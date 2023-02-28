@@ -2,207 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0D56A5769
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAC96A576C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjB1LCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S231215AbjB1LDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjB1LCL (ORCPT
+        with ESMTP id S231238AbjB1LDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:02:11 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6B72ED6F;
-        Tue, 28 Feb 2023 03:02:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677582128; x=1709118128;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WWmp1hv/uFDxkm4wlpa8Jan2QxDmWX4YCWLpQI+K9BI=;
-  b=0iwCUjUfwRZZDXDzVfFfTVBvskIaABSq5wPTVl94crQX431EmhSN4SeJ
-   i4N4ep0/4qGd66LxhJ5MLcs/xtT49xA63EgAAhdyaqB82Gd/khMDfD5bS
-   kgX4R0EPGIe3yjLTjjmYfEQrZtlIkrl/cs4CRv4Jqh0Df5bsonOqke+f+
-   vObEFVRnFmhWzafWEOZKXj341H4w6822rhHiExJZzT842e//Y/pglTdI3
-   bC7XJSeseBvxtqdi6cBdiP3uugvxkCvwlTKFiLn6CLnaMjGU9nmRPkUAK
-   itE//0D6LMgDqIpTHF4fRx+5rmmfsCEzQIJ8jURgkZKqfB0dQWW6OaPgV
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,221,1673938800"; 
-   d="scan'208";a="202762758"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2023 04:02:06 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 28 Feb 2023 04:02:06 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Tue, 28 Feb 2023 04:02:03 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v3 3/3] ASoC: mchp-pdmc: fix poc noise at capture startup
-Date:   Tue, 28 Feb 2023 13:01:45 +0200
-Message-ID: <20230228110145.3770525-4-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230228110145.3770525-1-claudiu.beznea@microchip.com>
-References: <20230228110145.3770525-1-claudiu.beznea@microchip.com>
+        Tue, 28 Feb 2023 06:03:02 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE872C679
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:02:41 -0800 (PST)
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 66E393F1F2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:02:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677582160;
+        bh=whVHBfeNmd48/Mtd8KK1rHa96pedE0BT/IGoZMz9JD4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=WZ1ruGWMNQy8M99yrTIIGLqzGwPx3c6TSwpDDzYiWXEalhI+rOoOTACF3gNs6fM06
+         J/hCQjFvPDn5RmKg1wmyB9Y+j9QEtQlubzBcLX/vOK8gIu6NQr9/I3d0R08bD6UrLE
+         dUwpRLWiXKoQnxGBcdctDDLbJXKUUHvEEIWCQ/mVlyqMsC/YOi344iPvCA80sfMObp
+         8BrqDtRThGeYW9Gf6GI1ziV8+X1k//P9sJSSatvGvl1rfDVKcYTi2qJU1DHw3S0SDn
+         agkFrDa8XuXCebI5s6uV/GGNYKVVlK/KWyD4H2/wW4xRy09M9BZeyY/1rB3f2G8+l3
+         zAD9psFkwqFag==
+Received: by mail-qk1-f198.google.com with SMTP id z23-20020a376517000000b00731b7a45b7fso5831845qkb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:02:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=whVHBfeNmd48/Mtd8KK1rHa96pedE0BT/IGoZMz9JD4=;
+        b=gv2xiBftYgJFR/EAi/l+bgkO2kx+bdQAJN5Od667qFOC93KU84HdLDsGvIbnFgMGVn
+         6pWgAbzCeJq3p7BO2hEyOu5jb+YuCvavYsofxpsMduybqBcdALaqbKpLyCls52lwC8B0
+         +FOjHzYJQYwiBXIQQwgrvNdAV7CfxSJmSjQqXYY+8cJAdav3hmZVtFMJzRaioumHP26n
+         0P8BM05IKNXomrYSjOPZW+5Ehc+fWr/G8/6w6V5NHrCbfVXysA94bHw7ys1c0aasKJM1
+         /yqarGcV7jOgd6dL9t/Q2almzeG+Vh7VNRuJq+eD1rnFuCFVirrYAVtTvZbcG7ewJVSy
+         eQTg==
+X-Gm-Message-State: AO0yUKWCM+0qi5NOE5wC5+Qm3+w9wM6cFhnRECces7TF34JHnfSBwQDx
+        sxq6Fzl2pgZHY0xl5ZhHH3bpw5ehOs6sdZx/Bl7JIsAg2d9c0J5A9l94fpNeHX9By9bCmAsSCIk
+        Nlg0s3ZIB/9HDKvG+ml5XR3Ee+WoHMgVW3hEhxikXmwdcY+F6saZkSVzh3Q==
+X-Received: by 2002:ac8:56e8:0:b0:3bd:1fb6:c67a with SMTP id 8-20020ac856e8000000b003bd1fb6c67amr553381qtu.3.1677582159400;
+        Tue, 28 Feb 2023 03:02:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set8FR64yuzbIcs6D/WmwZMDZz31/kKp6+pin5PnwYtz+dLmWYPMDS6NzC6y0YpP+iqeWB1QMFW3KNM1UQsJutms=
+X-Received: by 2002:ac8:56e8:0:b0:3bd:1fb6:c67a with SMTP id
+ 8-20020ac856e8000000b003bd1fb6c67amr553374qtu.3.1677582159145; Tue, 28 Feb
+ 2023 03:02:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20230215113249.47727-1-william.qiu@starfivetech.com>
+ <20230215113249.47727-5-william.qiu@starfivetech.com> <20230220234335.GA615198-robh@kernel.org>
+ <348796cc-72d9-4dcf-9f09-4c2aa55cb858@starfivetech.com> <20230227222904.GC1048218-robh@kernel.org>
+ <f8d2b665-ce5d-81f8-8c55-81f1a4cb62b9@starfivetech.com> <54f51fa0-7821-b67b-b782-eb9a35b7bba9@linaro.org>
+In-Reply-To: <54f51fa0-7821-b67b-b782-eb9a35b7bba9@linaro.org>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Tue, 28 Feb 2023 12:02:21 +0100
+Message-ID: <CAJM55Z85fitjBOcCLqad9W-a7h3iN9bxtctVGzPgqCbf5fWobw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] dt-bindings: syscon: Add StarFive syscon doc
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     William Qiu <william.qiu@starfivetech.com>,
+        Rob Herring <robh@kernel.org>, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microchip PDMC IP doesn't filter microphone noises on startup. By default,
-it captures data received from digital microphones after
-the MCHP_PDMC_MR.EN bits are set. Thus when enable is set on PDMC side the
-digital microphones might not be ready yet and PDMC captures data from then
-in this time. This data captured is poc noise. To avoid this the software
-workaround is to the following:
-1/ enable PDMC channel
-2/ wait 150ms (on SAMA7G5-EK setup)
-3/ execute 16 dummy reads from RHR
-4/ clear interrupts
-5/ enable interrupts
-6/ enable DMA channel
+On Tue, 28 Feb 2023 at 11:40, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 28/02/2023 10:05, William Qiu wrote:
+> >
+> >
+> > On 2023/2/28 6:29, Rob Herring wrote:
+> >> On Tue, Feb 21, 2023 at 10:44:02AM +0800, William Qiu wrote:
+> >>>
+> >>>
+> >>> On 2023/2/21 7:43, Rob Herring wrote:
+> >>>> On Wed, Feb 15, 2023 at 07:32:49PM +0800, William Qiu wrote:
+> >>>>> Add documentation to describe StarFive System Controller Registers.
+> >>>>>
+> >>>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> >>>>> ---
+> >>>>>  .../bindings/soc/starfive/jh7110-syscon.yaml  | 51 +++++++++++++++++++
+> >>>>>  MAINTAINERS                                   |  5 ++
+> >>>>>  2 files changed, 56 insertions(+)
+> >>>>>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
+> >>>>> new file mode 100644
+> >>>>> index 000000000000..fa4d8522a454
+> >>>>> --- /dev/null
+> >>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
+> >>>>> @@ -0,0 +1,51 @@
+> >>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >>>>> +%YAML 1.2
+> >>>>> +---
+> >>>>> +$id: http://devicetree.org/schemas/soc/starfive/jh7110-syscon.yaml#
+> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>>>> +
+> >>>>> +title: StarFive JH7110 SoC system controller
+> >>>>> +
+> >>>>> +maintainers:
+> >>>>> +  - William Qiu <william.qiu@starfivetech.com>
+> >>>>> +
+> >>>>> +description: |
+> >>>>> +  The StarFive JH7110 SoC system controller provides register information such
+> >>>>> +  as offset, mask and shift to configure related modules such as MMC and PCIe.
+> >>>>> +
+> >>>>> +properties:
+> >>>>> +  compatible:
+> >>>>> +    items:
+> >>>>> +      - enum:
+> >>>>> +          - starfive,jh7110-stg-syscon
+> >>>>> +          - starfive,jh7110-sys-syscon
+> >>>>> +          - starfive,jh7110-aon-syscon
+> >>>>
+> >>>> Is 'syscon' really part of what the blocks are called? Is just 'stg',
+> >>>> 'sys' and 'aon' not unique enough?
+> >>>>
+> >>>> Rob
+> >>> Hi Rob,
+> >>>
+> >>> In StarFive SoC, we do have syscrg/aoncrg/stgcrg, which is uesd to be the clock
+> >>> controller, so 'syscon' is added to avoid confusion.
+> >>
+> >> You've only added to my confusion. 'syscrg' and 'sys-syscon' are 2
+> >> different h/w blocks and unrelated to each other? Or 'syscrg' is the
+> >> clock portion of 'sys-syscon'? In that case, 'syscrg' should be a child
+> >> of 'sys-syscon' or possibly just all one node. Please provide details on
+> >> the entire h/w block so we can provide better input on the bindings.
+> >>
+> >> Rob
+> >
+> > Hi Rob,
+> >
+> > It's my description that's problematic.'syscon' here refers to the hardware module
+> > inside our JH7110, which is different from the syscon interface in linux. The syscon
+> > I added now uses the syscon interface of linux to read and write the syscon register
+> > in our JH7110. So we decided to name it that way.
+>
+> You didn't really answer Rob's questions.
+>
+> Also, syscon is Linux term, so are you sure hardware module is called
+> like this? Hardware engineers took pure Linux name and used it?
 
-Fixes: 50291652af52 ("ASoC: atmel: mchp-pdmc: add PDMC driver")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- sound/soc/atmel/mchp-pdmc.c | 53 +++++++++++++++++++++++++++++++++----
- 1 file changed, 48 insertions(+), 5 deletions(-)
+Yes, from the documentation I could find[1] there are CRG blocks
+(Clock and Reset Generator) and SYSCON blocks:
+SYS CRG
+STG CRG
+AON CRG
+SYS SYSCON
+STG SYSCON
+AON SYSCON
 
-diff --git a/sound/soc/atmel/mchp-pdmc.c b/sound/soc/atmel/mchp-pdmc.c
-index cf4084dcbd5e..1aed3baa9369 100644
---- a/sound/soc/atmel/mchp-pdmc.c
-+++ b/sound/soc/atmel/mchp-pdmc.c
-@@ -114,6 +114,7 @@ struct mchp_pdmc {
- 	struct clk *gclk;
- 	u32 pdmcen;
- 	u32 suspend_irq;
-+	u32 startup_delay_us;
- 	int mic_no;
- 	int sinc_order;
- 	bool audio_filter_en;
-@@ -425,6 +426,7 @@ static const struct snd_soc_component_driver mchp_pdmc_dai_component = {
- 	.open = &mchp_pdmc_open,
- 	.close = &mchp_pdmc_close,
- 	.legacy_dai_naming = 1,
-+	.start_dma_last = 1,
- };
- 
- static const unsigned int mchp_pdmc_1mic[] = {1};
-@@ -632,6 +634,29 @@ static int mchp_pdmc_hw_params(struct snd_pcm_substream *substream,
- 	return 0;
- }
- 
-+static void mchp_pdmc_noise_filter_workaround(struct mchp_pdmc *dd)
-+{
-+	u32 tmp, steps = 16;
-+
-+	/*
-+	 * PDMC doesn't wait for microphones' startup time thus the acquisition
-+	 * may start before the microphones are ready leading to poc noises at
-+	 * the beginning of capture. To avoid this, we need to wait 50ms (in
-+	 * normal startup procedure) or 150 ms (worst case after resume from sleep
-+	 * states) after microphones are enabled and then clear the FIFOs (by
-+	 * reading the RHR 16 times) and possible interrupts before continuing.
-+	 * Also, for this to work the DMA needs to be started after interrupts
-+	 * are enabled.
-+	 */
-+	usleep_range(dd->startup_delay_us, dd->startup_delay_us + 5);
-+
-+	while (steps--)
-+		regmap_read(dd->regmap, MCHP_PDMC_RHR, &tmp);
-+
-+	/* Clear interrupts. */
-+	regmap_read(dd->regmap, MCHP_PDMC_ISR, &tmp);
-+}
-+
- static int mchp_pdmc_trigger(struct snd_pcm_substream *substream,
- 			     int cmd, struct snd_soc_dai *dai)
- {
-@@ -644,15 +669,17 @@ static int mchp_pdmc_trigger(struct snd_pcm_substream *substream,
- 	switch (cmd) {
- 	case SNDRV_PCM_TRIGGER_RESUME:
- 	case SNDRV_PCM_TRIGGER_START:
--		/* Enable overrun and underrun error interrupts */
--		regmap_write(dd->regmap, MCHP_PDMC_IER, dd->suspend_irq |
--			     MCHP_PDMC_IR_RXOVR | MCHP_PDMC_IR_RXUDR);
--		dd->suspend_irq = 0;
--		fallthrough;
- 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
- 		snd_soc_component_update_bits(cpu, MCHP_PDMC_MR,
- 					      MCHP_PDMC_MR_PDMCEN_MASK,
- 					      dd->pdmcen);
-+
-+		mchp_pdmc_noise_filter_workaround(dd);
-+
-+		/* Enable interrupts. */
-+		regmap_write(dd->regmap, MCHP_PDMC_IER, dd->suspend_irq |
-+			     MCHP_PDMC_IR_RXOVR | MCHP_PDMC_IR_RXUDR);
-+		dd->suspend_irq = 0;
- 		break;
- 	case SNDRV_PCM_TRIGGER_SUSPEND:
- 		regmap_read(dd->regmap, MCHP_PDMC_IMR, &dd->suspend_irq);
-@@ -796,6 +823,7 @@ static bool mchp_pdmc_readable_reg(struct device *dev, unsigned int reg)
- 	case MCHP_PDMC_CFGR:
- 	case MCHP_PDMC_IMR:
- 	case MCHP_PDMC_ISR:
-+	case MCHP_PDMC_RHR:
- 	case MCHP_PDMC_VER:
- 		return true;
- 	default:
-@@ -817,6 +845,17 @@ static bool mchp_pdmc_writeable_reg(struct device *dev, unsigned int reg)
- 	}
- }
- 
-+static bool mchp_pdmc_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case MCHP_PDMC_ISR:
-+	case MCHP_PDMC_RHR:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- static bool mchp_pdmc_precious_reg(struct device *dev, unsigned int reg)
- {
- 	switch (reg) {
-@@ -836,6 +875,7 @@ static const struct regmap_config mchp_pdmc_regmap_config = {
- 	.readable_reg	= mchp_pdmc_readable_reg,
- 	.writeable_reg	= mchp_pdmc_writeable_reg,
- 	.precious_reg	= mchp_pdmc_precious_reg,
-+	.volatile_reg	= mchp_pdmc_volatile_reg,
- 	.cache_type	= REGCACHE_FLAT,
- };
- 
-@@ -918,6 +958,9 @@ static int mchp_pdmc_dt_init(struct mchp_pdmc *dd)
- 		dd->channel_mic_map[i].clk_edge = edge;
- 	}
- 
-+	dd->startup_delay_us = 150000;
-+	of_property_read_u32(np, "microchip,startup-delay-us", &dd->startup_delay_us);
-+
- 	return 0;
- }
- 
--- 
-2.34.1
+The CRG blocks contain registers to control clocks and resets that
+follow a pattern used by the clock and reset drivers. The SYSCON
+blocks just seem to contain registers to control whatever didn't fit
+in any other blocks, but might be vaguely related to the peripherals
+that run off clocks controlled by the corresponding CRG block.
 
+[1]: https://doc-en.rvspace.org/JH7110/TRM/JH7110_TRM/system_control_registers.html
+
+/Emil
+
+> Best regards,
+> Krzysztof
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
