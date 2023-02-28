@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D936A53F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CB06A53F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjB1H5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 02:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S230156AbjB1H6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 02:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjB1H5N (ORCPT
+        with ESMTP id S229759AbjB1H6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 02:57:13 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EF32748B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:57:12 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id h9so9234110ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:57:12 -0800 (PST)
+        Tue, 28 Feb 2023 02:58:32 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4801A66A;
+        Mon, 27 Feb 2023 23:58:31 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id p6so8690579plf.0;
+        Mon, 27 Feb 2023 23:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677571031;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nqh6k7lLKfOfA+qZNQXHMx2HFoYuETh49MYOfc9k5dU=;
-        b=R3ZfcgpGxLqu0MbdBRU/luv3TuSs7ppTN845xxinSW8Wr9INXGKzSblDmCCjQeaMh+
-         0Js/7yuiGJ7n4dbLVPMe9dh53LD5weGbDB5MEBi9cvQTQPGqV6jqnrVy1s95YINDDQa8
-         xy51pni+IVjlk4UAyjyXVskcWiNAIJKpz48DT+8yMMOTd/+xLRQ/vvRvijJhXwpvjtoq
-         wjcE4s4ZUL8TXy57I04InGBL5xtkT/SrtB6k+9J1tVeTp+58gxY66eku30uM+rRmSaxH
-         OX8EEsZ+S5vOIHXWroT7QSil6lSkZ8tNBLgm7NkT9+wBK0IHBDBz+H7gMhtKtcrB2bo3
-         xR9g==
+        d=gmail.com; s=20210112; t=1677571111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xcgXmvlwPY/bJ8941ibAR2bWgWTcHokWpFkZZageEXA=;
+        b=WXFcRAR5sgWcqhbjdHTCC8ffSkyiH5GSvkhhMxZAx26ruDdmp5mFHorHjAMzrHZNQr
+         OX+tHF3mqNq296cxXdPVAmUxA1FjHDAeKVP2HmwXeKywQ3KfnbNfeZ127g3WKYOo2wEK
+         3g7lZKzCgxJwLZAWs9gt6KXH8pmZvkCAetYw60vYUa2TXOaAWf72K/Znxzn6Q0S7wvlu
+         Pf3ja2rUhaeW7hoPYDFXFPB+1vX/HCIoLzqhspEgF4rZ08SnlBIqz49t/UOOwd7D8liz
+         8xG1Er7WtWI3B2bTWsoF2bBBQyRo5/Ey5XgCa3FpWq1D7fKmoQ/R63nFTVOoHlLqhhpa
+         MtGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677571031;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nqh6k7lLKfOfA+qZNQXHMx2HFoYuETh49MYOfc9k5dU=;
-        b=Uy+cQKMOaUH5covSrTL4Mc/c9U+oOV49Bif+eOJAi5hm01IKtZ2T2X1RwmU4KsV6Qr
-         BkyK+6za42Q4aacwMaCVgqGhrp5mVpjXoE8bJwPrnm6xg7zghFxAHt2Q17TEL+Splegf
-         LJ1DdaFH6KDn5EafxibxCivWgVDq8DLnuPH3d5+xJ2KnBbK8tdgmIBrIwxj+rPBIIiFu
-         eJFG1BfKdW0mmP+rVw5junrv9xUOvsutWj2yp1JFjVhQHKTDKZ3bA92DUmLEbEWNerLc
-         j7UE+Rs8Y2Yuuh3B7YdfBe2yxgHmD9Dv//+coZrvgkwuTmCIXnN4MS8v6i2IXp6iDs4x
-         u2iQ==
-X-Gm-Message-State: AO0yUKXHfzHTiiBn0jN9giq9qwPygiNRiIfbCjn1UXdDxjQWUJGVnLqo
-        Cn8aFNx6DnJTMW9VdnIxBsIW4iOVNoneWcMNYi5NjA==
-X-Google-Smtp-Source: AK7set+I56JzWxEwgeSA2GOk8vYSjntF6TOYRFTaD9w/cgzoF53LhUV5+7MV6ES+ec893Su7vWLHc1LtQwUNLVsJHjM=
-X-Received: by 2002:a2e:86d7:0:b0:295:b026:8c34 with SMTP id
- n23-20020a2e86d7000000b00295b0268c34mr475554ljj.4.1677571030611; Mon, 27 Feb
- 2023 23:57:10 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677571111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xcgXmvlwPY/bJ8941ibAR2bWgWTcHokWpFkZZageEXA=;
+        b=BbRkofUOzYIeUxbONvHAHTTpOUgeXvHFY2Tk9T8JetLuF6rRFuIWsOjflQqDZ1FiJE
+         KDdjhIAMTPXJMgogqslpkkP76AY5H6G9yt09QQxR5teiQ3qWNLWtnGY44LAgq6tf4pig
+         L65v5dyVclX28JZau706bMEvb4J21eGf9jaSYk9zaew1GLoXuuh5sBt3NM0Cb9SWB/+e
+         GTYHA8QK7bJTlFIxkqe6h6rfsX2KmNKEeHPx+FW4KL54lFp1uD9FeL1hIBuXeHOq1mhW
+         9GS2ud3tYxXTBOvrR9k/dyM/khWdM6mkOCDL1wQLspXA/zH0lrnAkrYnBEj/FRxy0dsn
+         STOA==
+X-Gm-Message-State: AO0yUKXPyV/ZiL2idbxfnrFWZmqOiLUXiqyjhjw7ZAm/gcYwB/8SA/jm
+        aVkhO+rUzhiAJgKxC025+VYDhuyTkHiKddP8PAk=
+X-Google-Smtp-Source: AK7set8C62Fz1kmycCaLETHDH6hk4Z+n5TPkNZD43/Hd+LLKc2l3peEBHBZhuKkPKFkZ3/oOahDke7S7L6xJfSQHV6s=
+X-Received: by 2002:a17:902:f7c6:b0:19a:985c:9e35 with SMTP id
+ h6-20020a170902f7c600b0019a985c9e35mr614083plw.12.1677571111161; Mon, 27 Feb
+ 2023 23:58:31 -0800 (PST)
 MIME-Version: 1.0
-References: <000000000000dca7e505e9978943@google.com> <000000000000478fb705f5b2d79c@google.com>
-In-Reply-To: <000000000000478fb705f5b2d79c@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 28 Feb 2023 08:56:57 +0100
-Message-ID: <CACT4Y+bDpiHJ4yGYdv0DYYNwjkvTmV3F9p3Zq3jc+cZoqRSQJg@mail.gmail.com>
-Subject: Re: [syzbot] [udf?] KASAN: null-ptr-deref Write in udf_write_fi
-To:     syzbot <syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com>
-Cc:     jack@suse.com, jack@suse.cz, khoroshilov@ispras.ru,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, pchelkin@ispras.ru,
-        syzkaller-bugs@googlegroups.com
+References: <CAABZP2z+Hk_w7nAhhyhJA9zidQViibMUO_xYianfm3xcG1QQwQ@mail.gmail.com>
+ <D59B7575-FAB1-4446-BBA9-DF5EAA1B5DCA@joelfernandes.org> <20230227103257.4b99b6fb@gandalf.local.home>
+ <CAEXW_YT6_cSaEODPu3HLWUB5kJhs6U=CQrQ4v4ODKtk-D+Bzug@mail.gmail.com>
+ <CAABZP2zZHQ22MPsWkPZ5kPW5SNDPt0mT37xw3f4VNLeBsxRPvw@mail.gmail.com>
+ <20230227111626.463b8f85@gandalf.local.home> <20230227163258.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230227163258.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Tue, 28 Feb 2023 15:58:20 +0800
+Message-ID: <CAABZP2yqc0r8auf-m_tBTq2TbE1yr3Sn3cZ2zF8NPp3axJH+tw@mail.gmail.com>
+Subject: Re: BUG: unable to handle kernel NULL pointer dereference in rcu_core
+To:     paulmck@kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com,
+        contact@pgazz.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +79,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023 at 19:42, syzbot
-<syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com> wrote:
+On Tue, Feb 28, 2023 at 12:33=E2=80=AFAM Paul E. McKenney <paulmck@kernel.o=
+rg> wrote:
 >
-> syzbot suspects this issue was fixed by commit:
+> On Mon, Feb 27, 2023 at 11:16:26AM -0500, Steven Rostedt wrote:
+> > On Tue, 28 Feb 2023 00:11:51 +0800
+> > Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+> >
+> > > > Yes certainly, the rcu_head is allocated on the caller side so it
+> > > > could have been trampled while the callback was still in flight.
+> > > Thank you all for your guidance, I learned a lot during this process
+> > > >
+> > > > > OR it could be a bug with RCU if the synchronize_rcu() ended befo=
+re the
+> > > > > grace periods have finished.
+> > > Thanks again.
+> > >
+> > > By the way, the syzkaller on my local machine has been running for 8
+> > > hours, only three bugs reported[1][2][3], but they don't seem to be
+> > > related to Sanan's original report.
+> > > Maybe there are some configuration mismatches between us.The test
+> > > continues,  I will report to you once I have any new discovery.
+> >
+> > Note, the above races (either bug, the one that tramples on something i=
+n
+> > RCU flight, or a synchronize_sched() returning early) may be extremely =
+hard
+> > to hit. It could have been the planets were lined up just right to hit =
+the
+> > bug, and won't happen for another 27,000 years.
 >
-> commit e9109a92d2a95889498bed3719cd2318892171a2
-> Author: Jan Kara <jack@suse.cz>
-> Date:   Thu Oct 6 14:41:23 2022 +0000
+> Which turns into once per week or two across a million-system fleet.  ;-)
 >
->     udf: Convert udf_rename() to new directory iteration code
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1191f00f480000
-> start commit:   55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8a5a459f324d510ea15a
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100a46c2880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116a4e72880000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: udf: Convert udf_rename() to new directory iteration code
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> Not that I know of any fleets running syzkaller...
+My syzkaller has been running for 24 hours, the bug can't be reproduced.
+Yes, the above races are extremely hard to hit.
+I learned a lot during the process ;-)
 
-Looks sane:
+Please inform me if there are any more clues.
 
-#syz fix: udf: Convert udf_rename() to new directory iteration code
+Thank you all for your guidance ;-)
+Zhouyi
+>
+>                                                         Thanx, Paul
