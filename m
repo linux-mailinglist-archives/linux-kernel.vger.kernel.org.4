@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876C46A5F28
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E306A5F2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjB1TFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 14:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S229688AbjB1TGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 14:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB1TFH (ORCPT
+        with ESMTP id S229470AbjB1TGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:05:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9A72A9A8;
-        Tue, 28 Feb 2023 11:05:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DED0611A7;
-        Tue, 28 Feb 2023 19:05:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390E2C433D2;
-        Tue, 28 Feb 2023 19:05:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677611105;
-        bh=BEVSlWE7Hdyraa/Sod6gs2PRTZn7touzwnv11SD6P78=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0J0CbOmsK+afsjHSUHuq3U5Jj/jT4TPZVHM2NmPToEVsbEaebx0n1mNR7md7UXUOm
-         WYwSOZZY2gsnt+vyxFmMsFk3pE7LOcuDpHzwc7tzELkGV69JRuD9XtDFKs5GYvMsC9
-         hVNEeLrnSjdV1IGrdaw70IUe42PwF0FkfmTAruAE=
-Date:   Tue, 28 Feb 2023 20:05:03 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Michael Wu <michael@allwinnertech.com>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gong, Richard" <Richard.Gong@amd.com>
-Subject: Re: [PATCH] HID: usbhid: enable remote wakeup for mice
-Message-ID: <Y/5QX1gYsGinrPNF@kroah.com>
-References: <20230222013944.31095-1-michael@allwinnertech.com>
- <Y/WwXBF37hoZBbQa@kroah.com>
- <9bf4463c-6541-a6cb-9bbc-6d070118509a@allwinnertech.com>
- <Y/dMq2KKYfdMdrjh@kroah.com>
- <801338c3-7c0d-6b3e-eac8-872ee5add466@suse.com>
- <MN0PR12MB6101B1BF9748F0602684FED5E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
- <f2142d88-259f-302d-da61-e0fc39d1f041@suse.com>
- <MN0PR12MB61017A45BEF80013FD7B77D5E2AC9@MN0PR12MB6101.namprd12.prod.outlook.com>
+        Tue, 28 Feb 2023 14:06:01 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA11305FE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:06:00 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5384ff97993so302277607b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:06:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jp-hosting.net; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T5YAkEgvaiCl9tX6YlYNUEiVKoTeTiZHoRI7PUW6hZQ=;
+        b=B19osipC0T3RM+yR8sKkH/sNrtUXHUPsK0N9fVIDlgf/8Soq7DerG/LbV6EXBYPcIS
+         NVlw18qWttckm9e1xB+TP4kt8fFHMn434MMFhlYQEB8dEq89t7zJc2iFa7+pTIPg7ZNE
+         +pb2GdZsVIcYa5Rs8ichQ+NRtp1l8zY8y/a3xe28LWeHVIAgxQCCpZPnPkh9Zbnko0ip
+         TRWlh1lqf6Z53KjcC1YpdXRI2eFX8L2adRTAC/LtexW9W2XfMl6FGJBHmrurOQFVaouc
+         d78e44HrQe6C/V4nUvWhq7JCYmjO+TOy1nNJu/gPbmMddhyQSvILH3Bcoay1yN/qZ80s
+         g3Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T5YAkEgvaiCl9tX6YlYNUEiVKoTeTiZHoRI7PUW6hZQ=;
+        b=w0c4qMlinvlPeL+p4mykEwdBbCsDbrSvpYK9sRffaKDXhGsBwMuEwVdzjFc/WMLhPK
+         JP4yi9Yn96lrbLteGBq3Sw1VQ8WiL6ZJSCHWYbMyLpWHOEy+wolZeQyHS+4Zv3QCCTFA
+         z/h2ScZNAq72z2nkquS4SZ3LfPgGr5vukMvnUM9M3vm35/RTE9LCiQjVTLw3gVumoe0w
+         6cExuAUH+n8MXmqRxF9k5jjoQ/npmzh1u2KZMhq6Btm0rjx0HC7lYkrWbUM+1ddN9uqs
+         FzjhafNDdOJbqXAj+c1IPeAyyFTvtuJiZGJl4EZs73M6oGBQXTh3brzORhX/x+Kj3Lr5
+         YXLA==
+X-Gm-Message-State: AO0yUKUiAUVjAs2zLelOhyPVRn0H1iZ9G34CBBvRCUYSNQDSF5/cx2nK
+        wjBaoVrPF0ZQ0kRdI6Q47ziQXpdFQrNgDUqCW2u5nQ==
+X-Google-Smtp-Source: AK7set9auwWfF3wIN1q30rRtpdUmkonwyBMuaaRudbnZmPSKptNoCJ89EPkxhe1jBNWNXlbDVVv0W0QLvsyRWKtr9wg=
+X-Received: by 2002:a05:6902:1205:b0:a09:314f:9f09 with SMTP id
+ s5-20020a056902120500b00a09314f9f09mr3766092ybu.6.1677611159575; Tue, 28 Feb
+ 2023 11:05:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN0PR12MB61017A45BEF80013FD7B77D5E2AC9@MN0PR12MB6101.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+From:   James Addison <jay@jp-hosting.net>
+Date:   Tue, 28 Feb 2023 19:05:48 +0000
+Message-ID: <CALDQ5Ny1mbcUSk8pDL6HEq0Cgqze1tidyOeAgVxc5tyZNb+P_g@mail.gmail.com>
+Subject: [PATCH RESEND] Documentation: update kernel parameter limit notes
+To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,21 +62,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 06:50:18PM +0000, Limonciello, Mario wrote:
-> I still keep getting inquiries about this where teams that work on the same
-> hardware for Windows and Linux complain about this difference during
-> their testing.
-> 
-> I keep educating them to change it in sysfs (or to use a udev rule), but
-> you have to question if you keep getting something asked about policy
-> over and over if it's actually the right policy.
+There does appear to be a limit on the number of parameters accepted by the
+kernel at boot-time, so this changeset updates the kernel-parameters.rst
+documentation to reflect that.
 
-Why not complain to the Windows team to get them to change their policy
-back as they are the ones that changed it over time and are not
-backwards-compatible with older systems?
+Signed-off-by: James Addison <jay@jp-hosting.net>
+---
+ Documentation/admin-guide/kernel-parameters.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-:)
+diff --git a/Documentation/admin-guide/kernel-parameters.rst
+b/Documentation/admin-guide/kernel-parameters.rst
+index 19600c502..a3a099127 100644
+--- a/Documentation/admin-guide/kernel-parameters.rst
++++ b/Documentation/admin-guide/kernel-parameters.rst
+@@ -203,7 +203,8 @@ be entered as an environment variable, whereas its
+absence indicates that
+ it will appear as a kernel argument readable via /proc/cmdline by programs
+ running once the system is up.
 
-thanks,
+-The number of kernel parameters is not limited, but the length of the
++The number of kernel parameters is limited to 32 by default (128 in User Mode
++Linux), and is defined in ./init/main.c as MAX_INIT_ARGS. The length of the
+ complete command line (parameters including spaces etc.) is limited to
+ a fixed number of characters. This limit depends on the architecture
+ and is between 256 and 4096 characters. It is defined in the file
 
-greg k-h
+base-commit: e492250d5252635b6c97d52eddf2792ec26f1ec1
+-- 
+2.39.2
