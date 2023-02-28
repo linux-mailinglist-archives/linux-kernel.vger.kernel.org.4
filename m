@@ -2,160 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437ED6A5B78
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8F56A5B7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjB1POt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S229874AbjB1PQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjB1POq (ORCPT
+        with ESMTP id S229697AbjB1PQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:14:46 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C271CAC4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:14:45 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id k10-20020a92b70a000000b00316fed8644fso5934185ili.21
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:14:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r/aMelHf7Ei0qvgQkk0g/w6wUpHmD3dnt1rTP2g0+sw=;
-        b=BBwtHVMRBq2Mj2HTFJzzgoOjzDsko6zUCzZUT+Q3KGFXMJZYOZbHHwXE7vyXJgyBC/
-         qBEaYAEYwbqTkDH/xDnq0bKNX/zDWEmL/tFECNVfCEeoM2m9O4+U6t1sWr/S2ehuY50G
-         uXfS+0wlXwKvi2ZBxYhaNsWy2l0vOShrIFenGJ1FOgW3gDRdTpUoI412xUYjbA3BW79T
-         3BuxAac9hOSdmjZoKaS03BDlS9iW/n5EaxXipDfUbC5ujHlq2L8yAILWj1PpowLpU+4b
-         z+gvU1I+fXhTtQqdtynfiUkSl+hfYXARI0zeiI5mdxmojbKm9ngeI9eOy+w4YSGtWCdj
-         XEMA==
-X-Gm-Message-State: AO0yUKVWd6xBNkCAbYsDtJcWGkm7QsAToe2hyPynnpAf1yv70tTvv06r
-        L9+34qux72tNmr2BX2AsgUpYj108Rny+UYeK6JSOMmVF7mds
-X-Google-Smtp-Source: AK7set+Sg6XTovJLAE3vAhTNVY/sOQ2od/c4TBI3LfdFAw12Q8sC9j0tDmd9fWm2dgJNR9zxYVngcHawjbAzboRrk/S1KTtfdJ3k
-MIME-Version: 1.0
-X-Received: by 2002:a02:b10c:0:b0:3ec:dc1f:12d8 with SMTP id
- r12-20020a02b10c000000b003ecdc1f12d8mr1434977jah.4.1677597284949; Tue, 28 Feb
- 2023 07:14:44 -0800 (PST)
-Date:   Tue, 28 Feb 2023 07:14:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003ee4ee05f5c40e99@google.com>
-Subject: [syzbot] [rdma?] INFO: trying to register non-static key in
- rxe_cleanup_task (2)
-From:   syzbot <syzbot+cfcc1a3c85be15a40cba@syzkaller.appspotmail.com>
-To:     jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        zyjzyj2000@gmail.com
+        Tue, 28 Feb 2023 10:16:31 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2E32ED79;
+        Tue, 28 Feb 2023 07:16:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677597388; x=1709133388;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=0rVDGcs988B6ruuLRlvEEoQMQulrN8WTVi33mWt/aV8=;
+  b=XsYOym0VY4YxYmBVIIUmvPoMZx1abKab8ugk5cytltsgUEsLTcGHMYPz
+   csB7KRDzPxgdCK2l83X8SlMi+cKZSZDTbVrqAUIYoigE1Frhg//d+rO5W
+   aGC4Y9Gdz7a9StJ1PljusyaoANQiSL6hbIMtjcxA98b9BUqsEXSuVK1LV
+   bDPPMZZZ3FceicJad3NAGRZ0wDCwcrI5W15fV2U/+Qzffa6GAkvXsqtaH
+   +PJWoxxVZ1Wdbi5wn3hmqwgO4ATUcjAGoVg3Ob2muyoAZnJTl8dcLCpJ2
+   sSK7jpAVAG6kzYsmpmdo1UVbJmDS1MqBnMSZgWlBYWZSb0i7MbzhOW1Kr
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="396725446"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="396725446"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 07:16:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="624057880"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="624057880"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga003.jf.intel.com with ESMTP; 28 Feb 2023 07:16:28 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 28 Feb 2023 07:16:28 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 28 Feb 2023 07:16:28 -0800
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.46) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 28 Feb 2023 07:16:27 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G27rqsP3PkyXQt7IJ4juAwGURRY5szMIGKEXJeWh3VN43zcaaYKczuAwS8ZIW3r81Lk3hjdV5dLNuU/s0ea3UUit2RCFHFX5pITY8Wd+duldmq4MnWC1QJsDuMTB76AdItgaBJ5hK8kA0NnB9Hct9fJq7y/wUPjIfr70jc3Yei9pmVgOygvf7SzU69ITdJs4nodMrnB8zR4KYGqsMlW3PAtxpUATIhlG/CC6caUGeblXrJWoYUpMMAfpd/gJFBzGRH0kM7tXOcSTW9NSqP2Whl0KcVL7rKYXkNUmNhtiWyZDS2IERwG8amX3tZiF1rCWNewfYuV/i46oZxJI9xprBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VpoYmVunkpJJZ1vhlMl0b80BoOMh4fZiETyl/AhKdd4=;
+ b=SZ+Ry69vZ1iD8NMryCi45F+4+UZzBeDftLTirUxmWbKJxvSZooUkZFOn7UdEsAOG4Zu/IZc9pFytFjiN7YFrUeB22mIUk0o1VLgWWuIn20BN6blS8J3eICqP/6S5lytOvEw6WTKUir35tCJmox00IgOQOSEfpaTTPDNObuOrvZT/GTSjnfNYMPCB0pTgLVQhwgjPxlDk8BM9iDV660fSiTAqUh860sXMuy4kS2n+tOC9kui6hGKtKFMqR+9eY7wOFX8bjVFm9VEo4gfehIqb833dpjHVTLw4Eq94JQNCKRSh4aXcmsMFYHtmTCHWpwbG8AEC0zIlVOAn11C3lAFa4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by IA1PR11MB6074.namprd11.prod.outlook.com (2603:10b6:208:3d6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 15:16:24 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934%4]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 15:16:24 +0000
+Message-ID: <e8addca3-e539-110c-ea2b-9a4921a45d71@intel.com>
+Date:   Tue, 28 Feb 2023 16:15:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] Documentation: kbuild: Add note about using (subst m,y)
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        David Gow <davidgow@google.com>
+CC:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        <linux-kbuild@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230228031317.3415484-1-davidgow@google.com>
+ <CAK7LNASBznyHmAwSRApOHw_6dyAXFuskmtKav65xFwKZdvNWJw@mail.gmail.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <CAK7LNASBznyHmAwSRApOHw_6dyAXFuskmtKav65xFwKZdvNWJw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0055.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4b::18) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|IA1PR11MB6074:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1b0582f-2ef0-416b-297b-08db199ec162
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VDz8sUTT5TI3IIksuO6cci1YhuDyvMVzwi9l/8iAwdhEFPDDQcR4wTrp0aBV4GptoG0MKmfm1SiBJDgW6VW9z/5cTaDZsLdX22p305wnFaJmeGILEiXtPgiKtYAd+MQeabPbGlz3oDotXsrl/uFOkNPc5kjWvuTJo/CuzffZKv4ebA86HPRMv453zg+mqRhFOl+aM52TFuaGsQRvMe/uIBkDyNZw8yXMoXLcCj9sSyclGoC9YjVzYCXpdp15gcqyDOmgRte7vIbeQdDlz9vMJe9dFlJMtElGf0PTwH4QGigKTmxtgyhAyjVeWFbO7yRpThKMaibW8lbEqM5U5qiZXnsmfj3ZIVKBF3QG+WRFZroarmbgp0kQGA0gsaIzJMrtqJLmS/AjzIKc9yqsuit3XX5zcE/AbxVNX2lIR3LZBpp79sDRE2Z4lmwCQsrxxOMuha3OTIa2NzC65y/9NE9oIFDUjE8KfLOQSKrfn0yjXCZSQiy78t/f2RCVIl9PU258MtDEBE9ts1SuVkX5Dy2SO2fvZWRlm0G6WwTxHEn3upICdc9ETY7m3ZCXrFCqAsdRe9f7356B1h27X/Wh/uPU83UEND95ENBMkGb4fm3IwaYAkjiiqkWJpY/LQX+w7h/Rp/kiFTcQ1b4IXwLnN0MaEmd1BUInTMy5uNd1FC2IkrYIDieUPiEZk9Tb84z0xgI8obtGQT+6W6mbfMrUFTmg2wov3o9Xpbq9JqTgI9KxPRs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(346002)(376002)(136003)(396003)(451199018)(31686004)(31696002)(36756003)(86362001)(41300700001)(66946007)(66556008)(66476007)(7416002)(5660300002)(8936002)(4326008)(2906002)(82960400001)(38100700002)(8676002)(6666004)(6486002)(478600001)(54906003)(316002)(110136005)(2616005)(186003)(53546011)(6506007)(6512007)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TEhoTUhnSkZha05uMlBoQlY3ZWJqaDRPbFZxWmF1T2EzUlA3eVpOTTFXVTda?=
+ =?utf-8?B?dndMY21ZMndBcysrQmFzMk0vZWZTUDVMRnpQUXZaRms4bDIreEpEV1VWSE1P?=
+ =?utf-8?B?Vngyb2VTeWVhd0Q4a1VESzRXYTlzM1lraVdNeHVtRWNaU0JEcUJzeFpwaFh0?=
+ =?utf-8?B?dnJwK3JoNS9GTCtzVnZUd01MNjc0SDYybk9NNGE1dGVSb29ZNnYxN3pLUExj?=
+ =?utf-8?B?bktsaktjM0d1SlRDNU4zb2x1dzJSRzJPOTFJem1PdFlYTVpsTEJYTnlKVjI0?=
+ =?utf-8?B?ZHl2YXZvQStsbnlzMkFiSzdURllQbGJwNHg2Mm1kUTV6Q2U5M1BXSUM0MW4w?=
+ =?utf-8?B?N2c0YjhIK0podDhac0NPNW45bFFqNHZOZWdXcXNoSk9xMUt2RFBveWNUcjBh?=
+ =?utf-8?B?bk5lUlIxeHpoa1hhSk16b3l2Wm1oVklZNmdvSllMMUVsMlRENlU5c0ZCMC9k?=
+ =?utf-8?B?clZFMEkrZC8vM0ZpU1QyeE16Tk5aVm1LRGhGRlhDdnZWalFXYmtITDB6OVN2?=
+ =?utf-8?B?NjFZa1FUZ0ErdldTRmxpY1Y0cUx4TW5lUkRpa0ZyUDhWazdheTE3dUFlVWtR?=
+ =?utf-8?B?eU52akFWbXh3MFowL243MDFuRGFvN2diaGhuSzE2SHZBd3YrT3VGWnR3blF4?=
+ =?utf-8?B?YTBFK3YraGlPRVM4ZWN1RHY4d1h0RmRvTGtobkRWNnZad2c4bVVmUWJLaThG?=
+ =?utf-8?B?dSs5M3o5bXk4dE9vMnQvOWhsS2NVSHVLUk5NNG5QcFhSSXRVWmQ3QWpGR1dJ?=
+ =?utf-8?B?MGxCa1hyNGJyMFR0QmhobVlDTHdLMFVWRTRjbTFuOVlSMDFKMFFDeEtUd25B?=
+ =?utf-8?B?UExQbk15Sk1JR05KTlZkblBVVEJkTFNlWUtVd1JWamJ6TEtEcW56VWJFL0pn?=
+ =?utf-8?B?Zkh2akRRNG9ZNyt2bTZYTmYyVmdOdWhjaGZkLzRGTWU0bGlQcDdYWWdRRklr?=
+ =?utf-8?B?K2VUU2NibWhxNWxmSGZpZ3ZrSUhNK01Sblo0eTRmMWZEQTc4WnlZV1AvaU44?=
+ =?utf-8?B?cVdCdDc2c2MwKzlRbUY3RVVEbGJQMGRDZHZTRHVmQk8ySVFIaXZBVUcvTVY4?=
+ =?utf-8?B?cjQ0dDMwRzd3aHhPU1dsbnF3dlh2VHZZQm9JNTY4cGY4NkNvQ1o0OTZKTlJz?=
+ =?utf-8?B?ZEZKQ0phRVk0TWpPcnZQam96d2lwSW1rZW5FYjQrMVgyaTVHejkwM1NjMkxT?=
+ =?utf-8?B?dWVZN3V1TW1ma3VPdG9yRjk2aFgzUXB4R1RYMC80a3hXYkI5UHlUenhQc3dR?=
+ =?utf-8?B?MWEyZ3FUVzBvS3UzOWN6OWMyM2NYdzhFdFZKWXU3SlZiWVVMbWNOODIwNkRU?=
+ =?utf-8?B?Wm5RVVpNVmFyMEFJeXBlRlltNVRSQWlYdDFaemJ1V05RTC9waWhiUGF4MzNP?=
+ =?utf-8?B?aHBUcFFvRFJ4RlptL0Z1N2lCVHA3SFk2MXdVZjJhZ1dId29ZV3kxcWtSRUhH?=
+ =?utf-8?B?UDdxNkNSSDR5bWhwOEJpNlEwMXh6Z25leG1pUTFLVDdOb0Zuc1UvMktGa0h5?=
+ =?utf-8?B?UDc0Wk5Xc2kzbTdqOE5RNFoyNTJJT2MyTTB3VHVLRnVxVTZEb2pyUGFTRnVl?=
+ =?utf-8?B?dGhXTVhwUStBSkV0WFhlczNtSHpNL0Z3d3M1bEhOYkd2cU9LV052OFZSMEpK?=
+ =?utf-8?B?c093UXhzQWU5ZVFOQ2pJQnYzTzlmUHBIMVA4V3h3VFcxQ0huRnQ5Y2tGMmI0?=
+ =?utf-8?B?Nnl4SzU3VjJlVnJ2eUlPeG4xT0FrMndud01vWWRVRW83eldUcnhnK0xWc0c2?=
+ =?utf-8?B?bHdjT0t4UW01clQrRmlWRzN3aDRBL3FxT1U2ZXNDMkU2ckRQMzloQUFsTkVF?=
+ =?utf-8?B?Y2JpQUd3TFFPcXdjM0RTR09DeTZLSDVWeVdHZ3FzUFVxSnZRYWk0ckpjUm5E?=
+ =?utf-8?B?dUYzNE45ZHFlc3N6dW1JR0JxWGJLQW9OZ3JrbWZHQyttV2wzZ05RUnZvdHRv?=
+ =?utf-8?B?MGZlS1FkajMxYTVQVXBLbTVrc1Y3NDRmeEMzcGU1Y0F1UUE0RXc0bGxPSUhq?=
+ =?utf-8?B?T1k3RDFTcmNmWmh3MVJFenV4SUlxMHdyRFpqZkxJTlEzcnJybHV0S2czSEM0?=
+ =?utf-8?B?OW40ZTFjemh4QkxnN0JMb3pIdDFzOGRjTHZOTGFCRWRWbW1iclZGd2diL0sv?=
+ =?utf-8?B?NWNNV3Y0TmRkK1J1TXNjRVYzNnlobHVUY2tQaXY4L2p2RG4zckFhYVp5THVq?=
+ =?utf-8?Q?+r8aOM6D56zpiMslYDfbCMU=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1b0582f-2ef0-416b-297b-08db199ec162
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 15:16:24.5832
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R885FH6xXsCaiiN7Djm4ImcaDy7ECBUng1G7UA6JpFJVZehrLkvJU+exOzKESQEpXZk5g1g/zy/xDKGZONzYNdCv8cC5PzMjGO6uutuAPrE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6074
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 28 Feb 2023 17:30:09 +0900
 
-syzbot found the following issue on:
+> On Tue, Feb 28, 2023 at 12:13 PM David Gow <davidgow@google.com> wrote:
 
-HEAD commit:    982818426a0f Merge tag 'arm-fixes-6.3-1' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1194800f480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=90a4de3f96747e3f
-dashboard link: https://syzkaller.appspot.com/bug?extid=cfcc1a3c85be15a40cba
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+[...]
 
-Unfortunately, I don't have any reproducer for this issue yet.
+>> +Example::
+>> +
+>> +  #drivers/Makefile
+>> +  obj-$(subst m,y,$(CONFIG_HYPERV)) += hv/
+>> +
+> 
+> 
+> I think many subsystems simply do
+> 
+> obj-y  += hv/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/225d8c8e9264/disk-98281842.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/87a9e2a89842/vmlinux-98281842.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/39bdeb741f2e/bzImage-98281842.xz
+This creates a ton of empty built-in.a, each of them is listed in the
+Kbuild output. Someone may think that if a directory contains
+built-in.a, then something was built there. Sure it's their problems,
+but I'd prefer to not pollute the log and built-in.a contents when
+possible (empty files are still listed there IIRC).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cfcc1a3c85be15a40cba@syzkaller.appspotmail.com
+> 
+> 
+> I do not think we need to advertise hyperv's way
+> since it does not look very pretty.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> Mostly, it looks like this:
+> 
+> 
+> obj-y  += kunit/
+> 
+> and
+> 
+> obj-$(CONFIG_KUNIT_HOOK)   += hook.o
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> Bikeshed:
+> 
+> I think Linus' suggestion is OK, but
+> the BSD style seems less ugly,
+> of course, that is just a matter of style.
+> 
+> 
+> obj-$(CONFIG_HYPERV:m=y)   += kunit/
 
-Node 1 hugepages_total=2 hugepages_free=2 hugepages_surp=0 hugepages_size=2048kB
-14586 total pagecache pages
-0 pages in swap cache
-Free swap  = 0kB
-Total swap = 0kB
-2097051 pages RAM
-0 pages HighMem/MovableOnly
-392145 pages reserved
-0 pages cma reserved
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 1 PID: 5486 Comm: syz-executor.2 Not tainted 6.2.0-syzkaller-12765-g982818426a0f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- assign_lock_key kernel/locking/lockdep.c:982 [inline]
- register_lock_class+0xdb6/0x1120 kernel/locking/lockdep.c:1295
- __lock_acquire+0x108/0x5d40 kernel/locking/lockdep.c:4935
- lock_acquire kernel/locking/lockdep.c:5669 [inline]
- lock_acquire+0x1e3/0x670 kernel/locking/lockdep.c:5634
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- rxe_cleanup_task+0x73/0xc0 drivers/infiniband/sw/rxe/rxe_task.c:119
- rxe_qp_do_cleanup+0x8c/0x7c0 drivers/infiniband/sw/rxe/rxe_qp.c:776
- execute_in_process_context+0x3b/0x150 kernel/workqueue.c:3458
- __rxe_cleanup+0x21e/0x370 drivers/infiniband/sw/rxe/rxe_pool.c:233
- rxe_create_qp+0x2c2/0x340 drivers/infiniband/sw/rxe/rxe_verbs.c:430
- create_qp+0x5ac/0x970 drivers/infiniband/core/verbs.c:1233
- ib_create_qp_kernel+0xa1/0x310 drivers/infiniband/core/verbs.c:1344
- ib_create_qp include/rdma/ib_verbs.h:3743 [inline]
- create_mad_qp+0x177/0x380 drivers/infiniband/core/mad.c:2905
- ib_mad_port_open drivers/infiniband/core/mad.c:2986 [inline]
- ib_mad_init_device+0xf40/0x1a90 drivers/infiniband/core/mad.c:3077
- add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
- enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
- ib_register_device drivers/infiniband/core/device.c:1420 [inline]
- ib_register_device+0x8b1/0xbc0 drivers/infiniband/core/device.c:1366
- rxe_register_device+0x317/0x3f0 drivers/infiniband/sw/rxe/rxe_verbs.c:1096
- rxe_net_add+0x90/0xf0 drivers/infiniband/sw/rxe/rxe_net.c:524
- rxe_newlink+0xd5/0x140 drivers/infiniband/sw/rxe/rxe.c:195
- nldev_newlink+0x332/0x5e0 drivers/infiniband/core/nldev.c:1731
- rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
- rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
- sock_sendmsg_nosec net/socket.c:722 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:745
- ____sys_sendmsg+0x71c/0x900 net/socket.c:2504
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2558
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2587
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd95868c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd9594b3168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007fd9587abf80 RCX: 00007fd95868c0f9
-RDX: 0000000000000000 RSI: 0000000020000200 RDI: 0000000000000003
-RBP: 00007fd9586e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff9db7c9ef R14: 00007fd9594b3300 R15: 0000000000022000
- </TASK>
-infiniband syz1: Couldn't create ib_mad QP1
-infiniband syz1: Couldn't open port 1
-RDS/IB: syz1: added
-smc: adding ib device syz1 with port count 1
-smc:    ib device syz1 port 1 has pnetid 
-syz-executor.2 (5486) used greatest stack depth: 22840 bytes left
+I'd vote for this one, it's compact and readable.
 
+> 
+> 
+> 
+> 
+>>  Kbuild also supports dedicated syntax, subdir-y and subdir-m, for
+>>  descending into subdirectories. It is a good fit when you know they
+>>  do not contain kernel-space objects at all. A typical usage is to let
+>> --
+>> 2.39.2.722.g9855ee24e9-goog
+>>
+> 
+> 
+> --
+> Best Regards
+> Masahiro Yamada
+> 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks,
+Olek
