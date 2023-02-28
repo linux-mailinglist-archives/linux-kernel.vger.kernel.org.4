@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F2A6A5E1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 18:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0526A5E20
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 18:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjB1RTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 12:19:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S229534AbjB1RVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 12:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB1RTA (ORCPT
+        with ESMTP id S229537AbjB1RVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 12:19:00 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582F11B306
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 09:18:58 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id f13so43051554edz.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 09:18:58 -0800 (PST)
+        Tue, 28 Feb 2023 12:21:08 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9090F1C590
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 09:21:07 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17264e9b575so11599404fac.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 09:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677604737;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VLoVWdqrXACCM2GouapKLA9JL96p1Na7WBfaOoEKQxA=;
-        b=G7LehqzooPd8BCbeVlFg+jPMKCKGZ/IaHR/YO9AaRRat3p9+dKtcz4sRNFa1rulDtP
-         cDvvp8FdhyThlOUkEulw+aqyrbHsMr0nvvCC/teWJI395UJCOZsBn70eMJfkACmFTyB9
-         bffi1DJEyls1hUkdU1a6D54Ixfo2+5vsUIFyFXSz5fmFMLdJkkRTOYPNVGAY4g1A74q5
-         twd08sGthmaUN5PtZ06HgrBvOWqJC7Vvnrznivo0Pmo5Z1Z1sg7xjC+1AYR0oCTXfHZ6
-         Y9O+Qe/RBmHl4PBkXjs1gdazqNRDWm/BYz38LYItv5LAWsxcxlTJoFHabbJ3KtzqTS04
-         JMJA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q7x7oHut5DL2b1slktWg4ykcN8IGiByTWSwYr9fSdOk=;
+        b=W1aPmSSXbMzPCaSAecaI772FQHgFMTqPnezT3cYUHA92WRfdFX76nNqomSs4mqmMSN
+         xEBafiMXUr1i+RRk5CdEnwSVGApdZtwngzfMp3Ey8aNQ5SEAAP12etDcyGBnhdPalK2K
+         jOrjH1vB86N+OQSbRRCDmY+dR3CZMmZXvtm/FMF2p3abisKQfN8j5Xvu1CyrlT4JunZ5
+         2O1OVqBDgJOSDKhNkvDbMZbMRbjdySP0nUq8gdt6gQ4F6peTek4ZADfQeHr1iUfQeEA8
+         9iBJHVDvVlFkxhWDD/qFocnQ01yYG/jyJS6WT36ZM8hU6nzte/Mu+/k/Z7Jn//pFCvmv
+         WBog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677604737;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VLoVWdqrXACCM2GouapKLA9JL96p1Na7WBfaOoEKQxA=;
-        b=YSZMRHZD2sG5qT6P5cnmZqurKLURyyDvzEuHM4S+o6V58aELHvhU6h/kQK1rmgOFnd
-         eoyqxvCkceKSwBn1AcgnWR2PS5I5p4l0LjCJj98yEx/o/+eM2JEYAOy3qhECJmZqWht9
-         GmfZlCuPLS8a/DQ9F+dtUj736Zoio6sy/8YsQO/goF2h92dl0XPx9DXyJSAxjAtPlZua
-         ES8mPtV+Bia6aQIMyUB4JOyhlkmbjL9jgm2FTKy+mPUl4iyC9tXZFb+sCYkRXcGY5cz4
-         JPwFNyNkIN7nCFfgZZaghf2jPFMx1bbBK9hghYWZNB3vebZuOThQIECBE+VUPHbyMW7s
-         ByFw==
-X-Gm-Message-State: AO0yUKWzajnCnSLVgRZ4jUtsgExAijT/vDyLF7eOeqc+ZnjVNP+Ag68a
-        78rUNKPyaBfgZqxdipVYC2+RfLG8u+ubTpIj7UD+Kg==
-X-Google-Smtp-Source: AK7set/vaTqJWeJXi/PEHEc/NmmBXXfMfDTI+pq1bMDgth7G7QT71O0RPAOZmRrFprNOY8p2ozFAFihCdZMUz1x/Rn0=
-X-Received: by 2002:a50:8e5b:0:b0:4ab:3a49:68b9 with SMTP id
- 27-20020a508e5b000000b004ab3a4968b9mr2136811edx.5.1677604736513; Tue, 28 Feb
- 2023 09:18:56 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q7x7oHut5DL2b1slktWg4ykcN8IGiByTWSwYr9fSdOk=;
+        b=b16OVobYJFOlZPamhdWn35ufGY9Q442vLWdUt++LS3zjV56YxSJqzxidIY33L2E7AO
+         6tZ3Wk8J1MG+LGLpABQlmgP3atE8xrN8vm7saTsh8SikQjiUcqduhKnr7JT0qaJe67v+
+         916YJy5mfd8AZehZgVo7I8LE1DtpxYTwSWkudrDwuMEmuwGAg0w1qUuwV5OPduVvq8Pf
+         98bkrIFRLpqaXrffZkT2Ar78pJU7Kgk1GNHomgDqYEBQ0SCSjSADpQ2dKhv4vhzstZ3b
+         zrBrgh/PTv+AJcclBQjq3FFgeYXV0yUu8PvzXIBGWglbmoDXTRhXseUPAhptqtXrmLkg
+         KNOg==
+X-Gm-Message-State: AO0yUKVecsExha/n7msPni6BK1dNEHg2GJCKiXCsv9TqizXEZxYm+gYj
+        +ELLwTPKqrqdKn4mdyNF87Kw1cmPvx83FnT48hg=
+X-Google-Smtp-Source: AK7set/bb7R3q9nnU4uxrhjM46d5ADy7wq7B9UAVuFkbqBjqpPYOXMZIiragVo2wEaTsUqMgS+GpaShQpsfnJB7UTGk=
+X-Received: by 2002:a05:6871:6a9e:b0:16e:873e:b06b with SMTP id
+ zf30-20020a0568716a9e00b0016e873eb06bmr763908oab.3.1677604866849; Tue, 28 Feb
+ 2023 09:21:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20230228085002.2592473-3-yosryahmed@google.com> <202302281933.vU1PHuZr-lkp@intel.com>
-In-Reply-To: <202302281933.vU1PHuZr-lkp@intel.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 28 Feb 2023 09:18:19 -0800
-Message-ID: <CAJD7tkZxwuR6JoVo9RnepXA3Kg7HVMLyzTfTdRvLg27OihECiw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-To:     kernel test robot <lkp@intel.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-mm@kvack.org
+References: <20230227204000.56787-1-andrealmeid@igalia.com> <20230227204000.56787-2-andrealmeid@igalia.com>
+In-Reply-To: <20230227204000.56787-2-andrealmeid@igalia.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 28 Feb 2023 09:20:55 -0800
+Message-ID: <CAF6AEGvpJTHLQdQRBZXpc0Tpuo1zgt3A-L_2TGBc+imuzuzf-w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] drm/doc: Document DRM device reset expectations
+To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
+        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Rob Clark <robdclark@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,80 +79,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 3:56 AM kernel test robot <lkp@intel.com> wrote:
+On Mon, Feb 27, 2023 at 12:40 PM Andr=C3=A9 Almeida <andrealmeid@igalia.com=
+> wrote:
 >
-> Hi Yosry,
+> Create a section that specifies how to deal with DRM device resets for
+> kernel and userspace drivers.
 >
-> Thank you for the patch! Yet something to improve:
+> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
+> ---
+>  Documentation/gpu/drm-uapi.rst | 51 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 >
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on linus/master next-20230228]
-> [cannot apply to vbabka-slab/for-next xfs-linux/for-next v6.2]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.=
+rst
+> index 65fb3036a580..3d6c3ed392ea 100644
+> --- a/Documentation/gpu/drm-uapi.rst
+> +++ b/Documentation/gpu/drm-uapi.rst
+> @@ -285,6 +285,57 @@ for GPU1 and GPU2 from different vendors, and a thir=
+d handler for
+>  mmapped regular files. Threads cause additional pain with signal
+>  handling as well.
 >
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/mm-vmscan-refactor-updating-reclaimed-pages-in-reclaim_state/20230228-165214
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230228085002.2592473-3-yosryahmed%40google.com
-> patch subject: [PATCH v1 2/2] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-> config: i386-randconfig-a002-20230227 (https://download.01.org/0day-ci/archive/20230228/202302281933.vU1PHuZr-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/f6d2b849f186a927925a29e289d60895048550f5
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Yosry-Ahmed/mm-vmscan-refactor-updating-reclaimed-pages-in-reclaim_state/20230228-165214
->         git checkout f6d2b849f186a927925a29e289d60895048550f5
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202302281933.vU1PHuZr-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> mm/vmscan.c:549:13: error: redefinition of 'cgroup_reclaim'
->    static bool cgroup_reclaim(struct scan_control *sc)
->                ^
->    mm/vmscan.c:191:13: note: previous definition is here
->    static bool cgroup_reclaim(struct scan_control *sc)
->                ^
-> >> mm/vmscan.c:554:13: error: redefinition of 'global_reclaim'
->    static bool global_reclaim(struct scan_control *sc)
->                ^
->    mm/vmscan.c:196:13: note: previous definition is here
->    static bool global_reclaim(struct scan_control *sc)
->                ^
->    2 errors generated.
+> +Device reset
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The GPU stack is really complex and is prone to errors, from hardware bu=
+gs,
+> +faulty applications and everything in the many layers in between. To rec=
+over
+> +from this kind of state, sometimes is needed to reset the GPU. Unproper =
+handling
+> +of GPU resets can lead to an unstable userspace. This section describes =
+what's
+> +the expected behaviour from DRM drivers to do in those situations, from =
+usermode
+> +drivers and compositors as well. The end goal is to have a seamless expe=
+rience
+> +as possible, either the stack being able to recover itself or resetting =
+to a new
+> +stable state.
+> +
+> +Robustness
+> +----------
+> +
+> +First of all, application robust APIs, when available, should be used. T=
+his
+> +allows the application to correctly recover and continue to run after a =
+reset.
+> +Apps that doesn't use this should be promptly killed when the kernel dri=
+ver
+> +detects that it's in broken state. Specifically guidelines for some APIs=
+:
+> +
+> +- OpenGL: KMD signals the abortion of submitted commands and the UMD sho=
+uld then
+> +  react accordingly and abort the application.
 
-Ugh yeah I didn't realize I am moving the definitions from within an
-#ifdef CONFIG_MEMCG. I will just leave the definitions as-is and add a
-forward declaration before the definition of
-add_non_vmscan_reclaimed(), should also reduce the churn in the diff.
-Will wait for a bit before re-spinning to gather some feedback on the
-current version first.
+I disagree.. what would be the point of GL_EXT_robustness
+glGetGraphicsResetStatusEXT() if we are going to abort the application
+before it has a chance to call this?
 
+Also, this would break the deqp-egl robustness tests because they
+would start crashing ;-)
+
+> +
+> +- Vulkan: Assumes that every app is able to deal with ``VK_ERROR_DEVICE_=
+LOST``.
+> +  If it doesn't do it right, it's considered a broken application and UM=
+D will
+> +  deal with it, aborting it.
+> +
+> +Kernel mode driver
+> +------------------
+> +
+> +The KMD must be able to detect that something is wrong with the applicat=
+ion
+> +and that a reset is needed to take place to recover the device (e.g. an =
+endless
+> +wait). It needs to properly track the context that is broken and mark it=
+ as
+> +dead, so any other syscalls to that context should be further rejected. =
+The
+> +other contexts should be preserved when possible, avoid crashing the res=
+t of
+> +userspace. KMD can ban a file descriptor that keeps causing resets, as i=
+t's
+> +likely in a broken loop.
+
+syscalls to the context?  Like the one querying the reset status?  :-P
+
+In general I don't think the KMD should block syscalls.  _Maybe_ there
+could be some threshold at which point we start blocking things, but I
+think that would still cause problems with deqp-egl.
+
+What we should perhaps do is encourage drivers to implement
+devcoredump support for logging/reporting GPU crashes.  This would
+have the benefit that distro error reporting could be standardized.
+And hopefully some actionable bug reports come out of it.
+
+And maybe we could standardize UABI for reporting crashes so a
+compositor has a chance to realize an app is crashing and take action.
+(But again, how does the compositor know that this isn't intentional,
+it would be kinda inconvenient if the compositor kept killing my deqp
+runs.)  But for all the rest, nak
+
+BR,
+-R
+
+
+> +
+> +User mode driver
+> +----------------
+> +
+> +During a reset, UMD should be aware that rejected syscalls indicates tha=
+t the
+> +context is broken and for robust apps the recovery should happen for the
+> +context. Non-robust apps must be terminated.
+> +
+> +Compositors
+> +-----------
+> +
+> +Compositors should be robust as well to properly deal with its errors.
+> +
+> +
+>  .. _drm_driver_ioctl:
 >
->
-> vim +/cgroup_reclaim +549 mm/vmscan.c
->
-> 86750830468506 Yang Shi        2021-05-04  548
-> b5ead35e7e1d34 Johannes Weiner 2019-11-30 @549  static bool cgroup_reclaim(struct scan_control *sc)
-> 89b5fae5368f6a Johannes Weiner 2012-01-12  550  {
-> b5ead35e7e1d34 Johannes Weiner 2019-11-30  551          return false;
-> 89b5fae5368f6a Johannes Weiner 2012-01-12  552  }
-> 97c9341f727105 Tejun Heo       2015-05-22  553
-> a579086c99ed70 Yu Zhao         2022-12-21 @554  static bool global_reclaim(struct scan_control *sc)
-> a579086c99ed70 Yu Zhao         2022-12-21  555  {
-> a579086c99ed70 Yu Zhao         2022-12-21  556          return true;
-> a579086c99ed70 Yu Zhao         2022-12-21  557  }
-> a579086c99ed70 Yu Zhao         2022-12-21  558
->
+>  IOCTL Support on Device Nodes
 > --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+> 2.39.2
+>
