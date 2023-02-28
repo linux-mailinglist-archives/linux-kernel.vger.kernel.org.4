@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9ED16A6078
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A661B6A5FDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjB1UjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        id S229982AbjB1TmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 14:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjB1UjE (ORCPT
+        with ESMTP id S229987AbjB1TmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:39:04 -0500
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9D34C3B;
-        Tue, 28 Feb 2023 12:39:03 -0800 (PST)
+        Tue, 28 Feb 2023 14:42:22 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEECE32E73
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:42:18 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id t14so11499940ljd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1677616743; x=1709152743;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rl35dc1iPnbWuVVxE9D4Cxh5CG/w80f3pFsgYUgu3M8=;
-  b=iu0vx/w7ByuM3K5svEztWEhgkrnQ4GVe/WOpMszve4lXG+A8HgHP+X3N
-   sL6Nj2/13f7orx3sLtzqCBYgN3IkqLnatJ/0C/Dc3msU9ZEJVdwZNpwI0
-   ZM7yoMH7ld/lMulBON0MI4ayd8wFBGzMuNg9cKYXnYMHkDXL65Sv5wm3N
-   4=;
-X-IronPort-AV: E=Sophos;i="5.98,222,1673913600"; 
-   d="scan'208";a="1107738852"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d23e07e8.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 19:42:11 +0000
-Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-d23e07e8.us-east-1.amazon.com (Postfix) with ESMTPS id 121C781208;
-        Tue, 28 Feb 2023 19:42:08 +0000 (UTC)
-Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
- EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Tue, 28 Feb 2023 19:42:07 +0000
-Received: from b0f1d8753182.ant.amazon.com (10.106.83.6) by
- EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
- Tue, 28 Feb 2023 19:42:03 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     <bp@alien8.de>
-CC:     <dave.hansen@linux.intel.com>, <itazur@amazon.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mingo@redhat.com>, <pbonzini@redhat.com>, <seanjc@google.com>,
-        <tglx@linutronix.de>, <x86@kernel.org>, <zulinx86@gmail.com>
-Subject: Re: [PATCH 0/2] KVM: x86: Propagate AMD-specific IBRS bits to guests
-Date:   Tue, 28 Feb 2023 19:41:53 +0000
-Message-ID: <20230228194153.46995-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <Y/5U3N0XfRaZ2KkX@zn.tnic>
-References: <Y/5U3N0XfRaZ2KkX@zn.tnic>
+        d=linaro.org; s=google; t=1677613337;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IMgz+8i9lDRHkxwEIJDwxwFLj+KDr4M+MCf3M/7tTJM=;
+        b=fnVIH66A+T4loHjEJBk1eiwVsFWwySA0EjMRv4mNph/d634x+vZzQ1t1ZXX13PZK+A
+         lleZg6r6viA8nRna6Mky0+OOpu/CZbfDb5FukQBWRhQ7h2r2QCkW2PaXPrpBnMtmVp6p
+         MO2O2n0KmmOBAIGwNoOv7yDQ3GMdGfYW5ZOUuSnO475AnuGBTOgSPoDFmbRHiY3igDxV
+         C+6DWEYACQ4h3cx/Y43Gial10PkcLiH2ghVSsaFHZVidKovbKEh5Fne9vwBaAGhG47WS
+         AeeWx4qwR+cXNGXv78VuUfpYPsViDVz515M8Bfk4OaJ+wiYovt31AIVDEs7yABO767jA
+         iOGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677613337;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IMgz+8i9lDRHkxwEIJDwxwFLj+KDr4M+MCf3M/7tTJM=;
+        b=DsM6piQodgsCZTpCXl1w7E2MFbn+BMl4BqfNfaMJPkKi2E4nc/fqh9wylxVgcOAXCA
+         gqfT4P9uFDkrIgGGBGkdCFGNG/qHN5E0KDxxe4y1mB11fazkhcJm47QWEhovK+WpPgFB
+         nd4gnEBzouTWfMyaNwqRIHDD/JvQGEvY36rQMuWo8Dyo6gLrMqtrrhQ4htY+eWrdgk9N
+         XIdUsQUzIERvR8WLUMvID7BqNwVLpBYcZZOJ+T+OdLe9iUWzQZOF/noENE+80ZjXUOdg
+         Q8T3M7kgXDA53GDXs+BsvBEHIGMu5yWTIC32t1LgBvM/t/bM4qMaJDwpLR03oN+ZEwdT
+         OvZw==
+X-Gm-Message-State: AO0yUKVl2iKSciXw+4RSCnm6Jql9k/+Tca2zGjMBon3A1OsrIre3XrmL
+        28VOaRI43kVoL9nZUc+TkPGQNQ==
+X-Google-Smtp-Source: AK7set/YlENBCLqy77hHQCs4r1R/UVJNkdC2/9KL96Gc9ETxmc68JgoSYc5bsjJctCMiQPe+e97TMg==
+X-Received: by 2002:a2e:3510:0:b0:295:a391:7b48 with SMTP id z16-20020a2e3510000000b00295a3917b48mr1149818ljz.26.1677613336957;
+        Tue, 28 Feb 2023 11:42:16 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id p5-20020a2ea405000000b00295a2d07558sm1328602ljn.112.2023.02.28.11.42.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 11:42:16 -0800 (PST)
+Message-ID: <b280c6a5-04dc-8a4f-459c-4703e567fa1d@linaro.org>
+Date:   Tue, 28 Feb 2023 20:42:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.83.6]
-X-ClientProxiedBy: EX19D035UWB002.ant.amazon.com (10.13.138.97) To
- EX19D002ANA003.ant.amazon.com (10.37.240.141)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V5 0/3] rpmsg signaling/flowcontrol patches
+Content-Language: en-US
+To:     Sarannya S <quic_sarannya@quicinc.com>, quic_bjorande@quicinc.com,
+        arnaud.pouliquen@foss.st.com, swboyd@chromium.org,
+        quic_clew@quicinc.com, mathieu.poirier@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+References: <1676995418-19358-1-git-send-email-quic_sarannya@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1676995418-19358-1-git-send-email-quic_sarannya@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Date:   Tue, 28 Feb 2023 20:24:12 +0100
-From:   Borislav Petkov <bp@alien8.de>
-> I'd prefer if VMMs did supply whatever they prefer to the guests
-> instead. None of those bits are used in the kernel for mitigations, as
-> you've realized.
 
-It is true that the kernel does not use those bits at all, but any
-codes could be run inside guests.
 
-One of examples is the following spectre/meltdown checker scipt used as
-de facto standard.
-https://github.com/speed47/spectre-meltdown-checker/blob/master/spectre-meltdown-checker.sh#L2768
+On 21.02.2023 17:03, Sarannya S wrote:
+> Added two new RPMSG IOCTLs for rpmsg_char- RPMSG_GET_SIGNAL_IOCTRL and
+> RPMSG_SET_SIGNAL_IOCTRL, to set/get the flow.
+> Addressed review comments for changing variable names/ desciptions.
+> 
+Hi, your changes mostly don't apply on -next-20230228, please rebase
+them. Not sure if I didn't miss anything, but I did it locally to test
+this [1]. My Wi-Fi chip on SM6375 seems to send quite some signals calls
+and applying this series got rid of "unhandled rx cmd: 15" and the
+corresponding timeouts.
 
-Best regards,
-Takahiro Itazuri
+Also, please consider using b4 [2] for sending patches, you only sent
+them to a couple of people and it didn't even reach patchwork..
 
+Konrad
+
+[1] https://github.com/SoMainline/linux/commits/signals_rebase
+[2] https://b4.docs.kernel.org/en/latest/contributor/overview.html
+> Sarannya S (3):
+>   rpmsg: core: Add signal API support
+>   rpmsg: glink: Add support to handle signals command
+>   rpmsg: char: Add RPMSG GET/SET SIGNAL IOCTL support
+> 
+>  drivers/rpmsg/qcom_glink_native.c | 63 +++++++++++++++++++++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_char.c        | 58 ++++++++++++++++++++++++++++++-----
+>  drivers/rpmsg/rpmsg_core.c        | 20 +++++++++++++
+>  drivers/rpmsg/rpmsg_internal.h    |  2 ++
+>  include/linux/rpmsg.h             | 15 ++++++++++
+>  include/uapi/linux/rpmsg.h        | 12 +++++++-
+>  6 files changed, 162 insertions(+), 8 deletions(-)
+> 
