@@ -2,157 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB01A6A577E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593C26A5782
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjB1LHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
+        id S231414AbjB1LJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjB1LHs (ORCPT
+        with ESMTP id S229528AbjB1LJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:07:48 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51822ED5A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:07:30 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id e27so792769uan.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:07:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rNfciygMzVNBDRrjpdQwJPuhnz4YivqlqvOG4g21Tc0=;
-        b=Il/1IkEAW14Ed7gRqLPWJdMYAxdc7D8VH60v2LgxQ0b/80EXAGXRRqwl2hVm2ff7tT
-         3KPCr/Ff8TO7D7UBd56HTqrAczLgPyZ7rzZdo3z3kpmrkoAvsdCFgi09qFA1JqhP/KnB
-         vBzRDYdLDWdtMYsW2jl1CQ06blyxgeix2Bvu672fybcMOsbz4Hwv6lxsfEgj7+170hiX
-         tCWcU7YYcWkM/yQDw6JfmAtS9GdyefFPR88ncXZbQyT6S6Xks2VneJyKT8QxmmjZiYsi
-         koky/G60MzyQhoUVh5WRczvtc48hnUQT9W3WWiwfMTdgxI+MhNi53EkHLst+1ewOKEHk
-         Hi7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rNfciygMzVNBDRrjpdQwJPuhnz4YivqlqvOG4g21Tc0=;
-        b=En2c46yokkQCQ3BlS8V+MSZcMFZPHeles9M9VVd/ukwG+94Dg+KenQTWdHqulShp3q
-         wODyfWeFaYDLp7FlvNtntIMixhByI5WP5KycgNvLT9X0KlUcMmsT3vhUx/GEzO7mgg6D
-         7u/E4RZWvKWuUMulbM40wtol7murh1qKEz2J6YUMcgkIi4Fehm7Dm1hXeXlS4IIZ4lw9
-         eQ6OY3SnFelbAxMpF6FxvL10uqXA0zUoG3n0zr7pLokKatQBidD7izcRJOIqrY0WNQFo
-         ebwu6M4iVGmDfTfC8/K2DBmolybhc5vhqcs/cO1rwPg6PQFm9KLQNxkJsSv69G6Ow8Td
-         ROXA==
-X-Gm-Message-State: AO0yUKUAgW6B46gImQU9bxzTcrH5LZNpL3W5VecWXKioRP5ibrJXSxFg
-        SNYbyDHamMaH5Q/piGkTxCf5Izli8NdMB5bqrJB68w==
-X-Google-Smtp-Source: AK7set8xnWEcj0PoN3PFXB/ASvTpJJf4Y9zJxubQeCJYwll+4K8yw0tWai3jHZNMTg/9QEuEjzmPXalUE6Fxe9XMvHY=
-X-Received: by 2002:a1f:31c6:0:b0:411:ff57:d3b9 with SMTP id
- x189-20020a1f31c6000000b00411ff57d3b9mr1130074vkx.2.1677582449615; Tue, 28
- Feb 2023 03:07:29 -0800 (PST)
+        Tue, 28 Feb 2023 06:09:28 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8827916ACE;
+        Tue, 28 Feb 2023 03:09:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677582566; x=1709118566;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w3EchzkB5Z/lStXH8IV2nakLSYJ/zwXnOAI6aQ1a2oY=;
+  b=COF0dDVs/uW+Rr0F5odbz/mlBeE72uzV3US9nCyfBS1u9BszIdVekDcS
+   AK/bli7llxIpkNMn9DVxJ11Nq0tD3bPxQ7B1Gmzeq5QLSDZcTuv0CQLLU
+   +yEL+YQUbbee/yr+DYXFJo4jWY7VOw0EfcRRvetdWdnkRKgL7FXQ/iEQy
+   tAER6XltsRD71nxllA0Pvx3xaM4ySaucSbe4qz2Damro3J8iKFIoSy3C3
+   DDO5QzJ/FjA7zTWNZT1Jvt3/Q4lBhB9M6eWl6A0zTzZmKFZndFVCceEI/
+   dzuMju7/CgZ12yHIBs1MQqxnp34+Ix0zFR2NpcFwCnfb9UwFHXSNEgSwG
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,221,1673938800"; 
+   d="asc'?scan'208";a="139419466"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2023 04:09:25 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 28 Feb 2023 04:09:23 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Tue, 28 Feb 2023 04:09:21 -0700
+Date:   Tue, 28 Feb 2023 11:08:54 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     William Qiu <william.qiu@starfivetech.com>,
+        Rob Herring <robh@kernel.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 4/4] dt-bindings: syscon: Add StarFive syscon doc
+Message-ID: <Y/3gxi8ZMWTrnCoe@wendy>
+References: <20230215113249.47727-1-william.qiu@starfivetech.com>
+ <20230215113249.47727-5-william.qiu@starfivetech.com>
+ <20230220234335.GA615198-robh@kernel.org>
+ <348796cc-72d9-4dcf-9f09-4c2aa55cb858@starfivetech.com>
+ <20230227222904.GC1048218-robh@kernel.org>
+ <f8d2b665-ce5d-81f8-8c55-81f1a4cb62b9@starfivetech.com>
+ <54f51fa0-7821-b67b-b782-eb9a35b7bba9@linaro.org>
 MIME-Version: 1.0
-References: <5bf4f1d679e2f80814d07937309602877afd02c6.1677577036.git.Rijo-john.Thomas@amd.com>
-In-Reply-To: <5bf4f1d679e2f80814d07937309602877afd02c6.1677577036.git.Rijo-john.Thomas@amd.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 28 Feb 2023 16:37:18 +0530
-Message-ID: <CAFA6WYOZwWuMHXGscgK0Lv9Jbt5WHhfhmK+2ZNR6cr2EAbikCw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] tee: amdtee: fix race condition in amdtee_open_session
-To:     Rijo Thomas <Rijo-john.Thomas@amd.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        lm0963 <lm0963hack@gmail.com>,
-        Mythri PK <Mythri.Pandeshwarakrishna@amd.com>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        security@kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="X8n4J7EvKMl6UgmW"
+Content-Disposition: inline
+In-Reply-To: <54f51fa0-7821-b67b-b782-eb9a35b7bba9@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 at 15:11, Rijo Thomas <Rijo-john.Thomas@amd.com> wrote:
->
-> There is a potential race condition in amdtee_open_session that may
-> lead to use-after-free. For instance, in amdtee_open_session() after
-> sess->sess_mask is set, and before setting:
->
->     sess->session_info[i] = session_info;
->
-> if amdtee_close_session() closes this same session, then 'sess' data
-> structure will be released, causing kernel panic when 'sess' is
-> accessed within amdtee_open_session().
->
-> The solution is to set the bit sess->sess_mask as the last step in
-> amdtee_open_session().
->
-> Fixes: 757cc3e9ff1d ("tee: add AMD-TEE driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Rijo Thomas <Rijo-john.Thomas@amd.com>
-> ---
->  drivers/tee/amdtee/core.c | 29 ++++++++++++++---------------
->  1 file changed, 14 insertions(+), 15 deletions(-)
->
+--X8n4J7EvKMl6UgmW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looks sane to me, FWIW:
+On Tue, Feb 28, 2023 at 11:37:20AM +0100, Krzysztof Kozlowski wrote:
+> On 28/02/2023 10:05, William Qiu wrote:
+> > On 2023/2/28 6:29, Rob Herring wrote:
+> >> On Tue, Feb 21, 2023 at 10:44:02AM +0800, William Qiu wrote:
+> >>> On 2023/2/21 7:43, Rob Herring wrote:
+> >>>> On Wed, Feb 15, 2023 at 07:32:49PM +0800, William Qiu wrote:
+> >>>>> Add documentation to describe StarFive System Controller Registers.
+> >>>>>
+> >>>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> >>>>> ---
+> >>>>>  .../bindings/soc/starfive/jh7110-syscon.yaml  | 51 +++++++++++++++=
+++++
+> >>>>>  MAINTAINERS                                   |  5 ++
+> >>>>>  2 files changed, 56 insertions(+)
+> >>>>>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/=
+jh7110-syscon.yaml
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/jh7110-=
+syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.=
+yaml
+> >>>>> new file mode 100644
+> >>>>> index 000000000000..fa4d8522a454
+> >>>>> --- /dev/null
+> >>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.=
+yaml
+> >>>>> @@ -0,0 +1,51 @@
+> >>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >>>>> +%YAML 1.2
+> >>>>> +---
+> >>>>> +$id: http://devicetree.org/schemas/soc/starfive/jh7110-syscon.yaml#
+> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>>>> +
+> >>>>> +title: StarFive JH7110 SoC system controller
+> >>>>> +
+> >>>>> +maintainers:
+> >>>>> +  - William Qiu <william.qiu@starfivetech.com>
+> >>>>> +
+> >>>>> +description: |
+> >>>>> +  The StarFive JH7110 SoC system controller provides register info=
+rmation such
+> >>>>> +  as offset, mask and shift to configure related modules such as M=
+MC and PCIe.
+> >>>>> +
+> >>>>> +properties:
+> >>>>> +  compatible:
+> >>>>> +    items:
+> >>>>> +      - enum:
+> >>>>> +          - starfive,jh7110-stg-syscon
+> >>>>> +          - starfive,jh7110-sys-syscon
+> >>>>> +          - starfive,jh7110-aon-syscon
+> >>>>
+> >>>> Is 'syscon' really part of what the blocks are called? Is just 'stg'=
+,=20
+> >>>> 'sys' and 'aon' not unique enough?
 
-Acked-by: Sumit Garg <sumit.garg@linaro.org>
+> >>> In StarFive SoC, we do have syscrg/aoncrg/stgcrg, which is uesd to be=
+ the clock
+> >>> controller, so 'syscon' is added to avoid confusion.
+> >>
+> >> You've only added to my confusion. 'syscrg' and 'sys-syscon' are 2=20
+> >> different h/w blocks and unrelated to each other? Or 'syscrg' is the=
+=20
+> >> clock portion of 'sys-syscon'? In that case, 'syscrg' should be a chil=
+d=20
+> >> of 'sys-syscon' or possibly just all one node. Please provide details =
+on=20
+> >> the entire h/w block so we can provide better input on the bindings.
 
--Sumit
+> > It's my description that's problematic.'syscon' here refers to the hard=
+ware module
+> > inside our JH7110, which is different from the syscon interface in linu=
+x. The syscon
+> > I added now uses the syscon interface of linux to read and write the sy=
+scon register
+> > in our JH7110. So we decided to name it that way.
+>=20
+> You didn't really answer Rob's questions.
+>=20
+> Also, syscon is Linux term, so are you sure hardware module is called
+> like this? Hardware engineers took pure Linux name and used it?
 
-> diff --git a/drivers/tee/amdtee/core.c b/drivers/tee/amdtee/core.c
-> index 297dc62bca29..372d64756ed6 100644
-> --- a/drivers/tee/amdtee/core.c
-> +++ b/drivers/tee/amdtee/core.c
-> @@ -267,35 +267,34 @@ int amdtee_open_session(struct tee_context *ctx,
->                 goto out;
->         }
->
-> +       /* Open session with loaded TA */
-> +       handle_open_session(arg, &session_info, param);
-> +       if (arg->ret != TEEC_SUCCESS) {
-> +               pr_err("open_session failed %d\n", arg->ret);
-> +               handle_unload_ta(ta_handle);
-> +               kref_put(&sess->refcount, destroy_session);
-> +               goto out;
-> +       }
-> +
->         /* Find an empty session index for the given TA */
->         spin_lock(&sess->lock);
->         i = find_first_zero_bit(sess->sess_mask, TEE_NUM_SESSIONS);
-> -       if (i < TEE_NUM_SESSIONS)
-> +       if (i < TEE_NUM_SESSIONS) {
-> +               sess->session_info[i] = session_info;
-> +               set_session_id(ta_handle, i, &arg->session);
->                 set_bit(i, sess->sess_mask);
-> +       }
->         spin_unlock(&sess->lock);
->
->         if (i >= TEE_NUM_SESSIONS) {
->                 pr_err("reached maximum session count %d\n", TEE_NUM_SESSIONS);
-> +               handle_close_session(ta_handle, session_info);
->                 handle_unload_ta(ta_handle);
->                 kref_put(&sess->refcount, destroy_session);
->                 rc = -ENOMEM;
->                 goto out;
->         }
->
-> -       /* Open session with loaded TA */
-> -       handle_open_session(arg, &session_info, param);
-> -       if (arg->ret != TEEC_SUCCESS) {
-> -               pr_err("open_session failed %d\n", arg->ret);
-> -               spin_lock(&sess->lock);
-> -               clear_bit(i, sess->sess_mask);
-> -               spin_unlock(&sess->lock);
-> -               handle_unload_ta(ta_handle);
-> -               kref_put(&sess->refcount, destroy_session);
-> -               goto out;
-> -       }
-> -
-> -       sess->session_info[i] = session_info;
-> -       set_session_id(ta_handle, i, &arg->session);
->  out:
->         free_pages((u64)ta, get_order(ta_size));
->         return rc;
-> --
-> 2.25.1
->
+Their TRM uses the term SYSCON for these, yes.
+Eg:
+"The JH7110 system provides the following STG SYSCON control registers
+which provides [sic] clock and reset signals to interfaces..."
+
+In fact, the TRM I have describes the following system control register
+blocks:
+SYS CRG
+STG CRG
+AON CRG
+SYS SYSCON
+STG SYSCON
+AON SYSCON
+SYS IOMUX CFG
+AON IOMUX CFG
+
+My understanding is that the first 3 (the CRG ones) are concerned with
+clocks and resets & the second 3 contain "random" configuration options,
+such as their QSPI IP's configuration options, GPIO voltage settings
+etc.
+
+Each of these has a separate, 0x1000 aligned, block in the memory map.
+
+Cheers,
+Conor.
+
+
+--X8n4J7EvKMl6UgmW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/3gxQAKCRB4tDGHoIJi
+0m7FAP9ZuJY5lc5LbY1+xIN/TTUhGhhr3IOZmLx6bo+ojl5LUAD6Aq4/6MrSKXxJ
+t9GKVJwrsQFXq+f2SPRExjM7cySWEw0=
+=y2mX
+-----END PGP SIGNATURE-----
+
+--X8n4J7EvKMl6UgmW--
