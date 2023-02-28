@@ -2,386 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97C46A554D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 496806A5545
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbjB1JP3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Feb 2023 04:15:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S230328AbjB1JOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjB1JPY (ORCPT
+        with ESMTP id S229606AbjB1JOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:15:24 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434992BEE2;
-        Tue, 28 Feb 2023 01:15:21 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1A00624E1A4;
-        Tue, 28 Feb 2023 17:13:51 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
- 2023 17:13:48 +0800
-Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
- by EXMBX068.cuchost.com (172.16.6.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Tue, 28 Feb 2023 17:13:46 +0800
-From:   William Qiu <william.qiu@starfivetech.com>
-To:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>
-Subject: [PATCH v1 2/2] pwm: starfive: Add PWM driver support
-Date:   Tue, 28 Feb 2023 17:13:45 +0800
-Message-ID: <20230228091345.70515-3-william.qiu@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230228091345.70515-1-william.qiu@starfivetech.com>
-References: <20230228091345.70515-1-william.qiu@starfivetech.com>
+        Tue, 28 Feb 2023 04:14:25 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB0B2004F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:14:24 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C724921A4B;
+        Tue, 28 Feb 2023 09:14:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1677575662; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L+WXaR+5eyD3SgnEUW2jbzu4G0EEJxEV/thZNIYGSNM=;
+        b=Bw419Sm4w+33lRx7yoKfEdxwlbNEdrUBgIJLRE3zlPgkwj2fGC7OgtX+NOAoS/oKGXTuoj
+        Le3kTf9+xfDBBCYyz05qVz8ob1+xG6I6X7tbI6Z9PpuvA/FtpBtxDNc64ocBqViVlfQylW
+        wpozC0MjvwPIcii2ZY/N2z+ImjHJRm0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1677575662;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L+WXaR+5eyD3SgnEUW2jbzu4G0EEJxEV/thZNIYGSNM=;
+        b=6+ad0VPicC+f26+tj+7Hpcz6fZWR9kmW9Wbd+v9+EUnqIMuuWRi+wwKJld/6Yc07S25Crm
+        h+sKmPIo3VQGFqBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8C38613440;
+        Tue, 28 Feb 2023 09:14:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id THNMIe7F/WM9LgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 28 Feb 2023 09:14:22 +0000
+Message-ID: <9c8401c1-8a32-2b3a-5323-3c0f9dad0457@suse.de>
+Date:   Tue, 28 Feb 2023 10:14:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm: omapdrm: Do not use helper unininitialized in
+ omap_fbdev_init()
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>, tomba@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch, javierm@redhat.com
+Cc:     kernel test robot <lkp@intel.com>, trix@redhat.com,
+        llvm@lists.linux.dev, ndesaulniers@google.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        patches@lists.linux.dev
+References: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------w0z6qTToscvskSOlLJqX5NRQ"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Pulse Width Modulation driver support for StarFive
-JH7110 soc.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------w0z6qTToscvskSOlLJqX5NRQ
+Content-Type: multipart/mixed; boundary="------------PyeezaLySjTJbky6LHg1ebue";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Nathan Chancellor <nathan@kernel.org>, tomba@kernel.org,
+ airlied@gmail.com, daniel@ffwll.ch, javierm@redhat.com
+Cc: kernel test robot <lkp@intel.com>, trix@redhat.com, llvm@lists.linux.dev,
+ ndesaulniers@google.com, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, patches@lists.linux.dev
+Message-ID: <9c8401c1-8a32-2b3a-5323-3c0f9dad0457@suse.de>
+Subject: Re: [PATCH] drm: omapdrm: Do not use helper unininitialized in
+ omap_fbdev_init()
+References: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+In-Reply-To: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
 
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-Signed-off-by: William Qiu <william.qiu@starfivetech.com>
----
- MAINTAINERS                    |   7 +
- drivers/pwm/Kconfig            |  10 ++
- drivers/pwm/Makefile           |   1 +
- drivers/pwm/pwm-starfive-ptc.c | 256 +++++++++++++++++++++++++++++++++
- 4 files changed, 274 insertions(+)
- create mode 100644 drivers/pwm/pwm-starfive-ptc.c
+--------------PyeezaLySjTJbky6LHg1ebue
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ac151975d0d3..05b59605d864 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19929,6 +19929,13 @@ F:	drivers/pinctrl/starfive/pinctrl-starfive-jh71*
- F:	include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
- F:	include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
- 
-+STARFIVE JH71X0 PWM DRIVERS
-+M:	William Qiu <william.qiu@starfivetech.com>
-+M:	Hal Feng <hal.feng@starfivetech.com>
-+S:	Supported
-+F:	Documentation/devicetree/bindings/pwm/pwm-starfive.yaml
-+F:	drivers/pwm/pwm-starfive-ptc.c
-+
- STARFIVE JH71X0 RESET CONTROLLER DRIVERS
- M:	Emil Renner Berthing <kernel@esmil.dk>
- M:	Hal Feng <hal.feng@starfivetech.com>
-diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-index dae023d783a2..2307a0099994 100644
---- a/drivers/pwm/Kconfig
-+++ b/drivers/pwm/Kconfig
-@@ -536,6 +536,16 @@ config PWM_SPRD
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called pwm-sprd.
- 
-+config PWM_STARFIVE_PTC
-+	tristate "StarFive PWM PTC support"
-+	depends on OF
-+	depends on COMMON_CLK
-+	help
-+	  Generic PWM framework driver for StarFive SoCs.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called pwm-starfive-ptc.
-+
- config PWM_STI
- 	tristate "STiH4xx PWM support"
- 	depends on ARCH_STI || COMPILE_TEST
-diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-index 7bf1a29f02b8..577f69904baa 100644
---- a/drivers/pwm/Makefile
-+++ b/drivers/pwm/Makefile
-@@ -49,6 +49,7 @@ obj-$(CONFIG_PWM_SIFIVE)	+= pwm-sifive.o
- obj-$(CONFIG_PWM_SL28CPLD)	+= pwm-sl28cpld.o
- obj-$(CONFIG_PWM_SPEAR)		+= pwm-spear.o
- obj-$(CONFIG_PWM_SPRD)		+= pwm-sprd.o
-+obj-$(CONFIG_PWM_STARFIVE_PTC)	+= pwm-starfive-ptc.o
- obj-$(CONFIG_PWM_STI)		+= pwm-sti.o
- obj-$(CONFIG_PWM_STM32)		+= pwm-stm32.o
- obj-$(CONFIG_PWM_STM32_LP)	+= pwm-stm32-lp.o
-diff --git a/drivers/pwm/pwm-starfive-ptc.c b/drivers/pwm/pwm-starfive-ptc.c
-new file mode 100644
-index 000000000000..58831c600168
---- /dev/null
-+++ b/drivers/pwm/pwm-starfive-ptc.c
-@@ -0,0 +1,256 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * PWM driver for the StarFive JH7110 SoC
-+ *
-+ * Copyright (C) 2018 StarFive Technology Co., Ltd.
-+ */
-+
-+#include <dt-bindings/pwm/pwm.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pwm.h>
-+#include <linux/slab.h>
-+#include <linux/clk.h>
-+#include <linux/reset.h>
-+#include <linux/io.h>
-+
-+/* how many parameters can be transferred to ptc */
-+#define OF_PWM_N_CELLS			3
-+
-+/* PTC Register offsets */
-+#define REG_RPTC_CNTR			0x0
-+#define REG_RPTC_HRC			0x4
-+#define REG_RPTC_LRC			0x8
-+#define REG_RPTC_CTRL			0xC
-+
-+/* Bit for PWM clock */
-+#define BIT_PWM_CLOCK_EN		31
-+
-+/* Bit for clock gen soft reset */
-+#define BIT_CLK_GEN_SOFT_RESET		13
-+
-+#define NS_PER_SECOND			1000000000
-+#define DEFAULT_FREQ_HZ			2000000
-+
-+/*
-+ * Access PTC register (cntr hrc lrc and ctrl),
-+ * need to replace PWM_BASE_ADDR
-+ */
-+#define REG_PTC_BASE_ADDR_SUB(base, N)	\
-+((base) + (((N) > 3) ? (((N) % 4) * 0x10 + (1 << 15)) : ((N) * 0x10)))
-+#define REG_PTC_RPTC_CNTR(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N))
-+#define REG_PTC_RPTC_HRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x4)
-+#define REG_PTC_RPTC_LRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x8)
-+#define REG_PTC_RPTC_CTRL(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0xC)
-+
-+/* PTC_RPTC_CTRL */
-+#define PTC_EN      BIT(0)
-+#define PTC_ECLK    BIT(1)
-+#define PTC_NEC     BIT(2)
-+#define PTC_OE      BIT(3)
-+#define PTC_SIGNLE  BIT(4)
-+#define PTC_INTE    BIT(5)
-+#define PTC_INT     BIT(6)
-+#define PTC_CNTRRST BIT(7)
-+#define PTC_CAPTE   BIT(8)
-+
-+struct starfive_pwm_ptc_device {
-+	struct pwm_chip		chip;
-+	struct clk		*clk;
-+	struct reset_control	*rst;
-+	void __iomem		*regs;
-+	int			irq;
-+	/*pwm apb clock frequency*/
-+	unsigned int		approx_freq;
-+};
-+
-+static inline struct starfive_pwm_ptc_device *
-+		chip_to_starfive_ptc(struct pwm_chip *c)
-+{
-+	return container_of(c, struct starfive_pwm_ptc_device, chip);
-+}
-+
-+static int starfive_pwm_ptc_get_state(struct pwm_chip *chip,
-+				       struct pwm_device *dev,
-+				       struct pwm_state *state)
-+{
-+	struct starfive_pwm_ptc_device *pwm = chip_to_starfive_ptc(chip);
-+	u32 data_lrc, data_hrc;
-+	u32 pwm_clk_ns = 0;
-+
-+	data_lrc = ioread32(REG_PTC_RPTC_LRC(pwm->regs, dev->hwpwm));
-+	data_hrc = ioread32(REG_PTC_RPTC_HRC(pwm->regs, dev->hwpwm));
-+
-+	pwm_clk_ns = NS_PER_SECOND / pwm->approx_freq;
-+
-+	state->period = data_lrc * pwm_clk_ns;
-+	state->duty_cycle = data_hrc * pwm_clk_ns;
-+	state->polarity = PWM_POLARITY_NORMAL;
-+	state->enabled = 1;
-+
-+	return 0;
-+}
-+
-+static int starfive_pwm_ptc_apply(struct pwm_chip *chip,
-+				  struct pwm_device *dev,
-+				  struct pwm_state *state)
-+{
-+	struct starfive_pwm_ptc_device *pwm = chip_to_starfive_ptc(chip);
-+	u32 data_hrc = 0;
-+	u32 data_lrc = 0;
-+	u32 period_data = 0;
-+	u32 duty_data = 0;
-+	s64 multi = pwm->approx_freq;
-+	s64 div = NS_PER_SECOND;
-+	void __iomem *reg_addr;
-+
-+	if (state->duty_cycle > state->period)
-+		state->duty_cycle = state->period;
-+
-+	while (multi % 10 == 0 && div % 10 == 0 && multi > 0 && div > 0) {
-+		multi /= 10;
-+		div /= 10;
-+	}
-+
-+	period_data = (u32)(state->period * multi / div);
-+	if (abs(period_data * div / multi - state->period)
-+	    > abs((period_data + 1) * div / multi - state->period) ||
-+	    (state->period > 0 && period_data == 0))
-+		period_data += 1;
-+
-+	if (state->enabled) {
-+		duty_data = (u32)(state->duty_cycle * multi / div);
-+		if (abs(duty_data * div / multi - state->duty_cycle)
-+			> abs((duty_data + 1) * div / multi - state->duty_cycle) ||
-+			(state->duty_cycle > 0 && duty_data == 0))
-+			duty_data += 1;
-+	} else {
-+		duty_data = 0;
-+	}
-+
-+	if (state->polarity == PWM_POLARITY_NORMAL)
-+		data_hrc = period_data - duty_data;
-+	else
-+		data_hrc = duty_data;
-+
-+	data_lrc = period_data;
-+
-+	reg_addr = REG_PTC_RPTC_HRC(pwm->regs, dev->hwpwm);
-+	iowrite32(data_hrc, reg_addr);
-+
-+	reg_addr = REG_PTC_RPTC_LRC(pwm->regs, dev->hwpwm);
-+	iowrite32(data_lrc, reg_addr);
-+
-+	reg_addr = REG_PTC_RPTC_CNTR(pwm->regs, dev->hwpwm);
-+	iowrite32(0, reg_addr);
-+
-+	reg_addr = REG_PTC_RPTC_CTRL(pwm->regs, dev->hwpwm);
-+	iowrite32(PTC_EN | PTC_OE, reg_addr);
-+
-+	return 0;
-+}
-+
-+static const struct pwm_ops starfive_pwm_ptc_ops = {
-+	.get_state	= starfive_pwm_ptc_get_state,
-+	.apply		= (void *)starfive_pwm_ptc_apply,
-+	.owner		= THIS_MODULE,
-+};
-+
-+static int starfive_pwm_ptc_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct starfive_pwm_ptc_device *pwm;
-+	struct pwm_chip *chip;
-+	struct resource *res;
-+	unsigned int clk_apb_freq;
-+	int ret;
-+
-+	pwm = devm_kzalloc(dev, sizeof(*pwm), GFP_KERNEL);
-+	if (!pwm)
-+		return -ENOMEM;
-+
-+	chip = &pwm->chip;
-+	chip->dev = dev;
-+	chip->ops = &starfive_pwm_ptc_ops;
-+	chip->npwm = 8;
-+
-+	chip->of_pwm_n_cells = OF_PWM_N_CELLS;
-+	chip->base = -1;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	pwm->regs = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(pwm->regs)) {
-+		dev_err(dev, "Unable to map IO resources\n");
-+		return PTR_ERR(pwm->regs);
-+	}
-+
-+	pwm->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(pwm->clk)) {
-+		dev_err(dev, "Unable to get pwm clock\n");
-+		return PTR_ERR(pwm->clk);
-+	}
-+
-+	pwm->rst = devm_reset_control_get_exclusive(dev, NULL);
-+	if (IS_ERR(pwm->rst)) {
-+		dev_err(dev, "Unable to get pwm reset\n");
-+		return PTR_ERR(pwm->rst);
-+	}
-+
-+	ret = clk_prepare_enable(pwm->clk);
-+	if (ret) {
-+		dev_err(dev,
-+			"Failed to enable pwm clock, %d\n", ret);
-+		return ret;
-+	}
-+
-+	reset_control_deassert(pwm->rst);
-+
-+	clk_apb_freq = (unsigned int)clk_get_rate(pwm->clk);
-+	if (!clk_apb_freq)
-+		dev_warn(dev,
-+			 "get pwm apb clock rate failed.\n");
-+	else
-+		pwm->approx_freq = clk_apb_freq;
-+
-+	ret = pwmchip_add(chip);
-+	if (ret < 0) {
-+		dev_err(dev, "cannot register PTC: %d\n", ret);
-+		clk_disable_unprepare(pwm->clk);
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, pwm);
-+
-+	return 0;
-+}
-+
-+static int starfive_pwm_ptc_remove(struct platform_device *dev)
-+{
-+	struct starfive_pwm_ptc_device *pwm = platform_get_drvdata(dev);
-+	struct pwm_chip *chip = &pwm->chip;
-+
-+	pwmchip_remove(chip);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id starfive_pwm_ptc_of_match[] = {
-+	{ .compatible = "starfive,jh7110-pwm" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, starfive_pwm_ptc_of_match);
-+
-+static struct platform_driver starfive_pwm_ptc_driver = {
-+	.probe = starfive_pwm_ptc_probe,
-+	.remove = starfive_pwm_ptc_remove,
-+	.driver = {
-+		.name = "pwm-starfive-ptc",
-+		.of_match_table = of_match_ptr(starfive_pwm_ptc_of_match),
-+	},
-+};
-+module_platform_driver(starfive_pwm_ptc_driver);
-+
-+MODULE_AUTHOR("Jenny Zhang <jenny.zhang@starfivetech.com>");
-+MODULE_AUTHOR("Hal Feng <hal.feng@starfivetech.com>");
-+MODULE_DESCRIPTION("StarFive PWM PTC driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+QWRkZWQgdG8gZHJtLW1pc2MtbmV4dC1maXhlcy4NCg0KQW0gMjQuMDIuMjMgdW0gMTg6MjUg
+c2NocmllYiBOYXRoYW4gQ2hhbmNlbGxvcjoNCj4gQ2xhbmcgd2FybnMgKG9yIGVycm9ycyB3
+aXRoIENPTkZJR19XRVJST1IpOg0KPiANCj4gICAgLi4vZHJpdmVycy9ncHUvZHJtL29tYXBk
+cm0vb21hcF9mYmRldi5jOjIzNTo2OiBlcnJvcjogdmFyaWFibGUgJ2hlbHBlcicgaXMgdXNl
+ZCB1bmluaXRpYWxpemVkIHdoZW5ldmVyICdpZicgY29uZGl0aW9uIGlzIHRydWUgWy1XZXJy
+b3IsLVdzb21ldGltZXMtdW5pbml0aWFsaXplZF0NCj4gICAgICAgICAgICBpZiAoIWZiZGV2
+KQ0KPiAgICAgICAgICAgICAgICBefn5+fn4NCj4gICAgLi4vZHJpdmVycy9ncHUvZHJtL29t
+YXBkcm0vb21hcF9mYmRldi5jOjI1OToyNjogbm90ZTogdW5pbml0aWFsaXplZCB1c2Ugb2Nj
+dXJzIGhlcmUNCj4gICAgICAgICAgICBkcm1fZmJfaGVscGVyX3VucHJlcGFyZShoZWxwZXIp
+Ow0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fg0KPiAgICAu
+Li9kcml2ZXJzL2dwdS9kcm0vb21hcGRybS9vbWFwX2ZiZGV2LmM6MjM1OjI6IG5vdGU6IHJl
+bW92ZSB0aGUgJ2lmJyBpZiBpdHMgY29uZGl0aW9uIGlzIGFsd2F5cyBmYWxzZQ0KPiAgICAg
+ICAgICAgIGlmICghZmJkZXYpDQo+ICAgICAgICAgICAgXn5+fn5+fn5+fn4NCj4gICAgLi4v
+ZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9mYmRldi5jOjIyODozMDogbm90ZTogaW5p
+dGlhbGl6ZSB0aGUgdmFyaWFibGUgJ2hlbHBlcicgdG8gc2lsZW5jZSB0aGlzIHdhcm5pbmcN
+Cj4gICAgICAgICAgICBzdHJ1Y3QgZHJtX2ZiX2hlbHBlciAqaGVscGVyOw0KPiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeDQo+ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICA9IE5VTEwNCj4gICAgMSBlcnJvciBnZW5lcmF0ZWQu
+DQo+IA0KPiBSZXR1cm4gZWFybHksIGFzIHRoZXJlIGlzIG5vdGhpbmcgZm9yIHRoZSBmdW5j
+dGlvbiB0byBkbyBpZiBtZW1vcnkNCj4gY2Fubm90IGJlIGFsbG9jYXRlZC4gVGhlcmUgaXMg
+bm8gcG9pbnQgaW4gYWRkaW5nIGFub3RoZXIgbGFiZWwgdG8ganVzdA0KPiBlbWl0IHRoZSB3
+YXJuaW5nIGF0IHRoZSBlbmQgb2YgdGhlIGZ1bmN0aW9uIGluIHRoaXMgY2FzZSwgYXMgbWVt
+b3J5DQo+IGFsbG9jYXRpb24gZmFpbHVyZXMgYXJlIGFscmVhZHkgbG9nZ2VkLg0KPiANCj4g
+Rml4ZXM6IDNmYjFmNjJmODBhMSAoImRybS9mYi1oZWxwZXI6IFJlbW92ZSBkcm1fZmJfaGVs
+cGVyX3VucHJlcGFyZSgpIGZyb20gZHJtX2ZiX2hlbHBlcl9maW5pKCkiKQ0KPiBMaW5rOiBo
+dHRwczovL2dpdGh1Yi5jb20vQ2xhbmdCdWlsdExpbnV4L2xpbnV4L2lzc3Vlcy8xODA5DQo+
+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAyMzAyMjUw
+MDU4LmZZVGU5YVRQLWxrcEBpbnRlbC5jb20vDQo+IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVz
+dCByb2JvdCA8bGtwQGludGVsLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogTmF0aGFuIENoYW5j
+ZWxsb3IgPG5hdGhhbkBrZXJuZWwub3JnPg0KPiAtLS0NCj4gVGhpcyBpcyBjdXJyZW50bHkg
+c2hvd2luZyBpbiBtYWlubGluZSBzbyBJIGJlbGlldmUgdGhpcyBzaG91bGQgZ28gdG8NCj4g
+ZHJtLW1pc2MtbmV4dC1maXhlcy4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL29tYXBk
+cm0vb21hcF9mYmRldi5jIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlv
+bigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2Ry
+bS9vbWFwZHJtL29tYXBfZmJkZXYuYyBiL2RyaXZlcnMvZ3B1L2RybS9vbWFwZHJtL29tYXBf
+ZmJkZXYuYw0KPiBpbmRleCA4NDQyOTcyODM0N2YuLmE2Yzg1NDIwODdlYyAxMDA2NDQNCj4g
+LS0tIGEvZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9mYmRldi5jDQo+ICsrKyBiL2Ry
+aXZlcnMvZ3B1L2RybS9vbWFwZHJtL29tYXBfZmJkZXYuYw0KPiBAQCAtMjMzLDcgKzIzMyw3
+IEBAIHZvaWQgb21hcF9mYmRldl9pbml0KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpDQo+ICAg
+DQo+ICAgCWZiZGV2ID0ga3phbGxvYyhzaXplb2YoKmZiZGV2KSwgR0ZQX0tFUk5FTCk7DQo+
+ICAgCWlmICghZmJkZXYpDQo+IC0JCWdvdG8gZmFpbDsNCj4gKwkJcmV0dXJuOw0KPiAgIA0K
+PiAgIAlJTklUX1dPUksoJmZiZGV2LT53b3JrLCBwYW5fd29ya2VyKTsNCj4gICANCj4gDQo+
+IC0tLQ0KPiBiYXNlLWNvbW1pdDogZTAzNGI4YTE4ZDRiYWRjZWVjYjY3MmM1OGI0ODhiYWQx
+ZTkwMWQ5NQ0KPiBjaGFuZ2UtaWQ6IDIwMjMwMjI0LW9tYXBkcm0td3NvbWV0aW1lcy11bmlu
+aXRpYWxpemVkLTAxMjVmNzY5MmZiYg0KPiANCj4gQmVzdCByZWdhcmRzLA0KDQotLSANClRo
+b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
+YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
+YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
+vGhyZXI6IEl2byBUb3Rldg0K
 
+--------------PyeezaLySjTJbky6LHg1ebue--
+
+--------------w0z6qTToscvskSOlLJqX5NRQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP9xe4FAwAAAAAACgkQlh/E3EQov+D/
+txAAjH/d4APMhjDTQWU+GhtyJgMQ5W8iYv4ZQNYL7O/wZKvi0GsY6gM+RVIzy0/OHGFVJI1hfQHl
+yvwjFrC2Uu161wJL1bMDifbSqfh5KZsR3NkXuODxcKtG+xXelw/McIXK9viAJvjDqDgcRRi88rIa
+VM0qfxCfsqW88p/EvbWQVfBljuMo7ON6v89S6q5IWb1QvvxvtGKJahUtUGc3/K7LxHgtotH7LJU6
+sz8EyRwudFZC7vko+zgwezVpgVNbbm7AzUGzNjq0CT5qtKWMUku5AtkPd3a8wEarvVGOjViC6Ez7
+S04sSutPWcy0J3TZ+rLRPhtCRiEr5pFc0mb5qSJasppL5/4SCzbPkTvg/06oUgSWAmRnm0A7cqt8
+DXwXsh2NU+oI58qPY33IWDLrwoemJod0cO7zYIXojoXccJZrLQPHcunqkrYqaBSm2FUSksAT8o0O
+M5WrEqFz7wsGvmAt0Y8OnHGBwRh+weyZz/7aFv2e8589RMwm/HnVjp9fgIrVedKLwQilGUj6MlQO
+RHotcxzWPkRtPQ4AdU0kiNM7L6Jgmc2zgc+mmxbMwaiOWWNOWymavynsdhSenqSicROHk1HJl3dP
+axUGVsdhYAyZDhaEwwpq+XmMYg4GnMjAF+8782rIy0T/wnq5DKjx323tCRRve+uOgAHou++uM9Xk
+jqE=
+=ZQmY
+-----END PGP SIGNATURE-----
+
+--------------w0z6qTToscvskSOlLJqX5NRQ--
