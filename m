@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F826A5B25
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1B76A5B28
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjB1Ozs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 09:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
+        id S229803AbjB1O4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 09:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjB1Ozq (ORCPT
+        with ESMTP id S229775AbjB1O4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 09:55:46 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F285CC3D;
-        Tue, 28 Feb 2023 06:55:33 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id i12so6417931ila.5;
-        Tue, 28 Feb 2023 06:55:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677596133;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q5eTTfgqaqAQ3CFcC2lIe16x/qcJqi2p2PHjQUf8Jvw=;
-        b=Q7xAlJQyRu5B7Cy83Q+sT2qzoqhrkVrBSrGXj4JcG5zoSL3Kbj9QszSrpZGLczlO3h
-         eck2+fXID/edmLhozaZjTAtbLVRV5palbbPxUkLFNkRjha8Yu6rnnke+qdemzHeFekqm
-         lOtL1XmXEGHtd8SDcd6f1fMgRvx5cJ3IDYj6I4KWqocDOcGlgcdTpRY/Co1s6CbWNhnY
-         b05UeRVP3LzQPoB5V8jDDcfeHN7dUGLjcfNm+1Rtd0iucT2YrmV6eN6ii4k92SGaomN2
-         Zx/Luw3CKLpsoTKfI9442yfXiLAHSxe2Uw6lHcFSt4wpiKfPfG+YLBUZiNJ6hX/m/Tc5
-         80cQ==
+        Tue, 28 Feb 2023 09:56:48 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673332739;
+        Tue, 28 Feb 2023 06:56:18 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-172afa7bee2so11165064fac.6;
+        Tue, 28 Feb 2023 06:56:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677596133;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q5eTTfgqaqAQ3CFcC2lIe16x/qcJqi2p2PHjQUf8Jvw=;
-        b=NgNiloE+w86C18vxfODa/MCyFG5kjdx8Ii/T2TywCfuiTeR3IC56A6y6U7pVveSe3t
-         HMIZls4gkwOxFAL1dA75SgWZTPZ5Ty4vgSyUSDYu5WXvvYfGQxKuBJ2k4Oawm9KUmdT4
-         8c9sjrihztQhLgZ0ntCDuUGB1q+BTg6XJaZdDpAmC+x7cxTREeX+8N43H4Gu/sTM4UGa
-         kR6rV6L3Qxfa8MIwHGe3s4x129cpZNraorB2aN/w/Owe/keJnLByA2tl0AtfrkLi2sK3
-         AZ5PfzOdKm6f3e+dQYiQyiGzHmVcKdO//I/yeYGyY+xz5Rcw3eYF+UN/sAG41IuEV50a
-         JwUg==
-X-Gm-Message-State: AO0yUKVSEfK/MJEGkx+6PU47GC7s93MJRlT8vk2byHkMWEqVfFsSj0gO
-        VmpCfraf296oyZrr5PP4VsX0kpWNEMw=
-X-Google-Smtp-Source: AK7set9shbJpReCH2WaoIyL8idU/N5JfWPZwcmqak7rP5Tjb+0Muq4sVw//bvSpOwHBJVZsI6P2Sbw==
-X-Received: by 2002:a05:6e02:2142:b0:315:7fec:f1f0 with SMTP id d2-20020a056e02214200b003157fecf1f0mr2650247ilv.7.1677596132916;
-        Tue, 28 Feb 2023 06:55:32 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o21-20020a02b815000000b003b8708902c0sm3084290jam.21.2023.02.28.06.55.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 06:55:31 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <82659eef-528d-e421-aed4-21e1a7794bf5@roeck-us.net>
-Date:   Tue, 28 Feb 2023 06:55:29 -0800
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V5ioO1pIepGfs4SqLPVfsMcAuwOTg1zSb7b6ZK0A88s=;
+        b=xxiLTvcVJrRMs1BXs2iFukcpwSTxWnBi3Tbj9VVd8HL0Fm2JAqr949DPKJ6vl15GCk
+         zWsRiQMrv+kuE4UTIeB5wao7F3hrBAn1VZQhp1h7xM/AKh7Ufyaq87qs83ynrkyHCahX
+         wKDoK6gGzDEmawN4KAP1vAZDjHF2hrkxkR0pOk+mxQhkgsr+uIWEniF64NIMPnbIvFwm
+         eNFf+WCUhkYRS/LrWuPB9K+NN7J7rT5RQCiLkl3S2oa1eYTpuzaVOGdXEMzdIGKTeeDD
+         voSdT0Y2o2WZB6zwWO+oC0rmYrpALYYnPlkK7UYy6ILrCnc9MTurYoV2UKRsxMkuD+HA
+         jLnQ==
+X-Gm-Message-State: AO0yUKUTh5+Bgn9vGNSBVffAwwaVZY8VQ/tzN0BeJ6gZBOi3glrFayy+
+        FOvaejA5oFt2mtxfycRspQ==
+X-Google-Smtp-Source: AK7set+W45Qn/7/1YbmF3TWAhYItsVzxA7GfCwF6t4mgcwhbvhEsNDIOss2JQCOTYam578+VvcvXBw==
+X-Received: by 2002:a05:6870:8a2c:b0:172:7236:a5c0 with SMTP id p44-20020a0568708a2c00b001727236a5c0mr1663030oaq.13.1677596177578;
+        Tue, 28 Feb 2023 06:56:17 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w11-20020a9d70cb000000b0068bb3a9e2b9sm3696943otj.77.2023.02.28.06.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 06:56:17 -0800 (PST)
+Received: (nullmailer pid 3231849 invoked by uid 1000);
+        Tue, 28 Feb 2023 14:56:16 -0000
+Date:   Tue, 28 Feb 2023 08:56:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     David.Laight@aculab.com, evan@rivosinc.com,
+        Conor Dooley <conor@kernel.org>,
+        Vineet Gupta <vineetg@rivosinc.com>, heiko@sntech.de,
+        slewis@rivosinc.com, aou@eecs.berkeley.edu,
+        krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 4/6] dt-bindings: Add RISC-V misaligned access
+ performance
+Message-ID: <20230228145616.GA3205994-robh@kernel.org>
+References: <4bd24def02014939a87eb8430ba0070d@AcuMS.aculab.com>
+ <mhng-8736b349-e27a-4372-81ca-3a25d2ec1e94@palmer-ri-x1c9>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 2/5] mips: dts: ralink: mt7621: rename watchdog node
- from 'wdt' into 'watchdog'
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-References: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
- <20230214103936.1061078-3-sergio.paracuellos@gmail.com>
- <20230214151101.GB742354@roeck-us.net>
- <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
- <CAMhs-H_Ce-+MFi5zTMg8v8dSSg5ioaTy+Pw-0QMgK++PVtEViQ@mail.gmail.com>
- <20230228083920.GA5801@alpha.franken.de>
- <CAMhs-H8xGjGs0-qvxb5KgQ3YZw=2=scqaY15K3ZRp50jQcncSg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAMhs-H8xGjGs0-qvxb5KgQ3YZw=2=scqaY15K3ZRp50jQcncSg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <mhng-8736b349-e27a-4372-81ca-3a25d2ec1e94@palmer-ri-x1c9>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,63 +71,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 00:51, Sergio Paracuellos wrote:
-> On Tue, Feb 28, 2023 at 9:41 AM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
->>
->> On Tue, Feb 28, 2023 at 05:44:21AM +0100, Sergio Paracuellos wrote:
->>> On Tue, Feb 14, 2023 at 4:12 PM Sergio Paracuellos
->>> <sergio.paracuellos@gmail.com> wrote:
->>>>
->>>> On Tue, Feb 14, 2023 at 4:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>>>
->>>>> On Tue, Feb 14, 2023 at 11:39:33AM +0100, Sergio Paracuellos wrote:
->>>>>> Watchdog nodes must use 'watchdog' for node name. When a 'make dtbs_check'
->>>>>> is performed the following warning appears:
->>>>>>
->>>>>> wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-f])?$'
->>>>>>
->>>>>> Fix this warning up properly renaming the node into 'watchdog'.
->>>>>>
->>>>>> Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
->>>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->>>>>
->>>>> Acked-by: Guenter Roeck <linux@roeck-us.net>
->>>>>
->>>>> Note that we can not apply this and the next patch of the series
->>>>> through the watchdog tree since it crosses a maintainer boundary.
->>>>
->>>> I was expecting Thomas to get these two arch/mips patches or get an
->>>> Acked-by from him in order for you to apply them.
->>>
->>> Hi Thomas,
->>>
->>> I think you have missed this series since you have started to apply
->>> newer stuff in mips-next. Are you ok with taking or Acking patches 2
->>> and 3 of this series?
->>
->> yes, I sort of missed it. If it's enough to take patch 2/3 I'll do that.
->> If it's better to keep the series, I'm also ok with acking them.
->> What's the best way forward ?
+On Thu, Feb 09, 2023 at 08:51:22AM -0800, Palmer Dabbelt wrote:
+> On Wed, 08 Feb 2023 04:45:10 PST (-0800), David.Laight@ACULAB.COM wrote:
+> > From: Rob Herring
+> > > Sent: 07 February 2023 17:06
+> > > 
+> > > On Mon, Feb 06, 2023 at 12:14:53PM -0800, Evan Green wrote:
+> > > > From: Palmer Dabbelt <palmer@rivosinc.com>
+> > > >
+> > > > This key allows device trees to specify the performance of misaligned
+> > > > accesses to main memory regions from each CPU in the system.
+> > > >
+> > > > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > > Signed-off-by: Evan Green <evan@rivosinc.com>
+> > > > ---
+> > > >
+> > > > (no changes since v1)
+> > > >
+> > > >  Documentation/devicetree/bindings/riscv/cpus.yaml | 15 +++++++++++++++
+> > > >  1 file changed, 15 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> > > b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> > > > index c6720764e765..2c09bd6f2927 100644
+> > > > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> > > > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> > > > @@ -85,6 +85,21 @@ properties:
+> > > >      $ref: "/schemas/types.yaml#/definitions/string"
+> > > >      pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:_[hsxz](?:[a-z])+)*$
+> > > >
+> > > > +  riscv,misaligned-access-performance:
+> > > > +    description:
+> > > > +      Identifies the performance of misaligned memory accesses to main memory
+> > > > +      regions.  There are three flavors of unaligned access performance: "emulated"
+> > > > +      means that misaligned accesses are emulated via software and thus
+> > > > +      extremely slow, "slow" means that misaligned accesses are supported by
+> > > > +      hardware but still slower that aligned accesses sequences, and "fast"
+> > > > +      means that misaligned accesses are as fast or faster than the
+> > > > +      cooresponding aligned accesses sequences.
+> > > > +    $ref: "/schemas/types.yaml#/definitions/string"
+> > > > +    enum:
+> > > > +      - emulated
+> > > > +      - slow
+> > > > +      - fast
+> > > 
+> > > I don't think this belongs in DT. (I'm not sure about a userspace
+> > > interface either.)
 > 
-> Both trees work for me. The rest of the patches of this series should
-> go through the watchdog tree. Guenter, what is better for you?
+> [Kind of answered below.]
 > 
-
-Wim is handling pull requests. He has queued the other three patches in his
-tree. I would suggest to apply the two remaining patches through the mips
-tree.
-
-Guenter
-
-> Thanks,
->      Sergio Paracuellos
+> > > Can't this be tested and determined at runtime? Do misaligned accesses
+> > > and compare the performance. We already do this for things like memcpy
+> > > or crypto implementation selection.
 > 
->>
->> Thomas.
->>
->> --
->> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
->> good idea.                                                [ RFC1925, 2.3 ]
+> We've had a history of broken firmware emulation of misaligned accesses
+> wreaking havoc.  We don't run into concrete bugs there because we avoid
+> misaligned accesses as much as possible in the kernel, but I'd be worried
+> that we'd trigger a lot of these when probing for misaligned accesses.
 
+Then how do you distinguish between emulated and working vs. emulated 
+and broken? Sounds like the kernel running things would motivate fixing 
+firmware. :) If not, then broken platforms can disable the check with a 
+kernel command line flag. 
+
+> 
+> > There is also an long discussion about misaligned accesses
+> > for loooongarch.
+> > 
+> > Basically if you want to run a common kernel (and userspace)
+> > you have to default to compiling everything with -mno-stict-align
+> > so that the compiler generates byte accesses for anything
+> > marked 'packed' (etc).
+> > 
+> > Run-time tests can optimise some hot-spots.
+> > 
+> > In any case 'slow' is probably pointless - unless the accesses
+> > take more than 1 or 2 extra cycles.
+> 
+> [Also below.]
+> 
+> > Oh, and you really never, ever want to emulate them.
+> 
+> Unfortunately we're kind of stuck with this one: the specs used to require
+> that misaligned accesses were supported and thus there's a bunch of
+> firmwares that emulate them (and various misaligned accesses spread around,
+> though they're kind of a mess).  The specs no longer require this support,
+> but just dropping it from firmware will break binaries.
+> 
+> There's been some vague plans to dig out of this, but it'd require some sort
+> of firmware interface additions in order to turn off the emulation and
+> that's going to take a while.  As it stands we've got a bunch of users that
+> just want to know when they can emit misaligned accesses.
+> 
+> > Technically misaligned reads on (some) x86-64 cpu are slower
+> > than aligned ones, but the difference is marginal.
+> > I've measured two 64bit misaligned reads every clock.
+> > But it is consistently slower by much less than one clock
+> > per cache line.
+> 
+> The "fast" case is explicitly written to catch that flavor of
+> implementation.
+> 
+> The "slow" one is a bit vaguer, but the general idea is to catch
+> implementations that end up with some sort of pipeline flush on misaligned
+> accesses.  We've got a lot of very small in-order processors in RISC-V land,
+> and while I haven't gotten around to benchmarking them all my guess is that
+> the spec requirement for support ended up with some simple implementations.
+
+If userspace wants to get into microarchitecture level optimizations, it 
+should just look at the CPU model. IOW, use the CPU compatible to infer 
+things rather than continuously adding properties in an adhoc manor 
+trying to parameterize everything.
+
+Rob
