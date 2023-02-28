@@ -2,152 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2A26A6085
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9884A6A6091
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjB1Ume (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        id S229738AbjB1Uo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:44:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjB1Umd (ORCPT
+        with ESMTP id S229758AbjB1Uox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:42:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603C334339
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:41:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677616906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+n5ao7sZl4YPF+uvuG7GgDxKNOHxoWdmpB6UrFdBImU=;
-        b=jHv1fqyrxw+fkdeUBEGpKmswh6AWlEFlntlh1ZBoTAvLWCPSIYoc52UTmkG+0aH6aJtCue
-        2jKyEUoBDeBmt1Z9Jx7LA/Qir2q7YglpCeiita6BV9psJM1AIKblTL5wB58nIBBWgYo2qL
-        J4L1NDJv2Lc0zQtBknyZAnOEwyUFV0s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-n88w3L0tPlmNNPE3pXkhnQ-1; Tue, 28 Feb 2023 15:41:43 -0500
-X-MC-Unique: n88w3L0tPlmNNPE3pXkhnQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1FDC882820;
-        Tue, 28 Feb 2023 20:41:41 +0000 (UTC)
-Received: from swamp.redhat.com (unknown [10.39.192.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CF0FE2026D68;
-        Tue, 28 Feb 2023 20:41:39 +0000 (UTC)
-From:   Petr Oros <poros@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, scott.w.taylor@intel.com,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net] ice: copy last block omitted in ice_get_module_eeprom()
-Date:   Tue, 28 Feb 2023 21:41:39 +0100
-Message-Id: <20230228204139.2264495-1-poros@redhat.com>
+        Tue, 28 Feb 2023 15:44:53 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EE859FB;
+        Tue, 28 Feb 2023 12:44:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=Rtyk/933i49ixLph7CNpZDmvFerPzLAHEB/U4/br/XQ=; b=aU4Rkt00RfXf4/xidYpX0mbQoT
+        w5fWIxbq+awg5/9wDZhDWQ778Cftd3nDQAZNxujgc5/IDM5k2ZaHnl07hj6XrkA4mf51i3JJfAKDl
+        iTZkN7AUASYhuX/wT0w8p8VBnznvf0l9OqfG9in5Dn1n5UCA1DArGHywa+6e9uaI9SBN0dNibXqeQ
+        7GDtc5DBFAZzm28tVfoG0bIc5AvUmb7pzEmxydWhGhdQ5VFnoOuZEdJX1tOtKBaIzfKC/EDSXXRop
+        zJ1RiYfHM3qD7nbzb9QX9YNRSaopZvyPD/kHOjkt1eimOt0mhApSEvwvdxnS9wW8AcO/7q6yJYR9K
+        xziaZCtg==;
+Received: from [2a00:23ee:1191:17a9:ac09:981:11d9:64d9] (helo=[IPv6:::1])
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pX6p8-00EfBz-2x;
+        Tue, 28 Feb 2023 20:43:48 +0000
+Date:   Tue, 28 Feb 2023 20:43:41 +0000
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        brgerst@gmail.com
+CC:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
+Subject: Re: [PATCH v12 06/11] x86/smpboot: Remove initial_stack on 64-bit
+User-Agent: K-9 Mail for Android
+In-Reply-To: <87edq9mto0.ffs@tglx>
+References: <20230226110802.103134-1-usama.arif@bytedance.com> <20230226110802.103134-7-usama.arif@bytedance.com> <87k001n4xo.ffs@tglx> <c6863590f5fbf139f6aec50d0f3bc8e8b00cfcaf.camel@infradead.org> <87edq9mto0.ffs@tglx>
+Message-ID: <64B60F62-3760-43A0-A0FB-C349DA70C013@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ice_get_module_eeprom() is broken since commit e9c9692c8a81 ("ice:
-Reimplement module reads used by ethtool") In this refactor,
-ice_get_module_eeprom() reads the eeprom in blocks of size 8.
-But the condition that should protect the buffer overflow
-ignores the last block. The last block always contains zeros.
-Fix adding memcpy for last block.
 
-Bug uncovered by ethtool upstream commit 9538f384b535
-("netlink: eeprom: Defer page requests to individual parsers")
-After this commit, ethtool reads a block with length = 1;
-to read the SFF-8024 identifier value.
 
-unpatched driver:
-$ ethtool -m enp65s0f0np0 offset 0x90 length 8
-Offset          Values
-------          ------
-0x0090:         00 00 00 00 00 00 00 00
-$ ethtool -m enp65s0f0np0 offset 0x90 length 12
-Offset          Values
-------          ------
-0x0090:         00 00 01 a0 4d 65 6c 6c 00 00 00 00
-$
+On 28 February 2023 20:17:19 GMT, Thomas Gleixner <tglx@linutronix=2Ede> w=
+rote:
+>On Tue, Feb 28 2023 at 17:09, David Woodhouse wrote:
+>> On Tue, 2023-02-28 at 17:13 +0100, Thomas Gleixner wrote:
+>>> As this patch is now part of the parallel boot series and actually
+>>> introduces smpboot_control, the above is neither accurate nor useful=
+=2E
+>>
+>> Better commit message, add a comment where we abuse current->thread=2Es=
+p
+>> in the sleep path=2E Didn't remove the {} which would be added back in
+>> the very next patch=2E Pushed to my tree for Usama's next round=2E
+>
+>Ok=2E
+>
+>> However, we start by introducing one more: smpboot_control=2E For now t=
+his
+>
+>s/we// :)
 
-$ ethtool -m enp65s0f0np0
-Offset          Values
-------          ------
-0x0000:         11 06 06 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0010:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0020:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0030:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0040:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0050:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0060:         00 00 00 00 00 00 00 00 00 00 00 00 00 01 08 00
-0x0070:         00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Yeah, actually spotted that one as I hit send and it's different in the gi=
+t tree already=2E
 
-patched driver:
-$ ethtool -m enp65s0f0np0 offset 0x90 length 8
-Offset          Values
-------          ------
-0x0090:         00 00 01 a0 4d 65 6c 6c
-$ ethtool -m enp65s0f0np0 offset 0x90 length 12
-Offset          Values
-------          ------
-0x0090:         00 00 01 a0 4d 65 6c 6c 61 6e 6f 78
-$ ethtool -m enp65s0f0np0
-    Identifier                                : 0x11 (QSFP28)
-    Extended identifier                       : 0x00
-    Extended identifier description           : 1.5W max. Power consumption
-    Extended identifier description           : No CDR in TX, No CDR in RX
-    Extended identifier description           : High Power Class (> 3.5 W) not enabled
-    Connector                                 : 0x23 (No separable connector)
-    Transceiver codes                         : 0x88 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-    Transceiver type                          : 40G Ethernet: 40G Base-CR4
-    Transceiver type                          : 25G Ethernet: 25G Base-CR CA-N
-    Encoding                                  : 0x05 (64B/66B)
-    BR, Nominal                               : 25500Mbps
-    Rate identifier                           : 0x00
-    Length (SMF,km)                           : 0km
-    Length (OM3 50um)                         : 0m
-    Length (OM2 50um)                         : 0m
-    Length (OM1 62.5um)                       : 0m
-    Length (Copper or Active cable)           : 1m
-    Transmitter technology                    : 0xa0 (Copper cable unequalized)
-    Attenuation at 2.5GHz                     : 4db
-    Attenuation at 5.0GHz                     : 5db
-    Attenuation at 7.0GHz                     : 7db
-    Attenuation at 12.9GHz                    : 10db
-    ........
-    ....
 
-Fixes: e9c9692c8a81 ("ice: Reimplement module reads used by ethtool")
-Signed-off-by: Petr Oros <poros@redhat.com>
----
- drivers/net/ethernet/intel/ice/ice_ethtool.c | 2 ++
- 1 file changed, 2 insertions(+)
+>> merely holds the CPU# of the CPU which is coming up=2E That CPU can the=
+n
+>> find its own per-cpu data, and everything else it needs can be found fr=
+om
+>> there, allowing the other global variables to be removed=2E
+>>
+>> First to be removed is initial_stack=2E Each CPU can load %rsp from its
+>> current_task->thread=2Esp instead=2E That is already set up with the co=
+rrect
+>> idle thread for APs=2E Set up the =2Esp field in INIT_THREAD on x86 so =
+that
+>> the BSP also finds a suitable stack pointer in the static per-cpu data
+>> when coming up on first boot=2E
+>>
+>> On resume from S3, the CPU needs a temporary stack because its idle tas=
+k
+>> is already active=2E Instead of setting initial_stack, the sleep code c=
+an
+>> simply set its own current->thread=2Esp to point to the temporary stack=
+=2E
+>> The true stack pointer will get restored with the rest of the CPU
+>> context in do_suspend_lowlevel()=2E
+>
+>Thanks for writing this up!
+>
+>> +	/*
+>> +	 * As each CPU starts up, it will find its own stack pointer
+>> +	 * from its current_task->thread=2Esp=2E Typically that will be
+>> +	 * the idle thread for a newly-started AP, or even the boot
+>> +	 * CPU which will find it set to &init_task in the static
+>> +	 * per-cpu data=2E
+>> +	 *
+>> +	 * Make the resuming CPU use the temporary stack at startup
+>> +	 * by setting current->thread=2Esp to point to that=2E The true
+>> +	 * %rsp will be restored with the rest of the CPU context,
+>> +	 * by do_suspend_lowlevel()=2E
+>
+>Right, but what restores current->thread=2Esp? thread=2Esp is used by
+>unwinders=2E=2E=2E
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index b360bd8f15998b..33b2bee5cfb40f 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -4356,6 +4356,8 @@ ice_get_module_eeprom(struct net_device *netdev,
- 			/* Make sure we have enough room for the new block */
- 			if ((i + SFF_READ_BLOCK_SIZE) < ee->len)
- 				memcpy(data + i, value, SFF_READ_BLOCK_SIZE);
-+			else if (ee->len - i > 0)
-+				memcpy(data + i, value, ee->len - i);
- 		}
- 	}
- 	return 0;
--- 
-2.39.2
-
+Unwinding a thread that is actually *on* the CPU? By the time it's taken o=
+ff, won't ->thread=2Esp have been written out again? I figured it was just =
+a dead variable while the actual %rsp was in use?
