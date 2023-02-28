@@ -2,132 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9884A6A6091
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417496A6089
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjB1Uo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S229682AbjB1UoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjB1Uox (ORCPT
+        with ESMTP id S229529AbjB1UoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:44:53 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EE859FB;
-        Tue, 28 Feb 2023 12:44:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=Rtyk/933i49ixLph7CNpZDmvFerPzLAHEB/U4/br/XQ=; b=aU4Rkt00RfXf4/xidYpX0mbQoT
-        w5fWIxbq+awg5/9wDZhDWQ778Cftd3nDQAZNxujgc5/IDM5k2ZaHnl07hj6XrkA4mf51i3JJfAKDl
-        iTZkN7AUASYhuX/wT0w8p8VBnznvf0l9OqfG9in5Dn1n5UCA1DArGHywa+6e9uaI9SBN0dNibXqeQ
-        7GDtc5DBFAZzm28tVfoG0bIc5AvUmb7pzEmxydWhGhdQ5VFnoOuZEdJX1tOtKBaIzfKC/EDSXXRop
-        zJ1RiYfHM3qD7nbzb9QX9YNRSaopZvyPD/kHOjkt1eimOt0mhApSEvwvdxnS9wW8AcO/7q6yJYR9K
-        xziaZCtg==;
-Received: from [2a00:23ee:1191:17a9:ac09:981:11d9:64d9] (helo=[IPv6:::1])
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pX6p8-00EfBz-2x;
-        Tue, 28 Feb 2023 20:43:48 +0000
-Date:   Tue, 28 Feb 2023 20:43:41 +0000
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
-        brgerst@gmail.com
-CC:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com
-Subject: Re: [PATCH v12 06/11] x86/smpboot: Remove initial_stack on 64-bit
-User-Agent: K-9 Mail for Android
-In-Reply-To: <87edq9mto0.ffs@tglx>
-References: <20230226110802.103134-1-usama.arif@bytedance.com> <20230226110802.103134-7-usama.arif@bytedance.com> <87k001n4xo.ffs@tglx> <c6863590f5fbf139f6aec50d0f3bc8e8b00cfcaf.camel@infradead.org> <87edq9mto0.ffs@tglx>
-Message-ID: <64B60F62-3760-43A0-A0FB-C349DA70C013@infradead.org>
+        Tue, 28 Feb 2023 15:44:05 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD02459FB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:44:04 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 28FD46D5;
+        Tue, 28 Feb 2023 21:44:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1677617043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S1v6w6DTzkEbKtrSUwNsxP5WAtnW7YNf54tXklMOUDM=;
+        b=wRdO30Sk6qRlzSXmrtf4HggMiB91LHLcJdgiNxZpkagN39Hmso7NJTx/df+RhAXG93pE7k
+        gcd8XZ5C2p8MocFyLMUP5omGpE3HxJS5ktYgCVPJxAMLIKw85JlK0T55qNlVyv0gyeNXq1
+        PJRbugYK6/axJs9rG8ORWbkmeCrbOoIJ0it6Un6X29L7pn2o7MCc3+3F62OTL3pJISO5Lv
+        LRz7yveLxyrpGsEEsqqzcRV/CQTssk5VoMvr0MTHiJi2JZ5vFVmEFzwB1Y+PYHmYvhOAf8
+        8i2bidRyuFwni+cbhqYX3DRVI2ijaaNeiKNn4c05JCUQWU+K6flyvH5f/L3Fng==
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 28 Feb 2023 21:44:02 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, broonie@kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quarium@gmail.com, jhentges@accesio.com, jay.dolan@accesio.com
+Subject: Re: [PATCH 2/3] gpio: gpio-regmap: Expose struct gpio_regmap in
+ linux/gpio/regmap.h
+In-Reply-To: <5c0354c87d4d2a082cf0c331076d5aad18a93169.1677547393.git.william.gray@linaro.org>
+References: <cover.1677547393.git.william.gray@linaro.org>
+ <5c0354c87d4d2a082cf0c331076d5aad18a93169.1677547393.git.william.gray@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <0e0901de3668baec5ce7cd4836c045a5@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+Am 2023-02-28 02:53, schrieb William Breathitt Gray:
+> A struct gpio_regmap is passed as a parameter for reg_mask_xlate(), but
+> for callbacks to access its members the declaration must be exposed.
 
-On 28 February 2023 20:17:19 GMT, Thomas Gleixner <tglx@linutronix=2Ede> w=
-rote:
->On Tue, Feb 28 2023 at 17:09, David Woodhouse wrote:
->> On Tue, 2023-02-28 at 17:13 +0100, Thomas Gleixner wrote:
->>> As this patch is now part of the parallel boot series and actually
->>> introduces smpboot_control, the above is neither accurate nor useful=
-=2E
->>
->> Better commit message, add a comment where we abuse current->thread=2Es=
-p
->> in the sleep path=2E Didn't remove the {} which would be added back in
->> the very next patch=2E Pushed to my tree for Usama's next round=2E
->
->Ok=2E
->
->> However, we start by introducing one more: smpboot_control=2E For now t=
-his
->
->s/we// :)
+That parameter is only an opaque one to call any gpio_regmap_*().
 
-Yeah, actually spotted that one as I hit send and it's different in the gi=
-t tree already=2E
+> Move the struct gpio_regmap declaration from drivers/gpio/gpio-regmap.c
+> to include/linux/gpio/regmap.h so callbacks can properly interact with
+> struct gpio_regmap members.
 
+That struct should be kept private. It seems you only need the
+regmap. Either introduce a gpio_regmap_get_regmap() or add the
+regmap to a private struct and use gpio_regmap_get_drvdata().
 
->> merely holds the CPU# of the CPU which is coming up=2E That CPU can the=
-n
->> find its own per-cpu data, and everything else it needs can be found fr=
-om
->> there, allowing the other global variables to be removed=2E
->>
->> First to be removed is initial_stack=2E Each CPU can load %rsp from its
->> current_task->thread=2Esp instead=2E That is already set up with the co=
-rrect
->> idle thread for APs=2E Set up the =2Esp field in INIT_THREAD on x86 so =
-that
->> the BSP also finds a suitable stack pointer in the static per-cpu data
->> when coming up on first boot=2E
->>
->> On resume from S3, the CPU needs a temporary stack because its idle tas=
-k
->> is already active=2E Instead of setting initial_stack, the sleep code c=
-an
->> simply set its own current->thread=2Esp to point to the temporary stack=
-=2E
->> The true stack pointer will get restored with the rest of the CPU
->> context in do_suspend_lowlevel()=2E
->
->Thanks for writing this up!
->
->> +	/*
->> +	 * As each CPU starts up, it will find its own stack pointer
->> +	 * from its current_task->thread=2Esp=2E Typically that will be
->> +	 * the idle thread for a newly-started AP, or even the boot
->> +	 * CPU which will find it set to &init_task in the static
->> +	 * per-cpu data=2E
->> +	 *
->> +	 * Make the resuming CPU use the temporary stack at startup
->> +	 * by setting current->thread=2Esp to point to that=2E The true
->> +	 * %rsp will be restored with the rest of the CPU context,
->> +	 * by do_suspend_lowlevel()=2E
->
->Right, but what restores current->thread=2Esp? thread=2Esp is used by
->unwinders=2E=2E=2E
-
-Unwinding a thread that is actually *on* the CPU? By the time it's taken o=
-ff, won't ->thread=2Esp have been written out again? I figured it was just =
-a dead variable while the actual %rsp was in use?
+-michael
