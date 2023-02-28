@@ -2,94 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67616A5B6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830BE6A5B71
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjB1PLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
+        id S229815AbjB1PMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:12:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjB1PK7 (ORCPT
+        with ESMTP id S229698AbjB1PMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:10:59 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F349E212A0;
-        Tue, 28 Feb 2023 07:10:53 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id u6so6445457ilk.12;
-        Tue, 28 Feb 2023 07:10:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=0hFgCVYvdf8qCio/mcfsT/HFMMai5H9F95nC41WxplU=;
-        b=dijrorNv9fDP9TTW1Cs81VGsu1XCztj0Z2xPY7I9NWdwoIiqm/LKgimo/i6O2xaMLR
-         yzO0K0yqc+hQZL25Vvoly6iZBrakjAHqmGhnXrK+npdDeH0UokiBGgYyi4Yhsedvc8on
-         pJ5ZZZhqZH/4JcwVJxjJ4GHUsz0wizN2i9HYjsCLYiGhTgSyaVQ3p3N6M3HPj4DQXi/H
-         2BW/swGHEI1Qhpu/AKdH3ur9UBbIvcdkvOShLPwADfDQxDzuFmwGD7KVupZ9IikRl/17
-         mXzUpZ+uPVzJYf08j/rWYYyOCtn+QG3AjRVoj0mav667JNh/tAu9VjuxeBovRWgbL7v2
-         MLSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0hFgCVYvdf8qCio/mcfsT/HFMMai5H9F95nC41WxplU=;
-        b=NitGhgVsPRE/j8Mk0ws15T7ceegBvORTxmhx6pze5BgsMPAkN12adinjrnj1x1Acvl
-         2TuSJ1aNCj8BVku2m/bPl2sW34sx/nUNPOcpl/2ObUaMuCYuyMkerdbWmYhr0yGTGgjJ
-         86VxNL7VjHcBsL8ITVgr3QFSykRB2xDLzsbGPKsw7noTUpTL8BQIxoa/fj4PZ9cPe/O/
-         zNAjP8xyu0A7ozM/1P5O82b40otj0kw512RumFmGriBHBmv7RZRbwTIO4Q4S4Z5W7tfL
-         nAGJLF95gQns69W2KiO2rHgHFmi5+5qmjSaPE+YbXGnsU+iby3AxSsZsTRkQbzrJ/XfI
-         ItVA==
-X-Gm-Message-State: AO0yUKVO/ZdyyQ5Xs0SeV9Koj3IdYL3qXt3IRQUMwhJNJZfD1y0U0kpN
-        tEfdkxSfS72V3yKuV4fRXF8=
-X-Google-Smtp-Source: AK7set/G+92FN/0hLG5LTDqB/5HLO+jsglkAAhxlxzfORyNGXB0Myo5noi0wmboxoHyoUt8qSFqJcg==
-X-Received: by 2002:a92:cd89:0:b0:315:34b8:4c6d with SMTP id r9-20020a92cd89000000b0031534b84c6dmr2888115ilb.17.1677597053373;
-        Tue, 28 Feb 2023 07:10:53 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b13-20020a05663801ad00b003e9e5e1aacasm2778973jaq.143.2023.02.28.07.10.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:10:52 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d2aada79-61c4-0cc7-7b09-058564ed9fce@roeck-us.net>
-Date:   Tue, 28 Feb 2023 07:10:50 -0800
+        Tue, 28 Feb 2023 10:12:01 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0B528864;
+        Tue, 28 Feb 2023 07:11:56 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pX1dy-00083M-0G; Tue, 28 Feb 2023 16:11:54 +0100
+Message-ID: <5671584b-011c-f0a1-a013-e05e388c9f1f@leemhuis.info>
+Date:   Tue, 28 Feb 2023 16:11:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 2/2] drivers: watchdog: Add StarFive Watchdog driver
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
-References: <20230220081926.267695-1-xingyu.wu@starfivetech.com>
- <20230220081926.267695-3-xingyu.wu@starfivetech.com>
- <CAJM55Z823iqUqD8enM0qJ_MA3Tw94Mn0mq71fbLT1Qjo2s2J3g@mail.gmail.com>
- <0ffb02d2-0bbd-fd0d-b0f6-cb5605570050@starfivetech.com>
- <CAJM55Z_hRpUYueZ-XuWUx1NfAsL9E+-4ry9TYeRWM_bKXvym-g@mail.gmail.com>
- <Y/3coFvMWOLaaY9p@wendy> <545c23f3-1d68-2bff-89d9-584e3ca31044@linaro.org>
- <Y/3hVlp/YPnWHDCX@wendy>
- <f9e380f6-334f-11fa-1118-8d6c3c9befaf@starfivetech.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <f9e380f6-334f-11fa-1118-8d6c3c9befaf@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+ Thunderbird/102.8.0
+Subject: Re: [regression] Bug 216946 - Toshiba satellite click mini l9w-b:
+ touchscreen: no touch events with kernel 6.1.4
+Content-Language: en-US, de-DE
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Hans De Goede <hdegoede@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?G=c3=a9_Koerkamp?= <ge.koerkamp@gmail.com>
+References: <32a14a8a-9795-4c8c-7e00-da9012f548f8@leemhuis.info>
+ <abb495f7-f973-4614-846b-d3922dc0fe25@leemhuis.info>
+ <CAO-hwJJ2OMFgpmrXK_Z43z0ddujaS1fNjaAJSWwao4qQN+pJ6w@mail.gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CAO-hwJJ2OMFgpmrXK_Z43z0ddujaS1fNjaAJSWwao4qQN+pJ6w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677597116;74fe23a5;
+X-HE-SMSGID: 1pX1dy-00083M-0G
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,40 +54,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 05:16, Xingyu Wu wrote:
-> On 2023/2/28 19:11, Conor Dooley wrote:
->> On Tue, Feb 28, 2023 at 11:57:58AM +0100, Krzysztof Kozlowski wrote:
->>> On 28/02/2023 11:51, Conor Dooley wrote:
->>>> On Tue, Feb 28, 2023 at 11:36:49AM +0100, Emil Renner Berthing wrote:
->>>>> On Tue, 28 Feb 2023 at 10:44, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
->>>>>> On 2023/2/26 22:14, Emil Renner Berthing wrote:
->>>>>>> On Mon, 20 Feb 2023 at 09:21, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
->>>>
->>>>>> So the dt-bingdings need to rename, and which one could be better,
->>>>>> 'starfive,jh71x0-wdt.yaml' or 'starfive,jh-wdt.yaml'?
->>>>>
->>>>> Sure, starfive,jh71x0-wdt.yaml sounds good to me.
->>>>
->>>> I feel like a common comment I see from the dt folks is to not put
->>>> wildcards in filenames & just pick the first compatible.
->>>> I could very well be wrong on that front though...
->>>
->>> First compatible is a bit better, unless you are sure this will cover
->>> all such compatibles now and in the future. For many bindings the
->>> family/wildcards were fine in filename.
+On 28.02.23 14:26, Benjamin Tissoires wrote:
+> On Tue, Feb 28, 2023 at 12:32 PM Thorsten Leemhuis
+> <regressions@leemhuis.info> wrote:
 >>
->> Ahh cool, good to know what the specific policy is - thanks!
+>> On 19.01.23 16:06, Linux kernel regression tracking (Thorsten Leemhuis)
+>> wrote:
+>>> Hi, this is your Linux kernel regression tracker.
+>>>
+>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+>>> kernel developer don't keep an eye on it, I decided to forward it by
+>>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216946 :
+>>
+>> The reporter recently confirmed in the ticket that the issue still
+>> happens with 6.2.
+>>
+>> There wasn't any reply from any of the input developers here or in
+>> bugzilla afaics. :-/ Hmmm. Could someone from that camp maybe please
+>> take a minute and at least briefly look into this as answer something
+>> like "that might be due to a problem in subsystem 'foo'", "maybe ask bar
+>> for an option", or "we have no idea what might cause this, this needs to
+>> be bisected"? That would help a lot.
 > 
-> If this watchdog driver is improved to also support JH7100 in next patch,
-> it seems more reasonable to rename the dt-bingdings to 'starfive,jh71x0-wdt.yaml'.
+> The working dmesg shows a line with:
+> hid-generic 0018:0457:10FB.0002: input,hidraw1: I2C HID v1.00 Device
+> [SIS0817:00 0457:10FB] on i2c-SIS0817:00
+> and then
+> hid-multitouch 0018:0457:10FB.0002: input,hidraw1: I2C HID v1.00
+> Device [SIS0817:00 0457:10FB] on i2c-SIS0817:00
+> 
+> But these 2 lines do not appear on the 6.1.4 logs.
+> 
+> So the device is not properly enumerated by ACPI or I2C. Hans might
+> have an idea on how to debug/solve that issue.
+> 
+> Also there were no changes between v5.15 and v5.16 in i2c-hid.ko, so
+> it's unlikely to be an issue there (unless '5.16' means '5.16.x').
 
+Great, many thx for your help!
 
-Up to the devicetree maintainers to decide, but I for my part never accept
-wildcards in file names. You can not guarantee that all of jh71[0-9]0 will
-be supported by this set of bindings. On top of that, when / if you add
-support for anything outside that range (say, jh7200 or jh8100 or jh7101
-or whatever) you'd have an even worse problem. Are you then going to suggest
-renaming the file to jhxxxx-wdt ? Or one digit at a time ?
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-Guenter
-
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>> --
+>> Everything you wanna know about Linux kernel regression tracking:
+>> https://linux-regtracking.leemhuis.info/about/#tldr
+>> If I did something stupid, please tell me, as explained on that page.
+>>
+>> #regzbot poke
+>>>>  Gé Koerkamp 2023-01-17 20:21:51 UTC
+>>>>
+>>>> Created attachment 303619 [details]
+>>>> Kernel configuration for v6.1.4/ journalctl (dmesg)/ ACPIdump/lsmod
+>>>>
+>>>> Overview:
+>>>> The touchscreen does not react on touch events.
+>>>> Touchscreen display and touchpad are working.
+>>>>
+>>>> Step to reproduce:
+>>>> Open any UI page
+>>>> Try to use touch on relevant UI controls (buttons etc.)
+>>>>
+>>>> Result:
+>>>> No reaction on screen touches
+>>>>
+>>>> Expected result:
+>>>> Reaction on touched control, same as when using the touch pad or connected mouse (which do work).
+>>>>
+>>>> Build information:
+>>>> The error happens with kernel version 6.1.4
+>>>> After rebuilding with different kernel versions, it appears that it first fails with kernel 5.16
+>>>>
+>>>> Additional builds:
+>>>> The click mini l9w-b still works with kernel 5.10.y LTS and 5.15.y LTS.
+>>>>
+>>>> Important remark:
+>>>> Touchscreen still works fine with kernel 6.1.4 using
+>>>> - an HP x2 detachable 10-p0xx or
+>>>> - a Lenovo yoga 520-14ikb
+>>>>
+>>>> So it could be a hardware dependent issue
+>>>
+>>> See the ticket for more details.
+>>>
+>>>
+>>> [TLDR for the rest of this mail: I'm adding this report to the list of
+>>> tracked Linux kernel regressions; the text you find below is based on a
+>>> few templates paragraphs you might have encountered already in similar
+>>> form.]
+>>>
+>>> BTW, let me use this mail to also add the report to the list of tracked
+>>> regressions to ensure it's doesn't fall through the cracks:
+>>>
+>>> #regzbot introduced: v5.15..v5.16
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=216946
+>>> #regzbot title: hid: touchscreen broken with Toshiba satellite click
+>>> mini l9w-b
+>>> #regzbot ignore-activity
+>>>
+>>> This isn't a regression? This issue or a fix for it are already
+>>> discussed somewhere else? It was fixed already? You want to clarify when
+>>> the regression started to happen? Or point out I got the title or
+>>> something else totally wrong? Then just reply and tell me -- ideally
+>>> while also telling regzbot about it, as explained by the page listed in
+>>> the footer of this mail.
+>>>
+>>> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+>>> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+>>> this thread sees some discussion). See page linked in footer for details.
+>>>
+>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>> --
+>>> Everything you wanna know about Linux kernel regression tracking:
+>>> https://linux-regtracking.leemhuis.info/about/#tldr
+>>> If I did something stupid, please tell me, as explained on that page.
+>>
+> 
+> 
+> 
