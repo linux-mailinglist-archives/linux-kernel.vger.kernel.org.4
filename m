@@ -2,268 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA39B6A5A61
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2CB6A5A63
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjB1Nvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 08:51:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
+        id S229734AbjB1Nwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 08:52:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjB1Nvw (ORCPT
+        with ESMTP id S229733AbjB1Nw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:51:52 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780482DE62
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:51:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677592303; x=1709128303;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qdhyhSG2q4g8od+nQoD8vr632OZziZi6ddb2PgHXUVQ=;
-  b=CxXTA/IAfCKbal226gj3xKrRhzxe/9HGBsSbIj+rVHolNjy3uqBOOwH8
-   zu93Q+y0ujjfmRy1O7zmhIuzIENxVRlt0HWY/EcLMwat+9sje4rkdSRJW
-   /7Y0EREYVeFwEuPv/Sdew0pcl6KEoW59UdY1wKQyj1fd/JFuaiHsGkXZl
-   ni3xXDa0DZIkKY/2Qb9r9hqp6eT8gHkYZ/q1eYou8VVPhkEsSzRkYF/+/
-   L/mMmVHd4BpHcg4J3U8pWnQtUBDnjKGdzmc4rx/4EzD9DmJ8ngFwv1+uh
-   lnEhGZSobMFs7NtLihvhCa2mcihcM/06nW1XDbEZzJUZvg98kZkoSVeM7
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="396704293"
-X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="396704293"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 05:51:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="1003248801"
-X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="1003248801"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Feb 2023 05:51:35 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pX0OE-0005Qp-33;
-        Tue, 28 Feb 2023 13:51:34 +0000
-Date:   Tue, 28 Feb 2023 21:50:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.02.24a] BUILD SUCCESS
- 4494d173d8208b4e467c88f53f989dfaf995097d
-Message-ID: <63fe06c3.RzZwAbHKcCDIVtR+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 28 Feb 2023 08:52:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807B610420
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:52:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8F376109A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19DDFC433EF;
+        Tue, 28 Feb 2023 13:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677592336;
+        bh=NuoO5o1gNzybHzjaUYtQJpYqsA4sxJZdGNvF28deojY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=l0lI1LdQ8gtTTq8qLsQ0PsPf6PqJCDkaxV9zreuOwD3zbiPhsoGRdj88ow6Yljai6
+         xKkerNJrlCHn6oPTd/Bunuu/dwStOEYKq9naSMwYxvEB092FF6cBVlu2nJWOc081KX
+         RU5OT7SSrZ8UUzqPszx9Y18ZJYZU9xAiFgAahSv0l+tqTCwLlCOC5scTWN9Yb6h09Z
+         PbVblg76VLZRKuPInEcuEj2mUNzMP3leYsWSuJw4r+/fSzmnACm2mMUICu+rKoRBsa
+         Sio1vgDn1tRu7jAVSOsdPn/KfCMHgD3xTO6TMzOpLeFVt1EIAXxEHdlrjx3TJvzol/
+         9HjOHwO4ysRLA==
+From:   Greg Ungerer <gerg@kernel.org>
+To:     linux-riscv@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Ungerer <gerg@kernel.org>
+Subject: [PATCH 0/2] riscv: support ELF format binaries in nommu mode
+Date:   Tue, 28 Feb 2023 23:51:24 +1000
+Message-Id: <20230228135126.1686427-1-gerg@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.02.24a
-branch HEAD: 4494d173d8208b4e467c88f53f989dfaf995097d  kernel/smp: Make csdlock_debug= resettable
+The following changes add the ability to run ELF format binaries when
+running RISC-V in nommu mode. That support is actually part of the
+ELF-FDPIC loader, so these changes are all about making that work on
+RISC-V.
 
-elapsed time: 721m
+The first issue to deal with is making the ELF-FDPIC loader capable of
+handling 64-bit ELF files. As coded right now it only supports 32-bit
+ELF files.
 
-configs tested: 188
-configs skipped: 20
+Secondly some changes are required to enable and compile the ELF-FDPIC
+loader on RISC-V and to pass the ELF-FDPIC mapping addresses through to
+user space when execing the new program.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+These changes have not been used to run actual ELF-FDPIC binaries.
+It is used to load and run normal ELF - compiled -pie format. Though the
+underlying changes are expected to work with full ELF-FDPIC binaries if
+or when that is supported on RISC-V in gcc.
 
-tested configs:
-alpha                            alldefconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r004-20230227   gcc  
-alpha        buildonly-randconfig-r006-20230227   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r003-20230226   gcc  
-alpha                randconfig-r021-20230227   gcc  
-alpha                randconfig-r034-20230226   gcc  
-alpha                randconfig-r035-20230226   gcc  
-alpha                randconfig-r035-20230227   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r013-20230226   gcc  
-arc                  randconfig-r021-20230226   gcc  
-arc                  randconfig-r036-20230227   gcc  
-arc                  randconfig-r043-20230226   gcc  
-arc                  randconfig-r043-20230227   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm          buildonly-randconfig-r001-20230228   gcc  
-arm                                 defconfig   gcc  
-arm                   milbeaut_m10v_defconfig   clang
-arm                       omap2plus_defconfig   gcc  
-arm                        oxnas_v6_defconfig   gcc  
-arm                  randconfig-r015-20230227   clang
-arm                  randconfig-r022-20230227   clang
-arm                  randconfig-r046-20230226   gcc  
-arm                  randconfig-r046-20230227   clang
-arm                           stm32_defconfig   gcc  
-arm                       versatile_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r023-20230227   gcc  
-arm64                randconfig-r031-20230227   clang
-arm64                randconfig-r034-20230227   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r004-20230226   gcc  
-csky                 randconfig-r011-20230227   gcc  
-csky                 randconfig-r016-20230227   gcc  
-csky                 randconfig-r023-20230227   gcc  
-hexagon      buildonly-randconfig-r006-20230226   clang
-hexagon              randconfig-r024-20230227   clang
-hexagon              randconfig-r035-20230226   clang
-hexagon              randconfig-r035-20230227   clang
-hexagon              randconfig-r041-20230226   clang
-hexagon              randconfig-r041-20230227   clang
-hexagon              randconfig-r045-20230226   clang
-hexagon              randconfig-r045-20230227   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r002-20230227   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230227   clang
-i386                 randconfig-a002-20230227   clang
-i386                 randconfig-a003-20230227   clang
-i386                 randconfig-a004-20230227   clang
-i386                 randconfig-a005-20230227   clang
-i386                 randconfig-a006-20230227   clang
-i386                 randconfig-a011-20230227   gcc  
-i386                 randconfig-a012-20230227   gcc  
-i386                 randconfig-a013-20230227   gcc  
-i386                 randconfig-a014-20230227   gcc  
-i386                 randconfig-a015-20230227   gcc  
-i386                 randconfig-a016-20230227   gcc  
-i386                          randconfig-c001   gcc  
-i386                 randconfig-r002-20230227   clang
-i386                 randconfig-r014-20230227   gcc  
-i386                 randconfig-r025-20230227   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r022-20230227   gcc  
-ia64                 randconfig-r032-20230227   gcc  
-ia64                 randconfig-r036-20230226   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r002-20230226   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r005-20230226   gcc  
-loongarch            randconfig-r014-20230226   gcc  
-loongarch            randconfig-r031-20230226   gcc  
-loongarch            randconfig-r034-20230226   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r005-20230226   gcc  
-m68k                                defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                 randconfig-r012-20230226   gcc  
-m68k                 randconfig-r014-20230227   gcc  
-m68k                 randconfig-r025-20230227   gcc  
-m68k                 randconfig-r033-20230226   gcc  
-microblaze   buildonly-randconfig-r001-20230227   gcc  
-microblaze   buildonly-randconfig-r006-20230228   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230226   clang
-mips         buildonly-randconfig-r005-20230226   clang
-mips                 randconfig-r033-20230226   clang
-mips                 randconfig-r036-20230227   gcc  
-mips                           xway_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r023-20230226   gcc  
-nios2                randconfig-r024-20230227   gcc  
-nios2                randconfig-r026-20230227   gcc  
-openrisc     buildonly-randconfig-r003-20230226   gcc  
-openrisc             randconfig-r002-20230226   gcc  
-openrisc             randconfig-r011-20230226   gcc  
-openrisc             randconfig-r016-20230226   gcc  
-openrisc             randconfig-r026-20230226   gcc  
-parisc       buildonly-randconfig-r003-20230227   gcc  
-parisc       buildonly-randconfig-r004-20230226   gcc  
-parisc       buildonly-randconfig-r006-20230227   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230227   gcc  
-parisc               randconfig-r015-20230226   gcc  
-parisc               randconfig-r025-20230226   gcc  
-parisc               randconfig-r033-20230227   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230226   clang
-powerpc      buildonly-randconfig-r003-20230228   clang
-powerpc      buildonly-randconfig-r006-20230226   clang
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                mpc7448_hpc2_defconfig   gcc  
-powerpc                 mpc834x_mds_defconfig   gcc  
-powerpc              randconfig-r022-20230226   clang
-powerpc              randconfig-r036-20230226   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r002-20230226   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230226   gcc  
-riscv                randconfig-r014-20230226   clang
-riscv                randconfig-r015-20230226   clang
-riscv                randconfig-r042-20230226   clang
-riscv                randconfig-r042-20230227   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r016-20230227   gcc  
-s390                 randconfig-r044-20230226   clang
-s390                 randconfig-r044-20230227   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r004-20230228   gcc  
-sh                               j2_defconfig   gcc  
-sh                   randconfig-r001-20230226   gcc  
-sh                   randconfig-r011-20230226   gcc  
-sh                   randconfig-r012-20230227   gcc  
-sh                   randconfig-r013-20230227   gcc  
-sh                   randconfig-r033-20230227   gcc  
-sh                      rts7751r2d1_defconfig   gcc  
-sh                           se7343_defconfig   gcc  
-sh                            shmin_defconfig   gcc  
-sparc        buildonly-randconfig-r005-20230227   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230227   gcc  
-sparc                randconfig-r021-20230227   gcc  
-sparc                randconfig-r032-20230226   gcc  
-sparc64      buildonly-randconfig-r005-20230228   gcc  
-sparc64              randconfig-r012-20230226   gcc  
-um                               alldefconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230227   clang
-x86_64               randconfig-a002-20230227   clang
-x86_64               randconfig-a003-20230227   clang
-x86_64               randconfig-a004-20230227   clang
-x86_64               randconfig-a005-20230227   clang
-x86_64               randconfig-a006-20230227   clang
-x86_64               randconfig-a011-20230227   gcc  
-x86_64               randconfig-a012-20230227   gcc  
-x86_64               randconfig-a013-20230227   gcc  
-x86_64               randconfig-a014-20230227   gcc  
-x86_64               randconfig-a015-20230227   gcc  
-x86_64               randconfig-a016-20230227   gcc  
-x86_64               randconfig-r004-20230227   clang
-x86_64               randconfig-r015-20230227   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r002-20230227   gcc  
-xtensa               randconfig-r016-20230226   gcc  
-xtensa               randconfig-r032-20230226   gcc  
+To avoid needing changes to the C-library (tested with uClibc-ng
+currently) there is a simple runtime dynamic loader (interpreter)
+available to do the final relocations, https://github.com/gregungerer/uldso.
+The nice thing about doing it this way is that the same program
+binary can also be loaded with the usual ELF loader in MMU linux.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+The motivation here is to provide an easy to use alternative to the
+flat format binaries normally used for RISC-V nommu based systems.
+
+Signed-off-by: Greg Ungerer <gerg@kernel.org>
+---
+
+ arch/riscv/include/asm/elf.h         |   11 +++++++++-
+ arch/riscv/include/asm/mmu.h         |    4 +++
+ arch/riscv/include/uapi/asm/ptrace.h |    5 ++++
+ fs/Kconfig.binfmt                    |    2 -
+ fs/binfmt_elf_fdpic.c                |   38 +++++++++++++++++------------------
+ include/linux/elf-fdpic.h            |   14 +++++++++++-
+ include/uapi/linux/elf-fdpic.h       |   15 +++++++++++++
+ 7 files changed, 67 insertions(+), 22 deletions(-)
+
+
