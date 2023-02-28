@@ -2,193 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766286A514F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD796A5154
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjB1CkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
+        id S229727AbjB1Cku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjB1CkE (ORCPT
+        with ESMTP id S229471AbjB1Ckt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:40:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ED31715D;
-        Mon, 27 Feb 2023 18:40:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8403C60FBA;
-        Tue, 28 Feb 2023 02:40:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB3BC433EF;
-        Tue, 28 Feb 2023 02:40:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677552001;
-        bh=g0eDzrfjNbTCob099SJw7KqJqdR7cRW3Cv0jdqmvURI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Unc8lvTLqfqQsVK2Ik0XO2/GceM1wwBd8oQXYW6s43ONw6M4Hc8g0ZGBukF+MA/zY
-         +0u7ZwwPJftm+RyEfuW/Dhvln1DD0qoyfx+mE2DOgOb6h3KwrlXPmfoyPQOZyqqD0b
-         uLUMgx2gujCBwjzO0vCHm8rgoHZEeLJUblZ5NKN9ob1IpxnCteMRqd4+poylTmQ01b
-         qqeKp583t0CxWhoNfV0bx/Dt0RPB3uz5+FFyemsFeT/t2zEj0mUBi5UzHKn1HaFbrN
-         /siWSFPwLoGhO4K2C6sxXfP7jnF8CQKnDmDjclNv0lZUVw/jLccsxu3ioG/XuuuMkI
-         XVq2aL2NWPz4A==
-Date:   Tue, 28 Feb 2023 04:39:58 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        stable@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: disable hwrng for fTPM on some AMD designs
-Message-ID: <Y/1pfpA2o6GRUIDZ@kernel.org>
-References: <20230220180729.23862-1-mario.limonciello@amd.com>
- <20230227145554.GA3714281@roeck-us.net>
- <7f5bd6a2-2eed-a27e-8655-181bb37a7c1c@amd.com>
+        Mon, 27 Feb 2023 21:40:49 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F1B29160
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:40:48 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id d30so34109488eda.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1677552046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S33amPXBgEdvAj5aotTxFER/po/FAxTdpekQddcRdP0=;
+        b=YxKbnUWTkfpWeNciGJkOdlwppOPzA7xvnBrKyFYmchwEuCkUceKSBjsY/taOKRFXAX
+         ZPUXHDflYsjqOhyR7qlNe3t+PNFcdFVoHxqRDCYsxYvSJhx6pOzGIbnu2TsbiNhR8Jt0
+         gyDFTIxOxiTe7XKoVjUFQ/Pow7zfF4xKSe6DE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677552046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S33amPXBgEdvAj5aotTxFER/po/FAxTdpekQddcRdP0=;
+        b=dzX6eXB0KF13u4eQz5lB37KMWmWepAI/kpifGuYI9JiGevMWjb4SqZ2//0puyRgi+L
+         G5r/KNoEvEExl0eBUqJegq8fwrQjNJS0hxCfaH+BXk+oNl0ybvzBW/HfWv/Yc44XodaT
+         5Z9A+2/2aX/bOM8mJr2yvxFFYgkfV0wCtX/zI0EwN7/95FNSB3z6fqnSpVD9Zfzq6AF5
+         pTwjOIbFEaMicZxpNW/mWXPcSFXtNvine0Xg36gpTW+CAz9IxZ1QmCr9vnZlB5u+KDdR
+         8KIaIYIvszCV72Yc4HOP+ucLchrnm6qr71GwczaSrS6wJ48WHiJZfpdCb/iGF9CD5s3o
+         R0Gg==
+X-Gm-Message-State: AO0yUKUgHRLoGfFC0yOh9FbTr37lCYfiII8r3z56ChW/DpQHTMA6hHb7
+        ZS+8kVDE9oF53a8eSt5cwYU5KkIb3WSOWf9AmTM=
+X-Google-Smtp-Source: AK7set9PVV4gRGd61yPESkhyOPDT1DYC7WN3bnj+AvUllLlnQiZTetK+54h2LVHVYUleI5fJv+bSUQ==
+X-Received: by 2002:a17:906:4a08:b0:8b1:88aa:46da with SMTP id w8-20020a1709064a0800b008b188aa46damr764885eju.48.1677552046293;
+        Mon, 27 Feb 2023 18:40:46 -0800 (PST)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id r30-20020a50d69e000000b004acc5077026sm3807177edi.79.2023.02.27.18.40.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 18:40:45 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id ec43so34057822edb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:40:45 -0800 (PST)
+X-Received: by 2002:a17:906:79a:b0:8b8:aef3:f2a9 with SMTP id
+ l26-20020a170906079a00b008b8aef3f2a9mr413714ejc.0.1677552045260; Mon, 27 Feb
+ 2023 18:40:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7f5bd6a2-2eed-a27e-8655-181bb37a7c1c@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1677529301-19530-1-git-send-email-george.kennedy@oracle.com>
+ <face2b1b-0f2e-4a79-a71b-79681fc56273@t-8ch.de> <CAHk-=whxC0ob3f--B-igBp34ujA5PZQMcTnDQ8Zh8HA7+ZbeWg@mail.gmail.com>
+ <64981d94-d00c-4b31-9063-43ad0a384bde@t-8ch.de>
+In-Reply-To: <64981d94-d00c-4b31-9063-43ad0a384bde@t-8ch.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 27 Feb 2023 18:40:28 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi3KimdZnsU5j7fPgPCpDj3QaZvmu5CXRsAE=NiOjmAXw@mail.gmail.com>
+Message-ID: <CAHk-=wi3KimdZnsU5j7fPgPCpDj3QaZvmu5CXRsAE=NiOjmAXw@mail.gmail.com>
+Subject: Re: [PATCH v2] vc_screen: modify vcs_size() handling in vcs_read()
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     George Kennedy <george.kennedy@oracle.com>, jirislaby@kernel.org,
+        gregkh@linuxfoundation.org, sfr@canb.auug.org.au,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 08:58:37AM -0600, Mario Limonciello wrote:
-> On 2/27/23 08:55, Guenter Roeck wrote:
-> > On Mon, Feb 20, 2023 at 12:07:28PM -0600, Mario Limonciello wrote:
-> > > AMD has issued an advisory indicating that having fTPM enabled in
-> > > BIOS can cause "stuttering" in the OS.  This issue has been fixed
-> > > in newer versions of the fTPM firmware, but it's up to system
-> > > designers to decide whether to distribute it.
-> > > 
-> > > This issue has existed for a while, but is more prevalent starting
-> > > with kernel 6.1 because commit b006c439d58db ("hwrng: core - start
-> > > hwrng kthread also for untrusted sources") started to use the fTPM
-> > > for hwrng by default. However, all uses of /dev/hwrng result in
-> > > unacceptable stuttering.
-> > > 
-> > > So, simply disable registration of the defective hwrng when detecting
-> > > these faulty fTPM versions.  As this is caused by faulty firmware, it
-> > > is plausible that such a problem could also be reproduced by other TPM
-> > > interactions, but this hasn't been shown by any user's testing or reports.
-> > > 
-> > > It is hypothesized to be triggered more frequently by the use of the RNG
-> > > because userspace software will fetch random numbers regularly.
-> > > 
-> > > Intentionally continue to register other TPM functionality so that users
-> > > that rely upon PCR measurements or any storage of data will still have
-> > > access to it.  If it's found later that another TPM functionality is
-> > > exacerbating this problem a module parameter it can be turned off entirely
-> > > and a module parameter can be introduced to allow users who rely upon
-> > > fTPM functionality to turn it on even though this problem is present.
-> > > 
-> > > Link: https://www.amd.com/en/support/kb/faq/pa-410
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=216989
-> > > Link: https://lore.kernel.org/all/20230209153120.261904-1-Jason@zx2c4.com/
-> > > Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untrusted sources")
-> > > Cc: stable@vger.kernel.org
-> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > Cc: Thorsten Leemhuis <regressions@leemhuis.info>
-> > > Cc: James Bottomley <James.Bottomley@hansenpartnership.com>
-> > > Co-developed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > > v1->v2:
-> > >   * Minor style from Jarkko's feedback
-> > >   * Move comment above function
-> > >   * Explain further in commit message
-> > > ---
-> > >   drivers/char/tpm/tpm-chip.c | 61 ++++++++++++++++++++++++++++++-
-> > >   drivers/char/tpm/tpm.h      | 73 +++++++++++++++++++++++++++++++++++++
-> > >   2 files changed, 133 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> > > index 741d8f3e8fb3..1b066d7a6e21 100644
-> > > --- a/drivers/char/tpm/tpm-chip.c
-> > > +++ b/drivers/char/tpm/tpm-chip.c
-> > > @@ -512,6 +512,64 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
-> > >   	return 0;
-> > >   }
-> > > +/*
-> > > + * Some AMD fTPM versions may cause stutter
-> > > + * https://www.amd.com/en/support/kb/faq/pa-410
-> > > + *
-> > > + * Fixes are available in two series of fTPM firmware:
-> > > + * 6.x.y.z series: 6.0.18.6 +
-> > > + * 3.x.y.z series: 3.57.y.5 +
-> > > + */
-> > > +static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
-> > > +{
-> > > +	u32 val1, val2;
-> > > +	u64 version;
-> > > +	int ret;
-> > > +
-> > > +	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-> > > +		return false;
-> > > +
-> > > +	ret = tpm_request_locality(chip);
-> > > +	if (ret)
-> > > +		return false;
-> > > +
-> > > +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val1, NULL);
-> > > +	if (ret)
-> > > +		goto release;
-> > > +	if (val1 != 0x414D4400U /* AMD */) {
-> > > +		ret = -ENODEV;
-> > > +		goto release;
-> > > +	}
-> > > +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_1, &val1, NULL);
-> > > +	if (ret)
-> > > +		goto release;
-> > > +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_2, &val2, NULL);
-> > > +	if (ret)
-> > > +		goto release;
-> > 
-> > This goto is unnecessary.
-> > 
-> > > +
-> > > +release:
-> > > +	tpm_relinquish_locality(chip);
-> > > +
-> > > +	if (ret)
-> > > +		return false;
-> > > +
-> > > +	version = ((u64)val1 << 32) | val2;
-> > > +	if ((version >> 48) == 6) {
-> > > +		if (version >= 0x0006000000180006ULL)
-> > > +			return false;
-> > > +	} else if ((version >> 48) == 3) {
-> > > +		if (version >= 0x0003005700000005ULL)
-> > > +			return false;
-> > > +	} else
-> > > +		return false;
-> > 
-> > checkpatch:
-> > 
-> > CHECK: braces {} should be used on all arms of this statement
-> > #200: FILE: drivers/char/tpm/tpm-chip.c:557:
-> > +	if ((version >> 48) == 6) {
-> > [...]
-> > +	} else if ((version >> 48) == 3) {
-> > [...]
-> > +	} else
-> > [...]
-> 
-> It was requested by Jarko explicitly in v1 to do it this way.
-> 
-> https://lore.kernel.org/lkml/Y+%2F6G+UlTI7GpW6o@kernel.org/
+On Mon, Feb 27, 2023 at 6:18=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisss=
+chuh.net> wrote:
+>
+> Tested-By: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+>
+> (Or feel free to use my patch from above and fixup the goto/break line)
 
-OK, you're right, it is my bad, I'm sorry about that. Send v3 with that feedback reverted.
+Done.
 
-BR, Jarkko
+              Linus
