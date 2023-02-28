@@ -2,263 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62596A579A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFF66A57A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjB1LQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S231474AbjB1LSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjB1LQ5 (ORCPT
+        with ESMTP id S231482AbjB1LSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:16:57 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7C921DB99;
-        Tue, 28 Feb 2023 03:16:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 911A5C14;
-        Tue, 28 Feb 2023 03:17:38 -0800 (PST)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C602D3F881;
-        Tue, 28 Feb 2023 03:16:52 -0800 (PST)
-Message-ID: <ba7dba61-9fa1-1b6f-c95e-2c23d8f9c2d4@arm.com>
-Date:   Tue, 28 Feb 2023 11:16:51 +0000
+        Tue, 28 Feb 2023 06:18:07 -0500
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF3C8691;
+        Tue, 28 Feb 2023 03:18:05 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id j3so6146660wms.2;
+        Tue, 28 Feb 2023 03:18:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ECVBbBNg+qpreZ+NjEHmoaNJonyP/UdTvTXnKWGxr1Q=;
+        b=mXV/hce3APRKGxudMZqnB9+uvdYyC+NXMAFCTzfo1DVIGpCmLdTbIpR8zhTHfKMug+
+         4PBX1o3kLPvtHi+WwaOE8NnqmKg/b7nknPXrH8kHf0IVDqyLw/Bc97qS+qd/cMgTWnpZ
+         xgp7YJJpsLV3PExBJ6SYLWMPSPL54jCjns+9oNFSDQPfjiuVUqvr/PafXEzfKpM9FVH0
+         wvojHZUae8oHBFJvoHJG2fnX2UqpvtOv5YK1KqSJoGzDyS7FEc5tE8DS/VguSGzL/uY4
+         P2kdYyrLzU95iICdvmk51Fa1qcEIK4kHp+hIs7gfLX0DlmHL0iP9oWChgVbhSA4Xogv1
+         xKhQ==
+X-Gm-Message-State: AO0yUKWaJArRvsNPF0pfyLDA3KJ93R6WzkOde4fo6tjT9tkjMy3ygIGL
+        VEnftrmMGixtPZ4v/Lq2DWI=
+X-Google-Smtp-Source: AK7set9HUtbmG90OrsFVGQTxfvQa9SM/NLVvSJ1z5FQ7smftlbjuhUqTA7Zkj6YfZ0hQ7Ijb+oaF0A==
+X-Received: by 2002:a05:600c:1d28:b0:3e2:147f:ac1a with SMTP id l40-20020a05600c1d2800b003e2147fac1amr1966364wms.21.1677583083691;
+        Tue, 28 Feb 2023 03:18:03 -0800 (PST)
+Received: from localhost (fwdproxy-cln-027.fbsv.net. [2a03:2880:31ff:1b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id fl16-20020a05600c0b9000b003e1f6e18c95sm16309443wmb.21.2023.02.28.03.18.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 03:18:03 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     axboe@kernel.dk, tj@kernel.org, josef@toxicpanda.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org
+Cc:     aherrmann@suse.de, linux-kernel@vger.kernel.org, hch@lst.de,
+        leit@fb.com
+Subject: [PATCH v4] blk-iocost: Pass gendisk to ioc_refresh_params
+Date:   Tue, 28 Feb 2023 03:16:54 -0800
+Message-Id: <20230228111654.1778120-1-leitao@debian.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 3/9] coresight-tpdm: Initialize DSB subunit
- configuration
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        Tao Zhang <taozha@qti.qualcomm.com>
-References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
- <1674114105-16651-4-git-send-email-quic_taozha@quicinc.com>
-Content-Language: en-US
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1674114105-16651-4-git-send-email-quic_taozha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 07:41, Tao Zhang wrote:
-> DSB subunit need to be configured in enablement and disablement.
-> A struct that specifics associated to dsb dataset is needed. It
-> saves the configuration and parameters of the dsb datasets. This
-> change is to add this struct and initialize the configuration of
-> DSB subunit.
+Current kernel (d2980d8d826554fa6981d621e569a453787472f8) crashes
+when blk_iocost_init for `nvme1` disk.
 
-Please could add a line about the type of things you can do with DSB.
-e.g, Timestamp, trigger type etc ? The description seems to be 
-describing the code, rather than the functionality of the code.
+	BUG: kernel NULL pointer dereference, address: 0000000000000050
+	#PF: supervisor read access in kernel mode
+	#PF: error_code(0x0000) - not-present page
 
-> 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
+	blk_iocost_init (include/asm-generic/qspinlock.h:128
+			 include/linux/spinlock.h:203
+			 include/linux/spinlock_api_smp.h:158
+			 include/linux/spinlock.h:400
+			 block/blk-iocost.c:2884)
+	ioc_qos_write (block/blk-iocost.c:3198)
+	? kretprobe_perf_func (kernel/trace/trace_kprobe.c:1566)
+	? kernfs_fop_write_iter (include/linux/slab.h:584 fs/kernfs/file.c:311)
+	? __kmem_cache_alloc_node (mm/slab.h:? mm/slub.c:3452 mm/slub.c:3491)
+	? _copy_from_iter (arch/x86/include/asm/uaccess_64.h:46
+			   arch/x86/include/asm/uaccess_64.h:52
+			   lib/iov_iter.c:183 lib/iov_iter.c:628)
+	? kretprobe_dispatcher (kernel/trace/trace_kprobe.c:1693)
+	cgroup_file_write (kernel/cgroup/cgroup.c:4061)
+	kernfs_fop_write_iter (fs/kernfs/file.c:334)
+	vfs_write (include/linux/fs.h:1849 fs/read_write.c:491
+		   fs/read_write.c:584)
+	ksys_write (fs/read_write.c:637)
+	do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+	entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
 
-As pointed out on the previous response by someone else, please fix the
-above to single.
+This happens because ioc_refresh_params() is being called without
+a properly initialized ioc->rqos, which is happening later in the callee
+side.
 
+ioc_refresh_params() -> ioc_autop_idx() tries to access
+ioc->rqos.disk->queue but ioc->rqos.disk is NULL, causing the BUG above.
 
-> ---
->   drivers/hwtracing/coresight/coresight-tpdm.c | 57 ++++++++++++++++++++++++++--
->   drivers/hwtracing/coresight/coresight-tpdm.h | 17 +++++++++
->   2 files changed, 70 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> index d85ca96..6befc87 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -24,13 +24,35 @@ static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->   {
->   	u32 val;
->   
-> +	val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
-> +	/* Set trigger timestamp */
-> +	if (drvdata->dsb->trig_ts)
-> +		val |= TPDM_DSB_XTRIG_TSENAB;
-> +	else
-> +		val &= ~TPDM_DSB_XTRIG_TSENAB;
-> +	writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
-> +
-> +	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
-> +	/* Set trigger type */
-> +	if (drvdata->dsb->trig_type)
-> +		val |= TPDM_DSB_TRIG_TYPE;
-> +	else
-> +		val &= ~TPDM_DSB_TRIG_TYPE;
-> +	writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
-> +
->   	/* Set the enable bit of DSB control register to 1 */
->   	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
->   	val |= TPDM_DSB_CR_ENA;
->   	writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
+Create function, called ioc_refresh_params_disk(), that is similar to
+ioc_refresh_params() but where the "struct gendisk" could be passed as
+an explicit argument. This function will be called when ioc->rqos.disk
+is not initialized.
 
-Do they have to be written out separately ? Why not combine the value 
-updates to the TPDM_DSB_CR ?
+Fixes: ce57b558604e ("blk-rq-qos: make rq_qos_add and rq_qos_del more useful")
 
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Acked-by: Tejun Heo <tj@kernel.org>
+---
+ block/blk-iocost.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
->   }
->   
-> -/* TPDM enable operations */
-> +/* TPDM enable operations
+---
+Changelog
+v1->v2: Pass the struct request_queue explictly to ioc_refresh_params()
+v2->v3: Use struct gendisk instead of struct request_queue
+v3->v4: Rename _ioc_refresh_params() to ioc_refresh_params_disk()
 
-Minor nit: Comment style issues.
-
-
-> + * The TPDM or Monitor serves as data collection component for various
-> + * dataset types. It covers Basic Counts(BC), Tenure Counts(TC),
-> + * Continuous Multi-Bit(CMB), Multi-lane CMB(MCMB) and Discrete Single
-> + * Bit(DSB). This function will initialize the configuration according
-> + * to the dataset type supported by the TPDM.
-> + */
->   static void __tpdm_enable(struct tpdm_drvdata *drvdata)
->   {
->   	CS_UNLOCK(drvdata->base);
-> @@ -110,15 +132,33 @@ static const struct coresight_ops tpdm_cs_ops = {
->   	.source_ops	= &tpdm_source_ops,
->   };
->   
-> -static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
-> +static void tpdm_datasets_setup(struct tpdm_drvdata *drvdata)
->   {
->   	u32 pidr;
->   
-> -	CS_UNLOCK(drvdata->base);
->   	/*  Get the datasets present on the TPDM. */
->   	pidr = readl_relaxed(drvdata->base + CORESIGHT_PERIPHIDR0);
->   	drvdata->datasets |= pidr & GENMASK(TPDM_DATASETS - 1, 0);
-> -	CS_LOCK(drvdata->base);
-> +}
-> +
-> +static int tpdm_datasets_alloc(struct tpdm_drvdata *drvdata)
-> +{
-> +	if (drvdata->datasets & TPDM_PIDR0_DS_DSB) {
-> +		drvdata->dsb = devm_kzalloc(drvdata->dev, sizeof(*drvdata->dsb),
-> +					    GFP_KERNEL);
-> +		if (!drvdata->dsb)
-> +			return -ENOMEM;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
-Couldn't this be moved into the init_default_data() ?
-
-> +static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
-> +{
-> +	if (drvdata->datasets & TPDM_PIDR0_DS_DSB) {
-> +		drvdata->dsb->trig_ts = true;
-> +		drvdata->dsb->trig_type = false;
-
-
-
-> +	}
->   }
-
-It looks a bit silly to move the initialisation to a separate function. 
-Please could you fold this to tpdm_datasets_alloc() and may be even
-rename that function to tpdm_init_datasets() ?
-
-Suzuki
-
->   
->   /*
-> @@ -181,6 +221,7 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
->   	struct coresight_platform_data *pdata;
->   	struct tpdm_drvdata *drvdata;
->   	struct coresight_desc desc = { 0 };
-> +	int ret;
->   
->   	pdata = coresight_get_platform_data(dev);
->   	if (IS_ERR(pdata))
-> @@ -200,6 +241,8 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
->   
->   	drvdata->base = base;
->   
-> +	tpdm_datasets_setup(drvdata);
-> +
->   	/* Set up coresight component description */
->   	desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
->   	if (!desc.name)
-> @@ -216,7 +259,13 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
->   		return PTR_ERR(drvdata->csdev);
->   
->   	spin_lock_init(&drvdata->spinlock);
-> +	ret = tpdm_datasets_alloc(drvdata);
-> +	if (ret) {
-> +		coresight_unregister(drvdata->csdev);
-> +		return ret;
-> +	}
->   	tpdm_init_default_data(drvdata);
-> +
->   	/* Decrease pm refcount when probe is done.*/
->   	pm_runtime_put(&adev->dev);
->   
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-> index 5438540..3ad1be5 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-> @@ -11,8 +11,14 @@
->   
->   /* DSB Subunit Registers */
->   #define TPDM_DSB_CR		(0x780)
-> +#define TPDM_DSB_TIER		(0x784)
-> +
->   /* Enable bit for DSB subunit */
->   #define TPDM_DSB_CR_ENA		BIT(0)
-> +/* Enable bit for DSB subunit trigger timestamp */
-> +#define TPDM_DSB_XTRIG_TSENAB		BIT(1)
-> +/* Enable bit for DSB subunit trigger type */
-> +#define TPDM_DSB_TRIG_TYPE		BIT(12)
->   
->   /* TPDM integration test registers */
->   #define TPDM_ITATBCNTRL		(0xEF0)
-> @@ -41,6 +47,16 @@
->   #define TPDM_PIDR0_DS_DSB	BIT(1)
->   
->   /**
-> + * struct dsb_dataset - specifics associated to dsb dataset
-> + * @trig_ts:          Enable/Disable trigger timestamp.
-> + * @trig_type:        Enable/Disable trigger type.
-> + */
-> +struct dsb_dataset {
-> +	bool			trig_ts;
-> +	bool			trig_type;
-> +};
-> +
-> +/**
->    * struct tpdm_drvdata - specifics associated to an TPDM component
->    * @base:       memory mapped base address for this component.
->    * @dev:        The device entity associated to this component.
-> @@ -57,6 +73,7 @@ struct tpdm_drvdata {
->   	spinlock_t		spinlock;
->   	bool			enable;
->   	unsigned long		datasets;
-> +	struct dsb_dataset	*dsb;
->   };
->   
->   #endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
+diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+index ff534e9d92dc..4442c7a85112 100644
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -800,7 +800,11 @@ static void ioc_refresh_period_us(struct ioc *ioc)
+ 	ioc_refresh_margins(ioc);
+ }
+ 
+-static int ioc_autop_idx(struct ioc *ioc)
++/*
++ *  ioc->rqos.disk isn't initialized when this function is called from
++ *  the init path.
++ */
++static int ioc_autop_idx(struct ioc *ioc, struct gendisk *disk)
+ {
+ 	int idx = ioc->autop_idx;
+ 	const struct ioc_params *p = &autop[idx];
+@@ -808,11 +812,11 @@ static int ioc_autop_idx(struct ioc *ioc)
+ 	u64 now_ns;
+ 
+ 	/* rotational? */
+-	if (!blk_queue_nonrot(ioc->rqos.disk->queue))
++	if (!blk_queue_nonrot(disk->queue))
+ 		return AUTOP_HDD;
+ 
+ 	/* handle SATA SSDs w/ broken NCQ */
+-	if (blk_queue_depth(ioc->rqos.disk->queue) == 1)
++	if (blk_queue_depth(disk->queue) == 1)
+ 		return AUTOP_SSD_QD1;
+ 
+ 	/* use one of the normal ssd sets */
+@@ -901,14 +905,19 @@ static void ioc_refresh_lcoefs(struct ioc *ioc)
+ 		    &c[LCOEF_WPAGE], &c[LCOEF_WSEQIO], &c[LCOEF_WRANDIO]);
+ }
+ 
+-static bool ioc_refresh_params(struct ioc *ioc, bool force)
++/*
++ * struct gendisk is required as an argument because ioc->rqos.disk
++ * is not properly initialized when called from the init path.
++ */
++static bool ioc_refresh_params_disk(struct ioc *ioc, bool force,
++				    struct gendisk *disk)
+ {
+ 	const struct ioc_params *p;
+ 	int idx;
+ 
+ 	lockdep_assert_held(&ioc->lock);
+ 
+-	idx = ioc_autop_idx(ioc);
++	idx = ioc_autop_idx(ioc, disk);
+ 	p = &autop[idx];
+ 
+ 	if (idx == ioc->autop_idx && !force)
+@@ -939,6 +948,11 @@ static bool ioc_refresh_params(struct ioc *ioc, bool force)
+ 	return true;
+ }
+ 
++static bool ioc_refresh_params(struct ioc *ioc, bool force)
++{
++	return ioc_refresh_params_disk(ioc, force, ioc->rqos.disk);
++}
++
+ /*
+  * When an iocg accumulates too much vtime or gets deactivated, we throw away
+  * some vtime, which lowers the overall device utilization. As the exact amount
+@@ -2880,7 +2894,7 @@ static int blk_iocost_init(struct gendisk *disk)
+ 
+ 	spin_lock_irq(&ioc->lock);
+ 	ioc->autop_idx = AUTOP_INVALID;
+-	ioc_refresh_params(ioc, true);
++	ioc_refresh_params_disk(ioc, true, disk);
+ 	spin_unlock_irq(&ioc->lock);
+ 
+ 	/*
+-- 
+2.39.2
 
