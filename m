@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8A46A60EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C676A6122
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjB1VIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
+        id S229947AbjB1VTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:19:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB1VIF (ORCPT
+        with ESMTP id S229569AbjB1VTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:08:05 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688188A6E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:08:04 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id z6so12246473qtv.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:08:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677618483;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XrTkPkZkw/0rszifswppJiV3UUqdBojElA8azL6bV4g=;
-        b=LKz9vk4sEfto1Nq1L/+2Rd50Syw+DCzYCP7cEpxMagAp+GU+k7zv993ZEmxmvjQ5Mx
-         bGLusjNGzJI0rmzwuXZsdQ6yCqvjM97UAzvHi7YNoWvh/4pGxsLQwYVarDRtlBJC45Xq
-         fy++Aax/BLW8GqHestXB09RxUKTikSmCcXiCowwZR2ytAqTYOHfNXE+smUS9yjyW4Ivf
-         lZe2ds9ofj8zwJw4/kBcM6YMJHJQq10ms9HPV/dHEnbd/6g5k6s1z7qL2pRUegwOQkd/
-         7f9TH/8lI4p1wQLDH4Vfm6mdfH5eaw8NWbAigb8H86vAz/lS0T3kH557WjwaUxCgyfGd
-         jMXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677618483;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XrTkPkZkw/0rszifswppJiV3UUqdBojElA8azL6bV4g=;
-        b=wqc0o6rbdQZT+npB3V5EZNWlLrU0h/2hk3uqYSwzraL96WdAs9Fw01I/HkXin8PB+f
-         A9bnSXEeqx9CTR7L2OzzaJYM13ijUDKER1avhggmGP7f9ExxnX2tEZDgaZgabdjk+IHm
-         JUIs2i8JsEHjAOi3ASa0aLIWBKarlYBJGDsWH+gfeXNQh0AFaZ3syezyCRZDTsN4BBY2
-         rmA6xmp3W1QAPa2X/m/ZlE6OK6vOHLt8PbZIn0kRdm3j0dr2UaYla0lfdRlBEZSGVgFX
-         16F/HAahXUrXW20/CHZ1Rkc0g1xsMVAEJZRrx/mHWDn7A+Glq6Cvn9qObBr+u8broS0f
-         eoCQ==
-X-Gm-Message-State: AO0yUKUH88aSE1CcJh7EOoSM1fHhjiAzTuHVsglRazjT9rsPQpn8oeiG
-        rZwJS7Ei3tZ5nx/sQeARuWI5Aw==
-X-Google-Smtp-Source: AK7set+6aLyPMkD7xe29+p60VT/myxoeCyqKiL1h6WPHDNFq05JHuLlu+LV3Cb9C/IVZ+9WPTNr1dA==
-X-Received: by 2002:ac8:7d8a:0:b0:3bf:e796:bfdd with SMTP id c10-20020ac87d8a000000b003bfe796bfddmr6686616qtd.9.1677618483404;
-        Tue, 28 Feb 2023 13:08:03 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id g128-20020a37b686000000b007419f1561fesm7352678qkf.112.2023.02.28.13.08.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 13:08:02 -0800 (PST)
-Date:   Tue, 28 Feb 2023 13:07:41 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     "Huang, Ying" <ying.huang@intel.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, "Xu, Pengfei" <pengfei.xu@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>,
-        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH 1/3] migrate_pages: fix deadlock in batched migration
-In-Reply-To: <87h6v6b6er.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Message-ID: <da5ba36a-dba-f44-926a-c5c912148b@google.com>
-References: <20230224141145.96814-1-ying.huang@intel.com> <20230224141145.96814-2-ying.huang@intel.com> <ea4dc95a-e6b2-ff6-62df-1590b93269f@google.com> <87h6v6b6er.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tue, 28 Feb 2023 16:19:34 -0500
+X-Greylist: delayed 579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Feb 2023 13:19:32 PST
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EDE233EE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:19:32 -0800 (PST)
+Received: from [192.168.2.144] (bband-dyn207.178-40-209.t-com.sk [178.40.209.207])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id F3D6D1F4A4;
+        Tue, 28 Feb 2023 22:09:48 +0100 (CET)
+Date:   Tue, 28 Feb 2023 22:09:43 +0100
+From:   Martin Botka <martin.botka@somainline.org>
+Subject: Re: [PATCH v8 3/3] regulator: axp20x: Add support for AXP313a variant
+To:     Shengyu Qu <wiagn233@outlook.com>
+Cc:     wens@csie.org, martin.botka1@gmail.com,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Jan Trmal <jtrmal@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <7S6TQR.JINNS1OA2FSY2@somainline.org>
+In-Reply-To: <TY3P286MB261122217B621C53B6AC1B3198A69@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+References: <20230120184500.1899814-1-martin.botka@somainline.org>
+        <20230120184500.1899814-4-martin.botka@somainline.org>
+        <CAGb2v649yQVcNn7uv1eKtnEDnb=D4X9yGYB1eOC3zeAe+encFg@mail.gmail.com>
+        <TY3P286MB261122217B621C53B6AC1B3198A69@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: geary/43.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023, Huang, Ying wrote:
-> Hugh Dickins <hughd@google.com> writes:
-> > On Fri, 24 Feb 2023, Huang Ying wrote:
-> >> @@ -1247,7 +1236,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
-> >>  		/* Establish migration ptes */
-> >>  		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
-> >>  			       !folio_test_ksm(src) && !anon_vma, src);
-> >> -		try_to_migrate(src, TTU_BATCH_FLUSH);
-> >> +		try_to_migrate(src, mode == MIGRATE_ASYNC ? TTU_BATCH_FLUSH : 0);
-> >
-> > Why that change, I wonder? The TTU_BATCH_FLUSH can still be useful for
-> > gathering multiple cross-CPU TLB flushes into one, even when it's only
-> > a single page in the batch.
+
+Hi Shengyu,
+On Sat, Feb 18 2023 at 06:08:06 PM +08:00:00, Shengyu Qu 
+<wiagn233@outlook.com> wrote:
+> Hi Martin,
 > 
-> Firstly, I would have thought that we have no opportunities to batch the
-> TLB flushing now.  But as you pointed out, it is still possible to batch
-> if mapcount > 1.  Secondly, without TTU_BATCH_FLUSH, we may flush the
-> TLB for a single page (with invlpg instruction), otherwise, we will
-> flush the TLB for all pages.  The former is faster and will not
-> influence other TLB entries of the process.
+>> On Sat, Jan 21, 2023 at 2:45 AM Martin Botka
+>> <martin.botka@somainline.org> wrote:
+>>> The AXP313a is your typical I2C controlled PMIC, although in a 
+>>> lighter
+>>> fashion compared to the other X-Powers PMICs: it has only three DCDC
+>>> rails, three LDOs, and no battery charging support.
+>>> 
+>>> The AXP313a datasheet does not describe a register to change the 
+>>> DCDC
+>>> switching frequency, and talks of it being fixed at 3 MHz. The BSP
+>>> driver hints at a register being able to change that, but we haven't
+>>> verified that, so leave that one out. It can be added later, if 
+>>> needed
+>>> and/or required.
+>> The datasheet released by MangoPi says this isn't configurable. The
+>> thing that is configurable is spread-spectrum operation, and mode
+>> switching between fixed PWM and hybrid PFM/PWM. So just drop the
+>> DCDC frequency stuff and use the default code path.
 > 
-> Or we use TTU_BATCH_FLUSH only if mapcount > 1?
+> You could get full datasheet of AXP313A here:
+> 
+> https://github.com/YuzukiHD/YuzukiChameleon/blob/master/Datasheet/AXP313A_Datasheet_V1.0_cn.pdf
 
-I had not thought at all of the "invlpg" advantage (which I imagine
-some other architectures than x86 share) to not delaying the TLB flush
-of a single PTE.
+I do have the datasheet but maybe this one is more up to date somehow. 
+Will have to check.
+> 
+> Btw I'm working on AXP15060 support mostly based on your series.
+Lovely to hear. So sorry for the very very late reply. New semester 
+began 3 weeks ago and been quite the ride.
+Would love to get the series more up to date in the upcoming weeks :) I 
+will see what time allows :)
+> 
+> 
+> Best regards,
+> 
+> Shengyu
+Best regards,
 
-Frankly, I just don't have any feeling for the tradeoff between
-multiple remote invlpgs versus one remote batched TLB flush of all.
-Which presumably depends on number of CPUs, size of TLBs, etc etc.
+Martin
 
-Your "mapcount > 1" idea might be good, but I cannot tell: I'd say
-now that there's no reason to change your "mode == MIGRATE_ASYNC ?
-TTU_BATCH_FLUSH : 0" without much more thought, or a quick insight
-from someone else.  Some other time maybe.
 
-Hugh
