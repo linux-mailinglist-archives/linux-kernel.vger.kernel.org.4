@@ -2,587 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B4C6A5620
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE63D6A561C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbjB1Jsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S231375AbjB1Jsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjB1Jsw (ORCPT
+        with ESMTP id S230160AbjB1Jsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:48:52 -0500
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E6C8695;
-        Tue, 28 Feb 2023 01:48:49 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pWwax-00GMwx-Lx; Tue, 28 Feb 2023 17:48:28 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 28 Feb 2023 17:48:27 +0800
-Date:   Tue, 28 Feb 2023 17:48:27 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Subject: [v4 PATCH] crypto: stm32 - Save and restore between each request
-Message-ID: <Y/3N6zFOZeehJQ/p@gondor.apana.org.au>
-References: <Y/cBB+q0Ono9j2Jy@gondor.apana.org.au>
- <20230224231430.2948-1-kunyu@nfschina.com>
- <Y/cy5wUtk10OahpO@gondor.apana.org.au>
- <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
- <Y/c7iVW67Xhhdu8e@gondor.apana.org.au>
- <Y/hQdzsKMYgkIfMY@gondor.apana.org.au>
- <Y/yIbPBVCPx9K/0s@gondor.apana.org.au>
- <CACRpkdZC4z2Xng4=k94rmM=AFzNzTdXkvtkArMnK7afouz=7VA@mail.gmail.com>
- <Y/3FYZJeLE7DVPBf@gondor.apana.org.au>
- <Y/3IA4OjmUmjMgh1@gondor.apana.org.au>
+        Tue, 28 Feb 2023 04:48:40 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B590F86A7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:48:39 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id bd34so5310727pfb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:48:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yPddb0HDtF9d2o1OZFO2vc7qzozYm9cGO8ZIZD2N5lo=;
+        b=Hj+f2ENp6WO4WsJRYAfufUCPyaAd32keia9MlPZGg0Xou3OJ2lU3YFnl46+qmEK+Mv
+         S+USkkw8L7lFm+w8xJmojj8InjdS0d9sYDbmuQGEjTnyE6OVnpouM0FqM2yfrQOeI871
+         4v4LANzC+qLcG5qvgfcyIeN4/Cc9ruYguOtB15BoFtpfLM1VbwbUyQgOf8r/YL2KlyeR
+         kpEJCxNoUw6GmZxqTZNteySU6Z/g9bEwpZeX4njDDN2LLApDPPdGhmnLnYWTiyWZCehQ
+         06wgOTHKvnaL+3Kkf5m0JaEbcERN3RRLxA8N3licfS1Yp1ESws/9bAL18aj2Rs5FKeF2
+         3xlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yPddb0HDtF9d2o1OZFO2vc7qzozYm9cGO8ZIZD2N5lo=;
+        b=miwHAulRSweXOZH3lIm8BKnKWc8oCUvi6oGekXjSoTs2EcdBTX4KcFn9EkUfSlfncj
+         6LX2nKGefoDXJdCoP0m8oJByB/q5Otba6RRTaGpw84uUbyUirNnjmI4LENtkh45zozQ2
+         vbvMdMLeAaod7SYKRJ09dFtSyKOwEmPkifB7lHZP38+0kTofPcqChP9rT1388JLewAVL
+         wv3HMjPOdhKOCy3T9FbRYCUiU0sm3Hw3e5srQ+qOh/yNXINZ/5Cb+PRaeJCfsSxw6S0W
+         q2BnUpmXmxsKSYMjtmxQxIjL4vv0pEr0sbNPqpbbXlMo2ArXjGfi8YAnGjfV/BciuWzs
+         qnog==
+X-Gm-Message-State: AO0yUKWHh9Bw/LwxBWYMKeFbl8iN4o56dQZO75Qv/jaejodpspOlS59t
+        1ndo7YZ3iQGlMdmvVNkj024Z2WYL8zDzRFjSIfQ=
+X-Google-Smtp-Source: AK7set/XV1Z9lnz2CrSQ2DN/jTG6ghKPsR3pFFITXMXczTKbs1kKa9TpXEwQ8EchaXFpz0DQ/WpqttGYkBc/gQ3OyG0=
+X-Received: by 2002:a63:b513:0:b0:502:f46f:c7c6 with SMTP id
+ y19-20020a63b513000000b00502f46fc7c6mr595842pge.1.1677577719146; Tue, 28 Feb
+ 2023 01:48:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/3IA4OjmUmjMgh1@gondor.apana.org.au>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+References: <63fd57cb.620a0220.4e1b.8886@mx.google.com> <461f3a89-53d0-4a80-2d9b-0d3d648e1405@suse.de>
+In-Reply-To: <461f3a89-53d0-4a80-2d9b-0d3d648e1405@suse.de>
+From:   Luc Ma <onion0709@gmail.com>
+Date:   Tue, 28 Feb 2023 17:48:27 +0800
+Message-ID: <CAB3Z9RLCU1c1G_8Rus1f_37YvhHpuJgXQXainTxz+Q9qqTaOSw@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/vram-helper: fix function names in vram helper doc
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v4 fixes hmac to not reload the key over and over again causing
-the hash state to be corrupted.
+On Tue, 28 Feb 2023 at 16:11, Thomas Zimmermann <tzimmermann@suse.de> wrote=
+:
+>
+> Hi
+>
+> Am 28.02.23 um 02:24 schrieb Luc Ma:
+> > Refer to drmm_vram_helper_init() instead of the non-existent
+> > drmm_vram_helper_alloc_mm().
+> >
+> > Fixes: a5f23a72355d ("drm/vram-helper: Managed vram helpers")
+> > Signed-off-by: Luc Ma <luc@sietium.com>
+>
+> I didn't notice before: your sender email address has to match the
+> signed-off-by address. I can fix that when I commit the patch. Which
+> email address shall I use?
 
----8<---
-The Crypto API hashing paradigm requires the hardware state to
-be exported between *each* request because multiple unrelated
-hashes may be processed concurrently.
+Hi, Thomas
+please use Luc Ma <luc@sietium.com>, thank you
 
-The stm32 hardware is capable of producing the hardware hashing
-state but it was only doing it in the export function.  This is
-not only broken for export as you can't export a kernel pointer
-and reimport it, but it also means that concurrent hashing was
-fundamentally broken.
-
-Fix this by moving the saving and restoring of hardware hash
-state between each and every hashing request.
-
-Also change the emptymsg check in stm32_hash_copy_hash to rely
-on whether we have any existing hash state, rather than whether
-this particular update request is empty.
-
-Fixes: 8a1012d3f2ab ("crypto: stm32 - Support for STM32 HASH module")
-Reported-by: Li kunyu <kunyu@nfschina.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
-index 7bf805563ac2..a4c4cb1735d4 100644
---- a/drivers/crypto/stm32/stm32-hash.c
-+++ b/drivers/crypto/stm32/stm32-hash.c
-@@ -7,7 +7,6 @@
-  */
- 
- #include <linux/clk.h>
--#include <linux/crypto.h>
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
- #include <linux/dmaengine.h>
-@@ -127,6 +126,16 @@ struct stm32_hash_ctx {
- 	int			keylen;
- };
- 
-+struct stm32_hash_state {
-+	u16			bufcnt;
-+	u16			buflen;
-+
-+	u8 buffer[HASH_BUFLEN] __aligned(4);
-+
-+	/* hash state */
-+	u32			hw_context[3 + HASH_CSR_REGISTER_NUMBER];
-+};
-+
- struct stm32_hash_request_ctx {
- 	struct stm32_hash_dev	*hdev;
- 	unsigned long		flags;
-@@ -134,8 +143,6 @@ struct stm32_hash_request_ctx {
- 
- 	u8 digest[SHA256_DIGEST_SIZE] __aligned(sizeof(u32));
- 	size_t			digcnt;
--	size_t			bufcnt;
--	size_t			buflen;
- 
- 	/* DMA */
- 	struct scatterlist	*sg;
-@@ -149,10 +156,7 @@ struct stm32_hash_request_ctx {
- 
- 	u8			data_type;
- 
--	u8 buffer[HASH_BUFLEN] __aligned(sizeof(u32));
--
--	/* Export Context */
--	u32			*hw_context;
-+	struct stm32_hash_state state;
- };
- 
- struct stm32_hash_algs_info {
-@@ -183,7 +187,6 @@ struct stm32_hash_dev {
- 	struct ahash_request	*req;
- 	struct crypto_engine	*engine;
- 
--	int			err;
- 	unsigned long		flags;
- 
- 	struct dma_chan		*dma_lch;
-@@ -326,11 +329,12 @@ static void stm32_hash_write_ctrl(struct stm32_hash_dev *hdev, int bufcnt)
- 
- static void stm32_hash_append_sg(struct stm32_hash_request_ctx *rctx)
- {
-+	struct stm32_hash_state *state = &rctx->state;
- 	size_t count;
- 
--	while ((rctx->bufcnt < rctx->buflen) && rctx->total) {
-+	while ((state->bufcnt < state->buflen) && rctx->total) {
- 		count = min(rctx->sg->length - rctx->offset, rctx->total);
--		count = min(count, rctx->buflen - rctx->bufcnt);
-+		count = min_t(size_t, count, state->buflen - state->bufcnt);
- 
- 		if (count <= 0) {
- 			if ((rctx->sg->length == 0) && !sg_is_last(rctx->sg)) {
-@@ -341,10 +345,10 @@ static void stm32_hash_append_sg(struct stm32_hash_request_ctx *rctx)
- 			}
- 		}
- 
--		scatterwalk_map_and_copy(rctx->buffer + rctx->bufcnt, rctx->sg,
--					 rctx->offset, count, 0);
-+		scatterwalk_map_and_copy(state->buffer + state->bufcnt,
-+					 rctx->sg, rctx->offset, count, 0);
- 
--		rctx->bufcnt += count;
-+		state->bufcnt += count;
- 		rctx->offset += count;
- 		rctx->total -= count;
- 
-@@ -413,26 +417,27 @@ static int stm32_hash_xmit_cpu(struct stm32_hash_dev *hdev,
- static int stm32_hash_update_cpu(struct stm32_hash_dev *hdev)
- {
- 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(hdev->req);
-+	struct stm32_hash_state *state = &rctx->state;
- 	int bufcnt, err = 0, final;
- 
- 	dev_dbg(hdev->dev, "%s flags %lx\n", __func__, rctx->flags);
- 
- 	final = (rctx->flags & HASH_FLAGS_FINUP);
- 
--	while ((rctx->total >= rctx->buflen) ||
--	       (rctx->bufcnt + rctx->total >= rctx->buflen)) {
-+	while ((rctx->total >= state->buflen) ||
-+	       (state->bufcnt + rctx->total >= state->buflen)) {
- 		stm32_hash_append_sg(rctx);
--		bufcnt = rctx->bufcnt;
--		rctx->bufcnt = 0;
--		err = stm32_hash_xmit_cpu(hdev, rctx->buffer, bufcnt, 0);
-+		bufcnt = state->bufcnt;
-+		state->bufcnt = 0;
-+		err = stm32_hash_xmit_cpu(hdev, state->buffer, bufcnt, 0);
- 	}
- 
- 	stm32_hash_append_sg(rctx);
- 
- 	if (final) {
--		bufcnt = rctx->bufcnt;
--		rctx->bufcnt = 0;
--		err = stm32_hash_xmit_cpu(hdev, rctx->buffer, bufcnt, 1);
-+		bufcnt = state->bufcnt;
-+		state->bufcnt = 0;
-+		err = stm32_hash_xmit_cpu(hdev, state->buffer, bufcnt, 1);
- 
- 		/* If we have an IRQ, wait for that, else poll for completion */
- 		if (hdev->polled) {
-@@ -441,8 +446,20 @@ static int stm32_hash_update_cpu(struct stm32_hash_dev *hdev)
- 			hdev->flags |= HASH_FLAGS_OUTPUT_READY;
- 			err = 0;
- 		}
-+	} else {
-+		u32 *preg = state->hw_context;
-+		int i;
-+
-+		if (!hdev->pdata->ux500)
-+			*preg++ = stm32_hash_read(hdev, HASH_IMR);
-+		*preg++ = stm32_hash_read(hdev, HASH_STR);
-+		*preg++ = stm32_hash_read(hdev, HASH_CR);
-+		for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
-+			*preg++ = stm32_hash_read(hdev, HASH_CSR(i));
- 	}
- 
-+	rctx->flags |= HASH_FLAGS_INIT;
-+
- 	return err;
- }
- 
-@@ -584,10 +601,10 @@ static int stm32_hash_dma_init(struct stm32_hash_dev *hdev)
- static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
- {
- 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(hdev->req);
-+	u32 *buffer = (void *)rctx->state.buffer;
- 	struct scatterlist sg[1], *tsg;
- 	int err = 0, len = 0, reg, ncp = 0;
- 	unsigned int i;
--	u32 *buffer = (void *)rctx->buffer;
- 
- 	rctx->sg = hdev->req->src;
- 	rctx->total = hdev->req->nbytes;
-@@ -615,7 +632,7 @@ static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
- 
- 				ncp = sg_pcopy_to_buffer(
- 					rctx->sg, rctx->nents,
--					rctx->buffer, sg->length - len,
-+					rctx->state.buffer, sg->length - len,
- 					rctx->total - sg->length + len);
- 
- 				sg->length = len;
-@@ -671,6 +688,8 @@ static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
- 		err = stm32_hash_hmac_dma_send(hdev);
- 	}
- 
-+	rctx->flags |= HASH_FLAGS_INIT;
-+
- 	return err;
- }
- 
-@@ -749,14 +768,12 @@ static int stm32_hash_init(struct ahash_request *req)
- 		return -EINVAL;
- 	}
- 
--	rctx->bufcnt = 0;
--	rctx->buflen = HASH_BUFLEN;
-+	rctx->state.bufcnt = 0;
-+	rctx->state.buflen = HASH_BUFLEN;
- 	rctx->total = 0;
- 	rctx->offset = 0;
- 	rctx->data_type = HASH_DATA_8_BITS;
- 
--	memset(rctx->buffer, 0, HASH_BUFLEN);
--
- 	if (ctx->flags & HASH_FLAGS_HMAC)
- 		rctx->flags |= HASH_FLAGS_HMAC;
- 
-@@ -774,15 +791,16 @@ static int stm32_hash_final_req(struct stm32_hash_dev *hdev)
- {
- 	struct ahash_request *req = hdev->req;
- 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
-+	struct stm32_hash_state *state = &rctx->state;
-+	int buflen = state->bufcnt;
- 	int err;
--	int buflen = rctx->bufcnt;
- 
--	rctx->bufcnt = 0;
-+	state->bufcnt = 0;
- 
- 	if (!(rctx->flags & HASH_FLAGS_CPU))
- 		err = stm32_hash_dma_send(hdev);
- 	else
--		err = stm32_hash_xmit_cpu(hdev, rctx->buffer, buflen, 1);
-+		err = stm32_hash_xmit_cpu(hdev, state->buffer, buflen, 1);
- 
- 	/* If we have an IRQ, wait for that, else poll for completion */
- 	if (hdev->polled) {
-@@ -832,7 +850,7 @@ static void stm32_hash_copy_hash(struct ahash_request *req)
- 	__be32 *hash = (void *)rctx->digest;
- 	unsigned int i, hashsize;
- 
--	if (hdev->pdata->broken_emptymsg && !req->nbytes)
-+	if (hdev->pdata->broken_emptymsg && !(rctx->flags & HASH_FLAGS_INIT))
- 		return stm32_hash_emptymsg_fallback(req);
- 
- 	switch (rctx->flags & HASH_FLAGS_ALGO_MASK) {
-@@ -882,11 +900,6 @@ static void stm32_hash_finish_req(struct ahash_request *req, int err)
- 	if (!err && (HASH_FLAGS_FINAL & hdev->flags)) {
- 		stm32_hash_copy_hash(req);
- 		err = stm32_hash_finish(req);
--		hdev->flags &= ~(HASH_FLAGS_FINAL | HASH_FLAGS_CPU |
--				 HASH_FLAGS_INIT | HASH_FLAGS_DMA_READY |
--				 HASH_FLAGS_OUTPUT_READY | HASH_FLAGS_HMAC |
--				 HASH_FLAGS_HMAC_INIT | HASH_FLAGS_HMAC_FINAL |
--				 HASH_FLAGS_HMAC_KEY);
- 	} else {
- 		rctx->flags |= HASH_FLAGS_ERRORS;
- 	}
-@@ -897,67 +910,61 @@ static void stm32_hash_finish_req(struct ahash_request *req, int err)
- 	crypto_finalize_hash_request(hdev->engine, req, err);
- }
- 
--static int stm32_hash_hw_init(struct stm32_hash_dev *hdev,
-+static void stm32_hash_hw_init(struct stm32_hash_dev *hdev,
- 			      struct stm32_hash_request_ctx *rctx)
- {
- 	pm_runtime_get_sync(hdev->dev);
--
--	if (!(HASH_FLAGS_INIT & hdev->flags)) {
--		stm32_hash_write(hdev, HASH_CR, HASH_CR_INIT);
--		stm32_hash_write(hdev, HASH_STR, 0);
--		stm32_hash_write(hdev, HASH_DIN, 0);
--		stm32_hash_write(hdev, HASH_IMR, 0);
--		hdev->err = 0;
--	}
--
--	return 0;
- }
- 
--static int stm32_hash_one_request(struct crypto_engine *engine, void *areq);
--static int stm32_hash_prepare_req(struct crypto_engine *engine, void *areq);
--
- static int stm32_hash_handle_queue(struct stm32_hash_dev *hdev,
- 				   struct ahash_request *req)
- {
- 	return crypto_transfer_hash_request_to_engine(hdev->engine, req);
- }
- 
--static int stm32_hash_prepare_req(struct crypto_engine *engine, void *areq)
-+static int stm32_hash_one_request(struct crypto_engine *engine, void *areq)
- {
- 	struct ahash_request *req = container_of(areq, struct ahash_request,
- 						 base);
- 	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
- 	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
- 	struct stm32_hash_request_ctx *rctx;
-+	int err = 0;
- 
- 	if (!hdev)
- 		return -ENODEV;
- 
-+	dev_dbg(hdev->dev, "processing new req, op: %lu, nbytes %d\n",
-+		rctx->op, req->nbytes);
-+
-+	stm32_hash_hw_init(hdev, rctx);
-+
- 	hdev->req = req;
-+	hdev->flags = 0;
- 
- 	rctx = ahash_request_ctx(req);
- 
--	dev_dbg(hdev->dev, "processing new req, op: %lu, nbytes %d\n",
--		rctx->op, req->nbytes);
-+	if (rctx->flags & HASH_FLAGS_INIT) {
-+		u32 *preg = rctx->state.hw_context;
-+		u32 reg;
-+		int i;
- 
--	return stm32_hash_hw_init(hdev, rctx);
--}
--
--static int stm32_hash_one_request(struct crypto_engine *engine, void *areq)
--{
--	struct ahash_request *req = container_of(areq, struct ahash_request,
--						 base);
--	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
--	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
--	struct stm32_hash_request_ctx *rctx;
--	int err = 0;
-+		if (!hdev->pdata->ux500)
-+			stm32_hash_write(hdev, HASH_IMR, *preg++);
-+		stm32_hash_write(hdev, HASH_STR, *preg++);
-+		stm32_hash_write(hdev, HASH_CR, *preg);
-+		reg = *preg++ | HASH_CR_INIT;
-+		stm32_hash_write(hdev, HASH_CR, reg);
- 
--	if (!hdev)
--		return -ENODEV;
-+		for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
-+			stm32_hash_write(hdev, HASH_CSR(i), *preg++);
- 
--	hdev->req = req;
-+		hdev->flags |= HASH_FLAGS_INIT;
- 
--	rctx = ahash_request_ctx(req);
-+		if (rctx->flags & HASH_FLAGS_HMAC)
-+			hdev->flags |= HASH_FLAGS_HMAC |
-+				       HASH_FLAGS_HMAC_KEY;
-+	}
- 
- 	if (rctx->op == HASH_OP_UPDATE)
- 		err = stm32_hash_update_req(hdev);
-@@ -985,6 +992,7 @@ static int stm32_hash_enqueue(struct ahash_request *req, unsigned int op)
- static int stm32_hash_update(struct ahash_request *req)
- {
- 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
-+	struct stm32_hash_state *state = &rctx->state;
- 
- 	if (!req->nbytes || !(rctx->flags & HASH_FLAGS_CPU))
- 		return 0;
-@@ -993,7 +1001,7 @@ static int stm32_hash_update(struct ahash_request *req)
- 	rctx->sg = req->src;
- 	rctx->offset = 0;
- 
--	if ((rctx->bufcnt + rctx->total < rctx->buflen)) {
-+	if ((state->bufcnt + rctx->total < state->buflen)) {
- 		stm32_hash_append_sg(rctx);
- 		return 0;
- 	}
-@@ -1044,35 +1052,13 @@ static int stm32_hash_digest(struct ahash_request *req)
- static int stm32_hash_export(struct ahash_request *req, void *out)
- {
- 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
--	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
--	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
--	u32 *preg;
--	unsigned int i;
--	int ret;
-+	bool empty = !(rctx->flags & HASH_FLAGS_INIT);
-+	u8 *p = out;
- 
--	pm_runtime_get_sync(hdev->dev);
--
--	ret = stm32_hash_wait_busy(hdev);
--	if (ret)
--		return ret;
--
--	rctx->hw_context = kmalloc_array(3 + HASH_CSR_REGISTER_NUMBER,
--					 sizeof(u32),
--					 GFP_KERNEL);
-+	*(u8 *)p = empty;
- 
--	preg = rctx->hw_context;
--
--	if (!hdev->pdata->ux500)
--		*preg++ = stm32_hash_read(hdev, HASH_IMR);
--	*preg++ = stm32_hash_read(hdev, HASH_STR);
--	*preg++ = stm32_hash_read(hdev, HASH_CR);
--	for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
--		*preg++ = stm32_hash_read(hdev, HASH_CSR(i));
--
--	pm_runtime_mark_last_busy(hdev->dev);
--	pm_runtime_put_autosuspend(hdev->dev);
--
--	memcpy(out, rctx, sizeof(*rctx));
-+	if (!empty)
-+		memcpy(p + 1, &rctx->state, sizeof(rctx->state));
- 
- 	return 0;
- }
-@@ -1080,32 +1066,14 @@ static int stm32_hash_export(struct ahash_request *req, void *out)
- static int stm32_hash_import(struct ahash_request *req, const void *in)
- {
- 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
--	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
--	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
--	const u32 *preg = in;
--	u32 reg;
--	unsigned int i;
--
--	memcpy(rctx, in, sizeof(*rctx));
-+	const u8 *p = in;
- 
--	preg = rctx->hw_context;
--
--	pm_runtime_get_sync(hdev->dev);
-+	stm32_hash_init(req);
- 
--	if (!hdev->pdata->ux500)
--		stm32_hash_write(hdev, HASH_IMR, *preg++);
--	stm32_hash_write(hdev, HASH_STR, *preg++);
--	stm32_hash_write(hdev, HASH_CR, *preg);
--	reg = *preg++ | HASH_CR_INIT;
--	stm32_hash_write(hdev, HASH_CR, reg);
--
--	for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
--		stm32_hash_write(hdev, HASH_CSR(i), *preg++);
--
--	pm_runtime_mark_last_busy(hdev->dev);
--	pm_runtime_put_autosuspend(hdev->dev);
--
--	kfree(rctx->hw_context);
-+	if (!*(u8 *)p) {
-+		rctx->flags |= HASH_FLAGS_INIT;
-+		memcpy(&rctx->state, p + 1, sizeof(rctx->state));
-+	}
- 
- 	return 0;
- }
-@@ -1162,8 +1130,6 @@ static int stm32_hash_cra_init_algs(struct crypto_tfm *tfm,
- 		ctx->flags |= HASH_FLAGS_HMAC;
- 
- 	ctx->enginectx.op.do_one_request = stm32_hash_one_request;
--	ctx->enginectx.op.prepare_request = stm32_hash_prepare_req;
--	ctx->enginectx.op.unprepare_request = NULL;
- 
- 	return stm32_hash_init_fallback(tfm);
- }
-@@ -1255,7 +1221,7 @@ static struct ahash_alg algs_md5[] = {
- 		.import = stm32_hash_import,
- 		.halg = {
- 			.digestsize = MD5_DIGEST_SIZE,
--			.statesize = sizeof(struct stm32_hash_request_ctx),
-+			.statesize = sizeof(struct stm32_hash_state) + 1,
- 			.base = {
- 				.cra_name = "md5",
- 				.cra_driver_name = "stm32-md5",
-@@ -1282,7 +1248,7 @@ static struct ahash_alg algs_md5[] = {
- 		.setkey = stm32_hash_setkey,
- 		.halg = {
- 			.digestsize = MD5_DIGEST_SIZE,
--			.statesize = sizeof(struct stm32_hash_request_ctx),
-+			.statesize = sizeof(struct stm32_hash_state) + 1,
- 			.base = {
- 				.cra_name = "hmac(md5)",
- 				.cra_driver_name = "stm32-hmac-md5",
-@@ -1311,7 +1277,7 @@ static struct ahash_alg algs_sha1[] = {
- 		.import = stm32_hash_import,
- 		.halg = {
- 			.digestsize = SHA1_DIGEST_SIZE,
--			.statesize = sizeof(struct stm32_hash_request_ctx),
-+			.statesize = sizeof(struct stm32_hash_state) + 1,
- 			.base = {
- 				.cra_name = "sha1",
- 				.cra_driver_name = "stm32-sha1",
-@@ -1338,7 +1304,7 @@ static struct ahash_alg algs_sha1[] = {
- 		.setkey = stm32_hash_setkey,
- 		.halg = {
- 			.digestsize = SHA1_DIGEST_SIZE,
--			.statesize = sizeof(struct stm32_hash_request_ctx),
-+			.statesize = sizeof(struct stm32_hash_state) + 1,
- 			.base = {
- 				.cra_name = "hmac(sha1)",
- 				.cra_driver_name = "stm32-hmac-sha1",
-@@ -1367,7 +1333,7 @@ static struct ahash_alg algs_sha224[] = {
- 		.import = stm32_hash_import,
- 		.halg = {
- 			.digestsize = SHA224_DIGEST_SIZE,
--			.statesize = sizeof(struct stm32_hash_request_ctx),
-+			.statesize = sizeof(struct stm32_hash_state) + 1,
- 			.base = {
- 				.cra_name = "sha224",
- 				.cra_driver_name = "stm32-sha224",
-@@ -1394,7 +1360,7 @@ static struct ahash_alg algs_sha224[] = {
- 		.import = stm32_hash_import,
- 		.halg = {
- 			.digestsize = SHA224_DIGEST_SIZE,
--			.statesize = sizeof(struct stm32_hash_request_ctx),
-+			.statesize = sizeof(struct stm32_hash_state) + 1,
- 			.base = {
- 				.cra_name = "hmac(sha224)",
- 				.cra_driver_name = "stm32-hmac-sha224",
-@@ -1423,7 +1389,7 @@ static struct ahash_alg algs_sha256[] = {
- 		.import = stm32_hash_import,
- 		.halg = {
- 			.digestsize = SHA256_DIGEST_SIZE,
--			.statesize = sizeof(struct stm32_hash_request_ctx),
-+			.statesize = sizeof(struct stm32_hash_state) + 1,
- 			.base = {
- 				.cra_name = "sha256",
- 				.cra_driver_name = "stm32-sha256",
-@@ -1450,7 +1416,7 @@ static struct ahash_alg algs_sha256[] = {
- 		.setkey = stm32_hash_setkey,
- 		.halg = {
- 			.digestsize = SHA256_DIGEST_SIZE,
--			.statesize = sizeof(struct stm32_hash_request_ctx),
-+			.statesize = sizeof(struct stm32_hash_state) + 1,
- 			.base = {
- 				.cra_name = "hmac(sha256)",
- 				.cra_driver_name = "stm32-hmac-sha256",
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+>
+> Apart from that
+>
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>
+> Best regards
+> Thomas
+>
+> > ---
+> > v1 -> v2: improved commit message and add changelog
+> >
+> >   drivers/gpu/drm/drm_gem_vram_helper.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/dr=
+m_gem_vram_helper.c
+> > index d40b3edb52d0..f1539d4448c6 100644
+> > --- a/drivers/gpu/drm/drm_gem_vram_helper.c
+> > +++ b/drivers/gpu/drm/drm_gem_vram_helper.c
+> > @@ -45,7 +45,7 @@ static const struct drm_gem_object_funcs drm_gem_vram=
+_object_funcs;
+> >    * the frame's scanout buffer or the cursor image. If there's no more=
+ space
+> >    * left in VRAM, inactive GEM objects can be moved to system memory.
+> >    *
+> > - * To initialize the VRAM helper library call drmm_vram_helper_alloc_m=
+m().
+> > + * To initialize the VRAM helper library call drmm_vram_helper_init().
+> >    * The function allocates and initializes an instance of &struct drm_=
+vram_mm
+> >    * in &struct drm_device.vram_mm . Use &DRM_GEM_VRAM_DRIVER to initia=
+lize
+> >    * &struct drm_driver and  &DRM_VRAM_MM_FILE_OPERATIONS to initialize
+> > @@ -73,7 +73,7 @@ static const struct drm_gem_object_funcs drm_gem_vram=
+_object_funcs;
+> >    *          // setup device, vram base and size
+> >    *          // ...
+> >    *
+> > - *           ret =3D drmm_vram_helper_alloc_mm(dev, vram_base, vram_si=
+ze);
+> > + *           ret =3D drmm_vram_helper_init(dev, vram_base, vram_size);
+> >    *          if (ret)
+> >    *                  return ret;
+> >    *          return 0;
+> > @@ -86,7 +86,7 @@ static const struct drm_gem_object_funcs drm_gem_vram=
+_object_funcs;
+> >    * to userspace.
+> >    *
+> >    * You don't have to clean up the instance of VRAM MM.
+> > - * drmm_vram_helper_alloc_mm() is a managed interface that installs a
+> > + * drmm_vram_helper_init() is a managed interface that installs a
+> >    * clean-up handler to run during the DRM device's release.
+> >    *
+> >    * For drawing or scanout operations, rsp. buffer objects have to be =
+pinned
+>
+> --
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+> (HRB 36809, AG N=C3=BCrnberg)
+> Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
