@@ -2,56 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A11A6A5822
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2456A5840
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbjB1Ld1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
+        id S229833AbjB1LeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjB1LdY (ORCPT
+        with ESMTP id S231307AbjB1Ld6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:33:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9A359CA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:33:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7239B80BD9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:33:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB9AC433EF;
-        Tue, 28 Feb 2023 11:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677584000;
-        bh=ySplhGjtRXHh02WU9pQEA4p/9BJOGHAH95H5Ub7YC/U=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=q+wxsQA16xJ7A1YNovnYV1avPzX/2o+XpXCx0EqjeANN6fNFEOR54lO2jrTbFa62f
-         h1RLfsliUMz4xQZwJtibRfzvEONwCNGcCboWFNHz8plkHZmwpGZgfcRBSETIA45xoZ
-         ROUqeGdCqIZugzOK0FS4m94BNEISvdgKYuNzLsw3Z8dNfjV+ojtwEg+i0Flt17EJjf
-         RxGx3Tcikcry3Zwh26PHsDc2y3AUXwPxlORtThVEoSAdjSm/h+0+4uaoSj6cbywGB4
-         jn6cZ8C2axBj+V1nFAwI8V5sGQfBV8yRWZ1KmP9gKoYpGRQ3Nqd/Bvv7YGI7CmszLm
-         L61vQoeHWilng==
-Message-ID: <f5238f9d-20aa-2cc1-8e83-820c46a33a52@kernel.org>
-Date:   Tue, 28 Feb 2023 12:33:16 +0100
+        Tue, 28 Feb 2023 06:33:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09316E87
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:33:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677584003;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Td4oddmmM1+vJS0lWsyO8iL6ac/jcvqUOESFVNQcxyQ=;
+        b=I+Ah4p2bZfyQjJDkOpkxzhfZXkO3z3FJz/Pqje8kLnMXFXhOdgS1anAVhRZSZ6zUq11uVO
+        r/McgOJkE5ckuF1L3lR5vnIybO3k2f5yvxBIE2u9B7k4cZn++E6bIrNSUiRjSsmOCuSr/8
+        TRcMIFdlR/9jW7CPeg2cV1GT9eERkKY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-348-MOchjEmLNnyZ5i-eMD3QqA-1; Tue, 28 Feb 2023 06:33:22 -0500
+X-MC-Unique: MOchjEmLNnyZ5i-eMD3QqA-1
+Received: by mail-wm1-f72.google.com with SMTP id c7-20020a7bc847000000b003e00be23a70so6785031wml.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:33:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Td4oddmmM1+vJS0lWsyO8iL6ac/jcvqUOESFVNQcxyQ=;
+        b=f0vrtys8h8As0A83jZnL8iAAud9/FkNZSF0iZ5oU7kvWjyWOkYnN9UmR+WZoXTgyQn
+         pQXx7B5EiOyJp8sjja72FmdFz8p9xrLgQlm6OrhPUePwoS4JKTcfaQ5NwCq7/RIzuJ7S
+         /qO4IuqnqsP+q8Ofsb522OUkyvX7IqYO5yEJ2invqYRXCtRpX2VftDNX82DTliSNxlfb
+         D3q2/mByaWxNg9vS3n4G7bTUglF0ZJDrM/hxZbgc4OXetDPCfvU9ZvhLH03eGfTAiDZF
+         UdRFGm3w8JZoZKaoVVg7IUIaZ4/vV/N9tfDaATUa+9N/FPyCHjdV4+yGRSHONr6mcR9r
+         ns8g==
+X-Gm-Message-State: AO0yUKX5QAhdNo5Z5lNNxrWeyDKje0c6KVxMxF4f2D2jqMSrCuiokXiw
+        o6W3mQac8RJ52+XzGFqNyuyrt2iHqK5/a6Oww881UEn+APjKmbpn4W1B3voCocpgTZ17o9gejql
+        y9KAtXz9TP5gWVBXQh/34r4Da
+X-Received: by 2002:a5d:5962:0:b0:2c9:8b81:bd04 with SMTP id e34-20020a5d5962000000b002c98b81bd04mr1569322wri.0.1677584000917;
+        Tue, 28 Feb 2023 03:33:20 -0800 (PST)
+X-Google-Smtp-Source: AK7set9Q9kIQxqyRlatsve8g0wcgxyegweDnlQJHTOCP2QArZXsRYiS2XU5fqY0HFcUTe47lj7xTDw==
+X-Received: by 2002:a5d:5962:0:b0:2c9:8b81:bd04 with SMTP id e34-20020a5d5962000000b002c98b81bd04mr1569305wri.0.1677584000626;
+        Tue, 28 Feb 2023 03:33:20 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id c18-20020adfed92000000b002c54c9bd71fsm9793687wro.93.2023.02.28.03.33.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 03:33:19 -0800 (PST)
+Message-ID: <4a10c2acacf8ca3e34c5452c44fe21bbcc26e271.camel@redhat.com>
+Subject: Re: [PATCH net 0/7] mptcp: fixes for 6.3
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>,
+        Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>,
+        Jiang Biao <benbjiang@tencent.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Christoph Paasch <cpaasch@apple.com>,
+        Geliang Tang <geliang.tang@suse.com>
+Date:   Tue, 28 Feb 2023 12:33:17 +0100
+In-Reply-To: <a0a76c20-4fd9-476b-3e32-06f7cc2bbf1b@tessares.net>
+References: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
+         <a0a76c20-4fd9-476b-3e32-06f7cc2bbf1b@tessares.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/4] dt-bindings: net/dsa/: add brcm,bcm53134 as
- compatible flag
-Content-Language: en-US
-To:     Paul Geurts <paul.geurts@prodrive-technologies.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221212135640.3590545-1-paul.geurts@prodrive-technologies.com>
- <20221212135640.3590545-3-paul.geurts@prodrive-technologies.com>
- <AM0PR02MB55242B90172EAB35D0ADF44EBDAF9@AM0PR02MB5524.eurprd02.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <AM0PR02MB55242B90172EAB35D0ADF44EBDAF9@AM0PR02MB5524.eurprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,21 +89,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2023 20:44, Paul Geurts wrote:
-> The b53 Ethernet driver now has support for the BCM53134 device.
-> This means the driver has a new compatible device, which is now also documented
-> 
-> Signed-off-by: Paul Geurts <paul.geurts@prodrive-technologies.com>
-> ---
->  Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml | 1 +
+On Tue, 2023-02-28 at 12:28 +0100, Matthieu Baerts wrote:
+> Hello,
+>=20
+> On 27/02/2023 18:29, Matthieu Baerts wrote:
+> > Patch 1 fixes a possible deadlock in subflow_error_report() reported by
+> > lockdep. The report was in fact a false positive but the modification
+> > makes sense and silences lockdep to allow syzkaller to find real issues=
+.
+> > The regression has been introduced in v5.12.
+> >=20
+> > Patch 2 is a refactoring needed to be able to fix the two next issues.
+> > It improves the situation and can be backported up to v6.0.
+> >=20
+> > Patches 3 and 4 fix UaF reported by KASAN. It fixes issues potentially
+> > visible since v5.7 and v5.19 but only reproducible until recently
+> > (v6.0). These two patches depend on patch 2/7.
+> >=20
+> > Patch 5 fixes the order of the printed values: expected vs seen values.
+> > The regression has been introduced recently: present in Linus' tree but
+> > not in a tagged version yet.
+> >=20
+> > Patch 6 adds missing ro_after_init flags. A previous patch added them
+> > for other functions but these two have been missed. This previous patch
+> > has been backported to stable versions (up to v5.12) so probably better
+> > to do the same here.
+> >=20
+> > Patch 7 fixes tcp_set_state() being called twice in a row since v5.10.
+>=20
+> I'm sorry to ask for that but is it possible not to apply these patches?
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+Done, thanks!
 
-You literally skipped everyone...
-
-Best regards,
-Krzysztof
+Paolo
 
