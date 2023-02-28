@@ -2,92 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DC26A57A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BE96A57AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjB1LSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S231182AbjB1LWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjB1LSs (ORCPT
+        with ESMTP id S229574AbjB1LWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:18:48 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDDD61AA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:18:44 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id g3so439792wri.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:18:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xVoyC8wrd+bTb+TPTb4Bl/kNMNJ5socmwXem2vdIaJo=;
-        b=NHhkM6XWjGereQscqBrss1KgjdsC4Uw7hMUfqTgTCppgDbPYH4HmZvWHbf1YptSK2v
-         RY2HNVoOcTiJwSKMta9OCE1XR6dozHgkeOdm1pUhcWqbAIygIsF49f8wrQaFJCmcmKtw
-         SLGt+1Drnm5QJqtXw7gdHTBVOvQh4pFmPtyCC8iljFLSiSTLJe7/LQaSL7Jv4kmFHDCd
-         8UnCNtmZN/5ZKldUT3wIRCokoLwDsY+YrCz2365mu+thrNSg4rJME8cDHNRVIzl7ajmf
-         qTr1RLxYhEQM5eCRjVDnbYlyeVHD3INXy/NlGNUi2XgJ6moIIQ9R8zm48HaisrQqTeqk
-         CFVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xVoyC8wrd+bTb+TPTb4Bl/kNMNJ5socmwXem2vdIaJo=;
-        b=CqhBl0Gd3J1uyMq2LoqiN8/LAoRimFGSC0KuBsSdm1PF8AzCs/d6xoNScHo7aXmQeN
-         hcAnGftDX5z8Va1q/gdyv3K944UiPICLR4Yz8lG/uWu8IY/vT37j+GKFB6wdsjCUIJMb
-         D516hU5u9pNkqIXN8Z3byd2tNTrnZvBga2TfsaBP7SLx6FNpek0iimaDXmubay7mG4eH
-         JUoE+hR0DgRcK3gfi+VvJNE2bh2SCqS8Z9BRkbiJDr/so54rBmFoQ2tIRQZLN6IAYsuF
-         9juYyzEOZJgcfgp1Mqe3NILwfEMFUzD8AMJ5quR7jYxpxAg5r0NyRaIfZxNYQMJXUOvM
-         1k3g==
-X-Gm-Message-State: AO0yUKXDFWy5zr14cs0LUdfW0uma3lnhqJh+brDdf5TeIsnVnlvh832a
-        dWbi2NULak0hNB57NRw/l5p44Q==
-X-Google-Smtp-Source: AK7set8SssAP4PkOqN8PR49y6R5vCMxua5W3zRYjs7yGeGL5s0LFqTaxTjp7CcBvtRCJSDHFZSLQiw==
-X-Received: by 2002:a5d:4b87:0:b0:2c9:a8c7:b48d with SMTP id b7-20020a5d4b87000000b002c9a8c7b48dmr1857468wrt.10.1677583122951;
-        Tue, 28 Feb 2023 03:18:42 -0800 (PST)
-Received: from [10.2.4.117] (lfbn-nic-1-295-18.w90-116.abo.wanadoo.fr. [90.116.132.18])
-        by smtp.gmail.com with ESMTPSA id j14-20020a5d464e000000b002c558869934sm9633925wrs.81.2023.02.28.03.18.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 03:18:42 -0800 (PST)
-Message-ID: <741eb8c3-ad05-19e2-2604-9cd9c97c4ef4@baylibre.com>
-Date:   Tue, 28 Feb 2023 12:18:41 +0100
+        Tue, 28 Feb 2023 06:22:21 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D6DD83FF;
+        Tue, 28 Feb 2023 03:22:20 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E04CEC14;
+        Tue, 28 Feb 2023 03:23:02 -0800 (PST)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4EBDB3F881;
+        Tue, 28 Feb 2023 03:22:17 -0800 (PST)
+Message-ID: <89247650-2bff-cb94-eaed-f1d6c343035a@arm.com>
+Date:   Tue, 28 Feb 2023 11:22:16 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
+Subject: Re: [PATCH v2 4/9] coresight-tpdm: Add reset node to TPDM node
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jon Cormier <jcormier@criticallink.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, tony@atomide.com,
-        lee@kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org
-References: <20230224113837.874264-1-jneanne@baylibre.com>
- <20230224113837.874264-2-jneanne@baylibre.com> <Y/iqhsEIvHgnZ+5l@surfacebook>
- <CADL8D3bm82+=LwYnve04FB2zsSJ6ceKQHycV9oNWoYFiOQnVCA@mail.gmail.com>
- <CAHp75Vc52cqPaTFTvi2E-3Gg6gAsDWc7wSWjn7wMuhcxWqFXBA@mail.gmail.com>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <CAHp75Vc52cqPaTFTvi2E-3Gg6gAsDWc7wSWjn7wMuhcxWqFXBA@mail.gmail.com>
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
+        Tao Zhang <taozha@qti.qualcomm.com>
+References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
+ <1674114105-16651-5-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1674114105-16651-5-git-send-email-quic_taozha@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 19/01/2023 07:41, Tao Zhang wrote:
+> TPDM device need a node to reset the configurations and status of
+> it. So as to avoid the previous configurations affecting the
+> current use, the configurations need to be reset first. And in
+> some scenarios, it may be necessary to reset the TPDM
+> configurations to complete the verification of certain function.
+> This change provides a node to reset the configurations and
+> disable the TPDM if it has been enabled.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-tpdm.c | 32 ++++++++++++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index 6befc87..c29d667d 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -161,6 +161,37 @@ static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+>   	}
+>   }
+>   
+> +static ssize_t reset_store(struct device *dev,
+> +					  struct device_attribute *attr,
+> +					  const char *buf,
+> +					  size_t size)
+> +{
+> +	int ret = 0;
+> +	unsigned long val;
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	ret = kstrtoul(buf, 0, &val);
+> +	if (ret || (val != 1))
+> +		return -EINVAL;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	/* Reset all datasets to ZERO */
+> +	if (drvdata->dsb != NULL)
+> +		memset(drvdata->dsb, 0, sizeof(struct dsb_dataset));
+> +
+> +	/* Init the default data */
 
+Code is self explanatory, don't need a comment here.
 
-On 27/02/2023 20:51, Andy Shevchenko wrote:
->>>> Signed-off-by: Jonathan Cormier<jcormier@criticallink.com>
->>>> Signed-off-by: Jerome Neanne<jneanne@baylibre.com>
->>> Not sure how to interpet this along with the From line.
->> Are two sign-offs not allowed/expected?  I wrote the initial
->> implementation of this driver and Jerome updated it and is handling
->> submitting it since he did the rest of the TPS65219 drivers.
-> 1. Submitter's SoB must be the last SoB in the chain.
-> 2. Developers also need to be marked with Co-developed-by.
-Got it! My mistake. I'll fix following your instructions.
+> +	tpdm_init_default_data(drvdata);
+
+Could this be helper be renamed to
+
+	tpdm_reset_dsb_data() ?
+
+Because, that is what it does now.
+
+> +
+> +	spin_unlock(&drvdata->spinlock);
+> +
+> +	/* Disable tpdm if enabled */
+> +	if (drvdata->enable)
+> +		coresight_disable(drvdata->csdev);
+
+Woh, where did that come from ? Don't you have a disable handle ?
+
+> +
+> +	return size;
+> +}
+> +static DEVICE_ATTR_WO(reset);
+> +
+
+This looks a bit pointless to me, given we have separate controls for 
+all that is being achieved above.
+
+Suzuki
+
+>   /*
+>    * value 1: 64 bits test data
+>    * value 2: 32 bits test data
+> @@ -201,6 +232,7 @@ static ssize_t integration_test_store(struct device *dev,
+>   static DEVICE_ATTR_WO(integration_test);
+>   
+>   static struct attribute *tpdm_attrs[] = {
+> +	&dev_attr_reset.attr,
+>   	&dev_attr_integration_test.attr,
+>   	NULL,
+>   };
+
