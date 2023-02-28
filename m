@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB45C6A5E7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910E56A5E7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjB1SAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 13:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
+        id S229755AbjB1SAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 13:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjB1R77 (ORCPT
+        with ESMTP id S229732AbjB1SAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 12:59:59 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4992732CF8;
-        Tue, 28 Feb 2023 09:59:58 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s26so43395745edw.11;
-        Tue, 28 Feb 2023 09:59:58 -0800 (PST)
+        Tue, 28 Feb 2023 13:00:06 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFD832CD8;
+        Tue, 28 Feb 2023 10:00:02 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id o12so43474540edb.9;
+        Tue, 28 Feb 2023 10:00:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=gmail.com; s=20210112; t=1677607200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rCbSLcdXBN5AxQderjzc9KOZWeLSCuHpmkG/hHKOcd0=;
-        b=eYsO0tzXVT9DSPdr8vKN3Ghl3EqOSD9x1DTMZRsCOR0FJ4UZKCiYX12kJmceKf3DZf
-         M2OUsQt0PXCsJoET3L6ScIeOjUJVhHAuNuXibClNU3w6LI9xoCwmOvDRoVGQXhMk2ejX
-         0oRHaekdYj8tFPEfyeN1PicIkmt1VboM/iT3LAQvI5OgmlQzwtgayM9gKc5/Tti7Ejoq
-         EfAr5RI1bbwnobUpTIOIOwIaGqJ+mj8PBcKimw3xO02qU/ZRLIYB49oUETH/VwkE0lBX
-         9x3lA9gaFY3Ww08G+pYtV7dDUd1TMGtv3/wQBdDIP9ZTmQ+qvU3aANIOCoVe+sUJPDP2
-         cvFA==
+        bh=pqjyz7XpRqD7AGnx5mr4UeTlubc91jtSFlPOIv5ZSYs=;
+        b=VV0c2BfxERQrOq34IdAg+GUtD5wK1/zFIwDk6LywrD+XkPWghUXE30X/COcx8kN9x6
+         2gcn9raUl+N0Xi3WKJjPtP0sNnA1cSRQZFT55IVPvzzSCuxo7Me9hqJ7JRojhWWFcVor
+         9xhRcI0oi+mLZhQVF5faDtmp1vD1vnZDwxjXui/TO9dPeuIKHccBdV+9liJPHNQo2HfR
+         RPSYYXj415L65llLO7pTGrv5286z+RZxEwL5IvZNSP0IWS5fNiea9W+ItIy5uYgW+dRx
+         1T1puX2HO2Di76cudYTt1UwFzEYslwxtP1/lUk/vYtOQAimyj/XjX7H3xQj1UtxyUARf
+         TNMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
+        d=1e100.net; s=20210112; t=1677607200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rCbSLcdXBN5AxQderjzc9KOZWeLSCuHpmkG/hHKOcd0=;
-        b=Z4xcVJyZdgIEoOCIgsHHSe6qEnoJ0tKq09F1YeidOH+OsHGvd0yuk7EdqLEGcTpeEz
-         sNLlBe5wYb6WC8WbGSRQWoWu+Hbw4SnngcFaKHJUciouKJ1qPYeB7Fi7ccqdoeKtwcb/
-         W4yWlazUH5XEOM2PDeTKf6i/9za59rJsocvH6eZ00Kgt4BPy9aRGgIiflLnUeZwT7LTv
-         QESV2hMYcdTcZC5ylXhiYAMwoVQA+fgaBDHNIOKauDtnoYZ2ByxVfh5br7OBJjIIbCzA
-         TCFtBLIjVJgczB0srQcSPHo8h9OITRHYdQBbR42mJ1AHmuesu+G1bd5MkId3gKUYefhc
-         dLMA==
-X-Gm-Message-State: AO0yUKV7S3w1/mC7SVxk71fqNNL3Q6jFJTRRZBvu9HNFHhLBv8RlEzkY
-        QxHCzQhsT9QfR5CGTO9CwiKdCq9FEgUQncDS
-X-Google-Smtp-Source: AK7set+TlzEl0ATCLJWDp/KAFz9dRaGmYNUb4pLi02Ym0ZQIUjfVADzCEhfcZXrLcuefKzE8w57KAg==
-X-Received: by 2002:a17:906:24c2:b0:877:a9d2:e5e9 with SMTP id f2-20020a17090624c200b00877a9d2e5e9mr3510567ejb.42.1677607197518;
-        Tue, 28 Feb 2023 09:59:57 -0800 (PST)
+        bh=pqjyz7XpRqD7AGnx5mr4UeTlubc91jtSFlPOIv5ZSYs=;
+        b=pci8h+i/6RM2yBzobOBJ2hlTUpZb5jOtowkFoAJlJzjX42if0jCysXwuLJ4RT36vkN
+         XD74d1STBUXv/JeB4WxbwF55GvraeoDmaaTjGRDD7lnzfrD4zJTXH5e/qZLFIvVE18tD
+         26cmxmaXvs5CdgaGAZ1xuOpVkVCYTOk18pVEwLeM38VEqhaI5+opUxRdBFV02shfiODZ
+         wBB6HGBbU73dueiMX6lOJCRdgp//CXB3H5h4wy/f/P5tmbYbSpueRRZoVLAg3ijXZiVV
+         g0esE5MWDs5vPEDHx1zkns0B60HlEiyz4smBED0NE2NalbA2DQhQ5aFpsbyx/MeidKuN
+         iblQ==
+X-Gm-Message-State: AO0yUKX+4QV3ySqolNoLOP6qz/nHMwIbzHTz6o89jxtgpZwpOUySDoXt
+        QgQyn16tAS3OdJzQpjXlr3z8zXT1w6gHdSiL
+X-Google-Smtp-Source: AK7set+nw9/LWb/Vgp0ga2Iu8qJzU9Zofsz+DsT1bTYTuhIxfEP/wCUo+H3XUxv2VgjryUTcpzEkvw==
+X-Received: by 2002:a17:907:ca14:b0:8b0:26b6:3f2b with SMTP id uk20-20020a170907ca1400b008b026b63f2bmr3169307ejc.53.1677607200274;
+        Tue, 28 Feb 2023 10:00:00 -0800 (PST)
 Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170906234500b008d9c518a318sm4869725eja.142.2023.02.28.09.59.56
+        by smtp.gmail.com with ESMTPSA id m5-20020a170906234500b008d9c518a318sm4869725eja.142.2023.02.28.09.59.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 09:59:57 -0800 (PST)
+        Tue, 28 Feb 2023 09:59:59 -0800 (PST)
 From:   Uros Bizjak <ubizjak@gmail.com>
 To:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Uros Bizjak <ubizjak@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 1/3] ring_buffer: Change some static functions to void
-Date:   Tue, 28 Feb 2023 18:59:27 +0100
-Message-Id: <20230228175929.7534-2-ubizjak@gmail.com>
+Subject: [PATCH 2/3] ring_buffer: Change some static functions to bool
+Date:   Tue, 28 Feb 2023 18:59:28 +0100
+Message-Id: <20230228175929.7534-3-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230228175929.7534-1-ubizjak@gmail.com>
 References: <20230228175929.7534-1-ubizjak@gmail.com>
@@ -73,8 +73,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The results of some static functions are not used. Change the
-type of these function to void and remove unnecessary returns.
+The return values of some functions are of boolean type. Change the
+type of these function to bool and adjust their return values. Also
+change type of some internal varibles to bool.
 
 No functional change intended.
 
@@ -82,91 +83,195 @@ Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 ---
- kernel/trace/ring_buffer.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ kernel/trace/ring_buffer.c | 47 ++++++++++++++++++--------------------
+ 1 file changed, 22 insertions(+), 25 deletions(-)
 
 diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index af50d931b020..05fdc92554df 100644
+index 05fdc92554df..4188af7d4cfe 100644
 --- a/kernel/trace/ring_buffer.c
 +++ b/kernel/trace/ring_buffer.c
-@@ -1569,15 +1569,12 @@ static void rb_tail_page_update(struct ring_buffer_per_cpu *cpu_buffer,
- 	}
- }
+@@ -163,7 +163,7 @@ enum {
+ #define extended_time(event) \
+ 	(event->type_len >= RINGBUF_TYPE_TIME_EXTEND)
  
--static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
-+static void rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
- 			  struct buffer_page *bpage)
+-static inline int rb_null_event(struct ring_buffer_event *event)
++static inline bool rb_null_event(struct ring_buffer_event *event)
  {
- 	unsigned long val = (unsigned long)bpage;
- 
--	if (RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK))
--		return 1;
--
--	return 0;
-+	RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK);
+ 	return event->type_len == RINGBUF_TYPE_PADDING && !event->time_delta;
  }
- 
- /**
-@@ -1587,30 +1584,28 @@ static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
-  * As a safety measure we check to make sure the data pages have not
-  * been corrupted.
+@@ -367,11 +367,9 @@ static void free_buffer_page(struct buffer_page *bpage)
+ /*
+  * We need to fit the time_stamp delta into 27 bits.
   */
--static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
-+static void rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
+-static inline int test_time_stamp(u64 delta)
++static inline bool test_time_stamp(u64 delta)
  {
- 	struct list_head *head = rb_list_head(cpu_buffer->pages);
- 	struct list_head *tmp;
- 
- 	if (RB_WARN_ON(cpu_buffer,
- 			rb_list_head(rb_list_head(head->next)->prev) != head))
--		return -1;
-+		return;
- 
- 	if (RB_WARN_ON(cpu_buffer,
- 			rb_list_head(rb_list_head(head->prev)->next) != head))
--		return -1;
-+		return;
- 
- 	for (tmp = rb_list_head(head->next); tmp != head; tmp = rb_list_head(tmp->next)) {
- 		if (RB_WARN_ON(cpu_buffer,
- 				rb_list_head(rb_list_head(tmp->next)->prev) != tmp))
--			return -1;
-+			return;
- 
- 		if (RB_WARN_ON(cpu_buffer,
- 				rb_list_head(rb_list_head(tmp->prev)->next) != tmp))
--			return -1;
-+			return;
- 	}
--
+-	if (delta & TS_DELTA_TEST)
+-		return 1;
 -	return 0;
++	return !!(delta & TS_DELTA_TEST);
  }
  
- static int __rb_allocate_pages(struct ring_buffer_per_cpu *cpu_buffer,
-@@ -4500,7 +4495,6 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
- 	default:
- 		RB_WARN_ON(cpu_buffer, 1);
- 	}
--	return;
+ #define BUF_PAGE_SIZE (PAGE_SIZE - BUF_PAGE_HDR_SIZE)
+@@ -700,7 +698,7 @@ rb_time_read_cmpxchg(local_t *l, unsigned long expect, unsigned long set)
+ 	return ret == expect;
  }
  
- static void
-@@ -4531,7 +4525,6 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
- 	default:
- 		RB_WARN_ON(iter->cpu_buffer, 1);
- 	}
--	return;
- }
- 
- static struct buffer_page *
-@@ -4946,7 +4939,6 @@ rb_reader_unlock(struct ring_buffer_per_cpu *cpu_buffer, bool locked)
+-static int rb_time_cmpxchg(rb_time_t *t, u64 expect, u64 set)
++static bool rb_time_cmpxchg(rb_time_t *t, u64 expect, u64 set)
  {
- 	if (likely(locked))
- 		raw_spin_unlock(&cpu_buffer->reader_lock);
--	return;
+ 	unsigned long cnt, top, bottom, msb;
+ 	unsigned long cnt2, top2, bottom2, msb2;
+@@ -1490,7 +1488,7 @@ rb_set_head_page(struct ring_buffer_per_cpu *cpu_buffer)
+ 	return NULL;
  }
  
- /**
+-static int rb_head_page_replace(struct buffer_page *old,
++static bool rb_head_page_replace(struct buffer_page *old,
+ 				struct buffer_page *new)
+ {
+ 	unsigned long *ptr = (unsigned long *)&old->list.prev->next;
+@@ -1917,7 +1915,7 @@ static inline unsigned long rb_page_write(struct buffer_page *bpage)
+ 	return local_read(&bpage->write) & RB_WRITE_MASK;
+ }
+ 
+-static int
++static bool
+ rb_remove_pages(struct ring_buffer_per_cpu *cpu_buffer, unsigned long nr_pages)
+ {
+ 	struct list_head *tail_page, *to_remove, *next_page;
+@@ -2030,12 +2028,13 @@ rb_remove_pages(struct ring_buffer_per_cpu *cpu_buffer, unsigned long nr_pages)
+ 	return nr_removed == 0;
+ }
+ 
+-static int
++static bool
+ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ {
+ 	struct list_head *pages = &cpu_buffer->new_pages;
+-	int retries, success;
++	int retries;
+ 	unsigned long flags;
++	bool success;
+ 
+ 	/* Can be called at early boot up, where interrupts must not been enabled */
+ 	raw_spin_lock_irqsave(&cpu_buffer->reader_lock, flags);
+@@ -2054,7 +2053,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ 	 * spinning.
+ 	 */
+ 	retries = 10;
+-	success = 0;
++	success = false;
+ 	while (retries--) {
+ 		struct list_head *head_page, *prev_page, *r;
+ 		struct list_head *last_page, *first_page;
+@@ -2083,7 +2082,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ 			 * pointer to point to end of list
+ 			 */
+ 			head_page->prev = last_page;
+-			success = 1;
++			success = true;
+ 			break;
+ 		}
+ 	}
+@@ -2111,7 +2110,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ 
+ static void rb_update_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ {
+-	int success;
++	bool success;
+ 
+ 	if (cpu_buffer->nr_pages_to_update > 0)
+ 		success = rb_insert_pages(cpu_buffer);
+@@ -2994,7 +2993,7 @@ static u64 rb_time_delta(struct ring_buffer_event *event)
+ 	}
+ }
+ 
+-static inline int
++static inline bool
+ rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,
+ 		  struct ring_buffer_event *event)
+ {
+@@ -3015,7 +3014,7 @@ rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,
+ 	delta = rb_time_delta(event);
+ 
+ 	if (!rb_time_read(&cpu_buffer->write_stamp, &write_stamp))
+-		return 0;
++		return false;
+ 
+ 	/* Make sure the write stamp is read before testing the location */
+ 	barrier();
+@@ -3028,7 +3027,7 @@ rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,
+ 		/* Something came in, can't discard */
+ 		if (!rb_time_cmpxchg(&cpu_buffer->write_stamp,
+ 				       write_stamp, write_stamp - delta))
+-			return 0;
++			return false;
+ 
+ 		/*
+ 		 * It's possible that the event time delta is zero
+@@ -3061,12 +3060,12 @@ rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,
+ 		if (index == old_index) {
+ 			/* update counters */
+ 			local_sub(event_length, &cpu_buffer->entries_bytes);
+-			return 1;
++			return true;
+ 		}
+ 	}
+ 
+ 	/* could not discard */
+-	return 0;
++	return false;
+ }
+ 
+ static void rb_start_commit(struct ring_buffer_per_cpu *cpu_buffer)
+@@ -3281,7 +3280,7 @@ rb_wakeups(struct trace_buffer *buffer, struct ring_buffer_per_cpu *cpu_buffer)
+  * Note: The TRANSITION bit only handles a single transition between context.
+  */
+ 
+-static __always_inline int
++static __always_inline bool
+ trace_recursive_lock(struct ring_buffer_per_cpu *cpu_buffer)
+ {
+ 	unsigned int val = cpu_buffer->current_context;
+@@ -3298,14 +3297,14 @@ trace_recursive_lock(struct ring_buffer_per_cpu *cpu_buffer)
+ 		bit = RB_CTX_TRANSITION;
+ 		if (val & (1 << (bit + cpu_buffer->nest))) {
+ 			do_ring_buffer_record_recursion();
+-			return 1;
++			return true;
+ 		}
+ 	}
+ 
+ 	val |= (1 << (bit + cpu_buffer->nest));
+ 	cpu_buffer->current_context = val;
+ 
+-	return 0;
++	return false;
+ }
+ 
+ static __always_inline void
+@@ -5408,9 +5407,8 @@ bool ring_buffer_empty(struct trace_buffer *buffer)
+ {
+ 	struct ring_buffer_per_cpu *cpu_buffer;
+ 	unsigned long flags;
+-	bool dolock;
++	bool dolock, ret;
+ 	int cpu;
+-	int ret;
+ 
+ 	/* yes this is racy, but if you don't like the race, lock the buffer */
+ 	for_each_buffer_cpu(buffer, cpu) {
+@@ -5438,8 +5436,7 @@ bool ring_buffer_empty_cpu(struct trace_buffer *buffer, int cpu)
+ {
+ 	struct ring_buffer_per_cpu *cpu_buffer;
+ 	unsigned long flags;
+-	bool dolock;
+-	int ret;
++	bool dolock, ret;
+ 
+ 	if (!cpumask_test_cpu(cpu, buffer->cpumask))
+ 		return true;
 -- 
 2.39.2
 
