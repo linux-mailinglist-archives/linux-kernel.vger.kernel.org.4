@@ -2,103 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8026A58D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321276A58D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjB1MFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 07:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S231547AbjB1MFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 07:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjB1ME6 (ORCPT
+        with ESMTP id S231514AbjB1MFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 07:04:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE112DE52
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:04:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677585854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KCJidl22u1cKfAyMeW4PYXi3JfewoKCLf6JCBtPv+4E=;
-        b=imXD55bt2Gev2i/p6DR6bULaPt8kaQ8CGOQuC/kI2EHs5iMUnSiTVfE6pNlqy2BEE809QJ
-        ibgVYLZFzbpbKWGNd4IT3xKS8Vr3YesTjE71JKzcMhpfSBjfLyDDrUA4HoFoud5863mGIZ
-        dUkj7xJVEONxt6D2YpkNODvp1R6roU0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-546-CVHzQ5ZkPQSowccCc1USbg-1; Tue, 28 Feb 2023 07:04:13 -0500
-X-MC-Unique: CVHzQ5ZkPQSowccCc1USbg-1
-Received: by mail-wm1-f72.google.com with SMTP id j6-20020a05600c1c0600b003eaf882cb85so4155319wms.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:04:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KCJidl22u1cKfAyMeW4PYXi3JfewoKCLf6JCBtPv+4E=;
-        b=d0gfySyyHCW4lyYixe9cRUj/zTbu9TqKkylNjNeSszcs5V0ZwMMVSoWIran69S1emI
-         msN40VUtfWSAc4kk13KF4MN/N1HknBO0sYwcLZFu54Fv77G3QE/ljhDl6yofmZi0dBLC
-         Yr4zbxOW1Q6Z7FAXKrDdsVHhrECoNTHpU5nzXXcM7f4bnPkjXKMTN3P+LSzTPIEcvLp4
-         urPTGVmAHnFLvrooZjnKSShMtLWgOa7hzsR4AP9sabdb+HM6Eb6jRLepvuo5MgcpFnOW
-         O6LC3l03CVdc5Btgcnz/bWIgi2JWQeo6egIqY0oQGJ4k6NolkMRGtBbhokSBfDqLjihn
-         9o0A==
-X-Gm-Message-State: AO0yUKW7dNMeZ6imgGXYvJpmumwgWka+lotxlOA1mdxmzqrtsZeVDb29
-        oKtgApSOMCCApHtRQq7wOmRQ6kkmylib8R1vLkBXJpF3x1jItBHQKH0y1MqkBd6Voh6Yaanf3e6
-        0xaKCFH+ULxofdvr9zlr0f+jQ
-X-Received: by 2002:a05:600c:35cc:b0:3ea:840c:e8ff with SMTP id r12-20020a05600c35cc00b003ea840ce8ffmr2220083wmq.3.1677585852441;
-        Tue, 28 Feb 2023 04:04:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set+i4oLcSfX/DPlO4reXLr5cplrlWIwAVs7488OSTZEYMFEEjdYGmSLF3oxgzaF/YTdKk1RNSg==
-X-Received: by 2002:a05:600c:35cc:b0:3ea:840c:e8ff with SMTP id r12-20020a05600c35cc00b003ea840ce8ffmr2220063wmq.3.1677585852119;
-        Tue, 28 Feb 2023 04:04:12 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id l8-20020a05600c1d0800b003de2fc8214esm13242664wms.20.2023.02.28.04.04.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 04:04:11 -0800 (PST)
-Message-ID: <85dae3d33c5b19b968313069c7c5342d688852b2.camel@redhat.com>
-Subject: Re: [PATCH] sched: delete some api is not used
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     lingfuyi <lingfuyi@126.com>, jhs@mojatatu.com, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lingfuyi <lingfuyi@kylinos.cn>, k2ci <kernel-bot@kylinos.cn>
-Date:   Tue, 28 Feb 2023 13:04:10 +0100
-In-Reply-To: <20230228031241.1675263-1-lingfuyi@126.com>
-References: <20230228031241.1675263-1-lingfuyi@126.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 28 Feb 2023 07:05:44 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D382DE62;
+        Tue, 28 Feb 2023 04:05:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Tb8v3gSrxOz35jzMapCnQ0G/8W1+t6kLfHHktPU3mD4=; b=VIsdJCJXi1xMa1zI7F3s3Pliy0
+        HXitXrg+XyBOf9eICMwNy3L8y3AtwLggejHxMxrL7XfK80/0MXxMA/DQqUDAbRxVbHiN4Nu3PbxzX
+        w8IGouuc9WMEeTri671NblotNzLe7WcGcTfk3F1w7Ow7Z7aT5bp1ld9hTxH/LC/0hwXOQRBBNFqqk
+        rrsqnin7gJ9ZF74MyYK2HiEMeKQtGgdjh3EWejV5NcV3QrBOy1n+L12tOZ4JoKl3Nv8c7W7j0ndEc
+        dJnG7bSC1a2hIxqWvWXggjafWSPKymCzn+3rR4BBNdlNLv9ML42EY3Zn7CJttGIc03R5sMDLU8Ns/
+        W0s+kYcQ==;
+Received: from [152.254.196.162] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pWyiv-000Bgy-K1; Tue, 28 Feb 2023 13:04:49 +0100
+Message-ID: <174e3a17-31bb-d74c-6248-23558fc2b5ee@igalia.com>
+Date:   Tue, 28 Feb 2023 09:04:39 -0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v12 00/11] Parallel CPU bringup for x86_64
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Usama Arif <usama.arif@bytedance.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, brgerst@gmail.com,
+        dave.hansen@linux.intel.com, fam.zheng@bytedance.com,
+        hewenliang4@huawei.com, "H. Peter Anvin" <hpa@zytor.com>,
+        kim.phillips@amd.com, kvm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, liangma@liangbit.com,
+        mimoja@mimoja.de, oleksandr@natalenko.name,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, piotrgorski@cachyos.org,
+        punit.agrawal@bytedance.com, rcu@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        simon.evans@bytedance.com, Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>, x86@kernel.org
+References: <3ca3b60e-47a2-640a-cad3-e3e110d3aaf7@igalia.com>
+ <8b0cc6fa-8d40-7401-b8f9-559b5db3e8c9@molgen.mpg.de>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <8b0cc6fa-8d40-7401-b8f9-559b5db3e8c9@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-28 at 11:12 +0800, lingfuyi wrote:
-> From: lingfuyi <lingfuyi@kylinos.cn>
->=20
-> fix compile errors like this:
-> net/sched/cls_api.c:141:13: error: =E2=80=98tcf_exts_miss_cookie_base_des=
-troy=E2=80=99
-> defined but not used [-Werror=3Dunused-function]
->=20
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: lingfuyi <lingfuyi@kylinos.cn>
+On 28/02/2023 07:13, Paul Menzel wrote:
+> Dear Guilherme,
+> 
+> 
+> Am 27.02.23 um 22:39 schrieb Guilherme G. Piccoli:
+> 
+>> I've tested it on Steam Deck (with and without the "no_parallel_bringup"
+>> parameter), it works fine - also tested S3/deep sleep-resume cycle.
+>>
+>> Feel free to add (to the series):
+>> Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> Thank you for testing the series. It’d be great if you could share the 
+> timing differences.
+> 
+> […]
+> 
+> 
+> Kind regards,
+> 
+> Paul
 
-This has been already addressed by:
+Hi Paul!
 
-commit 37e1f3acc339b28493eb3dad571c3f01b6af86f6
-Author: Nathan Chancellor <nathan@kernel.org>
-Date:   Fri Feb 24 11:18:49 2023 -0700
+The results...weren't so great, I felt no difference heh
+Which is also not bad, it seems the series favors big SMP systems, Deck
+has only 8 CPUs.
 
-    net/sched: cls_api: Move call to tcf_exts_miss_cookie_base_destroy()
+But maybe the way I measured is not ideal? I just compared timestamps on
+dmesg from the first SMP message up to the one that says the boot of
+secondary CPUs is complete. Do you have a better suggestion? I can try
+things here.
 
-Thanks,
+Cheers,
 
-Paolo
 
+Guilherme
