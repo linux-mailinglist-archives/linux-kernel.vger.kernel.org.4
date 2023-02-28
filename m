@@ -2,144 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A906A5773
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA906A5777
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjB1LEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S231346AbjB1LGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbjB1LEo (ORCPT
+        with ESMTP id S229606AbjB1LGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:04:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1A627497;
-        Tue, 28 Feb 2023 03:04:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FCD2B80D58;
-        Tue, 28 Feb 2023 11:04:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8F2C433D2;
-        Tue, 28 Feb 2023 11:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677582280;
-        bh=QpDfQ/zJp6kV7hVEF9bezQ5WIgwiAYm6JLVTuiilDXw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PxIOIXNqhzXRLo2LGPqW2PgTig+cHJdmF6wthVXirQB1Eqc3HBvl+EPi3ZEWuHF4c
-         n+/2/fOjEJCyXki6PSX4oeix71z8Y+eprCUXKH1YWqVmEwOeOpZtquIL038SEKnNvb
-         Kt/CfrKVY9AoyIr1IkHjJZf4vvmVTUytMrMBCTSGwiDSRjl692CuiZFlK7Zw30TmXi
-         vGkmvW+VOHeE0om/CPMJQrGNugdD1pU75Yi1ikm+ZWkjnjKH2J/cAxJlnEAqHPU0kZ
-         UxbJwI49lXOUBMv8vxmQhuGVWnh0cXN92HinaChq0/HnYyp7WFFyBzzPsmNC7Wse0y
-         YynmkKaKnSXiw==
-Date:   Tue, 28 Feb 2023 12:04:36 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as
- completed
-Message-ID: <Y/3fxLXbfvnLFEZq@lothringen>
-References: <Y/z0fHHYdxEXcWMT@pc636>
- <7EBE4F51-F2BD-4B42-AFC1-CA234E78CC7B@joelfernandes.org>
- <Y/z9Its1RKetIr8V@pc636>
- <CAEXW_YSjT_orp8TbomBFU+ETS7YJ7TrbHTdrsBRTzCKG5_SBdw@mail.gmail.com>
- <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y/0/dnmIk508sidK@lothringen>
- <Y/1ZMXsNZtwYPJNW@google.com>
+        Tue, 28 Feb 2023 06:06:36 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7DA3ABE;
+        Tue, 28 Feb 2023 03:06:35 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id y2so9384305pjg.3;
+        Tue, 28 Feb 2023 03:06:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bvm36jEtxsjOED1mtOtwojZpdWddplJxOZnpRXDzWDw=;
+        b=KzzWos9fuGTDMCs6y0xH3HRrCE5mLcFihPrconwhq+QCcBC4pWDNKodtXXuJvvzyuR
+         /LWzXNmC6wWCZOKGXeMRF+NylZAcuiR5+znWAGGobNx+KPsqCU1zaXWu3CYi1NxcNdYv
+         NgT6hZQGmUk34EJG24vuNmkNTLZX5zQdFRdtkjzubWaSSRT7uyhF2xYjnl8C6ZC88YNv
+         PeWvJCpEKjI0BYCvIjlmO9Ew4sRSCxBmn/lYTWlClN7vfHr15NQ6j6w7ZEn4utpjgjut
+         vRpPgcXdswr5stowAP8MIy7yEn4pv5d1mi/rOExwx65D3Ml8u/7A9xvzRcc/olexf2mF
+         4jVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bvm36jEtxsjOED1mtOtwojZpdWddplJxOZnpRXDzWDw=;
+        b=xIomMJ06Ra5BEmjrREV30u50qDc2hL38r6IgT6rkgeHhz8j6bzIev2cg8xjHc7Etjj
+         lgO+fDc6yMLFI/N0pFvBk0N9J/+uDQpxsWohzxXmsp8DaiuLUy8ECVgaqM+4PGpGdGYv
+         mFE3Tgj9ul+QM3vJkbU51hcfR5DW781apVAsrLos+o+sblb/+AljNci1NzeOQfHLSFXc
+         QFzZreqkK8l6B0y7gJSX3sBMYhJyaTNFmlnlD9dOTyQ7UMgCuBSVQQ2WBR9pjtOy152e
+         AoI6Z9Tp3Cw/yjsJWVuji0fN+eUFNwKABpfS7bMbfPz7JYeDmx5g1tv1sTe1lV93pTKA
+         KvBw==
+X-Gm-Message-State: AO0yUKVITG7OXaqTu2mOZU0CnwcHuTd4QPtChVkJ+YWkQyko384E75CU
+        1Y3CRU0fqU1hdP7BvCnUS+Y=
+X-Google-Smtp-Source: AK7set/V0gZ4d5+d6LDbQquSz4/CAYQAR1LC0vZM7MFpb7GZho2ejiRNPXoDfVRuEC1RxYD7eVFmKg==
+X-Received: by 2002:a17:90a:3e4f:b0:237:bf05:40b with SMTP id t15-20020a17090a3e4f00b00237bf05040bmr2814072pjm.20.1677582394314;
+        Tue, 28 Feb 2023 03:06:34 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id x25-20020a63b219000000b00502ecc282e2sm5476821pge.5.2023.02.28.03.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 03:06:33 -0800 (PST)
+Date:   Tue, 28 Feb 2023 03:06:32 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v11 023/113] KVM: TDX: allocate/free TDX vcpu structure
+Message-ID: <20230228110632.GV4175971@ls.amr.corp.intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <db53b2c6c7718df7df89bb36b83257a2588b58e1.1673539699.git.isaku.yamahata@intel.com>
+ <76cd219cadf3f5e06eb10b592de121ed0db056eb.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y/1ZMXsNZtwYPJNW@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <76cd219cadf3f5e06eb10b592de121ed0db056eb.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 01:30:25AM +0000, Joel Fernandes wrote:
-> On Tue, Feb 28, 2023 at 12:40:38AM +0100, Frederic Weisbecker wrote:
-> > On Mon, Feb 27, 2023 at 03:05:02PM -0800, Paul E. McKenney wrote:
-> > > On Mon, Feb 27, 2023 at 02:10:30PM -0500, Joel Fernandes wrote:
-> > > 
-> > > The combination of sysfs manipulated by userspace and a kernel failsafe
-> > > makes sense to me.  Especially if by default triggering the failsafe
-> > > splats.  That way, bugs where userspace fails to update the sysfs file
-> > > get caught.
-> > > 
-> > > The non-default silent-failsafe mode is also useful to allow some power
-> > > savings in advance of userspace getting the sysfs updating in place.
-> > > And of course the default splatting setup can be used in internal testing
-> > > with the release software being more tolerant of userspace foibles.
+On Thu, Jan 19, 2023 at 12:45:09AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
+
+> On Thu, 2023-01-12 at 08:31 -0800, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
 > > 
-> > I'm wondering, this is all about CONFIG_RCU_LAZY, right? Or does also expedited
-> > GP turned off a bit early or late on boot matter for anybody in practice?
+> > The next step of TDX guest creation is to create vcpu.  Allocate TDX vcpu
+> > structures, partially initialize it.  
+> > 
 > 
-> Yes, if you provide 'rcu_normal_after_boot', then after the boot ends, it
-> switches expedited GPs to normal ones.
+> Why partially initialize it?  Shouldn't a better way be either: 1) not
+> initialize at all, or; 2) fully initialize? 
 > 
-> It is the same issue for expedited, the kernel's version of what is 'boot' is
-> much shorter than what is actually boot.
+> Can you put more _why_ here?
 > 
-> This is also the case with suspend/resume's rcu_pm_notify(). See the comment:
->   /*
->    * On non-huge systems, use expedited RCU grace periods to make suspend
->    * and hibernation run faster.
->    */
 > 
-> There also we turn on/off both lazy and expedited. I don't see why we
-> shouldn't do it for boot.
-
-Of course but I mean currently rcu_end_inkernel_boot() is called explicitly
-before the kernel calls init. From that point on, what is the source of the
-issue? Delaying lazy further would be enough or do we really need to delay
-forcing expedited as well? Or is it the reverse: delaying expedited further
-would matter and lazy doesn't play much role from there.
-
-It matters to know because if delaying expedited further is enough, then indeed
-we must delay the call to rcu_end_inkernel_boot() somehow. But if delaying
-expedited further doesn't matter and delaying lazy matter then it's possible
-that the issue is a callback that should be marked as call_rcu_hurry() and then
-the source of the problem is much broader.
-
-I think the confusion comes from the fact that your changelog doesn't state precisely
-what the problem exactly is. Also do we need to wait for the kernel boot completion?
-And if so what is missing from kernel boot after the current explicit call to
-rcu_end_inkernel_boot()?
-
-Or do we also need to wait for userspace to complete the boot? Different
-problems, different solutions.
-
-But in any case a countdown is not a way to go. Consider that rcu_lazy may
-be used by a larger audience than just chromium in the long run. You can not
-ask every admin to provide his own estimation per type of machine. You can't
-either rely on a long default value because that may have bad impact on
-workload assumptions launched right after boot.
-
+> > Allocate pages of TDX vcpu for the
+> > TDX module.  Actual donation TDX vcpu pages to the TDX module is not done
+> > yet.
 > 
-> > So shouldn't we disable lazy callbacks by default when CONFIG_RCU_LAZY=y and then
-> > turn it on with "sysctl kernel.rcu.lazy=1" only whenever userspace feels ready
-> > about it? We can still keep the current call to rcu_end_inkernel_boot().
+> Also, can you explain _why_ it is not done here?
 > 
-> Hmm IMHO that would add more knobs for not much reason honestly. We already
-> have CONFIG_RCU_LAZY default disabled, I really don't want to add more
-> dependency (like user enables the config and does not see laziness).
+> > 
+> > In the case of the conventional case, cpuid is empty at the initialization.
+> > and cpuid is configured after the vcpu initialization.  Because TDX
+> > supports only X2APIC mode, cpuid is forcibly initialized to support X2APIC
+> > on the vcpu initialization.
+> 
+> Don't quite understand here.  As you said CPUID entries are configured later in
+> KVM_SET_CPUID2, so what's the point of initializing CPUID to support x2api> Are you suggesting KVM_SET_CPUID2 will be somehow rejected for TDX guest, or
+> there will be special handling to make sure the CPUID initialized here won't be
+> overwritten later?
+> 
+> Please explain clearly here.
 
-I don't know. Like I said, different problems, different solutions. Let's
-identify what the issue is precisely. For example can we expect that the issues
-on boot can be a problem also on some temporary workloads?
+Here is the updated one.
 
-Besides I'm currently testing a very hacky flavour of rcu_lazy and so far it
-shows many idle calls that would have been delayed if callbacks weren't queued
-as lazy. I have yet to do actual energy and performance measurements but if it
-happens to show improvements, I suspect distros will want a supported yet
-default disabled Kconfig that can be turned on on boot or later. Of course we
-are not there yet but things to keep in mind...
+    The next step of TDX guest creation is to create vcpu.  Allocate TDX vcpu
+    structures, initialize it that doesn't require TDX SEAMCALL.  TDX specific
+    vcpuid initialization will be implemented as independent KVM_TDX_INIT_VCPU
+    so that when error occurs it's easy to determine which component has the
+    issue, KVM or TDX.
+    
+    In the case of the conventional case, cpuid is empty at the initialization.
+    and cpuid is configured after the vcpu initialization.  Because TDX
+    supports only X2APIC mode, cpuid is forcibly set to support X2APIC and APIC
+    BASE MSR is forcibly set to X2APIC mode.  The MSR will be read only for
+    guest TD.  Because kvm_arch_vcpu_create() also initializes kvm MMU that
+    depends on local apic settings.  So x2apic needs to be initialized to
+    X2APIC mode by vcpu_reset method before KVM mmu initialization.
 
-Thanks.
+
+
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index 557a609c5147..099f0737a5aa 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -281,6 +281,81 @@ int tdx_vm_init(struct kvm *kvm)
+> >  	return 0;
+> >  }
+> >  
+> > +int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+> > +{
+> > +	struct kvm_cpuid_entry2 *e;
+> > +
+> > +	/*
+> > +	 * On cpu creation, cpuid entry is blank.  Forcibly enable
+> > +	 * X2APIC feature to allow X2APIC.
+> > +	 * Because vcpu_reset() can't return error, allocation is done here.
+> > +	 */
+> > +	WARN_ON_ONCE(vcpu->arch.cpuid_entries);
+> > +	WARN_ON_ONCE(vcpu->arch.cpuid_nent);
+> > +	e = kvmalloc_array(1, sizeof(*e), GFP_KERNEL_ACCOUNT);
+> 
+> You don't need to use kvmalloc_array() when only allocating one entry.
+
+I'll make it kvmalloc() and add comment on kvmalloc(), not kmalloc().
+
+
+> > +	if (!e)
+> > +		return -ENOMEM;
+> > +	*e  = (struct kvm_cpuid_entry2) {
+> > +		.function = 1,	/* Features for X2APIC */
+> > +		.index = 0,
+> > +		.eax = 0,
+> > +		.ebx = 0,
+> > +		.ecx = 1ULL << 21,	/* X2APIC */
+> > +		.edx = 0,
+> > +	};
+> > +	vcpu->arch.cpuid_entries = e;
+> > +	vcpu->arch.cpuid_nent = 1;
+> 
+> As mentioned above, why doing it here? Won't be this be overwritten later in
+> KVM_SET_CPUID2?
+
+Yes, user space VMM can overwrite cpuid[0x1] and APIC base MSR.  But it doesn't
+matter because it's a bug of user space VMM. user space VMM has to keep the
+consistency of cpuid and MSRs.
+Because TDX module virtualizes cpuid[0x1].x2apic to fixed 1, KVM value doesn't
+matter after vcpu creation.
+Because KVM virtualizes APIC base as read only to guest, cpuid[0x1].x2apic
+doesn't matter after vcpu creation as long as user space VMM keeps KVM APIC BASE
+value.
+
+I'll add a comment.
+
+
+> > +
+> > +	/* TDX only supports x2APIC, which requires an in-kernel local APIC. */
+> > +	if (!vcpu->arch.apic)
+> > +		return -EINVAL;
+> 
+> If this is hit, what happens to the CPUID entry allocated above?  It's
+> absolutely not clear here in this patch.
+
+It's memory leak. I'll move the check before memory allocation.
+
+
+> > +
+> > +	fpstate_set_confidential(&vcpu->arch.guest_fpu);
+> > +
+> > +	vcpu->arch.efer = EFER_SCE | EFER_LME | EFER_LMA | EFER_NX;
+> > +
+> > +	vcpu->arch.cr0_guest_owned_bits = -1ul;
+> > +	vcpu->arch.cr4_guest_owned_bits = -1ul;
+> > +
+> > +	vcpu->arch.tsc_offset = to_kvm_tdx(vcpu->kvm)->tsc_offset;
+> > +	vcpu->arch.l1_tsc_offset = vcpu->arch.tsc_offset;
+> > +	vcpu->arch.guest_state_protected =
+> > +		!(to_kvm_tdx(vcpu->kvm)->attributes & TDX_TD_ATTRIBUTE_DEBUG);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +void tdx_vcpu_free(struct kvm_vcpu *vcpu)
+> > +{
+> > +	/* This is stub for now.  More logic will come. */
+> > +}
+> > +
+> > +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> > +{
+> > +	struct msr_data apic_base_msr;
+> > +
+> > +	/* TDX doesn't support INIT event. */
+> > +	if (WARN_ON_ONCE(init_event))
+> > +		goto td_bugged;
+> 
+> Should we use KVM_BUG_ON()?
+>
+> Again, it appears this depends on how KVM handles INIT, which is done in a later
+> patch far way:
+> 
+> [PATCH v11 102/113] KVM: TDX: Silently ignore INIT/SIPI
+> 
+> And there's no material explaining how it is handled in either changelog or
+> comment, so to me it's not reviewable.
+
+I'll convert them to KVM_BUG_ON().  With this patch, I'll remove WARN_ON_ONCE()
+and add KVM_BUG_ON() with the later patch.
+
+
+> > +
+> > +	/* TDX rquires X2APIC. */
+> > +	apic_base_msr.data = APIC_DEFAULT_PHYS_BASE | LAPIC_MODE_X2APIC;
+> > +	if (kvm_vcpu_is_reset_bsp(vcpu))
+> > +		apic_base_msr.data |= MSR_IA32_APICBASE_BSP;
+> > +	apic_base_msr.host_initiated = true;
+> > +	if (WARN_ON_ONCE(kvm_set_apic_base(vcpu, &apic_base_msr)))
+> > +		goto td_bugged;
+> 
+> I think we have KVM_BUG_ON()?
+> 
+> TDX requires a lot more staff then just x2apic, why only x2apic is done here,
+> particularly in _this_ patch?
+
+After this callback, kvm mmu initialization follows.  It depends on apic
+setting.  X2APIC is only devication from the common logic kvm_lapic_reset().
+I'll add a comment.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
