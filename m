@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5405A6A5CE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192986A5CF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjB1QOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S229544AbjB1QTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjB1QOm (ORCPT
+        with ESMTP id S229445AbjB1QTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:14:42 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CC62330E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:14:40 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id ck15so42473020edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:14:40 -0800 (PST)
+        Tue, 28 Feb 2023 11:19:16 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4170D50A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:19:15 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-536cb25982eso286548967b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:19:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=d8tRS460nc4KIz6Gi8dIzh48uT/Gqvrt2n9DWhZ29rY=;
-        b=IehjgpMbn3Eo6EKsrwBu/GL6F4CUPB9kww4ilDWDx4m4BtWjE74S+RumzMcpLSqTnp
-         9bB+30LJDDS6o2IHlzAgYNlFgK7kxPN+BGnVW0Qhjwqz9501OoCyi22zBk4gSMfxAjhB
-         H5RJlC98/rS/t7vyuKP6BT8UsRe+GDueaKJue8cWRBeZzdQbjGlomLR7LQclmlBEft6N
-         YHhS8f+Ic7fY3hMeSTkgasGz6KgRQLIK89g1wWaFyBdq1lK1rajRIBQ5TczwRlcmDOoe
-         QdLi2sbZE5wdCatI7nupb+nMGRlvx8xVVBGqsPN+VU0HOM964PhJGVDuLXQ4wPFywdZ9
-         qnOw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hvwi10BCTbbsbzCDkyaJyelvBf36hI6KbwY7rWAn+yI=;
+        b=Rs7XQMKTGdkQouim1SxhyfOHHjAPnJdbNpHg0sJ+MBDNH0F89vy4153+0K4fSwpRzO
+         /BgxRQ3nEMNtm4BhcSqTytojoSlcZfJYJNFn46+eC0FGyhdyqV+bQDrFyq4UQB+aWJA5
+         G7IyfIA77lACVCE46aHx78a0EeQBe1RJ8KAVfTvqC+pzf27e/y/nKfJtLCoQOU3Xr/4i
+         l3sEg+AgWKy31KTOwfnt6wFojKVMobFgdO54cZX2LjQgumufcN7XPMXaeMbKZIQKdq3E
+         QJ6ADTFvzA3wegE9OcG0oh3Xw8FWI5CdGEuXqQMi48VkIE3uvuJknvcVdbEZ/4e0qoTp
+         sYgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d8tRS460nc4KIz6Gi8dIzh48uT/Gqvrt2n9DWhZ29rY=;
-        b=d3/yBJj7NPm2gfmm5feyBtIb4xG27gaRBzdtIG/2wpdcV7mmHwe1tGCA8X2Oud2j/j
-         bbizvkrXi97KmcobcNcXyPpkv4UCOHNUuWnt42fh9O5uORC3q3Nh1aEIVQYLVyFYRZvj
-         uD6Rx8X8cjCWs2IqDN8KFCGLWrrGtit/N/VqH5a/iFF7C69VeqCJN8TU27ysC2ilsPw4
-         1SzlTSzqZ6Ksbh4fGzUa0uonj25/Ya2SYgTd07wCu0qUFi1m6tOlNd5NXwKr77gszlxa
-         aFLPbiBYsh3DPqc3flFKypGTFunK33RDrL5NU/nq+J/NrQ0qPzU3r3UCNjHdOdZst0nI
-         Ihag==
-X-Gm-Message-State: AO0yUKXAvW+V+yiQE4y5PpRtxaeJHJAtMkBNIgQdXf71TgmHePNEj92Q
-        W2EkokY3wSdQV1kXlp0JDu/BaLnjDAFXWkHA
-X-Google-Smtp-Source: AK7set/uK6TxHaNRknwX1VSyDeTfQU+WOOuUwcbU1jti4MIbn43Z87o2cLpqpaTquIMFuQNbm0SaBg==
-X-Received: by 2002:aa7:ca50:0:b0:4ae:eae1:21f8 with SMTP id j16-20020aa7ca50000000b004aeeae121f8mr4153879edt.29.1677600876852;
-        Tue, 28 Feb 2023 08:14:36 -0800 (PST)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id p3-20020a50cd83000000b004acba0afaa3sm4483665edi.21.2023.02.28.08.14.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 08:14:36 -0800 (PST)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Brauner <brauner@kernel.org>
-Subject: [PATCH] sched/core: Use do-while instead of for loop in set_nr_if_polling
-Date:   Tue, 28 Feb 2023 17:14:26 +0100
-Message-Id: <20230228161426.4508-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hvwi10BCTbbsbzCDkyaJyelvBf36hI6KbwY7rWAn+yI=;
+        b=sKFsg0ddus0usB9TGk3UZvsFYmjBzf+LE4kVfoVtjvWBYYIR9kZSPP4z1ZugHYbebQ
+         7ttmrFW9U8kpCrWUbuht+l5MwKQkxefzIeP3GEjj71jy/LJmkHrGd9jCfPXtyRHDMUZF
+         hjenTM+VP1QARMuoEHobpYvk+t1LD9ap0maQsKaeI3ZR+glT/OK8H4GWc/Hgc9dAzskf
+         qgwHdExR1Xt6NmQxUE4LebR8ephQw31wqJRv0J6Nn/WWuOEXmwVFp3wk5XglkKmeTLWD
+         lhsyMqIziF5oOKtRTGlEkp1sdp8erfnBYW0l73dhS9yERcDgLseMXBB+cSHFZxowOlic
+         7xSg==
+X-Gm-Message-State: AO0yUKUdCWC85uTvgqXkI/V3jgxZzbG9JNdfSk/KAV3m59pE3TDiLZ84
+        CrH6/j3P6bHt8fgR3GPiuPCe8xRxitZsWJ+qd75uxw==
+X-Google-Smtp-Source: AK7set/VGlrxe4bCPrXoKKdImpARYrcb4bLo6BZA7c0D74m/IHouJb6Ka7q1yEfXuou60h8FhHfju3fw/QNEiAlPsik=
+X-Received: by 2002:a81:3e17:0:b0:52f:69d:cc75 with SMTP id
+ l23-20020a813e17000000b0052f069dcc75mr1980711ywa.6.1677601154832; Tue, 28 Feb
+ 2023 08:19:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230228135508.1798428-1-u.kleine-koenig@pengutronix.de> <20230228135508.1798428-3-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230228135508.1798428-3-u.kleine-koenig@pengutronix.de>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 28 Feb 2023 08:19:03 -0800
+Message-ID: <CABXOdTfSg8MtNFD8nz8XYsy74K3gMY0xis+aq+VfDnQi7JZsxQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] pwm: cros-ec: Explicitly set .polarity in .get_state()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Munehisa Kamata <kamatam@amazon.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>, linux-pwm@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use equivalent do-while loop instead of infinite for loop.
+On Tue, Feb 28, 2023 at 5:55=E2=80=AFAM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> The driver only supports normal polarity. Complete the implementation of
+> .get_state() by setting .polarity accordingly.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-There are no asm code changes.
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Christian Brauner <brauner@kernel.org>
----
- kernel/sched/core.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index af017e038b48..349c018eaf09 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -899,14 +899,13 @@ static bool set_nr_if_polling(struct task_struct *p)
- 	struct thread_info *ti = task_thread_info(p);
- 	typeof(ti->flags) val = READ_ONCE(ti->flags);
- 
--	for (;;) {
-+	do {
- 		if (!(val & _TIF_POLLING_NRFLAG))
- 			return false;
- 		if (val & _TIF_NEED_RESCHED)
- 			return true;
--		if (try_cmpxchg(&ti->flags, &val, val | _TIF_NEED_RESCHED))
--			break;
--	}
-+	} while (!try_cmpxchg(&ti->flags, &val, val | _TIF_NEED_RESCHED));
-+
- 	return true;
- }
- 
--- 
-2.39.2
-
+> ---
+>  drivers/pwm/pwm-cros-ec.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/pwm/pwm-cros-ec.c b/drivers/pwm/pwm-cros-ec.c
+> index 86df6702cb83..ad18b0ebe3f1 100644
+> --- a/drivers/pwm/pwm-cros-ec.c
+> +++ b/drivers/pwm/pwm-cros-ec.c
+> @@ -198,6 +198,7 @@ static int cros_ec_pwm_get_state(struct pwm_chip *chi=
+p, struct pwm_device *pwm,
+>
+>         state->enabled =3D (ret > 0);
+>         state->period =3D EC_PWM_MAX_DUTY;
+> +       state->polarity =3D PWM_POLARITY_NORMAL;
+>
+>         /*
+>          * Note that "disabled" and "duty cycle =3D=3D 0" are treated the=
+ same. If
+> --
+> 2.39.1
+>
