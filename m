@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A7F6A6CA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC1D6A6CA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCAM6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 07:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S229942AbjCAM6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjCAM6s (ORCPT
+        with ESMTP id S229935AbjCAM6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 07:58:48 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BEF1A647
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:58:47 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id e26-20020a9d6e1a000000b00694274b5d3aso1667916otr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:58:47 -0800 (PST)
+        Wed, 1 Mar 2023 07:58:49 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D301A647
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:58:48 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id q11-20020a056830440b00b00693c1a62101so7493460otv.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:58:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677675526;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K39jV7/rdE+BjoF+nHpEJFPDrYnOAY+w/+g8Z+OkbeA=;
-        b=U+eok6NnTmqvncg2t1LmfzVcFxCqTCpO9oXWZVWu42psER+FWauzpmqYACyzWG2gu3
-         3NYNzWW9Ukdwfr/yV2l7I2McME2NkNinBgMmhy9sJbRcjuQf8KmzQd0rQlDHmSDD5MAK
-         8bMOIw/ggHVygHeKw4fkBv0II87wnVps020pYxCbZdVuXMNFrG5f3HZtTlyXMYP/ITkZ
-         gFRFtJ12LOy12fEhRPzBsEucvKC3NSqiNtDyU+F1NHmp7oeGbiyN0KLgemk7UIOEcZ72
-         VvOfilTyr2r2RVoW1tZYdT0RNCLOD1MxRFYwcES7pj+LMSbhPlwyDmOWUKzMwRfx9G0x
-         T+kw==
+        d=linaro.org; s=google; t=1677675527;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OyK1NRjw/4c0nP3WiY5DJv3QaTW6QxlnmL7lL+zTtyk=;
+        b=bDQWML8wSwB8+GUWJ/35tvSFmVYqnPkC/OFQvZIdEh32mMSq0HNtBFMxDZ7RnPqofX
+         H1ECS406rlQGoCL+5FDOwjO7JYec/+r+KUF1lfwW2Z6yh4q5lZDcCSkd13dLyatmAjoX
+         92+0l4f7TnUpLtpdVLsChIsWC/Aa4lke3jeIFRoxVkS7Ofqi9WfrXqpBAqUUjF72YRpF
+         J7NfohRIiscqEMjhEoOsQLWhEjWwurkWxWAxy1Xnc2J9Ds90yvCqwz/tPKg+cqBjPxxN
+         aDJMW+parsmOUvvmg+gu8KuBmJ2iFdS9KKe4m8IZ1GPU1uOtVw+ScjATIVX4NTqFha14
+         2Mkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677675526;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K39jV7/rdE+BjoF+nHpEJFPDrYnOAY+w/+g8Z+OkbeA=;
-        b=sHIgdWFuJUjc/sYds7BbZW86o5YFWE6O+mvJfV4ywFVmdHkIi/S0uJtQEw8O+stCZa
-         mLOqWn8aJSjaLgXhePrSHa9Qn3S13MjOZx0/u8/wSiVGR5TDFOciJ2RaX/Xsdv0N1F02
-         1lsLUsXaQKmqn0J66hMzhWfUAsNAmjDIaLYJlCTQDkKNqSuzR6Kh2yHo4klXajy30MEz
-         Wt0arhzoP2/GUzMi7XMynfwJpc14e51ln65WWE2Q4mlQsX+RRqZo09nQWaIkLWye6AAd
-         8G3BWRA/gJoeSL6W6sjsHtMUzDpMAPIqUAW10UltkGcpNRz/jh6vyeqLMmrfqCC+88f1
-         JYcA==
-X-Gm-Message-State: AO0yUKXlO6h/+jeNwVEH61tgtSk0HTnFtC+TF/mKP8myNxpF7505LZe/
-        MX963n0M9mIHSPG1YNjFcGQMbQ==
-X-Google-Smtp-Source: AK7set8ONkZnF4b3UApgDYFOP21xMxQOlZ8//HZe4y5Vf1SfGBfaHCdbwQCz2Or4+eGdHvfFI1/Ggg==
-X-Received: by 2002:a05:6830:1f5d:b0:68d:7a7f:2939 with SMTP id u29-20020a0568301f5d00b0068d7a7f2939mr2681730oth.27.1677675526365;
-        Wed, 01 Mar 2023 04:58:46 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677675527;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OyK1NRjw/4c0nP3WiY5DJv3QaTW6QxlnmL7lL+zTtyk=;
+        b=IcLlBbwECLuR9WUfysb9H+57EKZwWaSIaFNuZUMcC2V6cKGRZu9P12xSmc8bTVe6Xn
+         lgjlFK/Dg0ordx0lIm7ksjc9uwmbiavzb2EOPMb9F3Cfu3ldSZ+aWYBzxoQ1Z+vzcoT0
+         HfPKrxBfAQY7A0jQj1yZzzSW8NxrUJ7I/712R/Tux8JrjVtaMUlvqpTDFDsazzXSx9jT
+         x846fYMyMNAdj398uGMsdXc2GfgOslf8/PRg+HSwD1NwB7URgAXM6Zk85zNHbM62wuCG
+         UcI/3M2FHhfYoNDtOkKYhDLe9E3EpoH+y+Lq+VaLC2q8T/6YDGgR+ju/BsthxYXbNwBt
+         gVXw==
+X-Gm-Message-State: AO0yUKU41gzcVDzE6Gl/4WGY5Hxr5Xxg7jvKypb8b9/QqOilJvP4+IaT
+        4UQnVLt9mLgrT5DZZA6Ph5J9xw==
+X-Google-Smtp-Source: AK7set/dVBq5ekwOQCiM49scymI8WZzuOpGkFc5nXsYLFQ8q2ASWJRNLwosukPEax+QDm9VD2Sma2Q==
+X-Received: by 2002:a9d:71db:0:b0:68b:ba4d:1c94 with SMTP id z27-20020a9d71db000000b0068bba4d1c94mr1984390otj.4.1677675527667;
+        Wed, 01 Mar 2023 04:58:47 -0800 (PST)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id g21-20020a056830309500b0068bc48c61a5sm4865064ots.19.2023.03.01.04.58.44
+        by smtp.gmail.com with ESMTPSA id g21-20020a056830309500b0068bc48c61a5sm4865064ots.19.2023.03.01.04.58.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 04:58:45 -0800 (PST)
+        Wed, 01 Mar 2023 04:58:47 -0800 (PST)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linus.walleij@linaro.org, brgl@bgdev.pl
 Cc:     broonie@kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, quarium@gmail.com,
         jhentges@accesio.com, jay.dolan@accesio.com,
         William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v2 0/2] Migrate PCIe-IDIO-24 GPIO driver to the regmap API
-Date:   Mon, 27 Feb 2023 22:56:26 -0500
-Message-Id: <cover.1677555956.git.william.gray@linaro.org>
+Subject: [PATCH v2 1/2] regmap: Pass regmap and irq_drv_data as parameters for set_type_config()
+Date:   Mon, 27 Feb 2023 22:56:27 -0500
+Message-Id: <c94de04b84d66b9686e26cb7653ae360f3075ede.1677555956.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <cover.1677555956.git.william.gray@linaro.org>
+References: <cover.1677555956.git.william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
@@ -70,35 +73,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in v2:
- - Simplify PCIe-IDIO-24 register offset defines to remove superfluous
-   arithmetic
- - Check for NULL pointer after chip->irq_drv_data allocation
- - Set gpio_regmap drvdata and use gpio_regmap_get_drvdata() to get the
-   regmap in idio_24_reg_map_xlate()
+Allow struct regmap_irq_chip set_type_config() callbacks to access the
+device regmap and irq_drv_data by passing them as parameters.
 
-The regmap API supports IO port accessors so we can take advantage of
-regmap abstractions rather than handling access to the device registers
-directly in the driver.
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+Changes in v2: none
 
-A patch to pass the device regmap and irq_drv_data as a parameters for
-the struct regmap_irq_chip set_type_config() is included. This is needed
-by idio_24_set_type_config() in order to update the type configuration
-on the device as well as irq_drv_data for idio_24_handle_mask_sync().
+ drivers/base/regmap/regmap-irq.c | 13 +++++++++----
+ include/linux/regmap.h           | 12 ++++++++----
+ 2 files changed, 17 insertions(+), 8 deletions(-)
 
-William Breathitt Gray (2):
-  regmap: Pass regmap and irq_drv_data as parameters for
-    set_type_config()
-  gpio: pcie-idio-24: Migrate to the regmap API
-
- drivers/base/regmap/regmap-irq.c |  13 +-
- drivers/gpio/Kconfig             |   3 +
- drivers/gpio/gpio-pcie-idio-24.c | 693 ++++++++++++-------------------
- include/linux/regmap.h           |  12 +-
- 4 files changed, 279 insertions(+), 442 deletions(-)
-
-
-base-commit: 4827aae061337251bb91801b316157a78b845ec7
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index a8f185430a07..eac55a3af6d9 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -333,8 +333,9 @@ static int regmap_irq_set_type(struct irq_data *data, unsigned int type)
+ 	}
+ 
+ 	if (d->chip->set_type_config) {
+-		ret = d->chip->set_type_config(d->config_buf, type,
+-					       irq_data, reg);
++		ret = d->chip->set_type_config(map, d->config_buf, type,
++					       irq_data, reg,
++					       d->chip->irq_drv_data);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -650,18 +651,22 @@ EXPORT_SYMBOL_GPL(regmap_irq_get_irq_reg_linear);
+ 
+ /**
+  * regmap_irq_set_type_config_simple() - Simple IRQ type configuration callback.
++ * @map: The regmap for the device.
+  * @buf: Buffer containing configuration register values, this is a 2D array of
+  *       `num_config_bases` rows, each of `num_config_regs` elements.
+  * @type: The requested IRQ type.
+  * @irq_data: The IRQ being configured.
+  * @idx: Index of the irq's config registers within each array `buf[i]`
++ * @irq_drv_data: Driver specific IRQ data
+  *
+  * This is a &struct regmap_irq_chip->set_type_config callback suitable for
+  * chips with one config register. Register values are updated according to
+  * the &struct regmap_irq_type data associated with an IRQ.
+  */
+-int regmap_irq_set_type_config_simple(unsigned int **buf, unsigned int type,
+-				      const struct regmap_irq *irq_data, int idx)
++int regmap_irq_set_type_config_simple(struct regmap *map, unsigned int **buf,
++				      unsigned int type,
++				      const struct regmap_irq *irq_data,
++				      int idx, void *irq_drv_data)
+ {
+ 	const struct regmap_irq_type *t = &irq_data->type;
+ 
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index a3bc695bcca0..49073f5ae87a 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -1648,8 +1648,10 @@ struct regmap_irq_chip {
+ 				unsigned int mask_buf, void *irq_drv_data);
+ 	int (*set_type_virt)(unsigned int **buf, unsigned int type,
+ 			     unsigned long hwirq, int reg);
+-	int (*set_type_config)(unsigned int **buf, unsigned int type,
+-			       const struct regmap_irq *irq_data, int idx);
++	int (*set_type_config)(struct regmap *map, unsigned int **buf,
++			       unsigned int type,
++			       const struct regmap_irq *irq_data, int idx,
++			       void *irq_drv_data);
+ 	unsigned int (*get_irq_reg)(struct regmap_irq_chip_data *data,
+ 				    unsigned int base, int index);
+ 	void *irq_drv_data;
+@@ -1657,8 +1659,10 @@ struct regmap_irq_chip {
+ 
+ unsigned int regmap_irq_get_irq_reg_linear(struct regmap_irq_chip_data *data,
+ 					   unsigned int base, int index);
+-int regmap_irq_set_type_config_simple(unsigned int **buf, unsigned int type,
+-				      const struct regmap_irq *irq_data, int idx);
++int regmap_irq_set_type_config_simple(struct regmap *map, unsigned int **buf,
++				      unsigned int type,
++				      const struct regmap_irq *irq_data,
++				      int idx, void *irq_drv_data);
+ 
+ int regmap_add_irq_chip(struct regmap *map, int irq, int irq_flags,
+ 			int irq_base, const struct regmap_irq_chip *chip,
 -- 
 2.39.2
 
