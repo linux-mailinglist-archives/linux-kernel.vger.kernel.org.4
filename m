@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092816A53E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986216A53E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjB1HtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 02:49:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S229977AbjB1HtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 02:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjB1HtM (ORCPT
+        with ESMTP id S229537AbjB1HtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 02:49:12 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03583244A6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:49:10 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id cf14so9506541qtb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:49:10 -0800 (PST)
+        Tue, 28 Feb 2023 02:49:00 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F8021944;
+        Mon, 27 Feb 2023 23:48:59 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id i10so9497787plr.9;
+        Mon, 27 Feb 2023 23:48:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677570539;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IZ/cMOGvS9DzjygK7cuVRUjCO9JEh86G/ox5bXVC1DM=;
+        b=Ij0jwP9fnA69PUrdtWGb8EbhWqgJqexb3xA7TQc08Xu9EHMKIfbkBjj6k5SAkaP40s
+         eS31l/nj5qUoJw7wFfyl3+aj2F0r/UuyC7wLJ2jPzFcoNTD12Zcoy05swq2e71FdpcA1
+         rZI1mo7OlOr6fU5k648vHXFluETYrJtOiL/p7LGD1qtKkwRCUSEy8numijqUImZ4Zq3r
+         xaqqXW2PEc6nc5l/4Ig7aGxNpLCS0VGeO2zdxjQrReirAVcEjr6luYYrfl7Lv1CUoXqq
+         t92npfkOzY9LvMNUm+o7RaSEtTg1s6bK9uxsGWE8B7OTWp7+eH+goeJ+qk8X6PeXsL5d
+         v4ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/9nszujs/cR5S+IMyIjmZJZVbyFeU+vaQIe48z9YdiU=;
-        b=XrtR6wPR45/o/EEFuB/1hakKKo2EqyNg33v7KbHEf4VwcQsxaBD7VGBFK1fmTeQtGQ
-         0pIRg3o7I4rRDvIWPLvm1XORSUCUxZ9DA2iedPzOEgtzMRlQOlhNMuFwx+xx23lqIznp
-         ChB2Wex0SVk9hcohDM+YT6CLjEAkl1zAKoAi8Oj/IaUbCXNrlmQl+aLn+M3zdgZdCm95
-         BlnVuJPBITESFHmowMOa8FxtF1M0IXfz04eeNPy7d7rLmxf201YvCG/xLBUoHxhxjAts
-         meRryQ8Krg+mC52ndK4biJXS9a4ARFQNycBey3BWWS/BXhgFlA3fQMgvZWe/T4DNB3D7
-         90kQ==
-X-Gm-Message-State: AO0yUKWH39Y0QHoAb7c9S/9oz2cqGfmi9yiwbYGSbLCD+EOssvilt332
-        nv6PCuKz9NF9/R4/xDK4jRr2Mlb7cwYWhw==
-X-Google-Smtp-Source: AK7set90o8U+dJcNXo/F2empMe19+Q1q+Fs4FPI2RVlOornhJECqj3EMdU5OcthndOqE/2WHn7s5fQ==
-X-Received: by 2002:ac8:5f8b:0:b0:3b8:1f33:ab57 with SMTP id j11-20020ac85f8b000000b003b81f33ab57mr3485790qta.59.1677570549751;
-        Mon, 27 Feb 2023 23:49:09 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id p3-20020ac84083000000b003b9a573aec6sm6058649qtl.70.2023.02.27.23.49.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 23:49:09 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-536c02eea4dso247870887b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:49:09 -0800 (PST)
-X-Received: by 2002:a81:441c:0:b0:52e:f66d:b70f with SMTP id
- r28-20020a81441c000000b0052ef66db70fmr1003301ywa.5.1677570548820; Mon, 27 Feb
- 2023 23:49:08 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677570539;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IZ/cMOGvS9DzjygK7cuVRUjCO9JEh86G/ox5bXVC1DM=;
+        b=GnZ1bl78bR87Vhpoq21YYFZmhaGEhl/BX2HMz9tytJ50PdpnF6GdpnPvLeirHdeCD9
+         IEm+zgc5c2czYXNQlwT3OP/5qGoHGziMqN9pjTw4EkHi6eNlyUuJjiB/GLvakQsQdVHa
+         6sk7b76uLSwSTcMLZpZDRm/NfTUT4r6oW/mrekFaGkXsXCC9mugO9jVRJFQ+9vLRILqq
+         Q4WwOSgABPjHkxVRyqxT6/ZmkjHfjYBtS+ALXCQQ+eZtYswjR7qUroh6FSCPwUZN6+md
+         27fPb5bxyboOmyIfBkIQL993eu/Q/ykmdq+Ju25x0rQFh0cWPcsMWoS9qkIYN9QvdwbU
+         dptA==
+X-Gm-Message-State: AO0yUKWeoUrRxNETuPN1GDvS6Ec2SayB5QnPMVqHC50OXkxCVQbitv5O
+        Lxj3s5HuVCRHq608DKSQlZA=
+X-Google-Smtp-Source: AK7set8eLvHNV7YHP1gioNaAbF6VlT10U9X1GZRH6Ak9TXlvMxUhS0gr+7q/4hJWQXEKtTgX1vK5EQ==
+X-Received: by 2002:a17:902:8542:b0:19c:eb42:883 with SMTP id d2-20020a170902854200b0019ceb420883mr1546287plo.49.1677570539275;
+        Mon, 27 Feb 2023 23:48:59 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-86.three.co.id. [180.214.232.86])
+        by smtp.gmail.com with ESMTPSA id v1-20020a1709028d8100b00194d2f14ef0sm5840192plo.23.2023.02.27.23.48.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 23:48:58 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 3407310105C; Tue, 28 Feb 2023 14:48:56 +0700 (WIB)
+Date:   Tue, 28 Feb 2023 14:48:56 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Linux BPF <bpf@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Ross Zwisler <zwisler@google.com>
+Subject: Re: [PATCH v2] Documentation: bpf: Fix link to BTF doc
+Message-ID: <Y/2x6KLsGecrIIok@debian.me>
+References: <20230222083530.26136-1-bagasdotme@gmail.com>
+ <7cd545a2-4a5c-1961-1cf7-cd0f24e41df8@iogearbox.net>
 MIME-Version: 1.0
-References: <dff216da09ab7a60217c3fc2147e671ae07d636f.1677528627.git.geert@linux-m68k.org>
- <f0877485-16df-1bda-c935-5ef56afacc8d@linux-m68k.org>
-In-Reply-To: <f0877485-16df-1bda-c935-5ef56afacc8d@linux-m68k.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Feb 2023 08:48:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXMWaCm7OGq7O9F5SWBxhreTppUr4K6K9FmZf1GpaAtVA@mail.gmail.com>
-Message-ID: <CAMuHMdXMWaCm7OGq7O9F5SWBxhreTppUr4K6K9FmZf1GpaAtVA@mail.gmail.com>
-Subject: Re: [PATCH] m68k: mm: Move initrd phys_to_virt handling after paging_init()
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, Stephen Walsh <vk3heg@vk3heg.net>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NknHNgPSc3zXNhzD"
+Content-Disposition: inline
+In-Reply-To: <7cd545a2-4a5c-1961-1cf7-cd0f24e41df8@iogearbox.net>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Finn,
 
-On Mon, Feb 27, 2023 at 11:46 PM Finn Thain <fthain@linux-m68k.org> wrote:
-> On Mon, 27 Feb 2023, Geert Uytterhoeven wrote:
-> > When booting with an initial ramdisk on platforms where physical memory
-> > does not start at address zero (e.g. on Amiga):
-> >
-> >     initrd: 0ef0602c - 0f800000
-> >     Zone ranges:
-> >       DMA      [mem 0x0000000008000000-0x000000f7ffffffff]
-> >       Normal   empty
-> >     Movable zone start for each node
-> >     Early memory node ranges
-> >       node   0: [mem 0x0000000008000000-0x000000000f7fffff]
-> >     Initmem setup node 0 [mem 0x0000000008000000-0x000000000f7fffff]
-> >     Unable to handle kernel access at virtual address (ptrval)
-> >     Oops: 00000000
-> >     Modules linked in:
-> >     PC: [<00201d3c>] memcmp+0x28/0x56
-> >
-> > As phys_to_virt() relies on m68k_memoffset and module_fixup(), it must
-> > not be called before paging_init().  Hence postpone the phys_to_virt
-> > handling for the initial ramdisk until after calling paging_init().
->
-> Thanks for debugging this issue.
+--NknHNgPSc3zXNhzD
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Np, you're welcome.
+On Mon, Feb 27, 2023 at 10:11:52PM +0100, Daniel Borkmann wrote:
+> Applied, thanks! Looks like kselftest.rst has a similar issue, could you
+> send a fix for this too?
+>=20
 
-> > While at it, reduce #ifdef clutter by using IS_ENABLED() instead.
-> >
-> > Fixes: 376e3fdecb0dcae2 ("m68k: Enable memtest functionality")
->
-> I apologise for the trouble caused by that patch.
+The fixup is in the recently sent miniseries at [1].
 
-Does that count as an Acked-by? ;-)
+[1]: https://lore.kernel.org/linux-doc/20230228074523.11493-1-bagasdotme@gm=
+ail.com/
 
-Gr{oetje,eeting}s,
+Thanks!
 
-                        Geert
+--=20
+An old man doll... just what I always wanted! - Clara
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+--NknHNgPSc3zXNhzD
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY/2x5wAKCRD2uYlJVVFO
+ozomAP9wHAiFW7w91ha2sqjjxGSuQd1FWDB+nPzOJ62PKMVVaQEA1XFaqfEd4wkg
+5yiZyLLrL5Rxbr05XArUniNHcW0S3gM=
+=xS9a
+-----END PGP SIGNATURE-----
+
+--NknHNgPSc3zXNhzD--
