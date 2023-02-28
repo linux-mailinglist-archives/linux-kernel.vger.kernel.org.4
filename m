@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077E76A61BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43746A61C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjB1VvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S229582AbjB1Vv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjB1Vu7 (ORCPT
+        with ESMTP id S229511AbjB1Vv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:50:59 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53754A261
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:50:58 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso4330237pjr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:50:58 -0800 (PST)
+        Tue, 28 Feb 2023 16:51:58 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8FD12F11;
+        Tue, 28 Feb 2023 13:51:48 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id j10so2194368qkg.12;
+        Tue, 28 Feb 2023 13:51:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677621058;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0LVmFrLrm92phvm/Baac+5/XWBy/z8f4Ods8WhgeHYw=;
-        b=B9/smwhj4zsVD/lCX+bhR3gCU1Gu4DTdwrPwXDX6K69uiYX9tNrGeiqDe505xH2fg9
-         YvYqZIMlRJH/f/e3/SkzZioafxBvpOXsALJHppQZ5NIvfLIMTlTXp9bHMWjx/c3Cdmck
-         OeXttEXHOyVZvk/HF0V1MjDsIl1QnsJYmgad+rYgV5CP0xbDtFtvdzu2AYvDodhTWc88
-         K4Wdm/Xc21noqInI79H+hy2ZIUNJm8v8bRMsfOBhNI1+ejT8lwF5t86Ig1XJWnucXLzq
-         lL6BpBqGp5/Ti+nX5HJmaN2no3BR4VIpdWBJNccVuL/y1N/rtBMPxd4dLeaWK+iUGDfL
-         1EQg==
+        bh=9+dfh/VCiAl5Ymkzsu2S+IKfHY6gQX+dxWUJXya35fQ=;
+        b=Eunq6xlHqH+DhN85nvZeFuvXm1Fqo3sOp5ElUTxUVyv9tkwEYBbF4MKsI55GyzTqJl
+         PHKoeYq6kfq1bIF4YLWOloLsLGL3C/Ge9+v+mUGMc0kYJf+nuxl7iPUfyhnGqEPHr0BL
+         ilZiin0a6IWyDTChphy3MLX5PHGX7qZ0UAQqJ659lQJNMPyzNpA0d8YWXmx9E88aWtEx
+         rh0RbF83ky/IxHqix3KYgPCEKoZdw9aauiOBdzoAI02UZWXphCv4OlpPJM84hFPGeFuK
+         DVIvMCu2mfNaBKzjgbAM3boCmMgnv1zTVDk+B71q5dz3utc6xCqEdwX1nssmXdRR/UWF
+         IqCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677621058;
+        d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0LVmFrLrm92phvm/Baac+5/XWBy/z8f4Ods8WhgeHYw=;
-        b=E76GIt0sKHJbR9R6IynT9TOIESDnLbXfjOf2d00vbFNTF+MldKkpSd+aN13P6yhATu
-         e0pEgS2KXk3Oz1Ee9SI6jLpt+tm2NjUsuTYFFFPeG/kfvueUwMb1W3u0RLi2hCTDoHiM
-         EGbiSD7TfQuqWaYDNtfAX1uO0jYiqETSF/PEFs1SYVq9b6YW23nesVT0deTBhx+vK0Ej
-         wKFzh+aNox4aPIMuqz45qPrQ+m3xVupvogbDXJL/5wg+O2PAck26ahrtkXB4N3ndXyy1
-         55POT9Czp+ORkpMLNsLGBwQfCuK2SC39JMZffVD4j+Nn7Gk2g4tg5gXA6LyeHdnZwqoq
-         DgtQ==
-X-Gm-Message-State: AO0yUKW77jd79zk2PBuvf1KPCPXuTyf9v2t2KGdxgWCYakYrYBZ7z5ri
-        Fse03Ic5TEhibCiNQtKzCOLtfZJUOkxBDySuyZE=
-X-Google-Smtp-Source: AK7set+w7RP/NpegjU9GETWFHpC2DBpWEKPKqo1OqR3wtJ9Pu2cQKMZF8467qIYKiwyZOtkrADDNxWopMyjWIaHTeIk=
-X-Received: by 2002:a17:903:2591:b0:19a:8bc7:d814 with SMTP id
- jb17-20020a170903259100b0019a8bc7d814mr1498018plb.13.1677621057764; Tue, 28
- Feb 2023 13:50:57 -0800 (PST)
+        bh=9+dfh/VCiAl5Ymkzsu2S+IKfHY6gQX+dxWUJXya35fQ=;
+        b=dBNasxjYyPSs7/9G5jKTwgD87YUxZzB6/GhQa8lpKfnuqmHNvu7/m97tJMIE21RIBT
+         lN+OK6FymOuvxFMXmrBQv4hObgPmsq0lWcpIGwf57zaUhhJ9lNtlUTHDCfBLOHWeUpvE
+         5xHtP+UiXMsiwG/2LgEyqD7NabZhDJ6QGbtm/W7mQMJcfzSlh1AZcqXJbievUJDBvspC
+         TL38e5WeTvoFSPbV09NYef8fsbkvtlCnIna2OUGFGYT8H3K8RoEcQ15VmfcdD2EYIW6w
+         nq5MOnW2JkEsVhOwAOg+4soqQjhghoRxSuLWDk1f7CwyaHFosGJ3PyW8ZNu62BCATL8X
+         MyhA==
+X-Gm-Message-State: AO0yUKXBJ8McFwyipt56te//+9wlr2I8B2GiVtK0tvZJvYcGRWA2VS5B
+        WAqcYw6wa6p2s9rxVHY10mH6w6kzsMyO79yCugAq7HPuHpqYVA==
+X-Google-Smtp-Source: AK7set8MLv0Y6D7hbNriT1diDGviWlx8nZPmG1xHdzks3ynlTB9lzelE3S6RTdorjMqkBdXm5D+x5bD9M/ZiNdrAlbQ=
+X-Received: by 2002:a05:620a:1e9:b0:742:7e5a:4cee with SMTP id
+ x9-20020a05620a01e900b007427e5a4ceemr1008610qkn.10.1677621107760; Tue, 28 Feb
+ 2023 13:51:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20230209031159.2337445-1-ouyangweizhao@zeku.com>
- <CACT4Y+Zrz4KOU82jjEperYOM0sEp6TCmgse4XVMPkwAkS+dXrA@mail.gmail.com>
- <93b94f59016145adbb1e01311a1103f8@zeku.com> <CACT4Y+a=BaMNUf=_suQ5or9=ZksX2ht9gX8=XBSDEgHogyy3mg@mail.gmail.com>
- <CA+fCnZf3k-rsaOeti0Q7rqkmvsqDb2XxgxOq6V5Gqp6FGLH7Yg@mail.gmail.com>
- <b058a424e46d4f94a1f2fdc61292606b@zeku.com> <2b57491a9fab4ce9a643bd0922e03e73@zeku.com>
- <CA+fCnZcirNwdA=oaLLiDN+NxBPNcA75agPV1sRsKuZ0Wz6w_hQ@mail.gmail.com> <Y/4nJEHeUAEBsj6y@arm.com>
-In-Reply-To: <Y/4nJEHeUAEBsj6y@arm.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 28 Feb 2023 22:50:46 +0100
-Message-ID: <CA+fCnZcFaOAGYic-x7848TMom2Rt5-Bm5SpYd-uxdT3im8PHvg@mail.gmail.com>
-Subject: Re: [PATCH v2] kasan: fix deadlock in start_report()
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     =?UTF-8?B?6KKB5biFKFNodWFpIFl1YW4p?= <yuanshuai@zeku.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        =?UTF-8?B?5qyn6Ziz54Kc6ZKKKFdlaXpoYW8gT3V5YW5nKQ==?= 
-        <ouyangweizhao@zeku.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Weizhao Ouyang <o451686892@gmail.com>,
-        =?UTF-8?B?5Lu756uL6bmPKFBlbmcgUmVuKQ==?= <renlipeng@zeku.com>,
-        Peter Collingbourne <pcc@google.com>
+References: <20230228211046.109693-1-mmkurbanov@sberdevices.ru> <20230228211046.109693-3-mmkurbanov@sberdevices.ru>
+In-Reply-To: <20230228211046.109693-3-mmkurbanov@sberdevices.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Feb 2023 23:51:11 +0200
+Message-ID: <CAHp75Ve0vKSuO9ieSCKf758=uEbAj4aq1OwbtuSc_8tWkPtvWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] leds: add aw20xx driver
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,66 +72,340 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 5:09=E2=80=AFPM Catalin Marinas <catalin.marinas@ar=
-m.com> wrote:
+On Tue, Feb 28, 2023 at 11:11=E2=80=AFPM Martin Kurbanov
+<mmkurbanov@sberdevices.ru> wrote:
 >
-> On Mon, Feb 27, 2023 at 03:13:45AM +0100, Andrey Konovalov wrote:
-> > +Catalin, would it be acceptable to implement a routine that disables
-> > in-kernel MTE tag checking (until the next
-> > mte_enable_kernel_sync/async/asymm call)? In a similar way an MTE
-> > fault does this, but without the fault itself. I.e., expose the part
-> > of do_tag_recovery functionality without report_tag_fault?
->
-> I don't think we ever re-enable MTE after do_tag_recovery(). The
-> mte_enable_kernel_*() are called at boot. We do call
-> kasan_enable_tagging() explicitly in the kunit tests but that's a
-> controlled fault environment.
+> This commit adds support for AWINIC AW20036/AW20054/AW20072 LED driver.
+> This driver supports following AW200XX features:
+>   - Individual 64-level DIM currents
 
-Right, but here we don't want to re-enable MTE after a fault, we want
-to suppress faults when printing an error report.
+I'm wondering if I already commented on the v1 of this. A lot of
+issues with the code and your email rings a bell...
+Okay, I have dug into archives and it was something else.
 
-> IIUC, the problem is that the kernel already got an MTE fault, so at
-> that point the error is not really recoverable.
+...
 
-No, the problem is with the following sequence of events:
+> +Date:          February 2023
 
-1. KASAN detects a memory corruption and starts printing a report
-_without getting an MTE fault_. This happens when e.g. KASAN sees a
-free of an invalid address.
+Blast from the past? The best you can get is March 2023.
 
-2. During error reporting, an MTE fault is triggered by the error
-reporting code. E.g. while collecting information about the accessed
-slab object.
+...
 
-3. KASAN tries to print another report while printing a report and
-goes into a deadlock.
+> +Description:   64-level DIM current. If write negative value or "auto",
 
-If we could avoid MTE faults being triggered during error reporting,
-this would solve the problem.
+If you write a
 
-> If we want to avoid a
-> fault in the first place, we could do something like
-> __uaccess_enable_tco() (Vincenzo has some patches to generalise these
-> routines)
+> +               the dim will be calculated according to the brightness.
 
-Ah, this looks exactly like what we need. Adding
-__uaccess_en/disable_tco to kasan_report_invalid_free solves the
-problem.
+...
 
-Do you think it would be possible to expose these routines to KASAN?
+> +config LEDS_AW200XX
+> +       tristate "LED support for Awinic AW20036/AW20054/AW20072"
+> +       depends on LEDS_CLASS
+> +       depends on I2C
+> +       help
+> +         This option enables support for the AW20036/AW20054/AW20072 LED=
+ driver.
+> +         It is a 3x12/6x9/6x12 matrix LED driver programmed via
+> +         an I2C interface, up to 36/54/72 LEDs or 12/18/24 RGBs,
+> +         3 pattern controllers for auto breathing or group dimming contr=
+ol.
 
-> but if an MTE fault already triggered and MTE is to stay
-> disabled after the reporting anyway, I don't think it's worth it.
+What would be the name of the module if M?
 
-No MTE fault is triggered yet in the described sequence of events.
+...
 
-> So I wonder whether it's easier to just disable MTE before calling
-> report_tag_fault() so that it won't trigger additional faults:
+> +/**
 
-This will only help in case the first error report is caused by an MTE
-fault. However, this won't help with the discussed problem: KASAN can
-detect a memory corruption and print a report without getting an MTE
-fault.
+Is it a kernel doc?
 
-Nevertheless, this change makes sense to avoid a similar scenario
-involving 2 MTE faults.
+> + * leds-aw200xx.c - Awinic AW20036/AW20054/AW20072 LED driver
+
+No name of the file in the file. It's impractical (in case it will be
+moved/renamed).
+
+> + *
+> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
+> + *
+> + * Author: Martin Kurbanov <mmkurbanov@sberdevices.ru>
+> + */
+
+...
+
+> +#include <linux/i2c.h>
+> +#include <linux/leds.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/mutex.h>
+> +#include <linux/regmap.h>
+> +#include <linux/bitfield.h>
+
+Can you keep this sorted?
+
+...
+
+> +#define AW200XX_DIM_MAX                  0x3F
+> +#define AW200XX_FADE_MAX                 0xFF
+
+If it is limited by the amount of bits in the bitfields, better to use
+the form of (BIT(x) - 1), where x is the amount of bits.
+
+...
+
+> +#define AW200XX_IMAX_DEFAULT_MICROAMP    60000
+> +#define AW200XX_IMAX_MAX_MICROAMP        160000
+> +#define AW200XX_IMAX_MIN_MICROAMP        3300
+
+A is the unit, and for microamperes we already use (in another
+driver(s)) the _uA suffix.
+
+...
+
+> +/* Page 0 */
+> +#define AW200XX_REG_PAGE0_BASE 0xc000
+
+Indeed, like Pavel mentioned, why not consider the DRM approach for
+this? If it's not really a display similar to LCD, then there is
+drivers/auxdisplay folder for the non-standard / alphanumeric / etc
+cases.
+
+...
+
+> +       (AW200XX_REG_PAGE0_BASE + ((page) * AW200XX_PAGE_SIZE) + (reg))
+
+Multiplication doesn't require parentheses.
+
+...
+
+> +#define AW200XX_PAT_T3_LT_MASK      0xFF
+
+> +#define AW200XX_PAT0_T3_LT_LSB(x)   ((x) & 0xFF)
+
+GENMASK()
+
+...
+
+> +#define AW200XX_PAT0_T_LT_MAX       0xFFF
+
+(BIT(12) - 1) ?
+
+...
+
+> +#define AW200XX_PAT_T1_T3_MASK      0xF0
+> +#define AW200XX_PAT_T2_T4_MASK      0x0F
+
+GENMASK()
+
+...
+
+> +#define AW200XX_TEMPLATE_TIME_MAX   0x0F
+
+(BIT(4) - 1)
+
+...
+
+> +/* Duty ratio of display scan (see p.15 of datasheet for formula) */
+> +#define AW200XX_DUTY_RATIO(rows) \
+> +       (((592UL * 1000000UL) / 600500UL) * (1000UL / (rows)) / 1000UL)
+
+Something to use from units.h?
+
+...
+
+> +struct aw200xx_led {
+> +       struct aw200xx *chip;
+
+> +       struct led_classdev cdev;
+
+Moving embedded structure to be the first member might make some code
+to be no-op at compile time.
+
+> +       int dim;
+> +       u32 num;
+> +};
+
+...
+
+> +       ssize_t ret;
+
+Useless, just use return directly.
+
+> +       if (dim < 0)
+> +               ret =3D sysfs_emit(buf, "auto\n");
+> +       else
+> +               ret =3D sysfs_emit(buf, "%d\n", dim);
+> +
+> +       return ret;
+
+if (dim >=3D 0)
+  return sysfs_emit(...);
+
+return sysfs_emit(...);
+
+...
+
+> +               ret =3D kstrtoint(buf, 0, &dim);
+> +               if (ret < 0 || dim > AW200XX_DIM_MAX)
+> +                       return -EINVAL;
+
+Why shadowing ret?
+Hint: it may not be EINVAL in some cases.
+
+...
+
+> +       if (dim >=3D 0) {
+
+Hmm... Why not simply use an unsigned type?
+
+> +       }
+
+...
+
+> +       /* The output current of each LED (see p.14 of datasheet for form=
+ula) */
+> +       return (duty * global_imax_microamp) / 1000U;
+
+units.h ?
+
+...
+
+> +       /* The output current of each LED (see p.14 of datasheet for form=
+ula) */
+> +       return (led_imax_microamp * 1000U) / duty;
+
+Ditto.
+
+...
+
+> +static int aw200xx_set_imax(const struct aw200xx *const chip,
+> +                           u32 led_imax_microamp)
+> +{
+> +       struct imax_global {
+> +               u32 regval;
+> +               u32 microamp;
+> +       } imaxs[] =3D {
+> +               { 8,  3300 },
+> +               { 9,  6700 },
+> +               { 0,  10000 },
+> +               { 11, 13300 },
+> +               { 1,  20000 },
+> +               { 13, 26700 },
+> +               { 2,  30000 },
+> +               { 3,  40000 },
+> +               { 15, 53300 },
+> +               { 4,  60000 },
+> +               { 5,  80000 },
+> +               { 6,  120000 },
+> +               { 7,  160000 },
+
+This looks a bit random. Is there any pattern on how value is
+connected to the register value?
+
+> +       };
+> +       u32 g_imax_microamp =3D aw200xx_imax_to_global(chip, led_imax_mic=
+roamp);
+> +       int i;
+
+int i =3D ARRAY_SIZE(...);
+
+> +       for (i =3D ARRAY_SIZE(imaxs) - 1; i >=3D 0; i--) {
+
+while (i--) {
+
+> +               if (g_imax_microamp >=3D imaxs[i].microamp)
+> +                       break;
+> +       }
+
+> +
+
+Redundant blank line.
+
+> +       if (i < 0)
+> +               return -EINVAL;
+> +
+> +       return regmap_update_bits(chip->regmap, AW200XX_REG_GCCR,
+> +                                 AW200XX_GCCR_IMAX_MASK,
+> +                                 AW200XX_GCCR_IMAX(imaxs[i].regval));
+> +}
+
+...
+
+> +       ret =3D regmap_write(chip->regmap, AW200XX_REG_FCD, AW200XX_FCD_C=
+LEAR);
+> +
+> +       return ret;
+
+return regmap_write(...);
+
+...
+
+> +       ret =3D regmap_update_bits(chip->regmap, AW200XX_REG_GCCR,
+> +                                AW200XX_GCCR_ALLON, AW200XX_GCCR_ALLON);
+> +
+> +       return ret;
+
+Ditto.
+
+...
+
+> +       ret =3D aw200xx_set_imax(chip, min_microamp);
+> +
+> +       return ret;
+
+Ditto.
+
+...
+
+> +       chip =3D devm_kzalloc(&client->dev,
+> +                           struct_size(chip, leds, count),
+> +                           GFP_KERNEL);
+
+There is a lot of room on the previous lines.
+
+> +       if (!chip)
+> +               return -ENOMEM;
+
+...
+
+> +static const struct of_device_id __maybe_unused aw200xx_match_table[] =
+=3D {
+> +       { .compatible =3D "awinic,aw20036", .data =3D &aw20036_cdef, },
+> +       { .compatible =3D "awinic,aw20054", .data =3D &aw20054_cdef, },
+> +       { .compatible =3D "awinic,aw20072", .data =3D &aw20072_cdef, },
+> +       {},
+
+Comma is not needed for the terminator entry.
+
+> +};
+
+...
+
+> +static struct i2c_driver aw200xx_driver =3D {
+> +       .driver =3D {
+> +               .name =3D "aw200xx",
+> +               .of_match_table =3D of_match_ptr(aw200xx_match_table),
+
+Why of_match_ptr()? It's a very rare case when you really need this.
+
+> +       },
+> +       .probe_new =3D aw200xx_probe,
+> +       .remove =3D aw200xx_remove,
+> +       .id_table =3D aw200xx_id,
+> +};
+
+> +
+
+Redundant blank line.
+
+> +module_i2c_driver(aw200xx_driver);
+
+...
+
+> +MODULE_ALIAS("platform:leds-aw200xx");
+
+What is this?! Or i.o.w. why is this violation of the subsystems?
+
+
+--
+With Best Regards,
+Andy Shevchenko
