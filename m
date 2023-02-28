@@ -2,182 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770F76A52AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 06:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F336A52AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 06:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjB1Ffh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Feb 2023 00:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
+        id S229647AbjB1Fin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 00:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjB1Ffe (ORCPT
+        with ESMTP id S229469AbjB1Fil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 00:35:34 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9479018B15
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 21:35:30 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D99BB24E3C9;
-        Tue, 28 Feb 2023 13:35:27 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
- 2023 13:33:33 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
- 2023 13:33:33 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Tue, 28 Feb 2023 13:33:32 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v4 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Topic: [PATCH v4 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Index: AQHZRZ0zqkG7/pRhhEiAX6gFjug0Aa7cUgAAgAEC65D///aKAIAAiLXg//+GvACAAI+BwP//lVOAAJFkcXD//+axAP//cjXQgADMoID//pX2AIACjLaA//93Q9A=
-Date:   Tue, 28 Feb 2023 05:33:32 +0000
-Message-ID: <803ac603023c4eeda4a0b8e414cce6f1@EXMBX066.cuchost.com>
-References: <20230224090010.nmy6latszfkdqcft@orel>
- <9cfd485d1e0d46cdb1323bb6ea330f6e@EXMBX066.cuchost.com>
- <20230224095526.ctctpzw3p3csf6qj@orel>
- <24a6dbe6aa2043c7812bf7e258786e13@EXMBX066.cuchost.com>
- <20230224120715.wgqnqmkadsbqusus@orel>
- <180fda36f9974809b436c52e4b3eda58@EXMBX066.cuchost.com>
- <20230227075942.rgl4hqnwttwvoroe@orel>
- <178ca008701147828d2e62402ff4f78a@EXMBX066.cuchost.com>
- <20230227114435.eow57ax5zhysz3kv@orel>
- <a6c319dd867f4f1d97e9d950b9e7c636@EXMBX066.cuchost.com>
- <20230228050457.zfbflfawctaccepv@orel>
-In-Reply-To: <20230228050457.zfbflfawctaccepv@orel>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [202.188.176.82]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 28 Feb 2023 00:38:41 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E47C2006F;
+        Mon, 27 Feb 2023 21:38:40 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pWsh7-0004NB-VD; Tue, 28 Feb 2023 06:38:34 +0100
+Message-ID: <4e9cdfbd-9e9e-449c-a4e4-fe22021c7187@leemhuis.info>
+Date:   Tue, 28 Feb 2023 06:38:33 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
+Content-Language: en-US, de-DE
+To:     George Kennedy <george.kennedy@oracle.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Storm Dragon <stormdragon2976@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        sfr@canb.auug.org.au, akpm@linux-foundation.org,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <Y/KtG9vK0oz0nQrN@hotmail.com>
+ <20230220064612.1783-1-linux@weissschuh.net>
+ <dcaaf7d5-b2d5-dbb9-f3fe-2232ee525cc8@kernel.org>
+ <2094ecec-f63c-4e8a-ba97-da77c5266da1@t-8ch.de>
+ <2941c2b9-5fa5-e25c-dcd0-ab9c9c0f143e@oracle.com>
+ <Y/TMH8Hf6zBrC3yc@kroah.com>
+ <9e297f30-dc8c-ecac-f7a6-348ddbd4b928@leemhuis.info>
+ <c0d99436-28a0-d012-646d-251a9511e76f@oracle.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <c0d99436-28a0-d012-646d-251a9511e76f@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677562720;e1ab0d66;
+X-HE-SMSGID: 1pWsh7-0004NB-VD
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 27.02.23 20:59, George Kennedy wrote:
+> Hello Thomas,
+> 
+> On 2/27/2023 9:20 AM, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> Hi, this is your Linux kernel regression tracker. Top-posting for once,
+>> to make this easily accessible to everyone.
+>>
+>> George, is there anything we can do to help you moving forward to
+>> finally get this regression fixed? It seems (or am I missing something?)
+>> everyone is waiting for you (see below) to act on the feedback Jiri
+>> provided here:
+>>
+>> https://lore.kernel.org/lkml/8dffe187-240d-746e-ed84-885ffd2785f6@kernel.org/
+>>
+>> Side note: would be good to add a "Link:" tag pointing to the start of
+>> this thread as well, but that's just a detail.
+> 
+> I just sent the requested patch up for review.
+> 
+> https://lore.kernel.org/lkml/1677527001-17459-1-git-send-email-george.kennedy@oracle.com/
 
+Thx for handling this!
 
-> -----Original Message-----
-> From: Andrew Jones <ajones@ventanamicro.com>
-> Sent: Tuesday, 28 February, 2023 1:05 PM
-> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> 
-> On Tue, Feb 28, 2023 at 01:32:53AM +0000, JeeHeng Sia wrote:
-> > > > > > 	load image;
-> > > > > > loop:	Create pbe chain, return error if failed;
-> > > > >
-> > > > > This loop pseudocode is incomplete. It's
-> > > > >
-> > > > > loop:
-> > > > >         if (swsusp_page_is_forbidden(page) && swsusp_page_is_free(page))
-> > > > > 	   return page_address(page);
-> > > > > 	Create pbe chain, return error if failed;
-> > > > > 	...
-> > > > >
-> > > > > which I pointed out explicitly in my last reply. Also, as I asked in my
-> > > > > last reply (and have been asking four times now, albeit less explicitly
-> > > > > the first two times), how do we know at least one PBE will be linked?
-> > > > 1 PBE correspond to 1 page, you shouldn't expect only 1 page is saved.
-> > >
-> > > I know PBEs correspond to pages. *Why* should I not expect only one page
-> > > is saved? Or, more importantly, why should I expect more than zero pages
-> > > are saved?
-> > >
-> > > Convincing answers might be because we *always* put the restore code in
-> > > pages which get added to the PBE list or that the original page tables
-> > > *always* get put in pages which get added to the PBE list. It's not very
-> > > convincing to simply *assume* that at least one random page will always
-> > > meet the PBE list criteria.
-> > >
-> > > > Hibernation core will do the calculation. If the PBEs (restore_pblist) linked successfully, the hibernated image will be restore else
-> > > normal boot will take place.
-> > > > > Or, even more specifically this time, where is the proof that for each
-> > > > > hibernation resume, there exists some page such that
-> > > > > !swsusp_page_is_forbidden(page) or !swsusp_page_is_free(page) is true?
-> > > > forbidden_pages and free_pages are not contributed to the restore_pblist (as you already aware from the code). Infact, the
-> > > forbidden_pages and free_pages are not save into the disk.
-> > >
-> > > Exactly, so those pages are *not* going to contribute to the greater than
-> > > zero pages. What I've been asking for, from the beginning, is to know
-> > > which page(s) are known to *always* contribute to the list. Or, IOW, how
-> > > do you know the PBE list isn't empty, a.k.a restore_pblist isn't NULL?
-> > Well, this is keep going around in a circle, thought the answer is in the hibernation code. restore_pblist get the pointer from the PBE,
-> and the PBE already checked for validity.
-> 
-> It keeps going around in circles because you keep avoiding my question by
-> pointing out trivial linked list code. I'm not worried about the linked
-> list code being correct. My concern is that you're using a linked list
-> with an assumption that it is not empty. My question has been all along,
-> how do you know it's not empty?
-> 
-> I'll change the way I ask this time. Please take a look at your PBE list
-> and let me know if there are PBEs on it that must be there on each
-> hibernation resume, e.g. the resume code page is there or whatever.
-> 
-> > Can I suggest you to submit a patch to the hibernation core?
-> 
-> Why? What's wrong with it?
-Kindly let me draw 2 scenarios for you. Option 1 is to add the restore_pblist checking to the hibernation core and option 2 is to add restore_pblist checking to the arch solution
-Although I really don't think it is needed. But if you really wanted to add the checking, I would suggest to go with option 1. again, I really think that it is not needed!
+And I see it very quickly made its way to mainline. :-D
 
-	//Option 1
-	//Pseudocode to illustrate the image loading
-	initialize restore_pblist to null;
-	initialize safe_pages_list to null;
-	Allocate safe page list, return error if failed;
-	load image;
-loop:	Create pbe chain, return error if failed;
-	assign orig_addr and safe_page to pbe;
-	link pbe to restore_pblist;
-	/* Add checking here */
-	return error if restore_pblist equal to null;
-	return pbe to handle->buffer;
-	check handle->buffer;
-	goto loop if no error else return with error;
+Ciao, Thorsten
 
-	//option 2
-	//Pseudocode to illustrate the image loading
-	initialize restore_pblist to null;
-	initialize safe_pages_list to null;
-	Allocate safe page list, return error if failed;
-	load image;
-loop:	Create pbe chain, return error if failed;
-	assign orig_addr and safe_page to pbe;
-	link pbe to restore_pblist;
-	return pbe to handle->buffer;
-	check handle->buffer;
-	goto loop if no error else return with error;
-	everything works correctly, continue the rest of the operation
-	invoke swsusp_arch_resume
-
-	//@swsusp_arch_resume()
-loop2: return error if restore_pblist is null
-	increment restore_pblist and goto loop2
-	create temp_pg_table
-	continue the rest of the resume operation
+>> On 21.02.23 14:50, Greg Kroah-Hartman wrote:
+>>> On Tue, Feb 21, 2023 at 08:30:11AM -0500, George Kennedy wrote:
+>>>> On 2/20/2023 11:34 AM, Thomas Weißschuh wrote:
+>>>>> +Cc people who were involved in the original thread.
+>>>>>
+>>>>> On Mon, Feb 20, 2023 at 12:48:59PM +0100, Jiri Slaby wrote:
+>>>>>> On 20. 02. 23, 7:46, linux@weissschuh.net wrote:
+>>>>>>> From: Thomas Weißschuh <linux@weissschuh.net>
+>>>>>>>
+>>>>>>> Commit 226fae124b2d
+>>>>>>> ("vc_screen: move load of struct vc_data pointer in vcs_read() to
+>>>>>>> avoid UAF")
+>>>>>>> moved the call to vcs_vc() into the loop.
+>>>>>>> While doing this it also moved the unconditional assignment of
+>>>>>>> "ret = -ENXIO".
+>>>>>>> This unconditional assignment was valid outside the loop but
+>>>>>>> within it
+>>>>>>> it clobbers the actual value of ret.
+>>>>>>>
+>>>>>>> To avoid this only assign "ret = -ENXIO" when actually needed.
+>>>>>> Not sure -- I cannot find it -- but hasn't George fixed this yet?
+>>>>> Indeed there was a proposed fix at
+>>>>> https://lore.kernel.org/lkml/1675704844-17228-1-git-send-email-george.kennedy@oracle.com/
+>>>>>
+>>>>> Linus had some suggestions so it was not applied as is.
+>>>>>
+>>>>> I'm not sure what the current state is.
+>>>>> George, do you have something in the pipeline?
+>>>> Yes, that is in the pipeline:
+>>>> https://lore.kernel.org/lkml/1675774098-17722-1-git-send-email-george.kennedy@oracle.com/
+>>>>
+>>>> Linus suggested the fix, which was tested and submitted.
+>>>>
+>>>> Jiri commented on the patch, which I believe was directed at Linus
+>>>> as he
+>>>> suggested the fix.
+>>> And I was waiting for a new version from you based on those comments :(
+>>>
+>>> Can you fix that up and send?
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>> #regzbot monitor:
+>> https://lore.kernel.org/lkml/1675774098-17722-1-git-send-email-george.kennedy@oracle.com/
+>> #regzbot poke
 > 
-> Thanks,
-> drew
+> 
+> 
