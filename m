@@ -2,78 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08676A5CDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA636A5CE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjB1QMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S229637AbjB1QOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjB1QML (ORCPT
+        with ESMTP id S229560AbjB1QOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:12:11 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915A230EB5;
-        Tue, 28 Feb 2023 08:12:05 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id C9DA1103;
-        Tue, 28 Feb 2023 17:12:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1677600722;
+        Tue, 28 Feb 2023 11:14:02 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA1020548;
+        Tue, 28 Feb 2023 08:13:59 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677600835;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SMyAtlujt0L0cMyshMqhEj9CXvje1bkovuz0G81iQOo=;
-        b=hnBro2ddPp3iX8s3YpHLRnOwSChsDYQdEVGzdvh9UtzmWfPdJOQaLj3TUzR9kJg+52oH9V
-        WyvASHJZ06L+S0Im0PGabf5nlzwGc57EFZdwXyGwW557annuzH/HkAJX/SgkJvXz6rw0/2
-        04/r7mj511krIS/KN9/rXF3/Xf2b+jVEMTbah0aC87xnFOHoicoqL0fSh8hcQXEorxQmXt
-        nE9Qc8krBcZyAXoNfcilvZvq+Ob5eIqXK/XG1a96d+NB9k5y2SUB3Disg6EpMI0gGQn03p
-        GrKqDO0l3ysY7tPAN5ToRsQ+P4Nu4CV/zEss/kxAMsb5fW0PnPuuoBBEwq9k9w==
+        bh=Yzn4ZC6rxI44VXytBI5Fnc7+a5GIfbz7OrWhI6HHXwo=;
+        b=BGato9Jn5a3ROBz+NS5V3X407E3+wK948iylyHOQz+LAVewkjsmWZaFoyqMAxPdKxG1cxs
+        8Plkbv03K77D5nmyS5mUZCNtJTIDT4vpRLvFyMbYTZYkqNqi80vJInfZMtKwDVZGBxp5NM
+        4D9CAi7RoRSJWUDUtSWWDKpYv1MhVuuEiRVD/LN4QHg+1miSt2II0JhMuU12OHq+UgzZE4
+        aqLa9UHgD8AIV9GH9HttxZDpJOg9krtK/k4uskuCKSEi8awzLF6H/Zh+jF8hwwii624jov
+        5WiEdfjAmfFXWm9H0ABdxLYYMbZOHbzpsw3DWm2ohXCIFcUJtpGGxbVA03DgcQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677600835;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yzn4ZC6rxI44VXytBI5Fnc7+a5GIfbz7OrWhI6HHXwo=;
+        b=uTdd0PBkQ0wwFhY/RHnddcbIfbACiZwiWoUzLdsnStv6mgQUAkR3RjqLHgtZe0BV2KIPS9
+        mJ8m2Snp1P3zQhDw==
+To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
+        kim.phillips@amd.com, brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>
+Subject: Re: [PATCH v12 06/11] x86/smpboot: Remove initial_stack on 64-bit
+In-Reply-To: <20230226110802.103134-7-usama.arif@bytedance.com>
+References: <20230226110802.103134-1-usama.arif@bytedance.com>
+ <20230226110802.103134-7-usama.arif@bytedance.com>
+Date:   Tue, 28 Feb 2023 17:13:55 +0100
+Message-ID: <87k001n4xo.ffs@tglx>
 MIME-Version: 1.0
-Date:   Tue, 28 Feb 2023 17:12:02 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH 16/20] irqchip/irq-sl28cpld: remove MODULE_LICENSE in
- non-modules
-In-Reply-To: <20230228130215.289081-17-nick.alcock@oracle.com>
-References: <20230228130215.289081-1-nick.alcock@oracle.com>
- <20230228130215.289081-17-nick.alcock@oracle.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e90b7152f0e5c819be8baf8af7874e3f@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-02-28 14:02, schrieb Nick Alcock:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
-> 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+On Sun, Feb 26 2023 at 11:07, Usama Arif wrote:
+> From: Brian Gerst <brgerst@gmail.com>
+>
+> Eliminating global variables from the CPU startup path in order to simplify
+> it and facilitate parallel startup.
 
-Acked-by: Michael Walle <michael@walle.cc>
+As this patch is now part of the parallel boot series and actually
+introduces smpboot_control, the above is neither accurate nor useful.
+
+Folks, really.
+
+> Remove initial_stack, and load RSP from current_task->thread.sp instead.
+
+  
+>  #ifdef CONFIG_SMP
+> -	initial_stack = (unsigned long)temp_stack + sizeof(temp_stack);
+> +	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
+
+This lacks a comment about the temporary (ab)use of current->thread.sp
+
+>  	early_gdt_descr.address =
+>  			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
+>  	initial_gs = per_cpu_offset(smp_processor_id());
+> +	smpboot_control = smp_processor_id();
+>  #endif
+
+> @@ -241,6 +241,24 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+>  	UNWIND_HINT_EMPTY
+>  	ANNOTATE_NOENDBR // above
+>  
+> +#ifdef CONFIG_SMP
+> +	movl	smpboot_control(%rip), %ecx
+> +
+> +	/* Get the per cpu offset for the given CPU# which is in ECX */
+> +	movq	__per_cpu_offset(,%rcx,8), %rdx
+> +#else
+> +	xorl	%edx, %edx
+> +#endif /* CONFIG_SMP */
+
+Sigh, we should finally make CONFIG_SMP def_bool y ...
+
+> +	/*
+> +	 * Setup a boot time stack - Any secondary CPU will have lost its stack
+> +	 * by now because the cr3-switch above unmaps the real-mode stack.
+> +	 *
+> +	 * RDX contains the per-cpu offset
+> +	 */
+> +	movq	pcpu_hot + X86_current_task(%rdx), %rax
+> +	movq	TASK_threadsp(%rax), %rsp
+> +
+> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> index b18c1385e181..62e3bf37f0b8 100644
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -1112,7 +1112,12 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
+>  	idle->thread.sp = (unsigned long)task_pt_regs(idle);
+>  	early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
+>  	initial_code = (unsigned long)start_secondary;
+> -	initial_stack  = idle->thread.sp;
+> +
+> +	if (IS_ENABLED(CONFIG_X86_32)) {
+> +		initial_stack  = idle->thread.sp;
+> +	} else {
+> +		smpboot_control = cpu;
+> +	}
+
+Please remove the pointless brackets.
+  
+Thanks,
+
+        tglx
