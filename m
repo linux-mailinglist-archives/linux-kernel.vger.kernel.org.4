@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE416A5C2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0D86A5C39
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjB1Pnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S229987AbjB1PpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjB1Pnt (ORCPT
+        with ESMTP id S229672AbjB1PpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:43:49 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42823113D9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:43:48 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id w25-20020a4ae9f9000000b0052513fb2e09so1613344ooc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:43:48 -0800 (PST)
+        Tue, 28 Feb 2023 10:45:10 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA7730B3E;
+        Tue, 28 Feb 2023 07:45:07 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso5836576ota.1;
+        Tue, 28 Feb 2023 07:45:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LonH6h0XflHd2ZjJoaCMQxM+eselh1rFlXJtr2TdEH0=;
-        b=WyJg6CTQHizjZtwa26KfNyODiFG3bpBQVCtLC6kZa2jQ93g3cNA0st7X5zv0Q0WEyz
-         DssEP8HT6EafkjajKflc8sIiiF0dUns20WwxZRwoLYoYxJDiuQntnrgON6O0bmAB78gU
-         eusnG6BYYBWBbE9LMTXMKE1W0CDyQP43ruj+RGcEzoFV8LOE3zN/x9BMvVl2JZ1quO1J
-         YTTCzT58vDVD0zhGKokq3aPnJ1b01i5rGPvzR8ipxkTmzyihfnBoBJxmHS8DBHDCFkJT
-         en235u700aMHlAZhuPqoO8i2/Fohbbk33SHXIvLNO4mmMkLm7loqL7m1EG3wa+b8ziGD
-         udpg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=47Io8bjBgTfpx9irLzQIk7kc2k6GPp2PZ97i5J/VsnU=;
+        b=cmBSfjVhL11B7Tk2kzeIA9iNdYDewp+Lj2BTbbj6UDcbnNNnGRKEG9iCWQZ+Zn3g9m
+         +0Zx+GlqRizxRKPwVVA4/JaFtaKfoHx9z08Qt2aL2jYElbluHU/qNXZSmld3edT7vPer
+         mqK5c2oWjXhedR1BJv6EXjMqwSeGb6qxBliUPUwERul1AYJ+81hovh17DHIbCSD5cK5w
+         9gwm8dkKVD7UCQUidLDzlT+m/No89gMZlEDYYGUWzhhwiazV+8nn9uut0WCqrLE6UV/g
+         tafJgCdHGRGVm9NWQqu21rdJz8b0ivr1k0uKj14YYV/O5qMTtismWvnVbWfVfSc1EyjJ
+         t6OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LonH6h0XflHd2ZjJoaCMQxM+eselh1rFlXJtr2TdEH0=;
-        b=flTsmOCfmeDSBvZOCshBLtp12bRM3QauyHoJIDwhy3USNHoYxmmCQGmWOFuLtFdxps
-         x/QxMgB0hdwjYiwBQF2RpDJilWEVvRZKZljh5vtcZEZrFa0bCOv17nffYyJKgcVq+/kB
-         A3LN/Dwvm5HK4IpDmAq8os4JdLuwvPPcGeAtyEUY5yBkWjzeA8NahSyyKn+gqVvG3dzR
-         VW/PbBrKEFo0H4QxdnEOJ7QIg2ass11f9fHHSYgx2DWM/kcUiowu36AfZszjtD4rgvQF
-         nvuYaV0JF6cs6bTFRh+0FhE5+1kwnIS+Kih5AbfxvE36NeaYofPRiTMf8Bosv99XgjGD
-         CeYQ==
-X-Gm-Message-State: AO0yUKVDW8V9hVA7954XqkpuuEQOlIrSFrBj4xKgLn5bTRCryni7xjNy
-        1yt3lkGP81/oe/IuIWWtRRUiFLgZUYYYdPh8c30=
-X-Google-Smtp-Source: AK7set8STQ1oztAalDc2bpQ9rNAMwQTUZCm2yzbWRYUjL7JbeIR+duZmjExm+N3PqFqj9f5vVh1ZzbL3mR9s5ouJdgQ=
-X-Received: by 2002:a4a:840f:0:b0:525:499e:ce2f with SMTP id
- l15-20020a4a840f000000b00525499ece2fmr795883oog.1.1677599027483; Tue, 28 Feb
- 2023 07:43:47 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=47Io8bjBgTfpx9irLzQIk7kc2k6GPp2PZ97i5J/VsnU=;
+        b=1CWJxt/w4tQEzawmcrvTAGCwa51RqUs+FRwDNro+vJ0RFNOANO5gGGcRRSi24/gx5b
+         yhlLhDoI8geb5ZNeTLLOfHUoBaiznTaMFdu+k4WRbx7L9+j4B1403/QCIG7kP7YYubeI
+         TAgu7z3U8x/9/Si3ZQqwb6sLshcn8Tvz52l2zN9GfjGNedR6YDoukSW0k0JD/uPmKZfz
+         5sw1wPkKEkGNV1aMwLgqHAJ9Swa0f8oi6XE0Wfx1nwXgWH0zcw1H9y8GSQTk9BrZ+oc/
+         XfHeqLPuvt2rMfE37ZYVjGQ0gv9mPqphjNWLTA8YTHc/tzC3C9NELumsGKLXnqjUTSjh
+         v80g==
+X-Gm-Message-State: AO0yUKU9Dsm2swe+CdCDI0GCW44hejovqMqY5OOgTIYlchwCLn+gcgJK
+        DitYB9aVXkmNu7SMl/QjwbscE+flktTkL9SJZWU=
+X-Google-Smtp-Source: AK7set84ZiKu/x5bhuHzdqKQUv7sjdjnKY8F7kTvWRv1lYoh5z8jZHyiBzPqCGMtJV4jXTtlMVk45nk6MjMvbYL6vxQ=
+X-Received: by 2002:a9d:128e:0:b0:688:cf52:6e18 with SMTP id
+ g14-20020a9d128e000000b00688cf526e18mr1074144otg.4.1677599106749; Tue, 28 Feb
+ 2023 07:45:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20230227173800.2809727-1-robdclark@gmail.com> <44e67d88-fce6-a1c1-79a9-a937e64a32bb@collabora.com>
- <CAF6AEGsT8_o+v0vzGu1nyh6Z82pj8FnGUdMFc0Lq+4OWoSjRBQ@mail.gmail.com> <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
-In-Reply-To: <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
+References: <20230227193535.2822389-1-robdclark@gmail.com> <Y/320d96QmbLe1J8@debian.me>
+In-Reply-To: <Y/320d96QmbLe1J8@debian.me>
 From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 28 Feb 2023 07:43:36 -0800
-Message-ID: <CAF6AEGt2SYvppE3-QbmZNbgVgTNndT+mRUe6N-z0AS+SB6KKoQ@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/virtio: Add option to disable KMS support
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+Date:   Tue, 28 Feb 2023 07:44:55 -0800
+Message-ID: <CAF6AEGuqHDDQS22qcp8sk+5bj16XFiBarCLvpX=qNc2r2euMUw@mail.gmail.com>
+Subject: Re: [PATCH v7 00/15] dma-fence: Deadline awareness
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Luben Tuikov <luben.tuikov@amd.com>,
         Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        intel-gfx@lists.freedesktop.org,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>,
+        Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,82 +92,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 4:34 AM Thomas Zimmermann <tzimmermann@suse.de> wro=
-te:
+On Tue, Feb 28, 2023 at 4:43 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 >
-> Hi
->
-> Am 27.02.23 um 19:15 schrieb Rob Clark:
-> > On Mon, Feb 27, 2023 at 9:57 AM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >>
-> >> On 2/27/23 20:38, Rob Clark wrote:
-> >> ...
-> >>> +     if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS)) {
-> >>> +             /* get display info */
-> >>> +             virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
-> >>> +                             num_scanouts, &num_scanouts);
-> >>> +             vgdev->num_scanouts =3D min_t(uint32_t, num_scanouts,
-> >>> +                                         VIRTIO_GPU_MAX_SCANOUTS);
-> >>> +             if (!vgdev->num_scanouts) {
-> >>> +                     /*
-> >>> +                      * Having an EDID but no scanouts is non-sensic=
-al,
-> >>> +                      * but it is permitted to have no scanouts and =
-no
-> >>> +                      * EDID (in which case DRIVER_MODESET and
-> >>> +                      * DRIVER_ATOMIC are not advertised)
-> >>> +                      */
-> >>> +                     if (vgdev->has_edid) {
-> >>> +                             DRM_ERROR("num_scanouts is zero\n");
-> >>> +                             ret =3D -EINVAL;
-> >>> +                             goto err_scanouts;
-> >>> +                     }
-> >>> +                     dev->driver_features &=3D ~(DRIVER_MODESET | DR=
-IVER_ATOMIC);
-> >>
-> >> If it's now configurable by host, why do we need the
-> >> CONFIG_DRM_VIRTIO_GPU_KMS?
+> On Mon, Feb 27, 2023 at 11:35:06AM -0800, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
 > >
-> > Because a kernel config option makes it more obvious that
-> > modeset/atomic ioctls are blocked.  Which makes it more obvious about
-> > where any potential security issues apply and where fixes need to get
-> > backported to.  The config option is the only thing _I_ want,
-> > everything else is just a bonus to help other people's use-cases.
+> > This series adds a deadline hint to fences, so realtime deadlines
+> > such as vblank can be communicated to the fence signaller for power/
+> > frequency management decisions.
+> >
+> > This is partially inspired by a trick i915 does, but implemented
+> > via dma-fence for a couple of reasons:
+> >
+> > 1) To continue to be able to use the atomic helpers
+> > 2) To support cases where display and gpu are different drivers
+> >
+> > This iteration adds a dma-fence ioctl to set a deadline (both to
+> > support igt-tests, and compositors which delay decisions about which
+> > client buffer to display), and a sw_sync ioctl to read back the
+> > deadline.  IGT tests utilizing these can be found at:
+> >
+> >   https://gitlab.freedesktop.org/robclark/igt-gpu-tools/-/commits/fence-deadline
+> >
+> >
+> > v1: https://patchwork.freedesktop.org/series/93035/
+> > v2: Move filtering out of later deadlines to fence implementation
+> >     to avoid increasing the size of dma_fence
+> > v3: Add support in fence-array and fence-chain; Add some uabi to
+> >     support igt tests and userspace compositors.
+> > v4: Rebase, address various comments, and add syncobj deadline
+> >     support, and sync_file EPOLLPRI based on experience with perf/
+> >     freq issues with clvk compute workloads on i915 (anv)
+> > v5: Clarify that this is a hint as opposed to a more hard deadline
+> >     guarantee, switch to using u64 ns values in UABI (still absolute
+> >     CLOCK_MONOTONIC values), drop syncobj related cap and driver
+> >     feature flag in favor of allowing count_handles==0 for probing
+> >     kernel support.
+> > v6: Re-work vblank helper to calculate time of _start_ of vblank,
+> >     and work correctly if the last vblank event was more than a
+> >     frame ago.  Add (mostly unrelated) drm/msm patch which also
+> >     uses the vblank helper.  Use dma_fence_chain_contained().  More
+> >     verbose syncobj UABI comments.  Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
+> > v7: Fix kbuild complaints about vblank helper.  Add more docs.
+> >
 >
-> I find this very vague. What's the security thread?
+> I want to apply this series for testing, but it can't be applied cleanly
+> on current drm-misc tree. On what tree (and commit) is this series based
+> on?
 
-The modeset ioctls are a big potential attack surface area.  Which in
-the case of CrOS VM guests serves no legitimate purpose.  (kms is
-unused in the guest, instead guest window surfaces are proxied to host
-for composition alongside host window surfaces.)
+You can find my branch here:
 
-There have been in the past potential security bugs (use-after-free,
-etc) found in the kms ioctls.  We should assume that there will be
-more in the future.  So it seems like simple common sense to want to
-block unused ioctls.
-
-> And if the config option is useful, shouldn't it be DRM-wide? The
-> modesetting ioctl calls are shared among all drivers.
-
-Maybe, if there is a use?  The situation of compositing guest windows
-in the host seems a bit unique to virtgpu, which is why I went with a
-config option specific to virtgpu.
+https://gitlab.freedesktop.org/robclark/msm/-/commits/dma-fence/deadline
 
 BR,
 -R
-
-> Best regards
-> Thomas
->
-> >
-> > BR,
-> > -R
->
-> --
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-> (HRB 36809, AG N=C3=BCrnberg)
-> Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
