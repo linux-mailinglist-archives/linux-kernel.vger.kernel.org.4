@@ -2,196 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E6D6A5815
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDF26A5816
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjB1L3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
+        id S231693AbjB1L3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbjB1L3d (ORCPT
+        with ESMTP id S231655AbjB1L3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:29:33 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096031BAE0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:29:09 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id j3so6166357wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:29:08 -0800 (PST)
+        Tue, 28 Feb 2023 06:29:36 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAF1DBD1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:29:12 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ck15so38722456edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:29:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677583712;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oOBHN8SOWfG+6E39W2LRb5Mdzz3QwZLD1qrh4jZE1NY=;
-        b=Ag74R7l9pGf3aD9fmSORY5jTnHtW5Ti/+uDtY+oI0soLyi5X24HUuTq0geN35auA7/
-         paINEYop5l3gS5/N8IYQhngW16h5NO32M6RuFIxrO7+8dOKVcpc+mnYIdIKunamBpjUP
-         gKBR9N4o9PQj7M+yEOBrpr3+g+Hnj0A2P9DUlpU0QMldjArH9BMjp8fggYwl1Ux/YLO2
-         DEQ5nvlWQ8V5qt44dQRQnvhUp6+i5pgOB4iAvRcSiiAY+kMNJBoTEeXtb+dFABkYM/Ig
-         UTwlSK2+DzrdrcKg3pPniZSoC+pYom93m4UMNJ71TSziZ1o0G8swohICA9akBJ1114hg
-         aeFQ==
+        bh=GBj/GGcssUIPclJb9OaTVZJj6GUgJJTT+lDCTo9rCgQ=;
+        b=ev4Uj0zM8CDLMvFJ9N89gY8s6bTexBCziLfJ9y93h0GjAvOdGgRLYhyM7EWKpGSG/c
+         uBBFYWpQ+ShDHjIhAMAbtmkRcPG4oU1w/LTk+Xr4H+V/ZfQfiOsJm6yk5r2BuJ15vlic
+         wQiodG7MheSxV25r7YFRcY9iC1qE2jrqtB3l03dLuU8KG0QcEaJvbntY1ecSLelsUB6F
+         Z7Q3nrhzvpDTr0apjMYNKcvvhwD+geZ8bmraNLTfVIY2NphLF5ntsu0sIRC+8QB7Z+nB
+         fVaQ4mzqOaH5FDJQRt757SZpNXAlTZJ/iNhFbhpQbSdIJM0+QDLF5Ul/EQJq6KYRdE5h
+         gOVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677583712;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oOBHN8SOWfG+6E39W2LRb5Mdzz3QwZLD1qrh4jZE1NY=;
-        b=E7sxq7+PY4G9eBEAvuvZfbvggp7DvyQaxWceV54hm5LbVj9yDo4qENtwCVMQjeisjS
-         aGhDnfnvUOtYJ0GtnBq9moHp/KiRk5uvU6f1wOhj2ATWSNzOa+QAqu+l8cDjlihS7yBg
-         WW+qaWd4BGVocW6JLl5GXqW53tKaoTZmkm1WPmh3c4cGeIUCZi3cE3aSbo86ErIEO8nZ
-         ShJkQ2tfjCYv9mYlWoVfxddlCqdjYh8ZtVZWcAIvXerX4fLPa96vTX92FuUV0ZU89dnO
-         yiGOWov+TPEWtCHkMI9VoBxEGlQ7CrHdhRbmj6qknaYy6MhdSFoJ6CHRsXmzoACCXC9o
-         nKzw==
-X-Gm-Message-State: AO0yUKXmIcFO1aSkxxxw4SRDkrBaisAoKpdGIEJ46cHheK5qlqwAXqeN
-        DpQKABa1sIRujpUO3F6aG1+iNw==
-X-Google-Smtp-Source: AK7set9i1nyEmV4xklLiWUberN1IuWUGxUCefGBaFmf86XSGGwOVTlVC376se2dRpHJO97E6LEOKBw==
-X-Received: by 2002:a05:600c:4f85:b0:3eb:383c:1876 with SMTP id n5-20020a05600c4f8500b003eb383c1876mr1983616wmq.6.1677583712514;
-        Tue, 28 Feb 2023 03:28:32 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e26-20020a7bc2fa000000b003eb39e60ec9sm9135043wmk.36.2023.02.28.03.28.31
+        bh=GBj/GGcssUIPclJb9OaTVZJj6GUgJJTT+lDCTo9rCgQ=;
+        b=H2av8SJyO4s6biYFe3f759fnq7uNriFJ7AVb6PDF92Fd+NCIkHnJF/+bsBaafbUAFf
+         ebQtPSl2KHfHR0r3Ktqutrj8fTd5hkj/qvcIgGMrGVo5HhtmzwpF2fkRJm0FFpespsea
+         L9ODKVbMxtSkGNKcj9E6YGBrPJMgJehDjWDOmwGhvrj8smgVY1Qav2kfk4AQvO727yCW
+         Pc+61KGxk5wQspxLRnYx99nQlm6FPQeZ2Zl9ZhcG20reHV2WhkMVfi+ocjpqgweyCsUs
+         38x82/l/LnJUTVmaoPWlmfHPWuRWDTlUzKmm08kkpZZvxuAyIEGSK6qJS0w8bP5W9eVm
+         g4xA==
+X-Gm-Message-State: AO0yUKV0jgu3UGFFV/ojHtre7IULXuBccJZtW4jOqvKSywz8Db39247U
+        TqvUJvojzi3sYEqMlvnomYfR+w==
+X-Google-Smtp-Source: AK7set8RZDJ6WdOsfg3RtQ3zH7fB6FvZdtq4hk6RJEmyFYlX71IvTbbNpXsS2JtDUgI3CjxqD9hTNg==
+X-Received: by 2002:a17:907:ca14:b0:8b0:26b6:3f2b with SMTP id uk20-20020a170907ca1400b008b026b63f2bmr2016682ejc.53.1677583722973;
+        Tue, 28 Feb 2023 03:28:42 -0800 (PST)
+Received: from ?IPV6:2a02:578:8593:1200:5848:64ae:8a99:312a? ([2a02:578:8593:1200:5848:64ae:8a99:312a])
+        by smtp.gmail.com with ESMTPSA id r22-20020a50aad6000000b004af6a7e9131sm4223979edc.64.2023.02.28.03.28.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 03:28:32 -0800 (PST)
-Message-ID: <a0168d89-3c30-55e1-cf4c-37f7fe90aae4@linaro.org>
-Date:   Tue, 28 Feb 2023 12:28:30 +0100
+        Tue, 28 Feb 2023 03:28:42 -0800 (PST)
+Message-ID: <a0a76c20-4fd9-476b-3e32-06f7cc2bbf1b@tessares.net>
+Date:   Tue, 28 Feb 2023 12:28:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v4 4/4] dt-bindings: syscon: Add StarFive syscon doc
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     William Qiu <william.qiu@starfivetech.com>,
-        Rob Herring <robh@kernel.org>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230215113249.47727-1-william.qiu@starfivetech.com>
- <20230215113249.47727-5-william.qiu@starfivetech.com>
- <20230220234335.GA615198-robh@kernel.org>
- <348796cc-72d9-4dcf-9f09-4c2aa55cb858@starfivetech.com>
- <20230227222904.GC1048218-robh@kernel.org>
- <f8d2b665-ce5d-81f8-8c55-81f1a4cb62b9@starfivetech.com>
- <54f51fa0-7821-b67b-b782-eb9a35b7bba9@linaro.org>
- <CAJM55Z85fitjBOcCLqad9W-a7h3iN9bxtctVGzPgqCbf5fWobw@mail.gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAJM55Z85fitjBOcCLqad9W-a7h3iN9bxtctVGzPgqCbf5fWobw@mail.gmail.com>
+Subject: Re: [PATCH net 0/7] mptcp: fixes for 6.3
+Content-Language: en-GB
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>,
+        Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>,
+        Jiang Biao <benbjiang@tencent.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Christoph Paasch <cpaasch@apple.com>,
+        Geliang Tang <geliang.tang@suse.com>
+References: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2023 12:02, Emil Renner Berthing wrote:
-> On Tue, 28 Feb 2023 at 11:40, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 28/02/2023 10:05, William Qiu wrote:
->>>
->>>
->>> On 2023/2/28 6:29, Rob Herring wrote:
->>>> On Tue, Feb 21, 2023 at 10:44:02AM +0800, William Qiu wrote:
->>>>>
->>>>>
->>>>> On 2023/2/21 7:43, Rob Herring wrote:
->>>>>> On Wed, Feb 15, 2023 at 07:32:49PM +0800, William Qiu wrote:
->>>>>>> Add documentation to describe StarFive System Controller Registers.
->>>>>>>
->>>>>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->>>>>>> ---
->>>>>>>  .../bindings/soc/starfive/jh7110-syscon.yaml  | 51 +++++++++++++++++++
->>>>>>>  MAINTAINERS                                   |  5 ++
->>>>>>>  2 files changed, 56 insertions(+)
->>>>>>>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
->>>>>>> new file mode 100644
->>>>>>> index 000000000000..fa4d8522a454
->>>>>>> --- /dev/null
->>>>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
->>>>>>> @@ -0,0 +1,51 @@
->>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>>>> +%YAML 1.2
->>>>>>> +---
->>>>>>> +$id: http://devicetree.org/schemas/soc/starfive/jh7110-syscon.yaml#
->>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>> +
->>>>>>> +title: StarFive JH7110 SoC system controller
->>>>>>> +
->>>>>>> +maintainers:
->>>>>>> +  - William Qiu <william.qiu@starfivetech.com>
->>>>>>> +
->>>>>>> +description: |
->>>>>>> +  The StarFive JH7110 SoC system controller provides register information such
->>>>>>> +  as offset, mask and shift to configure related modules such as MMC and PCIe.
->>>>>>> +
->>>>>>> +properties:
->>>>>>> +  compatible:
->>>>>>> +    items:
->>>>>>> +      - enum:
->>>>>>> +          - starfive,jh7110-stg-syscon
->>>>>>> +          - starfive,jh7110-sys-syscon
->>>>>>> +          - starfive,jh7110-aon-syscon
->>>>>>
->>>>>> Is 'syscon' really part of what the blocks are called? Is just 'stg',
->>>>>> 'sys' and 'aon' not unique enough?
->>>>>>
->>>>>> Rob
->>>>> Hi Rob,
->>>>>
->>>>> In StarFive SoC, we do have syscrg/aoncrg/stgcrg, which is uesd to be the clock
->>>>> controller, so 'syscon' is added to avoid confusion.
->>>>
->>>> You've only added to my confusion. 'syscrg' and 'sys-syscon' are 2
->>>> different h/w blocks and unrelated to each other? Or 'syscrg' is the
->>>> clock portion of 'sys-syscon'? In that case, 'syscrg' should be a child
->>>> of 'sys-syscon' or possibly just all one node. Please provide details on
->>>> the entire h/w block so we can provide better input on the bindings.
->>>>
->>>> Rob
->>>
->>> Hi Rob,
->>>
->>> It's my description that's problematic.'syscon' here refers to the hardware module
->>> inside our JH7110, which is different from the syscon interface in linux. The syscon
->>> I added now uses the syscon interface of linux to read and write the syscon register
->>> in our JH7110. So we decided to name it that way.
->>
->> You didn't really answer Rob's questions.
->>
->> Also, syscon is Linux term, so are you sure hardware module is called
->> like this? Hardware engineers took pure Linux name and used it?
+Hello,
+
+On 27/02/2023 18:29, Matthieu Baerts wrote:
+> Patch 1 fixes a possible deadlock in subflow_error_report() reported by
+> lockdep. The report was in fact a false positive but the modification
+> makes sense and silences lockdep to allow syzkaller to find real issues.
+> The regression has been introduced in v5.12.
 > 
-> Yes, from the documentation I could find[1] there are CRG blocks
-> (Clock and Reset Generator) and SYSCON blocks:
-> SYS CRG
-> STG CRG
-> AON CRG
-> SYS SYSCON
-> STG SYSCON
-> AON SYSCON
+> Patch 2 is a refactoring needed to be able to fix the two next issues.
+> It improves the situation and can be backported up to v6.0.
 > 
-> The CRG blocks contain registers to control clocks and resets that
-> follow a pattern used by the clock and reset drivers. The SYSCON
-> blocks just seem to contain registers to control whatever didn't fit
-> in any other blocks, but might be vaguely related to the peripherals
-> that run off clocks controlled by the corresponding CRG block.
+> Patches 3 and 4 fix UaF reported by KASAN. It fixes issues potentially
+> visible since v5.7 and v5.19 but only reproducible until recently
+> (v6.0). These two patches depend on patch 2/7.
+> 
+> Patch 5 fixes the order of the printed values: expected vs seen values.
+> The regression has been introduced recently: present in Linus' tree but
+> not in a tagged version yet.
+> 
+> Patch 6 adds missing ro_after_init flags. A previous patch added them
+> for other functions but these two have been missed. This previous patch
+> has been backported to stable versions (up to v5.12) so probably better
+> to do the same here.
+> 
+> Patch 7 fixes tcp_set_state() being called twice in a row since v5.10.
 
-The memory map [1] suggests these are indeed separate address spaces,
-e.g. AON CRG, AON SYSCON and AON GPIO, but now I would argue that this
-might be still one device - AON (or STG, SYS). Just like PCIE0 has four
-address spaces, it does not mean you have four separate PCIE0 devices.
-You have only one PCIE0, just like you have only one AON, one STG and
-one SYS (System).
+I'm sorry to ask for that but is it possible not to apply these patches?
 
-[1] https://doc-en.rvspace.org/JH7110/TRM/JH7110_TRM/system_memory_map.html
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+> Geliang Tang (1):
+>       mptcp: add ro_after_init for tcp{,v6}_prot_override
+> 
+> Matthieu Baerts (2):
+>       selftests: mptcp: userspace pm: fix printed values
+>       mptcp: avoid setting TCP_CLOSE state twice
+> 
+> Paolo Abeni (4):
+>       mptcp: fix possible deadlock in subflow_error_report
+>       mptcp: refactor passive socket initialization
+>       mptcp: use the workqueue to destroy unaccepted sockets
 
+After 3 weeks of validation, syzkaller found an issue with this patch:
 
-Best regards,
-Krzysztof
+  https://github.com/multipath-tcp/mptcp_net-next/issues/366
 
+We then need to NAK this series. We will send a v2 with a fix for that.
+
+>       mptcp: fix UaF in listener shutdown
+
+The other patches of the series are either not very important or are
+linked to the "faulty" one: they can all wait as well.
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
