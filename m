@@ -2,107 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C676A6122
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 070A06A6108
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjB1VTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S230042AbjB1VMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjB1VTe (ORCPT
+        with ESMTP id S229915AbjB1VLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:19:34 -0500
-X-Greylist: delayed 579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Feb 2023 13:19:32 PST
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EDE233EE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:19:32 -0800 (PST)
-Received: from [192.168.2.144] (bband-dyn207.178-40-209.t-com.sk [178.40.209.207])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id F3D6D1F4A4;
-        Tue, 28 Feb 2023 22:09:48 +0100 (CET)
-Date:   Tue, 28 Feb 2023 22:09:43 +0100
-From:   Martin Botka <martin.botka@somainline.org>
-Subject: Re: [PATCH v8 3/3] regulator: axp20x: Add support for AXP313a variant
-To:     Shengyu Qu <wiagn233@outlook.com>
-Cc:     wens@csie.org, martin.botka1@gmail.com,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Tue, 28 Feb 2023 16:11:53 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142F52CC40;
+        Tue, 28 Feb 2023 13:11:29 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id D4D3B5FD09;
+        Wed,  1 Mar 2023 00:11:25 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1677618685;
+        bh=pgQxgtsN8c/gxCxs+9mAc2jJsLaDMPf7RRR/AHAAC4c=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=UFEi2oVntTZ+iFJX3/2p7kX3/86556SroG1zvxiKoWsXM5qw/BOknqeFBELWjTYIy
+         aSvFjIyIUv1osAeylq6GmA2i811zh4F3icqw811OSk9ZDbyqiHy0rxb7nitgL0zZ4Q
+         F7tfMp8G2ECZ2v/YeSNvR+MKEl47i3no0tWjkxeZaKGgh5Axfp28iOF4ttSZ4V0mrn
+         9xJFcM1bZ1BD9QdSW/POD/yVRrFCuFBSbpzzKDFs+pWhrDhwI7SqXiupgZy2K4Yy67
+         zgP0dv90fXsXcVdkFcp0xWeye0YRFP/FU/WGCYM1bRiCiEcgpYMJNvZP9ysTYMrBJh
+         JOpqHB87nJ0pA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  1 Mar 2023 00:11:24 +0300 (MSK)
+From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
+To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <7S6TQR.JINNS1OA2FSY2@somainline.org>
-In-Reply-To: <TY3P286MB261122217B621C53B6AC1B3198A69@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-References: <20230120184500.1899814-1-martin.botka@somainline.org>
-        <20230120184500.1899814-4-martin.botka@somainline.org>
-        <CAGb2v649yQVcNn7uv1eKtnEDnb=D4X9yGYB1eOC3zeAe+encFg@mail.gmail.com>
-        <TY3P286MB261122217B621C53B6AC1B3198A69@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: geary/43.0
+        Lee Jones <lee@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Subject: [PATCH v2 0/2] leds: add aw20xx driver
+Date:   Wed, 1 Mar 2023 00:10:44 +0300
+Message-ID: <20230228211046.109693-1-mmkurbanov@sberdevices.ru>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/28 15:18:00 #20903376
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series adds support for AWINIC AW20036/AW20054/AW20072 LED
+driver programmed via an I2C interface.
 
-Hi Shengyu,
-On Sat, Feb 18 2023 at 06:08:06 PM +08:00:00, Shengyu Qu 
-<wiagn233@outlook.com> wrote:
-> Hi Martin,
-> 
->> On Sat, Jan 21, 2023 at 2:45 AM Martin Botka
->> <martin.botka@somainline.org> wrote:
->>> The AXP313a is your typical I2C controlled PMIC, although in a 
->>> lighter
->>> fashion compared to the other X-Powers PMICs: it has only three DCDC
->>> rails, three LDOs, and no battery charging support.
->>> 
->>> The AXP313a datasheet does not describe a register to change the 
->>> DCDC
->>> switching frequency, and talks of it being fixed at 3 MHz. The BSP
->>> driver hints at a register being able to change that, but we haven't
->>> verified that, so leave that one out. It can be added later, if 
->>> needed
->>> and/or required.
->> The datasheet released by MangoPi says this isn't configurable. The
->> thing that is configurable is spread-spectrum operation, and mode
->> switching between fixed PWM and hybrid PFM/PWM. So just drop the
->> DCDC frequency stuff and use the default code path.
-> 
-> You could get full datasheet of AXP313A here:
-> 
-> https://github.com/YuzukiHD/YuzukiChameleon/blob/master/Datasheet/AXP313A_Datasheet_V1.0_cn.pdf
+This driver supports following AW200XX features:
+  - Individual 64-level DIM currents
 
-I do have the datasheet but maybe this one is more up to date somehow. 
-Will have to check.
-> 
-> Btw I'm working on AXP15060 support mostly based on your series.
-Lovely to hear. So sorry for the very very late reply. New semester 
-began 3 weeks ago and been quite the ride.
-Would love to get the series more up to date in the upcoming weeks :) I 
-will see what time allows :)
-> 
-> 
-> Best regards,
-> 
-> Shengyu
-Best regards,
+Datasheet:
+  aw20036 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151532_5eb65894d205a.pdf
+  aw20054 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151602_5eb658b2b77cb.pdf
+  aw20072 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151754_5eb659227a145.pdf
 
-Martin
+Add YAML dt-binding schema for AW200XX.
 
+Changelog:
+ v1 -> v2:
+  - Remove the hardware pattern support (I will send a separate patch)
+  - Support the 'led-max-microamp' property
+
+Martin Kurbanov (2):
+  dt-bindings: leds: add binding for aw200xx
+  leds: add aw20xx driver
+
+ .../testing/sysfs-class-led-driver-aw200xx    |   4 +
+ .../bindings/leds/awinic,aw200xx.yaml         | 126 ++++
+ drivers/leds/Kconfig                          |  10 +
+ drivers/leds/Makefile                         |   1 +
+ drivers/leds/leds-aw200xx.c                   | 649 ++++++++++++++++++
+ 5 files changed, 790 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-led-driver-aw200xx
+ create mode 100644 Documentation/devicetree/bindings/leds/awinic,aw200xx.yaml
+ create mode 100644 drivers/leds/leds-aw200xx.c
+
+--
+2.38.1
 
