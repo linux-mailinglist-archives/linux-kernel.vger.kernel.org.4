@@ -2,61 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0496D6A50CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2946A50CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjB1BsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 20:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S229891AbjB1BsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 20:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjB1BsQ (ORCPT
+        with ESMTP id S229491AbjB1BsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 20:48:16 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111CEDBD5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:48:15 -0800 (PST)
-Received: from dggpemm100009.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PQgFB1Xt9zKqGN;
-        Tue, 28 Feb 2023 09:46:06 +0800 (CST)
-Received: from [10.174.179.24] (10.174.179.24) by
- dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 28 Feb 2023 09:48:03 +0800
-Subject: Re: [PATCH RFC] arm64/vmalloc: use module region only for
- module_alloc() if CONFIG_RANDOMIZE_BASE is set
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <20221227092634.445212-1-liushixin2@huawei.com>
- <b93ec55c-f6f0-274a-e7d6-edb419b4be8a@huawei.com>
- <20230129134147.f19ca0641f1133f3e3bc185b@linux-foundation.org>
- <20230131150644.GA2605@willie-the-truck>
- <20230131150750.GB2605@willie-the-truck>
- <CAMj1kXGaxehOcrQqFZNA+C3dTk_H8sBr_1wsN3_KN82nXVaG_g@mail.gmail.com>
- <20230207112940.GA12147@willie-the-truck>
- <8c287b1d-476c-7b00-27f6-76c3a1a5fd46@leemhuis.info>
- <CAMj1kXGWEaQXoKj=DzG9XpVGi4t5zfE-RSG0BodVL-b47nsj-A@mail.gmail.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Will Deacon <will@kernel.org>
-From:   Liu Shixin <liushixin2@huawei.com>
-Message-ID: <856fa1a1-cecd-a7b7-a6b0-3e3c8fedda47@huawei.com>
-Date:   Tue, 28 Feb 2023 09:48:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Mon, 27 Feb 2023 20:48:18 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BB6113F6;
+        Mon, 27 Feb 2023 17:48:18 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id u5so5445989plq.7;
+        Mon, 27 Feb 2023 17:48:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677548898;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fuxi2Ph3dEYFWBIK3fO91ydoj6EsxhxaDYSbv7nd3WE=;
+        b=VAAOPUL78BN21OwPsprfQRfAf30U3pzgxqqyEYoe8C1XqDjGb1LwY0nkNVIcbYxgg4
+         7nYUgKpG83puWKH7RnbbA8mO9sj9w27fiV/CF7pnudykRKY+T766q/3nI58dzXiiIODG
+         Lbee5ri15Na+KQI3iMLbDgnyclh8o9nR5p/PU+wqVyqc6Uyj8DRkhhfn9bIdMlwrgSvG
+         tl2paUoQcfKsRRV5IWtBQVX5/beEFxCQBMUTjfQYD1J4CFX37uX8peZxis8Vj1ZnKQnB
+         QAtoqvtJlwPNnm7KN9OzqI+8BOm4uuBU15z10ZhK1djSzkU094r0KB+Xvq+gsLe1XRLq
+         L5qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677548898;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fuxi2Ph3dEYFWBIK3fO91ydoj6EsxhxaDYSbv7nd3WE=;
+        b=uSjiH4vDmuIqUv3Dt00coH3yh1tcGd7VTgXSUfyDUlGV7ApKWzTgexJ9vTJ3GYpQOJ
+         wHdCgmTWhnbYzxoTzctMG9AtXmMhXjKd4ReAXxcdtbFt74gjQzh3AEFCqlU7RNC/5WN7
+         hJfKiy4zBap9/frCoLL47UN2b0zGXZ0ybSZMdYV8nnGoSawtUCz3pTFTPCfjPvSV2Nrz
+         0rXiwbbRZr8DAQoYvINvXaC/6WTHeXAQYQ8rb06re568JKzCzojJPA9DUugKe0o1pT5W
+         81fOVI9zfizT/e1CaDUuR7wtYsCSugVv29203zvIzAMh0E+hD/i05/7+Hag/sUkFVBTD
+         T3Fg==
+X-Gm-Message-State: AO0yUKXdPPeKkQLfveO6yLSwhBiwaaV1MWBuZ6C74Q5AyZm9IpR+rQSk
+        m4sboSTg0drm1A/0bgw2WgQ=
+X-Google-Smtp-Source: AK7set92pp9hYlZRbO//Og6UNuQDneFPXto5iP7xKBLSU2HL0C1TFOd8MW8dQJu5IKU8tyyNc4RifQ==
+X-Received: by 2002:a17:903:32c4:b0:19a:a2e7:64de with SMTP id i4-20020a17090332c400b0019aa2e764demr1256410plr.0.1677548897584;
+        Mon, 27 Feb 2023 17:48:17 -0800 (PST)
+Received: from [127.0.0.1] ([103.152.220.17])
+        by smtp.gmail.com with ESMTPSA id b21-20020a170902d31500b001994a0f3380sm5140002plc.265.2023.02.27.17.48.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 17:48:16 -0800 (PST)
+Message-ID: <12305071-c136-f39f-9450-bdaad08137b2@gmail.com>
+Date:   Tue, 28 Feb 2023 09:48:11 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAMj1kXGWEaQXoKj=DzG9XpVGi4t5zfE-RSG0BodVL-b47nsj-A@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] net: tls: fix possible race condition between
+ do_tls_getsockopt_conf() and do_tls_setsockopt_conf()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Sabrina Dubroca <sd@queasysnail.net>,
+        Florian Westphal <fw@strlen.de>, borisp@nvidia.com,
+        john.fastabend@gmail.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, davejwatson@fb.com, aviadye@mellanox.com,
+        ilyal@mellanox.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230224105811.27467-1-hbh25y@gmail.com>
+ <20230224120606.GI26596@breakpoint.cc> <20230224105508.4892901f@kernel.org>
+ <Y/kck0/+NB+Akpoy@hog> <20230224130625.6b5261b4@kernel.org>
+ <Y/kwyS2n4uLn8eD0@hog> <20230224141740.63d5e503@kernel.org>
+ <52faaa10-f3e4-bca9-4bff-6f1ea7d26593@gmail.com>
+ <20230227110750.6988fca5@kernel.org>
+Content-Language: en-US
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <20230227110750.6988fca5@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.24]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,90 +85,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/2/2023 03:07, Jakub Kicinski wrote:
+> On Mon, 27 Feb 2023 11:26:18 +0800 Hangyu Hua wrote:
+>> In order to reduce ambiguity, I think it may be a good idea only to
+>> lock do_tls_getsockopt_conf() like we did in do_tls_setsockopt()
+>>
+>> It will look like:
+>>
+>> static int do_tls_getsockopt(struct sock *sk, int optname,
+>> 			     char __user *optval, int __user *optlen)
+>> {
+>> 	int rc = 0;
+>>
+>> 	switch (optname) {
+>> 	case TLS_TX:
+>> 	case TLS_RX:
+>> +		lock_sock(sk);
+>> 		rc = do_tls_getsockopt_conf(sk, optval, optlen,
+>> 					    optname == TLS_TX);
+>> +		release_sock(sk);
+>> 		break;
+>> 	case TLS_TX_ZEROCOPY_RO:
+>> 		rc = do_tls_getsockopt_tx_zc(sk, optval, optlen);
+>> 		break;
+>> 	case TLS_RX_EXPECT_NO_PAD:
+>> 		rc = do_tls_getsockopt_no_pad(sk, optval, optlen);
+>> 		break;
+>> 	default:
+>> 		rc = -ENOPROTOOPT;
+>> 		break;
+>> 	}
+>> 	return rc;
+>> }
+>>
+>> Of cause, I will clean the lock in do_tls_getsockopt_conf(). What do you
+>> guys think?
+> 
+> I'd suggest to take the lock around the entire switch statement.
 
+I get it. I will send a v2 later.
 
-On 2023/2/28 0:14, Ard Biesheuvel wrote:
-> On Mon, 27 Feb 2023 at 16:08, Linux regression tracking (Thorsten
-> Leemhuis) <regressions@leemhuis.info> wrote:
->> [CCing the regression list, as it should be in the loop for regressions:
->> https://docs.kernel.org/admin-guide/reporting-regressions.html]
->>
->> On 07.02.23 12:29, Will Deacon wrote:
->>> On Tue, Jan 31, 2023 at 05:03:32PM +0100, Ard Biesheuvel wrote:
->>>> On Tue, 31 Jan 2023 at 16:07, Will Deacon <will@kernel.org> wrote:
->>>>> On Tue, Jan 31, 2023 at 03:06:44PM +0000, Will Deacon wrote:
->>>>>> On Sun, Jan 29, 2023 at 01:41:47PM -0800, Andrew Morton wrote:
->>>>>>> On Sun, 29 Jan 2023 10:44:31 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
->>>>>>>> On 2022/12/27 17:26, Liu Shixin wrote:
->>>>>>>>> After I add a 10GB pmem device, I got the following error message when
->>>>>>>>> insert module:
->>>>>>>>>
->>>>>>>>>  insmod: vmalloc error: size 16384, vm_struct allocation failed,
->>>>>>>>>  mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
->>>>>>>>>
->>>>>>>>> If CONFIG_RANDOMIZE_BASE is set, the module region can be located in the
->>>>>>>>> vmalloc region entirely. Although module_alloc() can fall back to a 2GB
->>>>>>>>> window if ARM64_MODULE_PLTS is set, the module region is still easily
->>>>>>>>> exhausted because the module region is located at bottom of vmalloc region
->>>>>>>>> and the vmalloc region is allocated from bottom to top.
->>>>>>>>>
->>>>>>>>> Skip module region if not calling from module_alloc().
->>>>>>> I'll assume this is for the arm tree.
->>>>>>>
->>>>>>> Acked-by: Andrew Morton <akpm@linux-foundation.org>
->>>>>> This looks like the same issue previously reported at:
->>>>>>
->>>>>> https://lore.kernel.org/all/e6a804de-a5f7-c551-ffba-e09d04e438fc@hisilicon.com/
->>>>>>
->>>>>> where Ard had a few suggestions but, afaict, they didn't help.
->>>>>>
->>>> Thanks for the cc.
->>>>
->>>> So this is a bit clunky, and I wonder whether we wouldn't be better
->>>> off just splitting the vmalloc region into two separate regions: one
->>>> for the kernel and modules, and one for everything else. That way, we
->>>> lose one bit of entropy in the randomized placement, but the default
->>>> 48-bit VA space is vast anway, and even on 39-bit VA configs (such as
->>>> Android), I seriously doubt that we come anywhere close to exhausting
->>>> the vmalloc space today.
->>> That sounds like a good idea to me.
->>>
->>> Liu Shixin -- do you think you could have a go at implementing Ard's
->>> suggestion instead?
->> Liu Shixin, did you ever look into realizing this idea?
->>
->> Or was some progress already made and I just missed it?
->>
-> This patch
->
-> https://lore.kernel.org/all/20230223204101.1500373-1-ardb@kernel.org/
->
-> should fix the issue.
->
->> I'm asking, as the idea discussed afaics is not only supposed to fix the
->> regression you tried to address, but also one that is now three months
->> old and stalled since Mid-December -- which is really unfortunate, as
->> that's not how regressions should be handled. :-/
-> Is it documented anywhere how regressions should be handled? The
-> mailing list is flooded with hard to reproduce reports from users as
-> well as automatic fuzzers and build bots, so I don't think it is
-> entirely unreasonable to move unresponsive reporters to the back of
-> the queue.
->
->> But well, it afaik was
->> caused by a patch from Ard, so it's obviously not your job to address
->> it. But it seems you were working on it.
->>
-> We are all working together here, so please refrain from telling
-> people what they should or should not be working on. (I am aware that
-> you probably did not mean it that way, but things tend to get lost in
-> translation very easily on the mailing list)
->
-> Liu, could you please check whether the linked patch addresses your issue?
-Thanks, I will try this patch.
->
-> Thanks,
-> Ard.
-> .
->
-
+Thanks,
+Hangyu
