@@ -2,54 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0540A6A5C4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 258126A5C4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjB1PsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
+        id S230156AbjB1Psy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:48:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjB1Pr6 (ORCPT
+        with ESMTP id S230124AbjB1Psp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:47:58 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D9D1BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:47:52 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id y187-20020a6bc8c4000000b0074d28aa136dso853441iof.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:47:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        Tue, 28 Feb 2023 10:48:45 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BDC4492
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:48:40 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id j2so10236011wrh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:48:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677599319;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gt8lq7568+EVyUrMnPGNdffNvJYxI0gAHeVl0IuRSnE=;
-        b=mP7mQTYjfg3X0fgI7xqs1vIpnJLgrYIsW8Y1F1JNkPPP6nQmI/TK4YKPXmQx8JY+dI
-         xwM75dZIKjUjsWVhM+4tUlmRrE18oO3FPrHyD/XLoNbzkoEAqFciZ0b2Wd9mVeRQttpW
-         mUp69heoAgMdCCzU4Zrplr5+obypcfZOdFjcvTysWjEgIy3vPGJUE+XBPKC6gxwqCRtB
-         E/aqtw3jbvSfEDr0Ia4T8CJJRx7vv5Ft9gMD/PfHa+Ct9gzrU8CWjFWyokOTCY0iQQUG
-         MF1CI+7APTCYJcTjHMX9rjWzbkmj3XyNohoUUwNZUw3aT5yh3C7IUHwuF+ziNxlIvIQn
-         Lmhg==
-X-Gm-Message-State: AO0yUKXAlgjkP2azycaQLcBRyweyvqav2Rpv9YD6ElE0/ApRUE2eiTSF
-        Qmu7CFTIwx1aV74O2FB0zhvhUGnF+dgCwWw6u/+G1TGvG0hf
-X-Google-Smtp-Source: AK7set8yHjWVUzn9dIsXcm1TN0i2BaWYdkR2sjRr+YMpQJdX0d03vK7vnxXMsWKZvv2orygFDfT7Cah467yFPuXbGWvvuYDjURWT
+        bh=kPPcSM7cJFme3QuQE7JkKVDyEl6XTV+0C/RSCHiSBvw=;
+        b=U234OuP7IlWP3zDebTbiHVpOQ0hrcBSk+f0jmcgQgz5KhWiQQ2u8dD8/Zhh7T/pbBt
+         idCMrSEy/7DCGN7xRNBDV/8XCzajg/rXwcjDhrUwzCoqywkcMviphHCd2TsLIyGUe0m+
+         a1BKTr5aDkywJ+VAOb9sbcMtwwp8kQKiclcdlViQt80BQRmGf7y08lSulVz3GtZsSQpo
+         HPpgAdAlhImBg40l8hAUKGlCEGebwf8SjI+aT5cSeGiZOgJEAAz6EsFNzR6WJfw30QfU
+         fMPH+YbO8O1NSQ+dAr4MWCDSQ/TITw/ydypV6rnCXXpp3zQ/uirBwaNRXz/xDmRCUlkS
+         cbAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677599319;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kPPcSM7cJFme3QuQE7JkKVDyEl6XTV+0C/RSCHiSBvw=;
+        b=G5CHae/hBcLUGHQC/WKvYPlHKNjiiDfJ9Y+ld7vlcp8AlyZQMdhOt/3sPk3fkVdcDX
+         vJtQOcfPVcZAU39HRQXZh7tREYBdwLEaZYZaWqWkfWmsCBUiuEzpW18/9KIzZJdH506Y
+         u1j17RC188wdts5nKgKrik8RUjzHhbYWpO38dhZ50MEA5EmWzzmjhATbeXTRGD9LEfe9
+         MhKV9Y7oQ6HzDbLUlRDn+8L+FvzF03/zD4/V+V8ksP8nlG9qYv0K1Lyq56F9divKJU4n
+         IPVBugsuTkUeow7vK4Z08pCsSo+pLMT/UAII9z8IPeGbLDxv1UTGGBANFpjTHw/gHzPi
+         temQ==
+X-Gm-Message-State: AO0yUKVJeOxKrKF9TfYj/fTo3LEn3B2hN7Jgfdn7q83hvyIaQuYRcUB+
+        nvdvC3AmzMPym5LsKqV/l1mLzA==
+X-Google-Smtp-Source: AK7set/jx8KDkgxFKTKVjW32HMOrBS98c4oO5060qCBoCKEBqQG87Tu98Ji9ZbroAFdOUduKXrS7iA==
+X-Received: by 2002:a05:6000:1e07:b0:2c7:d7c:7d7 with SMTP id bj7-20020a0560001e0700b002c70d7c07d7mr2642471wrb.22.1677599318823;
+        Tue, 28 Feb 2023 07:48:38 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id n7-20020a5d4c47000000b002c5534db60bsm10041694wrt.71.2023.02.28.07.48.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 07:48:38 -0800 (PST)
+Message-ID: <cb71bea2-088b-d4e9-b143-be9421b92c78@linaro.org>
+Date:   Tue, 28 Feb 2023 15:48:37 +0000
 MIME-Version: 1.0
-X-Received: by 2002:a92:cdac:0:b0:317:6eac:97e1 with SMTP id
- g12-20020a92cdac000000b003176eac97e1mr2309027ild.0.1677599271874; Tue, 28 Feb
- 2023 07:47:51 -0800 (PST)
-Date:   Tue, 28 Feb 2023 07:47:51 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000acf9bb05f5c4848e@google.com>
-Subject: [syzbot] [wireless?] WARNING in ieee80211_link_info_change_notify (2)
-From:   syzbot <syzbot+de87c09cc7b964ea2e23@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 12/18] media: venus: firmware: Correct IS_V6() checks
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vikash Garodia <vgarodia@codeaurora.org>
+References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
+ <20230228-topic-venus-v1-12-58c2c88384e9@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230228-topic-venus-v1-12-58c2c88384e9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,85 +88,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 28/02/2023 15:24, Konrad Dybcio wrote:
+> -	if (IS_V6(core))
+> +	/*
+> +	 * This may sound counter-intuitive, but when there's no TZ, we gotta
+> +	 * do things that it would otherwise do for us, such as initializing
+> +	 * the hardware at a very basic level.
+> +	 * */
 
-syzbot found the following issue on:
+Suggest "When there is no TZ we have got to initialize hardware in-lieu 
+of TZ" as an example.
 
-HEAD commit:    489fa31ea873 Merge branch 'work.misc' of git://git.kernel...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1592ceacc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbfa7a73c540248d
-dashboard link: https://syzkaller.appspot.com/bug?extid=de87c09cc7b964ea2e23
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16cf19a8c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13bdf254c80000
+Either way please drop that "gotta" - I ain't gonna ACK such a 
+butchering of the language.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8121ff3f8044/disk-489fa31e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ba8296ba1bf7/vmlinux-489fa31e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6459f50e23f3/bzImage-489fa31e.xz
+Then
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+de87c09cc7b964ea2e23@syzkaller.appspotmail.com
-
-netlink: 'syz-executor242': attribute type 27 has an invalid length.
-------------[ cut here ]------------
-wlan1: Failed check-sdata-in-driver check, flags: 0x0
-WARNING: CPU: 0 PID: 5072 at net/mac80211/main.c:287 ieee80211_link_info_change_notify+0x1b6/0x220 net/mac80211/main.c:287
-Modules linked in:
-CPU: 0 PID: 5072 Comm: syz-executor242 Not tainted 6.2.0-syzkaller-10827-g489fa31ea873 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-RIP: 0010:ieee80211_link_info_change_notify+0x1b6/0x220 net/mac80211/main.c:287
-Code: e0 e4 b7 f7 49 8b 86 f8 08 00 00 49 81 c6 18 09 00 00 48 85 c0 4c 0f 45 f0 48 c7 c7 e0 57 0d 8c 4c 89 f6 89 ea e8 9a 2b 28 f7 <0f> 0b e9 3a ff ff ff 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c c9 fe ff
-RSP: 0018:ffffc90003c5f348 EFLAGS: 00010246
-RAX: dbfb579b07df7200 RBX: 0000000002000000 RCX: ffff88807a840000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffff81536fb2 R09: ffffed101730515b
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff8880763c0de0
-R13: dffffc0000000000 R14: ffff88807c3cc000 R15: ffff88807c3ce230
-FS:  0000555555a97300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020001384 CR3: 00000000795c5000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ieee80211_set_mcast_rate+0x46/0x50 net/mac80211/cfg.c:2872
- rdev_set_mcast_rate net/wireless/rdev-ops.h:1220 [inline]
- nl80211_set_mcast_rate+0xb77/0xfb0 net/wireless/nl80211.c:11399
- genl_family_rcv_msg_doit net/netlink/genetlink.c:968 [inline]
- genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
- genl_rcv_msg+0xc33/0xf90 net/netlink/genetlink.c:1065
- netlink_rcv_skb+0x1df/0x430 net/netlink/af_netlink.c:2574
- genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x7c3/0x990 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0xa2a/0xd60 net/netlink/af_netlink.c:1942
- sock_sendmsg_nosec net/socket.c:722 [inline]
- sock_sendmsg net/socket.c:745 [inline]
- ____sys_sendmsg+0x58f/0x890 net/socket.c:2504
- ___sys_sendmsg net/socket.c:2558 [inline]
- __sys_sendmsg+0x2ad/0x390 net/socket.c:2587
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5b7bb5d2a9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc05f7c888 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f5b7bb5d2a9
-RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000c00000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000031
-R13: 00007ffc05f7c8f0 R14: 00007ffc05f7c8e0 R15: 00007f5b7bbd7410
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
