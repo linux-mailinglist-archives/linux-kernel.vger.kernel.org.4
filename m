@@ -2,181 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5DB6A55EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7556A55F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjB1JgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S230119AbjB1JhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjB1JgK (ORCPT
+        with ESMTP id S229520AbjB1JhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:36:10 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9699029E15;
-        Tue, 28 Feb 2023 01:36:08 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 48BE71FDC2;
-        Tue, 28 Feb 2023 09:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1677576967; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=taaLiLGPxaqufQ2R430/cnXrJjAKnDyXV614KjX4P38=;
-        b=sRYmU6Y+9Zjnuojqw1yyR1C1Xp+9gqic7ETrAJ3f22NJo30oigfnbYDwhbX0i9t2VjZoiO
-        sW2uWwZ7QfeFSPg9axfWslKerdOqD5BZAFjkeRhprGry1Hbpts70WHkSdwvXa6I0suORvg
-        NemgZnzptyk33aeqDm6EmH8/Q88KE/0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1677576967;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=taaLiLGPxaqufQ2R430/cnXrJjAKnDyXV614KjX4P38=;
-        b=8pKw1F7iyYH/ijfXTkoUdIAp9bjuwkUcZT407zpqJ4gKz/BMDqpCi53C+jNZm/ueHSUeNr
-        oiwzzXLaHnb/VTDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 21EE91333C;
-        Tue, 28 Feb 2023 09:36:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mMCXBwfL/WNzOAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 28 Feb 2023 09:36:07 +0000
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH] tomoyo: replace tomoyo_round2() with kmalloc_size_roundup()
-Date:   Tue, 28 Feb 2023 10:35:56 +0100
-Message-Id: <20230228093556.19027-1-vbabka@suse.cz>
-X-Mailer: git-send-email 2.39.2
+        Tue, 28 Feb 2023 04:37:01 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F165C29E30;
+        Tue, 28 Feb 2023 01:36:59 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S6wqPi010092;
+        Tue, 28 Feb 2023 09:36:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=f9iJEgKBIWtE12yxfvC3PM2+H0C+9MQfImj1Ex4J4kU=;
+ b=S9Z28mtI7Cd8iBn8ilXGOG/ss7q5Q+JFX8WcSy8aLGqktU1yaumpxB6JJnNrmR3u3DKS
+ jd/O4dp3Dm5aNssGEOffvcCPb8WuJ4i1HOAU3FnfmSSD5CrDcG3GZJyDPidwCS5kyk1e
+ TcMQPvF5xmR3rtbJKgFhCcQN1je3FHDqJNxNZ6RejcTuHt8sj7nProat3kqRylPWgGKb
+ Yw4ABnrwlC3DTwC4VpH9WVl11nYVbadstQ9N89b4eBl/1/bhqyyEkq81tsZ4tUsrN7Sc
+ wXnq2YtXVok0P5V2+nBavsjisZY7qW7Z2zY7eflpgzBaOIN1Hf/gPlgwC20GwD3tOGi7 sg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1csvrde5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 09:36:57 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31S9auQq003345
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 09:36:56 GMT
+Received: from [10.110.31.193] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Feb
+ 2023 01:36:55 -0800
+Message-ID: <d01e243e-1ba2-b9cf-2b74-f77f22b5c624@quicinc.com>
+Date:   Tue, 28 Feb 2023 01:36:55 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: gadget: Add 100uS delay after end transfer
+ command without IOC
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20230227232035.13759-1-quic_wcheng@quicinc.com>
+ <20230228021925.j5bquwnwuvog3hx6@synopsys.com>
+ <20230228031027.ghrfnda5lkt7qfmt@synopsys.com>
+ <24af4a1b-0cc5-e65b-ac66-f767f891520e@quicinc.com>
+ <20230228035625.rrda7hpitfrfx34z@synopsys.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20230228035625.rrda7hpitfrfx34z@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0dY_00VpvJP09Qw3MKlOEtSV061EgpZy
+X-Proofpoint-ORIG-GUID: 0dY_00VpvJP09Qw3MKlOEtSV061EgpZy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-28_06,2023-02-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ suspectscore=0 phishscore=0 mlxscore=0 priorityscore=1501 malwarescore=0
+ adultscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302280076
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems tomoyo has had its own implementation of what
-kmalloc_size_roundup() does today. Remove the function tomoyo_round2()
-and replace it with kmalloc_size_roundup(). It provides more accurate
-results and doesn't contain a while loop.
+Hi Thinh,
 
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
- security/tomoyo/audit.c  |  6 +++---
- security/tomoyo/common.c |  2 +-
- security/tomoyo/common.h | 44 ----------------------------------------
- 3 files changed, 4 insertions(+), 48 deletions(-)
+On 2/27/2023 8:02 PM, Thinh Nguyen wrote:
+> On Mon, Feb 27, 2023, Wesley Cheng wrote:
+>> Hi Thinh,
+>>
+>> On 2/27/2023 7:10 PM, Thinh Nguyen wrote:
+>>> On Tue, Feb 28, 2023, Thinh Nguyen wrote:
+>>>> On Mon, Feb 27, 2023, Wesley Cheng wrote:
+>>>>> Previously, there was a 100uS delay inserted after issuing an end transfer
+>>>>> command for specific controller revisions.  This was due to the fact that
+>>>>> there was a GUCTL2 bit field which enabled synchronous completion of the
+>>>>> end transfer command once the CMDACT bit was cleared in the DEPCMD
+>>>>> register.  Since this bit does not exist for all controller revisions, add
+>>>>> the delay back in.
+>>>>>
+>>>>> An issue was seen where the USB request buffer was unmapped while the DWC3
+>>>>> controller was still accessing the TRB.  However, it was confirmed that the
+>>>>> end transfer command was successfully submitted. (no end transfer timeout)
+>>>>
+>>>> Currently we only check for command active, not completion on teardown.
+>>>>
+>>>>> In situations, such as dwc3_gadget_soft_disconnect() and
+>>>>> __dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
+>>>>> will issue the end transfer command, and follow up with
+>>>>> dwc3_gadget_giveback().  At least for the USB ep disable path, it is
+>>>>> required for any pending and started requests to be completed and returned
+>>>>> to the function driver in the same context of the disable call.  Without
+>>>>> the GUCTL2 bit, it is not ensured that the end transfer is completed before
+>>>>> the buffers are unmapped.
+>>>>>
+>>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>>
+>>>> This is expected. We're supposed to make sure the End Transfer command
+>>>> complete before accessing the request. Usually on device/endpoint
+>>>> teardown, the gadget drivers don't access the stale/incomplete requests
+>>>> with -ESHUTDOWN status. There will be problems if we do, and we haven't
+>>>> fixed that.
+>>>>
+>>>> Adding 100uS may not apply for every device, and we don't need to do
+>>>> that for every End Transfer command. Can you try this untested diff
+>>>> instead:
+>>>>
+>>
+>> Thanks for the code suggestion.
+>>
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>> index 30408bafe64e..5ae5ff4c8858 100644
+>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>> @@ -1962,6 +1962,34 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
+>>>>    	return DWC3_DSTS_SOFFN(reg);
+>>>>    }
+>>>> +static int dwc3_poll_ep_completion(struct dwc3_ep *dep)
+>>>> +{
+>>>> +	if (!list_empty(&dep->started_list)) {
+>>>> +		struct dwc3_request *req;
+>>>> +		int timeout = 500;
+>>>> +
+>>>> +		req = next_request(&dep->started_list);
+>>>> +		while(--timeout) {
+>>>> +			/*
+>>>> +			 * Note: don't check the last enqueued TRB in case
+>>>> +			 * of short transfer. Check first TRB of a started
+>>>> +			 * request instead.
+>>>> +			 */
+>>>> +			if (!(req->trb->ctrl & DWC3_TRB_CTRL_HWO))
+>>>> +				break;
+>>>> +
+>>>> +			udelay(2);
+>>>> +		}
+>>>> +		if (!timeout) {
+>>>> +			dev_warn(dep->dwc->dev,
+>>>> +				 "%s is still in-progress\n", dep->name);
+>>>> +			return -ETIMEDOUT;
+>>>> +		}
+>>>> +	}
+>>>> +
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>>    /**
+>>>>     * __dwc3_stop_active_transfer - stop the current active transfer
+>>>>     * @dep: isoc endpoint
+>>>> @@ -2003,10 +2031,12 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
+>>>>    	WARN_ON_ONCE(ret);
+>>>>    	dep->resource_index = 0;
+>>>> -	if (!interrupt)
+>>>> +	if (!interrupt) {
+>>>> +		ret = dwc3_poll_ep_completion(dep);
+>>>
+>>> Actually, the TRB status may not get updated, so this may not work,
+>>> instead of polling, may need to add the delay here instead.
+>>>
+>>
+>> Yeah, I just gave it a try, and I get the ETIMEDOUT error all the time.
+>> Don't think we can utilize the HWO bit here.
+>>
+> 
+> I may be over complicating things here. With ForceRM, the controller
+> only updates the last TRB it processed. We don't care about performance
+> much during teardown. That would mean more codes for something that's
+> not need.
+> 
 
-diff --git a/security/tomoyo/audit.c b/security/tomoyo/audit.c
-index 7cf8fdbb29bf..610c1536cf70 100644
---- a/security/tomoyo/audit.c
-+++ b/security/tomoyo/audit.c
-@@ -271,7 +271,7 @@ char *tomoyo_init_log(struct tomoyo_request_info *r, int len, const char *fmt,
- 		/* +18 is for " symlink.target=\"%s\"" */
- 		len += 18 + strlen(symlink);
- 	}
--	len = tomoyo_round2(len);
-+	len = kmalloc_size_roundup(len);
- 	buf = kzalloc(len, GFP_NOFS);
- 	if (!buf)
- 		goto out;
-@@ -382,12 +382,12 @@ void tomoyo_write_log2(struct tomoyo_request_info *r, int len, const char *fmt,
- 		goto out;
- 	}
- 	entry->log = buf;
--	len = tomoyo_round2(strlen(buf) + 1);
-+	len = kmalloc_size_roundup(strlen(buf) + 1);
- 	/*
- 	 * The entry->size is used for memory quota checks.
- 	 * Don't go beyond strlen(entry->log).
- 	 */
--	entry->size = len + tomoyo_round2(sizeof(*entry));
-+	entry->size = len + kmalloc_size_roundup(sizeof(*entry));
- 	spin_lock(&tomoyo_log_lock);
- 	if (tomoyo_memory_quota[TOMOYO_MEMORY_AUDIT] &&
- 	    tomoyo_memory_used[TOMOYO_MEMORY_AUDIT] + entry->size >=
-diff --git a/security/tomoyo/common.c b/security/tomoyo/common.c
-index f4cd9b58b205..969d4aa6fd55 100644
---- a/security/tomoyo/common.c
-+++ b/security/tomoyo/common.c
-@@ -2094,7 +2094,7 @@ int tomoyo_supervisor(struct tomoyo_request_info *r, const char *fmt, ...)
- 		tomoyo_add_entry(r->domain, entry.query);
- 		goto out;
- 	}
--	len = tomoyo_round2(entry.query_len);
-+	len = kmalloc_size_roundup(entry.query_len);
- 	entry.domain = r->domain;
- 	spin_lock(&tomoyo_query_list_lock);
- 	if (tomoyo_memory_quota[TOMOYO_MEMORY_QUERY] &&
-diff --git a/security/tomoyo/common.h b/security/tomoyo/common.h
-index ca285f362705..a539b2cbb5c4 100644
---- a/security/tomoyo/common.h
-+++ b/security/tomoyo/common.h
-@@ -1276,50 +1276,6 @@ static inline struct tomoyo_policy_namespace *tomoyo_current_namespace(void)
- 	return tomoyo_domain()->ns;
- }
- 
--#if defined(CONFIG_SLOB)
--
--/**
-- * tomoyo_round2 - Round up to power of 2 for calculating memory usage.
-- *
-- * @size: Size to be rounded up.
-- *
-- * Returns @size.
-- *
-- * Since SLOB does not round up, this function simply returns @size.
-- */
--static inline int tomoyo_round2(size_t size)
--{
--	return size;
--}
--
--#else
--
--/**
-- * tomoyo_round2 - Round up to power of 2 for calculating memory usage.
-- *
-- * @size: Size to be rounded up.
-- *
-- * Returns rounded size.
-- *
-- * Strictly speaking, SLAB may be able to allocate (e.g.) 96 bytes instead of
-- * (e.g.) 128 bytes.
-- */
--static inline int tomoyo_round2(size_t size)
--{
--#if PAGE_SIZE == 4096
--	size_t bsize = 32;
--#else
--	size_t bsize = 64;
--#endif
--	if (!size)
--		return 0;
--	while (size > bsize)
--		bsize <<= 1;
--	return bsize;
--}
--
--#endif
--
- /**
-  * list_for_each_cookie - iterate over a list with cookie.
-  * @pos:        the &struct list_head to use as a loop cursor.
--- 
-2.39.2
+Yes :) that is what I encountered as well.  I tried a few other things, 
+but it opened a whole new set of topics that needed to be discussed 
+further.  Hence why I proposed the simple delay, since this happens only 
+in the teardown path as you mentioned.
 
+
+> Can you add a delay here instead? Make sure it's at least 1ms and
+> applicable for dwc_usb32 also.
+> 
+
+Sure, I will update the delay to 1ms and also add USB32 check.
+
+Thanks
+Wesley Cheng
