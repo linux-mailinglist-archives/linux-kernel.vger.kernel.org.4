@@ -2,193 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5372F6A573E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A906A5773
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjB1Kzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S231331AbjB1LEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:04:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbjB1KzA (ORCPT
+        with ESMTP id S231278AbjB1LEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:55:00 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7807F2F7AE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:54:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677581645; x=1709117645;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NJciKRJMnzK7SbQj0J79bMsp/NMqmU8wZsDVX9vwRVc=;
-  b=mUX0GTAqRbRwunwK5edp3Q1m1V0w0cG/inebEe02NjgZrJ9Zu8sdnhQi
-   872lD3zxcdqs8EkE1gj/8S3GJ4fhRVr8t4QaZKxxCgaBOBq4WYMf1+nCK
-   /S16yfJfUOTLFXmPYJvdptjgvs6VjLNBV16drdex8H6SXxxrzQsTMvgAI
-   RZj6t6wNBuTEDe7sv/yLwOhsj7aOS8uqgHg7nqS0POikTPbQs5hiFVqcE
-   qFFyp5sN7jBhmwjC3Mezq1aV4dPxa0UhNwahC2uVve+Lg8nIAWtILD9I9
-   6tGwArQjoOjgBe5D1YgKE52JL79NeZNQh/OHZu3fiAyS+tdfvu9CLCbFM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="361669309"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="361669309"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 02:54:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="704374540"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="704374540"
-Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
-  by orsmga008.jf.intel.com with ESMTP; 28 Feb 2023 02:54:03 -0800
-From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Subject: [PATCH v2] firmware_loader: Add debug message with checksum for FW file
-Date:   Tue, 28 Feb 2023 19:55:07 +0100
-Message-Id: <20230228185507.1729059-1-amadeuszx.slawinski@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 28 Feb 2023 06:04:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1A627497;
+        Tue, 28 Feb 2023 03:04:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FCD2B80D58;
+        Tue, 28 Feb 2023 11:04:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8F2C433D2;
+        Tue, 28 Feb 2023 11:04:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677582280;
+        bh=QpDfQ/zJp6kV7hVEF9bezQ5WIgwiAYm6JLVTuiilDXw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PxIOIXNqhzXRLo2LGPqW2PgTig+cHJdmF6wthVXirQB1Eqc3HBvl+EPi3ZEWuHF4c
+         n+/2/fOjEJCyXki6PSX4oeix71z8Y+eprCUXKH1YWqVmEwOeOpZtquIL038SEKnNvb
+         Kt/CfrKVY9AoyIr1IkHjJZf4vvmVTUytMrMBCTSGwiDSRjl692CuiZFlK7Zw30TmXi
+         vGkmvW+VOHeE0om/CPMJQrGNugdD1pU75Yi1ikm+ZWkjnjKH2J/cAxJlnEAqHPU0kZ
+         UxbJwI49lXOUBMv8vxmQhuGVWnh0cXN92HinaChq0/HnYyp7WFFyBzzPsmNC7Wse0y
+         YynmkKaKnSXiw==
+Date:   Tue, 28 Feb 2023 12:04:36 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as
+ completed
+Message-ID: <Y/3fxLXbfvnLFEZq@lothringen>
+References: <Y/z0fHHYdxEXcWMT@pc636>
+ <7EBE4F51-F2BD-4B42-AFC1-CA234E78CC7B@joelfernandes.org>
+ <Y/z9Its1RKetIr8V@pc636>
+ <CAEXW_YSjT_orp8TbomBFU+ETS7YJ7TrbHTdrsBRTzCKG5_SBdw@mail.gmail.com>
+ <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y/0/dnmIk508sidK@lothringen>
+ <Y/1ZMXsNZtwYPJNW@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/1ZMXsNZtwYPJNW@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable dynamic-debug logging of firmware filenames and SHA256 checksums
-to clearly identify the firmware files that are loaded by the system.
+On Tue, Feb 28, 2023 at 01:30:25AM +0000, Joel Fernandes wrote:
+> On Tue, Feb 28, 2023 at 12:40:38AM +0100, Frederic Weisbecker wrote:
+> > On Mon, Feb 27, 2023 at 03:05:02PM -0800, Paul E. McKenney wrote:
+> > > On Mon, Feb 27, 2023 at 02:10:30PM -0500, Joel Fernandes wrote:
+> > > 
+> > > The combination of sysfs manipulated by userspace and a kernel failsafe
+> > > makes sense to me.  Especially if by default triggering the failsafe
+> > > splats.  That way, bugs where userspace fails to update the sysfs file
+> > > get caught.
+> > > 
+> > > The non-default silent-failsafe mode is also useful to allow some power
+> > > savings in advance of userspace getting the sysfs updating in place.
+> > > And of course the default splatting setup can be used in internal testing
+> > > with the release software being more tolerant of userspace foibles.
+> > 
+> > I'm wondering, this is all about CONFIG_RCU_LAZY, right? Or does also expedited
+> > GP turned off a bit early or late on boot matter for anybody in practice?
+> 
+> Yes, if you provide 'rcu_normal_after_boot', then after the boot ends, it
+> switches expedited GPs to normal ones.
+> 
+> It is the same issue for expedited, the kernel's version of what is 'boot' is
+> much shorter than what is actually boot.
+> 
+> This is also the case with suspend/resume's rcu_pm_notify(). See the comment:
+>   /*
+>    * On non-huge systems, use expedited RCU grace periods to make suspend
+>    * and hibernation run faster.
+>    */
+> 
+> There also we turn on/off both lazy and expedited. I don't see why we
+> shouldn't do it for boot.
 
-Example output:
-[   34.944619] firmware_class:_request_firmware: i915 0000:00:02.0: Loaded FW: i915/kbl_dmc_ver1_04.bin, sha256: 2cde41c3e5ad181423bcc3e98ff9c49f743c88f18646af4d0b3c3a9664b831a1
-[   48.155884] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/cnl/dsp_basefw.bin, sha256: 43f6ac1b066e9bd0423d914960fbbdccb391af27d2b1da1085eee3ea8df0f357
-[   49.579540] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/rt274-tplg.bin, sha256: 4b3580da96dc3d2c443ba20c6728d8b665fceb3ed57223c3a57582bbad8e2413
-[   49.798196] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/hda-8086280c-tplg.bin, sha256: 5653172579b2be1b51fd69f5cf46e2bac8d63f2a1327924311c13b2f1fe6e601
-[   49.859627] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/dmic-tplg.bin, sha256: 00fb7fbdb74683333400d7e46925dae60db448b88638efcca0b30215db9df63f
+Of course but I mean currently rcu_end_inkernel_boot() is called explicitly
+before the kernel calls init. From that point on, what is the source of the
+issue? Delaying lazy further would be enough or do we really need to delay
+forcing expedited as well? Or is it the reverse: delaying expedited further
+would matter and lazy doesn't play much role from there.
 
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
----
+It matters to know because if delaying expedited further is enough, then indeed
+we must delay the call to rcu_end_inkernel_boot() somehow. But if delaying
+expedited further doesn't matter and delaying lazy matter then it's possible
+that the issue is a callback that should be marked as call_rcu_hurry() and then
+the source of the problem is much broader.
 
-Changes in v2:
- * allocate buffers (Greg)
- * introduce CONFIG_ option to allow for CONFIG_CRYPTO and CONFIG_CRYPTO_SHA256
-dependencies without introducing circular dependency (Greg)
- * add new line between includes and function name (Cezary)
+I think the confusion comes from the fact that your changelog doesn't state precisely
+what the problem exactly is. Also do we need to wait for the kernel boot completion?
+And if so what is missing from kernel boot after the current explicit call to
+rcu_end_inkernel_boot()?
 
----
- drivers/base/firmware_loader/Kconfig | 10 ++++++
- drivers/base/firmware_loader/main.c  | 48 +++++++++++++++++++++++++++-
- 2 files changed, 57 insertions(+), 1 deletion(-)
+Or do we also need to wait for userspace to complete the boot? Different
+problems, different solutions.
 
-diff --git a/drivers/base/firmware_loader/Kconfig b/drivers/base/firmware_loader/Kconfig
-index 5166b323a0f8..70524113c9fb 100644
---- a/drivers/base/firmware_loader/Kconfig
-+++ b/drivers/base/firmware_loader/Kconfig
-@@ -3,6 +3,7 @@ menu "Firmware loader"
- 
- config FW_LOADER
- 	tristate "Firmware loading facility" if EXPERT
-+	select FW_LOADER_DEBUG if DYNAMIC_DEBUG
- 	default y
- 	help
- 	  This enables the firmware loading facility in the kernel. The kernel
-@@ -24,6 +25,15 @@ config FW_LOADER
- 	  You also want to be sure to enable this built-in if you are going to
- 	  enable built-in firmware (CONFIG_EXTRA_FIRMWARE).
- 
-+config FW_LOADER_DEBUG
-+	bool "Additional debug logs"
-+	depends on CRYPTO
-+	depends on CRYPTO_SHA256
-+	default FW_LOADER
-+	help
-+	  Select this if additional information about loaded firmware file in
-+	  form of sha256sum should be dumped.
-+
- if FW_LOADER
- 
- config FW_LOADER_PAGED_BUF
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index 017c4cdb219e..b2c292ca95e8 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -791,6 +791,50 @@ static void fw_abort_batch_reqs(struct firmware *fw)
- 	mutex_unlock(&fw_lock);
- }
- 
-+#if defined(CONFIG_FW_LOADER_DEBUG)
-+#include <crypto/hash.h>
-+#include <crypto/sha2.h>
-+
-+static void fw_log_firmware_info(const struct firmware *fw, const char *name, struct device *device)
-+{
-+	struct shash_desc *shash;
-+	struct crypto_shash *alg;
-+	u8 *sha256buf;
-+	char *outbuf;
-+
-+	alg = crypto_alloc_shash("sha256", 0, 0);
-+	if (!alg)
-+		return;
-+
-+	sha256buf = kmalloc(SHA256_DIGEST_SIZE, GFP_KERNEL);
-+	outbuf = kmalloc(SHA256_BLOCK_SIZE + 1, GFP_KERNEL);
-+	shash = kmalloc(sizeof(*shash) + crypto_shash_descsize(alg), GFP_KERNEL);
-+	if (!sha256buf || !outbuf || !shash)
-+		goto out_free;
-+
-+	shash->tfm = alg;
-+
-+	if (crypto_shash_digest(shash, fw->data, fw->size, sha256buf) < 0)
-+		goto out_shash;
-+
-+	for (int i = 0; i < SHA256_DIGEST_SIZE; i++)
-+		sprintf(&outbuf[i * 2], "%02x", sha256buf[i]);
-+	outbuf[SHA256_BLOCK_SIZE] = 0;
-+	dev_dbg(device, "Loaded FW: %s, sha256: %s\n", name, outbuf);
-+
-+out_shash:
-+	crypto_free_shash(alg);
-+out_free:
-+	kfree(shash);
-+	kfree(outbuf);
-+	kfree(sha256buf);
-+}
-+#else
-+static void fw_log_firmware_info(const struct firmware *fw, const char *name,
-+				 struct device *device)
-+{}
-+#endif
-+
- /* called from request_firmware() and request_firmware_work_func() */
- static int
- _request_firmware(const struct firmware **firmware_p, const char *name,
-@@ -861,11 +905,13 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 	revert_creds(old_cred);
- 	put_cred(kern_cred);
- 
-- out:
-+out:
- 	if (ret < 0) {
- 		fw_abort_batch_reqs(fw);
- 		release_firmware(fw);
- 		fw = NULL;
-+	} else {
-+		fw_log_firmware_info(fw, name, device);
- 	}
- 
- 	*firmware_p = fw;
--- 
-2.34.1
+But in any case a countdown is not a way to go. Consider that rcu_lazy may
+be used by a larger audience than just chromium in the long run. You can not
+ask every admin to provide his own estimation per type of machine. You can't
+either rely on a long default value because that may have bad impact on
+workload assumptions launched right after boot.
 
+> 
+> > So shouldn't we disable lazy callbacks by default when CONFIG_RCU_LAZY=y and then
+> > turn it on with "sysctl kernel.rcu.lazy=1" only whenever userspace feels ready
+> > about it? We can still keep the current call to rcu_end_inkernel_boot().
+> 
+> Hmm IMHO that would add more knobs for not much reason honestly. We already
+> have CONFIG_RCU_LAZY default disabled, I really don't want to add more
+> dependency (like user enables the config and does not see laziness).
+
+I don't know. Like I said, different problems, different solutions. Let's
+identify what the issue is precisely. For example can we expect that the issues
+on boot can be a problem also on some temporary workloads?
+
+Besides I'm currently testing a very hacky flavour of rcu_lazy and so far it
+shows many idle calls that would have been delayed if callbacks weren't queued
+as lazy. I have yet to do actual energy and performance measurements but if it
+happens to show improvements, I suspect distros will want a supported yet
+default disabled Kconfig that can be turned on on boot or later. Of course we
+are not there yet but things to keep in mind...
+
+Thanks.
