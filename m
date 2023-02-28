@@ -2,145 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6476A5453
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351E96A5459
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjB1IXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 03:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S230289AbjB1IYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 03:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjB1IXl (ORCPT
+        with ESMTP id S230197AbjB1IY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 03:23:41 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5D4C679;
-        Tue, 28 Feb 2023 00:23:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677572620; x=1709108620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1DJvCDeMigg+spVqqPvrDVHVTHo7+Gu7nzVH6GcvuPQ=;
-  b=V3wNFiAaIdGTp+J6StsSd+Yv+oJT0cZ/CJZMIf4DDVBKop2czNEUQVBz
-   S3w+T39y8rCs+Mqopqs1GLcu1+0OkDO1Rae03thlTeunBB1w/XRvdrWzi
-   3zAsvUxQk1pnfoy2tHJhWT2P9LfZH73D40RJDxX2uje5NQRaznfLjBpor
-   8mT37AZAVBoiganSABZPpvX2woEWnjypl0Z3LNhf+qT8kM5vGLpuFyExZ
-   pYTWfM0hr5eMUfXH9IHRaJ9s16pR8L284kmTHkKZaiI1TaduNZQL0TT6c
-   LJok2dobQJqnAKjmWWszj8R/fsdUeY/x1ox275W0D+crzWD07A2xl6twM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313754619"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="313754619"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 00:23:39 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="742892251"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="742892251"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 00:23:37 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 91CE41207EA;
-        Tue, 28 Feb 2023 10:23:34 +0200 (EET)
-Date:   Tue, 28 Feb 2023 10:23:34 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Ye, Xiang" <xiang.ye@intel.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-        "Cao, Bingbu" <bingbu.cao@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v2 3/3] media: pci: intel: ivsc: Add acquire/release API
- for ivsc
-Message-ID: <Y/26BpJ15rpSAypW@kekkonen.localdomain>
-References: <20230213022347.2480307-1-wentong.wu@intel.com>
- <20230213022347.2480307-4-wentong.wu@intel.com>
- <Y+uxbQi7seGf+adP@kekkonen.localdomain>
- <DM6PR11MB43169FAE93274F64AA7E06F28DAC9@DM6PR11MB4316.namprd11.prod.outlook.com>
+        Tue, 28 Feb 2023 03:24:29 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D14CA0D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:24:27 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so8892110wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:24:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677572666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qCa9eFA4MAuvdUpjEutbEhVDEXa13F9jRr5aGoUB3t8=;
+        b=R97enwMN3XC+NbplCZTfX0/1FWjL0/ibd4Ss7LWrablB8qE+oj645pJM4lUVcG2EEO
+         vT4qiDpVqbxagWtoO1z4PLBqy4XmiPInZ3XxdKejzfVzudVwj4+Hg09nkH1aPUwX0Kdu
+         2ltBKOx6NpeHs8/c3p/XXEDTB/fCeTS/L//E0hZwGieMPAKebRtYtD+RKcM5udhu/3Y0
+         Uryt7404F5L8593ZAXq4ttqTT7UQxkwlm5S4PepoiclPT6AdtZqf+SSJXIT1LKcYiFIS
+         Sl49KwNlUkrQjzXfad09XVJMs2nWT2saj8lRZV5LrmtCdhYPKSeNONnLhSCJ7Xiyhnvl
+         ZEqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677572666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qCa9eFA4MAuvdUpjEutbEhVDEXa13F9jRr5aGoUB3t8=;
+        b=CE7kfVIpm/8pCtI3FOYDISaZOFa9qzckEsbdZNxsb/extNkzBllkq/uhrXIQWgTv6l
+         YlRTvQKrDSvJYsjmQQDXu7x8ELgdCYWq6Kxz+F9ZuJEK9Qx1bZiedJYlgHbYCA1M+iqd
+         1519AycuOsCHT5Qf1KLOTD3ZsbGnQVzrQMHD7IccLu+LBtYvnPW3nfDEd3zWSYxFjKSW
+         p0N2TTen4nnocvBGSc6+6J7uupPAYovcJBMuTYOs+tlVlknKlCkydvXQ/L//fFTZRO9E
+         8pDonWI4OiW1rZ2W+RICMGbIqLu1juqkJWP/i3Tqwje7xChfitz2buaUZ13oJ4VW1wQT
+         XhAA==
+X-Gm-Message-State: AO0yUKWcYfJNuMj7hfFIAIoeVQLkwaJkdCM5un6GI9qhRWqnMXicdI5T
+        WakHGJXSa49fGdS3R7CutuCUbg==
+X-Google-Smtp-Source: AK7set+561ScUMYHwh6Ics+VWI683XONjmmmO5cGE2PRQI2VyhOWzhywPrSMutxHQNhiUzsuMT3LiA==
+X-Received: by 2002:a05:600c:1d29:b0:3eb:2708:86ce with SMTP id l41-20020a05600c1d2900b003eb270886cemr1337572wms.31.1677572665796;
+        Tue, 28 Feb 2023 00:24:25 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p15-20020a7bcdef000000b003e200d3b2d1sm11651518wmj.38.2023.02.28.00.24.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 00:24:25 -0800 (PST)
+Message-ID: <1cf02768-aa92-3ad4-af00-566c16128352@linaro.org>
+Date:   Tue, 28 Feb 2023 09:24:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB43169FAE93274F64AA7E06F28DAC9@DM6PR11MB4316.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 09/16] dt-bindings: pinctrl: mediatek: rt305x: split
+ binding
+Content-Language: en-US
+To:     arinc9.unal@gmail.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-10-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230222183932.33267-10-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wentong,
-
-On Tue, Feb 28, 2023 at 06:35:41AM +0000, Wu, Wentong wrote:
-> Hi Sakari,
+On 22/02/2023 19:39, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> few questions as switching to v4l2 sub-dev framework.
+> The RT3352 and RT5350 SoCs each contain different pin muxing information,
+> therefore, should be split. This can be done now that there are compatible
+> strings to distinguish them from other SoCs.
 > 
-> > -----Original Message-----
-> > From: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Sent: Wednesday, February 15, 2023 12:06 AM
-> > 
-> > Hi Wentong,
-> > 
-> > Thanks for the patchset.
-> > 
-> > On Mon, Feb 13, 2023 at 10:23:47AM +0800, Wentong Wu wrote:
-> > > IVSC directly connects to camera sensor on source side, and on output
-> > > side it not only connects ISH via I2C, but also exposes MIPI CSI-2
-> > > interface to output camera sensor data. IVSC can use the camera sensor
-> > > data to do AI algorithm, and send the results to ISH. On the other
-> > > end, IVSC can share camera sensor to host by routing the raw camera
-> > > sensor data to the exposed MIPI CSI-2 interface. But they can not work
-> > > at the same time, so software APIs are defined to sync the ownership.
-> > >
-> > > This commit defines the interfaces between IVSC and camera sensor
-> > > driver in include/linux/ivsc.h. The camera driver controls ownership
-> > > of the CSI-2 link and sensor with the acquire/release APIs. When
-> > > acquiring camera, lane number and link freq are also required by IVSC
-> > > frame router.
-> > 
-> > The more I learn about this system, the more I'm inclined to think this
-> > functionality should be exposed as a V4L2 sub-device. IVSC doesn't really do
-> > anything to the data (as long as it directs it towards the CSI-2 receiver in the
-> > SoC), but it is definitely part of the image pipeline.
-> > 
-> > I suppose the intended use cases assume a single instance of IVSC (as well as
-> > MEI) but there can, and often are, be multiple camera sensors in the system. The
-> > decision whether to request pass-through from IVCS can't be done in the camera
-> > sensor driver, and should not be visible to the camera sensor driver. Exposing
-> > IVSC as a V4L2 sub-device makes this trivial to address, as the IVSC driver's V4L2
-> > sub-device video s_stream() operation gets called before streaming is started.
-> > 
-> > The information whether IVSC is found between the camera sensor and the
-> > host's CSI-2 receiver (IPU in this case) should come from system firmware and
-> > accessed most probably by what is called cio2-bridge at the moment.
-> > 
-> > The privacy status can be a V4L2 control.
+> Split the schema out to mediatek,rt3352-pinctrl.yaml and
+> mediatek,rt5350-pinctrl.yaml.
 > 
-> This should be a control or event? If control, how user-space handle
-> privacy stuff?
-
-Changing control events generates events for the user space.
-
-<URL:https://hverkuil.home.xs4all.nl/spec/userspace-api/v4l/dev-event.html>
-
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../pinctrl/mediatek,rt305x-pinctrl.yaml      |  78 +-----
+>  .../pinctrl/mediatek,rt3352-pinctrl.yaml      | 247 ++++++++++++++++++
+>  .../pinctrl/mediatek,rt5350-pinctrl.yaml      | 210 +++++++++++++++
+>  3 files changed, 462 insertions(+), 73 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,rt5350-pinctrl.yaml
 > 
-> For the required link freq and lane number, is v4l2 control the correct
-> way to configure them? If yes, seems there is no CID value for them so
-> that we should custom some CID value(link freqm, lane number, and
-> privacy) for ivsc in linux/v4l2-controls.h, is this acceptable?
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
+> index 61fcf3ab1091..1e6c7e7f2fe2 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
+> @@ -11,8 +11,7 @@ maintainers:
+>    - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>  
+>  description:
+> -  MediaTek RT305X pin controller for RT3050, RT3052, RT3350, RT3352 and RT5350
+> -  SoCs.
+> +  MediaTek RT305X pin controller for RT3050, RT3052, and RT3350 SoCs.
+>    The pin controller can only set the muxing of pin groups. Muxing individual
+>    pins is not supported. There is no pinconf support.
+>  
+> @@ -36,21 +35,9 @@ patternProperties:
+>            function:
+>              description:
+>                A string containing the name of the function to mux to the group.
+> -            anyOf:
+> -              - description: For RT3050, RT3052 and RT3350 SoCs
+> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio,
+> -                       pcm gpio, pcm i2s, pcm uartf, rgmii, sdram, spi, uartf,
+> -                       uartlite]
+> -
+> -              - description: For RT3352 SoC
+> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led,
+> -                       lna, mdio, pa, pcm gpio, pcm i2s, pcm uartf, rgmii, spi,
+> -                       spi_cs1, uartf, uartlite, wdg_cs1]
+> -
+> -              - description: For RT5350 SoC
+> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led,
+> -                       pcm gpio, pcm i2s, pcm uartf, spi, spi_cs1, uartf,
+> -                       uartlite, wdg_cs1]
+> +            enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio,
+> +                   pcm gpio, pcm i2s, pcm uartf, rgmii, sdram, spi, uartf,
+> +                   uartlite]
+>  
+>            groups:
+>              description:
+> @@ -69,17 +56,7 @@ patternProperties:
+>              then:
+>                properties:
+>                  groups:
+> -                  anyOf:
+> -                    - description: For RT3050, RT3052 and RT3350 SoCs
+> -                      enum: [i2c, jtag, mdio, rgmii, sdram, spi, uartf,
+> -                             uartlite]
+> -
+> -                    - description: For RT3352 SoC
+> -                      enum: [i2c, jtag, led, lna, mdio, pa, rgmii, spi, spi_cs1,
+> -                             uartf, uartlite]
+> -
+> -                    - description: For RT5350 SoC
+> -                      enum: [i2c, jtag, led, spi, spi_cs1, uartf, uartlite]
+> +                  enum: [i2c, jtag, mdio, rgmii, sdram, spi, uartf, uartlite]
+>  
+>            - if:
+>                properties:
+> @@ -126,24 +103,6 @@ patternProperties:
+>                  groups:
+>                    enum: [jtag]
+>  
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: led
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [led]
+> -
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: lna
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [lna]
+> -
+>            - if:
+>                properties:
+>                  function:
+> @@ -153,15 +112,6 @@ patternProperties:
+>                  groups:
+>                    enum: [mdio]
+>  
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: pa
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [pa]
+> -
+>            - if:
+>                properties:
+>                  function:
+> @@ -216,15 +166,6 @@ patternProperties:
+>                  groups:
+>                    enum: [spi]
+>  
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: spi_cs1
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [spi_cs1]
+> -
+>            - if:
+>                properties:
+>                  function:
+> @@ -243,15 +184,6 @@ patternProperties:
+>                  groups:
+>                    enum: [uartlite]
+>  
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: wdg_cs1
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [spi_cs1]
+> -
+>          additionalProperties: false
+>  
+>      additionalProperties: false
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..7a74c1602afc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
+> @@ -0,0 +1,247 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/mediatek,rt3352-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek RT3352 Pin Controller
+> +
+> +maintainers:
+> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
+> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> +
+> +description:
+> +  MediaTek RT3352 pin controller for RT3352 SoC.
+> +  The pin controller can only set the muxing of pin groups. Muxing individual
+> +  pins is not supported. There is no pinconf support.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,rt3352-pinctrl
+> +      - ralink,rt305x-pinctrl
+> +      - ralink,rt2880-pinmux
 
-You should obtain these using the V4L2 fwnode interface. Please see e.g.
-drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c how that driver
-registers a V4L2 async sub-device and a V4L2 async notifier.
+Following Rob's comments, you need to keep old compatibles when
+splitting binding.
 
--- 
-Kind regards,
+Best regards,
+Krzysztof
 
-Sakari Ailus
