@@ -2,123 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5406A5A06
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4BF6A5A15
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjB1Nft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 08:35:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S229548AbjB1Nk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 08:40:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjB1Nfs (ORCPT
+        with ESMTP id S229525AbjB1Nk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:35:48 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34F0196AB;
-        Tue, 28 Feb 2023 05:35:46 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S7QTQ9017835;
-        Tue, 28 Feb 2023 13:35:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=tsUfXmQDNYr6ASvuTFr+KKzEQmpBqjlfN2tgGFpkf7A=;
- b=Yy2YXisuU5VdUXX84FoQImYNuxWfRHM+7BtitcryRBHv4QtjOSBOeGjLCsCsMVvqgMf3
- MyPdNGipjLLJyDP0VzHSVf9PLYLKEBmxX907ER99t4SsIU3OS9jdKJrGlC2wfLV5vqVc
- bPJmdV/Tq1Agz4q3DVi83uXjW3f27V6SYK0ckN9JtsdGheVc7WP3ToOvZrbTMiychB+o
- zpoh1+dyX5hZ1lmSbi+LvKd+XRDAciXhNeVFAis1PYEsx1UWKxPzTYVQCeQq0ebdx07A
- IaTwV9hsAG9r9b72vrBSgvjScw3trkI/HFPH3OzwDNlqs0WzQJM5WwVWLL/B83oMSfom Uw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p0u3jusue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 13:35:40 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SDZdUG004218
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 13:35:39 GMT
-Received: from [10.216.42.110] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Feb
- 2023 05:35:35 -0800
-Message-ID: <f819a73c-ba92-3106-cd25-2ce5cb85064c@quicinc.com>
-Date:   Tue, 28 Feb 2023 19:05:31 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 08/20] remoteproc: remove MODULE_LICENSE in non-modules
-Content-Language: en-US
-To:     Nick Alcock <nick.alcock@oracle.com>, <mcgrof@kernel.org>
-CC:     <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>
-References: <20230228130215.289081-1-nick.alcock@oracle.com>
- <20230228130215.289081-9-nick.alcock@oracle.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230228130215.289081-9-nick.alcock@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QN2qm9qIKtWCADb_Eb-GsxJqUTed7YYL
-X-Proofpoint-GUID: QN2qm9qIKtWCADb_Eb-GsxJqUTed7YYL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_09,2023-02-28_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1011 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280109
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 28 Feb 2023 08:40:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9B52C64F;
+        Tue, 28 Feb 2023 05:40:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DBC1B80E19;
+        Tue, 28 Feb 2023 13:40:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C97A7C433D2;
+        Tue, 28 Feb 2023 13:40:51 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 5.15.96-rt61
+Date:   Tue, 28 Feb 2023 13:39:50 -0000
+Message-ID: <167759159041.179258.17818107373821533412@puck.lan>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello RT-list!
+
+I'm pleased to announce the 5.15.96-rt61 stable release.
+
+You can get this release via the git tree at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+
+  branch: v5.15-rt
+  Head SHA1: e73a1e3f64b939150cafb50f528c3b991d7f1c25
+
+Or to build 5.15.96-rt61 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.96.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.96-rt61.patch.xz
 
 
-On 2/28/2023 6:32 PM, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
-> 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: linux-remoteproc@vger.kernel.org
+Enjoy!
+Clark
 
-Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Changes from v5.15.95-rt60:
+---
 
--Mukesh
-> ---
->   drivers/remoteproc/remoteproc_core.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 1cd4815a6dd19..de1ace44cb57b 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -2765,5 +2765,4 @@ static void __exit remoteproc_exit(void)
->   }
->   module_exit(remoteproc_exit);
->   
-> -MODULE_LICENSE("GPL v2");
->   MODULE_DESCRIPTION("Generic Remote Processor Framework");
+Alessandro Astone (2):
+      binder: Address corner cases in deferred copy and fixup
+      binder: Gracefully handle BINDER_TYPE_FDA objects with num_fds=0
+
+Ankit Nautiyal (1):
+      drm/edid: Fix minimum bpc supported with DSC1.2 for HDMI sink
+
+Arnd Bergmann (1):
+      binder: fix pointer cast warning
+
+Bitterblue Smith (1):
+      wifi: rtl8xxxu: gen2: Turn on the rate control
+
+Christophe Leroy (1):
+      powerpc: use generic version of arch_is_kernel_initmem_freed()
+
+Clark Williams (2):
+      Merge tag 'v5.15.96' into v5.15-rt
+      'Linux 5.15.96-rt61'
+
+Dave Hansen (1):
+      uaccess: Add speculation barrier to copy_from_user()
+
+Greg Kroah-Hartman (1):
+      Linux 5.15.96
+
+Jason A. Donenfeld (1):
+      random: always mix cycle counter in add_latent_entropy()
+
+Jim Mattson (1):
+      KVM: VMX: Execute IBPB on emulated VM-exit when guest has IBRS
+
+Kees Cook (1):
+      ext4: Fix function prototype mismatch for ext4_feat_ktype
+
+Linus Torvalds (1):
+      bpf: add missing header file include
+
+Lucas Stach (1):
+      drm/etnaviv: don't truncate physical page address
+
+Lukas Wunner (1):
+      wifi: mwifiex: Add missing compatible string for SD8787
+
+Marc Kleine-Budde (1):
+      can: kvaser_usb: hydra: help gcc-13 to figure out cmd_len
+
+Michael Ellerman (4):
+      powerpc/vmlinux.lds: Ensure STRICT_ALIGN_SIZE is at least page aligned
+      powerpc/vmlinux.lds: Add an explicit symbol for the SRWX boundary
+      powerpc/64s/radix: Fix crash with unaligned relocated kernel
+      powerpc/64s/radix: Fix RWX mapping with relocated kernel
+
+Nathan Chancellor (4):
+      kbuild: Add CONFIG_PAHOLE_VERSION
+      scripts/pahole-flags.sh: Use pahole-version.sh
+      lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
+      lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
+
+Paul Moore (1):
+      audit: update the mailing list in MAINTAINERS
+
+Rahul Tanwar (5):
+      clk: mxl: Switch from direct readl/writel based IO to regmap based IO
+      clk: mxl: Remove redundant spinlocks
+      clk: mxl: Add option to override gate clks
+      clk: mxl: Fix a clk entry by adding relevant flags
+      clk: mxl: syscon_node_to_regmap() returns error pointers
+
+Sean Anderson (2):
+      powerpc: dts: t208x: Mark MAC1 and MAC2 as 10G
+      powerpc: dts: t208x: Disable 10G on MAC1 and MAC2
+
+Sean Christopherson (2):
+      KVM: x86: Fail emulation during EMULTYPE_SKIP on any exception
+      KVM: SVM: Skip WRMSR fastpath on VM-Exit if next RIP isn't valid
+
+Todd Kjos (2):
+      binder: read pre-translated fds from sender buffer
+      binder: defer copies of pre-patched txn data
+
+Vladimir Oltean (1):
+      Revert "net/sched: taprio: make qdisc_leaf() see the per-netdev-queue pfifo child qdiscs"
+
+Zhang Wensheng (1):
+      nbd: fix possible overflow on 'first_minor' in nbd_dev_add()
+
+Zheng Wang (1):
+      drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+---
+MAINTAINERS                                        |   3 +-
+ Makefile                                           |   2 +-
+ arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-2.dtsi |  44 +++
+ arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-3.dtsi |  44 +++
+ arch/powerpc/boot/dts/fsl/t2081si-post.dtsi        |  20 +-
+ arch/powerpc/include/asm/sections.h                |  14 +-
+ arch/powerpc/kernel/vmlinux.lds.S                  |  14 +-
+ arch/powerpc/mm/book3s32/mmu.c                     |   2 +-
+ arch/powerpc/mm/book3s64/radix_pgtable.c           |  28 +-
+ arch/x86/kvm/svm/svm.c                             |  10 +-
+ arch/x86/kvm/vmx/nested.c                          |  11 +
+ arch/x86/kvm/vmx/vmx.c                             |   6 +-
+ arch/x86/kvm/x86.c                                 |   4 +-
+ drivers/android/binder.c                           | 343 +++++++++++++++++++--
+ drivers/block/nbd.c                                |  23 +-
+ drivers/clk/x86/Kconfig                            |   5 +-
+ drivers/clk/x86/clk-cgu-pll.c                      |  23 +-
+ drivers/clk/x86/clk-cgu.c                          | 106 ++-----
+ drivers/clk/x86/clk-cgu.h                          |  46 +--
+ drivers/clk/x86/clk-lgm.c                          |  18 +-
+ drivers/gpu/drm/drm_edid.c                         |   3 +-
+ drivers/gpu/drm/etnaviv/etnaviv_mmu.c              |   4 +-
+ drivers/gpu/drm/i915/gvt/gtt.c                     |  17 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c  |  33 +-
+ drivers/net/wireless/marvell/mwifiex/sdio.c        |   1 +
+ .../net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c  |   8 +-
+ fs/ext4/sysfs.c                                    |   7 +-
+ include/linux/nospec.h                             |   4 +
+ include/linux/random.h                             |   6 +-
+ init/Kconfig                                       |   4 +
+ kernel/bpf/core.c                                  |   3 +-
+ lib/Kconfig.debug                                  |   4 +-
+ lib/usercopy.c                                     |   7 +
+ localversion-rt                                    |   2 +-
+ net/sched/sch_taprio.c                             |   8 +-
+ scripts/pahole-flags.sh                            |   2 +-
+ scripts/pahole-version.sh                          |  13 +
+ 37 files changed, 661 insertions(+), 231 deletions(-)
+---
