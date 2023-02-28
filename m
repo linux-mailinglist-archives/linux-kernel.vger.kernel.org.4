@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD3B6A61E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0DD6A61F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjB1V5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:57:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S229886AbjB1V6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjB1V5V (ORCPT
+        with ESMTP id S229820AbjB1V6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:57:21 -0500
-Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508417CE3;
-        Tue, 28 Feb 2023 13:57:18 -0800 (PST)
-Received: from pps.filterd (m0050096.ppops.net [127.0.0.1])
-        by m0050096.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 31SJmtmn029247;
-        Tue, 28 Feb 2023 21:57:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=uoQOVrBMW7Xj+yJvCwKq8GYEq8oVWbao23ALPFIoPVo=;
- b=FSpKpQ0Bh31jFTq/18ExllqscQcy9ICzKWG3UjEZR4R4dgTfRKrT7sqYuUIvjVO+vy35
- rrc+wvsutu4bvYu7raYIwUqeDuxVnXhjLCz0o7bRtpOx4Cvw4Zwz4z4W2cQS0poMuyB+
- vYutRRlFAP8Y33cJCOd0NHzVSeAoHyQhPZnYFZAQ4L/H886ad28XgnIusOjdhwS3jmku
- Q78Xg5x7vGvDCWkYcCApNerWe9LXjz3EhGlT9XbFGfnWVLEoEGgxWI6Q53uacTvxNJr2
- GM7D6TDED6WndCScTJ0toLASgGIUkRfMJag32pkYW9W00/49idCPWy1kve55pGv6yjSi Ng== 
-Received: from prod-mail-ppoint5 (prod-mail-ppoint5.akamai.com [184.51.33.60] (may be forged))
-        by m0050096.ppops.net-00190b01. (PPS) with ESMTPS id 3nybmk0228-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 21:57:00 +0000
-Received: from pps.filterd (prod-mail-ppoint5.akamai.com [127.0.0.1])
-        by prod-mail-ppoint5.akamai.com (8.17.1.19/8.17.1.19) with ESMTP id 31SKg6BD032110;
-        Tue, 28 Feb 2023 13:56:59 -0800
-Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
-        by prod-mail-ppoint5.akamai.com (PPS) with ESMTP id 3nyh6fq2vg-1;
-        Tue, 28 Feb 2023 13:56:59 -0800
-Received: from [172.19.33.208] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.208])
-        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id 526D05451C;
-        Tue, 28 Feb 2023 21:56:59 +0000 (GMT)
-Message-ID: <c0c38c08-a329-9d0a-ca75-0519b589731e@akamai.com>
-Date:   Tue, 28 Feb 2023 16:56:59 -0500
+        Tue, 28 Feb 2023 16:58:04 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F37011175
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:58:02 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id l1so11314802pjt.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677621482;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zT2Z59SyUMMx6e7nQOd4Y0e0wzjXIYNSwDsukVzhlNU=;
+        b=Nsdhqqj2NAcNHj2DSBZ+kS5jRtdqO1utNXx7SAbLK0yH86JWAe9okdx3cmSTDAFyfe
+         37ogiE7menuoVRArjVndBX9XVxS4xzFY39Yg7dbN4B3OES8E3feaews1w7Y0tLw8g80U
+         f7gyTG+rsuiSAUXrPXu3qbYxbAxv2Q+2PLfLTi9DKnIDbgC5laxseX130GU+8SqkrggW
+         g92RuJEHmtR5D1LiKyiNTL8hSWVpqKplI6qNjli28NNdAE/NYaedmX5AIUH3CzcrYB1m
+         w9iYyGwlp9ECD7akzFK69VgVpSozhiR0DG64qwSlXV1VUc4E7eB9gdBHNK2WttHSJ7ah
+         e6HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677621482;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zT2Z59SyUMMx6e7nQOd4Y0e0wzjXIYNSwDsukVzhlNU=;
+        b=BSyXAe+tXKsID/xdsDZuZDl2vUqA8ptvOHycTlwflui8M7UtmPqwyMDMMHVfn5hJEO
+         ySC+X/P582hiQFfydWpOvUPyuQ2tidxx1WrjavzX6oSRSqNfyAbPQN5G1VB8qxANuwJD
+         DsgVxLmH0T5PDDLKeXosjGioFZlmgKUAai+BRKcbVLsXF/VNi9VAIsljhdj5DyfKjPOV
+         UiKXk5R5lC6tIIClaZU55cnG5OgLj2XbaUGO+i8azFBVFjQfWrIRQL4eIe5IbwKSdCQK
+         gEB+y8amNpDrNaGQS02xP/wRX1sYbVR9bsBOpdvB2fw0s89ksF7PE/pfabsyRhteBIXx
+         eV5w==
+X-Gm-Message-State: AO0yUKVH+npjlFxGyXWmpEIy/8epFiRJd2m6pIqydcBQ2+r0quJDnO5g
+        M23839M8NZWyo9ZkbR7GuGDJ2DDmTGtJfYTlI/sbGe9dt1aFRWzp
+X-Google-Smtp-Source: AK7set88qVqC//7RZJZH7Fy234rgMOzyArOoxOrL3OzXINFMZ9nkmS0e90ROYD3+FtDG7At9brmyXiMAVCz0tkqFd4g=
+X-Received: by 2002:a17:90a:9c06:b0:236:736d:2581 with SMTP id
+ h6-20020a17090a9c0600b00236736d2581mr1662417pjp.8.1677621482115; Tue, 28 Feb
+ 2023 13:58:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/2] dyndbg: use the module notifier callbacks
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     jim.cromie@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-References: <cover.1677612539.git.jbaron@akamai.com>
- <a775dcc14a10d0b3df34e087ee29ddb1d62fb517.1677612539.git.jbaron@akamai.com>
- <Y/5ntkYoKHvfU9S8@bombadil.infradead.org>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <Y/5ntkYoKHvfU9S8@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- suspectscore=0 adultscore=0 bulkscore=0 mlxlogscore=806 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280176
-X-Proofpoint-ORIG-GUID: AP_-8jXN7JxW4zXZbN66IuHKACUwUIDK
-X-Proofpoint-GUID: AP_-8jXN7JxW4zXZbN66IuHKACUwUIDK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 mlxlogscore=747
- phishscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0 bulkscore=0
- spamscore=0 clxscore=1015 malwarescore=0 suspectscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280178
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230228174019.4004581-1-jjhiblot@traphandler.com>
+ <CAGETcx-w4A3fz_DPqJG+9P6ETGAPv547DcnsO52gqTO1_vijsw@mail.gmail.com> <CAL_JsqL6qFDC5uC_0PgyM_8OVEwFq+o=gPk2=PRKBDTp9XTzOw@mail.gmail.com>
+In-Reply-To: <CAL_JsqL6qFDC5uC_0PgyM_8OVEwFq+o=gPk2=PRKBDTp9XTzOw@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 28 Feb 2023 13:57:25 -0800
+Message-ID: <CAGETcx9DGK8Ass-f2wo=efHaGcQ8T2xzOqOP5TTrkM+537YPjA@mail.gmail.com>
+Subject: Re: [PATCH] of: property: Add missing of_node_get() in parse_interrupt()
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     jjhiblot@traphandler.com, frowand.list@gmail.com,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,50 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 28, 2023 at 1:01=E2=80=AFPM Rob Herring <robh+dt@kernel.org> wr=
+ote:
+>
+> On Tue, Feb 28, 2023 at 1:07=E2=80=AFPM Saravana Kannan <saravanak@google=
+.com> wrote:
+> >
+> > On Tue, Feb 28, 2023 at 9:40=E2=80=AFAM Jean-Jacques Hiblot
+> > <jjhiblot@traphandler.com> wrote:
+> > >
+> > > From: Jean Jacques Hiblot <jjhiblot@traphandler.com>
+> > >
+> > > As all the other parsers do, parse_interrupt() must increase the refc=
+ount
+> > > of the device_node. Otherwise the refcount is decremented every time
+> > > parse_interrupt() is called on this node, leading to a potential
+> > > use-after-free.
+> > >
+> > > This is a regression introduced by commit f265f06af194 ("of: property=
+:
+> > > Fix fw_devlink handling of interrupts/interrupts-extended"). The reas=
+on is
+> > > that of_irq_parse_one() does not increase the refcount while the prev=
+iously
+> > > used of_irq_find_parent() does.
+> >
+> > Thanks for catching the issue Jean!
+> >
+> > This feels like a bug in of_irq_parse_one() to me. It's returning a
+> > reference to a node without doing a of_node_get() on it.
+> >
+> > Rob, Marc, Do you agree?
+>
+> I think you are right. If we look at the 'interrupts-extended' path,
+> it just calls of_parse_phandle_with_args() which does a get.
+>
+> > Jean,
+> >
+> > If they agree, can you please fix of_irq_parse_one() and add a
+> > of_node_put() to existing callers (if they aren't already doing a
+> > put()).
+>
+> I think it is not that simple. The correct thing for callers may also
+> be to hold the ref. We wouldn't want to just blindly do a put that is
+> clearly wrong just to keep current behavior.
 
+Right, I was just giving the approximate idea. If the caller keeps
+using the node pointer, they shouldn't do a put().
 
-On 2/28/23 3:44 PM, Luis Chamberlain wrote:
-> On Tue, Feb 28, 2023 at 02:35:02PM -0500, Jason Baron wrote:
->> As part of Jim Cromie's new dynamic debug classmap feature, the new code
->> tries to toggle a jump label from dynamic_debug_setup(). However,
->> dynamic_debug_setup() is called before the 'module_notify_list' notifier
->> chain is invoked. And jump labels are initialized via the module notifier
->> chain. Note this is an issue for a new feature not yet merged and doesn't
->> affect any existing codepaths.
-> 
-> I think we can summarize this to "in preperation for some future work where
-> ordering matters with respect to jump labels" or something like that.
-> 
-> Because that is then making it specific to the future use case and
-> creates the current justification.
-> 
->> We could just move dynamic_debug_setup() earlier in load_module(). But
->> let's instead ensure the ordering via the 'priority' in the module list
->> notifier.
-> 
-> "becuase the notifier for jump labels jump_label_module_nb uses a
-> priority of 1" or something like that would be nice to get added.
-> 
->> This brings dynamic debug more in line with other subsystems and
->> pulls code out of the core module code.
-> 
-> This should be the main reason for this change, as explained in the
-> commit log. A secondary benefit would be it fixes the first future bug
-> mentioned.
-> 
-> With those changes I can take this into modules-next to start getting
-> this tested sooner rather than later.
-> 
->    Luis
+> But not having the put
+> means we're leaking refcounts as calling the APIs originally had no
+> side effect. For example, IIRC, of_irq_get() is called again on each
+> deferred probe. There is no of_irq_put() because Linux IRQ numbers
+> aren't (or weren't?) refcounted.
 
+Hopefully fw_devlink will avoid a lot of these deferred probes. But if
+it comes to wasting memory (leaking) vs use after free, we should for
+the short term switch to leaking.
 
-Hi Luis,
+IRQ themselves can't be freed once they are registered with the IRQ
+framework, but I'd think the consumers can still do a get/put on an
+IRQ. So, at the least, we should be able to do some put() from the
+consumer context.
 
-Ok, I can fix up the commit message and re-post. I'm thinking maybe we 
-should separate these patches as they are independent. The 2nd one I 
-think makes sense to go through modules-next, but the first one is 
-internal to dynamic debug and can be a part of Jim's series. Make sense?
+> Really, I'd like to get rid of exposing of_irq_parse_one() in the first p=
+lace.
 
-Thanks,
+I don't have enough context to comment here.
 
--Jason
+-Saravana
