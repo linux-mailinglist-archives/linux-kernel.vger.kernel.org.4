@@ -2,158 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE8F6A58BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535556A58C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjB1L7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S231319AbjB1MC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 07:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjB1L73 (ORCPT
+        with ESMTP id S231197AbjB1MC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:59:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1147E2364A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:58:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677585520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=igXe/9x6jKu5rbYdkW8/4YE+XBhlQH3c260qTWOAdLI=;
-        b=VxoUsGbBq4jE2+fAKyxsV7qvv4tKbrLTq4ixtrZYm/Le8sCHxrv+PcLBFf9b3rByo5Ha6W
-        DJwc7pkSGLPHiEl9kstWLDaCohTxoeHuYG4uByJzp8n5dCPygM5qN3LzxvQpukV34ssfLV
-        xwJZkzlxw8UzpRs1qRvV0j8wrWUTvz8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-526-JaqTbu6PO3C_1mD4_w47Yw-1; Tue, 28 Feb 2023 06:58:38 -0500
-X-MC-Unique: JaqTbu6PO3C_1mD4_w47Yw-1
-Received: by mail-wm1-f69.google.com with SMTP id t1-20020a7bc3c1000000b003dfe223de49so6790486wmj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:58:38 -0800 (PST)
+        Tue, 28 Feb 2023 07:02:27 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BC41024E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:02:25 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so9336730wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:02:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WOil+rmUBFJnsQrtO4mSmdPRv6I6Z8F/QkUyhuD4Ppo=;
+        b=Lg8uh+4cTsDN+Kf4VvOc7btsCDJvtNMmrwLkQ8tCBKnJZ7oi/a+fMX6SdOwpn6l2p5
+         SH5vEoCsC3WE+c42LJ9SejOh4W2S06JGi2+qdeX5gdhIm6+KgaMPJzO0skzPwNEQfwMN
+         DDp0VsxYWVi8OPFQxe15KAj/fUBPgDxtwESkIx0aHzTNGo/0JEGMCoAzO7nnYgvF22ua
+         A6qTOhMxzkWP1HNa+oFu+LiqUqmvOuIRw400N+B2A2DLhHKJ6MO95KhUEi1cEnplx0nl
+         471q1cQ+gqdNs4JylSAm80nyFzQqZ13+wWSFJGt/j8vK7ieT1hOCzH4G2Ds+mjRjUDE2
+         JtAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677585518;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=igXe/9x6jKu5rbYdkW8/4YE+XBhlQH3c260qTWOAdLI=;
-        b=mvO9VsVXEm1n40o/zwMtO0jGiqV+AK2sHJH0yfeKw84lrqXgjHKdPlGl8yyTIJQsYe
-         1rjHzL9r2dUy/3b1HZsdsr4v4ITGunMCWb+jXQ2pZ+ViKPOzASwUoGeahRtt2ocDb7Tk
-         CIKe7aX4hnCsY7mD+KdG0SzwdIYTNmDwX/HQJAaHTEIGz5wr3CzOXBWGMj0C4yzF8xRX
-         6RRCE0DPq0nQ7nFiU6xcPma6EyERFEqD8LSRJ6lILG6Vgp4z8RgLaFDIZBMR/Y4lO9ot
-         Dsqs8sOqLdAM8UAM5veP7lHpLRlRptkcm026OaBu9FPnEsBqLO79u1zZohK+43OemSha
-         hPRA==
-X-Gm-Message-State: AO0yUKWXsJNNNgA6T5AjerqxHOf7TDUikRVHuzOy5jEOjOguBSoy+/YD
-        fb1h7j4IjJK3XQQAi7UNfws0Iq1+zEGgc81WEThvhsZmCudLgWgxQfNm19ExsMsIz1MwnU3sRc/
-        OGcLmWiNrzudaqOgJRdQsi30v
-X-Received: by 2002:a05:600c:30d3:b0:3eb:376e:2b9c with SMTP id h19-20020a05600c30d300b003eb376e2b9cmr1757792wmn.36.1677585517831;
-        Tue, 28 Feb 2023 03:58:37 -0800 (PST)
-X-Google-Smtp-Source: AK7set9vfqp+w/Fq0Ru6ZcWshr4cD9JM+oi0fjZfEmOzrz/RJhaLD8ynMHaAjx0sjRa2QEfWdI63KA==
-X-Received: by 2002:a05:600c:30d3:b0:3eb:376e:2b9c with SMTP id h19-20020a05600c30d300b003eb376e2b9cmr1757776wmn.36.1677585517487;
-        Tue, 28 Feb 2023 03:58:37 -0800 (PST)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id i2-20020adfdec2000000b002c71dd1109fsm9582519wrn.47.2023.02.28.03.58.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:58:37 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Ryan Neph <ryanneph@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH] drm/virtio: Add option to disable KMS support
-In-Reply-To: <9631930e-3826-ded7-1a45-1d0a285c5195@suse.de>
-References: <20230224180225.2477641-1-robdclark@gmail.com>
- <20230227063821.dg2gbjjwcekbxyzw@sirius.home.kraxel.org>
- <CAF6AEGsv1G7CPSkCPe3iHGB9JEO4iy+bTbkFLoitmx64U78RJw@mail.gmail.com>
- <20230228062809.ccyzgnvizh6jidn4@sirius.home.kraxel.org>
- <87a60yywo0.fsf@minerva.mail-host-address-is-not-set>
- <9631930e-3826-ded7-1a45-1d0a285c5195@suse.de>
-Date:   Tue, 28 Feb 2023 12:58:36 +0100
-Message-ID: <87pm9uxaqb.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WOil+rmUBFJnsQrtO4mSmdPRv6I6Z8F/QkUyhuD4Ppo=;
+        b=ElcOXbe7wNgUQdolptmPwxN6B5XtDOjIAbPJg/UKhJ2wjzbrVJolOIXVpezh69U+Sv
+         efUteRzkWK3Y2pgq4YtZ2gTVQI8ijQpeTQIHZl6uqIEuDrN1WpQCCNZaF5iDfvfcZdca
+         Kesy7bgVjUzjlfgOLj9DwP/1WLbDH+Vwcxw2ydpkrWGlECzh8vPLoiy3vd4c8j95uEqt
+         PKR4Aisvv08oawUhSqoxH3UUw7wxMFnBc7YwNAJ4BCyDO+pvZCHVg1KdEt5ZKeNh1hkZ
+         8xItzH49Al9/e0oD66AIdsJ7oIzTZCsSEd9/8SzwRN0DI4BdrrmCnua7bCiFoLExCoPD
+         YJ1g==
+X-Gm-Message-State: AO0yUKUIMsavgoNot5QavhjoxERV++8L9bAERzoTBWu969QeALU9L8mf
+        /1nFDCyBlat8sQCkiwV9psx7wQ==
+X-Google-Smtp-Source: AK7set8naYHPskgq2n+dpMigAxIXBgugkmme9zsENGOr36KsES9+Ir0HbUQfWSuX1p/zAanX0YizeA==
+X-Received: by 2002:a05:600c:1992:b0:3ea:f0d6:5d36 with SMTP id t18-20020a05600c199200b003eaf0d65d36mr1952197wmq.29.1677585744390;
+        Tue, 28 Feb 2023 04:02:24 -0800 (PST)
+Received: from [192.168.30.216] ([81.0.6.76])
+        by smtp.gmail.com with ESMTPSA id k22-20020a7bc416000000b003dc521f336esm11966128wmi.14.2023.02.28.04.02.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 04:02:23 -0800 (PST)
+Message-ID: <6198f1c8-29b7-dba4-2469-2a99eb03c83e@linaro.org>
+Date:   Tue, 28 Feb 2023 13:02:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/2] MIPS: ebpf jit: Implement DADDI workarounds
+Content-Language: en-US
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
+        bpf@vger.kernel.org
+References: <20230228113305.83751-1-jiaxun.yang@flygoat.com>
+ <20230228113305.83751-2-jiaxun.yang@flygoat.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230228113305.83751-2-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Zimmermann <tzimmermann@suse.de> writes:
+On 28/2/23 12:33, Jiaxun Yang wrote:
+> For DADDI errata we just workaround by disable immediate operation
+> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
+> 
+> All other use cases in JIT won't cause overflow thus they are all safe.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> v2: Drop 64BIT ifdef
+> ---
+>   arch/mips/Kconfig            | 1 -
+>   arch/mips/net/bpf_jit_comp.c | 4 ++++
+>   2 files changed, 4 insertions(+), 1 deletion(-)
 
-> Hi
->
-> Am 28.02.23 um 10:19 schrieb Javier Martinez Canillas:
->> Gerd Hoffmann <kraxel@redhat.com> writes:
-> [...]
->>>
->>> I think it is a bad idea to make that a compile time option, I'd suggest
->>> a runtime switch instead, for example a module parameter to ask the
->>> driver to ignore any scanouts.
->>>
->> 
->> I don't think there's a need for a new module parameter, there's already
->> the virtio-gpu 'modeset' module parameter to enable/disable modsetting
->> and the global 'nomodeset' kernel cmdline parameter to do it for all DRM
->> drivers.
->> 
->> Currently, many drivers just fail to probe when 'nomodeset' is present,
->> but others only disable modsetting but keep the rendering part. In fact,
->> most DRM only drivers just ignore the 'nomodeset' parameter.
->
-> Do you have a list of these drivers? Maybe we need to adjust semantics 
-> slightly. Please see my comment below.
->
-
-AFAIK i915 and nouveau do this. But also on the rpi4 only the vc4 display
-driver is disabled but the v3d driver used for rendering is not disabled.
-
-So the 'nomodeset' semantics are not consistent across all DRM drivers.
-
-[...]
-
->> -	if (virtio_gpu_modeset == 0)
->> -		return -EINVAL;
->> +	if ((drm_firmware_drivers_only() && virtio_gpu_modeset == -1) ||
->> +	    (virtio_gpu_modeset == 0))
->> +		driver.driver_features &= ~(DRIVER_MODESET | DRIVER_ATOMIC);
->
-> The kernel-wide option 'nomodeset' affects system behavior. It's a 
-> misnomer, as it actually means 'don't replace the firmware-provided 
-> framebuffer.' So if you just set these flags here, virtio-gpu would 
-> later remove the firmware driver via aperture helpers. Therefore, if 
-> drm_formware_drivers_only() returns true, we should fail probing with 
-> -ENODEV.
->
-
-Right. Or the DRM aperture helper shouldn't attempt to remove the firmware
-provided framebuffer if the DRM driver doesn't have the DRIVER_MODESET set.
-
-> But we could try to repurpose the module's 'modeset' option. It's 
-> already obsoleted by nomodeset anyway.  I'd try to make modeset it a 
-> boolean that controls modesetting vs render-only. It will then be about 
-> the driver's feature set, rather than system behavior.
->
-
-Yes, that could work too. Dmitry mentioned that Rob wanted the compile-time
-option to reduce the attack surface area. I don't have a strong opinion on
-this, but just wanted to point out that there wasn't a need for a new param
-and that the existing module's 'modeset' could be repurposed for this case.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
