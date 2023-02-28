@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849A36A5DD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EBC6A5DDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 18:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjB1Q7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
+        id S229636AbjB1RAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 12:00:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjB1Q7P (ORCPT
+        with ESMTP id S229671AbjB1RAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:59:15 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F42063AB6;
-        Tue, 28 Feb 2023 08:59:07 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 662645C01A5;
-        Tue, 28 Feb 2023 11:59:07 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 28 Feb 2023 11:59:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677603547; x=1677689947; bh=Ub7nGi8CXk
-        YFk6pL5n50rcqGGgaORCubLMdPuhB4UGo=; b=ZRAMlnoZLRHl3Q9bPUPBhN8voM
-        ntIl7uxo6EPfcGNEt/o7y70QSGHWYozaFA/UREjA7BS4XisAjxhXiD7B3lf9OysI
-        C3X34lqb6Q6mjxHPOG2A1uUlEyRa24Y7a0n/6qYZCF/DG7LyJ3abn07bRTPOa1Dj
-        nIhRMISQ7riaHDpb/sI8nFhjVkMAtU+XYSvRbJvvAbL+KIqNrwMrlLPRmFgX5KlD
-        A1VqWoknwg1AM84h1HyqciA00PU5SF2H2ZUAC9ri/X5Vk9L1k7g9yZ0NIi1wpdxl
-        pc+6oqO07orDDTs2DqmdP4DGlZM6equVpfu4XfeX2lENkKYt6Mle6Kujw6Bw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677603547; x=1677689947; bh=Ub7nGi8CXkYFk6pL5n50rcqGGgaO
-        RCubLMdPuhB4UGo=; b=nr+fmc7TpSYgBl8EDO8JdmlbKttgbGYmh3XQOiEpThG4
-        RJG9fao1LILBrDHOPtMCUagIpgJOGlj6v8863SgsWiGPD/Y4ANwYFMnvR3t6SEUP
-        PGsKn5294KWiSPhtTUdnLF6ShIRZXJlsyEC8JgHTqWiGvmzcktl47W1xw/677tR1
-        55dbX4E5vSG6f2zySH+yiDlRuZe2KgmLWX0TXJoJ2fajRcnS+oX9KpN27dvRX1de
-        HeT2GRl87FU8yY5Y90BJP73N5JMuptVgR6SJaNxlbPZxBBnPtEbq+4MlRToFyE9j
-        TmWOdCoqd82UHexjsNpkOdDgxgYaQmUrTwnjydw1hA==
-X-ME-Sender: <xms:2zL-Yz6AtOcc9jtiAwQh4J1fSVWYk3FP2gggegg6FVEs0ag4tBC9LQ>
-    <xme:2zL-Y45qMBgeQ1LGRAm1KMPHV38vxLWYYYR8N_b_u99oL25ZzQIllpYVrq3RNGSYk
-    0vpw4Wdycop9AO1XM8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelfedgfedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:2zL-Y6dKoSJpKUj-euMLixLczBPc-a3YHv7fQE-uEmBldf8YQGTT-A>
-    <xmx:2zL-Y0I_lpDBGWz2SydbJhsPw_SJ19Ujez7NM07iePDCkx1T4FJ_GQ>
-    <xmx:2zL-Y3L_6VULXzgycuFPYkfVn0KtPvXk37i2BopOKl42GaMacCR3rw>
-    <xmx:2zL-Y9gsLwC0iAlgEVCXRDgR7CeQARJRo8oH4597hkwoa1Jyn29-KA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3CAA2B60086; Tue, 28 Feb 2023 11:59:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <c5e36887-f84d-40ef-bef9-8a3947bbb73f@app.fastmail.com>
-In-Reply-To: <20230228164752.55682-1-manivannan.sadhasivam@linaro.org>
-References: <20230228164752.55682-1-manivannan.sadhasivam@linaro.org>
-Date:   Tue, 28 Feb 2023 17:58:37 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>
-Cc:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/16] Qcom: Fix PCI I/O range defined in devicetree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Tue, 28 Feb 2023 12:00:09 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01884EEA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 09:00:04 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id a1so6693325iln.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 09:00:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rJNYL3/Pn6dTb34xJuoqZG6IfhAivvzXJAcexxieRHo=;
+        b=KDJDMpfb7g8KD+fKdfQpfBu6Jo1KW7VTvm5nFfXdQpAOYVoV98ExO/v3e0MWPgDAsZ
+         ghPep1tF5BJbw/xtD2Weklv3NaWTfVYFjg0nDR+YwLNdVXko2hJgOhkX1I+CWn4iBPGI
+         zNFfL4+voL96LrvD94V2ZeojyKwcDnrcGVQCveJSgGHUQQzr1azfvrNWFwZ4/AARvMrt
+         CdtBcp8o8jEgPU2wDwa+/8giwagLCr3xL49T5qw4S3LCcjBakmtS+Yb86ptzkVLniDB4
+         COimYuv7DJltRObcZ39x02GaL4CG1byqGWlh/2oeuavlA6gk0Io53/eKvX2od+r2MzGc
+         0/Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rJNYL3/Pn6dTb34xJuoqZG6IfhAivvzXJAcexxieRHo=;
+        b=HR8doFXadOfjRpaQL9w5qvdFCxRAVIjZbiRzyjwi59yyajahOF7UM5izRa7hvy03rE
+         nS4mTYoNG/ZSBLxUrLbyLq4P+BBkIxRgTYB4Ann2CgfY2RGKV0st2M6i0O0Nj7lUipfq
+         3ROvb7HlM5sQ3rWJ1pY0sqZQY3XS3HVQMjwUTcXzKg6GPRqbhr6iD5q5tDZkbeFw6ZTO
+         iAO7jM1jU3ktt9VY5wUbGLXFtna+iR8Ip152N30F2QggHmdmA1DMhF/b+3Osehzhz5A9
+         ikcvF7gKbwDw8m5rEdjNYpaoKokccci+RNF4DmozZHiiPldEGU3ifKEm4MZ2YCM+W92A
+         rsRw==
+X-Gm-Message-State: AO0yUKWwTiGor5WVebj5TbA8EJ4KxRB/TqB+NYHv3NDgPnrzA9pzz/Ob
+        1UwRV7wOqwwmgFDdRwtKPDUyhU/PpecQVAfWHeOy/A==
+X-Google-Smtp-Source: AK7set+nSw4xJMuMPsHhlbqbyBOX5qCocRDopPGYlOlnKT5JOSMevUFr2cf1Vmpt4UjnrOsT6LlVCPME+ZzwG/vEarw=
+X-Received: by 2002:a92:300c:0:b0:317:b01:229 with SMTP id x12-20020a92300c000000b003170b010229mr1711689ile.2.1677603603855;
+ Tue, 28 Feb 2023 09:00:03 -0800 (PST)
+MIME-Version: 1.0
+References: <20230228132118.978145284@linutronix.de> <CANn89iL2pYt2QA2sS4KkXrCSjprz9byE_p+Geom3MTNPMzfFDw@mail.gmail.com>
+ <87h6v5n3su.ffs@tglx>
+In-Reply-To: <87h6v5n3su.ffs@tglx>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 28 Feb 2023 17:59:52 +0100
+Message-ID: <CANn89iL_ey=S=FjkhJ+mk7gabOdVag6ENKnu9GnZkcF31qOaZA@mail.gmail.com>
+Subject: Re: [patch 0/3] net, refcount: Address dst_entry reference count
+ scalability issues
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>, x86@kernel.org,
+        Wangyang Guo <wangyang.guo@intel.com>,
+        Arjan van De Ven <arjan@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,27 +81,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023, at 17:47, Manivannan Sadhasivam wrote:
-> Hi,
+On Tue, Feb 28, 2023 at 5:38=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
 >
-> This series fixes the issue with PCI I/O ranges defined in devicetree of
-> Qualcomm SoCs as reported by Arnd [1]. Most of the Qualcomm SoCs define
-> identical mapping for the PCI I/O range. But the PCI device I/O ports
-> are usually located between 0x0 to 64KiB/1MiB. So the defined PCI addresses are
-> mostly bogus. The lack of bug report on this issue indicates that no one really
-> tested legacy PCI devices with these SoCs.
+> Eric!
 >
-> This series also contains a couple of cleanup patches that aligns the entries of
-> ranges property.
+> On Tue, Feb 28 2023 at 16:07, Eric Dumazet wrote:
+> > On Tue, Feb 28, 2023 at 3:33=E2=80=AFPM Thomas Gleixner <tglx@linutroni=
+x.de> wrote:
+> >>
+> >> Hi!
+> >>
+> >> Wangyang and Arjan reported a bottleneck in the networking code relate=
+d to
+> >> struct dst_entry::__refcnt. Performance tanks massively when concurren=
+cy on
+> >> a dst_entry increases.
+> >
+> > We have per-cpu or per-tcp-socket dst though.
+> >
+> > Input path is RCU and does not touch dst refcnt.
+> >
+> > In real workloads (200Gbit NIC and above), we do not observe
+> > contention on a dst refcnt.
+> >
+> > So it would be nice knowing in which case you noticed some issues,
+> > maybe there is something wrong in some layer.
+>
+> Two lines further down I explained which benchmark was used, no?
+>
+> >> This happens when there are a large amount of connections to or from t=
+he
+> >> same IP address. The memtier benchmark when run on the same host as
+> >> memcached amplifies this massively. But even over real network connect=
+ions
+> >> this issue can be observed at an obviously smaller scale (due to the
+> >> network bandwith limitations in my setup, i.e. 1Gb).
+> >>       atomic_inc_not_zero() is implemted via a atomic_try_cmpxchg() lo=
+op,
+> >>       which exposes O(N^2) behaviour under contention with N concurren=
+t
+> >>       operations.
+> >>
+> >>       Lightweight instrumentation exposed an average of 8!! retry loop=
+s per
+> >>       atomic_inc_not_zero() invocation in a userspace inc()/dec() loop
+> >>       running concurrently on 112 CPUs.
+> >
+> > User space benchmark <> kernel space.
+>
+> I know that. The point was to illustrate the non-scalability.
+>
+> > And we tend not using 112 cpus for kernel stack processing.
+> >
+> > Again, concurrent dst->refcnt changes are quite unlikely.
+>
+> So unlikely that they stand out in that particular benchmark.
+>
+> >> The overall gain of both changes for localhost memtier ranges from 1.2=
+X to
+> >> 3.2X and from +2% to %5% range for networked operations on a 1Gb conne=
+ction.
+> >>
+> >> A micro benchmark which enforces maximized concurrency shows a gain be=
+tween
+> >> 1.2X and 4.7X!!!
+> >
+> > Can you elaborate on what networking benchmark you have used,
+> > and what actual gains you got ?
+>
+> I'm happy to repeat here that it was memtier/memcached as I explained
+> more than once in the cover letter.
+>
+> > In which path access to dst->lwtstate proved to be a problem ?
+>
+> ip_finish_output2()
+>    if (lwtunnel_xmit_redirect(dst->lwtstate)) <- This read
 
-Looks good to me. I already commented that we may also want to use
-64KB everywhere instead of 1MB for the per-host window size. Regardless
-of that, please add
+This change alone should be easy to measure, please do this ?
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Oftentimes, moving a field looks sane, but the cache line access is
+simply done later.
+For example when refcnt is changed :)
 
-I would also prefer to do this in fewer patches, maybe one to
-change all the prefixes, and another one to change the location,
-or whichever way Bjorn prefers.
+Making dsts one cache line bigger has a performance impact.
 
-     Arnd
+>
+> > To me, this looks like someone wanted to push a new piece of infra
+> > (include/linux/rcuref.h)
+> > and decided that dst->refcnt would be a perfect place.
+> >
+> > Not the other way (noticing there is an issue, enquire networking
+> > folks about it, before designing a solution)
+>
+> We looked at this because the reference count operations stood out in
+> perf top and we analyzed it down to the false sharing _and_ the
+> non-scalability of atomic_inc_not_zero().
+>
+
+Please share your recipe and perf results.
+
+We must have been very lucky to not see this at Google.
+
+tcp_rr workloads show dst_mtu() costs (60k GCU in Google fleet) ,
+which outperform the dst refcnt you are mentioning here.
