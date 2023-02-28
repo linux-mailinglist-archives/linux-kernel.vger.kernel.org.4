@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BB06A54BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1C56A54BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbjB1IuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 03:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S230522AbjB1IuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 03:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjB1IuD (ORCPT
+        with ESMTP id S230299AbjB1IuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 03:50:03 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB4C1BD8;
-        Tue, 28 Feb 2023 00:49:56 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 6EA825FD02;
-        Tue, 28 Feb 2023 11:49:53 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1677574193;
-        bh=WTDff+9gxDSiq4AqgGvZY+eqS12sSl1fFBNNtQAELTw=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=DpSD19ZrvLwLCBFstdb7Upko+A112qjp/5Fap0UQ59Akxu4XktCVHzRFV0TNEK4B0
-         Px59EN1UDE19F8/Bxpsvm5hNb/lpyXns5wxqP26+0ijhgV+3JIGtOGfzw9vXIGHu4/
-         wk0G8bLIzriC/v11/nvEv1L+ucV1F6IBqiTHF79wUiIewCQg/ql3N9074QtwHQlqiB
-         7AZ0tJHg/lDcr37PgJ/c0ALbWm+Gi3jNKrsTlIePYT0OyU+O41tF41s1ofhmfnE4mx
-         JNoq9nZ6vJIgCb4HdwzGsen5DCC1EsboUJygGWAUl6gdji4quYMs+Vsb7RW4un5L5c
-         vxR8cO/W6RsPg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 28 Feb 2023 11:49:52 +0300 (MSK)
-Date:   Tue, 28 Feb 2023 11:49:52 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Alexey Romanov <avromanov@sberdevices.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>
-Subject: Re: [PATCH v1 0/3] Meson A1 32-bit support
-Message-ID: <20230228084952.mgx3d3nw65yo5ebu@CAB-WSD-L081021>
-References: <20230222115020.55867-1-avromanov@sberdevices.ru>
- <8e5f9bfa-d612-cd43-d722-d04c40938c62@linaro.org>
- <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
- <f3e42012-609c-4085-b4f4-bd32bfc34aff@app.fastmail.com>
- <20230227155100.hhl4yvkyfqfyoa6h@CAB-WSD-L081021>
- <a5fa8b23-4ec8-475f-be5e-538b53d6f82d@app.fastmail.com>
- <33b58877-5167-c453-e686-1d10cdca66c0@linaro.org>
- <20230227165049.4y7jx5nnnlibe6kg@CAB-WSD-L081021>
- <7d29f3fd-b8c8-4687-b6a0-b8956dd39f0b@app.fastmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7d29f3fd-b8c8-4687-b6a0-b8956dd39f0b@app.fastmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/28 06:24:00 #20902806
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 28 Feb 2023 03:50:14 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36C9EC57
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:50:06 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id i11-20020a056a00224b00b005d44149eb06so4808298pfu.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:50:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677574206;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xdSAVrwCtkhEWC8GgYYqKMfIX8yBwrpfZDbmqtRyDyA=;
+        b=SOVV++5ZdqitZ36JKIv2fFMUIZWr2mRvM+1SYrMDqxcU64YKMcyXiXS7/JBzrMzVGR
+         a6lwTwArMZ5cvyX8urVSHUrUuVQOSfF42XGvNomA8Tvnp0LV06/wsJWl0LMz4W76Db5h
+         y3jUa5jifEAMLoWLF0Zr9sO3rNX27weBBlTgPK6tlMagy9lhu6URapPi6JL/AiWDq+/O
+         xpiOl8e/9NHV1lIOw2MgMwgF5M6/In9pOSbo61IAhJJdv/IGVjLeA7M8iH+2ekiFYHMp
+         H9Jqpmo7RoeMES/COvqdvDIkncurMcMLwWiPU0V57IM51nNJ+lMIpEBY3rU7HFrTSgtB
+         lU7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677574206;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xdSAVrwCtkhEWC8GgYYqKMfIX8yBwrpfZDbmqtRyDyA=;
+        b=bd2vVjnnolo8vCezWag9JqdUXYKvv24fWtc6WOJIRO6Tu812Jbmo1j22Ol7bG8+ReV
+         cJplR51b7NbGtTqWuRfhwq/6KSiTMQgSkyGYGgV50RBFVR3pRHB0WvhGIY9Swh9BBzK4
+         OzT0CEWEcXEBHzNMRbPGl0y40UYcX6L8ljj+0rrqDjgm3CUozCmBrGwyLWa4OqugVvVA
+         07OlA1671RCk8hov3itcoMZZBlx4IKR4GgXly7wH4assXaseDpngoRKlngGpjL6lT37K
+         vNegHA+/htNBPK7Tbppay6FGOGLmL7J+tO7FwYT9VuocAoz4ofc8NNL+Vd95R0h40OxL
+         tnxg==
+X-Gm-Message-State: AO0yUKXzuoETbP73c6iSxJIUQv5kAv0u65ZqyjTHw6nK8DN+zvp4vvU/
+        5CfDaF8V1WjJTJgCqzWlANw+r1M3WWRFFDc4
+X-Google-Smtp-Source: AK7set9xyaSEGINDP0JdrxfWpmvgvG2OFkld3cb1qL57vscSNy7S0nejYo/cjvFVY+VnsY2ooCNyScP6qk2951NZ
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:902:6bc5:b0:19c:fc1b:e600 with SMTP
+ id m5-20020a1709026bc500b0019cfc1be600mr684030plt.5.1677574206196; Tue, 28
+ Feb 2023 00:50:06 -0800 (PST)
+Date:   Tue, 28 Feb 2023 08:50:00 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
+Message-ID: <20230228085002.2592473-1-yosryahmed@google.com>
+Subject: [PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 07:19:38PM +0100, Arnd Bergmann wrote:
-> On Mon, Feb 27, 2023, at 17:50, Dmitry Rokosov wrote:
-> > On Mon, Feb 27, 2023 at 05:38:49PM +0100, Neil Armstrong wrote:
-> >> On 27/02/2023 17:15, Arnd Bergmann wrote:
-> >> > On Mon, Feb 27, 2023, at 16:51, Dmitry Rokosov wrote:
-> >> > 
-> >> > Most of these don't apply in userspace, so the incentive to
-> >> > run smaller 32-bit userland on systems with less than 1GB of
-> >> > RAM usually outweighs the benefits of 64-bit userspace.
-> >> 
-> >> Thanks for the details!
-> >
-> > Looks like Thomas has already prepared a basic patch series for buildroot,
-> > but maintainers declined it.
-> >
-> > https://lore.kernel.org/all/20220730194331.GA2515056@scaer/
-> 
-> I see. I know very little about buildroot, but it sounds like
-> there are other ways of doing the same thing here. In general,
-> this is pretty much an Arm specific problem. While you clearly
-> want compat mode for small userland on any architecture but don't
-> want 32-bit kernels, arm is the only one that has a different
-> kernel "ARCH=" value and needs a separate gcc toolchain.
-> 
-> If the problem is only the toolchain, an easy way out may
-> be to use clang instead of gcc as your compiler, as a single
-> clang binary can target both 32-bit userland and 64-bit kernel
-> on all supported architectures.
+Reclaimed pages through other means than LRU-based reclaim are tracked
+through reclaim_state in struct scan_control, which is stashed in
+current task_struct. These pages are added to the number of reclaimed
+pages through LRUs. For memcg reclaim, these pages generally cannot be
+linked to the memcg under reclaim and can cause an overestimated count
+of reclaimed pages. This short series tries to address that.
 
-Agreed with you. We will try different local approaches to support
-compat build configurations. For now, prebuilt toolchain (buildroot make
-sdk goal) is best way from my point of view. Anyway, we will try to
-solve this problem in the our sandbox and stay on the 64-bit kernel.
-Thank you for all the helpful details you shared, appreciate it!
+Patch 1 is just refactoring updating reclaim_state into a helper
+function, and renames reclaimed_slab to just reclaimed, with a comment
+describing its true purpose.
+
+Patch 2 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
+The pages are uncharged anyway, so even if we end up under-reporting
+reclaimed pages we will still succeed in making progress during
+charging.
+
+Do not let the diff stat trick you, patch 2 is a one-line change. All
+the rest is moving a couple of functions around and a huge comment :)
+
+RFC -> v1:
+- Exported report_freed_pages in case XFS is built as a module (Matthew
+  Wilcox).
+- Renamed reclaimed_slab to reclaim in previously missed MGLRU code.
+- Refactored using reclaim_state to update sc->nr_reclaimed into a
+  helper and added an XL comment explaining why we ignore
+  reclaim_state->reclaimed in memcg reclaim (Johannes Weiner).
+
+Yosry Ahmed (2):
+  mm: vmscan: refactor updating reclaimed pages in reclaim_state
+  mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+
+ fs/inode.c           |  3 +-
+ fs/xfs/xfs_buf.c     |  3 +-
+ include/linux/swap.h |  5 ++-
+ mm/slab.c            |  3 +-
+ mm/slob.c            |  6 ++--
+ mm/slub.c            |  5 ++-
+ mm/vmscan.c          | 79 +++++++++++++++++++++++++++++++++++---------
+ 7 files changed, 74 insertions(+), 30 deletions(-)
 
 -- 
-Thank you,
-Dmitry
+2.39.2.722.g9855ee24e9-goog
+
