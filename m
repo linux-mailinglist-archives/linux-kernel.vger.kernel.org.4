@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2296A53B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A656A53BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjB1Hbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 02:31:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
+        id S229778AbjB1HeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 02:34:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjB1Hbd (ORCPT
+        with ESMTP id S229470AbjB1HeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 02:31:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4851167F;
-        Mon, 27 Feb 2023 23:31:01 -0800 (PST)
+        Tue, 28 Feb 2023 02:34:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807F810AB1;
+        Mon, 27 Feb 2023 23:34:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CD9460FF9;
-        Tue, 28 Feb 2023 07:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D778C4339B;
-        Tue, 28 Feb 2023 07:30:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 184EE60FF3;
+        Tue, 28 Feb 2023 07:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89DFC433D2;
+        Tue, 28 Feb 2023 07:34:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677569459;
-        bh=e6s4tpTO5in76O06wuyEcoiAxV018g78W3FW7CWNMG8=;
+        s=korg; t=1677569660;
+        bh=3BCQtTaoAWxY6XcyC7IK2Ni1ftd1LIYwHPXYAOHigno=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JmEu1GdtX8gza/6UTwGHjaJOKfGTpyVRZty6nHoB8l3XBYVjcnHFvZuVD8uvAxHWu
-         dvRJX31VrceN5IU2JK5gI4TmGk0hJy8ACiJJyk4+FAjShY4+Rg1xxlVx7K4AkHVlNh
-         9CLm3iCWZAZcdGukKvVwqxtbOhrftl2jqQBTKcAE=
-Date:   Tue, 28 Feb 2023 08:30:57 +0100
+        b=eMXs3aMDccSqN83TVIdJPnk7imTUeC/8STtUztsKGxdg1jQ532YK4qH46ZMTZn77S
+         TOdGQ9WQY1anhHpw/dBZLGprghzwMTvSoZUYn0SwBtShoIsh/rRZeTJR3vdjk/nVFI
+         78gZctIC8RCRVLE/IYsFQyYXg9z1ga+B8HIL6bFs=
+Date:   Tue, 28 Feb 2023 08:34:17 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
-        broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [RFC PATCH v2 12/22] sound: usb: card: Introduce USB SND
- platform op callbacks
-Message-ID: <Y/2tsfGGzAlLzxwd@kroah.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-13-quic_wcheng@quicinc.com>
- <Y9Ui82OaI54Qx8Ft@kroah.com>
- <2c062ab0-905c-f1fe-eca2-02e23cc9fa6f@quicinc.com>
- <5e5c6481-8d5d-dc3f-e40e-986e3ac30387@quicinc.com>
+To:     Werner Sembach <wse@tuxedocomputers.com>
+Cc:     dmitry.torokhov@gmail.com, swboyd@chromium.org,
+        hdegoede@redhat.com, mkorpershoek@baylibre.com,
+        chenhuacai@kernel.org, wsa+renesas@sang-engineering.com,
+        tiwai@suse.de, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] Input: atkbd - Make it possible to apply
+ atkbd.reset via kernel quirk
+Message-ID: <Y/2ueXSFK0iOR5M5@kroah.com>
+References: <20230227185907.569154-1-wse@tuxedocomputers.com>
+ <20230227185907.569154-2-wse@tuxedocomputers.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5e5c6481-8d5d-dc3f-e40e-986e3ac30387@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230227185907.569154-2-wse@tuxedocomputers.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,82 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 06:59:32PM -0800, Wesley Cheng wrote:
-> Hi Greg,
+On Mon, Feb 27, 2023 at 07:59:06PM +0100, Werner Sembach wrote:
+> atkbd.reset was only a command line parameter. Some devices might have a
+> known bug that can be worked around by just permanently applying this
+> quirk.
 > 
-> On 2/10/2023 2:49 PM, Wesley Cheng wrote:
-> > Hi Greg,
-> > 
-> > On 1/28/2023 5:28 AM, Greg KH wrote:
-> > > On Wed, Jan 25, 2023 at 07:14:14PM -0800, Wesley Cheng wrote:
-> > > > Allow for different platforms to be notified on USB SND
-> > > > connect/disconnect
-> > > > seqeunces.  This allows for platform USB SND modules to properly
-> > > > initialize
-> > > > and populate internal structures with references to the USB SND chip
-> > > > device.
-> > > > 
-> > > > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> > > > ---
-> > > >   sound/usb/card.c | 28 ++++++++++++++++++++++++++++
-> > > >   sound/usb/card.h | 20 ++++++++++++++++++++
-> > > >   2 files changed, 48 insertions(+)
-> > > > 
-> > > > diff --git a/sound/usb/card.c b/sound/usb/card.c
-> > > > index 26268ffb8274..803230343c16 100644
-> > > > --- a/sound/usb/card.c
-> > > > +++ b/sound/usb/card.c
-> > > > @@ -117,6 +117,24 @@ MODULE_PARM_DESC(skip_validation, "Skip
-> > > > unit descriptor validation (default: no)
-> > > >   static DEFINE_MUTEX(register_mutex);
-> > > >   static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
-> > > >   static struct usb_driver usb_audio_driver;
-> > > > +static struct snd_usb_platform_ops *platform_ops;
-> > > 
-> > > You can not have a single "platform_ops" pointer, this HAS to be
-> > > per-bus.
-> > > 
-> > 
-> > Agreed.
-> > 
+> This patch adds the ability to do this on the kernel level for known buggy
+> devices.
 > 
-> I looked at seeing how we could implement this at a per bus level, but the
-> USB class driver model doesn't exactly have a good framework for supporting
-> this.  Reason being is because, at the time of the USB SND class driver
-> initialization, there is a big chance that there isn't a USB bus registered
-> in the system, so the point of adding the operations is not clear.  However,
-> we need to ensure that we've added the platform/driver operations before any
-> USB SND devices are detected.
+> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/input/keyboard/atkbd.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/input/keyboard/atkbd.c b/drivers/input/keyboard/atkbd.c
+> index 246958795f60..ef65c46c4efe 100644
+> --- a/drivers/input/keyboard/atkbd.c
+> +++ b/drivers/input/keyboard/atkbd.c
+> @@ -1731,6 +1731,12 @@ static int __init atkbd_deactivate_fixup(const struct dmi_system_id *id)
+>  	return 1;
+>  }
+>  
+> +static int __init atkbd_reset_fixup(const struct dmi_system_id *id)
+> +{
+> +	atkbd_reset = true;
+> +	return 1;
 
-But the offload "engine" is associated with the specific USB bus
-controller instance in the system, so perhaps you are just not adding
-this to the correct location?
+Why is this returning 1?  Who calls this?
 
-The sound core shouldn't care about this at all, add the logic to the
-USB host controller driver instead, why isn't this just another USB bus
-function?
-
-> To add to the above, in case of OTG/DRD (dual role) designs, the USB HCD/bus
-> isn't created until we move into the host role.  At that time, using DWC3 as
-> an example, we will create the XHCI platform device, and probe the USB HCD,
-> where a USB bus is created.
-
-Great, again, tie it to the specific xhci host controler instance.
-
-> In general, we currently think this USB offload driver should co-exist with
-> the USB SND class driver, which handles all devices connected across every
-> bus.
-
-And that is incorrect, please do not do that.
-
-> We can add a check to the platform connect routine to ensure that
-> there is a reference to the USB backend.  If so, then that particular USB
-> bus/sysdev can be supported by the audio DSP.  That way, we do not falsely
-> populate USB SND cards which are present on another USB bus/controller.
-
-You should NEVER be able to populate a USB card unless the USB bus
-controller has given you the USB interface structure to control, so I do
-not understand how this is an issue.
+And this should be a per-device attribute, not a global one, right?
 
 thanks,
 
