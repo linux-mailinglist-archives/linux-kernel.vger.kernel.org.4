@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9076A5C26
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075ED6A5C28
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjB1PkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S230113AbjB1Pkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjB1PkR (ORCPT
+        with ESMTP id S229792AbjB1Pki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:40:17 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F8D196B7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:40:15 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c18so6717111wmr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:40:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677598814;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mo74FXa48EiHuR/p3cmL0JbUvzG9s2CSQCFcDO9etU4=;
-        b=pw6QVKERnSKJ+6q59CSuM2qo672FcudvhDoRx/RARoL7NQYjK6hT4oCTmIovILiY9v
-         uIS/W644P1m2HzcuVUaAeI+k/bM3SuXVwrrmvFAHTI8Otug54XpMSnKm3Hp+94CCH3fq
-         L72Ezqm0ieAufr1E/7r7ure+vgpNDKeU/ySPkMIYoKWu0DbJFaW08ExX5D0QEt9WRFIO
-         rOyhI/MD0Dr35otPmVmzrff0x3jMy5SiZrfrTMZlB+f2T9aUAc9Frt8e69NpNtnfEfzI
-         j35XJtpEc/Vmm9EZHtE1ds7XAQBv3lzfk2ns8ZzXE4QPHch9GXIMP46Pu9u094yntX/r
-         8asg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677598814;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mo74FXa48EiHuR/p3cmL0JbUvzG9s2CSQCFcDO9etU4=;
-        b=jWXmlmCTlgJyaiyN4Tdv1cj4Z54BEs6KTVpnQkhxsrUq9IUFsNqvoaQRWjSW0UkvFE
-         y9hMjePoPQq8UhBfBsPv3HM7yfN6jTicAEPZ+k3OG/5/RjD05ZczL/iMZz0WJmOlY5LW
-         8+3fpBTjmQyBqCH5DLetfkI98/bDwmaJoHyNwbWtmjEQqNZ0wDVgX4pYuy0oJQGcQ8sC
-         iKoXpLnHa0OOxObEM5ZsEDokptzfjqCp6/51wGTdfx3hETYgEpfLogNLDiI4++8XNU+l
-         7Q2EKJqDljRUZ6pFhhoW7is9hpaXZ79Z/1+OR8iaw34LrkYasAN0vFshk8HUVgigxK2I
-         MECQ==
-X-Gm-Message-State: AO0yUKXOEma4yhNC9D5o1HOJNarmbdLwcNj2W8aJP+DG/354wNFgZWFl
-        3XjrDy/qpchoQnlOHUb1NGomtOumgVXe9XoB
-X-Google-Smtp-Source: AK7set+pz6p2SbJFmEqWt9MjkLkWAVY4jRiKSA9wG7+UuAauDfBrNS1y9jEPEreahs4LKelHsnijBg==
-X-Received: by 2002:a05:600c:1d1d:b0:3df:db20:b0ae with SMTP id l29-20020a05600c1d1d00b003dfdb20b0aemr2717550wms.17.1677598814357;
-        Tue, 28 Feb 2023 07:40:14 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id hg13-20020a05600c538d00b003dc434b39c7sm2533558wmb.0.2023.02.28.07.40.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:40:13 -0800 (PST)
-Message-ID: <9ff1640c-8365-10f7-6765-0d1bd0e07620@linaro.org>
-Date:   Tue, 28 Feb 2023 15:40:12 +0000
+        Tue, 28 Feb 2023 10:40:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2554029E33
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:40:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AF6CB80E6C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 15:40:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D11C433EF;
+        Tue, 28 Feb 2023 15:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677598831;
+        bh=VxCn3XWriHTW8YjvIK4DPsYbOK48hiwgEOBiGZ3LUI8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=h6d4zLvOKREpFeVevff8Fh7nfZ5TAmbT+eAJqCEyiRgDZ7UGl+DelWcncZJW5zJeC
+         jUxeNJYZX/c1TkU4MweG0XHjRACLTaPbfyt6IRZhFACWqWd9idAbmm/vP0BDouw3vI
+         7pST4w6YWCJ44EuqZY/XP0ZT2BNXcQTeBxA8R4LSTNevB7f/t9KCaF033Z9UoXXc9f
+         Gk28cwypEtKmrMS7LxChjldOhwfVLIrqtTaj5a6Kq3o4hevXOKpkFmfE0AwVWgG46d
+         xnQFZSuxTIPLcE2BEhAvehNrynZrTxmxNAo1Xu79xdxxIF5l2psGG+1en03CGrM8zY
+         C9AQfiR7DC/Kg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BD1205C0368; Tue, 28 Feb 2023 07:40:30 -0800 (PST)
+Date:   Tue, 28 Feb 2023 07:40:30 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <20230228154030.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
+ <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
+ <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230226010110.GA1576556@paulmck-ThinkPad-P17-Gen-1>
+ <Y/rEH2r9i0BtfxEW@rowland.harvard.edu>
+ <Y/0HEESX2wDWtPS1@andrea>
+ <bf2881fb-039b-06ab-68f9-806b29a84188@huaweicloud.com>
+ <20230227222120.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <9b5a04e9-39e7-ffa1-b43e-831a4f0c4b73@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 10/18] media: venus: hfi_venus: Fix version check in
- venus_cpu_and_video_core_idle()
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-10-58c2c88384e9@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230228-topic-venus-v1-10-58c2c88384e9@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b5a04e9-39e7-ffa1-b43e-831a4f0c4b73@huaweicloud.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_SBL_A autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,33 +71,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2023 15:24, Konrad Dybcio wrote:
-> IS_V6() should have instead checked for specific VPU versions. Fix it.
+On Tue, Feb 28, 2023 at 09:49:07AM +0100, Jonas Oberhauser wrote:
 > 
-> Fixes: e396e75fc254 ("media: venus: hfi: Read WRAPPER_TZ_CPU_STATUS_V6 on 6xx")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/media/platform/qcom/venus/hfi_venus.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-> index ecfbac36de20..584c84125887 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-> @@ -1543,7 +1543,7 @@ static bool venus_cpu_and_video_core_idle(struct venus_hfi_device *hdev)
->   	void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
->   	u32 ctrl_status, cpu_status;
->   
-> -	if (IS_V6(hdev->core))
-> +	if (IS_AR50_LITE(hdev->core) || IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core))
->   		cpu_status = readl(wrapper_tz_base + WRAPPER_TZ_CPU_STATUS_V6);
->   	else
->   		cpu_status = readl(wrapper_base + WRAPPER_CPU_STATUS);
+> On 2/27/2023 11:21 PM, Paul E. McKenney wrote:
+> > On Mon, Feb 27, 2023 at 09:13:01PM +0100, Jonas Oberhauser wrote:
+> > > 
+> > > On 2/27/2023 8:40 PM, Andrea Parri wrote:
+> > > > > The LKMM doesn't believe that a control or data dependency orders a
+> > > > > plain write after a marked read.  Hence in this test it thinks that P1's
+> > > > > store to u0 can happen before the load of x1.  I don't remember why we
+> > > > > did it this way -- probably we just wanted to minimize the restrictions
+> > > > > on when plain accesses can execute.  (I do remember the reason for
+> > > > > making address dependencies induce order; it was so RCU would work.)
+> > > > > 
+> > > > > The patch below will change what the LKMM believes.  It eliminates the
+> > > > > positive outcome of the litmus test and the data race.  Should it be
+> > > > > adopted into the memory model?
+> > > > (Unpopular opinion I know,) it should drop dependencies ordering, not
+> > > > add/promote it.
+> > > > 
+> > > >     Andrea
+> > > Maybe not as unpopular as you think... :)
+> > > But either way IMHO it should be consistent; either take all the
+> > > dependencies that are true and add them, or drop them all.
+> > > In the latter case, RCU should change to an acquire barrier. (also, one
+> > > would have to deal with OOTA in some yet different way).
+> > > 
+> > > Generally my position is that unless there's a real-world benchmark with
+> > > proven performance benefits of relying on dependency ordering, one should
+> > > use an acquire barrier. I haven't yet met such a case, but maybe one of you
+> > > has...
+> > https://www.msully.net/thesis/thesis.pdf page 128 (PDF page 141).
+> > 
+> > Though this is admittedly for ARMv7 and PowerPC.
+> > 
 > 
+> Thanks for the link.
+> 
+> It's true that on architectures that don't have an acquire load (and have to
+> use a fence), the penalty will be bigger.
+> 
+> But the more obvious discussion would be what constitutes a real-world
+> benchmark : )
+> In my experience you can get a lot of performance benefits out of optimizing
+> barriers in code if all you execute is that code.
+> But once you embed that into a real-world application, often 90%-99% of time
+> spent will be in the business logic, not in the data structure.
+> 
+> And then the benefits suddenly disappear.
+> Note that a lot of barriers are a lot cheaper as well when there's no
+> contention.
+> 
+> Because of that, making optimization decisions based on microbenchmarks can
+> sometimes lead to a very poor "time invested" vs "total product improvement"
+> ratio.
 
-Same comment on the Fixes.
+All true, though that 2x and 4x should be worth something.
 
-You need 02/18 to apply this to pervious kernels.
+The real-world examples I know of involved garbage collectors, and the
+improvement was said to be a few percent system-wide.  But that was a
+verbal exchange, so I don't have a citation for you.
 
----
-bod
+							Thanx, Paul
