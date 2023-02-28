@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF6F6A8B7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBA76A8BD5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjCBWG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:06:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
+        id S230098AbjCBWas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjCBWGt (ORCPT
+        with ESMTP id S229794AbjCBWap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:06:49 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A36059E65
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:06:46 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id c19so880900qtn.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:06:46 -0800 (PST)
+        Thu, 2 Mar 2023 17:30:45 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E533403D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:30:43 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id v1-20020a9d6041000000b0068d4a8a8d2dso463058otj.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:30:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677794805;
+        d=linaro.org; s=google; t=1677796243;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=595Lzrfk9ZZdyXMZyGBrATdXcUsn/JJF/BAGuFzsFec=;
-        b=q9WuQVRcQGJLXY3BAu1UJSkTSvvF1INVr1jkwYHInIoJV+Uqtz8CGfN1RJSrewwQyY
-         TnagFtJVhOawMjgbufAar2d6mWYxR2ajsOuPVjIKJUAYydnhR2KGNo1xMi/oT1MsfRHK
-         uam8jWsm0vRXugto4GCeO6FPz5gJtoqfC6tNnN7IcRGZF3vKhORpPi9jDH9uBYqhXIIo
-         97GsyuCMlV5WVhB7bS3a2FIoOddClAuFAE8UeExs/scG80bhGu1TNbYmmZIlrurJlpHX
-         zXLRy6x8NDzI14OVLEJJw7zVESq3wvmcY3IJjwMdKlzvsdwijOAnjHZ/Ti2eARtO7oze
-         2t8Q==
+        bh=0HDohv0lvkUtSClkIwD4MKqx28WrKdTpdtBDDMSSGgA=;
+        b=QK5ECiWqmMBIYChjTCoV1plMlRsQHILLL5Qy/L0tFkz0T5B+516OiUGoN1oGnwHkJp
+         WCLdYjxUmUl5GZEvc/9mcDLq5c+g8M/jysvcni8fKq7E/pz9KIov8jcUJWg+qDhgK8Il
+         2Hu0fe6rlSaC3WPcqiNxNajahwo3oodAJWra7MNllB9RHiP+WLzu0mD42MALpSlywSkK
+         HAlfblwrkejJHyXDPE5lfTBiMuWq01PLafhDpN1AxExPj6o90mZxPK7zvayQBQ2Iau31
+         D7Kb+a0aH7UXGY+LSsIHsMtjN2Ge5fE+7aJ4nFL4V++G06l+xjwxEJYqgD6k3eCF4lme
+         eDpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677794805;
+        d=1e100.net; s=20210112; t=1677796243;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=595Lzrfk9ZZdyXMZyGBrATdXcUsn/JJF/BAGuFzsFec=;
-        b=Wkraw2sOaxfV6egDaY/Gz2cPzIqwmL9ZVGA00cMpzJBo+BKMzoeO+cAdOQXRkI5stZ
-         8YsV/Nn4NfgB+bfmCqV/Er1uNSBscDEeliEF2bC81zefeKc6mXOTR+pHBccLAnV9hp02
-         v5kax5lXLWfpFU0Zia2WUoXkYxecM6HSC/LimWzwtXkhms0biEbS3R335T6lII9eLg2B
-         xybWSDj8vJSKmhBpIhJ8eBkDQDaW/hF4WCEMN662zATl3vtOS5QKLPo/7WEpbE4F6i8z
-         znbyetq9ByfNF9Z6mMs51ow9VH0QDmrDTgYJIDokTxVdYyI49G55zv4wBVNlUNNo4x+r
-         UG+Q==
-X-Gm-Message-State: AO0yUKW8vEef4Q99roytcE/ZGCPJ1aEhgQIJfkaCS55Ic/lsytT05d7D
-        H1IzFathcGZIyTynYBsMbghpGA==
-X-Google-Smtp-Source: AK7set/9MBtd+iJjRd54/HRa57T4mYovpBo3CmEJtLHoI+UdeNKSex3laftnTdJhaGJtNjJcjmVNRQ==
-X-Received: by 2002:ac8:5b10:0:b0:3a9:818f:db3d with SMTP id m16-20020ac85b10000000b003a9818fdb3dmr19779078qtw.53.1677794805636;
-        Thu, 02 Mar 2023 14:06:45 -0800 (PST)
+        bh=0HDohv0lvkUtSClkIwD4MKqx28WrKdTpdtBDDMSSGgA=;
+        b=eADCG1hGL5oTcUL0LUTR2k/jhyxOTbf4e9zig3k8jREbSOqPnpYl/6SyMzS/Et2jJ8
+         cimx3mme9jUi45rEcr3p2UVe9xR/DXsj18SoTtL1JZmuIrOm8X2yb6oGOF73jBV3JwiY
+         PnxEvZhZdtp+SP7TxE3ygFNg3aC7MROv8hxwLg32+M8WEw6xccVIGl6v5GK/hedxK1hq
+         /pvYEFhdhlmNFx/pKvsboUkvCNOfRGzlwYXfpAVsHjgWfH2+kJUisozS9NI3/LJ1t6ID
+         rZTwLBZTun8ONN4n9huXr8t6MJf4T5c9rPKg9vDW+1C3CAJGbq2pONQXu9PB9ZlzoOjL
+         vo7w==
+X-Gm-Message-State: AO0yUKUa9tMsqWLPEwKzkp+niSfegrgE0iNuKam9fYb9W1YGlvTmdmtl
+        uLgr0YaUXt82f3slzXebm9znBw==
+X-Google-Smtp-Source: AK7set8aOSjPE5sh5YVuAen/6NBD9XPC1GJYtNeoPHfloJ8wL4Ac8gg9pWvda4YzAQAMyKKCz0oYPg==
+X-Received: by 2002:a9d:4e5:0:b0:68d:5b43:5ac9 with SMTP id 92-20020a9d04e5000000b0068d5b435ac9mr6213905otm.4.1677796243123;
+        Thu, 02 Mar 2023 14:30:43 -0800 (PST)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id g5-20020ac87d05000000b003b68d445654sm527483qtb.91.2023.03.02.14.06.44
+        by smtp.gmail.com with ESMTPSA id a26-20020a056830101a00b00693ea7bfdc2sm346095otp.76.2023.03.02.14.30.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 14:06:45 -0800 (PST)
+        Thu, 02 Mar 2023 14:30:42 -0800 (PST)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linus.walleij@linaro.org, brgl@bgdev.pl
 Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         techsupport@winsystems.com, stable@vger.kernel.org,
         William Breathitt Gray <william.gray@linaro.org>,
         Paul Demetrotion <pdemetrotion@winsystems.com>
-Subject: [PATCH] gpio: ws16c48: Fix off-by-one error in WS16C48 resource region extent
-Date:   Tue, 28 Feb 2023 03:11:26 -0500
-Message-Id: <20230228081126.94280-1-william.gray@linaro.org>
+Subject: [RESEND] gpio: ws16c48: Fix off-by-one error in WS16C48 resource region extent
+Date:   Tue, 28 Feb 2023 03:17:24 -0500
+Message-Id: <20230228081724.94786-1-william.gray@linaro.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,6 +78,7 @@ properly requested in the ws16c48_probe() callback by the
 devm_request_region() function call.
 
 Fixes: 2c05a0f29f41 ("gpio: ws16c48: Implement and utilize register structures")
+Cc: stable@vger.kernel.org
 Cc: Paul Demetrotion <pdemetrotion@winsystems.com>
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
