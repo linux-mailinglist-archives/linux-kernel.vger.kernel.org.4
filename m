@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F336A52AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 06:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FEB6A52B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 06:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjB1Fin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 00:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S229682AbjB1FvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 00:51:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjB1Fil (ORCPT
+        with ESMTP id S229534AbjB1FvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 00:38:41 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E47C2006F;
-        Mon, 27 Feb 2023 21:38:40 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pWsh7-0004NB-VD; Tue, 28 Feb 2023 06:38:34 +0100
-Message-ID: <4e9cdfbd-9e9e-449c-a4e4-fe22021c7187@leemhuis.info>
-Date:   Tue, 28 Feb 2023 06:38:33 +0100
+        Tue, 28 Feb 2023 00:51:19 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751F81C327
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 21:51:18 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso4943192oti.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 21:51:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677563476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KVO9D3it9baXxwOs3sdGaxeINko9L5QuRxlEmbnRx9I=;
+        b=jPOIf+aDnaBftghWwitaHLIz/kDaPp5HR9dVZxEGLytOjTWy8AmU81Wrm/E4hrxEIE
+         W594uK45226OyK8dp0Opk3ke9fmm/6DI1LZw+wnH6CbtEQkdIWoWwzKb+FbcnbLsR1Si
+         5Ll66iSkPX3QABLvctic4MfbyptliFGq+TLfzVm1w5YwOc+YjIO+FSXc76f8zUmPFful
+         WmJdAKGbIIy9VxHqR0o0YPM3K1O5B8gtO/1VoVJDteHvpdDUFEC3QmtlqnpEjKBdZT47
+         YVEUoAxptdYt4Lmshx7k/KdXv0FtLW+t3Atn9flJ9PB1YRgKlXVzVQn8U2YpCH/s8TwU
+         Di7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677563476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KVO9D3it9baXxwOs3sdGaxeINko9L5QuRxlEmbnRx9I=;
+        b=1ZoiyZu5ZV4Pfhw4tNNAESQKSEkTPKJhCiiCpIHrMi7qdWsVgEXgtnnhkuxH2KaRXF
+         1M7p4EJHJ7mGzH+Q5duPqAk3n1VzEKjCrW2vK5EMHLeWJIbfy5RlC9SJ5y0m9zHbNlv7
+         vZs9TyFaoXgYJtoLtQDP1qlbr85OTH1DJ81s59lAU0VCK+mMKDHCXtqOVn4HwTDipOFs
+         KYiQSTclNWRZNdL3b80uvTmaod8G2DXJJrigxsTm6wCTsU5pG5o8bU6oCnm8pEwuKcBY
+         BbVALxlcmZd+vqvtUOtsCMvqYGnB3EWQeAgJKrdbMdrlXv32T3EjNdGhIeKkrUtP7+7F
+         UzCQ==
+X-Gm-Message-State: AO0yUKUjEUzsqRUdK2IeGQIShd9qgUZLkWsEhkpvf+JElTGXJ+yDttRF
+        nBr5QJDzIPbPGXUC2MBqHMlFt9gNufVDumUxnhmIhA==
+X-Google-Smtp-Source: AK7set8xPfpIn1P5Zdq04cHzmCCh/Wgn+RuC1dRItO5lpXetxNt5SGHlyR3GxK/vU+AEmzlQZeJGZGBTkEslWnFfFpo=
+X-Received: by 2002:a9d:315:0:b0:690:ed96:e019 with SMTP id
+ 21-20020a9d0315000000b00690ed96e019mr562300otv.4.1677563476282; Mon, 27 Feb
+ 2023 21:51:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
-Content-Language: en-US, de-DE
-To:     George Kennedy <george.kennedy@oracle.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Storm Dragon <stormdragon2976@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        sfr@canb.auug.org.au, akpm@linux-foundation.org,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <Y/KtG9vK0oz0nQrN@hotmail.com>
- <20230220064612.1783-1-linux@weissschuh.net>
- <dcaaf7d5-b2d5-dbb9-f3fe-2232ee525cc8@kernel.org>
- <2094ecec-f63c-4e8a-ba97-da77c5266da1@t-8ch.de>
- <2941c2b9-5fa5-e25c-dcd0-ab9c9c0f143e@oracle.com>
- <Y/TMH8Hf6zBrC3yc@kroah.com>
- <9e297f30-dc8c-ecac-f7a6-348ddbd4b928@leemhuis.info>
- <c0d99436-28a0-d012-646d-251a9511e76f@oracle.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <c0d99436-28a0-d012-646d-251a9511e76f@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677562720;e1ab0d66;
-X-HE-SMSGID: 1pWsh7-0004NB-VD
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230208093322.75816-1-hsiangkao@linux.alibaba.com>
+ <Y/ewpGQkpWvOf7qh@gmail.com> <ca1e604a-92ba-023b-8896-dcad9413081d@linux.alibaba.com>
+ <8e067230-ce1b-1c75-0c23-87b926357f96@linux.alibaba.com> <CAB=BE-SQZA7gETEvxnHmy0FDQ182fUSRoa0bJBNouN33SFx3hQ@mail.gmail.com>
+ <CAB=BE-Svf7TMPs-eA+sVuGtYjVWfKd1Nd_AkA9im4Op7TCLW3g@mail.gmail.com> <1f926a20-6b45-137d-4e78-30025ba33574@linux.alibaba.com>
+In-Reply-To: <1f926a20-6b45-137d-4e78-30025ba33574@linux.alibaba.com>
+From:   Sandeep Dhavale <dhavale@google.com>
+Date:   Mon, 27 Feb 2023 21:51:05 -0800
+Message-ID: <CAB=BE-SBtO6vcoyLNA9F-9VaN5R0t3o_Zn+FW8GbO6wyUqFneQ@mail.gmail.com>
+Subject: Re: [PATCH v5] erofs: add per-cpu threads for decompression as an option
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,79 +74,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.02.23 20:59, George Kennedy wrote:
-> Hello Thomas,
-> 
-> On 2/27/2023 9:20 AM, Linux regression tracking (Thorsten Leemhuis) wrote:
->> Hi, this is your Linux kernel regression tracker. Top-posting for once,
->> to make this easily accessible to everyone.
->>
->> George, is there anything we can do to help you moving forward to
->> finally get this regression fixed? It seems (or am I missing something?)
->> everyone is waiting for you (see below) to act on the feedback Jiri
->> provided here:
->>
->> https://lore.kernel.org/lkml/8dffe187-240d-746e-ed84-885ffd2785f6@kernel.org/
->>
->> Side note: would be good to add a "Link:" tag pointing to the start of
->> this thread as well, but that's just a detail.
-> 
-> I just sent the requested patch up for review.
-> 
-> https://lore.kernel.org/lkml/1677527001-17459-1-git-send-email-george.kennedy@oracle.com/
+On Mon, Feb 27, 2023 at 9:01=E2=80=AFPM Gao Xiang <hsiangkao@linux.alibaba.=
+com> wrote:
+>
+> Hi Sandeep,
+>
+> On 2023/2/28 12:47, Sandeep Dhavale via Linux-erofs wrote:
+> > Hi all,
+> > I completed the tests and the results are consistent with
+> > our previous observation. We can see that removing WQ_UNBOUND
+> > helps but the scheduling latency by using high priority per cpu
+> > kthreads is even lower. Below is the table.
+> >
+> > |---------------------+-------+-------+------+-------|
+> > | Table               | avg   | med   | min  | max   |
+> > |---------------------+-------+-------+------+-------|
+> > | Default erofs       | 19323 | 19758 | 3986 | 35051 |
+> > |---------------------+-------+-------+------+-------|
+> > | !WQ_UNBOUND         | 11202 | 10798 | 3493 | 19822 |
+> > |---------------------+-------+-------+------+-------|
+> > | hipri pcpu kthreads | 7182  | 7017  | 2463 | 12300 |
+> > |---------------------+-------+-------+------+-------|
+>
+> May I ask did it test with different setup since the test results
+> in the original commit message are:
+>
+Hi Gao,
+Yes I did the test on the different (older) hardware than my original testi=
+ng
+(but the same one Nathan had used) to remove that as a variable.
 
-Thx for handling this!
+Thanks,
+Sandeep.
 
-And I see it very quickly made its way to mainline. :-D
-
-Ciao, Thorsten
-
->> On 21.02.23 14:50, Greg Kroah-Hartman wrote:
->>> On Tue, Feb 21, 2023 at 08:30:11AM -0500, George Kennedy wrote:
->>>> On 2/20/2023 11:34 AM, Thomas Weißschuh wrote:
->>>>> +Cc people who were involved in the original thread.
->>>>>
->>>>> On Mon, Feb 20, 2023 at 12:48:59PM +0100, Jiri Slaby wrote:
->>>>>> On 20. 02. 23, 7:46, linux@weissschuh.net wrote:
->>>>>>> From: Thomas Weißschuh <linux@weissschuh.net>
->>>>>>>
->>>>>>> Commit 226fae124b2d
->>>>>>> ("vc_screen: move load of struct vc_data pointer in vcs_read() to
->>>>>>> avoid UAF")
->>>>>>> moved the call to vcs_vc() into the loop.
->>>>>>> While doing this it also moved the unconditional assignment of
->>>>>>> "ret = -ENXIO".
->>>>>>> This unconditional assignment was valid outside the loop but
->>>>>>> within it
->>>>>>> it clobbers the actual value of ret.
->>>>>>>
->>>>>>> To avoid this only assign "ret = -ENXIO" when actually needed.
->>>>>> Not sure -- I cannot find it -- but hasn't George fixed this yet?
->>>>> Indeed there was a proposed fix at
->>>>> https://lore.kernel.org/lkml/1675704844-17228-1-git-send-email-george.kennedy@oracle.com/
->>>>>
->>>>> Linus had some suggestions so it was not applied as is.
->>>>>
->>>>> I'm not sure what the current state is.
->>>>> George, do you have something in the pipeline?
->>>> Yes, that is in the pipeline:
->>>> https://lore.kernel.org/lkml/1675774098-17722-1-git-send-email-george.kennedy@oracle.com/
->>>>
->>>> Linus suggested the fix, which was tested and submitted.
->>>>
->>>> Jiri commented on the patch, which I believe was directed at Linus
->>>> as he
->>>> suggested the fix.
->>> And I was waiting for a new version from you based on those comments :(
->>>
->>> Can you fix that up and send?
->>>
->>> thanks,
->>>
->>> greg k-h
->> #regzbot monitor:
->> https://lore.kernel.org/lkml/1675774098-17722-1-git-send-email-george.kennedy@oracle.com/
->> #regzbot poke
-> 
-> 
-> 
+> +-------------------------+-----------+----------------+---------+
+> |                         | workqueue | kthread_worker |  diff   |
+> +-------------------------+-----------+----------------+---------+
+> | Average (us)            |     15253 |           2914 | -80.89% |
+> | Median (us)             |     14001 |           2912 | -79.20% |
+> | Minimum (us)            |      3117 |           1027 | -67.05% |
+> | Maximum (us)            |     30170 |           3805 | -87.39% |
+> | Standard deviation (us) |      7166 |            359 |         |
+> +-------------------------+-----------+----------------+---------+
+>
+> Otherwise it looks good to me for now, hopefully helpful to Android
+> users.
+>
+> Thanks,
+> Gao Xiang
+>
+> >
+> >
+> > Thanks,
+> > Sandeep.
