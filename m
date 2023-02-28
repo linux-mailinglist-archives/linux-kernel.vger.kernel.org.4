@@ -2,121 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599B66A6203
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE996A6208
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjB1V7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:59:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S229854AbjB1WAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjB1V7b (ORCPT
+        with ESMTP id S229510AbjB1WAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:59:31 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5DEE05A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:59:19 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id y19so6584736pgk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:59:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1677621558;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zcPXNEsEpksofsMgrJKoW+2Dw41GYFuZiABYuzNl9Gs=;
-        b=za5fWNg2Nv2HD9fejIfGBhGN1pMgo+aOFuLl+8D0p02BS02PEImNrgQqCIrppjORuf
-         Ivb6x0gnS0BZbVUteSyLJCe4dTk4zpZynrOz2UWb8qWvNDF+yf/sciJYzrRNEgvxLC9u
-         E+F8Jm5xh8TCc/I/byatHLr26L45EWG8pwgxY8bbdXhQsB74QJZvbs2lRJR9Za0eJQrh
-         P5GUabS7IWGFucgrRD6J0IOa6HasWQ1XTi4OIfCkZYZytf9vQdJlGOg3RL3s8CWEpn5/
-         z2Z6M46w39AsDLnnsLxujw5xk3E+JuicdzOsa2t4XB/n/cM5AaEnJbKx5Syy42mM5qGb
-         HD4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677621558;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zcPXNEsEpksofsMgrJKoW+2Dw41GYFuZiABYuzNl9Gs=;
-        b=BiICbeFfIw/URBPLzevUnc7qELMa4hBKqUY/iSc0Tu1xtJi8iFytJt+9JKzv2XYuyX
-         bMSahP7C/G0a3AtYhIRp/3igtK4DPr6M4qjp7gmt4PwIcAoS7z5LoXQVLB4ADIzeML3f
-         H+Ul5YAx97bXWVCZMnooVrQtlrE/RDg9J4+r9lpgOp/D4Rr8rGKoXZ2+L84uCR4qcFgg
-         4Os1a3ZIQbZOUwuqH3IlM9NgAHnyop7FJ4cB/SygJ/jMxQn050OSJXwCEiAubdT3uL62
-         IcwP6fBGaIfXyUHQ5w5Ej4XfGvix9B6yl/gPAwQrQNULlBed3QQtx+snCSHRXVUd7d+0
-         X73Q==
-X-Gm-Message-State: AO0yUKUihoDHe/D2CaZuVYiKJUcSWqMUA8dMpDnNwLedRX1W/Kz9FlRf
-        +SpbhRvnVSXtpKzeWC+BePhBXA==
-X-Google-Smtp-Source: AK7set9MF/vBgDRK4NIoF28WqhT66X4p2Sfvcjoa4aaWatAUerjrnyBRKlu55zK+kgH1S0F08yes8A==
-X-Received: by 2002:a62:1887:0:b0:5df:9809:2e3f with SMTP id 129-20020a621887000000b005df98092e3fmr2660388pfy.32.1677621558446;
-        Tue, 28 Feb 2023 13:59:18 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id e18-20020a656892000000b004fbd91d9716sm6185873pgt.15.2023.02.28.13.59.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 13:59:17 -0800 (PST)
-Date:   Tue, 28 Feb 2023 13:59:17 -0800 (PST)
-X-Google-Original-Date: Tue, 28 Feb 2023 13:58:23 PST (-0800)
-Subject:     Re: [PATCH] sched/doc: supplement CPU capacity with RISC-V
-In-Reply-To: <20230227105941.2749193-1-suagrfillet@gmail.com>
-CC:     alexs@kernel.org, siyanteng@loongson.cn, robh@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        leyfoon.tan@starfivetech.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        suagrfillet@gmail.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     suagrfillet@gmail.com, corbet@lwn.net
-Message-ID: <mhng-90a89c61-02e7-4f1a-b18d-189d9b7fff72@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 28 Feb 2023 17:00:15 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D265B8C;
+        Tue, 28 Feb 2023 14:00:12 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A149D5C02AC;
+        Tue, 28 Feb 2023 17:00:10 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 28 Feb 2023 17:00:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677621610; x=1677708010; bh=aNAgHaJy6a
+        AUHCk0J9b41K7Ir+UwyzX6a2u2nOJgENc=; b=A5KbX0M4SbSIsq+2A7eW2KKJR9
+        dp8sI4U2Nd5aQHyOyOVLKn7Ag19cmwk/6wyS4m4lVLwVVqQJqrblEnvlYVjoeWEw
+        Uu06A40aO20Ojo1ds6YNQ/TJ+NIMDSb9ydt1FSuo+I7dKArR4YJunioGGO17L/c3
+        dbRoMWWeiGOcYuA8xsFtjmRJAnpbQetVMDuwEX+mSnj6RDPHUt3ZOsbqJLdniD1k
+        hlDgiWE6QFp658LddRnYvhd01HYLCxGSKjhjQltKtw9BS4tpd4oM6x66vp7Ra6Tb
+        3xffFjcoqX4s40EBPcGDQxEcm3Yfi5N6KDhNAMhdR9esjXwAH6rPgOngB/Ag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677621610; x=1677708010; bh=aNAgHaJy6aAUHCk0J9b41K7Ir+Uw
+        yzX6a2u2nOJgENc=; b=TvyC0F/pyYsT7tnUKG6brxOBFkexCrDv0lgNw8DFDDjU
+        zqFGXMhHCxtC6N58KWXDEIOHlxES4tBcZPPMVE0GjE0i4xiiCDJwjRhOucZIkNfx
+        GOjvGSc++6ow6BXrrhU2pyev0PdlwzkTGGGC+5uogP7+0HNzROiONhg2WtgF4G0f
+        Pngp6+16dJP3EqRDqpkJ0UdpeaC1iurRWUxNBniY0xccIO276jKcmVoFwGcYTYNl
+        lKgmun+mdJcAVOJ+tqhKndc78WOZJFB5Xp7GZ2rt2TOunH6EsY4oUL3t6W3PCSEI
+        lEC+4Pz+secUnWzqwQZNir9kcXOdDScppj2PyJdQ5A==
+X-ME-Sender: <xms:aXn-Y8SPyh8AD8VTg2RKOGK3ZPl-iiRfI2NN4RKLUGwZ8n_hmNRflg>
+    <xme:aXn-Y5xqD08YSPNca3mZW-8qCOAiGV3j134UhloWhmMt3K0-51QpEtW4QXU15pZ5x
+    g2x_P1bmPQB0z_reg>
+X-ME-Received: <xmr:aXn-Y53kiAoizQm8_KSKuVwUUgL_Osd-FDoulTqh2Q1IllPpDLenqLmgALx2AkyMfppbyDzxz_piOSqsXa8omVtc-r7NTpe6ZPDtJig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelfedgleefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpeffhf
+    fvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeffrghnihgvlhcuighuuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepveduudegiefhtdffhe
+    fggfdugeeggeehtefgvefhkeekieelueeijeelkeeivdfgnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:aXn-YwDRTaWQjkhZmtkITNafg4S3DOFkgfLevxvdBtVeN_9RzZxplg>
+    <xmx:aXn-Y1jBKzQVSE5uSyIC9lqjBW9ukV2M5uZDhgOFOZCBgZxijwdMdg>
+    <xmx:aXn-Y8r-XJS8ysPMhQpTGg9GRA9nWP97Rxed1vqeV-oHFNFcAVsnTQ>
+    <xmx:ann-Y9jT2PL7mzD6HHfBsQMsfNQrEp2isrCY51EAMDh7NRrwmwe8Mw>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Feb 2023 17:00:09 -0500 (EST)
+Date:   Tue, 28 Feb 2023 15:00:07 -0700
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
+        dsahern@kernel.org, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 3/8] bpf, net, frags: Add
+ bpf_ip_check_defrag() kfunc
+Message-ID: <20230228220007.7qrcazeepnyjoqns@kashmir.localdomain>
+References: <cover.1677526810.git.dxu@dxuuu.xyz>
+ <7145c9891791db1c868a326476fef590f22b352b.1677526810.git.dxu@dxuuu.xyz>
+ <Y/5X7BF9CDYZMuMl@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/5X7BF9CDYZMuMl@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023 02:59:41 PST (-0800), suagrfillet@gmail.com wrote:
-> This commit 7d2078310cbf ("dt-bindings: arm: move cpu-capacity to a
-> shared loation") updates some references about capacity-dmips-mhz
-> property in this document.
->
-> The list of architectures using capacity-dmips-mhz omits RISC-V, so
-> supplements it here.
->
-> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> ---
->  Documentation/scheduler/sched-capacity.rst                    | 2 +-
->  Documentation/translations/zh_CN/scheduler/sched-capacity.rst | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/scheduler/sched-capacity.rst b/Documentation/scheduler/sched-capacity.rst
-> index 8e2b8538bc2b..e2c1cf743158 100644
-> --- a/Documentation/scheduler/sched-capacity.rst
-> +++ b/Documentation/scheduler/sched-capacity.rst
-> @@ -258,7 +258,7 @@ Linux cannot currently figure out CPU capacity on its own, this information thus
->  needs to be handed to it. Architectures must define arch_scale_cpu_capacity()
->  for that purpose.
->
-> -The arm and arm64 architectures directly map this to the arch_topology driver
-> +The arm, arm64, and RISC-V architectures directly map this to the arch_topology driver
->  CPU scaling data, which is derived from the capacity-dmips-mhz CPU binding; see
->  Documentation/devicetree/bindings/cpu/cpu-capacity.txt.
->
-> diff --git a/Documentation/translations/zh_CN/scheduler/sched-capacity.rst b/Documentation/translations/zh_CN/scheduler/sched-capacity.rst
-> index e07ffdd391d3..8cba135dcd1a 100644
-> --- a/Documentation/translations/zh_CN/scheduler/sched-capacity.rst
-> +++ b/Documentation/translations/zh_CN/scheduler/sched-capacity.rst
-> @@ -231,7 +231,7 @@ CFS调度类基于实体负载跟踪机制（Per-Entity Load Tracking, PELT）
->  当前，Linux无法凭自身算出CPU算力，因此必须要有把这个信息传递给Linux的方式。每个架构必须为此
->  定义arch_scale_cpu_capacity()函数。
->
-> -arm和arm64架构直接把这个信息映射到arch_topology驱动的CPU scaling数据中（译注：参考
-> +arm、arm64和RISC-V架构直接把这个信息映射到arch_topology驱动的CPU scaling数据中（译注：参考
->  arch_topology.h的percpu变量cpu_scale），它是从capacity-dmips-mhz CPU binding中衍生计算
->  出来的。参见Documentation/devicetree/bindings/cpu/cpu-capacity.txt。
+Hi Stanislav,
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com> # English
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Tue, Feb 28, 2023 at 11:37:16AM -0800, Stanislav Fomichev wrote:
+> On 02/27, Daniel Xu wrote:
+> > This kfunc is used to defragment IPv4 packets. The idea is that if you
+> > see a fragmented packet, you call this kfunc. If the kfunc returns 0,
+> > then the skb has been updated to contain the entire reassembled packet.
+> 
+> > If the kfunc returns an error (most likely -EINPROGRESS), then it means
+> > the skb is part of a yet-incomplete original packet. A reasonable
+> > response to -EINPROGRESS is to drop the packet, as the ip defrag
+> > infrastructure is already hanging onto the frag for future reassembly.
+> 
+> > Care has been taken to ensure the prog skb remains valid no matter what
+> > the underlying ip_check_defrag() call does. This is in contrast to
+> > ip_defrag(), which may consume the skb if the skb is part of a
+> > yet-incomplete original packet.
+> 
+> > So far this kfunc is only callable from TC clsact progs.
+> 
+> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > ---
+> >   include/net/ip.h           | 11 +++++
+> >   net/ipv4/Makefile          |  1 +
+> >   net/ipv4/ip_fragment.c     |  2 +
+> >   net/ipv4/ip_fragment_bpf.c | 98 ++++++++++++++++++++++++++++++++++++++
+> >   4 files changed, 112 insertions(+)
+> >   create mode 100644 net/ipv4/ip_fragment_bpf.c
+> 
+> > diff --git a/include/net/ip.h b/include/net/ip.h
+> > index c3fffaa92d6e..f3796b1b5cac 100644
+> > --- a/include/net/ip.h
+> > +++ b/include/net/ip.h
+> > @@ -680,6 +680,7 @@ enum ip_defrag_users {
+> >   	IP_DEFRAG_VS_FWD,
+> >   	IP_DEFRAG_AF_PACKET,
+> >   	IP_DEFRAG_MACVLAN,
+> > +	IP_DEFRAG_BPF,
+> >   };
+> 
+> >   /* Return true if the value of 'user' is between 'lower_bond'
+> > @@ -693,6 +694,16 @@ static inline bool ip_defrag_user_in_between(u32
+> > user,
+> >   }
+> 
+> >   int ip_defrag(struct net *net, struct sk_buff *skb, u32 user);
+> > +
+> > +#ifdef CONFIG_DEBUG_INFO_BTF
+> > +int register_ip_frag_bpf(void);
+> > +#else
+> > +static inline int register_ip_frag_bpf(void)
+> > +{
+> > +	return 0;
+> > +}
+> > +#endif
+> > +
+> >   #ifdef CONFIG_INET
+> >   struct sk_buff *ip_check_defrag(struct net *net, struct sk_buff *skb,
+> > u32 user);
+> >   #else
+> > diff --git a/net/ipv4/Makefile b/net/ipv4/Makefile
+> > index 880277c9fd07..950efb166d37 100644
+> > --- a/net/ipv4/Makefile
+> > +++ b/net/ipv4/Makefile
+> > @@ -65,6 +65,7 @@ obj-$(CONFIG_TCP_CONG_ILLINOIS) += tcp_illinois.o
+> >   obj-$(CONFIG_NET_SOCK_MSG) += tcp_bpf.o
+> >   obj-$(CONFIG_BPF_SYSCALL) += udp_bpf.o
+> >   obj-$(CONFIG_NETLABEL) += cipso_ipv4.o
+> > +obj-$(CONFIG_DEBUG_INFO_BTF) += ip_fragment_bpf.o
+> 
+> >   obj-$(CONFIG_XFRM) += xfrm4_policy.o xfrm4_state.o xfrm4_input.o \
+> >   		      xfrm4_output.o xfrm4_protocol.o
+> > diff --git a/net/ipv4/ip_fragment.c b/net/ipv4/ip_fragment.c
+> > index 959d2c4260ea..e3fda5203f09 100644
+> > --- a/net/ipv4/ip_fragment.c
+> > +++ b/net/ipv4/ip_fragment.c
+> > @@ -759,5 +759,7 @@ void __init ipfrag_init(void)
+> >   	if (inet_frags_init(&ip4_frags))
+> >   		panic("IP: failed to allocate ip4_frags cache\n");
+> >   	ip4_frags_ctl_register();
+> > +	if (register_ip_frag_bpf())
+> > +		panic("IP: bpf: failed to register ip_frag_bpf\n");
+> >   	register_pernet_subsys(&ip4_frags_ops);
+> >   }
+> > diff --git a/net/ipv4/ip_fragment_bpf.c b/net/ipv4/ip_fragment_bpf.c
+> > new file mode 100644
+> > index 000000000000..a9e5908ed216
+> > --- /dev/null
+> > +++ b/net/ipv4/ip_fragment_bpf.c
+> > @@ -0,0 +1,98 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/* Unstable ipv4 fragmentation helpers for TC-BPF hook
+> > + *
+> > + * These are called from SCHED_CLS BPF programs. Note that it is
+> > allowed to
+> > + * break compatibility for these functions since the interface they are
+> > exposed
+> > + * through to BPF programs is explicitly unstable.
+> > + */
+> > +
+> > +#include <linux/bpf.h>
+> > +#include <linux/btf_ids.h>
+> > +#include <linux/ip.h>
+> > +#include <linux/filter.h>
+> > +#include <linux/netdevice.h>
+> > +#include <net/ip.h>
+> > +#include <net/sock.h>
+> > +
+> > +__diag_push();
+> > +__diag_ignore_all("-Wmissing-prototypes",
+> > +		  "Global functions as their definitions will be in ip_fragment BTF");
+> > +
+> > +/* bpf_ip_check_defrag - Defragment an ipv4 packet
+> > + *
+> > + * This helper takes an skb as input. If this skb successfully
+> > reassembles
+> > + * the original packet, the skb is updated to contain the original,
+> > reassembled
+> > + * packet.
+> > + *
+> > + * Otherwise (on error or incomplete reassembly), the input skb remains
+> > + * unmodified.
+> > + *
+> > + * Parameters:
+> > + * @ctx		- Pointer to program context (skb)
+> > + * @netns	- Child network namespace id. If value is a negative signed
+> > + *		  32-bit integer, the netns of the device in the skb is used.
+> > + *
+> > + * Return:
+> > + * 0 on successfully reassembly or non-fragmented packet. Negative
+> > value on
+> > + * error or incomplete reassembly.
+> > + */
+> > +int bpf_ip_check_defrag(struct __sk_buff *ctx, u64 netns)
+> 
+> Needs a __bpf_kfunc tag as well?
 
-Happy to take this through the RISC-V tree, but I'll hold off for a bit 
-and let the doc folks have a chance to chime in (or just pick it up).  
-I'm planning on sending something later this week either way.
+Ack.
+
+> > +{
+> > +	struct sk_buff *skb = (struct sk_buff *)ctx;
+> > +	struct sk_buff *skb_cpy, *skb_out;
+> > +	struct net *caller_net;
+> > +	struct net *net;
+> > +	int mac_len;
+> > +	void *mac;
+> > +
+> 
+> [..]
+> 
+> > +	if (unlikely(!((s32)netns < 0 || netns <= S32_MAX)))
+> > +		return -EINVAL;
+> 
+> Can you explain what it does? Is it checking for -1 explicitly? Not sure
+> it works :-/
+> 
+> Maybe we can spell out the cases explicitly?
+> if (unlikely(
+> 	     ((s32)netns < 0 && netns != S32_MAX) || /* -1 */
+> 	     netns > U32_MAX /* higher 4 bytes */
+> 	    )
+> 	return -EINVAL;
+> 
+
+I copied this from net/core/filter.c:__bpf_skc_lookup:
+
+	if (unlikely(flags || !((s32)netns_id < 0 || netns_id <= S32_MAX)))
+		goto out;
+
+The semantics are a bit odd, but I thought it'd be good to maintain
+consistency. I believe the code correctly checks what the docs describe:
+
+        @netns	- Child network namespace id. If value is a negative signed
+                  32-bit integer, the netns of the device in the skb is used.
+
+I can pull out the logic into a helper for v3.
+
+[...]
+
+
+Thanks,
+Daniel
