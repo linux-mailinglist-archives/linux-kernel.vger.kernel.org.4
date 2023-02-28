@@ -2,53 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC0A6A5779
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB01A6A577E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbjB1LHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S230216AbjB1LHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjB1LHI (ORCPT
+        with ESMTP id S229528AbjB1LHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:07:08 -0500
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448EE2A9B3;
-        Tue, 28 Feb 2023 03:07:06 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 8EA5EC800A8;
-        Tue, 28 Feb 2023 12:07:04 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id e8gRqcMKz9K0; Tue, 28 Feb 2023 12:07:04 +0100 (CET)
-Received: from [192.168.176.165] (host-88-217-226-44.customer.m-online.net [88.217.226.44])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id 0ABDFC800A7;
-        Tue, 28 Feb 2023 12:07:04 +0100 (CET)
-Message-ID: <02ec2b60-2651-fb50-ca8c-d64c2df84caa@tuxedocomputers.com>
-Date:   Tue, 28 Feb 2023 12:07:03 +0100
+        Tue, 28 Feb 2023 06:07:48 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51822ED5A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:07:30 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id e27so792769uan.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rNfciygMzVNBDRrjpdQwJPuhnz4YivqlqvOG4g21Tc0=;
+        b=Il/1IkEAW14Ed7gRqLPWJdMYAxdc7D8VH60v2LgxQ0b/80EXAGXRRqwl2hVm2ff7tT
+         3KPCr/Ff8TO7D7UBd56HTqrAczLgPyZ7rzZdo3z3kpmrkoAvsdCFgi09qFA1JqhP/KnB
+         vBzRDYdLDWdtMYsW2jl1CQ06blyxgeix2Bvu672fybcMOsbz4Hwv6lxsfEgj7+170hiX
+         tCWcU7YYcWkM/yQDw6JfmAtS9GdyefFPR88ncXZbQyT6S6Xks2VneJyKT8QxmmjZiYsi
+         koky/G60MzyQhoUVh5WRczvtc48hnUQT9W3WWiwfMTdgxI+MhNi53EkHLst+1ewOKEHk
+         Hi7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rNfciygMzVNBDRrjpdQwJPuhnz4YivqlqvOG4g21Tc0=;
+        b=En2c46yokkQCQ3BlS8V+MSZcMFZPHeles9M9VVd/ukwG+94Dg+KenQTWdHqulShp3q
+         wODyfWeFaYDLp7FlvNtntIMixhByI5WP5KycgNvLT9X0KlUcMmsT3vhUx/GEzO7mgg6D
+         7u/E4RZWvKWuUMulbM40wtol7murh1qKEz2J6YUMcgkIi4Fehm7Dm1hXeXlS4IIZ4lw9
+         eQ6OY3SnFelbAxMpF6FxvL10uqXA0zUoG3n0zr7pLokKatQBidD7izcRJOIqrY0WNQFo
+         ebwu6M4iVGmDfTfC8/K2DBmolybhc5vhqcs/cO1rwPg6PQFm9KLQNxkJsSv69G6Ow8Td
+         ROXA==
+X-Gm-Message-State: AO0yUKUAgW6B46gImQU9bxzTcrH5LZNpL3W5VecWXKioRP5ibrJXSxFg
+        SNYbyDHamMaH5Q/piGkTxCf5Izli8NdMB5bqrJB68w==
+X-Google-Smtp-Source: AK7set8xnWEcj0PoN3PFXB/ASvTpJJf4Y9zJxubQeCJYwll+4K8yw0tWai3jHZNMTg/9QEuEjzmPXalUE6Fxe9XMvHY=
+X-Received: by 2002:a1f:31c6:0:b0:411:ff57:d3b9 with SMTP id
+ x189-20020a1f31c6000000b00411ff57d3b9mr1130074vkx.2.1677582449615; Tue, 28
+ Feb 2023 03:07:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 0/2] Fix "Input: i8042 - add TUXEDO devices to i8042
- quirk tables for partial fix"
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>, dmitry.torokhov@gmail.com,
-        swboyd@chromium.org, gregkh@linuxfoundation.org,
-        mkorpershoek@baylibre.com, chenhuacai@kernel.org,
-        wsa+renesas@sang-engineering.com, tiwai@suse.de,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230227185907.569154-1-wse@tuxedocomputers.com>
- <a2216cc2-b719-12e1-264c-374fc467db14@redhat.com>
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <a2216cc2-b719-12e1-264c-374fc467db14@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <5bf4f1d679e2f80814d07937309602877afd02c6.1677577036.git.Rijo-john.Thomas@amd.com>
+In-Reply-To: <5bf4f1d679e2f80814d07937309602877afd02c6.1677577036.git.Rijo-john.Thomas@amd.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Tue, 28 Feb 2023 16:37:18 +0530
+Message-ID: <CAFA6WYOZwWuMHXGscgK0Lv9Jbt5WHhfhmK+2ZNR6cr2EAbikCw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] tee: amdtee: fix race condition in amdtee_open_session
+To:     Rijo Thomas <Rijo-john.Thomas@amd.com>
+Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
+        lm0963 <lm0963hack@gmail.com>,
+        Mythri PK <Mythri.Pandeshwarakrishna@amd.com>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        security@kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,35 +70,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Am 28.02.23 um 09:41 schrieb Hans de Goede:
-> Hi Werner,
+On Tue, 28 Feb 2023 at 15:11, Rijo Thomas <Rijo-john.Thomas@amd.com> wrote:
 >
-> On 2/27/23 19:59, Werner Sembach wrote:
->> This is a continuation of
->> https://lore.kernel.org/linux-input/20220708161005.1251929-3-wse@tuxedocomputers.com/
->>
->> That fix did fix the keyboard not responding at all sometimes after resume,
->> but at the price of it being laggy for some time after boot. Additionally
->> setting atkbd.reset removes that lag.
->>
->> This patch comes in 2 parts: The first one adds a quirk to atkbd to set
->> atkbd.reset and the second one then applies that and the i8042 quirks to
->> the affected devices.
-> Can you please rework this series so that the quirk based setting of
-> the "atkbd.reset" equivalent on the kernel commandline becomes another
-> SERIO_QUIRK_* flag and avoid the duplication of the DMI ids?
-
-I'm not sure how to cleanly do this, since atkbd is an own module?
-
-Kind Regards,
-
-Werner
-
+> There is a potential race condition in amdtee_open_session that may
+> lead to use-after-free. For instance, in amdtee_open_session() after
+> sess->sess_mask is set, and before setting:
 >
-> Regards,
+>     sess->session_info[i] = session_info;
 >
-> Hans
+> if amdtee_close_session() closes this same session, then 'sess' data
+> structure will be released, causing kernel panic when 'sess' is
+> accessed within amdtee_open_session().
 >
+> The solution is to set the bit sess->sess_mask as the last step in
+> amdtee_open_session().
 >
+> Fixes: 757cc3e9ff1d ("tee: add AMD-TEE driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Rijo Thomas <Rijo-john.Thomas@amd.com>
+> ---
+>  drivers/tee/amdtee/core.c | 29 ++++++++++++++---------------
+>  1 file changed, 14 insertions(+), 15 deletions(-)
+>
+
+Looks sane to me, FWIW:
+
+Acked-by: Sumit Garg <sumit.garg@linaro.org>
+
+-Sumit
+
+> diff --git a/drivers/tee/amdtee/core.c b/drivers/tee/amdtee/core.c
+> index 297dc62bca29..372d64756ed6 100644
+> --- a/drivers/tee/amdtee/core.c
+> +++ b/drivers/tee/amdtee/core.c
+> @@ -267,35 +267,34 @@ int amdtee_open_session(struct tee_context *ctx,
+>                 goto out;
+>         }
+>
+> +       /* Open session with loaded TA */
+> +       handle_open_session(arg, &session_info, param);
+> +       if (arg->ret != TEEC_SUCCESS) {
+> +               pr_err("open_session failed %d\n", arg->ret);
+> +               handle_unload_ta(ta_handle);
+> +               kref_put(&sess->refcount, destroy_session);
+> +               goto out;
+> +       }
+> +
+>         /* Find an empty session index for the given TA */
+>         spin_lock(&sess->lock);
+>         i = find_first_zero_bit(sess->sess_mask, TEE_NUM_SESSIONS);
+> -       if (i < TEE_NUM_SESSIONS)
+> +       if (i < TEE_NUM_SESSIONS) {
+> +               sess->session_info[i] = session_info;
+> +               set_session_id(ta_handle, i, &arg->session);
+>                 set_bit(i, sess->sess_mask);
+> +       }
+>         spin_unlock(&sess->lock);
+>
+>         if (i >= TEE_NUM_SESSIONS) {
+>                 pr_err("reached maximum session count %d\n", TEE_NUM_SESSIONS);
+> +               handle_close_session(ta_handle, session_info);
+>                 handle_unload_ta(ta_handle);
+>                 kref_put(&sess->refcount, destroy_session);
+>                 rc = -ENOMEM;
+>                 goto out;
+>         }
+>
+> -       /* Open session with loaded TA */
+> -       handle_open_session(arg, &session_info, param);
+> -       if (arg->ret != TEEC_SUCCESS) {
+> -               pr_err("open_session failed %d\n", arg->ret);
+> -               spin_lock(&sess->lock);
+> -               clear_bit(i, sess->sess_mask);
+> -               spin_unlock(&sess->lock);
+> -               handle_unload_ta(ta_handle);
+> -               kref_put(&sess->refcount, destroy_session);
+> -               goto out;
+> -       }
+> -
+> -       sess->session_info[i] = session_info;
+> -       set_session_id(ta_handle, i, &arg->session);
+>  out:
+>         free_pages((u64)ta, get_order(ta_size));
+>         return rc;
+> --
+> 2.25.1
 >
