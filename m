@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F916A62BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 686116A62C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjB1WpN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Feb 2023 17:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S229675AbjB1WrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjB1WpJ (ORCPT
+        with ESMTP id S229525AbjB1WrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:45:09 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C272305FA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:45:06 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-71-ecQdmCC0MlGQuDzZDzZ6eg-1; Tue, 28 Feb 2023 22:45:02 +0000
-X-MC-Unique: ecQdmCC0MlGQuDzZDzZ6eg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Tue, 28 Feb
- 2023 22:45:00 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Tue, 28 Feb 2023 22:45:00 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Russell King' <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@kernel.org>
-CC:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        "Ian Abbott" <abbotti@mev.co.uk>, Jakub Kicinski <kuba@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Manuel Lauss <manuel.lauss@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "Olof Johansson" <olof@lixom.net>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
-Thread-Topic: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
-Thread-Index: AQHZSuhWwIxyEez/qUesuC2XWPglYq7k9JKQ
-Date:   Tue, 28 Feb 2023 22:45:00 +0000
-Message-ID: <b75b24146c114e948bb2d325a8d27fda@AcuMS.aculab.com>
-References: <20230227133457.431729-1-arnd@kernel.org>
- <Y/0PbJzvrzpvLbcW@shell.armlinux.org.uk>
-In-Reply-To: <Y/0PbJzvrzpvLbcW@shell.armlinux.org.uk>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 28 Feb 2023 17:47:07 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73B132CE2;
+        Tue, 28 Feb 2023 14:47:04 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 53D69377;
+        Tue, 28 Feb 2023 22:47:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 53D69377
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1677624424; bh=7MOTi1s0b6wiBYLHjM9LPAN2VSq4alK+pt/BAj3Oh5s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SZfsWHTYodVesLpkkDor5aNKlAkkcj88wZexFryLzKj3tSXRc5KonSWXxJbfjJmdN
+         6a0D+iNZCde9EXh3NxmVY3RzaGYTebdNe+Buc+42ycsRE5vJH0I9y5O8cEnsVFfvSr
+         p/wYiJPH1k9A1Oi8zCmocqhBvNsZzIB2nuZupgIVMLGejzA2soCJfA+2ReOLRGtfmd
+         uQJ6mPerZnpI+eubIJvQglyATKCel6aIsyoUnIZeOUWMGDcg3+at4lbECCuBM/3YJ5
+         Dy/L2CMGK0h7nRhbsbCluBUVgRqd6VxpwZceW5qJ1tWqmJ4Asn6hxJSr55Z0Fuxpq0
+         WNhxqVFcG35XA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Linus Torvalds <torvalds@linuxfoundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Documentation stragglers for 6.3
+Date:   Tue, 28 Feb 2023 15:47:03 -0700
+Message-ID: <87sfepwgpk.fsf@meer.lwn.net>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King
-> Sent: 27 February 2023 20:16
-> 
-> On Mon, Feb 27, 2023 at 02:34:51PM +0100, Arnd Bergmann wrote:
-> > I don't expect this to be a problem normal laptop support, as the last
-> > PC models that predate Cardbus support (e.g. 1997 ThinkPad 380ED) are
-> > all limited to i586MMX CPUs and 80MB of RAM. This is barely enough to
-> > boot Tiny Core Linux but not a regular distro.
-> 
-> Am I understanding that the argument you're putting forward here is
-> "cardbus started in year X, so from year X we can ignore 16-bit
-> PCMCIA support" ?
-> 
-> Given that PCMCIA support has been present in x86 hardware at least
-> up to 2010, I don't see how that is any basis for making a decision
-> about 16-bit PCMCIA support.
-> 
-> Isn't the relevant factor here whether 16-bit PCMCIA cards are still
-> in use on hardware that can run a modern distro? (And yes, x86
-> machines that have 16-bit PCMCIA can still run Debian Stable today.)
+The following changes since commit cc29eadef921fe52aa58f32536a93d9ea0ca3eb7:
 
-Or, more specifically, are any people using 16-bit PCMCIA cards
-in cardbus-capable sockets with a current kernel.
-They might be using unusual cards that aren't available as
-cardbus - perhaps 56k modems (does anyone still use those?).
+  Documentation/watchdog/hpwdt: Fix Format (2023-02-16 17:31:29 -0700)
 
-I'm pretty sure I've used sparc systems that had slots that
-would take both pcmcia and cardbus cards.
-Would have been 20 years ago - but they were 64MHz PCI so wouldn't
-have been that slow (I can't remember which cpu it was).
-They ran Solaris, but weren't made by Sun.
+are available in the Git repository at:
 
-	David
+  git://git.lwn.net/linux.git tags/docs-6.3-2
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+for you to fetch changes up to 901578a45950bcc4d5055a24e9016d61b84dc1a2:
 
+  docs: recommend using Link: whenever using Reported-by: (2023-02-23 12:47:46 -0700)
+
+----------------------------------------------------------------
+A handful of documentation patches that were ready before the merge window,
+but which I didn't get merged for the first round:
+
+- A recommendation from Thorsten (also akpm) on use of Link tags to point
+  out problem reports.
+
+- Some front-page formatting tweaks
+
+- Another Spanish translation
+
+- One typo(ish) fix.
+
+----------------------------------------------------------------
+Carlos Bilbao (1):
+      docs/sp_SP: Add process programming-language translation
+
+Lukas Bulwahn (1):
+      docs: locking: refer to the actual existing config names
+
+Randy Dunlap (1):
+      Documentation: front page: use recommended heading adornments
+
+Thorsten Leemhuis (1):
+      docs: recommend using Link: whenever using Reported-by:
+
+ Documentation/index.rst                            | 17 +++----
+ Documentation/locking/locktorture.rst              |  4 +-
+ Documentation/process/5.Posting.rst                |  3 +-
+ Documentation/process/submitting-patches.rst       |  9 ++--
+ Documentation/translations/sp_SP/process/index.rst |  1 +
+ .../sp_SP/process/programming-language.rst         | 53 ++++++++++++++++++++++
+ 6 files changed, 72 insertions(+), 15 deletions(-)
+ create mode 100644 Documentation/translations/sp_SP/process/programming-language.rst
