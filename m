@@ -2,122 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B2E6A50B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D006A50BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjB1Baa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 20:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S229802AbjB1Ba4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 20:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjB1Ba2 (ORCPT
+        with ESMTP id S229700AbjB1Bav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 20:30:28 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475425245
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:30:27 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id cf14so8915699qtb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:30:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EuMQ4R7Qcpzp+24B3X8Yl/9yUt6uqVFoa6RSbqcjeIs=;
-        b=O/BNoI/bjDmKlfOByyzuulTXcHp5SUbRqGfj7S7wmalXNQbMw9EVxdYHrAseqJAKiN
-         jLMgDufyroK/6c4CRtZePBt4DV1vdZp/RTM1LheCrhD365AVTTRvutIjw6YZTcx0VZfA
-         eCwyTGl7qT4tK7neqUgNGkGQAexQEc03nXBjA=
+        Mon, 27 Feb 2023 20:30:51 -0500
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CD85B80
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:30:49 -0800 (PST)
+Received: by mail-io1-f77.google.com with SMTP id be25-20020a056602379900b0074ce1a54a46so3728386iob.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:30:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EuMQ4R7Qcpzp+24B3X8Yl/9yUt6uqVFoa6RSbqcjeIs=;
-        b=REj2zB8T1WGVLvpUQEg0GP/xKODCac6F3S7n0/ow5BoTeWx8c935QpQkP8rXQhAUPI
-         OcWFuo2cJVBFl6DbXCIUfs7Lc9xuZqJ3SiqRZYuClRJ2GT5jFCf0HB0GTwwkL24QA3Rs
-         VrV4zw9TTokFWSJP5UPSs2nfFX6ePY20ngFq05XRNBWhNIF/em7eX8Ms2FfcroT+rROU
-         mdsh0DjUeDb0stdx22uJY8RkEO/YXqff5R9T6m95V5ZKEVCXNVZKqL+eT0HxhIjoJOdb
-         kP4gjhaGMSp4B2eyfc/lOVATi2a3BGwquA5P3owbWNhIsgr0pNu+TyLGHi/cMPCdt1YM
-         QMXA==
-X-Gm-Message-State: AO0yUKU+kahiJEQ64zCbH5+c5/1r5fRb7ou3Ly7DZ1mXF3CVcBNyCYyl
-        8GIw8jcWRTZNdATRhCIOlbnhQg==
-X-Google-Smtp-Source: AK7set+gzmpHwGjyqAH6OmnNysxwS8GhOVYZrcGN/dDY8QQ38IcGvcm+qQyKvVQ2LWTIavMzLD4X+Q==
-X-Received: by 2002:ac8:5848:0:b0:3bf:a72f:d0bd with SMTP id h8-20020ac85848000000b003bfa72fd0bdmr2602796qth.3.1677547826325;
-        Mon, 27 Feb 2023 17:30:26 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id g2-20020ac870c2000000b003b868cdc689sm5690048qtp.5.2023.02.27.17.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 17:30:25 -0800 (PST)
-Date:   Tue, 28 Feb 2023 01:30:25 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as
- completed
-Message-ID: <Y/1ZMXsNZtwYPJNW@google.com>
-References: <Y/z0fHHYdxEXcWMT@pc636>
- <7EBE4F51-F2BD-4B42-AFC1-CA234E78CC7B@joelfernandes.org>
- <Y/z9Its1RKetIr8V@pc636>
- <CAEXW_YSjT_orp8TbomBFU+ETS7YJ7TrbHTdrsBRTzCKG5_SBdw@mail.gmail.com>
- <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y/0/dnmIk508sidK@lothringen>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0XVOtsS20j6TwpAszdBH5R8uzB/1WiLe+mL7s7CZq0g=;
+        b=gZ0CMlzLJJWvEWnoBy28GuBjy2Y95kMdmQoepDBgv02ga9cdkrPH6aio5xL3/3qEhd
+         eYM93R23/M23bTEGiyShVm4WcYmEKBH1U6m3act7wg8VDvVTc4hsKikgwawggoi/fTMG
+         FjuVY5prmw6Nqq35Uq3xmvoAmeMkG+vmZjih3jt+eNZPjE5liQv0pZ9C3yyIerce0kbZ
+         fsWzvAAFeVWLNSXc8e118o5vLktXbBUemC/Mlm6cmAlLyaxV/7Mi4krlMCw1jOFHKFZ2
+         iZUiy9qONrVVjARv2D40KaVNCqv537mbbdKjgpQ3KfG5SwQ4fJ2K1s1n6u9C8wLznR/8
+         ZzMw==
+X-Gm-Message-State: AO0yUKVLiJcJgyuSHzHhDLa8W7H1ZnL9LLll+IaTnySkBYeu+08d2VwK
+        dtsS3MvRXfgRwiMCYzxdwRx2lwWogZ5hLoMF/aVgido9hNhh
+X-Google-Smtp-Source: AK7set/SI3qAz2hTZ4NMc/vpWcLm3kTR8JDTmYu6a9NIUCowB469HoiMmoiJZA9vAeA/9H/XqpPpB0T12B4E95z79S6ZpjNyWNH/
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/0/dnmIk508sidK@lothringen>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:2185:b0:3c2:c1c9:8bca with SMTP id
+ s5-20020a056638218500b003c2c1c98bcamr7525487jaj.2.1677547848624; Mon, 27 Feb
+ 2023 17:30:48 -0800 (PST)
+Date:   Mon, 27 Feb 2023 17:30:48 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009c7eb105f5b88b70@google.com>
+Subject: [syzbot] [xfs?] INFO: task hung in xfs_buf_item_unpin
+From:   syzbot <syzbot+3f083e9e08b726fcfba2@syzkaller.appspotmail.com>
+To:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 12:40:38AM +0100, Frederic Weisbecker wrote:
-> On Mon, Feb 27, 2023 at 03:05:02PM -0800, Paul E. McKenney wrote:
-> > On Mon, Feb 27, 2023 at 02:10:30PM -0500, Joel Fernandes wrote:
-> > 
-> > The combination of sysfs manipulated by userspace and a kernel failsafe
-> > makes sense to me.  Especially if by default triggering the failsafe
-> > splats.  That way, bugs where userspace fails to update the sysfs file
-> > get caught.
-> > 
-> > The non-default silent-failsafe mode is also useful to allow some power
-> > savings in advance of userspace getting the sysfs updating in place.
-> > And of course the default splatting setup can be used in internal testing
-> > with the release software being more tolerant of userspace foibles.
-> 
-> I'm wondering, this is all about CONFIG_RCU_LAZY, right? Or does also expedited
-> GP turned off a bit early or late on boot matter for anybody in practice?
+Hello,
 
-Yes, if you provide 'rcu_normal_after_boot', then after the boot ends, it
-switches expedited GPs to normal ones.
+syzbot found the following issue on:
 
-It is the same issue for expedited, the kernel's version of what is 'boot' is
-much shorter than what is actually boot.
+HEAD commit:    d2980d8d8265 Merge tag 'mm-nonmm-stable-2023-02-20-15-29' ..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1762367f480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=471a946f0dd5764c
+dashboard link: https://syzkaller.appspot.com/bug?extid=3f083e9e08b726fcfba2
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a077d8c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14d91c74c80000
 
-This is also the case with suspend/resume's rcu_pm_notify(). See the comment:
-  /*
-   * On non-huge systems, use expedited RCU grace periods to make suspend
-   * and hibernation run faster.
-   */
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/159d030340e5/disk-d2980d8d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/0d5b1b25dc46/vmlinux-d2980d8d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ef120fb23cd8/bzImage-d2980d8d.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/80ffe04ac396/mount_0.gz
 
-There also we turn on/off both lazy and expedited. I don't see why we
-shouldn't do it for boot.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3f083e9e08b726fcfba2@syzkaller.appspotmail.com
 
-> So shouldn't we disable lazy callbacks by default when CONFIG_RCU_LAZY=y and then
-> turn it on with "sysctl kernel.rcu.lazy=1" only whenever userspace feels ready
-> about it? We can still keep the current call to rcu_end_inkernel_boot().
+INFO: task kworker/0:1H:52 blocked for more than 143 seconds.
+      Not tainted 6.2.0-syzkaller-09238-gd2980d8d8265 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:1H    state:D stack:25824 pid:52    ppid:2      flags:0x00004000
+Workqueue: xfs-log/loop0 xlog_ioend_work
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5304 [inline]
+ __schedule+0x17d8/0x4990 kernel/sched/core.c:6622
+ schedule+0xc3/0x180 kernel/sched/core.c:6698
+ schedule_timeout+0xb0/0x310 kernel/time/timer.c:2143
+ ___down_common+0x33e/0x5e0 kernel/locking/semaphore.c:225
+ __down_common+0xcd/0x470 kernel/locking/semaphore.c:246
+ down+0x84/0xc0 kernel/locking/semaphore.c:63
+ xfs_buf_lock+0x1fa/0x780 fs/xfs/xfs_buf.c:1120
+ xfs_buf_item_unpin+0x29b/0x9b0 fs/xfs/xfs_buf_item.c:547
+ xfs_trans_committed_bulk+0x346/0x830 fs/xfs/xfs_trans.c:806
+ xlog_cil_committed+0x26d/0xfb0 fs/xfs/xfs_log_cil.c:795
+ xlog_cil_process_committed+0x159/0x1a0 fs/xfs/xfs_log_cil.c:823
+ xlog_state_shutdown_callbacks+0x2ba/0x3b0 fs/xfs/xfs_log.c:538
+ xlog_force_shutdown+0x32c/0x390 fs/xfs/xfs_log.c:3837
+ xlog_ioend_work+0xad/0x100 fs/xfs/xfs_log.c:1429
+ process_one_work+0x915/0x13a0 kernel/workqueue.c:2390
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
+ kthread+0x270/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task syz-executor359:5073 blocked for more than 143 seconds.
+      Not tainted 6.2.0-syzkaller-09238-gd2980d8d8265 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor359 state:D stack:23624 pid:5073  ppid:5072   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5304 [inline]
+ __schedule+0x17d8/0x4990 kernel/sched/core.c:6622
+ schedule+0xc3/0x180 kernel/sched/core.c:6698
+ xlog_wait+0x16e/0x1e0 fs/xfs/xfs_log_priv.h:617
+ xlog_wait_on_iclog+0x3a5/0x650 fs/xfs/xfs_log.c:926
+ xfs_log_force_seq+0x1da/0x450 fs/xfs/xfs_log.c:3409
+ __xfs_trans_commit+0xbcd/0x1130 fs/xfs/xfs_trans.c:1014
+ xfs_sync_sb_buf+0x14f/0x1e0 fs/xfs/libxfs/xfs_sb.c:1110
+ xfs_ioc_setlabel fs/xfs/xfs_ioctl.c:1801 [inline]
+ xfs_file_ioctl+0x1448/0x1850 fs/xfs/xfs_ioctl.c:1899
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fac26e0ff49
+RSP: 002b:00007fffe47996f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fffe4799810 RCX: 00007fac26e0ff49
+RDX: 0000000020000000 RSI: 0000000041009432 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 0000000000000140 R09: 0000000000000140
+R10: 0000000000000140 R11: 0000000000000246 R12: 00007fffe4799730
+R13: 00007fffe4799810 R14: 431bde82d7b634db R15: 00007fffe4799710
+ </TASK>
 
-Hmm IMHO that would add more knobs for not much reason honestly. We already
-have CONFIG_RCU_LAZY default disabled, I really don't want to add more
-dependency (like user enables the config and does not see laziness).
+Showing all locks held in the system:
+1 lock held by kworker/u4:1/11:
+ #0: ffff8880b993be98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:539
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffffffff8cf27b70 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x29/0xd20 kernel/rcu/tasks.h:510
+1 lock held by rcu_tasks_trace/13:
+ #0: ffffffff8cf28370 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x29/0xd20 kernel/rcu/tasks.h:510
+1 lock held by khungtaskd/28:
+ #0: ffffffff8cf279a0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+2 locks held by kworker/0:1H/52:
+ #0: ffff888027b13138 ((wq_completion)xfs-log/loop0){+.+.}-{0:0}, at: process_one_work+0x77f/0x13a0
+ #1: ffffc90000bd7d20 ((work_completion)(&iclog->ic_end_io_work)){+.+.}-{0:0}, at: process_one_work+0x7c6/0x13a0 kernel/workqueue.c:2365
+2 locks held by getty/4748:
+ #0: ffff88814a02d098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900015902f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6ab/0x1db0 drivers/tty/n_tty.c:2177
+1 lock held by syz-executor359/5073:
+ #0: ffff888028a02460 (sb_writers#10){.+.+}-{0:0}, at: mnt_want_write_file+0x5e/0x1f0 fs/namespace.c:438
 
-Thanks!
+=============================================
 
- - Joel
+NMI backtrace for cpu 0
+CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.2.0-syzkaller-09238-gd2980d8d8265 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x4e5/0x560 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x1b4/0x410 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
+ watchdog+0x1024/0x1070 kernel/hung_task.c:379
+ kthread+0x270/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 11 Comm: kworker/u4:1 Not tainted 6.2.0-syzkaller-09238-gd2980d8d8265 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:mark_lock+0x0/0x340 kernel/locking/lockdep.c:4596
+Code: 80 e1 07 80 c1 03 38 c1 0f 8c 73 ff ff ff 4c 89 ff e8 94 06 77 00 e9 66 ff ff ff e8 fa d4 47 09 66 2e 0f 1f 84 00 00 00 00 00 <55> 41 57 41 56 41 55 41 54 53 48 83 ec 10 49 89 f7 48 89 3c 24 49
+RSP: 0018:ffffc90000107778 EFLAGS: 00000006
+RAX: 0000000000040033 RBX: ffff88801664c580 RCX: ffffffff816c215a
+RDX: 0000000000000006 RSI: ffff88801664c580 RDI: ffff88801664ba80
+RBP: ffffc90000107828 R08: dffffc0000000000 R09: fffffbfff205b439
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88801664c5a0
+R13: 0000000000000005 R14: ffff88801664c4b0 R15: 1ffff11002cc9896
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055b384dcb070 CR3: 000000000cd30000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mark_held_locks kernel/locking/lockdep.c:4237 [inline]
+ __trace_hardirqs_on_caller kernel/locking/lockdep.c:4263 [inline]
+ lockdep_hardirqs_on_prepare+0x3a4/0x7a0 kernel/locking/lockdep.c:4322
+ trace_hardirqs_on+0x28/0x40 kernel/trace/trace_preemptirq.c:61
+ __text_poke+0x7f8/0xa00 arch/x86/kernel/alternative.c:1644
+ text_poke arch/x86/kernel/alternative.c:1669 [inline]
+ text_poke_bp_batch+0x485/0x950 arch/x86/kernel/alternative.c:1992
+ text_poke_flush arch/x86/kernel/alternative.c:2161 [inline]
+ text_poke_finish+0x1a/0x30 arch/x86/kernel/alternative.c:2168
+ arch_jump_label_transform_apply+0x17/0x30 arch/x86/kernel/jump_label.c:146
+ static_key_disable_cpuslocked+0xce/0x1b0 kernel/jump_label.c:235
+ static_key_disable+0x1a/0x20 kernel/jump_label.c:243
+ toggle_allocation_gate+0x1b8/0x250 mm/kfence/core.c:804
+ process_one_work+0x915/0x13a0 kernel/workqueue.c:2390
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
+ kthread+0x270/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
