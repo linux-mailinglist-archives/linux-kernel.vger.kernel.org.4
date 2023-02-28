@@ -2,353 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0692D6A54FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A5A6A550A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjB1JAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
+        id S230100AbjB1JD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjB1I7x (ORCPT
+        with ESMTP id S229689AbjB1JDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 03:59:53 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182E89EFB
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:59:49 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id i3so9672311plg.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:59:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pQBKQh/JPZVeEyo4cKP8MeVDOsrocCsvCDEA4dtoOBY=;
-        b=ak/t+0bR5tl+Wz948mSjbFpmzElyWIvs0L/d0/04uaVP4Oc20Wz69MMlXRFp9s/yFc
-         0dDcB4CCnJrvc8pMOm7YABvzaEobW4hwXYD7GWOImLUWmkqpICXeoXNhdl8W5+i7Cmoe
-         nKQHQ9YwxhoKLYN0tXhxVvkGCx/weidblhFkBwAIudHY5c9eU4IJfPn/88xFm7FQdO8/
-         huQquygtzLBy/zntdJYJnJV7So27HZqI/UFVCyhV7T+NJk3beL15RR55FTc4Z7IaYuZ1
-         At6hLjrTZH3t0CoCfFnV5beHGEb1tW3sxRPKQLsuGUDjK9y3g0iOmkBapFFn1+Fxr/q0
-         WBMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pQBKQh/JPZVeEyo4cKP8MeVDOsrocCsvCDEA4dtoOBY=;
-        b=BNHX14x2GgdA7w6VCxVDcM8R3HgYBhvXqfUJhM5nDNy33rRJmAVX88WJE3EdYTREBB
-         emtF7UbvtwYTIxaB20aMaL/Jsuc/n2Q5oxxkxzDGdBpRJQKih7yiuFv6N+5CXhBo8yIp
-         OFYL4r3CfJk8O3UIkTsZs0hK2AVdH85Fd2fVaZqln/MTzqKDYauCxMNkxJZYNtJqAF9C
-         4qV9HMvJ2sW9+K4X5bikngFpQYoAeh1/fQvKy7McEfNe2PNE1afdSQaXkbOfbaGAVKSz
-         wmduhHhNxaEtMt4kwpmLbAXaJfLLbD9r3UhHfaUqD9eHVtYW831Yp0/kePNfnCvC8gTl
-         Dysw==
-X-Gm-Message-State: AO0yUKWegby/FlhHLqwJjTlE+sIulSJDncQQEzr07EZSLf6gmob+8jX0
-        lIl6f6rQHjle4bxmbSvsSePdAa5fObrw776S5VI=
-X-Google-Smtp-Source: AK7set/9byPE2sRgWumv94VlZlIXQji6aUUXjuMaFe/+gIrcUVXJH6loNBkmKrwMrkdjfYEmz2luKA==
-X-Received: by 2002:a05:6a20:548a:b0:be:e450:69b3 with SMTP id i10-20020a056a20548a00b000bee45069b3mr3653442pzk.0.1677574788497;
-        Tue, 28 Feb 2023 00:59:48 -0800 (PST)
-Received: from C02GD5ZHMD6R.bytedance.net ([61.213.176.5])
-        by smtp.gmail.com with ESMTPSA id e16-20020aa78c50000000b005a817f72c21sm5572272pfd.131.2023.02.28.00.59.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 00:59:47 -0800 (PST)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com,
-        Jinke Han <hanjinke.666@bytedance.com>
-Subject: [RESEND PATCH v6] blk-throtl: Introduce sync and async queues for blk-throtl
-Date:   Tue, 28 Feb 2023 16:59:35 +0800
-Message-Id: <20230228085935.71465-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Tue, 28 Feb 2023 04:03:55 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2083.outbound.protection.outlook.com [40.107.21.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7C8E392;
+        Tue, 28 Feb 2023 01:03:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dwPJ90W9+0d2WJyX1EnQeNce5g3Qd1HRXNOYROTr2ZkHmW5VWVFtQkJvDqx4KsTezuWksfpORLjz7/CW3dhngh0rUFxxuYJkbH1lIg4+AQBqKFAJJNks3DOh2Be81Jq+13B5B/k6e9OqIALbKX242xg8GSg1+wKVNELKRHXP7GrrCLU0rchxo87s7gFQLR3Ynj4jyjKEO4j2oR02Gs6z+2mnQ5eF51zO10C/31NdlMztP5Dgt8ZKs77AEFjdNNsmRViVjFRjItUpGXd/PRHULcfYOO9gPZ2NhUkjpgqPe+xaUy2XQhm3vUVTWRRWoa9AVsIDkOCoN5MHh/rP2jHE/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/iq+lNSstlgqM9eb7NWeprxwFMbke7ns+/NYUa2zXg8=;
+ b=QLzLaPh4LTAd/JGGOwXnJ+ef0RQkiM5y7qNFWoSz+o9c3swG3fDqfWaDjcmYK8Z40oGpVFl4kJrXddI1HCMe83DCyilUpyr4UM86NtfjpYCLiXeWBuDjb7X5yWEsy3hpBsdbc4sO5kU5hQ1CyzTWYW1zImPcOw/UM2pYgR5Pek9JoBbIBOBbMAVf1kZOspoUkTsG33JbzoQTj/EOapTn5S1tbdg6N0ATbRqm14ppPBE7mVdfd793rfvCPaD1yOh8lfo4UABl9kVT7ngY5oRqxItgnjS4trcl6BjdGV+csiUvX04GqkupA+0L6iRwu0ghdWgkRwpR04GaPXdwMas7Hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/iq+lNSstlgqM9eb7NWeprxwFMbke7ns+/NYUa2zXg8=;
+ b=E6gQEgEA9x16Ei4CZq8q0hTrqY79igGEil8pBS+lanENK/RrEnW9CofqQqxvaHbgz1Wpg5ZgHU3PH18SBv4GVm48iVIMor/D+f1Z25ZaS//rmypOuI4zDHhIIZDTtyp+Mnl7Y5UjQS8sy5um9MVOXIxQyp7A7lB4Ei3Y7HX/c5IKzbvAtjHqx3SUu7FZc4x2SCBZzUAbboCfNgJCh9KB+EJPGbJLCfa83/yXqjk9mjq44mQQ/9tdBuykDEqdabLV5y1xmf5KF5bGCyURWQ69jK45GBRw33+oAKGDb5npC5x2HmZS+KKRcssTQYJqH9/ZT/khBIdNoxS2GkDQQcux3w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by PAXPR04MB8512.eurprd04.prod.outlook.com (2603:10a6:102:213::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 09:03:25 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7])
+ by VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7%3]) with
+ mapi id 15.20.6134.029; Tue, 28 Feb 2023 09:03:25 +0000
+Message-ID: <f2142d88-259f-302d-da61-e0fc39d1f041@suse.com>
+Date:   Tue, 28 Feb 2023 10:03:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] HID: usbhid: enable remote wakeup for mice
+Content-Language: en-US
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Michael Wu <michael@allwinnertech.com>
+Cc:     "jikos@kernel.org" <jikos@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Gong, Richard" <Richard.Gong@amd.com>
+References: <20230222013944.31095-1-michael@allwinnertech.com>
+ <Y/WwXBF37hoZBbQa@kroah.com>
+ <9bf4463c-6541-a6cb-9bbc-6d070118509a@allwinnertech.com>
+ <Y/dMq2KKYfdMdrjh@kroah.com> <801338c3-7c0d-6b3e-eac8-872ee5add466@suse.com>
+ <MN0PR12MB6101B1BF9748F0602684FED5E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <MN0PR12MB6101B1BF9748F0602684FED5E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0094.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a1::9) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PAXPR04MB8512:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8c638ed5-f18b-47c1-6bd5-08db196aa612
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QLtFSatGfNipWt5Sn4U3QaJShL+XrrImP/d34Y6+QamHG2WmfDK94CYtWpnlurMNS0LF5jfo3SFG/CQhSFi8USmEyQoYgygcHmCmuHZix3hgmkCbmPcEDWboZpEu2LC/8n8mtuX3pvbUQPLqqGAivSDZFG90egUcZkF489qbSDEhvWHkfS8d2EspnZ7y7mSidxDCwh1JP1puQtGzcUd+36SZS5UZQG5XkXDz+QfteOX9NLWLFuXLkiN5hAlJZt73aGGXBmFloI91mGHuxXEXByitA6yI7DGUL8aBa6u4uns2/sODnXlw/1Qv3JmFujKxEBKZ3mk5TBANcdg4LiChyeOQBVbyi3ySpJnUuw+zLzzhN9mDj/0cFaaTFjfowvJqtRLYzxU7bN86HHZ2nYNP/P++SiSs8lF+3jLoRrxt8rKBCQl1iSbEYzLn3qJGUb0ZUXFtpqogEbawuDlo9rLLk2BsvxNNLAicUOc8ia1LuEAbfOPMQC/q9iUfC1r01BFz/nVTE+uWpbbeFpbXYosUZOQlJ2zbrJPiLEZ7tNfuUUX/QSmcT6M35zh0ykCcH6L4AGNKo/6OuBFMLlBktgvVrtAgPvZu2unNDqRg1G1MHIy1bgV7Zgk/xHA0t06oTRe9GmOZp7fD80dIwwhtE/kEUOv1/8f5ZMzNhARqR4Tr8mjkl8QkC5R9P1XYPKN5309SHuFFDuI71XPf6CjXh7Z8aVrVVlTovAjNHpKT9EBjHaA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(396003)(136003)(376002)(346002)(451199018)(38100700002)(31696002)(86362001)(36756003)(2906002)(41300700001)(5660300002)(4326008)(8676002)(66946007)(66476007)(66556008)(8936002)(2616005)(6506007)(53546011)(6512007)(186003)(83380400001)(110136005)(478600001)(316002)(54906003)(6666004)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Qk84cGFFazZCdlBBQWliRm95M3FuVWxDcEswcURFQVdMRlhUN2orTDVPeC9O?=
+ =?utf-8?B?RkNuZktueTBlcURjWkt6cWJTVDZid09NYkNxNmJsNFdjaXlZazBGcnpTM2c4?=
+ =?utf-8?B?c2lLRHQ3WGprUm5UNWZqbXhrWTJTR24zYXdwUWd1QWdCb0lGZ2k2N2ZzVkRE?=
+ =?utf-8?B?WUJabU03WEJJQnllOTZLZDZsWlV6LzV3bWs2SmU4WkZPa1lhNVo5bndObXlU?=
+ =?utf-8?B?QUUyblRWYXNlSit6cHl3WkpTbDBZcVF4bHprL3FkOUpXYmpUSkw1amx2ak1L?=
+ =?utf-8?B?UVNoZTlxQUZlUUlxeXFmZDZsK1Bmc3ZNYno0RllqWWpkMGhMN0JNU3pMcG9j?=
+ =?utf-8?B?UjNYTFpZNTA3aUFnL29XQXYxWkc5bnl6N0hOUkxWWjFUSjJCMFM3T1FRaTVn?=
+ =?utf-8?B?Y3pwbFEyTnE0dnBraU5JMWxlRlIxYnk3UlM1MHE4ZGhJaW5FTEtlU0ZvUllM?=
+ =?utf-8?B?ZkFuNlBqcC9ieTNtSGtZbWlEZnJGYU9xLzNVYmlSU2dDZ0poSWJNblk1cC91?=
+ =?utf-8?B?eGRpNFdFeDNtclEyd0xrektoZkx3Sy8xUGQwNzJYMEFkdlBqZldXa3JzK2tl?=
+ =?utf-8?B?U2piY0c5NzNnK1p4S0RDRzJxVmkvbEpDV1pjcU5QZ3RjRzZNdzN5cGlMQy9a?=
+ =?utf-8?B?UmVUSTd1YW9XT2NEYWZuVkMya0FsNTVwcW4yMU9hYjRPaXNQcTNsMUJPQlh6?=
+ =?utf-8?B?WVlaWXhuR0RsMUFiKzBNazJ3aDNIZjBFSWVYUWI1TWhLTDU0NnZyNVR2RFNj?=
+ =?utf-8?B?eHRrVjZYNFIwQTVBQnZsRWZNZzc2YWlib2puc1ZFcDd2bXNDVmJCR212dU1U?=
+ =?utf-8?B?MXF5Mjg0cnNMclh4UzVmOE1PTDFuR2M3MUtxZ3F3VG9kSWZLbDlEQ3grUWRx?=
+ =?utf-8?B?S1VDT2FlRVc5RFlRaGVnRUVxdW5jT0VRNlRnbUhqY3NaZURaUkVBV0RWUlk2?=
+ =?utf-8?B?WTFhWVl2SGpWczZmSTRkRFlNNGliNFVhUzJ6V0diVzZ3cEhnbTN4dWdNUnRj?=
+ =?utf-8?B?M045K2hRWGNLVXA4UWVvK1YrZlUrTlhZdDdrbC9reXFkR0Fvb1IyQ25kb3dB?=
+ =?utf-8?B?L1Zod0N0SUp6UWVMMysvQ2RzSGsvVXp5anZMemVNMktHMDdEMkRBY2JWQmpa?=
+ =?utf-8?B?blhlRW9mQ05EQ0QxeG1rTkxubFNBSko2ZVkzSTdSenRpczZrVXBwS0RYQ0hn?=
+ =?utf-8?B?MkZqbFl4MnZkOGVpVkRXVC9KWjVnOXFvN1hMQjVQS3pmUit3eHVsR0liWTRC?=
+ =?utf-8?B?ZFIrM0xKcmxMSk9DVUlmZTd6QUp6V1NmTlZURkdOQnVENUFzSVN2V2xjbkFE?=
+ =?utf-8?B?SzVIcXhKM0Z3UGw5bC9RU29GdDFRcS9zUytDQk4xNnUxRWthR28vK2Yzc0hS?=
+ =?utf-8?B?dWxtQThOTVNybzRxbDkyWlhQV2txbVBGMU9kUndocm0ydFdnVGZMU1YyUDJh?=
+ =?utf-8?B?WWxoOWFWZkR0RndKM1Q1anRTUlJBeWd5bUY4ZVhsVXI4aUNxV1JBTEp5UzlL?=
+ =?utf-8?B?b1FzYjF5ZDBteW1pdEo5UVlrd2xPbFlNcjBRVE5yellOQTRCMWsyVnE3M1Qz?=
+ =?utf-8?B?QXZjZDYxK2lIM054VzJTb1ZNL3VtaGttOXQydWR5SWxPcmYrb1lQN1FlcGhL?=
+ =?utf-8?B?cDI0emZoa1pVN1FSUGdha0VGMjRZMVU4TFVIMk5sak1BN3JaVnJmVzVmSE9D?=
+ =?utf-8?B?c2psdHN4UWg3R2tiYjYwQ2Q4cVM0Y3VCN05CbVNlMHZDTGdMbTBHTUJnTWJ4?=
+ =?utf-8?B?VEVxd1BEMENGU3dMOEpQamgxeDAvejBhYnhQYXpmNkVQcjVycVYzcnlhbTdT?=
+ =?utf-8?B?Y0FmZlpYL0p2aU44dGhEMnVxaGhPdmdCaWttVHQzVU54RmtwYTdUcUFHRjJo?=
+ =?utf-8?B?Q0xEcVFJTDBCTU1pQWF0UWtqSGREU1lIKzlBV1B4K0FlYmZER1U0YW1UTUNN?=
+ =?utf-8?B?aTcyaitlbjhCeDc4UTdocElDV2RiWlJBYlVudURqMlUwM2xvN3NPMzg2azhW?=
+ =?utf-8?B?cXB5NkZpMG9lMjdhL2hEdFI1cExIbHdJRzBGR0YxYzFkeTFqejhJSlFjblFL?=
+ =?utf-8?B?ZjkwRkZlMHdrc0dtSDVzU2lFRFdXTTdwTGZtL3VZTjVHN0xZUDlrM0RTVUpi?=
+ =?utf-8?B?RHczckFxU00ycXExMUlFbkhlRFgvbVZ5U3E3VDJzQUNRSUtDbVFROHlUR1Ix?=
+ =?utf-8?Q?16yLKoL9wdRabBstAh+G7xV1iP0N9ww/MKAxuL5QymRE?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c638ed5-f18b-47c1-6bd5-08db196aa612
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 09:03:25.0259
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8okfKpvL/IDphzU3ZvLMwNCXMcbk4kNYfm/C9fPx/D6sYnjm1JUgWAtg63ZRIUHjbIufWl9bmu8BfsyPyuXamw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8512
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+On 23.02.23 20:41, Limonciello, Mario wrote:
 
-Now we don't distinguish sync write ios from normal buffer write ios
-in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
-until write completion soon after it submit. So it's reasonable for sync
-io to complete as soon as possible.
+Hi,
 
-In our test, fio writes a 100g file in sequential 4k blocksize in
-a container with low bps limit configured (wbps=10M). More than 1200
-ios were throttled in blk-throtl queue and the avarage throtle time
-of each io is 140s. At the same time, the operation of saving a small
-file by vim will be blocked amolst 140s. As a fsync will be send by vim,
-the sync ios of fsync will be blocked by a huge amount of buffer write
-ios ahead. This is also a priority inversion problem within one cgroup.
-In the database scene, things got really bad with blk-throtle enabled
-as fsync is called very often.
+>> As a system wakeup source a mouse that generates events when
+>> it is moved, however, would make the system unsuspendable, whenever
+>> even
+>> a bit of vibration is acting on the system.
+>> And as S4 is used in many setups to prevent an uncontrolled shutdown
+>> at low power, this must work.
+> 
+> At least in my version of the series, this is part of the reason that it was
+> only intended to be used with s2idle.
 
-This patch splits bio queue into sync and async queues for blk-throtl
-and gives a huge priority to sync write ios. Sync queue only make sense
-for write ios as we treat all read io as sync io. I think it's a nice
-respond to the semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO
-gains the same priority as they are important to fs. This may avoid
-some potential priority inversion problems.
+Yes, that is sensible. If these patches are to be taken at all, that will
+be a necessary condition to meet. But it is not sufficient.
+  
+> The kernel driver is well aware of what power state you're in the suspend
+> callback (pm_suspend_target_state).
+> 
+> What about if we agreed to treat this one special by examining that?
+> 
+> If the sysfs is set to "enabled"
 
-With this patch, do the same test above, the duration of the fsync sent
-by vim drops to several hundreds of milliseconds.
+If user space needs to manipulate sysfs at all, we can have user space
+tell kernel space exactly what to do. Hence I see no point in
+conditional interpretations values in sysfs at that point.
 
-Acked-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
----
+We are discussing the kernel's default here.
 
-Changes in v2
-- Make code more simple.
-Changes in v3
-- Fix mismatch of waiting bio and the next dispatched bio.
-- Rename dispatch_sync_cnt to disp_sync_cnt.
-- Add more comments.
-Changes in v4
-- Improve patch in code style and code comments.
-Changes in v5
-- Add more comments for next_to_disp.
-Changes in v6
-- Adjust the comments for next_to_disp.
+> * During suspend if your target is s2idle -> program it
+> * During suspend if your target is mem -> disable it
+> * During suspend if your target is hibernate -> disable it
 
- block/blk-throttle.c | 144 ++++++++++++++++++++++++++++++++++++++++---
- block/blk-throttle.h |  13 +++-
- 2 files changed, 148 insertions(+), 9 deletions(-)
+To my mind these defaults make sense.
+However, do they make much more sense than what we are doing now?
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 47e9d8be68f3..530d0c4c3a77 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -21,6 +21,13 @@
- /* Total max dispatch from all groups in one round */
- #define THROTL_QUANTUM 32
- 
-+/* For write ios, dispatch 4 sync ios and 1 normal io in one loop */
-+#define THROTL_SYNC_FACTOR 4
-+
-+/* Only make sense for write ios, all read ios are treated as SYNC */
-+#define SYNC	0
-+#define ASYNC	1
-+
- /* Throttling is performed over a slice and after that slice is renewed */
- #define DFL_THROTL_SLICE_HD (HZ / 10)
- #define DFL_THROTL_SLICE_SSD (HZ / 50)
-@@ -241,11 +248,30 @@ static inline unsigned int throtl_bio_data_size(struct bio *bio)
- 	return bio->bi_iter.bi_size;
- }
- 
--static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
-+static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg,
-+			      bool rw)
- {
- 	INIT_LIST_HEAD(&qn->node);
--	bio_list_init(&qn->bios);
-+	bio_list_init(&qn->bios[SYNC]);
-+	bio_list_init(&qn->bios[ASYNC]);
- 	qn->tg = tg;
-+	qn->disp_sync_cnt = rw == READ ? UINT_MAX : 0;
-+	qn->next_to_disp = NULL;
-+}
-+
-+static inline void throtl_qnode_add_bio_list(struct throtl_qnode *qn,
-+					     struct bio *bio)
-+{
-+	bool rw = bio_data_dir(bio);
-+
-+	/*
-+	 * All read bios and those write bios with REQ_SYNC, REQ_META or
-+	 * REQ_PRIO flags set are treated as SYNC io.
-+	 */
-+	if (rw == READ || bio->bi_opf & (REQ_SYNC | REQ_META | REQ_PRIO))
-+		bio_list_add(&qn->bios[SYNC], bio);
-+	else
-+		bio_list_add(&qn->bios[ASYNC], bio);
- }
- 
- /**
-@@ -261,13 +287,84 @@ static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
- static void throtl_qnode_add_bio(struct bio *bio, struct throtl_qnode *qn,
- 				 struct list_head *queued)
- {
--	bio_list_add(&qn->bios, bio);
-+	throtl_qnode_add_bio_list(qn, bio);
- 	if (list_empty(&qn->node)) {
- 		list_add_tail(&qn->node, queued);
- 		blkg_get(tg_to_blkg(qn->tg));
- 	}
- }
- 
-+/**
-+ * throtl_qnode_bio_list_pop: pop a bio from sync/async queue
-+ * @qn: the qnode to pop a bio from
-+ *
-+ * For writes, target SYNC or ASYNC queue based on disp_sync_cnt. If empty,
-+ * try the other queue.
-+ */
-+static struct bio *throtl_qnode_bio_list_pop(struct throtl_qnode *qn)
-+{
-+	struct bio *bio;
-+	int from = qn->disp_sync_cnt == THROTL_SYNC_FACTOR ? ASYNC : SYNC;
-+
-+	bio = bio_list_pop(&qn->bios[from]);
-+	if (!bio) {
-+		from = 1 - from;
-+		bio = bio_list_pop(&qn->bios[from]);
-+	}
-+
-+	if (qn->disp_sync_cnt < THROTL_SYNC_FACTOR && from == SYNC)
-+		qn->disp_sync_cnt++;
-+	else
-+		qn->disp_sync_cnt = 0;
-+
-+	return bio;
-+}
-+
-+/**
-+ * throtl_qnode_bio_peek - peek a bio from a qn
-+ * @qn: the qnode to peek from
-+ *
-+ * For read, always peek bio from the SYNC queue.
-+ *
-+ * For write, we first peek bio from next_to_disp. If it's NULL, a bio
-+ * will be popped from SYNC or ASYNC queue to fill it. The next_to_disp
-+ * is used to make sure that the previously bio and the next popped bio
-+ * are always the same even in case that the spin lock of queue was
-+ * released and re-grabbed. Consider the following situation:
-+ *
-+ * Assume that there are only bios queued in ASYNC queue and the SYNC
-+ * queue is empty and all ASYNC bios are 1M in size and the bps limit is
-+ * 1M/s. The throtl_slice is 100ms. The current slice is [jiffies1,
-+ * jiffies1+100] and the bytes_disp[w] is 0.
-+ *
-+ * The disp_sync_cnt is 0 as it was set 0 after each dispatching of a
-+ * ASYNC bio. A ASYNC bio wil be peeked to check in tg_may_dispatch.
-+ * Obviously, it can't be dispatched in current slice and the wait time
-+ * is 1000ms. The slice will be extended to [jiffies1, jiffies1+1000] in
-+ * tg_may_dispatch. The queue lock is released and a 4k SYNC bio gets
-+ * queued during the 1000ms wait. After 1000ms, it's time to dispatch the
-+ * tg, the SYNC bio will be popped to dispatched as the disp_sync_cnt is 0
-+ * and the SYNC queue is no-empty. The slice will be extended to [jiffies1,
-+ * jiffies1+1100] in tg_may_dispatch. Then the slice will be trimed to
-+ * [jiffies1+1000, jiffies1+1100] after the SYNC bio was dispatched. This
-+ * means that only 4k size was dispatched in last 1000ms and the budget for
-+ * this 1000ms has be voided immediately with the trim. If this happens
-+ * often, it is hard to fill up the bandwidth considering that the bps
-+ * limit is 1M/s.
-+ */
-+static inline struct bio *throtl_qnode_bio_peek(struct throtl_qnode *qn)
-+{
-+	/* qn for read ios */
-+	if (qn->disp_sync_cnt == UINT_MAX)
-+		return bio_list_peek(&qn->bios[SYNC]);
-+
-+	/* qn for write ios */
-+	if (!qn->next_to_disp)
-+		qn->next_to_disp  = throtl_qnode_bio_list_pop(qn);
-+
-+	return qn->next_to_disp;
-+}
-+
- /**
-  * throtl_peek_queued - peek the first bio on a qnode list
-  * @queued: the qnode list to peek
-@@ -281,11 +378,42 @@ static struct bio *throtl_peek_queued(struct list_head *queued)
- 		return NULL;
- 
- 	qn = list_first_entry(queued, struct throtl_qnode, node);
--	bio = bio_list_peek(&qn->bios);
-+	bio = throtl_qnode_bio_peek(qn);
- 	WARN_ON_ONCE(!bio);
- 	return bio;
- }
- 
-+/**
-+ * throtl_qnode_bio_pop: pop a bio from a qnode
-+ * @qn: the qnode to pop a bio from
-+ */
-+static inline struct bio *throtl_qnode_bio_pop(struct throtl_qnode *qn)
-+{
-+	struct bio *bio;
-+
-+	/* qn for read ios */
-+	if (qn->disp_sync_cnt == UINT_MAX)
-+		return bio_list_pop(&qn->bios[SYNC]);
-+
-+	/* qn for write ios */
-+	if (qn->next_to_disp) {
-+		bio = qn->next_to_disp;
-+		qn->next_to_disp = NULL;
-+		return bio;
-+	}
-+
-+	return throtl_qnode_bio_list_pop(qn);
-+}
-+
-+static inline bool throtl_qnode_empty(struct throtl_qnode *qn)
-+{
-+	if (!qn->next_to_disp &&
-+	    bio_list_empty(&qn->bios[SYNC]) &&
-+			   bio_list_empty(&qn->bios[ASYNC]))
-+		return true;
-+	return false;
-+}
-+
- /**
-  * throtl_pop_queued - pop the first bio form a qnode list
-  * @queued: the qnode list to pop a bio from
-@@ -310,10 +438,10 @@ static struct bio *throtl_pop_queued(struct list_head *queued,
- 		return NULL;
- 
- 	qn = list_first_entry(queued, struct throtl_qnode, node);
--	bio = bio_list_pop(&qn->bios);
-+	bio = throtl_qnode_bio_pop(qn);
- 	WARN_ON_ONCE(!bio);
- 
--	if (bio_list_empty(&qn->bios)) {
-+	if (throtl_qnode_empty(qn)) {
- 		list_del_init(&qn->node);
- 		if (tg_to_put)
- 			*tg_to_put = qn->tg;
-@@ -354,8 +482,8 @@ static struct blkg_policy_data *throtl_pd_alloc(struct gendisk *disk,
- 	throtl_service_queue_init(&tg->service_queue);
- 
- 	for (rw = READ; rw <= WRITE; rw++) {
--		throtl_qnode_init(&tg->qnode_on_self[rw], tg);
--		throtl_qnode_init(&tg->qnode_on_parent[rw], tg);
-+		throtl_qnode_init(&tg->qnode_on_self[rw], tg, rw);
-+		throtl_qnode_init(&tg->qnode_on_parent[rw], tg, rw);
- 	}
- 
- 	RB_CLEAR_NODE(&tg->rb_node);
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index ef4b7a4de987..bd4fff65b6d9 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -28,8 +28,19 @@
-  */
- struct throtl_qnode {
- 	struct list_head	node;		/* service_queue->queued[] */
--	struct bio_list		bios;		/* queued bios */
-+	struct bio_list		bios[2];	/* queued bios */
- 	struct throtl_grp	*tg;		/* tg this qnode belongs to */
-+
-+	struct bio		*next_to_disp;	/* pinned for next to dispatch */
-+	/*
-+	 * 1) for write throtl_qnode:
-+	 * [0, THROTL_SYNC_FACTOR-1]: dispatch sync io
-+	 * [THROTL_SYNC_FACTOR]: dispatch async io
-+	 *
-+	 * 2) for read throtl_qnode:
-+	 * UINT_MAX
-+	 */
-+	unsigned int disp_sync_cnt;         /* sync io dispatch counter */
- };
- 
- struct throtl_service_queue {
--- 
-2.20.1
+> With that type of policy on how to handle the suspend call in place
+> perhaps we could set it to enabled by default?
 
+It pains me to say, but I am afraid in that regard the only
+decision that will not cause ugly surprises is to follow Windows.
+Yet, what is wrong about the current defaults?
+  
+> Turning on "autosuspend" for USB mice makes them behave pretty
+> similarly to how they work when they're marked for remote wakeup.
+
+Because it is exactly the same mechanism.
+  
+> On some mice the lasers turn off, and they only wakeup when you
+> press a button or roll a wheel.
+
+Yes. And _some_ is the exact problem. If we could tell, _how_ mice
+react, this discussion were unnecessary.
+
+	Regards
+		Oliver
