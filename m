@@ -2,1062 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D00B6A5FCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E9A6A5FCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjB1TjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 14:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S229766AbjB1TjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 14:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjB1TjI (ORCPT
+        with ESMTP id S229565AbjB1TjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:39:08 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52816E07E;
-        Tue, 28 Feb 2023 11:39:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677613120; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=DpT+gRuwrLFDk00RqUfjVwCAMB/11Ketj+JESr/nV1NFh4LfEkFBbEmGYsPKY/xlGto2yut0lrgtsl7kmyBQ9XyoUDEBt1PYIWU9gQ3DnMntVyKUFZqkm8iUJy6DzaQDA//HUoFm8hMnBds/PmASI/kT/HzDSIl1q5OTjZlOwjQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677613120; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=3hZ6CjNhNIOj/IjOMe96xCA1ghRTECewvq7BT6s3O4g=; 
-        b=SY0qtzVVmxDUO9KevhVUI0QCbnJvTxZUSGSgmmer/O2ZnPhexYroVCnub9eU046kvA17PTCPDfmJNIYaXQRvV84jAcT1V/dJz9AmXcqSQJeUEoSJOKA+EHHBL2Us4aqoHdnhbdHaA1ssc3O7CKCgLYQtkVkuNR3jVeVWqnOh40U=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677613120;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=3hZ6CjNhNIOj/IjOMe96xCA1ghRTECewvq7BT6s3O4g=;
-        b=jdcI3frdQiUJVdFMnKQkI8SdPruzNY+hH+tIKmnzbmrcZMYGLaR5lrU1vZgkV0C/
-        XflsHemtoceDNSesmalveqzhRz9QkRga+hncsyw21Z5rNGjFP0QHBqbG1tG1gY8rf2k
-        NLBmbiSjrkQqjruaPcjRcMSbH9RAR9vqjRY/Tlkc=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1677613117772825.1759194711672; Tue, 28 Feb 2023 11:38:37 -0800 (PST)
-Message-ID: <d91e8959-3a94-2d66-f228-2eb401a75187@arinc9.com>
-Date:   Tue, 28 Feb 2023 22:38:30 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 10/16] dt-bindings: pinctrl: mediatek: mt7620: split
- binding
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-11-arinc.unal@arinc9.com>
- <20230227182155.GA550689-robh@kernel.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230227182155.GA550689-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 28 Feb 2023 14:39:03 -0500
+Received: from esa5.hc3370-68.iphmx.com (esa5.hc3370-68.iphmx.com [216.71.155.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D420E07E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:39:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1677613142;
+  h=message-id:date:from:subject:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=9I29FQr43SIgx88XJePdnwBrwRxiIeBnk2vMNFa5MbE=;
+  b=Dr20fPOqcKSFDE69DkKWwJyiEyMF/fZwh6/tS3bT4/NongZtMpp3T4ow
+   MolAoE6hXgV07h9SOLgf3Vggx3G99xf/8Yx0Q1dsg6KrThM5tDbSIbrxm
+   Ov3957eXheA4+WJ5znALlE4GhDo9p+DMXVJ50Ui4jTab/mIpYtCzTAoQ/
+   E=;
+X-IronPort-RemoteIP: 104.47.55.171
+X-IronPort-MID: 97728652
+X-IronPort-Reputation: None
+X-IronPort-Listener: OutboundMail
+X-IronPort-SenderGroup: RELAY_O365
+X-IronPort-MailFlowPolicy: $RELAYED
+IronPort-Data: A9a23:8LlC8K4m9YCMlN/PQtFQ+wxRtPfGchMFZxGqfqrLsTDasY5as4F+v
+ jYeC27QO/6JNmOjeIt3bNiyo0kCuZaGyYMwQQRl/HtgHi5G8cbLO4+Ufxz6V8+wwm8vb2o8t
+ plDNYOQRCwQZiWBzvt4GuG59RGQ7YnRGvynTraCYnsrLeNdYH9JoQp5nOIkiZJfj9G8Agec0
+ fv/uMSaM1K+s9JOGjt8B5mr9VU+7JwehBtC5gZlPaoR7AeE/5UoJMl3yZ+ZfiOQrrZ8RoZWd
+ 86bpJml82XQ+QsaC9/Nut4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5iXBYoUm9Fii3hojxE4
+ I4lWapc6+seFvakdOw1C3G0GszlVEFM0OevzXOX6aR/w6BaGpdFLjoH4EweZOUlFuhL7W5m3
+ vgqFh5RXDa5mPuLkLyYFa582pkCM5y+VG8fkikIITDxK98DGMqGaYOaoNhS0XE3m9xEGuvYa
+ 4wBcz1zYR/cYhpJfFAKFJY5m+TujX76G9FagAvN+exrvC6OkUooj+GF3Nn9I7RmQe18mEqCq
+ 32A1GP+GhwAb/SUyCaf82LqjejK9c/+cNNNS+foqKMw6LGV7mcyMAdGWlCemN2ghh+Ef9MCD
+ nIb+BN7+MDe82TuFLERRSaQqXuDuBcfXMR4EvYi8giWjLDJiy6THkANSj9MboxguMJebSAjy
+ F6SmPvmADVutPueTnf13rOVqy6ifCsYN2kPYQcaQgYfpdruuoc+ilTIVNkLOL7l0PX2FCv2z
+ jTMqzIx74j/luYO3qS/uFrB0zSlo8GTShZvv1qOGGW48gl+eYipIZSy7kTW5upBK4DfSUSdu
+ H8DmI6V6+Vm4YyxqRFhid4lRNmBj8tp+hWG6bKzN/HNLwiQxkM=
+IronPort-HdrOrdr: A9a23:V6VYSaguxNMtdIqU+2ntUjUj8XBQX5913DAbv31ZSRFFG/Fw9v
+ re6cjzsCWe5gr5N0tBpTn+Atj9fZqxz/9ICOoqTMSftXfdyQmVxehZhOOJ/9SKIVycygcy79
+ YET0B0YOeAcmST5azBjDVReLwbr+VuP8qT6Nv2/jNVaUVPVokl1gF+D2+gYz9LrMstP+tGKH
+ JZjPA31wZJvB4sH7WG7wI+Loz+juyOrovifRkFQzY/8WC1/EqVwY+/KQGcwhAdFxhSwbIumF
+ K17jDR1+GYqvSmzR2Z8GfW4/1t6bzc4+oGPtWIls8WbhPzjQqyDb4RPYGqjXQOueSy71Rvqv
+ ngyi1QR/hb2jfqZ2Sophmo4QX6zzo0zHfnxTaj8ADeiP28fis+F81Cwb1UaQHY7U1IhqAH7J
+ 52
+X-IronPort-AV: E=Sophos;i="5.98,222,1673931600"; 
+   d="scan'208";a="97728652"
+Received: from mail-bn8nam12lp2171.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.171])
+  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2023 14:39:00 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j4G8mxaE40Jx4fC+wY3atqG/TTUZYItsjuB8xFGi+JfXtUVPSmgUsIWnF6IPB0HW06k++Lfy/6xd4/RwwCMEHhrS+nMwOtuz0hT0eenV7uSa0NCQNz/JJ+Is0SVHPE252jouh1+1opmzZNd7HLwYzFZJhSF/YrfIeTR+odemp3k58I2sg15z1adOmcqweqfzW/ElKfriGeffFEh0GphVRUYxPLnr3IbTB20Zcx6/Joe7iV3SPmQxz64YEX9FbEWBhK5xeq3LNeUy6pD+aDNY54/Pfdf+EfEBVZUbGbUbaBsoNKukPqAgfpr2scygUfU76kBs1bIy3T8X1GkabqkgTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9I29FQr43SIgx88XJePdnwBrwRxiIeBnk2vMNFa5MbE=;
+ b=RKVtD6gpYBneTC9w2laLQZXGLwrhBfdMqTRjvmXCUe40bg3NjibdA1wic0PuJeXBCGj++Z99Kgc4tH9Lp22S27vm65/OhffKmxYAmGCgcplZ73p8uYYSG7ElGJgqjnBfv8rzhS0gTB5udy7inzCJk28lLKHud/GbI0Ly5OgtvVo1zDJeOJ6yWUyrOa5oRa3qrLoxABlSTA9hcOPY/dLAEqU47SGSOAdPUEcPgDVnE8f+U0flcnneZzAMbFDlzeaBeosspDnh5XHKlSxFSVAhR6fZ33aQio6xVHg65PBZVfrUq0x5p2Q42OAkF9iSB/gSFAS0N6GaF405KEpiGSN6qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
+ dkim=pass header.d=citrix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9I29FQr43SIgx88XJePdnwBrwRxiIeBnk2vMNFa5MbE=;
+ b=YusWBWAdqYdqeRoUj5SMuTq4CELNT30P1Hk0fYYJiXzG7J6xT/3voxgrZBnKf5UlXa3kaHyRkpN5tUquSaxrTYunsrGZQbpb2IQ37wiiToiFhdhBJqa2ersUXEtQofh5Ec3jx2WYcQYZA5BDhQ58e2UAQYBuVGaNI5lc4lo4FGI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=citrix.com;
+Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
+ by CH2PR03MB5303.namprd03.prod.outlook.com (2603:10b6:610:96::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Tue, 28 Feb
+ 2023 19:38:58 +0000
+Received: from BYAPR03MB3623.namprd03.prod.outlook.com
+ ([fe80::8299:f95f:934b:29e8]) by BYAPR03MB3623.namprd03.prod.outlook.com
+ ([fe80::8299:f95f:934b:29e8%7]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 19:38:58 +0000
+Message-ID: <8eff0a18-7faa-1135-a558-40150f4443e5@citrix.com>
+Date:   Tue, 28 Feb 2023 19:38:53 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: x86: AMD Zen2 ymm registers rolling back
+Content-Language: en-GB
+To:     Alexander Monakov <amonakov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Tavis Ormandy <taviso@gmail.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
+ <Y/XTT59OrLw2as4R@zn.tnic> <Y/Xc+yMzI83WZ4V1@zn.tnic>
+ <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com> <Y/Xp73KJe3c/1jrn@zn.tnic>
+ <4737f149-c5b7-8a51-7cc5-8bda6e98308b@ispras.ru> <Y/5T4ScbM/99DhgT@zn.tnic>
+ <3d007f98-a42a-3c0e-8d6a-c86c5d0e25be@ispras.ru> <Y/5VIECduoyCJKP5@zn.tnic>
+ <4d21fe93-7b77-bf5a-9ba8-645256ab0983@ispras.ru>
+In-Reply-To: <4d21fe93-7b77-bf5a-9ba8-645256ab0983@ispras.ru>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LO4P123CA0217.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a6::6) To BYAPR03MB3623.namprd03.prod.outlook.com
+ (2603:10b6:a02:aa::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR03MB3623:EE_|CH2PR03MB5303:EE_
+X-MS-Office365-Filtering-Correlation-Id: da9bf093-9eea-4990-5ede-08db19c36f85
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iXm0F7JrhbPMaPtZeLq96ieM07jhhOAiP4SXwd+RwEBd0aLMiXzPSbPmAzEf2V/9wexMd8KQGMifDlpHJ1K4EJBekQJ/C+nZV5fa4FHjudxndo4jZau42CZ/8WHime2iGooiODLngKJLIvjY5b1C0qVRuyem7r6/xk8vXIP07F1CjDCT+TUdUEiZDUuqE1Oz2LvmCJBMmd/GU7Rp0LXCLLwec/D51veVdpzzSdVejXC4ukRqVmWD9kvY9W6dU7h21jGV/SWh7kkKfNfXT/efG/imJIZBeI/QOsMp28y0ugGbwLiFBwrMFoe2/D7aMQmnvgdIg2qT6eYVHlH2wJykyere3/N/nRxnDUuib8/u/iD11ffLr54mq2NBuqpj2rh2Rv/hOTWrphrK7dmAKdj3aKVowI8LQQ6QGX/SzgUHLs5xXY2Fm+UyllFHco0yuiOa/uEvJhsl4OsX/XTvzd1a7MU1+jPsDhcvve3ZUQiLK6Mv/8MiacNw0j5JKS0VZWtowSTGvXUXZNzd9jnOnlAOs5jt0z5ij/piT1lOwEWfBd14TZa5cF3uslf/JoZnjBoly7s6cxto11G8UXbmeA5m/n8i8rxvJJA/NOS7X7ksDMlFqwgmWP9TR8k1l1KlxNTOm5W5ANRQo76d3VKdjU6W1jFNdorBKgn37T+2DMApTTkHLnVceOyvtraE817dedSuUWcSHYZzhanPT/NBPiBNNhGdFr7WCwjAr+IfEN7RbKI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(451199018)(31686004)(110136005)(316002)(6512007)(36756003)(38100700002)(31696002)(66556008)(82960400001)(53546011)(83380400001)(6666004)(6506007)(4326008)(186003)(26005)(2616005)(2906002)(8936002)(6486002)(5660300002)(966005)(478600001)(86362001)(41300700001)(66476007)(8676002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RW90VEpjMVZvZzdnRWpSN0Zhd2t5dnZiWEVycUtZOHEyK3RFeUpPTFhtMTF1?=
+ =?utf-8?B?NWlCWUJCcUdwZllhQnZrMEdseEQxc25xc3RqZnVESjlKWkk4bEpRMWc5QURV?=
+ =?utf-8?B?M2ZTNXRiQWtXS3VKczVYMFZRNUIvbVdmNFdKOWpHWUlaZ0VTcXk1N0x1RTVN?=
+ =?utf-8?B?RzJwcDBjK084SDhDSmFFa2NFWGh0cnNkN1podHp3RUNhVGZLT1pNWTJkVWVy?=
+ =?utf-8?B?b3Rjd2t5K3BmZE9CRXpvUHpGMWhrSWdtTmFsOHVjU09KMGY4M1ZIRW0yLzdo?=
+ =?utf-8?B?NHNtVUdCN3hBS1Z5dSswVmEvQlhKRVpSN0o0eWxjWXpGbE1Rb1cxZXcvQkRr?=
+ =?utf-8?B?enZqUUpueVJsU3dObTRSMFFiQ3FLQUhYcHhPb1hORzd4UEdzMzc1TFFhNTFW?=
+ =?utf-8?B?QXVIa2l2bVUwWC9aWW90N21vNFlFVXptV1ZCak90N0tNMW9JcUhEa3hLV1ZP?=
+ =?utf-8?B?YXQ0SlUwSWNtNUJOTllTNU45a29DUkJvZ1E0d2t1VnBuQ0hLeDVnQW93Rmgz?=
+ =?utf-8?B?amhTTU5rbFFGYndjQWN6N1FiS1Q3QTZra25VUFhjaVBtNEM4akV0ZXRzRDdT?=
+ =?utf-8?B?R0tIR3I2emphMjd3ZnRhTEtqdlN1dENVbDJHQm8rZHJ6NWZHMFhuMGlXVkFG?=
+ =?utf-8?B?RUJsQU5wYUlFb042ZkZsK3AxN0JjTlE5TGtNYXZGQ3ByaEdHLzBjdEZYaFNC?=
+ =?utf-8?B?MkpodEdCdEZiQmlYTnUyQ2RSbU9LaXRvSG5nWmRqblZ2Y2Zzd2I1alNrbXlL?=
+ =?utf-8?B?bEY3dmtQdERhWlYzdDhKb1VEOGRpcGFHRTJ2ajJDWDdCN2VlV1NCODdCV0pR?=
+ =?utf-8?B?QVNsT21CTGhidUZud1B4ZUVKQUpRRkZYeFRQUmhQNE5nUXpWMTNiM1NJS0I3?=
+ =?utf-8?B?UWptcGRlbERObDFveUFTNDRBdXJjSFltNXZhQlBNeFR3UzVmTEtyKzFPYkdp?=
+ =?utf-8?B?S0xzUiswQllHWHZ5aW4yWTR2MXdHckY4UGMyMVVJRUlCRW43cU9qTWJxRFJK?=
+ =?utf-8?B?QlBSM2pZek95OGJQeFhlb29tWkk2Tlk3V2oycURkcFpsRU02UnhoRVllb0Q1?=
+ =?utf-8?B?V0JLRWNRckJxbElBMWtzNkhnSk5pWUhVYmVYV1NiUDUwYlhHK1FySXBTYnhj?=
+ =?utf-8?B?bithSjdTbDJ1YjhjNTh0RGwwZVhPZmlhYnhOcHEzMmZjaGxuRGI1ZWdabC9n?=
+ =?utf-8?B?T2VWeG1RTllmMThoalJJUi80b3F4SkF2Wml0b1JDdVlETXBLTnF3NG5JVjQ3?=
+ =?utf-8?B?Zzd3RWJEN09kQXZPTUlUdm1YblUzc0ZJalU0SWdLYm5ZVmVFNW5kT2hGbVNz?=
+ =?utf-8?B?THE0cGVQNGwzdFJ3ZFlXWGExYkxSUEpyZmNxR1RsY3pQUzJTWmdzb1NMMmp1?=
+ =?utf-8?B?bVVHdFVpMDZnK1ZZSFRWcmpwTTY0R2NibDM0bWk0R2pPaEFVallVNTIvT1lF?=
+ =?utf-8?B?R3F2dTlEUWx4MTRVWU0vcW9iekJCb3ZhVHJTbmVObkNIRTdZbDNIUENOWm42?=
+ =?utf-8?B?RzViK25EaHJXN3JjMSs5MjR0WDNBbm45Qi92bEZUWEp1STc3Skk3L3ZkM2FJ?=
+ =?utf-8?B?K08wcnJSMGtDQW5xMHRRVmdTQWNmTzFRR3k1WnJuaHRoNkxiNDFZSnZJSWhp?=
+ =?utf-8?B?YWFPbW4rdVZaTFRJMjY2V09qSyt3eXk1ekpGMUxsRzhTbU84TlVYWDYvNmtQ?=
+ =?utf-8?B?YkI1Mmd2L2MwVWt1M2R6M2FhSTNoRGxKL1BTczJlV2gwcHFLL0QzZk5NK0Jv?=
+ =?utf-8?B?SjA3NWVPejQ5YXF0RnZKb0dkaE5ha3JmRWdBMVZhM1B2UGlJdGdlem01aDdo?=
+ =?utf-8?B?ZTlpb2pVVFQrQ3dwUytRQVUwQVNNTUlYekF1eVpjQ0o5Y0FXSEp2ME11U3No?=
+ =?utf-8?B?U0tpYzNFUUZsTzdnREcwaHJxTG95cGJFRy9tODhUQVRtRHlOZktQTGxwdmFW?=
+ =?utf-8?B?WklzQno4VlloQTdLOUVDOVZkRjY5V3ZFUE9WcExqc01xRmozREdLdkdEcW1a?=
+ =?utf-8?B?VFBHUEFFMDFsN0tQTTcxcUk0cnUrengxcE9XMUNCbWdMemdLcmlYd240YTVO?=
+ =?utf-8?B?SXpQM3dwa1E2QVc0dS8wU3lwQWl0ZWE0TjlCR1RZWjlCTzZTbTJubGt0dVZO?=
+ =?utf-8?B?UCtIOEIyWDZSNEpNQ05nNmQ1dS9qTnVmdzlRbHliTldOQmRqVENjOHBWNFhU?=
+ =?utf-8?B?Unc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: bC4HC6LBS1ttEQg8nO8toOwbd342svTnf4LAubiq6hMtiIx64KOwetQOO3ZdAV9EUc+urOPBJ4+82Lq7CaMvq7+xlb54UobK94rE0s0+IA8Y51phEwCrHq9ilCrXfi0s4TJxi1tGl5WjbyoaqmRcmHz251zt4MPTCh3T6s6kfDnOh0Dgmb4oz1s8dbsXPTdXDbbBAT2xdl+NR+pHpYKX5tOLMvcFWweFVttJiXQovasl+VTfGYdTxFOaz9wfp8HWNVCEuZNfM0X5ETokfYYSCWSIs9qqAoqXCQd8/qb/MPVKxF5LKPPBeH4AHZH5hyFSLDt72+KBU9qvOF60xQ031rAKt1YS1bIpnXOOzPazusVqfOEi/RmwjTNOF77ReJ5rwrqsvH/1jgMw19UsyiyHu3WdUQRmSj7zlqQabPlR34AHhG8ovFpoeNrbjSMwtInRx7FJA9SeG5LjoUnngDGYw9cW93DGwBEHzLHaoMBbRt3pnwGxt1x0l6BoRRn1d7onNJH5b10RIryRMgcuYS6NREArYCfb7u2w3F4wrQUaPOXFONdQdj4D/EpzaFbhQjzWQX0Ml2Xq/C0m2lrGcqQqFBAPdq734BQeX8VuTWUAZfzD2zB2FM7DS51GOtKI9LOK86GDBDhAu/IfNU2ZjW58Dr+4E4Z/ZVCwHi1v4n3MkcacmXBm/Jq6QTvUf2rADUf9AZlYEUtmOMnpZK0KaHymzCHtE29fwUzuq7muC3aNkrQqYh7aQIbz+r6QuNvohTSmNJhJHkhPjJtjoIxCmBygtI/Bw6oZ+8emvI5zXiFHKR8oaezND8t4h6Eprt9zzCvEWhQEBfy8TXmJbzGYwDgaxWJTALzUSx1deNQhhM/BMTIOI7hUZyQLFF4jSt2Zt22i
+X-OriginatorOrg: citrix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da9bf093-9eea-4990-5ede-08db19c36f85
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 19:38:58.6198
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zu316M2Ol9/L3TEaxpSpdOQ+EeoAc/MJjEH8XlK9LFe1ghDMbu88vZzKDMuv/WAz8ZrEtpWNPXn0s6/hr4n8cbNmW5irVbvO7JkpfQRtUk0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR03MB5303
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2023 21:21, Rob Herring wrote:
-> On Wed, Feb 22, 2023 at 09:39:26PM +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> The MT7628 and MT7688 SoCs contain different pin muxing information,
->> therefore, should be split. This can be done now that there are compatible
->> strings to distinguish them from other SoCs.
->>
->> Split the schema out to mediatek,mt76x8-pinctrl.yaml.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
->>   .../pinctrl/mediatek,mt7620-pinctrl.yaml      | 375 +--------------
->>   .../pinctrl/mediatek,mt76x8-pinctrl.yaml      | 454 ++++++++++++++++++
->>   2 files changed, 462 insertions(+), 367 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
->> index 3bf58da8a394..ea4a1194fbc4 100644
->> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
->> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
->> @@ -11,7 +11,7 @@ maintainers:
->>     - Sergio Paracuellos <sergio.paracuellos@gmail.com>
->>   
->>   description:
->> -  MediaTek MT7620 pin controller for MT7620, MT7628 and MT7688 SoCs.
->> +  MediaTek MT7620 pin controller for MT7620 SoC.
->>     The pin controller can only set the muxing of pin groups. Muxing individual
->>     pins is not supported. There is no pinconf support.
->>   
->> @@ -35,19 +35,10 @@ patternProperties:
->>             function:
->>               description:
->>                 A string containing the name of the function to mux to the group.
->> -            anyOf:
->> -              - description: For MT7620 SoC
->> -                enum: [ephy, gpio, gpio i2s, gpio uartf, i2c, i2s uartf, mdio, nand, pa,
->> -                       pcie refclk, pcie rst, pcm gpio, pcm i2s, pcm uartf, refclk,
->> -                       rgmii1, rgmii2, sd, spi, spi refclk, uartf, uartlite, wdt refclk,
->> -                       wdt rst, wled]
->> -
->> -              - description: For MT7628 and MT7688 SoCs
->> -                enum: [antenna, debug, gpio, i2c, i2s, jtag, p0led_an, p0led_kn,
->> -                       p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an, p3led_kn,
->> -                       p4led_an, p4led_kn, pcie, pcm, perst, pwm, pwm0, pwm1, pwm_uart2,
->> -                       refclk, rsvd, sdxc, sdxc d5 d4, sdxc d6, sdxc d7, spi, spi cs1,
->> -                       spis, sw_r, uart0, uart1, uart2, utif, wdt, wled_an, wled_kn, -]
->> +            enum: [ephy, gpio, gpio i2s, gpio uartf, i2c, i2s uartf, mdio, nand,
->> +                   pa, pcie refclk, pcie rst, pcm gpio, pcm i2s, pcm uartf,
->> +                   refclk, rgmii1, rgmii2, sd, spi, spi refclk, uartf, uartlite,
->> +                   wdt refclk, wdt rst, wled]
->>   
->>             groups:
->>               description:
->> @@ -59,24 +50,6 @@ patternProperties:
->>             - function
->>   
->>           allOf:
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: antenna
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [i2s]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: debug
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [i2c]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -93,17 +66,8 @@ patternProperties:
->>               then:
->>                 properties:
->>                   groups:
->> -                  anyOf:
->> -                    - description: For MT7620 SoC
->> -                      enum: [ephy, i2c, mdio, nd_sd, pa, pcie, rgmii1, rgmii2,
->> -                             spi, spi refclk, uartf, uartlite, wdt, wled]
->> -
->> -                    - description: For MT7628 and MT7688 SoCs
->> -                      enum: [gpio, i2c, i2s, p0led_an, p0led_kn, p1led_an,
->> -                             p1led_kn, p2led_an, p2led_kn, p3led_an, p3led_kn,
->> -                             p4led_an, p4led_kn, perst, pwm0, pwm1, refclk,
->> -                             sdmode, spi, spi cs1, spis, uart0, uart1, uart2,
->> -                             wdt, wled_an, wled_kn]
->> +                  enum: [ephy, i2c, mdio, nd_sd, pa, pcie, rgmii1, rgmii2, spi,
->> +                         spi refclk, uartf, uartlite, wdt, wled]
->>   
->>             - if:
->>                 properties:
->> @@ -132,15 +96,6 @@ patternProperties:
->>                   groups:
->>                     enum: [i2c]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: i2s
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [i2s]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -150,17 +105,6 @@ patternProperties:
->>                   groups:
->>                     enum: [uartf]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: jtag
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p0led_an, p0led_kn, p1led_an, p1led_kn, p2led_an,
->> -                         p2led_kn, p3led_an, p3led_kn, p4led_an, p4led_kn,
->> -                         sdmode]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -179,96 +123,6 @@ patternProperties:
->>                   groups:
->>                     enum: [nd_sd]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p0led_an
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p0led_an]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p0led_kn
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p0led_kn]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p1led_an
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p1led_an]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p1led_kn
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p1led_kn]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p2led_an
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p2led_an]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p2led_kn
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p2led_kn]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p3led_an
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p3led_an]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p3led_kn
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p3led_kn]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p4led_an
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p4led_an]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: p4led_kn
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p4led_kn]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -278,15 +132,6 @@ patternProperties:
->>                   groups:
->>                     enum: [pa]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: pcie
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [gpio]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -305,15 +150,6 @@ patternProperties:
->>                   groups:
->>                     enum: [pcie]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: pcm
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [i2s]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -341,51 +177,6 @@ patternProperties:
->>                   groups:
->>                     enum: [uartf]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: perst
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [perst]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: pwm
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [uart1, uart2]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: pwm0
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [pwm0]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: pwm1
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [pwm1]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: pwm_uart2
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [spis]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -393,12 +184,7 @@ patternProperties:
->>               then:
->>                 properties:
->>                   groups:
->> -                  anyOf:
->> -                    - description: For MT7620 SoC
->> -                      enum: [mdio]
->> -
->> -                    - description: For MT7628 and MT7688 SoCs
->> -                      enum: [gpio, refclk, spi cs1]
->> +                  enum: [mdio]
->>   
->>             - if:
->>                 properties:
->> @@ -418,15 +204,6 @@ patternProperties:
->>                   groups:
->>                     enum: [rgmii2]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: rsvd
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p0led_an, p0led_kn, wled_an, wled_kn]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -436,42 +213,6 @@ patternProperties:
->>                   groups:
->>                     enum: [nd_sd]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: sdxc
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [sdmode]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: sdxc d5 d4
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [uart2]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: sdxc d6
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [pwm1]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: sdxc d7
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [pwm0]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -481,15 +222,6 @@ patternProperties:
->>                   groups:
->>                     enum: [spi]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: spi cs1
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [spi cs1]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -499,51 +231,6 @@ patternProperties:
->>                   groups:
->>                     enum: [spi refclk]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: spis
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [spis]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: sw_r
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [uart1]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: uart0
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [uart0]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: uart1
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [uart1]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: uart2
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [uart2]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -562,25 +249,6 @@ patternProperties:
->>                   groups:
->>                     enum: [uartlite]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: utif
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an,
->> -                         p3led_kn, p4led_an, p4led_kn, pwm0, pwm1, sdmode, spis]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: wdt
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [wdt]
->> -
->>             - if:
->>                 properties:
->>                   function:
->> @@ -608,33 +276,6 @@ patternProperties:
->>                   groups:
->>                     enum: [wled]
->>   
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: wled_an
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [wled_an]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: wled_kn
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [wled_kn]
->> -
->> -          - if:
->> -              properties:
->> -                function:
->> -                  const: "-"
->> -            then:
->> -              properties:
->> -                groups:
->> -                  enum: [i2c, spi cs1, uart0]
->> -
->>           additionalProperties: false
->>   
->>       additionalProperties: false
->> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
->> new file mode 100644
->> index 000000000000..c818c8947866
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
->> @@ -0,0 +1,454 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/pinctrl/mediatek,mt76x8-pinctrl.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: MediaTek MT76X8 Pin Controller
->> +
->> +maintainers:
->> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
->> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
->> +
->> +description:
->> +  MediaTek MT76X8 pin controller for MT7628 and MT7688 SoCs.
->> +  The pin controller can only set the muxing of pin groups. Muxing individual
->> +  pins is not supported. There is no pinconf support.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - mediatek,mt76x8-pinctrl
-> 
-> We generally don't do wildcards in compatible strings. Are these 2 SoCs
-> really 'the same'?
+On 28/02/2023 7:29 pm, Alexander Monakov wrote:
+> On Tue, 28 Feb 2023, Borislav Petkov wrote:
+>
+>> On Tue, Feb 28, 2023 at 10:24:40PM +0300, Alexander Monakov wrote:
+>>> No, on the contrary, if there were no updates I would not be able to
+>>> see microcode version increase after updating.
+>> So what are you saying then?
+> That I can reproduce the bug even with the latest BIOS, i.e. the microcode
+> in the latest BIOS update does not have the fix, and the linux-firmware.git
+> microcode does not have a patch for this CPU family at all.
+>
+> Hence the question how to get fixed microcode for this CPU family.
 
-They are very similar SoCs which have got the same pin configuration. 
-Just like the RT305X SoCs.
+I shouldn't be recommending this, but I've begged AMD many times to be
+better at publishing microcode...
 
-> 
->> +      - ralink,mt7620-pinctrl
-> 
-> Huh? Doesn't this conflict with the mt7620 schema?
+https://github.com/platomav/CPUMicrocodes
 
-It does, this is what I asked to you and Krzysztof on the composed mail 
-for the patch series.
+and you'll need
 
-> 
->> +      - ralink,rt2880-pinmux
->> +
->> +patternProperties:
->> +  '-pins$':
->> +    type: object
->> +    patternProperties:
->> +      '^(.*-)?pinmux$':
->> +        type: object
->> +        description: node for pinctrl.
->> +        $ref: pinmux-node.yaml#
->> +
->> +        properties:
->> +          function:
->> +            description:
->> +              A string containing the name of the function to mux to the group.
->> +            enum: [antenna, debug, gpio, i2c, i2s, jtag, p0led_an, p0led_kn,
->> +                   p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an, p3led_kn,
->> +                   p4led_an, p4led_kn, pcie, pcm, perst, pwm, pwm0, pwm1,
->> +                   pwm_uart2, refclk, rsvd, sdxc, sdxc d5 d4, sdxc d6, sdxc d7,
->> +                   spi, spi cs1, spis, sw_r, uart0, uart1, uart2, utif, wdt,
->> +                   wled_an, wled_kn, -]
->> +
->> +          groups:
->> +            description:
->> +              An array of strings. Each string contains the name of a group.
->> +            maxItems: 1
->> +
->> +        required:
->> +          - groups
->> +          - function
->> +
->> +        allOf:
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: antenna
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [i2s]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: debug
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [i2c]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: gpio
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [gpio, i2c, i2s, p0led_an, p0led_kn, p1led_an, p1led_kn,
->> +                         p2led_an, p2led_kn, p3led_an, p3led_kn, p4led_an,
->> +                         p4led_kn, perst, pwm0, pwm1, refclk, sdmode, spi,
->> +                         spi cs1, spis, uart0, uart1, uart2, wdt, wled_an,
->> +                         wled_kn]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: i2c
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [i2c]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: i2s
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [i2s]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: jtag
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p0led_an, p0led_kn, p1led_an, p1led_kn, p2led_an,
->> +                         p2led_kn, p3led_an, p3led_kn, p4led_an, p4led_kn,
->> +                         sdmode]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p0led_an
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p0led_an]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p0led_kn
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p0led_kn]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p1led_an
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p1led_an]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p1led_kn
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p1led_kn]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p2led_an
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p2led_an]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p2led_kn
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p2led_kn]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p3led_an
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p3led_an]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p3led_kn
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p3led_kn]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p4led_an
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p4led_an]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: p4led_kn
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p4led_kn]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: pcie
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [gpio]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: pcm
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [i2s]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: perst
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [perst]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: pwm
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [uart1, uart2]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: pwm0
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [pwm0]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: pwm1
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [pwm1]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: pwm_uart2
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [spis]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: refclk
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [gpio, refclk, spi cs1]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: rsvd
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p0led_an, p0led_kn, wled_an, wled_kn]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: sdxc
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [sdmode]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: sdxc d5 d4
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [uart2]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: sdxc d6
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [pwm1]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: sdxc d7
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [pwm0]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: spi
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [spi]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: spi cs1
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [spi cs1]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: spis
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [spis]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: sw_r
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [uart1]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: uart0
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [uart0]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: uart1
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [uart1]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: uart2
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [uart2]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: utif
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an,
->> +                         p3led_kn, p4led_an, p4led_kn, pwm0, pwm1, sdmode, spis]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: wdt
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [wdt]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: wled_an
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [wled_an]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: wled_kn
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [wled_kn]
->> +
->> +          - if:
->> +              properties:
->> +                function:
->> +                  const: "-"
->> +            then:
->> +              properties:
->> +                groups:
->> +                  enum: [i2c, spi cs1, uart0]
->> +
-> 
->> +        additionalProperties: false
->> +
->> +    additionalProperties: false
-> 
-> Move these above 'properties'. It's easier to read than after a long
-> indented section.
-> 
->> +
->> +allOf:
->> +  - $ref: "pinctrl.yaml#"
-> 
-> Drop quotes.
+---8<---
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
 
-Will do.
+import sys
+from pathlib import Path
+from struct import pack
 
-Arınç
+fout = sys.stdout
+
+def stream_write(_):
+    """Write to the output"""
+    return fout.buffer.write(_)
+
+blobs = []
+for ucode in sorted(sys.argv[1:]):
+
+    # cpu00xx0Fxx_
+    fm = int(ucode[3:11], 16)
+
+    eq = int("".join([ucode[5], ucode[6], ucode[9], ucode[10]]), 16)
+    sz = Path(ucode).stat().st_size
+
+    print("%08x, %s => %04x" % (fm, ucode[3:11], eq), file=sys.stderr)
+
+    blobs.append((fm, eq, sz, open(ucode, "rb").read()))
+
+equiv = []
+for x in blobs:
+    equiv.append(pack(b"=IIIHH", x[0], 0, 0, x[1], 0))
+equiv.append(pack("=IIIHH", 0, 0, 0, 0, 0))
+
+stream_write(pack("I", 0x00414d44)) # Magic
+
+equiv_bin = b"".join(equiv)
+
+stream_write(pack("II", 0, len(equiv_bin))) # Equiv table
+stream_write(equiv_bin)
+
+for blob in blobs:
+    stream_write(pack("II", 1, len(blob[3])))
+    stream_write(blob[3])
+---8<---
+
+to wrap the blob(s) from that git repo into the container format that
+Linux and others know how to parse.
+
+~Andrew
