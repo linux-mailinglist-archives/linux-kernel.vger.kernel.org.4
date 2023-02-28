@@ -2,205 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142316A63BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 00:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2553B6A63C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 00:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjB1XPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 18:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S229451AbjB1XRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 18:17:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjB1XPb (ORCPT
+        with ESMTP id S229591AbjB1XRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 18:15:31 -0500
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD98A126D1;
-        Tue, 28 Feb 2023 15:15:26 -0800 (PST)
-Received: by mail-oo1-f43.google.com with SMTP id x19-20020a4a3953000000b00525191358b6so1820120oog.12;
-        Tue, 28 Feb 2023 15:15:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=42CWs713idbO/CYhPX4NZ4H9bYxxL/CCH/Vaue+iG8M=;
-        b=vViWgrISr7bmNk3NqUQpiYPLxjYDDFBLPvMHB8ZehuXeDcC8h5Ymk3k0lfHWqitmNU
-         CIZc/Q6Z5yRx1JYM2pyWfwAo/E5u4ikgUt4fTNkIGh74Eebmzud2FSnIQ/q8W8vJi8cS
-         y75Q4u2e6lszP4ax5dI0bxBSg0lbeUaulSlbMM6QvTSfS70VyNVQrGPsVj7SiSHgWX2c
-         +FBv5L16L3Z8RpestTaUaxqM899UhORmjF6139ShaE1OWH/ZtNm+Jx9BoJnLMyqRakXk
-         eE4ltvChsDuC5gaTHiuf161BAHZBFhSt2AKIqYw2+WfBtWo6/va/fJ6WsqKHnAN9HXAC
-         5PJw==
-X-Gm-Message-State: AO0yUKX6qSfTAlGu6kHH3JRfxydpeK25Nh+FvUs6ihEIEvumcRAg9kH3
-        HyqFxBuCS8aHPZWkoiWYKA==
-X-Google-Smtp-Source: AK7set+tMwLfJlHBAPoLVZOB1EWEZgi5T+91nmZvuIQvmyX6QUc9G0z1Jj82uaTGupYNDZi7yr4zXg==
-X-Received: by 2002:a4a:e511:0:b0:525:5a74:a7fe with SMTP id r17-20020a4ae511000000b005255a74a7femr2032879oot.4.1677626125963;
-        Tue, 28 Feb 2023 15:15:25 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z9-20020a4aae09000000b0049fd5c02d25sm4211690oom.12.2023.02.28.15.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 15:15:25 -0800 (PST)
-Received: (nullmailer pid 4157989 invoked by uid 1000);
-        Tue, 28 Feb 2023 23:15:24 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Tue, 28 Feb 2023 18:17:22 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF2D199EA;
+        Tue, 28 Feb 2023 15:17:20 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3DF4C5C00E3;
+        Tue, 28 Feb 2023 18:17:18 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 28 Feb 2023 18:17:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1677626238; x=
+        1677712638; bh=4KxBwKlTQZ05BLQjRzeOs8wp458o4ENpyLmhm8kBBF8=; b=q
+        It9z9OGTfT94KurTW4r2++HlnWTc8ppcw1U+1ih0whaZl6edWoV9KPzg8INNTYn6
+        FBYu4PTKD683Q6ECPPajA6YKA49dl8IZjs3RcyDO8EicxiOFx+vRbBnArog7rHW0
+        Lb0t6H0CFTiu0DEsVHD7eYNI0+8JZEwo3surYKWn6IWamPJzlDUZAiIuRhIwIq36
+        TB0xh+ohbtrljb+cyOmxY2onCtN8WPjEirsLA80yWPPMN3L5vuzYw1ruX8wpb8lN
+        +drsO4OmCHM+KzxZYtfoS3YCxFoRiYoMlPGwm8kH7H0LlhlaWr1hq1MIgp9jFmVE
+        PhNyOzuT8X8oGbmuQna+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677626238; x=
+        1677712638; bh=4KxBwKlTQZ05BLQjRzeOs8wp458o4ENpyLmhm8kBBF8=; b=c
+        HAVbbPs9z2GHoY4/QDROnKFhCYOJs2wzYftlUdsHeEk/ev3022oV0jNHeTFZKmb5
+        1smXhbHJk9VnsiIzmQEGL4mAan2x1NGdnoprT2i7/b7K2uGz0mqXQ7eTF+B+1OgU
+        7rRUiZ4Zs5fcKf2vVce+mcntH8eJsENYS4z5qise3UMJWotY9tlYh6RI8THR9KeQ
+        3S0trnYqxEtTA+/SM9L5tdUq2ExTGEbIg5fq4bNz9VhTdkcn3+kyoCP4YSVlMLTk
+        lKs9QRF/rTxS2hlBun27pHmCDQyOhRIGXfjCeSJNB6V0nsv68SeEcBx5ZbIRZO6m
+        u50EOp8uvlYjPdHhonMDA==
+X-ME-Sender: <xms:fov-Y1eZpVuDQqsZ_pjMAWdBtHUI_O1njFoxzzdrvYuwkiPAsEWbaA>
+    <xme:fov-YzOQcOMwCfmpwQ3dB9tGAcwPPHqgc2no9BcB01X0Gsi0x3KNULFRAM1_3eDap
+    8wsiY04osQ5VhqV2w>
+X-ME-Received: <xmr:fov-Y-iP3xjX-FWkmLiHGa1T2kVLs5AH_mI7_1h3HpeGncCB_VdrSwLtGvTPgwpKAwdUAjI2zxhEmiji6kGvbBoC9Mco1RSh-VfckH3vUXI6Noiyd3sxiYhh>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtugfgjgesthekredt
+    tddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
+    enucggtffrrghtthgvrhhnpefgteejiedthfdvvedujeetudeugeetieejfeegvefhjeeg
+    keevheehvefgiefhgeenucffohhmrghinhepkhgvrhhnvghlnhgvfigsihgvshdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihu
+    segugihuuhhurdighiii
+X-ME-Proxy: <xmx:fov-Y-8hPpH8zQx9qO2xtThrBhTnf5ybansu7bER3xcs1JSxwv46ZQ>
+    <xmx:fov-YxvxiHD-6hHwC72z_fN5-Qq9xHtseKAhmUuyHc-yKLlKD5v5WQ>
+    <xmx:fov-Y9GGtyJE5r_k47X3ZLtk7i_LhiPd9IRpexT5FbhsaS7Z3TQ9Yw>
+    <xmx:fov-Y7J6eXorEBy_ZCD_RAMed2tx2XpIbu6JS_moLO6iA4622CNM7w>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Feb 2023 18:17:17 -0500 (EST)
+Date:   Tue, 28 Feb 2023 16:17:16 -0700
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets
+ in BPF
+Message-ID: <20230228231716.a5uwc4tdo3kjlkg7@aviatrix-fedora.tail1b9c7.ts.net>
+References: <cover.1677526810.git.dxu@dxuuu.xyz>
+ <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
+ <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain>
+ <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        ~postmarketos/upstreaming@lists.sr.ht, devicetree@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>
-In-Reply-To: <a698f524106e0eb7db5cbd7e73e77ecd5ac8ad7f.1677620677.git.jahau@rocketmail.com>
-References: <cover.1677620677.git.jahau@rocketmail.com>
- <a698f524106e0eb7db5cbd7e73e77ecd5ac8ad7f.1677620677.git.jahau@rocketmail.com>
-Message-Id: <167762589365.4152972.16760715269546832503.robh@kernel.org>
-Subject: Re: [PATCH 10/10] dt-bindings: Add documentation for rt5033 mfd,
- regulator and charger
-Date:   Tue, 28 Feb 2023 17:15:24 -0600
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alexei,
 
-On Tue, 28 Feb 2023 23:32:27 +0100, Jakob Hauser wrote:
-> Add device tree binding documentation for rt5033 multifunction device, voltage
-> regulator and battery charger.
+On Mon, Feb 27, 2023 at 08:56:38PM -0800, Alexei Starovoitov wrote:
+> On Mon, Feb 27, 2023 at 5:57 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> > Hi Alexei,
+> >
+> > On Mon, Feb 27, 2023 at 03:03:38PM -0800, Alexei Starovoitov wrote:
+> > > On Mon, Feb 27, 2023 at 12:51:02PM -0700, Daniel Xu wrote:
+> > > > === Context ===
+> > > >
+> > > > In the context of a middlebox, fragmented packets are tricky to handle.
+> > > > The full 5-tuple of a packet is often only available in the first
+> > > > fragment which makes enforcing consistent policy difficult. There are
+> > > > really only two stateless options, neither of which are very nice:
+> > > >
+> > > > 1. Enforce policy on first fragment and accept all subsequent fragments.
+> > > >    This works but may let in certain attacks or allow data exfiltration.
+> > > >
+> > > > 2. Enforce policy on first fragment and drop all subsequent fragments.
+> > > >    This does not really work b/c some protocols may rely on
+> > > >    fragmentation. For example, DNS may rely on oversized UDP packets for
+> > > >    large responses.
+> > > >
+> > > > So stateful tracking is the only sane option. RFC 8900 [0] calls this
+> > > > out as well in section 6.3:
+> > > >
+> > > >     Middleboxes [...] should process IP fragments in a manner that is
+> > > >     consistent with [RFC0791] and [RFC8200]. In many cases, middleboxes
+> > > >     must maintain state in order to achieve this goal.
+> > > >
+> > > > === BPF related bits ===
+> > > >
+> > > > However, when policy is enforced through BPF, the prog is run before the
+> > > > kernel reassembles fragmented packets. This leaves BPF developers in a
+> > > > awkward place: implement reassembly (possibly poorly) or use a stateless
+> > > > method as described above.
+> > > >
+> > > > Fortunately, the kernel has robust support for fragmented IP packets.
+> > > > This patchset wraps the existing defragmentation facilities in kfuncs so
+> > > > that BPF progs running on middleboxes can reassemble fragmented packets
+> > > > before applying policy.
+> > > >
+> > > > === Patchset details ===
+> > > >
+> > > > This patchset is (hopefully) relatively straightforward from BPF perspective.
+> > > > One thing I'd like to call out is the skb_copy()ing of the prog skb. I
+> > > > did this to maintain the invariant that the ctx remains valid after prog
+> > > > has run. This is relevant b/c ip_defrag() and ip_check_defrag() may
+> > > > consume the skb if the skb is a fragment.
+> > >
+> > > Instead of doing all that with extra skb copy can you hook bpf prog after
+> > > the networking stack already handled ip defrag?
+> > > What kind of middle box are you doing? Why does it have to run at TC layer?
+> >
+> > Unless I'm missing something, the only other relevant hooks would be
+> > socket hooks, right?
+> >
+> > Unfortunately I don't think my use case can do that. We are running the
+> > kernel as a router, so no sockets are involved.
 > 
-> Cc: Beomho Seo <beomho.seo@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-> ---
->  .../bindings/mfd/richtek,rt5033.yaml          | 102 ++++++++++++++++++
->  .../power/supply/richtek,rt5033-charger.yaml  |  76 +++++++++++++
->  .../regulator/richtek,rt5033-regulator.yaml   |  45 ++++++++
->  3 files changed, 223 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
->  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml
-> 
+> Are you using bpf_fib_lookup and populating kernel routing
+> table and doing everything on your own including neigh ?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+We're currently not doing any routing things in BPF yet. All the routing
+manipulation has been done in iptables / netfilter so far. I'm not super
+familiar with routing stuff but from what I understand there is some
+relatively complicated stuff going on with BGP and ipsec tunnels at the
+moment. Not sure if that answers your question.
 
-yamllint warnings/errors:
+> Have you considered to skb redirect to another netdev that does ip defrag?
+> Like macvlan does it under some conditions. This can be generalized.
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/power/supply/richtek,rt5033-charger.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,pre-threshold-uvolt: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,pre-threshold-uvolt: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,pre-threshold-uvolt: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,const-uvolt: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,const-uvolt: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,const-uvolt: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,eoc-uamp: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,eoc-uamp: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,eoc-uamp: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,fast-uamp: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,fast-uamp: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,fast-uamp: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,pre-uamp: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,pre-uamp: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml: properties:richtek,pre-uamp: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-Documentation/devicetree/bindings/mfd/richtek,rt5033.example.dts:23.15-66.11: Warning (unit_address_vs_reg): /example-0/i2c@0: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/mfd/richtek,rt5033.example.dts:68.15-78.11: Warning (unit_address_vs_reg): /example-0/i2c@1: node has a unit name, but no reg or ranges property
+I had not considered that yet. Are you suggesting adding a new
+passthrough netdev thing that'll defrags? I looked at the macvlan driver
+and it looks like it defrags to handle some multicast corner case.
 
-doc reference errors (make refcheckdocs):
+> Recently Florian proposed to allow calling bpf progs from all existing
+> netfilter hooks.
+> You can pretend to local deliver and hook in NF_INET_LOCAL_IN ?
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/a698f524106e0eb7db5cbd7e73e77ecd5ac8ad7f.1677620677.git.jahau@rocketmail.com
+Does that work for forwarding cases? I'm reading through [0] and it
+seems to suggest that it'll only defrag for locally destined packets:
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+    If the destination IP address is matches with
+    local NIC's IP address, the dst_input() function will brings the packets
+    into the ip_local_deliver(), which will defrag the packet and pass it
+    to the NF_IP_LOCAL_IN hook
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Faking local delivery seems kinda ugly -- maybe I don't know any clean
+ways.
 
-pip3 install dtschema --upgrade
+[...]
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+[0]: https://kernelnewbies.org/Networking?action=AttachFile&do=get&target=hacking_the_wholism_of_linux_net.txt
 
+
+Thanks,
+Daniel
