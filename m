@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAD56A5896
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 861B26A5897
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjB1Lwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
+        id S231666AbjB1LxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjB1Lwv (ORCPT
+        with ESMTP id S231675AbjB1Lw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:52:51 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEA22DE56
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:52:49 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so9326502pjz.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:52:49 -0800 (PST)
+        Tue, 28 Feb 2023 06:52:59 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D9F35AC
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:52:54 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so13424980pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:52:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=guDwbtDzSe+f0+mE5P/BUoxD2wXxd/5dZJDCePQTDmo=;
-        b=E+V5mFVRRI43IP7kqQcke3AznYV/S6Ax/UM7BApz+3FkhQxAr93dXOqZuqoF/LS+qX
-         04HAAJqfSO4vTVuVKUm5Ak1zItk75wJTyI1Ig0R7FfmZFDKedx/11l/5tRwvMC5d7EIX
-         vd8w08ex43ahzUMY+XPJL/R6EdGiMF6Ndy1mFcVOgmkx2GL0MbqupOL5LkA3+vQW1/zd
-         eJFr8GlHR/1qNjS/Zn0wNk36DogNRB+W/saHAdwUxnUa8PXKdgeNxv5bAIemq087I9cW
-         iQL+T0w1Q5WLiaS2TtNS0fnBcDPpl564goMRO4280uEGNLnML1rzjQ00rvJhfuzwCU4h
-         5MbA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EfFwm9/whD1jR/5n6DKKR8V6Fa945UAISwsDPx5HLJU=;
+        b=wbv7ziCPJxqwbDWQhst1eW5b1dBwhJRXlbUxZezytqOmUHFMzhW4NWpoKafXASCkB7
+         GeL34Pgb3wfWJ4NsX4UEzTCvdzr1siXmUfB6y/EEOatKrLTXlNU5SfvkOn3FpKOiu/aD
+         V45usGfgtn3wBdgEvXtjuBhRoxgFMxUg5GOiu5PjvkAKB1D3nOt3CWnnY7BLvA7q3J99
+         oT+Gxgu2CygU46jOjfUzF0oGUmHrPSIIReBlomRNOf4lQ38cm3BrPqUijxow22PbVzWk
+         MByhiEjCTg/yEzg2k4+gB4WRlaOIsMNSuGYqYBbc2+jDfaVDvh6+AbXKx2qWsyXzVShL
+         Zttg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=guDwbtDzSe+f0+mE5P/BUoxD2wXxd/5dZJDCePQTDmo=;
-        b=iyIpEf+mJH/O++D3p/GftGC5OK/yf063pndRTG29jvL2aB/ChYETgRMIiK0kE7x4Sd
-         DZd/NsnmF7f2XctpPuC7k9A42WBE0rDkhtrBUFExprUTZG/CsZsTUZgD1JmTa3DvebPo
-         4RQz1tnbvNGgiZblWUvq54DdCQNncFtvRPLipqxzwyMNveHXq+YlAJQK3dUEs+zSh7IO
-         2RyuagNm0j+4Ip8LBN4x7VcLz8XVV5XAgx4yGaqPpO9KR0FAwMWD4bqZDrYx+5jIsACt
-         5dmX2wgDq8LK5F4EqhidNrBriwMZj+2zau9hpDizb9YhSa43CtjfKOksqgqqbWUbGl9s
-         Yi6A==
-X-Gm-Message-State: AO0yUKXmdh+q4hgfQMo4Vn8oNreqAdJt2jyIflI79Jyrk/za/oe2KWoz
-        dLqpSpc532DVKFsyQTYa4IectQ==
-X-Google-Smtp-Source: AK7set/i2bqxU9AV3gKotxdi1R4HmL6WNw5Uze90LzuUY6rnWopKherWyWPttSRADRJIn1bKAN3G6g==
-X-Received: by 2002:a17:90b:350b:b0:236:9e16:b49b with SMTP id ls11-20020a17090b350b00b002369e16b49bmr3150244pjb.21.1677585168902;
-        Tue, 28 Feb 2023 03:52:48 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EfFwm9/whD1jR/5n6DKKR8V6Fa945UAISwsDPx5HLJU=;
+        b=F7cSI7dshZKf8Km4z2lXKmhy3VVkqdfjP2ppbiswbRSMMY3CFiuq5+jrMwJtmZxL0h
+         GJdouKweVvBqDb+2MBLSo596jaQHaOVPkpDPrA9n/wROHVH21EGo/LdEbBYZlHo2lb13
+         4tt+Yx6Gg++DzGxWSyjLeQT8pFdfmBoUlmrlH2nePfPw3FaRFuOC9LWNQpFDACHM9jM+
+         z+kJr3NlvhhVQVwbc6d2kAMIRzcAz72a/kqUaGICGnQrAGzb3qbZBrWFVMzS2tO7K3ta
+         9oUwiPQNOF75CHR4whkKch3pCD4kOHUZNhe4Wy/dBp/XdNE5XB7PAyG0ycxnVk3rYoRZ
+         fZbg==
+X-Gm-Message-State: AO0yUKVCyw40NWoa338JeTDC4AcmrwBOhbgSnvtihbRUFZeUTbNp1GsN
+        tk1P+xv1EHV/z+cJbkeoaTm8nQ==
+X-Google-Smtp-Source: AK7set+RyVPlxna1uVA+l/uQXFZn+/+JbDCj4AjboMdynOdSiXT5U81AqAlc4WUVIXEChAlTf+gDLg==
+X-Received: by 2002:a17:90b:4a83:b0:235:9d0c:6e3f with SMTP id lp3-20020a17090b4a8300b002359d0c6e3fmr2884941pjb.31.1677585174069;
+        Tue, 28 Feb 2023 03:52:54 -0800 (PST)
 Received: from leoy-huanghe.lan (n058152048225.netvigator.com. [58.152.48.225])
-        by smtp.gmail.com with ESMTPSA id gk8-20020a17090b118800b002339491ead6sm7922317pjb.5.2023.02.28.03.52.43
+        by smtp.gmail.com with ESMTPSA id gk8-20020a17090b118800b002339491ead6sm7922317pjb.5.2023.02.28.03.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:52:48 -0800 (PST)
+        Tue, 28 Feb 2023 03:52:53 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -62,10 +63,12 @@ To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         James Clark <james.clark@arm.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v3 00/14] perf kvm: Support histograms and TUI mode
-Date:   Tue, 28 Feb 2023 19:51:11 +0800
-Message-Id: <20230228115125.144172-1-leo.yan@linaro.org>
+Subject: [PATCH v3 01/14] perf kvm: Refactor overall statistics
+Date:   Tue, 28 Feb 2023 19:51:12 +0800
+Message-Id: <20230228115125.144172-2-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230228115125.144172-1-leo.yan@linaro.org>
+References: <20230228115125.144172-1-leo.yan@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,62 +80,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch set is to enable histograms and (partially) TUI mode in perf
-kvm tool.
+Currently the tool computes overall statistics when sort the results.
+This patch refactors overall statistics during events processing,
+therefore, the function update_total_coun() is not needed anymore, an
+extra benefit is we can de-couple code between the statistics and the
+sorting.
 
-Patch set v1 [1] gives brief introduction for the change and this series
-has a minor update for the patch 13 'perf kvm: Add TUI mode for stat
-report' to avoid building failure when the system doesn't support
-HAVE_SLANG_SUPPORT.
+This patch is not expected any functionality changes.
 
-We can use below commands for testing this series:
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Reviewed-by: James Clark <james.clark@arm.com>
+---
+ tools/perf/builtin-kvm.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-In a terminal, you could launch a virtual machine with qemu command; in
-below case, I downloaded a Ubuntu (or Debian) iso file and used it as
-the file system image:
-
-  $ qemu-system-x86_64 -M pc -enable-kvm -cpu host -m 4096 -hda ubuntu-22.04-desktop-amd64.iso
-
-Then in another terminal, I can use below command to capture KVM trace
-data and report the result:
-
-  # cd linux/tools/perf
-  # ./perf kvm stat record
-  # ./perf kvm stat report          => Output in TUI mode
-  # ./perf kvm stat report --stdio  => Output in stdio mode
-
-Changes from v2:
-* Found building failure with command 'make VF=1 DEBUG=1 NO_SLANG=1',
-  fixed it in the patch 13. (James Clark)
-
-Changes from v1:
-* Updated the patch 13 'perf kvm: Add TUI mode for stat report' to avoid
-  building failure if no support HAVE_SLANG_SUPPORT.
-
-[1] https://lore.kernel.org/lkml/20230226042053.1492409-1-leo.yan@linaro.org/
-
-
-Leo Yan (14):
-  perf kvm: Refactor overall statistics
-  perf kvm: Add pointer to 'perf_kvm_stat' in kvm event
-  perf kvm: Move up metrics helpers
-  perf kvm: Use subtraction for comparison metrics
-  perf kvm: Introduce histograms data structures
-  perf kvm: Pass argument 'sample' to kvm_alloc_init_event()
-  perf kvm: Parse address location for samples
-  perf kvm: Add dimensions for KVM event statistics
-  perf kvm: Use histograms list to replace cached list
-  perf kvm: Polish sorting key
-  perf kvm: Support printing attributions for dimensions
-  perf kvm: Add dimensions for percentages
-  perf kvm: Add TUI mode for stat report
-  perf kvm: Update documentation to reflect new changes
-
- tools/perf/Documentation/perf-kvm.txt |   9 +-
- tools/perf/builtin-kvm.c              | 856 +++++++++++++++++++++-----
- tools/perf/util/kvm-stat.h            |  26 +-
- 3 files changed, 716 insertions(+), 175 deletions(-)
-
+diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
+index 641e739c717c..0172e5b0d26e 100644
+--- a/tools/perf/builtin-kvm.c
++++ b/tools/perf/builtin-kvm.c
+@@ -278,9 +278,14 @@ static double kvm_event_rel_stddev(int vcpu_id, struct kvm_event *event)
+ 				avg_stats(&kvm_stats->stats));
+ }
+ 
+-static bool update_kvm_event(struct kvm_event *event, int vcpu_id,
++static bool update_kvm_event(struct perf_kvm_stat *kvm,
++			     struct kvm_event *event, int vcpu_id,
+ 			     u64 time_diff)
+ {
++	/* Update overall statistics */
++	kvm->total_count++;
++	kvm->total_time += time_diff;
++
+ 	if (vcpu_id == -1) {
+ 		kvm_update_event_stats(&event->total, time_diff);
+ 		return true;
+@@ -399,7 +404,7 @@ static bool handle_end_event(struct perf_kvm_stat *kvm,
+ 		}
+ 	}
+ 
+-	return update_kvm_event(event, vcpu, time_diff);
++	return update_kvm_event(kvm, event, vcpu, time_diff);
+ }
+ 
+ static
+@@ -526,15 +531,6 @@ static void insert_to_result(struct rb_root *result, struct kvm_event *event,
+ 	rb_insert_color(&event->rb, result);
+ }
+ 
+-static void
+-update_total_count(struct perf_kvm_stat *kvm, struct kvm_event *event)
+-{
+-	int vcpu = kvm->trace_vcpu;
+-
+-	kvm->total_count += get_event_count(event, vcpu);
+-	kvm->total_time += get_event_time(event, vcpu);
+-}
+-
+ static bool event_is_valid(struct kvm_event *event, int vcpu)
+ {
+ 	return !!get_event_count(event, vcpu);
+@@ -549,7 +545,6 @@ static void sort_result(struct perf_kvm_stat *kvm)
+ 	for (i = 0; i < EVENTS_CACHE_SIZE; i++) {
+ 		list_for_each_entry(event, &kvm->kvm_events_cache[i], hash_entry) {
+ 			if (event_is_valid(event, vcpu)) {
+-				update_total_count(kvm, event);
+ 				insert_to_result(&kvm->result, event,
+ 						 kvm->compare, vcpu);
+ 			}
 -- 
 2.34.1
 
