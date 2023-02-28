@@ -2,215 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44F06A6115
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B956A6116
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjB1VP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S229915AbjB1VQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB1VP5 (ORCPT
+        with ESMTP id S229471AbjB1VQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:15:57 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F7F55BD
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:15:55 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id v4-20020a6b5b04000000b0074cb180c5e2so7129526ioh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:15:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aunH6rdCIjzCCa3AlQOm8uLa2dTuWVha0QFL6cudSV4=;
-        b=JMzlAis3iVzbKQnKaWuKmIUYocx7dAUnIGsIz0od8QCyyqWZY9kd+UoTglUzCCv6BH
-         xqglWjO8rHv0VTqfxoUM4NL4PrlNoEZa9ZrQvIjRfLldORkK2OZkC5Ve1VFo+VffBY+J
-         /UQdit2wivACYqdSVU0iQJJjgtqBn6dbQWqS1MgJxXzIIcMBK3gp/U4FTspCemK9OiY/
-         /vSKdvfVpgwMt4+L/0ByXCZh8yWOH/y/pyHECBJvqeju6PeSgpuJSaRvZNUl7+ouHbaM
-         bbaxr26qZHcPWu1nwJVsqt5Ros2MPoWDvEzBBI941Xsyd2HwDnRfHiUD5jy034ghSlHD
-         52oA==
-X-Gm-Message-State: AO0yUKX5l0nVHRYsLVruWpiUhdcSXkAyPzXSMh6tieZhx9uCWR68XOpG
-        ckcMHIkpym2yXX8N/4o3PGQBqQqVkGK310vZMeIiInIWjsfN
-X-Google-Smtp-Source: AK7set8MxM/tzuPvaNy0JLF6qwOY+Soj8ev2m2D3QxocKBefgh4qMrVPeibK6VjeImOtT5LX0hnclFU41gplzEUheqgK+gfjaj5D
+        Tue, 28 Feb 2023 16:16:46 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F06EAD0C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:16:45 -0800 (PST)
+Received: from [10.10.3.121] (unknown [10.10.3.121])
+        by mail.ispras.ru (Postfix) with ESMTPS id 1F50540770DC;
+        Tue, 28 Feb 2023 21:16:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 1F50540770DC
+Date:   Wed, 1 Mar 2023 00:16:43 +0300 (MSK)
+From:   Alexander Monakov <amonakov@ispras.ru>
+To:     Borislav Petkov <bp@alien8.de>
+cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Tavis Ormandy <taviso@gmail.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: x86: AMD Zen2 ymm registers rolling back
+In-Reply-To: <Y/5qbJgwHhkrMQqr@zn.tnic>
+Message-ID: <7ce3ea01-9758-0a97-e810-2bf38e7d59a7@ispras.ru>
+References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net> <Y/XTT59OrLw2as4R@zn.tnic> <Y/Xc+yMzI83WZ4V1@zn.tnic> <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com> <Y/Xp73KJe3c/1jrn@zn.tnic> <4737f149-c5b7-8a51-7cc5-8bda6e98308b@ispras.ru> <Y/5T4ScbM/99DhgT@zn.tnic>
+ <3d007f98-a42a-3c0e-8d6a-c86c5d0e25be@ispras.ru> <Y/5VIECduoyCJKP5@zn.tnic> <4d21fe93-7b77-bf5a-9ba8-645256ab0983@ispras.ru> <Y/5qbJgwHhkrMQqr@zn.tnic>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:840d:0:b0:745:5135:b9e with SMTP id
- i13-20020a5d840d000000b0074551350b9emr1931321ion.2.1677618955251; Tue, 28 Feb
- 2023 13:15:55 -0800 (PST)
-Date:   Tue, 28 Feb 2023 13:15:55 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e578cb05f5c91997@google.com>
-Subject: [syzbot] [reiserfs?] possible deadlock in balance_pgdat
-From:   syzbot <syzbot+bb678557e871cd928756@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+On Tue, 28 Feb 2023, Borislav Petkov wrote:
 
-HEAD commit:    ae3419fbac84 vc_screen: don't clobber return value in vcs_..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10721d60c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ff98a3b3c1aed3ab
-dashboard link: https://syzkaller.appspot.com/bug?extid=bb678557e871cd928756
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> On Tue, Feb 28, 2023 at 10:29:23PM +0300, Alexander Monakov wrote:
+> > That I can reproduce the bug even with the latest BIOS,
+> 
+> Can you reproduce if you boot with
+> 
+> clearcpuid=xsaves
+> 
+> ?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+No, with this option it is not reproducible.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bb678557e871cd928756@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.2.0-syzkaller-12913-gae3419fbac84 #0 Not tainted
-------------------------------------------------------
-kswapd0/100 is trying to acquire lock:
-ffff88801f2f4090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
-
-but task is already holding lock:
-ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:200 [inline]
-ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7338
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (fs_reclaim){+.+.}-{0:0}:
-       __fs_reclaim_acquire mm/page_alloc.c:4716 [inline]
-       fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:4730
-       might_alloc include/linux/sched/mm.h:271 [inline]
-       slab_pre_alloc_hook mm/slab.h:728 [inline]
-       slab_alloc_node mm/slab.c:3241 [inline]
-       slab_alloc mm/slab.c:3266 [inline]
-       __kmem_cache_alloc_lru mm/slab.c:3443 [inline]
-       kmem_cache_alloc_lru+0x3e/0x5d0 mm/slab.c:3459
-       __d_alloc+0x32/0x980 fs/dcache.c:1769
-       d_alloc_anon fs/dcache.c:1868 [inline]
-       d_make_root+0x49/0x110 fs/dcache.c:2069
-       reiserfs_fill_super+0x1301/0x2ea0 fs/reiserfs/super.c:2083
-       mount_bdev+0x351/0x410 fs/super.c:1371
-       legacy_get_tree+0x109/0x220 fs/fs_context.c:610
-       vfs_get_tree+0x8d/0x350 fs/super.c:1501
-       do_new_mount fs/namespace.c:3042 [inline]
-       path_mount+0x1342/0x1e40 fs/namespace.c:3372
-       do_mount fs/namespace.c:3385 [inline]
-       __do_sys_mount fs/namespace.c:3594 [inline]
-       __se_sys_mount fs/namespace.c:3571 [inline]
-       __x64_sys_mount+0x283/0x300 fs/namespace.c:3571
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&sbi->lock){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3098 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-       validate_chain kernel/locking/lockdep.c:3832 [inline]
-       __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
-       lock_acquire kernel/locking/lockdep.c:5669 [inline]
-       lock_acquire+0x1e3/0x670 kernel/locking/lockdep.c:5634
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
-       reiserfs_evict_inode+0x30b/0x540 fs/reiserfs/inode.c:55
-       evict+0x2ed/0x6b0 fs/inode.c:665
-       iput_final fs/inode.c:1748 [inline]
-       iput.part.0+0x59b/0x8a0 fs/inode.c:1774
-       iput+0x5c/0x80 fs/inode.c:1764
-       dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
-       __dentry_kill+0x3c0/0x640 fs/dcache.c:607
-       shrink_dentry_list+0x12c/0x4f0 fs/dcache.c:1201
-       prune_dcache_sb+0xeb/0x150 fs/dcache.c:1282
-       super_cache_scan+0x33a/0x590 fs/super.c:104
-       do_shrink_slab+0x464/0xd20 mm/vmscan.c:853
-       shrink_slab_memcg mm/vmscan.c:922 [inline]
-       shrink_slab+0x388/0x660 mm/vmscan.c:1001
-       shrink_one+0x502/0x810 mm/vmscan.c:5343
-       shrink_many mm/vmscan.c:5394 [inline]
-       lru_gen_shrink_node mm/vmscan.c:5511 [inline]
-       shrink_node+0x2064/0x35f0 mm/vmscan.c:6459
-       kswapd_shrink_node mm/vmscan.c:7262 [inline]
-       balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7452
-       kswapd+0x70b/0x1000 mm/vmscan.c:7712
-       kthread+0x2e8/0x3a0 kernel/kthread.c:376
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(fs_reclaim);
-                               lock(&sbi->lock);
-                               lock(fs_reclaim);
-  lock(&sbi->lock);
-
- *** DEADLOCK ***
-
-3 locks held by kswapd0/100:
- #0: ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:200 [inline]
- #0: ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7338
- #1: ffffffff8c8995d0 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab_memcg mm/vmscan.c:895 [inline]
- #1: ffffffff8c8995d0 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab+0x2a0/0x660 mm/vmscan.c:1001
- #2: ffff88801230a0e0 (&type->s_umount_key#64){++++}-{3:3}, at: trylock_super fs/super.c:414 [inline]
- #2: ffff88801230a0e0 (&type->s_umount_key#64){++++}-{3:3}, at: super_cache_scan+0x70/0x590 fs/super.c:79
-
-stack backtrace:
-CPU: 2 PID: 100 Comm: kswapd0 Not tainted 6.2.0-syzkaller-12913-gae3419fbac84 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2178
- check_prev_add kernel/locking/lockdep.c:3098 [inline]
- check_prevs_add kernel/locking/lockdep.c:3217 [inline]
- validate_chain kernel/locking/lockdep.c:3832 [inline]
- __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
- lock_acquire kernel/locking/lockdep.c:5669 [inline]
- lock_acquire+0x1e3/0x670 kernel/locking/lockdep.c:5634
- __mutex_lock_common kernel/locking/mutex.c:603 [inline]
- __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
- reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
- reiserfs_evict_inode+0x30b/0x540 fs/reiserfs/inode.c:55
- evict+0x2ed/0x6b0 fs/inode.c:665
- iput_final fs/inode.c:1748 [inline]
- iput.part.0+0x59b/0x8a0 fs/inode.c:1774
- iput+0x5c/0x80 fs/inode.c:1764
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- shrink_dentry_list+0x12c/0x4f0 fs/dcache.c:1201
- prune_dcache_sb+0xeb/0x150 fs/dcache.c:1282
- super_cache_scan+0x33a/0x590 fs/super.c:104
- do_shrink_slab+0x464/0xd20 mm/vmscan.c:853
- shrink_slab_memcg mm/vmscan.c:922 [inline]
- shrink_slab+0x388/0x660 mm/vmscan.c:1001
- shrink_one+0x502/0x810 mm/vmscan.c:5343
- shrink_many mm/vmscan.c:5394 [inline]
- lru_gen_shrink_node mm/vmscan.c:5511 [inline]
- shrink_node+0x2064/0x35f0 mm/vmscan.c:6459
- kswapd_shrink_node mm/vmscan.c:7262 [inline]
- balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7452
- kswapd+0x70b/0x1000 mm/vmscan.c:7712
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Alexander
