@@ -2,121 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAB86A57FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249116A5801
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbjB1LZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S231658AbjB1LZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbjB1LYV (ORCPT
+        with ESMTP id S231500AbjB1LYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:24:21 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F192CFC0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:23:46 -0800 (PST)
-Received: from [192.168.2.206] (unknown [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3B91E6602FDB;
-        Tue, 28 Feb 2023 11:23:40 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677583420;
-        bh=E6qt90GxOfucMcC6bgFlkh6pyweclyl9Mhp2XoIESkc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YDjzY7PLJkIFAF01dNDVw8heJ+9gQNPuvtd1JND0dcYRRzev52TSdtMBmSjgnSITw
-         sp/8nV9TKGiIDVvVSAZbZAZWr0AO2dsN6whyLFH3s2YvxRxcSZh70rKnfXX/HK565/
-         fIq3gJPzie4UGVNTXZnNkawobX78EWBgIzLT6cJYJD22q/inVAqXi2DkqE48Askn38
-         i1W7Zauiyp+l+NWiuZfd2vYH+sPzeBytqTk6+1kx8r7tVisAazq2A/MCMgxTnuNm0E
-         lq1JEYRnMMLljU2Uy4T0GvJNMxcLNOFKR4iLsWR+EeiY8Z8RQ6HRemD1l0N4rHuc0p
-         SbKdBvJz49nhA==
-Message-ID: <33f03f9e-4af3-3237-00dc-d79570d9022a@collabora.com>
-Date:   Tue, 28 Feb 2023 14:23:37 +0300
+        Tue, 28 Feb 2023 06:24:24 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4365E2FCC5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:24:01 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id t129so3862950iof.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:24:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0u2iKp9ldtcgMOD+hKR8kz3k0BOCjo1o/U4cCu8boAs=;
+        b=L0u+m/Xvcmz+gegyTZ64Bq2mJd6k/r1EXydm4FVgaQ6f4cz0HqDzFGrIqcKOKeSX4m
+         TQ2suA/qG7DQtPqbClxjbKGwj2GKtt6FFwCQFWrQVesEBm4qkMyt9e09ErWg4q4S1J75
+         n+o213OvKaZoFEpQM7Hk9gKLAaUlTk305d2L3HUZs/pPqw2e0UIx9zx6fMq0R9+gEEPT
+         O34ufDaxKGHtli6AC8vWpEO2KOSke0lMJ2Bnc+ZgrGF33uzfXf/47/wc4NKgmC4rPYU8
+         laCKAqxJH/CfzZv3sST8ObLCavdA+kzooEOzZrzU4a8Qxy08Ynv85vjvXyX/9L8+EqaA
+         tt5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0u2iKp9ldtcgMOD+hKR8kz3k0BOCjo1o/U4cCu8boAs=;
+        b=0z9V2HuSivHljJKxSKmI2+cjS7m5kXXbISw3HuM3JQBhnMh1GFfniovARxlo4Z1cTj
+         3taUqbPLfPdL0c+ai8cAptU0mYwSP/jNiKd4nr+Y9Mf9J+spgNNnJgrhAP6lKapsgMK1
+         DLxLp7/aaXfKJg3T9fiO88K3dbCCHGMzaS09X/Ol9ddG4rkN9MoVWUwE3LjasD4q0PDK
+         bJ8rbjjuCWh6ge+yLboXfFWebQB8EdSAzvGjlX2PW1DkXx7Lj0RZh9nqH01N/VlmIwyd
+         1JlY2rgsBAfVRe1+SVjATjQG7XLxdTJrmsPRdo2L3QP7iDQKCAkW9Zo02AqLx7Q5vOl3
+         1Hdg==
+X-Gm-Message-State: AO0yUKWdbaF8+VxcBPap1IckbTgADlwLKoti0TE5pw1S6VyYNtVwNHNG
+        KWgyRFOvn1i/2cdB1nlkZEEp/cIEUiOj7O/udnJM/A==
+X-Google-Smtp-Source: AK7set/XxfKvKpioQb1Ae1RPArAsVZtkPOSIDArcUmsbNHh+ZP+BrV/3l+awhLoUPWogWiBdbkJZzvBuO+cK4uoi2os=
+X-Received: by 2002:a05:6602:214b:b0:74c:bb62:6763 with SMTP id
+ y11-20020a056602214b00b0074cbb626763mr1138820ioy.1.1677583438043; Tue, 28 Feb
+ 2023 03:23:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm/virtio: Add option to disable KMS support
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     Rob Clark <robdclark@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Ryan Neph <ryanneph@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>
-References: <20230224180225.2477641-1-robdclark@gmail.com>
- <20230227063821.dg2gbjjwcekbxyzw@sirius.home.kraxel.org>
- <CAF6AEGsv1G7CPSkCPe3iHGB9JEO4iy+bTbkFLoitmx64U78RJw@mail.gmail.com>
- <20230228062809.ccyzgnvizh6jidn4@sirius.home.kraxel.org>
- <87a60yywo0.fsf@minerva.mail-host-address-is-not-set>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <87a60yywo0.fsf@minerva.mail-host-address-is-not-set>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000e412e905f5b46201@google.com> <CANn89iJ_kLaF0tVVUfzKQwVkQ0VtCca1dL8eF+RrXCVDTK6h2Q@mail.gmail.com>
+ <20230227155352.3399bb10@kernel.org>
+In-Reply-To: <20230227155352.3399bb10@kernel.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 28 Feb 2023 12:23:46 +0100
+Message-ID: <CANn89i+ooMT_G9aL8keZ-WOcAKqpC44OLQNGvfUtjA6PW-yxcA@mail.gmail.com>
+Subject: Re: [syzbot] [net?] INFO: task hung in tls_sw_sendpage (3)
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     syzbot <syzbot+9c0268252b8ef967c62e@syzkaller.appspotmail.com>,
+        borisp@nvidia.com, bpf@vger.kernel.org, davem@davemloft.net,
+        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 12:19, Javier Martinez Canillas wrote:
-> Gerd Hoffmann <kraxel@redhat.com> writes:
-> 
-> Hello Gerd,
-> 
->> On Mon, Feb 27, 2023 at 07:40:11AM -0800, Rob Clark wrote:
->>> On Sun, Feb 26, 2023 at 10:38 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
->>>> On Fri, Feb 24, 2023 at 10:02:24AM -0800, Rob Clark wrote:
->>>>> From: Rob Clark <robdclark@chromium.org>
->>>>>
->>>>> Add a build option to disable modesetting support.  This is useful in
->>>>> cases where the guest only needs to use the GPU in a headless mode, or
->>>>> (such as in the CrOS usage) window surfaces are proxied to a host
->>>>> compositor.
->>>> Why make that a compile time option?  There is a config option for the
->>>> number of scanouts (aka virtual displays) a device has.  Just set that
->>>> to zero (and fix the driver to not consider that configuration an
->>>> error).
->>> The goal is to not advertise DRIVER_MODESET (and DRIVER_ATOMIC).. I
->>> guess that could be done based on whether there are any scanouts, but
->>> it would mean making the drm_driver struct non-const.
->> Apparently there is a drm_device->driver_features override,
->> (amdgpu uses that).  The driver could simply drop the DRIVER_MODESET and
->> DRIVER_ATOMIC bits in case no scanout is present instead of throwing an
->> error.
->>
->>> And I think it is legitimate to allow the guest to make this choice,
->>> regardless of what the host decides to expose, since it is about the
->>> ioctl surface area that the guest kernel exposes to guest userspace.
->> I think it is a bad idea to make that a compile time option, I'd suggest
->> a runtime switch instead, for example a module parameter to ask the
->> driver to ignore any scanouts.
->>
-> I don't think there's a need for a new module parameter, there's already
-> the virtio-gpu 'modeset' module parameter to enable/disable modsetting
-> and the global 'nomodeset' kernel cmdline parameter to do it for all DRM
-> drivers.
-> 
-> Currently, many drivers just fail to probe when 'nomodeset' is present,
-> but others only disable modsetting but keep the rendering part. In fact,
-> most DRM only drivers just ignore the 'nomodeset' parameter.
+On Tue, Feb 28, 2023 at 12:53=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+>
+> On Mon, 27 Feb 2023 21:35:41 +0100 Eric Dumazet wrote:
+> > This looks suspicious to me
+> >
+> > commit 79ffe6087e9145d2377385cac48d0d6a6b4225a5
+> > Author: Jakub Kicinski <kuba@kernel.org>
+> > Date:   Tue Nov 5 14:24:35 2019 -0800
+> >
+> >     net/tls: add a TX lock
+> >
+> >
+> > If tls_sw_sendpage() has to call sk_stream_wait_memory(),
+> > sk_stream_wait_memory() is properly releasing the socket lock,
+> > but knows nothing about mutex_{un}lock(&tls_ctx->tx_lock);
+>
+> That's supposed to be the point of the lock, prevent new writers from
+> messing with the partially pushed records when the original writer
+> is waiting for write space.
+>
+> Obvious hack but the async crypto support makes TLS a bit of a mess :|
+>
+> sendpage_lock not taking tx_lock may lead to obvious problems, I'm not
+> seeing where the deadlock is, tho..
+>
 
-IIUC, Rob's main point for having a config option is solely for security
-reasons. The config option eliminates possibility of accidentally (or
-intentionally) enabling KMS from software, which is better to have in
-case of shipping a product (Chromebook) on which multiple teams are
-working on.
+This report mentions sendpage, but sendmsg() would have the same issue.
 
--- 
-Best regards,
-Dmitry
+A thread might be blocked in sk_stream_wait_memory() with the mutex
+held, for an arbitrary amount of time,
+say if the remote peer stays in RWIN 0 for hours.
 
+This prevents tx_work from making progress, and
+tls_sw_cancel_work_tx() would be stuck forever.
+
+The consensus is that the kernel shouts a warning if a thread has been
+waiting on a mutex
+more than 120 seconds (check_hung_uninterruptible_tasks())
