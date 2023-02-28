@@ -2,140 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE656A605D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0515D6A6064
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjB1U3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        id S229672AbjB1Uah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjB1U3C (ORCPT
+        with ESMTP id S229481AbjB1Uaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:29:02 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9909511E98
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:29:01 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id o12so45137320edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677616140;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3QtVJrWXC9rGmnnc7M284yV9DN6nBtrJT7HUgADRWDs=;
-        b=C/G2C4DVX2bGqJJUEz6VqNG1FmT5cewYqbcHX8sBNLCdYALG3RHO+5ToBh9LXcgtjf
-         ctTMPXYcLWDvEg8di09qPjCdXvxvxReRYrKFFwL107leynYPYoQADs2HygD3SR7crrI3
-         Ch0gsNPRUL9mCZLY6Unt6vlj7/IQB/2NpIZYKxrXXaCh4x/+vJjIX6ed8qclTvPhqAmx
-         lMYkKuytiTlnZfLCrOn57MNjSp7ZUPUTQl2k03kRvZEKoBS7vB2E+d9iSLN/X4gedDfa
-         TtCHk5OMvxz+1/4SHiIcr7XMdZi4zRPhgAb/x+O61Gu2vV9ZABcjJK7V0D1CFcnhbYM1
-         XZGw==
+        Tue, 28 Feb 2023 15:30:35 -0500
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D763332E64;
+        Tue, 28 Feb 2023 12:30:34 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id ee7so45331293edb.2;
+        Tue, 28 Feb 2023 12:30:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677616140;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3QtVJrWXC9rGmnnc7M284yV9DN6nBtrJT7HUgADRWDs=;
-        b=splc2cG8C94191Ue9uNhCnXg8WDz/FHTzoPXw9zV8LgbwqKNdDnInGhOEZrdrq2lWz
-         3SPx++7YVxaQhLDFQPu/dXi7vExXs6KK3LusmbcFVyPlfCiKEXBGBhFuwim3jnudq3Ul
-         eOg6Q4CPGAFuRES4WfdmbBw2doZ0rl4X+pXsdMe3fW+iP0Sa+Q695RCIa1hcHkNtID4O
-         Nr/7UnR0J580kpAcdzBIGIvuHpGbquHZseA3le1F87R//fxLnTL1B1UrOSnPX8QQcIzQ
-         5KyUxdvOG3MZ04C62kMCOxh2WyBC7PlDCERSu78/V0PNoc1o0DQ6UELQob1/bXY8V/oc
-         vYsw==
-X-Gm-Message-State: AO0yUKUMIAWaiBMeJF/b0ygaQTy8cd65C71NfwPC9kInSsvuF15MfTuY
-        aS5tz44IDBh2mEuzkPA7OUQ=
-X-Google-Smtp-Source: AK7set9zoo+TtHubqBJwmOt0qb1kPXXRmSV9dMnMd7bcIxofX2ktlVf9srCD6WTwISP3DlfCJ+kyQw==
-X-Received: by 2002:a17:906:251:b0:8b1:94cc:10b1 with SMTP id 17-20020a170906025100b008b194cc10b1mr3956372ejl.7.1677616140132;
-        Tue, 28 Feb 2023 12:29:00 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b008d356cafaedsm4778427ejd.40.2023.02.28.12.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 12:28:59 -0800 (PST)
-Date:   Tue, 28 Feb 2023 21:28:57 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8192e: Remove function ..dm_check_ac_dc_power
- calling a script
-Message-ID: <20230228202857.GA16442@matrix-ESPRIMO-P710>
+        d=1e100.net; s=20210112; t=1677616233;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TO0UqDEdNc0UYMM3lLiT6qUY68t+NUFmoAALBWAzxLs=;
+        b=yop9XxhN1SUB9UIM4pC3d17b4S3h/Pc14p8LtwErzBxAfrHbQ7kZyEPZZ1QHdwymq9
+         8B4Muss58ux4Bs0xTvzD2zr7Op4m3la3qrFtMnSJDyxxuaSD7IZ2xfb4DGZjTDW6zK+D
+         7V1mddwRIzUGBTP+Nrb71XnaRR0TUQsk/icK4wg4KZDaAlCbonWvfTm2S4qd2afAbs7a
+         K8wGmAjGT0K/3XAwppKSvXftoycK5sJHw1yYYYPPx2TRZtLnV5qb2H5rUzHqW/OGfksQ
+         lMZMtzZqcVD4CY9OqLVHZ448Z6mxuCGQn1Uwvl36cIo+w5mxpgZBCiMX4H+YsJvcfeLs
+         07Vw==
+X-Gm-Message-State: AO0yUKXc+lcXqVBhxP3pU7CCR53uAw6H4qofI1r/zPfJcnLWO/ZxvsFr
+        1+HXnx3UZsgOZOcViLkEvlHQLYI0A0ZKLy9Be4A=
+X-Google-Smtp-Source: AK7set8zuZrvSq++2p4EHSf4m6hn99SNIS9+wXIMduUvr3S/WvcjLtx9vAl4VRYq6tyNYFhcYQZQefDKuVc6ifuS/0g=
+X-Received: by 2002:a50:c007:0:b0:4ab:4933:225b with SMTP id
+ r7-20020a50c007000000b004ab4933225bmr2478922edb.6.1677616233240; Tue, 28 Feb
+ 2023 12:30:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230224150811.80316-1-nick.alcock@oracle.com> <20230224150811.80316-6-nick.alcock@oracle.com>
+In-Reply-To: <20230224150811.80316-6-nick.alcock@oracle.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 28 Feb 2023 21:30:21 +0100
+Message-ID: <CAJZ5v0gTmjUsZ_cLdmOm473V8Jn7EaMNy-1Z8_JQK9S1NUVsMQ@mail.gmail.com>
+Subject: Re: [PATCH 05/27] cpufreq: intel_pstate: remove MODULE_LICENSE in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove function _rtl92e_dm_check_ac_dc_power calling a script
-/etc/acpi/wireless-rtl-ac-dc-power.sh that is not available. This script
-is not part of the kernel and it is not available on the www. The result
-is that this function is just dead code.
+On Fri, Feb 24, 2023 at 4:09 PM Nick Alcock <nick.alcock@oracle.com> wrote:
+>
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> ---
+>  drivers/cpufreq/intel_pstate.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index fd73d6d2b808..0f3e1a1aab4c 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -3530,4 +3530,3 @@ early_param("intel_pstate", intel_pstate_setup);
+>
+>  MODULE_AUTHOR("Dirk Brandewie <dirk.j.brandewie@intel.com>");
+>  MODULE_DESCRIPTION("'intel_pstate' - P state driver Intel Core processors");
+> -MODULE_LICENSE("GPL");
+> --
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
-I found a hint in this blog about the content of the script:
-https://www.kubuntuforums.net/forum/archives/eol-releases/-9-10/network-
-support-ai/41269-realtek-lan-connection-timeout
-
-If you know more about the purpose and the need for this script please
-respond.
-
-Tested with rtl8192e
-Transferred this patch over wlan connection of rtl8192e
----
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 23 ----------------------
- 1 file changed, 23 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index d8455b23e555..c04eb15c4044 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -185,7 +185,6 @@ static void _rtl92e_dm_init_fsync(struct net_device *dev);
- static void _rtl92e_dm_deinit_fsync(struct net_device *dev);
- 
- static	void _rtl92e_dm_check_txrateandretrycount(struct net_device *dev);
--static  void _rtl92e_dm_check_ac_dc_power(struct net_device *dev);
- static void _rtl92e_dm_check_fsync(struct net_device *dev);
- static void _rtl92e_dm_check_rf_ctrl_gpio(void *data);
- static void _rtl92e_dm_fsync_timer_callback(struct timer_list *t);
-@@ -236,8 +235,6 @@ void rtl92e_dm_watchdog(struct net_device *dev)
- 	if (priv->being_init_adapter)
- 		return;
- 
--	_rtl92e_dm_check_ac_dc_power(dev);
--
- 	_rtl92e_dm_check_txrateandretrycount(dev);
- 	_rtl92e_dm_check_edca_turbo(dev);
- 
-@@ -255,26 +252,6 @@ void rtl92e_dm_watchdog(struct net_device *dev)
- 	_rtl92e_dm_cts_to_self(dev);
- }
- 
--static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
--{
--	struct r8192_priv *priv = rtllib_priv(dev);
--	static const char ac_dc_script[] = "/etc/acpi/wireless-rtl-ac-dc-power.sh";
--	char *argv[] = {(char *)ac_dc_script, DRV_NAME, NULL};
--	static char *envp[] = {"HOME=/",
--			"TERM=linux",
--			"PATH=/usr/bin:/bin",
--			 NULL};
--
--	if (priv->rst_progress == RESET_TYPE_SILENT)
--		return;
--	if (priv->rtllib->state != RTLLIB_LINKED)
--		return;
--	call_usermodehelper(ac_dc_script, argv, envp, UMH_WAIT_PROC);
--
--	return;
--};
--
--
- void rtl92e_init_adaptive_rate(struct net_device *dev)
- {
- 
--- 
-2.39.2
-
+Applied as 6.3-rc material, thanks!
