@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B149C6A570E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459926A570D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjB1KsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S230437AbjB1KsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjB1Kry (ORCPT
+        with ESMTP id S230313AbjB1Kry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Feb 2023 05:47:54 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3435830EE;
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3093AB2;
         Tue, 28 Feb 2023 02:47:53 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 87EFD6602FDB;
-        Tue, 28 Feb 2023 10:47:51 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2F0106602FDC;
+        Tue, 28 Feb 2023 10:47:52 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1677581272;
-        bh=iTiXsbcvL98tLYBNMasBh9C/GsvGSy9IVHh+FRRt/uQ=;
+        bh=MrIqGkrI7LujwoSZ7Bc2owhtRwNGguk3yNGZ02UZ6+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JUS5j3F6XoHW0m9VpkYAIFNOvfhSr5WYYwQlBODNQmGx6LU3E7Gu8H1TB92gy8Xjd
-         Kq8eF5nFyJbUGP+bKRFb4ly03VMEG7gXr88VMTxkAgeMycW30vbYKZeTxY5GOHnUkY
-         9uLnnuXfvwbnQ9QdnH/A0ESKNlKVZOe43ZVPbkcI/xQchKJW3z/A4mLOF9n08ljlwh
-         xYB3Q7tWUGWaeFC7Sqa9wJ9iQboVT6OMANFbFI+qau7j/iTk1UBInJP8FvXB5wrR86
-         JoMTMJhx3jbt5f6V/SLnOmfLmCcAxnU06nODrQa0PQl5k9UZgEKCYu/MZCpf6sHIc8
-         p8qn5ynxr+8Hg==
+        b=dR4/b3b5lltCNN8KfeulljLkwod7OuVNaM74a5HrWCCgegN1d2AhvW1vKT6Tr1vaR
+         1/SObUDle1lbS2jS+xAY5A7XfAZT/4WOhOgyNU6EKlFOvvJjQaWxpA8/ZcVUL5eVyA
+         goyY64+helLLB/rgqG0gQjaCUs2CreVyKfqEzt5z+wTAdOUcj5Q4BqJFIIPFpdOw/9
+         sg07ArnkLn47yTd+Hg1/ugU4uMQX3fyHn3k+kDWe6+1yTKYG1gZhO3kj5Yb3m/WN1m
+         A9LK6MVj+j2mC5orTIAkjMgZT1aL3SK3Yal8sxhThI4/vWBDUP7ziDaQr8uez07c1E
+         AnFuCFXdJE9+g==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -40,9 +40,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v3 04/18] arm64: dts: mt8183-pumpkin: Couple VGPU and VSRAM_GPU regulators
-Date:   Tue, 28 Feb 2023 11:47:27 +0100
-Message-Id: <20230228104741.717819-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 05/18] arm64: dts: mediatek: mt8183-evb: Couple VGPU and VSRAM_GPU regulators
+Date:   Tue, 28 Feb 2023 11:47:28 +0100
+Message-Id: <20230228104741.717819-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com>
 References: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com>
@@ -62,14 +62,14 @@ relation to satisfy in order to ensure GPU stable operation.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts | 11 ++++++++++-
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts | 11 ++++++++++-
  1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-index a1d01639df30..c228f04d086b 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-@@ -71,7 +71,6 @@ &auxadc {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+index 52dc4a50e34d..fd327437e932 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+@@ -52,7 +52,6 @@ &auxadc {
  
  &gpu {
  	mali-supply = <&mt6358_vgpu_reg>;
@@ -77,7 +77,7 @@ index a1d01639df30..c228f04d086b 100644
  };
  
  &i2c0 {
-@@ -176,6 +175,16 @@ &mmc1 {
+@@ -138,6 +137,16 @@ &mmc1 {
  	non-removable;
  };
  
@@ -92,7 +92,7 @@ index a1d01639df30..c228f04d086b 100644
 +};
 +
  &pio {
- 	i2c_pins_0: i2c0 {
+ 	i2c_pins_0: i2c0{
  		pins_i2c{
 -- 
 2.39.2
