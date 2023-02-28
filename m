@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144766A58EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BF46A58F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjB1MRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 07:17:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S231594AbjB1MXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 07:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjB1MRG (ORCPT
+        with ESMTP id S229534AbjB1MXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 07:17:06 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA7B265B8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:17:05 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id a7so5552735pfx.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:17:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7GDuRJNzB+FPcvVYxqkY8xWG29BxTJ0LYww4+9WZDNQ=;
-        b=soqfTf0BnDTlVqBS8PWubPPOErtzCuWTAhtUflMLeGsAwLCOiFJt2JfqTvKIxOM3mH
-         hunFX4sA33gFFTDEIdqgguK/u0KO1Un4HngqcYY0BcZT1NTr4pX0NaoA0LbhMtWJt+6V
-         MF0wi3aEpMYts+YAkCyLDeC2sFA6kJMYbUDwTKXrikxPmjYusFFduGHJQXibcfIYqBDQ
-         sbc820S7+Eq/o7is52t5mBVX2eVYfG5e3YrnScGWsABEeVo7XWQXgUukZbT9mKeJnuRm
-         n3uXAZKEOo0FXay+dPkGKxGkl2S3dFcq+OyF90OqUCYqR84IDYId7YuCrvGz+TOwr4x+
-         9Bgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7GDuRJNzB+FPcvVYxqkY8xWG29BxTJ0LYww4+9WZDNQ=;
-        b=2JOzGvCIEeOA+qFPdfvu2ATdVamM9iB1R7yeSxtV0h8AaAbbNssFsUZcDN67Abp1Rt
-         39PB5tq3/e06Ka//VqPSfWf2XMedYD6JPM6YMQT6oGAmGCb6WxRTnGD3txDlNB+yJNMk
-         WmZKuE7CRGxj/tgqXXWUdUUbb+UfYM/EZt36VYthWSTntC59ZsvOvV9nd/dKDdvXQhV4
-         33js6MUhfPBwMtD+C9YJxe/V86qMJmWab9XFODOnZy0uaZoHpjfbrlvQ9rLiip+bYWCY
-         sovGV1n1jlX3TK3gnJJeqtWbhAjbOaFYFR0yh5MgnUMIfw9Tp6+TBfJklyWpdFBlzqDi
-         j3/g==
-X-Gm-Message-State: AO0yUKXc0H378Vsu1667QkJIee6Y9B1NHcv5mfhf9lX0mRef4r2zNxOq
-        kfg5LHBrR2kmXW8ubXiFoR/Bji9rqtvw1zcw+6/JuA==
-X-Google-Smtp-Source: AK7set/fnigsJgTfH/ZX7+1djP388HDAukz4aDVxJDWE3QImQwXnbumtvaLPAQmZUFw1jxD4pZyjtzAtg/JmKuRJ2Ps=
-X-Received: by 2002:a05:6a00:26eb:b0:5de:ece4:2674 with SMTP id
- p43-20020a056a0026eb00b005deece42674mr875574pfw.3.1677586624954; Tue, 28 Feb
- 2023 04:17:04 -0800 (PST)
+        Tue, 28 Feb 2023 07:23:06 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4C3975E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:23:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9669721954;
+        Tue, 28 Feb 2023 12:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1677586982; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qe9LaQqlz0Rvcm+4GWx3FTDiiVR6J191bAYxqKFZY1k=;
+        b=JkklOna8Hdg7NhARG/VHwt00WXyRRIATojl1DYkIYCiTAd09Fg+wB8afyWAGLbj93mW7gi
+        rRq4oGqzQm6w2VkGvLD8MdgWfYViVbKigsUpTXpIm+fBRa8kM1s8pxD4RFDuvqiQTdyFDJ
+        WJ3IGomnop68EBICr6oJKbu/YnIILPA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1677586982;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qe9LaQqlz0Rvcm+4GWx3FTDiiVR6J191bAYxqKFZY1k=;
+        b=HciiFLFeUJ7kFcL/0Ro+2BsTIF/j11xZKYTvaF+YKY997dngdyfie7BpDsp0XmjjdWkv4Z
+        2zdBSFCUdHmNjmAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5B9751333C;
+        Tue, 28 Feb 2023 12:23:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KYn/FCby/WPFCwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 28 Feb 2023 12:23:02 +0000
+Message-ID: <4c1b8f71-6f1a-88d5-ed87-620edc8f4fff@suse.de>
+Date:   Tue, 28 Feb 2023 13:23:01 +0100
 MIME-Version: 1.0
-References: <20230215071649.9078-1-quic_mkshah@quicinc.com>
- <20230227153848.auqs4e5hf2qmwmg2@ripper> <CAD=FV=UK9zyQ=Mg3BaVCwOGBG3G7rW2pdpMFtGptR88p8ce9kg@mail.gmail.com>
-In-Reply-To: <CAD=FV=UK9zyQ=Mg3BaVCwOGBG3G7rW2pdpMFtGptR88p8ce9kg@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 28 Feb 2023 13:16:28 +0100
-Message-ID: <CAPDyKFouhMbFFMHeT5vEo_LUQWVe5wKpagx8HUtDpcV7LCa4zQ@mail.gmail.com>
-Subject: Re: [PATCH 0/1] Use PSCI OS initiated mode for sc7280
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>, swboyd@chromium.org,
-        wingers@google.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_lsrao@quicinc.com,
-        quic_rjendra@quicinc.com, Julius Werner <jwerner@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/virtio: Add option to disable KMS support
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Ryan Neph <ryanneph@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@redhat.com>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>
+References: <20230224180225.2477641-1-robdclark@gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230224180225.2477641-1-robdclark@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------3THst69zsGQO8wv6fA1VduEE"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,65 +79,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023 at 17:10, Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Mon, Feb 27, 2023 at 7:35=E2=80=AFAM Bjorn Andersson <andersson@kernel=
-.org> wrote:
-> >
-> > On Wed, Feb 15, 2023 at 12:46:48PM +0530, Maulik Shah wrote:
-> > > This change adds power-domains for cpuidle states to use PSCI OS
-> > > initiated mode for sc7280.
-> > >
-> > > This change depends on external project changes [1] & [2] which are u=
-nder
-> > > review/discussion to add PSCI os-initiated support in Arm Trusted Fir=
-mware.
-> > >
-> > > I can update here once the dependency are in and change is ready to m=
-erge.
-> > >
-> >
-> > Please do, I will drop this from the queue for now.
->
-> I'm a bit confused about why we're doing this. There's always been a
-> question about exactly why we need OSI mode. As far as I can tell it
-> can't be for "correctness" reasons because we managed to ship sc7180
-> without OSI mode. ...so I guess somehow the argument is that OSI mode
-> is more performant in some cases? Are there actual numbers backing
-> this up, or is it all theoretical? Before making such a big change, it
-> would be good to actually understand what the motivation is and see
-> real data. This should be easy to collect since we currently have
-> things working without OSI and (presumably) you have OSI working. It
-> would also be good to document this motivation in the commit message
-> and/or cover letter.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------3THst69zsGQO8wv6fA1VduEE
+Content-Type: multipart/mixed; boundary="------------IjOC2rWyHD0ClTUblu18PexJ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc: Rob Clark <robdclark@chromium.org>, Ryan Neph <ryanneph@chromium.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Gurchetan Singh <gurchetansingh@chromium.org>,
+ Gerd Hoffmann <kraxel@redhat.com>,
+ Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+ David Airlie <airlied@redhat.com>,
+ "open list:VIRTIO GPU DRIVER" <virtualization@lists.linux-foundation.org>
+Message-ID: <4c1b8f71-6f1a-88d5-ed87-620edc8f4fff@suse.de>
+Subject: Re: [PATCH] drm/virtio: Add option to disable KMS support
+References: <20230224180225.2477641-1-robdclark@gmail.com>
+In-Reply-To: <20230224180225.2477641-1-robdclark@gmail.com>
 
-I certainly don't object to what you say here. Although, let me also
-share some more background to these suggested changes.
+--------------IjOC2rWyHD0ClTUblu18PexJ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-As you know, for mobile platforms, Qcom have been using OS-initiated
-mode for years, but on Chromium platforms that has been limited to the
-default platform-coordinated mode. Whether that is a deliberate
-decision for the Chromium platforms or rather because the PSCI
-implementation in TF-A has been lacking OSI support, I don't know.
-Maybe you have some more insight to share around this?
+SGkNCg0KQW0gMjQuMDIuMjMgdW0gMTk6MDIgc2NocmllYiBSb2IgQ2xhcms6DQo+IEZyb206
+IFJvYiBDbGFyayA8cm9iZGNsYXJrQGNocm9taXVtLm9yZz4NCj4gDQo+IEFkZCBhIGJ1aWxk
+IG9wdGlvbiB0byBkaXNhYmxlIG1vZGVzZXR0aW5nIHN1cHBvcnQuICBUaGlzIGlzIHVzZWZ1
+bCBpbg0KPiBjYXNlcyB3aGVyZSB0aGUgZ3Vlc3Qgb25seSBuZWVkcyB0byB1c2UgdGhlIEdQ
+VSBpbiBhIGhlYWRsZXNzIG1vZGUsIG9yDQo+IChzdWNoIGFzIGluIHRoZSBDck9TIHVzYWdl
+KSB3aW5kb3cgc3VyZmFjZXMgYXJlIHByb3hpZWQgdG8gYSBob3N0DQo+IGNvbXBvc2l0b3Iu
+DQoNCldlJ3ZlIGp1c3QgYmVlbiBkaXNjdXNzaW5nIHRoaXMgb24gSVJDLCBidXQgZmFpbGVk
+IHRvIHNlZSB0aGUgcHJhY3RpY2FsIA0KYmVuZWZpdC4gSXQncyBub3QgbGlrZSB0aGUgbW9k
+ZXNldHRpbmcgY29kZSB0YWtlcyB1cCBsb3RzIG9mIG1lbW9yeS4gDQpXaGF0J3MgdGhlIHJl
+YWwtd29ybGQgdXNlIGNhc2U/DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IFJvYiBDbGFyayA8cm9iZGNsYXJrQGNocm9taXVtLm9yZz4NCj4gLS0t
+DQo+ICAgZHJpdmVycy9ncHUvZHJtL3ZpcnRpby9LY29uZmlnICAgICAgIHwgMTEgKysrKysr
+KysrKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vdmlydGlvL01ha2VmaWxlICAgICAgfCAgNSAr
+KysrLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS92aXJ0aW8vdmlydGdwdV9kcnYuYyB8ICA2ICsr
+KysrLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS92aXJ0aW8vdmlydGdwdV9kcnYuaCB8IDEwICsr
+KysrKysrKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vdmlydGlvL3ZpcnRncHVfa21zLmMgfCAg
+NiArKysrKysNCj4gICA1IGZpbGVzIGNoYW5nZWQsIDM2IGluc2VydGlvbnMoKyksIDIgZGVs
+ZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3ZpcnRpby9L
+Y29uZmlnIGIvZHJpdmVycy9ncHUvZHJtL3ZpcnRpby9LY29uZmlnDQo+IGluZGV4IDUxZWM3
+YzMyNDBjOS4uZWEwNmZmMmFhNGI0IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0v
+dmlydGlvL0tjb25maWcNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3ZpcnRpby9LY29uZmln
+DQo+IEBAIC0xMSwzICsxMSwxNCBAQCBjb25maWcgRFJNX1ZJUlRJT19HUFUNCj4gICAJICAg
+UUVNVSBiYXNlZCBWTU1zIChsaWtlIEtWTSBvciBYZW4pLg0KPiAgIA0KPiAgIAkgICBJZiB1
+bnN1cmUgc2F5IE0uDQo+ICsNCj4gK2NvbmZpZyBEUk1fVklSVElPX0dQVV9LTVMNCj4gKwli
+b29sICJWaXJ0aW8gR1BVIGRyaXZlciBtb2Rlc2V0dGluZyBzdXBwb3J0Ig0KPiArCWRlcGVu
+ZHMgb24gRFJNX1ZJUlRJT19HUFUNCj4gKwlkZWZhdWx0IHkNCj4gKwloZWxwDQo+ICsJICAg
+RW5hYmxlIG1vZGVzZXR0aW5nIHN1cHBvcnQgZm9yIHZpcnRpbyBHUFUgZHJpdmVyLiAgVGhp
+cyBjYW4gYmUNCj4gKwkgICBkaXNhYmxlZCBpbiBjYXNlcyB3aGVyZSBvbmx5ICJoZWFkbGVz
+cyIgdXNhZ2Ugb2YgdGhlIEdQVSBpcw0KPiArCSAgIHJlcXVpcmVkLg0KPiArDQo+ICsJICAg
+SWYgdW5zdXJlLCBzYXkgWS4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS92aXJ0
+aW8vTWFrZWZpbGUgYi9kcml2ZXJzL2dwdS9kcm0vdmlydGlvL01ha2VmaWxlDQo+IGluZGV4
+IGI5OWZhNGE3M2I2OC4uMjRjN2ViZTg3MDMyIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dw
+dS9kcm0vdmlydGlvL01ha2VmaWxlDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS92aXJ0aW8v
+TWFrZWZpbGUNCj4gQEAgLTQsOCArNCwxMSBAQA0KPiAgICMgRGlyZWN0IFJlbmRlcmluZyBJ
+bmZyYXN0cnVjdHVyZSAoRFJJKSBpbiBYRnJlZTg2IDQuMS4wIGFuZCBoaWdoZXIuDQo+ICAg
+DQo+ICAgdmlydGlvLWdwdS15IDo9IHZpcnRncHVfZHJ2Lm8gdmlydGdwdV9rbXMubyB2aXJ0
+Z3B1X2dlbS5vIHZpcnRncHVfdnJhbS5vIFwNCj4gLQl2aXJ0Z3B1X2Rpc3BsYXkubyB2aXJ0
+Z3B1X3ZxLm8gXA0KPiArCXZpcnRncHVfdnEubyBcDQo+ICAgCXZpcnRncHVfZmVuY2UubyB2
+aXJ0Z3B1X29iamVjdC5vIHZpcnRncHVfZGVidWdmcy5vIHZpcnRncHVfcGxhbmUubyBcDQo+
+ICAgCXZpcnRncHVfaW9jdGwubyB2aXJ0Z3B1X3ByaW1lLm8gdmlydGdwdV90cmFjZV9wb2lu
+dHMubw0KPiAgIA0KPiArdmlydGlvLWdwdS0kKENPTkZJR19EUk1fVklSVElPX0dQVV9LTVMp
+ICs9IFwNCj4gKwl2aXJ0Z3B1X2Rpc3BsYXkubw0KPiArDQo+ICAgb2JqLSQoQ09ORklHX0RS
+TV9WSVJUSU9fR1BVKSArPSB2aXJ0aW8tZ3B1Lm8NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+Z3B1L2RybS92aXJ0aW8vdmlydGdwdV9kcnYuYyBiL2RyaXZlcnMvZ3B1L2RybS92aXJ0aW8v
+dmlydGdwdV9kcnYuYw0KPiBpbmRleCBhZTk3Yjk4NzUwYjYuLjljYjdkNmRkM2RhNiAxMDA2
+NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3ZpcnRpby92aXJ0Z3B1X2Rydi5jDQo+ICsr
+KyBiL2RyaXZlcnMvZ3B1L2RybS92aXJ0aW8vdmlydGdwdV9kcnYuYw0KPiBAQCAtMTcyLDcg
+KzE3MiwxMSBAQCBNT0RVTEVfQVVUSE9SKCJBbG9uIExldnkiKTsNCj4gICBERUZJTkVfRFJN
+X0dFTV9GT1BTKHZpcnRpb19ncHVfZHJpdmVyX2ZvcHMpOw0KPiAgIA0KPiAgIHN0YXRpYyBj
+b25zdCBzdHJ1Y3QgZHJtX2RyaXZlciBkcml2ZXIgPSB7DQo+IC0JLmRyaXZlcl9mZWF0dXJl
+cyA9IERSSVZFUl9NT0RFU0VUIHwgRFJJVkVSX0dFTSB8IERSSVZFUl9SRU5ERVIgfCBEUklW
+RVJfQVRPTUlDLA0KPiArCS5kcml2ZXJfZmVhdHVyZXMgPQ0KPiArI2lmIGRlZmluZWQoQ09O
+RklHX0RSTV9WSVJUSU9fR1BVX0tNUykNCj4gKwkJCURSSVZFUl9NT0RFU0VUIHwgRFJJVkVS
+X0FUT01JQyB8DQo+ICsjZW5kaWYNCj4gKwkJCURSSVZFUl9HRU0gfCBEUklWRVJfUkVOREVS
+LA0KPiAgIAkub3BlbiA9IHZpcnRpb19ncHVfZHJpdmVyX29wZW4sDQo+ICAgCS5wb3N0Y2xv
+c2UgPSB2aXJ0aW9fZ3B1X2RyaXZlcl9wb3N0Y2xvc2UsDQo+ICAgDQo+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2dwdS9kcm0vdmlydGlvL3ZpcnRncHVfZHJ2LmggYi9kcml2ZXJzL2dwdS9k
+cm0vdmlydGlvL3ZpcnRncHVfZHJ2LmgNCj4gaW5kZXggYWY2ZmZiNjk2MDg2Li5mZmU4ZmFm
+NjcyNDcgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS92aXJ0aW8vdmlydGdwdV9k
+cnYuaA0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vdmlydGlvL3ZpcnRncHVfZHJ2LmgNCj4g
+QEAgLTQyNiw4ICs0MjYsMTggQEAgdmlydGlvX2dwdV9jbWRfc2V0X3NjYW5vdXRfYmxvYihz
+dHJ1Y3QgdmlydGlvX2dwdV9kZXZpY2UgKnZnZGV2LA0KPiAgIAkJCQl1aW50MzJfdCB4LCB1
+aW50MzJfdCB5KTsNCj4gICANCj4gICAvKiB2aXJ0Z3B1X2Rpc3BsYXkuYyAqLw0KPiArI2lm
+IGRlZmluZWQoQ09ORklHX0RSTV9WSVJUSU9fR1BVX0tNUykNCj4gICBpbnQgdmlydGlvX2dw
+dV9tb2Rlc2V0X2luaXQoc3RydWN0IHZpcnRpb19ncHVfZGV2aWNlICp2Z2Rldik7DQo+ICAg
+dm9pZCB2aXJ0aW9fZ3B1X21vZGVzZXRfZmluaShzdHJ1Y3QgdmlydGlvX2dwdV9kZXZpY2Ug
+KnZnZGV2KTsNCj4gKyNlbHNlDQo+ICtzdGF0aWMgaW5saW5lIGludCB2aXJ0aW9fZ3B1X21v
+ZGVzZXRfaW5pdChzdHJ1Y3QgdmlydGlvX2dwdV9kZXZpY2UgKnZnZGV2KQ0KPiArew0KPiAr
+CXJldHVybiAwOw0KPiArfQ0KPiArc3RhdGljIGlubGluZSB2b2lkIHZpcnRpb19ncHVfbW9k
+ZXNldF9maW5pKHN0cnVjdCB2aXJ0aW9fZ3B1X2RldmljZSAqdmdkZXYpDQo+ICt7DQo+ICt9
+DQo+ICsjZW5kaWYNCj4gICANCj4gICAvKiB2aXJ0Z3B1X3BsYW5lLmMgKi8NCj4gICB1aW50
+MzJfdCB2aXJ0aW9fZ3B1X3RyYW5zbGF0ZV9mb3JtYXQodWludDMyX3QgZHJtX2ZvdXJjYyk7
+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vdmlydGlvL3ZpcnRncHVfa21zLmMg
+Yi9kcml2ZXJzL2dwdS9kcm0vdmlydGlvL3ZpcnRncHVfa21zLmMNCj4gaW5kZXggMjdiN2Yx
+NGRhZTg5Li4yOTNlNmYwYmYxMzMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS92
+aXJ0aW8vdmlydGdwdV9rbXMuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vdmlydGlvL3Zp
+cnRncHVfa21zLmMNCj4gQEAgLTE2MSw5ICsxNjEsMTEgQEAgaW50IHZpcnRpb19ncHVfaW5p
+dChzdHJ1Y3QgdmlydGlvX2RldmljZSAqdmRldiwgc3RydWN0IGRybV9kZXZpY2UgKmRldikN
+Cj4gICAJaWYgKHZpcnRpb19oYXNfZmVhdHVyZSh2Z2Rldi0+dmRldiwgVklSVElPX0dQVV9G
+X1ZJUkdMKSkNCj4gICAJCXZnZGV2LT5oYXNfdmlyZ2xfM2QgPSB0cnVlOw0KPiAgICNlbmRp
+Zg0KPiArI2lmIGRlZmluZWQoQ09ORklHX0RSTV9WSVJUSU9fR1BVX0tNUykNCj4gICAJaWYg
+KHZpcnRpb19oYXNfZmVhdHVyZSh2Z2Rldi0+dmRldiwgVklSVElPX0dQVV9GX0VESUQpKSB7
+DQo+ICAgCQl2Z2Rldi0+aGFzX2VkaWQgPSB0cnVlOw0KPiAgIAl9DQo+ICsjZW5kaWYNCj4g
+ICAJaWYgKHZpcnRpb19oYXNfZmVhdHVyZSh2Z2Rldi0+dmRldiwgVklSVElPX1JJTkdfRl9J
+TkRJUkVDVF9ERVNDKSkgew0KPiAgIAkJdmdkZXYtPmhhc19pbmRpcmVjdCA9IHRydWU7DQo+
+ICAgCX0NCj4gQEAgLTIxOCw2ICsyMjAsNyBAQCBpbnQgdmlydGlvX2dwdV9pbml0KHN0cnVj
+dCB2aXJ0aW9fZGV2aWNlICp2ZGV2LCBzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPiAgIAkJ
+Z290byBlcnJfdmJ1ZnM7DQo+ICAgCX0NCj4gICANCj4gKyNpZiBkZWZpbmVkKENPTkZJR19E
+Uk1fVklSVElPX0dQVV9LTVMpDQo+ICAgCS8qIGdldCBkaXNwbGF5IGluZm8gKi8NCj4gICAJ
+dmlydGlvX2NyZWFkX2xlKHZnZGV2LT52ZGV2LCBzdHJ1Y3QgdmlydGlvX2dwdV9jb25maWcs
+DQo+ICAgCQkJbnVtX3NjYW5vdXRzLCAmbnVtX3NjYW5vdXRzKTsNCj4gQEAgLTIyOSw2ICsy
+MzIsNyBAQCBpbnQgdmlydGlvX2dwdV9pbml0KHN0cnVjdCB2aXJ0aW9fZGV2aWNlICp2ZGV2
+LCBzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPiAgIAkJZ290byBlcnJfc2Nhbm91dHM7DQo+
+ICAgCX0NCj4gICAJRFJNX0lORk8oIm51bWJlciBvZiBzY2Fub3V0czogJWRcbiIsIG51bV9z
+Y2Fub3V0cyk7DQo+ICsjZW5kaWYNCj4gICANCj4gICAJdmlydGlvX2NyZWFkX2xlKHZnZGV2
+LT52ZGV2LCBzdHJ1Y3QgdmlydGlvX2dwdV9jb25maWcsDQo+ICAgCQkJbnVtX2NhcHNldHMs
+ICZudW1fY2Fwc2V0cyk7DQo+IEBAIC0yNDYsMTAgKzI1MCwxMiBAQCBpbnQgdmlydGlvX2dw
+dV9pbml0KHN0cnVjdCB2aXJ0aW9fZGV2aWNlICp2ZGV2LCBzdHJ1Y3QgZHJtX2RldmljZSAq
+ZGV2KQ0KPiAgIAkJdmlydGlvX2dwdV9nZXRfY2Fwc2V0cyh2Z2RldiwgbnVtX2NhcHNldHMp
+Ow0KPiAgIAlpZiAodmdkZXYtPmhhc19lZGlkKQ0KPiAgIAkJdmlydGlvX2dwdV9jbWRfZ2V0
+X2VkaWRzKHZnZGV2KTsNCj4gKyNpZiBkZWZpbmVkKENPTkZJR19EUk1fVklSVElPX0dQVV9L
+TVMpDQo+ICAgCXZpcnRpb19ncHVfY21kX2dldF9kaXNwbGF5X2luZm8odmdkZXYpOw0KPiAg
+IAl2aXJ0aW9fZ3B1X25vdGlmeSh2Z2Rldik7DQo+ICAgCXdhaXRfZXZlbnRfdGltZW91dCh2
+Z2Rldi0+cmVzcF93cSwgIXZnZGV2LT5kaXNwbGF5X2luZm9fcGVuZGluZywNCj4gICAJCQkg
+ICA1ICogSFopOw0KPiArI2VuZGlmDQo+ICAgCXJldHVybiAwOw0KPiAgIA0KPiAgIGVycl9z
+Y2Fub3V0czoNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
+dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxk
+c3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJu
+YmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Note that, Wing has been working on adding support for PSCI OSI mode
-to TF-A [1], which hopefully should land soon. In this regard, it
-seems like we are getting closer to finally being able to run some
-more in-depth tests, that should allow us to better compare the
-behaviour of the PSCI CPU-suspend modes - at least on some platforms.
-In fact, Maulik/Wing also presented their work around this topic,
-including some results around performance/energy tests at the last
-TF-A call [2]. I think some of that data could be shared in the commit
-message too.
+--------------IjOC2rWyHD0ClTUblu18PexJ--
 
-Kind regards
-Uffe
+--------------3THst69zsGQO8wv6fA1VduEE
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-[1]
-https://review.trustedfirmware.org/q/topic:psci-osi
+-----BEGIN PGP SIGNATURE-----
 
-[2]
-https://www.trustedfirmware.org/meetings/tf-a-technical-forum
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP98iUFAwAAAAAACgkQlh/E3EQov+DQ
+MhAA0aYScKzC0jvP65/QvLnKIFqxNrXArtMG1avsP7jvKziAXPvNJrNOB4SWOwXhSpdtrKDwlfB8
+G8PhCtxlH7+NAmIY1N+k/y6GaTj2b5Icq1/yzECf/BoUvg7hpVyUQ/CjH4CDhr7giD855tqmyJXT
+6zME5tQRvNDBeLd3VKUN995bzrnFjbhl9YV7mBDNX57zjE5GCeU6Gu/7fU+wF6MDJrmX6NizLnC9
+DifS0ToZ6YN6dsq5/AcZ6eJAJbCisqCZnUX3IlzRPHh79MSP9ytFnKpyfPn7MdiXtAfJn1HO+Bg/
+DnDHx3QuiNyOVbdCz6+Q3lslMw51I4xgigLkEAyTEdHgvRBKZol+2t/SG+edUaKD3WZzz0v4vQyJ
+kuTLmMeowecyrivOCFA5VZ7SIz8/VD2bNVYEFAgt6rqhVWbHQQZ5FlzWcnE79Zc1Vd9sR73NhqPI
+780d5GXud2jTxerYyV/P1fmj9o5AqtwWjK5MzbP1yLIzDnQPT4bwh5Cwqyh26+USwOQiIRPxlKz4
+YIWGAX2vWswCWTmJ3bJYBjgTKO0l36bysrbnULIgU7hk7HC6V9KEXM9dauSTz45Q8PdFwgxt264+
+odiMIcd+6ILXniT5TO9txDDtuAXs2AV727nhzfLlRIVYMyWmQBNI1yIxYtML/eBOxpcEHQkvVSHu
+KNk=
+=0wCx
+-----END PGP SIGNATURE-----
+
+--------------3THst69zsGQO8wv6fA1VduEE--
