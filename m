@@ -2,124 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01C06A6066
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4676A606D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjB1UbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        id S229719AbjB1UdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjB1UbR (ORCPT
+        with ESMTP id S229565AbjB1Uc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:31:17 -0500
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C589632E61;
-        Tue, 28 Feb 2023 12:31:16 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id i34so45187077eda.7;
-        Tue, 28 Feb 2023 12:31:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677616275;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YkKHLm84xA9OfJ0fe4uBQT0llbNEG486m7fc4TEK1cU=;
-        b=hfW+RNiIBH/L50kWQfnvtvFjWx8rufyoliWIx7U7poAG7HnmI0ul1Mwj+xLGnl9dO2
-         gM1tZhUmwFXUweDFj6r4b4e05AffTNOH+kogOObaniLR2cenw8DYdW6yUaRFXCGwNVwV
-         vP17kGheGDw0GDleSvcI9dqmnzoy8KmEIaPkm6C54PNX3FZdqvPxrbpPdHEZy0ABNwcw
-         7fKfD9qsUINDfXk2ymyqPcswtiw7lY5vXpm1M9eQLKOgy9KGMfXw2BV4AvL7XtRxaTWq
-         v2a4Zmju5n606IKXcNqdIqWWoB9GIlEA4OUcrvgwvQSLUREkSQtTBHf8ccut0Mysabqh
-         J5MQ==
-X-Gm-Message-State: AO0yUKXLxWiaKAy5Qz0XLBPSgTVzZKcM2rdt2FnhUZ/Phf0T6g5J/2Qa
-        FgapCnNDch/jQFPnjHKY/KgJuKlncIqdbqGPjQQ=
-X-Google-Smtp-Source: AK7set/nQHwyFKdx6Zs6LmJxOCOcl5ShielM6Po/FS5rHEmqstafd1qK30+kJ46joRvZHHsO1X6KZjF+ZLo48SN8uR4=
-X-Received: by 2002:a50:cc93:0:b0:4ad:7482:cd3b with SMTP id
- q19-20020a50cc93000000b004ad7482cd3bmr2500271edi.6.1677616275163; Tue, 28 Feb
- 2023 12:31:15 -0800 (PST)
+        Tue, 28 Feb 2023 15:32:59 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4186A72B0;
+        Tue, 28 Feb 2023 12:32:58 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677616376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pVbhBujVm3EclS3yGgug0dwXP4dkLsKIuUfQtslE/JU=;
+        b=A5cuZgw+HY2OsMz9nx1VUlK2Hs0UOK51cSmMzL0Kt1xDzNc1jMv7ShAcYbDZVotlVoh93Q
+        S4mg5bSD4x/y4y8VwPVTvDOL/Fdcb1fsY5BDAr+bEQs0j8Wj9MY47mCoFB3tACpxFEhRpr
+        5rUdM/rw4qVPwYjB7M3h5rACUyXE2W4O3TPhTdQo970Z1ZJEvAxp/2YGAWhukGDEwZ0y8k
+        kESOWBaiI2/0zf36ADd/j+Wtq7VHtCbCyfxbap900dw4k5TFa4nxK3vJTp36ruLu6pVd7H
+        zk5rTykGk/bALkLbKtQXhMBMrY9pehOEzABiR7xlu3wLRXJQpt7CyplMNL0iGg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677616376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pVbhBujVm3EclS3yGgug0dwXP4dkLsKIuUfQtslE/JU=;
+        b=sknPopdWaQPYq/vhVEkooozmTNLQUMcVumJpGjjFv7Bu+nqXccITvGl7u+OeAqKb4JYpMr
+        CWBl8YFAwVJqlCCQ==
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
+Subject: Re: [PATCH v12 06/11] x86/smpboot: Remove initial_stack on 64-bit
+In-Reply-To: <2776fc04271e5d3697918ce36e7e2893e2a7bc21.camel@infradead.org>
+References: <20230226110802.103134-1-usama.arif@bytedance.com>
+ <20230226110802.103134-7-usama.arif@bytedance.com> <87k001n4xo.ffs@tglx>
+ <2776fc04271e5d3697918ce36e7e2893e2a7bc21.camel@infradead.org>
+Date:   Tue, 28 Feb 2023 21:32:55 +0100
+Message-ID: <87bkldmsy0.ffs@tglx>
 MIME-Version: 1.0
-References: <20230223202622.9023-1-mario.limonciello@amd.com> <20230223202622.9023-2-mario.limonciello@amd.com>
-In-Reply-To: <20230223202622.9023-2-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Feb 2023 21:31:04 +0100
-Message-ID: <CAJZ5v0j0oWmu1X8HND1xfisdkAey89huM+CtLuPYuA3svD3Tew@mail.gmail.com>
-Subject: Re: [PATCH 1/1] ACPI: x86: Drop quirk for HP Elitebook
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        anson.tsao@amd.com, Kalle Valo <kvalo@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 9:26 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Tue, Feb 28 2023 at 16:25, David Woodhouse wrote:
+> On Tue, 2023-02-28 at 17:13 +0100, Thomas Gleixner wrote:
+>> Folks, really.
 >
-> There was a quirk in `acpi/x86/s2idle.c` for an HP Elitebook G9
-> platforms to force AMD GUID codepath instead of Microsoft codepath.
->
-> This was due to a bug with WCN6855 WLAN firmware interaction with
-> the system.
->
-> This bug is fixed by WCN6855 firmware:
-> WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3.6510.23
->
-> Remove the quirk as it's no longer necessary with this firmware.
->
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=c7a57ef688f7d99d8338a5d8edddc8836ff0e6de
-> Tested-by: Anson Tsao <anson.tsao@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/acpi/x86/s2idle.c | 24 ------------------------
->  1 file changed, 24 deletions(-)
->
-> diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
-> index c7afce465a07..e499c60c4579 100644
-> --- a/drivers/acpi/x86/s2idle.c
-> +++ b/drivers/acpi/x86/s2idle.c
-> @@ -384,29 +384,6 @@ static const struct acpi_device_id amd_hid_ids[] = {
->         {}
->  };
->
-> -static int lps0_prefer_amd(const struct dmi_system_id *id)
-> -{
-> -       pr_debug("Using AMD GUID w/ _REV 2.\n");
-> -       rev_id = 2;
-> -       return 0;
-> -}
-> -static const struct dmi_system_id s2idle_dmi_table[] __initconst = {
-> -       {
-> -               /*
-> -                * AMD Rembrandt based HP EliteBook 835/845/865 G9
-> -                * Contains specialized AML in AMD/_REV 2 path to avoid
-> -                * triggering a bug in Qualcomm WLAN firmware. This may be
-> -                * removed in the future if that firmware is fixed.
-> -                */
-> -               .callback = lps0_prefer_amd,
-> -               .matches = {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "HP"),
-> -                       DMI_MATCH(DMI_BOARD_NAME, "8990"),
-> -               },
-> -       },
-> -       {}
-> -};
-> -
->  static int lps0_device_attach(struct acpi_device *adev,
->                               const struct acpi_device_id *not_used)
->  {
-> @@ -586,7 +563,6 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
->
->  void __init acpi_s2idle_setup(void)
->  {
-> -       dmi_check_system(s2idle_dmi_table);
->         acpi_scan_add_handler(&lps0_handler);
->         s2idle_set_ops(&acpi_s2idle_ops_lps0);
->  }
-> --
+> Also, while those two lines *happen* to be my addition to Brian's
+> commit message, I don't know if you knew that.
 
-Applied as 6.3-rc material, thanks!
+I knew because I read Brians patches _and_ I know your quick changelog
+style by heart.
+
+> Speak to me how you like; you know I'll still love you. But be nicer
+> to Brian and Usama.
+
+Hmm. I was not aware that 'Folks, really.' qualifies as not nice
+nowadays.
+
+>> > +#endif /* CONFIG_SMP */
+>>=20
+>> Sigh, we should finally make CONFIG_SMP def_bool y ...
+>
+> Not today :)
+
+Right, but it's overdue nevertheless to adjust with reality :)
+
+>> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ENABLED(CONFIG_X86_3=
+2)) {
+>> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0initial_stack=C2=A0 =3D idle->thread.sp;
+>> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} else {
+>> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0smpboot_control =3D cpu;
+>> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+>>=20
+>> Please remove the pointless brackets.
+>
+> I pondered that, but they only get added back again in the next patch.
+> It just seemed like adding pointless churn.
+
+Fair enough.
+
+Thanks,
+
+        tglx
