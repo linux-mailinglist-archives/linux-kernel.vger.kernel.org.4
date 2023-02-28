@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B636A5E7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 18:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB45C6A5E7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjB1R7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 12:59:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S229753AbjB1SAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 13:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjB1R7v (ORCPT
+        with ESMTP id S229732AbjB1R77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 12:59:51 -0500
+        Tue, 28 Feb 2023 12:59:59 -0500
 Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796C92A6F0;
-        Tue, 28 Feb 2023 09:59:50 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s26so43393954edw.11;
-        Tue, 28 Feb 2023 09:59:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4992732CF8;
+        Tue, 28 Feb 2023 09:59:58 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id s26so43395745edw.11;
+        Tue, 28 Feb 2023 09:59:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ghhb/LaJjrGYBzQapO6q5bJ+7Ok9ApRFFpAQvScLSMU=;
-        b=G1FMtz/ZpW9qTmiK5Bmf7ekvyfZcI43Y29uRkdiJFtbJTl86IN+If5/DzMW/us5tJe
-         nk581JVq7NeVEilVq8pGr24PXds0m3D7Z2/xQ8RdoI6EVl89hjqYvej53Wye7lOurxNq
-         Q4AoCZc1nPYVfGuWfwd+NReXWPDzA05SQhEezrIRpJo+nzK3TxJFoxB7nvwDVc5gb+Kn
-         NqfB2TYajubhu3h+AjY+72HPDCnuh8rr7dSDfPxDMvGzqUCoyQgc6/qZU1Cfw7nKuOkl
-         cpZZOlzzt3oa3s2HufwjSN+nlS+GL/rySpumaoGS8yaX2YlkSdkpuLNlWvdGBe0wnI+x
-         dokw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rCbSLcdXBN5AxQderjzc9KOZWeLSCuHpmkG/hHKOcd0=;
+        b=eYsO0tzXVT9DSPdr8vKN3Ghl3EqOSD9x1DTMZRsCOR0FJ4UZKCiYX12kJmceKf3DZf
+         M2OUsQt0PXCsJoET3L6ScIeOjUJVhHAuNuXibClNU3w6LI9xoCwmOvDRoVGQXhMk2ejX
+         0oRHaekdYj8tFPEfyeN1PicIkmt1VboM/iT3LAQvI5OgmlQzwtgayM9gKc5/Tti7Ejoq
+         EfAr5RI1bbwnobUpTIOIOwIaGqJ+mj8PBcKimw3xO02qU/ZRLIYB49oUETH/VwkE0lBX
+         9x3lA9gaFY3Ww08G+pYtV7dDUd1TMGtv3/wQBdDIP9ZTmQ+qvU3aANIOCoVe+sUJPDP2
+         cvFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ghhb/LaJjrGYBzQapO6q5bJ+7Ok9ApRFFpAQvScLSMU=;
-        b=OcVivWz/GASoVwvUZy3r8nCJ0TeEqRKsbC6gFQur2M79+J251ipugQIMREywdMOoPM
-         zN2arXE2Dqe1DNT9BUF7GcfHzLxXt0VlMukZr+AfktJUfuaaccLs8DUhWT1Cm/a5NPMM
-         LBxxbfdfrNK++knSs9nTfR5mefbn0TrKkYN0sBmXb+khGcvBvWeRZDPCk00371J5ytQa
-         guRLeynYlMObYPR+p9NNBkmX/rNSS+sEwO5APoAEG5dtvN10FZSqvfp9l7sCDo0GyThA
-         0T5DiYVtDWjCF64nGGltBBtZz5DJGtDk5WvpPaNX/fwPyfzpYsoaS1TD1HzpO8Aoty2S
-         13gw==
-X-Gm-Message-State: AO0yUKVngfvIKhp4aAtLHCWEuG3wMOppPsLKgP9lx2i7RITe0DCYs3iY
-        HH+UEndBq7ucFAW3rvtVl25EjqvlqTmXFqxz
-X-Google-Smtp-Source: AK7set/X0sunPyjVHRbCeY5C9BITNhtZZj6psWqlXrv4qYg5XSMhQwgrlHqNvAgNlDpcnos2pmV/8w==
-X-Received: by 2002:a17:907:3fa0:b0:8be:aba:e927 with SMTP id hr32-20020a1709073fa000b008be0abae927mr5144768ejc.17.1677607188619;
-        Tue, 28 Feb 2023 09:59:48 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rCbSLcdXBN5AxQderjzc9KOZWeLSCuHpmkG/hHKOcd0=;
+        b=Z4xcVJyZdgIEoOCIgsHHSe6qEnoJ0tKq09F1YeidOH+OsHGvd0yuk7EdqLEGcTpeEz
+         sNLlBe5wYb6WC8WbGSRQWoWu+Hbw4SnngcFaKHJUciouKJ1qPYeB7Fi7ccqdoeKtwcb/
+         W4yWlazUH5XEOM2PDeTKf6i/9za59rJsocvH6eZ00Kgt4BPy9aRGgIiflLnUeZwT7LTv
+         QESV2hMYcdTcZC5ylXhiYAMwoVQA+fgaBDHNIOKauDtnoYZ2ByxVfh5br7OBJjIIbCzA
+         TCFtBLIjVJgczB0srQcSPHo8h9OITRHYdQBbR42mJ1AHmuesu+G1bd5MkId3gKUYefhc
+         dLMA==
+X-Gm-Message-State: AO0yUKV7S3w1/mC7SVxk71fqNNL3Q6jFJTRRZBvu9HNFHhLBv8RlEzkY
+        QxHCzQhsT9QfR5CGTO9CwiKdCq9FEgUQncDS
+X-Google-Smtp-Source: AK7set+TlzEl0ATCLJWDp/KAFz9dRaGmYNUb4pLi02Ym0ZQIUjfVADzCEhfcZXrLcuefKzE8w57KAg==
+X-Received: by 2002:a17:906:24c2:b0:877:a9d2:e5e9 with SMTP id f2-20020a17090624c200b00877a9d2e5e9mr3510567ejb.42.1677607197518;
+        Tue, 28 Feb 2023 09:59:57 -0800 (PST)
 Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170906234500b008d9c518a318sm4869725eja.142.2023.02.28.09.59.47
+        by smtp.gmail.com with ESMTPSA id m5-20020a170906234500b008d9c518a318sm4869725eja.142.2023.02.28.09.59.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 09:59:48 -0800 (PST)
+        Tue, 28 Feb 2023 09:59:57 -0800 (PST)
 From:   Uros Bizjak <ubizjak@gmail.com>
 To:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Uros Bizjak <ubizjak@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 0/3] Improve trace/ring_buffer.c
-Date:   Tue, 28 Feb 2023 18:59:26 +0100
-Message-Id: <20230228175929.7534-1-ubizjak@gmail.com>
+Subject: [PATCH 1/3] ring_buffer: Change some static functions to void
+Date:   Tue, 28 Feb 2023 18:59:27 +0100
+Message-Id: <20230228175929.7534-2-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230228175929.7534-1-ubizjak@gmail.com>
+References: <20230228175929.7534-1-ubizjak@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,21 +73,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series improves ring_buffer.c by changing the type of some
-static functions to void or bool and uses try_cmpxchg instead of
-cmpxchg (*ptr, old, new) == old where appropriate.
+The results of some static functions are not used. Change the
+type of these function to void and remove unnecessary returns.
+
+No functional change intended.
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ kernel/trace/ring_buffer.c | 22 +++++++---------------
+ 1 file changed, 7 insertions(+), 15 deletions(-)
 
-Uros Bizjak (3):
-  ring_buffer: Change some static functions to void
-  ring_buffer: Change some static functions to bool
-  ring_buffer: Use try_cmpxchg instead of cmpxchg
-
- kernel/trace/ring_buffer.c | 89 ++++++++++++++++----------------------
- 1 file changed, 37 insertions(+), 52 deletions(-)
-
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index af50d931b020..05fdc92554df 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -1569,15 +1569,12 @@ static void rb_tail_page_update(struct ring_buffer_per_cpu *cpu_buffer,
+ 	}
+ }
+ 
+-static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
++static void rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
+ 			  struct buffer_page *bpage)
+ {
+ 	unsigned long val = (unsigned long)bpage;
+ 
+-	if (RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK))
+-		return 1;
+-
+-	return 0;
++	RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK);
+ }
+ 
+ /**
+@@ -1587,30 +1584,28 @@ static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
+  * As a safety measure we check to make sure the data pages have not
+  * been corrupted.
+  */
+-static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
++static void rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ {
+ 	struct list_head *head = rb_list_head(cpu_buffer->pages);
+ 	struct list_head *tmp;
+ 
+ 	if (RB_WARN_ON(cpu_buffer,
+ 			rb_list_head(rb_list_head(head->next)->prev) != head))
+-		return -1;
++		return;
+ 
+ 	if (RB_WARN_ON(cpu_buffer,
+ 			rb_list_head(rb_list_head(head->prev)->next) != head))
+-		return -1;
++		return;
+ 
+ 	for (tmp = rb_list_head(head->next); tmp != head; tmp = rb_list_head(tmp->next)) {
+ 		if (RB_WARN_ON(cpu_buffer,
+ 				rb_list_head(rb_list_head(tmp->next)->prev) != tmp))
+-			return -1;
++			return;
+ 
+ 		if (RB_WARN_ON(cpu_buffer,
+ 				rb_list_head(rb_list_head(tmp->prev)->next) != tmp))
+-			return -1;
++			return;
+ 	}
+-
+-	return 0;
+ }
+ 
+ static int __rb_allocate_pages(struct ring_buffer_per_cpu *cpu_buffer,
+@@ -4500,7 +4495,6 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
+ 	default:
+ 		RB_WARN_ON(cpu_buffer, 1);
+ 	}
+-	return;
+ }
+ 
+ static void
+@@ -4531,7 +4525,6 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
+ 	default:
+ 		RB_WARN_ON(iter->cpu_buffer, 1);
+ 	}
+-	return;
+ }
+ 
+ static struct buffer_page *
+@@ -4946,7 +4939,6 @@ rb_reader_unlock(struct ring_buffer_per_cpu *cpu_buffer, bool locked)
+ {
+ 	if (likely(locked))
+ 		raw_spin_unlock(&cpu_buffer->reader_lock);
+-	return;
+ }
+ 
+ /**
 -- 
 2.39.2
 
