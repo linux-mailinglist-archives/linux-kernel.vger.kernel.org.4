@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8726A53A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C055E6A53AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjB1H37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 02:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
+        id S229980AbjB1HaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 02:30:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjB1H3u (ORCPT
+        with ESMTP id S229835AbjB1H3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Feb 2023 02:29:50 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B771116B;
-        Mon, 27 Feb 2023 23:29:46 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id s20so11870775lfb.11;
-        Mon, 27 Feb 2023 23:29:46 -0800 (PST)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D96EFAC;
+        Mon, 27 Feb 2023 23:29:48 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id k14so11885364lfj.7;
+        Mon, 27 Feb 2023 23:29:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XZPr8dGI3aR8aZYgW2ma5FZPEeNI8Ujf4i3nXNHuIyE=;
-        b=Ixn3pcRJCxQ8McSfxwt2FqTJuJ6urKnsHOjrPhIOe0i8BrUpBVNhb6ZhgUs5IRLGpE
-         2V+ToK5VE1BMV1/CU4+Wgl4wnJrJDw8PvY3mo7zCodUX36RT50UfZ67PjZrXEfoc42Cz
-         GL+QH6sxFsZByYfEk/ZbUGgA2dpwrQ9s8LpcwDVcYm0dFJ0CXOnul6SvMvMXTv9KgBFF
-         T4ogJDNc4HS6oWvaQ81aEkon1RjbGpartM3Vq9lUp6H3TXvk/3Mfl4Ctb1kpSJGqhtXn
-         D5TGrCmQIOd2c3UHCLbFuV5ROhEHdCwa6yIpp7ChltudNZQMw8iK2hG+r8iTkBklIgbH
-         Kq4g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=anJfvBlE+shc2bmOxourHefmds/BtxwdudHBi4fTMDE=;
+        b=EJeNyNiEouLJCSo+lYCJumat2GRI7N0vyjv8gKfz5S/MY6+HDt6Sh5XFI1LczHt3oV
+         X1jKFx3jWBMjMIJJmSe4+pF73SGPCR4t3n/DQmb7XpDsQJt7V4YywVYSHV2bpn4fgIef
+         w35lEOCB1eeUBYKpsjlbUtjBvceAB7+sgHaOHs3WqLIrdQ4Xx6XfscB0G6d5MFDgqZEi
+         RLDJnDfPsaLqDq10l1EHb/c4XEgrORIJ+WnLIiCb/WdGCobFNM5tghacSO7jXxSiOuw5
+         hIcpqxXeoZ6HkP/HY1YdRx5P2EMtTwXJnlb5r3ZIF29YHB1KRrff4r2KnvwwKXgnEHse
+         xPaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XZPr8dGI3aR8aZYgW2ma5FZPEeNI8Ujf4i3nXNHuIyE=;
-        b=BAn4iIfSXk9w5AiTJVtkdn3bwBBsVspuepcGlhrFnRinZ4LC4lezAEvGSrp1Gf9qDz
-         7sR8a1S9PoTH0yHPMfYteQAE+C5D394AONdaBM9PPrzYwiUNBPfqmHlT0UWkqAJDCN4A
-         H7Mu+uV3+piYS4ImgsCOpu7Efwpm/mFM7qNZF9bPHfoZNFUQoa+4K/6paT4AcsmPMv3K
-         PfPdCejUHMJk8IXfDLc1i6u/asaXnFdGx6wRJyI4aKC88ikmuId+QJWPQ972JWxCXeKh
-         mDgC/Xd2iV3KzDpgfIyDlLGMUfSesw48iWNXlZhD68Nb+E8IzkrmpfsIwT9ZtLWqMmUu
-         xDbw==
-X-Gm-Message-State: AO0yUKWqHh5HlpiVJHA113OdMU4iEuKjpJOxtvmagLk2ar7U1t+UZRwG
-        BcXeZuHv+4EChZUrwgysf+g=
-X-Google-Smtp-Source: AK7set+eCp+xMpfhsvaxmUkNUhQJJ+UAblG4lQOyi6vzR9O3QZCLcmGJ9HndFHKpTd2Ec2pJylvPog==
-X-Received: by 2002:ac2:48a7:0:b0:4dc:4b70:a723 with SMTP id u7-20020ac248a7000000b004dc4b70a723mr383341lfg.30.1677569384662;
-        Mon, 27 Feb 2023 23:29:44 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=anJfvBlE+shc2bmOxourHefmds/BtxwdudHBi4fTMDE=;
+        b=e+HqO/FxUGSzyH5xV2mbyJsukeM1KSYpIwjXNkLzf7T4qYNnYM56a+xmWucSkZDo0k
+         L7JAWyQqezysXxPD2hpKopWKd69c01q4mW2lbIaoQBz4YSYrRmv6YD+HsERAGHNxyHet
+         fuzT78TbijYqItPHrDU2Ds1iKEz0iVx8MPGSxuEkwXYbSVoCFhjTDhTdL1bTT09soTwi
+         Gx/Eq9gnNmxmlHpvTvruEvATut1gS1D60O+rhq8QPAxZUkq231kVia5ePdrp1RvpyumY
+         /CFBfpudabe4Hc6PhVRiChLrvtXJF4y6DjL+doWsGO4/1O5CMrziZoolRcFVne71rO4m
+         m9qA==
+X-Gm-Message-State: AO0yUKUCyfY84g8x4V2lbDd+/i/ni2wsfdFVi7SO/xvjQqBjemu3TX+N
+        gR4QgTedwvld5fUgN/sjgzw=
+X-Google-Smtp-Source: AK7set/QtguLI5ukTkiUykG2VdzDxDgGFtQnX9xt1e+GexfGmgk3wXArPR+umYOM4/Qgy/igZSM+Sg==
+X-Received: by 2002:ac2:5215:0:b0:4e1:7209:c09f with SMTP id a21-20020ac25215000000b004e17209c09fmr476595lfl.66.1677569386447;
+        Mon, 27 Feb 2023 23:29:46 -0800 (PST)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id l2-20020ac25542000000b004d85a7e8b17sm1229550lfk.269.2023.02.27.23.29.43
+        by smtp.gmail.com with ESMTPSA id l2-20020ac25542000000b004d85a7e8b17sm1229550lfk.269.2023.02.27.23.29.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 23:29:44 -0800 (PST)
+        Mon, 27 Feb 2023 23:29:46 -0800 (PST)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,11 +60,14 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V4 0/2] nvmem: add and use generic MMIO NVMEM
-Date:   Tue, 28 Feb 2023 08:29:34 +0100
-Message-Id: <20230228072936.1108-1-zajec5@gmail.com>
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH V4 1/2] dt-bindings: nvmem: mmio: new binding for MMIO accessible NVMEM devices
+Date:   Tue, 28 Feb 2023 08:29:35 +0100
+Message-Id: <20230228072936.1108-2-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230228072936.1108-1-zajec5@gmail.com>
+References: <20230228072936.1108-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -79,29 +83,83 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-MMIO accessible NVMEM devices should be simple enough to allow using a
-single binding & driver for them.
+Content of some NVMEM devices can be read using MMIO. Some of them
+(probably very few though) may be also programmable that way. Add
+generic binding to allow describing such hardware.
 
-In V3 I didn't decide to modify existing Mediatek & UniPhier drivers as
-there are some concerns about adding writing support to them. If needed
-that can be done later.
+This *doesn't* apply to any more complicated devices that need more
+complex interface e.g. for writing. While such devices could be
+supported for reading purposes by the same driver - they should get
+their own binding.
 
-Once we get layouts support NVRAM driver will get migrated into one and
-generic MMIO driver will take over its binding.
+This binding will gain even more usability once we fully support NVMEM
+layouts (describing content of NVMEM devices in an independent way).
 
-Rafał Miłecki (2):
-  dt-bindings: nvmem: mmio: new binding for MMIO accessible NVMEM
-    devices
-  nvmem: add generic driver for devices with MMIO access
-
- .../devicetree/bindings/nvmem/mmio.yaml       |  50 ++++++
- drivers/nvmem/Kconfig                         |  10 ++
- drivers/nvmem/Makefile                        |   2 +
- drivers/nvmem/mmio.c                          | 148 ++++++++++++++++++
- 4 files changed, 210 insertions(+)
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+V3: Make it clear this binding should NOT be used for more complex devices
+---
+ .../devicetree/bindings/nvmem/mmio.yaml       | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/nvmem/mmio.yaml
- create mode 100644 drivers/nvmem/mmio.c
 
+diff --git a/Documentation/devicetree/bindings/nvmem/mmio.yaml b/Documentation/devicetree/bindings/nvmem/mmio.yaml
+new file mode 100644
+index 000000000000..9ca96b7a4856
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/mmio.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/mmio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MMIO access based NVMEM
++
++description: |
++  This binding describes simple NVMEM devices with content that can be accessed
++  using MMIO (memory-mapped I/O access).
++
++  More complex devices that support any other access than a simple memory
++  mapping should use a custom binding. In such cases this binding's compatible
++  should NOT be used even as a fallback.
++
++  This binding is designed to describe just an NVMEM content access method. The
++  way of handling actual content should be described independently (on top of
++  this binding).
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++allOf:
++  - $ref: nvmem.yaml#
++
++properties:
++  compatible:
++    const: mmio-nvmem
++
++  reg:
++    maxItems: 1
++
++  reg-io-width:
++    description: |
++      The size (in bytes) of the IO accesses that should be performed
++      on the device.
++    enum: [1, 2, 4, 8]
++
++required:
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    nvmem@10000 {
++        compatible = "mmio-nvmem";
++        reg = <0x10000000 0x10000>;
++    };
 -- 
 2.34.1
 
