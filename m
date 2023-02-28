@@ -2,270 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F776A55F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 665B26A55F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjB1Jhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S230391AbjB1JiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjB1Jhd (ORCPT
+        with ESMTP id S229520AbjB1JiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:37:33 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F922A6D6;
-        Tue, 28 Feb 2023 01:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677577051; x=1709113051;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xjjLkwPdC4Qnu2rsgdsvGKcGVndM1jwKd4HVYu7Q/Rg=;
-  b=bmHg8sPcaFuQc7//0yp1lD/dcV+0/TDMtoW2I4Bs0Xs0A8/rbLvm6Wqd
-   3OJvZW/NWqn5P3gtG3CouOzI89Tw3C3xDNQyNqyyIsblydYiDbWCxtiFo
-   eJmY6yK1RkHSeAAeXe+4vcQeAm3PsiElYLVmvjy/G4Zc7UrBpOYjLNcc/
-   Nl5oaZxNzmSUTBSj9Pe+S4/W1VC/RuYt4Nx29ukJBJtCERDcbprpYAqxM
-   lm89qwn7EdvSY7L6bbB3VI5BO9yxUVapGJdMFmcrcu3TwwXa5zXdlKAOq
-   XXkxQd9voLAmsJq8yomDQ6SWlIopP5avkn+j163RFhjrtSEgK0Q701A+6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="336383336"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="336383336"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 01:37:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="667388941"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="667388941"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Feb 2023 01:37:27 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWwQI-0005Ha-2I;
-        Tue, 28 Feb 2023 09:37:26 +0000
-Date:   Tue, 28 Feb 2023 17:37:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Xu <dxu@dxuuu.xyz>, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, dsahern@kernel.org, pabeni@redhat.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 5/8] bpf: net: ipv6: Add bpf_ipv6_frag_rcv()
- kfunc
-Message-ID: <202302281707.5vUL3boJ-lkp@intel.com>
-References: <bce083a4293eefb048a700b5a6086e8d8c957700.1677526810.git.dxu@dxuuu.xyz>
+        Tue, 28 Feb 2023 04:38:02 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F324C0B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:37:55 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id f16so9474678ljq.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:37:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677577074;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pLx88XxeINaxlh9c88no1ufEASvBrkn7OcCaxFAtYeg=;
+        b=JxTwuIbcVbdZ0XB/Ke6thXX+EuLbCMglRHbuTsDcHuG1WcxKzsWuKh9IzH+XQrjVfT
+         eA24c9QoJvrTMcNgSstG5r6ULEbW/tS1vJ6HgO//wh8IWWUoWqSgsluInD0IqX9pHy9M
+         t6RapCbSZ8CEfTGAVRtBewJSQITH2IKxarMs7I3yPvOnQvrJgrdOPfhzSvF6h6/LHYpJ
+         MVhN6erdapv9BGhw1tzBMGn5ESETGuU7f29FhzFtExEbCsCwIcsa8p98zUg4WYLA39g5
+         ZGOoVDtOQZOfFtk0xFbaeSiUT4GFozwbyeH/6z2GYiRVxeEHzLej2H27CLZOrJtAbcOC
+         kzig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677577074;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pLx88XxeINaxlh9c88no1ufEASvBrkn7OcCaxFAtYeg=;
+        b=Bx0DyNfUB03HWQMq69z1zOTpgACrkH9kzK4ajpGOB+nmC2Cwp01/Uf6nqyyMN1UPRj
+         KKJGN+GnmWCJBjGXZj6pqr0kki7bGQCt6DDP0/NsGXvR694rIGop1AG7AkoouM4ayKpi
+         OVtBW7Ds0+5HG3RX3S3iPL8oWDUwqccLWLZnLHXSjfMK68Q18tsBk52JUeOu+zyJxQNb
+         WSxehBor0bsLenO+o17jVNW6hnCBnpEtRieEC4Pqp5r7CJgDJuPVIO8qXzR458DNu/RM
+         n7NtBtqTjYFh6T+itB+4Lxmqghu3/96+yw6z/tfwTpbPliSEHm8DFdwQatBsbQma2k35
+         lK9A==
+X-Gm-Message-State: AO0yUKXvPtxSRCqA0U4zvz6C/vtbadfJF6q+cXPLmobybB1bogonPRLY
+        2K/V+oTlsJdDCVWaNrHWKX0ID1ZL8IL6OWLh5mw5VQ==
+X-Google-Smtp-Source: AK7set812PqxuX3MxJLxRLKJAHUohcBUnCC1CLWhxpTualMPtkhO/vvhti24y2V4Lpve70nRZvqahc7LvQktEGV+1VA=
+X-Received: by 2002:a05:651c:1242:b0:295:b83b:ab11 with SMTP id
+ h2-20020a05651c124200b00295b83bab11mr576748ljh.4.1677577073761; Tue, 28 Feb
+ 2023 01:37:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bce083a4293eefb048a700b5a6086e8d8c957700.1677526810.git.dxu@dxuuu.xyz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <0b5efd70e31bba7912cf9a6c951f0e76a8df27df.1677517724.git.andreyknvl@google.com>
+In-Reply-To: <0b5efd70e31bba7912cf9a6c951f0e76a8df27df.1677517724.git.andreyknvl@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 28 Feb 2023 10:37:40 +0100
+Message-ID: <CACT4Y+Z4GvK-XCbrLp8cuH-xHYsCdh1f0948ZgkU2D0apfGG5w@mail.gmail.com>
+Subject: Re: [PATCH] kcov: improve documentation
+To:     andrey.konovalov@linux.dev
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Mon, 27 Feb 2023 at 18:17, <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Improve KCOV documentation:
+>
+> - Use KCOV instead of kcov, as the former is more widely-used.
+>
+> - Mention Clang in compiler requirements.
+>
+> - Use ``annotations`` for inline code.
+>
+> - Rework remote coverage collection documentation for better clarity.
+>
+> - Various smaller changes.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> ---
+>  Documentation/dev-tools/kcov.rst | 169 +++++++++++++++++++------------
+>  1 file changed, 102 insertions(+), 67 deletions(-)
+>
+> diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
+> index d83c9ab49427..a113a03a475f 100644
+> --- a/Documentation/dev-tools/kcov.rst
+> +++ b/Documentation/dev-tools/kcov.rst
+> @@ -1,42 +1,50 @@
+> -kcov: code coverage for fuzzing
+> +KCOV: code coverage for fuzzing
+>  ===============================
+>
+> -kcov exposes kernel code coverage information in a form suitable for coverage-
+> -guided fuzzing (randomized testing). Coverage data of a running kernel is
+> -exported via the "kcov" debugfs file. Coverage collection is enabled on a task
+> -basis, and thus it can capture precise coverage of a single system call.
+> +KCOV collects and exposes kernel code coverage information in a form suitable
+> +for coverage-guided fuzzing. Coverage data of a running kernel is exported via
+> +the ``kcov`` debugfs file. Coverage collection is enabled on a task basis, and
+> +thus KCOV can capture precise coverage of a single system call.
+>
+> -Note that kcov does not aim to collect as much coverage as possible. It aims
+> -to collect more or less stable coverage that is function of syscall inputs.
+> -To achieve this goal it does not collect coverage in soft/hard interrupts
+> -and instrumentation of some inherently non-deterministic parts of kernel is
+> -disabled (e.g. scheduler, locking).
+> +Note that KCOV does not aim to collect as much coverage as possible. It aims
+> +to collect more or less stable coverage that is a function of syscall inputs.
+> +To achieve this goal, it does not collect coverage in soft/hard interrupts
+> +(unless remove coverage collection is enabled, see below) and from some
+> +inherently non-deterministic parts of the kernel (e.g. scheduler, locking).
+>
+> -kcov is also able to collect comparison operands from the instrumented code
+> -(this feature currently requires that the kernel is compiled with clang).
+> +Besides collecting code coverage, KCOV can also collect comparison operands.
+> +See the "Comparison operands collection" section for details.
+> +
+> +Besides collecting coverage data from syscall handlers, KCOV can also collect
+> +coverage for annotated parts of the kernel executing in background kernel
+> +tasks or soft interrupts. See the "Remote coverage collection" section for
+> +details.
+>
+>  Prerequisites
+>  -------------
+>
+> -Configure the kernel with::
+> +KCOV relies on compiler instrumentation and requires GCC 6.1.0 or later
+> +or any Clang version supported by the kernel.
+>
+> -        CONFIG_KCOV=y
+> +Collecting comparison operands is only supported with Clang.
 
-Thank you for the patch! Yet something to improve:
+Are you sure?
+I see -fsanitize-coverage=trace-cmp in gcc sources and man page.
 
-[auto build test ERROR on bpf-next/master]
+Otherwise looks good to me.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/ip-frags-Return-actual-error-codes-from-ip_check_defrag/20230228-035449
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/bce083a4293eefb048a700b5a6086e8d8c957700.1677526810.git.dxu%40dxuuu.xyz
-patch subject: [PATCH bpf-next v2 5/8] bpf: net: ipv6: Add bpf_ipv6_frag_rcv() kfunc
-config: i386-debian-10.3 (https://download.01.org/0day-ci/archive/20230228/202302281707.5vUL3boJ-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/be4610312351d4a658435bd4649a3a830322396d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Xu/ip-frags-Return-actual-error-codes-from-ip_check_defrag/20230228-035449
-        git checkout be4610312351d4a658435bd4649a3a830322396d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302281707.5vUL3boJ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   ld: net/ipv6/af_inet6.o: in function `inet6_init':
->> net/ipv6/af_inet6.c:1177: undefined reference to `register_ipv6_reassembly_bpf'
-
-
-vim +1177 net/ipv6/af_inet6.c
-
-  1061	
-  1062	static int __init inet6_init(void)
-  1063	{
-  1064		struct list_head *r;
-  1065		int err = 0;
-  1066	
-  1067		sock_skb_cb_check_size(sizeof(struct inet6_skb_parm));
-  1068	
-  1069		/* Register the socket-side information for inet6_create.  */
-  1070		for (r = &inetsw6[0]; r < &inetsw6[SOCK_MAX]; ++r)
-  1071			INIT_LIST_HEAD(r);
-  1072	
-  1073		raw_hashinfo_init(&raw_v6_hashinfo);
-  1074	
-  1075		if (disable_ipv6_mod) {
-  1076			pr_info("Loaded, but administratively disabled, reboot required to enable\n");
-  1077			goto out;
-  1078		}
-  1079	
-  1080		err = proto_register(&tcpv6_prot, 1);
-  1081		if (err)
-  1082			goto out;
-  1083	
-  1084		err = proto_register(&udpv6_prot, 1);
-  1085		if (err)
-  1086			goto out_unregister_tcp_proto;
-  1087	
-  1088		err = proto_register(&udplitev6_prot, 1);
-  1089		if (err)
-  1090			goto out_unregister_udp_proto;
-  1091	
-  1092		err = proto_register(&rawv6_prot, 1);
-  1093		if (err)
-  1094			goto out_unregister_udplite_proto;
-  1095	
-  1096		err = proto_register(&pingv6_prot, 1);
-  1097		if (err)
-  1098			goto out_unregister_raw_proto;
-  1099	
-  1100		/* We MUST register RAW sockets before we create the ICMP6,
-  1101		 * IGMP6, or NDISC control sockets.
-  1102		 */
-  1103		err = rawv6_init();
-  1104		if (err)
-  1105			goto out_unregister_ping_proto;
-  1106	
-  1107		/* Register the family here so that the init calls below will
-  1108		 * be able to create sockets. (?? is this dangerous ??)
-  1109		 */
-  1110		err = sock_register(&inet6_family_ops);
-  1111		if (err)
-  1112			goto out_sock_register_fail;
-  1113	
-  1114		/*
-  1115		 *	ipngwg API draft makes clear that the correct semantics
-  1116		 *	for TCP and UDP is to consider one TCP and UDP instance
-  1117		 *	in a host available by both INET and INET6 APIs and
-  1118		 *	able to communicate via both network protocols.
-  1119		 */
-  1120	
-  1121		err = register_pernet_subsys(&inet6_net_ops);
-  1122		if (err)
-  1123			goto register_pernet_fail;
-  1124		err = ip6_mr_init();
-  1125		if (err)
-  1126			goto ipmr_fail;
-  1127		err = icmpv6_init();
-  1128		if (err)
-  1129			goto icmp_fail;
-  1130		err = ndisc_init();
-  1131		if (err)
-  1132			goto ndisc_fail;
-  1133		err = igmp6_init();
-  1134		if (err)
-  1135			goto igmp_fail;
-  1136	
-  1137		err = ipv6_netfilter_init();
-  1138		if (err)
-  1139			goto netfilter_fail;
-  1140		/* Create /proc/foo6 entries. */
-  1141	#ifdef CONFIG_PROC_FS
-  1142		err = -ENOMEM;
-  1143		if (raw6_proc_init())
-  1144			goto proc_raw6_fail;
-  1145		if (udplite6_proc_init())
-  1146			goto proc_udplite6_fail;
-  1147		if (ipv6_misc_proc_init())
-  1148			goto proc_misc6_fail;
-  1149		if (if6_proc_init())
-  1150			goto proc_if6_fail;
-  1151	#endif
-  1152		err = ip6_route_init();
-  1153		if (err)
-  1154			goto ip6_route_fail;
-  1155		err = ndisc_late_init();
-  1156		if (err)
-  1157			goto ndisc_late_fail;
-  1158		err = ip6_flowlabel_init();
-  1159		if (err)
-  1160			goto ip6_flowlabel_fail;
-  1161		err = ipv6_anycast_init();
-  1162		if (err)
-  1163			goto ipv6_anycast_fail;
-  1164		err = addrconf_init();
-  1165		if (err)
-  1166			goto addrconf_fail;
-  1167	
-  1168		/* Init v6 extension headers. */
-  1169		err = ipv6_exthdrs_init();
-  1170		if (err)
-  1171			goto ipv6_exthdrs_fail;
-  1172	
-  1173		err = ipv6_frag_init();
-  1174		if (err)
-  1175			goto ipv6_frag_fail;
-  1176	
-> 1177		err = register_ipv6_reassembly_bpf();
-  1178		if (err)
-  1179			goto ipv6_frag_fail;
-  1180	
-  1181		/* Init v6 transport protocols. */
-  1182		err = udpv6_init();
-  1183		if (err)
-  1184			goto udpv6_fail;
-  1185	
-  1186		err = udplitev6_init();
-  1187		if (err)
-  1188			goto udplitev6_fail;
-  1189	
-  1190		err = udpv6_offload_init();
-  1191		if (err)
-  1192			goto udpv6_offload_fail;
-  1193	
-  1194		err = tcpv6_init();
-  1195		if (err)
-  1196			goto tcpv6_fail;
-  1197	
-  1198		err = ipv6_packet_init();
-  1199		if (err)
-  1200			goto ipv6_packet_fail;
-  1201	
-  1202		err = pingv6_init();
-  1203		if (err)
-  1204			goto pingv6_fail;
-  1205	
-  1206		err = calipso_init();
-  1207		if (err)
-  1208			goto calipso_fail;
-  1209	
-  1210		err = seg6_init();
-  1211		if (err)
-  1212			goto seg6_fail;
-  1213	
-  1214		err = rpl_init();
-  1215		if (err)
-  1216			goto rpl_fail;
-  1217	
-  1218		err = ioam6_init();
-  1219		if (err)
-  1220			goto ioam6_fail;
-  1221	
-  1222		err = igmp6_late_init();
-  1223		if (err)
-  1224			goto igmp6_late_err;
-  1225	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> -CONFIG_KCOV requires gcc 6.1.0 or later.
+> +To enable KCOV, configure the kernel with::
+>
+> -If the comparison operands need to be collected, set::
+> +        CONFIG_KCOV=y
+> +
+> +To enable comparison operands collection, set::
+>
+>         CONFIG_KCOV_ENABLE_COMPARISONS=y
+>
+> -Profiling data will only become accessible once debugfs has been mounted::
+> +Coverage data only becomes accessible once debugfs has been mounted::
+>
+>          mount -t debugfs none /sys/kernel/debug
+>
+>  Coverage collection
+>  -------------------
+>
+> -The following program demonstrates coverage collection from within a test
+> -program using kcov:
+> +The following program demonstrates how to use KCOV to collect coverage for a
+> +single syscall from within a test program:
+>
+>  .. code-block:: c
+>
+> @@ -84,7 +92,7 @@ program using kcov:
+>                 perror("ioctl"), exit(1);
+>         /* Reset coverage from the tail of the ioctl() call. */
+>         __atomic_store_n(&cover[0], 0, __ATOMIC_RELAXED);
+> -       /* That's the target syscal call. */
+> +       /* Call the target syscall call. */
+>         read(-1, NULL, 0);
+>         /* Read number of PCs collected. */
+>         n = __atomic_load_n(&cover[0], __ATOMIC_RELAXED);
+> @@ -103,7 +111,7 @@ program using kcov:
+>         return 0;
+>      }
+>
+> -After piping through addr2line output of the program looks as follows::
+> +After piping through ``addr2line`` the output of the program looks as follows::
+>
+>      SyS_read
+>      fs/read_write.c:562
+> @@ -121,12 +129,13 @@ After piping through addr2line output of the program looks as follows::
+>      fs/read_write.c:562
+>
+>  If a program needs to collect coverage from several threads (independently),
+> -it needs to open /sys/kernel/debug/kcov in each thread separately.
+> +it needs to open ``/sys/kernel/debug/kcov`` in each thread separately.
+>
+>  The interface is fine-grained to allow efficient forking of test processes.
+> -That is, a parent process opens /sys/kernel/debug/kcov, enables trace mode,
+> -mmaps coverage buffer and then forks child processes in a loop. Child processes
+> -only need to enable coverage (disable happens automatically on thread end).
+> +That is, a parent process opens ``/sys/kernel/debug/kcov``, enables trace mode,
+> +mmaps coverage buffer, and then forks child processes in a loop. The child
+> +processes only need to enable coverage (it gets disabled automatically when
+> +a thread exits).
+>
+>  Comparison operands collection
+>  ------------------------------
+> @@ -205,52 +214,78 @@ Comparison operands collection is similar to coverage collection:
+>         return 0;
+>      }
+>
+> -Note that the kcov modes (coverage collection or comparison operands) are
+> -mutually exclusive.
+> +Note that the KCOV modes (collection of code coverage or comparison operands)
+> +are mutually exclusive.
+>
+>  Remote coverage collection
+>  --------------------------
+>
+> -With KCOV_ENABLE coverage is collected only for syscalls that are issued
+> -from the current process. With KCOV_REMOTE_ENABLE it's possible to collect
+> -coverage for arbitrary parts of the kernel code, provided that those parts
+> -are annotated with kcov_remote_start()/kcov_remote_stop().
+> -
+> -This allows to collect coverage from two types of kernel background
+> -threads: the global ones, that are spawned during kernel boot in a limited
+> -number of instances (e.g. one USB hub_event() worker thread is spawned per
+> -USB HCD); and the local ones, that are spawned when a user interacts with
+> -some kernel interface (e.g. vhost workers); as well as from soft
+> -interrupts.
+> -
+> -To enable collecting coverage from a global background thread or from a
+> -softirq, a unique global handle must be assigned and passed to the
+> -corresponding kcov_remote_start() call. Then a userspace process can pass
+> -a list of such handles to the KCOV_REMOTE_ENABLE ioctl in the handles
+> -array field of the kcov_remote_arg struct. This will attach the used kcov
+> -device to the code sections, that are referenced by those handles.
+> -
+> -Since there might be many local background threads spawned from different
+> -userspace processes, we can't use a single global handle per annotation.
+> -Instead, the userspace process passes a non-zero handle through the
+> -common_handle field of the kcov_remote_arg struct. This common handle gets
+> -saved to the kcov_handle field in the current task_struct and needs to be
+> -passed to the newly spawned threads via custom annotations. Those threads
+> -should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
+> -
+> -Internally kcov stores handles as u64 integers. The top byte of a handle
+> -is used to denote the id of a subsystem that this handle belongs to, and
+> -the lower 4 bytes are used to denote the id of a thread instance within
+> -that subsystem. A reserved value 0 is used as a subsystem id for common
+> -handles as they don't belong to a particular subsystem. The bytes 4-7 are
+> -currently reserved and must be zero. In the future the number of bytes
+> -used for the subsystem or handle ids might be increased.
+> -
+> -When a particular userspace process collects coverage via a common
+> -handle, kcov will collect coverage for each code section that is annotated
+> -to use the common handle obtained as kcov_handle from the current
+> -task_struct. However non common handles allow to collect coverage
+> -selectively from different subsystems.
+> +Besides collecting coverage data from handlers of syscalls issued from a
+> +userspace process, KCOV can also collect coverage for parts of the kernel
+> +executing in other contexts - so-called "remote" coverage.
+> +
+> +Using KCOV to collect remote coverage requires:
+> +
+> +1. Modifying kernel code to annotate the code section from where coverage
+> +   should be collected with ``kcov_remote_start`` and ``kcov_remote_stop``.
+> +
+> +2. Using `KCOV_REMOTE_ENABLE`` instead of ``KCOV_ENABLE`` in the userspace
+> +   process that collects coverage.
+> +
+> +Both ``kcov_remote_start`` and ``kcov_remote_stop`` annotations and the
+> +``KCOV_REMOTE_ENABLE`` ioctl accept handles that identify particular coverage
+> +collection sections. The way a handle is used depends on the context where the
+> +matching code section executes.
+> +
+> +KCOV supports collecting remote coverage from the following contexts:
+> +
+> +1. Global kernel background tasks. These are the tasks that are spawned during
+> +   kernel boot in a limited number of instances (e.g. one USB ``hub_event``
+> +   worker is spawned per one USB HCD).
+> +
+> +2. Local kernel background tasks. These are spawned when a userspace process
+> +   interacts with some kernel interface and are usually killed when the process
+> +   exits (e.g. vhost workers).
+> +
+> +3. Soft interrupts.
+> +
+> +For #1 and #3, a unique global handle must be chosen and passed to the
+> +corresponding ``kcov_remote_start`` call. Then a userspace process must pass
+> +this handle to ``KCOV_REMOTE_ENABLE`` in the ``handles`` array field of the
+> +``kcov_remote_arg`` struct. This will attach the used KCOV device to the code
+> +section referenced by this handle. Multiple global handles identifying
+> +different code sections can be passed at once.
+> +
+> +For #2, the userspace process instead must pass a non-zero handle through the
+> +``common_handle`` field of the ``kcov_remote_arg`` struct. This common handle
+> +gets saved to the ``kcov_handle`` field in the current ``task_struct`` and
+> +needs to be passed to the newly spawned local tasks via custom kernel code
+> +modifications. Those tasks should in turn use the passed handle in their
+> +``kcov_remote_start`` and ``kcov_remote_stop`` annotations.
+> +
+> +KCOV follows a predefined format for both global and common handles. Each
+> +handle is a ``u64`` integer. Currently, only the one top and the lower 4 bytes
+> +are used. Bytes 4-7 are reserved and must be zero.
+> +
+> +For global handles, the top byte of the handle denotes the id of a subsystem
+> +this handle belongs to. For example, KCOV uses ``1`` as the USB subsystem id.
+> +The lower 4 bytes of a global handle denote the id of a task instance within
+> +that subsystem. For example, each ``hub_event`` worker uses the USB bus number
+> +as the task instance id.
+> +
+> +For common handles, a reserved value ``0`` is used as a subsystem id, as such
+> +handles don't belong to a particular subsystem. The lower 4 bytes of a common
+> +handle identify a collective instance of all local tasks spawned by the
+> +userspace process that passed a common handle to ``KCOV_REMOTE_ENABLE``.
+> +
+> +In practice, any value can be used for common handle instance id if coverage
+> +is only collected from a single userspace process on the system. However, if
+> +common handles are used by multiple processes, unique instance ids must be
+> +used for each process. One option is to use the process id as the common
+> +handle instance id.
+> +
+> +The following program demonstrates using KCOV to collect coverage from both
+> +local tasks spawned by the process and the global task that handles USB bus #1:
+>
+>  .. code-block:: c
+>
+> --
+> 2.25.1
+>
