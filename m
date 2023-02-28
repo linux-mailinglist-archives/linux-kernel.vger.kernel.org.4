@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822656A540F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798176A53FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjB1IDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 03:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        id S230175AbjB1H7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 02:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjB1IDU (ORCPT
+        with ESMTP id S230145AbjB1H7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 03:03:20 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD5AD528;
-        Tue, 28 Feb 2023 00:03:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677571399; x=1709107399;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+fjRBEyt8zyZIu0/NzNVouVY1z5OE8APuiDz1ezJ0g4=;
-  b=LYl7NbzHqqGv3NiqR/VjfLAj/TaTtID3YKn5pHU0XDxQ0BgKodg5XRVW
-   1AppAnfBqQbXGvdHvvrCKPrVRIos4nbySotCw6L0Dnxd124tRi3EN7ATF
-   hRLmCwGywySPVuBDuMk63p9KutHNx1lqApbHYktEdAMen/k+gSd4tO0y9
-   zn5uLCi0RzbK3PJpJr9Uq6K30/4x1k9AVFkmYe4KSTxl4kG2Q5ptw2m90
-   KDS/O95PfdEBr/WJQec1xdsw5242RTR03DGaJavA26G5Os3yXfL1hL/0z
-   m2GGPkxby2Adc2OD6uvb11LoFznbk4fWE4jd/LWy8hbPDkOlUCdeX1wMc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="336364246"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="336364246"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 00:03:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="674041439"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="674041439"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.211.20]) ([10.254.211.20])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 00:03:14 -0800
-Message-ID: <7ec69b6b-540c-95d1-079d-8527fabd440b@intel.com>
-Date:   Tue, 28 Feb 2023 16:03:12 +0800
+        Tue, 28 Feb 2023 02:59:04 -0500
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2040.outbound.protection.outlook.com [40.107.247.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CCF1B2D7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:59:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FY24TPfApkhaA+nlSUyvCWTAqtLquZXjdQJwuDAHC255WRoR5k2p1ubuyVjgQbS+0x8gmsUAkWS7z+y4EDOQl8Cdp4ErW1mGgGXD56RliWXYMN5rcHZ2cSjLDmHdHMJpwShjW64iiFe5WJl1Lfjan7W0zciwz7+Y0nJanYhTYxxv8bA87N/0oJs1ST4Sf7FL407cu3HaibTPw6IMO4B3gyc9WnPi/3Zj3BJTSowzUswDCIOeSNbRljbqkg+bdRvGPKz80fG76SVkHWxOup91jgLOhMM4MzfxgoYq9UKRmyX9g3k0R1cvFsQvKigEDRY6XiljZBfibnLlRKn9UyTqgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F60hxucCort2NZ60ENR9zW4KGQuarl3ytM+NGFonp+A=;
+ b=PBqJi2u3OJvFqoQFZWKcHheL/NPEUVYeexQ/b95M1rYTeD57pApCve6gkD/FF5iDtR0ZEeRpPGyFqcCsrfME3sVrGGmnP5nFMZ2BWYQhuy1jfKRuuw6BHf1Ae8MwS1kOQgK13EczyEVTB0sqp5WdWKwOK2od3DVgUIP1HGETZPk7m8HaE1HXwAxY/VLbzltElVBaIWKrZ5boqPt6mdZSegUDmPNS+iIgTD45/yW3ErLFpRmPBnrpmsX8NZzCaoz/9eqQ5FkpQ6k0VfVEdGZRDveFcIn88jIVXlpDeZddZIxLoOURIrlUThH0SXcIOppKmFroy7KlGVLYpty625nayA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F60hxucCort2NZ60ENR9zW4KGQuarl3ytM+NGFonp+A=;
+ b=BgCqyrRDLSTta0mLWNZM+8QfGcQy14vAQiEFHDlTbhjivdLLPx6G90JFjpijos70FSQwH2hPDbr30TWrm+T28sfEb6BAF689msdiTCNodikVLrsfxL06qWiyqVZD3IJ/YEsvRIuNba7iUGEJ85luYqoHWKq7d8je94rs3aw//2c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from GV1PR04MB9183.eurprd04.prod.outlook.com (2603:10a6:150:27::9)
+ by AS8PR04MB7685.eurprd04.prod.outlook.com (2603:10a6:20b:29c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 07:59:00 +0000
+Received: from GV1PR04MB9183.eurprd04.prod.outlook.com
+ ([fe80::bc90:f96e:eb61:cb36]) by GV1PR04MB9183.eurprd04.prod.outlook.com
+ ([fe80::bc90:f96e:eb61:cb36%6]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 07:59:00 +0000
+From:   Jindong Yue <jindong.yue@nxp.com>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, l.stach@pengutronix.de,
+        peng.fan@nxp.com, linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, jindong.yue@nxp.com
+Subject: [PATCH 0/6] soc: imx8m: Support building imx8m soc driver as module
+Date:   Tue, 28 Feb 2023 16:05:26 +0800
+Message-Id: <20230228080529.412669-1-jindong.yue@nxp.com>
+X-Mailer: git-send-email 2.36.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR02CA0040.apcprd02.prod.outlook.com
+ (2603:1096:4:196::6) To GV1PR04MB9183.eurprd04.prod.outlook.com
+ (2603:10a6:150:27::9)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v12 000/106] KVM TDX basic feature support
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>
-References: <cover.1677484918.git.isaku.yamahata@intel.com>
-Content-Language: en-US
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <cover.1677484918.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV1PR04MB9183:EE_|AS8PR04MB7685:EE_
+X-MS-Office365-Filtering-Correlation-Id: cd756664-e44f-4bd3-ef1a-08db1961a676
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1BhMOk/JBFYPW0q/HvEzWQ0xp9Q8UDEYwCfXX7MwSqZeX9ytJaNdYhdaWWsJy+tDBT4GTwpVFq6FtSfhp3OhtGwCKbqxNTwP51cCqS6VGBmWZttriWhMphDleRVvmiNcvcz5vjZZzxwvqypzYKYgEW7dhiGGrIC4y6o+3HmE9vntCCZjub8UATe1LmHGHG/AhwKFfuz9oYZpKW3H/wueH1aytS0rcyDS+aBk6UPL/i5Fs+tQ1IwQbE/TnzAUi81FeKpJLOZuy/BcdgBH9YFREnsQK59utV4fn4ulvWyDBGU9oSdWo2dr44jIn+kVWlyOb195jTxwht0u7t/5zE4huVAxtceCHt/kcjaIEP3ehIpVs8dFGCb0t6HTlE46taWnck015MubMKhkQ9ysFMakiCQNTiVRpvUiwCQP/vje/K5IgvVsV7oUqBfPnC/Zg/NWDjq1VCRx5PvItIZ2fygNSmO9WZ3dsMrUT9o8XSbJeNgGXyCUPyxQb63zuai/7AusnhD+YSqqh+UJMB5yAcCgeu4pP5rK8bblYmuYtJVj8jYM2LIOKXKxU//sstjy2K95Nk8uDvHI8/1ntF4eW6nCixF1eHsu3eBracV/AoVbsS9FTNcOOmjkG1f0/HM5CEJyT0UON25O8iQmF9FaHg73B4xTfvHJcHyxdS3IIWxvrgU/q2aNBXeYfWmxsgxyebkYsXKpyVjcMbll+hCecBlaR3bfVlXDtefbAhz/mSgXICg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9183.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199018)(83380400001)(316002)(36756003)(4326008)(8676002)(38100700002)(38350700002)(2906002)(6512007)(6506007)(1076003)(2616005)(478600001)(186003)(26005)(52116002)(6486002)(6666004)(5660300002)(66476007)(44832011)(66946007)(66556008)(4744005)(8936002)(86362001)(41300700001)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dVZnYStQKzBTcWF4c25VTlkxaDJWSjZFQjFCQ3M2TCtPWVNnbklrL0Nwc0Jr?=
+ =?utf-8?B?ZC85WTBTbVdwQVk2bCsvRHVRZ090QUlGK1lmMHRkNVlBdzMyWXhkZnNUMUtl?=
+ =?utf-8?B?QkFuckRzUlcrbng0dm5IRFVPbGtKRDVmdW01d0x2K2k3c2xVRFJuNWZtM29Q?=
+ =?utf-8?B?eklKRnF5bUlVMzhjWGJWQkxCWnpQeTM4b3FhMnBsaEY2eERnVlUzUEQ3V01E?=
+ =?utf-8?B?aWtHRlp0OVp0cjVIcHRoc01LUGZVZHV1TnFnUkgxYzRET3Bud281Y29ya3Rr?=
+ =?utf-8?B?RnVMV0FQeGRkLzJZdC92TUg0cEFESEVFeWtCVzZxNXFVZVNHUVlmQytXR1pR?=
+ =?utf-8?B?cmZBaGNOSU5pQ0FHUzZZbVF0ajRRbHN5ZXZGcVhteFd5U0V0YzZ4MUhyREhT?=
+ =?utf-8?B?NmV1bkxqTCtrbExrUit4bjh0TEpVTnltNWl0WHlodUlJMHI1MXdQS0dkM25D?=
+ =?utf-8?B?NFY3bHN0ZUpPZW5rRXhIUCsvemJYcUo4clVMZXIyeXZUQ3ZlclRRSTNGS3RH?=
+ =?utf-8?B?R3FhUEhNV1lJTUZMalQzODFHdW9ocmw3Qm1kbVJTWUN4cEt1R0Vac2dnUGdz?=
+ =?utf-8?B?UmpXeVpQQVRydGlVWWxRQ0JJLzVEaTRhVHl5Z25ESHJucjRLT2tsb0FLN1gv?=
+ =?utf-8?B?QytsZ3pCZ2NzbGxCTEdncitGK25mdlVvRUIwUHdPcWlDYzhkVmpFYmNqUGd6?=
+ =?utf-8?B?b2YwbXV4RDN4S1NoaDBZYm5JbHFUOEkrcitxeHAwbTFFek1xR3M3Uk5tRmJZ?=
+ =?utf-8?B?ckFlMm5mb1ZxbENVdkpaWGxaeHp1RHpQRmk0SnZOcTlXaTBEVElmelVGdFBu?=
+ =?utf-8?B?RkRnd2NFSVpockpOZVpIZ2ZjRXZ2TUdFcnBhWGs0RUJzUDR5UVExRWlRQ3ZX?=
+ =?utf-8?B?d0I5cUJOL2JlOWFtUDVBdnNnS1o1Z1N2UVBZU252RG0wb3pqU3VOaXBVVjVL?=
+ =?utf-8?B?blNBTDlMVmNkM0hFdFRqYmN2OWJyYUwwdHk4c3B1UHEvc2crSHlmMEdYbHNP?=
+ =?utf-8?B?ejlhby9MeUhjSmtLWjV6aFdUK0N3bmhwOG1FZHJJNEkxOUtGc3VJZE1TZ1hP?=
+ =?utf-8?B?cjY4UjNScFA0MWhxRlhWSjBqNGp6NHpPSXgwUHFqYUpTWitUNktadWpLZHRO?=
+ =?utf-8?B?MGQxTDNSNS9NSTBpNFV0ZnFrNjhEZWhGbmxHLzFwdjlLeWVCL01jOGJrNkJY?=
+ =?utf-8?B?NDZraXRsc3ZySm9Ja3pMbWhnZEpUd01WMDZOTWw1RGR1OFFaWlRqbFpaMzRk?=
+ =?utf-8?B?c2ZoenlQR2VtaHZZOGhtSC9IT0dyQ1dVTGFNNUo5RlVwOUhUeG42RW5Ta1Ny?=
+ =?utf-8?B?ZS9sOVh5OHRyN3VMTmRqV1NzWTRDNDFiU3g2UVBjRG8rQk5CZHhFUk9BVU9O?=
+ =?utf-8?B?K3hNREJSUGdORmJGUmQrNUF3TFZqNDB6UFZkRVRQbXFlZHA5NTV4Nzd3a0d0?=
+ =?utf-8?B?am1NWGt5QlppZFFYR3JBRDdCREN5SkxMa1I5SGxNcm5wWEhqSFo4UG9JTW1y?=
+ =?utf-8?B?THJuMnovR2JMakt3QWZ0S0tEandkT3VWN0lKZkJjVEI5WUcyREwwRkJXNkIy?=
+ =?utf-8?B?dmZKNXhndUFXMllVZ0lFVmZIbFFSaTFBeVZPZ29BS09sQXdWS2hCSnl0YzFz?=
+ =?utf-8?B?WmRFNjJFWjlzZFhjMkJ0eDNLbWxqei9hQWxEbjBhUXRmdDRUSWFnWkd1a0Zp?=
+ =?utf-8?B?TXpqUE4wVDFmSlpmZHcxRDMxL3A5a2l4Q0V5YnlpZ3M4bkJkTlVhT2VpR2Y0?=
+ =?utf-8?B?aTNhZ1hSR2Z2R3hzN05obTl3bGFVOXB5dERodmNPZDZyRHVGTGljTDF2YjJa?=
+ =?utf-8?B?b3R2d2pNMEhXcUVCRXpxbGJiUjd1NXlUQWlSdzNqdWVMNDNGdU1HeWQyYTJC?=
+ =?utf-8?B?OEtkWEk2Z2RwUlpFbXE4OVpSRUQ3a1Z3TlYwQ0huY0FIV1NqZnB5aXR5bXhQ?=
+ =?utf-8?B?ZFRNY0JGWDljSWluWTZsa1JUZXR3MjN2ZU1aMW5IVTl2cXlGTzBnQnQ4WUJY?=
+ =?utf-8?B?UjZuNHROMTlFMnd5SHYrQU10WDlKcHZkWHZBb2hVdFNndGFaM3ZRVWl5Yitr?=
+ =?utf-8?B?R2lYVHlrN3diOGtQeTJ5QWRIMk5EWmdTL2VkL3BvVHRSZ2NOOWF1OFhEdHZL?=
+ =?utf-8?Q?cGEeUdOzIAbmdnVWINMHRhYDm?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd756664-e44f-4bd3-ef1a-08db1961a676
+X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9183.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 07:59:00.3703
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CAtfG5gawXzd59nbHYuLOBQHwwoxeBhV+QLfpPVayx71sJJMNvBZoqan/O62AAy1uBSXAEEetajTd0tCNXV/nw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7685
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/2023 4:21 PM, isaku.yamahata@intel.com wrote:
-> KVM TDX basic feature support
-> 
-> Hello.  This is v12 the patch series vof KVM TDX support.  This is based on
-> v6.2-rc7 + the following patch series.
-> 
-> Related patch series This patch is based on:
-> - fd-based approach for supporing KVM v10 and
->    https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@linux.intel.com/
->    git@github.com:sean-jc/linux.git  x86/upm_base_support
-> - TDX host kernel support v9
->    https://lore.kernel.org/lkml/e1c717b36033caf8de9d7a448e06eff88ed0c9ae.camel@intel.com/T/#m2562c7f18eabae171793ed7ea81b3544d7af09c4
+This series adds support for building imx8m soc driver as module.
 
+Jindong Yue (6):
+  soc: imx: imx8mp-blk-ctrl: Fix typo of imx8m_blk_ctrl_of_match
+  soc: imx: imx8mp-blk-ctrl: Add MODULE_LICENSE
+  soc: imx: imx8m-blk-ctrl: Add MODULE_LICENSE
+  PM: domains: Export genpd_dev_pm_attach_by_name()
+  soc: imx8m: Add MODULE_LICENSE
+  soc: imx8m: Support building imx8m soc driver as module
 
-  9fdabaaf0346 KVM: TDX: Make TDX VM type supported
-  fa6b8135913c KVM: x86: Introduce vm_type to differentiate default VMs 
-from confidential VMs
-  6dbc1fdfb61f KVM: TDX: Add placeholders for TDX VM/vcpu structure
-  64a9c956f265 KVM: TDX: Initialize the TDX module when loading the KVM 
-intel kernel module
-  bacb6554fcf5 KVM: x86/vmx: Refactor KVM VMX module init/exit functions
-  b17eee6a7d53 KVM: VMX: Move out vmx_x86_ops to 'main.c' to wrap VMX 
-and TDX
-  5a8b8d63a2e8 x86/mtrr: Mask out keyid bits from variable mtrr mask 
-register
-  29017e2c04cc KVM: arm64: Mark kvm_arm_init() and its unique 
-descendants as __init
+ drivers/base/power/domain.c       | 1 +
+ drivers/soc/imx/Kconfig           | 2 +-
+ drivers/soc/imx/imx8m-blk-ctrl.c  | 1 +
+ drivers/soc/imx/imx8mp-blk-ctrl.c | 3 ++-
+ drivers/soc/imx/soc-imx8m.c       | 1 +
+ 5 files changed, 6 insertions(+), 2 deletions(-)
 
-
-I find above 8 patches not included in this patch series after TDX host 
-kernel support series. Some of them were included in v11 before, and I 
-think they are important to make the patch series intact. What's the 
-reason for not including them?
-
-
+-- 
+2.36.0
 
