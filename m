@@ -2,231 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33F16A5315
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4046A530E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjB1Ge2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 01:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S229888AbjB1GeM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Feb 2023 01:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjB1GeP (ORCPT
+        with ESMTP id S229889AbjB1GeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 01:34:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F65BB;
-        Mon, 27 Feb 2023 22:34:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0CC3B80DED;
-        Tue, 28 Feb 2023 06:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEC7C433D2;
-        Tue, 28 Feb 2023 06:34:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677566050;
-        bh=Nc/tNHHbdZudxlnetoUB/Ahcg8UGlbT8CjlJknq5GZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SOQLaHlKIFhSg2REjjo7JokZ31rtl+qdIP25T9GE4WtL335pDCx+3dSn6aNcafSEM
-         f6SBlJ8WU8PgpMRWnxgQhTUwOFy46puyoZvzH0HUTixO+WAEV+55itmCoKI2uxgTS4
-         qEgsXNZdEMFcZ37jIpMa/ARegBS8tpl9CBBnPUrK4uTR1TzMOmUSDgHwNnUGT+8eWv
-         vegFlfxxDxEnUZuBgSwOgGE5eR/1CHe2fRMcpGATGptXYE+0eJjs0Tp4sxIUqBlOBX
-         C+F4veJujCfKt3RXTOObOO33XWNh8Vdo5YD/IFEHHEd93UWwwjoIFqCWbXqwq1XHJQ
-         OKARpaN8Sx0ww==
-Date:   Tue, 28 Feb 2023 12:03:58 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de, svarbanov@mm-sol.com,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-clk@vger.kernel.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com
-Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific
- compatible
-Message-ID: <20230228063358.GA4839@thinkpad>
-References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
- <20230214164135.17039-2-quic_devipriy@quicinc.com>
- <20230224082332.GA5443@thinkpad>
- <bd153038-4427-1f11-1941-5f13fec01cf7@quicinc.com>
+        Tue, 28 Feb 2023 01:34:11 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661DA3A85
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 22:34:04 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2D58C24E3E2;
+        Tue, 28 Feb 2023 14:34:03 +0800 (CST)
+Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
+ 2023 14:33:59 +0800
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX161.cuchost.com
+ (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
+ 2023 14:33:59 +0800
+Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
+ EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
+ 15.00.1497.044; Tue, 28 Feb 2023 14:33:59 +0800
+From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: RE: [PATCH v4 4/4] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Thread-Topic: [PATCH v4 4/4] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Thread-Index: AQHZRZ0zqkG7/pRhhEiAX6gFjug0Aa7cUgAAgAEC65D///aKAIAAiLXg//+GvACAAI+BwP//lVOAAJFkcXD//+axAP//cjXQgADMoID//pX2AIACjLaA//9iDwA=
+Date:   Tue, 28 Feb 2023 06:33:59 +0000
+Message-ID: <ffd2e7849b764043bef606d9b8019506@EXMBX066.cuchost.com>
+References: <20230224090010.nmy6latszfkdqcft@orel>
+ <9cfd485d1e0d46cdb1323bb6ea330f6e@EXMBX066.cuchost.com>
+ <20230224095526.ctctpzw3p3csf6qj@orel>
+ <24a6dbe6aa2043c7812bf7e258786e13@EXMBX066.cuchost.com>
+ <20230224120715.wgqnqmkadsbqusus@orel>
+ <180fda36f9974809b436c52e4b3eda58@EXMBX066.cuchost.com>
+ <20230227075942.rgl4hqnwttwvoroe@orel>
+ <178ca008701147828d2e62402ff4f78a@EXMBX066.cuchost.com>
+ <20230227114435.eow57ax5zhysz3kv@orel>
+ <a6c319dd867f4f1d97e9d950b9e7c636@EXMBX066.cuchost.com>
+ <20230228050457.zfbflfawctaccepv@orel>
+In-Reply-To: <20230228050457.zfbflfawctaccepv@orel>
+Accept-Language: en-US, zh-CN
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.188.176.82]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bd153038-4427-1f11-1941-5f13fec01cf7@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 10:56:53AM +0530, Devi Priya wrote:
+
+
+> -----Original Message-----
+> From: Andrew Jones <ajones@ventanamicro.com>
+> Sent: Tuesday, 28 February, 2023 1:05 PM
+> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
+> Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
 > 
+> On Tue, Feb 28, 2023 at 01:32:53AM +0000, JeeHeng Sia wrote:
+> > > > > > 	load image;
+> > > > > > loop:	Create pbe chain, return error if failed;
+> > > > >
+> > > > > This loop pseudocode is incomplete. It's
+> > > > >
+> > > > > loop:
+> > > > >         if (swsusp_page_is_forbidden(page) && swsusp_page_is_free(page))
+> > > > > 	   return page_address(page);
+> > > > > 	Create pbe chain, return error if failed;
+> > > > > 	...
+> > > > >
+> > > > > which I pointed out explicitly in my last reply. Also, as I asked in my
+> > > > > last reply (and have been asking four times now, albeit less explicitly
+> > > > > the first two times), how do we know at least one PBE will be linked?
+> > > > 1 PBE correspond to 1 page, you shouldn't expect only 1 page is saved.
+> > >
+> > > I know PBEs correspond to pages. *Why* should I not expect only one page
+> > > is saved? Or, more importantly, why should I expect more than zero pages
+> > > are saved?
+> > >
+> > > Convincing answers might be because we *always* put the restore code in
+> > > pages which get added to the PBE list or that the original page tables
+> > > *always* get put in pages which get added to the PBE list. It's not very
+> > > convincing to simply *assume* that at least one random page will always
+> > > meet the PBE list criteria.
+> > >
+> > > > Hibernation core will do the calculation. If the PBEs (restore_pblist) linked successfully, the hibernated image will be restore else
+> > > normal boot will take place.
+> > > > > Or, even more specifically this time, where is the proof that for each
+> > > > > hibernation resume, there exists some page such that
+> > > > > !swsusp_page_is_forbidden(page) or !swsusp_page_is_free(page) is true?
+> > > > forbidden_pages and free_pages are not contributed to the restore_pblist (as you already aware from the code). Infact, the
+> > > forbidden_pages and free_pages are not save into the disk.
+> > >
+> > > Exactly, so those pages are *not* going to contribute to the greater than
+> > > zero pages. What I've been asking for, from the beginning, is to know
+> > > which page(s) are known to *always* contribute to the list. Or, IOW, how
+> > > do you know the PBE list isn't empty, a.k.a restore_pblist isn't NULL?
+> > Well, this is keep going around in a circle, thought the answer is in the hibernation code. restore_pblist get the pointer from the PBE,
+> and the PBE already checked for validity.
 > 
-> On 2/24/2023 1:53 PM, Manivannan Sadhasivam wrote:
-> > On Tue, Feb 14, 2023 at 10:11:29PM +0530, Devi Priya wrote:
-> > > Document the compatible for IPQ9574
-> > > 
-> Hi Mani, Thanks for taking time to review the patch.
-> > 
-> > You didn't mention about the "msi-parent" property that is being added
-> > by this patch
-> Sure, will update the commit message in the next spin
-> > 
-> > > Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> > > ---
-> > >   .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++++++++-
-> > >   1 file changed, 70 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > index 872817d6d2bd..dabdf2684e2d 100644
-> > > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > @@ -26,6 +26,7 @@ properties:
-> > >             - qcom,pcie-ipq8064-v2
-> > >             - qcom,pcie-ipq8074
-> > >             - qcom,pcie-ipq8074-gen3
-> > > +          - qcom,pcie-ipq9574
-> > >             - qcom,pcie-msm8996
-> > >             - qcom,pcie-qcs404
-> > >             - qcom,pcie-sa8540p
-> > > @@ -44,11 +45,11 @@ properties:
-> > >     reg:
-> > >       minItems: 4
-> > > -    maxItems: 5
-> > > +    maxItems: 6
-> > >     reg-names:
-> > >       minItems: 4
-> > > -    maxItems: 5
-> > > +    maxItems: 6
-> > >     interrupts:
-> > >       minItems: 1
-> > > @@ -105,6 +106,8 @@ properties:
-> > >       items:
-> > >         - const: pciephy
-> > > +  msi-parent: true
-> > > +
-> > >     power-domains:
-> > >       maxItems: 1
-> > > @@ -173,6 +176,27 @@ allOf:
-> > >               - const: parf # Qualcomm specific registers
-> > >               - const: config # PCIe configuration space
-> > > +  - if:
-> > > +      properties:
-> > > +        compatible:
-> > > +          contains:
-> > > +            enum:
-> > > +              - qcom,pcie-ipq9574
-> > > +    then:
-> > > +      properties:
-> > > +        reg:
-> > > +          minItems: 5
-> > > +          maxItems: 6
-> > > +        reg-names:
-> > > +          minItems: 5
-> > > +          items:
-> > > +            - const: dbi # DesignWare PCIe registers
-> > > +            - const: elbi # External local bus interface registers
-> > > +            - const: atu # ATU address space
-> > > +            - const: parf # Qualcomm specific registers
-> > > +            - const: config # PCIe configuration space
-> > > +            - const: aggr_noc #PCIe aggr_noc
-> > 
-> > Why do you need this region unlike other SoCs? Is the driver making use of it?
-> We have the aggr_noc region in ipq9574 to achieve higher throughput & to
-> handle multiple PCIe instances. The driver uses it to rate adapt 1-lane PCIe
-> clocks. My bad, missed it. Will add the driver changes in V2.
-
-Hmm, this is something new. How can you achieve higher throughput with this
-region? Can you explain more on how it is used?
-
-Thanks,
-Mani
-
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > +
-> > >     - if:
-> > >         properties:
-> > >           compatible:
-> > > @@ -365,6 +389,39 @@ allOf:
-> > >               - const: ahb # AHB Reset
-> > >               - const: axi_m_sticky # AXI Master Sticky reset
-> > > +  - if:
-> > > +      properties:
-> > > +        compatible:
-> > > +          contains:
-> > > +            enum:
-> > > +              - qcom,pcie-ipq9574
-> > > +    then:
-> > > +      properties:
-> > > +        clocks:
-> > > +          minItems: 6
-> > > +          maxItems: 6
-> > > +        clock-names:
-> > > +          items:
-> > > +            - const: ahb  # AHB clock
-> > > +            - const: aux  # Auxiliary clock
-> > > +            - const: axi_m # AXI Master clock
-> > > +            - const: axi_s # AXI Slave clock
-> > > +            - const: axi_bridge # AXI bridge clock
-> > > +            - const: rchng
-> > > +        resets:
-> > > +          minItems: 8
-> > > +          maxItems: 8
-> > > +        reset-names:
-> > > +          items:
-> > > +            - const: pipe # PIPE reset
-> > > +            - const: sticky # Core Sticky reset
-> > > +            - const: axi_s_sticky # AXI Slave Sticky reset
-> > > +            - const: axi_s # AXI Slave reset
-> > > +            - const: axi_m_sticky # AXI Master Sticky reset
-> > > +            - const: axi_m # AXI Master reset
-> > > +            - const: aux # AUX Reset
-> > > +            - const: ahb # AHB Reset
-> > > +
-> > >     - if:
-> > >         properties:
-> > >           compatible:
-> > > @@ -681,6 +738,16 @@ allOf:
-> > >           - interconnects
-> > >           - interconnect-names
-> > > +  - if:
-> > > +      properties:
-> > > +        compatible:
-> > > +          contains:
-> > > +            enum:
-> > > +              - qcom,pcie-ipq9574
-> > > +    then:
-> > > +      required:
-> > > +        - msi-parent
-> > > +
-> > >     - if:
-> > >         not:
-> > >           properties:
-> > > @@ -693,6 +760,7 @@ allOf:
-> > >                   - qcom,pcie-ipq8064v2
-> > >                   - qcom,pcie-ipq8074
-> > >                   - qcom,pcie-ipq8074-gen3
-> > > +                - qcom,pcie-ipq9574
-> > >                   - qcom,pcie-qcs404
-> > >       then:
-> > >         required:
-> > > -- 
-> > > 2.17.1
-> > > 
-> > 
+> It keeps going around in circles because you keep avoiding my question by
+> pointing out trivial linked list code. I'm not worried about the linked
+> list code being correct. My concern is that you're using a linked list
+> with an assumption that it is not empty. My question has been all along,
+> how do you know it's not empty?
+> 
+> I'll change the way I ask this time. Please take a look at your PBE list
+> and let me know if there are PBEs on it that must be there on each
+> hibernation resume, e.g. the resume code page is there or whatever.
+Just to add on, it is not "my" PBE list but the list is from the hibernation core. As already draw out the scenarios for you, checking should be done at the initialization phase. 
+> 
+> > Can I suggest you to submit a patch to the hibernation core?
+> 
+> Why? What's wrong with it?
+> 
 > Thanks,
-> Devi Priya
-
--- 
-மணிவண்ணன் சதாசிவம்
+> drew
