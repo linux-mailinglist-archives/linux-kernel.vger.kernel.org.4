@@ -2,238 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6766A5350
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3046A535E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjB1G7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 01:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
+        id S230262AbjB1HBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 02:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjB1G7U (ORCPT
+        with ESMTP id S229670AbjB1HBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 01:59:20 -0500
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F521A64C;
-        Mon, 27 Feb 2023 22:58:51 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id r18so8616548wrx.1;
-        Mon, 27 Feb 2023 22:58:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ayvPpqIegArr0R2l9x+qh7I7UJDUnZK9Guk3caLM4Dk=;
-        b=4ic3CmoSyVN9ZRPJrHtR9fzLVvM840/xDR5udbGfM2MwC3LG/bt8GVkHv2mjRf5qEt
-         it/aikIHUQ11Crwzc/gZyVn+ppSiTXxQ3Z56zNUuKAUGEUNUntxVrn07Hb3+phha8HcB
-         9bVWERHw6HaJ5mpJjirHJujMfgt31rLnLVQjhnHWMmSp7q/kX3jyQ7oc3TvFOWqI8JUn
-         DJXWXbuOOoU3klMRpWqr7s//Cc2zHzJt8S4JidixAQhwZ6T+BlgiaNdJgdOrYixrl8u8
-         Kcooew3cuIjBKoJGbFUn1Xq4N7ZlPGc3goFpW3y6T+4dVtowZwuU5gr7xfEuBYVvEKed
-         P3sA==
-X-Gm-Message-State: AO0yUKV8f9lT1dYXVCUkv1jcq3H4rUKzb9EvXkNosCjqoIV6axXTxHl/
-        OTyOgVruL42RWnoIL6YX6QUopXKYuS0=
-X-Google-Smtp-Source: AK7set/pkhWYzfYDqv+j9RR/uQGrxiBA3vL4Qx23vTgcgpWrAStnV/VuGmWDhj+EUtcQ7d5rWkMDkw==
-X-Received: by 2002:adf:e642:0:b0:2c5:5870:b589 with SMTP id b2-20020adfe642000000b002c55870b589mr1487555wrn.14.1677567529887;
-        Mon, 27 Feb 2023 22:58:49 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id n3-20020a5d4203000000b002c57384dfe0sm8749348wrq.113.2023.02.27.22.58.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 22:58:49 -0800 (PST)
-Message-ID: <7ad445d4-34b5-0973-1f4e-7413feabb206@kernel.org>
-Date:   Tue, 28 Feb 2023 07:58:48 +0100
+        Tue, 28 Feb 2023 02:01:03 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44047C646;
+        Mon, 27 Feb 2023 23:01:01 -0800 (PST)
+Received: from loongson.cn (unknown [10.2.5.185])
+        by gateway (Coremail) with SMTP id _____8Bx782rpv1jR2AGAA--.6484S3;
+        Tue, 28 Feb 2023 15:00:59 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxc+Wppv1jPG9AAA--.15462S2;
+        Tue, 28 Feb 2023 15:00:57 +0800 (CST)
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>
+Subject: [PATCH v3 00/29] Add KVM LoongArch support
+Date:   Tue, 28 Feb 2023 15:00:27 +0800
+Message-Id: <20230228070057.3687180-1-zhaotianrui@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     "D. Starke" <daniel.starke@siemens.com>,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        ilpo.jarvinen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20230228062957.3150-1-daniel.starke@siemens.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 1/3] tty: n_gsm: add ioctl for DLC specific parameter
- configuration
-In-Reply-To: <20230228062957.3150-1-daniel.starke@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxc+Wppv1jPG9AAA--.15462S2
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKFWkZFWrGr4kGry7Jr1DKFg_yoW3XF4kpF
+        W7urn8Gr4DGrWSq39Yq3s8Z3s8XF18Gryaq3Wa9Fy8CrW2qry8Z3yvgr9FvF9xAa95Jr10
+        qr1rKw1ag3WUJaDanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bcAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6x
+        kF7I0E14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaV
+        Av8VWrMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWU
+        AVWUtwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj4RKpBTUUUUU
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28. 02. 23, 7:29, D. Starke wrote:
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> Parameter negotiation has been introduced with
-> commit 92f1f0c3290d ("tty: n_gsm: add parameter negotiation support")
-> 
-> However, means to set individual parameters per DLCI are not yet
-> implemented. Furthermore, it is currently not possible to keep a DLCI half
-> open until the user application sets the right parameters for it. This is
-> required to allow a user application to set its specific parameters before
-> the underlying link is established. Otherwise, the link is opened and
-> re-established right afterwards if the user application sets incompatible
-> parameters. This may be an unexpected behavior for the peer.
-> 
-> Add parameter 'wait_config' to 'gsm_config' to support setups where the
-> DLCI specific user application sets its specific parameters after open()
-> and before the link gets fully established. Setting this to zero disables
-> the user application specific DLCI configuration option.
-> 
-> Add the ioctls 'GSMIOC_GETCONF_DLCI' and 'GSMIOC_SETCONF_DLCI' for the
-> ldisc and virtual ttys. This gets/sets the DLCI specific parameters and may
-> trigger a reconnect of the DLCI if incompatible values have been set. Only
-> the parameters for the DLCI associated with the virtual tty can be set or
-> retrieved if called on these.
-> 
-> Add remark within the documentation to introduce the new ioctls.
-> 
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-...
-> @@ -2453,6 +2476,128 @@ static void gsm_kick_timer(struct timer_list *t)
->   		pr_info("%s TX queue stalled\n", __func__);
->   }
->   
-> +/**
-> + * gsm_dlci_copy_config_values	-	copy DLCI configuration
-> + * @dlci: source DLCI
-> + * @dc: configuration structure to fill
-> + */
-> +static void gsm_dlci_copy_config_values(struct gsm_dlci *dlci, struct gsm_dlci_config *dc)
-> +{
-> +	memset(dc, 0, sizeof(*dc));
-> +	dc->channel = (u32)dlci->addr;
-> +	dc->adaption = (u32)dlci->adaption;
-> +	dc->mtu = (u32)dlci->mtu;
-> +	dc->priority = (u32)dlci->prio;
-> +	if (dlci->ftype == UIH)
-> +		dc->i = 1;
-> +	else
-> +		dc->i = 2;
-> +	dc->k = (u32)dlci->k;
+This series adds KVM LoongArch support. Loongson 3A5000 supports hardware
+assisted virtualization. With cpu virtualization, there are separate
+hw-supported user mode and kernel mode in guest mode. With memory
+virtualization, there are two-level hw mmu table for guest mode and host
+mode. Also there is separate hw cpu timer with consant frequency in
+guest mode, so that vm can migrate between hosts with different freq.
+Currently, we are able to boot LoongArch Linux Guests.
 
-Why all those casts?
+Few key aspects of KVM LoongArch added by this series are:
+1. Enable kvm hardware function when kvm module is loaded.
+2. Implement VM and vcpu related ioctl interface such as vcpu create,
+   vcpu run etc. GET_ONE_REG/SET_ONE_REG ioctl commands are use to
+   get general registers one by one.
+3. Hardware access about MMU, timer and csr are emulated in kernel.
+4. Hardwares such as mmio and iocsr device are emulated in user space
+   such as APIC, IPI, pci devices etc.
 
-> +}
-> +
-> +/**
-> + * gsm_dlci_config	-	configure DLCI from configuration
-> + * @dlci: DLCI to configure
-> + * @dc: DLCI configuration
-> + * @open: open DLCI after configuration?
-> + */
-> +static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, int open)
-> +{
-> +	struct gsm_mux *gsm;
-> +	bool need_restart = false;
-> +	bool need_open = false;
-> +	unsigned int i;
-> +
-> +	/*
-> +	 * Check that userspace doesn't put stuff in here to prevent breakages
-> +	 * in the future.
-> +	 */
-> +	for (i = 0; i < ARRAY_SIZE(dc->reserved); i++)
-> +		if (dc->reserved[i])
-> +			return -EINVAL;
-> +
-> +	if (!dlci)
-> +		return -EINVAL;
-> +	gsm = dlci->gsm;
-> +
-> +	/* Stuff we don't support yet - I frame transport */
-> +	if (dc->adaption != 1 && dc->adaption != 2)
-> +		return -EOPNOTSUPP;
-> +	if (dc->mtu > MAX_MTU || dc->mtu < MIN_MTU || (unsigned int)dc->mtu > gsm->mru)
-> +		return -EINVAL;
-> +	if (dc->priority >= 64)
-> +		return -EINVAL;
-> +	if (dc->i == 0 || dc->i > 2)  /* UIH and UI only */
-> +		return -EINVAL;
-> +	if (dc->k > 7)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * See what is needed for reconfiguration
-> +	 */
-> +	/* Framing fields */
-> +	if ((int)dc->adaption != dlci->adaption)
-> +		need_restart = true;
-> +	if ((unsigned int)dc->mtu != dlci->mtu)
-> +		need_restart = true;
-> +	if ((u8)dc->i != dlci->ftype)
-> +		need_restart = true;
-> +	/* Requires care */
-> +	if ((u8)dc->priority != (u32)dlci->prio)
-> +		need_restart = true;
+The running environment of LoongArch virt machine:
+1. Cross tools to build kernel and uefi:
+   $ wget https://github.com/loongson/build-tools/releases/download/2022.09.06/loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz
+   tar -vxf loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz  -C /opt
+   export PATH=/opt/cross-tools/bin:$PATH
+   export LD_LIBRARY_PATH=/opt/cross-tools/lib:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=/opt/cross-tools/loongarch64-unknown-linux-gnu/lib/:$LD_LIBRARY_PATH
+2. This series is based on the linux source code:
+   https://github.com/loongson/linux-loongarch-kvm
+   Build command:
+   git checkout kvm-loongarch
+   make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu- loongson3_defconfig
+   make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu-
+3. QEMU hypervisor with LoongArch supported:
+   https://github.com/loongson/qemu
+   Build command:
+   git checkout kvm-loongarch
+   ./configure --target-list="loongarch64-softmmu"  --enable-kvm
+   make
+4. Uefi bios of LoongArch virt machine:
+   Link: https://github.com/tianocore/edk2-platforms/tree/master/Platform/Loongson/LoongArchQemuPkg#readme
+5. you can also access the binary files we have already build:
+   https://github.com/yangxiaojuan-loongson/qemu-binary
 
-And here.
+The command to boot loongarch virt machine:
+   $ qemu-system-loongarch64 -machine virt -m 4G -cpu la464 \
+   -smp 1 -bios QEMU_EFI.fd -kernel vmlinuz.efi -initrd ramdisk \
+   -serial stdio   -monitor telnet:localhost:4495,server,nowait \
+   -append "root=/dev/ram rdinit=/sbin/init console=ttyS0,115200" \
+   --nographic
 
-> +
-> +	if ((open && gsm->wait_config) || need_restart)
-> +		need_open = true;
-> +	if (dlci->state == DLCI_WAITING_CONFIG) {
-> +		need_restart = false;
-> +		need_open = true;
-> +	}
-> +
-> +	/*
-> +	 * Close down what is needed, restart and initiate the new
-> +	 * configuration.
-> +	 */
-> +	if (need_restart) {
-> +		gsm_dlci_begin_close(dlci);
-> +		wait_event_interruptible(gsm->event, dlci->state == DLCI_CLOSED);
-> +		if (signal_pending(current))
-> +			return -EINTR;
-> +	}
-> +	/*
-> +	 * Setup the new configuration values
-> +	 */
-> +	dlci->adaption = (int)dc->adaption;
-> +
-> +	if (dlci->mtu)
+Changes for v3:
+1. Remove the vpid array list in kvm_vcpu_arch and use a vpid variable here,
+because a vpid will never be recycled if a vCPU migrates from physical CPU A
+to B and back to A.
+2. Make some constant variables in kvm_context to global such as vpid_mask,
+guest_eentry, enter_guest, etc.
+3. Add some new tracepoints, such as kvm_trace_idle, kvm_trace_cache,
+kvm_trace_gspr, etc.
+4. There are some duplicate codes in kvm_handle_exit and kvm_vcpu_run,
+so we move it to a new function kvm_pre_enter_guest.
+5. Change the RESUME_HOST, RESUME_GUEST value, return 1 for resume guest
+and "<= 0" for resume host.
+6. Fcsr and fpu registers are saved/restored together.
 
-dc->mtu?
+Changes for v2:
+1. Seprate the original patch-01 and patch-03 into small patches, and the
+patches mainly contain kvm module init, module exit, vcpu create, vcpu run,
+etc.
+2. Remove the original KVM_{GET,SET}_CSRS ioctl in the kvm uapi header,
+and we use the common KVM_{GET,SET}_ONE_REG to access register.
+3. Use BIT(x) to replace the "1 << n_bits" statement.
 
-> +		dlci->mtu = (unsigned int)dc->mtu;
-> +	else
-> +		dlci->mtu = gsm->mtu;
-> +
-> +	if (dc->priority)
-> +		dlci->prio = (u8)dc->priority;
-> +	else
-> +		dlci->prio = roundup(dlci->addr + 1, 8) - 1;
-> +
-> +	if (dc->i == 1)
-> +		dlci->ftype = UIH;
-> +	else if (dc->i == 2)
-> +		dlci->ftype = UI;
-> +
-> +	if (dc->k)
-> +		dlci->k = (u8)dc->k;
-> +	else
-> +		dlci->k = gsm->k;
-> +
-> +	if (need_open) {
-> +		if (gsm->initiator)
-> +			gsm_dlci_begin_open(dlci);
-> +		else
-> +			gsm_dlci_set_opening(dlci);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   /*
->    *	Allocate/Free DLCI channels
->    */
+Tianrui Zhao (29):
+  LoongArch: KVM: Add kvm related header files
+  LoongArch: KVM: Implement kvm module related interface
+  LoongArch: KVM: Implement kvm hardware enable, disable interface
+  LoongArch: KVM: Implement VM related functions
+  LoongArch: KVM: Add vcpu related header files
+  LoongArch: KVM: Implement vcpu create and destroy interface
+  LoongArch: KVM: Implement vcpu run interface
+  LoongArch: KVM: Implement vcpu handle exit interface
+  LoongArch: KVM: Implement vcpu get, vcpu set registers
+  LoongArch: KVM: Implement vcpu ENABLE_CAP ioctl interface
+  LoongArch: KVM: Implement fpu related operations for vcpu
+  LoongArch: KVM: Implement vcpu interrupt operations
+  LoongArch: KVM: Implement misc vcpu related interfaces
+  LoongArch: KVM: Implement vcpu load and vcpu put operations
+  LoongArch: KVM: Implement vcpu status description
+  LoongArch: KVM: Implement update VM id function
+  LoongArch: KVM: Implement virtual machine tlb operations
+  LoongArch: KVM: Implement vcpu timer operations
+  LoongArch: KVM: Implement kvm mmu operations
+  LoongArch: KVM: Implement handle csr excption
+  LoongArch: KVM: Implement handle iocsr exception
+  LoongArch: KVM: Implement handle idle exception
+  LoongArch: KVM: Implement handle gspr exception
+  LoongArch: KVM: Implement handle mmio exception
+  LoongArch: KVM: Implement handle fpu exception
+  LoongArch: KVM: Implement kvm exception vector
+  LoongArch: KVM: Implement vcpu world switch
+  LoongArch: KVM: Implement probe virtualization when loongarch cpu init
+  LoongArch: KVM: Enable kvm config and add the makefile
+
+ arch/loongarch/Kbuild                      |    1 +
+ arch/loongarch/Kconfig                     |    2 +
+ arch/loongarch/configs/loongson3_defconfig |    2 +
+ arch/loongarch/include/asm/cpu-features.h  |   22 +
+ arch/loongarch/include/asm/cpu-info.h      |   13 +
+ arch/loongarch/include/asm/inst.h          |   16 +
+ arch/loongarch/include/asm/kvm_csr.h       |   89 ++
+ arch/loongarch/include/asm/kvm_host.h      |  259 +++++
+ arch/loongarch/include/asm/kvm_types.h     |   11 +
+ arch/loongarch/include/asm/kvm_vcpu.h      |  114 +++
+ arch/loongarch/include/asm/loongarch.h     |  209 +++-
+ arch/loongarch/include/uapi/asm/kvm.h      |  107 ++
+ arch/loongarch/kernel/asm-offsets.c        |   32 +
+ arch/loongarch/kernel/cpu-probe.c          |   53 +
+ arch/loongarch/kvm/Kconfig                 |   38 +
+ arch/loongarch/kvm/Makefile                |   21 +
+ arch/loongarch/kvm/exit.c                  |  702 +++++++++++++
+ arch/loongarch/kvm/interrupt.c             |  126 +++
+ arch/loongarch/kvm/main.c                  |  163 ++++
+ arch/loongarch/kvm/mmu.c                   |  821 ++++++++++++++++
+ arch/loongarch/kvm/switch.S                |  303 ++++++
+ arch/loongarch/kvm/timer.c                 |  266 +++++
+ arch/loongarch/kvm/tlb.c                   |   31 +
+ arch/loongarch/kvm/trace.h                 |  169 ++++
+ arch/loongarch/kvm/vcpu.c                  | 1029 ++++++++++++++++++++
+ arch/loongarch/kvm/vm.c                    |   77 ++
+ arch/loongarch/kvm/vmid.c                  |   65 ++
+ include/uapi/linux/kvm.h                   |    9 +
+ 28 files changed, 4744 insertions(+), 6 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/kvm_csr.h
+ create mode 100644 arch/loongarch/include/asm/kvm_host.h
+ create mode 100644 arch/loongarch/include/asm/kvm_types.h
+ create mode 100644 arch/loongarch/include/asm/kvm_vcpu.h
+ create mode 100644 arch/loongarch/include/uapi/asm/kvm.h
+ create mode 100644 arch/loongarch/kvm/Kconfig
+ create mode 100644 arch/loongarch/kvm/Makefile
+ create mode 100644 arch/loongarch/kvm/exit.c
+ create mode 100644 arch/loongarch/kvm/interrupt.c
+ create mode 100644 arch/loongarch/kvm/main.c
+ create mode 100644 arch/loongarch/kvm/mmu.c
+ create mode 100644 arch/loongarch/kvm/switch.S
+ create mode 100644 arch/loongarch/kvm/timer.c
+ create mode 100644 arch/loongarch/kvm/tlb.c
+ create mode 100644 arch/loongarch/kvm/trace.h
+ create mode 100644 arch/loongarch/kvm/vcpu.c
+ create mode 100644 arch/loongarch/kvm/vm.c
+ create mode 100644 arch/loongarch/kvm/vmid.c
 
 -- 
-js
-suse labs
+2.31.1
 
