@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E806A632A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 977596A632C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjB1W7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:59:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S229928AbjB1W7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjB1W72 (ORCPT
+        with ESMTP id S230004AbjB1W73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:59:28 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA90937B78
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:59:00 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so10784696pjg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:59:00 -0800 (PST)
+        Tue, 28 Feb 2023 17:59:29 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAA937B61
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:59:01 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id h31so6650739pgl.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:59:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677625139;
+        d=gmail.com; s=20210112; t=1677625141;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cu6g0TfYrSTdJ3EF+CxBkdeZg6jPtGlNDSXHqXU9Yls=;
-        b=cvS8LqOx0cYrO7pK0Eqk2tx6R103XCF3hWtYE+HrcF4wM/7d7BtOkquTUva4/zt8qF
-         0QG+xcPnpGj2tDwRntlaGyzTZAIcdSnJXk1ChgqBDmX11aUQAqUZyskYKptJ5A+J2wmW
-         zU3bElL/TdXnXfRpgtAgg42RNyFDzEfUXGz3fbdAqhDa9z4m1ZrEOngvtOkAOEFbt9XA
-         fHHuLmzYIbqmM3Hu1PNUI9Nsqb642w7eXL3B/kJd/yYRHZMWocgbElB1kzrHkqA+2omJ
-         RT7mBrLw3nZFQdezht0vX3ts8LER6Nz4C5c213nBf6k0g37cZ1kFHO0wVRBg2JtSsgRE
-         57uw==
+        bh=Ip3Zm9fB4YGz5nKO4uRGWvdUBo1kk9r+HbO76l3v604=;
+        b=ewXwRGRs5XxNw0yYLS0Z+CG1BYHRMKm6jsIadXOv5Er2ClsBziH9bNYcLH2DQTa4yH
+         s4fG313nP1xNrZzWuYspxagsQ3g+6VPL1p3OPDJAVGEuyUOxRb1P5ULKwj+ct0HX71mb
+         jeZwrii+21/t1KxexnCl0cEKVoxFI6D0be++7uxsED1heLrIBhekkpAjbmKrqboEWwzv
+         NbLkUJ1rir9t5K3XeJBjD+Hs33bDeYJcPQxW7vQG5mxdtq2FgvicBd+IxRbZRbTCgdvL
+         XR6eDGcRVw9WW2WgAmnnLeNCf79OYdP1XmNQ0kXn0C4Bor7ZZZ9w8BIxZnxOgEuQEx/0
+         a43A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677625139;
+        d=1e100.net; s=20210112; t=1677625141;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cu6g0TfYrSTdJ3EF+CxBkdeZg6jPtGlNDSXHqXU9Yls=;
-        b=7bVcprSSsE5+p8u4ubAjYLYAT0xd4GB/qhYC4SZVCTsJvTGRleaB/mWkBgvdEBbigG
-         aaExCAk+gNEeddXesWpKQXVWH1tXYNaSslg4ftkmnZv5cSiDOlOOQZsacoReuks0RrKv
-         RX4Xbs52XndW/9h/Qw5QyDg8B9cQSi2nj1A49DOV2XrO4W4o7ug1MB9qR16RXLJTTZSF
-         VNlWAm8tFE6Q6FRgRZbhKjeGE0KUISwx9nQLl5io8wDYD9OfhO+PZKwcoq/MumrwMoto
-         tFkP87bTvyAqsonQCK7/VN/TTIRSiMr0QfFUOc+novYOy0n8ROUxvSOtPjPANKUJnZMh
-         dUrQ==
-X-Gm-Message-State: AO0yUKWPh4epOJ2YwRUWMUgNH52TGLhFlPsT/uaWc9f+bz/NFaBp8hQK
-        KL6D9HSKcoES4rKFMG4DuY8=
-X-Google-Smtp-Source: AK7set98sVLWuF1kUN5RnvyhJXNEQlgVHn2W5JgP/yuADLXVRLw9uAdc5AqJtCZOK9FrNJHngZQ8Rw==
-X-Received: by 2002:a05:6a20:4991:b0:bf:e6c:758b with SMTP id fs17-20020a056a20499100b000bf0e6c758bmr3813906pzb.4.1677625139046;
-        Tue, 28 Feb 2023 14:58:59 -0800 (PST)
+        bh=Ip3Zm9fB4YGz5nKO4uRGWvdUBo1kk9r+HbO76l3v604=;
+        b=4BTP9EXgoU6HAQMLlCNXNJ653CS6Ed5rZm7+hz1RzfFbiHhkITItqRs/U8W4xArrZi
+         RMO0J4ra4vJq3KNP7cNlTdsDhVeD95db3biiW5XH7E0XhJ3X0KHgKEBp/gi2CG4/UKkI
+         RRiQxeaIWOQOpM729n9y50lAgldXL3qjzdRgpBd58vgEGMK4ZFJzRcitr+75CReI+QSQ
+         uaZwAcJ7tAVRegovB1T7yXQv8u4B/rlu8azQdaLYPNCPj3Q+unmaBpXJ43KIMI9F+21/
+         70EdiyjtUpaN1graQHMhiKEcoL57tEryP8/7RJszE+/dHVh4+PKFqBy91ciIKpZGTlH/
+         BiIQ==
+X-Gm-Message-State: AO0yUKV4wXW/O9PSJ+2eUT0zoGdxuEM66cXxYejQKYp7a/kdGotxQwdb
+        9kIytfBDgX6pYOxFpVgzGOE=
+X-Google-Smtp-Source: AK7set+SbBTjgDlFjBXcVCopRQh3qnOHrIDh+FzMkvslK4T3hVajAd9HGTUNjcaxspSjq6/TyKqpRQ==
+X-Received: by 2002:a62:1c16:0:b0:5e3:16fc:b58e with SMTP id c22-20020a621c16000000b005e316fcb58emr3274500pfc.21.1677625141204;
+        Tue, 28 Feb 2023 14:59:01 -0800 (PST)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id c2-20020a6566c2000000b00503000f0492sm6132596pgw.14.2023.02.28.14.58.58
+        by smtp.gmail.com with ESMTPSA id k4-20020aa790c4000000b005cdf83e4513sm6743445pfk.145.2023.02.28.14.59.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 14:58:58 -0800 (PST)
+        Tue, 28 Feb 2023 14:59:00 -0800 (PST)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -63,14 +63,15 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Simon Ser <contact@emersion.fr>,
         Luben Tuikov <luben.tuikov@amd.com>,
         Rob Clark <robdclark@chromium.org>,
+        Mario Kleiner <mario.kleiner.de@gmail.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@gmail.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v8 10/16] drm/syncobj: Add deadline support for syncobj waits
-Date:   Tue, 28 Feb 2023 14:58:14 -0800
-Message-Id: <20230228225833.2920879-11-robdclark@gmail.com>
+Subject: [PATCH v8 11/16] drm/vblank: Add helper to get next vblank time
+Date:   Tue, 28 Feb 2023 14:58:15 -0800
+Message-Id: <20230228225833.2920879-12-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230228225833.2920879-1-robdclark@gmail.com>
 References: <20230228225833.2920879-1-robdclark@gmail.com>
@@ -88,221 +89,124 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Add a new flag to let userspace provide a deadline as a hint for syncobj
-and timeline waits.  This gives a hint to the driver signaling the
-backing fences about how soon userspace needs it to compete work, so it
-can addjust GPU frequency accordingly.  An immediate deadline can be
-given to provide something equivalent to i915 "wait boost".
+Will be used in the next commit to set a deadline on fences that an
+atomic update is waiting on.
 
-v2: Use absolute u64 ns value for deadline hint, drop cap and driver
-    feature flag in favor of allowing count_handles==0 as a way for
-    userspace to probe kernel for support of new flag
-v3: More verbose comments about UAPI
+v2: Calculate time at *start* of vblank period, not end
+v3: Fix kbuild complaints
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Mario Kleiner <mario.kleiner.de@gmail.com>
 ---
- drivers/gpu/drm/drm_syncobj.c | 64 ++++++++++++++++++++++++++++-------
- include/uapi/drm/drm.h        | 17 ++++++++++
- 2 files changed, 68 insertions(+), 13 deletions(-)
+ drivers/gpu/drm/drm_vblank.c | 53 ++++++++++++++++++++++++++++++------
+ include/drm/drm_vblank.h     |  1 +
+ 2 files changed, 45 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-index 0c2be8360525..a85e9464f07b 100644
---- a/drivers/gpu/drm/drm_syncobj.c
-+++ b/drivers/gpu/drm/drm_syncobj.c
-@@ -126,6 +126,11 @@
-  * synchronize between the two.
-  * This requirement is inherited from the Vulkan fence API.
-  *
-+ * If &DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE is set, the ioctl will also set
-+ * a fence deadline hint on the backing fences before waiting, to provide the
-+ * fence signaler with an appropriate sense of urgency.  The deadline is
-+ * specified as an absolute &CLOCK_MONOTONIC value in units of ns.
-+ *
-  * Similarly, &DRM_IOCTL_SYNCOBJ_TIMELINE_WAIT takes an array of syncobj
-  * handles as well as an array of u64 points and does a host-side wait on all
-  * of syncobj fences at the given points simultaneously.
-@@ -973,7 +978,8 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
- 						  uint32_t count,
- 						  uint32_t flags,
- 						  signed long timeout,
--						  uint32_t *idx)
-+						  uint32_t *idx,
-+						  ktime_t *deadline)
+diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+index 2ff31717a3de..299fa2a19a90 100644
+--- a/drivers/gpu/drm/drm_vblank.c
++++ b/drivers/gpu/drm/drm_vblank.c
+@@ -844,10 +844,9 @@ bool drm_crtc_vblank_helper_get_vblank_timestamp(struct drm_crtc *crtc,
+ EXPORT_SYMBOL(drm_crtc_vblank_helper_get_vblank_timestamp);
+ 
+ /**
+- * drm_get_last_vbltimestamp - retrieve raw timestamp for the most recent
+- *                             vblank interval
+- * @dev: DRM device
+- * @pipe: index of CRTC whose vblank timestamp to retrieve
++ * drm_crtc_get_last_vbltimestamp - retrieve raw timestamp for the most
++ *                                  recent vblank interval
++ * @crtc: CRTC whose vblank timestamp to retrieve
+  * @tvblank: Pointer to target time which should receive the timestamp
+  * @in_vblank_irq:
+  *     True when called from drm_crtc_handle_vblank().  Some drivers
+@@ -865,10 +864,9 @@ EXPORT_SYMBOL(drm_crtc_vblank_helper_get_vblank_timestamp);
+  * True if timestamp is considered to be very precise, false otherwise.
+  */
+ static bool
+-drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
+-			  ktime_t *tvblank, bool in_vblank_irq)
++drm_crtc_get_last_vbltimestamp(struct drm_crtc *crtc, ktime_t *tvblank,
++			       bool in_vblank_irq)
  {
- 	struct syncobj_wait_entry *entries;
- 	struct dma_fence *fence;
-@@ -1053,6 +1059,15 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
- 			drm_syncobj_fence_add_wait(syncobjs[i], &entries[i]);
+-	struct drm_crtc *crtc = drm_crtc_from_index(dev, pipe);
+ 	bool ret = false;
+ 
+ 	/* Define requested maximum error on timestamps (nanoseconds). */
+@@ -876,8 +874,6 @@ drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
+ 
+ 	/* Query driver if possible and precision timestamping enabled. */
+ 	if (crtc && crtc->funcs->get_vblank_timestamp && max_error > 0) {
+-		struct drm_crtc *crtc = drm_crtc_from_index(dev, pipe);
+-
+ 		ret = crtc->funcs->get_vblank_timestamp(crtc, &max_error,
+ 							tvblank, in_vblank_irq);
  	}
+@@ -891,6 +887,15 @@ drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
+ 	return ret;
+ }
  
-+	if (deadline) {
-+		for (i = 0; i < count; ++i) {
-+			fence = entries[i].fence;
-+			if (!fence)
-+				continue;
-+			dma_fence_set_deadline(fence, *deadline);
-+		}
-+	}
++static bool
++drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
++			  ktime_t *tvblank, bool in_vblank_irq)
++{
++	struct drm_crtc *crtc = drm_crtc_from_index(dev, pipe);
 +
- 	do {
- 		set_current_state(TASK_INTERRUPTIBLE);
- 
-@@ -1151,7 +1166,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
- 				  struct drm_file *file_private,
- 				  struct drm_syncobj_wait *wait,
- 				  struct drm_syncobj_timeline_wait *timeline_wait,
--				  struct drm_syncobj **syncobjs, bool timeline)
-+				  struct drm_syncobj **syncobjs, bool timeline,
-+				  ktime_t *deadline)
- {
- 	signed long timeout = 0;
- 	uint32_t first = ~0;
-@@ -1162,7 +1178,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
- 							 NULL,
- 							 wait->count_handles,
- 							 wait->flags,
--							 timeout, &first);
-+							 timeout, &first,
-+							 deadline);
- 		if (timeout < 0)
- 			return timeout;
- 		wait->first_signaled = first;
-@@ -1172,7 +1189,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
- 							 u64_to_user_ptr(timeline_wait->points),
- 							 timeline_wait->count_handles,
- 							 timeline_wait->flags,
--							 timeout, &first);
-+							 timeout, &first,
-+							 deadline);
- 		if (timeout < 0)
- 			return timeout;
- 		timeline_wait->first_signaled = first;
-@@ -1243,17 +1261,22 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
- {
- 	struct drm_syncobj_wait *args = data;
- 	struct drm_syncobj **syncobjs;
-+	unsigned possible_flags;
-+	ktime_t t, *tp = NULL;
- 	int ret = 0;
- 
- 	if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ))
- 		return -EOPNOTSUPP;
- 
--	if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
--			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT))
-+	possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-+			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-+			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
++	return drm_crtc_get_last_vbltimestamp(crtc, tvblank, in_vblank_irq);
++}
 +
-+	if (args->flags & ~possible_flags)
- 		return -EINVAL;
+ /**
+  * drm_crtc_vblank_count - retrieve "cooked" vblank counter value
+  * @crtc: which counter to retrieve
+@@ -980,6 +985,36 @@ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
+ }
+ EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
  
- 	if (args->count_handles == 0)
--		return -EINVAL;
-+		return 0;
- 
- 	ret = drm_syncobj_array_find(file_private,
- 				     u64_to_user_ptr(args->handles),
-@@ -1262,8 +1285,13 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
- 	if (ret < 0)
- 		return ret;
- 
-+	if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
-+		t = ns_to_ktime(args->deadline_ns);
-+		tp = &t;
-+	}
++/**
++ * drm_crtc_next_vblank_start - calculate the time of the next vblank
++ * @crtc: the crtc for which to calculate next vblank time
++ * @vblanktime: pointer to time to receive the next vblank timestamp.
++ *
++ * Calculate the expected time of the start of the next vblank period,
++ * based on time of previous vblank and frame duration
++ */
++int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblanktime)
++{
++	unsigned int pipe = drm_crtc_index(crtc);
++	struct drm_vblank_crtc *vblank = &crtc->dev->vblank[pipe];
++	struct drm_display_mode *mode = &vblank->hwmode;
++	u64 vblank_start;
 +
- 	ret = drm_syncobj_array_wait(dev, file_private,
--				     args, NULL, syncobjs, false);
-+				     args, NULL, syncobjs, false, tp);
- 
- 	drm_syncobj_array_free(syncobjs, args->count_handles);
- 
-@@ -1276,18 +1304,23 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
- {
- 	struct drm_syncobj_timeline_wait *args = data;
- 	struct drm_syncobj **syncobjs;
-+	unsigned possible_flags;
-+	ktime_t t, *tp = NULL;
- 	int ret = 0;
- 
- 	if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE))
- 		return -EOPNOTSUPP;
- 
--	if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
--			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
--			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE))
-+	possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-+			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-+			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE |
-+			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
++	if (!vblank->framedur_ns || !vblank->linedur_ns)
++		return -EINVAL;
 +
-+	if (args->flags & ~possible_flags)
- 		return -EINVAL;
- 
- 	if (args->count_handles == 0)
--		return -EINVAL;
-+		return -0;
- 
- 	ret = drm_syncobj_array_find(file_private,
- 				     u64_to_user_ptr(args->handles),
-@@ -1296,8 +1329,13 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
- 	if (ret < 0)
- 		return ret;
- 
-+	if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
-+		t = ns_to_ktime(args->deadline_ns);
-+		tp = &t;
-+	}
++	if (!drm_crtc_get_last_vbltimestamp(crtc, vblanktime, false))
++		return -EINVAL;
 +
- 	ret = drm_syncobj_array_wait(dev, file_private,
--				     NULL, args, syncobjs, true);
-+				     NULL, args, syncobjs, true, tp);
- 
- 	drm_syncobj_array_free(syncobjs, args->count_handles);
- 
-diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
-index 642808520d92..bff0509ac8b6 100644
---- a/include/uapi/drm/drm.h
-+++ b/include/uapi/drm/drm.h
-@@ -887,6 +887,7 @@ struct drm_syncobj_transfer {
- #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
- #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
- #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
-+#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadline based to deadline_ns */
- struct drm_syncobj_wait {
- 	__u64 handles;
- 	/* absolute timeout */
-@@ -895,6 +896,14 @@ struct drm_syncobj_wait {
- 	__u32 flags;
- 	__u32 first_signaled; /* only valid when not waiting all */
- 	__u32 pad;
-+	/**
-+	 * @deadline_ns - fence deadline hint
-+	 *
-+	 * Deadline hint, in absolute CLOCK_MONOTONIC, to set on backing
-+	 * fence(s) if the DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag is
-+	 * set.
-+	 */
-+	__u64 deadline_ns;
- };
- 
- struct drm_syncobj_timeline_wait {
-@@ -907,6 +916,14 @@ struct drm_syncobj_timeline_wait {
- 	__u32 flags;
- 	__u32 first_signaled; /* only valid when not waiting all */
- 	__u32 pad;
-+	/**
-+	 * @deadline_ns - fence deadline hint
-+	 *
-+	 * Deadline hint, in absolute CLOCK_MONOTONIC, to set on backing
-+	 * fence(s) if the DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag is
-+	 * set.
-+	 */
-+	__u64 deadline_ns;
- };
- 
- 
++	vblank_start = DIV_ROUND_DOWN_ULL(
++			(u64)vblank->framedur_ns * mode->crtc_vblank_start,
++			mode->crtc_vtotal);
++	*vblanktime  = ktime_add(*vblanktime, ns_to_ktime(vblank_start));
++
++	return 0;
++}
++EXPORT_SYMBOL(drm_crtc_next_vblank_start);
++
+ static void send_vblank_event(struct drm_device *dev,
+ 		struct drm_pending_vblank_event *e,
+ 		u64 seq, ktime_t now)
+diff --git a/include/drm/drm_vblank.h b/include/drm/drm_vblank.h
+index 733a3e2d1d10..7f3957943dd1 100644
+--- a/include/drm/drm_vblank.h
++++ b/include/drm/drm_vblank.h
+@@ -230,6 +230,7 @@ bool drm_dev_has_vblank(const struct drm_device *dev);
+ u64 drm_crtc_vblank_count(struct drm_crtc *crtc);
+ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
+ 				   ktime_t *vblanktime);
++int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblanktime);
+ void drm_crtc_send_vblank_event(struct drm_crtc *crtc,
+ 			       struct drm_pending_vblank_event *e);
+ void drm_crtc_arm_vblank_event(struct drm_crtc *crtc,
 -- 
 2.39.1
 
