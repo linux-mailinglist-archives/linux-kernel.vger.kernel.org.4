@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4586A5608
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225126A5605
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjB1Jmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
+        id S230259AbjB1JmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjB1Jmg (ORCPT
+        with ESMTP id S230000AbjB1JmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:42:36 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041AC1FFE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:42:08 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so13100055pjh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:42:08 -0800 (PST)
+        Tue, 28 Feb 2023 04:42:13 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7D912855
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:42:12 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id fd25so5306743pfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:42:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Amkwsoc7+Zh6LpSnYPT3sNZ/xGlGMM6GhMeq+khTZDk=;
-        b=bM10nE+NWvCO1Ge0vDaGLKbIbx7kHjOJCQRj2ZKs8L8kDqZq8yyqZhGRJW2Qa7Wx05
-         RaoMFrX/4sCNWD19Zl0NKH4FpMWQ9DMrkVpj4mLcovpDCU4h7PCgZ4PVySCwrYdGJsuq
-         uf92sEfCgTtwTdwMINeHpuXuwuAYW4eYWc2XUxf8FblBhk2sPjHqV/zid7itr9Lccyr2
-         prnWEL4ijb1leI3y/Vf1QjAJVe2Xuy1nygC1LdCJwKY3sRDnGBiom6ZNxkyDt49S7NBq
-         6/l3d8QNx6j9TAMQUeIqwiJ6j8L990DzdoM/PtVx1xi+TxmkV5bAv8U4PKOM5bpbTju2
-         gBqQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VZXmNRcPsICL6kN8QABaXbPWSPAMlFY7UslgXOPbl2g=;
+        b=WZm1/ppM9bXo+zrQbhLrwZvlq2t4bwNPkt4KUj6yPa5gKCwz8hlkwCNxGY3/hdZBLs
+         KyXwByvuLOAC+7T0rNGW/cSpoyGkNBHdKZFtS8QZA4wobdHYVgRwMYD5IJZRpIFlm5Go
+         pdPu+E58xD2ArAgqnwyJChUBVUhs2RxrXSuEsbA/4pn8AKWmqMGjJE+5L/LNtGdFF9me
+         6f3yh0poY2vWE4vGs4uGGs1Fc8fOg8rENBJuSyy0r2hwicETvbZS/zfbLlsaBWwjngJR
+         jxb7VJU7pMmi1cB7Pt+t96Ut3llgUL1lCK7XZEahCoZV8FOIBXLOSw/bZOV/5i+HiG5l
+         eP6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Amkwsoc7+Zh6LpSnYPT3sNZ/xGlGMM6GhMeq+khTZDk=;
-        b=z9oeANh4ZsdKjpAn6JtousVn7M6Y6Q0ALRms7ldZZUwireG20oVszj6ib+5Lw+J/do
-         ko8mvwTw7mKAckj7pV4Vv1s9lFsTKqWKmC4hqn5VQ7ccmbCKgKJsLDJTExYvwmXsLy42
-         rLfaPZUw6+zjceObfxphXXM7M6WvJJZ/mkfzxMC595ELTECj1cP3DrvtFmH8K8+pMkiJ
-         zWE2emnqANyDZdigx1dLe/RHWBj0pS3S7NnshoVhfN/xa8Q4HAn0kiFSfQ1dcIym0TLK
-         RuraL9jQtYQ0XPLfm6CBz5VL1q+QqJhdDcKkIpMFrm+h/cVc27jU4LxLoKoUO60Q1QIh
-         7//Q==
-X-Gm-Message-State: AO0yUKXCGCF3eG5p8fM2GlYVsHusOu1BBfnJf7/Es8K7H8jJP3Sq0ph6
-        yoJPiFm1nwp9mEuyjdHfjNix
-X-Google-Smtp-Source: AK7set/IHwkuZ2nQikTluBqUyAnDk6KZDgVNhb0Xjot2acFdIS6T/O4Q46b/vgMnZvMsvX4Jhf6uug==
-X-Received: by 2002:a17:903:2441:b0:199:bd4:9fbb with SMTP id l1-20020a170903244100b001990bd49fbbmr2487808pls.43.1677577328415;
-        Tue, 28 Feb 2023 01:42:08 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VZXmNRcPsICL6kN8QABaXbPWSPAMlFY7UslgXOPbl2g=;
+        b=ZZTiLkRK57mZYyZcZK1XOlwFNSFnRT+DEt1R5yBPKBgRRaKc0L7VzJuTz2YYpxktKX
+         WUfDagQ+A1rWrRpRRD5TI+r8lozk5QyrZz1x/xk25lEKHICFtG1UVY0Yzn3MnWfryke9
+         mi1AQuV6QqJIuq1WPTOzkyrBCtkNu0wH1VLjHMkLJoaa7EPsFz/uhejyuytf346oNm6H
+         ArxkuiuLaYj2/1BR2mswk3Qjg4UkOcmVfm69rSWv6yKrVTRySt3w39DWD9xG4IDh4XrU
+         btUwIN8A8Q4UmW6oSXfkxBcX0hEIolqYHGVwsBPrwCso0sTTl3fuRAMAS12NWYOWiKfG
+         /llg==
+X-Gm-Message-State: AO0yUKUlAgj2J+mpDePHjhmb1tWoGiNbegtKM/tRCZoRAbvgNjPOEp6y
+        ec97hTtCf/z0gV9QHWsOToG7K4dlNYplBUs=
+X-Google-Smtp-Source: AK7set+3yAVpuE0+W31PocteZQbp7Jfg/gw72pcGhpvkIIBjNzUWy2DSGF/+10Ov4ubcwXv5mpZFrg==
+X-Received: by 2002:a62:546:0:b0:5a8:ecb1:bfe with SMTP id 67-20020a620546000000b005a8ecb10bfemr1992722pff.2.1677577331997;
+        Tue, 28 Feb 2023 01:42:11 -0800 (PST)
 Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id gz17-20020a17090b0ed100b00230b8431323sm5780199pjb.30.2023.02.28.01.42.06
+        by smtp.gmail.com with ESMTPSA id r24-20020a62e418000000b00571f66721aesm5616892pfh.42.2023.02.28.01.42.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 01:42:08 -0800 (PST)
+        Tue, 28 Feb 2023 01:42:11 -0800 (PST)
 From:   Xie Yongji <xieyongji@bytedance.com>
 To:     mst@redhat.com, jasowang@redhat.com, tglx@linutronix.de, hch@lst.de
 Cc:     virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 00/11] VDUSE: Improve performance
-Date:   Tue, 28 Feb 2023 17:40:59 +0800
-Message-Id: <20230228094110.37-1-xieyongji@bytedance.com>
+Subject: [PATCH v3 01/11] lib/group_cpus: Export group_cpus_evenly()
+Date:   Tue, 28 Feb 2023 17:41:00 +0800
+Message-Id: <20230228094110.37-2-xieyongji@bytedance.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230228094110.37-1-xieyongji@bytedance.com>
+References: <20230228094110.37-1-xieyongji@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,71 +71,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Export group_cpus_evenly() so that some modules
+can make use of it to group CPUs evenly according
+to NUMA and CPU locality.
 
-This series introduces some ways to improve VDUSE performance.
+Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+---
+ lib/group_cpus.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Patch 1 ~ 6 bring current interrupt affinity spreading mechanism
-to vduse device and make it possible for the virtio-blk driver
-to build the blk-mq queues based on it. This would be useful to
-mitigate the virtqueue lock contention in virtio-blk driver. In
-our test, with those patches, we could get ~50% improvement (600k
-iops -> 900k iops) when using per-cpu virtqueue.
-
-Patch 7 adds a sysfs interface for each vduse virtqueue to change
-the affinity for IRQ callback. It would be helpful for performance
-tuning when the affinity mask contains more than one CPU.
-
-Patch 8 ~ 9 associate an eventfd to the vdpa callback so that
-we can signal it directly during irq injection without scheduling
-an additional workqueue thread to do that.
-
-Patch 10, 11 add a sysfs interface to support specifying bounce
-buffer size in virtio-vdpa case. The high throughput workloads
-can benefit from it. And we can also use it to reduce the memory
-overhead for small throughput workloads.
-
-Please review, thanks!
-
-V2 to V3:
-- Rebased to newest kernel tree
-- Export group_cpus_evenly() instead of irq_create_affinity_masks() [MST]
-- Remove the sysfs for workqueue control [Jason]
-- Associate an eventfd to the vdpa callback [Jason]
-- Signal the eventfd directly in vhost-vdpa case [Jason]
-- Use round-robin to spread IRQs between CPUs in the affinity mask [Jason]
-- Handle the cpu hotplug case on IRQ injection [Jason]
-- Remove effective IRQ affinity and balance mechanism for IRQ allocation
-
-V1 to V2:
-- Export irq_create_affinity_masks()
-- Add set/get_vq_affinity and set_irq_affinity callbacks in vDPA
-  framework
-- Add automatic irq callback affinity support in VDUSE driver [Jason]
-- Add more backgrounds information in commit log [Jason]
-- Only support changing effective affinity when the value is a subset
-  of the IRQ callback affinity mask
-
-Xie Yongji (11):
-  lib/group_cpus: Export group_cpus_evenly()
-  vdpa: Add set/get_vq_affinity callbacks in vdpa_config_ops
-  vdpa: Add set_irq_affinity callback in vdpa_config_ops
-  vduse: Refactor allocation for vduse virtqueues
-  vduse: Support automatic irq callback affinity
-  vduse: Support set/get_vq_affinity callbacks
-  vduse: Add sysfs interface for irq callback affinity
-  vdpa: Add eventfd for the vdpa callback
-  vduse: Signal interrupt's eventfd directly in vhost-vdpa case
-  vduse: Delay iova domain creation
-  vduse: Support specifying bounce buffer size via sysfs
-
- drivers/vdpa/vdpa_user/vduse_dev.c | 490 +++++++++++++++++++++++++----
- drivers/vhost/vdpa.c               |   2 +
- drivers/virtio/virtio_vdpa.c       |  33 ++
- include/linux/vdpa.h               |  25 ++
- lib/group_cpus.c                   |   1 +
- 5 files changed, 488 insertions(+), 63 deletions(-)
-
+diff --git a/lib/group_cpus.c b/lib/group_cpus.c
+index 9c837a35fef7..aa3f6815bb12 100644
+--- a/lib/group_cpus.c
++++ b/lib/group_cpus.c
+@@ -426,3 +426,4 @@ struct cpumask *group_cpus_evenly(unsigned int numgrps)
+ 	return masks;
+ }
+ #endif /* CONFIG_SMP */
++EXPORT_SYMBOL_GPL(group_cpus_evenly);
 -- 
 2.20.1
 
