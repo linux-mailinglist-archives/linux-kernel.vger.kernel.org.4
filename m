@@ -2,137 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908346A63CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 00:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B20F6A63CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 00:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjB1X27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 18:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
+        id S229890AbjB1Xaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 18:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjB1X25 (ORCPT
+        with ESMTP id S229504AbjB1Xa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 18:28:57 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2885F11E93;
-        Tue, 28 Feb 2023 15:28:56 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SNJ7GC003586;
-        Tue, 28 Feb 2023 23:28:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=u9p+/xBrjJGKmuK3/sn8Ey8FmIoCUMkLliFH4tdMtNg=;
- b=HT6E0ULzNV+vBjv3O5r+SiiKcfmKy8TIc52lTLQHx4YKwzLtW/POl8uOr0NQZjbekjbh
- sIccDYRjdtFamOEwgiLcoysOMVsZ6GKmocunPE4A/k1PG+mi1ahxR6XHR747RN7BcONi
- Gqw8vpU2JR68PUdvV6PF0LfThlq5Vk/Hij5NqynJHbPmzUbWyxuq72F7n/gxJxDwHQ2Y
- lwEH4MMTqUM6f9bESJMKKD75v8NlCXZRCsg4xM0EtlhedmSk3QstT+45+1pb0BevWNTB
- dqsZacUrvOAHLQWz+os2adHyLU6nrJdNx2gZbpZroFV0cVrOAggtQ+rkx64cGiBuBe3n uQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1mwx90e2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 23:28:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SNSmCL021204
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 23:28:48 GMT
-Received: from hu-jackp-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 28 Feb 2023 15:28:48 -0800
-Date:   Tue, 28 Feb 2023 15:28:46 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-CC:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Add 1ms delay after end transfer
- command without IOC
-Message-ID: <20230228232846.GB3727894@hu-jackp-lv.qualcomm.com>
-References: <20230228202418.9126-1-quic_wcheng@quicinc.com>
+        Tue, 28 Feb 2023 18:30:28 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98800F97B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 15:30:27 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id by8so12082353ljb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 15:30:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1677627026;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IOSxGvDXAN2XBjTFFoV5qPpPuqcyWu9fKmABaUWkmfs=;
+        b=UluvzYOLn0CmJBu2rIfZPWCNBj1bg60iunkHhbMmYFNVN4tfeHPO3+wxDtyLzyzWE+
+         mMLk8Wi7aJLmXjcPZNnxU6Heq5W4LcyUtu5vntA3gL8+NlDsP15jzMeE5Ht8Chb6rEVZ
+         J6pJRRjGUrYX6zL4Jvhb56p8abe71e4dCRlmA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677627026;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IOSxGvDXAN2XBjTFFoV5qPpPuqcyWu9fKmABaUWkmfs=;
+        b=alfwGRmc2cqv2WCAhbIDVL1Ty2xEpeyFM0XjfzUTaLaROsGw+KUw4UM8z4JBv8Dxw6
+         byReut8O4q/Jkkp8bFhHeDqTduCtcOr2lbfRSjkoV3vcH6jHFPylcpzdOjlcjdW51UmM
+         NrO+yP7H2tpfRGq7AdcQJumjSlukaYriFkbqq+gcvPsfqk8+mAkxoErLiTJeNiZdqLNw
+         4Q1LprRo6riOjRg9wLVGc2/ndEvrSU30v0Qvaaj7v6oVORFJi4V2vbfq8Nkl7EBgxQAY
+         dwONQgtw74ePyFMN++2iTO5u/E1atv1Po+bF3Ot256+6daKz8bYr3AlQodQPVdRAy7At
+         KS+g==
+X-Gm-Message-State: AO0yUKW6z6cHlVBWUsPuReTbyJzxMGQf2AJoL2+Xb4XzSUB4f8po93gM
+        MI5gT8A9Y7OHw4DVUFknyjJN2jQPNgqIz5YQZzQWqw==
+X-Google-Smtp-Source: AK7set9xNRYPzLUDBbe907018mq80QIk4R5DUuPvY8T8qeEoSF0YbOKYjPygamDUCNdwkm9n/guf3XTS7hiQ13Dkfdg=
+X-Received: by 2002:a05:651c:895:b0:293:4ab4:3bb1 with SMTP id
+ d21-20020a05651c089500b002934ab43bb1mr2220633ljq.4.1677627025774; Tue, 28 Feb
+ 2023 15:30:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230228202418.9126-1-quic_wcheng@quicinc.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: s85YVLxozDjdStmQg2EnhWhvVxnGeh-F
-X-Proofpoint-GUID: s85YVLxozDjdStmQg2EnhWhvVxnGeh-F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
- mlxlogscore=610 malwarescore=0 spamscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302280187
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230228155121.3416-1-ubizjak@gmail.com> <Y/5mguXPPqdP3MZF@google.com>
+ <20230228160324.2a7c1012@gandalf.local.home> <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230228164124.77c126d2@gandalf.local.home>
+In-Reply-To: <20230228164124.77c126d2@gandalf.local.home>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 28 Feb 2023 18:30:14 -0500
+Message-ID: <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Uros Bizjak <ubizjak@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 12:24:18PM -0800, Wesley Cheng wrote:
-> Previously, there was a 100uS delay inserted after issuing an end transfer
-> command for specific controller revisions.  This was due to the fact that
-> there was a GUCTL2 bit field which enabled synchronous completion of the
-> end transfer command once the CMDACT bit was cleared in the DEPCMD
-> register.  Since this bit does not exist for all controller revisions, add
-> the delay back in, and increase the duration to 1ms for the controller to
-> complete the command.
-> 
-> An issue was seen where the USB request buffer was unmapped while the DWC3
-> controller was still accessing the TRB.  However, it was confirmed that the
-> end transfer command was successfully submitted. (no end transfer timeout)
-> In situations, such as dwc3_gadget_soft_disconnect() and
-> __dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
-> will issue the end transfer command, and follow up with
-> dwc3_gadget_giveback().  At least for the USB ep disable path, it is
-> required for any pending and started requests to be completed and returned
-> to the function driver in the same context of the disable call.  Without
-> the GUCTL2 bit, it is not ensured that the end transfer is completed before
-> the buffers are unmapped.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
-> Changes in v3:
-> - Fixed subject title and modified commit text to reference the new 1ms
-> delay
-> 
-> Changes in v2:
-> - Increase delay value to 1ms
-> - Make this applicable to DWC32 revisions as well
-> 
->  drivers/usb/dwc3/gadget.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 3c63fa97a680..15adf07a4df4 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1699,6 +1699,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
->   */
->  static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
->  {
-> +	struct dwc3 *dwc = dep->dwc;
->  	struct dwc3_gadget_ep_cmd_params params;
->  	u32 cmd;
->  	int ret;
-> @@ -1722,10 +1723,14 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
->  	WARN_ON_ONCE(ret);
->  	dep->resource_index = 0;
->  
-> -	if (!interrupt)
-> +	if (!interrupt) {
-> +		if (DWC3_IP_IS(DWC32) || DWC3_IP_IS(DWC31) ||
-> +			DWC3_VER_IS_PRIOR(DWC3, 310A))
+Hey Steve,
 
-How about a little more succinctly:
+On Tue, Feb 28, 2023 at 4:41=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
+>
+> On Tue, 28 Feb 2023 13:29:11 -0800
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
+>
+> > All well and good, but the stall-warning code is nowhere near a fastpat=
+h.
+> >
+> > Is try_cmpxchg() considered more readable in this context?
+>
+>
+> -           cmpxchg(&rcu_state.jiffies_stall, js, jn) =3D=3D js) {
+> +           try_cmpxchg(&rcu_state.jiffies_stall, &js, jn)) {
+>
+> It's basically the same :-/
+>
+> But looking at this use case, I'd actually NAK it, as it is misleading.
 
-		if (!DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC3, 310A))
-?
+I'm trying to parse this. You are saying it is misleading, because it
+updates js when it doesn't need to?
 
-Jack
+> As try_cmpxchg() is used to get rid of the updating of the old value. As =
+in
+> the ring buffer code we had:
+>
+> void ring_buffer_record_off(struct trace_buffer *buffer)
+> {
+>         unsigned int rd;
+>         unsigned int new_rd;
+>
+>         do {
+>                 rd =3D atomic_read(&buffer->record_disabled);
+>                 new_rd =3D rd | RB_BUFFER_OFF;
+>         } while (!atomic_cmpxchg(&buffer->record_disabled, &rd, new_rd) !=
+=3D rd);
+
+Hear you actually meant "rd" as the second parameter without the & ?
+
+> }
+>
+> and the try_cmpxchg() converted it to:
+>
+> void ring_buffer_record_off(struct trace_buffer *buffer)
+> {
+>         unsigned int rd;
+>         unsigned int new_rd;
+>
+>         rd =3D atomic_read(&buffer->record_disabled);
+>         do {
+>                 new_rd =3D rd | RB_BUFFER_OFF;
+>         } while (!atomic_try_cmpxchg(&buffer->record_disabled, &rd, new_r=
+d));
+> }
+>
+> Which got rid of the need to constantly update the rd variable (cmpxchg
+> will load rax with the value read, so it removes the need for an extra
+> move).
+
+So that's a good thing?
+
+>
+> But in your case, we don't need to update js, in which case the
+> try_cmpxchg() does.
+
+Right, it has lesser value here but I'm curious why you feel it also
+doesn't belong in that ring buffer loop you shared (or did you mean,
+it does belong there but not in other ftrace code modified by Uros?).
+
+> The patch that Uros sent me for the ring buffer code also does some of
+> that, which I feel is wrong.
+
+I am guessing that is code *other than* the ring buffer loop above.
+
+> So with that, I would nack the patch.
+
+Dropping it for RCU is fine with me as well.
+
+(And yes for the other thread, I had it backwards, try_cmpxchg is what
+drops the need for cmp instruction -- sorry.)
+
+thanks,
+
+ -Joel
