@@ -2,125 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D8B6A621A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 059896A621F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjB1WEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S229898AbjB1WHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjB1WEp (ORCPT
+        with ESMTP id S229735AbjB1WHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:04:45 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02277199CB;
-        Tue, 28 Feb 2023 14:04:44 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id cq23so46280662edb.1;
-        Tue, 28 Feb 2023 14:04:43 -0800 (PST)
+        Tue, 28 Feb 2023 17:07:21 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A366311C7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:07:19 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id a2so1556736plm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:07:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677621882;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=q3wr9vleUaBWv0fjP+3zIm41n8+4y/23bdQdfu1e5gI=;
-        b=kXjIC9811i5bEaTokPhtu5hOzSi58cm3HX/Gdz2lvWFdAc4CFh6WsFEEsuGGJOMWFs
-         F1hCp0Ll8wqTiPeWrT3IoImFX0EgPZPsQDOyooyAuS89S+xZ5Bqb+nO4qHrzBqPb0XpY
-         LHMm3G4g0TH6lGX9G6x5N26HHDmJevRWJTQffxQvRlQ/1bOH0+aQxmnI8WBQ6yqRsGns
-         PDi5y6e6Qpq8dA5HEmBxLOoY3TXq46jsU8hi8mGG8xUtJgZUaLDjsHSeu0chqgoT/Rwq
-         y6VEaK/uoMqRP4yMAXegR4Mwk/Wm45jLWqbfbWPKK25p1HFcO53MRXTuWtPkBswAmfuZ
-         Z9PA==
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YRCOA+ylhY8BYizlMsPJIRnUep7ueVrntpLfbub6Ho8=;
+        b=mEiI40fNyimk2yi3utKlVT4Y6/XfiZzMjf8IL7rx8OZsMKma/44lGsAnfhQMTGCIOg
+         XwvFvk+ZnJmZe9+sdLNWPkH1TdM+I4pNgrG1evG8lyp0RSNhFvrtiSo6iMPFR5Acpwfy
+         Gq9DjLyDHgC0vFM4FAJfYVG+okzSshZtjiOJSUFJJZMUJbnLm8ZnikUj0L5RaPwWgSMG
+         uvZmyfdN0NiOFEtzPa+f8Wx053NjMRjhE1YFf8eOyqQTPSMHobAOoSptMdDuJvuJm2Ek
+         fCsUiKusB2DxBsB5dssZ2d7zDkIjFa6Epeo3CDsDMsfBdVQ2wwKx4rzUqmq5HEg//qc5
+         wJRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677621882;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q3wr9vleUaBWv0fjP+3zIm41n8+4y/23bdQdfu1e5gI=;
-        b=jSdncDGEI32TFiJ1fo9WHROEuLU9S14x3FNfmskx+ok8CIBEBmA5w+BdqpMBLZZKnU
-         /R6ae6g2d2vkGbOikRnj3LV74L0UTsnjiLZaArEMuGHVwaQvU0IAyPTEPLjLGuFNlKXZ
-         9rHqyLyUwInSgzFhjPwI6Dha5kxrQZrLygHukVdFUtF3PmTUW/it2Bg+pgtCwRzX67DQ
-         1pqDJELWXLSyz1Uwa/RCEuQ5TLzvEkfCKwasp5JZAr6/b9q3B48U2tN7jWrbpJn1oRKP
-         UYNrDTQPs+kwZ59Y3S7g2VYly5raJlRa+QHGY0tYZ6sqL3bBkZQjZSEFB+gwPERbpqNk
-         brcQ==
-X-Gm-Message-State: AO0yUKVruPNmmb4ztQ7dAqsHXqego2NY5E1CvnEc1wUm91FxgakdcP//
-        02+7V4DNyzQ9nLNplXYP2NnSxSdxZ8gtXcopFcY=
-X-Google-Smtp-Source: AK7set9yhZGiYm2bJwwuo0HrNm+yxTtsF8sAiJKGBEejQ5C0USEWoq1sx1ccRxk8TWGlICgRahPNM9mAXKE74gX5PMM=
-X-Received: by 2002:a50:f69d:0:b0:4bb:f5d1:fb07 with SMTP id
- d29-20020a50f69d000000b004bbf5d1fb07mr87906edn.6.1677621882358; Tue, 28 Feb
- 2023 14:04:42 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YRCOA+ylhY8BYizlMsPJIRnUep7ueVrntpLfbub6Ho8=;
+        b=UKI8/ZHdi+8hRS5KioKaWqgiJSIR7YytnUFxtYqgq37KPPTyURMxpsWc95WhQ4pKBZ
+         06wrLDJpbtNcAYBx5kK7zpizOm4xKkhuMr89XHXFgyhjl8sMedS1noNJiel3pth7f7Zv
+         WULsZrXLZvZ95+N72vjWAei5MJoDLXpXfDC8vm3Gi7/irqw0SwOk5K0zTLsvqvoRxwoY
+         P5GYMp+flsGFlIDxwa5+eK55KtC2PQCYuRkviCH2M1pBUP9vYKGRnpd3645qW9MCW3xR
+         0vJEcHkgA4dRjyQZtM/g11l02lCg6RyMhuujsGWcUwCEmSwf9UMTLacchbwM8lm2FY1v
+         7JLA==
+X-Gm-Message-State: AO0yUKUXUTSGWfjWHS1X28O0d5YcY8rP4+9yewUsONVG4GaehWCzLvb2
+        mqtBLng+5gmidsSr9F6T5Y9eBQ==
+X-Google-Smtp-Source: AK7set/jYgli/Hpbv8aT03CHshIOUH7bFyfP1JcTprKwyvrob0wmRB9dc55aO9ppjsNzZUynNOiyPQ==
+X-Received: by 2002:a17:903:1ce:b0:19d:1f42:b018 with SMTP id e14-20020a17090301ce00b0019d1f42b018mr8426976plh.27.1677622038760;
+        Tue, 28 Feb 2023 14:07:18 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
+        by smtp.gmail.com with ESMTPSA id bc7-20020a170902930700b0019aaccb665bsm6957404plb.245.2023.02.28.14.07.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 14:07:18 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pX87u-003HvY-Hh; Wed, 01 Mar 2023 09:07:14 +1100
+Date:   Wed, 1 Mar 2023 09:07:14 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>
+Subject: Re: [RFC v2 bpf-next 0/9] mm/bpf/perf: Store build id in inode object
+Message-ID: <20230228220714.GJ2825702@dread.disaster.area>
+References: <20230228093206.821563-1-jolsa@kernel.org>
 MIME-Version: 1.0
-References: <20230227201340.2087605-1-sdalvi@google.com>
-In-Reply-To: <20230227201340.2087605-1-sdalvi@google.com>
-From:   Han Jingoo <jingoohan1@gmail.com>
-Date:   Tue, 28 Feb 2023 14:04:30 -0800
-Message-ID: <CAPOBaE4U4rCJ+4CcSoj597LsP-0ESBhiKKHz00bk+SvNHrOzKQ@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
-To:     Sajid Dalvi <sdalvi@google.com>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228093206.821563-1-jolsa@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023, Sajid Dalvi <sdalvi@google.com> wrote:
->
-> In dw_pcie_host_init() regardless of whether the link has been started
-> or not, the code waits for the link to come up. Even in cases where
-> start_link() is not defined the code ends up spinning in a loop for 1
-> second. Since in some systems dw_pcie_host_init() gets called during
-> probe, this one second loop for each pcie interface instance ends up
-> extending the boot time.
->
-> Call trace when start_link() is not defined:
-> dw_pcie_wait_for_link << spins in a loop for 1 second
-> dw_pcie_host_init
->
-> Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+On Tue, Feb 28, 2023 at 10:31:57AM +0100, Jiri Olsa wrote:
+> hi,
+> this is RFC patchset for adding build id under inode's object.
+> 
+> The main change to previous post [1] is to use inode object instead of file
+> object for build id data.
 
-(CC'ed Krzysztof Kozlowski)
+Please explain what a "build id" is, the use case for it, why we
+need to store it in VFS objects, what threat model it is protecting
+the system against, etc.
 
-Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> 
+> However.. ;-) while using inode as build id storage place saves some memory
+> by keeping just one copy of the build id for all file instances, there seems
+> to be another problem.
 
-It looks good to me. I also checked the previous thread.
-I agree with Krzysztof's opinion that we should include
-only hardware-related features into DT.
-Thank you.
+Yes, the problem being that we can cache hundreds of millions of
+inodes in memory, and only a very small subset of them are going to
+have open files associated with them. And an even smaller subset are
+going to be mmapped.
 
-Best regards,
-Jingoo Han
+So, in reality, this proposal won't save any memory at all - it
+costs memory for every inode that is not currently being used as
+a mmapped elf executable, right?
 
-> ---
->  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index 9952057c8819..9709f69f173e 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -489,10 +489,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
->                 ret = dw_pcie_start_link(pci);
->                 if (ret)
->                         goto err_remove_edma;
-> -       }
->
-> -       /* Ignore errors, the link may come up later */
-> -       dw_pcie_wait_for_link(pci);
-> +               /* Ignore errors, the link may come up later */
-> +               dw_pcie_wait_for_link(pci);
-> +       }
->
->         bridge->sysdata = pp;
->
-> --
-> 2.39.2.722.g9855ee24e9-goog
->
+> The problem is that we read the build id when the file is mmap-ed.
+
+Why? I'm completely clueless as to what this thing does or how it's
+used....
+
+> Which is fine for our use case,
+
+Which is?
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
