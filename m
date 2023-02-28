@@ -2,140 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D878B6A5C2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE416A5C2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjB1PlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
+        id S229824AbjB1Pnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:43:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjB1PlU (ORCPT
+        with ESMTP id S229512AbjB1Pnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:41:20 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1145F222EE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:41:19 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id n2so13727542lfb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:41:18 -0800 (PST)
+        Tue, 28 Feb 2023 10:43:49 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42823113D9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:43:48 -0800 (PST)
+Received: by mail-oo1-xc31.google.com with SMTP id w25-20020a4ae9f9000000b0052513fb2e09so1613344ooc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:43:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677598877;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o0oSgh79dT4BwHorcu4cOKoy0Ow/ZznwbgklRDRu1oI=;
-        b=DS1vDN4ANBGoA83nXmkMioB5k5jbyFbCQwLBa21/NiGfTLei+j5AWJSkIIhKiioaD6
-         /+1jav2hwaG002/lMwDMVhjm399pqGtxzaQiZS14sjA9xNfsdY7Q6r4RKRGqGR5rrZ27
-         CyKV2YPmLXXvwzlUH0xebECCyvWeOsjdcyfTeKQUToVTXxMG+g2R0+PtoreW6XZWpGks
-         LxOqnht0f8MXHon5V6eQoAMCDR5BF2QzDodk2HJIAudJ+w1/ccGkSOQP8u5skOElKw4G
-         LmOIt8gqcS7cPVSE8ynxL7ycKQKiJRU/2bKB4zhySo/b4rUDP5WqDku/kN2xFR0yFChs
-         XzyA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LonH6h0XflHd2ZjJoaCMQxM+eselh1rFlXJtr2TdEH0=;
+        b=WyJg6CTQHizjZtwa26KfNyODiFG3bpBQVCtLC6kZa2jQ93g3cNA0st7X5zv0Q0WEyz
+         DssEP8HT6EafkjajKflc8sIiiF0dUns20WwxZRwoLYoYxJDiuQntnrgON6O0bmAB78gU
+         eusnG6BYYBWBbE9LMTXMKE1W0CDyQP43ruj+RGcEzoFV8LOE3zN/x9BMvVl2JZ1quO1J
+         YTTCzT58vDVD0zhGKokq3aPnJ1b01i5rGPvzR8ipxkTmzyihfnBoBJxmHS8DBHDCFkJT
+         en235u700aMHlAZhuPqoO8i2/Fohbbk33SHXIvLNO4mmMkLm7loqL7m1EG3wa+b8ziGD
+         udpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677598877;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o0oSgh79dT4BwHorcu4cOKoy0Ow/ZznwbgklRDRu1oI=;
-        b=P75qLCmLzBKpi4lIiUabcc9LDbKUYs2XE7SyeykD3ng0QsnzjfhGjbovXv2kCJppNL
-         jr0ood3TR6eYieWGW8RAT1KgkYAeZhHlkxjjX30jDDtlOzd9bGRlBTNa1oxaEzQY8j7H
-         OMSM6qi9yLKDvbD2ENCYLr+PBDv9OEmHa8KXpg0Q/relbxbi5xPDyBdal4lLaQHZR5/L
-         CbApNo9tZxR9NlD3mXRNhYMMJPdloSUolgqp9PJfvKBXMTR9s5YC2U62Sp0TVdz6qaQs
-         HPn5V7GW2tNTUv8Ce6TIEhpbupEmuE6hqXX1pB8CH94RGdK2LU3xPuXLEYqj4p5Nd9gG
-         3CYA==
-X-Gm-Message-State: AO0yUKUEvz/jEb+RsLIJpohupMWbxK/5aBk6cbkl7ZCutdxhkl1dkVf6
-        bSGJZxwG21u3vgvbuIRRTXW25w==
-X-Google-Smtp-Source: AK7set9GsnKLQmZvi1EI42Kuf4fQXweX0TVas8vb7ohjCdBBF/7lr7xMAdrXNr2J30rocg7gCVS12g==
-X-Received: by 2002:a05:6512:ea7:b0:4db:25bb:ff0b with SMTP id bi39-20020a0565120ea700b004db25bbff0bmr2954320lfb.2.1677598877358;
-        Tue, 28 Feb 2023 07:41:17 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id r7-20020ac252a7000000b004dc4d26c324sm1372910lfm.143.2023.02.28.07.41.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:41:16 -0800 (PST)
-Message-ID: <1091d8b4-3dd3-427b-2fcb-c3e0d32b0a3b@linaro.org>
-Date:   Tue, 28 Feb 2023 16:41:15 +0100
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LonH6h0XflHd2ZjJoaCMQxM+eselh1rFlXJtr2TdEH0=;
+        b=flTsmOCfmeDSBvZOCshBLtp12bRM3QauyHoJIDwhy3USNHoYxmmCQGmWOFuLtFdxps
+         x/QxMgB0hdwjYiwBQF2RpDJilWEVvRZKZljh5vtcZEZrFa0bCOv17nffYyJKgcVq+/kB
+         A3LN/Dwvm5HK4IpDmAq8os4JdLuwvPPcGeAtyEUY5yBkWjzeA8NahSyyKn+gqVvG3dzR
+         VW/PbBrKEFo0H4QxdnEOJ7QIg2ass11f9fHHSYgx2DWM/kcUiowu36AfZszjtD4rgvQF
+         nvuYaV0JF6cs6bTFRh+0FhE5+1kwnIS+Kih5AbfxvE36NeaYofPRiTMf8Bosv99XgjGD
+         CeYQ==
+X-Gm-Message-State: AO0yUKVDW8V9hVA7954XqkpuuEQOlIrSFrBj4xKgLn5bTRCryni7xjNy
+        1yt3lkGP81/oe/IuIWWtRRUiFLgZUYYYdPh8c30=
+X-Google-Smtp-Source: AK7set8STQ1oztAalDc2bpQ9rNAMwQTUZCm2yzbWRYUjL7JbeIR+duZmjExm+N3PqFqj9f5vVh1ZzbL3mR9s5ouJdgQ=
+X-Received: by 2002:a4a:840f:0:b0:525:499e:ce2f with SMTP id
+ l15-20020a4a840f000000b00525499ece2fmr795883oog.1.1677599027483; Tue, 28 Feb
+ 2023 07:43:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 01/18] media: venus: hfi_venus: Set
- venus_sys_idle_indicator to false on V6
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-1-58c2c88384e9@linaro.org>
- <99eeebc6-69aa-c6ba-139b-92672c299747@linaro.org>
- <893851c9-c8be-ed7f-ebde-5d90b9313f6d@linaro.org>
- <48ac4272-0e11-d943-e950-0be8d93fb036@linaro.org>
- <b7f0c568-72b7-3342-decc-784cd5f68b1a@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <b7f0c568-72b7-3342-decc-784cd5f68b1a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230227173800.2809727-1-robdclark@gmail.com> <44e67d88-fce6-a1c1-79a9-a937e64a32bb@collabora.com>
+ <CAF6AEGsT8_o+v0vzGu1nyh6Z82pj8FnGUdMFc0Lq+4OWoSjRBQ@mail.gmail.com> <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
+In-Reply-To: <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 28 Feb 2023 07:43:36 -0800
+Message-ID: <CAF6AEGt2SYvppE3-QbmZNbgVgTNndT+mRUe6N-z0AS+SB6KKoQ@mail.gmail.com>
+Subject: Re: [PATCH v3] drm/virtio: Add option to disable KMS support
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Rob Clark <robdclark@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Ryan Neph <ryanneph@chromium.org>,
+        David Airlie <airlied@redhat.com>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 28, 2023 at 4:34 AM Thomas Zimmermann <tzimmermann@suse.de> wro=
+te:
+>
+> Hi
+>
+> Am 27.02.23 um 19:15 schrieb Rob Clark:
+> > On Mon, Feb 27, 2023 at 9:57 AM Dmitry Osipenko
+> > <dmitry.osipenko@collabora.com> wrote:
+> >>
+> >> On 2/27/23 20:38, Rob Clark wrote:
+> >> ...
+> >>> +     if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS)) {
+> >>> +             /* get display info */
+> >>> +             virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
+> >>> +                             num_scanouts, &num_scanouts);
+> >>> +             vgdev->num_scanouts =3D min_t(uint32_t, num_scanouts,
+> >>> +                                         VIRTIO_GPU_MAX_SCANOUTS);
+> >>> +             if (!vgdev->num_scanouts) {
+> >>> +                     /*
+> >>> +                      * Having an EDID but no scanouts is non-sensic=
+al,
+> >>> +                      * but it is permitted to have no scanouts and =
+no
+> >>> +                      * EDID (in which case DRIVER_MODESET and
+> >>> +                      * DRIVER_ATOMIC are not advertised)
+> >>> +                      */
+> >>> +                     if (vgdev->has_edid) {
+> >>> +                             DRM_ERROR("num_scanouts is zero\n");
+> >>> +                             ret =3D -EINVAL;
+> >>> +                             goto err_scanouts;
+> >>> +                     }
+> >>> +                     dev->driver_features &=3D ~(DRIVER_MODESET | DR=
+IVER_ATOMIC);
+> >>
+> >> If it's now configurable by host, why do we need the
+> >> CONFIG_DRM_VIRTIO_GPU_KMS?
+> >
+> > Because a kernel config option makes it more obvious that
+> > modeset/atomic ioctls are blocked.  Which makes it more obvious about
+> > where any potential security issues apply and where fixes need to get
+> > backported to.  The config option is the only thing _I_ want,
+> > everything else is just a bonus to help other people's use-cases.
+>
+> I find this very vague. What's the security thread?
 
+The modeset ioctls are a big potential attack surface area.  Which in
+the case of CrOS VM guests serves no legitimate purpose.  (kms is
+unused in the guest, instead guest window surfaces are proxied to host
+for composition alongside host window surfaces.)
 
-On 28.02.2023 16:38, Bryan O'Donoghue wrote:
-> On 28/02/2023 15:37, Konrad Dybcio wrote:
->>
->>
->> On 28.02.2023 16:31, Bryan O'Donoghue wrote:
->>> On 28/02/2023 15:26, Bryan O'Donoghue wrote:
->>>> On 28/02/2023 15:24, Konrad Dybcio wrote:
->>>>> This call does not seem to have been cast on any kernel with support
->>>>> for VPU-1.0 or newer (and by extension, HFI6 and newer).
->>>>
->>>> We tested this on sm8250
->>>>
->>>> Restrict it
->>>>> to V4 only, as it seems to have been enabled by mistake and causes a
->>>>> hang & reboot to EDL on at least one occasion with SM6115 / AR50L
->>>>>
->>>>> Fixes: 7ed9e0b3393c ("media: venus: hfi, vdec: v6 Add IS_V6() to existing IS_V4() if locations")
->>>>> Signed-off-by: Konrad Dybcio<konrad.dybcio@linaro.org>
->>>>
->>>> Right. This may indeed fix it for you on SM6115, could you test it on RB5 and verify the above statement ?
->>>>
->>>> ---
->>>> bod
->>>
->>> For example.
->>>
->>> Doesn't your later patch take account of VPU h/w version ? IRIS_1, IRIS_2 etc.
->>>
->>> When we added for V6 here, we meant for current tested V6 hardware at that point - at least sm8250.
->>>
->>> Can you not differentiate sm6115 based on VPU hardware identifier ? We want to retain this logic for 8250 and then assuming your patch is correct, not do this for sm6115.
->> As far as my only source of information (msm-4.19 techpack) goes, this is
->> unnecessary/incorrect on 8250 as well. I doubt downstream would ship Venus
->> with no/broken low-power modes..
-> 
-> Can you test it and make sure ?
-As I mentioned in the cover letter, 8250 still seems to work with this
-patchset. I have no idea how one would go about validating the
-functionality enabled through this call.
+There have been in the past potential security bugs (use-after-free,
+etc) found in the kms ioctls.  We should assume that there will be
+more in the future.  So it seems like simple common sense to want to
+block unused ioctls.
 
-Konrad
-> 
-> ---
-> bod
-> 
+> And if the config option is useful, shouldn't it be DRM-wide? The
+> modesetting ioctl calls are shared among all drivers.
+
+Maybe, if there is a use?  The situation of compositing guest windows
+in the host seems a bit unique to virtgpu, which is why I went with a
+config option specific to virtgpu.
+
+BR,
+-R
+
+> Best regards
+> Thomas
+>
+> >
+> > BR,
+> > -R
+>
+> --
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+> (HRB 36809, AG N=C3=BCrnberg)
+> Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
