@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4DA6A5A3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501656A5A3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjB1No6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 08:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        id S229571AbjB1NrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 08:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjB1Nop (ORCPT
+        with ESMTP id S229564AbjB1NrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:44:45 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5CE301A8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:44:33 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id b10so10344003ljr.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:44:33 -0800 (PST)
+        Tue, 28 Feb 2023 08:47:04 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B62FCE8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:46:35 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so13756160pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:46:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677591872;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vveGd9sf9fGz7xfjIX4ynPRPTvQaFdGwhHtakqOTRYg=;
-        b=VLXw8x/HVK++rxyPE+23hHMFMSwTE3HGtekASbnCMGHZuPar3hClhNxfuQMN3uM/81
-         wNZlRETtkblRSd4rX6fxZtGipiuG/FJ3TPjMnVggM+q6Vqq3HAR9ozypQtbRcNDNxfl8
-         sjwWPtULXuothLPeRoF0e+yauL/i5EyFg0zsKoO+kaHb47CeXIuI4+V+QkmsXKOMNfVs
-         p9+75OjV2WKORkcqYS006WBS+44oaBFLj7qSQR2dF8MvlSmfWqQLNM10Snd8eW7CCuC6
-         FsszgvA5bu7t7l+bkKGo/4q1TYNWhk7Y0LnWnhTRY6FnksSMMI/Hv7BfRQexSQ1fwAKM
-         f0gw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zlc1mADyb2gJA0Cw8yGLqvsuAJJQSseXYNYd/pG/Xzw=;
+        b=y9qS8oh39+WbqTE7BuEYkb64gM398LyJ7EyVm/X7AAgllrkEDY3ZDUxN/P8+Wezr5G
+         Ao+SfGQavZvXHVpCp8CC8GFfPq2n3JUStcQ7KiTDvDq6tITt0GCGfaQsQ1qF+cV6qGAX
+         M3kaImCUAC6OG726SWjDFv4DWsVUT3fEd3JydLd0X0TtYltVo8gKWGDclB9Y34HDFTdt
+         5LzN1EI2meXNLrblM7DT/ePv6z13+zlyX639wZrGAwP7KkNN8i126FI75ES0AJ6B5zoJ
+         QL9fJAbWxBo/lz/epNQpblM1NQIsr7cnKYzS6tK398zAfCC6Jfr9y5WTIJrxOz8JUh54
+         t7iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677591872;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vveGd9sf9fGz7xfjIX4ynPRPTvQaFdGwhHtakqOTRYg=;
-        b=47dm6AyEEnOu6P8p2Pgmus0d9e/hwBMEfEdLIQGq4iT4L5LTsneGCdYPktfA3VmbgP
-         +jFg3ZktMK/++RMzQcwB8jA5IziKOQzH/+PcJRF/phNlwgJ6lwDl0o7sBrR1cp7R8yQn
-         ADol3Sscm/t2hKKo2tpmShxz239e1UouuPdN6K8xEPM55m9lyWf3lCzCIBvevMbI9Oy2
-         2ubKd+j37D6fUWu9KhS7lO73UuA7Yup98jcIKWx6QgbeHuRyMyiytjmogHkMGt4EQctU
-         ttsIb26Wn+ykSAHSoYog0F+Kq/OgouAQhr3TPpvOCEQku3oRoPQgfoRcsiWRkiYG3jGx
-         ty0Q==
-X-Gm-Message-State: AO0yUKVyplSS6mj6Qa7ZOB8xJxnk5T3FG/szlshFhcA7vK8VlrB5yf0Y
-        MpqN2d8Lx0I9ifn/tgJ+nCreEw==
-X-Google-Smtp-Source: AK7set/yNx+ztYP2VxaFAU39vtO3EyYHHb4UMqld4Hkcce54kgL2KmeBXxl+aeseQybRjjAqsX3EoQ==
-X-Received: by 2002:a2e:9bc9:0:b0:295:9970:9f73 with SMTP id w9-20020a2e9bc9000000b0029599709f73mr766874ljj.29.1677591872728;
-        Tue, 28 Feb 2023 05:44:32 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id j20-20020a2e3c14000000b00295a583a20bsm1203975lja.74.2023.02.28.05.44.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 05:44:32 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 28 Feb 2023 14:44:06 +0100
-Subject: [PATCH v6 9/9] interconnect: qcom: msm8996: Promote to
- core_initcall
+        bh=Zlc1mADyb2gJA0Cw8yGLqvsuAJJQSseXYNYd/pG/Xzw=;
+        b=3HCGRuNzcKX+JvHE3tnhrRh2LC7lnyLayakvxXn8q7lDnkDm0WXWiMnwN1xTOvvp2T
+         Bc001RAHU+hfXKq1KvncXjuzcU+BfcHNqH+tWuhinmzdKw8IcTT5lp0H+V/LgdOo4wYI
+         SONX6njFGuyec7i10e4R6aBqmmu+b8XuMU/SM8L+G65ES7f7+TpC51ejpVxGa3sjuh1O
+         iOwPVYxc2ms3YLqlLENmnISEMLPzx+NR3w/u2AgQpvcEbJ/jF/WUVFPNxk8G4WtlZji3
+         yOABRz9Bud615gJpYgxtsXW9Uj2ZF/6k6pdAExPZw6Iyyc1vPPOfosOgHr75f4gzZ1fL
+         t+Lg==
+X-Gm-Message-State: AO0yUKVFllDTlU0M6WhBJsENv2KiVXduTuI0pJLyS5Xx9BF40+H/ntbG
+        +HXYda001cTgdQZinPFhweWVJOnmsyFMJVKQHNN2Yw==
+X-Google-Smtp-Source: AK7set+dLsLozTjKN+7zdrEMJxmYHh8XNHnkDDqlLoV3B+Fiqu++uoM9VeCmmw4EuVCMFnEQ4cYMP2bdFjDYCAW/Txs=
+X-Received: by 2002:a17:903:2792:b0:194:6fc1:801f with SMTP id
+ jw18-20020a170903279200b001946fc1801fmr994098plb.6.1677591947666; Tue, 28 Feb
+ 2023 05:45:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-qos-v6-9-3c37a349656f@linaro.org>
-References: <20230228-topic-qos-v6-0-3c37a349656f@linaro.org>
-In-Reply-To: <20230228-topic-qos-v6-0-3c37a349656f@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677591861; l=1279;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=5H1KJ2r/pG170nOV3v3bsq3JNwWcNEZN04iD5DDB2kw=;
- b=yLfZUq5Z5xp1LtHleRTEckj0GMI3jzrt+GgHuw7jqq6epsR/JDBZ7/xLzu+YM7S7gah/Xn53SHWj
- OuJtKAZHBxh/lb5Uh3LGOzCaGd3xbVcn5ijbSbrKBi1QLMJaEP7c
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+References: <20230222080314.2146-1-xuewen.yan@unisoc.com> <Y/zO8WZV2kvcU78b@hirez.programming.kicks-ass.net>
+ <20230227220735.3kaytmtt53uoegq7@airbuntu> <CAB8ipk--trBk-Acsjz7YDb5szPLc93ejPXVXQBJdomZO4OrpGQ@mail.gmail.com>
+ <CAKfTPtBdMO6_APib1OBxW+fdAORX8vXdT-W3fWTRffa5-8bGxQ@mail.gmail.com>
+ <CAB8ipk96OXJcmp_H5EcagrMUigSFdW_gd4wwGjfjBpyP6hqaTg@mail.gmail.com>
+ <CAKfTPtAvuz0SEDX3izcOhZkC+pFddqrSwY+iYO2p7U6N3Z2hRA@mail.gmail.com> <20230228133111.6i5tlhvthnfljvmf@airbuntu>
+In-Reply-To: <20230228133111.6i5tlhvthnfljvmf@airbuntu>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 28 Feb 2023 14:45:36 +0100
+Message-ID: <CAKfTPtAsxz7s6W2peoVj+EcNVQp6bpO6qhPPTXgfJxVtXHbaKQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] sched/fair: update the vruntime to be max vruntime
+ when yield
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Xuewen Yan <xuewen.yan94@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        zhaoyang.huang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -85,42 +79,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interconnect driver is (or soon will be) vital to many other
-devices, as it's not a given that the bootloader will set up enough
-bandwidth for us or that the values we come into are reasonable.
+On Tue, 28 Feb 2023 at 14:31, Qais Yousef <qyousef@layalina.io> wrote:
+>
+> On 02/28/23 10:07, Vincent Guittot wrote:
+> > On Tue, 28 Feb 2023 at 09:21, Xuewen Yan <xuewen.yan94@gmail.com> wrote=
+:
+> > >
+> > > Hi Vincent
+> > >
+> > > On Tue, Feb 28, 2023 at 3:53=E2=80=AFPM Vincent Guittot
+> > > <vincent.guittot@linaro.org> wrote:
+> > > >
+> > > > On Tue, 28 Feb 2023 at 08:42, Xuewen Yan <xuewen.yan94@gmail.com> w=
+rote:
+> > > > >
+> > > > > Hi
+> > > > >
+> > > > > Thanks very much for comments!
+> > > > >
+> > > > > On Tue, Feb 28, 2023 at 6:33=E2=80=AFAM Qais Yousef <qyousef@laya=
+lina.io> wrote:
+> > > > > >
+> > > > > > On 02/27/23 16:40, Peter Zijlstra wrote:
+> > > > > > > On Wed, Feb 22, 2023 at 04:03:14PM +0800, Xuewen Yan wrote:
+> > > > > > > > When task call the sched_yield, cfs would set the cfs's ski=
+p buddy.
+> > > > > > > > If there is no other task call the sched_yield syscall, the=
+ task would
+> > > > > > > > always be skiped when there are tasks in rq.
+> > > > > > >
+> > > > > > > So you have two tasks A) which does sched_yield() and becomes=
+ ->skip,
+> > > > > > > and B) which is while(1). And you're saying that once A does =
+it's thing,
+> > > > > > > B runs forever and starves A?
+> > > > > >
+> > > > > > I read it differently.
+> > > > > >
+> > > > > > I understood that there are multiple tasks.
+> > > > > >
+> > > > > > If Task A becomes ->skip; then it seems other tasks will contin=
+ue to be picked
+> > > > > > instead. Until another task B calls sched_yield() and become ->=
+skip, then Task
+> > > > > > A is picked but with wrong vruntime causing it to run for multi=
+ple ticks (my
+> > > > > > interpretation of 'always run' below).
+> > > > > >
+> > > > > > There are no while(1) task running IIUC.
+> > > > > >
+> > > > > > >
+> > > > > > > > As a result, the task's
+> > > > > > > > vruntime would not be updated for long time, and the cfs's =
+min_vruntime
+> > > > > > > > is almost not updated.
+> > > > > > >
+> > > > > > > But the condition in pick_next_entity() should ensure that we=
+ still pick
+> > > > > > > ->skip when it becomes too old. Specifically, when it gets mo=
+re than
+> > > > > > > wakeup_gran() behind.
+> > > > > >
+> > > > > > I am not sure I can see it either. Maybe __pick_first_entity() =
+doesn't return
+> > > > > > the skipped one, or for some reason vdiff for second is almost =
+always
+> > > > > > < wakeup_gran()?
+> > > > > >
+> > > > > > >
+> > > > > > > > When this scenario happens, when the yield task had wait fo=
+r a long time,
+> > > > > > > > and other tasks run a long time, once there is other task c=
+all the sched_yield,
+> > > > > > > > the cfs's skip_buddy is covered, at this time, the first ta=
+sk can run normally,
+> > > > > > > > but the task's vruntime is small, as a result, the task wou=
+ld always run,
+> > > > > > > > because other task's vruntime is big. This would lead to ot=
+her tasks can not
+> > > > > > > > run for a long time.
+> > > > > >
+> > > > > > The error seems that when Task A finally runs - it consumes mor=
+e than its fair
+> > > > > > bit of sched_slice() as it looks it was starved.
+> > > > > >
+> > > > > > I think the question is why it was starved? Can you shed some l=
+ight Xuewen?
+> > > > > >
+> > > > > > My attempt to help to clarify :) I have read this just like you=
+.
+> > > > >
+> > > > > Thanks for Qais's clarify. And that's exactly what I want to say:=
+)
+> > > > >
+> > > > > >
+> > > > > > FWIW I have seen a report of something similar, but I didn't ma=
+naged to
+> > > > > > reproduce and debug (mostly due to ENOBANDWIDTH); and not sure =
+if the details
+> > > > > > are similar to what Xuewen is seeing. But there was a task star=
+ving for
+> > > > > > multiple ticks - RUNNABLE but never RUNNING in spite of other t=
+asks getting
+> > > > > > scheduled in instead multiple times. ie: there was a task RUNNI=
+NG for most of
+> > > > > > the time, and I could see it preempted by other tasks multiple =
+time, but not by
+> > > > > > the starving RUNNABLE task that is hung on the rq. It seems to =
+be vruntime
+> > > > > > related too but speculating here.
+> > > > >
+> > > > > Yes, now we met the similar scenario when running a monkey test o=
+n the
+> > > > > android phone.
+> > > > > There are multiple tasks on cpu, but the runnable task could not =
+be
+> > > > > got scheduled for a long time,
+> > > > > there is task running and we could see the task preempted by othe=
+r
+> > > > > tasks multiple times.
+> > > > > Then we dump the tasks, and find the vruntime of each task varies
+> > > > > greatly, and the task which running call the sched_yield frequent=
+ly.
+> > > >
+> > > > If I'm not wrong you are using cgroups and as a result you can't
+> > > > compare the vruntime of tasks that belongs to different group, you
+> > > > must compare the vruntime of entities at the same level. We might h=
+ave
+> > > > to look the side because I can't see why the task would not be
+> > > > schedule if other tasks in the same group move forward their vrunti=
+me
+> > >
+> > > All the tasks belong to the same cgroup.
+>
+> Could they move between cpusets though?
 
-Promote the driver to core_initcall to ensure the consumers (i.e.
-most "meaningful" parts of the SoC) can probe without deferrals.
+I have pinned them on same  CPU to force the contention
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/interconnect/qcom/msm8996.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> >
+> > ok.
+> > I have tried to reproduce your problem but can't see it so far. I'm
+> > probably missing something.
+> >
+> > With rt-app, I start:
+> > - 3 tasks A, B, C which are always running
+> > - 1 task D which always runs but yields every 1ms for 1000 times and
+> > then stops yielding and always run
+> >
+> > All tasks are pinned on the same cpu in the same cgroup.
+> >
+> > I don't see anything wrong.
+> > task A, B, C runs their slices
+> > task D is preempted by others after 1ms for a couple of times when it
+> > calls yield. Then the yield doesn't have effect and task D runs a few
+> > consecutive ms although the yield. Then task D restart to be preempted
+> > by others when it calls yield when its vruntime is close to others
+> >
+> > Once task D stop calling yield, the 4 tasks runs normally
+>
+> Could vruntime be inflated if a task gets stuck on a little core for a wh=
+ile
+> (where it'll run slower) then compared to another task running on a bigge=
+r core
+> the vruntime will appear smaller for the latter?
 
-diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-index 347fe59ec293..1eb51ed18b0b 100644
---- a/drivers/interconnect/qcom/msm8996.c
-+++ b/drivers/interconnect/qcom/msm8996.c
-@@ -2109,7 +2109,17 @@ static struct platform_driver qnoc_driver = {
- 		.sync_state = icc_sync_state,
- 	}
- };
--module_platform_driver(qnoc_driver);
-+static int __init qnoc_driver_init(void)
-+{
-+	return platform_driver_register(&qnoc_driver);
-+}
-+core_initcall(qnoc_driver_init);
-+
-+static void __exit qnoc_driver_exit(void)
-+{
-+	platform_driver_unregister(&qnoc_driver);
-+}
-+module_exit(qnoc_driver_exit);
- 
- MODULE_AUTHOR("Yassine Oudjana <y.oudjana@protonmail.com>");
- MODULE_DESCRIPTION("Qualcomm MSM8996 NoC driver");
+vruntime is not scaled by cpu capacity and is "normalized" before the
+task migrates to another cpu so there is no reason to see an impact
+because on running on little or migrating
 
--- 
-2.39.2
-
+>
+>
+> Cheers
+>
+> --
+> Qais Yousef
