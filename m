@@ -2,91 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD796A5154
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 424B26A5152
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjB1Cku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        id S230025AbjB1Ckp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB1Ckt (ORCPT
+        with ESMTP id S229486AbjB1Ckm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:40:49 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F1B29160
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:40:48 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id d30so34109488eda.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:40:48 -0800 (PST)
+        Mon, 27 Feb 2023 21:40:42 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95AA1715D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:40:40 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id h8so5638782plf.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:40:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677552046;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=shopee.com; s=shopee.com; t=1677552040;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S33amPXBgEdvAj5aotTxFER/po/FAxTdpekQddcRdP0=;
-        b=YxKbnUWTkfpWeNciGJkOdlwppOPzA7xvnBrKyFYmchwEuCkUceKSBjsY/taOKRFXAX
-         ZPUXHDflYsjqOhyR7qlNe3t+PNFcdFVoHxqRDCYsxYvSJhx6pOzGIbnu2TsbiNhR8Jt0
-         gyDFTIxOxiTe7XKoVjUFQ/Pow7zfF4xKSe6DE=
+        bh=Er0wiiBkQdwOG2u7UEGoJlR0ZlFwp2/vH39oGy8P/R4=;
+        b=fA1Z/s75eS1borChXO4aytMs1rkzmmjmTG6QPuJ5gcDH6TviWQRBJO1GQPBzY4aMWr
+         /3iPp/0VNobFzlclieU+mWKwo6RMUcnc8tHnNs4QwKxR2UFwHCu4ZpaJnJhkPleyugyI
+         YQvuqLOMCHgNtsgMNMBa0AJ5FnX6GVy6tNV2BjDRCxq441lmSNZeczQSR43GFIw7vt2j
+         zhbmbDSPOAgGUBw1TyLGShquqLWb06HdsePHMntFPOqkIj7NwBU4wTa8M5yb/eF+ZIYP
+         QI1pL3D/mealJ7pNbYXBeuXzW22XRiWSTCiyiHrHxmAzYimj93wqt8sOlSnoVtzodJwp
+         msRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677552046;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S33amPXBgEdvAj5aotTxFER/po/FAxTdpekQddcRdP0=;
-        b=dzX6eXB0KF13u4eQz5lB37KMWmWepAI/kpifGuYI9JiGevMWjb4SqZ2//0puyRgi+L
-         G5r/KNoEvEExl0eBUqJegq8fwrQjNJS0hxCfaH+BXk+oNl0ybvzBW/HfWv/Yc44XodaT
-         5Z9A+2/2aX/bOM8mJr2yvxFFYgkfV0wCtX/zI0EwN7/95FNSB3z6fqnSpVD9Zfzq6AF5
-         pTwjOIbFEaMicZxpNW/mWXPcSFXtNvine0Xg36gpTW+CAz9IxZ1QmCr9vnZlB5u+KDdR
-         8KIaIYIvszCV72Yc4HOP+ucLchrnm6qr71GwczaSrS6wJ48WHiJZfpdCb/iGF9CD5s3o
-         R0Gg==
-X-Gm-Message-State: AO0yUKUgHRLoGfFC0yOh9FbTr37lCYfiII8r3z56ChW/DpQHTMA6hHb7
-        ZS+8kVDE9oF53a8eSt5cwYU5KkIb3WSOWf9AmTM=
-X-Google-Smtp-Source: AK7set9PVV4gRGd61yPESkhyOPDT1DYC7WN3bnj+AvUllLlnQiZTetK+54h2LVHVYUleI5fJv+bSUQ==
-X-Received: by 2002:a17:906:4a08:b0:8b1:88aa:46da with SMTP id w8-20020a1709064a0800b008b188aa46damr764885eju.48.1677552046293;
-        Mon, 27 Feb 2023 18:40:46 -0800 (PST)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id r30-20020a50d69e000000b004acc5077026sm3807177edi.79.2023.02.27.18.40.45
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1677552040;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Er0wiiBkQdwOG2u7UEGoJlR0ZlFwp2/vH39oGy8P/R4=;
+        b=CMq5uv06+1SKPtmxT4vtp8eZ9bDqK4M/JzJH1zw4e3JeuUqjU/ibBgSPYZWoiAZgA4
+         pNPrIpJHVx9hABgOBTpU8aLweC5jp0zFoGN0p2uY3PB9zh+RZETHGCVHL/YkRlct//vS
+         hwVugLJyYjpLafI8H1krWEBq/U/LZn6aegEYgiHM7zBUTSTl6/UNQ+6VzIQd3ighABCX
+         YcgMugUva2IyWmLJ1wIoqo+yHELCiD72zoqzW9X8TLWwQs+ajKwzlaXc+fpE07GVR8ES
+         WfRjdiEMNo7bVsj1e9Nnbl8nqF5xSVUH10rAJglgn/gRTg3XPNjgzBhV5oa/RXoL5ES4
+         gqEA==
+X-Gm-Message-State: AO0yUKWrKy8hi7UHcLhV4ocMgiyOg53Ex2vaJAomVctBt+f/zg3WpLYU
+        J0nrBe9xeA9JIq6h6zr6BXowUg==
+X-Google-Smtp-Source: AK7set8G1TvRtTwvO7FHLKuWq9z5Fh7I0YrV/BsgKo9K9H42mGvzGIhDwQszGK2XvWd+/aOTMc6+zw==
+X-Received: by 2002:a17:902:e80a:b0:19b:afb:b92e with SMTP id u10-20020a170902e80a00b0019b0afbb92emr1356669plg.40.1677552040262;
+        Mon, 27 Feb 2023 18:40:40 -0800 (PST)
+Received: from [10.54.24.141] ([143.92.118.2])
+        by smtp.gmail.com with ESMTPSA id l10-20020a170902d34a00b0019c93a9a854sm5206307plk.213.2023.02.27.18.40.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 18:40:45 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id ec43so34057822edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:40:45 -0800 (PST)
-X-Received: by 2002:a17:906:79a:b0:8b8:aef3:f2a9 with SMTP id
- l26-20020a170906079a00b008b8aef3f2a9mr413714ejc.0.1677552045260; Mon, 27 Feb
- 2023 18:40:45 -0800 (PST)
+        Mon, 27 Feb 2023 18:40:39 -0800 (PST)
+Message-ID: <0222742e-3c31-b75d-6027-3b6da2be16be@shopee.com>
+Date:   Tue, 28 Feb 2023 10:40:36 +0800
 MIME-Version: 1.0
-References: <1677529301-19530-1-git-send-email-george.kennedy@oracle.com>
- <face2b1b-0f2e-4a79-a71b-79681fc56273@t-8ch.de> <CAHk-=whxC0ob3f--B-igBp34ujA5PZQMcTnDQ8Zh8HA7+ZbeWg@mail.gmail.com>
- <64981d94-d00c-4b31-9063-43ad0a384bde@t-8ch.de>
-In-Reply-To: <64981d94-d00c-4b31-9063-43ad0a384bde@t-8ch.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 27 Feb 2023 18:40:28 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi3KimdZnsU5j7fPgPCpDj3QaZvmu5CXRsAE=NiOjmAXw@mail.gmail.com>
-Message-ID: <CAHk-=wi3KimdZnsU5j7fPgPCpDj3QaZvmu5CXRsAE=NiOjmAXw@mail.gmail.com>
-Subject: Re: [PATCH v2] vc_screen: modify vcs_size() handling in vcs_read()
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     George Kennedy <george.kennedy@oracle.com>, jirislaby@kernel.org,
-        gregkh@linuxfoundation.org, sfr@canb.auug.org.au,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH] cpuset: Remove unused cpuset_node_allowed
+To:     Waiman Long <longman@redhat.com>
+Cc:     lizefan.x@bytedance.com, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230227080719.20280-1-haifeng.xu@shopee.com>
+ <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 6:18=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisss=
-chuh.net> wrote:
->
-> Tested-By: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
->
-> (Or feel free to use my patch from above and fixup the goto/break line)
 
-Done.
 
-              Linus
+On 2023/2/27 22:56, Waiman Long wrote:
+> On 2/27/23 03:07, Haifeng Xu wrote:
+>> Commit 002f290627c2 ("cpuset: use static key better and convert to new API")
+>> has used __cpuset_node_allowed instead of cpuset_node_allowed to check
+>> whether we can allocate on a memory node. Now this function isn't used by
+>> anyone, so we can remove it safely.
+>>
+>> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+>> ---
+>>   include/linux/cpuset.h | 12 ------------
+>>   1 file changed, 12 deletions(-)
+>>
+>> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+>> index d58e0476ee8e..7fad5afe3bba 100644
+>> --- a/include/linux/cpuset.h
+>> +++ b/include/linux/cpuset.h
+>> @@ -82,13 +82,6 @@ int cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask);
+>>     extern bool __cpuset_node_allowed(int node, gfp_t gfp_mask);
+>>   -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
+>> -{
+>> -    if (cpusets_enabled())
+>> -        return __cpuset_node_allowed(node, gfp_mask);
+>> -    return true;
+>> -}
+>> -
+>>   static inline bool __cpuset_zone_allowed(struct zone *z, gfp_t gfp_mask)
+>>   {
+>>       return __cpuset_node_allowed(zone_to_nid(z), gfp_mask);
+>> @@ -223,11 +216,6 @@ static inline int cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask)
+>>       return 1;
+>>   }
+>>   -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
+>> -{
+>> -    return true;
+>> -}
+>> -
+>>   static inline bool __cpuset_zone_allowed(struct zone *z, gfp_t gfp_mask)
+>>   {
+>>       return true;
+> 
+> The kernel convention is to add a "__" prefix to a function name if there is higher level helper without the "__" prefix that uses it. Since cpuset_node_allowed() is no longer used. We should just rename __cpuset_node_allowed() to cpuset_node_allowed() and get rid of the unused helper. A bit more code changes are needed for this, though.
+> 
+> Cheers,
+> Longman
+> 
+
+Maybe we can still use cpuset_node_allowed in __cpuset_zone_allowed? If so, less code need to be changed.
+
+Thanks.
