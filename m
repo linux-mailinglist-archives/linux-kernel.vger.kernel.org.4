@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242126A8AEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF6F6A8B7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCBVDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 16:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
+        id S229748AbjCBWG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjCBVDK (ORCPT
+        with ESMTP id S229897AbjCBWGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 16:03:10 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9160125AD;
-        Thu,  2 Mar 2023 13:03:05 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5384ff97993so5765977b3.2;
-        Thu, 02 Mar 2023 13:03:05 -0800 (PST)
+        Thu, 2 Mar 2023 17:06:49 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A36059E65
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:06:46 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id c19so880900qtn.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:06:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677790985;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A0e+M8lR2JG6NpLCRd1WCTH13OlQ8KKo1FJyWNWAWvw=;
-        b=c6nm5fiXqllQvs36BosfqFB+6xsA9Z1k9PhyAFM9pKI+dBF7CmRo+bIwneA/0V8Sab
-         CtmcVNohRYP5SITznCvI3kDP8p/Ix0DRsij7K+ArOJAtJ4an1PYGWEyqAAdZd35ryq24
-         it9dzO8vYCUWKfeJ4Q4gFVPB4FB0wLxrqCmbUkmIDv20iijZKPUqWaHa3L3Hd372AT4l
-         NzGD5nYbYKSw3ct5Ny/YWNIkKazmvoo21yypwwlaUYqPSAc+IhExDRvUFrAVOvaZlIdZ
-         CNLrwHfBBAKi+VyhfDMalJuIQozgPIznWm1RACUCIi7CKSokFJseeJnpTli9cmPB37qB
-         rCuQ==
+        d=linaro.org; s=google; t=1677794805;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=595Lzrfk9ZZdyXMZyGBrATdXcUsn/JJF/BAGuFzsFec=;
+        b=q9WuQVRcQGJLXY3BAu1UJSkTSvvF1INVr1jkwYHInIoJV+Uqtz8CGfN1RJSrewwQyY
+         TnagFtJVhOawMjgbufAar2d6mWYxR2ajsOuPVjIKJUAYydnhR2KGNo1xMi/oT1MsfRHK
+         uam8jWsm0vRXugto4GCeO6FPz5gJtoqfC6tNnN7IcRGZF3vKhORpPi9jDH9uBYqhXIIo
+         97GsyuCMlV5WVhB7bS3a2FIoOddClAuFAE8UeExs/scG80bhGu1TNbYmmZIlrurJlpHX
+         zXLRy6x8NDzI14OVLEJJw7zVESq3wvmcY3IJjwMdKlzvsdwijOAnjHZ/Ti2eARtO7oze
+         2t8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677790985;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A0e+M8lR2JG6NpLCRd1WCTH13OlQ8KKo1FJyWNWAWvw=;
-        b=44cFnVminRddFYNFEMz6ZgecfNvZM3JtJWQ9OphiBRD2oGqs9ts48bcDqbcLR5TSup
-         daj4mFSZRqevtZVmO7pq4mJpziFi5e295cisfxNILTIdSmzbYKNzr+8X94ll4LhQboMD
-         979szFA/fh7cmSazOqdaEXzAS2TqIN0WPBk/K5MC5PJm2I0LOavyOCIW1FJkGKHetv/c
-         JRQvL4xHXagFK2j3O8ekSZBeY6AcLWNZ+BGac3N4ex1AgwL9q0Ej1fhK0Z43/LDbiwlt
-         4rC9t5VtvMG3I9CA2nXXEqBebefVODtvfIWeAs66itoGLCq0aUT2VoRwV4NHwKrKfX+J
-         8eUw==
-X-Gm-Message-State: AO0yUKXXIWue/FTf4fT9LEBDkF4bb3CImSFw+bP0e/QWYBfD+zGoZ9hW
-        mXo5StTTAmeYKcfEbNbvLhEplpPM87bZo+GPgg8=
-X-Google-Smtp-Source: AK7set+UOO2x/FUKlfMt2Kcf7BBasRfyJxFZZYrhv3uDPWWLAYeML2RAIE7qu6JGPaGuplzMzbkqfXSVZXv8L9DaTqQ=
-X-Received: by 2002:a81:b664:0:b0:52e:cea7:f6e3 with SMTP id
- h36-20020a81b664000000b0052ecea7f6e3mr7061692ywk.10.1677790985226; Thu, 02
- Mar 2023 13:03:05 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677794805;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=595Lzrfk9ZZdyXMZyGBrATdXcUsn/JJF/BAGuFzsFec=;
+        b=Wkraw2sOaxfV6egDaY/Gz2cPzIqwmL9ZVGA00cMpzJBo+BKMzoeO+cAdOQXRkI5stZ
+         8YsV/Nn4NfgB+bfmCqV/Er1uNSBscDEeliEF2bC81zefeKc6mXOTR+pHBccLAnV9hp02
+         v5kax5lXLWfpFU0Zia2WUoXkYxecM6HSC/LimWzwtXkhms0biEbS3R335T6lII9eLg2B
+         xybWSDj8vJSKmhBpIhJ8eBkDQDaW/hF4WCEMN662zATl3vtOS5QKLPo/7WEpbE4F6i8z
+         znbyetq9ByfNF9Z6mMs51ow9VH0QDmrDTgYJIDokTxVdYyI49G55zv4wBVNlUNNo4x+r
+         UG+Q==
+X-Gm-Message-State: AO0yUKW8vEef4Q99roytcE/ZGCPJ1aEhgQIJfkaCS55Ic/lsytT05d7D
+        H1IzFathcGZIyTynYBsMbghpGA==
+X-Google-Smtp-Source: AK7set/9MBtd+iJjRd54/HRa57T4mYovpBo3CmEJtLHoI+UdeNKSex3laftnTdJhaGJtNjJcjmVNRQ==
+X-Received: by 2002:ac8:5b10:0:b0:3a9:818f:db3d with SMTP id m16-20020ac85b10000000b003a9818fdb3dmr19779078qtw.53.1677794805636;
+        Thu, 02 Mar 2023 14:06:45 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id g5-20020ac87d05000000b003b68d445654sm527483qtb.91.2023.03.02.14.06.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 14:06:45 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        techsupport@winsystems.com, stable@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Paul Demetrotion <pdemetrotion@winsystems.com>
+Subject: [PATCH] gpio: ws16c48: Fix off-by-one error in WS16C48 resource region extent
+Date:   Tue, 28 Feb 2023 03:11:26 -0500
+Message-Id: <20230228081126.94280-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <ZACvxNOuuyifQ9Nx@kernel.org> <37578649-c696-f3b5-a216-196e210929e5@gmail.com>
-In-Reply-To: <37578649-c696-f3b5-a216-196e210929e5@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 2 Mar 2023 22:02:54 +0100
-Message-ID: <CANiq72=nvg3cU61zRYXxLUKvEib1qezRHGZSC=7sGah8aDH-dw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] rust: bindgen: Add `alt_instr` as opaque type
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Derek Barbosa <debarbos@redhat.com>,
-        rust-for-linux@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 3:59=E2=80=AFPM Martin Rodriguez Reboredo
-<yakoyoku@gmail.com> wrote:
->
-> Still, we have to be careful if these kind of things appear in
-> the future.
+The WinSystems WS16C48 I/O address region spans offsets 0x0 through 0xA,
+which is a total of 11 bytes. Fix the WS16C48_EXTENT define to the
+correct value of 11 so that access to necessary device registers is
+properly requested in the ws16c48_probe() callback by the
+devm_request_region() function call.
 
-Not entirely sure what you mean -- do you mean if some Rust
-abstractions used its fields? But if we were in that case, it would
-not compile, so we would notice. Or what do you mean?
+Fixes: 2c05a0f29f41 ("gpio: ws16c48: Implement and utilize register structures")
+Cc: Paul Demetrotion <pdemetrotion@winsystems.com>
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ drivers/gpio/gpio-ws16c48.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> And I notice that You haven't mentioned the version of Bindgen that
-> You've used, including its linked libclang too. Otherwise I think this
-> could be accepted.
+diff --git a/drivers/gpio/gpio-ws16c48.c b/drivers/gpio/gpio-ws16c48.c
+index e73885a4dc32..afb42a8e916f 100644
+--- a/drivers/gpio/gpio-ws16c48.c
++++ b/drivers/gpio/gpio-ws16c48.c
+@@ -18,7 +18,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+ 
+-#define WS16C48_EXTENT 10
++#define WS16C48_EXTENT 11
+ #define MAX_NUM_WS16C48 max_num_isa_dev(WS16C48_EXTENT)
+ 
+ static unsigned int base[MAX_NUM_WS16C48];
 
-I could reproduce this with the expected versions. Since, for now,
-those are the only ones supported and the build system emits a warning
-otherwise, I think it is fair to assume those versions were used
-unless otherwise stated.
+base-commit: 4827aae061337251bb91801b316157a78b845ec7
+-- 
+2.39.2
 
-Cheers,
-Miguel
