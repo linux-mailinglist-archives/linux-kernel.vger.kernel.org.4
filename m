@@ -2,132 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABD66A5CAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1B06A5CB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjB1QBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S230283AbjB1QEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjB1QBT (ORCPT
+        with ESMTP id S230223AbjB1QEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:01:19 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A8E32527
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:01:14 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id f41so13798472lfv.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:01:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677600072;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BLj8g7cWA02hy9idKplTTomEBJCXg5TfcG4v549D2mI=;
-        b=XTcy/2nOnCqrShLeYBIrtqCIEGQogKWvdj/potwrGdHpnyNfKT+/lETN9btMktP41F
-         tYTaO8DKwzWhDu5/fe95UzbUMDbiJ2ybvLebDdkKWrFv2jMnih/F5JDU2EVE/5zIz2YF
-         +ZXV/t8JkvwzY9f70zITcCSwDhUpl295OfF1osf+d4LqGmTH6vVAEDnJnsDuirCwGZ1T
-         iWAk3wV0r6Mi8vABQNEE4g0QLZe4isivl/5lqmK41cFz3C0SxPBQ6+JB8a31wC3+0zp9
-         2BvJHg6iRpsz1Kyl4OVBF7mn+xOszpbBOwgHB2ilGteXiJRR7ap8PDjoOL3OYMxgQngj
-         0/5A==
+        Tue, 28 Feb 2023 11:04:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3274222DB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:03:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677600229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZWMAworI50CQabTilrteqDasDy+XoVkceugkq8E6Pr8=;
+        b=E28+0VgeUfH/TkeUbfmj2Fgr2FyimH3FwujMavEkRUVt+nBYJUlBr2Me6F5hpG+j/b/PyC
+        8kaomLAzyCo1U3XSSnod6KSAG1AX0s46ZXhP3W6JJBq3VnwDWo5rP9Sn4qJTpJjLXtPJPS
+        nguFQ/fN5fPlWviWjHdUG23bOcYFkVA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-344-OIBB_mTcOaal_WTAYKfLdA-1; Tue, 28 Feb 2023 11:03:46 -0500
+X-MC-Unique: OIBB_mTcOaal_WTAYKfLdA-1
+Received: by mail-wm1-f70.google.com with SMTP id n27-20020a05600c3b9b00b003e9ca0f4677so4410154wms.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:03:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677600072;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BLj8g7cWA02hy9idKplTTomEBJCXg5TfcG4v549D2mI=;
-        b=kLkRQHnQemh36hrosSQYLnTlfh4Z7+YTuzvlGb6jdNJ7aFiEw90b9DJp8WE/aCG16P
-         sQKIiIgZ9snpRdoio8Hm4X2OEl5mfkTOO3Hufj//vtEarc5jfgk1lC55kmfBOfSVkn9o
-         ynZu7Y+b2EvejJf1Y5kWMF80ABDOjTJWUoIob6STbGCihTuOxkT1TWZW/uZRs4POQqIl
-         rmPgfvv8KMR5vY4uVnUANdShvYkGbsKVX5hD9TKOnP3w0l2OjH5hX4/XrQivK8U2Y5eF
-         NNWZoqT8o6J80hjTh1RlUR58KyqoRWclveDVY+KNzad9SJxfmuOGcgRMRnxihXRadHE3
-         /gWw==
-X-Gm-Message-State: AO0yUKUsMFIbOqzeg5DFb57DqSumzuVHYGr1k4AWFNPvxAblQZL52f73
-        +PbCNxgFqEGUU+j94vWVhRBrFw==
-X-Google-Smtp-Source: AK7set8s9zsE3ofLcRWplOeVWmWiD2DJYeZtoYujRVgUqRI0dBTPbgKPLSCiDcvvEjpyZqVpqeauvw==
-X-Received: by 2002:ac2:4465:0:b0:4e0:ce21:b90 with SMTP id y5-20020ac24465000000b004e0ce210b90mr972172lfl.14.1677600072137;
-        Tue, 28 Feb 2023 08:01:12 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id u28-20020ac243dc000000b004d5a5d90d83sm1393752lfl.60.2023.02.28.08.01.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 08:01:11 -0800 (PST)
-Message-ID: <3d424869-dcdb-5ef7-5cba-0025924e2f50@linaro.org>
-Date:   Tue, 28 Feb 2023 17:01:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 08/18] media: venus: hfi_venus: Fix version checks in
- venus_halt_axi()
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        d=1e100.net; s=20210112; t=1677600224;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWMAworI50CQabTilrteqDasDy+XoVkceugkq8E6Pr8=;
+        b=Ur1wJqr3m2Wha4a5FnkhmNX9YKLmY7i9VsqsLIyzykT1BWoGAC6W7MtcrO2EAGWDaq
+         uCTXXx9Ziw1GQLFZO6n5fOy/sHuyZdRQgUmL2P9ZGzKDWlNIpPgcTDtsuV9aydsFTZIa
+         sDSrWjSwvQSXSlO+HfL4HWRKYYZA25fAUk0++AyaQ2Nbv2f1EFZVBUkQCRt7a4U97QJr
+         wZJAbr0QroR2XcrwoovKSmfBrHaDAdhlwfEKUdMADLzJYPvIHU+LpA0wHglEKlM/8qbc
+         mAT2DrHQHnCFwmJAuKkNljJV3RMV+8hBT1oTjy71rJeKZNipV6lvURA6BTMfyMbfGShk
+         nu9A==
+X-Gm-Message-State: AO0yUKUOVZEFZlqgZzPwvRsfBJ0aUxs8rFf2qWBS1uGIt4V66DJMvIRI
+        VHCcZM5J9LhddVG9Bja5yxpYb2sA4nlvxNbYIcTOlC2F6HgygLDAOxIX2c4Ln8CJzROQTQZR0/M
+        0uEw5fVnw1A8K9A1t8jjcPdeb
+X-Received: by 2002:a05:6000:1c5:b0:2ca:fd48:7c1e with SMTP id t5-20020a05600001c500b002cafd487c1emr2573784wrx.48.1677600224598;
+        Tue, 28 Feb 2023 08:03:44 -0800 (PST)
+X-Google-Smtp-Source: AK7set9v0g4E7whTc7rYOu89mROUSRxzGr6QXBdhfOQaLBzNnR8lC5RcL1m+NJS3PUR1LZvjFt2e1g==
+X-Received: by 2002:a05:6000:1c5:b0:2ca:fd48:7c1e with SMTP id t5-20020a05600001c500b002cafd487c1emr2573757wrx.48.1677600224266;
+        Tue, 28 Feb 2023 08:03:44 -0800 (PST)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id 13-20020a05600c020d00b003dc1d668866sm16485490wmi.10.2023.02.28.08.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 08:03:43 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Vikash Garodia <vgarodia@qti.qualcomm.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mka@chromium.org" <mka@chromium.org>,
+        Albert Esteve <aesteve@redhat.com>,
+        "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-8-58c2c88384e9@linaro.org>
- <a5fe6f7d-d410-9903-789c-d8c760ce6f1b@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <a5fe6f7d-d410-9903-789c-d8c760ce6f1b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Fritz Koenig <frkoenig@google.com>,
+        "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>,
+        "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: RE: [PATCH] Revert "venus: firmware: Correct non-pix start and end
+ addresses"
+In-Reply-To: <87356wn6xf.fsf@minerva.mail-host-address-is-not-set>
+References: <20230207102254.1446461-1-javierm@redhat.com>
+ <DM8PR02MB8169809493BF2822E6C29EECF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
+ <70c01751-1dd7-c4bd-a96e-94dea437aa40@redhat.com>
+ <DM8PR02MB81696369DBFE619E43F81EEFF3DE9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <e87344c6-acef-7f3f-5cac-24961dbd9401@redhat.com>
+ <6f97a117-0d9c-e21b-9adf-50f2233ba9e3@leemhuis.info>
+ <ea283f0a-ca72-447e-ce87-68c1bbee793e@leemhuis.info>
+ <CAFOAJEdBbzqkGVqw+vgNYNxyaTHwvjFyskTwjycP820L2tOctA@mail.gmail.com>
+ <b548da46-bf91-6f1c-4b63-4002109056bc@leemhuis.info>
+ <9a0bfef8-0b5d-f4d0-a8a5-4bbcacc5c0fb@leemhuis.info>
+ <DM8PR02MB8169E16569616870A583B376F3AB9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <87356wn6xf.fsf@minerva.mail-host-address-is-not-set>
+Date:   Tue, 28 Feb 2023 17:03:43 +0100
+Message-ID: <87edq9hj4w.fsf@minerva.mail-host-address-is-not-set>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
+> Vikash Garodia <vgarodia@qti.qualcomm.com> writes:
+>
+> Hello Vikash,
+>
+>> Hi All,
+>>
+>
+> [...]
+>
+>>>
+>>>No reply from Mauro and Linus chose to not apply the revert I pointed him to.
+>>>That at this point leads to the question:
+>>>
+>>>Vikash, did you or somebody else make any progress to fix this properly?
+>>
+>> We tried with different settings for the registers and arrive at a conclusion that
+>> the original configuration was proper. There is no need to explicitly configure
+>> the secure non-pixel region when there is no support for the usecase. So, in summary,
+>> we are good to have the revert.
+>>
+>
+> Perfect. Thanks a lot for looking at this.
+>
+>> Stan, could you please help with the revert and a pull request having this revert
+>> alongwith other pending changes ?
+>>
+>
+> Other fix posted is "media: venus: dec: Fix capture formats enumeration order":
+>
+> https://patchwork.kernel.org/project/linux-media/patch/20230210081835.2054482-1-javierm@redhat.com/
+>
 
-On 28.02.2023 16:36, Bryan O'Donoghue wrote:
-> On 28/02/2023 15:24, Konrad Dybcio wrote:
->> Only IRIS2(_1) should enter the until-now-IS_V6() path and the
->> condition for skipping part of it should be IS_IRIS2_1 and not the
->> number of VPP pipes. Fix that.
->>
->> Fixes: 4b0b6e147dc9 ("media: venus: hfi: Add 6xx AXI halt logic")
->> Fixes: 78d434ba8659 ("media: venus: hfi: Skip AON register programming for V6 1pipe")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/media/platform/qcom/venus/hfi_venus.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
->> index 4d785e53aa0b..0d137e070407 100644
->> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
->> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
->> @@ -550,10 +550,10 @@ static int venus_halt_axi(struct venus_hfi_device *hdev)
->>       u32 mask_val;
->>       int ret;
->>   -    if (IS_V6(hdev->core)) {
->> +    if (IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
->>           writel(0x3, cpu_cs_base + CPU_CS_X2RPMH_V6);
->>   -        if (hdev->core->res->num_vpp_pipes == 1)
->> +        if (IS_IRIS2_1(hdev->core))
->>               goto skip_aon_mvp_noc;
->>             writel(0x1, aon_base + AON_WRAPPER_MVP_NOC_LPI_CONTROL);
->>
-> 
-> If you want to denote these as fixes, you need your patch 02/18 as a depend...
-The main purpose of the Fixes tag is to mark commits that fix bugs in
-existing code and it only assists in autoselecting stable patches.
-Backporting this makes little sense, as we only support IRIS2 (8250)
-and IRIS2_1 (7280) HFI6 platforms and new additions won't be backported.
+Vikash,
 
-Konrad
-> 
-> ---
-> bod
+Could you or someone else from QC please Review/Ack these two patches,
+since it seems that Stanimir moved on and maybe is not working in this
+driver anymore?
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
