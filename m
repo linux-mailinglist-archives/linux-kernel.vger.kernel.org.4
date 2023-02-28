@@ -2,165 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA9D6A62CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD8D6A62D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjB1WtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S229540AbjB1WuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjB1WtQ (ORCPT
+        with ESMTP id S229566AbjB1WuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:49:16 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D919135255
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:49:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1677624550; x=1709160550;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Vy8BS1FuQ/PhAs7eaiMqD6ABWjKT7b+2fZNPoZ13nRU=;
-  b=SgSYfGrKLeiyVMBJNEdLwDsGOP+tPjVRo9Va/QOp8FWTsj5pbFQdlRzj
-   dqfxWbQstw/Rykkdf/uBx5YifE4mfiBUuCEyVlncZtU84C69a2VoECYvL
-   a2NOBacuCEllFjgV84SsBF4PJgh/sav5fsRlr+lXFFfoz2v/n7h8PvSjR
-   PXYNDDnILkALaLSHuAXGx2zvOHI2weGhrzY+5+Zhbgh48O86C4wT6qXPU
-   257Z1OoInmKtZikPXhA0o3gzHLZMItoYpv5DJtXHOv72TvipYGQwXTuta
-   8z0fzgvt8+yQx8jS35JmGvK8i0W0hKROg7dh+kT/Kd69EN4td3glyJ5Eb
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,223,1673884800"; 
-   d="scan'208";a="224470108"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Mar 2023 06:49:09 +0800
-IronPort-SDR: EK6lzJ7oPYIdhuTQLQ960XwrV6alckdYezmvdXMO3Fpaap/Okb5OkNmsjhnUztt6OeLCLc6psZ
- ymMYrRjpS/wtvrMTVNa4XkTu36j7fKNP6qv/slX43idwX8p24wjJVVmUgCVZsQ9uGBdaegwQ8q
- 1Xyv2n8pwYQYqLKMvLmw//zGn9Q6nMIkTETTDy63KNF8dPixl4uM3L6PaCtogRm374kkw1mEG7
- yZLQrTvLT1z9F5dU4Spfn4esJL/YM3kJkV8QooNSEMfWE4Db/5N5WZBsdWCZmHpU+OSZuJRBZK
- At8=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2023 14:00:15 -0800
-IronPort-SDR: NsEDAFCd4ZSTj3Wj+EakJfW6g54gNTbZ7pUBC5kxqH3zsNJ6NbOmgzPfKBcdfVyIMsirPrBM1n
- qYthxSzZ30XnZr3HB/mLtMQA/NWnxM75f0eIv59/YRTZLjZDw/4Dm8lqMEKc86Ji7ZSNPo2Omp
- b8KE+p5Ce7dooEk5e14OIPxjHRRFm2+6iHrejhx/4jNE4h+GSakB5Gfh87OBTMMpLaivbCVOD8
- WMov4zT6Y+bf6TtJbnNv0jhLPeiub89dEbRA7X8DBFq1o5ioFa38dJ9i+f4B/r/XEzMTGwZs6W
- /Bo=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2023 14:49:09 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PRCGX6sWPz1RvTr
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:49:08 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1677624548; x=1680216549; bh=Vy8BS1FuQ/PhAs7eaiMqD6ABWjKT7b+2fZN
-        PoZ13nRU=; b=nNSuDRehF9NyWIUnmI4m07iYXddB/xgLe80TA1tPm62D0oXt4RJ
-        us8sBSemat7k5pviO1lhW+duKe9Zedu3bh03ySY3v+0Zxu2ivUdFWahT55NcbpzT
-        zKbn3NPYI6vX2h4bMk0pzlbjPFuRkyq+c6osZzHOSg8xoMvUhnDStQxsJsl5afLZ
-        CcbRd+fOiTTj+onBmRcCkCcLBrLDWmbcMIIpSJ3XGWvJZA5bySbuavDPXCGDffkY
-        VTTSceKu2ks0Ul0gLNSCpHaMZck1WXtVnjeZVnPqxsGpAyk3r80WjwEOZ38l+ZW7
-        3ZU1GEOZDzdd3lM6SsYwWPl4ASsc/4zhF2Q==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id r4Dzdz9zLvFe for <linux-kernel@vger.kernel.org>;
-        Tue, 28 Feb 2023 14:49:08 -0800 (PST)
-Received: from [10.225.163.47] (unknown [10.225.163.47])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PRCGW1cbgz1RvLy;
-        Tue, 28 Feb 2023 14:49:07 -0800 (PST)
-Message-ID: <3719a4f0-1a5a-4661-a6d7-5d4f67d7b7e8@opensource.wdc.com>
-Date:   Wed, 1 Mar 2023 07:49:05 +0900
+        Tue, 28 Feb 2023 17:50:05 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B8C360BD;
+        Tue, 28 Feb 2023 14:49:48 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so15251580pjb.3;
+        Tue, 28 Feb 2023 14:49:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677624588;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+Zwi5NkQVNAd3Ci7xkK2t0DH7WVF3Tcbrz6/lTqUQc=;
+        b=PIJGqEMH5yJKExdMBNeASHbvErvT9M8sHs0vvIKON96f1JEb72jtE3OvRye+bmAv+G
+         t3n7Woh97W2teU7RAf+4O0rFLb1P5jRBHZFMnQegX4S4M4KYEaKAIHuN2N8EOp37LJfK
+         YyiDYd8C56owyFC4jpxXWEyimSHP4t63Q81ONF21gT+EvldlrGMDa4ZK2gafcj1vJv2e
+         I3SYUzMaJpamZdzlFU3mAKJE5bmZGZsLvMk7av0Ubl1wQjs+z4qc7Pu+rIuoBv0+eAki
+         MuauQY4XogDMe7sS8ogKAgoJjdwIiqENBcxZqDmyaV9JPj1raeyllEj0Va1CFL1ZrGSv
+         LcHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677624588;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g+Zwi5NkQVNAd3Ci7xkK2t0DH7WVF3Tcbrz6/lTqUQc=;
+        b=dYwPyi/1AQeMsIAwvHB36CZBQKCuTTorqxSl2eIkT4qCwn7ZYAyqQfOiJNhLzAnwSH
+         EuAPv9B7s2ZHTjpQKeZdDRM2VDW7lOiWehQTnO8261ZJ1qow16ObobYESmzt0SzgCB6+
+         MmSlh9tUBfCR0C0WdUVdaE3Q0ZzJe1yc5AYEq/81RG9uKIG0vy4Ef8UEvsZiztI7WWQ3
+         UNywcUXCNVy9t8u3hoocyuGh2BRjS3+umRV7NtaY5P9E88MWgIl7I3fQu9j8lndijVH/
+         0ej28L9bc8DAfXrkUEihUOVvSXXv8gEdECvdtOWUuEsV1fNvBjdNrMpQ8+VSRitTMIWW
+         koaA==
+X-Gm-Message-State: AO0yUKVeLymwLhC77ganoW8ZFdLuoSMuvMjmVst1PN+BcTxvU7i4brNb
+        u4d6jnj6EKmkeewoCQ+VqswDrqeH24k=
+X-Google-Smtp-Source: AK7set/QFb/pyopNhpRDre6NapurODnHUQ3B1m/bqmjC+Ng5sck2PGs5G1PBU7hrmQDUEL1FdU+JNQ==
+X-Received: by 2002:a05:6a21:6da1:b0:cc:c69b:f7e5 with SMTP id wl33-20020a056a216da100b000ccc69bf7e5mr5558797pzb.9.1677624588092;
+        Tue, 28 Feb 2023 14:49:48 -0800 (PST)
+Received: from blamoreauxMMD6M.vmware.com.com ([2601:600:8380:7f70:5855:8603:f7c2:a87f])
+        by smtp.gmail.com with ESMTPSA id d137-20020a63368f000000b00478c48cf73csm6130915pga.82.2023.02.28.14.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 14:49:47 -0800 (PST)
+From:   "Brennan Lamoreaux (VMware)" <brennanlamoreaux@gmail.com>
+To:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     blamoreaux@vmware.com, frederic.martinsons@gmail.com,
+        srivatsa@csail.mit.edu, vsirnapalli@vmware.com,
+        amakhalov@vmware.com, keerthanak@vmware.com, ankitja@vmware.com,
+        bordoloih@vmware.com, srivatsab@vmware.com,
+        "Brennan Lamoreaux (VMware)" <brennanlamoreaux@gmail.com>,
+        Daniel Wagner <wagi@monom.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 4.19-rt] workqueue: Fix deadlock due to recursive locking of pool->lock
+Date:   Tue, 28 Feb 2023 14:49:38 -0800
+Message-Id: <20230228224938.88035-1-brennanlamoreaux@gmail.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/2] riscv: support ELF format binaries in nommu mode
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@dabbelt.com>, gerg@kernel.org,
-        Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <mhng-20faeb04-8ed4-4759-8f13-aef3d2446d15@palmer-ri-x1c9a>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <mhng-20faeb04-8ed4-4759-8f13-aef3d2446d15@palmer-ri-x1c9a>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 06:52, Palmer Dabbelt wrote:
-> On Tue, 28 Feb 2023 05:51:24 PST (-0800), gerg@kernel.org wrote:
->> The following changes add the ability to run ELF format binaries when
->> running RISC-V in nommu mode. That support is actually part of the
->> ELF-FDPIC loader, so these changes are all about making that work on
->> RISC-V.
->>
->> The first issue to deal with is making the ELF-FDPIC loader capable of
->> handling 64-bit ELF files. As coded right now it only supports 32-bit
->> ELF files.
->>
->> Secondly some changes are required to enable and compile the ELF-FDPIC
->> loader on RISC-V and to pass the ELF-FDPIC mapping addresses through to
->> user space when execing the new program.
->>
->> These changes have not been used to run actual ELF-FDPIC binaries.
->> It is used to load and run normal ELF - compiled -pie format. Though the
->> underlying changes are expected to work with full ELF-FDPIC binaries if
->> or when that is supported on RISC-V in gcc.
->>
->> To avoid needing changes to the C-library (tested with uClibc-ng
->> currently) there is a simple runtime dynamic loader (interpreter)
->> available to do the final relocations, https://github.com/gregungerer/uldso.
->> The nice thing about doing it this way is that the same program
->> binary can also be loaded with the usual ELF loader in MMU linux.
->>
->> The motivation here is to provide an easy to use alternative to the
->> flat format binaries normally used for RISC-V nommu based systems.
->>
->> Signed-off-by: Greg Ungerer <gerg@kernel.org>
->> ---
->>
->>  arch/riscv/include/asm/elf.h         |   11 +++++++++-
->>  arch/riscv/include/asm/mmu.h         |    4 +++
->>  arch/riscv/include/uapi/asm/ptrace.h |    5 ++++
->>  fs/Kconfig.binfmt                    |    2 -
->>  fs/binfmt_elf_fdpic.c                |   38 +++++++++++++++++------------------
->>  include/linux/elf-fdpic.h            |   14 +++++++++++-
->>  include/uapi/linux/elf-fdpic.h       |   15 +++++++++++++
->>  7 files changed, 67 insertions(+), 22 deletions(-)
-> 
-> Adding Damien, as IIRC he's had some hacked up userspace bits for the 
-> K210.  I'm yet to get anything running, but it'd be great if we get this 
-> to a point where I can actually boot test this on QEMU (I'm just doing 
-> builds now).
+Upstream commit d8bb65ab70f7 ("workqueue: Use rcuwait for wq_manager_wait")
+replaced the waitqueue with rcuwait in the workqueue code. This change
+involved removing the acquisition of pool->lock in put_unbound_pool(),
+as it also adds the function wq_manager_inactive() which acquires this same
+lock and is called one line later as a parameter to rcu_wait_event().
 
-+Niklas
+However, the backport of this commit in the PREEMPT_RT patchset
+4.19.255-rt114 (patch 347) missed the removal of the acquisition of
+pool->lock in put_unbound_pool(). This leads to a deadlock due to
+recursive locking of pool->lock, as shown below in lockdep:
 
-Niklas, didn't you add a nommu qemu build for buildroot ? Can't find the config
-though...
+[  252.083713] WARNING: possible recursive locking detected
+[  252.083718] 4.19.269-3.ph3-rt #1-photon Not tainted
+[  252.083721] --------------------------------------------
+[  252.083733] kworker/2:0/33 is trying to acquire lock:
+[  252.083747] 000000000b7b1ceb (&pool->lock/1){....}, at:
+put_unbound_pool+0x10d/0x260
 
-> 
-> Given that it's the second week of the merge window and this is a bunch 
-> of new uABI it seems best to hold off until the next cycle.  I poked 
-> around and don't see anything wrong, but I'll try and take a more 
-> detailed look after the merge window.
+[  252.083857]
+               but task is already holding lock:
+[  252.083860] 000000000b7b1ceb (&pool->lock/1){....}, at:
+put_unbound_pool+0xbd/0x260
 
-Does any riscv compiler support nommu fdpic now ? When doing the work on the
-k210, there was no support at all, hence the statically linked user binaries
-used (no shared text for libraries).
+[  252.083876]
+               other info that might help us debug this:
+[  252.083897]  Possible unsafe locking scenario:
 
+[  252.083900]        CPU0
+[  252.083903]        ----
+[  252.083904]   lock(&pool->lock/1);
+[  252.083911]   lock(&pool->lock/1);
+[  252.083919]
+                *** DEADLOCK ***
 
+[  252.083921]  May be due to missing lock nesting notation
+
+Fix this deadlock by removing the pool->lock acquisition in
+put_unbound_pool().
+
+Signed-off-by: Brennan Lamoreaux (VMware) <brennanlamoreaux@gmail.com>
+Cc: Daniel Wagner <wagi@monom.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Tejun Heo <tj@kernel.org>
+---
+ kernel/workqueue.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index a9f3cc02bdc1..55ebdd56a5de 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -3394,7 +3394,6 @@ static void put_unbound_pool(struct worker_pool *pool)
+ 	 * Because of how wq_manager_inactive() works, we will hold the
+ 	 * spinlock after a successful wait.
+ 	 */
+-	raw_spin_lock_irq(&pool->lock);
+ 	rcuwait_wait_event(&manager_wait, wq_manager_inactive(pool),
+ 			   TASK_UNINTERRUPTIBLE);
+ 	pool->flags |= POOL_MANAGER_ACTIVE;
 -- 
-Damien Le Moal
-Western Digital Research
+2.35.6
 
