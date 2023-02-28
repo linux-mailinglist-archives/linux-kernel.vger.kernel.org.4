@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F866A574D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559156A5751
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjB1K6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S229951AbjB1K6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjB1K5n (ORCPT
+        with ESMTP id S231269AbjB1K6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:57:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31936302BB;
-        Tue, 28 Feb 2023 02:57:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD272B80DFF;
-        Tue, 28 Feb 2023 10:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B13C433D2;
-        Tue, 28 Feb 2023 10:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677581825;
-        bh=D2iUAMCdIQFGE46K3Uak4YjRzsHqOT4rcmVgoAEo6O0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jis5BtzV8MosCQobg4QszUhhb39t1rzLG0VGviohElDNqh5GoyP6KuZlWTCfq2LZi
-         yU+/nWL8swju5Gps8ItiqQv7PW95MCbbIPxdtl171FLocmpo91MRZ8me+mxlnfBXfV
-         /aZXQTaaOSiSq+1ILvwoLqn2u289yGlAsoXV9vKw7Fk3wSUjmX3PHyhrJbghKwJg4R
-         BoouyN1uoY2l7HU+2iCPxkyCuXRVd8Cj5cVf1zjVNj728psroVqJOKCEviC1h7hYj+
-         mELGCbLaGmvLGKdE2WCrLw1B+bMtdSgcXC9Ny8+lRs/fJCdcj1pf77ER4QUIqP35Jw
-         xmdb2bmiIl84w==
-Date:   Tue, 28 Feb 2023 11:57:02 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] driver core: bus: Handle early calls to bus_to_subsys()
-Message-ID: <Y/3d/sfipoe130Hu@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <0a92979f6e790737544638e8a4c19b0564e660a2.1676983596.git.geert+renesas@glider.be>
+        Tue, 28 Feb 2023 05:58:15 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A2CB769
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:58:03 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so9174752wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:58:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677581881;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u6A2Sc2TLWOMEQ5y9qjHmMZKsT1Mi1qRqi+sfSjfpO0=;
+        b=QqHiXL8xz6P0TwObJgri1HUKQUaS8QRVLWP1zU/kcdZdLcOZfuS5LDo0CS5erblAss
+         i3mypQ/t5If0PlKVO61jzWGlWmhg5iEbWbVAJTt3c/96K1HPpgFdTgkGsdah4LuMTPwD
+         fnCX9JgcR1J9JaLiR8LQCOAqmX0u0Hh/hRjIgiK5GzJp9UlARoRRiba8GJvtAuACohiF
+         XCvoPuYjEyVDUWaHz3N/HSDzhCIf0MpsRIZzq9mUHo9ch8t7+BCyvKtKV3vDwWCdAWjW
+         hm3QDZr1IgJXPvCyKzLVDXISQaIKaeMJgoaCP4/OgQK0T5wviBJNNPhoAI7f1FICoZbm
+         ZqMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677581881;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u6A2Sc2TLWOMEQ5y9qjHmMZKsT1Mi1qRqi+sfSjfpO0=;
+        b=EVryy2pHZZHpBdOwJ5V71RV/L+AM5/TI+/9kclJF8aUW8l7LNrh5EXx3B9JHVnFp9P
+         Ts4Uepekc/xu6Ux9HxetgFsRwuUBBJ6sxtlY1/fsWPGOGytFb5f7f3YEvhqmgG9XKq/4
+         yWYpLJ6e6XSpC+oc5C94egdh4zixmp3BB52dZqO9581jpaQWnYECY/T6gE5cxCAvzgfY
+         8QBpEGBkU4atkg+4wgXn7ls9dy5Pc2yw3R7TJcMQcv75XIM77yFpmv75RPQcMhO10UsG
+         VoPc+Pfwe08LyPTxFl0iY053AX2R3OR6/snGnkpzITUPVJmH7bBCGY9UimAOck/0lXPY
+         YUMA==
+X-Gm-Message-State: AO0yUKWFqErcIlTIH+p895JSQlcToBvhATm1cZ6J9TYmox48OypSJdt5
+        EAXzoKk9/okupxOZZI3fpPQFGA==
+X-Google-Smtp-Source: AK7set9aj//n9rmdyGmH3/dOQnO4mTtlCGyI8o1O6rY/P5ntjM8Tk+WDegjEDx/5j8Gn/DHp/NQNyQ==
+X-Received: by 2002:a05:600c:4d20:b0:3eb:2e66:8 with SMTP id u32-20020a05600c4d2000b003eb2e660008mr1731362wmp.35.1677581881467;
+        Tue, 28 Feb 2023 02:58:01 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id fl16-20020a05600c0b9000b003e1f6e18c95sm16244493wmb.21.2023.02.28.02.57.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 02:58:01 -0800 (PST)
+Message-ID: <545c23f3-1d68-2bff-89d9-584e3ca31044@linaro.org>
+Date:   Tue, 28 Feb 2023 11:57:58 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bf7Dv4zlfrDlY6f9"
-Content-Disposition: inline
-In-Reply-To: <0a92979f6e790737544638e8a4c19b0564e660a2.1676983596.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/2] drivers: watchdog: Add StarFive Watchdog driver
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
+References: <20230220081926.267695-1-xingyu.wu@starfivetech.com>
+ <20230220081926.267695-3-xingyu.wu@starfivetech.com>
+ <CAJM55Z823iqUqD8enM0qJ_MA3Tw94Mn0mq71fbLT1Qjo2s2J3g@mail.gmail.com>
+ <0ffb02d2-0bbd-fd0d-b0f6-cb5605570050@starfivetech.com>
+ <CAJM55Z_hRpUYueZ-XuWUx1NfAsL9E+-4ry9TYeRWM_bKXvym-g@mail.gmail.com>
+ <Y/3coFvMWOLaaY9p@wendy>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y/3coFvMWOLaaY9p@wendy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/02/2023 11:51, Conor Dooley wrote:
+> On Tue, Feb 28, 2023 at 11:36:49AM +0100, Emil Renner Berthing wrote:
+>> On Tue, 28 Feb 2023 at 10:44, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+>>> On 2023/2/26 22:14, Emil Renner Berthing wrote:
+>>>> On Mon, 20 Feb 2023 at 09:21, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+> 
+>>> So the dt-bingdings need to rename, and which one could be better,
+>>> 'starfive,jh71x0-wdt.yaml' or 'starfive,jh-wdt.yaml'?
+>>
+>> Sure, starfive,jh71x0-wdt.yaml sounds good to me.
+> 
+> I feel like a common comment I see from the dt folks is to not put
+> wildcards in filenames & just pick the first compatible.
+> I could very well be wrong on that front though...
 
---bf7Dv4zlfrDlY6f9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+First compatible is a bit better, unless you are sure this will cover
+all such compatibles now and in the future. For many bindings the
+family/wildcards were fine in filename.
 
-On Tue, Feb 21, 2023 at 01:53:51PM +0100, Geert Uytterhoeven wrote:
-> When calling soc_device_match() from early_initcall(), bus_kset is still
-> NULL, causing a crash:
->=20
->     Unable to handle kernel NULL pointer dereference at virtual address 0=
-000000000000028
->     ...
->     Call trace:
->      __lock_acquire+0x530/0x20f0
->      lock_acquire.part.0+0xc8/0x210
->      lock_acquire+0x64/0x80
->      _raw_spin_lock+0x4c/0x60
->      bus_to_subsys+0x24/0xac
->      bus_for_each_dev+0x30/0xcc
->      soc_device_match+0x4c/0xe0
->      r8a7795_sysc_init+0x18/0x60
->      rcar_sysc_pd_init+0xb0/0x33c
->      do_one_initcall+0x128/0x2bc
->=20
-> Before, bus_for_each_dev() handled this gracefully by checking that
-> the back-pointer to the private structure was valid.
->=20
-> Fix this by adding a NULL check for bus_kset to bus_to_subsys().
->=20
-> Fixes: 83b9148df2c95e23 ("driver core: bus: bus iterator cleanups")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Best regards,
+Krzysztof
 
-Current top-of-head doesn't boot my Salvator-XS board, this patch fixed
-it.
-
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-
---bf7Dv4zlfrDlY6f9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmP93foACgkQFA3kzBSg
-KbYprA//bHXhMY/B10i601BEs44685UB6WrlQPpGni9zRW/aZNZlVx27QSSz/kCO
-7dU5Ft6MN1nKPFbcFzEFn3OQOb4n5eWIV5L6ciAsPf55NS6zJ4gOdKzBFVkwA4QE
-U645S92mrW7RTLyekaZC6XHeL1a3CQNuje//Gr2C4quOwrAxaUriJoSxZ6LeFzgU
-hc/RUuNaa3O2fq+AQIuaPY9TRFwtzcW0pAvs9szV5YJv+pbL4KQwKc/xRgQhXMQ4
-cB5eSwEom5UQJdicRX3ZlC1xtjPH2NIymT9Mn0meCV0O+btBjk1+nFYZq98XDmT2
-ZpcerbD5HWjA8m6DFb7mr922SeAPwgNg3+NUqCr3cpbCi99sIraYihFNm/G2Oh2D
-whZghWvYa5UgoIrZ8oqBXqIN2RSFf841Q4u68V2/OpdIiL71qaQ3bP54vbCMmwj9
-HCRGz3rpX0tx8619JBsRW0SGqyHai6bz28yEQ7lql8zQkbWZa8LaKdxqBG4WOs3e
-8q3PQGQIw53bxCc6r0U1rEG6YsHFiwMdDCntRA5Q7NVzWZGXXQ42wmHUmwRXiy0O
-7SlOJkt8lZW5lnYDB8fbuyTRP4OPhIX4xRM0n4ob5fR2uC8m3r3bmVEy1WZUFsBD
-+5qPk2upFcOi/42z9cqk19Dj/TFDAW3a5cXF36zCqTNP3pkTPXs=
-=cSSB
------END PGP SIGNATURE-----
-
---bf7Dv4zlfrDlY6f9--
