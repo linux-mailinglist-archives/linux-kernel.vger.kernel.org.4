@@ -2,441 +2,577 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489266A5629
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DD86A563A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjB1JxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S230486AbjB1KC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:02:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjB1JxK (ORCPT
+        with ESMTP id S230361AbjB1KCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:53:10 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F2CFF23
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:53:08 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id cy6so37413489edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:53:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=owltronix-com.20210112.gappssmtp.com; s=20210112; t=1677577986;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kCPDxUFfY0WOQaiU03i9rlfBh+ujxxsXqzEK39bk5JY=;
-        b=2JxBz1uvQxFsj0bkyum1nBfcCzQcKvlSCIkPta9g4KCeCk7XG9wyxpf4/RgyRue5rd
-         NFeUnDYrYIZlkugUA/6UUWO/oFHDdgnseQhXt15Go0HCdguUIcEqVI1MfYP1zYpALXv4
-         V9BV8ivtmopGgOMA4k9GVhurib4iUY4oMWTN7fJ2GngZnvA0c4uAL+ooxa9arG7gK3aw
-         oF0U5eGTQ/MkFhZiJ0KOGTifu1Pkbq9hob+9Uqdfn+zJkLexMpug+7jloK7raI0a+lGb
-         eiiMQKIOl/qQZrB79rRFv5+OoPJ5VkSGYz9k2DWblQsOWO3OU428kZUcnQA74VLrUCub
-         YYEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677577986;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kCPDxUFfY0WOQaiU03i9rlfBh+ujxxsXqzEK39bk5JY=;
-        b=RK6NdU0dVF3ojDAM+mWwolnNgDG1WQfehb8K898jeyxkdhJ2BSnuNfhNI9h0DnXgl8
-         pt2nV4egA3B/NAWZnPSUB1ziSpB9cghYr5rgp7ke/xP2CoOguP3SIsEESOaKhRpljMP2
-         lzuKq4GRZj78E6t7h49A7taKZReuX1WFRD0ySV2btIrWBTsdSKZghQAkfZJqDZoGwhwQ
-         iJSYWgLVkmcgaqxLFapd0sm24WUZNxWVFK0Do+V11jq83j6lR8kjHf62+UCPmtZwQEhn
-         Kz/6MXtMZQaA86qWFMWyOhCGEXbM6sgRTBxVENWsxwga0IyihLaDNB/ugrKL5X8YHhFA
-         DaaQ==
-X-Gm-Message-State: AO0yUKUOkR1JxFGpvcmFXaRxeQfR5YLnIKuCz2YSTLdd29B1OWBUznwX
-        Vg4vS0piWrVAsIf/RA5ez2lSe/kq+F273bNLomBGsDDzlBimNrwxn58=
-X-Google-Smtp-Source: AK7set+Vrv7QhEB4E6E3JuEK3Bp36lmD000k/cNjNQgecZ2uEAvEV5PvR+sQph8Qo2LYdM0NnREbXaCpY3PQpmOjRUk=
-X-Received: by 2002:a17:906:6993:b0:8ae:1078:722f with SMTP id
- i19-20020a170906699300b008ae1078722fmr880177ejr.9.1677577986536; Tue, 28 Feb
- 2023 01:53:06 -0800 (PST)
+        Tue, 28 Feb 2023 05:02:25 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0942CC65;
+        Tue, 28 Feb 2023 02:02:22 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S4vWQC022070;
+        Tue, 28 Feb 2023 10:01:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=riIq3DvxV8VePygDhAadqcigQJuWvLEK3sryyyf57Yo=;
+ b=mxublvtqGKnjDfu5J6vEz9RlRk3aJPcNF56xhL3YocdjDP7IxOrwawvig1j5XxFEMYk4
+ xrWhFfWbDnI9bEFEuahg59tSuyoyrSSySmSigx8qTeq5RFerIkuNMNJCFuaDkMmoFCJ8
+ 1zWMLTcr237Shl+Y8SruM9L0yOAMDaS1CRuM7HI5HbXVQ72ABGgjj4z7ly4BaI70I11F
+ iZMPbw9wCJa4UbYReTpBDkPp2UemR2Tg2fZtOx62xE3M7YVAmDi2bZc/mQyWS9fpFlp2
+ 31JW/tQsSWiBFoDMYO9P0sQIg1uC1Y0KvT51fPnIo7wLN3IiiGh0HKHgTawYExA+CsF7 Aw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p19m0gx2d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 10:01:49 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SA1muD015280
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 10:01:48 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 28 Feb 2023 02:01:39 -0800
+Date:   Tue, 28 Feb 2023 15:31:35 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Devi Priya <quic_devipriy@quicinc.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+Subject: Re: [PATCH V8 1/7] dt-bindings: clock: Add ipq9574 clock and reset
+ definitions
+Message-ID: <20230228100135.GA11977@varda-linux.qualcomm.com>
+References: <20230214163116.9924-1-quic_devipriy@quicinc.com>
+ <20230214163116.9924-2-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
-References: <20230224200502.391570-1-nmi@metaspace.dk>
-In-Reply-To: <20230224200502.391570-1-nmi@metaspace.dk>
-From:   Hans Holmberg <hans@owltronix.com>
-Date:   Tue, 28 Feb 2023 10:52:55 +0100
-Message-ID: <CANr-nt3oe0LBycFbAQCN_-ehBxnSUw3jyv590sDe8GM6wn0fGg@mail.gmail.com>
-Subject: Re: [PATCH v2] block: ublk: enable zoned storage support
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     linux-block@vger.kernel.org,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        kernel test robot <lkp@intel.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230214163116.9924-2-quic_devipriy@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: uZXtvCb1B046f-U2k2AnQBzsl2YPHd6g
+X-Proofpoint-ORIG-GUID: uZXtvCb1B046f-U2k2AnQBzsl2YPHd6g
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-28_06,2023-02-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1011 impostorscore=0 spamscore=0
+ mlxscore=0 suspectscore=0 adultscore=0 mlxlogscore=999 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302280080
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 9:06=E2=80=AFPM Andreas Hindborg <nmi@metaspace.dk>=
- wrote:
->
-> Add zoned storage support to ublk: report_zones and operations:
->  - REQ_OP_ZONE_OPEN
->  - REQ_OP_ZONE_CLOSE
->  - REQ_OP_ZONE_FINISH
->  - REQ_OP_ZONE_RESET
-
-Reset all is missing, right? Might as well define that before there are
-users of the ublk<->ublksrv interface.
-
->
-> This allows implementation of zoned storage devices in user space. An
-> example user space implementation based on ubdsrv is available [1].
->
-> [1] https://github.com/metaspace/ubdsrv/commit/14a2b708f74f70cfecb076d92e=
-680dc718cc1f6d
->
-> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
+On Tue, Feb 14, 2023 at 10:01:10PM +0530, Devi Priya wrote:
+> Add clock and reset ID definitions for ipq9574
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 > ---
-> Changes since v1:
->  - Fixed conditional compilation bug
->  - Refactored to collect conditional code additions together
->  - Fixed style errors
->  - Zero stack allocated value used for zone report
->
-> Reported-by: Niklas Cassel <Niklas.Cassel@wdc.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202302250222.XOrw9j6z-lkp@int=
-el.com/
-> v1: https://lore.kernel.org/linux-block/20230224125950.214779-1-nmi@metas=
-pace.dk/
->
->  drivers/block/ublk_drv.c      | 150 ++++++++++++++++++++++++++++++++--
->  include/uapi/linux/ublk_cmd.h |  18 ++++
->  2 files changed, 162 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index 6368b56eacf1..37e516903867 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -20,6 +20,7 @@
->  #include <linux/major.h>
->  #include <linux/wait.h>
->  #include <linux/blkdev.h>
-> +#include <linux/blkzoned.h>
->  #include <linux/init.h>
->  #include <linux/swap.h>
->  #include <linux/slab.h>
-> @@ -51,10 +52,12 @@
->                 | UBLK_F_URING_CMD_COMP_IN_TASK \
->                 | UBLK_F_NEED_GET_DATA \
->                 | UBLK_F_USER_RECOVERY \
-> -               | UBLK_F_USER_RECOVERY_REISSUE)
-> +               | UBLK_F_USER_RECOVERY_REISSUE \
-> +               | UBLK_F_ZONED)
->
->  /* All UBLK_PARAM_TYPE_* should be included here */
-> -#define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DIS=
-CARD)
-> +#define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DIS=
-CARD \
-> +                            | UBLK_PARAM_TYPE_ZONED)
->
->  struct ublk_rq_data {
->         struct llist_node node;
-> @@ -187,6 +190,98 @@ static DEFINE_MUTEX(ublk_ctl_mutex);
->
->  static struct miscdevice ublk_misc;
->
-> +#ifdef CONFIG_BLK_DEV_ZONED
-> +static void ublk_set_nr_zones(struct ublk_device *ub)
-> +{
-> +       const struct ublk_param_basic *p =3D &ub->params.basic;
+>  Changes in V8:
+> 	- Dropped clock-names from the binding as suggested
+> 	  by Bjorn
+> 
+>  .../bindings/clock/qcom,ipq9574-gcc.yaml      |  61 +++++
+>  include/dt-bindings/clock/qcom,ipq9574-gcc.h  | 213 ++++++++++++++++++
+>  include/dt-bindings/reset/qcom,ipq9574-gcc.h  | 164 ++++++++++++++
+>  3 files changed, 438 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,ipq9574-gcc.h
+>  create mode 100644 include/dt-bindings/reset/qcom,ipq9574-gcc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
+> new file mode 100644
+> index 000000000000..afc68eb9d7cc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,ipq9574-gcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +       if (ub->dev_info.flags & UBLK_F_ZONED && p->chunk_sectors)
-> +               ub->ub_disk->nr_zones =3D p->dev_sectors / p->chunk_secto=
-rs;
-> +}
+> +title: Qualcomm Global Clock & Reset Controller on IPQ9574
 > +
-> +static void ublk_dev_param_zoned_apply(struct ublk_device *ub)
-> +{
-> +       const struct ublk_param_zoned *p =3D &ub->params.zoned;
+> +maintainers:
+> +  - Anusha Rao <quic_anusha@quicinc.com>
 > +
-> +       if (ub->dev_info.flags & UBLK_F_ZONED) {
-> +               disk_set_max_active_zones(ub->ub_disk, p->max_active_zone=
-s);
-> +               disk_set_max_open_zones(ub->ub_disk, p->max_open_zones);
-> +       }
-> +}
+> +description: |
+> +  Qualcomm global clock control module provides the clocks, resets and power
+> +  domains on IPQ9574
 > +
-> +static int ublk_revalidate_disk_zones(struct gendisk *disk)
-> +{
-> +       return blk_revalidate_disk_zones(disk, NULL);
-> +}
+> +  See also::
+> +    include/dt-bindings/clock/qcom,ipq9574-gcc.h
+> +    include/dt-bindings/reset/qcom,ipq9574-gcc.h
 > +
-> +static int ublk_report_zones(struct gendisk *disk, sector_t sector,
-> +                            unsigned int nr_zones, report_zones_cb cb,
-> +                            void *data)
-> +{
-> +       struct ublk_device *ub;
-> +       unsigned int zone_size;
-> +       unsigned int first_zone;
-> +       int ret =3D 0;
+> +properties:
+> +  compatible:
+> +    const: qcom,ipq9574-gcc
 > +
-> +       ub =3D disk->private_data;
+> +  clocks:
+> +    items:
+> +      - description: Board XO source
+> +      - description: Sleep clock source
+> +      - description: Bias PLL ubi clock source
+> +      - description: PCIE30 PHY0 pipe clock source
+> +      - description: PCIE30 PHY1 pipe clock source
+> +      - description: PCIE30 PHY2 pipe clock source
+> +      - description: PCIE30 PHY3 pipe clock source
+> +      - description: USB3 PHY pipe clock source
 > +
-> +       if (!(ub->dev_info.flags & UBLK_F_ZONED))
-> +               return -EINVAL;
+> +required:
+> +  - compatible
+> +  - clocks
 > +
-> +       zone_size =3D disk->queue->limits.chunk_sectors;
-> +       first_zone =3D sector >> ilog2(zone_size);
-> +       nr_zones =3D min(ub->ub_disk->nr_zones - first_zone, nr_zones);
+> +allOf:
+> +  - $ref: qcom,gcc.yaml#
 > +
-> +       for (unsigned int i =3D 0; i < nr_zones; i++) {
-> +               struct request *req;
-> +               blk_status_t status;
-> +               struct blk_zone info =3D {0};
+> +unevaluatedProperties: false
 > +
-> +               req =3D blk_mq_alloc_request(disk->queue, REQ_OP_DRV_IN, =
-0);
-> +
-> +               if (IS_ERR(req)) {
-> +                       ret =3D PTR_ERR(req);
-> +                       goto out;
-> +               }
-> +
-> +               req->__sector =3D sector;
-> +
-> +               ret =3D blk_rq_map_kern(disk->queue, req, &info, sizeof(i=
-nfo),
-> +                                     GFP_KERNEL);
-> +
-> +               if (ret)
-> +                       goto out;
-> +
-> +               status =3D blk_execute_rq(req, 0);
-
-Pingponging with userspace to retrieve thousand(s) of zone states is
-very inefficient, so I don't think we
-want to define the report zone ublk uapi to be one-zone-per-call.
-
-Also, just overloading REQ_OP_DRV_IN with report zones instead of
-defining a zone-report specific call does
-not seem future proof - there might be a need to do other
-driver-specific calls in the future.
-
-Virtio blk implements reporting in a better way - se
-virtblk_report_zones (that just got merged in Linus tree)
-The same type of interface should be possible for ublk.
-
-Cheers,
-Hans
-
-> +               ret =3D blk_status_to_errno(status);
-> +               if (ret)
-> +                       goto out;
-> +
-> +               blk_mq_free_request(req);
-> +
-> +               ret =3D cb(&info, i, data);
-> +               if (ret)
-> +                       goto out;
-> +
-> +               /* A zero length zone means don't ask for more zones */
-> +               if (!info.len) {
-> +                       nr_zones =3D i;
-> +                       break;
-> +               }
-> +
-> +               sector +=3D zone_size;
-> +       }
-> +       ret =3D nr_zones;
-> +
-> + out:
-> +       return ret;
-> +}
-> +#else
-> +void ublk_set_nr_zones(struct ublk_device *ub);
-> +void ublk_dev_param_zoned_apply(struct ublk_device *ub);
-> +int ublk_revalidate_disk_zones(struct gendisk *disk);
-> +#endif
-> +
->  static void ublk_dev_param_basic_apply(struct ublk_device *ub)
->  {
->         struct request_queue *q =3D ub->ub_disk->queue;
-> @@ -212,6 +307,9 @@ static void ublk_dev_param_basic_apply(struct ublk_de=
-vice *ub)
->                 set_disk_ro(ub->ub_disk, true);
->
->         set_capacity(ub->ub_disk, p->dev_sectors);
-> +
-> +       if (IS_ENABLED(CONFIG_BLK_DEV_ZONED))
-> +               ublk_set_nr_zones(ub);
->  }
->
->  static void ublk_dev_param_discard_apply(struct ublk_device *ub)
-> @@ -268,6 +366,9 @@ static int ublk_apply_params(struct ublk_device *ub)
->         if (ub->params.types & UBLK_PARAM_TYPE_DISCARD)
->                 ublk_dev_param_discard_apply(ub);
->
-> +       if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) && (ub->params.types & UBLK_=
-PARAM_TYPE_ZONED))
-> +               ublk_dev_param_zoned_apply(ub);
-> +
->         return 0;
->  }
->
-> @@ -361,9 +462,13 @@ static void ublk_free_disk(struct gendisk *disk)
->         put_device(&ub->cdev_dev);
->  }
->
-> +
->  static const struct block_device_operations ub_fops =3D {
-> -       .owner =3D        THIS_MODULE,
-> -       .free_disk =3D    ublk_free_disk,
-> +       .owner =3D THIS_MODULE,
-> +       .free_disk =3D ublk_free_disk,
-> +#ifdef CONFIG_BLK_DEV_ZONED
-> +       .report_zones =3D ublk_report_zones,
-> +#endif
->  };
->
->  #define UBLK_MAX_PIN_PAGES     32
-> @@ -499,7 +604,7 @@ static int ublk_unmap_io(const struct ublk_queue *ubq=
-,
->  {
->         const unsigned int rq_bytes =3D blk_rq_bytes(req);
->
-> -       if (req_op(req) =3D=3D REQ_OP_READ && ublk_rq_has_data(req)) {
-> +       if ((req_op(req) =3D=3D REQ_OP_READ || req_op(req) =3D=3D REQ_OP_=
-DRV_IN) && ublk_rq_has_data(req)) {
->                 struct ublk_map_data data =3D {
->                         .ubq    =3D       ubq,
->                         .rq     =3D       req,
-> @@ -566,6 +671,26 @@ static blk_status_t ublk_setup_iod(struct ublk_queue=
- *ubq, struct request *req)
->         case REQ_OP_WRITE_ZEROES:
->                 ublk_op =3D UBLK_IO_OP_WRITE_ZEROES;
->                 break;
-> +#ifdef CONFIG_BLK_DEV_ZONED
-> +       case REQ_OP_ZONE_OPEN:
-> +               ublk_op =3D UBLK_IO_OP_ZONE_OPEN;
-> +               break;
-> +       case REQ_OP_ZONE_CLOSE:
-> +               ublk_op =3D UBLK_IO_OP_ZONE_CLOSE;
-> +               break;
-> +       case REQ_OP_ZONE_FINISH:
-> +               ublk_op =3D UBLK_IO_OP_ZONE_FINISH;
-> +               break;
-> +       case REQ_OP_ZONE_RESET:
-> +               ublk_op =3D UBLK_IO_OP_ZONE_RESET;
-> +               break;
-> +       case REQ_OP_DRV_IN:
-> +               ublk_op =3D UBLK_IO_OP_DRV_IN;
-> +               break;
-> +       case REQ_OP_ZONE_APPEND:
-> +               /* We do not support zone append yet */
-> +               fallthrough;
-> +#endif
->         default:
->                 return BLK_STS_IOERR;
->         }
-> @@ -612,7 +737,8 @@ static void ublk_complete_rq(struct request *req)
->          *
->          * Both the two needn't unmap.
->          */
-> -       if (req_op(req) !=3D REQ_OP_READ && req_op(req) !=3D REQ_OP_WRITE=
-) {
-> +       if (req_op(req) !=3D REQ_OP_READ && req_op(req) !=3D REQ_OP_WRITE=
- &&
-> +           req_op(req) !=3D REQ_OP_DRV_IN) {
->                 blk_mq_end_request(req, BLK_STS_OK);
->                 return;
->         }
-> @@ -1535,6 +1661,15 @@ static int ublk_ctrl_start_dev(struct io_uring_cmd=
- *cmd)
->         if (ret)
->                 goto out_put_disk;
->
-> +       if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
-> +           ub->dev_info.flags & UBLK_F_ZONED) {
-> +               disk_set_zoned(disk, BLK_ZONED_HM);
-> +               blk_queue_required_elevator_features(disk->queue, ELEVATO=
-R_F_ZBD_SEQ_WRITE);
-> +               ret =3D ublk_revalidate_disk_zones(disk);
-> +               if (ret)
-> +                       goto out_put_disk;
-> +       }
-> +
->         get_device(&ub->cdev_dev);
->         ret =3D add_disk(disk);
->         if (ret) {
-> @@ -1673,6 +1808,9 @@ static int ublk_ctrl_add_dev(struct io_uring_cmd *c=
-md)
->         if (!IS_BUILTIN(CONFIG_BLK_DEV_UBLK))
->                 ub->dev_info.flags |=3D UBLK_F_URING_CMD_COMP_IN_TASK;
->
-> +       if (!IS_ENABLED(CONFIG_BLK_DEV_ZONED))
-> +               ub->dev_info.flags &=3D ~UBLK_F_ZONED;
-> +
->         /* We are not ready to support zero copy */
->         ub->dev_info.flags &=3D ~UBLK_F_SUPPORT_ZERO_COPY;
->
-> diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.=
-h
-> index 8f88e3a29998..074b97821575 100644
-> --- a/include/uapi/linux/ublk_cmd.h
-> +++ b/include/uapi/linux/ublk_cmd.h
-> @@ -78,6 +78,10 @@
->  #define UBLK_F_USER_RECOVERY   (1UL << 3)
->
->  #define UBLK_F_USER_RECOVERY_REISSUE   (1UL << 4)
+> +examples:
+> +  - |
+> +    clock-controller@1800000 {
+> +      compatible = "qcom,ipq9574-gcc";
+> +      reg = <0x01800000 0x80000>;
+> +      clocks = <&xo_board_clk>,
+> +               <&sleep_clk>,
+> +               <&bias_pll_ubi_nc_clk>,
+> +               <&pcie30_phy0_pipe_clk>,
+> +               <&pcie30_phy1_pipe_clk>,
+> +               <&pcie30_phy2_pipe_clk>,
+> +               <&pcie30_phy3_pipe_clk>,
+> +               <&usb3phy_0_cc_pipe_clk>;
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +      #power-domain-cells = <1>;
+> +    };
+> +...
+> diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+> new file mode 100644
+> index 000000000000..feedfdd5e00a
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+> @@ -0,0 +1,213 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
 > +/*
-> + * Enable zoned device support
+> + * Copyright (c) 2018-2023 The Linux Foundation. All rights reserved.
 > + */
-> +#define UBLK_F_ZONED (1ULL << 5)
->
->  /* device state */
->  #define UBLK_S_DEV_DEAD        0
-> @@ -129,6 +133,12 @@ struct ublksrv_ctrl_dev_info {
->  #define                UBLK_IO_OP_DISCARD      3
->  #define                UBLK_IO_OP_WRITE_SAME   4
->  #define                UBLK_IO_OP_WRITE_ZEROES 5
-> +#define                UBLK_IO_OP_ZONE_OPEN            10
-> +#define                UBLK_IO_OP_ZONE_CLOSE           11
-> +#define                UBLK_IO_OP_ZONE_FINISH          12
-> +#define                UBLK_IO_OP_ZONE_APPEND          13
-> +#define                UBLK_IO_OP_ZONE_RESET           15
-> +#define                UBLK_IO_OP_DRV_IN               34
->
->  #define                UBLK_IO_F_FAILFAST_DEV          (1U << 8)
->  #define                UBLK_IO_F_FAILFAST_TRANSPORT    (1U << 9)
-> @@ -214,6 +224,12 @@ struct ublk_param_discard {
->         __u16   reserved0;
->  };
->
-> +struct ublk_param_zoned {
-> +       __u64   max_open_zones;
-> +       __u64   max_active_zones;
-> +       __u64   max_append_size;
-> +};
 > +
->  struct ublk_params {
->         /*
->          * Total length of parameters, userspace has to set 'len' for bot=
-h
-> @@ -224,10 +240,12 @@ struct ublk_params {
->         __u32   len;
->  #define UBLK_PARAM_TYPE_BASIC           (1 << 0)
->  #define UBLK_PARAM_TYPE_DISCARD         (1 << 1)
-> +#define UBLK_PARAM_TYPE_ZONED           (1 << 2)
->         __u32   types;                  /* types of parameter included */
->
->         struct ublk_param_basic         basic;
->         struct ublk_param_discard       discard;
-> +       struct ublk_param_zoned         zoned;
->  };
->
->  #endif
->
-> base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
-> --
-> 2.39.2
->
+> +#ifndef _DT_BINDINGS_CLOCK_IPQ_GCC_9048_H
+> +#define _DT_BINDINGS_CLOCK_IPQ_GCC_9048_H
+
+s/9048/9574/
+
+> +
+> +#define GPLL0_MAIN					0
+> +#define GPLL0						1
+> +#define GPLL2_MAIN					2
+> +#define GPLL2						3
+> +#define GPLL4_MAIN					4
+> +#define GPLL4						5
+> +#define GCC_SLEEP_CLK_SRC				6
+> +#define APSS_AHB_CLK_SRC				7
+> +#define APSS_AXI_CLK_SRC				8
+> +#define BLSP1_QUP1_I2C_APPS_CLK_SRC			9
+> +#define BLSP1_QUP1_SPI_APPS_CLK_SRC			10
+> +#define BLSP1_QUP2_I2C_APPS_CLK_SRC			11
+> +#define BLSP1_QUP2_SPI_APPS_CLK_SRC			12
+> +#define BLSP1_QUP3_I2C_APPS_CLK_SRC			13
+> +#define BLSP1_QUP3_SPI_APPS_CLK_SRC			14
+> +#define BLSP1_QUP4_I2C_APPS_CLK_SRC			15
+> +#define BLSP1_QUP4_SPI_APPS_CLK_SRC			16
+> +#define BLSP1_QUP5_I2C_APPS_CLK_SRC			17
+> +#define BLSP1_QUP5_SPI_APPS_CLK_SRC			18
+> +#define BLSP1_QUP6_I2C_APPS_CLK_SRC			19
+> +#define BLSP1_QUP6_SPI_APPS_CLK_SRC			20
+> +#define BLSP1_UART1_APPS_CLK_SRC			21
+> +#define BLSP1_UART2_APPS_CLK_SRC			22
+> +#define BLSP1_UART3_APPS_CLK_SRC			23
+> +#define BLSP1_UART4_APPS_CLK_SRC			24
+> +#define BLSP1_UART5_APPS_CLK_SRC			25
+> +#define BLSP1_UART6_APPS_CLK_SRC			26
+> +#define GCC_APSS_AHB_CLK				27
+> +#define GCC_APSS_AXI_CLK				28
+> +#define GCC_BLSP1_QUP1_I2C_APPS_CLK			29
+> +#define GCC_BLSP1_QUP1_SPI_APPS_CLK			30
+> +#define GCC_BLSP1_QUP2_I2C_APPS_CLK			31
+> +#define GCC_BLSP1_QUP2_SPI_APPS_CLK			32
+> +#define GCC_BLSP1_QUP3_I2C_APPS_CLK			33
+> +#define GCC_BLSP1_QUP3_SPI_APPS_CLK			34
+> +#define GCC_BLSP1_QUP4_I2C_APPS_CLK			35
+> +#define GCC_BLSP1_QUP4_SPI_APPS_CLK			36
+> +#define GCC_BLSP1_QUP5_I2C_APPS_CLK			37
+> +#define GCC_BLSP1_QUP5_SPI_APPS_CLK			38
+> +#define GCC_BLSP1_QUP6_I2C_APPS_CLK			39
+> +#define GCC_BLSP1_QUP6_SPI_APPS_CLK			40
+> +#define GCC_BLSP1_UART1_APPS_CLK			41
+> +#define GCC_BLSP1_UART2_APPS_CLK			42
+> +#define GCC_BLSP1_UART3_APPS_CLK			43
+> +#define GCC_BLSP1_UART4_APPS_CLK			44
+> +#define GCC_BLSP1_UART5_APPS_CLK			45
+> +#define GCC_BLSP1_UART6_APPS_CLK			46
+> +#define PCIE0_AXI_M_CLK_SRC				47
+> +#define GCC_PCIE0_AXI_M_CLK				48
+> +#define PCIE1_AXI_M_CLK_SRC				49
+> +#define GCC_PCIE1_AXI_M_CLK				50
+> +#define PCIE2_AXI_M_CLK_SRC				51
+> +#define GCC_PCIE2_AXI_M_CLK				52
+> +#define PCIE3_AXI_M_CLK_SRC				53
+> +#define GCC_PCIE3_AXI_M_CLK				54
+> +#define PCIE0_AXI_S_CLK_SRC				55
+> +#define GCC_PCIE0_AXI_S_BRIDGE_CLK			56
+> +#define GCC_PCIE0_AXI_S_CLK				57
+> +#define PCIE1_AXI_S_CLK_SRC				58
+> +#define GCC_PCIE1_AXI_S_BRIDGE_CLK			59
+> +#define GCC_PCIE1_AXI_S_CLK				60
+> +#define PCIE2_AXI_S_CLK_SRC				61
+> +#define GCC_PCIE2_AXI_S_BRIDGE_CLK			62
+> +#define GCC_PCIE2_AXI_S_CLK				63
+> +#define PCIE3_AXI_S_CLK_SRC				64
+> +#define GCC_PCIE3_AXI_S_BRIDGE_CLK			65
+> +#define GCC_PCIE3_AXI_S_CLK				66
+> +#define PCIE0_PIPE_CLK_SRC				67
+> +#define PCIE1_PIPE_CLK_SRC				68
+> +#define PCIE2_PIPE_CLK_SRC				69
+> +#define PCIE3_PIPE_CLK_SRC				70
+> +#define PCIE_AUX_CLK_SRC				71
+> +#define GCC_PCIE0_AUX_CLK				72
+> +#define GCC_PCIE1_AUX_CLK				73
+> +#define GCC_PCIE2_AUX_CLK				74
+> +#define GCC_PCIE3_AUX_CLK				75
+> +#define PCIE0_RCHNG_CLK_SRC				76
+> +#define GCC_PCIE0_RCHNG_CLK				77
+> +#define PCIE1_RCHNG_CLK_SRC				78
+> +#define GCC_PCIE1_RCHNG_CLK				79
+> +#define PCIE2_RCHNG_CLK_SRC				80
+> +#define GCC_PCIE2_RCHNG_CLK				81
+> +#define PCIE3_RCHNG_CLK_SRC				82
+> +#define GCC_PCIE3_RCHNG_CLK				83
+> +#define GCC_PCIE0_AHB_CLK				84
+> +#define GCC_PCIE1_AHB_CLK				85
+> +#define GCC_PCIE2_AHB_CLK				86
+> +#define GCC_PCIE3_AHB_CLK				87
+> +#define USB0_AUX_CLK_SRC				88
+> +#define GCC_USB0_AUX_CLK				89
+> +#define USB0_MASTER_CLK_SRC				90
+> +#define GCC_USB0_MASTER_CLK				91
+> +#define GCC_SNOC_USB_CLK				92
+> +#define GCC_ANOC_USB_AXI_CLK				93
+> +#define USB0_MOCK_UTMI_CLK_SRC				94
+> +#define USB0_MOCK_UTMI_DIV_CLK_SRC			95
+> +#define GCC_USB0_MOCK_UTMI_CLK				96
+> +#define USB0_PIPE_CLK_SRC				97
+> +#define GCC_USB0_PHY_CFG_AHB_CLK			98
+> +#define SDCC1_APPS_CLK_SRC				99
+> +#define GCC_SDCC1_APPS_CLK				100
+> +#define SDCC1_ICE_CORE_CLK_SRC				101
+> +#define GCC_SDCC1_ICE_CORE_CLK				102
+> +#define GCC_SDCC1_AHB_CLK				103
+> +#define PCNOC_BFDCD_CLK_SRC				104
+> +#define GCC_NSSCFG_CLK					105
+> +#define GCC_NSSNOC_NSSCC_CLK				106
+> +#define GCC_NSSCC_CLK					107
+> +#define GCC_NSSNOC_PCNOC_1_CLK				108
+> +#define GCC_QDSS_DAP_AHB_CLK				109
+> +#define GCC_QDSS_CFG_AHB_CLK				110
+> +#define GCC_QPIC_AHB_CLK				111
+> +#define GCC_QPIC_CLK					112
+> +#define GCC_BLSP1_AHB_CLK				113
+> +#define GCC_MDIO_AHB_CLK				114
+> +#define GCC_PRNG_AHB_CLK				115
+> +#define GCC_UNIPHY0_AHB_CLK				116
+> +#define GCC_UNIPHY1_AHB_CLK				117
+> +#define GCC_UNIPHY2_AHB_CLK				118
+> +#define GCC_CMN_12GPLL_AHB_CLK				119
+> +#define GCC_CMN_12GPLL_APU_CLK				120
+> +#define SYSTEM_NOC_BFDCD_CLK_SRC			121
+> +#define GCC_NSSNOC_SNOC_CLK				122
+> +#define GCC_NSSNOC_SNOC_1_CLK				123
+> +#define GCC_QDSS_ETR_USB_CLK				124
+> +#define WCSS_AHB_CLK_SRC				125
+> +#define GCC_Q6_AHB_CLK					126
+> +#define GCC_Q6_AHB_S_CLK				127
+> +#define GCC_WCSS_ECAHB_CLK				128
+> +#define GCC_WCSS_ACMT_CLK				129
+> +#define GCC_SYS_NOC_WCSS_AHB_CLK			130
+> +#define WCSS_AXI_M_CLK_SRC				131
+> +#define GCC_ANOC_WCSS_AXI_M_CLK				132
+> +#define QDSS_AT_CLK_SRC					133
+> +#define GCC_Q6SS_ATBM_CLK				134
+> +#define GCC_WCSS_DBG_IFC_ATB_CLK			135
+> +#define GCC_NSSNOC_ATB_CLK				136
+> +#define GCC_QDSS_AT_CLK					137
+> +#define GCC_SYS_NOC_AT_CLK				138
+> +#define GCC_PCNOC_AT_CLK				139
+> +#define GCC_USB0_EUD_AT_CLK				140
+> +#define GCC_QDSS_EUD_AT_CLK				141
+> +#define QDSS_STM_CLK_SRC				142
+> +#define GCC_QDSS_STM_CLK				143
+> +#define GCC_SYS_NOC_QDSS_STM_AXI_CLK			144
+> +#define QDSS_TRACECLKIN_CLK_SRC				145
+> +#define GCC_QDSS_TRACECLKIN_CLK				146
+> +#define QDSS_TSCTR_CLK_SRC				147
+> +#define GCC_Q6_TSCTR_1TO2_CLK				148
+> +#define GCC_WCSS_DBG_IFC_NTS_CLK			149
+> +#define GCC_QDSS_TSCTR_DIV2_CLK				150
+> +#define GCC_QDSS_TS_CLK					151
+> +#define GCC_QDSS_TSCTR_DIV4_CLK				152
+> +#define GCC_NSS_TS_CLK					153
+> +#define GCC_QDSS_TSCTR_DIV8_CLK				154
+> +#define GCC_QDSS_TSCTR_DIV16_CLK			155
+> +#define GCC_Q6SS_PCLKDBG_CLK				156
+> +#define GCC_Q6SS_TRIG_CLK				157
+> +#define GCC_WCSS_DBG_IFC_APB_CLK			158
+> +#define GCC_WCSS_DBG_IFC_DAPBUS_CLK			159
+> +#define GCC_QDSS_DAP_CLK				160
+> +#define GCC_QDSS_APB2JTAG_CLK				161
+> +#define GCC_QDSS_TSCTR_DIV3_CLK				162
+> +#define QPIC_IO_MACRO_CLK_SRC				163
+> +#define GCC_QPIC_IO_MACRO_CLK                           164
+> +#define Q6_AXI_CLK_SRC					165
+> +#define GCC_Q6_AXIM_CLK					166
+> +#define GCC_WCSS_Q6_TBU_CLK				167
+> +#define GCC_MEM_NOC_Q6_AXI_CLK				168
+> +#define Q6_AXIM2_CLK_SRC				169
+> +#define NSSNOC_MEMNOC_BFDCD_CLK_SRC			170
+> +#define GCC_NSSNOC_MEMNOC_CLK				171
+> +#define GCC_NSSNOC_MEM_NOC_1_CLK			172
+> +#define GCC_NSS_TBU_CLK					173
+> +#define GCC_MEM_NOC_NSSNOC_CLK				174
+> +#define LPASS_AXIM_CLK_SRC				175
+> +#define LPASS_SWAY_CLK_SRC				176
+> +#define ADSS_PWM_CLK_SRC				177
+> +#define GCC_ADSS_PWM_CLK				178
+> +#define GP1_CLK_SRC					179
+> +#define GP2_CLK_SRC					180
+> +#define GP3_CLK_SRC					181
+> +#define DDRSS_SMS_SLOW_CLK_SRC				182
+> +#define GCC_XO_CLK_SRC					183
+> +#define GCC_XO_CLK					184
+> +#define GCC_NSSNOC_QOSGEN_REF_CLK			185
+> +#define GCC_NSSNOC_TIMEOUT_REF_CLK			186
+> +#define GCC_XO_DIV4_CLK					187
+> +#define GCC_UNIPHY0_SYS_CLK				188
+> +#define GCC_UNIPHY1_SYS_CLK				189
+> +#define GCC_UNIPHY2_SYS_CLK				190
+> +#define GCC_CMN_12GPLL_SYS_CLK				191
+> +#define GCC_NSSNOC_XO_DCD_CLK				192
+> +#define GCC_Q6SS_BOOT_CLK				193
+> +#define UNIPHY_SYS_CLK_SRC				194
+> +#define NSS_TS_CLK_SRC					195
+> +#define GCC_ANOC_PCIE0_1LANE_M_CLK			196
+> +#define GCC_ANOC_PCIE1_1LANE_M_CLK			197
+> +#define GCC_ANOC_PCIE2_2LANE_M_CLK			198
+> +#define GCC_ANOC_PCIE3_2LANE_M_CLK			199
+> +#define GCC_SNOC_PCIE0_1LANE_S_CLK			200
+> +#define GCC_SNOC_PCIE1_1LANE_S_CLK			201
+> +#define GCC_SNOC_PCIE2_2LANE_S_CLK			202
+> +#define GCC_SNOC_PCIE3_2LANE_S_CLK			203
+> +#endif
+> diff --git a/include/dt-bindings/reset/qcom,ipq9574-gcc.h b/include/dt-bindings/reset/qcom,ipq9574-gcc.h
+> new file mode 100644
+> index 000000000000..a11adbda45ec
+> --- /dev/null
+> +++ b/include/dt-bindings/reset/qcom,ipq9574-gcc.h
+> @@ -0,0 +1,164 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (c) 2018-2023, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_RESET_IPQ_GCC_9048_H
+> +#define _DT_BINDINGS_RESET_IPQ_GCC_9048_H
+
+s/9048/9574/
+
+> +
+> +#define GCC_ADSS_BCR						0
+> +#define GCC_APC0_VOLTAGE_DROOP_DETECTOR_BCR			1
+> +#define GCC_BLSP1_BCR						2
+> +#define GCC_BLSP1_QUP1_BCR					3
+> +#define GCC_BLSP1_QUP2_BCR					4
+> +#define GCC_BLSP1_QUP3_BCR					5
+> +#define GCC_BLSP1_QUP4_BCR					6
+> +#define GCC_BLSP1_QUP5_BCR					7
+> +#define GCC_BLSP1_QUP6_BCR					8
+> +#define GCC_BLSP1_UART1_BCR					9
+> +#define GCC_BLSP1_UART2_BCR					10
+> +#define GCC_BLSP1_UART3_BCR					11
+> +#define GCC_BLSP1_UART4_BCR					12
+> +#define GCC_BLSP1_UART5_BCR					13
+> +#define GCC_BLSP1_UART6_BCR					14
+> +#define GCC_BOOT_ROM_BCR					15
+> +#define GCC_MDIO_BCR						16
+> +#define GCC_NSS_BCR						17
+> +#define GCC_NSS_TBU_BCR						18
+> +#define GCC_PCIE0_BCR						19
+> +#define GCC_PCIE0_LINK_DOWN_BCR					20
+> +#define GCC_PCIE0_PHY_BCR					21
+> +#define GCC_PCIE0PHY_PHY_BCR					22
+> +#define GCC_PCIE1_BCR						23
+> +#define GCC_PCIE1_LINK_DOWN_BCR					24
+> +#define GCC_PCIE1_PHY_BCR					25
+> +#define GCC_PCIE1PHY_PHY_BCR					26
+> +#define GCC_PCIE2_BCR						27
+> +#define GCC_PCIE2_LINK_DOWN_BCR					28
+> +#define GCC_PCIE2_PHY_BCR					29
+> +#define GCC_PCIE2PHY_PHY_BCR					30
+> +#define GCC_PCIE3_BCR						31
+> +#define GCC_PCIE3_LINK_DOWN_BCR					32
+> +#define GCC_PCIE3_PHY_BCR					33
+> +#define GCC_PCIE3PHY_PHY_BCR					34
+> +#define GCC_PRNG_BCR						35
+> +#define GCC_QUSB2_0_PHY_BCR					36
+> +#define GCC_SDCC_BCR						37
+> +#define GCC_TLMM_BCR						38
+> +#define GCC_UNIPHY0_BCR						39
+> +#define GCC_UNIPHY1_BCR						40
+> +#define GCC_UNIPHY2_BCR						41
+> +#define GCC_USB0_PHY_BCR					42
+> +#define GCC_USB3PHY_0_PHY_BCR					43
+> +#define GCC_USB_BCR						44
+> +#define GCC_ANOC0_TBU_BCR					45
+> +#define GCC_ANOC1_TBU_BCR					46
+> +#define GCC_ANOC_BCR						47
+> +#define GCC_APSS_TCU_BCR					48
+> +#define GCC_CMN_BLK_BCR						49
+> +#define GCC_CMN_BLK_AHB_ARES					50
+> +#define GCC_CMN_BLK_SYS_ARES					51
+> +#define GCC_CMN_BLK_APU_ARES					52
+> +#define GCC_DCC_BCR						53
+> +#define GCC_DDRSS_BCR						54
+> +#define GCC_IMEM_BCR						55
+> +#define GCC_LPASS_BCR						56
+> +#define GCC_MPM_BCR						57
+> +#define GCC_MSG_RAM_BCR						58
+> +#define GCC_NSSNOC_MEMNOC_1_ARES				59
+> +#define GCC_NSSNOC_PCNOC_1_ARES					60
+> +#define GCC_NSSNOC_SNOC_1_ARES					61
+> +#define GCC_NSSNOC_XO_DCD_ARES					62
+> +#define GCC_NSSNOC_TS_ARES					63
+> +#define GCC_NSSCC_ARES						64
+> +#define GCC_NSSNOC_NSSCC_ARES					65
+> +#define GCC_NSSNOC_ATB_ARES					66
+> +#define GCC_NSSNOC_MEMNOC_ARES					67
+> +#define GCC_NSSNOC_QOSGEN_REF_ARES				68
+> +#define GCC_NSSNOC_SNOC_ARES					69
+> +#define GCC_NSSNOC_TIMEOUT_REF_ARES				70
+> +#define GCC_NSS_CFG_ARES					71
+> +#define GCC_UBI0_DBG_ARES					72
+> +#define GCC_PCIE0_AHB_ARES					73
+> +#define GCC_PCIE0_AUX_ARES					74
+> +#define GCC_PCIE0_AXI_M_ARES					75
+> +#define GCC_PCIE0_AXI_M_STICKY_ARES				76
+> +#define GCC_PCIE0_AXI_S_ARES					77
+> +#define GCC_PCIE0_AXI_S_STICKY_ARES				78
+> +#define GCC_PCIE0_CORE_STICKY_ARES				79
+> +#define GCC_PCIE0_PIPE_ARES					80
+> +#define GCC_PCIE1_AHB_ARES					81
+> +#define GCC_PCIE1_AUX_ARES					82
+> +#define GCC_PCIE1_AXI_M_ARES					83
+> +#define GCC_PCIE1_AXI_M_STICKY_ARES				84
+> +#define GCC_PCIE1_AXI_S_ARES					85
+> +#define GCC_PCIE1_AXI_S_STICKY_ARES				86
+> +#define GCC_PCIE1_CORE_STICKY_ARES				87
+> +#define GCC_PCIE1_PIPE_ARES					88
+> +#define GCC_PCIE2_AHB_ARES					89
+> +#define GCC_PCIE2_AUX_ARES					90
+> +#define GCC_PCIE2_AXI_M_ARES					91
+> +#define GCC_PCIE2_AXI_M_STICKY_ARES				92
+> +#define GCC_PCIE2_AXI_S_ARES					93
+> +#define GCC_PCIE2_AXI_S_STICKY_ARES				94
+> +#define GCC_PCIE2_CORE_STICKY_ARES				95
+> +#define GCC_PCIE2_PIPE_ARES					96
+> +#define GCC_PCIE3_AHB_ARES					97
+> +#define GCC_PCIE3_AUX_ARES					98
+> +#define GCC_PCIE3_AXI_M_ARES					99
+> +#define GCC_PCIE3_AXI_M_STICKY_ARES				100
+> +#define GCC_PCIE3_AXI_S_ARES					101
+> +#define GCC_PCIE3_AXI_S_STICKY_ARES				102
+> +#define GCC_PCIE3_CORE_STICKY_ARES				103
+> +#define GCC_PCIE3_PIPE_ARES					104
+> +#define GCC_PCNOC_BCR						105
+> +#define GCC_PCNOC_BUS_TIMEOUT0_BCR				106
+> +#define GCC_PCNOC_BUS_TIMEOUT1_BCR				107
+> +#define GCC_PCNOC_BUS_TIMEOUT2_BCR				108
+> +#define GCC_PCNOC_BUS_TIMEOUT3_BCR				109
+> +#define GCC_PCNOC_BUS_TIMEOUT4_BCR				110
+> +#define GCC_PCNOC_BUS_TIMEOUT5_BCR				111
+> +#define GCC_PCNOC_BUS_TIMEOUT6_BCR				112
+> +#define GCC_PCNOC_BUS_TIMEOUT7_BCR				113
+> +#define GCC_PCNOC_BUS_TIMEOUT8_BCR				114
+> +#define GCC_PCNOC_BUS_TIMEOUT9_BCR				115
+> +#define GCC_PCNOC_TBU_BCR					116
+> +#define GCC_Q6SS_DBG_ARES					117
+> +#define GCC_Q6_AHB_ARES						118
+> +#define GCC_Q6_AHB_S_ARES					119
+> +#define GCC_Q6_AXIM2_ARES					120
+> +#define GCC_Q6_AXIM_ARES					121
+> +#define GCC_QDSS_BCR						122
+> +#define GCC_QPIC_BCR						123
+> +#define GCC_QPIC_AHB_ARES					124
+> +#define GCC_QPIC_ARES						125
+> +#define GCC_RBCPR_BCR						126
+> +#define GCC_RBCPR_MX_BCR					127
+> +#define GCC_SEC_CTRL_BCR					128
+> +#define GCC_SMMU_CFG_BCR					129
+> +#define GCC_SNOC_BCR						130
+> +#define GCC_SPDM_BCR						131
+> +#define GCC_TME_BCR						132
+> +#define GCC_UNIPHY0_SYS_RESET					133
+> +#define GCC_UNIPHY0_AHB_RESET					134
+> +#define GCC_UNIPHY0_XPCS_RESET					135
+> +#define GCC_UNIPHY1_SYS_RESET					136
+> +#define GCC_UNIPHY1_AHB_RESET					137
+> +#define GCC_UNIPHY1_XPCS_RESET					138
+> +#define GCC_UNIPHY2_SYS_RESET					139
+> +#define GCC_UNIPHY2_AHB_RESET					140
+> +#define GCC_UNIPHY2_XPCS_RESET					141
+> +#define GCC_USB_MISC_RESET					142
+> +#define GCC_WCSSAON_RESET					143
+> +#define GCC_WCSS_ACMT_ARES					144
+> +#define GCC_WCSS_AHB_S_ARES					145
+> +#define GCC_WCSS_AXI_M_ARES					146
+> +#define GCC_WCSS_BCR						147
+> +#define GCC_WCSS_DBG_ARES					148
+> +#define GCC_WCSS_DBG_BDG_ARES					149
+> +#define GCC_WCSS_ECAHB_ARES					150
+> +#define GCC_WCSS_Q6_BCR						151
+> +#define GCC_WCSS_Q6_TBU_BCR					152
+> +#define GCC_TCSR_BCR						153
+> +
+> +#endif
+> -- 
+> 2.17.1
+> 
