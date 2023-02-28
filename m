@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2746A5728
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8C46A572E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjB1KtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        id S231446AbjB1KxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbjB1Ksa (ORCPT
+        with ESMTP id S231389AbjB1Kwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:48:30 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF9C469A;
-        Tue, 28 Feb 2023 02:48:02 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 28 Feb 2023 05:52:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7DE2ED55;
+        Tue, 28 Feb 2023 02:51:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 929D76602FDC;
-        Tue, 28 Feb 2023 10:48:00 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677581281;
-        bh=xNmiw2ujYQURCmwW9t7m1kerphWvM2Xx2d/qe8evz/4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EsL4UoDdDIceOXiCYkSlqmWUwfG44aQh0lfZSEHL8OECQjdQuvUBvh1ZolqJtIaU8
-         RUj2bFLzPSTuVesYRUOmQ282jVzYJ4RGjhKZuRh3Ss8MAywL1z7ohC3E9bNreQMTPL
-         0au+IEQ+7cZbTtuXWwX1Dc3uzp1egiNOGXeVcqIn7zIXQSny54lpAt2JviiQ2Smngf
-         Hoqk1M8I7WShI7dgWtT63W9sUUNyAGTS9FYvqSNR5yAuUl/UMWfS1RYA1aJdtvdeYi
-         sCuc1Gl4WImVJz6Z4H4F1Naerwq6+b+Wj2r50WzbPfU8Ob3ShzqvsMkymKAmcT63h8
-         jk8AQxf7bYZlg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     matthias.bgg@gmail.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v3 18/18] arm64: dts: mediatek: mt8183-evb: Override vgpu/vsram_gpu constraints
-Date:   Tue, 28 Feb 2023 11:47:41 +0100
-Message-Id: <20230228104741.717819-19-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com>
-References: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D75861047;
+        Tue, 28 Feb 2023 10:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E988C4339B;
+        Tue, 28 Feb 2023 10:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677581411;
+        bh=NZZgpnsY0UlgFo1E00gIN59RX1dFiqsBuwFlHaiymVY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H+GAIQqpKcyTTct85KSHswPk/2EuH6Uvj76pC6dlBjFGerkhzqebaujrb8V80EsW8
+         2QH8/XhqbptV7OaxRdibt7uoTRdmU1PagAxAI8NadpKsOyw+VcXmZQV5jxvOduc/nI
+         8Du/8DXCUWjBJyjcOiihH2+wbBybJ+rG8oQEeaLADTzzXhb0z/t0/c9igrzNxmRzgC
+         NrEyzueAMahZmkVAZbgdarJcSseEiEwkAEg5bp8XSPC5XDAKDy77YRSIM+XckJ3sZO
+         7XCXhSBmEB/2lNolY52xCQIa1u1YHJy2Q53TieMgdmYyDPBC5dlkC+YbkC1rY5u9jn
+         7F/gFhY9ousOQ==
+Date:   Tue, 28 Feb 2023 11:50:08 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, Dell.Client.Kernel@dell.com,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+Subject: Re: Accelerometer lis3lv02d is present on SMBus but its address is
+ unknown, skipping registration
+Message-ID: <Y/3cYL0s1Ul9fgR+@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, Dell.Client.Kernel@dell.com,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+References: <97708c11-ac85-fb62-2c8e-d37739ca826f@molgen.mpg.de>
+ <Y/0EIRsycj8EWjrz@ninjato>
+ <47ed190e-ebae-fdc6-f46a-f42a36fb6f26@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ChaSonXIBMCtBEjJ"
+Content-Disposition: inline
+In-Reply-To: <47ed190e-ebae-fdc6-f46a-f42a36fb6f26@molgen.mpg.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Override the PMIC-default voltage constraints for VGPU and VSRAM_GPU
-with the platform specific vmin/vmax for the highest possible SoC
-binning.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Suggested-by: Chen-Yu Tsai <wenst@chromium.org>
----
- arch/arm64/boot/dts/mediatek/mt8183-evb.dts | 6 ++++++
- 1 file changed, 6 insertions(+)
+--ChaSonXIBMCtBEjJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-index fd327437e932..3e3f4b1b00f0 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-@@ -138,11 +138,17 @@ &mmc1 {
- };
- 
- &mt6358_vgpu_reg {
-+	regulator-min-microvolt = <625000>;
-+	regulator-max-microvolt = <900000>;
-+
- 	regulator-coupled-with = <&mt6358_vsram_gpu_reg>;
- 	regulator-coupled-max-spread = <100000>;
- };
- 
- &mt6358_vsram_gpu_reg {
-+	regulator-min-microvolt = <850000>;
-+	regulator-max-microvolt = <1000000>;
-+
- 	regulator-coupled-with = <&mt6358_vgpu_reg>;
- 	regulator-coupled-max-spread = <100000>;
- };
--- 
-2.39.2
+Hi Paul,
 
+> So, 29 shows up in the dump. Let=E2=80=99s see if I am going to find the =
+time to
+> build a Linux kernel. (I couldn=E2=80=99t find a module parameter to forc=
+e loading
+> at a specific address.)
+
+We do this via sysfs:
+
+# echo lis3lv02d 0x29 > /sys/bus/i2c/devices/i2c-6/new_device
+
+(Depending on your system, you might need to ensure the lis3 driver is
+loaded before)
+
+Hope it works!
+
+   Wolfram
+
+
+--ChaSonXIBMCtBEjJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmP93GAACgkQFA3kzBSg
+KbbpeQ//R5UgTX6loyzP5QC9MMZ6cTnyvFvcBkVt4UHFnCS6dC5MJ0N5R0ITbvTw
+AmsOcGqlmfAHjOoFT25nOXBAwHCpWTIUoOp0IDx3IyCct45TfAljoL0I5m+CdjFi
+w+wsemFwaHyJQbKu/aDfJUXw/7x9BcP3vDJQoaE09N7TyWNYH666Sg3fj+bT2ixI
+1AyNSUdoRNRSiwk3zaJsPyK2cLJVfB4q+YBFH7Yq+vT+hpPI9yFZiHZwqOHXcTQ1
+0nZKbNuuIhVCgUlgVFfar6kyqeOWB42+tcnEwG21oPpCwEmgUM5v+xxqaAKaIVQQ
+17s5jtUGud6fiZIsUfKUbcH4w3WtQe00dDv4HgE9wStsFJbSUpeJpOclOz0jSprZ
+DkF1Rji+IBIsWCtMEYfG+/cgreHGOAMGugpCOkrpypRm7CB67FgNLOW+lO4pLPxq
+n92VD6EuahrnY5tOqWOTLdLkWz3AsheZyDbcniiDOu/thz1FJYbsW4ZooW+cADZO
+prj02wGuGc3JDl3qwDAy/+7zT7ZdluOaJXcyMK50X7jL1807tsbCMOWxkliuDOdw
+AXdpyAirawq9e9ExkP17/l4gV3oR7wECl1jENjrjxas1jr4sE9re0B6YGVTURBMD
+5gPCuQRBsl1Xx0GaOLnHJCpFl5ZhHLwwU8TL7FRF4floDKhmiRQ=
+=CdCI
+-----END PGP SIGNATURE-----
+
+--ChaSonXIBMCtBEjJ--
