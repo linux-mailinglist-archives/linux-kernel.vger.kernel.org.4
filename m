@@ -2,125 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3E06A5AB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77006A5AC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjB1OTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 09:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        id S229850AbjB1OVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 09:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjB1OTt (ORCPT
+        with ESMTP id S229527AbjB1OVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 09:19:49 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F54241EC
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 06:19:47 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id q7-20020a92d407000000b00316e14800eeso5931820ilm.20
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 06:19:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J6I9nx2s7RTfWTlnagZt92XwoQkoLlEorV5GfVg0HLE=;
-        b=EIrvDei+g7wNgKkv2TPNseZI0+o25Bw6K+SvQtExCD38iGT9mq3gtHIfjCZvjOkq7r
-         34gbZaHsZAWiCXRp8UlqqVmyema1QFjyCRM9a1DxOUM7ihUzu6FqEQtKGxKPfjfX3wHi
-         qj18/JwGM/MRMNu7ZLvoYXpUHedqz4nsQtT1RDkfrZ7qPqNXR3SuWnSmbe1ppOnKaRfX
-         BZD7So23fRdkPN9o81nq1lfyASx6A/0Mpjsi1p6aDpqoXCOPclEcVVt+VQzqIBURVerm
-         fQYlV5gy/drMEpYJbVslIKVO6uryrNgua6ouj8Nd/PPjYvtlpMyTy3Zwl/zTLQdy4HaT
-         3vEg==
-X-Gm-Message-State: AO0yUKVmLYClBqAyDG8dNGis/QX+RhcC0ZVjeDUauFQnHB7OJu8tna5h
-        7by8ZHFPgfflg7Ah2oS03gJK0yHOwWWifwbu/xIBhmq2Fxf0
-X-Google-Smtp-Source: AK7set80BgvGPfY0VZVc50EMjNfjx1r+lpseH5pu22IzNmUTBUhber0fCBuJJHCdpw2t1xFRIPl0wI8XeLnKny7oPSOmITR6cbg3
+        Tue, 28 Feb 2023 09:21:06 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A682312D;
+        Tue, 28 Feb 2023 06:21:04 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2B43C6602F90;
+        Tue, 28 Feb 2023 14:20:56 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677594063;
+        bh=fXrXYib4/IODPE+Or2l+E6ijJeid0k/x8BCxHGZiwIQ=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=TwWnx4/7sn4zeKGWVlB7xF34Q3kfjGHBo3Muw5icuLERAnrRYWiuHHQ9y5nCiUHi4
+         ySiO0wKlRLmE7DaiN4+Tr9nnsPrX4f3X7lAhFPxQEjWbbYO+tyeGnvb5AdaU4JISlz
+         Kxst2cFuDfbZn58tpNOgNDqRcd7wLeuFV3UDuovmwuMzksN7jJO9XW4mmuFifsjfqe
+         aaxaBDDdia2uVDI8y/Ou08uhz2MQ7niM8qZ8B6NjHSXbWGsjvlmu08a3FNHpjVWeSk
+         4LhCC0yISDy5xP8f/YdkWNV6gJMiwAX6zqIlu0r9mIFu5NPdcQh6pnQhcJRWf1P1j2
+         fSC93BbfvpEzQ==
+Message-ID: <803f7ef2-f217-65fe-d0b9-98ae469556fa@collabora.com>
+Date:   Tue, 28 Feb 2023 19:20:48 +0500
 MIME-Version: 1.0
-X-Received: by 2002:a02:6244:0:b0:3ad:65e:e489 with SMTP id
- d65-20020a026244000000b003ad065ee489mr1374385jac.1.1677593986353; Tue, 28 Feb
- 2023 06:19:46 -0800 (PST)
-Date:   Tue, 28 Feb 2023 06:19:46 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a24e7405f5c34912@google.com>
-Subject: [syzbot] [ntfs3?] UBSAN: shift-out-of-bounds in ntfs_fill_super (2)
-From:   syzbot <syzbot+478c1bf0e6bf4a8f3a04@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gautham.shenoy@amd.com,
+        ananth.narayan@amd.com,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: [PATCH] perf/x86/rapl: Enable Core RAPL for AMD
+To:     Stephane Eranian <eranian@google.com>,
+        Wyes Karny <wyes.karny@amd.com>
+References: <20230217161354.129442-1-wyes.karny@amd.com>
+ <Y/NdUjLiQu+D0q7b@hirez.programming.kicks-ass.net>
+ <CABPqkBTU_gnTr9ayvg220T4pO5NAguvu_UJAkZO2RUATWuMJ3A@mail.gmail.com>
+ <Y/ROTsCSCFtrwwTK@beas>
+ <CABPqkBQ_bSTC-OEe_LrgUrpj2VsseX1ThvO-yLcEtF8vb4+AAw@mail.gmail.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABPqkBQ_bSTC-OEe_LrgUrpj2VsseX1ThvO-yLcEtF8vb4+AAw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2/21/23 1:50 PM, Stephane Eranian wrote:
+> Hi,
+> 
+> Testing Wyes' patch for energy-cores on Zen3 server loaded with triad
+> bench on socket0:
+> 
+> $ perf stat --per-core -a -C0-63 -I 1000 -e
+> power/energy-cores/,power/energy-pkg/
+> #           time core               cpus             counts   unit events
+>      1.001019203 S0-D0-C0              1               1.28 Joules
+> power/energy-cores/
+>      1.001019203 S0-D0-C0              1             231.38 Joules
+> power/energy-pkg/
+>      1.001019203 S0-D0-C1              1   4,294,967,130.96 Joules
+> power/energy-cores/
+>      1.001019203 S0-D0-C1              1             231.38 Joules
+> power/energy-pkg/
+>      1.001019203 S0-D0-C2              1   4,294,967,126.23 Joules
+> power/energy-cores/
+>      1.001019203 S0-D0-C2              1             231.38 Joules
+> power/energy-pkg/
+>      1.001019203 S0-D0-C3              1   4,294,967,122.50 Joules
+> power/energy-cores/
+>      1.001019203 S0-D0-C3              1             231.38 Joules
+> power/energy-pkg/
+>      1.001019203 S0-D0-C4              1   4,294,967,129.92 Joules
+> power/energy-cores/
+>      1.001019203 S0-D0-C4              1             231.38 Joules
+> power/energy-pkg/
+>      1.001019203 S0-D0-C5              1   4,294,967,121.49 Joules
+> power/energy-cores/
+>      1.001019203 S0-D0-C5              1             231.39 Joules
+> power/energy-pkg/
+> 
+> I think the result of energy-cores is not reliable and I think that is
+> why I did not
+> include it in the patch.
+> 
+> Could also be a problem with the kernel code, but I don't know why it would only
+> impact energy-cores given energy-pkg looks reasonable here.
+> 
 
-syzbot found the following issue on:
+I'm getting consistent per core energy measurements on AMD Custom APU 405.
+Probably consistency depends on the chip.
 
-HEAD commit:    2ebd1fbb946d Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f0d518c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
-dashboard link: https://syzkaller.appspot.com/bug?extid=478c1bf0e6bf4a8f3a04
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165b7474c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c9de8cc80000
+sudo perf stat -a --per-core -C 0-7 -e power/energy-cores/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/16985cc7a274/disk-2ebd1fbb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fd3452567115/vmlinux-2ebd1fbb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c75510922212/Image-2ebd1fbb.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/deffedf88bc5/mount_0.gz
+ Performance counter stats for 'system wide':
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+478c1bf0e6bf4a8f3a04@syzkaller.appspotmail.com
+ S0-D0-C0           2               0.51 Joules power/energy-cores/
+ S0-D0-C1           2               0.51 Joules power/energy-cores/
+ S0-D0-C2           2               0.51 Joules power/energy-cores/
+ S0-D0-C3           2               0.51 Joules power/energy-cores/
 
-loop0: detected capacity change from 0 to 4096
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ntfs3/super.c:777:25
-shift exponent 128 is too large for 32-bit type 'unsigned int'
-CPU: 0 PID: 5928 Comm: syz-executor258 Not tainted 6.2.0-syzkaller-18300-g2ebd1fbb946d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Call trace:
- dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x2f4/0x36c lib/ubsan.c:321
- ntfs_init_from_boot fs/ntfs3/super.c:777 [inline]
- ntfs_fill_super+0x2544/0x3b9c fs/ntfs3/super.c:970
- get_tree_bdev+0x360/0x54c fs/super.c:1282
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1408
- vfs_get_tree+0x90/0x274 fs/super.c:1489
- do_new_mount+0x25c/0x8c8 fs/namespace.c:3145
- path_mount+0x590/0xe58 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount fs/namespace.c:3674 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3674
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-================================================================================
+What is the fate of this patch now?
 
+[..]
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>>>> Stephane, this was an oversight?
+>>>>
+>>> I think it may depend on the CPU model. I remember it returning either
+>>> 0 or bogus values on my systems. They may have improved that.
+>>> The commit msg does not show which CPU model this is run on.
+>>
+>> I've tested this on Zen 2, 3 and 4 server systems.
+>>
+>> Thanks,
+>> Wyes
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+BR,
+Muhammad Usama Anjum
