@@ -2,215 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924D76A6024
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3E66A6039
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjB1UJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
+        id S229719AbjB1UR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjB1UJG (ORCPT
+        with ESMTP id S229510AbjB1URY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:09:06 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1961B56F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:09:05 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id y12so7744902qvt.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:09:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1677614944;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NH34UHl+rn2FO1mQ7lCOsCVjbWfDkbPYuh07UsQOhis=;
-        b=H8JbXstRVmnyb9jd9RDj3Pnvvuq5Ealg3QjKjfsGavPEO6e7ckbwkzZz/20MOO5Ey0
-         FbksYZRhWWe7hwgmwnvyaVn/kra+2SNHIurnijeStGiR1CaANhatLN1Y5afYqd8mOs8N
-         I6y6IfhP5H2cDUXJ+p+5b6eKHrXxkTjTvct4s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677614944;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NH34UHl+rn2FO1mQ7lCOsCVjbWfDkbPYuh07UsQOhis=;
-        b=jWrTG0szKWqAD9e/hL10gQ0lhc6rvboGtP2AKAmXabIxT24dTshjMmZZDnRCSpCLAP
-         yqUqWeucGdtWxZcA19asrceVKUsThFDNN8b8W26AUUTD8bMkwx5UCGlolCqKP4AOWMV7
-         WR0/kaLJ8vDe9UEyg2YHb5b4/14vurEMPWOGBygM8SDudIQ1gG7m2ellTg81/vm2FoGl
-         nrBpMZjSsNFyDNvUqZkq0iTgiijJbO30Gl/+qVFRIlEzXq2AtaL2vbZ8/OdVMzW1qwsv
-         5UnVRbg2ty1afLqGBndYsa+lnF+uNCiNczMMjpOzKrlkvpZuIn8yQI+AXJF15pXKRK9T
-         eptQ==
-X-Gm-Message-State: AO0yUKUR93T74nTEeiID8aItkwaryUjQLeW+NVnZudHXxA3+Xr4RogiS
-        Sx9ZxULQdfbEXxWmzV17+IvOcQ==
-X-Google-Smtp-Source: AK7set950bRPMYcF1PBo6aHG2JurEHS1incCiQgR8NOD4Yh854UqDXAxDRkb6hlikDJeHLFHuKCVVA==
-X-Received: by 2002:a05:6214:f0f:b0:56e:bc62:e151 with SMTP id gw15-20020a0562140f0f00b0056ebc62e151mr8013215qvb.7.1677614944380;
-        Tue, 28 Feb 2023 12:09:04 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id v23-20020a05620a091700b007423c78b004sm7359424qkv.9.2023.02.28.12.09.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 12:09:03 -0800 (PST)
-Date:   Tue, 28 Feb 2023 20:09:02 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as
- completed
-Message-ID: <Y/5fXskgrQxzbt0U@google.com>
-References: <Y/z0fHHYdxEXcWMT@pc636>
- <7EBE4F51-F2BD-4B42-AFC1-CA234E78CC7B@joelfernandes.org>
- <Y/z9Its1RKetIr8V@pc636>
- <CAEXW_YSjT_orp8TbomBFU+ETS7YJ7TrbHTdrsBRTzCKG5_SBdw@mail.gmail.com>
- <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y/0/dnmIk508sidK@lothringen>
- <Y/1ZMXsNZtwYPJNW@google.com>
- <Y/3fxLXbfvnLFEZq@lothringen>
+        Tue, 28 Feb 2023 15:17:24 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5116730B19;
+        Tue, 28 Feb 2023 12:17:22 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677615440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+tJEqgPfdkTLU3mHfnXrw2lQR9/7aJ/wKbNQqiobsHA=;
+        b=3/ATstbq1/o40KQTaNbjoQFnnRTxln+BSFSftjZl4miiX0TOMmHlKAvntvpvK8n58cBAPq
+        QSweVaDkdRg8gKlaKLyOTfUaZVBodYetM5Qxf9t7CjYwSnpitNIOlWsZVdoQgmTlbZktbF
+        JGJt4ytVrT4i5qdLUvvHJANSdw42TunY9w1B5M4F27l8Ax7/aMmAsj4vUJ/pmBi5iofZ7e
+        9BazaWNjxsfEkaiCsljXy9Zz4aSplSe7psdVXAyPbaEwtYoF1JtpRGYm3ASxOd4Y4Jxz3w
+        4WH+2O5JgQCNjQkVslb1ubbtgWxf+Lr9ZC3/QfvlMWA15T4+2nAMrB7ZbzdgLA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677615440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+tJEqgPfdkTLU3mHfnXrw2lQR9/7aJ/wKbNQqiobsHA=;
+        b=hfXbJyNq/WCvzU5kJYwwuAWRs5vlS8B6t/OswGP/vo0Xa6aH6LS2i0jKHm62zAgbhr3NwW
+        TRs2z77XlyQBJcAw==
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
+Subject: Re: [PATCH v12 06/11] x86/smpboot: Remove initial_stack on 64-bit
+In-Reply-To: <c6863590f5fbf139f6aec50d0f3bc8e8b00cfcaf.camel@infradead.org>
+References: <20230226110802.103134-1-usama.arif@bytedance.com>
+ <20230226110802.103134-7-usama.arif@bytedance.com> <87k001n4xo.ffs@tglx>
+ <c6863590f5fbf139f6aec50d0f3bc8e8b00cfcaf.camel@infradead.org>
+Date:   Tue, 28 Feb 2023 21:17:19 +0100
+Message-ID: <87edq9mto0.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/3fxLXbfvnLFEZq@lothringen>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frederic,
+On Tue, Feb 28 2023 at 17:09, David Woodhouse wrote:
+> On Tue, 2023-02-28 at 17:13 +0100, Thomas Gleixner wrote:
+>> As this patch is now part of the parallel boot series and actually
+>> introduces smpboot_control, the above is neither accurate nor useful.
+>
+> Better commit message, add a comment where we abuse current->thread.sp
+> in the sleep path. Didn't remove the {} which would be added back in
+> the very next patch. Pushed to my tree for Usama's next round.
 
-On Tue, Feb 28, 2023 at 12:04:36PM +0100, Frederic Weisbecker wrote:
-> On Tue, Feb 28, 2023 at 01:30:25AM +0000, Joel Fernandes wrote:
-> > On Tue, Feb 28, 2023 at 12:40:38AM +0100, Frederic Weisbecker wrote:
-> > > On Mon, Feb 27, 2023 at 03:05:02PM -0800, Paul E. McKenney wrote:
-> > > > On Mon, Feb 27, 2023 at 02:10:30PM -0500, Joel Fernandes wrote:
-> > > > 
-> > > > The combination of sysfs manipulated by userspace and a kernel failsafe
-> > > > makes sense to me.  Especially if by default triggering the failsafe
-> > > > splats.  That way, bugs where userspace fails to update the sysfs file
-> > > > get caught.
-> > > > 
-> > > > The non-default silent-failsafe mode is also useful to allow some power
-> > > > savings in advance of userspace getting the sysfs updating in place.
-> > > > And of course the default splatting setup can be used in internal testing
-> > > > with the release software being more tolerant of userspace foibles.
-> > > 
-> > > I'm wondering, this is all about CONFIG_RCU_LAZY, right? Or does also expedited
-> > > GP turned off a bit early or late on boot matter for anybody in practice?
-> > 
-> > Yes, if you provide 'rcu_normal_after_boot', then after the boot ends, it
-> > switches expedited GPs to normal ones.
-> > 
-> > It is the same issue for expedited, the kernel's version of what is 'boot' is
-> > much shorter than what is actually boot.
-> > 
-> > This is also the case with suspend/resume's rcu_pm_notify(). See the comment:
-> >   /*
-> >    * On non-huge systems, use expedited RCU grace periods to make suspend
-> >    * and hibernation run faster.
-> >    */
-> > 
-> > There also we turn on/off both lazy and expedited. I don't see why we
-> > shouldn't do it for boot.
-> 
-> Of course but I mean currently rcu_end_inkernel_boot() is called explicitly
-> before the kernel calls init. From that point on, what is the source of the
-> issue? Delaying lazy further would be enough or do we really need to delay
-> forcing expedited as well? Or is it the reverse: delaying expedited further
-> would matter and lazy doesn't play much role from there.
+Ok.
 
-Both should play a role. For lazy, we found callbacks that showed later in
-the full boot sequence (like the SCSI issue).
+> However, we start by introducing one more: smpboot_control. For now this
 
-For expedited, there is new data from Qiuxu showing 5% improvement in boot
-time.
+s/we// :)
 
-> It matters to know because if delaying expedited further is enough, then indeed
-> we must delay the call to rcu_end_inkernel_boot() somehow. But if delaying
-> expedited further doesn't matter and delaying lazy matter then it's possible
-> that the issue is a callback that should be marked as call_rcu_hurry() and then
-> the source of the problem is much broader.
+> merely holds the CPU# of the CPU which is coming up. That CPU can then
+> find its own per-cpu data, and everything else it needs can be found from
+> there, allowing the other global variables to be removed.
+>
+> First to be removed is initial_stack. Each CPU can load %rsp from its
+> current_task->thread.sp instead. That is already set up with the correct
+> idle thread for APs. Set up the .sp field in INIT_THREAD on x86 so that
+> the BSP also finds a suitable stack pointer in the static per-cpu data
+> when coming up on first boot.
+>
+> On resume from S3, the CPU needs a temporary stack because its idle task
+> is already active. Instead of setting initial_stack, the sleep code can
+> simply set its own current->thread.sp to point to the temporary stack.
+> The true stack pointer will get restored with the rest of the CPU
+> context in do_suspend_lowlevel().
 
-Right, and we also don't know if in the future, somebody queues a CB that
-slows down boot as well (say they queue a lazy CB that does a wakeup), even
-if currently there are not any such. As noted, that SCSI issue did show. Just
-to note, callbacks doing wakeups are supposed to call call_rcu_hurry().
+Thanks for writing this up!
 
-> I think the confusion comes from the fact that your changelog doesn't state precisely
-> what the problem exactly is. Also do we need to wait for the kernel boot completion?
-> And if so what is missing from kernel boot after the current explicit call to
-> rcu_end_inkernel_boot()?
+> +	/*
+> +	 * As each CPU starts up, it will find its own stack pointer
+> +	 * from its current_task->thread.sp. Typically that will be
+> +	 * the idle thread for a newly-started AP, or even the boot
+> +	 * CPU which will find it set to &init_task in the static
+> +	 * per-cpu data.
+> +	 *
+> +	 * Make the resuming CPU use the temporary stack at startup
+> +	 * by setting current->thread.sp to point to that. The true
+> +	 * %rsp will be restored with the rest of the CPU context,
+> +	 * by do_suspend_lowlevel().
 
-Yes, sorry, it was more an RFC but still should have been more clear. For the
-v3 I'll definitely make it clear.
+Right, but what restores current->thread.sp? thread.sp is used by
+unwinders...
 
-rcu_end_inkernel_boot() is called before init is run. But the kernel cannot
-posibly know when init has finished running and say the system is now waiting
-for user login, or something. There's a considerable amount time from
-rcu_end_inkernel_boot() to when the system is actually "booted". That's the
-main issue. We could look at CPU load, but that's not ideal. Maybe wait for
-user input, but that sucks as well.
+Thanks,
 
-> Or do we also need to wait for userspace to complete the boot? Different
-> problems, different solutions.
-> 
-> But in any case a countdown is not a way to go. Consider that rcu_lazy may
-> be used by a larger audience than just chromium in the long run. You can not
-> ask every admin to provide his own estimation per type of machine. You can't
-> either rely on a long default value because that may have bad impact on
-> workload assumptions launched right after boot.
-
-Hmmm I see what you mean, so a conservative and configurable "fail-safe"
-timeout followed by sysctl to end the boot earlier than the timeout, should
-do it (something like 30 seconds IMHO sounds reasonable)? In any case,
-whatever way we go, we would not end the kernel boot before
-rcu_end_inkernel_boot() is called at least once (which is the current
-behavior).
-
-So it would be:
-
-  low level boot + initcalls
-       20 sec                         30 second timeout
-|------------------------------|--------------------------
-                               |                         |
-	        old rcu_end_inkernel_boot()      new rcu_end_inkernel_boot()
-
-But it could be, if user decides:
-  low level boot + initcalls
-       20 sec                         10 second timeout
-|------------------------------|--------------------------
-                               |                         |
-	        old rcu_end_inkernel_boot()      new rcu_end_inkernel_boot()
-		                                 via /sys/ entry.
-
-> > > So shouldn't we disable lazy callbacks by default when CONFIG_RCU_LAZY=y and then
-> > > turn it on with "sysctl kernel.rcu.lazy=1" only whenever userspace feels ready
-> > > about it? We can still keep the current call to rcu_end_inkernel_boot().
-> > 
-> > Hmm IMHO that would add more knobs for not much reason honestly. We already
-> > have CONFIG_RCU_LAZY default disabled, I really don't want to add more
-> > dependency (like user enables the config and does not see laziness).
-> 
-> I don't know. Like I said, different problems, different solutions. Let's
-> identify what the issue is precisely. For example can we expect that the issues
-> on boot can be a problem also on some temporary workloads?
-> 
-> Besides I'm currently testing a very hacky flavour of rcu_lazy and so far it
-> shows many idle calls that would have been delayed if callbacks weren't queued
-> as lazy.
-
-Can you provide more details? What kind of hack flavor, and what is it doing?
-
-thanks,
-
- - Joel
-
-
-> I have yet to do actual energy and performance measurements but if it
-> happens to show improvements, I suspect distros will want a supported yet
-> default disabled Kconfig that can be turned on on boot or later. Of course we
-> are not there yet but things to keep in mind...
-> 
-> Thanks.
+        tglx
