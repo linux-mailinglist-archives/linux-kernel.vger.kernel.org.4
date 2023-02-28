@@ -2,144 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79E56A5090
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 618756A5097
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjB1BPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 20:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S229644AbjB1BSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 20:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjB1BPB (ORCPT
+        with ESMTP id S229470AbjB1BSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 20:15:01 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA36117CDB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:14:58 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id h16so33460710edz.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:14:58 -0800 (PST)
+        Mon, 27 Feb 2023 20:18:37 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5076C1A4BF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:18:36 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id i5so7102514pla.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:18:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677546897;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A4foDmOd0TidPkdLCFMkrpX/LFzdbPkgPT38RIetMiw=;
-        b=WirmihFyrrVXSGptd2y2j1cn22O/wCwpjUfVO4nVTGBhhF/yulKPyU/gJZzLJrwBct
-         dXHy3G1t5CuCUB36+n1AuYqeQGvhtYQGgNHOfcb0JYS9Et31ltZPDmWl2vTaXnbSQHV6
-         F+1mO8KvPU75JUXQHIOj1uMYsAcBxdSUFHEm4=
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=45w/ePZnYI0/2LLjqhHdpOHZZUZkx2HLxk5IVIXVOTY=;
+        b=VksYiCrOuvmy2dWTmHyMVmqEos+eA1XMxT2L2aN3ljFOVVsxuvyZX737HBCHBuzGwU
+         WXbuaQi59qraaKUR2e7KybHK49lyNip4DeuT7isI+1zMex7x/o8Sbv+ghueRcpGz3kUE
+         ThiBxGrAP0LUjOlTeObA6T+BQo5nCQlwvVV1jDL40gEEjo2Tl7Ga9Exi9kyHrUFhYJkW
+         wQvnijgcJvSRZURNTPIDbcUGBqj46uL73qL49SOO2tqpFD2TZEAsgJsneN06H/E86E/u
+         Tj1GrTRFWXbXhd2zQxa4JaFho16/TZXR5JDLtlbs6Zr/qKbTvRW1/uiZTZf/+6L1iwdE
+         Qvng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677546897;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A4foDmOd0TidPkdLCFMkrpX/LFzdbPkgPT38RIetMiw=;
-        b=sQBeRtR632+KajlJAFEzwzGgsbWSLd5RoUgIr7nhJ3sOhyJu9qUzY4Gzw53/v5Rt8f
-         H/s+tgMMJPGl4iNA2mXoaPpTwKjbHNmubfktQip2HPh+FgPd1FIIKYSOXAA639mu8tYu
-         trMUfBEXm9C2v0QLPUERBPqhIwGj9Iec/4pni8IgTS8mkLUVNlsqOll6NwXRCcMMGLA+
-         +VsjhDnPC3Ac6BfDsgj5mNUb1sHWRascDolWcR1bnSzNG5aJCTi78aMDnXYGsp1HANE4
-         oDmaT9a7DibzfkVzJzjkXPBSaDefH7MrQas7dH15fxHFNo8yZor5rUXqm6qV+vmJPYTw
-         YfBw==
-X-Gm-Message-State: AO0yUKVUEJG958dNH3bVKALV78DCeMXGy8yV61TqB03qrgYPbcURWzum
-        EtrCIxDdId0rrHygqFYVwgcg2SWXrmWS/Zfm0x8=
-X-Google-Smtp-Source: AK7set/bmnCHGtYoOkQ0RAuisKFxJkvwiO8XO9bymMXdESU4gUHZ9+ZRL3woREwNp9uehXpHpRv6eQ==
-X-Received: by 2002:a17:906:d8b:b0:87a:ee05:f7b with SMTP id m11-20020a1709060d8b00b0087aee050f7bmr642537eji.24.1677546896788;
-        Mon, 27 Feb 2023 17:14:56 -0800 (PST)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id o6-20020a17090611c600b008f702684c51sm3764655eja.161.2023.02.27.17.14.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 17:14:56 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id cy6so33542069edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 17:14:55 -0800 (PST)
-X-Received: by 2002:a17:906:79a:b0:8b8:aef3:f2a9 with SMTP id
- l26-20020a170906079a00b008b8aef3f2a9mr323832ejc.0.1677546895540; Mon, 27 Feb
- 2023 17:14:55 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=45w/ePZnYI0/2LLjqhHdpOHZZUZkx2HLxk5IVIXVOTY=;
+        b=cpEUbH2CDePSq0xDCLCEzv1bq7zId/NcYOfdSIcKNs3VXYfi8P6brsMjcWWNIQp+ET
+         CciLIqWNxjx657ZvTNR5Xkn17PWE2aHIqeQNYLIhWZFqtOUURUNlejIsKXgT+sU307L/
+         QR7qB6vNQvnGlEBdtE80CD84CNgTDl80NR846Gl+LDo2RvlqD0+tvKt7uGO3WkWLcdXn
+         t85oA9VrUwuttO/dZpnLM5XxnEvEwuPpcIvDB8HGZF6Y3aH0HvtrNhrF+gps6xbSsRQh
+         VWTVAe0Dhk/VGLTqa+509TSlx0ZqnnOD+KLcq7w8hVMdCfDznsdWEYOoSVerDheAucyb
+         ld+w==
+X-Gm-Message-State: AO0yUKV0LaVqg9P5zlyl8JjhaxHIM5lYYhhcbVnpSUQE2WUfVPbH4UTn
+        hWrFyncil4wvyckNKmhwRDzIWw==
+X-Google-Smtp-Source: AK7set+5jx3+Ceo66EApE8SUSKzeARSdv7Ab+Hou1uZOcwtSBj41Kn2dD79VgcqMPUmiRkMYFH+5gg==
+X-Received: by 2002:a17:90b:4b10:b0:230:81e9:ebb4 with SMTP id lx16-20020a17090b4b1000b0023081e9ebb4mr1247690pjb.10.1677547115601;
+        Mon, 27 Feb 2023 17:18:35 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id q11-20020a17090a2e0b00b002372107fc3fsm4911667pjd.0.2023.02.27.17.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 17:18:34 -0800 (PST)
+Date:   Tue, 28 Feb 2023 06:48:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Sumit Gupta <sumitg@nvidia.com>, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, rafael@kernel.org,
+        jonathanh@nvidia.com, robh+dt@kernel.org, lpieralisi@kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
+        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v2 7/9] cpufreq: tegra194: add OPP support and set
+ bandwidth
+Message-ID: <20230228011832.2h6rfsju4qnwu5oj@vireshk-i7>
+References: <20230220140559.28289-1-sumitg@nvidia.com>
+ <20230220140559.28289-8-sumitg@nvidia.com>
+ <20230222040317.r2p6zlbumazymluc@vireshk-i7>
+ <df054fae-5195-1ef8-c72e-e5afe8d901d3@nvidia.com>
+ <Y/ylpaJLMOE6zY8C@orome>
 MIME-Version: 1.0
-References: <20230125155557.37816-1-mjguzik@gmail.com>
-In-Reply-To: <20230125155557.37816-1-mjguzik@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 27 Feb 2023 17:14:38 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjz8O4XX=Mg6cv5Rq9w9877Xd4DCz5jk0onVKLnzzaPTA@mail.gmail.com>
-Message-ID: <CAHk-=wjz8O4XX=Mg6cv5Rq9w9877Xd4DCz5jk0onVKLnzzaPTA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] capability: add cap_isidentical
-To:     Mateusz Guzik <mjguzik@gmail.com>, Serge Hallyn <serge@hallyn.com>
-Cc:     viro@zeniv.linux.org.uk, paul@paul-moore.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/ylpaJLMOE6zY8C@orome>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 7:56=E2=80=AFAM Mateusz Guzik <mjguzik@gmail.com> w=
-rote:
->
-> +static inline bool cap_isidentical(const kernel_cap_t a, const kernel_ca=
-p_t b)
-> +{
-> +       unsigned __capi;
-> +       CAP_FOR_EACH_U32(__capi) {
-> +               if (a.cap[__capi] !=3D b.cap[__capi])
-> +                       return false;
-> +       }
-> +       return true;
-> +}
-> +
+On 27-02-23, 13:44, Thierry Reding wrote:
+> On Thu, Feb 23, 2023 at 03:06:26PM +0530, Sumit Gupta wrote:
+> > On 22/02/23 09:33, Viresh Kumar wrote:
+> > Tried using it and got below crash. It seems to be coming because we don't
+> > have clocks property within CPU node for SoC's having BPMP-FW.
+> > 
+> >  Unable to handle kernel NULL pointer dereference at virtual address
+> > 000000000000002e
+> >  ....
+> >  Call trace:
+> >   clk_round_rate+0x38/0xd8
+> >   dev_pm_opp_set_rate+0xe4/0x1a8
+> >   tegra194_cpufreq_set_target+0x74/0x88
+> >   __cpufreq_driver_target+0x154/0x250
+> >   cpufreq_online+0x7b4/0x9ac
+> 
+> Can you try to find out what exactly is happening here? The clock
+> framework should be able to deal with NULL clock pointers just fine.
+> Although, looking at the OPP table code, it seems like we don't use
+> clk_get_optional(), so opp_table->clk may end up being a pointer-
+> encoded error. Perhaps we need something like this:
+> 
+> --- >8 ---
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index e87567dbe99f..d7baeb6ac697 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1397,6 +1397,7 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+>  		 * frequency in opp->rates and also parse the entries in DT.
+>  		 */
+>  		opp_table->clk_count = 1;
+> +		opp_table->clk = NULL;
+>  
+>  		dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+>  		return opp_table;
 
-Side note, and this is not really related to this particular patch
-other than because it just brought up the issue once more..
+I didn't reply earlier as I had nothing more to say and Sumit's
+initial approach was correct. Maybe I should have I have clarified
+this then.
 
-Our "kernel_cap_t" thing is disgusting.
+The OPP core supports dev_pm_opp_set_rate() only for devices that can
+set the rate, for everything else dev_pm_opp_set_opp() is the right
+choice. I suggested dev_pm_opp_set_rate() earlier as I thought rate is
+supported here.
 
-It's been a structure containing
-
-        __u32 cap[_KERNEL_CAPABILITY_U32S];
-
-basically forever, and it's not likely to change in the future. I
-would object to any crazy capability expansion, considering how
-useless and painful they've been anyway, and I don't think anybody
-really is even remotely planning anything like that anyway.
-
-And what is _KERNEL_CAPABILITY_U32S anyway? It's the "third version"
-of that size:
-
-  #define _KERNEL_CAPABILITY_U32S    _LINUX_CAPABILITY_U32S_3
-
-which happens to be the same number as the second version of said
-#define, which happens to be "2".
-
-In other words, that fancy array is just 64 bits. And we'd probably be
-better off just treating it as such, and just doing
-
-        typedef u64 kernel_cap_t;
-
-since we have to do the special "convert from user space format"
-_anyway_, and this isn't something that is shared to user space as-is.
-
-Then that "cap_isidentical()" would literally be just "a =3D=3D b" instead
-of us playing games with for-loops that are just two wide, and a
-compiler that may or may not realize.
-
-It would literally remove some of the insanity in <linux/capability.h>
-- look for CAP_TO_MASK() and CAP_TO_INDEX and CAP_FS_MASK_B0 and
-CAP_FS_MASK_B1 and just plain ugliness that comes from this entirely
-historical oddity.
-
-Yes, yes, we started out having it be a single-word array, and yes,
-the code is written to think that it might some day be expanded past
-the two words it then in 2008 it expanded to two words and 64 bits.
-And now, fifteen years later, we use 40 of those 64 bits, and
-hopefully we'll never add another one.
-
-So we have historical reasons for why our kernel_cap_t is so odd. But
-it *is* odd.
-
-Hmm?
-
-             Linus
+-- 
+viresh
