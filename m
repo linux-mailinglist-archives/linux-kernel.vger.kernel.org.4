@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBC16A5101
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B316A5105
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjB1CSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:18:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S229805AbjB1CS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB1CSL (ORCPT
+        with ESMTP id S229931AbjB1CSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:18:11 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6721186A4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:18:10 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id y14so3441512ilv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:18:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g9TqYNjPNFKEn9o2CRG5ylaHlbZcxiO6CKaFD2QKerQ=;
-        b=XUAsJofmvWzO6/rPEZJx3uXQo6Bb6sRVR0bnG7b2GkdGZxXYqdAZg1bSJusi6kqzQ6
-         UdIzIn1v2i0YIo1X7U6MY6TrVqjU3MEoDZ97TUxf4zJRKSoy+168+2dFpulzwTBF6pxH
-         d2ldQiRk1Qhzucovh2jc33+oVzgdtlyl13pBmnAWvgCoQpCKHAoBgfo/MH5memqMhhsQ
-         6M47Ufq0HhQnzmr+yg2pCTLXYfApTVhOoXA+dS2896UVW1pIcjCGqkxppQDvVVWHHjX8
-         DjGvm7L6/10Ek3W1X09C62e5+TXvrZLE63gVQVhhxeutunU936ujGuM3axIgzC/5OW1O
-         v6zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g9TqYNjPNFKEn9o2CRG5ylaHlbZcxiO6CKaFD2QKerQ=;
-        b=AHw8nrgjA4a1za72rzFe/pY5t1bf1TGhj1yvt1WQHXuAA1Ocuyq6fFOH5EybLbKVGB
-         Bt4B8NyKDNVoO6jIBKSK98CZdsU0O0lx7JwlVmEl8F2t78mwlhDQ2ARzpfHQzxhEpRDI
-         kobL2MnBbY5Ed9RaOl/7MnShcGCcoTxa6IYZOehBeijnXIMdT682y4LshOrbMz4g+ReR
-         TMSUG1v51Mp2YDLTct9+xI6W6v5Zjgicd9dBdbUHNxkkaF2Ftm3GpwidDICn7aLyj9sz
-         p1LxwFLvfckjJQXAhi8WP77YyqzpamG4eemDK3nmakWI2SEX/IL31vfU14Z7dyLW+kHG
-         53iw==
-X-Gm-Message-State: AO0yUKVC0keXvm5T7eJnB50EFJtPl5wnEmuzwMDTUq6OuDC4TmEN+iSb
-        1NMQD+T+MVo+x9du7H7Kna8=
-X-Google-Smtp-Source: AK7set9yeMt2xpmePzSBNnXyeVlTfqmfbnQzx9hYXmcCNB7p5gHw+e46PDaZ3soq+Ui2p7zPVyv7/w==
-X-Received: by 2002:a05:6e02:1565:b0:316:b0bb:3d99 with SMTP id k5-20020a056e02156500b00316b0bb3d99mr1390656ilu.22.1677550689740;
-        Mon, 27 Feb 2023 18:18:09 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l3-20020a02cce3000000b003e1fd49835asm2548087jaq.108.2023.02.27.18.18.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 18:18:09 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 27 Feb 2023 18:18:08 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Keith Busch <kbusch@meta.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, willy@infradead.org, hch@lst.de,
-        tonyb@cybernetics.com, akpm@linux-foundation.org,
-        kernel-team@meta.com
-Subject: Re: [PATCHv4 11/12] dmapool: link blocks across pages
-Message-ID: <20230228021808.GB3955901@roeck-us.net>
-References: <20230126215125.4069751-1-kbusch@meta.com>
- <20230126215125.4069751-12-kbusch@meta.com>
- <20230227005445.GA3425881@roeck-us.net>
- <Y/1SfK4//04Tznvy@kbusch-mbp.dhcp.thefacebook.com>
+        Mon, 27 Feb 2023 21:18:23 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484D9A5FC;
+        Mon, 27 Feb 2023 18:18:20 -0800 (PST)
+Date:   Tue, 28 Feb 2023 02:18:16 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1677550698;
+        bh=M6DbHO+PeywxABD2rLvdeB8pVgOEidTHxi8y5J0nZ7w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r9pbiEkv4aT4jJ3hyrNCr5GPqcRL8nDqobRz4+3qRr/5auhAaTgB5RYprY3BzJWG6
+         LytGoIeP3k9XiCjQRc/VoY+dzH4Q1Y3IA0iX2buKDpS4Epd1PJunUR7PGeDAaPKyYH
+         XdXecx0lioG8Wb/0uiDAhgo66/duT3MCDp/faKs4=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     George Kennedy <george.kennedy@oracle.com>, jirislaby@kernel.org,
+        gregkh@linuxfoundation.org, sfr@canb.auug.org.au,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, regressions@lists.linux.dev
+Subject: Re: [PATCH v2] vc_screen: modify vcs_size() handling in vcs_read()
+Message-ID: <64981d94-d00c-4b31-9063-43ad0a384bde@t-8ch.de>
+References: <1677529301-19530-1-git-send-email-george.kennedy@oracle.com>
+ <face2b1b-0f2e-4a79-a71b-79681fc56273@t-8ch.de>
+ <CAHk-=whxC0ob3f--B-igBp34ujA5PZQMcTnDQ8Zh8HA7+ZbeWg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y/1SfK4//04Tznvy@kbusch-mbp.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=whxC0ob3f--B-igBp34ujA5PZQMcTnDQ8Zh8HA7+ZbeWg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 06:01:48PM -0700, Keith Busch wrote:
-> On Sun, Feb 26, 2023 at 04:54:45PM -0800, Guenter Roeck wrote:
-> > With this patch in linux-next, I see a boot failure when trying to boot
-> > a powernv qemu emulation from the SCSI MEGASAS controller.
-> > 
-> > Qemu command line is
-> > 
-> > qemu-system-ppc64 -M powernv -cpu POWER9 -m 2G \
-> > 	-kernel arch/powerpc/boot/zImage.epapr \
-> > 	-snapshot \
-> > 	-device megasas,id=scsi,bus=pcie.0 -device scsi-hd,bus=scsi.0,drive=d0 \
-> > 	-drive file=rootfs-el.ext2,format=raw,if=none,id=d0 \
-> > 	-device i82557a,netdev=net0,bus=pcie.1 -netdev user,id=net0 \
-> > 	-nographic -vga none -monitor null -no-reboot \
-> > 	--append "root=/dev/sda console=tty console=hvc0"
-> > 
-> > Reverting this patch together with "dmapool: create/destroy cleanup"
-> > fixes the problem.
+On Mon, Feb 27, 2023 at 05:58:12PM -0800, Linus Torvalds wrote:
+> On Mon, Feb 27, 2023 at 5:46 PM <linux@weissschuh.net> wrote:
+> >
+> > This still seems to be broken for me.
 > 
-> Thanks for the notice. I was able to recreate, and it does look like this is
-> fixed with my more recent update changing the dma pool block order, and that is
-> still pending out of tree. Would you also be able to verify? The patch is
-> available here:
+> Looks that way.
 > 
->   https://lore.kernel.org/linux-mm/Y%2FzmUXrAiNujjoib@kbusch-mbp.dhcp.thefacebook.com/T/#t
+> > I still need the patch from
+> >
+> > https://lore.kernel.org/lkml/20230220064612.1783-1-linux@weissschuh.net/
+> 
+> .. and that has the same problem with "what if the error happens
+> during an iteration that wasn't the first, and we already succeeded
+> partially".
 
-Yes, that fixes the problem I have observed. I sent a Tested-by:
-a minute ago.
+Indeed.
 
-Guenter
+> The "goto unlock_out" is bogus, since it jumps over all the "update
+> pos and check if we read something".
+> 
+> It was the correct thing to do *above* the loop, but not inside the loop.
+> 
+> IOW, I think the proper patch is to also turn the "goto unlock_out"
+> into a "break". Mind testing something like this (whitespace-damaged,
+> but you get the idea):
+
+Makes sense and seems to work correctly.
+
+Tested-By: Thomas Weißschuh <linux@weissschuh.net>
+
+(Or feel free to use my patch from above and fixup the goto/break line)
+
+> 
+>     --- a/drivers/tty/vt/vc_screen.c
+>     +++ b/drivers/tty/vt/vc_screen.c
+>     @@ -403,10 +403,11 @@ vcs_read(struct file *file, char __user
+> *buf, size_t count, loff_t *ppos)
+>                 unsigned int this_round, skip = 0;
+>                 int size;
+> 
+>     -           ret = -ENXIO;
+>                 vc = vcs_vc(inode, &viewed);
+>     -           if (!vc)
+>     -                   goto unlock_out;
+>     +           if (!vc) {
+>     +                   ret = -ENXIO;
+>     +                   break;
+>     +           }
+> 
+>                 /* Check whether we are above size each round,
+>                  * as copy_to_user at the end of this loop
+> 
+> which hopefully really fixes this (at least I don't see any other
+> "goto unlock_out" cases).
+> 
+>               Linus
