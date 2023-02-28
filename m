@@ -2,138 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734176A5ACA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 739306A5ACD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjB1O07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 09:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S229657AbjB1O1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 09:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjB1O05 (ORCPT
+        with ESMTP id S229656AbjB1O1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 09:26:57 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FEE1BC9;
-        Tue, 28 Feb 2023 06:26:56 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id j3so6551739wms.2;
-        Tue, 28 Feb 2023 06:26:56 -0800 (PST)
+        Tue, 28 Feb 2023 09:27:22 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F29630B23
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 06:27:15 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id h9so10459862ljq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 06:27:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/tq/zszDMcZ/q4+NmurCt/9UiLLyD1boBQYOIvlny1E=;
-        b=OdqxhqK9TLRXQDeY4kvDV/5/PNlSSqSsW2dwVR+wcKiNh6ED+N5Pivk06LtJSAUEIp
-         HBHOpsrBWvtvvfZIcS6NE2/kfIlMUOMrWDGcIS7lRoK03bSTRGCnMBHqQHtF7zhOU+gS
-         cwkK1G0jE2aJS3NggWztmSS9fiJ29IQV4pafrpTZwU79uPOCnJmszgZgEYx2R58DeDBc
-         NUdVPJ2Ii3FLICIm7kII4x26XxPxo/kxix9ecmc39zEuQMVN5gYMS5/CWU8iw4nhwWkK
-         lTERhbJJJ62ASK3dMr0ZJ2U0g8jLXFh5ZnLmcBhcoNQ8mKW75kLH3SD06z+3GcoYE0OC
-         SMUg==
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HAHdW0R4bB84/Yv1D1KskPGK8seaDNPN4i0lvIc9rYU=;
+        b=DacTmKHtT5gE40GOYuFI7D4a8YIPu8S+Ow599Df9by4CQ5BRdHBvyt0nQUSRIeSb2t
+         6KkwAQUuQFKa73+u7fMjGiBPj3HjVRGt9ZsBJU8SkQ9aAonlpfwGT1RQH51bTDRK9cRM
+         AEX1sJuu42mM+X3ly+4jkuNjrKykcR9+EFUuc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/tq/zszDMcZ/q4+NmurCt/9UiLLyD1boBQYOIvlny1E=;
-        b=o1phTk/xod5GbQl3E6bCafoqNySZuuZNpLiNVThTIEzA1hI9IUcTf6mF1/HyeOqYJ2
-         oBGS8YdmB3wOVZLBlQQTDtxoABN4D0yQIE0NPw6pPrFHVIRPa9NL+kjVcZ4nlhIhsr8R
-         F9wiEaX4/fVMasWEeTA5XHJK9Px55M3MV0aRQKHL5h7sDiFF18sXaKL47t2AFPoVsu8P
-         13vfCPJB53Ep4U1RywAIzM3PQTSEr8/+n7rt1H6+FsqWv9IdeGZYl1Lnbj/rF6NERIkc
-         x9qEBG2vdlU6BJFu7Pw0O4YFdbHsCpOdQL5JmboySs+Rnvs+XDPZJXdGtrjHDyB274A5
-         Hkfw==
-X-Gm-Message-State: AO0yUKUneY2GTHFNEA/ws53e6rrDe24mouatP36E8KyxX4q3oJDhFxzx
-        IE24/kdagiega2JoLYMgHCc=
-X-Google-Smtp-Source: AK7set/Njfuc3yKOHWNK5KXQxBrJfvz/OT7fbh+EXYFYdrzRcEvWk4rSnTHuKLQTu25xMxoXo8xxRA==
-X-Received: by 2002:a05:600c:a293:b0:3eb:3e24:59e2 with SMTP id hu19-20020a05600ca29300b003eb3e2459e2mr2258301wmb.25.1677594414614;
-        Tue, 28 Feb 2023 06:26:54 -0800 (PST)
-Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id bi22-20020a05600c3d9600b003dc42d48defsm12822098wmb.6.2023.02.28.06.26.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 06:26:54 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] pwm: Changes for v6.3-rc1
-Date:   Tue, 28 Feb 2023 15:26:51 +0100
-Message-Id: <20230228142651.3839023-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HAHdW0R4bB84/Yv1D1KskPGK8seaDNPN4i0lvIc9rYU=;
+        b=CVK34ZFQ4yjIPDPLh99EkhzZENltqupWvunP7vGbS4VIePPohE0sR15YSKGrk+fy4o
+         Jmbxgxorp2AZYi5CWrNkcQDVS+QtvtAhfbQTp97uOto7TsI9Gu01M8sXKZmugFSMtHcN
+         ARlrGs3W/hs99BIHBmXgKZozrt1lbyFVN2LkuseK74YroRlmRTNYy/37tt9+Ua7Hi3+V
+         4OwvH7M99eXWOgT98Ly5GBHngXSTVd5YhpbGuh0hXTeG45stJjbawYwT6JV978nQckLi
+         +ZSxo+o9e0qoz++z+HDI/i9l0gmnudvoBLKxvKxrl0ldCgCt08zMK7w0zcwPt7Alvmzi
+         GmOA==
+X-Gm-Message-State: AO0yUKVPKACR4zjUpQKmrZJhGoNP1ugEqd2bt8y/uDvqvFqFKUzBsywp
+        H6oEUQ43AwZKdBSrgbmAJWUkLS+ga0clZyBVwZgKQA==
+X-Google-Smtp-Source: AK7set8RWzXot28kcY8LaU3hLMJC0uJ6rGu9Tkc9ovqpMn1izF9y3NUPM6HM9WcSGA1oi7Sam5kJlLxEvYt1S7tqTJI=
+X-Received: by 2002:a2e:508:0:b0:294:6de5:e642 with SMTP id
+ 8-20020a2e0508000000b002946de5e642mr870608ljf.3.1677594433251; Tue, 28 Feb
+ 2023 06:27:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <IA1PR11MB617175CA398D425B7489CE4889AF9@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <764CA486-6FB2-4667-B8CB-56E3AC31FD58@joelfernandes.org> <IA1PR11MB617118DAE8D72E2419558D6689AC9@IA1PR11MB6171.namprd11.prod.outlook.com>
+In-Reply-To: <IA1PR11MB617118DAE8D72E2419558D6689AC9@IA1PR11MB6171.namprd11.prod.outlook.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 28 Feb 2023 09:27:01 -0500
+Message-ID: <CAEXW_YQwu4ccqWLTfFSwcJQOH6fbhe4SiHHa4XPUCvefiBZi9g@mail.gmail.com>
+Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as completed
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Feb 28, 2023 at 1:40=E2=80=AFAM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> =
+wrote:
+>
+[...]
+> > > If so, we might make rcupdate.boot_end_delay =3D 0 as the default val=
+ue
+> > > (NOT the default 20s) for CONFIG_PREEMPT_RT=3Dy kernels?
+> >
+> > Could you measure how much time your RT system takes to boot before the
+> > application runs?
+>
+> I don't have a real-time OS environment to measure the OS boot time.
+> I tried to measure the OS boot time of my "CentOS Stream 8" w/o and
+> w/ Joel=E2=80=99s patch.
+>
+> My testing showed the positive result that the OS boot time was
+> reduced by ~4.6% on my side after applying Joel=E2=80=99s patch.
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+Wow, this is great! I am guessing you have CONFIG_RCU_LAZY disabled,
+when you tested. If so, that is great news that expediting RCU for a
+bit longer improves boot time! Please confirm that your config had
+LAZY disabled.
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> For testing details, please see the below:
+>
+> 1) Testing environment:
+>     OS            : CentOS Stream 8 (non-RT OS)
+>     Kernel     : v6.2
+>     Machine : Intel Cascade Lake server (2 sockets, each with 44 logical =
+threads)
+>     Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=3D2,sockets=3D2,=
+ =E2=80=A6
+>
+> 2) My OS boot time definition:
+>     The time from the start of the kernel boot to the shell command line
+>     prompt is shown from the console. [ Different people may have
+>     different OS boot time definitions. ]
+>
+> 3) My measurement method (very rough method):
+>     A timer in the kernel periodically prints the boot time every 100ms.
+>     As soon as the shell command line prompt is shown from the console,
+>     we record the boot time printed by the timer, then the printed boot
+>     time is the OS boot time.
 
-are available in the Git repository at:
+Hmm, Can you not just print the boot time from userspace using
+clock_gettime() and CLOCK_BOOTTIME? But yeah either way, good data!
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git tags/pwm/for-6.3-rc1
+>     The console log (mixed userspace and kernel logs) looked like this:
+>
+>            [  OK  ] Started Permit User Sessions.
+>                         Starting Terminate Plymouth Boot Screen...
+>                         Starting Hold until boot process finishes up...
+>            [  OK  ] Started Command Scheduler.
+>            [    6.824466] input: ImExPS/2 Generic Explorer ...
+>            [    6.884685] Boot ms 6863
+>                 ...
+>            [    7.170920] Spectre V2 : WARNING: Unprivileged eBPF ...
+>            [    7.173140] Spectre V2 : WARNING: Unprivileged eBPF ...
+>            [    7.196741] Boot ms 7175
+>                 ...
+>            [    8.236757] Boot ms 8215
+>
+>            CentOS Stream 8
+>            Kernel 6.2.0-rcu+ on an x86_64
+>
+>            login: [    8.340751] Boot ms 8319
+>            [    8.444756] Boot ms 8423
+>                 ...
+>
+>      Then the log "login: [    8.340751] Boot ms 8319" roughly showed the=
+ OS boot time was ~8.3s.
+>
+> 4) Measured OS boot time (in seconds)
+>    a) Measured 10 times w/o Joel's patch:
+>         8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
+>         The average OS boot time was: ~8.7s
+>
+>    b) Measure 10 times w/ Joel's patch:
+>         8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
+>         The average OS boot time was: ~8.3s.
+>
+> The OS boot time was reduced by : 8.7 =E2=80=93 8.3 =3D 0.4 second
+> The reduction percentage was       : 0.4/8.7 * 100% =3D 4.6%
+>
+> If the testing above makes sense to you, please feel free to
+> add
+>
+>       Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-for you to fetch changes up to cf70d01a62c712ee715df1f7892b58c77474bcfb:
+Yes, it makes sense. I will add these. Thanks!
 
-  pwm: dwc: Use devm_pwmchip_add() (2023-02-20 12:26:35 +0100)
+ - Joel
 
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-pwm: Changes for v6.3-rc1
-
-This rather small set of changes includes some minor fixes and
-improvements. The AB8500 driver gained support for reading the initial
-hardware state and the Synopsys DesignWare driver received some work to
-prepare for device tree and platform support.
-
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (1):
-      dt-bindings: pwm: mediatek: Convert pwm-mediatek to DT schema
-
-Ben Dooks (4):
-      dt-bindings: pwm: Document Synopsys DesignWare snps,pwm-dw-apb-timers-pwm2
-      pwm: dwc: Change &pci->dev to dev in probe
-      pwm: dwc: Move memory allocation to own function
-      pwm: dwc: Use devm_pwmchip_add()
-
-Emil Renner Berthing (1):
-      pwm: sifive: Always let the first pwm_apply_state succeed
-
-Fabrice Gasnier (1):
-      pwm: stm32-lp: fix the check on arr and cmp registers update
-
-Geert Uytterhoeven (1):
-      pwm: Move pwm_capture() dummy to restore order
-
-Jeff LaBundy (1):
-      pwm: iqs620a: Replace one remaining instance of regmap_update_bits()
-
-Uwe Kleine-König (3):
-      pwm: lp3943: Drop unused i2c include
-      pwm: ab8500: Fix calculation of duty and period
-      pwm: ab8500: Implement .get_state()
-
- .../bindings/pwm/mediatek,mt2712-pwm.yaml          |  93 +++++++++++++++++
- .../devicetree/bindings/pwm/pwm-mediatek.txt       |  52 ----------
- .../bindings/pwm/snps,dw-apb-timers-pwm2.yaml      |  68 +++++++++++++
- drivers/pwm/pwm-ab8500.c                           | 112 +++++++++++++++++++--
- drivers/pwm/pwm-dwc.c                              |  38 +++----
- drivers/pwm/pwm-iqs620a.c                          |   4 +-
- drivers/pwm/pwm-lp3943.c                           |   1 -
- drivers/pwm/pwm-sifive.c                           |   8 +-
- drivers/pwm/pwm-stm32-lp.c                         |   2 +-
- include/linux/pwm.h                                |  14 +--
- 10 files changed, 302 insertions(+), 90 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
- delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
- create mode 100644 Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
+>
+> Thanks!
+> -Qiuxu
+>
+> > I can change it to default 0 essentially NOOPing it, but I would rather=
+ have a
+> > saner default (10 seconds even), than having someone forget to tune thi=
+s for
+> > their system.
+> >
+> > Thanks,
+> >
+> >  - Joel
+>
