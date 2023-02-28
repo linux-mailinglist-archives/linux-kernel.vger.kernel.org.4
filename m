@@ -2,180 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07FF6A62CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1846A62CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjB1WtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S229690AbjB1Ws5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjB1WtR (ORCPT
+        with ESMTP id S229518AbjB1Wsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:49:17 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E554360BD
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:49:11 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SH3x3h021197;
-        Tue, 28 Feb 2023 22:48:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=tM1esT3GCoPfIlpqSD8h8Y8pAnxxcKArxIwrxMMa/Eo=;
- b=mwsTO9p8AV4Y7yP6yVpV64najdr4FUp/CPcxMCSUQ5YtTJ8GecvQ3DOO/fZ80vp0CAv+
- ukM8mm0XkqRAIwzDQl8HLgsQEEDvTDN9VnsuKCX0gr3L8+3bzP+CttBqp0qWc9snjU1O
- WhMuDwrNyTk2oxD8WziNuyI4d4B8k1wMRaoHSKs3Goy2rOps0eXPZWhczigVocFnrCAR
- vJGovBdHt3aL9bDc6ntZF8BrSHB8JEI2SLydYb/5fZ6/pAmfVt+Iji8pG/RLqdEZlgty
- PzySKPQPuSn4q4azCJi91nYgMiEhGsyrIzh5hJLizcynrkCkWjcvIzpIT4oNSAqbcjJE aA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nyb7wqncd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Feb 2023 22:48:26 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31SLhUgi031538;
-        Tue, 28 Feb 2023 22:48:25 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2102.outbound.protection.outlook.com [104.47.55.102])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ny8seahp3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Feb 2023 22:48:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YT9NMWyZaCaTrwcrZVLuiGHRyFSQYRi1oYKckagAGVYfen/3CPQWaMWDtkCD2EROWjfgBXDIMrBK+7pkWbzZAQ5VqfJjRX4JJlAWonSFR2Cv9aCECbNJ/6zTKCfJrcFA42LuIYR4/mL3V9q1tFC1DxDULF8oBno5Wt2gk3p86U/nmBDZJKz+q8VDy9rWwGeptnOno/m5M/ADmrpXCVSFkKBn2sxxrIgZSZsoYU/7yJS3W2T2K93k5qM5NSDTy8cknKcRIo+aDMiF7NBeWi5ey8WdmcTsCauqBSaoH+2h0vQl8IWiQYB566baHUDoajuEQQFGp1J1imT0PoIUmfBEaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tM1esT3GCoPfIlpqSD8h8Y8pAnxxcKArxIwrxMMa/Eo=;
- b=m+hQi41rUf7/z2qOWM9v7/6HGoBN6U6Jm/ee47BKzwVKpJtcLNKLNKuOizixV95t1NfP3qPCi518WXun/zSeSNBskJ3Dsz05BrQ8e7G58ZDlbU9emgtlnMqdFPk2on7YiNIta088SWazu6vrMyrUDcjfL95xUOje+KhSS0DWgeao8rAOP2dw+boL5v1FGyuGHNMnq921fU8goyXY80VishtJSvdGqwwoN0AiiOFLmWQ2bZcAYVnU+NnfiQdomvfYpYLVDxRZZ5CLmTXW841ZSwR4z2LT4eXlQ1FmExB/uDP7qra8auYQM2Jm2tVBCxh7lVne1j5fguN8o1EAek+hpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 28 Feb 2023 17:48:55 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4E934022;
+        Tue, 28 Feb 2023 14:48:54 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id h19so12397029qtk.7;
+        Tue, 28 Feb 2023 14:48:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tM1esT3GCoPfIlpqSD8h8Y8pAnxxcKArxIwrxMMa/Eo=;
- b=wwEMlV4eI6JLirrROeXnKVoBwVU951jZf5oo01Z3cUDN0QOtTs0UgeCpSTs6bi/RMYk//p6UuRpi1K3Bfyf/f9wTfzAxrqi7bcp4hL+YLsFNUggjU2nXrEtXrQF3njt5YeDN/ESnnDofFzV8ThPCE1WW76Rmwr2HfNeoKy3fgmY=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by SA3PR10MB7041.namprd10.prod.outlook.com (2603:10b6:806:314::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.16; Tue, 28 Feb
- 2023 22:48:22 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3db5:6e11:9aca:708a]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3db5:6e11:9aca:708a%7]) with mapi id 15.20.6156.016; Tue, 28 Feb 2023
- 22:48:21 +0000
-Date:   Tue, 28 Feb 2023 14:48:18 -0800
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Frank van der Linden <fvdl@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 14/46] hugetlb: split PTE markers when doing HGM walks
-Message-ID: <Y/6EsomcdMDl8Ffh@monkey>
-References: <20230218002819.1486479-1-jthoughton@google.com>
- <20230218002819.1486479-15-jthoughton@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230218002819.1486479-15-jthoughton@google.com>
-X-ClientProxiedBy: MW4PR03CA0007.namprd03.prod.outlook.com
- (2603:10b6:303:8f::12) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=gmail.com; s=20210112; t=1677624533;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GMtqDIiFEWDHqHhFJAnoEDLZ4UDoy4mDDU97fKecDF8=;
+        b=WIsalkXZRgcopURSxgd68sqTAV+TNnE7NCzw2iNl4mEswIm0aa7+zns9MTJ/4LOmnD
+         mX5DxRjJFqOzPVIg70PH7nCJx1xzV9SzmssLTOcm0QBJ+A2WH7w8rLTJ4ADXlSRXKW2L
+         u2j7nqIjaYS3IJyHj3Tm++qezDoXTg72vxAjCzoRR++51Pqg/wFansBEhbEZ4udMtL1k
+         9LIjBD3gEE8R2ePrAHMxWqD9lIiS6zg630xnU6OwZkniIsmkLRbxoUM3PCLwMegvfTty
+         FsTmAX+QDtxlO21V7Wbl2/zCowQTDrnZwB6ws63eAxu4DB8V7k+vxxeHr1QjMPsQ1gT3
+         nb2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677624533;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GMtqDIiFEWDHqHhFJAnoEDLZ4UDoy4mDDU97fKecDF8=;
+        b=WeTSfJ1HAStY+mYD+93myiICXc4WBdjj1AiU6Fk2PmqubalVK27DAspyEU93efFpKb
+         kGEj36VwRcftemfQsOg19m4bBlOzPARvrzIXKWxj+d1SmBMp1epRnTxnqtPVfMN6eNvp
+         GqQLmbes2As5oc6WqmzCj1/ELxHYV3G5DYVvKknZqBVloqgYLnzxCqiPbrlDy4dH3uYx
+         jtYKAvzChaUIkG6V6qqtwZzTJJedpnNUKHSG+G2XyCFT3Qg5CrLK6f7GdnGxVPc2A7V9
+         rPWrTqunvSO1vN/YFKahFUuTzH74SuSge5vWDZD/uyvgClJBjiVr+ByxQzW97k9muWFm
+         JcHg==
+X-Gm-Message-State: AO0yUKVP4K+Xf9sml8h3PDbdDWWe7LlemK9mFrl//klC+xeLslT+3NJ8
+        nLRT9B58zl8OpEuz6oBSH9EMU4gqUaz+Szw72w==
+X-Google-Smtp-Source: AK7set+RBzlEbfpSy8+eyRrEcKw3S9nC0Ehapi+Zo4Zw2VvowvF8usAqZdvthYyXq29rxKiE1PP3b4n1tKXga0xATyE=
+X-Received: by 2002:ac8:4299:0:b0:3bf:d9e4:8063 with SMTP id
+ o25-20020ac84299000000b003bfd9e48063mr995349qtl.10.1677624533552; Tue, 28 Feb
+ 2023 14:48:53 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SA3PR10MB7041:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8b1bfad1-9327-42ad-67b9-08db19dde48c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S68/Fh+1i6ARvIg3QQg5AlBXb5IMdKctXj5veWsA9MQdGQZRYw92GZVMnYPrsRHBT5hPDsaKpoJufkOiccGM3cDeINBMlcuCTDWUDK2CbnFKeLH8e+NfeEnEc/WiynGUpC1UCDJo0mreVYK9gYhhgRPzb/O3cavcgKkM0WZlfxztWwKIC9y+WSPgdGIcSNK8A8P9IJLFpy2TwmIGiGOUEicOXnGPvxd1ytCPr9qtj8+Ab87ZqGrmtTIC5pwCIIe2iTXAHgF+0CMsGuRxGhF9Eh6NBNCg4pvuFeemnn6Mnv1Lk8iQD/8PDMugb4l9i0wWIyYPiMiH2CJXHL1KPFX8Ocl1pdVF4RvfBI0T/E+OGdchI2bUyuUozEYvy9vvkTTVmVh/1WPGerayz/J9fsuBuYZ2Ib2nDg6F7/rL7DO0WcbygeKba9RS6C5oo5qEuNF8uHyLQaxZGXmshiLTkj0aSH3ISdOv+dg5b0ktK5bbYxeKxFgBPUJZsVaMyvaJBfrK6lHIqRXq/4LIBpc2YZBnZYxcBpXxikM88+M/YhtTgKrjFYPOq7g6wv0oZOfMoaBNVhOyJ+JvUkniFaXf/5EqhrBpCG9z8fSFD8L0O1im79kZJRQMxfxkT/e2FHz9awsAy1R0+Aq7wsiRJbSKLYpOyA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(136003)(39860400002)(396003)(376002)(366004)(451199018)(66899018)(86362001)(7416002)(66476007)(66556008)(41300700001)(4326008)(66946007)(8936002)(8676002)(5660300002)(2906002)(44832011)(6916009)(38100700002)(6666004)(6486002)(478600001)(54906003)(316002)(33716001)(186003)(9686003)(53546011)(6506007)(26005)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cxh/JOZGERdPAAXRcjUYz6G+61fhTu2muHCkGIQfnBCyqUiat2hpempyyunT?=
- =?us-ascii?Q?p9X+9T6U4Pq2uI/IuN3ZKccmbfcNk46V39wp51JbIqVAtEarNYtnXGijFR8U?=
- =?us-ascii?Q?2eS9UAyCTLd+zMi8KYASwgSJAKpl+cWshzx0Xj9cNueFtAXbpq6l3iKjR+F1?=
- =?us-ascii?Q?eaVyMzCiRzdzKMZumakkuN/rsn2GONX1q90v2woxPSjSPLOI6Mh0Dxp9+X8y?=
- =?us-ascii?Q?zIOZLcpapo+YeUjZ7j13NOvlyqESyEnghJJJPEXo5RwNn9X/ixzRNzVfEhTA?=
- =?us-ascii?Q?RHuPAAy4RvQpbLSqoL/SrxIncarCOq0feY3gU1ZJ59PKB31bAXuv1dgW7zrd?=
- =?us-ascii?Q?OT8asenCmPoKcD7r51KvpxBpieibdQ+vJNmhyHe1/jmYuC2ILfYCmpr1Gwg7?=
- =?us-ascii?Q?NrgVU/CF/2/M97f8ZmB5chFV7bC8QZNhXQepv1xVLUYPSVBgLKKq1uf0ec7A?=
- =?us-ascii?Q?IiI0S1F1feLabmZ2VaUtJ6laMPrqNKbePZuMBwHWeaar57ESpTUN3emHG9cY?=
- =?us-ascii?Q?FFe6JXckUj2BdOh+GNG3fmo0AQCv9Gr2SQiU4ii5ERoWk2ODx+1xc8m6VUEk?=
- =?us-ascii?Q?4hCa7nRcz9ozamnpZdZsk+Rschiqc3qR32zIM2MIfcGbk0S+bo0U9FOoKkZe?=
- =?us-ascii?Q?lfrtKEgft2kRbXV7CkMmGVY/8RIvAASQnR6oNNo+zdNgVBOrhWhaM/6Zz7/3?=
- =?us-ascii?Q?jbV0td5HTFifv6qqiUHhB++RmhkwhSshRDZJ+qL96JK8BcIdXptXvJriet0j?=
- =?us-ascii?Q?Uq7Xy5+nQMmc7OIdcfI/bUF9IbmUJ47r9Z2GWVjVzZmv29yiEwnzxrh44TuN?=
- =?us-ascii?Q?G1zG5jzcOd4ZX/NpULXeO6TfsdYrb3hgM/2FQh11iWvP0LvUTp/FfhYn6OFi?=
- =?us-ascii?Q?hZ8JB/1QedK7SrmzDEXeR/rQhXPdsvge+RpqnbEf5BESLS38MKtXTr3nYEbk?=
- =?us-ascii?Q?v+qOYNRx99aIaZ5PKB+Gj8SumUiYdi9B6XsoD3TZ4ZeoDDihViL+ieyId6tG?=
- =?us-ascii?Q?FzEIBkuoPMhY86awUkSjyWdCHGO6AyaHatIsbAhz/o7gsZwm20a+UNKQqJju?=
- =?us-ascii?Q?j2/2OZQTAOogmrwandCOoMcxEwDjXN5ezreyGvKuW/baZk6SbecgaCl4pRBM?=
- =?us-ascii?Q?zJRO0uXM4GCofRlfhMKUR2WzvJY3kOHWTVYgP88EuWo3KWBuRD6PKSSPcr4x?=
- =?us-ascii?Q?ttN0/2g6sEVLJUBCkc9q/eWsDqvSCT4LWCBbLp7fjwJiQliM8BWjgdDgX9eY?=
- =?us-ascii?Q?eGTjMIejsh2N8j6YOq0f/p7McT7kmNFPNyMBcoh9+tS51OrrMegzNIjWZ+YL?=
- =?us-ascii?Q?kt2HbFxrDnTb8LAguG9bDtPgRY/a3UKGB1DrnMWXxFLPC2HF6leDPCvNXl92?=
- =?us-ascii?Q?xp/uryx8S7LR5cXLAWj8Xeu+26+KM9AGyEIiMFXDImhWgkbVhNa2qGtzax2M?=
- =?us-ascii?Q?yycniUadZXZqpPfgf6fpjkJyQh76OUhgZtCYhygXB4OyAystTSbCTmnvssU7?=
- =?us-ascii?Q?fz7qNQNEdr53/JdJMRaBkd2S2G0YK+0dItb+v8/oreZ4k2QXdPPDaNHHeSHO?=
- =?us-ascii?Q?ze2ClponKpa34nsEGNVYu3JkR9DJGePSWkQqerBQPAdmuwQ0Trgfzg2bmKGO?=
- =?us-ascii?Q?Mw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?NMqVmQmV7nWNX+CJ0Vc4/7QDO24Ogl4qrrWoOHTpOJ5AVA6jgNVEQYFfHLcN?=
- =?us-ascii?Q?5/H+wDMYpt5KO/nZjaWoprnNH32A3ikbih3qgKbxIHevIPa2iicInxmg5O55?=
- =?us-ascii?Q?HZDzRrMxP4pADFG0DfnjQLuxEH546xLCJrfMI6xexSJhbjYVvxSRAivKWJgj?=
- =?us-ascii?Q?dzTl5jGW+dT/iIGr5OI93xXOP0z3LIEDSTbvoNTz4n45YuygW0CB6Xqp5Xux?=
- =?us-ascii?Q?0zVAnaZNm76qM6xrvIpbsR3kHSp9UdWC6oXE/+eLK3qRFONXptRfyq7gbm1S?=
- =?us-ascii?Q?YNWgOZh4ITodgEztQ5GXLkmX4+VrBQ9aB/E6ToFXIyHup583tmPXYoYtGJ35?=
- =?us-ascii?Q?pmUfVDEHsGyEl831bp3ra7/PwAAeDG3WduYjIhdX4P6NhZuaqfeWh8jXzbYW?=
- =?us-ascii?Q?ZqrwFIOa4ZrI8+FiB+mbgLoyA22hkg4vOzw9ei4ue/0ewNRns7rKsLKH1/yx?=
- =?us-ascii?Q?FbWp+ru9HHmaWzH2eL76Jt1hyOZwPWiN/C2UmSdwLbEnQy7Ijpx4+RaJ59Pd?=
- =?us-ascii?Q?FxW+WSKrE4UliWSHquiOVvA4nn5kWIy0X8vbq2eMjSfcR2cfQAUZgFyTMZ3g?=
- =?us-ascii?Q?s8CUDWImSNmSp9Y35lIK1W7IcZFtYRq9i+zRBrlPTjhU3e7v2eZC2lvvWdpP?=
- =?us-ascii?Q?O8fseEFdgnw9VUwGeS8ghuwQzDnADvnOtjqsIgU/pheuJlCk0g7PiCNe1l/z?=
- =?us-ascii?Q?1BS8IJqpXJ2SwoukAMdTS8wRfcUuFP2ly86zk3IAafUJO4GQ2qD+58Clau33?=
- =?us-ascii?Q?v6PoNIuuv+wfEfL0MpBI25OQJzrZ7o1OQXn+4BXsoUMIbhhMuDXYjV8m/MgF?=
- =?us-ascii?Q?ZJuc8teoeK4TJqODObAAxhPi0YU06tDcFOWlRx7lPO4VyHdHVCzm1q2LIvsD?=
- =?us-ascii?Q?mIpobd0A5yiec28EyEOUyejxHx68NYnqhUCCroGcok3dwGEe3OqAgHUt9u8A?=
- =?us-ascii?Q?rt3/wmNKTs/RXfMIL2XOoiijPKgHuoyIhUQ9oKuxUdZgAHNRcZUzab8HRlth?=
- =?us-ascii?Q?dsZw4BVvkLC3sj4WGkwLLJeMCFwVVJa8TLI4betyYSTV0/n5ncwHT7GANrwW?=
- =?us-ascii?Q?kISlbCBOGRog2ib2yVulS6SjDnU6nw4/08ViYzm1LN829KcZQPxjnGuw5xSg?=
- =?us-ascii?Q?Dz8dcQeWDgI4LmXjyhLBgVxfu30xTorDKQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b1bfad1-9327-42ad-67b9-08db19dde48c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 22:48:21.7974
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7VMoxTaADyKySFKvPlpI53iuCRXbnabhf3YlsM/rBSSnQ5Wz6Ci8ntCV6i99Su6JjfyqWtAAPwsbhVJgvS5pfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR10MB7041
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 mlxscore=0
- adultscore=0 bulkscore=0 malwarescore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280184
-X-Proofpoint-GUID: hEs6TrJ5jdfTAnNgG1AP-SQTJhqOxYw0
-X-Proofpoint-ORIG-GUID: hEs6TrJ5jdfTAnNgG1AP-SQTJhqOxYw0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230226110802.103134-1-usama.arif@bytedance.com>
+ <20230226110802.103134-8-usama.arif@bytedance.com> <878rghmrn2.ffs@tglx>
+ <35264451eabdf967eb31069cb814e8a05ee3179b.camel@infradead.org> <cf7a1657159219cea61ffef567280e2e88d1f670.camel@infradead.org>
+In-Reply-To: <cf7a1657159219cea61ffef567280e2e88d1f670.camel@infradead.org>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Tue, 28 Feb 2023 17:48:42 -0500
+Message-ID: <CAMzpN2hQArxf2mAVq55uMx9VhTjUD-VDEVAD406RScfsrjdAjQ@mail.gmail.com>
+Subject: Re: [PATCH v12 07/11] x86/smpboot: Remove early_gdt_descr on 64-bit
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -183,173 +80,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/18/23 00:27, James Houghton wrote:
-> Fix how UFFDIO_CONTINUE and UFFDIO_WRITEPROTECT interact in these two
-> ways:
->  - UFFDIO_WRITEPROTECT no longer prevents a high-granularity
->    UFFDIO_CONTINUE.
->  - UFFD-WP PTE markers installed with UFFDIO_WRITEPROTECT will be
->    properly propagated when high-granularily UFFDIO_CONTINUEs are
->    performed.
-> 
-> Note: UFFDIO_WRITEPROTECT is not yet permitted at PAGE_SIZE granularity.
-> 
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 810c05feb41f..f74183acc521 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
+On Tue, Feb 28, 2023 at 5:41=E2=80=AFPM David Woodhouse <dwmw2@infradead.or=
+g> wrote:
+>
+> On Tue, 2023-02-28 at 21:57 +0000, David Woodhouse wrote:
+> >
+> > ----------------
+> > IN:
+> > 0xffffffffa20000b2:  48 31 d2                 xorq     %rdx, %rdx
+> > 0xffffffffa20000b5:  48 8b 82 c0 74 d5 a3     movq     -0x5c2a8b40(%rdx=
+), %rax
+> > 0xffffffffa20000bc:  48 8b a0 58 14 00 00     movq     0x1458(%rax), %r=
+sp
+> > 0xffffffffa20000c3:  48 83 ec 10              subq     $0x10, %rsp
+> > 0xffffffffa20000c7:  66 c7 04 24 7f 00        movw     $0x7f, (%rsp)
+> > 0xffffffffa20000cd:  48 8d 82 00 10 81 a3     leaq     -0x5c7ef000(%rdx=
+), %rax
+> > 0xffffffffa20000d4:  48 89 44 24 02           movq     %rax, 2(%rsp)
+> > 0xffffffffa20000d9:  0f 01 14 24              lgdtq    (%rsp)
+> > 0xffffffffa20000dd:  48 83 c4 10              addq     $0x10, %rsp
+> > 0xffffffffa20000e1:  31 c0                    xorl     %eax, %eax
+> > 0xffffffffa20000e3:  8e d8                    movl     %eax, %ds
+> >
+> > I cannot work out where the value -0x5c7ef000 comes from, but it
+> > doesn't seem to be the 0xb000 you claimed, and my brain is hurting
+> > again...
+>
+> Turning off CONFIG_RANDOMIZE_BASE (or just looking at the vmlinux
+> disassembly instead as Brian did) helps to resolve that FWIW.
+>
+> I've changed it to zero all of %rdx and pushed it back to the v12bis
+> branch.
 
-Seems relatively straight forward,
+xorl %edx, %edx is preferred, as a 32-bit operation zero-extends to
+the full 64-bit register.  Using xorq to clear any of the lower 8
+registers adds an unnecessary REX prefix.  Just one of many quirks of
+the x86 instruction set...
 
-Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
--- 
-Mike Kravetz
-
-> @@ -506,6 +506,30 @@ static bool has_same_uncharge_info(struct file_region *rg,
->  #endif
->  }
->  
-> +static void hugetlb_install_markers_pmd(pmd_t *pmdp, pte_marker marker)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < PTRS_PER_PMD; ++i)
-> +		/*
-> +		 * WRITE_ONCE not needed because the pud hasn't been
-> +		 * installed yet.
-> +		 */
-> +		pmdp[i] = __pmd(pte_val(make_pte_marker(marker)));
-> +}
-> +
-> +static void hugetlb_install_markers_pte(pte_t *ptep, pte_marker marker)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < PTRS_PER_PTE; ++i)
-> +		/*
-> +		 * WRITE_ONCE not needed because the pmd hasn't been
-> +		 * installed yet.
-> +		 */
-> +		ptep[i] = make_pte_marker(marker);
-> +}
-> +
->  /*
->   * hugetlb_alloc_pmd -- Allocate or find a PMD beneath a PUD-level hpte.
->   *
-> @@ -528,23 +552,32 @@ pmd_t *hugetlb_alloc_pmd(struct mm_struct *mm, struct hugetlb_pte *hpte,
->  	pmd_t *new;
->  	pud_t *pudp;
->  	pud_t pud;
-> +	bool is_marker;
-> +	pte_marker marker;
->  
->  	if (hpte->level != HUGETLB_LEVEL_PUD)
->  		return ERR_PTR(-EINVAL);
->  
->  	pudp = (pud_t *)hpte->ptep;
->  retry:
-> +	is_marker = false;
->  	pud = READ_ONCE(*pudp);
->  	if (likely(pud_present(pud)))
->  		return unlikely(pud_leaf(pud))
->  			? ERR_PTR(-EEXIST)
->  			: pmd_offset(pudp, addr);
-> -	else if (!pud_none(pud))
-> +	else if (!pud_none(pud)) {
->  		/*
-> -		 * Not present and not none means that a swap entry lives here,
-> -		 * and we can't get rid of it.
-> +		 * Not present and not none means that a swap entry lives here.
-> +		 * If it's a PTE marker, we can deal with it. If it's another
-> +		 * swap entry, we don't attempt to split it.
->  		 */
-> -		return ERR_PTR(-EEXIST);
-> +		is_marker = is_pte_marker(__pte(pud_val(pud)));
-> +		if (!is_marker)
-> +			return ERR_PTR(-EEXIST);
-> +
-> +		marker = pte_marker_get(pte_to_swp_entry(__pte(pud_val(pud))));
-> +	}
->  
->  	new = pmd_alloc_one(mm, addr);
->  	if (!new)
-> @@ -557,6 +590,13 @@ pmd_t *hugetlb_alloc_pmd(struct mm_struct *mm, struct hugetlb_pte *hpte,
->  		goto retry;
->  	}
->  
-> +	/*
-> +	 * Install markers before PUD to avoid races with other
-> +	 * page tables walks.
-> +	 */
-> +	if (is_marker)
-> +		hugetlb_install_markers_pmd(new, marker);
-> +
->  	mm_inc_nr_pmds(mm);
->  	smp_wmb(); /* See comment in pmd_install() */
->  	pud_populate(mm, pudp, new);
-> @@ -576,23 +616,32 @@ pte_t *hugetlb_alloc_pte(struct mm_struct *mm, struct hugetlb_pte *hpte,
->  	pgtable_t new;
->  	pmd_t *pmdp;
->  	pmd_t pmd;
-> +	bool is_marker;
-> +	pte_marker marker;
->  
->  	if (hpte->level != HUGETLB_LEVEL_PMD)
->  		return ERR_PTR(-EINVAL);
->  
->  	pmdp = (pmd_t *)hpte->ptep;
->  retry:
-> +	is_marker = false;
->  	pmd = READ_ONCE(*pmdp);
->  	if (likely(pmd_present(pmd)))
->  		return unlikely(pmd_leaf(pmd))
->  			? ERR_PTR(-EEXIST)
->  			: pte_offset_kernel(pmdp, addr);
-> -	else if (!pmd_none(pmd))
-> +	else if (!pmd_none(pmd)) {
->  		/*
-> -		 * Not present and not none means that a swap entry lives here,
-> -		 * and we can't get rid of it.
-> +		 * Not present and not none means that a swap entry lives here.
-> +		 * If it's a PTE marker, we can deal with it. If it's another
-> +		 * swap entry, we don't attempt to split it.
->  		 */
-> -		return ERR_PTR(-EEXIST);
-> +		is_marker = is_pte_marker(__pte(pmd_val(pmd)));
-> +		if (!is_marker)
-> +			return ERR_PTR(-EEXIST);
-> +
-> +		marker = pte_marker_get(pte_to_swp_entry(__pte(pmd_val(pmd))));
-> +	}
->  
->  	/*
->  	 * With CONFIG_HIGHPTE, calling `pte_alloc_one` directly may result
-> @@ -613,6 +662,9 @@ pte_t *hugetlb_alloc_pte(struct mm_struct *mm, struct hugetlb_pte *hpte,
->  		goto retry;
->  	}
->  
-> +	if (is_marker)
-> +		hugetlb_install_markers_pte(page_address(new), marker);
-> +
->  	mm_inc_nr_ptes(mm);
->  	smp_wmb(); /* See comment in pmd_install() */
->  	pmd_populate(mm, pmdp, new);
-> @@ -7384,7 +7436,12 @@ static int __hugetlb_hgm_walk(struct mm_struct *mm, struct vm_area_struct *vma,
->  		if (!pte_present(pte)) {
->  			if (!alloc)
->  				return 0;
-> -			if (unlikely(!huge_pte_none(pte)))
-> +			/*
-> +			 * In hugetlb_alloc_pmd and hugetlb_alloc_pte,
-> +			 * we split PTE markers, so we can tolerate
-> +			 * PTE markers here.
-> +			 */
-> +			if (unlikely(!huge_pte_none_mostly(pte)))
->  				return -EEXIST;
->  		} else if (hugetlb_pte_present_leaf(hpte, pte))
->  			return 0;
-> -- 
-> 2.39.2.637.g21b0678d19-goog
-> 
+--
+Brian Gerst
