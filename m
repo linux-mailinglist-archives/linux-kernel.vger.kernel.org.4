@@ -2,80 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5246A5D62
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DB56A5D70
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjB1Qpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S229807AbjB1Qsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:48:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjB1Qpx (ORCPT
+        with ESMTP id S229778AbjB1Qsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:45:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00F33403F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:45:43 -0800 (PST)
+        Tue, 28 Feb 2023 11:48:37 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51AE6EAE;
+        Tue, 28 Feb 2023 08:48:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677602744; x=1709138744;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iduEXGZ2o7+EtBwbbNzm9i+5lVrMxR3oCXKBeB73i8k=;
-  b=Z815UpImcznj9vYaZK7blwN0Nn9plKX99Hl7x48HYFO/3HJgi4VeyvHy
-   a6n9YoTuQLn6lohQSut8o/nSz9Ac0dY5mBe8ELIR4ir84PQq4jeNWOm0Q
-   SL36xRrlpG2XViIsnwsxC6B+L69gIJGlow7jLt/sT8jQTNZjqFKDA82/V
-   AVjiUn6M6n/rb5HCUAU0cdPcHtfBKdfMV0FGwvvcy7rkGomF2oVeiSjlX
-   ok5uUKvGzY9YHCeXs90oqNcNxY60hARupEeasOfPaf8DdRJx3LB1m3+U6
-   lRJbUHl7DRfSc9w+C8m9K3nOzmBoP86mJbVvPdSc3552pPlGiM0t17Pdo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="313857944"
+  t=1677602886; x=1709138886;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WRHLtls8wXHkKG0wPUdAzJHiEECJD6P2u5mrgkq32og=;
+  b=GIITSovHGRKPNNTtFu04OQGPMroln0wHW/qqp0zCw8RKm17eppp+CFws
+   /PUYx1LkfG9HzeeORUnfDR2tB0YnNvcsKjlmd14wsubbFTadTjxdS7klW
+   n9oTsrlgL7i41IbRyNU/A/K9xeXlMmTy0OYlHv7BMZ6gJv8uWL21EvvBD
+   icJ+BV2gcU7tlii29k/2gyfhtaBBsiOXwQFzoX5TjPuuTTEtHfHF+7jdi
+   SaK0GFNAczUaWQbkh0/rKSVg/0JeN1s8xl4Cbdtcxfz3v5LaZoV4aNw2v
+   FThPn5cmwovc4gLUJYnb07o152pMgB0iYdhnmie0jWGd+/5Gbs6tGEKlF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="317986827"
 X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="313857944"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 08:45:43 -0800
+   d="scan'208";a="317986827"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 08:48:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="817138302"
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="624107465"
 X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="817138302"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Feb 2023 08:45:42 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pX36j-0005X1-0t;
-        Tue, 28 Feb 2023 16:45:41 +0000
-Date:   Wed, 1 Mar 2023 00:45:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: drivers/spi/spi.c:3078:38-40: WARNING !A || A && B is equivalent to
- !A || B
-Message-ID: <202303010051.HrHWSr9y-lkp@intel.com>
+   d="scan'208";a="624107465"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by orsmga003.jf.intel.com with ESMTP; 28 Feb 2023 08:48:03 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail002.ir.intel.com (Postfix) with ESMTP id 07A41369ED;
+        Tue, 28 Feb 2023 16:48:01 +0000 (GMT)
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net 0/2] iavf: fix double-broken HW hash report
+Date:   Tue, 28 Feb 2023 17:46:11 +0100
+Message-Id: <20230228164613.1360409-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ae3419fbac845b4d3f3a9fae4cc80c68d82cdf6e
-commit: 76a85704cb917e3b25e00f02d5fd46e4e0a9077d spi: spi-mem: Allow controller supporting mem_ops without exec_op
-date:   3 weeks ago
-config: nios2-randconfig-c031-20230226 (https://download.01.org/0day-ci/archive/20230301/202303010051.HrHWSr9y-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
+Currently, passing HW hash from descriptors to skb is broken two times.
+The first bug effectively disables hash from being filled at all, unless
+%NETIF_F_RXHASH is *disabled* via Ethtool. The second incorrectly says
+that IPv6 UDP packets are L3, which also triggers CPU hashing when
+needed (the networking core treats only L4 HW hash as "true").
+The very same problems were fixed in i40e and ice, but not in iavf,
+although each of the original commits bugged at least two drivers.
+It's never too late (I hope), so fix iavf this time.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303010051.HrHWSr9y-lkp@intel.com/
+Alexander Lobakin (2):
+  iavf: fix inverted Rx hash condition leading to disabled hash
+  iavf: fix non-tunneled IPv6 UDP packet type and hashing
 
-cocci warnings: (new ones prefixed by >>)
->> drivers/spi/spi.c:3078:38-40: WARNING !A || A && B is equivalent to !A || B
+ drivers/net/ethernet/intel/iavf/iavf_common.c | 2 +-
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+---
+To Tony: this is very trivial and tested for a while already, I hope it
+could hit one of the first couple RCs :p
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
