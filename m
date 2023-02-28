@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C65C6A61B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D3E6A61AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbjB1VrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S230138AbjB1VoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjB1VrL (ORCPT
+        with ESMTP id S229876AbjB1VoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:47:11 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DE1F1;
-        Tue, 28 Feb 2023 13:46:55 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 172871C0AAC; Tue, 28 Feb 2023 22:40:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1677620405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zqOoqxAGPYyAfPZSQwIAbK0Pu/uIpu/fhL/ijqWx87s=;
-        b=dmk+ElYHIxWewmkSlGPShEF7n2ouLRoxTMUZuJtl5apj5AodSn1w6Fdth+Evv5kuAvnLCx
-        xHiE/2s0n62GJHLW4GqzpxYglHXCQzQqPVFH/lKAdNtAAgjn/PO8VN3HM04tXGTfod67cq
-        xelHHDL7aY41VWAgH6PBnJGu6TReOF0=
-Date:   Tue, 28 Feb 2023 22:40:04 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>, ojeda@kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
-        dri-devel@lists.freedesktop.org
-Subject: AUXdisplay for LED arrays, keyboards with per-key LEDs -- was Re:
- [PATCH v2 2/2] leds: add aw20xx driver
-Message-ID: <Y/50tKxpNVZO4Hfb@duo.ucw.cz>
-References: <20230228211046.109693-1-mmkurbanov@sberdevices.ru>
- <20230228211046.109693-3-mmkurbanov@sberdevices.ru>
- <Y/5xBGFC3b9Chdtb@duo.ucw.cz>
+        Tue, 28 Feb 2023 16:44:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7593757E;
+        Tue, 28 Feb 2023 13:42:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67259B80E65;
+        Tue, 28 Feb 2023 21:41:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF876C433D2;
+        Tue, 28 Feb 2023 21:41:25 +0000 (UTC)
+Date:   Tue, 28 Feb 2023 16:41:24 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Uros Bizjak <ubizjak@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+Message-ID: <20230228164124.77c126d2@gandalf.local.home>
+In-Reply-To: <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+References: <20230228155121.3416-1-ubizjak@gmail.com>
+        <Y/5mguXPPqdP3MZF@google.com>
+        <20230228160324.2a7c1012@gandalf.local.home>
+        <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="Lf/YZ9BrM6XcCIJb"
-Content-Disposition: inline
-In-Reply-To: <Y/5xBGFC3b9Chdtb@duo.ucw.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,64 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 28 Feb 2023 13:29:11 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
---Lf/YZ9BrM6XcCIJb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> All well and good, but the stall-warning code is nowhere near a fastpath.
+> 
+> Is try_cmpxchg() considered more readable in this context?
 
-Hi!
 
-> > +config LEDS_AW200XX
-> > +	tristate "LED support for Awinic AW20036/AW20054/AW20072"
-> > +	depends on LEDS_CLASS
-> > +	depends on I2C
-> > +	help
-> > +	  This option enables support for the AW20036/AW20054/AW20072 LED dri=
-ver.
-> > +	  It is a 3x12/6x9/6x12 matrix LED driver programmed via
-> > +	  an I2C interface, up to 36/54/72 LEDs or 12/18/24 RGBs,
-> > +	  3 pattern controllers for auto breathing or group dimming control.
->=20
-> I'm afraid this should be handled as a display, not as an array of
-> individual LEDs.
+-	    cmpxchg(&rcu_state.jiffies_stall, js, jn) == js) {
++	    try_cmpxchg(&rcu_state.jiffies_stall, &js, jn)) {
 
-You probably want to see
+It's basically the same :-/
 
-AUXILIARY DISPLAY DRIVERS
-M:      Miguel Ojeda <ojeda@kernel.org>
-S:      Maintained
-F:      Documentation/devicetree/bindings/auxdisplay/
-F:      drivers/auxdisplay/
-F:      include/linux/cfag12864b.h
+But looking at this use case, I'd actually NAK it, as it is misleading.
 
-And this brings another question...
+As try_cmpxchg() is used to get rid of the updating of the old value. As in
+the ring buffer code we had:
 
-=2E..sooner or later we'll see LED displays with around 100 pixels in
-almost rectangular grid. Minority of the pixels will have funny
-shapes. How will we handle those? Pretend it is regular display with
-some pixels missing? How do we handle cellphone displays with rounded
-corners and holes for front camera?
+void ring_buffer_record_off(struct trace_buffer *buffer)
+{
+	unsigned int rd;
+	unsigned int new_rd;
 
-And yes, such crazy displays are being manufactured -- it is called
-keyboard with per-key backlight...=20
+	do {
+		rd = atomic_read(&buffer->record_disabled);
+		new_rd = rd | RB_BUFFER_OFF;
+	} while (!atomic_cmpxchg(&buffer->record_disabled, &rd, new_rd) != rd);
+}
 
-https://www.reddit.com/r/MechanicalKeyboards/comments/8dtvgo/keyboard_with_=
-individually_programmable_leds/
+and the try_cmpxchg() converted it to:
 
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+void ring_buffer_record_off(struct trace_buffer *buffer)
+{
+	unsigned int rd;
+	unsigned int new_rd;
 
---Lf/YZ9BrM6XcCIJb
-Content-Type: application/pgp-signature; name="signature.asc"
+	rd = atomic_read(&buffer->record_disabled);
+	do {
+		new_rd = rd | RB_BUFFER_OFF;
+	} while (!atomic_try_cmpxchg(&buffer->record_disabled, &rd, new_rd));
+}
 
------BEGIN PGP SIGNATURE-----
+Which got rid of the need to constantly update the rd variable (cmpxchg
+will load rax with the value read, so it removes the need for an extra
+move).
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY/50tAAKCRAw5/Bqldv6
-8p38AKC6zleFfBQhWzpHoEUJaT9vyIFVLwCaA+GnS49YUrJhe1ZsoXnIFJOi3cQ=
-=DMLD
------END PGP SIGNATURE-----
+But in your case, we don't need to update js, in which case the
+try_cmpxchg() does.
 
---Lf/YZ9BrM6XcCIJb--
+The patch that Uros sent me for the ring buffer code also does some of
+that, which I feel is wrong.
+
+So with that, I would nack the patch.
+
+-- Steve
