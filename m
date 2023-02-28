@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACB86A5876
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 237D66A581C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjB1Ll0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
+        id S230220AbjB1LcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjB1LlZ (ORCPT
+        with ESMTP id S229841AbjB1LcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:41:25 -0500
+        Tue, 28 Feb 2023 06:32:22 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFD332DE79;
-        Tue, 28 Feb 2023 03:41:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 176139B;
+        Tue, 28 Feb 2023 03:32:17 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F394C14;
-        Tue, 28 Feb 2023 03:30:22 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF13D1688;
+        Tue, 28 Feb 2023 03:32:59 -0800 (PST)
 Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D4BE3F881;
-        Tue, 28 Feb 2023 03:29:36 -0800 (PST)
-Message-ID: <299199d6-458b-fa54-cde1-dc6730ac1c3d@arm.com>
-Date:   Tue, 28 Feb 2023 11:29:35 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4AE1A3F881;
+        Tue, 28 Feb 2023 03:32:14 -0800 (PST)
+Message-ID: <fa09722a-b251-bf60-35af-e6dc45ed9ae4@arm.com>
+Date:   Tue, 28 Feb 2023 11:32:13 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
@@ -45,8 +45,8 @@ Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
         Yuanfang Zhang <quic_yuanfang@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        Tao Zhang <taozha@qti.qualcomm.com>
+        linux-arm-msm@vger.kernel.org, Tao Zhang <taozha@qti.qualcomm.com>,
+        Bjorn Andersson <andersson@kernel.org>
 References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
  <1674114105-16651-6-git-send-email-quic_taozha@quicinc.com>
 From:   Suzuki K Poulose <suzuki.poulose@arm.com>
@@ -79,117 +79,8 @@ On 19/01/2023 07:41, Tao Zhang wrote:
 > +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
 > @@ -20,6 +20,22 @@
 >   
->   DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
->   
-> +static umode_t tpdm_dsb_is_visible(struct kobject *kobj,
-> +							struct attribute *attr, int n)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	if (drvdata) {
-> +		if (drvdata->datasets & TPDM_PIDR0_DS_DSB)
-> +			return attr->mode;
-> +		else
-> +			return 0;
-> +	}
-
-	if (drvdata && drvdata->dsb)
-		return attr->mode;
-
-	return 0;
-
-?
 
 
-> +
-> +	return 0;
-> +}
-> +
->   static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->   {
->   	u32 val;
-> @@ -241,8 +257,89 @@ static struct attribute_group tpdm_attr_grp = {
->   	.attrs = tpdm_attrs,
->   };
->   
-> +static ssize_t dsb_trig_type_show(struct device *dev,
-> +				     struct device_attribute *attr,
-> +				     char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	return sysfs_emit(buf, "%u\n",
-> +			 (unsigned int)drvdata->dsb->trig_type);
-> +}
-> +
-> +/*
-> + * value 0: set trigger type as enablement
-> + * value 1: set trigger type as disablement
-> + */
-> +static ssize_t dsb_trig_type_store(struct device *dev,
-> +				      struct device_attribute *attr,
-> +				      const char *buf,
-> +				      size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long val;
-> +
-> +	if ((kstrtoul(buf, 0, &val)) || val < 0 || val > 1)
-
-val < 0 check here doesn't help on an unsigned variable.
-
-may be (val & ~1UL) ?
-
-> +		return -EINVAL;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	if (val)
-> +		drvdata->dsb->trig_type = true;
-> +	else
-> +		drvdata->dsb->trig_type = false;
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_trig_type);
-> +
-> +static ssize_t dsb_trig_ts_show(struct device *dev,
-> +				     struct device_attribute *attr,
-> +				     char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	return sysfs_emit(buf, "%u\n",
-> +			 (unsigned int)drvdata->dsb->trig_ts);
-> +}
-> +
-> +/*
-> + * value 0: set trigger timestamp as enablement
-> + * value 1: set trigger timestamp as disablement
-> + */
-> +static ssize_t dsb_trig_ts_store(struct device *dev,
-> +				      struct device_attribute *attr,
-> +				      const char *buf,
-> +				      size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long val;
-> +
-> +	if ((kstrtoul(buf, 0, &val)) || val < 0 || val > 1)
-
-same here.
-
-> +		return -EINVAL;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	if (val)
-> +		drvdata->dsb->trig_ts = true;
-> +	else
-> +		drvdata->dsb->trig_ts = false;
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_trig_ts);
 > +static struct attribute *tpdm_dsb_attrs[] = {
 > +	&dev_attr_dsb_trig_ts.attr,
 > +	&dev_attr_dsb_trig_type.attr,
@@ -206,7 +97,12 @@ same here.
 > +	&tpdm_dsb_attr_grp,
 >   	NULL,
 >   };
-> 
+>   
+
+
+Please also add documentation of the new sysfs handles under :
+
+Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm*
 
 Suzuki
 
