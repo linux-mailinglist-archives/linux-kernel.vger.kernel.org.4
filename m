@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249116A5801
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 786A16A586B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjB1LZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S230191AbjB1LhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjB1LYY (ORCPT
+        with ESMTP id S229510AbjB1LhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:24:24 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4365E2FCC5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:24:01 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id t129so3862950iof.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:24:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0u2iKp9ldtcgMOD+hKR8kz3k0BOCjo1o/U4cCu8boAs=;
-        b=L0u+m/Xvcmz+gegyTZ64Bq2mJd6k/r1EXydm4FVgaQ6f4cz0HqDzFGrIqcKOKeSX4m
-         TQ2suA/qG7DQtPqbClxjbKGwj2GKtt6FFwCQFWrQVesEBm4qkMyt9e09ErWg4q4S1J75
-         n+o213OvKaZoFEpQM7Hk9gKLAaUlTk305d2L3HUZs/pPqw2e0UIx9zx6fMq0R9+gEEPT
-         O34ufDaxKGHtli6AC8vWpEO2KOSke0lMJ2Bnc+ZgrGF33uzfXf/47/wc4NKgmC4rPYU8
-         laCKAqxJH/CfzZv3sST8ObLCavdA+kzooEOzZrzU4a8Qxy08Ynv85vjvXyX/9L8+EqaA
-         tt5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0u2iKp9ldtcgMOD+hKR8kz3k0BOCjo1o/U4cCu8boAs=;
-        b=0z9V2HuSivHljJKxSKmI2+cjS7m5kXXbISw3HuM3JQBhnMh1GFfniovARxlo4Z1cTj
-         3taUqbPLfPdL0c+ai8cAptU0mYwSP/jNiKd4nr+Y9Mf9J+spgNNnJgrhAP6lKapsgMK1
-         DLxLp7/aaXfKJg3T9fiO88K3dbCCHGMzaS09X/Ol9ddG4rkN9MoVWUwE3LjasD4q0PDK
-         bJ8rbjjuCWh6ge+yLboXfFWebQB8EdSAzvGjlX2PW1DkXx7Lj0RZh9nqH01N/VlmIwyd
-         1JlY2rgsBAfVRe1+SVjATjQG7XLxdTJrmsPRdo2L3QP7iDQKCAkW9Zo02AqLx7Q5vOl3
-         1Hdg==
-X-Gm-Message-State: AO0yUKWdbaF8+VxcBPap1IckbTgADlwLKoti0TE5pw1S6VyYNtVwNHNG
-        KWgyRFOvn1i/2cdB1nlkZEEp/cIEUiOj7O/udnJM/A==
-X-Google-Smtp-Source: AK7set/XxfKvKpioQb1Ae1RPArAsVZtkPOSIDArcUmsbNHh+ZP+BrV/3l+awhLoUPWogWiBdbkJZzvBuO+cK4uoi2os=
-X-Received: by 2002:a05:6602:214b:b0:74c:bb62:6763 with SMTP id
- y11-20020a056602214b00b0074cbb626763mr1138820ioy.1.1677583438043; Tue, 28 Feb
- 2023 03:23:58 -0800 (PST)
+        Tue, 28 Feb 2023 06:37:03 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EE76198;
+        Tue, 28 Feb 2023 03:37:01 -0800 (PST)
+Received: from fpc (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 1A4B14076277;
+        Tue, 28 Feb 2023 11:25:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 1A4B14076277
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1677583536;
+        bh=dseDSkkDHilrS59Zk+KH9sYISD8C5wKWpJzIj3wjll8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MiTjTGrbn73mC02flyHmmxWFWNNvXwDe0yrK8lTSI8BoWShr1298JbU6Z5UHPouDx
+         IwsYwh3gS2jUqD15v/tSDPM6PjbVY+8nT8Tj0U0kkMgU+ompnzTvgQH8/Meya7NjtQ
+         75TO2dEq3sTqMyxGHpFJo9GP2tw5AUbTQL4OrEBA=
+Date:   Tue, 28 Feb 2023 14:25:31 +0300
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Guenter Roeck <groeck@google.com>,
+        Martin Faltesek <mfaltesek@google.com>,
+        Duoming Zhou <duoming@zju.edu.cn>,
+        Samuel Ortiz <sameo@linux.intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org,
+        syzbot+df64c0a2e8d68e78a4fa@syzkaller.appspotmail.com
+Subject: Re: [PATCH] nfc: fix memory leak of se_io context in nfc_genl_se_io
+Message-ID: <20230228112531.gam3dwqyx36pyynf@fpc>
+References: <20230225105614.379382-1-pchelkin@ispras.ru>
+ <b0f65aaa-37aa-378f-fbbf-57d107f29f5f@linaro.org>
+ <20230227150553.m3okhdxqmjgon4dd@fpc>
+ <7e9ffa10-d6e8-48b5-e832-cf77ac1a8802@linaro.org>
 MIME-Version: 1.0
-References: <000000000000e412e905f5b46201@google.com> <CANn89iJ_kLaF0tVVUfzKQwVkQ0VtCca1dL8eF+RrXCVDTK6h2Q@mail.gmail.com>
- <20230227155352.3399bb10@kernel.org>
-In-Reply-To: <20230227155352.3399bb10@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 28 Feb 2023 12:23:46 +0100
-Message-ID: <CANn89i+ooMT_G9aL8keZ-WOcAKqpC44OLQNGvfUtjA6PW-yxcA@mail.gmail.com>
-Subject: Re: [syzbot] [net?] INFO: task hung in tls_sw_sendpage (3)
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     syzbot <syzbot+9c0268252b8ef967c62e@syzkaller.appspotmail.com>,
-        borisp@nvidia.com, bpf@vger.kernel.org, davem@davemloft.net,
-        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e9ffa10-d6e8-48b5-e832-cf77ac1a8802@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 12:53=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> w=
-rote:
->
-> On Mon, 27 Feb 2023 21:35:41 +0100 Eric Dumazet wrote:
-> > This looks suspicious to me
-> >
-> > commit 79ffe6087e9145d2377385cac48d0d6a6b4225a5
-> > Author: Jakub Kicinski <kuba@kernel.org>
-> > Date:   Tue Nov 5 14:24:35 2019 -0800
-> >
-> >     net/tls: add a TX lock
-> >
-> >
-> > If tls_sw_sendpage() has to call sk_stream_wait_memory(),
-> > sk_stream_wait_memory() is properly releasing the socket lock,
-> > but knows nothing about mutex_{un}lock(&tls_ctx->tx_lock);
->
-> That's supposed to be the point of the lock, prevent new writers from
-> messing with the partially pushed records when the original writer
-> is waiting for write space.
->
-> Obvious hack but the async crypto support makes TLS a bit of a mess :|
->
-> sendpage_lock not taking tx_lock may lead to obvious problems, I'm not
-> seeing where the deadlock is, tho..
->
+On Tue, Feb 28, 2023 at 11:14:03AM +0100, Krzysztof Kozlowski wrote:
+> On 27/02/2023 16:05, Fedor Pchelkin wrote:
+> >>> Fixes: 5ce3f32b5264 ("NFC: netlink: SE API implementation")
+> >>> Reported-by: syzbot+df64c0a2e8d68e78a4fa@syzkaller.appspotmail.com
+> >>> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> >>> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> >>
+> >> SoB order is a bit odd. Who is the author?
+> >>
+> > 
+> > The author is me (Fedor). I thought the authorship is expressed with the
+> > first Signed-off-by line, isn't it?
+> 
+> Yes and since you are sending it, then what is Alexey's Sob for? The
+> tags are in order...
+> 
 
-This report mentions sendpage, but sendmsg() would have the same issue.
+Now I get what you mean. Alexey is my supervisor and the patches I make
+are passed through him (even though they are sent by me). If this is not
+a customary thing, then I'll take that into account for further
+submissions. I guess something like Acked-by is more appropriate?
 
-A thread might be blocked in sk_stream_wait_memory() with the mutex
-held, for an arbitrary amount of time,
-say if the remote peer stays in RWIN 0 for hours.
+> > 
+> >>> ---
+> >>>  drivers/nfc/st-nci/se.c   | 6 ++++++
+> >>>  drivers/nfc/st21nfca/se.c | 6 ++++++
+> >>>  net/nfc/netlink.c         | 4 ++++
+> >>>  3 files changed, 16 insertions(+)
+> >>>
+> >>> diff --git a/drivers/nfc/st-nci/se.c b/drivers/nfc/st-nci/se.c
+> >>> index ec87dd21e054..b2f1ced8e6dd 100644
+> >>> --- a/drivers/nfc/st-nci/se.c
+> >>> +++ b/drivers/nfc/st-nci/se.c
+> >>> @@ -672,6 +672,12 @@ int st_nci_se_io(struct nci_dev *ndev, u32 se_idx,
+> >>>  					ST_NCI_EVT_TRANSMIT_DATA, apdu,
+> >>>  					apdu_length)
+> >> nci_hci_send_event() should also free it in its error paths.
+> >> nci_data_exchange_complete() as well? Who eventually frees it? These
+> >> might be separate patches.
+> >>
+> >>
+> > 
+> > nci_hci_send_event(), as I can see, should not free the callback context.
+> > I should have probably better explained that in the commit info (will
+> > include this in the patch v2), but the main thing is: nfc_se_io() is
+> > called with se_io_cb callback function as an argument and that callback is 
+> > the exact place where an allocated se_io_ctx context should be freed. And
+> > it is actually freed there unless some error path happens that leads the
+> 
+> Exactly, so why nci_hci_send_event() error path should not free it?
+> 
 
-This prevents tx_work from making progress, and
-tls_sw_cancel_work_tx() would be stuck forever.
+nci_hci_send_event() should not free it on its error path because the
+bwi_timer is already charged before nci_hci_send_event() is called.
 
-The consensus is that the kernel shouts a warning if a thread has been
-waiting on a mutex
-more than 120 seconds (check_hung_uninterruptible_tasks())
+The pattern in the .se_io functions of the corresponding drivers (st-nci,
+st21nfca) is following:
+
+	info->se_info.cb = cb;
+	info->se_info.cb_context = cb_context;
+	mod_timer(&info->se_info.bwi_timer, jiffies +
+		  msecs_to_jiffies(info->se_info.wt_timeout)); // <-charged
+	info->se_info.bwi_active = true;
+	return nci_hci_send_event(...);
+
+As the timer is charged, it will eventually call se_io_cb() to free the
+context, even if the error path is taken inside nci_hci_send_event().
+
+Am I missing something?
+
+> > timer which triggers this se_io_cb callback not to be charged at all.
+> > 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
