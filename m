@@ -2,181 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F0F6A622A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071626A622C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjB1WLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S229751AbjB1WLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjB1WLN (ORCPT
+        with ESMTP id S229736AbjB1WLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:11:13 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A476722034
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:11:11 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id x34so11384085pjj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:11:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oK0R6uzsJwHHotrDE5yxMN7yczxtEm7If2jkjBsqnnM=;
-        b=d5RZQIeJVdrSg81wAnTaq6vURlWF1WSn4JCtD+C8xy6vbaCISN1Gz5GH0SUY1iApd/
-         vfe8qezhYYhHKUhW5BLksbV9BufwDC59wjEuoYGXIoKYgYPK8xSx0+9NU+66nE2wn2ZC
-         rPo4FUGcOQh6GePRKk1WUTKq5fyCqBMgyHaR5Ram0VhsOn0WMtrVG8K3xLoChkyHk1NH
-         OGSCElgKxF4EWo1MAbK+gbLLLQQRelvw93nrKOYg53GJ8t4LGD435gWsuKH/7bsUIwCU
-         Uozu8r/FMu0dwFVjBHAwr/x9oRFguOgqsF38ELXsWkZnFJqhO86YmtD7cmbP443ki+9R
-         X2Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oK0R6uzsJwHHotrDE5yxMN7yczxtEm7If2jkjBsqnnM=;
-        b=U8AwXmKkQKziCKZb64zBzTfJMZi9QQIKbfD7bmPG+i+OzCWA06TMrKsFTG3BRhY87F
-         j9pzXjiNEPA9kMsvSwZVkYjSXtSIyQ9DgVGYXFPnZNL5B/RQoe4RIffEpBuoV19XnX7t
-         BRNPrJQ2xZanHY2mhVYtV6/nE+8ahJevSCvBnNN6sXxk6DWHWyhPI1EBN0aYMdzV9Z6H
-         v+Js4jrk3jpf03ExUtEJ6eJo8B2zkBCFCZyecyODzpcaeVAMCLCPqeSIQRz+iTAj5ZXD
-         SXU+IV4dzR3owXc+8bXSRwEED5ZR1N4q4ChpV8wgXI6abdcD5xkwqGRB6EaQonXUfp/z
-         WSAg==
-X-Gm-Message-State: AO0yUKW+v1ENF2BZyWmeduN458lBb0AqKr+PhsLzHzWbG4U/ZraXdp2A
-        WlWZ9U8Asj0WHA28f81dFCkqCg==
-X-Google-Smtp-Source: AK7set8H/pEwYE4aQRt7YimFDMtG7LUYCz88QANCklRSJDow0akDQOujkLKZfD7p301pkJmWFjHdzg==
-X-Received: by 2002:a17:90b:224f:b0:236:9eef:e280 with SMTP id hk15-20020a17090b224f00b002369eefe280mr4798820pjb.46.1677622271032;
-        Tue, 28 Feb 2023 14:11:11 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902780500b001992521f23esm6976979pll.100.2023.02.28.14.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 14:11:10 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pX8Bf-003Hy6-FP; Wed, 01 Mar 2023 09:11:07 +1100
-Date:   Wed, 1 Mar 2023 09:11:07 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     Dave Chinner <dchinner@redhat.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org
-Subject: Re: [linus:master] [xfs] 304a68b9c6:
- WARNING:at_fs/iomap/buffered-io.c:#iomap_write_delalloc_release
-Message-ID: <20230228221107.GD360264@dread.disaster.area>
-References: <202302281653.51938721-yujie.liu@intel.com>
+        Tue, 28 Feb 2023 17:11:51 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2040.outbound.protection.outlook.com [40.107.94.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0D3211CF;
+        Tue, 28 Feb 2023 14:11:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FdL+V4fef+j/qSXreftDE022We7jL6tfRvvD8TBOK1vol/1Cs//PAPhhYLXtAGlalljNr5J+++dxRQ9QVLkmTtbT1hPGX5BXJux5Ul8cH1ZZY/kw4r06amg0nFQunKa1A032EMyXrdVH1Qh+2HdU5S/Vmqh9TysdOovXUAlOV86QO0Sn8VAcwkkOB+fM0lNEwFETbDbcdS0z5h1a7d+NTMgeIUFabbjX0bL50b5HypJt5MjFfT5/rteUk155kDztA78pseoCxlCCLlzamzoC4cSCkgt/xZbotXSupNuRECnEnJ6VXaxKVnnkCFWmfuSRqZeyTEge2lGNjUwl+mYIUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eMmEQnkm9ZbCrpvcqOdhQLyn5XCUVtaGFZZXNU0CydU=;
+ b=EyCD9PPjzmPkZBP8oKoId1wf+wXitSPDPveLSCVVCu2DH1kzyfCknc/onIWO/9JFs6xQjzZk5utQnP9NYm1LigEQjSOa+Jhs3XeVLDmJkQj4R5Y5GqDQ8FHxEXZlZ829rJt1gu4t/1qgIm1coAKvIpaNDhzMNfvkNzZFblMD3SKb4qxCVJXwDQ3lPEnnEcYFZI9RfbgX5rroEDb3M9diUIbjXldMd+sAo4zEdq47xQayT9Hct8hIsTJ99QE6WiiTRt7ckuiwOI0B/nPKafrCJrWPhaFikkjXeLHQVEpT4tkOwCzpiIe+y1o1fxT5ZKdOuNQulshVBKajm3LRetAggQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eMmEQnkm9ZbCrpvcqOdhQLyn5XCUVtaGFZZXNU0CydU=;
+ b=OIf9a3awkeKmIGammWtsm2/iuzZxWll2B/667Ej2Vggupm2O2+YD4ZxuIdKzFkpdWX0v3YUO/rh8uZBrcpidzojcLxBm5UGncmFwJAAOICPRczX504eXPv0XTkaK1x8Lqnom8KO1AeXei7tdvrmxiIEOsP7CGCKAEHOEjzqJC0o=
+Received: from BN9PR03CA0403.namprd03.prod.outlook.com (2603:10b6:408:111::18)
+ by IA0PR12MB8228.namprd12.prod.outlook.com (2603:10b6:208:402::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 22:11:47 +0000
+Received: from BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:111:cafe::7b) by BN9PR03CA0403.outlook.office365.com
+ (2603:10b6:408:111::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30 via Frontend
+ Transport; Tue, 28 Feb 2023 22:11:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT045.mail.protection.outlook.com (10.13.177.47) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6156.14 via Frontend Transport; Tue, 28 Feb 2023 22:11:47 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 28 Feb
+ 2023 16:11:39 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <rafael@kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Mario Limonciello <mario.limonciello@amd.com>,
+        David Alvarez Lombardi <dqalombardi@proton.me>,
+        <dbilios@stdio.gr>, Elvis Angelaccio <elvis.angelaccio@kde.org>,
+        <victor.bonnelle@proton.me>, <hurricanepootis@protonmail.com>,
+        Len Brown <lenb@kernel.org>, <linux-acpi@vger.kernel.org>
+Subject: [PATCH v2] ACPI: x86: Add Cezanne to the list for forcing StorageD3Enable
+Date:   Tue, 28 Feb 2023 16:11:28 -0600
+Message-ID: <20230228221128.2560-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202302281653.51938721-yujie.liu@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT045:EE_|IA0PR12MB8228:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4d540ec0-f227-4a4a-5a6f-08db19d8c88e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +sxBOMDPU8mao/ra0BkpOe3tDe5ffcT+Xsv1MfZBm8FvrdwoRMlubAUDaKmPSoKsR86mUv8emRKjw54GVLZ+NNG4Hen63CmHYGCVFyOUkRBqRrvLG1TdwH7ddwgQeF0Boc2kGllD1xfsjWs5YgghzZvUGahFd9k8wk96Zz8FSt9Dobz+dbOTSxX+gGjPSHW0U4ds5lXQkNzO0DSr5SsWChIZ3L0oGZMLyRZ4Uiv1bbxdQOWVS4FIlOLng/7+QX8hNXE2z3H8zeHSAcd2+vf0HLNZBt5wDkU+L5R0aTXOoT4ciLnVAxXbY78tckwZh9ZpoD8aJZrNZflJpqILiu4BXHhDM318yZn3ETigzt+M8B3ByoSkPk4EuTJ4Mq9CwZepbqt4yWfpNZuq2XnvWLzwC5CkQLVdh4gy7eq0GRD85GHxvLieu/WE4mtjv8Uul7O1PlRVoRzug3Sx9PTEWL8x990izC2M1bbS7ArRNCuVmYi3Afab1vuwaZ/Kt87iZuSFNPEYodfwS33ls/+KhGWjuksvFXlz48WKZ607fFSEcbKrhTqHpyk/VVmJEohcuQ0Gxx1ToLeI4Z65k5Y6GrOjNn4088N/G+EE9H2lhXRKEp/C31diVXa9bdgkv4JWYKX9bKXcYj3CVpl6ZP0uC7b7rpGsyD1+v0A9akIweTh9qRztEIojX62aRTezTF+NY/jyZL6jKJHxVMVqIk4eR+vxQlKEZpofOxI6F9lPlnlY/VhlJDEs8ZRxZs0YnFsiObZmmKT7sL4FhJhzp+a0DeYPbw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(39860400002)(396003)(451199018)(46966006)(40470700004)(36840700001)(36860700001)(356005)(82740400003)(8936002)(41300700001)(81166007)(86362001)(36756003)(44832011)(2906002)(40480700001)(8676002)(70206006)(5660300002)(4326008)(82310400005)(70586007)(2616005)(40460700003)(336012)(16526019)(83380400001)(426003)(110136005)(26005)(186003)(1076003)(47076005)(478600001)(316002)(54906003)(6666004)(7696005)(966005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 22:11:47.0991
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d540ec0-f227-4a4a-5a6f-08db19d8c88e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8228
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 04:40:01PM +0800, kernel test robot wrote:
-> Greeting,
-> 
-> FYI, we noticed WARNING:at_fs/iomap/buffered-io.c:#iomap_write_delalloc_release due to commit (built with gcc-11):
-> 
-> commit: 304a68b9c63bbfc1f6e159d68e8892fc54a06067 ("xfs: use iomap_valid method to detect stale cached iomaps")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> 
-> [test failed on linux-next/master 058f4df42121baadbb8a980c06011e912784dbd2]
-> in testcase: xfstests
-> version: xfstests-i386-5a5e419-1_20220926
-> with following parameters:
-> 
-> 	disk: 4HDD
-> 	fs: xfs
-> 	test: generic-group-32
+commit 018d6711c26e4 ("ACPI: x86: Add a quirk for Dell Inspiron 14 2-in-1
+for StorageD3Enable") introduced a quirk to allow a system with ambiguous
+use of _ADR 0 to force StorageD3Enable.
 
-Which fstest was running at the time this warning was thrown?
+It was reported that several more Dell systems suffered the same symptoms.
+As the list is continuing to grow but these are all Cezanne systems,
+instead add Cezanne to the CPU list to apply the StorageD3Enable property
+and remove the whole list.
 
-> 
-> test-description: xfstests is a regression test suite for xfs and other files ystems.
-> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
-> 
-> on test machine: 8 threads Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz (Skylake) with 28G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> [   78.565703][   T59] ------------[ cut here ]------------
-> [ 78.570983][ T59] WARNING: CPU: 4 PID: 59 at fs/iomap/buffered-io.c:984 iomap_write_delalloc_release (buffered-io.c:?) 
+It was also reported that an HP system only has StorageD3Enable on the ACPI
+device for the first NVME disk, not the second.
 
-Well, that's useless without the function offset or line number to
-tell us what warning in that function triggered.
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217003
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216773
+Reported-by: David Alvarez Lombardi <dqalombardi@proton.me>
+Reported-by: dbilios@stdio.gr
+Reported-and-tested-by: Elvis Angelaccio <elvis.angelaccio@kde.org>
+Tested-by: victor.bonnelle@proton.me
+Tested-by: hurricanepootis@protonmail.com
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v1->v2:
+ * Switch to using CPU rather than an ever growing list
 
-> [   78.581265][   T59] Modules linked in: loop(E) dm_flakey(E) xfs(E) dm_mod(E) intel_rapl_msr(E) intel_rapl_common(E) btrfs(E) blake2b_generic(E) xor(E) raid6_pq(E) zstd_compress(E) x86_pkg_temp_thermal(E) libcrc32c(E) intel_powerclamp(E) crc32c_generic(E) coretemp(E) sd_mod(E) t10_pi(E) ipmi_devintf(E) kvm_intel(E) ipmi_msghandler(E) i915(E) crc64_rocksoft_generic(E) kvm(E) irqbypass(E) crc64_rocksoft(E) crc64(E) drm_buddy(E) crc32_pclmul(E) crc32c_intel(E) aesni_intel(E) crypto_simd(E) drm_display_helper(E) cryptd(E) cec(E) mei_wdt(E) wmi_bmof(E) rapl(E) ahci(E) evdev(E) ttm(E) xhci_pci(E) intel_cstate(E) xhci_hcd(E) libahci(E) i2c_i801(E) mei_me(E) drm_kms_helper(E) syscopyarea(E) intel_uncore(E) usbcore(E) i2c_smbus(E) sysfillrect(E) libata(E) mei(E) sysimgblt(E) intel_pch_thermal(E) fb_sys_fops(E) usb_common(E) video(E) fan(E) thermal(E) wmi(E) acpi_pad(E) button(E) fuse(E) drm(E) configfs(E) autofs4(E)
-> [   78.661092][   T59] CPU: 4 PID: 59 Comm: kworker/u16:2 Tainted: G            E      6.1.0-rc4-00008-g304a68b9c63b #1
+ drivers/acpi/x86/utils.c | 37 +++++++++++++------------------------
+ 1 file changed, 13 insertions(+), 24 deletions(-)
 
-This looks like a broken kernel install. Why are all the modules
-tainted?
-
-> [   78.671542][   T59] Hardware name: Dell Inc. OptiPlex 7040/0Y7WYT, BIOS 1.2.8 01/26/2016
-> [   78.679578][   T59] Workqueue: loop0 loop_rootcg_workfn [loop]
-> [ 78.685393][ T59] EIP: iomap_write_delalloc_release (buffered-io.c:?) 
-> [ 78.691449][ T59] Code: e8 cf 94 ed ff f0 ff 4b 1c 74 45 8b 45 e0 8b 40 20 83 c0 10 e8 ab 93 d8 ff 8d 65 f4 89 f0 5b 5e 5f 5d c3 0f 0b e9 f9 fd ff ff <0f> 0b e9 e0 fd ff ff 0f 0b 8b 45 cc 8b 4d f0 8b 55 d0 39 c8 89 d0
-> All code
-> ========
->    0:	e8 cf 94 ed ff       	callq  0xffffffffffed94d4
->    5:	f0 ff 4b 1c          	lock decl 0x1c(%rbx)
->    9:	74 45                	je     0x50
->    b:	8b 45 e0             	mov    -0x20(%rbp),%eax
->    e:	8b 40 20             	mov    0x20(%rax),%eax
->   11:	83 c0 10             	add    $0x10,%eax
->   14:	e8 ab 93 d8 ff       	callq  0xffffffffffd893c4
->   19:	8d 65 f4             	lea    -0xc(%rbp),%esp
->   1c:	89 f0                	mov    %esi,%eax
->   1e:	5b                   	pop    %rbx
->   1f:	5e                   	pop    %rsi
->   20:	5f                   	pop    %rdi
->   21:	5d                   	pop    %rbp
->   22:	c3                   	retq   
->   23:	0f 0b                	ud2    
->   25:	e9 f9 fd ff ff       	jmpq   0xfffffffffffffe23
->   2a:*	0f 0b                	ud2    		<-- trapping instruction
->   2c:	e9 e0 fd ff ff       	jmpq   0xfffffffffffffe11
->   31:	0f 0b                	ud2    
->   33:	8b 45 cc             	mov    -0x34(%rbp),%eax
->   36:	8b 4d f0             	mov    -0x10(%rbp),%ecx
->   39:	8b 55 d0             	mov    -0x30(%rbp),%edx
->   3c:	39 c8                	cmp    %ecx,%eax
->   3e:	89 d0                	mov    %edx,%eax
-> 
-> Code starting with the faulting instruction
-> ===========================================
->    0:	0f 0b                	ud2    
->    2:	e9 e0 fd ff ff       	jmpq   0xfffffffffffffde7
->    7:	0f 0b                	ud2    
->    9:	8b 45 cc             	mov    -0x34(%rbp),%eax
->    c:	8b 4d f0             	mov    -0x10(%rbp),%ecx
->    f:	8b 55 d0             	mov    -0x30(%rbp),%edx
->   12:	39 c8                	cmp    %ecx,%eax
->   14:	89 d0                	mov    %edx,%eax
-> [   78.710792][   T59] EAX: 2335a000 EBX: 00000004 ECX: fffffffc EDX: 00000004
-> [   78.717707][   T59] ESI: 2335b000 EDI: 00000000 EBP: c3187c24 ESP: c3187bf0
-> [   78.724624][   T59] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010297
-> [   78.732056][   T59] CR0: 80050033 CR2: b7da00b0 CR3: 02350000 CR4: 003506f0
-> [   78.738971][   T59] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
-> [   78.745887][   T59] DR6: fffe0ff0 DR7: 00000400
-> [   78.750389][   T59] Call Trace:
-> [ 78.753508][ T59] iomap_file_buffered_write_punch_delalloc (??:?) 
-> [ 78.760183][ T59] ? xfs_buffered_write_iomap_end (xfs_iomap.c:?) xfs
-> [ 78.766541][ T59] xfs_buffered_write_iomap_end (xfs_iomap.c:?) xfs
-
-What's with all the broken/missing function offsets and
-file/line numbers in the stack trace?
-
-Please fix your tooling - this report isn't useful with all the
-offset/line number information being broken like this
-
-Cheers,
-
-Dave.
-
+diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+index d7d3f1669d4c..788b29ed9fb3 100644
+--- a/drivers/acpi/x86/utils.c
++++ b/drivers/acpi/x86/utils.c
+@@ -200,39 +200,28 @@ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *s
+  * a hardcoded allowlist for D3 support, which was used for these platforms.
+  *
+  * This allows quirking on Linux in a similar fashion.
++ *
++ * Cezanne systems shouldn't *normally* need this as the BIOS includes
++ * StorageD3Enable.  But for two reasons we have added it.
++ * 1) The BIOS on a number of Dell systems have ambiguity
++ *    between the same value used for _ADR on ACPI nodes GPP1.DEV0 and GPP1.NVME.
++ *    GPP1.NVME is needed to get StorageD3Enable node set properly.
++ *    https://bugzilla.kernel.org/show_bug.cgi?id=216440
++ *    https://bugzilla.kernel.org/show_bug.cgi?id=216773
++ *    https://bugzilla.kernel.org/show_bug.cgi?id=217003
++ * 2) On at least one HP system StorageD3Enable is missing on the second NVME
++      disk in the system.
+  */
+ static const struct x86_cpu_id storage_d3_cpu_ids[] = {
+ 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 96, NULL),	/* Renoir */
+ 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 104, NULL),	/* Lucienne */
+-	{}
+-};
+-
+-static const struct dmi_system_id force_storage_d3_dmi[] = {
+-	{
+-		/*
+-		 * _ADR is ambiguous between GPP1.DEV0 and GPP1.NVME
+-		 * but .NVME is needed to get StorageD3Enable node
+-		 * https://bugzilla.kernel.org/show_bug.cgi?id=216440
+-		 */
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 14 7425 2-in-1"),
+-		}
+-	},
+-	{
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 16 5625"),
+-		}
+-	},
++	X86_MATCH_VENDOR_FAM_MODEL(AMD, 25, 80, NULL),	/* Cezanne */
+ 	{}
+ };
+ 
+ bool force_storage_d3(void)
+ {
+-	const struct dmi_system_id *dmi_id = dmi_first_match(force_storage_d3_dmi);
+-
+-	return dmi_id || x86_match_cpu(storage_d3_cpu_ids);
++	return x86_match_cpu(storage_d3_cpu_ids);
+ }
+ 
+ /*
 -- 
-Dave Chinner
-david@fromorbit.com
+2.34.1
+
