@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E49A6A631B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7396A6322
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjB1W7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S229959AbjB1W7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:59:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjB1W6z (ORCPT
+        with ESMTP id S229881AbjB1W66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:58:55 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8AE3771F;
-        Tue, 28 Feb 2023 14:58:50 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id n6so10725388plf.5;
-        Tue, 28 Feb 2023 14:58:50 -0800 (PST)
+        Tue, 28 Feb 2023 17:58:58 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF93CC674;
+        Tue, 28 Feb 2023 14:58:52 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 16so6637311pge.11;
+        Tue, 28 Feb 2023 14:58:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677625130;
+        d=gmail.com; s=20210112; t=1677625132;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Gs2AYZBiyJOWo2bwEtPyAED3FFjm3LWbSVDHsOlHbbQ=;
-        b=muUcV42OpNmDtSH3eB+39vnSACqove5RL9oED345x5ztYt6mH/n6Remh2hRwDIf7jo
-         0B86CLgfkW4Q9EynJL/rwqmWjx/4/bg6gnJqwCu++hmY11VijaNK/HdjK41NVhERiPV1
-         ltYWNp9Nf0QLrKr1Nm3fexykYZ8GtnNRf6KR/CvYi2xsi497c4RxPpDhe4qnrfKQ9j57
-         HShNzPLBQzkmpLXT/L7OC+zlmkhl5ArsL5hFn9luAPMcPL2QDvZw+9noVR6Fp4oAGjzr
-         +fT387OP336WvE4nRuHQwWuItFKYNFSAzFRExIYvZtM2ZktqbA3Wt+N1r0/7K1Xr+HqW
-         /6yg==
+        bh=qPSgblFxcMDwoNtdY8qW+0LuYLpgnFy45QQcEr2JcOw=;
+        b=V1urbG5RuLnnO3VpMHdX0KG/G6gU5WFBPcaLIO0j/3+ro3asLgBZxzPDlmGLQLGWfY
+         e1npBQxhdEGRFU27gZsGamZvqXfjGxkBzgs9jBR4/GulwzblxgQ3Q6HMAgg5602sWSXe
+         UvJ7TjSeSlS12TW3snncvEDnKiwrwdWyJzrDKOpd+ZV44GjPF2+IThw12qS6zyzKbezc
+         wD3N9vq19W3m09Onq+8ioeK5HFFsOCrkYESNlPR/LI/uiCcj/oiQoPZ+0w0sg8XCqlkr
+         6ehVtL1cFcF+Pwx6XuAwYT67z061XHz0XA9KQ8wRhNrbCXO7Sp3k2WWlSbcRXTxvF919
+         dW1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677625130;
+        d=1e100.net; s=20210112; t=1677625132;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Gs2AYZBiyJOWo2bwEtPyAED3FFjm3LWbSVDHsOlHbbQ=;
-        b=qrGWcpkzdbCSxL4qnR2Ye69YqnnuPt5niTav7cZsVajHxbjHmcfIetRr+7Y1hUUNba
-         BGrSVO8p2E30wZsrjSnDzG9bgsqXpoqLrUxoCs83uwL5616o2Dmrann2g4/OH6eiEsYj
-         nI/lPvX0pn7q9+HfnFHXOy/CVe2CIT5EBNB89TrLDdgUJeLD4CfHHrgcJyKqC585dxLS
-         eaW5HQHZ4VMesytWbbTyvuwCU9lTFoayA7rHqTYeKXzE7zAmhK0hk00GPxuGJl9S+JXa
-         PHqzpS5fugd8FhdYyVz/Pn05C8WzcQ1wLpfcNq8mFJN5T/K76S7rG0wR6XIdbBMLwGaq
-         yzFQ==
-X-Gm-Message-State: AO0yUKVm8GJHn8w1mvfaHIqznYzdZEmemD12NllT+iSMrxOqZ1Jj1jsN
-        ZCv41CfqRRTyUE4qIb3eZ9I=
-X-Google-Smtp-Source: AK7set/1+Xx8fpKwOaHOBR+49MN2QSzoZfSa3YaQZ7k/0ymgy+GqKeTLwmHuCADWYRyXhryjChCCDA==
-X-Received: by 2002:a05:6a20:3d92:b0:cc:606a:4330 with SMTP id s18-20020a056a203d9200b000cc606a4330mr5567041pzi.55.1677625130191;
-        Tue, 28 Feb 2023 14:58:50 -0800 (PST)
+        bh=qPSgblFxcMDwoNtdY8qW+0LuYLpgnFy45QQcEr2JcOw=;
+        b=drMn1Bqd7U5BcftodSROsE9IsKy8FcAQd+yNZvsFnXVwwSybAHhKezPB9lwCauYHGU
+         Is0VUa0Vr9kSNLESaUYw9fl8ImSMibkHksurd/LjrCUnFiXme5mVLvlYxvhQoVP+Ko0I
+         /XKKvCkbQqx8UjKDUv0C11typ5OhiurElhkXjOQ1XFqnNHqkUSXTmBOUgahcvNRe8zpx
+         jX1xaFWJTt29h+23g6LST1Xf/bQg8nnsEXJS3u6X7MN/unDNlKI5fwlgRmNC4pkTg4Kd
+         doGParsqU9DQX8OwNVg7jbVdHGTg0yDYZBEjFMERF5oh83ohiYLr5FBP3qRm3jTbdmR0
+         CLaw==
+X-Gm-Message-State: AO0yUKUdCB9kMtrzIRo9lR0KFrR9rpk+XbIxS8y/oq/uKtRWsVe/p787
+        Nzzz3FpKxSyY5GQYlomCIxM=
+X-Google-Smtp-Source: AK7set9D6bzyHSECO63x+rY5hYGmDXYfp4j6STSXtKZg5kfnZ3Wzzd0d0FRKKk5uiWMW7b1PfnYMZA==
+X-Received: by 2002:aa7:99c8:0:b0:5a8:d97d:c346 with SMTP id v8-20020aa799c8000000b005a8d97dc346mr4142929pfi.12.1677625132210;
+        Tue, 28 Feb 2023 14:58:52 -0800 (PST)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id s23-20020aa78d57000000b00593c1c5bd0esm6492665pfe.164.2023.02.28.14.58.49
+        by smtp.gmail.com with ESMTPSA id k184-20020a633dc1000000b0049f5da82b12sm6121487pga.93.2023.02.28.14.58.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 14:58:49 -0800 (PST)
+        Tue, 28 Feb 2023 14:58:51 -0800 (PST)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -63,16 +63,15 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Simon Ser <contact@emersion.fr>,
         Luben Tuikov <luben.tuikov@amd.com>,
         Rob Clark <robdclark@chromium.org>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         Gustavo Padovan <gustavo@padovan.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         linux-media@vger.kernel.org (open list:SYNC FILE FRAMEWORK),
         linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
         FRAMEWORK), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v8 06/16] dma-buf/sync_file: Add SET_DEADLINE ioctl
-Date:   Tue, 28 Feb 2023 14:58:10 -0800
-Message-Id: <20230228225833.2920879-7-robdclark@gmail.com>
+Subject: [PATCH v8 07/16] dma-buf/sync_file: Support (E)POLLPRI
+Date:   Tue, 28 Feb 2023 14:58:11 -0800
+Message-Id: <20230228225833.2920879-8-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230228225833.2920879-1-robdclark@gmail.com>
 References: <20230228225833.2920879-1-robdclark@gmail.com>
@@ -90,116 +89,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-The initial purpose is for igt tests, but this would also be useful for
-compositors that wait until close to vblank deadline to make decisions
-about which frame to show.
-
-The igt tests can be found at:
-
-https://gitlab.freedesktop.org/robclark/igt-gpu-tools/-/commits/fence-deadline
-
-v2: Clarify the timebase, add link to igt tests
-v3: Use u64 value in ns to express deadline.
-v4: More doc
+Allow userspace to use the EPOLLPRI/POLLPRI flag to indicate an urgent
+wait (as opposed to a "housekeeping" wait to know when to cleanup after
+some work has completed).  Usermode components of GPU driver stacks
+often poll() on fence fd's to know when it is safe to do things like
+free or reuse a buffer, but they can also poll() on a fence fd when
+waiting to read back results from the GPU.  The EPOLLPRI/POLLPRI flag
+lets the kernel differentiate these two cases.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
-Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
 ---
- drivers/dma-buf/dma-fence.c    |  3 ++-
- drivers/dma-buf/sync_file.c    | 19 +++++++++++++++++++
- include/uapi/linux/sync_file.h | 22 ++++++++++++++++++++++
- 3 files changed, 43 insertions(+), 1 deletion(-)
+ drivers/dma-buf/sync_file.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-index f177c56269bb..74e36f6d05b0 100644
---- a/drivers/dma-buf/dma-fence.c
-+++ b/drivers/dma-buf/dma-fence.c
-@@ -933,7 +933,8 @@ EXPORT_SYMBOL(dma_fence_wait_any_timeout);
-  *   the GPU's devfreq to reduce frequency, when in fact the opposite is what is
-  *   needed.
-  *
-- * To this end, deadline hint(s) can be set on a &dma_fence via &dma_fence_set_deadline.
-+ * To this end, deadline hint(s) can be set on a &dma_fence via &dma_fence_set_deadline
-+ * (or indirectly via userspace facing ioctls like &sync_set_deadline).
-  * The deadline hint provides a way for the waiting driver, or userspace, to
-  * convey an appropriate sense of urgency to the signaling driver.
-  *
 diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
-index af57799c86ce..418021cfb87c 100644
+index 418021cfb87c..cbe96295373b 100644
 --- a/drivers/dma-buf/sync_file.c
 +++ b/drivers/dma-buf/sync_file.c
-@@ -350,6 +350,22 @@ static long sync_file_ioctl_fence_info(struct sync_file *sync_file,
- 	return ret;
- }
- 
-+static int sync_file_ioctl_set_deadline(struct sync_file *sync_file,
-+					unsigned long arg)
-+{
-+	struct sync_set_deadline ts;
-+
-+	if (copy_from_user(&ts, (void __user *)arg, sizeof(ts)))
-+		return -EFAULT;
-+
-+	if (ts.pad)
-+		return -EINVAL;
-+
-+	dma_fence_set_deadline(sync_file->fence, ns_to_ktime(ts.deadline_ns));
-+
-+	return 0;
-+}
-+
- static long sync_file_ioctl(struct file *file, unsigned int cmd,
- 			    unsigned long arg)
+@@ -192,6 +192,14 @@ static __poll_t sync_file_poll(struct file *file, poll_table *wait)
  {
-@@ -362,6 +378,9 @@ static long sync_file_ioctl(struct file *file, unsigned int cmd,
- 	case SYNC_IOC_FILE_INFO:
- 		return sync_file_ioctl_fence_info(sync_file, arg);
+ 	struct sync_file *sync_file = file->private_data;
  
-+	case SYNC_IOC_SET_DEADLINE:
-+		return sync_file_ioctl_set_deadline(sync_file, arg);
-+
- 	default:
- 		return -ENOTTY;
- 	}
-diff --git a/include/uapi/linux/sync_file.h b/include/uapi/linux/sync_file.h
-index eced40c204d7..594b8bba7948 100644
---- a/include/uapi/linux/sync_file.h
-+++ b/include/uapi/linux/sync_file.h
-@@ -76,6 +76,27 @@ struct sync_file_info {
- 	__u64	sync_fence_info;
- };
- 
-+/**
-+ * struct sync_set_deadline - SYNC_IOC_SET_DEADLINE - set a deadline hint on a fence
-+ * @deadline_ns: absolute time of the deadline
-+ * @pad:	must be zero
-+ *
-+ * Allows userspace to set a deadline on a fence, see &dma_fence_set_deadline
-+ *
-+ * The timebase for the deadline is CLOCK_MONOTONIC (same as vblank).  For
-+ * example
-+ *
-+ *     clock_gettime(CLOCK_MONOTONIC, &t);
-+ *     deadline_ns = (t.tv_sec * 1000000000L) + t.tv_nsec + ns_until_deadline
-+ */
-+struct sync_set_deadline {
-+	__u64	deadline_ns;
-+	/* Not strictly needed for alignment but gives some possibility
-+	 * for future extension:
++	/*
++	 * The POLLPRI/EPOLLPRI flag can be used to signal that
++	 * userspace wants the fence to signal ASAP, express this
++	 * as an immediate deadline.
 +	 */
-+	__u64	pad;
-+};
++	if (poll_requested_events(wait) & EPOLLPRI)
++		dma_fence_set_deadline(sync_file->fence, ktime_get());
 +
- #define SYNC_IOC_MAGIC		'>'
+ 	poll_wait(file, &sync_file->wq, wait);
  
- /**
-@@ -87,5 +108,6 @@ struct sync_file_info {
- 
- #define SYNC_IOC_MERGE		_IOWR(SYNC_IOC_MAGIC, 3, struct sync_merge_data)
- #define SYNC_IOC_FILE_INFO	_IOWR(SYNC_IOC_MAGIC, 4, struct sync_file_info)
-+#define SYNC_IOC_SET_DEADLINE	_IOW(SYNC_IOC_MAGIC, 5, struct sync_set_deadline)
- 
- #endif /* _UAPI_LINUX_SYNC_H */
+ 	if (list_empty(&sync_file->cb.node) &&
 -- 
 2.39.1
 
