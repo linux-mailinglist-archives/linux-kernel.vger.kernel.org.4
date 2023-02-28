@@ -2,381 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8746A52DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FD86A52E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjB1GNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 01:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
+        id S229712AbjB1GUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 01:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjB1GNf (ORCPT
+        with ESMTP id S229549AbjB1GUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 01:13:35 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C277E38A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 22:13:33 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id c19so9322758qtn.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 22:13:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677564812;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=d/3S49rT9iaEVOKAK0kYZL88uHswI6nDVf4fQdct22A=;
-        b=rWG4DyO1JYi8O1qsLNn0m7zhYYgh9Dbgycr0jdv2otT8xxc2nlkT0INytMnHbl9Lhe
-         mRGiHDxneBz5ceEKR1ggAsSRqNSRqHadx79mo0RdKhBfftdcNLCuISPaeJJ0STdCiMGo
-         41M5nAesnFJEYjzrjwrx4CwPgg38As7fYjoX/GoF1DBjINork8H90S0yq5qT5xrPUB94
-         Q+q+z5sMcGhsjIdUYUW3/0nkUJaMxLs8PNXF7UWINE8hWQdqlsZg3RXsQzmqVs7jURxU
-         12biah9IcWhbjOfVixAnaAZ5iv2tCljebH4qAyNYc2eBqP5JCDcPbrFTPgbwcky/lww7
-         57lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677564812;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d/3S49rT9iaEVOKAK0kYZL88uHswI6nDVf4fQdct22A=;
-        b=Ix4b32VIr0bFT+AZnVYAJbfn1/ly2OZUCrGOYx2JcVrmoq+xmPhzME3kXGiPG72uTO
-         PnGIYmsFs/zvVLPPlgY9F2BHKpCMlEbYfBOYwhYokH1mFNuJvFwGLXR3Qwa80uFTbshU
-         jvziz2z9vyy+Za3Vh2MRRGloot5mobAN/odoJZAmMcOnXaGWq8vxWffn4IaRNZfhb1Jn
-         qIzCED2uxWzCjvKznTxrlu3yGPfAGrsDATCeNe9y4EKpLwhivglji/wFEy1uWSdpf9K6
-         3MF8u23Kj5AXc+2PrzfulPG/iyRelrJFNFDTCkq1hj5UjoPzskf+H1ZPnjP6UC0r/wI+
-         kudQ==
-X-Gm-Message-State: AO0yUKWCsxVhDDcmVOoKu/zEZibUhC4SanU5Mg+1NJwajmLBuFFIjIv6
-        LVqY9tMeZJgKGp8l5LzWNzd/9w==
-X-Google-Smtp-Source: AK7set89f9S+DO720QiSfR+GANsNgEyeANWr4WfZGaRyqRwt/WcPJXQF8k5dc6PJxoMlge+uolzoCg==
-X-Received: by 2002:ac8:58c5:0:b0:3b8:6db0:7565 with SMTP id u5-20020ac858c5000000b003b86db07565mr3514737qta.11.1677564812485;
-        Mon, 27 Feb 2023 22:13:32 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id w30-20020a05620a095e00b007422fd3009esm6254730qkw.20.2023.02.27.22.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 22:13:32 -0800 (PST)
-Date:   Mon, 27 Feb 2023 22:13:23 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Huang Ying <ying.huang@intel.com>
-cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>,
-        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH 1/3] migrate_pages: fix deadlock in batched migration
-In-Reply-To: <20230224141145.96814-2-ying.huang@intel.com>
-Message-ID: <ea4dc95a-e6b2-ff6-62df-1590b93269f@google.com>
-References: <20230224141145.96814-1-ying.huang@intel.com> <20230224141145.96814-2-ying.huang@intel.com>
+        Tue, 28 Feb 2023 01:20:37 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2057.outbound.protection.outlook.com [40.107.7.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A8C193E4;
+        Mon, 27 Feb 2023 22:20:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WeDhcwAjEmTR5zK2gJiJ126CECtUJZzohhvigyC/NjtL3A1FiVJwDcphbZ9mP/TMKBM02wJEPM09Dy7mL56mEEG2uS7BfNfqPI4+E0/tDaCkCqYP+ylogurwSosTJyjPlaXGbg0h4VpC8g6nr/FWd6sCJBOrHtE3dofTQB8lxdXfwYCYSpjGmDQSLtVyKUuYbecxaT8UAMx6BRcASZV7RB7aoAKJoi7advfcNfUhVKXUd4h8+SxEg5vNSj8VlbXj0qSL//IreYoeEtd55HUQDyC1l5oY7oYGtjMy5tkfm0Tag50+Nx4twT+ViENtx4zox0MoMlrqqAiL0WqntujPRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6aofe97n55yS6ERvM1beGjk21hgdGzpcKTJtAhHrxrg=;
+ b=eecwNkgVZb9JOAm5KLSw02ZOGaYfEYLTHeUoOXW0CUGXPkqDqMFZ31zIsEfECEillEqce+70k0JbNkkh9ArW63x8Z1wBEw6AHnCoF/uj2kM3djOjX1DKe5MgAJYuyyS/bAMJRibiUBnNmQWDmD0wvWckRtSxDcbVqdmiObbwP+eTCWRsT2NqEu6uMlJs/0fRLuSpaBdY9X4RQZG5puzC1AYzmzpJ5mDCAQclbpOjoowg0eiweja9VtyS5pWOxZ0PIAcUH7RfLWsCF6zWYVxkh5+32ibQ7zqHHVam4vzy3APdPRl8hY/He6T5ZHMayQjuHopg4EZMQkUl9DQzY8Op9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6aofe97n55yS6ERvM1beGjk21hgdGzpcKTJtAhHrxrg=;
+ b=tDp58XLcis89BpAC+/BBlo7UbSucoG4XQFf0zrusurSIYB6HbDTOuwKgTFtnYjiH0rS3UVFT/roQYbu7jAVt2/xLaX6qXyiO1gI9optpBuBFrGi4KAiUWKO26EL7gAAdIF1lZ3ym77OwWNjNKNKr9pXNI7o1tbFEjNbSrq/p9cZ3Q0a3sh3ErtbLUAz0Iz8DsJOihf7bhs6GnfkYabDa85ugXMvvDEvzdB0b+6mi84D4ilYIMFcJ7vRR6FDO1sXKzydzQ74kd6D5Q1p/wsQBitlSCfBL6pCiRXurzBzelWPRBGRbaHbTgjFjNkvTW5hX9CDDPYPJKThRcOl8D6ElRA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
+ by DB9PR10MB6642.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:3d2::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Tue, 28 Feb
+ 2023 06:20:31 +0000
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::784b:e95b:b855:dcc5]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::784b:e95b:b855:dcc5%9]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 06:20:31 +0000
+Message-ID: <08b4b0c8-3621-a970-d206-d24e6eb81355@siemens.com>
+Date:   Tue, 28 Feb 2023 07:20:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/2] binfmt_misc: enable sandboxed mounts
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Laurent Vivier <laurent@vivier.eu>,
+        linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Jann Horn <jannh@google.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Matthew Bobrowski <repnop@google.com>,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        containers@lists.linux.dev,
+        Christian Brauner <christian.brauner@ubuntu.com>
+References: <20211216112659.310979-1-brauner@kernel.org>
+ <20211216112659.310979-2-brauner@kernel.org>
+ <20211226133140.GA8064@mail.hallyn.com>
+ <0e817424-51db-fe0b-a00e-ac7933e8ac1d@siemens.com>
+ <20220530081358.b3tvgvo63mq5o2oo@wittgenstein>
+ <202205311219.725ED1C69@keescook>
+ <20220602104107.6b3d3udhslvhg6ew@wittgenstein>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+In-Reply-To: <20220602104107.6b3d3udhslvhg6ew@wittgenstein>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0121.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9d::12) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:588::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|DB9PR10MB6642:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb87789c-f033-468a-1299-08db1953e4b4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Agy+ZBglX85XO2VIORqpUFSgVWBIkKiT86myXe4MDXVyn3JvKllz/nEOQdNUb/LQfRCtKa3bVTjCaBgEeBN+XsU7EFms6MoF3Kyh/bwFreKUjhgVBEgA/Ut/kzqHBXragEvGedRwQEZxbpMHMlL9FYngOwQ0t6TmPtmHQVf4PxvgKjCnKOdrhkdUz6cyBR3J02g0k1XsZJxJ98DVcEAfEi8Uqpu0jJPyJ4imtqnJGTQF8Krs8JZZN1B1tdWIknvOWL84jDuc2web/7jxDiyFkIu7knkZ1/Nsgy1yMxg3zx3hSKqSSobGt31QMLquQ2wq3pS5uMkdLk/pQ0M8lK52J+0/kwTAUm9Hv5tc0XLJt8ZiRjAiOl8x7rIHOH00KiSEY6MmJijvwycj3gJYCIAXUpRbTTozpyMPVOg4dMWJeAQ+sTjydiTcKiuuPuG63O0FdRNrCQ4vQSB8QK5/3t5U6NMtgOi2vEp86b/UfkLnzOYYRoFLc5qbfXVDuWpk+0Sn+vbYyGXjCTx/7FQX6JpGRmjEXwL5Y5F1z0ZRUbZYIkW/1/+EVkfhk+CSrC5dTcHV5jRbJC/QSTsuIGWqcJAmZykdKjJ92vjbuLX9iX4ireKXKdtlzA9BBH2FjsszhichBute3Vn1rr7wDCufaKFv+oGAVCQ2HlTh7vP4S/e72HxriSn1ySvilFAQRN4nJk6gzx8OSKoVipHH/H7frLugy02kgZTAp3BI1sSnKRhxiB42IHOY7Pbt18v+tztGMcVe
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(346002)(396003)(136003)(451199018)(36756003)(31696002)(110136005)(478600001)(26005)(66556008)(66946007)(8676002)(86362001)(4326008)(41300700001)(66476007)(8936002)(316002)(2906002)(44832011)(7416002)(5660300002)(83380400001)(6506007)(186003)(54906003)(6666004)(966005)(38100700002)(6486002)(53546011)(6512007)(2616005)(82960400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?STB0M212ZjNPZHU1NlU0Tzg0SW9LTlFjR09hZ0dzcmdWQTV1RE84T1RMa01N?=
+ =?utf-8?B?K1pRSTh1b0RQMENzWHlBSjNBZ0QreXZ3MjNIR0phcDZ6SS9Xc1hzS3A5dk44?=
+ =?utf-8?B?TTlGMFdFMytBMHVnTUZJSnByc0pBMmxJS2RLWkh2TkFvTmMyQ25nbXcyRWVk?=
+ =?utf-8?B?UTdiOHFCMG9wMGptNjJ2MU1xNGVCdHNXN0ZVM1FybFpZNGo5QU5qeTJtN2Nk?=
+ =?utf-8?B?RVIzV0g4VFlmRWdsd2o3Q3pRTSt3WjY1UVB3N09DQ3Ava2Z0d2pWeXFxZnIw?=
+ =?utf-8?B?Rkl3ZHE5NERKTmI5b1RLVHJ6OXgyenlEYjdvdkNZRW5EUzltNE9pb2IrWWlE?=
+ =?utf-8?B?OHlpdVFCN0w3WUI5a3NhaGdvTmJtcGk5QW9jMWVCZ3NBclhIR3A2UFZCcUx2?=
+ =?utf-8?B?ckVsK2FFM0NvdEFWbk1NWisyOUFJNEFuUUdtUG1ibnJEQWhMcGVpZ3pKVHV2?=
+ =?utf-8?B?cmlqSjJmM3VkenRvblNjT0xpcFlKbmIzM3dIeFdmMWppT0ovZnF4eml0RkNM?=
+ =?utf-8?B?TDZOcHlaS2kxZGtlS0lIeGlUZHFuV09OSk5IYldrQTl5S2hzaVhDZ1hVQXRN?=
+ =?utf-8?B?MFRhSWRrcEhHY0sxSDZtMzAyUGlMSlk1Z2JUcFNRY0RPWWNjY3VuRTl0UkJq?=
+ =?utf-8?B?ajhmaWxlOWRuL0FuaGNrQ3Y3YWE4bEVYRTBZbFJ0aVJNVkpLb3g1WXdnSUk5?=
+ =?utf-8?B?STFidmpkem5BRXZIOStNNU9rZWFvSXVCckRhMGlTVmljK0xBOHZKTVY4ZDlM?=
+ =?utf-8?B?eVE2KzhpWnNtaDQvbzlTTXdzSVlxQ21RVVRVREI1Tk9SbjEzdGZHL3h3SWp2?=
+ =?utf-8?B?SHhwaGp1cWhrR2hnUmNUZDFVcVBGRDl1enpHK2hWbUZvQnlYYlNKSmlMWTNG?=
+ =?utf-8?B?RzhjenNBMno5THNxSXpZQmJTVVVxNmNFeFdMMWk1Y0dRdThJemVHNGpMcXVQ?=
+ =?utf-8?B?eTh3ZVlpUi9PUWFjd1pTN2V2bGh1N21pY3NkOEkrd01yMXA4NDU4Z0x4OXdT?=
+ =?utf-8?B?TDdyclcvZDBFSkpLeU5CdGhyTW9TVlVPNCsyaGN5VHQvRjQ5WTNtc2NqYzJK?=
+ =?utf-8?B?ZUUxWHJieTlPQ1JGaGVWeXVwd3BPNDZCOVAzalFqUng5NTBMajJqaTFwTzhB?=
+ =?utf-8?B?dW11YVpMdzFsbW8zNlQrWkhEUFVQSFNNajE3QlM3Q1VrbXRZMHh1eEZvRTZh?=
+ =?utf-8?B?RnNKMDVtVGtVcEp2eVVXSUhqS0Z0U3M0aG0xZEtDT3JMdDNQL3JBUDlTczRv?=
+ =?utf-8?B?UFJvN2ZtTW4xZEhjOUZtUXFIejhmOHRReWJGQW1tWWF3ck1XZnQ5WWdjcnVK?=
+ =?utf-8?B?QXJtU1hsWUFUTWtrR29sSldKN044SGRyYzZHelFWbmpWMDJpcnptU3BycUlT?=
+ =?utf-8?B?WlJZM3NLcVFvaVFkdFl0MWFzd3pNN0FQeDErc2NvS29Xc3RXaGNnajdETjls?=
+ =?utf-8?B?bUVMZVVEV05wTzUxbys4aUF4SElCeHlBR1lqdkRRdXdMYWVnb3lHSExJRFQv?=
+ =?utf-8?B?bmQyeld2czY5K09NU3U5Mk5kYkdxV01kOWQ3SzlxOVZwZ213UnlyazBneFdh?=
+ =?utf-8?B?SFZ0bnlWU2ErQ3VWeWVucVRSUmpzTG5ENmV3RE9PeWVLbmZZOGlWdk5FLzN6?=
+ =?utf-8?B?RXViaHltWjBDejZPOVQ1LzU4WEpGYmlmVzAvRm9ybmR0S2ZLNnpFbVJ0NE1J?=
+ =?utf-8?B?a0Q3dGRBOXlvaWRuVmJsQ2p0VnpLWmNuZHNTR0FMUGVaUUdZWU5ocVlvSjdV?=
+ =?utf-8?B?YXNZNHM1OVNhWUgzR0xXV1dkSktaUGlFSjBDT1hBTXY5MnZERzlhTmZBZFZm?=
+ =?utf-8?B?c1RzOUpNR1c1MFgwRTQ2eTE5cjk2TVpTZDJmdy85OGZrbFk3L2RKSlZVMnBQ?=
+ =?utf-8?B?UGVmdEZNdmhxYUYvM2NiTEs2UFU0U0xzaisxM1Ztdk5RaE5IalpYMTFCU3RJ?=
+ =?utf-8?B?akkzbHc0WEt6NTVGZWEwWWkzcHo0Sm9VWFl3Y1ZrYlBJYkFORjZ4RVJrN2M1?=
+ =?utf-8?B?ZGpDUmVZM2wySUhUaHR4NHBYdm84eWZLRGs5UERTaUxGS3RrNVlkSGphT2xm?=
+ =?utf-8?B?ZnNUTEZTS01HaTk4U3ZEUmRKRkU0Zk10UVlUNENUbmZlQ3k3TmtvY2s4NVdO?=
+ =?utf-8?B?SjB0R3V0aGFwaHJ1dDVMQjBBbnJERTBKenhyUjRsVnVNZHBhMnRQMkdrc3BS?=
+ =?utf-8?B?WUE9PQ==?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb87789c-f033-468a-1299-08db1953e4b4
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 06:20:31.4762
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3ceVd1I5Otbxa8MRB0fB/YFxCMhIRFXU8upD4f8SU89eldCNYxAlBDcgA3akttzUtam0paal3hgiD70KC5JE1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR10MB6642
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023, Huang Ying wrote:
-
-> Two deadlock bugs were reported for the migrate_pages() batching
-> series.  Thanks Hugh and Pengfei!  For example, in the following
-> deadlock trace snippet,
+On 02.06.22 12:41, Christian Brauner wrote:
+> On Tue, May 31, 2022 at 12:24:37PM -0700, Kees Cook wrote:
+>> On Mon, May 30, 2022 at 10:13:58AM +0200, Christian Brauner wrote:
+>>> On Sun, May 29, 2022 at 09:35:40PM +0200, Jan Kiszka wrote:
+>>>> On 26.12.21 14:31, Serge E. Hallyn wrote:
+>>>>> On Thu, Dec 16, 2021 at 12:26:59PM +0100, Christian Brauner wrote:
+>>>>>> From: Christian Brauner <christian.brauner@ubuntu.com>
+>>>>>>
+>>>>>> Enable unprivileged sandboxes to create their own binfmt_misc mounts.
+>>>>>> This is based on Laurent's work in [1] but has been significantly
+>>>>>> reworked to fix various issues we identified in earlier versions.
+>>>>>>
+>>>>>> While binfmt_misc can currently only be mounted in the initial user
+>>>>>> namespace, binary types registered in this binfmt_misc instance are
+>>>>>> available to all sandboxes (Either by having them installed in the
+>>>>>> sandbox or by registering the binary type with the F flag causing the
+>>>>>> interpreter to be opened right away). So binfmt_misc binary types are
+>>>>>> already delegated to sandboxes implicitly.
+>>>>>>
+>>>>>> However, while a sandbox has access to all registered binary types in
+>>>>>> binfmt_misc a sandbox cannot currently register its own binary types
+>>>>>> in binfmt_misc. This has prevented various use-cases some of which were
+>>>>>> already outlined in [1] but we have a range of issues associated with
+>>>>>> this (cf. [3]-[5] below which are just a small sample).
+>>>>>>
+>>>>>> Extend binfmt_misc to be mountable in non-initial user namespaces.
+>>>>>> Similar to other filesystem such as nfsd, mqueue, and sunrpc we use
+>>>>>> keyed superblock management. The key determines whether we need to
+>>>>>> create a new superblock or can reuse an already existing one. We use the
+>>>>>> user namespace of the mount as key. This means a new binfmt_misc
+>>>>>> superblock is created once per user namespace creation. Subsequent
+>>>>>> mounts of binfmt_misc in the same user namespace will mount the same
+>>>>>> binfmt_misc instance. We explicitly do not create a new binfmt_misc
+>>>>>> superblock on every binfmt_misc mount as the semantics for
+>>>>>> load_misc_binary() line up with the keying model. This also allows us to
+>>>>>> retrieve the relevant binfmt_misc instance based on the caller's user
+>>>>>> namespace which can be done in a simple (bounded to 32 levels) loop.
+>>>>>>
+>>>>>> Similar to the current binfmt_misc semantics allowing access to the
+>>>>>> binary types in the initial binfmt_misc instance we do allow sandboxes
+>>>>>> access to their parent's binfmt_misc mounts if they do not have created
+>>>>>> a separate binfmt_misc instance.
+>>>>>>
+>>>>>> Overall, this will unblock the use-cases mentioned below and in general
+>>>>>> will also allow to support and harden execution of another
+>>>>>> architecture's binaries in tight sandboxes. For instance, using the
+>>>>>> unshare binary it possible to start a chroot of another architecture and
+>>>>>> configure the binfmt_misc interpreter without being root to run the
+>>>>>> binaries in this chroot and without requiring the host to modify its
+>>>>>> binary type handlers.
+>>>>>>
+>>>>>> Henning had already posted a few experiments in the cover letter at [1].
+>>>>>> But here's an additional example where an unprivileged container
+>>>>>> registers qemu-user-static binary handlers for various binary types in
+>>>>>> its separate binfmt_misc mount and is then seamlessly able to start
+>>>>>> containers with a different architecture without affecting the host:
+>>>>>>
+>>>>>> root    [lxc monitor] /var/snap/lxd/common/lxd/containers f1
+>>>>>> 1000000  \_ /sbin/init
+>>>>>> 1000000      \_ /lib/systemd/systemd-journald
+>>>>>> 1000000      \_ /lib/systemd/systemd-udevd
+>>>>>> 1000100      \_ /lib/systemd/systemd-networkd
+>>>>>> 1000101      \_ /lib/systemd/systemd-resolved
+>>>>>> 1000000      \_ /usr/sbin/cron -f
+>>>>>> 1000103      \_ /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+>>>>>> 1000000      \_ /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+>>>>>> 1000104      \_ /usr/sbin/rsyslogd -n -iNONE
+>>>>>> 1000000      \_ /lib/systemd/systemd-logind
+>>>>>> 1000000      \_ /sbin/agetty -o -p -- \u --noclear --keep-baud console 115200,38400,9600 vt220
+>>>>>> 1000107      \_ dnsmasq --conf-file=/dev/null -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file=/run/lxc/dnsmasq.pid --liste
+>>>>>> 1000000      \_ [lxc monitor] /var/lib/lxc f1-s390x
+>>>>>> 1100000          \_ /usr/bin/qemu-s390x-static /sbin/init
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-journald
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /usr/sbin/cron -f
+>>>>>> 1100103              \_ /usr/bin/qemu-s390x-static /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-ac
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+>>>>>> 1100104              \_ /usr/bin/qemu-s390x-static /usr/sbin/rsyslogd -n -iNONE
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-logind
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud console 115200,38400,9600 vt220
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/0 115200,38400,9600 vt220
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/1 115200,38400,9600 vt220
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/2 115200,38400,9600 vt220
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/3 115200,38400,9600 vt220
+>>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-udevd
+>>>>>>
+>>>>>> [1]: https://lore.kernel.org/all/20191216091220.465626-1-laurent@vivier.eu
+>>>>>> [2]: https://discuss.linuxcontainers.org/t/binfmt-misc-permission-denied
+>>>>>> [3]: https://discuss.linuxcontainers.org/t/lxd-binfmt-support-for-qemu-static-interpreters
+>>>>>> [4]: https://discuss.linuxcontainers.org/t/3-1-0-binfmt-support-service-in-unprivileged-guest-requires-write-access-on-hosts-proc-sys-fs-binfmt-misc
+>>>>>> [5]: https://discuss.linuxcontainers.org/t/qemu-user-static-not-working-4-11
+>>>>>>
+>>>>>> Link: https://lore.kernel.org/r/20191216091220.465626-2-laurent@vivier.eu (origin)
+>>>>>> Link: https://lore.kernel.org/r/20211028103114.2849140-2-brauner@kernel.org (v1)
+>>>>>> Cc: Sargun Dhillon <sargun@sargun.me>
+>>>>>> Cc: Serge Hallyn <serge@hallyn.com>
+>>>>>
+>>>>> (one typo below)
+>>>>>
+>>>>> Acked-by: Serge Hallyn <serge@hallyn.com>
+>>>>>
+>>>>
+>>>> What happened to this afterwards? Any remaining issues?
+>>>
+>>> Not that we know. I plan to queue this up for 5.20.
+>>
+>> Hello!
+>>
+>> Thanks for the thread-ping -- I hadn't had a chance to read through this
+>> before, but since it's touching binfmt, it popped up on my radar. :)
+>>
+>> I like it overall, though I'd rather see it split up more (there's
+>> some refactoring built into the patches that would be nice to split out
+>> just to make review easier), but since others have already reviewed it,
+>> that's probably overkill.
+>>
+>> I'd really like to see some self-tests for this, though. Especially
 > 
->  INFO: task kworker/u4:0:9 blocked for more than 147 seconds.
->        Not tainted 6.2.0-rc4-kvm+ #1314
->  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->  task:kworker/u4:0    state:D stack:0     pid:9     ppid:2      flags:0x00004000
->  Workqueue: loop4 loop_rootcg_workfn
->  Call Trace:
->   <TASK>
->   __schedule+0x43b/0xd00
->   schedule+0x6a/0xf0
->   io_schedule+0x4a/0x80
->   folio_wait_bit_common+0x1b5/0x4e0
->   ? __pfx_wake_page_function+0x10/0x10
->   __filemap_get_folio+0x73d/0x770
->   shmem_get_folio_gfp+0x1fd/0xc80
->   shmem_write_begin+0x91/0x220
->   generic_perform_write+0x10e/0x2e0
->   __generic_file_write_iter+0x17e/0x290
->   ? generic_write_checks+0x12b/0x1a0
->   generic_file_write_iter+0x97/0x180
->   ? __sanitizer_cov_trace_const_cmp4+0x1a/0x20
->   do_iter_readv_writev+0x13c/0x210
->   ? __sanitizer_cov_trace_const_cmp4+0x1a/0x20
->   do_iter_write+0xf6/0x330
->   vfs_iter_write+0x46/0x70
->   loop_process_work+0x723/0xfe0
->   loop_rootcg_workfn+0x28/0x40
->   process_one_work+0x3cc/0x8d0
->   worker_thread+0x66/0x630
->   ? __pfx_worker_thread+0x10/0x10
->   kthread+0x153/0x190
->   ? __pfx_kthread+0x10/0x10
->   ret_from_fork+0x29/0x50
->   </TASK>
+> Yeah, I had started writing them but decoupled the upstreaming. Imho,
+> you can start queueing this up. I'd like this to have very long exposure
+> in -next. I'll follow up with selftests in the next weeks. (I'm out for
+> a conference this week.)
 > 
->  INFO: task repro:1023 blocked for more than 147 seconds.
->        Not tainted 6.2.0-rc4-kvm+ #1314
->  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->  task:repro           state:D stack:0     pid:1023  ppid:360    flags:0x00004004
->  Call Trace:
->   <TASK>
->   __schedule+0x43b/0xd00
->   schedule+0x6a/0xf0
->   io_schedule+0x4a/0x80
->   folio_wait_bit_common+0x1b5/0x4e0
->   ? compaction_alloc+0x77/0x1150
->   ? __pfx_wake_page_function+0x10/0x10
->   folio_wait_bit+0x30/0x40
->   folio_wait_writeback+0x2e/0x1e0
->   migrate_pages_batch+0x555/0x1ac0
->   ? __pfx_compaction_alloc+0x10/0x10
->   ? __pfx_compaction_free+0x10/0x10
->   ? __this_cpu_preempt_check+0x17/0x20
->   ? lock_is_held_type+0xe6/0x140
->   migrate_pages+0x100e/0x1180
->   ? __pfx_compaction_free+0x10/0x10
->   ? __pfx_compaction_alloc+0x10/0x10
->   compact_zone+0xe10/0x1b50
->   ? lock_is_held_type+0xe6/0x140
->   ? check_preemption_disabled+0x80/0xf0
->   compact_node+0xa3/0x100
->   ? __sanitizer_cov_trace_const_cmp8+0x1c/0x30
->   ? _find_first_bit+0x7b/0x90
->   sysctl_compaction_handler+0x5d/0xb0
->   proc_sys_call_handler+0x29d/0x420
->   proc_sys_write+0x2b/0x40
->   vfs_write+0x3a3/0x780
->   ksys_write+0xb7/0x180
->   __x64_sys_write+0x26/0x30
->   do_syscall_64+0x3b/0x90
->   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->  RIP: 0033:0x7f3a2471f59d
->  RSP: 002b:00007ffe567f7288 EFLAGS: 00000217 ORIG_RAX: 0000000000000001
->  RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f3a2471f59d
->  RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
->  RBP: 00007ffe567f72a0 R08: 0000000000000010 R09: 0000000000000010
->  R10: 0000000000000010 R11: 0000000000000217 R12: 00000000004012e0
->  R13: 00007ffe567f73e0 R14: 0000000000000000 R15: 0000000000000000
->   </TASK>
+>> around the cred logic changes and the namespace fallback logic. I'd like
+>> to explicitly document and test what the expectations are around the
+>> mounts, etc.
+>>
+>> Finally, I'd prefer this went via the execve tree.
 > 
-> The page migration task has held the lock of the shmem folio A, and is
-> waiting the writeback of the folio B of the file system on the loop
-> block device to complete.  While the loop worker task which writes
-> back the folio B is waiting to lock the shmem folio A, because the
-> folio A backs the folio B in the loop device.  Thus deadlock is
-> triggered.
+> I mentioned this yesterday to you but just so there's a paper trail:
+> The series and this iteration preceeds the maintainer entry. That's the
+> only reason this originally wasn't aimed at that tree when the series
+> was sent. You've been in Cc from the start though. :)
+> I'd like to step up and maintain the binfmt_misc fs going forward. There
+> are other tweaks it could use.
 > 
-> In general, if we have locked some other folios except the one we are
-> migrating, it's not safe to wait synchronously, for example, to wait
-> the writeback to complete or wait to lock the buffer head.
-> 
-> To fix the deadlock, in this patch, we avoid to batch the page
-> migration except for MIGRATE_ASYNC mode.  In MIGRATE_ASYNC mode,
-> synchronous waiting is avoided.
-> 
-> The fix can be improved further.  We will do that as soon as possible.
-> 
-> Link: https://lore.kernel.org/linux-mm/87a6c8c-c5c1-67dc-1e32-eb30831d6e3d@google.com/
-> Link: https://lore.kernel.org/linux-mm/874jrg7kke.fsf@yhuang6-desk2.ccr.corp.intel.com/
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Reported-by: Hugh Dickins <hughd@google.com>
-> Reported-by: "Xu, Pengfei" <pengfei.xu@intel.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Stefan Roesch <shr@devkernel.io>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Xin Hao <xhao@linux.alibaba.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> ---
->  mm/migrate.c | 62 ++++++++++++++++------------------------------------
->  1 file changed, 19 insertions(+), 43 deletions(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 37865f85df6d..7ac37dbbf307 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1106,7 +1106,7 @@ static void migrate_folio_done(struct folio *src,
->  /* Obtain the lock on page, remove all ptes. */
->  static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page,
->  			       unsigned long private, struct folio *src,
-> -			       struct folio **dstp, int force, bool avoid_force_lock,
-> +			       struct folio **dstp, int force,
->  			       enum migrate_mode mode, enum migrate_reason reason,
->  			       struct list_head *ret)
->  {
-> @@ -1157,17 +1157,6 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
->  		if (current->flags & PF_MEMALLOC)
->  			goto out;
->  
-> -		/*
-> -		 * We have locked some folios and are going to wait to lock
-> -		 * this folio.  To avoid a potential deadlock, let's bail
-> -		 * out and not do that. The locked folios will be moved and
-> -		 * unlocked, then we can wait to lock this folio.
-> -		 */
-> -		if (avoid_force_lock) {
-> -			rc = -EDEADLOCK;
-> -			goto out;
-> -		}
-> -
->  		folio_lock(src);
->  	}
->  	locked = true;
-> @@ -1247,7 +1236,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
->  		/* Establish migration ptes */
->  		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
->  			       !folio_test_ksm(src) && !anon_vma, src);
-> -		try_to_migrate(src, TTU_BATCH_FLUSH);
-> +		try_to_migrate(src, mode == MIGRATE_ASYNC ? TTU_BATCH_FLUSH : 0);
 
-Why that change, I wonder?  The TTU_BATCH_FLUSH can still be useful for
-gathering multiple cross-CPU TLB flushes into one, even when it's only
-a single page in the batch.
+Did anything happen after this? I'm not finding traced in lkml at least.
 
+Jan
 
->  		page_was_mapped = 1;
->  	}
->  
-> @@ -1261,7 +1250,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
->  	 * A folio that has not been unmapped will be restored to
->  	 * right list unless we want to retry.
->  	 */
-> -	if (rc == -EAGAIN || rc == -EDEADLOCK)
-> +	if (rc == -EAGAIN)
->  		ret = NULL;
->  
->  	migrate_folio_undo_src(src, page_was_mapped, anon_vma, locked, ret);
-> @@ -1634,11 +1623,9 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->  	LIST_HEAD(dst_folios);
->  	bool nosplit = (reason == MR_NUMA_MISPLACED);
->  	bool no_split_folio_counting = false;
-> -	bool avoid_force_lock;
->  
->  retry:
->  	rc_saved = 0;
-> -	avoid_force_lock = false;
->  	retry = 1;
->  	for (pass = 0;
->  	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
-> @@ -1683,15 +1670,14 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->  			}
->  
->  			rc = migrate_folio_unmap(get_new_page, put_new_page, private,
-> -						 folio, &dst, pass > 2, avoid_force_lock,
-> -						 mode, reason, ret_folios);
-> +						 folio, &dst, pass > 2, mode,
-> +						 reason, ret_folios);
->  			/*
->  			 * The rules are:
->  			 *	Success: folio will be freed
->  			 *	Unmap: folio will be put on unmap_folios list,
->  			 *	       dst folio put on dst_folios list
->  			 *	-EAGAIN: stay on the from list
-> -			 *	-EDEADLOCK: stay on the from list
->  			 *	-ENOMEM: stay on the from list
->  			 *	Other errno: put on ret_folios list
->  			 */
-> @@ -1743,14 +1729,6 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->  					goto out;
->  				else
->  					goto move;
-> -			case -EDEADLOCK:
-> -				/*
-> -				 * The folio cannot be locked for potential deadlock.
-> -				 * Go move (and unlock) all locked folios.  Then we can
-> -				 * try again.
-> -				 */
-> -				rc_saved = rc;
-> -				goto move;
->  			case -EAGAIN:
->  				if (is_large) {
->  					large_retry++;
-> @@ -1765,11 +1743,6 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->  				stats->nr_thp_succeeded += is_thp;
->  				break;
->  			case MIGRATEPAGE_UNMAP:
-> -				/*
-> -				 * We have locked some folios, don't force lock
-> -				 * to avoid deadlock.
-> -				 */
-> -				avoid_force_lock = true;
->  				list_move_tail(&folio->lru, &unmap_folios);
->  				list_add_tail(&dst->lru, &dst_folios);
->  				break;
-> @@ -1894,17 +1867,15 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->  		 */
->  		list_splice_init(from, ret_folios);
->  		list_splice_init(&split_folios, from);
-> +		/*
-> +		 * Force async mode to avoid to wait lock or bit when we have
-> +		 * locked more than one folios.
-> +		 */
-> +		mode = MIGRATE_ASYNC;
+-- 
+Siemens AG, Technology
+Competence Center Embedded Linux
 
-It goes away in a later patch anyway, but I didn't understand that change -
-I thought this was a point at which no locks are held.  Oh, perhaps I get
-it now: because the batch of 1 is here becoming a batch of HPAGE_PMD_NR?
-
->  		no_split_folio_counting = true;
->  		goto retry;
->  	}
->  
-> -	/*
-> -	 * We have unlocked all locked folios, so we can force lock now, let's
-> -	 * try again.
-> -	 */
-> -	if (rc == -EDEADLOCK)
-> -		goto retry;
-> -
->  	return rc;
->  }
->  
-> @@ -1939,7 +1910,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->  		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
->  {
->  	int rc, rc_gather;
-> -	int nr_pages;
-> +	int nr_pages, batch;
->  	struct folio *folio, *folio2;
->  	LIST_HEAD(folios);
->  	LIST_HEAD(ret_folios);
-> @@ -1953,6 +1924,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->  				     mode, reason, &stats, &ret_folios);
->  	if (rc_gather < 0)
->  		goto out;
-> +
-> +	if (mode == MIGRATE_ASYNC)
-> +		batch = NR_MAX_BATCHED_MIGRATION;
-> +	else
-> +		batch = 1;
->  again:
->  	nr_pages = 0;
->  	list_for_each_entry_safe(folio, folio2, from, lru) {
-> @@ -1963,11 +1939,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->  		}
->  
->  		nr_pages += folio_nr_pages(folio);
-> -		if (nr_pages > NR_MAX_BATCHED_MIGRATION)
-> +		if (nr_pages >= batch)
->  			break;
-
-Yes, the off-by-one fixes look good.
-
->  	}
-> -	if (nr_pages > NR_MAX_BATCHED_MIGRATION)
-> -		list_cut_before(&folios, from, &folio->lru);
-> +	if (nr_pages >= batch)
-> +		list_cut_before(&folios, from, &folio2->lru);
->  	else
->  		list_splice_init(from, &folios);
->  	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
-> -- 
-> 2.39.1
