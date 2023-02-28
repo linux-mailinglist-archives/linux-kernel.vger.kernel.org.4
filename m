@@ -2,150 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2346A55CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5241D6A55D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjB1JaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S231310AbjB1JcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjB1JaT (ORCPT
+        with ESMTP id S229565AbjB1JcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:30:19 -0500
-Received: from mout-b-105.mailbox.org (mout-b-105.mailbox.org [195.10.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A748C72B2;
-        Tue, 28 Feb 2023 01:30:17 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 28 Feb 2023 04:32:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40DD20046;
+        Tue, 28 Feb 2023 01:32:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-b-105.mailbox.org (Postfix) with ESMTPS id 4PQsXj4k9fz9tth;
-        Tue, 28 Feb 2023 10:30:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyantec.com; s=default;
-        t=1677576613;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bi4OIXDyb2sM777Ha+kervPZF/8SdxTa01qLXizAj9E=;
-        b=E2oZx40qJhRpnOxqow0hYGaXMt3skJHVIKtRaDvjE6GJRrfpbCOiCCap/E6RAlqLWiok06
-        Znz4QT2RqfvV2t+zgYn1vArKmlGNLfmyefZXhv12IZizyw6msqwSVKJZrNZXSu+5GFeDD6
-        kVncADUZew1H07Rj1ie8pNroOZmatrmcKzNUMNImjbN68d0fujX5yAblMGNf0doZ1n5jy0
-        yOX8EPWPzI2V92nIpNWu7Aql+1vOoocnwmert20VHD6GLkkJCfcD1Z9eNuuCUxd6OpNPy7
-        fNefKIH9pwv9+Ifyxs4ZTmM7+SoRaOCSahbuOrANcFL3EbyvW/2xHstkTnUBig==
-From:   Finn Behrens <fin@nyantec.com>
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Subject: Re: [PATCH 1/3] rust: macros: Make expect_punct() return the Punct
- directly
-Date:   Tue, 28 Feb 2023 10:29:59 +0100
-Message-ID: <A74F7C50-1F28-4416-8E99-27B9F63A352B@nyantec.com>
-In-Reply-To: <20230224-rust-macros-v1-1-b39fae46e102@asahilina.net>
-References: <20230224-rust-macros-v1-0-b39fae46e102@asahilina.net>
- <20230224-rust-macros-v1-1-b39fae46e102@asahilina.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F2596103C;
+        Tue, 28 Feb 2023 09:32:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF8B3C433EF;
+        Tue, 28 Feb 2023 09:32:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677576733;
+        bh=+IV4AHbmCCiEKP7LF/e7iy42Typyf3Xx3wgeSC17nEE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qBYvEMuONtlLWEKiJFbsfuEnIlCoUwAG8yVp5ddeof5wT43ogBWspmnlcHJrXI0Bf
+         8SJXID5Ak5i4IdsjswpcC9c0ONIp1PoZ5xotoc37Im1ZOfjsmhicUSXY6DdzoNDOii
+         grxi0zosyAVjxfpBeWpBo6AlCWixEPtFdnD5YPC/ZV6UNvN6X/WsTW26lrJ5ie/ahp
+         KnqqORvKvPBby074X7WGfJyOVD0WrOX0a0T0NtwYy8O+YIdhF2ewK2PSeTV8eE8IQ4
+         nI6ChbG5LH/oPETsBv36ND6xpliUSJ5vYRr7Z9OZfh59JUS/CJcUW+Vot9SvEBfCD7
+         hjBI4ILFN+/tw==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>
+Subject: [RFC v2 bpf-next 0/9] mm/bpf/perf: Store build id in inode object
+Date:   Tue, 28 Feb 2023 10:31:57 +0100
+Message-Id: <20230228093206.821563-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+hi,
+this is RFC patchset for adding build id under inode's object.
+
+The main change to previous post [1] is to use inode object instead of file
+object for build id data.
+
+However.. ;-) while using inode as build id storage place saves some memory
+by keeping just one copy of the build id for all file instances, there seems
+to be another problem.
+
+The problem is that we read the build id when the file is mmap-ed.
+
+Which is fine for our use case, because we only access build id data through
+vma->vm_file->f_inode. But there are possible scenarios/windows where the
+build id can be wrong when accessed in another way.
+
+Like when the file is overwritten with another binary version with different
+build id. This will result in having wrong build id data in inode until the
+new file is mmap-ed.
+
+   - file open                 > inode->i_build_id == NULL
+   - file mmap
+      -> read build id         > inode->i_build_id == build_id_1
+
+   [ file changed with same inode, inode keeps old i_build_id data ]
+
+   - file open                 > inode->i_build_id == build_id_1
+   - file mmap
+      -> read build id         > inode->i_build_id == build_id_2
 
 
-On 24 Feb 2023, at 8:25, Asahi Lina wrote:
+I guess we could release i_build_id when the last file's vma go out?
 
-> This makes it mirror the way expect_ident() works, and means we can mor=
-e
-> easily push the result back into the token stream.
->
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
+But I'm not sure how to solve this and still be able to access build id
+easily just by accessing the inode->i_build_id field without any lock.
 
-Reviewed-by: Finn Behrens <fin@nyantec.com>
+I'm inclined to go back and store build id under the file object, where the
+build id would be correct (or missing).
 
-> ---
->  rust/macros/concat_idents.rs | 2 +-
->  rust/macros/helpers.rs       | 6 +++---
->  rust/macros/module.rs        | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/rust/macros/concat_idents.rs b/rust/macros/concat_idents.r=
-s
-> index 7e4b450f3a50..6d955d65016e 100644
-> --- a/rust/macros/concat_idents.rs
-> +++ b/rust/macros/concat_idents.rs
-> @@ -15,7 +15,7 @@ fn expect_ident(it: &mut token_stream::IntoIter) -> I=
-dent {
->  pub(crate) fn concat_idents(ts: TokenStream) -> TokenStream {
->      let mut it =3D ts.into_iter();
->      let a =3D expect_ident(&mut it);
-> -    assert_eq!(expect_punct(&mut it), ',');
-> +    assert_eq!(expect_punct(&mut it).as_char(), ',');
->      let b =3D expect_ident(&mut it);
->      assert!(it.next().is_none(), "only two idents can be concatenated"=
-);
->      let res =3D Ident::new(&format!("{a}{b}"), b.span());
-> diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
-> index cf7ad950dc1e..65706ecc007e 100644
-> --- a/rust/macros/helpers.rs
-> +++ b/rust/macros/helpers.rs
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->
-> -use proc_macro::{token_stream, TokenTree};
-> +use proc_macro::{token_stream, Punct, TokenTree};
->
->  pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<Str=
-ing> {
->      if let Some(TokenTree::Ident(ident)) =3D it.next() {
-> @@ -38,9 +38,9 @@ pub(crate) fn expect_ident(it: &mut token_stream::Int=
-oIter) -> String {
->      try_ident(it).expect("Expected Ident")
->  }
->
-> -pub(crate) fn expect_punct(it: &mut token_stream::IntoIter) -> char {
-> +pub(crate) fn expect_punct(it: &mut token_stream::IntoIter) -> Punct {=
+thoughts?
 
->      if let TokenTree::Punct(punct) =3D it.next().expect("Reached end o=
-f token stream for Punct") {
-> -        punct.as_char()
-> +        punct
->      } else {
->          panic!("Expected Punct");
->      }
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index a7e363c2b044..07503b242d2d 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -104,7 +104,7 @@ impl ModuleInfo {
->                  );
->              }
->
-> -            assert_eq!(expect_punct(it), ':');
-> +            assert_eq!(expect_punct(it).as_char(), ':');
->
->              match key.as_str() {
->                  "type" =3D> info.type_ =3D expect_ident(it),
-> @@ -119,7 +119,7 @@ impl ModuleInfo {
->                  ),
->              }
->
-> -            assert_eq!(expect_punct(it), ',');
-> +            assert_eq!(expect_punct(it).as_char(), ',');
->
->              seen_keys.push(key);
->          }
->
-> -- =
+thanks,
+jirka
 
-> 2.35.1
+
+v2 changes:
+  - store build id under inode [Matthew Wilcox]
+  - use urandom_read and liburandom_read.so for test [Andrii]
+  - add libelf-based helper to fetch build ID from elf [Andrii]
+  - store build id or error we got when reading it [Andrii]
+  - use full name i_build_id [Andrii]
+  - several tests fixes [Andrii]
+
+
+[1] https://lore.kernel.org/bpf/20230201135737.800527-2-jolsa@kernel.org/
+---
+Jiri Olsa (9):
+      mm: Store build id in inode object
+      bpf: Use file's inode object build id in stackmap
+      perf: Use file object build id in perf_event_mmap_event
+      libbpf: Allow to resolve binary path in current directory
+      selftests/bpf: Add read_buildid function
+      selftests/bpf: Add err.h header
+      selftests/bpf: Replace extract_build_id with read_build_id
+      selftests/bpf: Add inode_build_id test
+      selftests/bpf: Add iter_task_vma_buildid test
+
+ fs/inode.c                                                       | 12 +++++++++++
+ include/linux/buildid.h                                          | 15 ++++++++++++++
+ include/linux/fs.h                                               |  7 +++++++
+ kernel/bpf/stackmap.c                                            | 24 +++++++++++++++++++++-
+ kernel/events/core.c                                             | 46 +++++++++++++++++++++++++++++++++++++----
+ lib/buildid.c                                                    | 40 ++++++++++++++++++++++++++++++++++++
+ mm/Kconfig                                                       |  8 ++++++++
+ mm/mmap.c                                                        | 23 +++++++++++++++++++++
+ tools/lib/bpf/libbpf.c                                           |  4 +++-
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c                | 78 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/inode_build_id.c          | 68 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c     | 19 +++++++----------
+ tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c | 17 ++++++---------
+ tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.c    | 60 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/err.h                          | 13 ++++++++++++
+ tools/testing/selftests/bpf/progs/inode_build_id.c               | 62 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/profiler.inc.h                 |  3 +--
+ tools/testing/selftests/bpf/test_progs.c                         | 25 ----------------------
+ tools/testing/selftests/bpf/test_progs.h                         | 11 +++++++++-
+ tools/testing/selftests/bpf/trace_helpers.c                      | 98 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/trace_helpers.h                      |  5 +++++
+ 21 files changed, 581 insertions(+), 57 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/inode_build_id.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/err.h
+ create mode 100644 tools/testing/selftests/bpf/progs/inode_build_id.c
