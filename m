@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884AF6A5CC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F05E6A5CCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbjB1QJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        id S230326AbjB1QJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjB1QJG (ORCPT
+        with ESMTP id S230323AbjB1QJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:09:06 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A761CAD8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:09:03 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id m7so13871442lfj.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:09:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677600541;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JNvO5e3u+7eCvYpL2ndFdFKbFrDn2HG9Ge5MkD8Klws=;
-        b=W95gy/E2QikoBCEclZmrNzX8NqOhU3Kur9lLj7lltxCtcKJ9OijjXT3fKS1rb8Cxzr
-         BZK9ET1fr5QIN6hWZHIgj1Iee+QsdOLrdfIqayXsCv3wuE+u18RB9GX16a70vOSVmJtW
-         0VCIvo0APDNLKCR4BDo1uRQc5F9NHECExymqpEm2iF70hlHAlF3dIQsuqlxw0Z6G5T/J
-         EmE5D2ANFd296DzvhXThqarUlDw9eCN7EPiHZHzcFHJzgpECC4AgrAPpo+t7hG0aD+jS
-         1ah28ynA5FIUOMzhDfqiYHlhp6NBRvATvgvafZqm1eVOk7OoNZHWiAL4tII5JdZinZc9
-         P/mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677600541;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JNvO5e3u+7eCvYpL2ndFdFKbFrDn2HG9Ge5MkD8Klws=;
-        b=lzNY1w46Bp/auRVIQOdi2gOtOUgzlo4qRL7o61+7Q9lyGBUyy8rsYALoXrAdD8kN5o
-         IYd5Q+YvkSwZ+h2Yit3+Owc03GWVbyjFmT36VGafNbbprSQs/bY4SwbiPBac+ESTyFgQ
-         Q0tXbJjr9S9goWLit3oKEXFdAuDNeQW1n7itMq92IsFxvqu0Tb2gdOyHz6MPzXfOxK9u
-         /l+TSkYZayeAC6b5eMph4cDusDFX22EifpVt29eaqAhTz0Uh1xSJ+Pm2hRklKbcUlBmY
-         TBLi8wuw6+xMjssLmIOoky0qPGo5yrUqthPxnOYIFwXwZLw3sZXMrS9792E8ASaW1k0v
-         Hgpg==
-X-Gm-Message-State: AO0yUKWea/Q9S/FLoG9fEi/56lt0b/cxHAsqUGO6nFYuknQ+X+u4QrHh
-        VFxVbWtzGaKDiv98kGBsmW1A+g==
-X-Google-Smtp-Source: AK7set8npvfpONOaNtGpbVGxu5PKfiHa4cp8WjlSaVn1UmhsI/m4GhHWN0xSaXHZGJ7llkL9ObTN7w==
-X-Received: by 2002:ac2:4c0f:0:b0:4cb:1189:285c with SMTP id t15-20020ac24c0f000000b004cb1189285cmr1010331lfq.10.1677600541547;
-        Tue, 28 Feb 2023 08:09:01 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id b1-20020a056512218100b004db3e445f1fsm1391872lft.97.2023.02.28.08.09.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 08:09:01 -0800 (PST)
-Message-ID: <0c522cb9-023b-63e1-dc48-3c0e82c2c7a8@linaro.org>
-Date:   Tue, 28 Feb 2023 17:08:59 +0100
+        Tue, 28 Feb 2023 11:09:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EEC2B2AD
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:09:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F251B80DFC
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:09:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F14C4339C;
+        Tue, 28 Feb 2023 16:09:11 +0000 (UTC)
+Date:   Tue, 28 Feb 2023 16:09:08 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     =?utf-8?B?6KKB5biFKFNodWFpIFl1YW4p?= <yuanshuai@zeku.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        =?utf-8?B?5qyn6Ziz54Kc6ZKKKFdlaXpoYW8gT3V5YW5nKQ==?= 
+        <ouyangweizhao@zeku.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Weizhao Ouyang <o451686892@gmail.com>,
+        =?utf-8?B?5Lu756uL6bmPKFBlbmcgUmVuKQ==?= <renlipeng@zeku.com>,
+        Peter Collingbourne <pcc@google.com>
+Subject: Re: [PATCH v2] kasan: fix deadlock in start_report()
+Message-ID: <Y/4nJEHeUAEBsj6y@arm.com>
+References: <20230209031159.2337445-1-ouyangweizhao@zeku.com>
+ <CACT4Y+Zrz4KOU82jjEperYOM0sEp6TCmgse4XVMPkwAkS+dXrA@mail.gmail.com>
+ <93b94f59016145adbb1e01311a1103f8@zeku.com>
+ <CACT4Y+a=BaMNUf=_suQ5or9=ZksX2ht9gX8=XBSDEgHogyy3mg@mail.gmail.com>
+ <CA+fCnZf3k-rsaOeti0Q7rqkmvsqDb2XxgxOq6V5Gqp6FGLH7Yg@mail.gmail.com>
+ <b058a424e46d4f94a1f2fdc61292606b@zeku.com>
+ <2b57491a9fab4ce9a643bd0922e03e73@zeku.com>
+ <CA+fCnZcirNwdA=oaLLiDN+NxBPNcA75agPV1sRsKuZ0Wz6w_hQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 12/18] media: venus: firmware: Correct IS_V6() checks
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-12-58c2c88384e9@linaro.org>
- <cb71bea2-088b-d4e9-b143-be9421b92c78@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <cb71bea2-088b-d4e9-b143-be9421b92c78@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+fCnZcirNwdA=oaLLiDN+NxBPNcA75agPV1sRsKuZ0Wz6w_hQ@mail.gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 27, 2023 at 03:13:45AM +0100, Andrey Konovalov wrote:
+> +Catalin, would it be acceptable to implement a routine that disables
+> in-kernel MTE tag checking (until the next
+> mte_enable_kernel_sync/async/asymm call)? In a similar way an MTE
+> fault does this, but without the fault itself. I.e., expose the part
+> of do_tag_recovery functionality without report_tag_fault?
 
+I don't think we ever re-enable MTE after do_tag_recovery(). The
+mte_enable_kernel_*() are called at boot. We do call
+kasan_enable_tagging() explicitly in the kunit tests but that's a
+controlled fault environment.
 
-On 28.02.2023 16:48, Bryan O'Donoghue wrote:
-> On 28/02/2023 15:24, Konrad Dybcio wrote:
->> -    if (IS_V6(core))
->> +    /*
->> +     * This may sound counter-intuitive, but when there's no TZ, we gotta
->> +     * do things that it would otherwise do for us, such as initializing
->> +     * the hardware at a very basic level.
->> +     * */
-> 
-> Suggest "When there is no TZ we have got to initialize hardware in-lieu of TZ" as an example.
-> 
-> Either way please drop that "gotta" - I ain't gonna ACK such a butchering of the language.
-Gotta do what you gotta do.. :P I can reword it.
+IIUC, the problem is that the kernel already got an MTE fault, so at
+that point the error is not really recoverable. If we want to avoid a
+fault in the first place, we could do something like
+__uaccess_enable_tco() (Vincenzo has some patches to generalise these
+routines) but if an MTE fault already triggered and MTE is to stay
+disabled after the reporting anyway, I don't think it's worth it.
 
-Konrad
-> 
-> Then
-> 
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+So I wonder whether it's easier to just disable MTE before calling
+report_tag_fault() so that it won't trigger additional faults:
+
+diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+index f4cb0f85ccf4..1449d2bc6f10 100644
+--- a/arch/arm64/mm/fault.c
++++ b/arch/arm64/mm/fault.c
+@@ -329,8 +329,6 @@ static void do_tag_recovery(unsigned long addr, unsigned long esr,
+ 			   struct pt_regs *regs)
+ {
+ 
+-	report_tag_fault(addr, esr, regs);
+-
+ 	/*
+ 	 * Disable MTE Tag Checking on the local CPU for the current EL.
+ 	 * It will be done lazily on the other CPUs when they will hit a
+@@ -339,6 +337,8 @@ static void do_tag_recovery(unsigned long addr, unsigned long esr,
+ 	sysreg_clear_set(sctlr_el1, SCTLR_EL1_TCF_MASK,
+ 			 SYS_FIELD_PREP_ENUM(SCTLR_EL1, TCF, NONE));
+ 	isb();
++
++	report_tag_fault(addr, esr, regs);
+ }
+ 
+ static bool is_el1_mte_sync_tag_check_fault(unsigned long esr)
+
+-- 
+Catalin
