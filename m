@@ -2,141 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99736A607D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E4F6A607B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjB1UkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S229787AbjB1Ujo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjB1UkF (ORCPT
+        with ESMTP id S229708AbjB1Ujl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:40:05 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CA513523
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:39:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677616798; x=1709152798;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/6ZAfLTx1tPZhDVDXGq8De+9d0VpF/AMNil0X8i8ADA=;
-  b=hYcDyrVro6IIgpR3Z1wM13JBSA65HZeLFRf8y/xpfiyIhx1py0272hmj
-   Oo8DJw76+UI2rJWKLPeqE7FWue4miuDLGjvDPp/kdE+PuW4QAtSeX1jYs
-   hrjCIdcK9chiKbIap53K8W/ZUJ23jpoe3FFEijtTzqcW54PbIacABHecn
-   g/sQDMN7CSIqJ/743brnANhFhgGzGkLVjZ3qCLBKRUpKieREOgpgeh+zU
-   H6OJjzeIz7BNY+vfGNg3zZE193EPyiVboh8tOYMc9W5Ll+kdo0l3YdzeS
-   vndOPrx2TPersW81zOHV+tacdC4sm9OpBuoewaO0O5JKNwdz8xCll6GTE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="396811520"
-X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="396811520"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 12:39:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="743121465"
-X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="743121465"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Feb 2023 12:39:56 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pX6lL-0005dV-06;
-        Tue, 28 Feb 2023 20:39:51 +0000
-Date:   Wed, 1 Mar 2023 04:39:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: drivers/pci/pcie/../pci.h:325:17: sparse: sparse: cast from
- restricted pci_channel_state_t
-Message-ID: <202303010454.jI5Jg2sT-lkp@intel.com>
+        Tue, 28 Feb 2023 15:39:41 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D8934C26
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:39:32 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id f1so7774094qvx.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:39:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1677616772;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3N2ywhkR/bMPSeXmwyHCwpyMHSCbDCyuk19SKsi7Rfg=;
+        b=agY7M0SISSdJupcls04a1QBQDOpWIBYSAesvX1+dRM5Tf/TKtCupRGPyem+9EZlYnn
+         40/a0mJ1MjcqAxbM0a4CYgn87T4aFjwtfCato8dAjIiQygAc7AVMzUzlMsFUd6+f4edD
+         NhE/DZIV3iiL7BRk9fi2RH5TsT8AmpR09suxE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677616772;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3N2ywhkR/bMPSeXmwyHCwpyMHSCbDCyuk19SKsi7Rfg=;
+        b=zbE0T7Y2wnLIjshAvA7VrwbDwFmAHBTtfvS/n+WySEZWBEJ1e53Swq9nA1s8WXYyzh
+         Tjz3/TsFmvkDsliTrdLaSHVNiAr2fU7Ta3rcdAnlgU+soKb1vCBLbJo0NNlX4elcrwrM
+         NZyDoozqfiFIyTZNpchRPsG3i0sRWYgf77RmPqZphtLmCpL51Oa/LK5ov4t3JGpj48F6
+         qxvLTIYql9v9hJ5f8zmh3PU17KiwUQ66RB9ZcpMEpVG7XmP8E/Zi0rUqRLY1gyTgkGsv
+         9jAIz0mRTFeRL+SbiSvFf5ml7M3N3cBNBN6r3pLOG5G0VE0ob7/oPu3av9SpN2HWklUO
+         eHfg==
+X-Gm-Message-State: AO0yUKV32Fq2WdmMT8EPtpAdtzgqtrTALvm21eI/v25TCXfXBAUupgsV
+        KGVtAcgg4X+sKppsv5UClocFPg==
+X-Google-Smtp-Source: AK7set/zofXKOT7Or3LOrmfABLDV6LwDDjSbBnAaw0bI6AAd+d8bCXukM4oVLnnSBzOzJB9BaffATA==
+X-Received: by 2002:ad4:5aea:0:b0:574:8ef8:89cc with SMTP id c10-20020ad45aea000000b005748ef889ccmr8817048qvh.41.1677616771783;
+        Tue, 28 Feb 2023 12:39:31 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id 81-20020a370c54000000b007423ccd892csm7479037qkm.47.2023.02.28.12.39.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 12:39:31 -0800 (PST)
+Date:   Tue, 28 Feb 2023 20:39:30 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+Message-ID: <Y/5mguXPPqdP3MZF@google.com>
+References: <20230228155121.3416-1-ubizjak@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230228155121.3416-1-ubizjak@gmail.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e492250d5252635b6c97d52eddf2792ec26f1ec1
-commit: 74ff8864cc842be994853095dba6db48e716400a PCI: hotplug: Allow marking devices as disconnected during bind/unbind
-date:   13 days ago
-config: loongarch-randconfig-s042-20230226 (https://download.01.org/0day-ci/archive/20230301/202303010454.jI5Jg2sT-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=74ff8864cc842be994853095dba6db48e716400a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 74ff8864cc842be994853095dba6db48e716400a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/
+On Tue, Feb 28, 2023 at 04:51:21PM +0100, Uros Bizjak wrote:
+> Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+> check_cpu_stall.  x86 CMPXCHG instruction returns success in ZF flag, so
+> this change saves a compare after cmpxchg (and related move instruction in
+> front of cmpxchg).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303010454.jI5Jg2sT-lkp@intel.com/
+In my codegen, I am not seeing mov instruction before the cmp removed, how
+can that be? The rax has to be populated with a mov before cmpxchg right?
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/pci/pcie/err.c: note: in included file:
->> drivers/pci/pcie/../pci.h:325:17: sparse: sparse: cast from restricted pci_channel_state_t
->> drivers/pci/pcie/../pci.h:325:17: sparse: sparse: cast to restricted pci_channel_state_t
-   drivers/pci/pcie/../pci.h:328:23: sparse: sparse: cast from restricted pci_channel_state_t
-   drivers/pci/pcie/../pci.h:328:23: sparse: sparse: cast from restricted pci_channel_state_t
-   drivers/pci/pcie/../pci.h:328:23: sparse: sparse: cast to restricted pci_channel_state_t
-   drivers/pci/pcie/../pci.h:332:23: sparse: sparse: cast from restricted pci_channel_state_t
-   drivers/pci/pcie/../pci.h:332:23: sparse: sparse: cast from restricted pci_channel_state_t
-   drivers/pci/pcie/../pci.h:332:23: sparse: sparse: cast to restricted pci_channel_state_t
->> drivers/pci/pcie/../pci.h:325:17: sparse: sparse: cast to restricted pci_channel_state_t
-   drivers/pci/pcie/../pci.h:328:23: sparse: sparse: cast to restricted pci_channel_state_t
-   drivers/pci/pcie/../pci.h:332:23: sparse: sparse: cast to restricted pci_channel_state_t
+So try_cmpxchg gives: mov, cmpxchg, cmp, jne
+Where as cmpxchg gives: mov, cmpxchg, mov, jne
 
-vim +325 drivers/pci/pcie/../pci.h
+So yeah you got rid of compare, but I am not seeing reduction in moves.
+Either way, I think it is an improvement due to dropping cmp so:
 
-   306	
-   307	/**
-   308	 * pci_dev_set_io_state - Set the new error state if possible.
-   309	 *
-   310	 * @dev: PCI device to set new error_state
-   311	 * @new: the state we want dev to be in
-   312	 *
-   313	 * If the device is experiencing perm_failure, it has to remain in that state.
-   314	 * Any other transition is allowed.
-   315	 *
-   316	 * Returns true if state has been changed to the requested state.
-   317	 */
-   318	static inline bool pci_dev_set_io_state(struct pci_dev *dev,
-   319						pci_channel_state_t new)
-   320	{
-   321		pci_channel_state_t old;
-   322	
-   323		switch (new) {
-   324		case pci_channel_io_perm_failure:
- > 325			xchg(&dev->error_state, pci_channel_io_perm_failure);
-   326			return true;
-   327		case pci_channel_io_frozen:
-   328			old = cmpxchg(&dev->error_state, pci_channel_io_normal,
-   329				      pci_channel_io_frozen);
-   330			return old != pci_channel_io_perm_failure;
-   331		case pci_channel_io_normal:
-   332			old = cmpxchg(&dev->error_state, pci_channel_io_frozen,
-   333				      pci_channel_io_normal);
-   334			return old != pci_channel_io_perm_failure;
-   335		default:
-   336			return false;
-   337		}
-   338	}
-   339	
+Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+thanks,
+
+ - Joel
+
+
+> 
+> No functional change intended.
+> 
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> ---
+>  kernel/rcu/tree_stall.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> index b10b8349bb2a..d81c88e66b42 100644
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@ -760,7 +760,7 @@ static void check_cpu_stall(struct rcu_data *rdp)
+>  	jn = jiffies + ULONG_MAX / 2;
+>  	if (rcu_gp_in_progress() &&
+>  	    (READ_ONCE(rnp->qsmask) & rdp->grpmask) &&
+> -	    cmpxchg(&rcu_state.jiffies_stall, js, jn) == js) {
+> +	    try_cmpxchg(&rcu_state.jiffies_stall, &js, jn)) {
+>  
+>  		/*
+>  		 * If a virtual machine is stopped by the host it can look to
+> @@ -778,7 +778,7 @@ static void check_cpu_stall(struct rcu_data *rdp)
+>  
+>  	} else if (rcu_gp_in_progress() &&
+>  		   ULONG_CMP_GE(j, js + RCU_STALL_RAT_DELAY) &&
+> -		   cmpxchg(&rcu_state.jiffies_stall, js, jn) == js) {
+> +		   try_cmpxchg(&rcu_state.jiffies_stall, &js, jn)) {
+>  
+>  		/*
+>  		 * If a virtual machine is stopped by the host it can look to
+> -- 
+> 2.39.2
+> 
