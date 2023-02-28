@@ -2,72 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A916A5EF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3F26A5EF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjB1Sqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 13:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S229758AbjB1Sr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 13:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjB1Squ (ORCPT
+        with ESMTP id S229481AbjB1Sr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 13:46:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C8912BEF;
-        Tue, 28 Feb 2023 10:46:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C0E1B80E69;
-        Tue, 28 Feb 2023 18:46:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7E3C433D2;
-        Tue, 28 Feb 2023 18:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677610007;
-        bh=ceXcKmSlC7n2+j9wLpzz3kcr7DaDgLacJwFFfZL2REs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HzDDQTI51jNeVxSX1bnLvUH0Uom/O/LLOIK80+wvYQ36OQHyXLWF5OvYX4/p5sTyP
-         1bsFYM9XSpbZ5fHz5+5hYtqSz5HMI2cTI995smr4zo3Hbm459GXCM3zFAgVMXBZ3jg
-         szYAHkgbPP2Y1PsVdsStyudN4DmSnueD6H8P7iWQ=
-Date:   Tue, 28 Feb 2023 19:46:44 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Edward Liaw <edliaw@google.com>
-Cc:     stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>, bpf@vger.kernel.org,
-        kernel-team@android.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4.14 v3 0/4] BPF fixes for CVE-2021-3444 and CVE-2021-3600
-Message-ID: <Y/5MFNdlHVW6zdAA@kroah.com>
-References: <20230224034020.2080637-1-edliaw@google.com>
+        Tue, 28 Feb 2023 13:47:27 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9DE2B60A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 10:47:24 -0800 (PST)
+Received: from [10.10.3.121] (unknown [10.10.3.121])
+        by mail.ispras.ru (Postfix) with ESMTPS id 9CEE140770A0;
+        Tue, 28 Feb 2023 18:47:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 9CEE140770A0
+Date:   Tue, 28 Feb 2023 21:47:22 +0300 (MSK)
+From:   Alexander Monakov <amonakov@ispras.ru>
+To:     Borislav Petkov <bp@alien8.de>
+cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Tavis Ormandy <taviso@gmail.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: x86: AMD Zen2 ymm registers rolling back
+In-Reply-To: <Y/Xp73KJe3c/1jrn@zn.tnic>
+Message-ID: <4737f149-c5b7-8a51-7cc5-8bda6e98308b@ispras.ru>
+References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net> <Y/XTT59OrLw2as4R@zn.tnic> <Y/Xc+yMzI83WZ4V1@zn.tnic> <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com> <Y/Xp73KJe3c/1jrn@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224034020.2080637-1-edliaw@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 03:40:15AM +0000, Edward Liaw wrote:
-> Thadeu Lima de Souza Cascardo originally sent this patch but it failed to
-> merge because of a compilation error:
-> 
-> https://lore.kernel.org/bpf/20210830183211.339054-1-cascardo@canonical.com/T/
-> 
-> v3:
-> Added upstream commit hash from 4.19.y and added detail to changelog.
-> 
-> v2:
-> Removed redefinition of tmp to fix compilation with CONFIG_BPF_JIT_ALWAYS_ON
-> enabled.
-> 
-> -Edward
 
-Now queued up, thanks.
+On Wed, 22 Feb 2023, Borislav Petkov wrote:
 
-greg k-h
+> On Wed, Feb 22, 2023 at 09:38:09AM +0000, Andrew Cooper wrote:
+> > This sounds suspiciously like an errata which was fixed with a ucode
+> > update last year.
+> 
+> Yes, it looks like it.
+> 
+> Alternatively, you can try booting with "clearcpuid=xsaves" - that
+> should take care of your observation too but yeah, you should rather
+> update your microcode.
+
+Hi folks,
+
+I can reproduce this bug on AMD Renoir SoC:
+
+vendor_id       : AuthenticAMD
+cpu family      : 23
+model           : 96
+model name      : AMD Ryzen 5 4600G with Radeon Graphics
+stepping        : 1
+microcode       : 0x8600104
+
+for which there's no microcode update, the microcode_amd_fam17h.bin file
+in the linux-firmware.git repo carries only the following patches:
+
+$ ./amd_ucode_info.py microcode_amd_fam17h.bin
+Microcode patches in microcode_amd_fam17h.bin:
+  Family=0x17 Model=0x08 Stepping=0x02: Patch=0x0800820d Length=3200 bytes
+  Family=0x17 Model=0x01 Stepping=0x02: Patch=0x0800126e Length=3200 bytes
+  Family=0x17 Model=0x31 Stepping=0x00: Patch=0x08301055 Length=3200 bytes
+
+
+I've seen microcode version increase after a BIOS update, so it seems like
+internally microcode patches exist for Renoir too, but it's up to hardware
+vendors to pick them up as part of a BIOS update. Is there any chance of
+a conventional release like for the above three CPU models?
+
+Thanks.
+Alexander
