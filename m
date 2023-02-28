@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D7E6A5F70
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 890CB6A5F78
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjB1TPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 14:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S229800AbjB1TRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 14:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjB1TPA (ORCPT
+        with ESMTP id S229613AbjB1TRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:15:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9596232CE5;
-        Tue, 28 Feb 2023 11:14:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FF10611A9;
-        Tue, 28 Feb 2023 19:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F193C4339B;
-        Tue, 28 Feb 2023 19:14:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677611698;
-        bh=ui+KEs4Qa2JI5Yzg5P3hL+EE1eHLHlEucYDkzO9+HQk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=MwVo6ozX0rFmTemM7x6x1a8snrpuFfFdndXxiEKfGPKEXYLB0iJB9WSgoTWhoxirT
-         EFeiVe2QsyM8wfHt4FLIvIsnsBg6GOtz0qvVhfyFzuTYHy+gilJRWp4Hdtic2G8QE1
-         2HqE6VhD0zxA8dVKTprRmwXX/hDdQvmiRE0OvTLlxnih31ljlzCtHZNfYyv84nKvEy
-         eBeAgmjT14p733V9NTAejOTf8F74dDk8/6H/lZfflNTD8+aCj2D0az7BdUDOj0znCT
-         MxrBD/UEYQZD7qTyZVOasPdQmOVpLEW8yv5sa4oRtc53ABHaIXlwtDHdZqrlJWtPpA
-         DFeJpPAIIuM1w==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-In-Reply-To: <20230227200428.45832-1-kyarlagadda@nvidia.com>
-References: <20230227200428.45832-1-kyarlagadda@nvidia.com>
-Subject: Re: [Patch V2] spi: tegra210-quad: Fix iterator outside loop
-Message-Id: <167761169678.74633.13115724247525542890.b4-ty@kernel.org>
-Date:   Tue, 28 Feb 2023 19:14:56 +0000
+        Tue, 28 Feb 2023 14:17:03 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840E732CE5;
+        Tue, 28 Feb 2023 11:17:01 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id ec43so44389386edb.8;
+        Tue, 28 Feb 2023 11:17:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jqQ/ShIAOZwCImjbSCQBE8GsaSJPKXSxwvHlxK05UmY=;
+        b=jJ8qnkfGfYeA95NGuJ93TBJeOQ9Aa7whuWUGRqCNILxZ3IsiqVkCascOvIzqgbxvlJ
+         PpBzTLQ3khPCzBaLj0s8AKeyFJqKxHLGpKl18ZzJApN8Sb42nyIckqhmtkLdtkeTZ6SU
+         ur0ZQC53mUXmunKCiUoJx4zunJuqqjrWbpM35A4cGAmFZPJTVqdKuSllTwFvjg3hy9jS
+         0amAOPjhUWbbmghamU97Jb9q5xDo8EZ5Psg1mIhRvqWMHgnVwU2a9l+s9/sPsTnM6+y7
+         Q7Taf+0bByzSCa8FHtqRE6qbeIQRwOVgPTR+Fpwz5rPTZpkO5zxP+cpK8wQtA8Ea0DjQ
+         J4+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jqQ/ShIAOZwCImjbSCQBE8GsaSJPKXSxwvHlxK05UmY=;
+        b=dx+yUlGd5A6XEJrcDOHjxZzsfUZOebg01FZwDAioHO6f4VWQSB5TAyPmK4Ucynx4lq
+         8Z6MSMxSv9fJv3yC7EOh7RzpLkLZHm3PjflIo5Ro1kpcIGZlit7pnVI4N3qwgfbv0ntD
+         wm5PAF3oRUB6dUVX5xI812tE64trEXKsTLam0JE4y1bs5+VuAHUH4R5IhdDtTvEQfh1A
+         rfWiNRrYIkD/DasfAQQOP+9p2ey8uuzGfrTIuvkBAYahqCkn6c/cUe4hVge98w5E75el
+         YWP10Zah38HZEupAv1NlcFbOHnfSV2XWjM91mh/gCqJX/NnaVufpfFlSba23KRpAMhmR
+         D8vQ==
+X-Gm-Message-State: AO0yUKXdlyKNlQ5yHqhD+rmbzf5LO+jSjbD+rxxt/cocvVcKcUkDSMuh
+        83epSZmUjPEVjgcr17gEUbH/1anQujY=
+X-Google-Smtp-Source: AK7set+uFV6wxD/vgDd+fPNl+nF9Chu7bew7c8XGXkaHUXWMFIqXlSn8Z4Cd4caRg0YyD/yiultXuw==
+X-Received: by 2002:aa7:c90c:0:b0:4aa:b63f:a0e with SMTP id b12-20020aa7c90c000000b004aab63f0a0emr3994112edt.17.1677611819959;
+        Tue, 28 Feb 2023 11:16:59 -0800 (PST)
+Received: from carbian ([2a02:8109:aa3f:ead8::dc02])
+        by smtp.gmail.com with ESMTPSA id b31-20020a509f22000000b004af596a6bfcsm4680061edf.26.2023.02.28.11.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 11:16:59 -0800 (PST)
+Date:   Tue, 28 Feb 2023 20:16:57 +0100
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] iio: Improve the kernel-doc of iio_trigger_poll
+Message-ID: <Y/5TKSylDDT74YBT@carbian>
+References: <cover.1677520155.git.mehdi.djait.k@gmail.com>
+ <219496d4d21755937a40c2c7dfbeca64660c9258.1677520155.git.mehdi.djait.k@gmail.com>
+ <Y/0znth++tPsptKs@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-ada30
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/0znth++tPsptKs@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 01:34:28 +0530, Krishna Yarlagadda wrote:
-> Fix warn: iterator used outside loop: 'xfer'. 'xfer' variable contain
-> invalid value in few conditions. Complete transfer within DATA phase
-> in successful case and at the end for failed transfer.
+Hello Andy, 
+
+On Tue, Feb 28, 2023 at 12:50:06AM +0200, Andy Shevchenko wrote:
+> On Mon, Feb 27, 2023 at 07:00:38PM +0100, Mehdi Djait wrote:
+> > Move the kernel-doc of the function to industrialio-trigger.c
+> > Add a note on the context where the function is expected to be called.
 > 
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Link:https://lore.kernel.org/all/202210191211.46FkzKmv-lkp@intel.com/
-> Fixes: 8777dd9dff40 ("spi: tegra210-quad: Fix combined sequence")
+> ...
 > 
-> [...]
+> > + * This function needs to be called from an interrupt context.
+> 
+> > - * Typically called in relevant hardware interrupt handler.
+> 
+> These are not equivalent. Can you explain in the commit message why we move
+> from hardware to any interrupt context?
 
-Applied to
+I read the definition of handle_irq_desc more carefully and [1]. I will
+change it to hard IRQ context. 
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+I got confused by the kernel-docs under /kernel/irq/irqdesc.c as it states
+that the function must be called from an IRQ context for generic_handle_irq 
+but explicitly states hard IRQ context for another funtion. 
 
-Thanks!
+[1] https://lore.kernel.org/all/1346922337-17088-1-git-send-email-lars@metafoo.de/
 
-[1/1] spi: tegra210-quad: Fix iterator outside loop
-      commit: 2449d436681d40bc63ec2c766fd51b632270d8a7
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+--
+Kind Regards
+Mehdi Djait
