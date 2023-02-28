@@ -2,110 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9CF6A516E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB60E6A5176
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjB1Ctf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
+        id S229900AbjB1Cxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB1Cte (ORCPT
+        with ESMTP id S230081AbjB1Cxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:49:34 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA6BCA32;
-        Mon, 27 Feb 2023 18:49:32 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-172094e10e3so9556358fac.10;
-        Mon, 27 Feb 2023 18:49:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CersIx0kd6XeO/gD5iEHLIOsr4GuTqA4PsWEpd2HTVA=;
-        b=d7wYHhkrTxTdtW6atj/z6oxITPp75ihK3afm3ATklMmvD8EKlgxJdo3Z+yiAF8tzw4
-         Gpr1thdiHiI0/L+1gG0oZmno9JP/w3RdWAE8tHH/0eC6CjvgR7cv/lE9mF8ts4Lyw8MK
-         ElN6UQqrAdJff7toxzCVbhr3/69XJljV7TuKhg/Uq3khDGfHwyqyeIFufPV1UkC4r5hU
-         qK0A0/Lzzk0ZH/PMX3me9zAh8FdZnUKe1nYS6cKbaUB8vl3OVqFEWig4VQ8qRYszJS1d
-         iNBrFRWmn7fphL/tlBhqJV/U8hI5NphdUQM9BAZpNmZMH3kOsIRyO+0co/o0znG9d/q6
-         o38A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CersIx0kd6XeO/gD5iEHLIOsr4GuTqA4PsWEpd2HTVA=;
-        b=oWAWgTe7ZZGE+vboMYGqsD/f05WalIZD62TZc0Aev7scdUj4EG0gL2dOp29b+ZLqKQ
-         9NXmFMbSMgdI9UyZUb+eBkDMatZysdeMEv4B5SIG1TuWkWTHW2Rz8IxebH6za9EW6XgU
-         zZERQGdr8TFHzpNJHn/QaNWVpXCObkFbBAPrPi5za/Sunb06PWE0FG0VwMwih/s7mIPt
-         ktKRPw3pk6NyPEZYekeR3y6XOOfIoeJFL8mTanIFfxoxRzjYNI2zzdgX2U/F1fkOdg9i
-         QTssBHIKzm1mqdmLSMLgWopTfopFOI91puXR2elrKoGSRJGekb+cO1DSvxDl7M/Fx5OU
-         3YJg==
-X-Gm-Message-State: AO0yUKXXZooFpg87Yjn2A8sUCeYED/xA60e/KP9tGtuo1ty1z1B/Pu/D
-        bYDpEVmCHVdgSMsnMK/iHlE=
-X-Google-Smtp-Source: AK7set/ZLfanWGn2W5w4Xvp0TN2ajODli+jEfK+pasdVSe3Y9NUEEH2fNVrXxA53KQ6A4bZd5mavnw==
-X-Received: by 2002:a05:6870:3125:b0:16e:90d0:e6a3 with SMTP id v37-20020a056870312500b0016e90d0e6a3mr590835oaa.9.1677552571625;
-        Mon, 27 Feb 2023 18:49:31 -0800 (PST)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id e5-20020a056870450500b0013b911d5960sm2873050oao.49.2023.02.27.18.49.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 18:49:30 -0800 (PST)
-Date:   Mon, 27 Feb 2023 18:49:29 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 1/2] lib/test_bitmap: increment failure counter properly
-Message-ID: <Y/1ruRmnY4eU536Q@yury-laptop>
-References: <20230227214524.914050-1-yury.norov@gmail.com>
- <Y/00yaVqK2x3+pP3@smile.fi.intel.com>
+        Mon, 27 Feb 2023 21:53:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3117F2748D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:52:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677552766;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XPbt6/x+qYDE9MQFVpKTztSTkJHQtPGD9fckbhyxCmo=;
+        b=jVeqTrIKz8RXzFC921gAp4J7xCXXltQG3snXZrlpfVNp+1SMvYismOZUMqFDzKxyBD7X6b
+        GvtlGzGM3e0oLoDKvxrpB3YOJ9yKBAVik7OGhniglGX8q6Zsmv0oDQhNmYNRaUVYTverY8
+        mr8mSzp2+7FnKLjRv7/ZWS88pijX5s8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-82-IbbaSl6yNn-Vrqv_QFI3YA-1; Mon, 27 Feb 2023 21:52:41 -0500
+X-MC-Unique: IbbaSl6yNn-Vrqv_QFI3YA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C7F91C02D33;
+        Tue, 28 Feb 2023 02:52:41 +0000 (UTC)
+Received: from [10.22.8.211] (unknown [10.22.8.211])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D10B8C15BAD;
+        Tue, 28 Feb 2023 02:52:40 +0000 (UTC)
+Message-ID: <d6df5140-ed7c-2c12-8e5a-d5c3fbf30a47@redhat.com>
+Date:   Mon, 27 Feb 2023 21:52:40 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/00yaVqK2x3+pP3@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] cpuset: Remove unused cpuset_node_allowed
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     lizefan.x@bytedance.com, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230227080719.20280-1-haifeng.xu@shopee.com>
+ <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
+ <0222742e-3c31-b75d-6027-3b6da2be16be@shopee.com>
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <0222742e-3c31-b75d-6027-3b6da2be16be@shopee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 12:55:05AM +0200, Andy Shevchenko wrote:
-> On Mon, Feb 27, 2023 at 01:45:23PM -0800, Yury Norov wrote:
-> > The tests that don't use expect_eq() macro to determine that a test is
-> > failured must increment failed_tests explicitly.
-> 
-> ...
-> 
-> >  			pr_err("bitmap_copy_arr32(nbits == %d:"
-> >  				" tail is not safely cleared: %d\n",
-> 
-> Usually we don't split string literals (since checkpatch doesn't complain on a
-> looong lines with them at the end of the line),
-> 
-> ...
-> 
-> >  			pr_err("bitmap_copy_arr64(nbits == %d:"
-> >  				" tail is not safely cleared: %d\n", nbits, next_bit);
-> 
-> Ditto.
-> 
-> P.S. Seems a material for another patch.
+On 2/27/23 21:40, Haifeng Xu wrote:
+>
+> On 2023/2/27 22:56, Waiman Long wrote:
+>> On 2/27/23 03:07, Haifeng Xu wrote:
+>>> Commit 002f290627c2 ("cpuset: use static key better and convert to new API")
+>>> has used __cpuset_node_allowed instead of cpuset_node_allowed to check
+>>> whether we can allocate on a memory node. Now this function isn't used by
+>>> anyone, so we can remove it safely.
+>>>
+>>> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+>>> ---
+>>>    include/linux/cpuset.h | 12 ------------
+>>>    1 file changed, 12 deletions(-)
+>>>
+>>> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+>>> index d58e0476ee8e..7fad5afe3bba 100644
+>>> --- a/include/linux/cpuset.h
+>>> +++ b/include/linux/cpuset.h
+>>> @@ -82,13 +82,6 @@ int cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask);
+>>>      extern bool __cpuset_node_allowed(int node, gfp_t gfp_mask);
+>>>    -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
+>>> -{
+>>> -    if (cpusets_enabled())
+>>> -        return __cpuset_node_allowed(node, gfp_mask);
+>>> -    return true;
+>>> -}
+>>> -
+>>>    static inline bool __cpuset_zone_allowed(struct zone *z, gfp_t gfp_mask)
+>>>    {
+>>>        return __cpuset_node_allowed(zone_to_nid(z), gfp_mask);
+>>> @@ -223,11 +216,6 @@ static inline int cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask)
+>>>        return 1;
+>>>    }
+>>>    -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
+>>> -{
+>>> -    return true;
+>>> -}
+>>> -
+>>>    static inline bool __cpuset_zone_allowed(struct zone *z, gfp_t gfp_mask)
+>>>    {
+>>>        return true;
+>> The kernel convention is to add a "__" prefix to a function name if there is higher level helper without the "__" prefix that uses it. Since cpuset_node_allowed() is no longer used. We should just rename __cpuset_node_allowed() to cpuset_node_allowed() and get rid of the unused helper. A bit more code changes are needed for this, though.
+>>
+>> Cheers,
+>> Longman
+>>
+> Maybe we can still use cpuset_node_allowed in __cpuset_zone_allowed? If so, less code need to be changed.
+>
+mm/page_alloc.c has 2 references to __cpuset_node_allowed() in their 
+comments. These references should also be updated as well. That is why I 
+said a bit more code needs to be touched.
 
-If you're OK with this patch, can you give your review tag please?
+Cheers,
+Longman
 
-Thanks,
-Yury
