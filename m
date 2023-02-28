@@ -2,107 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192986A5CF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB996A5CF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjB1QTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S229587AbjB1QUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjB1QTQ (ORCPT
+        with ESMTP id S229445AbjB1QUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:19:16 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4170D50A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:19:15 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-536cb25982eso286548967b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:19:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hvwi10BCTbbsbzCDkyaJyelvBf36hI6KbwY7rWAn+yI=;
-        b=Rs7XQMKTGdkQouim1SxhyfOHHjAPnJdbNpHg0sJ+MBDNH0F89vy4153+0K4fSwpRzO
-         /BgxRQ3nEMNtm4BhcSqTytojoSlcZfJYJNFn46+eC0FGyhdyqV+bQDrFyq4UQB+aWJA5
-         G7IyfIA77lACVCE46aHx78a0EeQBe1RJ8KAVfTvqC+pzf27e/y/nKfJtLCoQOU3Xr/4i
-         l3sEg+AgWKy31KTOwfnt6wFojKVMobFgdO54cZX2LjQgumufcN7XPMXaeMbKZIQKdq3E
-         QJ6ADTFvzA3wegE9OcG0oh3Xw8FWI5CdGEuXqQMi48VkIE3uvuJknvcVdbEZ/4e0qoTp
-         sYgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hvwi10BCTbbsbzCDkyaJyelvBf36hI6KbwY7rWAn+yI=;
-        b=sKFsg0ddus0usB9TGk3UZvsFYmjBzf+LE4kVfoVtjvWBYYIR9kZSPP4z1ZugHYbebQ
-         7ttmrFW9U8kpCrWUbuht+l5MwKQkxefzIeP3GEjj71jy/LJmkHrGd9jCfPXtyRHDMUZF
-         hjenTM+VP1QARMuoEHobpYvk+t1LD9ap0maQsKaeI3ZR+glT/OK8H4GWc/Hgc9dAzskf
-         qgwHdExR1Xt6NmQxUE4LebR8ephQw31wqJRv0J6Nn/WWuOEXmwVFp3wk5XglkKmeTLWD
-         lhsyMqIziF5oOKtRTGlEkp1sdp8erfnBYW0l73dhS9yERcDgLseMXBB+cSHFZxowOlic
-         7xSg==
-X-Gm-Message-State: AO0yUKUdCWC85uTvgqXkI/V3jgxZzbG9JNdfSk/KAV3m59pE3TDiLZ84
-        CrH6/j3P6bHt8fgR3GPiuPCe8xRxitZsWJ+qd75uxw==
-X-Google-Smtp-Source: AK7set/VGlrxe4bCPrXoKKdImpARYrcb4bLo6BZA7c0D74m/IHouJb6Ka7q1yEfXuou60h8FhHfju3fw/QNEiAlPsik=
-X-Received: by 2002:a81:3e17:0:b0:52f:69d:cc75 with SMTP id
- l23-20020a813e17000000b0052f069dcc75mr1980711ywa.6.1677601154832; Tue, 28 Feb
- 2023 08:19:14 -0800 (PST)
+        Tue, 28 Feb 2023 11:20:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610C81E283;
+        Tue, 28 Feb 2023 08:20:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F7B9B80E19;
+        Tue, 28 Feb 2023 16:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8DEC433D2;
+        Tue, 28 Feb 2023 16:20:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677601231;
+        bh=ui+2BVSMErurQQKP1GO0zuy/s8AMVS9122TTr3yDGWQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XRGbW32WNCFW9WYStqKcKfb9YXX3BbJuaRoq/0rB/VN0JWHfUUKH7Nix1nk2cVQi3
+         ZW6V7MlxZZVe8eGapt9oSbMfBJ7xmKwilY0TepJNg9TvS4rRJ2NTW0G4DcxT6mx0US
+         qAs092Zjt+nRI0WUn331amrpJlBhMpRduNDlKv8hi0rAzek6Ud0UbIg/UP42aw7g/D
+         fdtifypog98yDcYr1tsSkUjuFs5MHKOiHxWjOnpXIJS7NLxcTMdj9xNPp+7TFawQnV
+         a8QSTdkoCseddwcD/Goz/nTgqvSYWFGIIhj9BWXpEbXydOvrCInUdl0f7A4lp+W/3A
+         scJ74LbxeHYJA==
+Received: by mail-ot1-f47.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso5904510ota.1;
+        Tue, 28 Feb 2023 08:20:31 -0800 (PST)
+X-Gm-Message-State: AO0yUKW+ygsJ6ghbieA7VqkaXtrf6+F9ut1lscuQkWBKhNf/9tPtgp2w
+        GQyVXVsaNf6oJcvHxEpq8QTh1kdrGn+tr46M78I=
+X-Google-Smtp-Source: AK7set8YS1Vv0suz5K+Dx+3soGLtMePJFoubCuwPDhovyLAbxjeDWPRZM+w5+GIIDxLfP+Hwf2M0GE6YsRPfdMDJYgI=
+X-Received: by 2002:a9d:1c7:0:b0:688:d1a8:389e with SMTP id
+ e65-20020a9d01c7000000b00688d1a8389emr1179515ote.1.1677601230840; Tue, 28 Feb
+ 2023 08:20:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20230228135508.1798428-1-u.kleine-koenig@pengutronix.de> <20230228135508.1798428-3-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230228135508.1798428-3-u.kleine-koenig@pengutronix.de>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 28 Feb 2023 08:19:03 -0800
-Message-ID: <CABXOdTfSg8MtNFD8nz8XYsy74K3gMY0xis+aq+VfDnQi7JZsxQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] pwm: cros-ec: Explicitly set .polarity in .get_state()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Munehisa Kamata <kamatam@amazon.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>, linux-pwm@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
+References: <CAK7LNATJ-3JQ0QQGQ5R+R8aBJEq-tmBL8iBZrbM_4t0zeoYTaw@mail.gmail.com>
+ <CAHk-=wi49sMaC7vY1yMagk7eqLK=1jHeHQ=yZ_k45P=xBccnmA@mail.gmail.com>
+ <CAK7LNAR40OOCJhz2oNF4FXWeyF=MOQPwfojHCU=XZ0jHcuSP5g@mail.gmail.com> <CAHk-=wh5AixGsLeT0qH2oZHKq0FLUTbyTw4qY921L=PwYgoGVw@mail.gmail.com>
+In-Reply-To: <CAHk-=wh5AixGsLeT0qH2oZHKq0FLUTbyTw4qY921L=PwYgoGVw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 1 Mar 2023 01:19:54 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQj9=yzb3C0OdTq=6MPr4SZE=PBXaZY7xPMbti1Fe7n6g@mail.gmail.com>
+Message-ID: <CAK7LNAQj9=yzb3C0OdTq=6MPr4SZE=PBXaZY7xPMbti1Fe7n6g@mail.gmail.com>
+Subject: Re: [GIT PULL] Kbuild updates for v6.3-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 5:55=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
+On Tue, Feb 28, 2023 at 2:08=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> The driver only supports normal polarity. Complete the implementation of
-> .get_state() by setting .polarity accordingly.
+> On Mon, Feb 27, 2023 at 2:10=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > If tar's --exclude-vcs-ignores option had worked correctly,
+> > I would not have written such a gitignore parser by myself.
 >
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> But that thing is *WRONG*.
+>
+> Seriously. It's fundamentally wrong.
+>
+> The thing is, you don't even seem to understand how gitignores work.
+>
+> A gitignore pattern doesn't actually mean "this path does not exist in th=
+e VCS".
+>
+> It means "git will ignore this path for unknown files".
+>
+> And that's a *big* difference.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-> ---
->  drivers/pwm/pwm-cros-ec.c | 1 +
->  1 file changed, 1 insertion(+)
+Of course, I know this difference.
+
+I wrote it in the commit description of
+5c3d1d0abb12a6915d0f43233837053945621a89
+
+Please read it closely.
+
+
+
+
+
+We are talking past each other due to the disagreement
+about=E3=80=80what the source code means.
+
+You think "what is committed in the VCS is the source code"
+in other words, files in "HEAD" are sources.
+
+
+
+I think "what exists in the source tree is the source code"
+that is, files in the "working tree" are sources.
+
+Of course, the working tree contains a lot of build artifacts, hence
+the list-gitignored tool excludes them.
+
+
+
+
 >
-> diff --git a/drivers/pwm/pwm-cros-ec.c b/drivers/pwm/pwm-cros-ec.c
-> index 86df6702cb83..ad18b0ebe3f1 100644
-> --- a/drivers/pwm/pwm-cros-ec.c
-> +++ b/drivers/pwm/pwm-cros-ec.c
-> @@ -198,6 +198,7 @@ static int cros_ec_pwm_get_state(struct pwm_chip *chi=
-p, struct pwm_device *pwm,
+> That "for unknown files" means that *known* files can still match the pat=
+tern.
+
+Yes,
+
+'git ls-files -i -c --exclude-per-directory=3D.gitignore'
+
+lists those files. None of them is needed for building the kernel,
+and if we want, it is easy to fix .gitignore files.
+
+
 >
->         state->enabled =3D (ret > 0);
->         state->period =3D EC_PWM_MAX_DUTY;
-> +       state->polarity =3D PWM_POLARITY_NORMAL;
+> And that is actually a perfectly valid pattern, and is very much by
+> design. You can say "ignore unknown *.o files", but still actually add
+> one explicitly to a git repository, if there is some special case.
+> There's nothing wrong with it.
 >
->         /*
->          * Note that "disabled" and "duty cycle =3D=3D 0" are treated the=
- same. If
-> --
-> 2.39.1
+> But the way you have done things, it now is actively wrong.
 >
+> We are *not* adding complexity for no good reason, particularly when
+> said complexity is fundamentally *broken*.
+>
+> Yes, we export the kernel as a tar-file. But that's for people who
+> just don't want to deal with the full deal, and even that is partly
+> for legacy reasons that aren't necessarily all that true any more.
+>
+> I suspect that by now, there are probably _more_ people used to git
+> than there are people who are still used to the "tar-files and
+> patches" workflow.
+
+I do not know.
+We are discussing from upstream developers' point of view,
+not from packagers' point of view.
+
+
+
+>
+> So here's the simple rule: if the packaging people can't be bothered
+> to use "gti archive" to make their packages, then they had better just
+> do a "make clean" first (or, better yet, do "git clean -dqfx" to
+> really clean up, because "make clean" isn't 100% reliable either).
+>
+> We don't add more broken infrastructure to deal with broken workflows.
+> Just do the right thing.
+>
+> Or if package managers want to do their own thing, then they can damn
+> well do it in their own broken systems, not adding a completely broken
+> script to the kernel.
+
+Fair enough.
+
+
+>
+>                 Linus
+
+
+--
+Best Regards
+Masahiro Yamada
