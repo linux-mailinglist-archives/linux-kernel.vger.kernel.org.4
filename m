@@ -2,128 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2946A50CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FF46A50D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjB1BsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 20:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S229842AbjB1Bxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 20:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjB1BsS (ORCPT
+        with ESMTP id S229491AbjB1Bxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 20:48:18 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BB6113F6;
-        Mon, 27 Feb 2023 17:48:18 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id u5so5445989plq.7;
-        Mon, 27 Feb 2023 17:48:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677548898;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fuxi2Ph3dEYFWBIK3fO91ydoj6EsxhxaDYSbv7nd3WE=;
-        b=VAAOPUL78BN21OwPsprfQRfAf30U3pzgxqqyEYoe8C1XqDjGb1LwY0nkNVIcbYxgg4
-         7nYUgKpG83puWKH7RnbbA8mO9sj9w27fiV/CF7pnudykRKY+T766q/3nI58dzXiiIODG
-         Lbee5ri15Na+KQI3iMLbDgnyclh8o9nR5p/PU+wqVyqc6Uyj8DRkhhfn9bIdMlwrgSvG
-         tl2paUoQcfKsRRV5IWtBQVX5/beEFxCQBMUTjfQYD1J4CFX37uX8peZxis8Vj1ZnKQnB
-         QAtoqvtJlwPNnm7KN9OzqI+8BOm4uuBU15z10ZhK1djSzkU094r0KB+Xvq+gsLe1XRLq
-         L5qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677548898;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuxi2Ph3dEYFWBIK3fO91ydoj6EsxhxaDYSbv7nd3WE=;
-        b=uSjiH4vDmuIqUv3Dt00coH3yh1tcGd7VTgXSUfyDUlGV7ApKWzTgexJ9vTJ3GYpQOJ
-         wHdCgmTWhnbYzxoTzctMG9AtXmMhXjKd4ReAXxcdtbFt74gjQzh3AEFCqlU7RNC/5WN7
-         hJfKiy4zBap9/frCoLL47UN2b0zGXZ0ybSZMdYV8nnGoSawtUCz3pTFTPCfjPvSV2Nrz
-         0rXiwbbRZr8DAQoYvINvXaC/6WTHeXAQYQ8rb06re568JKzCzojJPA9DUugKe0o1pT5W
-         81fOVI9zfizT/e1CaDUuR7wtYsCSugVv29203zvIzAMh0E+hD/i05/7+Hag/sUkFVBTD
-         T3Fg==
-X-Gm-Message-State: AO0yUKXdPPeKkQLfveO6yLSwhBiwaaV1MWBuZ6C74Q5AyZm9IpR+rQSk
-        m4sboSTg0drm1A/0bgw2WgQ=
-X-Google-Smtp-Source: AK7set92pp9hYlZRbO//Og6UNuQDneFPXto5iP7xKBLSU2HL0C1TFOd8MW8dQJu5IKU8tyyNc4RifQ==
-X-Received: by 2002:a17:903:32c4:b0:19a:a2e7:64de with SMTP id i4-20020a17090332c400b0019aa2e764demr1256410plr.0.1677548897584;
-        Mon, 27 Feb 2023 17:48:17 -0800 (PST)
-Received: from [127.0.0.1] ([103.152.220.17])
-        by smtp.gmail.com with ESMTPSA id b21-20020a170902d31500b001994a0f3380sm5140002plc.265.2023.02.27.17.48.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 17:48:16 -0800 (PST)
-Message-ID: <12305071-c136-f39f-9450-bdaad08137b2@gmail.com>
-Date:   Tue, 28 Feb 2023 09:48:11 +0800
+        Mon, 27 Feb 2023 20:53:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13E81025A;
+        Mon, 27 Feb 2023 17:53:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50293B80DD4;
+        Tue, 28 Feb 2023 01:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A94A6C433EF;
+        Tue, 28 Feb 2023 01:53:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677549212;
+        bh=XQgg7okNSt0UU7e0L/mKAh+e8h6zanHG5wBT7ARFUZ8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rjyqg/LjcvYKncjmpomKVMxb4CqnZ8IkgrAaGDIUZ6jZtTWO/jKU3NxzKnxJiCUKO
+         cP1SOikVRCp4p/nxngLJvBBj6Nsu/dXipxeveSmfKxnszy6zyXcFIWbUkijTOBpTtE
+         WIkUUf37Eo/oOii4zsYZNbXr0Szj+qLp7bqcAwFf39pOBB4KLST1kl4tHd672cZ9o6
+         JaFSaaIIo3gO7kzQhqbWExf4uK8KndCIvnugsWAyB5rTKBsl0+LPwouc+YKU919f8F
+         AaLik4l7QmXQZfrIoybE704GFYvIC0/7qYRp0UJhNsgLsjEIbe9Z4RXTrYkNjJB2oZ
+         0NldmEbKcu4YA==
+Date:   Mon, 27 Feb 2023 20:53:31 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <Y/1em4ygHgSjIYau@sashalap>
+References: <Y/rbGxq8oAEsW28j@sol.localdomain>
+ <Y/rufenGRpoJVXZr@sol.localdomain>
+ <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+ <Y/y70zJj4kjOVfXa@sashalap>
+ <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <Y/0U8tpNkgePu00M@sashalap>
+ <Y/0i5pGYjrVw59Kk@gmail.com>
+ <Y/0wMiOwoeLcFefc@sashalap>
+ <Y/1LlA5WogOAPBNv@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] net: tls: fix possible race condition between
- do_tls_getsockopt_conf() and do_tls_setsockopt_conf()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Sabrina Dubroca <sd@queasysnail.net>,
-        Florian Westphal <fw@strlen.de>, borisp@nvidia.com,
-        john.fastabend@gmail.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, davejwatson@fb.com, aviadye@mellanox.com,
-        ilyal@mellanox.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230224105811.27467-1-hbh25y@gmail.com>
- <20230224120606.GI26596@breakpoint.cc> <20230224105508.4892901f@kernel.org>
- <Y/kck0/+NB+Akpoy@hog> <20230224130625.6b5261b4@kernel.org>
- <Y/kwyS2n4uLn8eD0@hog> <20230224141740.63d5e503@kernel.org>
- <52faaa10-f3e4-bca9-4bff-6f1ea7d26593@gmail.com>
- <20230227110750.6988fca5@kernel.org>
-Content-Language: en-US
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <20230227110750.6988fca5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y/1LlA5WogOAPBNv@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/2/2023 03:07, Jakub Kicinski wrote:
-> On Mon, 27 Feb 2023 11:26:18 +0800 Hangyu Hua wrote:
->> In order to reduce ambiguity, I think it may be a good idea only to
->> lock do_tls_getsockopt_conf() like we did in do_tls_setsockopt()
+On Tue, Feb 28, 2023 at 12:32:20AM +0000, Eric Biggers wrote:
+>On Mon, Feb 27, 2023 at 05:35:30PM -0500, Sasha Levin wrote:
+>> > > Note, however, that it's not enough to keep pointing at a tiny set and
+>> > > using it to suggest that the entire process is broken. How many AUTOSEL
+>> > > commits introduced a regression? How many -stable tagged ones did? How
+>> > > many bugs did AUTOSEL commits fix?
+>> >
+>> > So basically you don't accept feedback from individual people, as individual
+>> > people don't have enough data?
 >>
->> It will look like:
+>> I'd love to improve the process, but for that we need to figure out
+>> criteria for what we consider good or bad, collect data, and make
+>> decisions based on that data.
 >>
->> static int do_tls_getsockopt(struct sock *sk, int optname,
->> 			     char __user *optval, int __user *optlen)
->> {
->> 	int rc = 0;
+>> What I'm getting from this thread is a few anecdotal examples and
+>> statements that the process isn't working at all.
 >>
->> 	switch (optname) {
->> 	case TLS_TX:
->> 	case TLS_RX:
->> +		lock_sock(sk);
->> 		rc = do_tls_getsockopt_conf(sk, optval, optlen,
->> 					    optname == TLS_TX);
->> +		release_sock(sk);
->> 		break;
->> 	case TLS_TX_ZEROCOPY_RO:
->> 		rc = do_tls_getsockopt_tx_zc(sk, optval, optlen);
->> 		break;
->> 	case TLS_RX_EXPECT_NO_PAD:
->> 		rc = do_tls_getsockopt_no_pad(sk, optval, optlen);
->> 		break;
->> 	default:
->> 		rc = -ENOPROTOOPT;
->> 		break;
->> 	}
->> 	return rc;
->> }
+>> I took Jon's stablefixes script which he used for his previous articles
+>> around stable kernel regressions (here:
+>> https://lwn.net/Articles/812231/) and tried running it on the 5.15
+>> stable tree (just a random pick). I've proceeded with ignoring the
+>> non-user-visible regressions as Jon defined in his article (basically
+>> issues that were introduced and fixed in the same releases) and ended up
+>> with 604 commits that caused a user visible regression.
 >>
->> Of cause, I will clean the lock in do_tls_getsockopt_conf(). What do you
->> guys think?
-> 
-> I'd suggest to take the lock around the entire switch statement.
+>> Out of those 604 commits:
+>>
+>>  - 170 had an explicit stable tag.
+>>  - 434 did not have a stable tag.
+>>
+>> Looking at the commits in the 5.15 tree:
+>>
+>> With stable tag:
+>>
+>> 	$ git log --oneline -i --grep "cc.*stable" v5.15..stable/linux-5.15.y | wc -l
+>> 	3676
+>>
+>> Without stable tag (-96 commits which are version bumps):
+>>
+>> 	$ git log --oneline --invert-grep -i --grep "cc.*stable" v5.15..stable/linux-5.15.y | wc -l
+>> 	10649
+>>
+>> Regression rate for commits with stable tag: 170 / 3676 = 4.62%
+>> Regression rate for commits without a stable tag: 434 / 10553 = 4.11%
+>>
+>> Is the analysis flawed somehow? Probably, and I'd happy take feedback on
+>> how/what I can do better, but this type of analysis is what I look for
+>> to know if the process is working well or not.
+>
+>I'm shocked that these are the statistics you use to claim the current AUTOSEL
+>process is working.  I think they actually show quite the opposite!
+>
+>First, since many AUTOSEL commits aren't actually fixes but nearly all
+>stable-tagged commits *are* fixes, the rate of regressions per commit would need
+>to be lower for AUTOSEL commits than for stable-tagged commits in order for
+>AUTOSEL commits to have the same rate of regressions *per fix*.  Your numbers
+>suggest a similar regression rate *per commit*.  Thus, AUTOSEL probably
+>introduces more regressions *per fix* than stable-tagged commits.
 
-I get it. I will send a v2 later.
+Interesting claim. How many of the AUTOSEL commits are "actual" fixes?
+How do you know if a commit is a fix for anything or not?
 
+Could you try and back claims with some evidence?
+
+Yes, in a perfect world where we know if a commit is a fix we could
+avoid introducing regressions into the stable trees. Heck, maybe we could
+even stop writing buggy code to begin with?
+
+>Second, the way you're identifying regression-introducing commits seems to be
+>excluding one of the most common, maybe *the* most common, cause of AUTOSEL
+>regressions: missing prerequisite commits.  A very common case that I've seen
+>repeatedly is AUTOSEL picking just patch 2 or higher of a multi-patch series.
+>For an example, see the patch that started this thread...  If a missing
+>prerequisite is backported later, my understanding is that it usually isn't
+>given a Fixes tag, as the upstream commit didn't have it.  I think such
+>regressions aren't counted in your statistic, which only looks at Fixes tags.
+
+It definitely happens, but we usually end up dropping the AUTOSEL-ed
+commit rather than bringing in complex dependency chains.
+
+Look at the stable-queue for a record of those.
+
+>(Of course, stable-tagged commits sometimes have missing prerequisite bugs too.
+>But it's expected to be at a lower rate, since the original developers and
+>maintainers are directly involved in adding the stable tags.  These are the
+>people who are more familiar than anyone else with prerequisites.)
+
+You'd be surprised. There is documentation around how one would annotate
+dependencies for stable tagged commits, something along the lines of:
+
+	cc: stable@kernel.org # dep1 dep2
+
+Grep through the git log and see how often this is actually used.
+
+>Third, the category "commits without a stable tag" doesn't include just AUTOSEL
+>commits, but also non-AUTOSEL commits that people asked to be added to stable
+>because they fixed a problem for them.  Such commits often have been in mainline
+>for a long time, so naturally they're expected to have a lower regression rate
+>than stable-tagged commits due to the longer soak time, on average.  So if the
+>regression rate of stable-tagged and non-stable-tagged commits is actually
+>similar, that suggests the regression rate of non-stable-tagged commits is being
+>brought up artifically by a high regression rate in AUTOSEL commits...
+
+Yes, the numbers are pretty skewed up by different aspects of the
+process.
+
+>So, I think your statistics actually reflect quite badly on AUTOSEL in its
+>current form.
+>
+>By the way, to be clear, AUTOSEL is absolutely needed.  The way you are doing it
+>currently is not working well, though.  I think it needs to be tuned to select
+>fewer, higher-confidence fixes, and you need to do some basic checks against
+>each one, like "does this commit have a pending fix" and "is this commit part of
+
+Keep in mind that there's some lag time between when we do our thing vs
+when things appear upstream.
+
+Greg actually runs the "is there a pending fix" check even after I've
+pushed the patches, before he cuts releases.
+
+>a multi-patch series, and if so are earlier patches needed as prerequisites".
+>There also needs to be more soak time in mainline, and more review time.
+
+Tricky bit with mainline/review time is that very few of our users
+actually run -rc trees.
+
+We end up hitting many of the regressions because the commits actually
+end up in stable trees. Should it work that way? No, but our testing
+story around -rc releases is quite lacking.
+
+>IMO you also need to take a hard look at whatever neural network thing you are
+>using, as from what I've seen its results are quite poor...  It does pick up
+>some obvious fixes, but it seems they could have just as easily been found
+>through some heuristics with grep.  Beyond those obvious fixes, what it picks up
+>seems to be barely distinguishable from a random selection.
+
+I mean... patches welcome? Do you want to come up with a set of
+heuristics that performs better and give it a go? I'll happily switch
+over.
+
+I'm not sure how feedback in the form of "this sucks but I'm sure it
+could be much better" is useful.
+
+-- 
 Thanks,
-Hangyu
+Sasha
