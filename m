@@ -2,112 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4E76A57FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAB86A57FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbjB1LZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S231599AbjB1LZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjB1LYV (ORCPT
+        with ESMTP id S231584AbjB1LYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Feb 2023 06:24:21 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BD022DCD
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:23:49 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id r18so9357083wrx.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:23:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677583423;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FS5MMzUrtYY5N2w5QCadh2L/6Lyuv9jfcaqNKoRqTRU=;
-        b=wmROP6AyQSd/5lYDaTnJSUSDXdhXDdPFq6dWXSe77IejOrFttF3d59ytNrebe9bWZD
-         7G9JvxGcOZeqMgxxKGV78ZWGnj3tWGl5eHJp0AcWtzyoe3qEdHGW6yN3eVOEs00SdMev
-         1IXw0FeceljNrRpqTqA3WpAol75g+SiSq2TGI265YAs4USbddI0OBs2VZkN0y81+KQJC
-         ag97hXN8hnVLeuV73nCVIlwWV1IJwsGLMorSpUivU/zZYBwtgadH+UPfQvbdnBvBiY/w
-         nya+SL8nqgkYI8Z5tKMI0O3fcuoPiU9Z1AjYwN6Z44iSGmqj9rWQctC5xBwHXC8HoLf1
-         f5Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677583423;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FS5MMzUrtYY5N2w5QCadh2L/6Lyuv9jfcaqNKoRqTRU=;
-        b=2FUBuTBEz1Nr1VGDS+5j+Jhj+xq4NrQWR0d1MjEYOQWKITzjp56M7ofsluIhJEqCMG
-         qJS5idgsnq28qJ2/LNqs7p/ofQu5mY7vnIUGr1d96zGe4gwslaQtNc7nnGxEVlKCdSnI
-         KOn5O7ewCZgYHRNzJf7cWXZhO6kCCcevCTM8oHRagFJo7O1t22Ny3wOsz8BwyY5ZdxYb
-         dObclxENDALT7Sql8R/PWO/VTxqPszczAS5ulUwtaWfRkz+DA0hAEJIMu0qE3zXHs+uY
-         Spti4H6NyMYLbdYDOTFMEGJf/dYV04phyFDH0fWkmEq2yd4O9NRW3pJfhJlBUlreOF1a
-         gSqg==
-X-Gm-Message-State: AO0yUKXpMBpzoTuD2a+EkPwDpQ1jWPZLVnOHCF0rNNdVMqsj2Z1YNckS
-        dpyH67tMdz5XiqDhLjC2A7Kjvw==
-X-Google-Smtp-Source: AK7set/dTEth29o+dr/zBLrbuIlnFlYoyHiG+j5LuNH6wDymmrDcmCwbBZcl8aJWcvTmBiAmDk7x+Q==
-X-Received: by 2002:a5d:63c6:0:b0:2c9:e34e:7d0 with SMTP id c6-20020a5d63c6000000b002c9e34e07d0mr2243434wrw.3.1677583422966;
-        Tue, 28 Feb 2023 03:23:42 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6830:6390:2815:b6a5])
-        by smtp.gmail.com with ESMTPSA id z5-20020a5d6545000000b002c5501a5803sm9598130wrv.65.2023.02.28.03.23.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:23:42 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org (open list:ACER ASPIRE ONE
-        TEMPERATURE AND FAN DRIVER)
-Subject: [PATCH v4 19/19] thermal/drivers/acerhdf: Remove pointless governor test
-Date:   Tue, 28 Feb 2023 12:22:38 +0100
-Message-Id: <20230228112238.2312273-20-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
-References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F192CFC0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:23:46 -0800 (PST)
+Received: from [192.168.2.206] (unknown [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3B91E6602FDB;
+        Tue, 28 Feb 2023 11:23:40 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677583420;
+        bh=E6qt90GxOfucMcC6bgFlkh6pyweclyl9Mhp2XoIESkc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YDjzY7PLJkIFAF01dNDVw8heJ+9gQNPuvtd1JND0dcYRRzev52TSdtMBmSjgnSITw
+         sp/8nV9TKGiIDVvVSAZbZAZWr0AO2dsN6whyLFH3s2YvxRxcSZh70rKnfXX/HK565/
+         fIq3gJPzie4UGVNTXZnNkawobX78EWBgIzLT6cJYJD22q/inVAqXi2DkqE48Askn38
+         i1W7Zauiyp+l+NWiuZfd2vYH+sPzeBytqTk6+1kx8r7tVisAazq2A/MCMgxTnuNm0E
+         lq1JEYRnMMLljU2Uy4T0GvJNMxcLNOFKR4iLsWR+EeiY8Z8RQ6HRemD1l0N4rHuc0p
+         SbKdBvJz49nhA==
+Message-ID: <33f03f9e-4af3-3237-00dc-d79570d9022a@collabora.com>
+Date:   Tue, 28 Feb 2023 14:23:37 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/virtio: Add option to disable KMS support
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Ryan Neph <ryanneph@chromium.org>,
+        David Airlie <airlied@redhat.com>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>
+References: <20230224180225.2477641-1-robdclark@gmail.com>
+ <20230227063821.dg2gbjjwcekbxyzw@sirius.home.kraxel.org>
+ <CAF6AEGsv1G7CPSkCPe3iHGB9JEO4iy+bTbkFLoitmx64U78RJw@mail.gmail.com>
+ <20230228062809.ccyzgnvizh6jidn4@sirius.home.kraxel.org>
+ <87a60yywo0.fsf@minerva.mail-host-address-is-not-set>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <87a60yywo0.fsf@minerva.mail-host-address-is-not-set>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal zone parameter specifies the bang-bang governor.
+On 2/28/23 12:19, Javier Martinez Canillas wrote:
+> Gerd Hoffmann <kraxel@redhat.com> writes:
+> 
+> Hello Gerd,
+> 
+>> On Mon, Feb 27, 2023 at 07:40:11AM -0800, Rob Clark wrote:
+>>> On Sun, Feb 26, 2023 at 10:38 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
+>>>> On Fri, Feb 24, 2023 at 10:02:24AM -0800, Rob Clark wrote:
+>>>>> From: Rob Clark <robdclark@chromium.org>
+>>>>>
+>>>>> Add a build option to disable modesetting support.  This is useful in
+>>>>> cases where the guest only needs to use the GPU in a headless mode, or
+>>>>> (such as in the CrOS usage) window surfaces are proxied to a host
+>>>>> compositor.
+>>>> Why make that a compile time option?  There is a config option for the
+>>>> number of scanouts (aka virtual displays) a device has.  Just set that
+>>>> to zero (and fix the driver to not consider that configuration an
+>>>> error).
+>>> The goal is to not advertise DRIVER_MODESET (and DRIVER_ATOMIC).. I
+>>> guess that could be done based on whether there are any scanouts, but
+>>> it would mean making the drm_driver struct non-const.
+>> Apparently there is a drm_device->driver_features override,
+>> (amdgpu uses that).  The driver could simply drop the DRIVER_MODESET and
+>> DRIVER_ATOMIC bits in case no scanout is present instead of throwing an
+>> error.
+>>
+>>> And I think it is legitimate to allow the guest to make this choice,
+>>> regardless of what the host decides to expose, since it is about the
+>>> ioctl surface area that the guest kernel exposes to guest userspace.
+>> I think it is a bad idea to make that a compile time option, I'd suggest
+>> a runtime switch instead, for example a module parameter to ask the
+>> driver to ignore any scanouts.
+>>
+> I don't think there's a need for a new module parameter, there's already
+> the virtio-gpu 'modeset' module parameter to enable/disable modsetting
+> and the global 'nomodeset' kernel cmdline parameter to do it for all DRM
+> drivers.
+> 
+> Currently, many drivers just fail to probe when 'nomodeset' is present,
+> but others only disable modsetting but keep the rendering part. In fact,
+> most DRM only drivers just ignore the 'nomodeset' parameter.
 
-The Kconfig selects the bang-bang governor. So it is pointless to test
-if the governor was set for the thermal zone assuming it may not have
-been compiled-in.
+IIUC, Rob's main point for having a config option is solely for security
+reasons. The config option eliminates possibility of accidentally (or
+intentionally) enabling KMS from software, which is better to have in
+case of shipping a product (Chromebook) on which multiple teams are
+working on.
 
-Remove the test and prevent another access into the thermal internals.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Peter Kaestle <peter@piie.net>
----
- drivers/platform/x86/acerhdf.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 61f1c3090867..71b9c1f922d9 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -697,13 +697,6 @@ static int __init acerhdf_register_thermal(void)
- 	if (ret)
- 		return ret;
- 
--	if (strcmp(thz_dev->governor->name,
--				acerhdf_zone_params.governor_name)) {
--		pr_err("Didn't get thermal governor %s, perhaps not compiled into thermal subsystem.\n",
--				acerhdf_zone_params.governor_name);
--		return -EINVAL;
--	}
--
- 	return 0;
- }
- 
 -- 
-2.34.1
+Best regards,
+Dmitry
 
