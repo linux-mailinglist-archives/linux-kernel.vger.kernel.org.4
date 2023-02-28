@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0533A6A50FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A96316A5103
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjB1COc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:14:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S229807AbjB1CSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjB1COa (ORCPT
+        with ESMTP id S229720AbjB1CSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:14:30 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269E63599
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:14:29 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id f14so3476515iow.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:14:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g2m+6sOh3dyXOUyiPoT4Lw8BzZfcrPOpFEQSJseXRAs=;
-        b=FqL5p8OZ3DK2n3cd37DdQvhpw3wHvw2tkH20Z1KoftB7Id72i2VcBm30+8pcowdVmj
-         qHmc0lf1BUoYpr1591cjLFWz3BXSbZV3iZLbco7NyfA8l/jhbpklOK09efaPtpxJZ6o8
-         unNkX0Zd1NikKQP4NZdUJbChiSEN4rQVY+CRXmrIAYEtmGye7gxmYtgl5wT8+Y5IAWgl
-         ObvndivndepZh4QtDZUBihQi1YarfrnVl3ioFoF8/DWR8xHMQRZGg96qhwWzspHKuGjs
-         7RzzQQePnuhMiDlFv/TKz4B976ktQs+IwRr1L9HaUUxF9HiZtZFxjVcu7dnERH7v9sDY
-         fSQQ==
+        Mon, 27 Feb 2023 21:18:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8176E26857
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:17:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677550642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aaG8/Bg6dhlDDPoj6nBl4VpMZT/wui8WldswSe4hBs4=;
+        b=KOn1yK/HQlmp4eg5oZxkrKVZ8b/884wFqRau4gDLWnj31SjYi+Ipn8aHyXOyzDrW8619sq
+        eN5x++OPrFtSjIEg3RwA47oS2cIv4v+IdUMRQP5Z5QaDMFUwyNL3hlDkcblGE+fMx1TMh7
+        mRCFjZr9Oq3sP7A57Ri6p/xJRvo/TAM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-64-rFKR-LusOyqTpO0niS9iZQ-1; Mon, 27 Feb 2023 21:17:21 -0500
+X-MC-Unique: rFKR-LusOyqTpO0niS9iZQ-1
+Received: by mail-ed1-f70.google.com with SMTP id da15-20020a056402176f00b004ace822b750so11396288edb.20
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:17:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2m+6sOh3dyXOUyiPoT4Lw8BzZfcrPOpFEQSJseXRAs=;
-        b=3d3mJBqiaHQhnlapIRz1weiiMeRMp2b3+vNFaoyViA2oC0pI2jy+/+eDHl+sjLSYs/
-         WHcOXVg9KUiEeNZeFrXmwFmYFjmkHQH+dK1YielgY7E1ik05eVvSqY8Do/Z9IjarqqvL
-         ThfXBo/XoGnvEvjGHHlMyEFNe9L3J4sWqjGrfyeSDjAKvER+ecrWu+8Oe67iWomUZKkL
-         Zc6+V69mhJCD0ag05EGj6ngZxXxdk0bpoRq+cotBGzI2HWb5ut0OpcJVvjdq1dNDZ137
-         3POgJAK84CvhoNoGWTA0maNLeb1QuIlFBn7lJPM23tplCrty9oxs3rJ2L9d9Td+G7HC0
-         VKsw==
-X-Gm-Message-State: AO0yUKUGIxWD4Mzf8lA/HYJa5/ICoodNZ9uuLwYsbnyCmcRTyE2Q2aL9
-        Mc852o1I6l/+vbNB9zBc82Q=
-X-Google-Smtp-Source: AK7set/0bDq770mH9N02FdUqzvYx+uX2ctrnSx+SFLIYYrsE9WCTllIMtIIoOA0Ey4OdDiu6yy+GJQ==
-X-Received: by 2002:a5d:840d:0:b0:74c:ae72:dc16 with SMTP id i13-20020a5d840d000000b0074cae72dc16mr1008687ion.5.1677550468323;
-        Mon, 27 Feb 2023 18:14:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r16-20020a056e02109000b00316ecc80a61sm2414581ilj.11.2023.02.27.18.14.27
+        h=in-reply-to:content-disposition:mime-version:references:subject:to
+         :from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aaG8/Bg6dhlDDPoj6nBl4VpMZT/wui8WldswSe4hBs4=;
+        b=AGJe4IN0LaqceLsGYG0UxGbuN9ipw7iCnIqfzd5Gy8xa5g1u5vDchBYWvlDeNkVTUh
+         vdWBaMphweUY2YHz8zerJlhW6CWxv90XvfoINNasbEN6Y/a+wSSh4OUJez64b1p/RQlK
+         nJZxHlD+BSxUA0WILLEI2RJ5N4GgKsUuBrRJbBt344aKdLX94j/LjIAljM3Y0a+8MKCq
+         W3Ww4AZB7Wf12OMZYPRVrDlZ6qu1q3e/uvA3gIrvrcNh9tstTeeaXdT6NvxMNjJtyJbu
+         x9RheRqsD5T73JYtNFf69CxD6fIIoU+k92J5fvEwRanXwhZJPCzW7xQFlQdhjELFsaJm
+         BgLg==
+X-Gm-Message-State: AO0yUKU4PtE/IiugqXT/SkRlA3PrTs/V1/8S2CJSgfkfixhI1oTfNTsM
+        AdRiBHSGfzqj8aLzqYUWvGNbeX2HOboP/pCEWW2QNlAhKkQM1g26//DIA86j33ktiHX+wTxoBIc
+        RMJkz+fIIEC0041xhZTUX5BDx
+X-Received: by 2002:a17:906:714e:b0:8b2:8876:6a3c with SMTP id z14-20020a170906714e00b008b288766a3cmr878937ejj.29.1677550640021;
+        Mon, 27 Feb 2023 18:17:20 -0800 (PST)
+X-Google-Smtp-Source: AK7set9tTXKhn1koDlG1F1zP1IAfope6sN3htqLi1+Nr+TLZ9X3jnhKZaiB/RADncuz0n/Vy80QyHA==
+X-Received: by 2002:a17:906:714e:b0:8b2:8876:6a3c with SMTP id z14-20020a170906714e00b008b288766a3cmr878917ejj.29.1677550639717;
+        Mon, 27 Feb 2023 18:17:19 -0800 (PST)
+Received: from WINDOWS. ([2a02:810d:4b3f:de78:41c:160e:6481:ed36])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170906501100b008b17aa6afc8sm3927141ejj.30.2023.02.27.18.17.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 18:14:27 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 27 Feb 2023 18:14:26 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Keith Busch <kbusch@meta.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: Re: [PATCH] dmapool: push new blocks in ascending order
-Message-ID: <20230228021426.GA3955867@roeck-us.net>
-References: <20230221165400.1595247-1-kbusch@meta.com>
+        Mon, 27 Feb 2023 18:17:18 -0800 (PST)
+Message-ID: <63fd642e.170a0220.f67f6.e248@mx.google.com>
+X-Google-Original-Message-ID: <Y/1kK5mjGoovZ8dU@WINDOWS.>
+Date:   Tue, 28 Feb 2023 03:17:15 +0100
+From:   Danilo Krummrich <dakr@redhat.com>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, airlied@gmail.com,
+        daniel@ffwll.ch, tzimmermann@suse.de, mripard@kernel.org,
+        corbet@lwn.net, christian.koenig@amd.com, bskeggs@redhat.com,
+        matthew.brost@intel.com, boris.brezillon@collabora.com,
+        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
+        willy@infradead.org, jason@jlekstrand.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH drm-next v2 05/16] drm: manager to keep track of GPUs VA
+ mappings
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-6-dakr@redhat.com>
+ <20230221182050.day6z5ge2e3dxerv@revolver>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="xgWBGL0J166I1n9/"
 Content-Disposition: inline
-In-Reply-To: <20230221165400.1595247-1-kbusch@meta.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20230221182050.day6z5ge2e3dxerv@revolver>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,68 +87,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 08:54:00AM -0800, Keith Busch wrote:
-> From: Keith Busch <kbusch@kernel.org>
-> 
-> Some users of the dmapool need their allocations to happen in ascending
-> order. The recent optimizations pushed the blocks in reverse order, so
-> restore the previous behavior by linking the next available block from
-> low-to-high.
-> 
-> Fixes: ced6d06a81fb69 ("dmapool: link blocks across pages")
-> Reported-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Keith Busch <kbusch@kernel.org>
 
-This patch fixes the problem I had observed when trying to boot from
-the megasas SCSI controller on powernv.
+--xgWBGL0J166I1n9/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+On Tue, Feb 21, 2023 at 01:20:50PM -0500, Liam R. Howlett wrote:
+> * Danilo Krummrich <dakr@redhat.com> [230217 08:45]:
+> > Add infrastructure to keep track of GPU virtual address (VA) mappings
+> > with a decicated VA space manager implementation.
+> > 
+> > New UAPIs, motivated by Vulkan sparse memory bindings graphics drivers
+> > start implementing, allow userspace applications to request multiple and
+> > arbitrary GPU VA mappings of buffer objects. The DRM GPU VA manager is
+> > intended to serve the following purposes in this context.
+> > 
+> > 1) Provide infrastructure to track GPU VA allocations and mappings,
+> >    making use of the maple_tree.
+> > 
+> > 2) Generically connect GPU VA mappings to their backing buffers, in
+> >    particular DRM GEM objects.
+> > 
+> > 3) Provide a common implementation to perform more complex mapping
+> >    operations on the GPU VA space. In particular splitting and merging
+> >    of GPU VA mappings, e.g. for intersecting mapping requests or partial
+> >    unmap requests.
+> > 
+> > Suggested-by: Dave Airlie <airlied@redhat.com>
+> > Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+> > ---
+> >  Documentation/gpu/drm-mm.rst    |   31 +
+> >  drivers/gpu/drm/Makefile        |    1 +
+> >  drivers/gpu/drm/drm_gem.c       |    3 +
+> >  drivers/gpu/drm/drm_gpuva_mgr.c | 1704 +++++++++++++++++++++++++++++++
+> >  include/drm/drm_drv.h           |    6 +
+> >  include/drm/drm_gem.h           |   75 ++
+> >  include/drm/drm_gpuva_mgr.h     |  714 +++++++++++++
+> >  7 files changed, 2534 insertions(+)
+> >  create mode 100644 drivers/gpu/drm/drm_gpuva_mgr.c
+> >  create mode 100644 include/drm/drm_gpuva_mgr.h
+> > 
+> > diff --git a/Documentation/gpu/drm-mm.rst b/Documentation/gpu/drm-mm.rst
+> > index a52e6f4117d6..c9f120cfe730 100644
+> > --- a/Documentation/gpu/drm-mm.rst
+> > +++ b/Documentation/gpu/drm-mm.rst
+> > @@ -466,6 +466,37 @@ DRM MM Range Allocator Function References
+> >  .. kernel-doc:: drivers/gpu/drm/drm_mm.c
+> >     :export:
+> >  
+> ...
+> 
+> > +
+> > +/**
+> > + * drm_gpuva_remove_iter - removes the iterators current element
+> > + * @it: the &drm_gpuva_iterator
+> > + *
+> > + * This removes the element the iterator currently points to.
+> > + */
+> > +void
+> > +drm_gpuva_iter_remove(struct drm_gpuva_iterator *it)
+> > +{
+> > +	mas_erase(&it->mas);
+> > +}
+> > +EXPORT_SYMBOL(drm_gpuva_iter_remove);
+> > +
+> > +/**
+> > + * drm_gpuva_insert - insert a &drm_gpuva
+> > + * @mgr: the &drm_gpuva_manager to insert the &drm_gpuva in
+> > + * @va: the &drm_gpuva to insert
+> > + * @addr: the start address of the GPU VA
+> > + * @range: the range of the GPU VA
+> > + *
+> > + * Insert a &drm_gpuva with a given address and range into a
+> > + * &drm_gpuva_manager.
+> > + *
+> > + * Returns: 0 on success, negative error code on failure.
+> > + */
+> > +int
+> > +drm_gpuva_insert(struct drm_gpuva_manager *mgr,
+> > +		 struct drm_gpuva *va)
+> > +{
+> > +	u64 addr = va->va.addr;
+> > +	u64 range = va->va.range;
+> > +	MA_STATE(mas, &mgr->va_mt, addr, addr + range - 1);
+> > +	struct drm_gpuva_region *reg = NULL;
+> > +	int ret;
+> > +
+> > +	if (unlikely(!drm_gpuva_in_mm_range(mgr, addr, range)))
+> > +		return -EINVAL;
+> > +
+> > +	if (unlikely(drm_gpuva_in_kernel_region(mgr, addr, range)))
+> > +		return -EINVAL;
+> > +
+> > +	if (mgr->flags & DRM_GPUVA_MANAGER_REGIONS) {
+> > +		reg = drm_gpuva_in_region(mgr, addr, range);
+> > +		if (unlikely(!reg))
+> > +			return -EINVAL;
+> > +	}
+> > +
+> 
+> -----
+> 
+> > +	if (unlikely(drm_gpuva_find_first(mgr, addr, range)))
+> > +		return -EEXIST;
+> > +
+> > +	ret = mas_store_gfp(&mas, va, GFP_KERNEL);
+> 
+> mas_walk() will set the internal maple state to the limits to what it
+> finds.  So, instead of an iterator, you can use the walk function and
+> ensure there is a large enough area in the existing NULL:
+> 
+> /*
+>  * Nothing at addr, mas now points to the location where the store would
+>  * happen
+>  */
+> if (mas_walk(&mas))
+> 	return -EEXIST;
+> 
 
-Thanks,
-Guenter
+For some reason mas_walk() finds an entry and hence this function returns
+-EEXIST for the following sequence of insertions.
 
-> ---
->  mm/dmapool.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
+A = [0xc0000 - 0xfffff]
+B = [0x0 - 0xbffff]
+
+Interestingly, inserting B before A works fine.
+
+I attached a test module that reproduces the issue. I hope its just a stupid
+mistake I just can't spot though.
+
+> /* The NULL entry ends at mas.last, make sure there is room */
+> if (mas.last < (addr + range - 1))
+> 	return -EEXIST;
 > 
-> diff --git a/mm/dmapool.c b/mm/dmapool.c
-> index 1920890ff8d3d..a151a21e571b7 100644
-> --- a/mm/dmapool.c
-> +++ b/mm/dmapool.c
-> @@ -300,7 +300,7 @@ EXPORT_SYMBOL(dma_pool_create);
->  static void pool_initialise_page(struct dma_pool *pool, struct dma_page *page)
->  {
->  	unsigned int next_boundary = pool->boundary, offset = 0;
-> -	struct dma_block *block;
-> +	struct dma_block *block, *first = NULL, *last = NULL;
->  
->  	pool_init_page(pool, page);
->  	while (offset + pool->size <= pool->allocation) {
-> @@ -311,11 +311,22 @@ static void pool_initialise_page(struct dma_pool *pool, struct dma_page *page)
->  		}
->  
->  		block = page->vaddr + offset;
-> -		pool_block_push(pool, block, page->dma + offset);
-> +		block->dma = page->dma + offset;
-> +		block->next_block = NULL;
-> +
-> +		if (last)
-> +			last->next_block = block;
-> +		else
-> +			first = block;
-> +		last = block;
-> +
->  		offset += pool->size;
->  		pool->nr_blocks++;
->  	}
->  
-> +	last->next_block = pool->next_block;
-> +	pool->next_block = first;
-> +
->  	list_add(&page->page_list, &pool->page_list);
->  	pool->nr_pages++;
->  }
-> -- 
-> 2.30.2
+> /* Limit the store size to the correct end address, and store */
+>  mas.last = addr + range - 1;
+>  ret = mas_store_gfp(&mas, va, GFP_KERNEL);
 > 
-> 
+
+--xgWBGL0J166I1n9/
+Content-Type: text/x-c; charset=us-ascii
+Content-Disposition: attachment; filename="maple.c"
+
+/* SPDX-License-Identifier: GPL-2.0 */
+#if 1
+#include <linux/init.h>
+#include <linux/ioctl.h>
+#include <linux/kernel.h>
+#include <linux/list.h>
+#include <linux/maple_tree.h>
+#include <linux/mm.h>
+#include <linux/module.h>
+#include <linux/moduleparam.h>
+#include <linux/mutex.h>
+#include <linux/printk.h>
+#include <linux/proc_fs.h>
+#include <linux/slab.h>
+#include <linux/types.h>
+#endif
+
+struct maple_tree mt;
+
+struct va {
+	u64 addr;
+	u64 range;
+};
+
+static int va_store(struct va *va)
+{
+	void *entry = NULL;
+	u64 addr = va->addr;
+	u64 range = va->range;
+	u64 last = addr + range - 1;
+	MA_STATE(mas, &mt, addr, addr);
+	int ret;
+
+	mas_lock(&mas);
+
+	if ((entry = mas_walk(&mas))) {
+		pr_err("addr=%llx, range=%llx, last=%llx, mas.index=%lx, mas.last=%lx, entry=%px - exists\n",
+		       addr, range, last, mas.index, mas.last, entry);
+		ret = -EEXIST;
+		goto err_unlock;
+	}
+
+	if (mas.last < last) {
+		pr_err("addr=%llx, range=%llx, last=%llx, mas.index=%lx, mas.last%lx, va=%px - not enough space\n",
+		       addr, range, last, mas.index, mas.last, va);
+		ret = -EEXIST;
+		goto err_unlock;
+	}
+
+	mas.last = last;
+	ret = mas_store_gfp(&mas, &va, GFP_KERNEL);
+	if (ret) {
+		pr_err("mas_store_gfp() failed\n");
+		goto err_unlock;
+	}
+
+	mas_unlock(&mas);
+
+	pr_info("addr=%llx, range=%llx, last=%llx, mas.index=%lx, mas.last=%lx, va=%px - insert\n",
+		addr, range, last, mas.index, mas.last, va);
+
+	return 0;
+
+err_unlock:
+	mas_unlock(&mas);
+	return ret;
+}
+
+static int __init maple_init(void)
+{
+	struct va kernel_node = { .addr = 0xc0000, .range = 0x40000 };
+	struct va node = { .addr = 0x0, .range = 0xc0000 };
+
+	mt_init(&mt);
+
+	va_store(&kernel_node);
+	va_store(&node);
+
+	return 0;
+}
+
+static void __exit maple_exit(void)
+{
+	mtree_lock(&mt);
+	__mt_destroy(&mt);
+	mtree_unlock(&mt);
+}
+
+module_init(maple_init);
+module_exit(maple_exit);
+
+MODULE_LICENSE("GPL v2");
+MODULE_AUTHOR("Danilo Krummrich");
+MODULE_DESCRIPTION("Maple Tree example.");
+MODULE_VERSION("0.1");
+
+--xgWBGL0J166I1n9/--
+
