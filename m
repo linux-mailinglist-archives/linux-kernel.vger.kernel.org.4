@@ -2,262 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5C56A5634
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4556A563F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjB1KCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
+        id S229840AbjB1KEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjB1KCJ (ORCPT
+        with ESMTP id S229509AbjB1KEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:02:09 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6199A2B2B1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:02:07 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id t11so12436641lfr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:02:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677578525;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G8hhzXkZOya5l1+2gQHv4ogw/z8WojXSIvbDiC05eoE=;
-        b=MYWMJTBduZDw1oZjUVYJ/Gx62kZCfsAKH+pKZl72VmRybCPdz8c0+c9XuI5HU9LyZI
-         8p4sLulTSpLvCL640MexO1H6khHPs8ZopBAOP21RNCQnlrIeOaDao3tfZQioSYCNidbg
-         8222/93iiHba5q6Xn2rjD7CGiR8fBhzT/LzQzpwu4uIItCYV8Sti9Ku74AHCsyv3U+UK
-         HMeu3cDOgIEyBVc76U/MeNHo7pHdBhmfXkCIeFZxWpyXvAeauEC0tOBfdsxyGOfYRtfm
-         FdrbdfKTYql8RVT1XtprfNgPZ/ECufwQzmc8kRYmiACgPkeHQqphN5YQr/d4LSOZISOm
-         I8pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677578525;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G8hhzXkZOya5l1+2gQHv4ogw/z8WojXSIvbDiC05eoE=;
-        b=jYPaHvbx6zK0KgI243BUhbcI50Pn5bjviB6ACpy7oY1pHxbg9yVF9/Gn1rmLNnYu3x
-         EcFhbENL0lgFy4nQm8GyiBfDLfbbZw7AHhZp+1xB85BBuYDP9BMGlFk7/xrDSq8S2uUf
-         xgOwkOyDVTOUR94V7p+QkT92ILh+ZWfEqOrZJ+xHolsM3jMmD0WyYHn58/fM/As7X+7a
-         w0kJTP3OFgGJtIXKRQ8rmgO8kX4aT1YHuIzjO2NHj1+8LjxY+OQd2HWqxRbDb8sK0bMr
-         Zutd0TFhRbpG6Wi9IXud8p9aJKj++eUaS1ecQwAk91lK0PjBTFV6BjzPRxlgYQzhCR08
-         vkmA==
-X-Gm-Message-State: AO0yUKVOL/EnfAaodCjsbs0yBB60EytOT60WE0+mWmhzycfhOl+92TH8
-        yVw7tZ/sLHbucKI45Agt83E=
-X-Google-Smtp-Source: AK7set9kOzDNcpy7n8owlmf75WwP/agrXt+BlAo3GZFtShfHQENo9cFf98g4cf/XBAOfbuqCzIOskw==
-X-Received: by 2002:ac2:5119:0:b0:4db:405f:d5c0 with SMTP id q25-20020ac25119000000b004db405fd5c0mr472382lfb.48.1677578525436;
-        Tue, 28 Feb 2023 02:02:05 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id q2-20020ac25a02000000b004dd6c325311sm1253952lfn.248.2023.02.28.02.02.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 02:02:04 -0800 (PST)
-Date:   Tue, 28 Feb 2023 12:02:01 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
-        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
-        pierre-eric.pelloux-prayer@amd.com,
-        "Simon Ser" <contact@emersion.fr>,
-        "Rob Clark" <robdclark@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Daniel Stone" <daniel@fooishbar.org>,
-        Marek =?UTF-8?B?T2zFocOhaw==?= <maraeo@gmail.com>,
-        "Dave Airlie" <airlied@gmail.com>
-Subject: Re: [PATCH v2 1/1] drm/doc: Document DRM device reset expectations
-Message-ID: <20230228120201.7b20519a@eldfell>
-In-Reply-To: <20230227204000.56787-2-andrealmeid@igalia.com>
-References: <20230227204000.56787-1-andrealmeid@igalia.com>
-        <20230227204000.56787-2-andrealmeid@igalia.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 28 Feb 2023 05:04:40 -0500
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2129.outbound.protection.outlook.com [40.107.114.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8E61E5DE;
+        Tue, 28 Feb 2023 02:04:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W50wo6SVjWqTRql8azTIBSp112yZFYUnwiqBmz5rt3zP+R0xx6i+9/zC8tcoJZVGDB2U49dPh4bb/5ScPza76Cy2UTzbyWRx9FHca2i4Ztg0m/TeFh1FKhSUhzfY/1NLXFkGvxzE217T6VcTGj04kddXO9CUKO9lbP45XKa3y3heEvz2GHmIUX56OtG2ULo2Ga4xJpZfgu/wdO4JrQUpM8p84Zz80eyF21VOpN0NZPGx/NRpY7sSedbm/pJhD01P1iqzSot1hyMVRLurc9CLyaKzMBj7O16s+xxJ9B9NnQGaQhxXR3ucLBNQUyKIiKx2qLWRpG6zRFl5qqhV9rno1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+3i70xWXavYZQGl6p7G0iTHoiu3qJDlVbM5xvi5VUMk=;
+ b=jffHO6hYc35dKQu/izCcqYa7n8XrTTfsmZWn+xEmDCushH3ufIDLRp8lzH+PctSrGgglasAEh0PfavcWVD2UdUUKezCSfzQRINtWUVF6kUSBeQ7pYh5J/PDDSGSrPryE7PfJwRZWdDO5Xo98OCWb5Tt/s7lxA7jNiIQQ8K0FXhe33iGUGTuZ0YDjD6OzlXx+MynGaW0IgR0z9nybzRAa9WgPrxcMUgeKe5y7Du7JPbdEbTU+Q4cgiftQTsNdcX5DLvm0OQKAqlJWAjqQPJS8mfyclvgFn6PhNtcLG+ZfjeX5xvn0WybQxNZKlfHdDS+S/9wuWSw8IB+nFIWtkWkKpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=dm.renesas.com; dmarc=pass action=none
+ header.from=dm.renesas.com; dkim=pass header.d=dm.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dm.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+3i70xWXavYZQGl6p7G0iTHoiu3qJDlVbM5xvi5VUMk=;
+ b=QXdh6mXgo3Wzw+n42vmC7O0dNubyDSN6hhALUFFWvfqJCElgq2ApH3XeQXXii+xwgezEOBWp/6gxPJ25+l/NwKAl+YI93lKSrSFvf6BLNdJgp/s+ChaLAdwk8kSjH4MTQZXKffKhgEKoQ7ATlWB+W7aFGteu3IPDG41iObqpBUA=
+Received: from OS3PR01MB8460.jpnprd01.prod.outlook.com (2603:1096:604:197::13)
+ by TYCPR01MB5599.jpnprd01.prod.outlook.com (2603:1096:400:41::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 10:04:35 +0000
+Received: from OS3PR01MB8460.jpnprd01.prod.outlook.com
+ ([fe80::e332:554a:7:7135]) by OS3PR01MB8460.jpnprd01.prod.outlook.com
+ ([fe80::e332:554a:7:7135%3]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
+ 10:04:35 +0000
+From:   DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Subject: RE: [PATCH v3 14/20] thermal/drivers/da9062: Don't access the thermal
+ zone device fields
+Thread-Topic: [PATCH v3 14/20] thermal/drivers/da9062: Don't access the
+ thermal zone device fields
+Thread-Index: AQHZSjVt1CNmStCwSEqbfFuNq8Ar967jGjGAgAEI5AA=
+Date:   Tue, 28 Feb 2023 10:04:35 +0000
+Message-ID: <OS3PR01MB8460E9E5C18126A0A0930E15C2AC9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
+References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
+ <20230226225406.979703-15-daniel.lezcano@linaro.org>
+ <ff124b19-4a21-f9f8-4249-d72e3b8dbd6a@linaro.org>
+In-Reply-To: <ff124b19-4a21-f9f8-4249-d72e3b8dbd6a@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dm.renesas.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS3PR01MB8460:EE_|TYCPR01MB5599:EE_
+x-ms-office365-filtering-correlation-id: debbf852-07fd-4343-a9d9-08db1973320a
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LqcgVrbuJebznkbTHpMYAoj9+XdkbPXsvQOTqbqjdbQU8sgp6CzcFzlDGK9vfsYgXB+3wUsGjB/7Xz52yTarrNNY0mCsj/febjKBYdlHLDKaD5iR0k42yDAL6FgTWcDl+SVUXkmctYC7MqFFZD7Q+2BRVgT/Yg/s6IEnC9F4oZ+WwuzzHIHzVnVfOdLDpJiQfUGxCD/GjDY1ZEHooldkgwg1cGOb5DxJEHWb5dAi9w9TJdQyYQzbJyAq6PaIbIf8FEKam1TtE9oFbNC7rYAguwVjWv22Vr7XYImuOfhGzYGXW+42LGR6RiG2Ok9bupvLJsKj77X86wuqndRgMRlKRB853JrsfjAYOHEk+1SbMs1dMJMl7SGo15lM9ZRf0OkhGkj54Lh2cbdpIxefaKfzsHcZl16obYffeyW3R2Xcx6ADfqrEn0kdABZOBzCLGuBdQ2H0jb6bICcBQ8lk5BxuMGIyuGEwa5Yc5gfmH6wyvSLUjJoWZeGfi2oxtIxB1JVWULF5iJY+WphUbwWyBTN9mA+m7bVnG37pBpHhWMxFZmQbxRszSr4UalelnSFMqhkm0mzlEB+Rvpey/A3dh4DG8j5zXeLBjevs2H3Y1TM9FnKnmjLulqZerL98MomJIsLW9GY4MO3FIjC1i2nUcFO/kYpj+lmR0QnMOcV3akNofRpedjmclitjLJ9ZwsUFKQgTwgJ9WRRtDdicCv9rn4o2aQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8460.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199018)(110136005)(478600001)(83380400001)(33656002)(122000001)(54906003)(316002)(38070700005)(7696005)(26005)(41300700001)(9686003)(186003)(71200400001)(55236004)(53546011)(6506007)(5660300002)(4744005)(38100700002)(76116006)(52536014)(86362001)(8936002)(2906002)(66946007)(8676002)(66476007)(66556008)(4326008)(66446008)(55016003)(64756008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SnF5b0RUbkFDMUNLWWRHVTlFb1d1UVk1ckZ0Yk53MGI0VHg3aXBVWDNvbU5N?=
+ =?utf-8?B?Vm9ES3oxU0ptOHlFRHlBbW5yOFRZdlN0ZmFra3diK1ZEaVp5dm12U2JXTHhY?=
+ =?utf-8?B?UlNrUzc3UU5Vb0RKVE1pemtkMTAvYVA2ZlhkcGYwZUgrUU5rd2tETnZXS0xW?=
+ =?utf-8?B?SVNaODNZYXV0Mzg1TysyN1ZDVTZGOXFGVThIdjVVSXF2eHlJNlVGbnRidWJu?=
+ =?utf-8?B?bDNHQTlVbWhDbU55SW8zTXR1U01mbU1LMitMd0J3NjU1ekdiYUFuaXJJc2Ji?=
+ =?utf-8?B?dWY2TURMRmVPWVQ2VXlYbjVTQnRJL1hJZ3RiRTZ3S0NaT1lTSGw3UHcwVmI1?=
+ =?utf-8?B?SkNNUzcwaGc4TUQ4MnM4K2hZOVM5SEdic2loQU1ZV1lCaHRkeUdrRWdKKzVJ?=
+ =?utf-8?B?L3hQQUM2OEl6VU50aWpLZlF3bjU3YytueVlYcHJJVWtRTFF0VE9NZ2pTQWwy?=
+ =?utf-8?B?a3dwT2dYS21wa1BJc3RMcW1xSDN0WkRqeEJVelBydmtIWXdpVE9ya1oxSG5P?=
+ =?utf-8?B?TDladXhiUStUY1ltbFJoL1R0Um1BM1RvRWZxaGc1QTh4V0J0K2xnZ3NIMGVm?=
+ =?utf-8?B?ZGtIdThsZkpsUVkzZGJ5TW8wYktjUC9MSk9rMUF5VlhhTC95N254SGlKcmZZ?=
+ =?utf-8?B?a0U1MytlbTNMdGpJbmlRVjNQWXJYUHRFRldpMkdMU2crZVlaM3NwbUdXa1NU?=
+ =?utf-8?B?VGtpSWlsUGxWZnlKK0o5S292YWpCbTZ3SWM1dms2eHY2RXB1eFlTcGo1Vld6?=
+ =?utf-8?B?Qis3eUc4QzFiNnh1SENtWkQ4VEVuMUJ6Um9HVXF5YThSMUJoMDQza1FSS0pp?=
+ =?utf-8?B?Rm8rRWhLcis0L0Y2VVRsbFpOMXpyeVF5U1lpUVFta1R5UGtKSlUwUWwvbkY1?=
+ =?utf-8?B?aExmOEZoNytEY3lyY253MEREMlNGd21qdUVHNWYvRGR0UHFRcUVNSjBhN1F0?=
+ =?utf-8?B?MVlpV3JOcURIejFwMXpuVFRjSmpsK0hmd3cyYmc5K1ducjlBcHgySDd3RnRz?=
+ =?utf-8?B?anpZMi9LSUFqL09jR2xIWjkwR1NNR2l1eGJuZHJDc3ZaYXkydnJZUXNKbjF4?=
+ =?utf-8?B?MUFidUxiN0s5cWl5TGVnczVQZmpRempGbWY1cjRpbzRxcW5NWm1mWVlrOEZw?=
+ =?utf-8?B?OVdqQjY3blNNMG5aSXVvZHBhOEE1eFNvTGxDd0Z5aXYzL3gxUjlOaHN1QytG?=
+ =?utf-8?B?blBNZWVlTkhVOTBKcTVhWnNmK05hRkh3amxPWERGNG9PNFVPaVdwT25EbGdr?=
+ =?utf-8?B?N2lLYm4zK3FpU29uM1hHQk15eTU5Wk5NMEVtbkhab0Z5YzV6V0UxUTBiQkdL?=
+ =?utf-8?B?YjFIaEVaY0JCc2psK1R1b0NDcEZxNFR4dmVKY0dOM3NjZlJJVnFwMDg1dkg2?=
+ =?utf-8?B?TG9BZVNCM25Fem5VOUhabEhuU29JVzBOY0tJVFlvcWRhVTZ2Myt2Mzk3QWFX?=
+ =?utf-8?B?ZUJaRzVHNUgwU0lsWUgxenRjQ0N4ODdkdUFrSHI3OXgxOFlqeFhGV2JmMHNq?=
+ =?utf-8?B?WVFpbGVGN2JDSzNiWE1OVFNqNHVMdk9DU1NkV0RqWWtING5RYnQ0OE44L0tw?=
+ =?utf-8?B?TjRUMExmMXc2TEpmSHJJVVErRlBJK0ZVdkRmS3FML1RXOTFpcU9jK2l1WjJ0?=
+ =?utf-8?B?dzRiaFp2bmQyVGNWTDVFSzBkMXBHQXJESFByQlM1Q2locVBoa1FvaHBwcFFG?=
+ =?utf-8?B?VDZmem5lRTkvWndNT0NwZ1hFaEZjOTM2djZOVHNLWlhMandMYVJ1M0hYd2Mx?=
+ =?utf-8?B?QlhvUGhtUGU2MzJXS0J4R0E3elZqQUZsdGtmVUpwaklnbFNPMHVKQmR4WjNN?=
+ =?utf-8?B?dmJzZDEwUXJPcnhNdGwrZW9Ma01OS3NKQVU1L3BDdXNrYVgxUFBwWXA1Rzk3?=
+ =?utf-8?B?UFpTNU14TE9obzBjN2F2YkJzTTdOdnBrd2JZa3JqcFhOSW1pVjJJckVtZEha?=
+ =?utf-8?B?THhDYk1RbXBIaFdEZ0x2Z2hkYmgrZXJrMnV5OXpNMzRWQ2lURVhmZGN6akVK?=
+ =?utf-8?B?eS9MbnFJVnBEK3ovUlRzbWNGVkoyeUgrTU1ORk9EWk1JZTJCTnhDSE9URnUr?=
+ =?utf-8?B?aGV2U09hS2RzdHlOeU4vbnN3ZGQxWTBOWTNNdnc5cWMyNHh1OFd0WWxMYUxY?=
+ =?utf-8?Q?QDJNgDEa2M8mWlcuvZnAU5LTp?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WWSRvI8mNtp3sX1sMaJYoVm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: dm.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8460.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: debbf852-07fd-4343-a9d9-08db1973320a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2023 10:04:35.4394
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sXpj7jBT0jj3+EXYzWPkucT1WxpdH9KtHUXa0QyclPqe6nM5MQR5rVrA4DeZ2+aJJSpxaRM9umYttdrMtUYQ0+p8O6E3LQ46VX/07obfPJY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5599
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WWSRvI8mNtp3sX1sMaJYoVm
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, 27 Feb 2023 15:40:00 -0500
-Andr=C3=A9 Almeida <andrealmeid@igalia.com> wrote:
-
-> Create a section that specifies how to deal with DRM device resets for
-> kernel and userspace drivers.
->=20
-> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
-> ---
->  Documentation/gpu/drm-uapi.rst | 51 ++++++++++++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
->=20
-> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.=
-rst
-> index 65fb3036a580..3d6c3ed392ea 100644
-> --- a/Documentation/gpu/drm-uapi.rst
-> +++ b/Documentation/gpu/drm-uapi.rst
-> @@ -285,6 +285,57 @@ for GPU1 and GPU2 from different vendors, and a thir=
-d handler for
->  mmapped regular files. Threads cause additional pain with signal
->  handling as well.
-> =20
-> +Device reset
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +The GPU stack is really complex and is prone to errors, from hardware bu=
-gs,
-> +faulty applications and everything in the many layers in between. To rec=
-over
-> +from this kind of state, sometimes is needed to reset the GPU. Unproper =
-handling
-> +of GPU resets can lead to an unstable userspace. This section describes =
-what's
-> +the expected behaviour from DRM drivers to do in those situations, from =
-usermode
-> +drivers and compositors as well. The end goal is to have a seamless expe=
-rience
-> +as possible, either the stack being able to recover itself or resetting =
-to a new
-> +stable state.
-> +
-> +Robustness
-> +----------
-> +
-> +First of all, application robust APIs, when available, should be used. T=
-his
-> +allows the application to correctly recover and continue to run after a =
-reset.
-> +Apps that doesn't use this should be promptly killed when the kernel dri=
-ver
-> +detects that it's in broken state. Specifically guidelines for some APIs:
-
-Hi,
-
-the "kill" wording is still here. It feels too harsh to me, like I say
-in my comments below, but let's see what others think.
-
-Even the device hot-unplug guide above this does not call for killing
-anything and is prepared for userspace to keep going indefinitely if
-userspace is broken enough.
-
-> +
-> +- OpenGL: KMD signals the abortion of submitted commands and the UMD sho=
-uld then
-> +  react accordingly and abort the application.
-
-No, not abort. Just return failures and make sure no API call will
-block indefinitely.
-
-> +
-> +- Vulkan: Assumes that every app is able to deal with ``VK_ERROR_DEVICE_=
-LOST``.
-> +  If it doesn't do it right, it's considered a broken application and UM=
-D will
-> +  deal with it, aborting it.
-
-Is it even possible to detect if an app does it right?
-
-What if the app does do it right, but not before it attempts to hammer
-a few more jobs in?
-
-> +
-> +Kernel mode driver
-> +------------------
-> +
-> +The KMD must be able to detect that something is wrong with the applicat=
-ion
-> +and that a reset is needed to take place to recover the device (e.g. an =
-endless
-> +wait). It needs to properly track the context that is broken and mark it=
- as
-> +dead, so any other syscalls to that context should be further rejected. =
-The
-> +other contexts should be preserved when possible, avoid crashing the res=
-t of
-> +userspace. KMD can ban a file descriptor that keeps causing resets, as i=
-t's
-> +likely in a broken loop.
-
-If userspace is in a broken loop repeatedly causing GPU reset, would it
-keep using the same (render node) fd? To me it would be more likely to
-close the fd and open a new one, then crash again. Robust or not, the
-gfx library API would probably require tearing everything down and
-starting from scratch. In fact, only robust apps would likely exhibit
-this behaviour, and non-robust just get stuck or quit themselves.
-
-I suppose in e.g. EGL, it is possible to just create a new context
-instead of a new EGLDisplay, so both re-using and not using the old fd
-are possible.
-
-The process identity would usually remain, I believe, except in cases
-like Chromium with its separate rendering processes, but then, would
-you really want to ban whole Chromium in that case...
-
-> +
-
-Another thing for the kernel mode driver maybe worth mentioning is that
-the driver could also pretend a hot-unplug if the GPU crash is so bad
-that everything is at risk being lost or corrupted.
-
-> +User mode driver
-> +----------------
-> +
-> +During a reset, UMD should be aware that rejected syscalls indicates tha=
-t the
-> +context is broken and for robust apps the recovery should happen for the
-> +context. Non-robust apps must be terminated.
-
-I think the termination thing probably needs to be much more nuanced,
-and also interact with the repeat-offender policy.
-
-Repeat-offender policy could be implemented in userspace too,
-especially if userspace keeps using the same device fd which is likely
-hidden by the gfx API.
-
-> +
-> +Compositors
-> +-----------
-> +
-> +Compositors should be robust as well to properly deal with its errors.
-
-What is the worth of this note? To me as a compositor developer it is
-obvious.
-
-
-Thanks,
-pq
-
-> +
-> +
->  .. _drm_driver_ioctl:
-> =20
->  IOCTL Support on Device Nodes
-
-
---Sig_/WWSRvI8mNtp3sX1sMaJYoVm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmP90RkACgkQI1/ltBGq
-qqcuAw//VeEiTkS/jsh5b8dSbIL6C2WakLcErXAtEo65dLIwOdyxueFIAIRzM14K
-9SRGg34hvSfmug/0Kqo/0FugRwMfhVxhJ147fZIioQl/VNqEIfHqb480hc7COSG3
-BW+FARtBM9k3ZA885aD7pV///+VnxjKCs+0D8gCj7o8jt/SzNGFAAEbB1RohC7kN
-9/3kbT7l2K2oIxgEI1uqt5AD4cfLOHO8aR+omS8QBi9q77kjii+XWlwGclmo4tzq
-W+HTY9esbbMBLDDIXgc3T2fiC0uWmyK+CWzKD1B6whfkDm+nH5sDxmdfuMAxan3T
-Hf7YFgQLRI1WwJ0xQupzrJG+znjJW5M6TpaGh72dFyncCYwB1M8lNVXkzr5QKfWX
-ieu2pI8b8iakYlAuBrStO4pQwShK7h5LIXXXJR7R2hhX53pbJ5yPGJZNSYr5mGw7
-/PWgbmTW1LkUBzpJauKwEBn8v7aWy4A/ZoJM6/hBGAoy4CoUAsx//kRVaw8LjWQN
-feQ1SDEOB8xlQPevx6/1nv7Sv3toZhzkVIpXf7r2guXLD0q5HZYa5PY/7EVT5Xsh
-6xqBMZK7blgAXWqKS0eb90bM1iLRKpfHstOni6p65ec4zPZX1UemX+3VMUEPKlxO
-dxTNRj6q4IFz7kgEMwY/gMaceHGbHJqxc32WrbiQ9crQ0LEHsaM=
-=J8hB
------END PGP SIGNATURE-----
-
---Sig_/WWSRvI8mNtp3sX1sMaJYoVm--
+T24gMjcvMDIvMjAyMyAxODoxNCwgRGFuaWVsIExlemNhbm8gd3JvdGU6DQo+SGkgQWRhbSwNCj4N
+Cj5hcmUgeW91IG9rIHdpdGggdGhpcyBwYXRjaCA/DQoNCkhpIERhbmllbCwgDQpZZXAsIGxvb2tz
+IGdvb2QgdG8gbWU6DQoNCk9uIDI2LzAyLzIwMjMgMjM6NTQsIERhbmllbCBMZXpjYW5vIHdyb3Rl
+Og0KPiBTaWduZWQtb2ZmLWJ5OiBEYW5pZWwgTGV6Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJv
+Lm9yZz4NCj4gLS0tDQo+ICAgZHJpdmVycy90aGVybWFsL2RhOTA2Mi10aGVybWFsLmMgfCAxMSAr
+KysrKysrLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDQgZGVsZXRp
+b25zKC0pDQoNClJldmlld2VkLWJ5OiBBZGFtIFdhcmQgPERMRy1BZGFtLldhcmQub3BlbnNvdXJj
+ZUBkbS5yZW5lc2FzLmNvbT4NCg0K
