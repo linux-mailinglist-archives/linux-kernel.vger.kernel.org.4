@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663336A50EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77D06A50EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjB1CKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:10:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S229755AbjB1CLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjB1CKp (ORCPT
+        with ESMTP id S229906AbjB1CLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:10:45 -0500
+        Mon, 27 Feb 2023 21:11:51 -0500
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A50C25E22
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:10:43 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id D0A2132004E7;
-        Mon, 27 Feb 2023 21:10:42 -0500 (EST)
-Received: from imap42 ([10.202.2.92])
-  by compute2.internal (MEProxy); Mon, 27 Feb 2023 21:10:43 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6437430C0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:11:50 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 30D4E320093F;
+        Mon, 27 Feb 2023 21:11:49 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 27 Feb 2023 21:11:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1677550241; x=1677636641; bh=P14zqdhnyc
-        6iszJp/UwB8H7XJYXcCXBwf9ismx4VI2o=; b=F9AW2/r5Ut6yK4tJ+PcDaBE9Bc
-        pJSYmw+O4XqNWRwfyY3J00tqe2EHhfsmjjULyEsJRexj6V4cQtZttqX7Nex5YyWB
-        fObX6L6lXiY6ELRGf8hcI0Zs4r9GiEIo7oLSB4J4Ws7al9IZe/4NWMLUbV1bgxWt
-        B0ix6k6gKi+jgHHYoNrWcFvM/hPqcLxs2/8mDguGuzfw29urjhdTh4lXsy8xTpUP
-        8/LKutPDkAJxzicqzJZYo7Agy+tIUwFQRMwBqT4s768SnWh+HcjNI18kcwFYbrpq
-        pfGWnqKfeFfuGQNDQjXB6WICNel37dc4bY0Rde9OzkbElTtg5TPlYz9P2mtA==
+        :content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1677550308; x=1677636708; bh=09rEogSw39
+        BE6hJVqc4+1JRjsOZEx+0NN5c8zuhIPcQ=; b=LM23vRz1WmVYUs9Xj/r0cQ2JBO
+        2u+Z0gBLwpjIE6ED0eFLW2g3QTOjRg/qGesYMWoN/cJpGRRPGHUxSs+sf0iJ4CyW
+        8MAHkusNcmG7UM3otih3E/zasjMJnPNKKofNkGvd3dvCzg909pjEigNnaROZeakr
+        tR42eebl3eAw8bvXaX+rg7r/+QaE0XSgpXAUy7uV0WZWJAEye7zmvGA1Kl3WA9MT
+        T3eNiD6YuM08BZU9EQ4ta3xJSTsKAGh1a6e+1oXwVqytT3xprOcV/BCKtmhAZRrc
+        ROHIcKVlwCzP905hTj8djVShKrtMdscWluKwVXTt/DUY9TXtWn61F6bN2YMg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677550241; x=1677636641; bh=P14zqdhnyc6iszJp/UwB8H7XJYXc
-        CXBwf9ismx4VI2o=; b=oUnWToY+qO57e0rrRXA7U+cGnanZpgIZrNVBacZdHlsZ
-        Go/mXPtqrXYIDYYyIFuAAXzamto5hNmN9Hx752gSOsLhc7BqtDZ/RMhAPjXJNmbY
-        d2ZoPoyFa9VkSVmrxK1+s0Fd3TsexTmFHGB27HhNL+O+2+OIoq4KHV9jJVEvP9Mn
-        q5uNub5LTJq00Xifl3Mhgd3hbaJ1VDKNIsMEcemyIZGRQf8AxxLag4BoGdxUb42G
-        9I8CxFcgxret1qsbd+mCElGQXbkzW9AchQJf7XXwIj75nGfzHvMQhdC73+veVDWC
-        YqgtCCQTh6BoMMeBt7fQZW7YcyeYaZmwemra/ABu7A==
-X-ME-Sender: <xms:oWL9YzxtNOQrzKms8ycF7RsXkEP-V-z6aC67SwfmOdDGL9qzxfqZMA>
-    <xme:oWL9Y7SGvEd-wqs4RZ0TfFq7F38WfoEDdEPfMzfiIPq0nAj4PRgD2WPwP0mPx7xw1
-    v0XjGyd_J9pe6GyDAs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeluddggedvucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1677550308; x=1677636708; bh=09rEogSw39BE6
+        hJVqc4+1JRjsOZEx+0NN5c8zuhIPcQ=; b=AM/bVi1dsh6EEuwHMgfIIY+mqh8K3
+        L42nic894o6GZJ5gOrTMSHHicTp7QrWmc3If8QIB+LcDDd9sUTBvCFJDakyDi7LB
+        +Ux93VmyUpic4QUbjTE5pWBVxd1o2j7qMr5HAfJRD7XCIbQkvgBW1YgYAhx6Az+9
+        NZV/pIeGRiEylWQmOGYqx+lZ+4/6ftQfasLdrk3itvrZHDEwMLhrGQfkyAOJadFK
+        QhsDJOpVDHK2/5V5aBd/d+xHfkwEqqXCCEPv6ke+gmmM7ngJ7igTjyYPoDFjVdai
+        u64khV7qdVRArBjLS5zdbiGrt9bOGASd+7pjKMhfHpJA0aPxhz0ku/nqA==
+X-ME-Sender: <xms:5GL9Y_FlBYxKqNC5Vyb7-ydCSDJ8NXomJFnlv7MQTEER16K3MG6cmw>
+    <xme:5GL9Y8UJBbiCHdnVmngRryLoCoM74ofMwmnHUX3nJhpc3wNPITSfo2X6DKqNSUNLB
+    BaEO_S37DWcjvgYWvc>
+X-ME-Received: <xmr:5GL9YxJ_6K_qWQSP9JimFlHaE0svPffFexHJqsWjmY3LhyNAXahXDZkR6k6JD0SSkXF3bh4WXJGt1ZZMw8JhSOveE4n3>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeluddggeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
-    dtredtreertdenucfhrhhomhepfdggihhntggvnhhtucffrghgohhnnhgvrghufdcuoehv
-    sehvuggrrdhioheqnecuggftrfgrthhtvghrnhephfeugeffgfetiefhieetfeefveevhf
-    ffvdduvdetheefgeelfeetgfegueeghfefnecuvehluhhsthgvrhfuihiivgeptdenucfr
-    rghrrghmpehmrghilhhfrhhomhepvhesvhgurgdrihho
-X-ME-Proxy: <xmx:oWL9Y9VqmyluPFKD1gu4_5fj4i6TuGDh-sBu_kJccF_P36vM2YFqhw>
-    <xmx:oWL9Y9hGZ9Diw4kO3XPPBqfLO5X-ix6WHcE9ZUCadldFzJvVQWIKog>
-    <xmx:oWL9Y1D-AmGK-TBh8Mg9H0jF8Enk9e_RIdp_ruNC7q8rglUA_WA-1A>
-    <xmx:oWL9Y4otechcN_Max3jdtqmW9MNNKvPMxO2kae9jlrqyN4KIqWv7uw>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekre
+    dtredtjeenucfhrhhomhepgghinhgtvghnthcuffgrghhonhhnvggruhcuoehvsehvuggr
+    rdhioheqnecuggftrfgrthhtvghrnhephfejveduudevvefhfeevfeekjeegtddtteetud
+    ekvefgudeikeegjeejgffftdefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehvsehvuggrrd
+    hioh
+X-ME-Proxy: <xmx:5GL9Y9Gyo83XhI4C40Aa9FI98yUKxsxutahalknbUAkvm7viAISgqg>
+    <xmx:5GL9Y1WtSvSW2BWCib-dQvy95t7ZjXpy13-ImP5z6LisvuKSEux7iA>
+    <xmx:5GL9Y4PHyByqlEgkd1ZucPNqe2NB-YKeQckvOdIdlO6xtOtX3-InGA>
+    <xmx:5GL9YygwXHSGtX13KXLm5RZVdVfciSDy9N5GJD86IG4Gbhmbcj-PIQ>
 Feedback-ID: ic7094478:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3C689BC0078; Mon, 27 Feb 2023 21:10:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <92950bb2-bca8-4278-87ea-d68c6687534d@app.fastmail.com>
-In-Reply-To: <Y/nWwuqLLG8A0xT7@1wt.eu>
-References: <20230223010025.11092-1-v@vda.io>
- <20230223010025.11092-5-v@vda.io> <Y/nWwuqLLG8A0xT7@1wt.eu>
-Date:   Mon, 27 Feb 2023 21:10:20 -0500
-From:   "Vincent Dagonneau" <v@vda.io>
-To:     "Willy Tarreau" <w@1wt.eu>
-Cc:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] tools/nolibc: add tests for the integer limits in stdint.h
-Content-Type: text/plain
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Feb 2023 21:11:48 -0500 (EST)
+From:   Vincent Dagonneau <v@vda.io>
+To:     linux-kernel@vger.kernel.org
+Cc:     w@1wt.eu, thomas@t-8ch.de, Vincent Dagonneau <v@vda.io>
+Subject: [PATCH v7 0/4] tools/nolibc: Adding stdint.h, more integer types and tests
+Date:   Mon, 27 Feb 2023 21:11:32 -0500
+Message-Id: <20230228021136.13472-1-v@vda.io>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -83,50 +81,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023, at 04:37, Willy Tarreau wrote:
-> Hi Vincent,
->
-> I'm currently integrating your patches. I'm having a quick question
-> below:
->
-> On Wed, Feb 22, 2023 at 08:00:25PM -0500, Vincent Dagonneau wrote:
->> This commit adds tests for the limits added in a previous commit. The
->> limits are defined in decimal in stdint.h and as hexadecimal in the
->> tests (e.g. 0x7f = 127 or 0x80 = -128). Hopefully it catches some of the
->> most egregious mistakes.
->> 
->> As we rely on the compiler to provide __SIZEOF_LONG__, we also test
->> whether it is defined.
->> 
->> Signed-off-by: Vincent Dagonneau <v@vda.io>
->> Signed-off-by: Willy Tarreau <w@1wt.eu>
->> ---
->>  tools/testing/selftests/nolibc/nolibc-test.c | 53 ++++++++++++++++++++
->>  1 file changed, 53 insertions(+)
->> 
->> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
->> index 882140508d56..d6886f900e79 100644
->> --- a/tools/testing/selftests/nolibc/nolibc-test.c
->> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
->> @@ -561,6 +561,59 @@ int run_syscall(int min, int max)
->>  		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
->>  		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
->>  		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
->> +		CASE_TEST(limit_int8_max);          EXPECT_EQ(1, INT8_MAX,         (int8_t)          0x7f); break;
->> +		CASE_TEST(limit_int8_min);          EXPECT_EQ(1, INT8_MIN,         (int8_t)          0x80); break;
->> +		CASE_TEST(limit_uint8_max);         EXPECT_EQ(1, UINT8_MAX,        (uint8_t)         0xff); break;
-> (...)
->
-> I'm just realizing now that the test was added at the end of the syscalls
-> tests instead of the stdlib test (e.g. after memcmp()). Are you OK with me
-> moving it there, given that it has nothing to do with syscalls but rather
-> with what the nolibc itself provides ?
->
+Hi,
 
-Hi, I was away for a few day. It is fine by me. If you want I'll just send another version with the Reviewed-By and the syscall -> stdlib move. 
+This is version 7 of the patch to add stdint.h to nolibc. Previous
+versions of this patch are available here:
 
-Thank you again for all the review!
+* v6: https://lore.kernel.org/all/20230223010025.11092-1-v@vda.io/
+* v5: https://lore.kernel.org/all/20230220202010.37475-1-v@vda.io/
+* v4: https://lore.kernel.org/all/20230209024044.13127-1-v@vda.io/
+* v3: https://lore.kernel.org/all/20230206013248.471664-1-v@vda.io/
+* v2: https://lore.kernel.org/all/20230202201101.43160-1-v@vda.io/
+* v1: https://lore.kernel.org/all/20230202160236.25342-1-v@vda.io/
+
+This version integrates the Reviewd-By Thomas Weißschuh. It also moves
+the whole block of tests from syscall tests to stdlib tests.
+
 Vincent.
 
-> Thanks!
-> Willy
+Vincent Dagonneau (4):
+  tools/nolibc: Adding stdint.h
+  tools/nolibc: Adding integer types and integer limit macros
+  tools/nolibc: Enlarging column width of tests
+  tools/nolibc: Adds tests for the integer limits in stdint.h
+
+ tools/include/nolibc/Makefile                |   4 +-
+ tools/include/nolibc/std.h                   |  15 +-
+ tools/include/nolibc/stdint.h                |  84 +++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 139 ++++++++++++-------
+ 4 files changed, 177 insertions(+), 65 deletions(-)
+ create mode 100644 tools/include/nolibc/stdint.h
+
+-- 
+2.39.1
+
