@@ -2,147 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77006A5AC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734176A5ACA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjB1OVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 09:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S229625AbjB1O07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 09:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjB1OVG (ORCPT
+        with ESMTP id S229504AbjB1O05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 09:21:06 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A682312D;
-        Tue, 28 Feb 2023 06:21:04 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.217.110])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2B43C6602F90;
-        Tue, 28 Feb 2023 14:20:56 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677594063;
-        bh=fXrXYib4/IODPE+Or2l+E6ijJeid0k/x8BCxHGZiwIQ=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=TwWnx4/7sn4zeKGWVlB7xF34Q3kfjGHBo3Muw5icuLERAnrRYWiuHHQ9y5nCiUHi4
-         ySiO0wKlRLmE7DaiN4+Tr9nnsPrX4f3X7lAhFPxQEjWbbYO+tyeGnvb5AdaU4JISlz
-         Kxst2cFuDfbZn58tpNOgNDqRcd7wLeuFV3UDuovmwuMzksN7jJO9XW4mmuFifsjfqe
-         aaxaBDDdia2uVDI8y/Ou08uhz2MQ7niM8qZ8B6NjHSXbWGsjvlmu08a3FNHpjVWeSk
-         4LhCC0yISDy5xP8f/YdkWNV6gJMiwAX6zqIlu0r9mIFu5NPdcQh6pnQhcJRWf1P1j2
-         fSC93BbfvpEzQ==
-Message-ID: <803f7ef2-f217-65fe-d0b9-98ae469556fa@collabora.com>
-Date:   Tue, 28 Feb 2023 19:20:48 +0500
+        Tue, 28 Feb 2023 09:26:57 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FEE1BC9;
+        Tue, 28 Feb 2023 06:26:56 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id j3so6551739wms.2;
+        Tue, 28 Feb 2023 06:26:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/tq/zszDMcZ/q4+NmurCt/9UiLLyD1boBQYOIvlny1E=;
+        b=OdqxhqK9TLRXQDeY4kvDV/5/PNlSSqSsW2dwVR+wcKiNh6ED+N5Pivk06LtJSAUEIp
+         HBHOpsrBWvtvvfZIcS6NE2/kfIlMUOMrWDGcIS7lRoK03bSTRGCnMBHqQHtF7zhOU+gS
+         cwkK1G0jE2aJS3NggWztmSS9fiJ29IQV4pafrpTZwU79uPOCnJmszgZgEYx2R58DeDBc
+         NUdVPJ2Ii3FLICIm7kII4x26XxPxo/kxix9ecmc39zEuQMVN5gYMS5/CWU8iw4nhwWkK
+         lTERhbJJJ62ASK3dMr0ZJ2U0g8jLXFh5ZnLmcBhcoNQ8mKW75kLH3SD06z+3GcoYE0OC
+         SMUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/tq/zszDMcZ/q4+NmurCt/9UiLLyD1boBQYOIvlny1E=;
+        b=o1phTk/xod5GbQl3E6bCafoqNySZuuZNpLiNVThTIEzA1hI9IUcTf6mF1/HyeOqYJ2
+         oBGS8YdmB3wOVZLBlQQTDtxoABN4D0yQIE0NPw6pPrFHVIRPa9NL+kjVcZ4nlhIhsr8R
+         F9wiEaX4/fVMasWEeTA5XHJK9Px55M3MV0aRQKHL5h7sDiFF18sXaKL47t2AFPoVsu8P
+         13vfCPJB53Ep4U1RywAIzM3PQTSEr8/+n7rt1H6+FsqWv9IdeGZYl1Lnbj/rF6NERIkc
+         x9qEBG2vdlU6BJFu7Pw0O4YFdbHsCpOdQL5JmboySs+Rnvs+XDPZJXdGtrjHDyB274A5
+         Hkfw==
+X-Gm-Message-State: AO0yUKUneY2GTHFNEA/ws53e6rrDe24mouatP36E8KyxX4q3oJDhFxzx
+        IE24/kdagiega2JoLYMgHCc=
+X-Google-Smtp-Source: AK7set/Njfuc3yKOHWNK5KXQxBrJfvz/OT7fbh+EXYFYdrzRcEvWk4rSnTHuKLQTu25xMxoXo8xxRA==
+X-Received: by 2002:a05:600c:a293:b0:3eb:3e24:59e2 with SMTP id hu19-20020a05600ca29300b003eb3e2459e2mr2258301wmb.25.1677594414614;
+        Tue, 28 Feb 2023 06:26:54 -0800 (PST)
+Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id bi22-20020a05600c3d9600b003dc42d48defsm12822098wmb.6.2023.02.28.06.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 06:26:54 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] pwm: Changes for v6.3-rc1
+Date:   Tue, 28 Feb 2023 15:26:51 +0100
+Message-Id: <20230228142651.3839023-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gautham.shenoy@amd.com,
-        ananth.narayan@amd.com,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: [PATCH] perf/x86/rapl: Enable Core RAPL for AMD
-To:     Stephane Eranian <eranian@google.com>,
-        Wyes Karny <wyes.karny@amd.com>
-References: <20230217161354.129442-1-wyes.karny@amd.com>
- <Y/NdUjLiQu+D0q7b@hirez.programming.kicks-ass.net>
- <CABPqkBTU_gnTr9ayvg220T4pO5NAguvu_UJAkZO2RUATWuMJ3A@mail.gmail.com>
- <Y/ROTsCSCFtrwwTK@beas>
- <CABPqkBQ_bSTC-OEe_LrgUrpj2VsseX1ThvO-yLcEtF8vb4+AAw@mail.gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABPqkBQ_bSTC-OEe_LrgUrpj2VsseX1ThvO-yLcEtF8vb4+AAw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/23 1:50 PM, Stephane Eranian wrote:
-> Hi,
-> 
-> Testing Wyes' patch for energy-cores on Zen3 server loaded with triad
-> bench on socket0:
-> 
-> $ perf stat --per-core -a -C0-63 -I 1000 -e
-> power/energy-cores/,power/energy-pkg/
-> #           time core               cpus             counts   unit events
->      1.001019203 S0-D0-C0              1               1.28 Joules
-> power/energy-cores/
->      1.001019203 S0-D0-C0              1             231.38 Joules
-> power/energy-pkg/
->      1.001019203 S0-D0-C1              1   4,294,967,130.96 Joules
-> power/energy-cores/
->      1.001019203 S0-D0-C1              1             231.38 Joules
-> power/energy-pkg/
->      1.001019203 S0-D0-C2              1   4,294,967,126.23 Joules
-> power/energy-cores/
->      1.001019203 S0-D0-C2              1             231.38 Joules
-> power/energy-pkg/
->      1.001019203 S0-D0-C3              1   4,294,967,122.50 Joules
-> power/energy-cores/
->      1.001019203 S0-D0-C3              1             231.38 Joules
-> power/energy-pkg/
->      1.001019203 S0-D0-C4              1   4,294,967,129.92 Joules
-> power/energy-cores/
->      1.001019203 S0-D0-C4              1             231.38 Joules
-> power/energy-pkg/
->      1.001019203 S0-D0-C5              1   4,294,967,121.49 Joules
-> power/energy-cores/
->      1.001019203 S0-D0-C5              1             231.39 Joules
-> power/energy-pkg/
-> 
-> I think the result of energy-cores is not reliable and I think that is
-> why I did not
-> include it in the patch.
-> 
-> Could also be a problem with the kernel code, but I don't know why it would only
-> impact energy-cores given energy-pkg looks reasonable here.
-> 
+Hi Linus,
 
-I'm getting consistent per core energy measurements on AMD Custom APU 405.
-Probably consistency depends on the chip.
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-sudo perf stat -a --per-core -C 0-7 -e power/energy-cores/
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
- Performance counter stats for 'system wide':
+are available in the Git repository at:
 
- S0-D0-C0           2               0.51 Joules power/energy-cores/
- S0-D0-C1           2               0.51 Joules power/energy-cores/
- S0-D0-C2           2               0.51 Joules power/energy-cores/
- S0-D0-C3           2               0.51 Joules power/energy-cores/
+  git://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git tags/pwm/for-6.3-rc1
 
-What is the fate of this patch now?
+for you to fetch changes up to cf70d01a62c712ee715df1f7892b58c77474bcfb:
 
-[..]
+  pwm: dwc: Use devm_pwmchip_add() (2023-02-20 12:26:35 +0100)
 
->>>> Stephane, this was an oversight?
->>>>
->>> I think it may depend on the CPU model. I remember it returning either
->>> 0 or bogus values on my systems. They may have improved that.
->>> The commit msg does not show which CPU model this is run on.
->>
->> I've tested this on Zen 2, 3 and 4 server systems.
->>
->> Thanks,
->> Wyes
+Thanks,
+Thierry
 
--- 
-BR,
-Muhammad Usama Anjum
+----------------------------------------------------------------
+pwm: Changes for v6.3-rc1
+
+This rather small set of changes includes some minor fixes and
+improvements. The AB8500 driver gained support for reading the initial
+hardware state and the Synopsys DesignWare driver received some work to
+prepare for device tree and platform support.
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+      dt-bindings: pwm: mediatek: Convert pwm-mediatek to DT schema
+
+Ben Dooks (4):
+      dt-bindings: pwm: Document Synopsys DesignWare snps,pwm-dw-apb-timers-pwm2
+      pwm: dwc: Change &pci->dev to dev in probe
+      pwm: dwc: Move memory allocation to own function
+      pwm: dwc: Use devm_pwmchip_add()
+
+Emil Renner Berthing (1):
+      pwm: sifive: Always let the first pwm_apply_state succeed
+
+Fabrice Gasnier (1):
+      pwm: stm32-lp: fix the check on arr and cmp registers update
+
+Geert Uytterhoeven (1):
+      pwm: Move pwm_capture() dummy to restore order
+
+Jeff LaBundy (1):
+      pwm: iqs620a: Replace one remaining instance of regmap_update_bits()
+
+Uwe Kleine-König (3):
+      pwm: lp3943: Drop unused i2c include
+      pwm: ab8500: Fix calculation of duty and period
+      pwm: ab8500: Implement .get_state()
+
+ .../bindings/pwm/mediatek,mt2712-pwm.yaml          |  93 +++++++++++++++++
+ .../devicetree/bindings/pwm/pwm-mediatek.txt       |  52 ----------
+ .../bindings/pwm/snps,dw-apb-timers-pwm2.yaml      |  68 +++++++++++++
+ drivers/pwm/pwm-ab8500.c                           | 112 +++++++++++++++++++--
+ drivers/pwm/pwm-dwc.c                              |  38 +++----
+ drivers/pwm/pwm-iqs620a.c                          |   4 +-
+ drivers/pwm/pwm-lp3943.c                           |   1 -
+ drivers/pwm/pwm-sifive.c                           |   8 +-
+ drivers/pwm/pwm-stm32-lp.c                         |   2 +-
+ include/linux/pwm.h                                |  14 +--
+ 10 files changed, 302 insertions(+), 90 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
