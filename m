@@ -2,167 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17E96A62E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C076A62EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjB1Wz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
+        id S229726AbjB1Wzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjB1Wz1 (ORCPT
+        with ESMTP id S229719AbjB1Wzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:55:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A573644D;
-        Tue, 28 Feb 2023 14:55:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26F93B80DD0;
-        Tue, 28 Feb 2023 22:55:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C4AC433EF;
-        Tue, 28 Feb 2023 22:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677624922;
-        bh=+J5dybGf17o0wN1DobraFoU++9dN2UmIDOv7C6NV+aY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=flY9czc83DDmsYRvRyj51brgCuz5OJjlqkhHd0hsIlK6K3kXg87uM7mxJ/ZuSR3Yx
-         qb6YM6EZrUP/K5mmcvBPUwyemrINyRtFXAEYksIzSZ0DrQUpwEtQVezhM6ks1ik5HM
-         Yz5i0sRFKOn8KZEDbHawnJKPMgfZBDAwVpxJbkgQAs0ZZfnlpSeOToE5tqr7qLlpmz
-         D7aoDtWPHl5YTPDjdLL8Qzvghs1SiJl2agfe3ieL3K2+ELIosk7nxGaorq5GGce8RK
-         lzOJh/k0KgYzcVFjO2Rz6pph1MdDZzsZlnOTEPoIHGxcf2xE0BsGNckfkGvUI2erdy
-         +0NBRFAJszaKg==
-Date:   Wed, 1 Mar 2023 07:55:19 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 1/3] ring_buffer: Change some static functions to void
-Message-Id: <20230301075519.dbf770fed0476e2b6ecdad37@kernel.org>
-In-Reply-To: <20230228175929.7534-2-ubizjak@gmail.com>
-References: <20230228175929.7534-1-ubizjak@gmail.com>
-        <20230228175929.7534-2-ubizjak@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 28 Feb 2023 17:55:43 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98EF3754C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:55:38 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-260-VraOLvLhMQKDyz9L5f4zYg-1; Tue, 28 Feb 2023 22:55:35 +0000
+X-MC-Unique: VraOLvLhMQKDyz9L5f4zYg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Tue, 28 Feb
+ 2023 22:55:27 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.047; Tue, 28 Feb 2023 22:55:26 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Russell King' <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@kernel.org>
+CC:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        "Ian Abbott" <abbotti@mev.co.uk>, Jakub Kicinski <kuba@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "Olof Johansson" <olof@lixom.net>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+Thread-Topic: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+Thread-Index: AQHZSuhWwIxyEez/qUesuC2XWPglYq7k9JKQgAAEaJA=
+Date:   Tue, 28 Feb 2023 22:55:26 +0000
+Message-ID: <e03e2ef805b94ee2a81a6ecb3adab6c3@AcuMS.aculab.com>
+References: <20230227133457.431729-1-arnd@kernel.org>
+ <Y/0PbJzvrzpvLbcW@shell.armlinux.org.uk>
+ <b75b24146c114e948bb2d325a8d27fda@AcuMS.aculab.com>
+In-Reply-To: <b75b24146c114e948bb2d325a8d27fda@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 18:59:27 +0100
-Uros Bizjak <ubizjak@gmail.com> wrote:
+RnJvbTogRGF2aWQgTGFpZ2h0DQo+IFNlbnQ6IDI4IEZlYnJ1YXJ5IDIwMjMgMjI6NDUNCi4uLg0K
+PiBPciwgbW9yZSBzcGVjaWZpY2FsbHksIGFyZSBhbnkgcGVvcGxlIHVzaW5nIDE2LWJpdCBQQ01D
+SUEgY2FyZHMNCj4gaW4gY2FyZGJ1cy1jYXBhYmxlIHNvY2tldHMgd2l0aCBhIGN1cnJlbnQga2Vy
+bmVsLg0KPiBUaGV5IG1pZ2h0IGJlIHVzaW5nIHVudXN1YWwgY2FyZHMgdGhhdCBhcmVuJ3QgYXZh
+aWxhYmxlIGFzDQo+IGNhcmRidXMgLSBwZXJoYXBzIDU2ayBtb2RlbXMgKGRvZXMgYW55b25lIHN0
+aWxsIHVzZSB0aG9zZT8pLg0KDQpPciwgd2hhdCBJIG5vdyByZW1lbWJlciB3ZSB3ZXJlIGRvaW5n
+Og0KQ29weWluZyBpbWFnZXMgdG8gbGluZWFyIHBjbWNpYSBzcmFtIGNhcmRzIHRvIGFjY2VzcyBm
+cm9tDQphbiBlbWJlZGRlZCBzeXN0ZW0gdGhhdCBvbmx5IHN1cHBvcnRlZCBwY21jaWEuDQooV2hp
+Y2ggbWVhbnMgdGhlIHNwYXJjIHN5c3RlbXMgc3VwcG9ydGVkIGJvdGggY2FyZGJ1cyBhbmQgcGNt
+Y2lhLikNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxl
+eSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0
+aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-> The results of some static functions are not used. Change the
-> type of these function to void and remove unnecessary returns.
-> 
-> No functional change intended.
-
-NAK, instead of dropping the errors, please handle it on the caller side.
-
-Thank you,
-
-> 
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> ---
->  kernel/trace/ring_buffer.c | 22 +++++++---------------
->  1 file changed, 7 insertions(+), 15 deletions(-)
-> 
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> index af50d931b020..05fdc92554df 100644
-> --- a/kernel/trace/ring_buffer.c
-> +++ b/kernel/trace/ring_buffer.c
-> @@ -1569,15 +1569,12 @@ static void rb_tail_page_update(struct ring_buffer_per_cpu *cpu_buffer,
->  	}
->  }
->  
-> -static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
-> +static void rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
->  			  struct buffer_page *bpage)
->  {
->  	unsigned long val = (unsigned long)bpage;
->  
-> -	if (RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK))
-> -		return 1;
-> -
-> -	return 0;
-> +	RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK);
->  }
->  
->  /**
-> @@ -1587,30 +1584,28 @@ static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
->   * As a safety measure we check to make sure the data pages have not
->   * been corrupted.
->   */
-> -static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
-> +static void rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
->  {
->  	struct list_head *head = rb_list_head(cpu_buffer->pages);
->  	struct list_head *tmp;
->  
->  	if (RB_WARN_ON(cpu_buffer,
->  			rb_list_head(rb_list_head(head->next)->prev) != head))
-> -		return -1;
-> +		return;
->  
->  	if (RB_WARN_ON(cpu_buffer,
->  			rb_list_head(rb_list_head(head->prev)->next) != head))
-> -		return -1;
-> +		return;
->  
->  	for (tmp = rb_list_head(head->next); tmp != head; tmp = rb_list_head(tmp->next)) {
->  		if (RB_WARN_ON(cpu_buffer,
->  				rb_list_head(rb_list_head(tmp->next)->prev) != tmp))
-> -			return -1;
-> +			return;
->  
->  		if (RB_WARN_ON(cpu_buffer,
->  				rb_list_head(rb_list_head(tmp->prev)->next) != tmp))
-> -			return -1;
-> +			return;
->  	}
-> -
-> -	return 0;
->  }
->  
->  static int __rb_allocate_pages(struct ring_buffer_per_cpu *cpu_buffer,
-> @@ -4500,7 +4495,6 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
->  	default:
->  		RB_WARN_ON(cpu_buffer, 1);
->  	}
-> -	return;
->  }
->  
->  static void
-> @@ -4531,7 +4525,6 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
->  	default:
->  		RB_WARN_ON(iter->cpu_buffer, 1);
->  	}
-> -	return;
->  }
->  
->  static struct buffer_page *
-> @@ -4946,7 +4939,6 @@ rb_reader_unlock(struct ring_buffer_per_cpu *cpu_buffer, bool locked)
->  {
->  	if (likely(locked))
->  		raw_spin_unlock(&cpu_buffer->reader_lock);
-> -	return;
->  }
->  
->  /**
-> -- 
-> 2.39.2
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
