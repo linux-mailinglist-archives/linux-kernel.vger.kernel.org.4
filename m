@@ -2,299 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0AF6A573C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E51E26A5740
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjB1Kz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
+        id S231462AbjB1K4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:56:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjB1Kyl (ORCPT
+        with ESMTP id S231348AbjB1Kzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:54:41 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A8D2CC4B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:53:27 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id i5so8261201pla.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:53:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1677581607;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oRaRJQujxEovvpNBmWWw2pEpFxn8UUlJ/UEqlgQi6ZI=;
-        b=aeBXG6iyFD5PwjINMCmQ6lI7EG0Ji5j7gwGjAi8iefCQ8oCF8/ysjEyYS3IQRbVjcS
-         sLA1vpJT6p6kSc1PRhfLJHUOZeIIJgoYtdJGZligmPUZqa9dGgR1cbNjm6960kbXX7/c
-         AjysLvXdzvvycJ/MRJXHyu3q1ukNKmBHwhDs5HLeSdFdAzsIaQf9dj//FIJHPJMcNZco
-         P/E5ambolomWxcwMInH/Sa7V9cNfJUtSnAFpxCSnUO4+S1q7OLonzyB2povhcYzsXRsD
-         01FiBLMb7sGWw4dQamc4Q1UXC+NM2Z2eEXf1Y0C3lT8fvyTKWGDZeJJNeLPvNGL/Rh4V
-         7wgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677581607;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oRaRJQujxEovvpNBmWWw2pEpFxn8UUlJ/UEqlgQi6ZI=;
-        b=nB3+iR96keCopp667EC7Y6xIg4NY4cuWEUeug0wk4G3TUgknjgMYWt8IcCEE9hnoZ2
-         /wRMrxT+vOOEnXHy3pr6hLF/OGQ1WjyafTfhArmTEm1ZBbnFLCF/KkxXkJyLaQWPLK+S
-         llAVe0Q+0Ff4KxTeVMBAL8NFJBvThQtESNDoZmIuVMDVsEfFTRWYs4fysopW059q/gA2
-         IdPIaEo06KMGYtThbSzdbsJYvt2eD1tJaloXtBHzAehy9/Zope0iK5XNhiMtMjAeMzbs
-         D4J8same0HJhZJB932Clxm87nNymAaPgj4CqzM7kdFv9sNZYHnIiNKJs7XKc2gTts4wS
-         15GQ==
-X-Gm-Message-State: AO0yUKU0pQbOchKrkm0Jxt8jfIXreiRVRJO1PjOOGk/VahvDqFVtae1q
-        M+eLYyA39HZxWnz8Il+6njk1j1T5UbY23UG2
-X-Google-Smtp-Source: AK7set8oPq+zjY95hL7VZvhmfFuroc5InJJqtSGtiOK3eHEN//wiiSs0C0NJ55KxfhblWw7OquRzWQ==
-X-Received: by 2002:a17:902:7109:b0:19a:839d:b67a with SMTP id a9-20020a170902710900b0019a839db67amr2571695pll.5.1677581606989;
-        Tue, 28 Feb 2023 02:53:26 -0800 (PST)
-Received: from [10.70.252.135] ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id y1-20020a1709029b8100b00185402cfedesm1528426plp.246.2023.02.28.02.53.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 02:53:26 -0800 (PST)
-Message-ID: <36c737e1-7e1c-7098-8bd5-1767869489d9@bytedance.com>
-Date:   Tue, 28 Feb 2023 18:53:17 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v3 0/8] make slab shrink lockless
+        Tue, 28 Feb 2023 05:55:55 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74F92BF16;
+        Tue, 28 Feb 2023 02:54:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677581691; x=1709117691;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=FiRgn+UYcxvjMQ6NWrMpahABtdxeM/LH+Bp44Rv8URU=;
+  b=juoMIM6uHUzJo2xvAilAyJ2KZ3HNq4j53QjHW34tCrt9NYzv/rjqCi3d
+   CM6J7a+2JRMjK07F4OywGyyjEGb/S3IZ+EV4GxVM5UKozi5DJsT9WlcwD
+   fs5b5W5yW/ISsLrcmN3WLKb1FJDWWdLpw42RFmvb8Ghip8nrfPS9Ic1Ki
+   Vf4re2kK0dDtiKRp8vBxj96QcPfpTTV+8FivD6TivoeFMFmWibE5hWyJb
+   GUNCUC07zLHX523jgWddpwX+0Go7TjqFnpZ+Ij8EghEOs+PJasGlr6JTS
+   FWebVc84O5b+P5+8F4MKOqntOJQXVwTBPP3SQ2PIwOgC54kfpN+bFsxtu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="331586577"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="331586577"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 02:54:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="848202088"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="848202088"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2023 02:54:51 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 28 Feb 2023 02:54:50 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 28 Feb 2023 02:54:50 -0800
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.46) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 28 Feb 2023 02:54:50 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dE0CXoc0gN84mq9fLaCNeuiw1/Zo84zNgWbFvnFQz+Synu1alCPjjMrJgLTeaThhS6Wr0CghwBpuSZZ0tCaQgwQ3jOjvdpx3xsDagGP7hR5q4DyWe3t0TcT063hjo4B6zdnxwU4RuOMkB+7oVx4G0RrWlZDI0hmx7pvjU5cgn04Ia2Q2KrzpJWeYxeH99DyZibqNJfoDHQY0nnCdrg89WNoe3KL5nuIoSs7avWDPaCQGd0Tsy6+jLZHR6kEaY2mfFBo0qynn6PXKjf1fpCjo4zwqvL8K2L8Gb9Oj49u+2ZE2UGcyuW85vHlQj8dynLKaLg69zvUkU0+YYiLZpwufZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CAEkc6OHYTWjYuo57dyv/Dqg/AkH+u1Vc9kvkrGEe40=;
+ b=KmAgkxTwBPelPjfCWinxAWWtyNXvdA5dLWoEuzu57ldshupOfkGS8OIKtBkChcKC7bUCnsb1NTgSfQJaxzrhfzFpB2aemmDKjcU3sUq5xnNeBVcVnILBQyP8PNQztTbx5lB2LfORAJH6cfJY3QNZYLTMlMi4pBHFLaY8H9zUKQh2T+zAiu7TopjX9vMA+QAtLQgz6cfE5OKmAzKcpywpIvIUcqSB5k4vubFkeO3d0JJoBrSkhjLwfI+dNx4b1/V4cmOTQh+Cisg0ZBZrwh3Im5SulGjJhd2GXxcT841BEKNpWaY3IAff3ztfpU+DNNsgUP2QAccteQKX/FwTCXP4Xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by CO1PR11MB5203.namprd11.prod.outlook.com (2603:10b6:303:98::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 10:54:48 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934%4]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 10:54:48 +0000
+Message-ID: <411ad4f0-2551-d0e7-77b6-04e71d35f6e4@intel.com>
+Date:   Tue, 28 Feb 2023 11:53:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 net-next 3/5] net: dsa: microchip: add eth mac grouping
+ for ethtool statistics
 Content-Language: en-US
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     tkhai@ya.ru, hannes@cmpxchg.org, shakeelb@google.com,
-        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
-        david@redhat.com, shy828301@gmail.com, sultan@kerneltoast.com,
-        dave@stgolabs.net, penguin-kernel@i-love.sakura.ne.jp,
-        paulmck@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230226144655.79778-1-zhengqi.arch@bytedance.com>
- <20230226115100.7e12bda7931dd65dbabcebe3@linux-foundation.org>
- <b7e8929c-8fd5-a248-f8a8-d9177fc01b4b@bytedance.com>
- <Y/zHbhxnQ2YsP+wX@kernel.org>
- <63a16f0e-d6e9-29a1-069e-dc76bfd82319@bytedance.com>
-In-Reply-To: <63a16f0e-d6e9-29a1-069e-dc76bfd82319@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     Vladimir Oltean <olteanv@gmail.com>,
+        Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <f.fainelli@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+References: <20230217110211.433505-1-rakesh.sankaranarayanan@microchip.com>
+ <20230217110211.433505-4-rakesh.sankaranarayanan@microchip.com>
+ <84835bee-a074-eb46-f1e4-03e53cd7f9ec@intel.com>
+ <20230217164227.mw2cyp22bsnvuh6t@skbuf>
+ <47a67799-27d9-094e-11c3-a18efcf281e2@intel.com>
+ <20230224215349.umzw46xvzccjdndd@skbuf>
+ <ca1f4970-206d-64f2-d210-e4e54b59d301@intel.com> <Y/zDmZDPnwvBqAST@lunn.ch>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <Y/zDmZDPnwvBqAST@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0067.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9a::7) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|CO1PR11MB5203:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca184325-0702-4254-9ce9-08db197a358f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9/yd7TFODRGzBKZuY3pyHxvJNJ398rgkAR6LHazFg9HP9T4i6uz9I2xfY1cEGWR73QGrjXXNBcf6EQpBxyV3u/s7u+aSQ94AeDpPDsrs/iJyLV+FrRBL4Xw3m2F9w9v9GjiZB2M6mP79bDaB8wC/M0tiuR1uCf5RhtLoOIf3ts5i7GUoAYm0Mf6JfzrYJasoKyMXQheI1AKbgLtL6VJTGqdeQD7Ml0ONKad7qfqI2FaH1Wtlx/H+7LLLp5kNPHj12bH4nZgMQfbWSFhcblaCsufuoXvrRQmwz28UAoDzqQD+sMII5hWXhLhZbhVsxCRABSuOJi7UP8MRXJQ1LiFL94mBShvs4Fv7FPdRvF816Zxj5zDYexDObDLgHVgCOwOJHGSoUpyqmh2C5iJ7FxZ417usRcC1BSGzzIVs4OXBh2YMyPond5WggE+6fVjka7ORy83Hfwf6DQ1OyfYQOjoFpqMqBGvpSVjS1MAVjVGN+V+JK92ExU18/bxxK6RenaWRxadncXA9ZMeWHaEF809vNl62CaMdOP0UBcHHtcFCdH8RTDyHDvfSSUMpppB6xSq/VntbyJkcT9vs2pjBBthjBHRbdOZEnNI+HEOn5PpfBCUA/+tavnt+ip39wiBSFl+0h2cp6RwdK0bSQospFOx/y/dX5it+y6YJsgHNrKD+xJL9v7/PL1hUEB+7DEfadDb8NQSNFtfaXOtBjKLt80c1A2PwCobKMt1ajqNBaOpAYTQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(366004)(376002)(136003)(396003)(451199018)(31686004)(86362001)(36756003)(41300700001)(66946007)(66556008)(66476007)(7416002)(5660300002)(8936002)(31696002)(8676002)(2906002)(6916009)(4326008)(82960400001)(38100700002)(6666004)(6486002)(478600001)(54906003)(316002)(83380400001)(26005)(2616005)(186003)(6506007)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aEtET3E1Z0xKdU1pRStvUU1qUzVLZlIyUVdpTGRVRFM2UWQyVjV3RWszTUIz?=
+ =?utf-8?B?aHZVb3lUU0pvazIwVFI0dDgyd1EvU2JZd09yUk16QVRKRk03eEI5dk1UQUtt?=
+ =?utf-8?B?M2xVdzJXd0tpc3QweW1LWGRuYjI2UXJYdWxCcDVMRWllL1NwYno4dTUzQklG?=
+ =?utf-8?B?UVQ2cm12ZkhOTDFTK2dwUGd5Q0lCNkpyT0lKbFpKMzdVb0kxakt3aEV3bU1S?=
+ =?utf-8?B?cW9RY3k4Y3BlakxXOVMyRzhQMnd6eldyYmdzSE0zeEtYMWpoVHB1dWo4Qmg0?=
+ =?utf-8?B?eWZnWElKb1ZrRFh6aDFpL091dHFlSFArdWRhOEVQWXlxOGJZWGs0L3JmQnJK?=
+ =?utf-8?B?MzJtemJnUUQycVpKTjhSQVZZQ0RnUzdQNFhXZmRJNUxnU0RLR0FDVU9WS1lp?=
+ =?utf-8?B?REFybnFiUzZBYTN4TVd0TjZ1SGplY0dzUkp1Z3F5NnhHMjVXZHlvb0VuNXlO?=
+ =?utf-8?B?bS9qR1JEQkh5NnlYY3hmTE4ydVFlZmRKUjZmQ1puWGRQamJrT2xIZUNXdG1T?=
+ =?utf-8?B?OURZRFRpT3hjR09RWlI0bGFmdU8wQll2S0lrZzl0eTgzQitLdEY1UUZyNEQ3?=
+ =?utf-8?B?NjBjM3FMQVB6dzJ0SlpucjhuVDhCRW40TXRYVFR6b0s3WFozdWxkcnhMdUJn?=
+ =?utf-8?B?MG9lN1lWd0c4SzNQYmlBa2hCMUtaK29rZVlyK0NjR2Y3NFMwNzhGZzNrMlRz?=
+ =?utf-8?B?VHE0TUQ5bGZiS2dZWkZxVHc2UGdPekJTb2FMcWdCbUVPYWxKb09KRTVCS3Jy?=
+ =?utf-8?B?NHRZcHZqSG01aXBJRWhKeG9VK29XRXptNERIdzZGbXhuWVRyVEt6YXFsRmMz?=
+ =?utf-8?B?dTM3K2E5ODZ0MkI1dmQ5MmRJZG0zTEJkamZMZUZzTjNqYlRjU1RXc1VxUTdx?=
+ =?utf-8?B?TS9GNGFnSUpBaERyeHpuWU5ncDNwbG1vM3NhdU8ycm8rT254N1pROE1sdTIy?=
+ =?utf-8?B?MmpXSmVveU1DZndMb3owb2NyRGhWRVgzVHlQZDRjOXZlQWplUTV3djM5Ym9C?=
+ =?utf-8?B?WUo0eTRTdS9JOGpHRU5UK2E1VW42d2JuTGxPOVN3TnFDMWtGSHlYRDlBUlZ4?=
+ =?utf-8?B?bEhqQXNXdDNTdHRIZWxqSUhEajBSUGtNSDgyZXQ5ejBYcGwzZGtRQWg3bzZB?=
+ =?utf-8?B?TFEwdGxQcS9LL1V3ZStQdXFMOUpEMUFSdXhDN0prZ01WZ0twZXFrL1AySXVO?=
+ =?utf-8?B?MjVMdjdlalZqcStLWUdkaW9mTU8zK3oybnVaV0RMdWQ4YlYyaWpwYWFac05j?=
+ =?utf-8?B?VVJDcytkV3JWNFdmb3MzQTQzUTFGdmJqMVVRSWNwRWJMNE1tL0M5U084ekRt?=
+ =?utf-8?B?OUJ2QlRWU290UW5iREZxUGZVb3JtQ3Y1RG5YbHF5ZmkySUk1MkZwSVhjUjRH?=
+ =?utf-8?B?QjMrRWJVQ0lRdTl1SWxudnRjUDlSOVJObHVyOFNkS093MWJKVE9DNXY1bkd3?=
+ =?utf-8?B?K2tUYWVRMGlvb1JDVU00SDZkYVk1aHJRWkFZT01scVVPcXhZZWZXZ016N0tS?=
+ =?utf-8?B?a0RPYlJreUQ5ZG96ZHFmYzlHK0tMMmFqc1ltN3Y5cTkwSWhETUU3OFFCUWdQ?=
+ =?utf-8?B?WU41VytpcytQa0VjTWdMUXBXYklLTWx0N1NzaGdidVc2QUg2eGpUWWxheHJC?=
+ =?utf-8?B?WFgzME5NdEJMSjcrWERUSEVQQmZJb1d6aXJBUUhlSnNVcnN5N296UTdJTkdX?=
+ =?utf-8?B?OGdudkdEWG1aQ0NaeGZ1QmZmZ3dFLzdXWUlZZ3Jlcm9XRGlOSWE1bGQ5RUoy?=
+ =?utf-8?B?dWQ3SkNhQ29iZkc3b21DZjdwUGd2cWUvWmxRWnF1ZHNPQ0Zxbm45R3FBS1d0?=
+ =?utf-8?B?V0FEWDJaeXJRRDRRUFE2WnhjWjJKTjJkV2NoZ01NVFV6dmsvOE1YNFpZZytm?=
+ =?utf-8?B?aVRvL2luaXg0U0ZQamxoVkZ3NGZjYkFoclNlcG9UNnVWM1V1S0dFaElzSUZ2?=
+ =?utf-8?B?TmFCS0RoRS9mS0ljM3lWMWJNZ1A0a25Ha1ZGZDAya3hjb25lZmtxTktFT0U3?=
+ =?utf-8?B?NDMzbWZmM0N4c0Ixd0htZTRRb1k2anBoRm9wdXlDRDhBMGgyb3BwUnBqMUdG?=
+ =?utf-8?B?TXRGeVUrQkVLb3JoZVdMb1c3R25seW1ZYmZaU2pVOFg2b1BxU01IdTFJRUlG?=
+ =?utf-8?B?WEhOd3RzbHBOaFFsOWZISjFGOWRCa3gycmdMYmpnRDJ5UVdFK1RxWkJZMW13?=
+ =?utf-8?Q?obOYzgQ+pdsL/LUEmH0YOOA=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca184325-0702-4254-9ce9-08db197a358f
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 10:54:48.1490
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: k9U2D2JrahiZitBPDOzuO/9Fg8aPfZtlS2Wav3gobuqMubtDSPH3zugY55LOiUm/IYzqxZEKdHIZepq8rjOc/LYLFaRCGWWWmYYLDH8n0TU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5203
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Andrew Lunn <andrew@lunn.ch>
+Date: Mon, 27 Feb 2023 15:52:09 +0100
 
-
-On 2023/2/28 18:04, Qi Zheng wrote:
-> 
-> 
-> On 2023/2/27 23:08, Mike Rapoport wrote:
->> Hi,
+>>> Easiest way to see a disassembly (also has C code interleaved) would be
+>>> this:
+>>>
+>>> make drivers/net/dsa/microchip/ksz_ethtool.lst
 >>
->> On Mon, Feb 27, 2023 at 09:31:51PM +0800, Qi Zheng wrote:
->>>
->>>
->>> On 2023/2/27 03:51, Andrew Morton wrote:
->>>> On Sun, 26 Feb 2023 22:46:47 +0800 Qi Zheng 
->>>> <zhengqi.arch@bytedance.com> wrote:
->>>>
->>>>> Hi all,
->>>>>
->>>>> This patch series aims to make slab shrink lockless.
->>>>
->>>> What an awesome changelog.
->>>>
->>>>> 2. Survey
->>>>> =========
->>>>
->>>> Especially this part.
->>>>
->>>> Looking through all the prior efforts and at this patchset I am not
->>>> immediately seeing any statements about the overall effect upon
->>>> real-world workloads.  For a good example, does this patchset
->>>> measurably improve throughput or energy consumption on your servers?
->>>
->>> Hi Andrew,
->>>
->>> I re-tested with the following physical machines:
->>>
->>> Architecture:        x86_64
->>> CPU(s):              96
->>> On-line CPU(s) list: 0-95
->>> Model name:          Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz
->>>
->>> I found that the reason for the hotspot I described in cover letter is
->>> wrong. The reason for the down_read_trylock() hotspot is not because of
->>> the failure to trylock, but simply because of the atomic operation
->>> (cmpxchg). And this will lead to a significant reduction in IPC (insn
->>> per cycle).
->>
->> ...
->>> Then we can use the following perf command to view hotspots:
->>>
->>> perf top -U -F 999
->>>
->>> 1) Before applying this patchset:
->>>
->>>    32.31%  [kernel]           [k] down_read_trylock
->>>    19.40%  [kernel]           [k] pv_native_safe_halt
->>>    16.24%  [kernel]           [k] up_read
->>>    15.70%  [kernel]           [k] shrink_slab
->>>     4.69%  [kernel]           [k] _find_next_bit
->>>     2.62%  [kernel]           [k] shrink_node
->>>     1.78%  [kernel]           [k] shrink_lruvec
->>>     0.76%  [kernel]           [k] do_shrink_slab
->>>
->>> 2) After applying this patchset:
->>>
->>>    27.83%  [kernel]           [k] _find_next_bit
->>>    16.97%  [kernel]           [k] shrink_slab
->>>    15.82%  [kernel]           [k] pv_native_safe_halt
->>>     9.58%  [kernel]           [k] shrink_node
->>>     8.31%  [kernel]           [k] shrink_lruvec
->>>     5.64%  [kernel]           [k] do_shrink_slab
->>>     3.88%  [kernel]           [k] mem_cgroup_iter
->>>
->>> 2. At the same time, we use the following perf command to capture IPC
->>> information:
->>>
->>> perf stat -e cycles,instructions -G test -a --repeat 5 -- sleep 10
->>>
->>> 1) Before applying this patchset:
->>>
->>>   Performance counter stats for 'system wide' (5 runs):
->>>
->>>        454187219766      cycles                    
->>> test                    (
->>> +-  1.84% )
->>>         78896433101      instructions              test #    0.17  
->>> insn per
->>> cycle           ( +-  0.44% )
->>>
->>>          10.0020430 +- 0.0000366 seconds time elapsed  ( +-  0.00% )
->>>
->>> 2) After applying this patchset:
->>>
->>>   Performance counter stats for 'system wide' (5 runs):
->>>
->>>        841954709443      cycles                    
->>> test                    (
->>> +- 15.80% )  (98.69%)
->>>        527258677936      instructions              test #    0.63  
->>> insn per
->>> cycle           ( +- 15.11% )  (98.68%)
->>>
->>>            10.01064 +- 0.00831 seconds time elapsed  ( +-  0.08% )
->>>
->>> We can see that IPC drops very seriously when calling
->>> down_read_trylock() at high frequency. After using SRCU,
->>> the IPC is at a normal level.
->>
->> The results you present do show improvement in IPC for an artificial test
->> script. But more interesting would be to see how a real world workloads
->> benefit from your changes.
+>> Oh, nice! I didn't know Kbuild has capability of listing the assembly
+>> code built-in. I was adding it manually to Makefiles when needed >_<
+>> Thanks! :D
 > 
-> Hi Mike and Andrew,
+> You can also do
 > 
-> I did encounter this problem under the real workload of our online
-> server. At the end of this email, I posted another call stack and
-> hot spot that I found before.
+> make drivers/net/dsa/microchip/ksz_ethtool.o
+> make drivers/net/dsa/microchip/ksz_ethtool.S
 > 
-> I scanned the hotspots of all our online servers yesterday and today, 
-> but unfortunately did not find the live environment.
+> etc to get any of the intermediary files from the build process.
 > 
-> Some of our servers have a large number of containers, and each
-> container will mount some file systems. This is likely to trigger
-> down_read_trylock() hotspots when the memory pressure of the whole
-> machine or the memory pressure of memcg is high.
+> Also
+> 
+> make drivers/net/dsa/microchip/
 
-And the servers where this hotspot has happened (we have a hotspot alarm
-record), basically have 96 cores, or 128 cores or even more.
+I was aware of this and .o, but didn't know about .lst and .S, hehe.
+Yeah, this helps a lot. Sometimes I do
+
+make W=1 <folder/file to recheck>
+
+so that if a driver builds cleanly before my changes, it should do so
+after them as well. `make W=1` for the whole kernel is still noisy
+currently.
 
 > 
-> So I just found a physical server with a similar configuration to the
-> online server yesterday for a simulation test. The call stack and the 
-> hot spot in the simulation test are almost exactly the same, so in
-> theory, when such a hot spot appears on the online server, we can also
-> enjoy the improvement of IPC. This will improve the performance of the
-> server in memory exhaustion scenarios (memcg or global level).
+> will build everything in that subdirectory and below. That can be much
+> faster, especially when you have an allmodconf configuration and it
+> needs to check 1000s of modules before getting around to building the
+> one module you just changed. FYI: the trailing / is important.
 > 
-> And the above scenario is only one aspect, and the other aspect is the
-> lock competition scenario mentioned by Kirill. After applying this patch 
-> set, slab shrink and register_shrinker() can be completely parallelized,
-> which can fix that problem.
-> 
-> These are the two main benefits for real workloads that I consider.
-> 
-> Thanks,
-> Qi
-> 
-> call stack
-> ----------
-> 
-> @[
->      down_read_trylock+1
->      shrink_slab+128
->      shrink_node+371
->      do_try_to_free_pages+232
->      try_to_free_pages+243
->      _alloc_pages_slowpath+771
->      _alloc_pages_nodemask+702
->      pagecache_get_page+255
->      filemap_fault+1361
->      ext4_filemap_fault+44
->      __do_fault+76
->      handle_mm_fault+3543
->      do_user_addr_fault+442
->      do_page_fault+48
->      page_fault+62
-> ]: 1161690
-> @[
->      down_read_trylock+1
->      shrink_slab+128
->      shrink_node+371
->      balance_pgdat+690
->      kswapd+389
->      kthread+246
->      ret_from_fork+31
-> ]: 8424884
-> @[
->      down_read_trylock+1
->      shrink_slab+128
->      shrink_node+371
->      do_try_to_free_pages+232
->      try_to_free_pages+243
->      __alloc_pages_slowpath+771
->      __alloc_pages_nodemask+702
->      __do_page_cache_readahead+244
->      filemap_fault+1674
->      ext4_filemap_fault+44
->      __do_fault+76
->      handle_mm_fault+3543
->      do_user_addr_fault+442
->      do_page_fault+48
->      page_fault+62
-> ]: 20917631
-> 
-> hotspot
-> -------
-> 
-> 52.22% [kernel]        [k] down_read_trylock
-> 19.60% [kernel]        [k] up_read
->   8.86% [kernel]        [k] shrink_slab
->   2.44% [kernel]        [k] idr_find
->   1.25% [kernel]        [k] count_shadow_nodes
->   1.18% [kernel]        [k] shrink lruvec
->   0.71% [kernel]        [k] mem_cgroup_iter
->   0.71% [kernel]        [k] shrink_node
->   0.55% [kernel]        [k] find_next_bit
-> 
-> 
->>> Thanks,
->>> Qi
->>
-> 
+>        Andrew
 
--- 
 Thanks,
-Qi
+Olek
