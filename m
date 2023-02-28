@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7474C6A5947
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FE56A5948
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjB1Mn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 07:43:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S231180AbjB1Mnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 07:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjB1MnY (ORCPT
+        with ESMTP id S231307AbjB1Mn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 07:43:24 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2BA8A46;
-        Tue, 28 Feb 2023 04:43:03 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so13517784pjb.3;
-        Tue, 28 Feb 2023 04:43:03 -0800 (PST)
+        Tue, 28 Feb 2023 07:43:28 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1146EB5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:43:07 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id ck15so39574135edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:43:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677588182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GNoSdXiAy4Hnpx4GSmf9v1s/TnoJ2Easnzikmce7RFo=;
-        b=Df7zrRz22eg8YZi+bpqjSJPlYpN8eIwr9o77wJ4OIQ+4kuTEVXpnUz/mPubCGdCkzm
-         wB0GhDQXs3xOQYDpZ9TG3khGJT4x7Ps3f8Vj0npRhk0C4oSB96tMQoW50c51EZ3lfU6+
-         vFMlcXzfaK3nk76iyyHVvUt22CWre9Kuihg8DdAXM83Q0NBTYhnQ9e1mcv7ZaGj3nj6C
-         DWIlEvKfO56rW78AV5SO5ICvqhDgv2GTFKuLLPU+zrXAXmgq0Z3G0wNqW6+IdX6MRcKc
-         JC/a+Zbq22en8EaGBqwiunzxOiXmQHaNTUI4tKBNSby2zUAc3XWf8SlBzOOJfcD8IlKJ
-         SM5Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nJVEIhPKLgTn+f8VRs4bEIhn760RPkrg51g9quDiRIM=;
+        b=KpZe4kRNteu5U7jRkBjLAJrNgdsosHyBUOuWkSDOiYhDSEZemMAlXs2A+5/nOeRwbc
+         gHZLzrN99Fd9HyEHt51MNyySoE7+SZURVC7mJ8oOiNQnn6aBoziCZBV1fNWH8AtOmD8s
+         eFb2FIrOIQriuUuE67S8xs1yVBfkjpVYCd2VsZeMprVlawBTMKdJphmhGMR9gTDUTHei
+         OzB2SE8gxRX9HYbWukfQrEapjCVClDWL2hNQyRubzjNahdqBpmK33OvtOCffI/8jQl2q
+         +dbrlazx2m8MBhSDeAgQfTlTJPRaUOzUzdcC7JsWgV8kn3SF1k3sGsZm8kJ2RIXhLppT
+         q07Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677588182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GNoSdXiAy4Hnpx4GSmf9v1s/TnoJ2Easnzikmce7RFo=;
-        b=FBDohP3fu3kQLytahyhOvYTIj72q4/9UJrAxCkl3mmAnomevTHmr3nclTXlGdUmM8P
-         OhnakrWnAMFJAM2OL3rS/V+DxRVIiL3WuF5stbCLF9kwRy0Q8cf/3Yb9cW6DiLyO+lfw
-         goa1EVOVD3maW3PsGSds+yjbCRvckigrXS5xW9vLw5tg82T6SI48/rnIVS0XFxA+tpvk
-         y52bvQ3vfSTfx1/ee12pe3UVET0KRAiGctIXLXHC7zNR2dn05hviK5lv6W4zATvy+NT8
-         zvhqd+scZL2atbNQXPYBM6il+lYEWz84dLZYUSPoN2kqlk3JvIHNZXFNG/O7XJI6dvRP
-         dlmg==
-X-Gm-Message-State: AO0yUKV2seuGNnS5LdA318lpsTVq5hp6nWui9PgGrzYWaURXIj0c/fez
-        aHyBcGq6ICP8VeuMxGNFyL0=
-X-Google-Smtp-Source: AK7set9OdAQjCkCpgdCiYZHKKMRQTrLw3bEzWK8cbf3O+nNoqA5K32bwW9Ij9MRpVcAkVdH7hRxAQg==
-X-Received: by 2002:a05:6a20:47d7:b0:cc:68a1:5033 with SMTP id ey23-20020a056a2047d700b000cc68a15033mr3052844pzb.16.1677588182510;
-        Tue, 28 Feb 2023 04:43:02 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-83.three.co.id. [180.214.232.83])
-        by smtp.gmail.com with ESMTPSA id y18-20020aa78052000000b005a909290425sm6172405pfm.172.2023.02.28.04.43.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 04:43:01 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 24D0210105C; Tue, 28 Feb 2023 19:42:57 +0700 (WIB)
-Date:   Tue, 28 Feb 2023 19:42:57 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Christian =?utf-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?utf-8?Q?D=C3=A4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        intel-gfx@lists.freedesktop.org,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>
-Subject: Re: [PATCH v7 00/15] dma-fence: Deadline awareness
-Message-ID: <Y/320d96QmbLe1J8@debian.me>
-References: <20230227193535.2822389-1-robdclark@gmail.com>
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nJVEIhPKLgTn+f8VRs4bEIhn760RPkrg51g9quDiRIM=;
+        b=zCwxCPu7fEONujs4iwyMXNRgEMxggWy2UPh9mcf+NecLF5rErmc5NB2aPhhHotrS34
+         aNUqYZMHHrpLGDrRT6qaNsq6VHmIcDEJHrj7Nd6g9es5K9sk/Qo9RVHWPQYceuSDVWUB
+         K+RG3+joa/GwOPHM9cQWG+biHeDhW9wiATzwPKH/QMPUJEmYzfk8mDN0HtSJIhzlWipI
+         Yd50XupOO1zKXBRMjAm5Zyxz387S8mbY6HPiuwRqU0xtazwpz9kb6pNYMjLE1Qb2qFtp
+         NE5umpjE0igZoEsTxCEs09b3NAyozevtueoOMJnQNskZ1Z/HNs7qGQmsGLnv0yn8UTw6
+         Wc0Q==
+X-Gm-Message-State: AO0yUKWAE3kk+bzWKd4o1FZ8v3LQ2bIosXQs3Ybqh6iSiuFuNCVCQfHT
+        VwOvSWXx3w9QCe1UzcEU9ikrdsZYvus=
+X-Google-Smtp-Source: AK7set/OhVedFmU/CFmt9qtLTMgyTFaxY8xIf1FUKl3A+f66bTfFrn3M6y8ruONLxxA3A6be+MD9yw==
+X-Received: by 2002:a17:906:b851:b0:872:b17a:9b59 with SMTP id ga17-20020a170906b85100b00872b17a9b59mr2493027ejb.38.1677588185729;
+        Tue, 28 Feb 2023 04:43:05 -0800 (PST)
+Received: from [192.168.178.21] (p5b0ea2e7.dip0.t-ipconnect.de. [91.14.162.231])
+        by smtp.gmail.com with ESMTPSA id h23-20020a50cdd7000000b004af64086a0esm4371314edj.35.2023.02.28.04.43.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 04:43:05 -0800 (PST)
+Message-ID: <5cbba992-c4ce-01c1-2691-ed65ce66aad5@gmail.com>
+Date:   Tue, 28 Feb 2023 13:43:01 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wAv6Jr7MZqhKVbDV"
-Content-Disposition: inline
-In-Reply-To: <20230227193535.2822389-1-robdclark@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: amdgpu didn't start with pci=nocrs parameter, get error "Fatal
+ error during GPU init"
+Content-Language: en-US
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>
+References: <CABXGCsMbqw2qzWSCDfp3cNrYVJ1oxLv8Aixfm_Dt91x1cvFX4w@mail.gmail.com>
+ <a99e6def-68be-3f2b-4e01-ac26cdb80f49@gmail.com>
+ <CABXGCsM7JPxtQm6B7vk+ZcXfphgQm=ArJZKiDUdbk9hujyRtmg@mail.gmail.com>
+ <43016018-4d0a-94dc-ce93-b4bff2dce71c@gmail.com>
+ <90b1c9f8-1674-e9ec-e6d8-2fa1967439b3@gmail.com>
+ <CABXGCsN2NutEmi==JBDD5G2Bj=DJ6vm87_Cbubycz-WowUOh5w@mail.gmail.com>
+ <e2975d53-840c-a104-8b2d-c302f502c894@gmail.com>
+ <CABXGCsOJkF=c4B+oQm7cuEO7Fr_oknmH2iB6e6OCzmFy=KYtAw@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <CABXGCsOJkF=c4B+oQm7cuEO7Fr_oknmH2iB6e6OCzmFy=KYtAw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,71 +85,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 28.02.23 um 10:52 schrieb Mikhail Gavrilov:
+> On Mon, Feb 27, 2023 at 3:22 PM Christian König
+>> Unfortunately yes. We could clean that up a bit more so that you don't
+>> run into a BUG() assertion, but what essentially happens here is that we
+>> completely fail to talk to the hardware.
+>>
+>> In this situation we can't even re-enable vesa or text console any more.
+>>
+> Then I don't understand why when amdgpu is blacklisted via
+> modprobe.blacklist=amdgpu then I see graphics and could login into
+> GNOME. Yes without hardware acceleration, but it is better than non
+> working graphics. It means there is some other driver (I assume this
+> is "video") which can successfully talk to the AMD hardware in
+> conditions where amdgpu cannot do this.
 
---wAv6Jr7MZqhKVbDV
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The point is it doesn't need to talk to the amdgpu hardware. What it 
+does is that it talks to the good old VGA/VESA emulation and that just 
+happens to be still enabled by the BIOS/GRUB.
 
-On Mon, Feb 27, 2023 at 11:35:06AM -0800, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
->=20
-> This series adds a deadline hint to fences, so realtime deadlines
-> such as vblank can be communicated to the fence signaller for power/
-> frequency management decisions.
->=20
-> This is partially inspired by a trick i915 does, but implemented
-> via dma-fence for a couple of reasons:
->=20
-> 1) To continue to be able to use the atomic helpers
-> 2) To support cases where display and gpu are different drivers
->=20
-> This iteration adds a dma-fence ioctl to set a deadline (both to
-> support igt-tests, and compositors which delay decisions about which
-> client buffer to display), and a sw_sync ioctl to read back the
-> deadline.  IGT tests utilizing these can be found at:
->=20
->   https://gitlab.freedesktop.org/robclark/igt-gpu-tools/-/commits/fence-d=
-eadline
->=20
->=20
-> v1: https://patchwork.freedesktop.org/series/93035/
-> v2: Move filtering out of later deadlines to fence implementation
->     to avoid increasing the size of dma_fence
-> v3: Add support in fence-array and fence-chain; Add some uabi to
->     support igt tests and userspace compositors.
-> v4: Rebase, address various comments, and add syncobj deadline
->     support, and sync_file EPOLLPRI based on experience with perf/
->     freq issues with clvk compute workloads on i915 (anv)
-> v5: Clarify that this is a hint as opposed to a more hard deadline
->     guarantee, switch to using u64 ns values in UABI (still absolute
->     CLOCK_MONOTONIC values), drop syncobj related cap and driver
->     feature flag in favor of allowing count_handles=3D=3D0 for probing
->     kernel support.
-> v6: Re-work vblank helper to calculate time of _start_ of vblank,
->     and work correctly if the last vblank event was more than a
->     frame ago.  Add (mostly unrelated) drm/msm patch which also
->     uses the vblank helper.  Use dma_fence_chain_contained().  More
->     verbose syncobj UABI comments.  Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
-> v7: Fix kbuild complaints about vblank helper.  Add more docs.
->=20
+And that VGA/VESA emulation doesn't need any BAR or whatever to keep the 
+hw running in the state where it was initialized before the kernel 
+started. The kernel just grabs the addresses where it needs to write the 
+display data and keeps going with that.
 
-I want to apply this series for testing, but it can't be applied cleanly
-on current drm-misc tree. On what tree (and commit) is this series based
-on?
+But when a hw specific driver wants to load this is the first thing 
+which gets disabled because we need to load new firmware. And with the 
+BARs disabled this can't be re-enabled without rebooting the system.
 
---=20
-An old man doll... just what I always wanted! - Clara
+> My suggestion is that if
+> amdgpu fails to talk to the hardware, then let another suitable driver
+> do it. I attached a system log when I apply "pci=nocrs" with
+> "modprobe.blacklist=amdgpu" for showing that graphics work right in
+> this case.
+> To do this, does the Linux module loading mechanism need to be refined?
 
---wAv6Jr7MZqhKVbDV
-Content-Type: application/pgp-signature; name="signature.asc"
+That's actually working as expected. The real problem is that the BIOS 
+on that system is so broken that we can't access the hw correctly.
 
------BEGIN PGP SIGNATURE-----
+What we could to do is to check the BARs very early on and refuse to 
+load when they are disable. The problem with this approach is that there 
+are systems where it is normal that the BARs are disable until the 
+driver loads and get enabled during the hardware initialization process.
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY/32zQAKCRD2uYlJVVFO
-o1TBAQCAHLKqy5NdumoKS+DbOAOm+KfhLK93EKYDC8UmiebsRAEA+JAK75T6QTDt
-aHxaJFTZKkVfK7+Eq1MfYn2ZeBgJXgU=
-=jpg1
------END PGP SIGNATURE-----
+What you might want to look into is to find a quirk for the BIOS to 
+properly enable the nvme controller.
 
---wAv6Jr7MZqhKVbDV--
+Regards,
+Christian.
+
