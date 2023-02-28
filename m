@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604506A58C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8026A58D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjB1MDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 07:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
+        id S231502AbjB1MFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 07:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjB1MDG (ORCPT
+        with ESMTP id S231543AbjB1ME6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 07:03:06 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B290B44A;
-        Tue, 28 Feb 2023 04:03:03 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxYeV27f1jVXUGAA--.6664S3;
-        Tue, 28 Feb 2023 20:03:02 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxnb517f1jiuVAAA--.55379S2;
-        Tue, 28 Feb 2023 20:03:02 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3] selftests/bpf: Set __BITS_PER_LONG if target is bpf for LoongArch
-Date:   Tue, 28 Feb 2023 20:03:01 +0800
-Message-Id: <1677585781-21628-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8Cxnb517f1jiuVAAA--.55379S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Aw1UGr13KF48ArWrJF47urg_yoW8uFWDpF
-        yrC342kFW0gFW3Kwn7Ar4j9F1ftwn5Kr4UAFsIg34vqFs8J34xJws7GFykXFnIgrWSkFn8
-        Z3W3Kay3ua18CwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b78YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-        6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
-        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
-        UvcSsGvfC2KfnxnUUI43ZEXa7IU1EksDUUUUU==
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Tue, 28 Feb 2023 07:04:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE112DE52
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:04:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677585854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KCJidl22u1cKfAyMeW4PYXi3JfewoKCLf6JCBtPv+4E=;
+        b=imXD55bt2Gev2i/p6DR6bULaPt8kaQ8CGOQuC/kI2EHs5iMUnSiTVfE6pNlqy2BEE809QJ
+        ibgVYLZFzbpbKWGNd4IT3xKS8Vr3YesTjE71JKzcMhpfSBjfLyDDrUA4HoFoud5863mGIZ
+        dUkj7xJVEONxt6D2YpkNODvp1R6roU0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-546-CVHzQ5ZkPQSowccCc1USbg-1; Tue, 28 Feb 2023 07:04:13 -0500
+X-MC-Unique: CVHzQ5ZkPQSowccCc1USbg-1
+Received: by mail-wm1-f72.google.com with SMTP id j6-20020a05600c1c0600b003eaf882cb85so4155319wms.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:04:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KCJidl22u1cKfAyMeW4PYXi3JfewoKCLf6JCBtPv+4E=;
+        b=d0gfySyyHCW4lyYixe9cRUj/zTbu9TqKkylNjNeSszcs5V0ZwMMVSoWIran69S1emI
+         msN40VUtfWSAc4kk13KF4MN/N1HknBO0sYwcLZFu54Fv77G3QE/ljhDl6yofmZi0dBLC
+         Yr4zbxOW1Q6Z7FAXKrDdsVHhrECoNTHpU5nzXXcM7f4bnPkjXKMTN3P+LSzTPIEcvLp4
+         urPTGVmAHnFLvrooZjnKSShMtLWgOa7hzsR4AP9sabdb+HM6Eb6jRLepvuo5MgcpFnOW
+         O6LC3l03CVdc5Btgcnz/bWIgi2JWQeo6egIqY0oQGJ4k6NolkMRGtBbhokSBfDqLjihn
+         9o0A==
+X-Gm-Message-State: AO0yUKW7dNMeZ6imgGXYvJpmumwgWka+lotxlOA1mdxmzqrtsZeVDb29
+        oKtgApSOMCCApHtRQq7wOmRQ6kkmylib8R1vLkBXJpF3x1jItBHQKH0y1MqkBd6Voh6Yaanf3e6
+        0xaKCFH+ULxofdvr9zlr0f+jQ
+X-Received: by 2002:a05:600c:35cc:b0:3ea:840c:e8ff with SMTP id r12-20020a05600c35cc00b003ea840ce8ffmr2220083wmq.3.1677585852441;
+        Tue, 28 Feb 2023 04:04:12 -0800 (PST)
+X-Google-Smtp-Source: AK7set+i4oLcSfX/DPlO4reXLr5cplrlWIwAVs7488OSTZEYMFEEjdYGmSLF3oxgzaF/YTdKk1RNSg==
+X-Received: by 2002:a05:600c:35cc:b0:3ea:840c:e8ff with SMTP id r12-20020a05600c35cc00b003ea840ce8ffmr2220063wmq.3.1677585852119;
+        Tue, 28 Feb 2023 04:04:12 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id l8-20020a05600c1d0800b003de2fc8214esm13242664wms.20.2023.02.28.04.04.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 04:04:11 -0800 (PST)
+Message-ID: <85dae3d33c5b19b968313069c7c5342d688852b2.camel@redhat.com>
+Subject: Re: [PATCH] sched: delete some api is not used
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     lingfuyi <lingfuyi@126.com>, jhs@mojatatu.com, davem@davemloft.net
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lingfuyi <lingfuyi@kylinos.cn>, k2ci <kernel-bot@kylinos.cn>
+Date:   Tue, 28 Feb 2023 13:04:10 +0100
+In-Reply-To: <20230228031241.1675263-1-lingfuyi@126.com>
+References: <20230228031241.1675263-1-lingfuyi@126.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If target is bpf, there is no __loongarch__ definition, __BITS_PER_LONG
-defaults to 32, __NR_nanosleep is not defined:
+On Tue, 2023-02-28 at 11:12 +0800, lingfuyi wrote:
+> From: lingfuyi <lingfuyi@kylinos.cn>
+>=20
+> fix compile errors like this:
+> net/sched/cls_api.c:141:13: error: =E2=80=98tcf_exts_miss_cookie_base_des=
+troy=E2=80=99
+> defined but not used [-Werror=3Dunused-function]
+>=20
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: lingfuyi <lingfuyi@kylinos.cn>
 
-  #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
-  #define __NR_nanosleep 101
-  __SC_3264(__NR_nanosleep, sys_nanosleep_time32, sys_nanosleep)
-  #endif
+This has been already addressed by:
 
-Work around this problem, by explicitly setting __BITS_PER_LONG to
-__loongarch_grlen which is defined by compiler as 64 for LA64, then
-__NR_nanosleep can also be defined to fix the following build errors:
+commit 37e1f3acc339b28493eb3dad571c3f01b6af86f6
+Author: Nathan Chancellor <nathan@kernel.org>
+Date:   Fri Feb 24 11:18:49 2023 -0700
 
-  clang  -g -Werror ... -target bpf -c progs/test_vmlinux.c ...
-  progs/test_vmlinux.c:24:18: error: use of undeclared identifier '__NR_nanosleep'
-          if (args->id != __NR_nanosleep)
-                          ^
-  progs/test_vmlinux.c:42:12: error: use of undeclared identifier '__NR_nanosleep'
-          if (id != __NR_nanosleep)
-                    ^
-  progs/test_vmlinux.c:60:12: error: use of undeclared identifier '__NR_nanosleep'
-          if (id != __NR_nanosleep)
-                    ^
-  3 errors generated.
+    net/sched: cls_api: Move call to tcf_exts_miss_cookie_base_destroy()
 
-This is similar with commit 36e70b9b06bf ("selftests, bpf: Fix broken
-riscv build").
+Thanks,
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b677dcd..f40606a 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -338,7 +338,8 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids	\
- define get_sys_includes
- $(shell $(1) $(2) -v -E - </dev/null 2>&1 \
- 	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
--$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}') \
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__loongarch_grlen ' | awk '{printf("-D__BITS_PER_LONG=%d", $$3)}')
- endef
- 
- # Determine target endianness.
--- 
-2.1.0
+Paolo
 
