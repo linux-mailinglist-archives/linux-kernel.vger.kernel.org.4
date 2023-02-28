@@ -2,321 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FE56A5164
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 294A16A5169
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjB1Co6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S230089AbjB1CqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjB1Co5 (ORCPT
+        with ESMTP id S229817AbjB1CqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:44:57 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2054.outbound.protection.outlook.com [40.107.101.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEA61167F;
-        Mon, 27 Feb 2023 18:44:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DT/dxPnA26eyKVvII5UvbghL4CgAoa1fptTBmD6Pl1fhFmbVF0efq19XVcsHD4gwfugiazM/cSqDLWEKYWjSTbtIfFEG5kgqjI4gi1zJVF7Y/BSB20eCm+b4Wnx0kP07wVO/Fr8gahGmahClK3IoO1aUQFUNvrpItm95PUzLv1C1CN93KSmY6jwjVBtN/IILP25PgUMqpT4uzO+Z8JU5kR3Q+arwWgb3ymZZ7Oc12RHdh8b0AyJg3lRgHkAjTVrkaY/s1CnY9RaaMu2WnJXGFhnyaCAi2D5Z6Gw9w6Sahjo9ulKkgfos2JiHFZwl/pdSbXQ/hGiPHyNsz3pFAIcRkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kMuqSUFpwCCh68Vv8mNo2yUfJpXu45dnqhCaoPih7hE=;
- b=TFQ5zQ8d3hP5EijpLILXXGl3dTrOK42e4aegaRvz+qyxVkY6ekB6jwtyDEpY+bIb3VNMepw/XX+jPlfvX1arE7QJ4xhCaMNghEo+J0mei/TcxlT6veTH2HFfqTVMEd+a4Tg0BOMu2/OeidN4DFbqxPS7z5USnfUyZL5NioOpibs/98HP5WbmdT6r2ogFjYBV8EN97mridQ0alhzTw0qESo/9M8Ll1QrLLkILp807KHNNhHWuuKiD8HQDaFHiQbZzoyqH4PyLtP+MMEVfeGn68zh1fimTdgzAVzv7zgKeY3DB7EFZIqcf7eAV1BGA+CqQHsCOnuv4DJSVuKq1A7qryg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmx.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kMuqSUFpwCCh68Vv8mNo2yUfJpXu45dnqhCaoPih7hE=;
- b=pZuAAAM7X1Da6OZZ5x4OPzwhI/MnGoRHLSiCVOEwkHVW7txTshH8aQjnOxpAAc/z4XHeYirfxj4zAl8r56A6I0mntJyjfeTT+g62bpYcvYcLdkHaeMdcGxuDn6Y1D/7CpaQzA710wvlygt9yDH7ZPPRxFvyUZv1hdZvqI4zNQXk=
-Received: from BN0PR04CA0170.namprd04.prod.outlook.com (2603:10b6:408:eb::25)
- by MW3PR12MB4346.namprd12.prod.outlook.com (2603:10b6:303:58::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.26; Tue, 28 Feb
- 2023 02:44:52 +0000
-Received: from BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:eb:cafe::1d) by BN0PR04CA0170.outlook.office365.com
- (2603:10b6:408:eb::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29 via Frontend
- Transport; Tue, 28 Feb 2023 02:44:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT035.mail.protection.outlook.com (10.13.177.116) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.17 via Frontend Transport; Tue, 28 Feb 2023 02:44:51 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Feb
- 2023 20:44:50 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-CC:     Mario Limonciello <mario.limonciello@amd.com>,
-        <stable@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        <reach622@mailcuk.com>, Bell <1138267643@qq.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] tpm: disable hwrng for fTPM on some AMD designs
-Date:   Mon, 27 Feb 2023 20:44:39 -0600
-Message-ID: <20230228024439.27156-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 27 Feb 2023 21:46:20 -0500
+Received: from sonic314-28.consmr.mail.ne1.yahoo.com (sonic314-28.consmr.mail.ne1.yahoo.com [66.163.189.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5081ACC5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:46:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1677552378; bh=BQ+WXlqpXh/uVG2MKB5itNMQ6Bd25Ipr7yTqsr/SVgo=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Lr+3eRhGyfq+C1ZSB+BQVj7xCTZ+SzGg5OlaocQiuwwjan+ZiD1iGT9PY+dUT5Q52kkk/3lyYkGZK4zfygbFjO9b0HaZ3k7PB0bo/5I5a3kubItuUAmiE/+wBDYVJ+awz2HH2j4LYMTYtCgLrndk0Nt9iaUdW5n/mscv00PvN8UQ2Vv/JIiVLv5JiHeuK3Ep4/Kr+/SNjAlAJdQjJajjExiwcyGqISD4HAoMVxR7J7MadlQzGYwbphww4W9muARwb8+316o4/WeZLrqOMkTBBQ1G21042DcoWWvu5PzqW0JD5FAniqkAvoTFUvHP91fM8YXqlHMljo9tL+qgMdRBag==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1677552378; bh=CQMeHqcj7aXG5ZlssH8sHHcD3WVvtuLyXO4qUFLtlWX=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=XOzdlBgztf+yNBsBb5135Z0taK+0hGMkGs4oN3VWZkPWwy8V0A795aGEaXASQ8rm6pc+g4ShG+wNlb1anwZAv2HCu9j5Ks3xhVvXTNR3vjcesj12ARH3LTj4Z4Tis0L3Gsl8PpkbDdIYxPhtg1mAb0ossvBom7C1rXxxxsfqJliRvAeCHOJWlqr4D6o3Yi/SM8JVCgKDHyq1HF2BgX3RgYjLJHfCeuxuzx6d8QCPFFDdMi0ThPcbQL9f3hx+ipjqCU+ezH7G5mKwQzzYS8xmAPz758QrAkYfzeTtLsT4E+XyNVr2ZpR7jiRqKWDla73xxHxceJG/jriQmbDevI1FWw==
+X-YMail-OSG: ci610LsVM1mzE2wJyzYQMs_u41uMdgejp1hCT7fxgMe3Hk2FE5DaJoEXW2iwB0f
+ WpAlwqs7BG0ebXhR1xCTeCvVq_pRnLIY1YMmiLy8AC7HuX1yddhfV7WixyI_DZ0nRoalNQUxYARF
+ f0oZ6NUshS4Q5p.rOSOIYBVp45UZsDlD0XipBnzmL81Md9qqzHRLuGfQtMnvhwe.mfOKWtYP8gFn
+ 2hiSopzljNdbHRhXTZhpgE61WUnB1aQ7qXEvcERb3kwaQlo0UAVBZ0PghBTZliVS.I0h89Nogcb0
+ cThtpiDwRsuEtH0IMlg6rGUyk8V_tjv_1ky3bdZS0A4qSjWy05VGz.KGFpuxnOygqYu_8m0_XBIy
+ nHDI7W2PNb7VTvT.IG7OLM1Il7XBq_fFy5xCaXsGKVI2LGD5kPqaDqvP79bP22AQH8goZWJhqKyr
+ LGYodniDi1x179ITC9TVtdtPVuHo7BkkZFp2DYZaL849g3H1iyWwCMiSIXiGVnaTxyQ33tnCF_K3
+ cYMW9g.PtqI7BaCttIzZjzS0rfmk4GJTBtjotUeZzrCPfZN6h1VPYw84HyXu2S0.8OjAt7Klyl77
+ Ha49eUujDL60MZ5HjdDHnlzNEsVcbmSgi3WXunlAZFZbKG4Vyuf14.yhEFv9JqbKpiKv2954hW0r
+ qxap0mycBx1B0d4xubnx300y0YXHz_vWcs4EyBD8Mv8xIycvKn1INPHJYzDRQWKzhDNIfmi5.2bT
+ SRi2kB0XMyipnZ6fR.uu5bHmQ99xDBFH_R_ZRf60DYbqw.YUKfycRD2NrFYoTfyR4qNJdZkO.i51
+ I2_KqBgYYPcRb8BFW5fuD4fHCpsud8eF81dLKJkvvxagGWbm5IvSTGQOmC2hB792EFCGN5UCIX9h
+ GO_t5GWp3NHotwDLE4ODQsldHIYhrQ0S3MCYnJqsAFhh2wa1Z6nqltF3wjBdPXzDCH98R8rfQrWT
+ Nae6ta.s_FSPR5WQmHEC2jQcAfSlEeQWUAAj7UwctkS9LxiPVHnDN763vbMz09S6cRQS9Nw73JAI
+ .Dd8SMBPTaKFBJsXNtggzsWnyXR9q9es77XHnX0hXo5zXmQj0mlfvgqdIYEkuE65lstciv2aCWdK
+ 6KzcshgGnQw4DXmLA.mXW86ZylktiQHC.bnScVzgalC2gLzXsc9TlT_QbksM9oU_6N.A.DzbY49o
+ nod1QL60zTUagREZRfHlxlzp.S9K2iPZEckJE_xaDqoeWMNDk0705XXBw_Isy3JeQykxBuMWYrbI
+ fgKr.RiwdcYlKXqeYnMXVgjz.109P45_025CwLGAHrBTbO4RuuEu8aTG8YSGeu86ye5U.d0kMmYg
+ OqHbXftMrlKRhZJrP1QhI0kcLYMf.6P4JtLlml1iI4ovLLtUEF4WJJMFxsLptkKmq.YGthh1HsLh
+ wmlr11mqcAKBv50IKmO3xWGJzFzhbE5bzdOg6x4fDqrfQHfIqT2zpHNM6obPgKdXaZuxOPfGmZh6
+ z72cKYxD9.gtPvTnEpJPcSSsXIZk8kMUHDI9EpCsa_76O0p.FeaNdvpN0ioVmCOlKJG6xqnaJ6m7
+ z2LJtL7JWapqyAi6vTyWfkeiZTjw27cYSgI_j_9tHaAgK5TiCcVGGgLTWkOBjlv_hxkl129xrw.N
+ G6CpMg.Ely8UDu4Lodz0sT1FGVbXYtF6TDaZ2AC8z0PcI.j6PUbWGhGhRp.pMMFEYXvSpdDuq142
+ tIk1DO2rgOtowwvJrCPyLKoshJtMzuaxWhuR.7zj4Oi03.1Ifz3TqJVoK5EKaTHD3YFdtOlySTXg
+ giRq_WouLi6ZLxACfFolIJxy92P8xP7r4QHrDLL.IKBK1cQuom_z6cPzpqd2Qf72KSD9_fP_x62j
+ 5s1oDWF7ZK5JkFSaT.uCDdP43uzhByB2KGtZCz3oJsMdssqM2KTSyb6dXAhrbb_9cSlVuUI4pPeI
+ 3_9KXUPJ3ZbORA_7NihWOfRq.rva7d8kucLf09gFQqDH7XYzzM9CymiqzqsHZMDriPgOBtkFp158
+ 2D_JOVH7_Gbed4ng0NrrCNZE10VeB.tr7.z8fFVkvYgmY0u.zzjpUmM04TsnKlxUEWBSRN6WB8zA
+ 1g_MxorlOO50XfISIBgZfGI13Wjt1U_C1TRfroh0k_FXqBlA2k3AuSit1awPeEfuuq4A6lR7fSle
+ OfXKC.veY4sdULIwUYN0NYzdhjeXPGQu5rslXjWJo4kGJnvH4g9A6KZLTEMxyfUy8VQF_lLWf2dt
+ zkFvjbJoD6mxLU_VxJs0uPGaAiQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Tue, 28 Feb 2023 02:46:18 +0000
+Received: by hermes--production-bf1-57c96c66f6-l6456 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d4e562dc8e3f825fd81194f5c4ddb2ab;
+          Tue, 28 Feb 2023 02:46:16 +0000 (UTC)
+Message-ID: <97465c08-7b6e-7fd7-488d-0f677ac22f81@schaufler-ca.com>
+Date:   Mon, 27 Feb 2023 18:46:12 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/2] capability: add cap_isidentical
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mateusz Guzik <mjguzik@gmail.com>,
+        Serge Hallyn <serge@hallyn.com>
+Cc:     viro@zeniv.linux.org.uk, paul@paul-moore.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, casey@schaufler-ca.com
+References: <20230125155557.37816-1-mjguzik@gmail.com>
+ <CAHk-=wjz8O4XX=Mg6cv5Rq9w9877Xd4DCz5jk0onVKLnzzaPTA@mail.gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAHk-=wjz8O4XX=Mg6cv5Rq9w9877Xd4DCz5jk0onVKLnzzaPTA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT035:EE_|MW3PR12MB4346:EE_
-X-MS-Office365-Filtering-Correlation-Id: 91b5ea4e-9528-4774-02bb-08db1935c437
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: luXoMr2yoDbXgNNGxl98mn49bpudG9ScOppez/7spEotKj73fzzlKTs/bG32BAcRshQ3glrvl3POoQ8qnXUHX7sOIVOiSSAquSv09eu13xsU1HyI0QCAbQJLxK8Fd3bh7fU3JmytI7hvOCOll3vI2TtQJ4AOtpg+fVBtf/UAPcMZ//ZKnXl6CqN2HJ8jf7sBEX2YOg9mHUFAJXfNuo6EfgtygYqlyiEKfNKrNAycuGj+IEtIFGiOKqao2GItHltMsp43vjmHIpaeJBJ+++b5NzPX8X40MSVG8lqVHVpzNfMd1Ca0Ucvl2F6OAFyehzuQAndkj6T9bTEXpOVf1MJcYvI9Di1Ix6SaQ5aFuWMdV6x7A2T754eu4C2os9yK56ip3NQNjc9W9lXkRDVm5QN1p/KmcUwCR0pc+DTAKw5e8ZbmDHtDCw6a9IT8NzINPDw30hC4Mb/2k5gjAqeViLqaFx0KMzDFGE2cbxShGx8f3bnAzP3IQ7uEDlb1Ehh8fOvm21VBkjlsZipz50dKtt1x9ym00xCOfnwAObhhzbgYoa+X1f3MupUE9+hpdOvblTUF97LDyQBY2HioXBSyUdcnethxu0Kbvgihm2tlOmT7BhMQKAZ+XZUOBsDCSEc0ae8P9IFks9RPbn0g2DpO/BQk4bb8SDsJTsM1kh/nq9Hd2t5NkCyhPszaG5D2mz/tjd9ZWzCazJS75hAHMZJJTjFx7qVhk/Q2E9PeNq5ZAfyfvupYufzEpldIsKcDT339PdL4ZiHnSWnZP9ZFdFyic4X12g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(82310400005)(110136005)(86362001)(36756003)(54906003)(966005)(186003)(40460700003)(5660300002)(16526019)(41300700001)(2906002)(44832011)(36860700001)(8936002)(6666004)(4326008)(8676002)(1076003)(70206006)(70586007)(2616005)(47076005)(478600001)(7416002)(26005)(40480700001)(7696005)(426003)(336012)(356005)(82740400003)(316002)(83380400001)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 02:44:51.8489
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91b5ea4e-9528-4774-02bb-08db1935c437
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4346
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: WebService/1.1.21221 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD has issued an advisory indicating that having fTPM enabled in
-BIOS can cause "stuttering" in the OS.  This issue has been fixed
-in newer versions of the fTPM firmware, but it's up to system
-designers to decide whether to distribute it.
+On 2/27/2023 5:14 PM, Linus Torvalds wrote:
+> On Wed, Jan 25, 2023 at 7:56 AM Mateusz Guzik <mjguzik@gmail.com> wrote:
+>> +static inline bool cap_isidentical(const kernel_cap_t a, const kernel_cap_t b)
+>> +{
+>> +       unsigned __capi;
+>> +       CAP_FOR_EACH_U32(__capi) {
+>> +               if (a.cap[__capi] != b.cap[__capi])
+>> +                       return false;
+>> +       }
+>> +       return true;
+>> +}
+>> +
+> Side note, and this is not really related to this particular patch
+> other than because it just brought up the issue once more..
+>
+> Our "kernel_cap_t" thing is disgusting.
+>
+> It's been a structure containing
+>
+>         __u32 cap[_KERNEL_CAPABILITY_U32S];
+>
+> basically forever, and it's not likely to change in the future. I
+> would object to any crazy capability expansion, considering how
+> useless and painful they've been anyway, and I don't think anybody
+> really is even remotely planning anything like that anyway.
+>
+> And what is _KERNEL_CAPABILITY_U32S anyway? It's the "third version"
+> of that size:
+>
+>   #define _KERNEL_CAPABILITY_U32S    _LINUX_CAPABILITY_U32S_3
+>
+> which happens to be the same number as the second version of said
+> #define, which happens to be "2".
+>
+> In other words, that fancy array is just 64 bits. And we'd probably be
+> better off just treating it as such, and just doing
+>
+>         typedef u64 kernel_cap_t;
+>
+> since we have to do the special "convert from user space format"
+> _anyway_, and this isn't something that is shared to user space as-is.
+>
+> Then that "cap_isidentical()" would literally be just "a == b" instead
+> of us playing games with for-loops that are just two wide, and a
+> compiler that may or may not realize.
+>
+> It would literally remove some of the insanity in <linux/capability.h>
+> - look for CAP_TO_MASK() and CAP_TO_INDEX and CAP_FS_MASK_B0 and
+> CAP_FS_MASK_B1 and just plain ugliness that comes from this entirely
+> historical oddity.
+>
+> Yes, yes, we started out having it be a single-word array, and yes,
+> the code is written to think that it might some day be expanded past
+> the two words it then in 2008 it expanded to two words and 64 bits.
+> And now, fifteen years later, we use 40 of those 64 bits, and
+> hopefully we'll never add another one.
 
-This issue has existed for a while, but is more prevalent starting
-with kernel 6.1 because commit b006c439d58db ("hwrng: core - start
-hwrng kthread also for untrusted sources") started to use the fTPM
-for hwrng by default. However, all uses of /dev/hwrng result in
-unacceptable stuttering.
+I agree that the addition of 24 more capabilities is unlikely. The
+two reasons presented recently for adding capabilities are to implement
+boutique policies (CAP_MYHARDWAREISSPECIAL) or to break up CAP_SYS_ADMIN.
+Neither of these is sustainable with a finite number of capabilities, nor
+do they fit the security model capabilities implement. It's possible that
+a small number of additional capabilities will be approved, but even that
+seems unlikely.
 
-So, simply disable registration of the defective hwrng when detecting
-these faulty fTPM versions.  As this is caused by faulty firmware, it
-is plausible that such a problem could also be reproduced by other TPM
-interactions, but this hasn't been shown by any user's testing or reports.
 
-It is hypothesized to be triggered more frequently by the use of the RNG
-because userspace software will fetch random numbers regularly.
+> So we have historical reasons for why our kernel_cap_t is so odd. But
+> it *is* odd.
+>
+> Hmm?
 
-Intentionally continue to register other TPM functionality so that users
-that rely upon PCR measurements or any storage of data will still have
-access to it.  If it's found later that another TPM functionality is
-exacerbating this problem a module parameter it can be turned off entirely
-and a module parameter can be introduced to allow users who rely upon
-fTPM functionality to turn it on even though this problem is present.
+I don't see any reason that kernel_cap_t shouldn't be a u64. If by some
+amazing change in mindset we develop need for 65 capabilities, someone can
+dredge up the old code, shout "I told you so!" and put it back the way it
+was. Or maybe by then we'll have u128, and can just switch to that.
 
-Link: https://www.amd.com/en/support/kb/faq/pa-410
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216989
-Link: https://lore.kernel.org/all/20230209153120.261904-1-Jason@zx2c4.com/
-Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untrusted sources")
-Cc: stable@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Thorsten Leemhuis <regressions@leemhuis.info>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>
-Tested-by: reach622@mailcuk.com
-Tested-by: Bell <1138267643@qq.com>
-Co-developed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v2->v3:
- * Revert extra curl braces back to behavior in v1
- * Remove needless goto
- * Pick up 2 tested tags
----
- drivers/char/tpm/tpm-chip.c | 60 +++++++++++++++++++++++++++++-
- drivers/char/tpm/tpm.h      | 73 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 132 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 741d8f3e8fb3..c467eeae9973 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -512,6 +512,63 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
- 	return 0;
- }
- 
-+/*
-+ * Some AMD fTPM versions may cause stutter
-+ * https://www.amd.com/en/support/kb/faq/pa-410
-+ *
-+ * Fixes are available in two series of fTPM firmware:
-+ * 6.x.y.z series: 6.0.18.6 +
-+ * 3.x.y.z series: 3.57.y.5 +
-+ */
-+static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
-+{
-+	u32 val1, val2;
-+	u64 version;
-+	int ret;
-+
-+	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-+		return false;
-+
-+	ret = tpm_request_locality(chip);
-+	if (ret)
-+		return false;
-+
-+	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val1, NULL);
-+	if (ret)
-+		goto release;
-+	if (val1 != 0x414D4400U /* AMD */) {
-+		ret = -ENODEV;
-+		goto release;
-+	}
-+	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_1, &val1, NULL);
-+	if (ret)
-+		goto release;
-+	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_2, &val2, NULL);
-+
-+release:
-+	tpm_relinquish_locality(chip);
-+
-+	if (ret)
-+		return false;
-+
-+	version = ((u64)val1 << 32) | val2;
-+	if ((version >> 48) == 6) {
-+		if (version >= 0x0006000000180006ULL)
-+			return false;
-+	} else if ((version >> 48) == 3) {
-+		if (version >= 0x0003005700000005ULL)
-+			return false;
-+	} else {
-+		return false;
-+	}
-+
-+	dev_warn(&chip->dev,
-+		 "AMD fTPM version 0x%llx causes system stutter; hwrng disabled\n",
-+		 version);
-+
-+	return true;
-+}
-+
- static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
- {
- 	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
-@@ -521,7 +578,8 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
- 
- static int tpm_add_hwrng(struct tpm_chip *chip)
- {
--	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip))
-+	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip) ||
-+	    tpm_amd_is_rng_defective(chip))
- 		return 0;
- 
- 	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 24ee4e1cc452..830014a26609 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -150,6 +150,79 @@ enum tpm_sub_capabilities {
- 	TPM_CAP_PROP_TIS_DURATION = 0x120,
- };
- 
-+enum tpm2_pt_props {
-+	TPM2_PT_NONE = 0x00000000,
-+	TPM2_PT_GROUP = 0x00000100,
-+	TPM2_PT_FIXED = TPM2_PT_GROUP * 1,
-+	TPM2_PT_FAMILY_INDICATOR = TPM2_PT_FIXED + 0,
-+	TPM2_PT_LEVEL = TPM2_PT_FIXED + 1,
-+	TPM2_PT_REVISION = TPM2_PT_FIXED + 2,
-+	TPM2_PT_DAY_OF_YEAR = TPM2_PT_FIXED + 3,
-+	TPM2_PT_YEAR = TPM2_PT_FIXED + 4,
-+	TPM2_PT_MANUFACTURER = TPM2_PT_FIXED + 5,
-+	TPM2_PT_VENDOR_STRING_1 = TPM2_PT_FIXED + 6,
-+	TPM2_PT_VENDOR_STRING_2 = TPM2_PT_FIXED + 7,
-+	TPM2_PT_VENDOR_STRING_3 = TPM2_PT_FIXED + 8,
-+	TPM2_PT_VENDOR_STRING_4 = TPM2_PT_FIXED + 9,
-+	TPM2_PT_VENDOR_TPM_TYPE = TPM2_PT_FIXED + 10,
-+	TPM2_PT_FIRMWARE_VERSION_1 = TPM2_PT_FIXED + 11,
-+	TPM2_PT_FIRMWARE_VERSION_2 = TPM2_PT_FIXED + 12,
-+	TPM2_PT_INPUT_BUFFER = TPM2_PT_FIXED + 13,
-+	TPM2_PT_HR_TRANSIENT_MIN = TPM2_PT_FIXED + 14,
-+	TPM2_PT_HR_PERSISTENT_MIN = TPM2_PT_FIXED + 15,
-+	TPM2_PT_HR_LOADED_MIN = TPM2_PT_FIXED + 16,
-+	TPM2_PT_ACTIVE_SESSIONS_MAX = TPM2_PT_FIXED + 17,
-+	TPM2_PT_PCR_COUNT = TPM2_PT_FIXED + 18,
-+	TPM2_PT_PCR_SELECT_MIN = TPM2_PT_FIXED + 19,
-+	TPM2_PT_CONTEXT_GAP_MAX = TPM2_PT_FIXED + 20,
-+	TPM2_PT_NV_COUNTERS_MAX = TPM2_PT_FIXED + 22,
-+	TPM2_PT_NV_INDEX_MAX = TPM2_PT_FIXED + 23,
-+	TPM2_PT_MEMORY = TPM2_PT_FIXED + 24,
-+	TPM2_PT_CLOCK_UPDATE = TPM2_PT_FIXED + 25,
-+	TPM2_PT_CONTEXT_HASH = TPM2_PT_FIXED + 26,
-+	TPM2_PT_CONTEXT_SYM = TPM2_PT_FIXED + 27,
-+	TPM2_PT_CONTEXT_SYM_SIZE = TPM2_PT_FIXED + 28,
-+	TPM2_PT_ORDERLY_COUNT = TPM2_PT_FIXED + 29,
-+	TPM2_PT_MAX_COMMAND_SIZE = TPM2_PT_FIXED + 30,
-+	TPM2_PT_MAX_RESPONSE_SIZE = TPM2_PT_FIXED + 31,
-+	TPM2_PT_MAX_DIGEST = TPM2_PT_FIXED + 32,
-+	TPM2_PT_MAX_OBJECT_CONTEXT = TPM2_PT_FIXED + 33,
-+	TPM2_PT_MAX_SESSION_CONTEXT = TPM2_PT_FIXED + 34,
-+	TPM2_PT_PS_FAMILY_INDICATOR = TPM2_PT_FIXED + 35,
-+	TPM2_PT_PS_LEVEL = TPM2_PT_FIXED + 36,
-+	TPM2_PT_PS_REVISION = TPM2_PT_FIXED + 37,
-+	TPM2_PT_PS_DAY_OF_YEAR = TPM2_PT_FIXED + 38,
-+	TPM2_PT_PS_YEAR = TPM2_PT_FIXED + 39,
-+	TPM2_PT_SPLIT_MAX = TPM2_PT_FIXED + 40,
-+	TPM2_PT_TOTAL_COMMANDS = TPM2_PT_FIXED + 41,
-+	TPM2_PT_LIBRARY_COMMANDS = TPM2_PT_FIXED + 42,
-+	TPM2_PT_VENDOR_COMMANDS = TPM2_PT_FIXED + 43,
-+	TPM2_PT_NV_BUFFER_MAX = TPM2_PT_FIXED + 44,
-+	TPM2_PT_MODES = TPM2_PT_FIXED + 45,
-+	TPM2_PT_MAX_CAP_BUFFER = TPM2_PT_FIXED + 46,
-+	TPM2_PT_VAR = TPM2_PT_GROUP * 2,
-+	TPM2_PT_PERMANENT = TPM2_PT_VAR + 0,
-+	TPM2_PT_STARTUP_CLEAR = TPM2_PT_VAR + 1,
-+	TPM2_PT_HR_NV_INDEX = TPM2_PT_VAR + 2,
-+	TPM2_PT_HR_LOADED = TPM2_PT_VAR + 3,
-+	TPM2_PT_HR_LOADED_AVAIL = TPM2_PT_VAR + 4,
-+	TPM2_PT_HR_ACTIVE = TPM2_PT_VAR + 5,
-+	TPM2_PT_HR_ACTIVE_AVAIL = TPM2_PT_VAR + 6,
-+	TPM2_PT_HR_TRANSIENT_AVAIL = TPM2_PT_VAR + 7,
-+	TPM2_PT_HR_PERSISTENT = TPM2_PT_VAR + 8,
-+	TPM2_PT_HR_PERSISTENT_AVAIL = TPM2_PT_VAR + 9,
-+	TPM2_PT_NV_COUNTERS = TPM2_PT_VAR + 10,
-+	TPM2_PT_NV_COUNTERS_AVAIL = TPM2_PT_VAR + 11,
-+	TPM2_PT_ALGORITHM_SET = TPM2_PT_VAR + 12,
-+	TPM2_PT_LOADED_CURVES = TPM2_PT_VAR + 13,
-+	TPM2_PT_LOCKOUT_COUNTER = TPM2_PT_VAR + 14,
-+	TPM2_PT_MAX_AUTH_FAIL = TPM2_PT_VAR + 15,
-+	TPM2_PT_LOCKOUT_INTERVAL = TPM2_PT_VAR + 16,
-+	TPM2_PT_LOCKOUT_RECOVERY = TPM2_PT_VAR + 17,
-+	TPM2_PT_NV_WRITE_RECOVERY = TPM2_PT_VAR + 18,
-+	TPM2_PT_AUDIT_COUNTER_0 = TPM2_PT_VAR + 19,
-+	TPM2_PT_AUDIT_COUNTER_1 = TPM2_PT_VAR + 20,
-+};
- 
- /* 128 bytes is an arbitrary cap. This could be as large as TPM_BUFSIZE - 18
-  * bytes, but 128 is still a relatively large number of random bytes and
--- 
-2.34.1
-
+>              Linus
