@@ -2,168 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9816A5FE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B126A5FE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjB1Tnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 14:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S230005AbjB1TpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 14:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjB1Tnm (ORCPT
+        with ESMTP id S229969AbjB1TpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:43:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159E519B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677613370;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2PdsM/iL56+yhqvj5vNisyU3+lVwEZ4AAgNHpSpMNXI=;
-        b=hna14TeRkM0nvQfm/3s4tc9kj26W+COeeXfF6CXOiGoAy2/Ybn/dZBhfckDi3EyIKM16/f
-        eOa7sUv8duvcUo6SEGTKER4uprI0MhEFAcjqT5h05xRvLW4u0EHIYu0vsnO5WgjHAzFKlR
-        0d4JyW/4RRiSb4pfPk+hopV3LkYJ5JI=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-494-Ud-tIN19OX60X5bpGswrgA-1; Tue, 28 Feb 2023 14:42:49 -0500
-X-MC-Unique: Ud-tIN19OX60X5bpGswrgA-1
-Received: by mail-qt1-f197.google.com with SMTP id b7-20020ac85407000000b003bfb9cff263so5168056qtq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:42:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677613368;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2PdsM/iL56+yhqvj5vNisyU3+lVwEZ4AAgNHpSpMNXI=;
-        b=4zw1W9aXC57GLpbbQOzR81WVYbSwuWquLXCAyVslAZydL1uTRSISEuw9b+FjTBorf1
-         YQEzBrFNWKJ74OtdTRc5/V43vlP5irbFUsdTpK8MUiauE/oSCskOWO6Jc69HW41nM+RA
-         cI3YEKJQl64+Sm273YjA/ZZSiCuI551p/J/WuArjmqqHCPeLq+aL3R0OpOXoRg1Tkh7M
-         QBzig5yWaR63/xuJtmEdZ5aJb87JVF+0MnzrJb2H4xEvgErp92dfRIM4gGepZmlDXfeb
-         tsPwGhiGzYYYljVoPhyS3fmmaJ+OvxEGrOMZ92Fr9dFSPFlyXw7ftE7B7nM71qc4yxzt
-         /SWA==
-X-Gm-Message-State: AO0yUKVXdDHR/c0dsfYNwMmaqEXH+1X3YyhpzoemAoN16imWQKQD8nll
-        Pt8u4GRhDHVGeGvA52j52dwAC5m1b0fpkB7LsqjoCA0PKNLQvpv6XNZzzuXWqDJPK8/94yi8sqe
-        74yc8TQ0VFR9mRO46p1Bgvyl2EGiU6Q==
-X-Received: by 2002:a05:622a:306:b0:3b9:fc92:a6 with SMTP id q6-20020a05622a030600b003b9fc9200a6mr8263346qtw.6.1677613367778;
-        Tue, 28 Feb 2023 11:42:47 -0800 (PST)
-X-Google-Smtp-Source: AK7set+J/kJ+JwXDuFlF2fZVP0JuHo1NNbT5QNuUO6XGXHiZyL5u8JtWFUD7rdaXpjhYR2VZpthXGA==
-X-Received: by 2002:a05:622a:306:b0:3b9:fc92:a6 with SMTP id q6-20020a05622a030600b003b9fc9200a6mr8263304qtw.6.1677613367374;
-        Tue, 28 Feb 2023 11:42:47 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id 20-20020a370a14000000b0072396cb73cdsm7399499qkk.13.2023.02.28.11.42.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 11:42:46 -0800 (PST)
-Date:   Tue, 28 Feb 2023 14:42:45 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: Re: [PATCH] mm/uffd: UFFD_FEATURE_WP_ZEROPAGE
-Message-ID: <Y/5ZNTESKfntBSF3@x1n>
-References: <Y+5uIS5E9sTLi41T@x1n>
- <456f8e2e-9554-73a3-4fdb-be21f9cc54b6@redhat.com>
- <Y+6NKPuty9V3nycI@x1n>
- <4dbc9913-3483-d22d-bbd2-e4f510fff56d@redhat.com>
- <Y/AIEvHJoMUnh4b6@x1n>
- <c463c421-2f33-9ae3-7d41-b394d1737d42@redhat.com>
- <Y/VQMyssclyIGa5i@x1n>
- <91d7c512-ee57-7d71-34b7-90e45f5c109b@redhat.com>
- <Y/Z9ACW8l2E3kOVk@x1n>
- <4b3c2f37-3b84-3147-7513-4293e5408fdd@redhat.com>
+        Tue, 28 Feb 2023 14:45:21 -0500
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8DE1B56F;
+        Tue, 28 Feb 2023 11:45:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1677613520; x=1709149520;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=VFI/B5VF9lRQpPbKXQuU8MbJ+ZWjTxcz40DChLMwRUc=;
+  b=O6rXeavmpqFjNxe+wgouz9qhA6B3ZWsNlNhvE2eHnzhIROnhC1yLNPFS
+   KazlCQpk16W51Za0iCq5pYqIyf3EEqgcPnoJNbo9oiO78qcxvN5kM7GKQ
+   lZjqKnms2CEMFeF7adDN9YQNsSON+crjUH/xB2Zv1nLTjSX3blLWbA4NM
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.98,222,1673913600"; 
+   d="scan'208";a="187784959"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 19:43:40 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com (Postfix) with ESMTPS id 56D1CA2B84;
+        Tue, 28 Feb 2023 19:43:39 +0000 (UTC)
+Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 28 Feb 2023 19:43:39 +0000
+Received: from u9aa42af9e4c55a.ant.amazon.com (10.106.100.8) by
+ EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.24; Tue, 28 Feb 2023 19:43:38 +0000
+From:   Munehisa Kamata <kamatam@amazon.com>
+To:     <u.kleine-koenig@pengutronix.de>
+CC:     <kamatam@amazon.com>, <kernel@pengutronix.de>,
+        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <stable@vger.kernel.org>, <thierry.reding@gmail.com>,
+        <tobetter@gmail.com>
+Subject: Re: [PATCH] pwm: Zero-initialize the pwm_state passed to driver's .get_state()
+Date:   Tue, 28 Feb 2023 11:43:27 -0800
+Message-ID: <20230228194327.1237008-1-kamatam@amazon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230228101558.b4dosk54jojfqkgi@pengutronix.de>
+References: <20230228101558.b4dosk54jojfqkgi@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4b3c2f37-3b84-3147-7513-4293e5408fdd@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.106.100.8]
+X-ClientProxiedBy: EX19D038UWC001.ant.amazon.com (10.13.139.213) To
+ EX19D010UWA004.ant.amazon.com (10.13.138.204)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 03:35:13PM +0100, David Hildenbrand wrote:
-> I had some idea of using two markers: PTE_UFFD_WP and PT_UFFD_NO_WP, and
-> being pte_none() being something fuzzy in between that the application knows
-> how to deal with ("not touched since we registered uffd-wp").
+On Tue, 2023-02-28 10:15:58 +0000, Uwe Kleine-König wrote:
+>
+> This is just to ensure that .usage_power is properly initialized and
+> doesn't contain random stack data. The other members of struct pwm_state
+> should get a value assigned in a successful call to .get_state(). So in
+> the absence of bugs in driver implementations, this is only a safe-guard
+> and no fix.
 > 
-> The goal would be to not populate page tables just to insert PTE
-> markers/zeropages, but to only special case on the "there is a page table
-> with a present PTE and we're unmapping something with uffd-wp set or uffd-wp
-> not set". Because when we're unmapping we already have a page table entry we
-> can just set instead of allocating a page table.
+> Reported-by: Munehisa Kamata <kamatam@amazon.com>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/pwm/core.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> Sorry for throwing semi-finished ideas at you, but the basic idea would be
-> to only special case when we're unmapping something: there, we already do
-> have a page mapped and can remember uffd-wp-set (clean) vs. !uffd-wp-set
-> (dirty).
+> Hello,
 > 
+> On Sat, Feb 25, 2023 at 05:37:21PM -0800, Munehisa Kamata wrote:
+> > Zero-initialize the on-stack structure to avoid unexpected behaviors. Some
+> > drivers may not set or initialize all the values in pwm_state through their
+> > .get_state() callback and therefore some random values may remain there and
+> > be set into pwm->state eventually.
+> > 
+> > This actually caused regression on ODROID-N2+ as reported in [1]; kernel
+> > fails to boot due to random panic or hang-up.
+> > 
+> > [1] https://forum.odroid.com/viewtopic.php?f=177&t=46360
+> > 
+> > Fixes: c73a3107624d ("pwm: Handle .get_state() failures")
+> > Cc: stable@vger.kernel.org # 6.2
+> > Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
 > 
-> uffd-wp protecting a range:
-> * !pte_none() -> set uffd-wp bit and wrprotect
-> * pte_none() -> nothing to do
-> * PTE_UFFD_WP -> nothing to do
-> * PTE_UFFD_NO_WP -> set PTE_UFFD_WP
+> My patch is essentially the same as Munehisa's, just written a bit
+> differently (to maybe make it easier for the compiler to optimize it?)
+> and with an explaining comment. The actual motivation is different so
+> the commit log is considerably different, too.
 > 
-> unmapping a page (old way: !pte_none() -> pte_none()):
-> * uffd-wp bit set: set PTE_UFFD_WP
-> * uffd-wp bit not set: set PTE_UFFD_NO_WP
-> 
-> (re)mapping a page (old: pte_none() -> !pte_none()):
-> * PTE_UFFD_WP -> set pte bit for new PTE
-> * PTE_UFFD_NO_WP -> don't set pte bit for new PTE
-> * pte_none() -> set pte bit for new PTE
-> 
-> Zapping an anon page using MADV_DONTNEED is a bit confusing. It's actually
-> similar to a memory write (-> write zeroes), but we don't notify uffd-wp for
-> that (I think that's something you comment on below). Theoretically, we'd
-> want to set PTE_UFFD_NO_WP ("dirty") in the async mode. But that might need
-> more thought of what the expected semantics actually are.
-> 
-> When we walk over the page tables we would get the following information
-> after protecting the range:
-> 
-> * PTE_UFFD_WP -> clean, not modified since last protection round
-> * PTE_UFFD_NO_WP -> dirty, modified since last protection round
-> * pte_none() -> not mapped and therefore not modified since beginning of
->                 protection.
-> * !pte_none() -> uffd-wp bit decides
+> I was unsure how to honor Munehisa's effort, I went with a
+> "Reported-by". Please tell me if you want this to be different.
 
-I can't say I thought a lot but I feel like it may work. I'd probably avoid
-calling it PTE_UFFD_NO_WP or it'll be confusing.. maybe WP_WRITTEN or
-WP_RESOLVED instead.
+I'm okay with that, thank you.
 
-But that interface looks weird in that the protection happens right after
-VM_UFFD_WP applied to VMA and that keeps true until unregister.  One needs
-to reprotect using ioctl(UFFDIO_WRITEPROTECT) OTOH after the 1st round of
-tracking.  It just looks a little bit over-complicated, not to mention we
-will need two markers only for userfault-wp.  I had a feeling this
-complexity can cause us some trouble elsewhere.
+Perhaps, you should also add Cc tag for the stable tree? I did that in my
+patch and we're actually CCing to the stable list, but I'm not sure if it
+can pick up your patch without the tag. This should be fixed in linux-6.2.y.
 
-IIUC this can be something done on top even if it'll work (I think the
-userspace API doesn't need to change at all), so I'd suggest giving it some
-more thoughts and we start with simple and working.
 
-In general, I'll be happy with anything simpler if Muhammad is happy with
-its current performance..  For myself, WP_UNPOPULATED is definitely much
-better than the old workaround in QEMU live snapshots, so I never worry that.
+Regards,
+Munehisa
 
-> Yes, I focused on anon. Let's see if any of the above I said makes sense. :)
+> Best regards
+> Uwe
 > 
-> Anyhow, what we're discussing here is yet another uffd-wp addition, if ever,
-> so don't feel blocked by my comments.
-
-Thanks.  I've just posted a new version.
-
--- 
-Peter Xu
-
+> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+> index e01147f66e15..533ef5bd3add 100644
+> --- a/drivers/pwm/core.c
+> +++ b/drivers/pwm/core.c
+> @@ -115,7 +115,14 @@ static int pwm_device_request(struct pwm_device *pwm, const char *label)
+>  	}
+>  
+>  	if (pwm->chip->ops->get_state) {
+> -		struct pwm_state state;
+> +		/*
+> +		 * Zero-initialize state because most drivers are unaware of
+> +		 * .usage_power. The other members of state are supposed to be
+> +		 * set by lowlevel drivers. We still initialize the whole
+> +		 * structure for simplicity even though this might paper over
+> +		 * faulty implementations of .get_state().
+> +		 */
+> +		struct pwm_state state = { 0, };
+>  
+>  		err = pwm->chip->ops->get_state(pwm->chip, pwm, &state);
+>  		trace_pwm_get(pwm, &state, err);
+> -- 
+> 2.39.1
+> 
+> 
+> -- 
+> Pengutronix e.K.                           | Uwe Kleine-König            |
+> Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> 
