@@ -2,121 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E9F6A5926
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3936A593D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjB1Mfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 07:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        id S230157AbjB1Mmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 07:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjB1Mfq (ORCPT
+        with ESMTP id S229708AbjB1Mml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 07:35:46 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4D82ED55
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:35:44 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id d6so5539340pgu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:35:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KhWe8sLMccBLRrPsWcYHRaaybNDxZ0zi1CaL4lrAFvc=;
-        b=iJtweGpDdSTqN2kXZgyLyRHBqBC9GUkRRoy6rynxSdBwc/xi7Vbq/3f2N94C5mLujq
-         w9EG2wiCllviId6GNDlLkbXFwd3mXYXseKL95wKTB6KmEQRjBHJCGbOqKmbCti3DI+ge
-         /jjBYZdSq+2BssKiI8DTPI5TE4zup3ctckwnYAZoqcHmwlnU/lF34WLBlpPh5DbmZW1x
-         OnYjrkr1l05OXbW3P7CY1B6CopBD27raod6Z7rbWXHCofjgDskhx3QBlMTRKsjTh8d0+
-         GZZSBSrne7Q72pybnSMNmSC0ZLCujlURHmZoqWO/H6Tviay4BkJWod6ZfRaG33ptLhER
-         A9Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KhWe8sLMccBLRrPsWcYHRaaybNDxZ0zi1CaL4lrAFvc=;
-        b=yYdIs8mNqZQ+iSvpRIJMwsxwaf/dMA/eO7G6loEzhfdbd29utgBaNfo40OmCdsYon3
-         gN2ehkAfntvcMYxL48SiUVo8uXPDRNCey5rWgmqLnK+g38SRlJ254L0YCP64KoMLsPAZ
-         wVSu6l8rUzog1AGUAZ75u7yRKoex6MMmgsA7lqN+1vBtYk4cRL27yabEC11PRa1SMFD0
-         gqvlPnMg0A2AF/qWXqsDgak3FNQ4QB81r2jiAfcP7XAjwpNubo/MtU5iEbIZB0MVgIpa
-         Z0gIL2yzY2/dFyiDV+y8fqQ5GVKbHImaT0eVMszlj3bLcIlm38ZI5A3eNXYZPPj0lbyY
-         OhYA==
-X-Gm-Message-State: AO0yUKVGd+MxRLzwnRmtXSbOAv4zh9QtJQyBlb8xtJas90zXVLgQ4YKR
-        9JMhhCJA41NSd+8bPj45+aEmAXHiFjW0TMQ5DmkyNuORFi+nCScRs3o=
-X-Google-Smtp-Source: AK7set982toa957BfsESaT9p96TlyfxqaTB6xdGDJ93u6JOrGrfrsLteEwl7OmrMxFUw0AK+STVOgMbUnjwZ3PQRWHE=
-X-Received: by 2002:a63:7807:0:b0:502:f4c6:b96 with SMTP id
- t7-20020a637807000000b00502f4c60b96mr701622pgc.5.1677587743821; Tue, 28 Feb
- 2023 04:35:43 -0800 (PST)
+        Tue, 28 Feb 2023 07:42:41 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B31642FCCE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:42:38 -0800 (PST)
+Received: from loongson.cn (unknown [192.168.200.1])
+        by gateway (Coremail) with SMTP id _____8Axkk699v1jW3cGAA--.6658S3;
+        Tue, 28 Feb 2023 20:42:37 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.200.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ7289v1jIPVAAA--.50084S3;
+        Tue, 28 Feb 2023 20:42:37 +0800 (CST)
+Subject: Re: [PATCH v2 3/6] LoongArch: Create a exception handlers section
+To:     Jinyang He <hejinyang@loongson.cn>
+References: <20230228080257.28807-1-hejinyang@loongson.cn>
+ <20230228080257.28807-4-hejinyang@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <68036cab-e2f0-86b6-c26c-4bcd0716e554@loongson.cn>
+Date:   Tue, 28 Feb 2023 20:42:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <20230228113305.83751-1-jiaxun.yang@flygoat.com> <20230228113305.83751-2-jiaxun.yang@flygoat.com>
-In-Reply-To: <20230228113305.83751-2-jiaxun.yang@flygoat.com>
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Tue, 28 Feb 2023 13:35:32 +0100
-Message-ID: <CAM1=_QTwYqAH+21fNnG3aBW-cV8vxtgM7h=enqZYaj2wbRnV8Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] MIPS: ebpf jit: Implement DADDI workarounds
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsbogend@alpha.franken.de, paulburton@kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230228080257.28807-4-hejinyang@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxJ7289v1jIPVAAA--.50084S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Cw1xZw4fAw43Zr4ruw4xtFb_yoW8Xr4Dpr
+        y2vrWkZr4DCFn8ZFyDZa1jvrWjv34Sgw43Gayaga48C3WavF109r4kAryDAanF9w1kXa18
+        XF1rA3ySya45Aa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bYkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCF
+        FI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY20_WwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxG
+        rwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0zRVWlkUUU
+        UU=
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Hi, Jinyang
 
-On Tue, Feb 28, 2023 at 12:33=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.c=
-om> wrote:
+On 02/28/2023 04:02 PM, Jinyang He wrote:
+
+> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
+> index ad2ce1a0908e..e99b50359900 100644
+> --- a/arch/loongarch/kernel/vmlinux.lds.S
+> +++ b/arch/loongarch/kernel/vmlinux.lds.S
+> @@ -21,6 +21,11 @@
+>   */
+>  PECOFF_FILE_ALIGN = 0x200;
+>  PECOFF_SEGMENT_ALIGN = 0x10000;
+> +EX_HANDLER_ALIGN = SZ_512;
+> +EX_HANDLER_SIZE = SZ_512;
+> +EX_HANDLER_TOTAL = 78; /* 64 Exceptions + 14 Interrupts */
+
+You can define EXCCODE_NUM as 78 in loongarch.h, and remove the unused
+EXCCODE_INT_END and EXCCODE_INT_NUM in PATCH4.
+
+Youling.
+
+> +EXCEPTION_ENTRY_ALIGN = SZ_64K;
+> +TLBR_ENTRY_ALIGN = SZ_4K;
 >
-> For DADDI errata we just workaround by disable immediate operation
-> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
+>  OUTPUT_ARCH(loongarch)
+>  ENTRY(kernel_entry)
+> @@ -54,6 +59,17 @@ SECTIONS
+>  	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+>  	_etext = .;
 >
-> All other use cases in JIT won't cause overflow thus they are all safe.
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> v2: Drop 64BIT ifdef
-> ---
->  arch/mips/Kconfig            | 1 -
->  arch/mips/net/bpf_jit_comp.c | 4 ++++
->  2 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 37072e15b263..df0910e3895c 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -64,7 +64,6 @@ config MIPS
->         select HAVE_DMA_CONTIGUOUS
->         select HAVE_DYNAMIC_FTRACE
->         select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
-> -                               !CPU_DADDI_WORKAROUNDS && \
->                                 !CPU_R4000_WORKAROUNDS && \
->                                 !CPU_R4400_WORKAROUNDS
->         select HAVE_EXIT_THREAD
-> diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
-> index b17130d510d4..a40d926b6513 100644
-> --- a/arch/mips/net/bpf_jit_comp.c
-> +++ b/arch/mips/net/bpf_jit_comp.c
-> @@ -218,9 +218,13 @@ bool valid_alu_i(u8 op, s32 imm)
->                 /* All legal eBPF values are valid */
->                 return true;
->         case BPF_ADD:
-> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-> +                       return false;
->                 /* imm must be 16 bits */
->                 return imm >=3D -0x8000 && imm <=3D 0x7fff;
->         case BPF_SUB:
-> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-> +                       return false;
->                 /* -imm must be 16 bits */
->                 return imm >=3D -0x7fff && imm <=3D 0x8000;
->         case BPF_AND:
-> --
-> 2.37.1 (Apple Git-137.1)
->
+> +	. = ALIGN(EXCEPTION_ENTRY_ALIGN);
+> +	.ex_handlers : {
+> +		__ex_handlers = .;
+> +		*(SORT_BY_INIT_PRIORITY(.exception_handlers.*))
+> +		. = ALIGN(EX_HANDLER_ALIGN);
+> +		__ex_handlers_end = .;
+> +		. = ALIGN(TLBR_ENTRY_ALIGN);
+> +		__tlbr_entry = .;
+> +		*(.tlbrhandler)
+> +	}
+> +
+>  	/*
+>  	 * struct alt_inst entries. From the header (alternative.h):
+>  	 * "Alternative instructions for different CPU types or capabilities"
+> @@ -154,3 +170,6 @@ SECTIONS
+>  		*(.eh_frame)
+>  	}
+>  }
+> +
+> +ASSERT(__ex_handlers_end == (__ex_handlers + EX_HANDLER_SIZE * EX_HANDLER_TOTAL),
+> +       "The amount of exception handlers does not match!");
+
