@@ -2,113 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C888E6A5F35
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334796A5F22
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjB1TGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 14:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
+        id S229564AbjB1TDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 14:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjB1TG2 (ORCPT
+        with ESMTP id S229470AbjB1TDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:06:28 -0500
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FDC31E0E;
-        Tue, 28 Feb 2023 11:06:18 -0800 (PST)
+        Tue, 28 Feb 2023 14:03:38 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B916824C81
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:03:37 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id bo10so7593474qvb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:03:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1677611178; x=1709147178;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ji1cHpBv5/5kGQg/cBO8SihfSuHNBBaEf12NhCoRr2I=;
-  b=GalQ5RvEppT8Kheu5vT8bOufJJz8lBhXr1MwTdBlOALHeh8MuavZ7FOT
-   4NGi/bwUqqNQUcsCtCUrdT4nO3GznuHxNBxB5BPI0uEZQ5esX08eHKm1X
-   MImeDbEoZAE7OH7dPEHNzDbktMUOZ8D8ABMNkvfKn/KyFeYpcHNXB1I5A
-   I=;
-X-IronPort-AV: E=Sophos;i="5.98,222,1673913600"; 
-   d="scan'208";a="187760472"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-e7094f15.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 18:14:42 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-e7094f15.us-west-2.amazon.com (Postfix) with ESMTPS id E87C940DB9;
-        Tue, 28 Feb 2023 18:14:41 +0000 (UTC)
-Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Tue, 28 Feb 2023 18:14:41 +0000
-Received: from b0f1d8753182.ant.amazon.com (10.106.83.6) by
- EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.24; Tue, 28 Feb 2023 18:14:36 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     <bp@alien8.de>
-CC:     <dave.hansen@linux.intel.com>, <itazur@amazon.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mingo@redhat.com>, <pbonzini@redhat.com>, <seanjc@google.com>,
-        <tglx@linutronix.de>, <x86@kernel.org>, <zulinx86@gmail.com>
-Subject: Re: [PATCH 0/2] KVM: x86: Propagate AMD-specific IBRS bits to guests
-Date:   Tue, 28 Feb 2023 18:13:45 +0000
-Message-ID: <20230228181345.40837-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <Y/0jRXzbcbxTjqSS@zn.tnic>
-References: <Y/0jRXzbcbxTjqSS@zn.tnic>
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VhF0f5+OI0BrKkPV5TeYBsk54yszg6zUdMYrMu7RCfM=;
+        b=h+L4MFqDtmZ+GTkE19Pe0xpMlAJVgmaPr04s99cIr2BJJJXOBUDw/0ZlI8RXgc0tLc
+         8TzTLjRsIp6qyRAPCjtGdFhRihInCsNrEJmZxD3ZV7LdM/D+X8mxQTq6p2/qWdyX5GGf
+         7zXpgiufF1duId32oYz1lYReQYMZesAD9779H/0y8gpn1AHBObfDRfJ1c10Rr+3ww89p
+         jZaRMArTrL4QpAHVBWfxBT5dwqTRUWcnmgfxqeWuLAkwjDfmZMuvBwsFa0MmjJuGRBBE
+         72mzWzb9RE2edvVqbVh+TeNQL4n0QIvS7ul1uObwFKsVN5DRWesi3BqYZd3HEqk6eT9B
+         RZ+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VhF0f5+OI0BrKkPV5TeYBsk54yszg6zUdMYrMu7RCfM=;
+        b=2HxsZYBzYzmEefpXm15Ap6lhEk3f0V1VP6ZrCz9PtkFBXFTE849NCphdlzKxFIqZ5J
+         qc6mgHlqgME9HoAef8X1k2aMTpcKo0/U1Vj+BGJwPaaenxM1qnxFOyXzqDn2sINvO9L6
+         zAjAEBYnMLUIBvzJ1b9zZZuao6Lx3q9Cj6HQ9JO1IkEaWWJKSsUgZE3CTseEuWsVSSP/
+         uNDvSrYK4x38AUBem1GnxT5ipoIDi9d0pJyYp78qWqcXvZ5JuFvnuTxWO73iapC26+mN
+         pyCz9RUf2al7QNkc9CrUv9259Wo3q9XaL7eCaK1QClTPTkEHjRTzl30O8PIsRKeAiwqs
+         qnSA==
+X-Gm-Message-State: AO0yUKXEocgreBshS2VZCXJVMaZ2SbAO54vZb5SGLeTiL6KVIyZVXlUG
+        gcLsetWy/0wgQ9bEhXvwGfhr0xL4dm3SBuD2fDg=
+X-Google-Smtp-Source: AK7set+Fy1XS77KWw+GxkksHVNDG5xO/igrEX9DvAIbbOptVcmS3xk67Y1RELe/94wY887lm6V/NBy+zZ6x0FH+mGx4=
+X-Received: by 2002:ad4:5949:0:b0:56b:ed36:ffb with SMTP id
+ eo9-20020ad45949000000b0056bed360ffbmr4646782qvb.1.1677611016847; Tue, 28 Feb
+ 2023 11:03:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.83.6]
-X-ClientProxiedBy: EX19D042UWB003.ant.amazon.com (10.13.139.135) To
- EX19D002ANA003.ant.amazon.com (10.37.240.141)
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230228184245.1585775-1-bjorn@kernel.org>
+In-Reply-To: <20230228184245.1585775-1-bjorn@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Feb 2023 21:03:00 +0200
+Message-ID: <CAHp75VfK3RM+SP90d3nOXEobY81Xd_94tLL=Qt86mmdNwXaQpg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] lib/test_string.c: Make definition less dense
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Date:   Mon, 27 Feb 2023 22:40:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-> On Mon, Feb 27, 2023 at 09:05:24PM +0000, Takahiro Itazuri wrote:
-> > VMMs retrieve supported CPUID features via KVM_GET_SUPPORTED_CPUID to
-> > construct CPUID information to be passed to KVM_SET_CPUID2. Most CPUID
-> > feature bits related to speculative attacks are propagated from host
-> > CPUID. But AMD processors have AMD-specific IBRS related bits in CPUID
-> > Fn8000_0008_EBX (ref: AMD64 Architecture Programmer's Manual Volume 3:
-> > General-Purpose and System Instructions) and some bits are not
-> > propagated to guests.
-> >
-> > Enable propagation of these bits to guests, so that VMMs don't have to
-> > enable them explicitly based on host CPUID.
-> 
-> How hard is it for the VMMs to enable them?
+On Tue, Feb 28, 2023 at 8:42=E2=80=AFPM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
+.org> wrote:
+>
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>
+> Checkpatch seems to have trouble making sense of the situation when
+> struct definitions, variable definitions, and __initconst marking is
+> done in one go.
+>
+> Let's be nicer to checkpatch, and move the struct definition out,
+> which removes the error.
 
-Actually it is not so hard. What VMMs need to do is:
-1. Get host CPUID value.
-2. Check if these bits are set.
-3. Modify the return value of KVM_GET_SUPPORTED_CPUID based on step 2.
-4. Pass it to KVM_SET_CPUID2.
+Not that I'm against the patch, but how hard is it to fix the checkpatch?
 
-If these bits are propagated to guests same as other bits, VMMs can
-skip the above process.
+In case you go this way with a patch, it probably makes sense to move
+test data out of the function as well with something like
+strspn_test_data name.
 
-https://www.kernel.org/doc/Documentation/virtual/kvm/api.txt
-> This ioctl returns x86 cpuid features which are supported by both the
-> hardware and kvm in its default configuration.  Userspace can use the
-> information returned by this ioctl to construct cpuid information (for
-> KVM_SET_CPUID2) that is consistent with hardware, kernel, and
-> userspace capabilities, and with user requirements (for example, the
-> user may wish to constrain cpuid to emulate older hardware, or for
-> feature consistency across a cluster).
-
-VMMs trust to some extent that KVM_GET_SUPPORTED_CPUID returns cpuid
-information consistent with hardware, although they should not for some
-leaves (like CPU topoligy). IMHO, propagating these bits without VMM
-actions would be helpful since guests come to know IBRS related
-information of processors by default and applies mitigations properly
-based on that information.
-
-Best regards,
-Takahiro Itazuri
-
+--=20
+With Best Regards,
+Andy Shevchenko
