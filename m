@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4BA6A5676
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B72436A5685
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjB1KQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S230445AbjB1KXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjB1KQL (ORCPT
+        with ESMTP id S229686AbjB1KXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:16:11 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD2C19681
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:16:06 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pWx1c-00047a-4O; Tue, 28 Feb 2023 11:16:00 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pWx1a-000qPj-Ug; Tue, 28 Feb 2023 11:15:58 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pWx1a-000zTY-9Q; Tue, 28 Feb 2023 11:15:58 +0100
-Date:   Tue, 28 Feb 2023 11:15:58 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Munehisa Kamata <kamatam@amazon.com>
-Cc:     thierry.reding@gmail.com, tobetter@gmail.com,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] pwm: Zero-initialize the pwm_state passed to driver's
- .get_state()
-Message-ID: <20230228101558.b4dosk54jojfqkgi@pengutronix.de>
-References: <20230226013722.1802842-1-kamatam@amazon.com>
+        Tue, 28 Feb 2023 05:23:08 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7898AEC50
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:23:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Mcb71SBLKJKo9n9XevXq87y2BbJN
+        cVOghzuFyCgc96Y=; b=ZGJtnlb9Jw+qbvg28NF5dWPt62fo75S5TLrLQ76zOy/Y
+        rpLfSFs9XW9G3p0kVxSlDNdTfu5RLmszoqIuvd5T29q7dfDU/597OMV6K9oX/iub
+        g6Z4v8F3jvvlH/pFgD25Vc9XSInlWx3I/3rX0HYsurwLeDrMnmBt3L0A/EvJimE=
+Received: (qmail 2424783 invoked from network); 28 Feb 2023 11:23:03 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Feb 2023 11:23:03 +0100
+X-UD-Smtp-Session: l3s3148p1@QusL+7/1kLZehh92
+Date:   Tue, 28 Feb 2023 11:23:02 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: renesas: vsp1: blacklist r8a7795 ES1.*
+Message-ID: <Y/3WBpRUYfLCTsvy@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230118122003.132905-1-wsa+renesas@sang-engineering.com>
+ <Y8fpg/WkR4OMrpOu@pendragon.ideasonboard.com>
+ <CAMuHMdUegruzCdP_+_qNuhVvFWp-_8zvdYw=v3kmt6zDU8=w5Q@mail.gmail.com>
+ <Y8f2elExwiwxK2n+@pendragon.ideasonboard.com>
+ <CAMuHMdXYsCN+evJB8idRFQ-v2B4bJ6vi+DSF=Zg6+QSiu+Op5Q@mail.gmail.com>
+ <Y8f88dw/fWfVij/d@pendragon.ideasonboard.com>
+ <Y/3UNv4a9xmAR+54@duo.ucw.cz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bd76unbsfstrl6f7"
+        protocol="application/pgp-signature"; boundary="nPQgwykiPRC2cvTf"
 Content-Disposition: inline
-In-Reply-To: <20230226013722.1802842-1-kamatam@amazon.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y/3UNv4a9xmAR+54@duo.ucw.cz>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,95 +66,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---bd76unbsfstrl6f7
-Content-Type: text/plain; charset=iso-8859-1
+--nPQgwykiPRC2cvTf
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-This is just to ensure that .usage_power is properly initialized and
-doesn't contain random stack data. The other members of struct pwm_state
-should get a value assigned in a successful call to .get_state(). So in
-the absence of bugs in driver implementations, this is only a safe-guard
-and no fix.
+Hi Pavel,
 
-Reported-by: Munehisa Kamata <kamatam@amazon.com>
-Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
----
- drivers/pwm/core.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> There's some agreement that DTBs are an ABI, and that they should work
+> with old and new kernels. Disabling it in the driver seems like right
+> solution.
 
-Hello,
+We agreed to remove support for this specific SoC entirely from the
+kernel. With this merge window, it won't boot anymore. It was for
+internal development only anyhow. So, instead of adding new quirks for
+it, I will remove all existing ones once rc1 is released. So, this patch
+can be dropped.
 
-On Sat, Feb 25, 2023 at 05:37:21PM -0800, Munehisa Kamata wrote:
-> Zero-initialize the on-stack structure to avoid unexpected behaviors. Some
-> drivers may not set or initialize all the values in pwm_state through the=
-ir
-> .get_state() callback and therefore some random values may remain there a=
-nd
-> be set into pwm->state eventually.
->=20
-> This actually caused regression on ODROID-N2+ as reported in [1]; kernel
-> fails to boot due to random panic or hang-up.
->=20
-> [1] https://forum.odroid.com/viewtopic.php?f=3D177&t=3D46360
->=20
-> Fixes: c73a3107624d ("pwm: Handle .get_state() failures")
-> Cc: stable@vger.kernel.org # 6.2
-> Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+Thank you for your review,
 
-My patch is essentially the same as Munehisa's, just written a bit
-differently (to maybe make it easier for the compiler to optimize it?)
-and with an explaining comment. The actual motivation is different so
-the commit log is considerably different, too.
-
-I was unsure how to honor Munehisa's effort, I went with a
-"Reported-by". Please tell me if you want this to be different.
-
-Best regards
-Uwe
-
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index e01147f66e15..533ef5bd3add 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -115,7 +115,14 @@ static int pwm_device_request(struct pwm_device *pwm, =
-const char *label)
- 	}
-=20
- 	if (pwm->chip->ops->get_state) {
--		struct pwm_state state;
-+		/*
-+		 * Zero-initialize state because most drivers are unaware of
-+		 * .usage_power. The other members of state are supposed to be
-+		 * set by lowlevel drivers. We still initialize the whole
-+		 * structure for simplicity even though this might paper over
-+		 * faulty implementations of .get_state().
-+		 */
-+		struct pwm_state state =3D { 0, };
-=20
- 		err =3D pwm->chip->ops->get_state(pwm->chip, pwm, &state);
- 		trace_pwm_get(pwm, &state, err);
---=20
-2.39.1
+   Wolfram
 
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---bd76unbsfstrl6f7
+--nPQgwykiPRC2cvTf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmP91FsACgkQwfwUeK3K
-7AmsCgf/eRMqDHCB9MFwz2J4+eO1GBN7uA8nfwjMVBT2RMbZ3fIRsKehLMgz/HHs
-FFDZp+RYpiglA8jxVrWf3yJxHu3ZIIyavmLXHZxG1meao2qqnNg76wyVMlbbfe3t
-ijzvxJzB130a4dRbxuexptTHLhQLA8e1K7lEOxbFARo58sCmajWT0xRPM2wzX1gq
-FmsZOtv2ZiBPYTyMl1tdKeRskNSf18xj2toDPKyrMtZquOJLbd+UBTmepChzgrVW
-YSpl4QLDhvUY40Ro/tOdJZiQGlkqpuJNCvfSSQPl/8UOFkKhbqETB3EArBW3SWOR
-iioBTB1fWXG1wsWUV8oX0wgVdUX3AA==
-=55iK
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmP91gMACgkQFA3kzBSg
+KbZX2g/8CRdgZEghA+jOxG+dED3Yed4LejY50XrC8Meia645ecmev9Tk0D9teR9z
+uBBw9DwG8Hy3IGZEMM2gvhRsyWG4nNH7bzS6J8+djwCcMru34uWxrhXZY4Yq3eyy
+peR8+XrMv8mnEmof8o3nYmhPFUeLSlAqS6P52reA+TzaA3AwHfopOpvmZhdncZnb
+IJSscvXRlK65igGwWYfdOSdppoCUojH3Qp7taeShjb3GAmCGpORhdIpWem08uhJy
+t4xrHJJ9/W42MNqaN3wk7EnuJhO/AprtE2pmUGjIuhtNxdtprwqHK6g7ld5p7P+i
+rg4Somtted4vC6/69AyZvBhaYxcoYuA48fiTlGuvFmp9fh7Jn1S3pOq73qt+J/wF
+ZKO9J+wnsg+ZZzexpC2HsM+Y2GljV76ETxmOXssES0+JKv5uumw6m2wNq3IL2Hey
+AtgixoYJrVZN3pRtIHEahGevzNkEk1239NKCIfRW78TrYuTStdjt9OePRIT9VQFh
+dDBwXJ9krNyGMCJkXYUcbDD9JfRUFF9VDSjc4y/q9K9TMRPhnN/gz1qmtMwnWmEM
+bNyFwHJbobAOpen223/gMdRKd14roJlyHHzKDXV4aSeE94E1dpF8PpfWSKGvojc6
+YRyKMHHVj38f/SM5LpT/niU4NQsOTU9KdrDier2ePO3TRq8ogYw=
+=JMpQ
 -----END PGP SIGNATURE-----
 
---bd76unbsfstrl6f7--
+--nPQgwykiPRC2cvTf--
