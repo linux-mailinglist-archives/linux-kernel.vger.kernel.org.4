@@ -2,129 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71E26A5A5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA39B6A5A61
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjB1NvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 08:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S229723AbjB1Nvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 08:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjB1NvB (ORCPT
+        with ESMTP id S229702AbjB1Nvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:51:01 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058E0305E6;
-        Tue, 28 Feb 2023 05:50:54 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9FA681FDC1;
-        Tue, 28 Feb 2023 13:50:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677592253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a+axJ4fDmePQKpl5oDQ9xI+mAYeRUk3jBZn02hzcYwk=;
-        b=IYQKcMF4XvBnvvKRj/q+4NsA4zlgvalUeOeZo1lBfkaF3u2BNeUHa15J5mK2wKQUGa2QzL
-        7DHSTLBQQX4mHTOkhneDNjY8k6kwgvqUD4TOa2szu510WQDdc/g+V5bXW+oLqUMQDQCzLK
-        //rYSrtyAx9tgv/KUWmg5yxRdrZunok=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 798E913440;
-        Tue, 28 Feb 2023 13:50:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jU5ZG70G/mPKQQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 28 Feb 2023 13:50:53 +0000
-Date:   Tue, 28 Feb 2023 14:50:52 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        mark.rutland@arm.com, will@kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Patrick Daly <quic_pdaly@quicinc.com>, johunt@akamai.com
-Subject: Re: [PATCH] psi: reduce min window size to 50ms
-Message-ID: <Y/4GvIMtjVoEozWE@dhcp22.suse.cz>
-References: <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com>
- <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
- <82406da2-799e-f0b4-bce0-7d47486030d4@quicinc.com>
- <CAJuCfpHrhO7_fMwNuu2hdQob=MPjZTW8eaJpNhEhPmDMqz2qTA@mail.gmail.com>
- <Y/ix53x8i/ViuBXf@dhcp22.suse.cz>
- <CAJuCfpG1c5v6qOotPV6t-o1T1p7EbOLs90eFnoEBjts+gafovA@mail.gmail.com>
- <Y/yxSqhpQh9yR7L4@dhcp22.suse.cz>
- <CAJuCfpHXwbtjdhH_K9r28-LUYtzC6+NaZ+RrKCtiNBk8PfXhLw@mail.gmail.com>
- <Y/0ASztGOwfM6bNK@dhcp22.suse.cz>
- <CAJuCfpHYMR6O_uJvaeq1f+ZvgW9oN6zTRG=UvTXyLJLSFOV3jw@mail.gmail.com>
+        Tue, 28 Feb 2023 08:51:52 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780482DE62
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:51:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677592303; x=1709128303;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qdhyhSG2q4g8od+nQoD8vr632OZziZi6ddb2PgHXUVQ=;
+  b=CxXTA/IAfCKbal226gj3xKrRhzxe/9HGBsSbIj+rVHolNjy3uqBOOwH8
+   zu93Q+y0ujjfmRy1O7zmhIuzIENxVRlt0HWY/EcLMwat+9sje4rkdSRJW
+   /7Y0EREYVeFwEuPv/Sdew0pcl6KEoW59UdY1wKQyj1fd/JFuaiHsGkXZl
+   ni3xXDa0DZIkKY/2Qb9r9hqp6eT8gHkYZ/q1eYou8VVPhkEsSzRkYF/+/
+   L/mMmVHd4BpHcg4J3U8pWnQtUBDnjKGdzmc4rx/4EzD9DmJ8ngFwv1+uh
+   lnEhGZSobMFs7NtLihvhCa2mcihcM/06nW1XDbEZzJUZvg98kZkoSVeM7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="396704293"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="396704293"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 05:51:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="1003248801"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="1003248801"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Feb 2023 05:51:35 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pX0OE-0005Qp-33;
+        Tue, 28 Feb 2023 13:51:34 +0000
+Date:   Tue, 28 Feb 2023 21:50:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.02.24a] BUILD SUCCESS
+ 4494d173d8208b4e467c88f53f989dfaf995097d
+Message-ID: <63fe06c3.RzZwAbHKcCDIVtR+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpHYMR6O_uJvaeq1f+ZvgW9oN6zTRG=UvTXyLJLSFOV3jw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 27-02-23 11:50:48, Suren Baghdasaryan wrote:
-> On Mon, Feb 27, 2023 at 11:11 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 27-02-23 09:49:59, Suren Baghdasaryan wrote:
-> > > On Mon, Feb 27, 2023 at 5:34 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Fri 24-02-23 13:07:57, Suren Baghdasaryan wrote:
-> > > > > On Fri, Feb 24, 2023 at 4:47 AM Michal Hocko <mhocko@suse.com> wrote:
-> > [...]
-> > > > > > Btw. it seems that there is is only a limit on a single trigger per fd
-> > > > > > but no limits per user so it doesn't sound too hard to end up with too
-> > > > > > much polling even with a larger timeouts. To me it seems like we need to
-> > > > > > contain the polling thread to be bound by the cpu controller.
-> > > > >
-> > > > > Hmm. We have one "psimon" thread per cgroup (+1 system-level one) and
-> > > > > poll_min_period for each thread is chosen as the min() of polling
-> > > > > periods between triggers created in that group. So, a bad trigger that
-> > > > > causes overly aggressive polling and polling thread being throttled,
-> > > > > might affect other triggers in that cgroup.
-> > > >
-> > > > Yes, and why that would be a problem?
-> > >
-> > > If unprivileged processes are allowed to add new triggers then a
-> > > malicious process can add a bad trigger and affect other legit
-> > > processes. That sounds like a problem to me.
-> >
-> > Hmm, I am not sure we are on the same page. My argument was that the
-> > monitoring kernel thread should be bound by the same cpu controller so
-> > even if it was excessive it would be bound to the cgroup constrains.
-> 
-> Right. But if cgroup constraints are violated then the psimon thread's
-> activity will be impacted by throttling. In such cases won't that
-> affect other "good" triggers served by that thread even if they are
-> using higher polling periods?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.02.24a
+branch HEAD: 4494d173d8208b4e467c88f53f989dfaf995097d  kernel/smp: Make csdlock_debug= resettable
 
-That is no different from any other part of the workload running within
-the same cpu bound cgroup running overboard with the cpu consumption. I
-do not see why psimon or anything else should be any different.
+elapsed time: 721m
 
-Actually the only difference here is that the psi monitoring is
-outsourced to a kernel thread which is running ourside of any constrains.
-I am not sure where do we stand with kernel thread cpu cgroup accounting
-and I suspect this is not a trivial thing to do ATM. Hence longer term
-plan.
+configs tested: 188
+configs skipped: 20
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            alldefconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r004-20230227   gcc  
+alpha        buildonly-randconfig-r006-20230227   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r003-20230226   gcc  
+alpha                randconfig-r021-20230227   gcc  
+alpha                randconfig-r034-20230226   gcc  
+alpha                randconfig-r035-20230226   gcc  
+alpha                randconfig-r035-20230227   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r013-20230226   gcc  
+arc                  randconfig-r021-20230226   gcc  
+arc                  randconfig-r036-20230227   gcc  
+arc                  randconfig-r043-20230226   gcc  
+arc                  randconfig-r043-20230227   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         assabet_defconfig   gcc  
+arm          buildonly-randconfig-r001-20230228   gcc  
+arm                                 defconfig   gcc  
+arm                   milbeaut_m10v_defconfig   clang
+arm                       omap2plus_defconfig   gcc  
+arm                        oxnas_v6_defconfig   gcc  
+arm                  randconfig-r015-20230227   clang
+arm                  randconfig-r022-20230227   clang
+arm                  randconfig-r046-20230226   gcc  
+arm                  randconfig-r046-20230227   clang
+arm                           stm32_defconfig   gcc  
+arm                       versatile_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r023-20230227   gcc  
+arm64                randconfig-r031-20230227   clang
+arm64                randconfig-r034-20230227   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r004-20230226   gcc  
+csky                 randconfig-r011-20230227   gcc  
+csky                 randconfig-r016-20230227   gcc  
+csky                 randconfig-r023-20230227   gcc  
+hexagon      buildonly-randconfig-r006-20230226   clang
+hexagon              randconfig-r024-20230227   clang
+hexagon              randconfig-r035-20230226   clang
+hexagon              randconfig-r035-20230227   clang
+hexagon              randconfig-r041-20230226   clang
+hexagon              randconfig-r041-20230227   clang
+hexagon              randconfig-r045-20230226   clang
+hexagon              randconfig-r045-20230227   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r002-20230227   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230227   clang
+i386                 randconfig-a002-20230227   clang
+i386                 randconfig-a003-20230227   clang
+i386                 randconfig-a004-20230227   clang
+i386                 randconfig-a005-20230227   clang
+i386                 randconfig-a006-20230227   clang
+i386                 randconfig-a011-20230227   gcc  
+i386                 randconfig-a012-20230227   gcc  
+i386                 randconfig-a013-20230227   gcc  
+i386                 randconfig-a014-20230227   gcc  
+i386                 randconfig-a015-20230227   gcc  
+i386                 randconfig-a016-20230227   gcc  
+i386                          randconfig-c001   gcc  
+i386                 randconfig-r002-20230227   clang
+i386                 randconfig-r014-20230227   gcc  
+i386                 randconfig-r025-20230227   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r022-20230227   gcc  
+ia64                 randconfig-r032-20230227   gcc  
+ia64                 randconfig-r036-20230226   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r002-20230226   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r005-20230226   gcc  
+loongarch            randconfig-r014-20230226   gcc  
+loongarch            randconfig-r031-20230226   gcc  
+loongarch            randconfig-r034-20230226   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r005-20230226   gcc  
+m68k                                defconfig   gcc  
+m68k                            mac_defconfig   gcc  
+m68k                        mvme147_defconfig   gcc  
+m68k                 randconfig-r012-20230226   gcc  
+m68k                 randconfig-r014-20230227   gcc  
+m68k                 randconfig-r025-20230227   gcc  
+m68k                 randconfig-r033-20230226   gcc  
+microblaze   buildonly-randconfig-r001-20230227   gcc  
+microblaze   buildonly-randconfig-r006-20230228   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r001-20230226   clang
+mips         buildonly-randconfig-r005-20230226   clang
+mips                 randconfig-r033-20230226   clang
+mips                 randconfig-r036-20230227   gcc  
+mips                           xway_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r023-20230226   gcc  
+nios2                randconfig-r024-20230227   gcc  
+nios2                randconfig-r026-20230227   gcc  
+openrisc     buildonly-randconfig-r003-20230226   gcc  
+openrisc             randconfig-r002-20230226   gcc  
+openrisc             randconfig-r011-20230226   gcc  
+openrisc             randconfig-r016-20230226   gcc  
+openrisc             randconfig-r026-20230226   gcc  
+parisc       buildonly-randconfig-r003-20230227   gcc  
+parisc       buildonly-randconfig-r004-20230226   gcc  
+parisc       buildonly-randconfig-r006-20230227   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r005-20230227   gcc  
+parisc               randconfig-r015-20230226   gcc  
+parisc               randconfig-r025-20230226   gcc  
+parisc               randconfig-r033-20230227   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r003-20230226   clang
+powerpc      buildonly-randconfig-r003-20230228   clang
+powerpc      buildonly-randconfig-r006-20230226   clang
+powerpc                      ep88xc_defconfig   gcc  
+powerpc                mpc7448_hpc2_defconfig   gcc  
+powerpc                 mpc834x_mds_defconfig   gcc  
+powerpc              randconfig-r022-20230226   clang
+powerpc              randconfig-r036-20230226   gcc  
+powerpc                    sam440ep_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r002-20230226   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r006-20230226   gcc  
+riscv                randconfig-r014-20230226   clang
+riscv                randconfig-r015-20230226   clang
+riscv                randconfig-r042-20230226   clang
+riscv                randconfig-r042-20230227   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r016-20230227   gcc  
+s390                 randconfig-r044-20230226   clang
+s390                 randconfig-r044-20230227   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r004-20230228   gcc  
+sh                               j2_defconfig   gcc  
+sh                   randconfig-r001-20230226   gcc  
+sh                   randconfig-r011-20230226   gcc  
+sh                   randconfig-r012-20230227   gcc  
+sh                   randconfig-r013-20230227   gcc  
+sh                   randconfig-r033-20230227   gcc  
+sh                      rts7751r2d1_defconfig   gcc  
+sh                           se7343_defconfig   gcc  
+sh                            shmin_defconfig   gcc  
+sparc        buildonly-randconfig-r005-20230227   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r003-20230227   gcc  
+sparc                randconfig-r021-20230227   gcc  
+sparc                randconfig-r032-20230226   gcc  
+sparc64      buildonly-randconfig-r005-20230228   gcc  
+sparc64              randconfig-r012-20230226   gcc  
+um                               alldefconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230227   clang
+x86_64               randconfig-a002-20230227   clang
+x86_64               randconfig-a003-20230227   clang
+x86_64               randconfig-a004-20230227   clang
+x86_64               randconfig-a005-20230227   clang
+x86_64               randconfig-a006-20230227   clang
+x86_64               randconfig-a011-20230227   gcc  
+x86_64               randconfig-a012-20230227   gcc  
+x86_64               randconfig-a013-20230227   gcc  
+x86_64               randconfig-a014-20230227   gcc  
+x86_64               randconfig-a015-20230227   gcc  
+x86_64               randconfig-a016-20230227   gcc  
+x86_64               randconfig-r004-20230227   clang
+x86_64               randconfig-r015-20230227   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r002-20230227   gcc  
+xtensa               randconfig-r016-20230226   gcc  
+xtensa               randconfig-r032-20230226   gcc  
+
 -- 
-Michal Hocko
-SUSE Labs
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
