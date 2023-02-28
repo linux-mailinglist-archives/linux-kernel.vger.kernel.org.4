@@ -2,206 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7556A55F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F776A55F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjB1JhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S230369AbjB1Jhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjB1JhB (ORCPT
+        with ESMTP id S229520AbjB1Jhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:37:01 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F165C29E30;
-        Tue, 28 Feb 2023 01:36:59 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S6wqPi010092;
-        Tue, 28 Feb 2023 09:36:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=f9iJEgKBIWtE12yxfvC3PM2+H0C+9MQfImj1Ex4J4kU=;
- b=S9Z28mtI7Cd8iBn8ilXGOG/ss7q5Q+JFX8WcSy8aLGqktU1yaumpxB6JJnNrmR3u3DKS
- jd/O4dp3Dm5aNssGEOffvcCPb8WuJ4i1HOAU3FnfmSSD5CrDcG3GZJyDPidwCS5kyk1e
- TcMQPvF5xmR3rtbJKgFhCcQN1je3FHDqJNxNZ6RejcTuHt8sj7nProat3kqRylPWgGKb
- Yw4ABnrwlC3DTwC4VpH9WVl11nYVbadstQ9N89b4eBl/1/bhqyyEkq81tsZ4tUsrN7Sc
- wXnq2YtXVok0P5V2+nBavsjisZY7qW7Z2zY7eflpgzBaOIN1Hf/gPlgwC20GwD3tOGi7 sg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1csvrde5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 09:36:57 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31S9auQq003345
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 09:36:56 GMT
-Received: from [10.110.31.193] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Feb
- 2023 01:36:55 -0800
-Message-ID: <d01e243e-1ba2-b9cf-2b74-f77f22b5c624@quicinc.com>
-Date:   Tue, 28 Feb 2023 01:36:55 -0800
+        Tue, 28 Feb 2023 04:37:33 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F922A6D6;
+        Tue, 28 Feb 2023 01:37:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677577051; x=1709113051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xjjLkwPdC4Qnu2rsgdsvGKcGVndM1jwKd4HVYu7Q/Rg=;
+  b=bmHg8sPcaFuQc7//0yp1lD/dcV+0/TDMtoW2I4Bs0Xs0A8/rbLvm6Wqd
+   3OJvZW/NWqn5P3gtG3CouOzI89Tw3C3xDNQyNqyyIsblydYiDbWCxtiFo
+   eJmY6yK1RkHSeAAeXe+4vcQeAm3PsiElYLVmvjy/G4Zc7UrBpOYjLNcc/
+   Nl5oaZxNzmSUTBSj9Pe+S4/W1VC/RuYt4Nx29ukJBJtCERDcbprpYAqxM
+   lm89qwn7EdvSY7L6bbB3VI5BO9yxUVapGJdMFmcrcu3TwwXa5zXdlKAOq
+   XXkxQd9voLAmsJq8yomDQ6SWlIopP5avkn+j163RFhjrtSEgK0Q701A+6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="336383336"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="336383336"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 01:37:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="667388941"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="667388941"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Feb 2023 01:37:27 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pWwQI-0005Ha-2I;
+        Tue, 28 Feb 2023 09:37:26 +0000
+Date:   Tue, 28 Feb 2023 17:37:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, dsahern@kernel.org, pabeni@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 5/8] bpf: net: ipv6: Add bpf_ipv6_frag_rcv()
+ kfunc
+Message-ID: <202302281707.5vUL3boJ-lkp@intel.com>
+References: <bce083a4293eefb048a700b5a6086e8d8c957700.1677526810.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: dwc3: gadget: Add 100uS delay after end transfer
- command without IOC
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20230227232035.13759-1-quic_wcheng@quicinc.com>
- <20230228021925.j5bquwnwuvog3hx6@synopsys.com>
- <20230228031027.ghrfnda5lkt7qfmt@synopsys.com>
- <24af4a1b-0cc5-e65b-ac66-f767f891520e@quicinc.com>
- <20230228035625.rrda7hpitfrfx34z@synopsys.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20230228035625.rrda7hpitfrfx34z@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0dY_00VpvJP09Qw3MKlOEtSV061EgpZy
-X-Proofpoint-ORIG-GUID: 0dY_00VpvJP09Qw3MKlOEtSV061EgpZy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-28_06,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- suspectscore=0 phishscore=0 mlxscore=0 priorityscore=1501 malwarescore=0
- adultscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280076
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bce083a4293eefb048a700b5a6086e8d8c957700.1677526810.git.dxu@dxuuu.xyz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thinh,
+Hi Daniel,
 
-On 2/27/2023 8:02 PM, Thinh Nguyen wrote:
-> On Mon, Feb 27, 2023, Wesley Cheng wrote:
->> Hi Thinh,
->>
->> On 2/27/2023 7:10 PM, Thinh Nguyen wrote:
->>> On Tue, Feb 28, 2023, Thinh Nguyen wrote:
->>>> On Mon, Feb 27, 2023, Wesley Cheng wrote:
->>>>> Previously, there was a 100uS delay inserted after issuing an end transfer
->>>>> command for specific controller revisions.  This was due to the fact that
->>>>> there was a GUCTL2 bit field which enabled synchronous completion of the
->>>>> end transfer command once the CMDACT bit was cleared in the DEPCMD
->>>>> register.  Since this bit does not exist for all controller revisions, add
->>>>> the delay back in.
->>>>>
->>>>> An issue was seen where the USB request buffer was unmapped while the DWC3
->>>>> controller was still accessing the TRB.  However, it was confirmed that the
->>>>> end transfer command was successfully submitted. (no end transfer timeout)
->>>>
->>>> Currently we only check for command active, not completion on teardown.
->>>>
->>>>> In situations, such as dwc3_gadget_soft_disconnect() and
->>>>> __dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
->>>>> will issue the end transfer command, and follow up with
->>>>> dwc3_gadget_giveback().  At least for the USB ep disable path, it is
->>>>> required for any pending and started requests to be completed and returned
->>>>> to the function driver in the same context of the disable call.  Without
->>>>> the GUCTL2 bit, it is not ensured that the end transfer is completed before
->>>>> the buffers are unmapped.
->>>>>
->>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>>>
->>>> This is expected. We're supposed to make sure the End Transfer command
->>>> complete before accessing the request. Usually on device/endpoint
->>>> teardown, the gadget drivers don't access the stale/incomplete requests
->>>> with -ESHUTDOWN status. There will be problems if we do, and we haven't
->>>> fixed that.
->>>>
->>>> Adding 100uS may not apply for every device, and we don't need to do
->>>> that for every End Transfer command. Can you try this untested diff
->>>> instead:
->>>>
->>
->> Thanks for the code suggestion.
->>
->>>>
->>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>> index 30408bafe64e..5ae5ff4c8858 100644
->>>> --- a/drivers/usb/dwc3/gadget.c
->>>> +++ b/drivers/usb/dwc3/gadget.c
->>>> @@ -1962,6 +1962,34 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
->>>>    	return DWC3_DSTS_SOFFN(reg);
->>>>    }
->>>> +static int dwc3_poll_ep_completion(struct dwc3_ep *dep)
->>>> +{
->>>> +	if (!list_empty(&dep->started_list)) {
->>>> +		struct dwc3_request *req;
->>>> +		int timeout = 500;
->>>> +
->>>> +		req = next_request(&dep->started_list);
->>>> +		while(--timeout) {
->>>> +			/*
->>>> +			 * Note: don't check the last enqueued TRB in case
->>>> +			 * of short transfer. Check first TRB of a started
->>>> +			 * request instead.
->>>> +			 */
->>>> +			if (!(req->trb->ctrl & DWC3_TRB_CTRL_HWO))
->>>> +				break;
->>>> +
->>>> +			udelay(2);
->>>> +		}
->>>> +		if (!timeout) {
->>>> +			dev_warn(dep->dwc->dev,
->>>> +				 "%s is still in-progress\n", dep->name);
->>>> +			return -ETIMEDOUT;
->>>> +		}
->>>> +	}
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>>    /**
->>>>     * __dwc3_stop_active_transfer - stop the current active transfer
->>>>     * @dep: isoc endpoint
->>>> @@ -2003,10 +2031,12 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
->>>>    	WARN_ON_ONCE(ret);
->>>>    	dep->resource_index = 0;
->>>> -	if (!interrupt)
->>>> +	if (!interrupt) {
->>>> +		ret = dwc3_poll_ep_completion(dep);
->>>
->>> Actually, the TRB status may not get updated, so this may not work,
->>> instead of polling, may need to add the delay here instead.
->>>
->>
->> Yeah, I just gave it a try, and I get the ETIMEDOUT error all the time.
->> Don't think we can utilize the HWO bit here.
->>
-> 
-> I may be over complicating things here. With ForceRM, the controller
-> only updates the last TRB it processed. We don't care about performance
-> much during teardown. That would mean more codes for something that's
-> not need.
-> 
+Thank you for the patch! Yet something to improve:
 
-Yes :) that is what I encountered as well.  I tried a few other things, 
-but it opened a whole new set of topics that needed to be discussed 
-further.  Hence why I proposed the simple delay, since this happens only 
-in the teardown path as you mentioned.
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/ip-frags-Return-actual-error-codes-from-ip_check_defrag/20230228-035449
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/bce083a4293eefb048a700b5a6086e8d8c957700.1677526810.git.dxu%40dxuuu.xyz
+patch subject: [PATCH bpf-next v2 5/8] bpf: net: ipv6: Add bpf_ipv6_frag_rcv() kfunc
+config: i386-debian-10.3 (https://download.01.org/0day-ci/archive/20230228/202302281707.5vUL3boJ-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/be4610312351d4a658435bd4649a3a830322396d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Xu/ip-frags-Return-actual-error-codes-from-ip_check_defrag/20230228-035449
+        git checkout be4610312351d4a658435bd4649a3a830322396d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302281707.5vUL3boJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: net/ipv6/af_inet6.o: in function `inet6_init':
+>> net/ipv6/af_inet6.c:1177: undefined reference to `register_ipv6_reassembly_bpf'
 
 
-> Can you add a delay here instead? Make sure it's at least 1ms and
-> applicable for dwc_usb32 also.
-> 
+vim +1177 net/ipv6/af_inet6.c
 
-Sure, I will update the delay to 1ms and also add USB32 check.
+  1061	
+  1062	static int __init inet6_init(void)
+  1063	{
+  1064		struct list_head *r;
+  1065		int err = 0;
+  1066	
+  1067		sock_skb_cb_check_size(sizeof(struct inet6_skb_parm));
+  1068	
+  1069		/* Register the socket-side information for inet6_create.  */
+  1070		for (r = &inetsw6[0]; r < &inetsw6[SOCK_MAX]; ++r)
+  1071			INIT_LIST_HEAD(r);
+  1072	
+  1073		raw_hashinfo_init(&raw_v6_hashinfo);
+  1074	
+  1075		if (disable_ipv6_mod) {
+  1076			pr_info("Loaded, but administratively disabled, reboot required to enable\n");
+  1077			goto out;
+  1078		}
+  1079	
+  1080		err = proto_register(&tcpv6_prot, 1);
+  1081		if (err)
+  1082			goto out;
+  1083	
+  1084		err = proto_register(&udpv6_prot, 1);
+  1085		if (err)
+  1086			goto out_unregister_tcp_proto;
+  1087	
+  1088		err = proto_register(&udplitev6_prot, 1);
+  1089		if (err)
+  1090			goto out_unregister_udp_proto;
+  1091	
+  1092		err = proto_register(&rawv6_prot, 1);
+  1093		if (err)
+  1094			goto out_unregister_udplite_proto;
+  1095	
+  1096		err = proto_register(&pingv6_prot, 1);
+  1097		if (err)
+  1098			goto out_unregister_raw_proto;
+  1099	
+  1100		/* We MUST register RAW sockets before we create the ICMP6,
+  1101		 * IGMP6, or NDISC control sockets.
+  1102		 */
+  1103		err = rawv6_init();
+  1104		if (err)
+  1105			goto out_unregister_ping_proto;
+  1106	
+  1107		/* Register the family here so that the init calls below will
+  1108		 * be able to create sockets. (?? is this dangerous ??)
+  1109		 */
+  1110		err = sock_register(&inet6_family_ops);
+  1111		if (err)
+  1112			goto out_sock_register_fail;
+  1113	
+  1114		/*
+  1115		 *	ipngwg API draft makes clear that the correct semantics
+  1116		 *	for TCP and UDP is to consider one TCP and UDP instance
+  1117		 *	in a host available by both INET and INET6 APIs and
+  1118		 *	able to communicate via both network protocols.
+  1119		 */
+  1120	
+  1121		err = register_pernet_subsys(&inet6_net_ops);
+  1122		if (err)
+  1123			goto register_pernet_fail;
+  1124		err = ip6_mr_init();
+  1125		if (err)
+  1126			goto ipmr_fail;
+  1127		err = icmpv6_init();
+  1128		if (err)
+  1129			goto icmp_fail;
+  1130		err = ndisc_init();
+  1131		if (err)
+  1132			goto ndisc_fail;
+  1133		err = igmp6_init();
+  1134		if (err)
+  1135			goto igmp_fail;
+  1136	
+  1137		err = ipv6_netfilter_init();
+  1138		if (err)
+  1139			goto netfilter_fail;
+  1140		/* Create /proc/foo6 entries. */
+  1141	#ifdef CONFIG_PROC_FS
+  1142		err = -ENOMEM;
+  1143		if (raw6_proc_init())
+  1144			goto proc_raw6_fail;
+  1145		if (udplite6_proc_init())
+  1146			goto proc_udplite6_fail;
+  1147		if (ipv6_misc_proc_init())
+  1148			goto proc_misc6_fail;
+  1149		if (if6_proc_init())
+  1150			goto proc_if6_fail;
+  1151	#endif
+  1152		err = ip6_route_init();
+  1153		if (err)
+  1154			goto ip6_route_fail;
+  1155		err = ndisc_late_init();
+  1156		if (err)
+  1157			goto ndisc_late_fail;
+  1158		err = ip6_flowlabel_init();
+  1159		if (err)
+  1160			goto ip6_flowlabel_fail;
+  1161		err = ipv6_anycast_init();
+  1162		if (err)
+  1163			goto ipv6_anycast_fail;
+  1164		err = addrconf_init();
+  1165		if (err)
+  1166			goto addrconf_fail;
+  1167	
+  1168		/* Init v6 extension headers. */
+  1169		err = ipv6_exthdrs_init();
+  1170		if (err)
+  1171			goto ipv6_exthdrs_fail;
+  1172	
+  1173		err = ipv6_frag_init();
+  1174		if (err)
+  1175			goto ipv6_frag_fail;
+  1176	
+> 1177		err = register_ipv6_reassembly_bpf();
+  1178		if (err)
+  1179			goto ipv6_frag_fail;
+  1180	
+  1181		/* Init v6 transport protocols. */
+  1182		err = udpv6_init();
+  1183		if (err)
+  1184			goto udpv6_fail;
+  1185	
+  1186		err = udplitev6_init();
+  1187		if (err)
+  1188			goto udplitev6_fail;
+  1189	
+  1190		err = udpv6_offload_init();
+  1191		if (err)
+  1192			goto udpv6_offload_fail;
+  1193	
+  1194		err = tcpv6_init();
+  1195		if (err)
+  1196			goto tcpv6_fail;
+  1197	
+  1198		err = ipv6_packet_init();
+  1199		if (err)
+  1200			goto ipv6_packet_fail;
+  1201	
+  1202		err = pingv6_init();
+  1203		if (err)
+  1204			goto pingv6_fail;
+  1205	
+  1206		err = calipso_init();
+  1207		if (err)
+  1208			goto calipso_fail;
+  1209	
+  1210		err = seg6_init();
+  1211		if (err)
+  1212			goto seg6_fail;
+  1213	
+  1214		err = rpl_init();
+  1215		if (err)
+  1216			goto rpl_fail;
+  1217	
+  1218		err = ioam6_init();
+  1219		if (err)
+  1220			goto ioam6_fail;
+  1221	
+  1222		err = igmp6_late_init();
+  1223		if (err)
+  1224			goto igmp6_late_err;
+  1225	
 
-Thanks
-Wesley Cheng
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
