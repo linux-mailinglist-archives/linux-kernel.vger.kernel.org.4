@@ -2,125 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2CE6A588E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6356A588F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjB1LuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S231551AbjB1LvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbjB1LuJ (ORCPT
+        with ESMTP id S229711AbjB1LvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:50:09 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6229E1F481;
-        Tue, 28 Feb 2023 03:50:08 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S6Vr8P024430;
-        Tue, 28 Feb 2023 11:49:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=RiKQxet1aV+aN1dp0TU54EAcebB+HyrH3HYWI54gMSk=;
- b=My3zBjawpEp2W4HaP/3TCGFoH3c4bIEkmg6BgoNEtFQh5ecHJVL6qM//eawnKZsuTl9M
- fsSDWAckTsxk2NHJsKOyTaLnF6cY2Q1kfYT399/P9pujmgzyjL9+qjU+dYlwmX2vdt0x
- PrP0Oj1G0qtZtE/IyE5rt6ShFDWJCKUhCTVVJThbahZUE/nrCeqwFmnVpXBhLqSsNuLA
- VqvidQm6nk7ZHsB2JNMmQU20gmCuKnS/lFr7kjPCfQu7y2zY35nho0ywlXEY06vWHT5V
- SUZPgPfZmw+x4wewfhWC6O1z3/XGvVWtDtdhOsaMrtF4mUiV6fzcsL3PUj+OLSk4vPlv gg== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1ccxgtb9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 11:49:25 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31SBnEW4004703;
-        Tue, 28 Feb 2023 11:49:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3nybdkeaxb-1;
-        Tue, 28 Feb 2023 11:49:21 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31SBnLcE006237;
-        Tue, 28 Feb 2023 11:49:21 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.37])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 31SBnKX5006167;
-        Tue, 28 Feb 2023 11:49:21 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id F027547B9; Tue, 28 Feb 2023 17:19:19 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        svarbanov@mm-sol.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-phy@lists.infradead.org, vkoul@kernel.org, kishon@ti.com,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        stable@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Prasad Malisetty <pmaliset@codeaurora.org>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS)
-Subject: [PATCH V2] arm64: dts: qcom: sc7280: Mark PCIe controller as cache coherent
-Date:   Tue, 28 Feb 2023 17:19:12 +0530
-Message-Id: <1677584952-17496-1-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PJJOU_hZapybQxqINK46QQuT9oKQlc8V
-X-Proofpoint-ORIG-GUID: PJJOU_hZapybQxqINK46QQuT9oKQlc8V
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-28_07,2023-02-28_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 malwarescore=0 phishscore=0 adultscore=0
- clxscore=1011 mlxlogscore=656 bulkscore=0 impostorscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302280094
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 28 Feb 2023 06:51:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44571F5C3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:50:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677585021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FfScrIsI5x6rEVkEdrSdiYdcOjklUHQX5rbDlaigbQQ=;
+        b=iCGOmmw6pA9RnhcOkeNaTZtmTaC3bjVffxjMtDd/HIT1rmEcGpUa3fc/LgV8fb6EAywDUP
+        FtuHdEk4ZNrJXkIIFCtDMQcjczMY49oEM5fwLpGMj4C9BJ0DaSme+QbMtC2bF8awB6Wr3d
+        VYFFm6giUDWl+Umby7NpkJH7aq5kgVo=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-196-g7s1APMWNnCZ7Z8htErE4A-1; Tue, 28 Feb 2023 06:50:20 -0500
+X-MC-Unique: g7s1APMWNnCZ7Z8htErE4A-1
+Received: by mail-wr1-f70.google.com with SMTP id d14-20020adfa34e000000b002bfc062eaa8so1507442wrb.20
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:50:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FfScrIsI5x6rEVkEdrSdiYdcOjklUHQX5rbDlaigbQQ=;
+        b=7JVr9XbQmlrmltlqTF2GrpMhQ1UjXNP8sSOIZ0JFarsQwb7FUGYeQJCZeiJWsHJ750
+         l8+QMg5+MejMPyVYqeIZzerKSQeRViaI/S9H6QKbG7p8/yXs+c6LLMmIoQRDWeQERmX6
+         ndaxiTnaKx328kqem9LR0XUnTvZ2cqfbBLzkh/hB3jh2hxl+RpL88+7wWYKG8HZb4KPO
+         orSzSM5sZZsA8Ko4gX0WInsj3sWx/F6DZM0Ydb8Hl0lhldqIwZCtPpRT9yU2CumRbVzA
+         zIzLXIuCIvfM0+pcZ5f5hdnzgj7LzHhiTj2MfqVjsh4+Ii1nrnlD5sVnPaHLzcGbiM/W
+         2WdA==
+X-Gm-Message-State: AO0yUKXhuliHZru9TcxdsX6OBTeDmTrPdC1s6DXtW7D3/qIXdeSK19s/
+        WfL6HHgqtAgMBPDAEC1MA1tdMVFNH78dR/cYNvbKSHE05W/VjoFmWC30xJ0cfskG81xlnMw2nfB
+        JIG9wAwcex0jj3SFhATevehyR
+X-Received: by 2002:a5d:5962:0:b0:2c9:8b81:bd04 with SMTP id e34-20020a5d5962000000b002c98b81bd04mr1598338wri.0.1677585019330;
+        Tue, 28 Feb 2023 03:50:19 -0800 (PST)
+X-Google-Smtp-Source: AK7set/WCwUQ3kuQSoUUChN/7DoXag2/WHh+Ag1Cof24ZSeYbEAZPY3yHLOgPqbpAD21sl85tNb6aA==
+X-Received: by 2002:a5d:5962:0:b0:2c9:8b81:bd04 with SMTP id e34-20020a5d5962000000b002c98b81bd04mr1598321wri.0.1677585019011;
+        Tue, 28 Feb 2023 03:50:19 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id z10-20020a5d44ca000000b002c6e8af1037sm9651101wrr.104.2023.02.28.03.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 03:50:18 -0800 (PST)
+Message-ID: <192d72313269845fe19d6d8baecbecfb9d184f77.camel@redhat.com>
+Subject: Re: [PATCH v2] net: lan743x: LAN743X selects FIXED_PHY to resolve a
+ link error
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Tom Rix <trix@redhat.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, steen.hegelund@microchip.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 28 Feb 2023 12:50:17 +0100
+In-Reply-To: <20230227130535.2828181-1-trix@redhat.com>
+References: <20230227130535.2828181-1-trix@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the controller is not marked as cache coherent, then kernel will
-try to ensure coherency during dma-ops and that may cause data corruption.
-So, mark the PCIe node as dma-coherent as the devices on PCIe bus are
-cache coherent.
+Hello,
 
-Cc: stable@vger.kernel.org
-Fixes: 92e0ee9f83b3 ("arm64: dts: qcom: sc7280: Add PCIe and PHY related node")
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
----
+On Mon, 2023-02-27 at 08:05 -0500, Tom Rix wrote:
+> A rand config causes this link error
+> drivers/net/ethernet/microchip/lan743x_main.o: In function `lan743x_netde=
+v_open':
+> drivers/net/ethernet/microchip/lan743x_main.c:1512: undefined reference t=
+o `fixed_phy_register'
+>=20
+> lan743x_netdev_open is controlled by LAN743X
+> fixed_phy_register is controlled by FIXED_PHY
+>=20
+> and the error happens when
+> CONFIG_LAN743X=3Dy
+> CONFIG_FIXED_PHY=3Dm
+>=20
+> So LAN743X should also select FIXED_PHY
+>=20
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-changes since v1:
-	- Updated the commit text.
----
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+You are targeting the -net tree, but this lacks a 'Fixes' tag, please
+post a new version with such info.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index bdcb749..8f4ab6b 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2131,6 +2131,8 @@
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie1_clkreq_n>;
- 
-+			dma-coherent;
-+
- 			iommus = <&apps_smmu 0x1c80 0x1>;
- 
- 			iommu-map = <0x0 &apps_smmu 0x1c80 0x1>,
--- 
-2.7.4
+If instead the intended target was net-next (as I think it was agreed
+on previous revision) please repost after that net-next re-opens (in
+~1w from now).
+
+Thanks,
+
+Paolo
 
