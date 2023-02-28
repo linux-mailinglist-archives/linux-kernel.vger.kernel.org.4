@@ -2,166 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D026A5307
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F486A52FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjB1Gc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 01:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S229794AbjB1GcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 01:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjB1GcU (ORCPT
+        with ESMTP id S229451AbjB1GcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 01:32:20 -0500
-Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E4629E03
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 22:32:17 -0800 (PST)
-Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 202302280632157f9ad6a9521dd73370
-        for <linux-kernel@vger.kernel.org>;
-        Tue, 28 Feb 2023 07:32:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=tDSzegl8wRjGyTb80N1hE+w00MNy/G0rvVJNJbPavHY=;
- b=HPx/WSMAkv/9J2bd7VY6UZimwS3HJil+7kddYp4JQmIqP0z2ZuSHjQo8DzltM1u0xEjXOM
- G8/DibNx6MeiDLhfFFNXi3OyWL3gWOwJ0QI/9yp4ZxO4eGZYXvsCDJxQhuM1D+XMdU8QbCkf
- xDV77CQbnNXwqfgIlUOvhWL0Ed9EM=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 3/3] tty: n_gsm: add ioctl for DLC config via ldisc handle
-Date:   Tue, 28 Feb 2023 07:29:57 +0100
-Message-Id: <20230228062957.3150-3-daniel.starke@siemens.com>
-In-Reply-To: <20230228062957.3150-1-daniel.starke@siemens.com>
-References: <20230228062957.3150-1-daniel.starke@siemens.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 28 Feb 2023 01:32:13 -0500
+Received: from spamfilter04.delta.nl (spamfilter04.delta.nl [217.102.255.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A898D2057D;
+        Mon, 27 Feb 2023 22:32:11 -0800 (PST)
+Received: from host-ubmmyvj.static.zeelandnet.nl ([217.102.255.198] helo=mail.zeelandnet.nl)
+        by spamfilter04.delta.nl with esmtp (Exim 4.92)
+        (envelope-from <mike.looijmans@topic.nl>)
+        id 1pWtX0-0006dr-W8; Tue, 28 Feb 2023 07:32:07 +0100
+X-Sender-IP: 204.168.188.16
+Received: from phenom.domain_not_set.invalid (016-188-168-204.dynamic.caiway.nl [204.168.188.16])
+        (Authenticated sender: glasveze@delta.nl)
+        by mail.zeelandnet.nl (Postfix) with ESMTPA;
+        Tue, 28 Feb 2023 07:31:52 +0100 (CET)
+From:   Mike Looijmans <mike.looijmans@topic.nl>
+To:     devicetree@vger.kernel.org, linux-iio@vger.kernel.org
+Cc:     Mike Looijmans <mike.looijmans@topic.nl>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] dt-bindings: iio: adc: Add TI ADS1100 and ADS1000
+Date:   Tue, 28 Feb 2023 07:31:50 +0100
+Message-Id: <20230228063151.17598-1-mike.looijmans@topic.nl>
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: 217.102.255.198
+X-DELTA-Domain: zeelandnet.nl
+X-DELTA-Username: 217.102.255.198
+Authentication-Results: delta.nl; auth=pass smtp.auth=217.102.255.198@zeelandnet.nl
+X-DELTA-Outgoing-Class: ham
+X-DELTA-Outgoing-Evidence: Combined (0.02)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+DcX9mBS87Sjkl3zt5DZ/JPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xzeemUa7CfwmLuWRw6Ruql9Wrt/oF2ofKYeezPZTW+uL/H
+ seNZtCKdSRRS0Op9pfwEIJgF/Accv4lLtE4TWYNIjgZ0d6t6F7vRFkkblm+Z5L7uq2AYbiB7eX7C
+ A0Ee9FXnLqvnkE9k+JY3j0cID29DoODujL6FEsNqPMBZcb5VIYa36rQUNKpqI1Q4bofNkWUu8fTD
+ ZLzKN6k+QrhjNGJv3vMX8kxfmgvnPiAPWmoBuxmBwTME+9GFGInGiou45HNmtfv+FqJdBAzMzmkl
+ 3RebQxyzcaJWgnTP1X4liYqSLtlnibl3vcBqVmvQB4A18ae2ZUrTg6FOOV02sP442WuqAVXirbLu
+ Jjy3NtnGWLbnBD5wBOYayDY3tUZW3y7uaAiYA/VUAhdIJZFus1IsgsCDp7g8tNbgTOJVkvPWcKve
+ fL+CgfasVEKELzhStrT89iLQPrbYmyedRWSaH5Jq+f9dFu3a+YmrU6Iy71ckAFY+TtvrQQT37tVB
+ F8TuA2zDxdadd1WxHO/mLVgwAb47uaav6rkstLAf90f4v3S1FulD9czOuJQrulh5Fko3Tg7NaUQc
+ YIYdvv9xV5Ex49z0ZSNkjgZ0d6t6F7vRFkkblm+Z5MW9qS2/3RCT5H9A6khsXlWGs9HjdrlYbXkZ
+ KU5GQmOJZsmqX57B1EDhkm+xMEreF4WyYiqdZEM01eRU4ONdoVEFBfQHNmmYaIBwRgEu+hlkUryY
+ cSJLFEwVd01VIyXuC84PLa7Kvs1vJgz+jb+KUZ4ZI4crFqIiLO9pmeAxg3M8BMj+y2IddO0/FlXY
+ D8b+M8bPMsyA7EJ+U7NdS2YrNZ05xOYqJ9Tq2b0GjLr7lMbCDjnM3rdD8NgG/HfNinI857jdWiOx
+ jT+Uoc44sbCX7JxqjLaXu1AD0YHYM/EUhlEfE6TG2ORqQuRwhOvtgDJH0WotQdu7BL5WjlV6WURt
+ Nxb4RqrqGwDerCVKfZxBaa6lpe1/5cEtgGt7CHfC+dbEjaN+/GAFlUDQdIxEvZe3STQis/XYTU9g
+ OFOXr5UdN6W4PtxMTp1vEgkwihjWmfmNVfPvzy/hTW1WrcVDSDSSDu0wxuDU9J+Dmr/6e4fImcm4
+ 9R/2gMGq0KWAzmMf+ibVDqLZPzE7W9Cqnhlc7GZSDtYOqFKIG2trlPUTQYEjbgmVnZqbKIaNWdFw
+ SHKOTj4XQZ8i4WqksVTtjhZSepuHki+xkgmaS1TA/Dv/4AHP2EFtNptbHtgZAQM3rG32ibSwsxBN
+ fS19KOA46lF/j0xwFgg=
+X-Report-Abuse-To: spam@spamfilter03.delta.nl
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
+        SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+The ADS1100 is a 16-bit ADC (at 8 samples per second).
+The ADS1000 is similar, but has a fixed data rate.
 
-The application which initializes the n_gsm ldisc may like to set
-individual default parameters for each DLCI or take over of the application
-specific DLCI configuration completely. This is currently not possible.
-It is either possible to set common default parameters for all DLCIs or let
-the user application set its DLCI specific configuration parameters.
+Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
 
-Add support of GSMIOC_GETCONF_DLCI and GSMIOC_SETCONF_DLCI for the n_gsm
-ldisc handle to support DLCI specific parameter configuration upfront.
-
-Add a code example for this use case to the n_gsm documentation.
-
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- Documentation/driver-api/tty/n_gsm.rst | 16 +++++++++++++++
- drivers/tty/n_gsm.c                    | 28 ++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
 
-diff --git a/Documentation/driver-api/tty/n_gsm.rst b/Documentation/driver-api/tty/n_gsm.rst
-index c2624546fb8f..120317ec990f 100644
---- a/Documentation/driver-api/tty/n_gsm.rst
-+++ b/Documentation/driver-api/tty/n_gsm.rst
-@@ -47,6 +47,7 @@ Config Initiator
-       int ldisc = N_GSM0710;
-       struct gsm_config c;
-       struct gsm_config_ext ce;
-+      struct gsm_dlci_config dc;
-       struct termios configuration;
-       uint32_t first;
- 
-@@ -83,6 +84,13 @@ Config Initiator
-       c.mtu = 127;
-       /* set the new configuration */
-       ioctl(fd, GSMIOC_SETCONF, &c);
-+      /* get DLC 1 configuration */
-+      dc.channel = 1;
-+      ioctl(fd, GSMIOC_GETCONF_DLCI, &dc);
-+      /* the first user channel gets a higher priority */
-+      dc.priority = 1;
-+      /* set the new DLC 1 specific configuration */
-+      ioctl(fd, GSMIOC_SETCONF_DLCI, &dc);
-       /* get first gsmtty device node */
-       ioctl(fd, GSMIOC_GETFIRST, &first);
-       printf("first muxed line: /dev/gsmtty%i\n", first);
-@@ -136,6 +144,7 @@ Config Requester
- 	int ldisc = N_GSM0710;
- 	struct gsm_config c;
- 	struct gsm_config_ext ce;
-+	struct gsm_dlci_config dc;
- 	struct termios configuration;
- 	uint32_t first;
- 
-@@ -165,6 +174,13 @@ Config Requester
- 	c.mtu = 127;
- 	/* set the new configuration */
- 	ioctl(fd, GSMIOC_SETCONF, &c);
-+	/* get DLC 1 configuration */
-+	dc.channel = 1;
-+	ioctl(fd, GSMIOC_GETCONF_DLCI, &dc);
-+	/* the first user channel gets a higher priority */
-+	dc.priority = 1;
-+	/* set the new DLC 1 specific configuration */
-+	ioctl(fd, GSMIOC_SETCONF_DLCI, &dc);
- 	/* get first gsmtty device node */
- 	ioctl(fd, GSMIOC_GETFIRST, &first);
- 	printf("first muxed line: /dev/gsmtty%i\n", first);
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 494657e8535d..86f106545958 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -3716,6 +3716,7 @@ static int gsmld_ioctl(struct tty_struct *tty, unsigned int cmd,
- {
- 	struct gsm_config c;
- 	struct gsm_config_ext ce;
-+	struct gsm_dlci_config dc;
- 	struct gsm_mux *gsm = tty->disc_data;
- 	struct gsm_dlci *dlci;
- 	unsigned int base;
-@@ -3742,6 +3743,33 @@ static int gsmld_ioctl(struct tty_struct *tty, unsigned int cmd,
- 		if (copy_from_user(&ce, (void __user *)arg, sizeof(ce)))
- 			return -EFAULT;
- 		return gsm_config_ext(gsm, &ce);
-+	case GSMIOC_GETCONF_DLCI:
-+		if (copy_from_user(&dc, (void __user *)arg, sizeof(dc)))
-+			return -EFAULT;
-+		if (dc.channel == 0 || dc.channel >= NUM_DLCI)
-+			return -EINVAL;
-+		dlci = gsm->dlci[dc.channel];
-+		if (!dlci) {
-+			dlci = gsm_dlci_alloc(gsm, dc.channel);
-+			if (!dlci)
-+				return -ENOMEM;
-+		}
-+		gsm_dlci_copy_config_values(dlci, &dc);
-+		if (copy_to_user((void __user *)arg, &dc, sizeof(dc)))
-+			return -EFAULT;
-+		return 0;
-+	case GSMIOC_SETCONF_DLCI:
-+		if (copy_from_user(&dc, (void __user *)arg, sizeof(dc)))
-+			return -EFAULT;
-+		if (dc.channel == 0 || dc.channel >= NUM_DLCI)
-+			return -EINVAL;
-+		dlci = gsm->dlci[dc.channel];
-+		if (!dlci) {
-+			dlci = gsm_dlci_alloc(gsm, dc.channel);
-+			if (!dlci)
-+				return -ENOMEM;
-+		}
-+		return gsm_dlci_config(dlci, &dc, 0);
- 	default:
- 		return n_tty_ioctl_helper(tty, cmd, arg);
- 	}
+(no changes since v2)
+
+Changes in v2:
+"reg" property is mandatory.
+Add vdd-supply and #io-channel-cells
+
+ .../bindings/iio/adc/ti,ads1100.yaml          | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads1100.yaml
+
+diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads1100.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads1100.yaml
+new file mode 100644
+index 000000000000..970ccab15e1e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/adc/ti,ads1100.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/adc/ti,ads1100.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI ADS1100/ADS1000 single channel I2C analog to digital converter
++
++maintainers:
++  - Mike Looijmans <mike.looijmans@topic.nl>
++
++description: |
++  Datasheet at: https://www.ti.com/lit/gpn/ads1100
++
++properties:
++  compatible:
++    enum:
++      - ti,ads1100
++      - ti,ads1000
++
++  reg:
++    maxItems: 1
++
++  vdd-supply: true
++
++  "#io-channel-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        adc@49 {
++            compatible = "ti,ads1100";
++            reg = <0x49>;
++        };
++    };
++...
 -- 
-2.34.1
+2.17.1
 
