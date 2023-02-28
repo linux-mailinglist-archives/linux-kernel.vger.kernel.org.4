@@ -2,129 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD816A544A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527B96A544F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjB1ITd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 03:19:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S230197AbjB1IUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 03:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjB1ITb (ORCPT
+        with ESMTP id S230183AbjB1IU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 03:19:31 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CAFEC46;
-        Tue, 28 Feb 2023 00:19:29 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 52A386602E18;
-        Tue, 28 Feb 2023 08:19:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677572368;
-        bh=fVVg1Oe8kqqB/BkhS1jgx+11KmQgwD13uKhiAsbngls=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nO1R7DBBcZRJXbkS/4Q9JMHKaByMPOYF6twaPuQC0x0mlQ64uYAZ6L5fpJ8UP/Ldp
-         cRz6cmWxej3svM0Bw0sdUu0MdPwO3S3pq9zrkeOht9dph+Et3I5r/XlDW8/Hzp9JMP
-         c9Mgw6YCNXsgLxDyxaSqhl5bZPcnYJu7DJmo88ETktaPsbH72qGxZUpsfOGBsTfCvz
-         H4RcBAHmYEQTqFnQWKjDAm1ttYy9WyCbOb9aFJB4JRc7ArUk/GpBmVSOgATTdEPPb+
-         pMx3jb2lrUQp4geUGEiUIgly2Zvhc0HPVH3E4zzr9mJrlHVYdqc5agCbVPqO1L1dW3
-         DLpp8QuoYqPig==
-Message-ID: <5e7f9d22-b918-bdfc-931c-0e679c1e946d@collabora.com>
-Date:   Tue, 28 Feb 2023 09:19:24 +0100
+        Tue, 28 Feb 2023 03:20:28 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AF529E1B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:20:27 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id h8so6276719plf.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:20:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QdzoaRyb5oCo6xd8IOQ9cPgW8ozAM6ednsqQltxzExs=;
+        b=BqcRyaaKyWb9pCV5Cm430K4Z3cKN1oCziWGuAk0OAtJb1BHubwxttM0A1CLlc22g5y
+         OlDS01J4tPW77VAsIdcNYhslc2gk08QtUzZJi102oYFwr/AvZgha3cjFOvqK7ShhGBqd
+         1PiRf4gjCLnZLx+wtlryESe6Dp7+cDxpMUWHvuMPwDm7pMGBpXUI7AxxWQcXFJoJ1NUU
+         v9HvQhfedglpGHNVw4GPitVlw4IzL2iWKNRjq+hANDacKYP7xIADtpTKeUhmacsSiyM+
+         ucwJDE3UHK6HfkY847R64luJflvsXLK+e+wC0FwX8DSuaRW6Nbw9HDRcv4Q08a1DeGs1
+         SQoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QdzoaRyb5oCo6xd8IOQ9cPgW8ozAM6ednsqQltxzExs=;
+        b=gEZPdiQri7hc5z2HVdJi/rPkUkA2X4zXdDsZ7yRU+UJ0BL01ojOo51poedPB5UJ3VU
+         UEI28Nqb/0Jvby3MMi6le89xgygCWuqtrtRoPUgkDPeacAB4mzlc5VBSUqNFaBu+9Hth
+         Fi0cqiXXIR3Ijzc2c4LQFEe4A7KFqnKVB1gMqJeyhfaAfVNI3y1h6cuHrNMNaqBAsElG
+         4TI6XX7bjZt6DP4Eg9d1p4/6CTvnYN9MIpi4eVKwqkR1b9xzb9OpyXTnRxBC+XKV+A5g
+         u4WoN2U5tWjgo/LTEDlEGDU8wkjzclZoIs9FMMFQQLMAHZqwD9DRldOPlZE26iblOVeX
+         LtfA==
+X-Gm-Message-State: AO0yUKXJDZOHOu0GZYeGqYvgnpSUzsS74OjJrGZXMciGtJCf3IzjkclA
+        E7x4uktZgAFByvF9yYaAtob1
+X-Google-Smtp-Source: AK7set/zVF+0d5ZD8zgYrUqh1wEePvj1EbD/gqma4J089vE1KIOxONhftRtPeMTHDGHwyS/kTrEOaw==
+X-Received: by 2002:a17:90a:355:b0:237:9cc7:28a5 with SMTP id 21-20020a17090a035500b002379cc728a5mr2394542pjf.22.1677572426864;
+        Tue, 28 Feb 2023 00:20:26 -0800 (PST)
+Received: from thinkpad ([103.197.115.83])
+        by smtp.gmail.com with ESMTPSA id k70-20020a638449000000b004b1fef0bf16sm5215067pgd.73.2023.02.28.00.20.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 00:20:26 -0800 (PST)
+Date:   Tue, 28 Feb 2023 13:50:21 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     andersson@kernel.org, lpieralisi@kernel.org, kw@linux.com,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        konrad.dybcio@linaro.org, bhelgaas@google.com, kishon@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 02/13] dt-bindings: PCI: qcom: Add iommu properties
+Message-ID: <20230228082021.GB4839@thinkpad>
+References: <20230224105906.16540-1-manivannan.sadhasivam@linaro.org>
+ <20230224105906.16540-3-manivannan.sadhasivam@linaro.org>
+ <20230227195535.GA749409-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v10 5/6] soc: qcom: Add support for Core Power Reduction
- v3, v4 and Hardened
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
- <20230217-topic-cpr3h-v10-5-67aed8fdfa61@linaro.org>
- <153ef3e0-9978-d201-44ad-3a5e55eeef4f@linaro.org>
- <8c105a4f-f450-8fbf-ff0b-5629a47c1463@collabora.com>
- <d2784517-0f0c-43a5-63a6-57f6aa3e5912@linaro.org>
- <8a813713-c60d-4726-0c62-de032db99ede@collabora.com>
- <CAA8EJpprXe3k6Kecg6v-QHT-qP=QjimFZFpLWjPqky3M=J+x+A@mail.gmail.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAA8EJpprXe3k6Kecg6v-QHT-qP=QjimFZFpLWjPqky3M=J+x+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230227195535.GA749409-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/02/23 14:20, Dmitry Baryshkov ha scritto:
-> On Mon, 27 Feb 2023 at 15:06, AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 27/02/23 13:01, Dmitry Baryshkov ha scritto:
->>>
->>> I took a glance at the 'cpufreq: qcom-hw: Implement CPRh aware OSM programming'
->>> patch, it doesn't seem to use the header (maybe I checked the older version of the
->>> patch). As for me, this is another signal that cpr_ext_data should come together
->>> with the LUT programming rather than with the CPRh itself.
->>>
->>>> Konrad, perhaps you can send the cpufreq-hw commits in a separate series, in
->>>> which cover letter you mention a dependency on this one?
->>>> That would *clearly* show the full picture to reviewers.
->>>
->>> Yes, that would be great. A small note regarding those patches. I see that you
->>> patched the qcom-cpufreq-hw.c. This way first the driver programs the LUT, then it
->>> reads it back to setup the OPPs. Would it be easier to split OSM-not-programmed
->>> driver?
->>>
->>
->> When I engineered that solution, I kept the cpufreq-hw reading *again* the values
->> from OSM to keep the driver *fully* compatible with the bootloader-programmed OSM
->> flow, which makes one thing (in my opinion) perfectly clear: that programming
->> sequence is exactly the same as what happens "under the hood" on SDM845 (and later)
->> but performed here-instead-of-there (linux instead of bootloader), with the actual
->> scaling driver being 100% the same between the two flows in the end.
->>
->> Having two drivers as you suggested would indeed achieve the same, but wouldn't be
->> any easier... if you do that, you'd have to *somehow* make sure that the
->> programming driver does its job before the cpufreq driver tries to read the OSM
->> status, adding one more link to an already long chain.
->>
->> Besides, I remember that this question got asked a while ago on the mailing lists
->> and there was a short discussion about it:
->>
->> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2555580.html
+On Mon, Feb 27, 2023 at 01:55:35PM -0600, Rob Herring wrote:
+> On Fri, Feb 24, 2023 at 04:28:55PM +0530, Manivannan Sadhasivam wrote:
+> > Most of the PCIe controllers require iommu support to function properly.
+> > So let's add them to the binding.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > index a3639920fcbb..f48d0792aa57 100644
+> > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > @@ -64,6 +64,11 @@ properties:
+> >  
+> >    dma-coherent: true
+> >  
+> > +  iommus:
+> > +    maxItems: 1
+> > +
+> > +  iommu-map: true
+> > +
 > 
-> Ack, I see. Maybe splitting LUT programming to a separate source file
-> would emphasise the fact that it is only required for some (older)
-
-Maybe. I'm not sure it's worth adding a new helper file, but I don't really have
-any strong arguments against...
-
-Konrad, your call.
-
-Cheers!
-Angelo
-
-> SoCs. Other than that, I have no additional comments for that series.
+> I think both properties together doesn't make sense unless the PCI host 
+> itself does DMA in addition to PCI bus devices doing DMA.
 > 
+
+How? With "iommus", we specify the SMR mask along with the starting SID and with
+iommu-map, the individual SID<->BDF mapping is specified. This has nothing to
+do with host DMA capabilities.
+
+Thanks,
+Mani
+
+> Rob
+
+-- 
+மணிவண்ணன் சதாசிவம்
