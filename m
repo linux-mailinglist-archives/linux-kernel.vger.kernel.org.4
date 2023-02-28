@@ -2,99 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566376A56D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10FD6A56D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjB1KfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S230373AbjB1KfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:35:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjB1Kew (ORCPT
+        with ESMTP id S230193AbjB1KfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:34:52 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF338A51
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:34:51 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bw19so9142231wrb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:34:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677580490;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gcIFZ75GszROWVHc6fhuQ2yZDaxcPc/igDnt5Snznss=;
-        b=hHB4WHESAJnekEReyf6uGCnczOr42Hhw7lkNkUk4gIPwcgTtyCSljxpqnXB2bTA7IG
-         evNkmGEUZ90F7zckzsR2WzojUDk1xfUZrofd693USp+QNttzIv+uLSs9HhYywKNuWYpl
-         hwJ3NuIlexGe3Ob6VZRCZeMbwSqeWb1O3uINVwcs21OkxOzaSK1vVYHiRixf3GRJ/Grb
-         2dl7cgSyLIM2QJf/FUKm6pQvhwL1iVVsSBJzceJkGHgBpNWiN4CX3vcK3kRW8/dtc+ID
-         GOIEROTN3LAiSg1CQzS3u9lHSe4u414Ku7earTvryzXUheZJggMurcPuCRLM/T+qXaMb
-         /Oow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677580490;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gcIFZ75GszROWVHc6fhuQ2yZDaxcPc/igDnt5Snznss=;
-        b=nBxlMcBMfoOAW8+zjZDhJp2CRWbesrpgKm50Y04yJEQn6EfpD0kONwIHLh4yItqBO1
-         Ya/kC6yoI1MzkTY0zfxSEIEvSsKa1nz/+CPQLoDFye6FYVpoYZTwzw/CbkE822jpnLn6
-         +KJaCVFsZ+vjsn/m1Iv0Ok2QXBDZcV1JYrs+zvNb7e6Av3A++CewEnGNZp1tnXYDPMn+
-         M+5HLaW8ZZobEou77Jrh1IO5/V2HKl9YNdVr5aYsLqvbChOA2Qz1gkSP411YBXJsqGeq
-         ufuS8mCEyxnsYcel7FkE5CuNrjM7QgbFfZ0FK39f7qz8/euBLEGZHaj/W0ZaMCZsqUyK
-         37dg==
-X-Gm-Message-State: AO0yUKVnRZ86hbY40JVP3WemyHQSf/hjJXqZ+8u1iC8EGwSHwBDlveAJ
-        MVUuionJJ1FQPKKjzSVttKr2JQ==
-X-Google-Smtp-Source: AK7set8XI9Z0kByAgnUP5JY/bKFJVG2SMphbFAIpM6vToy46scsdRHYBTPE65nIL2wDnEMD/x8iLBA==
-X-Received: by 2002:a05:6000:190:b0:2c6:e744:cf71 with SMTP id p16-20020a056000019000b002c6e744cf71mr1551763wrx.52.1677580489791;
-        Tue, 28 Feb 2023 02:34:49 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p8-20020adfcc88000000b002c55b0e6ef1sm9772120wrj.4.2023.02.28.02.34.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 02:34:49 -0800 (PST)
-Message-ID: <2e3e0f4d-f7ee-4ce5-272e-c3be13da8c8c@linaro.org>
-Date:   Tue, 28 Feb 2023 11:34:48 +0100
+        Tue, 28 Feb 2023 05:35:21 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631031ADE2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:35:17 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0D9C01FDC2;
+        Tue, 28 Feb 2023 10:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1677580516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z91UYhzCbg1Q+gpWADaG0uyiQsgpRTPRLreoidsadJY=;
+        b=HSsSSGHdpDf/O3J8GoJir2KCz/nPSbPx6yFcDS1qxw7RBP2L9TBFBNZFgAkWxZRUThkPG1
+        Ad0WWE1BAFS3VeND9VS2BhyN9neS9xHVb6zzJV/0rhlQD/18z9preAgMFYBAPtMAgh0mgL
+        Ax42j8ykwCFJE5/jnngzFkmPIrDCc+8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1677580516;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z91UYhzCbg1Q+gpWADaG0uyiQsgpRTPRLreoidsadJY=;
+        b=s+sbQ3tlPZTHozo4cA6oDIiYCedgdxrAyv/t6gAMeFBKYRAcvKCmd5F3+1+9rkkGZVldyO
+        wgIzLrcau+cXCoAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E9DED1333C;
+        Tue, 28 Feb 2023 10:35:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xDcNOePY/WMCVAAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 28 Feb 2023 10:35:15 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 74F8AA06F2; Tue, 28 Feb 2023 11:35:15 +0100 (CET)
+Date:   Tue, 28 Feb 2023 11:35:15 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     jack@suse.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] quota:  fixup *_write_file_info() to return proper
+ error code
+Message-ID: <20230228103515.sb6qpvnmbvenvq73@quack3>
+References: <20230227120216.31306-1-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: Add TI ADS1100 and ADS1000
-Content-Language: en-US
-To:     Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-References: <20230228063151.17598-1-mike.looijmans@topic.nl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230228063151.17598-1-mike.looijmans@topic.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230227120216.31306-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2023 07:31, Mike Looijmans wrote:
-> The ADS1100 is a 16-bit ADC (at 8 samples per second).
-> The ADS1000 is similar, but has a fixed data rate.
+On Mon 27-02-23 20:02:15, Yangtao Li wrote:
+> For v1_write_file_info function, when quota_write() returns 0,
+> it should be considered an EIO error. And for v2_write_file_info(),
+> fix to proper error return code instead of raw number.
 > 
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+
+Thanks! Both patches look good now. I'll queue them into my tree.
+
+								Honza
+
 > ---
+>  fs/quota/quota_v1.c | 2 +-
+>  fs/quota/quota_v2.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> (no changes since v2)
+> diff --git a/fs/quota/quota_v1.c b/fs/quota/quota_v1.c
+> index cd92e5fa0062..a0db3f195e95 100644
+> --- a/fs/quota/quota_v1.c
+> +++ b/fs/quota/quota_v1.c
+> @@ -206,7 +206,7 @@ static int v1_write_file_info(struct super_block *sb, int type)
+>  	      sizeof(struct v1_disk_dqblk), v1_dqoff(0));
+>  	if (ret == sizeof(struct v1_disk_dqblk))
+>  		ret = 0;
+> -	else if (ret > 0)
+> +	else if (ret >= 0)
+>  		ret = -EIO;
+>  out:
+>  	up_write(&dqopt->dqio_sem);
+> diff --git a/fs/quota/quota_v2.c b/fs/quota/quota_v2.c
+> index b1467f3921c2..ae99e7b88205 100644
+> --- a/fs/quota/quota_v2.c
+> +++ b/fs/quota/quota_v2.c
+> @@ -212,7 +212,7 @@ static int v2_write_file_info(struct super_block *sb, int type)
+>  	up_write(&dqopt->dqio_sem);
+>  	if (size != sizeof(struct v2_disk_dqinfo)) {
+>  		quota_error(sb, "Can't write info structure");
+> -		return -1;
+> +		return size < 0 ? size : -EIO;
+>  	}
+>  	return 0;
+>  }
+> -- 
+> 2.25.1
 > 
-> Changes in v2:
-> "reg" property is mandatory.
-> Add vdd-supply and #io-channel-cells
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
