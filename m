@@ -2,187 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965586A595E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40196A5972
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjB1MrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 07:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S231520AbjB1Mv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 07:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbjB1MrV (ORCPT
+        with ESMTP id S229530AbjB1Mv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 07:47:21 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CBD301BB
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:47:20 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3F2841FDC9;
-        Tue, 28 Feb 2023 12:47:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1677588439; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6Wv3/gc28gTr9+vYN5g7yFA5FfRbxf9cyh6K6dL5Mx8=;
-        b=yTSsK1oY6C/TBmeffE5+9HTl67GD9wfjY7+PDc6fEKmluueZFz10rKIn6ewSUGG3h3s3gQ
-        Wn7KA1qoO639D7ro3Rc6Gx8ms66rDhHSr+g+o1+WShVzJi+pMgZJevO4cEjjeld24RbFuf
-        0cExsWFQJ/pWE+6ttBXdlbjQtO6EHYk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1677588439;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6Wv3/gc28gTr9+vYN5g7yFA5FfRbxf9cyh6K6dL5Mx8=;
-        b=vzlYeJtifK98QKCuJUtzETWAm35afZDkUm4nBNO4Q+iKuV7LWo2wcEszTQMzcQTR0UN4TG
-        xq7Om5zw/a60ymBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 11C5A1333C;
-        Tue, 28 Feb 2023 12:47:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uz6DA9f3/WPeGgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 28 Feb 2023 12:47:19 +0000
-Message-ID: <a4bbfe5e-36b1-ed94-f805-42728a8b820d@suse.de>
-Date:   Tue, 28 Feb 2023 13:47:18 +0100
+        Tue, 28 Feb 2023 07:51:56 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991212BECB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:51:55 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id l1so9704464pjt.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:51:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1677588715;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F6bVcZFE0HqAVo8qfWn/M3ByKpGU6+Lc1KXSuspx5lo=;
+        b=uBP8y0KEudDm9buTiNU2aHEUByfTEd7uJJX36ri4HmxFFsoYkiHFJzReJ3mx75gVYV
+         WTPbKyBnhRr2eJ8Rt0vUlSvHSnJ+Di21agCQTonnedhxrLQGKyMLs9xl7sNWrQKwhW8F
+         147/0/iHd9r1v6l5igLC90stz9n9ezHoTzvRO5fGOnF/OyfR0EsRFFWbhvbH5HtzyREf
+         WU9x2yz4/qD86Mxh1f29lyE6PMayDvH9RaIkuWfMilM6pr/VMfYWKQ6dOSLtK3k4Ghzz
+         gxnFm8gFw2dm1rsgeMyd3C5HpfmZ2JmWheE3g8p34giU36F/QsznGLcYKIkjj5Q1JlAn
+         CKoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677588715;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F6bVcZFE0HqAVo8qfWn/M3ByKpGU6+Lc1KXSuspx5lo=;
+        b=y8cm9WBbFh0iqvkGH/LPI5V5tgvmiRjP6hZN/Ge2uOr/cC6t4ufFtiIo2RuPFhETxu
+         03HRM53XDj6W4wG5QKO3GRe0kjEvRvzecFme+VKyf8ClWPGTLuK4xgc/zh7fnPiGUA8O
+         rxyfulA56+3o78+VS4uyf7zbhVbJzsgiTS3bzTi0MLZ+pXFvUNtSCQCoDctm9rb5MjR/
+         FC1C8Fqa1camF8kVXxf+4vzxtzWWakMSAtK1yjjcjbro1WGGH6kMTv3I0Dg9z2fUy21+
+         Ptg6nWX/1qDbX6HNtwBWzbALUnoaIn/bVzRAZfiZdAjbVPDpnrCQwuQIAYPJiQb95Ytv
+         e8Ng==
+X-Gm-Message-State: AO0yUKXX+BFdE9CWJX+D4qssUqNwdyh+5rdAxx0UvyA3VcO4S7yj5M6V
+        7xlei8Zs5uOg++8YrjnIKMzXkA==
+X-Google-Smtp-Source: AK7set/xsX6KTOkXV5tn/4bDglX2Xm+IGdT2/LnSExXMtV/Q2AL5gxeZWwAyHV0xvvCRT8fmWCOUsQ==
+X-Received: by 2002:a17:902:e74e:b0:19a:a815:2864 with SMTP id p14-20020a170902e74e00b0019aa8152864mr2879368plf.4.1677588714985;
+        Tue, 28 Feb 2023 04:51:54 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id d19-20020a170902b71300b00198e397994bsm6486540pls.136.2023.02.28.04.51.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 04:51:54 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     tj@kernel.org, josef@toxicpanda.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, Breno Leitao <leitao@debian.org>
+Cc:     aherrmann@suse.de, linux-kernel@vger.kernel.org, hch@lst.de,
+        leit@fb.com
+In-Reply-To: <20230228111654.1778120-1-leitao@debian.org>
+References: <20230228111654.1778120-1-leitao@debian.org>
+Subject: Re: [PATCH v4] blk-iocost: Pass gendisk to ioc_refresh_params
+Message-Id: <167758871388.8785.9077411400332712392.b4-ty@kernel.dk>
+Date:   Tue, 28 Feb 2023 05:51:53 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] drm/virtio: Add option to disable KMS support
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Rob Clark <robdclark@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>
-References: <20230227173800.2809727-1-robdclark@gmail.com>
- <44e67d88-fce6-a1c1-79a9-a937e64a32bb@collabora.com>
- <CAF6AEGsT8_o+v0vzGu1nyh6Z82pj8FnGUdMFc0Lq+4OWoSjRBQ@mail.gmail.com>
- <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
-In-Reply-To: <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------MymaBzxJWDFlUepZ0xSR3Ybp"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-ebd05
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------MymaBzxJWDFlUepZ0xSR3Ybp
-Content-Type: multipart/mixed; boundary="------------nBW0wihuX0zi4PycN12m8YJ5";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rob Clark <robdclark@gmail.com>,
- Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc: Rob Clark <robdclark@chromium.org>,
- open list <linux-kernel@vger.kernel.org>, dri-devel@lists.freedesktop.org,
- Gurchetan Singh <gurchetansingh@chromium.org>,
- Gerd Hoffmann <kraxel@redhat.com>, Ryan Neph <ryanneph@chromium.org>,
- David Airlie <airlied@redhat.com>,
- "open list:VIRTIO GPU DRIVER" <virtualization@lists.linux-foundation.org>
-Message-ID: <a4bbfe5e-36b1-ed94-f805-42728a8b820d@suse.de>
-Subject: Re: [PATCH v3] drm/virtio: Add option to disable KMS support
-References: <20230227173800.2809727-1-robdclark@gmail.com>
- <44e67d88-fce6-a1c1-79a9-a937e64a32bb@collabora.com>
- <CAF6AEGsT8_o+v0vzGu1nyh6Z82pj8FnGUdMFc0Lq+4OWoSjRBQ@mail.gmail.com>
- <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
-In-Reply-To: <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
 
---------------nBW0wihuX0zi4PycN12m8YJ5
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Tue, 28 Feb 2023 03:16:54 -0800, Breno Leitao wrote:
+> Current kernel (d2980d8d826554fa6981d621e569a453787472f8) crashes
+> when blk_iocost_init for `nvme1` disk.
+> 
+> 	BUG: kernel NULL pointer dereference, address: 0000000000000050
+> 	#PF: supervisor read access in kernel mode
+> 	#PF: error_code(0x0000) - not-present page
+> 
+> [...]
 
-DQoNCkFtIDI4LjAyLjIzIHVtIDEzOjM0IHNjaHJpZWIgVGhvbWFzIFppbW1lcm1hbm46DQo+
-IEhpDQo+IA0KPiBBbSAyNy4wMi4yMyB1bSAxOToxNSBzY2hyaWViIFJvYiBDbGFyazoNCj4+
-IE9uIE1vbiwgRmViIDI3LCAyMDIzIGF0IDk6NTcgQU0gRG1pdHJ5IE9zaXBlbmtvDQo+PiA8
-ZG1pdHJ5Lm9zaXBlbmtvQGNvbGxhYm9yYS5jb20+IHdyb3RlOg0KPj4+DQo+Pj4gT24gMi8y
-Ny8yMyAyMDozOCwgUm9iIENsYXJrIHdyb3RlOg0KPj4+IC4uLg0KPj4+PiArwqDCoMKgwqAg
-aWYgKElTX0VOQUJMRUQoQ09ORklHX0RSTV9WSVJUSU9fR1BVX0tNUykpIHsNCj4+Pj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBnZXQgZGlzcGxheSBpbmZvICovDQo+Pj4+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdmlydGlvX2NyZWFkX2xlKHZnZGV2LT52ZGV2LCBz
-dHJ1Y3QgdmlydGlvX2dwdV9jb25maWcsDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBudW1fc2Nhbm91dHMsICZudW1f
-c2Nhbm91dHMpOw0KPj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHZnZGV2LT5udW1f
-c2Nhbm91dHMgPSBtaW5fdCh1aW50MzJfdCwgbnVtX3NjYW5vdXRzLA0KPj4+PiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgVklSVElPX0dQVV9NQVhfU0NBTk9VVFMpOw0KPj4+PiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmICghdmdkZXYtPm51bV9zY2Fub3V0cykgew0K
-Pj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKg0KPj4+
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogSGF2aW5n
-IGFuIEVESUQgYnV0IG5vIHNjYW5vdXRzIGlzIA0KPj4+PiBub24tc2Vuc2ljYWwsDQo+Pj4+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBidXQgaXQg
-aXMgcGVybWl0dGVkIHRvIGhhdmUgbm8gc2Nhbm91dHMgYW5kIG5vDQo+Pj4+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBFRElEIChpbiB3aGljaCBj
-YXNlIERSSVZFUl9NT0RFU0VUIGFuZA0KPj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgICogRFJJVkVSX0FUT01JQyBhcmUgbm90IGFkdmVydGlzZWQp
-DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8N
-Cj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHZn
-ZGV2LT5oYXNfZWRpZCkgew0KPj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgRFJNX0VSUk9SKCJudW1fc2Nhbm91dHMgaXMg
-emVyb1xuIik7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCByZXQgPSAtRUlOVkFMOw0KPj4+PiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBlcnJf
-c2Nhbm91dHM7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIH0NCj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-ZGV2LT5kcml2ZXJfZmVhdHVyZXMgJj0gfihEUklWRVJfTU9ERVNFVCB8IA0KPj4+PiBEUklW
-RVJfQVRPTUlDKTsNCj4+Pg0KPj4+IElmIGl0J3Mgbm93IGNvbmZpZ3VyYWJsZSBieSBob3N0
-LCB3aHkgZG8gd2UgbmVlZCB0aGUNCj4+PiBDT05GSUdfRFJNX1ZJUlRJT19HUFVfS01TPw0K
-Pj4NCj4+IEJlY2F1c2UgYSBrZXJuZWwgY29uZmlnIG9wdGlvbiBtYWtlcyBpdCBtb3JlIG9i
-dmlvdXMgdGhhdA0KPj4gbW9kZXNldC9hdG9taWMgaW9jdGxzIGFyZSBibG9ja2VkLsKgIFdo
-aWNoIG1ha2VzIGl0IG1vcmUgb2J2aW91cyBhYm91dA0KPj4gd2hlcmUgYW55IHBvdGVudGlh
-bCBzZWN1cml0eSBpc3N1ZXMgYXBwbHkgYW5kIHdoZXJlIGZpeGVzIG5lZWQgdG8gZ2V0DQo+
-PiBiYWNrcG9ydGVkIHRvLsKgIFRoZSBjb25maWcgb3B0aW9uIGlzIHRoZSBvbmx5IHRoaW5n
-IF9JXyB3YW50LA0KPj4gZXZlcnl0aGluZyBlbHNlIGlzIGp1c3QgYSBib251cyB0byBoZWxw
-IG90aGVyIHBlb3BsZSdzIHVzZS1jYXNlcy4NCj4gDQo+IEkgZmluZCB0aGlzIHZlcnkgdmFn
-dWUuIFdoYXQncyB0aGUgc2VjdXJpdHkgdGhyZWFkPw0KPiANCj4gQW5kIGlmIHRoZSBjb25m
-aWcgb3B0aW9uIGlzIHVzZWZ1bCwgc2hvdWxkbid0IGl0IGJlIERSTS13aWRlPyBUaGUgDQo+
-IG1vZGVzZXR0aW5nIGlvY3RsIGNhbGxzIGFyZSBzaGFyZWQgYW1vbmcgYWxsIGRyaXZlcnMu
-DQoNCkZvciByZWZlcmVuY2UsIGhlcmUncyBhbiBvbGRlciBkaXNjdXNzaW9uIGFib3V0IHJl
-bmRlci1vbmx5IGRldmljZXMuDQoNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2RyaS1kZXZl
-bC8yMDIyMTAxMTExMDQzNy4xNTI1OC0xLWNocmlzdGlhbi5rb2VuaWdAYW1kLmNvbS8NCg0K
-PiANCj4gQmVzdCByZWdhcmRzDQo+IFRob21hcw0KPiANCj4+DQo+PiBCUiwNCj4+IC1SDQo+
-IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVy
-DQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUs
-IDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0K
-R2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+Applied, thanks!
 
---------------nBW0wihuX0zi4PycN12m8YJ5--
+[1/1] blk-iocost: Pass gendisk to ioc_refresh_params
+      commit: e33b93650fc5364f773985a3e961e24349330d97
 
---------------MymaBzxJWDFlUepZ0xSR3Ybp
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Best regards,
+-- 
+Jens Axboe
 
------BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP999YFAwAAAAAACgkQlh/E3EQov+Cj
-/RAAhVUR8LRJP35wWuW88UmUN1kp0OSpE/lPx0wso8vvO0ZI6J6k5aTD3NSVHdHBkg8N6JO6eDns
-QZSl0OCSoXSLbRUCGE6lm69i1BpeXdxUs3jZah844rSy0jg8zOW2KtThI78BVeaz5vchjV8XNwlk
-GrgsMwSvA2bsmPmb/bk8kSfMf3WClA+ygdckjbKp7eWpcYCc5nEpfe3RxndawbCUdkYhKyipP+3m
-2G3+wX3oct+h8Qj5UbTttadVRc8TEaNGn4K0XnRYU4pC7mlXdWdAdSTg/nt8Q1lgepL6iQVT2Dev
-4HSuKol6O4nEdFFbUaEwGieyeln1laK1xLoC4fv96EwOxkH0gfPhtNhHjOxvKa/ClIgIouQJYu3b
-Yp/gxbLWG/YbI7LsPo9lYxAqAgd5eM6xEKo7kUez4QRvMwc1RD258fyi8a2ciVzOuSOshrmZzREj
-XMg4dc6rbLZ9VaT+bbiZGfH24YeVmEUt6epFVfTHbHQoD2eatxCnwNyXSvPjiW7pnptha0pyfKWH
-JF3/qW4AUjxw3JgQST3lZHvQgTmdps0ifnRDO/diRP3z13Zk7ME31ZcUwmC2QAghLBTo6nyy1WWt
-ts8UwDk56wx+nGkYJtM8lsuwdl5gpvE2EDTnulk4hTsIqy6ZZCQje+BikIHCwb7h70Rshta/k6gh
-cno=
-=GLvI
------END PGP SIGNATURE-----
 
---------------MymaBzxJWDFlUepZ0xSR3Ybp--
