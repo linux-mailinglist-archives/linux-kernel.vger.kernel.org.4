@@ -2,145 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA86A6A613A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC686A613D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjB1V3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S229791AbjB1VaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjB1V3N (ORCPT
+        with ESMTP id S229515AbjB1V35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:29:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2CD2FCD2;
-        Tue, 28 Feb 2023 13:29:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A267611A1;
-        Tue, 28 Feb 2023 21:29:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1260C433EF;
-        Tue, 28 Feb 2023 21:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677619751;
-        bh=MdY6vMEzdUt7oRGM6u4C8kW4TrlqA1sGSuoYszSl6Zw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=n9wI3jKIWUzskEePAo+S0Jifd1ZC8wuSrYPWOZN/E6m8rGX3OdPqkpsxtYA7EJeD4
-         iOkoJXx8gq6BAT9/fa7wmPgQWiuR46wEKeq9uhEWgP+vtg4efW/fteXxrH3gWa22/X
-         pohKq9i1babd82Ed75aVcWnbRnaSSbkwol4gTdXz8ZzAxGW4GWtx7fRZIRwfZSgO6Y
-         LrkK5ML6qDcB0UNVbmDIIdMM6wb7cWg5/vuxUDwVKUGZb6GwwKGhjMGAEL3gfqexc7
-         3lePDKCzJIfq0thNntKZr9j6MAQrRUcCxC8yzVsAZbqUl1lzeeFSD9hd54EXwjlbQ3
-         h/uE5nOCWcqzw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 56EDC5C013B; Tue, 28 Feb 2023 13:29:11 -0800 (PST)
-Date:   Tue, 28 Feb 2023 13:29:11 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Uros Bizjak <ubizjak@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
-Message-ID: <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230228155121.3416-1-ubizjak@gmail.com>
- <Y/5mguXPPqdP3MZF@google.com>
- <20230228160324.2a7c1012@gandalf.local.home>
+        Tue, 28 Feb 2023 16:29:57 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E47F2E0CB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:29:54 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o15so43319183edr.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:29:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1677619792;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+8cphB32FCA+JDrayMTXIg9hnTVIdgiqn6d+31xf70g=;
+        b=RnvoGAxGwdikhKT4SupAxcADFamYOt+/v6RSL1oTb/zDbv1TM2he0JfutFX0uxibsD
+         aXfgAAPUlUpjgysAiDQd4529DHvHf+CRHuCzA3rdEZt3Lo9uF070u8Vc6hdwtGGCfB+P
+         QOl8M4FHCDbGl0EnClfCc8ZznvdwK40yN+tsU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677619792;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+8cphB32FCA+JDrayMTXIg9hnTVIdgiqn6d+31xf70g=;
+        b=amfr3UGwcsWgQVcX5C3e9Cuoz7PT5dAry5MkiFEzBTw/KJpVP4F0zytHumTicxQ/ct
+         XLy6A9NJ9Ud5Z82SspPeiwkx1fOPhcgmacxvhItayFSlFm95pgC67GLuEXbxYfuoVB1A
+         a0RYxvWptrJBHnaUFtDCgxYdxZ58q5GKkwkfiKaSQQZYyZST5Ov0qHQoSALo4zPOXdtF
+         ry4p39pKHNQ6c4HHl/UudTlFPWMJIh+LUQLjlHNNanpMN9mRPzqKZ7ahJ60sxHGWu0Xz
+         /uyT6oDAw2XgrHhlSVhe3i5qssUoITBaBnTzeW6irlvN275sn0N6jZzc56waGrju61OT
+         jmww==
+X-Gm-Message-State: AO0yUKWWnwEWQf40Qy2cwOqxyls54eqwldSaR+tPRzFTGUqyiNMHA5Bj
+        GRsIinSVY1Fkc6YkjxHruDbs6Rb2kxFy2Z0y6iw=
+X-Google-Smtp-Source: AK7set/v185P91w1L2hk0IAyCZvjzZLSk/hJrHa5tDHfkSSYV2hu17YarbOgKcAAtVpEPHlwtFOH8g==
+X-Received: by 2002:a17:906:a20a:b0:8af:514f:1078 with SMTP id r10-20020a170906a20a00b008af514f1078mr4346305ejy.31.1677619792622;
+        Tue, 28 Feb 2023 13:29:52 -0800 (PST)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id gv28-20020a1709072bdc00b008b8ae79a72bsm4976459ejc.135.2023.02.28.13.29.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 13:29:51 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id ee7so45935673edb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:29:51 -0800 (PST)
+X-Received: by 2002:a50:c34a:0:b0:4ae:f144:2c8e with SMTP id
+ q10-20020a50c34a000000b004aef1442c8emr2699107edb.5.1677619791223; Tue, 28 Feb
+ 2023 13:29:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228160324.2a7c1012@gandalf.local.home>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125155557.37816-1-mjguzik@gmail.com> <CAHk-=wjz8O4XX=Mg6cv5Rq9w9877Xd4DCz5jk0onVKLnzzaPTA@mail.gmail.com>
+ <97465c08-7b6e-7fd7-488d-0f677ac22f81@schaufler-ca.com> <CAGudoHEV_aNymUq6v9Trn_ZRU45TL12AVXqQeV2kA90FuawxiQ@mail.gmail.com>
+ <CAHk-=wgCMTUV=5aE-V8WjxuCME8LTBh-8k5XTPKz6oRXJ_sgTg@mail.gmail.com>
+ <CAHk-=whwBb5Ws8x6aDV9u6CzMBQmsAtzF+UjWRnoe9xZxuW=qQ@mail.gmail.com> <CAGudoHH-u3KkwSsrSQPGKmhL9uke4HEL8U1Z+aU9etk9-PmdQQ@mail.gmail.com>
+In-Reply-To: <CAGudoHH-u3KkwSsrSQPGKmhL9uke4HEL8U1Z+aU9etk9-PmdQQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 28 Feb 2023 13:29:34 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgsVFvGrmbedVgpUjUJaRTMVxvGkr-dcR7s30S_MyDZfA@mail.gmail.com>
+Message-ID: <CAHk-=wgsVFvGrmbedVgpUjUJaRTMVxvGkr-dcR7s30S_MyDZfA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] capability: add cap_isidentical
+To:     Mateusz Guzik <mjguzik@gmail.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Serge Hallyn <serge@hallyn.com>, viro@zeniv.linux.org.uk,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 04:03:24PM -0500, Steven Rostedt wrote:
-> On Tue, 28 Feb 2023 20:39:30 +0000
-> Joel Fernandes <joel@joelfernandes.org> wrote:
-> 
-> > On Tue, Feb 28, 2023 at 04:51:21PM +0100, Uros Bizjak wrote:
-> > > Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
-> > > check_cpu_stall.  x86 CMPXCHG instruction returns success in ZF flag, so
-> > > this change saves a compare after cmpxchg (and related move instruction in
-> > > front of cmpxchg).  
-> > 
-> > In my codegen, I am not seeing mov instruction before the cmp removed, how
-> > can that be? The rax has to be populated with a mov before cmpxchg right?
-> > 
-> > So try_cmpxchg gives: mov, cmpxchg, cmp, jne
-> > Where as cmpxchg gives: mov, cmpxchg, mov, jne
-> > 
-> > So yeah you got rid of compare, but I am not seeing reduction in moves.
-> > Either way, I think it is an improvement due to dropping cmp so:
-> 
-> Did you get the above backwards?
-> 
-> Anyway, when looking at the conversion of cmpxchg() to try_cmpxchg() that
-> Uros sent to me for the ring buffer, the code went from:
-> 
-> 0000000000000070 <ring_buffer_record_off>:
->       70:       48 8d 4f 08             lea    0x8(%rdi),%rcx
->       74:       8b 57 08                mov    0x8(%rdi),%edx
->       77:       89 d6                   mov    %edx,%esi
->       79:       89 d0                   mov    %edx,%eax
->       7b:       81 ce 00 00 10 00       or     $0x100000,%esi
->       81:       f0 0f b1 31             lock cmpxchg %esi,(%rcx)
->       85:       39 d0                   cmp    %edx,%eax
->       87:       75 eb                   jne    74 <ring_buffer_record_off+0x4>
->       89:       e9 00 00 00 00          jmp    8e <ring_buffer_record_off+0x1e>
->                         8a: R_X86_64_PLT32      __x86_return_thunk-0x4
->       8e:       66 90                   xchg   %ax,%ax
-> 
-> 
->   To
-> 
-> 00000000000001a0 <ring_buffer_record_off>:
->      1a0:       8b 47 08                mov    0x8(%rdi),%eax
->      1a3:       48 8d 4f 08             lea    0x8(%rdi),%rcx
->      1a7:       89 c2                   mov    %eax,%edx
->      1a9:       81 ca 00 00 10 00       or     $0x100000,%edx
->      1af:       f0 0f b1 57 08          lock cmpxchg %edx,0x8(%rdi)
->      1b4:       75 05                   jne    1bb <ring_buffer_record_off+0x1b>
->      1b6:       e9 00 00 00 00          jmp    1bb <ring_buffer_record_off+0x1b>
->                         1b7: R_X86_64_PLT32     __x86_return_thunk-0x4
->      1bb:       89 c2                   mov    %eax,%edx
->      1bd:       81 ca 00 00 10 00       or     $0x100000,%edx
->      1c3:       f0 0f b1 11             lock cmpxchg %edx,(%rcx)
->      1c7:       75 f2                   jne    1bb <ring_buffer_record_off+0x1b>
->      1c9:       e9 00 00 00 00          jmp    1ce <ring_buffer_record_off+0x2e>
->                         1ca: R_X86_64_PLT32     __x86_return_thunk-0x4
->      1ce:       66 90                   xchg   %ax,%ax
-> 
-> 
-> It does add a bit more code, but the fast path seems better (where the
-> cmpxchg succeeds). That would be:
-> 
-> 00000000000001a0 <ring_buffer_record_off>:
->      1a0:       8b 47 08                mov    0x8(%rdi),%eax
->      1a3:       48 8d 4f 08             lea    0x8(%rdi),%rcx
->      1a7:       89 c2                   mov    %eax,%edx
->      1a9:       81 ca 00 00 10 00       or     $0x100000,%edx
->      1af:       f0 0f b1 57 08          lock cmpxchg %edx,0x8(%rdi)
->      1b4:       75 05                   jne    1bb <ring_buffer_record_off+0x1b>
->      1b6:       e9 00 00 00 00          jmp    1bb <ring_buffer_record_off+0x1b>
->                         1b7: R_X86_64_PLT32     __x86_return_thunk-0x4
-> 
-> 
-> Where there's only two moves and no cmp, where the former has 3 moves and a
-> cmp in the fast path.
+On Tue, Feb 28, 2023 at 1:21=E2=80=AFPM Mateusz Guzik <mjguzik@gmail.com> w=
+rote:
+>
+> This is part of the crap which made me unwilling to do the clean up.
 
-All well and good, but the stall-warning code is nowhere near a fastpath.
+Yeah, it's not pretty.
 
-Is try_cmpxchg() considered more readable in this context?
+That said, the old code was worse. The only redeeming feature of the
+old code was that "nobody has touched it in ages", so it was at least
+stable.
 
-							Thanx, Paul
+              Linus
