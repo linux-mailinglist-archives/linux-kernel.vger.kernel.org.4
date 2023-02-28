@@ -2,160 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B556A61A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C65C6A61B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjB1Vjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S229471AbjB1VrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjB1VjA (ORCPT
+        with ESMTP id S229524AbjB1VrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:39:00 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40C63ABE;
-        Tue, 28 Feb 2023 13:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=GeBhKEWLK25eomw3eGszIimIpcpbCe83zHF885nubCM=; b=LP/NyLEvU7Zr38BcJdWijZxpuz
-        gziV4LpTw0wg2ceBinWysRsZZcycgBwZA2g7/Lm3HyxGiF1EEYEB3oZEMgrlbMW/lL2X2nrparQGy
-        Zw04V6x8HNF5cPBAJOvScFx9DZMJVWxlE6+lIdHHDhw+d3ZT5d8h4XrEnqJGiVw0cPI4xltr7qIBy
-        bUFvwy+/iUiECz7wXz+84dGuTi/q6iFsO4jyZD4oI7XQrBoeSvJnhDDqLdZ4xGHT8Bw5vZmVtkoVA
-        C9BfuyTn+j+hO03JV95B0gmKzMTE65OMlLGGPxQnsIVjRDXfIlhs+T6oOBoljZ+Q77g/iY3WItu5S
-        Pb6xt5sw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pX7fL-0018rJ-PM; Tue, 28 Feb 2023 21:37:43 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-kernel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH v3 34/34] filemap: Batch PTE mappings
-Date:   Tue, 28 Feb 2023 21:37:37 +0000
-Message-Id: <20230228213738.272178-35-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230228213738.272178-1-willy@infradead.org>
-References: <20230228213738.272178-1-willy@infradead.org>
+        Tue, 28 Feb 2023 16:47:11 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DE1F1;
+        Tue, 28 Feb 2023 13:46:55 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 172871C0AAC; Tue, 28 Feb 2023 22:40:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1677620405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zqOoqxAGPYyAfPZSQwIAbK0Pu/uIpu/fhL/ijqWx87s=;
+        b=dmk+ElYHIxWewmkSlGPShEF7n2ouLRoxTMUZuJtl5apj5AodSn1w6Fdth+Evv5kuAvnLCx
+        xHiE/2s0n62GJHLW4GqzpxYglHXCQzQqPVFH/lKAdNtAAgjn/PO8VN3HM04tXGTfod67cq
+        xelHHDL7aY41VWAgH6PBnJGu6TReOF0=
+Date:   Tue, 28 Feb 2023 22:40:04 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>, ojeda@kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
+        dri-devel@lists.freedesktop.org
+Subject: AUXdisplay for LED arrays, keyboards with per-key LEDs -- was Re:
+ [PATCH v2 2/2] leds: add aw20xx driver
+Message-ID: <Y/50tKxpNVZO4Hfb@duo.ucw.cz>
+References: <20230228211046.109693-1-mmkurbanov@sberdevices.ru>
+ <20230228211046.109693-3-mmkurbanov@sberdevices.ru>
+ <Y/5xBGFC3b9Chdtb@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="Lf/YZ9BrM6XcCIJb"
+Content-Disposition: inline
+In-Reply-To: <Y/5xBGFC3b9Chdtb@duo.ucw.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yin Fengwei <fengwei.yin@intel.com>
 
-Call set_pte_range() once per contiguous range of the folio instead
-of once per page.  This batches the updates to mm counters and the
-rmap.
+--Lf/YZ9BrM6XcCIJb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-With a will-it-scale.page_fault3 like app (change file write
-fault testing to read fault testing. Trying to upstream it to
-will-it-scale at [1]) got 15% performance gain on a 48C/96T
-Cascade Lake test box with 96 processes running against xfs.
+Hi!
 
-Perf data collected before/after the change:
-  18.73%--page_add_file_rmap
-          |
-           --11.60%--__mod_lruvec_page_state
-                     |
-                     |--7.40%--__mod_memcg_lruvec_state
-                     |          |
-                     |           --5.58%--cgroup_rstat_updated
-                     |
-                      --2.53%--__mod_lruvec_state
-                                |
-                                 --1.48%--__mod_node_page_state
+> > +config LEDS_AW200XX
+> > +	tristate "LED support for Awinic AW20036/AW20054/AW20072"
+> > +	depends on LEDS_CLASS
+> > +	depends on I2C
+> > +	help
+> > +	  This option enables support for the AW20036/AW20054/AW20072 LED dri=
+ver.
+> > +	  It is a 3x12/6x9/6x12 matrix LED driver programmed via
+> > +	  an I2C interface, up to 36/54/72 LEDs or 12/18/24 RGBs,
+> > +	  3 pattern controllers for auto breathing or group dimming control.
+>=20
+> I'm afraid this should be handled as a display, not as an array of
+> individual LEDs.
 
-  9.93%--page_add_file_rmap_range
-         |
-          --2.67%--__mod_lruvec_page_state
-                    |
-                    |--1.95%--__mod_memcg_lruvec_state
-                    |          |
-                    |           --1.57%--cgroup_rstat_updated
-                    |
-                     --0.61%--__mod_lruvec_state
-                               |
-                                --0.54%--__mod_node_page_state
+You probably want to see
 
-The running time of __mode_lruvec_page_state() is reduced about 9%.
+AUXILIARY DISPLAY DRIVERS
+M:      Miguel Ojeda <ojeda@kernel.org>
+S:      Maintained
+F:      Documentation/devicetree/bindings/auxdisplay/
+F:      drivers/auxdisplay/
+F:      include/linux/cfag12864b.h
 
-[1]: https://github.com/antonblanchard/will-it-scale/pull/37
+And this brings another question...
 
-Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- mm/filemap.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+=2E..sooner or later we'll see LED displays with around 100 pixels in
+almost rectangular grid. Minority of the pixels will have funny
+shapes. How will we handle those? Pretend it is regular display with
+some pixels missing? How do we handle cellphone displays with rounded
+corners and holes for front camera?
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 07ebd90967a3..40be33b5ee46 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -3486,11 +3486,12 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
- 	struct file *file = vma->vm_file;
- 	struct page *page = folio_page(folio, start);
- 	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
--	unsigned int ref_count = 0, count = 0;
-+	unsigned int count = 0;
-+	pte_t *old_ptep = vmf->pte;
- 
- 	do {
--		if (PageHWPoison(page))
--			continue;
-+		if (PageHWPoison(page + count))
-+			goto skip;
- 
- 		if (mmap_miss > 0)
- 			mmap_miss--;
-@@ -3500,20 +3501,33 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
- 		 * handled in the specific fault path, and it'll prohibit the
- 		 * fault-around logic.
- 		 */
--		if (!pte_none(*vmf->pte))
--			continue;
-+		if (!pte_none(vmf->pte[count]))
-+			goto skip;
- 
- 		if (vmf->address == addr)
- 			ret = VM_FAULT_NOPAGE;
- 
--		ref_count++;
--		set_pte_range(vmf, folio, page, 1, addr);
--	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
-+		count++;
-+		continue;
-+skip:
-+		if (count) {
-+			set_pte_range(vmf, folio, page, count, addr);
-+			folio_ref_add(folio, count);
-+		}
- 
--	/* Restore the vmf->pte */
--	vmf->pte -= nr_pages;
-+		count++;
-+		page += count;
-+		vmf->pte += count;
-+		addr += count * PAGE_SIZE;
-+		count = 0;
-+	} while (--nr_pages > 0);
-+
-+	if (count) {
-+		set_pte_range(vmf, folio, page, count, addr);
-+		folio_ref_add(folio, count);
-+	}
- 
--	folio_ref_add(folio, ref_count);
-+	vmf->pte = old_ptep;
- 	WRITE_ONCE(file->f_ra.mmap_miss, mmap_miss);
- 
- 	return ret;
--- 
-2.39.1
+And yes, such crazy displays are being manufactured -- it is called
+keyboard with per-key backlight...=20
 
+https://www.reddit.com/r/MechanicalKeyboards/comments/8dtvgo/keyboard_with_=
+individually_programmable_leds/
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--Lf/YZ9BrM6XcCIJb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY/50tAAKCRAw5/Bqldv6
+8p38AKC6zleFfBQhWzpHoEUJaT9vyIFVLwCaA+GnS49YUrJhe1ZsoXnIFJOi3cQ=
+=DMLD
+-----END PGP SIGNATURE-----
+
+--Lf/YZ9BrM6XcCIJb--
