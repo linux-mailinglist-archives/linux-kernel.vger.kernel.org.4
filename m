@@ -2,141 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50156A54E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAA96A54EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjB1I5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 03:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S229537AbjB1I61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 03:58:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjB1I5E (ORCPT
+        with ESMTP id S230059AbjB1I6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 03:57:04 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B7DF97D
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:57:02 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id v11so6135810plz.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:57:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677574622;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SMCK1aWtyIXb3CHIEdrWl/Mvgwf+H1xlGoUb2yNtzaY=;
-        b=kIt7h3rO0mqEjGuh8mFxR+dTf0KR5QUZMX9KgFSm1RPMTgI01BcxB7+17fhY35NCKJ
-         kkc/ilT3+EgMyx7yTdpJHO/mHJKNOs6Nbtdcj43CHkkd7Apxt6eqM3dR9KUaP33czNCg
-         sGEi2j19Q77huUSCaJFnuup76Y6UXVp/NW/PG6CjfydhMNa0ml9Zk4g08gxaCz9XtbP1
-         Qk7WP6xNYW25PJ83Ou4yKZfRksdwY8j1QBHAx/Y9Lhf1FeGzVNS/f8FVpRYbZIqzHi5N
-         IukmN3Z4S1vJag1qGYKag/N/f/Id5Ldh3D7hlIDXAZPgolYfqScVhMpxh1J+e8VB2u2W
-         UbaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677574622;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SMCK1aWtyIXb3CHIEdrWl/Mvgwf+H1xlGoUb2yNtzaY=;
-        b=HT523QFMww6KGWnABuKx/bKjbZjm/u9d3SYAH/u5RBnI2ClNZ2VIgE/lKbxFwnmScQ
-         EXq0NFChqOewirNSSu+//lAp0dzeBcNqYot3HRllseaEHeV2obqygOtpSo3TxbNVhRqK
-         eMkrfESaQUoG7oZub7pHik8j8R4Ta5+7nCDNNzVEN0Ot5YJ+7J1r6XgSOVSn+dpwdfUf
-         KVIEjauf8vg9qFpMbcOBzxED8bYNGFyXB90nsACL6gYmUwZudpgoANO3k4LvS95lVuhV
-         REEV6hZhrS8ykWVVsqU/xx6WxCNVBd7s8uatoeVv9BTIaaZdU93VTqnPIYIpHlEStNLz
-         enPQ==
-X-Gm-Message-State: AO0yUKW8vkpZ+Pyyx50DjYE8QBUEBcqxbMOOrCTIogt4HFit3iYWrHXx
-        Rc7gBZGyvI+GzLX/Qx95CyM=
-X-Google-Smtp-Source: AK7set9+knhQj0U7hk2Eer9QGeK2B7A4Qi8BWzGLq51cz7xhVQbyqwHIZRw8UOk5RMmx3Dr5AkZFpw==
-X-Received: by 2002:a05:6a20:8e04:b0:cd:7fcf:11a6 with SMTP id y4-20020a056a208e0400b000cd7fcf11a6mr3020020pzj.48.1677574622213;
-        Tue, 28 Feb 2023 00:57:02 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-86.three.co.id. [180.214.232.86])
-        by smtp.gmail.com with ESMTPSA id s23-20020aa78d57000000b00593c1c5bd0esm5503155pfe.164.2023.02.28.00.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 00:57:01 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id B6B2610105C; Tue, 28 Feb 2023 15:56:56 +0700 (WIB)
-Date:   Tue, 28 Feb 2023 15:56:56 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     zhenggy <zhenggy@chinatelecom.cn>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched: Fix rq nr_uninterruptible count
-Message-ID: <Y/3B2CwI+RdoDt7T@debian.me>
-References: <9b271641-ea59-daa5-333c-1dd1f02cdb52@chinatelecom.cn>
+        Tue, 28 Feb 2023 03:58:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFD57D9F;
+        Tue, 28 Feb 2023 00:58:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E33761030;
+        Tue, 28 Feb 2023 08:58:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24246C433D2;
+        Tue, 28 Feb 2023 08:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677574699;
+        bh=UztsLsaqmIXyoCT63yUOOYX/F2RBn+tEboh82iUTl84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dvFldP2nDPK1JM1UdTSvrNFQgLKdCKwOzfkHHphaxtZJbfiOb+x1w8SgrPHVVLpTM
+         0+DGxsyLVGr/st2iaB5VqG6eeN9RmbwrKyu1S1M0ogYouEhMNuHsdIhPyL2tnEfVU1
+         gTZGjIJffgoh26CK72V24tXXKN+/RvSZ3yTVgjyc=
+Date:   Tue, 28 Feb 2023 09:58:16 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tom Saeger <tom.saeger@oracle.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Rich Felker <dalias@libc.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dennis Gilmore <dennis@ausil.us>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org
+Subject: Re: [PATCH 5.15 v2 1/5] arch: fix broken BuildID for arm64 and riscv
+Message-ID: <Y/3CKO8XjvyMlg+5@kroah.com>
+References: <20230210-tsaeger-upstream-linux-stable-5-15-v2-0-6c68622745e9@oracle.com>
+ <20230210-tsaeger-upstream-linux-stable-5-15-v2-1-6c68622745e9@oracle.com>
+ <Y/c3MSvnN4DcvzSx@kroah.com>
+ <20230223175331.7tsgvkvcur6wl7h7@oracle.com>
+ <20230224024724.whvtsrljz5k3jpln@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9UX63Gy/Zfo3mF4u"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9b271641-ea59-daa5-333c-1dd1f02cdb52@chinatelecom.cn>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230224024724.whvtsrljz5k3jpln@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 23, 2023 at 08:47:24PM -0600, Tom Saeger wrote:
+> On Thu, Feb 23, 2023 at 11:53:42AM -0600, Tom Saeger wrote:
+> > On Thu, Feb 23, 2023 at 10:51:45AM +0100, Greg Kroah-Hartman wrote:
+> > > On Fri, Feb 10, 2023 at 01:18:40PM -0700, Tom Saeger wrote:
+> > > > From: Masahiro Yamada <masahiroy@kernel.org>
+> > > > 
+> > > > commit 99cb0d917ffa1ab628bb67364ca9b162c07699b1 upstream.
+> > > > 
+> > > > Dennis Gilmore reports that the BuildID is missing in the arm64 vmlinux
+> > > > since commit 994b7ac1697b ("arm64: remove special treatment for the
+> > > > link order of head.o").
+> > > > 
+> > > > The issue is that the type of .notes section, which contains the BuildID,
+> > > > changed from NOTES to PROGBITS.
+> > > > 
+> > > > Ard Biesheuvel figured out that whichever object gets linked first gets
+> > > > to decide the type of a section. The PROGBITS type is the result of the
+> > > > compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
+> > > > 
+> > > > While Ard provided a fix for arm64, I want to fix this globally because
+> > > > the same issue is happening on riscv since commit 2348e6bf4421 ("riscv:
+> > > > remove special treatment for the link order of head.o"). This problem
+> > > > will happen in general for other architectures if they start to drop
+> > > > unneeded entries from scripts/head-object-list.txt.
+> > > > 
+> > > > Discard .note.GNU-stack in include/asm-generic/vmlinux.lds.h.
+> > > > 
+> > > > Link: https://lore.kernel.org/lkml/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com/
+> > > > Fixes: 994b7ac1697b ("arm64: remove special treatment for the link order of head.o")
+> > > > Fixes: 2348e6bf4421 ("riscv: remove special treatment for the link order of head.o")
+> 
+> Greg, how about something like this tacked onto backport of this commit?
+> 
+> [Tom: stable backport 5.15.y, 5.10.y, 5.4.y]
+> 
+> Though the above "Fixes:" commits are not in this kernel, the conditions
+> which lead to a missing Build ID in arm64 vmlinux are similar.
+> 
+> Evidence points to these conditions:
+> 1. ld version > 2.36 (exact binutils commit documented in a494398bde27)
+> 2. first object which gets linked (head.o) has a PROGBITS .note.GNU-stack segment
+> 
+> These conditions can be observed when:
+> - 5.15.60+ OR 5.10.136+ OR 5.4.210+
+> - AND ld version > 2.36
+> - AND arch=arm64
+> - AND CONFIG_MODVERSIONS=y
+> 
+> This was previously bisected to the stable backport of 0d362be5b142.
+> Follow-up experiments were discussed here: https://lore.kernel.org/all/20221221235413.xaisboqmr7dkqwn6@oracle.com/ 
+> which strongly hints at condition 2.
+> 
+> 
+> > > 
+> > > Why are we adding a commit to 5.15.y that fixes an issue that only
+> > > showed up in 6.1.y?
+> 
+> If you approve - I'll send v3 for 5.15, 5.10, and 5.4 (with style fixes).
 
---9UX63Gy/Zfo3mF4u
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That would make more sense, thanks.
 
-On Tue, Feb 28, 2023 at 03:08:58PM +0800, zhenggy wrote:
-> When an uninterrptable task is queue to a differect cpu as where
-> it is dequeued, the rq nr_uninterruptible will be incorrent, so
-> fix it.
-
-tl;dr (too much typos above). Would you like to "massage" the commit
-mesage?
-
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 25b582b..cd5ef6e 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -4068,6 +4068,7 @@ bool ttwu_state_match(struct task_struct *p, unsign=
-ed int state, int *success)
->  {
->  	unsigned long flags;
->  	int cpu, success =3D 0;
-> +	struct rq *src_rq, *dst_rq;
->=20
->  	preempt_disable();
->  	if (p =3D=3D current) {
-> @@ -4205,6 +4206,16 @@ bool ttwu_state_match(struct task_struct *p, unsig=
-ned int state, int *success)
->  			atomic_dec(&task_rq(p)->nr_iowait);
->  		}
->=20
-> +		if (p->sched_contributes_to_load) {
-> +			src_rq =3D cpu_rq(task_cpu(p));
-> +			dst_rq =3D cpu_rq(cpu);
-> +
-> +			double_rq_lock(src_rq, dst_rq);
-> +			src_rq->nr_uninterruptible--;
-> +			dst_rq->nr_uninterruptible++;
-> +			double_rq_unlock(src_rq, dst_rq);
-> +		}
-> +
-
-Can you explain what the code above does to fix the problem you
-mentioned above?
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---9UX63Gy/Zfo3mF4u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY/3B1AAKCRD2uYlJVVFO
-o2/bAP9O5pBoA/zWyZz2ioyTzukHi0qSFgJ1vWZBauiezu4fCgEAyvQyh0QmAQZ1
-Iy5tYopi0L1eMdT2BAg+QhmC1ccJEwo=
-=tNCM
------END PGP SIGNATURE-----
-
---9UX63Gy/Zfo3mF4u--
+greg k-h
