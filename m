@@ -2,127 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B6F6A61E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD3B6A61E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjB1V46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47588 "EHLO
+        id S229681AbjB1V5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjB1V44 (ORCPT
+        with ESMTP id S229579AbjB1V5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:56:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A1F1259F;
-        Tue, 28 Feb 2023 13:56:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BE27611EC;
-        Tue, 28 Feb 2023 21:56:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06A12C4339B;
-        Tue, 28 Feb 2023 21:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677621415;
-        bh=ZCslAg5mFuG+VQFYzF+2mINX4NCH81xqNvRV9QNFhFQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=WevWBYjL9MKzeWAsPIQLf17NiK5O+jqGcEIQJRbVOVb/r6a9I34m3h4zD8Bxc7+st
-         26lr65BfYkjAbmFcr6pTDwUHopIrR1/0yvCZM2u3sARlyw2W44yJWsk8dKElE9dilw
-         DHWbpgWBK/eqQaO8S7/BNzlAvysREUqn3TzS7ago+FteUo8AZMHSKkK5HHQqAeWRe0
-         moZpdZljTe929XTkRbHTZ6ebLJqvfgbJqvmurtUBl/VYgqeaUxHmAYWyH5H9TQ2uMZ
-         mSPVyy4w9IumiPCSfqIu2Q5n327zsp4YrZXBLVJC0Q38Xt40vkmr5t9yNNBFAPgog2
-         4hVWkDsK/Ij7A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A03775C018D; Tue, 28 Feb 2023 13:56:54 -0800 (PST)
-Date:   Tue, 28 Feb 2023 13:56:54 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Uros Bizjak <ubizjak@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
-Message-ID: <20230228215654.GY2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230228155121.3416-1-ubizjak@gmail.com>
- <Y/5mguXPPqdP3MZF@google.com>
- <20230228160324.2a7c1012@gandalf.local.home>
- <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230228164124.77c126d2@gandalf.local.home>
+        Tue, 28 Feb 2023 16:57:21 -0500
+Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508417CE3;
+        Tue, 28 Feb 2023 13:57:18 -0800 (PST)
+Received: from pps.filterd (m0050096.ppops.net [127.0.0.1])
+        by m0050096.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 31SJmtmn029247;
+        Tue, 28 Feb 2023 21:57:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=jan2016.eng;
+ bh=uoQOVrBMW7Xj+yJvCwKq8GYEq8oVWbao23ALPFIoPVo=;
+ b=FSpKpQ0Bh31jFTq/18ExllqscQcy9ICzKWG3UjEZR4R4dgTfRKrT7sqYuUIvjVO+vy35
+ rrc+wvsutu4bvYu7raYIwUqeDuxVnXhjLCz0o7bRtpOx4Cvw4Zwz4z4W2cQS0poMuyB+
+ vYutRRlFAP8Y33cJCOd0NHzVSeAoHyQhPZnYFZAQ4L/H886ad28XgnIusOjdhwS3jmku
+ Q78Xg5x7vGvDCWkYcCApNerWe9LXjz3EhGlT9XbFGfnWVLEoEGgxWI6Q53uacTvxNJr2
+ GM7D6TDED6WndCScTJ0toLASgGIUkRfMJag32pkYW9W00/49idCPWy1kve55pGv6yjSi Ng== 
+Received: from prod-mail-ppoint5 (prod-mail-ppoint5.akamai.com [184.51.33.60] (may be forged))
+        by m0050096.ppops.net-00190b01. (PPS) with ESMTPS id 3nybmk0228-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 21:57:00 +0000
+Received: from pps.filterd (prod-mail-ppoint5.akamai.com [127.0.0.1])
+        by prod-mail-ppoint5.akamai.com (8.17.1.19/8.17.1.19) with ESMTP id 31SKg6BD032110;
+        Tue, 28 Feb 2023 13:56:59 -0800
+Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
+        by prod-mail-ppoint5.akamai.com (PPS) with ESMTP id 3nyh6fq2vg-1;
+        Tue, 28 Feb 2023 13:56:59 -0800
+Received: from [172.19.33.208] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.208])
+        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id 526D05451C;
+        Tue, 28 Feb 2023 21:56:59 +0000 (GMT)
+Message-ID: <c0c38c08-a329-9d0a-ca75-0519b589731e@akamai.com>
+Date:   Tue, 28 Feb 2023 16:56:59 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228164124.77c126d2@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/2] dyndbg: use the module notifier callbacks
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     jim.cromie@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+References: <cover.1677612539.git.jbaron@akamai.com>
+ <a775dcc14a10d0b3df34e087ee29ddb1d62fb517.1677612539.git.jbaron@akamai.com>
+ <Y/5ntkYoKHvfU9S8@bombadil.infradead.org>
+From:   Jason Baron <jbaron@akamai.com>
+In-Reply-To: <Y/5ntkYoKHvfU9S8@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
+ suspectscore=0 adultscore=0 bulkscore=0 mlxlogscore=806 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302280176
+X-Proofpoint-ORIG-GUID: AP_-8jXN7JxW4zXZbN66IuHKACUwUIDK
+X-Proofpoint-GUID: AP_-8jXN7JxW4zXZbN66IuHKACUwUIDK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 mlxlogscore=747
+ phishscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0 bulkscore=0
+ spamscore=0 clxscore=1015 malwarescore=0 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302280178
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 04:41:24PM -0500, Steven Rostedt wrote:
-> On Tue, 28 Feb 2023 13:29:11 -0800
-> "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> 
-> > All well and good, but the stall-warning code is nowhere near a fastpath.
-> > 
-> > Is try_cmpxchg() considered more readable in this context?
-> 
-> 
-> -	    cmpxchg(&rcu_state.jiffies_stall, js, jn) == js) {
-> +	    try_cmpxchg(&rcu_state.jiffies_stall, &js, jn)) {
-> 
-> It's basically the same :-/
 
-That was my assessment.  ;-)
 
-> But looking at this use case, I'd actually NAK it, as it is misleading.
+On 2/28/23 3:44 PM, Luis Chamberlain wrote:
+> On Tue, Feb 28, 2023 at 02:35:02PM -0500, Jason Baron wrote:
+>> As part of Jim Cromie's new dynamic debug classmap feature, the new code
+>> tries to toggle a jump label from dynamic_debug_setup(). However,
+>> dynamic_debug_setup() is called before the 'module_notify_list' notifier
+>> chain is invoked. And jump labels are initialized via the module notifier
+>> chain. Note this is an issue for a new feature not yet merged and doesn't
+>> affect any existing codepaths.
 > 
-> As try_cmpxchg() is used to get rid of the updating of the old value. As in
-> the ring buffer code we had:
+> I think we can summarize this to "in preperation for some future work where
+> ordering matters with respect to jump labels" or something like that.
 > 
-> void ring_buffer_record_off(struct trace_buffer *buffer)
-> {
-> 	unsigned int rd;
-> 	unsigned int new_rd;
+> Because that is then making it specific to the future use case and
+> creates the current justification.
 > 
-> 	do {
-> 		rd = atomic_read(&buffer->record_disabled);
-> 		new_rd = rd | RB_BUFFER_OFF;
-> 	} while (!atomic_cmpxchg(&buffer->record_disabled, &rd, new_rd) != rd);
-> }
+>> We could just move dynamic_debug_setup() earlier in load_module(). But
+>> let's instead ensure the ordering via the 'priority' in the module list
+>> notifier.
 > 
-> and the try_cmpxchg() converted it to:
+> "becuase the notifier for jump labels jump_label_module_nb uses a
+> priority of 1" or something like that would be nice to get added.
 > 
-> void ring_buffer_record_off(struct trace_buffer *buffer)
-> {
-> 	unsigned int rd;
-> 	unsigned int new_rd;
+>> This brings dynamic debug more in line with other subsystems and
+>> pulls code out of the core module code.
 > 
-> 	rd = atomic_read(&buffer->record_disabled);
-> 	do {
-> 		new_rd = rd | RB_BUFFER_OFF;
-> 	} while (!atomic_try_cmpxchg(&buffer->record_disabled, &rd, new_rd));
-> }
+> This should be the main reason for this change, as explained in the
+> commit log. A secondary benefit would be it fixes the first future bug
+> mentioned.
 > 
-> Which got rid of the need to constantly update the rd variable (cmpxchg
-> will load rax with the value read, so it removes the need for an extra
-> move).
+> With those changes I can take this into modules-next to start getting
+> this tested sooner rather than later.
 > 
-> But in your case, we don't need to update js, in which case the
-> try_cmpxchg() does.
-> 
-> The patch that Uros sent me for the ring buffer code also does some of
-> that, which I feel is wrong.
-> 
-> So with that, I would nack the patch.
+>    Luis
 
-OK, I will leave this one out.
 
-							Thanx, Paul
+Hi Luis,
+
+Ok, I can fix up the commit message and re-post. I'm thinking maybe we 
+should separate these patches as they are independent. The 2nd one I 
+think makes sense to go through modules-next, but the first one is 
+internal to dynamic debug and can be a part of Jim's series. Make sense?
+
+Thanks,
+
+-Jason
