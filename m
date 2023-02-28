@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666726A5672
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4BA6A5676
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjB1KPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S230236AbjB1KQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjB1KPV (ORCPT
+        with ESMTP id S229686AbjB1KQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:15:21 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F8510255;
-        Tue, 28 Feb 2023 02:15:20 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 4C2BD1C0AB2; Tue, 28 Feb 2023 11:15:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1677579319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pIobWVcWKOMktloTIZSETcSZg4B7IPXuWeejBjATNZw=;
-        b=HDheuxhc1hRmJvYXsUf3ccCpxIb68CvBYyMb5YuLB7JYRl5v/lcNUnBKH6syYWIcr5c/8t
-        LrivujR+7M1OybIyrP8N1jrU0g3z1UEwvnDwkIQtadKMUrl+kedPPblUaL9vR75UlsxUHW
-        +oLnbUQSmABMhL2ag1R4GQE0ZE+gb0A=
-Date:   Tue, 28 Feb 2023 11:15:18 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: renesas: vsp1: blacklist r8a7795 ES1.*
-Message-ID: <Y/3UNv4a9xmAR+54@duo.ucw.cz>
-References: <20230118122003.132905-1-wsa+renesas@sang-engineering.com>
- <Y8fpg/WkR4OMrpOu@pendragon.ideasonboard.com>
- <CAMuHMdUegruzCdP_+_qNuhVvFWp-_8zvdYw=v3kmt6zDU8=w5Q@mail.gmail.com>
- <Y8f2elExwiwxK2n+@pendragon.ideasonboard.com>
- <CAMuHMdXYsCN+evJB8idRFQ-v2B4bJ6vi+DSF=Zg6+QSiu+Op5Q@mail.gmail.com>
- <Y8f88dw/fWfVij/d@pendragon.ideasonboard.com>
+        Tue, 28 Feb 2023 05:16:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD2C19681
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:16:06 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWx1c-00047a-4O; Tue, 28 Feb 2023 11:16:00 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWx1a-000qPj-Ug; Tue, 28 Feb 2023 11:15:58 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWx1a-000zTY-9Q; Tue, 28 Feb 2023 11:15:58 +0100
+Date:   Tue, 28 Feb 2023 11:15:58 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Munehisa Kamata <kamatam@amazon.com>
+Cc:     thierry.reding@gmail.com, tobetter@gmail.com,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] pwm: Zero-initialize the pwm_state passed to driver's
+ .get_state()
+Message-ID: <20230228101558.b4dosk54jojfqkgi@pengutronix.de>
+References: <20230226013722.1802842-1-kamatam@amazon.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="C8mDkYo+HW8Czfre"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bd76unbsfstrl6f7"
 Content-Disposition: inline
-In-Reply-To: <Y8f88dw/fWfVij/d@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230226013722.1802842-1-kamatam@amazon.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,37 +56,95 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---C8mDkYo+HW8Czfre
-Content-Type: text/plain; charset=us-ascii
+--bd76unbsfstrl6f7
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
+This is just to ensure that .usage_power is properly initialized and
+doesn't contain random stack data. The other members of struct pwm_state
+should get a value assigned in a successful call to .get_state(). So in
+the absence of bugs in driver implementations, this is only a safe-guard
+and no fix.
 
-> > I prefer blacklisting in the driver, as dropping them from r8a77950.dtsi
-> > wouldn't disable them when used with an older or out-of-tree DTB.
+Reported-by: Munehisa Kamata <kamatam@amazon.com>
+Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+---
+ drivers/pwm/core.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+Hello,
+
+On Sat, Feb 25, 2023 at 05:37:21PM -0800, Munehisa Kamata wrote:
+> Zero-initialize the on-stack structure to avoid unexpected behaviors. Some
+> drivers may not set or initialize all the values in pwm_state through the=
+ir
+> .get_state() callback and therefore some random values may remain there a=
+nd
+> be set into pwm->state eventually.
 >=20
-> Is that really a use case we need to care about ? Who will run a recent
-> kernel with an old DTB on a H3 ES1.x, without an easy way to update to a
-> mainline device tree ? It's not like those devices went into production.
+> This actually caused regression on ODROID-N2+ as reported in [1]; kernel
+> fails to boot due to random panic or hang-up.
+>=20
+> [1] https://forum.odroid.com/viewtopic.php?f=3D177&t=3D46360
+>=20
+> Fixes: c73a3107624d ("pwm: Handle .get_state() failures")
+> Cc: stable@vger.kernel.org # 6.2
+> Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
 
-There's some agreement that DTBs are an ABI, and that they should work
-with old and new kernels. Disabling it in the driver seems like right
-solution.
+My patch is essentially the same as Munehisa's, just written a bit
+differently (to maybe make it easier for the compiler to optimize it?)
+and with an explaining comment. The actual motivation is different so
+the commit log is considerably different, too.
 
-Best regards,
-								Pavel
+I was unsure how to honor Munehisa's effort, I went with a
+"Reported-by". Please tell me if you want this to be different.
+
+Best regards
+Uwe
+
+diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+index e01147f66e15..533ef5bd3add 100644
+--- a/drivers/pwm/core.c
++++ b/drivers/pwm/core.c
+@@ -115,7 +115,14 @@ static int pwm_device_request(struct pwm_device *pwm, =
+const char *label)
+ 	}
+=20
+ 	if (pwm->chip->ops->get_state) {
+-		struct pwm_state state;
++		/*
++		 * Zero-initialize state because most drivers are unaware of
++		 * .usage_power. The other members of state are supposed to be
++		 * set by lowlevel drivers. We still initialize the whole
++		 * structure for simplicity even though this might paper over
++		 * faulty implementations of .get_state().
++		 */
++		struct pwm_state state =3D { 0, };
+=20
+ 		err =3D pwm->chip->ops->get_state(pwm->chip, pwm, &state);
+ 		trace_pwm_get(pwm, &state, err);
 --=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+2.39.1
 
---C8mDkYo+HW8Czfre
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--bd76unbsfstrl6f7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY/3UNgAKCRAw5/Bqldv6
-8r5yAKCQhsFBOLk2Za5sOjz+PmJh6YjMrQCfctyb4Gw+Q2kmG1nPpaeCp7xkYU8=
-=Vgwo
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmP91FsACgkQwfwUeK3K
+7AmsCgf/eRMqDHCB9MFwz2J4+eO1GBN7uA8nfwjMVBT2RMbZ3fIRsKehLMgz/HHs
+FFDZp+RYpiglA8jxVrWf3yJxHu3ZIIyavmLXHZxG1meao2qqnNg76wyVMlbbfe3t
+ijzvxJzB130a4dRbxuexptTHLhQLA8e1K7lEOxbFARo58sCmajWT0xRPM2wzX1gq
+FmsZOtv2ZiBPYTyMl1tdKeRskNSf18xj2toDPKyrMtZquOJLbd+UBTmepChzgrVW
+YSpl4QLDhvUY40Ro/tOdJZiQGlkqpuJNCvfSSQPl/8UOFkKhbqETB3EArBW3SWOR
+iioBTB1fWXG1wsWUV8oX0wgVdUX3AA==
+=55iK
 -----END PGP SIGNATURE-----
 
---C8mDkYo+HW8Czfre--
+--bd76unbsfstrl6f7--
