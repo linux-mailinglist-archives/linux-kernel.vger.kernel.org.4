@@ -2,148 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B126A5FE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097566A5FF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjB1TpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 14:45:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
+        id S230033AbjB1TsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 14:48:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjB1TpV (ORCPT
+        with ESMTP id S230030AbjB1TsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:45:21 -0500
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8DE1B56F;
-        Tue, 28 Feb 2023 11:45:19 -0800 (PST)
+        Tue, 28 Feb 2023 14:48:13 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3BE1C302;
+        Tue, 28 Feb 2023 11:48:11 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id bm20so8993073oib.7;
+        Tue, 28 Feb 2023 11:48:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1677613520; x=1709149520;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VFI/B5VF9lRQpPbKXQuU8MbJ+ZWjTxcz40DChLMwRUc=;
-  b=O6rXeavmpqFjNxe+wgouz9qhA6B3ZWsNlNhvE2eHnzhIROnhC1yLNPFS
-   KazlCQpk16W51Za0iCq5pYqIyf3EEqgcPnoJNbo9oiO78qcxvN5kM7GKQ
-   lZjqKnms2CEMFeF7adDN9YQNsSON+crjUH/xB2Zv1nLTjSX3blLWbA4NM
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.98,222,1673913600"; 
-   d="scan'208";a="187784959"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 19:43:40 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com (Postfix) with ESMTPS id 56D1CA2B84;
-        Tue, 28 Feb 2023 19:43:39 +0000 (UTC)
-Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Tue, 28 Feb 2023 19:43:39 +0000
-Received: from u9aa42af9e4c55a.ant.amazon.com (10.106.100.8) by
- EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.24; Tue, 28 Feb 2023 19:43:38 +0000
-From:   Munehisa Kamata <kamatam@amazon.com>
-To:     <u.kleine-koenig@pengutronix.de>
-CC:     <kamatam@amazon.com>, <kernel@pengutronix.de>,
-        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <stable@vger.kernel.org>, <thierry.reding@gmail.com>,
-        <tobetter@gmail.com>
-Subject: Re: [PATCH] pwm: Zero-initialize the pwm_state passed to driver's .get_state()
-Date:   Tue, 28 Feb 2023 11:43:27 -0800
-Message-ID: <20230228194327.1237008-1-kamatam@amazon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230228101558.b4dosk54jojfqkgi@pengutronix.de>
-References: <20230228101558.b4dosk54jojfqkgi@pengutronix.de>
+        d=gmail.com; s=20210112; t=1677613691;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u6AWgk38+dTcU1+mejGb2/o+ftP8MTujuhC/3B4ExDQ=;
+        b=ige+8up2DEpf5jbuZZLbqAXPllK21I8pU7z6B62/+rsiqOUHgf+tPXTEf+e1slNMgu
+         i2cYxHHAkwFZjGq8mzku6wjj2KNMMtvD5Bj/MKrCrbe7OOsHTeuVfdoOeDdLnmzCW5Eq
+         0IS938xQdPcLDKNCTK6c7ZQr4hIWBFvPFqZ0w8ssnsTKGbWqFc3/HQnTA/BztQCNO8Ng
+         MDZRmbzYiV1mKcbQFlPfNi3Fn7G/a9kkC7gOMoeP5uM35tmn+t+pchgqdWE7BwmjyVuQ
+         KDz3y5HhklWDT2WVZOYY5hfICg7iyZ9HgSNBqoCCO+QfpyQWPcVTlfg0NfVVnwN/Bf/S
+         bC9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677613691;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u6AWgk38+dTcU1+mejGb2/o+ftP8MTujuhC/3B4ExDQ=;
+        b=XdN3K0ls5RDMs6rheszXzB+SiR4k+CVZ6kQUHxUxJUXFSRDQjz1jY2H5ZQVPJYJlZG
+         CtDYLcGGfOUdxVRm/fF1U7MtyPGDOx7cVUMxbl8XlfjAdFDYsxUWx8kmpxwmw5T1xtr8
+         Za/Jlp9UOgWKHYgpI41mYEI+ddjQ4r1PYfOZXxw/B1YFzrkmggD8UmMBv17gSvnuPzbL
+         FbHgNR5CCxx0trSEV/0HLH/LxmLkxwE6b+oKCi76pOE67ekD5tWHYwDTnCMmb1WF+ZlS
+         rCLcFmFcXybBdUFHX/inGvDrojY7hGhqWYa5iUly6wm+pKiqquvqqZ4OR7tcNQET0Cii
+         dzxg==
+X-Gm-Message-State: AO0yUKVqdhhyIIrem5oLTrrlU9kFXvR+4kjX/VRBa8PdC9S7dCwf2hcp
+        bclYZciizBbLgCF6y1I7Q0nxKCaQp1acANZo4QQ=
+X-Google-Smtp-Source: AK7set9keJVYa+i1zqh5jp2cnA3sA6/AAsEU28TAnr0uVeyTvTrcT5iO0UESk31AobEWgbOlPb04AX6066Qk2dlbA5k=
+X-Received: by 2002:a05:6808:1cf:b0:384:253:642d with SMTP id
+ x15-20020a05680801cf00b003840253642dmr1372513oic.3.1677613690814; Tue, 28 Feb
+ 2023 11:48:10 -0800 (PST)
 MIME-Version: 1.0
+References: <20230227193535.2822389-1-robdclark@gmail.com> <20230227193535.2822389-8-robdclark@gmail.com>
+ <20230228112310.39274fcf@eldfell>
+In-Reply-To: <20230228112310.39274fcf@eldfell>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 28 Feb 2023 11:47:59 -0800
+Message-ID: <CAF6AEGve4Jx-TJZe_+PF4ekyBzCzxZBdwMeGQ1WoRawwX1tsxg@mail.gmail.com>
+Subject: Re: [PATCH v7 07/15] dma-buf/sw_sync: Add fence deadline support
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Simon Ser <contact@emersion.fr>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.106.100.8]
-X-ClientProxiedBy: EX19D038UWC001.ant.amazon.com (10.13.139.213) To
- EX19D010UWA004.ant.amazon.com (10.13.138.204)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-28 10:15:58 +0000, Uwe Kleine-König wrote:
+On Tue, Feb 28, 2023 at 1:23 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
 >
-> This is just to ensure that .usage_power is properly initialized and
-> doesn't contain random stack data. The other members of struct pwm_state
-> should get a value assigned in a successful call to .get_state(). So in
-> the absence of bugs in driver implementations, this is only a safe-guard
-> and no fix.
-> 
-> Reported-by: Munehisa Kamata <kamatam@amazon.com>
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/pwm/core.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> Hello,
-> 
-> On Sat, Feb 25, 2023 at 05:37:21PM -0800, Munehisa Kamata wrote:
-> > Zero-initialize the on-stack structure to avoid unexpected behaviors. Some
-> > drivers may not set or initialize all the values in pwm_state through their
-> > .get_state() callback and therefore some random values may remain there and
-> > be set into pwm->state eventually.
-> > 
-> > This actually caused regression on ODROID-N2+ as reported in [1]; kernel
-> > fails to boot due to random panic or hang-up.
-> > 
-> > [1] https://forum.odroid.com/viewtopic.php?f=177&t=46360
-> > 
-> > Fixes: c73a3107624d ("pwm: Handle .get_state() failures")
-> > Cc: stable@vger.kernel.org # 6.2
-> > Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
-> 
-> My patch is essentially the same as Munehisa's, just written a bit
-> differently (to maybe make it easier for the compiler to optimize it?)
-> and with an explaining comment. The actual motivation is different so
-> the commit log is considerably different, too.
-> 
-> I was unsure how to honor Munehisa's effort, I went with a
-> "Reported-by". Please tell me if you want this to be different.
+> On Mon, 27 Feb 2023 11:35:13 -0800
+> Rob Clark <robdclark@gmail.com> wrote:
+>
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > This consists of simply storing the most recent deadline, and adding an
+> > ioctl to retrieve the deadline.  This can be used in conjunction with
+> > the SET_DEADLINE ioctl on a fence fd for testing.  Ie. create various
+> > sw_sync fences, merge them into a fence-array, set deadline on the
+> > fence-array and confirm that it is propagated properly to each fence.
+> >
+> > v2: Switch UABI to express deadline as u64
+> > v3: More verbose UAPI docs, show how to convert from timespec
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> > ---
+> >  drivers/dma-buf/sw_sync.c      | 58 ++++++++++++++++++++++++++++++++++
+> >  drivers/dma-buf/sync_debug.h   |  2 ++
+> >  include/uapi/linux/sync_file.h |  6 +++-
+> >  3 files changed, 65 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/dma-buf/sw_sync.c b/drivers/dma-buf/sw_sync.c
+> > index 348b3a9170fa..3e2315ee955b 100644
+> > --- a/drivers/dma-buf/sw_sync.c
+> > +++ b/drivers/dma-buf/sw_sync.c
+> > @@ -52,12 +52,28 @@ struct sw_sync_create_fence_data {
+> >       __s32   fence; /* fd of new fence */
+> >  };
+> >
+> > +/**
+> > + * struct sw_sync_get_deadline - get the deadline hint of a sw_sync fe=
+nce
+> > + * @deadline_ns: absolute time of the deadline
+> > + * @pad:     must be zero
+> > + * @fence_fd:        the sw_sync fence fd (in)
+> > + *
+> > + * The timebase for the deadline is CLOCK_MONOTONIC (same as vblank)
+>
+> Hi,
+>
+> the commit message explains this returns the "most recent" deadline,
+> but the doc here forgets to mention that. I suppose that means the
+> most recently set deadline and not the deadline furthest forward in
+> time (largest value).
+>
+> Is "most recent" the appropriate behaviour when multiple deadlines have
+> been set? Would you not want the earliest deadline set so far instead?
 
-I'm okay with that, thank you.
+It's not what a "normal" implementation of ->set_deadline() would do.
+But it was useful for determining that the deadline propagates
+correctly through composite (array/chain) fences.
 
-Perhaps, you should also add Cc tag for the stable tree? I did that in my
-patch and we're actually CCing to the stable list, but I'm not sure if it
-can pick up your patch without the tag. This should be fixed in linux-6.2.y.
+I guess I could change the test to work with a more normal
+->set_deadline() implementation (which would just track the nearest
+(in time) deadline).
 
+> What if none has been set?
 
-Regards,
-Munehisa
+you'd get zero.. I suppose I could make it return an error instead..
 
-> Best regards
-> Uwe
-> 
-> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-> index e01147f66e15..533ef5bd3add 100644
-> --- a/drivers/pwm/core.c
-> +++ b/drivers/pwm/core.c
-> @@ -115,7 +115,14 @@ static int pwm_device_request(struct pwm_device *pwm, const char *label)
->  	}
->  
->  	if (pwm->chip->ops->get_state) {
-> -		struct pwm_state state;
-> +		/*
-> +		 * Zero-initialize state because most drivers are unaware of
-> +		 * .usage_power. The other members of state are supposed to be
-> +		 * set by lowlevel drivers. We still initialize the whole
-> +		 * structure for simplicity even though this might paper over
-> +		 * faulty implementations of .get_state().
-> +		 */
-> +		struct pwm_state state = { 0, };
->  
->  		err = pwm->chip->ops->get_state(pwm->chip, pwm, &state);
->  		trace_pwm_get(pwm, &state, err);
-> -- 
-> 2.39.1
-> 
-> 
-> -- 
-> Pengutronix e.K.                           | Uwe Kleine-König            |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-> 
+BR,
+-R
+
+> > + */
+> > +struct sw_sync_get_deadline {
+> > +     __u64   deadline_ns;
+> > +     __u32   pad;
+> > +     __s32   fence_fd;
+> > +};
+> > +
+> >  #define SW_SYNC_IOC_MAGIC    'W'
+> >
+> >  #define SW_SYNC_IOC_CREATE_FENCE     _IOWR(SW_SYNC_IOC_MAGIC, 0,\
+> >               struct sw_sync_create_fence_data)
+> >
+> >  #define SW_SYNC_IOC_INC                      _IOW(SW_SYNC_IOC_MAGIC, 1=
+, __u32)
+> > +#define SW_SYNC_GET_DEADLINE         _IOWR(SW_SYNC_IOC_MAGIC, 2, \
+> > +             struct sw_sync_get_deadline)
+> >
+> >  static const struct dma_fence_ops timeline_fence_ops;
+> >
+> > @@ -171,6 +187,13 @@ static void timeline_fence_timeline_value_str(stru=
+ct dma_fence *fence,
+> >       snprintf(str, size, "%d", parent->value);
+> >  }
+> >
+> > +static void timeline_fence_set_deadline(struct dma_fence *fence, ktime=
+_t deadline)
+> > +{
+> > +     struct sync_pt *pt =3D dma_fence_to_sync_pt(fence);
+> > +
+> > +     pt->deadline =3D deadline;
+> > +}
+> > +
+> >  static const struct dma_fence_ops timeline_fence_ops =3D {
+> >       .get_driver_name =3D timeline_fence_get_driver_name,
+> >       .get_timeline_name =3D timeline_fence_get_timeline_name,
+> > @@ -179,6 +202,7 @@ static const struct dma_fence_ops timeline_fence_op=
+s =3D {
+> >       .release =3D timeline_fence_release,
+> >       .fence_value_str =3D timeline_fence_value_str,
+> >       .timeline_value_str =3D timeline_fence_timeline_value_str,
+> > +     .set_deadline =3D timeline_fence_set_deadline,
+> >  };
+> >
+> >  /**
+> > @@ -387,6 +411,37 @@ static long sw_sync_ioctl_inc(struct sync_timeline=
+ *obj, unsigned long arg)
+> >       return 0;
+> >  }
+> >
+> > +static int sw_sync_ioctl_get_deadline(struct sync_timeline *obj, unsig=
+ned long arg)
+> > +{
+> > +     struct sw_sync_get_deadline data;
+> > +     struct dma_fence *fence;
+> > +     struct sync_pt *pt;
+> > +
+> > +     if (copy_from_user(&data, (void __user *)arg, sizeof(data)))
+> > +             return -EFAULT;
+> > +
+> > +     if (data.deadline_ns || data.pad)
+> > +             return -EINVAL;
+> > +
+> > +     fence =3D sync_file_get_fence(data.fence_fd);
+> > +     if (!fence)
+> > +             return -EINVAL;
+> > +
+> > +     pt =3D dma_fence_to_sync_pt(fence);
+> > +     if (!pt)
+> > +             return -EINVAL;
+> > +
+> > +
+> > +     data.deadline_ns =3D ktime_to_ns(pt->deadline);
+> > +
+> > +     dma_fence_put(fence);
+> > +
+> > +     if (copy_to_user((void __user *)arg, &data, sizeof(data)))
+> > +             return -EFAULT;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static long sw_sync_ioctl(struct file *file, unsigned int cmd,
+> >                         unsigned long arg)
+> >  {
+> > @@ -399,6 +454,9 @@ static long sw_sync_ioctl(struct file *file, unsign=
+ed int cmd,
+> >       case SW_SYNC_IOC_INC:
+> >               return sw_sync_ioctl_inc(obj, arg);
+> >
+> > +     case SW_SYNC_GET_DEADLINE:
+> > +             return sw_sync_ioctl_get_deadline(obj, arg);
+> > +
+> >       default:
+> >               return -ENOTTY;
+> >       }
+> > diff --git a/drivers/dma-buf/sync_debug.h b/drivers/dma-buf/sync_debug.=
+h
+> > index 6176e52ba2d7..2e0146d0bdbb 100644
+> > --- a/drivers/dma-buf/sync_debug.h
+> > +++ b/drivers/dma-buf/sync_debug.h
+> > @@ -55,11 +55,13 @@ static inline struct sync_timeline *dma_fence_paren=
+t(struct dma_fence *fence)
+> >   * @base: base fence object
+> >   * @link: link on the sync timeline's list
+> >   * @node: node in the sync timeline's tree
+> > + * @deadline: the most recently set fence deadline
+> >   */
+> >  struct sync_pt {
+> >       struct dma_fence base;
+> >       struct list_head link;
+> >       struct rb_node node;
+> > +     ktime_t deadline;
+> >  };
+> >
+> >  extern const struct file_operations sw_sync_debugfs_fops;
+> > diff --git a/include/uapi/linux/sync_file.h b/include/uapi/linux/sync_f=
+ile.h
+> > index 49325cf6749b..dc6645b2598b 100644
+> > --- a/include/uapi/linux/sync_file.h
+> > +++ b/include/uapi/linux/sync_file.h
+> > @@ -72,7 +72,11 @@ struct sync_file_info {
+> >   * @deadline_ns: absolute time of the deadline
+> >   * @pad:     must be zero
+> >   *
+> > - * The timebase for the deadline is CLOCK_MONOTONIC (same as vblank)
+> > + * The timebase for the deadline is CLOCK_MONOTONIC (same as vblank). =
+ For
+> > + * example:
+> > + *
+> > + *     clock_gettime(CLOCK_MONOTONIC, &t);
+> > + *     deadline_ns =3D (t.tv_sec * 1000000000L) + t.tv_nsec + duration=
+_ns
+>
+> Shouldn't this hunk be in patch 5 instead?
+>
+> What's duration_ns? Maybe ns_until_my_deadline would be more clear that
+> it is something userspace freely chooses?
+>
+> >   */
+> >  struct sync_set_deadline {
+> >       __u64   deadline_ns;
+>
+>
+> Thanks,
+> pq
