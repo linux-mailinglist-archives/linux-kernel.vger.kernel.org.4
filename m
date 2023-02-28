@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DE36A58A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01DE6A58A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbjB1Lyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S231786AbjB1Lyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbjB1LyU (ORCPT
+        with ESMTP id S229533AbjB1LyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:54:20 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C53CA26
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:53:52 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id bh1so10081542plb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:53:52 -0800 (PST)
+        Tue, 28 Feb 2023 06:54:23 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED60E35B1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:53:54 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id i10so10095683plr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:53:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l9iPZ6kED2sgejRw3aZIhHru7u/PrSSNmL2hmgbo2xU=;
-        b=yUDll5J7GnGcIkqj+lEUDzHzv7O+vN8nlDbM8MjOlM/hfuXTefjK6nhrzsPfuA8/oo
-         MvE/RHMgcpiXTBNBx9zskzB73Q0vMeoAgYlq8MGR43HX4FShbmbAw/+X4ESDdvC6HboR
-         8AJw+jQb8gc1Nk8d2obBd10Cn037XWKUt5kaJZDgjVgcRQR80H5h3W58ZmDuWniGSriG
-         j2kn1F2XgImdIuQTGCx19zNRoGxBPTo7GG6Fhy9/1MierflfeHbJvotFCN1jZ48LUk+H
-         HmB7XffVKPIMBOeYy+XgVs2+Ulsxc46DsJGyQTlKnj7XGA5pA93QIjwBTpz8NQQP+RS/
-         dCeQ==
+        bh=owO6RMSXMhELaAiCDQfYtj1K3jFcb8cutoYS8UegXjk=;
+        b=ITgM8j1GNblZluoCqcj6FUwDHNTxwKsb1LYP1MNGuaxh5G+XqwLEIsI4/pwROkU+I8
+         8p5oBFu7V/VHOX6pMAjvbKB79L7Blhmrs/36PnPgRJYQrhv/QxikWDsg8TedlTxYMiWh
+         /Zk9N3ZeLqXIXOxRejXRBAdpvCr7s0aW0/vBUAroM+dL8txrhE/hpHyTN9bqgEQg9etH
+         de03ZvVRY3lLYt2aBgusTebVc4FVjtAbaIZa9qOE7GVT8/yv6aajd/x0YCYpSoGUwLR0
+         lKMU2vI2TEMxS7JM2iE5UrZY77+RxfM5kEGLjzTN5GHOJC+pXAjS3qgMJSMXp9tatkFs
+         pN7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l9iPZ6kED2sgejRw3aZIhHru7u/PrSSNmL2hmgbo2xU=;
-        b=1OPQVRMbp5CoihbHdAYxh0m7YnJi8fpZqPzFNeMkOpvRLH+04yDCuEUlFGv/83QUHJ
-         5j+VQY6/mRO99C9bpoabxJ5QLJzTvg5Z7L7g/VN6KdWfw6PdPF1Xguq4WnuWG+BFGf95
-         F/XZaJuxo2qNWMMX5sq0huNayozDIJJja81oXrAHah7w0JgjBk1N+grLSgkievDaNBfC
-         94GW6HJ8i0kbvhEkEmfkq6a6QHY7i1IIOSPDfUv6+S/EOJdahJmI9XI5TcrZf5Ajr1cP
-         UfPQTCe1HeRRZAAtbpphd5ylAno3bDiQy7EmrXcsXBwUx08i2Sc6EMrOK/U5DGiDsAK4
-         pZzw==
-X-Gm-Message-State: AO0yUKXjk9UQUJ1eYOsZfeinZjxdFM2gG/5FgAMnXbX+daFpblCvQuRi
-        PXVpiCz5qyC4KVKzUSSDHl39yw==
-X-Google-Smtp-Source: AK7set+Pv0C8P12Xd85/1MPiNULsnUZK5TQAgCpz5ZENyf617uBKO/UEeuVN2jBWAVgvJDmSEwxadg==
-X-Received: by 2002:a17:90a:1959:b0:237:659a:a44d with SMTP id 25-20020a17090a195900b00237659aa44dmr3103998pjh.9.1677585228471;
-        Tue, 28 Feb 2023 03:53:48 -0800 (PST)
+        bh=owO6RMSXMhELaAiCDQfYtj1K3jFcb8cutoYS8UegXjk=;
+        b=OJWizj8MhBzVON4AGvS+fC3+HKxoRMcalBkNGvnTg4O7EKX2f7CuHVIvqvYIzFXYdj
+         mA19I/M3PjcdAZQX4eOqvqezMqb7hMhHdd9MyYhDxOoBJK2auYouIjUJqGboCj27urSP
+         4w8sB28arPGIVG6Vsp0TievpJH62Nk7ZnYamPTINDF+wtJZxhXMMSZvGe2Xo2Fa4QtlD
+         P7nABAtWWrI2liVreYNdixco3fnAkM4QCDQCHFNq/GaIyytvjKOOeETU8AP5ErSoeUFu
+         6VW1mcWvLcsHE0rOsy3cO+MkxEcYHalEGweVW7SNdFVzbtK9GNWotcx9p5mXNAVmHU0d
+         4VGg==
+X-Gm-Message-State: AO0yUKWQ4Tt0pVG7efZt/sSLSVDj1fY3pR/iUMSSIdcj9mWKDgP0+zlq
+        NJgX1GArQDXRCoQH/lNrnUV4eg==
+X-Google-Smtp-Source: AK7set8DtAIgce991bpJ51nCnfZYsOa3okIXdYADpriVE9RxYoxKWUHTjjKquyTj/2m7RtgRDvpzTg==
+X-Received: by 2002:a17:90b:4b4a:b0:22b:fd93:7286 with SMTP id mi10-20020a17090b4b4a00b0022bfd937286mr3107411pjb.4.1677585233710;
+        Tue, 28 Feb 2023 03:53:53 -0800 (PST)
 Received: from leoy-huanghe.lan (n058152048225.netvigator.com. [58.152.48.225])
-        by smtp.gmail.com with ESMTPSA id gk8-20020a17090b118800b002339491ead6sm7922317pjb.5.2023.02.28.03.53.43
+        by smtp.gmail.com with ESMTPSA id gk8-20020a17090b118800b002339491ead6sm7922317pjb.5.2023.02.28.03.53.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:53:48 -0800 (PST)
+        Tue, 28 Feb 2023 03:53:53 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -63,9 +63,9 @@ To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         James Clark <james.clark@arm.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v3 11/14] perf kvm: Support printing attributions for dimensions
-Date:   Tue, 28 Feb 2023 19:51:22 +0800
-Message-Id: <20230228115125.144172-12-leo.yan@linaro.org>
+Subject: [PATCH v3 12/14] perf kvm: Add dimensions for percentages
+Date:   Tue, 28 Feb 2023 19:51:23 +0800
+Message-Id: <20230228115125.144172-13-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230228115125.144172-1-leo.yan@linaro.org>
 References: <20230228115125.144172-1-leo.yan@linaro.org>
@@ -80,187 +80,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds header, entry callback and width for every dimension,
-thus in TUI mode the tool can print items with the defined attributions.
+Add dimensions for count and time percentages, it would useful for user
+to review percentage statistics.
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 Reviewed-by: James Clark <james.clark@arm.com>
 ---
- tools/perf/builtin-kvm.c | 105 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 102 insertions(+), 3 deletions(-)
+ tools/perf/builtin-kvm.c | 98 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 97 insertions(+), 1 deletion(-)
 
 diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-index 741ba65bf092..a56d0983c585 100644
+index a56d0983c585..5b1b2042dfed 100644
 --- a/tools/perf/builtin-kvm.c
 +++ b/tools/perf/builtin-kvm.c
-@@ -83,8 +83,12 @@ struct kvm_hists {
- 
- struct kvm_dimension {
- 	const char *name;
-+	const char *header;
-+	int width;
- 	int64_t (*cmp)(struct perf_hpp_fmt *fmt, struct hist_entry *left,
- 		       struct hist_entry *right);
-+	int (*entry)(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
-+		     struct hist_entry *he);
+@@ -230,10 +230,105 @@ static struct kvm_dimension dim_mean_time = {
+ 	.width		= 14,
  };
  
- struct kvm_fmt {
-@@ -102,9 +106,32 @@ empty_cmp(struct perf_hpp_fmt *fmt __maybe_unused,
- 	return 0;
- }
- 
-+static int fmt_width(struct perf_hpp_fmt *fmt,
-+		     struct perf_hpp *hpp __maybe_unused,
-+		     struct hists *hists __maybe_unused);
++#define PERC_STR(__s, __v)				\
++({							\
++	scnprintf(__s, sizeof(__s), "%.2F%%", __v);	\
++	__s;						\
++})
 +
-+static int ev_name_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
-+			 struct hist_entry *he)
++static double percent(u64 st, u64 tot)
 +{
-+	struct kvm_event *event;
-+	int width = fmt_width(fmt, hpp, he->hists);
-+	char decode[decode_str_len];
-+	struct perf_kvm_stat *perf_kvm;
-+
-+	event = container_of(he, struct kvm_event, he);
-+
-+	perf_kvm = event->perf_kvm;
-+	perf_kvm->events_ops->decode_key(perf_kvm, &event->key, decode);
-+
-+	return scnprintf(hpp->buf, hpp->size, "%*s", width, decode);
++	return tot ? 100. * (double) st / (double) tot : 0;
 +}
 +
- static struct kvm_dimension dim_event = {
-+	.header		= "Event name",
- 	.name		= "name",
- 	.cmp		= empty_cmp,
-+	.entry		= ev_name_entry,
-+	.width		= 40,
- };
- 
- #define EV_METRIC_CMP(metric)						\
-@@ -130,29 +157,77 @@ EV_METRIC_CMP(max)
- EV_METRIC_CMP(min)
- EV_METRIC_CMP(mean)
- 
-+#define EV_METRIC_ENTRY(metric)						\
-+static int ev_entry_##metric(struct perf_hpp_fmt *fmt,			\
-+			     struct perf_hpp *hpp,			\
-+			     struct hist_entry *he)			\
++#define EV_METRIC_PERCENT(metric)					\
++static int ev_percent_##metric(struct hist_entry *he)			\
 +{									\
 +	struct kvm_event *event;					\
-+	int width = fmt_width(fmt, hpp, he->hists);			\
 +	struct perf_kvm_stat *perf_kvm;					\
 +									\
 +	event = container_of(he, struct kvm_event, he);			\
 +	perf_kvm = event->perf_kvm;					\
-+	return scnprintf(hpp->buf, hpp->size, "%*lu", width,		\
-+		get_event_##metric(event, perf_kvm->trace_vcpu));	\
++									\
++	return percent(get_event_##metric(event, perf_kvm->trace_vcpu),	\
++		       perf_kvm->total_##metric);			\
 +}
 +
-+EV_METRIC_ENTRY(time)
-+EV_METRIC_ENTRY(count)
-+EV_METRIC_ENTRY(max)
-+EV_METRIC_ENTRY(min)
++EV_METRIC_PERCENT(time)
++EV_METRIC_PERCENT(count)
 +
- static struct kvm_dimension dim_time = {
-+	.header		= "Time (ns)",
- 	.name		= "time",
- 	.cmp		= ev_cmp_time,
-+	.entry		= ev_entry_time,
-+	.width		= 12,
- };
- 
- static struct kvm_dimension dim_count = {
-+	.header		= "Samples",
- 	.name		= "sample",
- 	.cmp		= ev_cmp_count,
-+	.entry		= ev_entry_count,
-+	.width		= 12,
- };
- 
- static struct kvm_dimension dim_max_time = {
-+	.header		= "Max Time (ns)",
- 	.name		= "max_t",
- 	.cmp		= ev_cmp_max,
-+	.entry		= ev_entry_max,
-+	.width		= 14,
- };
- 
- static struct kvm_dimension dim_min_time = {
-+	.header		= "Min Time (ns)",
- 	.name		= "min_t",
- 	.cmp		= ev_cmp_min,
-+	.entry		= ev_entry_min,
-+	.width		= 14,
- };
- 
-+static int ev_entry_mean(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
-+			 struct hist_entry *he)
++static int ev_entry_time_precent(struct perf_hpp_fmt *fmt,
++				 struct perf_hpp *hpp,
++				 struct hist_entry *he)
 +{
-+	struct kvm_event *event;
 +	int width = fmt_width(fmt, hpp, he->hists);
-+	struct perf_kvm_stat *perf_kvm;
++	double per;
++	char buf[10];
 +
-+	event = container_of(he, struct kvm_event, he);
-+	perf_kvm = event->perf_kvm;
-+	return scnprintf(hpp->buf, hpp->size, "%*lu", width,
-+			 get_event_mean(event, perf_kvm->trace_vcpu));
++	per = ev_percent_time(he);
++	return scnprintf(hpp->buf, hpp->size, "%*s", width, PERC_STR(buf, per));
 +}
 +
- static struct kvm_dimension dim_mean_time = {
-+	.header		= "Mean Time (ns)",
- 	.name		= "mean_t",
- 	.cmp		= ev_cmp_mean,
-+	.entry		= ev_entry_mean,
-+	.width		= 14,
- };
- 
++static int64_t
++ev_cmp_time_precent(struct perf_hpp_fmt *fmt __maybe_unused,
++		    struct hist_entry *left, struct hist_entry *right)
++{
++	double per_left;
++	double per_right;
++
++	per_left  = ev_percent_time(left);
++	per_right = ev_percent_time(right);
++
++	return per_left - per_right;
++}
++
++static struct kvm_dimension dim_time_percent = {
++	.header		= "Time%",
++	.name		= "percent_time",
++	.cmp		= ev_cmp_time_precent,
++	.entry		= ev_entry_time_precent,
++	.width		= 12,
++};
++
++static int ev_entry_count_precent(struct perf_hpp_fmt *fmt,
++				  struct perf_hpp *hpp,
++				  struct hist_entry *he)
++{
++	int width = fmt_width(fmt, hpp, he->hists);
++	double per;
++	char buf[10];
++
++	per = ev_percent_count(he);
++	return scnprintf(hpp->buf, hpp->size, "%*s", width, PERC_STR(buf, per));
++}
++
++static int64_t
++ev_cmp_count_precent(struct perf_hpp_fmt *fmt __maybe_unused,
++		     struct hist_entry *left, struct hist_entry *right)
++{
++	double per_left;
++	double per_right;
++
++	per_left  = ev_percent_count(left);
++	per_right = ev_percent_count(right);
++
++	return per_left - per_right;
++}
++
++static struct kvm_dimension dim_count_percent = {
++	.header		= "Sample%",
++	.name		= "percent_sample",
++	.cmp		= ev_cmp_count_precent,
++	.entry		= ev_entry_count_precent,
++	.width		= 12,
++};
++
  static struct kvm_dimension *dimensions[] = {
-@@ -165,6 +240,30 @@ static struct kvm_dimension *dimensions[] = {
- 	NULL,
- };
+ 	&dim_event,
+ 	&dim_time,
++	&dim_time_percent,
+ 	&dim_count,
++	&dim_count_percent,
+ 	&dim_max_time,
+ 	&dim_min_time,
+ 	&dim_mean_time,
+@@ -406,7 +501,8 @@ static int kvm_hpp_list__parse(struct perf_hpp_list *hpp_list,
  
-+static int fmt_width(struct perf_hpp_fmt *fmt,
-+		     struct perf_hpp *hpp __maybe_unused,
-+		     struct hists *hists __maybe_unused)
-+{
-+	struct kvm_fmt *kvm_fmt;
-+
-+	kvm_fmt = container_of(fmt, struct kvm_fmt, fmt);
-+	return kvm_fmt->dim->width;
-+}
-+
-+static int fmt_header(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
-+		      struct hists *hists, int line __maybe_unused,
-+		      int *span __maybe_unused)
-+{
-+	struct kvm_fmt *kvm_fmt;
-+	struct kvm_dimension *dim;
-+	int width = fmt_width(fmt, hpp, hists);
-+
-+	kvm_fmt = container_of(fmt, struct kvm_fmt, fmt);
-+	dim = kvm_fmt->dim;
-+
-+	return scnprintf(hpp->buf, hpp->size, "%*s", width, dim->header);
-+}
-+
- static bool fmt_equal(struct perf_hpp_fmt *a, struct perf_hpp_fmt *b)
+ static int kvm_hists__init(struct perf_kvm_stat *kvm)
  {
- 	struct kvm_fmt *kvm_fmt_a = container_of(a, struct kvm_fmt, fmt);
-@@ -214,9 +313,9 @@ static struct kvm_fmt *get_format(const char *name)
- 	fmt->cmp	= dim->cmp;
- 	fmt->sort	= dim->cmp;
- 	fmt->color	= NULL;
--	fmt->entry	= NULL;
--	fmt->header	= NULL;
--	fmt->width	= NULL;
-+	fmt->entry	= dim->entry;
-+	fmt->header	= fmt_header;
-+	fmt->width	= fmt_width;
- 	fmt->collapse	= dim->cmp;
- 	fmt->equal	= fmt_equal;
- 	fmt->free	= fmt_free;
+-	const char *output_columns = "name,sample,time,max_t,min_t,mean_t";
++	const char *output_columns = "name,sample,percent_sample,"
++				     "time,percent_time,max_t,min_t,mean_t";
+ 
+ 	__hists__init(&kvm_hists.hists, &kvm_hists.list);
+ 	perf_hpp_list__init(&kvm_hists.list);
 -- 
 2.34.1
 
