@@ -2,346 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E1D6A629B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7E46A6270
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjB1WjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S229997AbjB1WdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjB1WjA (ORCPT
+        with ESMTP id S229580AbjB1WdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:39:00 -0500
-Received: from sonic305-35.consmr.mail.ir2.yahoo.com (sonic305-35.consmr.mail.ir2.yahoo.com [77.238.177.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D407F2D14C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:38:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1677623936; bh=DEPjcIA3533VAWySuEI9s7PPZDzVB5wbr8s5WByqx1U=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=GLkQ1YmZofqOFSU4HHlCBhXXvjQuAOYRnV+HNOEcJudjl5DblCXek1CTsaOUewsYZ42HS6LMkg7oXk726KgzRAqwIOo7wCDWExN/Ys5mojRtdm3HcG1UVlgaNArK+kIJopf+8J/i3YuqSSaziBG3wX7TgcmXjeC0LAcIpvvCfchyBefazGRDSiSvFqnO9QkfLlY3iz5EFtQQAuqzfYf7j2L9oVJcKCr7DRVB1ip6MEnk+NTnr2wH/CWDcE6f60zSy9rzV8abywp+yJTfaMSbtRrz7DBbL76D23oHur01onHeEqbyfB6RPVTXEgKl+kd/dlwhjlMTNB9XHWz0U+f0pA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1677623936; bh=puQJA0gdVym2HfwHj5egYqRerFeCvP4PggIFAAKOIRc=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=UkFbdaxEulnv5TVXl0qmYdrNbmFKncHQZE9Y2d5rpRbc82gA5kckJDBCEnUc4iUDUPXohaH9zAzBzdKlUNuxt8zis9lpmSSfvHISm2GMzylWYz4GQCEpnhKWWOQAwzyszazX1MwlWujGK7EvAnqJKMNFlVOTavQ9mphd/3QgFiOSrVePVGeCdZPw0vCCSzLwiBhKRg21f5kgP+38ztmThaEtGuEpIll2aRxBaDRrdeExPYCBpdkMA2CeruScCtFsS20o4peMNi//Cqv3QY1sfbVwrAKBl92ZYnLXJA16NIpujUnSuEpHRbWzSIEKIF8unZAm0Lix8hOavzGsKv6+5g==
-X-YMail-OSG: rktOehMVM1lApGO.db2VNB2jhLvPQpCZr5joCvujiq8YHDTbdtPtVrV7Nfwcib5
- XvlaAMF5EpLsV__fJEFsX05Yjm4sZW8q0QcBMoLlCKqw4RSdrpsqDIuvSS48MV.xqqPTo2w9WCpu
- IMpEJdxff.NMzLTbLzUBkXUQdeXckzjIcW5N.dMbJS4L7l8oI5WwxQY6UYoBjr7b_yk1GEDGhLEb
- TTf3b5RNxUq8SkAl7vwPMj_jtwDH6hA0oMbmmWjfAr0xtN96lwdGyxjqEQKGgKfU7NZMkofjeGdT
- 00gx.0IojhExt9QpxY7LVTVGHV2Usm5sgVYceQ_dVBOIo2.7QtiuNRfYUsRtRMS5d3ywzSzd9syC
- puXF1SGhLp56ppjYjqZJA2RGXqV9IiOAvk_GOSHc7E8MaVGzdmBCUJ0aJL_NyM9prl5XD8GX_.yK
- ot1TX3IzOqL9SE27jfnkBhlwpI0F2wNWa6JQrIZbJk9UcafcYrO40cL71Ja805k1X2xQ7ByNPJnJ
- 5E7yx3JoS4nigASS2zMbG80QalFvrGHsGS52Kw3t6nJniuGgPizz.9MclQq6oMqd7oZ.RAsSWYWI
- d9qqTnOM.D8W7Op3MrjsOovkMwGrIOKX29D3xZvtxJ3juG_cgkPo6cTkoW.7.ziiIrsdmaFqyWQg
- c3zuOq1G6dDp7SDkJE4GtH7OCxnFr_xK7NfnfrKFk0_KoxW.7tWMPW2cz0rlbqYEgBqgi7ZaiqLd
- O_9dWzRBM_zLNcZKJQ9IQqX7SnxdrohIOaL2D_n9gmjGOlSu_Dqzb_O7y9SyK58EEfY.0uzISY5v
- 5nGzkJg5uX54ZxSxWa2FAewhIpkuC9C4wYbI0e8B9YBanhEdEv6DjA4x9ykzDzZmY0zt_tpvwYYD
- SgWrRRIKyw10yvUMygVNzbM17rjyXmPl63m0csG1qRVIIAycWU4_ZhoFGNGDZOA.4YqKI5Zoj2cB
- 0JZ_SRpCXcukTPvqLJADud0li6nDo34KBXoUlyqHYKscgpb70Br96NBQp228aR8zjf4QbVdxWRsv
- wGROnEEfRksjxoUC7.ceoKYQjf0wAPYg3MoWrVzCEkuJrNdHmpA7hLDt7z_yCE6mUoFrWYEJ1U4p
- sqSNCi2beLBOvqKZshBQZcGli9hrChn4BGcSKIP3WQ4XNH9DN2dfGjiyMbVP7CrAaeye4Yqk8HN6
- Kq8NjoFhwF_yQ63B8vMTYOuCsiQJtCM66CcLuBM.rcSmKqcmjJFNqYvyNP1oisxxMMBzoTdecjAc
- eO4eyu6awpqadT_t4_CrecKNn4OwEpHbBEld5hzHjNERbgGRqqyfrqkM4zDnqwFbpRk0j3z9fJhU
- NmJmh4HoabjMdiFZCNBCY78V52dVlel1arctxg8NT2CTwZ3voggHvvhaaKK3COdZHdIjChMJo8gI
- qQXlNJU7s1ukcFOxGpMj1PvL0SYmQGCD.VJOX_LKmAkGAiNNmOCg.hLczF7RFuhBEiU7Qj8zVbZC
- 3gWlXrEpC.wwdjlczZB77pT.j7EnadOzkrQrL3pGQBujlmZ_VCz_XfDBIPMlV9N_Df0cH.Hvhm3e
- FNCaX9oZLkMguTwooUV2auTk7F.3HVO9rrn5_w1yzQaRZ6oNNY6d8dm2qULsMTcBtFKxRV4p71hT
- YHuhmz_72zRi0JJL1RstxokT1OPZcYG2_x8G9E4xGwB0wtSHux_lQLMl25g76P3CmIHsQu9oPHtp
- Q3oJXj.WW2BOvWHok8eD6PiO5pjfTqa_M_b72IRde49GUAwNaNzVqaHM6qwnZP4V04a.k6h59x.J
- a_gXmWu3g.DJrMfd2UQzEF5fnRdugMobOwXC247Y_KlB2SvcK1Y_b3dMZZ7vBpMTc7Mrw93ZKXa7
- Oj20cX8a4TtO.AZyjzavL0D7A8h5eReq9BhObugJRcV2213OODqL1t8BNUYsFReKeNlfgTe_Qrri
- bCsChdyShy0bDq4_2o7Qr3yk9lS3f3KHbveCQ1SoDht0b66_ncKuCCOkJjuchvHzfuixie3Vz8hf
- iKHX7v20yV3sOM7yCIaGzUjpRs8bPdpFsxEYcccIgztCFkivQyY5VQkDGNtYKKGQM1emXIHC5Ka5
- NOREzSMQnIVEfqfaSgciRTcSGEHKKRxjXEAjQ5y4NeKkm7sQW_AiXtkmxivg7CF6VjFVSt1Ny4rV
- WDQYfUwk.hfquUU9sTx63A3FcdholkECDZ_ziXr8xJaI6kQDqlkRU4iDAII97YYfyAdqoOs_9tcw
- KG98KAUUbJTk8IrkaOngNUTrccw_K4F5xf6knJ7GnQ7LVMqmfHvO80_2Y5POCWoHRl_Qne39Idd0
- yb5AFpkZMvk1W3YrnlCL_S1bZ43v7E33rbWV47Py91sREpHTs7V7H_JWfRB3QhO4LAkKAEj4psct
- uYppjtlOCIktRaprFGIxociotrdDeNLCv79WEAfg8I8J0mk8-
-X-Sonic-MF: <jahau@rocketmail.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ir2.yahoo.com with HTTP; Tue, 28 Feb 2023 22:38:56 +0000
-Received: by hermes--production-ir2-65c64dfd66-svnc4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1052c26ec2388683ab738a7f87fce466;
-          Tue, 28 Feb 2023 22:38:52 +0000 (UTC)
-From:   Jakob Hauser <jahau@rocketmail.com>
-To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Jakob Hauser <jahau@rocketmail.com>
-Subject: [PATCH 10/10] dt-bindings: Add documentation for rt5033 mfd, regulator and charger
-Date:   Tue, 28 Feb 2023 23:32:27 +0100
-Message-Id: <a698f524106e0eb7db5cbd7e73e77ecd5ac8ad7f.1677620677.git.jahau@rocketmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1677620677.git.jahau@rocketmail.com>
-References: <cover.1677620677.git.jahau@rocketmail.com>
+        Tue, 28 Feb 2023 17:33:19 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD971C311
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:33:17 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id s8so7266508ilv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:33:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KDZFHOktHxS/XDKrIMefDxSktOzxgIy4sJlU+F/fZDA=;
+        b=XcdYgB1yBTrJ0aYQ0dsS8hFi/aaKG4F8Ds0GxVsXWTTIN6NWfXAZ4D3+9snIiGmDpk
+         qcv/TZW88idkK+8CkUbjAmZ4nhvjrvug00Qh4Env3wOG1Er5byNPRO3d2+QnoNdsByVU
+         I+xpXzBw+p5vYHbknDO3bqjr11W4h+GV5UIT0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KDZFHOktHxS/XDKrIMefDxSktOzxgIy4sJlU+F/fZDA=;
+        b=wcMXstADBzjsieFZet5j6uvsV8w7EgAcLKjocUkOuAee5jvt0S1BApcZa8TpJWolzV
+         pvBBCssaUsZO4OYeqppT5Z68tsxPoxFvJO+mtHJfvsFh8cP8jR/LCbhzoI1jcmDZsELG
+         HeBmfTuOjhIFqs2Hg2SydtXjuRDHF80aJRKArxGFdmkvAWpZoecW8y2G3k/Gd8OLIJam
+         p0Kr2TQBCCNxW2Gl38R1A3AKS/UVV5MHtmZA4LE7LdfK8FPIVB7jQcK1g5aj5mIXPwZN
+         OnOgC7w+YE5urX1VnV4JApGRwNxa0jcaSEjXIeps3e5bTOR1Ch+bJDzNcjYexy+Q7792
+         X20A==
+X-Gm-Message-State: AO0yUKUJkOJPNBKhQDGserqwcDb9Klt4ApQbgh+SMtbbP1sIcDcLxM15
+        OPJNieI9+8ZOkhdxmscI/JF724vO9hjjwpFi
+X-Google-Smtp-Source: AK7set9dmP7HxzH5Veo4QRsVjeHHeGiZyobqf8+uBrxS+/BdyOydKGfYwDgLcehF/97JWZlhIA0igQ==
+X-Received: by 2002:a05:6e02:1a61:b0:310:c6f7:c1e9 with SMTP id w1-20020a056e021a6100b00310c6f7c1e9mr4028375ilv.5.1677623596543;
+        Tue, 28 Feb 2023 14:33:16 -0800 (PST)
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com. [209.85.166.50])
+        by smtp.gmail.com with ESMTPSA id 14-20020a056e020cae00b00316dc3afe57sm2979183ilg.86.2023.02.28.14.33.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 14:33:14 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id v10so4664237iox.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:33:14 -0800 (PST)
+X-Received: by 2002:a05:6602:151:b0:745:c41a:8f0f with SMTP id
+ v17-20020a056602015100b00745c41a8f0fmr1934398iot.2.1677623593416; Tue, 28 Feb
+ 2023 14:33:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230224070506.4157738-1-saravanak@google.com> <20230224070506.4157738-2-saravanak@google.com>
+In-Reply-To: <20230224070506.4157738-2-saravanak@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 28 Feb 2023 14:33:01 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XQnLpD1P8sRBcizTMjCQyHTjaiNvjcPdgyZc5JCzvOtw@mail.gmail.com>
+Message-ID: <CAD=FV=XQnLpD1P8sRBcizTMjCQyHTjaiNvjcPdgyZc5JCzvOtw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] driver core: Add fw_devlink.sync_state command
+ line param
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree binding documentation for rt5033 multifunction device, voltage
-regulator and battery charger.
+Hi,
 
-Cc: Beomho Seo <beomho.seo@samsung.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
----
- .../bindings/mfd/richtek,rt5033.yaml          | 102 ++++++++++++++++++
- .../power/supply/richtek,rt5033-charger.yaml  |  76 +++++++++++++
- .../regulator/richtek,rt5033-regulator.yaml   |  45 ++++++++
- 3 files changed, 223 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml
+On Thu, Feb 23, 2023 at 11:05=E2=80=AFPM Saravana Kannan <saravanak@google.=
+com> wrote:
+>
+> When all devices that could probe have finished probing, this parameter
+> controls what to do with devices that haven't yet received their
+> sync_state() calls.
+>
+> fw_devlink.sync_state=3Dstrict is the default and the driver core will
+> continue waiting on consumers to probe successfully in the future.
 
-diff --git a/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-new file mode 100644
-index 000000000000..f1a58694c81e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-@@ -0,0 +1,102 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/richtek,rt5033.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT5033 Power Management Integrated Circuit
-+
-+maintainers:
-+  - Jakob Hauser <jahau@rocketmail.com>
-+
-+description: |
-+  RT5033 is a multifunction device which includes battery charger, fuel gauge,
-+  flash LED current source, LDO and synchronous Buck converter for portable
-+  applications. It is interfaced to host controller using I2C interface. The
-+  battery fuel gauge uses a separate I2C bus.
-+
-+properties:
-+  compatible:
-+    const: richtek,rt5033
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  regulators:
-+    type: object
-+    $ref: /schemas/regulator/richtek,rt5033-regulator.yaml#
-+
-+  charger:
-+    type: object
-+    $ref: /schemas/power/supply/richtek,rt5033-charger.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c@0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@34 {
-+            compatible = "richtek,rt5033";
-+            reg = <0x34>;
-+
-+            interrupt-parent = <&msmgpio>;
-+            interrupts = <62 IRQ_TYPE_EDGE_FALLING>;
-+
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pmic_int_default>;
-+
-+            regulators {
-+                safe_ldo_reg: SAFE_LDO {
-+                    regulator-name = "SAFE_LDO";
-+                    regulator-min-microvolt = <4900000>;
-+                    regulator-max-microvolt = <4900000>;
-+                    regulator-always-on;
-+                };
-+                ldo_reg: LDO {
-+                    regulator-name = "LDO";
-+                    regulator-min-microvolt = <2800000>;
-+                    regulator-max-microvolt = <2800000>;
-+                };
-+                buck_reg: BUCK {
-+                    regulator-name = "BUCK";
-+                    regulator-min-microvolt = <1200000>;
-+                    regulator-max-microvolt = <1200000>;
-+                };
-+            };
-+
-+            charger {
-+                compatible = "richtek,rt5033-charger";
-+                richtek,pre-uamp = <450000>;
-+                richtek,fast-uamp = <1000000>;
-+                richtek,eoc-uamp = <150000>;
-+                richtek,pre-threshold-uvolt = <3500000>;
-+                richtek,const-uvolt = <4350000>;
-+                extcon = <&muic>;
-+            };
-+        };
-+    };
-+
-+    i2c@1 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        battery@35 {
-+            compatible = "richtek,rt5033-battery";
-+            reg = <0x35>;
-+            interrupt-parent = <&msmgpio>;
-+            interrupts = <121 IRQ_TYPE_EDGE_FALLING>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-new file mode 100644
-index 000000000000..996c2932927d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/richtek,rt5033-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT5033 PIMC Battery Charger
-+
-+maintainers:
-+  - Jakob Hauser <jahau@rocketmail.com>
-+
-+description: |
-+  The battery charger of the multifunction device RT5033 has to be instantiated
-+  under sub-node named "charger" using the following format.
-+
-+properties:
-+  compatible:
-+    const: richtek,rt5033-charger
-+
-+  richtek,pre-uamp:
-+    description: |
-+      Current of pre-charge mode. The pre-charge current levels are 350 mA to
-+      650 mA programmed by I2C per 100 mA.
-+    maxItems: 1
-+
-+  richtek,fast-uamp:
-+    description: |
-+      Current of fast-charge mode. The fast-charge current levels are 700 mA
-+      to 2000 mA programmed by I2C per 100 mA.
-+    maxItems: 1
-+
-+  richtek,eoc-uamp:
-+    description: |
-+      This property is end of charge current. Its level ranges from 150 mA to
-+      600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and 600 mA
-+      in 100 mA steps.
-+    maxItems: 1
-+
-+  richtek,pre-threshold-uvolt:
-+    description: |
-+      Voltage of pre-charge mode. If the battery voltage is below the pre-charge
-+      threshold voltage, the charger is in pre-charge mode with pre-charge current.
-+      Its levels are 2.3 V to 3.8 V programmed by I2C per 0.1 V.
-+    maxItems: 1
-+
-+  richtek,const-uvolt:
-+    description: |
-+      Battery regulation voltage of constant voltage mode. This voltage levels from
-+      3.65 V to 4.4 V by I2C per 0.025 V.
-+    maxItems: 1
-+
-+  extcon:
-+    description: |
-+      Phandle to the extcon device.
-+    maxItems: 1
-+
-+required:
-+  - richtek,pre-uamp
-+  - richtek,fast-uamp
-+  - richtek,eoc-uamp
-+  - richtek,pre-threshold-uvolt
-+  - richtek,const-uvolt
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    charger {
-+        compatible = "richtek,rt5033-charger";
-+        richtek,pre-uamp = <450000>;
-+        richtek,fast-uamp = <1000000>;
-+        richtek,eoc-uamp = <150000>;
-+        richtek,pre-threshold-uvolt = <3500000>;
-+        richtek,const-uvolt = <4350000>;
-+        extcon = <&muic>;
-+    };
-diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml
-new file mode 100644
-index 000000000000..61b074488db4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml
-@@ -0,0 +1,45 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/richtek,rt5033-regulator.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT5033 PIMC Voltage Regulator
-+
-+maintainers:
-+  - Jakob Hauser <jahau@rocketmail.com>
-+
-+description: |
-+  The regulators of RT5033 have to be instantiated under a sub-node named
-+  "regulators". For SAFE_LDO voltage there is only one value of 4.9 V. LDO
-+  voltage ranges from 1.2 V to 3.0 V in 0.1 V steps. BUCK voltage ranges from
-+  1.0 V to 3.0 V in 0.1 V steps.
-+
-+patternProperties:
-+  "^(SAFE_LDO|LDO|BUCK)$":
-+    type: object
-+    $ref: /schemas/regulator/regulator.yaml#
-+    unevaluatedProperties: false
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    regulators {
-+        safe_ldo_reg: SAFE_LDO {
-+            regulator-name = "SAFE_LDO";
-+            regulator-min-microvolt = <4900000>;
-+            regulator-max-microvolt = <4900000>;
-+            regulator-always-on;
-+        };
-+        ldo_reg: LDO {
-+            regulator-name = "LDO";
-+            regulator-min-microvolt = <2800000>;
-+            regulator-max-microvolt = <2800000>;
-+        };
-+        buck_reg: BUCK {
-+            regulator-name = "BUCK";
-+            regulator-min-microvolt = <1200000>;
-+            regulator-max-microvolt = <1200000>;
-+        };
-+     };
--- 
-2.39.1
+This description is misleading / borderline wrong. You say that when
+"sync_state=3Dstrict" that you'll wait on consumers to probe
+successfully in the future. As talked about below, I think that when
+the pre-existing "deferred_probe_timeout" (which you're tying into)
+expires, it's unlikely that devices will probe successfully in the
+future. Sure, it's possible, but in general once the
+"deferred_probe_timeout" expires then the system is done waiting for
+new devices to show up. While it's still _possible_ to add new
+devices, you need to take care to deal with the fact that some
+important devices might have already given up and also that you're
+adding these new devices in strict dependency order...
 
+IMO better would be to say something like when sync_state=3Dstrict that
+you'll just leave resources in a high power state if not all devices
+have shown up and the system thinks probing is done.
+
+
+> This
+> is the default behavior since calling sync_state() when all the
+> consumers haven't probed could make some systems unusable/unstable.
+>
+> fw_devlink.sync_state=3Dtimeout will cause the driver core to give up
+> waiting on consumers and call sync_state() on any devices that haven't
+> yet received their sync_state() calls. This option is provided for
+> systems that won't become unusable/unstable as they might be able to
+> save power (depends on state of hardware before kernel starts) if all
+> devices get their sync_state().
+
+While I don't object to this being a kernel command line flag, the
+default should also be a Kconfig option. The kernel command line is
+not a great place for general configuration. As we jam too much stuff
+in the kernel command line it gets unwieldy quickly. IMO:
+
+* Kconfig: the right place for stuff for config options that a person
+building the kernel might want to tweak.
+
+* Kernel command line: the right place for a user of a pre-built
+kernel to tweak; also (sometimes) the right place for the bootloader
+to pass info to the kernel; also a good place for debug options that a
+kernel engineer might want to tweak w/out rebuilding the kernel.
+
+In this case it makes sense for the person building the kernel to
+choose a default that makes sense for the hardware that their kernel
+is targetting. It can also make sense for a user of a pre-built kernel
+to tweak this if their hardware isn't working correctly. Thus it makes
+sense for Kconfig to choose the default and the kernel command line to
+override.
+
+
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         | 12 ++++
+>  drivers/base/base.h                           |  1 +
+>  drivers/base/core.c                           | 58 +++++++++++++++++++
+>  drivers/base/dd.c                             |  6 ++
+>  4 files changed, 77 insertions(+)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+> index 6cfa6e3996cf..f0bf2f40af64 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1594,6 +1594,18 @@
+>                         dependencies. This only applies for fw_devlink=3D=
+on|rpm.
+>                         Format: <bool>
+>
+> +       fw_devlink.sync_state =3D
+
+Is there a reason this is nested under "fw_devlink"? The sysfs
+attribute "sync_state" that you modify in patch #2 doesn't reference
+"fw_devlink" at all.
+
+
+> +                       [KNL] When all devices that could probe have fini=
+shed
+> +                       probing, this parameter controls what to do with
+> +                       devices that haven't yet received their sync_stat=
+e()
+> +                       calls.
+> +                       Format: { strict | timeout }
+> +                       strict -- Default. Continue waiting on consumers =
+to
+> +                               probe successfully.
+> +                       timeout -- Give up waiting on consumers and call
+> +                               sync_state() on any devices that haven't =
+yet
+> +                               received their sync_state() calls.
+
+Some description needs to be included about how long the timeout is.
+Specifically, tie it into the "deferred_probe_timeout" feature since
+that's what you're using.
+
+
+> +
+>         gamecon.map[2|3]=3D
+>                         [HW,JOY] Multisystem joystick and NES/SNES/PSX pa=
+d
+>                         support via parallel port (up to 5 devices per po=
+rt)
+> diff --git a/drivers/base/base.h b/drivers/base/base.h
+> index 726a12a244c0..6fcd71803d35 100644
+> --- a/drivers/base/base.h
+> +++ b/drivers/base/base.h
+> @@ -209,6 +209,7 @@ extern void device_links_no_driver(struct device *dev=
+);
+>  extern bool device_links_busy(struct device *dev);
+>  extern void device_links_unbind_consumers(struct device *dev);
+>  extern void fw_devlink_drivers_done(void);
+> +extern void fw_devlink_probing_done(void);
+>
+>  /* device pm support */
+>  void device_pm_move_to_tail(struct device *dev);
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index f9297c68214a..929ec218f180 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -1727,6 +1727,26 @@ static int __init fw_devlink_strict_setup(char *ar=
+g)
+>  }
+>  early_param("fw_devlink.strict", fw_devlink_strict_setup);
+>
+> +#define FW_DEVLINK_SYNC_STATE_STRICT   0
+> +#define FW_DEVLINK_SYNC_STATE_TIMEOUT  1
+
+I don't care tons, but I feel like this should be an enum, or a bool.
+
+
+> +
+> +static int fw_devlink_sync_state;
+> +static int __init fw_devlink_sync_state_setup(char *arg)
+> +{
+> +       if (!arg)
+> +               return -EINVAL;
+> +
+> +       if (strcmp(arg, "strict") =3D=3D 0) {
+> +               fw_devlink_sync_state =3D FW_DEVLINK_SYNC_STATE_STRICT;
+> +               return 0;
+> +       } else if (strcmp(arg, "timeout") =3D=3D 0) {
+> +               fw_devlink_sync_state =3D FW_DEVLINK_SYNC_STATE_TIMEOUT;
+> +               return 0;
+> +       }
+> +       return -EINVAL;
+> +}
+> +early_param("fw_devlink.sync_state", fw_devlink_sync_state_setup);
+> +
+>  static inline u32 fw_devlink_get_flags(u8 fwlink_flags)
+>  {
+>         if (fwlink_flags & FWLINK_FLAG_CYCLE)
+> @@ -1797,6 +1817,44 @@ void fw_devlink_drivers_done(void)
+>         device_links_write_unlock();
+>  }
+>
+> +static int fw_devlink_dev_sync_state(struct device *dev, void *data)
+> +{
+> +       struct device_link *link =3D to_devlink(dev);
+> +       struct device *sup =3D link->supplier;
+> +
+> +       if (!(link->flags & DL_FLAG_MANAGED) ||
+> +           link->status =3D=3D DL_STATE_ACTIVE || sup->state_synced ||
+> +           !dev_has_sync_state(sup))
+> +               return 0;
+> +
+> +       if (fw_devlink_sync_state =3D=3D FW_DEVLINK_SYNC_STATE_STRICT) {
+> +               dev_warn(sup, "sync_state() pending due to %s\n",
+> +                        dev_name(link->consumer));
+
+This warning message is (IMO) an important feature of your patch. IMO
+it deserves a mention in the commit message and even if (for some
+reason) we decide we don't like the concept of forcing sync_state
+after a timeout then we should still find a way to get this warning
+message printed out. Maybe promote it to its own patch?
+
+Specifically, I think this warning message gets printed out after
+we've given up waiting for devices to show up. At this point
+-EPROBE_DEFER becomes an error that we won't retry. That means that we
+expect that sync state will _never_ be called in the future and that
+resources will be left enabled / in a higher power state than needed.
+
+I would perhaps also make it sound a little scarier since, IMO, this
+is a problem that really shouldn't be "shipped" if this is an embedded
+kernel. Maybe something like:
+
+  sync_state pending (%s); resources left in high power state
+
+
+> +               return 0;
+> +       }
+> +
+> +       if (!list_empty(&sup->links.defer_sync))
+> +               return 0;
+> +
+> +       dev_warn(sup, "Timed out. Calling sync_state()\n");
+
+nit: since you aren't directly calling it after this print (you're
+adding it to the queue), maybe change to "Forcing sync_state()".
