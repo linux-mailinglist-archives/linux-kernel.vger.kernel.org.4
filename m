@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868426A570B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B149C6A570E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjB1KsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        id S231179AbjB1KsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjB1Krx (ORCPT
+        with ESMTP id S230308AbjB1Kry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:47:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C49F2108;
-        Tue, 28 Feb 2023 02:47:52 -0800 (PST)
+        Tue, 28 Feb 2023 05:47:54 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3435830EE;
+        Tue, 28 Feb 2023 02:47:53 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E106E6602FDA;
-        Tue, 28 Feb 2023 10:47:50 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 87EFD6602FDB;
+        Tue, 28 Feb 2023 10:47:51 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677581271;
-        bh=lArSKCx17mh1O30bNJ4tPf+I/p5uXQpXGMq90jh0j/I=;
+        s=mail; t=1677581272;
+        bh=iTiXsbcvL98tLYBNMasBh9C/GsvGSy9IVHh+FRRt/uQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OWM8GNat2cxz2dHig+YugKoL+OwAddx+1YznjJbNxnFhTFXspLxH6Dy8FDq+jOA+K
-         xtgtptCoLnOc3iLfGHxYuTQEBIbgLRsBCg0+QxL9KmQ8NPZq47vcKMNz8glpon+/bj
-         dKalxWeJIqHFmg/dtfgl3NY1gYcxP4VpAgFZAwvgCykLjxSdelXoqZE0QpZdJZnbX/
-         YIPUJqXJYiCZLPPYoXgJO0/4mGr4CIURa8oX6q0Ar9ImBiy5AlMxFLsMe4RvVH1OiT
-         38mD8GR5LzccWvMr9szI6SNtknO51dwE5D/Qn1HmViPM9snCYMWgOxkY6NR2K9RSIm
-         WwwWJotS+u4+Q==
+        b=JUS5j3F6XoHW0m9VpkYAIFNOvfhSr5WYYwQlBODNQmGx6LU3E7Gu8H1TB92gy8Xjd
+         Kq8eF5nFyJbUGP+bKRFb4ly03VMEG7gXr88VMTxkAgeMycW30vbYKZeTxY5GOHnUkY
+         9uLnnuXfvwbnQ9QdnH/A0ESKNlKVZOe43ZVPbkcI/xQchKJW3z/A4mLOF9n08ljlwh
+         xYB3Q7tWUGWaeFC7Sqa9wJ9iQboVT6OMANFbFI+qau7j/iTk1UBInJP8FvXB5wrR86
+         JoMTMJhx3jbt5f6V/SLnOmfLmCcAxnU06nODrQa0PQl5k9UZgEKCYu/MZCpf6sHIc8
+         p8qn5ynxr+8Hg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -40,9 +40,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v3 03/18] arm64: dts: mediatek: mt8183: Remove second opp-microvolt entries from gpu table
-Date:   Tue, 28 Feb 2023 11:47:26 +0100
-Message-Id: <20230228104741.717819-4-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 04/18] arm64: dts: mt8183-pumpkin: Couple VGPU and VSRAM_GPU regulators
+Date:   Tue, 28 Feb 2023 11:47:27 +0100
+Message-Id: <20230228104741.717819-5-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com>
 References: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com>
@@ -57,119 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This was done to keep a strict relation between VSRAM and VGPU, but
-it never worked: now we're doing it transparently with the new
-mediatek-regulator-coupler driver.
+Add coupling for these regulators, as they have a strict voltage output
+relation to satisfy in order to ensure GPU stable operation.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 32 ++++++++++++------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 3d1d7870a5f1..e01b96adef02 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -563,82 +563,82 @@ gpu_opp_table: opp-table-0 {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+index a1d01639df30..c228f04d086b 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+@@ -71,7 +71,6 @@ &auxadc {
  
- 		opp-300000000 {
- 			opp-hz = /bits/ 64 <300000000>;
--			opp-microvolt = <625000>, <850000>;
-+			opp-microvolt = <625000>;
- 		};
+ &gpu {
+ 	mali-supply = <&mt6358_vgpu_reg>;
+-	sram-supply = <&mt6358_vsram_gpu_reg>;
+ };
  
- 		opp-320000000 {
- 			opp-hz = /bits/ 64 <320000000>;
--			opp-microvolt = <631250>, <850000>;
-+			opp-microvolt = <631250>;
- 		};
+ &i2c0 {
+@@ -176,6 +175,16 @@ &mmc1 {
+ 	non-removable;
+ };
  
- 		opp-340000000 {
- 			opp-hz = /bits/ 64 <340000000>;
--			opp-microvolt = <637500>, <850000>;
-+			opp-microvolt = <637500>;
- 		};
- 
- 		opp-360000000 {
- 			opp-hz = /bits/ 64 <360000000>;
--			opp-microvolt = <643750>, <850000>;
-+			opp-microvolt = <643750>;
- 		};
- 
- 		opp-380000000 {
- 			opp-hz = /bits/ 64 <380000000>;
--			opp-microvolt = <650000>, <850000>;
-+			opp-microvolt = <650000>;
- 		};
- 
- 		opp-400000000 {
- 			opp-hz = /bits/ 64 <400000000>;
--			opp-microvolt = <656250>, <850000>;
-+			opp-microvolt = <656250>;
- 		};
- 
- 		opp-420000000 {
- 			opp-hz = /bits/ 64 <420000000>;
--			opp-microvolt = <662500>, <850000>;
-+			opp-microvolt = <662500>;
- 		};
- 
- 		opp-460000000 {
- 			opp-hz = /bits/ 64 <460000000>;
--			opp-microvolt = <675000>, <850000>;
-+			opp-microvolt = <675000>;
- 		};
- 
- 		opp-500000000 {
- 			opp-hz = /bits/ 64 <500000000>;
--			opp-microvolt = <687500>, <850000>;
-+			opp-microvolt = <687500>;
- 		};
- 
- 		opp-540000000 {
- 			opp-hz = /bits/ 64 <540000000>;
--			opp-microvolt = <700000>, <850000>;
-+			opp-microvolt = <700000>;
- 		};
- 
- 		opp-580000000 {
- 			opp-hz = /bits/ 64 <580000000>;
--			opp-microvolt = <712500>, <850000>;
-+			opp-microvolt = <712500>;
- 		};
- 
- 		opp-620000000 {
- 			opp-hz = /bits/ 64 <620000000>;
--			opp-microvolt = <725000>, <850000>;
-+			opp-microvolt = <725000>;
- 		};
- 
- 		opp-653000000 {
- 			opp-hz = /bits/ 64 <653000000>;
--			opp-microvolt = <743750>, <850000>;
-+			opp-microvolt = <743750>;
- 		};
- 
- 		opp-698000000 {
- 			opp-hz = /bits/ 64 <698000000>;
--			opp-microvolt = <768750>, <868750>;
-+			opp-microvolt = <768750>;
- 		};
- 
- 		opp-743000000 {
- 			opp-hz = /bits/ 64 <743000000>;
--			opp-microvolt = <793750>, <893750>;
-+			opp-microvolt = <793750>;
- 		};
- 
- 		opp-800000000 {
- 			opp-hz = /bits/ 64 <800000000>;
--			opp-microvolt = <825000>, <925000>;
-+			opp-microvolt = <825000>;
- 		};
- 	};
- 
++&mt6358_vgpu_reg {
++	regulator-coupled-with = <&mt6358_vsram_gpu_reg>;
++	regulator-coupled-max-spread = <100000>;
++};
++
++&mt6358_vsram_gpu_reg {
++	regulator-coupled-with = <&mt6358_vgpu_reg>;
++	regulator-coupled-max-spread = <100000>;
++};
++
+ &pio {
+ 	i2c_pins_0: i2c0 {
+ 		pins_i2c{
 -- 
 2.39.2
 
