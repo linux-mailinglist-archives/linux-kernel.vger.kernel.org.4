@@ -2,123 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310596A5FFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EF46A5FFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjB1TwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 14:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S230036AbjB1TxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 14:53:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjB1TwJ (ORCPT
+        with ESMTP id S229509AbjB1TxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:52:09 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EBE32E71
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:51:57 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id o15so42297399edr.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:51:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677613915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CI4tO9SBnVHbpP1UFj/aIsZLnQqSb0KukHtZDEVF+9Q=;
-        b=EGqXWGb6FO9oqjBg/RjdN/86icRC1mPJ3oftK9FFQmtW1fgTuj/zmUleWUKUiXp25b
-         c6AlQmcV0atsC/y67K5zu2wXxvzhbGCaOD7syFHQ9VXJzRYz6NH2pn9up0dOx+dWjEbu
-         VnxtlH/hlKeQ5BYQrPpt5FLATZFI06UDFf424=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677613915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CI4tO9SBnVHbpP1UFj/aIsZLnQqSb0KukHtZDEVF+9Q=;
-        b=B4m+mOPPU63xvAtPkrRNTUOwW+7ifEX8vUofAHW9eDuEaL1JJwzvlv9C4ul2JtZZ0f
-         +R+oZ7Wo/0XzEw43RDGQnkM+GwMS/pIYkeoXBgGHxBeLsMGUcCtAvP0cPPscNaI/8+sz
-         JbkwuTJ2ROXc21JD6rAXbKPGGR17CJUyd5mXvjHZhC+TllDpCN19kIPXEArJtNQrSiRd
-         wBDRT/L4TtTPmJNaLCwVUzphrRItcrEb1HTJV4V9NsfHLP0vYtVeEE1bFvQF/NgPJhaw
-         ugL7SILWVVsMhNuW9XtpNZc7m/gSOWH8P3fqfoZeNzP03hDYMaqr/xVB1OTFZGyrrf3g
-         gtLQ==
-X-Gm-Message-State: AO0yUKUpYc9BKL/wOU6rOJ6V7CeByMW3B5tudzmj2A7OI/8urfA9VM4Z
-        Gt2FSjoKY9744rIEttaCqlJ4NEklDWK6kMEjJ3Q=
-X-Google-Smtp-Source: AK7set+S+LgTL7SUtcQ74x6ZIYP0X6uCvTY5a7Nvgj/6gD9xxsv3gdQuY5V7khDmf68HwWuLloc2lw==
-X-Received: by 2002:a05:6402:488:b0:4ac:b760:f07a with SMTP id k8-20020a056402048800b004acb760f07amr5185726edv.19.1677613915582;
-        Tue, 28 Feb 2023 11:51:55 -0800 (PST)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id f23-20020a170906085700b008e51a1fd7bfsm4905812ejd.172.2023.02.28.11.51.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 11:51:54 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id da10so44885222edb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:51:54 -0800 (PST)
-X-Received: by 2002:a17:906:c08c:b0:8f1:4cc5:f14c with SMTP id
- f12-20020a170906c08c00b008f14cc5f14cmr1947231ejz.0.1677613914258; Tue, 28 Feb
- 2023 11:51:54 -0800 (PST)
+        Tue, 28 Feb 2023 14:53:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0018FF3B;
+        Tue, 28 Feb 2023 11:53:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83479B80DE7;
+        Tue, 28 Feb 2023 19:53:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49711C433D2;
+        Tue, 28 Feb 2023 19:53:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677613994;
+        bh=Y2iCQOI+QIptI1cAQ9K+Q84gdG4gXITGnMKH6Zu3i2w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JadZaEPK9VGtVAUCHTICx1dxwwELfHxbmZjBNCAeSO6DplqIkZ4ZgHp1gUrjKYt5k
+         X7GtnlE6c5EFA0kOyYMVREFolk/RkPyZl2Za0Fsk2Gen8Kxqb/xUQ7YtaHh2csJJWO
+         mga4bkPDH2pcnwYhm1vhiJlmIpYc9aegsYAuSesP1jRHbVQ0c63DCxKtujtiBAperG
+         LGRG5kH/QG3gH3pbxitetkFdCqPtf8zxmoZ3GJ6n8V3e1B2CZZ2UWMwE+9nmWB6V6s
+         Wovk/gGzKeboJVoZWbuij8aFnA+Tbj3ixeCl//s7RJBqymzNfOGh0jz6hyR70UkC68
+         SZdT8sAV08lSw==
+Date:   Tue, 28 Feb 2023 19:53:10 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 13/20] reset: remove MODULE_LICENSE in non-modules
+Message-ID: <Y/5bpr/93hJ3yYUU@spud>
+References: <20230228130215.289081-1-nick.alcock@oracle.com>
+ <20230228130215.289081-14-nick.alcock@oracle.com>
+ <Y/5TU/gxAxfVOedg@spud>
+ <87edq9h9q8.fsf@esperi.org.uk>
 MIME-Version: 1.0
-References: <20230125155557.37816-1-mjguzik@gmail.com> <CAHk-=wjz8O4XX=Mg6cv5Rq9w9877Xd4DCz5jk0onVKLnzzaPTA@mail.gmail.com>
- <97465c08-7b6e-7fd7-488d-0f677ac22f81@schaufler-ca.com> <CAGudoHEV_aNymUq6v9Trn_ZRU45TL12AVXqQeV2kA90FuawxiQ@mail.gmail.com>
- <CAHk-=wgCMTUV=5aE-V8WjxuCME8LTBh-8k5XTPKz6oRXJ_sgTg@mail.gmail.com>
-In-Reply-To: <CAHk-=wgCMTUV=5aE-V8WjxuCME8LTBh-8k5XTPKz6oRXJ_sgTg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 28 Feb 2023 11:51:37 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjrQ_+PCrdNRWKsmf=SZP45_N7r51NbbB55DUdGb5f76A@mail.gmail.com>
-Message-ID: <CAHk-=wjrQ_+PCrdNRWKsmf=SZP45_N7r51NbbB55DUdGb5f76A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] capability: add cap_isidentical
-To:     Mateusz Guzik <mjguzik@gmail.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Serge Hallyn <serge@hallyn.com>, viro@zeniv.linux.org.uk,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Kp+/tWtv3tDQlrmv"
+Content-Disposition: inline
+In-Reply-To: <87edq9h9q8.fsf@esperi.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 11:39=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> This actually looks sane enough that I might even boot it. Call me crazy.
 
-Oh, and while I haven't actually booted it or tested it in any way, I
-did verify that it changes
+--Kp+/tWtv3tDQlrmv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--       movq    48(%rbx), %rax
--       movq    56(%rbx), %rcx
--       cmpl    %eax, %ecx
--       jne     .LBB58_13
--       shrq    $32, %rax
--       shrq    $32, %rcx
--       cmpl    %eax, %ecx
--       jne     .LBB58_13
+On Tue, Feb 28, 2023 at 07:26:55PM +0000, Nick Alcock wrote:
+> [dropped non-lists to defend innocent ears from my flaming pedantry]
+>=20
+> On 28 Feb 2023, Conor Dooley stated:
+>=20
+> > On Tue, Feb 28, 2023 at 01:02:08PM +0000, Nick Alcock wrote:
+> >> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> >> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> >> are used to identify modules. As a consequence, uses of the macro
+> >> in non-modules will cause modprobe to misidentify their containing
+> >> object file as a module when it is not (false positives), and modprobe
+> >> might succeed rather than failing with a suitable error message.
+> >>=20
+> >> So remove it in the files in this commit, none of which can be built as
+> >> modules.
+> >>=20
+> >> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> >> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> >> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> >> Cc: linux-modules@vger.kernel.org
+> >> Cc: linux-kernel@vger.kernel.org
+> >> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> >> Cc: Conor Dooley <conor.dooley@microchip.com>
+> >> Cc: Daire McNamara <daire.mcnamara@microchip.com>
+> >> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> >> Cc: linux-riscv@lists.infradead.org
+> >> ---
+> >>  drivers/reset/reset-mpfs.c | 1 -
+> >
+> > I assume your script just got confused here w/ $subject, since there's
+> > only a change for this specific file.
+>=20
+> This file has had no commits since you wrote it last year, and the
+> subject for that commit was
+>=20
+>     reset: add polarfire soc reset support
+>=20
+> so, er, yes, the script used 'reset:' as a prefix, mimicking the
+> existing commit. I'm not sure what else it could have done.
 
-into
+Oh ye, silly me - I didn't think of that. I guess that's a common
+pattern for commits adding a driver, as the "mpfs:" doesn't really make
+sense until the driver is in-tree.
+I'm not too sure what you could have done either, but I'm not
+complaining, or requesting that something be changed here.
 
-+       movq    56(%rbx), %rax
-+       cmpq    48(%rbx), %rax
-+       jne     .LBB58_12
+> (Regarding the rest of the subject line, I suppose I could have arranged
+> to detect single-file commits and turned the subject into 'in this
+> non-module'? But there comes a time when even I think that maybe I might
+> be overdesigning something, and automated grammatical adjustments to the
+> subject line was that point!)
 
-because it looks like clang was smart enough to unroll the silly
-fixed-size loop and do the two adjacent 32-bit loads of the old cap[]
-array as one 64-bit load, but then was _not_ smart enough to combine
-the two 32-bit compares into one 64-bit one.
+Yeah, I think it's not worth doing anything about really...
 
-And gcc didn't do the load optimization (which is questionable since
-it then just results in extra shifts and extra registers), so it just
-kept it as two 32-bit loads and compares. Again, with the patch, gcc
-obviously does the sane "one 64-bit load, one 64-bit compare" too.
+--Kp+/tWtv3tDQlrmv
+Content-Type: application/pgp-signature; name="signature.asc"
 
-There's a lot to be said for compiler optimizations fixing up silly
-source code, but I personally would just prefer to make the source
-code DTRT.
+-----BEGIN PGP SIGNATURE-----
 
-Could the compiler have been even smarter and generated the same code?
-Yes it could. We shouldn't expect that, though. Particularly when the
-sane code is much more legible to humans too.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/5bpgAKCRB4tDGHoIJi
+0ityAP4ieRuQTEdqsGZxmgH0Ie+b5HZsxWdK57F1JJsroTqwYwEAj6GT1/w4OmV6
+y3uemsRLYSiSaSApbXcOdwNMXgMnEwY=
+=YIMs
+-----END PGP SIGNATURE-----
 
-                 Linus
+--Kp+/tWtv3tDQlrmv--
