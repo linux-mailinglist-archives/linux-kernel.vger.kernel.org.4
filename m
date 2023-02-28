@@ -2,256 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BCD6A5EEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E1B6A5EF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjB1Spd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 13:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
+        id S229832AbjB1SqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 13:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjB1Spc (ORCPT
+        with ESMTP id S229799AbjB1SqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 13:45:32 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAD623C54;
-        Tue, 28 Feb 2023 10:45:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677609913; i=deller@gmx.de;
-        bh=xC4mv9H9pJblFBF7YkDJhJo1H9/5OAuWYUzB/h8CUhU=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=TM9TVncuNGf2j70P02Ae9jnrDYn77Br667yprt8G7iKDZtOSyfc1Cg6d9dIZ+u/4q
-         gJGatpl0X8YoVHnd1CeGnRqoVGm+mUveFUBDah6WGHCCxKcy6IIf0oKnguWuDTfZrn
-         StJgiBVsQ2A2G2w+X0lX1hVhAentpnVDI42+kZAIoB2rH9rzilBGcVePGqZEpJsVNn
-         c10qdzLaV1J1hp88z/d3R3Zv+s1Xm998IJ4Q2IcX/hu59FVtNWqf7ukvLbMsuLqmXJ
-         SWcrrMSRib7+Tjr/fCYk51afgYalpmNLfJnrP1e/lpkJV0/ejSJVpLfvtXpia2nyHL
-         R5s9vYMcypJ/A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.156.241]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N7R1T-1oQAnF3QqL-017mkM; Tue, 28
- Feb 2023 19:45:12 +0100
-Message-ID: <9b75b8ec-4006-9606-2db4-e1ad5a0b3f8d@gmx.de>
-Date:   Tue, 28 Feb 2023 19:45:12 +0100
+        Tue, 28 Feb 2023 13:46:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B38012BEF;
+        Tue, 28 Feb 2023 10:45:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD4E361197;
+        Tue, 28 Feb 2023 18:45:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A03CC433D2;
+        Tue, 28 Feb 2023 18:45:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677609950;
+        bh=FmQEaDOhGkaMbppIny7kn16miS990t0lRYjdS47Sjts=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Wm+TphbLMbnlvEamXL9A9ZVCZ0axu96lP9IIXbAKTyJbx4+GHQkSCuTG3ednlh3dv
+         PO7e0eV/v70LKkrQF2kNiTImaTjpXLwYepSmjcNccWyuItg5MBOipV49oQ7q9bHZwq
+         JIhO15lBvJ308v8HwDfLacq+Zh6Hss9zNRv4hjvsskkqA8IFmZ1mr4LAJSVhkbfPKF
+         MRZYuKvOXbFX1LCIW2GKKq5z6hYYydfaqOm4sZnz4cpyKzGQZix19PdtkjJ+EqxBP3
+         YQApwHnNln6pc10yKafyrRo6qTQjkQuCn/TF6wUM3LHG3rD1h4oelggojCnTWaAxwj
+         SEjRvdw2TbGxg==
+Received: by mail-lj1-f178.google.com with SMTP id z5so11337605ljc.8;
+        Tue, 28 Feb 2023 10:45:50 -0800 (PST)
+X-Gm-Message-State: AO0yUKXQJRgeEyB1ehuobR0W+jIEgVhWHcLBB8ouLkTURLR/OAcyKgFI
+        mPG3WrvGIjxtQECoDg1YsTE4jGPRnEbewjjCsf0=
+X-Google-Smtp-Source: AK7set8h5brA6o2W+ky1Dj6uNEaOLA3H8Ainc97VUCEeBpWjeMPhOAY+5RsnjMgIU9k5ki6WMaFhqlvOOYt/r4/rMpI=
+X-Received: by 2002:a2e:a613:0:b0:294:6de5:e644 with SMTP id
+ v19-20020a2ea613000000b002946de5e644mr1146995ljp.5.1677609948071; Tue, 28 Feb
+ 2023 10:45:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] parisc: Replace regular spinlock with spin_trylock on
- panic path
-Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-parisc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Jeroen Roovers <jer@xs4all.nl>
-References: <20230220211105.151401-1-gpiccoli@igalia.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230220211105.151401-1-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:AYEo+fLw83pVG8JaWlKFqryBjkR6m1sEIwz5xZj4D8CSC7w+seF
- y0D4fmkPH7L+NmsDKNrHCx9iyrbgxvIi3gEyqIuEG0Xu60W+zYlATRSRNyzVOq91dOP1lR7
- YAXYGegmufj23cVsWIw2gg+e7NGLx6VysR0krg0QEBgYTMc6CpnLTihi49e0hIYuLRxisE6
- Dd8WRBB/7286y/h+qCpyQ==
-UI-OutboundReport: notjunk:1;M01:P0:4ynow6gXnfU=;5+1L77mAidF6JB78375blQj7xiY
- sf1ABrLon9fbj8HBbtZvARGX8JcmTjhLOESp53hFE7t6uWyIOCVMicU17SoeI4qLnyDtb8Dwv
- 6q/GgE5Ykf6Tk0ShUPibtzxdqxYeO+Sep5PZ8uWHe1c4MRiA55qFwbZ8cI1svalUawkcWDixN
- Mr5UYBfoofu1dZdSPnzzgHGWpU62gW4rND0fxs5BbHe94DnBS2lqOMp4VFxDBv32BholCokhT
- 7anQliH5HDGzWNWPkmTXiDjDuNHRMJB7wbQ8Gg9piPZrBVKt/jslVeo8TPTH7+Kx9PmV2rPE1
- 4EDC3rgFb9IiQJs/ZHbWNe+SU3HTM5EuAHBMSxuEuyPMLyTlSQf7XTd9dnAID5jnqyYWim4lc
- zcm4Ld3YUTlOx5O9YzA0BVGuFFqnHw7xtF88u3lF8y5qRlvw7CzfjUk/9P4MckiJZsuco/dJO
- Sfexrd6plPI57OHntPgOJGgRtp/2BohAp55VgYFdgAuo6hjV2SKvvhrvNzkQ7I3RaurV1TWAd
- ssXFjEveiu8p+G2ZVOfwSteqQm1sbMJnPxtOjRF+BWgFo59k1WvgNDFiknEdc2vpNSiALnTrb
- a53auPddxopdgQNZyupmphFgTnWL+c77MbRNkU48ncmI/DexMkHQw5IrHgsQcmgBj4mNjfufa
- R20XcfshyopD4DlcegCwjC3qHOcHhHox1gUxh3Y/xZkp3wPd5YhoGRsDJ2n1ZP2AftbuRLia2
- pe3+UHC6O72cAKgyEdVzLaS0fqMig21T423o0VilJuFxDV+XgpZXu3fdKAeqzNE+2OMt0eKT3
- e118oOqaBH8h2w7wraThsz7XKOx5V1A6xyh7bYOzN7YNFw3yj4ilCHnG1eaHMb744S1b+Kzba
- JHKNZi6S47ufIz6aICqHkSPshuO5gQrbsTykMzGr5Q5uaMT65+atMske6BnQaeh8Dfz0s5J8J
- 7gY9rBSDa3ftd64OooNUcW4G5vk=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <a13cd3b5-cc41-bf2f-c8ac-e031ad0d5dd7@leemhuis.info>
+In-Reply-To: <a13cd3b5-cc41-bf2f-c8ac-e031ad0d5dd7@leemhuis.info>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 28 Feb 2023 10:45:35 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW53cDdcXYAkc7fabx-ET+AKctG_dWMZ1iCA9csCq3TZfA@mail.gmail.com>
+Message-ID: <CAPhsuW53cDdcXYAkc7fabx-ET+AKctG_dWMZ1iCA9csCq3TZfA@mail.gmail.com>
+Subject: Re: [regression] Bug 217074 - upgrading to kernel 6.1.12 from 5.15.x
+ can no longer assemble software raid0
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     linux-raid <linux-raid@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nikolay Kichukov <hijacker@oldum.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 22:11, Guilherme G. Piccoli wrote:
-> The panic notifiers' callbacks execute in an atomic context, with
-> interrupts/preemption disabled, and all CPUs not running the panic
-> function are off, so it's very dangerous to wait on a regular
-> spinlock, there's a risk of deadlock.
->
-> Refactor the panic notifier of parisc/power driver to make use
-> of spin_trylock - for that, we've added a second version of the
-> soft-power function. Also, some comments were reorganized and
-> trailing white spaces, useless header inclusion and blank lines
-> were removed.
->
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Jeroen Roovers <jer@xs4all.nl>
-> Acked-by: Helge Deller <deller@gmx.de> # parisc
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
->
-> ---
-> V4:
-> - rebase against v6.2 (build-tested).
->
-> V3:
-> - s/in/on as per Jeroen's suggestion - thanks!
->
-> V2:
-> - Added Helge's ACK - thanks!
->
->
-> Hey Helge, this is the V4 - just rebased and build-tested on v6.2.
-> I remember we discussed the possibility of this getting merged through
-> the series I've submitted [0], but happens the series is "gone", most of
-> the patches were picked by maintainers, others I'm dropping. This is rea=
-lly
-> a standalone fix, similar ones were merged in other notifiers.
->
-> I'd appreciate if you/James could pick it for the next kernel, there's n=
-o
-> rush at all, but there's also no series we could throw this patch to get
-> merged with heh
->
-> Thanks in advance,
-> Guilherme
+Thanks for the report. I was on vacation last week. I will look into this soon.
 
-Thank you Guilherme!
+Thanks,
+Song
 
-I've now picked it up in the parisc-for-next tree.
-
-Helge
-
-
+On Thu, Feb 23, 2023 at 8:06 AM Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
 >
-> [0] https://lore.kernel.org/lkml/43de5653-7587-3e8e-274c-b2729649d0fd@gm=
-x.de/
+> Hi, this is your Linux kernel regression tracker.
+>
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217074 :
+>
+> > Hello,
+> > Installing a new kernel 6.1.12 does not allow assembly of raid0 device.
+> >
+> > Going back to previous working kernels: 5.15.65, 5.15.75 assembles the raid0 without any problems.
+> >
+> > Kernel command line parameters:
+> > ... ro kvm_amd.nested=0 kvm_amd.avic=1 kvm_amd.npt=1 raid0.default_layout=2
+> >
+> > mdadm assembly attempt fails with:
+> > 'mdadm: unexpected failure opening /dev/md<NR>'
+> >
+> > Tried with mdadm-4.1 and mdadm-4.2, but as it works with either versions of mdadm, I rule out the mdadm software.
+> >
+> > strace -f output, last few lines:
+> >
+> > mkdir("/run/mdadm", 0755)               = -1 EEXIST (File exists)
+> > openat(AT_FDCWD, "/run/mdadm/map.lock", O_RDWR|O_CREAT|O_TRUNC, 0600) = 3
+> > fcntl(3, F_GETFL)                       = 0x8002 (flags O_RDWR|O_LARGEFILE)
+> > flock(3, LOCK_EX)                       = 0
+> > newfstatat(3, "", {st_mode=S_IFREG|0600, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> > openat(AT_FDCWD, "/run/mdadm/map", O_RDONLY) = 4
+> > fcntl(4, F_GETFL)                       = 0x8000 (flags O_RDONLY|O_LARGEFILE)
+> > newfstatat(4, "", {st_mode=S_IFREG|0600, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> > read(4, "", 4096)                       = 0
+> > close(4)                                = 0
+> > openat(AT_FDCWD, "/run/mdadm/map", O_RDONLY) = 4
+> > fcntl(4, F_GETFL)                       = 0x8000 (flags O_RDONLY|O_LARGEFILE)
+> > newfstatat(4, "", {st_mode=S_IFREG|0600, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> > read(4, "", 4096)                       = 0
+> > close(4)                                = 0
+> > newfstatat(AT_FDCWD, "/dev/.udev", 0x7ffcd8243c90, 0) = -1 ENOENT (No such file or directory)
+> > newfstatat(AT_FDCWD, "/run/udev", {st_mode=S_IFDIR|0755, st_size=160, ...}, 0) = 0
+> > openat(AT_FDCWD, "/proc/mdstat", O_RDONLY) = 4
+> > fcntl(4, F_SETFD, FD_CLOEXEC)           = 0
+> > newfstatat(4, "", {st_mode=S_IFREG|0444, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> > read(4, "Personalities : [raid1] [raid0] "..., 1024) = 56
+> > read(4, "", 1024)                       = 0
+> > close(4)                                = 0
+> > openat(AT_FDCWD, "/sys/block/md127/dev", O_RDONLY) = -1 ENOENT (No such file or directory)
+> > getpid()                                = 18351
+> > mknodat(AT_FDCWD, "/dev/.tmp.md.18351:9:127", S_IFBLK|0600, makedev(0x9, 0x7f)) = 0
+> > openat(AT_FDCWD, "/dev/.tmp.md.18351:9:127", O_RDWR|O_EXCL|O_DIRECT) = -1 ENXIO (No such device or address)
+> > unlink("/dev/.tmp.md.18351:9:127")      = 0
+> > getpid()                                = 18351
+> > mknodat(AT_FDCWD, "/tmp/.tmp.md.18351:9:127", S_IFBLK|0600, makedev(0x9, 0x7f)) = 0
+> > openat(AT_FDCWD, "/tmp/.tmp.md.18351:9:127", O_RDWR|O_EXCL|O_DIRECT) = -1 ENXIO (No such device or address)
+> > unlink("/tmp/.tmp.md.18351:9:127")      = 0
+> > write(2, "mdadm: unexpected failure openin"..., 45mdadm: unexpected failure opening /dev/md127
+> > ) = 45
+> > unlink("/run/mdadm/map.lock")           = 0
+> > close(3)                                = 0
+> > exit_group(1)                           = ?
+> > +++ exited with 1 +++
+> >
+> >
+> > Tried with kernel compiled with either CONFIG_DEVTMPFS_SAFE=y or CONFIG_DEVTMPFS_SAFE=n, fails the same way.
+> >
+> > The raid consists of 4 devices, here is mdstat contents:
+> >
+> > Personalities : [raid0]
+> > md127 : active raid0 sda[0] sdc[2] sdd[3] sdb[1]
+> >       2929769472 blocks super 1.2 512k chunks
+> >
+> > unused devices: <none>
+> >
+> >
+> > Examining the 4 block devices:
+> >
+> > gnusystem /var/log # mdadm --misc -E /dev/sda
+> > /dev/sda:
+> >           Magic : a92b4efc
+> >         Version : 1.2
+> >     Feature Map : 0x0
+> >      Array UUID : bb710ce6:edd5d68d:a0a0a405:edd99547
+> >            Name : gnusystem:md0-store  (local to host gnusystem)
+> >   Creation Time : Wed Sep 29 22:28:09 2021
+> >      Raid Level : raid0
+> >    Raid Devices : 4
+> >
+> >  Avail Dev Size : 976508976 sectors (465.64 GiB 499.97 GB)
+> >     Data Offset : 264192 sectors
+> >    Super Offset : 8 sectors
+> >    Unused Space : before=264112 sectors, after=0 sectors
+> >           State : clean
+> >     Device UUID : 7f226c1c:23632b9d:e3d6c656:74522906
+> >
+> >     Update Time : Wed Sep 29 22:28:09 2021
+> >   Bad Block Log : 512 entries available at offset 8 sectors
+> >        Checksum : 51e99fb5 - correct
+> >          Events : 0
+> >
+> >      Chunk Size : 512K
+> >
+> >    Device Role : Active device 0
+> >    Array State : AAAA ('A' == active, '.' == missing, 'R' == replacing)
+> > gnusystem /var/log # mdadm --misc -E /dev/sdb
+> > /dev/sdb:
+> >           Magic : a92b4efc
+> >         Version : 1.2
+> >     Feature Map : 0x0
+> >      Array UUID : bb710ce6:edd5d68d:a0a0a405:edd99547
+> >            Name : gnusystem:md0-store  (local to host gnusystem)
+> >   Creation Time : Wed Sep 29 22:28:09 2021
+> >      Raid Level : raid0
+> >    Raid Devices : 4
+> >
+> >  Avail Dev Size : 1953260976 sectors (931.39 GiB 1000.07 GB)
+> >     Data Offset : 264192 sectors
+> >    Super Offset : 8 sectors
+> >    Unused Space : before=264112 sectors, after=0 sectors
+> >           State : clean
+> >     Device UUID : ed8795fe:c7e6719a:165db37e:32ec0894
+> >
+> >     Update Time : Wed Sep 29 22:28:09 2021
+> >   Bad Block Log : 512 entries available at offset 8 sectors
+> >        Checksum : 215db63b - correct
+> >          Events : 0
+> >
+> >      Chunk Size : 512K
+> >
+> >    Device Role : Active device 1
+> >    Array State : AAAA ('A' == active, '.' == missing, 'R' == replacing)
+> > gnusystem /var/log # mdadm --misc -E /dev/sdc
+> > /dev/sdc:
+> >           Magic : a92b4efc
+> >         Version : 1.2
+> >     Feature Map : 0x0
+> >      Array UUID : bb710ce6:edd5d68d:a0a0a405:edd99547
+> >            Name : gnusystem:md0-store  (local to host gnusystem)
+> >   Creation Time : Wed Sep 29 22:28:09 2021
+> >      Raid Level : raid0
+> >    Raid Devices : 4
+> >
+> >  Avail Dev Size : 976508976 sectors (465.64 GiB 499.97 GB)
+> >     Data Offset : 264192 sectors
+> >    Super Offset : 8 sectors
+> >    Unused Space : before=264112 sectors, after=0 sectors
+> >           State : clean
+> >     Device UUID : 3713dfff:d2e29aaf:3275039d:08b317bb
+> >
+> >     Update Time : Wed Sep 29 22:28:09 2021
+> >   Bad Block Log : 512 entries available at offset 8 sectors
+> >        Checksum : 42f70f03 - correct
+> >          Events : 0
+> >
+> >      Chunk Size : 512K
+> >
+> >    Device Role : Active device 2
+> >    Array State : AAAA ('A' == active, '.' == missing, 'R' == replacing)
+> > gnusystem /var/log # mdadm --misc -E /dev/sdd
+> > /dev/sdd:
+> >           Magic : a92b4efc
+> >         Version : 1.2
+> >     Feature Map : 0x0
+> >      Array UUID : bb710ce6:edd5d68d:a0a0a405:edd99547
+> >            Name : gnusystem:md0-store  (local to host gnusystem)
+> >   Creation Time : Wed Sep 29 22:28:09 2021
+> >      Raid Level : raid0
+> >    Raid Devices : 4
+> >
+> >  Avail Dev Size : 1953260976 sectors (931.39 GiB 1000.07 GB)
+> >     Data Offset : 264192 sectors
+> >    Super Offset : 8 sectors
+> >    Unused Space : before=264112 sectors, after=0 sectors
+> >           State : clean
+> >     Device UUID : 7da858ae:c0d6ca51:0ecaaaf0:280367cc
+> >
+> >     Update Time : Wed Sep 29 22:28:09 2021
+> >   Bad Block Log : 512 entries available at offset 8 sectors
+> >        Checksum : 32cf4ab4 - correct
+> >          Events : 0
+> >
+> >      Chunk Size : 512K
+> >
+> >    Device Role : Active device 3
+> >    Array State : AAAA ('A' == active, '.' == missing, 'R' == replacing)
+> >
+> > If any more information is needed, let me know.
+>
+> See the ticket for details.
 >
 >
->   arch/parisc/include/asm/pdc.h |  1 +
->   arch/parisc/kernel/firmware.c | 27 +++++++++++++++++++++++----
->   drivers/parisc/power.c        | 17 ++++++++++-------
->   3 files changed, 34 insertions(+), 11 deletions(-)
+> [TLDR for the rest of this mail: I'm adding this report to the list of
+> tracked Linux kernel regressions; the text you find below is based on a
+> few templates paragraphs you might have encountered already in similar
+> form.]
 >
-> diff --git a/arch/parisc/include/asm/pdc.h b/arch/parisc/include/asm/pdc=
-.h
-> index 40793bef8429..2b4fad8328e8 100644
-> --- a/arch/parisc/include/asm/pdc.h
-> +++ b/arch/parisc/include/asm/pdc.h
-> @@ -80,6 +80,7 @@ int pdc_do_firm_test_reset(unsigned long ftc_bitmap);
->   int pdc_do_reset(void);
->   int pdc_soft_power_info(unsigned long *power_reg);
->   int pdc_soft_power_button(int sw_control);
-> +int pdc_soft_power_button_panic(int sw_control);
->   void pdc_io_reset(void);
->   void pdc_io_reset_devices(void);
->   int pdc_iodc_getc(void);
-> diff --git a/arch/parisc/kernel/firmware.c b/arch/parisc/kernel/firmware=
-.c
-> index 6817892a2c58..cc124d9f1f7f 100644
-> --- a/arch/parisc/kernel/firmware.c
-> +++ b/arch/parisc/kernel/firmware.c
-> @@ -1232,15 +1232,18 @@ int __init pdc_soft_power_info(unsigned long *po=
-wer_reg)
->   }
+> BTW, let me use this mail to also add the report to the list of tracked
+> regressions to ensure it's doesn't fall through the cracks:
 >
->   /*
-> - * pdc_soft_power_button - Control the soft power button behaviour
-> - * @sw_control: 0 for hardware control, 1 for software control
-> + * pdc_soft_power_button{_panic} - Control the soft power button behavi=
-our
-> + * @sw_control: 0 for hardware control, 1 for software control
->    *
->    *
->    * This PDC function places the soft power button under software or
->    * hardware control.
-> - * Under software control the OS may control to when to allow to shut
-> - * down the system. Under hardware control pressing the power button
-> + * Under software control the OS may control to when to allow to shut
-> + * down the system. Under hardware control pressing the power button
->    * powers off the system immediately.
-> + *
-> + * The _panic version relies on spin_trylock to prevent deadlock
-> + * on panic path.
->    */
->   int pdc_soft_power_button(int sw_control)
->   {
-> @@ -1254,6 +1257,22 @@ int pdc_soft_power_button(int sw_control)
->   	return retval;
->   }
+> #regzbot introduced: v5.15..v6.1.12
+> https://bugzilla.kernel.org/show_bug.cgi?id=217074
+> #regzbot title: block: md: raid0 no longer assembled
+> #regzbot ignore-activity
 >
-> +int pdc_soft_power_button_panic(int sw_control)
-> +{
-> +	int retval;
-> +	unsigned long flags;
-> +
-> +	if (!spin_trylock_irqsave(&pdc_lock, flags)) {
-> +		pr_emerg("Couldn't enable soft power button\n");
-> +		return -EBUSY; /* ignored by the panic notifier */
-> +	}
-> +
-> +	retval =3D mem_pdc_call(PDC_SOFT_POWER, PDC_SOFT_POWER_ENABLE, __pa(pd=
-c_result), sw_control);
-> +	spin_unlock_irqrestore(&pdc_lock, flags);
-> +
-> +	return retval;
-> +}
-> +
->   /*
->    * pdc_io_reset - Hack to avoid overlapping range registers of Bridges=
- devices.
->    * Primarily a problem on T600 (which parisc-linux doesn't support) bu=
-t
-> diff --git a/drivers/parisc/power.c b/drivers/parisc/power.c
-> index 456776bd8ee6..8512884de2cf 100644
-> --- a/drivers/parisc/power.c
-> +++ b/drivers/parisc/power.c
-> @@ -37,7 +37,6 @@
->   #include <linux/module.h>
->   #include <linux/init.h>
->   #include <linux/kernel.h>
-> -#include <linux/notifier.h>
->   #include <linux/panic_notifier.h>
->   #include <linux/reboot.h>
->   #include <linux/sched/signal.h>
-> @@ -175,16 +174,21 @@ static void powerfail_interrupt(int code, void *x)
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
 >
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+> this thread sees some discussion). See page linked in footer for details.
 >
->
-> -/* parisc_panic_event() is called by the panic handler.
-> - * As soon as a panic occurs, our tasklets above will not be
-> - * executed any longer. This function then re-enables the
-> - * soft-power switch and allows the user to switch off the system
-> +/*
-> + * parisc_panic_event() is called by the panic handler.
-> + *
-> + * As soon as a panic occurs, our tasklets above will not
-> + * be executed any longer. This function then re-enables
-> + * the soft-power switch and allows the user to switch off
-> + * the system. We rely in pdc_soft_power_button_panic()
-> + * since this version spin_trylocks (instead of regular
-> + * spinlock), preventing deadlocks on panic path.
->    */
->   static int parisc_panic_event(struct notifier_block *this,
->   		unsigned long event, void *ptr)
->   {
->   	/* re-enable the soft-power switch */
-> -	pdc_soft_power_button(0);
-> +	pdc_soft_power_button_panic(0);
->   	return NOTIFY_DONE;
->   }
->
-> @@ -193,7 +197,6 @@ static struct notifier_block parisc_panic_block =3D =
-{
->   	.priority	=3D INT_MAX,
->   };
->
-> -
->   static int __init power_init(void)
->   {
->   	unsigned long ret;
-
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
