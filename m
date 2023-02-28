@@ -2,125 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0373B6A5749
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C626A574E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjB1K5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S231271AbjB1K6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbjB1K5Q (ORCPT
+        with ESMTP id S231331AbjB1K6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:57:16 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE9D305D8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:56:25 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id r18so9271244wrx.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:56:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677581784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1g1zgoQ8e1rCmD+8V4lGEZR3Cqpnsy/4iKzn5XmTAqQ=;
-        b=qPtYuCnjYFvgN/MWdlB6HfRBPLMrs5RBj9IQwO3XK1T3AjSHxK+spWk7T5Px0cFxMN
-         ZWO8cO2ychz4ST51hBTs+hR1sXLdKySOB+ONK29wSvgfpooZXSlAkpNnJDDtL3gaYVvX
-         SEoD8eudJR0mIaRTchppYPlspfXGoifvkrLlCtozjhCZZPlBU9ETwhuysK5zoc3C0EkV
-         BjkGTELeEoP4OFN56BsSiR01v7cKCXrDgl8wvMd3C6CJk+8xJjby+nNBjL8PX4PaxEgl
-         rjkXAUYZoXy6FUBUnNtOhPg45jeAqyExnXZrRHAXSQHGU6I0CHgwu6VnzZlqEk1kVHq/
-         fVyA==
+        Tue, 28 Feb 2023 05:58:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ECC23102
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:56:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677581800;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nB/5iQA/ERrIuMdNnPUytn6rExVcHdy0T6L0a8hSUc0=;
+        b=X4NT6p77MLlq2ML2oK+3RfUitWP1JJL9amtA9S4Q2L8bXcr8n3EYtTjci9VXFAf7NvC82m
+        k8/CTu8S8KstFaxxohiyhBNnxOz81JvWXZLCSX0L5vEoqPGUUs8q37+oUWEub9BBZHAmVm
+        1dNhu8VBwNCCNdfSsHqqIFoDPSlS0f4=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-344-vrgYYktLOYKwwvbK6FYGRw-1; Tue, 28 Feb 2023 05:56:39 -0500
+X-MC-Unique: vrgYYktLOYKwwvbK6FYGRw-1
+Received: by mail-wm1-f72.google.com with SMTP id n15-20020a05600c500f00b003dd07ce79c8so4118533wmr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:56:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677581784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1g1zgoQ8e1rCmD+8V4lGEZR3Cqpnsy/4iKzn5XmTAqQ=;
-        b=nu/y9mJyrgR28diDFgcvnn2pqF8Lo2WQ8KAXAYOHtIDASw+yeWkfnxvuguWb/xYrIz
-         31OMBFr/WmmFQIB4pfG/KkweI6iMgvzReIB0zcV8CP1RfuouFkv7ermU5wkINJKw4u3u
-         TJyOr/GpQqNeL9CkZKOp6XZ/uNT/sjhyfoDQIhidgCb9eESnHiyEFbhi8nHQy91p9Shg
-         CY+eTyY5L/tNmzq94dWx6NdDLCiuOw4QZ/x9Hya4Ktf34rEOm6e27QrwCjPYq/EywDYc
-         HPNjH3So2vSVv9hBv/EKeI/z51cJDyC2twTdyrR7YwnltJTzXQ8vMD8KoR1akI29jK5h
-         TAZw==
-X-Gm-Message-State: AO0yUKWV7tuHpj8jTH3CdRnzSNUw5uzETHIckJBKcuLcESQauh8LgLEk
-        ig8Koq5nXzZEB0aTGbZ6DelXow==
-X-Google-Smtp-Source: AK7set/gFPVojB1YHQtiFQzFwtOTIxwh5zVr8canwK3mSUBFXw89fvTyUYLRoiWrIidbpCXW6nM0Ow==
-X-Received: by 2002:a5d:598b:0:b0:2c5:67e3:808d with SMTP id n11-20020a5d598b000000b002c567e3808dmr8344224wri.35.1677581784294;
-        Tue, 28 Feb 2023 02:56:24 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s9-20020a5d4249000000b002c5598c14acsm9443185wrr.6.2023.02.28.02.56.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 02:56:23 -0800 (PST)
-Message-ID: <91879230-7f2d-c168-3808-d567b9e19e82@linaro.org>
-Date:   Tue, 28 Feb 2023 11:56:21 +0100
+        bh=nB/5iQA/ERrIuMdNnPUytn6rExVcHdy0T6L0a8hSUc0=;
+        b=b7vzuNYkCsN+JdWhxE/3Eb2u+2mo1ocXPmaC2XODe9McKJX18FRKFpmwZnMqItF/MZ
+         3fCf5qRruD0cD7ku5kR70dGztWGUWA0aRHah30JKEiRpc/FseTMH2vU/xbE1Tc+DbB/r
+         r9MKtTbWOTShD20qidjUuyglZGfgyh6a+9a/Dk73xqdOGEDyAdexDsPX8JcnDCevMwUf
+         AE0+GwFAjXl6AzsU/yHwJOgZ28zbDDN7LADIFrGSFUFh6jgh/Zt9hF/xN4Ili5aYrFWW
+         T/vEOsBoyj1BAxwq4yferUoEn8/Owk0EDDk8EY2i0DSIi+H+vntcoF8MCXFJ86KU/Gtc
+         iHeg==
+X-Gm-Message-State: AO0yUKVk79A+PoQ2Z4MrM71vWXudrN+bjkVn3UdWEbimp/iRuBCIv4iY
+        RPmbuIeoIMbbSECheY1W/x1Z1ln2nrTEDmA+gFO6DDvGLQ8iZnrpSAzoxSPkXrnFBBwRklljo6S
+        W2txeRf1GTJKVmYgGE5v/bMbm
+X-Received: by 2002:a05:600c:4da4:b0:3ea:e554:7808 with SMTP id v36-20020a05600c4da400b003eae5547808mr1859445wmp.19.1677581794988;
+        Tue, 28 Feb 2023 02:56:34 -0800 (PST)
+X-Google-Smtp-Source: AK7set8t5/GwTKlOQXUiSLsp1gpZsKknVKhWt62LvswyPXDef6Z7111tgcUhPxqtQuKzFkIe1Yy0Lg==
+X-Received: by 2002:a05:600c:4da4:b0:3ea:e554:7808 with SMTP id v36-20020a05600c4da400b003eae5547808mr1859429wmp.19.1677581794668;
+        Tue, 28 Feb 2023 02:56:34 -0800 (PST)
+Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
+        by smtp.gmail.com with ESMTPSA id l20-20020a05600c4f1400b003e20cf0408esm12986061wmq.40.2023.02.28.02.56.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 02:56:34 -0800 (PST)
+Date:   Tue, 28 Feb 2023 11:56:28 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
+Cc:     mst@redhat.com, lulu@redhat.com,
+        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
+        leiyang@redhat.com, Gautam Dawar <gdawar@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>, longpeng2@huawei.com,
+        parav@nvidia.com, linux-kernel@vger.kernel.org,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        alvaro.karsz@solid-run.com, Laurent Vivier <lvivier@redhat.com>
+Subject: Re: [PATCH v2] vdpa_sim: set last_used_idx as last_avail_idx in
+ vdpasim_queue_ready
+Message-ID: <20230228105628.lwd4l2nw6isfjc7c@sgarzare-redhat>
+References: <20230203142501.300125-1-eperezma@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 2/2] dt-bindings:pinctrl:at91:Adding macros for sama7g5
-Content-Language: en-US
-To:     Ryan.Wanner@microchip.com, ludovic.desroches@microchip.com,
-        linus.walleij@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <cover.1677520830.git.Ryan.Wanner@microchip.com>
- <936fd3060662becd5485e32d5947286fcf0a3502.1677520830.git.Ryan.Wanner@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <936fd3060662becd5485e32d5947286fcf0a3502.1677520830.git.Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230203142501.300125-1-eperezma@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2023 19:07, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Adding macros for sama7g drive strength.
+On Fri, Feb 03, 2023 at 03:25:01PM +0100, Eugenio Pérez wrote:
+>Starting from an used_idx different than 0 is needed in use cases like
+>virtual machine migration.  Not doing so and letting the caller set an
+>avail idx different than 0 causes destination device to try to use old
+>buffers that source driver already recover and are not available
+>anymore.
+>
+>Since vdpa_sim does not support receive inflight descriptors as a
+>destination of a migration, let's set both avail_idx and used_idx the
+>same at vq start.  This is how vhost-user works in a
+>VHOST_SET_VRING_BASE call.
+>
+>Although the simple fix is to set last_used_idx at vdpasim_set_vq_state,
+>it would be reset at vdpasim_queue_ready.  The last_avail_idx case is
+>fixed with commit a09f493c ("vdpa_sim: not reset state in
+>vdpasim_queue_ready").  Since the only option is to make it equal to
+>last_avail_idx, adding the only change needed here.
+>
+>This was discovered and tested live migrating the vdpa_sim_net device.
+>
+>Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
+>Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+>---
+>Cherry-picked from patch 2/2 of the series [1]. Differences are:
+>* Set the value of used_idx at vdpasim_queue_ready instead of fetching
+>  from the guest vring like vhost-kernel.
+>
+>v2: Actually update last_used_idx only at vdpasim_queue_ready.
+>
+>Note that commit id present in the patch text is not in master but in
+>git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git.
+>
+>[1] https://lkml.org/lkml/2023/1/18/1041
+>---
+> drivers/vdpa/vdpa_sim/vdpa_sim.c | 1 +
+> 1 file changed, 1 insertion(+)
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>index 6a0a65814626..79ac585e40b9 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>@@ -68,6 +68,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
+> 			  (uintptr_t)vq->device_addr);
+>
+> 	vq->vring.last_avail_idx = last_avail_idx;
+>+	vq->vring.last_used_idx = last_avail_idx;
+> 	vq->vring.notify = vdpasim_vq_notify;
+> }
+>
+>-- 2.31.1
+>
 
+If you need to resend, I'd add a comment in the code following the 
+commit description.
 
-Look at output of the command I gave you. Now look at your subject...
-Missing spaces.
+Anyway, the patch LGTM:
 
-BTW, it is "Add", not "Adding".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
-> changes since v1:
-> - Fix ABI break.
-> - Add explanation for drive strength macros.
-> 
-> changes since v2:
-> -Fix subject prefix to match subsystem.
-> -Add more in-depth discription of sama7g5 define values.
-> -Fix formatting issues.
-> 
->  include/dt-bindings/pinctrl/at91.h | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/dt-bindings/pinctrl/at91.h b/include/dt-bindings/pinctrl/at91.h
-> index e8e117306b1b..a02bee76b1fb 100644
-> --- a/include/dt-bindings/pinctrl/at91.h
-> +++ b/include/dt-bindings/pinctrl/at91.h
-> @@ -42,8 +42,21 @@
->  #define AT91_PERIPH_C		3
->  #define AT91_PERIPH_D		4
->  
-> -#define ATMEL_PIO_DRVSTR_LO	1
-> +/*These macros are for all other at91 pinctrl drivers*/
-> +#define ATMEL_PIO_DRVSTR_LO	0
-
-That's still ABI break, isn't it?
-
-
-Best regards,
-Krzysztof
+Thanks,
+Stefano
 
