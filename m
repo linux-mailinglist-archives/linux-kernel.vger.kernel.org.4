@@ -2,175 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9143F6A5B03
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57216A5B05
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjB1Opw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 09:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        id S229755AbjB1OqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 09:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjB1Opt (ORCPT
+        with ESMTP id S229752AbjB1OqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 09:45:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F118CA29;
-        Tue, 28 Feb 2023 06:45:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FA0661137;
-        Tue, 28 Feb 2023 14:45:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CFEC433EF;
-        Tue, 28 Feb 2023 14:45:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677595546;
-        bh=hQDgOCq4TEsrkw8p1yiXndRHnEKYWMMTcXjOqKrEePQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NHnd+YNRKkeZ5G1kJF1QOJjar3hsAurwIScVuhaTAUBYSQIfMV+acPW4ITXqZuEKQ
-         GHnAk5zMfTCSM+dtlTrGC/mj+Kz98cdyIvypiTOZrOvg9E53h9Z4ziHkVa+hZbkbP0
-         iAtKmU+ZEtUBMvyYNbm/zPm2pp6sZivHaKhq3a5tFHew5R+siNnJUVd5izJ/n+wD8Q
-         7nFfrlHVWYe9RWt+BfIwCC3ek7N8n/VA+Tg+X1j4hW+MRmivSwMb0CaHybSS3Us2JS
-         nCRdoXfT2nMIk2lFlphuedquwB1PUaihQ+B1OSPgEwzzxQNvG4HZOsyeZksXB0/+9z
-         93rS+YbpZ7mig==
-Date:   Tue, 28 Feb 2023 16:45:42 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next] scm: fix MSG_CTRUNC setting condition for
- SO_PASSSEC
-Message-ID: <Y/4Tlu7q2gNbcExT@unreal>
-References: <20230226201730.515449-1-aleksandr.mikhalitsyn@canonical.com>
- <Y/x8H4qCNsj4mEkA@unreal>
- <CAEivzxeorZoiE4VmJ45CoF4ZRoW3B+rkT0ufX7y1bxn510yzPQ@mail.gmail.com>
- <Y/z3OtIA+25GjjH2@unreal>
- <CAEivzxemz8SDr2_NAvgi6XdzA12d5_3ZOmJ=1FF8VMbaGLdVng@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Tue, 28 Feb 2023 09:46:00 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC15E30194;
+        Tue, 28 Feb 2023 06:45:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677595556; x=1709131556;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=aLzCtKhI01As4ruXBrYfk3b+I8TTpHSQmuOY0vKHQL0=;
+  b=D6XzpNlUj5eamXpcp9LFNThT7XgXbbrTly5/SSvY5UVHdB6ieqI9Two5
+   PUdCpsMqMlC6xGM6SWxio+O80Pfn8odkEcnPtQBVrwUM/FTcvDp9+GIEk
+   TbTWF1LF5Hpyx7XuOyCYQ1kTxF0WJcESVjKjwlL1sZIZAj1zQf20f5pcn
+   ohKbOmaiKrOY0xguwDlC7e5f5rsJMxD+tExxVzpK10aj8vHxa7M82kO/Z
+   XQ+2XUdcSBZnh/lyktJvnU5MwS3+U0pbwSr43MbsrKSm/X9MaZ0gW88bt
+   5ww7BPRCLvtZtHjNivArVCHxzjsmIwf/OPuHmPeNnJzalh+I8Iy4ai4Pu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="396717295"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="396717295"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 06:45:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="706583429"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="706583429"
+Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
+  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2023 06:45:43 -0800
+Message-ID: <425d56ca2a2c9eb3a0bd4019706aee6db5dd8fc6.camel@linux.intel.com>
+Subject: Re: [PATCH 2/2] Documentation/process: Add a maintainer handbook
+ for KVM x86
+From:   Robert Hoo <robert.hu@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Shier <pshier@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 28 Feb 2023 22:45:42 +0800
+In-Reply-To: <20230217225449.811957-3-seanjc@google.com>
+References: <20230217225449.811957-1-seanjc@google.com>
+         <20230217225449.811957-3-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEivzxemz8SDr2_NAvgi6XdzA12d5_3ZOmJ=1FF8VMbaGLdVng@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 11:06:12AM +0100, Aleksandr Mikhalitsyn wrote:
-> On Mon, Feb 27, 2023 at 7:32 PM Leon Romanovsky <leon@kernel.org> wrote:
-> >
-> > On Mon, Feb 27, 2023 at 10:55:04AM +0100, Aleksandr Mikhalitsyn wrote:
-> > > On Mon, Feb 27, 2023 at 10:47 AM Leon Romanovsky <leon@kernel.org> wrote:
-> > > >
-> > > > On Sun, Feb 26, 2023 at 09:17:30PM +0100, Alexander Mikhalitsyn wrote:
-> > > > > Currently, we set MSG_CTRUNC flag is we have no
-> > > > > msg_control buffer provided and SO_PASSCRED is set
-> > > > > or if we have pending SCM_RIGHTS.
-> > > > >
-> > > > > For some reason we have no corresponding check for
-> > > > > SO_PASSSEC.
-> > > > >
-> > > > > Cc: "David S. Miller" <davem@davemloft.net>
-> > > > > Cc: Eric Dumazet <edumazet@google.com>
-> > > > > Cc: Jakub Kicinski <kuba@kernel.org>
-> > > > > Cc: Paolo Abeni <pabeni@redhat.com>
-> > > > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> > > > > ---
-> > > > >  include/net/scm.h | 13 ++++++++++++-
-> > > > >  1 file changed, 12 insertions(+), 1 deletion(-)
-> > > >
-> > > > Is it a bugfix? If yes, it needs Fixes line.
-> > >
-> > > It's from 1da177e4c3 ("Linux-2.6.12-rc2") times :)
-> > > I wasn't sure that it's correct to put the "Fixes" tag on such an old
-> > > and big commit. Will do. Thanks!
-> > >
-> > > >
-> > > > >
-> > > > > diff --git a/include/net/scm.h b/include/net/scm.h
-> > > > > index 1ce365f4c256..585adc1346bd 100644
-> > > > > --- a/include/net/scm.h
-> > > > > +++ b/include/net/scm.h
-> > > > > @@ -105,16 +105,27 @@ static inline void scm_passec(struct socket *sock, struct msghdr *msg, struct sc
-> > > > >               }
-> > > > >       }
-> > > > >  }
-> > > > > +
-> > > > > +static inline bool scm_has_secdata(struct socket *sock)
-> > > > > +{
-> > > > > +     return test_bit(SOCK_PASSSEC, &sock->flags);
-> > > > > +}
-> > > > >  #else
-> > > > >  static inline void scm_passec(struct socket *sock, struct msghdr *msg, struct scm_cookie *scm)
-> > > > >  { }
-> > > > > +
-> > > > > +static inline bool scm_has_secdata(struct socket *sock)
-> > > > > +{
-> > > > > +     return false;
-> > > > > +}
-> > > > >  #endif /* CONFIG_SECURITY_NETWORK */
-> > > >
-> > > > There is no need in this ifdef, just test bit directly.
-> > >
-> > > The problem is that even if the kernel is compiled without
-> > > CONFIG_SECURITY_NETWORK
-> > > userspace can still set the SO_PASSSEC option. IMHO it's better not to
-> > > set MSG_CTRUNC
-> > > if CONFIG_SECURITY_NETWORK is disabled, msg_control is not set but
-> > > SO_PASSSEC is enabled.
-> > > Because in this case SCM_SECURITY will never be sent. Please correct
-> > > me if I'm wrong.
-> >
-> > I don't know enough in this area to say if it is wrong or not.
-> > My remark was due to the situation where user sets some bit which is
-> > going to be ignored silently. It will be much cleaner do not set it
-> > if CONFIG_SECURITY_NETWORK is disabled instead of masking its usage.
-> 
-> Hi Leon,
-> 
-> I agree with you, but IMHO then it looks more correct to return -EOPNOTSUPP on
-> setsockopt(fd, SO_PASSSEC, ...) if CONFIG_SECURITY_NETWORK is disabled.
-> But such a change may break things.
-> 
-> Okay, anyway I'll wait until net-next will be opened and present a
-> patch with a more
-> detailed description and Fixes tag. Speaking about this problem with
-> CONFIG_SECURITY_NETWORK
-> if you insist that it will be more correct then I'm ready to fix it too.
+On Fri, 2023-02-17 at 14:54 -0800, Sean Christopherson wrote:
+> +Branches
+> +~~~~~~~~
+> +The KVM x86 tree is organized into multiple topic branches.  The
+> purpose of
+> +using finer-grained topic branches is to make it easier to keep tabs
+> on an area
+> +of development, and to limit the collateral damage of human errors
+> and/or buggy
+> +commits, e.g. dropping the HEAD commit of a topic branch has no
+> impact on other
+> +in-flight commits' SHA1 hashes, and having to reject a pull request
+> due to bugs
+> +delays only that topic branch.
+> +
+> +All topic branches, except for ``next`` and ``fixes``
 
-I won't insist on anything, most likely Eric will comment if you need to
-fix it.
+What's this "fixes" branch for?
+If fixes for current cycle, will apply to main KVM tree; if fixes for
+next cycle, why not directly to its topic branch or next branch (kvm-
+x86 tree)?
+I see in main KVM tree, its "fixes" branch is very inactive.
+Too many functional branches will add your maintenance burden.
 
-Thanks
+> , are rolled into ``next``
+> +via a cthulu merge on an as-needed basis, i.e. when a topic branch
+> is updated.
+> +As a result, force pushes to ``next`` are common.
+> +
+> +Lifecycle
+> +~~~~~~~~~
+> +Pull requests for the next release cycle are sent to the main KVM
+> tree, one
+> +for each KVM x86 topic branch. 
 
+Will each KVM x86 topic branch has a mapping topic branch in main KVM
+tree? I mean where is their pull target(s), next branch in main KVM
+tree? or their counterpart branches in main KVM tree?
+
+>  If all goes well, the topic branches are rolled
+> +into the main KVM pull request sent during Linus' merge
+> window.  Pull requests
+> +for KVM x86 branches are typically made the week before Linus'
+> opening of the
+> +merge window, e.g. the week following rc7 for "normal" releases.
+> +
+> +The KVM x86 tree doesn't have its own official merge window, but
+> there's a soft
+> +close around rc5 for new features, and a soft close around rc6 for
+> fixes.
+> +
 > 
-> Thanks,
-> Alex
-> 
-> >
-> > Thanks
-> >
-> > >
-> > > Kind regards,
-> > > Alex
-> > >
-> > > >
-> > > > >
-> > > > >  static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
-> > > > >                               struct scm_cookie *scm, int flags)
-> > > > >  {
-> > > > >       if (!msg->msg_control) {
-> > > > > -             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp)
-> > > > > +             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
-> > > > > +                 scm_has_secdata(sock))
-> > > > >                       msg->msg_flags |= MSG_CTRUNC;
-> > > > >               scm_destroy(scm);
-> > > > >               return;
-> > > > > --
-> > > > > 2.34.1
-> > > > >
+> +Comments
+> +~~~~~~~~
+> +Write comments using imperative mood and avoid pronouns.  Use
+> comments to
+> +provide a high level overview of the code, and/or to explain why the
+> code does
+> +what it does.  Do not reiterate what the code literally does; let
+> the code
+> +speak for itself.  If the code itself is inscrutable, comments will
+> not help.
+
+Welcome comments that state preconditions for calling this function?
+e.g. some lock held.
+
+> +
+> +SDM and APM References
+> +~~~~~~~~~~~~~~~~~~~~~~
+> +Much of KVM's code base is directly tied to architectural behavior
+> defined in
+> +Intel's Software Development Manual (SDM) and AMD's Architecture
+> Programmer’s
+> +Manual (APM).  Use of "Intel's SDM" and "AMD's APM", or even just
+> "SDM" or
+> +"APM", without additional context is a-ok.
+> +
+> +Do not reference specific sections, tables, figures, etc. by number,
+> especially
+> +not in comments.  Instead, copy-paste the relevant snippet (if
+> warranted), and
+> +reference sections/tables/figures by name.  The layouts of the SDM
+> and APM are
+> +constantly changing, and so the numbers/labels aren't
+> stable/consistent.
+
+Ack
+
