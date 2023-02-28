@@ -2,111 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0A36A5ED0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E066A5ED2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjB1SfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 13:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S229675AbjB1SgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 13:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjB1Sey (ORCPT
+        with ESMTP id S229486AbjB1SgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 13:34:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A818C1A48F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 10:34:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677609246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M/upaeZg39CGRkRtUjHzzG4geHV95wgedCmPWBh4GgI=;
-        b=PzeZO+pnrZ+dYqYuyJKD3s6mXoNN2gdfl+FK5L1foe0N9SoH22mBjv6of9FjWgmE/5dzCO
-        Qa+ZXjjVO1gx382/V020XIAye6mmnJsB4DpdoJh1lD7f9l3E/7mrNX6YX41QwvAuzOEQSv
-        xX9d4UUZhbsas9de1o742bun1CVzo+4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-TNFH7IW9OCiX0RXE7QnGAQ-1; Tue, 28 Feb 2023 13:34:03 -0500
-X-MC-Unique: TNFH7IW9OCiX0RXE7QnGAQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 28 Feb 2023 13:36:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE7D21282;
+        Tue, 28 Feb 2023 10:36:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2960C811732;
-        Tue, 28 Feb 2023 18:34:02 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.252])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 47E00C15BAD;
-        Tue, 28 Feb 2023 18:33:59 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue, 28 Feb 2023 19:33:55 +0100 (CET)
-Date:   Tue, 28 Feb 2023 19:33:52 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Dmitry Safonov <0x7f454c46@gmail.com>
-Cc:     Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        avagin@gmail.com, peterz@infradead.org, luto@kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, corbet@lwn.net,
-        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Subject: Re: [PATCH v12 2/3] ptrace,syscall_user_dispatch: checkpoint/restore
- support for SUD
-Message-ID: <20230228183351.GB15021@redhat.com>
-References: <20230224233126.1936-1-gregory.price@memverge.com>
- <20230224233126.1936-3-gregory.price@memverge.com>
- <CAJwJo6YnELNhU8RmR-z37vDZ=xb0CmUUBgrPGgHP2dqjVm=O2g@mail.gmail.com>
- <20230228165217.GA16798@redhat.com>
- <c44af068-8f30-9fbc-1b06-da9fe317f213@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D8161048;
+        Tue, 28 Feb 2023 18:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4234DC433EF;
+        Tue, 28 Feb 2023 18:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677609368;
+        bh=4i2w3IjZpNVaaX/QXWl+jjxOp48vuN+cZ/1cr/Gy4Rs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IswZsZP2rr/5zrUJ4S89pykp6mhI3haKo9AF2OjnaKwOp3TjtAToT56/rrl4tIB0q
+         WJeXQ5zTXfYFlqXFVpdYF7TNx43GWpXXjGncCwD29RDwA02vJ/6ESQXeR+QABIrhVz
+         W+fit+7HPEi6Hh6O9ilQ/VD6R1Jqmgr2f0KDYvNQ=
+Date:   Tue, 28 Feb 2023 19:36:06 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     stable@vger.kernel.org, Storm Dragon <stormdragon2976@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Please backport commit ae3419fbac84 ("vc_screen: don't clobber
+ return value in vcs_read")
+Message-ID: <Y/5Jlg3M/2KYtfzV@kroah.com>
+References: <15acd998-ea8a-4897-9920-dd19fc06a996@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <c44af068-8f30-9fbc-1b06-da9fe317f213@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <15acd998-ea8a-4897-9920-dd19fc06a996@t-8ch.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/28, Dmitry Safonov wrote:
->
-> On 2/28/23 16:52, Oleg Nesterov wrote:
-> > On 02/27, Dmitry Safonov wrote:
-> >>
-> >>> +int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-> >>> +                                    void __user *data)
-> >>> +{
-> >>> +       int rc;
-> >>> +       struct ptrace_sud_config cfg;
-> >>> +
-> >>> +       if (size != sizeof(struct ptrace_sud_config))
-> >>> +               return -EINVAL;
-> >>> +
-> >>> +       if (copy_from_user(&cfg, data, sizeof(struct ptrace_sud_config)))
-> >>> +               return -EFAULT;
-> >>
-> >> It seems that the tool you want here would be copy_struct_from_user(),
-> >> which is designed for extendable syscalls.
-> >
-> > Hmm. Why?
-> >
-> > In this case ksize == usize, so why do we need copy_struct_from_user ?
->
-> In case the structure extends in future, that will let newer userspace
-> run on an older kernel (as long as it doesn't use [set] any new fields).
+On Tue, Feb 28, 2023 at 03:42:12AM +0000, Thomas Weißschuh wrote:
+> Hi,
+> 
+> please backport the following commit[0] to all stable releases that
+> contain the commit
+> 226fae124b2d ("vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF")
+> 
+> Commit 46d733d0efc7 ("vc_screen: modify vcs_size() handling in vcs_read()") [1]
+> also tries to fix this commit but should not actually be necessary for a
+> proper fix. It may make sense to also backport for consistency.
 
-Sure, I understand that, but I don't think it's worth the trouble
-in this case.
+Now queued up, thanks.
 
-If (unlikely, I think) this structure ever extends we can switch to
-copy_struct_from_user() or do something else if check_zeroed_user()
-makes no real sense for the new fields.
-
-Right now I think it is more important to ensure that the new users
-of this API use the correct size.
-
-Oleg.
-
+greg k-h
