@@ -2,288 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FD86A52E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 433B66A52E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 07:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjB1GUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 01:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S229773AbjB1GWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 01:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjB1GUh (ORCPT
+        with ESMTP id S229437AbjB1GWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 01:20:37 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2057.outbound.protection.outlook.com [40.107.7.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A8C193E4;
-        Mon, 27 Feb 2023 22:20:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WeDhcwAjEmTR5zK2gJiJ126CECtUJZzohhvigyC/NjtL3A1FiVJwDcphbZ9mP/TMKBM02wJEPM09Dy7mL56mEEG2uS7BfNfqPI4+E0/tDaCkCqYP+ylogurwSosTJyjPlaXGbg0h4VpC8g6nr/FWd6sCJBOrHtE3dofTQB8lxdXfwYCYSpjGmDQSLtVyKUuYbecxaT8UAMx6BRcASZV7RB7aoAKJoi7advfcNfUhVKXUd4h8+SxEg5vNSj8VlbXj0qSL//IreYoeEtd55HUQDyC1l5oY7oYGtjMy5tkfm0Tag50+Nx4twT+ViENtx4zox0MoMlrqqAiL0WqntujPRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6aofe97n55yS6ERvM1beGjk21hgdGzpcKTJtAhHrxrg=;
- b=eecwNkgVZb9JOAm5KLSw02ZOGaYfEYLTHeUoOXW0CUGXPkqDqMFZ31zIsEfECEillEqce+70k0JbNkkh9ArW63x8Z1wBEw6AHnCoF/uj2kM3djOjX1DKe5MgAJYuyyS/bAMJRibiUBnNmQWDmD0wvWckRtSxDcbVqdmiObbwP+eTCWRsT2NqEu6uMlJs/0fRLuSpaBdY9X4RQZG5puzC1AYzmzpJ5mDCAQclbpOjoowg0eiweja9VtyS5pWOxZ0PIAcUH7RfLWsCF6zWYVxkh5+32ibQ7zqHHVam4vzy3APdPRl8hY/He6T5ZHMayQjuHopg4EZMQkUl9DQzY8Op9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6aofe97n55yS6ERvM1beGjk21hgdGzpcKTJtAhHrxrg=;
- b=tDp58XLcis89BpAC+/BBlo7UbSucoG4XQFf0zrusurSIYB6HbDTOuwKgTFtnYjiH0rS3UVFT/roQYbu7jAVt2/xLaX6qXyiO1gI9optpBuBFrGi4KAiUWKO26EL7gAAdIF1lZ3ym77OwWNjNKNKr9pXNI7o1tbFEjNbSrq/p9cZ3Q0a3sh3ErtbLUAz0Iz8DsJOihf7bhs6GnfkYabDa85ugXMvvDEvzdB0b+6mi84D4ilYIMFcJ7vRR6FDO1sXKzydzQ74kd6D5Q1p/wsQBitlSCfBL6pCiRXurzBzelWPRBGRbaHbTgjFjNkvTW5hX9CDDPYPJKThRcOl8D6ElRA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by DB9PR10MB6642.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:3d2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Tue, 28 Feb
- 2023 06:20:31 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::784b:e95b:b855:dcc5]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::784b:e95b:b855:dcc5%9]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
- 06:20:31 +0000
-Message-ID: <08b4b0c8-3621-a970-d206-d24e6eb81355@siemens.com>
-Date:   Tue, 28 Feb 2023 07:20:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/2] binfmt_misc: enable sandboxed mounts
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Laurent Vivier <laurent@vivier.eu>,
-        linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Jann Horn <jannh@google.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Matthew Bobrowski <repnop@google.com>,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        containers@lists.linux.dev,
-        Christian Brauner <christian.brauner@ubuntu.com>
-References: <20211216112659.310979-1-brauner@kernel.org>
- <20211216112659.310979-2-brauner@kernel.org>
- <20211226133140.GA8064@mail.hallyn.com>
- <0e817424-51db-fe0b-a00e-ac7933e8ac1d@siemens.com>
- <20220530081358.b3tvgvo63mq5o2oo@wittgenstein>
- <202205311219.725ED1C69@keescook>
- <20220602104107.6b3d3udhslvhg6ew@wittgenstein>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <20220602104107.6b3d3udhslvhg6ew@wittgenstein>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0121.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9d::12) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
+        Tue, 28 Feb 2023 01:22:14 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F95419F3F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 22:22:12 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id v16so5728349wrn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 22:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677565330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hANHy0X7xOXrMa1dJjI7V0xkBTqEpJuS3LQGVCqgUfk=;
+        b=W5BfGnxdyxFf46WKy7y4ImpGYl5wMpuife1A5HRQOyHDeXq/u38o16qmtmPvBodyum
+         rN34+G9/jvWc46Ix9zXPdyW5apGfAie9mXO1WBDJJL6Lsik3rkXjnxNxM3rXCNjZo4Z/
+         TUWNhGW8ek502hTK7LO+QHXB8C8ydba+wa/JVQk/QQLRfBc0bvtihb8lW2NWrm3ev0+s
+         0Mxhi4QTc0FhrBb8QtZXWeOtC/tENtFFB0yKml6zoVGVGxF8aldAe4JKj0CSYQTVTM94
+         RftvwaQ2Ccw/tKkF7rt6hbjWicP7CJ4A2X6rCbf1hb6tRYqsVSl7yMepZBaONXVK7Ya1
+         /8hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677565330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hANHy0X7xOXrMa1dJjI7V0xkBTqEpJuS3LQGVCqgUfk=;
+        b=ZJMyOmKQnyBJ6MBuWnpWNG9SFSXJ+RfTLLF6YSkD7+Eyja9r/OYDsGBc/at2BttoVy
+         WoHgGj34Ij3feJHFDxfuU47TyI+lmZcz1vfVBA9AYnkbvwr8fygKSvQ8Rjo+/uriyIim
+         jvp1DEe1TmzHs4IXRfJ37iSdLE8IMie8/fAOovfOZzKrEdXLUH6kUgP3wrJ0P5RYOMzV
+         DnteMU9p2/VUhKp0lbpGUSlfXFRziXlpu4XvYCLRzw+gHbFDHIVN9lFIegHx6UwKMSNx
+         ywesnHJtpVju9vN4XeSn/Li1VhSMQKrgKTOBInO/QSzg7rv6EwuwTjbSjaf9H+YbZ93g
+         VUfw==
+X-Gm-Message-State: AO0yUKVIOYnEcpaWK/V8Opwgp/MqCsfenSoE8dSpR5wAZtBQ6g0X+z2f
+        UpkH32Z2iQlWcb2R9xeimSaACfo5n+GoEtTO3J9pYw==
+X-Google-Smtp-Source: AK7set+VMS+cyRme9m1rsHU08Y9w782j8uieTLMEk52FawGlwlISWhERluqJUgKKCFbozeBXpMdoU/NE+2WjKsCTj+s=
+X-Received: by 2002:a5d:4e07:0:b0:2c7:ce2:6484 with SMTP id
+ p7-20020a5d4e07000000b002c70ce26484mr257258wrt.9.1677565330354; Mon, 27 Feb
+ 2023 22:22:10 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|DB9PR10MB6642:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb87789c-f033-468a-1299-08db1953e4b4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Agy+ZBglX85XO2VIORqpUFSgVWBIkKiT86myXe4MDXVyn3JvKllz/nEOQdNUb/LQfRCtKa3bVTjCaBgEeBN+XsU7EFms6MoF3Kyh/bwFreKUjhgVBEgA/Ut/kzqHBXragEvGedRwQEZxbpMHMlL9FYngOwQ0t6TmPtmHQVf4PxvgKjCnKOdrhkdUz6cyBR3J02g0k1XsZJxJ98DVcEAfEi8Uqpu0jJPyJ4imtqnJGTQF8Krs8JZZN1B1tdWIknvOWL84jDuc2web/7jxDiyFkIu7knkZ1/Nsgy1yMxg3zx3hSKqSSobGt31QMLquQ2wq3pS5uMkdLk/pQ0M8lK52J+0/kwTAUm9Hv5tc0XLJt8ZiRjAiOl8x7rIHOH00KiSEY6MmJijvwycj3gJYCIAXUpRbTTozpyMPVOg4dMWJeAQ+sTjydiTcKiuuPuG63O0FdRNrCQ4vQSB8QK5/3t5U6NMtgOi2vEp86b/UfkLnzOYYRoFLc5qbfXVDuWpk+0Sn+vbYyGXjCTx/7FQX6JpGRmjEXwL5Y5F1z0ZRUbZYIkW/1/+EVkfhk+CSrC5dTcHV5jRbJC/QSTsuIGWqcJAmZykdKjJ92vjbuLX9iX4ireKXKdtlzA9BBH2FjsszhichBute3Vn1rr7wDCufaKFv+oGAVCQ2HlTh7vP4S/e72HxriSn1ySvilFAQRN4nJk6gzx8OSKoVipHH/H7frLugy02kgZTAp3BI1sSnKRhxiB42IHOY7Pbt18v+tztGMcVe
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(346002)(396003)(136003)(451199018)(36756003)(31696002)(110136005)(478600001)(26005)(66556008)(66946007)(8676002)(86362001)(4326008)(41300700001)(66476007)(8936002)(316002)(2906002)(44832011)(7416002)(5660300002)(83380400001)(6506007)(186003)(54906003)(6666004)(966005)(38100700002)(6486002)(53546011)(6512007)(2616005)(82960400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?STB0M212ZjNPZHU1NlU0Tzg0SW9LTlFjR09hZ0dzcmdWQTV1RE84T1RMa01N?=
- =?utf-8?B?K1pRSTh1b0RQMENzWHlBSjNBZ0QreXZ3MjNIR0phcDZ6SS9Xc1hzS3A5dk44?=
- =?utf-8?B?TTlGMFdFMytBMHVnTUZJSnByc0pBMmxJS2RLWkh2TkFvTmMyQ25nbXcyRWVk?=
- =?utf-8?B?UTdiOHFCMG9wMGptNjJ2MU1xNGVCdHNXN0ZVM1FybFpZNGo5QU5qeTJtN2Nk?=
- =?utf-8?B?RVIzV0g4VFlmRWdsd2o3Q3pRTSt3WjY1UVB3N09DQ3Ava2Z0d2pWeXFxZnIw?=
- =?utf-8?B?Rkl3ZHE5NERKTmI5b1RLVHJ6OXgyenlEYjdvdkNZRW5EUzltNE9pb2IrWWlE?=
- =?utf-8?B?OHlpdVFCN0w3WUI5a3NhaGdvTmJtcGk5QW9jMWVCZ3NBclhIR3A2UFZCcUx2?=
- =?utf-8?B?ckVsK2FFM0NvdEFWbk1NWisyOUFJNEFuUUdtUG1ibnJEQWhMcGVpZ3pKVHV2?=
- =?utf-8?B?cmlqSjJmM3VkenRvblNjT0xpcFlKbmIzM3dIeFdmMWppT0ovZnF4eml0RkNM?=
- =?utf-8?B?TDZOcHlaS2kxZGtlS0lIeGlUZHFuV09OSk5IYldrQTl5S2hzaVhDZ1hVQXRN?=
- =?utf-8?B?MFRhSWRrcEhHY0sxSDZtMzAyUGlMSlk1Z2JUcFNRY0RPWWNjY3VuRTl0UkJq?=
- =?utf-8?B?ajhmaWxlOWRuL0FuaGNrQ3Y3YWE4bEVYRTBZbFJ0aVJNVkpLb3g1WXdnSUk5?=
- =?utf-8?B?STFidmpkem5BRXZIOStNNU9rZWFvSXVCckRhMGlTVmljK0xBOHZKTVY4ZDlM?=
- =?utf-8?B?eVE2KzhpWnNtaDQvbzlTTXdzSVlxQ21RVVRVREI1Tk9SbjEzdGZHL3h3SWp2?=
- =?utf-8?B?SHhwaGp1cWhrR2hnUmNUZDFVcVBGRDl1enpHK2hWbUZvQnlYYlNKSmlMWTNG?=
- =?utf-8?B?RzhjenNBMno5THNxSXpZQmJTVVVxNmNFeFdMMWk1Y0dRdThJemVHNGpMcXVQ?=
- =?utf-8?B?eTh3ZVlpUi9PUWFjd1pTN2V2bGh1N21pY3NkOEkrd01yMXA4NDU4Z0x4OXdT?=
- =?utf-8?B?TDdyclcvZDBFSkpLeU5CdGhyTW9TVlVPNCsyaGN5VHQvRjQ5WTNtc2NqYzJK?=
- =?utf-8?B?ZUUxWHJieTlPQ1JGaGVWeXVwd3BPNDZCOVAzalFqUng5NTBMajJqaTFwTzhB?=
- =?utf-8?B?dW11YVpMdzFsbW8zNlQrWkhEUFVQSFNNajE3QlM3Q1VrbXRZMHh1eEZvRTZh?=
- =?utf-8?B?RnNKMDVtVGtVcEp2eVVXSUhqS0Z0U3M0aG0xZEtDT3JMdDNQL3JBUDlTczRv?=
- =?utf-8?B?UFJvN2ZtTW4xZEhjOUZtUXFIejhmOHRReWJGQW1tWWF3ck1XZnQ5WWdjcnVK?=
- =?utf-8?B?QXJtU1hsWUFUTWtrR29sSldKN044SGRyYzZHelFWbmpWMDJpcnptU3BycUlT?=
- =?utf-8?B?WlJZM3NLcVFvaVFkdFl0MWFzd3pNN0FQeDErc2NvS29Xc3RXaGNnajdETjls?=
- =?utf-8?B?bUVMZVVEV05wTzUxbys4aUF4SElCeHlBR1lqdkRRdXdMYWVnb3lHSExJRFQv?=
- =?utf-8?B?bmQyeld2czY5K09NU3U5Mk5kYkdxV01kOWQ3SzlxOVZwZ213UnlyazBneFdh?=
- =?utf-8?B?SFZ0bnlWU2ErQ3VWeWVucVRSUmpzTG5ENmV3RE9PeWVLbmZZOGlWdk5FLzN6?=
- =?utf-8?B?RXViaHltWjBDejZPOVQ1LzU4WEpGYmlmVzAvRm9ybmR0S2ZLNnpFbVJ0NE1J?=
- =?utf-8?B?a0Q3dGRBOXlvaWRuVmJsQ2p0VnpLWmNuZHNTR0FMUGVaUUdZWU5ocVlvSjdV?=
- =?utf-8?B?YXNZNHM1OVNhWUgzR0xXV1dkSktaUGlFSjBDT1hBTXY5MnZERzlhTmZBZFZm?=
- =?utf-8?B?c1RzOUpNR1c1MFgwRTQ2eTE5cjk2TVpTZDJmdy85OGZrbFk3L2RKSlZVMnBQ?=
- =?utf-8?B?UGVmdEZNdmhxYUYvM2NiTEs2UFU0U0xzaisxM1Ztdk5RaE5IalpYMTFCU3RJ?=
- =?utf-8?B?akkzbHc0WEt6NTVGZWEwWWkzcHo0Sm9VWFl3Y1ZrYlBJYkFORjZ4RVJrN2M1?=
- =?utf-8?B?ZGpDUmVZM2wySUhUaHR4NHBYdm84eWZLRGs5UERTaUxGS3RrNVlkSGphT2xm?=
- =?utf-8?B?ZnNUTEZTS01HaTk4U3ZEUmRKRkU0Zk10UVlUNENUbmZlQ3k3TmtvY2s4NVdO?=
- =?utf-8?B?SjB0R3V0aGFwaHJ1dDVMQjBBbnJERTBKenhyUjRsVnVNZHBhMnRQMkdrc3BS?=
- =?utf-8?B?WUE9PQ==?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb87789c-f033-468a-1299-08db1953e4b4
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 06:20:31.4762
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3ceVd1I5Otbxa8MRB0fB/YFxCMhIRFXU8upD4f8SU89eldCNYxAlBDcgA3akttzUtam0paal3hgiD70KC5JE1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR10MB6642
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <20230219092848.639226-1-irogers@google.com> <dc14eb3e-f5e3-4a64-85e6-5be6072e305d@linux.intel.com>
+In-Reply-To: <dc14eb3e-f5e3-4a64-85e6-5be6072e305d@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 27 Feb 2023 22:21:57 -0800
+Message-ID: <CAP-5=fVBoLv-P7fhsQQBfFig0fopfghoGry2dS7gt=rfWkKqyQ@mail.gmail.com>
+Subject: Re: [PATCH v1 00/51] shadow metric clean up and improvements
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        James Clark <james.clark@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.06.22 12:41, Christian Brauner wrote:
-> On Tue, May 31, 2022 at 12:24:37PM -0700, Kees Cook wrote:
->> On Mon, May 30, 2022 at 10:13:58AM +0200, Christian Brauner wrote:
->>> On Sun, May 29, 2022 at 09:35:40PM +0200, Jan Kiszka wrote:
->>>> On 26.12.21 14:31, Serge E. Hallyn wrote:
->>>>> On Thu, Dec 16, 2021 at 12:26:59PM +0100, Christian Brauner wrote:
->>>>>> From: Christian Brauner <christian.brauner@ubuntu.com>
->>>>>>
->>>>>> Enable unprivileged sandboxes to create their own binfmt_misc mounts.
->>>>>> This is based on Laurent's work in [1] but has been significantly
->>>>>> reworked to fix various issues we identified in earlier versions.
->>>>>>
->>>>>> While binfmt_misc can currently only be mounted in the initial user
->>>>>> namespace, binary types registered in this binfmt_misc instance are
->>>>>> available to all sandboxes (Either by having them installed in the
->>>>>> sandbox or by registering the binary type with the F flag causing the
->>>>>> interpreter to be opened right away). So binfmt_misc binary types are
->>>>>> already delegated to sandboxes implicitly.
->>>>>>
->>>>>> However, while a sandbox has access to all registered binary types in
->>>>>> binfmt_misc a sandbox cannot currently register its own binary types
->>>>>> in binfmt_misc. This has prevented various use-cases some of which were
->>>>>> already outlined in [1] but we have a range of issues associated with
->>>>>> this (cf. [3]-[5] below which are just a small sample).
->>>>>>
->>>>>> Extend binfmt_misc to be mountable in non-initial user namespaces.
->>>>>> Similar to other filesystem such as nfsd, mqueue, and sunrpc we use
->>>>>> keyed superblock management. The key determines whether we need to
->>>>>> create a new superblock or can reuse an already existing one. We use the
->>>>>> user namespace of the mount as key. This means a new binfmt_misc
->>>>>> superblock is created once per user namespace creation. Subsequent
->>>>>> mounts of binfmt_misc in the same user namespace will mount the same
->>>>>> binfmt_misc instance. We explicitly do not create a new binfmt_misc
->>>>>> superblock on every binfmt_misc mount as the semantics for
->>>>>> load_misc_binary() line up with the keying model. This also allows us to
->>>>>> retrieve the relevant binfmt_misc instance based on the caller's user
->>>>>> namespace which can be done in a simple (bounded to 32 levels) loop.
->>>>>>
->>>>>> Similar to the current binfmt_misc semantics allowing access to the
->>>>>> binary types in the initial binfmt_misc instance we do allow sandboxes
->>>>>> access to their parent's binfmt_misc mounts if they do not have created
->>>>>> a separate binfmt_misc instance.
->>>>>>
->>>>>> Overall, this will unblock the use-cases mentioned below and in general
->>>>>> will also allow to support and harden execution of another
->>>>>> architecture's binaries in tight sandboxes. For instance, using the
->>>>>> unshare binary it possible to start a chroot of another architecture and
->>>>>> configure the binfmt_misc interpreter without being root to run the
->>>>>> binaries in this chroot and without requiring the host to modify its
->>>>>> binary type handlers.
->>>>>>
->>>>>> Henning had already posted a few experiments in the cover letter at [1].
->>>>>> But here's an additional example where an unprivileged container
->>>>>> registers qemu-user-static binary handlers for various binary types in
->>>>>> its separate binfmt_misc mount and is then seamlessly able to start
->>>>>> containers with a different architecture without affecting the host:
->>>>>>
->>>>>> root    [lxc monitor] /var/snap/lxd/common/lxd/containers f1
->>>>>> 1000000  \_ /sbin/init
->>>>>> 1000000      \_ /lib/systemd/systemd-journald
->>>>>> 1000000      \_ /lib/systemd/systemd-udevd
->>>>>> 1000100      \_ /lib/systemd/systemd-networkd
->>>>>> 1000101      \_ /lib/systemd/systemd-resolved
->>>>>> 1000000      \_ /usr/sbin/cron -f
->>>>>> 1000103      \_ /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
->>>>>> 1000000      \_ /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
->>>>>> 1000104      \_ /usr/sbin/rsyslogd -n -iNONE
->>>>>> 1000000      \_ /lib/systemd/systemd-logind
->>>>>> 1000000      \_ /sbin/agetty -o -p -- \u --noclear --keep-baud console 115200,38400,9600 vt220
->>>>>> 1000107      \_ dnsmasq --conf-file=/dev/null -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file=/run/lxc/dnsmasq.pid --liste
->>>>>> 1000000      \_ [lxc monitor] /var/lib/lxc f1-s390x
->>>>>> 1100000          \_ /usr/bin/qemu-s390x-static /sbin/init
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-journald
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /usr/sbin/cron -f
->>>>>> 1100103              \_ /usr/bin/qemu-s390x-static /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-ac
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
->>>>>> 1100104              \_ /usr/bin/qemu-s390x-static /usr/sbin/rsyslogd -n -iNONE
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-logind
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud console 115200,38400,9600 vt220
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/0 115200,38400,9600 vt220
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/1 115200,38400,9600 vt220
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/2 115200,38400,9600 vt220
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/3 115200,38400,9600 vt220
->>>>>> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-udevd
->>>>>>
->>>>>> [1]: https://lore.kernel.org/all/20191216091220.465626-1-laurent@vivier.eu
->>>>>> [2]: https://discuss.linuxcontainers.org/t/binfmt-misc-permission-denied
->>>>>> [3]: https://discuss.linuxcontainers.org/t/lxd-binfmt-support-for-qemu-static-interpreters
->>>>>> [4]: https://discuss.linuxcontainers.org/t/3-1-0-binfmt-support-service-in-unprivileged-guest-requires-write-access-on-hosts-proc-sys-fs-binfmt-misc
->>>>>> [5]: https://discuss.linuxcontainers.org/t/qemu-user-static-not-working-4-11
->>>>>>
->>>>>> Link: https://lore.kernel.org/r/20191216091220.465626-2-laurent@vivier.eu (origin)
->>>>>> Link: https://lore.kernel.org/r/20211028103114.2849140-2-brauner@kernel.org (v1)
->>>>>> Cc: Sargun Dhillon <sargun@sargun.me>
->>>>>> Cc: Serge Hallyn <serge@hallyn.com>
->>>>>
->>>>> (one typo below)
->>>>>
->>>>> Acked-by: Serge Hallyn <serge@hallyn.com>
->>>>>
->>>>
->>>> What happened to this afterwards? Any remaining issues?
->>>
->>> Not that we know. I plan to queue this up for 5.20.
->>
->> Hello!
->>
->> Thanks for the thread-ping -- I hadn't had a chance to read through this
->> before, but since it's touching binfmt, it popped up on my radar. :)
->>
->> I like it overall, though I'd rather see it split up more (there's
->> some refactoring built into the patches that would be nice to split out
->> just to make review easier), but since others have already reviewed it,
->> that's probably overkill.
->>
->> I'd really like to see some self-tests for this, though. Especially
-> 
-> Yeah, I had started writing them but decoupled the upstreaming. Imho,
-> you can start queueing this up. I'd like this to have very long exposure
-> in -next. I'll follow up with selftests in the next weeks. (I'm out for
-> a conference this week.)
-> 
->> around the cred logic changes and the namespace fallback logic. I'd like
->> to explicitly document and test what the expectations are around the
->> mounts, etc.
->>
->> Finally, I'd prefer this went via the execve tree.
-> 
-> I mentioned this yesterday to you but just so there's a paper trail:
-> The series and this iteration preceeds the maintainer entry. That's the
-> only reason this originally wasn't aimed at that tree when the series
-> was sent. You've been in Cc from the start though. :)
-> I'd like to step up and maintain the binfmt_misc fs going forward. There
-> are other tweaks it could use.
-> 
+On Mon, Feb 27, 2023 at 2:05=E2=80=AFPM Liang, Kan <kan.liang@linux.intel.c=
+om> wrote:
+>
+>
+>
+> On 2023-02-19 4:27 a.m., Ian Rogers wrote:
+> > Recently the shadow stat metrics broke due to repeated aggregation and
+> > a quick fix was applied:
+> > https://lore.kernel.org/lkml/20230209064447.83733-1-irogers@google.com/
+> > This is the longer fix but one that comes with some extras. To avoid
+> > fixing issues for hard coded metrics, the topdown, SMI cost and
+> > transaction flags are moved into json metrics. A side effect of this
+> > is that TopdownL1 metrics will now be displayed when supported, if no
+> > "perf stat" events are specified.
+> >
+> > Another fix included here is for event grouping as raised in:
+> > https://lore.kernel.org/lkml/CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdT=
+DRQfGUBMQ@mail.gmail.com/
+> > Metrics are now tagged with NMI and SMT flags, meaning that the events
+> > shouldn't be grouped if the NMI watchdog is enabled or SMT is enabled.
+> >
+> > Given the two issues, the metrics are re-generated and the patches
+> > also include the latest Intel vendor events. The changes to the metric
+> > generation code can be seen in:
+> > https://github.com/intel/perfmon/pull/56
+> >
+> > Hard coded metrics support thresholds, the patches add this ability to
+> > json metrics so that the hard coded metrics can be removed. Migrate
+> > remaining hard coded metrics to looking up counters from the
+> > evlist/aggregation count. Finally, get rid of the saved_value logic
+> > and thereby look to fix the aggregation issues.
+> >
+> > Some related fix ups and code clean ups are included in the changes,
+> > in particular to aid with the code's readability and to keep topdown
+> > documentation in sync.
+> >
+> > Ian Rogers (51):
+>
+> Thanks Ian for the clean up and improvements. The patches 1-38 looks
+> good to me.
+>
+> Reviewed-by: Kan Liang<kan.liang@linux.intel.com>
+>
+> I like the idea of utilizing the json metrics. But the changes for the
+> later patches seem change the current user-visible behavior for some case=
+s.
 
-Did anything happen after this? I'm not finding traced in lkml at least.
+Thanks Kan, I'll put some comments on the previous thread wrt behavior chan=
+ge.
 
-Jan
+Ian
 
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux
-
+> Thanks,
+> Kan
+>
+> >   perf tools: Ensure evsel name is initialized
+> >   perf metrics: Improve variable names
+> >   perf pmu-events: Remove aggr_mode from pmu_event
+> >   perf pmu-events: Change aggr_mode to be an enum
+> >   perf pmu-events: Change deprecated to be a bool
+> >   perf pmu-events: Change perpkg to be a bool
+> >   perf expr: Make the online topology accessible globally
+> >   perf pmu-events: Make the metric_constraint an enum
+> >   perf pmu-events: Don't '\0' terminate enum values
+> >   perf vendor events intel: Refresh alderlake events
+> >   perf vendor events intel: Refresh alderlake-n metrics
+> >   perf vendor events intel: Refresh broadwell metrics
+> >   perf vendor events intel: Refresh broadwellde metrics
+> >   perf vendor events intel: Refresh broadwellx metrics
+> >   perf vendor events intel: Refresh cascadelakex events
+> >   perf vendor events intel: Add graniterapids events
+> >   perf vendor events intel: Refresh haswell metrics
+> >   perf vendor events intel: Refresh haswellx metrics
+> >   perf vendor events intel: Refresh icelake events
+> >   perf vendor events intel: Refresh icelakex metrics
+> >   perf vendor events intel: Refresh ivybridge metrics
+> >   perf vendor events intel: Refresh ivytown metrics
+> >   perf vendor events intel: Refresh jaketown events
+> >   perf vendor events intel: Refresh knightslanding events
+> >   perf vendor events intel: Refresh sandybridge events
+> >   perf vendor events intel: Refresh sapphirerapids events
+> >   perf vendor events intel: Refresh silvermont events
+> >   perf vendor events intel: Refresh skylake events
+> >   perf vendor events intel: Refresh skylakex metrics
+> >   perf vendor events intel: Refresh tigerlake events
+> >   perf vendor events intel: Refresh westmereep-dp events
+> >   perf jevents: Add rand support to metrics
+> >   perf jevent: Parse metric thresholds
+> >   perf pmu-events: Test parsing metric thresholds with the fake PMU
+> >   perf list: Support for printing metric thresholds
+> >   perf metric: Compute and print threshold values
+> >   perf expr: More explicit NAN handling
+> >   perf metric: Add --metric-no-threshold option
+> >   perf stat: Add TopdownL1 metric as a default if present
+> >   perf stat: Implement --topdown using json metrics
+> >   perf stat: Remove topdown event special handling
+> >   perf doc: Refresh topdown documentation
+> >   perf stat: Remove hard coded transaction events
+> >   perf stat: Use metrics for --smi-cost
+> >   perf stat: Remove perf_stat_evsel_id
+> >   perf stat: Move enums from header
+> >   perf stat: Hide runtime_stat
+> >   perf stat: Add cpu_aggr_map for loop
+> >   perf metric: Directly use counts rather than saved_value
+> >   perf stat: Use counts rather than saved_value
+> >   perf stat: Remove saved_value/runtime_stat
+> >
+> >  tools/perf/Documentation/perf-stat.txt        |   27 +-
+> >  tools/perf/Documentation/topdown.txt          |   70 +-
+> >  tools/perf/arch/powerpc/util/header.c         |    2 +-
+> >  tools/perf/arch/x86/util/evlist.c             |    6 +-
+> >  tools/perf/arch/x86/util/topdown.c            |   78 +-
+> >  tools/perf/arch/x86/util/topdown.h            |    1 -
+> >  tools/perf/builtin-list.c                     |   13 +-
+> >  tools/perf/builtin-script.c                   |    9 +-
+> >  tools/perf/builtin-stat.c                     |  233 +-
+> >  .../arch/x86/alderlake/adl-metrics.json       | 3190 ++++++++++-------
+> >  .../pmu-events/arch/x86/alderlake/cache.json  |   36 +-
+> >  .../arch/x86/alderlake/floating-point.json    |   27 +
+> >  .../arch/x86/alderlake/frontend.json          |    9 +
+> >  .../pmu-events/arch/x86/alderlake/memory.json |    3 +-
+> >  .../arch/x86/alderlake/pipeline.json          |   14 +-
+> >  .../arch/x86/alderlake/uncore-other.json      |   28 +-
+> >  .../arch/x86/alderlaken/adln-metrics.json     |  811 +++--
+> >  .../arch/x86/broadwell/bdw-metrics.json       | 1439 ++++----
+> >  .../arch/x86/broadwellde/bdwde-metrics.json   | 1405 ++++----
+> >  .../arch/x86/broadwellx/bdx-metrics.json      | 1626 +++++----
+> >  .../arch/x86/broadwellx/uncore-cache.json     |   74 +-
+> >  .../x86/broadwellx/uncore-interconnect.json   |   64 +-
+> >  .../arch/x86/broadwellx/uncore-other.json     |    4 +-
+> >  .../arch/x86/cascadelakex/cache.json          |   24 +-
+> >  .../arch/x86/cascadelakex/clx-metrics.json    | 2198 ++++++------
+> >  .../arch/x86/cascadelakex/frontend.json       |    8 +-
+> >  .../arch/x86/cascadelakex/pipeline.json       |   16 +
+> >  .../arch/x86/cascadelakex/uncore-memory.json  |   18 +-
+> >  .../arch/x86/cascadelakex/uncore-other.json   |  120 +-
+> >  .../arch/x86/cascadelakex/uncore-power.json   |    8 +-
+> >  .../arch/x86/graniterapids/cache.json         |   54 +
+> >  .../arch/x86/graniterapids/frontend.json      |   10 +
+> >  .../arch/x86/graniterapids/memory.json        |  174 +
+> >  .../arch/x86/graniterapids/other.json         |   29 +
+> >  .../arch/x86/graniterapids/pipeline.json      |  102 +
+> >  .../x86/graniterapids/virtual-memory.json     |   26 +
+> >  .../arch/x86/haswell/hsw-metrics.json         | 1220 ++++---
+> >  .../arch/x86/haswellx/hsx-metrics.json        | 1397 ++++----
+> >  .../pmu-events/arch/x86/icelake/cache.json    |   16 +
+> >  .../arch/x86/icelake/floating-point.json      |   31 +
+> >  .../arch/x86/icelake/icl-metrics.json         | 1932 +++++-----
+> >  .../pmu-events/arch/x86/icelake/pipeline.json |   23 +-
+> >  .../arch/x86/icelake/uncore-other.json        |   56 +
+> >  .../arch/x86/icelakex/icx-metrics.json        | 2153 +++++------
+> >  .../arch/x86/icelakex/uncore-memory.json      |    2 +-
+> >  .../arch/x86/icelakex/uncore-other.json       |    4 +-
+> >  .../arch/x86/ivybridge/ivb-metrics.json       | 1270 ++++---
+> >  .../arch/x86/ivytown/ivt-metrics.json         | 1311 ++++---
+> >  .../pmu-events/arch/x86/jaketown/cache.json   |    6 +-
+> >  .../arch/x86/jaketown/floating-point.json     |    2 +-
+> >  .../arch/x86/jaketown/frontend.json           |   12 +-
+> >  .../arch/x86/jaketown/jkt-metrics.json        |  602 ++--
+> >  .../arch/x86/jaketown/pipeline.json           |    2 +-
+> >  .../arch/x86/jaketown/uncore-cache.json       |   22 +-
+> >  .../x86/jaketown/uncore-interconnect.json     |   74 +-
+> >  .../arch/x86/jaketown/uncore-memory.json      |    4 +-
+> >  .../arch/x86/jaketown/uncore-other.json       |   22 +-
+> >  .../arch/x86/jaketown/uncore-power.json       |    8 +-
+> >  .../arch/x86/knightslanding/cache.json        |   94 +-
+> >  .../arch/x86/knightslanding/pipeline.json     |    8 +-
+> >  .../arch/x86/knightslanding/uncore-other.json |    8 +-
+> >  tools/perf/pmu-events/arch/x86/mapfile.csv    |   29 +-
+> >  .../arch/x86/sandybridge/cache.json           |    8 +-
+> >  .../arch/x86/sandybridge/floating-point.json  |    2 +-
+> >  .../arch/x86/sandybridge/frontend.json        |   12 +-
+> >  .../arch/x86/sandybridge/pipeline.json        |    2 +-
+> >  .../arch/x86/sandybridge/snb-metrics.json     |  601 ++--
+> >  .../arch/x86/sapphirerapids/cache.json        |   24 +-
+> >  .../x86/sapphirerapids/floating-point.json    |   32 +
+> >  .../arch/x86/sapphirerapids/frontend.json     |    8 +
+> >  .../arch/x86/sapphirerapids/pipeline.json     |   19 +-
+> >  .../arch/x86/sapphirerapids/spr-metrics.json  | 2283 ++++++------
+> >  .../arch/x86/sapphirerapids/uncore-other.json |   60 +
+> >  .../arch/x86/silvermont/frontend.json         |    2 +-
+> >  .../arch/x86/silvermont/pipeline.json         |    2 +-
+> >  .../pmu-events/arch/x86/skylake/cache.json    |   25 +-
+> >  .../pmu-events/arch/x86/skylake/frontend.json |    8 +-
+> >  .../pmu-events/arch/x86/skylake/other.json    |    1 +
+> >  .../pmu-events/arch/x86/skylake/pipeline.json |   16 +
+> >  .../arch/x86/skylake/skl-metrics.json         | 1877 ++++++----
+> >  .../arch/x86/skylake/uncore-other.json        |    1 +
+> >  .../pmu-events/arch/x86/skylakex/cache.json   |    8 +-
+> >  .../arch/x86/skylakex/frontend.json           |    8 +-
+> >  .../arch/x86/skylakex/pipeline.json           |   16 +
+> >  .../arch/x86/skylakex/skx-metrics.json        | 2097 +++++------
+> >  .../arch/x86/skylakex/uncore-memory.json      |    2 +-
+> >  .../arch/x86/skylakex/uncore-other.json       |   96 +-
+> >  .../arch/x86/skylakex/uncore-power.json       |    6 +-
+> >  .../arch/x86/tigerlake/floating-point.json    |   31 +
+> >  .../arch/x86/tigerlake/pipeline.json          |   18 +
+> >  .../arch/x86/tigerlake/tgl-metrics.json       | 1942 +++++-----
+> >  .../arch/x86/tigerlake/uncore-other.json      |   28 +-
+> >  .../arch/x86/westmereep-dp/cache.json         |    2 +-
+> >  .../x86/westmereep-dp/virtual-memory.json     |    2 +-
+> >  tools/perf/pmu-events/jevents.py              |   58 +-
+> >  tools/perf/pmu-events/metric.py               |    8 +-
+> >  tools/perf/pmu-events/pmu-events.h            |   35 +-
+> >  tools/perf/tests/expand-cgroup.c              |    3 +-
+> >  tools/perf/tests/expr.c                       |    7 +-
+> >  tools/perf/tests/parse-metric.c               |   21 +-
+> >  tools/perf/tests/pmu-events.c                 |   49 +-
+> >  tools/perf/util/cpumap.h                      |    3 +
+> >  tools/perf/util/cputopo.c                     |   14 +
+> >  tools/perf/util/cputopo.h                     |    5 +
+> >  tools/perf/util/evsel.h                       |    2 +-
+> >  tools/perf/util/expr.c                        |   16 +-
+> >  tools/perf/util/expr.y                        |   12 +-
+> >  tools/perf/util/metricgroup.c                 |  178 +-
+> >  tools/perf/util/metricgroup.h                 |    5 +-
+> >  tools/perf/util/pmu.c                         |   17 +-
+> >  tools/perf/util/print-events.h                |    1 +
+> >  tools/perf/util/smt.c                         |   11 +-
+> >  tools/perf/util/smt.h                         |   12 +-
+> >  tools/perf/util/stat-display.c                |  117 +-
+> >  tools/perf/util/stat-shadow.c                 | 1287 ++-----
+> >  tools/perf/util/stat.c                        |   74 -
+> >  tools/perf/util/stat.h                        |   96 +-
+> >  tools/perf/util/synthetic-events.c            |    2 +-
+> >  tools/perf/util/topdown.c                     |   68 +-
+> >  tools/perf/util/topdown.h                     |   11 +-
+> >  120 files changed, 18025 insertions(+), 15590 deletions(-)
+> >  create mode 100644 tools/perf/pmu-events/arch/x86/graniterapids/cache.=
+json
+> >  create mode 100644 tools/perf/pmu-events/arch/x86/graniterapids/fronte=
+nd.json
+> >  create mode 100644 tools/perf/pmu-events/arch/x86/graniterapids/memory=
+.json
+> >  create mode 100644 tools/perf/pmu-events/arch/x86/graniterapids/other.=
+json
+> >  create mode 100644 tools/perf/pmu-events/arch/x86/graniterapids/pipeli=
+ne.json
+> >  create mode 100644 tools/perf/pmu-events/arch/x86/graniterapids/virtua=
+l-memory.json
+> >
