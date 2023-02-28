@@ -2,300 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBC96A53AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751416A53AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjB1HaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 02:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S229911AbjB1H3x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Feb 2023 02:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjB1H3v (ORCPT
+        with ESMTP id S229706AbjB1H3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 02:29:51 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA6CC677;
-        Mon, 27 Feb 2023 23:29:50 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id m7so11896433lfj.8;
-        Mon, 27 Feb 2023 23:29:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IsqApEBQlKEPGyVsiuZgMJvp51SjT+jXo8h7J6aTlqU=;
-        b=DBHZA2u5l6sYOQBXU/2/qGXgWNfm4q9o6T31R/JnTWDO8+FcoSjDjHBXuWpemTIAJ2
-         zZnTHkzXpgOcUctUStUU7PVZpT45yuNXpJjl9/QvKceCBhaN5wDdBpWNxfKAl09oI14X
-         3+M3Q2qL3o0bj/0SBM4rca658rXwm18o+nxUHCLvSgGwWtqnnxK7UsLOn4+EQCzLZPEt
-         ZJ10IHLfgOWy9SHq4uqPd8X4t9WhlQ/X/MYiVW2LfGLwdznLxMeo3E32a6gmxjVSLwdA
-         fuw50Xk3ahyQ9LaKxVQkfTfdfOc0mIb1Q70ZL0FYsdkbHsF+jPPLKWLm0vaETbpt3c3u
-         PcKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IsqApEBQlKEPGyVsiuZgMJvp51SjT+jXo8h7J6aTlqU=;
-        b=rhakyfkN3IWXNr0uma+JReRBTpdCw0/kK+GBy0yej71s8yGsa2x0GqHSxuYCmSukqO
-         nYMI7oDgVGiLDWnQm0SPoBsPhCc6Y2ByQ3Qk0ptqK6sYGlc3H9AdRoyiQ/GOy0Mcwod6
-         QsNJ6KxpG4L9FgkUm8NKkCbNv+pslhzIPQ+xT0eN0+tPF0OsQm/m8eREv5XGTc8B9b3T
-         etPKlF3ibonPxP3BlNnu1LK+skgoiiGd0216ILShneVa0Z71kkNid6CjSgLxdJhm0qJJ
-         DkZBDdngRQ8YHeBgYGZXhsOJ4ku9GZcMmSbhj3ZC2l1gZARuMCDrH0YmsyT7p7Upkw9h
-         D+1A==
-X-Gm-Message-State: AO0yUKV4Ad3sugVWHrqi9/61VccDuPfdBLs0op4Me0PjgKW7A111EkTp
-        K3pUNXqS4FuGTJ79ZYf0BEA=
-X-Google-Smtp-Source: AK7set/BRw5MnHT0rZU7iDo8+O3cRX17DDUeYCp+iZHDDfDmN9WEg14Yor2SJOus5mnaGa3ZPRsN2A==
-X-Received: by 2002:ac2:4117:0:b0:4db:4b7a:d6de with SMTP id b23-20020ac24117000000b004db4b7ad6demr410780lfi.63.1677569388255;
-        Mon, 27 Feb 2023 23:29:48 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id l2-20020ac25542000000b004d85a7e8b17sm1229550lfk.269.2023.02.27.23.29.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 23:29:47 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V4 2/2] nvmem: add generic driver for devices with MMIO access
-Date:   Tue, 28 Feb 2023 08:29:36 +0100
-Message-Id: <20230228072936.1108-3-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230228072936.1108-1-zajec5@gmail.com>
-References: <20230228072936.1108-1-zajec5@gmail.com>
+        Tue, 28 Feb 2023 02:29:50 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA1CD333
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:29:48 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E640124E43A;
+        Tue, 28 Feb 2023 15:29:45 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
+ 2023 15:29:40 +0800
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
+ 2023 15:29:40 +0800
+Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
+ EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
+ 15.00.1497.044; Tue, 28 Feb 2023 15:29:40 +0800
+From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: RE: [PATCH v4 4/4] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Thread-Topic: [PATCH v4 4/4] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Thread-Index: AQHZRZ0zqkG7/pRhhEiAX6gFjug0Aa7cUgAAgAEC65D///aKAIAAiLXg//+GvACAAI+BwP//lVOAAJFkcXD//+axAP//cjXQgADMoID//pX2AIACjLaA//93Q9AAFcQCgP//eFGw
+Date:   Tue, 28 Feb 2023 07:29:40 +0000
+Message-ID: <abd16b950ca744b081fc9f545977b8fa@EXMBX066.cuchost.com>
+References: <20230224095526.ctctpzw3p3csf6qj@orel>
+ <24a6dbe6aa2043c7812bf7e258786e13@EXMBX066.cuchost.com>
+ <20230224120715.wgqnqmkadsbqusus@orel>
+ <180fda36f9974809b436c52e4b3eda58@EXMBX066.cuchost.com>
+ <20230227075942.rgl4hqnwttwvoroe@orel>
+ <178ca008701147828d2e62402ff4f78a@EXMBX066.cuchost.com>
+ <20230227114435.eow57ax5zhysz3kv@orel>
+ <a6c319dd867f4f1d97e9d950b9e7c636@EXMBX066.cuchost.com>
+ <20230228050457.zfbflfawctaccepv@orel>
+ <803ac603023c4eeda4a0b8e414cce6f1@EXMBX066.cuchost.com>
+ <20230228071845.k6s6bcnesdsnw3jl@orel>
+In-Reply-To: <20230228071845.k6s6bcnesdsnw3jl@orel>
+Accept-Language: en-US, zh-CN
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.188.176.82]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
 
-Some NVMEM devices can be accessed by simply mapping memory and reading
-from / writing to it. This driver adds support for a generic
-"mmio-nvmem" DT binding used by such devices.
 
-One of such devices is Broadcom's NVRAM. It's already supported (see
-NVMEM_BRCM_NVRAM) but existing driver covers both:
-1. NVMEM device access
-2. NVMEM content parsing
-
-Once we get support for NVMEM layouts then existing NVRAM driver will
-get converted into a layout and generic driver will take over
-responsibility for data access.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-V3: Support "reg-io-width", basic writing & "brcm,nvram" string
-V3: Don't duplicate core checks, add 64 b support, complete writing
-    support, don't add confusing conditional "brcm,nvram" support (it
-    will be handled with layouts migration)
----
- drivers/nvmem/Kconfig  |  10 +++
- drivers/nvmem/Makefile |   2 +
- drivers/nvmem/mmio.c   | 148 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 160 insertions(+)
- create mode 100644 drivers/nvmem/mmio.c
-
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 6dec38805041..189ea85bd67d 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -166,6 +166,16 @@ config NVMEM_MICROCHIP_OTPC
- 	  This driver enable the OTP controller available on Microchip SAMA7G5
- 	  SoCs. It controls the access to the OTP memory connected to it.
- 
-+config NVMEM_MMIO
-+	tristate "MMIO access based NVMEM support"
-+	depends on HAS_IOMEM
-+	help
-+	  This driver provides support for NVMEM devices that can be accessed
-+	  using MMIO.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called nvmem-mmio.
-+
- config NVMEM_MTK_EFUSE
- 	tristate "Mediatek SoCs EFUSE support"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index 6a1efffa88f0..767a9db2bfc1 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -35,6 +35,8 @@ obj-$(CONFIG_NVMEM_MESON_MX_EFUSE)	+= nvmem_meson_mx_efuse.o
- nvmem_meson_mx_efuse-y			:= meson-mx-efuse.o
- obj-$(CONFIG_NVMEM_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
- nvmem-microchip-otpc-y			:= microchip-otpc.o
-+obj-$(CONFIG_NVMEM_MMIO)		+= nvmem-mmio.o
-+nvmem-mmio-y				:= mmio.o
- obj-$(CONFIG_NVMEM_MTK_EFUSE)		+= nvmem_mtk-efuse.o
- nvmem_mtk-efuse-y			:= mtk-efuse.o
- obj-$(CONFIG_NVMEM_MXS_OCOTP)		+= nvmem-mxs-ocotp.o
-diff --git a/drivers/nvmem/mmio.c b/drivers/nvmem/mmio.c
-new file mode 100644
-index 000000000000..ce51648bb321
---- /dev/null
-+++ b/drivers/nvmem/mmio.c
-@@ -0,0 +1,148 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Rafał Miłecki <rafal@milecki.pl>
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/slab.h>
-+
-+struct mmio_nvmem {
-+	void __iomem *base;
-+	u32 io_width;
-+};
-+
-+static int mmio_nvmem_read(void *context, unsigned int offset, void *val, size_t bytes)
-+{
-+	struct mmio_nvmem *priv = context;
-+	u64 __maybe_unused *dst64;
-+	u32 *dst32;
-+	u16 *dst16;
-+	u8 *dst8;
-+
-+	switch (priv->io_width) {
-+	case 0:
-+		memcpy_fromio(val, priv->base + offset, bytes);
-+		break;
-+	case 1:
-+		for (dst8 = val; bytes; bytes -= 1, offset += 1)
-+			*dst8++ = readb(priv->base + offset);
-+		break;
-+	case 2:
-+		for (dst16 = val; bytes; bytes -= 2, offset += 2)
-+			*dst16++ = readw(priv->base + offset);
-+		break;
-+	case 4:
-+		for (dst32 = val; bytes; bytes -= 4, offset += 4)
-+			*dst32++ = readl(priv->base + offset);
-+		break;
-+#ifdef CONFIG_64BIT
-+	case 8:
-+		for (dst64 = val; bytes; bytes -= 8, offset += 8)
-+			*dst64++ = readq(priv->base + offset);
-+		break;
-+#endif
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mmio_nvmem_write(void *context, unsigned int offset, void *val, size_t bytes)
-+{
-+	struct mmio_nvmem *priv = context;
-+	u64 __maybe_unused *dst64;
-+	u32 *dst32;
-+	u16 *dst16;
-+	u8 *dst8;
-+
-+	switch (priv->io_width) {
-+	case 0:
-+		memcpy_toio(priv->base + offset, val, bytes);
-+		break;
-+	case 1:
-+		for (dst8 = val; bytes; bytes -= 1, offset += 1)
-+			writeb(*dst8++, priv->base + offset);
-+		break;
-+	case 2:
-+		for (dst16 = val; bytes; bytes -= 2, offset += 2)
-+			writew(*dst16++, priv->base + offset);
-+		break;
-+	case 4:
-+		for (dst32 = val; bytes; bytes -= 4, offset += 4)
-+			writel(*dst32++, priv->base + offset);
-+		break;
-+#ifdef CONFIG_64BIT
-+	case 8:
-+		for (dst64 = val; bytes; bytes -= 8, offset += 8)
-+			writeq(*dst64++, priv->base + offset);
-+		break;
-+#endif
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mmio_nvmem_probe(struct platform_device *pdev)
-+{
-+	struct nvmem_config config = {
-+		.name = "mmio-nvmem",
-+		.id = NVMEM_DEVID_AUTO,
-+		.read_only = true,
-+		.reg_read = mmio_nvmem_read,
-+		.reg_write = mmio_nvmem_write,
-+	};
-+	struct device *dev = &pdev->dev;
-+	struct mmio_nvmem *priv;
-+	struct resource *res;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	of_property_read_u32(dev->of_node, "reg-io-width", &priv->io_width);
-+
-+	config.dev = dev;
-+	config.size = resource_size(res);
-+	config.word_size = priv->io_width;
-+	config.stride = priv->io_width;
-+	config.priv = priv;
-+
-+	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &config));
-+}
-+
-+static const struct of_device_id mmio_nvmem_of_match_table[] = {
-+	{ .compatible = "mmio-nvmem", },
-+	{},
-+};
-+
-+static struct platform_driver mmio_nvmem_driver = {
-+	.probe = mmio_nvmem_probe,
-+	.driver = {
-+		.name = "mmio_nvmem",
-+		.of_match_table = mmio_nvmem_of_match_table,
-+	},
-+};
-+
-+static int __init mmio_nvmem_init(void)
-+{
-+	return platform_driver_register(&mmio_nvmem_driver);
-+}
-+
-+subsys_initcall_sync(mmio_nvmem_init);
-+
-+MODULE_AUTHOR("Rafał Miłecki");
-+MODULE_LICENSE("GPL");
-+MODULE_DEVICE_TABLE(of, mmio_nvmem_of_match_table);
--- 
-2.34.1
-
+> -----Original Message-----
+> From: Andrew Jones <ajones@ventanamicro.com>
+> Sent: Tuesday, 28 February, 2023 3:19 PM
+> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
+> Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
+> 
+> On Tue, Feb 28, 2023 at 05:33:32AM +0000, JeeHeng Sia wrote:
+> >
+> >
+> > > -----Original Message-----
+> > > From: Andrew Jones <ajones@ventanamicro.com>
+> > > Sent: Tuesday, 28 February, 2023 1:05 PM
+> > > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+> > > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> > > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
+> > > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
+> > >
+> > > On Tue, Feb 28, 2023 at 01:32:53AM +0000, JeeHeng Sia wrote:
+> > > > > > > > 	load image;
+> > > > > > > > loop:	Create pbe chain, return error if failed;
+> > > > > > >
+> > > > > > > This loop pseudocode is incomplete. It's
+> > > > > > >
+> > > > > > > loop:
+> > > > > > >         if (swsusp_page_is_forbidden(page) && swsusp_page_is_free(page))
+> > > > > > > 	   return page_address(page);
+> > > > > > > 	Create pbe chain, return error if failed;
+> > > > > > > 	...
+> > > > > > >
+> > > > > > > which I pointed out explicitly in my last reply. Also, as I asked in my
+> > > > > > > last reply (and have been asking four times now, albeit less explicitly
+> > > > > > > the first two times), how do we know at least one PBE will be linked?
+> > > > > > 1 PBE correspond to 1 page, you shouldn't expect only 1 page is saved.
+> > > > >
+> > > > > I know PBEs correspond to pages. *Why* should I not expect only one page
+> > > > > is saved? Or, more importantly, why should I expect more than zero pages
+> > > > > are saved?
+> > > > >
+> > > > > Convincing answers might be because we *always* put the restore code in
+> > > > > pages which get added to the PBE list or that the original page tables
+> > > > > *always* get put in pages which get added to the PBE list. It's not very
+> > > > > convincing to simply *assume* that at least one random page will always
+> > > > > meet the PBE list criteria.
+> > > > >
+> > > > > > Hibernation core will do the calculation. If the PBEs (restore_pblist) linked successfully, the hibernated image will be restore
+> else
+> > > > > normal boot will take place.
+> > > > > > > Or, even more specifically this time, where is the proof that for each
+> > > > > > > hibernation resume, there exists some page such that
+> > > > > > > !swsusp_page_is_forbidden(page) or !swsusp_page_is_free(page) is true?
+> > > > > > forbidden_pages and free_pages are not contributed to the restore_pblist (as you already aware from the code). Infact, the
+> > > > > forbidden_pages and free_pages are not save into the disk.
+> > > > >
+> > > > > Exactly, so those pages are *not* going to contribute to the greater than
+> > > > > zero pages. What I've been asking for, from the beginning, is to know
+> > > > > which page(s) are known to *always* contribute to the list. Or, IOW, how
+> > > > > do you know the PBE list isn't empty, a.k.a restore_pblist isn't NULL?
+> > > > Well, this is keep going around in a circle, thought the answer is in the hibernation code. restore_pblist get the pointer from the
+> PBE,
+> > > and the PBE already checked for validity.
+> > >
+> > > It keeps going around in circles because you keep avoiding my question by
+> > > pointing out trivial linked list code. I'm not worried about the linked
+> > > list code being correct. My concern is that you're using a linked list
+> > > with an assumption that it is not empty. My question has been all along,
+> > > how do you know it's not empty?
+> > >
+> > > I'll change the way I ask this time. Please take a look at your PBE list
+> > > and let me know if there are PBEs on it that must be there on each
+> > > hibernation resume, e.g. the resume code page is there or whatever.
+> > >
+> > > > Can I suggest you to submit a patch to the hibernation core?
+> > >
+> > > Why? What's wrong with it?
+> > Kindly let me draw 2 scenarios for you. Option 1 is to add the restore_pblist checking to the hibernation core and option 2 is to add
+> restore_pblist checking to the arch solution
+> > Although I really don't think it is needed. But if you really wanted to add the checking, I would suggest to go with option 1. again, I
+> really think that it is not needed!
+> 
+> This entire email thread is because you've first coded, and now stated,
+> that you don't think the PBE list will ever be empty. And now, below, I
+> see you're proposing to return an error when the PBE list is empty, why?
+> If there's nothing in the PBE list, then there's nothing to do for it.
+> Why is that an error condition?
+> 
+> Please explain to me why you think the PBE list *must* not be empty
+> (which is what I've been asking for over and over). OIOW, are there
+> any pages you have in mind which the resume kernel always uses and
+> are also always going to end up in the suspend image? I don't know,
+> but I assume clean, file-backed pages do not get added to the suspend
+> image, which would rule out most kernel code pages. Also, many pages
+> written during boot (which is where the resume kernel is at resume time)
+> were no longer resident at hibernate time, so they won't be in the
+> suspend image either. While it's quite likely I'm missing something
+> obvious, I'd rather be told what that is than to assume the PBE list
+> will never be empty. Which is why I keep asking about it...
+The answer already in the Linux kernel hibernation core, do you need me to write a white paper to explain in detail or you need a conference call? 
+> 
+> Thanks,
+> drew
+> 
+> >
+> > 	//Option 1
+> > 	//Pseudocode to illustrate the image loading
+> > 	initialize restore_pblist to null;
+> > 	initialize safe_pages_list to null;
+> > 	Allocate safe page list, return error if failed;
+> > 	load image;
+> > loop:	Create pbe chain, return error if failed;
+> > 	assign orig_addr and safe_page to pbe;
+> > 	link pbe to restore_pblist;
+> > 	/* Add checking here */
+> > 	return error if restore_pblist equal to null;
+> > 	return pbe to handle->buffer;
+> > 	check handle->buffer;
+> > 	goto loop if no error else return with error;
+> >
+> > 	//option 2
+> > 	//Pseudocode to illustrate the image loading
+> > 	initialize restore_pblist to null;
+> > 	initialize safe_pages_list to null;
+> > 	Allocate safe page list, return error if failed;
+> > 	load image;
+> > loop:	Create pbe chain, return error if failed;
+> > 	assign orig_addr and safe_page to pbe;
+> > 	link pbe to restore_pblist;
+> > 	return pbe to handle->buffer;
+> > 	check handle->buffer;
+> > 	goto loop if no error else return with error;
+> > 	everything works correctly, continue the rest of the operation
+> > 	invoke swsusp_arch_resume
+> >
+> > 	//@swsusp_arch_resume()
+> > loop2: return error if restore_pblist is null
+> > 	increment restore_pblist and goto loop2
+> > 	create temp_pg_table
+> > 	continue the rest of the resume operation
+> > >
+> > > Thanks,
+> > > drew
