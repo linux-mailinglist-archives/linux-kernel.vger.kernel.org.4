@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F956A518B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCC86A5191
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 04:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjB1C6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S230164AbjB1DAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 22:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjB1C6q (ORCPT
+        with ESMTP id S229585AbjB1DAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:58:46 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2278F2D68;
-        Mon, 27 Feb 2023 18:58:36 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 69FD43FA55;
-        Tue, 28 Feb 2023 02:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1677553113; bh=VPx/RaRvEWklS2vFmotN6RsQ6+fRmCqm4iwrYL0/7Ys=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=QqD1dDRsk94y7q4iesV9vahaj8NRNo1Y1PQiIsWspg0DNooo/MwSkP7KzoAzuLsV6
-         gFcldFmERYjg1kYKWWaxc9J470QbKird/FXZ0235VS4rwAWBLfxURkp+4wdmOCdKJU
-         apdESR4gfMtJ3rFxrbK4TRA+GbXxn5b/xO4x13D3OrpNwP7OxNqwnC+8O1oRDShE8P
-         KtHkqPiUfJA4GOOD4pLN7GdLXc69zXBgt/+eejZFY5gYN+lQ81WCvV51jydgbIp/fl
-         HYzEyHWJMIvY1K1SSyAlutGpqGL2KcAAceoOl7mezLy8UiNLSAzq7F/3y22UivH3zh
-         lHlPU6r5Fj6LQ==
-Message-ID: <1874e194-5210-460b-3e8f-0f48962f8a47@marcan.st>
-Date:   Tue, 28 Feb 2023 11:58:28 +0900
+        Mon, 27 Feb 2023 22:00:11 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7CF1D906;
+        Mon, 27 Feb 2023 19:00:10 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S2Rpqh010567;
+        Tue, 28 Feb 2023 02:59:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iGExTyfqA8UiNaWVM0CI3ERBpJ+ppSBXThFNDZNWvK0=;
+ b=oXwk5/gMO3nnoQ3P1KcNZleSvKuZqit8I0FiBa65PV2bn6RtCDKE/6j95NxtdYUvXHxv
+ mItLLNhIlVPQ+U/NehbpdViJwsZ1UufCsNhciEV6IKFYMO0kF8An6OjIe40ANQBnjMFm
+ yePoXLWawYELCIbDaxtmWpqJRDgo2QTL4FQ9IgkWwGSJFTObPrsQBP5X/Dtc8wvUaFUh
+ QYgG3LAXuYU0tdws+uFI3utDIprUOW16ubk7ECuLVhO+8czFLk98v+usiBXbzK9WwpXU
+ bBh//Y0LZLu/8g41ES06UIxrjFJ65QBEad/9DRfHnUJv/rZtBwa5EloPxinJ8dP3FCcD pA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p17ryr78w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 02:59:41 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31S2xe9F013059
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 02:59:40 GMT
+Received: from [10.110.31.193] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Feb
+ 2023 18:59:39 -0800
+Message-ID: <5e5c6481-8d5d-dc3f-e40e-986e3ac30387@quicinc.com>
+Date:   Mon, 27 Feb 2023 18:59:32 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
+Subject: Re: [RFC PATCH v2 12/22] sound: usb: card: Introduce USB SND platform
+ op callbacks
 Content-Language: en-US
-To:     Sven Peter <sven@svenpeter.dev>,
-        Sasha Finkelstein <fnkl.kernel@gmail.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        asahi@lists.linux.dev, Henrik Rydberg <rydberg@bitmath.org>,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230223-z2-for-ml-v1-0-028f2b85dc15@gmail.com>
- <20230223-z2-for-ml-v1-1-028f2b85dc15@gmail.com>
- <87r0ufs574.fsf@bloch.sibelius.xs4all.nl>
- <CAMT+MTQOUd0aSDJ3DPBMfkVwaic=nbRPtfGgu2nduSdCdydcgg@mail.gmail.com>
- <e6c7eb27-1b60-4894-a623-28ca3bccdea5@app.fastmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH RFC 1/4] dt-bindings: input: touchscreen: Add Z2
- controller bindings.
-In-Reply-To: <e6c7eb27-1b60-4894-a623-28ca3bccdea5@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <Thinh.Nguyen@synopsys.com>,
+        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh+dt@kernel.org>, <agross@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-13-quic_wcheng@quicinc.com>
+ <Y9Ui82OaI54Qx8Ft@kroah.com>
+ <2c062ab0-905c-f1fe-eca2-02e23cc9fa6f@quicinc.com>
+In-Reply-To: <2c062ab0-905c-f1fe-eca2-02e23cc9fa6f@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6SRmoeFCRlxObLlSUAo-jbjYTEJwar6h
+X-Proofpoint-GUID: 6SRmoeFCRlxObLlSUAo-jbjYTEJwar6h
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-27_19,2023-02-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ adultscore=0 malwarescore=0 suspectscore=0 clxscore=1011 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302280018
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2023 20.08, Sven Peter wrote:
-> Hi,
+Hi Greg,
+
+On 2/10/2023 2:49 PM, Wesley Cheng wrote:
+> Hi Greg,
 > 
-> 
-> On Fri, Feb 24, 2023, at 12:04, Sasha Finkelstein wrote:
->> On Fri, 24 Feb 2023 at 11:55, Mark Kettenis <mark.kettenis@xs4all.nl> wrote:
+> On 1/28/2023 5:28 AM, Greg KH wrote:
+>> On Wed, Jan 25, 2023 at 07:14:14PM -0800, Wesley Cheng wrote:
+>>> Allow for different platforms to be notified on USB SND 
+>>> connect/disconnect
+>>> seqeunces.  This allows for platform USB SND modules to properly 
+>>> initialize
+>>> and populate internal structures with references to the USB SND chip
+>>> device.
+>>>
+>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>> ---
+>>>   sound/usb/card.c | 28 ++++++++++++++++++++++++++++
+>>>   sound/usb/card.h | 20 ++++++++++++++++++++
+>>>   2 files changed, 48 insertions(+)
+>>>
+>>> diff --git a/sound/usb/card.c b/sound/usb/card.c
+>>> index 26268ffb8274..803230343c16 100644
+>>> --- a/sound/usb/card.c
+>>> +++ b/sound/usb/card.c
+>>> @@ -117,6 +117,24 @@ MODULE_PARM_DESC(skip_validation, "Skip unit 
+>>> descriptor validation (default: no)
+>>>   static DEFINE_MUTEX(register_mutex);
+>>>   static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
+>>>   static struct usb_driver usb_audio_driver;
+>>> +static struct snd_usb_platform_ops *platform_ops;
 >>
->>> What is the motivation for including the firmware name in the device
->>> tree rather than constructing it in the driver like what is done for
->>> the broadcom wireless?
->> There is no way to identify the device subtype before the firmware is
->> uploaded, and so i need some way of figuring out which firmware to use.
+>> You can not have a single "platform_ops" pointer, this HAS to be
+>> per-bus.
+>>
 > 
-> Some Broadcom bluetooth boards use the compatible of the root node (see
-> btbcm_get_board_name in drivers/bluetooth/btbcm.c) which would be "apple,jXXX"
-> for Apple Silicon. I believe the Broadcom WiFi driver has similar logic as well
-> which marcan had to extend to instead of "brcm,board-type" because different
-> WiFi boards can me matched to different Apple Silicon boards. I don't think
-> that's the case for this touchscreen though.
+> Agreed.
+> 
 
-The reason why the brcmfmac stuff needs to construct the firmware name
-itself is that parts of it come from the OTP contents, so there is no
-way to know from the bootloader what the right firmware is.
+I looked at seeing how we could implement this at a per bus level, but 
+the USB class driver model doesn't exactly have a good framework for 
+supporting this.  Reason being is because, at the time of the USB SND 
+class driver initialization, there is a big chance that there isn't a 
+USB bus registered in the system, so the point of adding the operations 
+is not clear.  However, we need to ensure that we've added the 
+platform/driver operations before any USB SND devices are detected.
 
-That is not the case here, so it makes perfect sense to specify the
-firmware with `firmware-name` (which is a standard DT property).
+To add to the above, in case of OTG/DRD (dual role) designs, the USB 
+HCD/bus isn't created until we move into the host role.  At that time, 
+using DWC3 as an example, we will create the XHCI platform device, and 
+probe the USB HCD, where a USB bus is created.
 
-As for the layout, both bare names and paths are in common use:
+In general, we currently think this USB offload driver should co-exist 
+with the USB SND class driver, which handles all devices connected 
+across every bus.  We can add a check to the platform connect routine to 
+ensure that there is a reference to the USB backend.  If so, then that 
+particular USB bus/sysdev can be supported by the audio DSP.  That way, 
+we do not falsely populate USB SND cards which are present on another 
+USB bus/controller.
 
-qcom/sm8450-qrd.dts:    firmware-name = "qcom/sm8450/slpi.mbn";
-ti/k3-am64-main.dtsi:   firmware-name = "am64-main-r5f0_0-fw";
-
-... but the bare names in particular, judging by some Google searches,
-are *actually* mapped to bare files in /lib/firmware anyway. So the
-firmware-name property contains the firmware path in the linux-firmware
-standard hierarchy, in every case.
-
-I already did the same thing for the touchpad on M2s (which requires
-analogous Z2 firmware passed to it, just in a different format):
-
-dts/apple/t8112-j413.dts: firmware-name = "apple/tpmtfw-j413.bin";
-
-Why is having a directory a problem for OpenBSD? Regardless of how
-firmware is handled behind the scenes, it seems logical to organize it
-by vendor somehow. It seems to me that gratuitously diverging from the
-standard firmware hierarchy is only going to cause trouble for OpenBSD.
-Obviously it's fine to store it somewhere other than /lib/firmware or
-use a completely unrelated mechanism other than files, but why does the
-*organization* of the firmware have to diverge? There can only be one DT
-binding, so we need to agree on a way of specifying firmwares that works
-cross-OS, and I don't see why "apple/foo.bin" couldn't be made to work
-for everyone in some way or another.
-
-- Hector
+Thanks
+Wesley Cheng
