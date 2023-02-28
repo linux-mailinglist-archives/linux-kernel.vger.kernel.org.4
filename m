@@ -2,84 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64566A60C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD396A60D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjB1U4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:56:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S229850AbjB1VBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjB1U4S (ORCPT
+        with ESMTP id S229527AbjB1VBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:56:18 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F4C20577
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:56:17 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7C3E21EC0691;
-        Tue, 28 Feb 2023 21:56:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677617776;
+        Tue, 28 Feb 2023 16:01:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C660222DF9;
+        Tue, 28 Feb 2023 13:01:07 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677618066;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=iR9ibPzfkZJv7ygUQlIWXNmio9aKTjhZm11akaOcsJw=;
-        b=aG028S0/zsYSfv4OaqZFPF8KK5Hhez3naiw60P2Ucu/Wo+xbsMai0HFow76rX5k8XelPEv
-        VCrbeoqNw9OEcEbmpTwXYbpPbhPtJUVedoN4J4RUJTCkhvzG2O6oP/UuV/nM23tdAzdGty
-        5zxw8Zn+d7zU60e98ktxG0LIhYhmp84=
-Date:   Tue, 28 Feb 2023 21:56:12 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexander Monakov <amonakov@ispras.ru>
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Tavis Ormandy <taviso@gmail.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: x86: AMD Zen2 ymm registers rolling back
-Message-ID: <Y/5qbJgwHhkrMQqr@zn.tnic>
-References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
- <Y/XTT59OrLw2as4R@zn.tnic>
- <Y/Xc+yMzI83WZ4V1@zn.tnic>
- <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com>
- <Y/Xp73KJe3c/1jrn@zn.tnic>
- <4737f149-c5b7-8a51-7cc5-8bda6e98308b@ispras.ru>
- <Y/5T4ScbM/99DhgT@zn.tnic>
- <3d007f98-a42a-3c0e-8d6a-c86c5d0e25be@ispras.ru>
- <Y/5VIECduoyCJKP5@zn.tnic>
- <4d21fe93-7b77-bf5a-9ba8-645256ab0983@ispras.ru>
+         in-reply-to:in-reply-to:references:references;
+        bh=GINJMaOMVEa/0BnuxANTZw7J7gtIv9G1Tgm4tmy0fMw=;
+        b=O9FP/U9j8lOfeghAXC6OGfzlTjTqhhA31djN2F3dagJgUjo1sAy5rMsVCB2/KBAL5ZmHlv
+        3Wo76mL4NQ/tDJ1VlAL+wx94dPs+PKgquKwN92HHzwnD+MQrv1sL5SoQAkSAL9RBBid+w8
+        OT+ipl9+y+4nKczYF8FW793okKIa9q4rUWGKi3bZcZesIoQxTdzHy35Xtma+1hvy/Xsths
+        lX40xBf7GtzG2ZFQvyjNxgEu1ktk0ZhEQmSpIS0ADs9JYVdlawAuJhDswAiWM3tDeYUHSN
+        Sa1wuIQ++1hOjCeVJcoRAoTisy1YS5DkNYGULs3AQgcsRtgDrxA//qRlYPvO4Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677618066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GINJMaOMVEa/0BnuxANTZw7J7gtIv9G1Tgm4tmy0fMw=;
+        b=uyzf/xGHa60na5Ixygi1+bQO5hb7cPMMdMRnyBrUT9ZHZiOJixsbxP5ZulAP9bJs74d+dQ
+        vPEzDuIIch2fgfAw==
+To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
+        kim.phillips@amd.com, brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>
+Subject: Re: [PATCH v12 07/11] x86/smpboot: Remove early_gdt_descr on 64-bit
+In-Reply-To: <20230226110802.103134-8-usama.arif@bytedance.com>
+References: <20230226110802.103134-1-usama.arif@bytedance.com>
+ <20230226110802.103134-8-usama.arif@bytedance.com>
+Date:   Tue, 28 Feb 2023 22:01:05 +0100
+Message-ID: <878rghmrn2.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4d21fe93-7b77-bf5a-9ba8-645256ab0983@ispras.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 10:29:23PM +0300, Alexander Monakov wrote:
-> That I can reproduce the bug even with the latest BIOS,
+On Sun, Feb 26 2023 at 11:07, Usama Arif wrote:
+> @@ -265,7 +265,12 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+>  	 * addresses where we're currently running on. We have to do that here
+>  	 * because in 32bit we couldn't load a 64bit linear address.
+>  	 */
+> -	lgdt	early_gdt_descr(%rip)
+> +	subq	$16, %rsp
+> +	movw	$(GDT_SIZE-1), (%rsp)
+> +	leaq	gdt_page(%rdx), %rax
 
-Can you reproduce if you boot with
+Even on !SMP gdt_page is in the 0...__per_cpu_end range. Which means
+that on !SMP this results in:
 
-clearcpuid=xsaves
+      leaq    0xb000(%rdx),%rax
 
-?
+and RDX is 0. That's not really a valid GDT pointer, right?
 
-CONFIG_X86_FEATURE_NAMES must be enabled in your .config for that to
-work.
+> +	movq	%rax, 2(%rsp)
+> +	lgdt	(%rsp)
 
-Otherwise, try
+and obviously that's equally broken for the task stack part:
 
-clearcpuid=323
+>	movq	pcpu_hot + X86_current_task(%rdx), %rax
 
-Thx.
+This needs:
 
--- 
-Regards/Gruss,
-    Boris.
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -239,7 +239,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+ 	/* Get the per cpu offset for the given CPU# which is in ECX */
+ 	movq	__per_cpu_offset(,%rcx,8), %rdx
+ #else
+-	xorl	%edx, %edx
++	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
+ #endif /* CONFIG_SMP */
+ 
+ 	/*
 
-https://people.kernel.org/tglx/notes-about-netiquette
+in the initial_stack patch, which then allows to remove this hunk in the
+initial_gs patch:
+
+@@ -286,9 +286,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+ 	 * the per cpu areas are set up.
+ 	 */
+ 	movl	$MSR_GS_BASE,%ecx
+-#ifndef CONFIG_SMP
+-	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
+-#endif
+ 	movl	%edx, %eax
+ 	shrq	$32, %rdx
+ 	wrmsr
+
+Maybe we should enforce CONFIG_SMP=y first :)
+
+Thanks,
+
+        tglx
