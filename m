@@ -2,112 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6356A588F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAD56A5896
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbjB1LvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S230144AbjB1Lwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjB1LvA (ORCPT
+        with ESMTP id S229711AbjB1Lwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:51:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44571F5C3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:50:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677585021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FfScrIsI5x6rEVkEdrSdiYdcOjklUHQX5rbDlaigbQQ=;
-        b=iCGOmmw6pA9RnhcOkeNaTZtmTaC3bjVffxjMtDd/HIT1rmEcGpUa3fc/LgV8fb6EAywDUP
-        FtuHdEk4ZNrJXkIIFCtDMQcjczMY49oEM5fwLpGMj4C9BJ0DaSme+QbMtC2bF8awB6Wr3d
-        VYFFm6giUDWl+Umby7NpkJH7aq5kgVo=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-196-g7s1APMWNnCZ7Z8htErE4A-1; Tue, 28 Feb 2023 06:50:20 -0500
-X-MC-Unique: g7s1APMWNnCZ7Z8htErE4A-1
-Received: by mail-wr1-f70.google.com with SMTP id d14-20020adfa34e000000b002bfc062eaa8so1507442wrb.20
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:50:20 -0800 (PST)
+        Tue, 28 Feb 2023 06:52:51 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEA22DE56
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:52:49 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so9326502pjz.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:52:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=guDwbtDzSe+f0+mE5P/BUoxD2wXxd/5dZJDCePQTDmo=;
+        b=E+V5mFVRRI43IP7kqQcke3AznYV/S6Ax/UM7BApz+3FkhQxAr93dXOqZuqoF/LS+qX
+         04HAAJqfSO4vTVuVKUm5Ak1zItk75wJTyI1Ig0R7FfmZFDKedx/11l/5tRwvMC5d7EIX
+         vd8w08ex43ahzUMY+XPJL/R6EdGiMF6Ndy1mFcVOgmkx2GL0MbqupOL5LkA3+vQW1/zd
+         eJFr8GlHR/1qNjS/Zn0wNk36DogNRB+W/saHAdwUxnUa8PXKdgeNxv5bAIemq087I9cW
+         iQL+T0w1Q5WLiaS2TtNS0fnBcDPpl564goMRO4280uEGNLnML1rzjQ00rvJhfuzwCU4h
+         5MbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FfScrIsI5x6rEVkEdrSdiYdcOjklUHQX5rbDlaigbQQ=;
-        b=7JVr9XbQmlrmltlqTF2GrpMhQ1UjXNP8sSOIZ0JFarsQwb7FUGYeQJCZeiJWsHJ750
-         l8+QMg5+MejMPyVYqeIZzerKSQeRViaI/S9H6QKbG7p8/yXs+c6LLMmIoQRDWeQERmX6
-         ndaxiTnaKx328kqem9LR0XUnTvZ2cqfbBLzkh/hB3jh2hxl+RpL88+7wWYKG8HZb4KPO
-         orSzSM5sZZsA8Ko4gX0WInsj3sWx/F6DZM0Ydb8Hl0lhldqIwZCtPpRT9yU2CumRbVzA
-         zIzLXIuCIvfM0+pcZ5f5hdnzgj7LzHhiTj2MfqVjsh4+Ii1nrnlD5sVnPaHLzcGbiM/W
-         2WdA==
-X-Gm-Message-State: AO0yUKXhuliHZru9TcxdsX6OBTeDmTrPdC1s6DXtW7D3/qIXdeSK19s/
-        WfL6HHgqtAgMBPDAEC1MA1tdMVFNH78dR/cYNvbKSHE05W/VjoFmWC30xJ0cfskG81xlnMw2nfB
-        JIG9wAwcex0jj3SFhATevehyR
-X-Received: by 2002:a5d:5962:0:b0:2c9:8b81:bd04 with SMTP id e34-20020a5d5962000000b002c98b81bd04mr1598338wri.0.1677585019330;
-        Tue, 28 Feb 2023 03:50:19 -0800 (PST)
-X-Google-Smtp-Source: AK7set/WCwUQ3kuQSoUUChN/7DoXag2/WHh+Ag1Cof24ZSeYbEAZPY3yHLOgPqbpAD21sl85tNb6aA==
-X-Received: by 2002:a5d:5962:0:b0:2c9:8b81:bd04 with SMTP id e34-20020a5d5962000000b002c98b81bd04mr1598321wri.0.1677585019011;
-        Tue, 28 Feb 2023 03:50:19 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id z10-20020a5d44ca000000b002c6e8af1037sm9651101wrr.104.2023.02.28.03.50.17
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=guDwbtDzSe+f0+mE5P/BUoxD2wXxd/5dZJDCePQTDmo=;
+        b=iyIpEf+mJH/O++D3p/GftGC5OK/yf063pndRTG29jvL2aB/ChYETgRMIiK0kE7x4Sd
+         DZd/NsnmF7f2XctpPuC7k9A42WBE0rDkhtrBUFExprUTZG/CsZsTUZgD1JmTa3DvebPo
+         4RQz1tnbvNGgiZblWUvq54DdCQNncFtvRPLipqxzwyMNveHXq+YlAJQK3dUEs+zSh7IO
+         2RyuagNm0j+4Ip8LBN4x7VcLz8XVV5XAgx4yGaqPpO9KR0FAwMWD4bqZDrYx+5jIsACt
+         5dmX2wgDq8LK5F4EqhidNrBriwMZj+2zau9hpDizb9YhSa43CtjfKOksqgqqbWUbGl9s
+         Yi6A==
+X-Gm-Message-State: AO0yUKXmdh+q4hgfQMo4Vn8oNreqAdJt2jyIflI79Jyrk/za/oe2KWoz
+        dLqpSpc532DVKFsyQTYa4IectQ==
+X-Google-Smtp-Source: AK7set/i2bqxU9AV3gKotxdi1R4HmL6WNw5Uze90LzuUY6rnWopKherWyWPttSRADRJIn1bKAN3G6g==
+X-Received: by 2002:a17:90b:350b:b0:236:9e16:b49b with SMTP id ls11-20020a17090b350b00b002369e16b49bmr3150244pjb.21.1677585168902;
+        Tue, 28 Feb 2023 03:52:48 -0800 (PST)
+Received: from leoy-huanghe.lan (n058152048225.netvigator.com. [58.152.48.225])
+        by smtp.gmail.com with ESMTPSA id gk8-20020a17090b118800b002339491ead6sm7922317pjb.5.2023.02.28.03.52.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:50:18 -0800 (PST)
-Message-ID: <192d72313269845fe19d6d8baecbecfb9d184f77.camel@redhat.com>
-Subject: Re: [PATCH v2] net: lan743x: LAN743X selects FIXED_PHY to resolve a
- link error
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Tom Rix <trix@redhat.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, steen.hegelund@microchip.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 28 Feb 2023 12:50:17 +0100
-In-Reply-To: <20230227130535.2828181-1-trix@redhat.com>
-References: <20230227130535.2828181-1-trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 28 Feb 2023 03:52:48 -0800 (PST)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v3 00/14] perf kvm: Support histograms and TUI mode
+Date:   Tue, 28 Feb 2023 19:51:11 +0800
+Message-Id: <20230228115125.144172-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patch set is to enable histograms and (partially) TUI mode in perf
+kvm tool.
 
-On Mon, 2023-02-27 at 08:05 -0500, Tom Rix wrote:
-> A rand config causes this link error
-> drivers/net/ethernet/microchip/lan743x_main.o: In function `lan743x_netde=
-v_open':
-> drivers/net/ethernet/microchip/lan743x_main.c:1512: undefined reference t=
-o `fixed_phy_register'
->=20
-> lan743x_netdev_open is controlled by LAN743X
-> fixed_phy_register is controlled by FIXED_PHY
->=20
-> and the error happens when
-> CONFIG_LAN743X=3Dy
-> CONFIG_FIXED_PHY=3Dm
->=20
-> So LAN743X should also select FIXED_PHY
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Patch set v1 [1] gives brief introduction for the change and this series
+has a minor update for the patch 13 'perf kvm: Add TUI mode for stat
+report' to avoid building failure when the system doesn't support
+HAVE_SLANG_SUPPORT.
 
-You are targeting the -net tree, but this lacks a 'Fixes' tag, please
-post a new version with such info.
+We can use below commands for testing this series:
 
-If instead the intended target was net-next (as I think it was agreed
-on previous revision) please repost after that net-next re-opens (in
-~1w from now).
+In a terminal, you could launch a virtual machine with qemu command; in
+below case, I downloaded a Ubuntu (or Debian) iso file and used it as
+the file system image:
 
-Thanks,
+  $ qemu-system-x86_64 -M pc -enable-kvm -cpu host -m 4096 -hda ubuntu-22.04-desktop-amd64.iso
 
-Paolo
+Then in another terminal, I can use below command to capture KVM trace
+data and report the result:
+
+  # cd linux/tools/perf
+  # ./perf kvm stat record
+  # ./perf kvm stat report          => Output in TUI mode
+  # ./perf kvm stat report --stdio  => Output in stdio mode
+
+Changes from v2:
+* Found building failure with command 'make VF=1 DEBUG=1 NO_SLANG=1',
+  fixed it in the patch 13. (James Clark)
+
+Changes from v1:
+* Updated the patch 13 'perf kvm: Add TUI mode for stat report' to avoid
+  building failure if no support HAVE_SLANG_SUPPORT.
+
+[1] https://lore.kernel.org/lkml/20230226042053.1492409-1-leo.yan@linaro.org/
+
+
+Leo Yan (14):
+  perf kvm: Refactor overall statistics
+  perf kvm: Add pointer to 'perf_kvm_stat' in kvm event
+  perf kvm: Move up metrics helpers
+  perf kvm: Use subtraction for comparison metrics
+  perf kvm: Introduce histograms data structures
+  perf kvm: Pass argument 'sample' to kvm_alloc_init_event()
+  perf kvm: Parse address location for samples
+  perf kvm: Add dimensions for KVM event statistics
+  perf kvm: Use histograms list to replace cached list
+  perf kvm: Polish sorting key
+  perf kvm: Support printing attributions for dimensions
+  perf kvm: Add dimensions for percentages
+  perf kvm: Add TUI mode for stat report
+  perf kvm: Update documentation to reflect new changes
+
+ tools/perf/Documentation/perf-kvm.txt |   9 +-
+ tools/perf/builtin-kvm.c              | 856 +++++++++++++++++++++-----
+ tools/perf/util/kvm-stat.h            |  26 +-
+ 3 files changed, 716 insertions(+), 175 deletions(-)
+
+-- 
+2.34.1
 
