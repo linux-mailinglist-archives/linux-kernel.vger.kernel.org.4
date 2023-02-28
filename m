@@ -2,263 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA906A5777
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154A66A577C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjB1LGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S231410AbjB1LHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjB1LGg (ORCPT
+        with ESMTP id S231370AbjB1LHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:06:36 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7DA3ABE;
-        Tue, 28 Feb 2023 03:06:35 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id y2so9384305pjg.3;
-        Tue, 28 Feb 2023 03:06:35 -0800 (PST)
+        Tue, 28 Feb 2023 06:07:10 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20704.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::704])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594A93ABE;
+        Tue, 28 Feb 2023 03:07:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xafpwj9w2kMuhpDXceESyvUpMnH9YcXeLxBjer5L746NwWLRhW/PUFb7+7UfS/IaGVz4+bxsZb+fkzS0eAemUM/zbkuyfbTaSkqhsFiRnhOY6DafGJapjckWUoSW6uARXHCPgnuY9z89tPG1qjz0p0hXs7jOeKPeKhCRRTRtoWSS4i/VDzyqf7xbPeLEjQGrXoIFYPfpX9ePnf3M4tYlTBnI+RNCTWkGAru1ig60TINn2JFQYUUj83HEphTKfE2zNmBtYggTdLnRcqJnEZl7P1LuMUqXKMW5Pv9yhuBcSa3lQrulUoq6qCX2B0gBlzGgF1CGx3Ae29amqRNYFVQtEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NG1ywQoSlO86h4Q1huOevlfor7ETKWJN1TTyQBt3Nns=;
+ b=dF4rkmwbRXQRtQOchGM+dKSVh9XDVf6kNkIDSuyOWuAivgh5oGlI0uefoArMoCz13YS02OT85kDic1Fqv6fmlqcVp73iBG/z4nCfh9rAuniszCxxYqcfxJhuDtcR+zq74DAIWTGqnnVeJtqvboHyygXrTj3DzBhbWVP+2paQQudw5/oQQtimHnEB8ioumgbfXbKqrmmbEliecqmtiOV7kVkYxjEiw8G3fba23aPBxlYPMrc1ZAc8suQVJ15S/BhzBv7ACgrErpv3oGgodeEIfEOokJKguSOL6EJsrWmupZYfU+frcDGuiAqbTDcFAE6Bh7McWWn2mQ13ZRkHvIVLoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bvm36jEtxsjOED1mtOtwojZpdWddplJxOZnpRXDzWDw=;
-        b=KzzWos9fuGTDMCs6y0xH3HRrCE5mLcFihPrconwhq+QCcBC4pWDNKodtXXuJvvzyuR
-         /LWzXNmC6wWCZOKGXeMRF+NylZAcuiR5+znWAGGobNx+KPsqCU1zaXWu3CYi1NxcNdYv
-         NgT6hZQGmUk34EJG24vuNmkNTLZX5zQdFRdtkjzubWaSSRT7uyhF2xYjnl8C6ZC88YNv
-         PeWvJCpEKjI0BYCvIjlmO9Ew4sRSCxBmn/lYTWlClN7vfHr15NQ6j6w7ZEn4utpjgjut
-         vRpPgcXdswr5stowAP8MIy7yEn4pv5d1mi/rOExwx65D3Ml8u/7A9xvzRcc/olexf2mF
-         4jVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvm36jEtxsjOED1mtOtwojZpdWddplJxOZnpRXDzWDw=;
-        b=xIomMJ06Ra5BEmjrREV30u50qDc2hL38r6IgT6rkgeHhz8j6bzIev2cg8xjHc7Etjj
-         lgO+fDc6yMLFI/N0pFvBk0N9J/+uDQpxsWohzxXmsp8DaiuLUy8ECVgaqM+4PGpGdGYv
-         mFE3Tgj9ul+QM3vJkbU51hcfR5DW781apVAsrLos+o+sblb/+AljNci1NzeOQfHLSFXc
-         QFzZreqkK8l6B0y7gJSX3sBMYhJyaTNFmlnlD9dOTyQ7UMgCuBSVQQ2WBR9pjtOy152e
-         AoI6Z9Tp3Cw/yjsJWVuji0fN+eUFNwKABpfS7bMbfPz7JYeDmx5g1tv1sTe1lV93pTKA
-         KvBw==
-X-Gm-Message-State: AO0yUKVITG7OXaqTu2mOZU0CnwcHuTd4QPtChVkJ+YWkQyko384E75CU
-        1Y3CRU0fqU1hdP7BvCnUS+Y=
-X-Google-Smtp-Source: AK7set/V0gZ4d5+d6LDbQquSz4/CAYQAR1LC0vZM7MFpb7GZho2ejiRNPXoDfVRuEC1RxYD7eVFmKg==
-X-Received: by 2002:a17:90a:3e4f:b0:237:bf05:40b with SMTP id t15-20020a17090a3e4f00b00237bf05040bmr2814072pjm.20.1677582394314;
-        Tue, 28 Feb 2023 03:06:34 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id x25-20020a63b219000000b00502ecc282e2sm5476821pge.5.2023.02.28.03.06.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:06:33 -0800 (PST)
-Date:   Tue, 28 Feb 2023 03:06:32 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v11 023/113] KVM: TDX: allocate/free TDX vcpu structure
-Message-ID: <20230228110632.GV4175971@ls.amr.corp.intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <db53b2c6c7718df7df89bb36b83257a2588b58e1.1673539699.git.isaku.yamahata@intel.com>
- <76cd219cadf3f5e06eb10b592de121ed0db056eb.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NG1ywQoSlO86h4Q1huOevlfor7ETKWJN1TTyQBt3Nns=;
+ b=hhUhk4pfhbaXu9dSbDMQ/wVYgLb4Wy52VqvOX8mBHKmovyAHJshyogiaSNvayJdWuB0AnB97P0vG0VpSKASNS5GNnYnJXEgZXkjsQD63k8L1okqUQsBwI70ge8n2pvHkmvS3dR29ouyKidp4bD1getqPRlVs9M2R1yJx+GqhjMY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB3831.namprd13.prod.outlook.com (2603:10b6:610:a3::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.27; Tue, 28 Feb
+ 2023 11:07:05 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 11:07:05 +0000
+Date:   Tue, 28 Feb 2023 12:06:58 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] rtlwifi: rtl8192se: Remove the unused variable
+ bcntime_cfg
+Message-ID: <Y/3gUquaPNlaLaKt@corigine.com>
+References: <20230228021132.88910-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <76cd219cadf3f5e06eb10b592de121ed0db056eb.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230228021132.88910-1-jiapeng.chong@linux.alibaba.com>
+X-ClientProxiedBy: AS4P195CA0040.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:65a::28) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3831:EE_
+X-MS-Office365-Filtering-Correlation-Id: 172e84bd-92e0-4e50-47dc-08db197beced
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bLzXbb2Zhz7jLJILpQgh4xZ1pbdHuBf+sY0PFVq1UBJ4UXtoYJDI0GKtVzIaPyYQw0Ghf+Ge4bPY9u2ldlhcF8SQojRdfH3j/GK63BwZP35KByvB2waEbLpjLd4YofvIS/r8X2pEH5Wgku4WGYZ680TLoAF7TmPSQx88PMD9M8zKC/aq7UUggZerzv4UtsWfT3+qfnRClfdQRLk17rdUb56WkjO4Vvm23vfIzbUp9QHpc7WPk94bQ0PLfDx7YJaUTjdNPi14wAhiRivg0xoVa97wwqUlC1PJGFijqFNcNtridLOLvIvkjH4F0YxkFP6mBPxQaDsBLuwaA0Fv13kwE6LJ1Q3+BssazzZvqwtPN2Iya5ARpLvSpYGNMZ1GOMrz1Cj9MUoL5DO/figIVVlYc4lG+OtLjr5epL5w6JfIGYmrMMgYN7pD+KrO7iHfCjUqS2RzoQqijCGk/s407zOuY68A25ULLmL4gSkXRBc32jWDbBk80g0TvFvH23kpEIty4iHcJjt45Alu2u9eoudEpLvfKlfcXP6kBWT0PIzB2m17aEyGc1XF3AJ4fQOpqG0wvPedZPmikAvX96nxeiHfiDSCxqSPmkX6TFPtrwm6gthKn87aCFBTbu7xl5EPLmt5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(136003)(396003)(366004)(39840400004)(451199018)(2616005)(478600001)(83380400001)(86362001)(8936002)(6666004)(316002)(6486002)(186003)(966005)(44832011)(38100700002)(6506007)(6512007)(4744005)(66476007)(41300700001)(8676002)(2906002)(36756003)(66556008)(6916009)(7416002)(66946007)(5660300002)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xSXpNVs0kAhX9pp/6OIar0Rw867T8kX0qmhulSU5MAqTyKIZx8RDPVSEJyNH?=
+ =?us-ascii?Q?zRF0TVo0tl5Agm7SfT+wcbKJTn83dgaYkHnHmSM4ipGDCHhg1q4CoXMVXoLq?=
+ =?us-ascii?Q?vtOdQR5eBgZjcsDmySzK+PSW8SirH1GccxJ4/1Hcz6Y+XcLCmx50KRUIzxdB?=
+ =?us-ascii?Q?3tzIQN9cOrGlU0kQjeD45Hsmy+9OSuLb0ufC10obx/r5/IJ0Q8Wv4fryZeHY?=
+ =?us-ascii?Q?a3uPjFEugKn6tbvnqZ2i3TqrR2bYVErwxaVMVa7RvMW6bUnvdmHTGD3x4M7a?=
+ =?us-ascii?Q?BetDj8/y6gmTX/oJBiF7j+6gk6fFkVrAHCWO4azpSMKT4a2K54h+0GZjNf+L?=
+ =?us-ascii?Q?NPnqOK1oVFHcurAJxyeIxojktCmi4R5UA0VBcvKo0bBK/WSnjHQ8rjhjCuh6?=
+ =?us-ascii?Q?tXUOqxHicVl2EhOkHWxd7yG2l2qczjX35yJaScFG9F4yEzh6ZYT4B+9NpZjX?=
+ =?us-ascii?Q?BkAaOuwwk2bTl2GXpiYs2wJdJnbrg+Uy82NJf6R5UQCBHw5dpW9JjAAsTGh9?=
+ =?us-ascii?Q?2yo5a3Ar/hUx9oP9R3cMGfxuvdcw4cXrhgq4tRezzMedwHTMHH9075QlqQ3F?=
+ =?us-ascii?Q?0Kt6nbsllxUq9XmL208CLFs9Za+1qCLI2UsVXHZDNPXhogStPxAIKjB4jlJs?=
+ =?us-ascii?Q?A3906zw3hamLLYMmbBPBU8Zx+U6jKJyhLe2NM7ITOxrd8VMbhbpiKuES9wpv?=
+ =?us-ascii?Q?C1BKwDn400m7yAQBwzk9kYm88h4cvtpawmmoJkKbkJkMZUqbzj/DZT1c/zci?=
+ =?us-ascii?Q?MmD2D6jqwpjyQyEPa/ZRGXi1wDSSClVYg5++4kKap0Ib1iOzkTcsYZk4PVI6?=
+ =?us-ascii?Q?j/dHlneZZHq67l4TyN02xk8arX2xoqMoaQxTAKHQig02A8qk2m4skIvhxLNm?=
+ =?us-ascii?Q?Nb5va6WSigsQMToz2tnSe8WXukr92GJvfygwQu8kB22cfqhYTmB2o76Nlt5F?=
+ =?us-ascii?Q?Ly+EUmbMLUGF9huT7X00BvklIi4E7HbTT4WgJG9Z1fiu3CTKOmXsWbNdAQNS?=
+ =?us-ascii?Q?E6u+4BAMtJVeSJBXS5R0mHujoaG0c3BUALYu5m1dQVjBhIWkCxSOgxboJGwm?=
+ =?us-ascii?Q?dqFnW5fEySHW+lxnM4VP0GM0esQbiG+sLxtyjf7HRw5QyGF3xDUrsGAqNprz?=
+ =?us-ascii?Q?kCT/0wi7CLK1BOVzdm9ah9Btw2RqfF+96vTWqLI9QLnBz4oKpO9bJtvYvXIy?=
+ =?us-ascii?Q?FQT0aDwhR+9ySWKyZJVYerQOkWWwsQHjxEAT+cf50U4TR6pxpcj3QzOcbztC?=
+ =?us-ascii?Q?ULHtGx/vcNrMuMzNSKjDiQKjqie5SoeEO2+sjikub+o9Yyvnqfhqd8R8EVFt?=
+ =?us-ascii?Q?OykkNEAZSgimNK+Qmpf0QyFbq6k+SYvoP1ol4JnvYdR4Y7CT4XJ+aRWsJSOS?=
+ =?us-ascii?Q?ZDJAFJtFljdgY3yLMRcUjeuOrIcWe8UW4riHm9iPPBpbs5WR1fQzjVjApsT8?=
+ =?us-ascii?Q?LOMb4dbkcu7rxTJHicypJqC9ykc1DeDtrjqS+gIQO5m3s9G1dL9szF7txvab?=
+ =?us-ascii?Q?CUIYpM3ZIHPpg7GiSOsbysdE6V8uG2ew5LywJYAFJTHKo8Dm9qK0910WHpNN?=
+ =?us-ascii?Q?2KE+0GSuVgL8wmQyUt2tQAXGyPznKa+3wMX841eq/uTgJclUK2KZhBzXsZ5r?=
+ =?us-ascii?Q?JottzWMQt5IYe9HHvkxfPzkG3ioDdOloLYwb/ty06ADA/lUq3aS8BOdOGZ+8?=
+ =?us-ascii?Q?dxwY8g=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 172e84bd-92e0-4e50-47dc-08db197beced
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 11:07:05.1577
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jPGT0cRDHEu0lHxrOA/AozMheFDLLYEvNZxS3nPIC7jSzuuBpjjfbdrZ8sAEvZs6ykDjqGCZ90L/LswKYOniSQ5Uf3mgezOER/kH/2dsafc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3831
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 12:45:09AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
-
-> On Thu, 2023-01-12 at 08:31 -0800, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > 
-> > The next step of TDX guest creation is to create vcpu.  Allocate TDX vcpu
-> > structures, partially initialize it.  
-> > 
+On Tue, Feb 28, 2023 at 10:11:32AM +0800, Jiapeng Chong wrote:
+> Variable bcntime_cfg is not effectively used, so delete it.
 > 
-> Why partially initialize it?  Shouldn't a better way be either: 1) not
-> initialize at all, or; 2) fully initialize? 
+> drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c:1555:6: warning: variable 'bcntime_cfg' set but not used.
 > 
-> Can you put more _why_ here?
-> 
-> 
-> > Allocate pages of TDX vcpu for the
-> > TDX module.  Actual donation TDX vcpu pages to the TDX module is not done
-> > yet.
-> 
-> Also, can you explain _why_ it is not done here?
-> 
-> > 
-> > In the case of the conventional case, cpuid is empty at the initialization.
-> > and cpuid is configured after the vcpu initialization.  Because TDX
-> > supports only X2APIC mode, cpuid is forcibly initialized to support X2APIC
-> > on the vcpu initialization.
-> 
-> Don't quite understand here.  As you said CPUID entries are configured later in
-> KVM_SET_CPUID2, so what's the point of initializing CPUID to support x2api> Are you suggesting KVM_SET_CPUID2 will be somehow rejected for TDX guest, or
-> there will be special handling to make sure the CPUID initialized here won't be
-> overwritten later?
-> 
-> Please explain clearly here.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4240
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Here is the updated one.
+Hi Jiapeng Chong,
 
-    The next step of TDX guest creation is to create vcpu.  Allocate TDX vcpu
-    structures, initialize it that doesn't require TDX SEAMCALL.  TDX specific
-    vcpuid initialization will be implemented as independent KVM_TDX_INIT_VCPU
-    so that when error occurs it's easy to determine which component has the
-    issue, KVM or TDX.
-    
-    In the case of the conventional case, cpuid is empty at the initialization.
-    and cpuid is configured after the vcpu initialization.  Because TDX
-    supports only X2APIC mode, cpuid is forcibly set to support X2APIC and APIC
-    BASE MSR is forcibly set to X2APIC mode.  The MSR will be read only for
-    guest TD.  Because kvm_arch_vcpu_create() also initializes kvm MMU that
-    depends on local apic settings.  So x2apic needs to be initialized to
-    X2APIC mode by vcpu_reset method before KVM mmu initialization.
+this looks good to me.
 
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
+While reviewing this gcc 12.2.0 told me:
 
-> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > index 557a609c5147..099f0737a5aa 100644
-> > --- a/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -281,6 +281,81 @@ int tdx_vm_init(struct kvm *kvm)
-> >  	return 0;
-> >  }
-> >  
-> > +int tdx_vcpu_create(struct kvm_vcpu *vcpu)
-> > +{
-> > +	struct kvm_cpuid_entry2 *e;
-> > +
-> > +	/*
-> > +	 * On cpu creation, cpuid entry is blank.  Forcibly enable
-> > +	 * X2APIC feature to allow X2APIC.
-> > +	 * Because vcpu_reset() can't return error, allocation is done here.
-> > +	 */
-> > +	WARN_ON_ONCE(vcpu->arch.cpuid_entries);
-> > +	WARN_ON_ONCE(vcpu->arch.cpuid_nent);
-> > +	e = kvmalloc_array(1, sizeof(*e), GFP_KERNEL_ACCOUNT);
-> 
-> You don't need to use kvmalloc_array() when only allocating one entry.
+drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c:1555:25: error: unused variable 'bcn_ifs' [-Werror=unused-variable]
+ 1555 |         u16 bcn_cw = 6, bcn_ifs = 0xf;
+      |                         ^~~~~~~
+drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c:1555:13: error: unused variable 'bcn_cw' [-Werror=unused-variable]
+ 1555 |         u16 bcn_cw = 6, bcn_ifs = 0xf;
+      |             ^~~~~~
 
-I'll make it kvmalloc() and add comment on kvmalloc(), not kmalloc().
-
-
-> > +	if (!e)
-> > +		return -ENOMEM;
-> > +	*e  = (struct kvm_cpuid_entry2) {
-> > +		.function = 1,	/* Features for X2APIC */
-> > +		.index = 0,
-> > +		.eax = 0,
-> > +		.ebx = 0,
-> > +		.ecx = 1ULL << 21,	/* X2APIC */
-> > +		.edx = 0,
-> > +	};
-> > +	vcpu->arch.cpuid_entries = e;
-> > +	vcpu->arch.cpuid_nent = 1;
-> 
-> As mentioned above, why doing it here? Won't be this be overwritten later in
-> KVM_SET_CPUID2?
-
-Yes, user space VMM can overwrite cpuid[0x1] and APIC base MSR.  But it doesn't
-matter because it's a bug of user space VMM. user space VMM has to keep the
-consistency of cpuid and MSRs.
-Because TDX module virtualizes cpuid[0x1].x2apic to fixed 1, KVM value doesn't
-matter after vcpu creation.
-Because KVM virtualizes APIC base as read only to guest, cpuid[0x1].x2apic
-doesn't matter after vcpu creation as long as user space VMM keeps KVM APIC BASE
-value.
-
-I'll add a comment.
-
-
-> > +
-> > +	/* TDX only supports x2APIC, which requires an in-kernel local APIC. */
-> > +	if (!vcpu->arch.apic)
-> > +		return -EINVAL;
-> 
-> If this is hit, what happens to the CPUID entry allocated above?  It's
-> absolutely not clear here in this patch.
-
-It's memory leak. I'll move the check before memory allocation.
-
-
-> > +
-> > +	fpstate_set_confidential(&vcpu->arch.guest_fpu);
-> > +
-> > +	vcpu->arch.efer = EFER_SCE | EFER_LME | EFER_LMA | EFER_NX;
-> > +
-> > +	vcpu->arch.cr0_guest_owned_bits = -1ul;
-> > +	vcpu->arch.cr4_guest_owned_bits = -1ul;
-> > +
-> > +	vcpu->arch.tsc_offset = to_kvm_tdx(vcpu->kvm)->tsc_offset;
-> > +	vcpu->arch.l1_tsc_offset = vcpu->arch.tsc_offset;
-> > +	vcpu->arch.guest_state_protected =
-> > +		!(to_kvm_tdx(vcpu->kvm)->attributes & TDX_TD_ATTRIBUTE_DEBUG);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +void tdx_vcpu_free(struct kvm_vcpu *vcpu)
-> > +{
-> > +	/* This is stub for now.  More logic will come. */
-> > +}
-> > +
-> > +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> > +{
-> > +	struct msr_data apic_base_msr;
-> > +
-> > +	/* TDX doesn't support INIT event. */
-> > +	if (WARN_ON_ONCE(init_event))
-> > +		goto td_bugged;
-> 
-> Should we use KVM_BUG_ON()?
->
-> Again, it appears this depends on how KVM handles INIT, which is done in a later
-> patch far way:
-> 
-> [PATCH v11 102/113] KVM: TDX: Silently ignore INIT/SIPI
-> 
-> And there's no material explaining how it is handled in either changelog or
-> comment, so to me it's not reviewable.
-
-I'll convert them to KVM_BUG_ON().  With this patch, I'll remove WARN_ON_ONCE()
-and add KVM_BUG_ON() with the later patch.
-
-
-> > +
-> > +	/* TDX rquires X2APIC. */
-> > +	apic_base_msr.data = APIC_DEFAULT_PHYS_BASE | LAPIC_MODE_X2APIC;
-> > +	if (kvm_vcpu_is_reset_bsp(vcpu))
-> > +		apic_base_msr.data |= MSR_IA32_APICBASE_BSP;
-> > +	apic_base_msr.host_initiated = true;
-> > +	if (WARN_ON_ONCE(kvm_set_apic_base(vcpu, &apic_base_msr)))
-> > +		goto td_bugged;
-> 
-> I think we have KVM_BUG_ON()?
-> 
-> TDX requires a lot more staff then just x2apic, why only x2apic is done here,
-> particularly in _this_ patch?
-
-After this callback, kvm mmu initialization follows.  It depends on apic
-setting.  X2APIC is only devication from the common logic kvm_lapic_reset().
-I'll add a comment.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+So perhaps you could consider sending another patch to remove them too.
