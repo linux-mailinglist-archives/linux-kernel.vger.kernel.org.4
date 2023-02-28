@@ -2,159 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7566A60C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A1E6A60C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjB1UxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S229849AbjB1U42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjB1UxR (ORCPT
+        with ESMTP id S229679AbjB1U4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:53:17 -0500
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E43E129
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:53:13 -0800 (PST)
-X-KPN-MessageId: e59fbc5a-b7a9-11ed-afdd-005056abad63
-Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id e59fbc5a-b7a9-11ed-afdd-005056abad63;
-        Tue, 28 Feb 2023 21:53:04 +0100 (CET)
+        Tue, 28 Feb 2023 15:56:24 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9C834F70
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:56:22 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id nf5so7845777qvb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 12:56:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=subject:to:from:message-id:date;
-        bh=fudN8ArySQL4WxjTN7QCK9yq0lwyu6+8SisGWmyX75Q=;
-        b=m0ZY7+3tWMyJ6mV02HESHr2l1pOW5Ed2enycOSfnmV68NXwwPvx7n9SY1s3xRXdYdOjYL7Dv/5yrv
-         IhOeKbwTQIp72Feoe0LUy3d29YrgAvnEZBqhQ/dlBpN6hr9KPwU7blmQa5NvrTpZsPJvY8kAEv2+vB
-         NzMiglvb/olKTnwU2wUOiGZEreeC85bnHBRdVOJfHs7SPJX8+2snqtE2gIM9F71Vk2oAKLP+OqsyP8
-         +aeVRILBb2ua33Nqj4D6gZN5G25yhofl0WKz66g7r5ty9dXV8K8bpV0JAs3av9Qb7jotSDD42iVvtv
-         LYTRJP3kGQmaiQY13/JhbDYVU2mkOjQ==
-X-KPN-MID: 33|qw/opIog0L/9cUv1FdHJALWLJ+GSjGOJs5JQpYZ1ewEddOVHknQ7JqPBIPb5etM
- nyGMcY1SMzXWUySHwK25A7xcOIn3ik4pRV0KxPF4B7Hg=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|TyyRfy9x8DGtrDcN80aGHcz+FyBiGyfilCur4PWFuaPgwVH2U9q9D9JZDF365RQ
- 5+Y79MNe1fW0b87u+FQle2A==
-X-Originating-IP: 80.61.163.207
-Received: from bloch.sibelius.xs4all.nl (80-61-163-207.fixed.kpn.net [80.61.163.207])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id e836b37c-b7a9-11ed-ab4c-005056ab7447;
-        Tue, 28 Feb 2023 21:53:10 +0100 (CET)
-Date:   Tue, 28 Feb 2023 21:53:09 +0100
-Message-Id: <87wn41qzpm.fsf@bloch.sibelius.xs4all.nl>
-From:   Mark Kettenis <mark.kettenis@xs4all.nl>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     sven@svenpeter.dev, fnkl.kernel@gmail.com, alyssa@rosenzweig.io,
-        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, asahi@lists.linux.dev,
-        rydberg@bitmath.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <1874e194-5210-460b-3e8f-0f48962f8a47@marcan.st> (message from
-        Hector Martin on Tue, 28 Feb 2023 11:58:28 +0900)
-Subject: Re: [PATCH RFC 1/4] dt-bindings: input: touchscreen: Add Z2
- controller bindings.
-References: <20230223-z2-for-ml-v1-0-028f2b85dc15@gmail.com>
- <20230223-z2-for-ml-v1-1-028f2b85dc15@gmail.com>
- <87r0ufs574.fsf@bloch.sibelius.xs4all.nl>
- <CAMT+MTQOUd0aSDJ3DPBMfkVwaic=nbRPtfGgu2nduSdCdydcgg@mail.gmail.com>
- <e6c7eb27-1b60-4894-a623-28ca3bccdea5@app.fastmail.com> <1874e194-5210-460b-3e8f-0f48962f8a47@marcan.st>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        d=joelfernandes.org; s=google; t=1677617781;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1k1XmXsff3btuUGsie2pzFiOnlZVLd6pPcaArC3aVQs=;
+        b=gmQXfguQviSRKLou+oUUzSbGaTJ9ngV0L/yjBbSllPFq5CjWR3J2W3ftRniJbEJZLG
+         tz+tr7+GrkLgojwL4AmC8IlHQMcjefR6nZXWBI7jJNHOj5B1hpRKakgp63yY3St2O8iA
+         iMs4QSzN4BLC4Lyzrp0TY2Q7WLwUzBLlW2TME=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677617781;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1k1XmXsff3btuUGsie2pzFiOnlZVLd6pPcaArC3aVQs=;
+        b=B+IynXgn1yzHnNvZjBBIcWAAUixTwZAZLCXL9lqnRfKAj+LDxdCWiJ4mVKops2+PAS
+         UPs2KvJnB+yUuiZ1MYVe4d6+2ZlvNSkXUqnG9H0S5lbV8z7D6GCkhx3wPhrbrBpW7fG0
+         9SVR67iSX0laftsXuqyj9xOKlHWJLxXrc8CAUWog78zD0DJsRoE7etfZ8r4GyDlfTHUS
+         xtBrrwc4lVAYs9BcqE4GqbBolVOsG/vSvblHqEDZqXrnpymRe6XJDl3iDim2goyW7dV/
+         U+hQMop89JYvnXFStg3FyH34kN5qMDh9RIs0eihQrnCNWWB1SsRwB+5SSPu+lzLRINZV
+         Nsjg==
+X-Gm-Message-State: AO0yUKX0xwHv4M2byQSFVkCecGBbRdYMn3NwC3LREIPZUooTtrAKznre
+        eqDLUYUzUIr7Bd/bVmjT1M84Fw==
+X-Google-Smtp-Source: AK7set/wVX5+WV6VxKZvkpTsFI6BZFSZalcly9larjlq30KVCinUIpyb9ZcD4JgMAHH47oMcF3+7cQ==
+X-Received: by 2002:a05:6214:e8f:b0:571:f87:a66e with SMTP id hf15-20020a0562140e8f00b005710f87a66emr7923388qvb.34.1677617781566;
+        Tue, 28 Feb 2023 12:56:21 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id bm26-20020a05620a199a00b007424376ca4bsm7545832qkb.18.2023.02.28.12.56.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 12:56:20 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+Date:   Tue, 28 Feb 2023 15:56:09 -0500
+Message-Id: <944C2939-BE6B-431D-B751-F052A7684844@joelfernandes.org>
+References: <Y/5mguXPPqdP3MZF@google.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+In-Reply-To: <Y/5mguXPPqdP3MZF@google.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Date: Tue, 28 Feb 2023 11:58:28 +0900
-> From: Hector Martin <marcan@marcan.st>
-> 
-> On 24/02/2023 20.08, Sven Peter wrote:
-> > Hi,
-> > 
-> > 
-> > On Fri, Feb 24, 2023, at 12:04, Sasha Finkelstein wrote:
-> >> On Fri, 24 Feb 2023 at 11:55, Mark Kettenis <mark.kettenis@xs4all.nl> wrote:
-> >>
-> >>> What is the motivation for including the firmware name in the device
-> >>> tree rather than constructing it in the driver like what is done for
-> >>> the broadcom wireless?
-> >> There is no way to identify the device subtype before the firmware is
-> >> uploaded, and so i need some way of figuring out which firmware to use.
-> > 
-> > Some Broadcom bluetooth boards use the compatible of the root node (see
-> > btbcm_get_board_name in drivers/bluetooth/btbcm.c) which would be "apple,jXXX"
-> > for Apple Silicon. I believe the Broadcom WiFi driver has similar logic as well
-> > which marcan had to extend to instead of "brcm,board-type" because different
-> > WiFi boards can me matched to different Apple Silicon boards. I don't think
-> > that's the case for this touchscreen though.
-> 
-> The reason why the brcmfmac stuff needs to construct the firmware name
-> itself is that parts of it come from the OTP contents, so there is no
-> way to know from the bootloader what the right firmware is.
 
-The name of the "nvram" file is constructed as well, and that uses the
-compatible of the machine (the root of the device tree).  I suppose
-what is special in that case is that several files are tried so a
-single 'firmware-name" property wouldn't cut it.
 
-> That is not the case here, so it makes perfect sense to specify the
-> firmware with `firmware-name` (which is a standard DT property).
+> On Feb 28, 2023, at 3:39 PM, Joel Fernandes <joel@joelfernandes.org> wrote=
+:
+>=20
+> =EF=BB=BFOn Tue, Feb 28, 2023 at 04:51:21PM +0100, Uros Bizjak wrote:
+>> Use try_cmpxchg instead of cmpxchg (*ptr, old, new) =3D=3D old in
+>> check_cpu_stall.  x86 CMPXCHG instruction returns success in ZF flag, so
+>> this change saves a compare after cmpxchg (and related move instruction i=
+n
+>> front of cmpxchg).
+>=20
+> In my codegen, I am not seeing mov instruction before the cmp removed, how=
 
-It certainly provides the flexibility to cater for all potential
-nonsense names Apple comes up with for future hardware.
+> can that be? The rax has to be populated with a mov before cmpxchg right?
+>=20
+> So try_cmpxchg gives: mov, cmpxchg, cmp, jne
+> Where as cmpxchg gives: mov, cmpxchg, mov, jne
+>=20
+> So yeah you got rid of compare, but I am not seeing reduction in moves.
+> Either way, I think it is an improvement due to dropping cmp so:
+>=20
+> Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-> As for the layout, both bare names and paths are in common use:
-> 
-> qcom/sm8450-qrd.dts:    firmware-name = "qcom/sm8450/slpi.mbn";
-> ti/k3-am64-main.dtsi:   firmware-name = "am64-main-r5f0_0-fw";
-> 
-> ... but the bare names in particular, judging by some Google searches,
-> are *actually* mapped to bare files in /lib/firmware anyway. So the
-> firmware-name property contains the firmware path in the linux-firmware
-> standard hierarchy, in every case.
+Ah there probably is a lesser mov to hold the value to compare against,
+but maybe not always?=20
 
-Well, I think the device tree should not be tied to a particular OS
-and therefore not be tied to things like linux-firmware.
+Would be nice to clarify that in the changelog anyway.
 
-> I already did the same thing for the touchpad on M2s (which requires
-> analogous Z2 firmware passed to it, just in a different format):
-> 
-> dts/apple/t8112-j413.dts: firmware-name = "apple/tpmtfw-j413.bin";
-> 
-> Why is having a directory a problem for OpenBSD? Regardless of how
-> firmware is handled behind the scenes, it seems logical to organize it
-> by vendor somehow. It seems to me that gratuitously diverging from the
-> standard firmware hierarchy is only going to cause trouble for OpenBSD.
-> Obviously it's fine to store it somewhere other than /lib/firmware or
-> use a completely unrelated mechanism other than files, but why does the
-> *organization* of the firmware have to diverge? There can only be one DT
-> binding, so we need to agree on a way of specifying firmwares that works
-> cross-OS, and I don't see why "apple/foo.bin" couldn't be made to work
-> for everyone in some way or another.
+Thanks,
 
-We organize the firmware by driver.  And driver names in *BSD differ
-from Linux since there are different constraints.  The firmware is
-organized by driver because we have separate firmware packages for
-each driver that get installed as-needed by a tool that matches on the
-driver name.
+ - Joel
 
-Rather than have the device tree dictate the layout of the firmware
-files, I think it would be better to have the OS driver prepend the
-directory to match the convention of the OS in question.  This is what
-we typically do in OpenBSD.
-
-Now I did indeed forget about the "dockchannel" touchpad firmware that
-I already handle in OpenBSD.  That means I could handle the touchbar
-firmware in the same way.  But that is mostly because these firmwares
-are non-distributable, so we don't have firmware packages for them.
-Instead we rely on the Asahi installer to make the firmware available
-on the EFI partition and the OpenBSD installer to move the firmware in
-place on the root filesystem.
-
-So this isn't a big issue.
-
-Cheers,
-
-Mark
+>=20
+> thanks,
+>=20
+> - Joel
+>=20
+>=20
+>>=20
+>> No functional change intended.
+>>=20
+>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>> Cc: Frederic Weisbecker <frederic@kernel.org>
+>> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+>> Cc: Josh Triplett <josh@joshtriplett.org>
+>> Cc: Steven Rostedt <rostedt@goodmis.org>
+>> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+>> Cc: Joel Fernandes <joel@joelfernandes.org>
+>> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+>> ---
+>> kernel/rcu/tree_stall.h | 4 ++--
+>> 1 file changed, 2 insertions(+), 2 deletions(-)
+>>=20
+>> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+>> index b10b8349bb2a..d81c88e66b42 100644
+>> --- a/kernel/rcu/tree_stall.h
+>> +++ b/kernel/rcu/tree_stall.h
+>> @@ -760,7 +760,7 @@ static void check_cpu_stall(struct rcu_data *rdp)
+>>    jn =3D jiffies + ULONG_MAX / 2;
+>>    if (rcu_gp_in_progress() &&
+>>        (READ_ONCE(rnp->qsmask) & rdp->grpmask) &&
+>> -        cmpxchg(&rcu_state.jiffies_stall, js, jn) =3D=3D js) {
+>> +        try_cmpxchg(&rcu_state.jiffies_stall, &js, jn)) {
+>>=20
+>>        /*
+>>         * If a virtual machine is stopped by the host it can look to
+>> @@ -778,7 +778,7 @@ static void check_cpu_stall(struct rcu_data *rdp)
+>>=20
+>>    } else if (rcu_gp_in_progress() &&
+>>           ULONG_CMP_GE(j, js + RCU_STALL_RAT_DELAY) &&
+>> -           cmpxchg(&rcu_state.jiffies_stall, js, jn) =3D=3D js) {
+>> +           try_cmpxchg(&rcu_state.jiffies_stall, &js, jn)) {
+>>=20
+>>        /*
+>>         * If a virtual machine is stopped by the host it can look to
+>> --=20
+>> 2.39.2
+>>=20
