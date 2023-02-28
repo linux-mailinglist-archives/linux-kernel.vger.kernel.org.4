@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD396A60D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0176A60D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjB1VBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
+        id S229880AbjB1VBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjB1VBJ (ORCPT
+        with ESMTP id S229568AbjB1VBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:01:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C660222DF9;
-        Tue, 28 Feb 2023 13:01:07 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677618066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GINJMaOMVEa/0BnuxANTZw7J7gtIv9G1Tgm4tmy0fMw=;
-        b=O9FP/U9j8lOfeghAXC6OGfzlTjTqhhA31djN2F3dagJgUjo1sAy5rMsVCB2/KBAL5ZmHlv
-        3Wo76mL4NQ/tDJ1VlAL+wx94dPs+PKgquKwN92HHzwnD+MQrv1sL5SoQAkSAL9RBBid+w8
-        OT+ipl9+y+4nKczYF8FW793okKIa9q4rUWGKi3bZcZesIoQxTdzHy35Xtma+1hvy/Xsths
-        lX40xBf7GtzG2ZFQvyjNxgEu1ktk0ZhEQmSpIS0ADs9JYVdlawAuJhDswAiWM3tDeYUHSN
-        Sa1wuIQ++1hOjCeVJcoRAoTisy1YS5DkNYGULs3AQgcsRtgDrxA//qRlYPvO4Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677618066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GINJMaOMVEa/0BnuxANTZw7J7gtIv9G1Tgm4tmy0fMw=;
-        b=uyzf/xGHa60na5Ixygi1+bQO5hb7cPMMdMRnyBrUT9ZHZiOJixsbxP5ZulAP9bJs74d+dQ
-        vPEzDuIIch2fgfAw==
-To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
-        kim.phillips@amd.com, brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: Re: [PATCH v12 07/11] x86/smpboot: Remove early_gdt_descr on 64-bit
-In-Reply-To: <20230226110802.103134-8-usama.arif@bytedance.com>
-References: <20230226110802.103134-1-usama.arif@bytedance.com>
- <20230226110802.103134-8-usama.arif@bytedance.com>
-Date:   Tue, 28 Feb 2023 22:01:05 +0100
-Message-ID: <878rghmrn2.ffs@tglx>
+        Tue, 28 Feb 2023 16:01:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9720A22DF9;
+        Tue, 28 Feb 2023 13:01:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6082DB80E9E;
+        Tue, 28 Feb 2023 21:01:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B43C433EF;
+        Tue, 28 Feb 2023 21:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677618102;
+        bh=PuulFyV4awQbeaORv2ji+l8CrYcwr4rOBMH1Tmw+dtE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Avt+N/dHfyW7DzInBLT270f21nSYylFNKA/0Iv5W5TLARLIkzgle0VUkpFUBUCA+e
+         HS8r/UciJYdPwkRQhFVwVMvrPjh5pIcjn5cPcgAEy4BuTlOEZEZ9Uhv6xbZkqAOAej
+         9Y1snhlVSSP9wNoq6omx6gUP5WzPOaJ3qzGdw+Yde0PhxDHrDty2WDjkPeleROklIg
+         U2FUM2UBpv72NLnXSZp7qusAZFSfzbar6OPn9nd5j8x2fDpal0Ga9bJQTcOpacJg61
+         u5iQkA+MYjbiYbazNh3OAXedYMtET1cQqH6XtUaOMt2v2seQYb7EN1CP77U0WfSSaT
+         oQ0f3zsNd3sMA==
+Received: by mail-vs1-f54.google.com with SMTP id x14so17144794vso.9;
+        Tue, 28 Feb 2023 13:01:41 -0800 (PST)
+X-Gm-Message-State: AO0yUKU+4zedN9y7WyF4BHDO4XgUiMEW0+MUj638oCBBKL/4fMwcuFPh
+        1EgSpP+0xtrXb7G/qyIADbsO++K0RInr7qaCXA==
+X-Google-Smtp-Source: AK7set+knSmnKI9hZHw/GCydiY5YXrF1T3UuE2jhcpYZSRIm0PWl9GdSn7NK6uvej168lpg2EjqKn6El4YYdjuqeaj0=
+X-Received: by 2002:a67:e003:0:b0:414:d29b:497c with SMTP id
+ c3-20020a67e003000000b00414d29b497cmr2801654vsl.6.1677618100932; Tue, 28 Feb
+ 2023 13:01:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230228174019.4004581-1-jjhiblot@traphandler.com> <CAGETcx-w4A3fz_DPqJG+9P6ETGAPv547DcnsO52gqTO1_vijsw@mail.gmail.com>
+In-Reply-To: <CAGETcx-w4A3fz_DPqJG+9P6ETGAPv547DcnsO52gqTO1_vijsw@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 28 Feb 2023 15:01:29 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL6qFDC5uC_0PgyM_8OVEwFq+o=gPk2=PRKBDTp9XTzOw@mail.gmail.com>
+Message-ID: <CAL_JsqL6qFDC5uC_0PgyM_8OVEwFq+o=gPk2=PRKBDTp9XTzOw@mail.gmail.com>
+Subject: Re: [PATCH] of: property: Add missing of_node_get() in parse_interrupt()
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     jjhiblot@traphandler.com, frowand.list@gmail.com,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26 2023 at 11:07, Usama Arif wrote:
-> @@ -265,7 +265,12 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
->  	 * addresses where we're currently running on. We have to do that here
->  	 * because in 32bit we couldn't load a 64bit linear address.
->  	 */
-> -	lgdt	early_gdt_descr(%rip)
-> +	subq	$16, %rsp
-> +	movw	$(GDT_SIZE-1), (%rsp)
-> +	leaq	gdt_page(%rdx), %rax
+On Tue, Feb 28, 2023 at 1:07=E2=80=AFPM Saravana Kannan <saravanak@google.c=
+om> wrote:
+>
+> On Tue, Feb 28, 2023 at 9:40=E2=80=AFAM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+> >
+> > From: Jean Jacques Hiblot <jjhiblot@traphandler.com>
+> >
+> > As all the other parsers do, parse_interrupt() must increase the refcou=
+nt
+> > of the device_node. Otherwise the refcount is decremented every time
+> > parse_interrupt() is called on this node, leading to a potential
+> > use-after-free.
+> >
+> > This is a regression introduced by commit f265f06af194 ("of: property:
+> > Fix fw_devlink handling of interrupts/interrupts-extended"). The reason=
+ is
+> > that of_irq_parse_one() does not increase the refcount while the previo=
+usly
+> > used of_irq_find_parent() does.
+>
+> Thanks for catching the issue Jean!
+>
+> This feels like a bug in of_irq_parse_one() to me. It's returning a
+> reference to a node without doing a of_node_get() on it.
+>
+> Rob, Marc, Do you agree?
 
-Even on !SMP gdt_page is in the 0...__per_cpu_end range. Which means
-that on !SMP this results in:
+I think you are right. If we look at the 'interrupts-extended' path,
+it just calls of_parse_phandle_with_args() which does a get.
 
-      leaq    0xb000(%rdx),%rax
+> Jean,
+>
+> If they agree, can you please fix of_irq_parse_one() and add a
+> of_node_put() to existing callers (if they aren't already doing a
+> put()).
 
-and RDX is 0. That's not really a valid GDT pointer, right?
+I think it is not that simple. The correct thing for callers may also
+be to hold the ref. We wouldn't want to just blindly do a put that is
+clearly wrong just to keep current behavior. But not having the put
+means we're leaking refcounts as calling the APIs originally had no
+side effect. For example, IIRC, of_irq_get() is called again on each
+deferred probe. There is no of_irq_put() because Linux IRQ numbers
+aren't (or weren't?) refcounted.
 
-> +	movq	%rax, 2(%rsp)
-> +	lgdt	(%rsp)
+Really, I'd like to get rid of exposing of_irq_parse_one() in the first pla=
+ce.
 
-and obviously that's equally broken for the task stack part:
-
->	movq	pcpu_hot + X86_current_task(%rdx), %rax
-
-This needs:
-
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -239,7 +239,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_
- 	/* Get the per cpu offset for the given CPU# which is in ECX */
- 	movq	__per_cpu_offset(,%rcx,8), %rdx
- #else
--	xorl	%edx, %edx
-+	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
- #endif /* CONFIG_SMP */
- 
- 	/*
-
-in the initial_stack patch, which then allows to remove this hunk in the
-initial_gs patch:
-
-@@ -286,9 +286,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_
- 	 * the per cpu areas are set up.
- 	 */
- 	movl	$MSR_GS_BASE,%ecx
--#ifndef CONFIG_SMP
--	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
--#endif
- 	movl	%edx, %eax
- 	shrq	$32, %rdx
- 	wrmsr
-
-Maybe we should enforce CONFIG_SMP=y first :)
-
-Thanks,
-
-        tglx
+Rob
