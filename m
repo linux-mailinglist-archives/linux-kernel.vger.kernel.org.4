@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CA16A560C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3BF6A5607
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 10:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbjB1JnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 04:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        id S230410AbjB1Jmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 04:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbjB1Jmz (ORCPT
+        with ESMTP id S230421AbjB1Jmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 04:42:55 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647CC2CFC6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:42:23 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so1896249pjg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:42:23 -0800 (PST)
+        Tue, 28 Feb 2023 04:42:31 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DDC2D159
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:42:27 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id i10so9754952plr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 01:42:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sPERv8sXud0KxJcvENIsE+Ngn3x88OA7gINkyBoEiFY=;
-        b=PDJpl+ldwuucI1/uzqbjlrW/O5HF0qhP66bBRMokCzBCnN+t3cSLIYouzDqz9Nf5Ps
-         pFCsGNyykMkKM4AWTND+EAXjOsC85j6nfq9VC7ZtUeAIYaiR+TpGPPfQuHZ+vDtTL6bR
-         6tMN21/xSKfJB+U272N/5FhlKZQZQURhP2H2Eas/ro9UyQh0YMNZgxCkBNTE+rOD6aw4
-         +QsaqFlsBDi8fPf5UhdCL5NdLQtHo0ZvZZ6y19CoEp+Zm7RACTyUHFp6z8hG3LVFlrXC
-         R0wYdsQsehOv/kHQ/Hmx2CdCeodUHGKCqAUToQeRwD86fOKid9gep9FhAh+mu0q8qGcF
-         tk7A==
+        bh=2hJ42EGznmmKdit+DkkUJ/Qt7N29KFOU8Z1Bu00RmiQ=;
+        b=aNO16KpcRslYIothZ5ipnOru7C83teAcH/Izpsl5+VmpmgqL6Aro+jC4UBMPVIl8gg
+         H8VOlspRP99FW5HRqlnu2KR/cRKQ2bu6V9NWQrUPmHDHf4W+swM9rDCCBxq4a6yfVp7y
+         gexE/286EPl6w8XSysh5hwFI6x/ddWDN6UEUg1LgAOqMAnbo6JuUJr4lTgNy89NaxFt+
+         JbD0sjqk6DOAMecWDqpqK8fGL27nbwpF4vHpArxc1h5oQ36e8sizg9Ik+FHzmCzW7h7Y
+         CCnAm4KnbAosnfpz0YrdB5vc8o1i4M8D/tCbvxQZIjcqNL6gJ5tkuw9lGquVDDtjzYwT
+         +tOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sPERv8sXud0KxJcvENIsE+Ngn3x88OA7gINkyBoEiFY=;
-        b=4ZybLOzqj3o9UMF9Uwmxz0WBvRvIqu3h7p1wKQ9eMemgFHLIvp+HZp06cMwViDl7HP
-         fcf2J+TPET2uq/tzWG43nlPBn0GMX7pO/MKy5awQAdPXSm8KeWkqrMkrZIu6FKGUQf1N
-         WQlaixHpr5dhcKnmwOHPXH8ao/MdxmHTGLqPLGMFB9rSKV2PZGSSMOtXxVe55n9mUe1g
-         7XsLiJsJEkmsWwIEMjMPg4k6uCYyx2rX209p+DZ42H6c08s9gH+vyB7/N1ADiBNllfXf
-         CIJCCrA9amloZ1QobU9Xza2VFfdv8Win4C6rEiRi+kK3oap8vBA4U4um6rAxhKfQz8/8
-         Z0iw==
-X-Gm-Message-State: AO0yUKUxpKr0oz5SWfe7Rep2xgqpTu+Z2Ld4E3zTRMxq27KGqSGNYsSD
-        gL2oeBkCbkIa0Yp6eGJjWs+m
-X-Google-Smtp-Source: AK7set/aFITGNY+YtZ83ReOfFYQ+Ol58CDALtb3zGAzrhqo50WDsMJ08vZG4fTrooH5e98s2tRxg3Q==
-X-Received: by 2002:a17:903:22ca:b0:19d:90f:6c6c with SMTP id y10-20020a17090322ca00b0019d090f6c6cmr2816251plg.17.1677577342819;
-        Tue, 28 Feb 2023 01:42:22 -0800 (PST)
+        bh=2hJ42EGznmmKdit+DkkUJ/Qt7N29KFOU8Z1Bu00RmiQ=;
+        b=GHhZ8y6P7wbqpyxNHSfnoA5gOk/N3GmjqwcaTEhbbuGZv4jYn4Q3XsE7wgDq0nwirY
+         WOR8fziVyLjYiO/nDGhj7I+aYvj4lQ5utivrYTSLoMdFyF4tA+zsSgxGWjbrtIDrJyLO
+         l1vpgTq6TGnJqlIojJ4LIc05t5NSnXrUkr2pquSi1Ngfo/c+MIyp7UMNjkcCLlVESDuM
+         h+TKdfZvDHS9PSfoIjGx1qfi3NdtGWzwCWtIUXabGtEx4D/MkNP233g4/9k0grrHfgwh
+         7t928kepQi9xnp5d7jz3Fr4MgfhXXAIioEhLEYSRQA+LYQuA5f3aoxQt5nm9tiWv6v6i
+         rfOw==
+X-Gm-Message-State: AO0yUKVOZryQlUSq9OrdS9w9ZAluoXDPVlRqetwuBOY3vKWRI+K20Vst
+        ajeTwyE3z1R5ipytboAzPtlj
+X-Google-Smtp-Source: AK7set+TPNFC/xncKPCXhfN++ABlTZBeiZtGV3YKs6GK4wnSj6THLwqFKjksu7//B6tGl/kOzqVSJA==
+X-Received: by 2002:a17:903:2290:b0:19b:33c0:4097 with SMTP id b16-20020a170903229000b0019b33c04097mr2524721plh.27.1677577346715;
+        Tue, 28 Feb 2023 01:42:26 -0800 (PST)
 Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id v14-20020a17090331ce00b0019906c4c9dcsm5856719ple.98.2023.02.28.01.42.21
+        by smtp.gmail.com with ESMTPSA id jj13-20020a170903048d00b001967692d6f5sm6054858plb.227.2023.02.28.01.42.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 01:42:22 -0800 (PST)
+        Tue, 28 Feb 2023 01:42:26 -0800 (PST)
 From:   Xie Yongji <xieyongji@bytedance.com>
 To:     mst@redhat.com, jasowang@redhat.com, tglx@linutronix.de, hch@lst.de
 Cc:     virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 04/11] vduse: Refactor allocation for vduse virtqueues
-Date:   Tue, 28 Feb 2023 17:41:03 +0800
-Message-Id: <20230228094110.37-5-xieyongji@bytedance.com>
+Subject: [PATCH v3 05/11] vduse: Support automatic irq callback affinity
+Date:   Tue, 28 Feb 2023 17:41:04 +0800
+Message-Id: <20230228094110.37-6-xieyongji@bytedance.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230228094110.37-1-xieyongji@bytedance.com>
 References: <20230228094110.37-1-xieyongji@bytedance.com>
@@ -71,267 +71,263 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate memory for vduse virtqueues one by one instead of
-doing one allocation for all of them.
-
-This is a preparation for adding sysfs interface for virtqueues.
+This brings current interrupt affinity spreading mechanism
+to vduse device. We will make use of group_cpus_evenly()
+to create an irq callback affinity mask for each virtqueue of
+vduse device. Then we will spread IRQs between CPUs in the affinity
+mask, in a round-robin manner, to run the irq callback.
 
 Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/vdpa/vdpa_user/vduse_dev.c | 98 ++++++++++++++++++++----------
- 1 file changed, 66 insertions(+), 32 deletions(-)
+ drivers/vdpa/vdpa_user/vduse_dev.c | 130 +++++++++++++++++++++++++++--
+ 1 file changed, 123 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index 0c3b48616a9f..98359d87a06f 100644
+index 98359d87a06f..bde28a8692d5 100644
 --- a/drivers/vdpa/vdpa_user/vduse_dev.c
 +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -76,7 +76,7 @@ struct vduse_umem {
- struct vduse_dev {
- 	struct vduse_vdpa *vdev;
- 	struct device *dev;
--	struct vduse_virtqueue *vqs;
-+	struct vduse_virtqueue **vqs;
- 	struct vduse_iova_domain *domain;
- 	char *name;
- 	struct mutex lock;
-@@ -434,7 +434,7 @@ static void vduse_dev_reset(struct vduse_dev *dev)
- 	flush_work(&dev->inject);
+@@ -23,6 +23,8 @@
+ #include <linux/nospec.h>
+ #include <linux/vmalloc.h>
+ #include <linux/sched/mm.h>
++#include <linux/interrupt.h>
++#include <linux/group_cpus.h>
+ #include <uapi/linux/vduse.h>
+ #include <uapi/linux/vdpa.h>
+ #include <uapi/linux/virtio_config.h>
+@@ -41,6 +43,8 @@
+ #define VDUSE_IOVA_SIZE (128 * 1024 * 1024)
+ #define VDUSE_MSG_DEFAULT_TIMEOUT 30
  
- 	for (i = 0; i < dev->vq_num; i++) {
--		struct vduse_virtqueue *vq = &dev->vqs[i];
-+		struct vduse_virtqueue *vq = dev->vqs[i];
- 
- 		vq->ready = false;
- 		vq->desc_addr = 0;
-@@ -466,7 +466,7 @@ static int vduse_vdpa_set_vq_address(struct vdpa_device *vdpa, u16 idx,
- 				u64 device_area)
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
--	struct vduse_virtqueue *vq = &dev->vqs[idx];
-+	struct vduse_virtqueue *vq = dev->vqs[idx];
- 
- 	vq->desc_addr = desc_area;
- 	vq->driver_addr = driver_area;
-@@ -500,7 +500,7 @@ static void vduse_vq_kick_work(struct work_struct *work)
- static void vduse_vdpa_kick_vq(struct vdpa_device *vdpa, u16 idx)
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
--	struct vduse_virtqueue *vq = &dev->vqs[idx];
-+	struct vduse_virtqueue *vq = dev->vqs[idx];
- 
- 	if (!eventfd_signal_allowed()) {
- 		schedule_work(&vq->kick);
-@@ -513,7 +513,7 @@ static void vduse_vdpa_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
- 			      struct vdpa_callback *cb)
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
--	struct vduse_virtqueue *vq = &dev->vqs[idx];
-+	struct vduse_virtqueue *vq = dev->vqs[idx];
- 
- 	spin_lock(&vq->irq_lock);
- 	vq->cb.callback = cb->callback;
-@@ -524,7 +524,7 @@ static void vduse_vdpa_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
- static void vduse_vdpa_set_vq_num(struct vdpa_device *vdpa, u16 idx, u32 num)
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
--	struct vduse_virtqueue *vq = &dev->vqs[idx];
-+	struct vduse_virtqueue *vq = dev->vqs[idx];
- 
- 	vq->num = num;
- }
-@@ -533,7 +533,7 @@ static void vduse_vdpa_set_vq_ready(struct vdpa_device *vdpa,
- 					u16 idx, bool ready)
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
--	struct vduse_virtqueue *vq = &dev->vqs[idx];
-+	struct vduse_virtqueue *vq = dev->vqs[idx];
- 
- 	vq->ready = ready;
- }
-@@ -541,7 +541,7 @@ static void vduse_vdpa_set_vq_ready(struct vdpa_device *vdpa,
- static bool vduse_vdpa_get_vq_ready(struct vdpa_device *vdpa, u16 idx)
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
--	struct vduse_virtqueue *vq = &dev->vqs[idx];
-+	struct vduse_virtqueue *vq = dev->vqs[idx];
- 
- 	return vq->ready;
- }
-@@ -550,7 +550,7 @@ static int vduse_vdpa_set_vq_state(struct vdpa_device *vdpa, u16 idx,
- 				const struct vdpa_vq_state *state)
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
--	struct vduse_virtqueue *vq = &dev->vqs[idx];
-+	struct vduse_virtqueue *vq = dev->vqs[idx];
- 
- 	if (dev->driver_features & BIT_ULL(VIRTIO_F_RING_PACKED)) {
- 		vq->state.packed.last_avail_counter =
-@@ -569,7 +569,7 @@ static int vduse_vdpa_get_vq_state(struct vdpa_device *vdpa, u16 idx,
- 				struct vdpa_vq_state *state)
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
--	struct vduse_virtqueue *vq = &dev->vqs[idx];
-+	struct vduse_virtqueue *vq = dev->vqs[idx];
- 
- 	if (dev->driver_features & BIT_ULL(VIRTIO_F_RING_PACKED))
- 		return vduse_dev_get_vq_state_packed(dev, vq, &state->packed);
-@@ -624,8 +624,8 @@ static u16 vduse_vdpa_get_vq_num_max(struct vdpa_device *vdpa)
- 	int i;
- 
- 	for (i = 0; i < dev->vq_num; i++)
--		if (num_max < dev->vqs[i].num_max)
--			num_max = dev->vqs[i].num_max;
-+		if (num_max < dev->vqs[i]->num_max)
-+			num_max = dev->vqs[i]->num_max;
- 
- 	return num_max;
- }
-@@ -863,7 +863,7 @@ static int vduse_kickfd_setup(struct vduse_dev *dev,
- 		return -EINVAL;
- 
- 	index = array_index_nospec(eventfd->index, dev->vq_num);
--	vq = &dev->vqs[index];
-+	vq = dev->vqs[index];
- 	if (eventfd->fd >= 0) {
- 		ctx = eventfd_ctx_fdget(eventfd->fd);
- 		if (IS_ERR(ctx))
-@@ -889,7 +889,7 @@ static bool vduse_dev_is_ready(struct vduse_dev *dev)
- 	int i;
- 
- 	for (i = 0; i < dev->vq_num; i++)
--		if (!dev->vqs[i].num_max)
-+		if (!dev->vqs[i]->num_max)
- 			return false;
- 
- 	return true;
-@@ -1130,7 +1130,7 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
- 			break;
- 
- 		index = array_index_nospec(config.index, dev->vq_num);
--		dev->vqs[index].num_max = config.max_size;
-+		dev->vqs[index]->num_max = config.max_size;
- 		ret = 0;
- 		break;
- 	}
-@@ -1148,7 +1148,7 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
- 			break;
- 
- 		index = array_index_nospec(vq_info.index, dev->vq_num);
--		vq = &dev->vqs[index];
-+		vq = dev->vqs[index];
- 		vq_info.desc_addr = vq->desc_addr;
- 		vq_info.driver_addr = vq->driver_addr;
- 		vq_info.device_addr = vq->device_addr;
-@@ -1198,7 +1198,7 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
- 			break;
- 
- 		index = array_index_nospec(index, dev->vq_num);
--		ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index].inject);
-+		ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index]->inject);
- 		break;
- 	}
- 	case VDUSE_IOTLB_REG_UMEM: {
-@@ -1339,6 +1339,49 @@ static const struct file_operations vduse_dev_fops = {
- 	.llseek		= noop_llseek,
++#define IRQ_UNBOUND -1
++
+ struct vduse_virtqueue {
+ 	u16 index;
+ 	u16 num_max;
+@@ -57,6 +61,8 @@ struct vduse_virtqueue {
+ 	struct vdpa_callback cb;
+ 	struct work_struct inject;
+ 	struct work_struct kick;
++	int irq_effective_cpu;
++	struct cpumask irq_affinity;
  };
  
-+static void vduse_dev_deinit_vqs(struct vduse_dev *dev)
+ struct vduse_dev;
+@@ -128,6 +134,7 @@ static struct class *vduse_class;
+ static struct cdev vduse_ctrl_cdev;
+ static struct cdev vduse_cdev;
+ static struct workqueue_struct *vduse_irq_wq;
++static struct workqueue_struct *vduse_irq_bound_wq;
+ 
+ static u32 allowed_device_id[] = {
+ 	VIRTIO_ID_BLOCK,
+@@ -708,6 +715,82 @@ static u32 vduse_vdpa_get_generation(struct vdpa_device *vdpa)
+ 	return dev->generation;
+ }
+ 
++static void default_calc_sets(struct irq_affinity *affd, unsigned int affvecs)
 +{
++	affd->nr_sets = 1;
++	affd->set_size[0] = affvecs;
++}
++
++struct cpumask *
++create_affinity_masks(unsigned int nvecs, struct irq_affinity *affd)
++{
++	unsigned int affvecs = 0, curvec, usedvecs, i;
++	struct cpumask *masks = NULL;
++
++	if (nvecs > affd->pre_vectors + affd->post_vectors)
++		affvecs = nvecs - affd->pre_vectors - affd->post_vectors;
++
++	if (!affd->calc_sets)
++		affd->calc_sets = default_calc_sets;
++
++	affd->calc_sets(affd, affvecs);
++
++	if (!affvecs)
++		return NULL;
++
++	masks = kcalloc(nvecs, sizeof(*masks), GFP_KERNEL);
++	if (!masks)
++		return NULL;
++
++	/* Fill out vectors at the beginning that don't need affinity */
++	for (curvec = 0; curvec < affd->pre_vectors; curvec++)
++		cpumask_setall(&masks[curvec]);
++
++	for (i = 0, usedvecs = 0; i < affd->nr_sets; i++) {
++		unsigned int this_vecs = affd->set_size[i];
++		int j;
++		struct cpumask *result = group_cpus_evenly(this_vecs);
++
++		if (!result) {
++			kfree(masks);
++			return NULL;
++		}
++
++		for (j = 0; j < this_vecs; j++)
++			cpumask_copy(&masks[curvec + j], &result[j]);
++		kfree(result);
++
++		curvec += this_vecs;
++		usedvecs += this_vecs;
++	}
++
++	/* Fill out vectors at the end that don't need affinity */
++	if (usedvecs >= affvecs)
++		curvec = affd->pre_vectors + affvecs;
++	else
++		curvec = affd->pre_vectors + usedvecs;
++	for (; curvec < nvecs; curvec++)
++		cpumask_setall(&masks[curvec]);
++
++	return masks;
++}
++
++static void vduse_vdpa_set_irq_affinity(struct vdpa_device *vdpa,
++					struct irq_affinity *desc)
++{
++	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
++	struct cpumask *masks;
 +	int i;
 +
-+	if (!dev->vqs)
++	masks = create_affinity_masks(dev->vq_num, desc);
++	if (!masks)
 +		return;
 +
 +	for (i = 0; i < dev->vq_num; i++)
-+		kfree(dev->vqs[i]);
-+	kfree(dev->vqs);
++		cpumask_copy(&dev->vqs[i]->irq_affinity, &masks[i]);
++	kfree(masks);
 +}
 +
-+static int vduse_dev_init_vqs(struct vduse_dev *dev, u32 vq_align, u32 vq_num)
+ static int vduse_vdpa_set_map(struct vdpa_device *vdpa,
+ 				unsigned int asid,
+ 				struct vhost_iotlb *iotlb)
+@@ -758,6 +841,7 @@ static const struct vdpa_config_ops vduse_vdpa_config_ops = {
+ 	.get_config		= vduse_vdpa_get_config,
+ 	.set_config		= vduse_vdpa_set_config,
+ 	.get_generation		= vduse_vdpa_get_generation,
++	.set_irq_affinity	= vduse_vdpa_set_irq_affinity,
+ 	.reset			= vduse_vdpa_reset,
+ 	.set_map		= vduse_vdpa_set_map,
+ 	.free			= vduse_vdpa_free,
+@@ -917,7 +1001,8 @@ static void vduse_vq_irq_inject(struct work_struct *work)
+ }
+ 
+ static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
+-				    struct work_struct *irq_work)
++				    struct work_struct *irq_work,
++				    int irq_effective_cpu)
+ {
+ 	int ret = -EINVAL;
+ 
+@@ -926,7 +1011,11 @@ static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
+ 		goto unlock;
+ 
+ 	ret = 0;
+-	queue_work(vduse_irq_wq, irq_work);
++	if (irq_effective_cpu == IRQ_UNBOUND)
++		queue_work(vduse_irq_wq, irq_work);
++	else
++		queue_work_on(irq_effective_cpu,
++			      vduse_irq_bound_wq, irq_work);
+ unlock:
+ 	up_read(&dev->rwsem);
+ 
+@@ -1029,6 +1118,22 @@ static int vduse_dev_reg_umem(struct vduse_dev *dev,
+ 	return ret;
+ }
+ 
++static void vduse_vq_update_effective_cpu(struct vduse_virtqueue *vq)
 +{
-+	int i;
++	int curr_cpu = vq->irq_effective_cpu;
 +
-+	dev->vq_align = vq_align;
-+	dev->vq_num = vq_num;
-+	dev->vqs = kcalloc(dev->vq_num, sizeof(*dev->vqs), GFP_KERNEL);
-+	if (!dev->vqs)
-+		return -ENOMEM;
++	while (true) {
++		curr_cpu = cpumask_next(curr_cpu, &vq->irq_affinity);
++		if (cpu_online(curr_cpu))
++			break;
 +
-+	for (i = 0; i < vq_num; i++) {
-+		dev->vqs[i] = kzalloc(sizeof(*dev->vqs[i]), GFP_KERNEL);
-+		if (!dev->vqs[i])
-+			goto err;
-+
-+		dev->vqs[i]->index = i;
-+		INIT_WORK(&dev->vqs[i]->inject, vduse_vq_irq_inject);
-+		INIT_WORK(&dev->vqs[i]->kick, vduse_vq_kick_work);
-+		spin_lock_init(&dev->vqs[i]->kick_lock);
-+		spin_lock_init(&dev->vqs[i]->irq_lock);
++		if (curr_cpu >= nr_cpu_ids)
++			curr_cpu = -1;
 +	}
 +
-+	return 0;
-+err:
-+	while (i--)
-+		kfree(dev->vqs[i]);
-+	kfree(dev->vqs);
-+	dev->vqs = NULL;
-+	return -ENOMEM;
++	vq->irq_effective_cpu = curr_cpu;
 +}
 +
- static struct vduse_dev *vduse_dev_create(void)
+ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 			    unsigned long arg)
  {
- 	struct vduse_dev *dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-@@ -1396,7 +1439,7 @@ static int vduse_destroy_dev(char *name)
- 	device_destroy(vduse_class, MKDEV(MAJOR(vduse_major), dev->minor));
- 	idr_remove(&vduse_idr, dev->minor);
- 	kvfree(dev->config);
--	kfree(dev->vqs);
-+	vduse_dev_deinit_vqs(dev);
- 	vduse_domain_destroy(dev->domain);
- 	kfree(dev->name);
- 	vduse_dev_destroy(dev);
-@@ -1486,7 +1529,7 @@ ATTRIBUTE_GROUPS(vduse_dev);
- static int vduse_create_dev(struct vduse_dev_config *config,
- 			    void *config_buf, u64 api_version)
- {
--	int i, ret;
-+	int ret;
- 	struct vduse_dev *dev;
+@@ -1111,7 +1216,7 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 		break;
+ 	}
+ 	case VDUSE_DEV_INJECT_CONFIG_IRQ:
+-		ret = vduse_dev_queue_irq_work(dev, &dev->inject);
++		ret = vduse_dev_queue_irq_work(dev, &dev->inject, IRQ_UNBOUND);
+ 		break;
+ 	case VDUSE_VQ_SETUP: {
+ 		struct vduse_vq_config config;
+@@ -1198,7 +1303,10 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 			break;
  
- 	ret = -EEXIST;
-@@ -1513,19 +1556,10 @@ static int vduse_create_dev(struct vduse_dev_config *config,
+ 		index = array_index_nospec(index, dev->vq_num);
+-		ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index]->inject);
++
++		vduse_vq_update_effective_cpu(dev->vqs[index]);
++		ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index]->inject,
++					dev->vqs[index]->irq_effective_cpu);
+ 		break;
+ 	}
+ 	case VDUSE_IOTLB_REG_UMEM: {
+@@ -1367,10 +1475,12 @@ static int vduse_dev_init_vqs(struct vduse_dev *dev, u32 vq_align, u32 vq_num)
+ 			goto err;
  
- 	dev->config = config_buf;
- 	dev->config_size = config->config_size;
--	dev->vq_align = config->vq_align;
--	dev->vq_num = config->vq_num;
--	dev->vqs = kcalloc(dev->vq_num, sizeof(*dev->vqs), GFP_KERNEL);
--	if (!dev->vqs)
--		goto err_vqs;
+ 		dev->vqs[i]->index = i;
++		dev->vqs[i]->irq_effective_cpu = -1;
+ 		INIT_WORK(&dev->vqs[i]->inject, vduse_vq_irq_inject);
+ 		INIT_WORK(&dev->vqs[i]->kick, vduse_vq_kick_work);
+ 		spin_lock_init(&dev->vqs[i]->kick_lock);
+ 		spin_lock_init(&dev->vqs[i]->irq_lock);
++		cpumask_setall(&dev->vqs[i]->irq_affinity);
+ 	}
  
--	for (i = 0; i < dev->vq_num; i++) {
--		dev->vqs[i].index = i;
--		INIT_WORK(&dev->vqs[i].inject, vduse_vq_irq_inject);
--		INIT_WORK(&dev->vqs[i].kick, vduse_vq_kick_work);
--		spin_lock_init(&dev->vqs[i].kick_lock);
--		spin_lock_init(&dev->vqs[i].irq_lock);
+ 	return 0;
+@@ -1858,12 +1968,15 @@ static int vduse_init(void)
+ 	if (ret)
+ 		goto err_cdev;
+ 
++	ret = -ENOMEM;
+ 	vduse_irq_wq = alloc_workqueue("vduse-irq",
+ 				WQ_HIGHPRI | WQ_SYSFS | WQ_UNBOUND, 0);
+-	if (!vduse_irq_wq) {
+-		ret = -ENOMEM;
++	if (!vduse_irq_wq)
+ 		goto err_wq;
 -	}
-+	ret = vduse_dev_init_vqs(dev, config->vq_align, config->vq_num);
-+	if (ret)
-+		goto err_vqs;
++
++	vduse_irq_bound_wq = alloc_workqueue("vduse-irq-bound", WQ_HIGHPRI, 0);
++	if (!vduse_irq_bound_wq)
++		goto err_bound_wq;
  
- 	ret = idr_alloc(&vduse_idr, dev, 1, VDUSE_DEV_MAX, GFP_KERNEL);
- 	if (ret < 0)
-@@ -1546,7 +1580,7 @@ static int vduse_create_dev(struct vduse_dev_config *config,
- err_dev:
- 	idr_remove(&vduse_idr, dev->minor);
- err_idr:
--	kfree(dev->vqs);
-+	vduse_dev_deinit_vqs(dev);
- err_vqs:
- 	vduse_domain_destroy(dev->domain);
+ 	ret = vduse_domain_init();
+ 	if (ret)
+@@ -1877,6 +1990,8 @@ static int vduse_init(void)
+ err_mgmtdev:
+ 	vduse_domain_exit();
  err_domain:
++	destroy_workqueue(vduse_irq_bound_wq);
++err_bound_wq:
+ 	destroy_workqueue(vduse_irq_wq);
+ err_wq:
+ 	cdev_del(&vduse_cdev);
+@@ -1896,6 +2011,7 @@ static void vduse_exit(void)
+ {
+ 	vduse_mgmtdev_exit();
+ 	vduse_domain_exit();
++	destroy_workqueue(vduse_irq_bound_wq);
+ 	destroy_workqueue(vduse_irq_wq);
+ 	cdev_del(&vduse_cdev);
+ 	device_destroy(vduse_class, vduse_major);
 -- 
 2.20.1
 
