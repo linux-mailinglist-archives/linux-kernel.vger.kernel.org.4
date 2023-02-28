@@ -2,218 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76796A5C72
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28AB26A5C6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjB1Pyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S230104AbjB1PyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjB1Pyk (ORCPT
+        with ESMTP id S229774AbjB1PyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:54:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E79D14487
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:53:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677599632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9urmB+eiv6j/Lo/lx4LKexV35abQKB6hzTKK5DXDMQo=;
-        b=ctTO0t8+kA02DwxhZbwtG8V0gVbpXMdeppNYDdkdaMPUTrO7qR42t2xeNARdPmh3xy635+
-        ndpqHOgMONsbBwX2ROVWlMfNd5ugul97AUX6MZuGszBmIshS0Ug088yuPKzRF/Kopd02Cp
-        7y/swUJt6Qiem3gGIkXTaYe7sLwFWpg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-662-X5XqMR_XM5OmN5wzHJ-wIA-1; Tue, 28 Feb 2023 10:53:51 -0500
-X-MC-Unique: X5XqMR_XM5OmN5wzHJ-wIA-1
-Received: by mail-wm1-f72.google.com with SMTP id p22-20020a7bcc96000000b003e2036a1516so7069613wma.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:53:50 -0800 (PST)
+        Tue, 28 Feb 2023 10:54:12 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488AB1498D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:54:11 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id c23so10275368pjo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:54:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xw2WUA8mFvMCKalxYRCZJO97ik9Rv3lPc280o9Y+fdQ=;
+        b=NY9SP6qpNOYZLx9fij86g1bqzs4xbAG2fso2og2T3wxOd34OfdmRoXb95G6vCllXGL
+         PObC2iguXamZOrzALd1IOlMkgb3UfOcm1SSJ8ixJnSIWP6HQEkRVEI8MdO3Lp3C/7Jgm
+         hGLePAqnPzXMproE9miOH26dz4ePn9+5Jnz3Ial8doyAlkztj6ckSy2F6gxf7S+yKag3
+         J9jG9+Of9x6z8c5PelYhQNyvLhQh8BSv6HGO/oa0vCPfcVM9MdleizR68DLRfycXp2lv
+         ig0Zr7nlUZrhcXfz6ySzd8C5JPjWvCXvVhwGQUHzqvIqukIiwzLR6XI47A0+64gX8XmK
+         WlyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9urmB+eiv6j/Lo/lx4LKexV35abQKB6hzTKK5DXDMQo=;
-        b=KH604pJXITxfXt6fk7dGqJLq4W7IRjITYr2pgdv9mtgbgzCqcIaA3du79EvddekSQP
-         h+W9tR7z7j06C2VoejNMt/C68lMLmFkE+Z06mbZB/UtjQKO3adiTjVEFlBY2+9qTKy9/
-         K0vSoc4kRHJUuno3wIBxyUoFOvfBU8Ir9dW8IYytQNeUUF+vgKuj9Sx0ueoRiU1iZCDE
-         AsxsCXuItYzkG7aIQF1F6Z2Naa8X70yhthjPOLkik6iLLbmuvkuH/QkfM7cLM/hndnGl
-         Cku9sNVU98rnEoIfHAw4Mw9QYlEzxm3qiVAyX7Iez5iALKhBXuNqLVdcosVMQJIY5lDj
-         elfw==
-X-Gm-Message-State: AO0yUKXVO7Na+RON6/mcj3qt9pwln3boif7P5vUMZ2ggC63xnVVrOFnA
-        6YzXs495AO9iXpSQGAPWZTq1/JqHoFUTNy3vcCWV5BxjhbWmkUHJRFXmNw2dVNP97eo+mZ/yu/8
-        gmzaHTLKH56okva107kfzlKM5v71Ltw==
-X-Received: by 2002:a5d:4bcc:0:b0:2cc:4d13:908d with SMTP id l12-20020a5d4bcc000000b002cc4d13908dmr2573544wrt.11.1677599629955;
-        Tue, 28 Feb 2023 07:53:49 -0800 (PST)
-X-Google-Smtp-Source: AK7set9z87rAKtDOAB1eeCRczD4u3n/GbdmdNmJXV6/ODc8cOWP2y6Tp9WUpx79HbnQobf6rUJ+lbQ==
-X-Received: by 2002:a5d:4bcc:0:b0:2cc:4d13:908d with SMTP id l12-20020a5d4bcc000000b002cc4d13908dmr2573522wrt.11.1677599629577;
-        Tue, 28 Feb 2023 07:53:49 -0800 (PST)
-Received: from ?IPV6:2003:cb:c706:b800:3757:baed:f95e:20ac? (p200300cbc706b8003757baedf95e20ac.dip0.t-ipconnect.de. [2003:cb:c706:b800:3757:baed:f95e:20ac])
-        by smtp.gmail.com with ESMTPSA id n7-20020a5d4c47000000b002c5534db60bsm10053533wrt.71.2023.02.28.07.53.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:53:48 -0800 (PST)
-Message-ID: <6b6cd2fe-2309-b471-8950-3c4334462e69@redhat.com>
-Date:   Tue, 28 Feb 2023 16:53:47 +0100
+        bh=xw2WUA8mFvMCKalxYRCZJO97ik9Rv3lPc280o9Y+fdQ=;
+        b=GXcY8lGvkc5Wdj5DwKvPRbuW8vRMZ5Lck084MqWliHXTOzo676QWQpEM74GtZ7C2Dw
+         pUjBWHwCr2oT48XWx6GOq9vJW/pkrFZbEwv1F/BvO/6HpCFk+XZqD56CGPwvFf03EK/B
+         McwWgQ/v55F/KKMlxlIxlZE17vfWEQtFV1f9V4xVam+aHlrZsKsuMDd4IQ6qJAhAVWMt
+         3G8/ORgQc9+u4vx8HTtUJZP6jQlF4c+yGdvelZYB0HIKlbiIjlb+OnlXum/kb85LXMvo
+         AP71IW1sRF4C/uZVEtV16wuoDPUGuBafY4DHfNEmZaoFq6OAw2HsJuBxUHcNi3j7GG1h
+         V9SA==
+X-Gm-Message-State: AO0yUKUqkxxodschfuLE3hc4DFnqUEA+9uOvmtQP+wkEkGBMwjpeL8mP
+        p6kOLjVPOz+s4jRbPcD+dQU=
+X-Google-Smtp-Source: AK7set9Jgq9ZQhTADHjg3H6EfnFAKDeu0hMzuI3+D+kLEzZBWjL7xvRjyA9i1WiIEXsFG+bOs7CMjA==
+X-Received: by 2002:a05:6a20:3d11:b0:cd:3f69:e15 with SMTP id y17-20020a056a203d1100b000cd3f690e15mr4215843pzi.11.1677599650629;
+        Tue, 28 Feb 2023 07:54:10 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id u1-20020aa78381000000b005cd81a74821sm6190301pfm.152.2023.02.28.07.54.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 07:54:09 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Chia-I Wu <olvaffe@gmail.com>, Ryan Neph <ryanneph@chromium.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        virtualization@lists.linux-foundation.org (open list:VIRTIO GPU DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4] drm/virtio: Add option to disable KMS support
+Date:   Tue, 28 Feb 2023 07:54:05 -0800
+Message-Id: <20230228155406.2881252-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Christoph Lameter <cl@linux.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mel Gorman <mgorman@suse.de>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.656996515@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 01/11] mm/vmstat: remove remote node draining
-In-Reply-To: <20230209153204.656996515@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.02.23 16:01, Marcelo Tosatti wrote:
-> Draining of pages from the local pcp for a remote zone was necessary
-> since:
-> 
-> "Note that remote node draining is a somewhat esoteric feature that is
-> required on large NUMA systems because otherwise significant portions
-> of system memory can become trapped in pcp queues. The number of pcp is
-> determined by the number of processors and nodes in a system. A system
-> with 4 processors and 2 nodes has 8 pcps which is okay. But a system
-> with 1024 processors and 512 nodes has 512k pcps with a high potential
-> for large amount of memory being caught in them."
-> 
-> Since commit 443c2accd1b6679a1320167f8f56eed6536b806e
-> ("mm/page_alloc: remotely drain per-cpu lists"), drain_all_pages() is able
-> to remotely free those pages when necessary.
-> 
+From: Rob Clark <robdclark@chromium.org>
 
-I'm a bit new to that piece of code, so sorry for the dummy questions. 
-I'm staring at linux master,
+Add a build option to disable modesetting support.  This is useful in
+cases where the guest only needs to use the GPU in a headless mode, or
+(such as in the CrOS usage) window surfaces are proxied to a host
+compositor.
 
-(1) I think you're removing the single user of drain_zone_pages(). So we
-     should remove drain_zone_pages() as well.
+As the modesetting ioctls are a big surface area for potential security
+bugs to be found (it's happened in the past, we should assume it will
+again in the future), it makes sense to have a build option to disable
+those ioctls in cases where they serve no legitimate purpose.
 
-(2) drain_zone_pages() documents that we're draining the PCP
-     (bulk-freeing them) of the current CPU on remote nodes. That bulk-
-     freeing will properly adjust free memory counters. What exactly is
-     the impact when no longer doing that? Won't the "snapshot" of some
-     counters eventually be wrong? Do we care?
+v2: Use more if (IS_ENABLED(...))
+v3: Also permit the host to advertise no scanouts
+v4: Spiff out commit msg
 
-Describing the difference between instructed refresh of vmstat and 
-"remotely drain per-cpu lists" in order to move free memory from the pcp 
-to the buddy would be great.
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ drivers/gpu/drm/virtio/Kconfig       | 11 +++++++
+ drivers/gpu/drm/virtio/Makefile      |  5 +++-
+ drivers/gpu/drm/virtio/virtgpu_drv.c |  6 +++-
+ drivers/gpu/drm/virtio/virtgpu_drv.h | 10 +++++++
+ drivers/gpu/drm/virtio/virtgpu_kms.c | 44 ++++++++++++++++++----------
+ 5 files changed, 59 insertions(+), 17 deletions(-)
 
-Because removing this code here looks nice, but I am not 100% sure about 
-the implications. CCing Mel as well.
-
-
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> 
-> Index: linux-vmstat-remote/include/linux/mmzone.h
-> ===================================================================
-> --- linux-vmstat-remote.orig/include/linux/mmzone.h
-> +++ linux-vmstat-remote/include/linux/mmzone.h
-> @@ -577,9 +577,6 @@ struct per_cpu_pages {
->   	int high;		/* high watermark, emptying needed */
->   	int batch;		/* chunk size for buddy add/remove */
->   	short free_factor;	/* batch scaling factor during free */
-> -#ifdef CONFIG_NUMA
-> -	short expire;		/* When 0, remote pagesets are drained */
-> -#endif
->   
->   	/* Lists of pages, one per migrate type stored on the pcp-lists */
->   	struct list_head lists[NR_PCP_LISTS];
-> Index: linux-vmstat-remote/mm/vmstat.c
-> ===================================================================
-> --- linux-vmstat-remote.orig/mm/vmstat.c
-> +++ linux-vmstat-remote/mm/vmstat.c
-> @@ -803,7 +803,7 @@ static int fold_diff(int *zone_diff, int
->    *
->    * The function returns the number of global counters updated.
->    */
-> -static int refresh_cpu_vm_stats(bool do_pagesets)
-> +static int refresh_cpu_vm_stats(void)
->   {
->   	struct pglist_data *pgdat;
->   	struct zone *zone;
-> @@ -814,9 +814,6 @@ static int refresh_cpu_vm_stats(bool do_
->   
->   	for_each_populated_zone(zone) {
->   		struct per_cpu_zonestat __percpu *pzstats = zone->per_cpu_zonestats;
-> -#ifdef CONFIG_NUMA
-> -		struct per_cpu_pages __percpu *pcp = zone->per_cpu_pageset;
-> -#endif
->   
->   		for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
->   			int v;
-> @@ -826,44 +823,8 @@ static int refresh_cpu_vm_stats(bool do_
->   
->   				atomic_long_add(v, &zone->vm_stat[i]);
->   				global_zone_diff[i] += v;
-> -#ifdef CONFIG_NUMA
-> -				/* 3 seconds idle till flush */
-> -				__this_cpu_write(pcp->expire, 3);
-> -#endif
->   			}
->   		}
-> -#ifdef CONFIG_NUMA
-> -
-> -		if (do_pagesets) {
-> -			cond_resched();
-> -			/*
-> -			 * Deal with draining the remote pageset of this
-> -			 * processor
-> -			 *
-> -			 * Check if there are pages remaining in this pageset
-> -			 * if not then there is nothing to expire.
-> -			 */
-> -			if (!__this_cpu_read(pcp->expire) ||
-> -			       !__this_cpu_read(pcp->count))
-> -				continue;
-> -
-> -			/*
-> -			 * We never drain zones local to this processor.
-> -			 */
-> -			if (zone_to_nid(zone) == numa_node_id()) {
-> -				__this_cpu_write(pcp->expire, 0);
-> -				continue;
-> -			}
-> -
-> -			if (__this_cpu_dec_return(pcp->expire))
-> -				continue;
-> -
-> -			if (__this_cpu_read(pcp->count)) {
-> -				drain_zone_pages(zone, this_cpu_ptr(pcp));
-> -				changes++;
-> -			}
-> -		}
-> -#endif
->   	}
-
-I think you can then also get rid of the "changes" local variable and do 
-a "return fold_diff(global_zone_diff, global_node_diff);" directly.
-
-
+diff --git a/drivers/gpu/drm/virtio/Kconfig b/drivers/gpu/drm/virtio/Kconfig
+index 51ec7c3240c9..ea06ff2aa4b4 100644
+--- a/drivers/gpu/drm/virtio/Kconfig
++++ b/drivers/gpu/drm/virtio/Kconfig
+@@ -11,3 +11,14 @@ config DRM_VIRTIO_GPU
+ 	   QEMU based VMMs (like KVM or Xen).
+ 
+ 	   If unsure say M.
++
++config DRM_VIRTIO_GPU_KMS
++	bool "Virtio GPU driver modesetting support"
++	depends on DRM_VIRTIO_GPU
++	default y
++	help
++	   Enable modesetting support for virtio GPU driver.  This can be
++	   disabled in cases where only "headless" usage of the GPU is
++	   required.
++
++	   If unsure, say Y.
+diff --git a/drivers/gpu/drm/virtio/Makefile b/drivers/gpu/drm/virtio/Makefile
+index b99fa4a73b68..24c7ebe87032 100644
+--- a/drivers/gpu/drm/virtio/Makefile
++++ b/drivers/gpu/drm/virtio/Makefile
+@@ -4,8 +4,11 @@
+ # Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
+ 
+ virtio-gpu-y := virtgpu_drv.o virtgpu_kms.o virtgpu_gem.o virtgpu_vram.o \
+-	virtgpu_display.o virtgpu_vq.o \
++	virtgpu_vq.o \
+ 	virtgpu_fence.o virtgpu_object.o virtgpu_debugfs.o virtgpu_plane.o \
+ 	virtgpu_ioctl.o virtgpu_prime.o virtgpu_trace_points.o
+ 
++virtio-gpu-$(CONFIG_DRM_VIRTIO_GPU_KMS) += \
++	virtgpu_display.o
++
+ obj-$(CONFIG_DRM_VIRTIO_GPU) += virtio-gpu.o
+diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c b/drivers/gpu/drm/virtio/virtgpu_drv.c
+index ae97b98750b6..9cb7d6dd3da6 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_drv.c
++++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
+@@ -172,7 +172,11 @@ MODULE_AUTHOR("Alon Levy");
+ DEFINE_DRM_GEM_FOPS(virtio_gpu_driver_fops);
+ 
+ static const struct drm_driver driver = {
+-	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_RENDER | DRIVER_ATOMIC,
++	.driver_features =
++#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
++			DRIVER_MODESET | DRIVER_ATOMIC |
++#endif
++			DRIVER_GEM | DRIVER_RENDER,
+ 	.open = virtio_gpu_driver_open,
+ 	.postclose = virtio_gpu_driver_postclose,
+ 
+diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
+index af6ffb696086..ffe8faf67247 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_drv.h
++++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
+@@ -426,8 +426,18 @@ virtio_gpu_cmd_set_scanout_blob(struct virtio_gpu_device *vgdev,
+ 				uint32_t x, uint32_t y);
+ 
+ /* virtgpu_display.c */
++#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
+ int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev);
+ void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev);
++#else
++static inline int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev)
++{
++	return 0;
++}
++static inline void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev)
++{
++}
++#endif
+ 
+ /* virtgpu_plane.c */
+ uint32_t virtio_gpu_translate_format(uint32_t drm_fourcc);
+diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
+index 27b7f14dae89..1d888e309d6b 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_kms.c
++++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
+@@ -161,7 +161,8 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+ 	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_VIRGL))
+ 		vgdev->has_virgl_3d = true;
+ #endif
+-	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_EDID)) {
++	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) &&
++	    virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_EDID)) {
+ 		vgdev->has_edid = true;
+ 	}
+ 	if (virtio_has_feature(vgdev->vdev, VIRTIO_RING_F_INDIRECT_DESC)) {
+@@ -218,17 +219,28 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+ 		goto err_vbufs;
+ 	}
+ 
+-	/* get display info */
+-	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
+-			num_scanouts, &num_scanouts);
+-	vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
+-				    VIRTIO_GPU_MAX_SCANOUTS);
+-	if (!vgdev->num_scanouts) {
+-		DRM_ERROR("num_scanouts is zero\n");
+-		ret = -EINVAL;
+-		goto err_scanouts;
++	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS)) {
++		/* get display info */
++		virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
++				num_scanouts, &num_scanouts);
++		vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
++					    VIRTIO_GPU_MAX_SCANOUTS);
++		if (!vgdev->num_scanouts) {
++			/*
++			 * Having an EDID but no scanouts is non-sensical,
++			 * but it is permitted to have no scanouts and no
++			 * EDID (in which case DRIVER_MODESET and
++			 * DRIVER_ATOMIC are not advertised)
++			 */
++			if (vgdev->has_edid) {
++				DRM_ERROR("num_scanouts is zero\n");
++				ret = -EINVAL;
++				goto err_scanouts;
++			}
++			dev->driver_features &= ~(DRIVER_MODESET | DRIVER_ATOMIC);
++		}
++		DRM_INFO("number of scanouts: %d\n", num_scanouts);
+ 	}
+-	DRM_INFO("number of scanouts: %d\n", num_scanouts);
+ 
+ 	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
+ 			num_capsets, &num_capsets);
+@@ -246,10 +258,12 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+ 		virtio_gpu_get_capsets(vgdev, num_capsets);
+ 	if (vgdev->has_edid)
+ 		virtio_gpu_cmd_get_edids(vgdev);
+-	virtio_gpu_cmd_get_display_info(vgdev);
+-	virtio_gpu_notify(vgdev);
+-	wait_event_timeout(vgdev->resp_wq, !vgdev->display_info_pending,
+-			   5 * HZ);
++	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) && vgdev->num_scanouts) {
++		virtio_gpu_cmd_get_display_info(vgdev);
++		virtio_gpu_notify(vgdev);
++		wait_event_timeout(vgdev->resp_wq, !vgdev->display_info_pending,
++				   5 * HZ);
++	}
+ 	return 0;
+ 
+ err_scanouts:
 -- 
-Thanks,
-
-David / dhildenb
+2.39.1
 
