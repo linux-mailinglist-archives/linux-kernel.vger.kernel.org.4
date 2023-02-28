@@ -2,89 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4716F6A5C16
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80766A5C18
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjB1PhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
+        id S230063AbjB1Phd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbjB1PhS (ORCPT
+        with ESMTP id S230087AbjB1Pha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:37:18 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC77C2A9AD
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:37:15 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id h3so10683603lja.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677598634;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PmZThYj/LApm7g8E3Vb/uN+vkTQ915AMf1R2olPZ3NU=;
-        b=ElrpRhI3WQ3X5hsHrwaar/fvHU6EmGpxSEUDJK57GQ/39+NUkwXWShyocCIsQRKcIg
-         pbEJVkzhuWjSlfgnaEtAi57MM3iF4cVm2SmGDERNDxIQ7Dbj9+4OOGH18kWC6t7zP5FR
-         aH1L8CmT0CVfi37dAI0TCjmnp9R2RR1Z2IZLjG51iV53rr/Nslk+EoA+AJ5mS4FQKh4A
-         Z0Ojih9GGDIKxFtBQ3PWfiGwTP1s4mpmlpI2PTV+jb3loe6IeCeMh4cwLNQNG85eSVlh
-         qdNq5I1kt7EDOXbuMQtzfu0CAoOQRyBQcdDK6iPlZanYUfbwD8c3MWNQkd9ghOa0fhtg
-         Xd/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677598634;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PmZThYj/LApm7g8E3Vb/uN+vkTQ915AMf1R2olPZ3NU=;
-        b=fq/RkrVEVx536502SZnStVURc1dlpRHhoVi1AbK7zKeKalVtnozT2wS2gYDxKJfB14
-         e0i3NKZbwjOkpYiy54CoCkdE5du5SOuO6L3QgkjmXfwHD09Ut30QbPPLqj20oGgdAnNx
-         9uGs9WVDTGgDsyqguJS82XTiZ0kuzrK6+QPgUsbhZxc2EmuBJqS9skCBJGUn3GhpoET2
-         9C08wWXYB5ovL1DxsEfsiui9nk6mfUbRXo/VWsowB5D+9TBJ8lYaJntMKfNzVZdjYdun
-         9g4m1wJa7SSFPxkbqgxXHdQGGloSHeGuLdasZvDgU87NSf0k42L/I+czdfIG882izuD+
-         Q/XA==
-X-Gm-Message-State: AO0yUKW1Ml1u+YK3E3PxRNWunlr8EangkEm0ot/vBOwHMSj8F+TwTEQE
-        D2ImsgyBkXrTKxDKtgmBfBhk1Q==
-X-Google-Smtp-Source: AK7set8OR7nGA538ny3cM3lrTAmK0UyJgkUspqLu+Y4G4AHnYMu9ODpfNIvu2SNyqODgJf5yS33kBQ==
-X-Received: by 2002:a05:651c:383:b0:295:9829:47b0 with SMTP id e3-20020a05651c038300b00295982947b0mr802542ljp.49.1677598634002;
-        Tue, 28 Feb 2023 07:37:14 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05651c130500b002959f550084sm1213885lja.100.2023.02.28.07.37.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:37:13 -0800 (PST)
-Message-ID: <48ac4272-0e11-d943-e950-0be8d93fb036@linaro.org>
-Date:   Tue, 28 Feb 2023 16:37:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 01/18] media: venus: hfi_venus: Set
- venus_sys_idle_indicator to false on V6
+        Tue, 28 Feb 2023 10:37:30 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2111.outbound.protection.outlook.com [40.107.93.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4520F30B37;
+        Tue, 28 Feb 2023 07:37:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mX2s38qQ3uOuoM0lXvg9jXOjkvY4HIWvUeXLsLY/DLl6O9drevwTws9ObBe6tXuankqRccEUbJJTG+5bl9AcdIp7eb0GAGBUOqDm6vXPeDSUiiOLuSnOKAV4XVcchB1Seo5CweryXZvFp1o+d4580DnNHdi1t3SENRAXQKovUq7qa1ukxtX8IULfDcyZynKl5n6c0rqNqTKG7oiuEog4gInE8D1TCvExeemyXHe/33kEUNTpxJfyHV9sI0AihEs8tqf7WATWzAwNvRlBPpClNzvBrwmnB+spkUk0Mqxhtgysvg5lphr7MjhQJvf9eOymkp92TqoHnBQai6b0mz5STQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oATAFSZ1NDAEiB5OvJcqbp/Jtzr3zGU4eKvkwrsp4YQ=;
+ b=PfC8okNy7F1apWSotqiS47Y/pXWE9pMSG4UEc4nPHVlxR2qq6gSXWzH5M9b+1Xrl9IdJyEbR0v0WjzoztcnesQACF4ypjWhBJjPKoTVC4nSyPFhsuYTcjxWHSOu+u5eINREORNGB5KO4JKtr2zG4+IGYEHCHiBwHRtLPa4z6a9pJDPCtZ3bMCykvY4nJhurYHYhRB+iahSl0KzO0gHrq+PjpPKAXdNUx4hZp9AHIdm/IFnvSoA8e9LM+hsegnY0uPznuAyge2ANFkei2k/ivMUrb/Lc3ZLiKz5t/sRnXzobNb+MDgj9v+x2fIJisC85+1jlehxhfxDy8ER9BBeTSKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
+ header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oATAFSZ1NDAEiB5OvJcqbp/Jtzr3zGU4eKvkwrsp4YQ=;
+ b=VC2ATWk0l5dybidaPg4TRRVVXr0P65PbD3KIXU4hL0VOk5g+cu6X/LiOLFhBVO0/HAUEDmq/yCNRrmu9gH1iojbIFaVr8aO1DZWdVOin1CFgJ+2lXmq2XCRNuvWdNOtsG6fzrJZkHXlPuDnyTFmlnUS7L3dgJM/01G1ahWl1XSIv3SQKoynaD/sw/fvinaCCeaBQYQeTmnn5pY8tZ3q1Q0j/gRRaM9zf/Pa93ZEsYca9ItVAayWX4gcoYssnj0B+qIKW9cGV2q7oT6xdM09xp1CP4jNsvT7qNcRSrUJ+ncwMJ2cTdQzSB+lFAcmw9/ffIrzPA2aQ9NjFRGnmayZrXw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
+Received: from BN6PR01MB2610.prod.exchangelabs.com (2603:10b6:404:d0::7) by
+ BY3PR01MB6756.prod.exchangelabs.com (2603:10b6:a03:364::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.26; Tue, 28 Feb 2023 15:37:21 +0000
+Received: from BN6PR01MB2610.prod.exchangelabs.com
+ ([fe80::5844:6112:4eb1:a8f8]) by BN6PR01MB2610.prod.exchangelabs.com
+ ([fe80::5844:6112:4eb1:a8f8%9]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
+ 15:37:20 +0000
+Message-ID: <81922cc5-4de3-bcd6-b0c3-8f9e61a1e7c5@cornelisnetworks.com>
+Date:   Tue, 28 Feb 2023 10:37:17 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH] IB/rdmavt: Fix target union member for rvt_post_one_wr()
 Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-1-58c2c88384e9@linaro.org>
- <99eeebc6-69aa-c6ba-139b-92672c299747@linaro.org>
- <893851c9-c8be-ed7f-ebde-5d90b9313f6d@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <893851c9-c8be-ed7f-ebde-5d90b9313f6d@linaro.org>
+From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Zhang Yi <yizhan@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230218185701.never.779-kees@kernel.org>
+ <6d2fe281-891c-8909-5330-f05d4407431a@cornelisnetworks.com>
+In-Reply-To: <6d2fe281-891c-8909-5330-f05d4407431a@cornelisnetworks.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR15CA0025.namprd15.prod.outlook.com
+ (2603:10b6:208:1b4::38) To BN6PR01MB2610.prod.exchangelabs.com
+ (2603:10b6:404:d0::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN6PR01MB2610:EE_|BY3PR01MB6756:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1060d8e9-77d8-43a5-8bb1-08db19a1adde
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1DDhC/5LDJFfkJ9nIpWTPJtWRXOJ8tKe+0zXwmORayOgqMwyhDhXhNe4PZgI3jj0umxh87OOX8ILHlXbx71Fc9BNauxxpM/emvyt5qHk8K7payUanqhIHRreGhrf9/pTuymjhsZH6A1NnuNxoPlH6jVQgE0XoMYMCs6BNugtjTSnaSnrSWUh36C3OHAJtIFjRDEu1vuFJzxivbwVHITaBtebkea6FzH1rhORX2nYR5v3bDeRSzPMGw3EQNfjw7vdFQtf+C8H3IA5FsHyYaQC5VR/m7ZW8TdROnEufpfXAtjnWaRCbzZr7fQn2AF6JF0LePEUCAGyVETeHQL8UL654IdzOAxI2s2JpLFlXCTBcqwYJhehA31WWIReKP7QQpycfxyMas/+EwDFvhGDxa5kRWlic+Lx7mYxkK0YUh3iKP3fTbKWM83vVBPGAgB8/edJPnKq4Bz5kGwJcbtiyOP7uldK17k1VxKMGMVmejalJAMzjoJbxSMRsRr/RJAix0yxmkoaV5MjUbb72o36a040d99JeIBlX2IqKj42dx1/xPDebS5zcX6/iMKiB89ro0FZW00MgFkeyS6W6mnT9B5AWbyN6T5MX8bquV4lliOXfvFAQLPc0EMzWiJiVkyZmREJmRnDCxrTmMjj3YWCJYezy5DM4Pxr7VaX5HGKcJydEYTAXtxqFKI1fEwRTSn4Y3eBT4njmx9RqwWBAAzdN6T/Wg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR01MB2610.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(366004)(39840400004)(376002)(451199018)(186003)(5660300002)(38100700002)(2906002)(83380400001)(38350700002)(8936002)(66476007)(66946007)(4326008)(6506007)(66556008)(6916009)(44832011)(8676002)(41300700001)(26005)(478600001)(52116002)(6512007)(2616005)(6666004)(53546011)(966005)(316002)(31696002)(86362001)(54906003)(36756003)(31686004)(6486002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MTVEbmM4K050ZkJ0YXVkdmJ4VXJVU1JldkE2dVQ1TklaR1c4aFB5VWtFZGE1?=
+ =?utf-8?B?c3RaU01pYmxKT3JGSkVyUzFoRG04bTJJU3JTQjM1bDJJQnpiYmlxQXdCOVpN?=
+ =?utf-8?B?cTZSUGl0UXJtNWtxSEpiMkdLaWoxTmsreU03Z250ZnhLUDY2Mjl1ZjE4UE5y?=
+ =?utf-8?B?aW5rMDRJZElnM3VTRTRRRXNSbmlxeEtxSG9zSTNtTTl4eFhMbDB0SEFvTDNW?=
+ =?utf-8?B?RWMwSEVaWUFDQzIvb0syLzY1Q2VzNDBNTGczLzRwWk1OdkJJRmJib0YzWUZ1?=
+ =?utf-8?B?cC9MUUR5M1Q4cmNWYTVzTWFxVktzRnZ0RDNMZE45UlR3QkNhdWJXMTBkVXUv?=
+ =?utf-8?B?ekEvMVExVkJWZnVOanlMNjZtM1dmU3dmMmFCR2hQUHJVazRiRE90R1Noc3ZG?=
+ =?utf-8?B?ZDBDZWh1SExyWVZyMEgxWTkxaUpjbDZrQVB1NklVR083MndTUUNaRFRrY3pZ?=
+ =?utf-8?B?TVN3TFo0eCtTTnU3WDRYUnZDQml6TnlCTlJ2OVdBK2FEaExRelJOL0ZHekQx?=
+ =?utf-8?B?RWhKNTdxWlZneC9NTk5QaWFON1BRWENoQ3pKTXBuS1Y5M0xudEUzbGgrczFD?=
+ =?utf-8?B?Zi9oWlhMQ0VhTjFOZlZleDdUSjZWM2RWcm41djk3UEpTZk85VHBkQmlaT0hz?=
+ =?utf-8?B?N0loaW9Gb1NSV1dhSTRLMFRMWGd2UmppQVBmN0kzaW5FdnJvNVpXajVpTEpR?=
+ =?utf-8?B?WG1WNXVGUHgxK2RXbWRDMUNQSlVrakJpc0dVeDhVYVhMMHk5ZFFnditvM0VD?=
+ =?utf-8?B?OEFRaHdJNnEzM2JHMjFwdFMyMjE4b1ZCOUN2TEd0SXpKS0tYU0xVTnZQNk1M?=
+ =?utf-8?B?d2d3aUFnMkxoc2tjUU05UGVNY0o4anM0MmovSk1LVEJESERFRktIOXg5a29x?=
+ =?utf-8?B?U3NZbUpkU1lXa3kxTG1obGNFcnBmWURYdXl0U0wyRXZiTko2NVh3NThtaGlI?=
+ =?utf-8?B?Q2F0cXJqdnVnSGpPaHpzUmwreTYxZXpCa2lWSzVTU3pRT1V5WVAwTXpBeHgr?=
+ =?utf-8?B?dmdFZ2NMazhZOTBaK1hUTW8yd1pnY1V4bG9odmtIaTZvUFc0bzVBOXJCMzQ0?=
+ =?utf-8?B?ZksyUzF6M0JzUDJETUVqaUpxdmFZYktXSkhKNnYrNEZwbUVzcWtNaHowK1ZV?=
+ =?utf-8?B?RW5rMHF3YUlCQ2pWWHBhZXhWWjAwVDUrK2ZYYVZ2VkI2cWliNmRxQUZ0ZUJv?=
+ =?utf-8?B?d29DbTNGQUN6eDErMXhWbDBHeHNwMmZXckZsNGVFM0xueS9BVU5YOWluaUFR?=
+ =?utf-8?B?cldIdVg1eGNaZllFNTdyZWVDMkdySGJQclhxN3JPaXFHQXRvdndWS0dSYlYz?=
+ =?utf-8?B?cDQ2WGJKQXhxdTBDSWlkQlZlOG0wai9EWURKOGRzWTFKRWFudFhjcnYxRFJC?=
+ =?utf-8?B?SUI4SlJ4STRUbTdMUGNoTmFpL2N3RFNXYXRCMnlLNUtRbm9QOTI0ZU1jSUVk?=
+ =?utf-8?B?Q0xKRWFGU2ZBbnQ5NUlLUzZwWlpJKy9UKzhmZkQwQmFBN1pTTmdSTkZoVGpk?=
+ =?utf-8?B?cW9ybDQvQVYxR05MY29zZXFVNk10QmtRUzA2QXhMMDhGc2ZGcmpET2lDWEZi?=
+ =?utf-8?B?ZjlsUlRXUm1yUDE1c2RzZEIrNHRSd0xwWUsvNE1ZblBQKzh3RjhsZEhVd1kx?=
+ =?utf-8?B?NEJvT1dFQllvWDNUZ29BakZra3lDQ1V0bTlLTVRCVUxNVlZUR0NQcS9BNlZL?=
+ =?utf-8?B?dndSVVUwVWFISzhmb0NPQ1B1RGJVcEt1a0duRHZZSU9MMGk1UjdxU28rb2Jk?=
+ =?utf-8?B?eFo1ZjZ5RjF3RXVRZ0o5SzN5UWJoc3U2SHlxa1Z2bjNvTDhpaTJieG9WWU5Q?=
+ =?utf-8?B?MkhCdHJUdXNLVUVpdEVmZmw5UkJXall5U29QSjBCRnhZclNETklGZVh3UHV1?=
+ =?utf-8?B?eW8vRHZpV2FMT2dvR01LaXFqcG43L0JTMnBpYjdEbng5a3pOQ1EvSlF0bmFM?=
+ =?utf-8?B?YWNmbGUxQ0JvaXJZeW95cUVOeHNwRWkyZnlXVEFwSTNTMXdiaG1TWEZla2w1?=
+ =?utf-8?B?Qmc4MzRDcDdKRHpGZVVjSjNwMnNsUXMxVVgveVJaTjUvZU5jYThsKy9odytN?=
+ =?utf-8?B?UXRqbGN5TGo3MzRJanYxdzh4SGY5TVl6d3grYjNDaUU5SmQxa1RRMWtIcUxZ?=
+ =?utf-8?B?YklucUNBajZOWi9ma3dUQmJ5ay9LRFFtalhTMFVobEtwdGo3cG92QXVocWc5?=
+ =?utf-8?Q?CDo56jdzrNEPJaH9Zm4H/d4=3D?=
+X-OriginatorOrg: cornelisnetworks.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1060d8e9-77d8-43a5-8bb1-08db19a1adde
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR01MB2610.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 15:37:20.1935
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x/+/UIHKyANlv9a5EmhVAajrvMOV67UBOI79hNX+BcD5O09PQjXEbB8VFDU7eqO8GewiGQE3l7pWylfz67XftQ6KFv5QQ0jgkI2lYXWQN772SIzCGdaGDFegRgi4qMl9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR01MB6756
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,38 +130,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 28.02.2023 16:31, Bryan O'Donoghue wrote:
-> On 28/02/2023 15:26, Bryan O'Donoghue wrote:
->> On 28/02/2023 15:24, Konrad Dybcio wrote:
->>> This call does not seem to have been cast on any kernel with support
->>> for VPU-1.0 or newer (and by extension, HFI6 and newer). 
+On 2/21/23 8:00 AM, Dennis Dalessandro wrote:
+> On 2/18/23 1:57 PM, Kees Cook wrote:
+>> The "cplen" result used by the memcpy() into struct rvt_swqe "wqe" may
+>> be sized to 80 for struct rvt_ud_wr (which is member "ud_wr", not "wr"
+>> which is only 40 bytes in size). Change the destination union member so
+>> the compiler can use the correct bounds check.
 >>
->> We tested this on sm8250
+>> struct rvt_swqe {
+>>         union {
+>>                 struct ib_send_wr wr;   /* don't use wr.sg_list */
+>>                 struct rvt_ud_wr ud_wr;
+>> 		...
+>> 	};
+>> 	...
+>> };
 >>
->> Restrict it
->>> to V4 only, as it seems to have been enabled by mistake and causes a
->>> hang & reboot to EDL on at least one occasion with SM6115 / AR50L
->>>
->>> Fixes: 7ed9e0b3393c ("media: venus: hfi, vdec: v6 Add IS_V6() to existing IS_V4() if locations")
->>> Signed-off-by: Konrad Dybcio<konrad.dybcio@linaro.org>
+>> Silences false positive memcpy() run-time warning:
 >>
->> Right. This may indeed fix it for you on SM6115, could you test it on RB5 and verify the above statement ?
+>>   memcpy: detected field-spanning write (size 80) of single field "&wqe->wr" at drivers/infiniband/sw/rdmavt/qp.c:2043 (size 40)
 >>
+>> Reported-by: Zhang Yi <yizhan@redhat.com>
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216561
+>> Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+>> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+>> Cc: Leon Romanovsky <leon@kernel.org>
+>> Cc: linux-rdma@vger.kernel.org
+>> Signed-off-by: Kees Cook <keescook@chromium.org>
 >> ---
->> bod
+>>  drivers/infiniband/sw/rdmavt/qp.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
+>> index 3acab569fbb9..3f707e1fa517 100644
+>> --- a/drivers/infiniband/sw/rdmavt/qp.c
+>> +++ b/drivers/infiniband/sw/rdmavt/qp.c
+>> @@ -2040,7 +2040,7 @@ static int rvt_post_one_wr(struct rvt_qp *qp,
+>>  	wqe = rvt_get_swqe_ptr(qp, qp->s_head);
+>>  
+>>  	/* cplen has length from above */
+>> -	memcpy(&wqe->wr, wr, cplen);
+>> +	memcpy(&wqe->ud_wr, wr, cplen);
+>>  
+>>  	wqe->length = 0;
+>>  	j = 0;
 > 
-> For example.
-> 
-> Doesn't your later patch take account of VPU h/w version ? IRIS_1, IRIS_2 etc.
-> 
-> When we added for V6 here, we meant for current tested V6 hardware at that point - at least sm8250.
-> 
-> Can you not differentiate sm6115 based on VPU hardware identifier ? We want to retain this logic for 8250 and then assuming your patch is correct, not do this for sm6115.
-As far as my only source of information (msm-4.19 techpack) goes, this is
-unnecessary/incorrect on 8250 as well. I doubt downstream would ship Venus
-with no/broken low-power modes..
+> Thanks for the patch. We've been debating this issue internally since last week.
+> The problem I have is this makes it look like everything is a "UD" req when it
+> could be a different QP type. Maybe we just need a comment explaining.
 
-Konrad
-> 
-> ---
-> bod
+For what it's worth I did test this patch. If you could add the comment that'd
+be great. If not I can touch it up later.
+
+Reviewed-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
