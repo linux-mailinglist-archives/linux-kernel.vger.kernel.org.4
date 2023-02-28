@@ -2,150 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611E96A5736
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0AF6A573C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjB1KyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S231229AbjB1Kz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjB1Kxx (ORCPT
+        with ESMTP id S231265AbjB1Kyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:53:53 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF39F2FCC1;
-        Tue, 28 Feb 2023 02:52:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677581551; x=1709117551;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NFwLsfslShX+IFYT0uOjVxXfzC+4HOGVFcLPgpwbkeE=;
-  b=H/lVnAHscnar92ZA1GZl4TtjU5wvYWC8LIHBYjvZJipCu3snSBpD+S4V
-   YcKRVyAfsTYXrey2lLDI+jJuxNpxbC7bXrCQCdusJWfB5lijc+4BOX/Od
-   7+j9oRSmLc7x3mnK5jPV1X/5z9v53Gf/hhpiOfww6C55mSYP1f8yy9RlC
-   KXS/jMV0fgi5gnmHZaZtAmHubeNf9KCGttuxNYaIf6aSuIg85S898s67N
-   OJvUKnaEx+mJfVwIdibZXjjxbbGh0L4lT0On2sOwqsc4tXHXtSz+v0Ok6
-   GW1JImnnLAdL2KACoJ038b679uqgq27ARIzkqJsXMLHVKB8m9GXHX6K04
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="331586094"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="331586094"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 02:52:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="919736377"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="919736377"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Feb 2023 02:52:29 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWxau-0005KR-1s;
-        Tue, 28 Feb 2023 10:52:28 +0000
-Date:   Tue, 28 Feb 2023 18:51:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "D. Starke" <daniel.starke@siemens.com>,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: Re: [PATCH 1/3] tty: n_gsm: add ioctl for DLC specific parameter
- configuration
-Message-ID: <202302281856.S9Lz4gHB-lkp@intel.com>
-References: <20230228062957.3150-1-daniel.starke@siemens.com>
+        Tue, 28 Feb 2023 05:54:41 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A8D2CC4B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:53:27 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id i5so8261201pla.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:53:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1677581607;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oRaRJQujxEovvpNBmWWw2pEpFxn8UUlJ/UEqlgQi6ZI=;
+        b=aeBXG6iyFD5PwjINMCmQ6lI7EG0Ji5j7gwGjAi8iefCQ8oCF8/ysjEyYS3IQRbVjcS
+         sLA1vpJT6p6kSc1PRhfLJHUOZeIIJgoYtdJGZligmPUZqa9dGgR1cbNjm6960kbXX7/c
+         AjysLvXdzvvycJ/MRJXHyu3q1ukNKmBHwhDs5HLeSdFdAzsIaQf9dj//FIJHPJMcNZco
+         P/E5ambolomWxcwMInH/Sa7V9cNfJUtSnAFpxCSnUO4+S1q7OLonzyB2povhcYzsXRsD
+         01FiBLMb7sGWw4dQamc4Q1UXC+NM2Z2eEXf1Y0C3lT8fvyTKWGDZeJJNeLPvNGL/Rh4V
+         7wgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677581607;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oRaRJQujxEovvpNBmWWw2pEpFxn8UUlJ/UEqlgQi6ZI=;
+        b=nB3+iR96keCopp667EC7Y6xIg4NY4cuWEUeug0wk4G3TUgknjgMYWt8IcCEE9hnoZ2
+         /wRMrxT+vOOEnXHy3pr6hLF/OGQ1WjyafTfhArmTEm1ZBbnFLCF/KkxXkJyLaQWPLK+S
+         llAVe0Q+0Ff4KxTeVMBAL8NFJBvThQtESNDoZmIuVMDVsEfFTRWYs4fysopW059q/gA2
+         IdPIaEo06KMGYtThbSzdbsJYvt2eD1tJaloXtBHzAehy9/Zope0iK5XNhiMtMjAeMzbs
+         D4J8same0HJhZJB932Clxm87nNymAaPgj4CqzM7kdFv9sNZYHnIiNKJs7XKc2gTts4wS
+         15GQ==
+X-Gm-Message-State: AO0yUKU0pQbOchKrkm0Jxt8jfIXreiRVRJO1PjOOGk/VahvDqFVtae1q
+        M+eLYyA39HZxWnz8Il+6njk1j1T5UbY23UG2
+X-Google-Smtp-Source: AK7set8oPq+zjY95hL7VZvhmfFuroc5InJJqtSGtiOK3eHEN//wiiSs0C0NJ55KxfhblWw7OquRzWQ==
+X-Received: by 2002:a17:902:7109:b0:19a:839d:b67a with SMTP id a9-20020a170902710900b0019a839db67amr2571695pll.5.1677581606989;
+        Tue, 28 Feb 2023 02:53:26 -0800 (PST)
+Received: from [10.70.252.135] ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id y1-20020a1709029b8100b00185402cfedesm1528426plp.246.2023.02.28.02.53.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 02:53:26 -0800 (PST)
+Message-ID: <36c737e1-7e1c-7098-8bd5-1767869489d9@bytedance.com>
+Date:   Tue, 28 Feb 2023 18:53:17 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228062957.3150-1-daniel.starke@siemens.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v3 0/8] make slab shrink lockless
+Content-Language: en-US
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     tkhai@ya.ru, hannes@cmpxchg.org, shakeelb@google.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, sultan@kerneltoast.com,
+        dave@stgolabs.net, penguin-kernel@i-love.sakura.ne.jp,
+        paulmck@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230226144655.79778-1-zhengqi.arch@bytedance.com>
+ <20230226115100.7e12bda7931dd65dbabcebe3@linux-foundation.org>
+ <b7e8929c-8fd5-a248-f8a8-d9177fc01b4b@bytedance.com>
+ <Y/zHbhxnQ2YsP+wX@kernel.org>
+ <63a16f0e-d6e9-29a1-069e-dc76bfd82319@bytedance.com>
+In-Reply-To: <63a16f0e-d6e9-29a1-069e-dc76bfd82319@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Starke,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus]
-[cannot apply to v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/D-Starke/tty-n_gsm-allow-window-size-configuration/20230228-143349
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20230228062957.3150-1-daniel.starke%40siemens.com
-patch subject: [PATCH 1/3] tty: n_gsm: add ioctl for DLC specific parameter configuration
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230228/202302281856.S9Lz4gHB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/06d7556b46ca2395b18cb700f19ee5de37d8383b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review D-Starke/tty-n_gsm-allow-window-size-configuration/20230228-143349
-        git checkout 06d7556b46ca2395b18cb700f19ee5de37d8383b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302281856.S9Lz4gHB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/tty/n_gsm.c: In function 'gsmld_ioctl':
->> drivers/tty/n_gsm.c:3720:26: warning: unused variable 'dlci' [-Wunused-variable]
-    3720 |         struct gsm_dlci *dlci;
-         |                          ^~~~
 
 
-vim +/dlci +3720 drivers/tty/n_gsm.c
+On 2023/2/28 18:04, Qi Zheng wrote:
+> 
+> 
+> On 2023/2/27 23:08, Mike Rapoport wrote:
+>> Hi,
+>>
+>> On Mon, Feb 27, 2023 at 09:31:51PM +0800, Qi Zheng wrote:
+>>>
+>>>
+>>> On 2023/2/27 03:51, Andrew Morton wrote:
+>>>> On Sun, 26 Feb 2023 22:46:47 +0800 Qi Zheng 
+>>>> <zhengqi.arch@bytedance.com> wrote:
+>>>>
+>>>>> Hi all,
+>>>>>
+>>>>> This patch series aims to make slab shrink lockless.
+>>>>
+>>>> What an awesome changelog.
+>>>>
+>>>>> 2. Survey
+>>>>> =========
+>>>>
+>>>> Especially this part.
+>>>>
+>>>> Looking through all the prior efforts and at this patchset I am not
+>>>> immediately seeing any statements about the overall effect upon
+>>>> real-world workloads.  For a good example, does this patchset
+>>>> measurably improve throughput or energy consumption on your servers?
+>>>
+>>> Hi Andrew,
+>>>
+>>> I re-tested with the following physical machines:
+>>>
+>>> Architecture:        x86_64
+>>> CPU(s):              96
+>>> On-line CPU(s) list: 0-95
+>>> Model name:          Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz
+>>>
+>>> I found that the reason for the hotspot I described in cover letter is
+>>> wrong. The reason for the down_read_trylock() hotspot is not because of
+>>> the failure to trylock, but simply because of the atomic operation
+>>> (cmpxchg). And this will lead to a significant reduction in IPC (insn
+>>> per cycle).
+>>
+>> ...
+>>> Then we can use the following perf command to view hotspots:
+>>>
+>>> perf top -U -F 999
+>>>
+>>> 1) Before applying this patchset:
+>>>
+>>>    32.31%  [kernel]           [k] down_read_trylock
+>>>    19.40%  [kernel]           [k] pv_native_safe_halt
+>>>    16.24%  [kernel]           [k] up_read
+>>>    15.70%  [kernel]           [k] shrink_slab
+>>>     4.69%  [kernel]           [k] _find_next_bit
+>>>     2.62%  [kernel]           [k] shrink_node
+>>>     1.78%  [kernel]           [k] shrink_lruvec
+>>>     0.76%  [kernel]           [k] do_shrink_slab
+>>>
+>>> 2) After applying this patchset:
+>>>
+>>>    27.83%  [kernel]           [k] _find_next_bit
+>>>    16.97%  [kernel]           [k] shrink_slab
+>>>    15.82%  [kernel]           [k] pv_native_safe_halt
+>>>     9.58%  [kernel]           [k] shrink_node
+>>>     8.31%  [kernel]           [k] shrink_lruvec
+>>>     5.64%  [kernel]           [k] do_shrink_slab
+>>>     3.88%  [kernel]           [k] mem_cgroup_iter
+>>>
+>>> 2. At the same time, we use the following perf command to capture IPC
+>>> information:
+>>>
+>>> perf stat -e cycles,instructions -G test -a --repeat 5 -- sleep 10
+>>>
+>>> 1) Before applying this patchset:
+>>>
+>>>   Performance counter stats for 'system wide' (5 runs):
+>>>
+>>>        454187219766      cycles                    
+>>> test                    (
+>>> +-  1.84% )
+>>>         78896433101      instructions              test #    0.17  
+>>> insn per
+>>> cycle           ( +-  0.44% )
+>>>
+>>>          10.0020430 +- 0.0000366 seconds time elapsed  ( +-  0.00% )
+>>>
+>>> 2) After applying this patchset:
+>>>
+>>>   Performance counter stats for 'system wide' (5 runs):
+>>>
+>>>        841954709443      cycles                    
+>>> test                    (
+>>> +- 15.80% )  (98.69%)
+>>>        527258677936      instructions              test #    0.63  
+>>> insn per
+>>> cycle           ( +- 15.11% )  (98.68%)
+>>>
+>>>            10.01064 +- 0.00831 seconds time elapsed  ( +-  0.08% )
+>>>
+>>> We can see that IPC drops very seriously when calling
+>>> down_read_trylock() at high frequency. After using SRCU,
+>>> the IPC is at a normal level.
+>>
+>> The results you present do show improvement in IPC for an artificial test
+>> script. But more interesting would be to see how a real world workloads
+>> benefit from your changes.
+> 
+> Hi Mike and Andrew,
+> 
+> I did encounter this problem under the real workload of our online
+> server. At the end of this email, I posted another call stack and
+> hot spot that I found before.
+> 
+> I scanned the hotspots of all our online servers yesterday and today, 
+> but unfortunately did not find the live environment.
+> 
+> Some of our servers have a large number of containers, and each
+> container will mount some file systems. This is likely to trigger
+> down_read_trylock() hotspots when the memory pressure of the whole
+> machine or the memory pressure of memcg is high.
 
-  3713	
-  3714	static int gsmld_ioctl(struct tty_struct *tty, unsigned int cmd,
-  3715			       unsigned long arg)
-  3716	{
-  3717		struct gsm_config c;
-  3718		struct gsm_config_ext ce;
-  3719		struct gsm_mux *gsm = tty->disc_data;
-> 3720		struct gsm_dlci *dlci;
-  3721		unsigned int base;
-  3722	
-  3723		switch (cmd) {
-  3724		case GSMIOC_GETCONF:
-  3725			gsm_copy_config_values(gsm, &c);
-  3726			if (copy_to_user((void __user *)arg, &c, sizeof(c)))
-  3727				return -EFAULT;
-  3728			return 0;
-  3729		case GSMIOC_SETCONF:
-  3730			if (copy_from_user(&c, (void __user *)arg, sizeof(c)))
-  3731				return -EFAULT;
-  3732			return gsm_config(gsm, &c);
-  3733		case GSMIOC_GETFIRST:
-  3734			base = mux_num_to_base(gsm);
-  3735			return put_user(base + 1, (__u32 __user *)arg);
-  3736		case GSMIOC_GETCONF_EXT:
-  3737			gsm_copy_config_ext_values(gsm, &ce);
-  3738			if (copy_to_user((void __user *)arg, &ce, sizeof(ce)))
-  3739				return -EFAULT;
-  3740			return 0;
-  3741		case GSMIOC_SETCONF_EXT:
-  3742			if (copy_from_user(&ce, (void __user *)arg, sizeof(ce)))
-  3743				return -EFAULT;
-  3744			return gsm_config_ext(gsm, &ce);
-  3745		default:
-  3746			return n_tty_ioctl_helper(tty, cmd, arg);
-  3747		}
-  3748	}
-  3749	
+And the servers where this hotspot has happened (we have a hotspot alarm
+record), basically have 96 cores, or 128 cores or even more.
+
+> 
+> So I just found a physical server with a similar configuration to the
+> online server yesterday for a simulation test. The call stack and the 
+> hot spot in the simulation test are almost exactly the same, so in
+> theory, when such a hot spot appears on the online server, we can also
+> enjoy the improvement of IPC. This will improve the performance of the
+> server in memory exhaustion scenarios (memcg or global level).
+> 
+> And the above scenario is only one aspect, and the other aspect is the
+> lock competition scenario mentioned by Kirill. After applying this patch 
+> set, slab shrink and register_shrinker() can be completely parallelized,
+> which can fix that problem.
+> 
+> These are the two main benefits for real workloads that I consider.
+> 
+> Thanks,
+> Qi
+> 
+> call stack
+> ----------
+> 
+> @[
+>      down_read_trylock+1
+>      shrink_slab+128
+>      shrink_node+371
+>      do_try_to_free_pages+232
+>      try_to_free_pages+243
+>      _alloc_pages_slowpath+771
+>      _alloc_pages_nodemask+702
+>      pagecache_get_page+255
+>      filemap_fault+1361
+>      ext4_filemap_fault+44
+>      __do_fault+76
+>      handle_mm_fault+3543
+>      do_user_addr_fault+442
+>      do_page_fault+48
+>      page_fault+62
+> ]: 1161690
+> @[
+>      down_read_trylock+1
+>      shrink_slab+128
+>      shrink_node+371
+>      balance_pgdat+690
+>      kswapd+389
+>      kthread+246
+>      ret_from_fork+31
+> ]: 8424884
+> @[
+>      down_read_trylock+1
+>      shrink_slab+128
+>      shrink_node+371
+>      do_try_to_free_pages+232
+>      try_to_free_pages+243
+>      __alloc_pages_slowpath+771
+>      __alloc_pages_nodemask+702
+>      __do_page_cache_readahead+244
+>      filemap_fault+1674
+>      ext4_filemap_fault+44
+>      __do_fault+76
+>      handle_mm_fault+3543
+>      do_user_addr_fault+442
+>      do_page_fault+48
+>      page_fault+62
+> ]: 20917631
+> 
+> hotspot
+> -------
+> 
+> 52.22% [kernel]        [k] down_read_trylock
+> 19.60% [kernel]        [k] up_read
+>   8.86% [kernel]        [k] shrink_slab
+>   2.44% [kernel]        [k] idr_find
+>   1.25% [kernel]        [k] count_shadow_nodes
+>   1.18% [kernel]        [k] shrink lruvec
+>   0.71% [kernel]        [k] mem_cgroup_iter
+>   0.71% [kernel]        [k] shrink_node
+>   0.55% [kernel]        [k] find_next_bit
+> 
+> 
+>>> Thanks,
+>>> Qi
+>>
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Qi
