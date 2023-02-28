@@ -2,215 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BD56A539E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E016A539F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 08:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjB1HSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 02:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        id S229699AbjB1HV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 02:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjB1HSu (ORCPT
+        with ESMTP id S229560AbjB1HVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 02:18:50 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E09C1F930
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:18:48 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id j2so8621679wrh.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:18:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F7QCalr91Gu+O//k2T8jHNWqk9fHAxCkV2rWJc3mX7w=;
-        b=BKPEUniu2DWkWFeSdD8cSwDs9HmeTmUGL2OwSl1vQgiSpHChoUfw3j7fTranYmIchi
-         ORj8NCZHGwkC4Gspu3scmqUQFN+TiHoJ38ELCzTCH59K/8fuHqFQ+cDYnQWRJ4OTnLjh
-         +TC29pOrlIPdabnrulHkXDR9ylfNebWyp0VBUI5un9qdrHjZNFaXXrB5S6/Q8+a1F/D+
-         6oY/rHRB+qJmxayOgGXlwLnQ/t74EFZUTRY7Gh9xRFzOdQdU6rNk7MufqWSG94VKBCS4
-         Y7HUz23SxepSmxWP1h2piNWBsBRqhxXReERFBUq4YcJdA5sw7VWrnv5Cc899WU16RuCj
-         j3/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F7QCalr91Gu+O//k2T8jHNWqk9fHAxCkV2rWJc3mX7w=;
-        b=XjgWtvWv4cR0dSAXz5lnwWI/Xkr4tRj9C0ndTaDFwuhgYkSMOS45YgrYxNfBlG2VWc
-         q0DvFyHYbDbhU4bCbwtl/zx7ycEncRQ32G95aHdA3q63DyEcx6IvH8yTkY/DMn8UqpqL
-         YXvWGNRY0HCrA0ju0/zTU4b8olIQ17hJ2gz9nx8FgXYzK0UGB+mufw2e6jN5qRlc2+cw
-         gWpDoabxkGIVKney1FK7czcBHT/PH2X5WjMpeqBGyxE2Noeo7rPy3Gj9991mGwVXRK7v
-         r4ljZlK/vG7rhWGtkgNtM0lUWxF8HlZRyYmvg2+nxHW2K08pn1D0tutgoUy6POEzHGPO
-         Wz/Q==
-X-Gm-Message-State: AO0yUKWjjkdqT92VDQDBP0gGyadcBY97mF6EzGY2nYHijnkBSUzzqTKl
-        ExL7dufgTMwqLxBlTcGvOjZkcHtWnX++ClhZ
-X-Google-Smtp-Source: AK7set/OLZm3GwMXjkvBXR46FiMX8Csqr2D7fe4SrUAsncGIN1lGAVYvHFbZyDb46n8V1jDm0GHUdQ==
-X-Received: by 2002:a5d:4568:0:b0:2c5:5eff:5c81 with SMTP id a8-20020a5d4568000000b002c55eff5c81mr1258957wrc.38.1677568726678;
-        Mon, 27 Feb 2023 23:18:46 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id l1-20020a1ced01000000b003ea57808179sm14649183wmh.38.2023.02.27.23.18.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 23:18:46 -0800 (PST)
-Date:   Tue, 28 Feb 2023 08:18:45 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     JeeHeng Sia <jeeheng.sia@starfivetech.com>
-Cc:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Message-ID: <20230228071845.k6s6bcnesdsnw3jl@orel>
-References: <20230224095526.ctctpzw3p3csf6qj@orel>
- <24a6dbe6aa2043c7812bf7e258786e13@EXMBX066.cuchost.com>
- <20230224120715.wgqnqmkadsbqusus@orel>
- <180fda36f9974809b436c52e4b3eda58@EXMBX066.cuchost.com>
- <20230227075942.rgl4hqnwttwvoroe@orel>
- <178ca008701147828d2e62402ff4f78a@EXMBX066.cuchost.com>
- <20230227114435.eow57ax5zhysz3kv@orel>
- <a6c319dd867f4f1d97e9d950b9e7c636@EXMBX066.cuchost.com>
- <20230228050457.zfbflfawctaccepv@orel>
- <803ac603023c4eeda4a0b8e414cce6f1@EXMBX066.cuchost.com>
+        Tue, 28 Feb 2023 02:21:55 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C3B1EFE1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 23:21:53 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7907666021EB;
+        Tue, 28 Feb 2023 07:21:49 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677568911;
+        bh=f5T0rkBaJGbSHgZ//rCIzdBQQ68DfSJ5UEg364ciCPA=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=TxsSbM4cSmxx07zkqDrsNXv7qCnBXbTw+NOe71HpgdzS871eUKEcidHPEVnmMRDSX
+         LDClER+v3H7XaKbM/N3OMgGidfY2t1kBcpZlPHOrxVfM6I/Y/phGIFOk8OTgLq2r9B
+         J7RtHC8B4A58M0xDohLaL+U6wns05tbePRzlPKcR3ohIn721a6j0cgkCGUyWBxBUT/
+         jeXtuIuQ6WjvNqLgm5lU7uGOnMbrz14zCUBei6jUduvEO7IFwVG9l9C6MwmgtRbv2y
+         x8eiaWvNi1NDu+A0S1HzaDhX5Jhk4WyTdVPMR2BhBSchevErRmCT+pJANati4d1/4W
+         TUjMDO4B3y41w==
+Message-ID: <e1e0ed70-76df-647f-30ac-0bb6ae8dc05c@collabora.com>
+Date:   Tue, 28 Feb 2023 12:21:45 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <803ac603023c4eeda4a0b8e414cce6f1@EXMBX066.cuchost.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: [PATCH v2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230227230044.1596744-1-peterx@redhat.com>
+ <Y/1Mh5uivFt+zWKM@x1n>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y/1Mh5uivFt+zWKM@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 05:33:32AM +0000, JeeHeng Sia wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Andrew Jones <ajones@ventanamicro.com>
-> > Sent: Tuesday, 28 February, 2023 1:05 PM
-> > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > 
-> > On Tue, Feb 28, 2023 at 01:32:53AM +0000, JeeHeng Sia wrote:
-> > > > > > > 	load image;
-> > > > > > > loop:	Create pbe chain, return error if failed;
-> > > > > >
-> > > > > > This loop pseudocode is incomplete. It's
-> > > > > >
-> > > > > > loop:
-> > > > > >         if (swsusp_page_is_forbidden(page) && swsusp_page_is_free(page))
-> > > > > > 	   return page_address(page);
-> > > > > > 	Create pbe chain, return error if failed;
-> > > > > > 	...
-> > > > > >
-> > > > > > which I pointed out explicitly in my last reply. Also, as I asked in my
-> > > > > > last reply (and have been asking four times now, albeit less explicitly
-> > > > > > the first two times), how do we know at least one PBE will be linked?
-> > > > > 1 PBE correspond to 1 page, you shouldn't expect only 1 page is saved.
-> > > >
-> > > > I know PBEs correspond to pages. *Why* should I not expect only one page
-> > > > is saved? Or, more importantly, why should I expect more than zero pages
-> > > > are saved?
-> > > >
-> > > > Convincing answers might be because we *always* put the restore code in
-> > > > pages which get added to the PBE list or that the original page tables
-> > > > *always* get put in pages which get added to the PBE list. It's not very
-> > > > convincing to simply *assume* that at least one random page will always
-> > > > meet the PBE list criteria.
-> > > >
-> > > > > Hibernation core will do the calculation. If the PBEs (restore_pblist) linked successfully, the hibernated image will be restore else
-> > > > normal boot will take place.
-> > > > > > Or, even more specifically this time, where is the proof that for each
-> > > > > > hibernation resume, there exists some page such that
-> > > > > > !swsusp_page_is_forbidden(page) or !swsusp_page_is_free(page) is true?
-> > > > > forbidden_pages and free_pages are not contributed to the restore_pblist (as you already aware from the code). Infact, the
-> > > > forbidden_pages and free_pages are not save into the disk.
-> > > >
-> > > > Exactly, so those pages are *not* going to contribute to the greater than
-> > > > zero pages. What I've been asking for, from the beginning, is to know
-> > > > which page(s) are known to *always* contribute to the list. Or, IOW, how
-> > > > do you know the PBE list isn't empty, a.k.a restore_pblist isn't NULL?
-> > > Well, this is keep going around in a circle, thought the answer is in the hibernation code. restore_pblist get the pointer from the PBE,
-> > and the PBE already checked for validity.
-> > 
-> > It keeps going around in circles because you keep avoiding my question by
-> > pointing out trivial linked list code. I'm not worried about the linked
-> > list code being correct. My concern is that you're using a linked list
-> > with an assumption that it is not empty. My question has been all along,
-> > how do you know it's not empty?
-> > 
-> > I'll change the way I ask this time. Please take a look at your PBE list
-> > and let me know if there are PBEs on it that must be there on each
-> > hibernation resume, e.g. the resume code page is there or whatever.
-> > 
-> > > Can I suggest you to submit a patch to the hibernation core?
-> > 
-> > Why? What's wrong with it?
-> Kindly let me draw 2 scenarios for you. Option 1 is to add the restore_pblist checking to the hibernation core and option 2 is to add restore_pblist checking to the arch solution
-> Although I really don't think it is needed. But if you really wanted to add the checking, I would suggest to go with option 1. again, I really think that it is not needed!
+Hi Peter,
 
-This entire email thread is because you've first coded, and now stated,
-that you don't think the PBE list will ever be empty. And now, below, I
-see you're proposing to return an error when the PBE list is empty, why?
-If there's nothing in the PBE list, then there's nothing to do for it.
-Why is that an error condition?
+Thank you so much for sending.
 
-Please explain to me why you think the PBE list *must* not be empty
-(which is what I've been asking for over and over). OIOW, are there
-any pages you have in mind which the resume kernel always uses and
-are also always going to end up in the suspend image? I don't know,
-but I assume clean, file-backed pages do not get added to the suspend
-image, which would rule out most kernel code pages. Also, many pages
-written during boot (which is where the resume kernel is at resume time)
-were no longer resident at hibernate time, so they won't be in the
-suspend image either. While it's quite likely I'm missing something
-obvious, I'd rather be told what that is than to assume the PBE list
-will never be empty. Which is why I keep asking about it...
+On 2/28/23 5:36 AM, Peter Xu wrote:
+> On Mon, Feb 27, 2023 at 06:00:44PM -0500, Peter Xu wrote:
+>> This is a new feature that controls how uffd-wp handles none ptes.  When
+>> it's set, the kernel will handle anonymous memory the same way as file
+>> memory, by allowing the user to wr-protect unpopulated ptes.
+>>
+>> File memories handles none ptes consistently by allowing wr-protecting of
+>> none ptes because of the unawareness of page cache being exist or not.  For
+>> anonymous it was not as persistent because we used to assume that we don't
+>> need protections on none ptes or known zero pages.
+>>
+>> One use case of such a feature bit was VM live snapshot, where if without
+>> wr-protecting empty ptes the snapshot can contain random rubbish in the
+>> holes of the anonymous memory, which can cause misbehave of the guest when
+>> the guest OS assumes the pages should be all zeros.
+>>
+>> QEMU worked it around by pre-populate the section with reads to fill in
+>> zero page entries before starting the whole snapshot process [1].
+>>
+>> Recently there's another need raised on using userfaultfd wr-protect for
+>> detecting dirty pages (to replace soft-dirty in some cases) [2].  In that
+>> case if without being able to wr-protect none ptes by default, the dirty
+>> info can get lost, since we cannot treat every none pte to be dirty (the
+>> current design is identify a page dirty based on uffd-wp bit being cleared).
+>>
+>> In general, we want to be able to wr-protect empty ptes too even for
+>> anonymous.
+>>
+>> This patch implements UFFD_FEATURE_WP_UNPOPULATED so that it'll make
+>> uffd-wp handling on none ptes being consistent no matter what the memory
+>> type is underneath.  It doesn't have any impact on file memories so far
+>> because we already have pte markers taking care of that.  So it only
+>> affects anonymous.
+>>
+>> The feature bit is by default off, so the old behavior will be maintained.
+>> Sometimes it may be wanted because the wr-protect of none ptes will contain
+>> overheads not only during UFFDIO_WRITEPROTECT (by applying pte markers to
+>> anonymous), but also on creating the pgtables to store the pte markers. So
+>> there's potentially less chance of using thp on the first fault for a none
+>> pmd or larger than a pmd.
+>>
+>> The major implementation part is teaching the whole kernel to understand
+>> pte markers even for anonymously mapped ranges, meanwhile allowing the
+>> UFFDIO_WRITEPROTECT ioctl to apply pte markers for anonymous too when the
+>> new feature bit is set.
+>>
+>> Note that even if the patch subject starts with mm/uffd, there're a few
+>> small refactors to major mm path of handling anonymous page faults. But
+>> they should be straightforward.
+>>
+>> So far, add a very light smoke test within the userfaultfd kselftest
+>> pagemap unit test to make sure anon pte markers work.
+>>
+>> [1] https://lore.kernel.org/all/20210401092226.102804-4-andrey.gruzdev@virtuozzo.com/
+>> [1] https://lore.kernel.org/all/Y+v2HJ8+3i%2FKzDBu@x1n/
+>>
+>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>> ---
+>> v1->v2:
+>> - Use pte markers rather than populate zero pages when protect [David]
+>> - Rename WP_ZEROPAGE to WP_UNPOPULATED [David]
+> 
+> Some very initial performance numbers (I only ran in a VM but it should be
+> similar, unit is "us") below as requested.  The measurement is about time
+> spent when wr-protecting 10G range of empty but mapped memory.  It's done
+> in a VM, assuming we'll get similar results on bare metal.
+> 
+> Four test cases:
+> 
+>         - default UFFDIO_WP
+>         - pre-read the memory, then UFFDIO_WP (what QEMU does right now)
+>         - pre-fault using MADV_POPULATE_READ, then default UFFDIO_WP
+>         - UFFDIO_WP with WP_UNPOPULATED
+> 
+> Results:
+> 
+>         Test DEFAULT: 2
+>         Test PRE-READ: 3277099 (pre-fault 3253826)
+>         Test MADVISE: 2250361 (pre-fault 2226310)
+>         Test WP-UNPOPULATE: 20850
+> 
+> I'll add these information into the commit message when there's a new
+> version.
+I'm hitting a bug where I'm unable to write to the memory after adding this
+patch and wp the memory. I'm hitting this case in your test and my tests as
+well. Please apply the following diff to your test to reproduce on your end:
 
-Thanks,
-drew
+--- uffd_wp_perf.c.orig 2023-02-28 12:09:38.971820791 +0500
++++ uffd_wp_perf.c      2023-02-28 12:13:11.077827160 +0500
+@@ -114,6 +114,7 @@
+         start1 = get_usec();
+     }
+     wp_range(uffd, buffer, SIZE, true);
++    buffer[0] = 'a';
+     if (start1 == 0)
+          printf("%"PRIu64"\n", get_usec() - start);
+     else
+
 
 > 
-> 	//Option 1
-> 	//Pseudocode to illustrate the image loading
-> 	initialize restore_pblist to null;
-> 	initialize safe_pages_list to null;
-> 	Allocate safe page list, return error if failed;
-> 	load image;
-> loop:	Create pbe chain, return error if failed;
-> 	assign orig_addr and safe_page to pbe;
-> 	link pbe to restore_pblist;
-> 	/* Add checking here */
-> 	return error if restore_pblist equal to null;
-> 	return pbe to handle->buffer;
-> 	check handle->buffer;
-> 	goto loop if no error else return with error;
+> [1] https://github.com/xzpeter/clibs/blob/master/uffd-test/uffd-wp-perf.c
 > 
-> 	//option 2
-> 	//Pseudocode to illustrate the image loading
-> 	initialize restore_pblist to null;
-> 	initialize safe_pages_list to null;
-> 	Allocate safe page list, return error if failed;
-> 	load image;
-> loop:	Create pbe chain, return error if failed;
-> 	assign orig_addr and safe_page to pbe;
-> 	link pbe to restore_pblist;
-> 	return pbe to handle->buffer;
-> 	check handle->buffer;
-> 	goto loop if no error else return with error;
-> 	everything works correctly, continue the rest of the operation
-> 	invoke swsusp_arch_resume
-> 
-> 	//@swsusp_arch_resume()
-> loop2: return error if restore_pblist is null
-> 	increment restore_pblist and goto loop2
-> 	create temp_pg_table
-> 	continue the rest of the resume operation
-> > 
-> > Thanks,
-> > drew
+
+-- 
+BR,
+Muhammad Usama Anjum
