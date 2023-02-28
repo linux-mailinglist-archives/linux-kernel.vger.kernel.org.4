@@ -2,78 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4013E6A578A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B146A578B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjB1LL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S230356AbjB1LMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjB1LLv (ORCPT
+        with ESMTP id S230047AbjB1LMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:11:51 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7556A2A17F;
-        Tue, 28 Feb 2023 03:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677582710; x=1709118710;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8/W68TntRup6W2xyDuU46LT4rXG2iGw63eM9OwzTey0=;
-  b=MmJcbmVIfuw5IA4vz5mUW5xImuQv2SDjIJa3tGTR0bMy5BvdxvBBQhVm
-   z1gPk6u1+1YJg94XDS+uC+y76b9xQfnSxQbhgh/Pv7i6pjKpv1nTyTktm
-   4kqozQ+a3TORevznDEFuUvfJsSfYu/sUozxnuYdjPQ6cAZpcrfdjAJfVv
-   fPELnjg2dJI64ydDYVh0OHQuiNUOwQp6Kd0L3H/v4LDa96ewAMgnT/50i
-   KkDeFbJFALxg+y9BHoCVGF7uxMzajJK5zSnQT1epBAwrtR5POwxBw3rWr
-   S0gvG6SHAJffNAJZz515SeOm/0Jp93u4yMmX1vJbPgEbveRgMLE2BHc07
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,221,1673938800"; 
-   d="asc'?scan'208";a="199103866"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2023 04:11:50 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 28 Feb 2023 04:11:47 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Tue, 28 Feb 2023 04:11:45 -0700
-Date:   Tue, 28 Feb 2023 11:11:18 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, Conor Dooley <conor@kernel.org>
-Subject: Re: [PATCH v3 2/2] drivers: watchdog: Add StarFive Watchdog driver
-Message-ID: <Y/3hVlp/YPnWHDCX@wendy>
-References: <20230220081926.267695-1-xingyu.wu@starfivetech.com>
- <20230220081926.267695-3-xingyu.wu@starfivetech.com>
- <CAJM55Z823iqUqD8enM0qJ_MA3Tw94Mn0mq71fbLT1Qjo2s2J3g@mail.gmail.com>
- <0ffb02d2-0bbd-fd0d-b0f6-cb5605570050@starfivetech.com>
- <CAJM55Z_hRpUYueZ-XuWUx1NfAsL9E+-4ry9TYeRWM_bKXvym-g@mail.gmail.com>
- <Y/3coFvMWOLaaY9p@wendy>
- <545c23f3-1d68-2bff-89d9-584e3ca31044@linaro.org>
+        Tue, 28 Feb 2023 06:12:22 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2A332BEDF;
+        Tue, 28 Feb 2023 03:12:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5011C14;
+        Tue, 28 Feb 2023 03:13:04 -0800 (PST)
+Received: from [10.57.51.147] (unknown [10.57.51.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F86B3F881;
+        Tue, 28 Feb 2023 03:12:18 -0800 (PST)
+Message-ID: <678c5939-f512-d4f8-e290-9c0f2bf05023@arm.com>
+Date:   Tue, 28 Feb 2023 11:12:17 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jLh5qG3hXRv5ahXq"
-Content-Disposition: inline
-In-Reply-To: <545c23f3-1d68-2bff-89d9-584e3ca31044@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 13/14] perf kvm: Add TUI mode for stat report
+To:     Leo Yan <leo.yan@linaro.org>
+References: <20230228084147.106167-1-leo.yan@linaro.org>
+ <20230228084147.106167-14-leo.yan@linaro.org>
+Content-Language: en-US
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20230228084147.106167-14-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,44 +54,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---jLh5qG3hXRv5ahXq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 28, 2023 at 11:57:58AM +0100, Krzysztof Kozlowski wrote:
-> On 28/02/2023 11:51, Conor Dooley wrote:
-> > On Tue, Feb 28, 2023 at 11:36:49AM +0100, Emil Renner Berthing wrote:
-> >> On Tue, 28 Feb 2023 at 10:44, Xingyu Wu <xingyu.wu@starfivetech.com> w=
-rote:
-> >>> On 2023/2/26 22:14, Emil Renner Berthing wrote:
-> >>>> On Mon, 20 Feb 2023 at 09:21, Xingyu Wu <xingyu.wu@starfivetech.com>=
- wrote:
-> >=20
-> >>> So the dt-bingdings need to rename, and which one could be better,
-> >>> 'starfive,jh71x0-wdt.yaml' or 'starfive,jh-wdt.yaml'?
-> >>
-> >> Sure, starfive,jh71x0-wdt.yaml sounds good to me.
-> >=20
-> > I feel like a common comment I see from the dt folks is to not put
-> > wildcards in filenames & just pick the first compatible.
-> > I could very well be wrong on that front though...
->=20
-> First compatible is a bit better, unless you are sure this will cover
-> all such compatibles now and in the future. For many bindings the
-> family/wildcards were fine in filename.
 
-Ahh cool, good to know what the specific policy is - thanks!
+On 28/02/2023 08:41, Leo Yan wrote:
+> Since we have supported histograms list and prepared the dimensions in
+> the tool, this patch adds TUI mode for stat report.  It also adds UI
+> progress for sorting for better user experience.
+> 
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  tools/perf/builtin-kvm.c   | 110 ++++++++++++++++++++++++++++++++++++-
+>  tools/perf/util/kvm-stat.h |   1 +
+>  2 files changed, 109 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
+> index 5b1b2042dfed..b0be59577779 100644
+> --- a/tools/perf/builtin-kvm.c
+> +++ b/tools/perf/builtin-kvm.c
+> @@ -23,6 +23,8 @@
+>  #include "util/data.h"
+>  #include "util/ordered-events.h"
+>  #include "util/kvm-stat.h"
+> +#include "ui/browsers/hists.h"
+> +#include "ui/progress.h"
+>  #include "ui/ui.h"
+>  #include "util/string2.h"
+>  
+> @@ -506,10 +508,98 @@ static int kvm_hists__init(struct perf_kvm_stat *kvm)
+>  
+>  	__hists__init(&kvm_hists.hists, &kvm_hists.list);
+>  	perf_hpp_list__init(&kvm_hists.list);
+> +	kvm_hists.list.nr_header_lines = 1;
+>  	return kvm_hpp_list__parse(&kvm_hists.list, output_columns,
+>  				   kvm->sort_key);
+>  }
+>  
+> +static int kvm_browser__title(struct hist_browser *browser,
+> +			      char *buf, size_t size)
+> +{
+> +	scnprintf(buf, size, "KVM event statistics (%lu entries)",
+> +		  browser->nr_non_filtered_entries);
+> +	return 0;
+> +}
+> +
+> +static struct hist_browser*
+> +perf_kvm_browser__new(struct hists *hists)
+> +{
+> +	struct hist_browser *browser = hist_browser__new(hists);
+> +
+> +	if (browser)
+> +		browser->title = kvm_browser__title;
+> +
+> +	return browser;
+> +}
+> +
+> +static void print_result(struct perf_kvm_stat *kvm);
+> +
+> +#ifdef HAVE_SLANG_SUPPORT
 
---jLh5qG3hXRv5ahXq
-Content-Type: application/pgp-signature; name="signature.asc"
+Hi Leo,
 
------BEGIN PGP SIGNATURE-----
+I get an error because of this addition when building on x86. I think
+it's because I don't have HAVE_SLANG_SUPPORT. It might be the same error
+that you mentioned on v1?
 
-iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/3hVgAKCRB4tDGHoIJi
-0iFfAQDNJAIopU3zHNYFn2s2i+au7uDl7O7iIjf1FY4nFUaCFwD4y+Erbm3dLnRc
-dO8BxfN/ImoHPfoqemQXS3dw0Pj0AA==
-=sqkI
------END PGP SIGNATURE-----
+   builtin-kvm.c:535:13: error: ‘print_result’ used but never defined
+[-Werror]
+   535 | static void print_result(struct perf_kvm_stat *kvm);
 
---jLh5qG3hXRv5ahXq--
+Other than that, for the whole set:
+
+Reviewed-by: James Clark <james.clark@arm.com>
+
