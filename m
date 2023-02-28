@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCED6A62D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89776A62DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjB1WuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
+        id S229741AbjB1Wvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:51:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjB1WuT (ORCPT
+        with ESMTP id S229515AbjB1Wvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:50:19 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A90360A5;
-        Tue, 28 Feb 2023 14:50:16 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Tue, 28 Feb 2023 17:51:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49FB367E4;
+        Tue, 28 Feb 2023 14:51:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D503C1EC04DA;
-        Tue, 28 Feb 2023 23:50:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677624613;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=sf2h3hi220E781ncSCCtEipOWUHmkqQMWL7hGDGs3OU=;
-        b=LEYXMPAFbAW4NWRuAf3pW92Ggky+YFQ2w/c6gX6ukaNNjIMfuSn6VUMA8o3A8TsM4MMja1
-        5h6UewXSwWZL6AffZ+tL3vrX+Z/nkmqybH6gqm7KoIGCahS9S6452n0QJhxqsWu4tvKGnl
-        PlEt0VoBxw2lgPsNdSK6iAF0Ca00DiI=
-Date:   Tue, 28 Feb 2023 23:50:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Takahiro Itazuri <itazur@amazon.com>
-Cc:     dave.hansen@linux.intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de,
-        x86@kernel.org, zulinx86@gmail.com
-Subject: Re: [PATCH 0/2] KVM: x86: Propagate AMD-specific IBRS bits to guests
-Message-ID: <Y/6FIeJ5KCOfKEPN@zn.tnic>
-References: <Y/5oBKi6vjZe83ac@zn.tnic>
- <20230228222416.61484-1-itazur@amazon.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24B50B80EBF;
+        Tue, 28 Feb 2023 22:51:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2E9C433EF;
+        Tue, 28 Feb 2023 22:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677624693;
+        bh=Xzz4r0PQ/hM3RDGj9gnYQd2OmfFnt1L/ZVhwnGD50Fk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BYdKkkdTf1HGxTZGj89HCgzupY0c1U5cLYF+W2rnQ6RBbNWUqJYd7wWu4TbcX8kxe
+         q0XSn1fAAbf3T5j2RIk7txi7LRWROASL0kGF6iYoTLtWvKY/ndD0bMGBUuxk/b17+Z
+         YCF4RjJo8XXjsCujVznbquVGEV+EHmSngP8+guszOhdBm/02tlmvgGCoa26ViWQvIF
+         3DWuGyEnMOzsVMX5dFP69HD1VKOOj9s5Gx3shiUng2Jecg6UMjduK1kC607O1/NQn7
+         cZj0Ja4jabYdgBYUKcTp+vVn2hUlemIYqEI5w9eMqqApCUzde025mkc3k9KNI7t+u7
+         ql0ePuiRCsn/w==
+Date:   Tue, 28 Feb 2023 14:51:32 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     syzbot <syzbot+9c0268252b8ef967c62e@syzkaller.appspotmail.com>,
+        borisp@nvidia.com, bpf@vger.kernel.org, davem@davemloft.net,
+        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [net?] INFO: task hung in tls_sw_sendpage (3)
+Message-ID: <20230228145132.6d09453f@kernel.org>
+In-Reply-To: <CANn89i+ooMT_G9aL8keZ-WOcAKqpC44OLQNGvfUtjA6PW-yxcA@mail.gmail.com>
+References: <000000000000e412e905f5b46201@google.com>
+        <CANn89iJ_kLaF0tVVUfzKQwVkQ0VtCca1dL8eF+RrXCVDTK6h2Q@mail.gmail.com>
+        <20230227155352.3399bb10@kernel.org>
+        <CANn89i+ooMT_G9aL8keZ-WOcAKqpC44OLQNGvfUtjA6PW-yxcA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230228222416.61484-1-itazur@amazon.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 10:24:16PM +0000, Takahiro Itazuri wrote:
-> I'm still a kernel newbie and I don't have a strong opinion for that.
-> I just thought it would be helpful if the KVM_GET_SUPPORTED_CPUID API
-> returns the same security information as the host, as long as it is
-> harmless.
+On Tue, 28 Feb 2023 12:23:46 +0100 Eric Dumazet wrote:
+> This report mentions sendpage, but sendmsg() would have the same issue.
+> 
+> A thread might be blocked in sk_stream_wait_memory() with the mutex
+> held, for an arbitrary amount of time,
+> say if the remote peer stays in RWIN 0 for hours.
+> 
+> This prevents tx_work from making progress, and
+> tls_sw_cancel_work_tx() would be stuck forever.
+> 
+> The consensus is that the kernel shouts a warning if a thread has been
+> waiting on a mutex
+> more than 120 seconds (check_hung_uninterruptible_tasks())
 
-Not harmless - cpufeatures.h should contain flags which the kernel uses
-and not *every* CPUID bit out there.
-
-If you want to advertize flags to guests, see
-arch/x86/kvm/reverse_cpuid.h and the KVM-only feature flags. You can add
-them there.
-
-> https://documentation.suse.com/sles/15-SP1/html/SLES-all/cha-spectre.html
-
-Well, I was against adding that to the documentation when I was at SUSE
-but ...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks for explaining, let's see if I can hack a fix together..
