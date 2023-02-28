@@ -2,113 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72FC6A59E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E202C6A59E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjB1NU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 08:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S230514AbjB1NWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 08:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjB1NU5 (ORCPT
+        with ESMTP id S229471AbjB1NWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:20:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A577D2E817;
-        Tue, 28 Feb 2023 05:20:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3602961087;
-        Tue, 28 Feb 2023 13:20:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C189DC433EF;
-        Tue, 28 Feb 2023 13:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677590455;
-        bh=7JKAP1dx+7Ok1mnFRScROkFxj3hLAmTAiCcQtf73Uv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kEr4ORwyCILo5xRpeBLrxMIgY9JJrZFPbXBEwP+DIE/kd/y5W+lPvkdu6eCboGpT5
-         SN3Cs37H8z5qbGiUbsubLJWTLJGQeQVBqbadLfqw31DkR75B8F9Td5zWHusVvHQW49
-         p+xW4XlsqEBqi+k/1o9RDknP6pqiHxywGD7r3v7EfD2uJ/uN/FcDXnQcvJP48UHUvl
-         TDgpbSxXD0ltVdUOZQEd3eJc5NUGYExUDkL6pKKefNeGdgMdVQQi71GwPhcHCke3fh
-         aIUygJyMsvNjZ4pMGxDspibRO78wxOAyGF/PyY22MVKQLVejmsYwWhXC4HWZUCDWqv
-         3bJPC+BZBWUZw==
-Date:   Tue, 28 Feb 2023 18:50:43 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Robert Marko <robimarko@gmail.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>, bhelgaas@google.com,
-        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Manivannan Sadhasivam <mani@kernel.org>, svarbanov@mm-sol.com,
-        shawn.guo@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-Subject: Re: [PATCH v2 8/9] arm64: dts: qcom: ipq8074: fix Gen3 PCIe node
-Message-ID: <20230228132043.GC4839@thinkpad>
-References: <20230113164449.906002-1-robimarko@gmail.com>
- <20230113164449.906002-8-robimarko@gmail.com>
- <7c5dfa87-41df-4ba7-b0e4-72c8386402a8@app.fastmail.com>
- <CAOX2RU5Y642gWMSaK6fJ2tz=9N2AO-1fFhL5=wfLeTWWkVjz7Q@mail.gmail.com>
- <968c056c-74f9-4a8f-b662-51f60df93694@app.fastmail.com>
+        Tue, 28 Feb 2023 08:22:21 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C00E2E817;
+        Tue, 28 Feb 2023 05:22:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1677590495; i=w_armin@gmx.de;
+        bh=QVP466RW3LEp6uaazzvy9ds/oekGh5o8C2F8P4Qp8ME=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:References:Date:In-Reply-To;
+        b=CxxFy5YZArUXTADOk53lp2PuIQ2Shb6L1p5lVzW9xY+jnOpLl+3M3rOVsyFdSnsVO
+         /J0gOJQBwjIioilyFIqCKX9UzR/wYyKO3tNs4MOeSo4gRo0O31/qVlE8FP0pBRdCXR
+         zmRmxJjK54K25jNM7nQ/0/D4UHDKkGQXX9hHOi8Kj0HVOVw2sgSDwq+WSXPbuthZ8o
+         +CvdhWftAP4jfLSy5iqHWlBT/MmF+QToHYXG35uj+65RZ4lm4y5vUgrVpPE2/vZMji
+         q6h1y6yV9DBX1a9KQyyJubVWQ/v92RFHc2MwBCl0OW5TBIDg8EGJkjhfxj7wqN6rew
+         VXp7vTCyqjWpw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfYLa-1or2KF27dQ-00fy6f; Tue, 28
+ Feb 2023 14:21:35 +0100
+Subject: Re: [PATCH v2 1/2] platform/x86: dell-ddv: Fix cache invalidation on
+ resume
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230218115318.20662-1-W_Armin@gmx.de>
+Message-ID: <a50ee14a-0181-5237-ddbc-5df85bd2eb6a@gmx.de>
+Date:   Tue, 28 Feb 2023 14:21:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <968c056c-74f9-4a8f-b662-51f60df93694@app.fastmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230218115318.20662-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:clm5n+6ihDAo+6ma3hx/EJ2ABcn2sRQKbrmgBTGjMfdbPfJj4Yy
+ coetI3rlDDwiOLeVxB2OZ3UWxxPnMACCJZP2HAxdDIJvRDpmxOw+TcUgWnGHB4HfVXPMjNO
+ uee1AErrLp5//po7YzBdQ7HSbgUa3IMqmwAa/MvXwYBtGF8xE45eNaOCmcW96DGBXR9ocZx
+ kuYmvte4lrVQCZXwmW/FA==
+UI-OutboundReport: notjunk:1;M01:P0:wg9GWKTMJ5I=;x50cEz6bWGDmmyzNX1MqkPwGeE2
+ soPANucPOvq3agMLUuJs3fQXFIp0MwQ7pQxp723ZR5d4BTQXs8FSlA7PV69tfrFTMEV9LzKs7
+ UrUkW17iZj0z5OwZmRqX95d3paVAd2wbLymok29oFzTU1ygPGSVI4RbsIQzYehgroiHsD7zZq
+ JlkdbWEPdGsCGJWAD0joGv4CcTN3Qv3N7jISfk0qyvIO+X7ohjJTdVdkTg/g1jEwFMYzUeA7k
+ oRukCzevL6y8+362lDOVOLeuuev2JQ9DxMvQlX7aJN2M136EMifmzAffQf9oJ8ArWmlSkUSjU
+ lJTl27Bp0CfP3U8Ng4sRTKAs4Zqg4gYz5IPxRMRwiPJADKK2/bKQo6VquOEUuKjPcM0VhHYA7
+ Yse29P69fqUr/cXPEC3hlATjZcMJVbMn6k961amTGnTPz9qwPtlghlMgRrkJoUzXkfPbsmFUP
+ 5hTfI6vBGBJvGovA9IdkwfyiCG48rOAuhQh+tGUMdqBa2fV2v2RoejWFiC5tbtipC9hsvdFHc
+ VeoKZXTtk8wPetx7xvasisJlfOYIL8f4+MOueVdBbg6F9cv57zgWVKbHG+D0a6z0bgW4zWIpA
+ 9sKe9EGPqOQBFCafuDsgqGN1AHoFnSuetbHARpVder/5fizAPbKA5ThdKCHL+N0y+DyC0dQmk
+ XWVJp+aJzP0jXhKjHSomvNF8nxE/5puB4++/jOfU1YL5Koj77SEFy0H2aD1c9ooeHNGqsuTe4
+ cCNvTwZUsPkBAfa1O/eYGZ3dSB2DesgCqiaCxWrtL/GN/d2DDMNrYzvTiIrQnK+jn69ggI4la
+ DWMmHiVkVTBVRTP118KcPaW6RnbLPstlOFUgaheqiaxriCVw4Vbu8uPgY2j4RTvLKHdE4oDgj
+ WTwWvnGWl66o1WD6o6WRRTIUCpZ1BJf9XfyPuAJgraWLUoVr537FdRqH7w8xtEOAEgi9tLqNr
+ 9TMKiRxRKDCZdlUhsceOY0KDkyo=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 10:42:15AM +0100, Arnd Bergmann wrote:
-> On Thu, Feb 2, 2023, at 10:16, Robert Marko wrote:
-> > On Mon, 30 Jan 2023 at 18:11, Arnd Bergmann <arnd@arndb.de> wrote:
-> >> On Fri, Jan 13, 2023, at 17:44, Robert Marko wrote:
-> >
-> > As pointed out in the commit description, the ranges property was copied
-> > from the QCA-s downstream 5.4 kernel [1] as I dont have any documentation
-> > on the SoC.
-> >
-> > I have runtime tested this on Xiaomi AX3600 which has a QCA9889 card on the
-> > Gen3 PCIe port, and on Xiaomi AX9000 which has QCA9889 on Gen2 port
-> > and QCN9074 on the Gen3 port and they are working fine.
-> 
-> Neither of those use I/O ports though, nor does any other sensible
-> device that was made in the past decade.
-> 
-> The compatible string tells me that this is a designware pcie block,
-> so I think driver actually sets up the mapping based on the ranges
-> property in DT in dw_pcie_iatu_detect() and dw_pcie_iatu_setup(),
-> rather than the mapping being determined by hardware or firmware
-> in advance.
-> 
-> Not sure about the general policy we have for this case, maybe the
-> pci controller or pci-dwc maintainers have an idea here. I would
-> think it's better to either have no I/O ranges in DT or have
-> sensible ones than ones that are clearly bogus, if the controller
-> is able to set up the ranges.
-> 
+Am 18.02.23 um 12:53 schrieb Armin Wolf:
 
-Just happen to see this thread and I agree that the I/O port range is indeeed
-bogus. This is due to the fact that no one tested I/O range with a compatible
-device.
+> If one or both sensor buffers could not be initialized, either
+> due to missing hardware support or due to some error during probing,
+> the resume handler will encounter undefined behaviour when
+> attempting to lock buffers then protected by an uninitialized or
+> destroyed mutex.
+> Fix this by introducing a "active" flag which is set during probe,
+> and only invalidate buffers which where flaged as "active".
+>
+> Tested on a Dell Inspiron 3505.
 
-I'm not sure about the PCI policy though but we should fix the mapping across
-all SoCs. I will send out a series for that.
+Hello,
 
-Thanks for spotting, Arnd!
+what is the status of this series? Both patches are tested on real hardware
+and work flawlessly.
 
-- Mani
+Armin Wolf
 
->      Arnd
-
--- 
-மணிவண்ணன் சதாசிவம்
+> Fixes: 3b7eeff93d29 ("platform/x86: dell-ddv: Add hwmon support")
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+> Changes in v2:
+> - move checking of the "active" flag inside
+>    dell_wmi_ddv_hwmon_cache_invalidate()
+> ---
+>   drivers/platform/x86/dell/dell-wmi-ddv.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index d547c9d09725..eff4e9649faf 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -96,6 +96,7 @@ struct combined_chip_info {
+>   };
+>
+>   struct dell_wmi_ddv_sensors {
+> +	bool active;
+>   	struct mutex lock;	/* protect caching */
+>   	unsigned long timestamp;
+>   	union acpi_object *obj;
+> @@ -520,6 +521,9 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev
+>
+>   static void dell_wmi_ddv_hwmon_cache_invalidate(struct dell_wmi_ddv_sensors *sensors)
+>   {
+> +	if (!sensors->active)
+> +		return;
+> +
+>   	mutex_lock(&sensors->lock);
+>   	kfree(sensors->obj);
+>   	sensors->obj = NULL;
+> @@ -530,6 +534,7 @@ static void dell_wmi_ddv_hwmon_cache_destroy(void *data)
+>   {
+>   	struct dell_wmi_ddv_sensors *sensors = data;
+>
+> +	sensors->active = false;
+>   	mutex_destroy(&sensors->lock);
+>   	kfree(sensors->obj);
+>   }
+> @@ -549,6 +554,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
+>   		return ERR_PTR(ret);
+>
+>   	mutex_init(&sensors->lock);
+> +	sensors->active = true;
+>
+>   	ret = devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_hwmon_cache_destroy, sensors);
+>   	if (ret < 0)
+> @@ -852,7 +858,7 @@ static int dell_wmi_ddv_resume(struct device *dev)
+>   {
+>   	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+>
+> -	/* Force re-reading of all sensors */
+> +	/* Force re-reading of all active sensors */
+>   	dell_wmi_ddv_hwmon_cache_invalidate(&data->fans);
+>   	dell_wmi_ddv_hwmon_cache_invalidate(&data->temps);
+>
+> --
+> 2.30.2
+>
