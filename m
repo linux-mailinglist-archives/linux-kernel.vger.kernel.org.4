@@ -2,231 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69596A5A58
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C71E26A5A5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjB1NuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 08:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S229716AbjB1NvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 08:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjB1NuU (ORCPT
+        with ESMTP id S229699AbjB1NvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:50:20 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819A4B765;
-        Tue, 28 Feb 2023 05:50:18 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id cq23so40363026edb.1;
-        Tue, 28 Feb 2023 05:50:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677592217;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tCxnAj+Q7kSfLUaLTs010WnxrZ5KYykWmnNR3WSnBBw=;
-        b=0GjdbvjV6brpNyr01lKd9RSO5ev+FlUQ50swllTlPaDHNeALybv+74eEX0H/+PsqEc
-         bMsGgIobjd3JDUJIujdDKP2N2qDu+pKiOZIpDUqdKKThIqDOsn8l89qxeo8bX/h8BX8O
-         IkgNImpRysfKHTLlxQrZeSQaYHPLXr4IT2R0cqWGF2XKWBLFdXMKvXbvX86Z2tHaQFNW
-         ayW/e3ALMn2kQUTO28RrBGErD/bKJanpBCvNg6TpdUpQuTcRBZm3taxsMygr+p4qcItc
-         Wsi+T+GFkrh5siwBKBkcVczXTQykXsSBV/vBTy53QdiFS0jLHWkmTS2h1xNsFj6HUHzq
-         LYZQ==
-X-Gm-Message-State: AO0yUKWQr6WQyEOhyBiNummfK41XYPIPHoMzoGMTGhuL65kYMg/IEoTL
-        cC5ppoFVtn2T6Dztpq8Ezz3O5HYWDIkmpUr0WGE=
-X-Google-Smtp-Source: AK7set8S5ezEf2wc4QyBDfF9GX0sz25bCIICWeEW9UY6IYdnuV9vR5N4xHqeSBuAbFFoX9z04lWsqtmBSYzEer3mD94=
-X-Received: by 2002:a17:906:4bc8:b0:8ce:cb8f:3747 with SMTP id
- x8-20020a1709064bc800b008cecb8f3747mr1274124ejv.5.1677592216859; Tue, 28 Feb
- 2023 05:50:16 -0800 (PST)
+        Tue, 28 Feb 2023 08:51:01 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058E0305E6;
+        Tue, 28 Feb 2023 05:50:54 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9FA681FDC1;
+        Tue, 28 Feb 2023 13:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1677592253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a+axJ4fDmePQKpl5oDQ9xI+mAYeRUk3jBZn02hzcYwk=;
+        b=IYQKcMF4XvBnvvKRj/q+4NsA4zlgvalUeOeZo1lBfkaF3u2BNeUHa15J5mK2wKQUGa2QzL
+        7DHSTLBQQX4mHTOkhneDNjY8k6kwgvqUD4TOa2szu510WQDdc/g+V5bXW+oLqUMQDQCzLK
+        //rYSrtyAx9tgv/KUWmg5yxRdrZunok=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 798E913440;
+        Tue, 28 Feb 2023 13:50:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jU5ZG70G/mPKQQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 28 Feb 2023 13:50:53 +0000
+Date:   Tue, 28 Feb 2023 14:50:52 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        mark.rutland@arm.com, will@kernel.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Patrick Daly <quic_pdaly@quicinc.com>, johunt@akamai.com
+Subject: Re: [PATCH] psi: reduce min window size to 50ms
+Message-ID: <Y/4GvIMtjVoEozWE@dhcp22.suse.cz>
+References: <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com>
+ <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
+ <82406da2-799e-f0b4-bce0-7d47486030d4@quicinc.com>
+ <CAJuCfpHrhO7_fMwNuu2hdQob=MPjZTW8eaJpNhEhPmDMqz2qTA@mail.gmail.com>
+ <Y/ix53x8i/ViuBXf@dhcp22.suse.cz>
+ <CAJuCfpG1c5v6qOotPV6t-o1T1p7EbOLs90eFnoEBjts+gafovA@mail.gmail.com>
+ <Y/yxSqhpQh9yR7L4@dhcp22.suse.cz>
+ <CAJuCfpHXwbtjdhH_K9r28-LUYtzC6+NaZ+RrKCtiNBk8PfXhLw@mail.gmail.com>
+ <Y/0ASztGOwfM6bNK@dhcp22.suse.cz>
+ <CAJuCfpHYMR6O_uJvaeq1f+ZvgW9oN6zTRG=UvTXyLJLSFOV3jw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230220143143.3492-1-petr.pavlu@suse.com> <CAJZ5v0jng3PDPnTKAov0m2KTYKaQuwOdi+jCVwc5BM5duct2Pg@mail.gmail.com>
- <a75a9e85-5682-1527-2e74-e1f7cf69132e@suse.com>
-In-Reply-To: <a75a9e85-5682-1527-2e74-e1f7cf69132e@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Feb 2023 14:50:05 +0100
-Message-ID: <CAJZ5v0hUh0oEK9DCD7SFWLrW0avfZ5JEgNhO=A1FaBZsOXKC9A@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: cpufreq: use a platform device to load ACPI PPC
- and PCC drivers
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, lenb@kernel.org,
-        viresh.kumar@linaro.org, pmladek@suse.com, mcgrof@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpHYMR6O_uJvaeq1f+ZvgW9oN6zTRG=UvTXyLJLSFOV3jw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 11:05 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
->
-> On 2/22/23 16:04, Rafael J. Wysocki wrote:
-> > On Mon, Feb 20, 2023 at 3:32 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
-> >> Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
-> >> interface defined by ACPI. Allowed performance states and parameters
-> >> must be same for each CPU.
+On Mon 27-02-23 11:50:48, Suren Baghdasaryan wrote:
+> On Mon, Feb 27, 2023 at 11:11 AM Michal Hocko <mhocko@suse.com> wrote:
 > >
-> > This is not a requirement set by the ACPI specification, though, but
-> > the assumption made by the drivers in question AFAICS.  It would be
-> > good to clarify this here.
->
-> I can simplify this paragraph to:
-> Both acpi-cpufreq and pcc-cpufreq drivers use platform firmware controls
-> which are defined by ACPI. It is possible to treat these interfaces as
-> platform devices.
->
-> >> This makes it possible to model these
-> >> interfaces as platform devices.
-> >>
-> >> The patch extends the ACPI parsing logic to check the ACPI namespace if
-> >> the PPC or PCC interface is present and creates a virtual platform
-> >> device for each if it is available.
+> > On Mon 27-02-23 09:49:59, Suren Baghdasaryan wrote:
+> > > On Mon, Feb 27, 2023 at 5:34 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Fri 24-02-23 13:07:57, Suren Baghdasaryan wrote:
+> > > > > On Fri, Feb 24, 2023 at 4:47 AM Michal Hocko <mhocko@suse.com> wrote:
+> > [...]
+> > > > > > Btw. it seems that there is is only a limit on a single trigger per fd
+> > > > > > but no limits per user so it doesn't sound too hard to end up with too
+> > > > > > much polling even with a larger timeouts. To me it seems like we need to
+> > > > > > contain the polling thread to be bound by the cpu controller.
+> > > > >
+> > > > > Hmm. We have one "psimon" thread per cgroup (+1 system-level one) and
+> > > > > poll_min_period for each thread is chosen as the min() of polling
+> > > > > periods between triggers created in that group. So, a bad trigger that
+> > > > > causes overly aggressive polling and polling thread being throttled,
+> > > > > might affect other triggers in that cgroup.
+> > > >
+> > > > Yes, and why that would be a problem?
+> > >
+> > > If unprivileged processes are allowed to add new triggers then a
+> > > malicious process can add a bad trigger and affect other legit
+> > > processes. That sounds like a problem to me.
 > >
-> > I'm not sure that this is the best approach.
-> >
-> > The ACPI subsystem already walks the ACPI namespace twice when
-> > enumerating devices and CPUs.  In particular, acpi_processor_add() is
-> > invoked for each of them in the first on these walks, so it might as
-> > well take care of creating the requisite platform device if _PCT is
-> > present, can't it?
->
-> Makes sense, I see that acpi_processor_get_info() has some logic for handling
-> the first CPU so that looks to me as a good place to hook a check for _PCT.
->
-> >> The acpi-cpufreq and pcc-cpufreq
-> >> drivers are then updated to map to these devices.
-> >>
-> >> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
-> >> boot and only if a given interface is available in the firmware.
-> >>
-> >> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> >> ---
-> >>
-> >> Changes since v1 [1]:
-> >> - Describe the worst case scenario without the recent fix 0254127ab977e
-> >>   ("module: Don't wait for GOING modules") and refer to its discussion
-> >>   in the commit message.
-> >> - Consider ACPI processor device objects when looking for _PCT, in
-> >>   addition to processor objects.
-> >> - Add a few more comments explaining the code.
-> >>
-> >> [1] https://lore.kernel.org/lkml/20230131130041.629-1-petr.pavlu@suse.com/
-> >>
-> >>  drivers/acpi/Makefile          |  1 +
-> >>  drivers/acpi/acpi_cpufreq.c    | 77 ++++++++++++++++++++++++++++++++++
-> >>  drivers/acpi/bus.c             |  1 +
-> >>  drivers/acpi/internal.h        |  2 +
-> >>  drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++--------
-> >>  drivers/cpufreq/pcc-cpufreq.c  | 34 ++++++++++-----
-> >>  6 files changed, 127 insertions(+), 27 deletions(-)
-> >>  create mode 100644 drivers/acpi/acpi_cpufreq.c
-> >>
-> >> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-> >> index feb36c0b9446..880db1082c3e 100644
-> >> --- a/drivers/acpi/Makefile
-> >> +++ b/drivers/acpi/Makefile
-> >> @@ -57,6 +57,7 @@ acpi-y                                += evged.o
-> >>  acpi-y                         += sysfs.o
-> >>  acpi-y                         += property.o
-> >>  acpi-$(CONFIG_X86)             += acpi_cmos_rtc.o
-> >> +acpi-$(CONFIG_X86)             += acpi_cpufreq.o
-> >>  acpi-$(CONFIG_X86)             += x86/apple.o
-> >>  acpi-$(CONFIG_X86)             += x86/utils.o
-> >>  acpi-$(CONFIG_X86)             += x86/s2idle.o
-> >> diff --git a/drivers/acpi/acpi_cpufreq.c b/drivers/acpi/acpi_cpufreq.c
-> >> new file mode 100644
-> >> index 000000000000..4e4ceb7cd226
-> >> --- /dev/null
-> >> +++ b/drivers/acpi/acpi_cpufreq.c
-> >> @@ -0,0 +1,77 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-only
-> >> +/*
-> >> + * Registration of platform devices for ACPI Processor Performance Control and
-> >> + * Processor Clocking Control.
-> >> + */
-> >> +
-> >> +#include <linux/acpi.h>
-> >> +#include <linux/platform_device.h>
-> >> +
-> >> +#include <acpi/processor.h>
-> >> +
-> >> +#include "internal.h"
-> >> +
-> >> +static void __init cpufreq_add_device(const char *name)
-> >> +{
-> >> +       struct platform_device *pdev;
-> >> +
-> >> +       pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
-> >> +                                              0);
-> >> +       if (IS_ERR(pdev))
-> >> +               pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
-> >> +}
-> >> +
-> >> +static acpi_status __init acpi_pct_match(acpi_handle handle, u32 level,
-> >> +                                        void *context, void **return_value)
-> >> +{
-> >> +       bool *pct = context;
-> >> +       acpi_status status;
-> >> +       acpi_object_type acpi_type;
-> >> +       struct acpi_device *acpi_dev;
-> >> +
-> >> +       static const struct acpi_device_id processor_device_ids[] = {
-> >> +               { ACPI_PROCESSOR_OBJECT_HID, 0 },
-> >> +               { ACPI_PROCESSOR_DEVICE_HID, 0 },
-> >> +               { "", 0 },
-> >> +       };
-> >> +
-> >> +       /* Skip nodes that cannot be a processor. */
-> >> +       status = acpi_get_type(handle, &acpi_type);
-> >> +       if (ACPI_FAILURE(status))
-> >> +               return status;
-> >> +       if (acpi_type != ACPI_TYPE_PROCESSOR && acpi_type != ACPI_TYPE_DEVICE)
-> >> +               return AE_OK;
-> >> +
-> >> +       /* Look at the set IDs if it is really a one. */
-> >> +       acpi_dev = acpi_fetch_acpi_dev(handle);
-> >> +       if (acpi_dev == NULL ||
-> >> +           acpi_match_device_ids(acpi_dev, processor_device_ids))
-> >> +               return AE_OK;
-> >> +
-> >> +       /* Check if it has _PCT and stop the walk as all CPUs must be same. */
-> >> +       *pct = acpi_has_method(handle, "_PCT");
-> >> +       return AE_CTRL_TERMINATE;
-> >> +}
-> >> +
-> >> +void __init acpi_cpufreq_init(void)
-> >> +{
-> >> +       bool pct = false;
-> >> +       acpi_status status;
-> >> +       acpi_handle handle;
-> >> +
-> >> +       /*
-> >> +        * Check availability of the PPC by looking at the presence of the _PCT
-> >> +        * object under the first processor definition.
-> >> +        */
-> >> +       acpi_walk_namespace(ACPI_TYPE_ANY, ACPI_ROOT_OBJECT, ACPI_UINT32_MAX,
-> >> +                           acpi_pct_match, NULL, &pct, NULL);
-> >> +       if (pct)
-> >> +               cpufreq_add_device("acpi-cpufreq");
-> >
-> > It should be possible to combine this with CPU enumeration as stated above.
->
-> Ack.
->
-> >> +
-> >> +       /* Check availability of the PCC by searching for \_SB.PCCH. */
-> >> +       status = acpi_get_handle(NULL, "\\_SB", &handle);
-> >> +       if (ACPI_FAILURE(status))
-> >> +               return;
-> >> +       if (acpi_has_method(handle, "PCCH"))
-> >> +               cpufreq_add_device("pcc-cpufreq");
-> >
-> > And the remaining part can be called acpi_pcc_cpufreq_init().
->
-> Ok. I guess it then makes sense to move both PPC and PCC checks to
-> acpi_processor.c instead of adding a new file. Function
-> acpi_pcc_cpufreq_init() can be called from acpi_processor_init().
+> > Hmm, I am not sure we are on the same page. My argument was that the
+> > monitoring kernel thread should be bound by the same cpu controller so
+> > even if it was excessive it would be bound to the cgroup constrains.
+> 
+> Right. But if cgroup constraints are violated then the psimon thread's
+> activity will be impacted by throttling. In such cases won't that
+> affect other "good" triggers served by that thread even if they are
+> using higher polling periods?
 
-That's correct.
+That is no different from any other part of the workload running within
+the same cpu bound cgroup running overboard with the cpu consumption. I
+do not see why psimon or anything else should be any different.
+
+Actually the only difference here is that the psi monitoring is
+outsourced to a kernel thread which is running ourside of any constrains.
+I am not sure where do we stand with kernel thread cpu cgroup accounting
+and I suspect this is not a trivial thing to do ATM. Hence longer term
+plan.
+-- 
+Michal Hocko
+SUSE Labs
