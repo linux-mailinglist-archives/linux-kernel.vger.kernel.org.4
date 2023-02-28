@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196B16A5268
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 05:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD856A526D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 05:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjB1Eoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 23:44:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
+        id S229880AbjB1EsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 23:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjB1Eoe (ORCPT
+        with ESMTP id S229511AbjB1EsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 23:44:34 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0472ECA3D;
-        Mon, 27 Feb 2023 20:44:34 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id m25-20020a05683026d900b006941a2838caso98458otu.7;
-        Mon, 27 Feb 2023 20:44:33 -0800 (PST)
+        Mon, 27 Feb 2023 23:48:02 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32409EF3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 20:48:00 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-172b0ba97b0so9785335fac.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 20:48:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bfmYJ0b4hWHKRlFdtuun1P3pZqVYLgA8CJ0d1ZnpCJc=;
-        b=Nun8IwVYUt4tkernIxKDSObpXVAN4e8cBwu2epATj8pUm0q3TzvSaiUCisyzqXQNMN
-         FThh0nzWxEO0jWKbZ3/5JbrNu3KtUDFsBDCD4f8P3s8J/3Fu366+5U8vgbGJ5LDBwsCz
-         mHnAJ5VTSq5SAjih2cwMsbM7wKGEpzk9ElDHeXBInQ+HI4CtkLRYXxXZBNe2wGpHZRU7
-         TQjVNuBHyCNhVmKbnU9fxc+dbORgAmr9sbKusYZR1GNnKB82DYcpZhlIQ3JcJ0qt/s9Q
-         4xoqAz5GB62Z2OBLjgFxiVKWh4Uop0LYcPp/cYXcbFSf/Bffxq9nCO5YbxH9NMKzUt0O
-         yfGQ==
+        d=google.com; s=20210112; t=1677559680;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K8WrLUHrOkZwVtvZ+lvnGv80l/swT3uPg3ZR+9WAcCI=;
+        b=oBCwEc4dOUXxpjMLKyrKB1QjJJXpes/EDey9HoLGks6snYWmI6UchYmN8ItfnHKKPx
+         RfacIv+K75PDYDOeUD11zPJm5r6uw3D9Ij777rjRkFhscuKhnBX6N65IlYqar4wkXNFV
+         QfEE07PfydX33YVqalVMuvSnRU9YV6lzqP3n5RYonJKJFxGm8LeR0hFP+wZ0c1yAz1tc
+         Ei49vYBy4qyePeB1LiVi5nmDsAtDzGyurAi/wA5KVQ8oere5aDDLdYThq74ah+I+ztwU
+         dJJhzp2DfT6ochx9CvRWx64NQm0l/KASLBGVYatSfXUiq3QUSfVX1FMi+bj5ZzRA0+f4
+         32zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bfmYJ0b4hWHKRlFdtuun1P3pZqVYLgA8CJ0d1ZnpCJc=;
-        b=gVmT499byRfgRIPhUlOd2RBJz/oZx9KGvbr/Wk7hExGLUmnrdcnkjbWQwKqjns7tll
-         BFFNcYrtUkoCfu4YXvP7SPBZHDkNjxKUuPfBtDTgWwl38xlYrYW8PJLGBz7+a9wzWf5/
-         pVL7CoTSjFSYywrmBYlshh5pH1pe0uUnbgCpRA7FvYPbPpXAnACEdz9HVDtY7eK1ArVG
-         lw1ZwURbl32GO/c7ZowF57s/FnPiMtTTGA4Au6lpaAt8I+RLsLgmQPFbbiJNNNxI0E08
-         Zqm0Kl5CLgELI9XdfRQ2Pocki4fEkal8cL6n49lowugdx8gXYJJF7NmCfAqD8Fvb9gaD
-         I8kQ==
-X-Gm-Message-State: AO0yUKWufwCnJ0M+5mQ9EmTQ6vP80bEE46ua32rW0rIbmgBnhY/QAPeW
-        RlQGxjsI17yyRyGCZfs0/hcqYJ62X+bWXMsbzkR6b/gT
-X-Google-Smtp-Source: AK7set9408o7HwNQmk1pEZVmQzCN2Uu1vGVHDLMhtP3EEByROmYUfXm5A+HXZsapO/7zHYtBGMcqoPCtllteVJa25wo=
-X-Received: by 2002:a05:6830:244b:b0:68b:e3b2:8ca7 with SMTP id
- x11-20020a056830244b00b0068be3b28ca7mr466491otr.6.1677559473326; Mon, 27 Feb
- 2023 20:44:33 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677559680;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K8WrLUHrOkZwVtvZ+lvnGv80l/swT3uPg3ZR+9WAcCI=;
+        b=nX05dmI84p+He4QG7sbZGJEmHQU2vD3HF9hh94SVsIL/gCz2Z5ldd6B9jU1M++hj/5
+         217S/rHLLs8jjjKPFBE0OizqWO98GWofO3E+V9WnMjAqcn0WG7L+ugQ/MIQm5aPjibzS
+         4HgIfX5j75pSXimJFmEKt6s8jvNWWirHD9tGr3GOY+gw8xPAHs+JPY22Sy+CpqpbeD+/
+         pke2dOev3T2TowwLygqkHhqbi9Imx55tPftcUcaqt6S7LAU1EPobPmjnkU69HA1vQHQW
+         VriX1wh7UMeAbFqrIzqBK61a+Ttk9unEwOr8SNqXTDgXYLBkIbgVqt30CT7LGvCiwA07
+         rPOA==
+X-Gm-Message-State: AO0yUKWX/a64Z2hjap2TtzkBJRd2X5SPZhz1gdvpYs/60UwS9wNnIBNu
+        tILouzS7/7Pa0IWZMOt2qsrx6lmBA1d4CoCYAC721Q==
+X-Google-Smtp-Source: AK7set9JwUW2YQ7DpFFt31o8JbaZ+IMzObGX/ZQoBxVB4MK0wJoMnkEmUQMsMFY4Ai/Diyc3/c5VzK7fzYBls1tfzX0=
+X-Received: by 2002:a05:6870:98aa:b0:16e:93b3:2059 with SMTP id
+ eg42-20020a05687098aa00b0016e93b32059mr243150oab.9.1677559679935; Mon, 27 Feb
+ 2023 20:47:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
- <20230214103936.1061078-3-sergio.paracuellos@gmail.com> <20230214151101.GB742354@roeck-us.net>
- <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
-In-Reply-To: <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 28 Feb 2023 05:44:21 +0100
-Message-ID: <CAMhs-H_Ce-+MFi5zTMg8v8dSSg5ioaTy+Pw-0QMgK++PVtEViQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/5] mips: dts: ralink: mt7621: rename watchdog node
- from 'wdt' into 'watchdog'
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
-        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+References: <20230208093322.75816-1-hsiangkao@linux.alibaba.com>
+ <Y/ewpGQkpWvOf7qh@gmail.com> <ca1e604a-92ba-023b-8896-dcad9413081d@linux.alibaba.com>
+ <8e067230-ce1b-1c75-0c23-87b926357f96@linux.alibaba.com> <CAB=BE-SQZA7gETEvxnHmy0FDQ182fUSRoa0bJBNouN33SFx3hQ@mail.gmail.com>
+In-Reply-To: <CAB=BE-SQZA7gETEvxnHmy0FDQ182fUSRoa0bJBNouN33SFx3hQ@mail.gmail.com>
+From:   Sandeep Dhavale <dhavale@google.com>
+Date:   Mon, 27 Feb 2023 20:47:48 -0800
+Message-ID: <CAB=BE-Svf7TMPs-eA+sVuGtYjVWfKd1Nd_AkA9im4Op7TCLW3g@mail.gmail.com>
+Subject: Re: [PATCH v5] erofs: add per-cpu threads for decompression as an option
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-erofs@lists.ozlabs.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,67 +72,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 4:12 PM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
->
-> On Tue, Feb 14, 2023 at 4:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Tue, Feb 14, 2023 at 11:39:33AM +0100, Sergio Paracuellos wrote:
-> > > Watchdog nodes must use 'watchdog' for node name. When a 'make dtbs_c=
-heck'
-> > > is performed the following warning appears:
-> > >
-> > > wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-=
-f])?$'
-> > >
-> > > Fix this warning up properly renaming the node into 'watchdog'.
-> > >
-> > > Reviewed-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> > > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-> > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> >
-> > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> >
-> > Note that we can not apply this and the next patch of the series
-> > through the watchdog tree since it crosses a maintainer boundary.
->
-> I was expecting Thomas to get these two arch/mips patches or get an
-> Acked-by from him in order for you to apply them.
+Hi all,
+I completed the tests and the results are consistent with
+our previous observation. We can see that removing WQ_UNBOUND
+helps but the scheduling latency by using high priority per cpu
+kthreads is even lower. Below is the table.
 
-Hi Thomas,
+|---------------------+-------+-------+------+-------|
+| Table               | avg   | med   | min  | max   |
+|---------------------+-------+-------+------+-------|
+| Default erofs       | 19323 | 19758 | 3986 | 35051 |
+|---------------------+-------+-------+------+-------|
+| !WQ_UNBOUND         | 11202 | 10798 | 3493 | 19822 |
+|---------------------+-------+-------+------+-------|
+| hipri pcpu kthreads | 7182  | 7017  | 2463 | 12300 |
+|---------------------+-------+-------+------+-------|
 
-I think you have missed this series since you have started to apply
-newer stuff in mips-next. Are you ok with taking or Acking patches 2
-and 3 of this series?
 
 Thanks,
-    Sergio Paracuellos
-
->
-> Thanks,
->     Sergio Paracuellos
->
-> >
-> > Guenter
-> >
-> > > ---
-> > >  arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/d=
-ts/ralink/mt7621.dtsi
-> > > index 5ca40fd21662..ac818fd721ae 100644
-> > > --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > > +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > > @@ -70,7 +70,7 @@ sysc: syscon@0 {
-> > >                                            "250m", "270m";
-> > >               };
-> > >
-> > > -             wdt: wdt@100 {
-> > > +             wdt: watchdog@100 {
-> > >                       compatible =3D "mediatek,mt7621-wdt";
-> > >                       reg =3D <0x100 0x100>;
-> > >               };
-> > > --
-> > > 2.25.1
-> > >
+Sandeep.
