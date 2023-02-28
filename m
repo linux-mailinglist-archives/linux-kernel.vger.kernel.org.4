@@ -2,112 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EAE6A5D14
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 674286A5D23
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjB1Q0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
+        id S229723AbjB1Qad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjB1Q0e (ORCPT
+        with ESMTP id S229713AbjB1Qac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:26:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8212ED41;
-        Tue, 28 Feb 2023 08:26:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25C1CB80E77;
-        Tue, 28 Feb 2023 16:26:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60C4C4339B;
-        Tue, 28 Feb 2023 16:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677601590;
-        bh=AkB87OLJPxh9UIAOkr0bc/Qc5bsWpH72J1kKlUqwG6w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PJ+K1r4DTU8UnWWt6rDeyIEw3brQj8Y50enjFxlDsxXyBFdtsobwRo2OuLPr07Z4c
-         892oOad38RE0oMJXiWBb6yHcG1jEa/obwkIsuBuhYtP6m70kJoA+DbK/8guds5kura
-         k5EjcKYr9HsL1pdCxaIQPyiRHTjEWnFRBIq4jOPsZpHRbrh5C7gI+N2RJ5Wp0lwb2V
-         B4nnDuYm2CpX5j2F5tqFhfYhE2M3x7NYcdTG7VGGGpd9m/a4k3LiiBk6MS8Z2fnrNH
-         ji9Mxrq4WgFIodwP7bQyI6MuZAcdoX0waw/Lp7Sm2PPjvXpy7KiA9O+0H0IHtGml+d
-         /Yo7zMnF0OCHQ==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-17235c8dab9so11427491fac.7;
-        Tue, 28 Feb 2023 08:26:30 -0800 (PST)
-X-Gm-Message-State: AO0yUKVljMemMAeQbWz6Wiw/saH/4azJDorvafpPpY3pFMI5AsSRqlK7
-        DWtMN2dGk0/GakimrpVx963AzCRaEu/C/i65nSU=
-X-Google-Smtp-Source: AK7set+XkU42uYSE+s2398F/OQ9vjDr2sktTB9q7cO79kHz1YeeqQL2V9oj7FKqA0sumKSYwGJtv+OjxBCxoe2i9CVU=
-X-Received: by 2002:a05:6870:c7a6:b0:171:8f59:3437 with SMTP id
- dy38-20020a056870c7a600b001718f593437mr893819oab.8.1677601590226; Tue, 28 Feb
- 2023 08:26:30 -0800 (PST)
+        Tue, 28 Feb 2023 11:30:32 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB484EC46;
+        Tue, 28 Feb 2023 08:30:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677601826; x=1709137826;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dyojsfFIUKPS3PvJ1BbTCwtCmtNpDYEHb7YR/J13vUk=;
+  b=OwLI+VrDCL8o0K15172bWMqQtuNJP/+rTm2b603cwaE5sFZi2J5nM3WO
+   IDqO/3MPkkkaBzCrN/29PQAGrS6mF9xt7Cu+NpRfuk3rgQy/4lP3zx258
+   uH2rK0EoRmS3fT/5Ej1ZgOmq7AJwC5tKPBnW/sOedp2QtfTOky7up/du8
+   S2m3Q1q6B/ykq4U2Byfu9jkYGNLD1Dll3bD1bhuubmGwoKKM5D1fztQOy
+   BGxp5XafYGx9NV8WaDbt96aZrIBx9lUSXCHu5yDnq/Yc2omVFvv1yrsGA
+   55CcyMUk0O8tugHKNYC6ks6QmhhthCzbLbOXP62hyaxzgjTPb2IYamnNc
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="396751346"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="396751346"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 08:30:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="798107637"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="798107637"
+Received: from ticela-az-102.amr.corp.intel.com (HELO [10.209.55.154]) ([10.209.55.154])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 08:30:24 -0800
+Message-ID: <eefaf1bc-586b-aa0f-8899-fcce0460b733@linux.intel.com>
+Date:   Tue, 28 Feb 2023 08:30:24 -0800
 MIME-Version: 1.0
-References: <20230228031317.3415484-1-davidgow@google.com> <CAK7LNASBznyHmAwSRApOHw_6dyAXFuskmtKav65xFwKZdvNWJw@mail.gmail.com>
- <e8addca3-e539-110c-ea2b-9a4921a45d71@intel.com>
-In-Reply-To: <e8addca3-e539-110c-ea2b-9a4921a45d71@intel.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 1 Mar 2023 01:25:53 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASZwwHsbsEEHhqsLKg44ZUoGDWMqhteazuOrSx23uf1XQ@mail.gmail.com>
-Message-ID: <CAK7LNASZwwHsbsEEHhqsLKg44ZUoGDWMqhteazuOrSx23uf1XQ@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kbuild: Add note about using (subst m,y)
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     David Gow <davidgow@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] PCI/ATS: Add a helper function to configure ATS
+ STU of a PF
+Content-Language: en-US
+To:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        joro@8bytes.org, bhelgaas@google.com, robin.murphy@arm.com,
+        will@kernel.org
+Cc:     jean-philippe@linaro.org, darren@os.amperecomputing.com,
+        scott@os.amperecomputing.com
+References: <20230228042137.1941024-1-gankulkarni@os.amperecomputing.com>
+ <20230228042137.1941024-2-gankulkarni@os.amperecomputing.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230228042137.1941024-2-gankulkarni@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 12:16=E2=80=AFAM Alexander Lobakin
-<aleksander.lobakin@intel.com> wrote:
->
-> From: Masahiro Yamada <masahiroy@kernel.org>
-> Date: Tue, 28 Feb 2023 17:30:09 +0900
->
-> > On Tue, Feb 28, 2023 at 12:13=E2=80=AFPM David Gow <davidgow@google.com=
-> wrote:
->
-> [...]
->
-> >> +Example::
-> >> +
-> >> +  #drivers/Makefile
-> >> +  obj-$(subst m,y,$(CONFIG_HYPERV)) +=3D hv/
-> >> +
-> >
-> >
-> > I think many subsystems simply do
-> >
-> > obj-y  +=3D hv/
->
-> This creates a ton of empty built-in.a, each of them is listed in the
-> Kbuild output. Someone may think that if a directory contains
-> built-in.a, then something was built there. Sure it's their problems,
-> but I'd prefer to not pollute the log and built-in.a contents when
-> possible (empty files are still listed there IIRC).
 
 
-You can choose whichever you like.
-Up to each subsystem maintainer.
+On 2/27/23 8:21 PM, Ganapatrao Kulkarni wrote:
+> As per PCI specification (PCI Express Base Specification Revision
+> 6.0, Section 10.5) both PF and VFs of a PCI EP are permitted to be enabled
+> independently for ATS capability, however the STU(Smallest Translation
+> Unit) is shared between PF and VFs. For VFs, it is hardwired to Zero and
+> the associated PF's value applies to VFs.
+> 
+> In the current code, the STU is being configured while enabling the PF ATS.
+> Hence, it is not able to enable ATS for VFs, if it is not enabled on the
+> associated PF already.
+> 
+> Adding a function pci_ats_stu_configure(), which can be called to
+> configure the STU during PF enumeration.
+> Latter enumerations of VFs can successfully enable ATS independently.
+> 
+> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+> ---
+>  drivers/pci/ats.c       | 33 +++++++++++++++++++++++++++++++--
+>  include/linux/pci-ats.h |  3 +++
+>  2 files changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+> index f9cc2e10b676..1611bfa1d5da 100644
+> --- a/drivers/pci/ats.c
+> +++ b/drivers/pci/ats.c
+> @@ -46,6 +46,35 @@ bool pci_ats_supported(struct pci_dev *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(pci_ats_supported);
+>  
+> +/**
+> + * pci_ats_stu_configure - Configure STU of a PF.
+> + * @dev: the PCI device
+> + * @ps: the IOMMU page shift
+> + *
+> + * Returns 0 on success, or negative on failure.
+> + */
+> +int pci_ats_stu_configure(struct pci_dev *dev, int ps)
+> +{
+> +	u16 ctrl;
+> +
+> +	if (dev->ats_enabled || dev->is_virtfn)
+> +		return 0;
 
+Is PF allowed to re-configure STU if there are other active
+VF's which uses it?
 
+> +
+> +	if (!pci_ats_supported(dev))
+> +		return -EINVAL;
+> +
+> +	if (ps < PCI_ATS_MIN_STU)
+> +		return -EINVAL;
+> +
+> +	dev->ats_stu = ps;
+> +	pci_read_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, &ctrl);
+> +	ctrl |= PCI_ATS_CTRL_STU(dev->ats_stu - PCI_ATS_MIN_STU);
+> +	pci_write_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, ctrl);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_ats_stu_configure);
+> +
+>  /**
+>   * pci_enable_ats - enable the ATS capability
+>   * @dev: the PCI device
+> @@ -68,8 +97,8 @@ int pci_enable_ats(struct pci_dev *dev, int ps)
+>  		return -EINVAL;
+>  
+>  	/*
+> -	 * Note that enabling ATS on a VF fails unless it's already enabled
+> -	 * with the same STU on the PF.
+> +	 * Note that enabling ATS on a VF fails unless it's already
+> +	 * configured with the same STU on the PF.
+>  	 */
+>  	ctrl = PCI_ATS_CTRL_ENABLE;
+>  	if (dev->is_virtfn) {
+> diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
+> index df54cd5b15db..7d62a92aaf23 100644
+> --- a/include/linux/pci-ats.h
+> +++ b/include/linux/pci-ats.h
+> @@ -8,6 +8,7 @@
+>  /* Address Translation Service */
+>  bool pci_ats_supported(struct pci_dev *dev);
+>  int pci_enable_ats(struct pci_dev *dev, int ps);
+> +int pci_ats_stu_configure(struct pci_dev *dev, int ps);
+>  void pci_disable_ats(struct pci_dev *dev);
+>  int pci_ats_queue_depth(struct pci_dev *dev);
+>  int pci_ats_page_aligned(struct pci_dev *dev);
+> @@ -16,6 +17,8 @@ static inline bool pci_ats_supported(struct pci_dev *d)
+>  { return false; }
+>  static inline int pci_enable_ats(struct pci_dev *d, int ps)
+>  { return -ENODEV; }
+> +static inline int pci_ats_stu_configure(struct pci_dev *d, int ps)
+> +{ return -ENODEV; }
+>  static inline void pci_disable_ats(struct pci_dev *d) { }
+>  static inline int pci_ats_queue_depth(struct pci_dev *d)
+>  { return -ENODEV; }
 
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
