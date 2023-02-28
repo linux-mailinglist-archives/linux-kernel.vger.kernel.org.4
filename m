@@ -2,147 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9416A504E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 01:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 802B26A505B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 02:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjB1Aww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 19:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
+        id S229685AbjB1BBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 20:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjB1Awp (ORCPT
+        with ESMTP id S229524AbjB1BBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 19:52:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2739298DB;
-        Mon, 27 Feb 2023 16:52:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52E70B80DD6;
-        Tue, 28 Feb 2023 00:52:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC39C433EF;
-        Tue, 28 Feb 2023 00:52:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677545561;
-        bh=wX7w95mMFRf+sC/g2N5poZRs+gBImsllRdEeOYedA9A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kFx/vAvFODfYDII8Rr81BwnChAYdCNxC9tNo/Oz8VhEONHDOUm1EMX7MCdbp8A6LR
-         +oMdRD9iRi2cax4VuNTZAHEcg23Zjrrwan14eFgnL3TPGccGR8bRM14OXi9jeIrNxQ
-         s+zayBX3Z/VlntOznziR+Qqpt3c0IWFqEBOhLf44sbmRSw4ZUCWM4IIh9C60UDCWYH
-         6Dlb8UBRi8u9jKCJ2RCMIeahLTMuXGU2OZtWSgoCXZEKLa9PdMqSdQhhq7Tsvj7tdz
-         mshnY1R2JWhsL8aP2Urut2dmuVq0eN0NdnOKH6HOj7XkweUGoK/z9hW4rk8W7mE9di
-         h/8QRUJvQx5Ug==
-Date:   Mon, 27 Feb 2023 19:52:39 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <Y/1QV9mQ31wbqFnp@sashalap>
-References: <Y/rbGxq8oAEsW28j@sol.localdomain>
- <Y/rufenGRpoJVXZr@sol.localdomain>
- <Y/ux9JLHQKDOzWHJ@sol.localdomain>
- <Y/y70zJj4kjOVfXa@sashalap>
- <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
- <Y/0U8tpNkgePu00M@sashalap>
- <Y/0i5pGYjrVw59Kk@gmail.com>
- <Y/0wMiOwoeLcFefc@sashalap>
- <Y/01z4EJNfioId1d@casper.infradead.org>
+        Mon, 27 Feb 2023 20:01:36 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EADC2943F;
+        Mon, 27 Feb 2023 17:01:32 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PQfFg2m4pz4f3jZM;
+        Tue, 28 Feb 2023 09:01:27 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R9nUv1j3JdHEA--.17465S3;
+        Tue, 28 Feb 2023 09:01:29 +0800 (CST)
+Subject: Re: [PATCH -next RFC] block: count 'ios' and 'sectors' when io is
+ done for bio-based device
+To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk, agk@redhat.com,
+        snitzer@kernel.org, dm-devel@redhat.com, kbusch@kernel.org,
+        hch@lst.de, sagi@grimberg.me, guz.fnst@cn.fujitsu.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230223091226.1135678-1-yukuai1@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <05bbc421-100c-c18d-4261-e5669cfdfb94@huaweicloud.com>
+Date:   Tue, 28 Feb 2023 09:01:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y/01z4EJNfioId1d@casper.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230223091226.1135678-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDn4R9nUv1j3JdHEA--.17465S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3AFW8ury5KrWrWr4DKF15urg_yoW7ZF1UpF
+        40g3WrCrZIqwn0gw4UJayDCF1rKa10qry7CrW7Jry5Aw4ktryvvF10y3Z0yr1rCa97uFZr
+        Aa4rZF9ruw42k37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 10:59:27PM +0000, Matthew Wilcox wrote:
->On Mon, Feb 27, 2023 at 05:35:30PM -0500, Sasha Levin wrote:
->> On Mon, Feb 27, 2023 at 09:38:46PM +0000, Eric Biggers wrote:
->> > Just because you can't be 100% certain whether a commit is a fix doesn't mean
->> > you should be rushing to backport random commits that have no indications they
->> > are fixing anything.
->>
->> The difference in opinion here is that I don't think it's rushing: the
->> stable kernel rules say a commit must be in a released kernel, while the
->> AUTOSEL timelines make it so a commit must have been in two released
->> kernels.
->
->Patches in -rc1 have been in _no_ released kernels.  I'd feel a lot
->better about AUTOSEL if it didn't pick up changes until, say, -rc4,
->unless they were cc'd to stable.
+Hi,
 
-This happened before my time, but -rc are considered releases.
+friendly ping ...
 
-The counter point to your argument/ask is that if you run the numbers on
-regressions between -rc releases, it's the later one that tend to
-introduce (way) more issues.
-
-I've actually written about it a few years back to ksummit discuss
-(here: https://lwn.net/Articles/753329/) because the numbers I saw
-indicate that later -rc releases are 3x likely to introduce a
-regression.
-
-Linus pushed back on it saying that it is "by design" because those
-commits are way more complex than ones that land during the early -rc
-cycles.
-
-So yes, I don't mind modifying the release workflow to decrease the
-regressions we introduce, but I think that there's a difference between
-what folks see as "helpful" and the outcome it would have.
-
->> > Nothing has changed, but that doesn't mean that your process is actually
->> > working.  7 days might be appropriate for something that looks like a security
->> > fix, but not for a random commit with no indications it is fixing anything.
->>
->> How do we know if this is working or not though? How do you quantify the
->> amount of useful commits?
->
->Sasha, 7 days is too short.  People have to be allowed to take holiday.
-
-That's true, and I don't have strong objections to making it longer. How
-often did it happen though? We don't end up getting too many replies
-past the 7 day window.
-
-I'll bump it to 14 days for a few months and see if it changes anything.
-
->> I'd love to improve the process, but for that we need to figure out
->> criteria for what we consider good or bad, collect data, and make
->> decisions based on that data.
->>
->> What I'm getting from this thread is a few anecdotal examples and
->> statements that the process isn't working at all.
->>
->> I took Jon's stablefixes script which he used for his previous articles
->> around stable kernel regressions (here:
->> https://lwn.net/Articles/812231/) and tried running it on the 5.15
->> stable tree (just a random pick). I've proceeded with ignoring the
->> non-user-visible regressions as Jon defined in his article (basically
->> issues that were introduced and fixed in the same releases) and ended up
->> with 604 commits that caused a user visible regression.
->>
->> Out of those 604 commits:
->>
->>  - 170 had an explicit stable tag.
->>  - 434 did not have a stable tag.
->
->I think a lot of people don't realise they have to _both_ put a Fixes
->tag _and_ add a Cc: stable.  How many of those 604 commits had a Fixes
->tag?
-
-What do you mean? Just a cc: stable tag is enough to land it in stable,
-you don't have to do both. The numbers above reflect that.
-
-Running the numbers, there are 9422 commits with a Fixes tag in the 5.15
-tree, out of which 360 had a regression, so 360 / 9422 = 3.82%.
-
--- 
 Thanks,
-Sasha
+Kuai
+
+ÔÚ 2023/02/23 17:12, Yu Kuai Ð´µÀ:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> While using iostat for raid, I observed very strange 'await'
+> occasionally, and turns out it's due to that 'ios' and 'sectors' is
+> counted in bdev_start_io_acct(), while 'nsecs' is counted in
+> bdev_end_io_acct(). I'm not sure why they are ccounted like that
+> but I think this behaviour is obviously wrong because user will get
+> wrong disk stats.
+> 
+> Fix the problem by counting 'ios' and 'sectors' when io is done, like
+> what rq-based device does.
+> 
+> Fixes: 394ffa503bc4 ("blk: introduce generic io stat accounting help function")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/blk-core.c              | 16 ++++++----------
+>   drivers/md/dm.c               |  6 +++---
+>   drivers/nvme/host/multipath.c |  8 ++++----
+>   include/linux/blkdev.h        |  5 ++---
+>   4 files changed, 15 insertions(+), 20 deletions(-)
+> 
+> diff --git a/block/blk-core.c b/block/blk-core.c
+> index 82b5b2c53f1e..fe1d320f5f07 100644
+> --- a/block/blk-core.c
+> +++ b/block/blk-core.c
+> @@ -953,16 +953,11 @@ void update_io_ticks(struct block_device *part, unsigned long now, bool end)
+>   	}
+>   }
+>   
+> -unsigned long bdev_start_io_acct(struct block_device *bdev,
+> -				 unsigned int sectors, enum req_op op,
+> +unsigned long bdev_start_io_acct(struct block_device *bdev, enum req_op op,
+>   				 unsigned long start_time)
+>   {
+> -	const int sgrp = op_stat_group(op);
+> -
+>   	part_stat_lock();
+>   	update_io_ticks(bdev, start_time, false);
+> -	part_stat_inc(bdev, ios[sgrp]);
+> -	part_stat_add(bdev, sectors[sgrp], sectors);
+>   	part_stat_local_inc(bdev, in_flight[op_is_write(op)]);
+>   	part_stat_unlock();
+>   
+> @@ -978,13 +973,12 @@ EXPORT_SYMBOL(bdev_start_io_acct);
+>    */
+>   unsigned long bio_start_io_acct(struct bio *bio)
+>   {
+> -	return bdev_start_io_acct(bio->bi_bdev, bio_sectors(bio),
+> -				  bio_op(bio), jiffies);
+> +	return bdev_start_io_acct(bio->bi_bdev, bio_op(bio), jiffies);
+>   }
+>   EXPORT_SYMBOL_GPL(bio_start_io_acct);
+>   
+>   void bdev_end_io_acct(struct block_device *bdev, enum req_op op,
+> -		      unsigned long start_time)
+> +		      unsigned int sectors, unsigned long start_time)
+>   {
+>   	const int sgrp = op_stat_group(op);
+>   	unsigned long now = READ_ONCE(jiffies);
+> @@ -992,6 +986,8 @@ void bdev_end_io_acct(struct block_device *bdev, enum req_op op,
+>   
+>   	part_stat_lock();
+>   	update_io_ticks(bdev, now, true);
+> +	part_stat_inc(bdev, ios[sgrp]);
+> +	part_stat_add(bdev, sectors[sgrp], sectors);
+>   	part_stat_add(bdev, nsecs[sgrp], jiffies_to_nsecs(duration));
+>   	part_stat_local_dec(bdev, in_flight[op_is_write(op)]);
+>   	part_stat_unlock();
+> @@ -1001,7 +997,7 @@ EXPORT_SYMBOL(bdev_end_io_acct);
+>   void bio_end_io_acct_remapped(struct bio *bio, unsigned long start_time,
+>   			      struct block_device *orig_bdev)
+>   {
+> -	bdev_end_io_acct(orig_bdev, bio_op(bio), start_time);
+> +	bdev_end_io_acct(orig_bdev, bio_op(bio), bio_sectors(bio), start_time);
+>   }
+>   EXPORT_SYMBOL_GPL(bio_end_io_acct_remapped);
+>   
+> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+> index eace45a18d45..f5cc330bb549 100644
+> --- a/drivers/md/dm.c
+> +++ b/drivers/md/dm.c
+> @@ -512,10 +512,10 @@ static void dm_io_acct(struct dm_io *io, bool end)
+>   		sectors = io->sectors;
+>   
+>   	if (!end)
+> -		bdev_start_io_acct(bio->bi_bdev, sectors, bio_op(bio),
+> -				   start_time);
+> +		bdev_start_io_acct(bio->bi_bdev, bio_op(bio), start_time);
+>   	else
+> -		bdev_end_io_acct(bio->bi_bdev, bio_op(bio), start_time);
+> +		bdev_end_io_acct(bio->bi_bdev, bio_op(bio), sectors,
+> +				 start_time);
+>   
+>   	if (static_branch_unlikely(&stats_enabled) &&
+>   	    unlikely(dm_stats_used(&md->stats))) {
+> diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+> index fc39d01e7b63..9171452e2f6d 100644
+> --- a/drivers/nvme/host/multipath.c
+> +++ b/drivers/nvme/host/multipath.c
+> @@ -123,9 +123,8 @@ void nvme_mpath_start_request(struct request *rq)
+>   		return;
+>   
+>   	nvme_req(rq)->flags |= NVME_MPATH_IO_STATS;
+> -	nvme_req(rq)->start_time = bdev_start_io_acct(disk->part0,
+> -					blk_rq_bytes(rq) >> SECTOR_SHIFT,
+> -					req_op(rq), jiffies);
+> +	nvme_req(rq)->start_time = bdev_start_io_acct(disk->part0, req_op(rq),
+> +						      jiffies);
+>   }
+>   EXPORT_SYMBOL_GPL(nvme_mpath_start_request);
+>   
+> @@ -136,7 +135,8 @@ void nvme_mpath_end_request(struct request *rq)
+>   	if (!(nvme_req(rq)->flags & NVME_MPATH_IO_STATS))
+>   		return;
+>   	bdev_end_io_acct(ns->head->disk->part0, req_op(rq),
+> -		nvme_req(rq)->start_time);
+> +			 blk_rq_bytes(rq) >> SECTOR_SHIFT,
+> +			 nvme_req(rq)->start_time);
+>   }
+>   
+>   void nvme_kick_requeue_lists(struct nvme_ctrl *ctrl)
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index d1aee08f8c18..941304f17492 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -1446,11 +1446,10 @@ static inline void blk_wake_io_task(struct task_struct *waiter)
+>   		wake_up_process(waiter);
+>   }
+>   
+> -unsigned long bdev_start_io_acct(struct block_device *bdev,
+> -				 unsigned int sectors, enum req_op op,
+> +unsigned long bdev_start_io_acct(struct block_device *bdev, enum req_op op,
+>   				 unsigned long start_time);
+>   void bdev_end_io_acct(struct block_device *bdev, enum req_op op,
+> -		unsigned long start_time);
+> +		      unsigned int sectors, unsigned long start_time);
+>   
+>   unsigned long bio_start_io_acct(struct bio *bio);
+>   void bio_end_io_acct_remapped(struct bio *bio, unsigned long start_time,
+> 
+
