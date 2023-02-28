@@ -2,287 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56D46A5649
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF696A5645
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjB1KFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
+        id S230263AbjB1KFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjB1KFj (ORCPT
+        with ESMTP id S230175AbjB1KFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:05:39 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D392BF22
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:05:06 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso7964174pjs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 02:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n8tBohZg9MnxJCstc6cADUdFd79WkTqpbYudcuHPVfM=;
-        b=UdrmKdvtJSSc8ocyzAgL/sJNVr9d4p3GW11ZINBSa+kJvSPEh9S5c1V1Pp1Hnk8KHc
-         Da8KYjeGoihCiHvOK28YRS1BLOYoKWvv2ol9vp5Z9O65PQf7f3BENjOEwQH+sHUcZBDB
-         Uy8RD6zQQzLipW2o9Bv1Soj2A1ffx2pTyaFJzZM3lcTBRICx0W0h8Fk5WaeaTOSACg0D
-         /kpJyQ4Ca43u5JffS2brphSP4FmU0hcx9Z/diSp2T17uD8fGuipBaF+GFipNzfd2IqZU
-         XRqJ8ng+aHF1Lg2azf6Y786lDhRcAeswhIU5LmK/pYgP6Rt3rKSnEI6oty8kETcuoZ7y
-         0NSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n8tBohZg9MnxJCstc6cADUdFd79WkTqpbYudcuHPVfM=;
-        b=EuNF/2tdDcWWEQeJhyUfd41OgJEn6kXher45J8ogSPzJKS5q7SRIxEHeXAKdPqGSQ/
-         cQ1ICzIcJTx74rzsftSztfgn3BKboItf39D83f8bwOwccSxAVi3irC5z5m40yxPqRB85
-         d1lODgAxveZPH/xopWueX+GVCI/DTXnn7kelhuXa7PYZuraAx0+y0W0glTAtMGQzzlN4
-         gtLETzKG9pzXfhelRV7OCXeoKR4SBJKxi9TbdWdWqNVfsPM1tWDe7SHleH23hHGszp1I
-         tm0uYYk/auhoKRJAo9HrJ6iqOTjeUkVWGXk5o5o7gp6wZz0ICZOvNkQ37uXdz5GnDdI3
-         B15A==
-X-Gm-Message-State: AO0yUKX51Cq681HhotJhs5E3TF8Tp7aasPIJQSEgmD1cdZnj1uh21Cxl
-        lD01NJ+MzP2zdDCvJsA7k/0bbw==
-X-Google-Smtp-Source: AK7set9psX5vxXwoVV8nogv6bidJejoWVdBThkhpxPsjL61a4DJtxSemKR4i91D+gMtsFdD2S+wtEw==
-X-Received: by 2002:a17:902:e74b:b0:19a:7217:32af with SMTP id p11-20020a170902e74b00b0019a721732afmr2354000plf.5.1677578705519;
+        Tue, 28 Feb 2023 05:05:17 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2068.outbound.protection.outlook.com [40.107.21.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C92BF2A;
         Tue, 28 Feb 2023 02:05:05 -0800 (PST)
-Received: from [10.70.252.135] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170902704500b0019a7c890c5asm6105763plt.263.2023.02.28.02.04.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 02:05:05 -0800 (PST)
-Message-ID: <63a16f0e-d6e9-29a1-069e-dc76bfd82319@bytedance.com>
-Date:   Tue, 28 Feb 2023 18:04:53 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v3 0/8] make slab shrink lockless
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N8p/7ke4O4/t/i6nxL3O9S6bOMYZaBeaK0c3gtRyo5fmZeemAUMStZrve5pMxOkpRkV8WpECgOlNYEXTk8NlpJGi9UZaXU3Tb/vWClEqPAwnlKY9WQ7dfU7okEQ+4U+rYqMVinoFyCVqEFkzq2J37KibWp2FDKaFHgn/zZCpW8jn3wZKDeUURin34mtjmne9i4LIlWRs/wVaw4FvwDMcl4XcT8jTmeApPL+XpHVx3brvULlVPfBHC8kb80TI8tLKPDiCjvyfez8QsPe7EBte7/wV72wUi6hR9Z2WyINBVQQF3jDnOGVStKmPp8jLOAf1xHNWfzNYWtoygLIaB6hhsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iw4bSNQ5NDS9KLa/ealM++5IRRAJsLPDG2uxDCwScMQ=;
+ b=drdg8q1lOSn7thh1Sfb1xmqkDk745RceIbHNnz0SAmempHuCcDqcMsKvZTKlKp9hHz9cHIdesyVfbUEbl03CYIm2v3mSWP46vmi0/ObUxSyeiXPObXK8zFCVYVj+6waz4OMXW/pxI/TrfpWzZrLzkF6WedzGU5gQ+haMhso1uyFMFIW/N1AQ5ooVL9wKmh19E6r4jfCTJ4ZADlW9xwrLvqNg7t5yAgq9fBDBGixOd2haYFDHi0HPn7AlTFhm1Z9d+ZdnsrLGn13B+f2C4mxJeOSUQPwRTfMHYfYiMTiCCAMesyIRuuYSLM44ebnf4N/YdNanSmsUVAErFagpA4O5iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iw4bSNQ5NDS9KLa/ealM++5IRRAJsLPDG2uxDCwScMQ=;
+ b=ERVVTEjN7JC1brgtl/biiyxQ374B36957zq3xhCSo1bhgi0E1ZoYADw7cviHbn7OSKNOtpnqupvJs1mFPrhnD642Twqw4MT65317mH4oUQ4wTt+KYQzwOJfGsemLCCT1EyED/G6CeheOVGXmKbuv9WhghCoav7CYOn8nwi0TexPQgAnWTXFsJUX47qpty20hbRjcPZ0FAOeCiKqWIxq+HS4usi8KEKBVMHdn119sRtkJYRhrFvuIIm+UOP39Qb6Yey4qOsTpzemY9kMrCghMBvPbxkcyW/4SW2a85re/h1d0AifkpSJccb2iA2bs/hBfRFsLY+U6EmPEkJdtdCh8wQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by AM7PR04MB6918.eurprd04.prod.outlook.com
+ (2603:10a6:20b:10c::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 10:05:01 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::cb43:d6bc:dad3:3dd]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::cb43:d6bc:dad3:3dd%7]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 10:05:01 +0000
+Message-ID: <a75a9e85-5682-1527-2e74-e1f7cf69132e@suse.com>
+Date:   Tue, 28 Feb 2023 11:05:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] ACPI: cpufreq: use a platform device to load ACPI PPC
+ and PCC drivers
 Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     tkhai@ya.ru, hannes@cmpxchg.org, shakeelb@google.com,
-        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
-        david@redhat.com, shy828301@gmail.com, sultan@kerneltoast.com,
-        dave@stgolabs.net, penguin-kernel@i-love.sakura.ne.jp,
-        paulmck@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230226144655.79778-1-zhengqi.arch@bytedance.com>
- <20230226115100.7e12bda7931dd65dbabcebe3@linux-foundation.org>
- <b7e8929c-8fd5-a248-f8a8-d9177fc01b4b@bytedance.com>
- <Y/zHbhxnQ2YsP+wX@kernel.org>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <Y/zHbhxnQ2YsP+wX@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     lenb@kernel.org, viresh.kumar@linaro.org, pmladek@suse.com,
+        mcgrof@kernel.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230220143143.3492-1-petr.pavlu@suse.com>
+ <CAJZ5v0jng3PDPnTKAov0m2KTYKaQuwOdi+jCVwc5BM5duct2Pg@mail.gmail.com>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <CAJZ5v0jng3PDPnTKAov0m2KTYKaQuwOdi+jCVwc5BM5duct2Pg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-ClientProxiedBy: FR3P281CA0011.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1d::17) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|AM7PR04MB6918:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3840a74-30f5-4d3a-4bc8-08db19734176
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fmV7Sgry38HFS3zIwqTizuOqkAWurwbi3NvsndGl/XiM4T6sI7A8feymZTbDx90cQa+TAIuDXxSu9Y+uC1HZO9yzRxSf4qtgzEuFLx48JxAnyW1seTJy838CjFDyUMYRcQ16hvQsf8Zl0vG+DZFhuQrvLbgOjSnXdBSWtaQ3MSQJmKiFY/KL3MV9sLBQt6wGIhCWAeD5xo0cdfbn06sPetGQlIrV4hwgbiFdcwBbpWdNMwYPuOoDeAD5A67/nJQ+25qfzygr4p/BJ+H7y8YppCJW7Z/jkEQ04Vy6k/QhQ0UC10O7bdVi9k/CdpGYc8orE/kJ6/mhwjYNd/rddiIN3AXp68iadJ/4GAZPqkBs/fLEDLSoNk7SBFpKjc0wi6QoFVwj76dBGMmA/dSjzCqRzlJW0HksTFvYhT7Shr/uDftqou5YJpTrThBR2Qy0xwJBuncTBt2UBWCFq4ItFuvmUQF1r+rxF43146xuRAt/R4bpzUTCMRlf/vggol4EabPpNGtvoDGlFmGgqj4CxS5sjEUZMEx21BCKA/3cCgGIWamPNqBk/GC+UqbzbGlTLlXvfK1QEoK6aOfb0yzPgGNFYjUPflXHkdBm3TjeNRCiXkOPULm86BlP5w9SdaK5JrZIuNsJZtAYTorCXvwMLi5RmXNvzWuq2KsIm8bPQhXUcHFw2ZSJpbYKKYehLLH6WbL3rA6fT8y1IWIpfV+OmBhg3yBOLW9svxE6WClUhwCAs9I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(366004)(136003)(396003)(39860400002)(451199018)(38100700002)(4326008)(31696002)(86362001)(36756003)(44832011)(66556008)(41300700001)(66476007)(8676002)(5660300002)(6916009)(8936002)(66946007)(2906002)(55236004)(6506007)(186003)(26005)(6512007)(2616005)(83380400001)(53546011)(478600001)(316002)(966005)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjJWaVdkZnRHTTBzVERlOE0wemxKaG1KTVdrWHRaTktMM3c0NlpacGRWK0Zs?=
+ =?utf-8?B?cVdkMU5YNUJ0VWZuUjhQZ0kvQlRwMUEybEh2T2lNT2o0NzNTM2hReHd6bGdX?=
+ =?utf-8?B?ckNKeDNGL1k5NEhZZzJzMmEybytpeENTU0NUeVZEYjJraFB3QXFpRWhGd1cv?=
+ =?utf-8?B?ZXJsQkVvTjY5ZmFUNnNMZzJBTkdLQytQNXhsT2JMVURBT3dTc3Y4UmVsRWxh?=
+ =?utf-8?B?THlKQmE4UCt4UnlGSkpsRXVEbWt1MVlIOXhKWDZPYWk4RGVBN0FnLzNDTnVs?=
+ =?utf-8?B?a2RVK3g1VkpBcFFBYk9QSU5VOGg4S2gxSlFOSWNwbmlDeUJXd0xiQldSdW9Q?=
+ =?utf-8?B?aDlhOW8wS09idVZnZjY0OU9FYjh1VmNPcEFPWVNPSENkbENNRTMxSmYvd3lp?=
+ =?utf-8?B?MXh1TytQNFA3ZjAzV1BNV2p4YTk1SVZZaGFjeDRzcFV3ZmNjSUlyRzJGVlpO?=
+ =?utf-8?B?RDBKT0ZDZXVReWdZdngwOU9lbm9KNlV1a0IyaW9DZWZLTC9scnlJVWZ4SEdh?=
+ =?utf-8?B?dVFqelM1TzRnV1BPTTlZOG1kYy92Z3dSdXpTcUtoQzR3K3N0aXhUdHpxcnpU?=
+ =?utf-8?B?RDFGMllSMEpnNUZSTzF6TVZZMnJod2M3L0hGU3lOUmdrZDZlOHl3cjZFWmsx?=
+ =?utf-8?B?ZGoxU1FoV1ZodWpWS09FTDBhdTEzeGlDeTNSRHBuRDFuRDdjcnV4Tjg0d1RG?=
+ =?utf-8?B?MCtoMEExUVJuYTd4VFdOM0ZWNDMyekdqQ3dISE8vTkJabmdTZ1lMYkFNcTN3?=
+ =?utf-8?B?VnJWbklURS9SbG44cEIrQlM5OVRDR0xvV0VSSHNqUGZ0bzE3R0x0eWFIU1pL?=
+ =?utf-8?B?VjRHT0ZpRHJUbEZhanFEelRGejk2alVwZmUxSDlrU1ZXQno0UXFrUUJuSWRV?=
+ =?utf-8?B?b3hxdzZkWjM0TnJSN0lWMlVENDF4VDQ0Vk5ZOVkxZ3BreEo5MVMrTjQ4bW8r?=
+ =?utf-8?B?eWpydVF2NUhJVFROWXVqc1V6TENPai9FNlVBYlFaLzNNdzJqR0MwRGlhRURI?=
+ =?utf-8?B?RDc1NkRndFc0OUFUNFJqOUtCTHY4c2RTczIvK0VyMm5pd0JHclI4V1VNWWp0?=
+ =?utf-8?B?NDNJYW5NakluNytZaHdGRnZ2b2pweEoyd2VaYkRjK3FNZkZLNklvKytxZHJO?=
+ =?utf-8?B?RVQzRURoMlN5cmEwWHZmR0JwcHJuU2ZaRXY2MnNOVlJxcjltQlV2eXZvemIv?=
+ =?utf-8?B?cGV4bW5WOW0wRjhzWTU4c3V5ZnlrV1hia2dGTFFFcEpGbjFobGVHclRncmZ0?=
+ =?utf-8?B?V1FUMTdtRExPYjRRa0EyM1ZCRlEvbmVlU0xSbVBMMWFTUllMZW1USUkrazNW?=
+ =?utf-8?B?cjBCMUJTVHhVRnVmREEvQ1BwRGJGNTlEcWhiVEwwZVQybnNRWFdMTkpHeFFn?=
+ =?utf-8?B?UG5VMGtxaVVZODFnUGVLaWNHekJhYkpXTlQ0bHpZaVk3ZVBWOEt2VFl1OGts?=
+ =?utf-8?B?dFZxMFlLeGhwV2EwVy9BdWNjS0NFeXVCOSszVUsvSkx5aktYT0xMazFaV0tv?=
+ =?utf-8?B?ZHJCQStXL3owZGRMTzIyalRJSHpSbXpSeEJaVnpVT0JGeFpuR1VZL3BkN09C?=
+ =?utf-8?B?RFg3NEVzbCtaRUFGUGp3UHNZWDNydEcyQ0J4RGttSm9obG4zTzhzZWwxNlBM?=
+ =?utf-8?B?TkJ4TzBXMVhKVkhKWnk0Sjl0R2ROYThadDF2VUR6R1piL3k4L3RQMXR3dVVM?=
+ =?utf-8?B?UUlkaGFPK2prU3QwSjAyRldHemVqeStnTlNtT3NCZlB1ay92cjNvdmdRdTJh?=
+ =?utf-8?B?YldjM3FQRmVUZWdObVlWVnQ3ZWVWUXRHcVp6TjJBWnIvcUhhZWIyYURxekJS?=
+ =?utf-8?B?N0FpZW8xWElXMWgrZzVwM2FyVnkyWjI3NVZqK2VtcHNZellqVTU1V3J1VDh5?=
+ =?utf-8?B?dU9STmlRaUpDVm9oZ0plZWpqcm1OaWdLU3ZhN0tUaVltM0gxU3BNdjBxVW91?=
+ =?utf-8?B?dmg0UEhpRmtBMDRwY0FITm5mVXNBQnI3aVRTYisxblpxZDIxeUxDRytQYjYr?=
+ =?utf-8?B?dWY5M0g5VUh2S09YaEkzOXhkNkdlb3duZEgvc2RiaFdpRVNZMkZHRVdhMnBn?=
+ =?utf-8?B?NDZ4ZVVad2UvRzl3Tm1vc25uYU5YVmsxY1hldjQweVI1QkhmV0V3TFVNeHlu?=
+ =?utf-8?Q?/NC4vBz/n0tjD7OR7MFV4ftQj?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3840a74-30f5-4d3a-4bc8-08db19734176
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 10:05:01.4668
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VckzqQuCZR0ZPZP+5hg7fqoyZncDc7yFlhbC6Le06rtltf8/8S3GN0VYSZZnNscpYp3v+o9lKmiYXOgAVqpQKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6918
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/2/27 23:08, Mike Rapoport wrote:
-> Hi,
+On 2/22/23 16:04, Rafael J. Wysocki wrote:
+> On Mon, Feb 20, 2023 at 3:32 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>> Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
+>> interface defined by ACPI. Allowed performance states and parameters
+>> must be same for each CPU.
 > 
-> On Mon, Feb 27, 2023 at 09:31:51PM +0800, Qi Zheng wrote:
+> This is not a requirement set by the ACPI specification, though, but
+> the assumption made by the drivers in question AFAICS.  It would be
+> good to clarify this here.
+
+I can simplify this paragraph to:
+Both acpi-cpufreq and pcc-cpufreq drivers use platform firmware controls
+which are defined by ACPI. It is possible to treat these interfaces as
+platform devices.
+
+>> This makes it possible to model these
+>> interfaces as platform devices.
 >>
->>
->> On 2023/2/27 03:51, Andrew Morton wrote:
->>> On Sun, 26 Feb 2023 22:46:47 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
->>>
->>>> Hi all,
->>>>
->>>> This patch series aims to make slab shrink lockless.
->>>
->>> What an awesome changelog.
->>>
->>>> 2. Survey
->>>> =========
->>>
->>> Especially this part.
->>>
->>> Looking through all the prior efforts and at this patchset I am not
->>> immediately seeing any statements about the overall effect upon
->>> real-world workloads.  For a good example, does this patchset
->>> measurably improve throughput or energy consumption on your servers?
->>
->> Hi Andrew,
->>
->> I re-tested with the following physical machines:
->>
->> Architecture:        x86_64
->> CPU(s):              96
->> On-line CPU(s) list: 0-95
->> Model name:          Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz
->>
->> I found that the reason for the hotspot I described in cover letter is
->> wrong. The reason for the down_read_trylock() hotspot is not because of
->> the failure to trylock, but simply because of the atomic operation
->> (cmpxchg). And this will lead to a significant reduction in IPC (insn
->> per cycle).
+>> The patch extends the ACPI parsing logic to check the ACPI namespace if
+>> the PPC or PCC interface is present and creates a virtual platform
+>> device for each if it is available.
 > 
-> ...
->   
->> Then we can use the following perf command to view hotspots:
->>
->> perf top -U -F 999
->>
->> 1) Before applying this patchset:
->>
->>    32.31%  [kernel]           [k] down_read_trylock
->>    19.40%  [kernel]           [k] pv_native_safe_halt
->>    16.24%  [kernel]           [k] up_read
->>    15.70%  [kernel]           [k] shrink_slab
->>     4.69%  [kernel]           [k] _find_next_bit
->>     2.62%  [kernel]           [k] shrink_node
->>     1.78%  [kernel]           [k] shrink_lruvec
->>     0.76%  [kernel]           [k] do_shrink_slab
->>
->> 2) After applying this patchset:
->>
->>    27.83%  [kernel]           [k] _find_next_bit
->>    16.97%  [kernel]           [k] shrink_slab
->>    15.82%  [kernel]           [k] pv_native_safe_halt
->>     9.58%  [kernel]           [k] shrink_node
->>     8.31%  [kernel]           [k] shrink_lruvec
->>     5.64%  [kernel]           [k] do_shrink_slab
->>     3.88%  [kernel]           [k] mem_cgroup_iter
->>
->> 2. At the same time, we use the following perf command to capture IPC
->> information:
->>
->> perf stat -e cycles,instructions -G test -a --repeat 5 -- sleep 10
->>
->> 1) Before applying this patchset:
->>
->>   Performance counter stats for 'system wide' (5 runs):
->>
->>        454187219766      cycles                    test                    (
->> +-  1.84% )
->>         78896433101      instructions              test #    0.17  insn per
->> cycle           ( +-  0.44% )
->>
->>          10.0020430 +- 0.0000366 seconds time elapsed  ( +-  0.00% )
->>
->> 2) After applying this patchset:
->>
->>   Performance counter stats for 'system wide' (5 runs):
->>
->>        841954709443      cycles                    test                    (
->> +- 15.80% )  (98.69%)
->>        527258677936      instructions              test #    0.63  insn per
->> cycle           ( +- 15.11% )  (98.68%)
->>
->>            10.01064 +- 0.00831 seconds time elapsed  ( +-  0.08% )
->>
->> We can see that IPC drops very seriously when calling
->> down_read_trylock() at high frequency. After using SRCU,
->> the IPC is at a normal level.
+> I'm not sure that this is the best approach.
 > 
-> The results you present do show improvement in IPC for an artificial test
-> script. But more interesting would be to see how a real world workloads
-> benefit from your changes.
+> The ACPI subsystem already walks the ACPI namespace twice when
+> enumerating devices and CPUs.  In particular, acpi_processor_add() is
+> invoked for each of them in the first on these walks, so it might as
+> well take care of creating the requisite platform device if _PCT is
+> present, can't it?
 
-Hi Mike and Andrew,
+Makes sense, I see that acpi_processor_get_info() has some logic for handling
+the first CPU so that looks to me as a good place to hook a check for _PCT.
 
-I did encounter this problem under the real workload of our online
-server. At the end of this email, I posted another call stack and
-hot spot that I found before.
+>> The acpi-cpufreq and pcc-cpufreq
+>> drivers are then updated to map to these devices.
+>>
+>> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
+>> boot and only if a given interface is available in the firmware.
+>>
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> ---
+>>
+>> Changes since v1 [1]:
+>> - Describe the worst case scenario without the recent fix 0254127ab977e
+>>   ("module: Don't wait for GOING modules") and refer to its discussion
+>>   in the commit message.
+>> - Consider ACPI processor device objects when looking for _PCT, in
+>>   addition to processor objects.
+>> - Add a few more comments explaining the code.
+>>
+>> [1] https://lore.kernel.org/lkml/20230131130041.629-1-petr.pavlu@suse.com/
+>>
+>>  drivers/acpi/Makefile          |  1 +
+>>  drivers/acpi/acpi_cpufreq.c    | 77 ++++++++++++++++++++++++++++++++++
+>>  drivers/acpi/bus.c             |  1 +
+>>  drivers/acpi/internal.h        |  2 +
+>>  drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++--------
+>>  drivers/cpufreq/pcc-cpufreq.c  | 34 ++++++++++-----
+>>  6 files changed, 127 insertions(+), 27 deletions(-)
+>>  create mode 100644 drivers/acpi/acpi_cpufreq.c
+>>
+>> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+>> index feb36c0b9446..880db1082c3e 100644
+>> --- a/drivers/acpi/Makefile
+>> +++ b/drivers/acpi/Makefile
+>> @@ -57,6 +57,7 @@ acpi-y                                += evged.o
+>>  acpi-y                         += sysfs.o
+>>  acpi-y                         += property.o
+>>  acpi-$(CONFIG_X86)             += acpi_cmos_rtc.o
+>> +acpi-$(CONFIG_X86)             += acpi_cpufreq.o
+>>  acpi-$(CONFIG_X86)             += x86/apple.o
+>>  acpi-$(CONFIG_X86)             += x86/utils.o
+>>  acpi-$(CONFIG_X86)             += x86/s2idle.o
+>> diff --git a/drivers/acpi/acpi_cpufreq.c b/drivers/acpi/acpi_cpufreq.c
+>> new file mode 100644
+>> index 000000000000..4e4ceb7cd226
+>> --- /dev/null
+>> +++ b/drivers/acpi/acpi_cpufreq.c
+>> @@ -0,0 +1,77 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Registration of platform devices for ACPI Processor Performance Control and
+>> + * Processor Clocking Control.
+>> + */
+>> +
+>> +#include <linux/acpi.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +#include <acpi/processor.h>
+>> +
+>> +#include "internal.h"
+>> +
+>> +static void __init cpufreq_add_device(const char *name)
+>> +{
+>> +       struct platform_device *pdev;
+>> +
+>> +       pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
+>> +                                              0);
+>> +       if (IS_ERR(pdev))
+>> +               pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
+>> +}
+>> +
+>> +static acpi_status __init acpi_pct_match(acpi_handle handle, u32 level,
+>> +                                        void *context, void **return_value)
+>> +{
+>> +       bool *pct = context;
+>> +       acpi_status status;
+>> +       acpi_object_type acpi_type;
+>> +       struct acpi_device *acpi_dev;
+>> +
+>> +       static const struct acpi_device_id processor_device_ids[] = {
+>> +               { ACPI_PROCESSOR_OBJECT_HID, 0 },
+>> +               { ACPI_PROCESSOR_DEVICE_HID, 0 },
+>> +               { "", 0 },
+>> +       };
+>> +
+>> +       /* Skip nodes that cannot be a processor. */
+>> +       status = acpi_get_type(handle, &acpi_type);
+>> +       if (ACPI_FAILURE(status))
+>> +               return status;
+>> +       if (acpi_type != ACPI_TYPE_PROCESSOR && acpi_type != ACPI_TYPE_DEVICE)
+>> +               return AE_OK;
+>> +
+>> +       /* Look at the set IDs if it is really a one. */
+>> +       acpi_dev = acpi_fetch_acpi_dev(handle);
+>> +       if (acpi_dev == NULL ||
+>> +           acpi_match_device_ids(acpi_dev, processor_device_ids))
+>> +               return AE_OK;
+>> +
+>> +       /* Check if it has _PCT and stop the walk as all CPUs must be same. */
+>> +       *pct = acpi_has_method(handle, "_PCT");
+>> +       return AE_CTRL_TERMINATE;
+>> +}
+>> +
+>> +void __init acpi_cpufreq_init(void)
+>> +{
+>> +       bool pct = false;
+>> +       acpi_status status;
+>> +       acpi_handle handle;
+>> +
+>> +       /*
+>> +        * Check availability of the PPC by looking at the presence of the _PCT
+>> +        * object under the first processor definition.
+>> +        */
+>> +       acpi_walk_namespace(ACPI_TYPE_ANY, ACPI_ROOT_OBJECT, ACPI_UINT32_MAX,
+>> +                           acpi_pct_match, NULL, &pct, NULL);
+>> +       if (pct)
+>> +               cpufreq_add_device("acpi-cpufreq");
+> 
+> It should be possible to combine this with CPU enumeration as stated above.
 
-I scanned the hotspots of all our online servers yesterday and today, 
-but unfortunately did not find the live environment.
+Ack.
 
-Some of our servers have a large number of containers, and each
-container will mount some file systems. This is likely to trigger
-down_read_trylock() hotspots when the memory pressure of the whole
-machine or the memory pressure of memcg is high.
+>> +
+>> +       /* Check availability of the PCC by searching for \_SB.PCCH. */
+>> +       status = acpi_get_handle(NULL, "\\_SB", &handle);
+>> +       if (ACPI_FAILURE(status))
+>> +               return;
+>> +       if (acpi_has_method(handle, "PCCH"))
+>> +               cpufreq_add_device("pcc-cpufreq");
+> 
+> And the remaining part can be called acpi_pcc_cpufreq_init().
 
-So I just found a physical server with a similar configuration to the
-online server yesterday for a simulation test. The call stack and the 
-hot spot in the simulation test are almost exactly the same, so in
-theory, when such a hot spot appears on the online server, we can also
-enjoy the improvement of IPC. This will improve the performance of the
-server in memory exhaustion scenarios (memcg or global level).
-
-And the above scenario is only one aspect, and the other aspect is the
-lock competition scenario mentioned by Kirill. After applying this patch 
-set, slab shrink and register_shrinker() can be completely parallelized,
-which can fix that problem.
-
-These are the two main benefits for real workloads that I consider.
+Ok. I guess it then makes sense to move both PPC and PCC checks to
+acpi_processor.c instead of adding a new file. Function
+acpi_pcc_cpufreq_init() can be called from acpi_processor_init().
 
 Thanks,
-Qi
-
-call stack
-----------
-
-@[
-	down_read_trylock+1
-	shrink_slab+128
-	shrink_node+371
-	do_try_to_free_pages+232
-	try_to_free_pages+243
-	_alloc_pages_slowpath+771
-	_alloc_pages_nodemask+702
-	pagecache_get_page+255
-	filemap_fault+1361
-	ext4_filemap_fault+44
-	__do_fault+76
-	handle_mm_fault+3543
-	do_user_addr_fault+442
-	do_page_fault+48
-	page_fault+62
-]: 1161690
-@[
-	down_read_trylock+1
-	shrink_slab+128
-	shrink_node+371
-	balance_pgdat+690
-	kswapd+389
-	kthread+246
-	ret_from_fork+31
-]: 8424884
-@[
-	down_read_trylock+1
-	shrink_slab+128
-	shrink_node+371
-	do_try_to_free_pages+232
-	try_to_free_pages+243
-	__alloc_pages_slowpath+771
-	__alloc_pages_nodemask+702
-	__do_page_cache_readahead+244
-	filemap_fault+1674
-	ext4_filemap_fault+44
-	__do_fault+76
-	handle_mm_fault+3543
-	do_user_addr_fault+442
-	do_page_fault+48
-	page_fault+62
-]: 20917631
-
-hotspot
--------
-
-52.22% [kernel]		[k] down_read_trylock
-19.60% [kernel]		[k] up_read
-  8.86% [kernel]		[k] shrink_slab
-  2.44% [kernel]		[k] idr_find
-  1.25% [kernel]		[k] count_shadow_nodes
-  1.18% [kernel]		[k] shrink lruvec
-  0.71% [kernel]		[k] mem_cgroup_iter
-  0.71% [kernel]		[k] shrink_node
-  0.55% [kernel]		[k] find_next_bit
-
-
->   
->> Thanks,
->> Qi
-> 
-
--- 
-Thanks,
-Qi
+Petr
