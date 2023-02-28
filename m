@@ -2,382 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E9A6A579D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DC26A57A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjB1LSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
+        id S231481AbjB1LSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:18:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbjB1LR5 (ORCPT
+        with ESMTP id S231480AbjB1LSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:17:57 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCBD35A0;
-        Tue, 28 Feb 2023 03:17:55 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id k21-20020a17090aaa1500b002376652e160so9264599pjq.0;
-        Tue, 28 Feb 2023 03:17:55 -0800 (PST)
+        Tue, 28 Feb 2023 06:18:48 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDDD61AA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:18:44 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id g3so439792wri.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E9vrwH5EkwNuZbI7b5St4iV/e2vDAe+9+jHa7R6moW0=;
-        b=d6dYbb18WIzNGMzVqJYzOxtmMAzvAlVD4UsSBQWzFDButWR+3PQSOnI2qKnwYntBNz
-         zfbOsRQNFThgUB+0mBvo+IEmneG7XCtIJCaKn/gWnlai2hQnvs3F0GquETXdty7175Vv
-         abP4IxQSpCgzbvjtrzKpxLp0kRApanwty34byFqBPOHswLDQjzFvDT/94g247jaU2UJh
-         XPbo0CbSZ4x9kVaZ22a8Ch5QXuhZiY13u6ByMpA9gCjCNU8J4fSjHe8znYddYH+NA2Gp
-         fVgz+ECbYkIsd+wxYv8trKIWdE7c87246WFJLAHFc//qzlh2rawhcOmyL3ZhLpi198I9
-         NxWw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xVoyC8wrd+bTb+TPTb4Bl/kNMNJ5socmwXem2vdIaJo=;
+        b=NHhkM6XWjGereQscqBrss1KgjdsC4Uw7hMUfqTgTCppgDbPYH4HmZvWHbf1YptSK2v
+         RY2HNVoOcTiJwSKMta9OCE1XR6dozHgkeOdm1pUhcWqbAIygIsF49f8wrQaFJCmcmKtw
+         SLGt+1Drnm5QJqtXw7gdHTBVOvQh4pFmPtyCC8iljFLSiSTLJe7/LQaSL7Jv4kmFHDCd
+         8UnCNtmZN/5ZKldUT3wIRCokoLwDsY+YrCz2365mu+thrNSg4rJME8cDHNRVIzl7ajmf
+         qTr1RLxYhEQM5eCRjVDnbYlyeVHD3INXy/NlGNUi2XgJ6moIIQ9R8zm48HaisrQqTeqk
+         CFVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E9vrwH5EkwNuZbI7b5St4iV/e2vDAe+9+jHa7R6moW0=;
-        b=ot+7JFq49eINFeIeFJOzfVGw/QoQY1M/aDbVluNVaOHwWDCGymOXkXzqxZi6tq8jyj
-         dRy+UaK3Yg9wVWBOEin9ohSBxpPIaQNza8XybvYMHGeG+hBgLF6fWE3DHNu3IJzqZYC0
-         udSNfIlrz/AajrambJvFs8M1RVcpFCjFvOGJsZ6Je4LMuLuN3xTAjWESSXIZi9sOMD/W
-         Vh8dhxT5u9O9fzXZD/vlUJ64O/jNnJ1F0nhj2KUByh83gEefIijGqdVW02h0P/c9J9xE
-         yRjGKjBZWCveWLkTECp3tN3kQ/w8IQZvV44CeISvQmCFCryTCAlevMgIuOdeGJTVLHw8
-         w9Sg==
-X-Gm-Message-State: AO0yUKVf5Z8HcX2Grf7VfllGENN7832AhrEuuRAuGTHrKdbo5ev55c2H
-        zdhX+IHhymq8zjZlSl3oilekt/HnmYc=
-X-Google-Smtp-Source: AK7set+20J8nWwvcKdRI2wYMHvuv5Bgcjc7F1NUw4JHSVhR9Hi42qR/g3s7N8IkOaPVlPdivZclyCw==
-X-Received: by 2002:a17:902:ecc7:b0:19c:9fa5:af00 with SMTP id a7-20020a170902ecc700b0019c9fa5af00mr2150991plh.2.1677583074318;
-        Tue, 28 Feb 2023 03:17:54 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id y20-20020a170902ed5400b0019c2cf12d15sm6308766plb.116.2023.02.28.03.17.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:17:53 -0800 (PST)
-Date:   Tue, 28 Feb 2023 03:17:52 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v11 024/113] KVM: TDX: Do TDX specific vcpu initialization
-Message-ID: <20230228111752.GW4175971@ls.amr.corp.intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <c8f51a32315dce7d4f48d9ae6668da249e22a432.1673539699.git.isaku.yamahata@intel.com>
- <20230116180719.000057c4@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xVoyC8wrd+bTb+TPTb4Bl/kNMNJ5socmwXem2vdIaJo=;
+        b=CqhBl0Gd3J1uyMq2LoqiN8/LAoRimFGSC0KuBsSdm1PF8AzCs/d6xoNScHo7aXmQeN
+         hcAnGftDX5z8Va1q/gdyv3K944UiPICLR4Yz8lG/uWu8IY/vT37j+GKFB6wdsjCUIJMb
+         D516hU5u9pNkqIXN8Z3byd2tNTrnZvBga2TfsaBP7SLx6FNpek0iimaDXmubay7mG4eH
+         JUoE+hR0DgRcK3gfi+VvJNE2bh2SCqS8Z9BRkbiJDr/so54rBmFoQ2tIRQZLN6IAYsuF
+         9juYyzEOZJgcfgp1Mqe3NILwfEMFUzD8AMJ5quR7jYxpxAg5r0NyRaIfZxNYQMJXUOvM
+         1k3g==
+X-Gm-Message-State: AO0yUKXDFWy5zr14cs0LUdfW0uma3lnhqJh+brDdf5TeIsnVnlvh832a
+        dWbi2NULak0hNB57NRw/l5p44Q==
+X-Google-Smtp-Source: AK7set8SssAP4PkOqN8PR49y6R5vCMxua5W3zRYjs7yGeGL5s0LFqTaxTjp7CcBvtRCJSDHFZSLQiw==
+X-Received: by 2002:a5d:4b87:0:b0:2c9:a8c7:b48d with SMTP id b7-20020a5d4b87000000b002c9a8c7b48dmr1857468wrt.10.1677583122951;
+        Tue, 28 Feb 2023 03:18:42 -0800 (PST)
+Received: from [10.2.4.117] (lfbn-nic-1-295-18.w90-116.abo.wanadoo.fr. [90.116.132.18])
+        by smtp.gmail.com with ESMTPSA id j14-20020a5d464e000000b002c558869934sm9633925wrs.81.2023.02.28.03.18.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 03:18:42 -0800 (PST)
+Message-ID: <741eb8c3-ad05-19e2-2604-9cd9c97c4ef4@baylibre.com>
+Date:   Tue, 28 Feb 2023 12:18:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230116180719.000057c4@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jon Cormier <jcormier@criticallink.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, tony@atomide.com,
+        lee@kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org
+References: <20230224113837.874264-1-jneanne@baylibre.com>
+ <20230224113837.874264-2-jneanne@baylibre.com> <Y/iqhsEIvHgnZ+5l@surfacebook>
+ <CADL8D3bm82+=LwYnve04FB2zsSJ6ceKQHycV9oNWoYFiOQnVCA@mail.gmail.com>
+ <CAHp75Vc52cqPaTFTvi2E-3Gg6gAsDWc7wSWjn7wMuhcxWqFXBA@mail.gmail.com>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <CAHp75Vc52cqPaTFTvi2E-3Gg6gAsDWc7wSWjn7wMuhcxWqFXBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 06:07:19PM +0200,
-Zhi Wang <zhi.wang.linux@gmail.com> wrote:
-
-> On Thu, 12 Jan 2023 08:31:32 -0800
-> isaku.yamahata@intel.com wrote:
-> 
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > 
-> > TD guest vcpu need to be configured before ready to run which requests
-> > addtional information from Device model (e.g. qemu), one 64bit value is
-> > passed to vcpu's RCX as an initial value.  Repurpose KVM_MEMORY_ENCRYPT_OP
-> > to vcpu-scope and add new sub-commands KVM_TDX_INIT_VCPU under it for such
-> > additional vcpu configuration.
-> > 
-> 
-> Better add more details for this mystic value to save the review efforts.
-> 
-> For exmaple, refining the above part as:
-> 
-> ----
-> 
-> TD hands-off block(HOB) is used to pass the information from VMM to
-> TD virtual firmware(TDVF). Before KVM calls Intel TDX module to launch
-> TDVF, the address of HOB must be placed in the guest RCX.
-> 
-> Extend KVM_MEMORY_ENCRYPT_OP to vcpu-scope and add new... so that
-> TDH.VP.INIT can take the address of HOB from QEMU and place it in the
-> guest RCX when initializing a TDX vCPU.
-> 
-> ----
-> 
-> The below paragraph seems repeating the end of the first paragraph. Guess
-> it can be refined or removed.
-> 
-> 
-> > Add callback for kvm vCPU-scoped operations of KVM_MEMORY_ENCRYPT_OP and
-> > add a new subcommand, KVM_TDX_INIT_VCPU, for further vcpu initialization.
-> >
-
-I don't think it's good idea to mention about new terminology HOB and TDVF.
-We can say, VMM can pass one parameter.
-Here is the updated one.
-
-    TD guest vcpu needs TDX specific initialization before running.  Repurpose
-    KVM_MEMORY_ENCRYPT_OP to vcpu-scope, add a new sub-command
-    KVM_TDX_INIT_VCPU, and implement the callback for it.
 
 
-> PS: I am curious if the value of guest RCX on each VCPU will be configured
-> differently? (It seems they are the same according to the code of tdx-qemu)
-> 
-> If yes, then it is just an approach to configure the value (even it is
-> through TDH.VP.XXX). It should be configured in the domain level in KVM. The
-> TDX vCPU creation and initialization can be moved into tdx_vcpu_create()
-> and TDH.VP.INIT can take the value from a per-vm data structure.
-
-RCX can be set for each VCPUs as ABI (or TDX SEAMCALL API) between VMM and vcpu
-initial value.  It's convention between user space VMM(qemu) and guest
-firmware(TDVF) to pass same RCX value for all vcpu.  So KVM shouldn't enforce
-same RCX value for all vcpus.  KVM should allow user space VMM to set the value
-for each vcpus.
-
-
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  arch/x86/include/asm/kvm-x86-ops.h    |   1 +
-> >  arch/x86/include/asm/kvm_host.h       |   1 +
-> >  arch/x86/include/uapi/asm/kvm.h       |   1 +
-> >  arch/x86/kvm/vmx/main.c               |   9 ++
-> >  arch/x86/kvm/vmx/tdx.c                | 147 +++++++++++++++++++++++++-
-> >  arch/x86/kvm/vmx/tdx.h                |   7 ++
-> >  arch/x86/kvm/vmx/x86_ops.h            |  10 +-
-> >  arch/x86/kvm/x86.c                    |   6 ++
-> >  tools/arch/x86/include/uapi/asm/kvm.h |   1 +
-> >  9 files changed, 178 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> > index 1a27f3aee982..e3e9b1c2599b 100644
-> > --- a/arch/x86/include/asm/kvm-x86-ops.h
-> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> > @@ -123,6 +123,7 @@ KVM_X86_OP(enable_smi_window)
-> >  #endif
-> >  KVM_X86_OP_OPTIONAL(dev_mem_enc_ioctl)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_ioctl)
-> > +KVM_X86_OP_OPTIONAL(vcpu_mem_enc_ioctl)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_register_region)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_unregister_region)
-> >  KVM_X86_OP_OPTIONAL(vm_copy_enc_context_from)
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 30f4ddb18548..35773f925cc5 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1698,6 +1698,7 @@ struct kvm_x86_ops {
-> >  
-> >  	int (*dev_mem_enc_ioctl)(void __user *argp);
-> >  	int (*mem_enc_ioctl)(struct kvm *kvm, void __user *argp);
-> > +	int (*vcpu_mem_enc_ioctl)(struct kvm_vcpu *vcpu, void __user *argp);
-> >  	int (*mem_enc_register_region)(struct kvm *kvm, struct kvm_enc_region *argp);
-> >  	int (*mem_enc_unregister_region)(struct kvm *kvm, struct kvm_enc_region *argp);
-> >  	int (*vm_copy_enc_context_from)(struct kvm *kvm, unsigned int source_fd);
-> > diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-> > index b8f28d86d4fd..9236c1699c48 100644
-> > --- a/arch/x86/include/uapi/asm/kvm.h
-> > +++ b/arch/x86/include/uapi/asm/kvm.h
-> > @@ -536,6 +536,7 @@ struct kvm_pmu_event_filter {
-> >  enum kvm_tdx_cmd_id {
-> >  	KVM_TDX_CAPABILITIES = 0,
-> >  	KVM_TDX_INIT_VM,
-> > +	KVM_TDX_INIT_VCPU,
-> >  
-> >  	KVM_TDX_CMD_NR_MAX,
-> >  };
-> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> > index 59813ca05f36..23b3ffc3fe23 100644
-> > --- a/arch/x86/kvm/vmx/main.c
-> > +++ b/arch/x86/kvm/vmx/main.c
-> > @@ -103,6 +103,14 @@ static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
-> >  	return tdx_vm_ioctl(kvm, argp);
-> >  }
-> >  
-> > +static int vt_vcpu_mem_enc_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
-> > +{
-> > +	if (!is_td_vcpu(vcpu))
-> > +		return -EINVAL;
-> > +
-> > +	return tdx_vcpu_ioctl(vcpu, argp);
-> > +}
-> > +
-> >  struct kvm_x86_ops vt_x86_ops __initdata = {
-> >  	.name = KBUILD_MODNAME,
-> >  
-> > @@ -249,6 +257,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
-> >  
-> >  	.dev_mem_enc_ioctl = tdx_dev_ioctl,
-> >  	.mem_enc_ioctl = vt_mem_enc_ioctl,
-> > +	.vcpu_mem_enc_ioctl = vt_vcpu_mem_enc_ioctl,
-> >  };
-> >  
-> >  struct kvm_x86_init_ops vt_init_ops __initdata = {
-> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > index 099f0737a5aa..e2f5a07ad4e5 100644
-> > --- a/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -49,6 +49,11 @@ static __always_inline hpa_t set_hkid_to_hpa(hpa_t pa, u16 hkid)
-> >  	return pa | ((hpa_t)hkid << boot_cpu_data.x86_phys_bits);
-> >  }
-> >  
-> > +static inline bool is_td_vcpu_created(struct vcpu_tdx *tdx)
-> > +{
-> > +	return tdx->tdvpr_pa;
-> > +}
-> > +
-> >  static inline bool is_td_created(struct kvm_tdx *kvm_tdx)
-> >  {
-> >  	return kvm_tdx->tdr_pa;
-> > @@ -65,6 +70,11 @@ static inline bool is_hkid_assigned(struct kvm_tdx *kvm_tdx)
-> >  	return kvm_tdx->hkid > 0;
-> >  }
-> >  
-> > +static inline bool is_td_finalized(struct kvm_tdx *kvm_tdx)
-> > +{
-> > +	return kvm_tdx->finalized;
-> > +}
-> > +
-> >  static void tdx_clear_page(unsigned long page_pa)
-> >  {
-> >  	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
-> > @@ -327,7 +337,21 @@ int tdx_vcpu_create(struct kvm_vcpu *vcpu)
-> >  
-> >  void tdx_vcpu_free(struct kvm_vcpu *vcpu)
-> >  {
-> > -	/* This is stub for now.  More logic will come. */
-> > +	struct vcpu_tdx *tdx = to_tdx(vcpu);
-> > +	int i;
-> > +
-> > +	/* Can't reclaim or free pages if teardown failed. */
-> > +	if (is_hkid_assigned(to_kvm_tdx(vcpu->kvm)))
-> > +		return;
-> > +
-> 
-> Should we have an WARN_ON_ONCE here?
-
-No.  In normal case, it can come with hkid already reclaimed.
-
-
-> > +	if (tdx->tdvpx_pa) {
-> > +		for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++)
-> > +			tdx_reclaim_td_page(tdx->tdvpx_pa[i]);
-> > +		kfree(tdx->tdvpx_pa);
-> > +		tdx->tdvpx_pa = NULL;
-> > +	}
-> > +	tdx_reclaim_td_page(tdx->tdvpr_pa);
-> > +	tdx->tdvpr_pa = 0;
-> >  }
-> >  
-> >  void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> > @@ -337,6 +361,8 @@ void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> >  	/* TDX doesn't support INIT event. */
-> >  	if (WARN_ON_ONCE(init_event))
-> >  		goto td_bugged;
-> > +	if (WARN_ON_ONCE(is_td_vcpu_created(to_tdx(vcpu))))
-> > +		goto td_bugged;
-> >  
-> >  	/* TDX rquires X2APIC. */
-> >  	apic_base_msr.data = APIC_DEFAULT_PHYS_BASE | LAPIC_MODE_X2APIC;
-> > @@ -791,6 +817,125 @@ int tdx_vm_ioctl(struct kvm *kvm, void __user *argp)
-> >  	return r;
-> >  }
-> >  
-> > +static int tdx_td_vcpu_init(struct kvm_vcpu *vcpu, u64 vcpu_rcx)
-> > +{
-> > +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
-> > +	struct vcpu_tdx *tdx = to_tdx(vcpu);
-> > +	unsigned long *tdvpx_pa = NULL;
-> > +	unsigned long tdvpr_pa;
-> > +	unsigned long va;
-> > +	int ret, i;
-> > +	u64 err;
-> > +
-> > +	if (is_td_vcpu_created(tdx))
-> > +		return -EINVAL;
-> > +
-> > +	va = __get_free_page(GFP_KERNEL_ACCOUNT);
-> > +	if (!va)
-> > +		return -ENOMEM;
-> > +	tdvpr_pa = __pa(va);
-> > +
-> > +	tdvpx_pa = kcalloc(tdx_caps.tdvpx_nr_pages, sizeof(*tdx->tdvpx_pa),
-> > +			   GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-> > +	if (!tdvpx_pa) {
-> > +		ret = -ENOMEM;
-> > +		goto free_tdvpr;
-> > +	}
-> > +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++) {
-> > +		va = __get_free_page(GFP_KERNEL_ACCOUNT);
-> > +		if (!va)
-> > +			goto free_tdvpx;
-> > +		tdvpx_pa[i] = __pa(va);
-> > +	}
-> > +
-> > +	err = tdh_vp_create(kvm_tdx->tdr_pa, tdvpr_pa);
-> > +	if (WARN_ON_ONCE(err)) {
-> > +		ret = -EIO;
-> > +		pr_tdx_error(TDH_VP_CREATE, err, NULL);
-> > +		goto td_bugged_free_tdvpx;
-> > +	}
-> > +	tdx->tdvpr_pa = tdvpr_pa;
-> > +
-> > +	tdx->tdvpx_pa = tdvpx_pa;
-> > +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++) {
-> > +		err = tdh_vp_addcx(tdx->tdvpr_pa, tdvpx_pa[i]);
-> > +		if (WARN_ON_ONCE(err)) {
-> > +			ret = -EIO;
-> > +			pr_tdx_error(TDH_VP_ADDCX, err, NULL);
-> > +			for (; i < tdx_caps.tdvpx_nr_pages; i++) {
-> > +				free_page((unsigned long)__va(tdvpx_pa[i]));
-> > +				tdvpx_pa[i] = 0;
-> > +			}
-> > +			goto td_bugged;
-> > +		}
-> > +	}
-> > +
-> > +	err = tdh_vp_init(tdx->tdvpr_pa, vcpu_rcx);
-> > +	if (WARN_ON_ONCE(err)) {
-> > +		ret = -EIO;
-> > +		pr_tdx_error(TDH_VP_INIT, err, NULL);
-> > +		goto td_bugged;
-> > +	}
-> > +
-> > +	vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
-> > +
-> > +	return 0;
-> > +
-> > +td_bugged_free_tdvpx:
-> > +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++) {
-> > +		free_page((unsigned long)__va(tdvpx_pa[i]));
-> > +		tdvpx_pa[i] = 0;
-> > +	}
-> > +	kfree(tdvpx_pa);
-> > +td_bugged:
-> > +	vcpu->kvm->vm_bugged = true;
-> > +	return ret;
-> > +
-> > +free_tdvpx:
-> > +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++)
-> > +		if (tdvpx_pa[i])
-> > +			free_page((unsigned long)__va(tdvpx_pa[i]));
-> > +	kfree(tdvpx_pa);
-> > +	tdx->tdvpx_pa = NULL;
-> > +free_tdvpr:
-> > +	if (tdvpr_pa)
-> > +		free_page((unsigned long)__va(tdvpr_pa));
-> > +	tdx->tdvpr_pa = 0;
-> > +
-> > +	return ret;
-> > +}
-> 
-> Same comments with using vm_bugged in the previous patch.
-
-I converted it to KVM_BUG_ON().
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+On 27/02/2023 20:51, Andy Shevchenko wrote:
+>>>> Signed-off-by: Jonathan Cormier<jcormier@criticallink.com>
+>>>> Signed-off-by: Jerome Neanne<jneanne@baylibre.com>
+>>> Not sure how to interpet this along with the From line.
+>> Are two sign-offs not allowed/expected?  I wrote the initial
+>> implementation of this driver and Jerome updated it and is handling
+>> submitting it since he did the rest of the TPS65219 drivers.
+> 1. Submitter's SoB must be the last SoB in the chain.
+> 2. Developers also need to be marked with Co-developed-by.
+Got it! My mistake. I'll fix following your instructions.
