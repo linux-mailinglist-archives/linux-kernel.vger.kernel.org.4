@@ -2,117 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3446A6129
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5906A612C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjB1VWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
+        id S229616AbjB1VWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjB1VVY (ORCPT
+        with ESMTP id S229970AbjB1VWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:21:24 -0500
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D46A2D14F;
-        Tue, 28 Feb 2023 13:21:23 -0800 (PST)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-173435e0ec4so2149762fac.12;
-        Tue, 28 Feb 2023 13:21:23 -0800 (PST)
+        Tue, 28 Feb 2023 16:22:17 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841BE32E73
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:22:10 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g17so15040738lfv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:22:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677619283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wvMhoVZJQR+9k8669IqUInbv8WaxTFEW79E0/TzqezI=;
-        b=InN1PdxS1Ig3AqY0EFaeDacEVieZ8gQks59gHIBpopfo/ZArCwWTsmtmRjwecogeVV
-         z9GZ9f+7SJNC2DyXm5brIT7znZ8nzAKaEuwuX7JcbGUEL2ndwko5cBvGDhwpG/dNgh6n
-         9o5HmJFxqsUlzPfW4VSnrTzfI8jLb/6wjZauMCzoENGPTgc0kEf7sD8kJn5r0tR3GWn7
-         knNGmeSv8AF7M2txBwbsRqTOeRKYUkT/5r62dslUxkN3Jkvc8fbGpMF0muwgI/yzgApU
-         1wa0tedCt43MvMdOaijuUmkp1SFG7UxHZx9nNLly8/0Y+ebtX6mUdVHWSxXsEQFhsYVw
-         Vung==
+        d=linaro.org; s=google; t=1677619329;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c00Qj/i0YsYnbVJ+ujO8bcgmf6XZfCPNhrLp78qJmoI=;
+        b=beUsA/gpmi5dzol+71rvbxUW5hfb+7O6tGe/iuqkuGhhfGTFj0I0rOCerycqBftdCX
+         w5qDCLXxvo0eSsgJxFzrRO2lr8hmlMg1kOcVMmd64/gTqaR7v83EvECPUcKf9UgJl+/8
+         FnwlGWdkQJC/CZdXE/2d2yVrR+qDHNjnkC2ly6gJwwoDB4vgF05MbPPIw/JM9rJBrnHF
+         LAvWWbcv3lz32IyqE1J0CzL0BE0bWIow31kGpN5TSOHBtWV2p4EpqhK1falFRFogb4hv
+         TOYOQCxv/sn75YsSj8aJzXG7Ga2pP3WiZrO30jfyiHQB8AsvRHsoiONUWe1iZ5dDiKgY
+         2m/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677619283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wvMhoVZJQR+9k8669IqUInbv8WaxTFEW79E0/TzqezI=;
-        b=dFXbf4NTkUg7wrYY+7t23NA/Ljt0dh7zHpX4BmSUlZ6GdQxHTLQrZPj/o7Ui0GfgNd
-         PhsEICcO2GhvrBRJHeOBDqV7Z9nTPp38+NBA8cGxG4tdBuei6IhAiOSisDzGkf3mk1Vs
-         iLZ2MsPmqO95cP5zNrF8HRO9WemuD++bdBvVVsKiTK29PSAFGGN1d1V4TpQH4TxRe72z
-         f4ESv3ZiV+ZbVf418VCk61EPjWq3cFCfdvDS0ko6fZjuydHVs1+28YduMjnnZxvUDzGi
-         KPiD9cquIh1Lox+BYxlYvRK77hq+M9MAiH3x054ROUSAdhOrSexf8EeCiUwxC2wSKBLx
-         Al7w==
-X-Gm-Message-State: AO0yUKUQLlR4/4v0n1Dh7Iw+wE7rCKwLXKQ8/NGyC4ejV9GTESAPuKuI
-        wxXERqi2eHkq4WAeImFL5vZVHOof6j4qaG9guMC4wTeH
-X-Google-Smtp-Source: AK7set9R/jo+MUDJv56iNgwvKNRjoes1A5oNk32zTeA4myQbDPlus24Ej+pDHNKTOW3aHcq1+8GxmevxJkbTag5v5/M=
-X-Received: by 2002:a05:6870:a8a9:b0:176:218b:521e with SMTP id
- eb41-20020a056870a8a900b00176218b521emr18919oab.11.1677619282845; Tue, 28 Feb
- 2023 13:21:22 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677619329;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c00Qj/i0YsYnbVJ+ujO8bcgmf6XZfCPNhrLp78qJmoI=;
+        b=vGlInNPGgw2mA2CK3yYdy3aUFfN1TBJxQDFy68pVINyv5khSWMYyIFBncCpb/Fb430
+         bmis3Bue44IsmnOmuMq/HVLaLuFb+J0q3LWM5TMDcSPzHEj1N5tTj8KgVTVe+bU3TeMg
+         UhujkdtfYIyH/SW0MmyyAYGwVcSmH+lo/tLKEoAnw6oGCxYNYuP/7XR/I88hEaPZ/mh+
+         Dq3oFXQpVpZQ/X6voicEjsI5JQIa6CgtnoQ73jfezTnBqC9bSQkmaDXdpY6chlL0hWVK
+         7V6+mYVIZWBW6rYjSG298Rzf98ND5pCUZdAryyv4PWMQJ9jHiLAvs7aYm5n5FRYtHEvJ
+         cFBQ==
+X-Gm-Message-State: AO0yUKVQZ4K90uYUiWnSGvYkQgwCT/9yUDWrrI1gyXUE9YgVTWvXSh6y
+        fY6NEo5dDgFqYpnvWk1rNq4U1g==
+X-Google-Smtp-Source: AK7set8Eab20dptC+3fOTnjrjxgGq0+x7TgmW263JStUHtG7GQ7d8msWu6bwB+aaTP7lCHk7q4h+Jw==
+X-Received: by 2002:a05:6512:50f:b0:4df:9ce8:300 with SMTP id o15-20020a056512050f00b004df9ce80300mr957904lfb.52.1677619328687;
+        Tue, 28 Feb 2023 13:22:08 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id g28-20020a2eb5dc000000b00295b0a7d8e0sm1307811ljn.131.2023.02.28.13.22.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 13:22:08 -0800 (PST)
+Message-ID: <c608fa1b-96dd-8d32-3d00-28d40c734b43@linaro.org>
+Date:   Tue, 28 Feb 2023 22:22:05 +0100
 MIME-Version: 1.0
-Received: by 2002:ac9:4304:0:b0:4c1:4768:8c59 with HTTP; Tue, 28 Feb 2023
- 13:21:22 -0800 (PST)
-In-Reply-To: <CAHk-=whwBb5Ws8x6aDV9u6CzMBQmsAtzF+UjWRnoe9xZxuW=qQ@mail.gmail.com>
-References: <20230125155557.37816-1-mjguzik@gmail.com> <CAHk-=wjz8O4XX=Mg6cv5Rq9w9877Xd4DCz5jk0onVKLnzzaPTA@mail.gmail.com>
- <97465c08-7b6e-7fd7-488d-0f677ac22f81@schaufler-ca.com> <CAGudoHEV_aNymUq6v9Trn_ZRU45TL12AVXqQeV2kA90FuawxiQ@mail.gmail.com>
- <CAHk-=wgCMTUV=5aE-V8WjxuCME8LTBh-8k5XTPKz6oRXJ_sgTg@mail.gmail.com> <CAHk-=whwBb5Ws8x6aDV9u6CzMBQmsAtzF+UjWRnoe9xZxuW=qQ@mail.gmail.com>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Tue, 28 Feb 2023 22:21:22 +0100
-Message-ID: <CAGudoHH-u3KkwSsrSQPGKmhL9uke4HEL8U1Z+aU9etk9-PmdQQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] capability: add cap_isidentical
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Serge Hallyn <serge@hallyn.com>, viro@zeniv.linux.org.uk,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Freedreno] [PATCH v3 04/15] drm/msm/a6xx: Extend and explain
+ UBWC config
+Content-Language: en-US
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Rob Clark <robdclark@chromium.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+References: <20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org>
+ <20230223-topic-gmuwrapper-v3-4-5be55a336819@linaro.org>
+ <e19b5cd7-9125-a285-accc-ecf530804cfc@quicinc.com>
+ <487a6890-4b8f-d541-e074-5d3ab7424678@linaro.org>
+ <26953463-dae1-0f07-9e4e-0314ee8ea81a@quicinc.com>
+ <5a8a7fa1-bba3-50a2-aa39-83d342ba70c1@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <5a8a7fa1-bba3-50a2-aa39-83d342ba70c1@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Tue, Feb 28, 2023 at 11:39=E2=80=AFAM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+
+
+On 28.02.2023 21:48, Akhil P Oommen wrote:
+> On 3/1/2023 2:14 AM, Akhil P Oommen wrote:
+>> On 3/1/2023 2:10 AM, Konrad Dybcio wrote:
+>>> On 28.02.2023 21:23, Akhil P Oommen wrote:
+>>>> On 2/23/2023 5:36 PM, Konrad Dybcio wrote:
+>>>>> Rename lower_bit to hbb_lo and explain what it signifies.
+>>>>> Add explanations (wherever possible to other tunables).
+>>>>>
+>>>>> Sort the variable definition and assignment alphabetically.
+>>>> Sorting based on decreasing order of line length is more readable, isn't it?
+>>> I can do that.
+>>>
+>>>>> Port setting min_access_length, ubwc_mode and hbb_hi from downstream.
+>>>>> Set default values for all of the tunables to zero, as they should be.
+>>>>>
+>>>>> Values were validated against downstream and will be fixed up in
+>>>>> separate commits so as not to make this one even more messy.
+>>>>>
+>>>>> A618 remains untouched (left at hw defaults) in this patch.
+>>>>>
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>> ---
+>>>>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 55 ++++++++++++++++++++++++++++-------
+>>>>>  1 file changed, 45 insertions(+), 10 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>>> index c5f5d0bb3fdc..bdae341e0a7c 100644
+>>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>>> @@ -786,39 +786,74 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+>>>>>  static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
+>>>>>  {
+>>>>>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>>>>> -	u32 lower_bit = 2;
+>>>>> +	/* Unknown, introduced with A640/680 */
+>>>>>  	u32 amsbc = 0;
+>>>>> +	/*
+>>>>> +	 * The Highest Bank Bit value represents the bit of the highest DDR bank.
+>>>>> +	 * We then subtract 13 from it (13 is the minimum value allowed by hw) and
+>>>>> +	 * write the lowest two bits of the remaining value as hbb_lo and the
+>>>>> +	 * one above it as hbb_hi to the hardware. The default values (when HBB is
+>>>>> +	 * not specified) are 0, 0.
+>>>>> +	 */
+>>>>> +	u32 hbb_hi = 0;
+>>>>> +	u32 hbb_lo = 0;
+>>>>> +	/* Whether the minimum access length is 64 bits */
+>>>>> +	u32 min_acc_len = 0;
+>>>>> +	/* Unknown, introduced with A650 family, related to UBWC mode/ver 4 */
+>>>>>  	u32 rgb565_predicator = 0;
+>>>>> +	/* Unknown, introduced with A650 family */
+>>>>>  	u32 uavflagprd_inv = 0;
+>>>>> +	/* Entirely magic, per-GPU-gen value */
+>>>>> +	u32 ubwc_mode = 0;
+>>>>>  
+>>>>>  	/* a618 is using the hw default values */
+>>>>>  	if (adreno_is_a618(adreno_gpu))
+>>>>>  		return;
+>>>>>  
+>>>>> -	if (adreno_is_a640_family(adreno_gpu))
+>>>>> +	if (adreno_is_a619(adreno_gpu)) {
+>>>>> +		/* HBB = 14 */
+>>>>> +		hbb_lo = 1;
+>>>>> +	}
+>>>>> +
+>>>>> +	if (adreno_is_a630(adreno_gpu)) {
+>>>>> +		/* HBB = 15 */
+>>>>> +		hbb_lo = 2;
+>>>>> +	}
+>>>>> +
+>>>>> +	if (adreno_is_a640_family(adreno_gpu)) {
+>>>>>  		amsbc = 1;
+>>>>> +		/* HBB = 15 */
+>>>>> +		hbb_lo = 2;
+>>>>> +	}
+>>>>>  
+>>>>>  	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu)) {
+>>>>> -		/* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
+>>>>> -		lower_bit = 3;
+>>>>>  		amsbc = 1;
+>>>>> +		/* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
+>>>>> +		/* HBB = 16 */
+>>>>> +		hbb_lo = 3;
+>>>>>  		rgb565_predicator = 1;
+>>>>>  		uavflagprd_inv = 2;
+>>>>>  	}
+>>>>>  
+>>>>>  	if (adreno_is_7c3(adreno_gpu)) {
+>>>>> -		lower_bit = 1;
+>>>>>  		amsbc = 1;
+>>>>> +		/* HBB is unset in downstream DTS, defaulting to 0 */
+>>>> This is incorrect. For 7c3 hbb value is 14. So hbb_lo should be 1. FYI, hbb configurations were moved to the driver from DT in recent downstream kernels.
+>>> Right, seems to have happened with msm-5.10. Though a random kernel I
+>>> grabbed seems to suggest it's 15 and not 14?
+>>>
+>>> https://github.com/sonyxperiadev/kernel/blob/aosp/K.P.1.0.r1/drivers/gpu/msm/adreno-gpulist.h#L1710
+>> We override that with 14 in a6xx_init() for LP4 platforms dynamically. Since 7c3 is only supported on LP4, we can hardcode 14 here.
+Okay, I see.
+
+>> In the downstream kernel, there is an api (of_fdt_get_ddrtype()) to detect ddrtype. If we can get something like that in upstream, we should implement a similar logic here.
+Yeah, I mentioned it here [1], but I doubt it'd be implemented,
+given what Krzysztof pointed out.
+
 >>
->> Call me crazy.
->
+>> -Akhil.
+> Also, I haven't closely reviewed other targets configuration you updated, but it is a good idea to leave the existing configurations here as it in this refactor patch. Any update should be a separate patch.
+Sure, will do.
 
-Hello crazy,
+Konrad
 
-> I had to go through the patch with a find comb, because everything
-> worked except for some reason network name resolution failed:
-> systemd-resolved got a permission error on
->
->     Failed to listen on UDP socket 127.0.0.53:53: Permission denied
->
-> Spot the insufficient fixup in my cut-and-paste capget() patch:
->
->   kdata[0].effective   =3D pE.val;
->         kdata[1].effective   =3D pE.val >> 32;
->   kdata[0].permitted   =3D pP.val;
->         kdata[1].permitted   =3D pP.val >> 32;
->   kdata[0].inheritable =3D pI.val;
->         kdata[0].inheritable =3D pI.val >> 32;
->
-> Oops.
->
-> But with that fixed, that patch actually does seem to work.
->
-
-This is part of the crap which made me unwilling to do the clean up.
-
-Unless there is a test suite (which I'm guessing there is not), I
-think this warrants a prog which iterates over all methods with a
-bunch of randomly generated capsets (+ maybe handpicked corner cases?)
-and compares results new vs old. Otherwise I would feel very uneasy
-signing off on the patch.
-
-That said, nice cleanup if it works out :)
-
---=20
-Mateusz Guzik <mjguzik gmail.com>
+[1] https://github.com/devicetree-org/devicetree-specification/issues/62
+> 
+> -Akhil.
+>>> Konrad
+>>>> -Akhil.
+>>>>>  		rgb565_predicator = 1;
+>>>>>  		uavflagprd_inv = 2;
+>>>>>  	}
+>>>>>  
+>>>>>  	gpu_write(gpu, REG_A6XX_RB_NC_MODE_CNTL,
+>>>>> -		rgb565_predicator << 11 | amsbc << 4 | lower_bit << 1);
+>>>>> -	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, lower_bit << 1);
+>>>>> -	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL,
+>>>>> -		uavflagprd_inv << 4 | lower_bit << 1);
+>>>>> -	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, lower_bit << 21);
+>>>>> +		  rgb565_predicator << 11 | hbb_hi << 10 | amsbc << 4 |
+>>>>> +		  min_acc_len << 3 | hbb_lo << 1 | ubwc_mode);
+>>>>> +
+>>>>> +	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, hbb_hi << 4 |
+>>>>> +		  min_acc_len << 3 | hbb_lo << 1 | ubwc_mode);
+>>>>> +
+>>>>> +	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL, hbb_hi << 10 |
+>>>>> +		  uavflagprd_inv << 4 | min_acc_len << 3 |
+>>>>> +		  hbb_lo << 1 | ubwc_mode);
+>>>>> +
+>>>>> +	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, min_acc_len << 23 | hbb_lo << 21);
+>>>>>  }
+>>>>>  
+>>>>>  static int a6xx_cp_init(struct msm_gpu *gpu)
+>>>>>
+> 
