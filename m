@@ -2,520 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D926A62DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D476A62E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjB1Wwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
+        id S229610AbjB1Wx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjB1Ww3 (ORCPT
+        with ESMTP id S229509AbjB1Wx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:52:29 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF99367E4;
-        Tue, 28 Feb 2023 14:52:26 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id bp19so6612140oib.4;
-        Tue, 28 Feb 2023 14:52:26 -0800 (PST)
+        Tue, 28 Feb 2023 17:53:57 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A043401C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:53:56 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id n5so6781165pfv.11
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 14:53:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677624746;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+xn0kkLJKSd4QmG3K7ip5xkkpoJkU+E6BNKewjBKO4=;
-        b=hm2BbRf6iwyOalHaun6BduT03qt0ZYxvCu1gelVUyRKiW7rRVseRss0aTG5bQt9GM1
-         zAQetjCVvlwssDrNYJGH7x3naVeZN+KE3PB3VnxDvMMnnnQHvuGTP5RZGHvF01yXeaSa
-         rXKC7+Z25WPgCkWVYGbZATHtkr9A9yeoMQQb2hbWJadHRTdJInsI1T0diF8s4UEn0WGQ
-         j4cTklhIkrHQvbOyxg3S8TO0Man6+wR7+i+ESaDRUV16AstXJpR35+yfQDHU3WSYu14J
-         cawWo8geq+lb6gscrDSzvkTotlzuhoTsSTMckxs2qa+vrME/GMuqTEDSOa7wBVvGRvzh
-         9xTw==
+        d=gmail.com; s=20210112; t=1677624836;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FmJBk+SbzeGsb6WDHWELtLn5ezNrmb5a5dd/nz1DZN8=;
+        b=lVY47DTv23Y0ZhtqrSvSGHFUwL9XUFn/6RhnyXQvK02Zauv+OZuVLTbZrpB6MTzbCW
+         QiCDcEoizVdXP4ltBDgZm7nlSdjHhc5sr2J8LK6qWTiznx1aGcw+3J2vyMbKGy0gssce
+         ZTpcSgI+oCr1w/nAZE3l7J7bV6zZbZaCpxUzr62DArrBlNGBRr0iSRJOQxKLrlP50ftz
+         v+x6TYw+RIZH4fbysoFhF96H7+YVN1teZwjOE+QMTIzj6gJU2EYjTCYHx7kenUu9F6Nl
+         ue3toi9HBpL4XO1/0XG3B65FkAuvwIWZTV4+hFeyGX3IvqYnpjT44Ocwmvs3K/Z9dDih
+         5QWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677624746;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1677624836;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V+xn0kkLJKSd4QmG3K7ip5xkkpoJkU+E6BNKewjBKO4=;
-        b=g7EjKBO7E0/5hn+sqAHVFRydDFSk7JElAFEAJo9B76qunsJ5rpN8MVnW3HqX0BENzV
-         O5U8OxdqteQVyx/w/kDrk2Xp/8jwSHYKKzePJa0iclVCZ7RJ7opWmLxIljmLjZzJQoVy
-         8roIkwaWwns5DaIFwnBK+1y3OXpzVeABg1x8s3EJ2IDxoMvUOFZjeS9Shmu36S9b3yDW
-         VrKrYykp7Ixs7nB26AIP3+jsbJo7hOC6+r48bgc6PswAha6YliN/gpZ8YVmUE9Tinmhr
-         +k39G95Hv2bYCsZw1nccMRxYp8im2yFgZlR9Ls/JUbLReOFMvBTthGzQSa5tMPYSfUCQ
-         qAiA==
-X-Gm-Message-State: AO0yUKX9ch/nTzLvkYYpRjv9VVHXre2ucK4ONO8Kfg7MIyBnBT07a6HY
-        OQWEtDcBjGcRCB7ltXFU64EdlUPnlpR9lpF3lAw=
-X-Google-Smtp-Source: AK7set+ta7DIOuLpCnrxaCmgIjP+o9Pcaow818kkCRbnz+bZCOULyHF4/ioxNiYz4AVFG4chPxLTvwSDzE03Wl1nD38=
-X-Received: by 2002:a54:440f:0:b0:37d:b58a:6192 with SMTP id
- k15-20020a54440f000000b0037db58a6192mr1560724oiw.3.1677624745945; Tue, 28 Feb
- 2023 14:52:25 -0800 (PST)
+        bh=FmJBk+SbzeGsb6WDHWELtLn5ezNrmb5a5dd/nz1DZN8=;
+        b=Al7/Z2YSv+NQmXzusndqCtLESL2S877syW1LsQhB8nIx2FzYLrFzctZa5aosb/4pgC
+         yVgj26v+TBIB5Im/+QVSTEC/GAxQlCF5E7O77KbgymOSoFYId61d+dAodCxyLMDqlvnK
+         14G1UzgmBzVne4gM6ag0kD6HS3PJXlNGLC06c4tutBG9K4AEwbijiFU9RWUbVEPbFmS3
+         8q7Q80ArNauNv+w3LqOxo3fzqTCyruFfaPWQo5njuz3wjHVYyXk6is6Y+zy/UsA+V0Gv
+         HyLMgv4pmHQUjGXuvKLy5XxrP2NM1K78g/TeMTgD1zRALrMN1sjEOT7PG7GrfKAjVyF3
+         470A==
+X-Gm-Message-State: AO0yUKU37wwr3ViYHbGjSEVGGJCczzmDr2MvTKdFo4MYmQRIhOybAXJn
+        2SSYqwuzkmcUdGMk+Irv5y0=
+X-Google-Smtp-Source: AK7set/jEROoXr9AYq0co/9oRqaBiZryOKRUFIeuUhLG9S5SuZlHGgdaODylKVxuZJ8qHKeNUJr7cg==
+X-Received: by 2002:a62:1989:0:b0:5aa:2d65:4733 with SMTP id 131-20020a621989000000b005aa2d654733mr3252721pfz.10.1677624835978;
+        Tue, 28 Feb 2023 14:53:55 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:639:82f5:b510:3494])
+        by smtp.gmail.com with ESMTPSA id e3-20020aa78243000000b005e5861932c9sm6528850pfn.129.2023.02.28.14.53.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 14:53:55 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 28 Feb 2023 14:53:53 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCHv2 3/6] zsmalloc: fine-grained inuse ratio based fullness
+ grouping
+Message-ID: <Y/6GAYJ4c9W0bPzp@google.com>
+References: <20230223030451.543162-1-senozhatsky@chromium.org>
+ <20230223030451.543162-4-senozhatsky@chromium.org>
+ <Y/f2WvhNlwhsf2Cz@google.com>
+ <Y/riPlQ2UK00WirI@google.com>
 MIME-Version: 1.0
-References: <20230223113814.3010cedc@eldfell> <CAF6AEGuE89kuKTjjzwW1xMppcVw-M4-hcrtifed-mvsCA=cshQ@mail.gmail.com>
- <20230224112630.313d7b76@eldfell> <a47e2686-1e35-39a3-0f0c-6c3b9522f8ff@linux.intel.com>
- <20230224122403.6a088da1@eldfell> <582a9b92-d246-fce2-cf39-539d9a2db17f@linux.intel.com>
- <20230224130053.3f8939e2@eldfell> <c5d046d6-ab8e-2bc7-5110-dba78b91348b@linux.intel.com>
- <74e409dc-b642-779e-a755-b793c378e43a@amd.com> <CAF6AEGs_yzEj81yNP3KhmVP9Yo3rwTc5vntEVrm9tHw6+w1G_g@mail.gmail.com>
- <Y/0iM+ycUozaVbbC@intel.com> <CAF6AEGtXSEyyjELjGtPvnAN7mX+NwzngmB0PbKHsZqjTm-xYsg@mail.gmail.com>
- <CA+hFU4wtW6wNP2Y0e_iE6NhBSSfVRDxTBUk7kOUNHQPRXpSzrQ@mail.gmail.com>
- <CAF6AEGtaxbJ83sfviVWMic6Q8XoyhLvWCdtYwiSd8A4sV4ZXSQ@mail.gmail.com> <CA+hFU4x0VrQwF4JJcfHNwXrCUF8kP0d=Nhy5bboy=u5pJAgekQ@mail.gmail.com>
-In-Reply-To: <CA+hFU4x0VrQwF4JJcfHNwXrCUF8kP0d=Nhy5bboy=u5pJAgekQ@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 28 Feb 2023 14:52:14 -0800
-Message-ID: <CAF6AEGtBFOvVK-p1Xox-6wp4frrmVqO5C5rq4OxUUMv8V51CVA@mail.gmail.com>
-Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
-To:     Sebastian Wick <sebastian.wick@redhat.com>
-Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/riPlQ2UK00WirI@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 6:30 AM Sebastian Wick
-<sebastian.wick@redhat.com> wrote:
->
-> On Tue, Feb 28, 2023 at 12:48=E2=80=AFAM Rob Clark <robdclark@gmail.com> =
-wrote:
-> >
-> > On Mon, Feb 27, 2023 at 2:44 PM Sebastian Wick
-> > <sebastian.wick@redhat.com> wrote:
-> > >
-> > > On Mon, Feb 27, 2023 at 11:20 PM Rob Clark <robdclark@gmail.com> wrot=
-e:
-> > > >
-> > > > On Mon, Feb 27, 2023 at 1:36 PM Rodrigo Vivi <rodrigo.vivi@intel.co=
-m> wrote:
-> > > > >
-> > > > > On Fri, Feb 24, 2023 at 09:59:57AM -0800, Rob Clark wrote:
-> > > > > > On Fri, Feb 24, 2023 at 7:27 AM Luben Tuikov <luben.tuikov@amd.=
-com> wrote:
-> > > > > > >
-> > > > > > > On 2023-02-24 06:37, Tvrtko Ursulin wrote:
-> > > > > > > >
-> > > > > > > > On 24/02/2023 11:00, Pekka Paalanen wrote:
-> > > > > > > >> On Fri, 24 Feb 2023 10:50:51 +0000
-> > > > > > > >> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-> > > > > > > >>
-> > > > > > > >>> On 24/02/2023 10:24, Pekka Paalanen wrote:
-> > > > > > > >>>> On Fri, 24 Feb 2023 09:41:46 +0000
-> > > > > > > >>>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-> > > > > > > >>>>
-> > > > > > > >>>>> On 24/02/2023 09:26, Pekka Paalanen wrote:
-> > > > > > > >>>>>> On Thu, 23 Feb 2023 10:51:48 -0800
-> > > > > > > >>>>>> Rob Clark <robdclark@gmail.com> wrote:
-> > > > > > > >>>>>>
-> > > > > > > >>>>>>> On Thu, Feb 23, 2023 at 1:38 AM Pekka Paalanen <ppaal=
-anen@gmail.com> wrote:
-> > > > > > > >>>>>>>>
-> > > > > > > >>>>>>>> On Wed, 22 Feb 2023 07:37:26 -0800
-> > > > > > > >>>>>>>> Rob Clark <robdclark@gmail.com> wrote:
-> > > > > > > >>>>>>>>
-> > > > > > > >>>>>>>>> On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <ppa=
-alanen@gmail.com> wrote:
-> > > > > > > >>>>>>
-> > > > > > > >>>>>> ...
-> > > > > > > >>>>>>
-> > > > > > > >>>>>>>>>> On another matter, if the application uses SET_DEA=
-DLINE with one
-> > > > > > > >>>>>>>>>> timestamp, and the compositor uses SET_DEADLINE on=
- the same thing with
-> > > > > > > >>>>>>>>>> another timestamp, what should happen?
-> > > > > > > >>>>>>>>>
-> > > > > > > >>>>>>>>> The expectation is that many deadline hints can be =
-set on a fence.
-> > > > > > > >>>>>>>>> The fence signaller should track the soonest deadli=
-ne.
-> > > > > > > >>>>>>>>
-> > > > > > > >>>>>>>> You need to document that as UAPI, since it is obser=
-vable to userspace.
-> > > > > > > >>>>>>>> It would be bad if drivers or subsystems would diffe=
-r in behaviour.
-> > > > > > > >>>>>>>>
-> > > > > > > >>>>>>>
-> > > > > > > >>>>>>> It is in the end a hint.  It is about giving the driv=
-er more
-> > > > > > > >>>>>>> information so that it can make better choices.  But =
-the driver is
-> > > > > > > >>>>>>> even free to ignore it.  So maybe "expectation" is to=
-o strong of a
-> > > > > > > >>>>>>> word.  Rather, any other behavior doesn't really make=
- sense.  But it
-> > > > > > > >>>>>>> could end up being dictated by how the hw and/or fw w=
-orks.
-> > > > > > > >>>>>>
-> > > > > > > >>>>>> It will stop being a hint once it has been implemented=
- and used in the
-> > > > > > > >>>>>> wild long enough. The kernel userspace regression rule=
-s make sure of
-> > > > > > > >>>>>> that.
-> > > > > > > >>>>>
-> > > > > > > >>>>> Yeah, tricky and maybe a gray area in this case. I thin=
-k we eluded
-> > > > > > > >>>>> elsewhere in the thread that renaming the thing might b=
-e an option.
-> > > > > > > >>>>>
-> > > > > > > >>>>> So maybe instead of deadline, which is a very strong wo=
-rd, use something
-> > > > > > > >>>>> along the lines of "present time hint", or "signalled t=
-ime hint"? Maybe
-> > > > > > > >>>>> reads clumsy. Just throwing some ideas for a start.
-> > > > > > > >>>>
-> > > > > > > >>>> You can try, but I fear that if it ever changes behaviou=
-r and
-> > > > > > > >>>> someone notices that, it's labelled as a kernel regressi=
-on. I don't
-> > > > > > > >>>> think documentation has ever been the authoritative defi=
-nition of UABI
-> > > > > > > >>>> in Linux, it just guides drivers and userspace towards a=
- common
-> > > > > > > >>>> understanding and common usage patterns.
-> > > > > > > >>>>
-> > > > > > > >>>> So even if the UABI contract is not documented (ugh), yo=
-u need to be
-> > > > > > > >>>> prepared to set the UABI contract through kernel impleme=
-ntation.
-> > > > > > > >>>
-> > > > > > > >>> To be the devil's advocate it probably wouldn't be an ABI=
- regression but
-> > > > > > > >>> just an regression. Same way as what nice(2) priorities m=
-ean hasn't
-> > > > > > > >>> always been the same over the years, I don't think there =
-is a strict
-> > > > > > > >>> contract.
-> > > > > > > >>>
-> > > > > > > >>> Having said that, it may be different with latency sensit=
-ive stuff such
-> > > > > > > >>> as UIs though since it is very observable and can be very=
- painful to users.
-> > > > > > > >>>
-> > > > > > > >>>> If you do not document the UABI contract, then different=
- drivers are
-> > > > > > > >>>> likely to implement it differently, leading to differing=
- behaviour.
-> > > > > > > >>>> Also userspace will invent wild ways to abuse the UABI i=
-f there is no
-> > > > > > > >>>> documentation guiding it on proper use. If userspace or =
-end users
-> > > > > > > >>>> observe different behaviour, that's bad even if it's not=
- a regression.
-> > > > > > > >>>>
-> > > > > > > >>>> I don't like the situation either, but it is what it is.=
- UABI stability
-> > > > > > > >>>> trumps everything regardless of whether it was documente=
-d or not.
-> > > > > > > >>>>
-> > > > > > > >>>> I bet userspace is going to use this as a "make it faste=
-r, make it
-> > > > > > > >>>> hotter" button. I would not be surprised if someone wrot=
-e a LD_PRELOAD
-> > > > > > > >>>> library that stamps any and all fences with an expired d=
-eadline to
-> > > > > > > >>>> just squeeze out a little more through some weird side-e=
-ffect.
-> > > > > > > >>>>
-> > > > > > > >>>> Well, that's hopefully overboard in scaring, but in the =
-end, I would
-> > > > > > > >>>> like to see UABI documented so I can have a feeling of w=
-hat it is for
-> > > > > > > >>>> and how it was intended to be used. That's all.
-> > > > > > > >>>
-> > > > > > > >>> We share the same concern. If you read elsewhere in these=
- threads you
-> > > > > > > >>> will notice I have been calling this an "arms race". If t=
-he ability to
-> > > > > > > >>> make yourself go faster does not required additional priv=
-ilege I also
-> > > > > > > >>> worry everyone will do it at which point it becomes point=
-less. So yes, I
-> > > > > > > >>> do share this concern about exposing any of this as an un=
-privileged uapi.
-> > > > > > > >>>
-> > > > > > > >>> Is it possible to limit access to only compositors in som=
-e sane way?
-> > > > > > > >>> Sounds tricky when dma-fence should be disconnected from =
-DRM..
-> > > > > > > >>
-> > > > > > > >> Maybe it's not that bad in this particular case, because w=
-e are talking
-> > > > > > > >> only about boosting GPU clocks which benefits everyone (ex=
-cept
-> > > > > > > >> battery life) and it does not penalize other programs like=
- e.g.
-> > > > > > > >> job priorities do.
-> > > > > > > >
-> > > > > > > > Apart from efficiency that you mentioned, which does not al=
-ways favor
-> > > > > > > > higher clocks, sometimes thermal budget is also shared betw=
-een CPU and
-> > > > > > > > GPU. So more GPU clocks can mean fewer CPU clocks. It's rea=
-lly hard to
-> > > > > > > > make optimal choices without the full coordination between =
-both schedulers.
-> > > > > > > >
-> > > > > > > > But that is even not the main point, which is that if every=
-one sets the
-> > > > > > > > immediate deadline then having the deadline API is a bit po=
-intless. For
-> > > > > > > > instance there is a reason negative nice needs CAP_SYS_ADMI=
-N.
-> > > > > > > >
-> > > > > > > > However Rob has also pointed out the existence of uclamp.mi=
-n via
-> > > > > > > > sched_setattr which is unprivileged and can influence frequ=
-ency
-> > > > > > > > selection in the CPU world, so I conceded on that point. If=
- CPU world
-> > > > > > > > has accepted it so can we I guess.
-> > > > > > > >
-> > > > > > > > So IMO we are back to whether we can agree defining it is a=
- hint is good
-> > > > > > > > enough, be in via the name of the ioctl/flag itself or via =
-documentation.
-> > > > > > > >
-> > > > > > > >> Drivers are not going to use the deadline for scheduling p=
-riorities,
-> > > > > > > >> right? I don't recall seeing any mention of that.
-> > > > > > > >>
-> > > > > > > >> ...right?
-> > > > > > > >
-> > > > > > > > I wouldn't have thought it would be beneficial to preclude =
-that, or
-> > > > > > > > assume what drivers would do with the info to begin with.
-> > > > > > > >
-> > > > > > > > For instance in i915 we almost had a deadline based schedul=
-er which was
-> > > > > > > > much fairer than the current priority sorted fifo and in an=
- ideal world
-> > > > > > > > we would either revive or re-implement that idea. In which =
-case
-> > > > > > > > considering the fence deadline would naturally slot in and =
-give true
-> > > > > > > > integration with compositor deadlines (not just boost clock=
-s and pray it
-> > > > > > > > helps).
-> > > > > > > How is user-space to decide whether to use ioctl(SET_DEADLINE=
-) or
-> > > > > > > poll(POLLPRI)?
-> > > > > >
-> > > > > > Implementation of blocking gl/vk/cl APIs, like glFinish() would=
- use
-> > > > > > poll(POLLPRI).  It could also set an immediate deadline and the=
-n call
-> > > > > > poll() without POLLPRI.
-> > > > > >
-> > > > > > Other than compositors which do frame-pacing I expect the main =
-usage
-> > > > > > of either of these is mesa.
-> > > > >
-> > > > > Okay, so it looks like we already agreed that having a way to bum=
-p frequency
-> > > > > from userspace is acceptable. either because there are already ot=
-her ways
-> > > > > that you can waste power and because this already acceptable in t=
-he CPU
-> > > > > world.
-> > > > >
-> > > > > But why we are doing this in hidden ways then?
-> > > > >
-> > > > > Why can't we have this hint per context that is getting executed?
-> > > > > (either with a boost-context flag or with some low/med/max or '-1=
-' to '1'
-> > > > > value like the latency priority)?
-> > > > >
-> > > > > I don't like the waitboost because this heurisitic fails in some =
-media cases.
-> > > > > I don't like the global setting because we might be alternating a=
- top-priority
-> > > > > with low-priority cases...
-> > > > >
-> > > > > So, why not something per context in execution?
-> > > > >
-> > > >
-> > > > It needs to be finer granularity than per-context, because not all
-> > > > waits should trigger boosting.  For example, virglrenderer ends up
-> > > > with a thread polling unsignaled fences to know when to signal an
-> > > > interrupt to the guest virtgpu.  This alone shouldn't trigger
-> > > > boosting.  (We also wouldn't want to completely disable boosting fo=
-r
-> > > > virglrenderer.)  Or the usermode driver could be waiting on a fence=
- to
-> > > > know when to do some cleanup.
-> > > >
-> > > > That is not to say that there isn't room for per-context flags to
-> > > > disable/enable boosting for fences created by that context, meaning=
- it
-> > > > could be an AND operation for i915 if it needs to be.
-> > >
-> > > First of all, I believe that the fence deadline hint is a good idea.
-> > > With that being said, I also don't think it is sufficient in a lot of
-> > > cases.
-> > >
-> > > The one thing I was alluding to before and that Pekka mentioned as
-> > > well is that mutter for example has a problem where we're missing the
-> > > deadline consistently because the clocks don't ramp up fast enough an=
-d
-> > > there is a MR which is just trying to keep the GPU busy to avoid this=
-.
-> >
-> > the dynamic double/triple buffer thing?
->
-> Yes
->
-> > > It would be much better if the kernel could make sure the clocks are
-> > > all ramped up when we start submitting work. In the compositor we
-> > > actually have a lot of information that *should* influence clocks. We
-> > > know when we're going to start submitting work and when the deadline
-> > > for that work is beforehand. We know which windows are visible, and
-> > > which one should have the highest priority.
-> >
-> > This sounds like something orthogonal.. something for cgroups?  Ie.
-> > android moves visible/foreground apps to a different cgroup to given
-> > them higher priority.  Tvrtko had a patchset to add drm cgroup
-> > support..
->
-> For the priority stuff, yes, probably. The visibility information on
-> the other hand could be used to determine if we want to ramp up the
-> GPU in the first place.
+On Sun, Feb 26, 2023 at 01:38:22PM +0900, Sergey Senozhatsky wrote:
+> On (23/02/23 15:27), Minchan Kim wrote:
+> > > + * Pages are distinguished by the ratio of used memory (that is the ratio
+> > > + * of ->inuse objects to all objects that page can store). For example,
+> > > + * INUSE_RATIO_30 means that the ratio of used objects is > 20% and <= 30%.
+> > > + *
+> > > + * The number of fullness groups is not random. It allows us to keep
+> > > + * diffeence between the least busy page in the group (minimum permitted
+> > > + * number of ->inuse objects) and the most busy page (maximum permitted
+> > > + * number of ->inuse objects) at a reasonable value.
+> > > + */
+> > > +#define ZS_INUSE_RATIO_0	0
+> > 
+> > How about keeping ZS_EMPTY and ZS_FULL since they are used
+> > multiple places in source code? It would have less churning.
+> 
+> I have to admit that I sort of like the unified naming
+> 	"zspage inuse ratio goes from 0 to 100"
+> 
+> but I can keep ZS_EMPTY / ZS_FULL as two "special" inuse values.
+> 
+> > > +#define ZS_INUSE_RATIO_10	1
+> > > +#define ZS_INUSE_RATIO_20	2
+> > > +#define ZS_INUSE_RATIO_30	3
+> > > +#define ZS_INUSE_RATIO_40	4
+> > > +#define ZS_INUSE_RATIO_50	5
+> > > +#define ZS_INUSE_RATIO_60	6
+> > > +#define ZS_INUSE_RATIO_70	7
+> > > +#define ZS_INUSE_RATIO_80	8
+> > > +#define ZS_INUSE_RATIO_90	9
+> > > +#define ZS_INUSE_RATIO_99	10
+> > 
+> > Do we really need all the define macro for the range from 10 to 99?
+> > Can't we do this?
+> > 
+> > enum class_stat_type {
+> >     ZS_EMPTY,
+> >     /*
+> >      * There are fullness buckets between 10% - 99%.
+> >      */
+> >     ZS_FULL = 11
+> >     NR_ZS_FULLNESS,
+> >     ZS_OBJ_ALLOCATED = NR_ZS_FULLNESS,
+> >     ZS_OBJ_USED,
+> >     NR_ZS_STAT,
+> > }
+> 
+> This creates undocumented secret constats, which are being heavily
+> used (zspage fullness values, indeces in fullness lists arrays,
+> stats array offsets, etc.) but have no trace in the code. And this
+> also forces us to use magic number in the code. So should fullness
+> grouping change, things like, for instance, zs_stat_get(7), will
+> compile just fine yet will do something very different and we will
+> have someone to spot the regression.
+> 
+> So yes, it's 10 lines of defines, it's not even 10 lines of code, but
+>  1) it is documentation, we keep constats documented
+>  2) more importantly, it protects us from regressions and bugs
+> 
+> From maintinability point of view, having everything excpliticly
+> documented / spelled out is a win.
+> 
+> As of why I decided to go with defines, this is because zspage fullness
+> values and class stats are two conceptually different things, they don't
+> really fit in one single enum, unless enum's name is "zs_constants".
+> What do you think?
 
-Right, but I think that we could have multiple cgroup based knobs, one
-that adjusts priority and one that limits/disables deadline based
-boost?  This way the compositor could setup different policies for
-visible vs hidden apps influencing both how much time they get on the
-GPU and boost.
+Agree. We don't need to combine them, then. 
+BTW, I still prefer the enum instead of 10 define.
 
-> > > We know when there are
-> > > input events which actually matter.
-> >
-> > This I see input as a different boost source for the driver.  (Ie. one
-> > boost signal is missing fence deadlines, another is input events,
-> > etc.)
-> >
-> > We end up using downstream input-handlers on the kernel side for this.
-> > Partially for the freq boost (but mostly not, UI interactive workloads
-> > like touchscreen scrolling don't generally need high GPU freqs, they
-> > are more memory bandwidth limited if they are limited by anything)..
-> > really the reason here is to get a head-start on the ~2ms that it
-> > takes to power up the GPU if it is suspended.
->
-> Right, but one of my main points I want to make here is that we could
-> get the head-start not only in response to input events but also for
-> the GPU work the compositor submits and in the future also to GPU work
-> that clients commit. Except that we don't have a way to tell the
-> kernel about it.
->
-> > But this is not quite perfect, since for example some keys should be
-> > handled on key-down but others on key-up.
-> >
-> > But again, this is something different from fence deadlines.  I'm
-> > interested in proposals because we do need something for this.  But I
-> > think it is something is orthogonal to this series.  For input, we
-> > want the kernel to know long before userspace is ready to submit
-> > rendering.
->
-> We can do that in the compositor! Input events are really not
-> something you should care about in the kernel. Input itself is also
-> not the only indication of incoming animated content. Some network
-> packets arriving could equally well result in the same situation.
+enum fullness_group {
+    ZS_EMPTY,
+    ZS_INUSE_RATIO_MIN,
+    ZS_INUSE_RATIO_ALMOST_FULL = 7,
+    ZS_INUSE_RATIO_MAX = 10,
+    ZS_FULL,
+    NR_ZS_FULLNESS,
+}
 
-We do use input boost not just for GPU freq, but also for CPU freq.
-It seems like triggering it from the kernel could happen somewhat
-sooner than userspace.  (But just speculation.)
+> 
+> [..]
+> > >  	 * Size of objects stored in this class. Must be multiple
+> > >  	 * of ZS_ALIGN.
+> > > @@ -641,8 +644,23 @@ static int zs_stats_size_show(struct seq_file *s, void *v)
+> > >  			continue;
+> > >  
+> > >  		spin_lock(&pool->lock);
+> > > -		class_almost_full = zs_stat_get(class, ZS_ALMOST_FULL);
+> > > -		class_almost_empty = zs_stat_get(class, ZS_ALMOST_EMPTY);
+> > > +
+> > > +		/*
+> > > +		 * Replecate old behaviour for almost_full and almost_empty
+> > > +		 * stats.
+> > > +		 */
+> > > +		class_almost_full = zs_stat_get(class, ZS_INUSE_RATIO_99);
+> > > +		class_almost_full += zs_stat_get(class, ZS_INUSE_RATIO_90);
+> > > +		class_almost_full += zs_stat_get(class, ZS_INUSE_RATIO_80);
+> > > +		class_almost_full += zs_stat_get(class, ZS_INUSE_RATIO_70);
+> > 
+> > > +
+> > > +		class_almost_empty = zs_stat_get(class, ZS_INUSE_RATIO_60);
+> > > +		class_almost_empty += zs_stat_get(class, ZS_INUSE_RATIO_50);
+> > > +		class_almost_empty += zs_stat_get(class, ZS_INUSE_RATIO_40);
+> > > +		class_almost_empty += zs_stat_get(class, ZS_INUSE_RATIO_30);
+> > > +		class_almost_empty += zs_stat_get(class, ZS_INUSE_RATIO_20);
+> > > +		class_almost_empty += zs_stat_get(class, ZS_INUSE_RATIO_10);
+> > 
+> > I guess you can use just loop here from 1 to 6
+> > 
+> > And then from 7 to 10 for class_almost_full.
+> 
+> I can change it to
+> 
+> 	for (r = ZS_INUSE_RATIO_10; r <= ZS_INUSE_RATIO_70; r++)
+> and
+> 	for (r = ZS_INUSE_RATIO_80; r <= ZS_INUSE_RATIO_99; r++)
+> 
+> which would be safer than using hard-coded numbers.
 
-I'm not sure network packets count.  Or at least compared to a touch
-interface, the user won't perceive the lag nearly as much, compared to
-whether or not the UI tracks their fingertips.
+I didn't mean to have hard code either but just wanted to show
+the intention to use the loop.
 
-> > > We know when the deadline for
-> > > client work is.
-> > >
-> > > In the future we also want to make sure clients know beforehand when
-> > > they should start their work and when the deadline is but that's all
-> > > very much WIP in both wayland and vulkan.
-> > >
-> > > There are two issues:
-> > >
-> > > 1. The compositor has no way to communicate any of that information t=
-o
-> > > the kernel.
-> > > 2. The only connection to client work the compositor has is a fence t=
-o
-> > > the last bit of work that must be done before the deadline after a
-> > > wl_surface.commit.
-> >
-> > If the client isn't using multiple GPUs, a single fence should be
-> > sufficient.  And even if it is, well we still have all the dependency
-> > information on the kernel side.  Ie. drm/sched knows what fences it is
-> > waiting on if it is waiting to schedule the work associated with the
-> > last fence.  It would otherwise require drm/sched to be a bit more
-> > tricky than it is so far in this series.
-> >
-> > But I think the normal dual-gpu case, the app is only dealing with a si=
-ngle GPU?
->
-> We generally don't know which GPU a client uses though. We know which
-> one we're using and tell the client that the buffer should be
-> compatible with it but that's the extent of information we have, until
-> we get a fence but that fence usually gets to the compositor pretty
-> late. Way too late for the compositor to tell the kernel to ramp up
-> the GPU and still have an impact.
+> 
+> Shall we actually instead report per inuse ratio stats instead? I sort
+> of don't see too many reasons to keep that below/above 3/4 thing.
 
-Are you sure about that?  I'd have expected the app to hand off
-fence+buffer to the compositor pretty quickly after rendering is
-submitted.  This is what I've seen elsewhere.
-
-> It also seems like we're moving away from tracking execution
-> dependencies with fences when we're switching to user mode fences.
-
-I suppose there are two cases..
-
-1) dependent fences all from the same device.. no prob, the right
-driver gets the signal that it needs to clk up, and figures out the
-rest on it's own
-
-2) dependent fences from different devices.. I suppose if device B is
-waiting for a fence from device A before it can make forward progress,
-why not express this as a deadline hint on A's fence?  (But by the
-time you have this problem, you are probably not really caring about
-power consumption, so meh..)
-
-BR,
--R
-
-> > > So in both cases a fence is just not the right primitive for us. We
-> > > need to be able to provide per-context/queue information for work tha=
-t
-> > > will happen in the future and we need a way to refer to a
-> > > context/queue generically and over IPC to boost the clocks of the
-> > > device that a client is actually using and maybe even give priority.
-> > >
-> > > But like I said, having a per-fence deadline is probably still a good
-> > > idea and doesn't conflict with any of the more coarse information.
-> >
-> > Yeah, I think the thing is you need multiple things, and this is only
-> > one of them ;-)
-> >
-> > BR,
-> > -R
-> >
->
+Oh, yeah. Since it's debugfs, we would get excuse to break.
