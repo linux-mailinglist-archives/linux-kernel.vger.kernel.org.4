@@ -2,118 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32CE6A5CDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08676A5CDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjB1QLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
+        id S230345AbjB1QMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjB1QLt (ORCPT
+        with ESMTP id S229509AbjB1QML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:11:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2B32129D
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:11:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677600665;
+        Tue, 28 Feb 2023 11:12:11 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915A230EB5;
+        Tue, 28 Feb 2023 08:12:05 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id C9DA1103;
+        Tue, 28 Feb 2023 17:12:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1677600722;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t7IBO5aYl69umpGyTeyvZekqQInZMv1t8j+p55wYs/4=;
-        b=fTNvFVpzba55EzMS823/EqgX4pR26YpfuYQI7Fqx0MzXbVtrfMl5ImjdSNKJ/ZK3eFm54H
-        Z4obwvsbcdnEyleism4IYQmLamEQ+aCLtRfX+m+4bHoY6+rWxdqxLsm6sPHxxXCw9Ef+Jy
-        oi/nv6q3IcLhPf4HI2EasowYXyGSNl4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-507-xe3GfWjfNBa08cPXzckM-Q-1; Tue, 28 Feb 2023 11:11:03 -0500
-X-MC-Unique: xe3GfWjfNBa08cPXzckM-Q-1
-Received: by mail-wr1-f71.google.com with SMTP id o3-20020a5d6483000000b002cc4fe0f7fcso1005671wri.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:11:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677600662;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t7IBO5aYl69umpGyTeyvZekqQInZMv1t8j+p55wYs/4=;
-        b=aMnqfTlw6VYSlvD+vu9AeafWXyCJnKN5uwzfah3D7H0+t1e1Fm98mujQsAWK5cUbgP
-         atASCF0WS39LBXgZelDjBWnm7ukJ3yF61FjPWASZJE7j4Z5aCzDekZgsCJyaDHhoS84v
-         Yeuy0tPl1lcvOFIKu4Uscm9/sNXl5g0cJd5hc6El9uipZ2pKw/uArTYPmSMQuB47E4ih
-         K1tddaTWXHmVkJlLANCT/fZ16bAm7sw5h4stFAN1GYX5BQ5IKj/Lzl4bUdhcA1MGToIR
-         a+6UJptk/pwL8RRsCiiw2joj5fC3QH+eFZaLwtOCtS5ngCVmJWuEYmW/QCWka1xnrTyN
-         2Iaw==
-X-Gm-Message-State: AO0yUKWlxd/pE1yoYOQhCvMWokhbWP4GKyIP5BVXPHrEHKYgfDWtE3yy
-        Hs2ltKTfWXttNXyW/oTpSVZ+coRWJ4/gQhVjgUVF4t15RcK3ozfay4wEjj9ORSZ6GRNp7GNlm4t
-        hqkFax7nCWUGBXhDnwAlkX3t1
-X-Received: by 2002:a5d:6542:0:b0:2c7:434e:9a5a with SMTP id z2-20020a5d6542000000b002c7434e9a5amr2710709wrv.65.1677600662599;
-        Tue, 28 Feb 2023 08:11:02 -0800 (PST)
-X-Google-Smtp-Source: AK7set+C4Sx+1qgWlESMbjldUwgs92cnO8HMzCf0I1Pku6si91VTDTWk4Zh3ewsOtCPt8aCThrr3VA==
-X-Received: by 2002:a5d:6542:0:b0:2c7:434e:9a5a with SMTP id z2-20020a5d6542000000b002c7434e9a5amr2710693wrv.65.1677600662295;
-        Tue, 28 Feb 2023 08:11:02 -0800 (PST)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o25-20020a05600c511900b003dfe549da4fsm18453097wms.18.2023.02.28.08.11.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 08:11:02 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        David Airlie <airlied@redhat.com>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH v4] drm/virtio: Add option to disable KMS support
-In-Reply-To: <20230228155406.2881252-1-robdclark@gmail.com>
-References: <20230228155406.2881252-1-robdclark@gmail.com>
-Date:   Tue, 28 Feb 2023 17:11:00 +0100
-Message-ID: <87bkldhisr.fsf@minerva.mail-host-address-is-not-set>
+        bh=SMyAtlujt0L0cMyshMqhEj9CXvje1bkovuz0G81iQOo=;
+        b=hnBro2ddPp3iX8s3YpHLRnOwSChsDYQdEVGzdvh9UtzmWfPdJOQaLj3TUzR9kJg+52oH9V
+        WyvASHJZ06L+S0Im0PGabf5nlzwGc57EFZdwXyGwW557annuzH/HkAJX/SgkJvXz6rw0/2
+        04/r7mj511krIS/KN9/rXF3/Xf2b+jVEMTbah0aC87xnFOHoicoqL0fSh8hcQXEorxQmXt
+        nE9Qc8krBcZyAXoNfcilvZvq+Ob5eIqXK/XG1a96d+NB9k5y2SUB3Disg6EpMI0gGQn03p
+        GrKqDO0l3ysY7tPAN5ToRsQ+P4Nu4CV/zEss/kxAMsb5fW0PnPuuoBBEwq9k9w==
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Tue, 28 Feb 2023 17:12:02 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH 16/20] irqchip/irq-sl28cpld: remove MODULE_LICENSE in
+ non-modules
+In-Reply-To: <20230228130215.289081-17-nick.alcock@oracle.com>
+References: <20230228130215.289081-1-nick.alcock@oracle.com>
+ <20230228130215.289081-17-nick.alcock@oracle.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e90b7152f0e5c819be8baf8af7874e3f@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob Clark <robdclark@gmail.com> writes:
+Am 2023-02-28 14:02, schrieb Nick Alcock:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Hello Rob,
-
-> From: Rob Clark <robdclark@chromium.org>
->
-> Add a build option to disable modesetting support.  This is useful in
-> cases where the guest only needs to use the GPU in a headless mode, or
-> (such as in the CrOS usage) window surfaces are proxied to a host
-> compositor.
->
-> As the modesetting ioctls are a big surface area for potential security
-> bugs to be found (it's happened in the past, we should assume it will
-> again in the future), it makes sense to have a build option to disable
-> those ioctls in cases where they serve no legitimate purpose.
->
-> v2: Use more if (IS_ENABLED(...))
-> v3: Also permit the host to advertise no scanouts
-> v4: Spiff out commit msg
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
-
-The patch looks good to me.
-
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Acked-by: Michael Walle <michael@walle.cc>
