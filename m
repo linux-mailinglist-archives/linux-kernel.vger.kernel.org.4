@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C7D6A5C00
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309156A5C06
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjB1Pdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S230023AbjB1PeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjB1Pdo (ORCPT
+        with ESMTP id S229629AbjB1PeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:33:44 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C142ED76
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:33:29 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id p26so6693559wmc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:33:28 -0800 (PST)
+        Tue, 28 Feb 2023 10:34:02 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9ED2BEFA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:33:44 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id n2so13695006lfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:33:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677598407;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9nv9JNtDlCNdtDLRBoEfNQRumarktclBfrFr5F3k7E8=;
-        b=bMu5ay0c51WoE+NUEQb+duROsc8eq0IELqCZ4lPXk8hzWns/Tnde6Ss1GglVTUCWCg
-         nGIsimZlVgTollaFCtjotqgD14tpS2X/5T9IG7dL7MQGVjqu2KZOPg1ycRef2iJ/9DCe
-         CoOd+KvWlYjSSAdH3/+dXBMceTIZ7MzgGpBpSe4oW02FXRWSh04/rLs2NyT2eaVOR/JV
-         jUtOJ8204uu8ATG1R2Gcc9OtMErMZRGU75FaEBiBQgJl4hA8HmU8gzF+Y8osYrCLRac0
-         vRJfe+Vq8UslgPsi+TTZqpZICXz38dJVtQHgdmUPqp5EvAyQQfHMs+S9jgZXqFsuDPO9
-         A7lQ==
+        d=linaro.org; s=google; t=1677598422;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8acnOAcWi9QAteiWt4LuCoceS68jTxeKv6KnqusOtHM=;
+        b=RkLKpK4b8V+69XDlfUcEpWbHvr4Yx40sNSoxQhzcR5mjp8Ejq8xAxLgSNQuDMrUQ1+
+         q7tVywLEAxxBqS4YZEjmRnFSDT71QZ/mrpN/PHSrmcw6m9ot7YupedwCAFSw3DeQ7Nt/
+         ajgCPbzpPiBchj5J79h2Qgnjajkcp1jSipRsu7Vp32eThmqYriOteGtGLlsI9LBPPYfk
+         fkTcN02x9kGN5T3/7u6Rn702ikP2jaeW1qGeY28PtTalZxXj4hMm7SaWEhfNzV0j6eyC
+         1bIPGNXY+32yryCuNpGKeyzY4QrfutSxRnsdS3q7TesDo3IJPmePVLubA63h0HiwdK2c
+         z9jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677598407;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9nv9JNtDlCNdtDLRBoEfNQRumarktclBfrFr5F3k7E8=;
-        b=YoNF5AkP957Wlpvi+gPVSADDe/5QpLIJPgWwpZnIf17fMv1L1kOy9F9EQOqAsURKZI
-         XzaqkZqhWSIGXkgA0Ei9ahI9QXvJ+VFnuzIP1stCaGS8b6puWpG8wpg8SaIZ1K1xZgOU
-         tyWQUzlpyNzt/ngwy573MlsZK9syBp30ikl2Sm9ZOZk2VPgEzIiPjzsSwg30kXElEG2l
-         IOrEcSNkN/aZfurcMWVdMrNz1zEaCJpf2pHEtsgywWhT+kgw7ThMgOjKcTnm1IbDObCI
-         NowTodiS4Tmg9Hsv4AfnH3+h6fFioSSOpdOU8/Jn0dF7h1pzwbshSAgnbNo7Dzy/IetP
-         +3CA==
-X-Gm-Message-State: AO0yUKXQfS/HQtYY6qJN3Pw/WMZQLRNJeY5GD4a6mCBRl5pR9DGP1quf
-        2Pj6HhoSqGmyyMw8d4bMWf8EFA==
-X-Google-Smtp-Source: AK7set8wq1PJum4pWy19ypA8LxCBU2liGpV1nyFqRuNVz1Djx5bVEeSFVDn7ExYe4bqelqqqJo5RFg==
-X-Received: by 2002:a05:600c:164a:b0:3eb:4cb5:dfa with SMTP id o10-20020a05600c164a00b003eb4cb50dfamr2471202wmn.31.1677598407489;
-        Tue, 28 Feb 2023 07:33:27 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id az11-20020a05600c600b00b003e1202744f2sm16169728wmb.31.2023.02.28.07.33.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:33:27 -0800 (PST)
-Message-ID: <54bd7d0b-b47b-dfae-f62e-9393162d79a7@linaro.org>
-Date:   Tue, 28 Feb 2023 15:33:26 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 06/18] media: venus: hfi_venus: Write to VIDC_CTRL_INIT
- after unmasking interrupts
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        d=1e100.net; s=20210112; t=1677598422;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8acnOAcWi9QAteiWt4LuCoceS68jTxeKv6KnqusOtHM=;
+        b=mKOxk/Sl9eGeawMU7n8+ROfZJbd0Qzo2aCAf8d+QfJwjroEhp+zF34VuC9Qm21G8cE
+         ivK/6WcsYdp4/mzqry9j0JgwhQ6COrfnLbYEhCgDXjwOLhtzXJl6SkkflkyB83IlXoFC
+         FsfQH16mbg0xpZcCpAVYZ6mi4kiV/NXzZiH55zDtzbHW2ISQol3e3BwzWbKYTscPKKnW
+         PQU7rv8ozvAYvdd/CRBMOnKaS4pbhqjlC1yfADXMCiPjL2k2x2g1XBH/ovn5p2lpBVf+
+         FQOjA8d2rVf/sLJFuEQM6dMZY04SbNNrmClyjuUaOtD7f6ShaLoAHM2tlRECibdRckao
+         tCyw==
+X-Gm-Message-State: AO0yUKXK7Jz+oLpCvIjvZAC8zYfBMM/A5j2zz6o1EE7m1dQ3ALx/x89G
+        nM559x7P5ozbLG3H4wY/MRZxNw==
+X-Google-Smtp-Source: AK7set8C+oB7shl3CwVJJvoRc5QJ3tHikl2ZdBNYCCkSLYMZgO/UPofjbu6qjqFRvz3DbvrWfqhYYA==
+X-Received: by 2002:ac2:559a:0:b0:4db:24f8:fabc with SMTP id v26-20020ac2559a000000b004db24f8fabcmr740324lfg.49.1677598422574;
+        Tue, 28 Feb 2023 07:33:42 -0800 (PST)
+Received: from localhost.localdomain (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id e13-20020a056512090d00b004b58500383bsm1373308lft.272.2023.02.28.07.33.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 07:33:42 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-6-58c2c88384e9@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230228-topic-venus-v1-6-58c2c88384e9@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Qais Yousef <qyousef@layalina.io>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Kirill Tkhai <tkhai@ya.ru>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] mailmap: map Dikshita Agarwal's old address to his current one
+Date:   Tue, 28 Feb 2023 16:33:34 +0100
+Message-Id: <20230228153335.907164-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230228153335.907164-1-konrad.dybcio@linaro.org>
+References: <20230228153335.907164-1-konrad.dybcio@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2023 15:24, Konrad Dybcio wrote:
-> The downstream driver signals the hardware to be enabled only after the
-> interrupts are unmasked, which... makes sense. Follow suit.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/media/platform/qcom/venus/hfi_venus.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-> index 772e5e9cf127..4d785e53aa0b 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-> @@ -454,7 +454,6 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
->   	void __iomem *wrapper_base = hdev->core->wrapper_base;
->   	int ret = 0;
->   
-> -	writel(BIT(VIDC_CTRL_INIT_CTRL_SHIFT), cpu_cs_base + VIDC_CTRL_INIT);
->   	if (IS_IRIS1(hdev->core) || IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
->   		mask_val = readl(wrapper_base + WRAPPER_INTR_MASK);
->   		mask_val &= ~(WRAPPER_INTR_MASK_A2HWD_BASK_V6 |
-> @@ -466,6 +465,7 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
->   	writel(mask_val, wrapper_base + WRAPPER_INTR_MASK);
->   	writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
->   
-> +	writel(BIT(VIDC_CTRL_INIT_CTRL_SHIFT), cpu_cs_base + VIDC_CTRL_INIT);
->   	while (!ctrl_status && count < max_tries) {
->   		ctrl_status = readl(cpu_cs_base + CPU_CS_SCIACMDARG0);
->   		if ((ctrl_status & CPU_CS_SCIACMDARG0_ERROR_STATUS_MASK) == 4) {
-> 
+Dikshita's old email is still picked up by the likes of get_maintainer.pl
+and keeps bouncing. Map it to his current one.
 
-This should go before you add your new macros in-place of IS_V6() and it 
-should have a fixes.
-
+Cc: Dikshita Agarwal <dikshita@qti.qualcomm.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-bod
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/.mailmap b/.mailmap
+index fb65947d671d..3d5b6cf4409a 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -121,6 +121,7 @@ Dengcheng Zhu <dzhu@wavecomp.com> <dengcheng.zhu@gmail.com>
+ Dengcheng Zhu <dzhu@wavecomp.com> <dengcheng.zhu@imgtec.com>
+ Dengcheng Zhu <dzhu@wavecomp.com> <dengcheng.zhu@mips.com>
+ <dev.kurt@vandijck-laurijssen.be> <kurt.van.dijck@eia.be>
++Dikshita Agarwal <dikshita@qti.qualcomm.com> <dikshita@codeaurora.org>
+ Dmitry Baryshkov <dbaryshkov@gmail.com>
+ Dmitry Baryshkov <dbaryshkov@gmail.com> <[dbaryshkov@gmail.com]>
+ Dmitry Baryshkov <dbaryshkov@gmail.com> <dmitry_baryshkov@mentor.com>
+-- 
+2.39.2
+
