@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA146A5BBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB4F6A5BCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjB1PZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S230023AbjB1PZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjB1PYr (ORCPT
+        with ESMTP id S229963AbjB1PYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:24:47 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B19D25965
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:24:43 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id m7so13685179lfj.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:24:43 -0800 (PST)
+        Tue, 28 Feb 2023 10:24:51 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C253244A6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:24:45 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id i28so971605lfv.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:24:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677597883;
+        d=linaro.org; s=google; t=1677597885;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=S4xuvAnYE2JZwfKFXp7AV+YC6//bPuJqtQS+4kWNGBM=;
-        b=EZ2y2iBNaR+gVD9Ez/YMS/EJijOdC3Fep1XtCvcrLkyiJ1L+rjamEbj055LVNVS/+P
-         C23M6BNJV3xNALvnMI+ZJKsfNEdYtGgsvc9hUNsJgkauUMEtj+Ag2tRpFVbqGWcVywm2
-         SU/LHyGPIkYSYzzEpMZRQvXTUGngjc/TZthmUJOSMhis6zk+q7pulNReWj9WxnPo9INP
-         YKYsWEi+/WGNFXqbiM9BpHyjkZSuvlb8hSwZ/EzJTzGFyRvMgI5QTOM6PHsnzwPj+Kya
-         I45qAhzyChisUPYNIU9kTkB36hCRq1ADNrKdWDyGLVg4ZLEgJT4GDhb6SVTp+UJDJmHf
-         gCAw==
+        bh=QOZJv5Al1O3Nf++ajfeJZ7JKg8b2Wm5p9dwHgpwfHnI=;
+        b=T7ur33ww7+Maj6xcpM1Jp5Se+aSgDMOHmTLf1HO1vei0brYJ2BDAluQ9iq8UbEjiCC
+         IEVEYVn1C3T6jUhwOxiPAO9sQ8c7CNrppHI1auLgv5yhH3M0mhljelAlW8kMJx7ECJ4r
+         EAzNz+VyG/YI3u1ZoN9nUDWKNJhMymXn+wA7PeJGDhOuFvHnZbFTzB7YylrHTPKN8gpC
+         6w07B1KgEBxMyugRRdTaC8Bngjo5Yocmmaxq4q90QgcR7/S10pLcBw7hZzJ10nzPwYMC
+         /aft9RXS/0Nv8Sw1iJTKKrDXKvCYm7cx4+6BtHORQZ3tH6kNIbXHGwR8UUYJtc3AaR7q
+         HClg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677597883;
+        d=1e100.net; s=20210112; t=1677597885;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S4xuvAnYE2JZwfKFXp7AV+YC6//bPuJqtQS+4kWNGBM=;
-        b=vOqaTBwmJ5p8jw/8ZtdGSBMK0OOkvTFsB7b120Lhm8RuFXCwlY3e3QtYWUgEt9Hsqm
-         lw7njjrzXtHBDLEnr0/ooBKmMn8hWJ+X6UA3+SQql8fq8vhyDMt1ZYNmo13IKwLZFjw6
-         CR40lvZXt7Yk9WH1oSsqFcBgHjDR4lu2AZDwqqaeQ+mQIFLrDa+uzd3sXI65isqS8PVb
-         9QQ9/CZeLmZJzh5pojXJFV60gYKpQWdzaf1hQCpBRi/A0HyVAdqN/7gRYjt1ep1fLVbk
-         dIv4+hgnAt6mLqfF11TKLRaPljFOl+3nrEErT29IIA/x5R9V07Vs2Za0Wusk/4cK4WY+
-         Uvxw==
-X-Gm-Message-State: AO0yUKW045XpzMvzK9ndPvRlXzxG27ggOnvAxU64C70GkLsdcNPvJjrH
-        ZbUYvh7eL4010m17kLzslPWfew==
-X-Google-Smtp-Source: AK7set9Nx09q1xk3UMtxKXhFCB8Jru+j76Kv0PINz7jERmz0uIcjocFFwO4OgZenXTVeACxtmgyBnQ==
-X-Received: by 2002:ac2:539b:0:b0:4dd:821c:3688 with SMTP id g27-20020ac2539b000000b004dd821c3688mr754024lfh.66.1677597882849;
-        Tue, 28 Feb 2023 07:24:42 -0800 (PST)
+        bh=QOZJv5Al1O3Nf++ajfeJZ7JKg8b2Wm5p9dwHgpwfHnI=;
+        b=LS6e64SocGsqGjsbgzLsXKC3fHrNjzQHHA+RR5K8DmGOKG44w6Wpd1Dgk94lJftijN
+         Yg8UYE/D2YWkN2AXt2SgcznOCrlSqLiMnjdIXiafg7jMfhRaKiEODFXboIA/KwYxvMEL
+         R4jgdUyZXPrmu+sbjuObLCZLZshPNCVndoM1A+Pv9YdfxqKu0qHK9/L1p5IYnxei4c/u
+         jIzEKTcMUPPwhI5xs8MRHzdf4iH0BpJwcU+xNe+QD0bsSssT/xiO5cffirJKNpueDt1J
+         Exg0Sj+eFvJOLodjSWH16hNJ3LslyrsMkU8oP2pCL7ZxRBNPlTHwYMcHyAwJhVtDC7RK
+         aWfg==
+X-Gm-Message-State: AO0yUKU8/xQ8ZdsmuqIXHhqQXmSGE094ghwjlf4f8KA/Bg3n1IsXumsJ
+        DJox/4Rya9OiQawQWwm9LIff2A==
+X-Google-Smtp-Source: AK7set+O868kh/0KamQVaXo+Z+pRaMIpeU1oSERhi2KFO4LYHMFct3n5rQwzSHvyQzeY9WpQ268myw==
+X-Received: by 2002:a05:6512:1021:b0:4a4:68b7:d64b with SMTP id r1-20020a056512102100b004a468b7d64bmr838403lfr.50.1677597885374;
+        Tue, 28 Feb 2023 07:24:45 -0800 (PST)
 Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id h17-20020ac250d1000000b004db3aa3c542sm1363688lfm.47.2023.02.28.07.24.41
+        by smtp.gmail.com with ESMTPSA id h17-20020ac250d1000000b004db3aa3c542sm1363688lfm.47.2023.02.28.07.24.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 07:24:42 -0800 (PST)
+        Tue, 28 Feb 2023 07:24:43 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 28 Feb 2023 16:24:30 +0100
-Subject: [PATCH 06/18] media: venus: hfi_venus: Write to VIDC_CTRL_INIT
- after unmasking interrupts
+Date:   Tue, 28 Feb 2023 16:24:31 +0100
+Subject: [PATCH 07/18] media: venus: core: Assign registers based on VPU
+ version
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-venus-v1-6-58c2c88384e9@linaro.org>
+Message-Id: <20230228-topic-venus-v1-7-58c2c88384e9@linaro.org>
 References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
 In-Reply-To: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
 To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
@@ -77,11 +77,11 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Vikash Garodia <vgarodia@codeaurora.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677597872; l=1424;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677597872; l=889;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=4cqdrxrrUgh13B8sLIuOgZXxifYwhKNgm7jLLB9azJ0=;
- b=B8st5MyNmMBX79EtSQ6MZuilPEoKwlnJ0Rs0FLW47HrlhaXrxRM6spie1IVShxpnLMDf1R4BW8jF
- 9PWFeIsyDn7dNIV63jc3/QbMaq8OINVGSmzY++FcZ6+EZGg9DLkZ
+ bh=sx/AsEeutDVEzb05mFqQidBHgnDp5m3CRWWH6EqqBeA=;
+ b=m4cuQUCpvYiAZQbjgycB0N68xXrrz6IIK6w4NiPk96vWScEx1BdCbbgSAriCj8PHJlR7g3nxtMqb
+ //Wbg3VED9QLsRST2RgL4dngMe81BMwYI8DxA/obxxyOj59mrOtw
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,34 +93,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The downstream driver signals the hardware to be enabled only after the
-interrupts are unmasked, which... makes sense. Follow suit.
+IRIS2(_1) has a different register map compared to other HFI6XX-
+using VPUs. Take care of it.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/media/platform/qcom/venus/hfi_venus.c | 2 +-
+ drivers/media/platform/qcom/venus/core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index 772e5e9cf127..4d785e53aa0b 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -454,7 +454,6 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
- 	void __iomem *wrapper_base = hdev->core->wrapper_base;
- 	int ret = 0;
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index c13436d58ed3..bdc14acc8399 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -246,7 +246,7 @@ static int venus_enumerate_codecs(struct venus_core *core, u32 type)
  
--	writel(BIT(VIDC_CTRL_INIT_CTRL_SHIFT), cpu_cs_base + VIDC_CTRL_INIT);
- 	if (IS_IRIS1(hdev->core) || IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
- 		mask_val = readl(wrapper_base + WRAPPER_INTR_MASK);
- 		mask_val &= ~(WRAPPER_INTR_MASK_A2HWD_BASK_V6 |
-@@ -466,6 +465,7 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
- 	writel(mask_val, wrapper_base + WRAPPER_INTR_MASK);
- 	writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
- 
-+	writel(BIT(VIDC_CTRL_INIT_CTRL_SHIFT), cpu_cs_base + VIDC_CTRL_INIT);
- 	while (!ctrl_status && count < max_tries) {
- 		ctrl_status = readl(cpu_cs_base + CPU_CS_SCIACMDARG0);
- 		if ((ctrl_status & CPU_CS_SCIACMDARG0_ERROR_STATUS_MASK) == 4) {
+ static void venus_assign_register_offsets(struct venus_core *core)
+ {
+-	if (IS_V6(core)) {
++	if (IS_IRIS2(core) || IS_IRIS2_1(core)) {
+ 		core->vbif_base = core->base + VBIF_BASE;
+ 		core->cpu_base = core->base + CPU_BASE_V6;
+ 		core->cpu_cs_base = core->base + CPU_CS_BASE_V6;
 
 -- 
 2.39.2
