@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FA86A6B4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A7F6A6CA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjCALCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S229937AbjCAM6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjCALCV (ORCPT
+        with ESMTP id S229852AbjCAM6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:02:21 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65F239CE2
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:02:09 -0800 (PST)
-X-UUID: 8001859ab82011eda06fc9ecc4dadd91-20230301
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JujL0zJMof6BeSlvA5bvmTeu3hHrd2enXVP0mfRzsrA=;
-        b=egqhgcTJMRLOXnyC2Ff0GDXNNYeukR0m3xLRRHFCd+mnOv0KWkc568qo0c0p29Vxjn4Ei6J71AJj/05oUc4KGk2qAmCcN1teh94ANqg4KUQBxN6IMxGToEZPeu030fhfBsadFTvqC0lEekh4EsOs+7/LjJAwD66QuPGBoN+TSbs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:aeb25cc6-fab0-4870-898e-b1242d39c4ad,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:25b5999,CLOUDID:49ab6bf4-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: 8001859ab82011eda06fc9ecc4dadd91-20230301
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 92384482; Wed, 01 Mar 2023 19:02:04 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 1 Mar 2023 19:02:03 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 1 Mar 2023 19:02:03 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <perex@perex.cz>, <matthias.bgg@gmail.com>
-CC:     <trevor.wu@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] ASoC: mediatek: mt8195: add missing initialization
-Date:   Wed, 1 Mar 2023 19:02:00 +0800
-Message-ID: <20230301110200.26177-3-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230301110200.26177-1-trevor.wu@mediatek.com>
-References: <20230301110200.26177-1-trevor.wu@mediatek.com>
+        Wed, 1 Mar 2023 07:58:48 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BEF1A647
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:58:47 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id e26-20020a9d6e1a000000b00694274b5d3aso1667916otr.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:58:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677675526;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=K39jV7/rdE+BjoF+nHpEJFPDrYnOAY+w/+g8Z+OkbeA=;
+        b=U+eok6NnTmqvncg2t1LmfzVcFxCqTCpO9oXWZVWu42psER+FWauzpmqYACyzWG2gu3
+         3NYNzWW9Ukdwfr/yV2l7I2McME2NkNinBgMmhy9sJbRcjuQf8KmzQd0rQlDHmSDD5MAK
+         8bMOIw/ggHVygHeKw4fkBv0II87wnVps020pYxCbZdVuXMNFrG5f3HZtTlyXMYP/ITkZ
+         gFRFtJ12LOy12fEhRPzBsEucvKC3NSqiNtDyU+F1NHmp7oeGbiyN0KLgemk7UIOEcZ72
+         VvOfilTyr2r2RVoW1tZYdT0RNCLOD1MxRFYwcES7pj+LMSbhPlwyDmOWUKzMwRfx9G0x
+         T+kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677675526;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K39jV7/rdE+BjoF+nHpEJFPDrYnOAY+w/+g8Z+OkbeA=;
+        b=sHIgdWFuJUjc/sYds7BbZW86o5YFWE6O+mvJfV4ywFVmdHkIi/S0uJtQEw8O+stCZa
+         mLOqWn8aJSjaLgXhePrSHa9Qn3S13MjOZx0/u8/wSiVGR5TDFOciJ2RaX/Xsdv0N1F02
+         1lsLUsXaQKmqn0J66hMzhWfUAsNAmjDIaLYJlCTQDkKNqSuzR6Kh2yHo4klXajy30MEz
+         Wt0arhzoP2/GUzMi7XMynfwJpc14e51ln65WWE2Q4mlQsX+RRqZo09nQWaIkLWye6AAd
+         8G3BWRA/gJoeSL6W6sjsHtMUzDpMAPIqUAW10UltkGcpNRz/jh6vyeqLMmrfqCC+88f1
+         JYcA==
+X-Gm-Message-State: AO0yUKXlO6h/+jeNwVEH61tgtSk0HTnFtC+TF/mKP8myNxpF7505LZe/
+        MX963n0M9mIHSPG1YNjFcGQMbQ==
+X-Google-Smtp-Source: AK7set8ONkZnF4b3UApgDYFOP21xMxQOlZ8//HZe4y5Vf1SfGBfaHCdbwQCz2Or4+eGdHvfFI1/Ggg==
+X-Received: by 2002:a05:6830:1f5d:b0:68d:7a7f:2939 with SMTP id u29-20020a0568301f5d00b0068d7a7f2939mr2681730oth.27.1677675526365;
+        Wed, 01 Mar 2023 04:58:46 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id g21-20020a056830309500b0068bc48c61a5sm4865064ots.19.2023.03.01.04.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 04:58:45 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     broonie@kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quarium@gmail.com,
+        jhentges@accesio.com, jay.dolan@accesio.com,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH v2 0/2] Migrate PCIe-IDIO-24 GPIO driver to the regmap API
+Date:   Mon, 27 Feb 2023 22:56:26 -0500
+Message-Id: <cover.1677555956.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In etdm dai driver, dai_etdm_parse_of() function is used to parse dts
-properties to get parameters. There are two for-loops which are
-sepearately for all etdm and etdm input only cases. In etdm in only
-loop, dai_id is not initialized, so it keeps the value intiliazed in
-another loop.
+Changes in v2:
+ - Simplify PCIe-IDIO-24 register offset defines to remove superfluous
+   arithmetic
+ - Check for NULL pointer after chip->irq_drv_data allocation
+ - Set gpio_regmap drvdata and use gpio_regmap_get_drvdata() to get the
+   regmap in idio_24_reg_map_xlate()
 
-In the patch, add the missing initialization to fix the unexpected
-parsing problem.
+The regmap API supports IO port accessors so we can take advantage of
+regmap abstractions rather than handling access to the device registers
+directly in the driver.
 
-Fixes: 1de9a54acafb ("ASoC: mediatek: mt8195: support etdm in platform driver")
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
----
- sound/soc/mediatek/mt8195/mt8195-dai-etdm.c | 3 +++
- 1 file changed, 3 insertions(+)
+A patch to pass the device regmap and irq_drv_data as a parameters for
+the struct regmap_irq_chip set_type_config() is included. This is needed
+by idio_24_set_type_config() in order to update the type configuration
+on the device as well as irq_drv_data for idio_24_handle_mask_sync().
 
-diff --git a/sound/soc/mediatek/mt8195/mt8195-dai-etdm.c b/sound/soc/mediatek/mt8195/mt8195-dai-etdm.c
-index c2e268054773..f2c9a1fdbe0d 100644
---- a/sound/soc/mediatek/mt8195/mt8195-dai-etdm.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-dai-etdm.c
-@@ -2567,6 +2567,9 @@ static void mt8195_dai_etdm_parse_of(struct mtk_base_afe *afe)
- 
- 	/* etdm in only */
- 	for (i = 0; i < 2; i++) {
-+		dai_id = ETDM_TO_DAI_ID(i);
-+		etdm_data = afe_priv->dai_priv[dai_id];
-+
- 		ret = snprintf(prop, sizeof(prop),
- 			       "mediatek,%s-chn-disabled",
- 			       of_afe_etdms[i].name);
+William Breathitt Gray (2):
+  regmap: Pass regmap and irq_drv_data as parameters for
+    set_type_config()
+  gpio: pcie-idio-24: Migrate to the regmap API
+
+ drivers/base/regmap/regmap-irq.c |  13 +-
+ drivers/gpio/Kconfig             |   3 +
+ drivers/gpio/gpio-pcie-idio-24.c | 693 ++++++++++++-------------------
+ include/linux/regmap.h           |  12 +-
+ 4 files changed, 279 insertions(+), 442 deletions(-)
+
+
+base-commit: 4827aae061337251bb91801b316157a78b845ec7
 -- 
-2.18.0
+2.39.2
 
