@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85566A5281
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 06:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D34C6A51DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 04:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjB1FBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 00:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S230162AbjB1Dlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 22:41:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjB1FBt (ORCPT
+        with ESMTP id S229558AbjB1Dlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 00:01:49 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D54D2940F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 21:01:47 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VchTz00_1677560504;
-Received: from 30.97.48.254(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VchTz00_1677560504)
-          by smtp.aliyun-inc.com;
-          Tue, 28 Feb 2023 13:01:45 +0800
-Message-ID: <1f926a20-6b45-137d-4e78-30025ba33574@linux.alibaba.com>
-Date:   Tue, 28 Feb 2023 13:01:43 +0800
+        Mon, 27 Feb 2023 22:41:37 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ADF24129;
+        Mon, 27 Feb 2023 19:41:33 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PQjpJ1rcFz4f41Tt;
+        Tue, 28 Feb 2023 11:41:28 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgDnjOrod_1jpDeZEQ--.58449S2;
+        Tue, 28 Feb 2023 11:41:30 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+        ojaswin@linux.ibm.com, ritesh.list@gmail.com
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shikemeng@huaweicloud.com
+Subject: [PATCH v2 00/20] Some bugfix and cleanup to mballoc
+Date:   Tue, 28 Feb 2023 19:42:46 +0800
+Message-Id: <20230228114306.3328235-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v5] erofs: add per-cpu threads for decompression as an
- option
-To:     Sandeep Dhavale <dhavale@google.com>
-Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Nathan Huckleberry <nhuck@google.com>,
-        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com
-References: <20230208093322.75816-1-hsiangkao@linux.alibaba.com>
- <Y/ewpGQkpWvOf7qh@gmail.com>
- <ca1e604a-92ba-023b-8896-dcad9413081d@linux.alibaba.com>
- <8e067230-ce1b-1c75-0c23-87b926357f96@linux.alibaba.com>
- <CAB=BE-SQZA7gETEvxnHmy0FDQ182fUSRoa0bJBNouN33SFx3hQ@mail.gmail.com>
- <CAB=BE-Svf7TMPs-eA+sVuGtYjVWfKd1Nd_AkA9im4Op7TCLW3g@mail.gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <CAB=BE-Svf7TMPs-eA+sVuGtYjVWfKd1Nd_AkA9im4Op7TCLW3g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgDnjOrod_1jpDeZEQ--.58449S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW7CrWDKryUAFWxXryrJFb_yoW8uFykpF
+        43GrnxC34xXr17CFZxuw45X3Wft3y0kw1UGFy2g348ArnrAr9IqFnrKFyruFWUJFWkt3Zx
+        ZFy2yr45Grs7Ca7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
+        YI8I648v4I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7sRi
+        Pl1DUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sandeep,
+Hi, this series contain some random cleanup patches and some bugfix
+patches to make EXT4_MB_HINT_GOAL_ONLY work properly, protect pa->pa_free
+from race and so on. More details can be found in git log.
+Thanks!
 
-On 2023/2/28 12:47, Sandeep Dhavale via Linux-erofs wrote:
-> Hi all,
-> I completed the tests and the results are consistent with
-> our previous observation. We can see that removing WQ_UNBOUND
-> helps but the scheduling latency by using high priority per cpu
-> kthreads is even lower. Below is the table.
-> 
-> |---------------------+-------+-------+------+-------|
-> | Table               | avg   | med   | min  | max   |
-> |---------------------+-------+-------+------+-------|
-> | Default erofs       | 19323 | 19758 | 3986 | 35051 |
-> |---------------------+-------+-------+------+-------|
-> | !WQ_UNBOUND         | 11202 | 10798 | 3493 | 19822 |
-> |---------------------+-------+-------+------+-------|
-> | hipri pcpu kthreads | 7182  | 7017  | 2463 | 12300 |
-> |---------------------+-------+-------+------+-------|
+---
+V2:
+-Add signed-off from Ritesh and Ojaswin to patch 3/20 "ext4: get correct
+ext4_group_info in ext4_mb_prefetch_fini" as this is a duplicate of
+a patch under reviewing.
+-Split out original patch "ext4: avoid to use preallocated blocks if
+EXT4_MB_HINT_GOAL_ONLY is set" which will be resend after improved.
+-Improve log information of patch 20.
+-Collect Reviewed-by from Ojaswin and Ritesh. Now only patch 3, 12 and
+20 need futher review.
+---
 
-May I ask did it test with different setup since the test results
-in the original commit message are:
+Kemeng Shi (20):
+  ext4: set goal start correctly in ext4_mb_normalize_request
+  ext4: allow to find by goal if EXT4_MB_HINT_GOAL_ONLY is set
+  ext4: get correct ext4_group_info in ext4_mb_prefetch_fini
+  ext4: correct calculation of s_mb_preallocated
+  ext4: correct start of used group pa for debug in ext4_mb_use_group_pa
+  ext4: protect pa->pa_free in ext4_discard_allocated_blocks
+  ext4: add missed brelse in ext4_free_blocks_simple
+  ext4: remove unused return value of ext4_mb_try_best_found and
+    ext4_mb_free_metadata
+  ext4: Remove unnecessary release when memory allocation failed in
+    ext4_mb_init_cache
+  ext4: remove unnecessary e4b->bd_buddy_page check in
+    ext4_mb_load_buddy_gfp
+  ext4: remove unnecessary check in ext4_mb_new_blocks
+  ext4: remove dead check in mb_buddy_mark_free
+  ext4: remove ac->ac_found > sbi->s_mb_min_to_scan dead check in
+    ext4_mb_check_limits
+  ext4: use best found when complex scan of group finishs
+  ext4: remove unnecessary exit_meta_group_info tag
+  ext4: remove unnecessary count2 in ext4_free_data_in_buddy
+  ext4: remove unnecessary goto in ext4_mb_mark_diskspace_used
+  ext4: remove repeat assignment to ac_f_ex
+  ext4: remove comment code ext4_discard_preallocations
+  ext4: simplify calculation of blkoff in ext4_mb_new_blocks_simple
 
-+-------------------------+-----------+----------------+---------+
-|                         | workqueue | kthread_worker |  diff   |
-+-------------------------+-----------+----------------+---------+
-| Average (us)            |     15253 |           2914 | -80.89% |
-| Median (us)             |     14001 |           2912 | -79.20% |
-| Minimum (us)            |      3117 |           1027 | -67.05% |
-| Maximum (us)            |     30170 |           3805 | -87.39% |
-| Standard deviation (us) |      7166 |            359 |         |
-+-------------------------+-----------+----------------+---------+
+ fs/ext4/mballoc.c | 104 +++++++++++++++++-----------------------------
+ 1 file changed, 38 insertions(+), 66 deletions(-)
 
-Otherwise it looks good to me for now, hopefully helpful to Android
-users.
+-- 
+2.30.0
 
-Thanks,
-Gao Xiang
-
-> 
-> 
-> Thanks,
-> Sandeep.
