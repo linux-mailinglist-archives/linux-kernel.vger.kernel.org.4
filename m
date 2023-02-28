@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796DA6A51B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 04:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1B86A51B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 04:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjB1DNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 22:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        id S230013AbjB1DNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 22:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjB1DNq (ORCPT
+        with ESMTP id S229900AbjB1DNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 22:13:46 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37A21E1DC
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 19:13:44 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536bbaeceeaso180785987b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 19:13:44 -0800 (PST)
+        Mon, 27 Feb 2023 22:13:38 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDACF86B2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 19:13:36 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id kb15so8351871pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 19:13:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677554024;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=s6UOSWO+feCYZ3WxJ17vXN444yl542PP/Ra8QhWlg1E=;
-        b=BVXvaAIO+k0MW9rbMLSLEL10JfJv/dqSvdauXeBmyVpNYdjfdOGp19/tANrYafzYyE
-         LbhRzdL2lvTTAncxwGhgasgNaGccO4CT6trzGMtN4OyDVqq1yNRvKr8k6m0SyGzhQLf6
-         62xJm5ZeHJZe2QcGqIHidAamjGA3cdLHPl2Vd4WJ/W/YHO1XRESmHk17nnsE851VuOIi
-         Kn7qMoYRJwkl4eeph2+NygNkEAKludimbYssyp6p84lsBq54aUAGi1Mfjy/aPlwcmX4l
-         vTBdnYLWidYqBDUjq4fijBm3IaF2hMCneHOe76SeRAoXID4FJGMHP7dV6xWbKKzHOYLg
-         lUoQ==
+        d=shopee.com; s=shopee.com; t=1677554016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pOmm/Vo67LFh2DeLQEl+PyGHp2QpvdcC8yMg1+l9oPo=;
+        b=R1jqaA2eIonxb4RUDB15L7AxwldFeSpdbxSp05n/iPBlv6erUG5rKVF8HpSmd3yCsS
+         l+9VL9FZS65HaOxr9D0t8IMxGDUaNU7gYPtc7boarOzEUUHtVwR2iJp4uE0euYThZJHW
+         GBp99ckTO6UbgYy2kMGQltmQSAthhenH9IgYF8AjeN4voefOBtBHBQp073UJOib6EaOs
+         ap1RxkorRzhb9lM6Cl0YvI+WoVwLn7IyBP2aGaS9ClWMPnkdR4xoQRzWGuU9accbOcug
+         bFaBu5XYT8C+Fr49LBDla0PVjKcvZiJG33QTQTAgSUyLRJi0ZJlG2VpXKl3fd6ShNLly
+         dTPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677554024;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s6UOSWO+feCYZ3WxJ17vXN444yl542PP/Ra8QhWlg1E=;
-        b=TCRTwFyqaDSwcZ9QBY3tw1VIVPlQPGVBUjvN1yb8VXRPIUI3a7RuJi/2nlF4kqpxYk
-         Vfz4aAnwViap8xJu4/V/2vOZ1+GSQSeyVKctFGOuMGUx8PdfK2ARbkz1NulJEVmbGCY/
-         hHJ3AVcO6wag+ZaGXP5FOirqUVnfJO1QskWGIjLD7tq4gZacPQ6nU3F7FM+PKnKjInmV
-         /gfgKSX01zretGyJr1UlvgwFecKE/1CUaLz3v/RFtfR9MrT+NvliCa+IG/ossRUenOoY
-         11oXKNDHa3uTFo7552N/OEwGwWCJyeQ3HvWDq1ONkHXOojN49WsRZeXZXm7Cnkyb4EUF
-         a3GA==
-X-Gm-Message-State: AO0yUKVFtSSO/LrbcSubwsz02QXeWGpm4CQ6znKOoxcXrxewFTZ8gdte
-        vwOAaVL6XW+o60YWJ4K/Gyl2jg2KfoWz5A==
-X-Google-Smtp-Source: AK7set9/7oGN1cxLTSyivW/Lnm2hI66pvRCEncRFscnVFliFQ59tiscx9LiAIz1ONm2E9DLKuEu4Xv3lFA6dBw==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:431c:0:b0:52e:b22b:f99 with SMTP id
- q28-20020a81431c000000b0052eb22b0f99mr623341ywa.4.1677554024082; Mon, 27 Feb
- 2023 19:13:44 -0800 (PST)
-Date:   Tue, 28 Feb 2023 11:13:18 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230228031317.3415484-1-davidgow@google.com>
-Subject: [PATCH] Documentation: kbuild: Add note about using (subst m,y)
-From:   David Gow <davidgow@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1677554016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pOmm/Vo67LFh2DeLQEl+PyGHp2QpvdcC8yMg1+l9oPo=;
+        b=Hv3qPiBsC/QIQSBhocG9ncgnGkPJ1jToihkO3DbYVCiZwOmsyEVgnjlZq43ECmgRHj
+         OJA8ctrRx9Te8wv/YUHY6fX+ZJKx+SnNhWtK5K4oCA3KyLD9CRW4Yq2p2XaTf3Wjwdne
+         8arW7L35o6CXC1cYXceh2RddZgiiTLJvag/iwy0Uf7w4bwHd0XASANcWpUa0Unnjifqk
+         7+EBiNHuMZK4sr2xRDw49tODzHbld0lxbsQQ5yVEKzwR0D70fiLktkUL+KaYyi3WAW0f
+         HacC56oWZgGCxSVRgQKqU6RZa7cyWPEaUAazAdB6Xy2C+xNy6ycMPWE0loHeM693e17p
+         DUYQ==
+X-Gm-Message-State: AO0yUKWcdvub/mQasgzUu0yj+K3Anhr5e1Lt45+ElMWMLUC+d2VzxvUR
+        NQBQokmyc1WH9WzPbET/IX/eCw==
+X-Google-Smtp-Source: AK7set+rrl6uCpBddpqmVCFPuDnIQM2HuvpUbPUFAvzzi91CzifNh1DSkVaiMLl1zKaeNl3Rw/rOfQ==
+X-Received: by 2002:a05:6a20:42a3:b0:cd:83b1:420d with SMTP id o35-20020a056a2042a300b000cd83b1420dmr1879064pzj.38.1677554016415;
+        Mon, 27 Feb 2023 19:13:36 -0800 (PST)
+Received: from [10.54.24.141] ([143.92.118.3])
+        by smtp.gmail.com with ESMTPSA id k10-20020aa7820a000000b005a9ea5d43ddsm5033146pfi.174.2023.02.27.19.13.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 19:13:36 -0800 (PST)
+Message-ID: <802cb319-37d9-c5a7-46f3-73e729a27239@shopee.com>
+Date:   Tue, 28 Feb 2023 11:13:33 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH] cpuset: Remove unused cpuset_node_allowed
+To:     Waiman Long <longman@redhat.com>
+Cc:     lizefan.x@bytedance.com, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230227080719.20280-1-haifeng.xu@shopee.com>
+ <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
+ <0222742e-3c31-b75d-6027-3b6da2be16be@shopee.com>
+ <d6df5140-ed7c-2c12-8e5a-d5c3fbf30a47@redhat.com>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <d6df5140-ed7c-2c12-8e5a-d5c3fbf30a47@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-THe kbuild documentation already notes that, where there's an obj-y
-target in a subdirectory, it will be orphaned if the subdirectory uses
-obj-m. Suggest a way of forcing the directory to obj-y when it's based
-on a config option which could be 'm'.
 
-Linus made several suggestions as to how this is usually done here:
-https://lore.kernel.org/linux-kselftest/CAHk-=wgK07PQ_DBBbAbSJ41t__6de1xZ6q7RRu-JS=2SU0wqLQ@mail.gmail.com/
 
-This only documents the first one, which seems most common.
+On 2023/2/28 10:52, Waiman Long wrote:
+> On 2/27/23 21:40, Haifeng Xu wrote:
+>>
+>> On 2023/2/27 22:56, Waiman Long wrote:
+>>> On 2/27/23 03:07, Haifeng Xu wrote:
+>>>> Commit 002f290627c2 ("cpuset: use static key better and convert to new API")
+>>>> has used __cpuset_node_allowed instead of cpuset_node_allowed to check
+>>>> whether we can allocate on a memory node. Now this function isn't used by
+>>>> anyone, so we can remove it safely.
+>>>>
+>>>> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+>>>> ---
+>>>>    include/linux/cpuset.h | 12 ------------
+>>>>    1 file changed, 12 deletions(-)
+>>>>
+>>>> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+>>>> index d58e0476ee8e..7fad5afe3bba 100644
+>>>> --- a/include/linux/cpuset.h
+>>>> +++ b/include/linux/cpuset.h
+>>>> @@ -82,13 +82,6 @@ int cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask);
+>>>>      extern bool __cpuset_node_allowed(int node, gfp_t gfp_mask);
+>>>>    -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
+>>>> -{
+>>>> -    if (cpusets_enabled())
+>>>> -        return __cpuset_node_allowed(node, gfp_mask);
+>>>> -    return true;
+>>>> -}
+>>>> -
+>>>>    static inline bool __cpuset_zone_allowed(struct zone *z, gfp_t gfp_mask)
+>>>>    {
+>>>>        return __cpuset_node_allowed(zone_to_nid(z), gfp_mask);
+>>>> @@ -223,11 +216,6 @@ static inline int cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask)
+>>>>        return 1;
+>>>>    }
+>>>>    -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
+>>>> -{
+>>>> -    return true;
+>>>> -}
+>>>> -
+>>>>    static inline bool __cpuset_zone_allowed(struct zone *z, gfp_t gfp_mask)
+>>>>    {
+>>>>        return true;
+>>> The kernel convention is to add a "__" prefix to a function name if there is higher level helper without the "__" prefix that uses it. Since cpuset_node_allowed() is no longer used. We should just rename __cpuset_node_allowed() to cpuset_node_allowed() and get rid of the unused helper. A bit more code changes are needed for this, though.
+>>>
+>>> Cheers,
+>>> Longman
+>>>
+>> Maybe we can still use cpuset_node_allowed in __cpuset_zone_allowed? If so, less code need to be changed.
+>>
+> mm/page_alloc.c has 2 references to __cpuset_node_allowed() in their comments. These references should also be updated as well. That is why I said a bit more code needs to be touched.
+> 
+> Cheers,
+> Longman
+> 
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- Documentation/kbuild/makefiles.rst | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Ok. I mean maybe we could keep cpuset_node_allowed() and use it in __cpuset_zone_allowed(). So we don't need rename __cpuset_node_allowed() or update releated comments.
 
-diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-index e67eb261c9b0..d9eb24799f52 100644
---- a/Documentation/kbuild/makefiles.rst
-+++ b/Documentation/kbuild/makefiles.rst
-@@ -254,6 +254,17 @@ from that directory will be linked into vmlinux. If the Makefile in
- that directory specifies obj-y, those objects will be left orphan.
- It is very likely a bug of the Makefile or of dependencies in Kconfig.
- 
-+This means that, if a directory contains both obj-y and obj-m targets,
-+it should be added with obj-y. If this directory nevertheless should
-+only be built when a config option is enabled (typically to support
-+a module which requires one or two files to nevertheless be built-in),
-+'subst m,y' can be used to ensure obj-y is used.
-+
-+Example::
-+
-+  #drivers/Makefile
-+  obj-$(subst m,y,$(CONFIG_HYPERV)) += hv/
-+
- Kbuild also supports dedicated syntax, subdir-y and subdir-m, for
- descending into subdirectories. It is a good fit when you know they
- do not contain kernel-space objects at all. A typical usage is to let
--- 
-2.39.2.722.g9855ee24e9-goog
-
+Thanks.
