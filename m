@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711A06A5C84
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D346A5C82
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjB1P4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        id S230248AbjB1P4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjB1P4j (ORCPT
+        with ESMTP id S230207AbjB1P4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:56:39 -0500
+        Tue, 28 Feb 2023 10:56:38 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5EC30EB3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD500311C5
         for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:55:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1677599746;
@@ -21,242 +21,153 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=v6M2ykteJBFwPdE4Fc5PB7vibFCXhoU/gll1/xu6zk0=;
-        b=R8OwL6QnQYfbCN0NH5tuz778m9YcoHcv2TeDKfmzibZPV4/zMlznpAxuO4/EYM6vRXyAqX
-        fi1qEV49SpPGnJo6XHBduB2Wo3NmBTyY9IgTJijJNXSODH1I1+RTGL25LVNErXLMw9hCbx
-        DXWp6c3xG6yfhTVW1+G4St0Lnn5X3zQ=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=xBghEncF8boHA8ERPg4saQyYB+zKBnxfff7p7OTCduA=;
+        b=Wdgp+ShpR8oPuIbIv1cMoHGdwz7Hnu20fhoZlHfN2R/kfNQL6IkNYln1IUd2Bi/bR82QNh
+        ZHn9DyhkhN9QAM/A8kGkbZNm2W6ssr3y9+8YxDG1QLMuewtdfcswLXSoQ2L2rcehvdI01Q
+        H1TWHUlClGhOhyU3hn3xkxlrqJSN3pE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-315-A7IF_u0yOWeUyuHmHnnVDw-1; Tue, 28 Feb 2023 10:55:44 -0500
-X-MC-Unique: A7IF_u0yOWeUyuHmHnnVDw-1
-Received: by mail-qt1-f200.google.com with SMTP id p7-20020ac84607000000b003b9b6101f65so4838865qtn.11
+ us-mta-417-e8YvPS-8MxG5Z5KPfbm0iA-1; Tue, 28 Feb 2023 10:55:44 -0500
+X-MC-Unique: e8YvPS-8MxG5Z5KPfbm0iA-1
+Received: by mail-wm1-f69.google.com with SMTP id y16-20020a1c4b10000000b003dd1b5d2a36so328010wma.1
         for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:55:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677599744;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v6M2ykteJBFwPdE4Fc5PB7vibFCXhoU/gll1/xu6zk0=;
-        b=gz5SoOJxEg/FEznmKHHZlm94vlQOdYPTJp8/10a7eNFs16/BZikoZ8pgRkCTj/DKVM
-         5cKwr5I5ODXce7hCMvoeTn8aG6hn4NJixATb8/wW3eFH3cOt6fr7q05zDZz1zmUSn625
-         j4b5nlqGtNscn/OypeIsRKkOXdEf360SgNnoGEkDHml2yeokfN9LZfpOq+2iXZ4sLeGb
-         v9UThSF8YYH5K/G+82PNbC6HWFnQNxTCGf5aRJKQKDQdvaw+bceYRc6QIuj1GvM71dRu
-         cWLKqty167iBrhx1cAo6KquL4WaNAGSOCuu6FKGi1uPlidHW3NXP8tQxd78IDaSAvFIH
-         RemQ==
-X-Gm-Message-State: AO0yUKW1CMN0GOz4qjQW1xyZP1uSoErObGYwlBbWNJb1WbizPFzvvDrC
-        yYU0dLSm8ss5ELPYZ2Wing9dw4bDjsUa/JgLZXwHIOedMF8nCmbMV/YFi9kRXfdtWhjDfFA0bGy
-        Wz0NPo9Ki6P/tdHMsv8eRx9yD
-X-Received: by 2002:ac8:580f:0:b0:3bf:daa8:cacc with SMTP id g15-20020ac8580f000000b003bfdaa8caccmr6872046qtg.3.1677599743738;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xBghEncF8boHA8ERPg4saQyYB+zKBnxfff7p7OTCduA=;
+        b=Onpm1sf8QkxzCDu793480e+k19AsQ/9qmV9KJ2Baf6Ik0Qn0Nx0h3WWL/0uP1ey1Ye
+         SOtEEeKTJCoix6U+hVbORCTEKIz0h7L5TwjY6CqXPb8ytKuIKJDBQSIFnqCxtcSQR3Mh
+         Oe2kWkFZ+JJHj2wgc94+oXdIshaqVloKgyMkQnIoY1SQ6alvGopIHFN+eMMqo6tdZ6fe
+         JjNz+bzYZ+AwHzjMgReQx/zHHhmZR/CYD1Glh938fp6PQGAImRrD9Z+pNNlLmOKIarfC
+         jxR81PmDBgyYdIol45+WEvfQOKcAlFqTmYlGPz3aeQoLBX3XwGq8DQc44rRXr17FVjfe
+         7bdg==
+X-Gm-Message-State: AO0yUKXcCZsil1TJeHDxC6XH7hC6uUS8TESyQB2vpjiUz3ZW0QDbw1CI
+        WGSjJmEqRJDGNg+UlLN5rSRpZ6AFqyK+ZDxB8oSm3vej4GCZcjzMDd3um4ljHT6TK4xRM0rvKsy
+        3WgLh9xuTpo67yDktw/hfX09V
+X-Received: by 2002:a05:600c:350f:b0:3eb:3945:d400 with SMTP id h15-20020a05600c350f00b003eb3945d400mr2593184wmq.6.1677599743561;
         Tue, 28 Feb 2023 07:55:43 -0800 (PST)
-X-Google-Smtp-Source: AK7set/XPVjIGEfnKjmfSsCn1612xPeb/JaaDAmV6dwmY5PblZQ38Qj9ElM25ukoj3dLGb0rICpZcw==
-X-Received: by 2002:ac8:580f:0:b0:3bf:daa8:cacc with SMTP id g15-20020ac8580f000000b003bfdaa8caccmr6871879qtg.3.1677599742772;
+X-Google-Smtp-Source: AK7set+wnf2WDMcprxngEfzcv3vYTz2vjDLBbvltb+8+t+ERFjJxQhjmdzxRvt+YBcvxcSrV4CC0jA==
+X-Received: by 2002:a05:600c:350f:b0:3eb:3945:d400 with SMTP id h15-20020a05600c350f00b003eb3945d400mr2593150wmq.6.1677599743200;
+        Tue, 28 Feb 2023 07:55:43 -0800 (PST)
+Received: from ?IPV6:2003:cb:c706:b800:3757:baed:f95e:20ac? (p200300cbc706b8003757baedf95e20ac.dip0.t-ipconnect.de. [2003:cb:c706:b800:3757:baed:f95e:20ac])
+        by smtp.gmail.com with ESMTPSA id o25-20020a05600c511900b003dfe549da4fsm18407191wms.18.2023.02.28.07.55.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Tue, 28 Feb 2023 07:55:42 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id x21-20020a376315000000b007419eb86df0sm7080654qkb.127.2023.02.28.07.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 07:55:42 -0800 (PST)
-Date:   Tue, 28 Feb 2023 10:55:40 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+Message-ID: <5d99c731-c47a-c525-76e5-4578d9dfc9ee@redhat.com>
+Date:   Tue, 28 Feb 2023 16:55:41 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH mm-unstable v1 11/26] microblaze/mm: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Yang Shi <shy828301@gmail.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y/4j/Nu1vp9sVI7N@x1n>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
- <cf36b6ea-6268-deff-d9ed-6782de2bd0a7@gmail.com>
- <2fe790e5-89e0-d660-79cb-15160dffd907@collabora.com>
- <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
- <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
- <F73885A1-14AE-4820-876B-A8E6DC6D19CC@vmware.com>
- <Y/0eIUIh81jK9w2i@x1n>
- <5D5DEEED-55EB-457B-9EB7-C6D5B326FE99@vmware.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5D5DEEED-55EB-457B-9EB7-C6D5B326FE99@vmware.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        Michal Simek <monstr@monstr.eu>
+References: <20230113171026.582290-1-david@redhat.com>
+ <20230113171026.582290-12-david@redhat.com>
+ <CAMuHMdX-FDga8w=pgg1myskEx6wp+oyZifhPPPFnWrc1zW7ZpQ@mail.gmail.com>
+ <9ed766a6-cf06-535d-3337-ea6ff25c2362@redhat.com>
+ <CAMuHMdWSaoKqO1Nx7QMDCcXrRmFbqqX8uwDRezXs8g+HdEFjKA@mail.gmail.com>
+ <c145a2db-f92c-65aa-3e68-07dbb2e097a6@redhat.com>
+ <CAMuHMdX7MND++KXgTpx4jscfctQA_-zPt3EN9-+79EWE7e+OjA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAMuHMdX7MND++KXgTpx4jscfctQA_-zPt3EN9-+79EWE7e+OjA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 11:09:12PM +0000, Nadav Amit wrote:
+On 27.02.23 20:46, Geert Uytterhoeven wrote:
+> Hi David,
 > 
+> On Mon, Feb 27, 2023 at 6:01 PM David Hildenbrand <david@redhat.com> wrote:
+>>>>>>     /*
+>>>>>>      * Externally used page protection values.
+>>>>>> diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
+>>>>>> index 42f5988e998b..7e3de54bf426 100644
+>>>>>> --- a/arch/microblaze/include/asm/pgtable.h
+>>>>>> +++ b/arch/microblaze/include/asm/pgtable.h
 > 
-> > On Feb 27, 2023, at 1:18 PM, Peter Xu <peterx@redhat.com> wrote:
-> > 
-> > !! External Email
-> > 
-> > On Thu, Feb 23, 2023 at 05:11:11PM +0000, Nadav Amit wrote:
-> >> From my experience with UFFD, proper ordering of events  is crucial, although it
-> >> is not always done well. Therefore, we should aim for improvement, not
-> >> regression. I believe that utilizing the pagemap-based mechanism for WP'ing
-> >> might be a step in the wrong direction. I think that it would have been better
-> >> to emit a 'UFFD_FEATURE_WP_ASYNC' WP-log (and ordered) with UFFD #PF and
-> >> events. The 'UFFD_FEATURE_WP_ASYNC'-log may not need to wake waiters on the
-> >> file descriptor unless the log is full.
-> > 
-> > Yes this is an interesting question to think about..
-> > 
-> > Keeping the data in the pgtable has one good thing that it doesn't need any
-> > complexity on maintaining the log, and no possibility of "log full".
+>>>>>>      * - All other bits of the PTE are loaded into TLBLO without
+>>>>>>      *  * modification, leaving us only the bits 20, 21, 24, 25, 26, 30 for
+>>>>>>      * software PTE bits.  We actually use bits 21, 24, 25, and
+>>>>>> @@ -155,6 +155,9 @@ extern pte_t *va_to_pte(unsigned long address);
+>>>>>>     #define _PAGE_ACCESSED 0x400   /* software: R: page referenced */
+>>>>>>     #define _PMD_PRESENT   PAGE_MASK
+>>>>>>
+>>>>>> +/* We borrow bit 24 to store the exclusive marker in swap PTEs. */
+>>>>>> +#define _PAGE_SWP_EXCLUSIVE    _PAGE_DIRTY
+>>>>>
+>>>>> _PAGE_DIRTY is 0x80, so this is also bit 7, thus the new comment is
+>>>>> wrong?
+>>>>
+>>>> In the example, I use MSB-0 bit numbering (which I determined to be
+>>>> correct in microblaze context eventually, but I got confused a couple a
+>>>> times because it's very inconsistent). That should be MSB-0 bit 24.
+>>>
+>>> Thanks, TIL microblaze uses IBM bit numbering...
+>>
+>> I assume IBM bit numbering corresponds to MSB-0 bit numbering, correct?
 > 
-> I understand your concern, but I think that eventually it might be simpler
-> to maintain, since the logic of how to process the log is moved to userspace.
-> 
-> At the same time, handling inputs from pagemap and uffd handlers and sync’ing
-> them would not be too easy for userspace.
+> Correct, as seen in s370 and PowerPC manuals...
 
-I do not expect a common uffd-wp async user to provide a fault handler at
-all.  In my imagination it's in most cases used standalone from other uffd
-modes; it means all the faults will still be handled by the kernel.  Here
-we only leverage the accuracy of userfaultfd comparing to soft-dirty, so
-not really real "user"-faults.
-
-> 
-> But yes, allocation on the heap for userfaultfd_wait_queue-like entries would
-> be needed, and there are some issues of ordering the events (I think all #PF
-> and other events should be ordered regardless) and how not to traverse all
-> async-userfaultfd_wait_queue’s (except those that block if the log is full)
-> when a wakeup is needed.
-
-Will there be an ordering requirement for an async mode?  Considering it
-should be async to whatever else, I would think it's not a problem, but
-maybe I missed something.
+Good, I have some solid s390x background, but thinking about the term 
+"IBM PC" made me double-check that we're talking about the same thing ;)
 
 > 
-> > 
-> > If there's possible "log full" then the next question is whether we should
-> > let the worker wait the monitor if the monitor is not fast enough to
-> > collect those data.  It adds some slight dependency on the two threads, I
-> > think it can make the tracking harder or impossible in latency sensitive
-> > workloads.
+>> I recall that I used the comment above "/* Definitions for MicroBlaze.
+>> */" as an orientation.
+>>
+>> 0  1  2  3  4  ... 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+>> RPN.....................  0  0 EX WR ZSEL.......  W  I  M  G
 > 
-> Again, I understand your concern. But this model that I propose is not new.
-> It is used with PML (page-modification logging) and KVM, and IIRC there is
-> a similar interface between KVM and QEMU to provide this information. There
-> are endless other examples for similar producer-consumer mechanisms that
-> might lead to stall in extreme cases. 
-
-Yes, I'm not against thinking of using similar structures here.  It's just
-that it's definitely more complicated on the interface, at least we need
-yet one more interface to setup the rings and define its interfaces.
-
-Note that although Muhammud is defining another new interface here too for
-pagemap, I don't think it's strictly needed for uffd-wp async mode.  One
-can use uffd-wp async mode with PM_UFFD_WP which is with current pagemap
-interface already.
-
-So what Muhammud is proposing here are two things to me: (1) uffd-wp async,
-plus (2) a new pagemap interface (which will closely work with (1) only if
-we need atomicity on get-dirty and reprotect).
-
-Defining new interface for uffd-wp async mode will be something extra, so
-IMHO besides the heap allocation on the rings, we need to also justify
-whether that is needed.  That's why I think it's fine to go with what
-Muhammud proposed, because it's a minimum changeset at least for userfault
-to support an async mode, and anything else can be done on top if necessary.
-
-Going a bit back to the "lead to stall in extreme cases" above, just also
-want to mention that the VM use case is slightly different - dirty tracking
-is only heavily used during migration afaict, and it's a short period.  Not
-a lot of people will complain performance degrades during that period
-because that's just rare.  And, even without the ring the perf is really
-bad during migration anyway... Especially when huge pages are used to back
-the guest RAM.
-
-Here it's slightly different to me: it's about tracking dirty pages during
-any possible workload, and it can be monitored periodically and frequently.
-So IMHO stricter than a VM use case where migration is the only period to
-use it.
-
+> Indeed, that's where I noticed the "unconventional" numbering...
 > 
-> > 
-> > The other thing is we can also make the log "never gonna full" by making it
-> > a bitmap covering any registered ranges, but I don't either know whether
-> > it'll be worth it for the effort.
+>> So ... either we adjust both or we leave it as is. (again, depends on
+>> what the right thing to to is -- which I don't know :) )
 > 
-> I do not see a benefit of half-log half-scan. It tries to take the
-> data-structure of one format and combine it with another.
+> It depends whether you want to match the hardware documentation,
+> or the Linux BIT() macro and friends...
 
-What I'm saying here is not half-log / half-scan, but use a single bitmap
-to store what page is dirty, just like KVM_GET_DIRTY_LOG.  I think it
-avoids any above "stall" issue.
+The hardware documentation, so we should be good.
 
-> 
-> Anyhow, I was just giving my 2 cents. Admittedly, I did not follow the
-> threads of previous versions and I did not see userspace components that
-> use the API to say something smart.
-
-Actually similar here. :) So I'm probably not the best one to describe what
-is the best to look as API.
-
-What I know is I think the new pagemap interface is welcomed by CRIU
-developers, so it may be something good with/without userfaultfd getting
-involved already.  I see this as "let's add one more bit for uffd-wp" in
-the new interface only.
-
-Quotting some link I got from Muhammud before with CRIU usage:
-
-https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com
-https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com
-
-> Personally, I do not find the current API proposal to be very consistent
-> and simple, and it seems to me that it lets pagemap do
-> userfaultfd-related tasks, which might be considered inappropriate and
-> non-intuitive.
-
-Yes, I agree.  I just don't know what's the best way to avoid this.
-
-The issue here IIUC is Muhammud needs one operation to do what Windows does
-with getWriteWatch() API.  It means we need to mix up GET and PROTECT in a
-single shot.  If we want to use pagemap as GET, then no choice to PROTECT
-also here to me.
-
-I think it'll be the same to soft-dirty if it's used, it means we'll extend
-soft-dirty modifications from clear_refs to pagemap too which I also don't
-think it's as clean.
-
-> 
-> If I derailed the discussion, I apologize.
-
-Not at all.  I just wished you joined earlier!
+Thanks!
 
 -- 
-Peter Xu
+Thanks,
+
+David / dhildenb
 
