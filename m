@@ -2,208 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CCF36A5866
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFA26A5867
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjB1LgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S231382AbjB1LgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjB1Lfz (ORCPT
+        with ESMTP id S230338AbjB1LgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:35:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0C1C1DB9C;
-        Tue, 28 Feb 2023 03:35:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAD8DFEC;
-        Tue, 28 Feb 2023 03:36:36 -0800 (PST)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 304F23F881;
-        Tue, 28 Feb 2023 03:35:51 -0800 (PST)
-Message-ID: <f4dcb4f8-c70b-3ca9-33fd-8889899d7481@arm.com>
-Date:   Tue, 28 Feb 2023 11:35:49 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 6/9] coresight-tpdm: Add node to set dsb programming
- mode
-Content-Language: en-US
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Tue, 28 Feb 2023 06:36:05 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0569EF971
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:36:04 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so8844286pjg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:36:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=o//K/tErGPaPJ52r46l6Rxq+plE4dBlL3n3ahROgLsA=;
+        b=D6k8bxREcPgb0FmW6ZpVz/wG9B5iQfpxlbGjk+Hi12FAw/wxJlITtDRe/EGC9pzTjA
+         moa0q6yPJxYUmyEWj492+kaFVyYvdKMyniovt1TUgduSOk6tnxx6/rA8iJFsaCsu/K2Z
+         PoSFMaWSHBXBtRNIs56fiJ62jIYeuDh3z+NkAjmB2Wg3uo6jON0rRjS08tBLfGR9bFmo
+         jK1+rWeOkk0m2B/G9z64/cTj9agn4Eyu7nxYfO4TPSW/pt5bC1HAl5D6rZehsLMYQBDy
+         VTIuzykyGeMRvJHtyUsIM9bzWdN+fi/SZLCSNUpiap6cBdHm4KYcukofgrk77pSWmzHW
+         4OHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o//K/tErGPaPJ52r46l6Rxq+plE4dBlL3n3ahROgLsA=;
+        b=7vr4ifiLOySFSAJ6uCicuypDuJ+kGyj/moLVSNhL63q0VRjCczq7ZgklAD+I8N8dBR
+         AJI4d3FlueMJ4oJt4TuS7BOVocFjcXFPqzhUoE3WzFAZgiw2y52o9iDDzvur+/xYfyeH
+         VZd/xnwdCHovhimrhRMyrkhfCVs3hprTJ+oYWGuyakClU62yEW6msQmB9woScLmOWUem
+         OkYmzDM+fpV9dROSmc2Pujb5Rm+HTZ06gNFvaKnCD6I+LEfcVZshhfuwcpUneLkW7ngQ
+         +/sUHzd+s1LqVFLNMUmEDxvPs2jtchexz2HjODI73OTTZvOEmbQPmdkf5GHU8murbpXA
+         ZiHQ==
+X-Gm-Message-State: AO0yUKUjHfo3Yfcj4ujYN1/lUy9AFc5Bmhzb+K6E29E9kwS7VP0iKmBi
+        98pZeH34wmHZmEee3UGLClvxeA==
+X-Google-Smtp-Source: AK7set9d8OSjLjeV3pqXHAmC+UhG8CPdsw8c53sE0CrU+XDHEF6X+GrnWDDTo0c2Cwo30jzN3xNOzA==
+X-Received: by 2002:a17:90b:4acd:b0:233:f354:e7df with SMTP id mh13-20020a17090b4acd00b00233f354e7dfmr2988992pjb.18.1677584163380;
+        Tue, 28 Feb 2023 03:36:03 -0800 (PST)
+Received: from leoy-yangtze.lan (n058152048225.netvigator.com. [58.152.48.225])
+        by smtp.gmail.com with ESMTPSA id p2-20020a17090a348200b00233567a978csm7784204pjb.42.2023.02.28.03.35.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 03:36:02 -0800 (PST)
+Date:   Tue, 28 Feb 2023 19:35:57 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        Tao Zhang <taozha@qti.qualcomm.com>
-References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
- <1674114105-16651-7-git-send-email-quic_taozha@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1674114105-16651-7-git-send-email-quic_taozha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 13/14] perf kvm: Add TUI mode for stat report
+Message-ID: <Y/3nHZdMQEoadoLG@leoy-yangtze.lan>
+References: <20230228084147.106167-1-leo.yan@linaro.org>
+ <20230228084147.106167-14-leo.yan@linaro.org>
+ <678c5939-f512-d4f8-e290-9c0f2bf05023@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <678c5939-f512-d4f8-e290-9c0f2bf05023@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 07:41, Tao Zhang wrote:
-> Add node to set and show programming mode for TPDM DSB subunit.
-> Once the DSB programming mode is set, it will be written to the
-> register DSB_CR. Bit[10:9] of the DSB_CR register is used to set
-> the DSB test mode.
+Hi James,
+
+On Tue, Feb 28, 2023 at 11:12:17AM +0000, James Clark wrote:
+
+[...]
+
+> > +static void print_result(struct perf_kvm_stat *kvm);
+> > +
+> > +#ifdef HAVE_SLANG_SUPPORT
 > 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
-> ---
->   drivers/hwtracing/coresight/coresight-tpdm.c | 45 +++++++++++++++++++++++++++-
->   drivers/hwtracing/coresight/coresight-tpdm.h | 12 ++++++++
->   2 files changed, 56 insertions(+), 1 deletion(-)
+> Hi Leo,
 > 
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> index 1dbb6c4..9126a37 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -4,6 +4,7 @@
->    */
->   
->   #include <linux/amba/bus.h>
-> +#include <linux/bitfield.h>
->   #include <linux/bitmap.h>
->   #include <linux/coresight.h>
->   #include <linux/coresight-pmu.h>
-> @@ -38,7 +39,7 @@ static umode_t tpdm_dsb_is_visible(struct kobject *kobj,
->   
->   static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->   {
-> -	u32 val;
-> +	u32 val, mode;
->   
->   	val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
->   	/* Set trigger timestamp */
-> @@ -58,6 +59,19 @@ static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->   
->   	/* Set the enable bit of DSB control register to 1 */
->   	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
-> +	/* Set the cycle accurate mode */
-> +	mode = TPDM_DSB_MODE_CYCACC(drvdata->dsb->mode);
-> +	val &= ~TPDM_DSB_TEST_MODE;
-> +	val |= FIELD_PREP(TPDM_DSB_TEST_MODE, mode);
-> +	/* Set the byte lane for high-performance mode */
-> +	mode = TPDM_DSB_MODE_HPBYTESEL(drvdata->dsb->mode);
-> +	val &= ~TPDM_DSB_HPSEL;
-> +	val |= FIELD_PREP(TPDM_DSB_HPSEL, mode);
-> +	/* Set the performance mode */
-> +	if (drvdata->dsb->mode & TPDM_DSB_MODE_PERF)
-> +		val |= TPDM_DSB_MODE;
-> +	else
-> +		val &= ~TPDM_DSB_MODE;
+> I get an error because of this addition when building on x86. I think
+> it's because I don't have HAVE_SLANG_SUPPORT. It might be the same error
+> that you mentioned on v1?
+> 
+>    builtin-kvm.c:535:13: error: ‘print_result’ used but never defined
+> [-Werror]
+>    535 | static void print_result(struct perf_kvm_stat *kvm);
 
-This looks a bit tricky to me. Please could you add documentation of
-the values supported under Documentation/ABI/testing/sysfs-....-
+It's a bit weird for reporting this issue, since you could see I have
+moved the function definition for print_result() ahead the macro
+condition '#ifdef HAVE_SLANG_SUPPORT'.
 
-Couldn't we provide separate handles for these "mode bits" ?
+But I found building failure with below command:
 
-cycacc
-perf
-hpsel
+  $ make VF=1 DEBUG=1 NO_SLANG=1
 
-Suzuki
+Let me repin this patch for the building failures; sorry I have been
+negligent.
 
+> Other than that, for the whole set:
+> 
+> Reviewed-by: James Clark <james.clark@arm.com>
 
->   	val |= TPDM_DSB_CR_ENA;
->   	writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
->   }
-> @@ -257,6 +271,34 @@ static struct attribute_group tpdm_attr_grp = {
->   	.attrs = tpdm_attrs,
->   };
->   
-> +static ssize_t dsb_mode_show(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	return sysfs_emit(buf, "%lx\n",
-> +			 (unsigned long)drvdata->dsb->mode);
-> +}
-> +
-> +static ssize_t dsb_mode_store(struct device *dev,
-> +				   struct device_attribute *attr,
-> +				   const char *buf,
-> +				   size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long val;
-> +
-> +	if ((kstrtoul(buf, 0, &val)) || val < 0)
-> +		return -EINVAL;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	drvdata->dsb->mode = val & TPDM_MODE_ALL;
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_mode);
-> +
->   static ssize_t dsb_trig_type_show(struct device *dev,
->   				     struct device_attribute *attr,
->   				     char *buf)
-> @@ -327,6 +369,7 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
->   }
->   static DEVICE_ATTR_RW(dsb_trig_ts);
->   static struct attribute *tpdm_dsb_attrs[] = {
-> +	&dev_attr_dsb_mode.attr,
->   	&dev_attr_dsb_trig_ts.attr,
->   	&dev_attr_dsb_trig_type.attr,
->   	NULL,
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-> index 3ad1be5..b3ecb9f 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-> @@ -19,6 +19,16 @@
->   #define TPDM_DSB_XTRIG_TSENAB		BIT(1)
->   /* Enable bit for DSB subunit trigger type */
->   #define TPDM_DSB_TRIG_TYPE		BIT(12)
-> +/* Enable bit for DSB subunit perfmance mode */
-> +#define TPDM_DSB_MODE		BIT(1)
-> +
-> +/* DSB programming modes */
-> +#define TPDM_DSB_MODE_CYCACC(val)	(val & GENMASK(2, 0))
-> +#define TPDM_DSB_MODE_PERF		BIT(3)
-> +#define TPDM_DSB_MODE_HPBYTESEL(val)	(val & GENMASK(8, 4))
-> +#define TPDM_MODE_ALL			(0xFFFFFFF)
-> +#define TPDM_DSB_TEST_MODE		GENMASK(11, 9)
-> +#define TPDM_DSB_HPSEL		GENMASK(6, 2)
->   
->   /* TPDM integration test registers */
->   #define TPDM_ITATBCNTRL		(0xEF0)
-> @@ -48,10 +58,12 @@
->   
->   /**
->    * struct dsb_dataset - specifics associated to dsb dataset
-> + * @mode:             DSB programming mode
->    * @trig_ts:          Enable/Disable trigger timestamp.
->    * @trig_type:        Enable/Disable trigger type.
->    */
->   struct dsb_dataset {
-> +	u32				mode;
->   	bool			trig_ts;
->   	bool			trig_type;
->   };
+Thanks a lot for reviewing!  I will apply your tag in next spin
+except patch 13.
 
+Leo
