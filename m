@@ -2,142 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D003D6A656E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC786A6570
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjCACXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 21:23:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S229703AbjCACXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 21:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCACXC (ORCPT
+        with ESMTP id S229644AbjCACXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 21:23:02 -0500
-Received: from out-15.mta1.migadu.com (out-15.mta1.migadu.com [IPv6:2001:41d0:203:375::f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BF112F3D
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:23:01 -0800 (PST)
-Date:   Wed, 1 Mar 2023 10:22:53 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677637377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KjfrdvJ5EsT0YAy1o3AET9M3uaWnQUjK9n1xqYiKKqI=;
-        b=ZFXZDpPnzIeQyQPyopzXCeCoC1mkMkXU8UcQM1hTChwqORjbga7wiPKXPpidve6XUGscqM
-        fQs+AXb1Z5HNbO/mV3bCbstCvjWzgrpZxEyrajLZw54msNo26fkgmuqizhu18ygxhVQ1kS
-        5cyqVzY61WkjZGpnvEYJFrCGMYxBAAI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     fancer.lancer@gmail.com
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <Y/62/XUiHz363qmD@chq-MS-7D45>
-References: <20230221034656.14476-1-cai.huoqing@linux.dev>
+        Tue, 28 Feb 2023 21:23:44 -0500
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C6D30D2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:23:41 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VclkV32_1677637417;
+Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VclkV32_1677637417)
+          by smtp.aliyun-inc.com;
+          Wed, 01 Mar 2023 10:23:37 +0800
+Message-ID: <e820f68a-d1c7-c552-b924-56d97fb0b927@linux.alibaba.com>
+Date:   Wed, 1 Mar 2023 10:23:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230221034656.14476-1-cai.huoqing@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 2/3] migrate_pages: move split folios processing out of
+ migrate_pages_batch()
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>,
+        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <20230224141145.96814-1-ying.huang@intel.com>
+ <20230224141145.96814-3-ying.huang@intel.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230224141145.96814-3-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21 2月 23 11:46:51, Cai Huoqing wrote:
-> Add support for HDMA NATIVE, as long the IP design has set
-> the compatible register map parameter-HDMA_NATIVE,
-> which allows compatibility for native HDMA register configuration.
-> 
-> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> And the native HDMA registers are different from eDMA,
-> so this patch add support for HDMA NATIVE mode.
-> 
-> HDMA write and read channels operate independently to maximize
-> the performance of the HDMA read and write data transfer over
-> the link When you configure the HDMA with multiple read channels,
-> then it uses a round robin (RR) arbitration scheme to select
-> the next read channel to be serviced.The same applies when
-> youhave multiple write channels.
-> 
-> The native HDMA driver also supports a maximum of 16 independent
-> channels (8 write + 8 read), which can run simultaneously.
-> Both SAR (Source Address Register) and DAR (Destination Address Register)
-> are aligned to byte.
-Just ping this patch v4
 
-Thanks,
-Cai-
+
+On 2/24/2023 10:11 PM, Huang Ying wrote:
+> To simplify the code logic and reduce the line number.
 > 
-> Cai huoqing (4):
->   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
->     dw_edma_plat_ops
->   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
->     abstract controller operation
->   dmaengine: dw-edma: Add support for native HDMA
->   dmaengine: dw-edma: Add HDMA DebugFS support
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: "Xu, Pengfei" <pengfei.xu@intel.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Stefan Roesch <shr@devkernel.io>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Xin Hao <xhao@linux.alibaba.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>   mm/migrate.c | 76 ++++++++++++++++++----------------------------------
+>   1 file changed, 26 insertions(+), 50 deletions(-)
 > 
->   v3->v4:
->     [1/4]
->     1.Update the structure name dw_edma_plat_ops in commit log
->     2.Fix code stytle.
->     [2/4]
->     3.Refactor dw_edma_interrupt() and related callbacks to
->       make the code more readable, the calls hierarchy like this:
-> 
->       irq: dw_edma_interrupt_{write,read}()
->       +-> dw_edma_core_handle_int() (dw-edma-v0-core.c)
->           +-> dw_edma_v0_core_status_done_int() (dw-edma-v0-core.c)
->           +-> dw_edma_v0_core_clear_done_int() (dw-edma-v0-core.c)
->           +-> dw_edma_done_interrupt() (dw-edma-core.c)
->           +-> dw_edma_v0_core_status_abort_int() (dw-edma-v0-core.c)
->           +-> dw_edma_v0_core_clear_abort_int() (dw-edma-v0-core.c)
->           +-> dw_edma_abort_interrupt() (dw-edma-core.c)
->     4.Use the dw_edma_v0_core name for the dw_edma_core_ops structure instance.
->     [3/4]
->     5.Fix weird indentation of control1, func_num, etc.
->     6.Include 'linux/io-64-nonatomic-lo-hi.h' to fix warning.
->     7.Refactor dw_edma_core_handle_int related callback in dw_hdma_v0_core ops.
->     [4/4]
->     8.Add field watermark_en, func_num, qos, msi_watermark,etc.
->     9.Make variables reverse xmas tree order.
->     10.Declare const for 'struct dw_hdma_debugfs_entry'
-> 
->   v3 link:
->   https://lore.kernel.org/lkml/20230213132411.65524-1-cai.huoqing@linux.dev/
-> 
->  drivers/dma/dw-edma/Makefile                 |   8 +-
->  drivers/dma/dw-edma/dw-edma-core.c           |  77 ++---
->  drivers/dma/dw-edma/dw-edma-core.h           |  56 ++++
->  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
->  drivers/dma/dw-edma/dw-edma-v0-core.c        |  73 ++++-
->  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
->  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 302 +++++++++++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 181 +++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
->  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 129 ++++++++
->  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
->  include/linux/dma/edma.h                     |   7 +-
->  13 files changed, 807 insertions(+), 85 deletions(-)
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> 
-> -- 
-> 2.34.1
-> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 7ac37dbbf307..91198b487e49 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1605,9 +1605,10 @@ static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
+>   static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   		free_page_t put_new_page, unsigned long private,
+>   		enum migrate_mode mode, int reason, struct list_head *ret_folios,
+> -		struct migrate_pages_stats *stats)
+> +		struct list_head *split_folios, struct migrate_pages_stats *stats,
+> +		int nr_pass)
+>   {
+> -	int retry;
+> +	int retry = 1;
+>   	int large_retry = 1;
+>   	int thp_retry = 1;
+>   	int nr_failed = 0;
+> @@ -1617,19 +1618,12 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   	bool is_large = false;
+>   	bool is_thp = false;
+>   	struct folio *folio, *folio2, *dst = NULL, *dst2;
+> -	int rc, rc_saved, nr_pages;
+> -	LIST_HEAD(split_folios);
+> +	int rc, rc_saved = 0, nr_pages;
+>   	LIST_HEAD(unmap_folios);
+>   	LIST_HEAD(dst_folios);
+>   	bool nosplit = (reason == MR_NUMA_MISPLACED);
+> -	bool no_split_folio_counting = false;
+>   
+> -retry:
+> -	rc_saved = 0;
+> -	retry = 1;
+> -	for (pass = 0;
+> -	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
+> -	     pass++) {
+> +	for (pass = 0; pass < nr_pass && (retry || large_retry); pass++) {
+>   		retry = 0;
+>   		large_retry = 0;
+>   		thp_retry = 0;
+> @@ -1660,7 +1654,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   			if (!thp_migration_supported() && is_thp) {
+>   				nr_large_failed++;
+>   				stats->nr_thp_failed++;
+> -				if (!try_split_folio(folio, &split_folios)) {
+> +				if (!try_split_folio(folio, split_folios)) {
+>   					stats->nr_thp_split++;
+>   					continue;
+>   				}
+> @@ -1692,7 +1686,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   					stats->nr_thp_failed += is_thp;
+>   					/* Large folio NUMA faulting doesn't split to retry. */
+>   					if (!nosplit) {
+> -						int ret = try_split_folio(folio, &split_folios);
+> +						int ret = try_split_folio(folio, split_folios);
+>   
+>   						if (!ret) {
+>   							stats->nr_thp_split += is_thp;
+> @@ -1709,18 +1703,11 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   							break;
+>   						}
+>   					}
+> -				} else if (!no_split_folio_counting) {
+> +				} else {
+>   					nr_failed++;
+>   				}
+>   
+>   				stats->nr_failed_pages += nr_pages + nr_retry_pages;
+> -				/*
+> -				 * There might be some split folios of fail-to-migrate large
+> -				 * folios left in split_folios list. Move them to ret_folios
+> -				 * list so that they could be put back to the right list by
+> -				 * the caller otherwise the folio refcnt will be leaked.
+> -				 */
+> -				list_splice_init(&split_folios, ret_folios);
+>   				/* nr_failed isn't updated for not used */
+>   				nr_large_failed += large_retry;
+>   				stats->nr_thp_failed += thp_retry;
+> @@ -1733,7 +1720,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   				if (is_large) {
+>   					large_retry++;
+>   					thp_retry += is_thp;
+> -				} else if (!no_split_folio_counting) {
+> +				} else {
+>   					retry++;
+>   				}
+>   				nr_retry_pages += nr_pages;
+> @@ -1756,7 +1743,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   				if (is_large) {
+>   					nr_large_failed++;
+>   					stats->nr_thp_failed += is_thp;
+> -				} else if (!no_split_folio_counting) {
+> +				} else {
+>   					nr_failed++;
+>   				}
+>   
+> @@ -1774,9 +1761,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   	try_to_unmap_flush();
+>   
+>   	retry = 1;
+> -	for (pass = 0;
+> -	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
+> -	     pass++) {
+> +	for (pass = 0; pass < nr_pass && (retry || large_retry); pass++) {
+>   		retry = 0;
+>   		large_retry = 0;
+>   		thp_retry = 0;
+> @@ -1805,7 +1790,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   				if (is_large) {
+>   					large_retry++;
+>   					thp_retry += is_thp;
+> -				} else if (!no_split_folio_counting) {
+> +				} else {
+>   					retry++;
+>   				}
+>   				nr_retry_pages += nr_pages;
+> @@ -1818,7 +1803,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   				if (is_large) {
+>   					nr_large_failed++;
+>   					stats->nr_thp_failed += is_thp;
+> -				} else if (!no_split_folio_counting) {
+> +				} else {
+>   					nr_failed++;
+>   				}
+>   
+> @@ -1855,27 +1840,6 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   		dst2 = list_next_entry(dst, lru);
+>   	}
+>   
+> -	/*
+> -	 * Try to migrate split folios of fail-to-migrate large folios, no
+> -	 * nr_failed counting in this round, since all split folios of a
+> -	 * large folio is counted as 1 failure in the first round.
+> -	 */
+> -	if (rc >= 0 && !list_empty(&split_folios)) {
+> -		/*
+> -		 * Move non-migrated folios (after NR_MAX_MIGRATE_PAGES_RETRY
+> -		 * retries) to ret_folios to avoid migrating them again.
+> -		 */
+> -		list_splice_init(from, ret_folios);
+> -		list_splice_init(&split_folios, from);
+> -		/*
+> -		 * Force async mode to avoid to wait lock or bit when we have
+> -		 * locked more than one folios.
+> -		 */
+> -		mode = MIGRATE_ASYNC;
+> -		no_split_folio_counting = true;
+> -		goto retry;
+> -	}
+> -
+>   	return rc;
+>   }
+>   
+> @@ -1914,6 +1878,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	struct folio *folio, *folio2;
+>   	LIST_HEAD(folios);
+>   	LIST_HEAD(ret_folios);
+> +	LIST_HEAD(split_folios);
+>   	struct migrate_pages_stats stats;
+>   
+>   	trace_mm_migrate_pages_start(mode, reason);
+> @@ -1947,12 +1912,23 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	else
+>   		list_splice_init(from, &folios);
+>   	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
+> -				 mode, reason, &ret_folios, &stats);
+> +				 mode, reason, &ret_folios, &split_folios, &stats,
+> +				 NR_MAX_MIGRATE_PAGES_RETRY);
+>   	list_splice_tail_init(&folios, &ret_folios);
+>   	if (rc < 0) {
+>   		rc_gather = rc;
+> +		list_splice_tail(&split_folios, &ret_folios);
+
+Can we still keep the original comments? Which can help to understand 
+the case, at least for me:)
+  /*
+   * There might be some split folios of fail-to-migrate large
+   * folios left in split_folios list. Move them to ret_folios
+   * list so that they could be put back to the right list by
+   * the caller otherwise the folio refcnt will be leaked.
+   */
+
+>   		goto out;
+>   	}
+> +	if (!list_empty(&split_folios)) {
+> +		/*
+> +		 * Failure isn't counted since all split folios of a large folio
+> +		 * is counted as 1 failure already.
+> +		 */
+> +		migrate_pages_batch(&split_folios, get_new_page, put_new_page, private,
+> +				    MIGRATE_ASYNC, reason, &ret_folios, NULL, &stats, 1);
+
+Better to copy the original comments to explain why force to 
+MIGRATE_ASYNC mode for split folios.
+
+Thanks for the simplification, and please feel free to add:
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
