@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6ABF6A6BFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D76A6A6C04
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjCAL6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:58:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        id S229807AbjCAMAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjCAL6J (ORCPT
+        with ESMTP id S229627AbjCAMAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:58:09 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AB515891;
-        Wed,  1 Mar 2023 03:58:08 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B40215C004A;
-        Wed,  1 Mar 2023 06:58:04 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 01 Mar 2023 06:58:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677671884; x=1677758284; bh=DW3WbC75cz
-        X0LV0l9cu2j+K1Qv1UGQIUsfyeJalR0c4=; b=hLq3+W3boNQL75WBk1+3ShBkTz
-        9Gh0/EoeQQYqXomMVJ2NuF+8u8PZb5Yk0MyShtm+eBI25C6o21OiZbRYuvYFUe+F
-        6FkWSlDyP83+aDWERuh+uK/b4vp6kJQ0/rJjTHj4dGv8X+yXL5nD4+bU0+BcAary
-        hL/ZaSoDuYfUoD7p/RaCWT6pNQ6DiBICr4cMHBWhMt2+kMR0z/tUNGMCskCSL3qr
-        lhwhyxsPfeqWGyvGo5XGT1WghlMzUEO+/nvJlCuRFInJET99GG3mMIEVuY6vVCPJ
-        Sh/wpFENA4zLWZr/vS+cl4NzPJ2ltzZBr2Gcf5y6qc7Zn4juWPyYcc6eCnJQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677671884; x=1677758284; bh=DW3WbC75czX0LV0l9cu2j+K1Qv1U
-        GQIUsfyeJalR0c4=; b=FMRjJwkS5K+X0aFn3FqMwzUeQvzq24yiOf+kGLzFq802
-        GwWWIeTctc4rEWpiJOHb5MAlCY2y+yoX3OCo+bomfyTKKBTanmGg7CgPgE9lCuaT
-        hvaK/A32KlqwNGHJx8kejNtNWanZnLzLXPZRlz1xQtvpmhr9uMiR4BbiZi5eOFlr
-        YNE52w2HH7Ruj0hWR0wLDYGeytrbBCMuyfN+LV8e0bjHwixKQcGXkYJgQYZVWdv6
-        7SNMdGWoi442mXiwOHywwbO1zWqkpXVT55a6jcKDqHWamCOy6w1iB4wm8OQoVoSI
-        9OqSr5xTC4EgVpVkdT2MB3gRR9olb6Eg5b/Qz43+UA==
-X-ME-Sender: <xms:zD3_YwXkzxdEZqNJQiYdHWpLYWWAizy_YX87cx7F8FJi46zWkUoIAg>
-    <xme:zD3_Y0mw8rwNKTnXL08Ts6EHKbcWfUp0rkt7y6gsDrfBo_H96PwleH3Y_RohzZBt_
-    xYQKZ0s8R0Fp5VX2RY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:zD3_Y0b9YkYTaGxkS5tu06FYE_gtq5VGduPopIRcDwUdSBjji3TAxQ>
-    <xmx:zD3_Y_UmHl0K0n8H82M33u8R27OhwF1TQiCxVLvXmZjL3V3MyZfvgw>
-    <xmx:zD3_Y6l49lj89V8sSB879wFyYG5jsWP9TqhwkTrRQQRV9vsLVcgwOQ>
-    <xmx:zD3_Yxv2m2lLI9T2cS9dwHSC0IgZab28m-P3A3NiswR_TSD0V27H1w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 685B9B60086; Wed,  1 Mar 2023 06:58:04 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <b19a25bd-7fa1-4220-b8d6-919399a9e7d7@app.fastmail.com>
-In-Reply-To: <20230301112935.GD5409@thinkpad>
-References: <20230228164752.55682-1-manivannan.sadhasivam@linaro.org>
- <c5e36887-f84d-40ef-bef9-8a3947bbb73f@app.fastmail.com>
- <20230301112935.GD5409@thinkpad>
-Date:   Wed, 01 Mar 2023 12:57:43 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>
-Cc:     "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/16] Qcom: Fix PCI I/O range defined in devicetree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 07:00:14 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC812F7B7;
+        Wed,  1 Mar 2023 04:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677672013; x=1709208013;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WRHLtls8wXHkKG0wPUdAzJHiEECJD6P2u5mrgkq32og=;
+  b=VKeLANoWIAVuIIBVuspaM1v3ldoG16x1T3K29QsTGyUiwDiyyKz1IDKi
+   GnNbXjgK6FNwWu0IXvJS+gO+PjrHceCwFVfU7h9nk7vzCZAJ5raup1SDU
+   ImdASurrx12ydrjEFkyTE5Ivbtkeq6uTAbCRk4ol9FRCFZ0qj+wu5WZPF
+   mO8FjADK549egf0XEU9HGl00F4kNdgfMNtiylilSM4livD240a4q4gr2J
+   GUkOA9RD6InhcGDdfDu5UjhXrjj2sJOcbJ7JVHoRIItSXNrxxm+vJLmaM
+   dDxVZIRZhc5mcd4dUvPWzfv4+D0ZtyVC4uOaO7vZczRrMoiQYJE7r6lPt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="331870243"
+X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
+   d="scan'208";a="331870243"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 04:00:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="743405092"
+X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
+   d="scan'208";a="743405092"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmsmga004.fm.intel.com with ESMTP; 01 Mar 2023 04:00:09 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail002.ir.intel.com (Postfix) with ESMTP id E2F9636A0B;
+        Wed,  1 Mar 2023 12:00:08 +0000 (GMT)
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND net v1 0/2] iavf: fix double-broken HW hash report
+Date:   Wed,  1 Mar 2023 12:59:06 +0100
+Message-Id: <20230301115908.47995-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023, at 12:29, Manivannan Sadhasivam wrote:
-> On Tue, Feb 28, 2023 at 05:58:37PM +0100, Arnd Bergmann wrote:
->> On Tue, Feb 28, 2023, at 17:47, Manivannan Sadhasivam wrote:
->> > Hi,
->> >
->> > This series fixes the issue with PCI I/O ranges defined in devicetree of
->> > Qualcomm SoCs as reported by Arnd [1]. Most of the Qualcomm SoCs define
->> > identical mapping for the PCI I/O range. But the PCI device I/O ports
->> > are usually located between 0x0 to 64KiB/1MiB. So the defined PCI addresses are
->> > mostly bogus. The lack of bug report on this issue indicates that no one really
->> > tested legacy PCI devices with these SoCs.
->> >
->> > This series also contains a couple of cleanup patches that aligns the entries of
->> > ranges property.
->> 
->> Looks good to me. I already commented that we may also want to use
->> 64KB everywhere instead of 1MB for the per-host window size.
->
-> I also spotted this discrepancy while working on this series, but the size
-> seems to be not universal across SoCs from many vendors. So I settled with
-> whatever range that was used before.
+Currently, passing HW hash from descriptors to skb is broken two times.
+The first bug effectively disables hash from being filled at all, unless
+%NETIF_F_RXHASH is *disabled* via Ethtool. The second incorrectly says
+that IPv6 UDP packets are L3, which also triggers CPU hashing when
+needed (the networking core treats only L4 HW hash as "true").
+The very same problems were fixed in i40e and ice, but not in iavf,
+although each of the original commits bugged at least two drivers.
+It's never too late (I hope), so fix iavf this time.
 
-Makes sense. We could add another patch if necessary of course, and
-it probably doesn't matter much. OTOH I don't think there is anything
-SoC specific in this and we used to just truncate this to 64KB per
-domain. It's only really a problem if the total size of the I/O ports
-for all domains in a system exceeds the 16MB of virtual memory area.
+Alexander Lobakin (2):
+  iavf: fix inverted Rx hash condition leading to disabled hash
+  iavf: fix non-tunneled IPv6 UDP packet type and hashing
 
-     Arnd
+ drivers/net/ethernet/intel/iavf/iavf_common.c | 2 +-
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+---
+To Tony: this is very trivial and tested for a while already, I hope it
+could hit one of the first couple RCs :p
+-- 
+2.39.2
+
