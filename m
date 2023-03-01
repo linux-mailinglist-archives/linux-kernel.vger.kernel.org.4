@@ -2,80 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C616A6543
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9241A6A6545
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjCACFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 21:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S229661AbjCACGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 21:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjCACFX (ORCPT
+        with ESMTP id S229566AbjCACGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 21:05:23 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F235128D35
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:05:19 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id cf14so12785185qtb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:05:19 -0800 (PST)
+        Tue, 28 Feb 2023 21:06:01 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA7755B6;
+        Tue, 28 Feb 2023 18:06:00 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-172afa7bee2so12983750fac.6;
+        Tue, 28 Feb 2023 18:06:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
+        d=gmail.com; s=20210112; t=1677636360;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TRjVj/Q9CuAHhxFzkvoIbUrL5/4PqItnxLip/wdIyLY=;
-        b=QKy1Pi9vufh5kuJhj7chiF0r1VdnM9l0V9AnDDv8maynJSleXR94/5jeKdGIHhZZFM
-         gdNZQtxggcXF0+wDO0TEJDY9922HjGRavvwZw/UtA8O+ox3rPsg8o0NnjZQVu6WLZ+6N
-         Y5e7iEhkrPPNu069+Z0G7sItZ7r5ROgIUuh0nG/zSHYW4vvBZXJM18pCgbdZwkajpu18
-         tudaothi8YpweyE/g/lpNa4z1CoheOtrrkh5g+hQVVZA1yDLhVuapLepe1LsqL0CAkQe
-         l4/QQ7SN87jYBMqWpygUZeLV3QmKfZXQ5OMZ0nrrmFPzMxuP0hwnsmT2wZQS2gBuC4Bp
-         m9ig==
+        bh=xVqcFtg7kVG8V0qj9xxJLXTxKinuC56rq4O/0sV1arw=;
+        b=qSzmpSmGykvvwQ8KGqUAcVFJASpvfqa6eqOT1rcPebO6HO+sWPd/1gyC5YSuK3uEBL
+         iptefhYBM+M4/45Q6oSJfs0GTqAFpeRmWKzo3r9+L/oOS8pIenHiaLILBkbOvgVAQBJG
+         L/g2WF1oykOE7IqfbKzT68smXfRphV0dRLmrW5BTnpX7m0fBNF9uG4TPt9ccEclCeR5J
+         mJ8ULOhM4Ha4hplkaNf1izk9hrtOqHeMrrOiXn8GV7+64yFLL4yxQo8ycHdWYmMFWMR1
+         C8kgAG1QEhd7HVMujOW7SBw8TfzrmTOdbiMDVrhgmVURki4VUXrDxUEDv4QHzKIYux1e
+         gVNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
+        d=1e100.net; s=20210112; t=1677636360;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TRjVj/Q9CuAHhxFzkvoIbUrL5/4PqItnxLip/wdIyLY=;
-        b=0PKSslw0VhxjBs/VUmEaLfxBwO3WqZ7bKzwSESC0zJ0UwKwQgrSNKcle4PW2+5+mo5
-         OWZlrCUFg9nXqEHRBiAG8wZarz2yoQv8HmVK1YzfF3VqtWnbUv9YjMkHkW9v47iGSpXE
-         nlHkeXdnVm/bU92zpL4IBVJOFPW9DvnG++ytRb5fNiVc4xxm6M3rVxn4lkX7DYuGxInF
-         9o8n8L6O78xupyH84PVzlgO2eQhovjN6/dA+kB7pD+wbiBP/pjmPrsH1LQ6uyjAaQ4zZ
-         fJtxSwwPRlexNA6yfyPgbzOaYPoTFh21UFisj0RcQAdDenu+s7T84+GAmqj9QQfziATY
-         8q2Q==
-X-Gm-Message-State: AO0yUKX/ne0kpj6f+0uXycayL3SChPxODr3b6ETXCS75SVR+ZZEBou4N
-        qDfPMhOwL72JGxMMqjjrgQ9YM+2RU7CDaieQm74=
-X-Google-Smtp-Source: AK7set8kJFy9c93zY5Ha1M3Gbk6fwg1oP7ZowNJCK3vHB0c3OxBT2OVt/2LkxQb3R2xFpnpV7d2dhw==
-X-Received: by 2002:ac8:5f94:0:b0:3bf:d1c6:d375 with SMTP id j20-20020ac85f94000000b003bfd1c6d375mr8623747qta.36.1677636318964;
-        Tue, 28 Feb 2023 18:05:18 -0800 (PST)
-Received: from ghost.leviathan.sladewatkins.net (pool-108-44-32-49.albyny.fios.verizon.net. [108.44.32.49])
-        by smtp.gmail.com with ESMTPSA id a2-20020ac80002000000b003b9bca1e093sm7438872qtg.27.2023.02.28.18.05.17
+        bh=xVqcFtg7kVG8V0qj9xxJLXTxKinuC56rq4O/0sV1arw=;
+        b=sCxQy9mjOlsnr0io0U+dyOgUG0jUqA+9dfL6cBQVXmqTnHvSZVLJTQxJ9uvXKKtTC+
+         g8dK59Yd1ECJUgIgm8Gj0s4OVWylqdmItqBxDVULHT8POB76P6Mfjz0xk9QHFkCNtso7
+         UJOsrAw0qMUMje4qXT+uq14EcMETuwES5VJyjQ7meXPbQbhWeFNuK8ZY17M+PYDY8Jby
+         /wJ38PzAR/IL8prqANUvmzTs94fhgjnOLjOnkMmVaYfyrBzIRNXyGSUHo93vgK4GkuDB
+         K/O9ZliHJ0RD6IjNE4wVPNU0ncfb76/y+UgxQoRhV1nFqUhYoNj2VGaUr0Mg16A06rYL
+         SEvQ==
+X-Gm-Message-State: AO0yUKUHMOFkZI1twCkrimDOrhHnPe0SMYIRYQToiGdQTfryfBAXC2QU
+        /Kh62GeYtrAwwOXAYYLOMkI=
+X-Google-Smtp-Source: AK7set9AxPxVAxJ4JgJoNQHlubLlU9fkkq1N5br5KsrCpT0/qVCTQlgIHjJiRSQkMHTg79UklbAFpw==
+X-Received: by 2002:a05:6870:e309:b0:176:2145:5e18 with SMTP id z9-20020a056870e30900b0017621455e18mr501822oad.46.1677636360021;
+        Tue, 28 Feb 2023 18:06:00 -0800 (PST)
+Received: from ?IPV6:2600:1700:2442:6db0:488d:18da:bebc:d316? ([2600:1700:2442:6db0:488d:18da:bebc:d316])
+        by smtp.gmail.com with ESMTPSA id eg41-20020a05687098a900b001724742cfcesm3948184oab.38.2023.02.28.18.05.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 18:05:18 -0800 (PST)
-Message-ID: <8caf1c23-54e7-6357-29b0-4f7ddf8f16d2@sladewatkins.net>
-Date:   Tue, 28 Feb 2023 21:05:16 -0500
+        Tue, 28 Feb 2023 18:05:59 -0800 (PST)
+Message-ID: <cbf76155-4355-5241-d7a5-816e6721ce1b@gmail.com>
+Date:   Tue, 28 Feb 2023 20:05:58 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: AUTOSEL process
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 1/2] of: create of_root if no dtb provided
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
-References: <Y/y70zJj4kjOVfXa@sashalap> <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain> <Y/0U8tpNkgePu00M@sashalap>
- <Y/0i5pGYjrVw59Kk@gmail.com> <Y/0wMiOwoeLcFefc@sashalap>
- <Y/1LlA5WogOAPBNv@gmail.com> <Y/1em4ygHgSjIYau@sashalap>
- <Y/136zpJSWx96YEe@sol.localdomain>
- <CAOQ4uxietbePiWgw8aOZiZ+YT=5vYVdPH=ChnBkU_KCaHGv+1w@mail.gmail.com>
- <Y/3lV0P9h+FxmjyF@kroah.com>
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <Y/3lV0P9h+FxmjyF@kroah.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@xilinx.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230223213418.891942-1-frowand.list@gmail.com>
+ <20230223213418.891942-2-frowand.list@gmail.com>
+ <CAL_JsqLR9sm+GRU8EP4eO_Ln2UhD=ztdAU834CzP8RSv2s2jQg@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <CAL_JsqLR9sm+GRU8EP4eO_Ln2UhD=ztdAU834CzP8RSv2s2jQg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,33 +82,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 06:28, Greg KH wrote:
->> But just so you know, as a maintainer, you have the option to request that
->> patches to your subsystem will not be selected by AUTOSEL and run your
->> own process to select, test and submit fixes to stable trees.
+On 2/27/23 11:17, Rob Herring wrote:
+> On Thu, Feb 23, 2023 at 3:34 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>>
+>> When enabling CONFIG_OF on a platform where of_root is not populated by
+>> firmware, we end up without a root node. In order to apply overlays and
+>> create subnodes of the root node, we need one. Create this root node
+>> by unflattening an empty builtin dtb.
+>>
+>> If firmware provides a flattened device tree (FDT) then the FDT is
+>> unflattened via setup_arch().  Otherwise, setup_of() which is called
+>> immediately after setup_arch(), and will create the default root node
+>> if it does not exist.
 > 
-> Yes, and simply put, that's the answer for any subsystem or maintainer
-> that does not want their patches picked using the AUTOSEL tool.
+> Why do we need a hook after setup_arch() rather than an initcall?
 > 
-> The problem that the AUTOSEL tool is solving is real, we have whole
-> major subsystems where no patches are ever marked as "for stable" and so
-> real bugfixes are never backported properly.
+> Rob
 
-Yeah, I agree.
+It might work as an initcall today.  Maybe not in the future as other
+initcalls are added.
 
-And I'm throwing this out here [after having time to think about it due to an
-internet outage], but, would Cc'ing the patch's relevant subsystems on AUTOSEL
-emails help? This was sort of mentioned in this email[1] from Eric, and I
-think it _could_ help? I don't know, just something that crossed my mind earlier.
+But my main stream of thinking is that before the patch "we know" that
+the device tree data structure exists when setup_arch() returns.
+Adding setup_of() immediately after setup_arch() retains that
+guarantee, but one line later in start_kernel().
 
-> 
-> In an ideal world, all maintainers would properly mark their patches for
-> stable backporting (as documented for the past 15+ years, with a cc:
-> stable tag, NOT a Fixes: tag), but we do not live in that world, and
-> hence, the need for the AUTOSEL work.
+I could have instead put the call to setup_of() into each architectures'
+setup_arch(), but that would just be duplicating the same code for each
+architecture, which did not seem like a good choice.
 
-(I wish we did... Oh well.)
-
-[1] https://lore.kernel.org/stable/Y%2Fzswi91axMN8OsA@sol.localdomain/
-
--- Slade
+-Frank
