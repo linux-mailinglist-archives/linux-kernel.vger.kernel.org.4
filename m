@@ -2,155 +2,570 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302D76A6E8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6412C6A6E90
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjCAOgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
+        id S229745AbjCAOiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjCAOgc (ORCPT
+        with ESMTP id S229518AbjCAOiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:36:32 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2057.outbound.protection.outlook.com [40.107.13.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0555342BD8;
-        Wed,  1 Mar 2023 06:36:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fNVv/AeEQwUXhCUNxw9RY7OzgLm2DbUtIJvxSlbNPXDk/Ht7pXmxCovABGd06mTDit09kKAyu5QdoXVUdLVtsDlBGRf1PtMaKqiR/FXCR6snI0tuL2jFEWidV96Ocxqgg3NxMEyWFJ2Bd7V3yrVPNzGnJxAsKwgRB6+C1rqdx4Au4SPYPJG/10zYYxG+h4NqWnWuUB4TgUwFQo+atuC6OPgt6fBVraLajZQw4+o71y5E8gMnpyrJHGJQdKKBLASBBbBYi9ygxPh+EMn3A9bT83sMTdjwWzUMPOEStB5Rn4+p1aqwHPT/bu995+ILGGW2tqDqpn8vH31eGDqXGrtTsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=it/NvwhObiJHAjkGXCbWiJgPCyaBlHL3VEFuoKT0ikM=;
- b=kW2AUaPehCu9cEWcSAVlA5M8TsfpoacCM3q4GWarsQAIuzQs4lz1EZNLncvauW77Oa3J4sSVyaODYnwiSfvm8B2qg6jkJYm0AG02aWuyV6TmX/UrwR9SYrz3jfy6xL5Nn7v+kBiQR59uA2QqSZ5DZQeu3MRKdYafnoH4PoidEO2iVh30oOYzO7RYImae/0gHSHY8DYs31vw/SSEHfiBr3v5j4SkUI4Sd+UuttfK3+ssZaAH0Y06HtXXYRZanCg9PHeOAFoEbbjqW0s8MFG6x4nYFb1N60FrN1vArOqIEHKlHhpHEEWzS2joB1vYGytOeia6yLj+KDXC8v3JN1nMGHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=it/NvwhObiJHAjkGXCbWiJgPCyaBlHL3VEFuoKT0ikM=;
- b=Wk8hknaP8Xz3TtRI4xx4gBBMcEhihN/VhEbHChvXL2AC4O5kvUleTTSh3x49jZqsUjdpl0u4MZzR9Xh4ZNVp73LK174VawFBXVu77QI2XVT2ycpk60EFvzCVMBKXyHS7LmSNiqseQqWk/PAZg2+V8dIQofT4ayT751TGlDh2HZA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by AM7PR04MB7175.eurprd04.prod.outlook.com (2603:10a6:20b:111::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17; Wed, 1 Mar
- 2023 14:36:28 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::29a3:120c:7d42:3ca8]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::29a3:120c:7d42:3ca8%4]) with mapi id 15.20.6156.017; Wed, 1 Mar 2023
- 14:36:28 +0000
-Date:   Wed, 1 Mar 2023 16:36:25 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Implementation of fwnode_operations :: device_get_match_data()
- for software nodes?
-Message-ID: <20230301143625.7kdnzujlv4psbhla@skbuf>
-References: <20230223203713.hcse3mkbq3m6sogb@skbuf>
- <Y/0uC1LgeWR0V0ts@smile.fi.intel.com>
- <20230227234411.jqmwshzkeyx6iqyo@skbuf>
- <Y/9iLBWAO37y6lZZ@smile.fi.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/9iLBWAO37y6lZZ@smile.fi.intel.com>
-X-ClientProxiedBy: BE1P281CA0261.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:86::7) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Wed, 1 Mar 2023 09:38:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E22242BD5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:37:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677681440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bXS+L4x/+aByNMGcZKYOJNfPEOpdzh59BNNtQCXHzj0=;
+        b=RR9+s3IGVGZ0SF11DDPejX7gjV/FtDtMHHk+2VpAAPasU2SWd75OvTjkB3LbUyfHbahMeo
+        CtWZJWEyoMz8OwDrkV1g1H3I8DmuD2b9EcXdMN3HJK7pXynKDstz2+hvTCrUsPC1hnEUh0
+        28w/j4m77bsuUTcL3EIbanm+zZKJOIg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-85-HUEhJ9LgO9yZxpzpKlUXdQ-1; Wed, 01 Mar 2023 09:37:19 -0500
+X-MC-Unique: HUEhJ9LgO9yZxpzpKlUXdQ-1
+Received: by mail-ed1-f72.google.com with SMTP id fi8-20020a056402550800b004a26cc7f6cbso19434647edb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:37:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bXS+L4x/+aByNMGcZKYOJNfPEOpdzh59BNNtQCXHzj0=;
+        b=7lu/fBNsc1BTxEeKYJmBmdm7ugwxX0X2pXMROPAzhGbRb8n17jT6P5V6ZVnz+zo8W5
+         9zfmADOolpTDdj5SGv8qITtz6YFR4DHeJur/O9cAasQJS3K4HDCBgIBiYnGlN8+1ukU6
+         0fappFpodx6H2LWmetJc/0t6JUNqJLI8EIa22xBW1FdrsiJSZk9SDnSU74Bn2BAyaer+
+         LA/oZuTczUJVfKB2+PpR3VHvfEf3s1gL5t5IVzraiU6wo7ALjATr7q0UgCbWfAVPNAkC
+         yoLNMRlGMNZbmCXtxYrRVc9RG0o7rI3sv7BiZEDC8HzdN5LHngjGXYF2D8SeCOv3Usv3
+         hr3g==
+X-Gm-Message-State: AO0yUKWyov4gUfsQGpvQk9rhqL0w8hgCTnsL2z+CtIL92NM3f9qKbt8w
+        TeT9ybqq4sI7PXnUg4KNBFwCf363O89ifA1BLl7DjhE6YPu/akr+YcN9lbwrXJXE2x2IRb+8EgN
+        HhKAYMlr21tGxMCt+lyd0AHKD
+X-Received: by 2002:a17:906:dac3:b0:8dd:5710:a017 with SMTP id xi3-20020a170906dac300b008dd5710a017mr9282358ejb.4.1677681438057;
+        Wed, 01 Mar 2023 06:37:18 -0800 (PST)
+X-Google-Smtp-Source: AK7set/c/liv8yhlyXdOQO0w2d7yNB6swlhxziU9i8quvuYVlJE7edqulAmQ+8bkLUXaysy2ro2sXg==
+X-Received: by 2002:a17:906:dac3:b0:8dd:5710:a017 with SMTP id xi3-20020a170906dac300b008dd5710a017mr9282339ejb.4.1677681437655;
+        Wed, 01 Mar 2023 06:37:17 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id h14-20020a17090619ce00b008f14cc5f2e4sm5885887ejd.68.2023.03.01.06.37.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 06:37:17 -0800 (PST)
+Message-ID: <22b443fd-b415-9550-76d3-a897dde9805e@redhat.com>
+Date:   Wed, 1 Mar 2023 15:37:16 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM7PR04MB7175:EE_
-X-MS-Office365-Filtering-Correlation-Id: a2483353-6957-4246-b517-08db1a62576f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 99VUEqcqFBZmmipPI9JPQnX3VxrKDUAr3hYHfCFhChWeH4kd/vgbxDO9j+h/foYwn26Msf2wrbUgrd8zpGhd+7+k3QVkUzIUa7n6ooB1D8WW1qUjGBSki3kdSqo1ZszAaM+OYz6e8CsPvSvC+ARr4lMTfq0zpg+rbMNDKLpD55VPVZUiS2ezerBzfT5o3qigS2Lzn5W1C5knO+wMd/PrRPWXnsrqW5ctBVfyX5RewRuu7R3AxOgRdMTq/TLTm4TO8okxUYCTCOht5h8mk3E5osuu4EQATkNnyhwVX2DgTZkQ+fcy1E1RZLnLlWjnYLOhSYgNBbtITmM0UHxpTPQJpmUv3ZBxW9LG0ysK5olvBv9cxb6MB74Bs8O33AOLK3tK93CDcg3KE+eWNw8pXLuHKDsZdm9oAbNxhU7Mbulkie+3vXamreTIEEcnwQ/iH2ypWwT6Rh9TXFiB49oqgxTMkjFhGkJAuk9pz0c+omTfoBLYrfi0Rx73XolloUKtlxnC8y48wuwzspSCNt+3mDm/FbdOObBgBQv9nQb20CKujHwWZ/SJFr73PMlnsM/thBxTZS7Qpch4uF+jqrnaQtHbRqxT4j8Fr4vmZ0kJYF45inWpgg8YjxA+oPrGhB+0N6W1WhC5P/OFeQwTAkqOOhaL6Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(346002)(376002)(136003)(366004)(39860400002)(396003)(451199018)(8676002)(38100700002)(33716001)(8936002)(6916009)(478600001)(4326008)(66556008)(66946007)(5660300002)(66476007)(44832011)(2906002)(41300700001)(54906003)(6486002)(86362001)(6512007)(6506007)(1076003)(6666004)(316002)(9686003)(186003)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?68H1AvyqsUP1N6X3k2Q3EhiaXj1Axm/j3SPJSOWMgR/QspfbpW6l1UgQIGKL?=
- =?us-ascii?Q?eFkUyYjRT2D+n1RrGqUpTpABUHsDR87luQ1E+kzJ0BQtuyV7Pv5jOaGll9Du?=
- =?us-ascii?Q?lSDOH5uo2/4SaLiUSmBzrGi422DoDIo/3bdTfOyDCVx6KNvbqVFkEt+lLXV2?=
- =?us-ascii?Q?LMYwtuIGp02ZRfamnmeLg6bdgN6byFLOSGaNkp+sTVv8ZaQgz3lw6OiePQTL?=
- =?us-ascii?Q?5n2a4vPmZVDS3weAHItbQ7YQWW1h0DFmLb2fFg2rb+n14otgbeKR12+Z7ZuH?=
- =?us-ascii?Q?6KgreOJqLehsMo7wquEstOPVjoYYuiMvTT8e8Cx3aRT+jbVO6MTPXP+wiQoP?=
- =?us-ascii?Q?ShYtb3p4qTmMv4NcK4+FVuwum7YpmijZhRVLxk9K55QbvUcCOfzC7FELLzfa?=
- =?us-ascii?Q?Q+jzqEqOUfN2Dsjripyq5w+QhrXQglRSnOu3/mCOGwt9vagXNazM88u8B9jx?=
- =?us-ascii?Q?zxb2/cn/EtWjThGxnSjt4bWXr1uyprc5aQTQpWwC9fx2BVYkOV7cronLniRn?=
- =?us-ascii?Q?mnujRikvteofwyYQlplM2YLrMk38HggrMggHqHr69OIanJIDeTsNohsQPinA?=
- =?us-ascii?Q?zxxOCxHM3dMmnhHo5PjwBzmW1Kj+M/HWdVcUB4LkQu9rXd11kRTQY3H7iPVl?=
- =?us-ascii?Q?Gu+fgbMADBQ8hbMLjLJ0JtUpjO9Jj2V1u4e9HPz/eHECEGvuEYT0VX5lfRaN?=
- =?us-ascii?Q?y1b1oPZpL8jYilghwQ4Ee4IjduHqwR52R9KBbyUNSqj97t1fFGn2q16tCCFB?=
- =?us-ascii?Q?5xLhEo88u1YPTe+t/Fln2jTXp9XCq/t9TLiWowfmApFWmFIe0MpO7Yt6G+mi?=
- =?us-ascii?Q?JPvSeYgHoG+6P6srilcWTxrOrmIfyTvhxRmEtZj6uZ1g8cuNOOFXDGaOjzQb?=
- =?us-ascii?Q?K9Sq5GlRRtEsdek2nGApYOUfi/O0HnPKy2djpiwBzdzP+8SlCx4zWx3gc2J6?=
- =?us-ascii?Q?KsideLHlV0XbZ+Ss7B7KF60rGN6N/N9vFSFVsjqDSNFBIcwHzx8fG9Xfe+Jb?=
- =?us-ascii?Q?tQryMBeZIWEc2+ytNa8Cis/MKiyK7WoVX4X60aYV4o6k0UiKrxNK+g1dFHCC?=
- =?us-ascii?Q?zgRvhqRkwE+2UFS8zJRtTQiK5nSeANqHi/DqWYn+4OOIq0XdsqmYTaanB1Li?=
- =?us-ascii?Q?KObjPMDLaBBTldriaeA4nnNUHYjz18l2AezJ2itDWKrXW0BMCWMqKEbBb855?=
- =?us-ascii?Q?UlHan5wDXD98di5ON3yXVZm6xr+ytCWr3qwgB+569EyQBBVsQrGUVJ9EDAeO?=
- =?us-ascii?Q?7/yfN885yPSzMeyu4AZW25UZIk829fInVyZAhkC3xoSATzM07imYRkrAa45h?=
- =?us-ascii?Q?hrfQu5Ni/PH2s8Q4PUAt3zhOhx46okU38kVxR1OJgw9AOU0O8XieEiqV61BW?=
- =?us-ascii?Q?LWSIKMGSMxs9fu1UwpuHoFRejiIL1gtfyCGBXusbxSDyKkxXvsHuyERqMVej?=
- =?us-ascii?Q?71u0/ZXbQ4VlMaUa34jCbAQlCQoJMS7LiTNzof5na1nhXokCpoqpXQqHapCT?=
- =?us-ascii?Q?i7ENsYM9knS41u3it/LrsXbCu2JAdHhv5DOjvZCwsJYtsjP/61tsfMCFOOAm?=
- =?us-ascii?Q?DzTmNBxSPIir+VBoiwOb6so6g6Yav10e8BT+JvgbCuSVWS8U6Lp6WoitjBOP?=
- =?us-ascii?Q?pA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2483353-6957-4246-b517-08db1a62576f
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 14:36:28.0362
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZyhzhNws92TE57vp2WlamD/ew548DMQb/1Sj1axii3E8oIQFci2mcn2xfLIG+1abZmf/joF1+kkPRWLFlyHRVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7175
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 06/12] platform/x86: ISST: Enumerate TPMI SST and create
+ framework
+Content-Language: en-US, nl
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230211063257.311746-1-srinivas.pandruvada@linux.intel.com>
+ <20230211063257.311746-7-srinivas.pandruvada@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230211063257.311746-7-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 04:33:16PM +0200, Andy Shevchenko wrote:
-> On Tue, Feb 28, 2023 at 01:44:11AM +0200, Vladimir Oltean wrote:
-> > On Tue, Feb 28, 2023 at 12:26:19AM +0200, Andy Shevchenko wrote:
-> > > I believe that there are few reasons for that:
-> > > 1) (besides that what Heikki mentioned);
-> > > 2) the software nodes only for quirks, seems you are trying to implement
-> > > something that should have to be implemented as proper DT / ACPI device node.
-> > > 
-> > > Can you elaborate why do you need that (as you see no other board file requires
-> > > this)?
-> > 
-> > Trying to keep the answer short while still answering the question.
-> 
-> Thank you, this is helpful to understand what you want.
-> 
-> Random idea #N+1 based on what you told is: how about DT / ACPI overlays?
-> Random idea #N+2 is: have you considered FPGA approach?
-> 
-> So, as far as I got it right the device _can_ be considered as hotpluggable
-> blackbox with a lot of hardware onboard. This is very much reminds me FPGA
-> sitting behind PCIe hotplug capable interface.
-> 
-> What do we have now there? Can we spread the same approach for your case?
-> 
-> Because to me board files here looks like a hack.
-> 
-> P.S.
-> Yeah, I know that SPI is not hotpluggable bus per se. It may be that
-> we actually need to reboot machine after plugging in/out the device.
+Hi,
 
-Can you please give me some clearer references for #N+1 and #N+2?
-I haven't considered either of those options and I'm not sure what that
-would entail.
+On 2/11/23 07:32, Srinivas Pandruvada wrote:
+> Enumerate TPMI SST driver and create basic framework to add more
+> features.
+> 
+> The basic user space interface is still same as the legacy using
+> /dev/isst_interface. Users of "intel-speed-select" utility should
+> be able to use same commands as prior gens without being aware
+> of new underlying hardware interface.
+> 
+> TPMI SST driver enumerates on device "intel_vsec.tpmi-sst". Since there
+> can be multiple instances and there is one common SST core, split
+> implementation into two parts: A common core part and an enumeration
+> part. The enumeration driver is loaded for each device instance and
+> register with the TPMI SST core driver.
+> 
+> On very first enumeration the TPMI SST core driver register with SST
+> core driver to get IOCTL callbacks. The api_version is incremented
+> for IOCTL ISST_IF_GET_PLATFORM_INFO, so that user space can issue
+> new IOCTLs.
+> 
+> Each TPMI package contains multiple power domains. Each power domain
+> has its own set of SST controls. For each domain map the MMIO memory
+> and update per domain struct tpmi_per_power_domain_info. This information
+> will be used to implement other SST interfaces.
+> 
+> Implement first IOCTL commands to get number of TPMI SST instances
+> and instance mask as some of the power domains may not have any
+> SST controls.
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+But this is a somewhat larger patch and IMHO it would be good
+to get an extra pair of eyes on this, can you get someone else
+from Intel to also review this patch ?
+
+This (getting someone else to review the patches) especially
+applies to patches 7-11, where I don't really feel myself
+qualifeed to review them. I have given them a quick lookover
+and nothing stood out, but they really need a Reviewed-by or
+at minimum an Ack from someone else @Intel.
+
+Regards,
+
+Hans
+
+
+> ---
+>  .../x86/intel/speed_select_if/Kconfig         |   4 +
+>  .../x86/intel/speed_select_if/Makefile        |   2 +
+>  .../x86/intel/speed_select_if/isst_tpmi.c     |  53 ++++
+>  .../intel/speed_select_if/isst_tpmi_core.c    | 274 ++++++++++++++++++
+>  .../intel/speed_select_if/isst_tpmi_core.h    |  16 +
+>  include/uapi/linux/isst_if.h                  |  18 ++
+>  6 files changed, 367 insertions(+)
+>  create mode 100644 drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
+>  create mode 100644 drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
+>  create mode 100644 drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
+> 
+> diff --git a/drivers/platform/x86/intel/speed_select_if/Kconfig b/drivers/platform/x86/intel/speed_select_if/Kconfig
+> index ce3e3dc076d2..4eb3ad299db0 100644
+> --- a/drivers/platform/x86/intel/speed_select_if/Kconfig
+> +++ b/drivers/platform/x86/intel/speed_select_if/Kconfig
+> @@ -2,8 +2,12 @@ menu "Intel Speed Select Technology interface support"
+>  	depends on PCI
+>  	depends on X86_64 || COMPILE_TEST
+>  
+> +config INTEL_SPEED_SELECT_TPMI
+> +	tristate
+> +
+>  config INTEL_SPEED_SELECT_INTERFACE
+>  	tristate "Intel(R) Speed Select Technology interface drivers"
+> +	select INTEL_SPEED_SELECT_TPMI if INTEL_TPMI
+>  	help
+>  	  This config enables the Intel(R) Speed Select Technology interface
+>  	  drivers. The Intel(R) speed select technology features are non
+> diff --git a/drivers/platform/x86/intel/speed_select_if/Makefile b/drivers/platform/x86/intel/speed_select_if/Makefile
+> index 856076206f35..1d878a36d0ab 100644
+> --- a/drivers/platform/x86/intel/speed_select_if/Makefile
+> +++ b/drivers/platform/x86/intel/speed_select_if/Makefile
+> @@ -8,3 +8,5 @@ obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += isst_if_common.o
+>  obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += isst_if_mmio.o
+>  obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += isst_if_mbox_pci.o
+>  obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += isst_if_mbox_msr.o
+> +obj-$(CONFIG_INTEL_SPEED_SELECT_TPMI) += isst_tpmi_core.o
+> +obj-$(CONFIG_INTEL_SPEED_SELECT_TPMI) += isst_tpmi.o
+> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c b/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
+> new file mode 100644
+> index 000000000000..7b4bdeefb8bc
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * isst_tpmi.c: SST TPMI interface
+> + *
+> + * Copyright (c) 2023, Intel Corporation.
+> + * All Rights Reserved.
+> + *
+> + */
+> +
+> +#include <linux/auxiliary_bus.h>
+> +#include <linux/module.h>
+> +#include <linux/intel_tpmi.h>
+> +
+> +#include "isst_tpmi_core.h"
+> +
+> +static int intel_sst_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
+> +{
+> +	int ret;
+> +
+> +	ret = tpmi_sst_init();
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = tpmi_sst_dev_add(auxdev);
+> +	if (ret)
+> +		tpmi_sst_exit();
+> +
+> +	return ret;
+> +}
+> +
+> +static void intel_sst_remove(struct auxiliary_device *auxdev)
+> +{
+> +	tpmi_sst_dev_remove(auxdev);
+> +	tpmi_sst_exit();
+> +}
+> +
+> +static const struct auxiliary_device_id intel_sst_id_table[] = {
+> +	{ .name = "intel_vsec.tpmi-sst" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(auxiliary, intel_sst_id_table);
+> +
+> +static struct auxiliary_driver intel_sst_aux_driver = {
+> +	.id_table       = intel_sst_id_table,
+> +	.remove         = intel_sst_remove,
+> +	.probe          = intel_sst_probe,
+> +};
+> +
+> +module_auxiliary_driver(intel_sst_aux_driver);
+> +
+> +MODULE_IMPORT_NS(INTEL_TPMI_SST);
+> +MODULE_DESCRIPTION("Intel TPMI SST Driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
+> new file mode 100644
+> index 000000000000..6b37016c0417
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
+> @@ -0,0 +1,274 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * isst_tpmi.c: SST TPMI interface core
+> + *
+> + * Copyright (c) 2023, Intel Corporation.
+> + * All Rights Reserved.
+> + *
+> + * This information will be useful to understand flows:
+> + * In the current generation of platforms, TPMI is supported via OOB
+> + * PCI device. This PCI device has one instance per CPU package.
+> + * There is a unique TPMI ID for SST. Each TPMI ID also has multiple
+> + * entries, representing per power domain information.
+> + *
+> + * There is one dev file for complete SST information and control same as the
+> + * prior generation of hardware. User spaces don't need to know how the
+> + * information is presented by the hardware. The TPMI core module implements
+> + * the hardware mapping.
+> + */
+> +
+> +#include <linux/auxiliary_bus.h>
+> +#include <linux/intel_tpmi.h>
+> +#include <linux/fs.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <uapi/linux/isst_if.h>
+> +
+> +#include "isst_tpmi_core.h"
+> +#include "isst_if_common.h"
+> +
+> +/**
+> + * struct tpmi_per_power_domain_info -	Store per power_domain SST info
+> + * @package_id:		Package id for this power_domain
+> + * @power_domain_id:	Power domain id, Each entry from the SST-TPMI instance is a power_domain.
+> + * @sst_base:		Mapped SST base IO memory
+> + * @auxdev:		Auxiliary device instance enumerated this instance
+> + *
+> + * This structure is used store complete SST information for a power_domain. This information
+> + * is used to read/write request for any SST IOCTL. Each physical CPU package can have multiple
+> + * power_domains. Each power domain describes its own SST information and has its own controls.
+> + */
+> +struct tpmi_per_power_domain_info {
+> +	int package_id;
+> +	int power_domain_id;
+> +	void __iomem *sst_base;
+> +	struct auxiliary_device *auxdev;
+> +};
+> +
+> +/**
+> + * struct tpmi_sst_struct -	Store sst info for a package
+> + * @package_id:			Package id for this aux device instance
+> + * @number_of_power_domains:	Number of power_domains pointed by power_domain_info pointer
+> + * @power_domain_info:		Pointer to power domains information
+> + *
+> + * This structure is used store full SST information for a package.
+> + * Each package has a unique OOB PCI device, which enumerates TPMI.
+> + * Each Package will have multiple power_domains.
+> + */
+> +struct tpmi_sst_struct {
+> +	int package_id;
+> +	int number_of_power_domains;
+> +	struct tpmi_per_power_domain_info *power_domain_info;
+> +};
+> +
+> +/**
+> + * struct tpmi_sst_common_struct -	Store all SST instances
+> + * @max_index:		Maximum instances currently present
+> + * @sst_inst:		Pointer to per package instance
+> + *
+> + * Stores every SST Package instance.
+> + */
+> +struct tpmi_sst_common_struct {
+> +	int max_index;
+> +	struct tpmi_sst_struct **sst_inst;
+> +};
+> +
+> +/*
+> + * Each IOCTL request is processed under this lock. Also used to protect
+> + * registration functions and common data structures.
+> + */
+> +static DEFINE_MUTEX(isst_tpmi_dev_lock);
+> +
+> +/* Usage count to track, number of TPMI SST instances registered to this core. */
+> +static int isst_core_usage_count;
+> +
+> +/* Stores complete SST information for every package and power_domain */
+> +static struct tpmi_sst_common_struct isst_common;
+> +
+> +static int isst_if_get_tpmi_instance_count(void __user *argp)
+> +{
+> +	struct isst_tpmi_instance_count tpmi_inst;
+> +	struct tpmi_sst_struct *sst_inst;
+> +	int i;
+> +
+> +	if (copy_from_user(&tpmi_inst, argp, sizeof(tpmi_inst)))
+> +		return -EFAULT;
+> +
+> +	if (tpmi_inst.socket_id >= topology_max_packages())
+> +		return -EINVAL;
+> +
+> +	tpmi_inst.count = isst_common.sst_inst[tpmi_inst.socket_id]->number_of_power_domains;
+> +
+> +	sst_inst = isst_common.sst_inst[tpmi_inst.socket_id];
+> +	tpmi_inst.valid_mask = 0;
+> +	for (i = 0; i < sst_inst->number_of_power_domains; ++i) {
+> +		struct tpmi_per_power_domain_info *power_domain_info;
+> +
+> +		power_domain_info = &sst_inst->power_domain_info[i];
+> +		if (power_domain_info->sst_base)
+> +			tpmi_inst.valid_mask |= BIT(i);
+> +	}
+> +
+> +	if (copy_to_user(argp, &tpmi_inst, sizeof(tpmi_inst)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +static long isst_if_def_ioctl(struct file *file, unsigned int cmd,
+> +			      unsigned long arg)
+> +{
+> +	void __user *argp = (void __user *)arg;
+> +	long ret = -ENOTTY;
+> +
+> +	mutex_lock(&isst_tpmi_dev_lock);
+> +	switch (cmd) {
+> +	case ISST_IF_COUNT_TPMI_INSTANCES:
+> +		ret = isst_if_get_tpmi_instance_count(argp);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +	mutex_unlock(&isst_tpmi_dev_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +int tpmi_sst_dev_add(struct auxiliary_device *auxdev)
+> +{
+> +	struct intel_tpmi_plat_info *plat_info;
+> +	struct tpmi_sst_struct *tpmi_sst;
+> +	int i, pkg = 0, inst = 0;
+> +	int num_resources;
+> +
+> +	plat_info = tpmi_get_platform_data(auxdev);
+> +	if (!plat_info) {
+> +		dev_err(&auxdev->dev, "No platform info\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	pkg = plat_info->package_id;
+> +	if (pkg >= topology_max_packages()) {
+> +		dev_err(&auxdev->dev, "Invalid package id :%x\n", pkg);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (isst_common.sst_inst[pkg])
+> +		return -EEXIST;
+> +
+> +	num_resources = tpmi_get_resource_count(auxdev);
+> +
+> +	if (!num_resources)
+> +		return -EINVAL;
+> +
+> +	tpmi_sst = devm_kzalloc(&auxdev->dev, sizeof(*tpmi_sst), GFP_KERNEL);
+> +	if (!tpmi_sst)
+> +		return -ENOMEM;
+> +
+> +	tpmi_sst->power_domain_info = devm_kcalloc(&auxdev->dev, num_resources,
+> +						   sizeof(*tpmi_sst->power_domain_info),
+> +						   GFP_KERNEL);
+> +	if (!tpmi_sst->power_domain_info)
+> +		return -ENOMEM;
+> +
+> +	tpmi_sst->number_of_power_domains = num_resources;
+> +
+> +	for (i = 0; i < num_resources; ++i) {
+> +		struct resource *res;
+> +
+> +		res = tpmi_get_resource_at_index(auxdev, i);
+> +		if (!res) {
+> +			tpmi_sst->power_domain_info[i].sst_base = NULL;
+> +			continue;
+> +		}
+> +
+> +		tpmi_sst->power_domain_info[i].package_id = pkg;
+> +		tpmi_sst->power_domain_info[i].power_domain_id = i;
+> +		tpmi_sst->power_domain_info[i].auxdev = auxdev;
+> +		tpmi_sst->power_domain_info[i].sst_base = devm_ioremap_resource(&auxdev->dev, res);
+> +		if (IS_ERR(tpmi_sst->power_domain_info[i].sst_base))
+> +			return PTR_ERR(tpmi_sst->power_domain_info[i].sst_base);
+> +
+> +		++inst;
+> +	}
+> +
+> +	if (!inst)
+> +		return -ENODEV;
+> +
+> +	tpmi_sst->package_id = pkg;
+> +	auxiliary_set_drvdata(auxdev, tpmi_sst);
+> +
+> +	mutex_lock(&isst_tpmi_dev_lock);
+> +	if (isst_common.max_index < pkg)
+> +		isst_common.max_index = pkg;
+> +	isst_common.sst_inst[pkg] = tpmi_sst;
+> +	mutex_unlock(&isst_tpmi_dev_lock);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_add, INTEL_TPMI_SST);
+> +
+> +void tpmi_sst_dev_remove(struct auxiliary_device *auxdev)
+> +{
+> +	struct tpmi_sst_struct *tpmi_sst = auxiliary_get_drvdata(auxdev);
+> +
+> +	mutex_lock(&isst_tpmi_dev_lock);
+> +	isst_common.sst_inst[tpmi_sst->package_id] = NULL;
+> +	mutex_unlock(&isst_tpmi_dev_lock);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_remove, INTEL_TPMI_SST);
+> +
+> +#define ISST_TPMI_API_VERSION	0x02
+> +
+> +int tpmi_sst_init(void)
+> +{
+> +	struct isst_if_cmd_cb cb;
+> +	int ret = 0;
+> +
+> +	mutex_lock(&isst_tpmi_dev_lock);
+> +
+> +	if (isst_core_usage_count) {
+> +		++isst_core_usage_count;
+> +		goto init_done;
+> +	}
+> +
+> +	isst_common.sst_inst = kcalloc(topology_max_packages(),
+> +				       sizeof(*isst_common.sst_inst),
+> +				       GFP_KERNEL);
+> +	if (!isst_common.sst_inst)
+> +		return -ENOMEM;
+> +
+> +	memset(&cb, 0, sizeof(cb));
+> +	cb.cmd_size = sizeof(struct isst_if_io_reg);
+> +	cb.offset = offsetof(struct isst_if_io_regs, io_reg);
+> +	cb.cmd_callback = NULL;
+> +	cb.api_version = ISST_TPMI_API_VERSION;
+> +	cb.def_ioctl = isst_if_def_ioctl;
+> +	cb.owner = THIS_MODULE;
+> +	ret = isst_if_cdev_register(ISST_IF_DEV_TPMI, &cb);
+> +	if (ret)
+> +		kfree(isst_common.sst_inst);
+> +init_done:
+> +	mutex_unlock(&isst_tpmi_dev_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(tpmi_sst_init, INTEL_TPMI_SST);
+> +
+> +void tpmi_sst_exit(void)
+> +{
+> +	mutex_lock(&isst_tpmi_dev_lock);
+> +	if (isst_core_usage_count)
+> +		--isst_core_usage_count;
+> +
+> +	if (!isst_core_usage_count) {
+> +		isst_if_cdev_unregister(ISST_IF_DEV_TPMI);
+> +		kfree(isst_common.sst_inst);
+> +	}
+> +	mutex_unlock(&isst_tpmi_dev_lock);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(tpmi_sst_exit, INTEL_TPMI_SST);
+> +
+> +MODULE_IMPORT_NS(INTEL_TPMI);
+> +MODULE_IMPORT_NS(INTEL_TPMI_POWER_DOMAIN);
+> +
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
+> new file mode 100644
+> index 000000000000..356cb02273b1
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Intel Speed Select Interface: Drivers Internal defines
+> + * Copyright (c) 2023, Intel Corporation.
+> + * All rights reserved.
+> + *
+> + */
+> +
+> +#ifndef _ISST_TPMI_CORE_H
+> +#define _ISST_TPMI_CORE_H
+> +
+> +int tpmi_sst_init(void);
+> +void tpmi_sst_exit(void);
+> +int tpmi_sst_dev_add(struct auxiliary_device *auxdev);
+> +void tpmi_sst_dev_remove(struct auxiliary_device *auxdev);
+> +#endif
+> diff --git a/include/uapi/linux/isst_if.h b/include/uapi/linux/isst_if.h
+> index ba078f8e9add..bf32d959f6e8 100644
+> --- a/include/uapi/linux/isst_if.h
+> +++ b/include/uapi/linux/isst_if.h
+> @@ -163,10 +163,28 @@ struct isst_if_msr_cmds {
+>  	struct isst_if_msr_cmd msr_cmd[1];
+>  };
+>  
+> +/**
+> + * struct isst_tpmi_instance_count - Get number of TPMI instances per socket
+> + * @socket_id:	Socket/package id
+> + * @count:	Number of instances
+> + * @valid_mask: Mask of instances as there can be holes
+> + *
+> + * Structure used to get TPMI instances information using
+> + * IOCTL ISST_IF_COUNT_TPMI_INSTANCES.
+> + */
+> +struct isst_tpmi_instance_count {
+> +	__u8 socket_id;
+> +	__u8 count;
+> +	__u16 valid_mask;
+> +};
+> +
+>  #define ISST_IF_MAGIC			0xFE
+>  #define ISST_IF_GET_PLATFORM_INFO	_IOR(ISST_IF_MAGIC, 0, struct isst_if_platform_info *)
+>  #define ISST_IF_GET_PHY_ID		_IOWR(ISST_IF_MAGIC, 1, struct isst_if_cpu_map *)
+>  #define ISST_IF_IO_CMD		_IOW(ISST_IF_MAGIC, 2, struct isst_if_io_regs *)
+>  #define ISST_IF_MBOX_COMMAND	_IOWR(ISST_IF_MAGIC, 3, struct isst_if_mbox_cmds *)
+>  #define ISST_IF_MSR_COMMAND	_IOWR(ISST_IF_MAGIC, 4, struct isst_if_msr_cmds *)
+> +
+> +#define ISST_IF_COUNT_TPMI_INSTANCES	_IOR(ISST_IF_MAGIC, 5, struct isst_tpmi_instance_count *)
+> +
+>  #endif
+
