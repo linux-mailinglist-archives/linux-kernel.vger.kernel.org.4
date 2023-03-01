@@ -2,167 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30D96A6DAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17ED86A6DB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCAN76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 08:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S229760AbjCAOBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:01:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCAN75 (ORCPT
+        with ESMTP id S229471AbjCAOBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:59:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C899017CC1;
-        Wed,  1 Mar 2023 05:59:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47237B80EFA;
-        Wed,  1 Mar 2023 13:59:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B704C433D2;
-        Wed,  1 Mar 2023 13:59:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677679193;
-        bh=8PEGTqoD3ZAIsaZQaQutH0+jGrMJxDplevBcyJZHAUk=;
-        h=From:Date:Subject:To:Cc:Reply-To:From;
-        b=kUuGQzapYmEwq6jWvQMXWos35RLWdxGP5dQmQ1sqTXeffsrc1D77y/qWcORUanQdm
-         YE3aFnsf59m8TWbJtl59QHF//MqDb078B9pYg7Oyg8rooFVBTv/5DBw7aoY8MuBPIX
-         8SR+Q7yaaLSYcdU5uXiWY1/SAXsUarIWU2mw3CoiA/lUeDVWaHFPD/xYOJTBT01q6d
-         DQErX9LkkW/zFscv5IdPgWeKDanSwGiNifyRpwJsMks4PY+NLP79x6Gi7nlVOGmCSo
-         aiVYR0eIHa94Bd/C1Y15cxRc2CrNL/a3L/LkdInsPllHqoVdDc8vs0XWXfwHldIMun
-         reCRKCZ7Z0vsw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id EDDB7C6FA9D;
-        Wed,  1 Mar 2023 13:59:52 +0000 (UTC)
-From:   Rob Bradford via B4 Relay 
-        <devnull+rbradford.rivosinc.com@kernel.org>
-Date:   Wed, 01 Mar 2023 13:59:52 +0000
-Subject: [PATCH v3] virtio-net: Fix probe of virtio-net on kvmtool
+        Wed, 1 Mar 2023 09:01:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D536D22004
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677679213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CL8E0O6RN+NrPQ/BLg0Ur8+SgAnEDTABwI3zVV7mIYc=;
+        b=cp5cTK8d3m7TAfnDMEd8BTySo1wfAkrvHw4o6sohGGwzsanWYZFgAhLiLJt3uUDruJkQMA
+        LXdg853mLMvUnPDKJvQZ8jWj67vU1U6BDG3Na3FTom/98ekWF3GWeMjqaaxQHwK/MAXqH0
+        1qfXCaqzwqn1oP9QQUYAWH8UZg5R4A4=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-329-8Zj7wAt0PJSb9klb5q03uA-1; Wed, 01 Mar 2023 09:00:06 -0500
+X-MC-Unique: 8Zj7wAt0PJSb9klb5q03uA-1
+Received: by mail-qk1-f197.google.com with SMTP id ou5-20020a05620a620500b007423e532628so8023322qkn.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:00:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677679205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CL8E0O6RN+NrPQ/BLg0Ur8+SgAnEDTABwI3zVV7mIYc=;
+        b=E6xJn4WgLIhzYQMm3m+574cYFhpZN604oeFPpH+/BknX7VStDSW8EhI0xppA+b6o09
+         +g7uJMp8PBJk90kgLk8WoJgY8tJACr4W//yLB5GtnqNBvXXoWlIdsJSSSoZHHjv0O7Vp
+         T67xk+jkg2AY5jw/QjRmIYRFDgBmgavSyFjpOu2cfLL7cy9XjTgiHfZXI2EroTy2S9Hx
+         8/Iyx/3hw+bPRktFV8XrglEuaIj3HYmZs18b+Twe1REGOzvKFMZmQ0H4EvbgO1DhHGmo
+         NAhPGVNEARAl8Ca5ivH7dkt0Si3PkOBIt8ITY6Rw5e42444snhhO4qOtKLkQQIDDlbMo
+         rDOw==
+X-Gm-Message-State: AO0yUKUtuAOUwVIJCc7zZN880Mmz3di/y6Fr4capnJw2PfsF98KH3dmS
+        wF67KWT2LAVsm+k8ThbyedXcbddqYw4fGfaN0OmLDeThj+x27i08grzPehaLvJQ/2mZCGyyU7Vv
+        h0L5dBOgFHvjLZFXykgMOwUh9
+X-Received: by 2002:ac8:5a4e:0:b0:3bf:e320:ba5d with SMTP id o14-20020ac85a4e000000b003bfe320ba5dmr11526513qta.17.1677679205437;
+        Wed, 01 Mar 2023 06:00:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set8dWK4c13zlMSqeRkUXAOU6QC6GcZMEJsa/xNpp+NtbXPm/fld3f2OETxlRbgVc4VZpjYjcQw==
+X-Received: by 2002:ac8:5a4e:0:b0:3bf:e320:ba5d with SMTP id o14-20020ac85a4e000000b003bfe320ba5dmr11526351qta.17.1677679204525;
+        Wed, 01 Mar 2023 06:00:04 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id t128-20020ae9df86000000b0073d7e81f8b5sm8801235qkf.35.2023.03.01.06.00.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 06:00:03 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     evan.quan@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, andrealmeid@igalia.com, kevinyang.wang@amd.com,
+        li.ma@amd.com, Kun.Liu2@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/pm: set vangogh_set_apu_thermal_limit storage-class-specifier to static
+Date:   Wed,  1 Mar 2023 09:00:00 -0500
+Message-Id: <20230301140000.2719608-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com>
-X-B4-Tracking: v=1; b=H4sIAFda/2MC/4WOQQrCMBBFr1KydqSZUNO68h7iok0ndlATSUpQS
- u9uWnAjopuBN5//+JOIFJii2BeTCJQ4sncZ1KYQZmjdmYD7zAJLVCWigsRhZA+ORrik2+j9FWp
- tla5k1RGiyMWujQRdaJ0Z3lUoEfK1/PgiWDr3QDlchxxPmQeOow/PdVeSy/fnhCRBgjWoemy6p
- tftIXDykZ3ZGn8TizHhfwtmS02mUZWUtNP2wzLP8wtIA04KMQEAAA==
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Bradford <rbradford@rivosinc.com>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677679192; l=3604;
- i=rbradford@rivosinc.com; s=20230223; h=from:subject:message-id;
- bh=uAe/SKwsHTpefY9V/DL39NAvpPxAdiRm85ilJO0Tds4=;
- b=k3aNNNHOyZhbPNqhoQd4/ZrfM9IEXIi8pClhR7JYzeZ1xW0xniVNY7ktwc8A5oqTs9584QUIF
- jJQ1lPRhD6cDPKufx8BQoSk+9x7invBgdec+Om5UZGc3Nmdvwv95leh
-X-Developer-Key: i=rbradford@rivosinc.com; a=ed25519;
- pk=LZhCh/kJ+nOqxgEGWkLfx2jKUM5LlyU0Jlip8qsjuA8=
-X-Endpoint-Received: by B4 Relay for rbradford@rivosinc.com/20230223 with auth_id=34
-X-Original-From: Rob Bradford <rbradford@rivosinc.com>
-Reply-To: <rbradford@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Bradford <rbradford@rivosinc.com>
+gcc with W=1 reports
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:1600:5:
+  error: no previous prototype for ‘vangogh_set_apu_thermal_limit’ [-Werror=missing-prototypes]
+ 1600 | int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Since the following commit virtio-net on kvmtool has printed a warning
-during the probe:
+vangogh_set_apu_thermal_limit is only used in vangogh_ppt.c, so it should be static
 
-commit dbcf24d153884439dad30484a0e3f02350692e4c
-Author: Jason Wang <jasowang@redhat.com>
-Date:   Tue Aug 17 16:06:59 2021 +0800
-
-    virtio-net: use NETIF_F_GRO_HW instead of NETIF_F_LRO
-
-[    1.865992] net eth0: Fail to set guest offload.
-[    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); wanted 0x0000000000134829, left 0x0080000000134829
-
-This is because during the probing the underlying netdev device has
-identified that the netdev features on the device has changed and
-attempts to update the virtio-net offloads through the virtio-net
-control queue. kvmtool however does not have a control queue that supports
-offload changing (VIRTIO_NET_F_CTRL_GUEST_OFFLOADS is not advertised)
-
-The netdev features have changed due to validation checks in
-netdev_fix_features():
-
-if (!(features & NETIF_F_RXCSUM)) {
-	/* NETIF_F_GRO_HW implies doing RXCSUM since every packet
-	 * successfully merged by hardware must also have the
-	 * checksum verified by hardware.  If the user does not
-	 * want to enable RXCSUM, logically, we should disable GRO_HW.
-	 */
-	if (features & NETIF_F_GRO_HW) {
-		netdev_dbg(dev, "Dropping NETIF_F_GRO_HW since no RXCSUM feature.\n");
-		features &= ~NETIF_F_GRO_HW;
-	}
-}
-
-Since kvmtool does not advertise the VIRTIO_NET_F_GUEST_CSUM feature the
-NETIF_F_RXCSUM bit is not present and so the NETIF_F_GRO_HW bit is
-cleared. This results in the netdev features changing, which triggers
-the attempt to reprogram the virtio-net offloads which then fails.
-
-This commit prevents that set of netdev features from changing by
-preemptively applying the same validation and only setting
-NETIF_F_GRO_HW if NETIF_F_RXCSUM is set because the device supports both
-VIRTIO_NET_F_GUEST_CSUM and VIRTIO_NET_F_GUEST_TSO{4,6}
-
-Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-Changes in v3:
-- Identified root-cause of feature bit changing and updated conditions
-  check
-- Link to v2: https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v2-1-8ec93511e67f@rivosinc.com
+ drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v2:
-- Use parentheses to group logical OR of features 
-- Link to v1:
-  https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v1-1-fc23d29b9d7a@rivosinc.com
----
- drivers/net/virtio_net.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 61e33e4dd0cd..2e7705142ca5 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -3778,11 +3778,13 @@ static int virtnet_probe(struct virtio_device *vdev)
- 			dev->features |= dev->hw_features & NETIF_F_ALL_TSO;
- 		/* (!csum && gso) case will be fixed by register_netdev() */
- 	}
--	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
-+	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM)) {
- 		dev->features |= NETIF_F_RXCSUM;
--	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
--	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
--		dev->features |= NETIF_F_GRO_HW;
-+		/* This dependency is enforced by netdev_fix_features */
-+		if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-+		    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
-+			dev->features |= NETIF_F_GRO_HW;
-+	}
- 	if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
- 		dev->hw_features |= NETIF_F_GRO_HW;
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
+index 016d5621e0b3..24046af60933 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
+@@ -1597,7 +1597,7 @@ static int vangogh_get_apu_thermal_limit(struct smu_context *smu, uint32_t *limi
+ 					      0, limit);
+ }
  
-
----
-base-commit: c39cea6f38eefe356d64d0bc1e1f2267e282cdd3
-change-id: 20230223-virtio-net-kvmtool-87f37515be22
-
-Best regards,
+-int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
++static int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
+ {
+ 	return smu_cmn_send_smc_msg_with_param(smu,
+ 					      SMU_MSG_SetReducedThermalLimit,
 -- 
-Rob Bradford <rbradford@rivosinc.com>
+2.27.0
 
