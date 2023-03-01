@@ -2,155 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0061B6A6A6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373016A6A71
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjCAKHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 05:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S229763AbjCAKIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 05:08:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCAKHf (ORCPT
+        with ESMTP id S229486AbjCAKH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 05:07:35 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7817F3B664;
-        Wed,  1 Mar 2023 02:07:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1677665250; bh=v2kuNm+Q39kK7NHvc+m9+z6V+1IGL9skdWhRln3C/7I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=J13AztCgrcycFD3eJc5DKBwOUJ+WeByW2G1Si+X6jzYCLeVlWPugqbh54Jps3IT1I
-         C8sX9W0PkB8buEivEbRMEtSrHh96yjSQ6u69wNdneQ8wzYkKU+BMrXXXu8BevFTUjx
-         9eWA5LF93/9sEv7ppRfyIGozb25vmirQ01j0yP/c=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 9070F600D4;
-        Wed,  1 Mar 2023 18:07:29 +0800 (CST)
-Message-ID: <b22aa314-5804-ef10-7865-2445222e2f49@xen0n.name>
-Date:   Wed, 1 Mar 2023 18:07:29 +0800
+        Wed, 1 Mar 2023 05:07:59 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDB575FFF;
+        Wed,  1 Mar 2023 02:07:56 -0800 (PST)
+Received: from loongson.cn (unknown [192.168.200.1])
+        by gateway (Coremail) with SMTP id _____8DxEwz7I_9j+McGAA--.7304S3;
+        Wed, 01 Mar 2023 18:07:55 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.200.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxyub5I_9jsG1DAA--.20371S3;
+        Wed, 01 Mar 2023 18:07:54 +0800 (CST)
+Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
+ relocate kernel
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <20230301085545.2373646-1-chenhuacai@loongson.cn>
+ <aba37b65-6fc4-721e-ebc5-df52533e4791@loongson.cn>
+ <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
+        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <dfd6a1cb-25be-cc11-4134-b2e92e353c00@loongson.cn>
+Date:   Wed, 1 Mar 2023 18:07:53 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] LoongArch: Export some symbols without GPL
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <20230301085109.2373524-1-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230301085109.2373524-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxyub5I_9jsG1DAA--.20371S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxCw15uF1rCrWUJF4UCw4xtFb_yoW5Zryfp3
+        y7JF40yF4UXrW5A3Z2q345uFyqq3s7trySgFZFyw1rur9IvFnrZr1Fqrs3uFW8AFWjgw4r
+        XF10kFy2k3WUArDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bc8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
+        CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc80
+        4VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY2
+        0_WwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
+        8wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
+        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj4RKtC7UUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, Huacai
 
-On 2023/3/1 16:51, Huacai Chen wrote:
-> Some symbols, i.e., vm_map_base, empty_zero_page and invalid_pmd_table,
-> could be accessed widely by some out-of-tree non-GPL but important file
-> systems or drivers (e.g., OpenZFS). Let's use EXPORT_SYMBOL() instead of
-> EXPORT_SYMBOL_GPL() to export them, so as to avoid build errors.
+On 03/01/2023 05:30 PM, Huacai Chen wrote:
+> Hi, Youling,
+>
+> On Wed, Mar 1, 2023 at 5:21 PM Youling Tang <tangyouling@loongson.cn> wrote:
+>>
+>> Hi, Huacai
+>>
+>> On 03/01/2023 04:55 PM, Huacai Chen wrote:
+>>> Since Linux-6.3, LoongArch supports PIE kernel now, so let's reintroduce
+>>> efi_relocate_kernel() to relocate the core kernel.
+>>
+>> If we strongly rely on the PIE feature after the modification, we need
+>> to modify it as follows,
+> There is no strong rely, efi_relocate_kernel() can also handle the
+> non-PIE kernel.
 
-The commit title probably could become "Mark 3 symbol exports as non-GPL".
+IMHO, if EFI_KIMG_PREFERRED_ADDRESS is no longer defined as
+`PHYSADDR(VMLINUX_LOAD_ADDRESS)` (physical link address), we need to
+relocate through the RELOCATABLE function, so it is recommended to
+select RELOCATABLE if EFI_STUB is enabled
 
-Also you could drop the "some symbols, i.e.," part and go straight to 
-the 3 symbols. It sounds more natural to me at least (because I know the 
-current wording is 1:1 perfectly idiomatic Chinese, so it is highly 
-likely some adjustment would be needed: idiomatic English don't 
-*perfectly* map to Chinese).
-
-In addition to this, I've did some archaeology:
-
-In the OpenZFS case, empty_zero_page and vm_map_base are affected. 
-vm_map_base is arch/loongarch invention so we actually kind of have 
-"authority" over it, but what follows is a little more background on why 
-EXPORT_SYMBOL is arguably more appropriate for empty_zero_page.
-
-As it stands today, only 3 architectures export empty_zero_page as a GPL 
-symbol: ia64, loongarch and mips. loongarch gets the GPL export by 
-inheriting from mips, and the mips export was first introduced in commit 
-497d2adcbf50b ("[MIPS] Export empty_zero_page for sake of the ext4 
-module."). The ia64 export was similar: commit a7d57ecf4216e ("[IA64] 
-Export three symbols for module use") did so for kvm.
-
-In both ia64 and mips, the export of empty_zero_page was done for 
-satisfying some in-kernel component built as module (kvm and ext4 
-respectively), and given its reasonably low-level nature, GPL is a 
-reasonable choice. But looking at the bigger picture it is evident most 
-other architectures do not regard it as GPL, so in effect the symbol 
-probably should not be treated as such, in favor of consistency.
-
-You could incorporate some or all of this into the commit message to 
-give others some background on the justification. After all reverting 
-symbols to non-GPL is relatively rare compared to all the GPL-marking 
-actions.
-
-> 
-> Details about vm_map_base: may be referenced through macros PCI_IOBASE,
-> VMALLOC_START and VMALLOC_END.
-> 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   arch/loongarch/kernel/cpu-probe.c | 2 +-
->   arch/loongarch/mm/init.c          | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-> index 008b0249905f..001e43dd94ca 100644
-> --- a/arch/loongarch/kernel/cpu-probe.c
-> +++ b/arch/loongarch/kernel/cpu-probe.c
-> @@ -60,7 +60,7 @@ static inline void set_elf_platform(int cpu, const char *plat)
->   
->   /* MAP BASE */
->   unsigned long vm_map_base;
-> -EXPORT_SYMBOL_GPL(vm_map_base);
-> +EXPORT_SYMBOL(vm_map_base);
->   
->   static void cpu_probe_addrbits(struct cpuinfo_loongarch *c)
->   {
-> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
-> index e018aed34586..3b7d8129570b 100644
-> --- a/arch/loongarch/mm/init.c
-> +++ b/arch/loongarch/mm/init.c
-> @@ -41,7 +41,7 @@
->    * don't have to care about aliases on other CPUs.
->    */
->   unsigned long empty_zero_page, zero_page_mask;
-> -EXPORT_SYMBOL_GPL(empty_zero_page);
-> +EXPORT_SYMBOL(empty_zero_page);
->   EXPORT_SYMBOL(zero_page_mask);
->   
->   void setup_zero_pages(void)
-> @@ -270,7 +270,7 @@ pud_t invalid_pud_table[PTRS_PER_PUD] __page_aligned_bss;
->   #endif
->   #ifndef __PAGETABLE_PMD_FOLDED
->   pmd_t invalid_pmd_table[PTRS_PER_PMD] __page_aligned_bss;
-> -EXPORT_SYMBOL_GPL(invalid_pmd_table);
-> +EXPORT_SYMBOL(invalid_pmd_table);
->   #endif
->   pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
->   EXPORT_SYMBOL(invalid_pte_table);
-
-And in the latter two cases it seems we're actually fixing 
-inconsistencies. Nice!
-
-Reviewed-by: WANG Xuerui <git@xen0n.name>
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+Youling.
+>
+> Huacai
+>>
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -137,6 +137,7 @@ config LOONGARCH
+>>          select PCI_MSI_ARCH_FALLBACKS
+>>          select PCI_QUIRKS
+>>          select PERF_USE_VMALLOC
+>> +       select RELOCATABLE
+>>          select RTC_LIB
+>>          select SMP
+>>          select SPARSE_IRQ
+>>
+>> or:
+>>
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -360,6 +360,7 @@ config EFI_STUB
+>>          default y
+>>          depends on EFI
+>>          select EFI_GENERIC_STUB
+>> +       select RELOCATABLE
+>>          help
+>>
+>> Youling.
+>>
+>>>
+>>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>>> ---
+>>>  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++-------------
+>>>  1 file changed, 7 insertions(+), 17 deletions(-)
+>>>
+>>> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
+>>> index eee7ed43cdfb..72c71ae201f0 100644
+>>> --- a/drivers/firmware/efi/libstub/loongarch-stub.c
+>>> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
+>>> @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
+>>>                                efi_loaded_image_t *image,
+>>>                                efi_handle_t image_handle)
+>>>  {
+>>> -     int nr_pages = round_up(kernel_asize, EFI_ALLOC_ALIGN) / EFI_PAGE_SIZE;
+>>> -     efi_physical_addr_t kernel_addr = EFI_KIMG_PREFERRED_ADDRESS;
+>>>       efi_status_t status;
+>>> +     unsigned long kernel_addr = 0;
+>>>
+>>> -     /*
+>>> -      * Allocate space for the kernel image at the preferred offset. This is
+>>> -      * the only location in memory from where we can execute the image, so
+>>> -      * no point in falling back to another allocation.
+>>> -      */
+>>> -     status = efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
+>>> -                          EFI_LOADER_DATA, nr_pages, &kernel_addr);
+>>> -     if (status != EFI_SUCCESS)
+>>> -             return status;
+>>> -
+>>> -     *image_addr = EFI_KIMG_PREFERRED_ADDRESS;
+>>> -     *image_size = kernel_asize;
+>>> +     kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
+>>> +
+>>> +     status = efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
+>>> +                  EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min_align(), 0x0);
+>>>
+>>> -     memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
+>>> -            (void *)&kernel_offset - kernel_offset,
+>>> -            kernel_fsize);
+>>> +     *image_addr = kernel_addr;
+>>> +     *image_size = kernel_asize;
+>>>
+>>>       return status;
+>>>  }
+>>>
+>>
 
