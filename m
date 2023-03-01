@@ -2,516 +2,531 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A186A6553
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6956A6556
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCACMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 21:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
+        id S229712AbjCACMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 21:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjCACMO (ORCPT
+        with ESMTP id S229523AbjCACMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 21:12:14 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22495367CF
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:12:11 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id m25-20020a05683026d900b006941a2838caso1964216otu.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:12:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677636730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1mJqBoB/RasR5gtijI/jnSkUAz2BkidpYh3sfu2pzMM=;
-        b=PAcBwU1xISVf9SONwn9/49J9KdjdUbIWtAhof0ALVrrd7xf6Y24Kj8H1jzaDuPNiMs
-         YregHHthoHVt3/HZaB4ALnR3UMJnr2vIPwLiRst23FZdM+ZQ1f8zvNn59KlveqJdQQ6G
-         Z4gSfSxsGqwKSwaYd8pM9Bk7ToDtKwKL8PTELOAUigBa0jmBxP2PnNDaJPOayYqSopsu
-         hrghsAK7c/SUWlo8xXUuqy9IYmWDIuWOfOFHfHLD0PJIkXmrYbWPu1FMiCOEwE2zyO/H
-         UIkmGTfaJlLQKSLJFPuD2UZyUo68Dab3b9oQXrr9WxcuXvZvf9WD6HvCtTQcuXkFnCam
-         lG6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677636730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1mJqBoB/RasR5gtijI/jnSkUAz2BkidpYh3sfu2pzMM=;
-        b=Fm5PtpPxiCBscrYqE7GN/nxQL8K7Xa3FUGMsGlTmOrwBY/T5IwnvN8keMai9HOVyZz
-         ShM+HHtZLx/CCUDP9a86cZTKSCK2T50VpjQ2yuhcNEN9wCKPf7JpB6JO6QgPPaz8/Vng
-         xhm7j1f5ghXFNr3yBwvuhNxj3UT7cWbEMBNTh6IWhZOaX4qVjR/mKbuS9z3pnJRl7xuW
-         bCKB7I/OOkw8+y59xlXrTan+yOzv9UPrQn9XsyP7+G2rwWtHmvjKIKd6N0pRAC+bj5d8
-         m7RdqtHYuoKKQ8TadN6TSkT0BEXRFOSxAY7lC7M/Utawt58814SdqPI32fYYNmkn/olJ
-         4E/Q==
-X-Gm-Message-State: AO0yUKXADF4YVJIIWWDZY1aiJOlJTjiYrRDT/4ZjFrAcLkswSl5gQHVz
-        a9NamGid52cmRxnLSGaEZ5WPn8SQYPTu8l90ws+y5Q==
-X-Google-Smtp-Source: AK7set/A4z1FE3KDPYCmfRS8UGyF6L/pRuZZdTeVgetNQlhBj80fWP4lZ5v6khhztOwXbXVZ06B/KdYMhZlAvDbDtGM=
-X-Received: by 2002:a9d:7082:0:b0:688:cfcc:ddb1 with SMTP id
- l2-20020a9d7082000000b00688cfccddb1mr1673676otj.5.1677636730164; Tue, 28 Feb
- 2023 18:12:10 -0800 (PST)
+        Tue, 28 Feb 2023 21:12:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A8D37F13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:12:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79AE8B80ED2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:12:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B5AC433A0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677636761;
+        bh=WQwj4g+c6pia1p0AWFf8ndGN1cpwyLT1z+Tt2NxY50c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MXqfTTplRPjeJYjPqPOYxOhxto+XhkJR/uC+bVfw6Ugtk0bw7VlkPzFj+GTZF/EVZ
+         J+HDDnRU5z4H5z8SAkUtFMPfsYzytzoyjCpYNwLUPkbTxzWUL0WFyASu+6pfwzx2i6
+         1//6PRxduSNz/zrZDv+jpemY/JcAIoSCnBG8iZ7sIBBCuAfBWNaYvqaQp3Bvgcudzf
+         JnmUsUM8EnRo1T/1XRyS/YHVib1BK0ir/T/45y5rP8zUu4AujdRrLZoISLM29hNDuc
+         P6I8Z4PWZ4rwOLW+orCGCrgSi/qGkqI9vRkU0hLjd+on1Pd5dTphpKat/UqiXpizN2
+         f0r8lWjxemkYw==
+Received: by mail-ed1-f43.google.com with SMTP id o15so45522039edr.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:12:40 -0800 (PST)
+X-Gm-Message-State: AO0yUKVTiRzIGZBlBHmacYk3OsT+ef7QvArQtliF2hsGuJEjWO2aSTKb
+        BMtz8H4LleGD7SZ57QVRWMiiIjLjiMhDXc9AGjA=
+X-Google-Smtp-Source: AK7set/hKUduL3lG+qsAohuQwiOTLLYsYAQXWwQU/yAFelANu/NMhX1IUEhgF6SyNuV/72lOL/2bkdwugZuZo5VIkOM=
+X-Received: by 2002:a17:906:1c10:b0:877:747c:9745 with SMTP id
+ k16-20020a1709061c1000b00877747c9745mr2230256ejg.8.1677636759184; Tue, 28 Feb
+ 2023 18:12:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20230224195313.1877313-1-jiangzp@google.com> <20230224115310.kernel.v2.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
- <CABBYNZ+yVWssa09NB+ahp-N87sLXRqYF58-GJK-Vx8jn-Sa5Uw@mail.gmail.com>
- <CAB4PzUrO32Z1AF-3UJviYqTr3YvachGgJ7NiqkNW46ioWigtfw@mail.gmail.com>
- <CAB4PzUoErDkUzyj6sFQc_CSa7hibucX42yY+oVGw7C4DcJdQFA@mail.gmail.com>
- <CABBYNZL=u88Ro1dR8fYWpiS6E1sZ4E8TXg8BVU7nEGBodYhTrA@mail.gmail.com>
- <CAB4PzUr9vE2m-uWVvcTa0SaeryLxhj8sZbvRqSkqLKDFwMoeyQ@mail.gmail.com>
- <CABBYNZKVc3F_GdSfYTtXcQm9jGXkZJGBh3xV8eSxGkA4iKooGQ@mail.gmail.com>
- <CAB4PzUpw7dqguZNuk45pk1sGvAtBabRqm1vuGNW_kPvHpgc=FA@mail.gmail.com> <CABBYNZLvdCA3Nn7CduBxb0y5FcmnuUxgthtuWjrR89VkGn97ZQ@mail.gmail.com>
-In-Reply-To: <CABBYNZLvdCA3Nn7CduBxb0y5FcmnuUxgthtuWjrR89VkGn97ZQ@mail.gmail.com>
-From:   Zhengping Jiang <jiangzp@google.com>
-Date:   Tue, 28 Feb 2023 18:11:59 -0800
-Message-ID: <CAB4PzUpDMvdc8j2MdeSAy1KkAE-D3woprCwAdYWeOc-3v3c9Sw@mail.gmail.com>
-Subject: Re: [kernel PATCH v2 1/1] Bluetooth: hci_sync: clear workqueue before
- clear mgmt cmd
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        mmandlik@google.com, chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <20230228215435.3366914-1-heiko@sntech.de> <20230228215435.3366914-3-heiko@sntech.de>
+In-Reply-To: <20230228215435.3366914-3-heiko@sntech.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 1 Mar 2023 10:12:27 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS6unB89L7OBXA9EyuzAmczenuLZxsHogTcaYVnYV4TuQ@mail.gmail.com>
+Message-ID: <CAJF2gTS6unB89L7OBXA9EyuzAmczenuLZxsHogTcaYVnYV4TuQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/2] RISC-V: add T-Head vector errata handling
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, linux-riscv@lists.infradead.org,
+        samuel@sholland.org, christoph.muellner@vrull.eu,
+        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
-
-Thanks for testing these options!
-
-> perhaps we need a dedicated flag to ensure cmd_sync cannot be schedule af=
-ter a certain point
-This actually sounds promising to me. I would think about this.
-
-This does not happen in regular use, but one of our customers has a
-script to run a stress test by turning on/off the adapter and
-rebooting for a few cycles. Then the crash can be reproduced. If you
-have any new ideas, I can schedule a test.
-
-Just to confirm if you will submit the current patch or you would hold
-it for a solid solution? The current patch to clear the cmd_sync list
-indeed reduces the crash frequency.
-
-Best,
-Zhengping
-
-On Tue, Feb 28, 2023 at 5:53=E2=80=AFPM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
+On Wed, Mar 1, 2023 at 5:54=E2=80=AFAM Heiko Stuebner <heiko@sntech.de> wro=
+te:
 >
-> Hi Zhengping,
+> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
 >
-> On Tue, Feb 28, 2023 at 4:18=E2=80=AFPM Zhengping Jiang <jiangzp@google.c=
-om> wrote:
-> >
-> > Hi Luiz,
-> >
-> > This looks good to me. I still have a question. Does this prevent a
-> > job scheduled between "hci_cmd_sync_work_list_clear(hdev);" and
-> > "__mgmt_power_off(hdev);"? Otherwise, the chance for a race condition
-> > is still there. Maybe using cancel_work_sync and re-init the workqueue
-> > timer is the right thing to do?
+> T-Head C9xx cores implement an older version (0.7.1) of the vector
+> specification.
 >
-> I tried the cancel_work_sync but it doesn't work since to
-> cmd_sync_work itself can call hci_dev_close_sync so it deadlocks, Ive
-> also tried stopping new scheduling of new work based on HCI_UP flag
-> but that causes some tests not to run, perhaps we need a dedicated
-> flag to ensure cmd_sync cannot be schedule after a certain point but I
-> could found the exact point it is, anyway I fine leaving this to when
-> we actually have a more clear understanding or a reproducer.
+> Relevant changes concerning the kernel are:
+> - different placement of the SR_VS bit for the vector unit status
+> - different encoding of the vsetvli instruction
+> - different instructions for loads and stores
 >
-> > Thanks,
-> > Zhengping
-> >
-> > On Tue, Feb 28, 2023 at 1:11=E2=80=AFPM Luiz Augusto von Dentz
-> > <luiz.dentz@gmail.com> wrote:
-> > >
-> > > Hi Zhengping,
-> > >
-> > > On Mon, Feb 27, 2023 at 3:58=E2=80=AFPM Zhengping Jiang <jiangzp@goog=
-le.com> wrote:
-> > > >
-> > > > Hi Luiz,
-> > > >
-> > > > Sure. Hope this helps.
-> > > > Here is one log from the user.
-> > > >
-> > > > [   53.368740] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > [   53.376167] BUG: KASAN: use-after-free in set_ssp_sync+0x44/0x15=
-4 [bluetooth]
-> > > > [   53.384303] Read of size 8 at addr ffffff80b7ee0318 by task kwor=
-ker/u17:0/190
-> > > > [   53.396342] CPU: 7 PID: 190 Comm: kworker/u17:0 Tainted: G      =
-  W
-> > > >         5.15.59-lockdep #1 29eed131ef0afd42bc369a6a0ca1c69d3653699b
-> > > > [   53.408868] Hardware name: Qualcomm Technologies, Inc. sc7280 CR=
-D
-> > > > platform (rev5+) (DT)
-> > > > [   53.417095] Workqueue: hci0 hci_cmd_sync_work [bluetooth]
-> > > > [   53.422780] Call trace:
-> > > > [   53.425310]  dump_backtrace+0x0/0x424
-> > > > [   53.429108]  show_stack+0x20/0x2c
-> > > >
-> > > > [   53.432534]  dump_stack_lvl+0x84/0xb4
-> > > > [   53.436514]  print_address_description+0x30/0x2fc
-> > > > [   53.441369]  kasan_report+0x15c/0x19c
-> > > > [   53.445975]  __asan_report_load8_noabort+0x44/0x50
-> > > > [   53.450910]  set_ssp_sync+0x44/0x154 [bluetooth
-> > > > 34f6fa2bbf49f3d7faf6ea04e8755ae16590a6b3]
-> > > > [   53.460136]  hci_cmd_sync_work+0x1c8/0x2c8 [bluetooth
-> > > > 34f6fa2bbf49f3d7faf6ea04e8755ae16590a6b3]
-> > > > [   53.472214]  process_one_work+0x59c/0xa88
-> > > > [   53.476990]  worker_thread+0x81c/0xd18
-> > > > [   53.480854]  kthread+0x2d4/0x3d8
-> > > > [   53.484272]  ret_from_fork+0x10/0x20
-> > > >
-> > > > [   53.489733] Allocated by task 1162:
-> > > > [   53.493336]  kasan_save_stack+0x38/0x68
-> > > > [   53.498115]  __kasan_kmalloc+0xb4/0xd0
-> > > > [   53.501993]  kmem_cache_alloc_trace+0x29c/0x374
-> > > > [   53.506661]  mgmt_pending_new+0x74/0x200 [bluetooth]
-> > > > [   53.511905]  mgmt_pending_add+0x28/0xec [bluetooth]
-> > > > [   53.517059]  set_ssp+0x2d8/0x5b0 [bluetooth]
-> > > > [   53.521575]  hci_mgmt_cmd+0x5c4/0x8b0 [bluetooth]
-> > > > [   53.526538]  hci_sock_sendmsg+0x28c/0x95c [bluetooth]
-> > > > [   53.531850]  sock_sendmsg+0xb4/0xd8
-> > > > [   53.535454]  sock_write_iter+0x1c0/0x2d0
-> > > > [   53.539494]  do_iter_readv_writev+0x350/0x4e0
-> > > > [   53.543980]  do_iter_write+0xf0/0x2e4
-> > > > [   53.547747]  vfs_writev+0xd0/0x13c
-> > > > [   53.551254]  do_writev+0xe8/0x1fc
-> > > > [   53.554672]  __arm64_sys_writev+0x84/0x98
-> > > > [   53.558805]  invoke_syscall+0x78/0x20c
-> > > > [   53.562665]  el0_svc_common+0x12c/0x2f0
-> > > > [   53.566618]  do_el0_svc+0x94/0x13c
-> > > > [   53.570125]  el0_svc+0x5c/0x108
-> > > > [   53.573374]  el0t_64_sync_handler+0x78/0x108
-> > > > [   53.577773]  el0t_64_sync+0x1a4/0x1a8
-> > > >
-> > > > [   53.583089] Freed by task 3207:
-> > > > [   53.586325]  kasan_save_stack+0x38/0x68
-> > > > [   53.590282]  kasan_set_track+0x28/0x3c
-> > > > [   53.594153]  kasan_set_free_info+0x28/0x4c
-> > > > [   53.598369]  ____kasan_slab_free+0x138/0x17c
-> > > > [   53.602767]  __kasan_slab_free+0x18/0x28
-> > > > [   53.606803]  slab_free_freelist_hook+0x188/0x260
-> > > > [   53.611559]  kfree+0x138/0x29c
-> > > > [   53.614708]  mgmt_pending_free+0xac/0xdc [bluetooth]
-> > > > [   53.619948]  mgmt_pending_remove+0xd8/0xf0 [bluetooth]
-> > > > [   53.625357]  cmd_complete_rsp+0xc8/0x178 [bluetooth]
-> > > > [   53.630586]  mgmt_pending_foreach+0xa8/0xf8 [bluetooth]
-> > > > [   53.636076]  __mgmt_power_off+0x114/0x26c [bluetooth]
-> > > > [   53.641390]  hci_dev_close_sync+0x314/0x814 [bluetooth]
-> > > > [   53.646882]  hci_dev_do_close+0x3c/0x7c [bluetooth]
-> > > > [   53.652017]  hci_dev_close+0xa4/0x15c [bluetooth]
-> > > > [   53.656980]  hci_sock_ioctl+0x298/0x444 [bluetooth]
-> > > > [   53.662117]  sock_do_ioctl+0xd0/0x1e8
-> > > > [   53.665900]  sock_ioctl+0x4fc/0x72c
-> > > > [   53.669500]  __arm64_sys_ioctl+0x118/0x154
-> > > > [   53.673726]  invoke_syscall+0x78/0x20c
-> > > > [   53.677587]  el0_svc_common+0x12c/0x2f0
-> > > > [   53.681533]  do_el0_svc+0x94/0x13c
-> > > > [   53.685043]  el0_svc+0x5c/0x108
-> > > > [   53.688278]  el0t_64_sync_handler+0x78/0x108
-> > > > [   53.692677]  el0t_64_sync+0x1a4/0x1a8
-> > > >
-> > > > [   53.697988] Last potentially related work creation:
-> > > > [   53.703009]  kasan_save_stack+0x38/0x68
-> > > > [   53.706962]  kasan_record_aux_stack+0x104/0x130
-> > > > [   53.711622]  __call_rcu+0x14c/0x860
-> > > > [   53.715212]  call_rcu+0x18/0x24
-> > > > [   53.718448]  sk_filter_uncharge+0xc0/0x120
-> > > > [   53.722667]  __sk_destruct+0xb4/0x4a8
-> > > > [   53.726435]  sk_destruct+0x78/0xa0
-> > > > [   53.729941]  __sk_free+0x190/0x270
-> > > > [   53.733453]  sk_free+0x54/0x8c
-> > > > [   53.736603]  deferred_put_nlk_sk+0x1d4/0x20c
-> > > > [   53.741000]  rcu_do_batch+0x3e8/0xd08
-> > > > [   53.744772]  nocb_cb_wait+0xc8/0xa3c
-> > > > [   53.748453]  rcu_nocb_cb_kthread+0x48/0x134
-> > > > [   53.752768]  kthread+0x2d4/0x3d8
-> > > > [   53.756098]  ret_from_fork+0x10/0x20
-> > > >
-> > > > This is another one at a different function but with the same signa=
-ture.
-> > > >
-> > > > [   43.363512] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > [   43.370966] BUG: KASAN: use-after-free in
-> > > > mgmt_remove_adv_monitor_sync+0x40/0xcc [bluetooth]
-> > > > [   43.379813] Read of size 8 at addr ffffff8096c28d18 by task kwor=
-ker/u17:0/192
-> > > > [   43.387158]
-> > > > [   43.388705] CPU: 6 PID: 192 Comm: kworker/u17:0 Tainted: G      =
-  W
-> > > >         5.15.59-lockdep #1 59f35e3dfc07f6688b084869895c7a39892c891a
-> > > > localhost ~ # [   43.410184] Workqueue: hci0 hci_cmd_sync_work [blu=
-etooth]
-> > > >
-> > > > [   43.418887] Call trace:
-> > > > [   43.422407]  dump_backtrace+0x0/0x424
-> > > > [   43.426191]  show_stack+0x20/0x2c
-> > > > [   43.429608]  dump_stack_lvl+0x84/0xb4
-> > > > [   43.433395]  print_address_description+0x30/0x2fc
-> > > > [   43.438243]  kasan_report+0x15c/0x19c
-> > > > [   43.442070]  __asan_report_load8_noabort+0x44/0x50
-> > > > hciconfig hci0 up
-> > > > [   43.447009]  mgmt_remove_adv_monitor_sync+0x40/0xcc [bluetooth
-> > > > 8dae3a82177133cfa9626e7322b3b0c8f665102d]
-> > > > [   43.458568]  hci_cmd_sync_work+0x1bc/0x2bc [bluetooth
-> > > > 8dae3a82177133cfa9626e7322b3b0c8f665102d]
-> > > > [   43.467656]  process_one_work+0x59c/0xa88
-> > > > [   43.472530]  worker_thread+0x81c/0xd18
-> > > > [   43.476410]  kthread+0x2d4/0x3d8
-> > > > localhost ~ # [   43.479753]  ret_from_fork+0x10/0x20
-> > > > [   43.486588]
-> > > > [   43.488156] Allocated by task 1118:
-> > > > [   43.491751]  kasan_save_stack+0x38/0x68
-> > > > [   43.495709]  __kasan_kmalloc+0xb4/0xd0
-> > > > [   43.499577]  kmem_cache_alloc_trace+0x29c/0x374
-> > > > [   43.504238]  mgmt_pending_new+0x74/0x200 [bluetooth]
-> > > > sleep 2[   43.509509]  mgmt_pending_add+0x28/0xec [bluetooth]
-> > > >
-> > > > [   43.515244]  remove_adv_monitor+0xf8/0x174 [bluetooth]
-> > > > [   43.521533]  hci_mgmt_cmd+0x5c4/0x8b0 [bluetooth]
-> > > > [   43.526527]  hci_sock_sendmsg+0x28c/0x95c [bluetooth]
-> > > > [   43.531873]  sock_sendmsg+0xb4/0xd8
-> > > > [   43.535472]  sock_write_iter+0x1c0/0x2d0
-> > > > [   43.539519]  do_iter_readv_writev+0x350/0x4e0
-> > > > [   43.544012]  do_iter_write+0xf0/0x2e4
-> > > > [   43.547788]  vfs_writev+0xd0/0x13c
-> > > > [   43.551295]  do_writev+0xe8/0x1fc
-> > > > [   43.554710]  __arm64_sys_writev+0x84/0x98
-> > > > [   43.558838]  invoke_syscall+0x78/0x20c
-> > > > [   43.562709]  el0_svc_common+0x12c/0x2f0
-> > > > [   43.566654]  do_el0_svc+0x94/0x13c
-> > > > [   43.570155]  el0_svc+0x5c/0x108
-> > > > [   43.573391]  el0t_64_sync_handler+0x78/0x108
-> > > > [   43.577785]  el0t_64_sync+0x1a4/0x1a8
-> > > > [   43.581564]
-> > > > [   43.583115] Freed by task 3217:
-> > > > [   43.586356]  kasan_save_stack+0x38/0x68
-> > > > [   43.590314]  kasan_set_track+0x28/0x3c
-> > > > [   43.594180]  kasan_set_free_info+0x28/0x4c
-> > > > [   43.598396]  ____kasan_slab_free+0x138/0x17c
-> > > > [   43.602794]  __kasan_slab_free+0x18/0x28
-> > > > [   43.606838]  slab_free_freelist_hook+0x188/0x260
-> > > > [   43.611591]  kfree+0x138/0x29c
-> > > > [   43.614741]  mgmt_pending_free+0xac/0xdc [bluetooth]
-> > > > [   43.620003]  mgmt_pending_remove+0xd8/0xf0 [bluetooth]
-> > > > [   43.625434]  cmd_complete_rsp+0xc8/0x178 [bluetooth]
-> > > > [   43.630686]  mgmt_pending_foreach+0xa8/0xf8 [bluetooth]
-> > > > [   43.636198]  __mgmt_power_off+0x114/0x26c [bluetooth]
-> > > > [   43.641532]  hci_dev_close_sync+0x2ec/0x7ec [bluetooth]
-> > > > [   43.647049]  hci_dev_do_close+0x3c/0x7c [bluetooth]
-> > > > [   43.652209]  hci_dev_close+0xac/0x164 [bluetooth]
-> > > > [   43.657190]  hci_sock_ioctl+0x298/0x444 [bluetooth]
-> > > > [   43.662353]  sock_do_ioctl+0xd0/0x1e8
-> > > > [   43.666134]  sock_ioctl+0x4fc/0x72c
-> > > > [   43.669736]  __arm64_sys_ioctl+0x118/0x154
-> > > > [   43.673961]  invoke_syscall+0x78/0x20c
-> > > > [   43.677820]  el0_svc_common+0x12c/0x2f0
-> > > > [   43.681770]  do_el0_svc+0x94/0x13c
-> > > > [   43.685278]  el0_svc+0x5c/0x108
-> > > > [   43.688514]  el0t_64_sync_handler+0x78/0x108
-> > > > [   43.692913]  el0t_64_sync+0x1a4/0x1a8
-> > > >
-> > > > Thanks,
-> > > > Zhengping
-> > >
-> > > Ok, how about we do something like the following:
-> > >
-> > > https://gist.github.com/Vudentz/365d664275e4d2e2af157e47f0502f50
-> > >
-> > > The actual real culprit seem to be __mgmt_power_off does cleanup
-> > > mgmt_pending but that is still accessible via cmd_sync_work_list, thi=
-s
-> > > is probably how hci_request was designed but in case of cmd_sync we
-> > > normally have the data as part of cmd_sync_work_list.
-> > >
-> > > > On Mon, Feb 27, 2023 at 3:41=E2=80=AFPM Luiz Augusto von Dentz
-> > > > <luiz.dentz@gmail.com> wrote:
-> > > > >
-> > > > > Hi Zhengping,
-> > > > >
-> > > > > On Sun, Feb 26, 2023 at 11:18=E2=80=AFPM Zhengping Jiang <jiangzp=
-@google.com> wrote:
-> > > > > >
-> > > > > > Hi Luiz,
-> > > > > >
-> > > > > > I have a question. Given that each command in the cmd_sync queu=
-e
-> > > > > > should clean up the memory in a callback function. I was wonder=
-ing if
-> > > > > > the call to cmd_complete_rsp in __mgmt_power_off function is st=
-ill
-> > > > > > necessary? Will this always risk a race condition that cmd has =
-been
-> > > > > > released when the complete callback or _sync function is run?
-> > > > >
-> > > > > Not sure I follow you here, do you have a stack trace when the us=
+> And a fixed VLEN of 128.
+>
+> The in-kernel access to vector instances is limited to the save and
+> restore of process states so the above mentioned areas can simply be
+> handled via the alternatives framework, similar to other T-Head specific
+> issues.
+>
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> ---
+>  arch/riscv/Kconfig.erratas           |  13 +++
+>  arch/riscv/errata/thead/errata.c     |  32 ++++++
+>  arch/riscv/include/asm/csr.h         |  26 ++++-
+>  arch/riscv/include/asm/errata_list.h |  62 +++++++++++-
+>  arch/riscv/include/asm/vector.h      | 139 +++++++++++++++++++++++++--
+>  5 files changed, 256 insertions(+), 16 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
+> index 69621ae6d647..624cefc9fcd7 100644
+> --- a/arch/riscv/Kconfig.erratas
+> +++ b/arch/riscv/Kconfig.erratas
+> @@ -79,4 +79,17 @@ config ERRATA_THEAD_PMU
+>
+>           If you don't know what to do here, say "Y".
+>
+> +config ERRATA_THEAD_VECTOR
+> +       bool "Apply T-Head Vector errata"
+> +       depends on ERRATA_THEAD && RISCV_ISA_V
+> +       default y
+> +       help
+> +         The T-Head C9xx cores implement an earlier version 0.7.1
+> +         of the vector extensions.
+> +
+> +         This will apply the necessary errata to handle the non-standard
+> +         behaviour via when switch to and from vector mode for processes=
+.
+> +
+> +         If you don't know what to do here, say "Y".
+> +
+>  endmenu # "CPU errata selection"
+> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/e=
+rrata.c
+> index fac5742d1c1e..55b3aaa2468a 100644
+> --- a/arch/riscv/errata/thead/errata.c
+> +++ b/arch/riscv/errata/thead/errata.c
+> @@ -12,6 +12,7 @@
+>  #include <asm/cacheflush.h>
+>  #include <asm/errata_list.h>
+>  #include <asm/patch.h>
+> +#include <asm/vector.h>
+>  #include <asm/vendorid_list.h>
+>
+>  static bool errata_probe_pbmt(unsigned int stage,
+> @@ -63,6 +64,34 @@ static bool errata_probe_pmu(unsigned int stage,
+>         return true;
+>  }
+>
+> +static bool errata_probe_vector(unsigned int stage,
+> +                               unsigned long arch_id, unsigned long impi=
+d)
+> +{
+> +       if (!IS_ENABLED(CONFIG_ERRATA_THEAD_VECTOR))
+> +               return false;
+> +
+> +       /* target-c9xx cores report arch_id and impid as 0 */
+> +       if (arch_id !=3D 0 || impid !=3D 0)
+> +               return false;
+> +
+> +       if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT) {
+> +               /*
+> +                * Disable VECTOR to detect illegal usage of vector in ke=
+rnel.
+> +                * This is normally done in _start_kernel but with the
+> +                * vector-1.0 SR_VS bits. VS is using [24:23] on T-Head's
+> +                * vector-0.7.1 and the vector-1.0-bits are unused there.
+> +                */
+> +               csr_clear(CSR_STATUS, SR_VS_THEAD);
+> +               return false;
+> +       }
+> +
+> +       /* let has_vector() return true and set the static vlen */
+> +       static_branch_enable(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_VECTOR=
+]);
+> +       riscv_vsize =3D 128 / 8 * 32;
+> +
+> +       return true;
+> +}
+> +
+>  static u32 thead_errata_probe(unsigned int stage,
+>                               unsigned long archid, unsigned long impid)
+>  {
+> @@ -77,6 +106,9 @@ static u32 thead_errata_probe(unsigned int stage,
+>         if (errata_probe_pmu(stage, archid, impid))
+>                 cpu_req_errata |=3D BIT(ERRATA_THEAD_PMU);
+>
+> +       if (errata_probe_vector(stage, archid, impid))
+> +               cpu_req_errata |=3D BIT(ERRATA_THEAD_VECTOR);
+> +
+>         return cpu_req_errata;
+>  }
+>
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 8b06f2472915..8d16c11487aa 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -24,11 +24,27 @@
+>  #define SR_FS_CLEAN    _AC(0x00004000, UL)
+>  #define SR_FS_DIRTY    _AC(0x00006000, UL)
+>
+> -#define SR_VS           _AC(0x00000600, UL) /* Vector Status */
+> -#define SR_VS_OFF       _AC(0x00000000, UL)
+> -#define SR_VS_INITIAL   _AC(0x00000200, UL)
+> -#define SR_VS_CLEAN     _AC(0x00000400, UL)
+> -#define SR_VS_DIRTY     _AC(0x00000600, UL)
+> +#define SR_VS_OFF              _AC(0x00000000, UL)
+> +
+> +#define SR_VS_1_0              _AC(0x00000600, UL) /* Vector Status */
+How about keep SR_VS?
+
+> +#define SR_VS_INITIAL_1_0      _AC(0x00000200, UL)
+> +#define SR_VS_CLEAN_1_0                _AC(0x00000400, UL)
+> +#define SR_VS_DIRTY_1_0                _AC(0x00000600, UL)
+> +
+> +#define SR_VS_THEAD            _AC(0x01800000, UL) /* Vector Status */
+How about?
+
+#ifdef ERRATA_THEAD_VECTOR
+#define SR_VS_0_7
+
+> +#define SR_VS_INITIAL_THEAD    _AC(0x00800000, UL)
+> +#define SR_VS_CLEAN_THEAD      _AC(0x01000000, UL)
+> +#define SR_VS_DIRTY_THEAD      _AC(0x01800000, UL)
+> +
+> +/*
+> + * Always default to vector-1.0 handling in assembly and let the broken
+> + * implementations handle their case separately.
+> + */
+> +#ifdef __ASSEMBLY__
+> +#define SR_VS                  SR_VS_1_0
+> +#else
+> +
+> +#endif
+>
+>  #define SR_XS          _AC(0x00018000, UL) /* Extension Status */
+>  #define SR_XS_OFF      _AC(0x00000000, UL)
+> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/as=
+m/errata_list.h
+> index 95e626b7281e..3f93cdd1599f 100644
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -19,7 +19,8 @@
+>  #define        ERRATA_THEAD_PBMT 0
+>  #define        ERRATA_THEAD_CMO 1
+>  #define        ERRATA_THEAD_PMU 2
+> -#define        ERRATA_THEAD_NUMBER 3
+> +#define        ERRATA_THEAD_VECTOR 3
+> +#define        ERRATA_THEAD_NUMBER 4
+>  #endif
+>
+>  #define        CPUFEATURE_SVPBMT 0
+> @@ -157,6 +158,65 @@ asm volatile(ALTERNATIVE(                           =
+               \
+>         : "=3Dr" (__ovl) :                                               =
+ \
+>         : "memory")
+>
+> +#ifdef CONFIG_ERRATA_THEAD_PBMT
+> +
+> +#define ALT_VS_SHIFT 61
+> +#define ALT_THEAD_VS_SHIFT 59
+> +#define ALT_THEAD_SR_VS(_val, _vs)                                     \
+> +asm(ALTERNATIVE(  "li %0, %1\t\nslli %0,%0,%3",                         =
+       \
+> +                 "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,        \
+> +                       ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)    \
+> +               : "=3Dr"(_val)                                           =
+ \
+> +               : "I"(prot##_MAIN >> ALT_SVPBMT_SHIFT),         \
+> +                 "I"(prot##_THEAD >> ALT_THEAD_PBMT_SHIFT),            \
+> +                 "I"(ALT_SVPBMT_SHIFT),                                \
+> +                 "I"(ALT_THEAD_PBMT_SHIFT))
+> +#else
+> +#define ALT_THEAD_SR_VS(_val ## _MAIN)
+> +#endif
+> +
+> +#ifdef CONFIG_ERRATA_THEAD_VECTOR
+> +
+> +#define THEAD_C9XX_CSR_VXSAT                   0x9
+> +#define THEAD_C9XX_CSR_VXRM                    0xa
+> +
+> +/*
+> + * Vector 0.7.1 as used for example on T-Head Xuantie cores, uses an old=
 er
-> > > > > after free occurs?
-> > > > >
-> > > > > > Thanks,
-> > > > > > Zhengping
-> > > > > >
-> > > > > > On Fri, Feb 24, 2023 at 2:37=E2=80=AFPM Zhengping Jiang <jiangz=
-p@google.com> wrote:
-> > > > > > >
-> > > > > > > Hi Luiz,
-> > > > > > >
-> > > > > > > > Any particular reason why you are not using hci_cmd_sync_cl=
-ear
-> > > > > > > > instead?
-> > > > > > >
-> > > > > > > That is a good question and we used hci_cmd_sync_clear in the=
- first
-> > > > > > > version, but it will clear the queue and also close the timer=
-. As a
-> > > > > > > result, when the adapter is turned on again, the timer will n=
-ot
-> > > > > > > schedule any new jobs. So the option is to use hci_cmd_sync_c=
-lear and
-> > > > > > > re-initiate the queue or to write a new function which only c=
-lears the
-> > > > > > > queue.
-> > > > > > >
-> > > > > > > > We also may want to move the clearing logic to
-> > > > > > > > hci_dev_close_sync since it should be equivalent to
-> > > > > > > > hci_request_cancel_all.
-> > > > > > >
-> > > > > > > I actually have a question here. I saw
-> > > > > > > "drain_workqueue(hdev->workqueue)" in hci_dev_close_sync and =
-thought
-> > > > > > > it should force clearing the cmd_sync queue. But it seems can=
-not
-> > > > > > > prevent the use-after-free situation.
-> > > > > > >
-> > > > > > > Any suggestions to improve the solution?
-> > > > > > >
-> > > > > > > Thanks,
-> > > > > > > Zhengping
-> > > > > > >
-> > > > > > >
-> > > > > > > On Fri, Feb 24, 2023 at 1:02 PM Luiz Augusto von Dentz
-> > > > > > > <luiz.dentz@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > Hi Zhengping,
-> > > > > > > >
-> > > > > > > > On Fri, Feb 24, 2023 at 11:53 AM Zhengping Jiang <jiangzp@g=
-oogle.com> wrote:
-> > > > > > > > >
-> > > > > > > > > Clear cmd_sync_work queue before clearing the mgmt cmd li=
-st to avoid
-> > > > > > > > > racing conditions which cause use-after-free.
-> > > > > > > > >
-> > > > > > > > > When powering off the adapter, the mgmt cmd list will be =
-cleared. If a
-> > > > > > > > > work is queued in the cmd_sync_work queue at the same tim=
-e, it will
-> > > > > > > > > cause the risk of use-after-free, as the cmd pointer is n=
-ot checked
-> > > > > > > > > before use.
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Zhengping Jiang <jiangzp@google.com>
-> > > > > > > > > ---
-> > > > > > > > >
-> > > > > > > > > Changes in v2:
-> > > > > > > > > - Add function to clear the queue without stop the timer
-> > > > > > > > >
-> > > > > > > > > Changes in v1:
-> > > > > > > > > - Clear cmd_sync_work queue before clearing the mgmt cmd =
-list
-> > > > > > > > >
-> > > > > > > > >  net/bluetooth/hci_sync.c | 21 ++++++++++++++++++++-
-> > > > > > > > >  1 file changed, 20 insertions(+), 1 deletion(-)
-> > > > > > > > >
-> > > > > > > > > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci=
-_sync.c
-> > > > > > > > > index 117eedb6f709..b70365dfff0c 100644
-> > > > > > > > > --- a/net/bluetooth/hci_sync.c
-> > > > > > > > > +++ b/net/bluetooth/hci_sync.c
-> > > > > > > > > @@ -636,6 +636,23 @@ void hci_cmd_sync_init(struct hci_de=
-v *hdev)
-> > > > > > > > >         INIT_DELAYED_WORK(&hdev->adv_instance_expire, adv=
-_timeout_expire);
-> > > > > > > > >  }
-> > > > > > > > >
-> > > > > > > > > +static void hci_pend_cmd_sync_clear(struct hci_dev *hdev=
-)
-> > > > > > > > > +{
-> > > > > > > > > +       struct hci_cmd_sync_work_entry *entry, *tmp;
-> > > > > > > > > +
-> > > > > > > > > +       mutex_lock(&hdev->cmd_sync_work_lock);
-> > > > > > > > > +       list_for_each_entry_safe(entry, tmp, &hdev->cmd_s=
-ync_work_list, list) {
-> > > > > > > > > +               if (entry->destroy) {
-> > > > > > > > > +                       hci_req_sync_lock(hdev);
-> > > > > > > > > +                       entry->destroy(hdev, entry->data,=
- -ECANCELED);
-> > > > > > > > > +                       hci_req_sync_unlock(hdev);
-> > > > > > > > > +               }
-> > > > > > > > > +               list_del(&entry->list);
-> > > > > > > > > +               kfree(entry);
-> > > > > > > > > +       }
-> > > > > > > > > +       mutex_unlock(&hdev->cmd_sync_work_lock);
-> > > > > > > > > +}
-> > > > > > > > > +
-> > > > > > > > >  void hci_cmd_sync_clear(struct hci_dev *hdev)
-> > > > > > > > >  {
-> > > > > > > > >         struct hci_cmd_sync_work_entry *entry, *tmp;
-> > > > > > > > > @@ -4842,8 +4859,10 @@ int hci_dev_close_sync(struct hci_=
-dev *hdev)
-> > > > > > > > >
-> > > > > > > > >         if (!auto_off && hdev->dev_type =3D=3D HCI_PRIMAR=
-Y &&
-> > > > > > > > >             !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
-> > > > > > > > > -           hci_dev_test_flag(hdev, HCI_MGMT))
-> > > > > > > > > +           hci_dev_test_flag(hdev, HCI_MGMT)) {
-> > > > > > > > > +               hci_pend_cmd_sync_clear(hdev);
-> > > > > > > >
-> > > > > > > > Any particular reason why you are not using hci_cmd_sync_cl=
-ear
-> > > > > > > > instead? We also may want to move the clearing logic to
-> > > > > > > > hci_dev_close_sync since it should be equivalent to
-> > > > > > > > hci_request_cancel_all.
-> > > > > > > >
-> > > > > > > > >                 __mgmt_power_off(hdev);
-> > > > > > > > > +       }
-> > > > > > > > >
-> > > > > > > > >         hci_inquiry_cache_flush(hdev);
-> > > > > > > > >         hci_pend_le_actions_clear(hdev);
-> > > > > > > > > --
-> > > > > > > > > 2.39.2.722.g9855ee24e9-goog
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > --
-> > > > > > > > Luiz Augusto von Dentz
-> > > > >
-> > > > >
-> > > > >
-> > > > > --
-> > > > > Luiz Augusto von Dentz
-> > >
-> > >
-> > >
-> > > --
-> > > Luiz Augusto von Dentz
+> + * encoding for vsetvli (ta, ma vs. d1), so provide an instruction for
+> + * vsetvli     t4, x0, e8, m8, d1
+> + */
+> +#define THEAD_VSETVLI_T4X0E8M8D1       ".long  0x00307ed7\n\t"
+> +
+> +/*
+> + * While in theory, the vector-0.7.1 vsb.v and vlb.v result in the same
+> + * encoding as the standard vse8.v and vle8.v, compilers seem to optimiz=
+e
+> + * the call resulting in a different encoding and then using a value for
+> + * the "mop" field that is not part of vector-0.7.1
+> + * So encode specific variants for vstate_save and _restore.
+> + */
+> +#define THEAD_VSB_V_V0T0               ".long  0x02028027\n\t"
+> +#define THEAD_VSB_V_V8T0               ".long  0x02028427\n\t"
+> +#define THEAD_VSB_V_V16T0              ".long  0x02028827\n\t"
+> +#define THEAD_VSB_V_V24T0              ".long  0x02028c27\n\t"
+> +#define THEAD_VLB_V_V0T0               ".long  0x012028007\n\t"
+> +#define THEAD_VLB_V_V8T0               ".long  0x012028407\n\t"
+> +#define THEAD_VLB_V_V16T0              ".long  0x012028807\n\t"
+> +#define THEAD_VLB_V_V24T0              ".long  0x012028c07\n\t"
+> +
+> +#define ALT_SR_VS_VECTOR_1_0_SHIFT     9
+> +#define ALT_SR_VS_THEAD_SHIFT          23
+> +
+> +#define ALT_SR_VS(_val, prot)                                          \
+> +asm(ALTERNATIVE("li %0, %1\t\nslli %0,%0,%3",                          \
+> +               "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,          \
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)        \
+> +               : "=3Dr"(_val)                                           =
+ \
+> +               : "I"(prot##_1_0 >> ALT_SR_VS_VECTOR_1_0_SHIFT),        \
+> +                 "I"(prot##_THEAD >> ALT_SR_VS_THEAD_SHIFT),           \
+> +                 "I"(ALT_SR_VS_VECTOR_1_0_SHIFT),                      \
+> +                 "I"(ALT_SR_VS_THEAD_SHIFT))
+> +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
+> +
+>  #endif /* __ASSEMBLY__ */
 >
+>  #endif
+> diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/vec=
+tor.h
+> index ad9e6161dd89..ad91f783316e 100644
+> --- a/arch/riscv/include/asm/vector.h
+> +++ b/arch/riscv/include/asm/vector.h
+> @@ -15,6 +15,55 @@
+>  #include <asm/hwcap.h>
+>  #include <asm/csr.h>
+>  #include <asm/asm.h>
+> +#include <asm/errata_list.h>
+> +
+> +#ifdef CONFIG_ERRATA_THEAD_VECTOR
+> +
+> +static inline u32 riscv_sr_vs(void)
+> +{
+> +       u32 val;
+> +
+> +       ALT_SR_VS(val, SR_VS);
+> +       return val;
+> +}
+> +
+> +static inline u32 riscv_sr_vs_initial(void)
+> +{
+> +       u32 val;
+> +
+> +       ALT_SR_VS(val, SR_VS_INITIAL);
+> +       return val;
+> +}
+> +
+> +static inline u32 riscv_sr_vs_clean(void)
+> +{
+> +       u32 val;
+> +
+> +       ALT_SR_VS(val, SR_VS_CLEAN);
+> +       return val;
+> +}
+> +
+> +static inline u32 riscv_sr_vs_dirty(void)
+> +{
+> +       u32 val;
+> +
+> +       ALT_SR_VS(val, SR_VS_DIRTY);
+> +       return val;
+> +}
+> +
+> +#define SR_VS          riscv_sr_vs()
+> +#define SR_VS_INITIAL  riscv_sr_vs_initial()
+> +#define SR_VS_CLEAN    riscv_sr_vs_clean()
+> +#define SR_VS_DIRTY    riscv_sr_vs_dirty()
+> +
+> +#else /* CONFIG_ERRATA_THEAD_VECTOR */
+> +
+> +#define SR_VS          SR_VS_1_0
+> +#define SR_VS_INITIAL  SR_VS_INITIAL_1_0
+> +#define SR_VS_CLEAN    SR_VS_CLEAN_1_0
+> +#define SR_VS_DIRTY    SR_VS_DIRTY_1_0
+> +
+> +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
 >
+>  #define CSR_STR(x) __ASM_STR(x)
 >
+> @@ -29,6 +78,7 @@ static __always_inline bool has_vector(void)
+>  static inline void __vstate_clean(struct pt_regs *regs)
+>  {
+>         regs->status =3D (regs->status & ~(SR_VS)) | SR_VS_CLEAN;
+> +
+>  }
+>
+>  static inline void vstate_off(struct pt_regs *regs)
+> @@ -58,30 +108,75 @@ static __always_inline void rvv_disable(void)
+>
+>  static __always_inline void __vstate_csr_save(struct __riscv_v_state *de=
+st)
+>  {
+> -       asm volatile (
+> +       register u32 t1 asm("t1") =3D (SR_FS);
+> +
+> +       /*
+> +        * CSR_VCSR is defined as
+> +        * [2:1] - vxrm[1:0]
+> +        * [0] - vxsat
+> +        * The earlier vector spec implemented by T-Head uses separate
+> +        * registers for the same bit-elements, so just combine those
+> +        * into the existing output field.
+> +        *
+> +        * Additionally T-Head cores need FS to be enabled when accessing
+> +        * the VXRM and VXSAT CSRs, otherwise ending in illegal instructi=
+ons.
+> +        */
+> +       asm volatile (ALTERNATIVE(
+>                 "csrr   %0, " CSR_STR(CSR_VSTART) "\n\t"
+>                 "csrr   %1, " CSR_STR(CSR_VTYPE) "\n\t"
+>                 "csrr   %2, " CSR_STR(CSR_VL) "\n\t"
+>                 "csrr   %3, " CSR_STR(CSR_VCSR) "\n\t"
+> +               __nops(5),
+> +               "csrs   sstatus, t1\n\t"
+> +               "csrr   %0, " CSR_STR(CSR_VSTART) "\n\t"
+> +               "csrr   %1, " CSR_STR(CSR_VTYPE) "\n\t"
+> +               "csrr   %2, " CSR_STR(CSR_VL) "\n\t"
+> +               "csrr   %3, " CSR_STR(THEAD_C9XX_CSR_VXRM) "\n\t"
+> +               "slliw  %3, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
+> +               "csrr   t4, " CSR_STR(THEAD_C9XX_CSR_VXSAT) "\n\t"
+> +               "or     %3, %3, t4\n\t"
+> +               "csrc   sstatus, t1\n\t",
+> +               THEAD_VENDOR_ID,
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+>                 : "=3Dr" (dest->vstart), "=3Dr" (dest->vtype), "=3Dr" (de=
+st->vl),
+> -                 "=3Dr" (dest->vcsr) : :);
+> +                 "=3Dr" (dest->vcsr) : "r"(t1) : "t4");
+>  }
+>
+>  static __always_inline void __vstate_csr_restore(struct __riscv_v_state =
+*src)
+>  {
+> -       asm volatile (
+> +       register u32 t1 asm("t1") =3D (SR_FS);
+> +
+> +       /*
+> +        * Similar to __vstate_csr_save above, restore values for the
+> +        * separate VXRM and VXSAT CSRs from the vcsr variable.
+> +        */
+> +       asm volatile (ALTERNATIVE(
+>                 "vsetvl  x0, %2, %1\n\t"
+>                 "csrw   " CSR_STR(CSR_VSTART) ", %0\n\t"
+>                 "csrw   " CSR_STR(CSR_VCSR) ", %3\n\t"
+> +               __nops(6),
+> +               "csrs   sstatus, t1\n\t"
+> +               "vsetvl  x0, %2, %1\n\t"
+> +               "csrw   " CSR_STR(CSR_VSTART) ", %0\n\t"
+> +               "srliw  t4, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
+> +               "andi   t4, t4, " CSR_STR(VCSR_VXRM_MASK) "\n\t"
+> +               "csrw   " CSR_STR(THEAD_C9XX_CSR_VXRM) ", t4\n\t"
+> +               "andi   %3, %3, " CSR_STR(VCSR_VXSAT_MASK) "\n\t"
+> +               "csrw   " CSR_STR(THEAD_C9XX_CSR_VXSAT) ", %3\n\t"
+> +               "csrc   sstatus, t1\n\t",
+> +               THEAD_VENDOR_ID,
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+>                 : : "r" (src->vstart), "r" (src->vtype), "r" (src->vl),
+> -                   "r" (src->vcsr) :);
+> +                   "r" (src->vcsr), "r"(t1): "t4");
+>  }
+>
+>  static inline void __vstate_save(struct __riscv_v_state *save_to, void *=
+datap)
+>  {
+>         rvv_enable();
+>         __vstate_csr_save(save_to);
+> -       asm volatile (
+> +
+> +       asm volatile (ALTERNATIVE(
+> +               "nop\n\t"
+>                 "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+>                 "vse8.v         v0, (%0)\n\t"
+>                 "add            %0, %0, t4\n\t"
+> @@ -89,8 +184,18 @@ static inline void __vstate_save(struct __riscv_v_sta=
+te *save_to, void *datap)
+>                 "add            %0, %0, t4\n\t"
+>                 "vse8.v         v16, (%0)\n\t"
+>                 "add            %0, %0, t4\n\t"
+> -               "vse8.v         v24, (%0)\n\t"
+> -               : : "r" (datap) : "t4", "memory");
+> +               "vse8.v         v24, (%0)\n\t",
+> +               "mv             t0, %0\n\t"
+> +               THEAD_VSETVLI_T4X0E8M8D1
+> +               THEAD_VSB_V_V0T0
+> +               "addi           t0, t0, 128\n\t"
+> +               THEAD_VSB_V_V8T0
+> +               "addi           t0, t0, 128\n\t"
+> +               THEAD_VSB_V_V16T0
+> +               "addi           t0, t0, 128\n\t"
+> +               THEAD_VSB_V_V24T0, THEAD_VENDOR_ID,
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+> +               : : "r" (datap) : "t0", "t4", "memory");
+>         rvv_disable();
+>  }
+>
+> @@ -98,7 +203,9 @@ static inline void __vstate_restore(struct __riscv_v_s=
+tate *restore_from,
+>                                     void *datap)
+>  {
+>         rvv_enable();
+> -       asm volatile (
+> +
+> +       asm volatile (ALTERNATIVE(
+> +               "nop\n\t"
+>                 "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+>                 "vle8.v         v0, (%0)\n\t"
+>                 "add            %0, %0, t4\n\t"
+> @@ -106,8 +213,20 @@ static inline void __vstate_restore(struct __riscv_v=
+_state *restore_from,
+>                 "add            %0, %0, t4\n\t"
+>                 "vle8.v         v16, (%0)\n\t"
+>                 "add            %0, %0, t4\n\t"
+> -               "vle8.v         v24, (%0)\n\t"
+> -               : : "r" (datap) : "t4");
+> +               "vle8.v         v24, (%0)\n\t",
+> +
+> +               "mv             t0, %0\n\t"
+> +               THEAD_VSETVLI_T4X0E8M8D1
+> +               THEAD_VLB_V_V0T0
+> +               "addi           t0, t0, 128\n\t"
+> +               THEAD_VLB_V_V8T0
+> +               "addi           %0, %0, 128\n\t"
+> +               THEAD_VLB_V_V16T0
+> +               "addi           %0, %0, 128\n\t"
+> +               THEAD_VLB_V_V24T0, THEAD_VENDOR_ID,
+> +               ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+> +               : : "r" (datap) : "t0", "t4");
+> +
+>         __vstate_csr_restore(restore_from);
+>         rvv_disable();
+>  }
 > --
-> Luiz Augusto von Dentz
+> 2.39.0
+>
+
+
+--=20
+Best Regards
+ Guo Ren
