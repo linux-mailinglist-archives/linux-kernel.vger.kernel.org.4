@@ -2,245 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12FA6A6433
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CF46A6434
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjCAAYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 19:24:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
+        id S229636AbjCAAYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 19:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCAAYF (ORCPT
+        with ESMTP id S229524AbjCAAYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 19:24:05 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED72B763;
-        Tue, 28 Feb 2023 16:24:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677630244; x=1709166244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yoZkfu3SK5uDBzze9pglBHWSzN6bUknAkIvbsUywnaQ=;
-  b=U4pmSIr8QxgTf2sIxjMl34Gg5kYO4KwOOet1GzgtyjfOD7xgLknhpR5z
-   UeiL5P+BSouSSwVWMMfZ+zK1JORWtKLgGSzH6S4jeL1GuYqgEqKghIn2t
-   uQtp+u0n7AfaqQ9Wu8a1oHLNGujlfXyqZVhrHKE3MiWyPlZwh4a3nTOia
-   yM7rlziZiSrj1tKyEDbTsqtWUmoL8RzL/PA3Ypia/QiYx8EAgc0DoUgEh
-   ebSyIjTmQp2OLiXdfXPKXyk4WjaTzXHRz+ULOfU0QRzqa/Le0rIkOHzrC
-   0LN21llO9Ktea/Tvtu7myXu/n4bwyGSqYTr1yxxSc2Gp2KwCLO+iHDmRO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="334320108"
-X-IronPort-AV: E=Sophos;i="5.98,223,1673942400"; 
-   d="scan'208";a="334320108"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 16:24:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="706774375"
-X-IronPort-AV: E=Sophos;i="5.98,223,1673942400"; 
-   d="scan'208";a="706774375"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2023 16:23:58 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXAGD-0005kb-1U;
-        Wed, 01 Mar 2023 00:23:57 +0000
-Date:   Wed, 1 Mar 2023 08:23:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>
-Subject: Re: [PATCH v3 29/29] LoongArch: KVM: Enable kvm config and add the
- makefile
-Message-ID: <202303010850.bV3yQ7cW-lkp@intel.com>
-References: <20230228070057.3687180-30-zhaotianrui@loongson.cn>
+        Tue, 28 Feb 2023 19:24:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342232D175
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:24:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3958A60FD9
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 00:24:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CE5C433D2;
+        Wed,  1 Mar 2023 00:24:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677630248;
+        bh=m4guPfJLUa8LmwPjtN0dbXYerTvJcpnOVu9CzY3no+U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ln9WdYoxjZoAiwJySwfPO+L2v7buBxftjBXhNQAVyCeyqTCSSukyiQ9rYjTgPIkCG
+         OjHp6qmOFvjSIZ37hNCL8gPtBO8K+S+dBzN8+wtQ0j/POPUvpZAgGnKlOJcG2Zc9JW
+         JE9Aa06X0egJzufhZyMZgY/Uo7wL1wtk3l9oHQYiz/OtpP4j15u7TGOizpEq/2sZJi
+         W1RjezCmky98WvbG1SRtJuDsrs29HKCY5+hi5g5ZZ9cCuKAauhFD15hQ26GNBOjVCm
+         O6P2tpeh/n+sfGQSvQm+H0wssokb+YVtMsdPsHlLJ0c8KaPzYQGJoNbVbEc6Y7OOmP
+         MMv93wiezPWVA==
+Message-ID: <b3ec8b21-8776-98e1-b7e2-f82bdee40602@kernel.org>
+Date:   Wed, 1 Mar 2023 10:24:05 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228070057.3687180-30-zhaotianrui@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/2] riscv: support ELF format binaries in nommu mode
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Niklas Cassel <Niklas.Cassel@wdc.com>
+Cc:     linux-riscv@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <mhng-20faeb04-8ed4-4759-8f13-aef3d2446d15@palmer-ri-x1c9a>
+ <3719a4f0-1a5a-4661-a6d7-5d4f67d7b7e8@opensource.wdc.com>
+From:   Greg Ungerer <gerg@kernel.org>
+In-Reply-To: <3719a4f0-1a5a-4661-a6d7-5d4f67d7b7e8@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tianrui,
+Hi Damien,
 
-Thank you for the patch! Perhaps something to improve:
+On 1/3/23 08:49, Damien Le Moal wrote:
+> On 3/1/23 06:52, Palmer Dabbelt wrote:
+>> On Tue, 28 Feb 2023 05:51:24 PST (-0800), gerg@kernel.org wrote:
+>>> The following changes add the ability to run ELF format binaries when
+>>> running RISC-V in nommu mode. That support is actually part of the
+>>> ELF-FDPIC loader, so these changes are all about making that work on
+>>> RISC-V.
+>>>
+>>> The first issue to deal with is making the ELF-FDPIC loader capable of
+>>> handling 64-bit ELF files. As coded right now it only supports 32-bit
+>>> ELF files.
+>>>
+>>> Secondly some changes are required to enable and compile the ELF-FDPIC
+>>> loader on RISC-V and to pass the ELF-FDPIC mapping addresses through to
+>>> user space when execing the new program.
+>>>
+>>> These changes have not been used to run actual ELF-FDPIC binaries.
+>>> It is used to load and run normal ELF - compiled -pie format. Though the
+>>> underlying changes are expected to work with full ELF-FDPIC binaries if
+>>> or when that is supported on RISC-V in gcc.
+>>>
+>>> To avoid needing changes to the C-library (tested with uClibc-ng
+>>> currently) there is a simple runtime dynamic loader (interpreter)
+>>> available to do the final relocations, https://github.com/gregungerer/uldso.
+>>> The nice thing about doing it this way is that the same program
+>>> binary can also be loaded with the usual ELF loader in MMU linux.
+>>>
+>>> The motivation here is to provide an easy to use alternative to the
+>>> flat format binaries normally used for RISC-V nommu based systems.
+>>>
+>>> Signed-off-by: Greg Ungerer <gerg@kernel.org>
+>>> ---
+>>>
+>>>   arch/riscv/include/asm/elf.h         |   11 +++++++++-
+>>>   arch/riscv/include/asm/mmu.h         |    4 +++
+>>>   arch/riscv/include/uapi/asm/ptrace.h |    5 ++++
+>>>   fs/Kconfig.binfmt                    |    2 -
+>>>   fs/binfmt_elf_fdpic.c                |   38 +++++++++++++++++------------------
+>>>   include/linux/elf-fdpic.h            |   14 +++++++++++-
+>>>   include/uapi/linux/elf-fdpic.h       |   15 +++++++++++++
+>>>   7 files changed, 67 insertions(+), 22 deletions(-)
+>>
+>> Adding Damien, as IIRC he's had some hacked up userspace bits for the
+>> K210.  I'm yet to get anything running, but it'd be great if we get this
+>> to a point where I can actually boot test this on QEMU (I'm just doing
+>> builds now).
+> 
+> +Niklas
+> 
+> Niklas, didn't you add a nommu qemu build for buildroot ? Can't find the config
+> though...
+> 
+>>
+>> Given that it's the second week of the merge window and this is a bunch
+>> of new uABI it seems best to hold off until the next cycle.  I poked
+>> around and don't see anything wrong, but I'll try and take a more
+>> detailed look after the merge window.
+> 
+> Does any riscv compiler support nommu fdpic now ? When doing the work on the
+> k210, there was no support at all, hence the statically linked user binaries
+> used (no shared text for libraries).
 
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on linus/master v6.2 next-20230228]
-[cannot apply to kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I was wondering if anyone was working on it. Couldn't find anything.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianrui-Zhao/LoongArch-KVM-Add-kvm-related-header-files/20230228-151250
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20230228070057.3687180-30-zhaotianrui%40loongson.cn
-patch subject: [PATCH v3 29/29] LoongArch: KVM: Enable kvm config and add the makefile
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20230301/202303010850.bV3yQ7cW-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7833c6dd07758557e28d69f9138c83adfbf06aeb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tianrui-Zhao/LoongArch-KVM-Add-kvm-related-header-files/20230228-151250
-        git checkout 7833c6dd07758557e28d69f9138c83adfbf06aeb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash arch/loongarch/
+The way I use this support doesn't improve the statically linked situation.
+The -pie ELF files are still statically linked. But it does avoid the
+use of flat format binaries. That makes the toolchain generation a little
+simpler.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303010850.bV3yQ7cW-lkp@intel.com/
+Regards
+Greg
 
-All warnings (new ones prefixed by >>):
-
-   In file included from include/trace/define_trace.h:102,
-                    from arch/loongarch/kvm/trace.h:169,
-                    from arch/loongarch/kvm/vcpu.c:14:
-   arch/loongarch/kvm/./trace.h: In function 'trace_raw_output_kvm_exit_gspr':
->> arch/loongarch/kvm/./trace.h:69:23: warning: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'unsigned int' [-Wformat=]
-      69 |             TP_printk("inst word: 0x%08lx",
-         |                       ^~~~~~~~~~~~~~~~~~~~
-   include/trace/trace_events.h:203:34: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     203 |         trace_event_printf(iter, print);                                \
-         |                                  ^~~~~
-   include/trace/trace_events.h:45:30: note: in expansion of macro 'PARAMS'
-      45 |                              PARAMS(print));                   \
-         |                              ^~~~~~
-   arch/loongarch/kvm/./trace.h:58:1: note: in expansion of macro 'TRACE_EVENT'
-      58 | TRACE_EVENT(kvm_exit_gspr,
-         | ^~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:69:13: note: in expansion of macro 'TP_printk'
-      69 |             TP_printk("inst word: 0x%08lx",
-         |             ^~~~~~~~~
-   In file included from include/trace/trace_events.h:237:
-   arch/loongarch/kvm/./trace.h:69:41: note: format string is defined here
-      69 |             TP_printk("inst word: 0x%08lx",
-         |                                     ~~~~^
-         |                                         |
-         |                                         long unsigned int
-         |                                     %08x
-   arch/loongarch/kvm/./trace.h: In function 'trace_raw_output_kvm_exit':
-   arch/loongarch/kvm/./trace.h:54:31: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-      54 |         ({ KVM_TRACE_EXIT_IDLE,         "IDLE" },                       \
-         |                               ^
-   include/trace/trace_events.h:203:34: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     203 |         trace_event_printf(iter, print);                                \
-         |                                  ^~~~~
-   arch/loongarch/kvm/./trace.h:87:13: note: in expansion of macro 'TP_printk'
-      87 |             TP_printk("[%s]PC: 0x%08lx",
-         |             ^~~~~~~~~
-   arch/loongarch/kvm/./trace.h:88:23: note: in expansion of macro '__print_symbolic'
-      88 |                       __print_symbolic(__entry->reason,
-         |                       ^~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:89:40: note: in expansion of macro 'kvm_trace_symbol_exit_types'
-      89 |                                        kvm_trace_symbol_exit_types),
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:54:48: error: expected ';' before '}' token
-      54 |         ({ KVM_TRACE_EXIT_IDLE,         "IDLE" },                       \
-         |                                                ^
-   include/trace/trace_events.h:203:34: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     203 |         trace_event_printf(iter, print);                                \
-         |                                  ^~~~~
-   arch/loongarch/kvm/./trace.h:87:13: note: in expansion of macro 'TP_printk'
-      87 |             TP_printk("[%s]PC: 0x%08lx",
-         |             ^~~~~~~~~
-   arch/loongarch/kvm/./trace.h:88:23: note: in expansion of macro '__print_symbolic'
-      88 |                       __print_symbolic(__entry->reason,
-         |                       ^~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:89:40: note: in expansion of macro 'kvm_trace_symbol_exit_types'
-      89 |                                        kvm_trace_symbol_exit_types),
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:54:49: error: expected ')' before ',' token
-      54 |         ({ KVM_TRACE_EXIT_IDLE,         "IDLE" },                       \
-         |                                                 ^
-   include/trace/trace_events.h:203:34: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     203 |         trace_event_printf(iter, print);                                \
-         |                                  ^~~~~
-   arch/loongarch/kvm/./trace.h:87:13: note: in expansion of macro 'TP_printk'
-      87 |             TP_printk("[%s]PC: 0x%08lx",
-         |             ^~~~~~~~~
-   arch/loongarch/kvm/./trace.h:88:23: note: in expansion of macro '__print_symbolic'
-      88 |                       __print_symbolic(__entry->reason,
-         |                       ^~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:89:40: note: in expansion of macro 'kvm_trace_symbol_exit_types'
-      89 |                                        kvm_trace_symbol_exit_types),
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:54:9: warning: initialization of 'long unsigned int' from 'char *' makes integer from pointer without a cast [-Wint-conversion]
-      54 |         ({ KVM_TRACE_EXIT_IDLE,         "IDLE" },                       \
-         |         ^
-   include/trace/trace_events.h:203:34: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     203 |         trace_event_printf(iter, print);                                \
-         |                                  ^~~~~
-   arch/loongarch/kvm/./trace.h:87:13: note: in expansion of macro 'TP_printk'
-      87 |             TP_printk("[%s]PC: 0x%08lx",
-         |             ^~~~~~~~~
-   arch/loongarch/kvm/./trace.h:88:23: note: in expansion of macro '__print_symbolic'
-      88 |                       __print_symbolic(__entry->reason,
-         |                       ^~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:89:40: note: in expansion of macro 'kvm_trace_symbol_exit_types'
-      89 |                                        kvm_trace_symbol_exit_types),
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:54:9: note: (near initialization for 'symbols[0].mask')
-      54 |         ({ KVM_TRACE_EXIT_IDLE,         "IDLE" },                       \
-         |         ^
-   include/trace/trace_events.h:203:34: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     203 |         trace_event_printf(iter, print);                                \
-         |                                  ^~~~~
-   arch/loongarch/kvm/./trace.h:87:13: note: in expansion of macro 'TP_printk'
-      87 |             TP_printk("[%s]PC: 0x%08lx",
-         |             ^~~~~~~~~
-   arch/loongarch/kvm/./trace.h:88:23: note: in expansion of macro '__print_symbolic'
-      88 |                       __print_symbolic(__entry->reason,
-         |                       ^~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:89:40: note: in expansion of macro 'kvm_trace_symbol_exit_types'
-      89 |                                        kvm_trace_symbol_exit_types),
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kvm/./trace.h:54:9: error: initializer element is not constant
-      54 |         ({ KVM_TRACE_EXIT_IDLE,         "IDLE" },                       \
-         |         ^
-
-
-vim +69 arch/loongarch/kvm/./trace.h
-
-2747799ba604af Tianrui Zhao 2023-02-28  51  
-2747799ba604af Tianrui Zhao 2023-02-28  52  /* Tracepoints for VM exits */
-2747799ba604af Tianrui Zhao 2023-02-28  53  #define kvm_trace_symbol_exit_types					\
-2747799ba604af Tianrui Zhao 2023-02-28  54  	({ KVM_TRACE_EXIT_IDLE,		"IDLE" },			\
-2747799ba604af Tianrui Zhao 2023-02-28  55  	{ KVM_TRACE_EXIT_CACHE,		"CACHE" },			\
-2747799ba604af Tianrui Zhao 2023-02-28  56  	{ KVM_TRACE_EXIT_SIGNAL,	"Signal" })
-2747799ba604af Tianrui Zhao 2023-02-28  57  
-2747799ba604af Tianrui Zhao 2023-02-28  58  TRACE_EVENT(kvm_exit_gspr,
-2747799ba604af Tianrui Zhao 2023-02-28  59  	    TP_PROTO(struct kvm_vcpu *vcpu, unsigned int inst_word),
-2747799ba604af Tianrui Zhao 2023-02-28  60  	    TP_ARGS(vcpu, inst_word),
-2747799ba604af Tianrui Zhao 2023-02-28  61  	    TP_STRUCT__entry(
-2747799ba604af Tianrui Zhao 2023-02-28  62  			__field(unsigned int, inst_word)
-2747799ba604af Tianrui Zhao 2023-02-28  63  	    ),
-2747799ba604af Tianrui Zhao 2023-02-28  64  
-2747799ba604af Tianrui Zhao 2023-02-28  65  	    TP_fast_assign(
-2747799ba604af Tianrui Zhao 2023-02-28  66  			__entry->inst_word = inst_word;
-2747799ba604af Tianrui Zhao 2023-02-28  67  	    ),
-2747799ba604af Tianrui Zhao 2023-02-28  68  
-2747799ba604af Tianrui Zhao 2023-02-28 @69  	    TP_printk("inst word: 0x%08lx",
-2747799ba604af Tianrui Zhao 2023-02-28  70  		      __entry->inst_word)
-2747799ba604af Tianrui Zhao 2023-02-28  71  );
-2747799ba604af Tianrui Zhao 2023-02-28  72  
-2747799ba604af Tianrui Zhao 2023-02-28  73  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
