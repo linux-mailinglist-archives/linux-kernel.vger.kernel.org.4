@@ -2,159 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2904A6A75B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76ADD6A75C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjCAU7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S229820AbjCAVBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 16:01:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCAU67 (ORCPT
+        with ESMTP id S229563AbjCAVBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:58:59 -0500
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9344E5C7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:58:56 -0800 (PST)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id XTXKp7HLjYdrCXTXKp7FeZ; Wed, 01 Mar 2023 21:58:55 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 01 Mar 2023 21:58:55 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: Reorder fields in 'struct spi_message'
-Date:   Wed,  1 Mar 2023 21:58:52 +0100
-Message-Id: <c112aad16eb47808e1ec10abd87b3d273c969a68.1677704283.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Wed, 1 Mar 2023 16:01:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EDD521CD;
+        Wed,  1 Mar 2023 13:01:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD885B80EE1;
+        Wed,  1 Mar 2023 21:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742DBC4339E;
+        Wed,  1 Mar 2023 21:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677704458;
+        bh=Ijy28NfIAolHq1kijXKPv1A9Prn6Z4PgPnz0SF2ZvmE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qwnNOgDopWNiUb4dKzA0Y6sT0gASegFoNl0l1oHhxaeFwidRVACqKvo9Zw4Lq2uLa
+         DkRPAf51+Vr8EEyQ7IwC/Bj5H1tJVAjANsJyJLagfb6dQBIR+9OsGjhNPWRat2SOtH
+         5jiteysKnyeBDdmsXExcQfoBUuLwKJRarM2/PpsDCzlFSlDaYiuiIN6Yn50f7C1yat
+         Kl5hMVdu4kXvgesUhxebkvb/oOudYsbAKXyirkpGD3xB/LvTXAtTlhB/h40wU7a9WI
+         X+6tPt1WSw58XL3OkDSeUjRPC3OEETL51n26pr7wfG3C7UJmYklBJjZHN6oNtzMzrG
+         H1pgP6Xi9fu0w==
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-53852143afcso389451967b3.3;
+        Wed, 01 Mar 2023 13:00:58 -0800 (PST)
+X-Gm-Message-State: AO0yUKUkNco2rq4K5o5XxG7Qrs1MolodYnCt0+yadl9+JyNaMT4qDo7m
+        2DczIbGS4CB2Hvw33a1Rv2MKLhdYuXOfAeUKqg==
+X-Google-Smtp-Source: AK7set/B7w4SIUVUY+fuTrfn39/aDxu+LSL+nDi5aDHHQnm81UFIS2ScAXvxaj+SUvgnwt845OQ2PIVb1st0BjISJs0=
+X-Received: by 2002:a05:6102:3ca9:b0:41e:bccf:5669 with SMTP id
+ c41-20020a0561023ca900b0041ebccf5669mr6637793vsv.2.1677704437053; Wed, 01 Mar
+ 2023 13:00:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230301185209.274134-1-jjhiblot@traphandler.com> <20230301185209.274134-4-jjhiblot@traphandler.com>
+In-Reply-To: <20230301185209.274134-4-jjhiblot@traphandler.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 1 Mar 2023 15:00:25 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJvYnBtaOwaRbNo5Eqp51yxhJpnSYQWEGfKjtZKjm7R4g@mail.gmail.com>
+Message-ID: <CAL_JsqJvYnBtaOwaRbNo5Eqp51yxhJpnSYQWEGfKjtZKjm7R4g@mail.gmail.com>
+Subject: Re: [PATCH 3/3] of: irq: release the node after looking up for "interrupts-extended"
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     saravanak@google.com, clement.leger@bootlin.com,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        zajec5@gmail.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Marc Zyngier <maz@kernel.org>, afaerber@suse.de,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nishanth Menon <nm@ti.com>, ssantosh@kernel.org,
+        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-wireless@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Group some variables based on their sizes to reduce hole and avoid padding.
-On x86_64, this shrinks the size from 112 to 96 bytes.
+On Wed, Mar 1, 2023 at 12:53=E2=80=AFPM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+>
+> When of_parse_phandle_with_args() succeeds, a get() is performed on
+> out_irq->np. And another get() is performed in of_irq_parse_raw(),
+> resulting in the refcount being incremented twice.
+> Fixing this by calling put() after of_irq_parse_raw().
 
-This should have no real impact on memory allocation because 'struct
-spi_message' is mostly used on stack, but it can save a few cycles
-when the structure is initialized with spi_message_init() and co.
+This looks like a band-aid to me. It only makes sense that the caller
+of of_irq_parse_raw() already holds a ref to out_irq->np. So the first
+of_node_get() in it looks wrong. It looks like the refcounting was
+originally balanced, but commit 2f53a713c4b6 ("of/irq: Fix device_node
+refcount in of_irq_parse_raw()") dropped the put on exit after 'got
+it!'. I'm not sure if just adding it back would be correct or not
+though.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Using pahole
+All this needs some test cases to be sure we get things right...
 
-Before:
-======
-struct spi_message {
-	struct list_head           transfers;            /*     0    16 */
-	struct spi_device *        spi;                  /*    16     8 */
-	unsigned int               is_dma_mapped:1;      /*    24: 0  4 */
-
-	/* XXX 31 bits hole, try to pack */
-	/* XXX 4 bytes hole, try to pack */
-
-	void                       (*complete)(void *);  /*    32     8 */
-	void *                     context;              /*    40     8 */
-	unsigned int               frame_length;         /*    48     4 */
-	unsigned int               actual_length;        /*    52     4 */
-	int                        status;               /*    56     4 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	struct list_head           queue;                /*    64    16 */
-	void *                     state;                /*    80     8 */
-	struct list_head           resources;            /*    88    16 */
-	bool                       prepared;             /*   104     1 */
-
-	/* size: 112, cachelines: 2, members: 12 */
-	/* sum members: 93, holes: 2, sum holes: 8 */
-	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 31 bits */
-	/* padding: 7 */
-	/* last cacheline: 48 bytes */
-};
-
-
-After:
-=====
-struct spi_message {
-	struct list_head           transfers;            /*     0    16 */
-	struct spi_device *        spi;                  /*    16     8 */
-	unsigned int               is_dma_mapped:1;      /*    24: 0  4 */
-
-	/* XXX 7 bits hole, try to pack */
-	/* Bitfield combined with next fields */
-
-	bool                       prepared;             /*    25     1 */
-
-	/* XXX 2 bytes hole, try to pack */
-
-	int                        status;               /*    28     4 */
-	void                       (*complete)(void *);  /*    32     8 */
-	void *                     context;              /*    40     8 */
-	unsigned int               frame_length;         /*    48     4 */
-	unsigned int               actual_length;        /*    52     4 */
-	struct list_head           queue;                /*    56    16 */
-	/* --- cacheline 1 boundary (64 bytes) was 8 bytes ago --- */
-	void *                     state;                /*    72     8 */
-	struct list_head           resources;            /*    80    16 */
-
-	/* size: 96, cachelines: 2, members: 12 */
-	/* sum members: 93, holes: 1, sum holes: 2 */
-	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 7 bits */
-	/* last cacheline: 32 bytes */
-};
----
- include/linux/spi/spi.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 4fa26b9a3572..bdb35a91b4bf 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -1093,6 +1093,9 @@ struct spi_message {
- 
- 	unsigned		is_dma_mapped:1;
- 
-+	/* spi_prepare_message() was called for this message */
-+	bool			prepared;
-+
- 	/* REVISIT:  we might want a flag affecting the behavior of the
- 	 * last transfer ... allowing things like "read 16 bit length L"
- 	 * immediately followed by "read L bytes".  Basically imposing
-@@ -1105,11 +1108,11 @@ struct spi_message {
- 	 */
- 
- 	/* Completion is reported through a callback */
-+	int			status;
- 	void			(*complete)(void *context);
- 	void			*context;
- 	unsigned		frame_length;
- 	unsigned		actual_length;
--	int			status;
- 
- 	/* For optional use by whatever driver currently owns the
- 	 * spi_message ...  between calls to spi_async and then later
-@@ -1120,9 +1123,6 @@ struct spi_message {
- 
- 	/* List of spi_res reources when the spi message is processed */
- 	struct list_head        resources;
--
--	/* spi_prepare_message() was called for this message */
--	bool			prepared;
- };
- 
- static inline void spi_message_init_no_memset(struct spi_message *m)
--- 
-2.34.1
-
+Rob
