@@ -2,89 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352546A747A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944566A747E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjCATsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:48:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S229657AbjCATtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjCATsi (ORCPT
+        with ESMTP id S229437AbjCATtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:48:38 -0500
-X-Greylist: delayed 1781 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 11:48:20 PST
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3A8271C;
-        Wed,  1 Mar 2023 11:48:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1677700090; bh=G8Do2SeddR9IDejdzfXb3mJ2yINZAw/nhNCrxZzNMRY=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=gV519zEmvj4C4oNOXlhBA9+i64aevboY1rgNNx4PKLxoEWW6JgKJP23itMrurDJfu
-         Px3lCOp2lbebQetpUtp7f787ciPnF1tGcHMUxzwDk3J7DptzLHsxeo4WvkQw0I4Dlb
-         AO/qcQ0oantrR6J9L7YSOsn1DyVmzDhUcQeT/W5M=
-Received: by b221-1.in.mailobj.net [192.168.90.21] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Wed,  1 Mar 2023 20:48:10 +0100 (CET)
-X-EA-Auth: hASAmwc8c6mMvRs+drNOd7GE2MX2lpbv4ZZC16GwJGIyF7aeVvkjA9YVkK/0oDZC1lfNol3EpAbLXaI5MtKzcX/mGBkLHTrw
-Date:   Thu, 2 Mar 2023 01:18:06 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH RESEND] drm/tegra: sor: Remove redundant error logging
-Message-ID: <Y/+r9jOO0s8sG4pX@ubun2204.myguest.virtualbox.org>
+        Wed, 1 Mar 2023 14:49:15 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A8455BE;
+        Wed,  1 Mar 2023 11:49:14 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id c19so15581495qtn.13;
+        Wed, 01 Mar 2023 11:49:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677700153;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SaoAu/dWkCaSTMzj2ZM4Jr76OIYgF7YKtHGbfgwEZcY=;
+        b=PcuSxeoOuvcOKqPmSoPaUC8BLOHWeHtfTThR6hjDYjdOEJAxKT4pLXRmJk8ZIpIc4j
+         PRSMysv5kMkG4LfvGf33QKKRXabJUf7lVAx9V4oi7x0++mzYvncHbPvjZ+aKwlocFFu4
+         L8bXDS+CEd2WcnvL6WWZQQKamloRsNXMKB2lotX+/a0B6ywSbK/6TVdJ6sAXdswjM1BF
+         uh3gYyoifApPzmYok/bEA0G/Ih1GkRZjPG6xCR8ZEM85PNYXRPtLaxUr2f0ZuUklwnKx
+         5zmFqbAPiQruo0Co0yy1o2jrUMCoUsmUan3actEAdIBBQleOu5jJiG1fteXqAValliUM
+         JCPA==
+X-Gm-Message-State: AO0yUKWtwJ0jB9zZrqoUrYKlSroJ2EU85nluidetBghcdVB43IM1EZU0
+        BH2cOCdm4o6GLrRGGhz0moz06dNUjqYIiB/f
+X-Google-Smtp-Source: AK7set/7+vCHQpXjbxstN7OOi/XJk26Bu56wJ7t4gepq35FxOeX/vHsDrK6P4VDKvXm9kljWoQxFSA==
+X-Received: by 2002:ac8:570d:0:b0:3bf:e364:1d19 with SMTP id 13-20020ac8570d000000b003bfe3641d19mr13175262qtw.54.1677700153237;
+        Wed, 01 Mar 2023 11:49:13 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:9336])
+        by smtp.gmail.com with ESMTPSA id y141-20020a376493000000b00706c1f7a608sm9473326qkb.89.2023.03.01.11.49.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 11:49:12 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH bpf-next 1/2] bpf: Fix doxygen comments for dynptr slice kfuncs
+Date:   Wed,  1 Mar 2023 13:49:09 -0600
+Message-Id: <20230301194910.602738-1-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A call to platform_get_irq() already prints an error on failure within
-its own implementation. So printing another error based on its return
-value in the caller is redundant and should be removed. The clean up
-also makes if condition block braces unnecessary. Remove that as well.
+In commit 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and
+bpf_dynptr_slice_rdwr"), the bpf_dynptr_slice() and
+bpf_dynptr_slice_rdwr() kfuncs were added to BPF. These kfuncs included
+doxygen headers, but unfortunately those headers are not properly
+formatted according to [0], and causes the following warnings during the
+docs build:
 
-Issue identified using platform_get_irq.cocci coccicheck script.
+./kernel/bpf/helpers.c:2225: warning: \
+    Excess function parameter 'returns' description in 'bpf_dynptr_slice'
+./kernel/bpf/helpers.c:2303: warning: \
+    Excess function parameter 'returns' description in 'bpf_dynptr_slice_rdwr'
+...
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
+This patch fixes those doxygen comments.
+
+[0]: https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
+
+Fixes: 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr")
+Signed-off-by: David Vernet <void@manifault.com>
 ---
-Note:
-   Resending the patch for review and feedback. Originally sent on Dec 12 2022.
+ kernel/bpf/helpers.c | 30 ++++++++++++++----------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
- drivers/gpu/drm/tegra/sor.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/tegra/sor.c b/drivers/gpu/drm/tegra/sor.c
-index 8af632740673..ceaebd33408d 100644
---- a/drivers/gpu/drm/tegra/sor.c
-+++ b/drivers/gpu/drm/tegra/sor.c
-@@ -3799,10 +3799,8 @@ static int tegra_sor_probe(struct platform_device *pdev)
- 	}
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 648b29e78b84..58431a92bb65 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2194,7 +2194,12 @@ __bpf_kfunc struct task_struct *bpf_task_from_pid(s32 pid)
+ }
  
- 	err = platform_get_irq(pdev, 0);
--	if (err < 0) {
--		dev_err(&pdev->dev, "failed to get IRQ: %d\n", err);
-+	if (err < 0)
- 		goto remove;
--	}
+ /**
+- * bpf_dynptr_slice - Obtain a read-only pointer to the dynptr data.
++ * bpf_dynptr_slice() - Obtain a read-only pointer to the dynptr data.
++ * @ptr: The dynptr whose data slice to retrieve
++ * @offset: Offset into the dynptr
++ * @buffer: User-provided buffer to copy contents into
++ * @buffer__szk: Size (in bytes) of the buffer. This is the length of the
++ *		 requested slice. This must be a constant.
+  *
+  * For non-skb and non-xdp type dynptrs, there is no difference between
+  * bpf_dynptr_slice and bpf_dynptr_data.
+@@ -2209,13 +2214,7 @@ __bpf_kfunc struct task_struct *bpf_task_from_pid(s32 pid)
+  * bpf_dynptr_slice will not invalidate any ctx->data/data_end pointers in
+  * the bpf program.
+  *
+- * @ptr: The dynptr whose data slice to retrieve
+- * @offset: Offset into the dynptr
+- * @buffer: User-provided buffer to copy contents into
+- * @buffer__szk: Size (in bytes) of the buffer. This is the length of the
+- * requested slice. This must be a constant.
+- *
+- * @returns: NULL if the call failed (eg invalid dynptr), pointer to a read-only
++ * Return: NULL if the call failed (eg invalid dynptr), pointer to a read-only
+  * data slice (can be either direct pointer to the data or a pointer to the user
+  * provided buffer, with its contents containing the data, if unable to obtain
+  * direct pointer)
+@@ -2258,7 +2257,12 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u32 offset
+ }
  
- 	sor->irq = err;
- 
+ /**
+- * bpf_dynptr_slice_rdwr - Obtain a writable pointer to the dynptr data.
++ * bpf_dynptr_slice_rdwr() - Obtain a writable pointer to the dynptr data.
++ * @ptr: The dynptr whose data slice to retrieve
++ * @offset: Offset into the dynptr
++ * @buffer: User-provided buffer to copy contents into
++ * @buffer__szk: Size (in bytes) of the buffer. This is the length of the
++ *		 requested slice. This must be a constant.
+  *
+  * For non-skb and non-xdp type dynptrs, there is no difference between
+  * bpf_dynptr_slice and bpf_dynptr_data.
+@@ -2287,13 +2291,7 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u32 offset
+  * bpf_dynptr_slice_rdwr will not invalidate any ctx->data/data_end pointers in
+  * the bpf program.
+  *
+- * @ptr: The dynptr whose data slice to retrieve
+- * @offset: Offset into the dynptr
+- * @buffer: User-provided buffer to copy contents into
+- * @buffer__szk: Size (in bytes) of the buffer. This is the length of the
+- * requested slice. This must be a constant.
+- *
+- * @returns: NULL if the call failed (eg invalid dynptr), pointer to a
++ * Return: NULL if the call failed (eg invalid dynptr), pointer to a
+  * data slice (can be either direct pointer to the data or a pointer to the user
+  * provided buffer, with its contents containing the data, if unable to obtain
+  * direct pointer)
 -- 
-2.34.1
-
-
+2.39.0
 
