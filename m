@@ -2,86 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40E36A73B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BD36A73B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjCASnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
+        id S229913AbjCASns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjCASnB (ORCPT
+        with ESMTP id S229701AbjCASnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:43:01 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625F4193D1
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:43:00 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-536b7ffdd34so381403277b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:43:00 -0800 (PST)
+        Wed, 1 Mar 2023 13:43:47 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E532D175;
+        Wed,  1 Mar 2023 10:43:46 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id t4so1335656ybg.11;
+        Wed, 01 Mar 2023 10:43:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677696179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QgPLMpe7BkNA8Wwa4SQkGDUobKi2YUERdDS2UIdsCsw=;
-        b=taF8aXTso+uUaarK9ptc0tZqfR+sYRAyP17JXfX6ItSoiwHrveZGuaB3tAurjmtk9C
-         /h5MhYxcf4/+pSlCsF+Tq/monTXOyTL0rDoJnJU/ZklABV1Wr998sA0haVCTeSsGc97P
-         G0QpUKEy6e9Cdg2iUQ+CnJzAXZP9iZeBPdc2Vk2sX3b7zYU4E6brH0/0XZkpTalSasnC
-         zVI5+Page27Y30NNOJ+H/PPtYK1KRtLxrMDT6qVpgOprjRAZyEGM5XEci64I37EIlO3l
-         0SnTpduvmR4U/aXBvG2e9pBmuJ+pcyVoSERnVUva3AHAzf4WyMOTNkewsJlzTfm/9yD5
-         MUvg==
+        d=gmail.com; s=20210112; t=1677696225;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hyPtn2UBKb0jqXlSHLLwcxVonecNrdFfMaZTCU8GNK4=;
+        b=SjOQaOfy08Ha6XQJzfkLHNluDF0JrhGU+rsPbi0tRmGEP+2LMA4CqGOaWN6a0LMTxm
+         uTWFFw1EF4xLBGZWZ8QUHQY/d94v0S/+IGdVIHxarU3YDZ4CJp6EwUojugYARr6txef1
+         /k1jl/b8ARM0Umb1uzz2iUbXWLZ13WnnQoQg6xroMt4ifePQTFWfE0Zhp2YgsktOTBpK
+         HL37wrMYf0qCqNmjVNDUejVvmp6OW2ND/zkGI0zOO1qn8js/6WZ2J729CSIqm/n7saSf
+         iKvXx9BURCLlv/xXBWg0Eg7HDpx4zumTw0PSYw2hbWE+9hOpYDvmaQhyQBQbAEjXKP9C
+         uu/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677696179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QgPLMpe7BkNA8Wwa4SQkGDUobKi2YUERdDS2UIdsCsw=;
-        b=Is05ovsTmv6CD2r5yrct/RiIaTTi6Ry5WFaizF6tWvRP1hkQ2gwiH63hqOTVUfyJdv
-         VA/UagWwf3a+wEgKXQbtgMarmsAskmjQY7fblxhchjmlvfGNUqBAQTs2jf9DOcSM2BKW
-         mpR2id9Ymueu0mQdmBf1JRUV3IfMc8lhH+EU6ww7t6cJtjXu6udK/g+xnkRaYnoRlJSF
-         YerNmn5kf0TesW/lxf5++qkowoL0QCdWP77e/LriGWZCUF6Qd8gvFQzZYu4en0wgjsel
-         qqgysMDLXVzCSgJRJyIR+NzvhKUEkFFOY2IKSDzpvGNA70C1OzQBC0y9ONoXGDkxyHJb
-         771Q==
-X-Gm-Message-State: AO0yUKVSSoaFR0kmUCMk/lBDok034jYIHRuLkFXIB4uKiP3To9raUIrc
-        icbggaVTPEfO21ZLPMOaP7VDodKQi9/pFMog84Xpyw==
-X-Google-Smtp-Source: AK7set9sACRMH4Eb3TVkGLF6tUZwYUxAatlnNEIDCCz6X9Pb6vwRLDjeKksLObXXTul7yrEbev05hcqoeupv64cd4UA=
-X-Received: by 2002:a81:ac16:0:b0:536:4194:e6eb with SMTP id
- k22-20020a81ac16000000b005364194e6ebmr4568479ywh.0.1677696179151; Wed, 01 Mar
- 2023 10:42:59 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677696225;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hyPtn2UBKb0jqXlSHLLwcxVonecNrdFfMaZTCU8GNK4=;
+        b=mR4jxTQ/r6xM5snxQJoaXwhl1P0/m8+PJAGUecbLZA0Qe5zbklRVpR7CxmAtkOou5Y
+         T51d+7gIJ/hOmRD/LUfv31friEpul6k1KGA2VIv3KPb5ldtfTR11L4gFKyxXHcFbnUOz
+         FPuyTt0104KELYus0MaNTgqXpdC7oorrR/O9yC0yDtORpqeSa+ba8uXFBCru9BHmq8u0
+         Y1ZnTdYxitACxL0gHK4TqJ0uhupJFRN08qvSroEl1EkKDoq1yYIBVKtxc+ejn49Efflx
+         dNW8OIofG10YbzCoeCOcBhjggYOGKTcFY9LSANGtWEYpiLFUhGLoPTkA2nDs4cGrTAIj
+         bHCQ==
+X-Gm-Message-State: AO0yUKWggoM9RhKXt7K6UA7RYEr8m/J8kvJbRWH7cVIybRtuGV5K0eaO
+        9R+MP3Co/sRAp/UEI8Zje4ZIavkQDYlT219h4U4=
+X-Google-Smtp-Source: AK7set/prPUf3VjhE4PZmTXMe6IhBy1sHnmn5X0w6za6akZV3tC40IuT8Ix5z/I98to53CK2eZE3X5Dt8eWFq63JHhQ=
+X-Received: by 2002:a05:6902:50b:b0:8e2:6b58:5fe8 with SMTP id
+ x11-20020a056902050b00b008e26b585fe8mr4055708ybs.10.1677696225458; Wed, 01
+ Mar 2023 10:43:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20230227173632.3292573-1-surenb@google.com> <20230227173632.3292573-19-surenb@google.com>
- <Y/8CJQGNuMUTdLwP@localhost> <Y/8FNM9czzPHb5eG@localhost> <CAJuCfpHYT++MBC6T-p80n_m5hHWRRC4Y1bO9J-bFFZZDqNX-BQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpHYT++MBC6T-p80n_m5hHWRRC4Y1bO9J-bFFZZDqNX-BQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 1 Mar 2023 10:42:48 -0800
-Message-ID: <CAJuCfpFax8LSdcq1qiz3sp0XPLaNZnkFFky2tQekG2_Azvw9_g@mail.gmail.com>
-Subject: Re: [PATCH v4 18/33] mm: write-lock VMAs before removing them from
- VMA tree
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20230228155121.3416-1-ubizjak@gmail.com> <Y/5mguXPPqdP3MZF@google.com>
+ <20230228160324.2a7c1012@gandalf.local.home> <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230228164124.77c126d2@gandalf.local.home> <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
+ <20230228190846.79b06089@gandalf.local.home> <CAFULd4aY3Y8tyLN70oebZDagBebvH0erwRxKDaEX8L83Xo8gYw@mail.gmail.com>
+ <20230301113813.4f16a689@gandalf.local.home>
+In-Reply-To: <20230301113813.4f16a689@gandalf.local.home>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Wed, 1 Mar 2023 19:43:34 +0100
+Message-ID: <CAFULd4aWZ+fvVZ+MEt6JD1rFaQZeO5DDWAHtPKOrx8R8DETFBw@mail.gmail.com>
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: multipart/mixed; boundary="0000000000008f74f605f5db173f"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,125 +77,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 10:34=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Tue, Feb 28, 2023 at 11:57=E2=80=AFPM Hyeonggon Yoo <42.hyeyoo@gmail.c=
-om> wrote:
-> >
-> > On Wed, Mar 01, 2023 at 07:43:33AM +0000, Hyeonggon Yoo wrote:
-> > > On Mon, Feb 27, 2023 at 09:36:17AM -0800, Suren Baghdasaryan wrote:
-> > > > Write-locking VMAs before isolating them ensures that page fault
-> > > > handlers don't operate on isolated VMAs.
-> > > >
-> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > > ---
-> > > >  mm/mmap.c  | 1 +
-> > > >  mm/nommu.c | 5 +++++
-> > > >  2 files changed, 6 insertions(+)
-> > > >
-> > > > diff --git a/mm/mmap.c b/mm/mmap.c
-> > > > index 1f42b9a52b9b..f7ed357056c4 100644
-> > > > --- a/mm/mmap.c
-> > > > +++ b/mm/mmap.c
-> > > > @@ -2255,6 +2255,7 @@ int split_vma(struct vma_iterator *vmi, struc=
-t vm_area_struct *vma,
-> > > >  static inline int munmap_sidetree(struct vm_area_struct *vma,
-> > > >                                struct ma_state *mas_detach)
-> > > >  {
-> > > > +   vma_start_write(vma);
-> > > >     mas_set_range(mas_detach, vma->vm_start, vma->vm_end - 1);
-> > >
-> > > I may be missing something, but have few questions:
-> > >
-> > >       1) Why does a writer need to both write-lock a VMA and mark the=
- VMA detached
-> > >          when unmapping it, isn't it enough to just only write-lock a=
- VMA?
->
-> We need to mark the VMA detached to avoid handling page fault in a
-> detached VMA. The possible scenario is:
->
-> lock_vma_under_rcu
->   vma =3D mas_walk(&mas)
->                                                         munmap_sidetree
->                                                           vma_start_write=
-(vma)
->
-> mas_store_gfp() // remove VMA from the tree
->                                                           vma_end_write_a=
-ll()
->   vma_start_read(vma)
->   // we locked the VMA but it is not part of the tree anymore.
->
-> So, marking the VMA locked before vma_end_write_all() and checking
+--0000000000008f74f605f5db173f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, I should have said "marking the VMA *detached* before
-vma_end_write_all() and checking vma->detached after vma_start_read()
-helps us avoid handling faults in the detached VMA."
+On Wed, Mar 1, 2023 at 5:38=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
+ wrote:
+>
+> On Wed, 1 Mar 2023 11:28:47 +0100
+> Uros Bizjak <ubizjak@gmail.com> wrote:
+>
+> > These benefits are the reason the change to try_cmpxchg was accepted
+> > also in the linear code elsewhere in the linux kernel, e.g. [2,3] to
+> > name a few commits, with a thumbs-up and a claim that the new code is
+> > actually *clearer* at the merge commit [4].
+>
+> I'll say it here too. I really like Joel's suggestion of having a
+> cmpxchg_success() that does not have the added side effect of modifying t=
+he
+> old variable.
+>
+> I think that would allow for the arch optimizations that you are trying t=
+o
+> achieve, as well as remove the side effect that might cause issues down t=
+he
+> road.
 
-> vma->detached after vma_start_read() helps us avoid handling faults in
-> the detached VMA.
->
->
-> > >
-> > >       2) as VMAs that are going to be removed are already locked in v=
-ma_prepare(),
-> > >          so I think this hunk could be dropped?
-> >
-> > After sending this just realized that I did not consider simple munmap =
-case :)
-> > But I still think 1) and 3) are valid question.
-> >
-> > >
-> > > >     if (mas_store_gfp(mas_detach, vma, GFP_KERNEL))
-> > > >             return -ENOMEM;
-> > > > diff --git a/mm/nommu.c b/mm/nommu.c
-> > > > index 57ba243c6a37..2ab162d773e2 100644
-> > > > --- a/mm/nommu.c
-> > > > +++ b/mm/nommu.c
-> > > > @@ -588,6 +588,7 @@ static int delete_vma_from_mm(struct vm_area_st=
-ruct *vma)
-> > > >                    current->pid);
-> > > >             return -ENOMEM;
-> > > >     }
-> > > > +   vma_start_write(vma);
-> > > >     cleanup_vma_from_mm(vma);
-> > >
-> > >       3) I think this hunk could be dropped as Per-VMA lock depends o=
-n MMU anyway.
->
-> Ah, yes, you are right. We can safely remove the changes in nommu.c
-> Andrew, should I post a fixup or you can make the removal directly in
-> mm-unstable?
-> Thanks,
-> Suren.
->
-> > >
-> > > Thanks,
-> > > Hyeonggon
-> > >
-> > > >
-> > > >     /* remove from the MM's tree and list */
-> > > > @@ -1519,6 +1520,10 @@ void exit_mmap(struct mm_struct *mm)
-> > > >      */
-> > > >     mmap_write_lock(mm);
-> > > >     for_each_vma(vmi, vma) {
-> > > > +           /*
-> > > > +            * No need to lock VMA because this is the only mm user=
- and no
-> > > > +            * page fault handled can race with it.
-> > > > +            */
-> > > >             cleanup_vma_from_mm(vma);
-> > > >             delete_vma(mm, vma);
-> > > >             cond_resched();
-> > > > --
-> > > > 2.39.2.722.g9855ee24e9-goog
-> > > >
-> > > >
-> > >
-> >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to kernel-team+unsubscribe@android.com.
-> >
+Attached patch implements this suggestion.
+
+Uros.
+
+--0000000000008f74f605f5db173f
+Content-Type: text/plain; charset="US-ASCII"; name="rcu-2.diff.txt"
+Content-Disposition: attachment; filename="rcu-2.diff.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_leq1061i0>
+X-Attachment-Id: f_leq1061i0
+
+ZGlmZiAtLWdpdCBhL2tlcm5lbC9yY3UvdHJlZV9zdGFsbC5oIGIva2VybmVsL3JjdS90cmVlX3N0
+YWxsLmgKaW5kZXggYjEwYjgzNDliYjJhLi4yMjkyNjNlYmJhM2IgMTAwNjQ0Ci0tLSBhL2tlcm5l
+bC9yY3UvdHJlZV9zdGFsbC5oCisrKyBiL2tlcm5lbC9yY3UvdHJlZV9zdGFsbC5oCkBAIC03MDks
+NiArNzA5LDEyIEBAIHN0YXRpYyB2b2lkIHByaW50X2NwdV9zdGFsbCh1bnNpZ25lZCBsb25nIGdw
+cykKIAlzZXRfcHJlZW1wdF9uZWVkX3Jlc2NoZWQoKTsKIH0KIAorI2RlZmluZSBjbXB4Y2hnX3N1
+Y2Nlc3MocHRyLCBvbGQsIG5ldykJCQkJXAorKHsJCQkJCQkJCVwKKwlfX3R5cGVvZl9fKCoocHRy
+KSkgX190bXAgPSAob2xkKTsJCQlcCisJdHJ5X2NtcHhjaGcoKHB0ciksICZfX3RtcCwgKG5ldykp
+OwkJCVwKK30pCisKIHN0YXRpYyB2b2lkIGNoZWNrX2NwdV9zdGFsbChzdHJ1Y3QgcmN1X2RhdGEg
+KnJkcCkKIHsKIAlib29sIGRpZHN0YWxsID0gZmFsc2U7CkBAIC03NjAsNyArNzY2LDcgQEAgc3Rh
+dGljIHZvaWQgY2hlY2tfY3B1X3N0YWxsKHN0cnVjdCByY3VfZGF0YSAqcmRwKQogCWpuID0gamlm
+ZmllcyArIFVMT05HX01BWCAvIDI7CiAJaWYgKHJjdV9ncF9pbl9wcm9ncmVzcygpICYmCiAJICAg
+IChSRUFEX09OQ0Uocm5wLT5xc21hc2spICYgcmRwLT5ncnBtYXNrKSAmJgotCSAgICBjbXB4Y2hn
+KCZyY3Vfc3RhdGUuamlmZmllc19zdGFsbCwganMsIGpuKSA9PSBqcykgeworCSAgICBjbXB4Y2hn
+X3N1Y2Nlc3MoJnJjdV9zdGF0ZS5qaWZmaWVzX3N0YWxsLCBqcywgam4pKSB7CiAKIAkJLyoKIAkJ
+ICogSWYgYSB2aXJ0dWFsIG1hY2hpbmUgaXMgc3RvcHBlZCBieSB0aGUgaG9zdCBpdCBjYW4gbG9v
+ayB0bwpAQCAtNzc4LDcgKzc4NCw3IEBAIHN0YXRpYyB2b2lkIGNoZWNrX2NwdV9zdGFsbChzdHJ1
+Y3QgcmN1X2RhdGEgKnJkcCkKIAogCX0gZWxzZSBpZiAocmN1X2dwX2luX3Byb2dyZXNzKCkgJiYK
+IAkJICAgVUxPTkdfQ01QX0dFKGosIGpzICsgUkNVX1NUQUxMX1JBVF9ERUxBWSkgJiYKLQkJICAg
+Y21weGNoZygmcmN1X3N0YXRlLmppZmZpZXNfc3RhbGwsIGpzLCBqbikgPT0ganMpIHsKKwkJICAg
+Y21weGNoZ19zdWNjZXNzKCZyY3Vfc3RhdGUuamlmZmllc19zdGFsbCwganMsIGpuKSkgewogCiAJ
+CS8qCiAJCSAqIElmIGEgdmlydHVhbCBtYWNoaW5lIGlzIHN0b3BwZWQgYnkgdGhlIGhvc3QgaXQg
+Y2FuIGxvb2sgdG8K
+--0000000000008f74f605f5db173f--
