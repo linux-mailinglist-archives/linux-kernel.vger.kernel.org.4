@@ -2,126 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EFB6A6B8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE566A6B9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjCALRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S229987AbjCALVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCALRl (ORCPT
+        with ESMTP id S229674AbjCALVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:17:41 -0500
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092B43B666
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:17:37 -0800 (PST)
-Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
-        by Atcsqr.andestech.com with ESMTP id 321BHUJK055101;
-        Wed, 1 Mar 2023 19:17:30 +0800 (+08)
-        (envelope-from dylan@andestech.com)
-Received: from APC323 (10.0.12.101) by ATCPCS16.andestech.com (10.0.1.222)
- with Microsoft SMTP Server id 14.3.498.0; Wed, 1 Mar 2023 19:17:28 +0800
-Date:   Wed, 1 Mar 2023 19:17:53 +0800
-From:   Dylan Jhong <dylan@andestech.com>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <liushixin2@huawei.com>, <x5710999x@gmail.com>,
-        <bjorn@rivosinc.com>, <abrestic@rivosinc.com>, <peterx@redhat.com>,
-        <hanchuanhua@oppo.com>, <apopple@nvidia.com>, <hca@linux.ibm.com>,
-        <aou@eecs.berkeley.edu>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <tim609@andestech.com>,
-        <peterlin@andestech.com>, <ycliang@andestech.com>
-Subject: Re: [PATCH] RISC-V: mm: Support huge page in vmalloc_fault()
-Message-ID: <Y/80YZOMce2cgITi@APC323>
-References: <20230224104001.2743135-1-dylan@andestech.com>
- <8adb9dcb-621a-0392-9ccd-0117345636ec@ghiti.fr>
+        Wed, 1 Mar 2023 06:21:14 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7363B206;
+        Wed,  1 Mar 2023 03:21:13 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id g3so3959428wri.6;
+        Wed, 01 Mar 2023 03:21:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k8uupGhWT0cJC0ZGi7m3ZW+QzCETbdp0XGrBXIt1ZcA=;
+        b=UeKStxeQM6igNrDtDNhX8o/3pbMFhVpjB0OwFwCmJArgJ+183mXSa5HIx6l9QG53uO
+         J+fwkfDV0o14bJ8o9tYjG21bCp8gDDD5R2U9nDbukZQcFiSZL/DrG0SkFtfgTT0+fFTz
+         egN4k8D4QxBNFhi4WIatG02YjoFJKr1VZ2Hzft01uwJfXIMThEt0w9ZSjRRGQa3+38X5
+         nlSe6yy3ipwfnRsFEeXeHlJ1s8NgaeMA+vp9NaAcFyoHBqK7JdtmeFDVi/fyb5OXAdYR
+         iXtQ9oPGdAdW8BHLzYVmbak8ozGU3IWzal4JFOcWlBT+9iOWBJiBM18I2T1zl+mVuSpa
+         NssA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k8uupGhWT0cJC0ZGi7m3ZW+QzCETbdp0XGrBXIt1ZcA=;
+        b=G6zUVynCKkqUMpDw625YR/GD3y5BVx6mBvKqw5AAJVARdxKu8VUhxbUnTKSdZkIlOm
+         u1b442MMZyO2inRwiqksg65CR29NrGWwetHLg8we12PpnKORdlVOQCIzKz36o1GFQgkX
+         9Xts44TlVmqOVjWTvnPUJqPKXeKJvisoimkDv6CYI0sWVyylOC8GtWpwjU4ULVtuzLO9
+         mQE/50il4J0UOU9ursC+7SSQJD1U/8hAwOhmphlWYlSn3EsaOMjQShw86wtT+iAvLgmp
+         laZwOdTT/+kAp0VCB/NdoeTWCGFLZRbMZWRaRzfTtytPsvkNIsbiW1bzc23jEDTguEJt
+         JJpQ==
+X-Gm-Message-State: AO0yUKXEyVZa5PTzvkw0DB4eN0PtUSysizKXgwV2MJAxHiDzmfGo7Zsr
+        FiWfAaH/q9ZZnkixOjHxupyYcB88oavEWA==
+X-Google-Smtp-Source: AK7set+AD1MK8ZoaDoS6r5V32Q28cTiJuQJyQzbNRXTftxp3gvoky39QOWsJllrQttt0aUZrLwgDpw==
+X-Received: by 2002:a5d:6686:0:b0:2c7:1d60:f34e with SMTP id l6-20020a5d6686000000b002c71d60f34emr4935591wru.6.1677669671530;
+        Wed, 01 Mar 2023 03:21:11 -0800 (PST)
+Received: from suse.localnet ([212.216.157.254])
+        by smtp.gmail.com with ESMTPSA id i15-20020adffdcf000000b002c58ca558b6sm12473328wrs.88.2023.03.01.03.21.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 03:21:10 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [git pull] vfs.git sysv pile
+Date:   Wed, 01 Mar 2023 12:20:56 +0100
+Message-ID: <13214812.uLZWGnKmhe@suse>
+In-Reply-To: <Y/gugbqq858QXJBY@ZenIV>
+References: <Y/gugbqq858QXJBY@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <8adb9dcb-621a-0392-9ccd-0117345636ec@ghiti.fr>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Originating-IP: [10.0.12.101]
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL: Atcsqr.andestech.com 321BHUJK055101
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 01:47:20PM +0100, Alexandre Ghiti wrote:
-> Hi Dylan,
-> 
-> On 2/24/23 11:40, Dylan Jhong wrote:
-> > RISC-V supports ioremap() with huge page (pud/pmd) mapping, but
-> > vmalloc_fault() assumes that the vmalloc range is limited to pte
-> > mappings. Add huge page support to complete the vmalloc_fault()
-> > function.
-> > 
-> > Fixes: 310f541a027b ("riscv: Enable HAVE_ARCH_HUGE_VMAP for 64BIT")
-> > 
-> > Signed-off-by: Dylan Jhong <dylan@andestech.com>
-> > ---
-> >   arch/riscv/mm/fault.c | 5 +++++
-> >   1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> > index eb0774d9c03b..4b9953b47d81 100644
-> > --- a/arch/riscv/mm/fault.c
-> > +++ b/arch/riscv/mm/fault.c
-> > @@ -143,6 +143,8 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
-> >   		no_context(regs, addr);
-> >   		return;
-> >   	}
-> > +	if (pud_leaf(*pud_k))
-> > +		goto flush_tlb;
-> >   	/*
-> >   	 * Since the vmalloc area is global, it is unnecessary
-> > @@ -153,6 +155,8 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
-> >   		no_context(regs, addr);
-> >   		return;
-> >   	}
-> > +	if (pmd_leaf(*pmd_k))
-> > +		goto flush_tlb;
-> >   	/*
-> >   	 * Make sure the actual PTE exists as well to
-> > @@ -172,6 +176,7 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
-> >   	 * ordering constraint, not a cache flush; it is
-> >   	 * necessary even after writing invalid entries.
-> >   	 */
-> > +flush_tlb:
-> >   	local_flush_tlb_page(addr);
-> >   }
-> 
-> 
-> This looks good to me, you can add:
-> 
-> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> 
-> One question: how did you encounter this bug?
-> 
-> Thanks,
-> 
-> Alex
->
-Hi Alex,
+On venerd=EC 24 febbraio 2023 04:26:57 CET Al Viro wrote:
+> 	Fabio's "switch to kmap_local_page()" patchset (originally after the
+> ext2 counterpart, with a lot of cleaning up done to it; as the matter of
+> fact, ext2 side is in need of similar cleanups - calling conventions there
+> are bloody awful).
 
->>> One question: how did you encounter this bug?
-This bug is caused by the combination of out-of-order excutiuon and ioremap().
-The OoO excution will try to access the VA that is given by ioremap() and record
-a page fault in TLB before the mapping is created in ioremap(). When the CPU
-really accesses the VA after ioremap(), the CPU will trigger page fault because
-of the TLB already has the VA mapping.
+If nobody else is already working on these cleanups in ext2 following your=
+=20
+suggestion, I'd be happy to work on this by the end of this week. I only ne=
+ed=20
+a confirmation because I'd hate to duplicate someone else work.
 
-We hope that the vmalloc_fault() in page fault handler will trigger sfence.vma
-to invalidate the TLB[1]. But since we do not support the huge page in vmalloc_fault(),
-we encountered the nested page faults in vmalloc_fault() while forcing the pmd/pud
-huge pages to resolve pte entry. This is the reason I send this patch.
+> Plus the equivalents of minix stuff...
 
-ref:
-    [1]: https://patchwork.kernel.org/project/linux-riscv/patch/20210412000531.12249-1-liu@jiuyang.me/
+I don't know this other filesystem but I could take a look and see whether =
+it=20
+resembles somehow sysv and ext2 (if so, this work would be pretty simple to=
+o,=20
+thanks to your kind suggestions when I worked on sysv and ufs).
+
+I'm adding Jan to the Cc list to hear whether he is aware of anybody else=20
+working on this changes for ext2. I'm waiting for a reply from you (@Al) or=
+=20
+Jan to avoid duplication (as said above).
+
+Thanks,
+
+=46abio=20
+
+> The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c2=
+62:
+>=20
+>   Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.sysv
+>=20
+> for you to fetch changes up to abb7c742397324f8676c5b622effdce911cd52e3:
+>=20
+>   sysv: fix handling of delete_entry and set_link failures (2023-01-19
+> 23:24:42 -0500)
+>=20
+> ----------------------------------------------------------------
+> Al Viro (1):
+>       sysv: fix handling of delete_entry and set_link failures
+>=20
+> Christoph Hellwig (1):
+>       sysv: don't flush page immediately for DIRSYNC directories
+>=20
+> Fabio M. De Francesco (4):
+>       fs/sysv: Use the offset_in_page() helper
+>       fs/sysv: Change the signature of dir_get_page()
+>       fs/sysv: Use dir_put_page() in sysv_rename()
+>       fs/sysv: Replace kmap() with kmap_local_page()
+>=20
+>  fs/sysv/dir.c   | 154
+> ++++++++++++++++++++++++++++++++------------------------ fs/sysv/namei.c =
+|=20
+> 42 ++++++++--------
+>  fs/sysv/sysv.h  |   3 +-
+>  3 files changed, 111 insertions(+), 88 deletions(-)
+
+
+
 
