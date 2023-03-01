@@ -2,124 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7DD6A699A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EF46A69A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjCAJOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S229715AbjCAJRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjCAJOI (ORCPT
+        with ESMTP id S229453AbjCAJRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:14:08 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12F14691
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:13:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677662023; x=1709198023;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MOnKZeHa2P5fMFhCHmdolm7+KsHjyAeRtEZf6JcY01s=;
-  b=RqqXAU/5bM44pn0HECX6aE5uDV87qgZ2bJKpgMouXqDhiW9i5ZPWrzCU
-   484G6itrxfsTGalDBh/2FIVdjDbJsRqxnAN/hdniZZWuGMu+HzEzqrh0Q
-   oMBfFYg1GMXRV0AJHzRRrqx1WlxPU7n3MWBZ93yr9GucC9FLFZ3/VFCo2
-   pL6khlw7fZTS+/KZreYmjNY4ZiVi72dMw9ms5z788DLxJEtveTrJ18MJZ
-   zU/5SVnd5Tzw3hTmKzWeyRC0/dEo9nCQNhtZCKe1s9Uz2eFttd7DFZP2B
-   u+JsAf0j5uDHwakD+UvFPxRtzKrPWkdguM4Vt3I7uxYO3Mc7ub/LmFHXg
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,224,1673938800"; 
-   d="asc'?scan'208";a="199305289"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Mar 2023 02:13:05 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 1 Mar 2023 02:13:04 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Wed, 1 Mar 2023 02:13:03 -0700
-Date:   Wed, 1 Mar 2023 09:12:36 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        <akpm@linux-foundation.org>
-CC:     <linux-kernel@vger.kernel.org>, Alexandre Ghiti <alex@ghiti.fr>,
-        Conor Dooley <conor@kernel.org>
-Subject: Re: [PATCH] .mailmap: Add Alexandre Ghiti personal email address
-Message-ID: <Y/8XBEOSsMD7r+bw@wendy>
-References: <20230301090132.280475-1-alexghiti@rivosinc.com>
+        Wed, 1 Mar 2023 04:17:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1774B975B;
+        Wed,  1 Mar 2023 01:17:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4F326129A;
+        Wed,  1 Mar 2023 09:17:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13576C433A0;
+        Wed,  1 Mar 2023 09:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677662221;
+        bh=lovfDVL8Scu9QyarHVO8qpnpcBeZhltZD2l0DKHmN4I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qVrBIPeo0qRh+Qr6oXK8/vpk7W0jNsW4w7n0Kd53kI3rQBSxiULJKuqjgLMpUjd58
+         6I5m10JAbUhAMAouVVoN8XLRWks9rx2gsjEznJrHh5Ut2F/iZCS9ZJbf9hOgyJPgRl
+         Lmkl5K2lzpEUlMyuuTKC4i6TSueLS5/5ErOdHRDNtlgQLC/wWow3VDCf+1Holi/FUA
+         QAs3rNRS17scdzwJvz75kQRl7mUmCqKzzoskUeULK8AmqWzIshnyWq/Eo1snPNp/ia
+         PoRcZJQorQh6prF/C7QhC1/Op438MpxWlRD3SIlmWUrP6CqKiwFQaT8ZttjQEhry2m
+         4AmmPJu0V3Wwg==
+Received: by mail-lj1-f171.google.com with SMTP id b10so13300251ljr.0;
+        Wed, 01 Mar 2023 01:17:00 -0800 (PST)
+X-Gm-Message-State: AO0yUKVnbP2bvs02T8bPf5wgV9XytENvePlOAz7fuuC2fozWZbwsFbp3
+        RIDtbYL7OUORLOUNig1LBrHPhA15hCoe6uX+nEY=
+X-Google-Smtp-Source: AK7set8Jxay6/XzRPbvyFuBXH/4bCLtcWK7sNwXjsYGVnArLTvXs6uFBWyOYAFgn2PY3QJRfnMfcmoD/BEom1rGEImc=
+X-Received: by 2002:a2e:b989:0:b0:295:ba26:8ad4 with SMTP id
+ p9-20020a2eb989000000b00295ba268ad4mr1803515ljp.2.1677662219042; Wed, 01 Mar
+ 2023 01:16:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9KhjAIgsnEjzZ9TK"
-Content-Disposition: inline
-In-Reply-To: <20230301090132.280475-1-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230301085545.2373646-1-chenhuacai@loongson.cn>
+In-Reply-To: <20230301085545.2373646-1-chenhuacai@loongson.cn>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 1 Mar 2023 10:16:47 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFybJ=snO5YG=6Uy2Qoi98b-6YTKX0Z9=1GPn=JMdxUiQ@mail.gmail.com>
+Message-ID: <CAMj1kXFybJ=snO5YG=6Uy2Qoi98b-6YTKX0Z9=1GPn=JMdxUiQ@mail.gmail.com>
+Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
+ relocate kernel
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>, linux-efi@vger.kernel.org,
+        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---9KhjAIgsnEjzZ9TK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 1 Mar 2023 at 09:55, Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> Since Linux-6.3, LoongArch supports PIE kernel now, so let's reintroduce
+> efi_relocate_kernel() to relocate the core kernel.
+>
 
-Hey Alex,
+Nice!
 
-+CC Andrew, I think it is he that picks most things up for .mailmap.
+I assume you will need to make a similar change for zboot?
 
-On Wed, Mar 01, 2023 at 10:01:32AM +0100, Alexandre Ghiti wrote:
-> From: Alexandre Ghiti <alex@ghiti.fr>
->=20
-> I'm no longer employed by Canonical which results in email bouncing so
-> add an entry to my personal email address.
->=20
-> Reported-by: Conor Dooley <conor@kernel.org>
-
-Could this be converted to, on application, to:
-Reported-by: Conor Dooley <conor.dooley@microchip.com>
-That'll make the corporate overlords happy :)
-
-Thanks Alex, hopefully one less set of those irritating bounce emails in
-my inbox!
-
-> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
->  .mailmap | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/.mailmap b/.mailmap
-> index 318e63f338b1..9a1050fac1a1 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -26,6 +26,7 @@ Alexander Lobakin <alobakin@pm.me> <alobakin@dlink.ru>
->  Alexander Lobakin <alobakin@pm.me> <alobakin@marvell.com>
->  Alexander Lobakin <alobakin@pm.me> <bloodyreaper@yandex.ru>
->  Alexandre Belloni <alexandre.belloni@bootlin.com> <alexandre.belloni@fre=
-e-electrons.com>
-> +Alexandre Ghiti <alex@ghiti.fr> <alexandre.ghiti@canonical.com>
->  Alexei Starovoitov <ast@kernel.org> <alexei.starovoitov@gmail.com>
->  Alexei Starovoitov <ast@kernel.org> <ast@fb.com>
->  Alexei Starovoitov <ast@kernel.org> <ast@plumgrid.com>
-> --=20
-> 2.37.2
->=20
->=20
-
---9KhjAIgsnEjzZ9TK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/8W6wAKCRB4tDGHoIJi
-0gSkAP9AI3FBXe/sVCMCDjAXlfsZtZJkFsB/gqg0qtnR3dTCAQEAmXMVfU0BS4O5
-EH/5fHHrz0dDDcTHaavHSWP1M+/Gwwo=
-=aQA+
------END PGP SIGNATURE-----
-
---9KhjAIgsnEjzZ9TK--
+>  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++-------------
+>  1 file changed, 7 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
+> index eee7ed43cdfb..72c71ae201f0 100644
+> --- a/drivers/firmware/efi/libstub/loongarch-stub.c
+> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
+> @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
+>                                  efi_loaded_image_t *image,
+>                                  efi_handle_t image_handle)
+>  {
+> -       int nr_pages = round_up(kernel_asize, EFI_ALLOC_ALIGN) / EFI_PAGE_SIZE;
+> -       efi_physical_addr_t kernel_addr = EFI_KIMG_PREFERRED_ADDRESS;
+>         efi_status_t status;
+> +       unsigned long kernel_addr = 0;
+>
+> -       /*
+> -        * Allocate space for the kernel image at the preferred offset. This is
+> -        * the only location in memory from where we can execute the image, so
+> -        * no point in falling back to another allocation.
+> -        */
+> -       status = efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
+> -                            EFI_LOADER_DATA, nr_pages, &kernel_addr);
+> -       if (status != EFI_SUCCESS)
+> -               return status;
+> -
+> -       *image_addr = EFI_KIMG_PREFERRED_ADDRESS;
+> -       *image_size = kernel_asize;
+> +       kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
+> +
+> +       status = efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
+> +                    EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min_align(), 0x0);
+>
+> -       memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
+> -              (void *)&kernel_offset - kernel_offset,
+> -              kernel_fsize);
+> +       *image_addr = kernel_addr;
+> +       *image_size = kernel_asize;
+>
+>         return status;
+>  }
+> --
+> 2.39.1
+>
