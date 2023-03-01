@@ -2,1542 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB656A7027
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F856A7017
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCAPrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S230019AbjCAPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCAPrL (ORCPT
+        with ESMTP id S229905AbjCAPp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:47:11 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2047.outbound.protection.outlook.com [40.107.247.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA9A32532;
-        Wed,  1 Mar 2023 07:46:29 -0800 (PST)
+        Wed, 1 Mar 2023 10:45:57 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD7F4392A;
+        Wed,  1 Mar 2023 07:45:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677685554; x=1709221554;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=HALYZ5RApAHiIybmWCnZ5z7c/iEqci06ilTQtGBRxfQ=;
+  b=gzjFQGNSNMvpApTdJxKsI8eKjFd268KMCTJNwCCMzFu//QmQysggu+wG
+   6PVgQWXZu7ciXDk7T9P1DurOIKbhoPJiX4jT73aCngS9E4bdqWxyLrbzB
+   cMgqunLgEAEG8/RgAMoU1l/5NQQMy4CuK2FvrCD2uY07UleDyUmeRsYG1
+   QbfiHmjWylOCpnO3LbxO3CIkaoZ6RYeNXkUxDx5Ds6qQgoSu1y9XrbGBv
+   Cui5/jCPxqYkBnAPmVQEJM7zstsnWYaVD8Qmk/qITkBXxICe3Ar73vRR8
+   TIpuGNk/b5dL14txvb7qtmQXByD2eR+AB4H8MpUhmjPREE8BoQKipOh6M
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="420702623"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="420702623"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 07:45:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="848683598"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="848683598"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 01 Mar 2023 07:45:53 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 1 Mar 2023 07:45:52 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 1 Mar 2023 07:45:52 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 1 Mar 2023 07:45:52 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.46) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 1 Mar 2023 07:45:51 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IFB5FOpOyPwhHMmQ9M4B63V6u/d4lN2NSqSa4rncgDovKJVl14H7IhWCGldLKgIe+rXJe/+k3TbKcCDXt7/8AZxUBp7IRJNN/Np0DJDs8CKl5rfrmPZLNmuQNKKtbvMDB33ArHNAFS9/l+gbgCw/uSUYfjBmVNcxIx5+98tnp94afkPaB3aMzF88XFVf3y4nWcFzcHdX9fq8psMI7GG0p5EDS+IEF2Is6MFvectOJPo3QtFOoGju/BrWaEhJ1R0nor1YxuHTMby0UEU9UUtT42kJzw3qAIUQiH7iUna/3pCiE6Wq9XCdQw35YRHUlSIEq2Z/2Ys1TfIliZKaZy2B+w==
+ b=EAT1yd+NNsANZeNAvHWr6QcAoz/zhwzZLwIvvyZv5zNyPxKIqGiFoRko/IH8Th5QFPNWjdBa/63t7YOuXZR2rpkuAS8kNoWi4Zpbd8AOqRCoMC+5jlsFceOBpZLC3q0gcKWnIoYJ7T6AaueEsal3ecO/2YPyMaIjUrK7dJhX3oEzZ8zKr+C+NJvjGygwLwD4t1hrklHSoAPKAKm5FDaaFE/QSFPz7LwxCHx5l4On04zsYY1anucxbZ1wPbeuL6php4UxvH+HQqzXxE4a9lzZJeutn9GgZdDqTg0dUceQlDgmk0hAMrljznagH2E82HgIIZPej7c99L2cT3T02/v28Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yMY/K1Gv+1W4jMLe2SfLaTVrSuqdWa7s1+SZ99GJyiA=;
- b=XNDOI+DLOEOg6wwRPaSLW73hmEcoIef60THMfb17ru5kNZqZELTwuFletZIzkG2pxm4XlfOAc4F0GhWTnsF2uIk/Zjo6QgjrGgSIamOm+azstWLYxpKiQAMatBs8mDx4m17lq3LZe0pRUuD69CpI+kDWBGt6mAfieQt4DOr/f4pVJeF8PVqTWsnBm+dT8OjAQI9Riw/UynCm5iVHydXVUJbWi2e1LdiZ8239CUgnB0i2WX//BaFPTXHChBOIqgFaRhNgWebhsnYYVfgAsQ4EtJM6BnYy4SwWNA8Sl6L6pcONr3lpr3Oj6RjN7quhVL+XtNjXm9MYqmup0GAOR9/G7g==
+ bh=hUWM0jV50k+2EWjTOAeN9KaA9fVzNHWerwgJtkq6yko=;
+ b=hTra7rI36aZwK2itj5AariynuqVfUkYqumLfgbAHadPKwaLyVNp6Pm7ut01SJ5hdxwZIxMmYtwGc3r2xgAJS/SRUkPvtmZ7rW1txiTIx8kcGStDJ4jLkJdWb1gZoSkz+p3aDo/vXPcRrh1JFyQ3w1LTatwSrdps2LEh6reJ2MQbZMlHzC0N976+MB6UgqyltkvfTJBP08axjh7GaiXssXmhcMERd5yQw3RyMvGIzl42XSVCAy8+MQPgHbbKiQ9nOtHepahLpogp43mcPD7rpJgwG6URDHtXovoQRVTaaIbL+DCs2sMtBVMkA+EKT9m8yF5LUMjlI2csNyPGAhDPR6A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yMY/K1Gv+1W4jMLe2SfLaTVrSuqdWa7s1+SZ99GJyiA=;
- b=h9VVypgVrD+V0IZcZRGtTNjlg9yTe7WjskxBjesEmxd0YjcF6Z5Tzbde8Pv/cvSdKrmvdHbXd06Wpk8tBOo1xOHg6nFk+sf6KDGeWbVA7jAp8aY3yCcM8tSWY2o8u/yiIrL17IThukg/Iq5rwfjEY2ToGBun2WTXlwZDc3SQhpA=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
- by DU2PR04MB9129.eurprd04.prod.outlook.com (2603:10a6:10:2f4::11) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by MN6PR11MB8244.namprd11.prod.outlook.com (2603:10b6:208:470::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
- 2023 15:46:13 +0000
-Received: from AM9PR04MB8603.eurprd04.prod.outlook.com
- ([fe80::45d2:ce51:a1c4:8762]) by AM9PR04MB8603.eurprd04.prod.outlook.com
- ([fe80::45d2:ce51:a1c4:8762%4]) with mapi id 15.20.6156.017; Wed, 1 Mar 2023
- 15:46:13 +0000
-From:   Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-serial@vger.kernel.org, amitkumar.karwar@nxp.com,
-        rohit.fule@nxp.com, sherry.sun@nxp.com, neeraj.sanjaykale@nxp.com
-Subject: [PATCH v6 3/3] Bluetooth: NXP: Add protocol support for NXP Bluetooth chipsets
-Date:   Wed,  1 Mar 2023 21:15:14 +0530
-Message-Id: <20230301154514.3292154-4-neeraj.sanjaykale@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230301154514.3292154-1-neeraj.sanjaykale@nxp.com>
-References: <20230301154514.3292154-1-neeraj.sanjaykale@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM0PR04CA0069.eurprd04.prod.outlook.com
- (2603:10a6:208:1::46) To AM9PR04MB8603.eurprd04.prod.outlook.com
- (2603:10a6:20b:43a::10)
+ 2023 15:45:46 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::3bd5:710c:ebab:6158]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::3bd5:710c:ebab:6158%9]) with mapi id 15.20.6134.027; Wed, 1 Mar 2023
+ 15:45:46 +0000
+Date:   Wed, 1 Mar 2023 10:45:40 -0500
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Rob Clark <robdclark@gmail.com>
+CC:     Luben Tuikov <luben.tuikov@amd.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        "Rob Clark" <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        <freedreno@lists.freedesktop.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
+Message-ID: <Y/9zJNO+reFI1FvG@intel.com>
+References: <20230224112630.313d7b76@eldfell>
+ <a47e2686-1e35-39a3-0f0c-6c3b9522f8ff@linux.intel.com>
+ <20230224122403.6a088da1@eldfell>
+ <582a9b92-d246-fce2-cf39-539d9a2db17f@linux.intel.com>
+ <20230224130053.3f8939e2@eldfell>
+ <c5d046d6-ab8e-2bc7-5110-dba78b91348b@linux.intel.com>
+ <74e409dc-b642-779e-a755-b793c378e43a@amd.com>
+ <CAF6AEGs_yzEj81yNP3KhmVP9Yo3rwTc5vntEVrm9tHw6+w1G_g@mail.gmail.com>
+ <Y/0iM+ycUozaVbbC@intel.com>
+ <CAF6AEGtXSEyyjELjGtPvnAN7mX+NwzngmB0PbKHsZqjTm-xYsg@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAF6AEGtXSEyyjELjGtPvnAN7mX+NwzngmB0PbKHsZqjTm-xYsg@mail.gmail.com>
+X-ClientProxiedBy: BY5PR13CA0005.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::18) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8603:EE_|DU2PR04MB9129:EE_
-X-MS-Office365-Filtering-Correlation-Id: eec002d8-c2db-4079-74fb-08db1a6c160e
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|MN6PR11MB8244:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6649e655-3713-4220-252d-08db1a6c05ca
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hSxm62e974XfRVoPtkApvNDEcZme5r3kzip6LPwIUlFIho8fMarDCSbJ4ePLDtIHC1PV5SzYaVMZi6LU7w1yd2QWWbIBIamkeRNWketKZw+FyItGjrATBJyic/vBu5S4zAJZX2MVcIzeI0HjMzsLIUAnRuuRAgBzcuzudd9mG2qycvPPo2pH9X+Dsx/PX9gvliaUdRqpphtCNybOOA6QsejzPUGR0uYzXsF3iufRb5ubXo1R1kjfb8Pcvb9TptX1EBmMDnRxN8Y3asYFqaaC7TiTqynpwNb1HJuU4jl6GMihFiqDlVUV5BxEO9FMPWi+aLKot+k54c5iSqW3Pzv94v3pvRQuotkZz9m0JGf0mnli71QZ3smneYLy+zamRVNBPNp9jBN8LViWBKhzmv67NcMrQqqg0M03PxKBq4h0+7fRDcumY5sDkKJuKyr9JnFByBX/2tQv6ChjtfcWh4F00VylrEwZtqAHQ5IiFsomciaMIQV4Irg92VjBnjjjzIzdHT15+czaCJLuDwkz8+ZiCLSK8IlaNfLSWaT0njS5lWtwZHUzHPBoU9u9s82xvAcTmPfi81u+uNgTDrQrYDK5Q69kYJPjqlQNFQaVZXhEDC60CNaxPaBQovk2vOa/kV0Y1y9aCIqWIpLsxUVlbING45dtCFVdBsIROj8DO1q8o/WdC7TLkA7NZEUk0t7BuXxJ4wspnXU9ET68DZkDsy6UgA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8603.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(136003)(396003)(346002)(39860400002)(451199018)(38350700002)(38100700002)(921005)(41300700001)(86362001)(4326008)(8676002)(36756003)(30864003)(2906002)(5660300002)(66476007)(8936002)(66946007)(66556008)(7416002)(52116002)(66574015)(186003)(6506007)(1076003)(6512007)(83380400001)(2616005)(26005)(316002)(478600001)(6486002)(66899018)(579004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: MoPPaYUlPBQi8owykp8OjHiRbuEQ1u9RTM2tGcQYdnKwQy4sfoupXN3Rv7LqVXkLYqQMR9Q6L9xR4miYBCNoLvSRB5EV19KLiiECjd9B6sNhqwMF1qnw4hxJzDpBq7uP2m8lUl9rjIueHDJTI27xj+s8qivXpTfwE4eHeNthD2T1dYw5qFqa8xyOBJaeO/pwShBodMyYGDOg9NJFOJWpGUoD/OF7r4Zac81nU3ZE0oS/1bBiiFyoeCDe9LW6J4iwFlRvnIhbzHhoT610zu6jz9xGPhhVX8kdZMCFWxMjvdIp6Wo2hM5mGh/vmfv4o7XI/+luA8V1ZHPyzMd5rwgDBK1PQ/0D1JapXHoNxpTTq3rRGqD6Fa01TnAmm1Wmb7y61JThYTTlfZjowfu4AqYmyQy7uWXHd3KiUjIONut1yeD+769vLXEmc1B7vPRWoeUwcY8ZcFxoH65Ez4AdEph3ugURafJyvt3rw1Z1tZh3duhQVvaSs1zYn93ufkUKo/OHyGSJnqUw8HajIRtPqZknuHNqea46d3bl5659YAaTcVyGd6jSxhV54aRZyiuqGDD8WeR5Gg2BC+HKg/Bpaj7HpLhQqHj+d74E4RXpkDH2NRG1aexEuivKPZ2bIQtmSHDin7bUyMwrZ5loSXRQITZrMg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(39860400002)(346002)(366004)(136003)(451199018)(66899018)(36756003)(66556008)(66476007)(86362001)(44832011)(66946007)(5660300002)(8676002)(6916009)(4326008)(7416002)(2906002)(82960400001)(8936002)(38100700002)(41300700001)(6486002)(6666004)(54906003)(316002)(478600001)(83380400001)(186003)(6512007)(2616005)(6506007)(53546011)(26005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NTJsUUc3WUt1K0I5Y1QrcXpMb2tKazZLUDZQQUdBUnBiejNJaEIvdThNYTlN?=
- =?utf-8?B?MWNjYW1sdi9TeWxwUm9VS3RyYmltYWora1hUY0ZQRHIxTkREQ0k4Z05hbjlW?=
- =?utf-8?B?RkRLTVJJVXRjYlQ1MzF1bEJjdEx0elpQeUl4MWt6ZGR4dzVQZmdHOVZmUWNx?=
- =?utf-8?B?UDRHZDNIV1RONjVoRkdybUVNOC9kTFljcURuOUxpcjFNOTI3dThoaUpHUFhQ?=
- =?utf-8?B?dzZvSUdESU5oYWx5a1RBSzFqSWlkVVpwYUhsenB0b3ZFYnFJMnc2UjMwcVhE?=
- =?utf-8?B?ZGk2OUxuNDM0TFFyWkV3Q29yUzZIREw1Q1hNZmZ5NFBtZVJHZHhQYVRZM2d3?=
- =?utf-8?B?RWlSdFpJUUZ0ZitwZ0VqWlpoaDZWOUhaZXFrZ0RlL0VOWExBVzRDV2FQTldU?=
- =?utf-8?B?cnM1eENFRWlmMFJta3Q2RVk0amlBaEtNUVNTM1ZpYi9PK1hDOHZQOEg4bVA4?=
- =?utf-8?B?cjRnLzErK2N5ZGt1RC9qT1BHOXE4TFQ4NktGR3hMbDNrT0dteVNTdE55NE00?=
- =?utf-8?B?cE5pcTkwU0dWeThENFduazF4amxpV3c3S3JNNnFhRkQraVVpQ0JQMThJanZB?=
- =?utf-8?B?YzU4Q2Z4akNPQ2V1d2IzM2Y4cVRNQitlVWZSTUxaQzRxZG5yTGJ2MFc5OEN0?=
- =?utf-8?B?Njl3U284dGxyR1VzR0ZSdW5aUHdSaG41Vm85Zm5KNTA0TXVTYVlQaThZM3hF?=
- =?utf-8?B?NTFqL081MkQrYmx0OFFwWlB2YlRJajRKSUVySXk5N3AwNUVPSGI5QkIzUXlR?=
- =?utf-8?B?cldyamQ3bmE3VmJOWmFHTlpFUmIzVDYzeG1HcDE1UWMyYml6cWxpQ25rVkNK?=
- =?utf-8?B?dkIyVFMrQTh2SUs4bnI5dmUzYnFpaFAzNWJXckR4MjZhQlNJYlBIaUFieWNn?=
- =?utf-8?B?dVVtUzVEcEp6aDJnN01hd2tveWh6TkY3VDh2TDF4TlI1TWEyQmdwY2JWWUZq?=
- =?utf-8?B?blVBcjZidVZmZHozekgxWHBmdVVkbFVSMC9hZEw0RGtqUEEzY2g4c2h0c0ox?=
- =?utf-8?B?eXdGUmZDU2VWT0k1VktPVVhrN3NaWjV0RjgxZGxJOHhRZDdMakVOV2Rpc3dy?=
- =?utf-8?B?MkpJMFdQTXJtcWxaR2NGaVF5WTFZekRMRktOTGNoUmxDc2JZNTZMUHAvdDh5?=
- =?utf-8?B?a1hFcTNiYzIyb1kyTDhsZlVwWXJNUnZkOVZGZzVmMjdWbVhjenN5UGJxa3l6?=
- =?utf-8?B?Q1JWYm5CZ2Q1TW5uajd0ODhMZjV5cXlOUHNac2FYNFMwaWZTazRmeW8rd3BG?=
- =?utf-8?B?V0YrRzRvclZBOUNjcVBoS0ZLVEFLVElLTTBFYklDV0pwcVV4a2FOSGlaTnJW?=
- =?utf-8?B?eDIzUUtDR2RtTTBVdlJYZHY1dGJEWG5ja1J1Y3B3L1FGV0Z0bFRSVStDSlRI?=
- =?utf-8?B?aC9MTXR6MWpsbG1HQnRIaThqemtYQmVsa3dVRUJ1SmRTR0hHYTFCSUwrbmJn?=
- =?utf-8?B?VmlXRjU2SStuTUVFS0NVT3M3TFBtSVBHLzVwYzNDbTVRanpIQTlJWEZ3blhE?=
- =?utf-8?B?aWZERmdic3pDZmZuNUFUWGhzQ29HOUoxZFp6c1RxSVFRbHFWem8rWk1KZEdh?=
- =?utf-8?B?aE5qRzI1bU5EcWJpbTRMUkVtNVh0Zm54QTNHWTl0MnIwQVZYNkUydnhDWlY0?=
- =?utf-8?B?RTR2S3JoeGlraVlLL1I1QnF4V05PamZ4S3BwUmtFb1FqeSs2R0I0MkFnb3gv?=
- =?utf-8?B?OFRMRjEvbWREbVozOXVSL1YzaUNidUwvRUQ5MFdzU0Fxb01kQk1JQTJuV0Fq?=
- =?utf-8?B?eWx5N1ZXZ2dzVi9KZDZ3QnpieHIya2UzMElwd3QwQU5FNTNZaUhaSlJMV2o4?=
- =?utf-8?B?U1hEek9ZNXVCVldWcUc3MjNxc3FHTVhvT2FwdjVDdThmS3pWVTg0V1ljdG1X?=
- =?utf-8?B?THVjZDZWczZVRk56WlZiQ2h3dVJycy8zRm9LazZzWmsxekxCSUJGakpXQXV2?=
- =?utf-8?B?Z2JVOXk1TjN6cU9zdjcydDBJOG5HdGVVYm1vb3YrTmhCYzZsVjkrUGlxdldF?=
- =?utf-8?B?VkdoM3BNZ2VUdUZlYkdCVURXUDdpY095TE5QL1lRT0RNa3JvSHVVNnFSZndy?=
- =?utf-8?B?U1pzN1hIUFRtMWM2ZHkxbHcyMUxrc1R4WXZRN3BheDlyNVZlMHl6eDJMM1dm?=
- =?utf-8?B?cERXWXIzVDZrRENYbXNZV01nNHc1b1dpdWttYXdQRitOaXRMT0hSR0xKVzdo?=
- =?utf-8?B?SXc9PQ==?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eec002d8-c2db-4079-74fb-08db1a6c160e
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8603.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/hFHDlruugQsebWWQc0VCtmh/gGcQIaJUGdVf762AT7uQVEZs9MAqRYcM63R?=
+ =?us-ascii?Q?1vrdsc1sq+5LpzAQ4Kc+FM/wZbUq4Mq/KOJ/JXZ2HbZ7qtVvbhFQNGO9fSCp?=
+ =?us-ascii?Q?GTbJbz/YyLiVHejr8EeKYa8H86IJmHAlDEz30yp7+YB0f7jN5iD+oUNmnXqP?=
+ =?us-ascii?Q?hy4eN/Rgul7U1kg76I3WPalVWEqZ/RnRs3JVSxn1oXMTXoa+OyijaqpNOcZs?=
+ =?us-ascii?Q?T3OfeLz26rrX7e1DwsRRz9m4HvdXFI03nxPNvt7+Fc68ZgH/CuIMv59ATbpT?=
+ =?us-ascii?Q?jRvYaI49Q/E0N1KUUBlYfV/T6o7BYj9oKhdX0nC/QhU3ywtr6+fxPzUiL0ww?=
+ =?us-ascii?Q?77HSONGgwL7QIeq1pOVDc70TDrz2/wjkppACcvx9owGV/521geFV5BErSku3?=
+ =?us-ascii?Q?LTK4eN5pwviHHS7T9zMn0RT2n1aiTCrJhhYFxY48EIax8s8Gy9kht1Ipn74K?=
+ =?us-ascii?Q?4K9WizzL78SO97/WPLupgASugqQWxFU7WKTS2LaX61gcq2gfmE0L/kH/fZHi?=
+ =?us-ascii?Q?++A250igEyRkjF7e7l3GNnNyH5j6M8ckeVYowNdM6RiHIhvGraZOQtl9cjwN?=
+ =?us-ascii?Q?spFBWBntBdfBNKJPiHftap2V88WqZFcAi4d4JIA/9HB8ISx4aKEWLpYsVfNq?=
+ =?us-ascii?Q?ZDQY2DF5bqxLlC4DjWLC9e/hBQuU9h1K+HVD87TxKPoHp0XYSbsDwNDH6LFF?=
+ =?us-ascii?Q?j8AiPmXWbB8qP9XscHTpTKyr60XQH1Plo+U2rmTs4BZqYPRtojgkAUj7gA8V?=
+ =?us-ascii?Q?Qn2P8qQMtaSUpE0gFqL1jmEbmJNmZXMWIstS0UQcAnm62fWmKetvNtb8RVUG?=
+ =?us-ascii?Q?jPXgy8SeHuBMzLrfdD3dvtPrH3fEHDzFbWzY8iOrR09u2iTLrH2guyRcHLHb?=
+ =?us-ascii?Q?MQfDRP7Lu3TXs/g9Yt4/oB03IFzFpQtFgWncK63RHqT5tixM/81N1uYRGS+P?=
+ =?us-ascii?Q?CGmxypcEYjTCUZjCRVl9GwUeiJJAymTx4r1Db54xt+H4JEgDU61XpvLKk3dX?=
+ =?us-ascii?Q?OoROQm++bj0sjUDFukQVeEy9GZQ6s68I6VmXi5CMCQjBYS3MZeMxBmrKv6HJ?=
+ =?us-ascii?Q?Gzi+Xcm6nUQJswT1JaIMizMPxiqh+MUJ6X/fskIPwS2YesXkgcZES0+j8Tgt?=
+ =?us-ascii?Q?CSo1NGtT7IrrrBCU0sstV/Ikru8HmwHpADjwisSIFngDP9VTFG3ResD3YXOc?=
+ =?us-ascii?Q?aMIeaAvX5Ff/ecYgdK5/R2nIF3+Sp18tYUPILVMz8a9Lq6+mOBi+MgOBvpfA?=
+ =?us-ascii?Q?84qTcm0kax0+1kjUqwKQT8O4DZQSqS7CC5K9D/aMBdwVbfcNRSqThQjnmuy5?=
+ =?us-ascii?Q?0SyDM85QSFgR/Y3o3e0GD7y3cf+jBvEpZun7arZJLmBz2sS0J43oqOYj27zG?=
+ =?us-ascii?Q?cU/zrEOmnEYXBEFk0rQwyczE1sBDTYzGBqOFUwhh5UrH1+718NxwnSCH/gM4?=
+ =?us-ascii?Q?4MVAPWReg4hX5lrhjQKsWlhc3ZnNpKl9ikfeVUOee5VAHqTBG1+Y4LPFlCuY?=
+ =?us-ascii?Q?jlchh21mbPlajNWpBsHFBZjXfZvlFA3jfcPZlaHUxh2RmP+CxeNlpUojVQsD?=
+ =?us-ascii?Q?sgW/JdiNWVfDUgT0Y32OqO82My2v7W3EQdPZosD+knGVKTLBIDGPufQBf1+1?=
+ =?us-ascii?Q?WA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6649e655-3713-4220-252d-08db1a6c05ca
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 15:46:13.6423
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 15:45:46.4761
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iL39D9JV/f4z3Dfj+hggy3PfzvsGvvgc+RNSDk4B+pr1z25OXF++VNiiH6jE7FPS2rCGOKkibd+WZT/GnNKjb3JW7G/zgCBg3LTzJSEdbmw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9129
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y9pm502xMLinOMbxF9+QNYjCpI5r4zei0Qhz97CbbWnhck5iG4GwUGm49qvA+Wx47OlvUcj4r7YBZL7CE+B1Sg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8244
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a driver based on serdev driver for the NXP BT serial protocol
-based on running H:4, which can enable the built-in Bluetooth device
-inside an NXP BT chip.
+On Mon, Feb 27, 2023 at 02:20:04PM -0800, Rob Clark wrote:
+> On Mon, Feb 27, 2023 at 1:36 PM Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+> >
+> > On Fri, Feb 24, 2023 at 09:59:57AM -0800, Rob Clark wrote:
+> > > On Fri, Feb 24, 2023 at 7:27 AM Luben Tuikov <luben.tuikov@amd.com> wrote:
+> > > >
+> > > > On 2023-02-24 06:37, Tvrtko Ursulin wrote:
+> > > > >
+> > > > > On 24/02/2023 11:00, Pekka Paalanen wrote:
+> > > > >> On Fri, 24 Feb 2023 10:50:51 +0000
+> > > > >> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+> > > > >>
+> > > > >>> On 24/02/2023 10:24, Pekka Paalanen wrote:
+> > > > >>>> On Fri, 24 Feb 2023 09:41:46 +0000
+> > > > >>>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+> > > > >>>>
+> > > > >>>>> On 24/02/2023 09:26, Pekka Paalanen wrote:
+> > > > >>>>>> On Thu, 23 Feb 2023 10:51:48 -0800
+> > > > >>>>>> Rob Clark <robdclark@gmail.com> wrote:
+> > > > >>>>>>
+> > > > >>>>>>> On Thu, Feb 23, 2023 at 1:38 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+> > > > >>>>>>>>
+> > > > >>>>>>>> On Wed, 22 Feb 2023 07:37:26 -0800
+> > > > >>>>>>>> Rob Clark <robdclark@gmail.com> wrote:
+> > > > >>>>>>>>
+> > > > >>>>>>>>> On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+> > > > >>>>>>
+> > > > >>>>>> ...
+> > > > >>>>>>
+> > > > >>>>>>>>>> On another matter, if the application uses SET_DEADLINE with one
+> > > > >>>>>>>>>> timestamp, and the compositor uses SET_DEADLINE on the same thing with
+> > > > >>>>>>>>>> another timestamp, what should happen?
+> > > > >>>>>>>>>
+> > > > >>>>>>>>> The expectation is that many deadline hints can be set on a fence.
+> > > > >>>>>>>>> The fence signaller should track the soonest deadline.
+> > > > >>>>>>>>
+> > > > >>>>>>>> You need to document that as UAPI, since it is observable to userspace.
+> > > > >>>>>>>> It would be bad if drivers or subsystems would differ in behaviour.
+> > > > >>>>>>>>
+> > > > >>>>>>>
+> > > > >>>>>>> It is in the end a hint.  It is about giving the driver more
+> > > > >>>>>>> information so that it can make better choices.  But the driver is
+> > > > >>>>>>> even free to ignore it.  So maybe "expectation" is too strong of a
+> > > > >>>>>>> word.  Rather, any other behavior doesn't really make sense.  But it
+> > > > >>>>>>> could end up being dictated by how the hw and/or fw works.
+> > > > >>>>>>
+> > > > >>>>>> It will stop being a hint once it has been implemented and used in the
+> > > > >>>>>> wild long enough. The kernel userspace regression rules make sure of
+> > > > >>>>>> that.
+> > > > >>>>>
+> > > > >>>>> Yeah, tricky and maybe a gray area in this case. I think we eluded
+> > > > >>>>> elsewhere in the thread that renaming the thing might be an option.
+> > > > >>>>>
+> > > > >>>>> So maybe instead of deadline, which is a very strong word, use something
+> > > > >>>>> along the lines of "present time hint", or "signalled time hint"? Maybe
+> > > > >>>>> reads clumsy. Just throwing some ideas for a start.
+> > > > >>>>
+> > > > >>>> You can try, but I fear that if it ever changes behaviour and
+> > > > >>>> someone notices that, it's labelled as a kernel regression. I don't
+> > > > >>>> think documentation has ever been the authoritative definition of UABI
+> > > > >>>> in Linux, it just guides drivers and userspace towards a common
+> > > > >>>> understanding and common usage patterns.
+> > > > >>>>
+> > > > >>>> So even if the UABI contract is not documented (ugh), you need to be
+> > > > >>>> prepared to set the UABI contract through kernel implementation.
+> > > > >>>
+> > > > >>> To be the devil's advocate it probably wouldn't be an ABI regression but
+> > > > >>> just an regression. Same way as what nice(2) priorities mean hasn't
+> > > > >>> always been the same over the years, I don't think there is a strict
+> > > > >>> contract.
+> > > > >>>
+> > > > >>> Having said that, it may be different with latency sensitive stuff such
+> > > > >>> as UIs though since it is very observable and can be very painful to users.
+> > > > >>>
+> > > > >>>> If you do not document the UABI contract, then different drivers are
+> > > > >>>> likely to implement it differently, leading to differing behaviour.
+> > > > >>>> Also userspace will invent wild ways to abuse the UABI if there is no
+> > > > >>>> documentation guiding it on proper use. If userspace or end users
+> > > > >>>> observe different behaviour, that's bad even if it's not a regression.
+> > > > >>>>
+> > > > >>>> I don't like the situation either, but it is what it is. UABI stability
+> > > > >>>> trumps everything regardless of whether it was documented or not.
+> > > > >>>>
+> > > > >>>> I bet userspace is going to use this as a "make it faster, make it
+> > > > >>>> hotter" button. I would not be surprised if someone wrote a LD_PRELOAD
+> > > > >>>> library that stamps any and all fences with an expired deadline to
+> > > > >>>> just squeeze out a little more through some weird side-effect.
+> > > > >>>>
+> > > > >>>> Well, that's hopefully overboard in scaring, but in the end, I would
+> > > > >>>> like to see UABI documented so I can have a feeling of what it is for
+> > > > >>>> and how it was intended to be used. That's all.
+> > > > >>>
+> > > > >>> We share the same concern. If you read elsewhere in these threads you
+> > > > >>> will notice I have been calling this an "arms race". If the ability to
+> > > > >>> make yourself go faster does not required additional privilege I also
+> > > > >>> worry everyone will do it at which point it becomes pointless. So yes, I
+> > > > >>> do share this concern about exposing any of this as an unprivileged uapi.
+> > > > >>>
+> > > > >>> Is it possible to limit access to only compositors in some sane way?
+> > > > >>> Sounds tricky when dma-fence should be disconnected from DRM..
+> > > > >>
+> > > > >> Maybe it's not that bad in this particular case, because we are talking
+> > > > >> only about boosting GPU clocks which benefits everyone (except
+> > > > >> battery life) and it does not penalize other programs like e.g.
+> > > > >> job priorities do.
+> > > > >
+> > > > > Apart from efficiency that you mentioned, which does not always favor
+> > > > > higher clocks, sometimes thermal budget is also shared between CPU and
+> > > > > GPU. So more GPU clocks can mean fewer CPU clocks. It's really hard to
+> > > > > make optimal choices without the full coordination between both schedulers.
+> > > > >
+> > > > > But that is even not the main point, which is that if everyone sets the
+> > > > > immediate deadline then having the deadline API is a bit pointless. For
+> > > > > instance there is a reason negative nice needs CAP_SYS_ADMIN.
+> > > > >
+> > > > > However Rob has also pointed out the existence of uclamp.min via
+> > > > > sched_setattr which is unprivileged and can influence frequency
+> > > > > selection in the CPU world, so I conceded on that point. If CPU world
+> > > > > has accepted it so can we I guess.
+> > > > >
+> > > > > So IMO we are back to whether we can agree defining it is a hint is good
+> > > > > enough, be in via the name of the ioctl/flag itself or via documentation.
+> > > > >
+> > > > >> Drivers are not going to use the deadline for scheduling priorities,
+> > > > >> right? I don't recall seeing any mention of that.
+> > > > >>
+> > > > >> ...right?
+> > > > >
+> > > > > I wouldn't have thought it would be beneficial to preclude that, or
+> > > > > assume what drivers would do with the info to begin with.
+> > > > >
+> > > > > For instance in i915 we almost had a deadline based scheduler which was
+> > > > > much fairer than the current priority sorted fifo and in an ideal world
+> > > > > we would either revive or re-implement that idea. In which case
+> > > > > considering the fence deadline would naturally slot in and give true
+> > > > > integration with compositor deadlines (not just boost clocks and pray it
+> > > > > helps).
+> > > > How is user-space to decide whether to use ioctl(SET_DEADLINE) or
+> > > > poll(POLLPRI)?
+> > >
+> > > Implementation of blocking gl/vk/cl APIs, like glFinish() would use
+> > > poll(POLLPRI).  It could also set an immediate deadline and then call
+> > > poll() without POLLPRI.
+> > >
+> > > Other than compositors which do frame-pacing I expect the main usage
+> > > of either of these is mesa.
+> >
+> > Okay, so it looks like we already agreed that having a way to bump frequency
+> > from userspace is acceptable. either because there are already other ways
+> > that you can waste power and because this already acceptable in the CPU
+> > world.
+> >
+> > But why we are doing this in hidden ways then?
+> >
+> > Why can't we have this hint per context that is getting executed?
+> > (either with a boost-context flag or with some low/med/max or '-1' to '1'
+> > value like the latency priority)?
+> >
+> > I don't like the waitboost because this heurisitic fails in some media cases.
+> > I don't like the global setting because we might be alternating a top-priority
+> > with low-priority cases...
+> >
+> > So, why not something per context in execution?
+> >
+> 
+> It needs to be finer granularity than per-context, because not all
+> waits should trigger boosting.  For example, virglrenderer ends up
+> with a thread polling unsignaled fences to know when to signal an
+> interrupt to the guest virtgpu.  This alone shouldn't trigger
+> boosting.  (We also wouldn't want to completely disable boosting for
+> virglrenderer.)  Or the usermode driver could be waiting on a fence to
+> know when to do some cleanup.
+> 
+> That is not to say that there isn't room for per-context flags to
+> disable/enable boosting for fences created by that context, meaning it
+> could be an AND operation for i915 if it needs to be.
 
-This driver has Power Save feature that will put the chip into sleep state
-whenever there is no activity for 2000ms, and will be woken up when any
-activity is to be initiated over UART.
+Right. It can be both ways I agree.
 
-This driver enables the power save feature by default by sending the vendor
-specific commands to the chip during setup.
-
-During setup, the driver checks if a FW is already running on the chip
-by waiting for the bootloader signature, and downloads device specific FW
-file into the chip over UART if bootloader signature is received..
-
-Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
----
-v2: Removed conf file support and added static data for each chip based
-on compatibility devices mentioned in DT bindings. Handled potential
-memory leaks and null pointer dereference issues, simplified FW download
-feature, handled byte-order and few cosmetic changes. (Ilpo Järvinen,
-Alok Tiwari, Hillf Danton)
-v3: Added conf file support necessary to support different vendor modules,
-moved .h file contents to .c, cosmetic changes. (Luiz Augusto von Dentz,
-Rob Herring, Leon Romanovsky)
-v4: Removed conf file support, optimized driver data, add logic to select
-FW name based on chip signature (Greg KH, Ilpo Jarvinen, Sherry Sun)
-v5: Replaced bt_dev_info() with bt_dev_dbg(), handled user-space cmd
-parsing in nxp_enqueue() in a better way. (Greg KH, Luiz Augusto von Dentz)
-v6: Add support for fw-init-baudrate parameter from device tree,
-modified logic to detect FW download is needed or FW is running. (Greg
-KH, Sherry Sun)
----
- MAINTAINERS                   |    1 +
- drivers/bluetooth/Kconfig     |   11 +
- drivers/bluetooth/Makefile    |    1 +
- drivers/bluetooth/btnxpuart.c | 1317 +++++++++++++++++++++++++++++++++
- 4 files changed, 1330 insertions(+)
- create mode 100644 drivers/bluetooth/btnxpuart.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 030ec6fe89df..fdb9b0788c89 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22840,6 +22840,7 @@ M:	Amitkumar Karwar <amitkumar.karwar@nxp.com>
- M:	Neeraj Kale <neeraj.sanjaykale@nxp.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-+F:	drivers/bluetooth/btnxpuart.c
- 
- THE REST
- M:	Linus Torvalds <torvalds@linux-foundation.org>
-diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
-index 5a1a7bec3c42..359a4833e31f 100644
---- a/drivers/bluetooth/Kconfig
-+++ b/drivers/bluetooth/Kconfig
-@@ -465,4 +465,15 @@ config BT_VIRTIO
- 	  Say Y here to compile support for HCI over Virtio into the
- 	  kernel or say M to compile as a module.
- 
-+config BT_NXPUART
-+	tristate "NXP protocol support"
-+	depends on SERIAL_DEV_BUS
-+	help
-+	  NXP is serial driver required for NXP Bluetooth
-+	  devices with UART interface.
-+
-+	  Say Y here to compile support for NXP Bluetooth UART device into
-+	  the kernel, or say M here to compile as a module (btnxpuart).
-+
-+
- endmenu
-diff --git a/drivers/bluetooth/Makefile b/drivers/bluetooth/Makefile
-index e0b261f24fc9..7a5967e9ac48 100644
---- a/drivers/bluetooth/Makefile
-+++ b/drivers/bluetooth/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_BT_QCA)		+= btqca.o
- obj-$(CONFIG_BT_MTK)		+= btmtk.o
- 
- obj-$(CONFIG_BT_VIRTIO)		+= virtio_bt.o
-+obj-$(CONFIG_BT_NXPUART)	+= btnxpuart.o
- 
- obj-$(CONFIG_BT_HCIUART_NOKIA)	+= hci_nokia.o
- 
-diff --git a/drivers/bluetooth/btnxpuart.c b/drivers/bluetooth/btnxpuart.c
-new file mode 100644
-index 000000000000..f581e05ddecb
---- /dev/null
-+++ b/drivers/bluetooth/btnxpuart.c
-@@ -0,0 +1,1317 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *  NXP Bluetooth driver
-+ *  Copyright 2018-2023 NXP
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+
-+#include <linux/serdev.h>
-+#include <linux/of.h>
-+#include <linux/skbuff.h>
-+#include <asm/unaligned.h>
-+#include <linux/firmware.h>
-+#include <linux/string.h>
-+#include <linux/crc8.h>
-+#include <linux/crc32.h>
-+
-+#include <net/bluetooth/bluetooth.h>
-+#include <net/bluetooth/hci_core.h>
-+
-+#include "h4_recv.h"
-+
-+#define MANUFACTURER_NXP		37
-+
-+#define BTNXPUART_TX_STATE_ACTIVE	1
-+#define BTNXPUART_FW_DOWNLOADING	2
-+#define BTNXPUART_CHECK_BOOT_SIGNATURE	3
-+
-+#define FIRMWARE_W8987	"nxp/uartuart8987_bt.bin"
-+#define FIRMWARE_W8997	"nxp/uartuart8997_bt_v4.bin"
-+#define FIRMWARE_W9098	"nxp/uartuart9098_bt_v1.bin"
-+#define FIRMWARE_IW416	"nxp/uartiw416_bt_v0.bin"
-+#define FIRMWARE_IW612	"nxp/uartspi_n61x_v1.bin.se"
-+
-+#define CHIP_ID_W9098		0x5c03
-+#define CHIP_ID_IW416		0x7201
-+#define CHIP_ID_IW612		0x7601
-+
-+#define HCI_NXP_PRI_BAUDRATE	115200
-+#define HCI_NXP_SEC_BAUDRATE	3000000
-+
-+#define MAX_FW_FILE_NAME_LEN    50
-+
-+/* Default ps timeout period in milli-second */
-+#define PS_DEFAULT_TIMEOUT_PERIOD     2000
-+
-+/* wakeup methods */
-+#define WAKEUP_METHOD_DTR       0
-+#define WAKEUP_METHOD_BREAK     1
-+#define WAKEUP_METHOD_EXT_BREAK 2
-+#define WAKEUP_METHOD_RTS       3
-+#define WAKEUP_METHOD_INVALID   0xff
-+
-+/* power save mode status */
-+#define PS_MODE_DISABLE         0
-+#define PS_MODE_ENABLE          1
-+
-+/* Power Save Commands to ps_work_func  */
-+#define PS_CMD_EXIT_PS          1
-+#define PS_CMD_ENTER_PS         2
-+
-+/* power save state */
-+#define PS_STATE_AWAKE          0
-+#define PS_STATE_SLEEP          1
-+
-+/* Bluetooth vendor command : Sleep mode */
-+#define HCI_NXP_AUTO_SLEEP_MODE	0xfc23
-+/* Bluetooth vendor command : Wakeup method */
-+#define HCI_NXP_WAKEUP_METHOD	0xfc53
-+/* Bluetooth vendor command : Set operational baudrate */
-+#define HCI_NXP_SET_OPER_SPEED	0xfc09
-+/* Bluetooth vendor command: Independent Reset */
-+#define HCI_NXP_IND_RESET	0xfcfc
-+
-+/* Bluetooth Power State : Vendor cmd params */
-+#define BT_PS_ENABLE			0x02
-+#define BT_PS_DISABLE			0x03
-+
-+/* Bluetooth Host Wakeup Methods */
-+#define BT_HOST_WAKEUP_METHOD_NONE      0x00
-+#define BT_HOST_WAKEUP_METHOD_DTR       0x01
-+#define BT_HOST_WAKEUP_METHOD_BREAK     0x02
-+#define BT_HOST_WAKEUP_METHOD_GPIO      0x03
-+
-+/* Bluetooth Chip Wakeup Methods */
-+#define BT_CTRL_WAKEUP_METHOD_DSR       0x00
-+#define BT_CTRL_WAKEUP_METHOD_BREAK     0x01
-+#define BT_CTRL_WAKEUP_METHOD_GPIO      0x02
-+#define BT_CTRL_WAKEUP_METHOD_EXT_BREAK 0x04
-+#define BT_CTRL_WAKEUP_METHOD_RTS       0x05
-+
-+#define MAX_USER_PARAMS			10
-+
-+struct ps_data {
-+	u8    ps_mode;
-+	u8    cur_psmode;
-+	u8    ps_state;
-+	u8    ps_cmd;
-+	u8    h2c_wakeupmode;
-+	u8    cur_h2c_wakeupmode;
-+	u8    c2h_wakeupmode;
-+	u8    c2h_wakeup_gpio;
-+	bool  driver_sent_cmd;
-+	bool  timer_on;
-+	u32   interval;
-+	struct hci_dev *hdev;
-+	struct work_struct work;
-+	struct timer_list ps_timer;
-+};
-+
-+struct btnxpuart_data {
-+	bool fw_dnld_use_high_baudrate;
-+	const u8 *fw_name;
-+};
-+
-+struct btnxpuart_dev {
-+	struct hci_dev *hdev;
-+	struct serdev_device *serdev;
-+
-+	struct work_struct tx_work;
-+	unsigned long tx_state;
-+	struct sk_buff_head txq;
-+	struct sk_buff *rx_skb;
-+
-+	const struct firmware *fw;
-+	u8 fw_name[MAX_FW_FILE_NAME_LEN];
-+	u32 fw_dnld_v1_offset;
-+	u32 fw_v1_sent_bytes;
-+	u32 fw_v3_offset_correction;
-+	u32 fw_v1_expected_len;
-+	wait_queue_head_t fw_dnld_done_wait_q;
-+	wait_queue_head_t check_boot_sign_wait_q;
-+
-+	u32 new_baudrate;
-+	u32 current_baudrate;
-+	u32 fw_init_baudrate;
-+	bool timeout_changed;
-+	bool baudrate_changed;
-+
-+	struct ps_data *psdata;
-+	struct btnxpuart_data *nxp_data;
-+};
-+
-+#define NXP_V1_FW_REQ_PKT	0xa5
-+#define NXP_V1_CHIP_VER_PKT	0xaa
-+#define NXP_V3_FW_REQ_PKT	0xa7
-+#define NXP_V3_CHIP_VER_PKT	0xab
-+
-+#define NXP_ACK_V1		0x5a
-+#define NXP_NAK_V1		0xbf
-+#define NXP_ACK_V3		0x7a
-+#define NXP_NAK_V3		0x7b
-+#define NXP_CRC_ERROR_V3	0x7c
-+
-+#define HDR_LEN			16
-+
-+#define NXP_RECV_FW_REQ_V1 \
-+	.type = NXP_V1_FW_REQ_PKT, \
-+	.hlen = 4, \
-+	.loff = 0, \
-+	.lsize = 0, \
-+	.maxlen = 4
-+
-+#define NXP_RECV_CHIP_VER_V3 \
-+	.type = NXP_V3_CHIP_VER_PKT, \
-+	.hlen = 4, \
-+	.loff = 0, \
-+	.lsize = 0, \
-+	.maxlen = 4
-+
-+#define NXP_RECV_FW_REQ_V3 \
-+	.type = NXP_V3_FW_REQ_PKT, \
-+	.hlen = 9, \
-+	.loff = 0, \
-+	.lsize = 0, \
-+	.maxlen = 9
-+
-+struct v1_data_req {
-+	__le16 len;
-+	__le16 len_comp;
-+} __packed;
-+
-+struct v3_data_req {
-+	__le16 len;
-+	__le32 offset;
-+	__le16 error;
-+	u8 crc;
-+} __packed;
-+
-+struct v3_start_ind {
-+	__le16 chip_id;
-+	u8 loader_ver;
-+	u8 crc;
-+} __packed;
-+
-+/* UART register addresses of BT chip */
-+#define CLKDIVADDR	0x7f00008f
-+#define UARTDIVADDR	0x7f000090
-+#define UARTMCRADDR	0x7f000091
-+#define UARTREINITADDR	0x7f000092
-+#define UARTICRADDR	0x7f000093
-+#define UARTFCRADDR	0x7f000094
-+
-+#define MCR		0x00000022
-+#define INIT		0x00000001
-+#define ICR		0x000000c7
-+#define FCR		0x000000c7
-+
-+#define POLYNOMIAL8	0x07
-+#define POLYNOMIAL32	0x04c11db7L
-+
-+struct uart_reg {
-+	__le32 address;
-+	__le32 value;
-+} __packed;
-+
-+struct uart_config {
-+	struct uart_reg clkdiv;
-+	struct uart_reg uartdiv;
-+	struct uart_reg mcr;
-+	struct uart_reg re_init;
-+	struct uart_reg icr;
-+	struct uart_reg fcr;
-+	__le32 crc;
-+} __packed;
-+
-+struct nxp_bootloader_cmd {
-+	__le32 header;
-+	__le32 arg;
-+	__le32 payload_len;
-+	__le32 crc;
-+} __packed;
-+
-+static u8 crc8_table[CRC8_TABLE_SIZE];
-+
-+/* Default Power Save configuration */
-+#define DEFAULT_H2C_WAKEUP_MODE	WAKEUP_METHOD_BREAK
-+#define DEFAULT_PS_MODE		PS_MODE_ENABLE
-+
-+#define FW_INIT_BAUDRATE		115200
-+
-+static struct sk_buff *nxp_drv_send_cmd(struct hci_dev *hdev, u16 opcode,
-+					u32 plen,
-+					void *param)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct ps_data *psdata = nxpdev->psdata;
-+	struct sk_buff *skb;
-+
-+	psdata->driver_sent_cmd = true;	/* set flag to prevent re-sending command in nxp_enqueue */
-+	skb = __hci_cmd_sync(hdev, opcode, plen, param, HCI_CMD_TIMEOUT);
-+	psdata->driver_sent_cmd = false;
-+
-+	return skb;
-+}
-+
-+static void btnxpuart_tx_wakeup(struct btnxpuart_dev *nxpdev)
-+{
-+	if (schedule_work(&nxpdev->tx_work))
-+		set_bit(BTNXPUART_TX_STATE_ACTIVE, &nxpdev->tx_state);
-+}
-+
-+/* NXP Power Save Feature */
-+static void ps_start_timer(struct btnxpuart_dev *nxpdev)
-+{
-+	struct ps_data *psdata = nxpdev->psdata;
-+
-+	if (!psdata)
-+		return;
-+
-+	if (psdata->cur_psmode == PS_MODE_ENABLE) {
-+		psdata->timer_on = true;
-+		mod_timer(&psdata->ps_timer, jiffies + msecs_to_jiffies(psdata->interval));
-+	}
-+}
-+
-+static void ps_cancel_timer(struct btnxpuart_dev *nxpdev)
-+{
-+	struct ps_data *psdata = nxpdev->psdata;
-+
-+	flush_work(&psdata->work);
-+	if (psdata->timer_on)
-+		del_timer_sync(&psdata->ps_timer);
-+}
-+
-+static void ps_control(struct hci_dev *hdev, u8 ps_state)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct ps_data *psdata = nxpdev->psdata;
-+	int status;
-+
-+	if (psdata->ps_state == ps_state)
-+		return;
-+
-+	switch (psdata->cur_h2c_wakeupmode) {
-+	case WAKEUP_METHOD_DTR:
-+		if (ps_state == PS_STATE_AWAKE)
-+			serdev_device_set_tiocm(nxpdev->serdev, TIOCM_DTR, 0);
-+		else
-+			serdev_device_set_tiocm(nxpdev->serdev, 0, TIOCM_DTR);
-+		break;
-+	case WAKEUP_METHOD_BREAK:
-+	default:
-+		if (ps_state == PS_STATE_AWAKE)
-+			status = serdev_device_break_ctl(nxpdev->serdev, 0);
-+		else
-+			status = serdev_device_break_ctl(nxpdev->serdev, -1);
-+		bt_dev_dbg(hdev, "Set UART break: %s, status=%d",
-+			   ps_state == PS_STATE_AWAKE ? "off" : "on", status);
-+		break;
-+	}
-+	psdata->ps_state = ps_state;
-+	if (ps_state == PS_STATE_AWAKE)
-+		btnxpuart_tx_wakeup(nxpdev);
-+}
-+
-+static void ps_work_func(struct work_struct *work)
-+{
-+	struct ps_data *data = container_of(work, struct ps_data, work);
-+
-+	if (data->ps_cmd == PS_CMD_ENTER_PS && data->cur_psmode == PS_MODE_ENABLE)
-+		ps_control(data->hdev, PS_STATE_SLEEP);
-+	else if (data->ps_cmd == PS_CMD_EXIT_PS)
-+		ps_control(data->hdev, PS_STATE_AWAKE);
-+}
-+
-+static void ps_timeout_func(struct timer_list *t)
-+{
-+	struct ps_data *data = from_timer(data, t, ps_timer);
-+	struct hci_dev *hdev = data->hdev;
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+
-+	data->timer_on = false;
-+	if (test_bit(BTNXPUART_TX_STATE_ACTIVE, &nxpdev->tx_state)) {
-+		ps_start_timer(nxpdev);
-+	} else {
-+		data->ps_cmd = PS_CMD_ENTER_PS;
-+		schedule_work(&data->work);
-+	}
-+}
-+
-+static int ps_init_work(struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct ps_data *psdata;
-+
-+	psdata = kzalloc(sizeof(*psdata), GFP_KERNEL);
-+	if (!psdata)
-+		return -ENOMEM;
-+
-+	nxpdev->psdata = psdata;
-+
-+	psdata->interval = PS_DEFAULT_TIMEOUT_PERIOD;
-+	psdata->ps_state = PS_STATE_AWAKE;
-+	psdata->ps_mode = DEFAULT_PS_MODE;
-+	psdata->hdev = hdev;
-+	psdata->c2h_wakeupmode = BT_HOST_WAKEUP_METHOD_NONE;
-+	psdata->c2h_wakeup_gpio = 0xff;
-+
-+	switch (DEFAULT_H2C_WAKEUP_MODE) {
-+	case WAKEUP_METHOD_DTR:
-+		psdata->h2c_wakeupmode = WAKEUP_METHOD_DTR;
-+		break;
-+	case WAKEUP_METHOD_BREAK:
-+	default:
-+		psdata->h2c_wakeupmode = WAKEUP_METHOD_BREAK;
-+		break;
-+	}
-+	psdata->cur_psmode = PS_MODE_DISABLE;
-+	psdata->cur_h2c_wakeupmode = WAKEUP_METHOD_INVALID;
-+	INIT_WORK(&psdata->work, ps_work_func);
-+
-+	return 0;
-+}
-+
-+static void ps_init_timer(struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct ps_data *psdata = nxpdev->psdata;
-+
-+	psdata->timer_on = false;
-+	timer_setup(&psdata->ps_timer, ps_timeout_func, 0);
-+}
-+
-+static void ps_wakeup(struct btnxpuart_dev *nxpdev)
-+{
-+	struct ps_data *psdata = nxpdev->psdata;
-+
-+	if (psdata->ps_state != PS_STATE_AWAKE) {
-+		psdata->ps_cmd = PS_CMD_EXIT_PS;
-+		schedule_work(&psdata->work);
-+	}
-+}
-+
-+static int send_ps_cmd(struct hci_dev *hdev, void *data)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct ps_data *psdata = nxpdev->psdata;
-+	u8 pcmd;
-+	struct sk_buff *skb;
-+	u8 *status;
-+
-+	if (psdata->ps_mode == PS_MODE_ENABLE)
-+		pcmd = BT_PS_ENABLE;
-+	else
-+		pcmd = BT_PS_DISABLE;
-+
-+	skb = nxp_drv_send_cmd(hdev, HCI_NXP_AUTO_SLEEP_MODE, 1, &pcmd);
-+	if (IS_ERR(skb)) {
-+		bt_dev_err(hdev, "Setting Power Save mode failed (%ld)", PTR_ERR(skb));
-+		return PTR_ERR(skb);
-+	}
-+
-+	status = skb_pull_data(skb, 1);
-+	if (status) {
-+		if (!*status)
-+			psdata->cur_psmode = psdata->ps_mode;
-+		else
-+			psdata->ps_mode = psdata->cur_psmode;
-+		if (psdata->cur_psmode == PS_MODE_ENABLE)
-+			ps_start_timer(nxpdev);
-+		else
-+			ps_wakeup(nxpdev);
-+		bt_dev_dbg(hdev, "Power Save mode response: status=%d, ps_mode=%d",
-+			   *status, psdata->cur_psmode);
-+	}
-+	kfree_skb(skb);
-+
-+	return 0;
-+}
-+
-+static int send_wakeup_method_cmd(struct hci_dev *hdev, void *data)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct ps_data *psdata = nxpdev->psdata;
-+	u8 pcmd[4];
-+	struct sk_buff *skb;
-+	u8 *status;
-+
-+	pcmd[0] = psdata->c2h_wakeupmode;
-+	pcmd[1] = psdata->c2h_wakeup_gpio;
-+	switch (psdata->h2c_wakeupmode) {
-+	case WAKEUP_METHOD_DTR:
-+		pcmd[2] = BT_CTRL_WAKEUP_METHOD_DSR;
-+		break;
-+	case WAKEUP_METHOD_BREAK:
-+	default:
-+		pcmd[2] = BT_CTRL_WAKEUP_METHOD_BREAK;
-+		break;
-+	}
-+	pcmd[3] = 0xff;
-+
-+	skb = nxp_drv_send_cmd(hdev, HCI_NXP_WAKEUP_METHOD, 4, pcmd);
-+	if (IS_ERR(skb)) {
-+		bt_dev_err(hdev, "Setting wake-up method failed (%ld)", PTR_ERR(skb));
-+		return PTR_ERR(skb);
-+	}
-+
-+	status = skb_pull_data(skb, 1);
-+	if (status) {
-+		if (*status == 0)
-+			psdata->cur_h2c_wakeupmode = psdata->h2c_wakeupmode;
-+		else
-+			psdata->h2c_wakeupmode = psdata->cur_h2c_wakeupmode;
-+		bt_dev_dbg(hdev, "Set Wakeup Method response: status=%d, h2c_wakeupmode=%d",
-+			   *status, psdata->cur_h2c_wakeupmode);
-+	}
-+	kfree_skb(skb);
-+
-+	return 0;
-+}
-+
-+static void ps_init(struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct ps_data *psdata = nxpdev->psdata;
-+
-+	serdev_device_set_tiocm(nxpdev->serdev, 0, TIOCM_RTS);
-+	usleep_range(5000, 10000);
-+	serdev_device_set_tiocm(nxpdev->serdev, TIOCM_RTS, 0);
-+	usleep_range(5000, 10000);
-+
-+	switch (psdata->h2c_wakeupmode) {
-+	case WAKEUP_METHOD_DTR:
-+		serdev_device_set_tiocm(nxpdev->serdev, 0, TIOCM_DTR);
-+		serdev_device_set_tiocm(nxpdev->serdev, TIOCM_DTR, 0);
-+		break;
-+	case WAKEUP_METHOD_BREAK:
-+	default:
-+		serdev_device_break_ctl(nxpdev->serdev, -1);
-+		usleep_range(5000, 10000);
-+		serdev_device_break_ctl(nxpdev->serdev, 0);
-+		usleep_range(5000, 10000);
-+		break;
-+	}
-+	if (!test_bit(HCI_RUNNING, &hdev->flags)) {
-+		bt_dev_dbg(hdev, "HCI_RUNNING is not set");
-+		return;
-+	}
-+	if (psdata->cur_h2c_wakeupmode != psdata->h2c_wakeupmode)
-+		hci_cmd_sync_queue(hdev, send_wakeup_method_cmd, NULL, NULL);
-+	if (psdata->cur_psmode != psdata->ps_mode)
-+		hci_cmd_sync_queue(hdev, send_ps_cmd, NULL, NULL);
-+}
-+
-+/* NXP Firmware Download Feature */
-+static int nxp_download_firmware(struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	int err = 0;
-+
-+	nxpdev->fw_dnld_v1_offset = 0;
-+	nxpdev->fw_v1_sent_bytes = 0;
-+	nxpdev->fw_v1_expected_len = HDR_LEN;
-+	nxpdev->fw_v3_offset_correction = 0;
-+	nxpdev->baudrate_changed = false;
-+	nxpdev->timeout_changed = false;
-+
-+	serdev_device_set_baudrate(nxpdev->serdev, HCI_NXP_PRI_BAUDRATE);
-+	serdev_device_set_flow_control(nxpdev->serdev, 0);
-+	nxpdev->current_baudrate = HCI_NXP_PRI_BAUDRATE;
-+
-+	/* Wait till FW is downloaded and CTS becomes low */
-+	err = wait_event_interruptible_timeout(nxpdev->fw_dnld_done_wait_q,
-+					       !test_bit(BTNXPUART_FW_DOWNLOADING,
-+							 &nxpdev->tx_state),
-+					       msecs_to_jiffies(60000));
-+	if (err == 0) {
-+		bt_dev_err(hdev, "FW Download Timeout.");
-+		return -ETIMEDOUT;
-+	}
-+
-+	serdev_device_set_flow_control(nxpdev->serdev, 1);
-+	err = serdev_device_wait_for_cts(nxpdev->serdev, 1, 60000);
-+	if (err < 0) {
-+		bt_dev_err(hdev, "CTS is still high. FW Download failed.");
-+		return err;
-+	}
-+	release_firmware(nxpdev->fw);
-+	memset(nxpdev->fw_name, 0, MAX_FW_FILE_NAME_LEN);
-+
-+	/* Allow the downloaded FW to initialize */
-+	usleep_range(800000, 1000000);
-+
-+	return 0;
-+}
-+
-+static void nxp_send_ack(u8 ack, struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	u8 ack_nak[2];
-+
-+	if (ack == NXP_ACK_V1 || ack == NXP_NAK_V1) {
-+		ack_nak[0] = ack;
-+		serdev_device_write_buf(nxpdev->serdev, ack_nak, 1);
-+	} else if (ack == NXP_ACK_V3) {
-+		ack_nak[0] = ack;
-+		ack_nak[1] = crc8(crc8_table, ack_nak, 1, 0xff);
-+		serdev_device_write_buf(nxpdev->serdev, ack_nak, 2);
-+	}
-+}
-+
-+static bool nxp_fw_change_baudrate(struct hci_dev *hdev, u16 req_len)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct nxp_bootloader_cmd nxp_cmd5;
-+	struct uart_config uart_config;
-+
-+	if (req_len == sizeof(nxp_cmd5)) {
-+		nxp_cmd5.header = __cpu_to_le32(5);
-+		nxp_cmd5.arg = 0;
-+		nxp_cmd5.payload_len = __cpu_to_le32(sizeof(uart_config));
-+		nxp_cmd5.crc = swab32(crc32_be(0UL, (char *)&nxp_cmd5,
-+					       sizeof(nxp_cmd5) - 4));
-+
-+		serdev_device_write_buf(nxpdev->serdev, (u8 *)&nxp_cmd5, req_len);
-+		nxpdev->fw_v3_offset_correction += req_len;
-+	} else if (req_len == sizeof(uart_config)) {
-+		uart_config.clkdiv.address = __cpu_to_le32(CLKDIVADDR);
-+		uart_config.clkdiv.value = __cpu_to_le32(0x00c00000);
-+		uart_config.uartdiv.address = __cpu_to_le32(UARTDIVADDR);
-+		uart_config.uartdiv.value = __cpu_to_le32(1);
-+		uart_config.mcr.address = __cpu_to_le32(UARTMCRADDR);
-+		uart_config.mcr.value = __cpu_to_le32(MCR);
-+		uart_config.re_init.address = __cpu_to_le32(UARTREINITADDR);
-+		uart_config.re_init.value = __cpu_to_le32(INIT);
-+		uart_config.icr.address = __cpu_to_le32(UARTICRADDR);
-+		uart_config.icr.value = __cpu_to_le32(ICR);
-+		uart_config.fcr.address = __cpu_to_le32(UARTFCRADDR);
-+		uart_config.fcr.value = __cpu_to_le32(FCR);
-+		uart_config.crc = swab32(crc32_be(0UL, (char *)&uart_config,
-+						  sizeof(uart_config) - 4));
-+		serdev_device_write_buf(nxpdev->serdev, (u8 *)&uart_config, req_len);
-+		serdev_device_wait_until_sent(nxpdev->serdev, 0);
-+		nxpdev->fw_v3_offset_correction += req_len;
-+		return true;
-+	}
-+	return false;
-+}
-+
-+static bool nxp_fw_change_timeout(struct hci_dev *hdev, u16 req_len)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct nxp_bootloader_cmd nxp_cmd7;
-+
-+	if (req_len != sizeof(nxp_cmd7))
-+		return false;
-+
-+	nxp_cmd7.header = __cpu_to_le32(7);
-+	nxp_cmd7.arg = __cpu_to_le32(0x70);
-+	nxp_cmd7.payload_len = 0;
-+	nxp_cmd7.crc = swab32(crc32_be(0UL, (char *)&nxp_cmd7,
-+				       sizeof(nxp_cmd7) - 4));
-+
-+	serdev_device_write_buf(nxpdev->serdev, (u8 *)&nxp_cmd7, req_len);
-+	serdev_device_wait_until_sent(nxpdev->serdev, 0);
-+	nxpdev->fw_v3_offset_correction += req_len;
-+	return true;
-+}
-+
-+static u32 nxp_get_data_len(const u8 *buf)
-+{
-+	struct nxp_bootloader_cmd *hdr = (struct nxp_bootloader_cmd *)buf;
-+
-+	return __le32_to_cpu(hdr->payload_len);
-+}
-+
-+/* for legacy chipsets with V1 bootloader */
-+static int nxp_recv_fw_req_v1(struct hci_dev *hdev, struct sk_buff *skb)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct btnxpuart_data *nxp_data = nxpdev->nxp_data;
-+	struct v1_data_req *req;
-+	u32 requested_len;
-+	int err;
-+
-+	if (test_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state)) {
-+		clear_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state);
-+		wake_up_interruptible(&nxpdev->check_boot_sign_wait_q);
-+		goto ret;
-+	}
-+
-+	if (!test_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state))
-+		goto ret;
-+
-+	req = (struct v1_data_req *)skb_pull_data(skb, sizeof(struct v1_data_req));
-+	if (!req)
-+		goto ret;
-+
-+	if ((req->len ^ req->len_comp) != 0xffff) {
-+		bt_dev_dbg(hdev, "ERR: Send NAK");
-+		nxp_send_ack(NXP_NAK_V1, hdev);
-+		goto ret;
-+	}
-+	nxp_send_ack(NXP_ACK_V1, hdev);
-+
-+	if (nxp_data->fw_dnld_use_high_baudrate) {
-+		if (!nxpdev->timeout_changed) {
-+			nxpdev->timeout_changed = nxp_fw_change_timeout(hdev, req->len);
-+			goto ret;
-+		}
-+		if (!nxpdev->baudrate_changed) {
-+			nxpdev->baudrate_changed = nxp_fw_change_baudrate(hdev, req->len);
-+			if (nxpdev->baudrate_changed) {
-+				serdev_device_set_baudrate(nxpdev->serdev,
-+							   HCI_NXP_SEC_BAUDRATE);
-+				serdev_device_set_flow_control(nxpdev->serdev, 1);
-+				nxpdev->current_baudrate = HCI_NXP_SEC_BAUDRATE;
-+			}
-+			goto ret;
-+		}
-+	}
-+
-+	if (!strlen(nxpdev->fw_name)) {
-+		snprintf(nxpdev->fw_name, MAX_FW_FILE_NAME_LEN, "%s",
-+			 nxp_data->fw_name);
-+		bt_dev_info(hdev, "Request Firmware: %s", nxpdev->fw_name);
-+		err = request_firmware(&nxpdev->fw, nxpdev->fw_name, &hdev->dev);
-+		if (err < 0) {
-+			bt_dev_err(hdev, "Firmware file %s not found", nxpdev->fw_name);
-+			clear_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
-+			return err;
-+		}
-+	}
-+
-+	requested_len = req->len;
-+	if (requested_len == 0) {
-+		bt_dev_info(hdev, "FW Downloaded Successfully: %zu bytes", nxpdev->fw->size);
-+		clear_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
-+		wake_up_interruptible(&nxpdev->fw_dnld_done_wait_q);
-+		goto ret;
-+	}
-+	if (requested_len & 0x01) {
-+		/* The CRC did not match at the other end.
-+		 * Simply send the same bytes again.
-+		 */
-+		requested_len = nxpdev->fw_v1_sent_bytes;
-+		bt_dev_dbg(hdev, "CRC error. Resend %d bytes of FW.", requested_len);
-+	} else {
-+		nxpdev->fw_dnld_v1_offset += nxpdev->fw_v1_sent_bytes;
-+
-+		/* The FW bin file is made up of many blocks of
-+		 * 16 byte header and payload data chunks. If the
-+		 * FW has requested a header, read the payload length
-+		 * info from the header, before sending the header.
-+		 * In the next iteration, the FW should request the
-+		 * payload data chunk, which should be equal to the
-+		 * payload length read from header. If there is a
-+		 * mismatch, clearly the driver and FW are out of sync,
-+		 * and we need to re-send the previous header again.
-+		 */
-+		if (requested_len == nxpdev->fw_v1_expected_len) {
-+			if (requested_len == HDR_LEN)
-+				nxpdev->fw_v1_expected_len = nxp_get_data_len(nxpdev->fw->data +
-+									nxpdev->fw_dnld_v1_offset);
-+			else
-+				nxpdev->fw_v1_expected_len = HDR_LEN;
-+		} else {
-+			if (requested_len == HDR_LEN) {
-+				/* FW download out of sync. Send previous chunk again */
-+				nxpdev->fw_dnld_v1_offset -= nxpdev->fw_v1_sent_bytes;
-+				nxpdev->fw_v1_expected_len = HDR_LEN;
-+			}
-+		}
-+	}
-+
-+	if (nxpdev->fw_dnld_v1_offset + requested_len <= nxpdev->fw->size)
-+		serdev_device_write_buf(nxpdev->serdev,
-+					nxpdev->fw->data + nxpdev->fw_dnld_v1_offset,
-+					requested_len);
-+	nxpdev->fw_v1_sent_bytes = requested_len;
-+
-+ret:
-+	kfree_skb(skb);
-+	return 0;
-+}
-+
-+static u8 *nxp_get_fw_name_from_chipid(struct hci_dev *hdev, u16 chipid)
-+{
-+	u8 *fw_name = NULL;
-+
-+	switch (chipid) {
-+	case CHIP_ID_W9098:
-+		fw_name = FIRMWARE_W9098;
-+		break;
-+	case CHIP_ID_IW416:
-+		fw_name = FIRMWARE_IW416;
-+		break;
-+	case CHIP_ID_IW612:
-+		fw_name = FIRMWARE_IW612;
-+		break;
-+	default:
-+		bt_dev_err(hdev, "Unknown chip signature %04X", chipid);
-+		break;
-+	}
-+	return fw_name;
-+}
-+
-+static int nxp_recv_chip_ver_v3(struct hci_dev *hdev, struct sk_buff *skb)
-+{
-+	struct v3_start_ind *req = skb_pull_data(skb, sizeof(struct v3_start_ind));
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	int err;
-+
-+	if (test_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state)) {
-+		clear_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state);
-+		wake_up_interruptible(&nxpdev->check_boot_sign_wait_q);
-+		goto ret;
-+	}
-+
-+	if (!test_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state))
-+		goto ret;
-+
-+	if (!strlen(nxpdev->fw_name)) {
-+		snprintf(nxpdev->fw_name, MAX_FW_FILE_NAME_LEN, "%s",
-+			 nxp_get_fw_name_from_chipid(hdev, req->chip_id));
-+
-+		bt_dev_info(hdev, "Request Firmware: %s", nxpdev->fw_name);
-+		err = request_firmware(&nxpdev->fw, nxpdev->fw_name, &hdev->dev);
-+		if (err < 0) {
-+			bt_dev_err(hdev, "Firmware file %s not found", nxpdev->fw_name);
-+			clear_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
-+			goto ret;
-+		}
-+	}
-+	nxp_send_ack(NXP_ACK_V3, hdev);
-+ret:
-+	kfree_skb(skb);
-+	return 0;
-+}
-+
-+static int nxp_recv_fw_req_v3(struct hci_dev *hdev, struct sk_buff *skb)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct v3_data_req *req;
-+
-+	if (test_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state)) {
-+		clear_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state);
-+		wake_up_interruptible(&nxpdev->check_boot_sign_wait_q);
-+		goto ret;
-+	}
-+
-+	if (!test_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state))
-+		goto ret;
-+
-+	req = (struct v3_data_req *)skb_pull_data(skb, sizeof(struct v3_data_req));
-+	if (!req || !nxpdev || !nxpdev->fw)
-+		goto ret;
-+
-+	nxp_send_ack(NXP_ACK_V3, hdev);
-+
-+	if (!nxpdev->timeout_changed) {
-+		nxpdev->timeout_changed = nxp_fw_change_timeout(hdev, req->len);
-+		goto ret;
-+	}
-+
-+	if (!nxpdev->baudrate_changed) {
-+		nxpdev->baudrate_changed = nxp_fw_change_baudrate(hdev, req->len);
-+		if (nxpdev->baudrate_changed) {
-+			serdev_device_set_baudrate(nxpdev->serdev,
-+						   HCI_NXP_SEC_BAUDRATE);
-+			serdev_device_set_flow_control(nxpdev->serdev, 1);
-+			nxpdev->current_baudrate = HCI_NXP_SEC_BAUDRATE;
-+		}
-+		goto ret;
-+	}
-+
-+	if (req->len == 0) {
-+		bt_dev_info(hdev, "FW Downloaded Successfully: %zu bytes", nxpdev->fw->size);
-+		clear_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
-+		wake_up_interruptible(&nxpdev->fw_dnld_done_wait_q);
-+		goto ret;
-+	}
-+	if (req->error)
-+		bt_dev_dbg(hdev, "FW Download received err 0x%02x from chip. Resending FW chunk.",
-+			   req->error);
-+
-+	if (req->offset < nxpdev->fw_v3_offset_correction) {
-+		/* This scenario should ideally never occur.
-+		 * But if it ever does, FW is out of sync and
-+		 * needs a power cycle.
-+		 */
-+		bt_dev_err(hdev, "Something went wrong during FW download. Please power cycle and try again");
-+		goto ret;
-+	}
-+
-+	serdev_device_write_buf(nxpdev->serdev,
-+				nxpdev->fw->data + req->offset - nxpdev->fw_v3_offset_correction,
-+				req->len);
-+
-+ret:
-+	kfree_skb(skb);
-+	return 0;
-+}
-+
-+static int nxp_set_baudrate_cmd(struct hci_dev *hdev, void *data)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	u32 new_baudrate = __cpu_to_le32(nxpdev->new_baudrate);
-+	struct ps_data *psdata = nxpdev->psdata;
-+	u8 *pcmd = (u8 *)&new_baudrate;
-+	struct sk_buff *skb;
-+	u8 *status;
-+
-+	if (!psdata)
-+		return 0;
-+
-+	skb = nxp_drv_send_cmd(hdev, HCI_NXP_SET_OPER_SPEED, 4, pcmd);
-+	if (IS_ERR(skb)) {
-+		bt_dev_err(hdev, "Setting baudrate failed (%ld)", PTR_ERR(skb));
-+		return PTR_ERR(skb);
-+	}
-+
-+	status = (u8 *)skb_pull_data(skb, 1);
-+	if (status) {
-+		if (*status == 0) {
-+			serdev_device_set_baudrate(nxpdev->serdev, nxpdev->new_baudrate);
-+			nxpdev->current_baudrate = nxpdev->new_baudrate;
-+		}
-+		bt_dev_dbg(hdev, "Set baudrate response: status=%d, baudrate=%d",
-+			   *status, nxpdev->new_baudrate);
-+	}
-+	kfree_skb(skb);
-+
-+	return 0;
-+}
-+
-+static int nxp_set_ind_reset(struct hci_dev *hdev, void *data)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct sk_buff *skb;
-+	u8 *status;
-+	u8 pcmd = 0;
-+	int err;
-+
-+	skb = nxp_drv_send_cmd(hdev, HCI_NXP_IND_RESET, 1, &pcmd);
-+	if (IS_ERR(skb))
-+		return PTR_ERR(skb);
-+
-+	status = skb_pull_data(skb, 1);
-+	if (status) {
-+		if (*status == 0) {
-+			set_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
-+			err = nxp_download_firmware(hdev);
-+			if (err < 0)
-+				return err;
-+			serdev_device_set_baudrate(nxpdev->serdev, nxpdev->fw_init_baudrate);
-+			nxpdev->current_baudrate = nxpdev->fw_init_baudrate;
-+			if (nxpdev->current_baudrate != HCI_NXP_SEC_BAUDRATE) {
-+				nxpdev->new_baudrate = HCI_NXP_SEC_BAUDRATE;
-+				nxp_set_baudrate_cmd(hdev, NULL);
-+			}
-+			hci_cmd_sync_queue(hdev, send_wakeup_method_cmd, NULL, NULL);
-+			hci_cmd_sync_queue(hdev, send_ps_cmd, NULL, NULL);
-+		}
-+	}
-+	kfree_skb(skb);
-+
-+	return 0;
-+}
-+
-+/* NXP protocol */
-+static bool nxp_check_boot_sign(struct btnxpuart_dev *nxpdev)
-+{
-+	int ret;
-+
-+	serdev_device_set_baudrate(nxpdev->serdev, HCI_NXP_PRI_BAUDRATE);
-+	serdev_device_set_flow_control(nxpdev->serdev, 0);
-+	set_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state);
-+
-+	ret = wait_event_interruptible_timeout(nxpdev->check_boot_sign_wait_q,
-+					       !test_bit(BTNXPUART_CHECK_BOOT_SIGNATURE,
-+							 &nxpdev->tx_state),
-+					       msecs_to_jiffies(1000));
-+	if (ret == 0)
-+		return false;
-+	else
-+		return true;
-+}
-+
-+static int nxp_setup(struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	int err = 0;
-+
-+	if (!nxpdev)
-+		return 0;
-+
-+	set_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
-+	init_waitqueue_head(&nxpdev->fw_dnld_done_wait_q);
-+	init_waitqueue_head(&nxpdev->check_boot_sign_wait_q);
-+
-+	if (nxp_check_boot_sign(nxpdev)) {
-+		bt_dev_dbg(hdev, "Need FW Download.");
-+		err = nxp_download_firmware(hdev);
-+		if (err < 0)
-+			return err;
-+	} else {
-+		bt_dev_dbg(hdev, "FW already running.");
-+		clear_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
-+	}
-+
-+	serdev_device_set_flow_control(nxpdev->serdev, 1);
-+	device_property_read_u32(&nxpdev->serdev->dev, "fw-init-baudrate",
-+				 &nxpdev->fw_init_baudrate);
-+	if (!nxpdev->fw_init_baudrate)
-+		nxpdev->fw_init_baudrate = FW_INIT_BAUDRATE;
-+	serdev_device_set_baudrate(nxpdev->serdev, nxpdev->fw_init_baudrate);
-+	nxpdev->current_baudrate = nxpdev->fw_init_baudrate;
-+
-+	if (nxpdev->current_baudrate != HCI_NXP_SEC_BAUDRATE) {
-+		nxpdev->new_baudrate = HCI_NXP_SEC_BAUDRATE;
-+		hci_cmd_sync_queue(hdev, nxp_set_baudrate_cmd, NULL, NULL);
-+	}
-+
-+	ps_init(hdev);
-+
-+	return 0;
-+}
-+
-+static int nxp_enqueue(struct hci_dev *hdev, struct sk_buff *skb)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	struct ps_data *psdata = nxpdev->psdata;
-+	struct hci_command_hdr *hdr;
-+	u8 param[MAX_USER_PARAMS];
-+
-+	if (!nxpdev || !psdata)
-+		goto free_skb;
-+
-+	/* if vendor commands are received from user space (e.g. hcitool), update
-+	 * driver flags accordingly and ask driver to re-send the command to FW.
-+	 */
-+	if (bt_cb(skb)->pkt_type == HCI_COMMAND_PKT && !psdata->driver_sent_cmd) {
-+		if (!skb->len || skb->len > (MAX_USER_PARAMS + HCI_COMMAND_HDR_SIZE))
-+			goto send_skb;
-+
-+		hdr = (struct hci_command_hdr *)skb->data;
-+		if (hdr->plen != (skb->len - HCI_COMMAND_HDR_SIZE))
-+			goto send_skb;
-+
-+		memcpy(param, skb->data + HCI_COMMAND_HDR_SIZE, hdr->plen);
-+		switch (__le16_to_cpu(hdr->opcode)) {
-+		case HCI_NXP_AUTO_SLEEP_MODE:
-+			if (hdr->plen >= 1) {
-+				if (param[0] == BT_PS_ENABLE)
-+					psdata->ps_mode = PS_MODE_ENABLE;
-+				else if (param[0] == BT_PS_DISABLE)
-+					psdata->ps_mode = PS_MODE_DISABLE;
-+				hci_cmd_sync_queue(hdev, send_ps_cmd, NULL, NULL);
-+				goto free_skb;
-+			}
-+			break;
-+		case HCI_NXP_WAKEUP_METHOD:
-+			if (hdr->plen >= 4) {
-+				psdata->c2h_wakeupmode = param[0];
-+				psdata->c2h_wakeup_gpio = param[1];
-+				switch (param[2]) {
-+				case BT_CTRL_WAKEUP_METHOD_DSR:
-+					psdata->h2c_wakeupmode = WAKEUP_METHOD_DTR;
-+					break;
-+				case BT_CTRL_WAKEUP_METHOD_BREAK:
-+				default:
-+					psdata->h2c_wakeupmode = WAKEUP_METHOD_BREAK;
-+					break;
-+				}
-+				hci_cmd_sync_queue(hdev, send_wakeup_method_cmd, NULL, NULL);
-+				goto free_skb;
-+			}
-+			break;
-+		case HCI_NXP_SET_OPER_SPEED:
-+			if (hdr->plen == 4) {
-+				nxpdev->new_baudrate = *((u32 *)param);
-+				hci_cmd_sync_queue(hdev, nxp_set_baudrate_cmd, NULL, NULL);
-+				goto free_skb;
-+			}
-+			break;
-+		case HCI_NXP_IND_RESET:
-+			if (hdr->plen == 1) {
-+				hci_cmd_sync_queue(hdev, nxp_set_ind_reset, NULL, NULL);
-+				goto free_skb;
-+			}
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+send_skb:
-+	/* Prepend skb with frame type */
-+	memcpy(skb_push(skb, 1), &hci_skb_pkt_type(skb), 1);
-+	skb_queue_tail(&nxpdev->txq, skb);
-+
-+	btnxpuart_tx_wakeup(nxpdev);
-+ret:
-+	return 0;
-+
-+free_skb:
-+	kfree_skb(skb);
-+	goto ret;
-+}
-+
-+static struct sk_buff *nxp_dequeue(void *data)
-+{
-+	struct btnxpuart_dev *nxpdev = (struct btnxpuart_dev *)data;
-+
-+	ps_wakeup(nxpdev);
-+	ps_start_timer(nxpdev);
-+	return skb_dequeue(&nxpdev->txq);
-+}
-+
-+/* btnxpuart based on serdev */
-+static void btnxpuart_tx_work(struct work_struct *work)
-+{
-+	struct btnxpuart_dev *nxpdev = container_of(work, struct btnxpuart_dev,
-+						   tx_work);
-+	struct serdev_device *serdev = nxpdev->serdev;
-+	struct hci_dev *hdev = nxpdev->hdev;
-+	struct sk_buff *skb;
-+	int len;
-+
-+	while ((skb = nxp_dequeue(nxpdev))) {
-+		len = serdev_device_write_buf(serdev, skb->data, skb->len);
-+		hdev->stat.byte_tx += len;
-+
-+		skb_pull(skb, len);
-+		if (skb->len > 0) {
-+			skb_queue_head(&nxpdev->txq, skb);
-+			break;
-+		}
-+
-+		switch (hci_skb_pkt_type(skb)) {
-+		case HCI_COMMAND_PKT:
-+			hdev->stat.cmd_tx++;
-+			break;
-+		case HCI_ACLDATA_PKT:
-+			hdev->stat.acl_tx++;
-+			break;
-+		case HCI_SCODATA_PKT:
-+			hdev->stat.sco_tx++;
-+			break;
-+		}
-+
-+		kfree_skb(skb);
-+	}
-+	clear_bit(BTNXPUART_TX_STATE_ACTIVE, &nxpdev->tx_state);
-+}
-+
-+static int btnxpuart_open(struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+	int err = 0;
-+
-+	err = serdev_device_open(nxpdev->serdev);
-+	if (err) {
-+		bt_dev_err(hdev, "Unable to open UART device %s",
-+			   dev_name(&nxpdev->serdev->dev));
-+	}
-+
-+	return err;
-+}
-+
-+static int btnxpuart_close(struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+
-+	if (!nxpdev)
-+		return 0;
-+
-+	serdev_device_close(nxpdev->serdev);
-+
-+	return 0;
-+}
-+
-+static int btnxpuart_flush(struct hci_dev *hdev)
-+{
-+	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-+
-+	if (!nxpdev)
-+		return 0;
-+
-+	/* Flush any pending characters */
-+	serdev_device_write_flush(nxpdev->serdev);
-+	skb_queue_purge(&nxpdev->txq);
-+
-+	cancel_work_sync(&nxpdev->tx_work);
-+
-+	kfree_skb(nxpdev->rx_skb);
-+	nxpdev->rx_skb = NULL;
-+
-+	return 0;
-+}
-+
-+static const struct h4_recv_pkt nxp_recv_pkts[] = {
-+	{ H4_RECV_ACL,          .recv = hci_recv_frame },
-+	{ H4_RECV_SCO,          .recv = hci_recv_frame },
-+	{ H4_RECV_EVENT,        .recv = hci_recv_frame },
-+	{ NXP_RECV_FW_REQ_V1,   .recv = nxp_recv_fw_req_v1 },
-+	{ NXP_RECV_CHIP_VER_V3, .recv = nxp_recv_chip_ver_v3 },
-+	{ NXP_RECV_FW_REQ_V3,   .recv = nxp_recv_fw_req_v3 },
-+};
-+
-+static bool is_valid_bootloader_signature(const u8 *data, size_t count)
-+{
-+	if ((*data == NXP_V1_FW_REQ_PKT && count == sizeof(struct v1_data_req) + 1) ||
-+	    (*data == NXP_V3_FW_REQ_PKT && count == sizeof(struct v3_data_req) + 1) ||
-+	    (*data == NXP_V3_CHIP_VER_PKT && count == sizeof(struct v3_start_ind) + 1))
-+		return true;
-+	else
-+		return false;
-+}
-+
-+static int btnxpuart_receive_buf(struct serdev_device *serdev, const u8 *data,
-+				 size_t count)
-+{
-+	struct btnxpuart_dev *nxpdev = serdev_device_get_drvdata(serdev);
-+
-+	if (test_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state)) {
-+		if (!is_valid_bootloader_signature(data, count)) {
-+			/* Unknown bootloader signature, skip without returning error */
-+			return count;
-+		}
-+	}
-+
-+	ps_start_timer(nxpdev);
-+
-+	nxpdev->rx_skb = h4_recv_buf(nxpdev->hdev, nxpdev->rx_skb, data, count,
-+				     nxp_recv_pkts, ARRAY_SIZE(nxp_recv_pkts));
-+	if (IS_ERR(nxpdev->rx_skb)) {
-+		int err = PTR_ERR(nxpdev->rx_skb);
-+
-+		bt_dev_err(nxpdev->hdev, "Frame reassembly failed (%d)", err);
-+		nxpdev->rx_skb = NULL;
-+		return err;
-+	}
-+	nxpdev->hdev->stat.byte_rx += count;
-+	return count;
-+}
-+
-+static void btnxpuart_write_wakeup(struct serdev_device *serdev)
-+{
-+	serdev_device_write_wakeup(serdev);
-+}
-+
-+static const struct serdev_device_ops btnxpuart_client_ops = {
-+	.receive_buf = btnxpuart_receive_buf,
-+	.write_wakeup = btnxpuart_write_wakeup,
-+};
-+
-+static int nxp_serdev_probe(struct serdev_device *serdev)
-+{
-+	struct hci_dev *hdev;
-+	struct btnxpuart_dev *nxpdev;
-+
-+	nxpdev = devm_kzalloc(&serdev->dev, sizeof(*nxpdev), GFP_KERNEL);
-+	if (!nxpdev)
-+		return -ENOMEM;
-+
-+	nxpdev->nxp_data = (struct btnxpuart_data *)device_get_match_data(&serdev->dev);
-+
-+	nxpdev->serdev = serdev;
-+	serdev_device_set_drvdata(serdev, nxpdev);
-+
-+	serdev_device_set_client_ops(serdev, &btnxpuart_client_ops);
-+
-+	INIT_WORK(&nxpdev->tx_work, btnxpuart_tx_work);
-+	skb_queue_head_init(&nxpdev->txq);
-+
-+	/* Initialize and register HCI device */
-+	hdev = hci_alloc_dev();
-+	if (!hdev) {
-+		dev_err(&serdev->dev, "Can't allocate HCI device\n");
-+		return -ENOMEM;
-+	}
-+
-+	nxpdev->hdev = hdev;
-+
-+	hdev->bus = HCI_UART;
-+	hci_set_drvdata(hdev, nxpdev);
-+
-+	hdev->manufacturer = MANUFACTURER_NXP;
-+	hdev->open  = btnxpuart_open;
-+	hdev->close = btnxpuart_close;
-+	hdev->flush = btnxpuart_flush;
-+	hdev->setup = nxp_setup;
-+	hdev->send  = nxp_enqueue;
-+	SET_HCIDEV_DEV(hdev, &serdev->dev);
-+
-+	if (hci_register_dev(hdev) < 0) {
-+		dev_err(&serdev->dev, "Can't register HCI device\n");
-+		hci_free_dev(hdev);
-+		return -ENODEV;
-+	}
-+
-+	if (!ps_init_work(hdev))
-+		ps_init_timer(hdev);
-+
-+	crc8_populate_msb(crc8_table, POLYNOMIAL8);
-+
-+	return 0;
-+}
-+
-+static void nxp_serdev_remove(struct serdev_device *serdev)
-+{
-+	struct btnxpuart_dev *nxpdev = serdev_device_get_drvdata(serdev);
-+	struct ps_data *psdata = nxpdev->psdata;
-+	struct hci_dev *hdev = nxpdev->hdev;
-+
-+	/* Restore FW baudrate to fw_init_baudrate if changed.
-+	 * This will ensure FW baudrate is in sync with
-+	 * driver baudrate in case this driver is re-inserted.
-+	 */
-+	if (nxpdev->current_baudrate != nxpdev->fw_init_baudrate) {
-+		nxpdev->new_baudrate = nxpdev->fw_init_baudrate;
-+		nxp_set_baudrate_cmd(hdev, NULL);
-+	}
-+
-+	if (psdata) {
-+		ps_cancel_timer(nxpdev);
-+		kfree(psdata);
-+	}
-+	hci_unregister_dev(hdev);
-+	hci_free_dev(hdev);
-+}
-+
-+static struct btnxpuart_data w8987_data = {
-+	.fw_dnld_use_high_baudrate = true,
-+	.fw_name = FIRMWARE_W8987,
-+};
-+
-+static struct btnxpuart_data w8997_data = {
-+	.fw_dnld_use_high_baudrate = false,
-+	.fw_name = FIRMWARE_W8997,
-+};
-+
-+static const struct of_device_id nxpuart_of_match_table[] = {
-+	{ .compatible = "nxp,88w8987-bt", .data = &w8987_data },
-+	{ .compatible = "nxp,88w8997-bt", .data = &w8997_data },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, nxpuart_of_match_table);
-+
-+static struct serdev_device_driver nxp_serdev_driver = {
-+	.probe = nxp_serdev_probe,
-+	.remove = nxp_serdev_remove,
-+	.driver = {
-+		.name = "btnxpuart",
-+		.of_match_table = of_match_ptr(nxpuart_of_match_table),
-+	},
-+};
-+
-+module_serdev_device_driver(nxp_serdev_driver);
-+
-+MODULE_AUTHOR("Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>");
-+MODULE_DESCRIPTION("NXP Bluetooth Serial driver v1.0 ");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
-
+> 
+> BR,
+> -R
