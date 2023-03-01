@@ -2,167 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D420C6A7034
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 557A46A704F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjCAPuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:50:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S229696AbjCAPw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjCAPut (ORCPT
+        with ESMTP id S229580AbjCAPwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:50:49 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B948334F62
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 07:50:48 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id k14so18206541lfj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 07:50:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1677685847;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hj6eJ++1N3rPBTIwpz1eg0ar98rfOfDI3Yg4f3Txs4g=;
-        b=tvCe3xzXBBIPl3AxmBXtIzZnjoaVOHSBFAB1HzTf2DstlkU2/PsVF6BjHqPhb3VnKi
-         UWi0owQwaNYEqUdgfWHj6nZKTSa0pPxIaBallK7tv2OFUlAWom+PJZkePoLFcdQxV5y0
-         Xjhj1KuJ2AUQiQAkiT8gqxw94Zf1A4cDWvzWI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677685847;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hj6eJ++1N3rPBTIwpz1eg0ar98rfOfDI3Yg4f3Txs4g=;
-        b=PoUck3K9C42X5ok/SM3obgYEmcn2HNT/L1Cu05HdYGkOU9Mwhnv03+a4Vfke7mJWbU
-         lJZ/IfQYrKcLrYkzQ4n0U3HHhzp1lbiJiAuMbH/FZ85GmVuWtiCAf5Hv6JsaazAP+D/9
-         Cxyr9bEUo/gOxpWXD9WLZUHCWu0xjoZ2bGKFFfRVa7ouc9W0PKFz035gibgmiSMsj/TF
-         UqG3dlAgHQd7L0BgCXfkI3l6xU2x19yi+YljAjZL70pCUxfuKfmox9zkbAYD5PtL3/O9
-         94JMlRU3ZeoRnfk+AM/Dq5JfGgI/T1XpSdR4Y6RT0k7GdyXIMaPiyZA0gn03nUqD9HtD
-         j1VA==
-X-Gm-Message-State: AO0yUKVKpAtnNuNjlgK/vE/CFB4fMSqxO4LiQ43pUxzXYGkpoXbcZLHf
-        Z831UU1r37yp+IxDkCayDfeq0jFLw3GDi0xB4NvXIehg92mDPQ==
-X-Google-Smtp-Source: AK7set/Ii2c/xr5ug7XO7NPba/+dAmzP1vCVYVe5ySZofk0mqO+qbgoZvtCesR6s25V3nxu6Sjr4VWsnKCda2oGsulk=
-X-Received: by 2002:ac2:5fe6:0:b0:4dd:a9e5:aa09 with SMTP id
- s6-20020ac25fe6000000b004dda9e5aa09mr1927421lfg.11.1677685846804; Wed, 01 Mar
- 2023 07:50:46 -0800 (PST)
+        Wed, 1 Mar 2023 10:52:53 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2056.outbound.protection.outlook.com [40.107.241.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9592474E0;
+        Wed,  1 Mar 2023 07:52:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mmkxa1UmZzfYWWvhvWhT4X97SqG6AEK4/KMmRVdiGNbs/QkAkMEi7DsG9DGMqPEDhQrAPjf56pZ2EuL/m4DPtAnFSBJol8mtXZ/VbKAq5mtZFbjBc3JVh3CmKOMSFf/T+QkalbsWvfL/SoQoD35DV6aZCXtBakas/Y5AqAGR06cdAI3AIHNiuFhBEwXl2B7WrKPM3UK8LKxH4pqSXgfk598FpHjlz9BO/yRpJs1MTmhnbys2OuD7QzrVJTULg2BlzJSQIihuhmbEm78bgwdocS4w1sOGf/ObvXRnFBzrlJKu2oSvJ4nqYPoJAfPRyWtIETNx+9tmT5c/PQyuLdrgnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IBWHTCX7klKcD11Q1PfKSI3ga7+hgoOp83RjlgPhgFI=;
+ b=APWkohifj1Rec1G42nkbaBu2yuXU1Co14d5RPX3YnAy/cdYtEnP0EkxuuuhWoP9Z9HratpK2LDB69GoXW3n1tB1TbGXg0s/0HxkQWShjP6alJNxy86YSlStnrkVqKRMoae8ikyNWwHPS1jAK83kJO3+hqi/bNNMm6vPtto1kkr1bxBp2Ebh8eVV6T3QaM5nb+22f5nUPHTczsuoAl9InhtRaz83CgfoceFDqsd4cEbGtj/iut/xBYEBzQSy6C6OuTGa1n8F7MZ5HpoAVWvWh1dERhyfIEpoSjsin5taoE7yVanaEPCgDADDheAjKlBxY88GAS/G0TuBEQfGF1dX+Tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IBWHTCX7klKcD11Q1PfKSI3ga7+hgoOp83RjlgPhgFI=;
+ b=TUtJwLl2HrgSxiVT5YKuCLdxTc+mzRKb2xYFInLvGFY3cfyjMGFq0V/PYhbdOhoFGqo3vST1fLcXan4Pv0azONBgmAewRKrQobg5sw/9fso5QFv9EvnwKGeFUr6tNvmO14tBJuTUA1g57iGekkZUAELgR9TZVWEzaOTJkB6DwFQ=
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
+ by PAXPR04MB9253.eurprd04.prod.outlook.com (2603:10a6:102:2bd::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Wed, 1 Mar
+ 2023 15:51:52 +0000
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::45d2:ce51:a1c4:8762]) by AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::45d2:ce51:a1c4:8762%4]) with mapi id 15.20.6156.017; Wed, 1 Mar 2023
+ 15:51:52 +0000
+From:   Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
+To:     Sherry Sun <sherry.sun@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
+        "hdanton@sina.com" <hdanton@sina.com>,
+        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
+        "leon@kernel.org" <leon@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
+        Rohit Fule <rohit.fule@nxp.com>
+Subject: RE: [PATCH v5] Bluetooth: NXP: Add protocol support for NXP Bluetooth
+ chipsets
+Thread-Topic: [PATCH v5] Bluetooth: NXP: Add protocol support for NXP
+ Bluetooth chipsets
+Thread-Index: AQHZR3LOTLuCHYJIkUS2g9wvpSvRZK7cZi8AgAm1GiA=
+Date:   Wed, 1 Mar 2023 15:51:52 +0000
+Message-ID: <AM9PR04MB860397EC747D0F0999D1A6C6E7AD9@AM9PR04MB8603.eurprd04.prod.outlook.com>
+References: <20230223103614.4137309-1-neeraj.sanjaykale@nxp.com>
+ <20230223103614.4137309-4-neeraj.sanjaykale@nxp.com>
+ <AS8PR04MB8404D3C45734179D80BC242092AB9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+In-Reply-To: <AS8PR04MB8404D3C45734179D80BC242092AB9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM9PR04MB8603:EE_|PAXPR04MB9253:EE_
+x-ms-office365-filtering-correlation-id: 67a7ffcd-b643-43dc-6218-08db1a6ce063
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wOIc/30WVWAdvQOlcpypaZCU0oK2iwLJCR+Y7WTV0lE8KvnsJDEL4ot7A8ol/cnKpNqfIQI/b3++LNH77fAfftCdibXAs9uQG5YZGu4lTXPhw6N/6/Fcx2t1u3EvMFg7WybHK4LIbSc8SJSilKXO8pLy8wdsuV4+tkdgI4UUKy0T5PtWA8KgSdu2ANDiahvFiR7v5a1kaNcQBj5X1kh8KvXG0NQVT3mX2cwMS6lDoO3FNYeCsdsfTcrJZJbLj0I2giQ2O1bCr9N9+Xyu5hsFVVmjY02WsfBMjEQwhriP3Ks2x7pM141gRblJDLgVHtCrhPg0HRXJycQAp9jLPsvGfaRs9764DayQcpgcMuOnXRHD66JMKYfwkbwSwpJpE9dz+IxrENFmirwLkekNlvTH9GgyDruE89kGZ4LsFCV7qm7tPuT+CqcJAf5jQmLS0jCT7B0FxzcIG91WHGLk7r7Hn/5KN/7oGOtXDG+RvG57YdnthyqIzisc7iRepScd5fjWCqATWpiqfFh1Zi/3ruWh5VSQdUcwK0FzL/3VzQeLXIX5J6Gfec9uUJS+1mXt/WVulcGyAXcrTvQPJY9TFJlf6zHqfoG1BXN2eez7miI6rVqje5v3gt+VyJyLGDzFpjX3tGwlK6TN+QzYT5PkgHrPO+OlTg1bm9Rm7MM612HFGIH8vP8hyrLcT5iVb/+fHagLnLAF4tePn67x/WtX75XuqNTfVw7WuDbW3Uq50nCTYzI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8603.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(366004)(39860400002)(346002)(451199018)(83380400001)(86362001)(2906002)(110136005)(26005)(478600001)(186003)(9686003)(33656002)(6506007)(52536014)(71200400001)(41300700001)(921005)(38100700002)(122000001)(7696005)(5660300002)(7416002)(66556008)(8676002)(64756008)(8936002)(66946007)(66476007)(76116006)(38070700005)(54906003)(4326008)(66446008)(316002)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K3hQbnZmUytTTDV6RXBQY2VXZFBCK2t0bXgxMzR6enRhSU82YXJzc3pseU5Q?=
+ =?utf-8?B?L2RtSzZZdWZHVHJvYzNzTHJkaTJVaTVSQVhjeDR1QU1jWHRXTlpNR1o2Q0NJ?=
+ =?utf-8?B?RC9aWEU1b2JReG1FQ2toMGxWZXlteW5scmNEMmpTWldNSHpGR2hvVmNlU1BR?=
+ =?utf-8?B?U29OaTRvWEg4M2N1M2ZMVnpMRGRjTi9wTGdWeDJ6YVJsbWRtVUVSM1lzMWpt?=
+ =?utf-8?B?cGZkSFFHakV0RkV4bGFqRTZQRHNYTllpMStvckZuQ25iY0RhS1FYcWh3ZHAx?=
+ =?utf-8?B?cGJlS1RBQzlGV2pCYnRhZHprWFBIbXJ2Q1NWaUUrK2kyMzdvU29hSlFZdGZu?=
+ =?utf-8?B?TXIzRmh5YTJRbTNTem9sOThMS3d2Z1FUQTA0SE1XM3JETWdrWlRwb1hHc3dh?=
+ =?utf-8?B?UzUrL3BzZmYvWnlvRDJlejRJSVBvZWNNd3JMZ01HQ0tBdnFDNjh2TENJaXds?=
+ =?utf-8?B?SC9jWnl5RFB4U3M5WjZvaFhtMlJlRmw5cmhrYmlSM2JzdVl2WjE1a1VtNk04?=
+ =?utf-8?B?UHBVaTZSRFNwNGxtcW9ENlBPQjR3MXJoOHRLbE1zeHpkdlFiMTRCVU5PYktP?=
+ =?utf-8?B?TlJYUGpBM0hRMTdPa0lVcU5md3RzUklZSFdyVWN1NTJhZm5HWXgzVkNVZnNW?=
+ =?utf-8?B?QnlyNzlPSnFEOUhwRFNxS0pDTlBiK1I5VThpTEFHUmJCeUlFNkRVZHJRRkRs?=
+ =?utf-8?B?aXE4SWlhTzAwN1d1VEcxVms0bVc5ZHRFR3R0b1ZUcmpuSnAyMWVZS1E0NmdK?=
+ =?utf-8?B?RnN6M2lrV3gvd3R2aHl6Q2hxTGsvQWlzNHJ3RkJZSWRhZEMyTTJ0aTI1VXVu?=
+ =?utf-8?B?bVFpK0UweFFMWEdDemp2YmZoTVlNM0Y2R1VFWFpkNjJMWEFIdzlNSjJmZkRh?=
+ =?utf-8?B?NzZDKzRxZUMvRUQzd2ZoQjJUQ1lHbUNMeVhQbjN3cnBBbVBhYVpOZTI4dXRZ?=
+ =?utf-8?B?Yzlxa0tYYy81RnlJUENrTXFQdmRPaXRjOStQbGtFWXYxTzdXQUVISXQvdDJ4?=
+ =?utf-8?B?ZE1MejBXbndFLy9FUXhSZHUwV1MyS0ZGb1J0bjNRT0JBN1NNRUNrT25UUWY2?=
+ =?utf-8?B?QVVRUTdpYzVXODVNaWxWbkNVdmx0dnBRejN0Sm1DS1V1UXBZUG1xNnFCMmQz?=
+ =?utf-8?B?MngrOWI1Y1YxMWR0Q29JdWR4cEtSU2RGbDlaTm5oOEt5c1VGMFAxczNFQnhZ?=
+ =?utf-8?B?WWZURGVvcVdzbHhHbzBPc0dCQy81dEVaRnM4S3l2QUFKcnJ2VEhSdUp3ZHVj?=
+ =?utf-8?B?dWZCK29qQkoyMWlxN1JoNW9TMUJjQ3JRbHIydUZnYzZ4bjdJUmNscVpEZGVq?=
+ =?utf-8?B?OVNGWm5KdldJb2JibHVrMWFvZHRTVU9BTFNrbGNOUVVLU0ZXK3BvM1ZSWkNK?=
+ =?utf-8?B?bTdBbm5XZWVzSnlJeUVyOXExWU9rSHZ1Y0VJRk05Wk15WExybGhJSUNueFF1?=
+ =?utf-8?B?ZUZJcmljclliOVkyN0tGWnBwKzgzbkhPUmxxNzN3c1lQeUFsSHZoTndySXBW?=
+ =?utf-8?B?cDJWN3N2OHRrSVVvaWNoL283NFZMay9xUEgrVHdPOFZ2VlJJZmxEYThpV1pw?=
+ =?utf-8?B?eXhQV2xhY2Zjd2duRGhwVGtyeEMzNTJkcHdQVHd6M21GNE5IYmZweUN1T01Z?=
+ =?utf-8?B?Q0RoU2FVV0ZZWFUrTXRsd2NsTkpZc284S1cxOFN5U3c3TGVnUnNZTW5zTkNF?=
+ =?utf-8?B?ZS9HSFRIZ1YzTGhNbmhhOGRhUngyNjYyTXVpamRyL2lDNjN3SjF5allJZWwv?=
+ =?utf-8?B?eEo4aEgxQjg0YWx1NUFDb0s0YXRaRGxad05hOElScGRpWkxRUktUbGdIc1hZ?=
+ =?utf-8?B?ZU84OGRLYkNQb3pFQnkzNUJzUFphUmZIdnFHY2szUHFjRzgxZFFqN2ZJZkda?=
+ =?utf-8?B?SVpjTTIvWnVzVElRM1VjSDNOQXRzRkMvcXQ4S0dHOWdOaGIrdFBNdGFOcDVk?=
+ =?utf-8?B?S3lXb0k3eC9PcXljVENlejZIeTFkUnhRNTJ5VW5RNUFEY2xkM0NZZjFmajV0?=
+ =?utf-8?B?RXZJK3RHZFpYem9VQ1gyV0Zweng3M2ZYdVRhckh5aTIzanNqb3BuSGhveFpa?=
+ =?utf-8?B?QkY0cjk4Z2ZRNjNHZmtmdnBYMHIwSW9EZG9Xa01CcGVlb3RONFE0QitLZ3k2?=
+ =?utf-8?B?VWRmbGk5bkw2ZWpRNDhzVzRGNCtvaFZjWmI0ZFYxMDAzUVlwanF3ZTRxY29u?=
+ =?utf-8?B?SGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230228175929.7534-1-ubizjak@gmail.com> <20230228175929.7534-4-ubizjak@gmail.com>
- <20230228164346.0691bb11@gandalf.local.home> <CAFULd4aGx=kGYYUz0BkFJz3abz97WOwDEgFHAOocT8SWT2oX-Q@mail.gmail.com>
- <CAEXW_YS89AXrbFXZpYeyh=5AxbQwhxDitniVcz=_tWFvnyuQyA@mail.gmail.com>
-In-Reply-To: <CAEXW_YS89AXrbFXZpYeyh=5AxbQwhxDitniVcz=_tWFvnyuQyA@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 1 Mar 2023 10:50:35 -0500
-Message-ID: <CAEXW_YSHD98Ys7-LLmpxsrmSSbUj30LU1dg1y2vvv=vva-Ttdw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ring_buffer: Use try_cmpxchg instead of cmpxchg
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8603.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67a7ffcd-b643-43dc-6218-08db1a6ce063
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2023 15:51:52.5827
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BAwENoZ/ixdTEQ69+3MR4ulWoyD9+3xQdzGDvOoOpkPx8AuGk0XAUF96eiBgK4Z5Qd6TJwOGGdAGQhiKexaKG4X3/176Q4vHICAklvGdLoQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9253
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 10:49=E2=80=AFAM Joel Fernandes <joel@joelfernandes.=
-org> wrote:
->
-> On Wed, Mar 1, 2023 at 4:37=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> wr=
-ote:
-> >
-> > On Tue, Feb 28, 2023 at 10:43 PM Steven Rostedt <rostedt@goodmis.org> w=
-rote:
-> > >
-> > > On Tue, 28 Feb 2023 18:59:29 +0100
-> > > Uros Bizjak <ubizjak@gmail.com> wrote:
-> > >
-> > > > Use try_cmpxchg instead of cmpxchg (*ptr, old, new) =3D=3D old.
-> > > > x86 CMPXCHG instruction returns success in ZF flag, so this change
-> > > > saves a compare after cmpxchg (and related move instruction in
-> > > > front of cmpxchg).
-> > > >
-> > > > Also, try_cmpxchg implicitly assigns old *ptr value to "old" when c=
-mpxchg
-> > > > fails. There is no need to re-read the value in the loop.
-> > > >
-> > > > No functional change intended.
-> > >
-> > > As I mentioned in the RCU thread, I have issues with some of the chan=
-ges
-> > > here.
-> > >
-> > > >
-> > > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> > > > ---
-> > > >  kernel/trace/ring_buffer.c | 20 ++++++++------------
-> > > >  1 file changed, 8 insertions(+), 12 deletions(-)
-> > > >
-> > > > diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.=
-c
-> > > > index 4188af7d4cfe..8f0ef7d12ddd 100644
-> > > > --- a/kernel/trace/ring_buffer.c
-> > > > +++ b/kernel/trace/ring_buffer.c
-> > > > @@ -1493,14 +1493,11 @@ static bool rb_head_page_replace(struct buf=
-fer_page *old,
-> > > >  {
-> > > >       unsigned long *ptr =3D (unsigned long *)&old->list.prev->next=
-;
-> > > >       unsigned long val;
-> > > > -     unsigned long ret;
-> > > >
-> > > >       val =3D *ptr & ~RB_FLAG_MASK;
-> > > >       val |=3D RB_PAGE_HEAD;
-> > > >
-> > > > -     ret =3D cmpxchg(ptr, val, (unsigned long)&new->list);
-> > > > -
-> > > > -     return ret =3D=3D val;
-> > > > +     return try_cmpxchg(ptr, &val, (unsigned long)&new->list);
-> > >
-> > > No, val should not be updated.
-> >
-> > Please see the definition of try_cmpxchg. The definition is written in
-> > such a way that benefits loops as well as linear code and in the later
-> > case depends on the compiler to eliminate assignment to val as a dead
-> > assignment.
-> >
-> > The above change was done under the assumption that val is unused
-> > after try_cmpxchg, and can be considered as a temporary
-> > [Alternatively, the value could be copied to a local temporary and a
-> > pointer to this local temporary could be passed to try_cmpxchg
-> > instead. Compiler is smart enough to eliminate the assignment in any
-> > case.]
-
-Ah I need to be more careful how I type.
-
-> If I understood Steve correctly, I think the "misleading" part is that
-> you are passing a variable by address to try_cmpxchg() but not really
-> modifying it (unlike in the loop patterns).
-
-It does modify it, but I meant it does not use it.
-
-> Perhaps it is more meaningful to have an API that looks like:
-> bool cmpxchg_succeeded(TYPE ptr, TYPE old, TYPE new)
-> Where old is not a pointer (unlike try_cmpxchg), and the API returns bool=
-.
->
-> Both cleaner to read and has the optimization you want, I believe.
->
-> However, the other point is, this is useful only for slow paths, but
-
-Useful only for fast paths...
-
-> at least cmpxchg_succeeded() is more readable and less "misleading"
-> than try_cmpxchg() IMO.
->
-
-Proofreading emails properly from here on! Not after the fact!
-
- - Joel
+SGkgU2hlcnJ5DQoNCj4gLi4uLi4uDQo+IA0KPiA+ICtzdGF0aWMgdTggKm54cF9nZXRfZndfbmFt
+ZV9mcm9tX2NoaXBpZChzdHJ1Y3QgaGNpX2RldiAqaGRldiwgdTE2DQo+ID4gK2NoaXBpZCkgew0K
+PiA+ICsJdTggKmZ3X25hbWUgPSBOVUxMOw0KPiA+ICsNCj4gPiArCXN3aXRjaCAoY2hpcGlkKSB7
+DQo+ID4gKwljYXNlIENISVBfSURfVzkwOTg6DQo+ID4gKwkJZndfbmFtZSA9IEZJUk1XQVJFX1c5
+MDk4Ow0KPiA+ICsJCWJyZWFrOw0KPiA+ICsJY2FzZSBDSElQX0lEX0lXNDE2Og0KPiA+ICsJCWZ3
+X25hbWUgPSBGSVJNV0FSRV9JVzQxNjsNCj4gPiArCQlicmVhazsNCj4gPiArCWNhc2UgQ0hJUF9J
+RF9JVzYxMjoNCj4gPiArCQlmd19uYW1lID0gRklSTVdBUkVfSVc2MTI7DQo+IA0KPiBTdXBwb3Nl
+IGZvciBlYWNoIFYzIEJUIGNoaXBzLCB5b3Ugbm90IG9ubHkgbmVlZCB0byB1cGRhdGUgdGhlIGZ3
+X25hbWUsIGJ1dA0KPiBhbHNvIGZ3X2RubGRfdXNlX2hpZ2hfYmF1ZHJhdGUuIERvbid0IHVzZSB0
+aGUgZGVmYXVsdCB2YWx1ZSBpbiBkcnZfZGF0YSBmb3INCj4gYWxsIGNoaXBzIGhlcmUuDQpmd19k
+bmxkX3VzZV9oaWdoX2JhdWRyYXRlIGlzIG5vdCB1c2VkIGluIHRoZSBWMyBkb3dubG9hZCBtZWNo
+YW5pc20sIG5laXRoZXIgZG8gd2UgbmVlZCBpdCBhcyBvZiBub3cgaW4gVjMuDQoNCj4gPiArDQo+
+ID4gKwlzZXRfYml0KEJUTlhQVUFSVF9GV19ET1dOTE9BRElORywgJm54cGRldi0+dHhfc3RhdGUp
+Ow0KPiA+ICsJaW5pdF93YWl0cXVldWVfaGVhZCgmbnhwZGV2LT5zdXNwZW5kX3dhaXRfcSk7DQo+
+ID4gKw0KPiA+ICsJaWYgKCFzZXJkZXZfZGV2aWNlX2dldF9jdHMobnhwZGV2LT5zZXJkZXYpKSB7
+DQo+ID4gKwkJYnRfZGV2X2RiZyhoZGV2LCAiQ1RTIGhpZ2guIE5lZWQgRlcgRG93bmxvYWQiKTsN
+Cj4gDQo+IEkgZG9uJ3QgdGhpbmsgaXQncyBhIGdvb2QgaWRlYSB0byB1c2UgQ1RTIHN0YXR1cyB0
+byBkZXRlcm1pbmUgdGhlIEJUIEZXIHN0YXR1cywNCj4gYmVjYXVzZSBtYW55IHVhcnQgZHJpdmVy
+cyBvbmx5IHN1cHBvcnQgYXV0byBoYXJkd2FyZSBmbG93IGNvbnRyb2wsIGFuZA0KPiBjYW5ub3Qg
+cmV0dXJuIHRoZSBDVFMgbGluZSBzdGF0ZS4NCj4gU3VjaCBhcyBmb3IgTFBVQVJULCBzZXJkZXZf
+ZGV2aWNlX2dldF9jdHMoKSB3aWxsIGFsd2F5cyByZXR1cm4gVElPQ01fQ1RTLA0KPiBzbyBoZXJl
+IEZXIG1heSBuZXZlciBiZSBkb3dubG9hZGVkLg0KSSBoYXZlIHJld29ya2VkIHRoaXMgcGFydCBv
+ZiBjb2RlIGFuZCB3ZSBhcmUgbm93IHdhaXRpbmcgZm9yIDEgc2Vjb25kIHRvIHNlZSBpZiB3ZSBh
+cmUgcmVjZWl2aW5nIGFueSBib290bG9hZGVyIHNpZ25hdHVyZSBmcm9tIHRoZSBjaGlwLCBhbmQg
+ZG93bmxvYWRpbmcgRlcgb3IgbW92aW5nIGFoZWFkIGFjY29yZGluZ2x5Lg0KDQpQbGVhc2UgY2hl
+Y2sgdGhlIHY2IHBhdGNoIGZvciB0aGUgY2hhbmdlcy4NCg0KVGhhbmtzLA0KTmVlcmFqDQo=
