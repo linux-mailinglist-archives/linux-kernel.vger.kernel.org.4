@@ -2,256 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA746A63FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BA56A6402
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjCAACm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 19:02:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S229780AbjCAADg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 19:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjCAACk (ORCPT
+        with ESMTP id S229481AbjCAADf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 19:02:40 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF9936FE8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:02:37 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id n42-20020a056602342a00b0074cde755b99so6289340ioz.16
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:02:37 -0800 (PST)
+        Tue, 28 Feb 2023 19:03:35 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD753C2A;
+        Tue, 28 Feb 2023 16:03:31 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id c19so12502134qtn.13;
+        Tue, 28 Feb 2023 16:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677629011;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y7xlEzbWy6v9JfLWv2ZpFnkkZM75lFiyxm9Fm1VS9Lo=;
+        b=MhDQY0UQ+y5lA4/Grc8SUZ3G1TlC3KIqrvzHzDI/kJi/x+70OIfJjfqdIGxV4g0cwQ
+         kxgAc/ybrHWiRPIduKLPvemwtLiUUHZbj/GFcrqmISn5bV2Z7HkIbYskSbx71X44LYFz
+         RIEHLjoRplEXyz+ZA8Rhxh2uJ5v9TryoybOXKtlTuwlm8z0B6x3Y+egeAAjZGd+0s4qi
+         eB0m95NF1OrZULRACKI3YFhVUh2LJ4F6UqkcYn7NMMI/rrFeBdNtYzqXflC18Y+Kt6Vf
+         mwZ2vDYjpjWwWdf1dW2M/mTx29M9mPFoL9X2eh4qMhLfyaO1o1dMQMq3B/LTlRRF37Wq
+         HdeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7FUfIDj4D8j6RMb63P8VxiauNL1Smwo79tHVupo7sXQ=;
-        b=oW0WSS+R98R8q2m9gYIml2JrRKzvVKOQ3/NCL3uArogi6aHViVJq09L/85ir/CTb9Z
-         29dyqnDp9149mA7DMl0k/QQF0Xn8hNANal3UtR5ibSmbOu5q9ow5PRTAMYCHS3E1zxSb
-         pxzsnWJP+jYUCIOzYDdp2NCbSNAWhSRe9bYoQXIqc+LTvmZcaGQKEIRrmj2zyuvFrlr0
-         1PZzGT8x++mcA1qcqvi0yhSb4kCtSRVqabR1JgOBrsoA4xxEKmRnBEhUPzrVvhs4DlbP
-         P+AzgT9LicE5xy1Lz7IsLQYbUAdWX5nyxHXgbiKrYeOewyxjaE+/NEj56onBDI63BlNF
-         hUsA==
-X-Gm-Message-State: AO0yUKV8zXti4uV4ACoYPw+UD8n0/qHO/r+PKB7TpYyvoeyBlnqakIbG
-        fUEl46f6zZzb5a+VEf1lUwwra0lAVHfuGP3TLN0MXXrMLxSK
-X-Google-Smtp-Source: AK7set8eP3JGOiihkwa0Xht5oStOFmLrGikIDEsudE2a47Kd2GwDVQn6txOQVlZFrQ5JUo6NDVGRzspJPPcRm3XlsnhpiKrw2yKs
+        d=1e100.net; s=20210112; t=1677629011;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y7xlEzbWy6v9JfLWv2ZpFnkkZM75lFiyxm9Fm1VS9Lo=;
+        b=4z5+3RwB32zbjBWRRz3hMqCKg24sU1TouQW15kmOHvEyfza4LY7sHPLkxNY8iWONtM
+         Qc1Hs7QZdQ2/y3a6W1HGFeooX5FYz3lrd88+oZmlYEoHfEu7CeAP3or+8Yj2RFEH/uE9
+         CqvmFXjmMwOHplxd8malnz1Mi7R3kufbd1uIbAh1btCeJKGW0hltHjmscGReQYl2uPZJ
+         I7Wthyt295L9nZCL+9S2Uf0epy0E3r1EL2XXYy1noPU4kR39EeP6krTKRxF8S+Hn0Pdh
+         /GfexbHiFQ/1qvTzPVMOFXNiqenl46YSVRcK2VplQQww4UVN8ic3qiMO3yvJwpZnes1i
+         7L4w==
+X-Gm-Message-State: AO0yUKVgS34JWicKZqgfY58w5Tb5ipQP9to6I/UNY+LMLFMhtRhaT+ew
+        qvfmXH4GjZnu8Kb3DHTOErk5QJN4B4/4Fz0cnqK+3S6zO0i0
+X-Google-Smtp-Source: AK7set+P1K1zJUQOa4fDilf3cLbc+JrET/UoKH5Obbp5N5CViT8tULlyqxFRQ+0WHzNnqBwjP9p/9upM3tM4R346pGU=
+X-Received: by 2002:a05:622a:1ba4:b0:3bd:17aa:49b2 with SMTP id
+ bp36-20020a05622a1ba400b003bd17aa49b2mr1965901qtb.5.1677629010966; Tue, 28
+ Feb 2023 16:03:30 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:841a:0:b0:745:dfde:ecec with SMTP id
- i26-20020a5d841a000000b00745dfdeececmr2147625ion.1.1677628956854; Tue, 28 Feb
- 2023 16:02:36 -0800 (PST)
-Date:   Tue, 28 Feb 2023 16:02:36 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000009d6c905f5cb6e07@google.com>
-Subject: [syzbot] [ext4?] possible deadlock in start_this_handle (4)
-From:   syzbot <syzbot+cf0b4280f19be4031cf2@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+References: <20230226110802.103134-1-usama.arif@bytedance.com>
+ <20230226110802.103134-8-usama.arif@bytedance.com> <878rghmrn2.ffs@tglx>
+ <35264451eabdf967eb31069cb814e8a05ee3179b.camel@infradead.org>
+ <cf7a1657159219cea61ffef567280e2e88d1f670.camel@infradead.org>
+ <CAMzpN2hQArxf2mAVq55uMx9VhTjUD-VDEVAD406RScfsrjdAjQ@mail.gmail.com> <0E3AFDDA-039B-40F3-92A4-85CD96B1BB64@infradead.org>
+In-Reply-To: <0E3AFDDA-039B-40F3-92A4-85CD96B1BB64@infradead.org>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Tue, 28 Feb 2023 19:03:19 -0500
+Message-ID: <CAMzpN2gEhC5q-FPv2iGmEzuk+LiRHF+Mn7EKWw7KbQ5NQUmG2g@mail.gmail.com>
+Subject: Re: [PATCH v12 07/11] x86/smpboot: Remove early_gdt_descr on 64-bit
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Feb 28, 2023 at 6:43=E2=80=AFPM David Woodhouse <dwmw2@infradead.or=
+g> wrote:
+>
+>
+>
+> On 28 February 2023 22:48:42 GMT, Brian Gerst <brgerst@gmail.com> wrote:
+> >On Tue, Feb 28, 2023 at 5:41=E2=80=AFPM David Woodhouse <dwmw2@infradead=
+.org> wrote:
+> >>
+> >> On Tue, 2023-02-28 at 21:57 +0000, David Woodhouse wrote:
+> >> >
+> >> > ----------------
+> >> > IN:
+> >> > 0xffffffffa20000b2:  48 31 d2                 xorq     %rdx, %rdx
+> >> > 0xffffffffa20000b5:  48 8b 82 c0 74 d5 a3     movq     -0x5c2a8b40(%=
+rdx), %rax
+> >> > 0xffffffffa20000bc:  48 8b a0 58 14 00 00     movq     0x1458(%rax),=
+ %rsp
+> >> > 0xffffffffa20000c3:  48 83 ec 10              subq     $0x10, %rsp
+> >> > 0xffffffffa20000c7:  66 c7 04 24 7f 00        movw     $0x7f, (%rsp)
+> >> > 0xffffffffa20000cd:  48 8d 82 00 10 81 a3     leaq     -0x5c7ef000(%=
+rdx), %rax
+> >> > 0xffffffffa20000d4:  48 89 44 24 02           movq     %rax, 2(%rsp)
+> >> > 0xffffffffa20000d9:  0f 01 14 24              lgdtq    (%rsp)
+> >> > 0xffffffffa20000dd:  48 83 c4 10              addq     $0x10, %rsp
+> >> > 0xffffffffa20000e1:  31 c0                    xorl     %eax, %eax
+> >> > 0xffffffffa20000e3:  8e d8                    movl     %eax, %ds
+> >> >
+> >> > I cannot work out where the value -0x5c7ef000 comes from, but it
+> >> > doesn't seem to be the 0xb000 you claimed, and my brain is hurting
+> >> > again...
+> >>
+> >> Turning off CONFIG_RANDOMIZE_BASE (or just looking at the vmlinux
+> >> disassembly instead as Brian did) helps to resolve that FWIW.
+> >>
+> >> I've changed it to zero all of %rdx and pushed it back to the v12bis
+> >> branch.
+> >
+> >xorl %edx, %edx is preferred, as a 32-bit operation zero-extends to
+> >the full 64-bit register.  Using xorq to clear any of the lower 8
+> >registers adds an unnecessary REX prefix.  Just one of many quirks of
+> >the x86 instruction set...
+>
+> Ewww. Couldn't the assembler choose to omit the REX prefix then? It does =
+more tricksy things than that already.
+>
+> I almost prefer having the prefix but (in the morning) if you prefer I ca=
+n put it back as it was with a comment about the zero-extension.
 
-syzbot found the following issue on:
+commit a7bea8308933aaeea76dad7d42a6e51000417626
+Author: Jan Beulich <JBeulich@suse.com>
+Date:   Mon Jul 2 04:31:54 2018 -0600
 
-HEAD commit:    a93e884edf61 Merge tag 'driver-core-6.3-rc1' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11b9dea8c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=537cd86b8ac8f12d
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf0b4280f19be4031cf2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+    x86/asm/64: Use 32-bit XOR to zero registers
 
-Unfortunately, I don't have any reproducer for this issue yet.
+    Some Intel CPUs don't recognize 64-bit XORs as zeroing idioms. Zeroing
+    idioms don't require execution bandwidth, as they're being taken care
+    of in the frontend (through register renaming). Use 32-bit XORs instead=
+.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cf0b4280f19be4031cf2@syzkaller.appspotmail.com
+Not that speed is important here, but it's good to be consistent
+across the whole kernel.  Someone will eventually come by and fix it
+up anyways, as there have been a few of these patches already in the
+git history.
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.2.0-syzkaller-10217-ga93e884edf61 #0 Not tainted
-------------------------------------------------------
-kswapd0/100 is trying to acquire lock:
-ffff888043c64990 (jbd2_handle){++++}-{0:0}, at: start_this_handle+0xfb4/0x14e0 fs/jbd2/transaction.c:461
-
-but task is already holding lock:
-ffffffff8c8e9ae0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:200 [inline]
-ffffffff8c8e9ae0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7338
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (fs_reclaim){+.+.}-{0:0}:
-       __fs_reclaim_acquire mm/page_alloc.c:4716 [inline]
-       fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:4730
-       might_alloc include/linux/sched/mm.h:271 [inline]
-       slab_pre_alloc_hook mm/slab.h:728 [inline]
-       slab_alloc_node mm/slub.c:3434 [inline]
-       __kmem_cache_alloc_node+0x41/0x330 mm/slub.c:3491
-       kmalloc_node_trace+0x21/0x60 mm/slab_common.c:1074
-       kmalloc_node include/linux/slab.h:606 [inline]
-       kzalloc_node include/linux/slab.h:731 [inline]
-       mempool_create_node mm/mempool.c:272 [inline]
-       mempool_create+0x52/0xc0 mm/mempool.c:261
-       mempool_create_page_pool include/linux/mempool.h:112 [inline]
-       fscrypt_initialize+0x8a/0xa0 fs/crypto/crypto.c:332
-       fscrypt_setup_encryption_info+0xef/0xeb0 fs/crypto/keysetup.c:563
-       fscrypt_get_encryption_info+0x375/0x450 fs/crypto/keysetup.c:668
-       fscrypt_setup_filename+0x23c/0xec0 fs/crypto/fname.c:458
-       __fscrypt_prepare_lookup+0x2c/0xf0 fs/crypto/hooks.c:100
-       fscrypt_prepare_lookup include/linux/fscrypt.h:935 [inline]
-       ext4_fname_prepare_lookup+0x1be/0x200 fs/ext4/crypto.c:46
-       ext4_lookup_entry fs/ext4/namei.c:1745 [inline]
-       ext4_lookup fs/ext4/namei.c:1820 [inline]
-       ext4_lookup+0x131/0x700 fs/ext4/namei.c:1811
-       __lookup_slow+0x24c/0x460 fs/namei.c:1686
-       lookup_slow fs/namei.c:1703 [inline]
-       walk_component+0x33f/0x5a0 fs/namei.c:1994
-       lookup_last fs/namei.c:2451 [inline]
-       path_lookupat+0x1ba/0x840 fs/namei.c:2475
-       filename_lookup+0x1d2/0x590 fs/namei.c:2504
-       user_path_at_empty+0x46/0x60 fs/namei.c:2877
-       user_path_at include/linux/namei.h:57 [inline]
-       __do_sys_chdir fs/open.c:515 [inline]
-       __se_sys_chdir fs/open.c:509 [inline]
-       __ia32_sys_chdir+0xbb/0x260 fs/open.c:509
-       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
-       do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
-       entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
--> #1 (fscrypt_init_mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       fscrypt_initialize+0x40/0xa0 fs/crypto/crypto.c:326
-       fscrypt_setup_encryption_info+0xef/0xeb0 fs/crypto/keysetup.c:563
-       fscrypt_get_encryption_info+0x375/0x450 fs/crypto/keysetup.c:668
-       fscrypt_setup_filename+0x23c/0xec0 fs/crypto/fname.c:458
-       ext4_fname_setup_filename+0x8c/0x110 fs/ext4/crypto.c:28
-       ext4_add_entry+0x3aa/0xe30 fs/ext4/namei.c:2380
-       ext4_rename+0x1979/0x2620 fs/ext4/namei.c:3904
-       ext4_rename2+0x1c7/0x270 fs/ext4/namei.c:4184
-       vfs_rename+0xef6/0x17a0 fs/namei.c:4772
-       do_renameat2+0xb62/0xc90 fs/namei.c:4923
-       __do_sys_renameat2 fs/namei.c:4956 [inline]
-       __se_sys_renameat2 fs/namei.c:4953 [inline]
-       __ia32_sys_renameat2+0xe8/0x120 fs/namei.c:4953
-       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
-       do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
-       entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
--> #0 (jbd2_handle){++++}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3098 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-       validate_chain kernel/locking/lockdep.c:3832 [inline]
-       __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
-       lock_acquire kernel/locking/lockdep.c:5669 [inline]
-       lock_acquire+0x1e3/0x670 kernel/locking/lockdep.c:5634
-       start_this_handle+0xfe7/0x14e0 fs/jbd2/transaction.c:463
-       jbd2__journal_start+0x39d/0x9d0 fs/jbd2/transaction.c:520
-       __ext4_journal_start_sb+0x706/0x890 fs/ext4/ext4_jbd2.c:111
-       __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
-       ext4_dirty_inode+0xa5/0x130 fs/ext4/inode.c:6107
-       __mark_inode_dirty+0x247/0x1250 fs/fs-writeback.c:2421
-       mark_inode_dirty_sync include/linux/fs.h:2132 [inline]
-       iput.part.0+0x57/0x8a0 fs/inode.c:1771
-       iput+0x5c/0x80 fs/inode.c:1764
-       dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
-       __dentry_kill+0x3c0/0x640 fs/dcache.c:607
-       shrink_dentry_list+0x12c/0x4f0 fs/dcache.c:1201
-       prune_dcache_sb+0xeb/0x150 fs/dcache.c:1282
-       super_cache_scan+0x33a/0x590 fs/super.c:104
-       do_shrink_slab+0x464/0xd20 mm/vmscan.c:853
-       shrink_slab_memcg mm/vmscan.c:922 [inline]
-       shrink_slab+0x388/0x660 mm/vmscan.c:1001
-       shrink_one+0x502/0x810 mm/vmscan.c:5343
-       shrink_many mm/vmscan.c:5394 [inline]
-       lru_gen_shrink_node mm/vmscan.c:5511 [inline]
-       shrink_node+0x2064/0x35f0 mm/vmscan.c:6459
-       kswapd_shrink_node mm/vmscan.c:7262 [inline]
-       balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7452
-       kswapd+0x70b/0x1000 mm/vmscan.c:7712
-       kthread+0x2e8/0x3a0 kernel/kthread.c:376
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-other info that might help us debug this:
-
-Chain exists of:
-  jbd2_handle --> fscrypt_init_mutex --> fs_reclaim
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(fs_reclaim);
-                               lock(fscrypt_init_mutex);
-                               lock(fs_reclaim);
-  lock(jbd2_handle);
-
- *** DEADLOCK ***
-
-3 locks held by kswapd0/100:
- #0: ffffffff8c8e9ae0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:200 [inline]
- #0: ffffffff8c8e9ae0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7338
- #1: ffffffff8c8a06d0 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab_memcg mm/vmscan.c:895 [inline]
- #1: ffffffff8c8a06d0 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab+0x2a0/0x660 mm/vmscan.c:1001
- #2: ffff88801b18a0e0 (&type->s_umount_key#31){++++}-{3:3}, at: trylock_super fs/super.c:414 [inline]
- #2: ffff88801b18a0e0 (&type->s_umount_key#31){++++}-{3:3}, at: super_cache_scan+0x70/0x590 fs/super.c:79
-
-stack backtrace:
-CPU: 1 PID: 100 Comm: kswapd0 Not tainted 6.2.0-syzkaller-10217-ga93e884edf61 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2178
- check_prev_add kernel/locking/lockdep.c:3098 [inline]
- check_prevs_add kernel/locking/lockdep.c:3217 [inline]
- validate_chain kernel/locking/lockdep.c:3832 [inline]
- __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
- lock_acquire kernel/locking/lockdep.c:5669 [inline]
- lock_acquire+0x1e3/0x670 kernel/locking/lockdep.c:5634
- start_this_handle+0xfe7/0x14e0 fs/jbd2/transaction.c:463
- jbd2__journal_start+0x39d/0x9d0 fs/jbd2/transaction.c:520
- __ext4_journal_start_sb+0x706/0x890 fs/ext4/ext4_jbd2.c:111
- __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
- ext4_dirty_inode+0xa5/0x130 fs/ext4/inode.c:6107
- __mark_inode_dirty+0x247/0x1250 fs/fs-writeback.c:2421
- mark_inode_dirty_sync include/linux/fs.h:2132 [inline]
- iput.part.0+0x57/0x8a0 fs/inode.c:1771
- iput+0x5c/0x80 fs/inode.c:1764
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- shrink_dentry_list+0x12c/0x4f0 fs/dcache.c:1201
- prune_dcache_sb+0xeb/0x150 fs/dcache.c:1282
- super_cache_scan+0x33a/0x590 fs/super.c:104
- do_shrink_slab+0x464/0xd20 mm/vmscan.c:853
- shrink_slab_memcg mm/vmscan.c:922 [inline]
- shrink_slab+0x388/0x660 mm/vmscan.c:1001
- shrink_one+0x502/0x810 mm/vmscan.c:5343
- shrink_many mm/vmscan.c:5394 [inline]
- lru_gen_shrink_node mm/vmscan.c:5511 [inline]
- shrink_node+0x2064/0x35f0 mm/vmscan.c:6459
- kswapd_shrink_node mm/vmscan.c:7262 [inline]
- balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7452
- kswapd+0x70b/0x1000 mm/vmscan.c:7712
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--
+Brian Gerst
