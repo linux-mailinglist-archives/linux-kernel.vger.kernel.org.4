@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5077E6A693B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 09:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1306A693E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 09:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjCAIz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 03:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S229847AbjCAI4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 03:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjCAIz5 (ORCPT
+        with ESMTP id S229660AbjCAI4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 03:55:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87948392AC;
-        Wed,  1 Mar 2023 00:55:56 -0800 (PST)
+        Wed, 1 Mar 2023 03:56:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091A128D2C;
+        Wed,  1 Mar 2023 00:56:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5F1261254;
-        Wed,  1 Mar 2023 08:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B58C433EF;
-        Wed,  1 Mar 2023 08:55:52 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-efi@vger.kernel.org, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to relocate kernel
-Date:   Wed,  1 Mar 2023 16:55:45 +0800
-Message-Id: <20230301085545.2373646-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96E3461254;
+        Wed,  1 Mar 2023 08:56:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B49AC433EF;
+        Wed,  1 Mar 2023 08:56:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677661011;
+        bh=8o/qEmUZeq3CS88LJJhl8I4SiIGxhxTJFc5HiEIcKHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SgMGQQVGjhwZHL+rwWCJFtoFUR/wn9crHR6aQMdFafpBEZ4KFGjXYUZgc1lFiVrsN
+         mGiOREiQKB5Dxal/wozV2D+J6h48VOzzAVVNonP6DaSW7lzTlb/gjRKP/qOxbthrab
+         kWsa73pPSljAA+j7H8/RFIP91L3bZHx2qNQkyZIIWdKIN4b8v8qLuAb8fpWYzsRRTb
+         MmejvP4kpBBoTw/3UWR0RdGg/iY9ZCP8IpFgbRggXRtNZNrBHS8BHPgZ35PQZCri6s
+         oCExO0cltCKgAYPxInpmQoV2KGxquxREpGl70mlCBMso3JDu+EKi+J39bpraFl3aCY
+         b/IqajPaQhUyA==
+Date:   Wed, 1 Mar 2023 08:56:45 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@sberdevices.ru
+Subject: Re: [PATCH v2 2/2] leds: add aw20xx driver
+Message-ID: <Y/8TTRtoFMJhMWV1@google.com>
+References: <20230228211046.109693-1-mmkurbanov@sberdevices.ru>
+ <20230228211046.109693-3-mmkurbanov@sberdevices.ru>
+ <Y/5xBGFC3b9Chdtb@duo.ucw.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y/5xBGFC3b9Chdtb@duo.ucw.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since Linux-6.3, LoongArch supports PIE kernel now, so let's reintroduce
-efi_relocate_kernel() to relocate the core kernel.
+On Tue, 28 Feb 2023, Pavel Machek wrote:
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++-------------
- 1 file changed, 7 insertions(+), 17 deletions(-)
+> Hi!
+> 
+> > +config LEDS_AW200XX
+> > +	tristate "LED support for Awinic AW20036/AW20054/AW20072"
+> > +	depends on LEDS_CLASS
+> > +	depends on I2C
+> > +	help
+> > +	  This option enables support for the AW20036/AW20054/AW20072 LED driver.
+> > +	  It is a 3x12/6x9/6x12 matrix LED driver programmed via
+> > +	  an I2C interface, up to 36/54/72 LEDs or 12/18/24 RGBs,
+> > +	  3 pattern controllers for auto breathing or group dimming control.
+> 
+> I'm afraid this should be handled as a display, not as an array of
+> individual LEDs.
 
-diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
-index eee7ed43cdfb..72c71ae201f0 100644
---- a/drivers/firmware/efi/libstub/loongarch-stub.c
-+++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-@@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
- 				 efi_loaded_image_t *image,
- 				 efi_handle_t image_handle)
- {
--	int nr_pages = round_up(kernel_asize, EFI_ALLOC_ALIGN) / EFI_PAGE_SIZE;
--	efi_physical_addr_t kernel_addr = EFI_KIMG_PREFERRED_ADDRESS;
- 	efi_status_t status;
-+	unsigned long kernel_addr = 0;
- 
--	/*
--	 * Allocate space for the kernel image at the preferred offset. This is
--	 * the only location in memory from where we can execute the image, so
--	 * no point in falling back to another allocation.
--	 */
--	status = efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
--			     EFI_LOADER_DATA, nr_pages, &kernel_addr);
--	if (status != EFI_SUCCESS)
--		return status;
--
--	*image_addr = EFI_KIMG_PREFERRED_ADDRESS;
--	*image_size = kernel_asize;
-+	kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
-+
-+	status = efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
-+		     EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min_align(), 0x0);
- 
--	memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
--	       (void *)&kernel_offset - kernel_offset,
--	       kernel_fsize);
-+	*image_addr = kernel_addr;
-+	*image_size = kernel_asize;
- 
- 	return status;
- }
+Just for my own information, where do we draw the line on this?
+
+Is 4x4 okay?  How about 6x6?
+
 -- 
-2.39.1
-
+Lee Jones [李琼斯]
