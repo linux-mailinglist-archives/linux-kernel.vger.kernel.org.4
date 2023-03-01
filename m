@@ -2,168 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA396A715F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF266A715E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjCAQi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 11:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S229766AbjCAQil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 11:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjCAQix (ORCPT
+        with ESMTP id S229690AbjCAQii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 11:38:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A54988C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 08:37:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677688561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FkL7Uhy+cPKcXOPgtSYv7QM09B2YNOq91Gba4VHb6zU=;
-        b=P2WHxFxRK5T+Qbm3U0DTSgnZ3Klg+C5tIrtJamAvFyIxqtLR156VCM41ENHts35oPItMUm
-        MxQEM1ueS6/7K+6PmGPapE2X6tnxXLhwKmmd2DQQMwJj1V8b3b07onscCohYkib/kA2v0s
-        pWr/aLNGYGfal0QJ95EeMYuNiRwEXhA=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-114-ZjNJ2f6tPp242lnTS68P2w-1; Wed, 01 Mar 2023 11:36:00 -0500
-X-MC-Unique: ZjNJ2f6tPp242lnTS68P2w-1
-Received: by mail-qt1-f199.google.com with SMTP id c5-20020ac85185000000b003bfae3b8051so6913996qtn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 08:36:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677688560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FkL7Uhy+cPKcXOPgtSYv7QM09B2YNOq91Gba4VHb6zU=;
-        b=XvRrUMoR3slgGvzpVVJs/7jKVUNgF27f3nMMVjrbp6SkivZNwFkUybn2wcPP7R9XxN
-         LbyCNAh6dwSp8Lz5hIPuxl36C75rGhaPhZNu7BFKhTNCJY/WwbSLnoRNzBQRQ00KHx+N
-         pz2imO+IyrvaCuBjHKyUBAXPpOFnBRprqgHnYFWGOjxH3uyWPCzh7fZGfpJ+FaFUhdvv
-         nDChD8L+iT+KZry+ZMGlthOsqtqwgvK7vHsMkWnDlpUn4MF1a7ik8Z1PuIZ2NtE8RfZY
-         DZWP+Q6wNi8SqjR4O2rQDU2zXA8kQjFnWZO/mBJuYSlPbtt8Ee17IrcQnZCdFwD9ZsC9
-         hsWw==
-X-Gm-Message-State: AO0yUKUFMvklSJ23phE29Q2QSplTaq8PqfEnr6sfeVaQEKHh3ATQ7WKa
-        D7n5r9XXdnft7Bum7ofzTTquBGw933Fjot8O9zX8j/oUpqltjvT5gqo8PxE2RJcfOzwBD3Yse7d
-        V73ryXAdjJV+KQTp1LIT2RPZq
-X-Received: by 2002:a05:622a:1993:b0:3bf:be4b:8094 with SMTP id u19-20020a05622a199300b003bfbe4b8094mr14665367qtc.0.1677688559660;
-        Wed, 01 Mar 2023 08:35:59 -0800 (PST)
-X-Google-Smtp-Source: AK7set8Cwi0eHdFAagaPGBeMs1+so6LN11xdXVXyv7QqXkjJci2aBg5qckwzm3APFdKOk2Zt7BkRJA==
-X-Received: by 2002:a05:622a:1993:b0:3bf:be4b:8094 with SMTP id u19-20020a05622a199300b003bfbe4b8094mr14665328qtc.0.1677688559357;
-        Wed, 01 Mar 2023 08:35:59 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id o26-20020ac8429a000000b003b64f1b1f40sm8613002qtl.40.2023.03.01.08.35.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 08:35:58 -0800 (PST)
-Date:   Wed, 1 Mar 2023 11:35:56 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Joey Gouly <joey.gouly@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
-Subject: Re: [PATCH v2 2/2] kselftest: vm: add tests for
- memory-deny-write-execute
-Message-ID: <Y/9+7LMtZ1c/J8JV@x1n>
-References: <20230119160344.54358-1-joey.gouly@arm.com>
- <20230119160344.54358-3-joey.gouly@arm.com>
+        Wed, 1 Mar 2023 11:38:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CD233FF;
+        Wed,  1 Mar 2023 08:38:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABC61B810C2;
+        Wed,  1 Mar 2023 16:38:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F34C433D2;
+        Wed,  1 Mar 2023 16:38:17 +0000 (UTC)
+Date:   Wed, 1 Mar 2023 11:38:13 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+Message-ID: <20230301113813.4f16a689@gandalf.local.home>
+In-Reply-To: <CAFULd4aY3Y8tyLN70oebZDagBebvH0erwRxKDaEX8L83Xo8gYw@mail.gmail.com>
+References: <20230228155121.3416-1-ubizjak@gmail.com>
+        <Y/5mguXPPqdP3MZF@google.com>
+        <20230228160324.2a7c1012@gandalf.local.home>
+        <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+        <20230228164124.77c126d2@gandalf.local.home>
+        <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
+        <20230228190846.79b06089@gandalf.local.home>
+        <CAFULd4aY3Y8tyLN70oebZDagBebvH0erwRxKDaEX8L83Xo8gYw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="+HtziZPaMlI7+HbK"
-Content-Disposition: inline
-In-Reply-To: <20230119160344.54358-3-joey.gouly@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 1 Mar 2023 11:28:47 +0100
+Uros Bizjak <ubizjak@gmail.com> wrote:
 
---+HtziZPaMlI7+HbK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+> These benefits are the reason the change to try_cmpxchg was accepted
+> also in the linear code elsewhere in the linux kernel, e.g. [2,3] to
+> name a few commits, with a thumbs-up and a claim that the new code is
+> actually *clearer* at the merge commit [4].
 
-On Thu, Jan 19, 2023 at 04:03:44PM +0000, Joey Gouly wrote:
-> From: Kees Cook <keescook@chromium.org>
-> 
-> Add some tests to cover the new PR_SET_MDWE prctl.
-> 
-> Co-developed-by: Joey Gouly <joey.gouly@arm.com>
-> Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Cc: Shuah Khan <shuah@kernel.org>
+I'll say it here too. I really like Joel's suggestion of having a
+cmpxchg_success() that does not have the added side effect of modifying the
+old variable.
 
-May need to sync prctl.h into tools/include/uapi?  Otherwise selftests/mm
-build fails here.  There's also one compiler report.  A fixup attached
-which works for me.
+I think that would allow for the arch optimizations that you are trying to
+achieve, as well as remove the side effect that might cause issues down the
+road.
 
-Thanks,
-
--- 
-Peter Xu
-
---+HtziZPaMlI7+HbK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-fixup-kselftest-vm-add-tests-for-memory-deny-write-e.patch"
-
-From ce8e17c244fcc743c7006316dd431c5650480756 Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Wed, 1 Mar 2023 11:33:34 -0500
-Subject: [PATCH] fixup! kselftest: vm: add tests for memory-deny-write-execute
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/include/uapi/linux/prctl.h       | 6 ++++++
- tools/testing/selftests/mm/mdwe_test.c | 3 +--
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/tools/include/uapi/linux/prctl.h b/tools/include/uapi/linux/prctl.h
-index e4c629c1f1b0..759b3f53e53f 100644
---- a/tools/include/uapi/linux/prctl.h
-+++ b/tools/include/uapi/linux/prctl.h
-@@ -281,6 +281,12 @@ struct prctl_mm_map {
- # define PR_SME_VL_LEN_MASK		0xffff
- # define PR_SME_VL_INHERIT		(1 << 17) /* inherit across exec */
- 
-+/* Memory deny write / execute */
-+#define PR_SET_MDWE			65
-+# define PR_MDWE_REFUSE_EXEC_GAIN	1
-+
-+#define PR_GET_MDWE			66
-+
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
- 
-diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
-index f466a099f1bf..bc91bef5d254 100644
---- a/tools/testing/selftests/mm/mdwe_test.c
-+++ b/tools/testing/selftests/mm/mdwe_test.c
-@@ -163,9 +163,8 @@ TEST_F(mdwe, mprotect_WRITE_EXEC)
- 
- TEST_F(mdwe, mmap_FIXED)
- {
--	void *p, *p2;
-+	void *p;
- 
--	p2 = mmap(NULL, self->size, PROT_READ | PROT_EXEC, self->flags, 0, 0);
- 	self->p = mmap(NULL, self->size, PROT_READ, self->flags, 0, 0);
- 	ASSERT_NE(self->p, MAP_FAILED);
- 
--- 
-2.39.1
-
-
---+HtziZPaMlI7+HbK--
-
+-- Steve
