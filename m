@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDAFE6A6876
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A456A6873
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjCAHzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 02:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
+        id S229819AbjCAHy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 02:54:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjCAHzG (ORCPT
+        with ESMTP id S229437AbjCAHy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 02:55:06 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0625039B8D;
-        Tue, 28 Feb 2023 23:54:59 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3215Q400032450;
+        Wed, 1 Mar 2023 02:54:56 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB022DE75;
+        Tue, 28 Feb 2023 23:54:54 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3216dDS4026185;
         Wed, 1 Mar 2023 07:54:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=ZkS1pU86noQguWf85gIp646oBtrNlmZ9qt70vL5klFU=;
- b=Amit8+lWWn5C4PtPJ52F8J83fGZRNP+p5P92zqlv7/lNg47iSV7uT1p0F6a6AtNDZS0z
- FFjtGycmVvos29ZLam3xmtzD3TsDShPgh/ETygbzFKYBn6xwa5gJeKtKmnhObrngnNm1
- +Coi0bIFL/ZNJn6w1TR65gGaq5rGb7IXT+lItvx4mkRkUYJ9i7g9RWCJCiTW8wJItIy5
- AWo2QKFAYR7/B2ur88Qgb90KTAV24YwAyVD0eRPGu/PLZKxqoaO68eHyoQp3IGvayz8p
- MUmQ3CEsLpJxzCVNHw5e1VakITBmZ4LMV9torhGiK30R7ebHfznh04eAfJThh95m+ho0 Sw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p20j2gcy5-1
+ bh=5vBpNWqoIG9Sd56AWdWffRkP9kbDWEXkwlpB9BhHEBM=;
+ b=i7R4ff6w9rH0a2e50JCojHoGxsTMhNNycNhpF3z6uXcFRmAB+lZJcCZkB1jScGBQvF6W
+ W9qfL4Vid/xCSC+zEJ7qzFaZOm/DaVzJyead4H+MFmbhI9AYC4dHB1So2U4QOAHXoTWz
+ tUteb3Au5vV1uNdHqkkE9vP9vjy/ncqC+Y6bA4g1laiNf1Nc1FcDfneD5cZlXKShLGeo
+ +E+L2ZRjbCrH9OtS5qvHvT8l3LKGJvtXrJNp075YUqdLxhzjzQdGi0PmFpDScNZG1Nos
+ WluuOlp8EKyu6+bKmZM4e6NxAXi9fQzcjZ2v8lQZcuueoDnf97wTWcdywO/ELf4KgmJO kw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1mwxa28a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 01 Mar 2023 07:54:32 +0000
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3217sVPB026643
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3217sVbx032691
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 1 Mar 2023 07:54:31 GMT
+        Wed, 1 Mar 2023 07:54:32 GMT
 Received: from hu-johmoo-lv.qualcomm.com (10.49.16.6) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 28 Feb 2023 23:54:30 -0800
+ 15.2.986.41; Tue, 28 Feb 2023 23:54:31 -0800
 From:   John Moon <quic_johmoo@quicinc.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
@@ -60,9 +60,9 @@ CC:     John Moon <quic_johmoo@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
         Elliot Berman <quic_eberman@quicinc.com>
-Subject: [PATCH v2 1/2] check-uapi: Introduce check-uapi.sh
-Date:   Tue, 28 Feb 2023 23:54:01 -0800
-Message-ID: <20230301075402.4578-2-quic_johmoo@quicinc.com>
+Subject: [PATCH v2 2/2] docs: dev-tools: Add UAPI checker documentation
+Date:   Tue, 28 Feb 2023 23:54:02 -0800
+Message-ID: <20230301075402.4578-3-quic_johmoo@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230301075402.4578-1-quic_johmoo@quicinc.com>
 References: <20230301075402.4578-1-quic_johmoo@quicinc.com>
@@ -73,101 +73,63 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: O9iVGVe9mh0w6lLILGSRLZA4K30cBxrL
-X-Proofpoint-GUID: O9iVGVe9mh0w6lLILGSRLZA4K30cBxrL
+X-Proofpoint-ORIG-GUID: 40KKAWs3331-R91PucECTRAARLT9wbO7
+X-Proofpoint-GUID: 40KKAWs3331-R91PucECTRAARLT9wbO7
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-01_04,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- spamscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0 mlxscore=0
- adultscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303010062
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=999 malwarescore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303010063
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While the kernel community has been good at maintaining backwards
-compatibility with kernel UAPIs, it would be helpful to have a tool
-to check if a commit introduces changes that break backwards
-compatibility.
-
-To that end, introduce check-uapi.sh: a simple shell script that
-checks for changes to UAPI headers using libabigail.
-
-libabigail is "a framework which aims at helping developers and
-software distributors to spot some ABI-related issues like interface
-incompatibility in ELF shared libraries by performing a static
-analysis of the ELF binaries at hand."
-
-The script uses one of libabigail's tools, "abidiff", to compile the
-changed header before and after the commit to detect any changes.
-
-abidiff "compares the ABI of two shared libraries in ELF format. It
-emits a meaningful report describing the differences between the two
-ABIs."
-
-The script also includes the ability to check the compatibilty of
-all UAPI headers across commits. This allows developers to inspect
-the stability of the UAPIs over time.
-
-Signed-off-by: John Moon <quic_johmoo@quicinc.com>
+Add detailed documentation for scripts/check-uapi.sh.
 ---
-   - Fixed issue where system UAPI headers were used instead of kernel
-     source headers. Now, script will include all UAPI headers from
-     source instead of just target ones.
-   - Added logic to install all requires sanitized headers to the tmp
-     directory up front (including across git commits)
-   - Added filter for changes which only add types (which should be
-     allowed for UAPI headers)
-   - Added -b flag to specify "base commit" to compare against.
-   - Modified logic to check for any changed UAPI files between the
-     base commit and reference commit.
-   - Added -a flag to check compatibility of all UAPI files.
-   - Added threaded execution and -j flag to control number of jobs.
-   - Added error log and -l option to control output path.
-   - Added support for checking dirty git workspaces.
-   - Added summary file output with header diffs
-   - Added "arch/*/include/uapi" to list of files to check.
-   - Addressed misc code review findings.
+ Documentation/dev-tools/checkuapi.rst | 258 ++++++++++++++++++++++++++
+ Documentation/dev-tools/index.rst     |   1 +
+ 2 files changed, 259 insertions(+)
+ create mode 100644 Documentation/dev-tools/checkuapi.rst
 
- scripts/check-uapi.sh | 451 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 451 insertions(+)
- create mode 100755 scripts/check-uapi.sh
-
-diff --git a/scripts/check-uapi.sh b/scripts/check-uapi.sh
-new file mode 100755
-index 000000000000..022cc7f8a2a9
+diff --git a/Documentation/dev-tools/checkuapi.rst b/Documentation/dev-tools/checkuapi.rst
+new file mode 100644
+index 000000000000..2255066658e3
 --- /dev/null
-+++ b/scripts/check-uapi.sh
-@@ -0,0 +1,451 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Script to check commits for UAPI backwards compatibility
++++ b/Documentation/dev-tools/checkuapi.rst
+@@ -0,0 +1,258 @@
++.. SPDX-License-Identifier: GPL-2.0-only
 +
-+set -o errexit
-+set -o pipefail
++============
++UAPI Checker
++============
 +
-+print_usage() {
-+	name=$(basename "$0")
-+	cat << EOF
-+$name - check for UAPI header stability across Git commits
++The UAPI checker (scripts/check-uapi.sh) is a shell script which checks UAPI
++header files for userspace backwards-compatibility across the git tree.
 +
-+By default, the script will check to make sure the latest commit (or current
-+dirty changes) did not introduce ABI changes when compared to HEAD^1. You can
-+check against additional commit ranges with the -b and -r options.
++The script can produce false positives in some cases, so developers are
++encouraged to use their best judgement when interpreting the results. Please
++refer to kernel documentation on the topic of IOCTL stability for more
++information (Documentation/process/botching-up-ioctls.rst).
 +
-+To force the script to check compatibility of all UAPI headers, use the -a
-+option.
++Options
++=======
 +
-+Usage: $name [-b BASE_REF] [-r COMP_REF] [-a] [-j N] [-l ERROR_LOG]
++This section will describe the options check-uapi.sh can be run with.
 +
-+Options:
++Usage::
++
++    ./scripts/check-uapi.sh [-b BASE_REF] [-r COMP_REF] [-a] [-j N] [-l ERROR_LOG]
++
++Available options::
++
 +    -b BASE_REF    Base git reference to use for comparison. If unspecified or empty,
 +                   will use any dirty changes in tree to UAPI files. If there are no
 +                   dirty changes, HEAD will be used.
@@ -175,428 +137,244 @@ index 000000000000..022cc7f8a2a9
 +                   will use BASE_REF^1.
 +    -a             Check all UAPI headers for backwards compatibility.
 +    -j JOBS        Number of checks to run in parallel (default: number of CPU cores)
-+    -l ERROR_LOG   Write error log to file (default: "\$KERNEL_SOURCE/abi_error_log.txt")
++    -l ERROR_LOG   Write error log to file (default: "$KERNEL_SOURCE/abi_error_log.txt")
 +
-+Environmental args:
++Environmental args::
++
 +    ABIDIFF  Custom path to abidiff binary
 +    CC       C compiler (default is "gcc")
-+EOF
-+}
 +
-+# Some UAPI headers require an architecture-specific compiler to build properly.
-+ARCH_SPECIFIC_CC_NEEDED=(
-+	"arch/hexagon/include/uapi/asm/sigcontext.h"
-+	"arch/ia64/include/uapi/asm/intel_intrin.h"
-+	"arch/ia64/include/uapi/asm/setup.h"
-+	"arch/ia64/include/uapi/asm/sigcontext.h"
-+	"arch/mips/include/uapi/asm/bitfield.h"
-+	"arch/mips/include/uapi/asm/byteorder.h"
-+	"arch/mips/include/uapi/asm/inst.h"
-+	"arch/sparc/include/uapi/asm/fbio.h"
-+	"arch/sparc/include/uapi/asm/uctx.h"
-+	"arch/xtensa/include/uapi/asm/byteorder.h"
-+	"arch/xtensa/include/uapi/asm/msgbuf.h"
-+	"arch/xtensa/include/uapi/asm/sembuf.h"
-+)
++Examples
++========
 +
-+# Print to stderr
-+eprintf() {
-+	# shellcheck disable=SC2059
-+	printf "$@" >&2
-+}
++First, let's try making a change to a UAPI header file that obviously won't
++break userspace::
 +
-+# Print list of UAPI files to operate on
-+get_uapi_files() {
-+	local -r check_all="$1"
-+	local -r base_ref="$2"
-+	local -r ref="$3"
-+	local -r args="--name-status --no-renames --format= --diff-filter=a -- ${UAPI_DIRS[*]}"
++    cat << 'EOF' | patch -l -p1
++    --- a/include/uapi/linux/acct.h
++    +++ b/include/uapi/linux/acct.h
++    @@ -21,7 +21,9 @@
++     #include <asm/param.h>
++     #include <asm/byteorder.h>
 +
-+	if [ "$check_all" = "true" ]; then
-+		# Use find to print all of the UAPI files as if git had detected they were modified
-+		# Ignore the headers that need an arch-specific compiler because we can't build all
-+		# of those in one run (as only one CC can be passed).
-+		# shellcheck disable=SC2046,SC2048,SC2086
-+		find "${UAPI_DIRS[@]}" -type f -name '*.h' -printf 'M\t%p\n' \
-+			| grep -v $(get_no_header_list | xargs -- printf '-e %s ') \
-+				  ${ARCH_SPECIFIC_CC_NEEDED[*]/#/-e }
-+	else
-+		if [ -z "$base_ref" ] || [ -z "$ref" ]; then
-+			# shellcheck disable=SC2086
-+			git diff $args
-+		else
-+			# shellcheck disable=SC2086
-+			git diff "$ref" "$base_ref" $args
-+		fi
-+	fi
-+}
++    -/*
++    +#define FOO
++    +
++    +/*
++      *  comp_t is a 16-bit "floating" point number with a 3-bit base 8
++      *  exponent and a 13-bit fraction.
++      *  comp2_t is 24-bit with 5-bit base 2 exponent and 20 bit fraction
++    diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
++    EOF
 +
-+# Compile the simple test app
-+do_compile() {
-+	local -r inc_dir="$1"
-+	local -r header="$2"
-+	local -r out="$3"
-+	printf "int main(void) { return 0; }\n" | \
-+		"${CC:-gcc}" -c \
-+		  -o "$out" \
-+		  -x c \
-+		  -O0 \
-+		  -std=c90 \
-+		  -fno-eliminate-unused-debug-types \
-+		  -g \
-+		  "-I${inc_dir}" \
-+		  -include "$header" \
-+		  -
-+}
++Now, let's use the script to validate::
 +
-+# Print the list of incompatible headers from the usr/include Makefile
-+get_no_header_list() {
-+	{
-+		# shellcheck disable=SC2016
-+		printf 'all: ; @echo $(no-header-test)\n'
-+		cat "usr/include/Makefile"
-+	} | make -f - | tr " " "\n" | grep -v "asm-generic"
++    % ./scripts/check-uapi.sh
++    Installing sanitized UAPI headers from dirty tree... OK
++    Saving current tree state... OK
++    Installing sanitized UAPI headers from HEAD... OK
++    Restoring current tree state... OK
++    Checking changes to UAPI headers starting from dirty tree
++    No ABI differences detected in include/uapi/linux/acct.h from HEAD -> dirty tree
++    All 1 UAPI headers modified between HEAD and dirty tree are backwards compatible!
 +
-+	# One additional header file is not building correctly
-+	# with this method.
-+	# TODO: why can't we build this one?
-+	printf "asm-generic/ucontext.h\n"
-+}
++Let's add another change that *would* break userspace::
 +
-+# Save the current git tree state, stashing if needed
-+save_tree_state() {
-+	printf "Saving current tree state... "
-+	current_ref="$(git rev-parse HEAD)"
-+	readonly current_ref
-+	if ! git diff-index --quiet HEAD; then
-+		unstash="true"
-+		git stash push --quiet
-+	fi
-+	printf "OK\n"
-+}
++    cat << 'EOF' | patch -l -p1
++    --- a/include/uapi/linux/bpf.h  2023-02-28 13:32:36.505591077 -0800
++    +++ b/include/uapi/linux/bpf.h  2023-02-28 13:32:57.033494020 -0800
++    @@ -73,7 +73,7 @@
++            __u8    dst_reg:4;      /* dest register */
++            __u8    src_reg:4;      /* source register */
++            __s16   off;            /* signed offset */
++    -       __s32   imm;            /* signed immediate constant */
++    +       __u32   imm;            /* unsigned immediate constant */
++     };
 +
-+# Restore the git tree state, unstashing if needed
-+restore_tree_state() {
-+	printf "Restoring current tree state... "
-+	git checkout --quiet "$current_ref"
-+	if [ "$unstash" = "true" ]; then
-+		git stash pop --quiet
-+		unstash="false"
-+	fi
-+	printf "OK\n"
-+}
++     /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
++    EOF
 +
-+# Install headers for every arch and ref we need
-+install_headers() {
-+	local -r check_all="$1"
-+	local -r base_ref="$2"
-+	local -r ref="$3"
++The script should catch this incompatibility::
 +
-+	local arch_list=()
-+	while read -r status file; do
-+		if arch="$(printf "%s" "$file" | grep -o 'arch/.*/uapi' | cut -d '/' -f 2)"; then
-+			# shellcheck disable=SC2076
-+			if ! [[ " ${arch_list[*]} " =~ " $arch " ]]; then
-+				arch_list+=("$arch")
-+			fi
-+		fi
-+	done < <(get_uapi_files "$check_all" "$base_ref" "$ref")
++    % ./scripts/check-uapi.sh
++    Installing sanitized UAPI headers from dirty tree... OK
++    Saving current tree state... OK
++    Installing sanitized UAPI headers from HEAD... OK
++    Restoring current tree state... OK
++    Checking changes to UAPI headers starting from dirty tree
++    No ABI differences detected in include/uapi/linux/acct.h from HEAD -> dirty tree
++    !!! ABI differences detected in include/uapi/linux/bpf.h from HEAD -> dirty tree !!!
 +
-+	deviated_from_current_tree="false"
-+	for inst_ref in "$base_ref" "$ref"; do
-+		if [ -n "$inst_ref" ]; then
-+			if [ "$deviated_from_current_tree" = "false" ]; then
-+				save_tree_state
-+				trap 'rm -rf "$tmp_dir"; restore_tree_state;' EXIT
-+				deviated_from_current_tree="true"
-+			fi
-+			git checkout --quiet "$(git rev-parse "$inst_ref")"
-+		fi
++        [C] 'struct bpf_insn' changed:
++          type size hasn't changed
++          1 data member change:
++            type of '__s32 imm' changed:
++              typedef name changed from __s32 to __u32 at int-ll64.h:27:1
++              underlying type 'int' changed:
++                type name changed from 'int' to 'unsigned int'
++                type size hasn't changed
 +
-+		printf "Installing sanitized UAPI headers from %s... " "${inst_ref:-dirty tree}"
-+		make INSTALL_HDR_PATH="${tmp_dir}/${inst_ref}/usr" headers_install > /dev/null 2>&1
-+		for arch in "${arch_list[@]}"; do
-+			make ARCH="$arch" INSTALL_HDR_PATH="${tmp_dir}/${inst_ref}/${arch}/usr" \
-+				headers_install > /dev/null 2>&1
-+		done
-+		printf "OK\n"
-+	done
++    Header file diff (after headers_install):
++    --- HEAD/include/uapi/linux/bpf.h       2023-02-28 22:24:44.068898545 -0800
++    +++ dirty/include/uapi/linux/bpf.h      2023-02-28 22:24:42.132909241 -0800
++    @@ -73,7 +73,7 @@
++            __u8    dst_reg:4;      /* dest register */
++            __u8    src_reg:4;      /* source register */
++            __s16   off;            /* signed offset */
++    -       __s32   imm;            /* signed immediate constant */
++    +       __u32   imm;            /* unsigned immediate constant */
++     };
 +
-+	restore_tree_state
-+	trap 'rm -rf "$tmp_dir"' EXIT
-+}
++     /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
 +
-+# Check file list for UAPI compatibility
-+check_uapi_files() {
-+	local -r check_all="$1"
-+	local -r base_ref="$2"
-+	local -r ref="$3"
++    error - 1/2 UAPI headers modified between HEAD and dirty tree are not backwards compatible
++    error - UAPI header ABI check failed
 +
-+	install_headers "$check_all" "$base_ref" "$ref"
++Note: the script is operating on UAPI header files which have changed in the
++dirty git tree. If there were no changes in the tree, it would look for UAPI
++changes introduced by the latest HEAD commit.
 +
-+	local passed=0;
-+	local failed=0;
-+	local -a threads=()
++Let's commit the breaking change, then commit the good change::
 +
-+	printf "Checking changes to UAPI headers starting from %s\n" "${base_ref:-dirty tree}"
-+	while read -r status file; do
-+		if [ "${#threads[@]}" -ge "$MAX_THREADS" ]; then
-+			if wait "${threads[0]}"; then
-+				passed=$((passed + 1))
-+			else
-+				failed=$((failed + 1))
-+			fi
-+			threads=("${threads[@]:1}")
-+		fi
++    % git commit -m 'Breaking UAPI change' include/uapi/linux/bpf.h
++    [detached HEAD f758e574663a] Breaking UAPI change
++     1 file changed, 1 insertion(+), 1 deletion(-)
++    % git commit -m 'Innocuous UAPI change' include/uapi/linux/acct.h
++    [detached HEAD 2e87df769081] Innocuous UAPI change
++     1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+		check_individual_file "$base_ref" "$ref" "$status" "$file" &
-+		threads+=("$!")
-+	done < <(get_uapi_files "$check_all" "$base_ref" "$ref")
++Now, what happens if we run the script again with no arguments?::
 +
-+	for t in "${threads[@]}"; do
-+		if wait "$t"; then
-+			passed=$((passed + 1))
-+		else
-+			failed=$((failed + 1))
-+		fi
-+	done
++    % ./scripts/check-uapi.sh
++    Saving current tree state... OK
++    Installing sanitized UAPI headers from HEAD... OK
++    Installing sanitized UAPI headers from HEAD^1... OK
++    Restoring current tree state... OK
++    Checking changes to UAPI headers starting from HEAD
++    No ABI differences detected in include/uapi/linux/acct.h from HEAD^1 -> HEAD
++    All 1 UAPI headers modified between HEAD^1 and HEAD are backwards compatible!
 +
-+	total="$((passed + failed))"
-+	if [ "$failed" -gt 0 ]; then
-+		eprintf "error - %d/%d UAPI headers modified between %s and %s are not backwards compatible\n" \
-+			"$failed" "$total" "$ref" "${base_ref:-dirty tree}"
-+	else
-+		printf "All %d UAPI headers modified between %s and %s are backwards compatible!\n" \
-+			"$total" "$ref" "${base_ref:-dirty tree}"
-+	fi
++It doesn't catch any breaking change because by default, it only compares HEAD
++to HEAD^1. If we wanted the search scope to go back further, we'd have to use
++the "-r" option to pass other references to compare to. In this case, let's
++pass "-r HEAD~2" to the script so it checks UAPI changes between HEAD~2 and
++HEAD::
 +
-+	return "$failed"
-+}
++    % ./scripts/check-uapi.sh -r "HEAD~2"
++    Saving current tree state... OK
++    Installing sanitized UAPI headers from HEAD... OK
++    Installing sanitized UAPI headers from HEAD~2... OK
++    Restoring current tree state... OK
++    Checking changes to UAPI headers starting from HEAD
++    No ABI differences detected in include/uapi/linux/acct.h from HEAD~2 -> HEAD
++    !!! ABI differences detected in include/uapi/linux/bpf.h from HEAD~2 -> HEAD !!!
 +
-+# Print the path to a give header in the tmp_dir
-+get_header() {
-+	local -r ref="$1"
-+	local -r arch="$2"
-+	local -r base="$3"
++        [C] 'struct bpf_insn' changed:
++          type size hasn't changed
++          1 data member change:
++            type of '__s32 imm' changed:
++              typedef name changed from __s32 to __u32 at int-ll64.h:27:1
++              underlying type 'int' changed:
++                type name changed from 'int' to 'unsigned int'
++                type size hasn't changed
 +
-+	if [ -z "$arch" ]; then
-+		printf "%s" "${tmp_dir}/${ref}/usr/${base}"
-+	else
-+		printf "%s" "${tmp_dir}/${ref}/${arch}/usr/$(printf "%s" "$base" | cut -d '/' -f 3-)"
-+	fi
-+}
++    Header file diff (after headers_install):
++    --- HEAD~2/include/uapi/linux/bpf.h     2023-02-28 22:27:40.311925004 -0800
++    +++ HEAD/include/uapi/linux/bpf.h       2023-02-28 22:27:39.743928142 -0800
++    @@ -73,7 +73,7 @@
++            __u8    dst_reg:4;      /* dest register */
++            __u8    src_reg:4;      /* source register */
++            __s16   off;            /* signed offset */
++    -       __s32   imm;            /* signed immediate constant */
++    +       __u32   imm;            /* unsigned immediate constant */
++     };
 +
-+# Check an individual file for UAPI compatibility
-+check_individual_file() {
-+	local -r base_ref="$1"
-+	local -r ref="$2"
-+	local -r status="$3"
-+	local -r file="$4"
++     /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
 +
-+	if [ "$status" = "D" ]; then
-+		eprintf "error - UAPI header %s was incorrectly removed\n" "$file"
-+		return 1
-+	fi
++    error - 1/2 UAPI headers modified between HEAD~2 and HEAD are not backwards compatible
++    error - UAPI header ABI check failed
 +
-+	local -r base=${file/uapi\//}
-+	local -r uapi_arch="$(printf "%s" "$file" | grep -o 'arch/.*/uapi' | cut -d '/' -f 2)"
-+	local -r base_header=$(get_header "$base_ref" "$uapi_arch" "$base")
-+	local -r ref_header=$(get_header "$ref" "$uapi_arch" "$base")
-+	local -r installed_base="$(printf "%s" "$base_header" | grep -o "usr/include/.*" | cut -d '/' -f 3-)"
++If you want to check different chunks of the tree, you can also change your
++base commit with the "-b" option. For example, to check all changed UAPI header
++files between v6.0 and v6.1, you'd run::
 +
-+	# shellcheck disable=SC2076
-+	if [[ " $(get_no_header_list | xargs) " =~ " $installed_base " ]]; then
-+		eprintf "%s cannot be tested by this script (see usr/include/Makefile)\n" "$file"
-+		return 1
-+	fi
++    % ./scripts/check-uapi.sh -b v6.1 -r v6.0
++    Saving current tree state... OK
++    Installing sanitized UAPI headers from v6.1... OK
++    Installing sanitized UAPI headers from v6.0... OK
++    Restoring current tree state... OK
++    Checking changes to UAPI headers starting from v6.1
++    -- snip --
++    error - 42/106 UAPI headers modified between v6.0 and v6.1 are not backwards compatible
++    error - UAPI header ABI check failed
 +
-+	for h in "$base_header" "$ref_header"; do
-+		if [ ! -f "$h" ]; then
-+			eprintf "%s does not exist - cannot compare ABI\n" "$h"
-+			return 1
-+		fi
-+	done
++Aren't kernel UAPIs stable forever? Why is the script reporting errors?
 +
-+	compare_abi "$file" "$base_header" "$ref_header" "$base_ref" "$ref" "$uapi_arch"
-+}
++False Positives
++===============
 +
-+# Perform the A/B compilation and compare output ABI
-+compare_abi() {
-+	local -r file="$1"
-+	local -r base_header="$2"
-+	local -r ref_header="$3"
-+	local -r base_ref="$4"
-+	local -r ref="$5"
-+	local -r uapi_arch="$6"
-+	local -r log="${tmp_dir}/log/$(basename "$file").log"
++The UAPI checker is very aggressive in detecting ABI changes, so some false
++positives may appear. For example, if you check all UAPI headers between v6.0
++and v6.1, many breakages will be flagged. Run the following::
 +
-+	mkdir -p "$(dirname "$log")"
++    ./scripts/check-uapi.sh -b v6.1 -r v6.0
 +
-+	if ! do_compile "${tmp_dir}/${base_ref}/${uapi_arch}/usr/include" "$base_header" "${base_header}.bin" 2> "$log"; then
-+		eprintf "error - couldn't compile current version of UAPI header %s\n" "$file"
-+		# shellcheck disable=SC2076
-+		if [[ " ${ARCH_SPECIFIC_CC_NEEDED[*]} " =~ " $file " ]]; then
-+			eprintf "warning - this file needs to be built with a %s compiler. Are you using one?\n" "$uapi_arch"
-+		fi
-+		cat "$log" >&2
-+		exit 1
-+	fi
++The errors will be logged to "abi_error_log.txt". Here, we'll find examples of
++several types of false positives.
 +
-+	if ! do_compile "${tmp_dir}/${ref}/${uapi_arch}/usr/include" "$ref_header" "${ref_header}.bin" 2> "$log"; then
-+		eprintf "error - couldn't compile version of UAPI header %s at %s\n" "$file" "$ref"
-+		# shellcheck disable=SC2076
-+		if [[ " ${ARCH_SPECIFIC_CC_NEEDED[*]} " =~ " $file " ]]; then
-+			eprintf "warning - this file needs to be built with a %s compiler. Are you using one?\n" "$uapi_arch"
-+		fi
++Enum Expansion::
 +
-+		cat "$log" >&2
-+		exit 1
-+	fi
++    !!! ABI differences detected in include/uapi/linux/openvswitch.h from v6.0 -> v6.1 !!!
 +
-+	if "$ABIDIFF" --non-reachable-types "${ref_header}.bin" "${base_header}.bin" > "$log"; then
-+		printf "No ABI differences detected in %s from %s -> %s\n" "$file" "$ref" "${base_ref:-dirty tree}"
-+	else
-+		# If the only changes were additions (not modifications to existing APIs), then
-+		# there's no problem. Ignore these diffs.
-+		if grep "Unreachable types summary" "$log" | grep -q "0 removed" &&
-+		   grep "Unreachable types summary" "$log" | grep -q "0 changed"; then
-+			return 0
-+		fi
-+		{
-+			printf "!!! ABI differences detected in %s from %s -> %s !!!\n\n" "$file" "$ref" "${base_ref:-dirty tree}"
-+			sed  -e '/summary:/d' -e '/changed type/d' -e '/^$/d' -e 's/^/  /g' "$log"
-+			printf "\nHeader file diff (after headers_install):\n"
-+			diff -Naur "$ref_header" "$base_header" \
-+				| sed -e "s|${ref_header}|${ref}/${file}|g" \
-+				      -e "s|${base_header}|${base_ref:-dirty}/${file}|g"
-+			printf "\n"
-+		} | tee "${base_header}.error" >&2
-+		return 1
-+	fi
-+}
++        [C] 'enum ovs_datapath_attr' changed:
++          type size hasn't changed
++          1 enumerator insertion:
++            'ovs_datapath_attr::OVS_DP_ATTR_IFINDEX' value '9'
++          1 enumerator change:
++            'ovs_datapath_attr::__OVS_DP_ATTR_MAX' from value '9' to '10' at openvswitch.h.current:85:1
 +
-+# Make sure we have the tools we need
-+check_deps() {
-+	export ABIDIFF="${ABIDIFF:-abidiff}"
++In this case, an enum was expanded. Consequently, the "MAX" value was
++incremented. This is not considered a breaking change because it's assumed
++userspace programs are using the MAX value in a sane fashion.
 +
-+	if ! command -v "$ABIDIFF" > /dev/null 2>&1; then
-+		eprintf "error - abidiff not found!\n"
-+		eprintf "Please install abigail-tools (version 1.7 or greater)\n"
-+		eprintf "See: https://sourceware.org/libabigail/manual/libabigail-overview.html\n"
-+		exit 1
-+	fi
++Expanding into reserved/padding fields::
 +
-+	read -r abidiff_maj abidiff_min _unused < <("$ABIDIFF" --version | cut -d ' ' -f 2 | tr '.' ' ')
-+	if [ "$abidiff_maj" -lt 1 ] || { [ "$abidiff_maj" -eq 1 ] && [ "$abidiff_min" -lt 7 ]; }; then
-+		eprintf "error - abidiff version too old: %s\n" "$("$ABIDIFF" --version)"
-+		eprintf "Please install abigail-tools (version 1.7 or greater)\n"
-+		eprintf "See: https://sourceware.org/libabigail/manual/libabigail-overview.html\n"
-+		exit 1
-+	fi
++    !!! ABI differences detected in include/uapi/linux/perf_event.h from v6.0 -> v6.1 !!!
 +
-+	if [ ! -x "scripts/unifdef" ]; then
-+		if ! make -f /dev/null scripts/unifdef; then
-+			eprintf 'error - failed to build required dependency "scripts/unifdef"\n'
-+			exit 1
-+		fi
-+	fi
-+}
++        [C] 'struct perf_branch_entry' changed:
++          type size hasn't changed
++          3 data member insertions:
++            '__u64 spec', at offset 152 (in bits) at perf_event.h.current:1420:1
++            '__u64 new_type', at offset 154 (in bits) at perf_event.h.current:1421:1
++            '__u64 priv', at offset 158 (in bits) at perf_event.h.current:1422:1
++          1 data member change:
++            '__u64 reserved' offset changed from 152 to 161 (in bits) (by +9 bits)
 +
-+main() {
-+	MAX_THREADS=$(nproc)
++In this case, a reserved field was expanded into. Previously, the reserved
++field occupied 40 bits in the struct. After the change, three new members
++were added that took up 9 bits, so the size of the reserved field was
++reduced to 31.
 +
-+	base_ref=""
-+	check_all="false"
-+	while getopts "hb:r:aj:l:" opt; do
-+		case $opt in
-+		h)
-+			print_usage
-+			exit 0
-+			;;
-+		b)
-+			base_ref="$OPTARG"
-+			;;
-+		r)
-+			ref_to_check="$OPTARG"
-+			;;
-+		a)
-+			check_all="true"
-+			;;
-+		j)
-+			MAX_THREADS="$OPTARG"
-+			;;
-+		l)
-+			abi_error_log="$OPTARG"
-+			;;
-+		*)
-+			eprintf "error - invalid option %s\n" "$opt"
-+			exit 1
-+		esac
-+	done
++As the size of the struct did not change and none of the fields a userspace
++program could have been using were removed/changed/relocated, this change is
++not considered breaking.
 +
-+	if [ -z "$KERNEL_SRC" ]; then
-+		KERNEL_SRC="$(realpath "$(dirname "$0")"/..)"
-+	fi
-+
-+	cd "$KERNEL_SRC"
-+
-+	abi_error_log="${abi_error_log:-${KERNEL_SRC}/abi_error_log.txt}"
-+
-+	check_deps
-+
-+	tmp_dir=$(mktemp -d)
-+	trap 'rm -rf "$tmp_dir"' EXIT
-+
-+	# Set of UAPI directories to check by default
-+	UAPI_DIRS=(include/uapi arch/*/include/uapi)
-+
-+	if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-+		eprintf "error - this script requires the kernel tree to be initialized with Git\n"
-+		exit 1
-+	fi
-+
-+	# If there are no dirty UAPI files, use HEAD as base_ref
-+	if [ -z "$base_ref" ] && [ "$(get_uapi_files "" "" | wc -l)" -eq 0 ]; then
-+		base_ref="HEAD"
-+	fi
-+
-+	if [ -z "$ref_to_check" ]; then
-+		if [ -n "$base_ref" ]; then
-+			ref_to_check="${base_ref}^1"
-+		else
-+			ref_to_check="HEAD"
-+		fi
-+	fi
-+
-+	if [ -n "$ref_to_check" ] && ! git rev-parse --verify "$ref_to_check" > /dev/null 2>&1; then
-+		printf 'error - invalid git reference "%s"\n' "$ref_to_check"
-+		exit 1
-+	fi
-+
-+	if [ -n "$base_ref" ]; then
-+		if ! git merge-base --is-ancestor "$ref_to_check" "$base_ref" > /dev/null 2>&1; then
-+			printf 'error - "%s" is not an ancestor of base ref "%s"\n' "$ref_to_check" "$base_ref"
-+			exit 1
-+		fi
-+	fi
-+
-+	if [ "$check_all" != "true" ] && [ "$(get_uapi_files "$check_all" "$base_ref" "$ref_to_check" | wc -l)" -eq 0 ]; then
-+		printf "No changes to UAPI headers were applied between %s and %s\n" "$ref_to_check" "$base_ref"
-+		exit 0
-+	fi
-+
-+	if ! check_uapi_files "$check_all" "$base_ref" "$ref_to_check"; then
-+		eprintf "error - UAPI header ABI check failed\n"
-+		{
-+			printf 'Generated by "%s %s" from git ref %s\n\n' "$0" "$*" "$(git rev-parse "HEAD")"
-+			find "$tmp_dir" -type f -name '*.error' -exec cat {} \;
-+		} > "$abi_error_log"
-+		eprintf "Failure summary saved to %s\n" "$abi_error_log"
-+		exit 1
-+	fi
-+}
-+
-+main "$@"
++In the future, as tooling improves, we may be able to filter out more of these
++false positives. There may also be additional examples of false positives not
++listed here. Use your best judgement, and ideally a unit test in userspace, to
++test your UAPI changes!
+diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
+index 6b0663075dc0..0876f5a2cf55 100644
+--- a/Documentation/dev-tools/index.rst
++++ b/Documentation/dev-tools/index.rst
+@@ -34,6 +34,7 @@ Documentation/dev-tools/testing-overview.rst
+    kselftest
+    kunit/index
+    ktap
++   checkuapi
+
+
+ .. only::  subproject and html
 --
 2.17.1
 
