@@ -2,121 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED586A6701
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 05:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323E06A6703
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 05:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjCAEiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 23:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S229697AbjCAEie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 23:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjCAEiQ (ORCPT
+        with ESMTP id S229695AbjCAEic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 23:38:16 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F320305E5;
-        Tue, 28 Feb 2023 20:38:15 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id g3so3035037wri.6;
-        Tue, 28 Feb 2023 20:38:15 -0800 (PST)
+        Tue, 28 Feb 2023 23:38:32 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F4C37F00
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 20:38:28 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id by13so479365vsb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 20:38:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iGJPeH0r7xdEaYTJzJa7w1hRBmNpRDwnHXG8dM1Fi/8=;
-        b=DFkgiwwMhK+5PJqOSgpPSKTngPQSY2UCT674oq6b9cyIrdrAk/eFMPKzpXxAIyU2mu
-         AIMVErKA5nZWJ3wD8mx7LGgpKD/41iyjWqIcH59c+EiRJJdzAwSPBWx7UO39UnVQ//Db
-         pDQhwa3j/09Z+VPJzZ9qZnnueCsDjit6+GxcDcNGGBZnoDkyxUmzcM9LpdjFsVuPhCMg
-         Pn/vqPoGz0RLuhzpxtqYIfmX+SUxQk+WUTbPXVLxLWQ8XksU3r3yg2yKs1cvcUNfk/8r
-         WHl+ZnqvX9Dy4JY5JTkBQPOfvpCf1+/e5aVvofM8BmoIuxHtoOImKJMYsOP2O/mRx63r
-         kEow==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=28yKfwjO/0s4rJfe6O0bQSgJmZe5IPEVZaGiHKCxTg4=;
+        b=ltkNxU1yuA7SsUdnMUKFZgbgRjVolNxel8F30fl8qwMT2mZ1gkbagUUvp7KPIZb9Aq
+         cqKY6RXZOfPn7rsWN+BPGfLphSlLwzpHvF67QeDuAvB4SvFJml65XJaT2vWDSQN1afSo
+         AZ1zD+02Au1E68OYq07MYfZvCt1TE1R5m7iGA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iGJPeH0r7xdEaYTJzJa7w1hRBmNpRDwnHXG8dM1Fi/8=;
-        b=hhwQloN70Wt4656Dq1gyph6uIM+ZyQsgRWr87kf2w/8lDvGc8yL90W01irAEKu3lDK
-         nzdTTJKIjcHO5EoCUzF+qvLfgwZ593yIs7hEw8fqQTSpie9mNIMQFGEcTaX8OCYje3me
-         fKT0LR5nCey6hdRHOGKLtlRBXLTyc+y+7UZkTygU+OBSWVoZ4WHnAgPcFH1p7RC+lZKP
-         i4mjLO5Bmdtkp90uG/DCjI8SV7uq5EzIyuuThmLIBsluqS/gzziNuIbe37UhgA7VX5G+
-         KAsfNIdmPMrzzCYjHibFsKJcbNTkilRsUTM1jMXRS+MyI+4UEg/zkcr+G11fvkr+Fvi4
-         wMGg==
-X-Gm-Message-State: AO0yUKXWncOyRmdFHipC0OzAqNvaG3y0nygX6fI3h8whwPJnCKiDh1db
-        uhLJEiIb2a+HHdEvlT6urV0=
-X-Google-Smtp-Source: AK7set+gUptp4vTi5bsWAxrQuCAD1OMXyp9cGvDDgba6mo1W7tgWi8r8vzfAV/1dNQguTi11mFakdQ==
-X-Received: by 2002:adf:e54b:0:b0:2c7:169b:c577 with SMTP id z11-20020adfe54b000000b002c7169bc577mr3859807wrm.19.1677645493423;
-        Tue, 28 Feb 2023 20:38:13 -0800 (PST)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id r14-20020adff70e000000b002c567881dbcsm11442126wrp.48.2023.02.28.20.38.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 20:38:12 -0800 (PST)
-Subject: Re: [PATCH v5 01/17] asm-generic/iomap.h: remove ARCH_HAS_IOREMAP_xx
- macros
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        christophe.leroy@csgroup.eu, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@ACULAB.COM, shorne@gmail.com,
-        willy@infradead.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        netdev@vger.kernel.org, Martin Habets <habetsm.xilinx@gmail.com>
-References: <20230301034247.136007-1-bhe@redhat.com>
- <20230301034247.136007-2-bhe@redhat.com>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <7bd6db48-ffb1-7eb1-decf-afa8be032970@gmail.com>
-Date:   Wed, 1 Mar 2023 04:38:10 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=28yKfwjO/0s4rJfe6O0bQSgJmZe5IPEVZaGiHKCxTg4=;
+        b=MWDsCPc8frUXI1PjHGYMY4accY49l4IXfHtpLAHzLzhYO9QxvyRKTZuwn/gzoDdrGj
+         0GwilqrA2kNhLxHTKm3mrHEzvdSQ+kHItYL7ZYn126GQFWg9+MzornCgle+QpqtNXA2n
+         D9BN+RkQb/Bs39rqfkaQxqCbHtYCHAieFcN53qFZkNt2g0roUtERh1pKAtAr1uKhLY1V
+         aNiyYHrHFptso0NneblMAg2XPy1YOphzgJkM2/8F7G2d609YoyVz2oYYDd/giXDxM7Gb
+         Fw/m+we1pNNP7k8z1ImNpURlyGVFIGOcYJOwMUQPx7s6MnRWkP7aP35XbGWtCMYt7qnz
+         tN3g==
+X-Gm-Message-State: AO0yUKWFtCS+y4sD1Tf5a0crsRhXNLZ9SqjKdcx9DNKhk3VzHNm3baZj
+        42UUaT9SR0BBC8ZuYMdH6BfAKlmuhyuGeNMon3vbmg==
+X-Google-Smtp-Source: AK7set91+2QnXMA/l4LPBLXs/2Khip/xRn9a22mox+dUKEcVere1J9qIQiz8Gao6UOQmlxbGnEkxjEAOVVyl6273gFk=
+X-Received: by 2002:a67:a641:0:b0:411:c62b:6bf0 with SMTP id
+ r1-20020a67a641000000b00411c62b6bf0mr3655682vsh.3.1677645507920; Tue, 28 Feb
+ 2023 20:38:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20230301034247.136007-2-bhe@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com> <20230228104741.717819-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230228104741.717819-3-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 1 Mar 2023 12:38:16 +0800
+Message-ID: <CAGXv+5HB-0XYw-vs97fbFu6nXWOOJzCf=rK31aL_ecC04vkq0Q@mail.gmail.com>
+Subject: Re: [PATCH v3 02/18] arm64: dts: mediatek: mt8183-kukui: Override
+ vgpu/vsram_gpu constraints
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2023 03:42, Baoquan He wrote:
-> diff --git a/drivers/net/ethernet/sfc/io.h b/drivers/net/ethernet/sfc/io.h
-> index 30439cc83a89..07f99ad14bf3 100644
-> --- a/drivers/net/ethernet/sfc/io.h
-> +++ b/drivers/net/ethernet/sfc/io.h
-> @@ -70,7 +70,7 @@
->   */
->  #ifdef CONFIG_X86_64
->  /* PIO is a win only if write-combining is possible */
-> -#ifdef ARCH_HAS_IOREMAP_WC
-> +#ifdef ioremap_wc
->  #define EFX_USE_PIO 1
->  #endif
->  #endif
+On Tue, Feb 28, 2023 at 6:47=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Override the PMIC-default voltage constraints for VGPU and VSRAM_GPU
+> with the platform specific vmin/vmax for the highest possible SoC
+> binning.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
 
-So I don't know how valid what we're doing here is...
-
-> diff --git a/include/asm-generic/iomap.h b/include/asm-generic/iomap.h
-> index 08237ae8b840..196087a8126e 100644
-> --- a/include/asm-generic/iomap.h
-> +++ b/include/asm-generic/iomap.h
-> @@ -93,15 +93,15 @@ extern void __iomem *ioport_map(unsigned long port, unsigned int nr);
->  extern void ioport_unmap(void __iomem *);
->  #endif
->  
-> -#ifndef ARCH_HAS_IOREMAP_WC
-> +#ifndef ioremap_wc
->  #define ioremap_wc ioremap
->  #endif
-
-... but it looks like this will break it, since in sfc/io.h
- `#ifdef ioremap_wc` will always be true (if I'm correctly
- understanding what we get via #include <linux/io.h>, which I'm
- probably not because asm includes always confuse me).
-I.e. we're not just interested in "can code that calls ioremap_wc
- compile?", we care about whether we actually get WC, because
- we're making an optimisation decision based on it.
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
