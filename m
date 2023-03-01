@@ -2,140 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0C66A73F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 524036A741A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCATDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S229696AbjCATOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjCATDJ (ORCPT
+        with ESMTP id S229544AbjCATOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:03:09 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996E3198F;
-        Wed,  1 Mar 2023 11:03:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1677697377; bh=cTE8O833aYzAtBzmtxia0kjyJ2tDBqNX7A/BHU+wHwQ=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=BIQIMvga/8fS4XjGDpbz4I4R2+p+wh1CXF5dzOTcm97N6LPluhA+h1tuUW3BI4vvt
-         iu0dcW2Dka+XhRJnmKoCN84HWW/ySOa1W0MOh0Fw8AYwTrArLjsyXiUvXpvxibdelW
-         7ChoapauReauPRGwBY59+6HzRhkU3LfCayEm2oJg=
-Received: by b221-1.in.mailobj.net [192.168.90.21] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Wed,  1 Mar 2023 20:02:57 +0100 (CET)
-X-EA-Auth: mg8m6pH8EMjB4QW7phrieOJq9PfSRl+dJ/cux7gVD/qyIimpW6+4I5isYtHXYDV/QYVNB1fMXbU5Qh57s8jR9A==
-Date:   Thu, 2 Mar 2023 00:32:45 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Hannes Reinecke <hare@suse.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH RESEND] scsi: libfc: Use refcount_* APIs for reference count
- management
-Message-ID: <Y/+hVSSFgeV+yPhY@ubun2204.myguest.virtualbox.org>
+        Wed, 1 Mar 2023 14:14:07 -0500
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132FC34015;
+        Wed,  1 Mar 2023 11:14:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1677698046; x=1709234046;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3wwzPb0/fcEw/uxsWSGn8+ksVDNwZHA6YXQnQDFNs3I=;
+  b=l2nYOPdmNJC542F6MTGph5fweeumSPoATCE+EwGoL7vg/OXUVgYDvSZm
+   oZpNmy7zGLAfFjo0veepl9j4OGRRvzCrFRMp+X7VUtU8Kg+w0KtrVvVVM
+   YTAHBJojnSXIaHaJ82q/qpaj/NGVtlqX2fBtaM5U5Uz0xxPVD1Q4cZf4K
+   A=;
+X-IronPort-AV: E=Sophos;i="5.98,225,1673913600"; 
+   d="scan'208";a="1108222414"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 18:59:01 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com (Postfix) with ESMTPS id B46B7AA1A5;
+        Wed,  1 Mar 2023 18:59:00 +0000 (UTC)
+Received: from EX19D002ANA002.ant.amazon.com (10.37.240.152) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Wed, 1 Mar 2023 18:58:59 +0000
+Received: from b0f1d8753182.ant.amazon.com.com (10.95.161.59) by
+ EX19D002ANA002.ant.amazon.com (10.37.240.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
+ Wed, 1 Mar 2023 18:58:56 +0000
+From:   Takahiro Itazuri <itazur@amazon.com>
+To:     <kvm@vger.kernel.org>, Sean Christopherson <seanjc@google.com>,
+        "Paolo Bonzini" <pbonzini@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        Takahiro Itazuri <zulinx86@gmail.com>,
+        Takahiro Itazuri <itazur@amazon.com>
+Subject: [PATCH v2 0/1] KVM: x86: Propagate AMD-specific IBRS bits to guests
+Date:   Wed, 1 Mar 2023 18:58:37 +0000
+Message-ID: <20230301185838.21659-1-itazur@amazon.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.95.161.59]
+X-ClientProxiedBy: EX19D035UWB004.ant.amazon.com (10.13.138.104) To
+ EX19D002ANA002.ant.amazon.com (10.37.240.152)
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The atomic_t API based object reference counter management is prone to
-counter value overflows, object use-after-free issues and to return
-puzzling values. The improved refcount_t APIs are designed to address
-these known issues with atomic_t reference counter management. This
-white paper [1] has detailed reasons for moving from atomic_t to
-refcount_t APIs. Hence replace the atomic_* based implementation by its
-refcount_* based equivalent.
-The issue is identified using atomic_as_refcounter.cocci Coccinelle
-semantic patch script.
+Changes since v2:
+* Move feature bits macros from arch/x86/include/asm/cpufeatures.h to
+  arch/x86/kvm/reverse_cpuid.h.
 
-	[1] https://arxiv.org/pdf/1710.06175.pdf
+Takahiro Itazuri (1):
+  KVM: x86: Propagate AMD-specific IBRS bits to guests
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Note: The proposal is compile tested only.
-      Resending the patch for review and feedback.
+ arch/x86/kvm/cpuid.c         | 5 +++--
+ arch/x86/kvm/reverse_cpuid.h | 5 +++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-
- drivers/scsi/libfc/fc_exch.c | 10 +++++-----
- include/scsi/libfc.h         |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
-index 1d91c457527f..1c49fddb65e3 100644
---- a/drivers/scsi/libfc/fc_exch.c
-+++ b/drivers/scsi/libfc/fc_exch.c
-@@ -246,7 +246,7 @@ static const char *fc_exch_rctl_name(unsigned int op)
-  */
- static inline void fc_exch_hold(struct fc_exch *ep)
- {
--	atomic_inc(&ep->ex_refcnt);
-+	refcount_inc(&ep->ex_refcnt);
- }
- 
- /**
-@@ -312,7 +312,7 @@ static void fc_exch_release(struct fc_exch *ep)
- {
- 	struct fc_exch_mgr *mp;
- 
--	if (atomic_dec_and_test(&ep->ex_refcnt)) {
-+	if (refcount_dec_and_test(&ep->ex_refcnt)) {
- 		mp = ep->em;
- 		if (ep->destructor)
- 			ep->destructor(&ep->seq, ep->arg);
-@@ -329,7 +329,7 @@ static inline void fc_exch_timer_cancel(struct fc_exch *ep)
- {
- 	if (cancel_delayed_work(&ep->timeout_work)) {
- 		FC_EXCH_DBG(ep, "Exchange timer canceled\n");
--		atomic_dec(&ep->ex_refcnt); /* drop hold for timer */
-+		refcount_dec(&ep->ex_refcnt); /* drop hold for timer */
- 	}
- }
- 
-@@ -1897,7 +1897,7 @@ static void fc_exch_reset(struct fc_exch *ep)
- 	ep->state |= FC_EX_RST_CLEANUP;
- 	fc_exch_timer_cancel(ep);
- 	if (ep->esb_stat & ESB_ST_REC_QUAL)
--		atomic_dec(&ep->ex_refcnt);	/* drop hold for rec_qual */
-+		refcount_dec(&ep->ex_refcnt);	/* drop hold for rec_qual */
- 	ep->esb_stat &= ~ESB_ST_REC_QUAL;
- 	sp = &ep->seq;
- 	rc = fc_exch_done_locked(ep);
-@@ -2332,7 +2332,7 @@ static void fc_exch_els_rrq(struct fc_frame *fp)
- 	 */
- 	if (ep->esb_stat & ESB_ST_REC_QUAL) {
- 		ep->esb_stat &= ~ESB_ST_REC_QUAL;
--		atomic_dec(&ep->ex_refcnt);	/* drop hold for rec qual */
-+		refcount_dec(&ep->ex_refcnt);	/* drop hold for rec qual */
- 	}
- 	if (ep->esb_stat & ESB_ST_COMPLETE)
- 		fc_exch_timer_cancel(ep);
-diff --git a/include/scsi/libfc.h b/include/scsi/libfc.h
-index 6e29e1719db1..ce65149b300c 100644
---- a/include/scsi/libfc.h
-+++ b/include/scsi/libfc.h
-@@ -432,7 +432,7 @@ struct fc_seq {
-  */
- struct fc_exch {
- 	spinlock_t	    ex_lock;
--	atomic_t	    ex_refcnt;
-+	refcount_t	    ex_refcnt;
- 	enum fc_class	    class;
- 	struct fc_exch_mgr  *em;
- 	struct fc_exch_pool *pool;
 -- 
-2.34.1
-
-
+2.38.0
 
