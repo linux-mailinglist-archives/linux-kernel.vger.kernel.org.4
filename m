@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB476A76AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F556A76AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjCAWOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 17:14:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S229750AbjCAWQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 17:16:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCAWOg (ORCPT
+        with ESMTP id S229471AbjCAWQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 17:14:36 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2072.outbound.protection.outlook.com [40.107.223.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD8D4392E;
-        Wed,  1 Mar 2023 14:14:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HrDlQuIUV/XE1K1H3qVZjMk0Ah+EFBM5U1K8avZm0plsBEAwBkgz2ZLUEs0k5sI/vFm7+CA1kitYa0c5NubOFy40rSDknXmg3nTAMEC0desQZqSbAaF2Zfrks8RKTVuO2DqjuyZz0bmbZRzRa9n5rBeCzu1RggzVHA0uD28nCpyNvfeO0w8jQhoK/4nUqk0n5E8teEREkeCkqDjy6JiUq6WB+k7jdWerXVvyoaqn0ZJWSvPR+k38/GmXSa8a+vYpZE3tsaLGYXMv3ILaOoEe8bOv4jwQTgpjG7wcMi+EUb4d8ockLRIm1y6I4d16q4f9v3PfKYJMrPU2sLj9WaZviA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bIIs7J4ikaeZk6ki8Ci/PnQREADdnADwzcj6SVAg3pc=;
- b=T1JOhgWGHafY9Ye8KQq/IvAWGtIx01Z8DhNxd8iBsDlB0zQwks45SaqDlftFp4wvceaqSSoUplSTCXtIhOajMya/2Gpt6tIUpYkroPch/YPREArghCi12p1E8UxYvs1OUCKCTeeFf6wMaNUlv0XvB5IThJ/cDlNG3c3fRdnWkE9BDvVNVXAM4Rsbp1F4TNIv1W8HwJBJJXwNnfZ8EthSU8YlsAhbxhJZkA2Qju2mCwXy6SmVMA53c+4iEhxU04IGtUODpAb4mJHDnQTZrpY1k1DOcmZ8aIim1s3VxkkELzL3i1PWw/GHfEG4pxLLh4iTkEEDb0kU3G81PFdQjWdE/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bIIs7J4ikaeZk6ki8Ci/PnQREADdnADwzcj6SVAg3pc=;
- b=3hea4znY3+1C7WVye2RFUVnxjtePLYwFfj26KHWXBs10vxZYZdLbt+JwyP9LETr3G/EOwHuWlS/Oy0SPtDZZrJJW3NTzJMjlGAEYx5mQbinY3OniswB60ax/FbyoEJAaemOWfWWlkhDb3rnjXpDnkU3C9iysRcS/yXLnL+qIyrE=
-Received: from MW4PR04CA0256.namprd04.prod.outlook.com (2603:10b6:303:88::21)
- by IA1PR12MB8555.namprd12.prod.outlook.com (2603:10b6:208:44f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
- 2023 22:14:32 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:88:cafe::c0) by MW4PR04CA0256.outlook.office365.com
- (2603:10b6:303:88::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Wed, 1 Mar 2023 22:14:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.12 via Frontend Transport; Wed, 1 Mar 2023 22:14:32 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
- 2023 16:14:31 -0600
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
-        <x86@kernel.org>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2] x86/mce: Schedule work after restart from sysfs update
-Date:   Wed, 1 Mar 2023 22:14:20 +0000
-Message-ID: <20230301221420.2203184-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 1 Mar 2023 17:16:03 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA614C6EF;
+        Wed,  1 Mar 2023 14:16:03 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id z2so15534592plf.12;
+        Wed, 01 Mar 2023 14:16:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677708963;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+VO58BJFY6nm+jljRMOtrXaix324GdbTWzVJl2d1Ygo=;
+        b=SK0zHrsztUZZbSIQbKAlthpoNzatdboI23fAfedLQfI4p3p5MbMv+aabfAg7pIJLtR
+         edLWU+NFy3x7J0MGreVaB1I1QslKUDd8KQMF7/ERa8XcorlyEJXkRlMAi3PehMoi6x67
+         PrfmY1kEsbpggxt2eLWbxFCswrYvqUaH26nv7eRb4NboW/InL3ODfAy511MUdrM6IRcJ
+         2ZV4bkabwc5DfW2pNCSCIL5nDBgZyHy1Uv0oLBv70i+Wunrma9ORl1eB8ERwl9g0R9EP
+         ZFtHZIzMzDsxrlAOIHnqEdp2/NHvxVR5td0o3Bc06hNbFgCVTU4nbeaSnHRnikQWy4TC
+         Oshg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677708963;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+VO58BJFY6nm+jljRMOtrXaix324GdbTWzVJl2d1Ygo=;
+        b=d1oLOFwzevwdFQGp9BJoKNHbyKJ/An+EBjd3Ts4UbTZuUcYuzLyvUPul1ga6K5j527
+         iKKjj/F/1up3VFrFgu4/gjdWvEnUTyEE3cgSWoZMmPuAJy9wHnmfK7bE6Xiy6aIkYxz5
+         jFBCQm+uLb6r/QKRl25AD8MkBOKleIX1CWa2ZQHJGE+L+3TIbRYwNBAxuFc4dvNLCk2O
+         ZzJDKVdUW2Bt55VT2ydNlxx3P20XPvYE02TEUirvAdfrAkz7iCUcP9OsEmw++2HXkrqe
+         P8Nz3ZqxO/lkgQAIJi0b4Y+F4W5B9dFCZo2gE47ywhHWI/WvySpnGde3rNWIwguD1C+i
+         L5FA==
+X-Gm-Message-State: AO0yUKW3OWguUKx1Z1OWlPvTskTQYABnLYQBdzZWd4RuCGC2xfvrzGuJ
+        mN6fLwVb5K6HzHa4W8cNdcBSWvtdVGU=
+X-Google-Smtp-Source: AK7set8i9ZNxm8L9u2i8JxWX9ntNvTWJs0PlAnbX7Nq/QOJgGIiVo/wcHYUPmRlcsuxgNbmNBxThuw==
+X-Received: by 2002:a17:902:f54c:b0:19a:8304:21eb with SMTP id h12-20020a170902f54c00b0019a830421ebmr20056plf.6.1677708962636;
+        Wed, 01 Mar 2023 14:16:02 -0800 (PST)
+Received: from [10.69.40.170] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id w16-20020a639350000000b004f2c088328bsm7898818pgm.43.2023.03.01.14.16.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 14:16:01 -0800 (PST)
+Message-ID: <7b4b962d-c001-b78e-439f-86d98bf1813d@gmail.com>
+Date:   Wed, 1 Mar 2023 14:16:00 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT063:EE_|IA1PR12MB8555:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ac8a115-f164-418d-448b-08db1aa25576
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ygf3aoYCbkbN3msN8lEiJyeMdfV+005mKEKh9+gFxwqSJBi09S8rGMKI6KPnfpCAQWcXVfDjnnhAax+DnZc2uH8Eb+epjDg9iNNhjqcypOtt2NKHa2rWvXZzyX8UXSlQ2+u+axRFgc0tQF23gzjh4UJILy3UjN5YuBwe+8kqKKdIhX6uUF2WcUQWFkEAcYTX/IkqLnX9JBrzdqOlseEwo3c9EEcRFbxIuwI23op74G10i74UrIGHC7Fg5LZ2rIWqPNy3A+s5V+VDgv5AMsKRNJdmeUTrzoPDTrUSs6uoI7zvwAbFpbDgMF1k5XfdYzULTMS5GVtHCVV+hTOZEnaXklU9pxFGr7jNukIQY5GBqB93s/bEJE+U0yyXU/drZD60xWA6s9D3orA/MfABVXLHtGQ4iPj+NK8uo2isHyrcGq01yWsaCjpzC1pDLHuyT7y4LwkvJt2MTh1hqfwTiQ54rm5gdM40GIVxv3UgvPaieTcjCeAXhmwwjznEJyiRYuW5HJFZWNbZf18WwCTfPw+kUmt2d9dJl0tUvJ63ORtPlDk/kBz/WFs7xTR3SLMRQxB6NdbYrrsUmOtfP3Yhg5UJwX8uuxcP/esgbhlkCi4Gp55NpqJFqt2imuHwrGRicKYrKl+EqTJhQCMk3kB92BwbvqqWp2JcfIN5HKEF/HOs/EDzcBwu6qIGTLDeBiTET3XC5S1+ZNEXvbdin1YOauciRAK+aRvuICs+9gI7a+bM3mE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199018)(40470700004)(36840700001)(46966006)(36860700001)(82740400003)(81166007)(86362001)(70206006)(356005)(7696005)(2906002)(44832011)(6916009)(4326008)(5660300002)(41300700001)(8936002)(40480700001)(15650500001)(8676002)(70586007)(82310400005)(40460700003)(336012)(2616005)(16526019)(1076003)(26005)(186003)(47076005)(83380400001)(426003)(316002)(478600001)(54906003)(966005)(36756003)(6666004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 22:14:32.2489
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ac8a115-f164-418d-448b-08db1aa25576
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8555
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230301180657.003689969@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20230301180657.003689969@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A recent change introduced a flag to queue up errors found during
-boot-time polling. These errors will be processed during late init once
-the MCE subsystem is fully set up.
 
-A number of sysfs updates call mce_restart() which goes through a subset
-of the CPU init flow. This includes polling MCA banks and logging any
-errors found. Since the same function is used as boot-time polling,
-errors will be queued. However, the system is now past late init, so the
-errors will remain queued until another error is found and the workqueue
-is triggered.
 
-Call mce_schedule_work() at the end of mce_restart() so that queued
-errors are processed.
+On 3/1/2023 10:08 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.15 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Fixes: 3bff147b187d ("x86/mce: Defer processing of early errors")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-Link:
-https://lore.kernel.org/r/20230301202623.2092271-1-yazen.ghannam@amd.com
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-v1->v2:
-* Refer to correct function in commit message.
-
- arch/x86/kernel/cpu/mce/core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 7832a69d170e..2eec60f50057 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2355,6 +2355,7 @@ static void mce_restart(void)
- {
- 	mce_timer_delete_all();
- 	on_each_cpu(mce_cpu_restart, NULL, 1);
-+	mce_schedule_work();
- }
- 
- /* Toggle features for corrected errors */
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.34.1
+Florian
 
