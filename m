@@ -2,209 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136A86A6EAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAE86A6EA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjCAOpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S229692AbjCAOoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjCAOpF (ORCPT
+        with ESMTP id S229523AbjCAOoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:45:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C3A2DE55
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:44:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677681856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E86jCb8kW1PzrvPSO5dVoBke0amKLBuYHjvi+nJQr9o=;
-        b=bTk2IXxjyM8H25glC8AUnI8Nvf7PrGOtJM0U4bFXTraGafQvNNnwqGKMD68lNez2cjCeuD
-        b0xuj84RHxU8q8eLhCZzTn2uD+C8RuDKf3BCnYjD60hYCrDECSiRRdEPN4ZS1cEa7wspr2
-        oFpOBKMeBwtdnl4AOUlSDrmVrxG+hEA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-461-MzsprxfzOUCBbOCAyFrtag-1; Wed, 01 Mar 2023 09:44:15 -0500
-X-MC-Unique: MzsprxfzOUCBbOCAyFrtag-1
-Received: by mail-wm1-f72.google.com with SMTP id k26-20020a05600c0b5a00b003dfe4bae099so5435818wmr.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:44:15 -0800 (PST)
+        Wed, 1 Mar 2023 09:44:14 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E4F234CB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:44:13 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so12011208wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:44:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677681852;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yl6C2iVlPZ96bPfCVmgZY7PP7SMNEem8KqVjYArVzQ8=;
+        b=cIjJqg9FJrBtRpUBk16LBmHsmWd0ev7K/7/JiiDt8o2hJnkTBtgTFEyT8wHJItK5O/
+         c1Xwp5eXTa+VP3Mxh8ACyn0xZN57XKs4PFdCYZhTexf53+6kxWO5E/iDa4Ttz6rZL/1l
+         oF8jPIQBE4LKsnCNIhWnWRyOw4XkUTZclUYv0vjUr73FbGA8TFY+lsB+vGMG9oX34Aa7
+         Gk7vQa4NijjgYs45pP1gGyKmMX7D5ahWEb1Sbh+pg9sghK4R2Y1Q1bU1T6gB1LNhCV8T
+         MwW7dT6M+qIKB+hSQK5D2YCZsjahy75Z/17Hzv6i2yLkVAdsn64jHHRz/MYwWdxaFdqb
+         l/ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677681854;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E86jCb8kW1PzrvPSO5dVoBke0amKLBuYHjvi+nJQr9o=;
-        b=UkH40BpxUDlEmZPFuEXhOb+Yll4nKA1SgpIfOcZP2DQxKfg/6zbl/ZTo3/V1iKWjOF
-         +veBImzVYTud5ynXT6kaJyyKtGy1qFgq7n0NnqOPydFjX8BSYrmbh0td2P5gQttPnflL
-         TPP2F/OSkoX5xgT7Pyy/8sKIoQPEETaOf2FpU3vNlnWmpw8degDXHo7IVIlLVgFBok9w
-         BwvlaKfkMnh4GoudgMytomdfyK/SSpfmsKnEDDPPc9paX6MAvt51IWqUxvO9qpLFX/a6
-         CNyQ/zkHU6WD9ow6l/POCki5iUoO36v9hiyn0YZqWoC4rM5HA8IiNCbRDJGjw276+p3b
-         DjPA==
-X-Gm-Message-State: AO0yUKV1JHBdyvXEnTIir7lXzi6jw/yJOuZupIRoGWmr9yZgrUfDF+le
-        0XBvLHW6GxJ1eIbixacnO3jaF6CsI5bdSnQODh8wJ0S616ovSVzaTpZcPG/9vW9yoXuofm9EASF
-        C3uDolF/NBgKaVY29HenPgAJo
-X-Received: by 2002:a5d:6e09:0:b0:2c7:5247:e496 with SMTP id h9-20020a5d6e09000000b002c75247e496mr5056898wrz.60.1677681854206;
-        Wed, 01 Mar 2023 06:44:14 -0800 (PST)
-X-Google-Smtp-Source: AK7set8mSY3e1Y8uBNg7J/umChcu632unCjyUQQS2o6WA2kpSEr1P+PNtHKwqRrvNwfJaKiCprzfMA==
-X-Received: by 2002:a5d:6e09:0:b0:2c7:5247:e496 with SMTP id h9-20020a5d6e09000000b002c75247e496mr5056875wrz.60.1677681853859;
-        Wed, 01 Mar 2023 06:44:13 -0800 (PST)
-Received: from redhat.com ([2.52.141.194])
-        by smtp.gmail.com with ESMTPSA id t14-20020adfe44e000000b002c5503a8d21sm13145104wrm.70.2023.03.01.06.44.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 06:44:13 -0800 (PST)
-Date:   Wed, 1 Mar 2023 09:44:09 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     rbradford@rivosinc.com
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] virtio-net: Fix probe of virtio-net on kvmtool
-Message-ID: <20230301093054-mutt-send-email-mst@kernel.org>
-References: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com>
+        d=1e100.net; s=20210112; t=1677681852;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yl6C2iVlPZ96bPfCVmgZY7PP7SMNEem8KqVjYArVzQ8=;
+        b=r6At6rHh6r5LPDLWs1P7FDOOfB12ULHHkrBw1LIqg9QfZzVbum5Hyozh/iJuRvKY/4
+         hxLUYhBc0ez7F6XVc8SteUb8H7PD9cac+2ouHMKgtTtMPutR4RVE5YufdL74u39b8C4s
+         dphrE79EfnLdNb+7SdkSzXuUFv5/IEK+ZFJ4v2yvvdWCcunJZ8nxH/oOysXA2wUjM/W7
+         77fNdeiwkysPhJk7EVHJNiTfQ+u5/810rDck2xCJEDkqhxU5Q4MBjzvMFo8+5+i6Kv/T
+         QlVqMnQmDmmmojqZMtKCPxdXMmczo6dfuMmyu/jIgeikw9W7h4nwiK8ncIpC/sesRX1B
+         4DmA==
+X-Gm-Message-State: AO0yUKXQkqFtVuUlQoWIMMiqGMRco98e9AQJcmdsv95Xz7pnjHVD8NjM
+        4UoyZwK2qGE+xJA0oR8zgzK19w==
+X-Google-Smtp-Source: AK7set8ZaMDTtplAM9a+ZyNMSwBq+nmbYRXDCAHNxgiHyZcDqX2ggQxMAUflaJ2Cj9Ba3mrq0LT0gw==
+X-Received: by 2002:a05:600c:3544:b0:3eb:3fea:a2ac with SMTP id i4-20020a05600c354400b003eb3feaa2acmr5288143wmq.22.1677681851899;
+        Wed, 01 Mar 2023 06:44:11 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:6ffe:ce4f:bd31:1e6d? ([2a05:6e02:1041:c10:6ffe:ce4f:bd31:1e6d])
+        by smtp.googlemail.com with ESMTPSA id m33-20020a05600c3b2100b003eaee9e0d22sm17455606wms.33.2023.03.01.06.44.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 06:44:11 -0800 (PST)
+Message-ID: <0ef0efeb-dc0b-ed37-6572-384d2fa93591@linaro.org>
+Date:   Wed, 1 Mar 2023 15:44:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 17/19] thermal/tegra: Do not enable the thermal zone,
+ it is already enabled
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
+ <20230228112238.2312273-18-daniel.lezcano@linaro.org>
+ <Y/9hZFfRWLNHMbxe@orome>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <Y/9hZFfRWLNHMbxe@orome>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 01:59:52PM +0000, Rob Bradford via B4 Relay wrote:
-> From: Rob Bradford <rbradford@rivosinc.com>
+On 01/03/2023 15:29, Thierry Reding wrote:
+> On Tue, Feb 28, 2023 at 12:22:36PM +0100, Daniel Lezcano wrote:
+>> The code enables the thermal zone after setting it up. But the thermal
+>> zone is already enabled by thermal_of_zone_register() function.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   drivers/thermal/tegra/tegra30-tsensor.c | 8 +-------
+>>   1 file changed, 1 insertion(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
+>> index 3506c3f3c474..e38902abf207 100644
+>> --- a/drivers/thermal/tegra/tegra30-tsensor.c
+>> +++ b/drivers/thermal/tegra/tegra30-tsensor.c
+>> @@ -346,7 +346,7 @@ static int tegra_tsensor_enable_hw_channel(const struct tegra_tsensor *ts,
+>>   {
+>>   	const struct tegra_tsensor_channel *tsc = &ts->ch[id];
+>>   	struct thermal_zone_device *tzd = tsc->tzd;
+>> -	int err, hot_trip = 0, crit_trip = 0;
+>> +	int hot_trip = 0, crit_trip = 0;
+>>   	u32 val;
+>>   
+>>   	if (!tzd) {
+>> @@ -401,12 +401,6 @@ static int tegra_tsensor_enable_hw_channel(const struct tegra_tsensor *ts,
+>>   	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_INTR_THERMAL_RST_EN, 1);
+>>   	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG0);
+>>   
+>> -	err = thermal_zone_device_enable(tzd);
+>> -	if (err) {
+>> -		dev_err(ts->dev, "ch%u: failed to enable zone: %d\n", id, err);
+>> -		return err;
+>> -	}
+>> -
+>>   	return 0;
+>>   }
 > 
-> Since the following commit virtio-net on kvmtool has printed a warning
-> during the probe:
+> This function is called in tegra_tsensor_resume() and balances out the
+> tegra_tsensor_hw_channel() calls from tegra_tsensor_suspend(). If we
+> remove the call from here, we'll likely end up with the zones disabled
+> after a resume.
 > 
-> commit dbcf24d153884439dad30484a0e3f02350692e4c
-> Author: Jason Wang <jasowang@redhat.com>
-> Date:   Tue Aug 17 16:06:59 2021 +0800
+> This ends up calling thermal_zone_device_set_mode(), which is a no-op,
+> basically, if the mode is unchanged, so this seems harmless.
 > 
->     virtio-net: use NETIF_F_GRO_HW instead of NETIF_F_LRO
-> 
-> [    1.865992] net eth0: Fail to set guest offload.
-> [    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); wanted 0x0000000000134829, left 0x0080000000134829
-> 
-> This is because during the probing the underlying netdev device has
-> identified that the netdev features on the device has changed and
-> attempts to update the virtio-net offloads through the virtio-net
-> control queue. kvmtool however does not have a control queue that supports
-> offload changing (VIRTIO_NET_F_CTRL_GUEST_OFFLOADS is not advertised)
-> 
-> The netdev features have changed due to validation checks in
-> netdev_fix_features():
-> 
-> if (!(features & NETIF_F_RXCSUM)) {
-> 	/* NETIF_F_GRO_HW implies doing RXCSUM since every packet
-> 	 * successfully merged by hardware must also have the
-> 	 * checksum verified by hardware.  If the user does not
-> 	 * want to enable RXCSUM, logically, we should disable GRO_HW.
-> 	 */
-> 	if (features & NETIF_F_GRO_HW) {
-> 		netdev_dbg(dev, "Dropping NETIF_F_GRO_HW since no RXCSUM feature.\n");
-> 		features &= ~NETIF_F_GRO_HW;
-> 	}
-> }
-> 
-> Since kvmtool does not advertise the VIRTIO_NET_F_GUEST_CSUM feature the
-> NETIF_F_RXCSUM bit is not present and so the NETIF_F_GRO_HW bit is
-> cleared. This results in the netdev features changing, which triggers
-> the attempt to reprogram the virtio-net offloads which then fails.
-> 
-> This commit prevents that set of netdev features from changing by
-> preemptively applying the same validation and only setting
-> NETIF_F_GRO_HW if NETIF_F_RXCSUM is set because the device supports both
-> VIRTIO_NET_F_GUEST_CSUM and VIRTIO_NET_F_GUEST_TSO{4,6}
-> 
-> Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
-> ---
-> Changes in v3:
-> - Identified root-cause of feature bit changing and updated conditions
->   check
-> - Link to v2: https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v2-1-8ec93511e67f@rivosinc.com
-> 
-> Changes in v2:
-> - Use parentheses to group logical OR of features 
-> - Link to v1:
->   https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v1-1-fc23d29b9d7a@rivosinc.com
-> ---
->  drivers/net/virtio_net.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 61e33e4dd0cd..2e7705142ca5 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -3778,11 +3778,13 @@ static int virtnet_probe(struct virtio_device *vdev)
->  			dev->features |= dev->hw_features & NETIF_F_ALL_TSO;
->  		/* (!csum && gso) case will be fixed by register_netdev() */
->  	}
-> -	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
-> +	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM)) {
->  		dev->features |= NETIF_F_RXCSUM;
-> -	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-> -	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
-> -		dev->features |= NETIF_F_GRO_HW;
-> +		/* This dependency is enforced by netdev_fix_features */
-> +		if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-> +		    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
-> +			dev->features |= NETIF_F_GRO_HW;
-> +	}
->  	if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
->  		dev->hw_features |= NETIF_F_GRO_HW;
->  
+> If you need this to change anyway, I suppose we could move the calls to
+> thermal_zone_device_enable() and move them into suspend/resume instead.
+> That's a bit tricky to undo in the error recovery paths, but should be
+> doable.
 
-I see. It is annoying that we are duplicating the logic from
-netdev_fix_features here though :(
-Maybe we should call netdev_update_features, in the callback check
-the flags and decide what to set and what to clear?
-Or export netdev_fix_features to modules?
+No it is fine, I will just drop this patch from the series.
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Also re-reading Documentation/networking/netdev-features.rst - 
-
- 1. netdev->hw_features set contains features whose state may possibly
-    be changed (enabled or disabled) for a particular device by user's
-    request.  This set should be initialized in ndo_init callback and not
-    changed later.
-
- 2. netdev->features set contains features which are currently enabled
-    for a device.  This should be changed only by network core or in
-    error paths of ndo_set_features callback.
-
-
-is it then wrong that virtio sets NETIF_F_RXCSUM and NETIF_F_GRO_HW in
-dev->features and not in dev->hw_features? We set it there because
-without ctrl guest offload these can not be changed.
-I suspect this is just a minor documentation bug yes? Maybe devices
-where features can't be cleared are uncommon.
-
-Also:
-        if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
-                dev->hw_features |= NETIF_F_GRO_HW;
-
-but should we not set NETIF_F_RXCSUM there too?
-
-
-
-> ---
-> base-commit: c39cea6f38eefe356d64d0bc1e1f2267e282cdd3
-> change-id: 20230223-virtio-net-kvmtool-87f37515be22
-> 
-> Best regards,
-> -- 
-> Rob Bradford <rbradford@rivosinc.com>
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
