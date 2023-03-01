@@ -2,131 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6056A6FE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8FC6A6FF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjCAPjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S229826AbjCAPl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjCAPjN (ORCPT
+        with ESMTP id S229527AbjCAPl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:39:13 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E122F15160
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 07:39:12 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id n5so8167088pfv.11
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 07:39:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1677685152;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G88lHAU8EQsCcXmuw5k8V0o7uYf93X0m0EbK56nmCkc=;
-        b=Ny+HmlrE0gXICVns/E53J7P+ufLy4O/6mPMZ9p2rf+anhUNDxXReAJ7Of7RumsIo7i
-         MF0of+OFSSVag+jJbKJCbWqw/7+3QP1Ep9RYaalmJO09mE4viOw8S2klvVFaryWM8jl2
-         TtVtqnAAOEN9R1ADWrsxZJSJWmuT6eBeUtGvwmxtiW6+g7vic+774Z/gaDYyszuozffC
-         OjXIGEYSwLxa1xaHosEo3E4lK3jZqYXbE8AJSAcyVW/Ya9OJJK8u4pEJ6QPLxpJdgj2D
-         ds5e0Mvpliu5fpO+nw6SVbgSyG5paByNt+L/3lCiP7+YU4Hd4Qok+ddJgLOslD7RpwmT
-         /2tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677685152;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G88lHAU8EQsCcXmuw5k8V0o7uYf93X0m0EbK56nmCkc=;
-        b=oaI7shcY7vsH8KrdxadAQ9x0aF1015vnWQYAFEj2ZmkcqCcfWbMowY2VE+OWfVx3L6
-         EyjaMD1ak0UD5/XAPX+F5+wM7MHTqr6f/fUM+OjmNM2OXqAsu+g2AU1fHKeeSM45YHaK
-         LtChceeWhW6AXbqF34AUhO1mhb+6QN6E4UdquTEL8OqJ5hSgSRbcYm0EeBQpIKm6pHOD
-         YK+yHRQ8fUvz4IeJ0tVckFFJWQ3Hf7cevbor5Mjfo+BNMVqVZBrAhh/Jj0bHg20Wpk2x
-         sxPQ2uclDLKkq+nBBOsWfPjxKlrptVSxjlfrWYgLGjqr/PzlBIxLRmoMkIOOw5LSngPz
-         mj/Q==
-X-Gm-Message-State: AO0yUKW4ZdWZYn4ggzTJ7f0yLTmevVY2oBuLxtVMGQtXShhmmuE3PYVu
-        pqVezXzVEAwYr8/84vFNTH0tnA==
-X-Google-Smtp-Source: AK7set8O+FBRYvI4IODXsFr4hn8ba9dIyWnvB6rPeJHmFqFJ7d5V8y8v1teRy0/jHqbFKVQ/Seo5yA==
-X-Received: by 2002:aa7:9ac2:0:b0:5a8:ea06:662 with SMTP id x2-20020aa79ac2000000b005a8ea060662mr6767366pfp.20.1677685152202;
-        Wed, 01 Mar 2023 07:39:12 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id j13-20020a62b60d000000b005a8851e0cddsm8070167pff.188.2023.03.01.07.39.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 07:39:11 -0800 (PST)
-Date:   Wed, 1 Mar 2023 07:39:08 -0800
-From:   Deepak Gupta <debug@rivosinc.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Wed, 1 Mar 2023 10:41:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1E8410AB;
+        Wed,  1 Mar 2023 07:41:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 212BF6137B;
+        Wed,  1 Mar 2023 15:41:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43BC4C433EF;
+        Wed,  1 Mar 2023 15:41:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677685284;
+        bh=+qv6It5dGq3Z5N42zbPSFy3HhrWC6PisO2WM+ec3U58=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WP5sZE1YDwJteuvwIPzuCpoH8l4GQ3vJF3Z7Ew12qTs0sbiTAQoUAm1H0GN3neq0g
+         kp546ONmr7KhXv/OQUUR8Q4v9HGkXwxIkySx2osYW0AECu/h+LiCSlJYGrORbKmaO4
+         g4uq3yVfsDmsO3UgjEtMI3vZbLHI1G/1eW9MSUs9j0ASnxnxkn+q8ygx2oaGcvrg0A
+         Q/i341yhJtzkSLYJaV+MfWAud9gG08qCfdCloNRQrNSpIBiVsvNHpv1gjpIzbO72iC
+         rvMoh/37GKzizCK7Frcw3ReUx01IyAYKX8YsZSlI3EI3xgodOG7Alct6KUWKTHNaeR
+         JERnhAKzpSPIA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7A4534049F; Wed,  1 Mar 2023 12:41:20 -0300 (-03)
+Date:   Wed, 1 Mar 2023 12:41:20 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, linux-arm-kernel@lists.infradead.org,
-        linux-s390@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v6 11/41] mm: Introduce pte_mkwrite_kernel()
-Message-ID: <20230301153908.GA3505369@debug.ba.rivosinc.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-12-rick.p.edgecombe@intel.com>
+        Ingo Molnar <mingo@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>
+Subject: Re: [RFC v2 bpf-next 0/9] mm/bpf/perf: Store build id in inode object
+Message-ID: <Y/9yIJ9kOHcZqIzo@kernel.org>
+References: <20230228093206.821563-1-jolsa@kernel.org>
+ <20230228220714.GJ2825702@dread.disaster.area>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230218211433.26859-12-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230228220714.GJ2825702@dread.disaster.area>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 01:14:03PM -0800, Rick Edgecombe wrote:
->The x86 Control-flow Enforcement Technology (CET) feature includes a new
->type of memory called shadow stack. This shadow stack memory has some
->unusual properties, which requires some core mm changes to function
->properly.
->
->One of these changes is to allow for pte_mkwrite() to create different
->types of writable memory (the existing conventionally writable type and
->also the new shadow stack type). Future patches will convert pte_mkwrite()
->to take a VMA in order to facilitate this, however there are places in the
->kernel where pte_mkwrite() is called outside of the context of a VMA.
->These are for kernel memory. So create a new variant called
->pte_mkwrite_kernel() and switch the kernel users over to it. Have
->pte_mkwrite() and pte_mkwrite_kernel() be the same for now. Future patches
->will introduce changes to make pte_mkwrite() take a VMA.
->
->Only do this for architectures that need it because they call pte_mkwrite()
->in arch code without an associated VMA. Since it will only currently be
->used in arch code, so do not include it in arch_pgtable_helpers.rst.
->
->Cc: linux-doc@vger.kernel.org
->Cc: linux-arm-kernel@lists.infradead.org
->Cc: linux-s390@vger.kernel.org
->Cc: xen-devel@lists.xenproject.org
->Cc: linux-arch@vger.kernel.org
->Cc: linux-mm@kvack.org
->Tested-by: Pengfei Xu <pengfei.xu@intel.com>
->Suggested-by: David Hildenbrand <david@redhat.com>
->Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
->
+Em Wed, Mar 01, 2023 at 09:07:14AM +1100, Dave Chinner escreveu:
+> On Tue, Feb 28, 2023 at 10:31:57AM +0100, Jiri Olsa wrote:
+> > this is RFC patchset for adding build id under inode's object.
 
-Acked-by: Deepak Gupta <debug@rivosinc.com>
+> > The main change to previous post [1] is to use inode object instead of file
+> > object for build id data.
+> 
+> Please explain what a "build id" is, the use case for it, why we
+> need to store it in VFS objects, what threat model it is protecting
+> the system against, etc.
+
+[root@quaco ~]# file /bin/bash
+/bin/bash: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=160df51238a38ca27d03290f3ad5f7df75560ae0, for GNU/Linux 3.2.0, stripped
+[root@quaco ~]# file /lib64/libc.so.6
+/lib64/libc.so.6: ELF 64-bit LSB shared object, x86-64, version 1 (GNU/Linux), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=8257ee907646e9b057197533d1e4ac8ede7a9c5c, for GNU/Linux 3.2.0, not stripped
+[root@quaco ~]#
+
+Those BuildID[sha1]= bits, that is present in all binaries I think in
+all distros for quite a while.
+
+This page, from when this was initially designed, has a discussion about
+it, why it is needed, etc:
+
+  https://fedoraproject.org/wiki/RolandMcGrath/BuildID
+
+'perf record' will receive MMAP records, initially without build-ids,
+now we have one that has, but collecting it when the mmap is executed
+(and thus a PERF_RECORD_MMAP* record is emitted) may not work, thus this
+work from Jiri.
+
+- Arnaldo
+ 
+> > 
+> > However.. ;-) while using inode as build id storage place saves some memory
+> > by keeping just one copy of the build id for all file instances, there seems
+> > to be another problem.
+ 
+> Yes, the problem being that we can cache hundreds of millions of
+> inodes in memory, and only a very small subset of them are going to
+> have open files associated with them. And an even smaller subset are
+> going to be mmapped.
+ 
+> So, in reality, this proposal won't save any memory at all - it
+> costs memory for every inode that is not currently being used as
+> a mmapped elf executable, right?
+> 
+> > The problem is that we read the build id when the file is mmap-ed.
+> 
+> Why? I'm completely clueless as to what this thing does or how it's
+> used....
+> 
+> > Which is fine for our use case,
+> 
+> Which is?
+> 
+> -Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com
