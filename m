@@ -2,209 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC0C6A76DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2771D6A76EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCAWhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 17:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S229706AbjCAWkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 17:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjCAWhk (ORCPT
+        with ESMTP id S229560AbjCAWkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 17:37:40 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBAF53296
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 14:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677710259; x=1709246259;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HL7HNb7gy7GdifS7kpj2eZMAcKm1rR7YFJsNeV0Q94A=;
-  b=fdiIPDGoiQlq3lKtr0Bz3M1MoLz18C+ACm6oEK95jhJZnsBBbGEo6FrA
-   vrrOp8g4ov9Nr3DaurcPPM5XXthC3kkVsCwZa/WH6zwd+qCygSiID4CtV
-   E6eTm2lps64EQsnQBSz99F+0IqVC5u6eE878EFPnEEWiWMo7WB8ToqrWv
-   cGK0La0vCMDSP3M3n6A3kI1wJs6wK70LLwsLRkp4+wxkIjhCC6kAJ83QC
-   SgtacPitqAI+pQWWPjSKwQRQvyN22JUDcqOVJTVdx97Xmg7BpNJn6AyGR
-   o+oRLwP5o9Qo3G53wMc7MxBCtlx4NN26kg6UifIJYGueGVSB+v18EkeOP
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="332020172"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="332020172"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 14:37:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="798584345"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="798584345"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2023 14:37:37 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXV4q-0006TH-2x;
-        Wed, 01 Mar 2023 22:37:36 +0000
-Date:   Thu, 02 Mar 2023 06:37:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- dd093fb08e8f8a958fec4eef36f9f09eac047f60
-Message-ID: <63ffd38d.IXnibGcMoKmgZZF+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 1 Mar 2023 17:40:21 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E364BE87
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 14:40:20 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id i4so9377262ils.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 14:40:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6P9KlPRdN24U2nZifrh47RGztoR1RSBxdmlJs02laf8=;
+        b=d4/myq9vduzzfqGKUrqatHviSOUeyfGXpmI1wLVtbkU4eLFrheTw9Jay/aWkkAqcIQ
+         lrVJ1ygEX23dReHZKRse+tyC0N0jsJPrhKg+ZPVMerXand+RXspxh0OSYNmmhGbSaoRU
+         jDGcG8u2dBXbZc7ICYCAadTkuohw55nv0o54s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6P9KlPRdN24U2nZifrh47RGztoR1RSBxdmlJs02laf8=;
+        b=PsYxeuSuPnQ3jprJmrqNb7m1XFDJckp3Wl0LgNl/Orv6qIngq3/mVn0jErlqA9fmBi
+         BclihVHWfaM4qECIqrPHrr7+X3abwVW7JUEazIW4WZ30ZOweiNwERzeYcywGK8LaUzo0
+         CoY0UTZ114PJ7UOUbxKYZG2VMeLPt/8cUIjKa0+Oy8Er4IKka+8O7u+PQOSAdlaY1INy
+         zN61CmFBxhKUdBKj2g0uhnX8LBfGwOLeoy6RsX83ZeepC9ZSJzF7axz9Ny1/mF5VbDOH
+         +6B6cPGCH8m3vU8h3TdfF/j5QvqybRxzXQM8HbZa7aMyD7ArA5iFFPqHRfpHmjIyrEDZ
+         2Fww==
+X-Gm-Message-State: AO0yUKV3vIKs9Z86H7wbG8ntX/i/TdWfS+eL+yYB0ZkUdVTuQ3TnEtbD
+        LUhqmshbhkZh7EjR6cnItFm+d8O2Bcdo1sAV
+X-Google-Smtp-Source: AK7set8ZBfzppogq2d1K7PcaVUG61+rUAkqjIPH1QI8C0Y44XbVN51D1Fxc1MNdA+1yQB+2bZ4rNPg==
+X-Received: by 2002:a05:6e02:1bcd:b0:316:f980:da93 with SMTP id x13-20020a056e021bcd00b00316f980da93mr7593034ilv.22.1677710419285;
+        Wed, 01 Mar 2023 14:40:19 -0800 (PST)
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com. [209.85.166.53])
+        by smtp.gmail.com with ESMTPSA id i4-20020a02ca04000000b003c4f7dd7554sm4147642jak.5.2023.03.01.14.40.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 14:40:17 -0800 (PST)
+Received: by mail-io1-f53.google.com with SMTP id y140so6033837iof.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 14:40:17 -0800 (PST)
+X-Received: by 2002:a5d:8919:0:b0:74a:f35:ca88 with SMTP id
+ b25-20020a5d8919000000b0074a0f35ca88mr3594955ion.2.1677710416683; Wed, 01 Mar
+ 2023 14:40:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127104054.895129-1-abel.vesa@linaro.org> <Y9v/z8CYik3faHh7@google.com>
+ <Y+ErWTyV8CnE3Hl+@linaro.org> <Y+E3T6bozU1K2sFb@google.com>
+ <Y+E9Z+/+eCpPK6DE@linaro.org> <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
+ <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com>
+ <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
+ <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com> <20230220171550.43a3h56gznfc3gec@ripper>
+In-Reply-To: <20230220171550.43a3h56gznfc3gec@ripper>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 1 Mar 2023 14:40:04 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UmbBOPAg6d-G=XpEyf0Sk=dmrp7wuthn1Cx+DmB1gvGQ@mail.gmail.com>
+Message-ID: <CAD=FV=UmbBOPAg6d-G=XpEyf0Sk=dmrp7wuthn1Cx+DmB1gvGQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: dd093fb08e8f8a958fec4eef36f9f09eac047f60  virt/sev-guest: Return -EIO if certificate buffer is not large enough
+Hi,
 
-elapsed time: 758m
+On Mon, Feb 20, 2023 at 9:12=E2=80=AFAM Bjorn Andersson <andersson@kernel.o=
+rg> wrote:
+>
+> > I suspect that here we'll have to agree to disagree. IMO it's a
+> > non-goal to expect hardware to work for which there is no driver. So
+> > making the backlight work without a backlight driver isn't really
+> > something we should strive for.
+> >
+>
+> Without trying to make you agree ;)
+>
+> How can you differentiate between "the driver wasn't built" and "the
+> driver isn't yet available"?
 
-configs tested: 129
-configs skipped: 13
+BTW, when I was responding to Saravana's series [1], I realized that
+you _can_ differentiate between these two cases, at least from a
+practical point of view. Specifically, when the
+"deferred_probe_timeout" expires then you should assume that "the
+driver wasn't built". Said another way, once the
+"deferred_probe_timeout" expires then you should assume that the
+driver won't be available in the future. While you still could try
+loading it, in general once that timeout has expired the kernel has
+made decisions (like making -EPROBE_DEFER non-retriable) that make it
+very awkward to load new drivers.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Of course, one could say "hey, let's get rid of the
+deferred_probe_timeout". That might be a tough sell unless you can
+come up with an equivalent solution for those currently using this
+feature.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r014-20230226   gcc  
-arc                  randconfig-r016-20230226   gcc  
-arc                  randconfig-r022-20230226   gcc  
-arc                  randconfig-r043-20230226   gcc  
-arc                  randconfig-r043-20230227   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r001-20230228   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r011-20230226   gcc  
-arm                  randconfig-r046-20230226   gcc  
-arm                  randconfig-r046-20230227   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r005-20230227   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r021-20230226   gcc  
-csky                 randconfig-r021-20230227   gcc  
-hexagon              randconfig-r002-20230226   clang
-hexagon              randconfig-r026-20230226   clang
-hexagon              randconfig-r041-20230226   clang
-hexagon              randconfig-r041-20230227   clang
-hexagon              randconfig-r045-20230226   clang
-hexagon              randconfig-r045-20230227   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230227   clang
-i386                 randconfig-a002-20230227   clang
-i386                 randconfig-a003-20230227   clang
-i386                 randconfig-a004-20230227   clang
-i386                 randconfig-a005-20230227   clang
-i386                 randconfig-a006-20230227   clang
-i386                 randconfig-a011-20230227   gcc  
-i386                 randconfig-a012-20230227   gcc  
-i386                 randconfig-a013-20230227   gcc  
-i386                 randconfig-a014-20230227   gcc  
-i386                 randconfig-a015-20230227   gcc  
-i386                 randconfig-a016-20230227   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r012-20230226   gcc  
-ia64                 randconfig-r023-20230226   gcc  
-ia64                 randconfig-r024-20230226   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r001-20230226   gcc  
-loongarch            randconfig-r012-20230227   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r002-20230227   gcc  
-microblaze   buildonly-randconfig-r001-20230227   gcc  
-microblaze   buildonly-randconfig-r006-20230228   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r005-20230226   clang
-nios2                               defconfig   gcc  
-openrisc             randconfig-r013-20230226   gcc  
-parisc       buildonly-randconfig-r004-20230226   gcc  
-parisc       buildonly-randconfig-r006-20230227   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r006-20230227   gcc  
-parisc               randconfig-r035-20230301   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230226   clang
-powerpc      buildonly-randconfig-r003-20230228   clang
-powerpc      buildonly-randconfig-r006-20230226   clang
-powerpc              randconfig-r015-20230227   gcc  
-powerpc              randconfig-r025-20230227   gcc  
-powerpc              randconfig-r034-20230301   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r002-20230226   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r001-20230227   clang
-riscv                randconfig-r006-20230226   gcc  
-riscv                randconfig-r016-20230227   gcc  
-riscv                randconfig-r042-20230226   clang
-riscv                randconfig-r042-20230227   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r004-20230226   gcc  
-s390                 randconfig-r044-20230226   clang
-s390                 randconfig-r044-20230227   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r004-20230228   gcc  
-sh                   randconfig-r025-20230226   gcc  
-sh                   randconfig-r026-20230227   gcc  
-sparc        buildonly-randconfig-r005-20230227   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r022-20230227   gcc  
-sparc                randconfig-r024-20230227   gcc  
-sparc                randconfig-r033-20230301   gcc  
-sparc64      buildonly-randconfig-r005-20230228   gcc  
-sparc64              randconfig-r003-20230226   gcc  
-sparc64              randconfig-r005-20230226   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230227   clang
-x86_64               randconfig-a002-20230227   clang
-x86_64               randconfig-a003-20230227   clang
-x86_64               randconfig-a004-20230227   clang
-x86_64               randconfig-a005-20230227   clang
-x86_64               randconfig-a006-20230227   clang
-x86_64               randconfig-a011-20230227   gcc  
-x86_64               randconfig-a012-20230227   gcc  
-x86_64               randconfig-a013-20230227   gcc  
-x86_64               randconfig-a014-20230227   gcc  
-x86_64               randconfig-a015-20230227   gcc  
-x86_64               randconfig-a016-20230227   gcc  
-x86_64               randconfig-r023-20230227   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r002-20230227   gcc  
-xtensa               randconfig-r004-20230227   gcc  
-xtensa               randconfig-r011-20230227   gcc  
-xtensa               randconfig-r013-20230227   gcc  
+[1] https://lore.kernel.org/r/CAD=3DFV=3DXQnLpD1P8sRBcizTMjCQyHTjaiNvjcPdgy=
+Zc5JCzvOtw@mail.gmail.com
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+> Consider the case where I boot my laptop, I have some set of builtin
+> drivers, some set of drivers in the ramdisk and some set of drivers in
+> the root filesystem.
+>
+> In the event that something goes wrong mounting the rootfs, I will now
+> be in the ramdisk console. Given the current timer-based disabling of
+> regulators, I have ~25 seconds to solve my problem before the backlight
+> goes blank.
+
+I personally don't love the timeout. It feels like the kind of thing
+that userspace knows and should be able to tell the kernel. I know we
+don't like to put impositions on userspace, but userspace is pretty
+definitely involved in things like loading modules. It just makes
+sense (in my mind) for userspace to say when it's done and all modules
+for cold-plugged devices have been loaded...
+
+-Doug
