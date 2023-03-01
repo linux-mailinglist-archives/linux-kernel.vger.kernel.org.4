@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0A96A6F44
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB73A6A6F47
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCAPWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
+        id S229492AbjCAPWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjCAPWq (ORCPT
+        with ESMTP id S229621AbjCAPWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Mar 2023 10:22:46 -0500
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B5C457E2;
-        Wed,  1 Mar 2023 07:22:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7E043468;
+        Wed,  1 Mar 2023 07:22:44 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6D87C60006;
-        Wed,  1 Mar 2023 15:22:40 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id AF9D160012;
+        Wed,  1 Mar 2023 15:22:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677684161;
+        t=1677684162;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=cRigVwnQt8es5I3iXZpxk6EHiZctGQfV0rOwtbc8tUM=;
-        b=inpFsoVedzeQb+Dlck6N8tnx9YU9/PguRcjm4w96w3cwgaMKoGXue83BFyZUiTZ0dUJQ5v
-        lszcGYEJPJcnUfO6yG/fS2wdcHotAnHD7vKKiO5qpZcx1NTC4lgA7cBsEnUPCFBhKlcyr5
-        A09WDEOpS1d4FmfnYaTrXfJdP7Rd2xSXkRiWNGwgy2Lm4D/cBEDiEIsqgMm3r/jmmJXIBT
-        fDV5SRXYzrgI+5XRwCCaVuT9qX+0o1pJB8m18nOIYymuI13oe35ubLLE/xIN1QnCzKBnqP
-        kcM3jQaJWwCv5lQ+VVykzIxVUbTBit8UrdhEx9sBOVR1DPrrbrX2OMjCJ1yU3Q==
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D5n3KQw5FkYOO2ZCdrhHgke1RNc7JrIvX3lBsallp24=;
+        b=Kj2GBS6PPrHijhJPSkrA4vv0KT5OEQjjPzF/nW8BXycugB6Xu2gjOknzG/damIwd2TRanB
+        1c0enPgMMA8IIszMLk2A2lUxLYou1ZnsNAfPMRSq9UfHRxc2P9tFLXj26oYAbc4GVC4eQN
+        0KNTTxCFwb+Q76V4T85IG3UhO47piXTUvwK3hJ6FwBGavwT29CLzVbM9dOuJFJb2ToXDjr
+        OTrUQwOkQ2BRS77IXkpqxx9cxjVlAmOP0CcazAKndeBIaTnOp8cdYqdh8H2EI2dOp0YE4J
+        1zW8buw6ZSfccyYSDnVdkAZpjvXYOopBMxsVq0Sh06xby1+8nOpZXdumZuoSWQ==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         <linux-kernel@vger.kernel.org>
@@ -39,13 +40,16 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Robert Marko <robert.marko@sartura.hr>,
         Luka Perkov <luka.perkov@sartura.hr>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        rafal@milecki.pl, Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 0/8] nvmem: Let layout drivers be modules
-Date:   Wed,  1 Mar 2023 16:22:31 +0100
-Message-Id: <20230301152239.531194-1-miquel.raynal@bootlin.com>
+        rafal@milecki.pl, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Stephen Boyd <stephen.boyd@linaro.org>,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/8] of: Fix modalias string generation
+Date:   Wed,  1 Mar 2023 16:22:32 +0100
+Message-Id: <20230301152239.531194-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230301152239.531194-1-miquel.raynal@bootlin.com>
+References: <20230301152239.531194-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -56,54 +60,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The helper generating an OF based modalias (of_device_get_modalias())
+works fine, but due to the use of snprintf() internally it needs a
+buffer one byte longer than what should be needed just for the entire
+string (excluding the '\0'). Most users of this helper are sysfs hooks
+providing the modalias string to users. They all provide a PAGE_SIZE
+buffer which is way above the number of bytes required to fit the
+modalias string and hence do not suffer from this issue.
 
-Following Greg's opposition to merge the current nvmem layout support
-proposal [1], arguing that it would eventually grow the size of the
-Linux kernel and asking for some "modularization" support, here is a
-proposal to turn layout drivers into regular tristate drivers.
+There is another user though, of_device_request_module(), which is only
+called by drivers/usb/common/ulpi.c. This request module function is
+faulty, but maybe because in most cases there is an alternative, ULPI
+driver users have not noticed it.
 
-The first three patches are preparation changes in order to extend (and
-fix) a little bit the of/device.c support. The fix does not seem to
-impact most of the current users so I guess it can live with the rest of
-the series in order to avoid future merge conflicts.
+In this function, of_device_get_modalias() is called twice. The first
+time without buffer just to get the number of bytes required by the
+modalias string (excluding the null byte), and a second time, after
+buffer allocation, to fill the buffer. The allocation asks for an
+additional byte, in order to store the trailing '\0'. However, the
+buffer *length* provided to of_device_get_modalias() excludes this extra
+byte. The internal use of snprintf() with a length that is exactly the
+number of bytes to be written has the effect of using the last available
+byte to store a '\0', which then smashes the last character of the
+modalias string.
 
-The nvmem core is then extended to support the absence of layouts and
-possibly lead to probe deferrals when relevant.
+Provide the actual size of the buffer to of_device_get_modalias() to fix
+this issue.
 
-Finally, the two existing layout drivers are converted into modules and
-their Kconfig symbols changed to tristate.
+Note: the "str[size - 1] = '\0';" line is not really needed as snprintf
+will anyway end the string with a null byte, but there is a possibility
+that this function might be called on a struct device_node without
+compatible, in this case snprintf() would not be executed. So we keep it
+just to avoid possible unbounded strings.
 
-The base series on which these changes apply is still contained in [1],
-I would prefer to keep it as it was and apply this series on top of it.
+Cc: Stephen Boyd <stephen.boyd@linaro.org>
+Cc: Peter Chen <peter.chen@nxp.com>
+Fixes: 9c829c097f2f ("of: device: Support loading a module with OF based modalias")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+ drivers/of/device.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Tests have been conducted on a Marvell Prestera switch with the mvpp2
-Ethernet driver calling for a MAC address stored in the ONIE TLV table
-available through a layout driver in an EEPROM/MTD device.
-
-[1] https://github.com/miquelraynal/linux/tree/nvmem-next/layouts
-
-Thanks,
-Miquèl
-
-Miquel Raynal (8):
-  of: Fix modalias string generation
-  of: Change of_device_get_modalias() main argument
-  of: Create an of_device_request_module() receiving an OF node
-  nvmem: core: Fix error path ordering
-  nvmem: core: Handle the absence of expected layouts
-  nvmem: core: Request layout modules loading
-  nvmem: layouts: sl28vpd: Convert layout driver into a module
-  nvmem: layouts: onie-tlv: Convert layout driver into a module
-
- drivers/nvmem/core.c             | 20 ++++++++++++--
- drivers/nvmem/layouts/Kconfig    |  4 +--
- drivers/nvmem/layouts/onie-tlv.c | 15 ++++++++++-
- drivers/nvmem/layouts/sl28vpd.c  | 14 +++++++++-
- drivers/of/device.c              | 45 ++++++++++++++++++++++----------
- include/linux/of_device.h        |  6 +++++
- 6 files changed, 84 insertions(+), 20 deletions(-)
-
+diff --git a/drivers/of/device.c b/drivers/of/device.c
+index c674a13c3055..877f50379fab 100644
+--- a/drivers/of/device.c
++++ b/drivers/of/device.c
+@@ -297,12 +297,15 @@ int of_device_request_module(struct device *dev)
+ 	if (size < 0)
+ 		return size;
+ 
+-	str = kmalloc(size + 1, GFP_KERNEL);
++	/* Reserve an additional byte for the trailing '\0' */
++	size++;
++
++	str = kmalloc(size, GFP_KERNEL);
+ 	if (!str)
+ 		return -ENOMEM;
+ 
+ 	of_device_get_modalias(dev, str, size);
+-	str[size] = '\0';
++	str[size - 1] = '\0';
+ 	ret = request_module(str);
+ 	kfree(str);
+ 
 -- 
 2.34.1
 
