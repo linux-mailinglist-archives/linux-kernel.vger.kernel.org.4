@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00726A77F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7F56A77FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjCAXsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 18:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S229652AbjCAXs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 18:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCAXsQ (ORCPT
+        with ESMTP id S229813AbjCAXsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 18:48:16 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4222CC47
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 15:48:05 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id v11so12251323plz.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 15:48:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677714485;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IwnplCZss/sjev7Hh27BVil2zDjq9ax06z63d9E4vYY=;
-        b=GpXkbFhcR+YXAEC9td8Szq1ZMuyjfpUMKgB3P7Odc6nMN5mfl0uTGmcLq0dXc6aZbw
-         NJo/SFk/ew1uJxyY0A7dFEH1PB/VS2EVoiFeQ+To0sYD/SHzmkYoWZKgkoVfwIpZMdzv
-         E65W+sp9Dv1nLfD+oVddXYTwqnL2X7iF05ZPNUnhMc5P90tKkAiwFAEYd791K3crES7/
-         ITr6nrUXbr4q1Fj+kyjGKPNQ3pRUMpKf2i7pUQJNUgftNwUPMz8yfCgqRni3YfBIniS6
-         evhwQ6sOHdJkAqmTL8me0I/YtNWeWWL09O3vDTcgzadkCCOTh8Sb9U4vYPIJ46SAVdKN
-         5coQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677714485;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IwnplCZss/sjev7Hh27BVil2zDjq9ax06z63d9E4vYY=;
-        b=CPPKQrOgX7KqsO3bL6zC5MK+NeHdnPtz44al1ML7d0oRLt+HNQIgWxSRGbjJ+utePd
-         IbAzIps2T9P6ZiykR8wIDVDJ3lXIzB1gSORdLmNvbv0Twk3/2qT9DbxXkq8fI0ah9bFX
-         wKGYpvgy8yV51UfKw7Yo/f2oWPCrpssYXFuK9U5w+3NX1pyxMi3d0BazLP1eESQssckt
-         hrGjAZ4i77vnvViJCV012dnDbczpHmXPGD2S76lDbuhmcrRNJVI3TxT9RB3lX+AvWXoE
-         0RuPyzX0gRMI4ytaV+MkF9CCkwLcwRuyoOnxV9Lfb2f18ZVcOcLsOAh1hpEWwUy6SrRj
-         FCIw==
-X-Gm-Message-State: AO0yUKVO9LtugQhFnzN2VnIOwQGr9SzqCOE8WEuPOLlFK0U9IOY6caAS
-        n7UkKOykQG4cQbzRC3myiM06Y7hbWcY=
-X-Google-Smtp-Source: AK7set8pm9GVZz+CiwcKtVsULeY275AftnO/TM3U50O74RuKS7xCbHJ/5t6tVSe791ZyGMKLJbgcyA==
-X-Received: by 2002:a05:6a20:8407:b0:cc:eb3b:56e9 with SMTP id c7-20020a056a20840700b000cceb3b56e9mr11850682pzd.1.1677714485139;
-        Wed, 01 Mar 2023 15:48:05 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:a524:71b8:ce7e:745d])
-        by smtp.gmail.com with ESMTPSA id f23-20020aa782d7000000b005dea362ed18sm8497558pfn.27.2023.03.01.15.48.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 15:48:04 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 1 Mar 2023 15:48:02 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2 5/6] zsmalloc: extend compaction statistics
-Message-ID: <Y//kMuCV7dzdrfGp@google.com>
-References: <20230223030451.543162-1-senozhatsky@chromium.org>
- <20230223030451.543162-6-senozhatsky@chromium.org>
- <Y/f75fkcQg6m3cbG@google.com>
- <Y/rYQdUDNHDCJJTO@google.com>
- <Y/5+PEfuEl3b/sDR@google.com>
- <Y/7MkLdVXImxPQeJ@google.com>
+        Wed, 1 Mar 2023 18:48:53 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FFD4EEA;
+        Wed,  1 Mar 2023 15:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677714523; x=1709250523;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=438mUqu27Pg/8R7tElJ2t97iI5443sfkue+J0vJ5gNg=;
+  b=QHr2xfOXiqxXREcERzwCmn5qwmAlVMwFBKWmyBUlFgsyMRrL+nDSHMrH
+   ddluhJ2+i5+ch/jW5BGc0FGec+1WZdb6J8nt70Al13rVmBa1DxKa3zwwh
+   w48jvOoz73PEvzqu/4TI4vnLZ70LzDgrdVIhNdLSg26bqO6hBugT2TUix
+   +yP0Oa/ucyBB35aXLWG8bH8oKpsDxUZ8DgeG2eidunD73dfrMCwjRH3dA
+   X5uBLJlwvZKy7hFE2MMKE7yy+1z0WjZ1ktLDvnC6Idulu0tc9FEr+k8Mk
+   PdLpZ46/11V6p42Y3R8OgwI8n2qHqJNtFPzeOVLbyiltManmV68NN6hDn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322831141"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="322831141"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 15:48:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="798604515"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="798604515"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2023 15:48:39 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXWBa-0006Vf-2d;
+        Wed, 01 Mar 2023 23:48:38 +0000
+Date:   Thu, 2 Mar 2023 07:48:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Petr Pavlu <petr.pavlu@suse.com>, rafael@kernel.org,
+        lenb@kernel.org, viresh.kumar@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev, pmladek@suse.com, mcgrof@kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
+Subject: Re: [PATCH v3] ACPI: cpufreq: use a platform device to load ACPI PPC
+ and PCC drivers
+Message-ID: <202303020759.pwVPib0p-lkp@intel.com>
+References: <20230301085717.10411-1-petr.pavlu@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y/7MkLdVXImxPQeJ@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230301085717.10411-1-petr.pavlu@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 12:54:56PM +0900, Sergey Senozhatsky wrote:
-> On (23/02/28 14:20), Minchan Kim wrote:
-> > On Sun, Feb 26, 2023 at 12:55:45PM +0900, Sergey Senozhatsky wrote:
-> > > On (23/02/23 15:51), Minchan Kim wrote:
-> > > > On Thu, Feb 23, 2023 at 12:04:50PM +0900, Sergey Senozhatsky wrote:
-> > > > > Extend zsmalloc zs_pool_stats with a new member that
-> > > > > holds the number of objects pool compaction moved
-> > > > > between pool pages.
-> > > > 
-> > > > I totally understand this new stat would be very useful for your
-> > > > development but not sure it's really useful for workload tune or
-> > > > monitoring.
-> > > > 
-> > > > Unless we have strong usecase, I'd like to avoid new stat.
-> > > 
-> > > The way I see is that it *can* give some interesting additional data to
-> > > periodical compaction (the one is not triggeed by the shrinker): if the
-> > > number of moves objects is relatively high but the number of comapcted
-> > > (feeed) pages is relatively low then the system has fragmentation in
-> > > small size classes (that tend to have many objects per zspage but not
-> > > too many pages per zspage) and in this case the interval between
-> > > periodical compactions probably can be increased. What do you think?
-> > 
-> > In the case, how could we get only data triggered by periodical munual
-> > compaction?
-> 
-> Something very simple like
-> 
-> 	read zram mm_stat
-> 	trigger comapction
-> 	read zram mm_stat
-> 
-> can work in most cases, I guess. There can be memory pressure
-> and shrinkers can compact the pool concurrently, in which case
-> mm_stat will include shrinker impact, but that's probably not
-> a problem. If system is under memory pressure then user space
+Hi Petr,
 
-Agreed.
+Thank you for the patch! Perhaps something to improve:
 
-> in general does not have to do comapction, since the kernel will
-> handle it.
-> 
-> Just an idea. It feels like "pages compacted" on its own tells very
-> little, but I don't insist on exporting that new stat.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.2 next-20230301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I don't mind adding the simple metric but I want to add metric if
-we have real usecase with handful of comments how they uses it
-in real world.
+url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Pavlu/ACPI-cpufreq-use-a-platform-device-to-load-ACPI-PPC-and-PCC-drivers/20230301-165927
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230301085717.10411-1-petr.pavlu%40suse.com
+patch subject: [PATCH v3] ACPI: cpufreq: use a platform device to load ACPI PPC and PCC drivers
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230302/202303020759.pwVPib0p-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/59eb26f9b02165cc5c5fb6514ff4d2a8d7a91356
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Petr-Pavlu/ACPI-cpufreq-use-a-platform-device-to-load-ACPI-PPC-and-PCC-drivers/20230301-165927
+        git checkout 59eb26f9b02165cc5c5fb6514ff4d2a8d7a91356
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/
 
-Thanks.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303020759.pwVPib0p-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/acpi/acpi_processor.c:177:13: warning: no previous prototype for 'acpi_pcc_cpufreq_init' [-Wmissing-prototypes]
+     177 | void __init acpi_pcc_cpufreq_init(void) {}
+         |             ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/acpi_pcc_cpufreq_init +177 drivers/acpi/acpi_processor.c
+
+   162	
+   163	#ifdef CONFIG_X86
+   164	/* Check presence of Processor Clocking Control by searching for \_SB.PCCH. */
+   165	void __init acpi_pcc_cpufreq_init(void)
+   166	{
+   167		acpi_status status;
+   168		acpi_handle handle;
+   169	
+   170		status = acpi_get_handle(NULL, "\\_SB", &handle);
+   171		if (ACPI_FAILURE(status))
+   172			return;
+   173		if (acpi_has_method(handle, "PCCH"))
+   174			cpufreq_add_device("pcc-cpufreq");
+   175	}
+   176	#else
+ > 177	void __init acpi_pcc_cpufreq_init(void) {}
+   178	#endif /* CONFIG_X86 */
+   179	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
