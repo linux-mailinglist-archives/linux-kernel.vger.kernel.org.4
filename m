@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE856A77F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0606A7861
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 01:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjCAXsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 18:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S229681AbjCBA2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 19:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjCAXsT (ORCPT
+        with ESMTP id S229451AbjCBA2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 18:48:19 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD01926B1
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 15:48:18 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id u5so12378895plq.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 15:48:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677714498;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P9K0sIWZPejM9pWl+DELmXG0JK2MHkeqyKOVm+ED3Kw=;
-        b=F9NbCixZ+vCSmB0bRFafb7jHWCH0MDYES7CG10slxxJzjFUh56T/6Lq63siuM6m8kS
-         a6b1jS5fyZLerFrMRBCvVs4NkB41XBvaOxyB+ZFPQiZAHGvf6auQqCDHHf0J3/6j2bAQ
-         I4cjVT8geYeOqncUxqiaewRCyGj1flNBEmcOYKS+2SipQzxC+GIaBmadjBEynS7fodOm
-         gGMxN51EDrM2F6hLp/OvLDydnxN+GF3M3gqqCmcpxJr7TkzcQYcsHxQk/r1E6eQ0C1A8
-         l/1594WxtZnKSafbRPuLp4NbeD1LD6TeN5KI0utUVb6bxonkEJhD9k9CdBa7fuIER2h3
-         gGhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677714498;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P9K0sIWZPejM9pWl+DELmXG0JK2MHkeqyKOVm+ED3Kw=;
-        b=5AyE77uzKNTVvcRLcvWBui/zq+8QjuZpE26LfxnFIFpZYmpcB2TxEy/Qo+ZFzd2o03
-         TJbISFFQP2nlQC0hILACD/XvNDEbwUiOzzGFZtM7tGbP244KpL1DLDKOgVVT7m+YyeBC
-         Q7aH34kVqmekxOZjxbrWtlqAmt7IN31QFaVrnBj1AFdhEr3LRJEU1AurtKUcaqqGTM4+
-         YlQIk94+Ne2FfsAne8KFQjRL1MEoGUbYAp8edKBaexUCPMlDhwiKLLvNyH3XAu57hjRp
-         86tdvxABckSJG/U0BQ55YdzNm92rl/gz9tJycxsk+rfyd4HQPG3FZYUGnSfZmqyT5i+N
-         yDCA==
-X-Gm-Message-State: AO0yUKX2lxQOEnMOnP8IixgCIsZUQr8YFEM7rfNBmtU7gGFNxCF/f12M
-        WbZ8y6/wNpN6OKB8BO3si5s=
-X-Google-Smtp-Source: AK7set/Q4i3opbyipRt7dpttTMYGub48j7lkG7t2XpI0nSWi3V3q7Mj9GO2W7cYPz0MGNhffPhwKog==
-X-Received: by 2002:a17:902:edd1:b0:19c:d7a9:8bf0 with SMTP id q17-20020a170902edd100b0019cd7a98bf0mr218191plk.10.1677714498262;
-        Wed, 01 Mar 2023 15:48:18 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:a524:71b8:ce7e:745d])
-        by smtp.gmail.com with ESMTPSA id l10-20020a170902eb0a00b0019ce470b9fesm9078422plb.140.2023.03.01.15.48.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 15:48:17 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 1 Mar 2023 15:48:16 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2 0/6] zsmalloc: fine-grained fullness and new compaction
- algorithm
-Message-ID: <Y//kQEjoCgoBlfhu@google.com>
-References: <20230223030451.543162-1-senozhatsky@chromium.org>
- <Y/f8esHswgLtjkee@google.com>
- <Y/rXFc4dI+190uJa@google.com>
- <Y/59k9T3akHc4JZW@google.com>
- <Y/7NP3LG+L7CKsLu@google.com>
+        Wed, 1 Mar 2023 19:28:21 -0500
+X-Greylist: delayed 1199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 16:28:06 PST
+Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11EE32E66;
+        Wed,  1 Mar 2023 16:28:05 -0800 (PST)
+Received: by gnu.wildebeest.org (Postfix, from userid 1000)
+        id 221EF30067B2; Thu,  2 Mar 2023 00:52:33 +0100 (CET)
+Date:   Thu, 2 Mar 2023 00:52:33 +0100
+From:   Mark Wielaard <mark@klomp.org>
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH v2 0/2] Validating UAPI backwards compatibility
+Message-ID: <20230301235233.GJ12496@gnu.wildebeest.org>
+References: <20230301075402.4578-1-quic_johmoo@quicinc.com>
+ <CAKwvOdmqShYae=DrwP1JZBYXAYZyDB0SaOkVCvCzQC60MaJcpw@mail.gmail.com>
+ <41d287fa-3a0a-cac6-4595-ad47ef873d79@quicinc.com>
+ <0c92e7b8-e415-8ad5-14e7-d94f18c3fa25@quicinc.com>
+ <b2055eab-4762-5fbf-8ea6-0956a0a2eb58@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y/7NP3LG+L7CKsLu@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <b2055eab-4762-5fbf-8ea6-0956a0a2eb58@quicinc.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 12:57:51PM +0900, Sergey Senozhatsky wrote:
-> On (23/02/28 14:17), Minchan Kim wrote:
-> > Thanks for the explanation, Sergey.
-> > 
-> > Please include the testing result data in the description of the patch
-> > you made significant change to achieve it as well as cover letter.
-> 
-> OK, I can include it into the "new compaction algorithm" patch.
+Hi John,
 
-Thanks.
+On Wed, Mar 01, 2023 at 02:33:00PM -0800, John Moon via Libabigail wrote:
+> With some additional help from Nick offline, we determined that the
+> issue isn't with clang, but with libdw (from elfutils). You need at
+> least libdw version 0.171 for the abidiff tool to work correctly
+> with clang (in this particular case). Ubuntu 18.04 ships with
+> version 0.170.
+
+I don't remember any specific fixes for clang in libdw for elfutils
+0.171. But elfutils 0.171 was the first release that supported most of
+DWARF5 (including GNU DebugFission and split dwarf).
+
+> If there's any interest, it'd be fairly easy to add a check for this
+> condition under the check_deps() function in the script.
+
+Please do add this check. elfutils 0.170 is almost 6 years old now,
+there have been many, many bug fixes since then (current release is
+0.188 from Nov 2022).
+
+Thanks,
+
+Mark
