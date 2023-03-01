@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64DE6A71FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 381366A7202
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjCARXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S229800AbjCARYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjCARXU (ORCPT
+        with ESMTP id S229728AbjCARYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:23:20 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDDA24106;
-        Wed,  1 Mar 2023 09:23:18 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so12398582wmb.5;
-        Wed, 01 Mar 2023 09:23:18 -0800 (PST)
+        Wed, 1 Mar 2023 12:24:31 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC79367E6;
+        Wed,  1 Mar 2023 09:24:30 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so1037563wms.0;
+        Wed, 01 Mar 2023 09:24:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677691397;
+        d=gmail.com; s=20210112; t=1677691469;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D6q//m1CEjfpqFhjrDbSC5BAypm/0jrg06FNQbMJmJ8=;
-        b=Q5AonMYOod1t7I+bD5dolZMJTkTodjSawwKXEefEu63aXYaTxfAplMseOC3l6dnInt
-         IY6UOPbrQM657WfCexe0c05RmFoZMKIRNlf2ZSGjbm877dCZDXL47KHXgAqjwMbqcbD+
-         fFZ9h43K2djvLOWeRaVGFJCik3wxMoXdLVWrSDdC8uSB+pIRo0TlWt0zu56efQT5N5ii
-         eLdOaBqu0b/Erhf0rh/zrLuLxMd7B8/NyZwPBdbutAls82wqdk0/3nyRQFCWz4hWT6Vs
-         DXy5h5dGAJqTATZErkrW6WtVKrKQ/QRNIs2TU1HnPiXSkD8bGJNwOVBcQKnrC3JRvOlY
-         1w0Q==
+        bh=sNpkdoZmqWbaOAVmdJei7p+ZGXFT2prpPoc6LJ5dBsc=;
+        b=H1hL0uZxcat8GWO9QXh3RBN3DAIwfBbtYifyqCAdNxaqgQICwyujdWtRJEcSeMXL/n
+         PAngsJryhFCO3gp3meGjYeSwkPxGiR+BwbRDUN0TgiYiX46jMXB7xfIFxnrgr+HzfwK9
+         VMaJsodlkF8yjTtTxIpOjV6MJKNFSD8gRGgTPBrp4RlJO8t8DjaDE6wgsfSGwg0p/qrH
+         iPWPLrYNyb3SO5K0RdE6dly+Eg6sd9sc66SkgXj2Ff/V9la1H5qXDdShWPVw6H0wBl7h
+         ReXY8rM2cQJtae0ZcBnQqP9o7y410Frlb7Y/ejnGH/zZsUZP83Lw+vccnBnrsfhr1LjU
+         JlEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677691397;
+        d=1e100.net; s=20210112; t=1677691469;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=D6q//m1CEjfpqFhjrDbSC5BAypm/0jrg06FNQbMJmJ8=;
-        b=iipPwXJqm3lsBE7h1AsX2ePbe+4eQ4wGbrNxCf2Nqk1w27J9TClg1mZv7b6iF6Ui8Z
-         AImXiQLPky9XJJK+Rn31aWwMOQwQpF3LN80rYd4laqZI3rdOujtzgI8rp/nkVVFdwSCA
-         ZYAjRBlgyIwexFuxjekp+Y8xuJeS/KvN2+D/moOY/lsUx4oX+7dF5BfReRD6BktzbbrG
-         XYJiZsvmIGC81fOQqrn/GV9DosewSCdyKXEbvVlhcSAVRSk7zu4aL6P2oogO9T7NN5Po
-         X++DnFuHdrTR3N8uwBtlDgHE2Gl+rvYunYIQKzyo8oFQK8QK8rYAZKtZ5DtqG88VqDYm
-         QB/g==
-X-Gm-Message-State: AO0yUKUbvORJNbUlPDBBm3hsoINriKT3I4ncuuiHcWAQZBTWb9erWaAo
-        N6gZp7BnSkUEaY+oB6WQPnU=
-X-Google-Smtp-Source: AK7set9yOFJ+2701IOZIcvtfhdWGpm6TIyV0B3HZ49V7YBtK3W44CkBO56vjco2DCs8k9rLV4Ur4bw==
-X-Received: by 2002:a05:600c:35c4:b0:3eb:37ce:4c3e with SMTP id r4-20020a05600c35c400b003eb37ce4c3emr5775190wmq.16.1677691397284;
-        Wed, 01 Mar 2023 09:23:17 -0800 (PST)
-Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05600c351100b003e4326a6d53sm171559wmq.35.2023.03.01.09.23.15
+        bh=sNpkdoZmqWbaOAVmdJei7p+ZGXFT2prpPoc6LJ5dBsc=;
+        b=4w2uxLkod4foKO3M+SMqeboPOnUjjWyXxaf5GvHJTolMDy0wyFRZGvLihBu6bwuX4A
+         cFoHMQTPhdXesu7VqITOB1XuxJJlm7WnSyUNP/BZmFB2JiPR4WthJDhK+KIu+S7ZRj81
+         WhNi2WJr3yuEla8ipOi9DrmK1SHQtqr9cMexRz3PZOmmzTDQZAaoAwv2Ztaq6T3V/Ugp
+         eQSDyJnVqcpCky4g1sqCUIsvAhQHYLQjiaUn8oqjHRb0CGxh2Tm9EaZ+2JvSdmgXTF5u
+         E5W+Hba+I4Ei/hi72rl5U+YDBCIXqW+o3c7+MY1Kq5iJ3uFlTnO7kKEvAJheF+TRaWk0
+         4vMA==
+X-Gm-Message-State: AO0yUKU4EivWDct1YxUzqhjUk7Q80oxsV0dXON7TQKoyy7EtD9qnS0L6
+        +4UYxzTLlYO6iSdtDA+yO0g=
+X-Google-Smtp-Source: AK7set/qEAM/YZLlke7KZF96LN1MjYAMr6V67vMOMBAYzfxb5ReD44O7Lfw2E+IZzSi1PTzv+CFdPQ==
+X-Received: by 2002:a05:600c:3acb:b0:3eb:38e6:f64f with SMTP id d11-20020a05600c3acb00b003eb38e6f64fmr5419748wms.8.1677691469184;
+        Wed, 01 Mar 2023 09:24:29 -0800 (PST)
+Received: from localhost (93-55-83-125.ip262.fastwebnet.it. [93.55.83.125])
+        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003dc49e0132asm255828wmo.1.2023.03.01.09.24.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 09:23:16 -0800 (PST)
+        Wed, 01 Mar 2023 09:24:28 -0800 (PST)
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 01 Mar 2023 18:23:14 +0100
-Message-Id: <CQV7YQW9HU8R.2HH07UP1OA6Y1@vincent-arch>
+Date:   Wed, 01 Mar 2023 18:24:26 +0100
+Message-Id: <CQV7ZNT6LMXI.1XG4YXSH8I7JK@vincent-arch>
 Cc:     <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <asahi@lists.linux.dev>
-Subject: Re: [PATCH 2/2] rust: sync: arc: Add
- UniqueArc<MaybeUninit<T>::assume_init()
+        <linux-kbuild@vger.kernel.org>, <asahi@lists.linux.dev>
+Subject: Re: [PATCH] rust: Enable the new_uninit feature for kernel and
+ driver crates
 From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
 To:     "Asahi Lina" <lina@asahilina.net>,
         "Miguel Ojeda" <ojeda@kernel.org>,
         "Alex Gaynor" <alex.gaynor@gmail.com>,
         "Wedson Almeida Filho" <wedsonaf@gmail.com>,
         "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230224-rust-arc-v1-0-568eea613a41@asahilina.net>
- <20230224-rust-arc-v1-2-568eea613a41@asahilina.net>
-In-Reply-To: <20230224-rust-arc-v1-2-568eea613a41@asahilina.net>
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>
+References: <20230224-rust-new_uninit-v1-1-c951443d9e26@asahilina.net>
+In-Reply-To: <20230224-rust-new_uninit-v1-1-c951443d9e26@asahilina.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,17 +82,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> We can already create `UniqueArc<MaybeUninit<T>>` instances with
-> `UniqueArc::try_new_uninit()` and write to them with `write()`. Add
-> the missing unsafe `assume_init()` function to promote it to
-> `UniqueArc<T>`, so users can do piece-wise initialization of the
-> contents instead of doing it all at once as long as they keep the
-> invariants (the same requirements as `MaybeUninit::assume_init()`).
+> The unstable new_uninit feature enables various library APIs to create
+> uninitialized containers, such as `Box::assume_init()`. This is
+> necessary to build abstractions that directly initialize memory at the
+> target location, instead of doing copies through the stack.
 >
-> This mirrors the std `Arc::assume_init()` function. In the kernel,
-> since we have `UniqueArc`, arguably this only belongs there since most
-> use cases will initialize it immediately after creating it, before
-> demoting it to `Arc` to share it.
+> Will be used by the DRM scheduler abstraction in the kernel crate, and
+> by field-wise initialization (e.g. using `place!()` or a future
+> replacement macro which may itself live in `kernel`) in driver crates.
+>
+> See [1] [2] [3] for background information.
+>
+> [1] https://github.com/Rust-for-Linux/linux/issues/879
+> [2] https://github.com/Rust-for-Linux/linux/issues/2
+> [3] https://github.com/rust-lang/rust/issues/63291
 >
 > Signed-off-by: Asahi Lina <lina@asahilina.net>
 > ---
