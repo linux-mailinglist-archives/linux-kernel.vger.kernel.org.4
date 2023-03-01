@@ -2,89 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FC16A7197
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C22816A719C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjCAQ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 11:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
+        id S229861AbjCAQ5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 11:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCAQ4V (ORCPT
+        with ESMTP id S229621AbjCAQ5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 11:56:21 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD023C79B;
-        Wed,  1 Mar 2023 08:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677689778; x=1709225778;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8NEWTaD5RnYbcKDVZrq2Ew/2DFfHh2dyMO/xAIfd+2Q=;
-  b=EP37rrPt80qPF9xzYZsfwsYu0f3YnL2SyOuBG52Nhu2Ws3aGYSJWYMH0
-   6s5d4yR7e3q6Y2heNX401vI4t3vItsjD3HMixW807cXMVlt06wQj4xZxK
-   Zpq6mf1vRRjfe14XZTRW87nzlBTUnWdXzFMkR7mDDaTZsaZeu20QC96Ea
-   Dx1uJ7cvn49RG5keoPaOvSMjL6uQpZkPckfBIbMbunNyP7KTirATOMetX
-   EZfVodjcIxFiWlZKH+6wd4b0jsAbHxrPImqeVGcaHFrWA2uHoZV5xqVLM
-   9HEvdUX5m/gJtQj1hGXFTQuDq6qCGckkyFiz/Y0Srzk8wnJofF+280yRJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="314881610"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="314881610"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 08:56:08 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="738700170"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="738700170"
-Received: from asaha3-mobl1.amr.corp.intel.com (HELO [10.251.12.67]) ([10.251.12.67])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 08:56:06 -0800
-Message-ID: <f2c904f6-996a-e903-5d56-662781567578@intel.com>
-Date:   Wed, 1 Mar 2023 08:56:05 -0800
+        Wed, 1 Mar 2023 11:57:40 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ACD3C79B;
+        Wed,  1 Mar 2023 08:57:39 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321CqHrw029706;
+        Wed, 1 Mar 2023 16:57:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=TNgVTtnLVJLk4LY3NdEKTfP1VGDnctvpoXM6cQePEbg=;
+ b=SYGDOGWPEYzxYMXUC5FoIkNa2MxF6NV6JCqoGk182m18QYDR2s9QNrCOf+NUsqRqBzJh
+ Rc+geaBbwj4IerplLWtW79ad4WCLoi8/jXsPvrTIZ9Yhy9zBJoX+0GzAWAyOHXvRjzLF
+ MrmLraySB6f2zViBv31jN/J+i4wwAPJ7uwYjiricHmAgKHiW/DqW7pkZDx6Hf+nYohlx
+ HKvpn8+2VrTsbOO4V49ccYVeS+3qw7dEelb1n8Bt3pYTUO2VGGOIo+/O/OxydVouLDRI
+ 6/Ds3CiimdQltq+BwKrxpSGZ6dri/jE4a3w5TGPq72sjoBBNdTSFquF8AGmsQ06kbBUx ew== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1vgejg8y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 16:57:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 321GvU8b014065
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 1 Mar 2023 16:57:30 GMT
+Received: from [10.110.57.196] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 1 Mar 2023
+ 08:57:28 -0800
+Message-ID: <38bf75b4-799a-9758-aae3-69a7e0fc3f58@quicinc.com>
+Date:   Wed, 1 Mar 2023 08:57:28 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RFC v8 00/56] Add AMD Secure Nested Paging (SEV-SNP)
- Hypervisor Support
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] drm/msm/dp: check core_initialized flag at both
+ host_init() and host_deinit()
 Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
-Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com
-References: <20230220183847.59159-1-michael.roth@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230220183847.59159-1-michael.roth@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@gmail.com>, <agross@kernel.org>, <andersson@kernel.org>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1677629817-18891-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAA8EJpquZAhn+HswNxardN1fE8Zu1CKrCU5EiX=B8mGWuxfWnQ@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAA8EJpquZAhn+HswNxardN1fE8Zu1CKrCU5EiX=B8mGWuxfWnQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: g5Kh394jQ4-mTJ6R0sP3AqUBPygzYo_Y
+X-Proofpoint-ORIG-GUID: g5Kh394jQ4-mTJ6R0sP3AqUBPygzYo_Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-01_13,2023-03-01_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303010138
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 10:37, Michael Roth wrote:
-> The RMP check is enforced as soon as SEV-SNP is enabled. Not every memory
-> access requires an RMP check. In particular, the read accesses from the
-> hypervisor do not require RMP checks because the data confidentiality is
-> already protected via memory encryption. When hardware encounters an RMP
-> checks failure, it raises a page-fault exception. If RMP check failure
-> is due to the page-size mismatch, then split the large page to resolve
-> the fault.
 
-What does this all _mean_?
+On 2/28/2023 6:16 PM, Dmitry Baryshkov wrote:
+> On Wed, 1 Mar 2023 at 02:17, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>> There is a reboot/suspend test case where system suspend is forced
+>> during system booting up. Since dp_display_host_init() of external
+>> DP is executed at hpd thread context, this test case may created a
+>> scenario that dp_display_host_deinit() from pm_suspend() run before
+>> dp_display_host_init() if hpd thread has no chance to run during
+>> booting up while suspend request command was issued. At this scenario
+>> system will crash at aux register access at dp_display_host_deinit()
+>> since aux clock had not yet been enabled by dp_display_host_init().
+>> Therefore we have to ensure aux clock enabled by checking
+>> core_initialized flag before access aux registers at pm_suspend.
+> Can a call to dp_display_host_init() be moved from
+> dp_display_config_hpd() to dp_display_bind()?
 
-When does the kernel need to care about a "page-size mismatch"?
+yes,  Sankeerth's  "drm/msm/dp: enable pm_runtime support for dp driver" 
+patch is doing that which is under review.
+
+https://patchwork.freedesktop.org/patch/523879/?series=114297&rev=1
+
+
+>
+> Related question: what is the primary reason for having
+> EV_HPD_INIT_SETUP and calling dp_display_config_hpd() via the event
+> thread? Does DP driver really depend on DPU irqs being installed? As
+> far as I understand, DP device uses MDSS interrupts and those IRQs are
+> available and working at the time of dp_display_probe() /
+> dp_display_bind().
+
+HDP gpio pin has to run through DP aux module 100ms denouncing logic and 
+have its mask bits.
+
+Therefore DP irq has to be enabled to receive DP isr with mask bits set.
+
+Similar mechanism is used for mdp, dsi, etc.
+
+
+>> Changes in v2:
+>> -- at commit text, dp_display_host_init() instead of host_init()
+>> -- at commit text, dp_display_host_deinit() instead of host_deinit()
+>>
+>> Changes in v3:
+>> -- re arrange to avoid commit text line over 75 chars
+>>
+>> Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>> ---
+>>   drivers/gpu/drm/msm/dp/dp_display.c | 20 ++++++++++++--------
+>>   1 file changed, 12 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index bde1a7c..1850738 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -460,10 +460,12 @@ static void dp_display_host_init(struct dp_display_private *dp)
+>>                  dp->dp_display.connector_type, dp->core_initialized,
+>>                  dp->phy_initialized);
+>>
+>> -       dp_power_init(dp->power, false);
+>> -       dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+>> -       dp_aux_init(dp->aux);
+>> -       dp->core_initialized = true;
+>> +       if (!dp->core_initialized) {
+>> +               dp_power_init(dp->power, false);
+>> +               dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+>> +               dp_aux_init(dp->aux);
+>> +               dp->core_initialized = true;
+>> +       }
+>>   }
+>>
+>>   static void dp_display_host_deinit(struct dp_display_private *dp)
+>> @@ -472,10 +474,12 @@ static void dp_display_host_deinit(struct dp_display_private *dp)
+>>                  dp->dp_display.connector_type, dp->core_initialized,
+>>                  dp->phy_initialized);
+>>
+>> -       dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
+>> -       dp_aux_deinit(dp->aux);
+>> -       dp_power_deinit(dp->power);
+>> -       dp->core_initialized = false;
+>> +       if (dp->core_initialized) {
+>> +               dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
+>> +               dp_aux_deinit(dp->aux);
+>> +               dp_power_deinit(dp->power);
+>> +               dp->core_initialized = false;
+>> +       }
+>>   }
+>>
+>>   static int dp_display_usbpd_configure_cb(struct device *dev)
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+>
