@@ -2,115 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC966A643C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514216A6445
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjCAA1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 19:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S229719AbjCAAda convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Feb 2023 19:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjCAA1D (ORCPT
+        with ESMTP id S229523AbjCAAd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 19:27:03 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E83215880;
-        Tue, 28 Feb 2023 16:27:02 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id cf14so12593100qtb.10;
-        Tue, 28 Feb 2023 16:27:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677630422;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ah2e83PDoe/U6Gf57zepbByTh0n9RNpGO3gN23MY0Ho=;
-        b=Cjy/nNRu165SghzyRoqBtp+mon81oWgIkg4ZrARfae2E9Rsz8v/brGam+WmHVCrGm2
-         EJUFWKIkQnPjCIaJhSD3M9cWgX4rHCi9bdnX22p2poLAQyjNF6ayxZHO2a6bWB+6/uL9
-         vFcUd1bOjeoR07sXMzjbVsONZDxMQSC6t8rI7qaKrXNulpyuyU0TWec4hlrhRB7TF12X
-         NA/FZ+SvEA4uc1PklvT1POYrJ7bHPsBVAbfMsX2JkVP1tX8YwzePyfLbkuPpcZCb02f2
-         DvBphTVSgrLmolfoO4XAwdZ2o1VW68ULKkmOaSTw2Eyu8Qr5h5v8m4Qeus2AE10sERpl
-         m3vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677630422;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ah2e83PDoe/U6Gf57zepbByTh0n9RNpGO3gN23MY0Ho=;
-        b=uPXH0BWrIbiLUGrktn5XSBOjj57LTWHhxXWL5OpzLKPCBD0HpNmW9upe8Im0x5eV/Y
-         WWSmJi1O8q+yku7Q6dxd27CZJEdpjZ7HGsyVMDTrhxpN3pSLa3wom9r+EhfqfRUtOyln
-         Ia18QO9y/dpng40/vlUtE9vbG/NEPNngsBgmKd6Y+71zBC+PVoA7tNIbb7ZY9QsJHFfq
-         jEJLVM6LF0Ert+tt4JB5s5PD0xfckSFCdNUt3NsVzm38ROHQ9mY+nuxBlPCtUfbqoT/y
-         7rci5q+XtW+j9tY/mpjfrWxJTgW9ETxMP/6AaMqmi+WWTYGJA2xhccVlgXd4+muhJ2gT
-         pGiA==
-X-Gm-Message-State: AO0yUKWcy8Klct20XLlV7y5Y3x3f5S2H23bNUk0lnyenlHZ2sPfp1Y4X
-        hKc8rh5JNxOEbDERhEyEVDM=
-X-Google-Smtp-Source: AK7set9iiLqJtrwPOOeLikPIZrT4VRpY2Bg6vQXeyHliiddZ31/ha/5MTwNUlgvr+61QjoyKXtwnIw==
-X-Received: by 2002:a05:622a:2c9:b0:3bd:155c:3ac8 with SMTP id a9-20020a05622a02c900b003bd155c3ac8mr8147019qtx.67.1677630422226;
-        Tue, 28 Feb 2023 16:27:02 -0800 (PST)
-Received: from jesse-desktop.jtp-bos.lab (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
-        by smtp.gmail.com with ESMTPSA id t8-20020ac85888000000b003bb8c60cdf1sm7576698qta.78.2023.02.28.16.27.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 16:27:01 -0800 (PST)
-From:   Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jesse Taube <Mr.Bossman075@gmail.com>,
-        Yimin Gu <ustcymgu@gmail.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Waldemar Brodkorb <wbx@openadk.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor@kernel.org>
-Subject: [PATCH v3 3/3] riscv: configs: Add nommu PHONY defconfig for RV32
-Date:   Tue, 28 Feb 2023 19:26:57 -0500
-Message-Id: <20230301002657.352637-4-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
-References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
+        Tue, 28 Feb 2023 19:33:28 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEFF13537;
+        Tue, 28 Feb 2023 16:33:25 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3210WVblC030574, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3210WVblC030574
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 1 Mar 2023 08:32:32 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 1 Mar 2023 08:32:38 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 1 Mar 2023 08:32:38 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Wed, 1 Mar 2023 08:32:38 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Simon Horman <simon.horman@corigine.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+CC:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: RE: [PATCH] rtlwifi: rtl8192se: Remove the unused variable bcntime_cfg
+Thread-Topic: [PATCH] rtlwifi: rtl8192se: Remove the unused variable
+ bcntime_cfg
+Thread-Index: AQHZSxoGZWivytKAKkyUIoUlgPpoua7jrTwAgAFmn/A=
+Date:   Wed, 1 Mar 2023 00:32:38 +0000
+Message-ID: <1d262829764d40a086e93f0c7d0541bc@realtek.com>
+References: <20230228021132.88910-1-jiapeng.chong@linux.alibaba.com>
+ <Y/3gUquaPNlaLaKt@corigine.com>
+In-Reply-To: <Y/3gUquaPNlaLaKt@corigine.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2023/2/28_=3F=3F_10:36:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-32bit risc-v can be configured to run without MMU. Introduce
-rv32_nommu_virt_defconfig .PHONY target, that is based on
-nommu_virt_defconfig. This is similar to how rv32_defconfig
-is based on "defconfig".
 
-Suggested-by: Conor Dooley <conor@kernel.org>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Cc: Yimin Gu <ustcymgu@gmail.com>
----
-V1->V2:
- - Fix typo in commit title
-V2->V3:
- - Change from defconfig file to a PHONY config
----
- arch/riscv/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 6203c3378922..1b276f62f22b 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -174,3 +174,7 @@ rv64_randconfig:
- PHONY += rv32_defconfig
- rv32_defconfig:
- 	$(Q)$(MAKE) -f $(srctree)/Makefile defconfig 32-bit.config
-+
-+PHONY += rv32_nommu_virt_defconfig
-+rv32_nommu_virt_defconfig:
-+	$(Q)$(MAKE) -f $(srctree)/Makefile nommu_virt_defconfig 32-bit.config
--- 
-2.39.0
+> -----Original Message-----
+> From: Simon Horman <simon.horman@corigine.com>
+> Sent: Tuesday, February 28, 2023 7:07 PM
+> To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> Cc: Ping-Ke Shih <pkshih@realtek.com>; kvalo@kernel.org; davem@davemloft.net; edumazet@google.com;
+> kuba@kernel.org; pabeni@redhat.com; linux-wireless@vger.kernel.org; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Abaci Robot <abaci@linux.alibaba.com>
+> Subject: Re: [PATCH] rtlwifi: rtl8192se: Remove the unused variable bcntime_cfg
+> 
+> On Tue, Feb 28, 2023 at 10:11:32AM +0800, Jiapeng Chong wrote:
+> > Variable bcntime_cfg is not effectively used, so delete it.
+> >
+> > drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c:1555:6: warning: variable 'bcntime_cfg' set but not
+> used.
+> >
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4240
+> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> 
+> Hi Jiapeng Chong,
+> 
+> this looks good to me.
+> 
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> 
+> While reviewing this gcc 12.2.0 told me:
+> 
+> drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c:1555:25: error: unused variable 'bcn_ifs'
+> [-Werror=unused-variable]
+>  1555 |         u16 bcn_cw = 6, bcn_ifs = 0xf;
+>       |                         ^~~~~~~
+> drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c:1555:13: error: unused variable 'bcn_cw'
+> [-Werror=unused-variable]
+>  1555 |         u16 bcn_cw = 6, bcn_ifs = 0xf;
+>       |             ^~~~~~
+> 
+> So perhaps you could consider sending another patch to remove them too.
+> 
+
+These errors are introduced by this patch, so please fix them together by this
+patch.
+
+Ping-Ke
+
 
