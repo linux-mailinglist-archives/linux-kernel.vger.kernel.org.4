@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AB96A6E94
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D166A6E9B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCAOjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S230228AbjCAOju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjCAOjj (ORCPT
+        with ESMTP id S230055AbjCAOjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:39:39 -0500
+        Wed, 1 Mar 2023 09:39:41 -0500
 Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED36B479
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:39:38 -0800 (PST)
-Received: by mail-ed1-x549.google.com with SMTP id cf11-20020a0564020b8b00b0049ec3a108beso19362631edb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:39:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7688CB479
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:39:40 -0800 (PST)
+Received: by mail-ed1-x549.google.com with SMTP id cf11-20020a0564020b8b00b0049ec3a108beso19362796edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:39:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JhZ8SEDoNzl+E2htjsUuUTMZqyHgHOmh7ac72ddETYs=;
-        b=hwwsMSyOzkoBWayzQKOdFKIZfN+8rn6K+uZRqXexu7jTOCYjQq9ACST/vXXGgUa8CT
-         9PbkYANDhENEWpCTAac5mNG7ZIAElA8E4TlfoSG2z+sTpCuZtWZwUNcme6Nz5ZOi8bmI
-         WuyGwo5xiOk2ylqXeLH4a6J07LtGg7Ap91k/9Mcx8NUjgjoD00YVOtKBU9sHuoMA8yE3
-         Onih1jNZmnQe2nEJA1yFuRFt5+jQMY1R2GMyNKX1qCR4BhaJrAA/7d3oi5VEphgCi5fm
-         cZRBWCikluD1F4OG5qcDUFzHLUwgyg0Swg3+bo7tCkfOYvarkHR+O8quNjT/Nzoz7/3D
-         eJkA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GvEmc+TQ/70wBv4c0+3F8h651+3YM9ltVwHdaJENm+0=;
+        b=TZbcESbsWwNX7ITUi/aZMlklXQLIxXSFS8qC4CBgfWLzgdWV4sw7TnmemklpH6W7Bc
+         A7y93ECEz75USteW8FD3Y1XqRtJk5z3dpdOjwx44G2Jjuz+Z4hitvfk4TnGhEpzcwscE
+         ecg0YS6TcupDfdmQ4FiWgzFt1XEr6a7zKBTWdlnNhV5j7eNaBRDBF61cN2PiP+iE5mTh
+         91+plLrvqvm2QV627pn0K767iy62E8FL4Syt1zWC06tG2/CxQdIgC4GhP+p/aeN6q3xd
+         8FPlln8dfQ68QkVsu4QnH0TBtMDPHUtGDPr6mhY3CY6Efu84yLWgr+mHbxwvH+VHgIa6
+         MHVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JhZ8SEDoNzl+E2htjsUuUTMZqyHgHOmh7ac72ddETYs=;
-        b=jkiL3nqI4kmv3dz6C1eCIsfHZfByWaDTsM4ixpH9IsTmreI4AHfnuzuVy8mc04kT7B
-         m+9+afdXi4ZkhR+2bGin+oqOBndBGaCLnOpLBptSNyPbAT4FmIlWIvOe+udRSbztAvur
-         u1BFcHwBz0LQBdzqJK2b7IF9hzAM1RvNU+cr5dttpfIOOxs+mV+/WTg0KiPM0z8tnVnV
-         cBu/NvCSPETkr/q1Fw7i+I72+K0Vx9eDeVhdr3oRigRIiDMI4eisvuO5MTGOeTUzLMTN
-         YNCHV2Ofj2x4rfffGhB4m7Sk+jAp8f3NH/6AOOS0TTxSuMtGApODcW2e7MNGKG7jqWk0
-         FuSw==
-X-Gm-Message-State: AO0yUKUY356y/odlxgMECtOvENI9XXs+KlMfLu8sMvUY9Rcy0iwDaUjP
-        DFuF8OSg2pgOtdiD+F1hVg1LxJq1Gkw=
-X-Google-Smtp-Source: AK7set/soLRTnmi/Q6cCoxB5T4A5ekmdZ3mGiPUd6HKEr7VaR2a3N3ZNKHKp69dd1Rxd9h+HwywF0ggPLBQ=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GvEmc+TQ/70wBv4c0+3F8h651+3YM9ltVwHdaJENm+0=;
+        b=lU8YQNB72+bQx63FO2imjXTNGIHfZSNxtcsI8Gu5KCiOabTvqBYpV1gzrrrLM6A3bT
+         1qX/TcELFo6yyKdhIiiLN45UzfyGQuB6i3EJMcKxfBkrkXVGo9GZW/5VK+eRAWLWGWvb
+         VQuhyxWXcMF1reAk/Y0Gic7XAjc1uDwL85XRbRfzzCtze8yEXxuO7i6GRODGWMqXOFfU
+         HNMkfrO3UJIcfYdxDHE50yKLNXLcPurslZ/Hr0FSzl0ImQ4WzU6d2G5b8oLbW0hWSKYf
+         MQ+GA0oUWSYUGiLMDo58zFbFJVs01HbP3cW3hBkY263vVpfbfmSU4XlhdRAc84Wftc9E
+         DYJw==
+X-Gm-Message-State: AO0yUKUb4EXzN4W1FE37Ae2GAv5+0UZkdt43cygsFgVLd3g37i/F7xg9
+        gzdQHxFFspqiPtUNYbKVqb/UniwYm3Y=
+X-Google-Smtp-Source: AK7set+/E1TqZIMkRHLQhUF/c0Crs4CPmSPBSgdNL2StGzl+To/OODmTIOi2hun6qk3SVyMlWubpsRLL6g8=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:3c31:b0cf:1498:e916])
- (user=glider job=sendgmr) by 2002:a17:907:9491:b0:8ee:babc:d3f8 with SMTP id
- dm17-20020a170907949100b008eebabcd3f8mr5683794ejc.3.1677681577396; Wed, 01
- Mar 2023 06:39:37 -0800 (PST)
-Date:   Wed,  1 Mar 2023 15:39:30 +0100
+ (user=glider job=sendgmr) by 2002:a50:d6db:0:b0:4aa:a4df:23fc with SMTP id
+ l27-20020a50d6db000000b004aaa4df23fcmr4014799edj.1.1677681579977; Wed, 01 Mar
+ 2023 06:39:39 -0800 (PST)
+Date:   Wed,  1 Mar 2023 15:39:31 +0100
+In-Reply-To: <20230301143933.2374658-1-glider@google.com>
 Mime-Version: 1.0
+References: <20230301143933.2374658-1-glider@google.com>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230301143933.2374658-1-glider@google.com>
-Subject: [PATCH 1/4] x86: kmsan: Don't rename memintrinsics in uninstrumented files
+Message-ID: <20230301143933.2374658-2-glider@google.com>
+Subject: [PATCH 2/4] kmsan: another take at fixing memcpy tests
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -58,7 +60,7 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         dave.hansen@linux.intel.com, hpa@zytor.com,
         akpm@linux-foundation.org, elver@google.com, dvyukov@google.com,
         nathan@kernel.org, ndesaulniers@google.com,
-        kasan-dev@googlegroups.com, Kees Cook <keescook@chromium.org>
+        kasan-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,60 +72,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN should be overriding calls to memset/memcpy/memmove and their
-__builtin_ versions in instrumented files, so there is no need to
-override them. In non-instrumented versions we are now required to
-leave memset() and friends intact, so we cannot replace them with
-__msan_XXX() functions.
+5478afc55a21 ("kmsan: fix memcpy tests") uses OPTIMIZER_HIDE_VAR() to
+hide the uninitialized var from the compiler optimizations.
 
-Cc: Kees Cook <keescook@chromium.org>
-Suggested-by: Marco Elver <elver@google.com>
+However OPTIMIZER_HIDE_VAR(uninit) enforces an immediate check of
+@uninit, so memcpy tests did not actually check the behavior of memcpy(),
+because they always contained a KMSAN report.
+
+Replace OPTIMIZER_HIDE_VAR() with a file-local asm macro that just
+clobbers the memory, and add a test case for memcpy() that does not
+expect an error report.
+
+Also reflow kmsan_test.c with clang-format.
+
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
- arch/x86/include/asm/string_64.h | 17 -----------------
- 1 file changed, 17 deletions(-)
+ mm/kmsan/kmsan_test.c | 43 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 37 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
-index 888731ccf1f67..9be401d971a99 100644
---- a/arch/x86/include/asm/string_64.h
-+++ b/arch/x86/include/asm/string_64.h
-@@ -15,22 +15,11 @@
- #endif
- 
- #define __HAVE_ARCH_MEMCPY 1
--#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
--#undef memcpy
--#define memcpy __msan_memcpy
--#else
- extern void *memcpy(void *to, const void *from, size_t len);
--#endif
- extern void *__memcpy(void *to, const void *from, size_t len);
- 
- #define __HAVE_ARCH_MEMSET
--#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
--extern void *__msan_memset(void *s, int c, size_t n);
--#undef memset
--#define memset __msan_memset
--#else
- void *memset(void *s, int c, size_t n);
--#endif
- void *__memset(void *s, int c, size_t n);
- 
- #define __HAVE_ARCH_MEMSET16
-@@ -70,13 +59,7 @@ static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
+diff --git a/mm/kmsan/kmsan_test.c b/mm/kmsan/kmsan_test.c
+index 088e21a48dc4b..cc98a3f4e0899 100644
+--- a/mm/kmsan/kmsan_test.c
++++ b/mm/kmsan/kmsan_test.c
+@@ -407,6 +407,36 @@ static void test_printk(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
  }
  
- #define __HAVE_ARCH_MEMMOVE
--#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
--#undef memmove
--void *__msan_memmove(void *dest, const void *src, size_t len);
--#define memmove __msan_memmove
--#else
- void *memmove(void *dest, const void *src, size_t count);
--#endif
- void *__memmove(void *dest, const void *src, size_t count);
++/*
++ * Prevent the compiler from optimizing @var away. Without this, Clang may
++ * notice that @var is uninitialized and drop memcpy() calls that use it.
++ *
++ * There is OPTIMIZER_HIDE_VAR() in linux/compier.h that we cannot use here,
++ * because it is implemented as inline assembly receiving @var as a parameter
++ * and will enforce a KMSAN check.
++ */
++#define DO_NOT_OPTIMIZE(var) asm("" ::: "memory")
++
++/*
++ * Test case: ensure that memcpy() correctly copies initialized values.
++ */
++static void test_init_memcpy(struct kunit *test)
++{
++	EXPECTATION_NO_REPORT(expect);
++	volatile int src;
++	volatile int dst = 0;
++
++	// Ensure DO_NOT_OPTIMIZE() does not cause extra checks.
++	DO_NOT_OPTIMIZE(src);
++	src = 1;
++	kunit_info(
++		test,
++		"memcpy()ing aligned initialized src to aligned dst (no reports)\n");
++	memcpy((void *)&dst, (void *)&src, sizeof(src));
++	kmsan_check_memory((void *)&dst, sizeof(dst));
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
+ /*
+  * Test case: ensure that memcpy() correctly copies uninitialized values between
+  * aligned `src` and `dst`.
+@@ -420,7 +450,7 @@ static void test_memcpy_aligned_to_aligned(struct kunit *test)
+ 	kunit_info(
+ 		test,
+ 		"memcpy()ing aligned uninit src to aligned dst (UMR report)\n");
+-	OPTIMIZER_HIDE_VAR(uninit_src);
++	DO_NOT_OPTIMIZE(uninit_src);
+ 	memcpy((void *)&dst, (void *)&uninit_src, sizeof(uninit_src));
+ 	kmsan_check_memory((void *)&dst, sizeof(dst));
+ 	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
+@@ -443,7 +473,7 @@ static void test_memcpy_aligned_to_unaligned(struct kunit *test)
+ 	kunit_info(
+ 		test,
+ 		"memcpy()ing aligned uninit src to unaligned dst (UMR report)\n");
+-	OPTIMIZER_HIDE_VAR(uninit_src);
++	DO_NOT_OPTIMIZE(uninit_src);
+ 	memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
+ 	kmsan_check_memory((void *)dst, 4);
+ 	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
+@@ -467,13 +497,14 @@ static void test_memcpy_aligned_to_unaligned2(struct kunit *test)
+ 	kunit_info(
+ 		test,
+ 		"memcpy()ing aligned uninit src to unaligned dst - part 2 (UMR report)\n");
+-	OPTIMIZER_HIDE_VAR(uninit_src);
++	DO_NOT_OPTIMIZE(uninit_src);
+ 	memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
+ 	kmsan_check_memory((void *)&dst[4], sizeof(uninit_src));
+ 	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
+ }
  
- int memcmp(const void *cs, const void *ct, size_t count);
+-static noinline void fibonacci(int *array, int size, int start) {
++static noinline void fibonacci(int *array, int size, int start)
++{
+ 	if (start < 2 || (start == size))
+ 		return;
+ 	array[start] = array[start - 1] + array[start - 2];
+@@ -482,8 +513,7 @@ static noinline void fibonacci(int *array, int size, int start) {
+ 
+ static void test_long_origin_chain(struct kunit *test)
+ {
+-	EXPECTATION_UNINIT_VALUE_FN(expect,
+-				    "test_long_origin_chain");
++	EXPECTATION_UNINIT_VALUE_FN(expect, "test_long_origin_chain");
+ 	/* (KMSAN_MAX_ORIGIN_DEPTH * 2) recursive calls to fibonacci(). */
+ 	volatile int accum[KMSAN_MAX_ORIGIN_DEPTH * 2 + 2];
+ 	int last = ARRAY_SIZE(accum) - 1;
+@@ -515,6 +545,7 @@ static struct kunit_case kmsan_test_cases[] = {
+ 	KUNIT_CASE(test_uaf),
+ 	KUNIT_CASE(test_percpu_propagate),
+ 	KUNIT_CASE(test_printk),
++	KUNIT_CASE(test_init_memcpy),
+ 	KUNIT_CASE(test_memcpy_aligned_to_aligned),
+ 	KUNIT_CASE(test_memcpy_aligned_to_unaligned),
+ 	KUNIT_CASE(test_memcpy_aligned_to_unaligned2),
 -- 
 2.39.2.722.g9855ee24e9-goog
 
