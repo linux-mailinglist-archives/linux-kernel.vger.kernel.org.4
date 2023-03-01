@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262AC6A71E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299CB6A71EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjCARQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S229834AbjCARRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCARQi (ORCPT
+        with ESMTP id S229665AbjCARRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:16:38 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B7147401;
-        Wed,  1 Mar 2023 09:16:33 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bw19so13977447wrb.13;
-        Wed, 01 Mar 2023 09:16:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677690992;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4NETed6QsszCCfbxUNnOzWzkjjDv/q/IkI5fEDoX4wI=;
-        b=j5PAiYPlH764lcPR/m7bd58SFHRINpPSYn+8pyDy66s3KWxkMDtOrMr6HS1ftAgCsB
-         KCFgPs0iZGQA0fRKL66/ZxeLPISCuAQgWgbXCseJcE+WFUVNicam9ctuQjs78sgzOI/R
-         WULWUUUgLlLsiDwJ9gZQ/7xnXqNzQjS7gbUDFIu9vH0wYBSDutnBH1yxxehHwccGngjp
-         dGDPw7SXtPa1TpT0Q0wZwhuH/uYHrpfLE/23eHf3gIK7pM2abGWzWjNuTnE6T9V2rLSY
-         5mTlOLEayhKOeQKgzyZt0no97Y5Dk+C0BTGX6hzXfrFvy6YynpKW8UwM7/PZ7y8JWjyB
-         0tOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677690992;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4NETed6QsszCCfbxUNnOzWzkjjDv/q/IkI5fEDoX4wI=;
-        b=efo8i3YH7HRlm2PU65FUu8lGuZiyspJJQPXcfvdOlq0tj/JFR/xoDs1q0clG8tjwIR
-         oj+fJq/9Fw5c1MKVpbtaSnZtwOzoM1N5q1Wrua/J5xJOvNnzFuwByDUOTiw2R0v4iHza
-         nlLFHPnM3KuyOSq3YF1UAV1mv9dKGgLyh3eMTqyh4YhLK7dgOaN8K9m8AhV09n4UvF9F
-         XJmsKIDvWjN/FgRxr7Hm1nyy9fiRP/PoiX3VfeMxI42FzGEMeHypRPvfe+wZr5FVDWde
-         PvWj/2wPdipVUBCVPfeFh0Iy/ZNB8BYU1E+T1yNnKoUJpp8Ov7g6DvrzE8rnSYe3aBx4
-         KdMw==
-X-Gm-Message-State: AO0yUKXxvtqvZTtfmAgibhR+hXBL+4Wq0eM7JtO2R/A2xJOEsOpHKspr
-        vV8tHOxAFG5Sx6vy9QSZ4rQ=
-X-Google-Smtp-Source: AK7set8n6Dv3tseaeJcVVe8S4m2p2/U1dnhpG40bkNzStOXjHpD7+sncmZigwAsWCYG7wao5G6x2DQ==
-X-Received: by 2002:a05:6000:38d:b0:2c5:5ee9:6b27 with SMTP id u13-20020a056000038d00b002c55ee96b27mr4969422wrf.13.1677690991742;
-        Wed, 01 Mar 2023 09:16:31 -0800 (PST)
-Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
-        by smtp.gmail.com with ESMTPSA id q10-20020adfea0a000000b002c567b58e9asm13303970wrm.56.2023.03.01.09.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 09:16:30 -0800 (PST)
-Mime-Version: 1.0
+        Wed, 1 Mar 2023 12:17:19 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E235D3B0E0;
+        Wed,  1 Mar 2023 09:17:17 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.221.228])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 321HGuBv1145373
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Wed, 1 Mar 2023 09:16:57 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 321HGuBv1145373
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023020601; t=1677691018;
+        bh=5hNMK+tD8odHiA4uw42+cFXxmyDl1DpNIg8KWnkmi/U=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=trCFRYsdzMYc/K/gmsizn5jQdX3cbZ4Ww+6mVEZMHLW7d20BO9/r0pDrk8gCzsmCM
+         xWQUUvYUeGMXqNCOeXKefDHbI0c8nK0JRNLoFvbEIhpM9CUYCZdri1bPOn4EqZLp7u
+         yTexpznb1m5XGbycQiDUqJQJ6RRdbGw3Y8EkK33b9YAQQg7aABgnIUsfetcE6Bymv9
+         +jSrSEUea7tffR7JVNUuZj2G3Nc7LdKfVh3/Uhz15A920t7bN7KvFtSbbKTe8fZFk8
+         +pQYuQ6yFpQ9e+PYj2r7HjhuKTXpEIokVjqLfztOcwhHrq21CdmlBEEa+sm9IPdshu
+         w5Qng9njILPqA==
+Date:   Wed, 01 Mar 2023 09:16:54 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>
+CC:     x86@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPING=5E3=5D=5BRESEND=5E3=5D=5BPAT?= =?US-ASCII?Q?CH_v3=5D_x86/PCI=3A_Add_support?= =?US-ASCII?Q?_for_the_Intel_82378ZB/82379AB_=28SIO/SIO=2EA=29_PIRQ_router?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <alpine.DEB.2.21.2303011311540.57556@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2301081956290.65308@angie.orcam.me.uk> <alpine.DEB.2.21.2303011311540.57556@angie.orcam.me.uk>
+Message-ID: <66DC3D77-91AC-4F1B-BE3E-892A9B9980BC@zytor.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 01 Mar 2023 18:16:29 +0100
-Message-Id: <CQV7TKRQDUHG.2RWP6Z9ERRF9B@vincent-arch>
-Cc:     <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <asahi@lists.linux.dev>
-Subject: Re: [PATCH 1/3] rust: macros: Make expect_punct() return the Punct
- directly
-From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
-To:     "Asahi Lina" <lina@asahilina.net>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230224-rust-macros-v1-0-b39fae46e102@asahilina.net>
- <20230224-rust-macros-v1-1-b39fae46e102@asahilina.net>
-In-Reply-To: <20230224-rust-macros-v1-1-b39fae46e102@asahilina.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This makes it mirror the way expect_ident() works, and means we can more
-> easily push the result back into the token stream.
+On March 1, 2023 5:14:59 AM PST, "Maciej W=2E Rozycki" <macro@orcam=2Eme=2E=
+uk> wrote:
+>On Sun, 8 Jan 2023, Maciej W=2E Rozycki wrote:
 >
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> ---
+>> The Intel 82378ZB System I/O (SIO) and 82379AB System I/O APIC (SIO=2EA=
+)=20
+>> ISA bridges implement PCI interrupt steering with a PIRQ router[1][2]=
+=20
+>> that is exactly the same as that of the PIIX and ICH southbridges (or=
+=20
+>> actually the other way round, given that the SIO ASIC was there first)=
+=2E
+>
+> Ping for:
+><https://lore=2Ekernel=2Eorg/lkml/alpine=2EDEB=2E2=2E21=2E2301081956290=
+=2E65308@angie=2Eorcam=2Eme=2Euk/>=2E
+>
+> I think the patch is fairly obvious=2E  Are there any outstanding concer=
+ns=20
+>that prevent it from being applied?
+>
+>  Maciej
+>
 
-Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Has this patch been actually tested on a real machine, or is it purely the=
+oretical?
