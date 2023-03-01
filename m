@@ -2,138 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198136A66C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 04:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47366A66B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 04:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCADqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 22:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
+        id S230005AbjCADpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 22:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjCADqb (ORCPT
+        with ESMTP id S230073AbjCADpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 22:46:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B845138EA0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 19:45:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677642287;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sZjhNHfCq0k8rI1ELCJTN8u4w8f61XUm94YTHptLe20=;
-        b=Rf9JNNu2+yCjCSCHzHveBLMEtVafB+hlxErDCJg4g/Pr/sHLDneCi+QHgXYvqmZUpd6mVc
-        dvB/Es+6tRyq0f551vH98CPKcDGtpxRIFpzd+VdhYWVAWIEpSUZCsoo+jNsFyjilD5hzNT
-        CfHalGUPOAUknvRzXgCUcatHQQDg8nY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-596-L7cYu-UcO7uMwCSPp8Rblg-1; Tue, 28 Feb 2023 22:44:43 -0500
-X-MC-Unique: L7cYu-UcO7uMwCSPp8Rblg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 451DC87B2A2;
-        Wed,  1 Mar 2023 03:44:43 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-180.pek2.redhat.com [10.72.13.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A2A5DC15BAD;
-        Wed,  1 Mar 2023 03:44:38 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        christophe.leroy@csgroup.eu, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@ACULAB.COM, shorne@gmail.com,
-        willy@infradead.org, Baoquan He <bhe@redhat.com>
-Subject: [PATCH v5 17/17] mm: ioremap: remove unneeded ioremap_allowed and iounmap_allowed
-Date:   Wed,  1 Mar 2023 11:42:47 +0800
-Message-Id: <20230301034247.136007-18-bhe@redhat.com>
-In-Reply-To: <20230301034247.136007-1-bhe@redhat.com>
-References: <20230301034247.136007-1-bhe@redhat.com>
+        Tue, 28 Feb 2023 22:45:09 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDFA2CFEA;
+        Tue, 28 Feb 2023 19:44:38 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PRKn30lK4z9tPk;
+        Wed,  1 Mar 2023 11:42:31 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 1 Mar 2023 11:44:30 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [RFC PATCH] tracing/ring-buffer: Drop inappropriate WARN in rb_set_head_page()
+Date:   Wed, 1 Mar 2023 11:47:02 +0800
+Message-ID: <20230301034702.3449755-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,TVD_SUBJ_WIPE_DEBT
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now there are no users of ioremap_allowed and iounmap_allowed, clean
-them up.
+Following WARNING appears several times during test on v5.10 but
+mainline kernel should have the same problem. However I currently
+can't find the reproduction method.
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
+WARNING: CPU: 29 PID: 686834 at kernel/trace/ring_buffer.c:1357
+           rb_set_head_page+0x168/0x264
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/kernel/trace/ring_buffer.c?h=linux-5.10.y#n1357
+Call trace:
+ rb_set_head_page+0x168/0x264
+ rb_per_cpu_empty+0x34/0x15c
+ ring_buffer_empty_cpu.part.0.isra.0+0x1a4/0x3f0
+ ring_buffer_empty_cpu+0x74/0xb4
+ __find_next_entry+0x14c/0x2f4
+ trace_find_next_entry_inc+0x48/0x13c
+ tracing_read_pipe+0x2c8/0x6b4
+ vfs_read+0x144/0x324
+ ksys_read+0x104/0x220
+ __arm64_sys_read+0x54/0x70
+ el0_svc_common.constprop.0+0xd8/0x37c
+ do_el0_svc+0x50/0x120
+ el0_svc+0x24/0x3c
+ el0_sync_handler+0x17c/0x180
+ el0_sync+0x160/0x180
+
+The WARNING appears because rb_set_head_page() didn't grab the header
+after three loops traversing buffer pages. This was not considered
+to be expected, as comment said, writer possibly moves the header in
+one loop.
+
+However, supposing writer keeps moving the header, we may miss more
+loops and it seems normal not to grab the header within three loops
+in rb_set_head_page(). Therefore drop that RB_WARN_ON().
+
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 ---
- include/asm-generic/io.h | 26 --------------------------
- mm/ioremap.c             |  6 ------
- 2 files changed, 32 deletions(-)
+ kernel/trace/ring_buffer.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 29ee791164ac..c13109d17dcb 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1047,32 +1047,6 @@ static inline void iounmap(volatile void __iomem *addr)
- #elif defined(CONFIG_GENERIC_IOREMAP)
- #include <linux/pgtable.h>
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index af50d931b020..cbfa306570d3 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -1471,9 +1471,7 @@ rb_set_head_page(struct ring_buffer_per_cpu *cpu_buffer)
+ 	page = head = cpu_buffer->head_page;
+ 	/*
+ 	 * It is possible that the writer moves the header behind
+-	 * where we started, and we miss in one loop.
+-	 * A second loop should grab the header, but we'll do
+-	 * three loops just because I'm paranoid.
++	 * where we started, so we try three loops to grab the header.
+ 	 */
+ 	for (i = 0; i < 3; i++) {
+ 		do {
+@@ -1485,8 +1483,6 @@ rb_set_head_page(struct ring_buffer_per_cpu *cpu_buffer)
+ 		} while (page != head);
+ 	}
  
--/*
-- * Arch code can implement the following two hooks when using GENERIC_IOREMAP
-- * ioremap_allowed() return a bool,
-- *   - true means continue to remap
-- *   - false means skip remap and return directly
-- * iounmap_allowed() return a bool,
-- *   - true means continue to vunmap
-- *   - false means skip vunmap and return directly
-- */
--#ifndef ioremap_allowed
--#define ioremap_allowed ioremap_allowed
--static inline bool ioremap_allowed(phys_addr_t phys_addr, size_t size,
--				   unsigned long prot)
--{
--	return true;
--}
--#endif
+-	RB_WARN_ON(cpu_buffer, 1);
 -
--#ifndef iounmap_allowed
--#define iounmap_allowed iounmap_allowed
--static inline bool iounmap_allowed(void *addr)
--{
--	return true;
--}
--#endif
--
- void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
- 				   pgprot_t prot);
- 
-diff --git a/mm/ioremap.c b/mm/ioremap.c
-index 4a7749d85044..8cb337446bba 100644
---- a/mm/ioremap.c
-+++ b/mm/ioremap.c
-@@ -32,9 +32,6 @@ void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
- 	phys_addr -= offset;
- 	size = PAGE_ALIGN(size + offset);
- 
--	if (!ioremap_allowed(phys_addr, size, pgprot_val(prot)))
--		return NULL;
--
- #ifdef IOREMAP_START
- 	area = __get_vm_area_caller(size, VM_IOREMAP, IOREMAP_START,
- 				    IOREMAP_END, __builtin_return_address(0));
-@@ -68,9 +65,6 @@ void generic_iounmap(volatile void __iomem *addr)
- {
- 	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
- 
--	if (!iounmap_allowed(vaddr))
--		return;
--
- 	if (is_ioremap_addr(vaddr))
- 		vunmap(vaddr);
+ 	return NULL;
  }
+ 
 -- 
-2.34.1
+2.25.1
 
