@@ -2,143 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA9A6A6A09
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBD66A6A0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjCAJtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:49:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S229762AbjCAJue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCAJts (ORCPT
+        with ESMTP id S229511AbjCAJuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:49:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87128271B;
-        Wed,  1 Mar 2023 01:49:46 -0800 (PST)
-Date:   Wed, 01 Mar 2023 09:49:43 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677664184;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjBYcejPwwKYBVOYzMQ4TIcvZoumdc8c7sD67+6I5es=;
-        b=HdmY4pdz68JHFhefmwNe20cjf3+25B0xeG5/Ca0Kq4QEeAeqdhZi4hXrzTGZ6kpbgDj0E6
-        X3aKQTG95SyOukBa50ucMVcA1TPuffRNN1nEQ+XnCuWTGz9lwC/+aPK8mtbYUILvdmjrox
-        5my3H1hL/XtvJCUv8p/RsNX0AuEGq15JYy+3t1xUpHGcDqGBJr8Z5V3GhLxIEo9pWDJt54
-        w/s3xv0EbEvHR/4x3xa3y/taMHRQX4rVQUd8HuMb++GYlXkzt8/hhVzdYxvTjq5YsXz4V7
-        7fEToIcGbw2fUXuwGeYPnxpGg87N5hxFBvgpN7TVd676yhOwwseuUDQeNJi4FQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677664184;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjBYcejPwwKYBVOYzMQ4TIcvZoumdc8c7sD67+6I5es=;
-        b=K3w53KBk5fUtxxp4SG1yyrmNuQljW1V5ii6uBFPzpfsl5yv8aRLQkNBHO4BzkLeNPdDqRv
-        EyeIe/RCIXNLD1Dg==
-From:   "tip-bot2 for Tom Lendacky" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] virt/sev-guest: Return -EIO if certificate buffer
- is not large enough
-Cc:     Larry Dewey <larry.dewey@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, <stable@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3C2afbcae6daf13f7ad5a4296692e0a0fe1bc1e4ee=2E16770?=
- =?utf-8?q?83979=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3C2afbcae6daf13f7ad5a4296692e0a0fe1bc1e4ee=2E167708?=
- =?utf-8?q?3979=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
+        Wed, 1 Mar 2023 04:50:32 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F2925B8C;
+        Wed,  1 Mar 2023 01:50:28 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id cq23so51519097edb.1;
+        Wed, 01 Mar 2023 01:50:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/qA5ZFeLE/hhjzy4kqiXBkHpSYNDEtXNEiCoxkQ8GIE=;
+        b=pTF9D0MQn3mmpu9pJ5FXzNm4p5KcIqLVfIWv4wB+m5QZu8tMyVdkm2OpYEspiGmjx5
+         U1Ahqjsg2Oh9DMKimZ8JAnVoPGk6CxyDyRAu0SDK3RCryD+MxCKULCioq/JfE5HciOHv
+         np1+QkGGGoeLOlncFW3QOlik6qnCjItl6rIjki3yBeLExPeruxvSs/gxGwRUvhnCuBlY
+         4Bb2RRpNF3uBIyREoXUgMzAEojd+s2IuoJMg9IKffZTQxnaAc0hKn4Yjb9jLXjPb+WmA
+         IIHQUGxRwcJcJV97/gdILakqjgLoeL7X/EdPx+cskP2SzD91AsT6gbsBZUq2D8vkXh7q
+         D8Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/qA5ZFeLE/hhjzy4kqiXBkHpSYNDEtXNEiCoxkQ8GIE=;
+        b=2xhTJEvb/xdKW3KLuQrzn745W5dv0P54eLvDpyIP5KA20Lwi7hWHS6y4AAkTOHWrMs
+         ah4F2hNvvv4b2UQyhREwM2YY5a1sOGds1QdGjcLajEHmhHaGewW9Bjxc+oePKOCwx3O6
+         i9OHyTYvXt84cOsSm+6DhX9h/at+Dz1qX7UxJ9hpcHR3dr+Jv4q7tgJBx+Nt4Yu7fUHK
+         mt8qFXHfAk8h74hEXfX5xP4uyPr7/udeeO/V4zp+ySNg3zU5exqx6lCOHkuza4sFhDo6
+         AO4CHTWiGUBzv6pdmUjTQcLTQbp1a5TfAOK5wNRf1HLxSISh9ZChpI1wQlpgjtsng9qg
+         IBLA==
+X-Gm-Message-State: AO0yUKUjNpXM+ZnRMbPLMEqu5jx8BfYtMi8Jh7LMzm5jHExcOVvEu4z4
+        9HxuXlnx1ccqj+u0zdEs+5NyIMNBmBZiHTiy1qcJt1Dj7H0=
+X-Google-Smtp-Source: AK7set8Y0j2oUGKL6afGBF88DWXfyo/9L2sEQMoOqwHMjnBv0LEDByGQxw35zwIwVsdWmtF/I/qRg/P5RfUEKF3D/jE=
+X-Received: by 2002:a50:f695:0:b0:4bb:e549:a2ad with SMTP id
+ d21-20020a50f695000000b004bbe549a2admr872671edn.4.1677664226668; Wed, 01 Mar
+ 2023 01:50:26 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <167766418335.5837.8035431870442051850.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230222111213.2241633-1-keguang.zhang@gmail.com>
+ <20230222111213.2241633-5-keguang.zhang@gmail.com> <18d1048e-c66b-fea8-2755-6c1c6e23fde9@linaro.org>
+In-Reply-To: <18d1048e-c66b-fea8-2755-6c1c6e23fde9@linaro.org>
+From:   Kelvin Cheung <keguang.zhang@gmail.com>
+Date:   Wed, 1 Mar 2023 17:50:10 +0800
+Message-ID: <CAJhJPsUOYJ6B=YSiZxDe3_h5+Rix_uuFvUDbo9wO084N71Q+jQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: gpio: Add Loongson-1 GPIO
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Wed, Feb 22, 2023 at 8:35=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 22/02/2023 12:12, Keguang Zhang wrote:
+> > Add devicetree binding document for Loongson-1 GPIO.
+> >
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> >  .../bindings/gpio/loongson,ls1x-gpio.yaml     | 60 +++++++++++++++++++
+> >  1 file changed, 60 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls1=
+x-gpio.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.=
+yaml b/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
+> > new file mode 100644
+> > index 000000000000..e4ab49d48fae
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
+> > @@ -0,0 +1,60 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/gpio/loongson,ls1x-gpio.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Loongson-1 GPIO controller
+> > +
+> > +maintainers:
+> > +  - Keguang Zhang <keguang.zhang@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: loongson,ls1x-gpio
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  gpio-controller: true
+> > +
+> > +  "#gpio-cells":
+> > +    const: 2
+> > +
+> > +  ngpios:
+> > +    minimum: 1
+> > +    maximum: 32
+>
+> Isn't this fixed at 32? Do you have hardware with different number of GPI=
+Os?
+>
+Yes. The GPIO number of some groups is less than 32.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - gpio-controller
+> > +  - '#gpio-cells'
+>
+> Use consistent quotes - either " or '
+>
+Will do.
 
-Commit-ID:     dd093fb08e8f8a958fec4eef36f9f09eac047f60
-Gitweb:        https://git.kernel.org/tip/dd093fb08e8f8a958fec4eef36f9f09eac047f60
-Author:        Tom Lendacky <thomas.lendacky@amd.com>
-AuthorDate:    Wed, 22 Feb 2023 10:39:39 -06:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 01 Mar 2023 10:17:46 +01:00
+> > +  - ngpios
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    gpio0: gpio@1fd010c0 {
+> > +        compatible =3D "loongson,ls1x-gpio";
+> > +        reg =3D <0x1fd010c0 0x4>;
+> > +
+> > +        gpio-controller;
+> > +        #gpio-cells =3D <2>;
+> > +
+> > +        ngpios =3D <32>;
+> > +    };
+> > +
+> > +  - |
+> > +    gpio1: gpio@1fd010c4 {
+> > +        compatible =3D "loongson,ls1x-gpio";
+> > +        reg =3D <0x1fd010c4 0x4>;
+> > +
+> > +        gpio-controller;
+> > +        #gpio-cells =3D <2>;
+> > +
+> > +        ngpios =3D <32>;
+> > +    };
+>
+> These are two the same examples, keep only one.
+>
+Will do.
 
-virt/sev-guest: Return -EIO if certificate buffer is not large enough
+> Best regards,
+> Krzysztof
+>
 
-Commit
 
-  47894e0fa6a5 ("virt/sev-guest: Prevent IV reuse in the SNP guest driver")
+--=20
+Best regards,
 
-changed the behavior associated with the return value when the caller
-does not supply a large enough certificate buffer. Prior to the commit a
-value of -EIO was returned. Now, 0 is returned.  This breaks the
-established ABI with the user.
-
-Change the code to detect the buffer size error and return -EIO.
-
-Fixes: 47894e0fa6a5 ("virt/sev-guest: Prevent IV reuse in the SNP guest driver")
-Reported-by: Larry Dewey <larry.dewey@amd.com>
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Tested-by: Larry Dewey <larry.dewey@amd.com>
-Cc: <stable@kernel.org>
-Link: https://lore.kernel.org/r/2afbcae6daf13f7ad5a4296692e0a0fe1bc1e4ee.1677083979.git.thomas.lendacky@amd.com
----
- drivers/virt/coco/sev-guest/sev-guest.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index 4ec4174..7b4e900 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -377,9 +377,26 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 		snp_dev->input.data_npages = certs_npages;
- 	}
- 
-+	/*
-+	 * Increment the message sequence number. There is no harm in doing
-+	 * this now because decryption uses the value stored in the response
-+	 * structure and any failure will wipe the VMPCK, preventing further
-+	 * use anyway.
-+	 */
-+	snp_inc_msg_seqno(snp_dev);
-+
- 	if (fw_err)
- 		*fw_err = err;
- 
-+	/*
-+	 * If an extended guest request was issued and the supplied certificate
-+	 * buffer was not large enough, a standard guest request was issued to
-+	 * prevent IV reuse. If the standard request was successful, return -EIO
-+	 * back to the caller as would have originally been returned.
-+	 */
-+	if (!rc && err == SNP_GUEST_REQ_INVALID_LEN)
-+		return -EIO;
-+
- 	if (rc) {
- 		dev_alert(snp_dev->dev,
- 			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
-@@ -395,9 +412,6 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 		goto disable_vmpck;
- 	}
- 
--	/* Increment to new message sequence after payload decryption was successful. */
--	snp_inc_msg_seqno(snp_dev);
--
- 	return 0;
- 
- disable_vmpck:
+Kelvin Cheung
