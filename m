@@ -2,135 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F5A6A6F05
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20296A6F0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjCAPIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
+        id S229953AbjCAPKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjCAPIs (ORCPT
+        with ESMTP id S229589AbjCAPKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:08:48 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2089.outbound.protection.outlook.com [40.107.237.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F9BAD28;
-        Wed,  1 Mar 2023 07:08:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YccLngqogFwb/5oqz32urRbXCqEAIte3HBPsSroq9qVLLbUOlfglms/q2b6URLUkWipRRWhsXLvGHGA5BNuh+M0ppmkbSz7ypm3LfXBcKyLzIX50iPcj6piO9InWe3xInuEqHctKSSTZ/WdcL4DXUO4X5qMBxWHQu/aGO1tVP3zKf7AfFY/oeW+xJHPrzS0h8DeAXBo2U0oZQmzJdG6EYDTICGhSYVE3xZvyfbCUHM9XbwtD/QrcHLh81tKeVACIKnOlOiVtyDRkTx/7MRrvLRxE9I0twC35Or9Sh8Fotawtm2b3DyMd0hWwC3JWH+LU032pizVBQsJdOayHmuzVTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XeVPxDh3038mdHDUFMduxjlhkxvHBqfUyEfRQrmaSF4=;
- b=J6fPqhnnm1Kv18GyejSd0wmD2c182E/UArhwZHRqxrSuDYvtIRXo3oQGQYopAe0csCVqC56v1ivtehjXaW+Xso872uM4EgAsqp2HsIah4DSdA0GcLzrHr1oObBPzWGfvHMcjqKIBekBHfB9BAgkYSiOPLcOxhPIzIhA9vCPaavVMkvQGv/hO8xf4t5WMV2kbBBTrIqrRqSNkJu9Ik/EUE128aWsdLgp6FKc40danijMtWSP6dhO+gmpMUD2zBAhL3YDX85lvTPddAjabOttDzAoAEpCSN6++ddb1ry1fLVSnmtckPn7cljKUbIiojmCyr+UwAJAWZ0N9w2RcLaJkug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XeVPxDh3038mdHDUFMduxjlhkxvHBqfUyEfRQrmaSF4=;
- b=RTOhgqfWY+MGpRtZqjYC+/f0aXAG3ZIdbwe/W4CDesDxyIGreEw138AK6vkWSBdlJSqY0DcAPyFOwX+Fep5U1/y24kRP8AhBjDJhsYZLC3dqEG+KlgfLSg6zYJ8CqqmJloIHtL1lDNOfVDB/Stb91/cP5QsRBCPpsSFllpIYndY=
-Received: from BN9PR03CA0064.namprd03.prod.outlook.com (2603:10b6:408:fc::9)
- by PH0PR12MB5420.namprd12.prod.outlook.com (2603:10b6:510:e8::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Wed, 1 Mar
- 2023 15:08:44 +0000
-Received: from BN8NAM11FT111.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fc:cafe::18) by BN9PR03CA0064.outlook.office365.com
- (2603:10b6:408:fc::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30 via Frontend
- Transport; Wed, 1 Mar 2023 15:08:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT111.mail.protection.outlook.com (10.13.177.54) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.18 via Frontend Transport; Wed, 1 Mar 2023 15:08:44 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
- 2023 09:08:43 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-CC:     Mario Limonciello <mario.limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] platform/x86/amd: pmc: Add a check for PMFW version on PS platform
-Date:   Wed, 1 Mar 2023 09:08:20 -0600
-Message-ID: <20230301150821.9791-2-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230301150821.9791-1-mario.limonciello@amd.com>
-References: <20230301150821.9791-1-mario.limonciello@amd.com>
+        Wed, 1 Mar 2023 10:10:07 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5100946A5;
+        Wed,  1 Mar 2023 07:10:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677683406; x=1709219406;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GZKkYyw/+6en+ZNdpH/LDyrmPrTHoHwB5M8HldeClUY=;
+  b=c0wm525nhju3XRwr7bYrkt5xWzoOG/3UrsjXWHiHTMJcrSc9HOtKegHD
+   CfR4vcove7CDyAbWa4Ur4qJXbLZ0ou1/XP7jeFz2zKUU1CZ1zEiKBPWZo
+   JI7zX7j99bIhpTPbKenIi2igdkPSJGIvr6VCGEyargJlwrp2kChcYjxZx
+   Ctd66fTsTuc7qjSw2wo85mSmGfzxhJ/7G/EhIuu7MWJ/MrV0hDQeU2GNp
+   owPPce6wh89RKalZ+bxln2Fi5SrLiozDSnPuZRnp/+gaQ8ktNlsBzL6Ma
+   h3UwJryDgUSXw31uFt1RIsLDkdQ6MY/dH3OSYDTCixyWiMO1t/LScYhYD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322693413"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="322693413"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 07:09:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="707009096"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="707009096"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 01 Mar 2023 07:09:43 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pXO5N-00DnwK-23;
+        Wed, 01 Mar 2023 17:09:41 +0200
+Date:   Wed, 1 Mar 2023 17:09:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Implementation of fwnode_operations :: device_get_match_data()
+ for software nodes?
+Message-ID: <Y/9qtT0vckSikOKJ@smile.fi.intel.com>
+References: <20230223203713.hcse3mkbq3m6sogb@skbuf>
+ <Y/0uC1LgeWR0V0ts@smile.fi.intel.com>
+ <20230227234411.jqmwshzkeyx6iqyo@skbuf>
+ <Y/9iLBWAO37y6lZZ@smile.fi.intel.com>
+ <20230301143625.7kdnzujlv4psbhla@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT111:EE_|PH0PR12MB5420:EE_
-X-MS-Office365-Filtering-Correlation-Id: 668f608d-6c27-4877-93fd-08db1a66d9b7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +qf3fzcEm8PBth74GtMvNN5BnqNg4idDRmSUCN/zkgKjU/VPJGlBXyOsIM1hsuWYPko+o0/F3dd1OQ0HeXcSiA6Ah2liHYvQVG5eIVPpXSSNbiwdVhLB6khBJMidU8c3itB6X8HftEA8OVtC4T2I1Yc1SsCyATWhKKpbL+AgRer69zXUzB5epKfUKHlZL0IKz19WbCPyKXBI2m6koYiZKT7kIzM1Gj/5yBT5SpP9nChb7dwpeSTZVKeQYhN5LaDsSsxdiUbgMh16w90Oa7RmdUQ/1Kp4o7v+f9/8dvXOjsfams/mbjqRbn8hO0DyKE5YE5rVkkuRbzuZvs9HUtq8oVc+5sWWgFG1qgSBLnm/yeWFPJcfpYeufCZG/DOOoqtssVWzGRtVeR0Irjt9jmNLFG+70haYa8wJbEd2Q2N20fJCRnCagT3DLzKKoMqJ/Yc9YMpN7kIxyvQ4rf9NVLpFEuGq18ICInDXXjy48BCmIRojaSX0b3veELh/0Ch0sluhXF89+tpYZDxo4mhhVIeBUKNsCBFKggl/Wh8cSqoGJ4qv1AOq6xc3JCha0gg0oheU0kfT4FE3/r1zYfLyEvyf1hFOqqnxUn/j0+/NUypBmFLyq+86ZYGSF/v44RT8vV/Qa3CBsn8lk6HZlkGvQ6Q6/5486+JjbUMJalJfDyTrK/bZi9kmK+Gqru8X1QHEacFKQWvXiUI1AH3pW+S2/MbOgOTV4gV9U0H8c0CejhDlCis=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(396003)(346002)(376002)(451199018)(36840700001)(46966006)(40470700004)(83380400001)(82310400005)(336012)(54906003)(6636002)(2906002)(2616005)(426003)(316002)(37006003)(47076005)(16526019)(6666004)(7696005)(26005)(4744005)(36860700001)(81166007)(82740400003)(86362001)(36756003)(5660300002)(8936002)(186003)(44832011)(6862004)(478600001)(40460700003)(356005)(1076003)(41300700001)(40480700001)(4326008)(8676002)(70586007)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 15:08:44.4261
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 668f608d-6c27-4877-93fd-08db1a66d9b7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT111.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5420
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301143625.7kdnzujlv4psbhla@skbuf>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running s2idle on PS if using PMFW older than 76.49.0 we will
-trip up some bugs that will lead to freezes outside of the control
-of Linux.  Set a guard that we only can enter HW sleep on 76.49.0
-or newer for PS.
+On Wed, Mar 01, 2023 at 04:36:25PM +0200, Vladimir Oltean wrote:
+> On Wed, Mar 01, 2023 at 04:33:16PM +0200, Andy Shevchenko wrote:
+> > On Tue, Feb 28, 2023 at 01:44:11AM +0200, Vladimir Oltean wrote:
+> > > On Tue, Feb 28, 2023 at 12:26:19AM +0200, Andy Shevchenko wrote:
+> > > > I believe that there are few reasons for that:
+> > > > 1) (besides that what Heikki mentioned);
+> > > > 2) the software nodes only for quirks, seems you are trying to implement
+> > > > something that should have to be implemented as proper DT / ACPI device node.
+> > > > 
+> > > > Can you elaborate why do you need that (as you see no other board file requires
+> > > > this)?
+> > > 
+> > > Trying to keep the answer short while still answering the question.
+> > 
+> > Thank you, this is helpful to understand what you want.
+> > 
+> > Random idea #N+1 based on what you told is: how about DT / ACPI overlays?
+> > Random idea #N+2 is: have you considered FPGA approach?
+> > 
+> > So, as far as I got it right the device _can_ be considered as hotpluggable
+> > blackbox with a lot of hardware onboard. This is very much reminds me FPGA
+> > sitting behind PCIe hotplug capable interface.
+> > 
+> > What do we have now there? Can we spread the same approach for your case?
+> > 
+> > Because to me board files here looks like a hack.
+> > 
+> > P.S.
+> > Yeah, I know that SPI is not hotpluggable bus per se. It may be that
+> > we actually need to reboot machine after plugging in/out the device.
+> 
+> Can you please give me some clearer references for #N+1 and #N+2?
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/platform/x86/amd/pmc.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> I haven't considered either of those options and I'm not sure what that
+> would entail.
 
-diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
-index c42fa47381c3..e7c6c06b2ccd 100644
---- a/drivers/platform/x86/amd/pmc.c
-+++ b/drivers/platform/x86/amd/pmc.c
-@@ -778,6 +778,14 @@ static void amd_pmc_s2idle_prepare(void)
- 			return;
- 		}
- 		break;
-+	case AMD_CPU_ID_PS:
-+		if (!amd_pmc_verify_min_version(pdev, 76, 49)) {
-+			dev_warn(pdev->dev,
-+				 "hardware sleep unsupported with firmware %u.%u.%u\n",
-+				 pdev->major, pdev->minor, pdev->rev);
-+			return;
-+		}
-+		break;
- 	}
- 
- 	msg = amd_pmc_get_os_hint(pdev);
+With overlays you can create the proper DT description stanza and end user's
+job is to just put it somewhere and upload via precoded script or so [1].
+
+
+For the second one I'm not really the expert. But either FPGA framework (if
+they have anything working for this), or you also may look at Thunderbolt /
+USB4 which uses similar approach while being PCIe devices. Okay, the latter
+(USB4) is the PCIe topology, while FPGA is whatever behind the PCI switch.
+Meaning that FPGA case from HW p.o.v. is closer to your case.
+
+[1]:https://docs.kernel.org/devicetree/overlay-notes.html
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
