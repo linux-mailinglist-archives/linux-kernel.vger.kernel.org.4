@@ -2,187 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4FF6A6C18
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DB26A6C20
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjCAMHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 07:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        id S229694AbjCAMJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjCAMHX (ORCPT
+        with ESMTP id S229561AbjCAMJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 07:07:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B452C36FF2;
-        Wed,  1 Mar 2023 04:07:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63513B81015;
-        Wed,  1 Mar 2023 12:07:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C5EC433A0;
-        Wed,  1 Mar 2023 12:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677672437;
-        bh=a4HXikBAfsTGDGyY1EqABSnmg24eMbvSd2S3rx8Tm3o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g40MrPv8lcWOXW6/DizK90pXcXhc5ZjN2N+VBsCEDK7j5myN+H9h1bjMfK6/7Gbnz
-         lYMYIwByn/cqiOtfaEfzgbJG3ABBHsf0u5lMxbKs3qwOHrHevPZ6exQaDcay4BGu6b
-         Q/IbO19ioZ/KKm+C3xC9F40Tvwp5GViQZSQfIh7GufQmRhCANRnlODjcpjBVDixcO3
-         9C3VbhKUOPAA/SeD/QBo4/CWNO+cO/hlHvUj3dGDcjE6gWCpofNg6yQFkCkyV5iBAP
-         wQ1Z/+7FVoPsUC0vaWf1bt7koqf5wVulZ8sTa/P4kibx6ZY30S6NpOmcaLFBzTJtpL
-         NOD1sr6ylcxmQ==
-Received: by mail-ed1-f46.google.com with SMTP id s26so52682660edw.11;
-        Wed, 01 Mar 2023 04:07:16 -0800 (PST)
-X-Gm-Message-State: AO0yUKVPG4Y7QJS2oOZEXmP4TlanW4KVUw+EmgLHTpkfjEUN7VJLdYt1
-        GB0MBIeUoy5KOObvTkAf9Al8/vzQHfE5Z+5RSOM=
-X-Google-Smtp-Source: AK7set+ZPFIRI5EJZyj6BlqoXxNozNx266bdzbtmag0+xgRl1DE36MIgV7uSxWvYQpCEJzBy1trQnMbYscC4Ba5Vz+M=
-X-Received: by 2002:a17:906:4f99:b0:8b0:e909:9136 with SMTP id
- o25-20020a1709064f9900b008b0e9099136mr3012557eju.1.1677672435185; Wed, 01 Mar
- 2023 04:07:15 -0800 (PST)
+        Wed, 1 Mar 2023 07:09:09 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E997D9B;
+        Wed,  1 Mar 2023 04:09:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1677672476; i=erbse.13@gmx.de;
+        bh=jW9QqbNiXOx9cSB+L+BuNqUp884nAnRhvACcY0amjgY=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Tb5LO9l1Y3HYnpzuLYsuCG63NhqCbi3sA+tRcO2vCiYIPN6laSjLD0NiLX93T2pFg
+         K2eVPQeZJ5y49yPGgtQnZYwvuctg9Jj1MhWCWL2JKFMolG69d5YPlhGQyPnxvTpv7J
+         RFcGw1y6222RDmLkNqhZn3RunlK5Mjr7thpnnynN7ZbkYONdFaFuPL8lG15qj187ex
+         NxAAjA9yRUhS8ZNZEuTlSFnNAdphzpc5RnyewkF5xKtchnJZIwHI5/a5q7z7SCksGi
+         mXshF9eYo79WPYnBmSZ9Id35VkznJP7uPVhs/i7cu0AGuVEXMoTGocCe91x7TFQx/N
+         MbgUeus/LfVsw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([134.147.116.198]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MORAa-1p7SOg1pde-00Pxza; Wed, 01
+ Mar 2023 13:07:56 +0100
+Date:   Wed, 1 Mar 2023 13:07:47 +0100
+From:   Tom Dohrmann <erbse.13@gmx.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH RFC v8 15/56] x86/sev: Invalidate pages from the direct
+ map when adding them to the RMP table
+Message-ID: <Y/9AEyiMLKfj+/mK@notebook>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-16-michael.roth@amd.com>
 MIME-Version: 1.0
-References: <20230301085545.2373646-1-chenhuacai@loongson.cn>
- <aba37b65-6fc4-721e-ebc5-df52533e4791@loongson.cn> <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
- <dfd6a1cb-25be-cc11-4134-b2e92e353c00@loongson.cn>
-In-Reply-To: <dfd6a1cb-25be-cc11-4134-b2e92e353c00@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 1 Mar 2023 20:06:57 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4q2+s2fV6DqSK8H0cByvJsd78GBB_Vw9gxHMfBu2Scug@mail.gmail.com>
-Message-ID: <CAAhV-H4q2+s2fV6DqSK8H0cByvJsd78GBB_Vw9gxHMfBu2Scug@mail.gmail.com>
-Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
- relocate kernel
-To:     Youling Tang <tangyouling@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220183847.59159-16-michael.roth@amd.com>
+X-Provags-ID: V03:K1:QAZfbcKAW91F2JHdCAu5cRq7q3g4qY9Nr1ls991Uxd34cj28wu4
+ gFgR+oTH8ZbPRHLZpBhl4NYmMW8WX2lBFowFZhD5+jFThO3mMnNTgmEBNRiYbYonDMhOz+R
+ zjLWYNL6TgjNmzKfnzwCu+728YITrxzAsF4A1hUmwF6jjASlkSwhevasq+/XUPFeziAS9iA
+ lCQJWTRgA4V/DccUsgqTQ==
+UI-OutboundReport: notjunk:1;M01:P0:1Jgywx4vEhk=;2NZfYQAX5/O0Apb5Etjyh5/d2qh
+ eoZenyL9fVz4LLWYn1aL6JAUcleXQbzD+mOwwVtCG+S25b4ODoMeXnKTCJwyr5AawnOintaUY
+ 3eOl3NoC9v9Loic97MjO5ALcja6B+siNBQs+3FAbNfGYjT9IGhdFKXwpic6nW/HPEb1Wf80Rx
+ GZuP5Nhwpp5EcJcdrhCFe0yJFUQRh5mBOILWXiNLqI3VIdhaF1cRCKRAUm9zttvfiklJfELAJ
+ g/ccPpWbfxd8fvZtWHGjAQ5bDY3YMnumdeK/klor4tDCjYUxXtAU8SGV4peI9JDW8ApKwpNot
+ /D/jvOrh5uC+Dbyjw5TDtmrl9MRrzonWkVlnyi9CD/vt/IX5K2caSov+eUinh9QJolwJngSBY
+ YuM2FoYztSiTU/cetwl0vlGctwwdeY+H0E7mG7cTjCkrgRwPrTGj4e3Hf5JbBGw/eFOZdHovG
+ 9c7tW/eIn+kBZA1tNK1KXXOSgFnyov3ZiH7Qbmjl0QCtcVapnDBwJYzuVSK4PBFit+ZCYggO5
+ OBDhItKwjvKj/t6OD1xwRvr+pxRm3zHL5o3+PB7WcU19ImxJ6V+vkjTmsUMN52M+QsDQk4eFi
+ 3C2KMwlC7Xfk/ypUcAWyFQS/iuWhx52WdKnxJL/OfEsqLiHhVrx0cB6jOp5d9ckbFhw4yfCZn
+ y26KcJ6psULQkv1vhyCt+xsBsEdtoD/YGZtssqQeuHOwaC6mN9gPLDno/aMIv+3kxkYOJMeGg
+ EXeyUze3ZSF0P6gyvpvFSIZvesTGINW83Z2EV6a3M2S9eb5AUYRcZ1Zc12Pm5UG/+r8IMohPP
+ ykUXcdbRW7eapvjEGlKeqGEOdrxcL/F7iN7DYoLyyG4agX00F/MhT8cQvPy7iAbSbKehuoSZQ
+ wWlBDcl+8bI+Hv+v54K2msu5Tn7jADDoaLZqOQx29HKGdYL1Xi7SGEKh+CnJGHzr8kt+D2gm3
+ eOolEjxJ36f6NoUOuJNRQvUe3Co=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Youling,
+On Mon, Feb 20, 2023 at 12:38:06PM -0600, Michael Roth wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+>
+> The integrity guarantee of SEV-SNP is enforced through the RMP table.
+> The RMP is used with standard x86 and IOMMU page tables to enforce
+> memory restrictions and page access rights. The RMP check is enforced as
+> soon as SEV-SNP is enabled globally in the system. When hardware
+> encounters an RMP-check failure, it raises a page-fault exception.
+>
+> The rmp_make_private() and rmp_make_shared() helpers are used to add
+> or remove the pages from the RMP table. Improve the rmp_make_private()
+> to invalidate state so that pages cannot be used in the direct-map after
+> they are added the RMP table, and restored to their default valid
+> permission after the pages are removed from the RMP table.
+>
+> Co-developed-by: Ashish Kalra <ashish.kalra@amd.com>
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  arch/x86/kernel/sev.c | 57 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index a49f30c10dc1..3e5ff5934e83 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -2595,6 +2595,37 @@ int psmash(u64 pfn)
+>  }
+>  EXPORT_SYMBOL_GPL(psmash);
+>
+> +static int restore_direct_map(u64 pfn, int npages)
+> +{
+> +	int i, ret =3D 0;
+> +
+> +	for (i =3D 0; i < npages; i++) {
+> +		ret =3D set_direct_map_default_noflush(pfn_to_page(pfn + i));
+> +		if (ret)
+> +			goto cleanup;
+> +	}
+> +
+> +cleanup:
+> +	WARN(ret > 0, "Failed to restore direct map for pfn 0x%llx\n", pfn + i=
+);
+> +	return ret;
+> +}
+> +
+> +static int invalidate_direct_map(u64 pfn, int npages)
+> +{
+> +	int i, ret =3D 0;
+> +
+> +	for (i =3D 0; i < npages; i++) {
+> +		ret =3D set_direct_map_invalid_noflush(pfn_to_page(pfn + i));
+> +		if (ret)
+> +			goto cleanup;
+> +	}
+> +
+> +cleanup:
+> +	WARN(ret > 0, "Failed to invalidate direct map for pfn 0x%llx\n", pfn =
++ i);
+> +	restore_direct_map(pfn, i);
 
-On Wed, Mar 1, 2023 at 6:08=E2=80=AFPM Youling Tang <tangyouling@loongson.c=
-n> wrote:
->
-> Hi, Huacai
->
-> On 03/01/2023 05:30 PM, Huacai Chen wrote:
-> > Hi, Youling,
-> >
-> > On Wed, Mar 1, 2023 at 5:21=E2=80=AFPM Youling Tang <tangyouling@loongs=
-on.cn> wrote:
-> >>
-> >> Hi, Huacai
-> >>
-> >> On 03/01/2023 04:55 PM, Huacai Chen wrote:
-> >>> Since Linux-6.3, LoongArch supports PIE kernel now, so let's reintrod=
-uce
-> >>> efi_relocate_kernel() to relocate the core kernel.
-> >>
-> >> If we strongly rely on the PIE feature after the modification, we need
-> >> to modify it as follows,
-> > There is no strong rely, efi_relocate_kernel() can also handle the
-> > non-PIE kernel.
->
-> IMHO, if EFI_KIMG_PREFERRED_ADDRESS is no longer defined as
-> `PHYSADDR(VMLINUX_LOAD_ADDRESS)` (physical link address), we need to
-> relocate through the RELOCATABLE function, so it is recommended to
-> select RELOCATABLE if EFI_STUB is enabled
-We can select RELOCATABLE when we modify EFI_KIMG_PREFERRED_ADDRESS.
-Before that I prefer to give a chance to build a non-PIE kernel.
+This immediately restores the direct map after invalidating it. It
+probably needs to put behind if(ret).
 
-Huacai
+Regards, Tom
+
+> +	return ret;
+> +}
+> +
+>  static int rmpupdate(u64 pfn, struct rmp_state *val)
+>  {
+>  	int max_attempts =3D 4 * num_present_cpus();
+> @@ -2605,6 +2636,21 @@ static int rmpupdate(u64 pfn, struct rmp_state *v=
+al)
+>  	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+>  		return -ENXIO;
 >
-> Youling.
-> >
-> > Huacai
-> >>
-> >> --- a/arch/loongarch/Kconfig
-> >> +++ b/arch/loongarch/Kconfig
-> >> @@ -137,6 +137,7 @@ config LOONGARCH
-> >>          select PCI_MSI_ARCH_FALLBACKS
-> >>          select PCI_QUIRKS
-> >>          select PERF_USE_VMALLOC
-> >> +       select RELOCATABLE
-> >>          select RTC_LIB
-> >>          select SMP
-> >>          select SPARSE_IRQ
-> >>
-> >> or:
-> >>
-> >> --- a/arch/loongarch/Kconfig
-> >> +++ b/arch/loongarch/Kconfig
-> >> @@ -360,6 +360,7 @@ config EFI_STUB
-> >>          default y
-> >>          depends on EFI
-> >>          select EFI_GENERIC_STUB
-> >> +       select RELOCATABLE
-> >>          help
-> >>
-> >> Youling.
-> >>
-> >>>
-> >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> >>> ---
-> >>>  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++-----------=
---
-> >>>  1 file changed, 7 insertions(+), 17 deletions(-)
-> >>>
-> >>> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/=
-firmware/efi/libstub/loongarch-stub.c
-> >>> index eee7ed43cdfb..72c71ae201f0 100644
-> >>> --- a/drivers/firmware/efi/libstub/loongarch-stub.c
-> >>> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-> >>> @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned long *i=
-mage_addr,
-> >>>                                efi_loaded_image_t *image,
-> >>>                                efi_handle_t image_handle)
-> >>>  {
-> >>> -     int nr_pages =3D round_up(kernel_asize, EFI_ALLOC_ALIGN) / EFI_=
-PAGE_SIZE;
-> >>> -     efi_physical_addr_t kernel_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
-> >>>       efi_status_t status;
-> >>> +     unsigned long kernel_addr =3D 0;
-> >>>
-> >>> -     /*
-> >>> -      * Allocate space for the kernel image at the preferred offset.=
- This is
-> >>> -      * the only location in memory from where we can execute the im=
-age, so
-> >>> -      * no point in falling back to another allocation.
-> >>> -      */
-> >>> -     status =3D efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
-> >>> -                          EFI_LOADER_DATA, nr_pages, &kernel_addr);
-> >>> -     if (status !=3D EFI_SUCCESS)
-> >>> -             return status;
-> >>> -
-> >>> -     *image_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
-> >>> -     *image_size =3D kernel_asize;
-> >>> +     kernel_addr =3D (unsigned long)&kernel_offset - kernel_offset;
-> >>> +
-> >>> +     status =3D efi_relocate_kernel(&kernel_addr, kernel_fsize, kern=
-el_asize,
-> >>> +                  EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min_align=
-(), 0x0);
-> >>>
-> >>> -     memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
-> >>> -            (void *)&kernel_offset - kernel_offset,
-> >>> -            kernel_fsize);
-> >>> +     *image_addr =3D kernel_addr;
-> >>> +     *image_size =3D kernel_asize;
-> >>>
-> >>>       return status;
-> >>>  }
-> >>>
-> >>
+> +	level =3D RMP_TO_X86_PG_LEVEL(val->pagesize);
+> +	npages =3D page_level_size(level) / PAGE_SIZE;
+> +
+> +	/*
+> +	 * If page is getting assigned in the RMP table then unmap it from the
+> +	 * direct map.
+> +	 */
+> +	if (val->assigned) {
+> +		if (invalidate_direct_map(pfn, npages)) {
+> +			pr_err("Failed to unmap %d pages at pfn 0x%llx from the direct_map\n=
+",
+> +			       npages, pfn);
+> +			return -EFAULT;
+> +		}
+> +	}
+> +
+>  	do {
+>  		/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
+>  		asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
+> @@ -2630,6 +2676,17 @@ static int rmpupdate(u64 pfn, struct rmp_state *v=
+al)
+>  			 attempts, val->asid, ret, pfn, npages);
+>  	}
 >
+> +	/*
+> +	 * Restore the direct map after the page is removed from the RMP table=
+.
+> +	 */
+> +	if (!val->assigned) {
+> +		if (restore_direct_map(pfn, npages)) {
+> +			pr_err("Failed to map %d pages at pfn 0x%llx into the direct_map\n",
+> +			       npages, pfn);
+> +			return -EFAULT;
+> +		}
+> +	}
+> +
+>  	return 0;
+>  }
+>
+> --
+> 2.25.1
 >
