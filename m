@@ -2,141 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB3D6A6B2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2476A6B33
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjCAK6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 05:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S229791AbjCAK7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 05:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjCAK6L (ORCPT
+        with ESMTP id S229512AbjCAK7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 05:58:11 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFEB14E85;
-        Wed,  1 Mar 2023 02:58:07 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id p3-20020a17090ad30300b0023a1cd5065fso712324pju.0;
-        Wed, 01 Mar 2023 02:58:07 -0800 (PST)
+        Wed, 1 Mar 2023 05:59:23 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583BB3AA1
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:59:21 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id h3so13492245lja.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 02:59:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677668287;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FgbtT5VMo9Vg7rJLdgD/z46AIvGTupdTznrZ5pjSr1Y=;
-        b=N/pTfrGBr4o5Yp3FyiP5YRAf92/V//p4ALFOsEF2CBdwzXHbuO64/bjlsvgXSr8WNR
-         PvHSZBjqf+vYRjnCk/Jy5g3wIzoTzSdsDm3RC0lFjUbOAJhRDA9Y+npeyCyV7/LdYL8r
-         Y4J5ipob8rKVW5ftmL81iTCSiChyRPQ94avam0hhL8MoaQvQKYMKVjJqItNEyVW1lLv6
-         VmAZBQh1zoJ/a8eTMxKcs+gJwtMqJ81kkYkHcaqe6kikkokNURXLav/Gx97Zhjk520kF
-         OhtaqYkFSfoUCWdkR/OSdqGweRKCwMJMrt8O5jStggAOrLO7Yefk2/hHkLNJjgmvTNiM
-         mxhg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/3ZhRJHh4DWKDcNXBiie21WCRUSPF0das6G0cLZ3qog=;
+        b=XsvQ3Xnkmy2gzsu8cozXUgqwPOCPwP+O2cs9jRE/4nNUmcCvlSUcPObumqXrtypi9V
+         GPwvQzCIKsbtuv/U0/Tv4Ccv5RsGfb7Fi7kuJKQOf2flAd3u7C5o57LS5t8pgZNi3Sxv
+         C00yngvUzAPJHnqHyUV5zxaq61DVL7LdDpie+OiyMK+/NAl/9HbrMLvvpQ/XDX54IfaT
+         fEKoBmOHhYecZ53X7DRvgFlg2FenQBn0O9dYf/FDCsvQhELx0jCd5lnZ3Ozb2qEV0df3
+         xvO/WwcuqDrX7cESFEZPfjjOnkw2ytzGsYHsVhg33MNqNxexWKeD9y/cH97I+t9k8Kg1
+         yYXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677668287;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FgbtT5VMo9Vg7rJLdgD/z46AIvGTupdTznrZ5pjSr1Y=;
-        b=wh68unDQJfWTCFm3/V3xtB1POvPRRBneCM/JlUCeujcyYehaK8nH2WCB/IsfpJvU5Y
-         blmhgYz1hImy9DYHZuMMG83cn1OhVlSja5QOw7EoLp+qbBgpbdW2ZD3mheXvRiETy/22
-         lIb/us1zBwy8X1DCgmVsgiuqrxSlS27jZUgmiTNeMrkFTyP0ccZYY4pqtxZrmNPkxeIE
-         2OvfTZxY8w2odc2RX5MCoesGQouqaidq2PpMNZTSJn2Lp/Orht2Z6TOBK+koTns6YDCZ
-         dkirU6WLS5YPS4GGNN1DFx4YU4h7+ROdk3acN4xWqn+hFT22/Td2Q5KicBg7J+4982Tw
-         t8og==
-X-Gm-Message-State: AO0yUKVx0GC+R1t/62JtNcNbXlPri4TpCL7OK3ZfYb5KOfi7Yna/mKud
-        EOpCEpGXd+JeYwKFdpzhLLto40J6ypjTDpxqGZk=
-X-Google-Smtp-Source: AK7set+0V4d9xQ7YZHs/VfWrDGTBSguweM3j4JjnjLbFsnJ9h6gqnYrkCKS6U/QvImgf274dK9/tMg0gQ2lpUo+vPhI=
-X-Received: by 2002:a17:90a:4e8a:b0:234:e49:ba9f with SMTP id
- o10-20020a17090a4e8a00b002340e49ba9fmr2316700pjh.4.1677668287312; Wed, 01 Mar
- 2023 02:58:07 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/3ZhRJHh4DWKDcNXBiie21WCRUSPF0das6G0cLZ3qog=;
+        b=NYT0vWh4da3eHtVEE+jymaFbyRk3+jx6TdVde2XbT8HcYQiBPxlmwE16AOJ944cGSF
+         ND4jZKDByzCN1YhvXqBQjTRrNJxkqvFfCEMS7TuP/LotnlnM3F5g4F8qfZ4IF34dQIkh
+         UlOQ8k+jU4K1yDgZII5kux+J3FNyDZih0t7MWuJx0MiIw/oFXuTlGebRdROlEVDO5wT+
+         yaHuYUyyns+vZ2WDgC4Nx8Uj1r21dOaqGp6IRrrn/svPHeCBVdFKf2vE+ZK28QXoCG7R
+         vkf1zFOsVCw5C/LSOF8MqXkOlnp8omdoGRz+6fvN0nEQxKvOkE48kB3JU9gO7WmBd+tf
+         Xn9g==
+X-Gm-Message-State: AO0yUKVDYeH/r82OmG7KtRgAECuypoCisVFreMhZh2HbjtHLeuKu2HA+
+        /Lj5M9aelyyWLA+Zvm55NndJnQ==
+X-Google-Smtp-Source: AK7set9GZ1CPZphxS+QpwK9OkBK6/QNjk8eMHF5wjHJVeqVVDVcHSfRMWnRPp2IM0cfQTAGw3DMf9Q==
+X-Received: by 2002:a05:651c:a05:b0:295:b0aa:978a with SMTP id k5-20020a05651c0a0500b00295b0aa978amr4001546ljq.6.1677668359564;
+        Wed, 01 Mar 2023 02:59:19 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id k19-20020a2ea273000000b00295a36fedadsm1618479ljm.26.2023.03.01.02.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 02:59:19 -0800 (PST)
+Message-ID: <469b4a3a-ea40-ad6b-2848-210325b8914c@linaro.org>
+Date:   Wed, 1 Mar 2023 12:59:18 +0200
 MIME-Version: 1.0
-References: <20230113164449.906002-1-robimarko@gmail.com> <20230113164449.906002-8-robimarko@gmail.com>
- <7c5dfa87-41df-4ba7-b0e4-72c8386402a8@app.fastmail.com> <CAOX2RU5Y642gWMSaK6fJ2tz=9N2AO-1fFhL5=wfLeTWWkVjz7Q@mail.gmail.com>
- <968c056c-74f9-4a8f-b662-51f60df93694@app.fastmail.com> <20230228132043.GC4839@thinkpad>
-In-Reply-To: <20230228132043.GC4839@thinkpad>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Wed, 1 Mar 2023 11:57:56 +0100
-Message-ID: <CAOX2RU61KotntoxEC+J9vDE1JEfhwDR2B21Z+GDu4nHC+y749g@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] arm64: dts: qcom: ipq8074: fix Gen3 PCIe node
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>, bhelgaas@google.com,
-        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        krzysztof.kozlowski+dt@linaro.org, svarbanov@mm-sol.com,
-        shawn.guo@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/4] firmware: qcom_scm: Refactor code to support
+ multiple download mode
+Content-Language: en-GB
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1677664555-30191-1-git-send-email-quic_mojha@quicinc.com>
+ <1677664555-30191-4-git-send-email-quic_mojha@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1677664555-30191-4-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 at 14:20, Manivannan Sadhasivam <mani@kernel.org> wrote=
-:
->
-> On Thu, Feb 02, 2023 at 10:42:15AM +0100, Arnd Bergmann wrote:
-> > On Thu, Feb 2, 2023, at 10:16, Robert Marko wrote:
-> > > On Mon, 30 Jan 2023 at 18:11, Arnd Bergmann <arnd@arndb.de> wrote:
-> > >> On Fri, Jan 13, 2023, at 17:44, Robert Marko wrote:
-> > >
-> > > As pointed out in the commit description, the ranges property was cop=
-ied
-> > > from the QCA-s downstream 5.4 kernel [1] as I dont have any documenta=
-tion
-> > > on the SoC.
-> > >
-> > > I have runtime tested this on Xiaomi AX3600 which has a QCA9889 card =
-on the
-> > > Gen3 PCIe port, and on Xiaomi AX9000 which has QCA9889 on Gen2 port
-> > > and QCN9074 on the Gen3 port and they are working fine.
-> >
-> > Neither of those use I/O ports though, nor does any other sensible
-> > device that was made in the past decade.
-> >
-> > The compatible string tells me that this is a designware pcie block,
-> > so I think driver actually sets up the mapping based on the ranges
-> > property in DT in dw_pcie_iatu_detect() and dw_pcie_iatu_setup(),
-> > rather than the mapping being determined by hardware or firmware
-> > in advance.
-> >
-> > Not sure about the general policy we have for this case, maybe the
-> > pci controller or pci-dwc maintainers have an idea here. I would
-> > think it's better to either have no I/O ranges in DT or have
-> > sensible ones than ones that are clearly bogus, if the controller
-> > is able to set up the ranges.
-> >
->
-> Just happen to see this thread and I agree that the I/O port range is ind=
-eeed
-> bogus. This is due to the fact that no one tested I/O range with a compat=
-ible
-> device.
->
-> I'm not sure about the PCI policy though but we should fix the mapping ac=
-ross
-> all SoCs. I will send out a series for that.
+On 01/03/2023 11:55, Mukesh Ojha wrote:
+> Currently on Qualcomm SoC, download_mode is enabled if
+> CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT is selected.
+> 
+> Refactor the code such that it supports multiple download
+> modes and drop CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT config
+> instead, give interface to set the download mode from
+> module parameter.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> Changes in v2:
+>   - Passed download mode as parameter
+>   - Accept human accepatable download mode string.
+>   - enable = !!dload_mode
+>   - Shifted module param callback to somewhere down in
+>     the file so that it no longer need to know the
+>     prototype of qcom_scm_set_download_mode()
+>   - updated commit text.
+> 
+>   drivers/firmware/Kconfig    | 11 --------
+>   drivers/firmware/qcom_scm.c | 65 ++++++++++++++++++++++++++++++++++++++-------
+>   2 files changed, 56 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index b59e304..ff7e9f3 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -215,17 +215,6 @@ config MTK_ADSP_IPC
+>   config QCOM_SCM
+>   	tristate
+>   
+> -config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
+> -	bool "Qualcomm download mode enabled by default"
+> -	depends on QCOM_SCM
+> -	help
+> -	  A device with "download mode" enabled will upon an unexpected
+> -	  warm-restart enter a special debug mode that allows the user to
+> -	  "download" memory content over USB for offline postmortem analysis.
+> -	  The feature can be enabled/disabled on the kernel command line.
+> -
+> -	  Say Y here to enable "download mode" by default.
+> -
+>   config SYSFB
+>   	bool
+>   	select BOOT_VESA_SUPPORT
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index c9f1fad..ca07208 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -17,17 +17,22 @@
+>   #include <linux/clk.h>
+>   #include <linux/reset-controller.h>
+>   #include <linux/arm-smccc.h>
+> +#include <linux/kstrtox.h>
+>   
+>   #include "qcom_scm.h"
+>   
+> -static bool download_mode = IS_ENABLED(CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT);
+> -module_param(download_mode, bool, 0);
+> -
+>   #define SCM_HAS_CORE_CLK	BIT(0)
+>   #define SCM_HAS_IFACE_CLK	BIT(1)
+>   #define SCM_HAS_BUS_CLK		BIT(2)
+>   
+>   #define QCOM_DOWNLOAD_MODE_MASK 0x30
+> +#define QCOM_DOWNLOAD_FULLDUMP	0x10
+> +#define QCOM_DOWNLOAD_NODUMP	0x0
+> +
+> +#define MAX_DLOAD_LEN	8
+> +
+> +static char download_mode[] = "off";
+> +static u32 dload_mode;
+>   
+>   struct qcom_scm {
+>   	struct device *dev;
+> @@ -417,8 +422,9 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+>   	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+>   }
+>   
+> -static void qcom_scm_set_download_mode(bool enable)
+> +static void qcom_scm_set_download_mode(u32 dload_mode)
+>   {
+> +	bool enable = !!dload_mode;
+>   	bool avail;
+>   	int ret = 0;
+>   	u32 val;
+> @@ -438,7 +444,7 @@ static void qcom_scm_set_download_mode(bool enable)
+>   
+>   		val &= ~QCOM_DOWNLOAD_MODE_MASK;
+>   		if (enable)
+> -			val |= QCOM_SCM_BOOT_SET_DLOAD_MODE;
+> +			val |= dload_mode;
+>   
+>   		ret = qcom_scm_io_writel(__scm->dload_mode_addr, val);
+>   	} else {
+> @@ -1338,6 +1344,47 @@ bool qcom_scm_is_available(void)
+>   }
+>   EXPORT_SYMBOL(qcom_scm_is_available);
+>   
+> +static int set_dload_mode(const char *val, const struct kernel_param *kp)
+> +{
+> +	int ret;
+> +
+> +	if (!strncmp(val, "full", strlen("full"))) {
+> +		dload_mode = QCOM_DOWNLOAD_FULLDUMP;
+> +	} else if (!strncmp(val, "off", strlen("off"))) {
+> +		dload_mode = QCOM_DOWNLOAD_NODUMP;
+> +	} else {
+> +		if (kstrtouint(val, 0, &dload_mode) ||
+> +		     !(dload_mode == 0 || dload_mode == 1)) {
+> +			pr_err("unknown download mode\n");
+> +			return -EINVAL;
+> +		}
+> +
+> +	}
+> +
+> +	ret = param_set_copystring(val, kp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (__scm)
+> +		qcom_scm_set_download_mode(dload_mode);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct kernel_param_ops dload_mode_param_ops = {
+> +	.set = set_dload_mode,
+> +	.get = param_get_string,
 
-Thanks for sorting this out.
+Please follow the param_get_bool approach and return sanitized data 
+here. In other words, "full" / "none" depending on the dload_mode 
+instead of storing the passed string and returning it later.
 
-Regards,
-Robert
->
-> Thanks for spotting, Arnd!
->
-> - Mani
->
-> >      Arnd
->
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D
+> +};
+> +
+> +static struct kparam_string dload_mode_param = {
+> +	.string = download_mode,
+> +	.maxlen = MAX_DLOAD_LEN,
+
+I think writing "full" to this param might overwrite some kernel data. 
+"00000000" should be even worse.
+
+> +};
+> +
+> +module_param_cb(download_mode, &dload_mode_param_ops, &dload_mode_param, 0644);
+> +MODULE_PARM_DESC(download_mode,
+> +		 "Download mode: off/full or 0/1/off/on for existing users");
+
+Nit: on is not supported even for existing users.
+
+> +
+>   static int qcom_scm_probe(struct platform_device *pdev)
+>   {
+>   	struct qcom_scm *scm;
+> @@ -1418,12 +1465,12 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>   	__get_convention();
+>   
+>   	/*
+> -	 * If requested enable "download mode", from this point on warmboot
+> +	 * If download mode is requested, from this point on warmboot
+>   	 * will cause the boot stages to enter download mode, unless
+>   	 * disabled below by a clean shutdown/reboot.
+>   	 */
+> -	if (download_mode)
+> -		qcom_scm_set_download_mode(true);
+> +	if (dload_mode)
+> +		qcom_scm_set_download_mode(dload_mode);
+>   
+>   	return 0;
+>   }
+> @@ -1431,7 +1478,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>   static void qcom_scm_shutdown(struct platform_device *pdev)
+>   {
+>   	/* Clean shutdown, disable download mode to allow normal restart */
+> -	qcom_scm_set_download_mode(false);
+> +	qcom_scm_set_download_mode(QCOM_DOWNLOAD_NODUMP);
+>   }
+>   
+>   static const struct of_device_id qcom_scm_dt_match[] = {
+
+-- 
+With best wishes
+Dmitry
+
