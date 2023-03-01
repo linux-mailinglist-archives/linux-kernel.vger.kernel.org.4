@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163076A7598
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F526A759B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCAUs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S229794AbjCAUue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjCAUsy (ORCPT
+        with ESMTP id S229462AbjCAUuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:48:54 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272433D099
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:48:50 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536be69eadfso388765237b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 12:48:50 -0800 (PST)
+        Wed, 1 Mar 2023 15:50:32 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F1E6E97;
+        Wed,  1 Mar 2023 12:50:30 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id j11so3687912lfg.13;
+        Wed, 01 Mar 2023 12:50:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677703729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1677703829;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:date:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pJ2NmEPepPcvJe3Ak3yvSzcJWQBbkK4dHDuYNukFsA4=;
-        b=ZxKqVSfGUt6z5p9e4Sh1vteLyfGnKL+sAJJBJkTnttLJNPVFFrb6Q8lkW4nTVy/X2l
-         N5/JO3+zD3LYuIc2tT3uQ9kIHFoLQRkCFwDLNeck6pX6qG69jf8xc79xIfmdgBxeS2ae
-         gPO0iZxFqzN5e0MFXgXFukI6ZT1Qrza33kJHQMolayOC/Za+3ACrukE+LUqaukvDjFBr
-         OCIs7/uvb4O8rRAJLPZcEaseFUhGWxhoiyvpdWyK/dTN0FhnoLz0yXoGm3A/ONfizmTE
-         f5SPURgiWH8B09lMfmeWhs9AhcPquBUDJmmxlJq+e+o8001eO34zMlf4yk7u8TJKsluk
-         F2zw==
+        bh=EVVIi1qOZQqID+FdPDDHY7NMwGofBluJX4NX+g9TI3E=;
+        b=VasxnDSTws6qNz+8E1phAyl+YOciqDut6QJdLrJixPO4nxQ9JOWgTpVJEsCX0GKXVm
+         xTVE8oxNEAbZ0THzYdxBe5wfusqulkheAPmXvWK63CBtUwDFUlwIfv/CPOlQm01FGsMY
+         /9DkiMjLxXjdf7ozxoOKQ737w6PET4LaWsVyR6j37gLupPpJcBz/Ol2iVat0+AFKwcnU
+         Bxq0DRkc3zK2EJyRpE1y69iN9iDL8lJjpIdiSJ6ItYzOR5t5lM6cMomt61wXyWXWQHgu
+         s6Z2ZATDIbsy3+mY1t3L1IyOdRS6pbN9xm4M6h3qMyXM/wP9H1s86xgB6aFwvc3RwmjF
+         g8oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677703729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1677703829;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pJ2NmEPepPcvJe3Ak3yvSzcJWQBbkK4dHDuYNukFsA4=;
-        b=RFSbTFAbK2SE/LudVKzu+CXh2cAsXWbcUJckiOg0SzCB0lRGA0qoSAp6d4r/zcx7MT
-         l5lsVKDmxHo+MZaRJwzR5Q77+G19JtMKnVDqGgtqMLE44seayPVPdM/wQiwK6PSBAP/z
-         JSe/VSI+iavJ9FJZ4P+/alVBx3FgMfN0WUNnjuDJNRJqgGnyfW3oJyIFrLS8kD2vUTOi
-         wPb4BM31DP705j0K1cU0UTOxhBgDfkttkToN2u4RNvBQ02+6pocttTbPV5K+1K1eFD6f
-         0ASlz3rot6+LguwQjUHIqybNMS263Uw6II3T1/Jh4GtpigRPuMU33Ag/hg8B7uja+S+5
-         OjMw==
-X-Gm-Message-State: AO0yUKW+ztxd8qTqVQyW7rVhJAxx0d+qGhnyThXiF/wivIjdzD5YbavZ
-        MnCWA6L5fi5npY0NWt54+y9JOtLtoLst4fWf3p60Aw==
-X-Google-Smtp-Source: AK7set8e8aN8lhe1v2IkmF76VC5t9F6FyKK9q3rCkR0EKsJvTiU9L2roDVQILALGedIxz/crcfjfzcHKNZduJg/PH8w=
-X-Received: by 2002:a81:ad03:0:b0:530:bbd3:798b with SMTP id
- l3-20020a81ad03000000b00530bbd3798bmr4793692ywh.0.1677703729203; Wed, 01 Mar
- 2023 12:48:49 -0800 (PST)
+        bh=EVVIi1qOZQqID+FdPDDHY7NMwGofBluJX4NX+g9TI3E=;
+        b=aLc3VwdIMIG8uNJPOgpTkTG6GBaVwBRcvWfGNSzxLl0tESFzlJIif++TCrPAGnNJuu
+         Jy+lHXlO9SkmkwzTSGjMXu4bJlCy11/FzvPl1tivRW/rLYf0zkXWxyIXqgE2O5WjMQZT
+         2aWQ2wuUOBoHwoSYDqyYH1zDoQ78xgTB8zhElxfugCTH9oWGMTGeF94WX6H/WB27PIop
+         on6AV2nYtFHE5mazb3yJRDhXPaK9RE2qaQGsvSY3lG5Kxb+p3Agg87McWABJ6h4OlQ43
+         Z0NOCB/dgglCSg7lCQEq2E/GzJW2wTDI3vtlYhFpqQSJAiSBCuDU6CvF4NxTU3GePhCK
+         5h+g==
+X-Gm-Message-State: AO0yUKVokuAZE6/NMXegSjz3sMhYtEA1agHYrZMIRO8rRgHtVIbUGh6P
+        /8GkqcddqQ1NJCvAhLZMP/U=
+X-Google-Smtp-Source: AK7set9s6L68MNMvJaMIm5hnekdlwc+Dfq4svvZSmGQlo9t3K6s+hDmaQhwTMbeCBOc77HvnQYc3dw==
+X-Received: by 2002:ac2:4c21:0:b0:4b5:a7c7:9dc4 with SMTP id u1-20020ac24c21000000b004b5a7c79dc4mr1736422lfq.3.1677703828933;
+        Wed, 01 Mar 2023 12:50:28 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id r10-20020ac252aa000000b004cc5f44747dsm1869566lfm.220.2023.03.01.12.50.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 12:50:28 -0800 (PST)
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+X-Google-Original-From: Zhi Wang <zhi.wang.linux@intel.com>
+Date:   Wed, 1 Mar 2023 22:50:26 +0200
+To:     Steven Price <steven.price@arm.com>
+Cc:     Zhi Wang <zhi.wang.linux@gmail.com>, kvm@vger.kernel.org,
+        kvmarm@lists.linux.dev, Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH 08/28] arm64: RME: Keep a spare page delegated to
+ the RMM
+Message-ID: <20230301225026.000054ec@intel.com>
+In-Reply-To: <5750eead-44f9-260f-283d-4902b5363faf@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        <20230127112932.38045-1-steven.price@arm.com>
+        <20230127112932.38045-9-steven.price@arm.com>
+        <20230213184701.00005d3b@gmail.com>
+        <5750eead-44f9-260f-283d-4902b5363faf@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230301193403.1507484-1-surenb@google.com> <Y/+wlg5L8A1iebya@cmpxchg.org>
-In-Reply-To: <Y/+wlg5L8A1iebya@cmpxchg.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 1 Mar 2023 12:48:38 -0800
-Message-ID: <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] psi: remove 500ms min window size limitation for triggers
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, peterz@infradead.org,
-        johunt@akamai.com, mhocko@suse.com, keescook@chromium.org,
-        quic_sudaraja@quicinc.com, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,65 +89,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 12:07=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org=
-> wrote:
->
-> On Wed, Mar 01, 2023 at 11:34:03AM -0800, Suren Baghdasaryan wrote:
-> > Current 500ms min window size for psi triggers limits polling interval
-> > to 50ms to prevent polling threads from using too much cpu bandwidth by
-> > polling too frequently. However the number of cgroups with triggers is
-> > unlimited, so this protection can be defeated by creating multiple
-> > cgroups with psi triggers (triggers in each cgroup are served by a sing=
-le
-> > "psimon" kernel thread).
-> > Instead of limiting min polling period, which also limits the latency o=
-f
-> > psi events, it's better to limit psi trigger creation to authorized use=
-rs
-> > only, like we do for system-wide psi triggers (/proc/pressure/* files c=
-an
-> > be written only by processes with CAP_SYS_RESOURCE capability). This al=
-so
-> > makes access rules for cgroup psi files consistent with system-wide one=
-s.
-> > Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers and
-> > remove the psi window min size limitation.
-> >
-> > Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-> > Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraja@qu=
-icinc.com/
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  kernel/cgroup/cgroup.c | 10 ++++++++++
-> >  kernel/sched/psi.c     |  4 +---
-> >  2 files changed, 11 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> > index 935e8121b21e..b600a6baaeca 100644
-> > --- a/kernel/cgroup/cgroup.c
-> > +++ b/kernel/cgroup/cgroup.c
-> > @@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct kern=
-fs_open_file *of,
-> >       return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
-> >  }
-> >
-> > +static int cgroup_pressure_open(struct kernfs_open_file *of)
-> > +{
-> > +     return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESOUR=
-CE)) ?
-> > +             -EPERM : 0;
-> > +}
->
-> I agree with the change, but it's a bit unfortunate that this check is
-> duplicated between system and cgroup.
->
-> What do you think about psi_trigger_create() taking the file and
-> checking FMODE_WRITE and CAP_SYS_RESOURCE against file->f_cred?
+On Wed, 1 Mar 2023 11:55:37 +0000
+Steven Price <steven.price@arm.com> wrote:
 
-That's definitely doable and we don't even need to pass file to
-psi_trigger_create() since it's called only when we write to the file.
-However by moving the capability check into psi_trigger_create() we
-also postpone the check until write() instead of failing early in
-open(). I always assumed failing early is preferable but if
-consolidating the code here makes more sense then I can make the
-switch. Please let me know if you still prefer to move the check.
+> On 13/02/2023 16:47, Zhi Wang wrote:
+> > On Fri, 27 Jan 2023 11:29:12 +0000
+> > Steven Price <steven.price@arm.com> wrote:
+> > 
+> >> Pages can only be populated/destroyed on the RMM at the 4KB granule,
+> >> this requires creating the full depth of RTTs. However if the pages are
+> >> going to be combined into a 4MB huge page the last RTT is only
+> >> temporarily needed. Similarly when freeing memory the huge page must be
+> >> temporarily split requiring temporary usage of the full depth oF RTTs.
+> >>
+> >> To avoid needing to perform a temporary allocation and delegation of a
+> >> page for this purpose we keep a spare delegated page around. In
+> >> particular this avoids the need for memory allocation while destroying
+> >> the realm guest.
+> >>
+> >> Signed-off-by: Steven Price <steven.price@arm.com>
+> >> ---
+> >>  arch/arm64/include/asm/kvm_rme.h | 3 +++
+> >>  arch/arm64/kvm/rme.c             | 6 ++++++
+> >>  2 files changed, 9 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/include/asm/kvm_rme.h b/arch/arm64/include/asm/kvm_rme.h
+> >> index 055a22accc08..a6318af3ed11 100644
+> >> --- a/arch/arm64/include/asm/kvm_rme.h
+> >> +++ b/arch/arm64/include/asm/kvm_rme.h
+> >> @@ -21,6 +21,9 @@ struct realm {
+> >>  	void *rd;
+> >>  	struct realm_params *params;
+> >>  
+> >> +	/* A spare already delegated page */
+> >> +	phys_addr_t spare_page;
+> >> +
+> >>  	unsigned long num_aux;
+> >>  	unsigned int vmid;
+> >>  	unsigned int ia_bits;
+> >> diff --git a/arch/arm64/kvm/rme.c b/arch/arm64/kvm/rme.c
+> >> index 9f8c5a91b8fc..0c9d70e4d9e6 100644
+> >> --- a/arch/arm64/kvm/rme.c
+> >> +++ b/arch/arm64/kvm/rme.c
+> >> @@ -148,6 +148,7 @@ static int realm_create_rd(struct kvm *kvm)
+> >>  	}
+> >>  
+> >>  	realm->rd = rd;
+> >> +	realm->spare_page = PHYS_ADDR_MAX;
+> >>  	realm->ia_bits = VTCR_EL2_IPA(kvm->arch.vtcr);
+> >>  
+> >>  	if (WARN_ON(rmi_rec_aux_count(rd_phys, &realm->num_aux))) {
+> >> @@ -357,6 +358,11 @@ void kvm_destroy_realm(struct kvm *kvm)
+> >>  		free_page((unsigned long)realm->rd);
+> >>  		realm->rd = NULL;
+> >>  	}
+> >> +	if (realm->spare_page != PHYS_ADDR_MAX) {
+> >> +		if (!WARN_ON(rmi_granule_undelegate(realm->spare_page)))
+> >> +			free_page((unsigned long)phys_to_virt(realm->spare_page));
+> > 
+> > Will the page be leaked (not usable for host and realms) if the undelegate
+> > failed? If yes, better at least put a comment.
+> 
+> Yes - I'll add a comment.
+> 
+> In general being unable to undelegate a page points to a programming
+> error in the host. The only reason the RMM should refuse the request is
+> it the page is in use by a Realm which the host has configured. So the
+> WARN() is correct (there's a kernel bug) and the only sensible course of
+> action is to leak the page and limp on.
+>
+
+It would be nice to add a summary of above into the patch comments.
+
+Having a comment when leaking a page (which mostly means the page cannot be
+reclaimed by VMM and used on a REALM any more) is nice. TDX/SNP also have
+the problem of leaking pages due to mystic reasons.
+
+Imagine the leaking can turn worse bit by bit in a long running server and
+KVM will definitely have a generic accounting interface for reporting the
+numbers to the userspace later. Having a explicit comment at this time
+really makes it easier later.
+ 
+> Thanks,
+> 
+> Steve
+> 
+> >> +		realm->spare_page = PHYS_ADDR_MAX;
+> >> +	}
+> >>  
+> >>  	pgd_sz = kvm_pgd_pages(pgt->ia_bits, pgt->start_level);
+> >>  	for (i = 0; i < pgd_sz; i++) {
+> > 
+> 
+
