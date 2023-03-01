@@ -2,156 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBF16A6859
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1386A685E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCAHnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 02:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
+        id S229750AbjCAHpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 02:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCAHnv (ORCPT
+        with ESMTP id S229530AbjCAHpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 02:43:51 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3D35265
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:43:50 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id h8so9803363plf.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:43:50 -0800 (PST)
+        Wed, 1 Mar 2023 02:45:06 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD961EBE3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:44:43 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id oj5so8511028pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:44:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OWjpqnVGFtJHppOeTMNCvEvJYUpqOyji4irq19gGZLo=;
-        b=IVuk/FRrQ1cnFEOcjIQKxmcSCAt5b8wwU30o9yvRkxkrtthfUWs4MWtfnshVW22vWV
-         pxG7b/5dfs+C8VjLBFS2wkbt+qjSk/VFBUxhrhScOhmkgtuOxWtfEZ7FDF4YbhxoAFtf
-         7gzmv/O9XC6bNpz8jWth4nLzBG5TX1M3DpJwR/F6ix9wK7nDrcJRXJwbYBcHxJ6nQxIO
-         oKgj/wJ7qANmcszJOk0mIbf1NFi3ht5tlJJFxVMGizGnLGMRMrUCqn8HsKJVjxYaKXxL
-         yj9Gd18KbPAo0nhLRBZR9E9/M4icHsh7OZm9uWzuOXch9CRasHUAL1sLbYZFSM3W/ZFj
-         yFlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1677656683;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OWjpqnVGFtJHppOeTMNCvEvJYUpqOyji4irq19gGZLo=;
-        b=3hcTycbfDrqD+ZSN7YxzzNJASQyH4fQutCIkx6BJM06APbQuMHRDhDtXLULko5uYm+
-         scSjDCJDkUG14lgyTyV/I1GViRHTjIEUb7jpSmcEbeeSosLiQoA3MZ1wUF2XIFN3ubth
-         0rj+oZjmbEsayXxApVFvp23U2Bm7baDiXlREMp377pDXbj7WbSF8BWPvPXdxQmh8Q4+B
-         o8OrDCQD1jcYPIw/YvJoOaD/ziVW723nBwEGDJaMbo+C4ca4Si7wIPBHn7zzOFH570eK
-         F+evogsMUK3sTyeh2nhSkbzMLyTjWbQeLVJ1XaXryE3Jt33fIFEUgK0aMLy76VZpzH7B
-         sVtA==
-X-Gm-Message-State: AO0yUKXxyqv7xIPrSQEf3r4ktRPblykwkVPA3NTVLsNF5QDk5anbZJjD
-        w0Dlo3pAp1kELHoCdVDe00g=
-X-Google-Smtp-Source: AK7set/NzwkQJ1R6EDT0Imnsgt3x8Nd6NQY8wcxlk07k0GJDQu1OIK3Vxc/SLHh5JSP6hXwMeNFAfQ==
-X-Received: by 2002:a17:90b:1c8d:b0:233:eba7:10c0 with SMTP id oo13-20020a17090b1c8d00b00233eba710c0mr6319388pjb.1.1677656629419;
-        Tue, 28 Feb 2023 23:43:49 -0800 (PST)
-Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
-        by smtp.gmail.com with ESMTPSA id q6-20020a17090a304600b00231261061a5sm7206661pjl.5.2023.02.28.23.43.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 23:43:48 -0800 (PST)
-Date:   Wed, 1 Mar 2023 07:43:33 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v4 18/33] mm: write-lock VMAs before removing them from
- VMA tree
-Message-ID: <Y/8CJQGNuMUTdLwP@localhost>
-References: <20230227173632.3292573-1-surenb@google.com>
- <20230227173632.3292573-19-surenb@google.com>
+        bh=jyS0C1HTG0tduNh0L7kbfvu/lzkj/LLnrbNqiht2ZzQ=;
+        b=K9cAlseifIqk8MiACuzD0FGxhZR1aO2o9ZI8Os17fFA2mqSVr3dKiYJTt/IYZ7fl+u
+         ph0RgCHRQsX5j+/PFetqA0UZzNvofS3/Dv1itfS9vNFho8Msr4EOmv5uvqKjH1sJFitg
+         Ipq/ff3fRNu/rOEERARAji3c2kKrBUgRcEYBz7Buj0+tkckiZI7xOrVGkcLVAknLO40H
+         vCCp4Z3R2BUOda+siG2WGrSE18a9VgvjpH5HfaXJ9eZppUpXcgb1JNeNbkPuxmKYXXhT
+         1EFNgd6CjRvv3aO7iChwxCFKN+F5lgSTXXEWRJ1vGeQLQJ9bSx29v/3TXgIrlKhQA3az
+         sQrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677656683;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jyS0C1HTG0tduNh0L7kbfvu/lzkj/LLnrbNqiht2ZzQ=;
+        b=6px8W4WAJvPXB29ec1C34ptoSKfBM5frsN+urycjIOODaLtYc79J+4ZeSdz8burlc3
+         g0wsPqGcPVX8vORIR8zndy7nO6o/QpNnXrKXmcxWohyEsR/xZ6SuRqhQ9qllMxM2TvtK
+         4OANLEB6vObqv/A22ctSX+0rkcxp5Mop/y61s3oKp0N/5BU6/45xqpIknX2E8edM+JCd
+         kfvVQRfTbgHxVdcAwpwp8AVqUH5nJY5PdhOH9lWJQfSMUkF9oTG+z0V1iH/y4YumH3dD
+         HnlKu4AG6QKmP1n937HHdqI+bCB1KaID9EGJQvipmcuHiE5GYDKh4ANeDNy+BEAFcGnz
+         QeHQ==
+X-Gm-Message-State: AO0yUKXVzkAfROav66ED9zwIFg3WBqVQZtlNjXKSKHXkehg5S/BYKvHQ
+        Ta7N2xlgFcfncdDejCsIL0jhGA==
+X-Google-Smtp-Source: AK7set/RvUa8pCt4yFC8gzSIzxh9lcNDOWsMuNnBPKvNbcp5EZJSGPNF8q5pVqT9V7lAOUXoxsmxcQ==
+X-Received: by 2002:a17:903:2447:b0:19c:c9da:a62e with SMTP id l7-20020a170903244700b0019cc9daa62emr6447929pls.54.1677656683026;
+        Tue, 28 Feb 2023 23:44:43 -0800 (PST)
+Received: from [10.3.144.50] ([61.213.176.8])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902eacc00b0019a6cce2060sm7663725pld.57.2023.02.28.23.44.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 23:44:42 -0800 (PST)
+Message-ID: <1c8b966e-8208-e9c9-c75b-9ebf2a138059@bytedance.com>
+Date:   Wed, 1 Mar 2023 15:44:37 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227173632.3292573-19-surenb@google.com>
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: Re: [PATCH] erofs: support for mounting a single block device
+ with multiple devices
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, gerry@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jefflexu@linux.alibaba.com, huyue2@coolpad.com,
+        Xin Yin <yinxin.x@bytedance.com>
+References: <20230301070417.13084-1-zhujia.zj@bytedance.com>
+ <c3c10f27-7941-6ccc-fa60-b5a289bf03ba@linux.alibaba.com>
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+In-Reply-To: <c3c10f27-7941-6ccc-fa60-b5a289bf03ba@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 09:36:17AM -0800, Suren Baghdasaryan wrote:
-> Write-locking VMAs before isolating them ensures that page fault
-> handlers don't operate on isolated VMAs.
+
+
+在 2023/3/1 15:08, Gao Xiang 写道:
+> Hi Jia,
 > 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  mm/mmap.c  | 1 +
->  mm/nommu.c | 5 +++++
->  2 files changed, 6 insertions(+)
+> On 2023/3/1 15:04, Jia Zhu wrote:
+>> In order to support mounting multi-layer container image as a block
+>> device, add single block device with multiple devices feature for EROFS.
 > 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 1f42b9a52b9b..f7ed357056c4 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -2255,6 +2255,7 @@ int split_vma(struct vma_iterator *vmi, struct vm_area_struct *vma,
->  static inline int munmap_sidetree(struct vm_area_struct *vma,
->  				   struct ma_state *mas_detach)
->  {
-> +	vma_start_write(vma);
->  	mas_set_range(mas_detach, vma->vm_start, vma->vm_end - 1);
+> In order to support mounting multi-blob container image as a single
+> flattened block device, add flattened block device feature for EROFS.
+> 
+Thanks, I would revise it.
+>>
+>> In this mode, all meta/data contents will be mapped into one block 
+>> address.
+>> User could directly mount the block device by EROFS.
+>>
+>> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+>> Reviewed-by: Xin Yin <yinxin.x@bytedance.com>
+>> ---
+>>   fs/erofs/data.c  | 8 ++++++--
+>>   fs/erofs/super.c | 5 +++++
+>>   2 files changed, 11 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+>> index e16545849ea7..870b1f7fe1d4 100644
+>> --- a/fs/erofs/data.c
+>> +++ b/fs/erofs/data.c
+>> @@ -195,9 +195,9 @@ int erofs_map_dev(struct super_block *sb, struct 
+>> erofs_map_dev *map)
+>>   {
+>>       struct erofs_dev_context *devs = EROFS_SB(sb)->devs;
+>>       struct erofs_device_info *dif;
+>> +    bool flatdev = !!sb->s_bdev;
+> 
+> I'd like to land it in sbi and set it in advance?
+> 
+I'll revise that in next version.
+> Also, did you test this patch?
 
-I may be missing something, but have few questions:
+I've tested the patch using the following steps mentioned by
+https://github.com/dragonflyoss/image-service/pull/1111
 
-	1) Why does a writer need to both write-lock a VMA and mark the VMA detached
-	   when unmapping it, isn't it enough to just only write-lock a VMA?
+1. Compose a (nbd)block device from an EROFS image.
+2. mount -t erofs /dev/nbdx /mnt/
+3. compare the md5sum between source dir and /mnt dir.
 
-	2) as VMAs that are going to be removed are already locked in vma_prepare(),
-	   so I think this hunk could be dropped?
-
->  	if (mas_store_gfp(mas_detach, vma, GFP_KERNEL))
->  		return -ENOMEM;
-> diff --git a/mm/nommu.c b/mm/nommu.c
-> index 57ba243c6a37..2ab162d773e2 100644
-> --- a/mm/nommu.c
-> +++ b/mm/nommu.c
-> @@ -588,6 +588,7 @@ static int delete_vma_from_mm(struct vm_area_struct *vma)
->  		       current->pid);
->  		return -ENOMEM;
->  	}
-> +	vma_start_write(vma);
->  	cleanup_vma_from_mm(vma);
-
-	3) I think this hunk could be dropped as Per-VMA lock depends on MMU anyway.
-
-Thanks,
-Hyeonggon
-
->  
->  	/* remove from the MM's tree and list */
-> @@ -1519,6 +1520,10 @@ void exit_mmap(struct mm_struct *mm)
->  	 */
->  	mmap_write_lock(mm);
->  	for_each_vma(vmi, vma) {
-> +		/*
-> +		 * No need to lock VMA because this is the only mm user and no
-> +		 * page fault handled can race with it.
-> +		 */
->  		cleanup_vma_from_mm(vma);
->  		delete_vma(mm, vma);
->  		cond_resched();
-> -- 
-> 2.39.2.722.g9855ee24e9-goog
+> 
+> Thanks,
+> Gao Xiang
 > 
 > 
+>>       int id;
+>> -    /* primary device by default */
+>>       map->m_bdev = sb->s_bdev;
+>>       map->m_daxdev = EROFS_SB(sb)->dax_dev;
+>>       map->m_dax_part_off = EROFS_SB(sb)->dax_part_off;
+>> @@ -210,12 +210,16 @@ int erofs_map_dev(struct super_block *sb, struct 
+>> erofs_map_dev *map)
+>>               up_read(&devs->rwsem);
+>>               return -ENODEV;
+>>           }
+>> +        if (flatdev) {
+>> +            map->m_pa += blknr_to_addr(dif->mapped_blkaddr);
+>> +            map->m_deviceid = 0;
+>> +        }
+>>           map->m_bdev = dif->bdev;
+>>           map->m_daxdev = dif->dax_dev;
+>>           map->m_dax_part_off = dif->dax_part_off;
+>>           map->m_fscache = dif->fscache;
+>>           up_read(&devs->rwsem);
+>> -    } else if (devs->extra_devices) {
+>> +    } else if (devs->extra_devices && !flatdev) {
+>>           down_read(&devs->rwsem);
+>>           idr_for_each_entry(&devs->tree, dif, id) {
+>>               erofs_off_t startoff, length;
+>> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+>> index 19b1ae79cec4..4f9725b0950c 100644
+>> --- a/fs/erofs/super.c
+>> +++ b/fs/erofs/super.c
+>> @@ -226,6 +226,7 @@ static int erofs_init_device(struct erofs_buf 
+>> *buf, struct super_block *sb,
+>>       struct erofs_fscache *fscache;
+>>       struct erofs_deviceslot *dis;
+>>       struct block_device *bdev;
+>> +    bool flatdev = !!sb->s_bdev;
+>>       void *ptr;
+>>       ptr = erofs_read_metabuf(buf, sb, erofs_blknr(*pos), EROFS_KMAP);
+>> @@ -248,6 +249,10 @@ static int erofs_init_device(struct erofs_buf 
+>> *buf, struct super_block *sb,
+>>           if (IS_ERR(fscache))
+>>               return PTR_ERR(fscache);
+>>           dif->fscache = fscache;
+>> +    } else if (flatdev) {
+>> +        dif->bdev = sb->s_bdev;
+>> +        dif->dax_dev = EROFS_SB(sb)->dax_dev;
+>> +        dif->dax_part_off = sbi->dax_part_off;
+>>       } else {
+>>           bdev = blkdev_get_by_path(dif->path, FMODE_READ | FMODE_EXCL,
+>>                         sb->s_type);
