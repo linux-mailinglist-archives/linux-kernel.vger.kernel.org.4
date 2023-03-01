@@ -2,168 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083BE6A7594
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BA96A7596
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjCAUr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
+        id S229759AbjCAUsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:48:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjCAUry (ORCPT
+        with ESMTP id S229557AbjCAUsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:47:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A885343445
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677703633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2il8EePBRc7AgflT4XHq9yy6CUWbrrE2NEZTXgGKJCU=;
-        b=OuK3GGtAwgDoDQZ6CIW3q9KuH4rrFj9TO0gnpFysJHWyLkDgDlU/enEzNDtj65UZJnszWg
-        hU90sM85DzblySD9Nj8KKBLhESeldeyjZqvIBqBLmoR0yMKH4IznQxTmKIIUMh8gUB565H
-        ZE2M201SOJ129HRm5X1hd8ES6EfNZlk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-578-iXqunm27Mj-9JXP5nSkxuA-1; Wed, 01 Mar 2023 15:47:10 -0500
-X-MC-Unique: iXqunm27Mj-9JXP5nSkxuA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 1 Mar 2023 15:48:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC88618F;
+        Wed,  1 Mar 2023 12:48:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F525100F90B;
-        Wed,  1 Mar 2023 20:47:10 +0000 (UTC)
-Received: from swamp.redhat.com (unknown [10.39.192.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4BD8F140EBF4;
-        Wed,  1 Mar 2023 20:47:08 +0000 (UTC)
-From:   Petr Oros <poros@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     aleksander.lobakin@intel.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        scott.w.taylor@intel.com, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net v3] ice: copy last block omitted in ice_get_module_eeprom()
-Date:   Wed,  1 Mar 2023 21:47:07 +0100
-Message-Id: <20230301204707.2592337-1-poros@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27FFEB8102B;
+        Wed,  1 Mar 2023 20:48:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C00C433D2;
+        Wed,  1 Mar 2023 20:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677703716;
+        bh=VPTv1A4287bwDiH9IK6PQ594XUhisaUOXpP3BbU7cgg=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=nwO7VKWYtEXDtmlTuzjAl+wakycKAXOeB/WAtDeGh7jrXxsac1GxCslkuCUaDlZF3
+         pJ4rbWOfuWBoQbrt3L7Cz3p9AM2w5gzvGbKCtCNq85Rq3gS4A5L1Ujd6WbYVMvnVIy
+         9hPDpmo+G+JcVgt/uvMUyO85BDnIsRLe3ZUJAJD5HEmbtX23J0D/5XWxuXpYaPtAn0
+         XLwI8gfA1SDK8Eio29VTtbi6cOmFCwFJp+fPEoEEyfjSN1NVJsRTcejbg3dmp8CEBG
+         9h5iKoDlofWTYascGYnKj1g/8ChM/HuErfis69Qd5DbyiSJy3wXDh0vWAzgsb29tSN
+         wMzQ43HHK13LQ==
+Message-ID: <7cca9a24b24d849565cd6a4f40ddbee9.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <31ae9957edf319416d4551f14eba2071.sboyd@kernel.org>
+References: <20230301012506.1401883-1-saravanak@google.com> <31ae9957edf319416d4551f14eba2071.sboyd@kernel.org>
+Subject: Re: [PATCH v1] clk: Mark a fwnode as initialized when using CLK_OF_DECLARE* macros
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, kernel-team@android.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Saravana Kannan <saravanak@google.com>
+Date:   Wed, 01 Mar 2023 12:48:34 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ice_get_module_eeprom() is broken since commit e9c9692c8a81 ("ice:
-Reimplement module reads used by ethtool") In this refactor,
-ice_get_module_eeprom() reads the eeprom in blocks of size 8.
-But the condition that should protect the buffer overflow
-ignores the last block. The last block always contains zeros.
+Quoting Stephen Boyd (2023-03-01 12:40:03)
+> Quoting Saravana Kannan (2023-02-28 17:25:06)
+> > The CLK_OF_DECLARE macros sometimes prevent the creation of struct
+> > devices for the device node being handled. It does this by
+> > setting/clearing OF_POPULATED flag. This can block the probing of some
+> > devices because fw_devlink will block the consumers of this node till a
+> > struct device is created and probed.
+>=20
+> Why can't you use CLK_OF_DECLARE_DRIVER()?
 
-Bug uncovered by ethtool upstream commit 9538f384b535
-("netlink: eeprom: Defer page requests to individual parsers")
-After this commit, ethtool reads a block with length = 1;
-to read the SFF-8024 identifier value.
+Ah I misunderstood. CLK_OF_DECLARE() _always_ prevents the creation of a
+struct device for the device node being handled. The 'sometimes' threw
+me off.
 
-unpatched driver:
-$ ethtool -m enp65s0f0np0 offset 0x90 length 8
-Offset          Values
-------          ------
-0x0090:         00 00 00 00 00 00 00 00
-$ ethtool -m enp65s0f0np0 offset 0x90 length 12
-Offset          Values
-------          ------
-0x0090:         00 00 01 a0 4d 65 6c 6c 00 00 00 00
-$
+>=20
+> >=20
+> > Set the appropriate fwnode flags when these device nodes are initialized
+> > by the clock framework and when OF_POPULATED flag is set/cleared. This
+> > will allow fw_devlink to handle the dependencies correctly.
 
-$ ethtool -m enp65s0f0np0
-Offset          Values
-------          ------
-0x0000:         11 06 06 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0010:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0020:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0030:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0040:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0050:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x0060:         00 00 00 00 00 00 00 00 00 00 00 00 00 01 08 00
-0x0070:         00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-
-patched driver:
-$ ethtool -m enp65s0f0np0 offset 0x90 length 8
-Offset          Values
-------          ------
-0x0090:         00 00 01 a0 4d 65 6c 6c
-$ ethtool -m enp65s0f0np0 offset 0x90 length 12
-Offset          Values
-------          ------
-0x0090:         00 00 01 a0 4d 65 6c 6c 61 6e 6f 78
-$ ethtool -m enp65s0f0np0
-    Identifier                                : 0x11 (QSFP28)
-    Extended identifier                       : 0x00
-    Extended identifier description           : 1.5W max. Power consumption
-    Extended identifier description           : No CDR in TX, No CDR in RX
-    Extended identifier description           : High Power Class (> 3.5 W) not enabled
-    Connector                                 : 0x23 (No separable connector)
-    Transceiver codes                         : 0x88 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-    Transceiver type                          : 40G Ethernet: 40G Base-CR4
-    Transceiver type                          : 25G Ethernet: 25G Base-CR CA-N
-    Encoding                                  : 0x05 (64B/66B)
-    BR, Nominal                               : 25500Mbps
-    Rate identifier                           : 0x00
-    Length (SMF,km)                           : 0km
-    Length (OM3 50um)                         : 0m
-    Length (OM2 50um)                         : 0m
-    Length (OM1 62.5um)                       : 0m
-    Length (Copper or Active cable)           : 1m
-    Transmitter technology                    : 0xa0 (Copper cable unequalized)
-    Attenuation at 2.5GHz                     : 4db
-    Attenuation at 5.0GHz                     : 5db
-    Attenuation at 7.0GHz                     : 7db
-    Attenuation at 12.9GHz                    : 10db
-    ........
-    ....
-
-Fixes: e9c9692c8a81 ("ice: Reimplement module reads used by ethtool")
-Signed-off-by: Petr Oros <poros@redhat.com>
----
-v2: memcpy unified calls
-v3: copy_len is now declared in if scope
-    unwrapped line before memcpy
----
----
- drivers/net/ethernet/intel/ice/ice_ethtool.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index b360bd8f15998b..f86e814354a311 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -4331,6 +4331,8 @@ ice_get_module_eeprom(struct net_device *netdev,
- 		 * SFP modules only ever use page 0.
- 		 */
- 		if (page == 0 || !(data[0x2] & 0x4)) {
-+			u32 copy_len;
-+
- 			/* If i2c bus is busy due to slow page change or
- 			 * link management access, call can fail. This is normal.
- 			 * So we retry this a few times.
-@@ -4354,8 +4356,8 @@ ice_get_module_eeprom(struct net_device *netdev,
- 			}
- 
- 			/* Make sure we have enough room for the new block */
--			if ((i + SFF_READ_BLOCK_SIZE) < ee->len)
--				memcpy(data + i, value, SFF_READ_BLOCK_SIZE);
-+			copy_len = min_t(u32, SFF_READ_BLOCK_SIZE, ee->len - i);
-+			memcpy(data + i, value, copy_len);
- 		}
- 	}
- 	return 0;
--- 
-2.39.2
-
+How is this different from commit 3c9ea42802a1 ("clk: Mark fwnodes when
+their clock provider is added/removed")? Do you have some user of
+CLK_OF_DECLARE() that isn't registering an OF clk provider?
