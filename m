@@ -2,151 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7456A6861
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC696A6866
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjCAHpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 02:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S229769AbjCAHuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 02:50:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjCAHpv (ORCPT
+        with ESMTP id S229504AbjCAHt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 02:45:51 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D1E30EBD;
-        Tue, 28 Feb 2023 23:45:50 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3214kDML004417;
-        Wed, 1 Mar 2023 07:45:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=aHnEMQp7evnRUr+B1+RiL92yYBTpDBHQfvhAmxs5KJo=;
- b=d28Sw1v/LVxPxblWN87yE2rYyFfQ68tBFCabTcl5Ikyv/nSRTT4pXyy7KvMi9bTc1iQy
- gcGAcd1n6Q+WVbgkFjiMp5PG15fltUgb+AHqts6pvkNVsoSBv8zX79T9lFra9FWKjuRQ
- KzRrG0RZ1VTwGGdOdazeZn3jyokHMp6X5hBoc9J+ix6t/HCkPVJZ+nesQm0tq1sKSHPQ
- ZraXSUqxml2TsUmYVyiwf8mR7cni/q7xHRjFQVQeHKhVEaihYUVKekykCGaTot8ZfhQg
- dsZFBQ1jKqj3yhb/fXOb3WK/FAKycAnp9CvevHf36A1WJ87lNX4BhuLJg57Hv9TkR+ky 2g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1n0tj23n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Mar 2023 07:45:34 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3217jX7x008244
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 1 Mar 2023 07:45:33 GMT
-Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Feb
- 2023 23:45:28 -0800
-Message-ID: <21ee7183-f661-f6dd-bcc2-c521003ae2ca@quicinc.com>
-Date:   Wed, 1 Mar 2023 15:45:25 +0800
+        Wed, 1 Mar 2023 02:49:59 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EA61D925
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:49:58 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id bo22so923043pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677656998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZOgHEwNMA5/W64rG1yukDar+bLo9DgwENvRdUUr422g=;
+        b=H01sVb5kjtk+NeqS6ib+5G8Z7ttJnk/mqOxIun+L5UaMp6667TgVaOyYshDGvK4Dyp
+         U/5QXVY2u7g4BJP915dGeuh8M0q4Q7PhoOXu3zcpMIJFgYPexoP7YzLqQBVobmSg++jO
+         +KiP7f2f3sc3RyU77e84MIv8eW9MEddNnPH2KseLLKhJwvZWHgUlZQGLCA8JHaCgHGEZ
+         JV9fmm3JAI2CmB34cADITgNmhjKwlcX0Sg8uLyJZCwddnrIfdSDrZyocHbefb4ENgwyw
+         otOaV7dQaPcS+WlYZ0VN6lzkFXVx4mJrTuEn+0ZTOVImHngc4ilY5vTYrLEJ/ikBcPq2
+         Io+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677656998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZOgHEwNMA5/W64rG1yukDar+bLo9DgwENvRdUUr422g=;
+        b=1wleL9jP15oPytrnON5Q0wdyo8eXUVGkbmt7UJRtp3TJuYocgoPjBqMndyqzji0SOD
+         RSUnFDUWHif2v2wAMMHjmndE40qBNeLeHHaJbXBSHTc90uUFCrmRqgBbKE3e47WUUm2e
+         gFt0EeZmNaop+uM1h787wJsImsxwj66nU3i7RrfeuME4jV5IHeKVo99LR4mUugdrskFl
+         37b+YAc0jRMNEZ7/HfZ4Z0Jaog9abmWCuhCOZ+ZFXE+J64B6FzYyFrFMVGrLdS4U3YDs
+         iUoHBBLd8p0eemR+XujO3hTTf2XGpHP3RbkHQrpCaM+DRlOayzBwyOFlx0D81Ba9b0yF
+         IsJg==
+X-Gm-Message-State: AO0yUKVpFeNpw9c54oPD60OE6An8ys8MJmAEQI+KWIUI49cD9jn3gUoF
+        k+BOcI1+zaycXTP1I6uqo+gEWlLOiQQkfNRDnoAkXSwQkD+kiV6p9pA=
+X-Google-Smtp-Source: AK7set8xLICJGNfKNIS5UN4B2sQOEjVokpi5RUCk0Av4IXMtcSjzZ+4dUIzMf9prZPBhvUtIQE+A97hEAby4ifG2t1U=
+X-Received: by 2002:a17:90b:3c08:b0:235:1fb7:393c with SMTP id
+ pb8-20020a17090b3c0800b002351fb7393cmr8956126pjb.1.1677656997480; Tue, 28 Feb
+ 2023 23:49:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 5/9] coresight-tpdm: Add nodes to set trigger timestamp
- and type
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Tao Zhang <taozha@qti.qualcomm.com>,
-        "Bjorn Andersson" <andersson@kernel.org>
-References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
- <1674114105-16651-6-git-send-email-quic_taozha@quicinc.com>
- <fa09722a-b251-bf60-35af-e6dc45ed9ae4@arm.com>
-From:   Tao Zhang <quic_taozha@quicinc.com>
-In-Reply-To: <fa09722a-b251-bf60-35af-e6dc45ed9ae4@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 52do2j87Ex7BqYhD7DlkbLtWk7bqIaIb
-X-Proofpoint-GUID: 52do2j87Ex7BqYhD7DlkbLtWk7bqIaIb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-01_04,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303010061
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <03b70a8a-0591-f28b-a567-9d2f736f17e5@gmail.com>
+ <CAGETcx-KLfxKae6-Kc74gOu2fiuu+5528j_TNEaY21U3_yZO0w@mail.gmail.com>
+ <0fa79232-18f7-af96-e116-a71b735a903d@gmail.com> <f13906c0-1a0c-dfa4-dcd3-96ebc82aabd8@gmail.com>
+In-Reply-To: <f13906c0-1a0c-dfa4-dcd3-96ebc82aabd8@gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 28 Feb 2023 23:49:21 -0800
+Message-ID: <CAGETcx-0EKYBL_fQbZSUra3LrzOnV4LABUBZ_jEBmW3sdUzZPA@mail.gmail.com>
+Subject: Re: Raspberry Pi 4B: Failed to create device link with soc:firmware:gpio
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
+On Sun, Feb 26, 2023 at 11:14=E2=80=AFAM Florian Fainelli <f.fainelli@gmail=
+.com> wrote:
+>
+>
+>
+> On 2/25/2023 5:58 PM, Florian Fainelli wrote:
+> >
+> >
+> > On 2/25/2023 4:01 PM, Saravana Kannan wrote:
+> >> On Sat, Feb 25, 2023 at 7:38 AM Florian Fainelli
+> >> <f.fainelli@gmail.com> wrote:
+> >>>
+> >>> Hi Saravana,
+> >>>
+> >>> Using v6.2-10217-ga93e884edf61v my Raspberry Pi 4B issues the followi=
+ng
+> >>> for the "extended GPIO" provider:
+> >>>
+> >>> [    5.969855] uart-pl011 fe201000.serial: Failed to create device li=
+nk
+> >>> with soc:firmware:gpio
+> >>
+> >> Outside of this error, is it actually breaking anything?
+> >
+> > There is just this warning, there does not appear to be a functional is=
+sue.
+> >
+> >> Also, can you
+> >> pull in this patch and tell me what it says? I want to know what the
+> >> flags are.
+> >> https://lore.kernel.org/lkml/20230225064148.274376-1-saravanak@google.=
+com/
+>
+> Pulling in this patch results in the following being printed:
+>
+> [   14.866835] uart-pl011 fe201000.serial: Failed to create device link
+> (0x180) with soc:firmware:gpio
 
-在 2/28/2023 7:32 PM, Suzuki K Poulose 写道:
-> On 19/01/2023 07:41, Tao Zhang wrote:
->> The nodes are needed to set or show the trigger timestamp and
->> trigger type. This change is to add these nodes to achieve these
->> function.
->>
->> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->> Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
->> ---
->>   drivers/hwtracing/coresight/coresight-tpdm.c | 97 
->> ++++++++++++++++++++++++++++
->>   1 file changed, 97 insertions(+)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->> b/drivers/hwtracing/coresight/coresight-tpdm.c
->> index c29d667d..1dbb6c4 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->> @@ -20,6 +20,22 @@
->
->
->> +static struct attribute *tpdm_dsb_attrs[] = {
->> +    &dev_attr_dsb_trig_ts.attr,
->> +    &dev_attr_dsb_trig_type.attr,
->> +    NULL,
->> +};
->> +
->> +static struct attribute_group tpdm_dsb_attr_grp = {
->> +    .attrs = tpdm_dsb_attrs,
->> +    .is_visible = tpdm_dsb_is_visible,
->> +};
->> +
->>   static const struct attribute_group *tpdm_attr_grps[] = {
->>       &tpdm_attr_grp,
->> +    &tpdm_dsb_attr_grp,
->>       NULL,
->>   };
->
->
-> Please also add documentation of the new sysfs handles under :
->
-> Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm*
->
-Sure, I will add the descriptions of new sysfs in the next of patch series.
-> Suzuki
->
-Best,
+I spent at least 2 hours looking at the logs and the DT files and I'm
+still kinda lost.
 
-Tao
+The 0x180 means it's a DL_FLAG_INFERRED | DL_FLAG_SYNC_STATE_ONLY.
+That's just fw_devlink trying to create a "proxy" link where an
+ancestor of a consumer (can be several levels above consumer) creates
+a SYNC_STATE_ONLY link to the supplier while we wait for the consumer
+device to get added. This prevents sync_state() from being called too
+early on the supplier.
 
+There are so many includes in the dts/dtsi files that my head is
+spinning. I finally found out where the soc:firmware:gpio device was
+coming from (after confusing myself with gpio@7e200000 for a bit) and
+where fe201000.serial was coming from. I still couldn't figure out how
+the address got mapped to fe201000 in fe201000.serial -- that
+generally means the parent has some address offset, but I don't see
+that in DT (but it is not important for this discussion, so we can
+ignore that).
+
+Anyway, I see no supplier-consumer link between serial@7e201000 (or
+any of its zero descendants) and soc:firmware:gpio (which is the node
+expgpio:). So I'm very confused why we might even try to create this
+sync state only device link between these two.
+
+There are actually two times where we try to create such a link:
+
+First attempt that actually succeeds -- but I have no idea why we even do t=
+his:
+[    0.100047] device:
+'platform:soc:firmware:gpio--amba:fe201000.serial': device_add
+[    0.100232] amba fe201000.serial: Linked as a sync state only
+consumer to soc:firmware:gpio
+the "amba" prefix tells us a driver hasn't been bound to fe201000.serial ye=
+t.
+
+Second attempt is the one that fails.
+[   15.516166] uart-pl011 fe201000.serial: Failed to create device
+link (0x180) with soc:firmware:gpio
+The uart-pl011 tells us that the driver has bound to fe201000.serial.
+
+And it fails because of this sensible check I had put up a while ago
+inside device_link_add():
+        /*
+         * SYNC_STATE_ONLY links are useless once a consumer device
+has probed.
+         * So, only create it if the consumer hasn't probed yet.
+         */
+        if (flags & DL_FLAG_SYNC_STATE_ONLY &&
+            consumer->links.status !=3D DL_DEV_NO_DRIVER &&
+            consumer->links.status !=3D DL_DEV_PROBING) {
+                link =3D NULL;
+                goto out;
+        }
+
+So the real question is still to figure out why fw_devlink is trying
+to create this device link.
+
+So to debug this further the following would help a lot:
+1. Pull the dtb from the device and then decompile it and provide me
+the result. This way, I can be sure I'm not missing something and
+don't have to dig through all the includes -- I forgot the exact
+commands for it, but it's been shared in LKML before. Let me know if
+you need me to dig this up.
+
+2. I think a stack backtrace when these two device link attempts are
+made might help me figure out why they are being created. To get these
+backtraces, can you do the following please?
+a. Put a WARN_ON() inside device_add() for when the device name matches:
+platform:soc:firmware:gpio--amba:fe201000.serial
+b. Put a WARN_ON(1) where we print "Failed to create device link..."
+
+Feel free to dig more into 2a and 2b if you find that the stack trace
+doesn't tell much -- one problem with the stack trace is that it
+doesn't show the params being passed to
+__fw_devlink_link_to_consumers() and __fw_devlink_link_to_suppliers()
+
+Thanks,
+Saravana
