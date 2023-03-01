@@ -2,78 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5CE6A7725
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E05F06A7729
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjCAW6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 17:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S229879AbjCAW7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 17:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAW6A (ORCPT
+        with ESMTP id S229445AbjCAW7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 17:58:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3D44A1ED
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 14:57:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677711432;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2GmVGzE9dg2H8nOmOuNAheynslug9iTn5GFX65axkqE=;
-        b=RdUjITZnxnADstDrwJ5ZKfWnkdvyzID8yTTLMsc79o6X7cEZfDenuy6rMzZ35kTKuFIdXS
-        ZGRhZtTm9OFxF1RkW001ikz05G8WKAYIIjGyIm4rVqfEunius+fjHZaEi6i8LOyIu6tamT
-        IixjvJaK+5XvxyYoF6GV4uY/i8E/TjY=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-98-GsYqupvXN9KmT8VQIWxXvA-1; Wed, 01 Mar 2023 17:57:11 -0500
-X-MC-Unique: GsYqupvXN9KmT8VQIWxXvA-1
-Received: by mail-qk1-f198.google.com with SMTP id c13-20020a05620a0ced00b007422bf7c4aeso9077964qkj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 14:57:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677711430;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Wed, 1 Mar 2023 17:59:48 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF7861A7;
+        Wed,  1 Mar 2023 14:59:47 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id s22so19763504lfi.9;
+        Wed, 01 Mar 2023 14:59:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677711585;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:date:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2GmVGzE9dg2H8nOmOuNAheynslug9iTn5GFX65axkqE=;
-        b=AMsJ1xlfWOFqzlsd9ICqQZkEl2orrLVpYnA6OeQ0LjjRTNMC+kCONkKP71m20qq8nB
-         PDSz4rJR3dqDn5qCOGHqX2HZkt+nPXdoGgLiO08nSrCbM+Liy4sP8ez3+MpVEdn7oAk/
-         TUm40/mPKmUYEDwyvl7lTksFfXh5tg8GZy1xTHnDYP69Q+ggwuD47Gv30W9310agyBIG
-         1ZuQwJfs8atpdGhRzXajpyIRUJdJRTJrNmATEeupPwP9eBIhR0c8B9s4jsvPDrYzGioi
-         6bpPybl3jppxp3WJTCitaxVXmrAw4gyx50UcP5mxwTUfpYxfGKNdU+lIEc4p5CGKMuDn
-         ZpUg==
-X-Gm-Message-State: AO0yUKXfbs/FV5ARVQKJ7v2j1sSAmZ8wYFGa2teSMKd7JT36HYgZ0eAx
-        QAEY1Fgc6jvxU8wjuRKRwzauoCVag/3FMNzkaswCTGVlnqioMOcSsi0PBPcMQfEfVMpRpeudejM
-        31C4+TZfV2dtCd/BXwdtKTX+B
-X-Received: by 2002:a05:622a:1ba4:b0:3bf:cc1b:9512 with SMTP id bp36-20020a05622a1ba400b003bfcc1b9512mr14202729qtb.1.1677711430642;
-        Wed, 01 Mar 2023 14:57:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set93TBGRn5okBxELCZrMoM6GqobKhJyb02BwHut9lHnFowBfdKMI7m3T+/Bn8GWrR/4BHTjzBA==
-X-Received: by 2002:a05:622a:1ba4:b0:3bf:cc1b:9512 with SMTP id bp36-20020a05622a1ba400b003bfcc1b9512mr14202715qtb.1.1677711430341;
-        Wed, 01 Mar 2023 14:57:10 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id 14-20020a05620a040e00b006fbb4b98a25sm9597056qkp.109.2023.03.01.14.57.08
+        bh=cq6JtszAd/uLsfuDjslZ5BwQBYc2QLNd/Q/ORRtI1lk=;
+        b=dfpYmq2PNG54SS8ia04DO+uL3grlthWKLD89howZ36X8GU27v5TLvRGdGW+t8dWOB4
+         Se8NRZNEsbPggEVS1ckF9FE1TZFkXtOyLkrFwtypJIpHPUOdcLQzxePKavB9l9/AEvqp
+         gaULyNyQq8cgP8VfINqkq941ljoJP4C0A3rK4x6doXeHSGLbeK6ylBQaQTnv8e0EPLYG
+         s9z7mFCZZbe7Wusc0nRDPIGi2yr7ynSL1Pm8WZuERUWU/DC3KpKVQ7auHgzdHVV9OXLJ
+         5P00d882SJsNjuG4uziCxFwDNg7Woq3O5MA7MtYov2N7EENwtWwvDiXkdIuC+twRxZDy
+         /foA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677711585;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cq6JtszAd/uLsfuDjslZ5BwQBYc2QLNd/Q/ORRtI1lk=;
+        b=dWCN1UhvmJ/KidG6CMhWiibibkUB7alDCY1Gb/ZNYHntDOJONLjUANSVegi+I0Qbz5
+         ZSVlXbEsM//0koTN6Y3wJjX6G+NGtZPH0Rdvan0WSL3oxZjTYjDpAgmX0pSjE0nZxjgL
+         cZ6wQPR8tZQDOfiRwmbqMzVlXOrR0w0cRCDaRhF9mYnYniVmibsxIQTh51654RJ9w4pX
+         OzSEIHjSnT/yEMvd8enjzEBALTmym4dFNPYa2llVpFeEfkVD0jSuDZhYQew0CItzUe9w
+         RRRnrexviukQP2CDRbbrB2TTHkZ+ESqQdv5vGYbWQNWXg+SBcGURFlK+/akTa/4lokfj
+         TPRg==
+X-Gm-Message-State: AO0yUKUm0IUOu8C7G4zIw1CRFr+q0FLm/ReaedJtbeBQ76H93Rk4gDNU
+        jYTTfhXwjsRiyrXt+hg1BhU=
+X-Google-Smtp-Source: AK7set/BPYqdOnbeAKkU76dP9CqqweuXat20Hca70pdpT2iKMrvQVVaWiZHBqH7PbYNMVYfwqF/KoA==
+X-Received: by 2002:ac2:5197:0:b0:4b5:3e6e:382e with SMTP id u23-20020ac25197000000b004b53e6e382emr1951450lfi.4.1677711585446;
+        Wed, 01 Mar 2023 14:59:45 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05651211c500b004dc48d91061sm1892988lfr.304.2023.03.01.14.59.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 14:57:09 -0800 (PST)
-Date:   Wed, 1 Mar 2023 17:57:08 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 09/11] mm/vmstat: use cmpxchg loop in cpu_vm_stats_fold
-Message-ID: <Y//YREMSErJjiSzh@x1n>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.873999366@redhat.com>
+        Wed, 01 Mar 2023 14:59:45 -0800 (PST)
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+X-Google-Original-From: Zhi Wang <zhi.wang.linux@intel.com>
+Date:   Thu, 2 Mar 2023 00:59:43 +0200
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com
+Subject: Re: [PATCH RFC v8 00/56] Add AMD Secure Nested Paging (SEV-SNP)
+ Hypervisor Support
+Message-ID: <20230302005943.00001a8e@intel.com>
+In-Reply-To: <f2c904f6-996a-e903-5d56-662781567578@intel.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+        <f2c904f6-996a-e903-5d56-662781567578@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230209153204.873999366@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,54 +89,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 12:01:59PM -0300, Marcelo Tosatti wrote:
->  /*
-> - * Fold the data for an offline cpu into the global array.
-> + * Fold the data for a cpu into the global array.
->   * There cannot be any access by the offline cpu and therefore
->   * synchronization is simplified.
->   */
-> @@ -906,8 +906,9 @@ void cpu_vm_stats_fold(int cpu)
->  			if (pzstats->vm_stat_diff[i]) {
->  				int v;
->  
-> -				v = pzstats->vm_stat_diff[i];
-> -				pzstats->vm_stat_diff[i] = 0;
-> +				do {
-> +					v = pzstats->vm_stat_diff[i];
-> +				} while (!try_cmpxchg(&pzstats->vm_stat_diff[i], &v, 0));
+On Wed, 1 Mar 2023 08:56:05 -0800
+Dave Hansen <dave.hansen@intel.com> wrote:
 
-IIUC try_cmpxchg will update "v" already, so I'd assume this'll work the
-same:
+> On 2/20/23 10:37, Michael Roth wrote:
+> > The RMP check is enforced as soon as SEV-SNP is enabled. Not every memory
+> > access requires an RMP check. In particular, the read accesses from the
+> > hypervisor do not require RMP checks because the data confidentiality is
+> > already protected via memory encryption. When hardware encounters an RMP
+> > checks failure, it raises a page-fault exception. If RMP check failure
+> > is due to the page-size mismatch, then split the large page to resolve
+> > the fault.
+> 
+> What does this all _mean_?
+>
 
-        while (!try_cmpxchg(&pzstats->vm_stat_diff[i], &v, 0));
+Unlike TDX which implements secure EPT to hold the restricted memory mapping,
+SEV-SNP is still using one NPT (similar to Intel EPT) while adding another
+level of HW-enforced check controlled by the "RMP" table. Similar to TDX,
+it has firmware calls to modify the attributes in the RMP table to achieve
+isolation and shared-private memory conversion. 
 
-Then I figured, maybe it's easier to use xchg()?
+The purpose and structure of RMP is quite similar to the PAMT table in TDX from
+the perspective of managing the per-page attributes. Each system page has a
+collection of attribute bits. But TDX only uses the PAMT as metadata as it has
+a separate secure EPT to achieve HW-enforced check.
 
-I've no knowledge at all on cpu offline code, so sorry if this will be a
-naive question.  But from what I understand this should not be touched by
-anyone else.  Reasons:
+The RMP memory access checks has its own schematics. E.g. data write,
+page table access from VMM will be checked, but data read is not, mostly
+I guess, due to performance consideration. More details can be found from
+Table 15-39. RMP Memory Access Checks in [1].
 
-  (1) cpu_vm_stats_fold() is only called in page_alloc_cpu_dead(), and the
-      comment says:
-  
-	/*
-	 * Zero the differential counters of the dead processor
-	 * so that the vm statistics are consistent.
-	 *
-	 * This is only okay since the processor is dead and cannot
-	 * race with what we are doing.
-	 */
-	cpu_vm_stats_fold(cpu);
+> When does the kernel need to care about a "page-size mismatch"?
 
-      so.. I think that's what it says..
+The RMP table has the ability to describe a large page (similar to a large page
+with a description of large-page PAMT entry in TDX that can be demoted via
+TDX SEAMCALLs). E.g. 2MB page.
 
-  (2) If someone can modify the dead cpu's vm_stat_diff, what guarantees it
-      won't be e.g. boosted again right after try_cmpxchg() / xchg()
-      returns?  What to do with the left-overs?
+When the userspace sets the memory attribute of a GFN range through the
+restricted memory ioctl, the sev logic (sev_update_mem_attr() in PATCH 48, to
+be precise) will try to build a large page description in the RMP table if the
+PFNs are continuous. When kernel mm breaks the the large page due to THP, KVM
+updates the NPT accordingly.
 
-Thanks,
+Then there will be a page-size mismatch between NPT and RMP. It will be
+resolved by a RMP fault later. Kinda of lazy sync.
 
--- 
-Peter Xu
-
+[1] https://www.amd.com/system/files/TechDocs/24593.pdf
