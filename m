@@ -2,85 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70136A6B08
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E81F16A6B12
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCAKpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 05:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S229803AbjCAKst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 05:48:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCAKpU (ORCPT
+        with ESMTP id S229492AbjCAKsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 05:45:20 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C280302AB;
-        Wed,  1 Mar 2023 02:45:19 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id r27so17008903lfe.10;
-        Wed, 01 Mar 2023 02:45:19 -0800 (PST)
+        Wed, 1 Mar 2023 05:48:47 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07FC18B09
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:48:46 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id d7so13618894qtr.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 02:48:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677667518;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:date:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HgQQZanRv5/alvxkVET4D6uB4QZkFnK7oJuTnwO/hEE=;
-        b=P7SSTk6sznBU59W8FIBilggNoPneO/753Y91fiXGPLcnZo+7vSp688RM2AEYDH7KHS
-         Oe6Ac54VLqQqTSg9I80HwktZ3FG0ggZw80CfLRhkgsqAsu52TYikxNSjooJzTFicW5sH
-         vwKPsN3AjYT+NcKd4RsE3ndx3CMxhQnu9JSc4it/+kxEwrpOrbfsnxRqNHKzgVeCjnB7
-         zDkHqnFloq2501FJaTMMlXxulgv8DLgS6APspZ30Pcw4+tXEcrJKn+NK83RWNJxXk3Fj
-         9fICn88zqCxqTvwKFaz5Vnv0SqDmkTZFcpqRA5y5uidc8eWLrUwwKEzOm92C5g5/tnIp
-         24Yw==
+        bh=/4HkARXzF8TlGnOQDulEJeGpVxYMh1KtAjEWT2EqlMU=;
+        b=ku6FAjlfOlx2faYGMvRo6ZfacPwmYl/FrRqaAGrELaQgvycbWOnz7IHA3eMQAuZffp
+         MSSaNfXxA8ayBJG4MfszFUxAbNZPa5dN5897deJfIOHrKcK9HTLzcYlGloupjoW4FHuz
+         6kJOAqxtsn1KffirNUCAuZ1S8qv48zp6XsLNy1f6cbwfKbWWf71I0Ci2lSl42ycPUEqS
+         O0PDOP/8QqLBogxTuV6alK4U0C8cSuRgXuAaKfbXW2jpS/cftlTRw9hJ0aDwBf2YbdEr
+         LBHt7Izxrk61n3LO+ZnZHYzFcfmNvXWqa25HYM53e4lqQX+H2RD6pBR3qtWJT6BIdpjW
+         1fhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677667518;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HgQQZanRv5/alvxkVET4D6uB4QZkFnK7oJuTnwO/hEE=;
-        b=CWTHhttSxbdl6xWGD6kz+alZeDel20pxi79JVR7ywUXVpA1nY4y4slvH58AhgvQVw2
-         Fh1XDuKc/Em9NdRYajuTxTfxeb6//C5mSDqyi9k5/+brbxRw6mGMdGWJeVOQLbMyVlOO
-         amtIj2AK/nEEd8gWfd+tjNwhDSxC+HnyWvdrCkYMI6J7xwkpb0gSk+vIPXgi6uN7EHE3
-         YgU40KRaCr6CHwgtVrXg3HrN+RCXSYQDZ89OKwz4EAYLMVjzHsKAdUjyCuwQhZECADNa
-         +H2LD8I3TYIEZ22Ri9vHg/BQCWePZJ32XicCyZQ8ZgC1uv+oAnDS9NVjjexVl0YW+sAY
-         wzEA==
-X-Gm-Message-State: AO0yUKUvBRBOmbw7JfKqsiC2aNToUOXwacLvpsduAd7DljFdI58U4WLf
-        8qSMazddDB3uo0e6Vp1KzGo=
-X-Google-Smtp-Source: AK7set+HFf00M+CzlupT1bQM2ZRdW6de/txyzQjH6FxzfeDTmSWjvROAUCh9HT5dCKqG75TdwtvY2A==
-X-Received: by 2002:ac2:44a9:0:b0:4d2:c70a:fe0a with SMTP id c9-20020ac244a9000000b004d2c70afe0amr1344986lfm.2.1677667517726;
-        Wed, 01 Mar 2023 02:45:17 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id r1-20020a19ac41000000b004dc4bb2f4bcsm1663800lfc.276.2023.03.01.02.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 02:45:17 -0800 (PST)
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-X-Google-Original-From: Zhi Wang <zhi.wang.linux@intel.com>
-Date:   Wed, 1 Mar 2023 12:45:16 +0200
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v8 51/56] KVM: SVM: Add module parameter to enable
- the SEV-SNP
-Message-ID: <20230301124516.000048f5@intel.com>
-In-Reply-To: <20230220183847.59159-52-michael.roth@amd.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
-        <20230220183847.59159-52-michael.roth@amd.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        bh=/4HkARXzF8TlGnOQDulEJeGpVxYMh1KtAjEWT2EqlMU=;
+        b=DNhDpM3ZCfmb6R8fdowIaSp0tAtrP9lPUAgxqQATPxIaT1raPmPIw2VnR99IVtBTx8
+         2k/Sf/uYn0IqEDNISQI8WvGawVW95dt2alZ/etm9gSroLifQHMu4DCwp0a87ScLaSwS6
+         3C36nrwc9NuaBuHO2G0I06d4sxUsiIMYpmCXQui3OpJbIMVCfBb0DSgy74QQE0QCluzA
+         Ev9EyyFvjJg/ymffCh7qdGgSyNJcU7huvtVsbBIDLKJkfzKdLo/6tL3zj++l0C2tVoBs
+         pjYYfAezRYEXgJ27aFY/v6DSeUBv+50W0d5yE0RLkSQZL7tFKLw+qwJzM873NQtnnnqH
+         89pw==
+X-Gm-Message-State: AO0yUKUPe94t0a2FV1mtDWcwCcEujf1NmdN0S5w6uM+fDGOt4tsayBPz
+        A8lMu7D8wx22AklcxNEfEO8Depmh5ZbKQWZ+2p0jW4Bx/q93UQ==
+X-Google-Smtp-Source: AK7set9SyLgqr1kDAksJiidD5Y0PSb/+K6D/mmPlDTKYK07jqcfdijOIhng1V2D9ELDbJhmkEHl05s3WSGv+44yO/gA=
+X-Received: by 2002:ac8:4049:0:b0:3bf:b9a7:c550 with SMTP id
+ j9-20020ac84049000000b003bfb9a7c550mr1581979qtl.1.1677667725806; Wed, 01 Mar
+ 2023 02:48:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20230301095402.28582-1-hdegoede@redhat.com>
+In-Reply-To: <20230301095402.28582-1-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 1 Mar 2023 12:48:09 +0200
+Message-ID: <CAHp75VeEnJ5fnme6QTjxN6XjNg82PB5SFMWAHkZBfKTc07tGkQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mfd: intel_soc_pmic_chtwc: Add Lenovo Yoga Book X90F
+ to intel_cht_wc_models
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andy@kernel.org>, Lee Jones <lee@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -91,64 +70,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 12:38:42 -0600
-Michael Roth <michael.roth@amd.com> wrote:
+On Wed, Mar 1, 2023 at 11:54=E2=80=AFAM Hans de Goede <hdegoede@redhat.com>=
+ wrote:
+>
+> The Android Lenovo Yoga Book X90F / X90L uses the same charger / fuelgaug=
+e
+> setup as the already supported Windows Lenovo Yoga Book X91F/L, add
+> a DMI match for this to intel_cht_wc_models with driver_data
+> set to INTEL_CHT_WC_LENOVO_YOGABOOK1.
+>
+> When the quirk for the X91F/L was initially added it was written to
+> also apply to the X90F/L but this does not work because the Android
+> version of the Yoga Book uses completely different DMI strings.
+> Also adjust the X91F/L quirk to reflect that it only applies to
+> the X91F/L models.
 
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> Add a module parameter than can be used to enable or disable the SEV-SNP
-> feature. Now that KVM contains the support for the SNP set the GHCB
-> hypervisor feature flag to indicate that SNP is supported.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+(Please, update the subject in the next version)
+
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->  arch/x86/kvm/svm/sev.c | 7 ++++---
->  arch/x86/kvm/svm/svm.h | 2 +-
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index bedec90d034f..70d5650d8d95 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -55,14 +55,15 @@ module_param_named(sev, sev_enabled, bool, 0444);
->  /* enable/disable SEV-ES support */
->  static bool sev_es_enabled = true;
->  module_param_named(sev_es, sev_es_enabled, bool, 0444);
-> +
-> +/* enable/disable SEV-SNP support */
-> +static bool sev_snp_enabled = true;
-> +module_param_named(sev_snp, sev_snp_enabled, bool, 0444);
->  #else
->  #define sev_enabled false
->  #define sev_es_enabled false
+>  drivers/mfd/intel_soc_pmic_chtwc.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/mfd/intel_soc_pmic_chtwc.c b/drivers/mfd/intel_soc_p=
+mic_chtwc.c
+> index d53dae255490..871776d511e3 100644
+> --- a/drivers/mfd/intel_soc_pmic_chtwc.c
+> +++ b/drivers/mfd/intel_soc_pmic_chtwc.c
+> @@ -159,11 +159,19 @@ static const struct dmi_system_id cht_wc_model_dmi_=
+ids[] =3D {
+>                         DMI_MATCH(DMI_PRODUCT_NAME, "Mipad2"),
+>                 },
+>         }, {
+> -               /* Lenovo Yoga Book X90F / X91F / X91L */
+> +               /* Lenovo Yoga Book X90F / X90L */
+>                 .driver_data =3D (void *)(long)INTEL_CHT_WC_LENOVO_YOGABO=
+OK1,
+>                 .matches =3D {
+> -                       /* Non exact match to match all versions */
+> -                       DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo YB1-X9"),
+> +                       DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Intel Corporatio=
+n"),
+> +                       DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "CHERRYVIEW D1 =
+PLATFORM"),
+> +                       DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "YETI-11"),
+> +               },
+> +       }, {
+> +               /* Lenovo Yoga Book X91F / X91L */
+> +               .driver_data =3D (void *)(long)INTEL_CHT_WC_LENOVO_YOGABO=
+OK1,
+> +               .matches =3D {
+> +                       /* Non exact match to match F + L versions */
+> +                       DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo YB1-X91"),
+>                 },
+>         }, {
+>                 /* Lenovo Yoga Tab 3 Pro YT3-X90F */
+> --
+> 2.39.1
+>
 
-Guess we also need #define sev_snp_enabled false.
 
->  #endif /* CONFIG_KVM_AMD_SEV */
->  
-> -/* enable/disable SEV-SNP support */
-> -static bool sev_snp_enabled;
-> -
->  #define AP_RESET_HOLD_NONE		0
->  #define AP_RESET_HOLD_NAE_EVENT		1
->  #define AP_RESET_HOLD_MSR_PROTO		2
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 857b674e68f0..221b38d3c845 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -694,7 +694,7 @@ void avic_refresh_virtual_apic_mode(struct kvm_vcpu *vcpu);
->  #define GHCB_VERSION_MAX	2ULL
->  #define GHCB_VERSION_MIN	1ULL
->  
-> -#define GHCB_HV_FT_SUPPORTED	0
-> +#define GHCB_HV_FT_SUPPORTED	(GHCB_HV_FT_SNP | GHCB_HV_FT_SNP_AP_CREATION)
-
-This is not related to the topic of this patch, should be merged into related
-patches.
-
->  
->  extern unsigned int max_sev_asid;
->  
-
+--=20
+With Best Regards,
+Andy Shevchenko
