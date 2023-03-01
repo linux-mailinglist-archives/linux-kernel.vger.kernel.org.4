@@ -2,238 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7656A6662
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 04:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 371AA6A665F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 04:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjCADQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 22:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S229783AbjCADOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 22:14:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCADQf (ORCPT
+        with ESMTP id S229619AbjCADOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 22:16:35 -0500
-X-Greylist: delayed 121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Feb 2023 19:16:33 PST
-Received: from esa20.fujitsucc.c3s2.iphmx.com (esa20.fujitsucc.c3s2.iphmx.com [216.71.158.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF2136444
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 19:16:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1677640594; x=1709176594;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=tYIEo92VFTRQbHwcL/3QPPwhQ4JfOPNYU+tAkvIamho=;
-  b=sRAkkTu3ehKOblalZqjhcAlkts7pViPcTa24JGev8q5+cNitI+DDgA/Z
-   rMNqDhtfYhaEQ6ciKsivriouhAHHuDl7gzSpgqnhjBJkU1HgFG6z3oDCf
-   edlaEQm78guVfLLgP6BMKJT7RNb3i8HM/XItMswwWWp46WwLsQyoMXMLS
-   JX8SrAbXCdo6fZfVwmyMcxdjyyvdSJ6spVG1Xqt2vNSuP9reAim86pLxI
-   qGZ+XW1MQxVqF9wj+guNqwdqQmlRIH8LI9bGau+OXoOQkoY9197noIyh5
-   j3z0l9VjR9j2QRZcoZ6YBY/hwaflSfZZILU2W7zCQVmQ81kH386UK5uoh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="78042999"
-X-IronPort-AV: E=Sophos;i="5.98,223,1673881200"; 
-   d="scan'208";a="78042999"
-Received: from mail-tycjpn01lp2176.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.176])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 12:13:07 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BAuQduEo3rKk/zxRyc9vvHjUMQKbtihzuGm5nhZzWD3Jej6YbR5J7mRGagq6GwEh0Erjt9A+zEP1uSb/1Tzmr5tIxp8tWRkIDFnf7bWUhzUhx+ggh+wdM5eBYVT65FEuZzrXHYj6gQdKR6IEjJI44fguK9AU2PSg5Too9X9wGSvKzQXvnBizq05v+Fshuv80dk6ZP9errscU1DG/YONw1fdzYcs7/s9AO8tCe32rn6lWh0ihmDCEQHyKmQZHmxtnpo9m/wudC3lryt75Kk2gvavoOgUihonAnfsHgYT4xKgjWHlND/r/be8X5Pk7ovdxvbxMwt/6ud9xtpDKn0rwsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v/+B2JSV/0zwahE13ocFR7cq/8eXhTcOb/iV9hEyydI=;
- b=KrGNFFEMGKp34iq82dP8fbRjTYZbSUh1qvpaYHY2ZjSLbA4rlDP6utcKkr5VprWTpvnGTgK96coUEguGZyfYP1QAGYZphXGwEWN9uwv8MQBQzzYJqVoGLb9Rl2ZKoBZ69k8h3WUkc0uQlaZPdd0JTijEw7Jb6zG1Mhsy3dTsFyol6/Jga6nzXBkbffZ3XpiXVFWMf+OrRV5dOWTBqwhQQ/bttEQUr+qLIuV/PXtk5Q3VShvHUfRK/JDhUFLlz1Wehm+M1Ov9TL92HPSIQtkRwsEDH5JFXf8OsGvYHbnW+hS+Y+IE1Oky1abY9HfhnR/xgk/l9ERV7udWYZRIHZQ38w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-Received: from TYCPR01MB6993.jpnprd01.prod.outlook.com (2603:1096:400:bc::7)
- by OSZPR01MB8417.jpnprd01.prod.outlook.com (2603:1096:604:16f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
- 2023 03:13:04 +0000
-Received: from TYCPR01MB6993.jpnprd01.prod.outlook.com
- ([fe80::fa28:794f:a1b4:8e2f]) by TYCPR01MB6993.jpnprd01.prod.outlook.com
- ([fe80::fa28:794f:a1b4:8e2f%6]) with mapi id 15.20.6134.031; Wed, 1 Mar 2023
- 03:13:04 +0000
-From:   "Tomohiro Misono (Fujitsu)" <misono.tomohiro@fujitsu.com>
-To:     "'madvenka@linux.microsoft.com'" <madvenka@linux.microsoft.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "Keiya Nobuta (Fujitsu)" <nobuta.keiya@fujitsu.com>,
-        "sjitindarsingh@gmail.com" <sjitindarsingh@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
- pointer validation
-Thread-Topic: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
- pointer validation
-Thread-Index: AQHZNtr2MNh0z0iEfEuTLgtmunaVUK7lZbhA
-Date:   Wed, 1 Mar 2023 03:12:08 +0000
-Deferred-Delivery: Wed, 1 Mar 2023 03:13:02 +0000
-Message-ID: <TYCPR01MB69938E7E2E14697FCF166155E5AD9@TYCPR01MB6993.jpnprd01.prod.outlook.com>
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
-In-Reply-To: <20230202074036.507249-1-madvenka@linux.microsoft.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-shieldmailcheckerpolicyversion: FJ-ISEC-20181130-VDI-enc
-x-shieldmailcheckermailid: 17a89900d8a24ac3b697d27e33162ca5
-x-securitypolicycheck: OK by SHieldMailChecker v2.6.2
-msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=true;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2023-03-01T02:58:35Z;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED?;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ActionId=733c9dc2-0864-4d02-a04d-1f76adbaefc3;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYCPR01MB6993:EE_|OSZPR01MB8417:EE_
-x-ms-office365-filtering-correlation-id: b726163c-3f4f-4fac-6e56-08db1a02df42
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: En2ypgOeXRhJcPGXXXsm0RwSVgkye8Rt5x0UAvl1e4gWsAXoeKTIqqvsMNZ3pQEp7ucb2hWsWXmBIaCrtOo0lHL5/CV3V5szwE7s3SDJ8k0uSkHjGgnVWqyXDpDveSoe+/VFuVblS57uCJVI5h5y8vW2qTwGZoH+QU0+DsjIriqCIDQ/Zvk6nGt1D/fyp1ZeGBQbVvtNUcHgfu10qOJx4c4UUQoAXPwr1v1VZrMk+Hy66awyG2Z4xgGpaZwopcrrXS3ChETIaTcA1Pw7hw9iXbtV7T6epW4OLoupkzmzC8+2cUAI6Tv46DhNhLjRvm6nnTzQV4d7Hdtd7D+tTPZsx/jGH9MhWvnGWN5e6MNC4t007juSAIWe/cF3Hn1y234gAunUFfpgVsSIi3+1YO2ryCC/aSJkofLyTuQ/qx9/EmfLQUEsdB8SKWZEf+r6VQMh9witPQz3bjrqDY1Dm7g2RvRvASwauG59/phjq4a+/SsCo69h7S+tcwRIXJL/ECuWwPTtD8L/vAZ109tGsPDy7dCT4nhm3yIbGXsdTfg5M8t1x2HTE9s1Q4XK7Pmf66Uss1Fp0QWMN004hA6puqFdqqgVooXpo09wezIBLjLOm/nF0+1q7Zp77XJCylr46Cz/Ov8G5Zxkblva+rb+e2/L3AEIaKQDX43uSie2ayikKZHe0JkiVDDtlUPT6XLRwzJE8neBKhL1X67KbdU1ygE/fddzTcbAZvS9zYQhC787ni4vKpvnREuIzIrrSgVGh7LuOE+EhVzPqfl340PuG6MxfQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB6993.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(396003)(376002)(136003)(39860400002)(1590799015)(451199018)(1580799012)(85182001)(66476007)(8936002)(66946007)(64756008)(52536014)(76116006)(41300700001)(66446008)(66556008)(2906002)(7416002)(8676002)(5660300002)(33656002)(122000001)(38070700005)(921005)(86362001)(82960400001)(38100700002)(71200400001)(316002)(7696005)(478600001)(55016003)(110136005)(9686003)(186003)(6506007)(26005)(491001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?bmx2ZzBtK3dsdUt4d0NnTVE4V3ZWL3MxMTFTT1g3VG92cEJidlQvR0o2?=
- =?iso-2022-jp?B?YWZSVUhDSVFiWTJRR3VTbVJhVWJma2p5QWdXbDZGd21kbUY1MXhpS3VQ?=
- =?iso-2022-jp?B?d1BCSEZkRm5HQTBSTjRXMHdmczllN3dtNUJQYlg2WXN3RlREblFkVUx2?=
- =?iso-2022-jp?B?V04zZXhTd3ZYd0g2eUo1THYvN0tSZkQ4VWkreEsvWDZsTUJ4VWM4T3dF?=
- =?iso-2022-jp?B?VjJmUEhpMDRwd3RtTFpkUEl5bXZaQzZVSGV2V3pSMU9TcWUvWjFvaTht?=
- =?iso-2022-jp?B?and6Vi9sKzZ3M05scUF2V0N2VEpqTDJ4Z3NhenY2dlh0WkVSbnRXbVdR?=
- =?iso-2022-jp?B?Wkt0L1NJNmlrMmhzeW05N3NvQU1zNm51NExZZWtnTUVVa3lwQTl0MEtS?=
- =?iso-2022-jp?B?RlNsTzF3cDZ1allEbHIxWTBiNDlBSUphRTFBSkNnMVhYWkpkaXJwR1VS?=
- =?iso-2022-jp?B?ekxyL0dTT1FDcktldE0zaU9rWm9NUGtvbjF5SEIvVHlZZmE0QzU1NXo1?=
- =?iso-2022-jp?B?UWFXTmpJMXVJcFY3R1BJOXlEMWZJSmNuWlM3UFV2TEF6ZE1kdHZWYWs4?=
- =?iso-2022-jp?B?Mm0xamJjaHVEc21NcnZvZy9URml6RWxVbWRBQ2tVQ0pNVVVyTXR5MG1G?=
- =?iso-2022-jp?B?ajd3YVJPRVdXWlJ3citNUXV4Zm9ORi9ST0U0TS96VEJXRVFraXdaQUQ5?=
- =?iso-2022-jp?B?UGtpVnN6a1ErNXo2TzYyRFJ3cEhuWitkNjZKWkR2SG5MNlBtQjJ6TTRk?=
- =?iso-2022-jp?B?dGlIRWx3NUFteS8vNVFyV2x4WkpwM2owWGhFZUJSUGR6QXN2N2M3em1s?=
- =?iso-2022-jp?B?aXZpVTJiTUNmVCtSU0dRWDlKTDg3Rzl0U1Z2dEw0SklEaUthTkhWdGZ5?=
- =?iso-2022-jp?B?TFF4OEZTK29aNXR5ZnVieU8wVjFmbjluTkhNT0QzZjJlQjJrM29wU1JP?=
- =?iso-2022-jp?B?TmVOcXNxaitQMHdRKzFxQ3p2Q1YzR0RZOWwyQkdzbld0OFlhcUdLdHY5?=
- =?iso-2022-jp?B?c3dHMmtER3A0TTA4ckdTNC8rR05pcUVNV0RYTmtpcG9UUWdpUW1lMXhB?=
- =?iso-2022-jp?B?T2Q5RFEwSWNoNkJ3RUxRU2ZIZ1RBVlptNDlaQ1RnNExCeE1sSS91TEtS?=
- =?iso-2022-jp?B?b1NIdGFmRkRuVTNaV3dEUUJzTG1pUGt5QTloVFV3dFFzbzMycEsyTExO?=
- =?iso-2022-jp?B?WWoyVml1Tzk3bEpzUlJRYjM2WmJrQ1liK3Y0WXNEMmRXRTNFSEx2d0t3?=
- =?iso-2022-jp?B?Skw0c2pHb3FXdWMrVjlxQlFrQ0dENnNET3VxVGJHa1ZRSkFZZXNMcUR5?=
- =?iso-2022-jp?B?Y0p0MHpvNldjdkhyVUNyTDlzQlJXNkVraXd1WU1SbnY0VmJybjVCc2E1?=
- =?iso-2022-jp?B?R3A1L2hLUmloQXdRL2ZZbitoNE14b0VYT0lHZEErUjNkcmxJN0NhOS9h?=
- =?iso-2022-jp?B?Wkc2eU93bDdORWhHZFFnMHduaGJxakEwcXZqODhhU3hRSmF1MXVSeCtl?=
- =?iso-2022-jp?B?Nm43ZTJHcmZVbnBQS09lMVpOUnZWampjUTRvczhJWVQyOUtKY3ZocUk3?=
- =?iso-2022-jp?B?UVo3TUh3UDdPZDRtWk5TNDIvNmdSQUVZaVNzdFYrYkxtcEk4Y1JvaTNC?=
- =?iso-2022-jp?B?YW1qUE1jaEJxUEMxTjhPL1IvaituTUhDcFpHZEdxdHJRUlI3eHU2TWRY?=
- =?iso-2022-jp?B?a2pkbzZRamdWTGpJQzZYQzZycFBrQVc1QjY2YjJ1dnU1cnlZZ1FjUkQ2?=
- =?iso-2022-jp?B?TDV5dm9YVG80ajZ1Tzl6MTFzQUhHSUhVeS9uM1dnNVNESUhpVmRTeFdQ?=
- =?iso-2022-jp?B?dnMzNWVlOXBuMy9OU3dEaDhvWkZreFJpSlF4NGI5RlBrdkozcEJPSWYr?=
- =?iso-2022-jp?B?N0F0enlWK3ZJUW5Ib0FldGtMWXExaEYyU3k4SExCWnNUWmhwd3pIMkp2?=
- =?iso-2022-jp?B?ZXBOZmtlWVlGSDdnOUN6QkRwdk9uSmFZTGV4T3VxUkM1WHNBTWNNV01s?=
- =?iso-2022-jp?B?NDFsNEU3dTU4dytFMy83QTV3ZlN5bkJIOW4wS3dEdlBSWHVWNFdoSHRI?=
- =?iso-2022-jp?B?NndGZ2ZoWFB0MXpkVzIyUWJoZFJoZEVOdWduYmVROXlDd3RBNlNBNmVB?=
- =?iso-2022-jp?B?cHhmTFBNK1YrY3Z4bG9BaTV6Yjg2ejhIVXlYVXN6ZkxXdGlnaS91V2dF?=
- =?iso-2022-jp?B?NUNJblRqL0JXRDJBSU91dGpIVEJjd2dnZHZidXZEQVBSR1V4YXFlRlU4?=
- =?iso-2022-jp?B?RWZSSk1heVErY0JaVDBvYVZMQktUNS9SQ2JYZmp2WEhIYzZ4VWdYM1Ix?=
- =?iso-2022-jp?B?aU5jQUFBckFQejF2V3ExZ2dseUcxOVpGS2c9PQ==?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 28 Feb 2023 22:14:09 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0C41E288;
+        Tue, 28 Feb 2023 19:14:07 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 45521422CC;
+        Wed,  1 Mar 2023 03:14:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1677640445; bh=UCKwk+pJV4EM3THeVIh/zQc6ljr1BqvcNCGraGweq7c=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=GjC4bTSb3lPoUPg4uFfDbZKKpZI/vbMVn7zFXGm7iET4RGkt1TLl+hrBeLtrR/UMi
+         oIC93n48q4HvrUlCxtPovlgb6uLB+Rppplpxxd/3sSwqNJKLom8b5AMxlgb27sW0IV
+         j8kFnBUnxzpYPWVGF9Nsl0U68qShbEJJEIrxJwab65s7Lcm0Q61P+Q/lTnUVi6aLcH
+         Gg1dPAcWgLUj4MZloE4xzF4rAt352Fyd+LA8YIIu4msXNtREOIuGHw1G3UiTQaYr67
+         Wwwc7x9v/McUNhJ8bzs3HQazUwHPRBoXhKtT5ItSUhABDQf5Cl3KJp6l/BJ7eH9ThL
+         hiCSVlYsr53QQ==
+Message-ID: <c875979d-68f9-6c4e-04ca-af310491b209@marcan.st>
+Date:   Wed, 1 Mar 2023 12:13:58 +0900
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?iso-2022-jp?B?UFBiaWdncTRjRkNwanpOb0ZFT2VBb1drUERTZmxLYW1HbTBQNFg5L08z?=
- =?iso-2022-jp?B?Wk83SnZqRnJnb0NZaUVZb3Y5QzNVbVYzRGJxa3ZnZG5uWHlGVDRoMzBh?=
- =?iso-2022-jp?B?Y1VuUGU2bUpSUlQ4Y1pyNFR6ZEw4V21CbG9qYmt0bGU0RWFxUDZHMkVN?=
- =?iso-2022-jp?B?N1pCNDVnN0FaQnNOYkFiREErS0JaL0tmWWh2cDZqbkF5a0srM2pkZXBi?=
- =?iso-2022-jp?B?YnpTNDlMK3ZVaXhFOEN5bFV2NTVFdGUzZmF5THdFZytPWlY3dy96d1By?=
- =?iso-2022-jp?B?cTVGSks0UFVxQXRqbHZWdSs3SVBYQUFFSkVXQ3JwMkh6aEJpeTRIU1dP?=
- =?iso-2022-jp?B?UmZHWEE5UWowWjlGcmNBNFU2UlZoSm9SS2gzUjRoR296RHVzZWhRZGJl?=
- =?iso-2022-jp?B?eTVTejJoZVFhdWZwUWpBMFJsSElRNWxYS2NFU21Wam1MMElZemJYdjQ4?=
- =?iso-2022-jp?B?TG92bkJLUzZZa0VKRW94MndEeEhiaVA4NzJFUkw1UHg0d0RtbURoZ0hO?=
- =?iso-2022-jp?B?ZVpTdGRoQjFEdHAybGJkZHZVR3dzYkMyZVdaWk5zVE1hQTRVOVFTaFEy?=
- =?iso-2022-jp?B?eVAzT09xQmR0aG9yVFV4RmZiL2VXZTVDU0MraW1ISzBMb05helNwT0Z4?=
- =?iso-2022-jp?B?VGkyZGdGeDdkMEVDUU9ORzBwMUtZV0V2dmN2V21OWnVscytTQ24vc1Zq?=
- =?iso-2022-jp?B?S0JDTE1zN0YxeDhaMDhjN3hpejJwOWh3cmdodnFERXBkQTZnWVlEMTZS?=
- =?iso-2022-jp?B?OTBQRnNacmc0d3ZiNFV6ZFhMVUJielZVMDdHaE1PR3VxZ1lFVE1BZ0Qr?=
- =?iso-2022-jp?B?TXRUTnF0YjhRaUxyRHNyN1p6UkJvQkJyb2RSRm9xUndnQjRQQUVnT3o0?=
- =?iso-2022-jp?B?bnpFZ1V6RlRuVHpBNmhKbzlwL0M5YWNnRnJtWXdGK0ZNS3J4Vm5xWGZ1?=
- =?iso-2022-jp?B?VEVFZGR0NnZtNnFVSklMTFRVWERGdWYrK2lwOUpRQTJqVENRMlR4dmJa?=
- =?iso-2022-jp?B?WWNnUnNLVXBGZlVMbFRUN09HaXR6TDFFS2pNeW00Q0lTaE1zNjZ1dU00?=
- =?iso-2022-jp?B?QWYxejJ0djdxNEY3MFo1d1d0UjF4Q0hicDhVLzhSbXAyQnBYVEh5amJV?=
- =?iso-2022-jp?B?RVBHQ3BBb3lBdDM1ZFMxT1YyMHhEK3lpdjJ6UjJjcnl2ay9nci9PdmVG?=
- =?iso-2022-jp?B?bVVmTHo4UlNWZmhtMDM1TlZ4ZXhkQUNSaUIrazM0cmp3VU11U3d5NVFZ?=
- =?iso-2022-jp?B?c2R5bU9oN0kwa25XWGExREVyUmtxY3JqejFrOTNTNnEyMHIrbnJwUFNv?=
- =?iso-2022-jp?B?OEdYUnRCSFovd2doUXVCVFZqSDQvSmg3aGwvZkc3dnlJZlQ1SlVyUm13?=
- =?iso-2022-jp?B?ZUNyRFZrbU9QT2JDMFpDdVhJOHJ4T2FzcWxBeFQ2aXJ0VEUyKytYQkk3?=
- =?iso-2022-jp?B?OHhCNFE0NWQvditvRVA2Q3FPR2dWc2lDb0Q5VHBHaUI0ZzhudG55ZkVt?=
- =?iso-2022-jp?B?bnF4UE9GaDNNREpGeU9jcTg9?=
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB6993.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b726163c-3f4f-4fac-6e56-08db1a02df42
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2023 03:13:04.0674
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z/3UbUglQtS25nv46Pbg0EyGyBEs0ziXoDw18P5Ejlr+ztyH+tzbWPwQCA6lIG0Yi2x8KCc54Iq3RP97XA2qED2JRIScAu9TmJrbG2sBJ8Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8417
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc:     sven@svenpeter.dev, fnkl.kernel@gmail.com, alyssa@rosenzweig.io,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, asahi@lists.linux.dev,
+        rydberg@bitmath.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230223-z2-for-ml-v1-0-028f2b85dc15@gmail.com>
+ <20230223-z2-for-ml-v1-1-028f2b85dc15@gmail.com>
+ <87r0ufs574.fsf@bloch.sibelius.xs4all.nl>
+ <CAMT+MTQOUd0aSDJ3DPBMfkVwaic=nbRPtfGgu2nduSdCdydcgg@mail.gmail.com>
+ <e6c7eb27-1b60-4894-a623-28ca3bccdea5@app.fastmail.com>
+ <1874e194-5210-460b-3e8f-0f48962f8a47@marcan.st>
+ <87wn41qzpm.fsf@bloch.sibelius.xs4all.nl>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH RFC 1/4] dt-bindings: input: touchscreen: Add Z2
+ controller bindings.
+In-Reply-To: <87wn41qzpm.fsf@bloch.sibelius.xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-<snip>
-> Testing
-> =3D=3D=3D=3D=3D=3D=3D
->=20
-> - I have run all of the livepatch selftests successfully. I have written =
-a
->   couple of extra selftests myself which I will be posting separately
-Hi,
+On 01/03/2023 05.53, Mark Kettenis wrote:
+>> Date: Tue, 28 Feb 2023 11:58:28 +0900
+>> From: Hector Martin <marcan@marcan.st>
+>>
+>> On 24/02/2023 20.08, Sven Peter wrote:
+>>> Hi,
+>>>
+>>>
+>>> On Fri, Feb 24, 2023, at 12:04, Sasha Finkelstein wrote:
+>>>> On Fri, 24 Feb 2023 at 11:55, Mark Kettenis <mark.kettenis@xs4all.nl> wrote:
+>>>>
+>>>>> What is the motivation for including the firmware name in the device
+>>>>> tree rather than constructing it in the driver like what is done for
+>>>>> the broadcom wireless?
+>>>> There is no way to identify the device subtype before the firmware is
+>>>> uploaded, and so i need some way of figuring out which firmware to use.
+>>>
+>>> Some Broadcom bluetooth boards use the compatible of the root node (see
+>>> btbcm_get_board_name in drivers/bluetooth/btbcm.c) which would be "apple,jXXX"
+>>> for Apple Silicon. I believe the Broadcom WiFi driver has similar logic as well
+>>> which marcan had to extend to instead of "brcm,board-type" because different
+>>> WiFi boards can me matched to different Apple Silicon boards. I don't think
+>>> that's the case for this touchscreen though.
+>>
+>> The reason why the brcmfmac stuff needs to construct the firmware name
+>> itself is that parts of it come from the OTP contents, so there is no
+>> way to know from the bootloader what the right firmware is.
+> 
+> The name of the "nvram" file is constructed as well, and that uses the
+> compatible of the machine (the root of the device tree).  I suppose
+> what is special in that case is that several files are tried so a
+> single 'firmware-name" property wouldn't cut it.
 
-What test configuration/environment you are using for test?
-When I tried kselftest with fedora based config on VM, I got errors
-because livepatch transition won't finish until signal is sent
-(i.e. it takes 15s for every transition).
+No, if you look at the way the name is constructed, some of it comes
+from OTP. The plain compatible stuff is for non-Apple platforms. Apple
+platforms need lookup of nvram/etc per specific fields in the OTP, and
+then we try multiple firmware names from most to least specific because
+the distinction often isn't relevant (but in some cases it is, and this
+even changes from macOS version to macOS version). Our firmware
+extractor actually attempts to prune the firmware tree by deduplicating
+and promoting the most popular variant up towards the root then pruning
+redundant branches, because otherwise we'd end up with hundreds of
+copies or links (which is what macOS does, they don't try multiple
+firmware filenames).
 
-[excerpt from test result]
-  ```
-  $ sudo ./test-livepatch.sh
-  TEST: basic function patching ... not ok
- =20
-  --- expected
-  +++ result
-  @@ -2,11 +2,13 @@
-   livepatch: enabling patch 'test_klp_livepatch'
-   livepatch: 'test_klp_livepatch': initializing patching transition
-   livepatch: 'test_klp_livepatch': starting patching transition
-  +livepatch: signaling remaining tasks
-   livepatch: 'test_klp_livepatch': completing patching transition
-  ```
+If the OTP were easily readable from the bootloader I'd just have thrown
+this in m1n1 and kept a fixed firmware-name property, but that involves
+full PCIe init and power-up of the wlan module and that's way too much
+junk to put in there. Hence, dynamically computing firmware names in the
+kernel driver.
 
-Thanks,
-Tomohiro
+If it were a simple 1:1 mapping from device tree blob to firmware files,
+I would certainly have advocated for "firmware-name" instead of the more
+complex thing we do now.
 
->=20
-> - I have a test driver to induce a NULL pointer exception to make sure
->   that unwinding through exception handlers is reliable.
->=20
-> - I use the test driver to create a timer to make sure that unwinding thr=
-ough
->   the timer IRQ is reliable.
->=20
-> - I call the unwinder from different places during boot to make sure that
->   the unwinding in each of those cases is reliable.
->
+>> That is not the case here, so it makes perfect sense to specify the
+>> firmware with `firmware-name` (which is a standard DT property).
+> 
+> It certainly provides the flexibility to cater for all potential
+> nonsense names Apple comes up with for future hardware.
+
+We actually make up the firmware names ourselves in the extractor, so
+that's not the reason. But if nothing else I'm pretty sure we already
+have n:1 mappings (M2 Pro/Max laptops almost certainly share the same
+touchpad firmware for at least the same size chassis models, if not all
+4 - haven't looked at that yet though), so using a separate property
+means we don't have to play symlink/hardlink games.
+
+> 
+>> As for the layout, both bare names and paths are in common use:
+>>
+>> qcom/sm8450-qrd.dts:    firmware-name = "qcom/sm8450/slpi.mbn";
+>> ti/k3-am64-main.dtsi:   firmware-name = "am64-main-r5f0_0-fw";
+>>
+>> ... but the bare names in particular, judging by some Google searches,
+>> are *actually* mapped to bare files in /lib/firmware anyway. So the
+>> firmware-name property contains the firmware path in the linux-firmware
+>> standard hierarchy, in every case.
+> 
+> Well, I think the device tree should not be tied to a particular OS
+> and therefore not be tied to things like linux-firmware.
+
+That's fine, but we need *some* source of truth, and just like the Linux
+kernel tree is the system of record for device tree bindings today, I
+don't see a good reason not to use linux-firmware as the defacto
+standard for firmware organization. There's nothing OS-specific about,
+effectively, a list of identifiers that particular firmwares should be
+listed under. Think of it as a "path key => expected firmware blob"
+mapping. How each OS implements that is up to the OS.
+
+This is similar to the whole vendorfw mechanism I constructed for these
+platforms. Sure, it's based on Linuxisms, but the whole thing is trivial
+enough to reimplement on any OS without much trouble (just a
+fixed-format CPIO archive in the ESP at a known path).
+
+>> I already did the same thing for the touchpad on M2s (which requires
+>> analogous Z2 firmware passed to it, just in a different format):
+>>
+>> dts/apple/t8112-j413.dts: firmware-name = "apple/tpmtfw-j413.bin";
+>>
+>> Why is having a directory a problem for OpenBSD? Regardless of how
+>> firmware is handled behind the scenes, it seems logical to organize it
+>> by vendor somehow. It seems to me that gratuitously diverging from the
+>> standard firmware hierarchy is only going to cause trouble for OpenBSD.
+>> Obviously it's fine to store it somewhere other than /lib/firmware or
+>> use a completely unrelated mechanism other than files, but why does the
+>> *organization* of the firmware have to diverge? There can only be one DT
+>> binding, so we need to agree on a way of specifying firmwares that works
+>> cross-OS, and I don't see why "apple/foo.bin" couldn't be made to work
+>> for everyone in some way or another.
+> 
+> We organize the firmware by driver.  And driver names in *BSD differ
+> from Linux since there are different constraints.  The firmware is
+> organized by driver because we have separate firmware packages for
+> each driver that get installed as-needed by a tool that matches on the
+> driver name.
+
+That's fair, but you can still have another level of hierarchy after the
+driver, no? Or just throw away that level when you parse the
+`firmware-name` if you prefer.
+
+> Rather than have the device tree dictate the layout of the firmware
+> files, I think it would be better to have the OS driver prepend the
+> directory to match the convention of the OS in question.  This is what
+> we typically do in OpenBSD.
+
+The thing is that for better or for worse, some drivers drive devices
+with firmware provided by multiple vendors, and then it can still make
+sense to split off by vendor. E.g. brcmfmac wifi is already in the
+process of diverging into three firmware lineages provided by
+two(/three?) vendors, even if you ignore the entire Apple special
+snowflake case. I expect pain to come out of that one for everyone
+involved... (well, at least for Apple we can always special case
+conditionals on "has OTP" which is effectively the "is Apple" flag).
+ISTR that radeon/amdgpu also ended up with separate roots, but it's
+mixed and with different firmware formats for each and a fallback.
+
+> Now I did indeed forget about the "dockchannel" touchpad firmware that
+> I already handle in OpenBSD.  That means I could handle the touchbar
+> firmware in the same way.  But that is mostly because these firmwares
+> are non-distributable, so we don't have firmware packages for them.
+> Instead we rely on the Asahi installer to make the firmware available
+> on the EFI partition and the OpenBSD installer to move the firmware in
+> place on the root filesystem.
+> 
+> So this isn't a big issue.
+
+:)
+
+(Do let me know if you have any big issues of course, you know I don't
+want to gratuitously make your life hard!)
+
+- Hector
