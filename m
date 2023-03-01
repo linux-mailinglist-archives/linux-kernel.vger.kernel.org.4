@@ -2,186 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13886A6EA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98816A6EA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCAOmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        id S229813AbjCAOnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCAOmH (ORCPT
+        with ESMTP id S229523AbjCAOnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:42:07 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DD134F5A;
-        Wed,  1 Mar 2023 06:42:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677681725; x=1709217725;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=qf5c3OcXmb7uiP/lhAr/PAh3qrdRtnNooteLD32Encs=;
-  b=eleJ/TVSKaSN+fMdS0ddsVJ95Rm28aTmO69+QfX0OoOEe8kBj4Ph5oXS
-   luXN0i1wpmdV/at7OnI8ci9KqVoE7kmg7mtSIJqSruqq7tlQXjivw9agF
-   9c4O0ZN29Dp5VtBwoVPGYvsG+HemAK8Nvda6hwrvoBzkdtRZWMipw7sII
-   +pJvhcNObeNIVOv3Rtv+ghqdrwGFQBqySXoGSNuJOVok3KShVurZtHlHI
-   kJf0e6ktROzPpoHChAaNIjbBQGoumkld5ihpG5Xa6S23sMd4zR+/JFKvD
-   0arag9FD2HtzjsVCdSmUCtwUgpAyCIMvHlxT26/YBSAOwR2XFIjpcG9su
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="336715586"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="336715586"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 06:42:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="676787326"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="676787326"
-Received: from smeeranx-mobl2.gar.corp.intel.com ([10.213.113.101])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 06:42:01 -0800
-Message-ID: <d79bc5e85ca61cbd978d7b9b349e076b7b94770a.camel@linux.intel.com>
-Subject: Re: [PATCH 05/12] platform/x86: ISST: Add support for MSR 0x54
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 01 Mar 2023 06:41:57 -0800
-In-Reply-To: <1950741c-b5a9-6883-0c16-391001540a25@redhat.com>
-References: <20230211063257.311746-1-srinivas.pandruvada@linux.intel.com>
-         <20230211063257.311746-6-srinivas.pandruvada@linux.intel.com>
-         <1950741c-b5a9-6883-0c16-391001540a25@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Wed, 1 Mar 2023 09:43:40 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F64C166FD
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:43:37 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.133])
+        by gateway (Coremail) with SMTP id _____8DxWNmXZP9jC+QGAA--.13204S3;
+        Wed, 01 Mar 2023 22:43:35 +0800 (CST)
+Received: from [10.20.42.133] (unknown [10.20.42.133])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+SRZP9jwSxEAA--.20716S3;
+        Wed, 01 Mar 2023 22:43:29 +0800 (CST)
+Message-ID: <cfd87ccf-bf75-2ce5-7393-920a643c0747@loongson.cn>
+Date:   Wed, 1 Mar 2023 22:43:29 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 1/2] drm: add kms driver for loongson display
+ controller
+To:     kernel test robot <lkp@intel.com>,
+        suijingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     oe-kbuild-all@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Li Yi <liyi@loongson.cn>
+References: <20230301072306.572685-1-15330273260@189.cn>
+ <202303012148.S6ymQNI9-lkp@intel.com>
+Content-Language: en-US
+From:   Sui jingfeng <suijingfeng@loongson.cn>
+In-Reply-To: <202303012148.S6ymQNI9-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cxf+SRZP9jwSxEAA--.20716S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKr4fuFWkJw45Zw1xGrWxWFg_yoWxuw48pa
+        n8AFyjyrZ5Jr4xXa4DJFy8C3WagwnxW3sF9Fy3CwnIkFWjy34YgFs2kryakw4DJFsrKay7
+        Kr93GFn0gF17A3DanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTAzLTAxIGF0IDE1OjMwICswMTAwLCBIYW5zIGRlIEdvZWRlIHdyb3RlOgo+
-IEhpLAo+IAo+IE9uIDIvMTEvMjMgMDc6MzIsIFNyaW5pdmFzIFBhbmRydXZhZGEgd3JvdGU6Cj4g
-PiBUbyBtYXAgTGludXggQ1BVIG51bWJlcmluZyBzY2hlbWUgdG8gaGFyZHdhcmUgQ1BVIG51bWJl
-cmluZyBzY2hlbWUKPiA+IE1TUiAweDUzIGlzIGdldHRpbmcgdXNlZC4gQnV0IGZvciBuZXcgZ2Vu
-ZXJhdGlvbiBvZiBDUFVzLCB0aGlzIE1TUgo+ID4gaXMgbm90IHZhbGlkLiBTaW5jZSB0aGlzIGlz
-IG1vZGVsIHNwZWNpZmljIE1TUiwgdGhpcyBpcyBwb3NzaWJsZS4KPiA+IAo+ID4gQSBuZXcgTVNS
-IDB4NTQgaXMgZGVmaW5lZC4gVXNlIHRoaXMgTVNSIGFuZCBjb252ZXJ0IHRoZSBJT0NUTAo+ID4g
-Zm9ybWF0Cj4gPiB0byBtYXRjaCBleGlzdGluZyBNU1IgMHg1MywgaW4gdGhpcyBjYXNlIHVzZXIg
-c3BhY2VzIGRvbid0IG5lZWQgdG8KPiA+IGJlIGF3YXJlIG9mIHRoaXMgY2hhbmdlLgo+ID4gCj4g
-PiBTaWduZWQtb2ZmLWJ5OiBTcmluaXZhcyBQYW5kcnV2YWRhCj4gPiA8c3Jpbml2YXMucGFuZHJ1
-dmFkYUBsaW51eC5pbnRlbC5jb20+Cj4gCj4gSSBhbSBub3QgYSBmYW4gb2YgdGhpcy4gSSBleHBl
-Y3QgdGhhdCB1c2VycyBvZiB0aGVzZSBuZXcgQ1BVcyB3aWxsCj4gdmVyeSBsaWtlbHkgYWxzbyBu
-ZWVkIGEgbmV3IGludGVsLXNwZWVkLXNlbGVjdCB1c2Vyc3BhY2UgdG9vbAo+IHJlZ2FyZGxlc3MK
-PiBvZiBkb2luZyB0aGlzIE1TUiBtdW5naW5nL3NodWZmbGluZyBpbiB0aGUga2VybmVsLiBTbyB3
-aHkgbm90IGZpeAo+IHRoZSB0b29sIHRvIHRlYWNoIGl0IGFib3V0IHRoZSBNU1IgaW5zdGVhZCA/
-CgpTdXJlLgoKSSBjYW4gcmVtb3ZlIHRoZSBmb3JtYXQgY29udmVyc2lvbiBpbiB0aGUga2VybmVs
-LCBzbyB0aGF0IHVzZXIgc3BhY2UKdG9vbCB3aWxsIGRvIHRoYXQuCgpJIHRoaW5rIHRoYXQncyB3
-aGF0IHlvdSBtZWFuLgoKCgo+IAo+IElmIHlvdSBoYXZlIGdvb2QgYXJndW1lbnRzIGZvciBkb2lu
-ZyB0aGlzIGluIHRoZSBrZXJuZWwgcGxlYXNlCj4gYWRkIHRoZW0gdGhlIGNvbW1pdCBtZXNzYWdl
-IGZvciB0aGUgbmV4dCB2ZXJzaW9uLCBidXQgbXkgaW5pdGlhbAo+IHJlYWN0aW9uIHRvIHRoaXMg
-aXMgdGhhdCBpdCBpcyB3cm9uZyB0byBkbyB0aGlzIGluIHRoZSBrZXJuZWwKPiBhbmQgdGhhdCB0
-aGUgdG9vbCBzaG91bGQgYmUgZml4ZWQgaW5zdGVhZC4gU28gbXkgcHJlZmVyZW5jZQo+IHdvdWxk
-IGJlIGZvciB0aGlzIHBhdGNoIHRvIGJlIGRyb3BwZWQgZnJvbSB0aGUgbmV4dCB2ZXJzaW9uIG9m
-Cj4gdGhlIHBhdGNoLXNldC4KClNpbmNlIHdlIGNhbid0IHJlYWQgTVNSIGZyb20gdXNlciBzcGFj
-ZSwgdGhpcyBwYXRjaCBpcyBzdGlsbCByZXF1aXJlZAp0byByZWFkIG9ubHkgTVNSIDB4NTQuIEp1
-c3QgaXQgd2lsbCBub3QgZG8gYW55IGZvcm1hdCBjb252ZXJzaW9uLiBTbwpmb3JtYXQgY29udmVy
-c2lvbiB3aWxsIGhhcHBlbiBpbiB1c2VyIHNwYWNlIHRvb2wuCgpUaGFua3MsClNyaW5pdmFzCgoK
-PiAKPiBSZWdhcmRzLAo+IAo+IEhhbnMKPiAKPiAKPiAKPiAKPiAKPiAKPiAKPiA+IC0tLQo+ID4g
-wqAuLi4vaW50ZWwvc3BlZWRfc2VsZWN0X2lmL2lzc3RfaWZfY29tbW9uLmPCoMKgwqAgfCA1MQo+
-ID4gKysrKysrKysrKysrKysrKysrKwo+ID4gwqAxIGZpbGUgY2hhbmdlZCwgNTEgaW5zZXJ0aW9u
-cygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0Cj4gPiBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L2ludGVs
-L3NwZWVkX3NlbGVjdF9pZi9pc3N0X2lmX2NvbW1vbi5jCj4gPiBiL2RyaXZlcnMvcGxhdGZvcm0v
-eDg2L2ludGVsL3NwZWVkX3NlbGVjdF9pZi9pc3N0X2lmX2NvbW1vbi5jCj4gPiBpbmRleCA2MGU1
-OGIwYjM4MzUuLjk3ZDFiNDU2NjUzNSAxMDA2NDQKPiA+IC0tLSBhL2RyaXZlcnMvcGxhdGZvcm0v
-eDg2L2ludGVsL3NwZWVkX3NlbGVjdF9pZi9pc3N0X2lmX2NvbW1vbi5jCj4gPiArKysgYi9kcml2
-ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC9zcGVlZF9zZWxlY3RfaWYvaXNzdF9pZl9jb21tb24uYwo+
-ID4gQEAgLTE5LDkgKzE5LDEzIEBACj4gPiDCoCNpbmNsdWRlIDxsaW51eC91YWNjZXNzLmg+Cj4g
-PiDCoCNpbmNsdWRlIDx1YXBpL2xpbnV4L2lzc3RfaWYuaD4KPiA+IMKgCj4gPiArI2luY2x1ZGUg
-PGFzbS9jcHVfZGV2aWNlX2lkLmg+Cj4gPiArI2luY2x1ZGUgPGFzbS9pbnRlbC1mYW1pbHkuaD4K
-PiA+ICsKPiA+IMKgI2luY2x1ZGUgImlzc3RfaWZfY29tbW9uLmgiCj4gPiDCoAo+ID4gwqAjZGVm
-aW5lIE1TUl9USFJFQURfSURfSU5GT8KgwqDCoMKgwqAweDUzCj4gPiArI2RlZmluZSBNU1JfUE1f
-TE9HSUNBTF9JRMKgwqDCoMKgwqDCoDB4NTQKPiA+IMKgI2RlZmluZSBNU1JfQ1BVX0JVU19OVU1C
-RVLCoMKgwqDCoMKgMHgxMjgKPiA+IMKgCj4gPiDCoHN0YXRpYyBzdHJ1Y3QgaXNzdF9pZl9jbWRf
-Y2IgcHVuaXRfY2FsbGJhY2tzW0lTU1RfSUZfREVWX01BWF07Cj4gPiBAQCAtMzEsNiArMzUsNyBA
-QCBzdGF0aWMgaW50IHB1bml0X21zcl93aGl0ZV9saXN0W10gPSB7Cj4gPiDCoMKgwqDCoMKgwqDC
-oMKgTVNSX0NPTkZJR19URFBfQ09OVFJPTCwKPiA+IMKgwqDCoMKgwqDCoMKgwqBNU1JfVFVSQk9f
-UkFUSU9fTElNSVQxLAo+ID4gwqDCoMKgwqDCoMKgwqDCoE1TUl9UVVJCT19SQVRJT19MSU1JVDIs
-Cj4gPiArwqDCoMKgwqDCoMKgwqBNU1JfUE1fTE9HSUNBTF9JRCwKPiA+IMKgfTsKPiA+IMKgCj4g
-PiDCoHN0cnVjdCBpc3N0X3ZhbGlkX2NtZF9yYW5nZXMgewo+ID4gQEAgLTczLDYgKzc4LDggQEAg
-c3RydWN0IGlzc3RfY21kIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqB1MzIgcGFyYW07Cj4gPiDCoH07
-Cj4gPiDCoAo+ID4gK3N0YXRpYyBib29sIGlzc3RfaHBtX3N1cHBvcnQ7Cj4gPiArCj4gPiDCoHN0
-YXRpYyBERUNMQVJFX0hBU0hUQUJMRShpc3N0X2hhc2gsIDgpOwo+ID4gwqBzdGF0aWMgREVGSU5F
-X01VVEVYKGlzc3RfaGFzaF9sb2NrKTsKPiA+IMKgCj4gPiBAQCAtNDExLDExICs0MTgsNDMgQEAg
-c3RhdGljIGludCBpc3N0X2lmX2NwdV9vbmxpbmUodW5zaWduZWQgaW50Cj4gPiBjcHUpCj4gPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlzc3RfY3B1X2luZm9bY3B1XS5wY2lfZGV2
-WzFdID0KPiA+IF9pc3N0X2lmX2dldF9wY2lfZGV2KGNwdSwgMSwgMzAsIDEpOwo+ID4gwqDCoMKg
-wqDCoMKgwqDCoH0KPiA+IMKgCj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoaXNzdF9ocG1fc3VwcG9y
-dCkgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHU2NCByYXdfZGF0YTsKPiA+
-ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSByZG1zcmxfc2FmZShN
-U1JfUE1fTE9HSUNBTF9JRCwgJnJhd19kYXRhKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBpZiAoIXJldCkgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAvKgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgKiBVc2UgdGhlIHNhbWUgZm9ybWF0IGFzIE1TUiA1MywgZm9yIHVzZXIKPiA+
-IHNwYWNlIGhhcm1vbnkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgICrCoCBGb3JtYXQKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgICrCoMKgwqDCoMKgwqBCaXQgMCDigJMgdGhyZWFkIElECj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqwqDCoMKgwqDCoMKg
-Qml0IDg6MSDigJMgY29yZSBJRAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgKsKgwqDCoMKgwqDCoEJpdCAxMzo5IOKAkyBDb21wdXRlIGRvbWFpbiBJ
-RCAoYWthCj4gPiBkaWUgSUQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCAqIEZyb20gdGhlIE1TUiAweDU0IGZvcm1hdAo+ID4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKsKgwqDCoMKgwqDCoFsxNToxMV0g
-UE1fRE9NQUlOX0lECj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAqwqDCoMKgwqDCoMKgWzEwOjNdIE1PRFVMRV9JRCAoYWthIElESV9BR0VOVF9JRCkK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICrCoMKg
-wqDCoMKgwqBbMjowXSBMUF9JRCAoV2UgZG9uJ3QgY2FyZSBhYm91dAo+ID4gdGhlc2UgYml0cyB3
-ZSBvbmx5Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjYXJlIGRpZSBh
-bmQgY29yZQo+ID4gaWQKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgICrCoMKgwqDCoMKgwqBGb3IgQXRvbToKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-WzJdIEFsd2F5cyAwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFsxOjBdIGNvcmUgSUQgd2l0aGlu
-IG1vZHVsZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgKsKgwqDCoMKgwqDCoEZvciBDb3JlCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFsyOjFdIEFs
-d2F5cyAwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFswXSB0aHJlYWQgSUQKPiA+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRhdGEgPSAocmF3X2RhdGEgPj4g
-MTEpICYgMHgxZjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgZGF0YSA8PD0gOTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgZGF0YSB8PSAoKChyYXdfZGF0YSA+PiAzKSAmIDB4ZmYpIDw8IDEpOwo+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIHNldF9w
-dW5pdF9pZDsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKg
-wqDCoMKgwqB9Cj4gPiArCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gcmRtc3JsX3NhZmUoTVNS
-X1RIUkVBRF9JRF9JTkZPLCAmZGF0YSk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkgewo+
-ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpc3N0X2NwdV9pbmZvW2NwdV0ucHVu
-aXRfY3B1X2lkID0gLTE7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
-biByZXQ7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gKwo+ID4gK3NldF9wdW5pdF9pZDoKPiA+
-IMKgwqDCoMKgwqDCoMKgwqBpc3N0X2NwdV9pbmZvW2NwdV0ucHVuaXRfY3B1X2lkID0gZGF0YTsK
-PiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgaXNzdF9yZXN0b3JlX21zcl9sb2NhbChjcHUpOwo+
-ID4gQEAgLTcwNCw2ICs3NDMsMTIgQEAgc3RhdGljIHN0cnVjdCBtaXNjZGV2aWNlIGlzc3RfaWZf
-Y2hhcl9kcml2ZXIgPQo+ID4gewo+ID4gwqDCoMKgwqDCoMKgwqDCoC5mb3BzwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoD0gJmlzc3RfaWZfY2hhcl9kcml2ZXJfb3BzLAo+ID4gwqB9Owo+ID4gwqAKPiA+
-ICtzdGF0aWMgY29uc3Qgc3RydWN0IHg4Nl9jcHVfaWQgaHBtX2NwdV9pZHNbXSA9IHsKPiA+ICvC
-oMKgwqDCoMKgwqDCoFg4Nl9NQVRDSF9JTlRFTF9GQU02X01PREVMKEdSQU5JVEVSQVBJRFNfWCzC
-oMKgwqDCoMKgTlVMTCksCj4gPiArwqDCoMKgwqDCoMKgwqBYODZfTUFUQ0hfSU5URUxfRkFNNl9N
-T0RFTChTSUVSUkFGT1JFU1RfWCzCoMKgwqDCoMKgwqBOVUxMKSwKPiA+ICvCoMKgwqDCoMKgwqDC
-oHt9Cj4gPiArfTsKPiA+ICsKPiA+IMKgc3RhdGljIGludCBpc3N0X21pc2NfcmVnKHZvaWQpCj4g
-PiDCoHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBtdXRleF9sb2NrKCZwdW5pdF9taXNjX2Rldl9yZWdf
-bG9jayk7Cj4gPiBAQCAtNzExLDYgKzc1NiwxMiBAQCBzdGF0aWMgaW50IGlzc3RfbWlzY19yZWco
-dm9pZCkKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byB1bmxvY2tfZXhp
-dDsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKCFtaXNjX3VzYWdlX2NvdW50KSB7Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29uc3Qgc3RydWN0IHg4Nl9jcHVfaWQg
-KmlkOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlkID0geDg2X21h
-dGNoX2NwdShocG1fY3B1X2lkcyk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-aWYgKGlkKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBpc3N0X2hwbV9zdXBwb3J0ID0gdHJ1ZTsKPiA+ICsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgbWlzY19kZXZpY2VfcmV0ID0gaXNzdF9pZl9jcHVfaW5mb19pbml0KCk7Cj4g
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChtaXNjX2RldmljZV9yZXQpCj4g
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIHVu
-bG9ja19leGl0Owo+IAoK
+
+On 2023/3/1 21:30, kernel test robot wrote:
+> Hi suijingfeng,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on drm-misc/drm-misc-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/suijingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230301-153240
+> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+> patch link:    https://lore.kernel.org/r/20230301072306.572685-1-15330273260%40189.cn
+> patch subject: [PATCH v6 1/2] drm: add kms driver for loongson display controller
+> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230301/202303012148.S6ymQNI9-lkp@intel.com/config)
+> compiler: mips-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/125bbfe8c188e62159ecd4d143246d36b1801f79
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review suijingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230301-153240
+>          git checkout 125bbfe8c188e62159ecd4d143246d36b1801f79
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/loongson/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303012148.S6ymQNI9-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>     drivers/gpu/drm/loongson/lsdc_plane.c: In function 'lsdc_update_primary_plane':
+>>> drivers/gpu/drm/loongson/lsdc_plane.c:95:20: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+>        95 |         if (IS_ERR((void *)bo_offset)) {
+>           |                    ^
+
+Loongson 3a4000 is a 64 bit cpu,  on 64 bit platform sizeof (void *) == 
+sizeof (u64) = 8 bytes.
+
+
+I complie drm-time  with following command:
+
+1) on loongarch
+
+|make -j$(nproc) ARCH=loongarch CROSS_COMPILE=loongarch64-linux-gnu- W=1|
+
+2) On mips64el
+
+|make -j$(nproc) ARCH=mips CROSS_COMPILE=mips64el-linux-gnuabi64- W=1|
+
+
+It report no warnings. I think this test robot compile this driver with 
+32 bit machine environment.
+
+
+> --
+>     In file included from include/linux/printk.h:566,
+>                      from include/asm-generic/bug.h:22,
+>                      from arch/mips/include/asm/bug.h:42,
+>                      from include/linux/bug.h:5,
+>                      from include/linux/thread_info.h:13,
+>                      from include/asm-generic/preempt.h:5,
+>                      from ./arch/mips/include/generated/asm/preempt.h:1,
+>                      from include/linux/preempt.h:78,
+>                      from include/linux/spinlock.h:56,
+>                      from include/linux/kref.h:16,
+>                      from include/drm/drm_device.h:5,
+>                      from include/drm/drm_drv.h:35,
+>                      from drivers/gpu/drm/loongson/lsdc_ttm.c:3:
+>     drivers/gpu/drm/loongson/lsdc_ttm.c: In function 'lsdc_dumb_create':
+>>> drivers/gpu/drm/loongson/lsdc_ttm.c:378:23: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+>       378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
+>           |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~
+>           |                                                   |
+>           |                                                   size_t {aka unsigned int}
+>     include/linux/dynamic_debug.h:223:29: note: in definition of macro '__dynamic_func_call_cls'
+>       223 |                 func(&id, ##__VA_ARGS__);                       \
+>           |                             ^~~~~~~~~~~
+>     include/drm/drm_print.h:413:9: note: in expansion of macro '_dynamic_func_call_cls'
+>       413 |         _dynamic_func_call_cls(cat, fmt, __drm_dev_dbg,         \
+>           |         ^~~~~~~~~~~~~~~~~~~~~~
+>     include/drm/drm_print.h:492:9: note: in expansion of macro 'drm_dev_dbg'
+>       492 |         drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
+>           |         ^~~~~~~~~~~
+>     include/drm/drm_print.h:510:33: note: in expansion of macro 'drm_dbg_driver'
+>       510 | #define drm_dbg(drm, fmt, ...)  drm_dbg_driver(drm, fmt, ##__VA_ARGS__)
+>           |                                 ^~~~~~~~~~~~~~
+>     drivers/gpu/drm/loongson/lsdc_ttm.c:378:9: note: in expansion of macro 'drm_dbg'
+>       378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
+>           |         ^~~~~~~
+>     drivers/gpu/drm/loongson/lsdc_ttm.c:378:33: note: format string is defined here
+>       378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
+>           |                               ~~^
+>           |                                 |
+>           |                                 long unsigned int
+>           |                               %u
+>
+here is the same reason, on 64 bit machine, sizeof (long unsigned int) 
+== sizeof (size_t) == 8.
+
+> vim +95 drivers/gpu/drm/loongson/lsdc_plane.c
+>
+>      77	
+>      78	static void lsdc_update_primary_plane(struct drm_plane *plane,
+>      79					      struct drm_atomic_state *state)
+>      80	{
+>      81		struct drm_device *ddev = plane->dev;
+>      82		struct lsdc_device *ldev = to_lsdc(ddev);
+>      83		struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(state, plane);
+>      84		struct drm_crtc *crtc = new_plane_state->crtc;
+>      85		struct drm_framebuffer *fb = new_plane_state->fb;
+>      86		struct ttm_buffer_object *tbo = to_ttm_bo(fb->obj[0]);
+>      87		unsigned int pipe = drm_crtc_index(crtc);
+>      88		unsigned int fb_offset = lsdc_get_fb_offset(fb, new_plane_state, 0);
+>      89		u64 bo_offset = lsdc_bo_gpu_offset(tbo);
+>      90		u64 fb_addr = ldev->vram_base + bo_offset + fb_offset;
+>      91		u32 stride = fb->pitches[0];
+>      92		u32 cfg;
+>      93		u32 lo, hi;
+>      94	
+>    > 95		if (IS_ERR((void *)bo_offset)) {
+>      96			drm_warn(ddev, "bo not pinned, should not happen\n");
+>      97			return;
+>      98		}
+>      99	
+>     100		/* 40-bit width physical address bus */
+>     101		lo = fb_addr & 0xFFFFFFFF;
+>     102		hi = (fb_addr >> 32) & 0xFF;
+>     103	
+>     104		cfg = lsdc_crtc_rreg32(ldev, LSDC_CRTC0_CFG_REG, pipe);
+>     105		if (cfg & CFG_FB_IN_USING) {
+>     106			drm_dbg(ddev, "CRTC-%u(FB1) is in using\n", pipe);
+>     107			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB1_LO_ADDR_REG, pipe, lo);
+>     108			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB1_HI_ADDR_REG, pipe, hi);
+>     109		} else {
+>     110			drm_dbg(ddev, "CRTC-%u(FB0) is in using\n", pipe);
+>     111			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB0_LO_ADDR_REG, pipe, lo);
+>     112			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB0_HI_ADDR_REG, pipe, hi);
+>     113		}
+>     114	
+>     115		drm_dbg(ddev, "CRTC-%u scanout from 0x%llx\n", pipe, fb_addr);
+>     116	
+>     117		lsdc_crtc_wreg32(ldev, LSDC_CRTC0_STRIDE_REG, pipe, stride);
+>     118	
+>     119		cfg &= ~CFG_PIX_FMT_MASK;
+>     120		cfg |= LSDC_PF_XRGB8888;
+>     121	
+>     122		lsdc_crtc_wreg32(ldev, LSDC_CRTC0_CFG_REG, pipe, cfg);
+>     123	}
+>     124	
+>
+Ok, will fixed at next version.
 
