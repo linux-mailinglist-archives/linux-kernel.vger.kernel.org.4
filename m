@@ -2,229 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98816A6EA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136A86A6EAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjCAOnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S230259AbjCAOpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCAOnk (ORCPT
+        with ESMTP id S229880AbjCAOpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:43:40 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F64C166FD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:43:37 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8DxWNmXZP9jC+QGAA--.13204S3;
-        Wed, 01 Mar 2023 22:43:35 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+SRZP9jwSxEAA--.20716S3;
-        Wed, 01 Mar 2023 22:43:29 +0800 (CST)
-Message-ID: <cfd87ccf-bf75-2ce5-7393-920a643c0747@loongson.cn>
-Date:   Wed, 1 Mar 2023 22:43:29 +0800
+        Wed, 1 Mar 2023 09:45:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C3A2DE55
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:44:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677681856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E86jCb8kW1PzrvPSO5dVoBke0amKLBuYHjvi+nJQr9o=;
+        b=bTk2IXxjyM8H25glC8AUnI8Nvf7PrGOtJM0U4bFXTraGafQvNNnwqGKMD68lNez2cjCeuD
+        b0xuj84RHxU8q8eLhCZzTn2uD+C8RuDKf3BCnYjD60hYCrDECSiRRdEPN4ZS1cEa7wspr2
+        oFpOBKMeBwtdnl4AOUlSDrmVrxG+hEA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-461-MzsprxfzOUCBbOCAyFrtag-1; Wed, 01 Mar 2023 09:44:15 -0500
+X-MC-Unique: MzsprxfzOUCBbOCAyFrtag-1
+Received: by mail-wm1-f72.google.com with SMTP id k26-20020a05600c0b5a00b003dfe4bae099so5435818wmr.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:44:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677681854;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E86jCb8kW1PzrvPSO5dVoBke0amKLBuYHjvi+nJQr9o=;
+        b=UkH40BpxUDlEmZPFuEXhOb+Yll4nKA1SgpIfOcZP2DQxKfg/6zbl/ZTo3/V1iKWjOF
+         +veBImzVYTud5ynXT6kaJyyKtGy1qFgq7n0NnqOPydFjX8BSYrmbh0td2P5gQttPnflL
+         TPP2F/OSkoX5xgT7Pyy/8sKIoQPEETaOf2FpU3vNlnWmpw8degDXHo7IVIlLVgFBok9w
+         BwvlaKfkMnh4GoudgMytomdfyK/SSpfmsKnEDDPPc9paX6MAvt51IWqUxvO9qpLFX/a6
+         CNyQ/zkHU6WD9ow6l/POCki5iUoO36v9hiyn0YZqWoC4rM5HA8IiNCbRDJGjw276+p3b
+         DjPA==
+X-Gm-Message-State: AO0yUKV1JHBdyvXEnTIir7lXzi6jw/yJOuZupIRoGWmr9yZgrUfDF+le
+        0XBvLHW6GxJ1eIbixacnO3jaF6CsI5bdSnQODh8wJ0S616ovSVzaTpZcPG/9vW9yoXuofm9EASF
+        C3uDolF/NBgKaVY29HenPgAJo
+X-Received: by 2002:a5d:6e09:0:b0:2c7:5247:e496 with SMTP id h9-20020a5d6e09000000b002c75247e496mr5056898wrz.60.1677681854206;
+        Wed, 01 Mar 2023 06:44:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set8mSY3e1Y8uBNg7J/umChcu632unCjyUQQS2o6WA2kpSEr1P+PNtHKwqRrvNwfJaKiCprzfMA==
+X-Received: by 2002:a5d:6e09:0:b0:2c7:5247:e496 with SMTP id h9-20020a5d6e09000000b002c75247e496mr5056875wrz.60.1677681853859;
+        Wed, 01 Mar 2023 06:44:13 -0800 (PST)
+Received: from redhat.com ([2.52.141.194])
+        by smtp.gmail.com with ESMTPSA id t14-20020adfe44e000000b002c5503a8d21sm13145104wrm.70.2023.03.01.06.44.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 06:44:13 -0800 (PST)
+Date:   Wed, 1 Mar 2023 09:44:09 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     rbradford@rivosinc.com
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] virtio-net: Fix probe of virtio-net on kvmtool
+Message-ID: <20230301093054-mutt-send-email-mst@kernel.org>
+References: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 1/2] drm: add kms driver for loongson display
- controller
-To:     kernel test robot <lkp@intel.com>,
-        suijingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     oe-kbuild-all@lists.linux.dev, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Li Yi <liyi@loongson.cn>
-References: <20230301072306.572685-1-15330273260@189.cn>
- <202303012148.S6ymQNI9-lkp@intel.com>
-Content-Language: en-US
-From:   Sui jingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <202303012148.S6ymQNI9-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxf+SRZP9jwSxEAA--.20716S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxKr4fuFWkJw45Zw1xGrWxWFg_yoWxuw48pa
-        n8AFyjyrZ5Jr4xXa4DJFy8C3WagwnxW3sF9Fy3CwnIkFWjy34YgFs2kryakw4DJFsrKay7
-        Kr93GFn0gF17A3DanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 01, 2023 at 01:59:52PM +0000, Rob Bradford via B4 Relay wrote:
+> From: Rob Bradford <rbradford@rivosinc.com>
+> 
+> Since the following commit virtio-net on kvmtool has printed a warning
+> during the probe:
+> 
+> commit dbcf24d153884439dad30484a0e3f02350692e4c
+> Author: Jason Wang <jasowang@redhat.com>
+> Date:   Tue Aug 17 16:06:59 2021 +0800
+> 
+>     virtio-net: use NETIF_F_GRO_HW instead of NETIF_F_LRO
+> 
+> [    1.865992] net eth0: Fail to set guest offload.
+> [    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); wanted 0x0000000000134829, left 0x0080000000134829
+> 
+> This is because during the probing the underlying netdev device has
+> identified that the netdev features on the device has changed and
+> attempts to update the virtio-net offloads through the virtio-net
+> control queue. kvmtool however does not have a control queue that supports
+> offload changing (VIRTIO_NET_F_CTRL_GUEST_OFFLOADS is not advertised)
+> 
+> The netdev features have changed due to validation checks in
+> netdev_fix_features():
+> 
+> if (!(features & NETIF_F_RXCSUM)) {
+> 	/* NETIF_F_GRO_HW implies doing RXCSUM since every packet
+> 	 * successfully merged by hardware must also have the
+> 	 * checksum verified by hardware.  If the user does not
+> 	 * want to enable RXCSUM, logically, we should disable GRO_HW.
+> 	 */
+> 	if (features & NETIF_F_GRO_HW) {
+> 		netdev_dbg(dev, "Dropping NETIF_F_GRO_HW since no RXCSUM feature.\n");
+> 		features &= ~NETIF_F_GRO_HW;
+> 	}
+> }
+> 
+> Since kvmtool does not advertise the VIRTIO_NET_F_GUEST_CSUM feature the
+> NETIF_F_RXCSUM bit is not present and so the NETIF_F_GRO_HW bit is
+> cleared. This results in the netdev features changing, which triggers
+> the attempt to reprogram the virtio-net offloads which then fails.
+> 
+> This commit prevents that set of netdev features from changing by
+> preemptively applying the same validation and only setting
+> NETIF_F_GRO_HW if NETIF_F_RXCSUM is set because the device supports both
+> VIRTIO_NET_F_GUEST_CSUM and VIRTIO_NET_F_GUEST_TSO{4,6}
+> 
+> Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
+> ---
+> Changes in v3:
+> - Identified root-cause of feature bit changing and updated conditions
+>   check
+> - Link to v2: https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v2-1-8ec93511e67f@rivosinc.com
+> 
+> Changes in v2:
+> - Use parentheses to group logical OR of features 
+> - Link to v1:
+>   https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v1-1-fc23d29b9d7a@rivosinc.com
+> ---
+>  drivers/net/virtio_net.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 61e33e4dd0cd..2e7705142ca5 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3778,11 +3778,13 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  			dev->features |= dev->hw_features & NETIF_F_ALL_TSO;
+>  		/* (!csum && gso) case will be fixed by register_netdev() */
+>  	}
+> -	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
+> +	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM)) {
+>  		dev->features |= NETIF_F_RXCSUM;
+> -	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> -	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
+> -		dev->features |= NETIF_F_GRO_HW;
+> +		/* This dependency is enforced by netdev_fix_features */
+> +		if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> +		    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
+> +			dev->features |= NETIF_F_GRO_HW;
+> +	}
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
+>  		dev->hw_features |= NETIF_F_GRO_HW;
+>  
 
-On 2023/3/1 21:30, kernel test robot wrote:
-> Hi suijingfeng,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on drm-misc/drm-misc-next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/suijingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230301-153240
-> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-> patch link:    https://lore.kernel.org/r/20230301072306.572685-1-15330273260%40189.cn
-> patch subject: [PATCH v6 1/2] drm: add kms driver for loongson display controller
-> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230301/202303012148.S6ymQNI9-lkp@intel.com/config)
-> compiler: mips-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/125bbfe8c188e62159ecd4d143246d36b1801f79
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review suijingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230301-153240
->          git checkout 125bbfe8c188e62159ecd4d143246d36b1801f79
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/loongson/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303012148.S6ymQNI9-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->     drivers/gpu/drm/loongson/lsdc_plane.c: In function 'lsdc_update_primary_plane':
->>> drivers/gpu/drm/loongson/lsdc_plane.c:95:20: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->        95 |         if (IS_ERR((void *)bo_offset)) {
->           |                    ^
-
-Loongson 3a4000 is a 64 bit cpu,  on 64 bit platform sizeof (void *) == 
-sizeof (u64) = 8 bytes.
+I see. It is annoying that we are duplicating the logic from
+netdev_fix_features here though :(
+Maybe we should call netdev_update_features, in the callback check
+the flags and decide what to set and what to clear?
+Or export netdev_fix_features to modules?
 
 
-I complie drm-time  with following command:
 
-1) on loongarch
+Also re-reading Documentation/networking/netdev-features.rst - 
 
-|make -j$(nproc) ARCH=loongarch CROSS_COMPILE=loongarch64-linux-gnu- W=1|
+ 1. netdev->hw_features set contains features whose state may possibly
+    be changed (enabled or disabled) for a particular device by user's
+    request.  This set should be initialized in ndo_init callback and not
+    changed later.
 
-2) On mips64el
-
-|make -j$(nproc) ARCH=mips CROSS_COMPILE=mips64el-linux-gnuabi64- W=1|
-
-
-It report no warnings. I think this test robot compile this driver with 
-32 bit machine environment.
+ 2. netdev->features set contains features which are currently enabled
+    for a device.  This should be changed only by network core or in
+    error paths of ndo_set_features callback.
 
 
-> --
->     In file included from include/linux/printk.h:566,
->                      from include/asm-generic/bug.h:22,
->                      from arch/mips/include/asm/bug.h:42,
->                      from include/linux/bug.h:5,
->                      from include/linux/thread_info.h:13,
->                      from include/asm-generic/preempt.h:5,
->                      from ./arch/mips/include/generated/asm/preempt.h:1,
->                      from include/linux/preempt.h:78,
->                      from include/linux/spinlock.h:56,
->                      from include/linux/kref.h:16,
->                      from include/drm/drm_device.h:5,
->                      from include/drm/drm_drv.h:35,
->                      from drivers/gpu/drm/loongson/lsdc_ttm.c:3:
->     drivers/gpu/drm/loongson/lsdc_ttm.c: In function 'lsdc_dumb_create':
->>> drivers/gpu/drm/loongson/lsdc_ttm.c:378:23: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
->       378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
->           |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~
->           |                                                   |
->           |                                                   size_t {aka unsigned int}
->     include/linux/dynamic_debug.h:223:29: note: in definition of macro '__dynamic_func_call_cls'
->       223 |                 func(&id, ##__VA_ARGS__);                       \
->           |                             ^~~~~~~~~~~
->     include/drm/drm_print.h:413:9: note: in expansion of macro '_dynamic_func_call_cls'
->       413 |         _dynamic_func_call_cls(cat, fmt, __drm_dev_dbg,         \
->           |         ^~~~~~~~~~~~~~~~~~~~~~
->     include/drm/drm_print.h:492:9: note: in expansion of macro 'drm_dev_dbg'
->       492 |         drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
->           |         ^~~~~~~~~~~
->     include/drm/drm_print.h:510:33: note: in expansion of macro 'drm_dbg_driver'
->       510 | #define drm_dbg(drm, fmt, ...)  drm_dbg_driver(drm, fmt, ##__VA_ARGS__)
->           |                                 ^~~~~~~~~~~~~~
->     drivers/gpu/drm/loongson/lsdc_ttm.c:378:9: note: in expansion of macro 'drm_dbg'
->       378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
->           |         ^~~~~~~
->     drivers/gpu/drm/loongson/lsdc_ttm.c:378:33: note: format string is defined here
->       378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
->           |                               ~~^
->           |                                 |
->           |                                 long unsigned int
->           |                               %u
->
-here is the same reason, on 64 bit machine, sizeof (long unsigned int) 
-== sizeof (size_t) == 8.
+is it then wrong that virtio sets NETIF_F_RXCSUM and NETIF_F_GRO_HW in
+dev->features and not in dev->hw_features? We set it there because
+without ctrl guest offload these can not be changed.
+I suspect this is just a minor documentation bug yes? Maybe devices
+where features can't be cleared are uncommon.
 
-> vim +95 drivers/gpu/drm/loongson/lsdc_plane.c
->
->      77	
->      78	static void lsdc_update_primary_plane(struct drm_plane *plane,
->      79					      struct drm_atomic_state *state)
->      80	{
->      81		struct drm_device *ddev = plane->dev;
->      82		struct lsdc_device *ldev = to_lsdc(ddev);
->      83		struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(state, plane);
->      84		struct drm_crtc *crtc = new_plane_state->crtc;
->      85		struct drm_framebuffer *fb = new_plane_state->fb;
->      86		struct ttm_buffer_object *tbo = to_ttm_bo(fb->obj[0]);
->      87		unsigned int pipe = drm_crtc_index(crtc);
->      88		unsigned int fb_offset = lsdc_get_fb_offset(fb, new_plane_state, 0);
->      89		u64 bo_offset = lsdc_bo_gpu_offset(tbo);
->      90		u64 fb_addr = ldev->vram_base + bo_offset + fb_offset;
->      91		u32 stride = fb->pitches[0];
->      92		u32 cfg;
->      93		u32 lo, hi;
->      94	
->    > 95		if (IS_ERR((void *)bo_offset)) {
->      96			drm_warn(ddev, "bo not pinned, should not happen\n");
->      97			return;
->      98		}
->      99	
->     100		/* 40-bit width physical address bus */
->     101		lo = fb_addr & 0xFFFFFFFF;
->     102		hi = (fb_addr >> 32) & 0xFF;
->     103	
->     104		cfg = lsdc_crtc_rreg32(ldev, LSDC_CRTC0_CFG_REG, pipe);
->     105		if (cfg & CFG_FB_IN_USING) {
->     106			drm_dbg(ddev, "CRTC-%u(FB1) is in using\n", pipe);
->     107			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB1_LO_ADDR_REG, pipe, lo);
->     108			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB1_HI_ADDR_REG, pipe, hi);
->     109		} else {
->     110			drm_dbg(ddev, "CRTC-%u(FB0) is in using\n", pipe);
->     111			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB0_LO_ADDR_REG, pipe, lo);
->     112			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB0_HI_ADDR_REG, pipe, hi);
->     113		}
->     114	
->     115		drm_dbg(ddev, "CRTC-%u scanout from 0x%llx\n", pipe, fb_addr);
->     116	
->     117		lsdc_crtc_wreg32(ldev, LSDC_CRTC0_STRIDE_REG, pipe, stride);
->     118	
->     119		cfg &= ~CFG_PIX_FMT_MASK;
->     120		cfg |= LSDC_PF_XRGB8888;
->     121	
->     122		lsdc_crtc_wreg32(ldev, LSDC_CRTC0_CFG_REG, pipe, cfg);
->     123	}
->     124	
->
-Ok, will fixed at next version.
+Also:
+        if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
+                dev->hw_features |= NETIF_F_GRO_HW;
+
+but should we not set NETIF_F_RXCSUM there too?
+
+
+
+> ---
+> base-commit: c39cea6f38eefe356d64d0bc1e1f2267e282cdd3
+> change-id: 20230223-virtio-net-kvmtool-87f37515be22
+> 
+> Best regards,
+> -- 
+> Rob Bradford <rbradford@rivosinc.com>
 
