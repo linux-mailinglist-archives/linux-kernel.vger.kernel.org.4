@@ -2,133 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A6D6A687B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78056A687C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCAH4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 02:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
+        id S229607AbjCAH5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 02:57:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCAH4P (ORCPT
+        with ESMTP id S229602AbjCAH5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 02:56:15 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516BB37562;
-        Tue, 28 Feb 2023 23:56:10 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id E71E7240009;
-        Wed,  1 Mar 2023 07:56:04 +0000 (UTC)
-Message-ID: <c0b60456-8731-0999-df3b-f25731209471@ghiti.fr>
-Date:   Wed, 1 Mar 2023 08:56:04 +0100
+        Wed, 1 Mar 2023 02:57:06 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A6E301BA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:57:04 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id 132so7181329pgh.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:57:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=02i/96l+6ZpFW/jZZDtc8h7hh0YgTsgKHKNNUB9KLxs=;
+        b=HoExU3YgBTtCAOk4N3KNsm5T7YL0gsxHB+lFf+mZSLfkrK85VG9LggoYxTRQ7rmz3C
+         84wDtDndx7u6dPFMDzMci7J3dRlBhYLD8p7N4cxJltqr/l1/LoOkET1w1jfz44lRpmD+
+         yjoxbqJkFS4i5IjCuDQNDys+LCXBL/2vc57zk4yN+L0lKbg8Ah9yDKskfZupSyh1loJC
+         KsaYjBt85J5T8JGZBYCSpQuskGBG1DLDhC5oSOhkNwahpLjl8OaJOTjfMCzGUsSW9D71
+         ZCflSag2e3UwHVjDC9ICqaiE+cYlCvCSRx09vaQVoWJazHBdCrB1RDzuiRfMPxmpmRKL
+         GbRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=02i/96l+6ZpFW/jZZDtc8h7hh0YgTsgKHKNNUB9KLxs=;
+        b=tm2s/Sa7g5pOs5gyabsj2gs7h6O1stDKFBwCHA+1LntX9KZOfqu4wxGTqDsE1a85lL
+         +rVq4yJG52UhyGLNhLXFKqRPC52x2UY5jWh6DDML2K5GAGwz2kKiuuNtygxJItwJYL01
+         uDsaMDDTmyiHwe+n/NKZFst0GH2rth8Fa6RcyUhUnTQhiYC5aEFWn4Fydwaq1lJNA44T
+         BkGapgYwZa2zYsBQSBmM5TNvb+WYxSsDZ9cLy3CT8Zf5uLD+pxlxGu7vvooxmbV+sem/
+         0Ft300AqMm18JBlD8QtRvs8XGx7UQZ3mF69rn4ECffVJ8Pd6KTiFE91yOAjRieD8aAUb
+         wMsw==
+X-Gm-Message-State: AO0yUKX3abx+6rmUM33TAb8fsq5fPqZeoBkGEhGK8jDfSBgJXtrtOky7
+        +3rjWoHEe+7MKL1taTM7cQ4=
+X-Google-Smtp-Source: AK7set9latmKg0SRlfW2C2EjdWRe42leQ/wjfKxC33I4XmpzAO3T0+sqRBSfcTT2+0oY4xU3klbfEA==
+X-Received: by 2002:a62:1dc6:0:b0:5e0:316a:39ce with SMTP id d189-20020a621dc6000000b005e0316a39cemr5569689pfd.27.1677657424046;
+        Tue, 28 Feb 2023 23:57:04 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id bm17-20020a056a00321100b005a852875590sm7266765pfb.113.2023.02.28.23.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 23:56:51 -0800 (PST)
+Date:   Wed, 1 Mar 2023 07:56:36 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 18/33] mm: write-lock VMAs before removing them from
+ VMA tree
+Message-ID: <Y/8FNM9czzPHb5eG@localhost>
+References: <20230227173632.3292573-1-surenb@google.com>
+ <20230227173632.3292573-19-surenb@google.com>
+ <Y/8CJQGNuMUTdLwP@localhost>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v5 1/2] riscv: Get rid of riscv_pfn_base variable
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev
-References: <20230125081214.1576313-2-alexghiti@rivosinc.com>
- <202301282230.sz4DCUe6-lkp@intel.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <202301282230.sz4DCUe6-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/8CJQGNuMUTdLwP@localhost>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/23 15:58, kernel test robot wrote:
-> Hi Alexandre,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on robh/for-next]
-> [also build test WARNING on linus/master v6.2-rc5 next-20230127]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Get-rid-of-riscv_pfn_base-variable/20230125-161537
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20230125081214.1576313-2-alexghiti%40rivosinc.com
-> patch subject: [PATCH v5 1/2] riscv: Get rid of riscv_pfn_base variable
-> config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230128/202301282230.sz4DCUe6-lkp@intel.com/config)
-> compiler: riscv64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/90b21402dc8a7e6e36a62ad19c4969ff13fad168
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Get-rid-of-riscv_pfn_base-variable/20230125-161537
->          git checkout 90b21402dc8a7e6e36a62ad19c4969ff13fad168
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->     In file included from include/asm-generic/bug.h:22,
->                      from arch/riscv/include/asm/bug.h:83,
->                      from include/linux/bug.h:5,
->                      from arch/riscv/include/asm/cmpxchg.h:9,
->                      from arch/riscv/include/asm/atomic.h:19,
->                      from include/linux/atomic.h:7,
->                      from include/linux/jump_label.h:255,
->                      from arch/riscv/include/asm/vdso/processor.h:7,
->                      from include/vdso/processor.h:10,
->                      from arch/riscv/include/asm/processor.h:11,
->                      from arch/riscv/include/asm/irqflags.h:10,
->                      from include/linux/irqflags.h:16,
->                      from arch/riscv/include/asm/bitops.h:14,
->                      from include/linux/bitops.h:68,
->                      from include/linux/kernel.h:22,
->                      from mm/debug.c:9:
->     mm/debug.c: In function '__dump_page':
->>> include/linux/kern_levels.h:5:25: warning: format '%lx' expects argument of type 'long unsigned int', but argument 7 has type 'long long unsigned int' [-Wformat=]
->         5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
->           |                         ^~~~~~
->     include/linux/printk.h:429:25: note: in definition of macro 'printk_index_wrap'
->       429 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
->           |                         ^~~~
->     include/linux/printk.h:510:9: note: in expansion of macro 'printk'
->       510 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
->           |         ^~~~~~
->     include/linux/kern_levels.h:12:25: note: in expansion of macro 'KERN_SOH'
->        12 | #define KERN_WARNING    KERN_SOH "4"    /* warning conditions */
->           |                         ^~~~~~~~
->     include/linux/printk.h:510:16: note: in expansion of macro 'KERN_WARNING'
->       510 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
->           |                ^~~~~~~~~~~~
->     mm/debug.c:93:9: note: in expansion of macro 'pr_warn'
->        93 |         pr_warn("page:%p refcount:%d mapcount:%d mapping:%p index:%#lx pfn:%#lx\n",
->           |         ^~~~~~~
->
->
-> vim +5 include/linux/kern_levels.h
->
-> 314ba3520e513a Joe Perches 2012-07-30  4
-> 04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
-> 04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
-> 04d2c8c83d0e3a Joe Perches 2012-07-30  7
->
+On Wed, Mar 01, 2023 at 07:43:33AM +0000, Hyeonggon Yoo wrote:
+> On Mon, Feb 27, 2023 at 09:36:17AM -0800, Suren Baghdasaryan wrote:
+> > Write-locking VMAs before isolating them ensures that page fault
+> > handlers don't operate on isolated VMAs.
+> > 
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  mm/mmap.c  | 1 +
+> >  mm/nommu.c | 5 +++++
+> >  2 files changed, 6 insertions(+)
+> > 
+> > diff --git a/mm/mmap.c b/mm/mmap.c
+> > index 1f42b9a52b9b..f7ed357056c4 100644
+> > --- a/mm/mmap.c
+> > +++ b/mm/mmap.c
+> > @@ -2255,6 +2255,7 @@ int split_vma(struct vma_iterator *vmi, struct vm_area_struct *vma,
+> >  static inline int munmap_sidetree(struct vm_area_struct *vma,
+> >  				   struct ma_state *mas_detach)
+> >  {
+> > +	vma_start_write(vma);
+> >  	mas_set_range(mas_detach, vma->vm_start, vma->vm_end - 1);
+> 
+> I may be missing something, but have few questions:
+> 
+> 	1) Why does a writer need to both write-lock a VMA and mark the VMA detached
+> 	   when unmapping it, isn't it enough to just only write-lock a VMA?
+> 
+> 	2) as VMAs that are going to be removed are already locked in vma_prepare(),
+> 	   so I think this hunk could be dropped?
 
-And this one was mine, sorry I i overlooked that!
+After sending this just realized that I did not consider simple munmap case :)
+But I still think 1) and 3) are valid question.
 
+> 
+> >  	if (mas_store_gfp(mas_detach, vma, GFP_KERNEL))
+> >  		return -ENOMEM;
+> > diff --git a/mm/nommu.c b/mm/nommu.c
+> > index 57ba243c6a37..2ab162d773e2 100644
+> > --- a/mm/nommu.c
+> > +++ b/mm/nommu.c
+> > @@ -588,6 +588,7 @@ static int delete_vma_from_mm(struct vm_area_struct *vma)
+> >  		       current->pid);
+> >  		return -ENOMEM;
+> >  	}
+> > +	vma_start_write(vma);
+> >  	cleanup_vma_from_mm(vma);
+> 
+> 	3) I think this hunk could be dropped as Per-VMA lock depends on MMU anyway.
+> 
+> Thanks,
+> Hyeonggon
+> 
+> >  
+> >  	/* remove from the MM's tree and list */
+> > @@ -1519,6 +1520,10 @@ void exit_mmap(struct mm_struct *mm)
+> >  	 */
+> >  	mmap_write_lock(mm);
+> >  	for_each_vma(vmi, vma) {
+> > +		/*
+> > +		 * No need to lock VMA because this is the only mm user and no
+> > +		 * page fault handled can race with it.
+> > +		 */
+> >  		cleanup_vma_from_mm(vma);
+> >  		delete_vma(mm, vma);
+> >  		cond_resched();
+> > -- 
+> > 2.39.2.722.g9855ee24e9-goog
+> > 
+> > 
+> 
