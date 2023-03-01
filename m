@@ -2,186 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666156A64EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FAD6A64F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCABqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 20:46:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S229695AbjCABrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 20:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCABqo (ORCPT
+        with ESMTP id S229667AbjCABq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 20:46:44 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0586A29E24
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:46:41 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id r13-20020a92c5ad000000b00316ecbf63c9so7032223ilt.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:46:41 -0800 (PST)
+        Tue, 28 Feb 2023 20:46:58 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BEC2BED6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:46:56 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-53865bdc1b1so251461527b3.16
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:46:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677635215;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Hkk07sQi4ewYkgcLI5Vv3w/Ohqk2oO/iYGZZBdhoujI=;
+        b=SPZCLaYSWsFrDoFUe+8BNKpQBvdrTpQWNkS+pSnYsNjidK6DiG6uxbfe7ZnXEF5NJn
+         mA4kKgoYr+T01aH7H9Odwr+okLsltXjxhHH8k/FBiPg0KQ05aWI6MnXcOTSBQBtmnZti
+         59IM9MtiQSlS5IIx5lpMwTlsQFBBfJKjga+S5NGw+aXNoPb6PpM92R+dqa3tXtO45j57
+         RPny4gtbyLIvSMGpWUYZEn0P66MLNtWF7zQh7PNLL89KppUZcj5yxU6XLU8oU7IJw3NG
+         V5S++Dy9Z/OJgLN7yPmibRr23zDQlcIIqNOKl+MKw+gsadanJtye+mwY96YZ1yXoFkyH
+         FAww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eQwVoECXOQyMsnlLVCVZRg4wJkJssoDqIHLnAqHX2IE=;
-        b=Dl2Lmia+fTCpR1uJyFQ1gFNT6RJBXEjB+P1FPB5RB/42UWFKnVnTOJXniI3LKeHpWo
-         V3vktU7pgVj06aTkuc8+u7ufJLIJPovC5Sxk9L+sdJ4F+fdJlXVh2FfiB7b/5a8dLS+g
-         BNe1O6+OLvj+6k64pgeHwZoBnHR+SsDJJ6aOsqNBNtX5QufaLK7Jq3Rq+IR9wp8KKeOZ
-         20PiucAgqvgrKuo9duzlbk4SuC+XEmiXPFLnFMrJDfR1wz5Y0DH2QpY4OfQdYV51/q1j
-         8k5fbVzPJx6oDkQk7y/0/YpHqjTGKA9kKrVgR7qO8GdkVqQV/fX0CcTdPhPjdUUpkUcy
-         oc0g==
-X-Gm-Message-State: AO0yUKWQqZyuaodjkwL0epvn5c6dS5Xv0sLWCDK3ojuOf0VDGm9PNYXj
-        fGDMJjqr0jm/NEdws41IEz8/5D1jhwqqRRpN6zoOOvAteZbS
-X-Google-Smtp-Source: AK7set/ZQLtnSWIAiLo/sNNmRnq0oW9KYq/WBGqgtYAnl+aa3N0NQUfCEBKJltPqJ7VlpBWq/fv92cMLHPxrBqk89jDlgzzgjCxj
-MIME-Version: 1.0
-X-Received: by 2002:a92:2001:0:b0:315:9a9a:2cd with SMTP id
- j1-20020a922001000000b003159a9a02cdmr2190416ile.4.1677635201228; Tue, 28 Feb
- 2023 17:46:41 -0800 (PST)
-Date:   Tue, 28 Feb 2023 17:46:41 -0800
-In-Reply-To: <00000000000052865105f5c8f2c8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003b68bb05f5cce269@google.com>
-Subject: Re: [syzbot] [ext4?] possible deadlock in jbd2_log_wait_commit
-From:   syzbot <syzbot+9d16c39efb5fade84574@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+        d=1e100.net; s=20210112; t=1677635215;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hkk07sQi4ewYkgcLI5Vv3w/Ohqk2oO/iYGZZBdhoujI=;
+        b=Mwc4qEdfpkm04GE12aP60IWuGTv6fjHg34ZJ0ay0xmiuQAukig9BfduK8ZVyn6tusK
+         ulw+Wsmvod4b1Ie+nv+0gXQvhScg2A5PSsje+fMVW/jvlZnSiTkx/k7djzFcRtWnwbPm
+         SqxvSbeYIBPecqknxu5bEZSIR7fQGOo0f9axOxOcHKuQF/dIaFsTT+jZ6U52otFKT+M6
+         cI6d4LQhijcDpVjr0Dsf8fu6yRNTK3n+e3h8HPLFPxvRoBIghoEX8l40rmvdBn8UuNvb
+         1Cusjfe3uULFxySRe1lvfFv4TSDlWYFSApW0o15ZRsgcCySW6vCFT3zF7U3C+IzqKHWN
+         OygQ==
+X-Gm-Message-State: AO0yUKW6EH0cII/v9gHzmvrikQupcMD50Vx4XU7IeHd2zNCGibIO6BT8
+        srlCL3KkuTbMarT0WQ1Hl2kWndpCrFM=
+X-Google-Smtp-Source: AK7set8u9kvWL+CJ3udaU7rkHUOfeWfiv3WiPx2d6BFNa6wRGcNcHxwUKh6Yo3I3K7hVVZt+Ni6rt2s8D+s=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:612b:820a:2225:ad82])
+ (user=surenb job=sendgmr) by 2002:a05:6902:128c:b0:8da:3163:224 with SMTP id
+ i12-20020a056902128c00b008da31630224mr12241994ybu.0.1677635215361; Tue, 28
+ Feb 2023 17:46:55 -0800 (PST)
+Date:   Tue, 28 Feb 2023 17:46:51 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
+Message-ID: <20230301014651.1370939-1-surenb@google.com>
+Subject: [PATCH 1/1] cgroup: limit cgroup psi file writes to processes with CAP_SYS_RESOURCE
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     tj@kernel.org
+Cc:     hannes@cmpxchg.org, lizefan.x@bytedance.com, peterz@infradead.org,
+        johunt@akamai.com, mhocko@suse.com, quic_sudaraja@quicinc.com,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Currently /proc/pressure/* files can be written only by processes with
+CAP_SYS_RESOURCE capability to prevent any unauthorized user from
+creating psi triggers. However no such limitation is required for
+per-cgroup pressure files. Fix this inconsistency by requiring the same
+capability for writing per-cgroup psi files.
 
-HEAD commit:    e492250d5252 Merge tag 'pwm/for-6.3-rc1' of git://git.kern..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13eff33cc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ff98a3b3c1aed3ab
-dashboard link: https://syzkaller.appspot.com/bug?extid=9d16c39efb5fade84574
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12317df8c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=150109acc80000
+Fixes: 6db12ee0456d ("psi: allow unprivileged users with CAP_SYS_RESOURCE to write psi files")
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+ kernel/cgroup/cgroup.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/50a19d2021d0/disk-e492250d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/eb6e11bcecdf/vmlinux-e492250d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6946b530d74f/bzImage-e492250d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9d16c39efb5fade84574@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.2.0-syzkaller-12944-ge492250d5252 #0 Not tainted
-------------------------------------------------------
-syz-executor109/5071 is trying to acquire lock:
-ffff88814afd4990 (jbd2_handle){++++}-{0:0}, at: jbd2_log_wait_commit+0x146/0x430 fs/jbd2/journal.c:689
-
-but task is already holding lock:
-ffff888070a4f780 (&type->i_mutex_dir_key#3/4){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:793 [inline]
-ffff888070a4f780 (&type->i_mutex_dir_key#3/4){+.+.}-{3:3}, at: ext4_rename+0x1924/0x26d0 fs/ext4/namei.c:3879
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&type->i_mutex_dir_key#3/4){+.+.}-{3:3}:
-       down_write_nested+0x96/0x200 kernel/locking/rwsem.c:1689
-       inode_lock_nested include/linux/fs.h:793 [inline]
-       ext4_rename+0x1924/0x26d0 fs/ext4/namei.c:3879
-       ext4_rename2+0x1c7/0x270 fs/ext4/namei.c:4193
-       vfs_rename+0xef6/0x17a0 fs/namei.c:4772
-       do_renameat2+0xb62/0xc90 fs/namei.c:4923
-       __do_sys_renameat2 fs/namei.c:4956 [inline]
-       __se_sys_renameat2 fs/namei.c:4953 [inline]
-       __x64_sys_renameat2+0xe8/0x120 fs/namei.c:4953
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (jbd2_handle){++++}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3098 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-       validate_chain kernel/locking/lockdep.c:3832 [inline]
-       __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
-       lock_acquire kernel/locking/lockdep.c:5669 [inline]
-       lock_acquire+0x1e3/0x670 kernel/locking/lockdep.c:5634
-       jbd2_log_wait_commit+0x17b/0x430 fs/jbd2/journal.c:692
-       jbd2_journal_stop+0x5f5/0xfd0 fs/jbd2/transaction.c:1959
-       __ext4_journal_stop+0xe2/0x1f0 fs/ext4/ext4_jbd2.c:133
-       ext4_rename+0x1470/0x26d0 fs/ext4/namei.c:4011
-       ext4_rename2+0x1c7/0x270 fs/ext4/namei.c:4193
-       vfs_rename+0xef6/0x17a0 fs/namei.c:4772
-       do_renameat2+0xb62/0xc90 fs/namei.c:4923
-       __do_sys_renameat2 fs/namei.c:4956 [inline]
-       __se_sys_renameat2 fs/namei.c:4953 [inline]
-       __x64_sys_renameat2+0xe8/0x120 fs/namei.c:4953
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&type->i_mutex_dir_key#3/4);
-                               lock(jbd2_handle);
-                               lock(&type->i_mutex_dir_key#3/4);
-  lock(jbd2_handle);
-
- *** DEADLOCK ***
-
-5 locks held by syz-executor109/5071:
- #0: ffff88814afd0460 (sb_writers#5){.+.+}-{0:0}, at: do_renameat2+0x37f/0xc90 fs/namei.c:4859
- #1: ffff88814afd0748 (&type->s_vfs_rename_key#2){+.+.}-{3:3}, at: lock_rename+0x58/0x280 fs/namei.c:2995
- #2: ffff888070a4b680 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:793 [inline]
- #2: ffff888070a4b680 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: lock_rename+0x136/0x280 fs/namei.c:3006
- #3: ffff888070a4e740 (&type->i_mutex_dir_key#3/2){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:793 [inline]
- #3: ffff888070a4e740 (&type->i_mutex_dir_key#3/2){+.+.}-{3:3}, at: lock_rename+0x16a/0x280 fs/namei.c:3007
- #4: ffff888070a4f780 (&type->i_mutex_dir_key#3/4){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:793 [inline]
- #4: ffff888070a4f780 (&type->i_mutex_dir_key#3/4){+.+.}-{3:3}, at: ext4_rename+0x1924/0x26d0 fs/ext4/namei.c:3879
-
-stack backtrace:
-CPU: 0 PID: 5071 Comm: syz-executor109 Not tainted 6.2.0-syzkaller-12944-ge492250d5252 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2178
- check_prev_add kernel/locking/lockdep.c:3098 [inline]
- check_prevs_add kernel/locking/lockdep.c:3217 [inline]
- validate_chain kernel/locking/lockdep.c:3832 [inline]
- __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
- lock_acquire kernel/locking/lockdep.c:5669 [inline]
- lock_acquire+0x1e3/0x670 kernel/locking/lockdep.c:5634
- jbd2_log_wait_commit+0x17b/0x430 fs/jbd2/journal.c:692
- jbd2_journal_stop+0x5f5/0xfd0 fs/jbd2/transaction.c:1959
- __ext4_journal_stop+0xe2/0x1f0 fs/ext4/ext4_jbd2.c:133
- ext4_rename+0x1470/0x26d0 fs/ext4/namei.c:4011
- ext4_rename2+0x1c7/0x270 fs/ext4/namei.c:4193
- vfs_rename+0xef6/0x17a0 fs/namei.c:4772
- do_renameat2+0xb62/0xc90 fs/namei.c:4923
- __do_sys_renameat2 fs/namei.c:4956 [inline]
- __se_sys_renameat2 fs/namei.c:4953 [inline]
- __x64_sys_renameat2+0xe8/0x120 fs/namei.c:4953
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd5477525c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe53888c48 EFLAGS: 00000246 ORIG_RAX: 000000000000013c
-RAX: ffffffffffffffda RBX: 00007fd5477960af RCX: 00007fd5477525c9
-RDX: 0000000000000004 RSI: 0000000020000140 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000004 R09: 00007ffe53888c70
-R10: 00000000200002c0 R11: 0000000000000246 R12: 00007ffe53888c6c
-R13: 00007ffe53888ca0 R14: 00007ffe53888c80 R15: 0000000000000001
- </TASK>
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 935e8121b21e..b600a6baaeca 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct kernfs_open_file *of,
+ 	return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
+ }
+ 
++static int cgroup_pressure_open(struct kernfs_open_file *of)
++{
++	return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESOURCE)) ?
++		-EPERM : 0;
++}
++
+ static void cgroup_pressure_release(struct kernfs_open_file *of)
+ {
+ 	struct cgroup_file_ctx *ctx = of->priv;
+@@ -5266,6 +5272,7 @@ static struct cftype cgroup_psi_files[] = {
+ 	{
+ 		.name = "io.pressure",
+ 		.file_offset = offsetof(struct cgroup, psi_files[PSI_IO]),
++		.open = cgroup_pressure_open,
+ 		.seq_show = cgroup_io_pressure_show,
+ 		.write = cgroup_io_pressure_write,
+ 		.poll = cgroup_pressure_poll,
+@@ -5274,6 +5281,7 @@ static struct cftype cgroup_psi_files[] = {
+ 	{
+ 		.name = "memory.pressure",
+ 		.file_offset = offsetof(struct cgroup, psi_files[PSI_MEM]),
++		.open = cgroup_pressure_open,
+ 		.seq_show = cgroup_memory_pressure_show,
+ 		.write = cgroup_memory_pressure_write,
+ 		.poll = cgroup_pressure_poll,
+@@ -5282,6 +5290,7 @@ static struct cftype cgroup_psi_files[] = {
+ 	{
+ 		.name = "cpu.pressure",
+ 		.file_offset = offsetof(struct cgroup, psi_files[PSI_CPU]),
++		.open = cgroup_pressure_open,
+ 		.seq_show = cgroup_cpu_pressure_show,
+ 		.write = cgroup_cpu_pressure_write,
+ 		.poll = cgroup_pressure_poll,
+@@ -5291,6 +5300,7 @@ static struct cftype cgroup_psi_files[] = {
+ 	{
+ 		.name = "irq.pressure",
+ 		.file_offset = offsetof(struct cgroup, psi_files[PSI_IRQ]),
++		.open = cgroup_pressure_open,
+ 		.seq_show = cgroup_irq_pressure_show,
+ 		.write = cgroup_irq_pressure_write,
+ 		.poll = cgroup_pressure_poll,
+-- 
+2.39.2.722.g9855ee24e9-goog
 
