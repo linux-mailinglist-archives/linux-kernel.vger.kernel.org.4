@@ -2,71 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758B26A6B20
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB426A6B28
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjCAKzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 05:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        id S229728AbjCAK53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 05:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjCAKzq (ORCPT
+        with ESMTP id S229512AbjCAK51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 05:55:46 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194403669E;
-        Wed,  1 Mar 2023 02:55:40 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DAE3860004;
-        Wed,  1 Mar 2023 10:55:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677668139;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fRU4uf36Q/C0+rtLw2Bbz8Q6lfTeLfQqxFNx9sVnK3Q=;
-        b=gWxHMbcd7xsS0mCFmVDJfWuTAtP23zwHQXqi5TgDy2o9AX1FVgguQiWLQyIkBJFNGgffiE
-        4V++GX0d6cbVc94gBvRw6NVipjb9wyQn2A9FkgcHvt16UBi2NqL70Se4r2jvuL9V0sdSsq
-        K5zgmGwcQZX0JkAZ4WAKEUcMnpyq8taPNOHOouzzf46T6Nub86bdpMp+4zigLPH5O0RYpo
-        tXWXVBSgPiZCKMgCPz1X9ecApoeVaqxMvqQwlR6mctwJUTOEEkCUeFau5U+ImPPzyia62w
-        p2K3mmDDCd7CzPQswOnVCOxQA4HprXo9eRCjXkMN37JA3vMPASKTkcb/jnJ8Mg==
-Date:   Wed, 1 Mar 2023 11:55:30 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [patch 05/39] genirq/msi: Remove filter from
- msi_free_descs_free_range()
-Message-ID: <20230301115530.5ccea5ae@xps-13>
-In-Reply-To: <20221111122013.888850936@linutronix.de>
-References: <20221111120501.026511281@linutronix.de>
-        <20221111122013.888850936@linutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 1 Mar 2023 05:57:27 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2128.outbound.protection.outlook.com [40.107.94.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C40E199C5;
+        Wed,  1 Mar 2023 02:57:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nnXITJHA1jSS+zSdqlaJ16C/4RPRB51u+bTu3otV5vU50WN3/+beo/hISMZ4wr+LqHwXQGd+9Vx2Ml9jRNCXVFM7Qh6REB35Gv4QvyM3fkcNIR5WGnOdNQSfQsk8Dsd0s+7iy9ATIaaQdKSafCZOcjxyCOh+ydEsyWGFimrxHCicjcZJS1FVcOYANE2PmAh9VMFqeAIl9N8LzanJGK4yYWlMeIyZbQG7LAffoU6hUDQ+u/zi+WFBIrtwGp+a825TZq0Xch0d99+cIJ74kHEMMHrk2DGspIKODM1tphq3lzF0ygfq4AC+iUt5rGwYxw7kSS1+LExekniGiihRqfpHPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=whc4FP1khjhQqKvKa1AZKrKRbgcghoZtcCiMttyMosQ=;
+ b=UoLxzdhzXXPUFIAkBhc8zg6+xGx6UsiEK8BWZjDN4j9IwhRN9uTPEdPdlZlJzrYHn9Xy85aA+v16GHjjjK90ZaN7fjMcq8MPUSthZNncAh/tv2GNPlpu3bbnEp1zY4aTR5jqhCsv97pYAth9S4wdJ6c2OtWxv+Uz8C4cxr9rGCJmXhb04RoHOFS9p5F7SoJxMvLiS4UrMoefEfep6FpRsosnnonciAG3DW4ZNmBv+nkiVDRw1JhC6FQX2rbbRt8gqK+ibmWLthrMowTPejwGNa+u48kAsTfJfuCo/SpOBeeSNNnClCfQvely6FvGhzRn/e1BBo6yM5TcuYNd3ttYmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=whc4FP1khjhQqKvKa1AZKrKRbgcghoZtcCiMttyMosQ=;
+ b=HGZkzJEJlYXtn+2yiLdRrmaXr+q5ydi4SYd0xpX+9XrUNLNdvUQSXcGleO07BWCcVV3aJ9xtwN1/Ij6lTCGM7K602B5l79EIyD6RlqihgWCXMFtKiEIMRcHiA/flDP7bQ126mAJ/YUH3GD4O6l99py+e4s2rVykySYyGkQVaTyI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MN2PR13MB4117.namprd13.prod.outlook.com (2603:10b6:208:260::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Wed, 1 Mar
+ 2023 10:57:23 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6156.018; Wed, 1 Mar 2023
+ 10:57:23 +0000
+Date:   Wed, 1 Mar 2023 11:57:16 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v2] rtlwifi: rtl8192se: Remove some unused variables
+Message-ID: <Y/8vjN8hcMU85bkC@corigine.com>
+References: <20230301030534.2102-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301030534.2102-1-jiapeng.chong@linux.alibaba.com>
+X-ClientProxiedBy: AM8P191CA0013.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21a::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB4117:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca5fdae9-2a30-42c9-6140-08db1a43bc84
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U2/yKvOn85qf1FHhqRipH4rwVdUvs02ZFU4xHcP0TYxOGwTL67PBFme3+xLQoMlUDJq70+k3+kA9k1eg6HSNtyoSxXzqZzj2AAzvy/FW/NQvFV5GVLCXThMiXtML9Zsi7j+Wx/+gnY4RMUJdXnJBDaW9wrM3VPxpLyfWh4+1BqnkEy17i0Lzugj0bGEi+CK/fMXrSeO1uljrMC8pP3cCQIAXG/WaZOQGblgra+1Q/hwxzuzfEf3UQ/vjyKiEx3F3XWCjdMnd4MyxJp69IXR6dIzJ8XyeIkjRYnFs0ububkPyjj3brUlIMwtjOgcW5DNf3yOcY7FXYQHcoyhDVibZRMKyODRNCLjVcfQbg3W+5xjNVeL43HRD1XNazyp1iASPJKVaPxv7eQHM2qVl1paBC53fXx7ifZcuVD9dRFzxpN5Qc7mIdlO/eK+sZF0lkLhDC0XFyztHRYp5AWaT22HROEBtlOwNelZX8rlKjrFHGfLxaoHw6Zio3GMOKjWxEkdyDWVv1vRKhdGFtUTrcAF79YQPwTYncGBnYv6OYmR34R8kS0aUdi/Z6h6tzroS+MFbkZEW4sIFfaGPg82Mpard1WZyw4g2YL4TYxyxs0sOarW1s4WVZzIPluyc0/kmEXLNqNYO4qi8TZWFxvhRRANFZXXD1+2m/5NhWNl36fLD0F85TI4qJXXbIP8QkO9l6iL6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39840400004)(136003)(366004)(376002)(346002)(451199018)(38100700002)(86362001)(36756003)(2906002)(44832011)(4744005)(7416002)(41300700001)(66946007)(66556008)(66476007)(6916009)(8676002)(4326008)(8936002)(5660300002)(6666004)(2616005)(6512007)(6506007)(186003)(83380400001)(478600001)(316002)(6486002)(966005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UrscYoJWHaDTh6FI75gHPVQD/DvWupU6fIwzxgctChzPuGB8rq8LN7h8Whpe?=
+ =?us-ascii?Q?yNwlARI7az0tck/Ru8HayVJL3cCc0+pmtY/NFHjztRoEMMREDLe+FrEBGFqe?=
+ =?us-ascii?Q?dEUtPoFx9eGOxm0tthKPqa9EN8Nqe8For7Sn4DNs6f7MSn39Oz+g2o5uNdvh?=
+ =?us-ascii?Q?KDHU3Y2mH111sPEJUvn0Z24y5oIa2FaLZeqpxZC2Xl0AXFe2hu9ebBTNMlmR?=
+ =?us-ascii?Q?qmeLfZjgGtF/NIUR1X1+XpQbE0W87vJcztJ4QCkBeDU5DpQG5693ip7Q94va?=
+ =?us-ascii?Q?ZhbM0OEo1+H1pSv6cPKa8w2I13pgliqkTX4qQc6/BrJh3KB4jeumGJ/l1yof?=
+ =?us-ascii?Q?n/ZZqAAnG4EMelAhBJz3zCujQQpaHVNUemhPBA/fZJZcysuuDX48HTd3+VHH?=
+ =?us-ascii?Q?jdeDNEw8KdzTiAmElyo9f5ACkHA5PQEUPbf/+Sgtd43rAnfPm8LJWgvvTFUI?=
+ =?us-ascii?Q?IOkO1ocAV7+soOVsDERZe0CMh4llNXS2ZDvbXl/9+7E2iuandbFpoeft0WZM?=
+ =?us-ascii?Q?jB3hMeGsXyeqDcGSgd2Jmig8gSFof1m1XEQeEUhdaCQNmcqSdj+f9seei7kY?=
+ =?us-ascii?Q?Xl3w9EnqijAWNajsG96/Fdzpkb6mxkSw7YlV9gHpWslUNyrbD3lNCdRm8458?=
+ =?us-ascii?Q?/h1wSDkA0vDVqO9RFYRhKR+nL3/nalADboOh5boDsElOukptcVkpeeFZuI/W?=
+ =?us-ascii?Q?yfw0sgtr9YReSrcaG/LbHbRw4cMH1Qwlu6Og26An0dsWLjU0tp4EjIEIF6ai?=
+ =?us-ascii?Q?qy+R4u5oIYwvn5onxAVD01ZFJ7nHq9QxeILP9PJxwpE6Vby/9KAObeATIZdp?=
+ =?us-ascii?Q?3jfXiBIa8KKn9tlY2oWGTIQAgsHtoEyX/koNqAoQPiIyK+KC0MarctAE7oCN?=
+ =?us-ascii?Q?Q5gptrS5q7aMj5UUOiWghMjoIvEhPbc4QL99JUdiYENVy1IWaumSvgg9Stuo?=
+ =?us-ascii?Q?1o1Pilk/R4ASTfXqF4C0O9c0JbSp2nq+Z5OAlI9WJHryZwVLvwj+EYqBST9u?=
+ =?us-ascii?Q?VciRjv2vpTRZTFxMhHlz+DrpHq0NGiS6ekoJAEr+8QP6Lp7nNUnMVSs/xCFr?=
+ =?us-ascii?Q?/JXrwVUcFGTlTXOap3Lvx6KeDnWVAsO/o6Ct3xSWHox3UZFmW5mOrZLLpLnL?=
+ =?us-ascii?Q?uIIvwAM3GPT1cFa2OFcCjmjJexf5mBfSaQZ8FWB3SJ1wW3PkV5deIGdaSRtd?=
+ =?us-ascii?Q?SDDACQQ8IS0AQcAtNl7akOLIvy0fwtUx2uvI/4Q8sp/mOUfMK50JikawOapF?=
+ =?us-ascii?Q?uOVOrpzqc6eYKd6Ca9hqZzIPr9WfStAhVkiJzDCsfBHwLNgLEMYygXM5XJjT?=
+ =?us-ascii?Q?+9ViHud/6EQhIqF143fZkB3k1IRqc3Xh/Z3X+uqw8mMOYtw5lV7fTyzBJRdm?=
+ =?us-ascii?Q?SCyufifyjQjB/OEQo6g1jnveQJZotJQ4rVbIr6aO49BscsTN9aN9TA3rDuig?=
+ =?us-ascii?Q?SC2dsZdsqCNCbFM08tAeyZXrBtcuudsabvFeDivpxaBSV4E4lx6HX1UYlKXQ?=
+ =?us-ascii?Q?nDdT4clriX7sBni83oxa34jBimG/20a3ZNYBL8136FGJb1nbeoMT30hZtLLK?=
+ =?us-ascii?Q?1sSZCqdUgq/VBaUR6tXrjn2ivxm07C3TZ3xBtkYLtBtNDAF/pG8EtDdFCGVz?=
+ =?us-ascii?Q?sb6/vMzyX2NPFdNMMMdkk4xoQte/+EEtlC2eP6cngVjg3whJSVrdPwRh4vWQ?=
+ =?us-ascii?Q?xRWH+g=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca5fdae9-2a30-42c9-6140-08db1a43bc84
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 10:57:23.2542
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AW/Tnckl8kRyDCfSVMWWkRoGZ3pkmu7xP9Ua+z6zJN95Xm/3b+uRme+otCnHCaSJOd/xQQLRvV0VTvQRyoMYAeWW/LsO+9PPFrHXhs1Girk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB4117
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,139 +116,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Wed, Mar 01, 2023 at 11:05:34AM +0800, Jiapeng Chong wrote:
+> Variable bcntime_cfg, bcn_cw and bcn_ifs are not effectively used, so
+> delete it.
+> 
+> drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c:1555:6: warning:
+> variable 'bcntime_cfg' set but not used.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4240
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-tglx@linutronix.de wrote on Fri, 11 Nov 2022 14:54:22 +0100 (CET):
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-> When a range of descriptors is freed then all of them are not associated =
-to
-> a linux interrupt. Remove the filter and add a warning to the free functi=
-on.
->=20
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
-
-[...]
-
-> --- a/kernel/irq/msi.c
-> +++ b/kernel/irq/msi.c
-> @@ -120,7 +120,7 @@ static int msi_add_simple_msi_descs(stru
->  fail_mem:
->  	ret =3D -ENOMEM;
->  fail:
-> -	msi_free_msi_descs_range(dev, MSI_DESC_ALL, index, last);
-> +	msi_free_msi_descs_range(dev, index, last);
->  	return ret;
->  }
-> =20
-> @@ -141,12 +141,11 @@ static bool msi_desc_match(struct msi_de
->  /**
->   * msi_free_msi_descs_range - Free MSI descriptors of a device
->   * @dev:		Device to free the descriptors
-> - * @filter:		Descriptor state filter
->   * @first_index:	Index to start freeing from
->   * @last_index:		Last index to be freed
->   */
-> -void msi_free_msi_descs_range(struct device *dev, enum msi_desc_filter f=
-ilter,
-> -			      unsigned int first_index, unsigned int last_index)
-> +void msi_free_msi_descs_range(struct device *dev, unsigned int first_ind=
-ex,
-> +			      unsigned int last_index)
->  {
->  	struct xarray *xa =3D &dev->msi.data->__store;
->  	struct msi_desc *desc;
-> @@ -155,10 +154,12 @@ void msi_free_msi_descs_range(struct dev
->  	lockdep_assert_held(&dev->msi.data->mutex);
-> =20
->  	xa_for_each_range(xa, idx, desc, first_index, last_index) {
-> -		if (msi_desc_match(desc, filter)) {
-> -			xa_erase(xa, idx);
-> -			msi_free_desc(desc);
-> -		}
-> +		xa_erase(xa, idx);
-> +
-> +		/* Leak the descriptor when it is still referenced */
-> +		if (WARN_ON_ONCE(msi_desc_match(desc, MSI_DESC_ASSOCIATED)))
-> +			continue;
-> +		msi_free_desc(desc);
->  	}
->  }
-
-It looks like since this commit I am getting warnings upon EPROBE_DEFER
-errors in the mvpp2 Marvell Ethernet driver. I looked a bit at the
-internals to understand why this warning was shown, and it seems that
-nothing "de-references" the descriptors, which would mean here:
-resetting desc->irq to 0.
-
-In my case I don't think the mvpp2_main.c driver nor the
-irq_mvebu_icu.c driver behind do anything strange (as far as I
-understand them). I believe any error during a ->probe() leading
-to an irq_dispose_mapping() call with MSI behind will trigger that
-warning.
-
-I am wondering how useful thisd WARN_ON() is, or otherwise where the
-desc->irq entry should be zeroed (if I understand that correctly), any
-help will be appreciated.
-
-Here is the splat:
-
-[    2.045857] ------------[ cut here ]------------
-[    2.050497] WARNING: CPU: 2 PID: 9 at kernel/irq/msi.c:197 msi_domain_fr=
-ee_descs+0x120/0x128
-[    2.058993] Modules linked in:
-[    2.062068] CPU: 2 PID: 9 Comm: kworker/u8:0 Not tainted 6.2.0-rc1+ #168
-[    2.068804] Hardware name: Delta TN48M (DT)
-[    2.073008] Workqueue: events_unbound deferred_probe_work_func
-[    2.078878] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=
-=3D--)
-[    2.085875] pc : msi_domain_free_descs+0x120/0x128
-[    2.090693] lr : msi_domain_free_descs+0xe0/0x128
-[    2.095423] sp : ffff80000a82b8d0
-[    2.098745] x29: ffff80000a82b8d0 x28: 00007bfdbb508ca8 x27: ffff000102e=
-28940
-[    2.105921] x26: 0000000000000004 x25: ffff000100257660 x24: ffff800009a=
-6b8d8
-[    2.113096] x23: ffff800008a1c868 x22: ffff000102e4b700 x21: ffff0001014=
-94bb0
-[    2.120270] x20: ffff80000a82b958 x19: ffff800009afe248 x18: 00000000000=
-00010
-[    2.127444] x17: fffffc0000fa4008 x16: 0000000000000008 x15: 00000000000=
-0013a
-[    2.134618] x14: ffff80000a82b6a0 x13: 00000000ffffffea x12: ffff80000a8=
-2b870
-[    2.141794] x11: 0000000000000002 x10: 0000000000000000 x9 : 00000000000=
-00001
-[    2.148967] x8 : 0000000000000000 x7 : 0000000000000238 x6 : ffff0001005=
-f1230
-[    2.156141] x5 : 0000000000000000 x4 : 0000200000000000 x3 : 00000000000=
-00000
-[    2.163315] x2 : b586accf01c45400 x1 : ffff0001000e0000 x0 : 00000000000=
-0002d
-[    2.170489] Call trace:
-[    2.172948]  msi_domain_free_descs+0x120/0x128
-[    2.177417]  msi_domain_free_msi_descs_range+0x64/0x9c
-[    2.182586]  platform_msi_device_domain_free+0x88/0xb8
-[    2.187752]  mvebu_icu_irq_domain_free+0x60/0x80
-[    2.192396]  irq_domain_free_irqs_hierarchy.part.21+0x94/0xa8
-[    2.198173]  irq_domain_free_irqs+0xec/0x150
-[    2.202466]  irq_dispose_mapping+0x104/0x120
-[    2.206758]  mvpp2_probe+0x2028/0x21f8
-[    2.210530]  platform_probe+0x68/0xd8
-[    2.214210]  really_probe+0xbc/0x2a8
-[    2.217807]  __driver_probe_device+0x78/0xe0
-[    2.222102]  driver_probe_device+0x3c/0x108
-[    2.226308]  __device_attach_driver+0xb8/0xf8
-[    2.230690]  bus_for_each_drv+0x7c/0xd0
-[    2.234547]  __device_attach+0xec/0x188
-[    2.238404]  device_initial_probe+0x14/0x20
-[    2.242611]  bus_probe_device+0x9c/0xa8
-[    2.246468]  deferred_probe_work_func+0x88/0xc0
-[    2.251024]  process_one_work+0x1fc/0x348
-[    2.255056]  worker_thread+0x228/0x420
-[    2.258825]  kthread+0x10c/0x118
-[    2.262075]  ret_from_fork+0x10/0x20
-[    2.265672] ---[ end trace 0000000000000000 ]---
-
-Thanks,
-Miqu=C3=A8l
