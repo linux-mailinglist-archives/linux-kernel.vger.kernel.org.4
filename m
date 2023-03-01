@@ -2,199 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A426A6972
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EA76A6976
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjCAJFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S229679AbjCAJHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjCAJEy (ORCPT
+        with ESMTP id S229501AbjCAJHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:04:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FBF15566;
-        Wed,  1 Mar 2023 01:04:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Mar 2023 04:07:14 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945E42D159;
+        Wed,  1 Mar 2023 01:07:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E5FDB80EFA;
-        Wed,  1 Mar 2023 09:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3E8C433EF;
-        Wed,  1 Mar 2023 09:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677661490;
-        bh=nnWBYCpOWlTZ5z+s2bo2GClbIpIKpWepFx5Lp7X+MMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xy575dxmp7KOEPQ3dRySjV+t9rt0HRXVkPTFFpVCD9CgtqTHolOJL2p3Yg1u1pA83
-         OBwCGNc6C8k3ZL3bdW1Uhqv2v3ifGqzl6HklCpkt16Hks0getdsvDYN42FK5Qa18bU
-         9SVa1TpG/t0MwmsBGcVToLrVf/pIMRkMRVPnCrbXcUlKXj11bBbCNOqRknSb0A+s1O
-         604+VCCzga2yw/BJ2+Dpvxupxvh4HFViJdbGk6xVceprBanHBTbyZNmCcaJNjoi8aW
-         rbRg0e1eOOIG6mcXcpu3hK9ZsS+IbtOq5GRbwQcdYQtMxbbS3FITc//PHL63fuXIe+
-         l3VosKQKL7GgQ==
-Date:   Wed, 1 Mar 2023 09:04:45 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Support Opensource <support.opensource@diasemi.com>
-Subject: Re: [PATCH 18/27] kbuild, mfd: remove MODULE_LICENSE in non-modules
-Message-ID: <Y/8VLcMlojbFmhZy@google.com>
-References: <20230222121453.91915-1-nick.alcock@oracle.com>
- <20230222121453.91915-19-nick.alcock@oracle.com>
- <OS3PR01MB8460D00B7C988DCC13173CAAC2AA9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
- <Y/duxo1aKFibuZtF@google.com>
- <87ttzcmbgu.fsf@esperi.org.uk>
- <OS3PR01MB8460AA34CBDD0C2BBE6F2399C2A89@OS3PR01MB8460.jpnprd01.prod.outlook.com>
- <87zg8zi71g.fsf@esperi.org.uk>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id ED1261FE15;
+        Wed,  1 Mar 2023 09:07:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1677661630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xkvS1ZS82FkR5HQxCLJx+REXczDxk4WNj+Mp+puCHM4=;
+        b=H/MKVg1p/0vH9xzgknFkRQ7tuzoTJF9Yz9FZFzVnsUYtD+3yI+hqJI1opwxd7vEidgCcNM
+        4hJF2+Sso5DzmThl2jLCI0Cuzi4qpRYMIuOi2zlJqQbrmSUIAaJmHY46VMJdz3vrXPK5uL
+        JXT6thmlrSk/I5xeuswqBHw5l1jloKo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1677661630;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xkvS1ZS82FkR5HQxCLJx+REXczDxk4WNj+Mp+puCHM4=;
+        b=Ta1IMPKWQYpKkundfUx3BYXcDK3NjogyFD1iCkCzIs8I3IA3hlI+YRqskjXbkmKlafEJBJ
+        c6vWAvHx8tHslvBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFEB713A3E;
+        Wed,  1 Mar 2023 09:07:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 24SjNr4V/2PzewAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 01 Mar 2023 09:07:10 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 6CCE3A06F2; Wed,  1 Mar 2023 10:07:10 +0100 (CET)
+Date:   Wed, 1 Mar 2023 10:07:10 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "yebin (H)" <yebin10@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, Ye Bin <yebin@huaweicloud.com>,
+        tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] ext4: commit super block if fs record error when
+ journal record without error
+Message-ID: <20230301090710.hwjvumiikbe2vbdc@quack3>
+References: <20230214022905.765088-1-yebin@huaweicloud.com>
+ <20230214022905.765088-2-yebin@huaweicloud.com>
+ <20230216173159.zkj4qd2nmj2yjpkr@quack3>
+ <63EEDC19.6010204@huawei.com>
+ <20230217105647.g6blbinkvnsyy2or@quack3>
+ <63F03582.1020303@huawei.com>
+ <20230227112001.hfcp7mmay6vzihck@quack3>
+ <63FD65DA.6050805@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87zg8zi71g.fsf@esperi.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <63FD65DA.6050805@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023, Nick Alcock wrote:
+On Tue 28-02-23 10:24:26, yebin (H) wrote:
+> On 2023/2/27 19:20, Jan Kara wrote:
+> > On Sat 18-02-23 10:18:42, yebin (H) wrote:
+> > > On 2023/2/17 18:56, Jan Kara wrote:
+> > > > On Fri 17-02-23 09:44:57, yebin (H) wrote:
+> > > > > On 2023/2/17 1:31, Jan Kara wrote:
+> > > > > > On Tue 14-02-23 10:29:04, Ye Bin wrote:
+> > > > > > > From: Ye Bin <yebin10@huawei.com>
+> > > > > > > 
+> > > > > > > Now, 'es->s_state' maybe covered by recover journal. And journal errno
+> > > > > > > maybe not recorded in journal sb as IO error. ext4_update_super() only
+> > > > > > > update error information when 'sbi->s_add_error_count' large than zero.
+> > > > > > > Then 'EXT4_ERROR_FS' flag maybe lost.
+> > > > > > > To solve above issue commit error information after recover journal.
+> > > > > > > 
+> > > > > > > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > > > > > > ---
+> > > > > > >     fs/ext4/super.c | 12 ++++++++++++
+> > > > > > >     1 file changed, 12 insertions(+)
+> > > > > > > 
+> > > > > > > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> > > > > > > index dc3907dff13a..b94754ba8556 100644
+> > > > > > > --- a/fs/ext4/super.c
+> > > > > > > +++ b/fs/ext4/super.c
+> > > > > > > @@ -5932,6 +5932,18 @@ static int ext4_load_journal(struct super_block *sb,
+> > > > > > >     		goto err_out;
+> > > > > > >     	}
+> > > > > > > +	if (unlikely(es->s_error_count && !jbd2_journal_errno(journal) &&
+> > > > > > > +		     !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS))) {
+> > > > > > > +		EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
+> > > > > > > +		es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+> > > > > > > +		err = ext4_commit_super(sb);
+> > > > > > > +		if (err) {
+> > > > > > > +			ext4_msg(sb, KERN_ERR,
+> > > > > > > +				 "Failed to commit error information, please repair fs force!");
+> > > > > > > +			goto err_out;
+> > > > > > > +		}
+> > > > > > > +	}
+> > > > > > > +
+> > > > > > Hum, I'm not sure I follow here. If journal replay has overwritten the
+> > > > > > superblock (and thus the stored error info), then I'd expect
+> > > > > > es->s_error_count got overwritten (possibly to 0) as well. And this is
+> > > > > > actually relatively realistic scenario with errors=remount-ro behavior when
+> > > > > > the first fs error happens.
+> > > > > > 
+> > > > > > What I intended in my original suggestion was to save es->s_error_count,
+> > > > > > es->s_state & EXT4_ERROR_FS, es->s_first_error_*, es->s_last_error_* before
+> > > > > > doing journal replay in ext4_load_journal() and then after journal replay
+> > > > > > merge this info back to the superblock
+> > > > > Actually，commit 1c13d5c08728 ("ext4: Save error information to the
+> > > > > superblock for analysis")
+> > > > > already merged error info back to the superblock after journal replay except
+> > > > > 'es->s_state'.
+> > > > > The problem I have now is that the error flag in the journal superblock was
+> > > > > not recorded,
+> > > > > but the error message was recorded in the superblock. So it leads to
+> > > > > ext4_clear_journal_err()
+> > > > > does not detect errors and marks the file system as an error. Because
+> > > > > ext4_update_super() is
+> > > > > only set error flag  when 'sbi->s_add_error_count  > 0'. Although
+> > > > > 'sbi->s_mount_state' is
+> > > > > written to the super block when umount, but it is also conditional.
+> > > > > So I handle the scenario "es->s_error_count && !jbd2_journal_errno(journal)
+> > > > > &&
+> > > > > !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS)". Maybe we can just store
+> > > > > 'EXT4_SB(sb)->s_mount_state & EXT4_ERROR_FS' back to the superblock. But i
+> > > > > prefer to mark fs as error if it contain detail error info without
+> > > > > EXT4_ERROR_FS.
+> > > > Aha, thanks for explanation! So now I finally understand what the problem
+> > > > exactly is. I'm not sure relying on es->s_error_count is too good. Probably
+> > > > it works but I'd be calmer if when saving error info we also did:
+> > > > 
+> > > > 	bool error_fs = es->s_state & cpu_to_le16(EXT4_ERROR_FS);
+> > > > 
+> > > > 	copy other info
+> > > > 	err = jbd2_journal_load(journal);
+> > > > 	restore other info
+> > > > 	if (error_fs)
+> > > > 		es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+> > > > 	/* Write out restored error information to the superblock */
+> > > > 	err2 = ext4_commit_super(sb);
+> > > > 
+> > > > and be done with this. I don't think trying to optimize away the committing
+> > > > of the superblock when we had to replay the journal is really worth it.
+> > > > 
+> > > > Does this solve your concerns?
+> > > Thanks for your suggestion.
+> > > 
+> > > I think if journal super block has 'j_errno' ext4_clear_journal_err()
+> > > will commit error info.  The scenario we need to deal with is:(1) journal
+> > > super block has no 'j_errno'; (2) super block has detail error info, but
+> > > 'es->s_state' has no 'EXT4_ERROR_FS', It means super block in journal has
+> > > no error flag and the newest super block has error flag.
+> > But my code above should be handling this situation you describe - the
+> > check:
+> > 
+> > error_fs = es->s_state & cpu_to_le16(EXT4_ERROR_FS);
+>
+> Here, we do not need to backup 'error_fs', as
+> 'EXT4_SB(sb)->s_mount_state' already record this flag when fs has error
+> flag before do journal replay.
 
-> On 24 Feb 2023, DLG Adam Ward told this:
-> 
-> > On 23/02/2023 19:25, Nick Alcock wrote:
-> >
-> >>> Makes sense - but if you need to do a V2, would you mind removing the erroneous claim on DA9055 at the same time?
-> >
-> >>I don't know what this means. There are two references to DA9055 in this patch, both in context (not in modified lines), one in drivers/mfd/da9055-core.c, the other in rivers/mfd/da9055-i2c.c. To me these both seem likely to be DA9055-related. Are you saying that one of them isn't?
-> >
-> > The comment was followed by this link - https://elixir.bootlin.com/linux/latest/source/drivers/mfd/Kconfig#L36
-> > This files talks about the driver being a module, but, as you correctly point out, it is not.
-> > And never has been.
-> > So it is worth removing.
-> 
-> Ah! I never even thought of auditing the Kconfigs for erroneous
-> statements of modularity: that's a much harder-to-automate job.
-> 
-> I'm not planning to do this in general any time soon (because I'd have
-> to soup up Kconfig parsers and maybe write my own just for this), but
-> here's a reroll of this one patch that drops the erroneous Kconfig help
-> text:
-> 
-> -- >8 --
+Yeah, right. We don't need error_fs variable and can just look at
+EXT4_SB(sb)->s_mount_state.
 
-Can you submit this as an orthogonal v2 please?
- 
-> From 06d491176513f9fcd699871cb6815534068b664a Mon Sep 17 00:00:00 2001
-> From: Nick Alcock <nick.alcock@oracle.com>
-> Date: Thu, 23 Feb 2023 19:10:03 +0000
-> Subject: [PATCH v2 18/27] mfd: remove MODULE_LICENSE in non-modules
-> 
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
-> 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Support Opensource <support.opensource@diasemi.com>
-> Cc: Lee Jones <lee@kernel.org>
-> ---
->  drivers/mfd/Kconfig       | 3 ---
->  drivers/mfd/da903x.c      | 1 -
->  drivers/mfd/da9052-core.c | 1 -
->  drivers/mfd/da9052-i2c.c  | 1 -
->  drivers/mfd/da9052-spi.c  | 1 -
->  drivers/mfd/da9055-core.c | 1 -
->  drivers/mfd/da9055-i2c.c  | 1 -
->  7 files changed, 9 deletions(-)
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 30db49f318668..751d38b30bb1f 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -361,9 +361,6 @@ config MFD_DA9055
->  	  Additional drivers must be enabled in order to use the functionality
->  	  of the device.
->  
-> -	  This driver can be built as a module. If built as a module it will be
-> -	  called "da9055"
-> -
->  config MFD_DA9062
->  	tristate "Dialog Semiconductor DA9062/61 PMIC Support"
->  	select MFD_CORE
-> diff --git a/drivers/mfd/da903x.c b/drivers/mfd/da903x.c
-> index 44a25d642ce94..6570b33a5a77b 100644
-> --- a/drivers/mfd/da903x.c
-> +++ b/drivers/mfd/da903x.c
-> @@ -563,4 +563,3 @@ module_exit(da903x_exit);
->  MODULE_DESCRIPTION("PMIC Driver for Dialog Semiconductor DA9034");
->  MODULE_AUTHOR("Eric Miao <eric.miao@marvell.com>");
->  MODULE_AUTHOR("Mike Rapoport <mike@compulab.co.il>");
-> -MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/mfd/da9052-core.c b/drivers/mfd/da9052-core.c
-> index 8b42d2f7024f5..150448cd2eb08 100644
-> --- a/drivers/mfd/da9052-core.c
-> +++ b/drivers/mfd/da9052-core.c
-> @@ -653,4 +653,3 @@ void da9052_device_exit(struct da9052 *da9052)
->  
->  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
->  MODULE_DESCRIPTION("DA9052 MFD Core");
-> -MODULE_LICENSE("GPL");
-> diff --git a/drivers/mfd/da9052-i2c.c b/drivers/mfd/da9052-i2c.c
-> index ecb8077cdaaf9..03db7a2ccf7a0 100644
-> --- a/drivers/mfd/da9052-i2c.c
-> +++ b/drivers/mfd/da9052-i2c.c
-> @@ -209,4 +209,3 @@ module_exit(da9052_i2c_exit);
->  
->  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
->  MODULE_DESCRIPTION("I2C driver for Dialog DA9052 PMIC");
-> -MODULE_LICENSE("GPL");
-> diff --git a/drivers/mfd/da9052-spi.c b/drivers/mfd/da9052-spi.c
-> index b79a57b45c1e8..be5f2b34e18ae 100644
-> --- a/drivers/mfd/da9052-spi.c
-> +++ b/drivers/mfd/da9052-spi.c
-> @@ -102,4 +102,3 @@ module_exit(da9052_spi_exit);
->  
->  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
->  MODULE_DESCRIPTION("SPI driver for Dialog DA9052 PMIC");
-> -MODULE_LICENSE("GPL");
-> diff --git a/drivers/mfd/da9055-core.c b/drivers/mfd/da9055-core.c
-> index c3bcbd8905c6c..768302e05baa1 100644
-> --- a/drivers/mfd/da9055-core.c
-> +++ b/drivers/mfd/da9055-core.c
-> @@ -398,5 +398,4 @@ void da9055_device_exit(struct da9055 *da9055)
->  }
->  
->  MODULE_DESCRIPTION("Core support for the DA9055 PMIC");
-> -MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
-> diff --git a/drivers/mfd/da9055-i2c.c b/drivers/mfd/da9055-i2c.c
-> index 702abff506a1a..537fd5de3e6d4 100644
-> --- a/drivers/mfd/da9055-i2c.c
-> +++ b/drivers/mfd/da9055-i2c.c
-> @@ -97,4 +97,3 @@ module_exit(da9055_i2c_exit);
->  
->  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
->  MODULE_DESCRIPTION("I2C driver for Dialog DA9055 PMIC");
-> -MODULE_LICENSE("GPL");
-> -- 
-> 2.39.1.268.g9de2f9a303
+> > will check the newest state in the superblock before journal replay. Then
+> > we replay the journal - es->s_state may loose the EXT4_ERROR_FS flag if the
+> > superblock version in the journal didn't have it. So we do:
+> > 
+> > if (error_fs)
+> > 	es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+> > 
+> > which makes sure EXT4_ERROR_FS is set either if it was set in the journal
+> > or in the newest superblock version before journal replay.
+>
+> My modification is to deal with the situation we missed, and I don't want
+> to introduce an invalid super block submission.  If you think my judgment
+> is too obscure, I can send another version according to your suggestion.
 
+So is the extra superblock write your only concern? Honestly, I prefer code
+simplicity over saved one superblock write in case we had to replay the
+journal (which should be rare anyway). If you look at the code, we can
+writeout superblock several times in that mount path anyway.
+
+> > > so we need to
+> > > store error flag to 'es->s_state', and commit it to disk.If 'es->s_state'
+> > > has 'EXT4_ERROR_FS', it means super block in journal has error flag, so
+> > > we do not need to store error flag in super block.
+> > Why do you think that if es->s_state has EXT4_ERROR_FS, the super block in
+> > the journal has that flag? During mount, we load the superblock directly
+> > from the first block in the filesystem and until we call
+> > jbd2_journal_load(), es->s_state contains this newest value of the
+> > superblock state. What am I missing?
+> After jbd2_journal_load() 'es->s_state' is already covered by the super
+> block in journal.  If there is super block in journal and 'es->s_state'
+> has error flag this means super block in journal has error flag. If there
+> is no super block in journal and 'es->s_state' has error flag, this means
+> super block already has error flag.In both cases we can do nothing.
+
+If what you wanted to say: "It is not necessary to write the superblock if
+EXT4_ERROR_FS is already set." I tend to agree although not 100% because
+journal replay could result in rewinding 's_last_error_*' fields and so
+writing superblock would still make sense even if EXT4_ERROR_FS is set in
+es->s_state after journal reply. That's why I wouldn't complicate things
+and just always write the superblock after journal replay.
+
+								Honza
 -- 
-Lee Jones [李琼斯]
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
