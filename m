@@ -2,205 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315DA6A6F36
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9B26A6F41
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjCAPTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
+        id S230056AbjCAPW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjCAPTp (ORCPT
+        with ESMTP id S229621AbjCAPWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:19:45 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB983BD86
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 07:19:44 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 132so7890979pgh.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 07:19:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fgz/Djjon8JkpfSssPQphU3ki++kBUAfgIVgXczgsW4=;
-        b=lE55rVTqYPSFuy5+14nvjA7f4zrhciYiHT8VxVUE1MJ7P9pqQTtaQwm0UYoMcgO6Os
-         OL0u3iwp4bZ4TUCrjpjd6wpnKK6Ill/WF0G+JYw2wlNK7Y6POjtfdCcoc2ttDvGtpLso
-         jlmVp7Y1CFCUdUB420Fcg47yHb6eBzqfyU0TzRZ7n8PpWluvmaAhk6ttjub4j4l9ErPQ
-         OJc2vrqoK01sDWIMxa4Zg/iGQVbsddxJDdcJd0xQvoO4bl8laDibtpksUiJjlRAPmEXq
-         th7bdkji/lLhHZ81E440EAQ3YvSpip90VI5oJrqDCeC7SPptRKu7pAxcF10xZ+PfzErA
-         fInw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fgz/Djjon8JkpfSssPQphU3ki++kBUAfgIVgXczgsW4=;
-        b=zyBFevnq2wNQCklfyr5V6/aR4RnkiBqsZ8j2Xmq0aK6szXG3zDU6sM0WWYfocklmRA
-         G6vwpBhFtrgqV1hf16ea9jKe+b0D58Ka5wv91Milfj7bnJJsSYZZ1+HqzMvQFWWgMRxv
-         Ac+PAAeytl2Hw1C8gbzWnOGxqNJ7zliWVaEo+k+SsWXEfwJ/84GLyAt1e4Liob+mqwKZ
-         uJjS/uaab9S201jn7aeYHTxJOBXjSOj1UPVhuxGmF7RnCwmxeyQXZYlrgtZTZCX/OrVX
-         6EqTPY9E57cHhbnSIRVF7vnOa37y11sXxG4fVNu7lZ/xem3+UT5HptO9RXk+xJag239l
-         03Ow==
-X-Gm-Message-State: AO0yUKW8IZve8jkQNpExx0DLyUdgpG5XzsVnAqlGnia/gR681+puITtw
-        4cHoqDPS7cC09730rImh/R6Arg==
-X-Google-Smtp-Source: AK7set8D4X5l66tyx1++Qt6S5OywQT89DpL4bGWD4TuPqWS1oorrBx8v0SQeMQr+7yhYkpYfA0BFLw==
-X-Received: by 2002:a62:7911:0:b0:5a9:4af:b05b with SMTP id u17-20020a627911000000b005a904afb05bmr7735128pfc.12.1677683984329;
-        Wed, 01 Mar 2023 07:19:44 -0800 (PST)
-Received: from smtpclient.apple ([51.52.155.79])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa7818b000000b005ae02dc5b94sm8093180pfi.219.2023.03.01.07.19.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Mar 2023 07:19:43 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.2\))
-Subject: Re: [PATCH] locking/atomic: cmpxchg: Make __generic_cmpxchg_local
- compare against zero-extended 'old' value
-From:   Matt Evans <mev@rivosinc.com>
-In-Reply-To: <e27d184e-2561-4efe-a191-8c0401f815b0@app.fastmail.com>
-Date:   Wed, 1 Mar 2023 15:19:40 +0000
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C7DB3543-8DB2-49F8-85A4-E9288843BCDD@rivosinc.com>
-References: <8B94CEAB-63AD-400F-A5CD-31AC4490EF4C@rivosinc.com>
- <e27d184e-2561-4efe-a191-8c0401f815b0@app.fastmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-X-Mailer: Apple Mail (2.3696.120.41.1.2)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 10:22:24 -0500
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587163BD86;
+        Wed,  1 Mar 2023 07:22:23 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 099472B066AA;
+        Wed,  1 Mar 2023 10:22:17 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 01 Mar 2023 10:22:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1677684137; x=1677691337; bh=35LAosmMrb
+        aNq+dBMEtgsW+bTUi65LRc+RMuP/OivHw=; b=v6r/OuO3xTuBebiQ3is1k1uNgb
+        eM4IUhoL0733u7q8ZxOv+4pNODCjZNmgkW5FkSbf1dfx2ls1Grm82aBNmFR2gFrs
+        dWX9+ARcHLoHxL+XxbneOWoAuBwBjlxAS/Q0hS79co2p2P9SFRngRFWGkCjxRwZ7
+        Qnufn/9aymmKdtS/2wjJfZo2edzzXJs45FJ4QFgghjCmmxBTSGXd64W2hh1QXphn
+        m+wr0iqJOzNUNi107dvmfiwTOBf1EDQc88lb+GScuQyOjSYrBsAPW3CdB3Jx6c0x
+        YJlD8qnJQ9mrIpO+9NND2RnTYicZbugt/jOx3cQddzoXzMzNJ4ssioIf409Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677684137; x=1677691337; bh=35LAosmMrbaNq+dBMEtgsW+bTUi6
+        5LRc+RMuP/OivHw=; b=YrVxsGT+aC71h7mj7ao4Py9kyXShoFsqsb1Jm7RP3Yvn
+        nH396vS0z9pOdgqXIlrjeB5zMrADq/bz9OBNNCQodaKeoox6wJbBuD3fF2L6owc0
+        Oys7MTC3BaainmlNiVRB2qFyl2NN72FnyYt1Snjl5crZu7cXm1ndKy1b/AQh6PU5
+        c6EbQSgUrX3PvX7uxQTly6uYsmhoo6qznkYoigFUY5wpZN3mDmifm6cO6bkZnZ3j
+        AIrC5geq/79NwjlPbn5tN54PGPWDGW0uv9td8JZc+dezONesHHOwBsWkBDbIOZeu
+        yOq+cG0Be+WXYkxhDm2MINGW6BxUTDjs7ECghJ8oag==
+X-ME-Sender: <xms:qG3_Y_Kilw9lw0q5o3bSwHvknKDCu4_e7WZcEZzDys9reEQKmI9lKg>
+    <xme:qG3_YzLpAztfri--XN0PrwqaBwZ97beLj854f7wKxVez4mCJv8zyiPqecPFo1u1cT
+    zEUqZxIzbpueA>
+X-ME-Received: <xmr:qG3_Y3uOpfGZWp1umNrtSno_6JY3Age98d14zFunKDbNGsY2CdpzI1ADTZCu5QFCH0RWINqVKbXK-4sOW155FXf9d9AP5hczQyeT6A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedgieekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:qG3_Y4aYx-nGh-WQ5O-qp59RhWhZAArJsvnpvZ7035GsO-DQyNEOGQ>
+    <xmx:qG3_Y2YZ0Oico0Uc56N52DZXE74FFpquCHM2bqfm8QCg6EkTjw8T1w>
+    <xmx:qG3_Y8AQW3a0YXNVbUYj51d-M6NdZdl5gJVp9giFRW4VtatA6ygdqw>
+    <xmx:qW3_Y5ntk_-AFmrGeaMNB4HBhvUULCS4CnWyZAb0V0HC0MfY7yTBSqYKyZE>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 1 Mar 2023 10:22:15 -0500 (EST)
+Date:   Wed, 1 Mar 2023 16:22:09 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     stable@vger.kernel.org,
+        "linux-wireless@vger.kernel.org Neo Jou" <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
+        Andreas Henriksson <andreas@fatal.se>,
+        Viktor Petrenko <g0000ga@gmail.com>
+Subject: Re: [PATCH v2 0/3] wifi: rtw88: USB fixes
+Message-ID: <Y/9toUMQlZ4fLbe0@kroah.com>
+References: <20230210111632.1985205-1-s.hauer@pengutronix.de>
+ <20230301071141.GN23347@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301071141.GN23347@pengutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Wed, Mar 01, 2023 at 08:11:41AM +0100, Sascha Hauer wrote:
+> On Fri, Feb 10, 2023 at 12:16:29PM +0100, Sascha Hauer wrote:
+> > This series addresses issues for the recently added RTW88 USB support
+> > reported by Andreas Henriksson and also our customer.
+> > 
+> > The hardware can't handle urbs that have a size of multiple of the
+> > bulkout_size (usually 512 bytes). The symptom is that the hardware
+> > stalls completely. The issue can be reproduced by sending a suitably
+> > sized ping packet from the device:
+> > 
+> > ping -s 394 <somehost>
+> > 
+> > (It's 394 bytes here on a RTL8822CU and RTL8821CU, the actual size may
+> > differ on other chips, it was 402 bytes on a RTL8723DU)
+> > 
+> > Other than that qsel was not set correctly. The sympton here is that
+> > only one of multiple bulk endpoints was used to send data.
+> > 
+> > Changes since v1:
+> > - Use URB_ZERO_PACKET to let the USB host controller handle it automatically
+> >   rather than working around the issue.
+> > 
+> > Sascha Hauer (3):
+> >   wifi: rtw88: usb: Set qsel correctly
+> >   wifi: rtw88: usb: send Zero length packets if necessary
+> >   wifi: rtw88: usb: drop now unnecessary URB size check
+> 
+> These patches went in upstream as:
+> 
+> 7869b834fb07c wifi: rtw88: usb: Set qsel correctly
+> 07ce9fa6ab0e5 wifi: rtw88: usb: send Zero length packets if necessary
+> 462c8db6a0116 wifi: rtw88: usb: drop now unnecessary URB size check
+> 
+> These patches make the RTW88 USB support much more reliable. Can they be
+> picked for the current 6.2 stable series please?
 
-> On 26 Feb 2023, at 10:13, Arnd Bergmann <arnd@arndb.de> wrote:
->=20
-> On Wed, Feb 1, 2023, at 19:39, Matt Evans wrote:
->> __generic_cmpxchg_local takes unsigned long old/new arguments which
->> might end up being up-cast from smaller signed types (which will
->> sign-extend).  The loaded compare value must be compared against a
->> truncated smaller type, so down-cast appropriately for each size.
->>=20
->> The issue is apparent on 64-bit machines with code, such as
->> atomic_dec_unless_positive(), that sign-extends from int.
->>=20
->> 64-bit machines generally don't use the generic cmpxchg but
->> development/early ports might make use of it, so make it correct.
->>=20
->> Signed-off-by: Matt Evans <mev@rivosinc.com>
->=20
-> Hi Matt,
->=20
-> I'm getting emails about nios2 sparse warnings from the
-> kernel test robot about your patch. I can also reproduce
-> this on armv5:
->=20
->=20
-> fs/erofs/zdata.c: note: in included file (through =
-/home/arnd/arm-soc/arch/arm/include/asm/cmpxchg.h, =
-/home/arnd/arm-soc/arch/arm/include/asm/atomic.h, =
-/home/arnd/arm-soc/include/linux/atomic.h, ...):
-> include/asm-generic/cmpxchg-local.h:29:33: warning: cast truncates =
-bits from constant value (5f0ecafe becomes fe)
-> include/asm-generic/cmpxchg-local.h:33:34: warning: cast truncates =
-bits from constant value (5f0ecafe becomes cafe)
-> include/asm-generic/cmpxchg-local.h:29:33: warning: cast truncates =
-bits from constant value (5f0ecafe becomes fe)
-> include/asm-generic/cmpxchg-local.h:30:42: warning: cast truncates =
-bits from constant value (5f0edead becomes ad)
-> include/asm-generic/cmpxchg-local.h:33:34: warning: cast truncates =
-bits from constant value (5f0ecafe becomes cafe)
-> include/asm-generic/cmpxchg-local.h:34:44: warning: cast truncates =
-bits from constant value (5f0edead becomes dead)
->=20
-> This was already warning for the 'new' cast, but now also warns
-> for the 'old' cast, so the bot thinks this is a new problem.
+All now queued up, thanks.
 
-Thank you!  Hmm, indeed, it=E2=80=99s =E2=80=9Cmore of the same=E2=80=9D =
-warning-wise but your alternative is nicer.
-
-> I managed to shut up the warning by using a binary '&' operator
-> instead of the cast, but I wonder if it would be better to do
-> also mask this in the caller, when arch_atomic_cmpxchg() with its
-> signed argument calls into arch_cmpxchg() with its unsigned argument:
-
-Proposed patch LGTM, but one query:  are the casts in =
-arch_[cmp]xchg()=E2=80=99s args necessary?  The new masks should deal =
-with the issue (and consistency would imply same for all other users of =
-arch_cmpxchg(), not ideal).
-
-> diff --git a/include/asm-generic/atomic.h =
-b/include/asm-generic/atomic.h
-> index 04b8be9f1a77..e271d6708c87 100644
-> --- a/include/asm-generic/atomic.h
-> +++ b/include/asm-generic/atomic.h
-> @@ -130,7 +130,7 @@ ATOMIC_OP(xor, ^)
-> #define arch_atomic_read(v)                    READ_ONCE((v)->counter)
-> #define arch_atomic_set(v, i)                  =
-WRITE_ONCE(((v)->counter), (i))
->=20
-> -#define arch_atomic_xchg(ptr, v)               =
-(arch_xchg(&(ptr)->counter, (v)))
-> -#define arch_atomic_cmpxchg(v, old, new)       =
-(arch_cmpxchg(&((v)->counter), (old), (new)))
-> +#define arch_atomic_xchg(ptr, v)               =
-(arch_xchg(&(ptr)->counter, (u32)(v)))
-> +#define arch_atomic_cmpxchg(v, old, new)       =
-(arch_cmpxchg(&((v)->counter), (u32)(old), (u32)(new)))
->=20
-> #endif /* __ASM_GENERIC_ATOMIC_H */
-> diff --git a/include/asm-generic/cmpxchg-local.h =
-b/include/asm-generic/cmpxchg-local.h
-> index c3e7315b7c1d..f9d52d1f0472 100644
-> --- a/include/asm-generic/cmpxchg-local.h
-> +++ b/include/asm-generic/cmpxchg-local.h
-> @@ -26,20 +26,20 @@ static inline unsigned long =
-__generic_cmpxchg_local(volatile void *ptr,
->        raw_local_irq_save(flags);
->        switch (size) {
->        case 1: prev =3D *(u8 *)ptr;
-> -               if (prev =3D=3D (u8)old)
-> -                       *(u8 *)ptr =3D (u8)new;
-> +               if (prev =3D=3D (old & 0xff))
-> +                       *(u8 *)ptr =3D (new & 0xffu);
->                break;
->        case 2: prev =3D *(u16 *)ptr;
-> -               if (prev =3D=3D (u16)old)
-> -                       *(u16 *)ptr =3D (u16)new;
-> +               if (prev =3D=3D (old & 0xffffu))
-> +                       *(u16 *)ptr =3D (new & 0xffffu);
->                break;
->        case 4: prev =3D *(u32 *)ptr;
-> -               if (prev =3D=3D (u32)old)
-> -                       *(u32 *)ptr =3D (u32)new;
-> +               if (prev =3D=3D (old & 0xffffffffu))
-> +                       *(u32 *)ptr =3D (new & 0xffffffffu);
->                break;
->        case 8: prev =3D *(u64 *)ptr;
->                if (prev =3D=3D old)
-> -                       *(u64 *)ptr =3D (u64)new;
-> +                       *(u64 *)ptr =3D new;
->                break;
->        default:
->                wrong_size_cmpxchg(ptr);
-
-FWIW (including the casts in atomic.h, if you prefer):
-
-Reviewed-by: Matt Evans <mev@rivosinc.com>
-
-
-Thanks,
-
-
-Matt
-
-
->=20
->=20
->     Arnd
-
+greg k-h
