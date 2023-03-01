@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38896A643B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C206A643D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjCAA1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 19:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
+        id S229716AbjCAA1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 19:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCAA1B (ORCPT
+        with ESMTP id S229651AbjCAA1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 19:27:01 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1416F166FE;
-        Tue, 28 Feb 2023 16:27:01 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id cf14so12593034qtb.10;
-        Tue, 28 Feb 2023 16:27:01 -0800 (PST)
+        Tue, 28 Feb 2023 19:27:03 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F9BC15F;
+        Tue, 28 Feb 2023 16:27:02 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id h19so12607007qtk.7;
+        Tue, 28 Feb 2023 16:27:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677630420;
+        d=gmail.com; s=20210112; t=1677630421;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EJeL8n1akQBNQY4mRwitUTFXHR0Ml81lQFAgFs/9ooY=;
-        b=K7bv3zo7nkCzf6deBRp4Lg5YJiKpmZGrVVrcwX6fMe04PLGbmPyiZ1MfpMFJQ3gczk
-         PTyFy7vyLgLlx4rQsvY5iWzcRX3PiEerotSwO1e2S/uUms8G6rSLjchIcjEksVUEjiAm
-         lqxx6nLANTkqsDfT2GGi0AknUbNFldAXU+7lx+ghL7WHK+3w+CaZW0Jan14INQZhOML9
-         ojesxHzEYYczhj2+mxUoQOQVI0RHUXdx3ff+mDU8+OOYUEjKABkvjPah1T9R0sgtLfL1
-         JRbjxDw92oE/6vsQ929iWXZ7ucRImszCuaADlO3+M6lK9IL4xYmXkipZHIL1URAUffnO
-         DiVw==
+        bh=w/MyxgPKxQn9hh5x2nb//eurUMI1TwFNKVvwtxDYylE=;
+        b=NuI2G4KbKwo/PAuNAKZEkDmoR0NVEBT6OEtd4HOsq+CmCK4Ggibq3XGzOgzN5EQD3z
+         xjqzyRsrCzdMQP8aS4kOMaJ0nwd/49iGKls3+xfVo06TtW8v+kflV4YhcgE4+ryBD7+X
+         LlNE1QAvjujKk9Tx1JLQtaPKvaYfX4APKtKUs3ADnrIGirku+vH6KDxhW3GvP0HfFTbu
+         zf2kb5Sxdn01s3ZPaydtlW7PeYfXGOPRnLnYXhQJQwnWUvFL2H2myVNb2tSneF/H3Mav
+         39T4L6VaQFOt1aGS5ELTfz4qr930VjYGQBiilNnaSAwJwGFno9NI7ATpVT+ZPhn9Oi8B
+         CTJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677630420;
+        d=1e100.net; s=20210112; t=1677630421;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EJeL8n1akQBNQY4mRwitUTFXHR0Ml81lQFAgFs/9ooY=;
-        b=HG208m9fU3ciDls425w2tiUogZYUMWbUIOQCeRYakQUutMBUAzpJZgusb7lI35XXwr
-         D/Tjei465eEM0zkt2rMPlUEmq0Gze3rMdyy4JFn1x6pZ+CZBSe5rTZCwp8MHjaSive+/
-         tv3BrsUT+wEmFnfbp/0dsVNV0iIkOf60eYo+S/m3n9R2EgTolnBDOZGxIqM1rtNyi1N9
-         3N0BC6+TWoMk+hiYmnYT1kAVcASsLNaKlul7UnCsbX7P84kDGXAYaAbSdK+N/stCDiuJ
-         qUdy3v7tg7jwZyWFuYTxZgv03bnLcJr+gfvVP7Bm2RAfWlIZLeAi43NWWzEXE4tfraFA
-         IHfg==
-X-Gm-Message-State: AO0yUKW8YToiK82jw3Tm3H1ml+Wn+DMFD4itJ6m8BC9PmUU/37TFQYrD
-        /zcvITfm5Kg4e1QsfmBIiFQ=
-X-Google-Smtp-Source: AK7set8zokOxucIULtSs5zhdVozPV61o7zflDRvd+aPvYt9Y7AQE+0kZsw5WSyFy3Fvn+3de2l1rkQ==
-X-Received: by 2002:a05:622a:1746:b0:3bf:dbd3:a014 with SMTP id l6-20020a05622a174600b003bfdbd3a014mr8768717qtk.45.1677630420219;
-        Tue, 28 Feb 2023 16:27:00 -0800 (PST)
+        bh=w/MyxgPKxQn9hh5x2nb//eurUMI1TwFNKVvwtxDYylE=;
+        b=wIc+nrEt4YCD99TqV/CytcxLPqpE99z3FhPAuABo3dG5mZ9LYb/6ZbwcqdawGcEH8+
+         6ZAH8/11zmFQCdG7iggHzaBtCbL+MBeVsrAfTeO2iC/1h33EQLA8tvjYUPItVCxqtW5c
+         V766n5dQar9Rj3T/YlR728eWHu/Ki9VzE2wevlZOzM3AKMf0FPmcN4+/LskOc8Th5hAP
+         pyLcMDLbLmWUtV97QqIL4mFCzZfo7w1436pvabLOoN2tZ1OpPI/0NdbXtH2w7DJ4n6UW
+         PnFKzlSFmOvzJ9Z7NYQFGyGpp4oCOLR/R3ZFTIduoXjavrmIcSdfx7YN2HkoeQI5X0Nh
+         OI1Q==
+X-Gm-Message-State: AO0yUKVcJk/EeR0oY7Yq9/+ljW8GFKBuv3poPSj2FIp478uoIyUMBlGw
+        YRW+XfhCi8fMRFP/7JEsaGU=
+X-Google-Smtp-Source: AK7set8V1wa1E6m4iqzrwXb7JVVMTDBwt0TSn/UDCQ5rLdFX0jxAYz/eYaCqUujiBmSzcznc6syVZA==
+X-Received: by 2002:ac8:5e49:0:b0:3bf:afd1:8c98 with SMTP id i9-20020ac85e49000000b003bfafd18c98mr7916982qtx.0.1677630421189;
+        Tue, 28 Feb 2023 16:27:01 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
-        by smtp.gmail.com with ESMTPSA id t8-20020ac85888000000b003bb8c60cdf1sm7576698qta.78.2023.02.28.16.26.59
+        by smtp.gmail.com with ESMTPSA id t8-20020ac85888000000b003bb8c60cdf1sm7576698qta.78.2023.02.28.16.27.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 16:26:59 -0800 (PST)
+        Tue, 28 Feb 2023 16:27:00 -0800 (PST)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-riscv@lists.infradead.org
@@ -62,12 +62,10 @@ Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         Waldemar Brodkorb <wbx@openadk.org>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v3 1/3] clk: k210: remove an implicit 64-bit division
-Date:   Tue, 28 Feb 2023 19:26:55 -0500
-Message-Id: <20230301002657.352637-2-Mr.Bossman075@gmail.com>
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: [PATCH v3 2/3] riscv: Kconfig: Allow RV32 to build with no MMU
+Date:   Tue, 28 Feb 2023 19:26:56 -0500
+Message-Id: <20230301002657.352637-3-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
 References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
@@ -83,41 +81,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+From: Yimin Gu <ustcymgu@gmail.com>
 
-The K210 clock driver depends on SOC_CANAAN, which is only selectable
-when !MMU on RISC-V. !MMU is not possible on 32-bit yet, but patches
-have been sent for its enabling. The kernel test robot reported this
-implicit 64-bit division there.
+Some RISC-V 32bit cores do not have an MMU, and the kernel should be
+able to build for them. This patch enables the RV32 to be built with
+no MMU support.
 
-Replace the implicit division with an explicit one.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/linux-riscv/202301201538.zNlqgE4L-lkp@intel.com/
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Yimin Gu <ustcymgu@gmail.com>
+CC: Jesse Taube <Mr.Bossman075@gmail.com>
+Tested-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 ---
 V1->V2:
- - new commit
+ - Fix typo in commit description
 V2->V3:
  - No change
 ---
- drivers/clk/clk-k210.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/Kconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/clk-k210.c b/drivers/clk/clk-k210.c
-index 67a7cb3503c3..4eed667eddaf 100644
---- a/drivers/clk/clk-k210.c
-+++ b/drivers/clk/clk-k210.c
-@@ -495,7 +495,7 @@ static unsigned long k210_pll_get_rate(struct clk_hw *hw,
- 	f = FIELD_GET(K210_PLL_CLKF, reg) + 1;
- 	od = FIELD_GET(K210_PLL_CLKOD, reg) + 1;
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c5e42cc37604..d1f661425790 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -177,8 +177,8 @@ config MMU
  
--	return (u64)parent_rate * f / (r * od);
-+	return div_u64((u64)parent_rate * f, r * od);
- }
+ config PAGE_OFFSET
+ 	hex
+-	default 0xC0000000 if 32BIT
+-	default 0x80000000 if 64BIT && !MMU
++	default 0xC0000000 if 32BIT && MMU
++	default 0x80000000 if !MMU
+ 	default 0xff60000000000000 if 64BIT
  
- static const struct clk_ops k210_pll_ops = {
+ config KASAN_SHADOW_OFFSET
+@@ -279,7 +279,6 @@ config ARCH_RV32I
+ 	select GENERIC_LIB_ASHRDI3
+ 	select GENERIC_LIB_LSHRDI3
+ 	select GENERIC_LIB_UCMPDI2
+-	select MMU
+ 
+ config ARCH_RV64I
+ 	bool "RV64I"
 -- 
 2.39.0
 
