@@ -2,122 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689716A69EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0466A69F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjCAJjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S229633AbjCAJnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCAJi6 (ORCPT
+        with ESMTP id S229510AbjCAJnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:38:58 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8130B311ED;
-        Wed,  1 Mar 2023 01:38:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677663537; x=1709199537;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=mwzi1nOCe5KSvSMHkgAMvU654fpFvrxwhFKDR1Q+JbA=;
-  b=PbMlW8vADZ0lLS0VNAyI1ZWY50EHPR9lSRvw/2wKAfHFLl2x2IGwhdqF
-   xf72k4+CrSSLJ7gdtgfo/Rc+ERhmWfniIT5f2FKr0p8gbfWvFl+LnvcJx
-   64c94cy+eVwrmhB/8y3p1M8IusosQ5N5Zq9jJ2ppCIDW4Xvn4FGoEqvUf
-   kC0QieS/mmUfARfVZnbzkmqWW0Ec2PYwBE0dUoW6U15OZTzXtDMy/lDeo
-   FdyFP3uVpGo8nKd9nUM97IgYVWR7kpTYFYPgyPUClXCKnQe+4iXJQt9Ou
-   EuBHsPsNP+xqbVt58sLvszjuIlbsBqc9ghp6zNom/wAM3O48WKF16CLjm
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="322627023"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="322627023"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 01:38:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="624418784"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="624418784"
-Received: from dsvarnas-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.46.249])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 01:38:51 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Martin Kurbanov <mmkurbanov@sberdevices.ru>, ojeda@kernel.org
-Cc:     devicetree@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel@sberdevices.ru, linux-leds@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: Re: AUXdisplay for LED arrays, keyboards with per-key LEDs -- was
- Re: [PATCH v2 2/2] leds: add aw20xx driver
-In-Reply-To: <Y/50tKxpNVZO4Hfb@duo.ucw.cz>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230228211046.109693-1-mmkurbanov@sberdevices.ru>
- <20230228211046.109693-3-mmkurbanov@sberdevices.ru>
- <Y/5xBGFC3b9Chdtb@duo.ucw.cz> <Y/50tKxpNVZO4Hfb@duo.ucw.cz>
-Date:   Wed, 01 Mar 2023 11:38:49 +0200
-Message-ID: <87h6v4x13q.fsf@intel.com>
+        Wed, 1 Mar 2023 04:43:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38C3E3AC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:43:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A14B61298
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 09:43:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CAA8C433D2;
+        Wed,  1 Mar 2023 09:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677663812;
+        bh=ot4Z2xK8UNxIYbmHAgiI5cpF545tn/mJuRLFj3fnJwc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RI8TDBH22AEvTMsZRhIgYHcGRb/mwN66vEOO2UR0BkGQEFZy3fjEkAguSaPUiB6dh
+         PQoO+Jl3z3uKPbzITJyrnkeA8S4ljjDNLpeP8xs+xNMkR6P+InZ6her/KfPLBR1zir
+         rG0TX4RadPxTkjiKo9BPc9/ggoN3wDTlZj39GLXOheKsNhzRI9OU4OGSGYGBxtveGR
+         bx15UcH8na8Pd3jS+IjpGo0wDvB8sSUEyEjxEYD7ha86IL1ipCxd+2vt+M5uXJIh5J
+         dFBsf0RLoJ9sU9+uF2uBBerzN9b4ERnKL+eSlk9tc8F7M5ScdwAyC2j01l1YHA66Ag
+         NwEIidIj4DEfw==
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Andy Shevchenko <andy@kernel.org>
+Subject: [RFC PATCH] checkpatch: Support __initconst combined with struct definition
+Date:   Wed,  1 Mar 2023 10:43:20 +0100
+Message-Id: <20230301094320.15954-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023, Pavel Machek <pavel@ucw.cz> wrote:
-> Hi!
->
->> > +config LEDS_AW200XX
->> > +	tristate "LED support for Awinic AW20036/AW20054/AW20072"
->> > +	depends on LEDS_CLASS
->> > +	depends on I2C
->> > +	help
->> > +	  This option enables support for the AW20036/AW20054/AW20072 LED driver.
->> > +	  It is a 3x12/6x9/6x12 matrix LED driver programmed via
->> > +	  an I2C interface, up to 36/54/72 LEDs or 12/18/24 RGBs,
->> > +	  3 pattern controllers for auto breathing or group dimming control.
->> 
->> I'm afraid this should be handled as a display, not as an array of
->> individual LEDs.
->
-> You probably want to see
->
-> AUXILIARY DISPLAY DRIVERS
-> M:      Miguel Ojeda <ojeda@kernel.org>
-> S:      Maintained
-> F:      Documentation/devicetree/bindings/auxdisplay/
-> F:      drivers/auxdisplay/
-> F:      include/linux/cfag12864b.h
->
-> And this brings another question...
->
-> ...sooner or later we'll see LED displays with around 100 pixels in
-> almost rectangular grid. Minority of the pixels will have funny
-> shapes. How will we handle those? Pretend it is regular display with
-> some pixels missing? How do we handle cellphone displays with rounded
-> corners and holes for front camera?
->
-> And yes, such crazy displays are being manufactured -- it is called
-> keyboard with per-key backlight... 
->
-> https://www.reddit.com/r/MechanicalKeyboards/comments/8dtvgo/keyboard_with_individually_programmable_leds/
+From: Björn Töpel <bjorn@rivosinc.com>
 
-But... is that a display or a HID?
+Checkpatch sometimes report a false positive for __initconst. E.g., for the
+following snippet:
 
-Only half-joking, really. This somewhat reminds me of using input system
-force feedback stuff for touch screen vibrations.
+ | static const struct strspn_test {
+ | 	const char str[16];
+ | 	const char accept[16];
+ | 	const char reject[16];
+ | 	unsigned a;
+ | 	unsigned r;
+ | } tests[] __initconst = {
+ | 	{ "foobar", "", "", 0, 6 },
+ | 	{ "abba", "abc", "ABBA", 4, 4 },
+ | 	{ "abba", "a", "b", 1, 1 },
+ | 	{ "", "abc", "abc", 0, 0},
+ | };
 
-Cc: Dmitry & linux-input.
+checkpatch would report:
 
+ | ERROR: Use of __initconst requires a separate use of const
+ | #190: FILE: ./test_string.c:190:
+ | +	} tests[] __initconst = {
 
-BR,
-Jani.
+Improve the reporting by trying harder to find the 'const'.
 
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+
+In [1], Andy asked if it was possible to fix the __initconst false
+positive in checkpatch, rather than the code.
+
+I did a crude hack that searches backwards for the 'const' in the
+struct definition, but I'm sure the Perl hackers out there hate it,
+hence the RFC. ;-)
+
+Björn
+
+[1] https://lore.kernel.org/linux-riscv/CAHp75VfK3RM+SP90d3nOXEobY81Xd_94tLL=Qt86mmdNwXaQpg@mail.gmail.com/
+
+---
+ scripts/checkpatch.pl | 54 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 53 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index bd44d12965c9..d2370233e2c1 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -1854,6 +1854,48 @@ sub ctx_statement_full {
+ 	return ($level, $linenr, @chunks);
+ }
+ 
++sub ctx_block_outer_rev {
++	my ($linenr, $open, $close) = @_;
++	my $line;
++	my $start = $linenr;
++	my $blk = '';
++	my @res = ();
++
++	my $level = 0;
++	my @stack = ($level);
++	for ($line = $start; $line >= 0; $line--) {
++		next if ($rawlines[$line] =~ /^-/);
++
++		$blk .= $rawlines[$line];
++
++		# Handle nested #if/#else.
++		if ($lines[$line] =~ /^.\s*#\s*(?:ifndef|ifdef|if)\s/) {
++			$level = pop(@stack);
++		} elsif ($lines[$line] =~ /^.\s*#\s*(?:else|elif)\b/) {
++			$level = $stack[$#stack - 1];
++		} elsif ($lines[$line] =~ /^.\s*#\s*endif\b/) {
++			push(@stack, $level);
++		}
++
++		foreach my $c (split(//, $lines[$line])) {
++			if ($c eq $close && $level > 0) {
++				$level--;
++				last if ($level == 0);
++			} elsif ($c eq $open) {
++				$level++;
++			}
++		}
++
++		if ($level <= 1) {
++			push(@res, $rawlines[$line]);
++		}
++
++		last if ($level == 0);
++	}
++
++	return @res;
++}
++
+ sub ctx_block_get {
+ 	my ($linenr, $remain, $outer, $open, $close, $off) = @_;
+ 	my $line;
+@@ -6502,7 +6544,17 @@ sub process {
+ # check for $InitAttributeConst (ie: __initconst) without const
+ 		if ($line !~ /\bconst\b/ && $line =~ /($InitAttributeConst)/) {
+ 			my $attr = $1;
+-			if (ERROR("INIT_ATTRIBUTE",
++			my $error = 1;
++			if ($line =~ /}/) {
++			# The const might be part of a struct definition. Try to find that...
++				my @ctx = ctx_block_outer_rev($linenr, '}', '{');
++				if (@ctx) {
++					if ($ctx[$#ctx] =~ /\bconst\b/) {
++						$error = 0;
++					}
++				}
++			}
++			if ($error && ERROR("INIT_ATTRIBUTE",
+ 				  "Use of $attr requires a separate use of const\n" . $herecurr) &&
+ 			    $fix) {
+ 				my $lead = $fixed[$fixlinenr] =~
+
+base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.37.2
+
