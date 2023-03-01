@@ -2,108 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0D76A72A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DBB6A7319
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjCASHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S230059AbjCASMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjCASHp (ORCPT
+        with ESMTP id S230056AbjCASMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:07:45 -0500
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889F0B464;
-        Wed,  1 Mar 2023 10:07:44 -0800 (PST)
-Received: by mail-pj1-f43.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so72674pjb.3;
-        Wed, 01 Mar 2023 10:07:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fz6WOZ/z5lwtTAg8FqEkEPXRRvxotq7sY4hiW57q0Vo=;
-        b=z5p+0eGYgWq0Uq61esGr6ir+1SX+VjyviJ5xjkQe5gV6BAASHRcRBuZKRZnYRiBGi6
-         i695Xkm5HW/Ru/77Kd5qWTgMhVpLbdG9xAh+IIStGIG9AT1PIHB1DO0XzOYguPdBxpNs
-         56sk+swjNUVme4LWo+YbLXLisuizB2JT6kfLSxi/Uv3si/vnhd+WrrqTt8ifrNle3mTE
-         yQsJAM4DHAC52KIkmx/SWp2bLjroxNIUTXWQe34z/6Jv7K0lVGdEUqKf96QzcfvA+tmA
-         EcnSnA8pWvYX15TIxbkcuT4lP1TaBnwEFs9uJacrCy403NBFNOXqsB/v9NvxHFzNbths
-         JItA==
-X-Gm-Message-State: AO0yUKVZG/uXPXc8ADYZklpEqWlItoowC6BKhWQrOjOiHQfqUX5lNoVJ
-        w5St6BwisHARyvJcNWWn9PCf0sxxzIQ=
-X-Google-Smtp-Source: AK7set9JhYtmNMV7lCXdQ9mo54Y2U1aBntVSGSDCFpGeGYqdnoGmlTk21DhG8GfJwnoV5I2xt7Rfug==
-X-Received: by 2002:a05:6a20:65b0:b0:cc:dd86:ca27 with SMTP id p48-20020a056a2065b000b000ccdd86ca27mr6552688pzh.17.1677694063831;
-        Wed, 01 Mar 2023 10:07:43 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:e8e:76a3:8425:6d37? ([2620:15c:211:201:e8e:76a3:8425:6d37])
-        by smtp.gmail.com with ESMTPSA id a6-20020a631a46000000b004fc1d91e695sm7682911pgm.79.2023.03.01.10.07.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 10:07:43 -0800 (PST)
-Message-ID: <a3c08b5f-b8cb-fdd9-eb60-b1adc2879fff@acm.org>
-Date:   Wed, 1 Mar 2023 10:07:41 -0800
+        Wed, 1 Mar 2023 13:12:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB724AFF6;
+        Wed,  1 Mar 2023 10:12:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 992AA6145E;
+        Wed,  1 Mar 2023 18:12:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 816F6C433D2;
+        Wed,  1 Mar 2023 18:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677694353;
+        bh=y1d53xEgSUxUqIvrYe+1FEG+frmchlfXOOBCQftVxw8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=zZJ27L5PooZ922V323VzzS8gbpvQikMGKAv89uvc+4TuySboOcY7Wfe9upCx+3RRf
+         UpQm4eDNGwtnZ/WtcHWfDCbXDCFZUkwFDMqqonSBa51IBd01RRwrwcZI/MLE3nzPwH
+         fI0pyGWqktXwqxCQ9PfdK7AtoBvE4s/zrol6/yiM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 6.1 00/42] 6.1.15-rc1 review
+Date:   Wed,  1 Mar 2023 19:08:21 +0100
+Message-Id: <20230301180657.003689969@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] ufs: host: ufs-qcom: Return directly if MCQ resource is
- provided in DT
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_asutoshd@quicinc.com
-References: <20230301073110.9083-1-manivannan.sadhasivam@linaro.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230301073110.9083-1-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.15-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-6.1.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 6.1.15-rc1
+X-KernelTest-Deadline: 2023-03-03T18:06+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 23:31, Manivannan Sadhasivam wrote:
-> Instead of using a goto label to return, let's return directly in the
-> "if" condition after setting mcq_base.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   drivers/ufs/host/ufs-qcom.c | 9 ++++-----
->   1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index 34fc453f3eb1..d90f963eed02 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -1460,8 +1460,10 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
->   	/* MCQ resource provided in DT */
->   	res = &hba->res[RES_MCQ];
->   	/* Bail if MCQ resource is provided */
-> -	if (res->base)
-> -		goto out;
-> +	if (res->base) {
-> +		hba->mcq_base = res->base;
-> +		return 0;
-> +	}
->   
->   	/* Explicitly allocate MCQ resource from ufs_mem */
->   	res_mcq = devm_kzalloc(hba->dev, sizeof(*res_mcq), GFP_KERNEL);
-> @@ -1489,9 +1491,6 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
->   		goto ioremap_err;
->   	}
->   
-> -out:
-> -	hba->mcq_base = res->base;
-> -	return 0;
->   ioremap_err:
->   	res->base = NULL;
->   	remove_resource(res_mcq);
+This is the start of the stable review cycle for the 6.1.15 release.
+There are 42 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-This patch changes the behavior for the success case without mentioning 
-this in the patch description. So I assume that the behavior change is 
-unintentional and hence that this patch should be dropped?
+Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+Anything received after that time might be too late.
 
-Bart.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.15-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 6.1.15-rc1
+
+Alan Stern <stern@rowland.harvard.edu>
+    USB: core: Don't hold device lock while reading the "descriptors" sysfs file
+
+Carlos Llamas <cmllamas@google.com>
+    scripts/tags.sh: fix incompatibility with PCRE2
+
+Christian Brauner <brauner@kernel.org>
+    fs: use consistent setgid checks in is_sxid()
+
+Christian Brauner <brauner@kernel.org>
+    attr: use consistent sgid stripping checks
+
+Christian Brauner <brauner@kernel.org>
+    attr: add setattr_should_drop_sgid()
+
+Christian Brauner <brauner@kernel.org>
+    fs: move should_remove_suid()
+
+Christian Brauner <brauner@kernel.org>
+    attr: add in_group_or_capable()
+
+Stylon Wang <stylon.wang@amd.com>
+    drm/amd/display: Properly reuse completion structure
+
+Saranya Gopal <saranya.gopal@intel.com>
+    usb: typec: pd: Remove usb_suspend_supported sysfs from sink PDO
+
+Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+    arm64: dts: uniphier: Fix property name in PXs3 USB node
+
+Prashanth K <quic_prashk@quicinc.com>
+    usb: gadget: u_serial: Add null pointer check in gserial_resume
+
+Florian Zumbiehl <florz@florz.de>
+    USB: serial: option: add support for VW/Skoda "Carstick LTE"
+
+Heikki Krogerus <heikki.krogerus@linux.intel.com>
+    usb: dwc3: pci: add support for the Intel Meteor Lake-M
+
+Stylon Wang <stylon.wang@amd.com>
+    drm/amd/display: Fix race condition in DPIA AUX transfer
+
+Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+    drm/amd/display: Move DCN314 DOMAIN power control to DMCUB
+
+Thomas Weißschuh <linux@weissschuh.net>
+    vc_screen: don't clobber return value in vcs_read
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Remove WARN_ON_ONCE(sk->sk_forward_alloc) from sk_stream_kill_queues().
+
+Martin KaFai Lau <martin.lau@kernel.org>
+    bpf: bpf_fib_lookup should not return neigh in NUD_FAILED state
+
+Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+    PM: sleep: Avoid using pr_cont() in the tasks freezing code
+
+Kan Liang <kan.liang@linux.intel.com>
+    x86/cpu: Add Lunar Lake M
+
+Vladimir Oltean <vladimir.oltean@nxp.com>
+    selftests: ocelot: tc_flower_chains: make test_vlan_ingress_modify() more comprehensive
+
+Luka Guzenko <l.guzenko@web.de>
+    HID: Ignore battery for ELAN touchscreen 29DF on HP
+
+Alexey Firago <a.firago@yadro.com>
+    ASoC: codecs: es8326: Fix DTS properties reading
+
+Xin Zhao <xnzhao@google.com>
+    HID: core: Fix deadloop in hid_apply_multiplier.
+
+Julian Anastasov <ja@ssi.bg>
+    neigh: make sure used and confirmed times are valid
+
+Dmitry Torokhov <dmitry.torokhov@gmail.com>
+    ARM: dts: stihxxx-b2120: fix polarity of reset line of tsin0 port
+
+V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+    ASoC: SOF: amd: Fix for handling spurious interrupts from DSP
+
+Michael Ellerman <mpe@ellerman.id.au>
+    powerpc: Don't select ARCH_WANTS_NO_INSTR
+
+Dean Luick <dean.luick@cornelisnetworks.com>
+    IB/hfi1: Assign npages earlier
+
+Jack Yu <jack.yu@realtek.com>
+    ASoC: rt715-sdca: fix clock stop prepare timeout issue
+
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    arm64: dts: rockchip: align rk3399 DMC OPP table with bindings
+
+David Sterba <dsterba@suse.com>
+    btrfs: send: limit number of clones and allocated memory size
+
+Mario Limonciello <mario.limonciello@amd.com>
+    pinctrl: amd: Fix debug output for debounce time
+
+Vishal Verma <vishal.l.verma@intel.com>
+    ACPI: NFIT: fix a potential deadlock during NFIT teardown
+
+marco.rodolfi@tuta.io <marco.rodolfi@tuta.io>
+    HID: Ignore battery for Elan touchscreen on Asus TP420IA
+
+Takahiro Fujii <fujii@xaxxi.net>
+    HID: elecom: add support for TrackBall 056E:011C
+
+Jonas Karlman <jonas@kwiboo.se>
+    arm64: dts: rockchip: fix probe of analog sound card on rock-3a
+
+Jensen Huang <jensenhuang@friendlyarm.com>
+    arm64: dts: rockchip: add missing #interrupt-cells to rk356x pcie2x1
+
+Johan Jonker <jbx6244@gmail.com>
+    ARM: dts: rockchip: add power-domains property to dp node on rk3288
+
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    arm64: dts: rockchip: drop unused LED mode property from rk3328-roc-cc
+
+Jarrah Gosbell <kernel@undef.tools>
+    arm64: dts: rockchip: reduce thermal limits on rk3399-pinephone-pro
+
+Benedict Wong <benedictwong@google.com>
+    Fix XFRM-I support for nested ESP tunnels
+
+
+-------------
+
+Diffstat:
+
+ Documentation/trace/ftrace.rst                     |   2 +-
+ Makefile                                           |   4 +-
+ arch/arm/boot/dts/rk3288.dtsi                      |   1 +
+ arch/arm/boot/dts/stihxxx-b2120.dtsi               |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts     |   2 -
+ arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi   |   2 +-
+ .../boot/dts/rockchip/rk3399-pinephone-pro.dts     |   7 +
+ arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts    |   2 +
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi           |   1 +
+ .../dts/socionext/uniphier-pxs3-ref-gadget0.dts    |   2 +-
+ .../dts/socionext/uniphier-pxs3-ref-gadget1.dts    |   2 +-
+ arch/powerpc/Kconfig                               |   1 -
+ arch/x86/include/asm/intel-family.h                |   2 +
+ drivers/acpi/nfit/core.c                           |   2 +-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  | 150 ++++++++++-----------
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h  |  17 ++-
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c  |  10 +-
+ .../gpu/drm/amd/display/dc/dcn314/dcn314_hwseq.c   |  24 ++++
+ .../gpu/drm/amd/display/dc/dcn314/dcn314_hwseq.h   |   2 +
+ .../gpu/drm/amd/display/dc/dcn314/dcn314_init.c    |   2 +-
+ drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h    |  25 ++++
+ drivers/hid/hid-core.c                             |   3 +
+ drivers/hid/hid-elecom.c                           |  16 ++-
+ drivers/hid/hid-ids.h                              |   5 +-
+ drivers/hid/hid-input.c                            |   4 +
+ drivers/hid/hid-quirks.c                           |   3 +-
+ drivers/infiniband/hw/hfi1/user_exp_rcv.c          |   9 +-
+ drivers/pinctrl/pinctrl-amd.c                      |   1 +
+ drivers/tty/vt/vc_screen.c                         |   7 +-
+ drivers/usb/core/hub.c                             |   5 +-
+ drivers/usb/core/sysfs.c                           |   5 -
+ drivers/usb/dwc3/dwc3-pci.c                        |   4 +
+ drivers/usb/gadget/function/u_serial.c             |  23 +++-
+ drivers/usb/serial/option.c                        |   4 +
+ drivers/usb/typec/pd.c                             |   1 -
+ fs/attr.c                                          |  74 +++++++++-
+ fs/btrfs/send.c                                    |   6 +-
+ fs/fuse/file.c                                     |   2 +-
+ fs/inode.c                                         |  64 ++++-----
+ fs/internal.h                                      |  10 +-
+ fs/ocfs2/file.c                                    |   4 +-
+ fs/open.c                                          |   8 +-
+ include/linux/fs.h                                 |   4 +-
+ kernel/power/process.c                             |  21 ++-
+ net/caif/caif_socket.c                             |   1 +
+ net/core/filter.c                                  |   4 +-
+ net/core/neighbour.c                               |  18 ++-
+ net/core/stream.c                                  |   1 -
+ net/xfrm/xfrm_interface.c                          |  54 +++++++-
+ net/xfrm/xfrm_policy.c                             |   3 +
+ scripts/tags.sh                                    |   2 +-
+ sound/soc/codecs/es8326.c                          |   6 +-
+ sound/soc/codecs/rt715-sdca-sdw.c                  |   2 +-
+ sound/soc/sof/amd/acp.c                            |  36 +++--
+ .../drivers/net/ocelot/tc_flower_chains.sh         |   2 +-
+ 55 files changed, 446 insertions(+), 228 deletions(-)
+
+
