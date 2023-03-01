@@ -2,158 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A9C6A6DFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1573C6A6E01
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjCAOJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S229987AbjCAOKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjCAOJi (ORCPT
+        with ESMTP id S229965AbjCAOJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:09:38 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681983E0B7;
-        Wed,  1 Mar 2023 06:09:28 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id cw28so5155465edb.5;
-        Wed, 01 Mar 2023 06:09:28 -0800 (PST)
+        Wed, 1 Mar 2023 09:09:57 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A542F796
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:09:47 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h11so1610130wrm.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:09:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677679767;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=semihalf.com; s=google; t=1677679786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VQ2h5y+b44F+mobDdB2zdaT79/B0GO70ffL6CZHUWgE=;
-        b=JrRY8a+aDfmP7FhclenYHyfaudCjQqqMaVlFEzXA9zsMH1pLKxTA1IZvqtbLGQvo2j
-         S6zzYEWFEM5tPZEu+VCWHhbWHFtT7IYXDV0J5e6HOk+15cK6DBkgz7TBehXMPuBWZzIP
-         g+54aw9uzSVCq6g+LaveaEbLm8tLIXyVL/8Y8GF36jU2rE8jMMxOmxCgzNuRvOdcXGVw
-         9sF7TixOanZdaE+bxsN1as2U3iQgRMu1mTg9GtnMlrysO+ZQ9pQbmniN4tnuRWWogyCJ
-         IlNYPuKpA50iV9ObYw18WiFTaZaZy1TRbl9qVdeT8FWLtrneFHJ/iukyrpL02BftqTbq
-         LtdQ==
+        bh=t2tkGhWdBAa8vzlH7r5oMbSYEhnxp7JkbKglKgSKZPM=;
+        b=oUYse4DWw7yraUVmj59PCoIil14gWfqSJGLpk8uuNeWmLJrodJcy6b/gtXgE5biTkP
+         GcPvcVQZ3cZ/13zsauESm0SPU9qozBpH3CfZeUwHwG46Zdm85Pyw56Z/C/7MIbiBnWua
+         4OXFZBHbVyK0pv84eQaUU/HHUtolfdk2Uugk58+Kngve/qHUMX/LZcSbhTRrtLWC9F+S
+         sSPnUzjWtlHvOf3VxgQyviEgwNeLtcPIr10deJxTr7Ktah0l89yiCzF2bFq7OQGWeqF+
+         KttFMWWs2TAL0f9D8K66/p8MxDEg/gPJr1OO5NAT9lKSrXGZQXWDkcj4dFoNKN6szQRm
+         hkkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677679767;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1677679786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VQ2h5y+b44F+mobDdB2zdaT79/B0GO70ffL6CZHUWgE=;
-        b=HvdXkk3AdeABLztt+V4nq0HiKUMbPCMm6Bocn8xEMC2El2imyn0zv0LvKMKzysdAx/
-         wR/VtG9Hx8cfiuaJDwI3qI8iQBycIy8BMFqxNDbuG9gcqvfCwctoWe5knlyORe83rGNo
-         RQBcAs9er+ulrVsq9WugJP08bX81HxmoqFTkyJQhCuKIAzKsrWl9aIaSZ03eZWhxvG3/
-         NLoABFfmFqDuetCiG2M9MAHa5SUQQsdNClvaFc3czgCAQWEL0hRf66nYDpyG224zur69
-         /G9YsPZQfphA8zrar/0WlKDMX8DCkOGyvw4wFxiz5xryA53GMtlmwHwvaxA3ayqnR5DB
-         SSvQ==
-X-Gm-Message-State: AO0yUKUNawCjGlFjRXLNaiUTv77dCx45rNA9V0bf8umYlopW+Ht67QKT
-        D9r9tLoar0h8ajEtXKZCcho=
-X-Google-Smtp-Source: AK7set/MejFRKaJfqO1GVMw1llYY9kytb3ybjbJGwgizkRQJSDCVCjXyIjIgM0jO8roS7tmQ69h05Q==
-X-Received: by 2002:a17:906:4d4b:b0:8af:2a97:91d4 with SMTP id b11-20020a1709064d4b00b008af2a9791d4mr6644489ejv.14.1677679766724;
-        Wed, 01 Mar 2023 06:09:26 -0800 (PST)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id qp16-20020a170907207000b008eb5877a221sm5813466ejb.75.2023.03.01.06.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 06:09:26 -0800 (PST)
-Date:   Wed, 1 Mar 2023 15:09:24 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Message-ID: <Y/9clKU9lAHxvOdd@orome>
-References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
- <20230227120702.13180-3-kyarlagadda@nvidia.com>
- <Y/1oqr0RfD7KVA4y@kernel.org>
- <Y/3zVdgnVz8BvGGl@ziepe.ca>
- <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
- <Y/9EwTtmxcVBjiHz@nvidia.com>
- <Y/9HB/KF2Kjkihkg@sirena.org.uk>
- <Y/9VkGjCP48FHtyS@nvidia.com>
+        bh=t2tkGhWdBAa8vzlH7r5oMbSYEhnxp7JkbKglKgSKZPM=;
+        b=gh+eH6H/o+txOd/E19eQtPj8AKFdLN4S46B0wAMQ9p4saYfSoQLaRzS2GZS1Ii1lTF
+         elWKNBI42f8oqfXYD3Fz4gkb5sDa5gvxFIAmoynQGjx02xeBQ86EXeNlMh+GXp+nBl0P
+         NZTjxM1vw/EJkdkRkew8VP2k7tO95wDxapm6p8d7EPc0HSKzYzs/b/aauEXPnWPYx3aA
+         LWaE5fEs+wssyh99HFPgWpTYdaAooArfHG5LmE/+0ClLECvuBg6WoY7MCOD3UTDNH8iT
+         jJFg/P+vbfVeuHY+LI0DtkZYmLXhAvvMUwwBRzA2LR9euz/6npb4pSXXjB2RNG9S+Tkq
+         oMLA==
+X-Gm-Message-State: AO0yUKU35Qum3Icg3Tv0Pd5s6ofTXdZzoyaGYGkq0EZ8HmdyUC/yXqBp
+        jfY74OFmriuh/B4Sg3zY6LGT3OuDgmhErNvKCcxVyg==
+X-Google-Smtp-Source: AK7set9C5QJ7lsnqeJK/GewLPn7eFADZyhxWk7KE+HwrjwBBgCiFNzCVKAVfBkPHY46lDxy2+JoL8SXc11QLl/ITKFw=
+X-Received: by 2002:a05:6000:1e12:b0:2c5:5941:a04b with SMTP id
+ bj18-20020a0560001e1200b002c55941a04bmr4283116wrb.7.1677679786037; Wed, 01
+ Mar 2023 06:09:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="L7TwG/A0jb5em9Jb"
-Content-Disposition: inline
-In-Reply-To: <Y/9VkGjCP48FHtyS@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+References: <20230301075751.43839-1-lma@semihalf.com> <Y/8PUdEwskXuWZHA@kroah.com>
+ <CAFJ_xbp+qD-_MGd3+SgBY=8zruZNy7k3CO3OMMmWhMGhA-tARQ@mail.gmail.com> <Y/9Ddl7c2PKSEpsR@kroah.com>
+In-Reply-To: <Y/9Ddl7c2PKSEpsR@kroah.com>
+From:   Lukasz Majczak <lma@semihalf.com>
+Date:   Wed, 1 Mar 2023 15:09:35 +0100
+Message-ID: <CAFJ_xbr_petJ8=wKNLSnJ=97t+cERre07=hNYFeBVHp0nvPtWw@mail.gmail.com>
+Subject: Re: [PATCH] serial: core: fix broken console after suspend
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+=C5=9Br., 1 mar 2023 o 13:22 Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> napisa=C5=82(a):
+>
+> On Wed, Mar 01, 2023 at 10:51:31AM +0100, Lukasz Majczak wrote:
+> > =C5=9Br., 1 mar 2023 o 09:39 Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> napisa=C5=82(a):
+> > >
+> > > On Wed, Mar 01, 2023 at 08:57:51AM +0100, Lukasz Majczak wrote:
+> > > > Re-enable the console device after suspending, causes its cflags,
+> > > > ispeed and ospeed to be set anew, basing on the values stored in
+> > > > uport->cons. The issue is that these values are set only once,
+> > > > when parsing console parameters after boot (see uart_set_options())=
+,
+> > > > next after configuring a port in uart_port_startup() these paramete=
+res
+> > > > (cflags, ispeed and ospeed) are copied to termios structure and
+> > > > the orginal one (stored in uport->cons) are cleared, but there is n=
+o place
+> > > > in code where those fields are checked against 0.
+> > > > When kernel calls uart_resume_port() and setups console, it copies =
+cflags,
+> > > > ispeed and ospeed values from uart->cons,but those are alread clear=
+ed.
+> > > > The efect is that console is broken.
+> > > > This patch address this by preserving the cflags, ispeed and
+> > > > ospeed fields in uart->cons during uart_port_startup().
+> > > >
+> > > > Signed-off-by: Lukasz Majczak <lma@semihalf.com>
+> > > > Cc: stable@vger.kernel.org
+> > > > ---
+> > > >  drivers/tty/serial/serial_core.c | 3 ---
+> > > >  1 file changed, 3 deletions(-)
+> > > >
+> > > > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/=
+serial_core.c
+> > > > index 2bd32c8ece39..394a05c09d87 100644
+> > > > --- a/drivers/tty/serial/serial_core.c
+> > > > +++ b/drivers/tty/serial/serial_core.c
+> > > > @@ -225,9 +225,6 @@ static int uart_port_startup(struct tty_struct =
+*tty, struct uart_state *state,
+> > > >                       tty->termios.c_cflag =3D uport->cons->cflag;
+> > > >                       tty->termios.c_ispeed =3D uport->cons->ispeed=
+;
+> > > >                       tty->termios.c_ospeed =3D uport->cons->ospeed=
+;
+> > > > -                     uport->cons->cflag =3D 0;
+> > > > -                     uport->cons->ispeed =3D 0;
+> > > > -                     uport->cons->ospeed =3D 0;
+> > > >               }
+> > > >               /*
+> > > >                * Initialise the hardware port settings.
+> > > > --
+> > > > 2.39.2.722.g9855ee24e9-goog
+> > > >
+> > >
+> > > What commit id does this fix?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> > Hi Greg,
+> >
+> > There are actually two commits that introduce problematic uport flags
+> > clearing in uart_startup (for the sake of simplicity I'd ignore the
+> > older history):
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?h=3Dv6.2&id=3Dc7d7abff40c27f82fe78b1091ab3fad69b2546f9
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?h=3Dv6.2&id=3D027b57170bf8bb6999a28e4a5f3d78bf1db0f90c
+> > It's 10 years between those 2 and to me it was hard to decide about
+> > picking a proper one for the `Fixes:` tag.
+> > How would you recommend to proceed wrt applying this patch on the
+> > stable releases?
+>
+> Where do you think this needs to go to?  Pick something?
+>
+> And as you have obviously found this on a device running an older kernel
+> version, what kernel tree(s) did you test it on?
+>
+> thanks,
+>
+> greg k-h
 
---L7TwG/A0jb5em9Jb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As this patch applies without conflict on 4.14, I would suggest 4.14+.
+I have tested the patch on chromes-5.15 (cannonlake device).
 
-On Wed, Mar 01, 2023 at 09:39:28AM -0400, Jason Gunthorpe wrote:
-> On Wed, Mar 01, 2023 at 12:37:27PM +0000, Mark Brown wrote:
-> > On Wed, Mar 01, 2023 at 08:27:45AM -0400, Jason Gunthorpe wrote:
-> > > On Wed, Mar 01, 2023 at 11:56:53AM +0000, Krishna Yarlagadda wrote:
-> >=20
-> > > > TPM device connected behind half duplex controller can only work
-> > > > this way. So, no additional flag needed to check.
-> >=20
-> > > Just because a DT hooks it up this way doesn't mean the kernel driver
-> > > can support it, eg support hasn't been implemented in an older SPI
-> > > driver or something.
-> >=20
-> > > If the failure mode is anything other than the TPM doesn't probe we
-> > > will need to check for support.
-> >=20
-> > It's not like these buses are hot pluggable - someone would have to
-> > design and manufacture a board which doesn't work.  It's probably
-> > reasonable for this to fail with the SPI subsystem saying it can't
-> > support things when the operation is tried.
->=20
-> If the spi subsystem fails this request with these flags that would be
-> great, it would cause the TPM to fail probing reliably.
->=20
-> But does this patch do that? It looks like non-supporting half duplex
-> drivers will just ignore the new flag?
-
-I think the assumption is that there are currently no half duplex
-drivers that would be impacted by this. If I understand correctly, the
-TPM driver currently supports only full duplex controllers, because
-that's required in order to detect the wait state in software.
-
-So, yes, half duplex controllers would ignore this flag, but since they
-couldn't have supported TPM flow control before anyway it doesn't make a
-difference.
-
-Thierry
-
---L7TwG/A0jb5em9Jb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP/XJIACgkQ3SOs138+
-s6E0sA//aMFMddr/WWIey7Ad32TSDXrGtSEPVXMk5rWm6crWKj7Py6JqCe/y+q8J
-uVjrk8XOsPW/YfZnPrdjQMyJ9Kke+SqFrptQ2Dy08/6szO08PURxs5vfs773EYxG
-viQywY/kNpaRkPUrpkSTGtwJDI3/OruuxJ539FEwwF3uPeRGykYv5BngON/2Dymo
-kvwRaIs/nQXtYDX/RAPPXyPbFgpRPKYE2MvEqbZ9z2gsc6BJUkYn65PcTmnARFho
-WuUbkltRjAFtKDlhfiOmetPQGi5COUsitMHM2gI6zqpH09mznnTo7ilwMvKP2UGd
-aoGRmyyV0L3a3WpMa9okjDMutqeBCNKle3q9n7ezf1Ztz8d8yRUap/VLYOjHlrt6
-4M2j2L7PmZaKXSKKp91+Sky5m+2c0ZX7l1o5ahIquZtLULcSCPKpVdz2rfAwDN2N
-iFITSw9PyfKX7clGSJ3T8Gbr+TUm6HnG6bmTU4CFs64rolmg2JM4Tj8HJYAK+DDj
-/J3iYwdduA5jdOpwFEFmhwnb0XMVVYRCufIFER1Ix7cG1WMJPpPr+zHC490/Gom+
-Cq54KRs2WXRXlolOmEmnsQN3iZ0tBQPHuNkJmOmQLnWhDXkNzmYMU/BiPH/WZV/A
-CoHwTOX/uP6FUeYJtNeXrCCz/x8gaLfG3kz9+1Ps31oO0urBnVg=
-=RWuP
------END PGP SIGNATURE-----
-
---L7TwG/A0jb5em9Jb--
+Best regards,
+Lukasz
