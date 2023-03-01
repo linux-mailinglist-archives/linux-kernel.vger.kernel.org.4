@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C65E6A77B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4706A77BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjCAXiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 18:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
+        id S229750AbjCAXiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 18:38:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCAXiA (ORCPT
+        with ESMTP id S229697AbjCAXiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 18:38:00 -0500
+        Wed, 1 Mar 2023 18:38:01 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190E586BB
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 15:37:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E5211660
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 15:38:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677713878; x=1709249878;
+  t=1677713880; x=1709249880;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=RjtAUFRJrzBKfA0+yFHKXNZopzCyfP9+J4w+QU7OMp8=;
-  b=h4WGTIWryt8ou3SediisWNZIFP8Y0FmjDSooYtl6jzDYEImaAPhaW9Vn
-   DKEMa/D3sgvFwcGyR+03MxXUtTOwf4Kzmarc08/d+3pUVLWQPw7wf0qJq
-   NAL7uwP1m+YwCRoLYTkJ8VIsZ2VqompTlb8wZzgmPJzKjcuzerEf1+XdS
-   ovcv2yuUWuqAhGV+yRfG8sLQ8Nj3ize7cFsyIrir04b9RqrqMpGWNG0wD
-   /oslP2rT96ingkEVfMt9JD4W2u6TDpMxtlqNM6fGtxxPmPXpy69ZY0ZEB
-   iTznCMT8RlALKjBZvZE74aV1jdVycT8g+eBmnj6NBOiyjE9DVlhhs5/5a
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="420818683"
+  bh=q1CqewxYyZYMIT/dLlB5/XAEQ5VVr9wg2syBU+4wkTk=;
+  b=AG6EEcZNHyW7d9fdxBEK65rH7QHL6B45jtOPF5qIm8aNjHaJyakZ3r/g
+   iOndMYjYiqhW0VhO9DLKqtFZZGa4AKTuU43q6GpMR/JEijq9Ir8FnGBK0
+   No8c4Ys/hN5hn24uG8MYzP2asztUs34RjMcsX0T3N/eqWMRuwe3sShtRV
+   L3NLwD+fSUBqBO8oOcAQERopZ7e89cmiCKanlIvwL4TCC+dtYSKEK9OXC
+   2FD+uQlw6pnzMZLqncRRbB90rGU6HQq1ci+L3wWJFWLVcS8LSH7ZXtg++
+   wcW0U22QQDSmlUSJitknQRbqfIhxqnfUhih/rBpzC7MV72brZmV0FInL2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="420818689"
 X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="420818683"
+   d="scan'208";a="420818689"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 15:37:55 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 15:37:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="738826789"
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="738826795"
 X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="738826789"
+   d="scan'208";a="738826795"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga008.fm.intel.com with ESMTP; 01 Mar 2023 15:37:55 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -53,9 +53,9 @@ Cc:     Andi Kleen <ak@linux.intel.com>,
         linuxppc-dev@lists.ozlabs.org, iommu@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v7 02/24] x86/apic/msi: Use the delivery mode from irq_cfg for message composition
-Date:   Wed,  1 Mar 2023 15:47:31 -0800
-Message-Id: <20230301234753.28582-3-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v7 03/24] x86/apic: Add the X86_IRQ_ALLOC_AS_NMI interrupt allocation flag
+Date:   Wed,  1 Mar 2023 15:47:32 -0800
+Message-Id: <20230301234753.28582-4-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230301234753.28582-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230301234753.28582-1-ricardo.neri-calderon@linux.intel.com>
@@ -68,27 +68,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-irq_cfg provides a delivery mode for each interrupt. Use it instead
-of the hardcoded APIC_DELIVERY_MODE_FIXED. This allows to compose
-messages for NMI delivery mode which is required to implement a HPET-
-based NMI watchdog.
-
-No functional change as the default delivery mode is set to
-APIC_DELIVERY_MODE_FIXED.
+There are cases in which it is necessary to set the delivery mode of an
+interrupt as NMI. Add a new flag that callers can specify when allocating
+an interrupt.
 
 Cc: Andi Kleen <ak@linux.intel.com>
 Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
 Cc: Stephane Eranian <eranian@google.com>
 Cc: iommu@lists.linux-foundation.org
 Cc: linuxppc-dev@lists.ozlabs.org
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v6:
- * Reworded changelog as per suggestion from Thomas.
+ * None
 
 Changes since v5:
- * Introduced this patch
+ * Introduced this patch.
 
 Changes since v4:
  * N/A
@@ -102,22 +99,21 @@ Changes since v2:
 Changes since v1:
  * N/A
 ---
- arch/x86/kernel/apic/apic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/irqdomain.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index 20d9a604da7c..352738238e52 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -2562,7 +2562,7 @@ void __irq_msi_compose_msg(struct irq_cfg *cfg, struct msi_msg *msg,
- 	msg->arch_addr_lo.dest_mode_logical = apic->dest_mode_logical;
- 	msg->arch_addr_lo.destid_0_7 = cfg->dest_apicid & 0xFF;
+diff --git a/arch/x86/include/asm/irqdomain.h b/arch/x86/include/asm/irqdomain.h
+index 30c325c235c0..e13f02c6fe95 100644
+--- a/arch/x86/include/asm/irqdomain.h
++++ b/arch/x86/include/asm/irqdomain.h
+@@ -8,6 +8,7 @@
+ #ifdef CONFIG_X86_LOCAL_APIC
+ enum {
+ 	X86_IRQ_ALLOC_LEGACY				= 0x1,
++	X86_IRQ_ALLOC_AS_NMI				= 0x2,
+ };
  
--	msg->arch_data.delivery_mode = APIC_DELIVERY_MODE_FIXED;
-+	msg->arch_data.delivery_mode = cfg->delivery_mode;
- 	msg->arch_data.vector = cfg->vector;
- 
- 	msg->address_hi = X86_MSI_BASE_ADDRESS_HIGH;
+ extern int x86_fwspec_is_ioapic(struct irq_fwspec *fwspec);
 -- 
 2.25.1
 
