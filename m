@@ -2,238 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69AD6A6CFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6522A6A6D02
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjCANYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 08:24:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
+        id S229698AbjCAN0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 08:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCANYY (ORCPT
+        with ESMTP id S229437AbjCAN0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:24:24 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FF371498A;
-        Wed,  1 Mar 2023 05:24:22 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 542862F4;
-        Wed,  1 Mar 2023 05:25:05 -0800 (PST)
-Received: from bogus (unknown [10.57.16.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C68C3F587;
-        Wed,  1 Mar 2023 05:24:18 -0800 (PST)
-Date:   Wed, 1 Mar 2023 13:24:13 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Huisong Li <lihuisong@huawei.com>
-Cc:     robbiek@xsightlabs.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
-        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
-        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
-        wangkefeng.wang@huawei.com, huangdaode@huawei.com
-Subject: Re: [PATCH 1/2] mailbox: pcc: Add processing platform notification
- for slave subspaces
-Message-ID: <20230301132413.p6ssnkp76pv2bz5y@bogus>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20230216063653.1995-1-lihuisong@huawei.com>
- <20230216063653.1995-2-lihuisong@huawei.com>
+        Wed, 1 Mar 2023 08:26:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044FF38019;
+        Wed,  1 Mar 2023 05:26:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 949B861309;
+        Wed,  1 Mar 2023 13:26:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338E6C433EF;
+        Wed,  1 Mar 2023 13:26:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677677202;
+        bh=kJHUAHlz97yUOJaZQyxEScFLubK3mASBfXnct/E80rk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ui73bJFZ6yQT4Fv97MIscyh6DxXnbSsOia542BXC8r2ymIUYjhfkTg0g68VskfDV+
+         U929vEdgnHulbQBZX0E8XzPKMW5OPCHIMy3S+fYoa4Pn/fTqsVmpIqiTWLyQo+fT4Z
+         q7wBeoPXGRlHwsikucj2F43Ohdm3h6r/Mb9ULXJUHcwX6UhdaQYUwJ3dq9LBqLGoxc
+         /t4BBJri0agdW5TWyRtPCijVhXRtv25vH0XuUXI29XG07FlqSpXGESXgvhtoJCnb0w
+         ON9UnMF9C3KdEYsDqyvK8pAjauAdhMTp6gDuIKAyVjEt0Liz+DUeZEdtqTndgJUYOP
+         XXmH33wu7xDeg==
+Date:   Wed, 1 Mar 2023 13:26:36 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Amir Goldstein <amir73il@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <Y/9SjIDSss390Ki/@sirena.org.uk>
+References: <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <Y/0U8tpNkgePu00M@sashalap>
+ <Y/0i5pGYjrVw59Kk@gmail.com>
+ <Y/0wMiOwoeLcFefc@sashalap>
+ <Y/1LlA5WogOAPBNv@gmail.com>
+ <Y/1em4ygHgSjIYau@sashalap>
+ <Y/136zpJSWx96YEe@sol.localdomain>
+ <CAOQ4uxietbePiWgw8aOZiZ+YT=5vYVdPH=ChnBkU_KCaHGv+1w@mail.gmail.com>
+ <Y/3lV0P9h+FxmjyF@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="adcGMmTVGJJ8PcSt"
 Content-Disposition: inline
-In-Reply-To: <20230216063653.1995-2-lihuisong@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y/3lV0P9h+FxmjyF@kroah.com>
+X-Cookie: They also surf who only stand on waves.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 02:36:52PM +0800, Huisong Li wrote:
-> Currently, PCC driver doesn't support the processing of platform
-> notification for slave PCC subspaces because of the incomplete
-> communication flow.
-> 
-> According to ACPI specification, if platform sends a notification
-> to OSPM, it must clear the command complete bit and trigger platform
-> interrupt. OSPM needs to check whether the command complete bit is
-> cleared, clear platform interrupt, process command, and then set the
-> command complete and ring doorbell to Platform. But the current judgment
-> on the command complete is not applicable to type4 in pcc_mbox_irq().
-> 
-> This patch determines whether the PCC driver needs to respond to the
-> interrupt of the channel with the master or slave subspace based on
-> the command complete register. And PCC driver needs to add the phase
-> of setting the command complete and ring doorbell in pcc_mbox_irq()
-> to complete type4 communication flow after processing command from
-> Platform.
-> 
 
-I would prefer to reword this a little bit:
+--adcGMmTVGJJ8PcSt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-"
-mailbox: pcc: Add support for platform notification handling
+On Tue, Feb 28, 2023 at 12:28:23PM +0100, Greg KH wrote:
 
-Currently, PCC driver doesn't support the processing of platform
-notification for type 4 PCC subspaces.
+> In an ideal world, all maintainers would properly mark their patches for
+> stable backporting (as documented for the past 15+ years, with a cc:
+> stable tag, NOT a Fixes: tag), but we do not live in that world, and
+> hence, the need for the AUTOSEL work.
 
-According to ACPI specification, if platform sends a notification
-to OSPM, it must clear the command complete bit and trigger platform
-interrupt. OSPM needs to check whether the command complete bit is
-cleared, clear platform interrupt, process command, and then set the
-command complete and ring doorbell to the Platform.
+Just as a datapoint here: I stopped making any effort to copy stable on
+things due to AUTOSEL, it's pulling back so much more than I would
+consider for stable that it no longer seems worthwhile to try to make
+decisions about what might fit.
 
-Let us stash the value of the pcc type and use the same while processing
-the interrupt of the channel. We also need to set the command complete
-bit and ring doorbell in the interrupt handler for the type 4 channel to
-complete the communication flow after processing the notification from
-the Platform.
-"
+--adcGMmTVGJJ8PcSt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> ---
->  drivers/mailbox/pcc.c | 57 ++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 51 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-> index 105d46c9801b..ecd54f049de3 100644
-> --- a/drivers/mailbox/pcc.c
-> +++ b/drivers/mailbox/pcc.c
-> @@ -91,6 +91,7 @@ struct pcc_chan_reg {
->   * @cmd_update: PCC register bundle for the command complete update register
->   * @error: PCC register bundle for the error status register
->   * @plat_irq: platform interrupt
-> + * @type: PCC subspace type
->   */
->  struct pcc_chan_info {
->  	struct pcc_mbox_chan chan;
-> @@ -100,12 +101,15 @@ struct pcc_chan_info {
->  	struct pcc_chan_reg cmd_update;
->  	struct pcc_chan_reg error;
->  	int plat_irq;
-> +	u8 type;
->  };
->  
->  #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
->  static struct pcc_chan_info *chan_info;
->  static int pcc_chan_count;
->  
-> +static int pcc_send_data(struct mbox_chan *chan, void *data);
-> +
->  /*
->   * PCC can be used with perf critical drivers such as CPPC
->   * So it makes sense to locally cache the virtual address and
-> @@ -221,6 +225,43 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
->  	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
->  }
->  
-> +static bool pcc_chan_command_complete(struct pcc_chan_info *pchan,
-> +				      u64 cmd_complete_reg_val)
-> +{
-> +	bool complete;
-> +
-> +	if (!pchan->cmd_complete.gas)
-> +		return true;
-> +
-> +	cmd_complete_reg_val &= pchan->cmd_complete.status_mask;
-> +
-> +	switch (pchan->type) {
-> +	case ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE:
-> +		/*
-> +		 * If this channel with the PCC master subspace is in use,
-> +		 * the command complete bit is 1 indicates that the executing
-> +		 * command has been completed by Platform and OSPM needs to
-> +		 * process the response.
-> +		 */
-> +		complete = cmd_complete_reg_val != 0;
-> +		break;
-> +	case ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE:
-> +		/*
-> +		 * If this channel with the PCC slave subspace is in use,
-> +		 * the command complete bit is 0 indicates that Platform is
-> +		 * sending a notification and OSPM needs to response the
-> +		 * interrupt to process this command.
-> +		 */
-> +		complete = cmd_complete_reg_val == 0;
-> +		break;
-> +	default:
-> +		complete = true;
-> +		break;
-> +	}
-> +
-> +	return complete;
-> +}
-> +
->  /**
->   * pcc_mbox_irq - PCC mailbox interrupt handler
->   * @irq:	interrupt number
-> @@ -240,12 +281,8 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
->  	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
->  	if (ret)
->  		return IRQ_NONE;
-> -
-> -	if (val) { /* Ensure GAS exists and value is non-zero */
-> -		val &= pchan->cmd_complete.status_mask;
-> -		if (!val)
-> -			return IRQ_NONE;
-> -	}
-> +	if (!pcc_chan_command_complete(pchan, val))
-> +		return IRQ_NONE;
->
+-----BEGIN PGP SIGNATURE-----
 
-Can we simplify the above 2 chunks like below ? Does that work for you ?
-I see we already check for presence of complete complete check and update
-registers for type3/4, we can avoid it I think. Let me know if you spot
-any issue with this.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP/UosACgkQJNaLcl1U
+h9BjtQf/f/WaWQ+wWiQwPh4CH6Sx5qKJ8vYaI4h36Be15bxeQATfKNB7ypB5Mm4w
+Mil4ox7p7JMlyR2q2p0+8WvDV/zkevvTTdqiZF4J3uDG761M2yfg8amzeLIDqPLH
+ojnUUXpIDPiAaOO4sYUaeT/Ia3N+TXCRk7yHSMyIAsorsb4vB3qCWfJ/tu1K3Xpu
+nteiYr1AvLeWafaP42Eq8eYLrXNKN53szNAnfgwDhPxR5DPjI7vQXSNQzATPb0za
+P+FnxKS4l6/Lb8s28qheORYDwxf49jDiYyS6G9wBdQ6wFbXQE8NtySgEx+29+cH+
+ultACzSjbFnOT1LJQOCNHB1UsBZInA==
+=ArvS
+-----END PGP SIGNATURE-----
 
-Regards,
-Sudeep
-
---->8
-
-@@ -221,6 +225,28 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
-        return acpi_register_gsi(NULL, interrupt, trigger, polarity);
- }
-
-+static bool pcc_mbox_cmd_complete_check(struct pcc_chan_info *pchan)
-+{
-+       u64 val;
-+       int ret;
-+
-+       ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
-+       if (ret)
-+               return false;
-+
-+       val &= pchan->cmd_complete.status_mask;
-+
-+       /*
-+        * If this is PCC slave subspace channel, then the command complete
-+        * bit 0 indicates that Platform is sending a notification and OSPM
-+        * needs to respond this interrupt to process this command.
-+        */
-+       if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE)
-+               return !val;
-+       else
-+               return !!val;
-+}
-+
- /**
-  * pcc_mbox_irq - PCC mailbox interrupt handler
-  * @irq:       interrupt number
-@@ -237,16 +263,9 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
-
-        pchan = chan->con_priv;
-
--       ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
--       if (ret)
-+       if (!pcc_mbox_cmd_complete_check(pchan))
-                return IRQ_NONE;
-
--       if (val) { /* Ensure GAS exists and value is non-zero */
--               val &= pchan->cmd_complete.status_mask;
--               if (!val)
--                       return IRQ_NONE;
--       }
--
-        ret = pcc_chan_reg_read(&pchan->error, &val);
-        if (ret)
-
+--adcGMmTVGJJ8PcSt--
