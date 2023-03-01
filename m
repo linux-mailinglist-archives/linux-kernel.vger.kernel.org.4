@@ -2,124 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A776A6FD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB7E6A6FD6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjCAPex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:34:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S229636AbjCAPfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjCAPev (ORCPT
+        with ESMTP id S229686AbjCAPfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:34:51 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFA12B28D;
-        Wed,  1 Mar 2023 07:34:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677684889; x=1709220889;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I9PqVo+xN7TbKIQQKjJpJiyeMifXqTzwWAA4D4p0X9s=;
-  b=XiQv32CcruN8tzHB/Hx16G21sT4nbgi75YDavZj+TaEe7nw9ihNqWa9P
-   wOT/ho4G4LJI2YEpRzBd+mHIEhTck5hS+5DlzBHsHTu+C56EpVl4VFZC0
-   c5e0n2Y86EK7Y0jwngZ1Jk8cpCeSWU2koik/KWOcDV6Z4dvFa2XyYAOS9
-   w91YOZ6HONMR4e936NBsEOyKFOqCVAQ1YGrljO75iwIdIAl2BPHbgJ3No
-   DQpMWfbwbNfUgKlEi2+i3pxT0PLNCXmDSZ174I3KV2rRYtwBpMuj/1PxF
-   jCUjQW1Op2W6jetqFSf6W3aM8XrMrOMrc3l9EBjC6aB+EUWNabiRLAg3g
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="420699629"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="420699629"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 07:34:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="798449312"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="798449312"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2023 07:34:46 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pXOTc-00DoSW-2g;
-        Wed, 01 Mar 2023 17:34:44 +0200
-Date:   Wed, 1 Mar 2023 17:34:44 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Implementation of fwnode_operations :: device_get_match_data()
- for software nodes?
-Message-ID: <Y/9wlDkuh39auAgF@smile.fi.intel.com>
-References: <20230223203713.hcse3mkbq3m6sogb@skbuf>
- <Y/0uC1LgeWR0V0ts@smile.fi.intel.com>
- <20230227234411.jqmwshzkeyx6iqyo@skbuf>
- <Y/9iLBWAO37y6lZZ@smile.fi.intel.com>
- <20230301143625.7kdnzujlv4psbhla@skbuf>
- <Y/9qtT0vckSikOKJ@smile.fi.intel.com>
- <20230301152527.khyzifds4w3rkebt@skbuf>
+        Wed, 1 Mar 2023 10:35:01 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C50311EC;
+        Wed,  1 Mar 2023 07:35:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4D3E5CE1D0A;
+        Wed,  1 Mar 2023 15:34:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6AC7C433D2;
+        Wed,  1 Mar 2023 15:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677684896;
+        bh=4+Tu/cIC0hHMrGoD7ESG5uRx2d2hbjOQ2mt+puZ4g0U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nfUaAtP4P5sN1WaMFyAPHgvMfQZ6Une0MYHJigdyMNeT154pPRgujXPqmYJAzpAwE
+         4EoJtLlU+N3/77Jvhxxcn8K+aTRDG4FVBCM0EUR9KZVx5Wmo+u4fiAmEWXFGIxTIVG
+         I+xhSmVEzka1keAMhr6IJ++XwZcv7YPvwWgqOm2s=
+Date:   Wed, 1 Mar 2023 16:34:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        rafal@milecki.pl
+Subject: Re: [PATCH 0/8] nvmem: Let layout drivers be modules
+Message-ID: <Y/9wnXde3OiyHh8S@kroah.com>
+References: <20230301152239.531194-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230301152527.khyzifds4w3rkebt@skbuf>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230301152239.531194-1-miquel.raynal@bootlin.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 05:25:27PM +0200, Vladimir Oltean wrote:
-> On Wed, Mar 01, 2023 at 05:09:41PM +0200, Andy Shevchenko wrote:
-> > With overlays you can create the proper DT description stanza and end user's
-> > job is to just put it somewhere and upload via precoded script or so [1].
-> > 
-> > [1]:https://docs.kernel.org/devicetree/overlay-notes.html
+On Wed, Mar 01, 2023 at 04:22:31PM +0100, Miquel Raynal wrote:
+> Hello,
 > 
-> Ah, okay, no, that's already a no-go, since existing device tree blobs
-> aren't compiled with the dtc "-@" flag which would generate the __symbols__
-> node necessary for DT overlays to be applied over them.
+> Following Greg's opposition to merge the current nvmem layout support
+> proposal [1], arguing that it would eventually grow the size of the
+> Linux kernel and asking for some "modularization" support, here is a
+> proposal to turn layout drivers into regular tristate drivers.
 > 
-> That, and it's clunky and uncalled for in general, both from my
-> perspective as a driver developer and that of a random user, if a driver
-> would just start requiring device tree overlays for more functionality.
-> Overlays address none of the complaints I had with large DT bindings
-> being large in general. They are still equally large, but now, they are
-> also spread into multiple files.
-
-But isn't it what you would like to have working for your case?
-
-Even taking into account the fixed HW layout, it would make sense to have more
-flexible approach to describe it, no?
-
-> > For the second one I'm not really the expert. But either FPGA framework (if
-> > they have anything working for this), or you also may look at Thunderbolt /
-> > USB4 which uses similar approach while being PCIe devices. Okay, the latter
-> > (USB4) is the PCIe topology, while FPGA is whatever behind the PCI switch.
-> > Meaning that FPGA case from HW p.o.v. is closer to your case.
+> The first three patches are preparation changes in order to extend (and
+> fix) a little bit the of/device.c support. The fix does not seem to
+> impact most of the current users so I guess it can live with the rest of
+> the series in order to avoid future merge conflicts.
 > 
-> A quick glance at Documentation/driver-api/fpga/ shows that it is a
-> framework for dealing with reprogrammable hardware, and has infra to
-> reprogram it. My hardware is fixed-function and doesn't need any of that.
+> The nvmem core is then extended to support the absence of layouts and
+> possibly lead to probe deferrals when relevant.
 > 
-> Are you suggesting that I should look at reusing some common infra with
-> the fpga subsystem instead? A quick grep for device_add in drivers/fpga/
-> shows a bunch of open-coded device_add() and platform_device_add() calls.
-> Is this what you wanted me to see or is there something else?
+> Finally, the two existing layout drivers are converted into modules and
+> their Kconfig symbols changed to tristate.
+> 
+> The base series on which these changes apply is still contained in [1],
+> I would prefer to keep it as it was and apply this series on top of it.
+> 
+> Tests have been conducted on a Marvell Prestera switch with the mvpp2
+> Ethernet driver calling for a MAC address stored in the ONIE TLV table
+> available through a layout driver in an EEPROM/MTD device.
+> 
+> [1] https://github.com/miquelraynal/linux/tree/nvmem-next/layouts
 
-Ah, so they don't have a mechanism on how to describe the hardware inside
-FPGA _after_ reconfiguration and apply it to the system? That's what I meant
-when referred to it.
+These look sane to me, thanks for making the changes.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
