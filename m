@@ -2,346 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1966A6C9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D296A6C9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjCAMyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 07:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S229927AbjCAMz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjCAMyX (ORCPT
+        with ESMTP id S229504AbjCAMz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 07:54:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21C72CC7F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:54:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EC6D61290
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:54:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B59EC4339B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677675260;
-        bh=nsAjfERmlYcwPCwRlGaZKt5QRBPCc6LjHfkvMN26bl4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=a698muagCddvVl3CDIHAIYRMgtMcCBtj584mVF/hFgrYFOjty+gro00FXeCVDc9fL
-         rC0S3uGEe9+eXbm3Pjora2P9bdKI3KwA1qWp5TqqC1yMXcC1JeV5Y4/Qf6javE/WYL
-         EO90Al8AgFaVHyTaZrhddYrmTdW02/WuQI077Qu2i+PPfn4slmjGwYyvqleTE3xe/h
-         bjZRwBN5ShNx+tbLc5mETbAu5Z6bcWcN33qMXNFID++u3D3DB1LhR96p3hPPCcxHfa
-         aGGl/I/0IHWqA+r3eLk0wltCXQ3ZZINgPdhWXkXxluCRuxxMz/WA//h4Xza92PFwdX
-         q9DUuOZEYeRHA==
-Received: by mail-ed1-f50.google.com with SMTP id o12so53270678edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:54:20 -0800 (PST)
-X-Gm-Message-State: AO0yUKUn+9WoVzmljYoVrQQrRmIb/id/KUSOMrwzpuj/G4zYPOqH6vWR
-        csI+m51HBvUMU8BxD5w4t5C4gUMmUPbP9Fx8Mn0=
-X-Google-Smtp-Source: AK7set+gKy5PfoUAkxjPyqViMV5TLsZt5d1WtsqHlZa+P0ra5Ew9UlFJGwuPsmKCDxZYFDS/4dfjtQPEgxSjqt+fJAk=
-X-Received: by 2002:a50:c319:0:b0:4ad:7439:cec3 with SMTP id
- a25-20020a50c319000000b004ad7439cec3mr3563374edb.7.1677675258664; Wed, 01 Mar
- 2023 04:54:18 -0800 (PST)
+        Wed, 1 Mar 2023 07:55:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358CD303DB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:54:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677675281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l7rxUejgMdEgbK2ryOu+LPqYE2umbodPKouLs7Mb/Xo=;
+        b=NOo232KfUeJ3n8EhGoK8OJ4KKujOK0J3TdfmtYxaxU9fM0KGs0tWZxb870ERCp/DlLaOdV
+        0nmcTGsBhl2zoPNVfNT3tbBS5STwyJsRpnjb1Rowe2XriDX3iTwcl4nfsl5U11HUirihiz
+        HcSj5OSVYZd48LvJXLTIwM++fDg6oY4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-464-3qXMTNlaPYONKGajkNjfAQ-1; Wed, 01 Mar 2023 07:54:40 -0500
+X-MC-Unique: 3qXMTNlaPYONKGajkNjfAQ-1
+Received: by mail-ed1-f69.google.com with SMTP id eh16-20020a0564020f9000b004acc4f8aa3fso18916784edb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:54:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l7rxUejgMdEgbK2ryOu+LPqYE2umbodPKouLs7Mb/Xo=;
+        b=OTJUMmqAhiSRrTn6EBIvZte6cNqLGU9RKDVaQgzk22RmglgSmVdhrjQitZLI3t9L0j
+         XtiSsLOztMw+wqRaDRDC7KCqA4ArJbT6llzyGwhouxL8xd2M7rxKK+L0N6pOy/O8iNp0
+         k2hTzQxRoTgwP+buKoOmhA3WGsdDbESDYhLycEO/aOGsdKaCJrpB9t3ANEZEuKwqOFEG
+         trOcUDT8r9qtyv4ZugPv1wRU7rLo0zxKToxMXDN4tEc3FFDDenimTGi2XRof+9fzQ0as
+         9fYjnkADpGz/KxDa4QRdcpncN55Cr4HJpVQvuU6wu8dx/fAYz2cSDF8EVtTNq+cmJ/qe
+         4XMg==
+X-Gm-Message-State: AO0yUKV4meyJSj/1C9rlNI0fDj1EjK7Atv99uMnuPecNqEJIAirEM2I/
+        ahr/BshidEvFGkhwGKpeJc3gbaXX50PG7etk4xRAEREI8cJLcJwOgGFl2e1HZHopzf2A9HlupZp
+        mBOulznSsI6VxjGFqPWaBVrYG
+X-Received: by 2002:a17:907:6ea5:b0:906:3799:cc7f with SMTP id sh37-20020a1709076ea500b009063799cc7fmr2499866ejc.39.1677675279309;
+        Wed, 01 Mar 2023 04:54:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set81lCv1nlaF8uVgwEzJ3dXt9sQnmYTFJPQS2vA/4IgLiYvEc8PtxcfEkdqcRM+zsD7LeNfPvA==
+X-Received: by 2002:a17:907:6ea5:b0:906:3799:cc7f with SMTP id sh37-20020a1709076ea500b009063799cc7fmr2499844ejc.39.1677675278954;
+        Wed, 01 Mar 2023 04:54:38 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id z71-20020a509e4d000000b004acb42134c4sm5607607ede.70.2023.03.01.04.54.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 04:54:38 -0800 (PST)
+Message-ID: <4ccb9139-1e70-e669-646a-1975460962cd@redhat.com>
+Date:   Wed, 1 Mar 2023 13:54:37 +0100
 MIME-Version: 1.0
-References: <20230216130914.156613-1-maobibo@loongson.cn>
-In-Reply-To: <20230216130914.156613-1-maobibo@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 1 Mar 2023 20:54:04 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6T_F4=D1i6GkJTczHY5i-FSa6o_oXiRdZFGOXBU=pwXg@mail.gmail.com>
-Message-ID: <CAAhV-H6T_F4=D1i6GkJTczHY5i-FSa6o_oXiRdZFGOXBU=pwXg@mail.gmail.com>
-Subject: Re: [PATCH v3] LoongArch: add checksum optimization for 64-bit system
-To:     Bibo Mao <maobibo@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        David Laight <David.Laight@aculab.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 0/5] apple-gmux: support MMIO gmux type on T2 Macs
+Content-Language: en-US, nl
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Seth Forshee <sforshee@kernel.org>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>
+References: <20230218132007.3350-1-orlandoch.dev@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230218132007.3350-1-orlandoch.dev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bibo,
+Hi,
 
-I found the version here [1] provides more functions than this one. So
-is it possible to take advantages from both versions?
+On 2/18/23 14:20, Orlando Chamberlain wrote:
+> Hi All,
+> 
+> This patch series adds support for the MMIO based gmux present on these
+> Dual GPU Apple T2 Macs: MacBookPro15,1, MacBookPro15,3, MacBookPro16,1,
+> MacBookPro16,4 (although amdgpu isn't working on MacBookPro16,4 [1]).
+> 
+> Changes from v2[2]:
+> 
+> - Add "," to last item in apple_gmux_type enum
+> - Don't not clear interrupts when status is 0
+> - Don't check if we failed to make debugfs folder
+> - Check for fake mmio gmux
 
-[1] https://github.com/loongson/linux/commit/92a6df48ccb73dd2c3dc1799add08a=
-df0e0b0deb
+Thanks, this looks good to me now:
 
-Huacai
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-On Thu, Feb 16, 2023 at 9:09=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrot=
-e:
->
-> loongArch platform is 64-bit system, which supports 8 bytes memory
-> accessing, generic checksum function uses 4 byte memory access.
-> This patch adds 8-bytes memory access optimization for checksum
-> function on loongArch. And the code comes from arm64 system.
->
-> When network hw checksum is disabled, iperf performance improves
-> about 10% with this patch.
->
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
-> Changelog:
-> v3: modify function accumulate() to handle better on loongarch platform,
->     maybe it's compiler optimization issue.
-> v2: use rotation API in function csum_fold to reduce one instruction.
-> ---
->  arch/loongarch/include/asm/checksum.h |  65 ++++++++++++
->  arch/loongarch/lib/Makefile           |   2 +-
->  arch/loongarch/lib/csum.c             | 141 ++++++++++++++++++++++++++
->  3 files changed, 207 insertions(+), 1 deletion(-)
->  create mode 100644 arch/loongarch/include/asm/checksum.h
->  create mode 100644 arch/loongarch/lib/csum.c
->
-> diff --git a/arch/loongarch/include/asm/checksum.h b/arch/loongarch/inclu=
-de/asm/checksum.h
-> new file mode 100644
-> index 000000000000..8a7d368d801d
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/checksum.h
-> @@ -0,0 +1,65 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2016 ARM Ltd.
-> + * Copyright (C) 2023 Loongson Technology Corporation Limited
-> + */
-> +#ifndef __ASM_CHECKSUM_H
-> +#define __ASM_CHECKSUM_H
-> +
-> +#include <linux/in6.h>
-> +
-> +#define _HAVE_ARCH_IPV6_CSUM
-> +__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
-> +                       const struct in6_addr *daddr,
-> +                       __u32 len, __u8 proto, __wsum sum);
-> +
-> +/*
-> + * turns a 32-bit partial checksum (e.g. from csum_partial) into a
-> + * 1's complement 16-bit checksum.
-> + */
-> +static inline __sum16 csum_fold(__wsum sum)
-> +{
-> +       u32 tmp =3D (__force u32)sum;
-> +
-> +       /*
-> +        * swap the two 16-bit halves of sum
-> +        * if there is a carry from adding the two 16-bit halves,
-> +        * it will carry from the lower half into the upper half,
-> +        * giving us the correct sum in the upper half.
-> +        */
-> +       return (__force __sum16)(~(tmp + rol32(tmp, 16)) >> 16);
-> +}
-> +#define csum_fold csum_fold
-> +
-> +/*
-> + * This is a version of ip_compute_csum() optimized for IP headers,
-> + * which always checksum on 4 octet boundaries.  ihl is the number
-> + * of 32-bit words and is always >=3D 5.
-> + */
-> +static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
-> +{
-> +       __uint128_t tmp;
-> +       u64 sum;
-> +       int n =3D ihl; /* we want it signed */
-> +
-> +       tmp =3D *(const __uint128_t *)iph;
-> +       iph +=3D 16;
-> +       n -=3D 4;
-> +       tmp +=3D ((tmp >> 64) | (tmp << 64));
-> +       sum =3D tmp >> 64;
-> +       do {
-> +               sum +=3D *(const u32 *)iph;
-> +               iph +=3D 4;
-> +       } while (--n > 0);
-> +
-> +       sum +=3D ror64(sum, 32);
-> +       return csum_fold((__force __wsum)(sum >> 32));
-> +}
-> +#define ip_fast_csum ip_fast_csum
-> +
-> +extern unsigned int do_csum(const unsigned char *buff, int len);
-> +#define do_csum do_csum
-> +
-> +#include <asm-generic/checksum.h>
-> +
-> +#endif /* __ASM_CHECKSUM_H */
-> diff --git a/arch/loongarch/lib/Makefile b/arch/loongarch/lib/Makefile
-> index 40bde632900f..6ba6df411f90 100644
-> --- a/arch/loongarch/lib/Makefile
-> +++ b/arch/loongarch/lib/Makefile
-> @@ -4,4 +4,4 @@
->  #
->
->  lib-y  +=3D delay.o memset.o memcpy.o memmove.o \
-> -          clear_user.o copy_user.o dump_tlb.o unaligned.o
-> +          clear_user.o copy_user.o dump_tlb.o unaligned.o csum.o
-> diff --git a/arch/loongarch/lib/csum.c b/arch/loongarch/lib/csum.c
-> new file mode 100644
-> index 000000000000..a5e84b403c3b
-> --- /dev/null
-> +++ b/arch/loongarch/lib/csum.c
-> @@ -0,0 +1,141 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +// Copyright (C) 2019-2020 Arm Ltd.
-> +
-> +#include <linux/compiler.h>
-> +#include <linux/kasan-checks.h>
-> +#include <linux/kernel.h>
-> +
-> +#include <net/checksum.h>
-> +
-> +static u64 accumulate(u64 sum, u64 data)
-> +{
-> +       sum +=3D data;
-> +       if (sum < data)
-> +               sum +=3D 1;
-> +       return sum;
-> +}
-> +
-> +/*
-> + * We over-read the buffer and this makes KASAN unhappy. Instead, disabl=
-e
-> + * instrumentation and call kasan explicitly.
-> + */
-> +unsigned int __no_sanitize_address do_csum(const unsigned char *buff, in=
-t len)
-> +{
-> +       unsigned int offset, shift, sum;
-> +       const u64 *ptr;
-> +       u64 data, sum64 =3D 0;
-> +
-> +       if (unlikely(len =3D=3D 0))
-> +               return 0;
-> +
-> +       offset =3D (unsigned long)buff & 7;
-> +       /*
-> +        * This is to all intents and purposes safe, since rounding down =
-cannot
-> +        * result in a different page or cache line being accessed, and @=
-buff
-> +        * should absolutely not be pointing to anything read-sensitive. =
-We do,
-> +        * however, have to be careful not to piss off KASAN, which means=
- using
-> +        * unchecked reads to accommodate the head and tail, for which we=
-'ll
-> +        * compensate with an explicit check up-front.
-> +        */
-> +       kasan_check_read(buff, len);
-> +       ptr =3D (u64 *)(buff - offset);
-> +       len =3D len + offset - 8;
-> +
-> +       /*
-> +        * Head: zero out any excess leading bytes. Shifting back by the =
-same
-> +        * amount should be at least as fast as any other way of handling=
- the
-> +        * odd/even alignment, and means we can ignore it until the very =
-end.
-> +        */
-> +       shift =3D offset * 8;
-> +       data =3D *ptr++;
-> +       data =3D (data >> shift) << shift;
-> +
-> +       /*
-> +        * Body: straightforward aligned loads from here on (the paired l=
-oads
-> +        * underlying the quadword type still only need dword alignment).=
- The
-> +        * main loop strictly excludes the tail, so the second loop will =
-always
-> +        * run at least once.
-> +        */
-> +       while (unlikely(len > 64)) {
-> +               __uint128_t tmp1, tmp2, tmp3, tmp4;
-> +
-> +               tmp1 =3D *(__uint128_t *)ptr;
-> +               tmp2 =3D *(__uint128_t *)(ptr + 2);
-> +               tmp3 =3D *(__uint128_t *)(ptr + 4);
-> +               tmp4 =3D *(__uint128_t *)(ptr + 6);
-> +
-> +               len -=3D 64;
-> +               ptr +=3D 8;
-> +
-> +               /* This is the "don't dump the carry flag into a GPR" idi=
-om */
-> +               tmp1 +=3D (tmp1 >> 64) | (tmp1 << 64);
-> +               tmp2 +=3D (tmp2 >> 64) | (tmp2 << 64);
-> +               tmp3 +=3D (tmp3 >> 64) | (tmp3 << 64);
-> +               tmp4 +=3D (tmp4 >> 64) | (tmp4 << 64);
-> +               tmp1 =3D ((tmp1 >> 64) << 64) | (tmp2 >> 64);
-> +               tmp1 +=3D (tmp1 >> 64) | (tmp1 << 64);
-> +               tmp3 =3D ((tmp3 >> 64) << 64) | (tmp4 >> 64);
-> +               tmp3 +=3D (tmp3 >> 64) | (tmp3 << 64);
-> +               tmp1 =3D ((tmp1 >> 64) << 64) | (tmp3 >> 64);
-> +               tmp1 +=3D (tmp1 >> 64) | (tmp1 << 64);
-> +               tmp1 =3D ((tmp1 >> 64) << 64) | sum64;
-> +               tmp1 +=3D (tmp1 >> 64) | (tmp1 << 64);
-> +               sum64 =3D tmp1 >> 64;
-> +       }
-> +       while (len > 8) {
-> +               __uint128_t tmp;
-> +
-> +               sum64 =3D accumulate(sum64, data);
-> +               tmp =3D *(__uint128_t *)ptr;
-> +
-> +               len -=3D 16;
-> +               ptr +=3D 2;
-> +
-> +               data =3D tmp >> 64;
-> +               sum64 =3D accumulate(sum64, tmp);
-> +       }
-> +       if (len > 0) {
-> +               sum64 =3D accumulate(sum64, data);
-> +               data =3D *ptr;
-> +               len -=3D 8;
-> +       }
-> +       /*
-> +        * Tail: zero any over-read bytes similarly to the head, again
-> +        * preserving odd/even alignment.
-> +        */
-> +       shift =3D len * -8;
-> +       data =3D (data << shift) >> shift;
-> +       sum64 =3D accumulate(sum64, data);
-> +
-> +       /* Finally, folding */
-> +       sum64 +=3D (sum64 >> 32) | (sum64 << 32);
-> +       sum =3D sum64 >> 32;
-> +       sum +=3D (sum >> 16) | (sum << 16);
-> +       if (offset & 1)
-> +               return (u16)swab32(sum);
-> +
-> +       return sum >> 16;
-> +}
-> +
-> +__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
-> +                       const struct in6_addr *daddr,
-> +                       __u32 len, __u8 proto, __wsum csum)
-> +{
-> +       __uint128_t src, dst;
-> +       u64 sum =3D (__force u64)csum;
-> +
-> +       src =3D *(const __uint128_t *)saddr->s6_addr;
-> +       dst =3D *(const __uint128_t *)daddr->s6_addr;
-> +
-> +       sum +=3D (__force u32)htonl(len);
-> +       sum +=3D (u32)proto << 24;
-> +       src +=3D (src >> 64) | (src << 64);
-> +       dst +=3D (dst >> 64) | (dst << 64);
-> +
-> +       sum =3D accumulate(sum, src >> 64);
-> +       sum =3D accumulate(sum, dst >> 64);
-> +
-> +       sum +=3D ((sum >> 32) | (sum << 32));
-> +       return csum_fold((__force __wsum)(sum >> 32));
-> +}
-> +EXPORT_SYMBOL(csum_ipv6_magic);
-> --
-> 2.27.0
->
+for the entire series.
+
+Can you prepare a v4 addressing Lukas's remarks:
+
+1. Switch to acpi_execute_simple_method()
+2. Add extra info about the gmux provided by Lukas 
+   to either the docs or as comments
+
+With those changes added I believe v4 will be ready
+for merging.
+
+Regards,
+
+Hans
+
+
+> 
+> # 1:
+> 
+> has a slight change in how the switch state is read: instead of checking
+> for x == 2, check !(x & 1)
+> 
+> # 2:
+> 
+> implements a system to support more than 2 gmux types
+> 
+> # 3:
+> 
+> start using the gmux's GMSP acpi method when handling interrupts on MMIO
+> gmux's. This is needed for the MMIO gmux's to clear interrupts.
+> 
+> # 4:
+> 
+> Adds support for the MMIO based gmux on T2 macs.
+> 
+> # 5:
+> 
+> Add a debugfs interface to apple-gmux so data from ports can be read
+> and written to from userspace.
+> 
+> This can be used for more easily researching what unknown ports do,
+> and switching gpus when vga_switcheroo isn't ready (e.g. when one gpu
+> is bound to vfio-pci and in use by a Windows VM, I can use this to
+> switch my internal display between Linux and Windows easily).
+> 
+> # Issues:
+> 
+> 1. Switching gpus at runtime has the same issue as indexed gmux's: the
+> inactive gpu can't probe the DDC lines for eDP [3]
+> 
+> 2. iMacPro1,1, iMac20,1 and iMac20,2 all seem to have a gmux in their
+> acpi tables, but they shouldn't. A check that hopefully will detect this
+> is used, but it's untested as I don't have any of those computers.
+> 
+> 3. Powering on the amdgpu with vga_switcheroo doesn't work well. I'm
+> told on the MacBookPro15,1 it works sometimes, and adding delays helps,
+> but on my MacBookPro16,1 I haven't been able to get it to work at all:
+> 
+> amdgpu: switched off
+> amdgpu: switched on
+> amdgpu 0000:03:00.0:
+>     Unable to change power state from D3hot to D0, device inaccessible
+> amdgpu 0000:03:00.0:
+>     Unable to change power state from D3cold to D0, device inaccessible
+> [drm] PCIE GART of 512M enabled (table at 0x00000080FEE00000).
+> [drm] PSP is resuming...
+> [drm:psp_hw_start [amdgpu]] *ERROR* PSP create ring failed!
+> [drm:psp_resume [amdgpu]] *ERROR* PSP resume failed
+> [drm:amdgpu_device_fw_loading [amdgpu]]
+>     *ERROR* resume of IP block <psp> failed -62
+> amdgpu 0000:03:00.0: amdgpu: amdgpu_device_ip_resume failed (-62).
+> snd_hda_intel 0000:03:00.1: Enabling via vga_switcheroo
+> snd_hda_intel 0000:03:00.1:
+>     Unable to change power state from D3cold to D0, device inaccessible
+> snd_hda_intel 0000:03:00.1: CORB reset timeout#2, CORBRP = 65535
+> snd_hda_codec_hdmi hdaudioC0D0: Unable to sync register 0x2f0d00. -5
+> 
+> There are some acpi methods (PWRD, PWG1 [4, 5]) that macOS calls when
+> changing the amdgpu's power state, but we don't use them and that could be
+> a cause. Additionally unlike previous generation Macbooks which work
+> better, on MacBookPro16,1 the gpu is located behind 2 pci bridges:
+> 
+> 01:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
+>     Navi 10 XL Upstream Port of PCI Express Switch (rev 43)
+> 02:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
+>     Navi 10 XL Downstream Port of PCI Express Switch
+> 03:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI]
+>     Navi 14 [Radeon RX 5500/5500M / Pro 5500M] (rev 43)
+> 03:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI]
+>     Navi 10 HDMI Audio
+> 
+> Upon attempting to power on the gpu with vga_switcheroo, all these
+> devices except 01:00.0 have their config space filled with 1s.
+> Rescanning pci makes the config space of all the devices go back to
+> normal, however amdgpu still fails to resume with the same logs as
+> above.
+> 
+> [1]: https://lore.kernel.org/all/3AFB9142-2BD0-46F9-AEA9-C9C5D13E68E6@live.com/
+> [2]: https://lore.kernel.org/platform-driver-x86/20230216122342.5918-1-orlandoch.dev@gmail.com/
+> [3]: https://lore.kernel.org/all/9eed8ede6f15a254ad578e783b050e1c585d5a15.1439288957.git.lukas@wunner.de/
+> [4]: https://gist.github.com/Redecorating/6c7136b7a4ac7ce3b77d8e41740dd87b
+> [5]: https://lore.kernel.org/all/20120710160555.GA31562@srcf.ucam.org/
+> 
+> Orlando Chamberlain (5):
+>   apple-gmux: use first bit to check switch state
+>   apple-gmux: refactor gmux types
+>   apple-gmux: Use GMSP acpi method for interrupt clear
+>   apple-gmux: support MMIO gmux on T2 Macs
+>   apple-gmux: add debugfs interface
+> 
+>  drivers/platform/x86/apple-gmux.c | 349 ++++++++++++++++++++++++++----
+>  include/linux/apple-gmux.h        |  70 ++++--
+>  2 files changed, 357 insertions(+), 62 deletions(-)
+> 
+
