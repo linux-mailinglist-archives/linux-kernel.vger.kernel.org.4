@@ -2,92 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AF56A7491
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117346A7494
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjCATyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S229498AbjCATyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:54:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjCATyI (ORCPT
+        with ESMTP id S229847AbjCATyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:54:08 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79864498BD;
-        Wed,  1 Mar 2023 11:53:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1677700430; bh=KfS7hS0J7xuE68udlOubvFGTC2KonI1Drjpg6rRNbgg=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To;
-        b=QPgJGe9o7ub+EDYb1FGYxEbS63yEcFy1TsM64ffG9R+WMckTlYeIuoDpahFA0iYCu
-         x9UADYoCVJFEIhnvxLSjT4h10Jdfu9kICR3LWRQjtvsBXKSqKvKS1zWwOgBBMwf2JP
-         N5vgPE5dmhC2YvOtMjwO2Vt5s33mbzjNaFDMFH4g=
-Received: by b221-3.in.mailobj.net [192.168.90.23] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Wed,  1 Mar 2023 20:53:50 +0100 (CET)
-X-EA-Auth: JGVVnp4Oj+hgsy//vZv/bmZxhDUe6GuLmgCnGlz9GaFR2TEcHfAHDQMYp/J1pq4IH2fMvvex8btEdmox2uqE1g==
-Date:   Thu, 2 Mar 2023 01:23:44 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH RESEND] scsi: libfc: Use refcount_* APIs for reference
- count management
-Message-ID: <Y/+tSLVxw0xuS9k1@ubun2204.myguest.virtualbox.org>
-References: <Y/+hVSSFgeV+yPhY@ubun2204.myguest.virtualbox.org>
- <cfe11fadc3d3e61ce6c7d6f00e1e427edea8a4e3.camel@linux.ibm.com>
+        Wed, 1 Mar 2023 14:54:25 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11664ECD2;
+        Wed,  1 Mar 2023 11:54:14 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pXSWj-0007I4-0n;
+        Wed, 01 Mar 2023 20:54:13 +0100
+Date:   Wed, 1 Mar 2023 19:54:09 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [RFC PATCH v11 03/12] dt-bindings: arm: mediatek: sgmiisys: Convert
+ to DT schema
+Message-ID: <91f38e6e1814294b6884d5c7fd71885dd2aa3f6c.1677699407.git.daniel@makrotopia.org>
+References: <cover.1677699407.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cfe11fadc3d3e61ce6c7d6f00e1e427edea8a4e3.camel@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1677699407.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 02:28:49PM -0500, James Bottomley wrote:
-> On Thu, 2023-03-02 at 00:32 +0530, Deepak R Varma wrote:
-> > The atomic_t API based object reference counter management is prone
-> > to counter value overflows, object use-after-free issues and to
-> > return puzzling values. The improved refcount_t APIs are designed to
-> > address these known issues with atomic_t reference counter
-> > management. This white paper [1] has detailed reasons for moving from
-> > atomic_t to refcount_t APIs. Hence replace the atomic_* based
-> > implementation by its refcount_* based equivalent.
-> > The issue is identified using atomic_as_refcounter.cocci Coccinelle
-> > semantic patch script.
-> > 
-> >         [1] https://arxiv.org/pdf/1710.06175.pdf
-> 
-> Citing long whitepapers in support of a patch isn't helpful to time
-> pressed reviewers, particularly when it's evident you didn't understand
-> the paper you cite. The argument in the paper for replacing atomics
-> with refcounts can be summarized as: if a user can cause a counter
-> overflow in an atomic_t simply by performing some action from userspace
-> then that represents a source of potential overflow attacks on the
-> kernel which should be mitigated by replacing the atomic_t in question
-> with a refcount_t which is overflow resistant.
-> 
-> What's missing from the quoted changelog is a justification of how a
-> user could cause an overflow in the ex_refcnt atomic_t.
+Convert mediatek,sgmiiisys bindings to DT schema format.
+Add maintainer Matthias Brugger, no maintainers were listed in the
+original documentation.
+As this node is also referenced by the Ethernet controller and used
+as SGMII PCS add this fact to the description.
+Move the file to Documentation/devicetree/bindings/pcs/ which seems more
+appropriate given that the great majority of registers are related to
+SGMII PCS functionality and only one register represents clock bits.
 
-Thank you very much James for the review comments. I truly appreciate your time
-and guidance. I will study your feedback and send in a revision with necessary
-update to patch log.
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ .../arm/mediatek/mediatek,sgmiisys.txt        | 27 ----------
+ .../bindings/net/pcs/mediatek,sgmiisys.yaml   | 49 +++++++++++++++++++
+ 2 files changed, 49 insertions(+), 27 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
 
-Regards,
-./drv
-
-> 
-> James
-> 
-
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+deleted file mode 100644
+index d2c24c2775141..0000000000000
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
++++ /dev/null
+@@ -1,27 +0,0 @@
+-MediaTek SGMIISYS controller
+-============================
+-
+-The MediaTek SGMIISYS controller provides various clocks to the system.
+-
+-Required Properties:
+-
+-- compatible: Should be:
+-	- "mediatek,mt7622-sgmiisys", "syscon"
+-	- "mediatek,mt7629-sgmiisys", "syscon"
+-	- "mediatek,mt7981-sgmiisys_0", "syscon"
+-	- "mediatek,mt7981-sgmiisys_1", "syscon"
+-	- "mediatek,mt7986-sgmiisys_0", "syscon"
+-	- "mediatek,mt7986-sgmiisys_1", "syscon"
+-- #clock-cells: Must be 1
+-
+-The SGMIISYS controller uses the common clk binding from
+-Documentation/devicetree/bindings/clock/clock-bindings.txt
+-The available clocks are defined in dt-bindings/clock/mt*-clk.h.
+-
+-Example:
+-
+-sgmiisys: sgmiisys@1b128000 {
+-	compatible = "mediatek,mt7622-sgmiisys", "syscon";
+-	reg = <0 0x1b128000 0 0x1000>;
+-	#clock-cells = <1>;
+-};
+diff --git a/Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml b/Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
+new file mode 100644
+index 0000000000000..7ce597011a321
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/pcs/mediatek,sgmiisys.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek SGMIISYS Controller
++
++maintainers:
++  - Matthias Brugger <matthias.bgg@gmail.com>
++
++description:
++  The MediaTek SGMIISYS controller provides a SGMII PCS and some clocks
++  to the ethernet subsystem to which it is attached.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - mediatek,mt7622-sgmiisys
++          - mediatek,mt7629-sgmiisys
++          - mediatek,mt7986-sgmiisys_0
++          - mediatek,mt7986-sgmiisys_1
++      - const: syscon
++
++  reg:
++    maxItems: 1
++
++  '#clock-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++      sgmiisys: syscon@1b128000 {
++        compatible = "mediatek,mt7622-sgmiisys", "syscon";
++        reg = <0 0x1b128000 0 0x1000>;
++        #clock-cells = <1>;
++      };
++    };
+-- 
+2.39.2
 
