@@ -2,130 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E792B6A71C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD38E6A71CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCAREE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S230054AbjCAREY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjCAREB (ORCPT
+        with ESMTP id S230000AbjCAREU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:04:01 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C593C0E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 09:03:26 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so12351621wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 09:03:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qUHKTRcQh3URDtHGlGaA089RX+46wq6JZY7f9xT1DBI=;
-        b=2O6UAvj6zfjZ/qTx+DC1jnzc4oofYRirSDiuT9o8rhJ/6BEiPA4+rcBx4atFEYGEIo
-         QVdj2yopC3IIfoL06yzTsC3ziAmJYMHVp28B/iZfCAryxbSMgsa3kgv/phahYvjdTBzb
-         Z/2osNzuFnLNlGTIvz/JMmEPzwLmZAOY13uQsvapEDGujowt6lWX6AE8hfelFeGUxisa
-         CJNyd0S6acdvftMLIIDqsimJ3mYWYm9fdb/HVEiQhLot1fGCgY3NO75b80K0cta4Mx61
-         J5BxMt3zLEk/F+OPrB+G6242679o0jxvLR4EnQao/I7ez0xvSyFY5dK4MelBSfYqGIyZ
-         x/vw==
+        Wed, 1 Mar 2023 12:04:20 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15914392E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 09:04:06 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id r13-20020a92c5ad000000b00316ecbf63c9so8271083ilt.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 09:04:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qUHKTRcQh3URDtHGlGaA089RX+46wq6JZY7f9xT1DBI=;
-        b=sTGH3yPZ5bqw/Ix3gUk3UNxa0c3XuMYKgQBRN5BaK7/p65oWDR3oHXXEyCwgQDvLQ2
-         qoUjLgC4kEhNP9nPnlcoG1edE+qIQttbCS6UTthMa5wy1/QjwL0MCcCEwbxoaXxUgAEy
-         C9xInhvmFmPcaIeJbmkK92A+w2h82FA+hdlzLW+adEc/zW3UIWaQYIlXc5u/5LZzXBE6
-         LuZB55xVTTsORgu0ljau/yby6srPd+m+hCG1NJNQwA9AmMorznfJuuGDe3Rozmrsmi9i
-         Jzqspw3/yewFw1/6kJhMSzaBr4HW3ap4QAwX2U+icuXRUc4gyaSL/qUhrIAfX4aFACaB
-         5GbA==
-X-Gm-Message-State: AO0yUKWqBopPTe4+9fjeG2d9ye2xK3tN4vTOeo3VzsvxRzBDLRY8feu9
-        BzjRRv7G1U/hrPV4n1Zlp0yEvg==
-X-Google-Smtp-Source: AK7set8vQqf910uXvU8gXb+dtW0FrWBh+y0eZXgna9uwh5OHAKzuXs0cw2hHMMTvzp4hl3cfxLpuSQ==
-X-Received: by 2002:a05:600c:3093:b0:3eb:3104:efef with SMTP id g19-20020a05600c309300b003eb3104efefmr5425757wmn.31.1677690204651;
-        Wed, 01 Mar 2023 09:03:24 -0800 (PST)
-Received: from airbuntu (host86-168-251-3.range86-168.btcentralplus.com. [86.168.251.3])
-        by smtp.gmail.com with ESMTPSA id z26-20020a1c4c1a000000b003eb395a8280sm107158wmf.37.2023.03.01.09.03.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 09:03:24 -0800 (PST)
-Date:   Wed, 1 Mar 2023 17:03:22 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on
- suspend-resume
-Message-ID: <20230301170322.xthlso7jfkixlyex@airbuntu>
-References: <20230206221428.2125324-1-qyousef@layalina.io>
- <20230223153859.37tqoqk33oc6tv7o@airbuntu>
- <5f087dd8-3e39-ce83-fe24-afa5179c05d9@arm.com>
- <20230227205725.dipvh3i7dvyrv4tv@airbuntu>
- <5a1e58bf-7eb2-bd7a-7e19-7864428a2b83@arm.com>
- <20230228174627.vja5aejq27dsta2u@airbuntu>
- <Y/7/SLzvK8LfB29z@localhost.localdomain>
- <20230301122852.zgzreby42lh2zf6w@airbuntu>
- <Y/9gmDRlGOChIwpf@localhost.localdomain>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ijtyYwUSpPiADlS8jXaq8RNP7rAhwQrJbgxXtqNnsk=;
+        b=e6ibiqjoulbmu0+GrfWAnP4UEJ3ycLAlD6LFf8sjei0OOC7zI39hSR3l5JSiLXl05B
+         6spEjYNru7OYoOydh0hGLcRE/Wi2O82usWU5vbyVD6pNZsk1MefxWnUTOHc30gkObmqF
+         04YFPSBXOCY28D3OZoUANakvotrMiXr00OLgeIwWkZ55ZmOjNQGXLcfKd8RQFJKVftj0
+         YkrwIoFEddnjJ9QUkeE5Ce1kzB+FyxsMNfiib4cCjiyx+ZfD3gwBthPaeaq7LP+fq6Oy
+         p+s3DmRQZAL0pDqKwPAeTX0QwE8nm61qnf2C9UAQwKYq+L+cl4wv7MPqtrOi2Zxl1SPG
+         b2wQ==
+X-Gm-Message-State: AO0yUKUrAhoEJHu0qAHC4/xkfYDtbbvN3rHepGMlG/lo63Ypd6AJkt7e
+        Rt0zmSSC9AkWCol5L9RDTJhYEcC6xxzH1rQhPy3WksaHA0MR
+X-Google-Smtp-Source: AK7set8uFRynAEITgWsfrGesrBup2CAk3VxbpWdX/bYU859iY/Hj9DUIPdja/medu71lSLKEl+EqARAhgw2v71t/elag0Fpb4znZ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y/9gmDRlGOChIwpf@localhost.localdomain>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:3312:0:b0:3c4:dda2:da6e with SMTP id
+ c18-20020a023312000000b003c4dda2da6emr3316494jae.4.1677690246030; Wed, 01 Mar
+ 2023 09:04:06 -0800 (PST)
+Date:   Wed, 01 Mar 2023 09:04:06 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000286e1a05f5d9b3c6@google.com>
+Subject: [syzbot] [ext4?] memory leak in ext4_expand_extra_isize_ea
+From:   syzbot <syzbot+0d042627c4f2ad332195@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/23 15:26, Juri Lelli wrote:
-> On 01/03/23 12:28, Qais Yousef wrote:
-> > On 03/01/23 08:31, Juri Lelli wrote:
-> 
-> ...
-> 
-> > > Not ignoring you guys here, but it turns out I'm quite bogged down with
-> > > other stuff at the moment. :/ So, apologies and I'll try to get to this
-> > > asap. Thanks a lot for all your efforts and time reviewing so far!
-> > 
-> > Np, I can feel you :-)
-> 
-> Eh. :/
+Hello,
 
-I hope I did not offend. That was meant as no pressure, I understand.
+syzbot found the following issue on:
 
-> 
-> BTW, do you have a repro script of some sort handy I might play with?
+HEAD commit:    c0927a7a5391 Merge tag 'xfs-6.3-merge-4' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10d973a8c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f5733ca1757172ad
+dashboard link: https://syzkaller.appspot.com/bug?extid=0d042627c4f2ad332195
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16598c22c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12376874c80000
 
-Sorry no. You'll just need to suspend to ram. I had a simple patch to measure
-the time around the call and trace_printk'ed the result.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a5732f39d793/disk-c0927a7a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a0b9fb85e380/vmlinux-c0927a7a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0f4253a65ff3/bzImage-c0927a7a.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/2162c5bd66e2/mount_0.gz
 
-I was working on a android phone which just suspends to ram if you turn the
-screen off and disconnect the usb.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0d042627c4f2ad332195@syzkaller.appspotmail.com
 
-I think you can use rtcwake in normal desktop environment. Something like
+BUG: memory leak
+unreferenced object 0xffff88810658dc00 (size 1024):
+  comm "syz-executor463", pid 5080, jiffies 4294961132 (age 13.510s)
+  hex dump (first 32 bytes):
+    00 fb 8e 00 00 cf e8 9e ac aa 80 5a e1 26 a9 9c  ...........Z.&..
+    71 e3 ea 67 33 7f 9a ef ca d1 17 51 5c 7f 0e 4b  q..g3......Q\..K
+  backtrace:
+    [<ffffffff8153410d>] __do_kmalloc_node mm/slab_common.c:966 [inline]
+    [<ffffffff8153410d>] __kmalloc_node+0x4d/0x120 mm/slab_common.c:974
+    [<ffffffff81523dd2>] kmalloc_node include/linux/slab.h:610 [inline]
+    [<ffffffff81523dd2>] kvmalloc_node+0xa2/0x180 mm/util.c:603
+    [<ffffffff8188b446>] kvmalloc include/linux/slab.h:737 [inline]
+    [<ffffffff8188b446>] ext4_xattr_move_to_block fs/ext4/xattr.c:2635 [inline]
+    [<ffffffff8188b446>] ext4_xattr_make_inode_space fs/ext4/xattr.c:2743 [inline]
+    [<ffffffff8188b446>] ext4_expand_extra_isize_ea+0x786/0xb80 fs/ext4/xattr.c:2835
+    [<ffffffff8181539b>] __ext4_expand_extra_isize+0x18b/0x200 fs/ext4/inode.c:5955
+    [<ffffffff8181fa55>] ext4_try_to_expand_extra_isize fs/ext4/inode.c:5998 [inline]
+    [<ffffffff8181fa55>] __ext4_mark_inode_dirty+0x245/0x370 fs/ext4/inode.c:6076
+    [<ffffffff818942fe>] ext4_set_acl+0x21e/0x340 fs/ext4/acl.c:263
+    [<ffffffff8170e672>] set_posix_acl+0x112/0x150 fs/posix_acl.c:956
+    [<ffffffff8170eb72>] vfs_set_acl+0x2b2/0x4a0 fs/posix_acl.c:1098
+    [<ffffffff81710ea0>] do_set_acl+0x90/0x140 fs/posix_acl.c:1247
+    [<ffffffff81690a63>] do_setxattr+0x73/0xf0 fs/xattr.c:606
+    [<ffffffff81690b9d>] setxattr+0xbd/0xe0 fs/xattr.c:632
+    [<ffffffff81690cd8>] path_setxattr+0x118/0x130 fs/xattr.c:651
+    [<ffffffff81690d79>] __do_sys_lsetxattr fs/xattr.c:674 [inline]
+    [<ffffffff81690d79>] __se_sys_lsetxattr fs/xattr.c:670 [inline]
+    [<ffffffff81690d79>] __x64_sys_lsetxattr+0x29/0x30 fs/xattr.c:670
+    [<ffffffff849ad699>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff849ad699>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-	sudo rtcwake -u -s 5 -m mem
 
 
-Thanks!
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---
-Qais Yousef
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
