@@ -2,175 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9606A64F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AED6A64FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjCABtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 20:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        id S229695AbjCABui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 20:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCABtb (ORCPT
+        with ESMTP id S229480AbjCABug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 20:49:31 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5882DEB48
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:49:30 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-536cd8f6034so326266867b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:49:30 -0800 (PST)
+        Tue, 28 Feb 2023 20:50:36 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE33319F2F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:50:35 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id nf5so8287329qvb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677635369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yAu0VY4pG5lMmayDlpyajBcn4svB3LfzCeO1dyYvFcM=;
-        b=Ab6GA6qPithzXQRnd8yinlWyVvOV9spWEWMRYdNDQgxJvdgJqykgfhy8Jai7ztaQ09
-         HDf+2cmdKeONrf+4KpcPfHOxWmp4wmYJ3BwxrEV6oGtwgZgolD0nLnnjScV6w+3MEblI
-         8AYNpMXJoeWoJqmlZZw8kF+3SWNcz3QOQpprZDvNy3AVOyyyRxlTFFpuT2voN57o5wwi
-         KJvq/55aKxYW9gkwaXLVYKJslTRPL9GBds9yNmAWrQBdtAHSQS+RXIsNOhQDg9n+yvsC
-         vo9xO4z/bk6rpniBqxIc+vfp0SY1kMAMk3ZU69uQL0zvnxOYF1Cw+Kc+v8/qPjl3hyRB
-         sCfA==
+        d=efficientek-com.20210112.gappssmtp.com; s=20210112; t=1677635435;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mcrDBIGtrTEDjzonWUNUAc4MXuRWYEApdBnj/prlZpU=;
+        b=dDKs5CP907SyA/Bjl9QDsBGZ56nJyMPapGC8bBkngXXKV1sqgR27+HEkCACRSCaOLl
+         vLHnnYCcap/MfQncsNX7nqNofY9v49OyxdDsfwIE6LLSzmDCIpX8tNjBgM7wCd6ZBBjG
+         92Xvh11XoHf0jiIbyL+CcMt++wiEAXwEph+dDblB0/3r0CuJ7n3E4U9XvRP47Yg9Q74o
+         nSpWC690N+qR//1QyrR58O/7PNRJsuAYpiiqkCQTCihzM+i7RoiKGTIjMe2kBKBmvOQt
+         JdoHVszfYpgUSAfwRN0LLNVztjr+MOfYHS0rADQ0TPR0lkgOQoQgaINpKmeJGV02/bzN
+         ANEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677635369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yAu0VY4pG5lMmayDlpyajBcn4svB3LfzCeO1dyYvFcM=;
-        b=eapRqM+oyBgNXVp5hIPrtoYfO5dK/D5ZMeWnmi8nazqEzW8sL2WbVB9L4agrAYwQaj
-         Nby0Q1N8jWs35WZFKM4FH5/Ka8Mc5k71F5q4tH3m1vaiBtd509cYMEpzFS6VY3htmtkV
-         lN/N/eZu5jX+a5t1d4dN8D7P3DFvM/6gnfSQze6IRgts22jSm+2QRNnjM3BLZtCYJk3f
-         waFVsQvJNCa/Xra6KAcWwI+/DVQKzLR7uRJloWvE/UdVOy8jMCs5eQfnKEumO1qzz7pb
-         QtWHqW7OdzZZM6l0KET3zJt/bJWheTytFYTpl1lXGzA2WlA5EeoPGKqs40dKIHXD0+p9
-         +csw==
-X-Gm-Message-State: AO0yUKWsgCg62SgohOY0WgcsyXqAXNKTS9X0lBA32r2Eq0z/eGi5FEgJ
-        XrmY07tws8rqkuMNMw7W/UG+0eMSwe56gyFE1FLqug==
-X-Google-Smtp-Source: AK7set+dFJSx78dk4VGv7wMamuwmK+ZqCmseIbFZi0QMwuE3BCrIawoUa/thhs72KuS9XQADzu8byCOGIewo885wKNU=
-X-Received: by 2002:a25:9704:0:b0:a30:38fb:a2e4 with SMTP id
- d4-20020a259704000000b00a3038fba2e4mr2102666ybo.6.1677635369232; Tue, 28 Feb
- 2023 17:49:29 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677635435;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mcrDBIGtrTEDjzonWUNUAc4MXuRWYEApdBnj/prlZpU=;
+        b=vq3I1sP9l/vSls9J4GxJZRTtMZro1kzCrnDI6VLjeghYlbt/0HWPtcYEgzRM38gAhg
+         rBYuZHBdyQgGTK9aOxzyCZn8dQb11QfAv/X3IcHqmeeErhppBk2DuPV/zK/iGccSF9Xf
+         4mbjelwRUjIWygu+CDtKgIpi51axURCXWMpqXAuDCyWFT51FrN9APYn4CFPi90GxPyxN
+         9tViVZwShq3/2KDo5nBDfux7JtBVxb6BdQnpk8g0CJOg9YLBVOVFFCol17/+p068xW5H
+         DMHYFczgZRZkKnFfOo5jjOh5zy9p+hFAGzA8miebRTWTINtGaz0aMEiygKhJhB3sXbSY
+         HniA==
+X-Gm-Message-State: AO0yUKXWnhx1Dip3r83eqJb5npkIpuby7S5Q20fOKWDjl9fLVY2G0tbU
+        IKF66jUkvI+DEVMlinwtMZFquA==
+X-Google-Smtp-Source: AK7set9a/p6WWFIvBuX9pL8jdiOxPQ2UPXugNGMeAAUTu0K6mSLmk0zzIXFguEf4CPa4Hbqn9ECGyA==
+X-Received: by 2002:a05:6214:c43:b0:56e:9ab5:cd9f with SMTP id r3-20020a0562140c4300b0056e9ab5cd9fmr8229751qvj.39.1677635434870;
+        Tue, 28 Feb 2023 17:50:34 -0800 (PST)
+Received: from localhost.localdomain ([37.218.244.251])
+        by smtp.gmail.com with ESMTPSA id d184-20020a37b4c1000000b0073b69922cfesm7750267qkf.85.2023.02.28.17.50.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 17:50:34 -0800 (PST)
+From:   Glenn Washburn <development@efficientek.com>
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+Cc:     Glenn Washburn <development@efficientek.com>,
+        linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        Seth Forshee <sforshee@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: [RFC PATCH v2] hostfs: handle idmapped mounts
+Date:   Tue, 28 Feb 2023 19:50:02 -0600
+Message-Id: <20230301015002.2402544-1-development@efficientek.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com>
- <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
- <82406da2-799e-f0b4-bce0-7d47486030d4@quicinc.com> <CAJuCfpHrhO7_fMwNuu2hdQob=MPjZTW8eaJpNhEhPmDMqz2qTA@mail.gmail.com>
- <Y/ix53x8i/ViuBXf@dhcp22.suse.cz> <CAJuCfpG1c5v6qOotPV6t-o1T1p7EbOLs90eFnoEBjts+gafovA@mail.gmail.com>
- <Y/yxSqhpQh9yR7L4@dhcp22.suse.cz> <CAJuCfpHXwbtjdhH_K9r28-LUYtzC6+NaZ+RrKCtiNBk8PfXhLw@mail.gmail.com>
- <Y/0ASztGOwfM6bNK@dhcp22.suse.cz> <CAJuCfpHYMR6O_uJvaeq1f+ZvgW9oN6zTRG=UvTXyLJLSFOV3jw@mail.gmail.com>
- <Y/4GvIMtjVoEozWE@dhcp22.suse.cz> <CAJuCfpEn-W5ffO7sEJPpu3TXeqK-XE1+TTVNnWcTcDBuoNUhGA@mail.gmail.com>
-In-Reply-To: <CAJuCfpEn-W5ffO7sEJPpu3TXeqK-XE1+TTVNnWcTcDBuoNUhGA@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 28 Feb 2023 17:49:18 -0800
-Message-ID: <CAJuCfpE604=5QtPBFFhhgNf43iXJvobE3uvaN_yFFHS-n4fKZw@mail.gmail.com>
-Subject: Re: [PATCH] psi: reduce min window size to 50ms
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        mark.rutland@arm.com, will@kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Patrick Daly <quic_pdaly@quicinc.com>, johunt@akamai.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 10:18=E2=80=AFAM Suren Baghdasaryan <surenb@google.=
-com> wrote:
->
-> On Tue, Feb 28, 2023 at 5:50 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 27-02-23 11:50:48, Suren Baghdasaryan wrote:
-> > > On Mon, Feb 27, 2023 at 11:11 AM Michal Hocko <mhocko@suse.com> wrote=
-:
-> > > >
-> > > > On Mon 27-02-23 09:49:59, Suren Baghdasaryan wrote:
-> > > > > On Mon, Feb 27, 2023 at 5:34 AM Michal Hocko <mhocko@suse.com> wr=
-ote:
-> > > > > >
-> > > > > > On Fri 24-02-23 13:07:57, Suren Baghdasaryan wrote:
-> > > > > > > On Fri, Feb 24, 2023 at 4:47 AM Michal Hocko <mhocko@suse.com=
-> wrote:
-> > > > [...]
-> > > > > > > > Btw. it seems that there is is only a limit on a single tri=
-gger per fd
-> > > > > > > > but no limits per user so it doesn't sound too hard to end =
-up with too
-> > > > > > > > much polling even with a larger timeouts. To me it seems li=
-ke we need to
-> > > > > > > > contain the polling thread to be bound by the cpu controlle=
-r.
-> > > > > > >
-> > > > > > > Hmm. We have one "psimon" thread per cgroup (+1 system-level =
-one) and
-> > > > > > > poll_min_period for each thread is chosen as the min() of pol=
-ling
-> > > > > > > periods between triggers created in that group. So, a bad tri=
-gger that
-> > > > > > > causes overly aggressive polling and polling thread being thr=
-ottled,
-> > > > > > > might affect other triggers in that cgroup.
-> > > > > >
-> > > > > > Yes, and why that would be a problem?
-> > > > >
-> > > > > If unprivileged processes are allowed to add new triggers then a
-> > > > > malicious process can add a bad trigger and affect other legit
-> > > > > processes. That sounds like a problem to me.
-> > > >
-> > > > Hmm, I am not sure we are on the same page. My argument was that th=
-e
-> > > > monitoring kernel thread should be bound by the same cpu controller=
- so
-> > > > even if it was excessive it would be bound to the cgroup constrains=
-.
-> > >
-> > > Right. But if cgroup constraints are violated then the psimon thread'=
-s
-> > > activity will be impacted by throttling. In such cases won't that
-> > > affect other "good" triggers served by that thread even if they are
-> > > using higher polling periods?
-> >
-> > That is no different from any other part of the workload running within
-> > the same cpu bound cgroup running overboard with the cpu consumption. I
-> > do not see why psimon or anything else should be any different.
-> >
-> > Actually the only difference here is that the psi monitoring is
-> > outsourced to a kernel thread which is running ourside of any constrain=
-s.
-> > I am not sure where do we stand with kernel thread cpu cgroup accountin=
-g
-> > and I suspect this is not a trivial thing to do ATM. Hence longer term
-> > plan.
->
-> Yeah, that sounds right.
-> In the meantime I think the prudent thing to do is to add
-> CAP_SYS_RESOURCE check for cgroup interface for consistency with
-> system-wide one. After that we can change the min period to be
-> anything more than 0 and let userspace privileged services implement
-> policies to limit trigger cpu consumption (might be via cpu
-> controller, limiting the number of triggers/their periods, etc).
-> Sudarshan, I'll post the CAP_SYS_RESOURCE change shortly and you can
-> follow up with the change to the min trigger period.
+Let hostfs handle idmapped mounts. This allows to have the same hostfs
+mount appear in multiple locations with different id mappings.
 
-Patch to require CAP_SYS_RESOURCE for writing per-cgroup psi files is
-posted at https://lore.kernel.org/all/20230301014651.1370939-1-surenb@googl=
-e.com/
+root@(none):/media# id
+uid=0(root) gid=0(root) groups=0(root)
+root@(none):/media# mkdir mnt idmapped
+root@(none):/media# mount -thostfs -o/home/user hostfs mnt
 
-> Thanks for the input folks!
->
-> > --
-> > Michal Hocko
-> > SUSE Labs
+root@(none):/media# touch mnt/aaa
+root@(none):/media# mount-idmapped --map-mount u:`id -u user`:0:1 --map-mount g:`id -g user`:0:1 /media/mnt /media/idmapped
+root@(none):/media# ls -l mnt/aaa idmapped/aaa
+-rw-r--r-- 1 root root 0 Jan 28 01:23 idmapped/aaa
+-rw-r--r-- 1 user user 0 Jan 28 01:23 mnt/aaa
+
+root@(none):/media# touch idmapped/bbb
+root@(none):/media# ls -l mnt/bbb idmapped/bbb
+-rw-r--r-- 1 root root 0 Jan 28 01:26 idmapped/bbb
+-rw-r--r-- 1 user user 0 Jan 28 01:26 mnt/bbb
+
+Signed-off-by: Glenn Washburn <development@efficientek.com>
+---
+Changes from v1:
+ * Rebase on to tip. The above commands work and have the results expected.
+   The __vfsuid_val(make_vfsuid(...)) seems ugly to get the uid_t, but it
+   seemed like the best one I've come across. Is there a better way?
+
+Glenn
+---
+ fs/hostfs/hostfs_kern.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+index c18bb50c31b6..9459da99a0db 100644
+--- a/fs/hostfs/hostfs_kern.c
++++ b/fs/hostfs/hostfs_kern.c
+@@ -786,7 +786,7 @@ static int hostfs_permission(struct mnt_idmap *idmap,
+ 		err = access_file(name, r, w, x);
+ 	__putname(name);
+ 	if (!err)
+-		err = generic_permission(&nop_mnt_idmap, ino, desired);
++		err = generic_permission(idmap, ino, desired);
+ 	return err;
+ }
+ 
+@@ -794,13 +794,14 @@ static int hostfs_setattr(struct mnt_idmap *idmap,
+ 			  struct dentry *dentry, struct iattr *attr)
+ {
+ 	struct inode *inode = d_inode(dentry);
++	struct user_namespace *fs_userns = i_user_ns(inode);
+ 	struct hostfs_iattr attrs;
+ 	char *name;
+ 	int err;
+ 
+ 	int fd = HOSTFS_I(inode)->fd;
+ 
+-	err = setattr_prepare(&nop_mnt_idmap, dentry, attr);
++	err = setattr_prepare(idmap, dentry, attr);
+ 	if (err)
+ 		return err;
+ 
+@@ -814,11 +815,11 @@ static int hostfs_setattr(struct mnt_idmap *idmap,
+ 	}
+ 	if (attr->ia_valid & ATTR_UID) {
+ 		attrs.ia_valid |= HOSTFS_ATTR_UID;
+-		attrs.ia_uid = from_kuid(&init_user_ns, attr->ia_uid);
++		attrs.ia_uid = __vfsuid_val(make_vfsuid(idmap, fs_userns, attr->ia_uid));
+ 	}
+ 	if (attr->ia_valid & ATTR_GID) {
+ 		attrs.ia_valid |= HOSTFS_ATTR_GID;
+-		attrs.ia_gid = from_kgid(&init_user_ns, attr->ia_gid);
++		attrs.ia_gid = __vfsgid_val(make_vfsgid(idmap, fs_userns, attr->ia_gid));
+ 	}
+ 	if (attr->ia_valid & ATTR_SIZE) {
+ 		attrs.ia_valid |= HOSTFS_ATTR_SIZE;
+@@ -857,7 +858,7 @@ static int hostfs_setattr(struct mnt_idmap *idmap,
+ 	    attr->ia_size != i_size_read(inode))
+ 		truncate_setsize(inode, attr->ia_size);
+ 
+-	setattr_copy(&nop_mnt_idmap, inode, attr);
++	setattr_copy(idmap, inode, attr);
+ 	mark_inode_dirty(inode);
+ 	return 0;
+ }
+@@ -991,7 +992,7 @@ static struct file_system_type hostfs_type = {
+ 	.name 		= "hostfs",
+ 	.mount	 	= hostfs_read_sb,
+ 	.kill_sb	= hostfs_kill_sb,
+-	.fs_flags 	= 0,
++	.fs_flags 	= FS_ALLOW_IDMAP,
+ };
+ MODULE_ALIAS_FS("hostfs");
+ 
+
+base-commit: 7fa08de735e41001a70c8ca869b2b159d74c2339
+-- 
+2.30.2
+
