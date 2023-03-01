@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827D46A7258
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 675C76A725B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCARws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:52:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S229942AbjCARxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCARwp (ORCPT
+        with ESMTP id S229976AbjCARwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:52:45 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2075.outbound.protection.outlook.com [40.107.223.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EB848E2D;
-        Wed,  1 Mar 2023 09:52:44 -0800 (PST)
+        Wed, 1 Mar 2023 12:52:54 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2045.outbound.protection.outlook.com [40.107.237.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29B24A1EE;
+        Wed,  1 Mar 2023 09:52:48 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eWXeWcXU4OmjD6lsAabyrI5d0ekazUjKpsqREe5g1ikIkR+1Y94Fp2NR107dlPwqSezjJgUVrfEoVnJLqoaGARXGdGStGN8Mh13bt5zmuYPb35kF2ORKvDeqg2ZHL8osc0t05EfKQRQhGicIKmR3aqv9Y+emEJEM5h/yqeucY7/34g0y3n6C5sz1zvbeCtU7igdczaSYa++vdvB0IfVGDDeLZagu5yhbiaOwybbQGoHcjqShrIZ8SJ4ORpOK16C9M/R483hkofVr0vFPqFVEtEzPkptO6QsiM58NPbZXEJtZyzD9qC0U2KkuJk6ic2OzosY1FTN+d2WkAT1IJsDEHQ==
+ b=V5imRQGI9OomAIqhOr2MyzUFunJs/gkp/2R1SqBOILw/ToiqQLRzeRxkApsc8ejx+ao1ITw0Dpb87CsCz4MnGHMDBxz/gdNIhakMqKLlVEUL0HJjqoLjX1KjvmPEwUAUMwCq5jIIvsz/dbfSD7YzOuqiIiYpiauFyDv4YOzXSgpc6xuDyqgFxh0iPMoNKcuwBvuvFc1dLZg9UGRzNEJRNmj8uJkWH94oRMwo4qpdSootb682AQpmvdmbL8Cq9fZrLFWy6YbQPVAS1lGk2OUsS5xFHztKOb3o1gSK+xvypLQ2Gu5jEnOL9fHc/TWZjCXT9HdkOaBJv6cXbMG4q3lAYA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ce29QMFAZTKHWaHxc5qWBmknSsMxbIo81qI6CnGI3nU=;
- b=eilFU0TEiwchVXSxZ/B6RQlwxbgY0GFLSOMhtv1obOYhI2vUa5/TF35fNeqnRx12gzr7n5TLQpHKUqDCasJFVM+ZcV4bG9sT9LItuqd56W+nJgK5a2KvkUbccMVlrgxKo1emnok/+dGeLFY5L8X172XCPVIZa2RH+bydsoQxKDSrOFpf5iq121zHuR2e0AKk2EUZRoeO4hjnPatpYwDVsPj4rgPq3O5QguTUDS80lCHihELk9unR2Pt6lTy6CFr6n68TyFtYz+83rDfUuifuCsJXXhbhe3ijz3WiKi2SKBfMaIzkRG0BzkrxGGevV016DUqbJUtZyp9W6arWz2Qx9A==
+ bh=K4jPSm1u8x81huOojOh6hhCqQ3nFVlKvgZHpLyzZ3ik=;
+ b=WKTpEXOPmejKg4l4YU4kY0iq/FfGS/Qiay3MT/KSrqrT5LWcnDRFnH0mkFPtxhsrJ4WLp0uTmOlIN+/STnvNp+TCN9fEfbCH9cZGSd2LodGxf+NclS71CKQyYoKQpP5iXC7TjlF8FVgl/y2KlFp5TzvPOaudfT8qw4GiAeMpF64Yc7QAsGXRNGM7bh/LG/nUVMgAgShWNSn0Hz6MGYtiXuYMnTRPJxvy/50V1fPsh6yDncEvehZPKDu5x6rFGrk9eDs4sUoC+pASf7xfjzqDDGOkjP/8vWI/2Kq16rZ2EOMhEvhgdXTEqpIBzdzPmrURIbtzG2a1OaxIJ0XdfXNVjQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ce29QMFAZTKHWaHxc5qWBmknSsMxbIo81qI6CnGI3nU=;
- b=fRmzcRKpDVorLcpK6kG/ssvL8FSsy3HIXlkQxgqTCNKZ6miFkjulRnwmz9kavSg0Y7trv78EF6Pkw573kE1GPtCHT5R2CXHwL2xJxwLQ3vEOQrZqiEB6TTcV3yEaQp/MEN7u1HMolZv+NenvlofmXpJeG3DbhdysM9CcdrU61lA=
-Received: from BN0PR02CA0042.namprd02.prod.outlook.com (2603:10b6:408:e5::17)
- by SN7PR12MB8004.namprd12.prod.outlook.com (2603:10b6:806:341::7) with
+ bh=K4jPSm1u8x81huOojOh6hhCqQ3nFVlKvgZHpLyzZ3ik=;
+ b=OJHoRu3D4dHlHefpBrWmj7OZTF15U5Gzr/UjhCP2D74TMTOQVCcsR4iZKAQ/0HT/9MRxqmK6xvvYQhUTKJOaF9UjxA+ALPDqdWBK6Y1aT/l1Rmlh8X1UsNQXypSjzn8podxXRMOueGC/sTYJrgKlo7EadKXbSAzwNk8GRK7cju8=
+Received: from BN0PR04CA0058.namprd04.prod.outlook.com (2603:10b6:408:e8::33)
+ by CH2PR12MB5020.namprd12.prod.outlook.com (2603:10b6:610:65::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Wed, 1 Mar
- 2023 17:52:42 +0000
-Received: from BN8NAM11FT072.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e5:cafe::d5) by BN0PR02CA0042.outlook.office365.com
- (2603:10b6:408:e5::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
+ 2023 17:52:45 +0000
+Received: from BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e8:cafe::24) by BN0PR04CA0058.outlook.office365.com
+ (2603:10b6:408:e8::33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Wed, 1 Mar 2023 17:52:41 +0000
+ Transport; Wed, 1 Mar 2023 17:52:45 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT072.mail.protection.outlook.com (10.13.176.165) with Microsoft SMTP
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT017.mail.protection.outlook.com (10.13.177.93) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.18 via Frontend Transport; Wed, 1 Mar 2023 17:52:41 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.6156.18 via Frontend Transport; Wed, 1 Mar 2023 17:52:45 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
- 2023 11:52:41 -0600
+ 2023 11:52:44 -0600
 Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
  (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
- 2023 09:52:40 -0800
+ 2023 09:52:44 -0800
 Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Wed, 1 Mar 2023 11:52:37 -0600
+ Transport; Wed, 1 Mar 2023 11:52:41 -0600
 From:   Srinivas Neeli <srinivas.neeli@amd.com>
 To:     <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@amd.com>,
@@ -69,9 +69,9 @@ CC:     <wim@linux-watchdog.org>, <linux-watchdog@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <git@xilinx.com>, <git@amd.com>,
         <devicetree@vger.kernel.org>
-Subject: [PATCH V2 2/4] dt-bindings: watchdog: xlnx,versal-wwdt: Add versal watchdog bindings
-Date:   Wed, 1 Mar 2023 23:22:27 +0530
-Message-ID: <20230301175229.342004-3-srinivas.neeli@amd.com>
+Subject: [PATCH V2 3/4] watchdog: xilinx_wwdt: Add Versal window watchdog support
+Date:   Wed, 1 Mar 2023 23:22:28 +0530
+Message-ID: <20230301175229.342004-4-srinivas.neeli@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230301175229.342004-1-srinivas.neeli@amd.com>
 References: <20230301175229.342004-1-srinivas.neeli@amd.com>
@@ -80,23 +80,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT072:EE_|SN7PR12MB8004:EE_
-X-MS-Office365-Filtering-Correlation-Id: b3825d9e-92c3-4b10-68b3-08db1a7dc138
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT017:EE_|CH2PR12MB5020:EE_
+X-MS-Office365-Filtering-Correlation-Id: e369f991-6840-41f8-fd26-08db1a7dc335
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I8fWMIGbK+e9RKPF0f6cOLLO7knOL3BpA7gE5XSxpSTxMzwGLktdJ1lNVSHPqQpQ/M9e8p6kIeaTlTQWvDe73069mW3zLh4B7GUXyLoT+jAtFJANAVq1rPbVQCx+X3rVuj0fEKCKoVXMj1cRYRrMWX7z/TTIUa5dwRQY86v91LyNItN/rDEPG3xIJbMkhPOJdMIfY7Y10aQW6sJEB1NVPkk69hKpOuoW68OCU98OVkVhHKtBrWcBhqaCv4G2mEfVIBuqAPuDJd+nah/lp7iNpJo/PD38cfwPcdmUnbubQHX3LVChdtz87rEHHvn4OIxGL2eSnv/q9SGP7JagnnE6Rhk4rGBT0z95FarNLiyLNVQbSZJjf6uVoq5XpS7M1G7+mZj4X7X64L2OOcRsiqC1+SP+qyqbZ60wLDoGlfPIkM8dWyAB5WNFVNDF+gzb0iJYQnnULWYJizMy85ktLqj8eHemD4gRlnXWtX36n6h1vxYkHA8dctUQeHQvKX0cU7u8ijt5mummvx3SKkOlpBJbAEsfDvRC102hS1+vm4TsMDSEuZ8Kjs/QYrRG/UFmiQmfKyOBw5CwVgx4N9CAcqmuAVW18zqYX1D4cEDvFwyh5sqLI2YIIWlb17Ttnnyhlu9borPkIE4GnBt+/xhsO6e+9hDbuoYmdic6QR6MAmqIXZ1DSjBrsNMdvG6NTefNSzUviWIEMlBni2vfnylYDQ+jbJtF15Ux81EkeybN+RhM4GokMFWsrN/JEpSF4I1U9HyOSzSAApY25limhDlBde341g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(396003)(136003)(376002)(451199018)(46966006)(40470700004)(36840700001)(110136005)(966005)(316002)(82310400005)(54906003)(86362001)(36756003)(40480700001)(40460700003)(44832011)(2906002)(4326008)(8676002)(36860700001)(5660300002)(1076003)(70586007)(70206006)(41300700001)(7416002)(426003)(6666004)(478600001)(2616005)(26005)(186003)(47076005)(83380400001)(336012)(81166007)(356005)(82740400003)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dMEr7RaX9nhzQMcibJ21kuJj8WzEFeXQxeFpl5jEgyxUVtyaM+DwayLxp+66TwMEvvfdQ114NshSZh2H9m0SCzY80KcALtd3zBiox8C1lfbmB6YZMwAE2xnaLcuW+oumYj4gRuaATtevSWwAriRh0BnIXgf2ypRUT8tPFCmRS+b0xaWVPD5w2odvj8Y2e4vOG0jMYMZxjyvuNvjjDBk+GfhKr+A13iEJo6Y81o1qi9H3aCH6nS4RaGpnbVrfJxK+I4TpspE28WBMA4YcsXOq95TiHTSEUmaY6NtJSyoxl7IXl41DnGLRInWXJzpi2nfBLct8yFhEdRazQ2r0rzDbIGA0kpdKX9RiiPU7gx8nOwMWkNJIO1a8t0zIBQ/1SMd5dwH70MY13L+ury3SnaNEU4h2so5SmoeaWQbMQpziHp7hh2PtAH2Af5ji3lIIgDpEHX+/RjR0+sz6gqrlme1v+Yb5yHzINUVEfLDU5s0UmSoxDJgpbYEo1bgzieT+wUX3+lh6HV4nUNefGl8X5nqDmSKqu5TtJGIwDoCcraYWuIDtlrPme48Tztg/B4FJryOc9oH/Ehy+/XvkBsi5DIJOTKkldF6s7sEeskp3cJpcMfLiTjCgYBzsycckKam0+qmGO0AYQCfBkczGOA3hCjpYKDVp1M6WDKLWgsFG0k6k3JB+HSM6KFc/0pU/Qg5phbKeit9Oa5viFwu1icRrFbUCxZmv3gimdc3JjwKVnLLV/U4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199018)(46966006)(40470700004)(36840700001)(36756003)(86362001)(5660300002)(40480700001)(8676002)(7416002)(70206006)(8936002)(4326008)(41300700001)(44832011)(2906002)(356005)(82740400003)(36860700001)(81166007)(6666004)(316002)(478600001)(54906003)(70586007)(82310400005)(110136005)(83380400001)(26005)(47076005)(426003)(186003)(40460700003)(336012)(1076003)(2616005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:52:41.7522
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:52:45.0917
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3825d9e-92c3-4b10-68b3-08db1a7dc138
+X-MS-Exchange-CrossTenant-Network-Message-Id: e369f991-6840-41f8-fd26-08db1a7dc335
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT072.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8004
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5020
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -110,86 +110,305 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Versal watchdog driver uses window watchdog mode. Window watchdog
 timer(WWDT) contains closed(first) and open(second) window with
 32 bit width. Write to the watchdog timer within predefined window
-periods of time. This means a period that is not too soon and
-a period that is not too late.
-
-Updated devicetree bindings for adding versal window watchdog device.
+periods of time. This means a period that is not too soon and a
+period that is not too late. The WWDT has to be restarted within
+the open window time. If software tries to restart WWDT outside of
+the open window time period, it generates a reset.
 
 Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
 ---
-Changes in V2:
-- Added watchdog ref
-- Removed timeout-sec property
-- Used 4 spaces for example indentation.
+Changes in V2:                                                                  
+- Takes "xlnx,close-percent" property from device tree parameter.
+- Removed clk_disable() function.
+- Removed module parameter permisions and using readomly.
+- Added check for close_percent( 0 < close_perecent < 100).
+- Updated other minor comments.
 ---
- .../bindings/watchdog/xlnx,versal-wwdt.yaml   | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+ drivers/watchdog/Kconfig       |  18 +++
+ drivers/watchdog/Makefile      |   1 +
+ drivers/watchdog/xilinx_wwdt.c | 232 +++++++++++++++++++++++++++++++++
+ 3 files changed, 251 insertions(+)
+ create mode 100644 drivers/watchdog/xilinx_wwdt.c
 
-diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index f0872970daf9..ec4b522ae29e 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -304,6 +304,24 @@ config XILINX_WATCHDOG
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called of_xilinx_wdt.
+ 
++config XILINX_WINDOW_WATCHDOG
++	tristate "Xilinx window watchdog timer"
++	depends on HAS_IOMEM
++	depends on ARM64
++	select WATCHDOG_CORE
++	help
++	  Window watchdog driver for the versal_wwdt IP core.
++	  Window watchdog timer(WWDT) contains closed(first) and
++	  open(second) window with 32 bit width. Write to the watchdog
++	  timer within predefined window periods of time. This means
++	  a period that is not too soon and a period that is not too
++	  late. The WWDT has to be restarted within the open window time.
++	  If software tries to restart WWDT outside of the open window
++	  time period, it generates a reset.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called xilinx_wwdt.
++
+ config ZIIRAVE_WATCHDOG
+ 	tristate "Zodiac RAVE Watchdog Timer"
+ 	depends on I2C
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 9cbf6580f16c..6cb5f1dfb492 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -157,6 +157,7 @@ obj-$(CONFIG_M54xx_WATCHDOG) += m54xx_wdt.o
+ 
+ # MicroBlaze Architecture
+ obj-$(CONFIG_XILINX_WATCHDOG) += of_xilinx_wdt.o
++obj-$(CONFIG_XILINX_WINDOW_WATCHDOG) += xilinx_wwdt.o
+ 
+ # MIPS Architecture
+ obj-$(CONFIG_ATH79_WDT) += ath79_wdt.o
+diff --git a/drivers/watchdog/xilinx_wwdt.c b/drivers/watchdog/xilinx_wwdt.c
 new file mode 100644
-index 000000000000..733de1ac60e8
+index 000000000000..5b50376d1474
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/xlnx,versal-wwdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/watchdog/xilinx_wwdt.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Window watchdog device driver for Xilinx Versal WWDT
++ *
++ * Copyright (C) 2022 - 2023, Advanced Micro Devices, Inc.
++ */
 +
-+title: Xilinx Versal window watchdog timer controller
++#include <linux/clk.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/ioport.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/of_address.h>
++#include <linux/watchdog.h>
 +
-+maintainers:
-+  - Neeli Srinivas <srinivas.neeli@amd.com>
++#define XWWDT_DEFAULT_TIMEOUT	40
++#define XWWDT_MIN_TIMEOUT	1
 +
-+description:
-+  Versal watchdog driver uses window watchdog mode. Window watchdog
-+  timer(WWDT) contains closed(first) and open(second) window with
-+  32 bit width. Write to the watchdog timer within predefined window
-+  periods of time. This means a period that is not too soon and a
-+  period that is not too late. The WWDT has to be restarted within
-+  the open window time. If software tries to restart WWDT outside of
-+  the open window time period, it generates a reset.
++/* Register offsets for the WWDT device */
++#define XWWDT_MWR_OFFSET	0x00
++#define XWWDT_ESR_OFFSET	0x04
++#define XWWDT_FCR_OFFSET	0x08
++#define XWWDT_FWR_OFFSET	0x0c
++#define XWWDT_SWR_OFFSET	0x10
 +
-+allOf:
-+  - $ref: /schemas/watchdog/watchdog.yaml#
++/* Master Write Control Register Masks */
++#define XWWDT_MWR_MASK		BIT(0)
 +
-+properties:
-+  compatible:
-+    enum:
-+      - xlnx,versal-wwdt
++/* Enable and Status Register Masks */
++#define XWWDT_ESR_WINT_MASK	BIT(16)
++#define XWWDT_ESR_WSW_MASK	BIT(8)
++#define XWWDT_ESR_WEN_MASK	BIT(0)
 +
-+  reg:
-+    maxItems: 1
++#define XWWDT_CLOSE_WINDOW_PERCENT		50
 +
-+  clocks:
-+    maxItems: 1
++static int xwwdt_timeout;
 +
-+  xlnx,close_percent:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    minimum: 1
-+    maximum: 99
-+    default: 50
-+    description: closed window percentage
++module_param(xwwdt_timeout, int, 0);
++MODULE_PARM_DESC(xwwdt_timeout,
++		 "Watchdog time in seconds. (default="
++		 __MODULE_STRING(XWWDT_DEFAULT_TIMEOUT) ")");
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
++/**
++ * struct xwwdt_device - Watchdog device structure
++ * @base: base io address of WDT device
++ * @spinlock: spinlock for IO register access
++ * @xilinx_wwdt_wdd: watchdog device structure
++ * @clk: struct clk * of a clock source
++ * @freq: source clock frequency of WWDT
++ * @close_percent : Closed window percent
++ */
++struct xwwdt_device {
++	void __iomem *base;
++	spinlock_t spinlock; /* spinlock for register handling */
++	struct watchdog_device xilinx_wwdt_wdd;
++	struct clk *clk;
++	unsigned long	freq;
++	u32 close_percent;
++};
 +
-+unevaluatedProperties: false
++static int xilinx_wwdt_start(struct watchdog_device *wdd)
++{
++	struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
++	struct watchdog_device *xilinx_wwdt_wdd = &xdev->xilinx_wwdt_wdd;
++	u64 time_out, closed_timeout, open_timeout;
++	u32 control_status_reg;
 +
-+examples:
-+  - |
-+    watchdog@fd4d0000 {
-+        compatible = "xlnx,versal-wwdt";
-+        reg = <0xfd4d0000 0x10000>;
-+        clocks = <&clock25>;
-+        timeout-sec = <30>;
-+        xlnx,close_percent = <25>;
-+    };
-+...
++	/* Calculate timeout count */
++	time_out = xdev->freq * wdd->timeout;
++
++	if (xdev->close_percent && xdev->close_percent < 100) {
++		closed_timeout = (time_out * xdev->close_percent) / 100;
++		open_timeout = time_out - closed_timeout;
++		wdd->min_hw_heartbeat_ms = xdev->close_percent * 10 * wdd->timeout;
++	} else {
++		/* Calculate XWWDT_CLOSE_WINDOW_PERCENT of timeout */
++		time_out *= XWWDT_CLOSE_WINDOW_PERCENT;
++		time_out /= 100;
++		wdd->min_hw_heartbeat_ms = XWWDT_CLOSE_WINDOW_PERCENT * 10 * wdd->timeout;
++	}
++
++	spin_lock(&xdev->spinlock);
++
++	iowrite32(XWWDT_MWR_MASK, xdev->base + XWWDT_MWR_OFFSET);
++	iowrite32(~(u32)XWWDT_ESR_WEN_MASK, xdev->base + XWWDT_ESR_OFFSET);
++
++	if (xdev->close_percent && xdev->close_percent < 100) {
++		iowrite32((u32)closed_timeout, xdev->base + XWWDT_FWR_OFFSET);
++		iowrite32((u32)open_timeout, xdev->base + XWWDT_SWR_OFFSET);
++	} else {
++		/* Configure closed and open windows with XWWDT_CLOSE_WINDOW_PERCENT of timeout */
++		iowrite32((u32)time_out, xdev->base + XWWDT_FWR_OFFSET);
++		iowrite32((u32)time_out, xdev->base + XWWDT_SWR_OFFSET);
++	}
++
++	/* Enable the window watchdog timer */
++	control_status_reg = ioread32(xdev->base + XWWDT_ESR_OFFSET);
++	control_status_reg |= XWWDT_ESR_WEN_MASK;
++	iowrite32(control_status_reg, xdev->base + XWWDT_ESR_OFFSET);
++
++	spin_unlock(&xdev->spinlock);
++
++	dev_dbg(xilinx_wwdt_wdd->parent, "Watchdog Started!\n");
++
++	return 0;
++}
++
++static int xilinx_wwdt_keepalive(struct watchdog_device *wdd)
++{
++	struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
++	u32 control_status_reg;
++
++	spin_lock(&xdev->spinlock);
++
++	/* Enable write access control bit for the window watchdog */
++	iowrite32(XWWDT_MWR_MASK, xdev->base + XWWDT_MWR_OFFSET);
++
++	/* Trigger restart kick to watchdog */
++	control_status_reg = ioread32(xdev->base + XWWDT_ESR_OFFSET);
++	control_status_reg |= XWWDT_ESR_WSW_MASK;
++	iowrite32(control_status_reg, xdev->base + XWWDT_ESR_OFFSET);
++
++	spin_unlock(&xdev->spinlock);
++
++	return 0;
++}
++
++static void xwwdt_clk_disable_unprepare(void *data)
++{
++	clk_disable_unprepare(data);
++}
++
++static const struct watchdog_info xilinx_wwdt_ident = {
++	.options = WDIOF_KEEPALIVEPING |
++		WDIOF_SETTIMEOUT,
++	.firmware_version = 1,
++	.identity = "xlnx_window watchdog",
++};
++
++static const struct watchdog_ops xilinx_wwdt_ops = {
++	.owner = THIS_MODULE,
++	.start = xilinx_wwdt_start,
++	.ping = xilinx_wwdt_keepalive,
++};
++
++static int xwwdt_probe(struct platform_device *pdev)
++{
++	struct watchdog_device *xilinx_wwdt_wdd;
++	struct device *dev = &pdev->dev;
++	struct xwwdt_device *xdev;
++	int ret;
++
++	xdev = devm_kzalloc(dev, sizeof(*xdev), GFP_KERNEL);
++	if (!xdev)
++		return -ENOMEM;
++
++	xilinx_wwdt_wdd = &xdev->xilinx_wwdt_wdd;
++	xilinx_wwdt_wdd->info = &xilinx_wwdt_ident;
++	xilinx_wwdt_wdd->ops = &xilinx_wwdt_ops;
++	xilinx_wwdt_wdd->parent = dev;
++
++	xdev->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(xdev->base))
++		return PTR_ERR(xdev->base);
++
++	xdev->clk = devm_clk_get(dev, NULL);
++	if (IS_ERR(xdev->clk))
++		return PTR_ERR(xdev->clk);
++
++	xdev->freq = clk_get_rate(xdev->clk);
++	if (!xdev->freq)
++		return -EINVAL;
++
++	ret = clk_prepare_enable(xdev->clk);
++	if (ret) {
++		dev_err(dev, "unable to enable clock\n");
++		return ret;
++	}
++
++	ret = devm_add_action_or_reset(dev, xwwdt_clk_disable_unprepare,
++				       xdev->clk);
++	if (ret)
++		return ret;
++
++	ret = of_property_read_u32(dev->of_node, "xlnx,close-percent",
++				   &xdev->close_percent);
++	if (ret)
++		xdev->close_percent = XWWDT_CLOSE_WINDOW_PERCENT;
++
++	xilinx_wwdt_wdd->timeout = XWWDT_DEFAULT_TIMEOUT;
++	xilinx_wwdt_wdd->min_timeout = XWWDT_MIN_TIMEOUT;
++	xilinx_wwdt_wdd->max_hw_heartbeat_ms = 1000 * xilinx_wwdt_wdd->timeout;
++
++	ret = watchdog_init_timeout(xilinx_wwdt_wdd,
++				    xwwdt_timeout, &pdev->dev);
++	if (ret)
++		dev_info(&pdev->dev, "Configured default timeout value\n");
++
++	spin_lock_init(&xdev->spinlock);
++	watchdog_set_drvdata(xilinx_wwdt_wdd, xdev);
++	watchdog_set_nowayout(xilinx_wwdt_wdd, WATCHDOG_NOWAYOUT);
++
++	ret = devm_watchdog_register_device(dev, xilinx_wwdt_wdd);
++	if (ret)
++		return ret;
++
++	dev_info(dev, "Xilinx window watchdog Timer with timeout %ds\n",
++		 xilinx_wwdt_wdd->timeout);
++
++	return 0;
++}
++
++static const struct of_device_id xwwdt_of_match[] = {
++	{ .compatible = "xlnx,versal-wwdt", },
++	{},
++};
++MODULE_DEVICE_TABLE(of, xwwdt_of_match);
++
++static struct platform_driver xwwdt_driver = {
++	.probe = xwwdt_probe,
++	.driver = {
++		.name = "Xilinx window watchdog",
++		.of_match_table = xwwdt_of_match,
++	},
++};
++
++module_platform_driver(xwwdt_driver);
++
++MODULE_AUTHOR("Neeli Srinivas <srinivas.neeli@amd.com>");
++MODULE_DESCRIPTION("Xilinx window watchdog driver");
++MODULE_LICENSE("GPL");
 -- 
 2.25.1
 
