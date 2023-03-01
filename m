@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E786A6E51
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455286A6E54
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjCAOYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S229750AbjCAOZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCAOYi (ORCPT
+        with ESMTP id S229525AbjCAOZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:24:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157CF367F7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:23:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677680615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LkimFynSnxK6YsAaiTKJQJFBKhhOmj+Wb4G+OWeGENQ=;
-        b=RU2gX3F+qDTH9lsmmUiswS64vz9n/DIU07Orq6kiXsMftXRY4nRr/wEx9p3JrytcjJPXXs
-        Tkxe85mrRmzEWzVIomZQYKSXS7XZJGPXD3XgAhCjcYYMVqIG8JchzYIJE1e6pGvSm1GqAg
-        9hSHVsFq5lria9hYEuvJg4Peup1pvmc=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-219-qxxc4FIeNEqaQMgRRf5a5A-1; Wed, 01 Mar 2023 09:23:34 -0500
-X-MC-Unique: qxxc4FIeNEqaQMgRRf5a5A-1
-Received: by mail-ed1-f71.google.com with SMTP id c1-20020a0564021f8100b004acbe232c03so19148834edc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:23:33 -0800 (PST)
+        Wed, 1 Mar 2023 09:25:19 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F3C59E9
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:25:17 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id o15so51983756edr.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:25:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9jpccmvW5G9g4h1RhMOIsgBhwoVCmPKcSKS3NuKK1yc=;
+        b=oohamuWzQpzUCq8y8ob2nKKrFXQbCBbzXUDJdfz7rlzHyfe5+Q18VB7h5FqIXIxO0j
+         Z9bTVQE3ul7E9zLr5O3fSkY74VzIs2OPnVDRl2bCCN2kbP57eR0AFJGWStiEemTUrh/u
+         S932ryELzTbvHXXRHge5aI3Ib55PAufrnqKP/BCu5znxKW6P2kgfVUles4LIVO9ic8NW
+         zcTzLlxTpzVxE3jkULvJT583r1WxVXQvuDazPBvOkU5hc3oxKHaLdk0X6z8DOfHnrHL8
+         e2VH9iEezVCFAHzvcGKaSn29PpZet2ZhC8r6YcioW+znWG4HoVLZA+BepNAgsJ9tgW3L
+         OStw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LkimFynSnxK6YsAaiTKJQJFBKhhOmj+Wb4G+OWeGENQ=;
-        b=1X6Z0qdUQDn1knwvl58QePwEn3rrQGJ56MLWOyBA4ksO+JlGaF/qFqofebONg9GfWl
-         Ko4pPWOjWt0qygUvoJjaMInQ3pichbni2Lz840qlUyaNEfM73D/hLhly33qMSrENWOc8
-         juIIRYfDmJGntSJSVqEFYtJO2v+3IKtjPqCZd0NMP11kGXXp9LoKeFAVK+RZj097YBJP
-         TptM+pBaj5CD6VuhsBNdRz2abjy0IDAoQ3SIM+kz5hUXe0yzkE3k6INz+deT3bYoYFUx
-         xR3Sq//DkP4aqjyqVuS7GNozxx0EAmFK1rYkTabZAgcrO9SXUHTaq5RicjcSUule29BF
-         bYCw==
-X-Gm-Message-State: AO0yUKVA1ty1RTxycvf8VKIoZRiZl2ZZBCGqxqQmoWgZmXU5dvTIQqFo
-        e47GDzfmk33NQw8Qxlz59z0o2GIHBq7jZyApSRmNk8tC6UoRtMVQ5aufsaGBZSbJ9eTaoriGdn7
-        +Rwj+Ng54TLuVUV8KOrTBqyho
-X-Received: by 2002:a17:907:b682:b0:8dc:cfe8:da53 with SMTP id vm2-20020a170907b68200b008dccfe8da53mr8667799ejc.10.1677680613078;
-        Wed, 01 Mar 2023 06:23:33 -0800 (PST)
-X-Google-Smtp-Source: AK7set89iR0qASUFFJ53En29c14nxWvTRDWTIt+BGVnixoWXFvL1LfSTHymUQ2K2OKvzj/ced7v/3Q==
-X-Received: by 2002:a17:907:b682:b0:8dc:cfe8:da53 with SMTP id vm2-20020a170907b68200b008dccfe8da53mr8667781ejc.10.1677680612818;
-        Wed, 01 Mar 2023 06:23:32 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id t8-20020a170906178800b008dcf89a72d7sm5966994eje.147.2023.03.01.06.23.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 06:23:32 -0800 (PST)
-Message-ID: <39b98cb1-1ef5-dabf-5f01-2f673b2b59b1@redhat.com>
-Date:   Wed, 1 Mar 2023 15:23:31 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9jpccmvW5G9g4h1RhMOIsgBhwoVCmPKcSKS3NuKK1yc=;
+        b=WuQm0gtuHn7jsnsoBaD1qJ0YlMGyaJtkEe4dAoCD+ab8vanOJJdT26CLTK1U9EctQQ
+         LQqFrT7a083iAicsYViTMHQiKHQbujAo1qb7FB86Y6Y1ia+U8UfpwAN7X0qExtE1DGwr
+         nmO7Z02V4c9oqtwmb3EjSZP83ctHIQUPVYXnBsV2lqsIKXHrYGI0yVuwKapCvD4Z1/hK
+         tv6bdDGooj8vqAMl0GTzJu19H/i4d1fDMwqAsr1yn5OXqgmgAf9FX30yezuFUhlORPXv
+         UxgzHykd5nzHBdAUiFP7aXMrCZyC2ezJMvw6YNRl4hsUWdzSaqpsrn6cTWNrDwHfmdSB
+         ZxbA==
+X-Gm-Message-State: AO0yUKWlBjnpAa9j1f7TIBA+v+ymI3jG8p+0yiwQyyAfxhFiH/d0YvQX
+        FtBtHkdvC3X2AnEVquPdAFfcjxP+v1XQhBjEhZ0mRw==
+X-Google-Smtp-Source: AK7set+p0Th1ekwsNtNnZd2IB9CHawyC93hZKmPGoH6BMgQtNR23lB/HFgYWfMEyjmQbVNIVQ5/IQq0JaMjDIXDiF4w=
+X-Received: by 2002:a17:907:d30d:b0:8f3:9ee9:f1e2 with SMTP id
+ vg13-20020a170907d30d00b008f39ee9f1e2mr5546438ejc.5.1677680716414; Wed, 01
+ Mar 2023 06:25:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 01/12] platform/x86: ISST: Fix kernel documentation
- warnings
-Content-Language: en-US, nl
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230211063257.311746-1-srinivas.pandruvada@linux.intel.com>
- <20230211063257.311746-2-srinivas.pandruvada@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230211063257.311746-2-srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230223-virtio-net-kvmtool-v2-1-8ec93511e67f@rivosinc.com>
+ <CACGkMEu8JtT9_0YcbmfWCGxbrB1GHnesnspFYgaeVrb2x3o3oQ@mail.gmail.com> <1677578798.8465447-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1677578798.8465447-1-xuanzhuo@linux.alibaba.com>
+From:   Rob Bradford <rbradford@rivosinc.com>
+Date:   Wed, 1 Mar 2023 14:25:05 +0000
+Message-ID: <CABPZdxussbbsqtrKZ8bbxSJYU4xuJphTJtvxV=jHHHWs7cO6+A@mail.gmail.com>
+Subject: Re: [PATCH v2] virtio-net: Fix probe of virtio-net on kvmtool
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 28 Feb 2023 at 10:08, Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+>
+> On Fri, 24 Feb 2023 11:11:37 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> > On Fri, Feb 24, 2023 at 3:38 AM Rob Bradford via B4 Relay
+> > <devnull+rbradford.rivosinc.com@kernel.org> wrote:
+> > >
+> > > From: Rob Bradford <rbradford@rivosinc.com>
+> > >
+> > > kvmtool does not support the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature
+> > > but does advertise the VIRTIO_NET_F_GUEST_TSO{4,6} features. Check that
+> > > the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature is present before setting
+> > > the NETIF_F_GRO_HW feature bit as otherwise
+>
+> Here are settings for dev->features and dev->hw_features.
+>
+>
+> > > an attempt will be made to
+> > > program the virtio-net device using the ctrl queue which will fail.
+> > >
+> > > This resolves the following error when running on kvmtool:
+>
+> Can you talk about it in detail what it did?
 
-On 2/11/23 07:32, Srinivas Pandruvada wrote:
-> Fix warning displayed for "make W=1" for kernel documentation.
-> 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+In the updated v3 version of the patch I went into a lot more detail,
+particularly of why the bit was being cleared and triggering the
+control queue reprogramming. Based on that I also adjusted the
+conditional check.
 
-Thanks, I've applied this patch to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Cheers,
 
-I'll rebase that branch once 6.3-rc1 is out and then push the rebased
-patch to the fixes branch and include it in my next 6.3 fixes pull-req
-to Linus.
-
-Regards,
-
-Hans
-
-
-
-
-
-> ---
->  drivers/platform/x86/intel/speed_select_if/isst_if_common.c | 3 ++-
->  drivers/platform/x86/intel/speed_select_if/isst_if_common.h | 1 +
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> index a7e02b24a87a..63d49fe17a16 100644
-> --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> @@ -112,6 +112,7 @@ static void isst_delete_hash(void)
->   * isst_store_cmd() - Store command to a hash table
->   * @cmd: Mailbox command.
->   * @sub_cmd: Mailbox sub-command or MSR id.
-> + * @cpu: Target CPU for the command
->   * @mbox_cmd_type: Mailbox or MSR command.
->   * @param: Mailbox parameter.
->   * @data: Mailbox request data or MSR data.
-> @@ -363,7 +364,7 @@ static struct pci_dev *_isst_if_get_pci_dev(int cpu, int bus_no, int dev, int fn
->  /**
->   * isst_if_get_pci_dev() - Get the PCI device instance for a CPU
->   * @cpu: Logical CPU number.
-> - * @bus_number: The bus number assigned by the hardware.
-> + * @bus_no: The bus number assigned by the hardware.
->   * @dev: The device number assigned by the hardware.
->   * @fn: The function number assigned by the hardware.
->   *
-> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.h b/drivers/platform/x86/intel/speed_select_if/isst_if_common.h
-> index fdecdae248d7..35ff506b402e 100644
-> --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.h
-> +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.h
-> @@ -40,6 +40,7 @@
->   * @offset:	Offset to the first valid member in command structure.
->   *		This will be the offset of the start of the command
->   *		after command count field
-> + * @owner:	Registered module owner
->   * @cmd_callback: Callback function to handle IOCTL. The callback has the
->   *		command pointer with data for command. There is a pointer
->   *		called write_only, which when set, will not copy the
-
+Rob
