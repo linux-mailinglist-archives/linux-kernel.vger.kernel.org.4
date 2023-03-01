@@ -2,354 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8366A73A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AE76A73A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCASis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S230093AbjCASie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjCASig (ORCPT
+        with ESMTP id S229942AbjCASiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:38:36 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2016C4D622
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677695914; x=1709231914;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0+6pK6GQZOLUcX08e82w2PNbJriTNrH9Gj7tBxOFd78=;
-  b=Tea575GnU3sG2w9L8OaX2ovC4mPBRK/uOmmujVGdG1ZRWlhDvcymnTVK
-   dqgN4N/QwcyuIuZaz8DZWbVV4f74+H0CHMa9ZUM/GPCmOZun6HtTUNJqG
-   ckRYwdv5RxKwYJnU+kG7wNUYuTGpVvBsDi7ywoggfgos6I3XNmkiQ3awH
-   XZn5JT4luAm+lBQjWiL8ggoRwDnhA5GNtG3ACSQzuavcdMm2FUH8rNyEJ
-   eUqsu1Q/Ai3NEKBR700Ry3bb/jjJM4pHHlgY6WiYOe9jmWXyFPxdvXz29
-   NLQEyeycb3/BiC3wXwV+fZu6AKHlfmAHWxqbvTGc5B4mwtTgeLvPqsv/I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="336780665"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="336780665"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 10:38:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="848760343"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="848760343"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Mar 2023 10:38:30 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXRLR-0006L9-31;
-        Wed, 01 Mar 2023 18:38:29 +0000
-Date:   Thu, 2 Mar 2023 02:37:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org, chao@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: Re: [PATCH] f2fs: add discard_cpuset mount opt
-Message-ID: <202303020207.fOdSTt0K-lkp@intel.com>
-References: <20230301152212.53951-1-frank.li@vivo.com>
+        Wed, 1 Mar 2023 13:38:25 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C694C2D67;
+        Wed,  1 Mar 2023 10:38:22 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id CA8F75FD78;
+        Wed,  1 Mar 2023 21:38:19 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1677695899;
+        bh=Q7bkAuXQpSbuVUCgoDA0jmxc5cabY8gnRQJbhBQm3vk=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=mfBF8sxL58ntXKDAqsxiPIc/8oNFQs4Z1+VOTFNlnXKfIg48oatqLrbMRXyGZ2yWa
+         1f9t4c+wQi9S42RweMQBYSBdga2YGOXCPrbBodsAayY23p7q0JB46lCSjiN6M2TJC+
+         e/4F1jkUrS3da4mZ2SYLfp/tAsTKessh+vPGFHR8j6ivWrPUBuhAUwn7bN6fpPScBC
+         eOlE8NfJ3uJlweROJ8IhsdcxWS7i1pzJhzeL84qgvdwtXZBp4Eyz5IAWgwL/PrJmJV
+         7jM2Qazaq5xdr8axfniQayauU80KjS7iU2sXa4puWQUoiqN5/jE7kd/UyGrp6bbV1f
+         ih0rS+XNd4lIA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  1 Mar 2023 21:38:17 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
+CC:     <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v9 0/5] add Amlogic A1 clock controller drivers
+Date:   Wed, 1 Mar 2023 21:37:54 +0300
+Message-ID: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301152212.53951-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/01 14:15:00 #20905952
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
+A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
+and Audio. The audio clock controller is different from others, but the
+rest are very similar from a functional and regmap point of view.
+This patch series add support for Amlogic A1 PLL and Peripherals clock
+drivers.
+It blocks all A1 peripherals mainline support and a couple of patch series,
+which were already reviewed and acked, but weren't merged due to pending
+clock controller drivers series, e.g.
+https://lore.kernel.org/linux-amlogic/7hd09cw9oh.fsf@baylibre.com/
 
-I love your patch! Perhaps something to improve:
+TODO: CPU and Audio clock controllers are not included in this patch
+series, it will be sent later. The following clks from these controllers
+are not supported for now:
+* Audio clks - vad, mclk_vad, mclk_d, resample_a, locker_in, mclk_b,
+   pdmdclk, pdmsysclk, eqdrc, spdifin, mclk_a, audio2_toaudiotop,
+   audio2_tovad, audio2_toddr_vad, audio2_tdmin_vad, audio2_pdm,
+   audio2_ddr_arb, audio_audiolocker, audio_eqdrc, audio_resamplea,
+   audio_spdifin, audio_toddrb, audio_toddra, audio_frddrb, audio_frddra,
+   audio_tdmoutb, audio_tdmouta, audio_loopbacka, audio_tdminlb,
+   audio_tdminb, audio_tdmina, audio_ddr_arb, mclk_c
 
-[auto build test WARNING on jaegeuk-f2fs/dev-test]
-[cannot apply to v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+* CPU clks: cpu_fixed_source_sel0, cpu_fixed_source_div0,
+            cpu_fixed_source_sel1, cpu_fixed_source_div1, cpu_clk
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yangtao-Li/f2fs-add-discard_cpuset-mount-opt/20230301-232500
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-patch link:    https://lore.kernel.org/r/20230301152212.53951-1-frank.li%40vivo.com
-patch subject: [PATCH] f2fs: add discard_cpuset mount opt
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230302/202303020207.fOdSTt0K-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/fdcaea1b50e37d5bcfcc186db80237edc04cfafc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yangtao-Li/f2fs-add-discard_cpuset-mount-opt/20230301-232500
-        git checkout fdcaea1b50e37d5bcfcc186db80237edc04cfafc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+Validation:
+* to double check all clk flags run below helper script:
+    pushd /sys/kernel/debug/clk
+    for f in *; do
+        if [[ -f "$f/clk_flags" ]]; then
+            flags="$(cat $f/clk_flags | awk '{$1=$1};1' | sed ':a;N;$!ba;s/\n/ | /g')"
+            echo -e "$f: $flags"
+        fi
+    done
+    popd
+* to trace current clks state use '/sys/kernel/debug/clk/clk_dump' node
+  with jq post-processing:
+    cat /sys/kernel/debug/clk/clk_dump | jq '.' > clk_dump.json
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303020207.fOdSTt0K-lkp@intel.com/
+Changes v9 since v8 at [9]:
+    - remove common a1-clkc driver for the first version of a1 clock
+      controllers as Jerome suggested (it will be discussed after s4 and
+      a1 clks landed, hope so)
+    - replace inherited a1-pll clk_pll_ops with common ops and
+      introduce custom A1 PLL logic under MESON_PARM_APPLICABLE()
+      conditions
+    - rename xtal depended clocks in PLL and Peripherals domains
+    - remove 'a1_' prefix for all clocks, because they are already
+      inside A1 driver, it's redundant
+    - change udelay() to usleep_range() as preferred for small msec
+      amount
+    - purge all double quotes from the yaml schemas
+    - use proper dt node names following kernel guidelines
+      https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+    - use devm_platform_ioremap_resource() instead of simple
+      devm_ioremap_resource()
+    - mark all dspX clocks as CLK_IGNORE_UNUSED, because we do not want
+      to touch these clocks during CCF initialization due to possible
+      workload execution on it started from bootloader; in this case
+      bootloader already made all initialization stuff for dspX
+    - also mark all dspX with NO_REPARENT tag, because from dspX clocks
+      we want to select proper clk source from device tree
 
-All warnings (new ones prefixed by >>):
+Changes v8 since v7 at [8]:
+    - introduced a1-clkc common driver for all A1 clock controllers
+    - exported meson_clk_pll_wait_lock symbol
+    - supported meson-a1-clkc common driver in the a1-pll and a1 clkc
+    - inherited a1-pll from the base clk-pll driver, implemented own
+      version of init/enable/disable/enabled routines; rate calculating
+      logic is fully the same
+    - aligned CLKID-related definitions with CLKID list from order
+      perspective to remove holes and permutations
+    - corrected Kconfig dependencies and types
+    - provided correct MODULE_AUTHORs()
+    - optimized and fixed up some clock relationships
+    - removed unused register offset definitions
+    - fixed up A1 PLL and Peripherals clkc dtb_check errors
+    - fixed clk_summary kernel panic due to missing a1_pad_ctrl
+      clk_regmap definition
+    - included PLL and Peripherals clk controllers to the base a1 dts
+    - The previous v7 version [8] had several logic and style problems,
+      all of them are resolved in this version. Original Jian Hu v7 patches
+      are not touched, and all additional fixes are implemented in separate
+      patches. Patch "clk: meson: add support for A1 PLL clock ops" is
+      removed, because a1-pll clk driver inherits all stuff from clk-pll
+      base driver, just implements custom init/enable/disable/is_enabled
+      callbacks.
 
-   fs/f2fs/super.c: In function 'f2fs_remount':
->> fs/f2fs/super.c:2526:1: warning: the frame size of 2568 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-    2526 | }
-         | ^
+Changes v7 since v6 at [7]:
+    - fix 'dt_binding_check' compiling error
+    - add acked-by
 
+Changes v6 since v5 at [6]:
+    - fix yaml file
+    - add rst/current_en/l_detect parm detection
+    - remove 'meson_eeclkc_data' in a1.c and a1-pll.c
 
-vim +2526 fs/f2fs/super.c
+Changes v5 since v4 at [5]:
+    - change yaml GPL
+    - drop meson-eeclk.c patch, add probe function in each driver
+    - add CLK_IS_CRITICAL for sys_clk clock, drop the flag for sys_a
+      and sys_b
+    - add new parm for pll, add protection for rst parm
+    - drop flag for a1_fixed_pll
+    - remove the same comment for fclk_div, add "refer to"
+    - add critical flag for a1_sys_clk
+    - remove rtc table
+    - rename a1_dspa_en_dspa and a1_dspb_en_dspb
+    - remove useless comment
 
-4b2414d04e9912 Chao Yu          2017-08-08  2284  
-df728b0f6954c3 Jaegeuk Kim      2016-03-23  2285  	/* recover superblocks we couldn't write due to previous RO mount */
-1751e8a6cb935e Linus Torvalds   2017-11-27  2286  	if (!(*flags & SB_RDONLY) && is_sbi_flag_set(sbi, SBI_NEED_SB_WRITE)) {
-df728b0f6954c3 Jaegeuk Kim      2016-03-23  2287  		err = f2fs_commit_super(sbi, false);
-dcbb4c10e6d969 Joe Perches      2019-06-18  2288  		f2fs_info(sbi, "Try to recover all the superblocks, ret: %d",
-dcbb4c10e6d969 Joe Perches      2019-06-18  2289  			  err);
-df728b0f6954c3 Jaegeuk Kim      2016-03-23  2290  		if (!err)
-df728b0f6954c3 Jaegeuk Kim      2016-03-23  2291  			clear_sbi_flag(sbi, SBI_NEED_SB_WRITE);
-df728b0f6954c3 Jaegeuk Kim      2016-03-23  2292  	}
-df728b0f6954c3 Jaegeuk Kim      2016-03-23  2293  
-498c5e9fcd10c8 Yunlei He        2015-05-07  2294  	default_options(sbi);
-26666c8a4366de Chao Yu          2014-09-15  2295  
-696c018c7718f5 Namjae Jeon      2013-06-16  2296  	/* parse mount options */
-ed318a6cc0b620 Eric Biggers     2020-05-12  2297  	err = parse_options(sb, data, true);
-696c018c7718f5 Namjae Jeon      2013-06-16  2298  	if (err)
-696c018c7718f5 Namjae Jeon      2013-06-16  2299  		goto restore_opts;
-696c018c7718f5 Namjae Jeon      2013-06-16  2300  
-696c018c7718f5 Namjae Jeon      2013-06-16  2301  	/*
-696c018c7718f5 Namjae Jeon      2013-06-16  2302  	 * Previous and new state of filesystem is RO,
-876dc59eb1f013 Gu Zheng         2014-04-11  2303  	 * so skip checking GC and FLUSH_MERGE conditions.
-696c018c7718f5 Namjae Jeon      2013-06-16  2304  	 */
-1751e8a6cb935e Linus Torvalds   2017-11-27  2305  	if (f2fs_readonly(sb) && (*flags & SB_RDONLY))
-696c018c7718f5 Namjae Jeon      2013-06-16  2306  		goto skip;
-696c018c7718f5 Namjae Jeon      2013-06-16  2307  
-a7d9fe3c338870 Jaegeuk Kim      2021-05-21  2308  	if (f2fs_sb_has_readonly(sbi) && !(*flags & SB_RDONLY)) {
-a7d9fe3c338870 Jaegeuk Kim      2021-05-21  2309  		err = -EROFS;
-a7d9fe3c338870 Jaegeuk Kim      2021-05-21  2310  		goto restore_opts;
-a7d9fe3c338870 Jaegeuk Kim      2021-05-21  2311  	}
-a7d9fe3c338870 Jaegeuk Kim      2021-05-21  2312  
-ea6767337f8631 Jaegeuk Kim      2017-10-06  2313  #ifdef CONFIG_QUOTA
-1751e8a6cb935e Linus Torvalds   2017-11-27  2314  	if (!f2fs_readonly(sb) && (*flags & SB_RDONLY)) {
-0abd675e97e60d Chao Yu          2017-07-09  2315  		err = dquot_suspend(sb, -1);
-0abd675e97e60d Chao Yu          2017-07-09  2316  		if (err < 0)
-0abd675e97e60d Chao Yu          2017-07-09  2317  			goto restore_opts;
-4354994f097d06 Daniel Rosenberg 2018-08-20  2318  	} else if (f2fs_readonly(sb) && !(*flags & SB_RDONLY)) {
-0abd675e97e60d Chao Yu          2017-07-09  2319  		/* dquot_resume needs RW */
-1751e8a6cb935e Linus Torvalds   2017-11-27  2320  		sb->s_flags &= ~SB_RDONLY;
-ea6767337f8631 Jaegeuk Kim      2017-10-06  2321  		if (sb_any_quota_suspended(sb)) {
-0abd675e97e60d Chao Yu          2017-07-09  2322  			dquot_resume(sb, -1);
-7beb01f74415c5 Chao Yu          2018-10-24  2323  		} else if (f2fs_sb_has_quota_ino(sbi)) {
-ea6767337f8631 Jaegeuk Kim      2017-10-06  2324  			err = f2fs_enable_quotas(sb);
-ea6767337f8631 Jaegeuk Kim      2017-10-06  2325  			if (err)
-ea6767337f8631 Jaegeuk Kim      2017-10-06  2326  				goto restore_opts;
-0abd675e97e60d Chao Yu          2017-07-09  2327  		}
-ea6767337f8631 Jaegeuk Kim      2017-10-06  2328  	}
-ea6767337f8631 Jaegeuk Kim      2017-10-06  2329  #endif
-c5bf8348338260 Yangtao Li       2023-02-06  2330  	if (f2fs_lfs_mode(sbi) && !IS_F2FS_IPU_DISABLE(sbi)) {
-c5bf8348338260 Yangtao Li       2023-02-06  2331  		err = -EINVAL;
-c5bf8348338260 Yangtao Li       2023-02-06  2332  		f2fs_warn(sbi, "LFS is not compatible with IPU");
-c5bf8348338260 Yangtao Li       2023-02-06  2333  		goto restore_opts;
-c5bf8348338260 Yangtao Li       2023-02-06  2334  	}
-c5bf8348338260 Yangtao Li       2023-02-06  2335  
-093749e296e29a Chao Yu          2020-08-04  2336  	/* disallow enable atgc dynamically */
-093749e296e29a Chao Yu          2020-08-04  2337  	if (no_atgc == !!test_opt(sbi, ATGC)) {
-093749e296e29a Chao Yu          2020-08-04  2338  		err = -EINVAL;
-093749e296e29a Chao Yu          2020-08-04  2339  		f2fs_warn(sbi, "switch atgc option is not allowed");
-093749e296e29a Chao Yu          2020-08-04  2340  		goto restore_opts;
-093749e296e29a Chao Yu          2020-08-04  2341  	}
-093749e296e29a Chao Yu          2020-08-04  2342  
-9cd81ce3c2f01f Chao Yu          2015-09-18  2343  	/* disallow enable/disable extent_cache dynamically */
-12607c1ba7637e Jaegeuk Kim      2022-11-30  2344  	if (no_read_extent_cache == !!test_opt(sbi, READ_EXTENT_CACHE)) {
-9cd81ce3c2f01f Chao Yu          2015-09-18  2345  		err = -EINVAL;
-dcbb4c10e6d969 Joe Perches      2019-06-18  2346  		f2fs_warn(sbi, "switch extent_cache option is not allowed");
-9cd81ce3c2f01f Chao Yu          2015-09-18  2347  		goto restore_opts;
-9cd81ce3c2f01f Chao Yu          2015-09-18  2348  	}
-71644dff481180 Jaegeuk Kim      2022-12-01  2349  	/* disallow enable/disable age extent_cache dynamically */
-71644dff481180 Jaegeuk Kim      2022-12-01  2350  	if (no_age_extent_cache == !!test_opt(sbi, AGE_EXTENT_CACHE)) {
-71644dff481180 Jaegeuk Kim      2022-12-01  2351  		err = -EINVAL;
-71644dff481180 Jaegeuk Kim      2022-12-01  2352  		f2fs_warn(sbi, "switch age_extent_cache option is not allowed");
-71644dff481180 Jaegeuk Kim      2022-12-01  2353  		goto restore_opts;
-71644dff481180 Jaegeuk Kim      2022-12-01  2354  	}
-9cd81ce3c2f01f Chao Yu          2015-09-18  2355  
-1f78adfab379e5 Chao Yu          2019-07-12  2356  	if (no_io_align == !!F2FS_IO_ALIGNED(sbi)) {
-1f78adfab379e5 Chao Yu          2019-07-12  2357  		err = -EINVAL;
-1f78adfab379e5 Chao Yu          2019-07-12  2358  		f2fs_warn(sbi, "switch io_bits option is not allowed");
-1f78adfab379e5 Chao Yu          2019-07-12  2359  		goto restore_opts;
-1f78adfab379e5 Chao Yu          2019-07-12  2360  	}
-1f78adfab379e5 Chao Yu          2019-07-12  2361  
-6ce19aff0b8cd3 Chao Yu          2021-05-20  2362  	if (no_compress_cache == !!test_opt(sbi, COMPRESS_CACHE)) {
-6ce19aff0b8cd3 Chao Yu          2021-05-20  2363  		err = -EINVAL;
-6ce19aff0b8cd3 Chao Yu          2021-05-20  2364  		f2fs_warn(sbi, "switch compress_cache option is not allowed");
-6ce19aff0b8cd3 Chao Yu          2021-05-20  2365  		goto restore_opts;
-6ce19aff0b8cd3 Chao Yu          2021-05-20  2366  	}
-6ce19aff0b8cd3 Chao Yu          2021-05-20  2367  
-4f993264fe2965 Chao Yu          2021-08-03  2368  	if (block_unit_discard != f2fs_block_unit_discard(sbi)) {
-4f993264fe2965 Chao Yu          2021-08-03  2369  		err = -EINVAL;
-4f993264fe2965 Chao Yu          2021-08-03  2370  		f2fs_warn(sbi, "switch discard_unit option is not allowed");
-4f993264fe2965 Chao Yu          2021-08-03  2371  		goto restore_opts;
-4f993264fe2965 Chao Yu          2021-08-03  2372  	}
-4f993264fe2965 Chao Yu          2021-08-03  2373  
-fdcaea1b50e37d Yangtao Li       2023-03-01  2374  	if (!cpumask_equal(&F2FS_OPTION(sbi).discard_cpumask,
-fdcaea1b50e37d Yangtao Li       2023-03-01  2375  		&old_discard_cpumask)) {
-fdcaea1b50e37d Yangtao Li       2023-03-01  2376  		err = -EINVAL;
-fdcaea1b50e37d Yangtao Li       2023-03-01  2377  		f2fs_warn(sbi, "switch discard_cpuset option is not allowed");
-fdcaea1b50e37d Yangtao Li       2023-03-01  2378  		goto restore_opts;
-fdcaea1b50e37d Yangtao Li       2023-03-01  2379  	}
-fdcaea1b50e37d Yangtao Li       2023-03-01  2380  
-4354994f097d06 Daniel Rosenberg 2018-08-20  2381  	if ((*flags & SB_RDONLY) && test_opt(sbi, DISABLE_CHECKPOINT)) {
-4354994f097d06 Daniel Rosenberg 2018-08-20  2382  		err = -EINVAL;
-dcbb4c10e6d969 Joe Perches      2019-06-18  2383  		f2fs_warn(sbi, "disabling checkpoint not compatible with read-only");
-4354994f097d06 Daniel Rosenberg 2018-08-20  2384  		goto restore_opts;
-4354994f097d06 Daniel Rosenberg 2018-08-20  2385  	}
-4354994f097d06 Daniel Rosenberg 2018-08-20  2386  
-696c018c7718f5 Namjae Jeon      2013-06-16  2387  	/*
-696c018c7718f5 Namjae Jeon      2013-06-16  2388  	 * We stop the GC thread if FS is mounted as RO
-696c018c7718f5 Namjae Jeon      2013-06-16  2389  	 * or if background_gc = off is passed in mount
-696c018c7718f5 Namjae Jeon      2013-06-16  2390  	 * option. Also sync the filesystem.
-696c018c7718f5 Namjae Jeon      2013-06-16  2391  	 */
-bbbc34fd666254 Chao Yu          2020-02-14  2392  	if ((*flags & SB_RDONLY) ||
-5911d2d1d1a38b Chao Yu          2021-03-27  2393  			(F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_OFF &&
-5911d2d1d1a38b Chao Yu          2021-03-27  2394  			!test_opt(sbi, GC_MERGE))) {
-696c018c7718f5 Namjae Jeon      2013-06-16  2395  		if (sbi->gc_thread) {
-4d57b86dd86404 Chao Yu          2018-05-30  2396  			f2fs_stop_gc_thread(sbi);
-876dc59eb1f013 Gu Zheng         2014-04-11  2397  			need_restart_gc = true;
-696c018c7718f5 Namjae Jeon      2013-06-16  2398  		}
-aba291b3d8d839 Chao Yu          2014-11-18  2399  	} else if (!sbi->gc_thread) {
-4d57b86dd86404 Chao Yu          2018-05-30  2400  		err = f2fs_start_gc_thread(sbi);
-696c018c7718f5 Namjae Jeon      2013-06-16  2401  		if (err)
-696c018c7718f5 Namjae Jeon      2013-06-16  2402  			goto restore_opts;
-876dc59eb1f013 Gu Zheng         2014-04-11  2403  		need_stop_gc = true;
-876dc59eb1f013 Gu Zheng         2014-04-11  2404  	}
-876dc59eb1f013 Gu Zheng         2014-04-11  2405  
-930e2607638de8 Jaegeuk Kim      2022-04-12  2406  	if (*flags & SB_RDONLY) {
-faa0e55bba54b9 Jaegeuk Kim      2016-03-24  2407  		sync_inodes_sb(sb);
-faa0e55bba54b9 Jaegeuk Kim      2016-03-24  2408  
-faa0e55bba54b9 Jaegeuk Kim      2016-03-24  2409  		set_sbi_flag(sbi, SBI_IS_DIRTY);
-faa0e55bba54b9 Jaegeuk Kim      2016-03-24  2410  		set_sbi_flag(sbi, SBI_IS_CLOSE);
-faa0e55bba54b9 Jaegeuk Kim      2016-03-24  2411  		f2fs_sync_fs(sb, 1);
-faa0e55bba54b9 Jaegeuk Kim      2016-03-24  2412  		clear_sbi_flag(sbi, SBI_IS_CLOSE);
-faa0e55bba54b9 Jaegeuk Kim      2016-03-24  2413  	}
-faa0e55bba54b9 Jaegeuk Kim      2016-03-24  2414  
-3f7070b05052f9 Chao Yu          2021-03-17  2415  	if ((*flags & SB_RDONLY) || test_opt(sbi, DISABLE_CHECKPOINT) ||
-3f7070b05052f9 Chao Yu          2021-03-17  2416  			!test_opt(sbi, MERGE_CHECKPOINT)) {
-3f7070b05052f9 Chao Yu          2021-03-17  2417  		f2fs_stop_ckpt_thread(sbi);
-3fd9735908287c Chao Yu          2021-03-17  2418  		need_restart_ckpt = true;
-4354994f097d06 Daniel Rosenberg 2018-08-20  2419  	} else {
-4f99484d27961c Jaegeuk Kim      2022-08-18  2420  		/* Flush if the prevous checkpoint, if exists. */
-4f99484d27961c Jaegeuk Kim      2022-08-18  2421  		f2fs_flush_ckpt_thread(sbi);
-4f99484d27961c Jaegeuk Kim      2022-08-18  2422  
-261eeb9c1585de Daeho Jeong      2021-01-19  2423  		err = f2fs_start_ckpt_thread(sbi);
-261eeb9c1585de Daeho Jeong      2021-01-19  2424  		if (err) {
-261eeb9c1585de Daeho Jeong      2021-01-19  2425  			f2fs_err(sbi,
-261eeb9c1585de Daeho Jeong      2021-01-19  2426  			    "Failed to start F2FS issue_checkpoint_thread (%d)",
-261eeb9c1585de Daeho Jeong      2021-01-19  2427  			    err);
-261eeb9c1585de Daeho Jeong      2021-01-19  2428  			goto restore_gc;
-261eeb9c1585de Daeho Jeong      2021-01-19  2429  		}
-3fd9735908287c Chao Yu          2021-03-17  2430  		need_stop_ckpt = true;
-261eeb9c1585de Daeho Jeong      2021-01-19  2431  	}
-261eeb9c1585de Daeho Jeong      2021-01-19  2432  
-876dc59eb1f013 Gu Zheng         2014-04-11  2433  	/*
-876dc59eb1f013 Gu Zheng         2014-04-11  2434  	 * We stop issue flush thread if FS is mounted as RO
-876dc59eb1f013 Gu Zheng         2014-04-11  2435  	 * or if flush_merge is not passed in mount option.
-876dc59eb1f013 Gu Zheng         2014-04-11  2436  	 */
-1751e8a6cb935e Linus Torvalds   2017-11-27  2437  	if ((*flags & SB_RDONLY) || !test_opt(sbi, FLUSH_MERGE)) {
-5eba8c5d1fb3af Jaegeuk Kim      2016-12-07  2438  		clear_opt(sbi, FLUSH_MERGE);
-4d57b86dd86404 Chao Yu          2018-05-30  2439  		f2fs_destroy_flush_cmd_control(sbi, false);
-3fd9735908287c Chao Yu          2021-03-17  2440  		need_restart_flush = true;
-5eba8c5d1fb3af Jaegeuk Kim      2016-12-07  2441  	} else {
-4d57b86dd86404 Chao Yu          2018-05-30  2442  		err = f2fs_create_flush_cmd_control(sbi);
-2163d19815b3df Gu Zheng         2014-04-27  2443  		if (err)
-3fd9735908287c Chao Yu          2021-03-17  2444  			goto restore_ckpt;
-3fd9735908287c Chao Yu          2021-03-17  2445  		need_stop_flush = true;
-876dc59eb1f013 Gu Zheng         2014-04-11  2446  	}
-3fd9735908287c Chao Yu          2021-03-17  2447  
-4d67490498acb4 Fengnan Chang    2021-08-19  2448  	if (no_discard == !!test_opt(sbi, DISCARD)) {
-4d67490498acb4 Fengnan Chang    2021-08-19  2449  		if (test_opt(sbi, DISCARD)) {
-4d67490498acb4 Fengnan Chang    2021-08-19  2450  			err = f2fs_start_discard_thread(sbi);
-4d67490498acb4 Fengnan Chang    2021-08-19  2451  			if (err)
-4d67490498acb4 Fengnan Chang    2021-08-19  2452  				goto restore_flush;
-4d67490498acb4 Fengnan Chang    2021-08-19  2453  			need_stop_discard = true;
-4d67490498acb4 Fengnan Chang    2021-08-19  2454  		} else {
-4d67490498acb4 Fengnan Chang    2021-08-19  2455  			f2fs_stop_discard_thread(sbi);
-4d67490498acb4 Fengnan Chang    2021-08-19  2456  			f2fs_issue_discard_timeout(sbi);
-4d67490498acb4 Fengnan Chang    2021-08-19  2457  			need_restart_discard = true;
-4d67490498acb4 Fengnan Chang    2021-08-19  2458  		}
-4d67490498acb4 Fengnan Chang    2021-08-19  2459  	}
-4d67490498acb4 Fengnan Chang    2021-08-19  2460  
-277afbde6ca2b3 Chao Yu          2021-07-29  2461  	if (enable_checkpoint == !!test_opt(sbi, DISABLE_CHECKPOINT)) {
-3fd9735908287c Chao Yu          2021-03-17  2462  		if (test_opt(sbi, DISABLE_CHECKPOINT)) {
-3fd9735908287c Chao Yu          2021-03-17  2463  			err = f2fs_disable_checkpoint(sbi);
-3fd9735908287c Chao Yu          2021-03-17  2464  			if (err)
-4d67490498acb4 Fengnan Chang    2021-08-19  2465  				goto restore_discard;
-3fd9735908287c Chao Yu          2021-03-17  2466  		} else {
-3fd9735908287c Chao Yu          2021-03-17  2467  			f2fs_enable_checkpoint(sbi);
-3fd9735908287c Chao Yu          2021-03-17  2468  		}
-876dc59eb1f013 Gu Zheng         2014-04-11  2469  	}
-3fd9735908287c Chao Yu          2021-03-17  2470  
-696c018c7718f5 Namjae Jeon      2013-06-16  2471  skip:
-4b2414d04e9912 Chao Yu          2017-08-08  2472  #ifdef CONFIG_QUOTA
-4b2414d04e9912 Chao Yu          2017-08-08  2473  	/* Release old quota file names */
-4b2414d04e9912 Chao Yu          2017-08-08  2474  	for (i = 0; i < MAXQUOTAS; i++)
-ba87a45c23d645 Wang Xiaojun     2020-06-17  2475  		kfree(org_mount_opt.s_qf_names[i]);
-4b2414d04e9912 Chao Yu          2017-08-08  2476  #endif
-696c018c7718f5 Namjae Jeon      2013-06-16  2477  	/* Update the POSIXACL Flag */
-1751e8a6cb935e Linus Torvalds   2017-11-27  2478  	sb->s_flags = (sb->s_flags & ~SB_POSIXACL) |
-1751e8a6cb935e Linus Torvalds   2017-11-27  2479  		(test_opt(sbi, POSIX_ACL) ? SB_POSIXACL : 0);
-df728b0f6954c3 Jaegeuk Kim      2016-03-23  2480  
-7e65be49ed94f8 Jaegeuk Kim      2017-12-27  2481  	limit_reserve_root(sbi);
-1ae18f71cb5226 Jaegeuk Kim      2020-05-15  2482  	adjust_unusable_cap_perc(sbi);
-095680f24f2673 Jaegeuk Kim      2018-09-28  2483  	*flags = (*flags & ~SB_LAZYTIME) | (sb->s_flags & SB_LAZYTIME);
-696c018c7718f5 Namjae Jeon      2013-06-16  2484  	return 0;
-4d67490498acb4 Fengnan Chang    2021-08-19  2485  restore_discard:
-4d67490498acb4 Fengnan Chang    2021-08-19  2486  	if (need_restart_discard) {
-4d67490498acb4 Fengnan Chang    2021-08-19  2487  		if (f2fs_start_discard_thread(sbi))
-4d67490498acb4 Fengnan Chang    2021-08-19  2488  			f2fs_warn(sbi, "discard has been stopped");
-4d67490498acb4 Fengnan Chang    2021-08-19  2489  	} else if (need_stop_discard) {
-4d67490498acb4 Fengnan Chang    2021-08-19  2490  		f2fs_stop_discard_thread(sbi);
-4d67490498acb4 Fengnan Chang    2021-08-19  2491  	}
-3fd9735908287c Chao Yu          2021-03-17  2492  restore_flush:
-3fd9735908287c Chao Yu          2021-03-17  2493  	if (need_restart_flush) {
-3fd9735908287c Chao Yu          2021-03-17  2494  		if (f2fs_create_flush_cmd_control(sbi))
-3fd9735908287c Chao Yu          2021-03-17  2495  			f2fs_warn(sbi, "background flush thread has stopped");
-3fd9735908287c Chao Yu          2021-03-17  2496  	} else if (need_stop_flush) {
-3fd9735908287c Chao Yu          2021-03-17  2497  		clear_opt(sbi, FLUSH_MERGE);
-3fd9735908287c Chao Yu          2021-03-17  2498  		f2fs_destroy_flush_cmd_control(sbi, false);
-3fd9735908287c Chao Yu          2021-03-17  2499  	}
-3fd9735908287c Chao Yu          2021-03-17  2500  restore_ckpt:
-3fd9735908287c Chao Yu          2021-03-17  2501  	if (need_restart_ckpt) {
-3fd9735908287c Chao Yu          2021-03-17  2502  		if (f2fs_start_ckpt_thread(sbi))
-3fd9735908287c Chao Yu          2021-03-17  2503  			f2fs_warn(sbi, "background ckpt thread has stopped");
-3fd9735908287c Chao Yu          2021-03-17  2504  	} else if (need_stop_ckpt) {
-3fd9735908287c Chao Yu          2021-03-17  2505  		f2fs_stop_ckpt_thread(sbi);
-3fd9735908287c Chao Yu          2021-03-17  2506  	}
-876dc59eb1f013 Gu Zheng         2014-04-11  2507  restore_gc:
-876dc59eb1f013 Gu Zheng         2014-04-11  2508  	if (need_restart_gc) {
-4d57b86dd86404 Chao Yu          2018-05-30  2509  		if (f2fs_start_gc_thread(sbi))
-dcbb4c10e6d969 Joe Perches      2019-06-18  2510  			f2fs_warn(sbi, "background gc thread has stopped");
-876dc59eb1f013 Gu Zheng         2014-04-11  2511  	} else if (need_stop_gc) {
-4d57b86dd86404 Chao Yu          2018-05-30  2512  		f2fs_stop_gc_thread(sbi);
-876dc59eb1f013 Gu Zheng         2014-04-11  2513  	}
-696c018c7718f5 Namjae Jeon      2013-06-16  2514  restore_opts:
-4b2414d04e9912 Chao Yu          2017-08-08  2515  #ifdef CONFIG_QUOTA
-63189b785960c3 Chao Yu          2018-03-08  2516  	F2FS_OPTION(sbi).s_jquota_fmt = org_mount_opt.s_jquota_fmt;
-4b2414d04e9912 Chao Yu          2017-08-08  2517  	for (i = 0; i < MAXQUOTAS; i++) {
-ba87a45c23d645 Wang Xiaojun     2020-06-17  2518  		kfree(F2FS_OPTION(sbi).s_qf_names[i]);
-63189b785960c3 Chao Yu          2018-03-08  2519  		F2FS_OPTION(sbi).s_qf_names[i] = org_mount_opt.s_qf_names[i];
-4b2414d04e9912 Chao Yu          2017-08-08  2520  	}
-4b2414d04e9912 Chao Yu          2017-08-08  2521  #endif
-fdcaea1b50e37d Yangtao Li       2023-03-01  2522  	cpumask_copy(&F2FS_OPTION(sbi).discard_cpumask, &old_discard_cpumask);
-696c018c7718f5 Namjae Jeon      2013-06-16  2523  	sbi->mount_opt = org_mount_opt;
-0abd675e97e60d Chao Yu          2017-07-09  2524  	sb->s_flags = old_sb_flags;
-696c018c7718f5 Namjae Jeon      2013-06-16  2525  	return err;
-696c018c7718f5 Namjae Jeon      2013-06-16 @2526  }
-696c018c7718f5 Namjae Jeon      2013-06-16  2527  
+Changes v4 since v3 at [3]:
+    - fix reparenting orphan failed, it depends on jerome's patch [4]
+    - fix changelist in v3 about reparenting orphan
+    - remove the dts patch 
+
+Changes v3 since v2 at [2]:
+    - add probe function for A1
+    - separate the clock driver into two patch
+    - change some clock flags and ops
+    - add support for a1 PLL ops
+    - add A1 clock node
+    - fix reparenting orphan clock failed, registering xtal_fixpll
+      and xtal_hifipll after the provider registration, it is not
+      a best way.
+
+Changes v2 since v1 at [1]:
+    - place A1 config alphabetically
+    - add actual reason for RO ops, CLK_IS_CRITICAL, CLK_IGNORE_UNUSED
+    - separate the driver into two driver: peripheral and pll driver
+    - delete CLK_IGNORE_UNUSED flag for pwm b/c/d/e/f clock, dsp clock
+    - delete the change in Kconfig.platforms, address to Kevin alone
+    - remove the useless comments
+    - modify the meson pll driver to support A1 PLLs
+
+[1] https://lkml.kernel.org/r/1569411888-98116-1-git-send-email-jian.hu@amlogic.com
+[2] https://lkml.kernel.org/r/1571382865-41978-1-git-send-email-jian.hu@amlogic.com
+[3] https://lkml.kernel.org/r/20191129144605.182774-1-jian.hu@amlogic.com
+[4] https://lkml.kernel.org/r/20191203080805.104628-1-jbrunet@baylibre.com
+[5] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+[6] https://lkml.kernel.org/r/20191227094606.143637-1-jian.hu@amlogic.com
+[7] https://lkml.kernel.org/r/20200116080440.118679-1-jian.hu@amlogic.com
+[8] https://lore.kernel.org/linux-amlogic/20200120034937.128600-1-jian.hu@amlogic.com/
+[9] https://lore.kernel.org/linux-amlogic/20221201225703.6507-1-ddrokosov@sberdevices.ru/
+
+Dmitry Rokosov (4):
+  clk: meson: a1: add Amlogic A1 PLL clock controller driver
+  dt-bindings: clock: meson: add A1 PLL clock controller bindings
+  clk: meson: a1: add Amlogic A1 Peripherals clock controller driver
+  dt-bindings: clock: meson: add A1 Peripherals clock controller
+    bindings
+
+Jian Hu (1):
+  clk: meson: add support for A1 PLL clock ops
+
+ .../bindings/clock/amlogic,a1-clkc.yaml       |   73 +
+ .../bindings/clock/amlogic,a1-pll-clkc.yaml   |   59 +
+ MAINTAINERS                                   |    1 +
+ drivers/clk/meson/Kconfig                     |   18 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/a1-pll.c                    |  365 +++
+ drivers/clk/meson/a1-pll.h                    |   47 +
+ drivers/clk/meson/a1.c                        | 2291 +++++++++++++++++
+ drivers/clk/meson/a1.h                        |  116 +
+ drivers/clk/meson/clk-pll.c                   |   47 +-
+ drivers/clk/meson/clk-pll.h                   |    2 +
+ include/dt-bindings/clock/a1-clkc.h           |  102 +
+ include/dt-bindings/clock/a1-pll-clkc.h       |   20 +
+ 13 files changed, 3136 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/a1-pll.c
+ create mode 100644 drivers/clk/meson/a1-pll.h
+ create mode 100644 drivers/clk/meson/a1.c
+ create mode 100644 drivers/clk/meson/a1.h
+ create mode 100644 include/dt-bindings/clock/a1-clkc.h
+ create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.36.0
+
