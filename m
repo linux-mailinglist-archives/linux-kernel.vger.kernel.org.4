@@ -2,163 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6209D6A762D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6593B6A7641
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCAVbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 16:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
+        id S229639AbjCAVjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 16:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCAVbT (ORCPT
+        with ESMTP id S229445AbjCAVjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 16:31:19 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C35E51F8C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:31:16 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id b10so15592843ljr.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 13:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1677706274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lO9u8Y9aCl3r3Q/aM+pDkXOYi2YlGs7AHUhcyE2n2LY=;
-        b=a9nHs6kSXWVgIl5oXYw2ESLt4jjTbPTVaUPLY4bwiIKzlL3BRCcc6btqbMcVuIeW0m
-         OaXbVQnUkn4Kn5iviM5qK9E5zlPYPH4pUT3dO0PXPPZfCFnbR6AgyIMNhDUDsTmP9h68
-         4OrComDjpKwoDUeG63K5E5OB9K16LZzLZPtXk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677706274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lO9u8Y9aCl3r3Q/aM+pDkXOYi2YlGs7AHUhcyE2n2LY=;
-        b=iQh8qSVjGpmjDIle//2A922BJYX80vwdYnRXLoI4UjRpZXmP7YMft5zcEoezecdh1C
-         7peTId3iJEWDXsGbyoouEFjaRFykQkY8qt001Wr/cIetAPcH3OX2tRVXAL+fwUzZMYSf
-         unsbI5sCoZHJ3Sk2MHKjekJIYrnBDIA3rTmQpi1ALf/rBf3rFTTiu8OKdfCLH5kd9rmZ
-         mIy054HywxgE98rXcJAqDPsYoN8W+EPvA+i8mdLPorUBWoHD7ek/4yNxxhmo1Cmn4eMK
-         GCdAZVOayPixO6JawFQ8e3FP8ZWZGnmpRfgMdp4xIRpUlsYfvrcX2M6hONOIywSyERMt
-         BYgA==
-X-Gm-Message-State: AO0yUKW9f5UAO4nOKmb/FGdoYvOmsY7VZYn7WET0FvKSS9x/23ROXFE/
-        wqkFYIhC/fXKkFtyG3+ogY2xQ2zY3M1TKuHiVyH+Og==
-X-Google-Smtp-Source: AK7set9Tm1EDlxHZBroReRahXqjqtSYLr7qj1vqPncn5dhoSh7r0awu49+RC5nrhdI7rVsydMc8y1qKFWfcNEkcTR6M=
-X-Received: by 2002:a05:651c:231b:b0:293:2d18:36a0 with SMTP id
- bi27-20020a05651c231b00b002932d1836a0mr2531588ljb.3.1677706274370; Wed, 01
- Mar 2023 13:31:14 -0800 (PST)
+        Wed, 1 Mar 2023 16:39:42 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1EA1B2E0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:39:39 -0800 (PST)
+Received: from [192.168.2.206] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CDE0F6602090;
+        Wed,  1 Mar 2023 21:39:36 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677706778;
+        bh=qfDjYlzDwFwVfHyC4wdLJWT5MiWZh5diRa9lzEziWvA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fJtpAP3xqsNFJWkDiHKTcvTxy6ss1AkwYaXx/U2+rveCPUTNTOsRqASOuiTEUTiuB
+         JnMXVSwGJq3OKL7NQ3z6S4s+Kqk2SU+ITdkmk546n1HwS2yarktgpk8/kWZhEVvuSP
+         yR8qYWCASQNTim6j4QFNi5xIa9yLnQv5I29qfbfVE1Z5ZVrEy7V/yUbCAJpjHoq1Cs
+         jX4FjK7oeip19SF2auP6KO5etkyT65LvchwoHdsZ1EzOQ8CSKElQBgeoMq67E1R9eJ
+         hTuNSeXHGxPBKrW3TiWWJ5lBrYKlbdEiF3mZH2unhSmt9FNywKUUGXTilMTF6aw9+Y
+         Bis9n+Pl6/GAg==
+Message-ID: <6eb2cde8-f548-73ba-6091-131c1848690c@collabora.com>
+Date:   Thu, 2 Mar 2023 00:39:33 +0300
 MIME-Version: 1.0
-References: <Y/z0fHHYdxEXcWMT@pc636> <7EBE4F51-F2BD-4B42-AFC1-CA234E78CC7B@joelfernandes.org>
- <Y/z9Its1RKetIr8V@pc636> <CAEXW_YSjT_orp8TbomBFU+ETS7YJ7TrbHTdrsBRTzCKG5_SBdw@mail.gmail.com>
- <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1> <Y/0/dnmIk508sidK@lothringen>
- <Y/1ZMXsNZtwYPJNW@google.com> <Y/3fxLXbfvnLFEZq@lothringen>
- <Y/5fXskgrQxzbt0U@google.com> <Y/+HPrU/ofFXapHM@lothringen>
-In-Reply-To: <Y/+HPrU/ofFXapHM@lothringen>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 1 Mar 2023 16:31:01 -0500
-Message-ID: <CAEXW_YTt=VZ8ZMptccFMStsQvfjy5yMbd5Ah3KL=PUB4YVSTCg@mail.gmail.com>
-Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as completed
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5] drm/virtio: Add option to disable KMS support
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Chia-I Wu <olvaffe@gmail.com>, Ryan Neph <ryanneph@chromium.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230301185432.3010939-1-robdclark@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230301185432.3010939-1-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 12:11=E2=80=AFPM Frederic Weisbecker <frederic@kerne=
-l.org> wrote:
-[...]
-> > Hmmm I see what you mean, so a conservative and configurable "fail-safe=
-"
-> > timeout followed by sysctl to end the boot earlier than the timeout, sh=
-ould
-> > do it (something like 30 seconds IMHO sounds reasonable)? In any case,
-> > whatever way we go, we would not end the kernel boot before
-> > rcu_end_inkernel_boot() is called at least once (which is the current
-> > behavior).
-> >
-> > So it would be:
-> >
-> >   low level boot + initcalls
-> >        20 sec                         30 second timeout
-> > |------------------------------|--------------------------
-> >                                |                         |
-> >               old rcu_end_inkernel_boot()      new rcu_end_inkernel_boo=
-t()
-> >
-> > But it could be, if user decides:
-> >   low level boot + initcalls
-> >        20 sec                         10 second timeout
-> > |------------------------------|--------------------------
-> >                                |                         |
-> >               old rcu_end_inkernel_boot()      new rcu_end_inkernel_boo=
-t()
-> >                                                via /sys/ entry.
->
-> The problem I have with a random default timeout is that it may break sen=
-sitive
-> workloads. If the default is 30 and say the boot only takes 5 seconds and
-> immediately launches a latency sensitive task, this may break things in a
-> subtle way during these 25 seconds when it usually didn't. Because expedi=
-ted
-> RCU is a hammer interrupting all non-idle CPUs.
->
-> Until now forcing expedited RCU was only performed before any user code. =
-Now it
-> crosses the boundary so better be careful. I'd personally advocate for ke=
-eping
-> the current call before init is launched. Then provide an end_boot_sysctl=
- kernel
-> boot parameter that will ignore the current call before init and let the =
-user
-> signal that through sysctl.
+On 3/1/23 21:54, Rob Clark wrote:
+>  /* virtgpu_display.c */
+> +#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
+>  int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev);
+>  void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev);
+> +#else
+> +static inline int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev)
+> +{
+> +	return 0;
+> +}
+> +static inline void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev)
+> +{
+> +}
+> +#endif
 
-Considering that the PREEMPT-RT system benefits from it within the 8
-seconds, I will go ahead make the default 15 seconds or so and make it
-tunable. Hopefully that will be an acceptable compromise, with
-sufficient documentation, changelog, and so forth... If you agree I'd
-appreciate your Ack on the next posting.
+In v4 Gerd wanted to keep building the virtgpu_display.o and instead add
+the KSM config check to virtio_gpu_modeset_init/fini(). Is there any
+reason why you didn't do that?
 
-> > > > > So shouldn't we disable lazy callbacks by default when CONFIG_RCU=
-_LAZY=3Dy and then
-> > > > > turn it on with "sysctl kernel.rcu.lazy=3D1" only whenever usersp=
-ace feels ready
-> > > > > about it? We can still keep the current call to rcu_end_inkernel_=
-boot().
-> > > >
-> > > > Hmm IMHO that would add more knobs for not much reason honestly. We=
- already
-> > > > have CONFIG_RCU_LAZY default disabled, I really don't want to add m=
-ore
-> > > > dependency (like user enables the config and does not see laziness)=
-.
-> > >
-> > > I don't know. Like I said, different problems, different solutions. L=
-et's
-> > > identify what the issue is precisely. For example can we expect that =
-the issues
-> > > on boot can be a problem also on some temporary workloads?
-> > >
-> > > Besides I'm currently testing a very hacky flavour of rcu_lazy and so=
- far it
-> > > shows many idle calls that would have been delayed if callbacks weren=
-'t queued
-> > > as lazy.
-> >
-> > Can you provide more details? What kind of hack flavor, and what is it =
-doing?
->
-> Sorry, I meant a hacky implementation of lazy to work with !NOCB.
+-- 
+Best regards,
+Dmitry
 
-Interesting, I'm curious which calls those are and if they should also
-be call_rcu_hurry().
-
- - Joel
