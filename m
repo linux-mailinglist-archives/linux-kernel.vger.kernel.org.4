@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B706A7664
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C6E6A7669
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjCAVuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 16:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S229525AbjCAVu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 16:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjCAVuK (ORCPT
+        with ESMTP id S229624AbjCAVuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 16:50:10 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2B7498A1
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:50:07 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5376fa4106eso293464277b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 13:50:07 -0800 (PST)
+        Wed, 1 Mar 2023 16:50:51 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBB255066;
+        Wed,  1 Mar 2023 13:50:36 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id v11so11985287plz.8;
+        Wed, 01 Mar 2023 13:50:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677707406;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wpj5qaodj5ScmnNVI3rS9lV8D5wtu+qpU9VuY7cTTKw=;
-        b=NhNtT+6dGVHh00iSdAACqfRBFAA8gf6z22UVtLG48MBccW6lc47mdX6u4S3FN+9QmZ
-         mWWKZ5GQQ1LHaoHzaYhg7xIPc9gr9tlfVsFAFUMIlKhSaJEUxwWfZ/Ebk3+Wsu8Nf3hS
-         zafom0jKpVZTLmC/AdVJT01uxzJbu6KIYR0YLBrtu8ZHJ3NA9QefB4xo4T6PunQ5irJr
-         OQjaIKArceRovZJc10UY0aVk5gijhFDZoUVpQh2GwEbo8Bmrkte13+eq5rEb/Vv2hzn+
-         sYInPfBEeQLT2HBq/aAPIGTo82S94stYrqWyb+PqmSh930CFo13uC0ItSG3CpfNv87bV
-         Vttw==
+        d=gmail.com; s=20210112; t=1677707435;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CY/G8VL1j9svKq6UXUSNaPlCs+v3E+YYw2wZs/Qarhw=;
+        b=KKKukoB/FejKMejFiidmTdPsUROFvlM6TbzAqQXHQP9iA7NMMMaOM/WuYsrJuTemvr
+         QtEaSPXhlbxEYkhUa+uQdVegAUXo2ZQfwgL0+Gd6dEqfSufHLbDGG9D34fNvU1s2PIPU
+         8w+HmXPRNVzVKW1VLNNh4lo1zLgAs0JiIM5H9oOHUOfwsJMaf312n/n/5dqZpm06tjYa
+         QVqyLSJ62TGMi7ILn8RDvt5nYXu1erOp3CWQkFOfYmPvbs6KjM2IMN8+AuwByJqyYA4E
+         TGyvSFuNoBThg3ZFXbOX75riN98LNHSDlUpq6sRhn+W+GfZdWpD45Hg4o9LpP/yRP1Qt
+         Gm7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677707406;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wpj5qaodj5ScmnNVI3rS9lV8D5wtu+qpU9VuY7cTTKw=;
-        b=DhcXlu39nUN+eouRZSNg/NFhrEvkxDQmN/n3ufkhZZtNUYllQwKxiYGsOxo+nVxd6U
-         4HsIHojySpLqV7AalR8FCWh0TEX7FThtQnJ8tlmiGzTytvW0rhM2lkk9hzNt6WiLMIMo
-         L0aiqa30Zl6xCNqvhe4TTXY+8Z1kBcPbL/LEPFw3pg/a2m8Zn4F6gyBXQ87SGQ6/b53P
-         MjMGUxDHwQ2l8hBlwhkJzuWRGL13qP+qoEzq4SnT3yEVEM2dW5UeAgywwXG9vpBVKRP0
-         hoKAgZDmRd+S/IeKACzTFbvYq+AJV4bfig2jsDE8JRuZ/LVUL+dYKspnHkznFEMyVFMF
-         Suqg==
-X-Gm-Message-State: AO0yUKVESspKB8CbkrOn2n1JUDOIQP8lC+LQTmWyPF7zgkvwZvfnF3Si
-        T1NXmFgAfFslKxbPP0N3TP6TBNGmnywx6q4=
-X-Google-Smtp-Source: AK7set81Xd2tYA4JOiqSKDhL+z8UEtfehns/zS6Rq/x95FFMqWM3N6FEq8Q+gfDREO1ct62FNHlpEoore1o1Hvs=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:debf:1aed:5c45:c92])
- (user=saravanak job=sendgmr) by 2002:a05:6902:1003:b0:9f5:af6b:6f69 with SMTP
- id w3-20020a056902100300b009f5af6b6f69mr14719319ybt.5.1677707406553; Wed, 01
- Mar 2023 13:50:06 -0800 (PST)
-Date:   Wed,  1 Mar 2023 13:49:51 -0800
-In-Reply-To: <20230301214952.2190757-1-saravanak@google.com>
-Message-Id: <20230301214952.2190757-5-saravanak@google.com>
-Mime-Version: 1.0
-References: <20230301214952.2190757-1-saravanak@google.com>
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Subject: [PATCH v1 4/4] driver core: Delete fw_devlink_purge_absent_suppliers()
-From:   Saravana Kannan <saravanak@google.com>
+        d=1e100.net; s=20210112; t=1677707435;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CY/G8VL1j9svKq6UXUSNaPlCs+v3E+YYw2wZs/Qarhw=;
+        b=nIZ9BkO+qQnSLtZzXloNgRIw0fO+vB/dU3GY1qqk4zzL/4gEWT41+i5kBNalsUc/io
+         dzqgUiY7Q2uYtXxYfRspmT3UylmdFzsdFinKnjFmCRpu8kwI4ky+eW7LyP6QDf1I+y/C
+         0m8Er3ktl/WB1nYMP7hlFwl03x74rXsXq5kFupkmjk41I3FUDASvQWaRGeoj2+yvUHVN
+         WIn8VwLUVsfq0IvX7DgNK2k+1oyNTgzF3GVUMGnl4IQSXTmmq4K06uKrCFWXi2BzGblM
+         hhmJxX1RS4Zkc+8204H177MeH/gOnhP2ddOKjKKHiMxyVbeT6KqYrJfcsaqqdYjfPHPm
+         VTxQ==
+X-Gm-Message-State: AO0yUKV7UM5ZpeyGLjinTqAvvl2RdU8dDf0pVshdIMAk6xZGoni0EiMg
+        aB4UtW0ZdPWcCG34DHKtaHc=
+X-Google-Smtp-Source: AK7set86T4W4m3qQ09dclQaqBWGByUWQ2bxyxzgNfkKg3sr6yZgUgKjoiTGlSoWT7cXVRWRdj4dZhw==
+X-Received: by 2002:a05:6a20:8e18:b0:cd:9664:3d5a with SMTP id y24-20020a056a208e1800b000cd96643d5amr10531686pzj.22.1677707435576;
+        Wed, 01 Mar 2023 13:50:35 -0800 (PST)
+Received: from [10.69.40.170] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id u8-20020a656708000000b005004919b31dsm7899513pgf.72.2023.03.01.13.50.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 13:50:34 -0800 (PST)
+Message-ID: <ddd46923-fc25-504d-394e-2c883977aff8@gmail.com>
+Date:   Wed, 1 Mar 2023 13:50:33 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.15 00/22] 5.15.97-rc1 review
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230301180652.658125575@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20230301180652.658125575@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,58 +79,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After recent changes to fw_devlink that ended with commit 4a032827daa8
-("of: property: Simplify of_link_to_phandle()"), fw_devlink no longer
-cares about the "compatible" property and figures out the correct struct
-device at runtime.
 
-So, there's no need for any driver or framework to call
-fw_devlink_purge_absent_suppliers() anymore and we can delete it.
 
-Signed-off-by: Saravana Kannan <saravanak@google.com>
----
- drivers/base/core.c    | 16 ----------------
- include/linux/fwnode.h |  1 -
- 2 files changed, 17 deletions(-)
+On 3/1/2023 10:08 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.97 release.
+> There are 22 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.97-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 6878dfcbf0d6..46364c4d1983 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -186,22 +186,6 @@ void fwnode_links_purge(struct fwnode_handle *fwnode)
- 	fwnode_links_purge_consumers(fwnode);
- }
- 
--void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
--{
--	struct fwnode_handle *child;
--
--	/* Don't purge consumer links of an added child */
--	if (fwnode->dev)
--		return;
--
--	fwnode->flags |= FWNODE_FLAG_NOT_DEVICE;
--	fwnode_links_purge_consumers(fwnode);
--
--	fwnode_for_each_available_child_node(fwnode, child)
--		fw_devlink_purge_absent_suppliers(child);
--}
--EXPORT_SYMBOL_GPL(fw_devlink_purge_absent_suppliers);
--
- /**
-  * __fwnode_links_move_consumers - Move consumer from @from to @to fwnode_handle
-  * @from: move consumers away from this fwnode
-diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
-index 5700451b300f..63972c863fcd 100644
---- a/include/linux/fwnode.h
-+++ b/include/linux/fwnode.h
-@@ -210,6 +210,5 @@ static inline void fwnode_dev_initialized(struct fwnode_handle *fwnode,
- extern bool fw_devlink_is_strict(void);
- int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup);
- void fwnode_links_purge(struct fwnode_handle *fwnode);
--void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
- 
- #endif
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.39.2.722.g9855ee24e9-goog
+Florian
 
