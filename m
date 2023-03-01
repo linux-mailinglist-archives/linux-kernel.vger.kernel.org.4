@@ -2,197 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5026A7675
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B28F6A7686
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjCAVzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 16:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S229635AbjCAV74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 16:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjCAVza (ORCPT
+        with ESMTP id S229525AbjCAV7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 16:55:30 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F6139BAC
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:55:15 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so814196pjh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 13:55:15 -0800 (PST)
+        Wed, 1 Mar 2023 16:59:54 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CD134332
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:59:52 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id n2so19557612lfb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 13:59:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AE61FwVgXloNhSM5ZenfX5y6Vo/6+yh3Dr6aPcvzdng=;
-        b=z6PaE6nerM9FUo86l1KBLYZPqhEYrwMnGztbwCVf5DcnhX5ZZfcdO12L5+kIEyAIjg
-         GnGdIQhnuLCCTT72IjV2d98YrTtxZq6HXayw9WsLBOXEMWrgxeSKD/KJmglliI0Pa42a
-         iJvoiFTDdCYUjV9FgU2fCnGexyqzpkveefAcRL42rfRifdbRLpAX7dQflk6xzoWWEii1
-         2LF9U8ao+edu7MyG7sWfTDY8zVVeWji++EaPBZX6IOrxEON6Z++PBqGVdfuggFOqR5rN
-         gb5d1PUrXVLtKsOO8CtRmX86WJiFvKftJfEEkF4r1HenSDabg89RfINkHGFqvdSY+8Mb
-         GIrQ==
+        d=linaro.org; s=google; t=1677707990;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xveem0XZU8zbcJMVqhduNToGKrA015CFGtNmws1lpSg=;
+        b=sscPBx8VipUxfpdU3daFHeHI7ppgtWgE718q0dAf3+T8455XnGIqaoR/wFlEv9cR0C
+         5sMdrmFUEymTYJ+cF6x/yEEK73Pi3RewsC5JoQ+G+lybzcOu5rMeBjtLi7GL3JDyYiBT
+         FO4HCZVRdY5FHqgpL1m13/OJlu89Yajy1/gfFW5ls0XHRa+xBT8D3ssGo17QjiR1cwKX
+         MPIr6iRHByLSFsWGKLCvL/sBxh5vyacM3TfTW+PzksPzaWHT+aUNbGOOazDgFwiVOa3I
+         jEv3h0sOAHvcz1yydc/RzeqzysbIGj3R1q5NNlzeFuvqu+AeEjxx9Del2GhO158e3Nce
+         LEag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AE61FwVgXloNhSM5ZenfX5y6Vo/6+yh3Dr6aPcvzdng=;
-        b=yGUyUUz4NmahC/eilsvdUtk9ckivnFS/gg1RcoHusa/zH9Ylmi4zmtr+6nujz0GD12
-         SH8RV1oJpm4GW5VweFlqQhxjXJ9R6kI2BDDFr975Ijr0B8G3+AfX4zF+a69LO8J3B2j2
-         qZ3Ljjflwfiu0O4oK5BuJD1WJOEbUO9L8Ppr8jk4hpFGyLLZ4hxNYbgIwQLxng0E4VWm
-         Nqn2AWIN2H0ZGdZS1peUWtZj6x9UGqOmAGikF+8EzgRRiiGETYNjwKoM9nR6q0ZGaJfT
-         VZ4NGum7Km0W92FsjcXroGntdwMBh3K4gta52ujPwQOoRhdhneHQhKS4Coaqxj444iXA
-         hdBQ==
-X-Gm-Message-State: AO0yUKXhjrNHhjrL2uQc2Rs+eWYtp3AzzKkKdRWOyAylzBIj+ck8WQSS
-        hIXQclvdGEvpRExVZdHfOxrC+w==
-X-Google-Smtp-Source: AK7set9DeyfsrZffzNp8g6/B9oLZMWp1hH0JhV6Y5X/KLVSOSkkHmWx3FGOYQhSNzmwg/KcjheFeVg==
-X-Received: by 2002:a05:6a20:9150:b0:cd:ed5c:4be with SMTP id x16-20020a056a20915000b000cded5c04bemr7310602pzc.25.1677707714480;
-        Wed, 01 Mar 2023 13:55:14 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
-        by smtp.gmail.com with ESMTPSA id a6-20020a631a46000000b004fc1d91e695sm7821235pgm.79.2023.03.01.13.55.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 13:55:13 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pXUPn-003gHe-23; Thu, 02 Mar 2023 08:55:11 +1100
-Date:   Thu, 2 Mar 2023 08:55:10 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Ritesh Harjani <ritesh.list@gmail.com>
-Cc:     syzbot <syzbot+dd426ae4af71f1e74729@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Subject: Re: [syzbot] [ext4?] possible deadlock in evict (3)
-Message-ID: <20230301215510.GM2825702@dread.disaster.area>
-References: <20230301000142.GK2825702@dread.disaster.area>
- <87v8jka12p.fsf@doe.com>
+        d=1e100.net; s=20210112; t=1677707990;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xveem0XZU8zbcJMVqhduNToGKrA015CFGtNmws1lpSg=;
+        b=Qi2cZeBKF5gVNinu/nu62Wej0JrqPF7kydOmhwwPvR9jdZ6Ta+C73wBNVPIU5By6YT
+         hB5Rv8JT0V/bJekFy9/GMSdQqZcQe14Ad+P2rQVMJitAkgTy3pvYq3uxeqFKqYz44aS+
+         SUm6Y72YH4TI2lXCtlT+mG5VMITxcvV1NbKuWJXp2iPi7kxkTBmStVYdoclAvvu0OuPG
+         ZKT/v4UMmshTU/TzlqbnlkkjAp2v0Ak1HcPq4gPyAFOaWz1R0ZXujlk/KGMNLFLPwsmn
+         brvAcu0abGe3eJUf1fNBKtz1JlAH/XskpWLuByE/fxEIsWulKp48w1UPJnFE4gq/fotz
+         ELmg==
+X-Gm-Message-State: AO0yUKXH6j+uh+1B+kxCsqg1jVNvqwgH0L2VnK0ajhjB3Zp0iXrmambK
+        WYdOZcCGWlZpU66AXPUtTuyFQQjWm33L0pkv
+X-Google-Smtp-Source: AK7set96xRRKf752/tKy8I/rX0/WG5Sw7M+TQ1tFyCV8QBvHb5x9PE/VW9BfVHW1H4UrciJp5dsr4A==
+X-Received: by 2002:ac2:491a:0:b0:4db:2977:508f with SMTP id n26-20020ac2491a000000b004db2977508fmr1811434lfi.68.1677707990543;
+        Wed, 01 Mar 2023 13:59:50 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id x21-20020ac24895000000b004b57162edfasm1865911lfc.117.2023.03.01.13.59.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 13:59:49 -0800 (PST)
+Message-ID: <43604015-3c48-e190-d5c0-32204d6201ff@linaro.org>
+Date:   Wed, 1 Mar 2023 22:59:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v8jka12p.fsf@doe.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc7180: Delete wormdingler-rev0
+Content-Language: en-US
+To:     Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     mka@chromium.org, swboyd@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230301185007.1101006-1-dianders@chromium.org>
+ <20230301104859.1.Id0cd5120469eb200118c0c7b8ee8209f877767b4@changeid>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230301104859.1.Id0cd5120469eb200118c0c7b8ee8209f877767b4@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 09:57:58PM +0530, Ritesh Harjani wrote:
-> Dave Chinner <david@fromorbit.com> writes:
+
+
+On 1.03.2023 19:50, Douglas Anderson wrote:
+> The earliest wormdingler I could find in my pile of hardware is
+> -rev1. I believe that -rev0 boards were just distributed as a pile of
+> components with no case. At this point I can't imagine anyone needing
+> to make wormdingler-rev0 work, so let's delete support for it.
 > 
-> > [obvious one for the ext4 people]
-> >
-> > On Tue, Feb 28, 2023 at 09:25:55AM -0800, syzbot wrote:
-> >> Hello,
-> >>
-> >> syzbot found the following issue on:
-> >>
-> >> HEAD commit:    ae3419fbac84 vc_screen: don't clobber return value in vcs_..
-> >> git tree:       upstream
-> >> console output: https://syzkaller.appspot.com/x/log.txt?x=1136fe18c80000
-> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=ff98a3b3c1aed3ab
-> >> dashboard link: https://syzkaller.appspot.com/bug?extid=dd426ae4af71f1e74729
-> >> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> >>
-> >> Unfortunately, I don't have any reproducer for this issue yet.
-> >>
-> >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> >> Reported-by: syzbot+dd426ae4af71f1e74729@syzkaller.appspotmail.com
-> >>
-> >> ======================================================
-> >> WARNING: possible circular locking dependency detected
-> >> 6.2.0-syzkaller-12913-gae3419fbac84 #0 Not tainted
-> >> ------------------------------------------------------
-> >> kswapd0/100 is trying to acquire lock:
-> >> ffff888047aea650 (sb_internal){.+.+}-{0:0}, at: evict+0x2ed/0x6b0 fs/inode.c:665
-> >>
-> >> but task is already holding lock:
-> >> ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:200 [inline]
-> >> ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7338
-> >>
-> >> which lock already depends on the new lock.
-> >>
-> >>
-> >> the existing dependency chain (in reverse order) is:
-> >>
-> >> -> #3 (fs_reclaim){+.+.}-{0:0}:
-> >>        __fs_reclaim_acquire mm/page_alloc.c:4716 [inline]
-> >>        fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:4730
-> >>        might_alloc include/linux/sched/mm.h:271 [inline]
-> >>        prepare_alloc_pages+0x159/0x570 mm/page_alloc.c:5362
-> >>        __alloc_pages+0x149/0x5c0 mm/page_alloc.c:5580
-> >>        alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
-> >>        __get_free_pages+0xc/0x40 mm/page_alloc.c:5641
-> >>        kasan_populate_vmalloc_pte mm/kasan/shadow.c:309 [inline]
-> >>        kasan_populate_vmalloc_pte+0x27/0x150 mm/kasan/shadow.c:300
-> >>        apply_to_pte_range mm/memory.c:2578 [inline]
-> >>        apply_to_pmd_range mm/memory.c:2622 [inline]
-> >>        apply_to_pud_range mm/memory.c:2658 [inline]
-> >>        apply_to_p4d_range mm/memory.c:2694 [inline]
-> >>        __apply_to_page_range+0x68c/0x1030 mm/memory.c:2728
-> >>        alloc_vmap_area+0x536/0x1f20 mm/vmalloc.c:1638
-> >>        __get_vm_area_node+0x145/0x3f0 mm/vmalloc.c:2495
-> >>        __vmalloc_node_range+0x250/0x1300 mm/vmalloc.c:3141
-> >>        kvmalloc_node+0x156/0x1a0 mm/util.c:628
-> >>        kvmalloc include/linux/slab.h:737 [inline]
-> >>        ext4_xattr_move_to_block fs/ext4/xattr.c:2570 [inline]
-> >
-> > 	buffer = kvmalloc(value_size, GFP_NOFS);
-> >
-> > Yeah, this doesn't work like the code says it should. The gfp mask
-> > is not passed down to the page table population code and it hard
-> > codes GFP_KERNEL allocations so you have to do:
-> >
-> > 	memalloc_nofs_save();
-> > 	buffer = kvmalloc(value_size, GFP_KERNEL);
-> > 	memalloc_nofs_restore();
-> >
-> > to apply GFP_NOFS to allocations in the pte population code to avoid
-> > memory reclaim recursion in kvmalloc.
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+Looks like sc7180-trogdor-wormdingler-rev0.dtsi can go as well!
+
+Konrad
 > 
-> What about this patch mentioned below? Is it the kasan allocations
-> (kasan_populate_vmalloc()), which hasn't been taken care of in this
-> patch. Does this means we need kvmalloc fixed instead for kasan allocations?
+>  arch/arm64/boot/dts/qcom/Makefile             |  2 --
+>  .../sc7180-trogdor-wormdingler-rev0-boe.dts   | 22 -------------------
+>  .../sc7180-trogdor-wormdingler-rev0-inx.dts   | 22 -------------------
+>  3 files changed, 46 deletions(-)
+>  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+>  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
 > 
-> Though I agree we can have the fix like you mentioned above
-> (as many of the API users are already doing above). Just wanted to have the
-> full context of what is going on here.
-> 
-> 451769ebb7e792c3404db53b3c2a422990de654e
-> Author:     Michal Hocko <mhocko@suse.com>
-> 
-> mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc
-
-Oh, you're right, I didn't realise that had been smacked into the
-guts of the vmalloc implementation instead of just being wrapped
-around the whole lot of it. That's an exact example of *how not to
-use scoped allocation contexts* because it leads to stupid
-whack-a-mole bugs like this one.  I made this exact point in the
-discussion you pointed to when I noticed an anti-pattern of scoped
-contexts were being used to wrap single kmalloc(GFP_KERNEL) calls.
-
-KASAN essentialy requires explicit use of allocation scopes to avoid
-spurious lockdep GFP_NOFS/GFP_NOIO allocation context warnings
-because most of it's low level tracking allocations are GFP_KERNEL.
-If we wrap the whole of kvmalloc() with the correct context,
-everything is fine. But using contexts for fined-grained internal
-"fix only the specific call-chain" patches like the above commit,
-then it just doesn't work.
-
-So in this case, I agree with you that this is a kvmalloc() bug in
-that kvmalloc is failing to apply the GFP_NOFS scoped context across
-the entire vmalloc operation. As it currently stands, any low level
-allocation in the vmalloc path that isn't passed the correct gfp
-mask will trigger this sort of warning.
-
-This is one of the reasons we use the scopes extensively in XFS -
-whenever we enter a NOFS context, we call memalloc_nofs_save() and
-so we always get disconnected low level allocations (like KASAN
-does) doing the right thing. Hence we simply haven't noticed how
-badly vmalloc() screwed up setting allocation contexts....
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 31aa54f0428c..a51060378ddc 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -118,8 +118,6 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3-lte.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-quackingstick-r0.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-quackingstick-r0-lte.dtb
+> -dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev0-boe.dtb
+> -dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev0-inx.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-inx.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+> deleted file mode 100644
+> index d6ed7d0afe4a..000000000000
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> -/*
+> - * Google Wormdingler board device tree source
+> - *
+> - * Copyright 2021 Google LLC.
+> - *
+> - * SKU: 0x10 => 16
+> - *  - bits 7..4: Panel ID: 0x1 (BOE)
+> - */
+> -
+> -/dts-v1/;
+> -
+> -#include "sc7180-trogdor-wormdingler-rev0.dtsi"
+> -
+> -/ {
+> -	model = "Google Wormdingler rev0 BOE panel board";
+> -	compatible = "google,wormdingler-rev0-sku16", "qcom,sc7180";
+> -};
+> -
+> -&panel {
+> -	compatible = "boe,tv110c9m-ll3";
+> -};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
+> deleted file mode 100644
+> index c03525ea64ca..000000000000
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> -/*
+> - * Google Wormdingler board device tree source
+> - *
+> - * Copyright 2021 Google LLC.
+> - *
+> - * SKU: 0x0 => 0
+> - *  - bits 7..4: Panel ID: 0x0 (INX)
+> - */
+> -
+> -/dts-v1/;
+> -
+> -#include "sc7180-trogdor-wormdingler-rev0.dtsi"
+> -
+> -/ {
+> -	model = "Google Wormdingler rev0 INX panel board";
+> -	compatible = "google,wormdingler-rev0-sku0", "qcom,sc7180";
+> -};
+> -
+> -&panel {
+> -	compatible = "innolux,hj110iz-01a";
+> -};
