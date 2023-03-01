@@ -2,192 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D56A664D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 04:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5D16A6650
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 04:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCADIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 22:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
+        id S229623AbjCADKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 22:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjCADIe (ORCPT
+        with ESMTP id S229557AbjCADKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 22:08:34 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E76A5F3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 19:08:24 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VcmORIu_1677640100;
-Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VcmORIu_1677640100)
-          by smtp.aliyun-inc.com;
-          Wed, 01 Mar 2023 11:08:21 +0800
-Message-ID: <a0c24dfe-3a07-fe9e-7edf-b51877d96c32@linux.alibaba.com>
-Date:   Wed, 1 Mar 2023 11:08:26 +0800
+        Tue, 28 Feb 2023 22:10:15 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2072.outbound.protection.outlook.com [40.107.8.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B91E2BECA;
+        Tue, 28 Feb 2023 19:10:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NMefczn8cC24pykUGzUf6nRr7DtMhAY01FvxNFIVEY178lTP8kBEfa6rz+jp7RbIeFv4Ea0rA8rEpzCKPLdUYd/+pTbWkyKbuXpXXk6TqCoDrvjD45BSTYz10givPl0XZQ/Al6E3kzVddUAcax3IDEms+xI2eKiCvzJ0HL1Iba0SUtN/dNAyhUDdvBpmGZWwXgFtY+CIYtWd8zj1K0A673iVcx57SWBMHl7hImNeqPeX+ci5OJfCm+BGdEkhgdKAusEaFLAFfiFYrmZ5KwHCiItfCHru3/UVVFAePcbqdQgnk4+v7UkUjDBT1vZ77pgLd5vetH62/z00pVU9gX/VwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DW1YlEs50bZ1GdAfXumfVKIYJZ5aHJKzNSPVJswORB0=;
+ b=UFQDKpUrqaTbRnGrpqgbZH9VQ1WfBbfEXLNaAvfaR31aV9IbXJcex5wEE6jkXWtyDp7KT35pBlzE3tu1avOlqqiJhXCXmFqGGfm9DBXoyxoBwxnSIqZmMIBbVPbqgLAl1Fnlx+KeN4ufGlJzvqIb+vsRBoFM3SMT/M/PnEbi/NXflTk0eykgQDRv5mzn6YUl1pwo5npI47TlnPFaFABW2JOG8SzVeuRIr9YT5PcvHnp1Bem3IQlV/u3VjvSnNu2Nmuj/ArtQAdZt1F2943UqXgro7OTZ5i8yT+epoeF9SFzo+juK4FKDktqH3JjX/lykHi2vfu76o2aSgHsy1W9UBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DW1YlEs50bZ1GdAfXumfVKIYJZ5aHJKzNSPVJswORB0=;
+ b=epWzJDRtSwTA+O2SoJpmJ5dO4zxvC/eFupvrRR6c11yet/oz13KM08Z5PYNWxc1C186J6pmF8Eq/EZPkqKkJCnaw8q57+3W7S+SgIhLBlZ68p0CjgmVzjb28y08KTI0hGv8TtzFP5R0M4J0Y/OxipE2Mi+XmOmFelKfwYbxqCLI=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS8PR04MB8420.eurprd04.prod.outlook.com (2603:10a6:20b:3fd::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
+ 2023 03:10:09 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a%3]) with mapi id 15.20.6134.027; Wed, 1 Mar 2023
+ 03:10:09 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Rob Herring <robh@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "stefan@agner.ch" <stefan@agner.ch>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH 0/9] dt-bindings: crypto: convert fsl-sec4 to DT schema
+Thread-Topic: [PATCH 0/9] dt-bindings: crypto: convert fsl-sec4 to DT schema
+Thread-Index: AQHZS+Bnbs5IsRHA20OKVri3xBRy6q7lPd+AgAAAiBA=
+Date:   Wed, 1 Mar 2023 03:10:09 +0000
+Message-ID: <DU0PR04MB94176D0F8ADF945822BE39D688AD9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20230301015702.3388458-1-peng.fan@oss.nxp.com>
+ <20230301030627.GA287352-robh@kernel.org>
+In-Reply-To: <20230301030627.GA287352-robh@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AS8PR04MB8420:EE_
+x-ms-office365-filtering-correlation-id: d4e1c89d-f33a-4652-cafa-08db1a027748
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jA6JFjSvTaMWOQVAlXPyj8qCuvZhTp/ADrdXx7wz58zGvqcWvMK/t9N9pKaQg8XbLfq/8mJWyOPxc/dGfS+9ZKf0YcWN42WYq2nwwOyMMEmwGn2W/+MJRFnj4PD+f8icm28mCa0wqbAOOXfYDy9c2y9JKsEl57RQsJHssN5u66W44BmuNsG5XXvmOyU6kti2Qpnhp0gkVaXf0cVRL+p1HgwILBPY3LLBJmy4e7Y5r1Iby7eOAHjsadHezMgUFeqFZvLX2WvHQJY8UEbWZdSNs7101zMchGrbpcmqXg+79W5LCs2/dVfncuoCrQJ+bLtUiSJl1kO4yV5yv6anoxFbk2V4Vxm1oj24RCmVKBIatswPRPG0tT2W9hTVCiAYpzD1NqmW8yRj9MM5J/kIKftZ84iGwSfd8lmrahLlgQnq0QQqNDBiQ6jlUoIIpSYwa9VvQS3ZwSmTVSrgFh3kyn0kJojwq5eiNfkDY/2XDxEerKVDxaV+Tgo4WFYZlqeezUtkf8rn1NEPlsmQi1dKSpuSG6uEZkQwIa/ZifegjdolvMjwB/WYLWmA6+gGCg/21TNVz7/T+6WF7KanDu6Bzq9T2u/kWx1YjuyaB2LwJSa+1npFxFqeWYVaol64CUiHMx9WKeaNl2ZBghUHouG8jeXU7+2g8Rt9L/ffYnzxLxibHPJQwpZ1BDOEyMV37q8b/XXw641rp8nV9l8P9N2mntKh6Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(396003)(136003)(376002)(346002)(451199018)(71200400001)(33656002)(86362001)(44832011)(5660300002)(66446008)(55016003)(66556008)(8936002)(64756008)(7416002)(52536014)(4326008)(8676002)(41300700001)(66476007)(2906002)(66946007)(38100700002)(122000001)(966005)(45080400002)(478600001)(316002)(38070700005)(54906003)(7696005)(76116006)(83380400001)(110136005)(26005)(9686003)(186003)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?chX0c996+u9jia8SXBXhdXcWN0YNbZoUNC+zxCneeWZ9W3onqQEyIXAfA7CK?=
+ =?us-ascii?Q?bBkLww8JwiIPfVtyDasJPNMWbokoAY8KsUZaWu4VfOuu+yn+nrhl2yQIi/R5?=
+ =?us-ascii?Q?QV//FIuvnrKqHWzvLC1HIv36Q0O/MlQFjjP2BCuI8vSlgDwk6OPk2Zeu3fnK?=
+ =?us-ascii?Q?fU9BtYvL5veH81jruVUL66Y0HYKSnVIzzkgwHyTWjsFxSnsBEgbfBuXgrJoS?=
+ =?us-ascii?Q?xULt98uMs6LUjkwMDVEfjOcFdUGPHP8ZUDp/mL4WferLBBL2+E+9NheZFB0q?=
+ =?us-ascii?Q?LjWipTed+La8xZYmwR4Pq+3F4vXCL32UwccUoIv0j04rS7bS2XUfLXv2EXKW?=
+ =?us-ascii?Q?/KE0XLn+jm+U/Ycpp3Wmricu8ZAOTx7cVf21ntYZrhlOQ5Z6NtcStDGZYqVc?=
+ =?us-ascii?Q?VMA+kmbKTfBB5vEETipmzUelxOPAA7O4pQSvK48ZXc3uN/4LzYmd6ONEdhi6?=
+ =?us-ascii?Q?X3Y2hZuFNsH6028eqHVeG24k/WJFHTy+TJ7l3vxE4PJ8LEYZaKkgpwvOq0Yl?=
+ =?us-ascii?Q?lB8Xb1KuWkILYvL/7ahYrasL0n5zdHjQhtMAwV8GwX6mtcUIxNsctKHd8fhu?=
+ =?us-ascii?Q?CQVsdYn9lKqc4cPxI/iSNpUr+wziq4HKZG4Bh4dI4OZl2XrAGNJyTg1pxkS4?=
+ =?us-ascii?Q?NG1Ig5dwA4yDAWM/H4ffatQfkY8ovpXC/rEqQmrgWgPWw8X5oIP2Zsp5SJje?=
+ =?us-ascii?Q?ha+hiB3Cv35mJg/qvdW8vX8BgbAhIS3jID51gTYLnBk+Sl7Td3SnHXZCXsOS?=
+ =?us-ascii?Q?DOoNHP6BzPcYLD2PFo0UdpEOKda6PBVgdD5RAgUiNOfuB/dTHACoG9H6UAQa?=
+ =?us-ascii?Q?W3AMUrMG4Gz657BzhCdVWvcv45x1cWmc4FF57PeFMcI7D6YpKUMiaHODN1/j?=
+ =?us-ascii?Q?LqyxsgJxrHntOSaGYVZSYdjiJU6bBPWmdjzk6sF9YaDVK6kYkEQAXKUXZQgC?=
+ =?us-ascii?Q?9taytAYxso31OnFlyuCeSaRiJw5IuoIuvEDjZ7qz/TU+vgTthWH56C8VzPls?=
+ =?us-ascii?Q?aJ9pK7QMgAhSPaK7hidfL3fB2g5hDjm6ZyzOqvoglwTnsvVgpMd9J9ImV5S8?=
+ =?us-ascii?Q?YopmcFr/qpzsOmyApZ4QsHRGoFaDDa90HcK2NzxC/tnIAD65AXAmsZET/WlF?=
+ =?us-ascii?Q?ShKhs8QerxEpDLoVZa4z8oKvnRLymkCx1Q55i/uxgTSVD7Rh+upPMjc4lJBW?=
+ =?us-ascii?Q?TGXOrlDNROew1yIVO+qWtRrmhAImG0QVMDvNzORYscC5l3YEL5N+I87Q8ys7?=
+ =?us-ascii?Q?/apBqMbrUhk7/vj4hXEIX0slonvGg5twy3PSQMzQR+0WNzs7weOr/+HjR5D4?=
+ =?us-ascii?Q?7YhVOIR6PpLJdQD0YBGPSbFcl7x0x6nRfhoLOVZeBAQA8UYb4xMUVa9FA68M?=
+ =?us-ascii?Q?VzuwIV2nB7cnHx0AGRqBqTHqZYtwjXWA3PN0UjDqfzraYx17U2wXVzOkw7qF?=
+ =?us-ascii?Q?1WdYswzNWOA3fMEuHfyClrKdmDBT6zaRnmvBBogy82HPrWDvA50tm+Gd5Ag7?=
+ =?us-ascii?Q?0grrFG4B4WkMeWr+l6ZsglxmqjSlGrLAurdFo537UeGIjybLZdtqsBAcRH7d?=
+ =?us-ascii?Q?ANQmLomYei5D9QyYeBM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 3/3] migrate_pages: try migrate in batch asynchronously
- firstly
-To:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>,
-        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-References: <20230224141145.96814-1-ying.huang@intel.com>
- <20230224141145.96814-4-ying.huang@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20230224141145.96814-4-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4e1c89d-f33a-4652-cafa-08db1a027748
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2023 03:10:09.5948
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZQSBjUdd1QwSe7TLPdwDdJ2GPf6+KQV6BOE4uWT0cwKcOup2fw1EJody+tWqRIsly+KYnECjNyL8F+r01lqjoQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8420
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rob,
 
+> Subject: Re: [PATCH 0/9] dt-bindings: crypto: convert fsl-sec4 to DT sche=
+ma
+>=20
+> On Wed, Mar 01, 2023 at 09:56:53AM +0800, Peng Fan (OSS) wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > This is effort towards SystemReady IR 2.0 to convert the txt binding
+> > to DT schema.
+> > Patch 1 is just to drop uneeded number since following DT schema will
+> > update the name
+> >
+> > The fsl-sec4.txt binding has two parts, one is crypto, one is snvs, so
+> > I split into two DT schema file. patch 2,3 is for crypto, patch 4,5,6
+> > is for snvs, patch 7 is to drop fsl-sec4.txt binding. patch 8,9 is to
+> > add new node
+> >
+> > Peng Fan (9):
+> >   ARM: dts: vfxxx: drop the number after jr
+> >   dt-bindings: crypto: fsl-sec4: convert to DT schema
+> >   dt-bindings: crypto: fsl-sec4: support sec5.4/0 and i.MX6UL
+> >   dt-bindings: crypto: add fsl-sec4-snvs DT schema
+> >   dt-bindings: crypto: fsl-sec4-snvs: add simple-mfd compatible
+> >   dt-bindings: crypto: fsl-sec4-snvs: add fsl sec 5.x compatible
+> >   dt-bindings: crypto: drop fsl-sec4 txt binding
+> >   dt-bindings: crypto: fsl-sec4-snvs: add snvs-lpgpr support
+> >   dt-bindings: crypto: fsl-sec4-snvs: add poweroff support
+>=20
+> I'll leave it to you to work out which one to take[1]. :(
 
-On 2/24/2023 10:11 PM, Huang Ying wrote:
-> When we have locked more than one folios, we cannot wait the lock or
-> bit (e.g., page lock, buffer head lock, writeback bit) synchronously.
-> Otherwise deadlock may be triggered.  This make it hard to batch the
-> synchronous migration directly.
-> 
-> This patch re-enables batching synchronous migration via trying to
-> migrate in batch asynchronously firstly.  And any folios that are
-> failed to be migrated asynchronously will be migrated synchronously
-> one by one.
-> 
-> Test shows that this can restore the TLB flushing batching performance
-> for synchronous migration effectively.
-> 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: "Xu, Pengfei" <pengfei.xu@intel.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Stefan Roesch <shr@devkernel.io>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Xin Hao <xhao@linux.alibaba.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> ---
->   mm/migrate.c | 65 ++++++++++++++++++++++++++++++++++++++++++++--------
->   1 file changed, 55 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 91198b487e49..c17ce5ee8d92 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1843,6 +1843,51 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->   	return rc;
->   }
->   
-> +static int migrate_pages_sync(struct list_head *from, new_page_t get_new_page,
-> +		free_page_t put_new_page, unsigned long private,
-> +		enum migrate_mode mode, int reason, struct list_head *ret_folios,
-> +		struct list_head *split_folios, struct migrate_pages_stats *stats)
-> +{
-> +	int rc, nr_failed = 0;
-> +	LIST_HEAD(folios);
-> +	struct migrate_pages_stats astats;
-> +
-> +	memset(&astats, 0, sizeof(astats));
-> +	/* Try to migrate in batch with MIGRATE_ASYNC mode firstly */
-> +	rc = migrate_pages_batch(from, get_new_page, put_new_page, private, MIGRATE_ASYNC,
-> +				 reason, &folios, split_folios, &astats,
-> +				 NR_MAX_MIGRATE_PAGES_RETRY);
-> +	stats->nr_succeeded += astats.nr_succeeded;
-> +	stats->nr_thp_succeeded += astats.nr_thp_succeeded;
-> +	stats->nr_thp_split += astats.nr_thp_split;
-> +	if (rc < 0) {
-> +		stats->nr_failed_pages += astats.nr_failed_pages;
-> +		stats->nr_thp_failed += astats.nr_thp_failed;
-> +		list_splice_tail(&folios, ret_folios);
-> +		return rc;
-> +	}
-> +	stats->nr_thp_failed += astats.nr_thp_split;
-> +	nr_failed += astats.nr_thp_split;
-> +	/*
-> +	 * Fall back to migrate all failed folios one by one synchronously. All
-> +	 * failed folios except split THPs will be retried, so their failure
-> +	 * isn't counted
-> +	 */
-> +	list_splice_tail_init(&folios, from);
-> +	while (!list_empty(from)) {
-> +		list_move(from->next, &folios);
-> +		rc = migrate_pages_batch(&folios, get_new_page, put_new_page,
-> +					 private, mode, reason, ret_folios,
-> +					 split_folios, stats, NR_MAX_MIGRATE_PAGES_RETRY);
-> +		list_splice_tail_init(&folios, ret_folios);
-> +		if (rc < 0)
-> +			return rc;
-> +		nr_failed += rc;
-> +	}
-> +
-> +	return nr_failed;
-> +}
-> +
->   /*
->    * migrate_pages - migrate the folios specified in a list, to the free folios
->    *		   supplied as the target for the page migration
-> @@ -1874,7 +1919,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
->   {
->   	int rc, rc_gather;
-> -	int nr_pages, batch;
-> +	int nr_pages;
->   	struct folio *folio, *folio2;
->   	LIST_HEAD(folios);
->   	LIST_HEAD(ret_folios);
-> @@ -1890,10 +1935,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   	if (rc_gather < 0)
->   		goto out;
->   
-> -	if (mode == MIGRATE_ASYNC)
-> -		batch = NR_MAX_BATCHED_MIGRATION;
-> -	else
-> -		batch = 1;
->   again:
->   	nr_pages = 0;
->   	list_for_each_entry_safe(folio, folio2, from, lru) {
-> @@ -1904,16 +1945,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   		}
->   
->   		nr_pages += folio_nr_pages(folio);
-> -		if (nr_pages >= batch)
-> +		if (nr_pages >= NR_MAX_BATCHED_MIGRATION)
->   			break;
->   	}
-> -	if (nr_pages >= batch)
-> +	if (nr_pages >= NR_MAX_BATCHED_MIGRATION)
->   		list_cut_before(&folios, from, &folio2->lru);
->   	else
->   		list_splice_init(from, &folios);
-> -	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
-> -				 mode, reason, &ret_folios, &split_folios, &stats,
-> -				 NR_MAX_MIGRATE_PAGES_RETRY);
-> +	if (mode == MIGRATE_ASYNC)
-> +		rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
-> +					 mode, reason, &ret_folios, &split_folios, &stats,
-> +					 NR_MAX_MIGRATE_PAGES_RETRY);
-> +	else
-> +		rc = migrate_pages_sync(&folios, get_new_page, put_new_page, private,
-> +					mode, reason, &ret_folios, &split_folios, &stats);
+Thanks for working on it.  Let's go with your patchset.
 
-For split folios, it seems also reasonable to use migrate_pages_sync() 
-instead of always using fixed MIGRATE_ASYNC mode?
-
->   	list_splice_tail_init(&folios, &ret_folios);
->   	if (rc < 0) {
->   		rc_gather = rc;
+Thanks,
+Peng.
+>=20
+> >  .../bindings/crypto/fsl-sec4-snvs.yaml        | 181 ++++++
+> >  .../devicetree/bindings/crypto/fsl-sec4.txt   | 553 ------------------
+> >  .../devicetree/bindings/crypto/fsl-sec4.yaml  | 366 ++++++++++++
+> >  arch/arm/boot/dts/vfxxx.dtsi                  |   4 +-
+> >  4 files changed, 549 insertions(+), 555 deletions(-)  create mode
+> > 100644 Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml
+> >  delete mode 100644
+> > Documentation/devicetree/bindings/crypto/fsl-sec4.txt
+> >  create mode 100644
+> > Documentation/devicetree/bindings/crypto/fsl-sec4.yaml
+>=20
+> Filenames based on compatible strings...
+>=20
+> Rob
+>=20
+> [1]
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.
+> kernel.org%2Fall%2F20230220213334.353779-1-
+> robh%40kernel.org%2F&data=3D05%7C01%7Cpeng.fan%40nxp.com%7C403af
+> 158981344444a5c08db1a01f439%7C686ea1d3bc2b4c6fa92cd99c5c301635%
+> 7C0%7C0%7C638132367911500608%7CUnknown%7CTWFpbGZsb3d8eyJWIj
+> oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C
+> 3000%7C%7C%7C&sdata=3DKsKhl8M5Z9Mqy0%2BfW12WJ9MRw6lTWFYTN1Qi
+> xnSagJo%3D&reserved=3D0
