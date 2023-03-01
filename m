@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415B26A727A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E85926A727D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCASCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S230085AbjCASCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbjCASCB (ORCPT
+        with ESMTP id S230176AbjCASCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:02:01 -0500
-X-Greylist: delayed 17219 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 10:01:59 PST
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4296836095;
-        Wed,  1 Mar 2023 10:01:59 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 5722E92009C; Wed,  1 Mar 2023 19:01:58 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 5061F92009B;
-        Wed,  1 Mar 2023 18:01:58 +0000 (GMT)
-Date:   Wed, 1 Mar 2023 18:01:58 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PING^3][RESEND^3][PATCH v3] x86/PCI: Add support for the Intel
- 82378ZB/82379AB (SIO/SIO.A) PIRQ router
-In-Reply-To: <66DC3D77-91AC-4F1B-BE3E-892A9B9980BC@zytor.com>
-Message-ID: <alpine.DEB.2.21.2303011734260.59747@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2301081956290.65308@angie.orcam.me.uk> <alpine.DEB.2.21.2303011311540.57556@angie.orcam.me.uk> <66DC3D77-91AC-4F1B-BE3E-892A9B9980BC@zytor.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 13:02:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF764A1C5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:02:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 288AA6144D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 18:02:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 898B2C433D2;
+        Wed,  1 Mar 2023 18:02:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677693729;
+        bh=kO5Wi1sF+r0PAn7FwLozPKkQkacs/Nay+DJ4pfDvRbk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=bLfakHSCIDslMw9ZrVqh6VAbxK/Jy6TKX/Gtll4OlxjOS6f7SKgCNyEz95qnyVL+N
+         B9NyjZ6JEYn9+dJEiX6hHt60arV76R9bgycJ6q578YeqaqzQg25pPbkMwx7hl59adS
+         AtF8WPq7UOCpRkXJG847iw6MLGcYbnoIGnluzP7IJt8TVtnQ4RPVwhP5YXVXFrlumR
+         WZfe7kQwsAVlfKJx3L6mjaujVcOuG+FhvWAt3Fo07l2RNeaDDWK7k7xg/+yr79QGOZ
+         SQbU2lpsDnbXkNw1au5gVJmiCV0ZGyPoNxNjOHMgrMlw16zEs/HwTOo/k+bdny5p1Z
+         RCn0IxOTAnU/A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 795ADC41676;
+        Wed,  1 Mar 2023 18:02:09 +0000 (UTC)
+Subject: Re: [GIT PULL] UML changes for v6.3-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <52785855.187162.1677658023892.JavaMail.zimbra@nod.at>
+References: <52785855.187162.1677658023892.JavaMail.zimbra@nod.at>
+X-PR-Tracked-List-Id: <linux-um.lists.infradead.org>
+X-PR-Tracked-Message-Id: <52785855.187162.1677658023892.JavaMail.zimbra@nod.at>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/uml/linux.git tags/uml-for-linus-6.3-rc1
+X-PR-Tracked-Commit-Id: 04df97e150c83d4640540008e95d0229cb188135
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 64e851689e441e66e001ae063d4536602f9f74cb
+Message-Id: <167769372948.10213.11066361498534065985.pr-tracker-bot@kernel.org>
+Date:   Wed, 01 Mar 2023 18:02:09 +0000
+To:     Richard Weinberger <richard@nod.at>
+Cc:     torvalds <torvalds@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023, H. Peter Anvin wrote:
+The pull request you sent on Wed, 1 Mar 2023 09:07:03 +0100 (CET):
 
-> >> The Intel 82378ZB System I/O (SIO) and 82379AB System I/O APIC (SIO.A) 
-> >> ISA bridges implement PCI interrupt steering with a PIRQ router[1][2] 
-> >> that is exactly the same as that of the PIIX and ICH southbridges (or 
-> >> actually the other way round, given that the SIO ASIC was there first).
-> >
-> > Ping for:
-> ><https://lore.kernel.org/lkml/alpine.DEB.2.21.2301081956290.65308@angie.orcam.me.uk/>.
-> >
-> > I think the patch is fairly obvious.  Are there any outstanding concerns 
-> >that prevent it from being applied?
-> 
-> Has this patch been actually tested on a real machine, or is it purely 
-> theoretical?
+> git://git.kernel.org/pub/scm/linux/kernel/git/uml/linux.git tags/uml-for-linus-6.3-rc1
 
- I have no way to verify it on real x86 hw, my only SIO southbridge is in 
-a DEC Alpha machine, so not relevant.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/64e851689e441e66e001ae063d4536602f9f74cb
 
- This is I believe the final Intel device we're missing PIRQ support for, 
-and this work was prompted by a user having issues with his network card, 
-which ultimately and with a lot of confusion around I was able to narrow 
-down to missing PIRQ support rather than any actual issue with hardware.  
-At least Nikolai was patient enough to go through all this and I was 
-vigilant enough to actually catch the ongoing discussion on netdev in the 
-flood.  See: <https://lore.kernel.org/netdev/60B24AC2.9050505@gmail.com/>.
+Thank you!
 
- I'd rather we did not frustrate someone else with something as trivial 
-again, but if you think it's not enough for justification to merge this 
-change, then I'll accept it.  I'd like such a decision to be explicitly 
-stated though rather than assumed by the loss of the patch in mailing list 
-noise (I know we're all overloaded with such stuff).
-
- Thank your for your input.
-
-  Maciej
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
