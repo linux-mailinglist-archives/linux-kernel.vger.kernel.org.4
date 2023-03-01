@@ -2,141 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920A56A68AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 09:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B7B6A68B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 09:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjCAIRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 03:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
+        id S229619AbjCAIRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 03:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjCAIRL (ORCPT
+        with ESMTP id S229879AbjCAIRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 03:17:11 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E201439CD2;
-        Wed,  1 Mar 2023 00:16:50 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id da10so50561854edb.3;
-        Wed, 01 Mar 2023 00:16:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TSqaYlQUZddNvmjmRwWT7Q43mvIxxx7/x0n679k+Rr4=;
-        b=Ncv5Q6I+853ziEJ9cFR2KIze1sEPOYFcl2bIAQzHg0HwDZOr++UC6svB8xjQwjP6KD
-         ZDzuuASX1qYHLpto1FnMJO1X9UB/QXfEVb42wZWfmjfKGt1shD/+d+tYkZmJGm9LLThi
-         9yeZwNTySbYwQOvXxFygGSc6LTPepJ0VNgjeEGr4G4j2U1UY4uuSwmVhH++ahsxuEeD9
-         B0FjuskEUT2RE7VVrSlA+4J4+886/9AbOur2Th4zo3fPx0ZEMNqjYRtbhXV6jVYuwGq0
-         Fn7sMh8/3PN0oiwrI8wTtaq5VRdoTjPRiZTmGn7L8bu8OS6lueukVupNM9QpQ89W3yYx
-         Cptg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TSqaYlQUZddNvmjmRwWT7Q43mvIxxx7/x0n679k+Rr4=;
-        b=vzwveZTFE4EQILtLvP5UdAyjJuF8vfASr8b6MkOaDL7PA4GHhIUsWVdN2d1xvc+EH8
-         Zmhxp1TWVs9/RMSaT3SBvbtalz6Ja9fa64iphyEIev18WLxE1+v9lpiiWxws8lzr8mDK
-         tZZjuG7OUPqCF3c2SPeUR1XezlvwocOuh0+o9Y0AQr9vtQNC7pjj2vVEIcy7eEzSygg+
-         t1N/wlAlZ/goNHzikww+QMOfliUnifXijdg2aOOEEnElFdyVKWWXerfZeuZhSfJ73WWU
-         6izuWtL2/J9hk1VopifXGbLC6HlLVkOOJVPViTFVnP6Lw8cptgS6uBRUmz6Jj/1LR1OY
-         fCUw==
-X-Gm-Message-State: AO0yUKXgQPwNYIq3H3rVsKtYTn2hOVC/epRyxLQmzc7yZoZMmoMEbKkY
-        1CcxKKLv5kJdU+5bseJSy1U=
-X-Google-Smtp-Source: AK7set95o6sHbzdX6KfRuUyx6EBQOue22QgQbKFPOQh/jgQcGhdkQTxLsOIsP3/Ms8wfhJY9TGhQew==
-X-Received: by 2002:a17:907:2057:b0:8b1:319c:c29e with SMTP id pg23-20020a170907205700b008b1319cc29emr6438580ejb.74.1677658608959;
-        Wed, 01 Mar 2023 00:16:48 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id v13-20020a1709064e8d00b008e3bf17fb2asm5578521eju.19.2023.03.01.00.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 00:16:48 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 1 Mar 2023 09:16:46 +0100
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>
-Subject: Re: [PATCH RFC v2 bpf-next 1/9] mm: Store build id in inode object
-Message-ID: <Y/8J7pkJ8g1uEQcq@krava>
-References: <20230228093206.821563-1-jolsa@kernel.org>
- <20230228093206.821563-2-jolsa@kernel.org>
- <20230228111310.05f339a0a1a00e919859ffad@linux-foundation.org>
+        Wed, 1 Mar 2023 03:17:40 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E874839CF0;
+        Wed,  1 Mar 2023 00:17:34 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 097A024E261;
+        Wed,  1 Mar 2023 16:17:27 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Mar
+ 2023 16:17:27 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Mar
+ 2023 16:17:26 +0800
+Message-ID: <a267f495-6a49-dae6-84f0-098e9868840d@starfivetech.com>
+Date:   Wed, 1 Mar 2023 16:17:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228111310.05f339a0a1a00e919859ffad@linux-foundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 0/2] StarFive's Pulse Width Modulation driver support
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Hal Feng <hal.feng@starfivetech.com>
+References: <20230228091345.70515-1-william.qiu@starfivetech.com>
+ <Y/8IYSYOsDrGIXzT@wendy>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <Y/8IYSYOsDrGIXzT@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 11:13:10AM -0800, Andrew Morton wrote:
-> On Tue, 28 Feb 2023 10:31:58 +0100 Jiri Olsa <jolsa@kernel.org> wrote:
-> 
-> > Storing build id in file's inode object for elf executable with build
-> > id defined. The build id is stored when file is mmaped.
-> > 
-> > This is enabled with new config option CONFIG_INODE_BUILD_ID.
-> > 
-> > The build id is valid only when the file with given inode is mmap-ed.
-> > 
-> > We store either the build id itself or the error we hit during
-> > the retrieval.
-> > 
-> > ...
-> >
-> > --- a/include/linux/fs.h
-> > +++ b/include/linux/fs.h
-> > @@ -699,6 +700,12 @@ struct inode {
-> >  	struct fsverity_info	*i_verity_info;
-> >  #endif
-> >  
-> > +#ifdef CONFIG_INODE_BUILD_ID
-> > +	/* Initialized and valid for executable elf files when mmap-ed. */
-> > +	struct build_id		*i_build_id;
-> > +	spinlock_t		i_build_id_lock;
-> > +#endif
-> > +
-> 
-> Remember we can have squillions of inodes in memory.  So that's one
-> costly spinlock!
-> 
-> AFAICT this lock could be removed if mmap_region() were to use an
-> atomic exchange on inode->i_build_id?
 
-right, that should work I'll check 
 
+On 2023/3/1 16:10, Conor Dooley wrote:
+> Hey William,
 > 
-> If not, can we use an existing lock?  i_lock would be appropriate
-> (don't forget to update its comment).
-
-ok
-
+> On Tue, Feb 28, 2023 at 05:13:43PM +0800, William Qiu wrote:
+>> Hi,
+>> 
+>> This patchset adds initial rudimentary support for the StarFive
+>> Pulse Width Modulation controller driver. And this driver will
+>> be used in StarFive's VisionFive 2 board.The first patch add
+>> Documentations for the device and Patch 2 adds device probe for
+>> the module.
+>> 
+>> The patch series is based on v6.2.
+>> 
+>> William Qiu (2):
+>>   dt-bindings: PWM: Add StarFive PWM module
+>>   pwm: starfive: Add PWM driver support
 > 
-> Also, the code in mmap_region() runs build_id_free() inside the locked
-> region, which seems unnecessary.
+> Is there a corresponding dts addition for this driver?
 > 
+> Cheers,
+> Conor
+Hi Conor,
 
-ok, if the atomic exchange is doable, it'll take care of this
+There is, but after communicating with Hal Feng, I decided to upload
+bindings and driver based on mainline first, and then upload dts after
+Hal Feng's minimal system is merged.
 
-thanks,
-jirka
+Best Regards
+William
