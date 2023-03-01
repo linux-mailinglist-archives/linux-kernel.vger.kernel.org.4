@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C896A6D33
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919596A6D37
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjCANlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 08:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S229854AbjCANlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 08:41:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCANlI (ORCPT
+        with ESMTP id S229563AbjCANlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:41:08 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F7D39BAC;
-        Wed,  1 Mar 2023 05:41:07 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id cw28so4787265edb.5;
-        Wed, 01 Mar 2023 05:41:07 -0800 (PST)
+        Wed, 1 Mar 2023 08:41:45 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6923E09C
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 05:41:44 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id q6so5387462iot.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 05:41:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677678065;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/qXAb53taSbccEZagai0EBEgCI96MXIqMCVHM5azkUc=;
-        b=OJZKGTc4qcrLMT6/BKM/Ya5MayDg2mw6migma8Nj1FDOxfkPtPK8fD631yPxhfqZ8T
-         bzuIj84l0Jf52GwbCS7SQ64yY5broVHqJJIOubxMW74rzhxLXKMUOWrbsZQFWLLVlNN/
-         RsoHNaqT5DAqhzoPJHKUnfyqLGIKrG0rJzdLjO7e8iZ4SJEoRdMwDVr8S0T/NXmHJcGc
-         extQKeKXgC3eEPcKMDUCxTHJwpnoFVXqv9mOnP/LeD03LPKDiUalr492xEAQjwRC3Ci4
-         RwyjLFq2R6NUjUa/V/m6bjviTddi/1gzJWsBwYjhD3AntWXRvCBZulTrBEHtTsACn7nS
-         nRBw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kq5OR9hoC260+bemchGBNuQjrNOZhrK9iuZRCuifkTs=;
+        b=RNGjW0fKHBPVSu32cnLyQ80bXdFmMDWGyWr8DyQlkX0JakbZI256w+r+tZD8H5sgLv
+         Mv93XNX6nbqefYx/euZAMec/fMtwLa6mGSn4k3ROmTxw2u0ojuqabJH+jtV4tzRPAMKB
+         Sf4KhzQY2gByZpvCMeUGD+L6zbuVQ94yycdGRyqLMeZsxotjVaKc1YYEOfw+n4dN1ZvQ
+         Fgf2sYQftnkmbDAqBSJbZxAR34gndmTIaEgKOwgBjqv+i0tZaPptUnvevGUMUG3iHXCh
+         bev3NxJ2B5iVDweZuR2h4Wenct2gS8Uo/P9mjYJ37PUqnG+cmME2c1cqJdMTE6E2Xg2W
+         lHkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677678065;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/qXAb53taSbccEZagai0EBEgCI96MXIqMCVHM5azkUc=;
-        b=p8g+Ep5WO5WYM3xXXRI/gn2112+QgCtzIeHuDkeYlAYg0mi71NN6dEf2u+E8O6tyhJ
-         4eiHa50hAmbqcUEsNU87xLG+flCNTxEaxbuet+W4lMPkcE5qJx7gsVwDrfmz6WYQWcPK
-         nMRp2hOxU0sCq/IO7WvhidGMD9d/2uyFKqdijgvvFxTgRkYYlICFjc99UAZIpc5/aVe3
-         3qMeyt1FeCsDQRXwG3GK4PU8TQ1iFI7P2PCPeh+jsGRjm1YfWVkGrFMAlosbE4+DQ7Uk
-         UZuwj7tle7cXtMhrju/ovsCoPaMnGWVw0ON6ty1Ia/XjN1P+7jK7v0sUI7iHrCUOIIe8
-         2tjw==
-X-Gm-Message-State: AO0yUKXSso/ITOGRQe6PAME3yCJ/JH3lN9icFgfGeHFusiaixpmlpeKW
-        ZRi2GCTKsjKALcai3zyZ+u8=
-X-Google-Smtp-Source: AK7set8FHkfSDXUUcd5t8RiBLiu5Zmr74vuTJic7kmmP31ZCfUWccx0n18ESE2U2YZxF3oiyHelwZw==
-X-Received: by 2002:a17:907:7245:b0:8cf:fda0:5b9b with SMTP id ds5-20020a170907724500b008cffda05b9bmr6663074ejc.22.1677678065397;
-        Wed, 01 Mar 2023 05:41:05 -0800 (PST)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id lb4-20020a170907784400b008d6e551e1bcsm5750277ejc.2.2023.03.01.05.41.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 05:41:04 -0800 (PST)
-Date:   Wed, 1 Mar 2023 14:41:03 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V6 3/3] spi: tegra210-quad: Enable TPM wait polling
-Message-ID: <Y/9V71ZYy7FGiK4g@orome>
-References: <20230227172108.8206-1-kyarlagadda@nvidia.com>
- <20230227172108.8206-4-kyarlagadda@nvidia.com>
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Kq5OR9hoC260+bemchGBNuQjrNOZhrK9iuZRCuifkTs=;
+        b=nm8JYU1x3RMt+tD8EJcXVBbSkLasME1AeTD2CawxOeXuyk+taZyanY13Rqw1KGhEjl
+         kRPwRXzbDx29ixZXkQmg2uW5T2TYlvUfJaTomveYvsR/VISK54JhV+AiCMFANVeRqnP2
+         gkTAEhRilTtLEzX9i3b4q0jaw65fcYiIJy5vMHgOCtLQw19MNSoEeyikw4W/kQDIiV8/
+         0/JsdBJV/saujNo1B9IyIVnmZIdEvbOuke96aWkwnwyWGa/G8Y0nerzjUqUFDndBysAP
+         rKOgPZ6UYX+nX7H0HLFig9SJyEDrpx1pjYPagVI273is85iG52BkJqUcHSztS+JBaNtX
+         q1nA==
+X-Gm-Message-State: AO0yUKVQtBzuquismMoThGWhyVJxJcHd7y6LNTw2ZWirpUtg0Bd7PyO/
+        GW/6/Jlzn13BE2ZYOzSyh/OHvvSY3arLWIvfnvfCyg==
+X-Google-Smtp-Source: AK7set+BWIITMwStn5iOknYU9Ytckv0R80OlViWQC7TNRL095p3FTuT9mKhGhMd4MFbc9GXISWxJtJVx+O7r52M/2LM=
+X-Received: by 2002:a02:85cb:0:b0:3c5:b47:539a with SMTP id
+ d69-20020a0285cb000000b003c50b47539amr2818912jai.5.1677678103307; Wed, 01 Mar
+ 2023 05:41:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="anIYPVtUQRiK+ddV"
-Content-Disposition: inline
-In-Reply-To: <20230227172108.8206-4-kyarlagadda@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <cad03d25-0ea0-32c4-8173-fd1895314bce@I-love.SAKURA.ne.jp>
+ <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
+ <86bdfea2-7125-2e54-c2c0-920f28ff80ce@I-love.SAKURA.ne.jp>
+ <CAG_fn=VJrJDNSea6DksLt5uBe_sDu0+8Ofg+ifscOyDdMKj3XQ@mail.gmail.com>
+ <Y7a6XkCNTkxxGMNC@phenom.ffwll.local> <032386fc-fffb-1f17-8cfd-94b35b6947ee@I-love.SAKURA.ne.jp>
+In-Reply-To: <032386fc-fffb-1f17-8cfd-94b35b6947ee@I-love.SAKURA.ne.jp>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 1 Mar 2023 14:41:06 +0100
+Message-ID: <CAG_fn=V4-zzo+6HFG+wCbJRYHRh+Xx=r1weyCBJG-afpaG4Hag@mail.gmail.com>
+Subject: Re: [PATCH] fbcon: Use kzalloc() in fbcon_prepare_logo()
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Helge Deller <deller@gmx.de>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,68 +79,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>
+> I'd like to avoid touching per-arch asm/string.h files if possible.
+>
+> Can't we do like below (i.e. keep asm implementations as-is, but
+> automatically redirect to __msan_memset()) ? If yes, we could move all
+> __msan_*() redirection from per-arch asm/string.h files to the common
+> linux/string.h file?
+>
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index c062c581a98b..403813b04e00 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -360,4 +360,15 @@ static __always_inline size_t str_has_prefix(const char *str, const char *prefix
+>         return strncmp(str, prefix, len) == 0 ? len : 0;
+>  }
+>
+> +#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
+> +#undef memset
+> +#define memset(dest, src, count) __msan_memset((dest), (src), (count))
+> +#undef memset16
+> +#define memset16(dest, src, count) __msan_memset((dest), (src), (count) << 1)
+> +#undef memset32
+> +#define memset32(dest, src, count) __msan_memset((dest), (src), (count) << 2)
+> +#undef memset64
+> +#define memset64(dest, src, count) __msan_memset((dest), (src), (count) << 3)
+> +#endif
 
---anIYPVtUQRiK+ddV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Feb 27, 2023 at 10:51:08PM +0530, Krishna Yarlagadda wrote:
-> Trusted Platform Module requires flow control. As defined in TPM
-> interface specification, client would drive MISO line at same cycle as
-> last address bit on MOSI.
-> Tegra241 QSPI controller has TPM wait state detection feature which is
-> enabled for TPM client devices reported in SPI device mode bits.
-> Set half duplex flag for TPM device to detect and send entire message
-> to controller in one shot.
->=20
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->  drivers/spi/spi-tegra210-quad.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->=20
-> diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-q=
-uad.c
-> index b967576b6c96..e1165584a20a 100644
-> --- a/drivers/spi/spi-tegra210-quad.c
-> +++ b/drivers/spi/spi-tegra210-quad.c
-> @@ -142,6 +142,7 @@
-> =20
->  #define QSPI_GLOBAL_CONFIG			0X1a4
->  #define QSPI_CMB_SEQ_EN				BIT(0)
-> +#define QSPI_TPM_WAIT_POLL_EN			BIT(1)
-> =20
->  #define QSPI_CMB_SEQ_ADDR			0x1a8
->  #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
-> @@ -164,6 +165,7 @@
->  struct tegra_qspi_soc_data {
->  	bool has_dma;
->  	bool cmb_xfer_capable;
-> +	bool support_tpm;
-
-Nit: this could be "supports_tpm" for slightly more consistency with
-"has_dma".
-
-Thierry
-
---anIYPVtUQRiK+ddV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP/Ve8ACgkQ3SOs138+
-s6HzVg/+Koo8cW9lLDnUsaNXV0MQJN99mkT5rJx5t4WjnBdiw1Zs9/ypgImIxJ5G
-yVEIgDhD2HhwKrgPE/Zk6lAd7zXzvbLyzJp0iVrGztWGq8w1vGrIHbQWWltLfoKq
-kRkEwxNX+MTmsI1PbboX1goTQLeZJZbSPAnUN/bltBIiT2V8mSqA1qA9B2QkSy7S
-WKJD1fWBA2mDj7JJq/SFBNk0AbaujWhCjNvQ2p+nwe0SAlmIHo1eeiujA05jWl+A
-27BzR+q5Uxnfgq4WUikEApJO1KyuBXaVsY6aEQB0JhRdDq64mnW+EaL4Wus2HEqf
-pLJ9HUA9Csq/t2fUYsBx5O0KM1bt3fkWGt/ZZSroiHQzg5exGKKSUyJOnixTXrlL
-wpy1qF2Xc+E8nQYdvMdsVLbVpS1XUQjm6HzERam6x7+Ap2pc2YcNoub32Rc8VYZk
-YzRCQdDITM/sChRBKgXNYD6cttI9t+J2kJhuYYvtlvB2Csv1za7DEWdz+5V64lu7
-CbK+MCGfIPuNP0v852tyFl2on/y4kE2GfNNfHHHEYa1cNUuM46pc0q6OWnVjpJTu
-ZNOCokv9dAKTLptpiZZFa5joJtAtcOLuQ/E5EPdX4R6u4u8v5nbuxHTXaK5ZKyko
-3gWEzSTxQWUChpr5fyQbErVX9S3mmd9QL8P4Jm5V3EUVwEnjKws=
-=Yd6F
------END PGP SIGNATURE-----
-
---anIYPVtUQRiK+ddV--
+The problem with this approach is that it can only work for
+memset/memcpy/memmove, whereas any function that is implemented in
+lib/string.c may require undefining the respective __HAVE_ARCH_FNAME
+so that KMSAN can instrument it.
