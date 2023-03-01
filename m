@@ -2,144 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259BB6A7433
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400B66A7435
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjCATYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
+        id S229813AbjCAT0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjCATYo (ORCPT
+        with ESMTP id S229462AbjCAT0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:24:44 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD4223309;
-        Wed,  1 Mar 2023 11:24:42 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321I17SW027768;
-        Wed, 1 Mar 2023 19:24:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=4hmOo7FaxBhqe/Ieuk7y0ebkwJe77i4ZNugorKt2Xhg=;
- b=WaNJFqzC2cxdlZb75wtixAFM+TZW7sdI5Lal8fCe1SS32EkqD6MFH+OKNBVBqsjGFtEA
- nVfpX5fsEJz7CBmyBEpLvOylW+AAjAvi6KuRqG6MOPL27H5iMm6QpCqFW2pyfDWSRVOF
- qbQfqxIVbn1TyPUAz3ovrr9m9kjb6gKjlpgLBhRz+LZtdiXwWdaK7zTUGbpptM/d6KTz
- 4UOZVUM5uZKd6KSVK3FeitfB3XksUaJckVGlwh8zC3/WALd8u7mhwSgBENDq15wSczMR
- 2BEWZsPLWcGGu/Zj853RXbK5C3BWP/AG6RHvzmGQpyOYVrhS4xoCaKDG2uG0xa3YgI4U mw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1vgejx8k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Mar 2023 19:24:20 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 321JOICF004277
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 1 Mar 2023 19:24:18 GMT
-Received: from [10.110.81.49] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 1 Mar 2023
- 11:24:16 -0800
-Message-ID: <0c92e7b8-e415-8ad5-14e7-d94f18c3fa25@quicinc.com>
-Date:   Wed, 1 Mar 2023 11:24:15 -0800
+        Wed, 1 Mar 2023 14:26:51 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21ADC43463;
+        Wed,  1 Mar 2023 11:26:51 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id i10so15113055plr.9;
+        Wed, 01 Mar 2023 11:26:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677698810;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4v3P6EKA1Bt9y18IA1nEWhKb3MWpao+bby1BrXmk/PM=;
+        b=SfybIzROFX55amZBZ8IIINi17zksuZE7349HRirXI6gRI/iXE3YRBlbqyHyHRkq26c
+         i7X0G3/ZmxsXk35LVQY7m6nXxuo10fMBKtHC2+M7QoOpSuqOKuhnwofbKr2/HsXvIUSA
+         5N6YQLVAJC3nv6P7YxYCO0tTLAxzRRhVSTwxC/slQt5kdlV72BE38UcDTz+yl7l0/lq7
+         O1hS49AqjMacdLnlQD9UWEuF4W373NjALldfhsPM2pKom1A4B+eY1kMRWW1EUPwXF+jF
+         gawiX9BhynuacMVh7DIDVnu+hejtThwI98I8T+eA/uCb6zF1eLVr/RRgeDaTIQt2FXFD
+         fu/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677698810;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4v3P6EKA1Bt9y18IA1nEWhKb3MWpao+bby1BrXmk/PM=;
+        b=dBl5qN5VAN0mjobDcPQ2jNO4i2aEloo/0TOKVXGr9tYCxaasxjJuBK4owGzl5MxMAx
+         q8JIhPHjFD6/wVQRkqHLxd0ihGKXV0x8E0QU7RnwY7oNDdL0mnc/8489vK/xnXLp3MiB
+         fw7RP+VQGBT0plSrqoojlv0jnn7VP9b0B2mv+z6T28IAFfTkmf09cOwM4ma/ePB7QahQ
+         hvOeXsEKo5DXWs8+ZMneUJibmBUNsk1oAB0K18VXu2/Qh78xrTfJdNJzLONLwkptIOGd
+         dV97KmjdmwEGMUlDIVFjM0LR/77B26391ZuAb14kZXsyWis3Ca4x50EjF4DW5pvqenN0
+         dFKg==
+X-Gm-Message-State: AO0yUKV+wtKmEJSpAcFLS+fEcuSu7HJgMYM0pUyYBM6iI86aTN65+AwO
+        AUeavhapwTmQPWwaf13KYe5Rl7wOK2I=
+X-Google-Smtp-Source: AK7set8i4VxbG0TEU1qv/MkFU89itwbnK3NKOXhvhKtxlgLazIqMbZL2qTMt0S77ZK1HrLm+ykmoNA==
+X-Received: by 2002:a05:6a20:244f:b0:cc:b8b4:d774 with SMTP id t15-20020a056a20244f00b000ccb8b4d774mr9772148pzc.7.1677698810513;
+        Wed, 01 Mar 2023 11:26:50 -0800 (PST)
+Received: from [10.69.40.170] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id h20-20020a62b414000000b005d3fdf7515esm8153605pfn.81.2023.03.01.11.26.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 11:26:49 -0800 (PST)
+Message-ID: <5e255f48-0878-8da6-8888-438315bb0cfd@gmail.com>
+Date:   Wed, 1 Mar 2023 11:26:47 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/2] Validating UAPI backwards compatibility
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 5.4 00/13] 5.4.234-rc1 review
 Content-Language: en-US
-From:   John Moon <quic_johmoo@quicinc.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-CC:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        <kernel-team@android.com>, <libabigail@sourceware.org>,
-        Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-References: <20230301075402.4578-1-quic_johmoo@quicinc.com>
- <CAKwvOdmqShYae=DrwP1JZBYXAYZyDB0SaOkVCvCzQC60MaJcpw@mail.gmail.com>
- <41d287fa-3a0a-cac6-4595-ad47ef873d79@quicinc.com>
-In-Reply-To: <41d287fa-3a0a-cac6-4595-ad47ef873d79@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: E0zizhCDS3g96j56kAD31RGiXuL1t5pO
-X-Proofpoint-ORIG-GUID: E0zizhCDS3g96j56kAD31RGiXuL1t5pO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-01_14,2023-03-01_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
- bulkscore=0 impostorscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303010155
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230301180651.177668495@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230301180651.177668495@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/2023 10:03 AM, John Moon wrote:
-> On 3/1/2023 9:50 AM, Nick Desaulniers wrote:
->> On Tue, Feb 28, 2023 at 11:54 PM John Moon <quic_johmoo@quicinc.com> 
->> wrote:
->>>
->>> Currently, the script works with gcc. It generates output like this when
->>> a backwards-incompatible change is made to a UAPI header:
->>>
->>>   !!! ABI differences detected in include/uapi/linux/acct.h (compared to
->>>   file at HEAD^1) !!!
->>>
->>>       [C] 'struct acct' changed:
->>>         type size changed from 512 to 544 (in bits)
->>>         1 data member insertion:
->>>           '__u32 new_val', at offset 512 (in bits) at acct.h:71:1
->>>
->>>   0/1 UAPI header file changes are backwards compatible
->>>   UAPI header ABI check failed
->>>
->>> However, we have not had success with clang. It seems clang is more
->>> aggressive in optimizing dead code away (no matter which options we
->>> pass). Therefore, no ABI differences are found.
->>
->> Hi John,
->> Do you have the list of bugs you've filed upstream against clang wrt.
->> information missing when using `-fno-eliminate-unused-debug-types`?
->>
->> https://github.com/llvm/llvm-project/issues is the issue tracker.
->>
->> Seeing a strong participant in both the Android and LLVM ecosystems
->> supply scripts that lack clang support...raises eyebrows.
+
+
+On 3/1/2023 10:07 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.234 release.
+> There are 13 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> We have not filed a bug with upstream clang since we're not sure it's 
-> *not* and issue on our end. Giuliano Procida (CC'd) has tested the 
-> script with clang 13 and 14 and GCC 10, 11 and 12 and got the expected 
-> diff. If it's convenient for anyone testing this script to give it a 
-> whirl with clang and report back, it could help us determine if there's 
-> a real issue with clang support. :)
+> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.234-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-With some additional internal testing, we've found that clang does not 
-work with this script on Ubuntu 18.04, but does work on Ubuntu 20.04. 
-This is controlling for the clang version and different installation 
-sources. The same clang-15 binary run on an 18.04 host fails while 
-working on 20.04.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-We'll investigate some more internally and potentially file a bug with 
-upstream clang.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
