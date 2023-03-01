@@ -2,156 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305F26A71DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 425266A71E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjCARLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
+        id S229775AbjCARN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCARLb (ORCPT
+        with ESMTP id S229494AbjCARN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:11:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550A639CDC;
-        Wed,  1 Mar 2023 09:11:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Mar 2023 12:13:57 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD411ADC1
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 09:13:56 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E696E6131D;
-        Wed,  1 Mar 2023 17:11:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0160EC433D2;
-        Wed,  1 Mar 2023 17:11:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677690689;
-        bh=PH/epbOMVisSzzrM7zukqcL0LJjEZPVuHTbngJa+R2I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fE5hykG7gUZjXoWdrr16RJE0QLTUswgRknNW1D+poxFcAItPhRKH933W8F0e3bO6j
-         Wus9cHXgwQqizGQiDghC+K1BZ+ChYi9urKokMXdHbnCkI95/LWQdY7hPARF5K3gWMb
-         1Ul9O+B5NkapKd/+2hTuolgkCPXv3qkSLnGr262dcEmxAZFEgHI5gJgRUpLsGs58QU
-         8U4qeWFuOA0UlDGjPj2xiF9EkoFa5RJb2LKCbHDzc9ZfbJFKfprnADb1JRqP+dapoN
-         6zKeadLC0hh1xEaJK9z0KgAxVUqD5K++x2iXYCrkQBhKLgbQIduZwWcXZcNBKa5A3B
-         0s9zNVR1nZ7cg==
-Date:   Wed, 1 Mar 2023 18:11:26 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as
- completed
-Message-ID: <Y/+HPrU/ofFXapHM@lothringen>
-References: <Y/z0fHHYdxEXcWMT@pc636>
- <7EBE4F51-F2BD-4B42-AFC1-CA234E78CC7B@joelfernandes.org>
- <Y/z9Its1RKetIr8V@pc636>
- <CAEXW_YSjT_orp8TbomBFU+ETS7YJ7TrbHTdrsBRTzCKG5_SBdw@mail.gmail.com>
- <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y/0/dnmIk508sidK@lothringen>
- <Y/1ZMXsNZtwYPJNW@google.com>
- <Y/3fxLXbfvnLFEZq@lothringen>
- <Y/5fXskgrQxzbt0U@google.com>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C77066020D1;
+        Wed,  1 Mar 2023 17:13:52 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677690835;
+        bh=sX1l5vpO1pOZkdcjHK8B8ItjOquI8mvBxgNUPz9UUtU=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=WpwQWd4IIz2bSmEsysv06hje/uFtGJtgn+Y9V7s6tDVHRPIPwLmRtra4nODd7a8+6
+         QdOglGJAbsw2D7rFomi47r7cOBQjU+InHvqkzh6ePefGUQu6pW0459GtnejpVUJEf/
+         EoBDwWZp5AqeR6tEGDlUxP1+4LzBNLvSSUzmofSfE5ZvcOoUUrCBjYybFBTBLeid/z
+         wyMTOefzz0fGk7xmTTu0L8tYf83px0M57XjEQ5Bf01nwmwdl9gpE1o8EkbXwymfNFx
+         sSnRTXAJtvj7buxOxrA/7eQHQAmNT1BZs/wlUi6tCA21ArH5nJgWUfINMO/SOSOWao
+         QdagiQheS9Bow==
+Message-ID: <fc95fd2c-d661-926c-3bdb-8709cb49de3b@collabora.com>
+Date:   Wed, 1 Mar 2023 22:13:47 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/5fXskgrQxzbt0U@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: [PATCH v2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230227230044.1596744-1-peterx@redhat.com>
+ <Y/1Mh5uivFt+zWKM@x1n> <e1e0ed70-76df-647f-30ac-0bb6ae8dc05c@collabora.com>
+ <Y/4kjnom6MQqh9iA@x1n> <fb7ec372-2b16-14e1-a8cd-a90f4449661f@collabora.com>
+ <640319be-ddb6-d74f-b731-eee5ceab3d01@collabora.com> <Y/9tA2EVglOJ0Ap1@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y/9tA2EVglOJ0Ap1@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 08:09:02PM +0000, Joel Fernandes wrote:
-> Hi Frederic,
+On 3/1/23 8:19 PM, Peter Xu wrote:
+> On Wed, Mar 01, 2023 at 12:55:51PM +0500, Muhammad Usama Anjum wrote:
+>> Hi Peter,
 > 
-> On Tue, Feb 28, 2023 at 12:04:36PM +0100, Frederic Weisbecker wrote:
-> Both should play a role. For lazy, we found callbacks that showed later in
-> the full boot sequence (like the SCSI issue).
+> Hi, Muhammad,
 > 
-> For expedited, there is new data from Qiuxu showing 5% improvement in boot
-> time.
-
-Indeed, nice one!
-
-> Right, and we also don't know if in the future, somebody queues a CB that
-> slows down boot as well (say they queue a lazy CB that does a wakeup), even
-> if currently there are not any such. As noted, that SCSI issue did show. Just
-> to note, callbacks doing wakeups are supposed to call call_rcu_hurry().
-
-Sure, ideally we should have a way to debug lazy callbacks involved in wait/wake
-dependency against the enqueuer but that doesn't sound easy to do...
-
-> Yes, sorry, it was more an RFC but still should have been more clear. For the
-> v3 I'll definitely make it clear.
+>> While using WP_UNPOPULATED, we get stuck if newly allocated memory is read
+>> without initialization. This can be reproduced by either of the following
+>> statements:
+>>     printf("%c", buffer[0]);
+>>     buffer[0]++;
+>>
+>> This bug has start to appear on this patch. How are you handling reading
+>> newly allocated memory when WP_UNPOPULATED is defined?
 > 
-> rcu_end_inkernel_boot() is called before init is run. But the kernel cannot
-> posibly know when init has finished running and say the system is now waiting
-> for user login, or something. There's a considerable amount time from
-> rcu_end_inkernel_boot() to when the system is actually "booted". That's the
-> main issue. We could look at CPU load, but that's not ideal. Maybe wait for
-> user input, but that sucks as well.
-
-So it looks like user boot is involved in what you want to wait for. In that
-case only userspace can tell.
-
-> Hmmm I see what you mean, so a conservative and configurable "fail-safe"
-> timeout followed by sysctl to end the boot earlier than the timeout, should
-> do it (something like 30 seconds IMHO sounds reasonable)? In any case,
-> whatever way we go, we would not end the kernel boot before
-> rcu_end_inkernel_boot() is called at least once (which is the current
-> behavior).
+> Yes it's a bug, thanks for the reproducer. You're right I missed a trivial
+> but important detail.  Could you try apply below on top?
 > 
-> So it would be:
+> ---8<---
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 46934133bd0b..2f4b3892948b 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4062,7 +4062,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+>                                                 vma->vm_page_prot));
+>                 vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+>                                 vmf->address, &vmf->ptl);
+> -               if (!pte_none(*vmf->pte)) {
+> +               if (vmf_pte_changed(vmf)) {
+>                         update_mmu_tlb(vma, vmf->address, vmf->pte);
+>                         goto unlock;
+>                 }
+> ---8<---
+This patch works. Thank you so much!
+
 > 
->   low level boot + initcalls
->        20 sec                         30 second timeout
-> |------------------------------|--------------------------
->                                |                         |
-> 	        old rcu_end_inkernel_boot()      new rcu_end_inkernel_boot()
+> I can send a new version after you confirmed it at least works on your
+> side. I'll also add some more test to cover that in the next version.
 > 
-> But it could be, if user decides:
->   low level boot + initcalls
->        20 sec                         10 second timeout
-> |------------------------------|--------------------------
->                                |                         |
-> 	        old rcu_end_inkernel_boot()      new rcu_end_inkernel_boot()
-> 		                                 via /sys/ entry.
-
-The problem I have with a random default timeout is that it may break sensitive
-workloads. If the default is 30 and say the boot only takes 5 seconds and
-immediately launches a latency sensitive task, this may break things in a
-subtle way during these 25 seconds when it usually didn't. Because expedited
-RCU is a hammer interrupting all non-idle CPUs.
-
-Until now forcing expedited RCU was only performed before any user code. Now it
-crosses the boundary so better be careful. I'd personally advocate for keeping
-the current call before init is launched. Then provide an end_boot_sysctl kernel
-boot parameter that will ignore the current call before init and let the user
-signal that through sysctl.
-
-
-> > > > So shouldn't we disable lazy callbacks by default when CONFIG_RCU_LAZY=y and then
-> > > > turn it on with "sysctl kernel.rcu.lazy=1" only whenever userspace feels ready
-> > > > about it? We can still keep the current call to rcu_end_inkernel_boot().
-> > > 
-> > > Hmm IMHO that would add more knobs for not much reason honestly. We already
-> > > have CONFIG_RCU_LAZY default disabled, I really don't want to add more
-> > > dependency (like user enables the config and does not see laziness).
-> > 
-> > I don't know. Like I said, different problems, different solutions. Let's
-> > identify what the issue is precisely. For example can we expect that the issues
-> > on boot can be a problem also on some temporary workloads?
-> > 
-> > Besides I'm currently testing a very hacky flavour of rcu_lazy and so far it
-> > shows many idle calls that would have been delayed if callbacks weren't queued
-> > as lazy.
+> The current smoke test within this patch is really light; I somehow rely on
+> you on this patch on the testing side, and thanks for that.
 > 
-> Can you provide more details? What kind of hack flavor, and what is it doing?
+>> Running my pagemap_ioctl selftest as benchmark in a VM:
+>> without zeropage / wp_unpopulated (decide from pte_none() if page is dirty
+>> or not, buggy and wrong implementation, just for reference)
+>> 26.608 seconds
+>> with zeropage
+>> 39.203 seconds
+>> with wp_unpopulated
+>> 62.907 seconds
+>>
+>> 136% worse performance overall
+>> 60% worse performance of unpopulated than zeropage
+> 
+> Yes this is unfortunate, because we're protecting more things than before
+> when with WP_ZEROPAGE / WP_UNPOPULATED but that's what it is for (when we
+> want to make sure that accuracy on the holes).
+> 
+> I didn't look closer to your whole test suite yet, but my pure test on
+> protection above should mean that it's still much better for such a use
+> case than either (1) pre-read or (2) MADV_POPULATE_READ.
+Ohh... I should stop comparing UNPOPULATE with buggy implementation and
+compare with pre-read. I've compared apples with oranges.
 
-Sorry, I meant a hacky implementation of lazy to work with !NOCB.
+I'll do better benchmark for the comparison sake. I'll let you know if the
+performance is becoming an issue. Overall we need pagemap_ioctl + UFFD to
+correctly emulate Windows syscall. Secondly we also need good performance
+(more the better).
 
-Thanks.
+> 
+> Again, I hope the performance result is not a concern to you.  If it is,
+> please let us know.
+> 
+> Thanks,
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
