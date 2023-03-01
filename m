@@ -2,204 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244426A7486
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97536A7488
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCATwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S229826AbjCATxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCATwV (ORCPT
+        with ESMTP id S229492AbjCATx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:52:21 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29099497FB;
-        Wed,  1 Mar 2023 11:52:19 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321J6jrn002151;
-        Wed, 1 Mar 2023 19:52:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=bN+eSv473stxdX6f/2RM/Yu9WCP/4a7goXSYB44BrrU=;
- b=m67HIef2cbFx9wyTpc1VyZNDppH59dZUUe3Xl5m9jM0hYAHdv/jQlC9UdWEjgoTe2KuL
- MaxaS0CUMut6j/ufJ38vk8XnyHlI3l0f+g3n6FbicoBh5gemsaTSpMPVY17SDFl6U/Lh
- xmCRRgyiiCw0ZEG7iTjEGsD1AuhLQzECtBm1RGN7+kqXCGmT2PeADoXPAZvM/T4DsuND
- fO7kpmlB7IlW7cf20erJS2RzEAriEv/URrIx79Nw5J7+MD5sXtxhRtoSC92HmdDMdeY6
- FNUGVJTApehjif05CI4RWCf+Gol4viucontgoPl6LH4AqY6s5UJrmX/QUdgTSOI46jgg YA== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2cjs92ca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Mar 2023 19:52:02 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 321JECDV024469;
-        Wed, 1 Mar 2023 19:52:01 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3nybe9rrsj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Mar 2023 19:52:01 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 321Jq0x046006672
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Mar 2023 19:52:00 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C7E65805D;
-        Wed,  1 Mar 2023 19:52:00 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 462D758058;
-        Wed,  1 Mar 2023 19:51:59 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.163.79.233])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Mar 2023 19:51:59 +0000 (GMT)
-Message-ID: <afba754afa2bd1fe7e0e72400b202db5b51ecdd8.camel@linux.ibm.com>
-Subject: Re: [PATCH-next] scsi: fix use-after-free problem in
- scsi_remove_target
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     zhongjinghua <zhongjinghua@huaweicloud.com>,
-        zhongjinghua <zhongjinghua@huawei.com>,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yukuai3@huawei.com
-Date:   Wed, 01 Mar 2023 14:51:58 -0500
-In-Reply-To: <a71be678-7f40-811b-4612-81a4eeb910dd@huaweicloud.com>
-References: <20230213034321.3261114-1-zhongjinghua@huaweicloud.com>
-         <4585779e-f919-0439-2062-b1f30b04f176@huawei.com>
-         <a71be678-7f40-811b-4612-81a4eeb910dd@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 1 Mar 2023 14:53:28 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3BE20562;
+        Wed,  1 Mar 2023 11:53:27 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pXSVr-0007Fg-02;
+        Wed, 01 Mar 2023 20:53:19 +0100
+Date:   Wed, 1 Mar 2023 19:53:10 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [RFC PATCH net-next v11 00/12] net: ethernet: mtk_eth_soc: various
+ enhancements
+Message-ID: <cover.1677699407.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: HI5Yc6kzjOcknZ1dUiIpIQ-mFU8Nx7Py
-X-Proofpoint-GUID: HI5Yc6kzjOcknZ1dUiIpIQ-mFU8Nx7Py
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-01_15,2023-03-01_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 suspectscore=0 mlxscore=0
- clxscore=1011 lowpriorityscore=0 mlxlogscore=999 phishscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303010157
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-01 at 11:40 +0800, zhongjinghua wrote:
-> ping...
-> 
-> Hello，
-> 
-> Anyone looking this？
-> 
-> 在 2023/3/1 11:37, zhongjinghua 写道:
-> > ping...
-> > 
-> > Hello，
-> > 
-> > Anyone looking this？
-> > 
-> > 在 2023/2/13 11:43, Zhong Jinghua 写道:
-> > > From: Zhong Jinghua <zhongjinghua@huawei.com>
-> > > 
-> > > A use-after-free problem like below:
-> > > 
-> > > BUG: KASAN: use-after-free in scsi_target_reap+0x6c/0x70
-> > > 
-> > > Workqueue: scsi_wq_1 __iscsi_unbind_session
-> > > [scsi_transport_iscsi]
-> > > Call trace:
-> > >   dump_backtrace+0x0/0x320
-> > >   show_stack+0x24/0x30
-> > >   dump_stack+0xdc/0x128
-> > >   print_address_description+0x68/0x278
-> > >   kasan_report+0x1e4/0x308
-> > >   __asan_report_load4_noabort+0x30/0x40
-> > >   scsi_target_reap+0x6c/0x70
-> > >   scsi_remove_target+0x430/0x640
-> > >   __iscsi_unbind_session+0x164/0x268 [scsi_transport_iscsi]
-> > >   process_one_work+0x67c/0x1350
-> > >   worker_thread+0x370/0xf90
-> > >   kthread+0x2a4/0x320
-> > >   ret_from_fork+0x10/0x18
-> > > 
-> > > The problem is caused by a concurrency scenario:
-> > > 
-> > > T0: delete target
-> > > // echo 1 > 
-> > > /sys/devices/platform/host1/session1/target1:0:0/1:0:0:1/delete
-> > > T1: logout
-> > > // iscsiadm -m node --logout
-> > > 
-> > > T0                            T1
-> > >   sdev_store_delete
-> > >    scsi_remove_device
-> > >     device_remove_file
-> > >      __scsi_remove_device
-> > >                              __iscsi_unbind_session
-> > >                               scsi_remove_target
-> > >                           spin_lock_irqsave
-> > >                                list_for_each_entry
-> > >       scsi_target_reap // starget->reaf 1 -> 0
-> > > kref_get(&starget->reap_ref);
-> > >                           // warn use-after-free.
-> > >                           spin_unlock_irqrestore
-> > >        scsi_target_reap_ref_release
-> > >     scsi_target_destroy
-> > >     ... // delete starget
-> > >                           scsi_target_reap
-> > >                           // UAF
-> > > 
-> > > When T0 reduces the reference count to 0, but has not been
-> > > released,
-> > > T1 can still enter list_for_each_entry, and then kref_get reports
-> > > UAF.
-> > > 
-> > > Fix it by using kref_get_unless_zero() to check for a reference
-> > > count of
-> > > 0.
-> > > 
-> > > Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
-> > > ---
-> > >   drivers/scsi/scsi_sysfs.c | 12 +++++++++++-
-> > >   1 file changed, 11 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/scsi/scsi_sysfs.c
-> > > b/drivers/scsi/scsi_sysfs.c
-> > > index e7893835b99a..0ad357ff4c59 100644
-> > > --- a/drivers/scsi/scsi_sysfs.c
-> > > +++ b/drivers/scsi/scsi_sysfs.c
-> > > @@ -1561,7 +1561,17 @@ void scsi_remove_target(struct device
-> > > *dev)
-> > >               starget->state == STARGET_CREATED_REMOVE)
-> > >               continue;
-> > >           if (starget->dev.parent == dev || &starget->dev == dev)
-> > > {
-> > > -            kref_get(&starget->reap_ref);
-> > > +
-> > > +            /*
-> > > +             * If starget->reap_ref is reduced to 0, it means
-> > > +             * that other processes are releasing it and
-> > > +             * there is no need to delete it again
-> > > +             */
-> > > +            if (!kref_get_unless_zero(&starget->reap_ref)) {
-> > > +                spin_unlock_irqrestore(shost->host_lock, flags);
-> > > +                goto restart;
+This series brings a variety of fixes and enhancements for mtk_eth_soc,
+adds support for the MT7981 SoC and facilitates sharing the SGMII PCS
+code between mtk_eth_soc and mt7530.
 
-This doesn't seem to be a good idea: you're asking for a live lock
-where the thread that's already reduced the refcount to 0 and will
-eventually remove the target from the list doesn't progress before you
-take the lock again in the restart and then you find the same result
-and go round again (and again ...).
+Note that this series depends on commit 697c3892d825
+("regmap: apply reg_base and reg_downshift for single register ops") to
+not break mt7530 pcs register access.
 
-Since there should only be one match in the target list and you found
-it and know it's going away, what about break instead of unlock and
-goto restart?
+The whole series has been tested on MT7622+MT7531 (BPi-R64),
+MT7623+MT7530 (BPi-R2), MT7981+GPY211 (GL.iNet GL-MT3000) and
+MT7986+MT7531 (BPi-R3).
 
-James
+Changes since v10:
+ * improve mediatek,mt7981-eth dt-bindings
+ * use regmap_set_bits instead of regmap_update_bits where possible
+ * completely remove mtk_sgmii.c
+ * no need to keep struct mtk_sgmii either as it had only a single
+   element
+
+Changes since v9:
+ * fix path in mediatek,sgmiisys dt-binding
+
+Changes since v8:
+ * move mediatek,sgmiisys dt-bindings to correct net/pcs folder
+ * rebase on top of net-next/main so series applies cleanly again
+
+Changes since v7:
+ * move mediatek,sgmiisys.yaml to more appropriate folder
+ * don't include <linux/phylink.h> twice in PCS driver, sort includes
+
+Changes since v6:
+ * label MAC MCR bit 12 in 08/12, MediaTek replied explaining its function
+
+Changes since v5:
+ * drop dev pointer also from struct mtk_sgmii, pass it as function
+   parameter instead
+ * address comments left for dt-bindings
+ * minor improvements to commit messages
+
+Changes since v4:
+ * remove unused dev pointer in struct pcs_mtk_lynxi
+ * squash link timer check into correct follow-up patch
+
+Changes since v3:
+ * remove unused #define's
+ * use BMCR_* instead of #define'ing our own constants
+ * return before changing registers in case of invalid link timer
+
+Changes since v2:
+ * improve dt-bindings, convert sgmisys bindings to dt-schema yaml
+ * fix typo
+
+Changes since v1:
+ * apply reverse xmas tree everywhere
+ * improve commit descriptions
+ * add dt binding documentation
+ * various small changes addressing all comments received for v1
+
+
+Daniel Golle (12):
+  net: ethernet: mtk_eth_soc: add support for MT7981 SoC
+  dt-bindings: net: mediatek,net: add mt7981-eth binding
+  dt-bindings: arm: mediatek: sgmiisys: Convert to DT schema
+  dt-bindings: arm: mediatek: sgmiisys: add MT7981 SoC
+  net: ethernet: mtk_eth_soc: set MDIO bus clock frequency
+  net: ethernet: mtk_eth_soc: reset PCS state
+  net: ethernet: mtk_eth_soc: only write values if needed
+  net: ethernet: mtk_eth_soc: fix RX data corruption issue
+  net: ethernet: mtk_eth_soc: ppe: add support for flow accounting
+  net: pcs: add driver for MediaTek SGMII PCS
+  net: ethernet: mtk_eth_soc: switch to external PCS driver
+  net: dsa: mt7530: use external PCS driver
+
+ .../arm/mediatek/mediatek,sgmiisys.txt        |  27 --
+ .../devicetree/bindings/net/mediatek,net.yaml |  53 ++-
+ .../bindings/net/pcs/mediatek,sgmiisys.yaml   |  55 ++++
+ MAINTAINERS                                   |   7 +
+ drivers/net/dsa/Kconfig                       |   1 +
+ drivers/net/dsa/mt7530.c                      | 277 ++++------------
+ drivers/net/dsa/mt7530.h                      |  47 +--
+ drivers/net/ethernet/mediatek/Kconfig         |   2 +
+ drivers/net/ethernet/mediatek/Makefile        |   2 +-
+ drivers/net/ethernet/mediatek/mtk_eth_path.c  |  14 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c   | 114 ++++++-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h   | 114 +++----
+ drivers/net/ethernet/mediatek/mtk_ppe.c       | 114 ++++++-
+ drivers/net/ethernet/mediatek/mtk_ppe.h       |  25 +-
+ .../net/ethernet/mediatek/mtk_ppe_debugfs.c   |   9 +-
+ .../net/ethernet/mediatek/mtk_ppe_offload.c   |   8 +
+ drivers/net/ethernet/mediatek/mtk_ppe_regs.h  |  14 +
+ drivers/net/ethernet/mediatek/mtk_sgmii.c     | 203 ------------
+ drivers/net/pcs/Kconfig                       |   7 +
+ drivers/net/pcs/Makefile                      |   1 +
+ drivers/net/pcs/pcs-mtk-lynxi.c               | 302 ++++++++++++++++++
+ include/linux/pcs/pcs-mtk-lynxi.h             |  13 +
+ 22 files changed, 817 insertions(+), 592 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
+ delete mode 100644 drivers/net/ethernet/mediatek/mtk_sgmii.c
+ create mode 100644 drivers/net/pcs/pcs-mtk-lynxi.c
+ create mode 100644 include/linux/pcs/pcs-mtk-lynxi.h
+
+
+base-commit: 1716a175592aff9549a0c07aac8f9cadd03003f5
+-- 
+2.39.2
 
