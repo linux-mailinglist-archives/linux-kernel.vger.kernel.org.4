@@ -2,169 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE326A69AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 444C46A69C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjCAJVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S229790AbjCAJZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:25:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCAJVI (ORCPT
+        with ESMTP id S229836AbjCAJZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:21:08 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7192A2FCD8
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:21:06 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pXIdp-0004k8-VR; Wed, 01 Mar 2023 10:20:54 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pXIdn-0014Ab-4C; Wed, 01 Mar 2023 10:20:51 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pXIdm-001Fi4-CX; Wed, 01 Mar 2023 10:20:50 +0100
-Date:   Wed, 1 Mar 2023 10:20:50 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Nylon Chen <nylon.chen@sifive.com>
-Cc:     aou@eecs.berkeley.edu, conor@kernel.org,
-        emil.renner.berthing@canonical.com, geert+renesas@glider.be,
-        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nylon7717@gmail.com,
-        zong.li@sifive.com, greentime.hu@sifive.com,
-        vincent.chen@sifive.com
-Subject: Re: [PATCH v2 2/2] pwm: sifive: change the PWM controlled LED
- algorithm
-Message-ID: <20230301092050.gwwbfsltyuow7pq6@pengutronix.de>
-References: <20230130093229.27489-1-nylon.chen@sifive.com>
- <20230130093229.27489-3-nylon.chen@sifive.com>
- <20230130101707.pdvabl3na2wpwxqu@pengutronix.de>
- <CAHh=Yk_hFOjwY1mbmYk8yqH_AKDs1_3J+5pYQStseNsZukPSoA@mail.gmail.com>
+        Wed, 1 Mar 2023 04:25:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0956236469
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:24:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677662678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EjLBO2oSAz1qd2pyxymW7NNpmRhL/8rZkZFuY2z88lg=;
+        b=WhSm/ig2q3uWy+EUlEyW1FQVhJ2a48IcohyWlvGH7w9IvTn3KvRmJedys4Dvfey9CdB12c
+        xRKhKKpnedVMttd9CqA3wiDbKFSWAB5XEBHXqI8o68QmtP8xNQvyBBCk3beGGhl7EoVM/N
+        TRT4x/IUtlx5Nkqmdx8dXy6Js3ELuRg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-280-y6BwrYfuMfy1XckhSv52eQ-1; Wed, 01 Mar 2023 04:24:33 -0500
+X-MC-Unique: y6BwrYfuMfy1XckhSv52eQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 41D9A85CBE0;
+        Wed,  1 Mar 2023 09:24:32 +0000 (UTC)
+Received: from localhost (ovpn-13-180.pek2.redhat.com [10.72.13.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F07B52026D76;
+        Wed,  1 Mar 2023 09:24:28 +0000 (UTC)
+Date:   Wed, 1 Mar 2023 17:24:26 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Edward Cree <ecree.xilinx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+        hch@infradead.org, agordeev@linux.ibm.com,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        David.Laight@aculab.com, shorne@gmail.com,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, netdev@vger.kernel.org,
+        Martin Habets <habetsm.xilinx@gmail.com>
+Subject: Re: [PATCH v5 01/17] asm-generic/iomap.h: remove ARCH_HAS_IOREMAP_xx
+ macros
+Message-ID: <Y/8Zyjfuypg3EiDd@MiWiFi-R3L-srv>
+References: <20230301034247.136007-1-bhe@redhat.com>
+ <20230301034247.136007-2-bhe@redhat.com>
+ <7bd6db48-ffb1-7eb1-decf-afa8be032970@gmail.com>
+ <Y/7eceqZ+89iPm1C@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uloatnw5mqumdhea"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHh=Yk_hFOjwY1mbmYk8yqH_AKDs1_3J+5pYQStseNsZukPSoA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y/7eceqZ+89iPm1C@casper.infradead.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/01/23 at 05:11am, Matthew Wilcox wrote:
+> On Wed, Mar 01, 2023 at 04:38:10AM +0000, Edward Cree wrote:
+> > On 01/03/2023 03:42, Baoquan He wrote:
+> > > diff --git a/drivers/net/ethernet/sfc/io.h b/drivers/net/ethernet/sfc/io.h
+> > > index 30439cc83a89..07f99ad14bf3 100644
+> > > --- a/drivers/net/ethernet/sfc/io.h
+> > > +++ b/drivers/net/ethernet/sfc/io.h
+> > > @@ -70,7 +70,7 @@
+> > >   */
+> > >  #ifdef CONFIG_X86_64
+> > >  /* PIO is a win only if write-combining is possible */
+> > > -#ifdef ARCH_HAS_IOREMAP_WC
+> > > +#ifdef ioremap_wc
+> > >  #define EFX_USE_PIO 1
+> > >  #endif
+> > >  #endif
+> > 
+> > So I don't know how valid what we're doing here is...
+> 
+> Well, x86 defines ARCH_HAS_IOREMAP_WC unconditionally, so it doesn't
+> affect you ... but you raise a good question about how a driver can
+> determine if it's actually getting WC memory.
 
---uloatnw5mqumdhea
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, this change doesn't affect sfc. Because ARCH_HAS_IOREMAP_WC is used to
+make ioremap_wc defined in <asm/io.h> override the default one in
+<asm-generic/iomap.h>, this patch has made code have the same effect.
 
-Hello Nylon,
+Besides, I have a question still in my mind. Surely this is unrelated to
+this patch.
 
-On Wed, Feb 01, 2023 at 04:56:42PM +0800, Nylon Chen wrote:
-> Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> =E6=96=BC 2023=E5=
-=B9=B41=E6=9C=8830=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=886:17=E5=AF=
-=AB=E9=81=93=EF=BC=9A
-> > On Mon, Jan 30, 2023 at 05:32:29PM +0800, Nylon Chen wrote:
-> > > The `frac` variable represents the pulse inactive time, and the resul=
-t of
-> > > this algorithm is the pulse active time. Therefore, we must reverse t=
-he
-> > > result.
-> > >
-> > > The reference is SiFive FU740-C000 Manual[0].
-> > >
-> > > [0]: https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-86e=
-d8b16acba_fu740-c000-manual-v1p6.pdf
-> > >
-> > > Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
-> > > ---
-> > >  drivers/pwm/pwm-sifive.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> > > index 62b6acc6373d..a5eda165d071 100644
-> > > --- a/drivers/pwm/pwm-sifive.c
-> > > +++ b/drivers/pwm/pwm-sifive.c
-> > > @@ -158,6 +158,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip=
-, struct pwm_device *pwm,
-> > >       frac =3D DIV64_U64_ROUND_CLOSEST(num, state->period);
-> > >       /* The hardware cannot generate a 100% duty cycle */
-> > >       frac =3D min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
-> > > +     frac =3D (1U << PWM_SIFIVE_CMPWIDTH) - 1 - frac;
-> >
-> > The same problem exists in pwm_sifive_get_state(), doesn't it?
-> >
-> > As fixing this is an interruptive change anyhow, this is the opportunity
-> > to align the driver to the rules tested by PWM_DEBUG.
-> >
-> > The problems I see in the driver (only checked quickly, so I might be
-> > wrong):
-> >
-> >  - state->period !=3D ddata->approx_period isn't necessarily a problem.=
- If
-> >    state->period > ddata->real_period that's fine and the driver should
-> >    continue
-> >
-> >  - frac =3D DIV64_U64_ROUND_CLOSEST(num, state->period);
-> >    is wrong for two reasons:
-> >    it should round down and use the real period.
-> >
-> I need a little time to clarify your assumptions. If possible, I will
-> make similar changes.
->=20
-> e.g.
-> rounddown(num, state->period);
-> if (state->period < ddata->approx_period)
->     ...
+In commit 38d9029a652c (parisc: Define ioremap_uc and ioremap_wc),
+ioremap_wc definition was added in arch/parisc/include/asm/io.h, and it
+didn't add ARCH_HAS_IOREMAP_WC definition. However, it won't cause
+redefinition of ioremap_wc, even though there's "#include <asm-generic/iomap.h>"
+at below. I could be dizzy on these io.h and iomap.h.
 
-the idea is that for a given request apply should do the following to
-select the hardware setting:
+When I added ioremap_wt and ioremap_np to debug, ioremap_np will
+cause redefinition, while ioremap_wt woundn't. Does anyone know what
+I am missing?
 
- - Check polarity, if the hardware doesn't support it, return -EINVAL.
-   (A period always starts with the active phase for the duration of
-   duty_cycle. For normal polarity active =3D high.)
- - Pick the biggest period length possible that is not bigger than the
-   requested period.
- - For the picked period, select the biggest duty_cycle possible that is
-   not bigger than the requested duty_cycle.
+diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
+index c05e781be2f5..20d566eec3b3 100644
+--- a/arch/parisc/include/asm/io.h
++++ b/arch/parisc/include/asm/io.h
+@@ -127,6 +127,8 @@ static inline void gsc_writeq(unsigned long long val, unsigned long addr)
+  */
+ void __iomem *ioremap(unsigned long offset, unsigned long size);
+ #define ioremap_wc                     ioremap
++#define ioremap_wt                     ioremap
++#define ioremap_np                     ioremap
+ #define ioremap_uc                     ioremap
+ #define pci_iounmap                    pci_iounmap
 
-Then if possible switch to the selected setting in an atomic step.
-
-Does this clearify your doubts?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---uloatnw5mqumdhea
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmP/GO8ACgkQwfwUeK3K
-7AmiBQf/QkDz4UZYVBJc3n2y9z64RYU6Ri68Em2lO8oxTfUYy7I/4IePztOJf0un
-riimd6Yxxwu7+b+wmtMyaMmHyzIZP+ecScJejXrSedMLGdC+SIvdGtNVEVUa/Lue
-41IHyN6Bv0SgKb7CSNGzo8luaU1n3R2v9pujlMCPW7kaS03SOfEf3TN5ior4DEdt
-9fl5PaVY1OY0M3Y+wkK3QLaD8u4GUkppSknT6tuQ0OP8r8rZil0p173UYRgpQ1rh
-EJt0oVvaSIDRC9oSL4qFqIf8k5sIjvP8rc0c6bfunPNW6saV2DK05Dg7F3A9/NrO
-uyu2CPKCuZ0h82DWo5SHFN3TKgF0QA==
-=5dcD
------END PGP SIGNATURE-----
-
---uloatnw5mqumdhea--
