@@ -2,189 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FAB6A71C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D796A71C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjCARDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:03:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S229997AbjCARCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjCARDh (ORCPT
+        with ESMTP id S230002AbjCARCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:03:37 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D2CD51A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 09:03:02 -0800 (PST)
-Received: from [192.168.1.141] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MIxBc-1pD96F2Q3u-00KQAi; Wed, 01 Mar 2023 17:57:41 +0100
-Message-ID: <465a444d-3edb-e6ae-3505-59be9f7509c2@i2se.com>
-Date:   Wed, 1 Mar 2023 17:57:41 +0100
+        Wed, 1 Mar 2023 12:02:45 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2041.outbound.protection.outlook.com [40.107.8.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B168C497ED;
+        Wed,  1 Mar 2023 09:02:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I3fVsPezEqXoNYFsG9yjEiUeF1rOqqPWtH4T3sWmR4uvdJuWLtPWlC983SL7MavK4df2n7r2y8A/J2yr9vv2/rHBCjTo/7qvJeoq6j6EO0xkl/XBG5xXQIDGUpXBJxWEEGrEj1h/nt9pcqDaCz3W2IZ7WeNHYc/upYH0VSQo5pid8U9L/iRNT4Usb/8dGOBLP/PC0OG41yjELdYaLQGB3u8eTSav/fvF6LpNiuaU+wJGlhZVy3td01qfQEF5vSH3p7IejeTlmMhulkKPW+YPBoDJUMACN4nxIqLIAUCNLjqzXhwHek08YnT+6R+KEaIcc+m6XEq1KR+vU4/LqDdz1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yplmJNAmyPBCc3MOdaK8D9T/eu87oU3GzxsBtPy7iSE=;
+ b=ls8du0lxli1P3/0l4SWdmhERJ8SyShESmZlxoR/mln/xuBEYg5wQHyvywoWGJD75EiZQVhUn8ZV4TG2QaRPw1FnxINsnn97a2xAMgrHvlYRljFwGhxNtw+Bgf6ACeHhKQ+F7h/o2A/qDwQfgdJQNe4pn2drZSDBiaYxf2N5HFHT1vxGFYKRe7dGR8RQ/dTj6NCxk9OTGQEBavcVAAyF6mmA9qpqkg0FsGXeBdoUVPlkf0OWK6/S8e7Kj1wbj5eS7oyoCPTUdf9YNLFWIjbdSLF8S0pQhi8VHJDDONYYhQZUy5WzC5Gy9Ris1X5VmzeMau2c42K5HBpWejU89t4ir3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.76) smtp.rcpttodomain=ucw.cz smtp.mailfrom=siemens.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=siemens.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yplmJNAmyPBCc3MOdaK8D9T/eu87oU3GzxsBtPy7iSE=;
+ b=sfkQGmwl9OXVKgzdB4tFO2aSvcTT9o/9nO4H1G1lpe1bme8txE4Ugi1dQcIQA3UZpK1GyHzHp7EOON3AeL5HHhHxBuE0AmOcwAePbOqqjUQ8yxDQimipWAlYckdrVV57OmmYQExTOldMB+8u1DJ3QpLLvgC4HVYLwM2awSFQ10FGvKsMl2r9SHyCB+DpCgeYo1li5wq2MwA+VqbpxPZVlGDAf/m6U0Opm4LwixXKJiffWgqadxVqx0QJl6nCYN3+JOZGRqIPJ0ViRE4bdskHvvHAOjW45aJGb/rqmS2HH0laGxWGBvRnmcqK8t9aPvY8V1BOseXwiZD2bq4PWTMopg==
+Received: from DU2PR04CA0215.eurprd04.prod.outlook.com (2603:10a6:10:2b1::10)
+ by VI1PR10MB8133.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:1dc::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
+ 2023 17:02:39 +0000
+Received: from DB5EUR01FT102.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:2b1:cafe::5) by DU2PR04CA0215.outlook.office365.com
+ (2603:10a6:10:2b1::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17 via Frontend
+ Transport; Wed, 1 Mar 2023 17:02:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.76)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.76; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.76) by
+ DB5EUR01FT102.mail.protection.outlook.com (10.152.5.35) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.18 via Frontend Transport; Wed, 1 Mar 2023 17:02:38 +0000
+Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
+ DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 1 Mar 2023 18:02:37 +0100
+Received: from md1za8fc.ad001.siemens.net (139.25.0.120) by
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.21; Wed, 1 Mar 2023 18:02:37 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>
+CC:     Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v2 3/3] leds: simatic-ipc-leds-gpio: introduce more Kconfig switches
+Date:   Wed, 1 Mar 2023 18:02:15 +0100
+Message-ID: <20230301170215.23382-4-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230301170215.23382-1-henning.schild@siemens.com>
+References: <20230301170215.23382-1-henning.schild@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: Raspberry Pi 4B: Failed to create device link with
- soc:firmware:gpio
-To:     Saravana Kannan <saravanak@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
-References: <03b70a8a-0591-f28b-a567-9d2f736f17e5@gmail.com>
- <CAGETcx-KLfxKae6-Kc74gOu2fiuu+5528j_TNEaY21U3_yZO0w@mail.gmail.com>
- <0fa79232-18f7-af96-e116-a71b735a903d@gmail.com>
- <f13906c0-1a0c-dfa4-dcd3-96ebc82aabd8@gmail.com>
- <CAGETcx-0EKYBL_fQbZSUra3LrzOnV4LABUBZ_jEBmW3sdUzZPA@mail.gmail.com>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <CAGETcx-0EKYBL_fQbZSUra3LrzOnV4LABUBZ_jEBmW3sdUzZPA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Vd0EzWCQNxqo25v208XHwB05xxZ6IG314u1g5D8ZXjrLeXlLok1
- wrBwqz2RzL+EmY7HR7YImwqWu6vjJ600ZnGOBuoJz3j3TEeyMmUtziKYsP6lAfZuXERn1Tx
- l+Cvm39vs7BNId/wgymcL2nkjz1vttM+4Fm9RquI/Nrw/4N7xn35meCXnitXLNd+AcDQHPR
- fxMa1K+DX4Tyu85Ue5zIA==
-UI-OutboundReport: notjunk:1;M01:P0:kqDBFLOdns0=;u8UJiky++p58CItqq2VK+y7mXkA
- cU1tGSXWCdNBklAAq7NsTqBhiMqYaLYPZpMMrqttjMdmyTIlMX4lStbraPFG347nAE3Ji9CfS
- tWq/5HRlniridYsquydzdSdwBTMLvPc3ghtavCBUpyp6ePac0xWwlAi6WlmOMR4F2zvofImEX
- VbftM1OYVMTTuJHskgB9VuMw1jw+FvSALDwsCHdoca+2NZH9Fbo3/zHyWo0Tl4l9jkp9/Nv6O
- TS3Uw3sPiQ6NHn70Srbe36SsLfStwBW7fD4oczijmmLam256gOBfsqEh2bTBNjYk3/H90fasw
- M197ZV2Hcu6KUatQe5iZhpw3xd0m2OGDyxIi8DKPJwqFfOPeO6PhnYDdoRMCtzHvBI5bx20iN
- 2IrT8wfQEQr5W4n6q/l0l8NT5JLS2XpN9si1c/YtdeHl2Yb+cgXFIFqLcugqtv4VLBheJGmZz
- CDQeO48Mbc9p7smDeEe0yZuI9vT/4OOG+oFNdB+eBw3rsmGfu+WMhz7BUPoNX6wgyhSasX9mU
- YRY7quRFTvYq0OHms/wWJhRqXpiQT09oCZ5LpmqzJ0G1pQHQJ54hTfdImmZUe8d19Vr3iBr1T
- T6jZxn64cC9tyWf9uUsdgqaJv9dy6F/D8HMepxF5PUsZMl81ZlUDye1yKHcXLhnxWkv6ciMUR
- jBuFxZysoI9t5zN6X5Rfvpbum5VGDwFnUNrk8gv0lA==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [139.25.0.120]
+X-ClientProxiedBy: DEMCHDC8WBA.ad011.siemens.net (139.25.226.105) To
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5EUR01FT102:EE_|VI1PR10MB8133:EE_
+X-MS-Office365-Filtering-Correlation-Id: a744ae1d-a67b-4e66-c7d8-08db1a76c307
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wZU2ePE3aF0wAa4QAfTGJxmx4xXIO4Y7tmoegiaT+okc6sFJXn5x9W+jguTg6jjJEzy/wBXFV2IS4QEvPcrw3PT1pGPPFusI79EhtcPa9SMKoWiRCGoh0bLBdbiCcE5VGRu2JnqXoNfyfz0kppT0DfJd4SGUe/p23pbot7iFsk6RYxvFwBWkuMQNehSwrJYtQJr2SfpwVswMb/NgycIG1rGmNo6NzReUL0Dc3Hs9R6fcAZPnq5+41NMNZ7kz9/CXjAK4/2lpejPB/80ERXLsEw7G342hHI/52CE38mYndwlj6QNQCX3FrGDSD7mu7cmfVP1VBIHYEK5WWEUKphKzOtlMle+IhSUTU7NdA6ZtJf8JBWrBAM9nXzHoiyH6r/Qd7Fkxm6mJxuzMezeRpSMPnVZUBuoz0rzV2+4rY0tVvFoUPPbOOdm17QgJRKDGi+cqk4YHG+4ZRpHjXn8nXX3b6H/PM149nIyIljW3j18D2bheEQE85AD7/vrV3KCc0h/fBfsuGQ8hmMAfAF7yr/rgtlSNYumeez/7W8HzpF4OAH0s8XpyW68HxoukcprLHylawxYHwp8XAzEXf/3CgmBAe/ZxHcue4Eqp47cdSr+sq2drb5jdVF0NYeJKN/L1BXEybyo0GKJ6HiAmuC4pbQCf+dw/IK74wz28/Jmi0fAv1ko8+QB2X+M4pHAsbiaCGlYe5mKXD0HvXz8BoZTzz2w15t5wsXN749UVAfaJbJRa4Y4=
+X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199018)(40470700004)(36840700001)(46966006)(86362001)(8936002)(5660300002)(4326008)(44832011)(36756003)(40480700001)(41300700001)(36860700001)(2906002)(82960400001)(81166007)(356005)(8676002)(82740400003)(107886003)(316002)(478600001)(6666004)(70586007)(47076005)(82310400005)(40460700003)(70206006)(83380400001)(110136005)(1076003)(2616005)(336012)(16526019)(186003)(26005)(956004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:02:38.2806
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a744ae1d-a67b-4e66-c7d8-08db1a76c307
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT102.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB8133
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+To describe the dependency chain better and allow for potential
+fine-grained config tuning, introduce Kconfig switch for the individual
+GPIO based drivers.
 
-Am 01.03.23 um 08:49 schrieb Saravana Kannan:
-> On Sun, Feb 26, 2023 at 11:14 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->>
->> On 2/25/2023 5:58 PM, Florian Fainelli wrote:
->>>
->>> On 2/25/2023 4:01 PM, Saravana Kannan wrote:
->>>> On Sat, Feb 25, 2023 at 7:38 AM Florian Fainelli
->>>> <f.fainelli@gmail.com> wrote:
->>>>> Hi Saravana,
->>>>>
->>>>> Using v6.2-10217-ga93e884edf61v my Raspberry Pi 4B issues the following
->>>>> for the "extended GPIO" provider:
->>>>>
->>>>> [    5.969855] uart-pl011 fe201000.serial: Failed to create device link
->>>>> with soc:firmware:gpio
->>>> Outside of this error, is it actually breaking anything?
->>> There is just this warning, there does not appear to be a functional issue.
->>>
->>>> Also, can you
->>>> pull in this patch and tell me what it says? I want to know what the
->>>> flags are.
->>>> https://lore.kernel.org/lkml/20230225064148.274376-1-saravanak@google.com/
->> Pulling in this patch results in the following being printed:
->>
->> [   14.866835] uart-pl011 fe201000.serial: Failed to create device link
->> (0x180) with soc:firmware:gpio
-> I spent at least 2 hours looking at the logs and the DT files and I'm
-> still kinda lost.
->
-> The 0x180 means it's a DL_FLAG_INFERRED | DL_FLAG_SYNC_STATE_ONLY.
-> That's just fw_devlink trying to create a "proxy" link where an
-> ancestor of a consumer (can be several levels above consumer) creates
-> a SYNC_STATE_ONLY link to the supplier while we wait for the consumer
-> device to get added. This prevents sync_state() from being called too
-> early on the supplier.
->
-> There are so many includes in the dts/dtsi files that my head is
-> spinning. I finally found out where the soc:firmware:gpio device was
-> coming from (after confusing myself with gpio@7e200000 for a bit) and
-> where fe201000.serial was coming from. I still couldn't figure out how
-> the address got mapped to fe201000 in fe201000.serial -- that
-> generally means the parent has some address offset, but I don't see
-> that in DT (but it is not important for this discussion, so we can
-> ignore that).
-This is uart0 which is at first defined in bcm283x.dtsi. On the 
-Raspberry Pi 4 this UART is connected to the Bluetooth IC. On Linux 
-probing of the serial communication via DT is done via serial device bus 
-(see bcm283x-rpi-wifi-bt.dtsi).
-> Anyway, I see no supplier-consumer link between serial@7e201000 (or
-> any of its zero descendants) and soc:firmware:gpio (which is the node
-> expgpio:). So I'm very confused why we might even try to create this
-> sync state only device link between these two.
->
-> There are actually two times where we try to create such a link:
->
-> First attempt that actually succeeds -- but I have no idea why we even do this:
-> [    0.100047] device:
-> 'platform:soc:firmware:gpio--amba:fe201000.serial': device_add
-> [    0.100232] amba fe201000.serial: Linked as a sync state only
-> consumer to soc:firmware:gpio
+Signed-off-by: Henning Schild <henning.schild@siemens.com>
+---
+ drivers/leds/simple/Kconfig  | 31 ++++++++++++++++++++++++++++---
+ drivers/leds/simple/Makefile |  7 +++----
+ 2 files changed, 31 insertions(+), 7 deletions(-)
 
-I assume the link is established by raspberry,firmware-gpio which 
-provides the necessary BT shutdown-gpios defined in bcm2711-rpi-4-b.dts. 
-Seems to me that the problem is, that necessary underlying firmware 
-driver is probed "too late":
+diff --git a/drivers/leds/simple/Kconfig b/drivers/leds/simple/Kconfig
+index fd2b8225d926..44fa0f93cb3b 100644
+--- a/drivers/leds/simple/Kconfig
++++ b/drivers/leds/simple/Kconfig
+@@ -1,11 +1,36 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config LEDS_SIEMENS_SIMATIC_IPC
+ 	tristate "LED driver for Siemens Simatic IPCs"
+-	depends on LEDS_GPIO
+ 	depends on SIEMENS_SIMATIC_IPC
+ 	help
+ 	  This option enables support for the LEDs of several Industrial PCs
+ 	  from Siemens.
+ 
+-	  To compile this driver as a module, choose M here: the modules
+-	  will be called simatic-ipc-leds and simatic-ipc-leds-gpio.
++	  To compile this driver as a module, choose M here: the module
++	  will be called simatic-ipc-leds.
++
++config LEDS_SIEMENS_SIMATIC_IPC_APOLLOLAKE
++	tristate "LED driver for Siemens Simatic IPCs based on Intel Apollo Lake GPIO"
++	depends on LEDS_GPIO
++	depends on PINCTRL_BROXTON
++	depends on SIEMENS_SIMATIC_IPC
++	default LEDS_SIEMENS_SIMATIC_IPC
++	help
++	  This option enables support for the LEDs of several Industrial PCs
++	  from Siemens based on Apollo Lake GPIO i.e. IPC127E.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called simatic-ipc-leds-gpio-apollolake.
++
++config LEDS_SIEMENS_SIMATIC_IPC_F7188X
++	tristate "LED driver for Siemens Simatic IPCs based on Nuvoton GPIO"
++	depends on LEDS_GPIO
++	depends on GPIO_F7188X
++	depends on SIEMENS_SIMATIC_IPC
++	default LEDS_SIEMENS_SIMATIC_IPC
++	help
++	  This option enables support for the LEDs of several Industrial PCs
++	  from Siemens based on Nuvoton GPIO i.e. IPC227G.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called simatic-ipc-leds-gpio-f7188x.
+diff --git a/drivers/leds/simple/Makefile b/drivers/leds/simple/Makefile
+index ed9057f7b6da..e3e840cea275 100644
+--- a/drivers/leds/simple/Makefile
++++ b/drivers/leds/simple/Makefile
+@@ -1,5 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+= simatic-ipc-leds.o
+-obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)  += simatic-ipc-leds-gpio-core.o
+-obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+= simatic-ipc-leds-gpio-apollolake.o
+-obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+= simatic-ipc-leds-gpio-f7188x.o
++obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)			+= simatic-ipc-leds.o
++obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_APOLLOLAKE)	+= simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-apollolake.o
++obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_F7188X)		+= simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-f7188x.o
+-- 
+2.39.2
 
-[ 15.456506] raspberrypi-firmware soc:firmware: Attached to firmware 
-from 2020-02-12T12:36:21
-
-Hope this helps a little bit
-
-> the "amba" prefix tells us a driver hasn't been bound to fe201000.serial yet.
->
-> Second attempt is the one that fails.
-> [   15.516166] uart-pl011 fe201000.serial: Failed to create device
-> link (0x180) with soc:firmware:gpio
-> The uart-pl011 tells us that the driver has bound to fe201000.serial.
->
-> And it fails because of this sensible check I had put up a while ago
-> inside device_link_add():
->          /*
->           * SYNC_STATE_ONLY links are useless once a consumer device
-> has probed.
->           * So, only create it if the consumer hasn't probed yet.
->           */
->          if (flags & DL_FLAG_SYNC_STATE_ONLY &&
->              consumer->links.status != DL_DEV_NO_DRIVER &&
->              consumer->links.status != DL_DEV_PROBING) {
->                  link = NULL;
->                  goto out;
->          }
->
-> So the real question is still to figure out why fw_devlink is trying
-> to create this device link.
->
-> So to debug this further the following would help a lot:
-> 1. Pull the dtb from the device and then decompile it and provide me
-> the result. This way, I can be sure I'm not missing something and
-> don't have to dig through all the includes -- I forgot the exact
-> commands for it, but it's been shared in LKML before. Let me know if
-> you need me to dig this up.
->
-> 2. I think a stack backtrace when these two device link attempts are
-> made might help me figure out why they are being created. To get these
-> backtraces, can you do the following please?
-> a. Put a WARN_ON() inside device_add() for when the device name matches:
-> platform:soc:firmware:gpio--amba:fe201000.serial
-> b. Put a WARN_ON(1) where we print "Failed to create device link..."
->
-> Feel free to dig more into 2a and 2b if you find that the stack trace
-> doesn't tell much -- one problem with the stack trace is that it
-> doesn't show the params being passed to
-> __fw_devlink_link_to_consumers() and __fw_devlink_link_to_suppliers()
->
-> Thanks,
-> Saravana
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
