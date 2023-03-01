@@ -2,100 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4726C6A64B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3A56A64BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjCABWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 20:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S229723AbjCABXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 20:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjCABWi (ORCPT
+        with ESMTP id S229708AbjCABW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 20:22:38 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB23534015;
-        Tue, 28 Feb 2023 17:22:08 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id h6-20020a9d7986000000b0068bd8c1e836so6719531otm.3;
-        Tue, 28 Feb 2023 17:22:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677633728;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ut1wOGTxZO1SVGZaQtP1Hekk5rmZBOrU7xQMiC2fKDs=;
-        b=W4wRXOLhsnVooDYCrmojCs6Pe5EL4K+vZIYoy/HLdfU/5GEcS/f3t+FnLUSz5CUZbd
-         WMVzgpgWwIalHDEHbIixOUUiPEzwkOAcvR7DzsoXP+yivjHIK80NSNu38us66AtKAjqZ
-         +58JcS/A4uezef9N3GemiNSFu48/IAnye8LNQd8+O3GeW9QIb6Mq7XWiRE3Mh5oNVgJF
-         9DYd74QIBmDFsa9dGm3Q273vcj+ZriuUIS5YwRiyGP5nzUx8aEoPFacEPbjBgxlmgz7r
-         OY97ZLQAGwH8u42SjktGKmlUfAhXX53mZFtsh//SkEKBENPaRa1QjyuOKUBl555vLkDQ
-         XOFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677633728;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ut1wOGTxZO1SVGZaQtP1Hekk5rmZBOrU7xQMiC2fKDs=;
-        b=VUFHSpjdDufK9CbsBPdhRWDGE5nVIjAB/QUSA7Teh/JI2GBM3sougzbEz1Cz9UtIHM
-         yiNIdmGZvrWSsHO2M1UBa1/24QnWueBzPAnv24Ca9KU/HNASFFgBxI/ckUbaJSJIjJYG
-         1fd8t7GRATKrCDsNboFJKEHuNlOiBLPWcN4PLSapR82w+F7KlQNMthuXO3oj9U3/vq5C
-         yanMvrGrjZBwMlN8ArWlvxkxX1npHRqrYm7BARYAE8xhp6ocxB3vAoDG6Ji63LDBCM+s
-         9X81sR6qEBMeP6fhmvVCljsnZWqzMBOanDGmoxk824+T+o8Xd0777I50qesm2iyhXsGV
-         f/+w==
-X-Gm-Message-State: AO0yUKU+TVIuQKv5cAN/Dk/A009IVS+CTTz5GGzumvAInDoiEzv9aDGS
-        igXJX9cb/VUymsnLcGOBQCM=
-X-Google-Smtp-Source: AK7set9l7pqGid3dlHIOJ92ewrX2ZoDZzzoy37WHpw1fTL9zt4ey8pg9dXGE0TW61TC8ao4Okx+RSA==
-X-Received: by 2002:a9d:729c:0:b0:693:cf97:c103 with SMTP id t28-20020a9d729c000000b00693cf97c103mr2244762otj.37.1677633727863;
+        Tue, 28 Feb 2023 20:22:57 -0500
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342BF34007
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:22:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1677633753; x=1709169753;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DByreY2GJXdAGvq71tt9Fo41tXYu1N83vt1UZRvOcNg=;
+  b=qr4bXhrybpzW53liFuCNx1/52j3qTI8AlyMYCB/rDGxt4AksQnNqvcua
+   82Cj/lSZXhr/Bpl1cAxymQdTFGxhWkewFuB9dk/+REHDPEglYmpxw6ekw
+   wCEfieuNdbdaSWWkyvq9Q0rmUXqrlIix8uKiBgeItpwGwVQ/CDsqzl/04
+   zke3yliQ4qaFaT9HlEMT8F3xUpbro3d3OAZ6uMGuOLOSw060KBhHqJ96V
+   xMRJE5IdgzJtSoCOYV+7ZX0tN+LMh6c1xft5uWSCdsBF4UKWS0ElSIK9w
+   jtXGUVEwuSxxFNwTFsVLSmr23TWLRqyHyj1QGrVkVsfoxLa1u56oicHKb
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,223,1673884800"; 
+   d="scan'208";a="224259750"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 01 Mar 2023 09:22:13 +0800
+IronPort-SDR: l8S+3OuI+epSNcWP3vqS/MaNp29MvAJfe0mqMb139NVPIbR0RaktCk1SAXsc2vj0ZWjpObLwlH
+ G1Oucszbcb6A6NwMoMrz0PHxSPOzZxXVIZtZrdzlcaEOLUvLejR08sghiDkK4qucTtiqPRX24E
+ PJCieokADgMyFJaD86MUDJ0TgV2NWQ8YiDO3OQ32G4fG4+YSXym7rac8ntlX8r9RnR4UqHSd90
+ XEHV8hKF56rfjKm9tFT+N4S4gf1NC7OEmiV6BqUOXwjei00jfiqSNn4ReZQ7oE6/br+DnihqiH
+ RdQ=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2023 16:39:00 -0800
+IronPort-SDR: 82MBcRzwoeN60BBFOX8ZFZr+dQwAf6PIXX+aER+hK5k2a/SXsSLKcE96PFkqkcq/jWvjm2YEsV
+ OWkHz1UI+O9fw1tYMt6DLJDoyCB51m97bqiFz9sXmrF9Tm8a+hRJUQf0Kdz/0m1ZlHviLihLLD
+ uEnQ1DztAikC8wMZrydqTCsFXYQPzJTkl0C9Q4oABY7YBkvhJnuYKV64dJ7Xs1MtScDHUbmSQm
+ 3wQVNkTeTH5iS9CGXPhLbG+MyniXZbeQNciPS30ZL9ZsfkbtfGF09E/1E5YtO3M0rr+vBGO/ui
+ Jsg=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2023 17:22:09 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PRGg573ZTz1RwvL
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:22:09 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1677633729; x=1680225730; bh=DByreY2GJXdAGvq71tt9Fo41tXYu1N83vt1
+        UZRvOcNg=; b=aRZcjnIWzTDBFw+lwAK0yQ8I8bxlc+Ac1zRjAR1GywFhY4yN1yH
+        aI+zVMJ6Q0eG41nPwWDXNKq/hOWxeI01P52EdQGYIOYzXOkufeBRfJIy6NRF23nX
+        Mv/CsRYiuYhXA9RxOcnGN3cKK70ZZzHyVwwLeiPp4Q25wXt4ULnXNHNK/fyeKyA1
+        72yG9x6b5NEawCA8VtwAC4s21lnwzYOOwwPhvyEQomn5yv9NJmNTstMZIMVrGBKM
+        4gtrS+dFAyEVUXJQ5eCYv8E5ukl9iy2YrxwHKqzpEipCj7vPGQzjx2LdG3rpZiBz
+        7ie+6OMDK/aILh8Jql2vRDyQiwps+YPQ7Zw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 80z6N2jLhkcW for <linux-kernel@vger.kernel.org>;
+        Tue, 28 Feb 2023 17:22:09 -0800 (PST)
+Received: from [10.225.163.47] (unknown [10.225.163.47])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PRGg32nyRz1RvLy;
         Tue, 28 Feb 2023 17:22:07 -0800 (PST)
-Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:20c1:2bed:d8f3:84d8])
-        by smtp.gmail.com with ESMTPSA id v2-20020a056830140200b006864b5f4650sm4436362otp.46.2023.02.28.17.22.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 17:22:07 -0800 (PST)
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 2/2] of: unittest: add of_unittest_stackdump to kernel documentation
-Date:   Tue, 28 Feb 2023 19:21:16 -0600
-Message-Id: <20230301012116.1488132-3-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230301012116.1488132-1-frowand.list@gmail.com>
-References: <20230301012116.1488132-1-frowand.list@gmail.com>
+Message-ID: <efe45f04-3a7a-3e94-ef79-4dcdd6029f44@opensource.wdc.com>
+Date:   Wed, 1 Mar 2023 10:22:06 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/3] riscv: Kconfig: Allow RV32 to build with no MMU
+Content-Language: en-US
+To:     Jesse Taube <mr.bossman075@gmail.com>,
+        linux-riscv@lists.infradead.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yimin Gu <ustcymgu@gmail.com>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Waldemar Brodkorb <wbx@openadk.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
+ <20230301002657.352637-3-Mr.Bossman075@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230301002657.352637-3-Mr.Bossman075@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new option of_unittest_stackdump to the documentation admin guide.
+On 3/1/23 09:26, Jesse Taube wrote:
+> From: Yimin Gu <ustcymgu@gmail.com>
+> 
+> Some RISC-V 32bit cores do not have an MMU, and the kernel should be
+> able to build for them. This patch enables the RV32 to be built with
+> no MMU support.
+> 
+> Signed-off-by: Yimin Gu <ustcymgu@gmail.com>
+> CC: Jesse Taube <Mr.Bossman075@gmail.com>
+> Tested-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 
-Signed-off-by: Frank Rowand <frowand.list@gmail.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 4 ++++
- 1 file changed, 4 insertions(+)
+Looks OK.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6221a1d057dd..98c3fc7f4f72 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3911,6 +3911,10 @@
- 			This can be set from sysctl after boot.
- 			See Documentation/admin-guide/sysctl/vm.rst for details.
- 
-+	of_unittest_stackdump	[OF]
-+			Do not skip OF unittests that trigger a kernel stack dump.
-+			Default: skip the tests that trigger a kernel stack dump
-+
- 	ohci1394_dma=early	[HW] enable debugging via the ohci1394 driver.
- 			See Documentation/core-api/debugging-via-ohci1394.rst for more
- 			info.
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
 -- 
-Frank Rowand <frowand.list@gmail.com>
+Damien Le Moal
+Western Digital Research
 
