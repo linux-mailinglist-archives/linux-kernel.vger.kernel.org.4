@@ -2,343 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287276A6795
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 07:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2FA6A6796
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 07:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjCAGSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 01:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
+        id S229746AbjCAGT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 01:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjCAGSQ (ORCPT
+        with ESMTP id S229548AbjCAGTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 01:18:16 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107FA7298;
-        Tue, 28 Feb 2023 22:18:12 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4BBBB24E3CE;
-        Wed,  1 Mar 2023 14:18:04 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Mar
- 2023 14:18:04 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Mar
- 2023 14:18:03 +0800
-Message-ID: <ae074538-c07d-ef12-0d8e-1679589c907e@starfivetech.com>
-Date:   Wed, 1 Mar 2023 14:18:02 +0800
+        Wed, 1 Mar 2023 01:19:55 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB64B83ED
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 22:19:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677651593; x=1709187593;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=f1EvyqOI7iFrXy5SrYy2Qs5gMHTyapwHJlT7PO8ZAYY=;
+  b=kQagKBOF9hI33/l7Vzv2qyADqYDIlvIINo018a/5D2wW7TjLaLzu45pg
+   D/01BmcF/nt4cP1VErvXJ0Kwm9La0y8PbIKFfKOU7nIkFcDnf+SvoW4mC
+   OfqjSsgoxsYUI09e6ToTO8sdG5JHl/rGAhQVRCkH8tuZUqJv8wnuu/kZ+
+   n7SIK0jFPos5ZrY0aJk6jxXt0U/h/2h00mvlk5Fb/YyDdKSXfeqFP9S5c
+   Fq5+himA4Rcv82I7kEYYo+E1zRsm/nnhDRZkEMgAeg4WUJbziNqvGVpxW
+   LheJSo0us4KVpWpLoev9SIgtjkh45XG5FMGfxTC+fwpoj2Vr30nH2Q0ic
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="314001789"
+X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
+   d="scan'208";a="314001789"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 22:19:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="676632503"
+X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
+   d="scan'208";a="676632503"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 22:19:47 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Hugh Dickins <hughd@google.com>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>,
+        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [PATCH 3/3] migrate_pages: try migrate in batch asynchronously
+ firstly
+References: <20230224141145.96814-1-ying.huang@intel.com>
+        <20230224141145.96814-4-ying.huang@intel.com>
+        <a0c24dfe-3a07-fe9e-7edf-b51877d96c32@linux.alibaba.com>
+Date:   Wed, 01 Mar 2023 14:18:51 +0800
+In-Reply-To: <a0c24dfe-3a07-fe9e-7edf-b51877d96c32@linux.alibaba.com> (Baolin
+        Wang's message of "Wed, 1 Mar 2023 11:08:26 +0800")
+Message-ID: <87zg8x9epg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/2] pwm: starfive: Add PWM driver support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Hal Feng <hal.feng@starfivetech.com>
-References: <20230228091345.70515-1-william.qiu@starfivetech.com>
- <20230228091345.70515-3-william.qiu@starfivetech.com>
- <60496973-5382-14de-6c2d-c60b3556defb@linaro.org>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <60496973-5382-14de-6c2d-c60b3556defb@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-
-On 2023/2/28 22:34, Krzysztof Kozlowski wrote:
-> On 28/02/2023 10:13, William Qiu wrote:
->> Add Pulse Width Modulation driver support for StarFive
->> JH7110 soc.
->> 
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> On 2/24/2023 10:11 PM, Huang Ying wrote:
+>> When we have locked more than one folios, we cannot wait the lock or
+>> bit (e.g., page lock, buffer head lock, writeback bit) synchronously.
+>> Otherwise deadlock may be triggered.  This make it hard to batch the
+>> synchronous migration directly.
+>> This patch re-enables batching synchronous migration via trying to
+>> migrate in batch asynchronously firstly.  And any folios that are
+>> failed to be migrated asynchronously will be migrated synchronously
+>> one by one.
+>> Test shows that this can restore the TLB flushing batching
+>> performance
+>> for synchronous migration effectively.
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Cc: Hugh Dickins <hughd@google.com>
+>> Cc: "Xu, Pengfei" <pengfei.xu@intel.com>
+>> Cc: Christoph Hellwig <hch@lst.de>
+>> Cc: Stefan Roesch <shr@devkernel.io>
+>> Cc: Tejun Heo <tj@kernel.org>
+>> Cc: Xin Hao <xhao@linux.alibaba.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: Mike Kravetz <mike.kravetz@oracle.com>
 >> ---
->>  MAINTAINERS                    |   7 +
->>  drivers/pwm/Kconfig            |  10 ++
->>  drivers/pwm/Makefile           |   1 +
->>  drivers/pwm/pwm-starfive-ptc.c | 256 +++++++++++++++++++++++++++++++++
->>  4 files changed, 274 insertions(+)
->>  create mode 100644 drivers/pwm/pwm-starfive-ptc.c
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index ac151975d0d3..05b59605d864 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19929,6 +19929,13 @@ F:	drivers/pinctrl/starfive/pinctrl-starfive-jh71*
->>  F:	include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
->>  F:	include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
->>  
->> +STARFIVE JH71X0 PWM DRIVERS
->> +M:	William Qiu <william.qiu@starfivetech.com>
->> +M:	Hal Feng <hal.feng@starfivetech.com>
->> +S:	Supported
->> +F:	Documentation/devicetree/bindings/pwm/pwm-starfive.yaml
->> +F:	drivers/pwm/pwm-starfive-ptc.c
->> +
->>  STARFIVE JH71X0 RESET CONTROLLER DRIVERS
->>  M:	Emil Renner Berthing <kernel@esmil.dk>
->>  M:	Hal Feng <hal.feng@starfivetech.com>
->> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
->> index dae023d783a2..2307a0099994 100644
->> --- a/drivers/pwm/Kconfig
->> +++ b/drivers/pwm/Kconfig
->> @@ -536,6 +536,16 @@ config PWM_SPRD
->>  	  To compile this driver as a module, choose M here: the module
->>  	  will be called pwm-sprd.
->>  
->> +config PWM_STARFIVE_PTC
->> +	tristate "StarFive PWM PTC support"
->> +	depends on OF
->> +	depends on COMMON_CLK
->> +	help
->> +	  Generic PWM framework driver for StarFive SoCs.
->> +
->> +	  To compile this driver as a module, choose M here: the module
->> +	  will be called pwm-starfive-ptc.
->> +
->>  config PWM_STI
->>  	tristate "STiH4xx PWM support"
->>  	depends on ARCH_STI || COMPILE_TEST
->> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
->> index 7bf1a29f02b8..577f69904baa 100644
->> --- a/drivers/pwm/Makefile
->> +++ b/drivers/pwm/Makefile
->> @@ -49,6 +49,7 @@ obj-$(CONFIG_PWM_SIFIVE)	+= pwm-sifive.o
->>  obj-$(CONFIG_PWM_SL28CPLD)	+= pwm-sl28cpld.o
->>  obj-$(CONFIG_PWM_SPEAR)		+= pwm-spear.o
->>  obj-$(CONFIG_PWM_SPRD)		+= pwm-sprd.o
->> +obj-$(CONFIG_PWM_STARFIVE_PTC)	+= pwm-starfive-ptc.o
->>  obj-$(CONFIG_PWM_STI)		+= pwm-sti.o
->>  obj-$(CONFIG_PWM_STM32)		+= pwm-stm32.o
->>  obj-$(CONFIG_PWM_STM32_LP)	+= pwm-stm32-lp.o
->> diff --git a/drivers/pwm/pwm-starfive-ptc.c b/drivers/pwm/pwm-starfive-ptc.c
->> new file mode 100644
->> index 000000000000..58831c600168
->> --- /dev/null
->> +++ b/drivers/pwm/pwm-starfive-ptc.c
->> @@ -0,0 +1,256 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * PWM driver for the StarFive JH7110 SoC
->> + *
->> + * Copyright (C) 2018 StarFive Technology Co., Ltd.
->> + */
->> +
->> +#include <dt-bindings/pwm/pwm.h>
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pwm.h>
->> +#include <linux/slab.h>
->> +#include <linux/clk.h>
->> +#include <linux/reset.h>
->> +#include <linux/io.h>
->> +
->> +/* how many parameters can be transferred to ptc */
->> +#define OF_PWM_N_CELLS			3
->> +
->> +/* PTC Register offsets */
->> +#define REG_RPTC_CNTR			0x0
->> +#define REG_RPTC_HRC			0x4
->> +#define REG_RPTC_LRC			0x8
->> +#define REG_RPTC_CTRL			0xC
->> +
->> +/* Bit for PWM clock */
->> +#define BIT_PWM_CLOCK_EN		31
->> +
->> +/* Bit for clock gen soft reset */
->> +#define BIT_CLK_GEN_SOFT_RESET		13
->> +
->> +#define NS_PER_SECOND			1000000000
->> +#define DEFAULT_FREQ_HZ			2000000
-> 
-> Drop unused defines.
-> 
-Will drop.
->> +
->> +/*
->> + * Access PTC register (cntr hrc lrc and ctrl),
->> + * need to replace PWM_BASE_ADDR
->> + */
->> +#define REG_PTC_BASE_ADDR_SUB(base, N)	\
->> +((base) + (((N) > 3) ? (((N) % 4) * 0x10 + (1 << 15)) : ((N) * 0x10)))
->> +#define REG_PTC_RPTC_CNTR(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N))
->> +#define REG_PTC_RPTC_HRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x4)
->> +#define REG_PTC_RPTC_LRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x8)
->> +#define REG_PTC_RPTC_CTRL(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0xC)
->> +
->> +/* PTC_RPTC_CTRL */
->> +#define PTC_EN      BIT(0)
->> +#define PTC_ECLK    BIT(1)
->> +#define PTC_NEC     BIT(2)
->> +#define PTC_OE      BIT(3)
->> +#define PTC_SIGNLE  BIT(4)
->> +#define PTC_INTE    BIT(5)
->> +#define PTC_INT     BIT(6)
->> +#define PTC_CNTRRST BIT(7)
->> +#define PTC_CAPTE   BIT(8)
->> +
->> +struct starfive_pwm_ptc_device {
->> +	struct pwm_chip		chip;
->> +	struct clk		*clk;
->> +	struct reset_control	*rst;
->> +	void __iomem		*regs;
->> +	int			irq;
->> +	/*pwm apb clock frequency*/
-> 
-> Missing spaces. Use Linux coding style.
-> 
-Will fix.
->> +	unsigned int		approx_freq;
->> +};
->> +
->> +static inline struct starfive_pwm_ptc_device *
->> +		chip_to_starfive_ptc(struct pwm_chip *c)
+>>   mm/migrate.c | 65 ++++++++++++++++++++++++++++++++++++++++++++--------
+>>   1 file changed, 55 insertions(+), 10 deletions(-)
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 91198b487e49..c17ce5ee8d92 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1843,6 +1843,51 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>   	return rc;
+>>   }
+>>   +static int migrate_pages_sync(struct list_head *from, new_page_t
+>> get_new_page,
+>> +		free_page_t put_new_page, unsigned long private,
+>> +		enum migrate_mode mode, int reason, struct list_head *ret_folios,
+>> +		struct list_head *split_folios, struct migrate_pages_stats *stats)
 >> +{
->> +	return container_of(c, struct starfive_pwm_ptc_device, chip);
+>> +	int rc, nr_failed = 0;
+>> +	LIST_HEAD(folios);
+>> +	struct migrate_pages_stats astats;
+>> +
+>> +	memset(&astats, 0, sizeof(astats));
+>> +	/* Try to migrate in batch with MIGRATE_ASYNC mode firstly */
+>> +	rc = migrate_pages_batch(from, get_new_page, put_new_page, private, MIGRATE_ASYNC,
+>> +				 reason, &folios, split_folios, &astats,
+>> +				 NR_MAX_MIGRATE_PAGES_RETRY);
+>> +	stats->nr_succeeded += astats.nr_succeeded;
+>> +	stats->nr_thp_succeeded += astats.nr_thp_succeeded;
+>> +	stats->nr_thp_split += astats.nr_thp_split;
+>> +	if (rc < 0) {
+>> +		stats->nr_failed_pages += astats.nr_failed_pages;
+>> +		stats->nr_thp_failed += astats.nr_thp_failed;
+>> +		list_splice_tail(&folios, ret_folios);
+>> +		return rc;
+>> +	}
+>> +	stats->nr_thp_failed += astats.nr_thp_split;
+>> +	nr_failed += astats.nr_thp_split;
+>> +	/*
+>> +	 * Fall back to migrate all failed folios one by one synchronously. All
+>> +	 * failed folios except split THPs will be retried, so their failure
+>> +	 * isn't counted
+>> +	 */
+>> +	list_splice_tail_init(&folios, from);
+>> +	while (!list_empty(from)) {
+>> +		list_move(from->next, &folios);
+>> +		rc = migrate_pages_batch(&folios, get_new_page, put_new_page,
+>> +					 private, mode, reason, ret_folios,
+>> +					 split_folios, stats, NR_MAX_MIGRATE_PAGES_RETRY);
+>> +		list_splice_tail_init(&folios, ret_folios);
+>> +		if (rc < 0)
+>> +			return rc;
+>> +		nr_failed += rc;
+>> +	}
+>> +
+>> +	return nr_failed;
 >> +}
 >> +
-> 
-> (...)
-> 
->> +static int starfive_pwm_ptc_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct starfive_pwm_ptc_device *pwm;
->> +	struct pwm_chip *chip;
->> +	struct resource *res;
->> +	unsigned int clk_apb_freq;
->> +	int ret;
->> +
->> +	pwm = devm_kzalloc(dev, sizeof(*pwm), GFP_KERNEL);
->> +	if (!pwm)
->> +		return -ENOMEM;
->> +
->> +	chip = &pwm->chip;
->> +	chip->dev = dev;
->> +	chip->ops = &starfive_pwm_ptc_ops;
->> +	chip->npwm = 8;
->> +
->> +	chip->of_pwm_n_cells = OF_PWM_N_CELLS;
->> +	chip->base = -1;
->> +
->> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +	pwm->regs = devm_ioremap_resource(dev, res);
-> 
-> Combine these two, there is a helper for it.
-> 
-Will update.
->> +	if (IS_ERR(pwm->regs)) {
->> +		dev_err(dev, "Unable to map IO resources\n");
-> 
-> return dev_err_probe(), everywhere probably.
-> 
-Will fix.
->> +		return PTR_ERR(pwm->regs);
->> +	}
->> +
->> +	pwm->clk = devm_clk_get(dev, NULL);
->> +	if (IS_ERR(pwm->clk)) {
->> +		dev_err(dev, "Unable to get pwm clock\n");
->> +		return PTR_ERR(pwm->clk);
->> +	}
->> +
->> +	pwm->rst = devm_reset_control_get_exclusive(dev, NULL);
->> +	if (IS_ERR(pwm->rst)) {
->> +		dev_err(dev, "Unable to get pwm reset\n");
->> +		return PTR_ERR(pwm->rst);
->> +	}
->> +
->> +	ret = clk_prepare_enable(pwm->clk);
->> +	if (ret) {
->> +		dev_err(dev,
->> +			"Failed to enable pwm clock, %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	reset_control_deassert(pwm->rst);
->> +
->> +	clk_apb_freq = (unsigned int)clk_get_rate(pwm->clk);
-> 
-> Why do you need this local variable? And why the cast?
-> 
-Will drop this local variable.
->> +	if (!clk_apb_freq)
->> +		dev_warn(dev,
->> +			 "get pwm apb clock rate failed.\n");
-> 
-> and pwm->approx_freq stays 0 which you later use for dividing. Did you
-> actually test it? It should produce big splat...
-> 
-Will update.
+>>   /*
+>>    * migrate_pages - migrate the folios specified in a list, to the free folios
+>>    *		   supplied as the target for the page migration
+>> @@ -1874,7 +1919,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
+>>   {
+>>   	int rc, rc_gather;
+>> -	int nr_pages, batch;
+>> +	int nr_pages;
+>>   	struct folio *folio, *folio2;
+>>   	LIST_HEAD(folios);
+>>   	LIST_HEAD(ret_folios);
+>> @@ -1890,10 +1935,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   	if (rc_gather < 0)
+>>   		goto out;
+>>   -	if (mode == MIGRATE_ASYNC)
+>> -		batch = NR_MAX_BATCHED_MIGRATION;
+>> -	else
+>> -		batch = 1;
+>>   again:
+>>   	nr_pages = 0;
+>>   	list_for_each_entry_safe(folio, folio2, from, lru) {
+>> @@ -1904,16 +1945,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   		}
+>>     		nr_pages += folio_nr_pages(folio);
+>> -		if (nr_pages >= batch)
+>> +		if (nr_pages >= NR_MAX_BATCHED_MIGRATION)
+>>   			break;
+>>   	}
+>> -	if (nr_pages >= batch)
+>> +	if (nr_pages >= NR_MAX_BATCHED_MIGRATION)
+>>   		list_cut_before(&folios, from, &folio2->lru);
+>>   	else
+>>   		list_splice_init(from, &folios);
+>> -	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
+>> -				 mode, reason, &ret_folios, &split_folios, &stats,
+>> -				 NR_MAX_MIGRATE_PAGES_RETRY);
+>> +	if (mode == MIGRATE_ASYNC)
+>> +		rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
+>> +					 mode, reason, &ret_folios, &split_folios, &stats,
+>> +					 NR_MAX_MIGRATE_PAGES_RETRY);
 >> +	else
->> +		pwm->approx_freq = clk_apb_freq;
->> +
->> +	ret = pwmchip_add(chip);
-> 
-> devm
-> 
-Will update.
->> +	if (ret < 0) {
->> +		dev_err(dev, "cannot register PTC: %d\n", ret);
->> +		clk_disable_unprepare(pwm->clk);
->> +		return ret;
->> +	}
->> +
->> +	platform_set_drvdata(pdev, pwm);
->> +
->> +	return 0;
->> +}
->> +
->> +static int starfive_pwm_ptc_remove(struct platform_device *dev)
->> +{
->> +	struct starfive_pwm_ptc_device *pwm = platform_get_drvdata(dev);
->> +	struct pwm_chip *chip = &pwm->chip;
->> +
->> +	pwmchip_remove(chip);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct of_device_id starfive_pwm_ptc_of_match[] = {
->> +	{ .compatible = "starfive,jh7110-pwm" },
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(of, starfive_pwm_ptc_of_match);
->> +
->> +static struct platform_driver starfive_pwm_ptc_driver = {
->> +	.probe = starfive_pwm_ptc_probe,
->> +	.remove = starfive_pwm_ptc_remove,
->> +	.driver = {
->> +		.name = "pwm-starfive-ptc",
->> +		.of_match_table = of_match_ptr(starfive_pwm_ptc_of_match),
-> 
-> of_match_ptr goes with maybe_unused, which you do not have. Anyway I am
-> not sure what's the benefit of having it here, so just drop it.
-> 
-Will drop.
-Thank you for spending time reviewing and providing helpful comments
-for this driver
+>> +		rc = migrate_pages_sync(&folios, get_new_page, put_new_page, private,
+>> +					mode, reason, &ret_folios, &split_folios, &stats);
+>
+> For split folios, it seems also reasonable to use migrate_pages_sync()
+> instead of always using fixed MIGRATE_ASYNC mode?
 
-Best regards
-William
-> Best regards,
-> Krzysztof
-> 
+For split folios, we only try to migrate them with minimal effort.
+Previously, we decrease the retry number from 10 to 1.  Now, I think
+that it's reasonable to change the migration mode to MIGRATE_ASYNC to
+reduce latency.  They have been counted as failure anyway.
+
+>>   	list_splice_tail_init(&folios, &ret_folios);
+>>   	if (rc < 0) {
+>>   		rc_gather = rc;
+
+Best Regards,
+Huang, Ying
