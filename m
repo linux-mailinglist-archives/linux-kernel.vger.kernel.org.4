@@ -2,521 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBD66A7439
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393036A7442
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjCAT1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
+        id S229930AbjCAT3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCAT1x (ORCPT
+        with ESMTP id S229653AbjCAT3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:27:53 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F188E43463
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:27:49 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id f1so10030876qvx.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:27:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1677698869;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JIiTxOqBtVJmmqfILDu4pzBpVT9EPwRlKJVqXgvs/LE=;
-        b=SPpOxIE4MFbKfT5oflMJuCUmCwTZXEWEpEG1wJIzbOVPgm78wM59YIPufNhx6J+xAY
-         uVAMJTeGKjNw/La0k0oS+DZnsX/O3juquDKDLaxoG3JHuebMZjvqVwW2OiSK8f5l7USh
-         kt/xAoIxRw79wuBJ1qtO6oGHHmYjmOXM3kL6A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677698869;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JIiTxOqBtVJmmqfILDu4pzBpVT9EPwRlKJVqXgvs/LE=;
-        b=s3/pocpS40TNfoH5rt9UmgqspJIJnlnVHGPln5K9McYBI3HDn+/BCmRg84lIHlXybB
-         1F1ofkU003bZEEQS9DVEMOko07oHtd69vIEorrdHP+1rZNRXXN5+tlgFqXCmJG2jUyhm
-         3MMUw3GyYMtrACPAzc9G6Q0UrtFagewlBfErtMCnkNt9uSsnBGdUwSqThowU0EnKNkJz
-         tPa8YAR7WzuGuA3f+pkmVndm4UPfA22tpgJ7aIJKLeNOlsC1vuZ5Jj9f6skX0HVrXWzS
-         LHHhYaA27DnAZynLlkuKXOOVQCRK8zch4kGQrPaWujbMxDDiWpusVK73OEUvkzgX8CTh
-         HX0g==
-X-Gm-Message-State: AO0yUKWwHfzOZr1/ESy8ssJwSdiZYvyPyZ9JG4GiBrYBDMl0j7c/l3Da
-        GkQe7XR/pcL/oDQYoyLQpYWRgqf87KyrSpDcnajqwA==
-X-Google-Smtp-Source: AK7set8sXTIjoEIIkKXqh8MhkPOLOOdhPeMyWKaljr8NWvj+clELNhANgz7y7ObItSZPtTG6KHoFEg==
-X-Received: by 2002:ad4:4eac:0:b0:56c:2ee:2641 with SMTP id ed12-20020ad44eac000000b0056c02ee2641mr14904796qvb.22.1677698868635;
-        Wed, 01 Mar 2023 11:27:48 -0800 (PST)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id t143-20020a374695000000b007422eee8058sm9492494qka.125.2023.03.01.11.27.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 11:27:48 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id e194so1456062ybf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:27:48 -0800 (PST)
-X-Received: by 2002:a05:6902:c7:b0:a02:a44e:585c with SMTP id
- i7-20020a05690200c700b00a02a44e585cmr4183238ybs.1.1677698867449; Wed, 01 Mar
- 2023 11:27:47 -0800 (PST)
+        Wed, 1 Mar 2023 14:29:30 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9407AAA;
+        Wed,  1 Mar 2023 11:29:26 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321JLL6m029491;
+        Wed, 1 Mar 2023 19:28:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=S3WeAgbjtIHJrp8ydb8xgorGnDPTtt3Yu06dfTH/Byg=;
+ b=gvlfJ2h1AGWo5fmK0dXVYpAWCe4/0Ganb7YA4KLnev7KKgkPoIogIIvnVsiqKvofs1nw
+ WKRlxJyD694g8W4XCIMBEBmsmrWSy0tClR9VHzGlk7UWPHa1oswDo2FFI3mJRBHvC+h+
+ rrLKu6SXjDbvqVQhtwQoCQOnGNPoXaMQlfPDmELtNXJ3gcZHbe/sVmmDSEZfrt6ctpkv
+ i0zXYZOX2SCjM3VGt8rl7jvzy4IvMB+Vy0DGrk3Pgiuur7aaPFT5j8AIZXRv3ghVeNBJ
+ zyOfxU0LOHQ+WFrN8ymqXhNYtX+5fI9vzs9tRJsbsG4tlsg2UE/kIY6/UV3P1zUxRfVE Eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2csu851a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 19:28:40 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 321JSd8q025666;
+        Wed, 1 Mar 2023 19:28:39 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2csu850r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 19:28:39 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 321GIqii005832;
+        Wed, 1 Mar 2023 19:28:37 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3nybcg8n0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 19:28:37 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 321JSaT062063056
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Mar 2023 19:28:36 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 43F3058043;
+        Wed,  1 Mar 2023 19:28:36 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF0A958055;
+        Wed,  1 Mar 2023 19:28:25 +0000 (GMT)
+Received: from [9.43.118.249] (unknown [9.43.118.249])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Mar 2023 19:28:25 +0000 (GMT)
+Message-ID: <cf16613d-b5e1-bdcf-ef3f-6763ba939f42@linux.vnet.ibm.com>
+Date:   Thu, 2 Mar 2023 00:58:24 +0530
 MIME-Version: 1.0
-References: <20230222092409.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
- <CAHUa44GUEtN4J_PKaeM4YEfL8dGBpCcSWw1C_pobwh9VFpWKTw@mail.gmail.com>
- <CA+ddPcNnCwBVnpyT2cWYeRtUfqZFk-KodtMHfNMnQs=T9o3nyA@mail.gmail.com>
- <CAHUa44FVrLDBNQqfFfwFAPHTjDNRpQJShCz2+H7X4nUbfe3QUQ@mail.gmail.com>
- <CA+ddPcMBfVxF2HK8g_o84Ata7Cg3MedacfpG=EZWUn4Zu8m0Pw@mail.gmail.com>
- <CAHUa44GhTnpyN6BrK69vOsjnDrQmYFsfm2mTX=sK97D2SWtrGQ@mail.gmail.com>
- <CA+ddPcO4L55d2Uudkj8_NAY_5zSay-LBKWS=ZR0C6opPrzwRwQ@mail.gmail.com> <CAHUa44FCnJo4D8TJ+=8iE7pT=Y70MtW9R68Li+CgEOnCBbxotw@mail.gmail.com>
-In-Reply-To: <CAHUa44FCnJo4D8TJ+=8iE7pT=Y70MtW9R68Li+CgEOnCBbxotw@mail.gmail.com>
-From:   Jeffrey Kardatzke <jkardatzke@chromium.org>
-Date:   Wed, 1 Mar 2023 11:27:34 -0800
-X-Gmail-Original-Message-ID: <CA+ddPcPzVEd6TJ=xFF3iGPpMmPbphGyCSdxMd0Ts-5CzYvRG=Q@mail.gmail.com>
-Message-ID: <CA+ddPcPzVEd6TJ=xFF3iGPpMmPbphGyCSdxMd0Ts-5CzYvRG=Q@mail.gmail.com>
-Subject: Re: [PATCH] tee: optee: Add SMC for loading OP-TEE image
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     op-tee@lists.trustedfirmware.org,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v12 5/8] sched/fair: Take into account latency priority at
+ wakeup
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
+References: <20230224093454.956298-1-vincent.guittot@linaro.org>
+ <20230224093454.956298-6-vincent.guittot@linaro.org>
+From:   shrikanth hegde <sshegde@linux.vnet.ibm.com>
+In-Reply-To: <20230224093454.956298-6-vincent.guittot@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sbahlocaxUaWbBG6Fw1_q6R7ErNwJZyn
+X-Proofpoint-ORIG-GUID: I7Dkmurqe50j5iCznmtclNp9rQrkHFhp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-01_15,2023-03-01_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 suspectscore=0
+ malwarescore=0 phishscore=0 spamscore=0 mlxlogscore=999 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303010154
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,BITCOIN_SPAM_02,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,PDS_BTC_ID,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 12:44=E2=80=AFAM Jens Wiklander
-<jens.wiklander@linaro.org> wrote:
->
-> On Tue, Feb 28, 2023 at 8:29 PM Jeffrey Kardatzke
-> <jkardatzke@chromium.org> wrote:
-> >
-> > On Tue, Feb 28, 2023 at 10:55=E2=80=AFAM Jens Wiklander
-> > <jens.wiklander@linaro.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Fri, Feb 24, 2023 at 9:17 PM Jeffrey Kardatzke
-> > > <jkardatzke@chromium.org> wrote:
-> > > >
-> > > > On Fri, Feb 24, 2023 at 12:25 AM Jens Wiklander
-> > > > <jens.wiklander@linaro.org> wrote:
-> > > > >
-> > > > > On Thu, Feb 23, 2023 at 8:09 PM Jeffrey Kardatzke
-> > > > > <jkardatzke@chromium.org> wrote:
-> > > > > >
-> > > > > > On Thu, Feb 23, 2023 at 1:28 AM Jens Wiklander
-> > > > > > <jens.wiklander@linaro.org> wrote:
-> > > > > > >
-> > > > > > > Hi,
-> > > > > > >
-> > > > > > > On Wed, Feb 22, 2023 at 6:24 PM Jeffrey Kardatzke
-> > > > > > > <jkardatzke@chromium.org> wrote:
-> > > > > > > >
-> > > > > > > > Adds an SMC call that will pass an OP-TEE binary image to E=
-L3 and
-> > > > > > > > instruct it to load it as the BL32 payload. This works in c=
-onjunction
-> > > > > > > > with a feature added to Trusted Firmware for ARM that suppo=
-rts this.
-> > > > > > > >
-> > > > > > > > Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org>
-> > > > > > > > Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
-> > > > > > > > ---
-> > > > > > > >
-> > > > > > > >  drivers/tee/optee/Kconfig     | 10 +++++
-> > > > > > > >  drivers/tee/optee/optee_msg.h | 14 +++++++
-> > > > > > > >  drivers/tee/optee/optee_smc.h | 22 ++++++++++
-> > > > > > > >  drivers/tee/optee/smc_abi.c   | 77 +++++++++++++++++++++++=
-++++++++++++
-> > > > > > > >  4 files changed, 123 insertions(+)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/optee/=
-Kconfig
-> > > > > > > > index f121c224e682..5ffbeb3eaac0 100644
-> > > > > > > > --- a/drivers/tee/optee/Kconfig
-> > > > > > > > +++ b/drivers/tee/optee/Kconfig
-> > > > > > > > @@ -7,3 +7,13 @@ config OPTEE
-> > > > > > > >         help
-> > > > > > > >           This implements the OP-TEE Trusted Execution Envi=
-ronment (TEE)
-> > > > > > > >           driver.
-> > > > > > > > +
-> > > > > > > > +config OPTEE_LOAD_IMAGE
-> > > > > > > > +       bool "Load Op-Tee image as firmware"
-> > > > > > >
-> > > > > > > OP-TEE
-> > > > > > Done, fixed in next patch set.
-> > > > > > >
-> > > > > > > > +       default n
-> > > > > > > > +       depends on OPTEE
-> > > > > > > > +       help
-> > > > > > > > +         This loads the BL32 image for OP-TEE as firmware =
-when the driver is probed.
-> > > > > > > > +         This returns -EPROBE_DEFER until the firmware is =
-loadable from the
-> > > > > > > > +         filesystem which is determined by checking the sy=
-stem_state until it is in
-> > > > > > > > +         SYSTEM_RUNNING.
-> > > > > > > > diff --git a/drivers/tee/optee/optee_msg.h b/drivers/tee/op=
-tee/optee_msg.h
-> > > > > > > > index 70e9cc2ee96b..84c1b15032a9 100644
-> > > > > > > > --- a/drivers/tee/optee/optee_msg.h
-> > > > > > > > +++ b/drivers/tee/optee/optee_msg.h
-> > > > > > > > @@ -284,6 +284,20 @@ struct optee_msg_arg {
-> > > > > > > >   */
-> > > > > > > >  #define OPTEE_MSG_FUNCID_GET_OS_REVISION       0x0001
-> > > > > > > >
-> > > > > > > > +/*
-> > > > > > > > + * Load Trusted OS from optee/tee.bin in the Linux firmwar=
-e.
-> > > > > > > > + *
-> > > > > > > > + * WARNING: Use this cautiously as it could lead to insecu=
-re loading of the
-> > > > > > > > + * Trusted OS.
-> > > > > > > > + * This SMC instructs EL3 to load a binary and excute it a=
-s the Trusted OS.
-> > > > > > > > + * The first two params are the high and low 32 bits of th=
-e size of the payload
-> > > > > > > > + * and the third and fourth params are the high and low 32=
- bits of the physical
-> > > > > > > > + * address of the payload. The payload is in the OP-TEE im=
-age format.
-> > > > > > > > + *
-> > > > > > > > + * Returns 0 on success and an error code otherwise.
-> > > > > > > > + */
-> > > > > > > > +#define OPTEE_MSG_FUNCID_LOAD_IMAGE   0x0002
-> > > > > > >
-> > > > > > > There's no need to add anything to this file, you can define
-> > > > > > > OPTEE_SMC_FUNCID_LOAD_IMAGE to 2 directly in optee_smc.h belo=
-w.
-> > > > > > >
-> > > > > > Done, fixed in next patch set.
-> > > > > > > > +
-> > > > > > > >  /*
-> > > > > > > >   * Do a secure call with struct optee_msg_arg as argument
-> > > > > > > >   * The OPTEE_MSG_CMD_* below defines what goes in struct o=
-ptee_msg_arg::cmd
-> > > > > > > > diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/op=
-tee/optee_smc.h
-> > > > > > > > index 73b5e7760d10..908b1005e9db 100644
-> > > > > > > > --- a/drivers/tee/optee/optee_smc.h
-> > > > > > > > +++ b/drivers/tee/optee/optee_smc.h
-> > > > > > > > @@ -104,6 +104,28 @@ struct optee_smc_call_get_os_revision_=
-result {
-> > > > > > > >         unsigned long reserved1;
-> > > > > > > >  };
-> > > > > > > >
-> > > > > > > > +/*
-> > > > > > > > + * Load Trusted OS from optee/tee.bin in the Linux firmwar=
-e.
-> > > > > > > > + *
-> > > > > > > > + * WARNING: Use this cautiously as it could lead to insecu=
-re loading of the
-> > > > > > > > + * Trusted OS.
-> > > > > > > > + * This SMC instructs EL3 to load a binary and excute it a=
-s the Trusted OS.
-> > > > > > >
-> > > > > > > execute
-> > > > > > >
-> > > > > > Done, fixed in next patch set.
-> > > > > > > > + *
-> > > > > > > > + * Call register usage:
-> > > > > > > > + * a0 SMC Function ID, OPTEE_SMC_CALL_LOAD_IMAGE
-> > > > > > > > + * a1 Upper 32bit of a 64bit size for the payload
-> > > > > > > > + * a2 Lower 32bit of a 64bit size for the payload
-> > > > > > > > + * a3 Upper 32bit of the physical address for the payload
-> > > > > > > > + * a4 Lower 32bit of the physical address for the payload
-> > > > > > > > + *
-> > > > > > > > + * The payload is in the OP-TEE image format.
-> > > > > > > > + *
-> > > > > > > > + * Returns result in a0, 0 on success and an error code ot=
-herwise.
-> > > > > > > > + */
-> > > > > > > > +#define OPTEE_SMC_FUNCID_LOAD_IMAGE OPTEE_MSG_FUNCID_LOAD_=
-IMAGE
-> > > > > > > > +#define OPTEE_SMC_CALL_LOAD_IMAGE \
-> > > > > > > > +       OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_LOAD_IMAGE=
-)
-> > > > > > > > +
-> > > > > > > >  /*
-> > > > > > > >   * Call with struct optee_msg_arg as argument
-> > > > > > > >   *
-> > > > > > > > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/opte=
-e/smc_abi.c
-> > > > > > > > index a1c1fa1a9c28..c1abbee86b39 100644
-> > > > > > > > --- a/drivers/tee/optee/smc_abi.c
-> > > > > > > > +++ b/drivers/tee/optee/smc_abi.c
-> > > > > > > > @@ -8,9 +8,11 @@
-> > > > > > > >
-> > > > > > > >  #include <linux/arm-smccc.h>
-> > > > > > > >  #include <linux/errno.h>
-> > > > > > > > +#include <linux/firmware.h>
-> > > > > > > >  #include <linux/interrupt.h>
-> > > > > > > >  #include <linux/io.h>
-> > > > > > > >  #include <linux/irqdomain.h>
-> > > > > > > > +#include <linux/kernel.h>
-> > > > > > > >  #include <linux/mm.h>
-> > > > > > > >  #include <linux/module.h>
-> > > > > > > >  #include <linux/of.h>
-> > > > > > > > @@ -1354,6 +1356,77 @@ static void optee_shutdown(struct pl=
-atform_device *pdev)
-> > > > > > > >                 optee_disable_shm_cache(optee);
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > +#ifdef CONFIG_OPTEE_LOAD_IMAGE
-> > > > > > > > +
-> > > > > > > > +#define OPTEE_FW_IMAGE "optee/tee.bin"
-> > > > > > > > +
-> > > > > > > > +static int optee_load_fw(struct platform_device *pdev,
-> > > > > > > > +                        optee_invoke_fn *invoke_fn)
-> > > > > > > > +{
-> > > > > > > > +       const struct firmware *fw =3D NULL;
-> > > > > > > > +       struct arm_smccc_res res;
-> > > > > > > > +       phys_addr_t data_pa;
-> > > > > > > > +       u8 *data_buf =3D NULL;
-> > > > > > > > +       u64 data_size;
-> > > > > > > > +       u32 data_pa_high, data_pa_low;
-> > > > > > > > +       u32 data_size_high, data_size_low;
-> > > > > > > > +       int rc;
-> > > > > > > > +
-> > > > > > > > +       rc =3D request_firmware(&fw, OPTEE_FW_IMAGE, &pdev-=
->dev);
-> > > > > > > > +       if (rc) {
-> > > > > > > > +               /*
-> > > > > > > > +                * The firmware in the rootfs will not be a=
-ccessible until we
-> > > > > > > > +                * are in the SYSTEM_RUNNING state, so retu=
-rn EPROBE_DEFER until
-> > > > > > > > +                * that point.
-> > > > > > > > +                */
-> > > > > > > > +               if (system_state < SYSTEM_RUNNING)
-> > > > > > > > +                       return -EPROBE_DEFER;
-> > > > > > > > +               goto fw_err;
-> > > > > > > > +       }
-> > > > > > > > +
-> > > > > > > > +       data_size =3D fw->size;
-> > > > > > > > +       /*
-> > > > > > > > +        * This uses the GFP_DMA flag to ensure we are allo=
-cated memory in the
-> > > > > > > > +        * 32-bit space since TF-A cannot map memory beyond=
- the 32-bit boundary.
-> > > > > > > > +        */
-> > > > > > > > +       data_buf =3D kmalloc(fw->size, GFP_KERNEL | GFP_DMA=
-);
-> > > > > > > > +       if (!data_buf) {
-> > > > > > > > +               rc =3D -ENOMEM;
-> > > > > > > > +               goto fw_err;
-> > > > > > > > +       }
-> > > > > > > > +       memcpy(data_buf, fw->data, fw->size);
-> > > > > > > > +       data_pa =3D virt_to_phys(data_buf);
-> > > > > > > > +       reg_pair_from_64(&data_pa_high, &data_pa_low, data_=
-pa);
-> > > > > > > > +       reg_pair_from_64(&data_size_high, &data_size_low, d=
-ata_size);
-> > > > > > > > +       goto fw_load;
-> > > > > > > > +
-> > > > > > > > +fw_err:
-> > > > > > > > +       pr_warn("image loading failed\n");
-> > > > > > > > +       data_pa_high =3D data_pa_low =3D data_size_high =3D=
- data_size_low =3D 0;
-> > > > > > > > +
-> > > > > > > > +fw_load:
-> > > > > > > > +       /*
-> > > > > > > > +        * Always invoke the SMC, even if loading the image=
- fails, to indicate
-> > > > > > > > +        * to EL3 that we have passed the point where it sh=
-ould allow invoking
-> > > > > > > > +        * this SMC.
-> > > > > > > > +        */
-> > > > > > > > +       invoke_fn(OPTEE_SMC_CALL_LOAD_IMAGE, data_size_high=
-, data_size_low,
-> > > > > > > > +                 data_pa_high, data_pa_low, 0, 0, 0, &res)=
-;
-> > > > > > >
-> > > > > > > Prior to this, you've done nothing to check that the firmware=
- might do
-> > > > > > > what you're expecting. optee_msg_api_uid_is_optee_api() does =
-this
-> > > > > > > under normal circumstances as that SMC function is defined in=
- the SMC
-> > > > > > > Calling Convention. I'm not sure what is the best approach he=
-re
-> > > > > > > though.
-> > > > > > >
-> > > > > > The way I think about it is that we have to issue this SMC call=
- once
-> > > > > > we are in the SYSTEM_RUNNING state no matter what. We need to c=
-lose
-> > > > > > the security hole this would leave open otherwise. Any other ch=
-ecks we
-> > > > > > would do that would prevent us from making that call could be o=
-ther
-> > > > > > attack vectors.
-> > > > >
-> > > > > This is clearly a weakness in the design. If the kernel config do=
-esn't
-> > > > > match exactly, we either have an open security hole in the secure
-> > > > > world or fail to initialize the driver.
-> > > > Yes, that's correct where if TF-A was built to enable the SMC call,
-> > > > but then the kernel wasn't built to include the OP-TEE driver, or w=
-ith
-> > > > the image loading SMC config or the driver doesn't get loaded; that=
-'s
-> > > > leaving an open security hole. It's understood as part of this desi=
-gn
-> > > > that there's a big open security hole if the system isn't configure=
-d
-> > > > properly.
-> > > > > The former can only happen in
-> > > > > systems designed like yours where the kernel up to this point has=
- the
-> > > > > same level of security as the secure world. There's no need for m=
-e to
-> > > > > repeat my concerns over that, but this is now going to have an im=
-pact
-> > > > > on platforms that don't use your security model too. So far we've
-> > > > > managed to avoid configuration options in the OP-TEE driver that
-> > > > > breaks everything for a class of devices.
-> > > > I could change TF-A and the kernel driver so that if it somebody do=
-es
-> > > > enable the kernel option but not the TF-A option, that TF-A returns=
- a
-> > > > specific error code (rather than passing the non-secure originating
-> > > > call to OP-TEE) and the kernel driver can recognize that and then
-> > > > continue as if OP-TEE was loaded. Then enabling this option won't
-> > > > break anything if the TF-A config doesn't match.
-> > >
-> > > Yes, that should help a bit. We may want to check some UUID of the
-> > > service too, just to avoid sending SMCs into the dark and not knowing
-> > > what it may hit. I believe we can sort out those details when
-> > > reviewing the TF-A patch.
-> > >
-> > After looking at the code again...I realize I could do this in TF-A or
-> > OP-TEE. In the current TF-A code (except when this option is enabled),
-> > all SMCs are passed to OP-TEE. So I could add this into the SMC
-> > handling code in OP-TEE to just return success in this case and that's
-> > always enabled (since OP-TEE knows it is already loaded that seems
-> > correct). I'd also want to change the TF-A code so that if it tries to
-> > load OP-TEE more than once, that it returns success to satisfy your
-> > concern about driver reloading if somebody is using this option
-> > (currently it returns -EPERM).  Does that sound fine to you?
->
-> You're overlooking the problem with sending SMCs to an unknown entity.
-> It might not be entirely unknown at this stage due to the entry in
-> DTB, but I would rather not depend on that.
->
-> Regarding the error code, that can actually be ignored as the driver
-> further down will discover if OP-TEE isn't there, see the call to
-> optee_msg_api_uid_is_optee_api(). The value defined for
-> OPTEE_SMC_CALLS_UID is also defined in the SMC Calling Convention,
-> https://developer.arm.com/documentation/den0028/latest, for this
-> purpose.
->
 
-OK, now I see what you're getting at regarding the unknown entity. How
-about I first invoke the UID call, and then in TF-A if it is in the
-state where it needs the image loaded still, it then returns an
-alternate UID.  In the kernel, if it has the alternate UID, then load
-the OP-TEE image. If it has the usual OP-TEE UID, then just proceed as
-normal.  We could even get rid of the kernel config option at that
-point too and always enable this. Would that be fine?
-> > > > >
-> > > > > Given how important this call is for your platform and at the sam=
-e
-> > > > > time harmful for all others perhaps this call should be done in a
-> > > > > separate driver.
-> > > > I'm not a kernel driver expert...but if I moved this into its own
-> > > > driver, then I think I'd need to have the OP-TEE driver defer loadi=
-ng
-> > > > until the image loading driver succeeds if it's enabled. So somebod=
-y
-> > > > enabling that other driver would hit the same issues as somebody
-> > > > enabling this config option for OP-TEE. (I have no problem moving t=
-his
-> > > > into a new driver if that's what you really want, but I want to be
-> > > > sure the same concerns don't come up if I do that).
-> > >
-> > > I was considering a way of trying to minimize the window where this
-> > > hole is open while taking care of that other problem. Let's say that
-> > > if something goes wrong and the OP-TEE driver isn't probed, then
-> > > you're in trouble if it doesn't crash badly. If you don't like it I
-> > > don't mind if you skip it.
-> > >
-> > For our config, I'm planning on including the driver directly rather
-> > than as a module (that's why I have the EDEFER logic in there...so
-> > both cases work...then I don't need to worry about probing). But yeah,
-> > if somebody builds it as a module and is using the image
-> > loading...they better be sure that the driver gets probed. And I would
-> > prefer to keep everything in the OP-TEE driver, so that the image
-> > loading is more straightforward.
+
+On 2/24/23 3:04 PM, Vincent Guittot wrote:
+> Take into account the latency priority of a thread when deciding to
+> preempt the current running thread. We don't want to provide more CPU
+> bandwidth to a thread but reorder the scheduling to run latency sensitive
+> task first whenever possible.
 >
-> Makes sense.
+> As long as a thread didn't use its bandwidth, it will be able to preempt
+> the current thread.
 >
-> Cheers,
-> Jens
+> At the opposite, a thread with a low latency priority will preempt current
+> thread at wakeup only to keep fair CPU bandwidth sharing. Otherwise it will
+> wait for the tick to get its sched slice.
 >
-> > > >
-> > > > If your main concern is somebody enabling this option and breaking
-> > > > their use of OP-TEE...then what I mentioned above should resolve th=
-at.
-> > > > If not, let me know more specifically what issue you're trying to
-> > > > avoid here.
-> > >
-> > > Yes, that's my main concern.
-> > Great, thanks for confirming.
-> > >
-> > > Cheers,
-> > > Jens
-> > >
-> > > >
-> > > > Thanks,
-> > > > Jeff
-> > > > >
-> > > > > Thanks,
-> > > > > Jens
-> > > > >
-> > > > > > > > +       if (!rc)
-> > > > > > > > +               rc =3D res.a0;
-> > > > > > > > +       if (fw)
-> > > > > > > > +               release_firmware(fw);
-> > > > > > > > +       kfree(data_buf);
-> > > > > > > > +
-> > > > > > > > +       return rc;
-> > > > > > > > +}
-> > > > > > > > +#else
-> > > > > > > > +static inline int optee_load_fw(struct platform_device *__=
-unused,
-> > > > > > > > +               optee_invoke_fn *__unused) {
-> > > > > > > > +       return 0;
-> > > > > > > > +}
-> > > > > > > > +#endif
-> > > > > > > > +
-> > > > > > > >  static int optee_probe(struct platform_device *pdev)
-> > > > > > > >  {
-> > > > > > > >         optee_invoke_fn *invoke_fn;
-> > > > > > > > @@ -1372,6 +1445,10 @@ static int optee_probe(struct platfo=
-rm_device *pdev)
-> > > > > > > >         if (IS_ERR(invoke_fn))
-> > > > > > > >                 return PTR_ERR(invoke_fn);
-> > > > > > > >
-> > > > > > > > +       rc =3D optee_load_fw(pdev, invoke_fn);
-> > > > > > > > +       if (rc)
-> > > > > > > > +               return rc;
-> > > > > > >
-> > > > > > > What if OP-TEE already was loaded?
-> > > > > > > This also causes trouble if unloading and loading the driver =
-again.
-> > > > > > > I think we need a way of telling if OP-TEE must be loaded fir=
-st or not.
-> > > > > > >
-> > > > > > OK, I added some state tracking in the driver code to return th=
-e prior
-> > > > > > loading result if it was already loaded.
-> > > > > > > Thanks,
-> > > > > > > Jens
-> > > > > > >
-> > > > > > > > +
-> > > > > > > >         if (!optee_msg_api_uid_is_optee_api(invoke_fn)) {
-> > > > > > > >                 pr_warn("api uid mismatch\n");
-> > > > > > > >                 return -EINVAL;
-> > > > > > > > --
-> > > > > > > > 2.39.2.637.g21b0678d19-goog
-> > > > > > > >
+>                                    curr vruntime
+>                                        |
+>                       sysctl_sched_wakeup_granularity
+>                                    <-->
+> ----------------------------------|----|-----------------------|---------------
+>                                   |    |<--------------------->
+>                                   |    .  sysctl_sched_latency
+>                                   |    .
+> default/current latency entity    |    .
+>                                   |    .
+> 1111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-
+> se preempts curr at wakeup ------>|<- se doesn't preempt curr -----------------
+>                                   |    .
+>                                   |    .
+>                                   |    .
+> low latency entity                |    .
+>                                    ---------------------->|
+>                                % of sysctl_sched_latency  |
+> 1111111111111111111111111111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-
+> preempt ------------------------------------------------->|<- do not preempt --
+>                                   |    .
+>                                   |    .
+>                                   |    .
+> high latency entity               |    .
+>          |<-----------------------|----.
+>          | % of sysctl_sched_latency   .
+> 111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1
+> preempt->|<- se doesn't preempt curr ------------------------------------------
+>
+> Tests results of nice latency impact on heavy load like hackbench:
+>
+> hackbench -l (2560 / group) -g group
+> group        latency 0             latency 19
+> 1            1.378(+/-  1%)      1.337(+/- 1%) + 3%
+> 4            1.393(+/-  3%)      1.312(+/- 3%) + 6%
+> 8            1.308(+/-  2%)      1.279(+/- 1%) + 2%
+> 16           1.347(+/-  1%)      1.317(+/- 1%) + 2%
+>
+> hackbench -p -l (2560 / group) -g group
+> group
+> 1            1.836(+/- 17%)      1.148(+/- 5%) +37%
+> 4            1.586(+/-  6%)      1.109(+/- 8%) +30%
+> 8            1.209(+/-  4%)      0.780(+/- 4%) +35%
+> 16           0.805(+/-  5%)      0.728(+/- 4%) +10%
+>
+> By deacreasing the latency prio, we reduce the number of preemption at
+> wakeup and help hackbench making progress.
+>
+> Test results of nice latency impact on short live load like cyclictest
+> while competing with heavy load like hackbench:
+>
+> hackbench -l 10000 -g $group &
+> cyclictest --policy other -D 5 -q -n
+>         latency 0           latency -20
+> group   min  avg    max     min  avg    max
+> 0       16    19     29      17   18     29
+> 1       43   299   7359      63   84   3422
+> 4       56   449  14806      45   83    284
+> 8       63   820  51123      63   83    283
+> 16      64  1326  70684      41  157  26852
+>
+> group = 0 means that hackbench is not running.
+>
+> The avg is significantly improved with nice latency -20 especially with
+> large number of groups but min and max remain quite similar. If we add the
+> histogram parameter to get details of latency, we have :
+>
+> hackbench -l 10000 -g 16 &
+> cyclictest --policy other -D 5 -q -n  -H 20000 --histfile data.txt
+>               latency 0    latency -20
+> Min Latencies:    64           62
+> Avg Latencies:  1170          107
+> Max Latencies: 88069        10417
+> 50% latencies:   122           86
+> 75% latencies:   614           91
+> 85% latencies:   961           94
+> 90% latencies:  1225           97
+> 95% latencies:  6120          102
+> 99% latencies: 18328          159
+>
+> With percentile details, we see the benefit of nice latency -20 as
+> only 1% of the latencies are above 159us whereas the default latency
+> has got 15% around ~1ms or above and 5% over the 6ms.
+>
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+> ---
+>  include/linux/sched.h      |  4 +++-
+>  include/linux/sched/prio.h |  9 +++++++++
+>  init/init_task.c           |  2 +-
+>  kernel/sched/core.c        | 19 ++++++++++++++-----
+>  kernel/sched/debug.c       |  2 +-
+>  kernel/sched/fair.c        | 32 +++++++++++++++++++++++++++-----
+>  kernel/sched/sched.h       | 11 +++++++++++
+>  7 files changed, 66 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 6c61bde49152..38decae3e156 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -568,6 +568,8 @@ struct sched_entity {
+>  	/* cached value of my_q->h_nr_running */
+>  	unsigned long			runnable_weight;
+>  #endif
+> +	/* preemption offset in ns */
+> +	long				latency_offset;
+>  
+>  #ifdef CONFIG_SMP
+>  	/*
+> @@ -784,7 +786,7 @@ struct task_struct {
+>  	int				static_prio;
+>  	int				normal_prio;
+>  	unsigned int			rt_priority;
+> -	int				latency_nice;
+> +	int				latency_prio;
+>  
+>  	struct sched_entity		se;
+>  	struct sched_rt_entity		rt;
+> diff --git a/include/linux/sched/prio.h b/include/linux/sched/prio.h
+> index bfcd7f1d1e11..be79503d86af 100644
+> --- a/include/linux/sched/prio.h
+> +++ b/include/linux/sched/prio.h
+> @@ -59,5 +59,14 @@ static inline long rlimit_to_nice(long prio)
+>   * Default tasks should be treated as a task with latency_nice = 0.
+>   */
+>  #define DEFAULT_LATENCY_NICE	0
+> +#define DEFAULT_LATENCY_PRIO	(DEFAULT_LATENCY_NICE + LATENCY_NICE_WIDTH/2)
+> +
+> +/*
+> + * Convert user-nice values [ -20 ... 0 ... 19 ]
+> + * to static latency [ 0..39 ],
+> + * and back.
+> + */
+> +#define NICE_TO_LATENCY(nice)	((nice) + DEFAULT_LATENCY_PRIO)
+> +#define LATENCY_TO_NICE(prio)	((prio) - DEFAULT_LATENCY_PRIO)
+>  
+>  #endif /* _LINUX_SCHED_PRIO_H */
+> diff --git a/init/init_task.c b/init/init_task.c
+> index 7dd71dd2d261..071deff8dbd1 100644
+> --- a/init/init_task.c
+> +++ b/init/init_task.c
+> @@ -78,7 +78,7 @@ struct task_struct init_task
+>  	.prio		= MAX_PRIO - 20,
+>  	.static_prio	= MAX_PRIO - 20,
+>  	.normal_prio	= MAX_PRIO - 20,
+> -	.latency_nice	= DEFAULT_LATENCY_NICE,
+> +	.latency_prio	= DEFAULT_LATENCY_PRIO,
+>  	.policy		= SCHED_NORMAL,
+>  	.cpus_ptr	= &init_task.cpus_mask,
+>  	.user_cpus_ptr	= NULL,
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index d327614c70b0..d5b7e237d79b 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1285,6 +1285,11 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+>  	}
+>  }
+>  
+> +static void set_latency_offset(struct task_struct *p)
+> +{
+> +	p->se.latency_offset = calc_latency_offset(p->latency_prio);
+> +}
+> +
+>  #ifdef CONFIG_UCLAMP_TASK
+>  /*
+>   * Serializes updates of utilization clamp values
+> @@ -4681,7 +4686,9 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
+>  		p->prio = p->normal_prio = p->static_prio;
+>  		set_load_weight(p, false);
+>  
+> -		p->latency_nice = DEFAULT_LATENCY_NICE;
+> +		p->latency_prio = NICE_TO_LATENCY(0);
+> +		set_latency_offset(p);
+> +
+>  		/*
+>  		 * We don't need the reset flag anymore after the fork. It has
+>  		 * fulfilled its duty:
+> @@ -7449,8 +7456,10 @@ static void __setscheduler_params(struct task_struct *p,
+>  static void __setscheduler_latency(struct task_struct *p,
+>  		const struct sched_attr *attr)
+>  {
+> -	if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE)
+> -		p->latency_nice = attr->sched_latency_nice;
+> +	if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE) {
+> +		p->latency_prio = NICE_TO_LATENCY(attr->sched_latency_nice);
+> +		set_latency_offset(p);
+> +	}
+>  }
+>  
+>  /*
+> @@ -7635,7 +7644,7 @@ static int __sched_setscheduler(struct task_struct *p,
+>  		if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)
+>  			goto change;
+>  		if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE &&
+> -		    attr->sched_latency_nice != p->latency_nice)
+> +		    attr->sched_latency_nice != LATENCY_TO_NICE(p->latency_prio))
+>  			goto change;
+>  
+>  		p->sched_reset_on_fork = reset_on_fork;
+> @@ -8176,7 +8185,7 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, struct sched_attr __user *, uattr,
+>  	get_params(p, &kattr);
+>  	kattr.sched_flags &= SCHED_FLAG_ALL;
+>  
+> -	kattr.sched_latency_nice = p->latency_nice;
+> +	kattr.sched_latency_nice = LATENCY_TO_NICE(p->latency_prio);
+>  
+>  #ifdef CONFIG_UCLAMP_TASK
+>  	/*
+> diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+> index 68be7a3e42a3..b3922184af91 100644
+> --- a/kernel/sched/debug.c
+> +++ b/kernel/sched/debug.c
+> @@ -1043,7 +1043,7 @@ void proc_sched_show_task(struct task_struct *p, struct pid_namespace *ns,
+>  #endif
+>  	P(policy);
+>  	P(prio);
+> -	P(latency_nice);
+> +	P(latency_prio);
+
+/proc/<pid>/sched  should update if the latency values are updated
+for the cgroup right? That doesn't seem to happen.
+
+#cd /sys/fs/cgroup/cpu
+# echo -20 >  task1/cpu.latency.nice 
+# cat task1/cgroup.procs 
+1897
+1998
+1999
+# cat /proc/1999/sched | grep latency
+latency_prio                                 :                   20
+# echo 0 >  task1/cpu.latency.nice 
+# cat /proc/1999/sched | grep latency
+latency_prio                                 :                   20
+# echo 19 >  task1/cpu.latency.nice 
+# cat /proc/1999/sched | grep latency
+latency_prio                                 :                   20
+
+
+>  	if (task_has_dl_policy(p)) {
+>  		P(dl.runtime);
+>  		P(dl.deadline);
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 81bef11eb660..414b6243208b 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4877,6 +4877,8 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>  		update_idle_cfs_rq_clock_pelt(cfs_rq);
+>  }
+>  
+> +static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *se);
+> +
+>  /*
+>   * Preempt the current task with a newly woken task if needed:
+>   */
+> @@ -4885,7 +4887,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>  {
+>  	unsigned long ideal_runtime, delta_exec;
+>  	struct sched_entity *se;
+> -	s64 delta;
+> +	s64 delta, offset;
+>  
+>  	/*
+>  	 * When many tasks blow up the sched_period; it is possible that
+> @@ -4916,10 +4918,12 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>  	se = __pick_first_entity(cfs_rq);
+>  	delta = curr->vruntime - se->vruntime;
+>  
+> -	if (delta < 0)
+> +	offset = wakeup_latency_gran(curr, se);
+> +	if (delta < offset)
+>  		return;
+>  
+> -	if (delta > ideal_runtime)
+> +	if ((delta > ideal_runtime) ||
+> +	    (delta > get_latency_max()))
+>  		resched_curr(rq_of(cfs_rq));
+>  }
+>  
+> @@ -7662,6 +7666,23 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+>  }
+>  #endif /* CONFIG_SMP */
+>  
+> +static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *se)
+> +{
+> +	long latency_offset = se->latency_offset;
+> +
+> +	/*
+> +	 * A negative latency offset means that the sched_entity has latency
+> +	 * requirement that needs to be evaluated versus other entity.
+> +	 * Otherwise, use the latency weight to evaluate how much scheduling
+> +	 * delay is acceptable by se.
+> +	 */
+> +	if ((latency_offset < 0) || (curr->latency_offset < 0))
+> +		latency_offset -= curr->latency_offset;
+> +	latency_offset = min_t(long, latency_offset, get_latency_max());
+> +
+> +	return latency_offset;
+> +}
+> +
+>  static unsigned long wakeup_gran(struct sched_entity *se)
+>  {
+>  	unsigned long gran = sysctl_sched_wakeup_granularity;
+> @@ -7700,11 +7721,12 @@ static int
+>  wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
+>  {
+>  	s64 gran, vdiff = curr->vruntime - se->vruntime;
+> +	s64 offset = wakeup_latency_gran(curr, se);
+>  
+> -	if (vdiff <= 0)
+> +	if (vdiff < offset)
+>  		return -1;
+>  
+> -	gran = wakeup_gran(se);
+> +	gran = offset + wakeup_gran(se);
+>  
+>  	/*
+>  	 * At wake up, the vruntime of a task is capped to not be older than
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 51ba0af7fb27..3f42f86105d4 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2494,6 +2494,17 @@ static inline unsigned long get_sleep_latency(bool idle)
+>  	return thresh;
+>  }
+>  
+> +/*
+> + * Calculate the latency offset for a priority level.
+> + * We use a linear mapping of the priority in the range:
+> + *     [-sysctl_sched_latency:sysctl_sched_latency]
+> + */
+> +static inline long calc_latency_offset(int prio)
+> +{
+> +	return (long)get_sleep_latency(false) * LATENCY_TO_NICE(prio) /
+> +			(LATENCY_NICE_WIDTH/2);
+> +}
+> +
+>  static inline unsigned long get_latency_max(void)
+>  {
+>  	unsigned long thresh = get_sleep_latency(false);
+
