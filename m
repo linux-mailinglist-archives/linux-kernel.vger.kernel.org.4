@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06B96A7628
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F1A6A762A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjCAV2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 16:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        id S229632AbjCAV3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 16:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjCAV16 (ORCPT
+        with ESMTP id S229471AbjCAV3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 16:27:58 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C9F2D5B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:27:54 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id ay9so15955632qtb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 13:27:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q8pvJ0948Bk2bTb0EoAuertZuXCjz3BchLxRWB04Br8=;
-        b=iUR84SphNv1FyhaQJhtzaO9+4MBhSlOjzCV+2WCUuwDRqrIOE0L6zYGz89lQiU4AZy
-         yzJubnXadmlmV+B0iK8Hh8PCfXHiPPWDwpINBjUHGZnxIr71WemGK+ra1NabfgizxRZm
-         kX7oLeaCiWmOTDSs11TgIQCs8c3Szd6q1b12PgPuw7aDC+aQKT+lwdqZlOBkq0J9mrXy
-         CXioL8V1kWYdcdq7mPaH/guT1zxujVFotwLAdiDE2kDNJbiOgvvfv63dc1hUawvKMVzE
-         G7D6ynOcKaEVrREA8cfvWj8xqaP7HgZScnz7fRQ0OFGPKzy4CU/YWfVN7hn/fowbK56C
-         9gfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q8pvJ0948Bk2bTb0EoAuertZuXCjz3BchLxRWB04Br8=;
-        b=P52QJklUwYZ/j8OlODS1nNtAtfHE7nKa+OUEg927qGJ/k+1tB7bsHeLOcCAJGikx6h
-         JFdnM1nnYDKmKaR3WLvPMRTkJqyJO61lXJjM1j+Zlb2DOsf8CrNsqdoAHeLAklHEgRTA
-         Az7TFUnyeyej0OItJ1JahsqxafpjPBvwLN5NlvO6cd0YTCU8I9K5E9kzvLlJv9m7gCfu
-         TkaqQGLeHb+nV3JatMJ5RmUYmPe3bKL/N7v0V55+wsd/5SsqgGUZrGPrHJuv9BRG/Zb8
-         ra55zNVx5nLP4xCed3c/7ktIj6/ghy5t/nWaczTE0sEp4gmp3+4HGQOSD4OVT8YugK64
-         x/tg==
-X-Gm-Message-State: AO0yUKWfHl2K8zxfa9gtSV4iIXIKbYo9miUMVqncyPF3d5Fzcb7Tx6tM
-        QtoXHV53Njw2vClwqoSSWYJlkHtd6qGSVP1nHgDhbpjq
-X-Google-Smtp-Source: AK7set+3OG7Cb+dYkOj0BWXYtK5QZz0QoBg9DJDsi1ikeYlSy4O/EqZOXG4/cstsAfa3PjdHeMyv/A==
-X-Received: by 2002:a05:622a:1356:b0:3bf:da2e:8c74 with SMTP id w22-20020a05622a135600b003bfda2e8c74mr14537968qtk.25.1677706073301;
-        Wed, 01 Mar 2023 13:27:53 -0800 (PST)
-Received: from ghost.leviathan.sladewatkins.net (pool-108-44-32-49.albyny.fios.verizon.net. [108.44.32.49])
-        by smtp.gmail.com with ESMTPSA id l20-20020a37f514000000b0074235fc7a69sm9807283qkk.68.2023.03.01.13.27.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 13:27:52 -0800 (PST)
-Message-ID: <5f6aae60-89a9-81af-0c1f-4f66dbb27f41@sladewatkins.net>
-Date:   Wed, 1 Mar 2023 16:27:51 -0500
+        Wed, 1 Mar 2023 16:29:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA606E8B;
+        Wed,  1 Mar 2023 13:29:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15B43614B4;
+        Wed,  1 Mar 2023 21:29:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C984C433EF;
+        Wed,  1 Mar 2023 21:29:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677706181;
+        bh=d39jRn8NUTafv5tSLxpXQQAMRtg500xyOXL35qot2Vw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=bzxCoJW1K4uZ7UQSnWA0eUPtaTBEXg9+w+NTKLiT4mDf+Zsoz2XZ8DbiUoDkuoID4
+         Qk8qXEzR+2cQ9+dx2vktwDw9FmY0TgAccC9Jq5ik/vsNexha98MRXHsOuaU/JqOf1p
+         +vM2o+hrOp6YWSJrBHpaqKPLh5bA0aRymoV/X3bJxvWA+fBQySzCphFMpEKOiprqvX
+         kzIsVVfEim9Nvd8gHpF2rqyTIG4SJoJXd6K/kbxWWxUITwsXYqwXzllARz823YJr9I
+         JAy2zg/5cE0eET9n8xhz3JwAt6CJeaHXo950lxs3g8n+dCZU3jx1bjFGlwkweHeiCO
+         kSC5VvYxj+Z1g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id F38755C03F0; Wed,  1 Mar 2023 13:29:40 -0800 (PST)
+Date:   Wed, 1 Mar 2023 13:29:40 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+Message-ID: <20230301212940.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230228164124.77c126d2@gandalf.local.home>
+ <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
+ <20230228190846.79b06089@gandalf.local.home>
+ <CAFULd4aY3Y8tyLN70oebZDagBebvH0erwRxKDaEX8L83Xo8gYw@mail.gmail.com>
+ <20230301113813.4f16a689@gandalf.local.home>
+ <CAFULd4aWZ+fvVZ+MEt6JD1rFaQZeO5DDWAHtPKOrx8R8DETFBw@mail.gmail.com>
+ <20230301200820.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230301151826.014c5977@gandalf.local.home>
+ <20230301203645.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230301154641.695778bf@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5.15 00/22] 5.15.97-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, rwarsow@gmx.de
-References: <20230301180652.658125575@linuxfoundation.org>
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <20230301180652.658125575@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301154641.695778bf@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 13:08, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.97 release.
-> There are 22 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Mar 01, 2023 at 03:46:41PM -0500, Steven Rostedt wrote:
+> On Wed, 1 Mar 2023 12:36:45 -0800
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
 > 
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
+> > Some years down the road, should cmpxchg_success() be on the tip of
+> > the tongue of every kernel hacker, perhaps.  Or perhaps not.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.97-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+> A bit of a catch-22 I would say. It will only become something everyone
+> knows if it exists.
+> 
+> > In the meantime, we have yet another abysmally documented atomic
+> 
+> Is it?
 
-5.15.97-rc1 compiled and booted on my x86_64 test system. No errors or
-regressions.
+Is sure is.
 
-Tested-by: Slade Watkins <srw@sladewatkins.net>
+> > operation that is not well known throughout the community.  And then the
+> > people coming across this curse everyone who had anything to do with it,
+> > as they search the source code, dig through assembly output, and so on
+> > trying to work out exactly what this thing does.
+> > 
+> > Sorry, but no way.
+> > 
+> > Again, unless there is some sort of forward-progress argument or
+> > similar convincing argument.
+> 
+> Speaking of forward progress...
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/atomic_t.txt#n316
 
--- Slade
+Yes, that is probably the best starting point.
 
+And if you have been around long enough, you know that this is in fact
+the best starting point.  Plus if you can correctly interpret the words
+in that document.  And if you are familiar with the entire document.
+But otherwise, good luck learning the semantics for something like
+atomic_fetch_add_release().
+
+> Anyway, I'm guessing this will not become part of rcu any time soon. But
+> for the ring buffer, I would happily take it.
+
+Certainly not unless someone comes up with a good reason for it.
+
+							Thanx, Paul
