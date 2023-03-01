@@ -2,276 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1C46A70B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02986A70C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjCAQTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 11:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S229670AbjCAQWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 11:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCAQS7 (ORCPT
+        with ESMTP id S229463AbjCAQWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 11:18:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85540302BE;
-        Wed,  1 Mar 2023 08:18:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09C2EB810A7;
-        Wed,  1 Mar 2023 16:18:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E432CC433EF;
-        Wed,  1 Mar 2023 16:18:53 +0000 (UTC)
-Date:   Wed, 1 Mar 2023 11:18:50 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 3/3] ring_buffer: Use try_cmpxchg instead of cmpxchg
-Message-ID: <20230301111850.768f8526@gandalf.local.home>
-In-Reply-To: <CAFULd4aGx=kGYYUz0BkFJz3abz97WOwDEgFHAOocT8SWT2oX-Q@mail.gmail.com>
-References: <20230228175929.7534-1-ubizjak@gmail.com>
-        <20230228175929.7534-4-ubizjak@gmail.com>
-        <20230228164346.0691bb11@gandalf.local.home>
-        <CAFULd4aGx=kGYYUz0BkFJz3abz97WOwDEgFHAOocT8SWT2oX-Q@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 1 Mar 2023 11:22:33 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C28302BE;
+        Wed,  1 Mar 2023 08:22:32 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 321GKeV8065246;
+        Wed, 1 Mar 2023 10:20:40 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1677687640;
+        bh=eJOulfBTO406+XJwSAbUrw3TOVKL7z76SdXOdRRvd8g=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=oITlJuKJL0Igo+Zp8Mw3to8q1ph1GEIt/d3yESZ3cer2ebuhWbdbMI3A5SmJvB3FN
+         V+iCTjreym1r6VJb2vPdvJYz95D6QkQDjk525lQPej2NRTUvuqozcO2ayatgFg+2/r
+         1bTPhJR/a6fqQcqeL9vlm4O3gnX/VFyNSv0aWTr0=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 321GKeZv003448
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 1 Mar 2023 10:20:40 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 1
+ Mar 2023 10:20:40 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 1 Mar 2023 10:20:40 -0600
+Received: from [10.250.235.39] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 321GKE84054644;
+        Wed, 1 Mar 2023 10:20:15 -0600
+Message-ID: <2493cf75-f78c-993a-01e6-8f89556973f0@ti.com>
+Date:   Wed, 1 Mar 2023 21:50:14 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 02/19] thermal/core: Use the thermal zone 'devdata'
+ accessor in thermal located drivers
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, <rafael@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Tim Zimmermann <tim@linux4.de>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Jiang Jian <jiangjian@cdjrlc.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:QUALCOMM TSENS THERMAL DRIVER" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
+ <20230228112238.2312273-3-daniel.lezcano@linaro.org>
+From:   "Gole, Dhruva" <d-gole@ti.com>
+Organization: Texas Instruments Incorporated
+In-Reply-To: <20230228112238.2312273-3-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 10:37:28 +0100
-Uros Bizjak <ubizjak@gmail.com> wrote:
 
-> > No, val should not be updated.  
-> 
-> Please see the definition of try_cmpxchg. The definition is written in
-> such a way that benefits loops as well as linear code and in the later
-> case depends on the compiler to eliminate assignment to val as a dead
-> assignment.
+On 2/28/2023 4:52 PM, Daniel Lezcano wrote:
+> The thermal zone device structure is exposed to the different drivers
+> and obviously they access the internals while that should be
+> restricted to the core thermal code.
+>
+> In order to self-encapsulate the thermal core code, we need to prevent
+> the drivers accessing directly the thermal zone structure and provide
+> accessor functions to deal with.
+>
+> Use the devdata accessor introduced in the previous patch.
+>
+> No functional changes intended.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se> #R-Car
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> #MediaTek auxadc and lvts
+> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek lvts
+> Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com> #da9062
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>  #spread
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com> #sun8i_thermal
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com> #Broadcom
+> ---
+>  drivers/thermal/amlogic_thermal.c                   |  2 +-
+>  drivers/thermal/armada_thermal.c                    |  4 ++--
+>  drivers/thermal/broadcom/bcm2711_thermal.c          |  2 +-
+>  drivers/thermal/broadcom/bcm2835_thermal.c          |  2 +-
+>  drivers/thermal/broadcom/brcmstb_thermal.c          |  4 ++--
+>  drivers/thermal/broadcom/ns-thermal.c               |  2 +-
+>  drivers/thermal/broadcom/sr-thermal.c               |  2 +-
+>  drivers/thermal/da9062-thermal.c                    |  2 +-
+>  drivers/thermal/db8500_thermal.c                    |  2 +-
+>  drivers/thermal/dove_thermal.c                      |  2 +-
+>  drivers/thermal/hisi_thermal.c                      |  2 +-
+>  drivers/thermal/imx8mm_thermal.c                    |  2 +-
+>  drivers/thermal/imx_sc_thermal.c                    |  2 +-
+>  drivers/thermal/imx_thermal.c                       |  6 +++---
+>  .../thermal/intel/int340x_thermal/int3400_thermal.c |  2 +-
+>  .../intel/int340x_thermal/int340x_thermal_zone.c    |  4 ++--
+>  .../int340x_thermal/processor_thermal_device_pci.c  |  4 ++--
+>  drivers/thermal/intel/intel_pch_thermal.c           |  2 +-
+>  drivers/thermal/intel/intel_quark_dts_thermal.c     |  6 +++---
+>  drivers/thermal/intel/intel_soc_dts_iosf.c          | 13 +++++--------
+>  drivers/thermal/intel/x86_pkg_temp_thermal.c        |  4 ++--
+>  drivers/thermal/k3_bandgap.c                        |  2 +-
+>  drivers/thermal/k3_j72xx_bandgap.c                  |  2 +-
+> [...]
+>  
+> diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
+> index 22c9bcb899c3..b5cd2c85e0c3 100644
+> --- a/drivers/thermal/k3_bandgap.c
+> +++ b/drivers/thermal/k3_bandgap.c
+> @@ -141,7 +141,7 @@ static int k3_bgp_read_temp(struct k3_thermal_data *devdata,
+>  
+>  static int k3_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -	struct k3_thermal_data *data = tz->devdata;
+> +	struct k3_thermal_data *data = thermal_zone_device_priv(tz);
 
-I did read it ;-)
-
-> 
-> The above change was done under the assumption that val is unused
-> after try_cmpxchg, and can be considered as a temporary
-> [Alternatively, the value could be copied to a local temporary and a
-> pointer to this local temporary could be passed to try_cmpxchg
-> instead. Compiler is smart enough to eliminate the assignment in any
-> case.]
-> 
-> Even in the linear code, the change has considerable effect.
-> rb_head_page_replace is inlined in rb_get_reader_page and gcc-10.3.1
-> improves code from:
-> 
->      ef8:    48 8b 0e                 mov    (%rsi),%rcx
->      efb:    48 83 e1 fc              and    $0xfffffffffffffffc,%rcx
->      eff:    48 83 c9 01              or     $0x1,%rcx
->      f03:    48 89 c8                 mov    %rcx,%rax
->      f06:    f0 48 0f b1 3e           lock cmpxchg %rdi,(%rsi)
->      f0b:    48 39 c1                 cmp    %rax,%rcx
->      f0e:    74 3b                    je     f4b <rb_get_reader_page+0x13b>
-> 
-> to:
-> 
->      ed8:    48 8b 01                 mov    (%rcx),%rax
->      edb:    48 83 e0 fc              and    $0xfffffffffffffffc,%rax
->      edf:    48 83 c8 01              or     $0x1,%rax
->      ee3:    f0 48 0f b1 31           lock cmpxchg %rsi,(%rcx)
->      ee8:    74 3b                    je     f25 <rb_get_reader_page+0x135>
-
-I'm using gcc 12.2.0 and have this;
-
-cmpxchg:
-
-0000000000000e50 <rb_get_reader_page>:
-     e50:       41 55                   push   %r13
-     e52:       41 54                   push   %r12
-     e54:       55                      push   %rbp
-     e55:       53                      push   %rbx
-     e56:       48 89 fb                mov    %rdi,%rbx
-     e59:       9c                      pushf
-     e5a:       5d                      pop    %rbp
-     e5b:       fa                      cli
-     e5c:       81 e5 00 02 00 00       and    $0x200,%ebp
-     e62:       0f 85 e6 01 00 00       jne    104e <rb_get_reader_page+0x1fe>
-     e68:       48 8d 7b 1c             lea    0x1c(%rbx),%rdi
-     e6c:       31 c0                   xor    %eax,%eax
-     e6e:       ba 01 00 00 00          mov    $0x1,%edx
-     e73:       f0 0f b1 53 1c          lock cmpxchg %edx,0x1c(%rbx)
-     e78:       0f 85 e5 01 00 00       jne    1063 <rb_get_reader_page+0x213>
-     e7e:       41 bc 03 00 00 00       mov    $0x3,%r12d
-     e84:       4c 8b 6b 58             mov    0x58(%rbx),%r13
-     e88:       49 8b 55 30             mov    0x30(%r13),%rdx
-     e8c:       41 8b 45 18             mov    0x18(%r13),%eax
-     e90:       48 8b 4a 08             mov    0x8(%rdx),%rcx
-     e94:       39 c8                   cmp    %ecx,%eax
-     e96:       0f 82 61 01 00 00       jb     ffd <rb_get_reader_page+0x1ad>
-     e9c:       48 8b 52 08             mov    0x8(%rdx),%rdx
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
 
-try_cmpxchg:
+>  	int ret = 0;
+>  
+>  	ret = k3_bgp_read_temp(data, temp);
+> diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+> index 031ea1091909..5be1f09eeb2c 100644
+> --- a/drivers/thermal/k3_j72xx_bandgap.c
+> +++ b/drivers/thermal/k3_j72xx_bandgap.c
+> @@ -248,7 +248,7 @@ static inline int k3_bgp_read_temp(struct k3_thermal_data *devdata,
+>  /* Get temperature callback function for thermal zone */
+>  static int k3_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -	return k3_bgp_read_temp(tz->devdata, temp);
+> +	return k3_bgp_read_temp(thermal_zone_device_priv(tz), temp);
+>  }
+>  
+>  static const struct thermal_zone_device_ops k3_of_thermal_ops = {
+> diff --git a/drivers/thermal/kirkwood_thermal.c b/drivers/thermal/kirkwood_thermal.c
+> index bec7ec20e79d..92b3ce426b9d 100644
+> --- a/drivers/thermal/kirkwood_thermal.c
+> +++ b/drivers/thermal/kirkwood_thermal.c
+> @@ -27,7 +27,7 @@ static int kirkwood_get_temp(struct thermal_zone_device *thermal,
+>  			  int *temp)
+>  {
+>  	unsigned long reg;
+> -	struct kirkwood_thermal_priv *priv = thermal->devdata;
+> +	struct kirkwood_thermal_priv *priv = thermal_zone_device_priv(thermal);
+>  
+>  	reg = readl_relaxed(priv->sensor);
+>  
+> [...]
 
-0000000000000e70 <rb_get_reader_page>:
-     e70:       41 55                   push   %r13
-     e72:       41 54                   push   %r12
-     e74:       55                      push   %rbp
-     e75:       53                      push   %rbx
-     e76:       48 89 fb                mov    %rdi,%rbx
-     e79:       9c                      pushf
-     e7a:       5d                      pop    %rbp
-     e7b:       fa                      cli
-     e7c:       81 e5 00 02 00 00       and    $0x200,%ebp
-     e82:       0f 85 e0 01 00 00       jne    1068 <rb_get_reader_page+0x1f8>
-     e88:       48 8d 7b 1c             lea    0x1c(%rbx),%rdi
-     e8c:       31 c0                   xor    %eax,%eax
-     e8e:       ba 01 00 00 00          mov    $0x1,%edx
-     e93:       f0 0f b1 53 1c          lock cmpxchg %edx,0x1c(%rbx)
-     e98:       0f 85 df 01 00 00       jne    107d <rb_get_reader_page+0x20d>
-     e9e:       41 bc 03 00 00 00       mov    $0x3,%r12d
-     ea4:       4c 8b 6b 58             mov    0x58(%rbx),%r13
-     ea8:       49 8b 55 30             mov    0x30(%r13),%rdx
-     eac:       41 8b 45 18             mov    0x18(%r13),%eax
-     eb0:       48 8b 4a 08             mov    0x8(%rdx),%rcx
-     eb4:       39 c8                   cmp    %ecx,%eax
-     eb6:       0f 82 5b 01 00 00       jb     1017 <rb_get_reader_page+0x1a7>
-     ebc:       48 8b 52 08             mov    0x8(%rdx),%rdx
-
-Which has no difference :-/
-
-
-> 
-> Again, even in linear code the change is able to eliminate the
-> assignment to a temporary reg and the compare. Please note that there
-> is no move *from* %rax register after cmpxchg, so the compiler
-> correctly eliminated unused assignment.
-> 
-> >  
-> > >  }
-> > >
-> > >  /*
-> > > @@ -2055,7 +2052,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
-> > >       retries = 10;
-> > >       success = false;
-> > >       while (retries--) {
-> > > -             struct list_head *head_page, *prev_page, *r;
-> > > +             struct list_head *head_page, *prev_page;
-> > >               struct list_head *last_page, *first_page;
-> > >               struct list_head *head_page_with_bit;
-> > >
-> > > @@ -2073,9 +2070,8 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
-> > >               last_page->next = head_page_with_bit;
-> > >               first_page->prev = prev_page;
-> > >
-> > > -             r = cmpxchg(&prev_page->next, head_page_with_bit, first_page);
-> > > -
-> > > -             if (r == head_page_with_bit) {
-> > > +             if (try_cmpxchg(&prev_page->next,
-> > > +                             &head_page_with_bit, first_page)) {  
-> >
-> > No. head_page_with_bit should not be updated.  
-> 
-> As above, head_page_with_bit should be considered as a temporary, it
-> is initialized a couple of lines above cmpxchg and unused after. The
-> gcc-10.3.1 compiler even found some more optimization opportunities
-> and reordered the code from:
-> 
->     1364:    4d 8b 86 38 01 00 00     mov    0x138(%r14),%r8
->     136b:    48 83 ce 01              or     $0x1,%rsi
->     136f:    48 89 f0                 mov    %rsi,%rax
->     1372:    49 89 30                 mov    %rsi,(%r8)
->     1375:    48 89 4f 08              mov    %rcx,0x8(%rdi)
->     1379:    f0 48 0f b1 39           lock cmpxchg %rdi,(%rcx)
->     137e:    48 39 c6                 cmp    %rax,%rsi
->     1381:    74 78                    je     13fb <rb_insert_pages+0xdb>
-> 
-> to:
-> 
->     1343:    48 83 c8 01              or     $0x1,%rax
->     1347:    48 8b bb 38 01 00 00     mov    0x138(%rbx),%rdi
->     134e:    48 89 07                 mov    %rax,(%rdi)
->     1351:    48 89 4e 08              mov    %rcx,0x8(%rsi)
->     1355:    f0 48 0f b1 31           lock cmpxchg %rsi,(%rcx)
->     135a:    41 0f 94 c7              sete   %r15b
->     135e:    75 2f                    jne    138f <rb_insert_pages+0x8f>
-> 
-> Please also note SETE insn in the above code, this is how the
-> "success" variable is handled in the loop. So, besides code size
-> improvement, other secondary improvements can be expected from the
-> change, too.
-
-For this gcc 12.2.0 did have a different result:
-
-cmpxchg:
-
-    1436:       49 89 c5                mov    %rax,%r13
-    1439:       eb 41                   jmp    147c <rb_update_pages+0x7c>
-    143b:       48 89 df                mov    %rbx,%rdi
-    143e:       e8 bd ed ff ff          call   200 <rb_set_head_page>
-    1443:       48 89 c2                mov    %rax,%rdx
-    1446:       48 85 c0                test   %rax,%rax
-    1449:       74 37                   je     1482 <rb_update_pages+0x82>
-    144b:       48 8b 48 08             mov    0x8(%rax),%rcx
-    144f:       48 8b bb 30 01 00 00    mov    0x130(%rbx),%rdi
-    1456:       48 89 c6                mov    %rax,%rsi
-    1459:       4c 8b 83 38 01 00 00    mov    0x138(%rbx),%r8
-    1460:       48 83 ce 01             or     $0x1,%rsi
-    1464:       48 89 f0                mov    %rsi,%rax
-    1467:       49 89 30                mov    %rsi,(%r8)
-    146a:       48 89 4f 08             mov    %rcx,0x8(%rdi)
-    146e:       f0 48 0f b1 39          lock cmpxchg %rdi,(%rcx)
-    1473:       48 39 c6                cmp    %rax,%rsi
-    1476:       0f 84 97 01 00 00       je     1613 <rb_update_pages+0x213>
-    147c:       41 83 ee 01             sub    $0x1,%r14d
-    1480:       75 b9                   jne    143b <rb_update_pages+0x3b>
-    1482:       48 8b 43 10             mov    0x10(%rbx),%rax
-    1486:       f0 ff 40 08             lock incl 0x8(%rax)
-
-try_cmpxchg:
-
-    1446:       49 89 c4                mov    %rax,%r12
-    1449:       41 83 ee 01             sub    $0x1,%r14d
-    144d:       0f 84 7b 01 00 00       je     15ce <rb_update_pages+0x1be>
-    1453:       48 89 df                mov    %rbx,%rdi
-    1456:       e8 c5 ed ff ff          call   220 <rb_set_head_page>
-    145b:       48 89 c2                mov    %rax,%rdx
-    145e:       48 85 c0                test   %rax,%rax
-    1461:       0f 84 67 01 00 00       je     15ce <rb_update_pages+0x1be>
-    1467:       48 8b 48 08             mov    0x8(%rax),%rcx
-    146b:       48 8b b3 30 01 00 00    mov    0x130(%rbx),%rsi
-    1472:       48 83 c8 01             or     $0x1,%rax
-    1476:       48 8b bb 38 01 00 00    mov    0x138(%rbx),%rdi
-    147d:       48 89 07                mov    %rax,(%rdi)
-    1480:       48 89 4e 08             mov    %rcx,0x8(%rsi)
-    1484:       f0 48 0f b1 31          lock cmpxchg %rsi,(%rcx)
-    1489:       75 be                   jne    1449 <rb_update_pages+0x39>
-    148b:       48 89 7a 08             mov    %rdi,0x8(%rdx)
-    148f:       4c 89 e6                mov    %r12,%rsi
-    1492:       48 89 ef                mov    %rbp,%rdi
-    1495:       4c 89 ab 30 01 00 00    mov    %r13,0x130(%rbx)
-    149c:       4c 89 ab 38 01 00 00    mov    %r13,0x138(%rbx)
-    14a3:       e8 00 00 00 00          call   14a8 <rb_update_pages+0x98>
-
-It's different, but I'm not so sure it's beneficial.
-
-> 
-> I think that the above examples demonstrate various improvements that
-> can be achieved with effectively a one-line, almost mechanical change
-> to the code, even in linear code. It would be unfortunate to not
-> consider them.
-
-But with gcc 12.2.0 I don't really see the benefit. And I'm worried that
-the side effect of modifying the old variable could cause a bug in the
-future, if it is used after the try_cmpxchg(). At least for the second case.
-
--- Steve
+-- 
+Regards,
+Dhruva Gole <d-gole@ti.com>
 
