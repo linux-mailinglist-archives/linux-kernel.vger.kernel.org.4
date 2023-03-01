@@ -2,123 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DB66A688F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 09:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF076A6890
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 09:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjCAIGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 03:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
+        id S229790AbjCAIHH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Mar 2023 03:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjCAIGh (ORCPT
+        with ESMTP id S229752AbjCAIHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 03:06:37 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D29937545;
-        Wed,  1 Mar 2023 00:06:36 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id w23so13380137qtn.6;
-        Wed, 01 Mar 2023 00:06:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IxktB80SVUUGX5HN3L3vi17Q72ZYHj/nfVmA7YVgBaA=;
-        b=wdSGo+pdXlu84nww6+YIrwwId9/9f8cBR8qDxCYPd3No4OoqNMrxTjE5TMK8t0JDVt
-         ktYYTzCNIPcVr4q94cdRARxGLi2i3+ZJlue8Jyjihib5QDxpj5tfQAw3xwrXslGSnJCI
-         bkTQDidm3G1UNSqC6lsKGOl4LRQe395rR5okFH5pE3bkc2uS+G5nHHI9dmHjngW4omac
-         vnIDBALcG3K7dEkl9RSJNvEbEXvtSv29NuPfAkPYjY7DujuzVzcze3Rc9WCQGzvU5FKc
-         WPUEIxarWe9RFCAOVp6TqiLeUrjuQn4maCpDncVLiX2YSuf4Mv5P2BJN7DoiIQ0slpjq
-         vR6Q==
-X-Gm-Message-State: AO0yUKWDHWpSfxPZBTbyVB+Qq0GItkfFsULXP6obhQ14XhqmV9NzO+O1
-        YQifRG1thbbWIWJt+M265jceiebVhmG6dg==
-X-Google-Smtp-Source: AK7set/auLsMLIlNhlXEG7ezcbAVvMv6WpFBcVJldKF6TnUx+tdBEq6g7gL2y4ZbvM6vu/qPOYnrrg==
-X-Received: by 2002:a05:622a:101:b0:3b6:2b5c:97e5 with SMTP id u1-20020a05622a010100b003b62b5c97e5mr9880556qtw.17.1677657995153;
-        Wed, 01 Mar 2023 00:06:35 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id p12-20020a37420c000000b007426ec97253sm5944573qka.111.2023.03.01.00.06.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 00:06:34 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-53916ab0c6bso344568887b3.7;
-        Wed, 01 Mar 2023 00:06:34 -0800 (PST)
-X-Received: by 2002:a81:ad45:0:b0:52e:cacb:d7c4 with SMTP id
- l5-20020a81ad45000000b0052ecacbd7c4mr3373237ywk.5.1677657994373; Wed, 01 Mar
- 2023 00:06:34 -0800 (PST)
+        Wed, 1 Mar 2023 03:07:05 -0500
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFF437545
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 00:07:03 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id A9A0B6382EFF;
+        Wed,  1 Mar 2023 09:07:02 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id JJYUEG33GHQY; Wed,  1 Mar 2023 09:07:02 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 5042C6382EFB;
+        Wed,  1 Mar 2023 09:07:02 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wTWnOLs0gHPD; Wed,  1 Mar 2023 09:07:02 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 3819A605DED8;
+        Wed,  1 Mar 2023 09:07:02 +0100 (CET)
+Date:   Wed, 1 Mar 2023 09:07:02 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1115586887.187161.1677658022188.JavaMail.zimbra@nod.at>
+Subject: [GIT PULL] JFFS2, UBI and UBIFS updates for v6.3-rc1
 MIME-Version: 1.0
-References: <20230228213738.272178-1-willy@infradead.org> <20230228213738.272178-23-willy@infradead.org>
-In-Reply-To: <20230228213738.272178-23-willy@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 1 Mar 2023 09:06:16 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVY9VSZ57g-RXpDVBigfKJZLyF5wuyRsbmOm6d+m08OEA@mail.gmail.com>
-Message-ID: <CAMuHMdVY9VSZ57g-RXpDVBigfKJZLyF5wuyRsbmOm6d+m08OEA@mail.gmail.com>
-Subject: Re: [PATCH v3 22/34] superh: Implement the new page table range API
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Index: roGm/tvZ5HdHDuKdZoGvK25uWKzwXw==
+Thread-Topic: JFFS2, UBI and UBIFS updates for v6.3-rc1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
+Linus,
 
-On Tue, Feb 28, 2023 at 10:39 PM Matthew Wilcox (Oracle)
-<willy@infradead.org> wrote:
-> Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio() and
-> flush_icache_pages().  Change the PG_dcache_clean flag from being
-> per-page to per-folio.  Flush the entire folio containing the pages in
-> flush_icache_pages() for ease of implementation.
->
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
-Thanks for your patch!
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
 
-> --- a/arch/sh/mm/cache.c
-> +++ b/arch/sh/mm/cache.c
+are available in the Git repository at:
 
->  void __flush_anon_page(struct page *page, unsigned long vmaddr)
->  {
-> +       struct folio *folio = page_folio(page);
->         unsigned long addr = (unsigned long) page_address(page);
->
->         if (pages_do_alias(addr, vmaddr)) {
-> -               if (boot_cpu_data.dcache.n_aliases && page_mapcount(page) &&
-> -                   test_bit(PG_dcache_clean, &page->flags)) {
-> +               if (boot_cpu_data.dcache.n_aliases && folio_mapped(folio) &&
-> +                   test_bit(PG_dcache_clean, &folio->flags)) {
->                         void *kaddr;
->
->                         kaddr = kmap_coherent(page, vmaddr);
->                         /* XXX.. For now kunmap_coherent() does a purge */
->                         /* __flush_purge_region((void *)kaddr, PAGE_SIZE); */
->                         kunmap_coherent(kaddr);
-> -               } else
-> -                       __flush_purge_region((void *)addr, PAGE_SIZE);
-> +               } else
+  git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git tags/ubifs-for-linus-6.3-rc1
 
-Trailing whitespace. Please run scripts/checkpath.pl (on the full series).
+for you to fetch changes up to 8fcf2d012c8641c18adcd139dba6a1e556338d36:
 
-> +                       __flush_purge_region(folio_address(folio),
-> +                                               folio_size(folio));
->         }
->  }
+  ubi: block: Fix a possible use-after-free bug in ubiblock_create() (2023-02-14 15:17:55 +0100)
 
-Gr{oetje,eeting}s,
+----------------------------------------------------------------
+This pull request contains updates for JFFS2, UBI and UBIFS
 
-                        Geert
+JFFS2:
+	- Fix memory corruption in error path
+	- Spelling and coding style fixes
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+UBI:
+	- Switch to BLK_MQ_F_BLOCKING in ubiblock
+	- Wire up partent device (for sysfs)
+	- Multiple UAF bugfixes
+	- Fix for an infinite loop in WL error path
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+UBIFS:
+	- Fix for multiple memory leaks in error paths
+	- Fixes for wrong space accounting
+	- Minor cleanups
+	- Spelling and coding style fixes
+
+----------------------------------------------------------------
+Christoph Hellwig (1):
+      ubi: block: set BLK_MQ_F_BLOCKING
+
+Daniel Golle (2):
+      mtd: ubi: wire-up parent MTD device
+      mtd: ubi: block: wire-up device parent
+
+George Kennedy (1):
+      ubi: ensure that VID header offset + VID header size <= alloc, size
+
+Harshit Mogalapalli (1):
+      ubi: block: Fix a possible use-after-free bug in ubiblock_create()
+
+Jiapeng Chong (1):
+      UBI: Fastmap: Fix kernel-doc
+
+Li Hua (1):
+      ubifs: Fix build errors as symbol undefined
+
+Li Zetao (3):
+      ubi: Fix use-after-free when volume resizing failed
+      ubi: Fix unreferenced object reported by kmemleak in ubi_resize_volume()
+      ubifs: Fix memory leak in alloc_wbufs()
+
+Liu Shixin (1):
+      ubifs: Fix memory leak in ubifs_sysfs_init()
+
+Mårten Lindahl (1):
+      ubi: block: Reduce warning print to info for static volumes
+
+Randy Dunlap (1):
+      ubi: use correct names in function kernel-doc comments
+
+Thomas Weißschuh (1):
+      ubifs: make kobj_type structures constant
+
+Yang Li (2):
+      ubifs: Fix some kernel-doc comments
+      ubifs: Fix kernel-doc
+
+Yang Yingliang (1):
+      ubi: Fix possible null-ptr-deref in ubi_free_volume()
+
+Yifei Liu (1):
+      jffs2: correct logic when creating a hole in jffs2_write_begin
+
+Yu Zhe (1):
+      jffs2: fix spelling mistake "neccecary"->"necessary"
+
+Zhang Xiaoxu (2):
+      jffs2: Use function instead of macro when initialize compressors
+      jffs2: Fix list_del corruption if compressors initialized failed
+
+ZhaoLong Wang (2):
+      ubi: fastmap: Add fastmap control support for module parameter
+      ubi: Fix permission display of the debugfs files
+
+Zhihao Cheng (13):
+      ubifs: Rectify space budget for ubifs_symlink() if symlink is encrypted
+      ubifs: Rectify space budget for ubifs_xrename()
+      ubifs: Add comments and debug info for ubifs_xrename()
+      ubifs: Fix wrong dirty space budget for dirty inode
+      ubifs: do_rename: Fix wrong space budget when target inode's nlink > 1
+      ubifs: Reserve one leb for each journal head while doing budget
+      ubifs: Re-statistic cleaned znode count if commit failed
+      ubifs: dirty_cow_znode: Fix memleak in error handling path
+      ubifs: ubifs_writepage: Mark page dirty after writing inode failed
+      ubifs: ubifs_releasepage: Remove ubifs_assert(0) to valid this process
+      ubi: fastmap: Fix missed fm_anchor PEB in wear-leveling after disabling fastmap
+      ubi: Fix UAF wear-leveling entry in eraseblk_count_seq_show()
+      ubi: ubi_wl_put_peb: Fix infinite loop when wear-leveling work failed
+
+ drivers/mtd/ubi/block.c      | 109 ++++++++++++++-----------------------------
+ drivers/mtd/ubi/build.c      |  32 +++++++++++--
+ drivers/mtd/ubi/debug.c      |  19 ++++----
+ drivers/mtd/ubi/eba.c        |   2 +-
+ drivers/mtd/ubi/fastmap-wl.c |  12 +++--
+ drivers/mtd/ubi/fastmap.c    |   2 +-
+ drivers/mtd/ubi/kapi.c       |   1 +
+ drivers/mtd/ubi/misc.c       |   2 +-
+ drivers/mtd/ubi/vmt.c        |  18 +++----
+ drivers/mtd/ubi/wl.c         |  27 +++++++++--
+ fs/jffs2/compr.c             |  50 +++++++++++---------
+ fs/jffs2/compr.h             |  26 ++++++++---
+ fs/jffs2/file.c              |  15 +++---
+ fs/jffs2/fs.c                |   2 +-
+ fs/ubifs/budget.c            |   9 ++--
+ fs/ubifs/dir.c               |  18 ++++++-
+ fs/ubifs/file.c              |  31 ++++++++----
+ fs/ubifs/io.c                |   6 +--
+ fs/ubifs/journal.c           |   8 +++-
+ fs/ubifs/super.c             |  17 +++++--
+ fs/ubifs/sysfs.c             |   6 ++-
+ fs/ubifs/tnc.c               |  24 +++++++++-
+ fs/ubifs/ubifs.h             |   5 ++
+ include/linux/mtd/ubi.h      |   1 +
+ 24 files changed, 274 insertions(+), 168 deletions(-)
