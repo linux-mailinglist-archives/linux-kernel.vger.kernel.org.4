@@ -2,93 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D965F6A6D6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8896A6D8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjCANwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 08:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
+        id S229591AbjCAN4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 08:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjCANvu (ORCPT
+        with ESMTP id S229471AbjCAN4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:51:50 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2569B39B98
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 05:51:48 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id eg37so53872541edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 05:51:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677678706;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FmROz+jjysGIdxG0OXVt9BXRI08zLySmgZ7Ui4RktGI=;
-        b=NNYQAaK3PrurqTvbeuwsK1orRteglxjVU8oziYmo6cL232LDCQYE7HxaAy2HxTdYxU
-         6772ktfC1iFKPuHSEnDwmLmI+pay57cmzklprEPmCYl4v2XTHEjrWrZI/PMYwZWyGted
-         kEvokGEE73dPNTQMVy5ZafPZ9o9SZgPV+yoxoIZZNgnnjBhB2yg/ab2g0+Mxkv19m1/F
-         nJXeQ0vw5pDdfS1jqEtIHWKKH5FC5C/vYcB4S5Ieejrfyrv7denKqgJMo84WWInl+gqs
-         fuj1EO0uTmTwzZVdDfVz4pqmws4qUpoEfuOcaqICO0XSaNe7ik+DTql+sjA6FgFNHF+O
-         LmXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677678706;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FmROz+jjysGIdxG0OXVt9BXRI08zLySmgZ7Ui4RktGI=;
-        b=wPpA+crvuoeUJiP7+L8ZIUFJe2RwGVXKusrKSUb35k0+WAlTXbCynA4xO0G0cUCNWj
-         7JttBeg6iHn7SQv0+g6Zu00qCWtkt6md6HZMECg9CqytDDbDTtpQAnNVUwj7lLGiXQTL
-         voRUqllegPQtyRtGvmI8af4cQhWdlFby2IMzl915ZVhmGWQeg2e+gWuuk0OTPdr3FzLf
-         rXlMtDBMsZVwVjvLFLjPu7tAR8SVob7Y1x2Q7iZytWkdtRHdSjMpbDDXN/K5j6Y+LOIc
-         G/krjbPRk6EANJwG53ugCiKc/RAj8QSi1uNqEUQ9W1XnnGq3rHSSPvp3hBkR0p8idoWV
-         ynng==
-X-Gm-Message-State: AO0yUKW/Z46xo9Me6GNu4T4tvqEZM7YNSG1BiqSiVp6CZydzpIkvBBGe
-        N+YKtBM7qzm1wDiF44eDwF63iA==
-X-Google-Smtp-Source: AK7set9k19CfomyRoAzS5IG1PaeH5snagnjiUJoHQOo664uyG5BxusdPc4ChxHb2cY9aq3IBrafPtQ==
-X-Received: by 2002:a17:906:8390:b0:8b1:800b:9fbf with SMTP id p16-20020a170906839000b008b1800b9fbfmr6951381ejx.13.1677678706653;
-        Wed, 01 Mar 2023 05:51:46 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id w1-20020a17090652c100b008cc920469b5sm5899948ejn.18.2023.03.01.05.51.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 05:51:46 -0800 (PST)
-Message-ID: <cbad45c9-07b1-4393-e20d-ab8d372e0a3c@linaro.org>
-Date:   Wed, 1 Mar 2023 13:51:44 +0000
+        Wed, 1 Mar 2023 08:56:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C993E09A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 05:56:37 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pXMwY-0006od-Vh; Wed, 01 Mar 2023 14:56:30 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pXMwX-0007JQ-Rd; Wed, 01 Mar 2023 14:56:29 +0100
+Date:   Wed, 1 Mar 2023 14:56:29 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Jindong Yue <jindong.yue@nxp.com>
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, l.stach@pengutronix.de, peng.fan@nxp.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v3 0/7] soc: imx8m: Support building imx8m soc driver as
+ module
+Message-ID: <20230301135629.pvif7opx6whguwod@pengutronix.de>
+References: <20230301130557.3949285-1-jindong.yue@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Android 5.10] kernel BUG in ext4_free_blocks (2)
-Content-Language: en-US
-To:     syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
-        joneslee@google.com, lczerner@redhat.com, lee@kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nogikh@google.com, sashal@kernel.org, stable@vger.kernel.org,
-        syzkaller-android-bugs@googlegroups.com, tadeusz.struk@linaro.org,
-        tytso@mit.edu
-References: <0000000000007e24fb05f5d61afb@google.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <0000000000007e24fb05f5d61afb@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301130557.3949285-1-jindong.yue@nxp.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On 23-03-01, Jindong Yue wrote:
+> This series adds support for building imx8m soc driver as module.
 
-On 3/1/23 12:46, syzbot wrote:
-> This bug is marked as fixed by commit:
-> ext4: block range must be validated before use in ext4_mb_clear_bb()
-> 
-> But I can't find it in the tested trees[1] for more than 90 days.
+...
 
-Indeed it seems this patch was never backported to the stable tree.
-I'm handling it.
+>  drivers/soc/imx/Kconfig           | 2 +-
+>  drivers/soc/imx/imx8m-blk-ctrl.c  | 3 ++-
+>  drivers/soc/imx/imx8mp-blk-ctrl.c | 5 +++--
+>  drivers/soc/imx/soc-imx8m.c       | 1 +
+>  4 files changed, 7 insertions(+), 4 deletions(-)
 
-Cheers,
-ta
+the serie lgtm now, feel free to add my:
+
+Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
