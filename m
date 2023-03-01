@@ -2,99 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5066A645F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2506A645E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjCAApr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 19:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjCAApo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229780AbjCAApo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 28 Feb 2023 19:45:44 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D936EB5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:45:43 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id x6so6620275ljq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:45:43 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229486AbjCAApm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Feb 2023 19:45:42 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29658CA0D;
+        Tue, 28 Feb 2023 16:45:42 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id i5so10629817pla.2;
+        Tue, 28 Feb 2023 16:45:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1677631541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y5m78WOJU8Q8f13mfbwHzzeODEphAMSlmLmtQWAwznk=;
-        b=vpxgg+RzU+WKen19EqJk1/2sn3MXymj9IIvV/DR2kisgIdPkoFuP3jcfGI67/Rt3yY
-         5eFWE/bDHwCeOjzjavdS0mY9XG34GY+ykXfnDVE+sxxPFzNXE59BN7LcqrLcG61zkrNu
-         g6fLacramYtPypiSVZjQyPcjEwaWp+NBGS7NY=
+        d=gmail.com; s=20210112; t=1677631541;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=itotDAvkNSqM9L6NfCXeS0yg6PSQMLST22vQZzFDif8=;
+        b=lw1dGrPyQAuOM7WYvldcWIdqS7WqRmyMI3mZJmRJnyTCCeLgT4VZWAgnOjWcFzkY22
+         mcrG3JSXzJwiXZqPortCdWih8SInbzGtw4QsmqpdG82ryQiTMzMgxdYunmf47qmwsXaR
+         F1vgqobY4YnM2Hx/r9rLsi/IQanmSobRAJvYhER4VR0a3XwSMSSDzBIXjeRW57pmW4g7
+         l6+dsC7Ita8d60HGJTdexpxC62xmfD+1OSARc1CtuPWlfrQOGj9PHtQcpWTfmVzO6rr+
+         F+3XZawkxmOYRbquMLZ+2QHe4yk03wjHLzX2RuH0OJTxvX92Tv8Mq59Y8UZ2CWdD1iuk
+         bGJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1677631541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y5m78WOJU8Q8f13mfbwHzzeODEphAMSlmLmtQWAwznk=;
-        b=yAPww++93WxV4irVVI0VFtrcWbRC48OaZJzgpcuLfC2hwPYDmjHhRICZyOYbv6RunS
-         3Xz+kgYTfFzu2OJMG+5p8hx8jkb3q7KZYiBidpXNbKFarsAyCfaVKsuhtxfObvL9QQip
-         0Tdd1BmAEai/FW4EYXGOrQ/JbeERk8wbIetN1PLPiF23sRCyaV2T0TIhDChlqIwZBTdf
-         pRho1n9QO7vMU1uDLxwtfIo3GuZIi6nE8271dMDmXSQirY/G8LBCT5a3jhdseX/nZxWB
-         gWWJLvOjwhymx8pLA+5SAVvx/RYk//dgz3L3RUUA+eOU/pLPodA9bRuOsoJowtHWaQcj
-         M83w==
-X-Gm-Message-State: AO0yUKXmhw5/VJRFbhSypALvc9ZOql/FU48LQ35l2xyQsjJK5QIQLuxj
-        rzQl1Ve7uVZjJQvWdLnmmqX+3N/++OXaPjrXoO6lYU3YmYiwFg==
-X-Google-Smtp-Source: AK7set9/hh2o8bm+fHkpcQlrQgSugVTdVkvXiR4SF1VBEJL6/MYChjro+BqRIATBG8FcsZvy4Kopido8eRPwR7bEO+4=
-X-Received: by 2002:a05:651c:b9b:b0:295:8ef2:8744 with SMTP id
- bg27-20020a05651c0b9b00b002958ef28744mr1400092ljb.3.1677631541365; Tue, 28
- Feb 2023 16:45:41 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=itotDAvkNSqM9L6NfCXeS0yg6PSQMLST22vQZzFDif8=;
+        b=Ta9447D8lgSlbkj15wPQbMDiQ+W3DkzCaP2847TsBol6k5SfgB3yDKC4rV9foJUyio
+         Kdl9/bZqbrKGTRrkJ17uQyNzPYpLr2A8YZJaRvBBZFZesg2MGfMtvYdUgIut7Mch6Te4
+         mp+B6u1czUBbIIMKYNehdxGB3VQU3a0A/iRjqNG9VSyt21Iut8EOWmX2YFLwfF6qTg71
+         VsQvesbMT6rFDJzPL7R9SjVDR0vRpxHFL2DAtkvNr77x0YsXGOiYJTwUkKkRyw0mFTyP
+         PPvGo4o7KLC4vxk07lpqbs/YXd0m34nSfPXD0P9muLzctX44wLC9mPb5Mt24QxO2oGop
+         Klgw==
+X-Gm-Message-State: AO0yUKW9KCDtaK2tM7KOScJdpu9S24NtR84pVEv5HH6rvR1sT51TOlL4
+        VTL68T9B3S/7HGo2iJSTrOk=
+X-Google-Smtp-Source: AK7set9moT28arC5PM2dQIIGj9okq904KeUfssdOuX2R66iu3dw432nYWaYAoO2US+d89vSfS/pbjg==
+X-Received: by 2002:a17:902:d504:b0:19e:2c25:d65e with SMTP id b4-20020a170902d50400b0019e2c25d65emr4920946plg.42.1677631541524;
+        Tue, 28 Feb 2023 16:45:41 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id o19-20020a170902779300b0019cba9d77desm7052408pll.258.2023.02.28.16.45.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 16:45:40 -0800 (PST)
+Date:   Tue, 28 Feb 2023 16:45:39 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>
+Subject: Re: [PATCH v12 000/106] KVM TDX basic feature support
+Message-ID: <20230301004539.GC3852341@ls.amr.corp.intel.com>
+References: <cover.1677484918.git.isaku.yamahata@intel.com>
+ <7ec69b6b-540c-95d1-079d-8527fabd440b@intel.com>
 MIME-Version: 1.0
-References: <20230228155121.3416-1-ubizjak@gmail.com> <Y/5mguXPPqdP3MZF@google.com>
- <20230228160324.2a7c1012@gandalf.local.home> <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230228164124.77c126d2@gandalf.local.home> <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
- <20230228190846.79b06089@gandalf.local.home>
-In-Reply-To: <20230228190846.79b06089@gandalf.local.home>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 28 Feb 2023 19:45:30 -0500
-Message-ID: <CAEXW_YTRG+7oTGgmqSKpC6Wzft6vsjOzEDkN=eLpcEWeAxYwdg@mail.gmail.com>
-Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Uros Bizjak <ubizjak@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7ec69b6b-540c-95d1-079d-8527fabd440b@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Steve,
+On Tue, Feb 28, 2023 at 04:03:12PM +0800,
+Xiaoyao Li <xiaoyao.li@intel.com> wrote:
 
-On Tue, Feb 28, 2023 at 7:08=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
-[...]
-> >
-> > >
-> > > But in your case, we don't need to update js, in which case the
-> > > try_cmpxchg() does.
-> >
-> > Right, it has lesser value here but I'm curious why you feel it also
-> > doesn't belong in that ring buffer loop you shared (or did you mean,
-> > it does belong there but not in other ftrace code modified by Uros?).
->
-> The ring buffer patch had more than one change, where half the updates we=
-re
-> fine, and half were not.
+> On 2/27/2023 4:21 PM, isaku.yamahata@intel.com wrote:
+> > KVM TDX basic feature support
+> > 
+> > Hello.  This is v12 the patch series vof KVM TDX support.  This is based on
+> > v6.2-rc7 + the following patch series.
+> > 
+> > Related patch series This patch is based on:
+> > - fd-based approach for supporing KVM v10 and
+> >    https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@linux.intel.com/
+> >    git@github.com:sean-jc/linux.git  x86/upm_base_support
+> > - TDX host kernel support v9
+> >    https://lore.kernel.org/lkml/e1c717b36033caf8de9d7a448e06eff88ed0c9ae.camel@intel.com/T/#m2562c7f18eabae171793ed7ea81b3544d7af09c4
+> 
+> 
+>  9fdabaaf0346 KVM: TDX: Make TDX VM type supported
+>  fa6b8135913c KVM: x86: Introduce vm_type to differentiate default VMs from
+> confidential VMs
+>  6dbc1fdfb61f KVM: TDX: Add placeholders for TDX VM/vcpu structure
+>  64a9c956f265 KVM: TDX: Initialize the TDX module when loading the KVM intel
+> kernel module
+>  bacb6554fcf5 KVM: x86/vmx: Refactor KVM VMX module init/exit functions
+>  b17eee6a7d53 KVM: VMX: Move out vmx_x86_ops to 'main.c' to wrap VMX and TDX
+>  5a8b8d63a2e8 x86/mtrr: Mask out keyid bits from variable mtrr mask register
+>  29017e2c04cc KVM: arm64: Mark kvm_arm_init() and its unique descendants as
+> __init
+> 
+> 
+> I find above 8 patches not included in this patch series after TDX host
+> kernel support series. Some of them were included in v11 before, and I think
+> they are important to make the patch series intact. What's the reason for
+> not including them?
 
-Thanks for all the clarifications. Good to know such loop design
-patterns can benefit from it!
-
-
- - Joel
+Thanks for pointing it out. My bad. I wrongly specified the start of patch
+series.  Those should be included.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
