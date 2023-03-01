@@ -2,218 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CE46A6ABD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC226A6ABF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjCAKXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 05:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S229534AbjCAKYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 05:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjCAKXv (ORCPT
+        with ESMTP id S229652AbjCAKYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 05:23:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B713B3CF
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:22:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677666147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XOyiQKIdMnvfgHK0+JM6b4NpBz3+X6fBNBNCgpa23Zk=;
-        b=P0uPbH03xmg5PExl8DSeKS3KOxRGdu6kYX4YemvVXvOgsZ6etEgNGwSaSTsdwcbfFqKWb0
-        nr9a4t3b8R58oKXnOlt4cozAT2P0CMcJ2ZS/2ksiMKptRrUOgrPwavGIomeNxOeUGBZHTr
-        7LYe448yQ1bMpxcs9a2K0FCCJqVdmtA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-388-jPx6-0M8MLWGe2Rl2uX8Wg-1; Wed, 01 Mar 2023 05:22:24 -0500
-X-MC-Unique: jPx6-0M8MLWGe2Rl2uX8Wg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 59A9F864761;
-        Wed,  1 Mar 2023 10:22:24 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-180.pek2.redhat.com [10.72.13.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 44439492C18;
-        Wed,  1 Mar 2023 10:22:20 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        geert@linux-m68k.org, hch@infradead.org, mcgrof@kernel.org,
-        Baoquan He <bhe@redhat.com>
-Subject: [PATCH v2 2/2] arch/*/io.h: remove ioremap_uc in some architectures
-Date:   Wed,  1 Mar 2023 18:22:08 +0800
-Message-Id: <20230301102208.148490-3-bhe@redhat.com>
-In-Reply-To: <20230301102208.148490-1-bhe@redhat.com>
-References: <20230301102208.148490-1-bhe@redhat.com>
+        Wed, 1 Mar 2023 05:24:47 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D426D6A6B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:24:46 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id p6so7439043pga.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 02:24:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jra8BlpEp5tQk24mlqoulQy0sFVz/ZQsJRpaaxqzSZw=;
+        b=PRVpWcAkCq7NgiCxzrtPNfvPE4AfyvLVTmgUdgmtnaeLuVbjIdcmQROp9Vcb79ELNJ
+         zDUvx9QH3eKsVHIGTX4TXdGHhRqfjspOaMD/q8RIO9Cj6rfpA8G2hgwisHh9aMtSLomQ
+         KlGWfzAZ4Oo3gY9SO0VRWLvdafRwIgy4KNf5AtqLcAqer/JZAOl6nlKbSbUyuyEurz3G
+         c6ooHywMEwQTI8IXJrB+kspgO/RxKKtiTEg8yCoXg5PQCUn6lHhZMzF4V2gl+AVtogyS
+         TOjx0U15pugCJsCgwy6yB0urYCj0msM3+TLcREDAadIqqzNzmisOS3SFc19b9vPvZGyo
+         XP/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jra8BlpEp5tQk24mlqoulQy0sFVz/ZQsJRpaaxqzSZw=;
+        b=voq1bBIX0pZsVf2l0KfgKmCWY6b0dbz0/4Wt2UDmFfEWUGj08DSzdEuiywg9hN+JdP
+         XqYt6+oEqw1MfKzGAHwi+C2rJn64uXS+gP7YN05ZMllBpIPSfxmhpPKPWl/gR673PJpy
+         kGy9pv3O2H5kGpOO3KgvwjBs+4mbIoiHC2iwnDJdBpRvPvtT9+5FmGZUaagEHvW1qKji
+         bPPH2OcdZSCbO6z8XiNH00JHHd+QDOlhEvVXJgh5OfcA/FP8TqUONc+u6LI7KwCivKfb
+         mOzkg3slEMQ19995kORO1BBmVuV/I3k0JTM8etd5UMUL1q3XJkvntB+XYXP5r063mPEo
+         DnjQ==
+X-Gm-Message-State: AO0yUKW4mN3PyC+P8JT44+E6ydlrcRxZ/B3/1zJR3XTtGL3mrl3k+uWw
+        TQKGCtyOCNzKmIldA08cl10E3WV/dW6F56vEp80g5Q==
+X-Google-Smtp-Source: AK7set/ZPBCpLxfSahAsqJGErr+qo4LEhLG88TYoDjBzsVCAsxitIKdtsDrvWBYHHrUqcy5K2LWtemG+O9XL5AhS0dM=
+X-Received: by 2002:a05:6a00:804:b0:5a8:5c7d:e4db with SMTP id
+ m4-20020a056a00080400b005a85c7de4dbmr3972654pfk.3.1677666285565; Wed, 01 Mar
+ 2023 02:24:45 -0800 (PST)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
+ <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
+ <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net> <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
+ <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net> <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
+ <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net> <20221108194843.i4qckcu7zwqstyis@airbuntu>
+ <Y2vMBWpPlIArwnI7@hirez.programming.kicks-ass.net> <424e2c81-987d-f10e-106d-8b4c611768bc@arm.com>
+ <CAKfTPtD0ZOndFef3-JxBn3G9tcX=cZEObjHZ0iqiVTJz7+QrmQ@mail.gmail.com>
+ <249816c9-c2b5-8016-f9ce-dab7b7d384e4@arm.com> <CAKfTPtA4gSZAmi3FtU2Y57cuqCzC5LCR=+7Q8Xh=VtkbfaQP5Q@mail.gmail.com>
+ <CAKfTPtCdoAtQUJgSGgCZtCWhtv0_WgDrBpGSRTwHG=SV_Jf4ew@mail.gmail.com> <94eeb587-e9c9-1d92-7fd3-edde46fd4dba@arm.com>
+In-Reply-To: <94eeb587-e9c9-1d92-7fd3-edde46fd4dba@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 1 Mar 2023 11:24:33 +0100
+Message-ID: <CAKfTPtCYQTUdAPb1_yy3103P9KnC5ccAnF0djgOYSkmo_=gU5w@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ioremap_uc() is only meaningful on old x86-32 systems with the PAT
-extension, and on ia64 with its slightly unconventional ioremap()
-behavior, everywhere else this is the same as ioremap() anyway.
+On Wed, 22 Feb 2023 at 21:29, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>
+> On 21/02/2023 10:29, Vincent Guittot wrote:
+> > On Mon, 20 Feb 2023 at 14:54, Vincent Guittot
+> > <vincent.guittot@linaro.org> wrote:
+> >>
+> >> On Fri, 17 Feb 2023 at 14:54, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >>>
+> >>> On 09/02/2023 17:16, Vincent Guittot wrote:
+> >>>> On Tue, 7 Feb 2023 at 11:29, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >>>>>
+> >>>>> On 09/11/2022 16:49, Peter Zijlstra wrote:
+> >>>>>> On Tue, Nov 08, 2022 at 07:48:43PM +0000, Qais Yousef wrote:
+> >>>>>>> On 11/07/22 14:41, Peter Zijlstra wrote:
+> >>>>>>>> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
+>
+> [...]
+>
+> >>> I ran the same test (boosting only for DVFS requests) with:
+>                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ *
+> >>>
+> >>> -->8--
+> >>>
+> >>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> >>> index dbc56e8b85f9..7a4bf38f2920 100644
+> >>> --- a/kernel/sched/sched.h
+> >>> +++ b/kernel/sched/sched.h
+> >>> @@ -2946,6 +2946,8 @@ static inline unsigned long cpu_util_cfs(int cpu)
+> >>>                              READ_ONCE(cfs_rq->avg.util_est.enqueued));
+> >>>         }
+> >>>
+> >>> +       util = max(util, READ_ONCE(cfs_rq->avg.runnable_avg));
+> >>> +
+> >
+> > Another reason why it gives better results could be that
+> > cpu_util_cfs() is not only used for DVFS selection but also to track
+> > the cpu utilization in load balance and EAS so the cpu will be faster
+> > seen as overloaded and tasks will be spread around when there are
+> > contentions.
+> >
+> > Could you try to take cfs_rq->avg.runnable_avg into account only when
+> > selecting frequency ?
+>
+> I actually did exactly this. (* but not shown in the code snippet).
+> I just used the boosting for CPU frequency selection (from
+> sugov_get_util()). I added the the `_freq` suffix in the kernel name to
+> indicate this.
 
-Here, remove the ioremap_uc() definition in architecutures other
-than x86 and ia64. These architectures all have asm-generic/io.h
-included and will have the default ioremap_uc() definition which
-returns NULL.
+Ok. So the improvement that you are seeing, is really related to
+better freq selection
 
-Note: This changes the existing behaviour and could break code
-calling ioremap_uc(). If any ARCH meets this breakage and really
-needs a specific ioremap_uc() for its own usage, one ioremap_uc()
-can be added in the ARCH.
+>
+> > That being said I can see some place in load balance where
+> > cfs_rq->avg.runnable_avg could give some benefits like in
+> > find_busiest_queue() where it could be better to take into account the
+> > contention when selecting the busiest queue
+>
+> Could be. Looks like so far we only use it in group_has_capacity(),
+> group_is_overloaded() and for NUMA.
 
-Link: https://lore.kernel.org/all/20191112105507.GA7122@lst.de/#t
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
- Documentation/driver-api/device-io.rst | 11 +++++++++--
- arch/alpha/include/asm/io.h            |  1 -
- arch/hexagon/include/asm/io.h          |  3 ---
- arch/m68k/include/asm/kmap.h           |  1 -
- arch/mips/include/asm/io.h             |  1 -
- arch/parisc/include/asm/io.h           |  2 --
- arch/powerpc/include/asm/io.h          |  1 -
- arch/sh/include/asm/io.h               |  2 --
- arch/sparc/include/asm/io_64.h         |  1 -
- 9 files changed, 9 insertions(+), 14 deletions(-)
+I think it could be interesting to use runnable_avg in
+find_busiest_queue() for migrate_util case to select the rq with
+highest contention as an example
 
-diff --git a/Documentation/driver-api/device-io.rst b/Documentation/driver-api/device-io.rst
-index 4d2baac0311c..ec37faa37a37 100644
---- a/Documentation/driver-api/device-io.rst
-+++ b/Documentation/driver-api/device-io.rst
-@@ -408,9 +408,16 @@ functions for details on the CPU side of things.
- ioremap_uc()
- ------------
- 
--ioremap_uc() behaves like ioremap() except that on the x86 architecture without
-+ioremap_uc() behaves like ioremap() except that on x86 architecture without
- 'PAT' mode, it marks memory as uncached even when the MTRR has designated
--it as cacheable, see Documentation/x86/pat.rst.
-+it as cacheable, see Documentation/x86/pat.rst, and on ia64 which checks if
-+attributes don't match.
-+
-+
-+ioremap_uc() behaves like ioremap() except that on x86 and ia64 architectures.
-+X86 non-PAT system marks memory as uncached even when the MTRR has designated
-+it as cacheable in ioremap_uc()(see Documentation/x86/pat.rst). While ia64
-+system firstly checks if attributes match ioremap_uc(), otherwise fails.
- 
- Portable drivers should avoid the use of ioremap_uc().
- 
-diff --git a/arch/alpha/include/asm/io.h b/arch/alpha/include/asm/io.h
-index 7aeaf7c30a6f..076f0e4e7f1e 100644
---- a/arch/alpha/include/asm/io.h
-+++ b/arch/alpha/include/asm/io.h
-@@ -308,7 +308,6 @@ static inline void __iomem *ioremap(unsigned long port, unsigned long size)
- }
- 
- #define ioremap_wc ioremap
--#define ioremap_uc ioremap
- 
- static inline void iounmap(volatile void __iomem *addr)
- {
-diff --git a/arch/hexagon/include/asm/io.h b/arch/hexagon/include/asm/io.h
-index dcd9cbbf5934..b9847472f25c 100644
---- a/arch/hexagon/include/asm/io.h
-+++ b/arch/hexagon/include/asm/io.h
-@@ -176,9 +176,6 @@ static inline void writel(u32 data, volatile void __iomem *addr)
- #define _PAGE_IOREMAP (_PAGE_PRESENT | _PAGE_READ | _PAGE_WRITE | \
- 		       (__HEXAGON_C_DEV << 6))
- 
--#define ioremap_uc(addr, size) ioremap((addr), (size))
--
--
- #define __raw_writel writel
- 
- static inline void memcpy_fromio(void *dst, const volatile void __iomem *src,
-diff --git a/arch/m68k/include/asm/kmap.h b/arch/m68k/include/asm/kmap.h
-index 4efb3efa593a..b778f015c917 100644
---- a/arch/m68k/include/asm/kmap.h
-+++ b/arch/m68k/include/asm/kmap.h
-@@ -25,7 +25,6 @@ static inline void __iomem *ioremap(unsigned long physaddr, unsigned long size)
- 	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
- }
- 
--#define ioremap_uc ioremap
- #define ioremap_wt ioremap_wt
- static inline void __iomem *ioremap_wt(unsigned long physaddr,
- 				       unsigned long size)
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 3737b48f37dd..9d93e27f7c82 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -167,7 +167,6 @@ void iounmap(const volatile void __iomem *addr);
-  */
- #define ioremap(offset, size)						\
- 	ioremap_prot((offset), (size), _CACHE_UNCACHED)
--#define ioremap_uc		ioremap
- 
- /*
-  * ioremap_cache -	map bus memory into CPU space
-diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
-index 366537042465..48630c78714a 100644
---- a/arch/parisc/include/asm/io.h
-+++ b/arch/parisc/include/asm/io.h
-@@ -132,8 +132,6 @@ static inline void gsc_writeq(unsigned long long val, unsigned long addr)
- 
- #define ioremap_wc(addr, size)  \
- 	ioremap_prot((addr), (size), _PAGE_IOREMAP)
--#define ioremap_uc(addr, size)  \
--	ioremap_prot((addr), (size), _PAGE_IOREMAP)
- 
- #define pci_iounmap			pci_iounmap
- 
-diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
-index 978d687edf32..7873fc83c82c 100644
---- a/arch/powerpc/include/asm/io.h
-+++ b/arch/powerpc/include/asm/io.h
-@@ -863,7 +863,6 @@ void __iomem *ioremap_wt(phys_addr_t address, unsigned long size);
- #endif
- 
- void __iomem *ioremap_coherent(phys_addr_t address, unsigned long size);
--#define ioremap_uc(addr, size)		ioremap((addr), (size))
- #define ioremap_cache(addr, size) \
- 	ioremap_prot((addr), (size), pgprot_val(PAGE_KERNEL))
- 
-diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
-index b3a26b405c8d..12a892804082 100644
---- a/arch/sh/include/asm/io.h
-+++ b/arch/sh/include/asm/io.h
-@@ -278,8 +278,6 @@ unsigned long long poke_real_address_q(unsigned long long addr,
- 	ioremap_prot((addr), (size), pgprot_val(PAGE_KERNEL))
- #endif /* CONFIG_MMU */
- 
--#define ioremap_uc	ioremap
--
- /*
-  * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-  * access
-diff --git a/arch/sparc/include/asm/io_64.h b/arch/sparc/include/asm/io_64.h
-index 9303270b22f3..d8ee1442f303 100644
---- a/arch/sparc/include/asm/io_64.h
-+++ b/arch/sparc/include/asm/io_64.h
-@@ -423,7 +423,6 @@ static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
- 	return (void __iomem *)offset;
- }
- 
--#define ioremap_uc(X,Y)			ioremap((X),(Y))
- #define ioremap_wc(X,Y)			ioremap((X),(Y))
- #define ioremap_wt(X,Y)			ioremap((X),(Y))
- static inline void __iomem *ioremap_np(unsigned long offset, unsigned long size)
--- 
-2.34.1
-
+>
+> [...]
