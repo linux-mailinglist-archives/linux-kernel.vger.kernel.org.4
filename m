@@ -2,145 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E966A6C33
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FD46A6C3C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjCAMUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 07:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        id S229849AbjCAMWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjCAMUq (ORCPT
+        with ESMTP id S229697AbjCAMW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 07:20:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5011498B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:20:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677673201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BmnN/JeNC+uXvUWsMwj8af3J1VCxOStShW/lz3XRU5Y=;
-        b=Vcg1uNA/x9jTExYMF7ZV1t4b3WtrHzkIneez4GWazMJrMo+/57fI5bWYZ3Cerxu1OEYuEm
-        Or4vInmvWA0fXI3IWM15//vN12dHRkxfeDgTIUoGqC66UTcfaImPsK6HGMOY+0WidvcksL
-        swyacaRz7bXsv2iiRMxf5OsY9IjOAu0=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-584-xVPKlweYNnuOgf7_bEhzOQ-1; Wed, 01 Mar 2023 07:19:57 -0500
-X-MC-Unique: xVPKlweYNnuOgf7_bEhzOQ-1
-Received: by mail-ed1-f70.google.com with SMTP id d24-20020a056402401800b004b65da6d5e2so13286894eda.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:19:57 -0800 (PST)
+        Wed, 1 Mar 2023 07:22:28 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3D93C7BE
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:22:27 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id i6so104208ybu.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:22:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=l8Nz7GHrjsKkrFAhlS/NkKdyC63Tn/KzsoBmeKFSXCw=;
+        b=w+EvywvXa3hPR1XRdg3fT9+2+j3fg01b9pb8YjCHXKBafIgJSWWztnhMRN78aDH1Gl
+         tIeHLL3AoQD9YS0rnC3Aier7ZvdJU+ue3uDqfCYSye3KgmjuM/ws69r9wlmAQaReSTX3
+         NElMSx/U74nuneh6v1fjqAVQeC0wPYvKtaMBRWpF+L4TMLK7WYs65RM5vWaPAtuTt+Kr
+         ypXDt+vTfG8L73u0jM6oN5/3R9TgvRBMmSEKL0gUiJU2UOX/EqKdHgRjEi8pCu6A9TmN
+         uU4ER6e0X5mDuDbr9vmHJy4JhNb/OXaJjONAEFZ35cJpmmzKjdFofE9FJ0L0MZ61wWQM
+         M2pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BmnN/JeNC+uXvUWsMwj8af3J1VCxOStShW/lz3XRU5Y=;
-        b=qsaX458cB6V7qSvKF07YuZ/Fo1+15mhs4bCFfF3LzC5MwAqzLBbPybB63zqBc8c4dg
-         TCCvGDTfJ8JkiLLxcuvuno19DFvv2SXDykJhS16XJamGuvBUFyVh9YSrO7cbGtRIqtlJ
-         cREkglP8hWIGFVFPSkBAcFuu2v9dHfe3nDAT41NOth+rbuECC5Ghp6ZOMYPGdcfiuGso
-         bgILYEMT6rAClR2jhHkl4GfRitbU3FdUl9Gn3WQeOx6oddJDMHhVS8dFJeH259rTAJpz
-         ChAAfyXIkG7ff6WS+bUp91hDvBGLf9UcFL2ATPe0chMijf+UhMmAe+lTL/FDBbIxO+Jg
-         qn6Q==
-X-Gm-Message-State: AO0yUKVtN7IXoYCodziNG1fBpJtZKkyY2RMpaWQ53CRGg6bb+o36v6s5
-        Cr7jKWR13nYyznGc8ZjYANDUQXVrc8JAnL433F0PyNrKe1Hlk0ZNSHG0akHYLJ/7LjrOp9Zl1XI
-        2zI6wmUtUg5pKwKlJkZYNdbhD
-X-Received: by 2002:a17:906:ca12:b0:87d:eff1:acc8 with SMTP id jt18-20020a170906ca1200b0087deff1acc8mr6291657ejb.48.1677673196893;
-        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
-X-Google-Smtp-Source: AK7set/kUyEn9SIqaSY0Dz+h4EG4rmJU65d2AlOikKFI6qVgT5C8p4j24U16+iVEyWf9j1c2O5n3Yw==
-X-Received: by 2002:a17:906:ca12:b0:87d:eff1:acc8 with SMTP id jt18-20020a170906ca1200b0087deff1acc8mr6291639ejb.48.1677673196647;
-        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id h11-20020a17090634cb00b008e36f9b2308sm5706107ejb.43.2023.03.01.04.19.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
-Message-ID: <cc25ee91-5197-b694-a6d6-e7d773afb5db@redhat.com>
-Date:   Wed, 1 Mar 2023 13:19:55 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l8Nz7GHrjsKkrFAhlS/NkKdyC63Tn/KzsoBmeKFSXCw=;
+        b=AiStxV1N2//Y8c5cotydm7uqT4KXxLaI6I7lWuIvL3SXYMK4Hw4dqygeLlwwkU0xFV
+         SHPlyV91qJ0FwBItbWs45jpw2lCoePx8e8KlSLUgiRfezuvu3KhQWri4oEZ6CYgmZZNV
+         Ud5dWstbY0IZ8Jh1Us6+sWKHa+0caisvnTw0ac5gARbiLRpdBjEcSXitID6FKDW9vu3m
+         kG8LlXwgl7onZUNCLU8VOfFDk7+ChzvW/X9oJ7X8uzCTXUiywduQ08EJ/tcXe9UkqZ6g
+         qhgya8/T0JROE5hA6abY3Z2K3cncaaGWPczM0PF0rC5RKt4V44jLEtyzygwCXVwXi6XR
+         wzag==
+X-Gm-Message-State: AO0yUKWeOElpZFLankfBVJYF2kE6SAk5pKF1RjSIhaZUozRJpKWjhbAj
+        eGFC12aviCeidk7RtVgrdxTvjmbw+1BSHX4wozqoLo04xMKnbQ==
+X-Google-Smtp-Source: AK7set/3PSECcYx5SDkKwfxXxVfKsTGwUn5f13PiuIuMv3U3cT7CDjiLP8yKUH8w5up+OiziuGYjkVabAyYxu7cUyWk=
+X-Received: by 2002:a05:6902:4d1:b0:ab8:1ed9:cfd6 with SMTP id
+ v17-20020a05690204d100b00ab81ed9cfd6mr2429104ybs.5.1677673346062; Wed, 01 Mar
+ 2023 04:22:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/2] platform/x86: dell-ddv: Fix temperature scaling
-Content-Language: en-US, nl
-To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230218115318.20662-1-W_Armin@gmx.de>
- <20230218115318.20662-2-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230218115318.20662-2-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <Y/cy5wUtk10OahpO@gondor.apana.org.au> <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
+ <Y/c7iVW67Xhhdu8e@gondor.apana.org.au> <Y/hQdzsKMYgkIfMY@gondor.apana.org.au>
+ <Y/yIbPBVCPx9K/0s@gondor.apana.org.au> <CACRpkdZC4z2Xng4=k94rmM=AFzNzTdXkvtkArMnK7afouz=7VA@mail.gmail.com>
+ <Y/3FYZJeLE7DVPBf@gondor.apana.org.au> <Y/3IA4OjmUmjMgh1@gondor.apana.org.au>
+ <Y/3N6zFOZeehJQ/p@gondor.apana.org.au> <CACRpkdZ3rCsOWqooNkPL6m7vZ2Z2Frh2sdxruKhrS0t3QHcSKw@mail.gmail.com>
+ <Y/6sCC2nH0FcD6kJ@gondor.apana.org.au>
+In-Reply-To: <Y/6sCC2nH0FcD6kJ@gondor.apana.org.au>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 1 Mar 2023 13:22:13 +0100
+Message-ID: <CACRpkdYN-SDfxXKLt3HWGVkWb3V1rABwvWuytwDrzfTqm81fNA@mail.gmail.com>
+Subject: Re: [v4 PATCH] crypto: stm32 - Save and restore between each request
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
+        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Mar 1, 2023 at 2:36 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
 
-On 2/18/23 12:53, Armin Wolf wrote:
-> After using the built-in UEFI hardware diagnostics to compare
-> the measured battery temperature, i noticed that the temperature
-> is actually expressed in tenth degree kelvin, similar to the
-> SBS-Data standard. For example, a value of 2992 is displayed as
-> 26 degrees celsius.
-> Fix the scaling so that the correct values are being displayed.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Fixes: a77272c16041 ("platform/x86: dell: Add new dell-wmi-ddv driver")
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> The failing vector is the first one where we save the state from
+> the hardware and then try to restore it.
 
-Thanks, I've applied this patch to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Yeah that's typical :/
 
-I'll rebase that branch once 6.3-rc1 is out and then push the rebased
-patch to the fixes branch and include it in my next 6.3 fixes pull-req
-to Linus.
+> Is your device ux500 or stm32? Perhaps state saving/restoring is
+> simply broken on ux500 (as the original ux500 driver didn't support
+> export/import and always used a fallback)?
 
-Regards,
+It's Ux500 but I had no problem with import/export before,
+and yeah it has state save/restore in HW.
 
-Hans
-
-
-
-> ---
-> Changes in v2:
-> - Avoid unnecessary rounding
-> ---
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index eff4e9649faf..2750dee99c3e 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -17,7 +17,6 @@
->  #include <linux/kernel.h>
->  #include <linux/hwmon.h>
->  #include <linux/kstrtox.h>
-> -#include <linux/math.h>
->  #include <linux/math64.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> @@ -665,7 +664,8 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *attr, char
->  	if (ret < 0)
->  		return ret;
-> 
-> -	return sysfs_emit(buf, "%d\n", DIV_ROUND_CLOSEST(value, 10));
-> +	/* Use 2731 instead of 2731.5 to avoid unnecessary rounding */
-> +	return sysfs_emit(buf, "%d\n", value - 2731);
->  }
-> 
->  static ssize_t eppid_show(struct device *dev, struct device_attribute *attr, char *buf)
-> --
-> 2.30.2
-> 
-
+Yours,
+Linus Walleij
