@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0C76A74CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134416A74C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjCAUK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:10:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S229708AbjCAUKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjCAUKx (ORCPT
+        with ESMTP id S229602AbjCAUKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:10:53 -0500
+        Wed, 1 Mar 2023 15:10:50 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52752474F2
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:10:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D8441B4F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:10:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677701450; x=1709237450;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uViA3Y36KMcppavOJUEi7BsP4TiAby+a491HDKtz4TU=;
-  b=X+mscz6+c2MUFXrjfQ0ei4t6jB//NjNtGNg2/xznaiAul06KeTQ5hiwA
-   lGYkb/bH0tYk7Hv/vwwU2vPgs4hr5geD1FutP4BakNy5+QfscleKKYVUw
-   gSRxi85LXLq/UQiCqsyQ8A23/n5bbTU5kySfLrlmTofbnuunpCeO2RDnt
-   /zMCoZXWCC7bBq7w1niHlo7igiMIValyJ6SebgQzhKRhmzKmv6IImnJsb
-   S0K2EmrWav47cVuXx4dG6fJVLzWEL5i29PBEpieaKPEag1oCKK5R4+ce2
-   xILXApFIbR/QWodoniGPKIsoXkLpvNvqKTQ8DIN0YITmILe9rkWVbXWUO
+  t=1677701448; x=1709237448;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H2gb310Vh/tQ2QVSRE3iWoVhZ5Tja9P5k8VPe5EDTCs=;
+  b=AZeV4Kj87hrHMKS/a182gS+pxBuXtbuC59gA6wb2S2QhjotcjpkJIPs2
+   JPtcnGljA6sMXfYKz7kpRfdCdFreZPUbl3Tqd6Vq9k32xSSuMtwYjKNk2
+   VckrK9vpV8szEsxiqiOTuA6pSkoMtm3hv3QzL4eUDUy1iQeTx6eQ2Kqid
+   Kwb75vuYcwJyiGo95frIuGot0x6XlbYm/g+0dOUvabPDo5+yzhFZFhLoT
+   R5tNEW2pHzFFwM/c06GjCOTKKZ1pJaZvQBdpOo5YtavW8lRZzVXdTWA4p
+   35jwt1/KOBEh8xl4cWsf8QK8xe78wRDDEbsm9Cm503bZYgu+6Y/fCSe5Q
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322778596"
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322778588"
 X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="322778596"
+   d="scan'208";a="322778588"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 12:10:37 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="667997312"
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="667997311"
 X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="667997312"
+   d="scan'208";a="667997311"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
   by orsmga007.jf.intel.com with ESMTP; 01 Mar 2023 12:10:34 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pXSmX-0006OH-31;
+        id 1pXSmX-0006OF-2u;
         Wed, 01 Mar 2023 20:10:33 +0000
-Date:   Thu, 2 Mar 2023 04:10:01 +0800
+Date:   Thu, 2 Mar 2023 04:10:02 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Justin Stitt <jstitt007@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: drivers/staging/rtl8712/rtl871x_cmd.c:670:27: sparse: sparse:
- incorrect type in assignment (different base types)
-Message-ID: <202303020407.lz2PqK2i-lkp@intel.com>
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Lee Jones <lee@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
+Message-ID: <202303020344.8ATqgdUl-lkp@intel.com>
+References: <20230301091234.3159953-2-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230301091234.3159953-2-Naresh.Solanki@9elements.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -65,353 +69,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c0927a7a5391f7d8e593e5e50ead7505a23cadf9
-commit: d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7 include/uapi/linux/swab.h: move explicit cast outside ternary
-date:   9 months ago
-config: openrisc-randconfig-s052-20230302 (https://download.01.org/0day-ci/archive/20230302/202303020407.lz2PqK2i-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce:
+Hi Naresh,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on 59c54c59974649b2e7bc92faae4a21e2b2408db2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/mfd-max597x-Add-support-for-MAX5970-and-MAX5978/20230301-171527
+base:   59c54c59974649b2e7bc92faae4a21e2b2408db2
+patch link:    https://lore.kernel.org/r/20230301091234.3159953-2-Naresh.Solanki%409elements.com
+patch subject: [PATCH 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230302/202303020344.8ATqgdUl-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7
+        # https://github.com/intel-lab-lkp/linux/commit/68623f7868d887a57422ce2cd6f5dc1ee1510f1e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Naresh-Solanki/mfd-max597x-Add-support-for-MAX5970-and-MAX5978/20230301-171527
+        git checkout 68623f7868d887a57422ce2cd6f5dc1ee1510f1e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/staging/rtl8712/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303020407.lz2PqK2i-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303020344.8ATqgdUl-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/staging/rtl8712/rtl871x_cmd.c:438:29: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] Length @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:438:29: sparse:     expected unsigned int [usertype] Length
-   drivers/staging/rtl8712/rtl871x_cmd.c:438:29: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:439:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] SsidLength @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:439:38: sparse:     expected unsigned int [usertype] SsidLength
-   drivers/staging/rtl8712/rtl871x_cmd.c:439:38: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:441:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __le32 [usertype] Privacy @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:441:32: sparse:     expected unsigned int [usertype] val
-   drivers/staging/rtl8712/rtl871x_cmd.c:441:32: sparse:     got restricted __le32 [usertype] Privacy
-   drivers/staging/rtl8712/rtl871x_cmd.c:441:32: sparse: sparse: cast from restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:441:32: sparse: sparse: cast from restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:441:32: sparse: sparse: cast from restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:441:32: sparse: sparse: cast from restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:442:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected signed int [usertype] Rssi @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:442:27: sparse:     expected signed int [usertype] Rssi
-   drivers/staging/rtl8712/rtl871x_cmd.c:442:27: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:443:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int enum NDIS_802_11_NETWORK_TYPE NetworkTypeInUse @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:443:39: sparse:     expected unsigned int enum NDIS_802_11_NETWORK_TYPE NetworkTypeInUse
-   drivers/staging/rtl8712/rtl871x_cmd.c:443:39: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:445:47: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] ATIMWindow @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:445:47: sparse:     expected unsigned int [usertype] ATIMWindow
-   drivers/staging/rtl8712/rtl871x_cmd.c:445:47: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:447:49: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] BeaconPeriod @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:447:49: sparse:     expected unsigned int [usertype] BeaconPeriod
-   drivers/staging/rtl8712/rtl871x_cmd.c:447:49: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:449:45: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] DSConfig @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:449:45: sparse:     expected unsigned int [usertype] DSConfig
-   drivers/staging/rtl8712/rtl871x_cmd.c:449:45: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:451:55: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] DwellTime @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:451:55: sparse:     expected unsigned int [usertype] DwellTime
-   drivers/staging/rtl8712/rtl871x_cmd.c:451:55: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:453:56: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] HopPattern @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:453:56: sparse:     expected unsigned int [usertype] HopPattern
-   drivers/staging/rtl8712/rtl871x_cmd.c:453:56: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:455:52: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] HopSet @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:455:52: sparse:     expected unsigned int [usertype] HopSet
-   drivers/staging/rtl8712/rtl871x_cmd.c:455:52: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:457:52: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] Length @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:457:52: sparse:     expected unsigned int [usertype] Length
-   drivers/staging/rtl8712/rtl871x_cmd.c:457:52: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:459:43: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] Length @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:459:43: sparse:     expected unsigned int [usertype] Length
-   drivers/staging/rtl8712/rtl871x_cmd.c:459:43: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:461:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int enum NDIS_802_11_NETWORK_INFRASTRUCTURE InfrastructureMode @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:461:41: sparse:     expected unsigned int enum NDIS_802_11_NETWORK_INFRASTRUCTURE InfrastructureMode
-   drivers/staging/rtl8712/rtl871x_cmd.c:461:41: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:463:31: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] IELength @@     got restricted __le32 [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:463:31: sparse:     expected unsigned int [usertype] IELength
-   drivers/staging/rtl8712/rtl871x_cmd.c:463:31: sparse:     got restricted __le32 [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:668:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:668:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:668:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:668:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:668:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:668:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:669:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:669:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:669:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:669:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:669:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:669:37: sparse: sparse: cast to restricted __le32
->> drivers/staging/rtl8712/rtl871x_cmd.c:670:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] Privacy @@     got unsigned int [usertype] @@
-   drivers/staging/rtl8712/rtl871x_cmd.c:670:27: sparse:     expected restricted __le32 [usertype] Privacy
-   drivers/staging/rtl8712/rtl871x_cmd.c:670:27: sparse:     got unsigned int [usertype]
-   drivers/staging/rtl8712/rtl871x_cmd.c:671:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:671:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:671:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:671:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:671:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:671:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:672:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:672:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:672:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:672:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:672:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:672:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:674:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:674:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:674:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:674:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:674:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:674:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:676:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:676:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:676:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:676:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:676:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:676:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:678:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:678:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:678:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:678:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:678:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:678:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:680:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:680:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:680:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:680:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:680:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:680:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:682:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:682:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:682:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:682:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:682:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:682:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:684:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:684:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:684:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:684:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:684:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:684:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:686:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:686:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:686:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:686:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:686:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:686:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:688:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:688:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:688:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:688:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:688:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:688:17: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:689:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:689:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:689:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:689:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:689:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_cmd.c:689:30: sparse: sparse: cast to restricted __le32
---
-   drivers/staging/rtl8712/rtl871x_mlme.c:455:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:455:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:455:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:455:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:455:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:455:28: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:456:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:456:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:456:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:456:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:456:37: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:456:37: sparse: sparse: cast to restricted __le32
->> drivers/staging/rtl8712/rtl871x_mlme.c:457:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] Privacy @@     got unsigned int [usertype] @@
-   drivers/staging/rtl8712/rtl871x_mlme.c:457:27: sparse:     expected restricted __le32 [usertype] Privacy
-   drivers/staging/rtl8712/rtl871x_mlme.c:457:27: sparse:     got unsigned int [usertype]
-   drivers/staging/rtl8712/rtl871x_mlme.c:458:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:458:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:458:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:458:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:458:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:458:26: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:459:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:459:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:459:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:459:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:459:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:459:38: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:461:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:461:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:461:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:461:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:461:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:461:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:463:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:463:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:463:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:463:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:463:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:463:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:465:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:465:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:465:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:465:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:465:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:465:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:467:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:467:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:467:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:467:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:467:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:467:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:469:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:469:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:469:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:469:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:469:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:469:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:471:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:471:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:471:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:471:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:471:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:471:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:473:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:473:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:473:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:473:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:473:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:473:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:475:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:475:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:475:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:475:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:475:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:475:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:477:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:477:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:477:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:477:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:477:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:477:18: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:478:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:478:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:478:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:478:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:478:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:478:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:673:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:673:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:673:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:673:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:673:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:673:30: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:674:34: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:674:34: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:674:34: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:674:34: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:674:34: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:674:34: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:675:36: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:675:36: sparse: sparse: cast to restricted __le32
-   drivers/staging/rtl8712/rtl871x_mlme.c:675:36: sparse: sparse: too many warnings
+All errors (new ones prefixed by >>):
 
-vim +670 drivers/staging/rtl8712/rtl871x_cmd.c
+   drivers/regulator/max597x-regulator.c: In function 'max597x_regulator_probe':
+>> drivers/regulator/max597x-regulator.c:447:41: error: 'struct max597x_data' has no member named 'dev'
+     447 |                     devm_kzalloc(max597x->dev, sizeof(struct max597x_regulator),
+         |                                         ^~
+>> drivers/regulator/max597x-regulator.c:453:39: error: 'struct max597x_data' has no member named 'regmap'
+     453 |                 data->regmap = max597x->regmap;
+         |                                       ^~
+   drivers/regulator/max597x-regulator.c:462:37: error: 'struct max597x_data' has no member named 'dev'
+     462 |                 config.dev = max597x->dev;
+         |                                     ^~
+   drivers/regulator/max597x-regulator.c:465:55: error: 'struct max597x_data' has no member named 'dev'
+     465 |                 rdev = devm_regulator_register(max597x->dev,
+         |                                                       ^~
+   In file included from include/linux/device.h:15,
+                    from drivers/regulator/max597x-regulator.c:11:
+   drivers/regulator/max597x-regulator.c:468:40: error: 'struct max597x_data' has no member named 'dev'
+     468 |                         dev_err(max597x->dev, "failed to register regulator %s\n",
+         |                                        ^~
+   include/linux/dev_printk.h:110:25: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   drivers/regulator/max597x-regulator.c:468:25: note: in expansion of macro 'dev_err'
+     468 |                         dev_err(max597x->dev, "failed to register regulator %s\n",
+         |                         ^~~~~~~
+>> drivers/regulator/max597x-regulator.c:476:20: error: 'struct max597x_data' has no member named 'irq'
+     476 |         if (max597x->irq) {
+         |                    ^~
+   drivers/regulator/max597x-regulator.c:478:46: error: 'struct max597x_data' has no member named 'dev'
+     478 |                     max597x_setup_irq(max597x->dev, max597x->irq, rdevs, num_switches,
+         |                                              ^~
+   drivers/regulator/max597x-regulator.c:478:60: error: 'struct max597x_data' has no member named 'irq'
+     478 |                     max597x_setup_irq(max597x->dev, max597x->irq, rdevs, num_switches,
+         |                                                            ^~
+   drivers/regulator/max597x-regulator.c:481:40: error: 'struct max597x_data' has no member named 'dev'
+     481 |                         dev_err(max597x->dev, "IRQ setup failed");
+         |                                        ^~
+   include/linux/dev_printk.h:110:25: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   drivers/regulator/max597x-regulator.c:481:25: note: in expansion of macro 'dev_err'
+     481 |                         dev_err(max597x->dev, "IRQ setup failed");
+         |                         ^~~~~~~
+   drivers/regulator/max597x-regulator.c: At top level:
+   drivers/regulator/max597x-regulator.c:360:35: warning: 'max597x_regmap_config' defined but not used [-Wunused-const-variable=]
+     360 | static const struct regmap_config max597x_regmap_config = {
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
 
-2865d42c78a912 Larry Finger        2010-08-20  651  
-2865d42c78a912 Larry Finger        2010-08-20  652  void r8712_createbss_cmd_callback(struct _adapter *padapter,
-2865d42c78a912 Larry Finger        2010-08-20  653  				  struct cmd_obj *pcmd)
-2865d42c78a912 Larry Finger        2010-08-20  654  {
-2865d42c78a912 Larry Finger        2010-08-20  655  	unsigned long irqL;
-2865d42c78a912 Larry Finger        2010-08-20  656  	struct sta_info *psta = NULL;
-2865d42c78a912 Larry Finger        2010-08-20  657  	struct wlan_network *pwlan = NULL;
-2865d42c78a912 Larry Finger        2010-08-20  658  	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
-44367877c6c504 Joshua Clayton      2015-08-05  659  	struct wlan_bssid_ex *pnetwork = (struct wlan_bssid_ex *)pcmd->parmbuf;
-2865d42c78a912 Larry Finger        2010-08-20  660  	struct wlan_network *tgt_network = &(pmlmepriv->cur_network);
-2865d42c78a912 Larry Finger        2010-08-20  661  
-34a2c5fe5b33fd Gulsah Kose         2014-03-12  662  	if (pcmd->res != H2C_SUCCESS)
-c703c750cc247c Vaishali Thakkar    2015-02-27  663  		mod_timer(&pmlmepriv->assoc_timer,
-c703c750cc247c Vaishali Thakkar    2015-02-27  664  			  jiffies + msecs_to_jiffies(1));
-39a6e7376af08b Sudip Mukherjee     2015-05-15  665  	del_timer(&pmlmepriv->assoc_timer);
-2865d42c78a912 Larry Finger        2010-08-20  666  #ifdef __BIG_ENDIAN
-2865d42c78a912 Larry Finger        2010-08-20  667  	/* endian_convert */
-2865d42c78a912 Larry Finger        2010-08-20  668  	pnetwork->Length = le32_to_cpu(pnetwork->Length);
-2865d42c78a912 Larry Finger        2010-08-20  669  	pnetwork->Ssid.SsidLength = le32_to_cpu(pnetwork->Ssid.SsidLength);
-2865d42c78a912 Larry Finger        2010-08-20 @670  	pnetwork->Privacy = le32_to_cpu(pnetwork->Privacy);
-2865d42c78a912 Larry Finger        2010-08-20  671  	pnetwork->Rssi = le32_to_cpu(pnetwork->Rssi);
-2865d42c78a912 Larry Finger        2010-08-20  672  	pnetwork->NetworkTypeInUse = le32_to_cpu(pnetwork->NetworkTypeInUse);
-b78559b60518eb Martin Homuth       2017-12-19  673  	pnetwork->Configuration.ATIMWindow =
-b78559b60518eb Martin Homuth       2017-12-19  674  		le32_to_cpu(pnetwork->Configuration.ATIMWindow);
-b78559b60518eb Martin Homuth       2017-12-19  675  	pnetwork->Configuration.DSConfig =
-b78559b60518eb Martin Homuth       2017-12-19  676  		le32_to_cpu(pnetwork->Configuration.DSConfig);
-b78559b60518eb Martin Homuth       2017-12-19  677  	pnetwork->Configuration.FHConfig.DwellTime =
-b78559b60518eb Martin Homuth       2017-12-19  678  		le32_to_cpu(pnetwork->Configuration.FHConfig.DwellTime);
-b78559b60518eb Martin Homuth       2017-12-19  679  	pnetwork->Configuration.FHConfig.HopPattern =
-b78559b60518eb Martin Homuth       2017-12-19  680  		le32_to_cpu(pnetwork->Configuration.FHConfig.HopPattern);
-b78559b60518eb Martin Homuth       2017-12-19  681  	pnetwork->Configuration.FHConfig.HopSet =
-b78559b60518eb Martin Homuth       2017-12-19  682  		le32_to_cpu(pnetwork->Configuration.FHConfig.HopSet);
-b78559b60518eb Martin Homuth       2017-12-19  683  	pnetwork->Configuration.FHConfig.Length =
-b78559b60518eb Martin Homuth       2017-12-19  684  		le32_to_cpu(pnetwork->Configuration.FHConfig.Length);
-b78559b60518eb Martin Homuth       2017-12-19  685  	pnetwork->Configuration.Length =
-b78559b60518eb Martin Homuth       2017-12-19  686  		le32_to_cpu(pnetwork->Configuration.Length);
-b78559b60518eb Martin Homuth       2017-12-19  687  	pnetwork->InfrastructureMode =
-b78559b60518eb Martin Homuth       2017-12-19  688  		le32_to_cpu(pnetwork->InfrastructureMode);
-2865d42c78a912 Larry Finger        2010-08-20  689  	pnetwork->IELength = le32_to_cpu(pnetwork->IELength);
-2865d42c78a912 Larry Finger        2010-08-20  690  #endif
-2865d42c78a912 Larry Finger        2010-08-20  691  	spin_lock_irqsave(&pmlmepriv->lock, irqL);
-2865d42c78a912 Larry Finger        2010-08-20  692  	if ((pmlmepriv->fw_state) & WIFI_AP_STATE) {
-2865d42c78a912 Larry Finger        2010-08-20  693  		psta = r8712_get_stainfo(&padapter->stapriv,
-2865d42c78a912 Larry Finger        2010-08-20  694  					 pnetwork->MacAddress);
-2865d42c78a912 Larry Finger        2010-08-20  695  		if (!psta) {
-2865d42c78a912 Larry Finger        2010-08-20  696  			psta = r8712_alloc_stainfo(&padapter->stapriv,
-2865d42c78a912 Larry Finger        2010-08-20  697  						   pnetwork->MacAddress);
-11975c56b6d130 Sandhya Bankar      2016-09-20  698  			if (!psta)
-2865d42c78a912 Larry Finger        2010-08-20  699  				goto createbss_cmd_fail;
-2865d42c78a912 Larry Finger        2010-08-20  700  		}
-2865d42c78a912 Larry Finger        2010-08-20  701  		r8712_indicate_connect(padapter);
-2865d42c78a912 Larry Finger        2010-08-20  702  	} else {
-2865d42c78a912 Larry Finger        2010-08-20  703  		pwlan = _r8712_alloc_network(pmlmepriv);
-11975c56b6d130 Sandhya Bankar      2016-09-20  704  		if (!pwlan) {
-2865d42c78a912 Larry Finger        2010-08-20  705  			pwlan = r8712_get_oldest_wlan_network(
-2865d42c78a912 Larry Finger        2010-08-20  706  				&pmlmepriv->scanned_queue);
-11975c56b6d130 Sandhya Bankar      2016-09-20  707  			if (!pwlan)
-2865d42c78a912 Larry Finger        2010-08-20  708  				goto createbss_cmd_fail;
-2865d42c78a912 Larry Finger        2010-08-20  709  			pwlan->last_scanned = jiffies;
-a7e585918ecd5a Liam Ryan           2017-09-12  710  		} else {
-fdfbf7890dcac9 James A Shackleford 2014-06-24  711  			list_add_tail(&(pwlan->list),
-2865d42c78a912 Larry Finger        2010-08-20  712  					 &pmlmepriv->scanned_queue.queue);
-a7e585918ecd5a Liam Ryan           2017-09-12  713  		}
-986fc8e7410d65 Joshua Clayton      2015-08-05  714  		pnetwork->Length = r8712_get_wlan_bssid_ex_sz(pnetwork);
-2865d42c78a912 Larry Finger        2010-08-20  715  		memcpy(&(pwlan->network), pnetwork, pnetwork->Length);
-2865d42c78a912 Larry Finger        2010-08-20  716  		pwlan->fixed = true;
-2865d42c78a912 Larry Finger        2010-08-20  717  		memcpy(&tgt_network->network, pnetwork,
-986fc8e7410d65 Joshua Clayton      2015-08-05  718  			(r8712_get_wlan_bssid_ex_sz(pnetwork)));
-2865d42c78a912 Larry Finger        2010-08-20  719  		if (pmlmepriv->fw_state & _FW_UNDER_LINKING)
-2865d42c78a912 Larry Finger        2010-08-20  720  			pmlmepriv->fw_state ^= _FW_UNDER_LINKING;
-8292b4de4ee67a Louie Lu            2016-09-02  721  		/*
-8292b4de4ee67a Louie Lu            2016-09-02  722  		 * we will set _FW_LINKED when there is one more sat to
-8292b4de4ee67a Louie Lu            2016-09-02  723  		 * join us (stassoc_event_callback)
-8292b4de4ee67a Louie Lu            2016-09-02  724  		 */
-2865d42c78a912 Larry Finger        2010-08-20  725  	}
-2865d42c78a912 Larry Finger        2010-08-20  726  createbss_cmd_fail:
-2865d42c78a912 Larry Finger        2010-08-20  727  	spin_unlock_irqrestore(&pmlmepriv->lock, irqL);
-2865d42c78a912 Larry Finger        2010-08-20  728  	r8712_free_cmd_obj(pcmd);
-2865d42c78a912 Larry Finger        2010-08-20  729  }
-2865d42c78a912 Larry Finger        2010-08-20  730  
 
-:::::: The code at line 670 was first introduced by commit
-:::::: 2865d42c78a9121caad52cb02d1fbb7f5cdbc4ef staging: r8712u: Add the new driver to the mainline kernel
+vim +447 drivers/regulator/max597x-regulator.c
 
-:::::: TO: Larry Finger <Larry.Finger@lwfinger.net>
-:::::: CC: Larry Finger <Larry.Finger@lwfinger.net>
+38493f008deb435 Patrick Rudolph 2022-07-05  434  
+38493f008deb435 Patrick Rudolph 2022-07-05  435  
+38493f008deb435 Patrick Rudolph 2022-07-05  436  	struct max597x_data *max597x = dev_get_drvdata(pdev->dev.parent);
+38493f008deb435 Patrick Rudolph 2022-07-05  437  	struct max597x_regulator *data;
+38493f008deb435 Patrick Rudolph 2022-07-05  438  
+38493f008deb435 Patrick Rudolph 2022-07-05  439  	struct regulator_config config = { };
+38493f008deb435 Patrick Rudolph 2022-07-05  440  	struct regulator_dev *rdev;
+38493f008deb435 Patrick Rudolph 2022-07-05  441  	struct regulator_dev *rdevs[MAX5970_NUM_SWITCHES];
+38493f008deb435 Patrick Rudolph 2022-07-05  442  	int num_switches = max597x->num_switches;
+38493f008deb435 Patrick Rudolph 2022-07-05  443  	int ret, i;
+38493f008deb435 Patrick Rudolph 2022-07-05  444  
+38493f008deb435 Patrick Rudolph 2022-07-05  445  	for (i = 0; i < num_switches; i++) {
+38493f008deb435 Patrick Rudolph 2022-07-05  446  		data =
+38493f008deb435 Patrick Rudolph 2022-07-05 @447  		    devm_kzalloc(max597x->dev, sizeof(struct max597x_regulator),
+38493f008deb435 Patrick Rudolph 2022-07-05  448  				 GFP_KERNEL);
+38493f008deb435 Patrick Rudolph 2022-07-05  449  		if (!data)
+38493f008deb435 Patrick Rudolph 2022-07-05  450  			return -ENOMEM;
+38493f008deb435 Patrick Rudolph 2022-07-05  451  
+38493f008deb435 Patrick Rudolph 2022-07-05  452  		data->num_switches = num_switches;
+38493f008deb435 Patrick Rudolph 2022-07-05 @453  		data->regmap = max597x->regmap;
+38493f008deb435 Patrick Rudolph 2022-07-05  454  
+38493f008deb435 Patrick Rudolph 2022-07-05  455  		ret = max597x_adc_range(data->regmap, i, &max597x->irng[i], &max597x->mon_rng[i]);
+38493f008deb435 Patrick Rudolph 2022-07-05  456  		if (ret < 0)
+38493f008deb435 Patrick Rudolph 2022-07-05  457  			return ret;
+38493f008deb435 Patrick Rudolph 2022-07-05  458  
+38493f008deb435 Patrick Rudolph 2022-07-05  459  		data->irng = max597x->irng[i];
+38493f008deb435 Patrick Rudolph 2022-07-05  460  		data->mon_rng = max597x->mon_rng[i];
+38493f008deb435 Patrick Rudolph 2022-07-05  461  
+38493f008deb435 Patrick Rudolph 2022-07-05  462  		config.dev = max597x->dev;
+38493f008deb435 Patrick Rudolph 2022-07-05  463  		config.driver_data = (void *)data;
+38493f008deb435 Patrick Rudolph 2022-07-05  464  		config.regmap = data->regmap;
+38493f008deb435 Patrick Rudolph 2022-07-05  465  		rdev = devm_regulator_register(max597x->dev,
+38493f008deb435 Patrick Rudolph 2022-07-05  466  					       &regulators[i], &config);
+38493f008deb435 Patrick Rudolph 2022-07-05  467  		if (IS_ERR(rdev)) {
+38493f008deb435 Patrick Rudolph 2022-07-05  468  			dev_err(max597x->dev, "failed to register regulator %s\n",
+38493f008deb435 Patrick Rudolph 2022-07-05  469  				regulators[i].name);
+38493f008deb435 Patrick Rudolph 2022-07-05  470  			return PTR_ERR(rdev);
+38493f008deb435 Patrick Rudolph 2022-07-05  471  		}
+38493f008deb435 Patrick Rudolph 2022-07-05  472  		rdevs[i] = rdev;
+38493f008deb435 Patrick Rudolph 2022-07-05  473  		max597x->shunt_micro_ohms[i] = data->shunt_micro_ohms;
+38493f008deb435 Patrick Rudolph 2022-07-05  474  	}
+38493f008deb435 Patrick Rudolph 2022-07-05  475  
+38493f008deb435 Patrick Rudolph 2022-07-05 @476  	if (max597x->irq) {
+38493f008deb435 Patrick Rudolph 2022-07-05  477  		ret =
+38493f008deb435 Patrick Rudolph 2022-07-05  478  		    max597x_setup_irq(max597x->dev, max597x->irq, rdevs, num_switches,
+38493f008deb435 Patrick Rudolph 2022-07-05  479  				      data);
+38493f008deb435 Patrick Rudolph 2022-07-05  480  		if (ret) {
+38493f008deb435 Patrick Rudolph 2022-07-05  481  			dev_err(max597x->dev, "IRQ setup failed");
+38493f008deb435 Patrick Rudolph 2022-07-05  482  			return ret;
+38493f008deb435 Patrick Rudolph 2022-07-05  483  		}
+38493f008deb435 Patrick Rudolph 2022-07-05  484  	}
+38493f008deb435 Patrick Rudolph 2022-07-05  485  
+38493f008deb435 Patrick Rudolph 2022-07-05  486  	return ret;
+38493f008deb435 Patrick Rudolph 2022-07-05  487  }
+38493f008deb435 Patrick Rudolph 2022-07-05  488  
 
 -- 
 0-DAY CI Kernel Test Service
