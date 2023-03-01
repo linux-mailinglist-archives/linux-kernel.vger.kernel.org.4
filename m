@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F786A7405
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA2D6A7408
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjCATHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S229830AbjCATHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjCATHU (ORCPT
+        with ESMTP id S229451AbjCATHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:07:20 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCD54C6C2;
-        Wed,  1 Mar 2023 11:07:18 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id o15so55597787edr.13;
-        Wed, 01 Mar 2023 11:07:18 -0800 (PST)
+        Wed, 1 Mar 2023 14:07:42 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF454DBCA
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:07:33 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536b7ffdd34so382746057b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:07:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677697637;
+        d=google.com; s=20210112; t=1677697653;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s0SrDaMx47dZSDAQhcmlHOV2N9fQVTDg09mPQlLxC9M=;
-        b=CDpRsh199rWY38RyCCGharyYY1hkwYA8Ws9uj5V2vaWsY2G3QxTsVJGjaz2EVqEA9+
-         8hqIzTazTS3T8bQuDm7aeR7pprJL3QihwiNXUa5W3iGs46jxNkxOdQivQF7Zzb1T3mQo
-         5TthgQrNgwZ6GEPylDOEWWnvZjXbS1nt5C0vuuQHQ9F97t4qWKy+1bQG3gR6TpHZbWwY
-         uijByKpFzIyQBQ1xxNdYB6GyM8iUEUrQ6AS3KKu96xjSDcoakn3uzcne/Dn+10cZGNgt
-         CRdqOSayQWN7eeHOlgxeoyUr9NRuVVBFzcCC+DlTSLjafAkzMaa7sb7kn+7uzzdk3yON
-         P1wA==
+        bh=BlFKPaHxV4jQ7dMxp37PMOa6KmgzjBmeyyNBQBavDx8=;
+        b=Tc+Lfvs4SS8u1UCDBpYQvIJ9La6W49lFb2CZ+De1a11FXObIXWCF3BlBujuIEcWfXR
+         K8XAAg8gxr2xVbV3LBMHTffyEYatSSzLtxaJ1thDWIz6aZ6tnyaWtD/HgJU6tyGJYf3q
+         jp3IKu6nyN7tV0mKfmzcHMG74wGuu0zdP7wmqBrP/k7QLFJgyU3CURBojezcQXpqpSdo
+         Fxa0y0DporTUWfiigj1CH1bgpxQ8jMFxnIOpFeF8j43Xe59cuxyCaa5vcLCOhN+5MFUV
+         PmN47d5ZRn6yecRBiQTEpYT20b93V+dsHO/LeLSVH6nyRn1/7A+vnbXttfD2d7rTtMJ5
+         iIiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677697637;
+        d=1e100.net; s=20210112; t=1677697653;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s0SrDaMx47dZSDAQhcmlHOV2N9fQVTDg09mPQlLxC9M=;
-        b=gvhd9363lPa2Z3WLqR0z4TNo77ApeAi8fj4EUz/wjk0lui2ugAv1UVad3SMkgBB+yU
-         B+MjWNFc76FCK4YQXuey1VpLAxHWNDvU1wPTXbg7TepL6ZyVrvyYdr5YfCSk+h2LvpsZ
-         LXsBzhlLKFCAjKIbf0MyX82vAIulyUxQgY0KR7NTeON7ZH4koHqvMwSECSo1yIr0gzVv
-         lduG42ekgSgcQsvEfYhFjzuTOW16rxbdgYSfMzE4vAHxKxHgdlZj5nTf4TGYfGQQJLO7
-         O8IIrw48I3OJGRcD5mtJsql+PoLxPprc+gtKXPnlp5pSHX/WlCsF62Rvm51Nc/0hzk/2
-         O5WQ==
-X-Gm-Message-State: AO0yUKX7N7s49lMdtWIIKaB+urlCnNie4rQS3GwPERbmcyPFFIugD6m7
-        12XWZmq0PcOFBQvkvfk6TiBbmCgY8clYskKwi83VdBHy32E=
-X-Google-Smtp-Source: AK7set+M+69w2igi8dfZYPhsZRTpH2ly6t8MSR4QfiEaQRo/nk897/ARs1e+HbzcbbSOkrhHiJYMdWktV6uvyOnBuPU=
-X-Received: by 2002:a50:cdd5:0:b0:4bc:13f5:68a5 with SMTP id
- h21-20020a50cdd5000000b004bc13f568a5mr1835748edj.5.1677697637021; Wed, 01 Mar
- 2023 11:07:17 -0800 (PST)
+        bh=BlFKPaHxV4jQ7dMxp37PMOa6KmgzjBmeyyNBQBavDx8=;
+        b=urgGYz+DaIndetQZEttNJdw5Uj+docGvS+WoR3Ouys/PdJKziLp/FTAN0VilqZLy3n
+         gHpWZweS97r04CE4NWTSco5+vQh5K6HdDiPriba1W021PEUvHulePbqpsu7WIkWIsoBd
+         K9Kuo/r+o9XoZUvisPG6EHstItfQnYFo2Hx+55GNjcUnmmAvUzKp7X41q5csEuENlpCM
+         sGTINWNu0QEHJYzvKrIAfIBe2yeNAWkkiSym487Q5dN3RYX0rrwz83ilYu7ReGThzKhC
+         MSfVE5ASJBVdux2CN7L1bJR4oLkAwVOjYlyjglD/rJxzdt317kD4H/C7hM20wdrIP0kh
+         NLfQ==
+X-Gm-Message-State: AO0yUKVdepgjhF7BRRbgpIs+OET1aSUkhzcWY39HSLaJ/V8nyX3I4xlB
+        a5kz6dH1yvjmivGQ9fxpygqoFNOsOTKLYijhdq2PXw==
+X-Google-Smtp-Source: AK7set9ZsSbg+lkgd2HRMSAvJ/YkGIQu9aJDVRfhrq6ARtmp15/GeLDk6fPjITpwN8ANRiWlqv4jLhfWt2ZLpWW0OEA=
+X-Received: by 2002:a81:ac16:0:b0:536:4194:e6eb with SMTP id
+ k22-20020a81ac16000000b005364194e6ebmr4616550ywh.0.1677697652553; Wed, 01 Mar
+ 2023 11:07:32 -0800 (PST)
 MIME-Version: 1.0
-References: <1677585781-21628-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1677585781-21628-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 1 Mar 2023 11:07:05 -0800
-Message-ID: <CAEf4BzbZogSTyvF4bPB8w_1KNrBOLOPKBWbo9na3_9JZSJnuAg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Set __BITS_PER_LONG if target
- is bpf for LoongArch
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230227173632.3292573-1-surenb@google.com> <20230227173632.3292573-19-surenb@google.com>
+ <Y/8CJQGNuMUTdLwP@localhost> <Y/8FNM9czzPHb5eG@localhost> <CAJuCfpHYT++MBC6T-p80n_m5hHWRRC4Y1bO9J-bFFZZDqNX-BQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpHYT++MBC6T-p80n_m5hHWRRC4Y1bO9J-bFFZZDqNX-BQ@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 1 Mar 2023 11:07:21 -0800
+Message-ID: <CAJuCfpH9HRSuh2sWZDr0oCXh5dpgS+LmzL=kO-TR9a0yFnT_xg@mail.gmail.com>
+Subject: Re: [PATCH v4 18/33] mm: write-lock VMAs before removing them from
+ VMA tree
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,68 +89,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 4:03=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
+On Wed, Mar 1, 2023 at 10:34=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
 >
-> If target is bpf, there is no __loongarch__ definition, __BITS_PER_LONG
-> defaults to 32, __NR_nanosleep is not defined:
+> On Tue, Feb 28, 2023 at 11:57=E2=80=AFPM Hyeonggon Yoo <42.hyeyoo@gmail.c=
+om> wrote:
+> >
+> > On Wed, Mar 01, 2023 at 07:43:33AM +0000, Hyeonggon Yoo wrote:
+> > > On Mon, Feb 27, 2023 at 09:36:17AM -0800, Suren Baghdasaryan wrote:
+> > > > Write-locking VMAs before isolating them ensures that page fault
+> > > > handlers don't operate on isolated VMAs.
+> > > >
+> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > > ---
+> > > >  mm/mmap.c  | 1 +
+> > > >  mm/nommu.c | 5 +++++
+> > > >  2 files changed, 6 insertions(+)
+> > > >
+> > > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > > index 1f42b9a52b9b..f7ed357056c4 100644
+> > > > --- a/mm/mmap.c
+> > > > +++ b/mm/mmap.c
+> > > > @@ -2255,6 +2255,7 @@ int split_vma(struct vma_iterator *vmi, struc=
+t vm_area_struct *vma,
+> > > >  static inline int munmap_sidetree(struct vm_area_struct *vma,
+> > > >                                struct ma_state *mas_detach)
+> > > >  {
+> > > > +   vma_start_write(vma);
+> > > >     mas_set_range(mas_detach, vma->vm_start, vma->vm_end - 1);
+> > >
+> > > I may be missing something, but have few questions:
+> > >
+> > >       1) Why does a writer need to both write-lock a VMA and mark the=
+ VMA detached
+> > >          when unmapping it, isn't it enough to just only write-lock a=
+ VMA?
 >
->   #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG !=3D 32
->   #define __NR_nanosleep 101
->   __SC_3264(__NR_nanosleep, sys_nanosleep_time32, sys_nanosleep)
->   #endif
+> We need to mark the VMA detached to avoid handling page fault in a
+> detached VMA. The possible scenario is:
 >
-> Work around this problem, by explicitly setting __BITS_PER_LONG to
-> __loongarch_grlen which is defined by compiler as 64 for LA64, then
-> __NR_nanosleep can also be defined to fix the following build errors:
+> lock_vma_under_rcu
+>   vma =3D mas_walk(&mas)
+>                                                         munmap_sidetree
+>                                                           vma_start_write=
+(vma)
 >
->   clang  -g -Werror ... -target bpf -c progs/test_vmlinux.c ...
->   progs/test_vmlinux.c:24:18: error: use of undeclared identifier '__NR_n=
-anosleep'
->           if (args->id !=3D __NR_nanosleep)
->                           ^
->   progs/test_vmlinux.c:42:12: error: use of undeclared identifier '__NR_n=
-anosleep'
->           if (id !=3D __NR_nanosleep)
->                     ^
->   progs/test_vmlinux.c:60:12: error: use of undeclared identifier '__NR_n=
-anosleep'
->           if (id !=3D __NR_nanosleep)
->                     ^
->   3 errors generated.
+> mas_store_gfp() // remove VMA from the tree
+>                                                           vma_end_write_a=
+ll()
+>   vma_start_read(vma)
+>   // we locked the VMA but it is not part of the tree anymore.
+>
+> So, marking the VMA locked before vma_end_write_all() and checking
+> vma->detached after vma_start_read() helps us avoid handling faults in
+> the detached VMA.
+>
+>
+> > >
+> > >       2) as VMAs that are going to be removed are already locked in v=
+ma_prepare(),
+> > >          so I think this hunk could be dropped?
+> >
+> > After sending this just realized that I did not consider simple munmap =
+case :)
+> > But I still think 1) and 3) are valid question.
+> >
+> > >
+> > > >     if (mas_store_gfp(mas_detach, vma, GFP_KERNEL))
+> > > >             return -ENOMEM;
+> > > > diff --git a/mm/nommu.c b/mm/nommu.c
+> > > > index 57ba243c6a37..2ab162d773e2 100644
+> > > > --- a/mm/nommu.c
+> > > > +++ b/mm/nommu.c
+> > > > @@ -588,6 +588,7 @@ static int delete_vma_from_mm(struct vm_area_st=
+ruct *vma)
+> > > >                    current->pid);
+> > > >             return -ENOMEM;
+> > > >     }
+> > > > +   vma_start_write(vma);
+> > > >     cleanup_vma_from_mm(vma);
+> > >
+> > >       3) I think this hunk could be dropped as Per-VMA lock depends o=
+n MMU anyway.
+>
+> Ah, yes, you are right. We can safely remove the changes in nommu.c
+> Andrew, should I post a fixup or you can make the removal directly in
+> mm-unstable?
 
-Not clear what __NR_nanosleep part has to do with this commit. I
-dropped this part from the commit message. Applied to bpf-next.
+I went ahead and posted the fixup for this at:
+https://lore.kernel.org/all/20230301190457.1498985-1-surenb@google.com/
 
+> Thanks,
+> Suren.
 >
-> This is similar with commit 36e70b9b06bf ("selftests, bpf: Fix broken
-> riscv build").
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  tools/testing/selftests/bpf/Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index b677dcd..f40606a 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -338,7 +338,8 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)=
-/resolve_btfids        \
->  define get_sys_includes
->  $(shell $(1) $(2) -v -E - </dev/null 2>&1 \
->         | sed -n '/<...> search starts here:/,/End of search list./{ s| \=
-(/.*\)|-idirafter \1|p }') \
-> -$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{pri=
-ntf("-D__riscv_xlen=3D%d -D__BITS_PER_LONG=3D%d", $$3, $$3)}')
-> +$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{pri=
-ntf("-D__riscv_xlen=3D%d -D__BITS_PER_LONG=3D%d", $$3, $$3)}') \
-> +$(shell $(1) $(2) -dM -E - </dev/null | grep '__loongarch_grlen ' | awk =
-'{printf("-D__BITS_PER_LONG=3D%d", $$3)}')
->  endef
->
->  # Determine target endianness.
-> --
-> 2.1.0
->
+> > >
+> > > Thanks,
+> > > Hyeonggon
+> > >
+> > > >
+> > > >     /* remove from the MM's tree and list */
+> > > > @@ -1519,6 +1520,10 @@ void exit_mmap(struct mm_struct *mm)
+> > > >      */
+> > > >     mmap_write_lock(mm);
+> > > >     for_each_vma(vmi, vma) {
+> > > > +           /*
+> > > > +            * No need to lock VMA because this is the only mm user=
+ and no
+> > > > +            * page fault handled can race with it.
+> > > > +            */
+> > > >             cleanup_vma_from_mm(vma);
+> > > >             delete_vma(mm, vma);
+> > > >             cond_resched();
+> > > > --
+> > > > 2.39.2.722.g9855ee24e9-goog
+> > > >
+> > > >
+> > >
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to kernel-team+unsubscribe@android.com.
+> >
