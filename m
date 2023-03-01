@@ -2,119 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C769A6A724D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE4A6A7252
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjCARus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S229713AbjCARwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:52:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjCARur (ORCPT
+        with ESMTP id S229486AbjCARwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:50:47 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDDD3E098
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 09:50:43 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id u20so8461713pfm.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 09:50:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677693043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DpL6DwFkyuaEtEvh0ArhxR/cUeifrKQ0QYmfCAMdbVU=;
-        b=lagi4xfM5lhItTQDuRxproJWvwcvRV2ufiYbfodtWrckZ9+0sW1ahRDIVSF1/ru37a
-         iHjqSfwo67gCHwutTwpxMZqhFvMGxAHTEhw6mb6VL0iuZes7SSdXJRb7kt9/jU5Rjn/k
-         7dPOZx7m8j2Z+rUdxYZfd2BB3F0T/G/6qn5xLtGLK3JyBD7nj85IMMOQGMRiDBz3fCvS
-         8rpnjHLfybMAgEC0FVsBNE0YPItotziNHYW4dTwBLVy7wVjWGwTd6s0tBZeu7i1WwynB
-         t6HgD+TNCzshFzJI6hyIbTjAJveFkmeHYGT0L46AP7u+zvz1rI93vWkmEWOkMUrSO/Ke
-         8CWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677693043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DpL6DwFkyuaEtEvh0ArhxR/cUeifrKQ0QYmfCAMdbVU=;
-        b=VfLPYlQpgBn4EMzTojHt42kSDJRSaEISM7ZcdkoxvT3JmPyFJL7ejG9O+3Oe9/xFdq
-         qcXHnZFtTE/wr7AveS4TRoy6k/vk/n54/sdRRtJPqwWKRyODDzT7EVW9x34n4VxyrjIX
-         nMUmXKCeqbjzzSW0B39Z9TDxEGhcU2095l33jMshJsRq2xr5D/9U7n8nysTKyuLo8D8t
-         pm+O7jaUDqXKwLfm87I2zpVZMdj86AmuolZno9oXgvhcWJAbFdVpMMLprATzdFeU18YH
-         kel+KkYzpVra2BG8ff2jYO7sVLv5Ut1Fskvr7lhGvJ2PB3jw1u4qLcybIk/gYU0k1w8C
-         Pg+A==
-X-Gm-Message-State: AO0yUKWf97t3Q5f2N/Jb8K82y8CY17bOXoEH4yOAjsn78nauLoEsGCd3
-        KjAUFCGpmATsxfW4f8Qf67EvSLT4/F1Bm1Gi105lKXHOks5SIJxkU1KQxA==
-X-Google-Smtp-Source: AK7set+sa5Lpwqw5kyGG4/qPXxMgWH2tZf+nBVEHopmtPWoZRNrFsf1qn2TKiNLI7IHyHoSIS55/eR0Qis04PyU96jg=
-X-Received: by 2002:a63:8c1d:0:b0:503:354c:41ad with SMTP id
- m29-20020a638c1d000000b00503354c41admr2372184pgd.11.1677693042346; Wed, 01
- Mar 2023 09:50:42 -0800 (PST)
+        Wed, 1 Mar 2023 12:52:39 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63EA3E098;
+        Wed,  1 Mar 2023 09:52:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fFkwhEAj99kMuz4ye8Em6A5i+ZSolo+e2J3zKQVWsiFG2okbQCCwm7gYWBvBp4eZ97c6+MOF5lMY/lXe3lqvgazVG30Uf+/IcLU+aGUTt8LD9QY/tVwP4H49ts3lua5X3r3NRMVKRvSx+hFhQYjEeZWy5eCHG3kG8hIyA77tTC0VwSE1ulxjYfL6cyOeb0ad2ipweuuesVReaRNfDEBw1pv8sYt6AB7XNM+5neJOfMLXq71UWTs0gO22cBqP3JmlUpbQYH753HUrH09P3wc9B5tFvSSqDkSQ8MEgS2x1ZtYaOPcbQaOySjHAzPL8+2dV6LSX5uIZCjYiFrOLxfL0PA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CtHu3Hln1S0SoyywQdBSgTA9vOGhRhYxb315DTtMimQ=;
+ b=AqxUtvMhzqrowbnwNF/TjOBG51nwBLgyNLWw3bEQBSwagOxRBFBo/VCvPvKpZ0x4au5kYYlCU9PLcKql5/efS7nRiXCTfja7owBS5IiVzlJTTCljTxiuwLxI893RM9S6jFperoebpl4qqkjxpua+EKt8tiWaAd+BRhRAPjbJQN1yCYhop+3zVsLoBS1mePrfMiEUO+IU+GzItFObAw6hxXGXSZ//Py10nChcjMTwJH9ivvvpovdI11DaLNO6lazHXJt+sI/F48iF5IE9pR1lsuYwmlYfysTjUtYBL2opWBR8al02O7uHZ3zHV4oSEM+tX4weOlaTOE72FRDLQVsdYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CtHu3Hln1S0SoyywQdBSgTA9vOGhRhYxb315DTtMimQ=;
+ b=J3pJwEm2ctp6oGz5Na45c2jekX6WeKFrRo8HhRLW53F5zr6shGzYDSC2rjaZnPP7I6EMDHJBqnNBFkTdChGsfKUJFogAYFolV5FL7sSbaQztrYRJJKonD+0mRDzgs1gkiChZytLnjZTuW90ig6rBXwUifkA1OIZD19/KJjbZFrI=
+Received: from BN9PR03CA0376.namprd03.prod.outlook.com (2603:10b6:408:f7::21)
+ by DS0PR12MB8443.namprd12.prod.outlook.com (2603:10b6:8:126::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Wed, 1 Mar
+ 2023 17:52:34 +0000
+Received: from BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f7:cafe::f4) by BN9PR03CA0376.outlook.office365.com
+ (2603:10b6:408:f7::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
+ Transport; Wed, 1 Mar 2023 17:52:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT093.mail.protection.outlook.com (10.13.177.22) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6156.18 via Frontend Transport; Wed, 1 Mar 2023 17:52:34 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
+ 2023 11:52:33 -0600
+Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Wed, 1 Mar 2023 11:52:30 -0600
+From:   Srinivas Neeli <srinivas.neeli@amd.com>
+To:     <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@amd.com>,
+        <neelisrinivas18@gmail.com>
+CC:     <wim@linux-watchdog.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>, <git@amd.com>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH V2 0/4] watchdog: xilinx_wwdt: Add Versal watchdog support
+Date:   Wed, 1 Mar 2023 23:22:25 +0530
+Message-ID: <20230301175229.342004-1-srinivas.neeli@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230301075402.4578-1-quic_johmoo@quicinc.com>
-In-Reply-To: <20230301075402.4578-1-quic_johmoo@quicinc.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 1 Mar 2023 09:50:30 -0800
-Message-ID: <CAKwvOdmqShYae=DrwP1JZBYXAYZyDB0SaOkVCvCzQC60MaJcpw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Validating UAPI backwards compatibility
-To:     John Moon <quic_johmoo@quicinc.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        kernel-team@android.com, libabigail@sourceware.org,
-        Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT093:EE_|DS0PR12MB8443:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc3d3218-0c83-49f4-a409-08db1a7dbcb9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HQnoTO+SGGNS6SDgRz2MSfjWRwBhOxA8oh2cUntZ2MDmUC4cEKtWqVOED1jUHQdz9sUCYxuhFAOxTnmAGUMHNGlg4JHlFOK5GSypZRO9gzrYrZcMjmtKgRrClJO7nc+kvu8Fr/Wll7CrpCUbpfgOMDA+gLOQDRkwYySE6V3sFOFgtLuqhRjzwHW9zze2L7+j0xgknpozamRqS1vCaZic7Webq//Lo68I29uJ5AjJ0yLQ6V2RHAVX0+aXEvXz0M25so3aTVpB3ZGWb8fFaUhTvVtPe04rL+GNzr3USDX+oycSQjJqtPw+9gBCSfWHOKRu/XQS8w/M4R3/Pm+mbhGAEVrNb/rbiaj1vB4McrnH+zIRweYrn5ArD2vqOCYxiWAB1Oe5NCNsVen+AI+yoxMoC8zHEo8EDN4zKx0PQnj0GKcZIff8VlOHm5hqJfHSp/ZBwKnRq43plwFTHVsE9o4T4stBUyQk/OotVTp8Hhx2kRM4LhCvSlk82p1LxoNFoiyTSe1mxYTCftAy3E1exXuPDWHkQ/FpBOZiDaZZJwVE3w2GH5ev/j8wSMvkfS4S0EWyvU8MozqJ8pu03SjKaeNP6RhTqryVH3MK56p44am8O7QecxgK+m7K2bUDvgmqmnuKMHvLnsu3o5DzlvJ8jROpro0rCdIm1y7DMrbcWSEkqptisOfDjt9ycFBTG8G4o4pfkxmdXziz2sHO3+gBSB7u6k1WSY8g+GjYgFFEMKuX8Lo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39860400002)(451199018)(46966006)(40470700004)(36840700001)(356005)(2616005)(86362001)(40480700001)(316002)(70206006)(8676002)(6666004)(40460700003)(54906003)(110136005)(70586007)(478600001)(36756003)(186003)(4326008)(41300700001)(336012)(1076003)(82740400003)(36860700001)(2906002)(26005)(426003)(8936002)(47076005)(7416002)(4744005)(82310400005)(81166007)(5660300002)(83380400001)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:52:34.2261
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc3d3218-0c83-49f4-a409-08db1a7dbcb9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8443
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 11:54=E2=80=AFPM John Moon <quic_johmoo@quicinc.com=
-> wrote:
->
-> Currently, the script works with gcc. It generates output like this when
-> a backwards-incompatible change is made to a UAPI header:
->
->  !!! ABI differences detected in include/uapi/linux/acct.h (compared to
->  file at HEAD^1) !!!
->
->      [C] 'struct acct' changed:
->        type size changed from 512 to 544 (in bits)
->        1 data member insertion:
->          '__u32 new_val', at offset 512 (in bits) at acct.h:71:1
->
->  0/1 UAPI header file changes are backwards compatible
->  UAPI header ABI check failed
->
-> However, we have not had success with clang. It seems clang is more
-> aggressive in optimizing dead code away (no matter which options we
-> pass). Therefore, no ABI differences are found.
+This patch series does
+-Adds dt-bindings for versal watchdog driver.
+-Adds support for versal watchdog driver.
+-Adds fragment page for xilinx watchdog drivers.
 
-Hi John,
-Do you have the list of bugs you've filed upstream against clang wrt.
-information missing when using `-fno-eliminate-unused-debug-types`?
+There was a series[1] sent earlier to add versal watchdog support using
+pretimeout. In review it was discouraged to use pretimeout for open and
+close window . This series is a new implementation of versal watchdog.
 
-https://github.com/llvm/llvm-project/issues is the issue tracker.
+Srinivas Neeli (4):
+  MAINTAINERS: Add fragment for Xilinx watchdog driver
+  dt-bindings: watchdog: xlnx,versal-wwdt: Add versal watchdog bindings
+  watchdog: xilinx_wwdt: Add Versal window watchdog support
+  MAINTAINERS: Add support for Xilinx verasl watchdog
 
-Seeing a strong participant in both the Android and LLVM ecosystems
-supply scripts that lack clang support...raises eyebrows.
---=20
-Thanks,
-~Nick Desaulniers
+ .../bindings/watchdog/xlnx,versal-wwdt.yaml   |  58 +++++
+ MAINTAINERS                                   |  10 +
+ drivers/watchdog/Kconfig                      |  18 ++
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/xilinx_wwdt.c                | 232 ++++++++++++++++++
+ 5 files changed, 319 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+ create mode 100644 drivers/watchdog/xilinx_wwdt.c
+
+-- 
+2.25.1
+
