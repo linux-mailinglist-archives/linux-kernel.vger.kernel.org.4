@@ -2,132 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC58D6A6BBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5333A6A6BC2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjCALdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
+        id S230049AbjCALel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:34:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCALdP (ORCPT
+        with ESMTP id S229510AbjCALeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:33:15 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C92E1CF48;
-        Wed,  1 Mar 2023 03:33:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677670394; x=1709206394;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=AkdMnSVRqKHnboe7AK7DDj91/5KWkNYHH8ZRSSJ14z8=;
-  b=BhNvixJlxwkL6ubh6ct1iM/psymT8UAdp9c/HcJ/l9ILzNkt8uXdpBtG
-   fq0alsnw1TdwX8rZ8Nc5HKBH2efBjpquNXZZ1ukj5Qsmw6Dsg/v3hz/nY
-   thMWrYS+G4oaKYCmkSYrsAwm52PmtLSnPSVa//C3H2/p9TlgakvBKGsLn
-   vJ2LCGG/L14r7AsANXZyAJ6C5yw4lbV/NF/TvCg5G7SyHjBSrdqS2zJDc
-   aEY7nhyRQjWPTCIK3NE4m1qyXraEB6T1CnS2UoCWs3W+D0kFyb0fGtjY7
-   S2VxB+gXrb8V4v8RBMlVDu2oStdbcJHlOal8XjJ0sQCoAnmU62KPKVJdI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="331864640"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="331864640"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 03:33:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="920213429"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="920213429"
-Received: from rlocatel-mobl1.ger.corp.intel.com ([10.252.57.87])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 03:33:11 -0800
-Date:   Wed, 1 Mar 2023 13:33:09 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lukasz Majczak <lma@semihalf.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, upstream@semihalf.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] serial: core: fix broken console after suspend
-In-Reply-To: <20230301075751.43839-1-lma@semihalf.com>
-Message-ID: <1ffc536e-9bdc-c246-d31d-ae368fcf6072@linux.intel.com>
-References: <20230301075751.43839-1-lma@semihalf.com>
+        Wed, 1 Mar 2023 06:34:37 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0AD2FCD0;
+        Wed,  1 Mar 2023 03:34:33 -0800 (PST)
+Received: from weisslap.aisec.fraunhofer.de ([31.19.218.61]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MLA6m-1pFFuO0kpm-00IEk1; Wed, 01 Mar 2023 12:34:22 +0100
+From:   =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        gyroidos@aisec.fraunhofer.de,
+        =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        dm-devel@redhat.com (maintainer:DEVICE-MAPPER (LVM)),
+        Eric Paris <eparis@redhat.com>,
+        linux-kernel@vger.kernel.org (open list),
+        audit@vger.kernel.org (open list:AUDIT SUBSYSTEM)
+Subject: [PATCH] dm verity: log audit events for dm-verity target
+Date:   Wed,  1 Mar 2023 12:34:15 +0100
+Message-Id: <20230301113415.47664-1-michael.weiss@aisec.fraunhofer.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:tGtzLe56BXPRA/UJkQiHxLFGUNAsPjaOFYy/tcw9+uPqPJpJz3Z
+ zj5Ye3Z3imqH6MRW+/HoKV3+n0oBXdPXSOf0LxvF2DeTb2JppDQpq7sQyQ37j1FL5FEwSRD
+ cv3elYOu1ZkvMmjJsZvSAqFRI9ce18cvY2ehQZsiCCxNdrHNO5WPznAhvTmRUB4YFtQP8kr
+ 1ubAow1SvYeIt6QIB/L/w==
+UI-OutboundReport: notjunk:1;M01:P0:3+LLLmlVKGE=;gastDA8YfJAfdqLlsH0jFPN6yVJ
+ 7ZIOlYmcHdb21dBEPg/HbaOG2a9LOy35DRcsE6+AYUrCnAsajzbo7HjWDrcwhdaP+nQE3Ojq3
+ 2mvydV49qUIDu2NpLqiTYaEnCd1Xu1SeV4en11qmDogveFs6E6FHfM/dODSXqmCxyB95L25Wk
+ 2ILRFKr3k24HZ8T7LJMAdR0wHqeg64Ismpk9OAGBhhmK91fap/v0Mndc/AECDuFhvAs1C+YFC
+ AkxUav5auvRwVR9EZVeHL6RuFQV89oEUw5zM3zh8sX06+S8ao7wMXLr6/nxmpvMbJMMgf6jAF
+ f8Q/kBCOR83eM0YlIsHpmXTZt+5BO6QjR/BGb+FuTmp8gRzGUN5EfX5MM3NLmhr4bJXBWJUQW
+ APApuDDot99iSugazmMFipUWmMnxT4IOAQCqgep3L+Z2OPLZfF7GRBTQKgDmbQfIsmp4u+9Om
+ gOv3RxK9FpTnOXj0VmaSgGX0T1y0hunXDyyQ41Si2buLOSa24X+BhtGICrcPHETu2kMl1m8cS
+ 3cu2zp0H8UTS6VJb94nAmaVdK1f3xOEeZO62+im38GbJN5DtlhfrqUhHm4OwD8F1CCakujcFW
+ WxM16Dg/dzU534Cs5CKWjc2FWnQgaAeyvFkzUHmzmITX9kGz7INqcFJlkJPb6SgYLr4ZrzQln
+ sPeLlSQWHxnpclMKOdgsFsrP6AHtGwghOY4g6DCoEw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023, Lukasz Majczak wrote:
+dm-verity signals integrity violations by returning I/O errors
+to user space. To identify integrity violations by a controlling
+instance, the kernel audit subsystem can be used to emit audit
+events to user space. Analogous to dm-integrity, we also use the
+dm-audit submodule allowing to emit audit events on verification
+failures of metadata and data blocks as well as if max corrupted
+errors are reached.
 
-> Re-enable the console device after suspending, causes its cflags,
+The construction and destruction of verity device mappings are
+also relevant for auditing a system. Thus, those events are also
+logged as audit events.
 
-Re-enabling
+We tested this by starting a container with the container manager
+(cmld) of GyroidOS which uses a dm-verity protected rootfs image
+root.img mapped to /dev/mapper/<uuid>-root. We than manipulated
+one block in the underlying image file and reading it from the
+protected mapper device again and again until we reach the max
+corrupted errors like this:
 
-> ispeed and ospeed to be set anew, basing on the values stored in
-> uport->cons. The issue is that these values are set only once,
-> when parsing console parameters after boot (see uart_set_options()),
+  dd if=/dev/urandom of=root.img bs=512 count=1 seek=1000
+  for i in range {1..101}; do \
+    dd if=/dev/mapper/<uuid>-root of=/dev/null bs=4096 \
+       count=1 skip=1000 \
+  done
 
-Remove "The issue is that" from here and just state:
+The resulting audit log looks as follows:
 
-"These values are set only once when parsing console parameters after boot 
-(see uart_set_options())."
+  type=DM_CTRL msg=audit(1677618791.876:962):
+    module=verity op=ctr ppid=4876 pid=29102 auid=0 uid=0 gid=0
+    euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=44
+    comm="cmld" exe="/usr/sbin/cml/cmld" subj=unconfined
+    dev=254:3 error_msg='success' res=1
 
-> next after configuring a port in uart_port_startup() these parameteres
+  type=DM_EVENT msg=audit(1677619463.786:1074): module=verity
+    op=verify-data dev=7:0 sector=1000 res=0
+  ...
+  type=DM_EVENT msg=audit(1677619596.727:1162): module=verity
+    op=verify-data dev=7:0 sector=1000 res=0
 
-parameters
+  type=DM_EVENT msg=audit(1677619596.731:1163): module=verity
+    op=max-corrupted-errors dev=254:3 sector=? res=0
 
-> (cflags, ispeed and ospeed) are copied to termios structure and
-> the orginal one (stored in uport->cons) are cleared, but there is no place
+Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
+---
+ drivers/md/dm-verity-target.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-original
-
-> in code where those fields are checked against 0.
-> When kernel calls uart_resume_port() and setups console, it copies cflags,
-> ispeed and ospeed values from uart->cons,but those are alread cleared.
-
-missing space after comma.
-
-alread -> already
-
-> The efect is that console is broken.
-
-effect
-
-> This patch address this by preserving the cflags, ispeed and
-
-Too many "this", don't start with "This patch" but go directly to the 
-point.
-
-
+diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+index ade83ef3b439..8beeb4ea66d1 100644
+--- a/drivers/md/dm-verity-target.c
++++ b/drivers/md/dm-verity-target.c
+@@ -16,6 +16,7 @@
+ #include "dm-verity.h"
+ #include "dm-verity-fec.h"
+ #include "dm-verity-verify-sig.h"
++#include "dm-audit.h"
+ #include <linux/module.h>
+ #include <linux/reboot.h>
+ #include <linux/scatterlist.h>
+@@ -248,8 +249,10 @@ static int verity_handle_err(struct dm_verity *v, enum verity_block_type type,
+ 	DMERR_LIMIT("%s: %s block %llu is corrupted", v->data_dev->name,
+ 		    type_str, block);
+ 
+-	if (v->corrupted_errs == DM_VERITY_MAX_CORRUPTED_ERRS)
++	if (v->corrupted_errs == DM_VERITY_MAX_CORRUPTED_ERRS) {
+ 		DMERR("%s: reached maximum errors", v->data_dev->name);
++		dm_audit_log_target(DM_MSG_PREFIX, "max-corrupted-errors", v->ti, 0);
++	}
+ 
+ 	snprintf(verity_env, DM_VERITY_ENV_LENGTH, "%s=%d,%llu",
+ 		DM_VERITY_ENV_VAR_NAME, type, block);
+@@ -340,6 +343,11 @@ static int verity_verify_level(struct dm_verity *v, struct dm_verity_io *io,
+ 		else if (verity_handle_err(v,
+ 					   DM_VERITY_BLOCK_TYPE_METADATA,
+ 					   hash_block)) {
++			struct bio *bio =
++				dm_bio_from_per_bio_data(io,
++							 v->ti->per_io_data_size);
++			dm_audit_log_bio(DM_MSG_PREFIX, "verify-metadata", bio,
++					 block, 0);
+ 			r = -EIO;
+ 			goto release_ret_r;
+ 		}
+@@ -590,8 +598,11 @@ static int verity_verify_io(struct dm_verity_io *io)
+ 				return -EIO;
+ 			}
+ 			if (verity_handle_err(v, DM_VERITY_BLOCK_TYPE_DATA,
+-					      cur_block))
++					      cur_block)) {
++				dm_audit_log_bio(DM_MSG_PREFIX, "verify-data",
++						 bio, cur_block, 0);
+ 				return -EIO;
++			}
+ 		}
+ 	}
+ 
+@@ -975,6 +986,8 @@ static void verity_dtr(struct dm_target *ti)
+ 		static_branch_dec(&use_tasklet_enabled);
+ 
+ 	kfree(v);
++
++	dm_audit_log_dtr(DM_MSG_PREFIX, ti, 1);
+ }
+ 
+ static int verity_alloc_most_once(struct dm_verity *v)
+@@ -1429,11 +1442,14 @@ static int verity_ctr(struct dm_target *ti, unsigned int argc, char **argv)
+ 
+ 	verity_verify_sig_opts_cleanup(&verify_args);
+ 
++	dm_audit_log_ctr(DM_MSG_PREFIX, ti, 1);
++
+ 	return 0;
+ 
+ bad:
+ 
+ 	verity_verify_sig_opts_cleanup(&verify_args);
++	dm_audit_log_ctr(DM_MSG_PREFIX, ti, 0);
+ 	verity_dtr(ti);
+ 
+ 	return r;
 -- 
- i.
+2.30.2
 
-
-> ospeed fields in uart->cons during uart_port_startup().
-> 
-> Signed-off-by: Lukasz Majczak <lma@semihalf.com>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/tty/serial/serial_core.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 2bd32c8ece39..394a05c09d87 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -225,9 +225,6 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
->  			tty->termios.c_cflag = uport->cons->cflag;
->  			tty->termios.c_ispeed = uport->cons->ispeed;
->  			tty->termios.c_ospeed = uport->cons->ospeed;
-> -			uport->cons->cflag = 0;
-> -			uport->cons->ispeed = 0;
-> -			uport->cons->ospeed = 0;
->  		}
->  		/*
->  		 * Initialise the hardware port settings.
-> 
