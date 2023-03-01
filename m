@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A2A6A75C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10F06A777A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjCAVA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 16:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
+        id S229892AbjCAXDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 18:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCAVA5 (ORCPT
+        with ESMTP id S229781AbjCAXDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 16:00:57 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E604DE39
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:00:56 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id o15so56847258edr.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 13:00:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677704454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P2kasoRjb1+wciE4LnUC2thgmhUmXODjqV4vRSm0GrQ=;
-        b=W7barMoQHh4OpBpyETO0/gkI5dClRC/69osO6LGoB7PZbyXAonsXRwPJeNy0OBf5UL
-         LXrKyhtV5pnGDcCIi4Piv/DxPPYhzjcQY6T6uNuSed9veKu1yjBJL4X+FkKb5bJYV9Yt
-         sE10hdpblg9K3wuqUwCurVvteg0oZ2CQ2bR4f73Gnt83eCIkCgy9LyANkDgWVMDqEBeJ
-         YZBj7K+xVkhICy6nS06wRn/bS8ni9axi1Ee9BCCArZ2aJbtEc/4KOm7qBrwJnCf7/X1M
-         WUrCsMG7Zvo1Tp+cjmRkFYImZEqA3rnUxBKoAy8NQeC6T/HaG9u5iIbM+jKerspIbLfZ
-         3YFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677704454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P2kasoRjb1+wciE4LnUC2thgmhUmXODjqV4vRSm0GrQ=;
-        b=4EONwLqFo2vCHZUYSespQ31omzua6Bu7yW7S2JMawStGsMH5CQLV3tDiYE5zc9a/yH
-         ujU18rnYQcnZJd51IT5RdLf3xEeTizBb2fTkLXLRATmBidVyqh+FCCAgGMVOYJ1Wf9r+
-         DTiFA9m6eTSz/LFFu5s0v09gVnv4iiuw99qP1WWdzUn8mFscboXMWHaf26EicfeKru8C
-         TR05GmYnDZGBc7AVIRdluMa0TLv7SdQ45yxLI4HWcoHu+xvjyLLac6XxV+8mY03uREjv
-         QS0fzMvns9VGfYOgaJvR5HWEM4f6iAaUEXiD2n1Hf44YfmC75xMACplx8yswS6Q8rXJ9
-         Cfwg==
-X-Gm-Message-State: AO0yUKXSgD1Vuxh9VQb9Fswuc15YSqOwnu14/zq5MxfnHYYLtsYAtxJy
-        +fyxHMiMV5fun8LzC08w5xYP1x1B0NX1Ejvua6xBJg==
-X-Google-Smtp-Source: AK7set8WhjZ+EUql0MKvPVALpu2QC0TPEikxqjdTRnnfGvepLuO+0VCK9ZPNqpgNDaswQPHgcICbMTezMh2iivOUnu0=
-X-Received: by 2002:a17:906:2308:b0:903:967b:42d8 with SMTP id
- l8-20020a170906230800b00903967b42d8mr3815668eja.4.1677704454274; Wed, 01 Mar
- 2023 13:00:54 -0800 (PST)
+        Wed, 1 Mar 2023 18:03:19 -0500
+X-Greylist: delayed 15004 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 15:03:06 PST
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39655CA16;
+        Wed,  1 Mar 2023 15:03:06 -0800 (PST)
+Received: from pro2.mail.ovh.net (unknown [10.109.156.120])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 92F4C21D7D;
+        Wed,  1 Mar 2023 18:53:00 +0000 (UTC)
+Received: from localhost.localdomain (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 1 Mar
+ 2023 19:52:58 +0100
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+To:     <saravanak@google.com>, <clement.leger@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        <zajec5@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Marc Zyngier <maz@kernel.org>, <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nishanth Menon <nm@ti.com>, <ssantosh@kernel.org>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
+CC:     <linux-renesas-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-wireless@vger.kernel.org>,
+        <linux-actions@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <linux-sunxi@lists.linux.dev>,
+        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Subject: [PATCH 2/3] of: irq: make callers of of_irq_parse_one() release the device node
+Date:   Wed, 1 Mar 2023 19:52:08 +0100
+Message-ID: <20230301185209.274134-3-jjhiblot@traphandler.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230301185209.274134-1-jjhiblot@traphandler.com>
+References: <20230301185209.274134-1-jjhiblot@traphandler.com>
 MIME-Version: 1.0
-References: <20230301193403.1507484-1-surenb@google.com> <Y/+wlg5L8A1iebya@cmpxchg.org>
- <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 1 Mar 2023 13:00:43 -0800
-Message-ID: <CAC_TJvfZu7-3QWF6EyEphZusnk8gjM-w3bw3K26TBnoY221yeQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] psi: remove 500ms min window size limitation for triggers
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, tj@kernel.org,
-        lizefan.x@bytedance.com, peterz@infradead.org, johunt@akamai.com,
-        mhocko@suse.com, keescook@chromium.org, quic_sudaraja@quicinc.com,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG3EX2.emp2.local (172.16.2.22) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 11460535152860871036
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedguddutdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeduteevleevvefggfdvueffffejhfehheeuiedtgedtjeeghfehueduudegfeefueenucfkphepuddvjedrtddrtddruddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdhnmhesthhirdgtohhmpdhsshgrnhhtohhshheskhgvrhhnvghlrdhorhhgpdhmrghthhhirghsrdhnhihmrghnsehinhhtvghlrdgtohhmpdhgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdpthhhihgvrhhrhidrrhgvughinhhgsehgmhgrihhlrdgtohhmpdhjohhnrghthhgrnhhhsehnvhhiughirgdrtghomhdplhhinhhugi
+ dqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugihpphgtqdguvghvsehlihhsthhsrdhoiihlrggsshdrohhrghdplhhinhhugidqfihirhgvlhgvshhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdgrtghtihhonhhssehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhlihhnuhigqdhrihhstghvsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhlihhnuhigqdhsuhhngihisehlihhsthhsrdhlihhnuhigrdguvghvpdguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpsghhvghlghgrrghssehgohhoghhlvgdrtghomhdpfhhrohifrghnugdrlhhishhtsehgmhgrihhlrdgtohhmpdhrohgshhdoughtsehkvghrnhgvlhdrohhrghdpshgrmhhuvghlsehshhholhhlrghnugdrohhrghdptghlvghmvghnthdrlhgvghgvrhessghoohhtlhhinhdrtghomhdpghgvvghrthdorhgvnhgvshgrshesghhlihguvghrrdgsvgdpmhgrghhnuhhsrdgurghmmhesghhmrghilhdrtghomhdplhhinhhugiesrghrmhhlihhnuhigrdh
+ orhhgrdhukhdpmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhnphhighhgihhnsehgmhgrihhlrdgtohhmpdgthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdiirghjvggtheesghhmrghilhdrtghomhdplhhinhhugidqthgvghhrrgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdptghlrghuughiuhdrsggviihnvggrsehmihgtrhhotghhihhprdgtohhmpdhmrgiisehkvghrnhgvlhdrohhrghdprghfrggvrhgsvghrsehsuhhsvgdruggvpdhmrghniheskhgvrhhnvghlrdhorhhgpdhprghlmhgvrhesuggrsggsvghlthdrtghomhdpphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhmpdifvghnshestghsihgvrdhorhhgpdhjvghrnhgvjhdrshhkrhgrsggvtgesghhmrghilhdrtghomhdpthhglhigsehlihhnuhhtrhhonhhigidruggvpdfovfetjfhoshhtpehmohehvdekpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,81 +83,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 12:48=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Wed, Mar 1, 2023 at 12:07=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.o=
-rg> wrote:
-> >
-> > On Wed, Mar 01, 2023 at 11:34:03AM -0800, Suren Baghdasaryan wrote:
-> > > Current 500ms min window size for psi triggers limits polling interva=
-l
-> > > to 50ms to prevent polling threads from using too much cpu bandwidth =
-by
-> > > polling too frequently. However the number of cgroups with triggers i=
-s
-> > > unlimited, so this protection can be defeated by creating multiple
-> > > cgroups with psi triggers (triggers in each cgroup are served by a si=
-ngle
-> > > "psimon" kernel thread).
-> > > Instead of limiting min polling period, which also limits the latency=
- of
-> > > psi events, it's better to limit psi trigger creation to authorized u=
-sers
-> > > only, like we do for system-wide psi triggers (/proc/pressure/* files=
- can
-> > > be written only by processes with CAP_SYS_RESOURCE capability). This =
-also
-> > > makes access rules for cgroup psi files consistent with system-wide o=
-nes.
-> > > Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers a=
-nd
-> > > remove the psi window min size limitation.
-> > >
-> > > Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-> > > Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraja@=
-quicinc.com/
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > ---
-> > >  kernel/cgroup/cgroup.c | 10 ++++++++++
-> > >  kernel/sched/psi.c     |  4 +---
-> > >  2 files changed, 11 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> > > index 935e8121b21e..b600a6baaeca 100644
-> > > --- a/kernel/cgroup/cgroup.c
-> > > +++ b/kernel/cgroup/cgroup.c
-> > > @@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct ke=
-rnfs_open_file *of,
-> > >       return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
-> > >  }
-> > >
-> > > +static int cgroup_pressure_open(struct kernfs_open_file *of)
-> > > +{
-> > > +     return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESO=
-URCE)) ?
-> > > +             -EPERM : 0;
-> > > +}
-> >
-> > I agree with the change, but it's a bit unfortunate that this check is
-> > duplicated between system and cgroup.
-> >
-> > What do you think about psi_trigger_create() taking the file and
-> > checking FMODE_WRITE and CAP_SYS_RESOURCE against file->f_cred?
->
-> That's definitely doable and we don't even need to pass file to
-> psi_trigger_create() since it's called only when we write to the file.
-> However by moving the capability check into psi_trigger_create() we
-> also postpone the check until write() instead of failing early in
-> open(). I always assumed failing early is preferable but if
-> consolidating the code here makes more sense then I can make the
-> switch. Please let me know if you still prefer to move the check.
->
+of_irq_parse_one() does a get() on the device node returned in out_irq->np.
+Callers of of_irq_parse_one() must do a put() when they are done with it.
 
-I always assumed the convention is to check the credentials on open()
-per Linus comment here:
+Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+---
+ .../mach-shmobile/regulator-quirk-rcar-gen2.c |  1 +
+ arch/powerpc/sysdev/mpic_msi.c                |  1 +
+ drivers/clocksource/timer-clint.c             |  1 +
+ drivers/irqchip/irq-mchp-eic.c                |  1 +
+ drivers/irqchip/irq-owl-sirq.c                |  1 +
+ drivers/irqchip/irq-renesas-rzg2l.c           |  1 +
+ drivers/irqchip/irq-sifive-plic.c             |  1 +
+ drivers/irqchip/irq-sun6i-r.c                 |  2 ++
+ drivers/of/irq.c                              | 22 ++++++++++++++-----
+ drivers/of/unittest.c                         |  7 ++++++
+ drivers/pci/of.c                              |  6 ++++-
+ drivers/soc/ti/knav_qmss_queue.c              |  3 +++
+ drivers/usb/host/xhci-tegra.c                 |  1 +
+ 13 files changed, 42 insertions(+), 6 deletions(-)
 
-https://lore.kernel.org/r/CAHk-=3DwhDkekE8n2LdPiKHeTdRnV--ys0V0nPZ76oPaE0fn=
--d+g@mail.gmail.com/#t
+diff --git a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+index 117e7b07995b9..af1c04f0705aa 100644
+--- a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
++++ b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+@@ -184,6 +184,7 @@ static int __init rcar_gen2_regulator_quirk(void)
+ 			kfree(quirk);
+ 			continue;
+ 		}
++		of_node_put(argsa->np);
+ 
+ 		list_for_each_entry(pos, &quirk_list, list) {
+ 			argsb = &pos->irq_args;
+diff --git a/arch/powerpc/sysdev/mpic_msi.c b/arch/powerpc/sysdev/mpic_msi.c
+index 34246c8e01c2b..bac8b12291a87 100644
+--- a/arch/powerpc/sysdev/mpic_msi.c
++++ b/arch/powerpc/sysdev/mpic_msi.c
+@@ -63,6 +63,7 @@ static int __init mpic_msi_reserve_u3_hwirqs(struct mpic *mpic)
+ 			ops->xlate(mpic->irqhost, NULL, oirq.args,
+ 						oirq.args_count, &hwirq, &flags);
+ 			msi_bitmap_reserve_hwirq(&mpic->msi_bitmap, hwirq);
++			of_node_put(oirq.np);
+ 		}
+ 	}
+ 
+diff --git a/drivers/clocksource/timer-clint.c b/drivers/clocksource/timer-clint.c
+index 6cfe2ab73eb0c..126912674610c 100644
+--- a/drivers/clocksource/timer-clint.c
++++ b/drivers/clocksource/timer-clint.c
+@@ -175,6 +175,7 @@ static int __init clint_timer_init_dt(struct device_node *np)
+ 		    oirq.args[0] == RV_IRQ_TIMER &&
+ 		    irq_find_host(oirq.np))
+ 			clint_timer_irq = irq_of_parse_and_map(np, i);
++		of_node_put(oirq.np);
+ 	}
+ 
+ 	/* If CLINT timer irq not found then fail */
+diff --git a/drivers/irqchip/irq-mchp-eic.c b/drivers/irqchip/irq-mchp-eic.c
+index c726a19837d29..f020d28efc6a4 100644
+--- a/drivers/irqchip/irq-mchp-eic.c
++++ b/drivers/irqchip/irq-mchp-eic.c
+@@ -239,6 +239,7 @@ static int mchp_eic_init(struct device_node *node, struct device_node *parent)
+ 		ret = of_irq_parse_one(node, i, &irq);
+ 		if (ret)
+ 			goto clk_unprepare;
++		of_node_put(irq.np);
+ 
+ 		if (WARN_ON(irq.args_count != 3)) {
+ 			ret = -EINVAL;
+diff --git a/drivers/irqchip/irq-owl-sirq.c b/drivers/irqchip/irq-owl-sirq.c
+index 6e4127465094f..1ac31acb8e792 100644
+--- a/drivers/irqchip/irq-owl-sirq.c
++++ b/drivers/irqchip/irq-owl-sirq.c
+@@ -311,6 +311,7 @@ static int __init owl_sirq_init(const struct owl_sirq_params *params,
+ 			pr_err("%pOF: failed to parse interrupt %d\n", node, i);
+ 			goto out_unmap;
+ 		}
++		of_node_put(irq.np);
+ 
+ 		if (WARN_ON(irq.args_count != 3)) {
+ 			ret = -EINVAL;
+diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+index 25fd8ee66565b..095d2263e2dac 100644
+--- a/drivers/irqchip/irq-renesas-rzg2l.c
++++ b/drivers/irqchip/irq-renesas-rzg2l.c
+@@ -310,6 +310,7 @@ static int rzg2l_irqc_parse_interrupts(struct rzg2l_irqc_priv *priv,
+ 			return ret;
+ 		of_phandle_args_to_fwspec(np, map.args, map.args_count,
+ 					  &priv->fwspec[i]);
++		of_node_put(map.np);
+ 	}
+ 
+ 	return 0;
+diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+index ff47bd0dec455..1a863ab2abd60 100644
+--- a/drivers/irqchip/irq-sifive-plic.c
++++ b/drivers/irqchip/irq-sifive-plic.c
+@@ -420,6 +420,7 @@ static int __init __plic_init(struct device_node *node,
+ 				irq_set_chained_handler(plic_parent_irq,
+ 							plic_handle_irq);
+ 		}
++		of_node_put(parent.np);
+ 
+ 		/*
+ 		 * When running in M-mode we need to ignore the S-mode handler.
+diff --git a/drivers/irqchip/irq-sun6i-r.c b/drivers/irqchip/irq-sun6i-r.c
+index a01e440494154..29e5917d1fc9d 100644
+--- a/drivers/irqchip/irq-sun6i-r.c
++++ b/drivers/irqchip/irq-sun6i-r.c
+@@ -317,6 +317,8 @@ static int __init sun6i_r_intc_init(struct device_node *node,
+ 	ret = of_irq_parse_one(node, 0, &nmi_parent);
+ 	if (ret)
+ 		return ret;
++	of_node_put(nmi_parent.np);
++
+ 	if (nmi_parent.args_count < 3 ||
+ 	    nmi_parent.args[0] != GIC_SPI ||
+ 	    nmi_parent.args[2] != IRQ_TYPE_LEVEL_HIGH)
+diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+index e9bf5236ed892..95da943fcf075 100644
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -35,12 +35,16 @@
+  */
+ unsigned int irq_of_parse_and_map(struct device_node *dev, int index)
+ {
++	unsigned int res;
+ 	struct of_phandle_args oirq;
+ 
+ 	if (of_irq_parse_one(dev, index, &oirq))
+ 		return 0;
+ 
+-	return irq_create_of_mapping(&oirq);
++	res = irq_create_of_mapping(&oirq);
++	of_node_put(oirq.np);
++
++	return res;
+ }
+ EXPORT_SYMBOL_GPL(irq_of_parse_and_map);
+ 
+@@ -438,10 +442,16 @@ int of_irq_get(struct device_node *dev, int index)
+ 		return rc;
+ 
+ 	domain = irq_find_host(oirq.np);
+-	if (!domain)
+-		return -EPROBE_DEFER;
++	if (!domain) {
++		rc = -EPROBE_DEFER;
++		goto out;
++	}
+ 
+-	return irq_create_of_mapping(&oirq);
++	rc = irq_create_of_mapping(&oirq);
++
++out:
++	of_node_put(oirq.np);
++	return rc;
+ }
+ EXPORT_SYMBOL_GPL(of_irq_get);
+ 
+@@ -478,8 +488,10 @@ int of_irq_count(struct device_node *dev)
+ 	struct of_phandle_args irq;
+ 	int nr = 0;
+ 
+-	while (of_irq_parse_one(dev, nr, &irq) == 0)
++	while (of_irq_parse_one(dev, nr, &irq) == 0) {
+ 		nr++;
++		of_node_put(irq.np);
++	}
+ 
+ 	return nr;
+ }
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index bc0f1e50a4bee..801a42c20fc79 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -1021,6 +1021,8 @@ static void __init of_unittest_parse_interrupts(void)
+ 
+ 		memset(&args, 0, sizeof(args));
+ 		rc = of_irq_parse_one(np, i, &args);
++		if (!rc)
++			of_node_put(args.np);
+ 
+ 		passed &= !rc;
+ 		passed &= (args.args_count == 1);
+@@ -1028,6 +1030,7 @@ static void __init of_unittest_parse_interrupts(void)
+ 
+ 		unittest(passed, "index %i - data error on node %pOF rc=%i\n",
+ 			 i, args.np, rc);
++
+ 	}
+ 	of_node_put(np);
+ 
+@@ -1042,6 +1045,8 @@ static void __init of_unittest_parse_interrupts(void)
+ 
+ 		memset(&args, 0, sizeof(args));
+ 		rc = of_irq_parse_one(np, i, &args);
++		if (!rc)
++			of_node_put(args.np);
+ 
+ 		/* Test the values from tests-phandle.dtsi */
+ 		switch (i) {
+@@ -1098,6 +1103,8 @@ static void __init of_unittest_parse_interrupts_extended(void)
+ 
+ 		memset(&args, 0, sizeof(args));
+ 		rc = of_irq_parse_one(np, i, &args);
++		if (!rc)
++			of_node_put(args.np);
+ 
+ 		/* Test the values from tests-phandle.dtsi */
+ 		switch (i) {
+diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+index 196834ed44fe8..a3a047f57e439 100644
+--- a/drivers/pci/of.c
++++ b/drivers/pci/of.c
+@@ -535,7 +535,11 @@ int of_irq_parse_and_map_pci(const struct pci_dev *dev, u8 slot, u8 pin)
+ 	if (ret)
+ 		return 0; /* Proper return code 0 == NO_IRQ */
+ 
+-	return irq_create_of_mapping(&oirq);
++	ret = irq_create_of_mapping(&oirq);
++
++	of_node_put(oirq.np);
++
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_irq_parse_and_map_pci);
+ #endif	/* CONFIG_OF_IRQ */
+diff --git a/drivers/soc/ti/knav_qmss_queue.c b/drivers/soc/ti/knav_qmss_queue.c
+index 8fb76908be704..0ac4a0f219127 100644
+--- a/drivers/soc/ti/knav_qmss_queue.c
++++ b/drivers/soc/ti/knav_qmss_queue.c
+@@ -1240,6 +1240,9 @@ static int knav_setup_queue_range(struct knav_device *kdev,
+ 			break;
+ 
+ 		range->irqs[i].irq = irq_create_of_mapping(&oirq);
++
++		of_node_put(oirq.np);
++
+ 		if (range->irqs[i].irq == IRQ_NONE)
+ 			break;
+ 
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index bdb776553826b..538eedac1c71e 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1458,6 +1458,7 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 	/* Older device-trees don't have padctrl interrupt */
+ 	err = of_irq_parse_one(np, 0, &args);
+ 	if (!err) {
++		of_node_put(args.np);
+ 		tegra->padctl_irq = of_irq_get(np, 0);
+ 		if (tegra->padctl_irq <= 0) {
+ 			err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
+-- 
+2.25.1
 
---Kalesh
