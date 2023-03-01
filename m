@@ -2,85 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137476A758B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B916A758D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjCAUpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S229602AbjCAUqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAUpI (ORCPT
+        with ESMTP id S229445AbjCAUqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:45:08 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53E12F7B0;
-        Wed,  1 Mar 2023 12:45:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677703507; x=1709239507;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LjtrVXB/viGf/EUhuoDkDAFTiBWGzZxjEx8qi57evnA=;
-  b=OLMboEEzwHzNuwqkUA0QpOGwirYOXNVvnViLlnMX8gJlYc8MgalmwBC8
-   eZ6EOXqKbr30xDISne5DaXfoXT1zcppyifRoPlHlqaH1Nb8Sr0nSCdgim
-   y3DJ5vfMpZJO9M/6eEBNjvV8C5eJSvkghznv8mLqCopJ8ZX9T7LlkMxXv
-   G3nRKVCi+y+pOKODy8qAHHdfK930HGmMXN16sTVwoDZIL1ej+dW7A40eP
-   5Z4qh5gvwoQuj/0Zk7MKZieZkwUa6mjAxA6X/LCfRKkUDUtxM1XMm1imY
-   2PUH6dNv/ayKreMeaGNhF9fqdmW9D+6AA/QGk35v7y3JgRMsJOcAl73JS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="336808223"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="336808223"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 12:45:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="784505924"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="784505924"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 12:45:02 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id E242111FAD0;
-        Wed,  1 Mar 2023 22:44:59 +0200 (EET)
-Date:   Wed, 1 Mar 2023 22:44:59 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v3 0/5] Add Intel LJCA device driver
-Message-ID: <Y/+5S5TlViDsSymF@kekkonen.localdomain>
-References: <20230228065618.2686550-1-xiang.ye@intel.com>
+        Wed, 1 Mar 2023 15:46:09 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7794838655
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:46:05 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso536142pjr.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 12:46:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677703565;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X9BoC0/A76+y2upt8Z7xd1pPLeDEjjRKQePPrJY8K6A=;
+        b=GBZ/bvvR+IIljM8PA91ubanXCRvXQF2JxVhOAECYNlq9AjYdNNQUE9i4+BDjWfkWh2
+         RzmZwz4JFT5fWKf4WzeaNavuCtUaLN85QzZ02FZoLVAEYz3Ke5Ma8flyK1CBVWB/VZWC
+         zbE2MgX3DrSp1DDZPKKvLxpapXn+EdHv3obBdz/6EZqhKywz+voFXekEGHfjJGCvX/tQ
+         BskjJ7fVI8WpCweMTDIpVeSddJAp+oXukEYt6XG6SSrmQVCsx8DjzawGOnktrnnZxKSo
+         twOaxACRA/3waYXYwq0AhgR1j3ebMMR6diHtYFVOYkaBCdHijor+zr1M9Jt469I0a3x1
+         XPjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677703565;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X9BoC0/A76+y2upt8Z7xd1pPLeDEjjRKQePPrJY8K6A=;
+        b=ojkD/Yc7SakGmBdXt4YuJUVO9qTSpniO7tBByS1ihovZvC/BVhZwMK7IebYsuM6aEW
+         TqvRK4+4zu+GqfMDPVxne4XeWxI0w+NpTvT3isMz60d0eO5w0jK9xJEWze/8Gf+l9PbJ
+         4ncM88p14hlltytOybmxqR2zIDGwiJG8yCl0nHt9zfDhiBAstBOgiBDkdrkLO/yqpcc2
+         ITkOI1DPtmfhmuFVUO4DUE/2Joet+2OyW3Rorn//UZxBgqsRzIgznIGQG3wYSoDnD+cp
+         Kh2/0BtZSIeBk+KzueO5lwuZKXfIPHvVEPInHObVcff+y9Ltbt4VtZYm5rJDJMk6aMTr
+         qkEA==
+X-Gm-Message-State: AO0yUKVXvvC+MCmX1N7lqK4feV0kQn/noMjzEL13oEztdqEX+qyWj39w
+        zrgaXfYnjC12UQqdcE0yf0smBrdrurGzrt0NFeR18Q==
+X-Google-Smtp-Source: AK7set+yTRmSTyauRufVb1tyAauc6gMRa8tEFWWYf06xoxgmZVXEEcgftQSIvTkiPsSBjqHC+tzLG30n4oA9Rvwt1DM=
+X-Received: by 2002:a17:90a:174a:b0:234:b29d:3319 with SMTP id
+ 10-20020a17090a174a00b00234b29d3319mr3089625pjm.8.1677703564622; Wed, 01 Mar
+ 2023 12:46:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228065618.2686550-1-xiang.ye@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230301012506.1401883-1-saravanak@google.com> <31ae9957edf319416d4551f14eba2071.sboyd@kernel.org>
+In-Reply-To: <31ae9957edf319416d4551f14eba2071.sboyd@kernel.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 1 Mar 2023 12:45:27 -0800
+Message-ID: <CAGETcx-t=SHPtNifpF35XTMEZk9b0gySr+J9AfcgHvVfBEEWtw@mail.gmail.com>
+Subject: Re: [PATCH v1] clk: Mark a fwnode as initialized when using
+ CLK_OF_DECLARE* macros
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kernel-team@android.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiang,
+On Wed, Mar 1, 2023 at 12:40=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wro=
+te:
+>
+> Quoting Saravana Kannan (2023-02-28 17:25:06)
+> > The CLK_OF_DECLARE macros sometimes prevent the creation of struct
+> > devices for the device node being handled. It does this by
+> > setting/clearing OF_POPULATED flag. This can block the probing of some
+> > devices because fw_devlink will block the consumers of this node till a
+> > struct device is created and probed.
+>
+> Why can't you use CLK_OF_DECLARE_DRIVER()?
 
-On Tue, Feb 28, 2023 at 02:56:13PM +0800, Ye Xiang wrote:
-> Add driver for Intel La Jolla Cove Adapter (LJCA) device.
-> This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
-> drivers to support this device: a USB driver, a GPIO chip
-> driver, a I2C controller driver and a SPI controller driver.
+Not sure if you looked at the patch. This is a fix for the macros, not
+this specific user of CLK_OF_DECLARE(). Even if Linus fixes his
+specific case, this change is still needed for other users of
+CLK_OF_DECLARE().
 
-I've given my Reviewed-by: for this set once, please keep it unless there
-are significant changes in the patches.
+Honestly, a ton of existing CLK_OF_DECLARE() users should really be
+switching to CLK_OF_DECLARE_DRIVER() or better yet, implement them as
+normal platform drivers when the specific clock control doesn't
+provide any early clocks.
 
--- 
-Regards,
-
-Sakari Ailus
+-Saravana
