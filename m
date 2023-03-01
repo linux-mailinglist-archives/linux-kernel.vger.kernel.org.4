@@ -2,171 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BC06A77D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00726A77F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjCAXjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 18:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S229624AbjCAXsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 18:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjCAXiW (ORCPT
+        with ESMTP id S229510AbjCAXsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 18:38:22 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D4F521F1
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 15:38:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677713891; x=1709249891;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=NR72OLVunS5t2SqSsi29lRMoOPaXNWEb1txH4+ymFL0=;
-  b=SSgWhUvXh2/LLdc7xJbLU2ZIFvdGZ9SCplpjI32FDZ2SBnCzl9uEb4hD
-   wrJFXTcBp5hwAyb6LTxqUeUER5O8hHUaS2z1S6FUhbU/rLDZXihDI0b2h
-   oruwKR0xv6LjJb+PEvAiqPJgHm8tADnAtjMmVg05pKE5VvzPBH6t4pZkQ
-   NGcTF8Ymy7SJwfqFe+n4C8I4U7Md5YY35kI3O+dH5z5PApry1/aYyroKW
-   8r1l4yHRhJGoJtZUGQqigMzm4y/6cBuaN5KCSZWnxME01jO1awTuDfQl9
-   XfF3FI7pw8w55x0XiNaDjwXzqF2thq49m5sYSkvkgfgnkgWaV8G3k4Jhw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="420818807"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="420818807"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 15:38:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="738826877"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="738826877"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Mar 2023 15:38:01 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Len Brown <len.brown@intel.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        linuxppc-dev@lists.ozlabs.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v7 24/24] x86/tsc: Stop the HPET hardlockup detector if TSC become unstable
-Date:   Wed,  1 Mar 2023 15:47:53 -0800
-Message-Id: <20230301234753.28582-25-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230301234753.28582-1-ricardo.neri-calderon@linux.intel.com>
-References: <20230301234753.28582-1-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 18:48:16 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4222CC47
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 15:48:05 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id v11so12251323plz.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 15:48:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677714485;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IwnplCZss/sjev7Hh27BVil2zDjq9ax06z63d9E4vYY=;
+        b=GpXkbFhcR+YXAEC9td8Szq1ZMuyjfpUMKgB3P7Odc6nMN5mfl0uTGmcLq0dXc6aZbw
+         NJo/SFk/ew1uJxyY0A7dFEH1PB/VS2EVoiFeQ+To0sYD/SHzmkYoWZKgkoVfwIpZMdzv
+         E65W+sp9Dv1nLfD+oVddXYTwqnL2X7iF05ZPNUnhMc5P90tKkAiwFAEYd791K3crES7/
+         ITr6nrUXbr4q1Fj+kyjGKPNQ3pRUMpKf2i7pUQJNUgftNwUPMz8yfCgqRni3YfBIniS6
+         evhwQ6sOHdJkAqmTL8me0I/YtNWeWWL09O3vDTcgzadkCCOTh8Sb9U4vYPIJ46SAVdKN
+         5coQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677714485;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IwnplCZss/sjev7Hh27BVil2zDjq9ax06z63d9E4vYY=;
+        b=CPPKQrOgX7KqsO3bL6zC5MK+NeHdnPtz44al1ML7d0oRLt+HNQIgWxSRGbjJ+utePd
+         IbAzIps2T9P6ZiykR8wIDVDJ3lXIzB1gSORdLmNvbv0Twk3/2qT9DbxXkq8fI0ah9bFX
+         wKGYpvgy8yV51UfKw7Yo/f2oWPCrpssYXFuK9U5w+3NX1pyxMi3d0BazLP1eESQssckt
+         hrGjAZ4i77vnvViJCV012dnDbczpHmXPGD2S76lDbuhmcrRNJVI3TxT9RB3lX+AvWXoE
+         0RuPyzX0gRMI4ytaV+MkF9CCkwLcwRuyoOnxV9Lfb2f18ZVcOcLsOAh1hpEWwUy6SrRj
+         FCIw==
+X-Gm-Message-State: AO0yUKVO9LtugQhFnzN2VnIOwQGr9SzqCOE8WEuPOLlFK0U9IOY6caAS
+        n7UkKOykQG4cQbzRC3myiM06Y7hbWcY=
+X-Google-Smtp-Source: AK7set8pm9GVZz+CiwcKtVsULeY275AftnO/TM3U50O74RuKS7xCbHJ/5t6tVSe791ZyGMKLJbgcyA==
+X-Received: by 2002:a05:6a20:8407:b0:cc:eb3b:56e9 with SMTP id c7-20020a056a20840700b000cceb3b56e9mr11850682pzd.1.1677714485139;
+        Wed, 01 Mar 2023 15:48:05 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:a524:71b8:ce7e:745d])
+        by smtp.gmail.com with ESMTPSA id f23-20020aa782d7000000b005dea362ed18sm8497558pfn.27.2023.03.01.15.48.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 15:48:04 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Wed, 1 Mar 2023 15:48:02 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCHv2 5/6] zsmalloc: extend compaction statistics
+Message-ID: <Y//kMuCV7dzdrfGp@google.com>
+References: <20230223030451.543162-1-senozhatsky@chromium.org>
+ <20230223030451.543162-6-senozhatsky@chromium.org>
+ <Y/f75fkcQg6m3cbG@google.com>
+ <Y/rYQdUDNHDCJJTO@google.com>
+ <Y/5+PEfuEl3b/sDR@google.com>
+ <Y/7MkLdVXImxPQeJ@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/7MkLdVXImxPQeJ@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HPET-based hardlockup detector relies on the TSC to determine if an
-observed NMI interrupt was originated by HPET timer. Hence, this detector
-can no longer be used with an unstable TSC. Once marked as unstable,
-the TSC cannot be stable again. In such case, permanently stop the HPET-
-based hardlockup detector.
+On Wed, Mar 01, 2023 at 12:54:56PM +0900, Sergey Senozhatsky wrote:
+> On (23/02/28 14:20), Minchan Kim wrote:
+> > On Sun, Feb 26, 2023 at 12:55:45PM +0900, Sergey Senozhatsky wrote:
+> > > On (23/02/23 15:51), Minchan Kim wrote:
+> > > > On Thu, Feb 23, 2023 at 12:04:50PM +0900, Sergey Senozhatsky wrote:
+> > > > > Extend zsmalloc zs_pool_stats with a new member that
+> > > > > holds the number of objects pool compaction moved
+> > > > > between pool pages.
+> > > > 
+> > > > I totally understand this new stat would be very useful for your
+> > > > development but not sure it's really useful for workload tune or
+> > > > monitoring.
+> > > > 
+> > > > Unless we have strong usecase, I'd like to avoid new stat.
+> > > 
+> > > The way I see is that it *can* give some interesting additional data to
+> > > periodical compaction (the one is not triggeed by the shrinker): if the
+> > > number of moves objects is relatively high but the number of comapcted
+> > > (feeed) pages is relatively low then the system has fragmentation in
+> > > small size classes (that tend to have many objects per zspage but not
+> > > too many pages per zspage) and in this case the interval between
+> > > periodical compactions probably can be increased. What do you think?
+> > 
+> > In the case, how could we get only data triggered by periodical munual
+> > compaction?
+> 
+> Something very simple like
+> 
+> 	read zram mm_stat
+> 	trigger comapction
+> 	read zram mm_stat
+> 
+> can work in most cases, I guess. There can be memory pressure
+> and shrinkers can compact the pool concurrently, in which case
+> mm_stat will include shrinker impact, but that's probably not
+> a problem. If system is under memory pressure then user space
 
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-Cc: iommu@lists.linux-foundation.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
-Changes since v6:
- * Do not switch to the perf-based NMI watchdog. Instead, only stop
-   the HPET-based NMI watchdog if the TSC counter becomes unstable.
+Agreed.
 
-Changes since v5:
- * Relocated the declaration of hardlockup_detector_switch_to_perf() to
-   x86/nmi.h It does not depend on HPET.
- * Removed function stub. The shim hardlockup detector is always for x86.
+> in general does not have to do comapction, since the kernel will
+> handle it.
+> 
+> Just an idea. It feels like "pages compacted" on its own tells very
+> little, but I don't insist on exporting that new stat.
 
-Changes since v4:
- * Added a stub version of hardlockup_detector_switch_to_perf() for
-   !CONFIG_HPET_TIMER. (lkp)
- * Reconfigure the whole lockup detector instead of unconditionally
-   starting the perf-based hardlockup detector.
+I don't mind adding the simple metric but I want to add metric if
+we have real usecase with handful of comments how they uses it
+in real world.
 
-Changes since v3:
- * None
-
-Changes since v2:
- * Introduced this patch.
-
-Changes since v1:
- * N/A
----
- arch/x86/include/asm/nmi.h     |  6 ++++++
- arch/x86/kernel/tsc.c          |  3 +++
- arch/x86/kernel/watchdog_hld.c | 11 +++++++++++
- 3 files changed, 20 insertions(+)
-
-diff --git a/arch/x86/include/asm/nmi.h b/arch/x86/include/asm/nmi.h
-index 5c5f1e56c404..4d0687a2b4ea 100644
---- a/arch/x86/include/asm/nmi.h
-+++ b/arch/x86/include/asm/nmi.h
-@@ -63,4 +63,10 @@ void stop_nmi(void);
- void restart_nmi(void);
- void local_touch_nmi(void);
- 
-+#ifdef CONFIG_HARDLOCKUP_DETECTOR
-+extern void hardlockup_detector_mark_hpet_hld_unavailable(void);
-+#else
-+static inline void hardlockup_detector_mark_hpet_hld_unavailable(void) {}
-+#endif
-+
- #endif /* _ASM_X86_NMI_H */
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index 344698852146..24f77efea569 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -1191,6 +1191,9 @@ void mark_tsc_unstable(char *reason)
- 
- 	clocksource_mark_unstable(&clocksource_tsc_early);
- 	clocksource_mark_unstable(&clocksource_tsc);
-+
-+	/* The HPET hardlockup detector depends on a stable TSC. */
-+	hardlockup_detector_mark_hpet_hld_unavailable();
- }
- 
- EXPORT_SYMBOL_GPL(mark_tsc_unstable);
-diff --git a/arch/x86/kernel/watchdog_hld.c b/arch/x86/kernel/watchdog_hld.c
-index 33c22f6456a3..f5d79ce0e7a2 100644
---- a/arch/x86/kernel/watchdog_hld.c
-+++ b/arch/x86/kernel/watchdog_hld.c
-@@ -6,6 +6,8 @@
-  * Copyright (C) Intel Corporation 2023
-  */
- 
-+#define pr_fmt(fmt) "watchdog: " fmt
-+
- #include <linux/nmi.h>
- #include <asm/hpet.h>
- 
-@@ -84,3 +86,12 @@ void watchdog_nmi_start(void)
- 	if (detector_type == X86_HARDLOCKUP_DETECTOR_HPET)
- 		hardlockup_detector_hpet_start();
- }
-+
-+void hardlockup_detector_mark_hpet_hld_unavailable(void)
-+{
-+	if (detector_type != X86_HARDLOCKUP_DETECTOR_HPET)
-+		return;
-+
-+	pr_warn("TSC is unstable. Stopping the HPET NMI watchdog.");
-+	hardlockup_detector_mark_unavailable();
-+}
--- 
-2.25.1
-
+Thanks.
