@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C6F6A656B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D003D6A656E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjCACW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 21:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S229674AbjCACXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 21:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCACWY (ORCPT
+        with ESMTP id S229486AbjCACXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 21:22:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D9E303F4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:22:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D478B80ED2
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:22:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E47C4339E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677637340;
-        bh=U33P0NyrqWLHKl8GZ4YuPEs18eKHtUPecDCiQFZw5yo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fDVDgZ/vwaUIdgMHa//um6SNWnks3Bi8gYwRRPL32QTYJ8F2ODysA8RcYJzlsfaHH
-         VXJzzyJ9MsBw0uEjeed4hiRpJsTknxgZQ/4cQK/+bhfQkVprvlNEFF1I3o4pVBx8/4
-         jLl2842aAEgUn2nJyCmjuTf+JZ95SSdMPQXe33EnLRYceDv1kN4QPG2OOe8yNKK6Cy
-         rsj5dPNjBmtlK88vHSVxjVt/ZxRZcwQMGxj32UzD1R2UJcHVXM8Kfio+bE07QWXpO4
-         og0IpT8mGQIqHj0iGYIonCiaDIO/SIsCwUJO3QuDRMNfZoxuucWHpIN1FcvmNoCZji
-         +fdimsgww8jkw==
-Received: by mail-ed1-f54.google.com with SMTP id s26so47949988edw.11
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:22:20 -0800 (PST)
-X-Gm-Message-State: AO0yUKVWb8H1PjEhB4K+sf6s4REaxpmXLjt4riMhK2iGOff7WMcj4jDE
-        37sPOgVRzOX4i7WcrjPoGbiN4zhcVTtiwEfD8mc=
-X-Google-Smtp-Source: AK7set8CC2LfBvQLsabLWQBvlwpphENbr9MVwvCMYqTjstMKH69q4QthOs9G4L7V4Vq2KUIHfX1hvVsfJmMLxKAIzSM=
-X-Received: by 2002:a17:907:2ce6:b0:8df:dc64:30d2 with SMTP id
- hz6-20020a1709072ce600b008dfdc6430d2mr10384264ejc.1.1677637339026; Tue, 28
- Feb 2023 18:22:19 -0800 (PST)
+        Tue, 28 Feb 2023 21:23:02 -0500
+Received: from out-15.mta1.migadu.com (out-15.mta1.migadu.com [IPv6:2001:41d0:203:375::f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BF112F3D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:23:01 -0800 (PST)
+Date:   Wed, 1 Mar 2023 10:22:53 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1677637377;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KjfrdvJ5EsT0YAy1o3AET9M3uaWnQUjK9n1xqYiKKqI=;
+        b=ZFXZDpPnzIeQyQPyopzXCeCoC1mkMkXU8UcQM1hTChwqORjbga7wiPKXPpidve6XUGscqM
+        fQs+AXb1Z5HNbO/mV3bCbstCvjWzgrpZxEyrajLZw54msNo26fkgmuqizhu18ygxhVQ1kS
+        5cyqVzY61WkjZGpnvEYJFrCGMYxBAAI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     fancer.lancer@gmail.com
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <Y/62/XUiHz363qmD@chq-MS-7D45>
+References: <20230221034656.14476-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-References: <20230228215435.3366914-1-heiko@sntech.de> <20230228215435.3366914-2-heiko@sntech.de>
-In-Reply-To: <20230228215435.3366914-2-heiko@sntech.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 1 Mar 2023 10:22:07 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTJRy1ABdNTHJY+4SZpyAFnRgr6POT37JjS6bV_r+d7bQ@mail.gmail.com>
-Message-ID: <CAJF2gTTJRy1ABdNTHJY+4SZpyAFnRgr6POT37JjS6bV_r+d7bQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/2] RISC-V: define the elements of the VCSR vector CSR
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, linux-riscv@lists.infradead.org,
-        samuel@sholland.org, christoph.muellner@vrull.eu,
-        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230221034656.14476-1-cai.huoqing@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+On 21 2月 23 11:46:51, Cai Huoqing wrote:
+> Add support for HDMA NATIVE, as long the IP design has set
+> the compatible register map parameter-HDMA_NATIVE,
+> which allows compatibility for native HDMA register configuration.
+> 
+> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> And the native HDMA registers are different from eDMA,
+> so this patch add support for HDMA NATIVE mode.
+> 
+> HDMA write and read channels operate independently to maximize
+> the performance of the HDMA read and write data transfer over
+> the link When you configure the HDMA with multiple read channels,
+> then it uses a round robin (RR) arbitration scheme to select
+> the next read channel to be serviced.The same applies when
+> youhave multiple write channels.
+> 
+> The native HDMA driver also supports a maximum of 16 independent
+> channels (8 write + 8 read), which can run simultaneously.
+> Both SAR (Source Address Register) and DAR (Destination Address Register)
+> are aligned to byte.
+Just ping this patch v4
 
-On Wed, Mar 1, 2023 at 5:54=E2=80=AFAM Heiko Stuebner <heiko@sntech.de> wro=
-te:
->
-> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
->
-> The VCSR CSR contains two elements VXRM[2:1] and VXSAT[0].
->
-> Define constants for those to access the elements in a readable way.
->
-> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> ---
->  arch/riscv/include/asm/csr.h | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index add51662b7c3..8b06f2472915 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -176,6 +176,11 @@
->  #define ENVCFG_CBIE_INV                        _AC(0x3, UL)
->  #define ENVCFG_FIOM                    _AC(0x1, UL)
->
-> +/* VCSR flags */
-> +#define VCSR_VXRM_MASK                 3
-> +#define VCSR_VXRM_SHIFT                        1
-> +#define VCSR_VXSAT_MASK                        1
-> +
->  /* symbolic CSR names: */
->  #define CSR_CYCLE              0xc00
->  #define CSR_TIME               0xc01
-> --
-> 2.39.0
->
-
-
---=20
-Best Regards
- Guo Ren
+Thanks,
+Cai-
+> 
+> Cai huoqing (4):
+>   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
+>     dw_edma_plat_ops
+>   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
+>     abstract controller operation
+>   dmaengine: dw-edma: Add support for native HDMA
+>   dmaengine: dw-edma: Add HDMA DebugFS support
+> 
+>   v3->v4:
+>     [1/4]
+>     1.Update the structure name dw_edma_plat_ops in commit log
+>     2.Fix code stytle.
+>     [2/4]
+>     3.Refactor dw_edma_interrupt() and related callbacks to
+>       make the code more readable, the calls hierarchy like this:
+> 
+>       irq: dw_edma_interrupt_{write,read}()
+>       +-> dw_edma_core_handle_int() (dw-edma-v0-core.c)
+>           +-> dw_edma_v0_core_status_done_int() (dw-edma-v0-core.c)
+>           +-> dw_edma_v0_core_clear_done_int() (dw-edma-v0-core.c)
+>           +-> dw_edma_done_interrupt() (dw-edma-core.c)
+>           +-> dw_edma_v0_core_status_abort_int() (dw-edma-v0-core.c)
+>           +-> dw_edma_v0_core_clear_abort_int() (dw-edma-v0-core.c)
+>           +-> dw_edma_abort_interrupt() (dw-edma-core.c)
+>     4.Use the dw_edma_v0_core name for the dw_edma_core_ops structure instance.
+>     [3/4]
+>     5.Fix weird indentation of control1, func_num, etc.
+>     6.Include 'linux/io-64-nonatomic-lo-hi.h' to fix warning.
+>     7.Refactor dw_edma_core_handle_int related callback in dw_hdma_v0_core ops.
+>     [4/4]
+>     8.Add field watermark_en, func_num, qos, msi_watermark,etc.
+>     9.Make variables reverse xmas tree order.
+>     10.Declare const for 'struct dw_hdma_debugfs_entry'
+> 
+>   v3 link:
+>   https://lore.kernel.org/lkml/20230213132411.65524-1-cai.huoqing@linux.dev/
+> 
+>  drivers/dma/dw-edma/Makefile                 |   8 +-
+>  drivers/dma/dw-edma/dw-edma-core.c           |  77 ++---
+>  drivers/dma/dw-edma/dw-edma-core.h           |  56 ++++
+>  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
+>  drivers/dma/dw-edma/dw-edma-v0-core.c        |  73 ++++-
+>  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 302 +++++++++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 181 +++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
+>  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 129 ++++++++
+>  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
+>  include/linux/dma/edma.h                     |   7 +-
+>  13 files changed, 807 insertions(+), 85 deletions(-)
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> 
+> -- 
+> 2.34.1
+> 
