@@ -2,299 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ED06A67AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 07:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FABF6A67B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 07:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjCAGgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 01:36:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S229750AbjCAGom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 01:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCAGgx (ORCPT
+        with ESMTP id S229512AbjCAGok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 01:36:53 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316A826CD1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 22:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677652612; x=1709188612;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=Tqy9ig0ZuyGUVp5wW1wDnwmPDyoBIKAs7BKfzerQq9c=;
-  b=BshhGNhtGxgXJbFCGPRU4IUzBLjzE/+aU1XT++jUuA+GTTmMM/m3TfZB
-   I0ZQod/RuH9iRvIjkca7FJCgreapbdV07FU46v8LeiNb6ZbsUnI3tTJmI
-   SMJY1C3JLlBJrWcGrU4W9vcyn7eHFMaoUHa1rcAn3dr65gmerOeOyzSYK
-   EPZ+ZdKkcppLKrIdcGtk5rBaUYt2nTSOp/NqfyDRWAwFJWMll4ncgytkz
-   TWXUqHdimShBlx1VXS3a5NhypAmUAn79OVQPDr3quXu1U0KJPzIV03Y0x
-   t6PJqf90NXHCAAZD2SbLMnkp1BdytPI9deCGkB721cEkrWMdF72Cv6+eo
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="334371710"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="334371710"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 22:36:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="848531971"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="848531971"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 22:36:47 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Hugh Dickins <hughd@google.com>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>,
-        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH 2/3] migrate_pages: move split folios processing out of
- migrate_pages_batch()
-References: <20230224141145.96814-1-ying.huang@intel.com>
-        <20230224141145.96814-3-ying.huang@intel.com>
-        <e820f68a-d1c7-c552-b924-56d97fb0b927@linux.alibaba.com>
-Date:   Wed, 01 Mar 2023 14:35:50 +0800
-In-Reply-To: <e820f68a-d1c7-c552-b924-56d97fb0b927@linux.alibaba.com> (Baolin
-        Wang's message of "Wed, 1 Mar 2023 10:23:43 +0800")
-Message-ID: <87v8jl9dx5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 1 Mar 2023 01:44:40 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CCE32504;
+        Tue, 28 Feb 2023 22:44:39 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3213hesn024166;
+        Wed, 1 Mar 2023 06:44:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=WTZCQYGUaufbYgRNIsn1AVRsdFAHWc+heWSesaphOCo=;
+ b=OQbIXh/pbn6PM3cgQtHggPhSitU9a88Q4Tm/OwseWpNafh3PzWFPOanwYazRTPxb2AcY
+ inUCetLR0MPT4Q0qiA2lnwlazL1l+3g2qfFpSuZoi62/jXpqFTeYuXPEW3b3P5bapLT8
+ kUZltE4zAdDB+/l2aYpL4DGIvdcaCwTbhzddX45C3obe799NdbwP0MklQdO6LlvrCiAL
+ UmxD/YlYIdVcoJfiNVeI9PrIpBrwCSj2MyQpvfohuNyqDxTWorlBOldW91OLWirVDGMR
+ no3u3bv5gJxa5Eh8E0KtbuM4GVCi0hUHeGsTG7QUGC5Q/5wDBMLAQ4Ylv8I93480OaAy TA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p1y23bj96-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 06:44:34 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3216XhV8005116;
+        Wed, 1 Mar 2023 06:44:34 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p1y23bj8q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 06:44:34 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31SIMTmS017670;
+        Wed, 1 Mar 2023 06:44:32 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3nybbyu1sx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 06:44:32 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3216iTE664225674
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Mar 2023 06:44:30 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E33DD2004E;
+        Wed,  1 Mar 2023 06:44:29 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C11D320063;
+        Wed,  1 Mar 2023 06:44:27 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.62.226])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed,  1 Mar 2023 06:44:27 +0000 (GMT)
+Date:   Wed, 1 Mar 2023 12:14:24 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rookxu <brookxu.cn@gmail.com>
+Subject: Re: [PATCH v4 8/9] ext4: Use rbtrees to manage PAs instead of inode
+ i_prealloc_list
+Message-ID: <Y/70SFCCfKxcpHcp@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <cover.1676634592.git.ojaswin@linux.ibm.com>
+ <bc5f70ca1d2974a41b77154966e736d1e58a8d20.1676634592.git.ojaswin@linux.ibm.com>
+ <20230227121925.6hfrrhq4gn5g2vlh@quack3>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230227121925.6hfrrhq4gn5g2vlh@quack3>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rhl0Fw51WbUdRng5kzEm3IzlUeQIXq7N
+X-Proofpoint-GUID: Zr7ZdsraZuUJ-oW9dal2LVVV43TIXPe8
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-01_02,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 mlxlogscore=999 suspectscore=0 clxscore=1015 mlxscore=0
+ adultscore=0 bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303010047
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+On Mon, Feb 27, 2023 at 01:19:25PM +0100, Jan Kara wrote:
+> On Fri 17-02-23 17:44:17, Ojaswin Mujoo wrote:
+> > Currently, the kernel uses i_prealloc_list to hold all the inode
+> > preallocations. This is known to cause degradation in performance in
+> > workloads which perform large number of sparse writes on a single file.
+> > This is mainly because functions like ext4_mb_normalize_request() and
+> > ext4_mb_use_preallocated() iterate over this complete list, resulting in
+> > slowdowns when large number of PAs are present.
+> > 
+> > Patch 27bc446e2 partially fixed this by enforcing a limit of 512 for
+> > the inode preallocation list and adding logic to continually trim the
+> > list if it grows above the threshold, however our testing revealed that
+> > a hardcoded value is not suitable for all kinds of workloads.
+> > 
+> > To optimize this, add an rbtree to the inode and hold the inode
+> > preallocations in this rbtree. This will make iterating over inode PAs
+> > faster and scale much better than a linked list. Additionally, we also
+> > had to remove the LRU logic that was added during trimming of the list
+> > (in ext4_mb_release_context()) as it will add extra overhead in rbtree.
+> > The discards now happen in the lowest-logical-offset-first order.
+> > 
+> > ** Locking notes **
+> > 
+> > With the introduction of rbtree to maintain inode PAs, we can't use RCU
+> > to walk the tree for searching since it can result in partial traversals
+> > which might miss some nodes(or entire subtrees) while discards happen
+> > in parallel (which happens under a lock).  Hence this patch converts the
+> > ei->i_prealloc_lock spin_lock to rw_lock.
+> > 
+> > Almost all the codepaths that read/modify the PA rbtrees are protected
+> > by the higher level inode->i_data_sem (except
+> > ext4_mb_discard_group_preallocations() and ext4_clear_inode()) IIUC, the
+> > only place we need lock protection is when one thread is reading
+> > "searching" the PA rbtree (earlier protected under rcu_read_lock()) and
+> > another is "deleting" the PAs in ext4_mb_discard_group_preallocations()
+> > function (which iterates all the PAs using the grp->bb_prealloc_list and
+> > deletes PAs from the tree without taking any inode lock (i_data_sem)).
+> > 
+> > So, this patch converts all rcu_read_lock/unlock() paths for inode list
+> > PA to use read_lock() and all places where we were using
+> > ei->i_prealloc_lock spinlock will now be using write_lock().
+> > 
+> > Note that this makes the fast path (searching of the right PA e.g.
+> > ext4_mb_use_preallocated() or ext4_mb_normalize_request()), now use
+> > read_lock() instead of rcu_read_lock/unlock().  Ths also will now block
+> > due to slow discard path (ext4_mb_discard_group_preallocations()) which
+> > uses write_lock().
+> > 
+> > But this is not as bad as it looks. This is because -
+> > 
+> > 1. The slow path only occurs when the normal allocation failed and we
+> >    can say that we are low on disk space.  One can argue this scenario
+> >    won't be much frequent.
+> > 
+> > 2. ext4_mb_discard_group_preallocations(), locks and unlocks the rwlock
+> >    for deleting every individual PA.  This gives enough opportunity for
+> >    the fast path to acquire the read_lock for searching the PA inode
+> >    list.
+> > 
+> > Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> 
+> Looks good to me. Feel free to add:
+> 
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> 
+> Just a few style nits below...
+> 
+> > @@ -3992,80 +4010,162 @@ ext4_mb_pa_assert_overlap(struct ext4_allocation_context *ac,
+> >  	struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
+> >  	struct ext4_prealloc_space *tmp_pa;
+> >  	ext4_lblk_t tmp_pa_start, tmp_pa_end;
+> > +	struct rb_node *iter;
+> >  
+> > -	rcu_read_lock();
+> > -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_node.inode_list) {
+> > -		spin_lock(&tmp_pa->pa_lock);
+> > -		if (tmp_pa->pa_deleted == 0) {
+> > -			tmp_pa_start = tmp_pa->pa_lstart;
+> > -			tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
+> > +	read_lock(&ei->i_prealloc_lock);
+> > +	for (iter = ei->i_prealloc_node.rb_node; iter;
+> > +	     iter = ext4_mb_pa_rb_next_iter(start, tmp_pa_start, iter)) {
+> > +		tmp_pa = rb_entry(iter, struct ext4_prealloc_space,
+> > +				  pa_node.inode_node);
+> > +		tmp_pa_start = tmp_pa->pa_lstart;
+> > +		tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
+> >  
+> > +		spin_lock(&tmp_pa->pa_lock);
+> > +		if (tmp_pa->pa_deleted == 0)
+> >  			BUG_ON(!(start >= tmp_pa_end || end <= tmp_pa_start));
+> > -		}
+> >  		spin_unlock(&tmp_pa->pa_lock);
+> >  	}
+> > -	rcu_read_unlock();
+> > +	read_unlock(&ei->i_prealloc_lock);
+> >  }
+> > -
+> 
+> Please keep the empty line here.
+> 
+> > @@ -4402,6 +4502,7 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+> >  	struct ext4_locality_group *lg;
+> >  	struct ext4_prealloc_space *tmp_pa, *cpa = NULL;
+> >  	ext4_lblk_t tmp_pa_start, tmp_pa_end;
+> > +	struct rb_node *iter;
+> >  	ext4_fsblk_t goal_block;
+> >  
+> >  	/* only data can be preallocated */
+> > @@ -4409,14 +4510,17 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+> >  		return false;
+> >  
+> >  	/* first, try per-file preallocation */
+> > -	rcu_read_lock();
+> > -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_node.inode_list) {
+> > +	read_lock(&ei->i_prealloc_lock);
+> > +	for (iter = ei->i_prealloc_node.rb_node; iter;
+> > +	     iter = ext4_mb_pa_rb_next_iter(ac->ac_o_ex.fe_logical, tmp_pa_start, iter)) {
+> > +		tmp_pa = rb_entry(iter, struct ext4_prealloc_space, pa_node.inode_node);
+> 
+> Perhaps wrap above two lines to fit in 80 characters?
+> 
+> > @@ -5043,17 +5177,18 @@ void ext4_discard_preallocations(struct inode *inode, unsigned int needed)
+> >  
+> >  repeat:
+> >  	/* first, collect all pa's in the inode */
+> > -	spin_lock(&ei->i_prealloc_lock);
+> > -	while (!list_empty(&ei->i_prealloc_list) && needed) {
+> > -		pa = list_entry(ei->i_prealloc_list.prev,
+> > -				struct ext4_prealloc_space, pa_node.inode_list);
+> > +	write_lock(&ei->i_prealloc_lock);
+> > +	for (iter = rb_first(&ei->i_prealloc_node); iter && needed; iter = rb_next(iter)) {
+> 
+> Wrap this line as well?
+> 
+> > +		pa = rb_entry(iter, struct ext4_prealloc_space,
+> > +				pa_node.inode_node);
+> >  		BUG_ON(pa->pa_node_lock.inode_lock != &ei->i_prealloc_lock);
+> > +
 
-> On 2/24/2023 10:11 PM, Huang Ying wrote:
->> To simplify the code logic and reduce the line number.
->> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->> Cc: Hugh Dickins <hughd@google.com>
->> Cc: "Xu, Pengfei" <pengfei.xu@intel.com>
->> Cc: Christoph Hellwig <hch@lst.de>
->> Cc: Stefan Roesch <shr@devkernel.io>
->> Cc: Tejun Heo <tj@kernel.org>
->> Cc: Xin Hao <xhao@linux.alibaba.com>
->> Cc: Zi Yan <ziy@nvidia.com>
->> Cc: Yang Shi <shy828301@gmail.com>
->> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
->> Cc: Matthew Wilcox <willy@infradead.org>
->> Cc: Mike Kravetz <mike.kravetz@oracle.com>
->> ---
->>   mm/migrate.c | 76 ++++++++++++++++++----------------------------------
->>   1 file changed, 26 insertions(+), 50 deletions(-)
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index 7ac37dbbf307..91198b487e49 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1605,9 +1605,10 @@ static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
->>   static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   		free_page_t put_new_page, unsigned long private,
->>   		enum migrate_mode mode, int reason, struct list_head *ret_folios,
->> -		struct migrate_pages_stats *stats)
->> +		struct list_head *split_folios, struct migrate_pages_stats *stats,
->> +		int nr_pass)
->>   {
->> -	int retry;
->> +	int retry = 1;
->>   	int large_retry = 1;
->>   	int thp_retry = 1;
->>   	int nr_failed = 0;
->> @@ -1617,19 +1618,12 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   	bool is_large = false;
->>   	bool is_thp = false;
->>   	struct folio *folio, *folio2, *dst = NULL, *dst2;
->> -	int rc, rc_saved, nr_pages;
->> -	LIST_HEAD(split_folios);
->> +	int rc, rc_saved = 0, nr_pages;
->>   	LIST_HEAD(unmap_folios);
->>   	LIST_HEAD(dst_folios);
->>   	bool nosplit = (reason == MR_NUMA_MISPLACED);
->> -	bool no_split_folio_counting = false;
->>   -retry:
->> -	rc_saved = 0;
->> -	retry = 1;
->> -	for (pass = 0;
->> -	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
->> -	     pass++) {
->> +	for (pass = 0; pass < nr_pass && (retry || large_retry); pass++) {
->>   		retry = 0;
->>   		large_retry = 0;
->>   		thp_retry = 0;
->> @@ -1660,7 +1654,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   			if (!thp_migration_supported() && is_thp) {
->>   				nr_large_failed++;
->>   				stats->nr_thp_failed++;
->> -				if (!try_split_folio(folio, &split_folios)) {
->> +				if (!try_split_folio(folio, split_folios)) {
->>   					stats->nr_thp_split++;
->>   					continue;
->>   				}
->> @@ -1692,7 +1686,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   					stats->nr_thp_failed += is_thp;
->>   					/* Large folio NUMA faulting doesn't split to retry. */
->>   					if (!nosplit) {
->> -						int ret = try_split_folio(folio, &split_folios);
->> +						int ret = try_split_folio(folio, split_folios);
->>     						if (!ret) {
->>   							stats->nr_thp_split += is_thp;
->> @@ -1709,18 +1703,11 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   							break;
->>   						}
->>   					}
->> -				} else if (!no_split_folio_counting) {
->> +				} else {
->>   					nr_failed++;
->>   				}
->>     				stats->nr_failed_pages += nr_pages +
->> nr_retry_pages;
->> -				/*
->> -				 * There might be some split folios of fail-to-migrate large
->> -				 * folios left in split_folios list. Move them to ret_folios
->> -				 * list so that they could be put back to the right list by
->> -				 * the caller otherwise the folio refcnt will be leaked.
->> -				 */
->> -				list_splice_init(&split_folios, ret_folios);
->>   				/* nr_failed isn't updated for not used */
->>   				nr_large_failed += large_retry;
->>   				stats->nr_thp_failed += thp_retry;
->> @@ -1733,7 +1720,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   				if (is_large) {
->>   					large_retry++;
->>   					thp_retry += is_thp;
->> -				} else if (!no_split_folio_counting) {
->> +				} else {
->>   					retry++;
->>   				}
->>   				nr_retry_pages += nr_pages;
->> @@ -1756,7 +1743,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   				if (is_large) {
->>   					nr_large_failed++;
->>   					stats->nr_thp_failed += is_thp;
->> -				} else if (!no_split_folio_counting) {
->> +				} else {
->>   					nr_failed++;
->>   				}
->>   @@ -1774,9 +1761,7 @@ static int migrate_pages_batch(struct
->> list_head *from, new_page_t get_new_page,
->>   	try_to_unmap_flush();
->>     	retry = 1;
->> -	for (pass = 0;
->> -	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
->> -	     pass++) {
->> +	for (pass = 0; pass < nr_pass && (retry || large_retry); pass++) {
->>   		retry = 0;
->>   		large_retry = 0;
->>   		thp_retry = 0;
->> @@ -1805,7 +1790,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   				if (is_large) {
->>   					large_retry++;
->>   					thp_retry += is_thp;
->> -				} else if (!no_split_folio_counting) {
->> +				} else {
->>   					retry++;
->>   				}
->>   				nr_retry_pages += nr_pages;
->> @@ -1818,7 +1803,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   				if (is_large) {
->>   					nr_large_failed++;
->>   					stats->nr_thp_failed += is_thp;
->> -				} else if (!no_split_folio_counting) {
->> +				} else {
->>   					nr_failed++;
->>   				}
->>   @@ -1855,27 +1840,6 @@ static int migrate_pages_batch(struct
->> list_head *from, new_page_t get_new_page,
->>   		dst2 = list_next_entry(dst, lru);
->>   	}
->>   -	/*
->> -	 * Try to migrate split folios of fail-to-migrate large folios, no
->> -	 * nr_failed counting in this round, since all split folios of a
->> -	 * large folio is counted as 1 failure in the first round.
->> -	 */
->> -	if (rc >= 0 && !list_empty(&split_folios)) {
->> -		/*
->> -		 * Move non-migrated folios (after NR_MAX_MIGRATE_PAGES_RETRY
->> -		 * retries) to ret_folios to avoid migrating them again.
->> -		 */
->> -		list_splice_init(from, ret_folios);
->> -		list_splice_init(&split_folios, from);
->> -		/*
->> -		 * Force async mode to avoid to wait lock or bit when we have
->> -		 * locked more than one folios.
->> -		 */
->> -		mode = MIGRATE_ASYNC;
->> -		no_split_folio_counting = true;
->> -		goto retry;
->> -	}
->> -
->>   	return rc;
->>   }
->>   @@ -1914,6 +1878,7 @@ int migrate_pages(struct list_head *from,
->> new_page_t get_new_page,
->>   	struct folio *folio, *folio2;
->>   	LIST_HEAD(folios);
->>   	LIST_HEAD(ret_folios);
->> +	LIST_HEAD(split_folios);
->>   	struct migrate_pages_stats stats;
->>     	trace_mm_migrate_pages_start(mode, reason);
->> @@ -1947,12 +1912,23 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>   	else
->>   		list_splice_init(from, &folios);
->>   	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
->> -				 mode, reason, &ret_folios, &stats);
->> +				 mode, reason, &ret_folios, &split_folios, &stats,
->> +				 NR_MAX_MIGRATE_PAGES_RETRY);
->>   	list_splice_tail_init(&folios, &ret_folios);
->>   	if (rc < 0) {
->>   		rc_gather = rc;
->> +		list_splice_tail(&split_folios, &ret_folios);
->
-> Can we still keep the original comments? Which can help to understand
-> the case, at least for me:)
->  /*
->   * There might be some split folios of fail-to-migrate large
->   * folios left in split_folios list. Move them to ret_folios
->   * list so that they could be put back to the right list by
->   * the caller otherwise the folio refcnt will be leaked.
->   */
+Thanks for the review Jan and Ritesh. I'll fix the styling issues and
+resend the series. 
 
-Previously, the cleanup code is buried in a corner of a much more
-complex code path.  So the comments are necessary.  Now, it is an
-explicit and simple code path.  And, the rule is clear, every folio list
-needs to be cleaned up before return: folios, split_folios, then
-ret_folios.  And we have done this here and there in the series.
+Ted, just wanted to check if you still want me to rebase this over
+Kemeng's [1] mballoc cleanup series since seems like they'll have to
+send another version.
 
->>   		goto out;
->>   	}
->> +	if (!list_empty(&split_folios)) {
->> +		/*
->> +		 * Failure isn't counted since all split folios of a large folio
->> +		 * is counted as 1 failure already.
->> +		 */
->> +		migrate_pages_batch(&split_folios, get_new_page, put_new_page, private,
->> +				    MIGRATE_ASYNC, reason, &ret_folios, NULL, &stats, 1);
->
-> Better to copy the original comments to explain why force to
-> MIGRATE_ASYNC mode for split folios.
+[1]
+https://lore.kernel.org/linux-ext4/81568343-36fb-aa90-2952-d1f26547541c@huaweicloud.com/T/#t
 
-Yes.  It's a good idea to explain that.  And now the rule to call
-migrate_pages_batch() has been changed.  If mode != MIGRATE_ASYNC, the
-length of "from" must be <= 1.  I will add a VM_WARN_ON() for that at
-the beginning of migrate_pages_batch().  And I would rather to add the
-comments to the header of migrate_pages().  Other callers of the
-function needs to follow that rule too.
+Regards,
+Ojaswin
 
-> Thanks for the simplification, and please feel free to add:
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-Thank you very much for review!
-
-Best Regards,
-Huang, Ying
+> 
+> 								Honza
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
