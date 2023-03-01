@@ -2,126 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444C46A69C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE26F6A6A14
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjCAJZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46898 "EHLO
+        id S229811AbjCAJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjCAJZ3 (ORCPT
+        with ESMTP id S229738AbjCAJxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:25:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0956236469
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:24:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677662678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EjLBO2oSAz1qd2pyxymW7NNpmRhL/8rZkZFuY2z88lg=;
-        b=WhSm/ig2q3uWy+EUlEyW1FQVhJ2a48IcohyWlvGH7w9IvTn3KvRmJedys4Dvfey9CdB12c
-        xRKhKKpnedVMttd9CqA3wiDbKFSWAB5XEBHXqI8o68QmtP8xNQvyBBCk3beGGhl7EoVM/N
-        TRT4x/IUtlx5Nkqmdx8dXy6Js3ELuRg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-280-y6BwrYfuMfy1XckhSv52eQ-1; Wed, 01 Mar 2023 04:24:33 -0500
-X-MC-Unique: y6BwrYfuMfy1XckhSv52eQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 41D9A85CBE0;
-        Wed,  1 Mar 2023 09:24:32 +0000 (UTC)
-Received: from localhost (ovpn-13-180.pek2.redhat.com [10.72.13.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F07B52026D76;
-        Wed,  1 Mar 2023 09:24:28 +0000 (UTC)
-Date:   Wed, 1 Mar 2023 17:24:26 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Edward Cree <ecree.xilinx@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, netdev@vger.kernel.org,
-        Martin Habets <habetsm.xilinx@gmail.com>
-Subject: Re: [PATCH v5 01/17] asm-generic/iomap.h: remove ARCH_HAS_IOREMAP_xx
- macros
-Message-ID: <Y/8Zyjfuypg3EiDd@MiWiFi-R3L-srv>
-References: <20230301034247.136007-1-bhe@redhat.com>
- <20230301034247.136007-2-bhe@redhat.com>
- <7bd6db48-ffb1-7eb1-decf-afa8be032970@gmail.com>
- <Y/7eceqZ+89iPm1C@casper.infradead.org>
+        Wed, 1 Mar 2023 04:53:09 -0500
+X-Greylist: delayed 846 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 01:53:07 PST
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DE63C01
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:53:07 -0800 (PST)
+Received: from pro2.mail.ovh.net (unknown [10.108.16.78])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id 760CB243F90;
+        Wed,  1 Mar 2023 09:29:20 +0000 (UTC)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 1 Mar
+ 2023 10:29:19 +0100
+Message-ID: <e335b715-471c-8e25-8eea-95ca1f64d17c@traphandler.com>
+Date:   Wed, 1 Mar 2023 10:29:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/7eceqZ+89iPm1C@casper.infradead.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] of: property: Add missing of_node_get() in
+ parse_interrupt()
+Content-Language: en-US
+To:     Saravana Kannan <saravanak@google.com>
+CC:     <robh+dt@kernel.org>, <frowand.list@gmail.com>,
+        <gregkh@linuxfoundation.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Marc Zyngier <maz@kernel.org>
+References: <20230228174019.4004581-1-jjhiblot@traphandler.com>
+ <CAGETcx-w4A3fz_DPqJG+9P6ETGAPv547DcnsO52gqTO1_vijsw@mail.gmail.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <CAGETcx-w4A3fz_DPqJG+9P6ETGAPv547DcnsO52gqTO1_vijsw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG4EX2.emp2.local (172.16.2.32) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 1941051441226463616
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgedguddviecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpedvfeekudegkeeuuedvueeuveejffdtvdethfelkefhfefftdetteffiefgvddtieenucfkphepuddvjedrtddrtddruddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdhrohgshhdoughtsehkvghrnhgvlhdrohhrghdpfhhrohifrghnugdrlhhishhtsehgmhgrihhlrdgtohhmpdhgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdpuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgriieskhgvrh
+ hnvghlrdhorhhgpdfovfetjfhoshhtpehmoheftddtgedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/23 at 05:11am, Matthew Wilcox wrote:
-> On Wed, Mar 01, 2023 at 04:38:10AM +0000, Edward Cree wrote:
-> > On 01/03/2023 03:42, Baoquan He wrote:
-> > > diff --git a/drivers/net/ethernet/sfc/io.h b/drivers/net/ethernet/sfc/io.h
-> > > index 30439cc83a89..07f99ad14bf3 100644
-> > > --- a/drivers/net/ethernet/sfc/io.h
-> > > +++ b/drivers/net/ethernet/sfc/io.h
-> > > @@ -70,7 +70,7 @@
-> > >   */
-> > >  #ifdef CONFIG_X86_64
-> > >  /* PIO is a win only if write-combining is possible */
-> > > -#ifdef ARCH_HAS_IOREMAP_WC
-> > > +#ifdef ioremap_wc
-> > >  #define EFX_USE_PIO 1
-> > >  #endif
-> > >  #endif
-> > 
-> > So I don't know how valid what we're doing here is...
-> 
-> Well, x86 defines ARCH_HAS_IOREMAP_WC unconditionally, so it doesn't
-> affect you ... but you raise a good question about how a driver can
-> determine if it's actually getting WC memory.
 
-Yeah, this change doesn't affect sfc. Because ARCH_HAS_IOREMAP_WC is used to
-make ioremap_wc defined in <asm/io.h> override the default one in
-<asm-generic/iomap.h>, this patch has made code have the same effect.
+On 28/02/2023 20:07, Saravana Kannan wrote:
+> On Tue, Feb 28, 2023 at 9:40 AM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+>> From: Jean Jacques Hiblot <jjhiblot@traphandler.com>
+>>
+>> As all the other parsers do, parse_interrupt() must increase the refcount
+>> of the device_node. Otherwise the refcount is decremented every time
+>> parse_interrupt() is called on this node, leading to a potential
+>> use-after-free.
+>>
+>> This is a regression introduced by commit f265f06af194 ("of: property:
+>> Fix fw_devlink handling of interrupts/interrupts-extended"). The reason is
+>> that of_irq_parse_one() does not increase the refcount while the previously
+>> used of_irq_find_parent() does.
+> Thanks for catching the issue Jean!
+>
+> This feels like a bug in of_irq_parse_one() to me. It's returning a
+> reference to a node without doing a of_node_get() on it.
+>
+> Rob, Marc, Do you agree?
 
-Besides, I have a question still in my mind. Surely this is unrelated to
-this patch.
+Sarvana,
 
-In commit 38d9029a652c (parisc: Define ioremap_uc and ioremap_wc),
-ioremap_wc definition was added in arch/parisc/include/asm/io.h, and it
-didn't add ARCH_HAS_IOREMAP_WC definition. However, it won't cause
-redefinition of ioremap_wc, even though there's "#include <asm-generic/iomap.h>"
-at below. I could be dizzy on these io.h and iomap.h.
+it looks like you're right. The bug seems to be in of_irq_parse_one().
 
-When I added ioremap_wt and ioremap_np to debug, ioremap_np will
-cause redefinition, while ioremap_wt woundn't. Does anyone know what
-I am missing?
+It doesn't behave in the same way for "interrupts-extended" where it 
+does a get() and 'interrupts" where it doesn't.
 
-diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
-index c05e781be2f5..20d566eec3b3 100644
---- a/arch/parisc/include/asm/io.h
-+++ b/arch/parisc/include/asm/io.h
-@@ -127,6 +127,8 @@ static inline void gsc_writeq(unsigned long long val, unsigned long addr)
-  */
- void __iomem *ioremap(unsigned long offset, unsigned long size);
- #define ioremap_wc                     ioremap
-+#define ioremap_wt                     ioremap
-+#define ioremap_np                     ioremap
- #define ioremap_uc                     ioremap
- #define pci_iounmap                    pci_iounmap
+So please ignore this patch.
 
+Thanks
+
+>
+> Jean,
+>
+> If they agree, can you please fix of_irq_parse_one() and add a
+> of_node_put() to existing callers (if they aren't already doing a
+> put()).
+>
+> Thanks,
+> Saravana
+>
+>> Fixes: f265f06af194 ("of: property: Fix fw_devlink handling of interrupts/interrupts-extended")
+>> Signed-off-by: Jean Jacques Hiblot <jjhiblot@traphandler.com>
+>> ---
+>>   drivers/of/property.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/of/property.c b/drivers/of/property.c
+>> index 134cfc980b70b..1f23bcb765c4e 100644
+>> --- a/drivers/of/property.c
+>> +++ b/drivers/of/property.c
+>> @@ -1380,7 +1380,10 @@ static struct device_node *parse_interrupts(struct device_node *np,
+>>              strcmp(prop_name, "interrupts-extended"))
+>>                  return NULL;
+>>
+>> -       return of_irq_parse_one(np, index, &sup_args) ? NULL : sup_args.np;
+>> +       if (of_irq_parse_one(np, index, &sup_args))
+>> +               return NULL;
+>> +
+>> +       return of_node_get(sup_args.np);
+>>   }
+>>
+>>   static const struct supplier_bindings of_supplier_bindings[] = {
+>> --
+>> 2.25.1
+>>
