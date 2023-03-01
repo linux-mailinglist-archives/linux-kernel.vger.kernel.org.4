@@ -2,270 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156756A6A0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B21976A6A11
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjCAJuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
+        id S229799AbjCAJvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCAJuQ (ORCPT
+        with ESMTP id S229781AbjCAJvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:50:16 -0500
-Received: from out28-74.mail.aliyun.com (out28-74.mail.aliyun.com [115.124.28.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7879C40EF;
-        Wed,  1 Mar 2023 01:50:14 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436262|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.0548796-0.0136331-0.931487;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047192;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.RaLi4We_1677664211;
-Received: from SunxiBot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.RaLi4We_1677664211)
-          by smtp.aliyun-inc.com;
-          Wed, 01 Mar 2023 17:50:12 +0800
-From:   Victor Hassan <victor@allwinnertech.com>
-To:     keescook@chromium.org
-Cc:     tony.luck@intel.com, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND v2] pstore/blk: Export a method to implemente panic_write()
-Date:   Wed,  1 Mar 2023 17:51:08 +0800
-Message-Id: <20230301095108.10670-1-victor@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Wed, 1 Mar 2023 04:51:46 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7214937545
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:51:44 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so364326wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 01:51:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1677664303;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oW952k94eHwop+SfxK3L89foJizL9YBwkHTpjecyhpQ=;
+        b=c4Rqu+eEkqy9Bl9PK9NHWqhQM2aSjUazWO5I8r6qS3LnGphqIrK93oqz9lyNQ27G7V
+         T1WseVDSNP0GRFUl2xdo8sYfnXn4/YC2jH5Eaw5ngZZCLU7NhBWrwIKuTaNDxnaxq0ad
+         PkfsGNHgISOPQOhVYr1FuWm6Ytymv6ZNNgZKCOQJ6bs/opsSvBHLR96p3MsriopmNoBT
+         ANNgEOjkeDgsnLmmygrdzJb4fAM8Y025YkwHOk+jtP6LHJxf5c+ggAMhwCkaH4mEjKDh
+         jjVhqLXLOUxPUGCyEZFG6+KeaRzU1p9q4ttIrS5+BwPQk64tPDzA7T96Qvs8JsVUGDpy
+         ACLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677664303;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oW952k94eHwop+SfxK3L89foJizL9YBwkHTpjecyhpQ=;
+        b=TMyW4e+rgdS4HuCnkmBdXcI1ZF9ej0J9gsXAbPP4f8EIJ/yf3C/mvW/Pflm1jYPpxP
+         4MfivhziS3+REJlELvxyujoov/XBL/fJsElIgvAmJEFW0uKmDrxRZRz90kqntAk+muod
+         H4GZyT3p7+/GEzj36+jyd9WO+v8wQG1DbSQyJWnR8pRkSbYy6ES8XC/9dcxAi4ta9eW3
+         kfJAKffCNKQ0p3CNiIFYFe+hd9zxd2DtGRLjDmzvWaRTMiohrnuwlPGW3qw54wGcSDio
+         CvUUvA7vXlSb9BO9uXJwcs1bXVXSAvhW4458zFz8Dx/dG6PpDP34jy/6zoJx5SU+84GO
+         bxXw==
+X-Gm-Message-State: AO0yUKVm3rLImiVqzgzpdKkAsDtK0ptoqLdIOEFdaHVJwVgVy9fTmAtJ
+        O2XZKz3PZgLlAOCgkS15GO3P+gOVFlq7Msa9UYFXng==
+X-Google-Smtp-Source: AK7set9MhUdTEyc+dfnzsEI00l6Qw7dbEOemGYM/wpEvVNGSGKPx5Hg1YC+yfNIMhGPjox/6alGzPW2Lrcq4MTO2+iE=
+X-Received: by 2002:a05:600c:1f06:b0:3eb:3e75:5daf with SMTP id
+ bd6-20020a05600c1f0600b003eb3e755dafmr3811676wmb.2.1677664302839; Wed, 01 Mar
+ 2023 01:51:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230301075751.43839-1-lma@semihalf.com> <Y/8PUdEwskXuWZHA@kroah.com>
+In-Reply-To: <Y/8PUdEwskXuWZHA@kroah.com>
+From:   Lukasz Majczak <lma@semihalf.com>
+Date:   Wed, 1 Mar 2023 10:51:31 +0100
+Message-ID: <CAFJ_xbp+qD-_MGd3+SgBY=8zruZNy7k3CO3OMMmWhMGhA-tARQ@mail.gmail.com>
+Subject: Re: [PATCH] serial: core: fix broken console after suspend
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The panic_write() is necessary to write the pstore frontend message
-to blk devices when panic. Here is a way to register panic_write when
-we use "best_effort" way to register the pstore blk-backend.
+=C5=9Br., 1 mar 2023 o 09:39 Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> napisa=C5=82(a):
+>
+> On Wed, Mar 01, 2023 at 08:57:51AM +0100, Lukasz Majczak wrote:
+> > Re-enable the console device after suspending, causes its cflags,
+> > ispeed and ospeed to be set anew, basing on the values stored in
+> > uport->cons. The issue is that these values are set only once,
+> > when parsing console parameters after boot (see uart_set_options()),
+> > next after configuring a port in uart_port_startup() these parameteres
+> > (cflags, ispeed and ospeed) are copied to termios structure and
+> > the orginal one (stored in uport->cons) are cleared, but there is no pl=
+ace
+> > in code where those fields are checked against 0.
+> > When kernel calls uart_resume_port() and setups console, it copies cfla=
+gs,
+> > ispeed and ospeed values from uart->cons,but those are alread cleared.
+> > The efect is that console is broken.
+> > This patch address this by preserving the cflags, ispeed and
+> > ospeed fields in uart->cons during uart_port_startup().
+> >
+> > Signed-off-by: Lukasz Majczak <lma@semihalf.com>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  drivers/tty/serial/serial_core.c | 3 ---
+> >  1 file changed, 3 deletions(-)
+> >
+> > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/seri=
+al_core.c
+> > index 2bd32c8ece39..394a05c09d87 100644
+> > --- a/drivers/tty/serial/serial_core.c
+> > +++ b/drivers/tty/serial/serial_core.c
+> > @@ -225,9 +225,6 @@ static int uart_port_startup(struct tty_struct *tty=
+, struct uart_state *state,
+> >                       tty->termios.c_cflag =3D uport->cons->cflag;
+> >                       tty->termios.c_ispeed =3D uport->cons->ispeed;
+> >                       tty->termios.c_ospeed =3D uport->cons->ospeed;
+> > -                     uport->cons->cflag =3D 0;
+> > -                     uport->cons->ispeed =3D 0;
+> > -                     uport->cons->ospeed =3D 0;
+> >               }
+> >               /*
+> >                * Initialise the hardware port settings.
+> > --
+> > 2.39.2.722.g9855ee24e9-goog
+> >
+>
+> What commit id does this fix?
+>
+> thanks,
+>
+> greg k-h
+Hi Greg,
 
-Usage:
+There are actually two commits that introduce problematic uport flags
+clearing in uart_startup (for the sake of simplicity I'd ignore the
+older history):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+h=3Dv6.2&id=3Dc7d7abff40c27f82fe78b1091ab3fad69b2546f9
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+h=3Dv6.2&id=3D027b57170bf8bb6999a28e4a5f3d78bf1db0f90c
+It's 10 years between those 2 and to me it was hard to decide about
+picking a proper one for the `Fixes:` tag.
+How would you recommend to proceed wrt applying this patch on the
+stable releases?
 
-    xx_register_pstore_panic_write(pstore_blk_notifier_type type,
-	    struct pstore_device_info *pdi)
-    {
-	switch (type) {
-	case PSTORE_BLK_BACKEND_REGISTER:
-	case PSTORE_BLK_BACKEND_PANIC_DRV_REGISTER:
-	    ...
-
-	    pid->zone.panic_write = xxx;
-
-	    ...
-	    break;
-	case PSTORE_BLK_BACKEND_UNREGISTER:
-	case PSTORE_BLK_BACKEND_PANIC_DRV_UNREGISTER:
-	    ...
-
-	    pdi->zone.panic_write = NULL;
-
-	    ...
-	    break;
-	default:
-	    break;
-	}
-
-    }
-
-    static struct pstore_blk_notifier pbn = {
-	.notitifer_call = xx_register_pstore_panic_write;
-    }
-
-    use {un,}register_pstore_blk_panic_notifier() to register/unregister
-    pstore_blk_notifier
-
-Signed-off-by: Victor Hassan <victor@allwinnertech.com>
----
- fs/pstore/blk.c            | 101 +++++++++++++++++++++++++++++++++++--
- include/linux/pstore_blk.h |  19 +++++++
- 2 files changed, 116 insertions(+), 4 deletions(-)
-
-diff --git a/fs/pstore/blk.c b/fs/pstore/blk.c
-index 4ae0cfcd15f2..2c70a3bff1ae 100644
---- a/fs/pstore/blk.c
-+++ b/fs/pstore/blk.c
-@@ -18,6 +18,7 @@
- #include <linux/file.h>
- #include <linux/init_syscalls.h>
- #include <linux/mount.h>
-+#include <linux/notifier.h>
- 
- static long kmsg_size = CONFIG_PSTORE_BLK_KMSG_SIZE;
- module_param(kmsg_size, long, 0400);
-@@ -72,6 +73,14 @@ static DEFINE_MUTEX(pstore_blk_lock);
- static struct file *psblk_file;
- static struct pstore_device_info *pstore_device_info;
- 
-+static struct {
-+	struct raw_notifier_head chain;
-+	struct pstore_blk_notifier *pbn;
-+	bool notifier;
-+} pstore_blk_panic_notifier = {
-+	.chain = RAW_NOTIFIER_INIT(pstore_blk_panic_notifier.chain),
-+};
-+
- #define check_size(name, alignsize) ({				\
- 	long _##name_ = (name);					\
- 	_##name_ = _##name_ <= 0 ? 0 : (_##name_ * 1024);	\
-@@ -94,6 +103,82 @@ static struct pstore_device_info *pstore_device_info;
- 	dev->zone.name = _##name_;				\
- }
- 
-+static int pstore_blk_panic_notifier_call(struct notifier_block *nb,
-+			     unsigned long action, void *data)
-+{
-+	int ret = 0;
-+	struct pstore_blk_notifier *pbn =
-+				container_of(nb, struct pstore_blk_notifier, nb);
-+
-+	if (pbn)
-+		ret = pbn->notifier_call(action, data);
-+
-+	return ret;
-+}
-+
-+int register_pstore_blk_panic_notifier(struct pstore_blk_notifier *pbn)
-+{
-+	int err = 0;
-+	struct notifier_block *nb;
-+
-+	mutex_lock(&pstore_blk_lock);
-+
-+	if (pstore_blk_panic_notifier.notifier) {
-+		pr_info("had register panic\n");
-+		goto unlock;
-+	}
-+
-+	nb = &pbn->nb;
-+	nb->notifier_call = pstore_blk_panic_notifier_call;
-+
-+	err = raw_notifier_chain_register(&pstore_blk_panic_notifier.chain, nb);
-+	if (err)
-+		goto unlock;
-+
-+	if (pstore_device_info)
-+		err = nb->notifier_call(nb, PSTORE_BLK_BACKEND_PANIC_DRV_REGISTER,
-+				pstore_device_info);
-+
-+	if (!err)
-+		pstore_blk_panic_notifier.notifier = true;
-+
-+unlock:
-+	mutex_unlock(&pstore_blk_lock);
-+
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(register_pstore_blk_panic_notifier);
-+
-+void unregister_pstore_blk_panic_notifier(struct pstore_blk_notifier *pbn)
-+{
-+	struct notifier_block *nb = &pbn->nb;
-+
-+	mutex_lock(&pstore_blk_lock);
-+
-+	raw_notifier_chain_unregister(&pstore_blk_panic_notifier.chain, nb);
-+
-+	if (pstore_device_info)
-+		nb->notifier_call(nb, PSTORE_BLK_BACKEND_PANIC_DRV_UNREGISTER,
-+				pstore_device_info);
-+
-+	pstore_blk_panic_notifier.notifier = false;
-+
-+	mutex_unlock(&pstore_blk_lock);
-+}
-+EXPORT_SYMBOL_GPL(unregister_pstore_blk_panic_notifier);
-+
-+static int pstore_blk_panic_notifier_init_call(struct pstore_device_info *pdi)
-+{
-+	return raw_notifier_call_chain(&pstore_blk_panic_notifier.chain,
-+			PSTORE_BLK_BACKEND_REGISTER, pdi);
-+}
-+
-+static int pstore_blk_panic_notifier_exit_call(struct pstore_device_info *pdi)
-+{
-+	return raw_notifier_call_chain(&pstore_blk_panic_notifier.chain,
-+			PSTORE_BLK_BACKEND_UNREGISTER, pdi);
-+}
-+
- static int __register_pstore_device(struct pstore_device_info *dev)
- {
- 	int ret;
-@@ -301,16 +386,22 @@ static int __init __best_effort_init(void)
- 	if (!best_effort_dev)
- 		return -ENOMEM;
- 
-+	strcpy(best_effort_dev->path, blkdev);
- 	best_effort_dev->zone.read = psblk_generic_blk_read;
- 	best_effort_dev->zone.write = psblk_generic_blk_write;
- 
- 	ret = __register_pstore_blk(best_effort_dev,
- 				    early_boot_devpath(blkdev));
--	if (ret)
-+	if (ret) {
- 		kfree(best_effort_dev);
--	else
--		pr_info("attached %s (%lu) (no dedicated panic_write!)\n",
--			blkdev, best_effort_dev->zone.total_size);
-+	} else {
-+		if (pstore_blk_panic_notifier_init_call(best_effort_dev) == NOTIFY_OK)
-+			pr_info("attached %s (%lu) (dedicated panic_write!)\n",
-+				    blkdev, best_effort_dev->zone.total_size);
-+		else
-+			pr_info("attached %s (%lu) (no dedicated panic_write!)\n",
-+				    blkdev, best_effort_dev->zone.total_size);
-+	}
- 
- 	return ret;
- }
-@@ -326,6 +417,8 @@ static void __exit __best_effort_exit(void)
- 	if (psblk_file) {
- 		struct pstore_device_info *dev = pstore_device_info;
- 
-+		pstore_blk_panic_notifier_exit_call(dev);
-+
- 		__unregister_pstore_device(dev);
- 		kfree(dev);
- 		fput(psblk_file);
-diff --git a/include/linux/pstore_blk.h b/include/linux/pstore_blk.h
-index 924ca07aafbd..fd2eb927c2c5 100644
---- a/include/linux/pstore_blk.h
-+++ b/include/linux/pstore_blk.h
-@@ -17,13 +17,32 @@
-  *
-  */
- struct pstore_device_info {
-+	char path[80];
- 	unsigned int flags;
- 	struct pstore_zone_info zone;
- };
- 
-+enum pstore_blk_notifier_type {
-+	PSTORE_BLK_BACKEND_REGISTER = 1,
-+	PSTORE_BLK_BACKEND_PANIC_DRV_REGISTER,
-+	PSTORE_BLK_BACKEND_UNREGISTER,
-+	PSTORE_BLK_BACKEND_PANIC_DRV_UNREGISTER,
-+};
-+
-+typedef	int (*pstore_blk_notifier_fn_t)(enum pstore_blk_notifier_type type,
-+		struct pstore_device_info *dev);
-+
-+struct pstore_blk_notifier {
-+	struct notifier_block nb;
-+	pstore_blk_notifier_fn_t notifier_call;
-+};
-+
- int  register_pstore_device(struct pstore_device_info *dev);
- void unregister_pstore_device(struct pstore_device_info *dev);
- 
-+int register_pstore_blk_panic_notifier(struct pstore_blk_notifier *pbn);
-+void unregister_pstore_blk_panic_notifier(struct pstore_blk_notifier *nb);
-+
- /**
-  * struct pstore_blk_config - the pstore_blk backend configuration
-  *
--- 
-2.29.0
-
+Best regards,
+Lukasz
