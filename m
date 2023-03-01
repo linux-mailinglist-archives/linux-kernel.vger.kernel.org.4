@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C756A6B51
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5A66A6B5B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjCALDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S229906AbjCALHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjCALDW (ORCPT
+        with ESMTP id S229437AbjCALHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:03:22 -0500
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3830A24B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:03:18 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vct2H0z_1677668593;
-Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vct2H0z_1677668593)
+        Wed, 1 Mar 2023 06:07:32 -0500
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A6A3346E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:07:30 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vct0REy_1677668846;
+Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vct0REy_1677668846)
           by smtp.aliyun-inc.com;
-          Wed, 01 Mar 2023 19:03:14 +0800
-Message-ID: <b43a37f0-a869-7ef5-0a65-2d581ca031a3@linux.alibaba.com>
-Date:   Wed, 1 Mar 2023 19:03:20 +0800
+          Wed, 01 Mar 2023 19:07:26 +0800
+Message-ID: <f77c128b-aa88-e263-7f1c-4bd597f7ca43@linux.alibaba.com>
+Date:   Wed, 1 Mar 2023 19:07:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.2
-Subject: Re: [PATCH 3/3] migrate_pages: try migrate in batch asynchronously
- firstly
+Subject: Re: [PATCH 2/3] migrate_pages: move split folios processing out of
+ migrate_pages_batch()
 To:     "Huang, Ying" <ying.huang@intel.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
@@ -37,17 +37,17 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         Matthew Wilcox <willy@infradead.org>,
         Mike Kravetz <mike.kravetz@oracle.com>
 References: <20230224141145.96814-1-ying.huang@intel.com>
- <20230224141145.96814-4-ying.huang@intel.com>
- <a0c24dfe-3a07-fe9e-7edf-b51877d96c32@linux.alibaba.com>
- <87zg8x9epg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <20230224141145.96814-3-ying.huang@intel.com>
+ <e820f68a-d1c7-c552-b924-56d97fb0b927@linux.alibaba.com>
+ <87v8jl9dx5.fsf@yhuang6-desk2.ccr.corp.intel.com>
 From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <87zg8x9epg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87v8jl9dx5.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,21 +56,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 3/1/2023 2:18 PM, Huang, Ying wrote:
+On 3/1/2023 2:35 PM, Huang, Ying wrote:
 > Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 > 
 >> On 2/24/2023 10:11 PM, Huang Ying wrote:
->>> When we have locked more than one folios, we cannot wait the lock or
->>> bit (e.g., page lock, buffer head lock, writeback bit) synchronously.
->>> Otherwise deadlock may be triggered.  This make it hard to batch the
->>> synchronous migration directly.
->>> This patch re-enables batching synchronous migration via trying to
->>> migrate in batch asynchronously firstly.  And any folios that are
->>> failed to be migrated asynchronously will be migrated synchronously
->>> one by one.
->>> Test shows that this can restore the TLB flushing batching
->>> performance
->>> for synchronous migration effectively.
+>>> To simplify the code logic and reduce the line number.
 >>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 >>> Cc: Hugh Dickins <hughd@google.com>
 >>> Cc: "Xu, Pengfei" <pengfei.xu@intel.com>
@@ -84,113 +74,211 @@ On 3/1/2023 2:18 PM, Huang, Ying wrote:
 >>> Cc: Matthew Wilcox <willy@infradead.org>
 >>> Cc: Mike Kravetz <mike.kravetz@oracle.com>
 >>> ---
->>>    mm/migrate.c | 65 ++++++++++++++++++++++++++++++++++++++++++++--------
->>>    1 file changed, 55 insertions(+), 10 deletions(-)
+>>>    mm/migrate.c | 76 ++++++++++++++++++----------------------------------
+>>>    1 file changed, 26 insertions(+), 50 deletions(-)
 >>> diff --git a/mm/migrate.c b/mm/migrate.c
->>> index 91198b487e49..c17ce5ee8d92 100644
+>>> index 7ac37dbbf307..91198b487e49 100644
 >>> --- a/mm/migrate.c
 >>> +++ b/mm/migrate.c
->>> @@ -1843,6 +1843,51 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>> @@ -1605,9 +1605,10 @@ static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
+>>>    static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    		free_page_t put_new_page, unsigned long private,
+>>>    		enum migrate_mode mode, int reason, struct list_head *ret_folios,
+>>> -		struct migrate_pages_stats *stats)
+>>> +		struct list_head *split_folios, struct migrate_pages_stats *stats,
+>>> +		int nr_pass)
+>>>    {
+>>> -	int retry;
+>>> +	int retry = 1;
+>>>    	int large_retry = 1;
+>>>    	int thp_retry = 1;
+>>>    	int nr_failed = 0;
+>>> @@ -1617,19 +1618,12 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    	bool is_large = false;
+>>>    	bool is_thp = false;
+>>>    	struct folio *folio, *folio2, *dst = NULL, *dst2;
+>>> -	int rc, rc_saved, nr_pages;
+>>> -	LIST_HEAD(split_folios);
+>>> +	int rc, rc_saved = 0, nr_pages;
+>>>    	LIST_HEAD(unmap_folios);
+>>>    	LIST_HEAD(dst_folios);
+>>>    	bool nosplit = (reason == MR_NUMA_MISPLACED);
+>>> -	bool no_split_folio_counting = false;
+>>>    -retry:
+>>> -	rc_saved = 0;
+>>> -	retry = 1;
+>>> -	for (pass = 0;
+>>> -	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
+>>> -	     pass++) {
+>>> +	for (pass = 0; pass < nr_pass && (retry || large_retry); pass++) {
+>>>    		retry = 0;
+>>>    		large_retry = 0;
+>>>    		thp_retry = 0;
+>>> @@ -1660,7 +1654,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    			if (!thp_migration_supported() && is_thp) {
+>>>    				nr_large_failed++;
+>>>    				stats->nr_thp_failed++;
+>>> -				if (!try_split_folio(folio, &split_folios)) {
+>>> +				if (!try_split_folio(folio, split_folios)) {
+>>>    					stats->nr_thp_split++;
+>>>    					continue;
+>>>    				}
+>>> @@ -1692,7 +1686,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    					stats->nr_thp_failed += is_thp;
+>>>    					/* Large folio NUMA faulting doesn't split to retry. */
+>>>    					if (!nosplit) {
+>>> -						int ret = try_split_folio(folio, &split_folios);
+>>> +						int ret = try_split_folio(folio, split_folios);
+>>>      						if (!ret) {
+>>>    							stats->nr_thp_split += is_thp;
+>>> @@ -1709,18 +1703,11 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    							break;
+>>>    						}
+>>>    					}
+>>> -				} else if (!no_split_folio_counting) {
+>>> +				} else {
+>>>    					nr_failed++;
+>>>    				}
+>>>      				stats->nr_failed_pages += nr_pages +
+>>> nr_retry_pages;
+>>> -				/*
+>>> -				 * There might be some split folios of fail-to-migrate large
+>>> -				 * folios left in split_folios list. Move them to ret_folios
+>>> -				 * list so that they could be put back to the right list by
+>>> -				 * the caller otherwise the folio refcnt will be leaked.
+>>> -				 */
+>>> -				list_splice_init(&split_folios, ret_folios);
+>>>    				/* nr_failed isn't updated for not used */
+>>>    				nr_large_failed += large_retry;
+>>>    				stats->nr_thp_failed += thp_retry;
+>>> @@ -1733,7 +1720,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    				if (is_large) {
+>>>    					large_retry++;
+>>>    					thp_retry += is_thp;
+>>> -				} else if (!no_split_folio_counting) {
+>>> +				} else {
+>>>    					retry++;
+>>>    				}
+>>>    				nr_retry_pages += nr_pages;
+>>> @@ -1756,7 +1743,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    				if (is_large) {
+>>>    					nr_large_failed++;
+>>>    					stats->nr_thp_failed += is_thp;
+>>> -				} else if (!no_split_folio_counting) {
+>>> +				} else {
+>>>    					nr_failed++;
+>>>    				}
+>>>    @@ -1774,9 +1761,7 @@ static int migrate_pages_batch(struct
+>>> list_head *from, new_page_t get_new_page,
+>>>    	try_to_unmap_flush();
+>>>      	retry = 1;
+>>> -	for (pass = 0;
+>>> -	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
+>>> -	     pass++) {
+>>> +	for (pass = 0; pass < nr_pass && (retry || large_retry); pass++) {
+>>>    		retry = 0;
+>>>    		large_retry = 0;
+>>>    		thp_retry = 0;
+>>> @@ -1805,7 +1790,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    				if (is_large) {
+>>>    					large_retry++;
+>>>    					thp_retry += is_thp;
+>>> -				} else if (!no_split_folio_counting) {
+>>> +				} else {
+>>>    					retry++;
+>>>    				}
+>>>    				nr_retry_pages += nr_pages;
+>>> @@ -1818,7 +1803,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>>    				if (is_large) {
+>>>    					nr_large_failed++;
+>>>    					stats->nr_thp_failed += is_thp;
+>>> -				} else if (!no_split_folio_counting) {
+>>> +				} else {
+>>>    					nr_failed++;
+>>>    				}
+>>>    @@ -1855,27 +1840,6 @@ static int migrate_pages_batch(struct
+>>> list_head *from, new_page_t get_new_page,
+>>>    		dst2 = list_next_entry(dst, lru);
+>>>    	}
+>>>    -	/*
+>>> -	 * Try to migrate split folios of fail-to-migrate large folios, no
+>>> -	 * nr_failed counting in this round, since all split folios of a
+>>> -	 * large folio is counted as 1 failure in the first round.
+>>> -	 */
+>>> -	if (rc >= 0 && !list_empty(&split_folios)) {
+>>> -		/*
+>>> -		 * Move non-migrated folios (after NR_MAX_MIGRATE_PAGES_RETRY
+>>> -		 * retries) to ret_folios to avoid migrating them again.
+>>> -		 */
+>>> -		list_splice_init(from, ret_folios);
+>>> -		list_splice_init(&split_folios, from);
+>>> -		/*
+>>> -		 * Force async mode to avoid to wait lock or bit when we have
+>>> -		 * locked more than one folios.
+>>> -		 */
+>>> -		mode = MIGRATE_ASYNC;
+>>> -		no_split_folio_counting = true;
+>>> -		goto retry;
+>>> -	}
+>>> -
 >>>    	return rc;
 >>>    }
->>>    +static int migrate_pages_sync(struct list_head *from, new_page_t
->>> get_new_page,
->>> +		free_page_t put_new_page, unsigned long private,
->>> +		enum migrate_mode mode, int reason, struct list_head *ret_folios,
->>> +		struct list_head *split_folios, struct migrate_pages_stats *stats)
->>> +{
->>> +	int rc, nr_failed = 0;
->>> +	LIST_HEAD(folios);
->>> +	struct migrate_pages_stats astats;
->>> +
->>> +	memset(&astats, 0, sizeof(astats));
->>> +	/* Try to migrate in batch with MIGRATE_ASYNC mode firstly */
->>> +	rc = migrate_pages_batch(from, get_new_page, put_new_page, private, MIGRATE_ASYNC,
->>> +				 reason, &folios, split_folios, &astats,
->>> +				 NR_MAX_MIGRATE_PAGES_RETRY);
->>> +	stats->nr_succeeded += astats.nr_succeeded;
->>> +	stats->nr_thp_succeeded += astats.nr_thp_succeeded;
->>> +	stats->nr_thp_split += astats.nr_thp_split;
->>> +	if (rc < 0) {
->>> +		stats->nr_failed_pages += astats.nr_failed_pages;
->>> +		stats->nr_thp_failed += astats.nr_thp_failed;
->>> +		list_splice_tail(&folios, ret_folios);
->>> +		return rc;
->>> +	}
->>> +	stats->nr_thp_failed += astats.nr_thp_split;
->>> +	nr_failed += astats.nr_thp_split;
->>> +	/*
->>> +	 * Fall back to migrate all failed folios one by one synchronously. All
->>> +	 * failed folios except split THPs will be retried, so their failure
->>> +	 * isn't counted
->>> +	 */
->>> +	list_splice_tail_init(&folios, from);
->>> +	while (!list_empty(from)) {
->>> +		list_move(from->next, &folios);
->>> +		rc = migrate_pages_batch(&folios, get_new_page, put_new_page,
->>> +					 private, mode, reason, ret_folios,
->>> +					 split_folios, stats, NR_MAX_MIGRATE_PAGES_RETRY);
->>> +		list_splice_tail_init(&folios, ret_folios);
->>> +		if (rc < 0)
->>> +			return rc;
->>> +		nr_failed += rc;
->>> +	}
->>> +
->>> +	return nr_failed;
->>> +}
->>> +
->>>    /*
->>>     * migrate_pages - migrate the folios specified in a list, to the free folios
->>>     *		   supplied as the target for the page migration
->>> @@ -1874,7 +1919,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>    		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
->>>    {
->>>    	int rc, rc_gather;
->>> -	int nr_pages, batch;
->>> +	int nr_pages;
+>>>    @@ -1914,6 +1878,7 @@ int migrate_pages(struct list_head *from,
+>>> new_page_t get_new_page,
 >>>    	struct folio *folio, *folio2;
 >>>    	LIST_HEAD(folios);
 >>>    	LIST_HEAD(ret_folios);
->>> @@ -1890,10 +1935,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>    	if (rc_gather < 0)
->>>    		goto out;
->>>    -	if (mode == MIGRATE_ASYNC)
->>> -		batch = NR_MAX_BATCHED_MIGRATION;
->>> -	else
->>> -		batch = 1;
->>>    again:
->>>    	nr_pages = 0;
->>>    	list_for_each_entry_safe(folio, folio2, from, lru) {
->>> @@ -1904,16 +1945,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>    		}
->>>      		nr_pages += folio_nr_pages(folio);
->>> -		if (nr_pages >= batch)
->>> +		if (nr_pages >= NR_MAX_BATCHED_MIGRATION)
->>>    			break;
->>>    	}
->>> -	if (nr_pages >= batch)
->>> +	if (nr_pages >= NR_MAX_BATCHED_MIGRATION)
->>>    		list_cut_before(&folios, from, &folio2->lru);
+>>> +	LIST_HEAD(split_folios);
+>>>    	struct migrate_pages_stats stats;
+>>>      	trace_mm_migrate_pages_start(mode, reason);
+>>> @@ -1947,12 +1912,23 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
 >>>    	else
 >>>    		list_splice_init(from, &folios);
->>> -	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
->>> -				 mode, reason, &ret_folios, &split_folios, &stats,
->>> -				 NR_MAX_MIGRATE_PAGES_RETRY);
->>> +	if (mode == MIGRATE_ASYNC)
->>> +		rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
->>> +					 mode, reason, &ret_folios, &split_folios, &stats,
->>> +					 NR_MAX_MIGRATE_PAGES_RETRY);
->>> +	else
->>> +		rc = migrate_pages_sync(&folios, get_new_page, put_new_page, private,
->>> +					mode, reason, &ret_folios, &split_folios, &stats);
+>>>    	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
+>>> -				 mode, reason, &ret_folios, &stats);
+>>> +				 mode, reason, &ret_folios, &split_folios, &stats,
+>>> +				 NR_MAX_MIGRATE_PAGES_RETRY);
+>>>    	list_splice_tail_init(&folios, &ret_folios);
+>>>    	if (rc < 0) {
+>>>    		rc_gather = rc;
+>>> +		list_splice_tail(&split_folios, &ret_folios);
 >>
->> For split folios, it seems also reasonable to use migrate_pages_sync()
->> instead of always using fixed MIGRATE_ASYNC mode?
+>> Can we still keep the original comments? Which can help to understand
+>> the case, at least for me:)
+>>   /*
+>>    * There might be some split folios of fail-to-migrate large
+>>    * folios left in split_folios list. Move them to ret_folios
+>>    * list so that they could be put back to the right list by
+>>    * the caller otherwise the folio refcnt will be leaked.
+>>    */
 > 
-> For split folios, we only try to migrate them with minimal effort.
-> Previously, we decrease the retry number from 10 to 1.  Now, I think
-> that it's reasonable to change the migration mode to MIGRATE_ASYNC to
-> reduce latency.  They have been counted as failure anyway.
+> Previously, the cleanup code is buried in a corner of a much more
+> complex code path.  So the comments are necessary.  Now, it is an
+> explicit and simple code path.  And, the rule is clear, every folio list
+> needs to be cleaned up before return: folios, split_folios, then
+> ret_folios.  And we have done this here and there in the series.
 
-Sounds reasonable. Thanks for explanation. Please feel free to add:
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+OK. Fair enough.
+
+> 
+>>>    		goto out;
+>>>    	}
+>>> +	if (!list_empty(&split_folios)) {
+>>> +		/*
+>>> +		 * Failure isn't counted since all split folios of a large folio
+>>> +		 * is counted as 1 failure already.
+>>> +		 */
+>>> +		migrate_pages_batch(&split_folios, get_new_page, put_new_page, private,
+>>> +				    MIGRATE_ASYNC, reason, &ret_folios, NULL, &stats, 1);
+>>
+>> Better to copy the original comments to explain why force to
+>> MIGRATE_ASYNC mode for split folios.
+> 
+> Yes.  It's a good idea to explain that.  And now the rule to call
+> migrate_pages_batch() has been changed.  If mode != MIGRATE_ASYNC, the
+> length of "from" must be <= 1.  I will add a VM_WARN_ON() for that at
+> the beginning of migrate_pages_batch().  And I would rather to add the
+> comments to the header of migrate_pages().  Other callers of the
+> function needs to follow that rule too.
+
+Looks reasonable to me. Thanks.
