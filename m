@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3A66A75AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86CE6A75AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjCAU6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
+        id S229715AbjCAU65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjCAU6w (ORCPT
+        with ESMTP id S229606AbjCAU6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:58:52 -0500
+        Wed, 1 Mar 2023 15:58:54 -0500
 Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408744DE1E;
-        Wed,  1 Mar 2023 12:58:50 -0800 (PST)
-Received: by mail-ot1-x342.google.com with SMTP id g73-20020a9d12cf000000b006943a7df072so126978otg.11;
-        Wed, 01 Mar 2023 12:58:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A054DE3F;
+        Wed,  1 Mar 2023 12:58:53 -0800 (PST)
+Received: by mail-ot1-x342.google.com with SMTP id cc12-20020a05683061cc00b00693daa9016fso8360459otb.2;
+        Wed, 01 Mar 2023 12:58:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677704329;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WSPQ47Kos15ho2WRz4oPujm7UYDuuuPK0dwj6BbZaLA=;
-        b=Hnknsni3bePlArjL4uYBR4neFTKq1h2VF6AQYSETv/UCPzjNhYgqjp4noBY0CVC2I8
-         beTMS5AVR1Jpzksj1kGM2EAgLiapkLY+zEW40Rm+/CbEnJvlYo44vXqrpKMg4/hbnbet
-         KDjv9ydZ+ceS3LZ+bql9v1PmYTxke6Bt0X75BCgKPNKyqP3xzRk0bUILsl1Sj0n/dWCQ
-         eSMVC90agJxsEK7Op/wXB4ETtO6gAqf2G0/+a7H8GN9Op8bh99KqHc8Zdl2XjFD3Fgdw
-         E5b/jZ++3UqE1wC4nsZWcG77xDZ8nJ4bTNoiwqFA8p41bbYdlfch8dQOdRhMDI18W3yl
-         WuWg==
+        d=gmail.com; s=20210112; t=1677704333;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CdtGqct+MwH2EWhlTBd073J94ebfBu7k+yd8Ehy7SG8=;
+        b=IPLMtaSO4optaEwUy0SdNfGqb/Tmst+FwE69yKgtFJNNflymrIkknlamomWDk8Dn4r
+         UNMyZUyb/CVC+Y7W5fvn9vo84Q1+waeShm1ey1SwuDuADKsVLbJUfApqvSrvl3PdhFfx
+         j3p2N2mpEDiFa71kSJ5TWMNbgVywlGgTNrym+oW0AHIQUSq6tWuzuvRh3vCb9Hr6zoFs
+         WIA68DAzJTvSU98n28O3Q0Y74pBXe+SQpZ24gBmMKeYYFEem0S/6MkKd4ZhpAuZhtFMR
+         Xhgv3NIIbzymEjx8auUp7iw4vCgA0l0TZ+DlPkz+JJ8P3zKbWpUvvtZJMwHrx0WKIA9i
+         i2ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677704329;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WSPQ47Kos15ho2WRz4oPujm7UYDuuuPK0dwj6BbZaLA=;
-        b=frjgFqhpxk5+lY2EAFpaRPkrTQCBG394TjzT0NcTueoNgnW0d77RRS193hdJj1CRiw
-         g+n9diJbGwwM9MPa4C+HXFy8thNnrgrJhqIL7S5i8uCkpjGyXetF8ufvaZ4FoTKbBy6P
-         y8T7ZhfLkIMQ3L1V9wjf5PH0cPF9cNd6hL0/SgGXtzHl87tgkmnFA5WhDfSqbQUTEyjw
-         B5NhPjwlwSZAdsLRgitZfz15PIaGpmJd1DrorwWel+oQYVwI/7JUbbBR2Dv0ItMCPAji
-         ga/uT28+gGbkk8SreUwusMkTaCtYBPpYAeqiOhwQu2gIzWU8/TlmdftIT8vw8dYys0FA
-         +LgA==
-X-Gm-Message-State: AO0yUKVP4ZwJsNxwOArXk4Upv1mkem8bp+Mzx3YpujwwioG1UQY1wT7l
-        Zw8CnJXj/u3RnVv76saslbkSYTmdmn5G
-X-Google-Smtp-Source: AK7set9C/GEMbQ6Aoj/TvhFXbscbE7k7mr6sQfJS1KhKXkmIeTw7/SdzsmBKlXfsipff2BcP2O+uyg==
-X-Received: by 2002:a9d:1e9:0:b0:68b:cdd3:3b93 with SMTP id e96-20020a9d01e9000000b0068bcdd33b93mr4358502ote.26.1677704329452;
-        Wed, 01 Mar 2023 12:58:49 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677704333;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CdtGqct+MwH2EWhlTBd073J94ebfBu7k+yd8Ehy7SG8=;
+        b=Vye75BaWbYIZdnLXQraQayp9btrPrnJhW6O0YFk1ZoP2xDM44RJn03mvixwDN7NXIF
+         OolGy3SmTuxEZadSBJpujSHQIuEtpFWqjfTpUsJRCi8AJBkgxIUpKXt1iZgao+imeSdv
+         vhOjLyZOqdAAY6X6EmYlOZ6rGDJkFgPzdiDDbtUvHRQz+fdXDrGZtTeDuERwSfxyC6OQ
+         XHWf24H3+KjC42n+H5EtyKq2fyVWVptatq2eb/nzA2OjTCRO8i2JU+lLIXKXwKFNIAZI
+         /3KPzXapwPbBBv+j/yuUtZjnddK1YNnftVXyGYoDwRvAm3piLBb3wcPf/lUfRm9Jz8rV
+         lbrA==
+X-Gm-Message-State: AO0yUKWZXP+DYs8uXH2ipZ8MIBm4OghW4ulVXJs1VI4VNfXgA/bWScUe
+        veMCsXZSSKo2gIN5kJ3CzEd6hB14QxZo
+X-Google-Smtp-Source: AK7set/lmRi5GSmTmOgb8SvwW6VRsffYsjxJ2lOXKH1n3w2Q2d2vUY1i/AhCrvBOnQawAeNGc6Un3A==
+X-Received: by 2002:a05:6830:314a:b0:693:d998:f52f with SMTP id c10-20020a056830314a00b00693d998f52fmr4690232ots.35.1677704332923;
+        Wed, 01 Mar 2023 12:58:52 -0800 (PST)
 Received: from fedora.mshome.net ([104.184.156.161])
-        by smtp.gmail.com with ESMTPSA id bt55-20020a05683039f700b0068abc8e786fsm5273899otb.10.2023.03.01.12.58.46
+        by smtp.gmail.com with ESMTPSA id bt55-20020a05683039f700b0068abc8e786fsm5273899otb.10.2023.03.01.12.58.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 12:58:48 -0800 (PST)
+        Wed, 01 Mar 2023 12:58:52 -0800 (PST)
 From:   Gregory Price <gourry.memverge@gmail.com>
 X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
 To:     linux-kernel@vger.kernel.org
@@ -56,10 +57,12 @@ Cc:     linux-doc@vger.kernel.org, oleg@redhat.com, avagin@gmail.com,
         peterz@infradead.org, luto@kernel.org, krisman@collabora.com,
         tglx@linutronix.de, corbet@lwn.net, shuah@kernel.org,
         Gregory Price <gregory.price@memverge.com>
-Subject: [PATCH v13 0/3] Checkpoint Support for Syscall User Dispatch
-Date:   Wed,  1 Mar 2023 15:58:40 -0500
-Message-Id: <20230301205843.2164-1-gregory.price@memverge.com>
+Subject: [PATCH v13 1/3] syscall_user_dispatch: helper function to operate on given task
+Date:   Wed,  1 Mar 2023 15:58:41 -0500
+Message-Id: <20230301205843.2164-2-gregory.price@memverge.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230301205843.2164-1-gregory.price@memverge.com>
+References: <20230301205843.2164-1-gregory.price@memverge.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,55 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v13: sizeof consistency and cosmetic changes in patch 2
+Preparatory patch ahead of set/get interfaces which will allow a
+ptrace to get/set the syscall user dispatch configuration of a task.
 
-v12: split test into its own patch
-     change from padding a u8 to using a u64
-     casting issues
-     checkpatch.pl
+This will simplify the set interface and consolidates error paths.
 
-[truncated version history]
+Signed-off-by: Gregory Price <gregory.price@memverge.com>
+---
+ kernel/entry/syscall_user_dispatch.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-Syscall user dispatch makes it possible to cleanly intercept system
-calls from user-land.  However, most transparent checkpoint software
-presently leverages some combination of ptrace and system call
-injection to place software in a ready-to-checkpoint state.
-
-If Syscall User Dispatch is enabled at the time of being quiesced,
-injected system calls will subsequently be interposed upon and
-dispatched to the task's signal handler.
-
-Patch summary:
-- Refactor configuration setting interface to operate on a task
-  rather than current, so the set and error paths can be consolidated
-
-- Implement a getter interface for Syscall User Dispatch config info.
-  To resume successfully, the checkpoint/resume software has to
-  save and restore this information.  Presently this configuration
-  is write-only, with no way for C/R software to save it.
-
-  This was done in ptrace because syscall user dispatch is not part of
-  uapi. The syscall_user_dispatch_config structure was added to the
-  ptrace exports.
-
-- Selftest for the new feature
-
-Gregory Price (3):
-  syscall_user_dispatch: helper function to operate on given task
-  ptrace,syscall_user_dispatch: checkpoint/restore support for SUD
-  selftest,ptrace: Add selftest for syscall user dispatch config api
-
- .../admin-guide/syscall-user-dispatch.rst     |  4 ++
- include/linux/syscall_user_dispatch.h         | 18 +++++
- include/uapi/linux/ptrace.h                   | 29 ++++++++
- kernel/entry/syscall_user_dispatch.c          | 65 ++++++++++++++---
- kernel/ptrace.c                               |  9 +++
- tools/testing/selftests/ptrace/.gitignore     |  1 +
- tools/testing/selftests/ptrace/Makefile       |  2 +-
- tools/testing/selftests/ptrace/get_set_sud.c  | 72 +++++++++++++++++++
- 8 files changed, 191 insertions(+), 9 deletions(-)
- create mode 100644 tools/testing/selftests/ptrace/get_set_sud.c
-
+diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
+index 0b6379adff6b..22396b234854 100644
+--- a/kernel/entry/syscall_user_dispatch.c
++++ b/kernel/entry/syscall_user_dispatch.c
+@@ -68,8 +68,9 @@ bool syscall_user_dispatch(struct pt_regs *regs)
+ 	return true;
+ }
+ 
+-int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
+-			      unsigned long len, char __user *selector)
++static int task_set_syscall_user_dispatch(struct task_struct *task, unsigned long mode,
++					  unsigned long offset, unsigned long len,
++					  char __user *selector)
+ {
+ 	switch (mode) {
+ 	case PR_SYS_DISPATCH_OFF:
+@@ -94,15 +95,21 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
+ 		return -EINVAL;
+ 	}
+ 
+-	current->syscall_dispatch.selector = selector;
+-	current->syscall_dispatch.offset = offset;
+-	current->syscall_dispatch.len = len;
+-	current->syscall_dispatch.on_dispatch = false;
++	task->syscall_dispatch.selector = selector;
++	task->syscall_dispatch.offset = offset;
++	task->syscall_dispatch.len = len;
++	task->syscall_dispatch.on_dispatch = false;
+ 
+ 	if (mode == PR_SYS_DISPATCH_ON)
+-		set_syscall_work(SYSCALL_USER_DISPATCH);
++		set_task_syscall_work(task, SYSCALL_USER_DISPATCH);
+ 	else
+-		clear_syscall_work(SYSCALL_USER_DISPATCH);
++		clear_task_syscall_work(task, SYSCALL_USER_DISPATCH);
+ 
+ 	return 0;
+ }
++
++int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
++			      unsigned long len, char __user *selector)
++{
++	return task_set_syscall_user_dispatch(current, mode, offset, len, selector);
++}
 -- 
 2.39.1
 
