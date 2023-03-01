@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1B66A6D20
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAAE6A6D23
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjCANhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 08:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S229766AbjCANia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 08:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjCANhu (ORCPT
+        with ESMTP id S229795AbjCANiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:37:50 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B233CE14;
-        Wed,  1 Mar 2023 05:37:49 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id i34so53824133eda.7;
-        Wed, 01 Mar 2023 05:37:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677677868;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a0Tm2Y+hWRKxWl4T5yrSEnRh0lFyul4U3El1HK5aNoo=;
-        b=mbJl8Y9WJ0jLMqRNmVJuAmCzx7Rxb/m087TaNuWoAaxZ9yxleN+hCNRTUiBJIEo956
-         FxiV5bs4Q+x8mVBiS9L15mxeX6/S0m42AE7phKF2bpeHnLnF4mKDtwm4BUr81ecfJSCl
-         IF2SdYwZOWJZ35G3HNQJDcEZ9Wa5Hfw1rrZC+5aQWgVLXz1dV7AC7RhIMH+AQh3vQGd+
-         23acDknu5ql09XMfvRD4vq5VDUDhBp050CaVF2qkhc2vY2d4B2y+4zxtcSd6Sb28h1Es
-         SL9Dhaz9p/ZLY5H0Lflvm9Z4o+KfYCn2fHeAirGs4WmjRGqNKjfkUw53ApTBNeu9qAXA
-         Z59w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677677868;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a0Tm2Y+hWRKxWl4T5yrSEnRh0lFyul4U3El1HK5aNoo=;
-        b=7jRLC4KU5fhjlHjoECe1fYGMyM7LbCBv+2mbIsu2IDwDuLiOXyjUn5HmntamJD8EnV
-         CzLz7wSbxO8AgVsJY+1G5nx0xOxqXI7gNa46RORCWrl3DuNl4tD7yaOyeOhN7MpF6aqR
-         iTGkevCEi1Q+hiGPbuRMTEgPw17nHAgBlputhZYy9WYOHNFXjjhwdjuFQ5kEgl0wl6FU
-         l6N60gtW8q4S4mGNj/JpIZ0dbHaOPg3tMMnFoKFL8uN0nUEr6VHHG8OhupYlA+bywhU/
-         auRncrB6ftheQxVj2quAVbrVigTSUTmohTdGK9ayibCNZcPdVm8sO2obiufqZRNucaUE
-         xXRw==
-X-Gm-Message-State: AO0yUKUHqgPu+VoEXpFEi9kK+R8ec/IRBcPC5KaSuqUoDjH287RIHUxM
-        z/pPY1GGjdVuV0S6Hz81mxQ=
-X-Google-Smtp-Source: AK7set9UfrHCyrRTAxw97aQ0S7UIoo02OEM1OfFoOvnNrPoOYEXSM29xcYTuvA/FDVaBedEDIKIncQ==
-X-Received: by 2002:a17:907:7e82:b0:8ab:4c4:d0f6 with SMTP id qb2-20020a1709077e8200b008ab04c4d0f6mr8733391ejc.56.1677677867732;
-        Wed, 01 Mar 2023 05:37:47 -0800 (PST)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id s4-20020a1709067b8400b00905a1abecbfsm1047441ejo.47.2023.03.01.05.37.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 05:37:47 -0800 (PST)
-Date:   Wed, 1 Mar 2023 14:37:45 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V6 2/3] tpm_tis-spi: Support hardware wait polling
-Message-ID: <Y/9VKV6ddpWlmU9f@orome>
-References: <20230227172108.8206-1-kyarlagadda@nvidia.com>
- <20230227172108.8206-3-kyarlagadda@nvidia.com>
+        Wed, 1 Mar 2023 08:38:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46E732CD5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 05:38:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C1F6121F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:38:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C467EC433D2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677677898;
+        bh=I87h7ETny0tLZvE2H5MvVi3ThxSYnB3UYA46KZvxVtc=;
+        h=From:Date:Subject:To:Cc:From;
+        b=WflKnS67ITboWuVNfiIwDFuoWgdUmn+ZFcI3l8FuZNOO2CeWFfUnLBZjzJNWvYqeW
+         q64RLUU5SN4z0vxm9VsM1wJqUQLH8ETrFAfBwZRTT14/I5rycP73PgaJWLSyhkj/h/
+         INZLujHQ/RfC92oBtVGhMoYZtoHazbEocX50DnrHFbPI1npgecZF0HKG75wf6PFGPn
+         +X5LOfBnOK5Hm99WW44n/aeqND7n7ZX68ssvOdg4ESUyvkUAJFr0D6CvhiDoY4X+J5
+         ozuDuhw23UP0FL6dnptH2csD2wiWAxcvS2877pUacFI6c3C+FAHEJYWS/Ygq+OqdXy
+         wCx26+D95J5IA==
+Received: by mail-oi1-f179.google.com with SMTP id r40so9717814oiw.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 05:38:18 -0800 (PST)
+X-Gm-Message-State: AO0yUKVIbZMA7fC79RPj3h4jDYvDsXpkl1wkKK/Ngdm7ClSPuFiIt5j3
+        NS2Tvp9Ny06H1TKGjR+ZxcJRMPBJLZSx8yqbD1U=
+X-Google-Smtp-Source: AK7set/TVXGCY+F4oTtezpQDhaG5mQB8h/dW4PKpIT3jea0YhbjdT5IHnY5Xj61V31lszOtle1nVKeOeb4a/X27oHQE=
+X-Received: by 2002:aca:1004:0:b0:384:33df:4dfc with SMTP id
+ 4-20020aca1004000000b0038433df4dfcmr2146036oiq.11.1677677897896; Wed, 01 Mar
+ 2023 05:38:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="irPaUU4QFHK5esZZ"
-Content-Disposition: inline
-In-Reply-To: <20230227172108.8206-3-kyarlagadda@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ac9:67ca:0:b0:4c2:5d59:8c51 with HTTP; Wed, 1 Mar 2023
+ 05:38:17 -0800 (PST)
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Wed, 1 Mar 2023 22:38:17 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_kAWqDdDHo+eM1MiT5tJEtvfdkiAD=WBD3sP+AUR03tg@mail.gmail.com>
+Message-ID: <CAKYAXd_kAWqDdDHo+eM1MiT5tJEtvfdkiAD=WBD3sP+AUR03tg@mail.gmail.com>
+Subject: [GIT PULL] exfat update for 6.3-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---irPaUU4QFHK5esZZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is exfat update pull request for v6.3-rc1. I add description of
+this pull request on below. Please pull exfat with following ones.
 
-On Mon, Feb 27, 2023 at 10:51:07PM +0530, Krishna Yarlagadda wrote:
-[...]
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_t=
-is_spi_main.c
-[...]
-> @@ -140,6 +206,28 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, =
-u32 addr, u16 len,
->  	return ret;
->  }
-> =20
-> +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> +			 u8 *in, const u8 *out)
-> +{
-> +	struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
-> +	struct spi_controller *ctlr =3D phy->spi_device->controller;
-> +
-> +	/*
-> +	 * TPM flow control over SPI requires full duplex support.
-> +	 * Send entire message to a half duplex controller to handle
-> +	 * wait polling in controller.
-> +	 * Set TPM HW flow control flag..
-> +	 */
-> +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX) {
-> +		phy->spi_device->mode |=3D SPI_TPM_HW_FLOW;
+Thanks!
 
-Can this be pushed up to tpm_tis_spi_probe()? The SPI controller flags
-are fixed, so this isn't going to change at runtime, is it?
+The following changes since commit c9c3395d5e3dcc6daee66c6908354d47bf98cb0c:
 
-Thierry
+  Linux 6.2 (2023-02-19 14:24:22 -0800)
 
---irPaUU4QFHK5esZZ
-Content-Type: application/pgp-signature; name="signature.asc"
+are available in the Git repository at:
 
------BEGIN PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git
+tags/exfat-for-6.3-rc1
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP/VSkACgkQ3SOs138+
-s6EAvA//fdYOQ31cnHUmBUSq8bSgsADnXCaPRRIfUxQ9WwiLD/pwqi72FoLb8D8E
-aaWr8mCE4zFlml1eMWFp9oEywyqAWGeSaXNQu02jZGg3oX79SCKzD26Y+0XfcTr0
-1bix4kIpQ15X2REtvH5NwGNbdZm2fvFO5gJlx9LIjIhOgkOTGoIQT8BHS72Yvzx8
-Ek+qwCvjiZb6Grv44hvrjVNox4i5Q1NGWUAuUchJiMtBJyAgvNGm+KvVraJYaPoX
-WJA3UXT6h70l0uH3vp021LwmOuftwdwh6XRtgijBttSgSbewHbLf/r3qmX4tpOqs
-MI6QmSi737ZK4JtA/6tjc+NX1rN5Ij3SYGBVQFuvjy84Q6TnOFY9FUw0pL98iyGk
-Fr3Nj11BugNa4Yxo5+CK0+LEAAeJ/SY6Vc9T7yScnTMRmsJQZ4hoWtiK064N6SLp
-/KZVwPzvz4ojmQkJ6XCvtmrlHsFPgS6hKgpDJKITPTks4ckjOVpq9bjKST6ewiso
-GmYNyvQAKiNKr2gWKSUyg1n9bmq/cUzsGvbbpAxTz+aP+I94qY3yG915swfPkfkU
-z8Z7RYDj09ynD9+3Tl9kM5IGijXHh2cmkAq3KqNQF+jtvjcf4i21djTnB0FMCdJM
-gkMjTa22l25OZ776Hd1CHOKQ9BAXiuoD+6VXdn6dmL7a4dtwbIo=
-=232t
------END PGP SIGNATURE-----
+for you to fetch changes up to d5c514b6a0c0b77ed7e5ef2484e8b20eb09c5f27:
 
---irPaUU4QFHK5esZZ--
+  exfat: fix the newly allocated clusters are not freed in error
+handling (2023-02-28 20:01:40 +0900)
+
+----------------------------------------------------------------
+Description for this pull request:
+- Handle vendor extension and allocation entries as unrecognized
+benign secondary entries.
+- Fix wrong ->i_blocks on devices with non-512 byte sector.
+- Add the check to avoid returning -EIO from exfat_readdir() at
+current position exceeding the directory size.
+- Fix a bug that reach the end of the directory stream at a position
+not aligned with the dentry size.
+- Redefine DIR_DELETED as 0xFFFFFFF7, the bad cluster number.
+- Two cleanup fixes and fix cluster leakage in error handling.
+
+----------------------------------------------------------------
+Namjae Jeon (1):
+      exfat: handle unreconized benign secondary entries
+
+Sungjong Seo (1):
+      exfat: redefine DIR_DELETED as the bad cluster number
+
+Yuezhang Mo (6):
+      exfat: fix unexpected EOF while reading dir
+      exfat: fix reporting fs error when reading dir beyond EOF
+      exfat: fix inode->i_blocks for non-512 byte sector size device
+      exfat: remove unneeded code from exfat_alloc_cluster()
+      exfat: don't print error log in normal case
+      exfat: fix the newly allocated clusters are not freed in error handling
+
+ fs/exfat/dir.c       | 90 ++++++++++++++++++++++++++++++++++------------------
+ fs/exfat/exfat_fs.h  |  4 ++-
+ fs/exfat/exfat_raw.h | 21 ++++++++++++
+ fs/exfat/fatent.c    | 32 +++++++------------
+ fs/exfat/file.c      |  3 +-
+ fs/exfat/inode.c     |  6 ++--
+ fs/exfat/namei.c     |  2 +-
+ fs/exfat/super.c     |  3 +-
+ 8 files changed, 101 insertions(+), 60 deletions(-)
