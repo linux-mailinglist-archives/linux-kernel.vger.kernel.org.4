@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980166A70D4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906916A70DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjCAQYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 11:24:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S229766AbjCAQ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 11:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAQYv (ORCPT
+        with ESMTP id S229679AbjCAQ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 11:24:51 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF0A3B0CC;
-        Wed,  1 Mar 2023 08:24:49 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 9FEDB3200406;
-        Wed,  1 Mar 2023 11:24:48 -0500 (EST)
-Received: from imap42 ([10.202.2.92])
-  by compute1.internal (MEProxy); Wed, 01 Mar 2023 11:24:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1677687887; x=
-        1677774287; bh=226yzvA64Kc8Q6zDrmuOtbs/tNXb1G/+qqLqVU0wHB4=; b=Q
-        gm5jFnpNqKyvfla6eRJrva3qhtbnUJ1RIrAD3Fl4JiCtqYtj9exaFLwkLlw/J9IW
-        CH4QA6HIR/xoP4kmwHX+Quq45QY2+BG57owtJDssVVSg9J6ywZsMsvyQgoFKrEgS
-        SdeJPePl7J5JnSy6cxPWai/Z5x97djayaPmn3chDhTlCSQP2dyGPXJ8Fr9uiXmPc
-        AeQEmvbKrXHwO0c3uf+qX19ctRMvJjK3HTZaJilwAgX3FuZkX/+feVMIWvvSTsCS
-        ZlDBn1IV98QliXyCLHUzr4OTb0u51LCeEVSOCSUnHnZRxiTGY1H4ajAWqpOO0SRb
-        FekUkcuHmCfk7w2AkxyPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677687887; x=
-        1677774287; bh=226yzvA64Kc8Q6zDrmuOtbs/tNXb1G/+qqLqVU0wHB4=; b=g
-        KUVlxshVdl0QmWZQ7o9s16OU/obw9EVg7TJH6NIcFJIOGon+kHQO3np8mwQh8L+C
-        oNtQSx9D1k7N4rzCkibBLQPez5jvubUR/795i1+KUFAz0GR5csS1rqXeem+1GBmc
-        UHjtCrjaX1o+1fr11Wmn64MbuyzMQY6NJ2XHsqDUOddD6OoFrgi80RKmUUMJHFPi
-        beYMpP0+JarS8tMdn2GvbBSCowbJMZnh2l7itK3kdcaEm1eQzWp4x6vS7kdH6Z58
-        YnJzaUto0FwpXgfpWFlOXEtYozK71YSNQIq9mb/6pDyX7MuzmmJ97FgADtJiXEtW
-        Pm79a7A+OrS8PPo+sCO/g==
-X-ME-Sender: <xms:T3z_Y0EdtiTqMRRrm0nISQVg-go1QHXe5OyKBmVt0Tqp9YuBwvXyVA>
-    <xme:T3z_Y9X2tN0pkEE8IfJC0y_rQn-ap8ClQ85giFB3DCMSNfn9cn2x0D8IakdH7yk0p
-    FuYDa-rqNwfMVAbiA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefofg
-    ggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedfffgrnhhivghlucgi
-    uhdfuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepueefheduve
-    eiheeitdeufeekudfhuddukefghfeiieegveeufffhteejgeejgefgnecuffhomhgrihhn
-    pehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:T3z_Y-LOjDX5NAcX_e2_yOXzIl5-T-mMwH2h64PFb_kryXbrngQzVw>
-    <xmx:T3z_Y2GODkhDhWBRMvngm3F6bX4QqDp0lhWsYMVkZeTYP0ZaoefO5g>
-    <xmx:T3z_Y6WJzV186uOyIEsll2Qr3HcGPEUqb6SJLTPCjs7MNdkaE_fS5Q>
-    <xmx:T3z_Y5TaLAWcccpos6M2HlQWZG-ij7LEon31LhKw1CHcHERCe46vAw>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C1FC7BC0078; Wed,  1 Mar 2023 11:24:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <e882b638-ab7e-4dde-b95b-c01c8e78e02a@app.fastmail.com>
-In-Reply-To: <cc4712f7-c723-89fc-dc9c-c8db3ff8c760@gmail.com>
-References: <cover.1677526810.git.dxu@dxuuu.xyz>
- <cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com>
- <20230227220406.4x45jcigpnjjpdfy@kashmir.localdomain>
- <cc4712f7-c723-89fc-dc9c-c8db3ff8c760@gmail.com>
-Date:   Wed, 01 Mar 2023 09:24:25 -0700
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Edward Cree" <ecree.xilinx@gmail.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in BPF
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Wed, 1 Mar 2023 11:28:16 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA5619C;
+        Wed,  1 Mar 2023 08:28:14 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so17869812pjb.3;
+        Wed, 01 Mar 2023 08:28:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:subject:cc:to:from:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=P7haAdLVLlDeldbPNE93BNwsAAMcDWz2aparhFZ6snc=;
+        b=ScpO2xYGcncaAu7MJmZ0jOxZc2MFhctvdoHr8MPqN1YeVqLXaIKJf5687TOMRiLeJF
+         ov2n7XuS384LRK55cbIy9sINjo1DFTtCGGIx1jRAczK8s1rL8cNJlKPhRnL+JYlUjsEr
+         wI2ajEmTljOZVPblwy7hyMNhD8L4uYLwT1lx4C2AyIfTfVGzvluQ4/XXH1O6JP4L1drU
+         nj6B/jiNGF4gmgEoKuYDcq2xGzxbhhsC3BQeSH9999F074yinxk/8R7JtY2h/QA/5l2W
+         bCUpFfKHg43g3H7X6dTk0WPmbKmKOxRwjAqtiTkqX066qqDSDiar0f59NDI8buGqoZT7
+         VL5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:subject:cc:to:from:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P7haAdLVLlDeldbPNE93BNwsAAMcDWz2aparhFZ6snc=;
+        b=UIU2B0ZAR44MDUIZtrqJefYa2zVysncAsrZ0I7GFT5tPOFlHAeaWJ7Ph2c5UT535f6
+         pLBSwQLeHLwfqcnWj/Kt22sPoj8Gx7carQRRgjSmiT7u6bM55ioRnNXyuSqHIE+tsQXw
+         2pihMvd8M2xNHA8DLa2LRHNtPHuPFT3syajoohfgghipIqSy0EkPx7oCH0/EON0qWm1o
+         WrU929RycJCQX6VClCRdHm6LZcppAz4/Dq3Mc8+gzf/pB9Dlz+ZhZFqI72ZM/rpKjzyf
+         1UURrzvwK/K8KljIr79tdTyIKFTVkmbllcm/qTV2Vke8vfBeVKnDicgVQr0VyCuOMpqD
+         auvQ==
+X-Gm-Message-State: AO0yUKVg6mJ0S95zvwmz7qn/U8h/P2TkzdKbGBIid09JGktFNmcF86Eq
+        XmAXhnUeVWaiRt2rkrD0gvQ=
+X-Google-Smtp-Source: AK7set+ervFmTCiG6ysVAUSUHqEReNOEh1qF1r4N++pKBJkkynck6Z0EyTk83a923L/HE/nYajTVtg==
+X-Received: by 2002:a17:903:247:b0:19c:f1ab:4220 with SMTP id j7-20020a170903024700b0019cf1ab4220mr7245531plh.46.1677688094437;
+        Wed, 01 Mar 2023 08:28:14 -0800 (PST)
+Received: from rh-tp ([2406:7400:63:469f:eb50:3ffb:dc1b:2d55])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170902ed0b00b0019602b2c00csm8633420pld.175.2023.03.01.08.28.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 08:28:13 -0800 (PST)
+Date:   Wed, 01 Mar 2023 21:57:58 +0530
+Message-Id: <87v8jka12p.fsf@doe.com>
+From:   Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+To:     Dave Chinner <david@fromorbit.com>,
+        syzbot <syzbot+dd426ae4af71f1e74729@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Subject: Re: [syzbot] [ext4?] possible deadlock in evict (3)
+In-Reply-To: <20230301000142.GK2825702@dread.disaster.area>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,121 +68,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ed,
+Dave Chinner <david@fromorbit.com> writes:
 
-Had some trouble with email yesterday (forgot to renew domain
-registration) and this reply might not have made it out. Apologies
-if it's a repost.
+> [obvious one for the ext4 people]
+>
+> On Tue, Feb 28, 2023 at 09:25:55AM -0800, syzbot wrote:
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    ae3419fbac84 vc_screen: don't clobber return value in vcs_..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=1136fe18c80000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=ff98a3b3c1aed3ab
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=dd426ae4af71f1e74729
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>>
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+dd426ae4af71f1e74729@syzkaller.appspotmail.com
+>>
+>> ======================================================
+>> WARNING: possible circular locking dependency detected
+>> 6.2.0-syzkaller-12913-gae3419fbac84 #0 Not tainted
+>> ------------------------------------------------------
+>> kswapd0/100 is trying to acquire lock:
+>> ffff888047aea650 (sb_internal){.+.+}-{0:0}, at: evict+0x2ed/0x6b0 fs/inode.c:665
+>>
+>> but task is already holding lock:
+>> ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:200 [inline]
+>> ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7338
+>>
+>> which lock already depends on the new lock.
+>>
+>>
+>> the existing dependency chain (in reverse order) is:
+>>
+>> -> #3 (fs_reclaim){+.+.}-{0:0}:
+>>        __fs_reclaim_acquire mm/page_alloc.c:4716 [inline]
+>>        fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:4730
+>>        might_alloc include/linux/sched/mm.h:271 [inline]
+>>        prepare_alloc_pages+0x159/0x570 mm/page_alloc.c:5362
+>>        __alloc_pages+0x149/0x5c0 mm/page_alloc.c:5580
+>>        alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
+>>        __get_free_pages+0xc/0x40 mm/page_alloc.c:5641
+>>        kasan_populate_vmalloc_pte mm/kasan/shadow.c:309 [inline]
+>>        kasan_populate_vmalloc_pte+0x27/0x150 mm/kasan/shadow.c:300
+>>        apply_to_pte_range mm/memory.c:2578 [inline]
+>>        apply_to_pmd_range mm/memory.c:2622 [inline]
+>>        apply_to_pud_range mm/memory.c:2658 [inline]
+>>        apply_to_p4d_range mm/memory.c:2694 [inline]
+>>        __apply_to_page_range+0x68c/0x1030 mm/memory.c:2728
+>>        alloc_vmap_area+0x536/0x1f20 mm/vmalloc.c:1638
+>>        __get_vm_area_node+0x145/0x3f0 mm/vmalloc.c:2495
+>>        __vmalloc_node_range+0x250/0x1300 mm/vmalloc.c:3141
+>>        kvmalloc_node+0x156/0x1a0 mm/util.c:628
+>>        kvmalloc include/linux/slab.h:737 [inline]
+>>        ext4_xattr_move_to_block fs/ext4/xattr.c:2570 [inline]
+>
+> 	buffer = kvmalloc(value_size, GFP_NOFS);
+>
+> Yeah, this doesn't work like the code says it should. The gfp mask
+> is not passed down to the page table population code and it hard
+> codes GFP_KERNEL allocations so you have to do:
+>
+> 	memalloc_nofs_save();
+> 	buffer = kvmalloc(value_size, GFP_KERNEL);
+> 	memalloc_nofs_restore();
+>
+> to apply GFP_NOFS to allocations in the pte population code to avoid
+> memory reclaim recursion in kvmalloc.
 
-On Mon, Feb 27, 2023 at 10:58:47PM +0000, Edward Cree wrote:
-> On 27/02/2023 22:04, Daniel Xu wrote:
-> > I don't believe full L4 headers are required in the first fragment.
-> > Sufficiently sneaky attackers can, I think, send a byte at a time to
-> > subvert your proposed algorithm. Storing skb data seems inevitable h=
-ere.
-> > Someone can correct me if I'm wrong here.
->=20
-> My thinking was that legitimate traffic would never do this and thus if
->  your first fragment doesn't have enough data to make a determination
->  then you just DROP the packet.
+What about this patch mentioned below? Is it the kasan allocations
+(kasan_populate_vmalloc()), which hasn't been taken care of in this
+patch. Does this means we need kvmalloc fixed instead for kasan allocations?
 
-Right, that would be practical. I had some discussion with coworkers and
-the other option on the table is to drop all fragments. At least for us
-in the cloud, fragments are heavily frowned upon (where are they not..)
-anyways.
+Though I agree we can have the fix like you mentioned above
+(as many of the API users are already doing above). Just wanted to have the
+full context of what is going on here.
 
-> > What I find valuable about this patch series is that we can
-> > leverage the well understood and battle hardened kernel facilities. =
-So
-> > avoid all the correctness and security issues that the kernel has sp=
-ent
-> > 20+ years fixing.
->=20
-> I can certainly see the argument here.  I guess it's a question of are
->  you more worried about the DoS from tricking the validator into think=
-ing
->  good fragments are bad (the reverse is irrelevant because if you can
->  trick a validator into thinking your bad fragment belongs to a previo=
-usly
->  seen good packet, then you can equally trick a reassembler into stitc=
-hing
->  your bad fragment into that packet), or are you more worried about the
->  DoS from tying lots of memory down in the reassembly cache.
+451769ebb7e792c3404db53b3c2a422990de654e
+Author:     Michal Hocko <mhocko@suse.com>
 
-Equal balance of concerns on my side. Ideally there are no dropping of
-valid packets and DoS is very hard to achieve.
+mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc
 
-> Even with reordering handling, a data structure to record which ranges=
- of
->  a packet have been seen takes much less memory than storing the compl=
-ete
->  fragment bodies.  (Just a simple bitmap of 8-byte blocks =E2=80=94 th=
-e resolution
->  of iph->frag_off =E2=80=94 reduces size by a factor of 64, not counti=
-ng all the
->  overhead of a struct sk_buff for each fragment in the queue.  Or you
->  could re-use the rbtree-based code from the reassembler, just with a
->  freshly allocated node containing only offset & length, instead of the
->  whole SKB.)
+Patch series "extend vmalloc support for constrained allocations", v2.
 
-Yeah, now that you say that, it doesn't sound too bad on space side. But
-I do wonder -- how much code and complexity is that going to be? For
-example I think ipv6 frags have a 60s reassembly timeout which adds more
-stuff to consider. And probably even more I've already forgotten.
+Based on a recent discussion with Dave and Neil [1] I have tried to
+implement NOFS, NOIO, NOFAIL support for the vmalloc to make life of
+kvmalloc users easier.
 
-B/c at least on the kernel side, this series is 80% code for tests. And
-the kfunc wrappers are not very invasive at all.  Plus it's wrapping
-infra that hasn't changed much for decades.
-
-
-> And having a BPF helper effectively consume the skb is awkward, as you
->  noted; someone is likely to decide that skb_copy() is too slow, try to
->  add ctx invalidation, and thereby create a whole new swathe of potent=
-ial
->  correctness and security issues.
-
-Yep. I did try that. While the verifier bits weren't too tricky, there
-are a lot of infra concerns to solve:
-
-* https://github.com/danobi/linux/commit/35a66af8d54cca647b0adfc7c1da710=
-5d2603dde
-* https://github.com/danobi/linux/commit/e8c86ea75e2ca8f0631632d54ef7633=
-81308711e
-* https://github.com/danobi/linux/commit/972bcf769f41fbfa7f84ce00faf06b5=
-b57bc6f7a
-
-But FWIW, fragmented packets are kinda a corner case anyways. I don't
-think it would be resonable to expect high perf when packets are in
-play.
-
-> Plus, imagine trying to support this in a hardware-offload XDP device.
->  They'd have to reimplement the entire frag cache, which is a much big=
-ger
->  attack surface than just a frag validator, and they couldn't leverage
->  the battle-hardened kernel implementation.
-
-Hmm, well this helper is restricted to TC progs for now. I don't quite
-see a path to enabling for XDP as there would have to be at a minimum
-quite a few allocations to handle frags. So not sure XDP is a factor at
-the moment.
-
->=20
-> > And make it trivial for the next person that comes
-> > along to do the right thing.
->=20
-> Fwiw the validator approach could *also* be a helper, it doesn't have =
-to
->  be something the BPF developer writes for themselves.
->=20
-> But if after thinking about the possibility you still prefer your way,=
- I
->  won't try to stop you =E2=80=94 I just wanted to ensure it had been c=
-onsidered.
-
-Thank you for the discussion. The thought had come to mind originally,
-but I shied away after seeing some of the reassembly details. Would be
-interested in hearing more from other folks.
+[1] http://lkml.kernel.org/r/163184741778.29351.16920832234899124642.stgit@noble.brown
 
 
-Thanks,
-Daniel
+Thanks
+-ritesh
