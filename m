@@ -2,197 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7DC6A6BFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6ABF6A6BFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjCAL5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S229781AbjCAL6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjCAL47 (ORCPT
+        with ESMTP id S229813AbjCAL6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:56:59 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2044.outbound.protection.outlook.com [40.107.223.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764BD2CC46;
-        Wed,  1 Mar 2023 03:56:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WDNaiQhykfqerTvP1OpHGth3wNtibK+x599XGrtSIb4dy9078rH0WslSglPcJjyobdWqTqp7QaS8x/Frk0Y0i8Dg9l3yGFuNC8nIqzm6bKhU2xGRsFePi6B/0/96xAVgkKTBH0tIDazY82BvVCC1WWBNj16MWa2dAwYj0jFlFDCvrI4W0VdzZDR60+bP4iWtzoMgJ5g8APytHzI7FDBWtigFMiUgKtPnSNQ2zCiG1cyjmNy7hiZQG2fpt+Q3TKr+TmDOSsVRutSid6pfDkHiRjjaXmG32Rnx7WmL0icAY3O51U5mJSfdiGkVd+WeOSMILKuSm/SjwXkuf0b1smDZ4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rdaX/H/FfIl7iktSsMfLiTNGaIQXFdQFw7iT/cpOO/U=;
- b=mdlK2IvDqsT81hppbDLNhyJfIJLmQA18QJ4oIvomSKWV5VvvR83yLeYkehjvTaVI4EvRDRfTEJ62OW22+kXDeFSWBEh6k9h6TEmvT8zRp3E7ZwZ2qcpUs37UDuU87223j1BJr7ajQeCYbD3qsfL2pOW+0KASU9C6DB8c85nnQrcxW/N6J7yzTdAylAFbQgq64BJGzclWEJL4TBLlkwNvy6NyonEYD3kvrP/XsGKkbWzf7upaR5Gg1+f5kwuo/zhFDwz6MignxGSaCuaIogTVMUTv9UKPfxih6LWHdepH6+9snCR3ZRzfO43fb+PhnzainApTUTIr4sb/kVaKQ7qL8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rdaX/H/FfIl7iktSsMfLiTNGaIQXFdQFw7iT/cpOO/U=;
- b=KwAhIYH1bEmUfGT9+zf3/6CYJnfLOEg2uxHN2tNurXFssQYmZfWT6iI7h98WfvQEDqWtadM9J7uzavEACI9LQiQwEtbqsZha9AIjxz1sgm9oRWUfrwlrIVqjCRm63F8D39MiIp97pfBm6CvvNGtIDBjfzxjROdB4PVSQSTT9n/vjL46R1IrAF4OOmVN+y5RttHQKa84ua5sTp0UTKIRYOMQQGHB4HuapNPRJDNUeHfVcOsCUt1PF+geF+X91H/214H3ORYvktqTFdaqDIBZ7BPSp3hqoSCq5CDckhhbxcvm0zMPueeCb9HE02lEF9lC/Ru0lIZLN60+rcrcP4w4S1Q==
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
- DS0PR12MB8270.namprd12.prod.outlook.com (2603:10b6:8:fe::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.30; Wed, 1 Mar 2023 11:56:53 +0000
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0]) by DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0%9]) with mapi id 15.20.6134.030; Wed, 1 Mar 2023
- 11:56:53 +0000
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: RE: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Thread-Topic: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Thread-Index: AQHZSqQUcW4yC19F/EyRW9qbZsaOO67jpaAAgAClToCAAYhzAA==
-Date:   Wed, 1 Mar 2023 11:56:53 +0000
-Message-ID: <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
-References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
- <20230227120702.13180-3-kyarlagadda@nvidia.com> <Y/1oqr0RfD7KVA4y@kernel.org>
- <Y/3zVdgnVz8BvGGl@ziepe.ca>
-In-Reply-To: <Y/3zVdgnVz8BvGGl@ziepe.ca>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5769:EE_|DS0PR12MB8270:EE_
-x-ms-office365-filtering-correlation-id: 29d8a4af-1396-4832-1584-08db1a4c0ca8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +hJNQWbrCoqsuYJXd932RemB01gHBazBVQaRnlpzSVeNrrgZ+cBjH71czrcc6sPkJJ9cBYIRMA2G5CnnD0aqbLQUBN9IJcHacwFrcSNhPmfp8hzP6ZqKIeJoCBG4i7dJ4mAxNSOekGGTGIpe2fvniVjo89i9gx10dQF40/J7Nwe3mpalhKfW9rRBtmYG4x4HMCuI+2gCqu2pGIqG1KNOZW2NJUpf0ywif/5R66D3HbuWLIfbYQUI681GeUZE3dFMwLh4UHsBRCHzh3EHGLXMrfJ66ft0KwI+spi39f21frRib7z/nB6xgJ7onauvviKP1jYUAQy2A7tKLJsXzHaM6a6EgGOBgLxZczxTbQtLrPCihrpvKpuVtVxVZj03fYTn413MOM6dgcX4uiNlfqfHQBs180QDKY9JAThYue+ItH8QZ29Qk1+TjVrnLXWh6UEk3/DLHP54wBqT3BYJVb5n0Gt1xnA7iqxAApvPL8vxWMtIqapNv3d3RgGvpfDvZBFvQn4a+1r2+s9TJ2jubVaV8pqPDjLorThDwrLERBmaMtW+HortMHERYolaAiIVGgcx78NNo8wRLltqlR8RsWEMEnIyKVwBuxod17IbcaQT8pIgCkgNwd28ib4pHIXq6L+be07c2pqhwPTHyQdKE60e2UcRCjMOWOyf/RGdUP8ejU0D08VxMS2ybk2/j4H+H2m5jk/S+CPAvq+Q6BEUkTfeSQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199018)(122000001)(38100700002)(38070700005)(52536014)(86362001)(2906002)(7416002)(64756008)(66556008)(66476007)(66446008)(5660300002)(55016003)(66946007)(8676002)(4326008)(41300700001)(8936002)(478600001)(76116006)(53546011)(9686003)(6506007)(186003)(26005)(83380400001)(110136005)(54906003)(316002)(7696005)(71200400001)(33656002)(107886003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3Dik6+/PG+LL2mIg6JgE6CBaPuQZrDMi+QIg0eVPyzTwD+i3weXelMoHQXSr?=
- =?us-ascii?Q?0fouohplr0M5m+RLVG+5nOaqMO4ztcQ1nPRT6WyakmZ0XCp9p4tWaLQT/yQC?=
- =?us-ascii?Q?lQ7jk31oi6U7bG8jmf6ChjdhyT8FUD0gkAOfChklP65m9uetRO9uxZnwy5mj?=
- =?us-ascii?Q?EoJKV+2Sp4KYiHC3tvFICDoVthMBXEfgDY0JYEop74IN1RZ0XA6VeAe1pC4c?=
- =?us-ascii?Q?+D5A3bFHAUaaFJOjCvqN1MC0wHbljkI6CMqUTUPHm/BeGq50JwktIZBXRy0D?=
- =?us-ascii?Q?ayU9ci18J+rO2+TDCM/PLpVMudU/86g1kV3pOzF651tmHA5F5CZOrrcUM7n9?=
- =?us-ascii?Q?hFfX/20Y8DT/BqqA3pMZ3vbOfmSrMrEMEyX0HKeKgOKe+BGdjAVnVPSouNtu?=
- =?us-ascii?Q?tBvbeHGFhFDL9Efv7u2GDHpaGevBYOC0s5AbWzWAIRNVNfTDfotAXyNrPWcf?=
- =?us-ascii?Q?rwz9xW4eVO5LH589AtOE6BhaI7Eq+J8sZ/oFg/bCWjQcRhwn2R7iJxaLZ+O9?=
- =?us-ascii?Q?N1QRlrzj6f27+fsEu7nLBUAa0A+T4Qq31kuhM2M+QArT/0K+bkh+KFShh2HT?=
- =?us-ascii?Q?i/MZf2l4WsQvrksUuOATPQqB9Vgsre6auMEMo70gmv6OFjqdN/RWdwljTExG?=
- =?us-ascii?Q?vF06JhfZ36Z5l3IMyxZcRUxPccki697Km+94S47R6zWV1Hz+2i3swN4QY/EC?=
- =?us-ascii?Q?oudQmBINI2qkHl0aISsjgQlSq+U5M+Grd8WZE4PmkrI5X6h7vcYVOwcNr8i2?=
- =?us-ascii?Q?t5BakPlZ+JUwSjLhR6RDJ9KroZ5jMwobvJleIcCYyGFVIi5wiTWCUNmWgBvy?=
- =?us-ascii?Q?BuHqmI3XinOJ+w9GU/TqPLYIp2N4xe7ojIQaxOLSHkqrSok0VvFJgEVTbE+b?=
- =?us-ascii?Q?Hu6IXdUXT2MFBVhjZ5iBFmWG29Sar5DISTWRi+ma4I+/FZ3KpowDZN7eCk3X?=
- =?us-ascii?Q?I5ch2NpcA9T4Zh5B47C4eM7QRl7a1kMQR6SFbqoEm8/LTeeoRUfUgQdTSydE?=
- =?us-ascii?Q?7Rq26U6s4BXJttU6PDqUdlOcOjFuQC/Vj7RqrZ4hjnLjuWnpd+LeJvG+TelB?=
- =?us-ascii?Q?Op/K7tQ95rACOSMinS4uPdIsoVsmexN3aXWO/5ECP96Z36EEjpYv9BUk+IC1?=
- =?us-ascii?Q?6VDwGKRE9qGuep8PdcP0SizIVN9uMPbygxopUH2Q0Oi0S3kLL7Kos5fkeLi7?=
- =?us-ascii?Q?REnkbGuH0jfok3prgt32jvwSoLM766i6Qhd1igMllTiL0GbFX8Vh3S9Wvb79?=
- =?us-ascii?Q?A4vsLvghNQUjLBpPZFjWN2dTiG8VYtYQ7gTFm60MZ5AB01i6n0WS0lQCuEQ5?=
- =?us-ascii?Q?rht4D/cuZ40DQ2GQiSnUJfqVGWEBE51JiypAGPF1GBowuLbe6gjc6n/74ZSz?=
- =?us-ascii?Q?/ZDwYR6sGZhVXDqYjeRYP990D0caSjL/djQNARL2J4rVd3UfMgBsMKu3wAD+?=
- =?us-ascii?Q?lXucg4pZb22Iy2MjCNIADmleGSNsb3h4gcHozDL61OCf/qbpNZZwnuenCPOb?=
- =?us-ascii?Q?NswQREZbxm3FnMs5uNijMP8mpBzhjO4uKeSxpbzdq0A3vRSP0Ra3qjUCL3HD?=
- =?us-ascii?Q?a611yEt9JeWu9erNOj8v2/TgOiYNfPvulXHsQ5Bi?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29d8a4af-1396-4832-1584-08db1a4c0ca8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2023 11:56:53.4611
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4Y+mIEc9kNi1ikl1MYxyQVIp/nk0yr8v8zEClKVe8voS/gNCOi26mHnImHb1uUdbuVkyF6oxHe0y/t6FCCLmvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8270
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 06:58:09 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AB515891;
+        Wed,  1 Mar 2023 03:58:08 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id B40215C004A;
+        Wed,  1 Mar 2023 06:58:04 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 01 Mar 2023 06:58:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677671884; x=1677758284; bh=DW3WbC75cz
+        X0LV0l9cu2j+K1Qv1UGQIUsfyeJalR0c4=; b=hLq3+W3boNQL75WBk1+3ShBkTz
+        9Gh0/EoeQQYqXomMVJ2NuF+8u8PZb5Yk0MyShtm+eBI25C6o21OiZbRYuvYFUe+F
+        6FkWSlDyP83+aDWERuh+uK/b4vp6kJQ0/rJjTHj4dGv8X+yXL5nD4+bU0+BcAary
+        hL/ZaSoDuYfUoD7p/RaCWT6pNQ6DiBICr4cMHBWhMt2+kMR0z/tUNGMCskCSL3qr
+        lhwhyxsPfeqWGyvGo5XGT1WghlMzUEO+/nvJlCuRFInJET99GG3mMIEVuY6vVCPJ
+        Sh/wpFENA4zLWZr/vS+cl4NzPJ2ltzZBr2Gcf5y6qc7Zn4juWPyYcc6eCnJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677671884; x=1677758284; bh=DW3WbC75czX0LV0l9cu2j+K1Qv1U
+        GQIUsfyeJalR0c4=; b=FMRjJwkS5K+X0aFn3FqMwzUeQvzq24yiOf+kGLzFq802
+        GwWWIeTctc4rEWpiJOHb5MAlCY2y+yoX3OCo+bomfyTKKBTanmGg7CgPgE9lCuaT
+        hvaK/A32KlqwNGHJx8kejNtNWanZnLzLXPZRlz1xQtvpmhr9uMiR4BbiZi5eOFlr
+        YNE52w2HH7Ruj0hWR0wLDYGeytrbBCMuyfN+LV8e0bjHwixKQcGXkYJgQYZVWdv6
+        7SNMdGWoi442mXiwOHywwbO1zWqkpXVT55a6jcKDqHWamCOy6w1iB4wm8OQoVoSI
+        9OqSr5xTC4EgVpVkdT2MB3gRR9olb6Eg5b/Qz43+UA==
+X-ME-Sender: <xms:zD3_YwXkzxdEZqNJQiYdHWpLYWWAizy_YX87cx7F8FJi46zWkUoIAg>
+    <xme:zD3_Y0mw8rwNKTnXL08Ts6EHKbcWfUp0rkt7y6gsDrfBo_H96PwleH3Y_RohzZBt_
+    xYQKZ0s8R0Fp5VX2RY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:zD3_Y0b9YkYTaGxkS5tu06FYE_gtq5VGduPopIRcDwUdSBjji3TAxQ>
+    <xmx:zD3_Y_UmHl0K0n8H82M33u8R27OhwF1TQiCxVLvXmZjL3V3MyZfvgw>
+    <xmx:zD3_Y6l49lj89V8sSB879wFyYG5jsWP9TqhwkTrRQQRV9vsLVcgwOQ>
+    <xmx:zD3_Yxv2m2lLI9T2cS9dwHSC0IgZab28m-P3A3NiswR_TSD0V27H1w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 685B9B60086; Wed,  1 Mar 2023 06:58:04 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <b19a25bd-7fa1-4220-b8d6-919399a9e7d7@app.fastmail.com>
+In-Reply-To: <20230301112935.GD5409@thinkpad>
+References: <20230228164752.55682-1-manivannan.sadhasivam@linaro.org>
+ <c5e36887-f84d-40ef-bef9-8a3947bbb73f@app.fastmail.com>
+ <20230301112935.GD5409@thinkpad>
+Date:   Wed, 01 Mar 2023 12:57:43 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>
+Cc:     "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/16] Qcom: Fix PCI I/O range defined in devicetree
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 1, 2023, at 12:29, Manivannan Sadhasivam wrote:
+> On Tue, Feb 28, 2023 at 05:58:37PM +0100, Arnd Bergmann wrote:
+>> On Tue, Feb 28, 2023, at 17:47, Manivannan Sadhasivam wrote:
+>> > Hi,
+>> >
+>> > This series fixes the issue with PCI I/O ranges defined in devicetree of
+>> > Qualcomm SoCs as reported by Arnd [1]. Most of the Qualcomm SoCs define
+>> > identical mapping for the PCI I/O range. But the PCI device I/O ports
+>> > are usually located between 0x0 to 64KiB/1MiB. So the defined PCI addresses are
+>> > mostly bogus. The lack of bug report on this issue indicates that no one really
+>> > tested legacy PCI devices with these SoCs.
+>> >
+>> > This series also contains a couple of cleanup patches that aligns the entries of
+>> > ranges property.
+>> 
+>> Looks good to me. I already commented that we may also want to use
+>> 64KB everywhere instead of 1MB for the per-host window size.
+>
+> I also spotted this discrepancy while working on this series, but the size
+> seems to be not universal across SoCs from many vendors. So I settled with
+> whatever range that was used before.
 
-> -----Original Message-----
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: 28 February 2023 17:58
-> To: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Krishna Yarlagadda <kyarlagadda@nvidia.com>; robh+dt@kernel.org;
-> broonie@kernel.org; peterhuewe@gmx.de;
-> krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org; linux-
-> tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> kernel@vger.kernel.org; thierry.reding@gmail.com; Jonathan Hunter
-> <jonathanh@nvidia.com>; Sowjanya Komatineni
-> <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
-> Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
->=20
-> On Tue, Feb 28, 2023 at 04:36:26AM +0200, Jarkko Sakkinen wrote:
-> > On Mon, Feb 27, 2023 at 05:37:01PM +0530, Krishna Yarlagadda wrote:
-> > > TPM devices raise wait signal on last addr cycle. This can be detecte=
-d
-> > > by software driver by reading MISO line on same clock which requires
-> > > full duplex support. In case of half duplex controllers wait detectio=
-n
-> > > has to be implemented in HW.
-> > > Support hardware wait state detection by sending entire message and l=
-et
-> > > controller handle flow control.
-> >
-> > When a is started sentence with the word "support" it translates to "I'=
-m
-> > too lazy to write a proper and verbose description of the implementatio=
-n"
-> > :-)
-> >
-> > It has some abstract ideas of the implementation, I give you that, but =
-do
-> > you think anyone ever will get any value of reading that honestly? A bi=
-t
-> > more concrette description of the change helps e.g. when bisecting bugs=
-.
->=20
-> I would expect SPI_TPM_HW_FLOW to be documented in the kdocs to a
-> level that any other HW could implement it as well.
-HW implementation can be controller specific. I would add comments in the
-header to say CMD-ADDR-DATA is sent as single message with this flag.
->=20
-> > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 le=
-n,
-> > > +			 u8 *in, const u8 *out)
-> > > +{
-> > > +	struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
-> > > +	struct spi_controller *ctlr =3D phy->spi_device->controller;
-> > > +
-> > > +	/*
-> > > +	 * TPM flow control over SPI requires full duplex support.
-> > > +	 * Send entire message to a half duplex controller to handle
-> > > +	 * wait polling in controller.
-> > > +	 * Set TPM HW flow control flag..
-> > > +	 */
-> > > +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX) {
-> > > +		phy->spi_device->mode |=3D SPI_TPM_HW_FLOW;
->=20
-> Shouldn't we check that this special flow is supported when the SPI
-> device is bound to the tpm in the first place?
-TPM device connected behind half duplex controller can only work
-this way. So, no additional flag needed to check.
-KY
->=20
-> Jason
+Makes sense. We could add another patch if necessary of course, and
+it probably doesn't matter much. OTOH I don't think there is anything
+SoC specific in this and we used to just truncate this to 64KB per
+domain. It's only really a problem if the total size of the I/O ports
+for all domains in a system exceeds the 16MB of virtual memory area.
+
+     Arnd
