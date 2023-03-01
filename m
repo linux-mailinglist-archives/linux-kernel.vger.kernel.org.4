@@ -2,102 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218726A73C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B24A6A73C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjCAStA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S230029AbjCASt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjCASs5 (ORCPT
+        with ESMTP id S229891AbjCASt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:48:57 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C303B23B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:48:56 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id y10so10765387qtj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:48:56 -0800 (PST)
+        Wed, 1 Mar 2023 13:49:27 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358333C79D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:49:20 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id ay18so8599257pfb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:49:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lgEtVBqhYQM2xpZGmxizRfxew/mOAe3TsmV4ZLiINaw=;
-        b=RsU5IMSG1sBe8t0gbZfGIvbtH9WMsbxCL0HIBI7r73OWudhZwiNkJ2YObGnL2Zv04k
-         JxVdGGqOBoOZDlrIWfs/R3WB9fUbETelHfXwOVkAgu9Sqh/BPxOB4WjLODzjoANboTmg
-         1g0lfzw5n6VGidrPdkQZsJ33K/iw8HptueoykObmlSEyXjYj9GeQNWZeyfvPtrWBG0fs
-         lZqMsXUSwBlJiHvswDQMCgCQpE4bwqkmLhuGNWKfrWDpsolPkm0BEjZBXjUaFgtBKQTH
-         9qLtbkvurAGjLkLyr0OI8h19AjxJgbiSh0JOPyC9cJzoWST/ziLtZ+R14POzbWDwcY09
-         PZnA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pMQQzFdkiDEMf5Lr2n3BwV5AYMp4CNjDkovaXSZyFms=;
+        b=J+xPzgJ7jDGr5CYcone+e9DE54pljgW32Y0/LKSSIYaJh1zTeRnuMlBiXGFpiNbYHX
+         A4AlmFGnl3Fj5xBNUb23i7gv7tfeqnvAFfcJHruoDSK3GS+NPpxlgnJ+kihgY8v5G91M
+         H444svdx1CWVwCHJl5CrolZGaR3NnPt/IPRLJYtPuIqmVk67ngsGeGBTV05GFJcCJrYy
+         bkMIIDjqfwRqK+XMONQ7/rTZ55dRbfWq4yzcbkx42MAcUo8+z8ycwxXWuq/E/0QBc4Ub
+         f0IJMV0cPHWdGAUuz7afMU3fdqn9TtS6Gu+h0hqD3soTRYQ5JzxpU4ll4mjav8Q/UtgL
+         vXYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lgEtVBqhYQM2xpZGmxizRfxew/mOAe3TsmV4ZLiINaw=;
-        b=N2i3ChypzL/gFB675DNkBvJnetmAwjXgRJ1YbeQBGBF4FWJqkEtD8+0kSoz912CxS+
-         iuBMPHwKu8lh/RcmAX70ygWmViuPzHN0K+IgCg9I143ATbK+xVgi1YF77GU1SRKrMNS0
-         CNcVfM2IOsuXvEbN4gHdpzp1pV0kPrkv4y/QsxCQ5xWjr0AYXCQGIgCNGv1zC/yNYt4g
-         pgFCebK097SJvXlFK77n9r1aUmSV6DUtKSauSDnywo6UD6tEa16OdnXXWumWIjtrF0Mx
-         g9WIFXXKaUOLCDqlob/ov4vUcrSApeN7eRq+cG/IWjtnHpduqPZSRVQgtzY35NjELFYF
-         Mb/g==
-X-Gm-Message-State: AO0yUKWmu1cch/uwLMxIyHNd5FjYr/rVMQ3af1ut4K4LiQxiGrK3RKi4
-        UwpKHVPes9wIPSWnjUKs+60dkg==
-X-Google-Smtp-Source: AK7set+1bLqI9kSwZBv3jy3IhBPxDvILB+hOxhOtidyH7eT01aGzUUHCgN8J7MjDAUGUV0Zy+9kb/A==
-X-Received: by 2002:ac8:7d42:0:b0:3bf:e005:3a85 with SMTP id h2-20020ac87d42000000b003bfe0053a85mr12492782qtb.5.1677696535305;
-        Wed, 01 Mar 2023 10:48:55 -0800 (PST)
-Received: from ghost.leviathan.sladewatkins.net (pool-108-44-32-49.albyny.fios.verizon.net. [108.44.32.49])
-        by smtp.gmail.com with ESMTPSA id k14-20020ac8604e000000b003bffe7fdc38sm246366qtm.9.2023.03.01.10.48.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 10:48:54 -0800 (PST)
-Message-ID: <26116769-3620-0544-cdaf-02516ab5ae60@sladewatkins.net>
-Date:   Wed, 1 Mar 2023 13:48:52 -0500
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pMQQzFdkiDEMf5Lr2n3BwV5AYMp4CNjDkovaXSZyFms=;
+        b=xF2CboYib8Zef7jdTfX/LMZBr8QjfoUHm7JkoaZs7qOeXslnc7YNyyFn4n3wlUBwgL
+         rPIQZaYwMErIiCTS/cdxFWN/Py07+SlHFp2R1ARTJmZKGeYuwkRO+X0XGj9ptJc5NRmX
+         aoTVI1Agn8mB3v8zoxIz1W5VcEEPg2fmhe7Uj0pM6w0H6WPUS+Kd60fQxokFKDIWYXVi
+         6snAHACJh48r9UBpwwhpaqpD5fago3wcTECKc6M+4u/gg0F8baLNm5bWHgx1fTt2ELTA
+         yB2ByIZZXpYvpbF7HGmUSTI3abS05Bi9R4xt7btK9iuCuMUHwxh9sgTFltSARipt1jPr
+         Kbvg==
+X-Gm-Message-State: AO0yUKUcde9AoBjdfbOROD37HqHcX62dPY8lL3GFnbcjddo9f9uthVEy
+        ZPGmb8hg/uzeJfXML6avMPl0bg==
+X-Google-Smtp-Source: AK7set8HfL876T8Ip+u2v23IJ1Samt8XAvuDlN918IHZfQ9BN9sQpxRBZqwSGZG689I20mVeCEMMVg==
+X-Received: by 2002:aa7:8ece:0:b0:5e5:6452:223f with SMTP id b14-20020aa78ece000000b005e56452223fmr6081525pfr.8.1677696559546;
+        Wed, 01 Mar 2023 10:49:19 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:a1e5:28cc:d6dd:89d0])
+        by smtp.gmail.com with ESMTPSA id m9-20020aa79009000000b005dd65169628sm8450771pfo.144.2023.03.01.10.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 10:49:19 -0800 (PST)
+Date:   Wed, 1 Mar 2023 11:49:16 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v5] remoteproc: imx_dsp_rproc: add custom memory copy
+ implementation for i.MX DSP Cores
+Message-ID: <20230301184916.GA1326133@p14s>
+References: <20230221170356.27923-1-iuliana.prodan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5.4 00/13] 5.4.234-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, rwarsow@gmx.de
-References: <20230301180651.177668495@linuxfoundation.org>
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <20230301180651.177668495@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221170356.27923-1-iuliana.prodan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 13:07, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.234 release.
-> There are 13 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi Iuliana,
+
+On Tue, Feb 21, 2023 at 07:03:56PM +0200, Iuliana Prodan (OSS) wrote:
+> From: Iuliana Prodan <iuliana.prodan@nxp.com>
 > 
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
+> The IRAM is part of the HiFi DSP.
+> According to hardware specification only 32-bits write are allowed
+> otherwise we get a Kernel panic.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.234-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Therefore add a custom memory copy and memset functions to deal with
+> the above restriction.
+> 
+> Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+> ---
+> Changes since v4
+> - use GENMASK;
+> - s/ioread32/readl;
+> - s/iowrite32/writel;
+> - use for loop with writel instead of __iowrite32_copy;
+> - update multi-line comment format.
+> 
 
-5.4.234-rc1 compiled and booted on my x86_64 test system. No errors or
-regressions.
+This looks good now.  I will queue this on March 13th when 6.3-rc2 is out.
 
-Tested-by: Slade Watkins <srw@sladewatkins.net>
+Thanks,
+Mathieu
 
--- Slade
-
+> Changes since v3
+> - remove Reported-by
+> 
+> Changes since v2
+> - fix warning "cast from pointer to integer of different size"
+> reported by kernel test robot.
+> 
+> Changes since v1
+> - added missing check for cases when the memory slot is bigger than the file size;
+> - added a custom memset function
+> - removed is_iomem flag since is not used here
+> - updated custom memcpy function to avoid reading after end of source
+> ---
+>  drivers/remoteproc/imx_dsp_rproc.c | 187 ++++++++++++++++++++++++++++-
+>  1 file changed, 186 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+> index 81d3a01e1444..dcbb957bc7ac 100644
+> --- a/drivers/remoteproc/imx_dsp_rproc.c
+> +++ b/drivers/remoteproc/imx_dsp_rproc.c
+> @@ -739,6 +739,191 @@ static void imx_dsp_rproc_kick(struct rproc *rproc, int vqid)
+>  		dev_err(dev, "%s: failed (%d, err:%d)\n", __func__, vqid, err);
+>  }
+>  
+> +/*
+> + * Custom memory copy implementation for i.MX DSP Cores
+> + *
+> + * The IRAM is part of the HiFi DSP.
+> + * According to hw specs only 32-bits writes are allowed.
+> + */
+> +static int imx_dsp_rproc_memcpy(void *dest, const void *src, size_t size)
+> +{
+> +	const u8 *src_byte = src;
+> +	const u32 *source = src;
+> +	u32 affected_mask;
+> +	u32 *dst = dest;
+> +	int i, q, r;
+> +	u32 tmp;
+> +
+> +	/* destination must be 32bit aligned */
+> +	if (!IS_ALIGNED((uintptr_t)dest, 4))
+> +		return -EINVAL;
+> +
+> +	q = size / 4;
+> +	r = size % 4;
+> +
+> +	/* copy data in units of 32 bits at a time */
+> +	for (i = 0; i < q; i++)
+> +		writel(source[i], &dst[i]);
+> +
+> +	if (r) {
+> +		affected_mask = GENMASK(8 * r, 0);
+> +
+> +		/*
+> +		 * first read the 32bit data of dest, then change affected
+> +		 * bytes, and write back to dest.
+> +		 * For unaffected bytes, it should not be changed
+> +		 */
+> +		tmp = readl(dest + q * 4);
+> +		tmp &= ~affected_mask;
+> +
+> +		/* avoid reading after end of source */
+> +		for (i = 0; i < r; i++)
+> +			tmp |= (src_byte[q * 4 + i] << (8 * i));
+> +
+> +		writel(tmp, dest + q * 4);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Custom memset implementation for i.MX DSP Cores
+> + *
+> + * The IRAM is part of the HiFi DSP.
+> + * According to hw specs only 32-bits writes are allowed.
+> + */
+> +static int imx_dsp_rproc_memset(void *addr, u8 value, size_t size)
+> +{
+> +	u32 tmp_val = value;
+> +	u32 *tmp_dst = addr;
+> +	u32 affected_mask;
+> +	int q, r;
+> +	u32 tmp;
+> +
+> +	/* destination must be 32bit aligned */
+> +	if (!IS_ALIGNED((uintptr_t)addr, 4))
+> +		return -EINVAL;
+> +
+> +	tmp_val |= tmp_val << 8;
+> +	tmp_val |= tmp_val << 16;
+> +
+> +	q = size / 4;
+> +	r = size % 4;
+> +
+> +	while (q--)
+> +		writel(tmp_val, tmp_dst++);
+> +
+> +	if (r) {
+> +		affected_mask = GENMASK(8 * r, 0);
+> +
+> +		/*
+> +		 * first read the 32bit data of addr, then change affected
+> +		 * bytes, and write back to addr.
+> +		 * For unaffected bytes, it should not be changed
+> +		 */
+> +		tmp = readl(tmp_dst);
+> +		tmp &= ~affected_mask;
+> +
+> +		tmp |= (tmp_val & affected_mask);
+> +		writel(tmp, tmp_dst);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * imx_dsp_rproc_elf_load_segments() - load firmware segments to memory
+> + * @rproc: remote processor which will be booted using these fw segments
+> + * @fw: the ELF firmware image
+> + *
+> + * This function loads the firmware segments to memory, where the remote
+> + * processor expects them.
+> + *
+> + * Return: 0 on success and an appropriate error code otherwise
+> + */
+> +static int imx_dsp_rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+> +{
+> +	struct device *dev = &rproc->dev;
+> +	const void *ehdr, *phdr;
+> +	int i, ret = 0;
+> +	u16 phnum;
+> +	const u8 *elf_data = fw->data;
+> +	u8 class = fw_elf_get_class(fw);
+> +	u32 elf_phdr_get_size = elf_size_of_phdr(class);
+> +
+> +	ehdr = elf_data;
+> +	phnum = elf_hdr_get_e_phnum(class, ehdr);
+> +	phdr = elf_data + elf_hdr_get_e_phoff(class, ehdr);
+> +
+> +	/* go through the available ELF segments */
+> +	for (i = 0; i < phnum; i++, phdr += elf_phdr_get_size) {
+> +		u64 da = elf_phdr_get_p_paddr(class, phdr);
+> +		u64 memsz = elf_phdr_get_p_memsz(class, phdr);
+> +		u64 filesz = elf_phdr_get_p_filesz(class, phdr);
+> +		u64 offset = elf_phdr_get_p_offset(class, phdr);
+> +		u32 type = elf_phdr_get_p_type(class, phdr);
+> +		void *ptr;
+> +
+> +		if (type != PT_LOAD || !memsz)
+> +			continue;
+> +
+> +		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
+> +			type, da, memsz, filesz);
+> +
+> +		if (filesz > memsz) {
+> +			dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
+> +				filesz, memsz);
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +
+> +		if (offset + filesz > fw->size) {
+> +			dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
+> +				offset + filesz, fw->size);
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +
+> +		if (!rproc_u64_fit_in_size_t(memsz)) {
+> +			dev_err(dev, "size (%llx) does not fit in size_t type\n",
+> +				memsz);
+> +			ret = -EOVERFLOW;
+> +			break;
+> +		}
+> +
+> +		/* grab the kernel address for this device address */
+> +		ptr = rproc_da_to_va(rproc, da, memsz, NULL);
+> +		if (!ptr) {
+> +			dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
+> +				memsz);
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +
+> +		/* put the segment where the remote processor expects it */
+> +		if (filesz) {
+> +			ret = imx_dsp_rproc_memcpy(ptr, elf_data + offset, filesz);
+> +			if (ret) {
+> +				dev_err(dev, "memory copy failed for da 0x%llx memsz 0x%llx\n",
+> +					da, memsz);
+> +				break;
+> +			}
+> +		}
+> +
+> +		/* zero out remaining memory for this segment */
+> +		if (memsz > filesz) {
+> +			ret = imx_dsp_rproc_memset(ptr + filesz, 0, memsz - filesz);
+> +			if (ret) {
+> +				dev_err(dev, "memset failed for da 0x%llx memsz 0x%llx\n",
+> +					da, memsz);
+> +				break;
+> +			}
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static int imx_dsp_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
+>  {
+>  	if (rproc_elf_load_rsc_table(rproc, fw))
+> @@ -753,7 +938,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
+>  	.start		= imx_dsp_rproc_start,
+>  	.stop		= imx_dsp_rproc_stop,
+>  	.kick		= imx_dsp_rproc_kick,
+> -	.load		= rproc_elf_load_segments,
+> +	.load		= imx_dsp_rproc_elf_load_segments,
+>  	.parse_fw	= imx_dsp_rproc_parse_fw,
+>  	.sanity_check	= rproc_elf_sanity_check,
+>  	.get_boot_addr	= rproc_elf_get_boot_addr,
+> -- 
+> 2.17.1
+> 
