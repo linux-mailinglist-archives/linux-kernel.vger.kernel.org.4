@@ -2,109 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76ADD6A75C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A2A6A75C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 22:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCAVBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 16:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S229652AbjCAVA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 16:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCAVBC (ORCPT
+        with ESMTP id S229540AbjCAVA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 16:01:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EDD521CD;
-        Wed,  1 Mar 2023 13:01:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD885B80EE1;
-        Wed,  1 Mar 2023 21:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742DBC4339E;
-        Wed,  1 Mar 2023 21:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677704458;
-        bh=Ijy28NfIAolHq1kijXKPv1A9Prn6Z4PgPnz0SF2ZvmE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qwnNOgDopWNiUb4dKzA0Y6sT0gASegFoNl0l1oHhxaeFwidRVACqKvo9Zw4Lq2uLa
-         DkRPAf51+Vr8EEyQ7IwC/Bj5H1tJVAjANsJyJLagfb6dQBIR+9OsGjhNPWRat2SOtH
-         5jiteysKnyeBDdmsXExcQfoBUuLwKJRarM2/PpsDCzlFSlDaYiuiIN6Yn50f7C1yat
-         Kl5hMVdu4kXvgesUhxebkvb/oOudYsbAKXyirkpGD3xB/LvTXAtTlhB/h40wU7a9WI
-         X+6tPt1WSw58XL3OkDSeUjRPC3OEETL51n26pr7wfG3C7UJmYklBJjZHN6oNtzMzrG
-         H1pgP6Xi9fu0w==
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-53852143afcso389451967b3.3;
-        Wed, 01 Mar 2023 13:00:58 -0800 (PST)
-X-Gm-Message-State: AO0yUKUkNco2rq4K5o5XxG7Qrs1MolodYnCt0+yadl9+JyNaMT4qDo7m
-        2DczIbGS4CB2Hvw33a1Rv2MKLhdYuXOfAeUKqg==
-X-Google-Smtp-Source: AK7set/B7w4SIUVUY+fuTrfn39/aDxu+LSL+nDi5aDHHQnm81UFIS2ScAXvxaj+SUvgnwt845OQ2PIVb1st0BjISJs0=
-X-Received: by 2002:a05:6102:3ca9:b0:41e:bccf:5669 with SMTP id
- c41-20020a0561023ca900b0041ebccf5669mr6637793vsv.2.1677704437053; Wed, 01 Mar
- 2023 13:00:37 -0800 (PST)
+        Wed, 1 Mar 2023 16:00:57 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E604DE39
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 13:00:56 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id o15so56847258edr.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 13:00:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677704454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P2kasoRjb1+wciE4LnUC2thgmhUmXODjqV4vRSm0GrQ=;
+        b=W7barMoQHh4OpBpyETO0/gkI5dClRC/69osO6LGoB7PZbyXAonsXRwPJeNy0OBf5UL
+         LXrKyhtV5pnGDcCIi4Piv/DxPPYhzjcQY6T6uNuSed9veKu1yjBJL4X+FkKb5bJYV9Yt
+         sE10hdpblg9K3wuqUwCurVvteg0oZ2CQ2bR4f73Gnt83eCIkCgy9LyANkDgWVMDqEBeJ
+         YZBj7K+xVkhICy6nS06wRn/bS8ni9axi1Ee9BCCArZ2aJbtEc/4KOm7qBrwJnCf7/X1M
+         WUrCsMG7Zvo1Tp+cjmRkFYImZEqA3rnUxBKoAy8NQeC6T/HaG9u5iIbM+jKerspIbLfZ
+         3YFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677704454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P2kasoRjb1+wciE4LnUC2thgmhUmXODjqV4vRSm0GrQ=;
+        b=4EONwLqFo2vCHZUYSespQ31omzua6Bu7yW7S2JMawStGsMH5CQLV3tDiYE5zc9a/yH
+         ujU18rnYQcnZJd51IT5RdLf3xEeTizBb2fTkLXLRATmBidVyqh+FCCAgGMVOYJ1Wf9r+
+         DTiFA9m6eTSz/LFFu5s0v09gVnv4iiuw99qP1WWdzUn8mFscboXMWHaf26EicfeKru8C
+         TR05GmYnDZGBc7AVIRdluMa0TLv7SdQ45yxLI4HWcoHu+xvjyLLac6XxV+8mY03uREjv
+         QS0fzMvns9VGfYOgaJvR5HWEM4f6iAaUEXiD2n1Hf44YfmC75xMACplx8yswS6Q8rXJ9
+         Cfwg==
+X-Gm-Message-State: AO0yUKXSgD1Vuxh9VQb9Fswuc15YSqOwnu14/zq5MxfnHYYLtsYAtxJy
+        +fyxHMiMV5fun8LzC08w5xYP1x1B0NX1Ejvua6xBJg==
+X-Google-Smtp-Source: AK7set8WhjZ+EUql0MKvPVALpu2QC0TPEikxqjdTRnnfGvepLuO+0VCK9ZPNqpgNDaswQPHgcICbMTezMh2iivOUnu0=
+X-Received: by 2002:a17:906:2308:b0:903:967b:42d8 with SMTP id
+ l8-20020a170906230800b00903967b42d8mr3815668eja.4.1677704454274; Wed, 01 Mar
+ 2023 13:00:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20230301185209.274134-1-jjhiblot@traphandler.com> <20230301185209.274134-4-jjhiblot@traphandler.com>
-In-Reply-To: <20230301185209.274134-4-jjhiblot@traphandler.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 1 Mar 2023 15:00:25 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJvYnBtaOwaRbNo5Eqp51yxhJpnSYQWEGfKjtZKjm7R4g@mail.gmail.com>
-Message-ID: <CAL_JsqJvYnBtaOwaRbNo5Eqp51yxhJpnSYQWEGfKjtZKjm7R4g@mail.gmail.com>
-Subject: Re: [PATCH 3/3] of: irq: release the node after looking up for "interrupts-extended"
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     saravanak@google.com, clement.leger@bootlin.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        zajec5@gmail.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Marc Zyngier <maz@kernel.org>, afaerber@suse.de,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nishanth Menon <nm@ti.com>, ssantosh@kernel.org,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-wireless@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
+References: <20230301193403.1507484-1-surenb@google.com> <Y/+wlg5L8A1iebya@cmpxchg.org>
+ <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Wed, 1 Mar 2023 13:00:43 -0800
+Message-ID: <CAC_TJvfZu7-3QWF6EyEphZusnk8gjM-w3bw3K26TBnoY221yeQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] psi: remove 500ms min window size limitation for triggers
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>, tj@kernel.org,
+        lizefan.x@bytedance.com, peterz@infradead.org, johunt@akamai.com,
+        mhocko@suse.com, keescook@chromium.org, quic_sudaraja@quicinc.com,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 12:53=E2=80=AFPM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
+On Wed, Mar 1, 2023 at 12:48=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
 >
-> When of_parse_phandle_with_args() succeeds, a get() is performed on
-> out_irq->np. And another get() is performed in of_irq_parse_raw(),
-> resulting in the refcount being incremented twice.
-> Fixing this by calling put() after of_irq_parse_raw().
+> On Wed, Mar 1, 2023 at 12:07=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.o=
+rg> wrote:
+> >
+> > On Wed, Mar 01, 2023 at 11:34:03AM -0800, Suren Baghdasaryan wrote:
+> > > Current 500ms min window size for psi triggers limits polling interva=
+l
+> > > to 50ms to prevent polling threads from using too much cpu bandwidth =
+by
+> > > polling too frequently. However the number of cgroups with triggers i=
+s
+> > > unlimited, so this protection can be defeated by creating multiple
+> > > cgroups with psi triggers (triggers in each cgroup are served by a si=
+ngle
+> > > "psimon" kernel thread).
+> > > Instead of limiting min polling period, which also limits the latency=
+ of
+> > > psi events, it's better to limit psi trigger creation to authorized u=
+sers
+> > > only, like we do for system-wide psi triggers (/proc/pressure/* files=
+ can
+> > > be written only by processes with CAP_SYS_RESOURCE capability). This =
+also
+> > > makes access rules for cgroup psi files consistent with system-wide o=
+nes.
+> > > Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers a=
+nd
+> > > remove the psi window min size limitation.
+> > >
+> > > Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+> > > Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraja@=
+quicinc.com/
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > ---
+> > >  kernel/cgroup/cgroup.c | 10 ++++++++++
+> > >  kernel/sched/psi.c     |  4 +---
+> > >  2 files changed, 11 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> > > index 935e8121b21e..b600a6baaeca 100644
+> > > --- a/kernel/cgroup/cgroup.c
+> > > +++ b/kernel/cgroup/cgroup.c
+> > > @@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct ke=
+rnfs_open_file *of,
+> > >       return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
+> > >  }
+> > >
+> > > +static int cgroup_pressure_open(struct kernfs_open_file *of)
+> > > +{
+> > > +     return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESO=
+URCE)) ?
+> > > +             -EPERM : 0;
+> > > +}
+> >
+> > I agree with the change, but it's a bit unfortunate that this check is
+> > duplicated between system and cgroup.
+> >
+> > What do you think about psi_trigger_create() taking the file and
+> > checking FMODE_WRITE and CAP_SYS_RESOURCE against file->f_cred?
+>
+> That's definitely doable and we don't even need to pass file to
+> psi_trigger_create() since it's called only when we write to the file.
+> However by moving the capability check into psi_trigger_create() we
+> also postpone the check until write() instead of failing early in
+> open(). I always assumed failing early is preferable but if
+> consolidating the code here makes more sense then I can make the
+> switch. Please let me know if you still prefer to move the check.
+>
 
-This looks like a band-aid to me. It only makes sense that the caller
-of of_irq_parse_raw() already holds a ref to out_irq->np. So the first
-of_node_get() in it looks wrong. It looks like the refcounting was
-originally balanced, but commit 2f53a713c4b6 ("of/irq: Fix device_node
-refcount in of_irq_parse_raw()") dropped the put on exit after 'got
-it!'. I'm not sure if just adding it back would be correct or not
-though.
+I always assumed the convention is to check the credentials on open()
+per Linus comment here:
 
-All this needs some test cases to be sure we get things right...
+https://lore.kernel.org/r/CAHk-=3DwhDkekE8n2LdPiKHeTdRnV--ys0V0nPZ76oPaE0fn=
+-d+g@mail.gmail.com/#t
 
-Rob
+--Kalesh
