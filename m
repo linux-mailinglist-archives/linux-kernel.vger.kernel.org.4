@@ -2,120 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D166A6EEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8CE6A6EF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjCAO7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S229849AbjCAPEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:04:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjCAO7I (ORCPT
+        with ESMTP id S229625AbjCAPE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:59:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3AE12BD7;
-        Wed,  1 Mar 2023 06:59:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A6A4B81084;
-        Wed,  1 Mar 2023 14:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0630BC433D2;
-        Wed,  1 Mar 2023 14:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677682744;
-        bh=Yqf9Ws2DwHgKm6RKTHWwgebUlFuviIC5Mpr3HYPHYMw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rSsYKIdcxo70HEhgfKeS6SyvlL/FIrQc4GDqJf8RNHWp2+mWnEq0OVjMa/KjgGkJj
-         VE4Pdz/5lZKXobmNg7Uk039lRQF3HJxeNHxrNndJpgDZYrBJfv4iK/9UQL7aoT/OtN
-         UuUm6kCuUrcZO7E7ZOJ74vqbqacktSVKlk+u7mFZ0bLrNYKpejvLpNu735mNhnL6uN
-         k+1NnbKB+LsnqVRruxNCAAoQUWGwU/MFvVkigPLmpk6Zb8Zxad6jbYrbXZMSBdIWAc
-         GRNXS1H27eFK7fHbkQiSjDlQCG42bMd5iraaTIwQgvW6NLAMiYX3gO1KFEgoeahTIW
-         m4QOgiw4EBGLw==
-Received: by mail-ua1-f47.google.com with SMTP id x40so3894209uaf.2;
-        Wed, 01 Mar 2023 06:59:03 -0800 (PST)
-X-Gm-Message-State: AO0yUKVRICwfvj0Z/QusH+VD+WiuQjrJEH/DHyeNxnaWpXtQJWFOVunc
-        Vxvd7ZPYpeCwbvBoAetvg5ehL2o8rUuEKrz6qg==
-X-Google-Smtp-Source: AK7set9NsZVlDinXDgjj4dqHc+VM2sMCUP6iO8tYTToBCSoRpMdK6SGL9S8gxffoDxacEmes9w4Gxeg/JlPukGxzdw0=
-X-Received: by 2002:ab0:4a97:0:b0:68d:6360:77b with SMTP id
- s23-20020ab04a97000000b0068d6360077bmr3878835uae.1.1677682742965; Wed, 01 Mar
- 2023 06:59:02 -0800 (PST)
+        Wed, 1 Mar 2023 10:04:29 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708BB303E5;
+        Wed,  1 Mar 2023 07:04:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677683068; x=1709219068;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JnmA5Zi17bd6jWDVLbg86M4rw6XNBDHfhFxQM53Fmpw=;
+  b=d/GJP07JcrCBqhy1GEhLfDLF26a1oJugufVquKVfyn3bZsu3bE67iYYv
+   IqEJr0WBhbnkRI4HQw2u4U/68XJ+ONUMxhsGbgdYMOBwGOtNmAlWxQHSF
+   ijzTiMTkhH8akGwJTi5noLajv59yJBjBoh8oX8TyPWLEnxrn4El6oTnDi
+   Sz8MzqWDnlDlmSkwxVkgWO3oz8NjOoLjGqrY0ZI0GEX8yyFmdvMIQaK0f
+   PoUzdkWNyJW4FAi79/A3VYOxP/xZ/LTm2TiFlcgO1u8U3yJA8i+tOurPM
+   sz7CZ2dFh4irK59Bym9GPy3QfUTakq0vrjhZYN2g+cjlgdl8QNdk5SiD/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="331908111"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="331908111"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 07:04:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="920273548"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="920273548"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Mar 2023 07:04:26 -0800
+From:   kan.liang@linux.intel.com
+To:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        namhyung@kernel.org
+Cc:     jolsa@kernel.org, irogers@google.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH] perf record: Fix "read LOST count failed" msg with sample read
+Date:   Wed,  1 Mar 2023 07:04:13 -0800
+Message-Id: <20230301150413.27011-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20230224105906.16540-1-manivannan.sadhasivam@linaro.org>
- <20230224105906.16540-3-manivannan.sadhasivam@linaro.org> <20230227195535.GA749409-robh@kernel.org>
- <20230228082021.GB4839@thinkpad>
-In-Reply-To: <20230228082021.GB4839@thinkpad>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 1 Mar 2023 08:58:51 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJXb1junhU+56ZcqHzAq8g0VN8BzQ2A1C9rB80pZDWJ-w@mail.gmail.com>
-Message-ID: <CAL_JsqJXb1junhU+56ZcqHzAq8g0VN8BzQ2A1C9rB80pZDWJ-w@mail.gmail.com>
-Subject: Re: [PATCH v2 02/13] dt-bindings: PCI: qcom: Add iommu properties
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Robin Murphy <Robin.Murphy@arm.com>
-Cc:     andersson@kernel.org, lpieralisi@kernel.org, kw@linux.com,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        konrad.dybcio@linaro.org, bhelgaas@google.com, kishon@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Robin
+From: Kan Liang <kan.liang@linux.intel.com>
 
-On Tue, Feb 28, 2023 at 2:20=E2=80=AFAM Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> On Mon, Feb 27, 2023 at 01:55:35PM -0600, Rob Herring wrote:
-> > On Fri, Feb 24, 2023 at 04:28:55PM +0530, Manivannan Sadhasivam wrote:
-> > > Most of the PCIe controllers require iommu support to function proper=
-ly.
-> > > So let's add them to the binding.
-> > >
-> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.or=
-g>
-> > > ---
-> > >  Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/D=
-ocumentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > index a3639920fcbb..f48d0792aa57 100644
-> > > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > @@ -64,6 +64,11 @@ properties:
-> > >
-> > >    dma-coherent: true
-> > >
-> > > +  iommus:
-> > > +    maxItems: 1
-> > > +
-> > > +  iommu-map: true
-> > > +
-> >
-> > I think both properties together doesn't make sense unless the PCI host
-> > itself does DMA in addition to PCI bus devices doing DMA.
-> >
->
-> How? With "iommus", we specify the SMR mask along with the starting SID a=
-nd with
-> iommu-map, the individual SID<->BDF mapping is specified. This has nothin=
-g to
-> do with host DMA capabilities.
+Hundreds of "read LOST count failed" error messages may be displayed,
+when the below command is launched.
 
-I spoke with Robin offline and he agrees that having both is broken at
-least in RC mode. He pointed out the issue is similar to this one on
-Tegra[1].
+perf record -e '{cpu/mem-loads-aux/,cpu/event=0xcd,umask=0x1/}:S' -a
 
-Rob
+According to the commit 89e3106fa25f ("libperf: Handle read format in
+perf_evsel__read()"), the PERF_FORMAT_GROUP is only available for the
+leader. However, the record__read_lost_samples() goes through every
+entry of an evlist, which includes both leader and member. The member
+event errors out and triggers the error message. Since there may be
+hundreds of CPUs on a server, the message will be printed hundreds of
+times, which is very annoying.
 
-[1] https://lore.kernel.org/all/AS8P193MB2095640357779A7F9B6026F8D2A19@AS8P=
-193MB2095.EURP193.PROD.OUTLOOK.COM/
+The message itself is correct, but the pr_err is a overkill. Other error
+messages in the record__read_lost_samples() are all pr_debug. To make
+the output format consistent, change the pr_err("read LOST count
+failed\n"); to pr_debug("read LOST count failed\n");.
+User can still get the message via -v option.
+
+Fixes: e3a23261ad06 ("perf record: Read and inject LOST_SAMPLES events")
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ tools/perf/builtin-record.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 8374117e66f6..be7c0c29d15b 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -1866,7 +1866,7 @@ static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
+ 	int id_hdr_size;
+ 
+ 	if (perf_evsel__read(&evsel->core, cpu_idx, thread_idx, &count) < 0) {
+-		pr_err("read LOST count failed\n");
++		pr_debug("read LOST count failed\n");
+ 		return;
+ 	}
+ 
+-- 
+2.35.1
+
