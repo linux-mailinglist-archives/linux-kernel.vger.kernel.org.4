@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BF46A6A48
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798996A6A4A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjCAJ4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
+        id S230042AbjCAJ4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjCAJzv (ORCPT
+        with ESMTP id S229930AbjCAJzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:55:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5636A3B65B;
+        Wed, 1 Mar 2023 04:55:52 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A4E3B667;
         Wed,  1 Mar 2023 01:55:41 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9879F6602124;
-        Wed,  1 Mar 2023 09:55:39 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5676866020E6;
+        Wed,  1 Mar 2023 09:55:40 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1677664540;
-        bh=eoUuj+cxZRXF8or5zd6PgagsDUpoYC3djot0WKXw2CA=;
+        bh=zNRcNap0DKbKus9H9hYNrxN03fzRsqShpCKFraZ9Guk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hhkBXk2E6FkkjzWFHfrQFY3szV5J3eYC7vihoX8QMtmYiJnBouEHytcgWIlQdh774
-         nS6GF8niejem4pwYCIwno8u55hl5sL17pA2rFL+6C1NU5TQAOaJ+PMSVPSts6GVego
-         jQcb3SUaOknckuaAW+pYCoQIcsRRZEuQ9U/p7b9+cNkwPTPH09jpoPmfmSMzziuRFd
-         xAaSRUyZ9Ji8z25/i+Gx+0B9NeY4FW0rhKzRhy3wUV583rDqmp+tC2W7XXsSd1Kpt8
-         RdyY/5NKnuckUtJgOxFBDnaxTlSl3pVBDV7BFdxAenTHm56YjX5kPIDLTjeiYV+owM
-         0MtB7C6puB40Q==
+        b=n0mJRNYsI1EWGG60jwpP5XNylZ79iqYTvNxHVaQvBqOmgh4tyCnB9jzoigrQeL4/y
+         YyWqIL5PD4EkiRFXi24I9wMkKwGspShqvOKzuHrjOIgEbokLHh2k8wPLFlJ1R8F+bR
+         lw3b9RPQ7vp4d8cHepEKf2SQwtnPz0TK7uw392TUunQ7+iTozVM1tjeLWQzEkR28Bh
+         gBhUM3PaBuZiSxGAlqNoRiVU0e5D0xdkwd6khL+MCS+jFfr1GYbYIbP2DcdeJ7rq0n
+         8S2+QsMb3D9Rn9HGmxhzlxxOpp0PV2ky7lXaEri7Xi99HCN2YUo7WkCVpe3Mi0NvF9
+         /n5QiMMTjOHCg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -40,9 +40,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v4 16/19] arm64: dts: mediatek: mt8195-cherry: Enable Mali-G57 GPU
-Date:   Wed,  1 Mar 2023 10:55:20 +0100
-Message-Id: <20230301095523.428461-17-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v4 17/19] arm64: dts: mediatek: mt8186: Add GPU node
+Date:   Wed,  1 Mar 2023 10:55:21 +0100
+Message-Id: <20230301095523.428461-18-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
 References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
@@ -57,31 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the Mali-G57 found on this platform with the open-source
-Panfrost driver.
+Add a GPU node for MT8186 SoC but keep it disabled.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 56749cfe7c33..24669093fbed 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -238,6 +238,11 @@ dptx_out: endpoint {
- 	};
- };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+index a0d3e1f731bd..78ff8ba5718e 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+@@ -1075,6 +1075,23 @@ mfgsys: clock-controller@13000000 {
+ 			#clock-cells = <1>;
+ 		};
  
-+&gpu {
-+	status = "okay";
-+	mali-supply = <&mt6315_7_vbuck1>;
-+};
++		gpu: gpu@13040000 {
++			compatible = "mediatek,mt8186-mali",
++				     "arm,mali-bifrost";
++			reg = <0 0x13040000 0 0x4000>;
 +
- &i2c0 {
- 	status = "okay";
- 
++			clocks = <&mfgsys CLK_MFG_BG3D>;
++			interrupts = <GIC_SPI 276 IRQ_TYPE_LEVEL_HIGH 0>,
++				     <GIC_SPI 275 IRQ_TYPE_LEVEL_HIGH 0>,
++				     <GIC_SPI 274 IRQ_TYPE_LEVEL_HIGH 0>;
++			interrupt-names = "job", "mmu", "gpu";
++			power-domains = <&spm MT8186_POWER_DOMAIN_MFG2>,
++					<&spm MT8186_POWER_DOMAIN_MFG3>;
++			power-domain-names = "core0", "core1";
++			#cooling-cells = <2>;
++			status = "disabled";
++		};
++
+ 		mmsys: syscon@14000000 {
+ 			compatible = "mediatek,mt8186-mmsys", "syscon";
+ 			reg = <0 0x14000000 0 0x1000>;
 -- 
 2.39.2
 
