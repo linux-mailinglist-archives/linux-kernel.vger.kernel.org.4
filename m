@@ -2,155 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787096A6C35
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E966A6C33
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjCAMVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 07:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S229779AbjCAMUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjCAMVK (ORCPT
+        with ESMTP id S229807AbjCAMUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 07:21:10 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2078.outbound.protection.outlook.com [40.107.100.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B038F3D924
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:20:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DNsf2aPvzoqczlB90Yj+spHLDgev4xcv6HC55MvCqhRylyXp2qgDxvP18fgiiqWnwLeHVBwOaahTvlKU5kOoo0jIAYwVdCMrsz9Z/aC7gbuEmhsNie+YiOAmeoEHV6stD+I7DXjAtOKw/7kzS5rPyXktkMCHUSbirjfSWgdd0W+cFKS1h7GLJZimP4JSyh7ap3xpmSDs/6hgdOvWsCPqeexWvJwOvtJy49yzyssUCWIO6+ykfblfrs6Y+njXNUFXpqm4JdAt8eyvypBTo6Ws9YevD05BDdA5eDiHnF2Ap9RHs8Gbq6at5aobENx9MJl2TYutKOQpsKmUsysW/8HAAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sdMpUlZfRBZwN1PTr9bWybieMaYFtQSQWlJlEbRQxwM=;
- b=Il1NgZgeQJomduZG1nMQ9UAZWNx9ONTvWC2bYSB5myEAXonE7hy7JKQ5Oh7223WLALq/PT3V30m5BYSD9QrR+M64n7jjT4CRT5iLAfOKguWMM29wBMqEYPQElQknGaIgnaPDxazkx5oBOTzwj2NSZMw2c0BQEEaf45ZK5TM7TuvQyxBjzV/yUkD7XGmTUPwSluZxX1oxMWF/FIS9591SUN0tYeDfZTwiZNdbgVJ48KrNf8gWKuuAihMd8dqJUeArULufEFcGv8im6ov3ThQ1HPCv68udYIxT2M14i39UW8BPt7bu/pBmXOi5beQdX93qzPqTpNu0hTgWtdlNm5UJFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sdMpUlZfRBZwN1PTr9bWybieMaYFtQSQWlJlEbRQxwM=;
- b=Rmu06Bt7FLjf++7Rt11aqHe8g5V+xIFq83p6OfQjsIR4lxpnzj+S6Tkh+F+Ek5Ls5S2/N30nl2K0Bv30mup/B8RJJwX6YesvwCKKpFT+JgEG5XML4dxDd6ylqNUdRCzVIbOu9gk6Ed6iQbw2J2ev7QUstF9iNeeORE4foxTTupE=
-Received: from DS7PR06CA0046.namprd06.prod.outlook.com (2603:10b6:8:54::13) by
- DS0PR12MB7803.namprd12.prod.outlook.com (2603:10b6:8:144::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.29; Wed, 1 Mar 2023 12:20:45 +0000
-Received: from DS1PEPF0000E63C.namprd02.prod.outlook.com
- (2603:10b6:8:54:cafe::ae) by DS7PR06CA0046.outlook.office365.com
- (2603:10b6:8:54::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Wed, 1 Mar 2023 12:20:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000E63C.mail.protection.outlook.com (10.167.17.74) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.12 via Frontend Transport; Wed, 1 Mar 2023 12:20:45 +0000
-Received: from BLR-L-RKODSARA.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
- 2023 06:20:41 -0600
-From:   Raghavendra K T <raghavendra.kt@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-CC:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David Hildenbrand" <david@redhat.com>, <rppt@kernel.org>,
-        Bharata B Rao <bharata@amd.com>,
-        Disha Talreja <dishaa.talreja@amd.com>,
-        Raghavendra K T <raghavendra.kt@amd.com>
-Subject: [PATCH REBASE V3 4/4] sched/numa: Use hash_32 to mix up PIDs accessing VMA
-Date:   Wed, 1 Mar 2023 17:49:03 +0530
-Message-ID: <d5a9f75513300caed74e5c8570bba9317b963c2b.1677672277.git.raghavendra.kt@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1677672277.git.raghavendra.kt@amd.com>
-References: <cover.1677672277.git.raghavendra.kt@amd.com>
+        Wed, 1 Mar 2023 07:20:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5011498B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:20:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677673201;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BmnN/JeNC+uXvUWsMwj8af3J1VCxOStShW/lz3XRU5Y=;
+        b=Vcg1uNA/x9jTExYMF7ZV1t4b3WtrHzkIneez4GWazMJrMo+/57fI5bWYZ3Cerxu1OEYuEm
+        Or4vInmvWA0fXI3IWM15//vN12dHRkxfeDgTIUoGqC66UTcfaImPsK6HGMOY+0WidvcksL
+        swyacaRz7bXsv2iiRMxf5OsY9IjOAu0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-584-xVPKlweYNnuOgf7_bEhzOQ-1; Wed, 01 Mar 2023 07:19:57 -0500
+X-MC-Unique: xVPKlweYNnuOgf7_bEhzOQ-1
+Received: by mail-ed1-f70.google.com with SMTP id d24-20020a056402401800b004b65da6d5e2so13286894eda.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:19:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BmnN/JeNC+uXvUWsMwj8af3J1VCxOStShW/lz3XRU5Y=;
+        b=qsaX458cB6V7qSvKF07YuZ/Fo1+15mhs4bCFfF3LzC5MwAqzLBbPybB63zqBc8c4dg
+         TCCvGDTfJ8JkiLLxcuvuno19DFvv2SXDykJhS16XJamGuvBUFyVh9YSrO7cbGtRIqtlJ
+         cREkglP8hWIGFVFPSkBAcFuu2v9dHfe3nDAT41NOth+rbuECC5Ghp6ZOMYPGdcfiuGso
+         bgILYEMT6rAClR2jhHkl4GfRitbU3FdUl9Gn3WQeOx6oddJDMHhVS8dFJeH259rTAJpz
+         ChAAfyXIkG7ff6WS+bUp91hDvBGLf9UcFL2ATPe0chMijf+UhMmAe+lTL/FDBbIxO+Jg
+         qn6Q==
+X-Gm-Message-State: AO0yUKVtN7IXoYCodziNG1fBpJtZKkyY2RMpaWQ53CRGg6bb+o36v6s5
+        Cr7jKWR13nYyznGc8ZjYANDUQXVrc8JAnL433F0PyNrKe1Hlk0ZNSHG0akHYLJ/7LjrOp9Zl1XI
+        2zI6wmUtUg5pKwKlJkZYNdbhD
+X-Received: by 2002:a17:906:ca12:b0:87d:eff1:acc8 with SMTP id jt18-20020a170906ca1200b0087deff1acc8mr6291657ejb.48.1677673196893;
+        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
+X-Google-Smtp-Source: AK7set/kUyEn9SIqaSY0Dz+h4EG4rmJU65d2AlOikKFI6qVgT5C8p4j24U16+iVEyWf9j1c2O5n3Yw==
+X-Received: by 2002:a17:906:ca12:b0:87d:eff1:acc8 with SMTP id jt18-20020a170906ca1200b0087deff1acc8mr6291639ejb.48.1677673196647;
+        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id h11-20020a17090634cb00b008e36f9b2308sm5706107ejb.43.2023.03.01.04.19.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
+Message-ID: <cc25ee91-5197-b694-a6d6-e7d773afb5db@redhat.com>
+Date:   Wed, 1 Mar 2023 13:19:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E63C:EE_|DS0PR12MB7803:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8772a753-7205-425b-4101-08db1a4f61f1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZUyQQgl9aFxV85LK8rx/q3JVAvv44lxplMSP7vlD54/pLOEIAmeCypYMOtR5c3crYehAU79/0IRA62FD/kUlh0HL0jGuyL1GKpcd3rYtmGRN3wJo4vIIn995Tdf84b5Y5hMWqVNBC5sIy8cFBej3IjmCDW7XNzKbKdXwz1IGRxRBUg/Cq0dv0+FLV7thVIjp1Pd07jM6lTk0guTdVG5HrBZuyw+urR/qh606yuSgkj1VqPEhKlQBQzGRxncVmXwgCNcNtihcsRKhYBhuLUaXJhtzQsSq4PWge/vcgr8o51btB7rtm8NEcCmDvfEO54gemZNDEyfmO4i+UNhsDRKeCsxHJyuufD0ud7TcQ4GDYK7RlWxge7A3mpP4Vldgx0qwWl4eLnQDIM8EKPjUKtZR7Lh2rUF4B8pf6kiEvg0+6qYkFDD6uZ3UU2yQgnvBP02637n1RWUBcomC28/duUZkvn7lfuqNwgfUNwfkrNf5x2SOpLXGfQpoDxzSiYa/Vintub8Dn+X2CU9BszrVtwMky9h8p068r1JM/Rc1lPndjYsMwFBakEFt4IA183CAa1Y/UOvJZlRlAdchFJION4wuGEhfLePgFoCEzbFDp3OSoInqL+wJwb4W+IatFzJmMI/8hfSuOBS4U4M9/eyYtw3HQmOfZ4W58Q1Ng2m8FmV7oCyPgvF74OYzSZx9NiB/88m3t4GVOtu8GUZ1lPEbOxmR6ew9VdbFUI69vr+NHl6iRhrCninftSZXpel5K/UibrWS
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(47076005)(186003)(16526019)(36860700001)(26005)(82310400005)(426003)(6666004)(40460700003)(83380400001)(81166007)(40480700001)(82740400003)(356005)(36756003)(336012)(2616005)(4326008)(8676002)(70206006)(2906002)(8936002)(5660300002)(70586007)(7696005)(41300700001)(110136005)(316002)(54906003)(478600001)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 12:20:45.0215
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8772a753-7205-425b-4101-08db1a4f61f1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E63C.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7803
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/2] platform/x86: dell-ddv: Fix temperature scaling
+Content-Language: en-US, nl
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230218115318.20662-1-W_Armin@gmx.de>
+ <20230218115318.20662-2-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230218115318.20662-2-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-before: last 6 bits of PID is used as index to store
-information about tasks accessing VMA's.
+Hi,
 
-after: hash_32 is used to take of cases where tasks are
-created over a period of time, and thus improve collision
-probability.
+On 2/18/23 12:53, Armin Wolf wrote:
+> After using the built-in UEFI hardware diagnostics to compare
+> the measured battery temperature, i noticed that the temperature
+> is actually expressed in tenth degree kelvin, similar to the
+> SBS-Data standard. For example, a value of 2992 is displayed as
+> 26 degrees celsius.
+> Fix the scaling so that the correct values are being displayed.
+> 
+> Tested on a Dell Inspiron 3505.
+> 
+> Fixes: a77272c16041 ("platform/x86: dell: Add new dell-wmi-ddv driver")
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Result:
-The patch series overall improving autonuma cost.
+Thanks, I've applied this patch to my review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-Kernbench around more than 5% improvement and
-system time in mmtest autonuma showed more than 80%
-improvement
+I'll rebase that branch once 6.3-rc1 is out and then push the rebased
+patch to the fixes branch and include it in my next 6.3 fixes pull-req
+to Linus.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Raghavendra K T <raghavendra.kt@amd.com>
----
- include/linux/mm.h  | 2 +-
- kernel/sched/fair.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Regards,
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 5232ebb34145..1b9be34a24fb 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1671,7 +1671,7 @@ static inline void vma_set_access_pid_bit(struct vm_area_struct *vma)
- {
- 	unsigned int pid_bit;
- 
--	pid_bit = current->pid % BITS_PER_LONG;
-+	pid_bit = hash_32(current->pid, ilog2(BITS_PER_LONG));
- 	if (vma->numab_state && !test_bit(pid_bit, &vma->numab_state->access_pids[1])) {
- 		__set_bit(pid_bit, &vma->numab_state->access_pids[1]);
- 	}
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index a93e7a33281f..8592941dd565 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -2941,7 +2941,7 @@ static bool vma_is_accessed(struct vm_area_struct *vma)
- 		return true;
- 
- 	pids = vma->numab_state->access_pids[0] | vma->numab_state->access_pids[1];
--	return test_bit(current->pid % BITS_PER_LONG, &pids);
-+	return test_bit(hash_32(current->pid, ilog2(BITS_PER_LONG)), &pids);
- }
- 
- #define VMA_PID_RESET_PERIOD (4 * sysctl_numa_balancing_scan_delay)
--- 
-2.34.1
+Hans
+
+
+
+> ---
+> Changes in v2:
+> - Avoid unnecessary rounding
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index eff4e9649faf..2750dee99c3e 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/kstrtox.h>
+> -#include <linux/math.h>
+>  #include <linux/math64.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+> @@ -665,7 +664,8 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *attr, char
+>  	if (ret < 0)
+>  		return ret;
+> 
+> -	return sysfs_emit(buf, "%d\n", DIV_ROUND_CLOSEST(value, 10));
+> +	/* Use 2731 instead of 2731.5 to avoid unnecessary rounding */
+> +	return sysfs_emit(buf, "%d\n", value - 2731);
+>  }
+> 
+>  static ssize_t eppid_show(struct device *dev, struct device_attribute *attr, char *buf)
+> --
+> 2.30.2
+> 
 
