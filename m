@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238E06A777D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 00:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076266A7849
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 01:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjCAXDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 18:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S229471AbjCBAN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 19:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjCAXDX (ORCPT
+        with ESMTP id S229567AbjCBANz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 18:03:23 -0500
+        Wed, 1 Mar 2023 19:13:55 -0500
 Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A9DEC50;
-        Wed,  1 Mar 2023 15:03:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5486A1E2B8;
+        Wed,  1 Mar 2023 16:13:50 -0800 (PST)
 Received: from pro2.mail.ovh.net (unknown [10.109.156.120])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 5F9F121955;
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id BF7E021936;
         Wed,  1 Mar 2023 18:53:00 +0000 (UTC)
 Received: from localhost.localdomain (88.161.25.233) by DAG1EX1.emp2.local
  (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 1 Mar
- 2023 19:52:58 +0100
+ 2023 19:52:59 +0100
 From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
 To:     <saravanak@google.com>, <clement.leger@bootlin.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -55,9 +55,9 @@ CC:     <linux-renesas-soc@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
         <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Subject: [PATCH 1/3] of: irq: make callers of of_irq_parse_raw() release the device node
-Date:   Wed, 1 Mar 2023 19:52:07 +0100
-Message-ID: <20230301185209.274134-2-jjhiblot@traphandler.com>
+Subject: [PATCH 3/3] of: irq: release the node after looking up for "interrupts-extended"
+Date:   Wed, 1 Mar 2023 19:52:09 +0100
+Message-ID: <20230301185209.274134-4-jjhiblot@traphandler.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230301185209.274134-1-jjhiblot@traphandler.com>
 References: <20230301185209.274134-1-jjhiblot@traphandler.com>
@@ -67,7 +67,7 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [88.161.25.233]
 X-ClientProxiedBy: DAG3EX2.emp2.local (172.16.2.22) To DAG1EX1.emp2.local
  (172.16.2.1)
-X-Ovh-Tracer-Id: 11460535152125229436
+X-Ovh-Tracer-Id: 11460535155466975612
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
 X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedguddutdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeduteevleevvefggfdvueffffejhfehheeuiedtgedtjeeghfehueduudegfeefueenucfkphepuddvjedrtddrtddruddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdhnmhesthhirdgtohhmpdhsshgrnhhtohhshheskhgvrhhnvghlrdhorhhgpdhmrghthhhirghsrdhnhihmrghnsehinhhtvghlrdgtohhmpdhgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdpthhhihgvrhhrhidrrhgvughinhhgsehgmhgrihhlrdgtohhmpdhjohhnrghthhgrnhhhsehnvhhiughirgdrtghomhdplhhinhhugi
@@ -82,43 +82,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_irq_parse_raw() does a get() on the device node returned in out_irq->np.
-Callers of of_irq_parse_raw() must do a put() when they are done with it.
+When of_parse_phandle_with_args() succeeds, a get() is performed on
+out_irq->np. And another get() is performed in of_irq_parse_raw(),
+resulting in the refcount being incremented twice.
+Fixing this by calling put() after of_irq_parse_raw().
 
 Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
 ---
- arch/powerpc/platforms/fsl_uli1575.c | 1 +
- drivers/bcma/main.c                  | 5 ++++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/of/irq.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/platforms/fsl_uli1575.c b/arch/powerpc/platforms/fsl_uli1575.c
-index 84afae7a25617..ba104f6474bc8 100644
---- a/arch/powerpc/platforms/fsl_uli1575.c
-+++ b/arch/powerpc/platforms/fsl_uli1575.c
-@@ -334,6 +334,7 @@ static void hpcd_final_uli5288(struct pci_dev *dev)
- 	laddr[1] = laddr[2] = 0;
- 	of_irq_parse_raw(laddr, &oirq);
- 	dev->irq = irq_create_of_mapping(&oirq);
-+	of_node_put(oirq.np);
- }
+diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+index 95da943fcf075..244f240bc4ac4 100644
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -349,8 +349,12 @@ int of_irq_parse_one(struct device_node *device, int index, struct of_phandle_ar
+ 	/* Try the new-style interrupts-extended first */
+ 	res = of_parse_phandle_with_args(device, "interrupts-extended",
+ 					"#interrupt-cells", index, out_irq);
+-	if (!res)
+-		return of_irq_parse_raw(addr, out_irq);
++	if (!res) {
++		p = out_irq->np;
++		res = of_irq_parse_raw(addr, out_irq);
++		of_node_put(p);
++		return res;
++	}
  
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_AL, 0x1575, hpcd_quirk_uli1575);
-diff --git a/drivers/bcma/main.c b/drivers/bcma/main.c
-index 0a8469e0b13ad..11219dd79d327 100644
---- a/drivers/bcma/main.c
-+++ b/drivers/bcma/main.c
-@@ -193,7 +193,10 @@ static unsigned int bcma_of_get_irq(struct device *parent,
- 		return 0;
- 	}
- 
--	return irq_create_of_mapping(&out_irq);
-+	ret = irq_create_of_mapping(&out_irq);
-+	of_node_put(out_irq.np);
-+
-+	return ret;
- }
- 
- static void bcma_of_fill_device(struct device *parent,
+ 	/* Look for the interrupt parent. */
+ 	p = of_irq_find_parent(device);
 -- 
 2.25.1
 
