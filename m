@@ -2,126 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796336A64CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054186A64D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjCABaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 20:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
+        id S229486AbjCABbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 20:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCABaV (ORCPT
+        with ESMTP id S229703AbjCABbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 20:30:21 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8789EC9;
-        Tue, 28 Feb 2023 17:30:19 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id o12so47688556edb.9;
-        Tue, 28 Feb 2023 17:30:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vZS4srdzYPX5rwf8hBmS3h/CSWlxeptJDidxpQ52/rY=;
-        b=jAZJqxNnaCbGp3Cn7I115sC3pbOLIoFPvymD9tvjSPw0mD8MYApBCMMkCAcdj8mh4M
-         CYNw1xXXsUQgDqAQwJSWMhpwGV560MZ6TvUwZPW5XxlgGBOVUQxzgAgWb/FAlfACMBTH
-         MSAmXvY5yDuOu8EgKMsqpKhQTl1+tPDCB02CE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vZS4srdzYPX5rwf8hBmS3h/CSWlxeptJDidxpQ52/rY=;
-        b=QfSPywj9Sd7jh4Rbx/uQ++iJdnn3aL+WzENboIAzjwlAN+Y6mBHQ0C+Hfjt7ui9Bi5
-         cDFbM6IYbAo9d0MGRHgBN8YSxMa2PEt3hBz61+3wIhg2Vv/O6Z6MzNwn6KvhEtHwZfXd
-         s+GrN40HrZYkX2HlvQlYTqYrLE9B4GyQ7ZcQ9klsPWyI/Rlh78SDj5AWOM4wH47AXZTq
-         DKKOO/UFy82WIDatQ+IJDpFd78On5oqLD3eCmArUeyXwyBkxXOeB9CCQmRpMZqvhvNAO
-         2bsrzYvjkPKbzq0XnPLR32T+xVUyZfad2PS4C7LgoBaNWXGB0h0sBTByBrH4OOzUSCeq
-         uTJQ==
-X-Gm-Message-State: AO0yUKU/m86dgsQjJf/EX6Jd45k57thUwMO53CcGMVtJZcYeC6AskzGi
-        Bupypk2HxNJ+RCggHzAci9TA2GGthlNXtRgV2S8=
-X-Google-Smtp-Source: AK7set/PW9p3+rsDwfdQvTVOa0cA7HHEYagI+NeYdL0zp0aQTvVe97kOvNfE5b67MEGgt5lDe1NN/RWcCezxLJstPSQ=
-X-Received: by 2002:a17:906:d82:b0:87b:db55:4887 with SMTP id
- m2-20020a1709060d8200b0087bdb554887mr2237966eji.4.1677634218221; Tue, 28 Feb
- 2023 17:30:18 -0800 (PST)
+        Tue, 28 Feb 2023 20:31:14 -0500
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A7A22A23;
+        Tue, 28 Feb 2023 17:31:11 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pXBIt-00Gi56-8m; Wed, 01 Mar 2023 09:30:48 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 01 Mar 2023 09:30:47 +0800
+Date:   Wed, 1 Mar 2023 09:30:47 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
+        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
+Subject: Re: [v4 PATCH] crypto: stm32 - Save and restore between each request
+Message-ID: <Y/6qx0DcaOL+cBy6@gondor.apana.org.au>
+References: <Y/cy5wUtk10OahpO@gondor.apana.org.au>
+ <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
+ <Y/c7iVW67Xhhdu8e@gondor.apana.org.au>
+ <Y/hQdzsKMYgkIfMY@gondor.apana.org.au>
+ <Y/yIbPBVCPx9K/0s@gondor.apana.org.au>
+ <CACRpkdZC4z2Xng4=k94rmM=AFzNzTdXkvtkArMnK7afouz=7VA@mail.gmail.com>
+ <Y/3FYZJeLE7DVPBf@gondor.apana.org.au>
+ <Y/3IA4OjmUmjMgh1@gondor.apana.org.au>
+ <Y/3N6zFOZeehJQ/p@gondor.apana.org.au>
+ <CACRpkdZ3rCsOWqooNkPL6m7vZ2Z2Frh2sdxruKhrS0t3QHcSKw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230224000400.12226-1-zev@bewilderbeest.net> <20230224000400.12226-4-zev@bewilderbeest.net>
-In-Reply-To: <20230224000400.12226-4-zev@bewilderbeest.net>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 1 Mar 2023 01:30:05 +0000
-Message-ID: <CACPK8XdFT=+VJJ=iDhcmWPh9m9of2b+2UYxkrAisp6tdmWOWKg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: asrock: Correct firmware flash
- SPI clocks
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdZ3rCsOWqooNkPL6m7vZ2Z2Frh2sdxruKhrS0t3QHcSKw@mail.gmail.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023 at 00:04, Zev Weiss <zev@bewilderbeest.net> wrote:
->
-> While I'm not aware of any problems that have occurred running these
-> at 100 MHz, the official word from ASRock is that 50 MHz is the
-> correct speed to use, so let's be safe and use that instead.
+On Tue, Feb 28, 2023 at 09:50:55PM +0100, Linus Walleij wrote:
+> 
+> OK I tested this, sadly the same results.
+> 
+> Notice though: the HMAC versions fail on test vector 0 and
+> the non-MAC:ed fail on vector 1, so I guess that means test
+> vector 0 works with those?
 
-:(
+Hah, test vector 0 for sha256 is an empty message.  While test
+vector 1 is the same as test vector 0 for hmac(sha256).
 
-Validated with which driver?
+So I guess at least the fallback is still working :)
 
-C=C3=A9dric, do you have any thoughts on this?
-
->
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> Cc: stable@vger.kernel.org
-> Fixes: 2b81613ce417 ("ARM: dts: aspeed: Add ASRock E3C246D4I BMC")
-> Fixes: a9a3d60b937a ("ARM: dts: aspeed: Add ASRock ROMED8HM3 BMC")
-> ---
->  arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts | 2 +-
->  arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts b/arch/arm=
-/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
-> index 67a75aeafc2b..c4b2efbfdf56 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
-> @@ -63,7 +63,7 @@ flash@0 {
->                 status =3D "okay";
->                 m25p,fast-read;
->                 label =3D "bmc";
-> -               spi-max-frequency =3D <100000000>; /* 100 MHz */
-> +               spi-max-frequency =3D <50000000>; /* 50 MHz */
->  #include "openbmc-flash-layout.dtsi"
->         };
->  };
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts b/arch/arm=
-/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
-> index 00efe1a93a69..4554abf0c7cd 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
-> @@ -51,7 +51,7 @@ flash@0 {
->                 status =3D "okay";
->                 m25p,fast-read;
->                 label =3D "bmc";
-> -               spi-max-frequency =3D <100000000>; /* 100 MHz */
-> +               spi-max-frequency =3D <50000000>; /* 50 MHz */
->  #include "openbmc-flash-layout-64.dtsi"
->         };
->  };
-> --
-> 2.39.1.438.gdcb075ea9396.dirty
->
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
