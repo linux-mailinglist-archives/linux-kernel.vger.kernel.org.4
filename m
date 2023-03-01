@@ -2,120 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CD96A741C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 390026A73FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjCATOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S229691AbjCATFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjCATOa (ORCPT
+        with ESMTP id S229656AbjCATFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:14:30 -0500
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AA336095;
-        Wed,  1 Mar 2023 11:14:20 -0800 (PST)
+        Wed, 1 Mar 2023 14:05:03 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFF04608F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:05:01 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536a545bfbaso291491417b3.20
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:05:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1677698061; x=1709234061;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9+Fk+ywSCeiN4GCv/ZuP2Cp2Wv3txmX4zooLxC/Zf10=;
-  b=mpNRF+YjgnBSsj6E8kiaKFf0SFksQzf+l7pix+jYFUxEdLIg1bbvQHUm
-   pnAIEpAV8+ZOP2/v8K9YQGhhmSi3txOz9g5TJvwv/+RuiLHcRPv2Qeytt
-   vMkp/tTDeu3UlrdCDx+sSAUQ/VKzS+tG4SX8Zhh9ltJAZnkwGJ7wEDDUy
-   k=;
-X-IronPort-AV: E=Sophos;i="5.98,225,1673913600"; 
-   d="scan'208";a="1108222653"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 18:59:08 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com (Postfix) with ESMTPS id 6E16740E2D;
-        Wed,  1 Mar 2023 18:59:08 +0000 (UTC)
-Received: from EX19D002ANA002.ant.amazon.com (10.37.240.152) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Wed, 1 Mar 2023 18:59:07 +0000
-Received: from b0f1d8753182.ant.amazon.com.com (10.95.161.59) by
- EX19D002ANA002.ant.amazon.com (10.37.240.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
- Wed, 1 Mar 2023 18:59:04 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     <kvm@vger.kernel.org>, Sean Christopherson <seanjc@google.com>,
-        "Paolo Bonzini" <pbonzini@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Takahiro Itazuri <zulinx86@gmail.com>,
-        Takahiro Itazuri <itazur@amazon.com>
-Subject: [PATCH v2 1/1] KVM: x86: Propagate AMD-specific IBRS bits to guests
-Date:   Wed, 1 Mar 2023 18:58:38 +0000
-Message-ID: <20230301185838.21659-2-itazur@amazon.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20230301185838.21659-1-itazur@amazon.com>
-References: <20230301185838.21659-1-itazur@amazon.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.95.161.59]
-X-ClientProxiedBy: EX19D035UWB004.ant.amazon.com (10.13.138.104) To
- EX19D002ANA002.ant.amazon.com (10.37.240.152)
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112; t=1677697501;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eZZzZE8GpdNY+MwogNnFVaUs2b/RvHe7OTvEU8aJPfc=;
+        b=Fyrl4aN8thLa08lvSwfnz3pS77dLDE/JPDoL0n+GfSBVkEYmU/na7n6N3awmHGcBsx
+         fg4YM6nkuIRNWndpa/Vvh28BBbpGpJRQu2vsHAWiO6a5ZOUjmcMA7LOEEPP8t186icRE
+         TTzl2f0lYKQ2gEv3faqd7R7sHmLmFHvz7aRO6WVgfOeUssnPkNyUgEAinVLSyUArDjIp
+         kbm/6C3MBv1I4BXWlD3jhzvuaIkNNoC3TdQPTPCNNYNwWctyfsetJwP6v0E+I8n/tQPA
+         F1L2rtHP4dGjfzEUvNlYgeld/2PRYT7D9g8oV1r1Tb8v8B8+31LZevINjOdzhGWMe5yh
+         P0iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677697501;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eZZzZE8GpdNY+MwogNnFVaUs2b/RvHe7OTvEU8aJPfc=;
+        b=WZUEvirwD7UCbnGijsQ8TGdrO1nS5k4gOwPGR0jA+eRSnzpvQbzBOgwpNAxpiStSo+
+         o9k1q6GfX7k9o3qpGOcxirKcl1zaqvVfwIil/zbu+BSXR2cwMBwVp48t/bsK7lO5+zUz
+         sfE9/6yKsZH0k2tmVMrGojzLqXLWROoupy7+XcBjFJtyJJJvgJO6wwpQP/Whau7j6GNR
+         ILEEMH4qCRYTFrAvsTHlW/Tyc6qH1/HU+y172rTjWlpH3nuzUegsqE+UkfTkO0uLRltK
+         Lj/NIQDHGJnnwiWyRbhXt09KqB7iuCaqTKu2UIP+zWP3qYdXr1BjcwU+0cUKPUP+YUBJ
+         DH5w==
+X-Gm-Message-State: AO0yUKWVAxaR63KmU39rbt1nL/59qpDHHvR3kQq/MppIj1xJazjEZ576
+        0EwQ43wmicX8ES+mTAQHrsdMUHGI19U=
+X-Google-Smtp-Source: AK7set/9C/tFDvwQ8AH2AjoEK29ndZJWeqFhKnrMFIlBfk3w7trnnd608E+7P+Ccqu1RqtfeQNT22abiIwk=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:3c40:eeb3:7c3a:807e])
+ (user=surenb job=sendgmr) by 2002:a0d:c506:0:b0:533:b8f6:828e with SMTP id
+ h6-20020a0dc506000000b00533b8f6828emr19ywd.411.1677697500632; Wed, 01 Mar
+ 2023 11:05:00 -0800 (PST)
+Date:   Wed,  1 Mar 2023 11:04:57 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230301190457.1498985-1-surenb@google.com>
+Subject: [PATCH 1/1] mm/nommu: remove unnecessary VMA locking
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        chriscli@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, rppt@kernel.org, jannh@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Suren Baghdasaryan <surenb@google.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VMMs retrieve supported CPUID features via KVM_GET_SUPPORTED_CPUID to
-construct CPUID information to be passed to KVM_SET_CPUID2. Most CPUID
-feature bits related to speculative attacks are propagated from host
-CPUID. AMD processors have AMD-specific IBRS related bits in CPUID
-Fn8000_0008_EBX (ref: AMD64 Architecture Programmer's Manual Volume 3:
-General-Purpose and System Instructions) and some bits are not
-propagated to guests.
+Since CONFIG_PER_VMA_LOCK depends on CONFIG_MMU, the changes in nommu
+are not needed. Remove them.
 
-Enable propagation of these bits to guests, so that guests can see the
-same security information as the host without VMM action.
-
-Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
+Fixes: bad94decd6a4 ("mm: write-lock VMAs before removing them from VMA tree")
+Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Link: https://lore.kernel.org/all/Y%2F8CJQGNuMUTdLwP@localhost/
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- arch/x86/kvm/cpuid.c         | 5 +++--
- arch/x86/kvm/reverse_cpuid.h | 5 +++++
- 2 files changed, 8 insertions(+), 2 deletions(-)
+Fix cleanly applies over mm-unstable, SHA in "Fixes" is from that tree.
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 596061c1610e..c297064208dd 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -704,8 +704,9 @@ void kvm_set_cpu_caps(void)
- 	kvm_cpu_cap_mask(CPUID_8000_0008_EBX,
- 		F(CLZERO) | F(XSAVEERPTR) |
- 		F(WBNOINVD) | F(AMD_IBPB) | F(AMD_IBRS) | F(AMD_SSBD) | F(VIRT_SSBD) |
--		F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_STIBP_ALWAYS_ON) |
--		__feature_bit(KVM_X86_FEATURE_AMD_PSFD)
-+		F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_IBRS_ALWAYS_ON) |
-+		F(AMD_STIBP_ALWAYS_ON) | F(AMD_IBRS_PREFERRED) |
-+		F(AMD_IBRS_SAME_MODE) | __feature_bit(KVM_X86_FEATURE_AMD_PSFD)
- 	);
+ mm/nommu.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/mm/nommu.c b/mm/nommu.c
+index 2ab162d773e2..57ba243c6a37 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -588,7 +588,6 @@ static int delete_vma_from_mm(struct vm_area_struct *vma)
+ 		       current->pid);
+ 		return -ENOMEM;
+ 	}
+-	vma_start_write(vma);
+ 	cleanup_vma_from_mm(vma);
  
- 	/*
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index 042d0aca3c92..1e538e29b117 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -43,6 +43,11 @@ enum kvm_only_cpuid_leafs {
- #define X86_FEATURE_AVX_NE_CONVERT      KVM_X86_FEATURE(CPUID_7_1_EDX, 5)
- #define X86_FEATURE_PREFETCHITI         KVM_X86_FEATURE(CPUID_7_1_EDX, 14)
- 
-+/* AMD-specific IBRS hint bits, CPUID level 0x80000008 (EBX) */
-+#define X86_FEATURE_AMD_IBRS_ALWAYS_ON	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 16)
-+#define X86_FEATURE_AMD_IBRS_PREFERRED	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 18)
-+#define X86_FEATURE_AMD_IBRS_SAME_MODE	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 19)
-+
- struct cpuid_reg {
- 	u32 function;
- 	u32 index;
+ 	/* remove from the MM's tree and list */
+@@ -1520,10 +1519,6 @@ void exit_mmap(struct mm_struct *mm)
+ 	 */
+ 	mmap_write_lock(mm);
+ 	for_each_vma(vmi, vma) {
+-		/*
+-		 * No need to lock VMA because this is the only mm user and no
+-		 * page fault handled can race with it.
+-		 */
+ 		cleanup_vma_from_mm(vma);
+ 		delete_vma(mm, vma);
+ 		cond_resched();
 -- 
-2.38.0
+2.40.0.rc0.216.gc4246ad0f0-goog
 
