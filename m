@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDA16A7460
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62B06A7465
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjCATgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S229736AbjCAThN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCATf6 (ORCPT
+        with ESMTP id S229716AbjCAThM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:35:58 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D622134332
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:35:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1677699348; bh=wMm9SK0T1X6wjNTxe4InzSuoAuJv/ovXH3Yd9x3INdU=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=M+bk0agZs/ip9NlWKZDeUxfjq8j6MC+6xVMMX5fU/IoWhEkbNWW1yC9t5wgOcujW3
-         9UpzH2khiWtofRavCKeOROPNzJ7F1MwDHi1MQC8lAMQrLQvxFJRM/n+qZ371YI/pA4
-         ryeabzdxFT5WjBOu4Wulvt4pgZaD1gbmA35PMcD0=
-Received: by b221-2.in.mailobj.net [192.168.90.22] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Wed,  1 Mar 2023 20:35:48 +0100 (CET)
-X-EA-Auth: PldJwNJFnC6SMwwwKTtAv1uOQAxuwnwELDsuScmNAdkFQxNVkfwbnt8OHmVTfN7luEAx/wUZHVjyHoFVwndeyg==
-Date:   Thu, 2 Mar 2023 01:05:41 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH RESEND] drm/nouveau/hwmon: Use sysfs_emit in show function
- callsbacks
-Message-ID: <Y/+pDaHOgG1x8Py2@ubun2204.myguest.virtualbox.org>
+        Wed, 1 Mar 2023 14:37:12 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC464DE02
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:37:11 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-536bf92b55cso383411407b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677699429;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QN5p7z1WK4bckACT7Rmjh2flVU52vLPk6a4cmtTmWCM=;
+        b=Bz3Gg87YDUOZRW3JtWlnTSRav9KQ3c8UoFRle8RRsFj4E8JL/6YPrh+cbeKQvNJrSI
+         QMDpNr81KkfsEda0yEywOHnC+W2xKgL2Ft6WVjYTsKQOeC1h3KVcSLXhiUMyy8SnnowZ
+         AvnOHJ70aVW5+ohbUw4QNQ/tpW2+8xTwez8SZjiA43cyddyn9r9oJ5V0erPMEqP58l0c
+         hZnbK+zPGprvS608QVNuofuBnuktaml9uU+vJsBuz4YC+hK8HHLgPyItbqzCSt0YzPe9
+         g171Iu8gTmGP5yXq9dTY2t6ZDaA3Teq+g2BPfaRFOIcY9M+dgqFZOZJyLxQBQ7lB0odM
+         oWIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677699429;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QN5p7z1WK4bckACT7Rmjh2flVU52vLPk6a4cmtTmWCM=;
+        b=6AvWQTKJBC9lwkj2057qliDJvHyJjYuyIKZwQUSgOpak17FNuLpkyjvVcZWUPl4hav
+         86VHK7g7RnX0RIg9JPbwdLdXJH/1CGWdMtEQU5U6Py++oM/6txpdHiht0Tlgz5MLrjdk
+         LkPoxuO/jTu8C9imA5lAgFkAOCOryTa4+vzcTGTBuqhWCZUkDMa25ChDDnb2DwdmpOc/
+         Wfb+gCKmiKu0u9zx7cdJNyrejtQQLZJvSH9fN4EGaDvJqEGXfCstEPjQwYqpnQKVvHXj
+         ZjP4/Dh/rGntoC4JdoD876TndSTczYaG2YIAqmmODQEHo01pvZzmfpbM1MGuapp6gSPR
+         88nw==
+X-Gm-Message-State: AO0yUKUERcenblUFCs1kOeUk2LD+h5WEUv+F64mo5Yy6+KyRhMX1D/FZ
+        1IA1tI/2wr5pZ2DJyD6T69l5RloHJW4dYawdX1qX8g==
+X-Google-Smtp-Source: AK7set959ywP5kb93gzYIRJS/wk9K0P02eARMqCZ6qig+6yex6/lV35+7mlNP2bx3bJOX45VvuUf5Mgex4bik8sctAE=
+X-Received: by 2002:a81:ae23:0:b0:533:9c5b:7278 with SMTP id
+ m35-20020a81ae23000000b005339c5b7278mr4521096ywh.0.1677699429308; Wed, 01 Mar
+ 2023 11:37:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230301014651.1370939-1-surenb@google.com> <Y/8fNrNm1B2h/MTb@dhcp22.suse.cz>
+ <CAJuCfpERczW1YhEW0fN3p2zrdDj-Ec_pCONH6SQVEwTj0BHYMw@mail.gmail.com>
+ <Y/+a7fczvsVe2lPP@dhcp22.suse.cz> <CAJuCfpH1OsRH15p9PBxuCXrp8RrSiP5u4XQouuO-zOUxCB-zbw@mail.gmail.com>
+In-Reply-To: <CAJuCfpH1OsRH15p9PBxuCXrp8RrSiP5u4XQouuO-zOUxCB-zbw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 1 Mar 2023 11:36:58 -0800
+Message-ID: <CAJuCfpH=vEObrnSkqyk2BfeG0Jqgz2T4GxrS7=xJ3Ts2zj0A7w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] cgroup: limit cgroup psi file writes to processes
+ with CAP_SYS_RESOURCE
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        peterz@infradead.org, johunt@akamai.com, quic_sudaraja@quicinc.com,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to Documentation/filesystems/sysfs.rst, the show() callback
-function of kobject attributes should strictly use sysfs_emit() instead
-of sprintf() family functions. So, make this change.
-Issue identified using the coccinelle device_attr_show.cocci script.
+On Wed, Mar 1, 2023 at 10:40=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Wed, Mar 1, 2023 at 10:35=E2=80=AFAM Michal Hocko <mhocko@suse.com> wr=
+ote:
+> >
+> > On Wed 01-03-23 10:05:36, Suren Baghdasaryan wrote:
+> > [...]
+> > > Yes but hopefully my argument about keeping this and min period
+> > > patches separate is reasonable?
+> >
+> > I am not questioning that. The practical advantage to squash the two
+> > changes is that in case of the CAP_SYS_RESOURCE you do not have to
+> > explicitly think about reverting the min constrain as well. I do not
+> > think reverting one without the other is good.
+>
+> Ok, I'm fine with having both changes in the same patch. Will post v2
+> later today. Thanks!
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Note:
-   Resending the patch for review and feedback. No functional changes.
+Didn't call it v2 since the title had to be changed. The new patch is
+posted at: https://lore.kernel.org/all/20230301193403.1507484-1-surenb@goog=
+le.com/
 
-
- drivers/gpu/drm/nouveau/nouveau_hwmon.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/nouveau/nouveau_hwmon.c b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
-index a7db7c31064b..e844be49e11e 100644
---- a/drivers/gpu/drm/nouveau/nouveau_hwmon.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
-@@ -41,7 +41,7 @@ static ssize_t
- nouveau_hwmon_show_temp1_auto_point1_pwm(struct device *d,
- 					 struct device_attribute *a, char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%d\n", 100);
-+	return sysfs_emit(buf, "%d\n", 100);
- }
- static SENSOR_DEVICE_ATTR(temp1_auto_point1_pwm, 0444,
- 			  nouveau_hwmon_show_temp1_auto_point1_pwm, NULL, 0);
-@@ -54,8 +54,8 @@ nouveau_hwmon_temp1_auto_point1_temp(struct device *d,
- 	struct nouveau_drm *drm = nouveau_drm(dev);
- 	struct nvkm_therm *therm = nvxx_therm(&drm->client.device);
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n",
--	      therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST) * 1000);
-+	return sysfs_emit(buf, "%d\n",
-+			  therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST) * 1000);
- }
- static ssize_t
- nouveau_hwmon_set_temp1_auto_point1_temp(struct device *d,
-@@ -87,8 +87,8 @@ nouveau_hwmon_temp1_auto_point1_temp_hyst(struct device *d,
- 	struct nouveau_drm *drm = nouveau_drm(dev);
- 	struct nvkm_therm *therm = nvxx_therm(&drm->client.device);
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n",
--	 therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST_HYST) * 1000);
-+	return sysfs_emit(buf, "%d\n",
-+			  therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST_HYST) * 1000);
- }
- static ssize_t
- nouveau_hwmon_set_temp1_auto_point1_temp_hyst(struct device *d,
--- 
-2.34.1
-
-
-
+>
+> >
+> > --
+> > Michal Hocko
+> > SUSE Labs
