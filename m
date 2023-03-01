@@ -2,155 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FB16A7362
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 968956A7368
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjCASZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:25:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S229735AbjCAS0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCASZG (ORCPT
+        with ESMTP id S229498AbjCAS0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:25:06 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BE2234D3;
-        Wed,  1 Mar 2023 10:25:04 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id j17so14946311ljq.11;
-        Wed, 01 Mar 2023 10:25:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fsmpw0D+wVLg2f4A5FKHFXC1PrzHNdWE6aaZ6Ob/5F4=;
-        b=N2o/TkrjobO7nq+2U7h5UDrD8Y9J9z7Q0sii+mudByIuIVHsElBLr//cdWp1p1HaTG
-         6fKoIwhqt/OOk41twF1duoi/mL9vIOIlOzZeaPYG169HKOQVtH0BDKgVkUkODWXt/1Cz
-         b2zQLU5TE1m8PBn3uuYEnNGJObNwcrJlyNqXQez+2kCeKR5kh5XjbPLXQZIly/vkgBnJ
-         n4SEciYTJ3gCqxCEq3UbWkYK5uQWrReneL8Y78/bRpAJ87Oq3Qj8+vVrtBSne0I4g5LC
-         aimdgDZ5DUZRsF4iIHym1ZenOSZ7oKVVzNrzAIevhQQo+buSh90k90i5PUYgKAEtY1Id
-         3eLQ==
+        Wed, 1 Mar 2023 13:26:20 -0500
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1474348E09;
+        Wed,  1 Mar 2023 10:26:19 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id eg37so57466575edb.12;
+        Wed, 01 Mar 2023 10:26:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fsmpw0D+wVLg2f4A5FKHFXC1PrzHNdWE6aaZ6Ob/5F4=;
-        b=QuKxDR2MgtYLBiu5zRqMUcFSpkGXiftjqi1KqOJ3Ma8YNrtEMNjlwHPj6By8DTUwUY
-         cSNu5P1u74umfKKVUPmRsYaQvRjABcmgSD0/NLy9+xeVlx744v+Xd/pRdd5Q9XzKS4nr
-         nG9Nuj1XkOg2km2N4soY3F9DEjfAvwNzvSfEC/KP13Pcz7Y+mXNQaf4TbrTUPumLcgUk
-         IGuD33pfZvd2hjjFwF8evBIiuYL+N2lGpnuiGra1nTH5cLEuB+dLyC7/pSAfqLIMQqE7
-         /Nmygq6RyeGilWsn+L/4rDY3NqJZn9XppEL8Beg0Q88uN/abrqRTotfHuxXwqObwP+d+
-         L09w==
-X-Gm-Message-State: AO0yUKVdgNfxvYjK7Tjs5AqNPX6YSqWKXiU9y+eBSR1NjQlZC43Hdvxz
-        wQew9ARYXnw0txKzacBzEpCFkoTZgUThYteynaw=
-X-Google-Smtp-Source: AK7set/jnQmZcP1/IeHiFXMC1XzNjQw++DN85W3WS6+eHxNziEznxsqPkXt2Mk+r/ipuYy+XBPBxHx23WxvaLjY374I=
-X-Received: by 2002:a2e:a278:0:b0:295:9a96:a5fd with SMTP id
- k24-20020a2ea278000000b002959a96a5fdmr2358537ljm.5.1677695102024; Wed, 01 Mar
- 2023 10:25:02 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677695177;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oTcW5bVcScAMnNN3gSgz/zKQl+YyNYPA26DBVP6pHao=;
+        b=NPRGSCEBEEv4QUrhwCftyZ7zDg3oy5ZGLeez0P3MB4zc5828ZjI4ZgvkYVP3F/YxIO
+         UcJEwu6M5McmgZcdEOH3QDX+nd53vkDZ72/01flGm75SOa2QKUpq84CRpsap++lnV+jv
+         hlrkkDAbARPs3WRQ7VOqqdM/cVJ133KkmlGs4RGRwSSR2f11GYMyYfAMcbkP2rr1SQUx
+         NyMPVjlYcuOpMIJDu7kr9i7cBxMH+AREQP52Soer4DUd0YGzBxk/UIFXbtnzRaMPvyql
+         M2ZSHd1OHulI2M0neYf9gKHjX8iJrJAlCXHoM9/+15h5QE0T6K2fwqOrV86O0z2PT897
+         USKA==
+X-Gm-Message-State: AO0yUKWSuMg5OxCTgGNlzoleOHOZBkIWe+7h2NxNveH9SZqrZTLbyT32
+        ZVrwFRV+zKCHfv6OEcUE2s9BJ9dXy+h4hvUpzzU=
+X-Google-Smtp-Source: AK7set/jqSgBFNlOmGDZrVLgyHFa9PcGuta3832R9dQaL2fjCFqTGxdXtS8sYPkVwsdo4FgcljnMkabF8JSJ0p/Ch7A=
+X-Received: by 2002:a50:cc93:0:b0:4ad:7482:cd3b with SMTP id
+ q19-20020a50cc93000000b004ad7482cd3bmr4350660edi.6.1677695177481; Wed, 01 Mar
+ 2023 10:26:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20230228223838.3794807-1-dhowells@redhat.com> <20230228223838.3794807-2-dhowells@redhat.com>
- <07171afd91dbd05b425d92e54f9832f9.pc@manguebit.com>
-In-Reply-To: <07171afd91dbd05b425d92e54f9832f9.pc@manguebit.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 1 Mar 2023 12:24:50 -0600
-Message-ID: <CAH2r5mtD7tF7UH0sXbvX2PASV5a63X0bmGhXK6KU3UJf+HB1zg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] cifs: Fix memory leak in direct I/O
-To:     Paulo Alcantara <pc@manguebit.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Murphy Zhou <jencce.kernel@gmail.com>,
-        Steve French <sfrench@samba.org>
+References: <20230228221128.2560-1-mario.limonciello@amd.com>
+In-Reply-To: <20230228221128.2560-1-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 1 Mar 2023 19:26:06 +0100
+Message-ID: <CAJZ5v0hkOv6RWHtCc9v+uAU2wMUV+h5xYv8NE2zMGC1yH9hZtA@mail.gmail.com>
+Subject: Re: [PATCH v2] ACPI: x86: Add Cezanne to the list for forcing StorageD3Enable
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        David Alvarez Lombardi <dqalombardi@proton.me>,
+        dbilios@stdio.gr, Elvis Angelaccio <elvis.angelaccio@kde.org>,
+        victor.bonnelle@proton.me, hurricanepootis@protonmail.com,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I also verified that this fixes the problem that Murphy pointed out - thx
-
-On Wed, Mar 1, 2023 at 9:11=E2=80=AFAM Paulo Alcantara <pc@manguebit.com> w=
-rote:
+On Tue, Feb 28, 2023 at 11:11 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> David Howells <dhowells@redhat.com> writes:
+> commit 018d6711c26e4 ("ACPI: x86: Add a quirk for Dell Inspiron 14 2-in-1
+> for StorageD3Enable") introduced a quirk to allow a system with ambiguous
+> use of _ADR 0 to force StorageD3Enable.
 >
-> > When __cifs_readv() and __cifs_writev() extract pages from a user-backe=
-d
-> > iterator into a BVEC-type iterator, they set ->bv_need_unpin to note
-> > whether they need to unpin the pages later.  However, in both cases the=
-y
-> > examine the BVEC-type iterator and not the source iterator - and so
-> > bv_need_unpin doesn't get set and the pages are leaked.
-> >
-> > I think this may be responsible for the generic/208 xfstest failing
-> > occasionally with:
-> >
-> >       WARNING: CPU: 0 PID: 3064 at mm/gup.c:218 try_grab_page+0x65/0x10=
-0
-> >       RIP: 0010:try_grab_page+0x65/0x100
-> >       follow_page_pte+0x1a7/0x570
-> >       __get_user_pages+0x1a2/0x650
-> >       __gup_longterm_locked+0xdc/0xb50
-> >       internal_get_user_pages_fast+0x17f/0x310
-> >       pin_user_pages_fast+0x46/0x60
-> >       iov_iter_extract_pages+0xc9/0x510
-> >       ? __kmalloc_large_node+0xb1/0x120
-> >       ? __kmalloc_node+0xbe/0x130
-> >       netfs_extract_user_iter+0xbf/0x200 [netfs]
-> >       __cifs_writev+0x150/0x330 [cifs]
-> >       vfs_write+0x2a8/0x3c0
-> >       ksys_pwrite64+0x65/0xa0
-> >
-> > with the page refcount going negative.  This is less unlikely than it s=
-eems
-> > because the page is being pinned, not simply got, and so the refcount
-> > increased by 1024 each time, and so only needs to be called around ~209=
-7152
-> > for the refcount to go negative.
-> >
-> > Further, the test program (aio-dio-invalidate-failure) uses a 32MiB sta=
-tic
-> > buffer and all the PTEs covering it refer to the same page because it's
-> > never written to.
-> >
-> > The warning in try_grab_page():
-> >
-> >       if (WARN_ON_ONCE(folio_ref_count(folio) <=3D 0))
-> >               return -ENOMEM;
-> >
-> > then trips and prevents us ever using the page again for DIO at least.
-> >
-> > Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rat=
-her than a page list")
-> > Reported-by: Murphy Zhou <jencce.kernel@gmail.com>
-> > Link: https://lore.kernel.org/r/CAH2r5mvaTsJ---n=3D265a4zqRA7pP+o4MJ36W=
-CQUS6oPrOij8cw@mail.gmail.com
-> > Signed-off-by: David Howells <dhowells@redhat.com>
-> > cc: Steve French <sfrench@samba.org>
-> > cc: Shyam Prasad N <nspmangalore@gmail.com>
-> > cc: Rohith Surabattula <rohiths.msft@gmail.com>
-> > cc: Paulo Alcantara <pc@cjr.nz>
-> > cc: Jeff Layton <jlayton@kernel.org>
-> > cc: linux-cifs@vger.kernel.org
-> > ---
-> >  fs/cifs/file.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> It was reported that several more Dell systems suffered the same symptoms.
+> As the list is continuing to grow but these are all Cezanne systems,
+> instead add Cezanne to the CPU list to apply the StorageD3Enable property
+> and remove the whole list.
 >
-> Reviewed-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
+> It was also reported that an HP system only has StorageD3Enable on the ACPI
+> device for the first NVME disk, not the second.
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217003
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216773
+> Reported-by: David Alvarez Lombardi <dqalombardi@proton.me>
+> Reported-by: dbilios@stdio.gr
+> Reported-and-tested-by: Elvis Angelaccio <elvis.angelaccio@kde.org>
+> Tested-by: victor.bonnelle@proton.me
+> Tested-by: hurricanepootis@protonmail.com
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>  * Switch to using CPU rather than an ever growing list
+>
+>  drivers/acpi/x86/utils.c | 37 +++++++++++++------------------------
+>  1 file changed, 13 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+> index d7d3f1669d4c..788b29ed9fb3 100644
+> --- a/drivers/acpi/x86/utils.c
+> +++ b/drivers/acpi/x86/utils.c
+> @@ -200,39 +200,28 @@ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *s
+>   * a hardcoded allowlist for D3 support, which was used for these platforms.
+>   *
+>   * This allows quirking on Linux in a similar fashion.
+> + *
+> + * Cezanne systems shouldn't *normally* need this as the BIOS includes
+> + * StorageD3Enable.  But for two reasons we have added it.
+> + * 1) The BIOS on a number of Dell systems have ambiguity
+> + *    between the same value used for _ADR on ACPI nodes GPP1.DEV0 and GPP1.NVME.
+> + *    GPP1.NVME is needed to get StorageD3Enable node set properly.
+> + *    https://bugzilla.kernel.org/show_bug.cgi?id=216440
+> + *    https://bugzilla.kernel.org/show_bug.cgi?id=216773
+> + *    https://bugzilla.kernel.org/show_bug.cgi?id=217003
+> + * 2) On at least one HP system StorageD3Enable is missing on the second NVME
+> +      disk in the system.
+>   */
+>  static const struct x86_cpu_id storage_d3_cpu_ids[] = {
+>         X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 96, NULL),  /* Renoir */
+>         X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 104, NULL), /* Lucienne */
+> -       {}
+> -};
+> -
+> -static const struct dmi_system_id force_storage_d3_dmi[] = {
+> -       {
+> -               /*
+> -                * _ADR is ambiguous between GPP1.DEV0 and GPP1.NVME
+> -                * but .NVME is needed to get StorageD3Enable node
+> -                * https://bugzilla.kernel.org/show_bug.cgi?id=216440
+> -                */
+> -               .matches = {
+> -                       DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> -                       DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 14 7425 2-in-1"),
+> -               }
+> -       },
+> -       {
+> -               .matches = {
+> -                       DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> -                       DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 16 5625"),
+> -               }
+> -       },
+> +       X86_MATCH_VENDOR_FAM_MODEL(AMD, 25, 80, NULL),  /* Cezanne */
+>         {}
+>  };
+>
+>  bool force_storage_d3(void)
+>  {
+> -       const struct dmi_system_id *dmi_id = dmi_first_match(force_storage_d3_dmi);
+> -
+> -       return dmi_id || x86_match_cpu(storage_d3_cpu_ids);
+> +       return x86_match_cpu(storage_d3_cpu_ids);
+>  }
+>
+>  /*
+> --
 
-
-
---=20
-Thanks,
-
-Steve
+Applied as 6.3-rc material, thanks!
