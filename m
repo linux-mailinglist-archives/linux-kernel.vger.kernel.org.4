@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE896A73CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0E46A73CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjCASug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S230045AbjCASuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjCASue (ORCPT
+        with ESMTP id S229851AbjCASug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:50:34 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F1F303C2
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:50:33 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y11so10881235plg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:50:33 -0800 (PST)
+        Wed, 1 Mar 2023 13:50:36 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B4D196A1
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:50:35 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id l1so14326269pjt.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EjySFxB3u/yJmF2L0v+RXLMEaLGvfkABUreehEPy5PQ=;
-        b=mgDVJNJ8VEJ2ueKGgq3JfaokAscdSPqv2DLxGgE1XmKplb1bc2HUZYl9+pLS0KVVVr
-         IgMXwL71UCpY1a66RblhTCXQVN8AsdlzLOlnlTcV2C2FsCAgOWBpl1dbsaxKSMQwtOKw
-         ahrMcAu2whjZKc9SF8kb99HK8G/03tCImQI8I=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Rl4MXOgHLVry4oz9vlA930t08zmflDfyfREOeE2Q34=;
+        b=Io4nCr0FvVKnFmQlugdrzL4PkzhrOpeHGSvFz/6Xgm7M+qoRurq0pAatZm7etSSoNA
+         8QL4nSezHw9OmXdh3BQBfvMXRTYIPdFoo/QgKymilOUnod7ILBBfVyZC+0FOLeQVGBGG
+         tyENgfAk4xIJvFqb/rOemVsV2NMijwV0c+fDE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EjySFxB3u/yJmF2L0v+RXLMEaLGvfkABUreehEPy5PQ=;
-        b=S4YVE5R/qpIDxdW8fM3mgrkv3jlDBfxj+ZndQAKaZ2q2KctjRSiUqZoKRgil+HzJhf
-         Fvx33mVsNQzmxvKue9DHt/6w8eDzkMKfMaOpAcpZKxRVVlswTM+i+G03FyVYUUNU+edg
-         kC3DstxQqr1nIbiIJIJd0J+IdhjjkvhcFHYWeTfyGVkJlXRyxWy2PGNcw2mhblPH5wvz
-         v4D/pXTtgaCeOWuy3qPTx9Jryjlo+y5tmONJu0eL65qVnXncFXXsr/93TPEmLDyYRsSt
-         U/qfTvvisFNGsWmZZ2BwIWrnOnU4mF0fXRap5dNra9908+9BD6sd79WjjEK/aaF5bpVe
-         3zOg==
-X-Gm-Message-State: AO0yUKV6ifhPf6qMTnWJkuTIXEUE0Uw2e3QRQBLTgwrm+wCAo+1vezim
-        +IqRupOucVPUCu+L7AlTQa0GOw==
-X-Google-Smtp-Source: AK7set9xrPfAg/LyDUfuKea8pYAEKZ7H/mBw5ppo/zgswkvRYZSeAVahAYgRDaZHaevxq3qRwaM4xA==
-X-Received: by 2002:a17:902:f54e:b0:19c:da7f:a238 with SMTP id h14-20020a170902f54e00b0019cda7fa238mr9362595plf.31.1677696633278;
-        Wed, 01 Mar 2023 10:50:33 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/Rl4MXOgHLVry4oz9vlA930t08zmflDfyfREOeE2Q34=;
+        b=6DglH/HvOdtaiA5+VZmKmUUrwyNJFU9NOCO22JrPqDhIZBJsmmL9I0dS1c6E5Xgzc8
+         53aWDG+fw11i0hxwirpAL/afDwV2jozPSD7n+1aYktc6e4WA8KNt0dEQxWFmv+fPLGHa
+         CkXuCp9SzybLx/+/kV8sbFHcsk/o3TlEa9YWR1n6dYOKXVBsfAMXsI+6i83wK8uILyll
+         a3ZQgvsiBFss+LfffajKteMV0Kke4rNfdoMXKFV4PrGU3b/Hz0fj0aHfnTWQ11Oh8FBk
+         quokYUO0bdc9Fef5TalD1e0rQJB7KItXNxLSeTdMAmZtAUNoMWwQXKXfQE8hh1PUe4C/
+         rEDw==
+X-Gm-Message-State: AO0yUKUQzLK7SBhNOKY4syfgJdENCywuLqnSvEDU+JP48nvAOlLAZoBZ
+        eeu8mkEdl7T+diUfSOWGpITTFg==
+X-Google-Smtp-Source: AK7set/ErsWyPbDxwfCjDWNR050TZwD/oYsuvFjY6vP9Wk+gnQhF1bRILuOJP1U+w4Q9NgG5IunJ/w==
+X-Received: by 2002:a17:902:e5ce:b0:19a:b754:4053 with SMTP id u14-20020a170902e5ce00b0019ab7544053mr9824366plf.26.1677696634786;
+        Wed, 01 Mar 2023 10:50:34 -0800 (PST)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:f4ac:1f4d:6f3b:f98])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902780500b0019a8530c063sm8761982pll.102.2023.03.01.10.50.32
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902780500b0019a8530c063sm8761982pll.102.2023.03.01.10.50.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 10:50:32 -0800 (PST)
+        Wed, 01 Mar 2023 10:50:34 -0800 (PST)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     mka@chromium.org, swboyd@chromium.org,
@@ -55,10 +56,12 @@ Cc:     mka@chromium.org, swboyd@chromium.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] arm64: dts: qcom: sc7180: Delete a few unused trogdor dts files
-Date:   Wed,  1 Mar 2023 10:50:02 -0800
-Message-Id: <20230301185007.1101006-1-dianders@chromium.org>
+Subject: [PATCH 1/4] arm64: dts: qcom: sc7180: Delete wormdingler-rev0
+Date:   Wed,  1 Mar 2023 10:50:03 -0800
+Message-Id: <20230301104859.1.Id0cd5120469eb200118c0c7b8ee8209f877767b4@changeid>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
+In-Reply-To: <20230301185007.1101006-1-dianders@chromium.org>
+References: <20230301185007.1101006-1-dianders@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -70,57 +73,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In general on ChromeOS we try hard not to throw away perfectly good
-hardware, even if it has a few quirks. Many people keep early versions
-of boards around indefinitely and keep using them for testing /
-development if the feature they're working on doesn't need the latest
-and greatest. This is the reason why there are so many sc7180-trogdor
-device tree files.
+The earliest wormdingler I could find in my pile of hardware is
+-rev1. I believe that -rev0 boards were just distributed as a pile of
+components with no case. At this point I can't imagine anyone needing
+to make wormdingler-rev0 work, so let's delete support for it.
 
-That being said, _very_ early hardware tends not to be kept. -rev0
-hardware tends (not always) to be prototype hardware and often comes
-as a pile of parts. People are really only willing to put up with this
-for so long. Even if it's not a pile of parts, -rev0 tends to be a
-very small production run and isn't widely distributed. That means
-that, by and large, we can eventually drop support for -rev0. Here,
-we'll do that for kingoftown and wormdingler, and lazor.
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-While looking at the -rev0 of mrbland, I noticed that mrbland appears
-to be long dead and unlikely to be revived. Let's just fully delete
-it.
-
-
-Douglas Anderson (4):
-  arm64: dts: qcom: sc7180: Delete wormdingler-rev0
-  arm64: dts: qcom: sc7180: Delete kingoftown-rev0
-  arm64: dts: qcom: sc7180: Delete lazor-rev0
-  arm64: dts: qcom: sc7180: Delete mrbland
-
- arch/arm64/boot/dts/qcom/Makefile             |  10 +-
- .../dts/qcom/sc7180-trogdor-kingoftown-r0.dts |  38 ---
- ...n-r1.dts => sc7180-trogdor-kingoftown.dts} |   0
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  34 --
- .../qcom/sc7180-trogdor-mrbland-rev0-auo.dts  |  22 --
- .../qcom/sc7180-trogdor-mrbland-rev0-boe.dts  |  22 --
- .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  36 --
- .../qcom/sc7180-trogdor-mrbland-rev1-auo.dts  |  22 --
- .../qcom/sc7180-trogdor-mrbland-rev1-boe.dts  |  24 --
- .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi | 320 ------------------
- .../sc7180-trogdor-wormdingler-rev0-boe.dts   |  22 --
- .../sc7180-trogdor-wormdingler-rev0-inx.dts   |  22 --
- 12 files changed, 1 insertion(+), 571 deletions(-)
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
- rename arch/arm64/boot/dts/qcom/{sc7180-trogdor-kingoftown-r1.dts => sc7180-trogdor-kingoftown.dts} (100%)
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+ arch/arm64/boot/dts/qcom/Makefile             |  2 --
+ .../sc7180-trogdor-wormdingler-rev0-boe.dts   | 22 -------------------
+ .../sc7180-trogdor-wormdingler-rev0-inx.dts   | 22 -------------------
+ 3 files changed, 46 deletions(-)
  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
 
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 31aa54f0428c..a51060378ddc 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -118,8 +118,6 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3-lte.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-quackingstick-r0.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-quackingstick-r0-lte.dtb
+-dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev0-boe.dtb
+-dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev0-inx.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-inx.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+deleted file mode 100644
+index d6ed7d0afe4a..000000000000
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
++++ /dev/null
+@@ -1,22 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+-/*
+- * Google Wormdingler board device tree source
+- *
+- * Copyright 2021 Google LLC.
+- *
+- * SKU: 0x10 => 16
+- *  - bits 7..4: Panel ID: 0x1 (BOE)
+- */
+-
+-/dts-v1/;
+-
+-#include "sc7180-trogdor-wormdingler-rev0.dtsi"
+-
+-/ {
+-	model = "Google Wormdingler rev0 BOE panel board";
+-	compatible = "google,wormdingler-rev0-sku16", "qcom,sc7180";
+-};
+-
+-&panel {
+-	compatible = "boe,tv110c9m-ll3";
+-};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
+deleted file mode 100644
+index c03525ea64ca..000000000000
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
++++ /dev/null
+@@ -1,22 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+-/*
+- * Google Wormdingler board device tree source
+- *
+- * Copyright 2021 Google LLC.
+- *
+- * SKU: 0x0 => 0
+- *  - bits 7..4: Panel ID: 0x0 (INX)
+- */
+-
+-/dts-v1/;
+-
+-#include "sc7180-trogdor-wormdingler-rev0.dtsi"
+-
+-/ {
+-	model = "Google Wormdingler rev0 INX panel board";
+-	compatible = "google,wormdingler-rev0-sku0", "qcom,sc7180";
+-};
+-
+-&panel {
+-	compatible = "innolux,hj110iz-01a";
+-};
 -- 
 2.39.2.722.g9855ee24e9-goog
 
