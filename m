@@ -2,131 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D156A64A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E098B6A64B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjCABTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 20:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S229527AbjCABWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 20:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjCABTk (ORCPT
+        with ESMTP id S229549AbjCABWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 20:19:40 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC15F659C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:19:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1677633571; x=1709169571;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=V6miA8MHSGYGrEI6DdpNRW7sdj0ZbxKqOIltGcg9nuk=;
-  b=GGw225+kX+pk4VSKgIWCQ032Bmzxa22cBIjCzwhCI34cdqeHueBlxKNe
-   uPqkVm/i8SKaIgLfJOocNK+kyTc+nGNWLkZkHJvdCTiMaiV9DWWFCghoi
-   JzcTf+SJD6JfJwZVh9ZJciTB/mZQeqBkfAznGZCg6q9XHuOGM8MH3Tykv
-   w85w/skA2hY1g5P0/rla2aszUhKytuAawHUXQEFnjcaMXcMZfqksp+TwH
-   JBl46OezcR74x7FizoRXNVtTo2qEylN0izZy7Sde5sh1EbSmeYBrwqmpv
-   PdB2Rx1JsPAwLXyceuviRpTau6pLoaxwKJqvI13Uvi35p3kLgD3KYBL5k
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,223,1673884800"; 
-   d="scan'208";a="224259541"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Mar 2023 09:19:31 +0800
-IronPort-SDR: Vn79YQBeQJUhUMytZaVmHBrjmJROfL88ohbMkfcOuPhHcS6A8+N0r6zjGCE43CRHvAcAgHJhEY
- 4N13bINcAqCvaSHXOeikgGOwM4jsz1RPPi+ua+5/kfGy1q4i5yIj4/zyk+SArsUDxQ/m3pa0wL
- aLNucYZlaAyqqzQG2ldbYqWO/cxZFcmMBMKOgaATde6NEX0ggEFFkfuXSqOB/d9non4i0IcFKJ
- FaYVUQ+3+6NyBvBJHhx8FZjkIhgJxPJCuo31VAkf0xsbY4pkK7dN3lHmeQxTwq5QBDevscfhGa
- 3Pk=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2023 16:30:37 -0800
-IronPort-SDR: HbixYcKXTVOrw07SXfhfBTPYQpfEz59AdReHIrlfCzl+BLApnbxn6ZBXj/DuKiCwFp1ZnyDO0y
- zKA3sVUTXPZcN99W27kf7EAZ6A0srWRVOi/YLeXryjonTz5AIXCE5pNIa0jMSgOVwqIkU/llEp
- YbxkLapUFDCE8vqqVP5SG0yaj0bMbu+2DrTZUH/joXemEQQszYlGSzn/+hTOSKLvpyf2TebL/c
- HelC6IKC4C8jeNABdFaVdLnlUNenZScE1vSTtlZC754ljxKkY71qWolaD7IDSZFbY1EhPibCxa
- OsE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2023 17:19:31 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PRGc26WCfz1RvTp
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 17:19:30 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1677633570; x=1680225571; bh=V6miA8MHSGYGrEI6DdpNRW7sdj0ZbxKqOIl
-        tGcg9nuk=; b=VN0P4sqB/z5su4BfULi1dB/UhJIijWBF0zYcZ7gYhjJpCBz66Oy
-        K8tYHQxWl5vxxESY6HehsGMSdJP7twl1dMLiXO2D3BBwLrGYW6jgPMWoakFiXh9f
-        GWWUbIiry3GQqYbBnqpEYmHu7pmpvjrFBENqDmVm1jdelhzokjALHFSakDK80DOd
-        LlpGJj689B9OzC80nFDwiXCcZp2O0sS/ZV+Sz5zIq8XUpKO0hvS4UJhlLJnqxZXM
-        TC1OGiPk0WGMJVyQoryANk5VgECIxkZqF6Gsq0mMoW8c7yj/u59MxJGzyBtoWU6q
-        AyUfWQWafGS9OK+eRXFbibeTJj7iJa2nkUw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id w-qXLwQXITsH for <linux-kernel@vger.kernel.org>;
-        Tue, 28 Feb 2023 17:19:30 -0800 (PST)
-Received: from [10.225.163.47] (unknown [10.225.163.47])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PRGc023zmz1RvLy;
-        Tue, 28 Feb 2023 17:19:28 -0800 (PST)
-Message-ID: <5a727aa8-4620-7019-4f45-e78ab6c52b04@opensource.wdc.com>
-Date:   Wed, 1 Mar 2023 10:19:27 +0900
+        Tue, 28 Feb 2023 20:22:38 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4CD32E5C;
+        Tue, 28 Feb 2023 17:22:07 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id g6-20020a056830308600b0068d4b30536aso6694720ots.9;
+        Tue, 28 Feb 2023 17:22:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677633726;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V0dDKM/kz9j+kr4YipucQRbjkJuSAUreWGjHChZMyfU=;
+        b=j70Z6d74PxeOmjKCkXe3wzFvCUDGNQMIVJgZJLIB80H5UBzLcqON1dFrv8KYK5wdwc
+         7VOamfdrjECIxrS90d+V/UUnWd/frIxXi+KLwMx0xQFJkeNcUGf3Wovvf5LLuV3l3Upo
+         0wX2PN9bIfMISC0V1VONVxUwNeswAIJs01DK9HnNJ7bK2gOMr5tiBzAR7MwIt/RLDYrR
+         InGI9xk39UvaSvdabX0kBG0bOahWv/tZrUnqz/toFzwQGTSzyRhhuR1DopzEIRiTlEoA
+         tZ24iuuKF5wdi+kq7wFbFCZAsMVqex5i8zERzB9kWDn1CPR2nGPIlhlFsrnmvuRyi99l
+         /iTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677633726;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V0dDKM/kz9j+kr4YipucQRbjkJuSAUreWGjHChZMyfU=;
+        b=Hw2aF4pqAVOgfW/coYEfldySypmH573kJ1z/d1KG0Hn9UNEgR5pAGWBWgYW2jJbuLT
+         GWJYRnGQ48HDFE0pjSLo6RN321sfeM6B3iXD4ueCa5b9L+lkJ+pnk/1GMElfvkhwxLLG
+         F2p0RnsJYKEnEAotpEnNv4qcQ0HWxgPyiBT9avGI08mA2Oqjd9MnDMRlheQOUXtmnR92
+         W9Wi3n1qVgwBDtMRbstI9WeD41wj2lyaYgUxIt2xwNTqL6Ch0E1NwEPP3LPe3jyOqmhq
+         St6MZGy4occFmxtZ1doziQ+ZeBsVSHZJDJK4KWpd20mmVsB15fK1eMIenz7YmmYAcr7s
+         Xbsg==
+X-Gm-Message-State: AO0yUKXN1f5v5EJHazO2YIwgV+OSu615EGIJvuEysvsFgbifh3gx5U/F
+        F8ePlWUnx2Wqpgd9KHz4ju4q9kiXt2o=
+X-Google-Smtp-Source: AK7set/qbane1eg06bWyjfTJCCSYY62178P6KH3XhvxVAYkSbuCmbKzoa2lpaYkWW6xkbjfFB3LKxA==
+X-Received: by 2002:a05:6830:829:b0:68b:d344:97cb with SMTP id t9-20020a056830082900b0068bd34497cbmr2510876ots.13.1677633725847;
+        Tue, 28 Feb 2023 17:22:05 -0800 (PST)
+Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:20c1:2bed:d8f3:84d8])
+        by smtp.gmail.com with ESMTPSA id v2-20020a056830140200b006864b5f4650sm4436362otp.46.2023.02.28.17.22.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 17:22:05 -0800 (PST)
+From:   Frank Rowand <frowand.list@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 0/2] of: unittest: option to allow tests that trigger kernel stack dump
+Date:   Tue, 28 Feb 2023 19:21:14 -0600
+Message-Id: <20230301012116.1488132-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 1/3] clk: k210: remove an implicit 64-bit division
-Content-Language: en-US
-To:     Jesse Taube <mr.bossman075@gmail.com>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yimin Gu <ustcymgu@gmail.com>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Waldemar Brodkorb <wbx@openadk.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        kernel test robot <lkp@intel.com>
-References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
- <20230301002657.352637-2-Mr.Bossman075@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230301002657.352637-2-Mr.Bossman075@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 09:26, Jesse Taube wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The K210 clock driver depends on SOC_CANAAN, which is only selectable
-> when !MMU on RISC-V. !MMU is not possible on 32-bit yet, but patches
-> have been sent for its enabling. The kernel test robot reported this
-> implicit 64-bit division there.
-> 
-> Replace the implicit division with an explicit one.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/linux-riscv/202301201538.zNlqgE4L-lkp@intel.com/
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Commit 74df14cd301a ("of: unittest: add node lifecycle tests") added
+some tests that trigger a kernel stack dump.  Filtering the boot
+messages with scripts/dtc/of_unittest_expect detects that the stack
+dump is expected instead of being a test error.
 
-Looks OK to me.
+Test beds might interpret the stack dumps as errors, resulting in
+needless debugging and error reports.  These test beds are likely
+to remove unittests due to these stack dumps. To avoid these problems,
+have the unittest default to skip the tests that trigger a stack dump.
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Add a kernel cmdline option to not skip those tests.  This option can
+be used by testers who are able to interpret the stack dumps as not
+an error.
 
+Frank Rowand (2):
+  of: unittest: option to allow tests that trigger kernel stack dump
+  of: unittest: add of_unittest_stackdump to kernel documentation
+
+ .../admin-guide/kernel-parameters.txt         |  4 ++
+ drivers/of/unittest.c                         | 54 +++++++++++++++++--
+ 2 files changed, 55 insertions(+), 3 deletions(-)
 
 -- 
-Damien Le Moal
-Western Digital Research
+Frank Rowand <frowand.list@gmail.com>
 
