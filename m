@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919596A6D37
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3356A6D53
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCANlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 08:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S229883AbjCANpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 08:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCANlp (ORCPT
+        with ESMTP id S229537AbjCANpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:41:45 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6923E09C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 05:41:44 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id q6so5387462iot.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 05:41:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kq5OR9hoC260+bemchGBNuQjrNOZhrK9iuZRCuifkTs=;
-        b=RNGjW0fKHBPVSu32cnLyQ80bXdFmMDWGyWr8DyQlkX0JakbZI256w+r+tZD8H5sgLv
-         Mv93XNX6nbqefYx/euZAMec/fMtwLa6mGSn4k3ROmTxw2u0ojuqabJH+jtV4tzRPAMKB
-         Sf4KhzQY2gByZpvCMeUGD+L6zbuVQ94yycdGRyqLMeZsxotjVaKc1YYEOfw+n4dN1ZvQ
-         Fgf2sYQftnkmbDAqBSJbZxAR34gndmTIaEgKOwgBjqv+i0tZaPptUnvevGUMUG3iHXCh
-         bev3NxJ2B5iVDweZuR2h4Wenct2gS8Uo/P9mjYJ37PUqnG+cmME2c1cqJdMTE6E2Xg2W
-         lHkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kq5OR9hoC260+bemchGBNuQjrNOZhrK9iuZRCuifkTs=;
-        b=nm8JYU1x3RMt+tD8EJcXVBbSkLasME1AeTD2CawxOeXuyk+taZyanY13Rqw1KGhEjl
-         kRPwRXzbDx29ixZXkQmg2uW5T2TYlvUfJaTomveYvsR/VISK54JhV+AiCMFANVeRqnP2
-         gkTAEhRilTtLEzX9i3b4q0jaw65fcYiIJy5vMHgOCtLQw19MNSoEeyikw4W/kQDIiV8/
-         0/JsdBJV/saujNo1B9IyIVnmZIdEvbOuke96aWkwnwyWGa/G8Y0nerzjUqUFDndBysAP
-         rKOgPZ6UYX+nX7H0HLFig9SJyEDrpx1pjYPagVI273is85iG52BkJqUcHSztS+JBaNtX
-         q1nA==
-X-Gm-Message-State: AO0yUKVQtBzuquismMoThGWhyVJxJcHd7y6LNTw2ZWirpUtg0Bd7PyO/
-        GW/6/Jlzn13BE2ZYOzSyh/OHvvSY3arLWIvfnvfCyg==
-X-Google-Smtp-Source: AK7set+BWIITMwStn5iOknYU9Ytckv0R80OlViWQC7TNRL095p3FTuT9mKhGhMd4MFbc9GXISWxJtJVx+O7r52M/2LM=
-X-Received: by 2002:a02:85cb:0:b0:3c5:b47:539a with SMTP id
- d69-20020a0285cb000000b003c50b47539amr2818912jai.5.1677678103307; Wed, 01 Mar
- 2023 05:41:43 -0800 (PST)
+        Wed, 1 Mar 2023 08:45:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D973B207;
+        Wed,  1 Mar 2023 05:45:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC906121F;
+        Wed,  1 Mar 2023 13:45:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E7DC433D2;
+        Wed,  1 Mar 2023 13:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677678337;
+        bh=1dD0pfFSToxyyHnOfvS1/MB1SaH40n0HvBzGm/xGYgQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nP6fPks0nvwV8mXLCdjb4pNHMZDHId82gyBhyBiHJ3jK1Zli0+IT3ucPaSdF6cnQ4
+         4GL0XhGSxttxixLQ8Fin5ohtn0ve2kqkEUSOV3kj35Rqco1v/FGDpxH1DjOA8uxU8j
+         LinWi1/l2eQAokClHIdsAoikDUgopALAzA/UCgYE6kG/OGyPwQuyeXcJVknQwA9p/M
+         KKPZiCMT5i1/4BKcyV5t7L3f0l1MYAxOC/3VVVjka7o2xaxqpsZxWNx+7ZFGyg8R0U
+         QKqyS8TZw2I1FW/Lht912c910+pFSQ0LYkuYB0VoV5Fo7dswNjM2WSTroLTZYqsIfj
+         5WZo4YfiHlSNg==
+Date:   Wed, 1 Mar 2023 13:45:31 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
+Message-ID: <Y/9W+7fiRRMqw5LB@sirena.org.uk>
+References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
+ <20230227120702.13180-3-kyarlagadda@nvidia.com>
+ <Y/1oqr0RfD7KVA4y@kernel.org>
+ <Y/3zVdgnVz8BvGGl@ziepe.ca>
+ <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <Y/9EwTtmxcVBjiHz@nvidia.com>
+ <Y/9HB/KF2Kjkihkg@sirena.org.uk>
+ <Y/9VkGjCP48FHtyS@nvidia.com>
 MIME-Version: 1.0
-References: <cad03d25-0ea0-32c4-8173-fd1895314bce@I-love.SAKURA.ne.jp>
- <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
- <86bdfea2-7125-2e54-c2c0-920f28ff80ce@I-love.SAKURA.ne.jp>
- <CAG_fn=VJrJDNSea6DksLt5uBe_sDu0+8Ofg+ifscOyDdMKj3XQ@mail.gmail.com>
- <Y7a6XkCNTkxxGMNC@phenom.ffwll.local> <032386fc-fffb-1f17-8cfd-94b35b6947ee@I-love.SAKURA.ne.jp>
-In-Reply-To: <032386fc-fffb-1f17-8cfd-94b35b6947ee@I-love.SAKURA.ne.jp>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 1 Mar 2023 14:41:06 +0100
-Message-ID: <CAG_fn=V4-zzo+6HFG+wCbJRYHRh+Xx=r1weyCBJG-afpaG4Hag@mail.gmail.com>
-Subject: Re: [PATCH] fbcon: Use kzalloc() in fbcon_prepare_logo()
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Helge Deller <deller@gmx.de>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HlJqL3KQOXVxMEv/"
+Content-Disposition: inline
+In-Reply-To: <Y/9VkGjCP48FHtyS@nvidia.com>
+X-Cookie: Life -- Love It or Leave It.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> I'd like to avoid touching per-arch asm/string.h files if possible.
->
-> Can't we do like below (i.e. keep asm implementations as-is, but
-> automatically redirect to __msan_memset()) ? If yes, we could move all
-> __msan_*() redirection from per-arch asm/string.h files to the common
-> linux/string.h file?
->
-> diff --git a/include/linux/string.h b/include/linux/string.h
-> index c062c581a98b..403813b04e00 100644
-> --- a/include/linux/string.h
-> +++ b/include/linux/string.h
-> @@ -360,4 +360,15 @@ static __always_inline size_t str_has_prefix(const char *str, const char *prefix
->         return strncmp(str, prefix, len) == 0 ? len : 0;
->  }
->
-> +#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
-> +#undef memset
-> +#define memset(dest, src, count) __msan_memset((dest), (src), (count))
-> +#undef memset16
-> +#define memset16(dest, src, count) __msan_memset((dest), (src), (count) << 1)
-> +#undef memset32
-> +#define memset32(dest, src, count) __msan_memset((dest), (src), (count) << 2)
-> +#undef memset64
-> +#define memset64(dest, src, count) __msan_memset((dest), (src), (count) << 3)
-> +#endif
 
-The problem with this approach is that it can only work for
-memset/memcpy/memmove, whereas any function that is implemented in
-lib/string.c may require undefining the respective __HAVE_ARCH_FNAME
-so that KMSAN can instrument it.
+--HlJqL3KQOXVxMEv/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Mar 01, 2023 at 09:39:28AM -0400, Jason Gunthorpe wrote:
+> On Wed, Mar 01, 2023 at 12:37:27PM +0000, Mark Brown wrote:
+
+> > It's not like these buses are hot pluggable - someone would have to
+> > design and manufacture a board which doesn't work.  It's probably
+> > reasonable for this to fail with the SPI subsystem saying it can't
+> > support things when the operation is tried.
+
+> If the spi subsystem fails this request with these flags that would be
+> great, it would cause the TPM to fail probing reliably.
+
+> But does this patch do that? It looks like non-supporting half duplex
+> drivers will just ignore the new flag?
+
+That's something we can fix up in SPI, we shouldn't worry about it for
+the client drivers.
+
+--HlJqL3KQOXVxMEv/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP/VvoACgkQJNaLcl1U
+h9BVlgf/fs6E4wmKL5YMg67Xab5gvjFCS0c76pnr1vNsg7oz4yBQBqQnyEcgAuBl
+tPyhDERF91NXkFa1bnJKd0aVFmq3cgUCp1bswLI2UfCXb+7T91yfHPR1zuJHXzX8
+S9WBmw8wZJYHHzgxVuOKaRjsg/SYUKSMYuPiW34HDhMKBlf94IiqsrK78Li5Gj5W
+9Z9DBv2CKGjP1JvcprBZQqhrgrDBWploLOh+5GqjKCDtoeSdntuUD+015K+EiajS
+RQpThQz4OfCWLfuGVb4O/L5tNoI0QSIzAz2DAq8Ow3XLzdGLK+nzeOuC/j9JVXh6
+wYcHaj8yHSm7/Esg05zt6MZzeMhK+g==
+=YiAy
+-----END PGP SIGNATURE-----
+
+--HlJqL3KQOXVxMEv/--
