@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E4B6A7209
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EC96A720C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjCAR2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S229908AbjCAR2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCAR17 (ORCPT
+        with ESMTP id S229734AbjCAR2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:27:59 -0500
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AC34692;
-        Wed,  1 Mar 2023 09:27:56 -0800 (PST)
-Received: by mail-il1-f180.google.com with SMTP id l2so8750773ilg.7;
-        Wed, 01 Mar 2023 09:27:56 -0800 (PST)
+        Wed, 1 Mar 2023 12:28:17 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B37F61B9;
+        Wed,  1 Mar 2023 09:28:12 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id s26so56774498edw.11;
+        Wed, 01 Mar 2023 09:28:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gulWVH/sPIU6yOCZNhy1ilRLX8pmCKNR1YsylU0tXqg=;
+        b=MY2ha1FCla4JB/Wvo5yDX5+a5sR1M2PfNbPuMfm1zLo9DxFq3w1npu0wm2wnqNabif
+         hf+dwv6sXF0/DyiSchrpgQERJMmpp/PpEku/N8oI1GsWbAPUAzqQmlDUEVtfeKhH0F+5
+         ohLl61Y5qwKxAz+fZPpwcttfd/OeZ+5YmwjUQfXfaOhsOvJLI7yDJurXTGgbZ0c25gxB
+         OiiyqJGLEm+JtW+K1qskQHLHVlo6V6dXzln7XkTVpcBhku/s5ROTPQlVkZ+h9SpXo3SI
+         Td6dIJZ7vBBlQ/TCvfZNLQOyKgAOcesmfkRMzcun4wrRFJ0Ao/3kirvlL6xCX4MksC/X
+         99kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677691676;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VnDrSHzj0d5rZfd3ZqmVD1Vt/nu27QzrG7mUHHcfkZ8=;
-        b=2VavQvw7btE3tezi/y5GGJlCztLE+WlTqJlra88wldevdNajtDinmkRgZ2M+aAjT79
-         4diDBXszfyDIP9bV65cWIhfGSGUH9PiVEZMHPE7yWKVsn2oSisfi1WHweQ7iVKf/cVUT
-         5WSVM+ndKjX+Otk8AhMFH0dq91AAmkVfXFmVJrjfXsh5MYvT3Ry48//0nQKZLNg1H8yD
-         Bp98LRnMwsnxlmRLxUsqwjr2N0LbCEjrqchj8joPJmWZZAFllTbr2SY8gYB8SgYQToaM
-         biyin9PuRZR5rFYfYTLxTFXSm7eqv+VAlvt2ZUN24OCacPlYxFe97+5trmhJcaSHw5Pu
-         Ferg==
-X-Gm-Message-State: AO0yUKUH/IO7/tKytB8Z8ARnxFBm6q/zIC2ItA5Pv37SB5wXRoKtQKI8
-        kqFStDDdU1m9KSULddXHMRG7RygrdOAhR4kMIWc=
-X-Google-Smtp-Source: AK7set83yH+1npW6gGqhuWJ31bWAt4kcjFrQR8MpvpBsv5vW8Gf/hpePfQPAmAVVVcszGMPYN6HleocwyFRH1P4J270=
-X-Received: by 2002:a05:6e02:12c4:b0:316:60e4:5ac5 with SMTP id
- i4-20020a056e0212c400b0031660e45ac5mr11380215ilm.0.1677691675992; Wed, 01 Mar
- 2023 09:27:55 -0800 (PST)
+        bh=gulWVH/sPIU6yOCZNhy1ilRLX8pmCKNR1YsylU0tXqg=;
+        b=n0ilRbiY4dNahOQb3j1hxQhG/yBbR9z3jP2qSyPfahRB/7J7gbnrDqufTkxJCqweg8
+         kJlCkIoVdLdHmBo0LcRvy3pH0dZr7Fkiypko3/iSJmM50ygPbkFfbvfYlOOSUZe+62/o
+         MgQ5VdGgfgfYDPkHFVmO5e4Cm/RaIEcL9MQ+9N9CvNAvZsWSyBxDmqihiVcbikFn0Mj3
+         pYv6FT4j3PrS48Zn9SO3MKQm0DXK2oPxclKeTdS/FENtCkxXQbVaGnp0SmE4HsANexdd
+         khZr48Zyws64ouy43Axgf4z5R5EvPXSj/lgt/bRoITBpHcrLE2s6VTm+UUiJnH7Qz08B
+         Wc1Q==
+X-Gm-Message-State: AO0yUKXQQCZraYogbhyFrkGhvzoENox8RQq0rVx9JodjHa67sc9H66S6
+        o/tE/+7ATN1A1vwIu99JpFY=
+X-Google-Smtp-Source: AK7set/oP8YcQpwI4E3owCU87g+/OfqHNU5T/spkclqiEAS8Llf4/XCGUSo56vD3xah0+tfmftjYuQ==
+X-Received: by 2002:a05:6402:1117:b0:4ad:7224:ce94 with SMTP id u23-20020a056402111700b004ad7224ce94mr8780777edv.15.1677691691044;
+        Wed, 01 Mar 2023 09:28:11 -0800 (PST)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id k12-20020a508acc000000b004af71e8cc3dsm5851023edk.60.2023.03.01.09.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 09:28:10 -0800 (PST)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Date:   Wed, 01 Mar 2023 18:28:06 +0100
+Subject: [PATCH] dmaengine: ppc4xx: Avoid returning iterator in
+ ppc440spe_get_group_entry()
 MIME-Version: 1.0
-References: <20230301150413.27011-1-kan.liang@linux.intel.com>
-In-Reply-To: <20230301150413.27011-1-kan.liang@linux.intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 1 Mar 2023 09:27:44 -0800
-Message-ID: <CAM9d7cgwmuCqjdFsW6VUTLeL-BJuoP2F2N6RaWGTuThVFaGFKA@mail.gmail.com>
-Subject: Re: [PATCH] perf record: Fix "read LOST count failed" msg with sample read
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        jolsa@kernel.org, irogers@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230301-dmaengine-ppc4xx-avoid-iter-after-loop-v1-1-330689e1e6fd@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACWL/2MC/x2OwQrDIBBEfyXsuQvGhFD6K6WHVddkoVHREoSQf
+ 4/2MvCY4TEnFM7CBV7DCZkPKRJDg/ExgN0orIziGoNWelKTGtHtxGGVwJiSnWtFOqI4lB9nJN/
+ zG2NC/VyU0WYhP4/QZIYKo8kU7NZ1O5U27UXK7KX+H7w/13UDoTtxYZEAAAA=
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677691690; l=1271;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=SYwttO2B0dATcsw8vkVCVRiW0EC92ynoBMVqWDILQOw=;
+ b=L/YvdY4EBghRKSRVN+Llho0v4AnJD+stIr5hKidmbjspFs51fe/LMlv09llbCTNYOqI1DIUEgJC5
+ SpvbOYmbCfDwlUoqiaXNhAEjklxa5VfKS9R0VtBgcZ9jvJsiVW0S
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kan,
+Linus proposed to avoid any use of the list iterator variable after the
+loop, in the attempt to move the list iterator variable declaration into
+the marcro to avoid any potential misuse after the loop [1].
 
-On Wed, Mar 1, 2023 at 7:04 AM <kan.liang@linux.intel.com> wrote:
->
-> From: Kan Liang <kan.liang@linux.intel.com>
->
-> Hundreds of "read LOST count failed" error messages may be displayed,
-> when the below command is launched.
->
-> perf record -e '{cpu/mem-loads-aux/,cpu/event=0xcd,umask=0x1/}:S' -a
->
-> According to the commit 89e3106fa25f ("libperf: Handle read format in
-> perf_evsel__read()"), the PERF_FORMAT_GROUP is only available for the
-> leader. However, the record__read_lost_samples() goes through every
-> entry of an evlist, which includes both leader and member. The member
-> event errors out and triggers the error message. Since there may be
-> hundreds of CPUs on a server, the message will be printed hundreds of
-> times, which is very annoying.
->
-> The message itself is correct, but the pr_err is a overkill. Other error
-> messages in the record__read_lost_samples() are all pr_debug. To make
-> the output format consistent, change the pr_err("read LOST count
-> failed\n"); to pr_debug("read LOST count failed\n");.
-> User can still get the message via -v option.
->
-> Fixes: e3a23261ad06 ("perf record: Read and inject LOST_SAMPLES events")
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Instead we'll just return 'iter' within the iterator and otherwise NULL.
+This ensures there is never a bogus pointer returned (e.g. if the list
+is empty).
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+---
+ drivers/dma/ppc4xx/adma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Namhyung
+diff --git a/drivers/dma/ppc4xx/adma.c b/drivers/dma/ppc4xx/adma.c
+index 686c270ef710..f62f9653196f 100644
+--- a/drivers/dma/ppc4xx/adma.c
++++ b/drivers/dma/ppc4xx/adma.c
+@@ -1431,9 +1431,9 @@ ppc440spe_get_group_entry(struct ppc440spe_adma_desc_slot *tdesc, u32 entry_idx)
+ 
+ 	list_for_each_entry(iter, &tdesc->group_list, chain_node) {
+ 		if (i++ == entry_idx)
+-			break;
++			return iter;
+ 	}
+-	return iter;
++	return NULL;
+ }
+ 
+ /**
 
+---
+base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
+change-id: 20230301-dmaengine-ppc4xx-avoid-iter-after-loop-2860b2b6af41
 
-> ---
->  tools/perf/builtin-record.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index 8374117e66f6..be7c0c29d15b 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -1866,7 +1866,7 @@ static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
->         int id_hdr_size;
->
->         if (perf_evsel__read(&evsel->core, cpu_idx, thread_idx, &count) < 0) {
-> -               pr_err("read LOST count failed\n");
-> +               pr_debug("read LOST count failed\n");
->                 return;
->         }
->
-> --
-> 2.35.1
->
+Best regards,
+-- 
+Jakob Koschel <jkl820.git@gmail.com>
+
