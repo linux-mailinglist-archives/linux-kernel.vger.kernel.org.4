@@ -2,211 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA2D6A7408
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A07E26A740F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCATHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S229735AbjCATJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCATHm (ORCPT
+        with ESMTP id S229492AbjCATJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:07:42 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF454DBCA
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:07:33 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536b7ffdd34so382746057b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:07:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677697653;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BlFKPaHxV4jQ7dMxp37PMOa6KmgzjBmeyyNBQBavDx8=;
-        b=Tc+Lfvs4SS8u1UCDBpYQvIJ9La6W49lFb2CZ+De1a11FXObIXWCF3BlBujuIEcWfXR
-         K8XAAg8gxr2xVbV3LBMHTffyEYatSSzLtxaJ1thDWIz6aZ6tnyaWtD/HgJU6tyGJYf3q
-         jp3IKu6nyN7tV0mKfmzcHMG74wGuu0zdP7wmqBrP/k7QLFJgyU3CURBojezcQXpqpSdo
-         Fxa0y0DporTUWfiigj1CH1bgpxQ8jMFxnIOpFeF8j43Xe59cuxyCaa5vcLCOhN+5MFUV
-         PmN47d5ZRn6yecRBiQTEpYT20b93V+dsHO/LeLSVH6nyRn1/7A+vnbXttfD2d7rTtMJ5
-         iIiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677697653;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BlFKPaHxV4jQ7dMxp37PMOa6KmgzjBmeyyNBQBavDx8=;
-        b=urgGYz+DaIndetQZEttNJdw5Uj+docGvS+WoR3Ouys/PdJKziLp/FTAN0VilqZLy3n
-         gHpWZweS97r04CE4NWTSco5+vQh5K6HdDiPriba1W021PEUvHulePbqpsu7WIkWIsoBd
-         K9Kuo/r+o9XoZUvisPG6EHstItfQnYFo2Hx+55GNjcUnmmAvUzKp7X41q5csEuENlpCM
-         sGTINWNu0QEHJYzvKrIAfIBe2yeNAWkkiSym487Q5dN3RYX0rrwz83ilYu7ReGThzKhC
-         MSfVE5ASJBVdux2CN7L1bJR4oLkAwVOjYlyjglD/rJxzdt317kD4H/C7hM20wdrIP0kh
-         NLfQ==
-X-Gm-Message-State: AO0yUKVdepgjhF7BRRbgpIs+OET1aSUkhzcWY39HSLaJ/V8nyX3I4xlB
-        a5kz6dH1yvjmivGQ9fxpygqoFNOsOTKLYijhdq2PXw==
-X-Google-Smtp-Source: AK7set9ZsSbg+lkgd2HRMSAvJ/YkGIQu9aJDVRfhrq6ARtmp15/GeLDk6fPjITpwN8ANRiWlqv4jLhfWt2ZLpWW0OEA=
-X-Received: by 2002:a81:ac16:0:b0:536:4194:e6eb with SMTP id
- k22-20020a81ac16000000b005364194e6ebmr4616550ywh.0.1677697652553; Wed, 01 Mar
- 2023 11:07:32 -0800 (PST)
+        Wed, 1 Mar 2023 14:09:18 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FCC30FF;
+        Wed,  1 Mar 2023 11:09:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677697757; x=1709233757;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bJzj9S3Ol5uf9Y3a+Q3tlxd3ZEIxI0dIWJCTPDgaX3w=;
+  b=Y/heiCKV65lDNVIkVhaa8II1pI2RTg4y04E2Xf7h0YlvuRuLnIImINII
+   MdJ+1Bq0sh3JVK5WL8JohUQkU/QDyXC9WVOJ4mi+7NfxAoMlazguU/Vq6
+   msbC1CHVZPuc6sETipvPtf+hEkhZuuEZt6l0jdhOsHzIk4L7iLvNr3qOC
+   hO9pTCrEj4Ln7+fVqSykEBZRt3oIr7Da312V0UPwBDJPcMCpAeLPUs5aX
+   jDtyRdAbd2088mhQ1YgF27IDy0xQRs5DNjrQr68uwI/HlV0aTEZ40KsMD
+   AuMN1JUuzN4aO4KzCY4BKgTXKlEMvk1ez7HZLGWwiK1C+MrhHPJ9Ay/Oi
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="318298923"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="318298923"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 11:08:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="920353573"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="920353573"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Mar 2023 11:08:31 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXRoU-0006M3-2q;
+        Wed, 01 Mar 2023 19:08:30 +0000
+Date:   Thu, 2 Mar 2023 03:08:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built
+ from XDP frames
+Message-ID: <202303020331.PSFMFbXw-lkp@intel.com>
+References: <20230301160315.1022488-2-aleksander.lobakin@intel.com>
 MIME-Version: 1.0
-References: <20230227173632.3292573-1-surenb@google.com> <20230227173632.3292573-19-surenb@google.com>
- <Y/8CJQGNuMUTdLwP@localhost> <Y/8FNM9czzPHb5eG@localhost> <CAJuCfpHYT++MBC6T-p80n_m5hHWRRC4Y1bO9J-bFFZZDqNX-BQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpHYT++MBC6T-p80n_m5hHWRRC4Y1bO9J-bFFZZDqNX-BQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 1 Mar 2023 11:07:21 -0800
-Message-ID: <CAJuCfpH9HRSuh2sWZDr0oCXh5dpgS+LmzL=kO-TR9a0yFnT_xg@mail.gmail.com>
-Subject: Re: [PATCH v4 18/33] mm: write-lock VMAs before removing them from
- VMA tree
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301160315.1022488-2-aleksander.lobakin@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 10:34=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Tue, Feb 28, 2023 at 11:57=E2=80=AFPM Hyeonggon Yoo <42.hyeyoo@gmail.c=
-om> wrote:
-> >
-> > On Wed, Mar 01, 2023 at 07:43:33AM +0000, Hyeonggon Yoo wrote:
-> > > On Mon, Feb 27, 2023 at 09:36:17AM -0800, Suren Baghdasaryan wrote:
-> > > > Write-locking VMAs before isolating them ensures that page fault
-> > > > handlers don't operate on isolated VMAs.
-> > > >
-> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > > ---
-> > > >  mm/mmap.c  | 1 +
-> > > >  mm/nommu.c | 5 +++++
-> > > >  2 files changed, 6 insertions(+)
-> > > >
-> > > > diff --git a/mm/mmap.c b/mm/mmap.c
-> > > > index 1f42b9a52b9b..f7ed357056c4 100644
-> > > > --- a/mm/mmap.c
-> > > > +++ b/mm/mmap.c
-> > > > @@ -2255,6 +2255,7 @@ int split_vma(struct vma_iterator *vmi, struc=
-t vm_area_struct *vma,
-> > > >  static inline int munmap_sidetree(struct vm_area_struct *vma,
-> > > >                                struct ma_state *mas_detach)
-> > > >  {
-> > > > +   vma_start_write(vma);
-> > > >     mas_set_range(mas_detach, vma->vm_start, vma->vm_end - 1);
-> > >
-> > > I may be missing something, but have few questions:
-> > >
-> > >       1) Why does a writer need to both write-lock a VMA and mark the=
- VMA detached
-> > >          when unmapping it, isn't it enough to just only write-lock a=
- VMA?
->
-> We need to mark the VMA detached to avoid handling page fault in a
-> detached VMA. The possible scenario is:
->
-> lock_vma_under_rcu
->   vma =3D mas_walk(&mas)
->                                                         munmap_sidetree
->                                                           vma_start_write=
-(vma)
->
-> mas_store_gfp() // remove VMA from the tree
->                                                           vma_end_write_a=
-ll()
->   vma_start_read(vma)
->   // we locked the VMA but it is not part of the tree anymore.
->
-> So, marking the VMA locked before vma_end_write_all() and checking
-> vma->detached after vma_start_read() helps us avoid handling faults in
-> the detached VMA.
->
->
-> > >
-> > >       2) as VMAs that are going to be removed are already locked in v=
-ma_prepare(),
-> > >          so I think this hunk could be dropped?
-> >
-> > After sending this just realized that I did not consider simple munmap =
-case :)
-> > But I still think 1) and 3) are valid question.
-> >
-> > >
-> > > >     if (mas_store_gfp(mas_detach, vma, GFP_KERNEL))
-> > > >             return -ENOMEM;
-> > > > diff --git a/mm/nommu.c b/mm/nommu.c
-> > > > index 57ba243c6a37..2ab162d773e2 100644
-> > > > --- a/mm/nommu.c
-> > > > +++ b/mm/nommu.c
-> > > > @@ -588,6 +588,7 @@ static int delete_vma_from_mm(struct vm_area_st=
-ruct *vma)
-> > > >                    current->pid);
-> > > >             return -ENOMEM;
-> > > >     }
-> > > > +   vma_start_write(vma);
-> > > >     cleanup_vma_from_mm(vma);
-> > >
-> > >       3) I think this hunk could be dropped as Per-VMA lock depends o=
-n MMU anyway.
->
-> Ah, yes, you are right. We can safely remove the changes in nommu.c
-> Andrew, should I post a fixup or you can make the removal directly in
-> mm-unstable?
+Hi Alexander,
 
-I went ahead and posted the fixup for this at:
-https://lore.kernel.org/all/20230301190457.1498985-1-surenb@google.com/
+Thank you for the patch! Yet something to improve:
 
-> Thanks,
-> Suren.
->
-> > >
-> > > Thanks,
-> > > Hyeonggon
-> > >
-> > > >
-> > > >     /* remove from the MM's tree and list */
-> > > > @@ -1519,6 +1520,10 @@ void exit_mmap(struct mm_struct *mm)
-> > > >      */
-> > > >     mmap_write_lock(mm);
-> > > >     for_each_vma(vmi, vma) {
-> > > > +           /*
-> > > > +            * No need to lock VMA because this is the only mm user=
- and no
-> > > > +            * page fault handled can race with it.
-> > > > +            */
-> > > >             cleanup_vma_from_mm(vma);
-> > > >             delete_vma(mm, vma);
-> > > >             cond_resched();
-> > > > --
-> > > > 2.39.2.722.g9855ee24e9-goog
-> > > >
-> > > >
-> > >
-> >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to kernel-team+unsubscribe@android.com.
-> >
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Lobakin/xdp-recycle-Page-Pool-backed-skbs-built-from-XDP-frames/20230302-000635
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230301160315.1022488-2-aleksander.lobakin%40intel.com
+patch subject: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built from XDP frames
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20230302/202303020331.PSFMFbXw-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/a5ca5578e9bd35220be091fd02df96d492120ee3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alexander-Lobakin/xdp-recycle-Page-Pool-backed-skbs-built-from-XDP-frames/20230302-000635
+        git checkout a5ca5578e9bd35220be091fd02df96d492120ee3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303020331.PSFMFbXw-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   net/core/xdp.c: In function '__xdp_build_skb_from_frame':
+>> net/core/xdp.c:662:17: error: implicit declaration of function 'skb_mark_for_recycle' [-Werror=implicit-function-declaration]
+     662 |                 skb_mark_for_recycle(skb);
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/skb_mark_for_recycle +662 net/core/xdp.c
+
+   614	
+   615	struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+   616						   struct sk_buff *skb,
+   617						   struct net_device *dev)
+   618	{
+   619		struct skb_shared_info *sinfo = xdp_get_shared_info_from_frame(xdpf);
+   620		unsigned int headroom, frame_size;
+   621		void *hard_start;
+   622		u8 nr_frags;
+   623	
+   624		/* xdp frags frame */
+   625		if (unlikely(xdp_frame_has_frags(xdpf)))
+   626			nr_frags = sinfo->nr_frags;
+   627	
+   628		/* Part of headroom was reserved to xdpf */
+   629		headroom = sizeof(*xdpf) + xdpf->headroom;
+   630	
+   631		/* Memory size backing xdp_frame data already have reserved
+   632		 * room for build_skb to place skb_shared_info in tailroom.
+   633		 */
+   634		frame_size = xdpf->frame_sz;
+   635	
+   636		hard_start = xdpf->data - headroom;
+   637		skb = build_skb_around(skb, hard_start, frame_size);
+   638		if (unlikely(!skb))
+   639			return NULL;
+   640	
+   641		skb_reserve(skb, headroom);
+   642		__skb_put(skb, xdpf->len);
+   643		if (xdpf->metasize)
+   644			skb_metadata_set(skb, xdpf->metasize);
+   645	
+   646		if (unlikely(xdp_frame_has_frags(xdpf)))
+   647			xdp_update_skb_shared_info(skb, nr_frags,
+   648						   sinfo->xdp_frags_size,
+   649						   nr_frags * xdpf->frame_sz,
+   650						   xdp_frame_is_frag_pfmemalloc(xdpf));
+   651	
+   652		/* Essential SKB info: protocol and skb->dev */
+   653		skb->protocol = eth_type_trans(skb, dev);
+   654	
+   655		/* Optional SKB info, currently missing:
+   656		 * - HW checksum info		(skb->ip_summed)
+   657		 * - HW RX hash			(skb_set_hash)
+   658		 * - RX ring dev queue index	(skb_record_rx_queue)
+   659		 */
+   660	
+   661		if (xdpf->mem.type == MEM_TYPE_PAGE_POOL)
+ > 662			skb_mark_for_recycle(skb);
+   663	
+   664		/* Allow SKB to reuse area used by xdp_frame */
+   665		xdp_scrub_frame(xdpf);
+   666	
+   667		return skb;
+   668	}
+   669	EXPORT_SYMBOL_GPL(__xdp_build_skb_from_frame);
+   670	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
