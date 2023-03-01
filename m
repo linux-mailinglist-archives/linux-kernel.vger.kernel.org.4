@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D366A71F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBF66A71F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjCARTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S229892AbjCARTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCARTi (ORCPT
+        with ESMTP id S229935AbjCARTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:19:38 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E47B36442;
-        Wed,  1 Mar 2023 09:19:33 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id i34so56777462eda.7;
-        Wed, 01 Mar 2023 09:19:33 -0800 (PST)
+        Wed, 1 Mar 2023 12:19:49 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B634A27988;
+        Wed,  1 Mar 2023 09:19:45 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id az36so9094135wmb.1;
+        Wed, 01 Mar 2023 09:19:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tRe05a9G8Y51+PSp1T278R9G34SaE71lnwKhgVyqRVM=;
-        b=auk8vpkMOuh5ilZZaALuGEMCApUX0ABSxSJMZ2aue89jBbUX7xDmIDB2mDWgLPJNpa
-         oYOt9QY7WXMt8CFPbk2XIAJ4qUQ4tMTKEC08rOwCtkaFegD5NxzlxMNXFVTsRlfCunue
-         jnjXH0/dDBK/fmErHXTjplnXQYktwyTFqTXlH2mLzpHozizqcRf91qmr12wYJ4hqJc+T
-         P+LHFnxB20ZpGIXPvn9x319k+KxVxDA38d8izKP65TWUv9k3EBxUyxGY8y1A5X3zY4iM
-         tEr9SC/TkVm5/tTPJjX4a11j24ragZB5pNo8KAELJm8LC2LTwHIqK4ujuvsbs0YcPmo4
-         5jKQ==
+        d=gmail.com; s=20210112; t=1677691184;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lVLUoMBClRsLJTrNJuKg+DNnna+fSwHUpLxyvEvQJJU=;
+        b=hGIWnqpKj9B5BELlIG92XwTie5VSWrj2kGuAfpbs9LGD9wBDfsgvjaSNcr5apiJC68
+         8DWjmL1lt0KAuvqc7GOc9b6qnzi1zWY4VX8K+g83XUwOFhAjXwghbJ4UgwfGtAh5ydVq
+         oNZpbORAhThRkBVZMv58snaAA5M50UZqTBdiRJ4Ign8yEDbogLuEHLhSkXxPL/anYK4A
+         5I8ndV7qcjphHGcuOs40p0CPebJNIvHsLpwS8H5qSvnNSpfvogjiSGn4vv4MnDBNnprc
+         LFlNS7z42RB1g4m7hZvshlgTsC8IH81R36b19g3yiNwzXDrqp6apeoO3+JJ/oj34Kg3K
+         BAuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tRe05a9G8Y51+PSp1T278R9G34SaE71lnwKhgVyqRVM=;
-        b=JKe15pvCXfyg3pIpvxgkqfavpsJpkgVs748BCByu4UU7Gu0Y4lUWObfXZz+DxvdzPa
-         QQlCO/KP1b38KFnd0wy9I191xlOMbtcGAAkt1ACRS4GHLNuVsLNgjTZhy9gh7FBiGPoU
-         ivLIU9IhTSNLJaolCw12XBTD0MTCOFI9QhcMSltahVmpIP0zH62VNzbW3kWXUbAaqfFL
-         Xh+x2bWUc9OO6RsgYnMyIFpcuPV5E+Twsznbf7D/uINaHYRn98i9K8SQ0sPMQDxjg2bf
-         SGQ3Cu/JjuuM2GJLdCEXNpP5u7NHOkXpNptAOEjMMsFVHw6uHu2ymjh0mqLmNDmWa9Kf
-         s8MA==
-X-Gm-Message-State: AO0yUKVYlENye+wRGNR4BOPcUTbzJy7d8umQ3BwFlRYzuLweKS+NRCZ8
-        3kC3ykrV2jk1Fpo8y88f3Wjfzq7SG4IkCuR6
-X-Google-Smtp-Source: AK7set8I5zFIHu9/b8cAqaSqZg2Om7uarsCPaGoQTaNxsGGZ5pGbKuIL41wOPrSZU29w1QkQT1WfiQ==
-X-Received: by 2002:a17:907:c68a:b0:87f:546d:7cb5 with SMTP id ue10-20020a170907c68a00b0087f546d7cb5mr7836689ejc.37.1677691171579;
-        Wed, 01 Mar 2023 09:19:31 -0800 (PST)
-Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id lc8-20020a170906f90800b008d57e796dcbsm5986567ejb.25.2023.03.01.09.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 09:19:31 -0800 (PST)
-From:   Jakob Koschel <jkl820.git@gmail.com>
-Date:   Wed, 01 Mar 2023 18:19:14 +0100
-Subject: [PATCH] scsi: lpfc: avoid usage of list iterator variable after
- loop
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230301-scsi-lpfc-avoid-list-iterator-after-loop-v1-1-325578ae7561@gmail.com>
-X-B4-Tracking: v=1; b=H4sIABGJ/2MC/x2OwQrDIBBEfyV47oKJlJT+SulhXddmwaq4IQRC/
- r2mt3nM8JjDKDdhNc/hMI03USm5w3gbDC2YPwwSOpvJTs46O4KSCqQaCXArEiCJriArN1xLA4w
- 9QSqlwuzncCeHD45kus6jMviGmZZL+EXt06uojaPs/w+v93n+APnED1STAAAA
-To:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677691171; l=1910;
- i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
- bh=8hGXtX/Zsq0Mz986GnpBIGioOKRulASx+6dKpyss844=;
- b=J9yLwyS7zTkZV9LOu0KRbQK7L77rrhfHLSepm1zL3eHWxIbnQGk0Js3AfQjI8L/K4V3vA1WE9Nfd
- 2htjx2PpDhi9OPD0o68L9N80mqOhn6R4qajYE6UExwXXPtGEx9or
-X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
- pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
+        d=1e100.net; s=20210112; t=1677691184;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lVLUoMBClRsLJTrNJuKg+DNnna+fSwHUpLxyvEvQJJU=;
+        b=EUPwpwn3ryNdccuEjlZMrgK/1l4CxxgY/Pyz8jzAtMdTYLtF4S0r60PCx7nXenxzs9
+         EZvMYFmy3GSoQNjEULOqLO12c+8OX3jlx+6QVj474XrBlfKuuBPiXkLr9U/VT3aS9q2+
+         HwoZOyPKRRQef3IP4EiJd0OyKnwg5xaqkYON/MN030VWCPBB7G17B8DurWNr10LJJdMF
+         x202maJCT65+WCkJbSRJy5wGa6DBja0DAgs1Hzp/UBzaVPDg+w1u0xobUoCCEm1w9DXP
+         mwjI+1NYS4lxF25zegfpualz0BlMBAUcMs/Wq0JRiVrDnQeClQq056YenhgLL12R4ea2
+         pqmg==
+X-Gm-Message-State: AO0yUKXZCnq47qjzZre6INzpq9rzqIdfxd/qOQaQf3Ni+ek/a+2emAMw
+        ornqR6PMFc3V5WwBHY0ugmQ=
+X-Google-Smtp-Source: AK7set8lQ8cqGjyf5GgzueugEeOGCskEuHNOA6VdFXO1Nx5pZJd05ym6Gw3DKRtCrczGsFG7hufDmA==
+X-Received: by 2002:a05:600c:3319:b0:3eb:383c:187d with SMTP id q25-20020a05600c331900b003eb383c187dmr5249410wmp.27.1677691184203;
+        Wed, 01 Mar 2023 09:19:44 -0800 (PST)
+Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
+        by smtp.gmail.com with ESMTPSA id j40-20020a05600c1c2800b003dd1bd0b915sm210956wms.22.2023.03.01.09.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 09:19:43 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 01 Mar 2023 18:19:41 +0100
+Message-Id: <CQV7W12MZX16.PLH1OAM17G7N@vincent-arch>
+To:     "Asahi Lina" <lina@asahilina.net>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <asahi@lists.linux.dev>, "Finn Behrens" <me@kloenk.dev>,
+        "Sumera Priyadarsini" <sylphrenadin@gmail.com>
+Subject: Re: [PATCH 3/3] rust: macros: Allow specifying multiple module
+ aliases
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+References: <20230224-rust-macros-v1-0-b39fae46e102@asahilina.net>
+ <20230224-rust-macros-v1-3-b39fae46e102@asahilina.net>
+In-Reply-To: <20230224-rust-macros-v1-3-b39fae46e102@asahilina.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -86,57 +80,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the &epd_pool->list is empty when executing
-lpfc_get_io_buf_from_expedite_pool() the function would return an
-invalid pointer. Even in the case if the list is guaranteed to be
-populated, the iterator variable should not be used after the loop to be
-more robust for future changes.
+> Modules can (and usually do) have multiple alias tags, in order to
+> specify multiple possible device matches for autoloading. Allow this by
+> changing the alias ModuleInfo field to an Option<Vec<String>>.
+>
+> Note: For normal device IDs this is autogenerated by modpost (which is
+> not properly integrated with Rust support yet), so it is useful to be
+> able to manually add device match aliases for now, and should still be
+> useful in the future for corner cases that modpost does not handle.
+>
+> This pulls in the expect_group() helper from the rfl/rust branch
+> (with credit to authors).
+>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Co-developed-by: Finn Behrens <me@kloenk.dev>
+> Signed-off-by: Finn Behrens <me@kloenk.dev>
+> Co-developed-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
+> Signed-off-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> ---
 
-Linus proposed to avoid any use of the list iterator variable after the
-loop, in the attempt to move the list iterator variable declaration into
-the marcro to avoid any potential misuse after the loop [1].
-
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
----
- drivers/scsi/lpfc/lpfc_sli.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index edbd81c3b643..5d06bf6d4f39 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -21899,20 +21899,20 @@ lpfc_get_io_buf_from_private_pool(struct lpfc_hba *phba,
- static struct lpfc_io_buf *
- lpfc_get_io_buf_from_expedite_pool(struct lpfc_hba *phba)
- {
--	struct lpfc_io_buf *lpfc_ncmd;
-+	struct lpfc_io_buf *lpfc_ncmd = NULL, *iter;
- 	struct lpfc_io_buf *lpfc_ncmd_next;
- 	unsigned long iflag;
- 	struct lpfc_epd_pool *epd_pool;
- 
- 	epd_pool = &phba->epd_pool;
--	lpfc_ncmd = NULL;
- 
- 	spin_lock_irqsave(&epd_pool->lock, iflag);
- 	if (epd_pool->count > 0) {
--		list_for_each_entry_safe(lpfc_ncmd, lpfc_ncmd_next,
-+		list_for_each_entry_safe(iter, lpfc_ncmd_next,
- 					 &epd_pool->list, list) {
--			list_del(&lpfc_ncmd->list);
-+			list_del(&iter->list);
- 			epd_pool->count--;
-+			lpfc_ncmd = iter;
- 			break;
- 		}
- 	}
-
----
-base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
-change-id: 20230301-scsi-lpfc-avoid-list-iterator-after-loop-7b7d5c3a8efc
-
-Best regards,
--- 
-Jakob Koschel <jkl820.git@gmail.com>
-
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
