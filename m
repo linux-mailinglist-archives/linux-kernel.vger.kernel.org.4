@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B916A758D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F466A758E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjCAUqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S229701AbjCAUqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAUqJ (ORCPT
+        with ESMTP id S229437AbjCAUqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:46:09 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7794838655
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:46:05 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso536142pjr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 12:46:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677703565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X9BoC0/A76+y2upt8Z7xd1pPLeDEjjRKQePPrJY8K6A=;
-        b=GBZ/bvvR+IIljM8PA91ubanXCRvXQF2JxVhOAECYNlq9AjYdNNQUE9i4+BDjWfkWh2
-         RzmZwz4JFT5fWKf4WzeaNavuCtUaLN85QzZ02FZoLVAEYz3Ke5Ma8flyK1CBVWB/VZWC
-         zbE2MgX3DrSp1DDZPKKvLxpapXn+EdHv3obBdz/6EZqhKywz+voFXekEGHfjJGCvX/tQ
-         BskjJ7fVI8WpCweMTDIpVeSddJAp+oXukEYt6XG6SSrmQVCsx8DjzawGOnktrnnZxKSo
-         twOaxACRA/3waYXYwq0AhgR1j3ebMMR6diHtYFVOYkaBCdHijor+zr1M9Jt469I0a3x1
-         XPjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677703565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X9BoC0/A76+y2upt8Z7xd1pPLeDEjjRKQePPrJY8K6A=;
-        b=ojkD/Yc7SakGmBdXt4YuJUVO9qTSpniO7tBByS1ihovZvC/BVhZwMK7IebYsuM6aEW
-         TqvRK4+4zu+GqfMDPVxne4XeWxI0w+NpTvT3isMz60d0eO5w0jK9xJEWze/8Gf+l9PbJ
-         4ncM88p14hlltytOybmxqR2zIDGwiJG8yCl0nHt9zfDhiBAstBOgiBDkdrkLO/yqpcc2
-         ITkOI1DPtmfhmuFVUO4DUE/2Joet+2OyW3Rorn//UZxBgqsRzIgznIGQG3wYSoDnD+cp
-         Kh2/0BtZSIeBk+KzueO5lwuZKXfIPHvVEPInHObVcff+y9Ltbt4VtZYm5rJDJMk6aMTr
-         qkEA==
-X-Gm-Message-State: AO0yUKVXvvC+MCmX1N7lqK4feV0kQn/noMjzEL13oEztdqEX+qyWj39w
-        zrgaXfYnjC12UQqdcE0yf0smBrdrurGzrt0NFeR18Q==
-X-Google-Smtp-Source: AK7set+yTRmSTyauRufVb1tyAauc6gMRa8tEFWWYf06xoxgmZVXEEcgftQSIvTkiPsSBjqHC+tzLG30n4oA9Rvwt1DM=
-X-Received: by 2002:a17:90a:174a:b0:234:b29d:3319 with SMTP id
- 10-20020a17090a174a00b00234b29d3319mr3089625pjm.8.1677703564622; Wed, 01 Mar
- 2023 12:46:04 -0800 (PST)
+        Wed, 1 Mar 2023 15:46:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C712B43445;
+        Wed,  1 Mar 2023 12:46:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86A53B81126;
+        Wed,  1 Mar 2023 20:46:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3717EC433EF;
+        Wed,  1 Mar 2023 20:46:43 +0000 (UTC)
+Date:   Wed, 1 Mar 2023 15:46:41 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+Message-ID: <20230301154641.695778bf@gandalf.local.home>
+In-Reply-To: <20230301203645.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+References: <20230228160324.2a7c1012@gandalf.local.home>
+        <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+        <20230228164124.77c126d2@gandalf.local.home>
+        <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
+        <20230228190846.79b06089@gandalf.local.home>
+        <CAFULd4aY3Y8tyLN70oebZDagBebvH0erwRxKDaEX8L83Xo8gYw@mail.gmail.com>
+        <20230301113813.4f16a689@gandalf.local.home>
+        <CAFULd4aWZ+fvVZ+MEt6JD1rFaQZeO5DDWAHtPKOrx8R8DETFBw@mail.gmail.com>
+        <20230301200820.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+        <20230301151826.014c5977@gandalf.local.home>
+        <20230301203645.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230301012506.1401883-1-saravanak@google.com> <31ae9957edf319416d4551f14eba2071.sboyd@kernel.org>
-In-Reply-To: <31ae9957edf319416d4551f14eba2071.sboyd@kernel.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 1 Mar 2023 12:45:27 -0800
-Message-ID: <CAGETcx-t=SHPtNifpF35XTMEZk9b0gySr+J9AfcgHvVfBEEWtw@mail.gmail.com>
-Subject: Re: [PATCH v1] clk: Mark a fwnode as initialized when using
- CLK_OF_DECLARE* macros
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        kernel-team@android.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 12:40=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wro=
-te:
->
-> Quoting Saravana Kannan (2023-02-28 17:25:06)
-> > The CLK_OF_DECLARE macros sometimes prevent the creation of struct
-> > devices for the device node being handled. It does this by
-> > setting/clearing OF_POPULATED flag. This can block the probing of some
-> > devices because fw_devlink will block the consumers of this node till a
-> > struct device is created and probed.
->
-> Why can't you use CLK_OF_DECLARE_DRIVER()?
+On Wed, 1 Mar 2023 12:36:45 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-Not sure if you looked at the patch. This is a fix for the macros, not
-this specific user of CLK_OF_DECLARE(). Even if Linus fixes his
-specific case, this change is still needed for other users of
-CLK_OF_DECLARE().
+> Some years down the road, should cmpxchg_success() be on the tip of
+> the tongue of every kernel hacker, perhaps.  Or perhaps not.
 
-Honestly, a ton of existing CLK_OF_DECLARE() users should really be
-switching to CLK_OF_DECLARE_DRIVER() or better yet, implement them as
-normal platform drivers when the specific clock control doesn't
-provide any early clocks.
+A bit of a catch-22 I would say. It will only become something everyone
+knows if it exists.
 
--Saravana
+> 
+> In the meantime, we have yet another abysmally documented atomic
+
+Is it?
+
+> operation that is not well known throughout the community.  And then the
+> people coming across this curse everyone who had anything to do with it,
+> as they search the source code, dig through assembly output, and so on
+> trying to work out exactly what this thing does.
+> 
+> Sorry, but no way.
+> 
+> Again, unless there is some sort of forward-progress argument or
+> similar convincing argument.
+
+Speaking of forward progress...
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/atomic_t.txt#n316
+
+Anyway, I'm guessing this will not become part of rcu any time soon. But
+for the ring buffer, I would happily take it.
+
+-- Steve
