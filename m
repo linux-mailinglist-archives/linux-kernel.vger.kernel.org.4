@@ -2,112 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92FC6A6F0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976746A6F11
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjCAPLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S229781AbjCAPMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCAPLm (ORCPT
+        with ESMTP id S229563AbjCAPMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:11:42 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0F016897;
-        Wed,  1 Mar 2023 07:11:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677683501; x=1709219501;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hjYr2EMRWWOBA1w4cnhzIu+T7tZBlHG4CpSb2cRhb34=;
-  b=NJpRKkRpt3/rHgSTAxW7Cfe4xrLcj7xTxAaVhCl+QmzqeJ5VQ/gmDrtV
-   vjGoQOpwZX0URqFhPruGS4A6Mu7caXc2SUlxT70+8zkgapsFYwO8RA4vr
-   T8v792GxcXnPD23LoB4vF+bypJ/V6oZgZbqLU4rG5cVpKnxwUR8xAEhb1
-   m26mL2tuLf2+hRWy5eb6LNhNtD69PMgbDs5moQFUapjgtF8dPG1Gpak4R
-   gYf1MO1azj7m8mfidv34qc5gBhRw/lQ0IiITib7wceTFG9H8zQSAN+93d
-   2cQatQGshVtoxvU7TYtHn8KYm6oa0JgiX3PsfngWN93AtRxXP16xtBtDK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="318230725"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="318230725"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 07:11:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="920278181"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="920278181"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Mar 2023 07:11:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pXO7B-00Dnz1-0F;
-        Wed, 01 Mar 2023 17:11:33 +0200
-Date:   Wed, 1 Mar 2023 17:11:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 1/2] lib/test_bitmap: increment failure counter properly
-Message-ID: <Y/9rJFJ9Pmzf6Waz@smile.fi.intel.com>
-References: <20230227214524.914050-1-yury.norov@gmail.com>
- <Y/00yaVqK2x3+pP3@smile.fi.intel.com>
- <Y/1ruRmnY4eU536Q@yury-laptop>
+        Wed, 1 Mar 2023 10:12:12 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B3A149B0;
+        Wed,  1 Mar 2023 07:12:10 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321F0LFL028502;
+        Wed, 1 Mar 2023 15:11:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Q5//b5Cfae/cAkb40PAPzUYQjwIyjf+4kpcHa68BpQ8=;
+ b=mDpVk0+DGGkdv1e2aYfwwdHGIoWyNLL1vjwpFWZ7Hf0p3/Tr6U01XFE3cIwalore9LMD
+ fhvD8AEp2TZgDdzNsil8F2EBOCi4a3ORDVMLEYmwjmISyDd3hYbGpNkrn3rjpvBVo5eL
+ HJca2s7U4aFzbVpFG9iZrk7rs/WZVBhRUXOf8GzAxV33Q2jZA6mFbbLiEzNMyRd5Bzip
+ QJB2LxTmc6oT3dBSRnKrbrBX9+3xBMnEX0p6wkNK3eEToOKSvCQJfxzTthj2dMAbx8wY
+ UlNdLyy6hdDkqUIcs7c+fjsuM0ZMvOyaF7Wsy7ul5G3vkpF3BOXutjqksGb/dcsVw9He HQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1vgej6n2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Mar 2023 15:11:59 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 321FBvUf000474
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 1 Mar 2023 15:11:57 GMT
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 1 Mar 2023
+ 07:11:54 -0800
+Message-ID: <b7abee2a-99ca-26d6-5850-60ee19d9c0e9@quicinc.com>
+Date:   Wed, 1 Mar 2023 23:11:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/1ruRmnY4eU536Q@yury-laptop>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] coresight: core: Add coresight name support
+Content-Language: en-US
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC:     <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Tingwei Zhang" <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20230208110716.18321-1-quic_jinlmao@quicinc.com>
+ <3c105c79-f523-653e-5154-7ba641e51a96@arm.com>
+ <180a66b1-6996-c705-5d8a-0a69ce0353d7@quicinc.com>
+In-Reply-To: <180a66b1-6996-c705-5d8a-0a69ce0353d7@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: GnYacKV0I-gpdE6AQlbENdKxrczBbbhb
+X-Proofpoint-ORIG-GUID: GnYacKV0I-gpdE6AQlbENdKxrczBbbhb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-01_10,2023-03-01_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303010125
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 06:49:29PM -0800, Yury Norov wrote:
-> On Tue, Feb 28, 2023 at 12:55:05AM +0200, Andy Shevchenko wrote:
-> > On Mon, Feb 27, 2023 at 01:45:23PM -0800, Yury Norov wrote:
-> > > The tests that don't use expect_eq() macro to determine that a test is
-> > > failured must increment failed_tests explicitly.
-> > 
-> > ...
-> > 
-> > >  			pr_err("bitmap_copy_arr32(nbits == %d:"
-> > >  				" tail is not safely cleared: %d\n",
-> > 
-> > Usually we don't split string literals (since checkpatch doesn't complain on a
-> > looong lines with them at the end of the line),
-> > 
-> > ...
-> > 
-> > >  			pr_err("bitmap_copy_arr64(nbits == %d:"
-> > >  				" tail is not safely cleared: %d\n", nbits, next_bit);
-> > 
-> > Ditto.
-> > 
-> > P.S. Seems a material for another patch.
-> 
-> If you're OK with this patch, can you give your review tag please?
+Hi Suzuki,
 
-I'm fine with the series,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 2/9/2023 10:16 AM, Jinlong Mao wrote:
+>
+> On 2/8/2023 10:26 PM, Suzuki K Poulose wrote:
+>> On 08/02/2023 11:07, Mao Jinlong wrote:
+>>> Apart from STM and ETM sources, there will be more sources added to
+>>> coresight components. For example, there are over 10 TPDM sources.
+>>> Add coresight name support for custom names which will be
+>>> easy to identify the source.
+>>>
+>>
+>> As we have previously discussed, please don't make this a generic
+>> code change. If your device has a "specifici" name, use that for
+>> allocating in the driver and leave the core code alone.
+>>
+>> Suzuki
+>>
+> Hi Suzuki,
+>
+> Not only for TPDMs. There could be dozens of CTI devices.
+> It is hard for user to know which CTI device it is with current names.
+>
+> Thanks
+> Jinlong Mao
 
--- 
-With Best Regards,
-Andy Shevchenko
+The coresight name support is applicable to CTI and TPDM devices.
+This is a generic change for the source which has dozens of devices.
 
+Thanks
+Jinlong Mao
 
+>>
+>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>>> ---
+>>>   drivers/hwtracing/coresight/coresight-core.c | 34 
+>>> +++++++++++---------
+>>>   1 file changed, 19 insertions(+), 15 deletions(-)
+>>>
+>>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+>>> b/drivers/hwtracing/coresight/coresight-core.c
+>>> index d3bf82c0de1d..5e95d9c7f256 100644
+>>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>>> @@ -1733,28 +1733,32 @@ char *coresight_alloc_device_name(struct 
+>>> coresight_dev_list *dict,
+>>>   {
+>>>       int idx;
+>>>       char *name = NULL;
+>>> +    const char *coresight_name = NULL;
+>>>       struct fwnode_handle **list;
+>>> +    struct device_node *node = dev->of_node;
+>>>         mutex_lock(&coresight_mutex);
+>>>   -    idx = coresight_search_device_idx(dict, dev_fwnode(dev));
+>>> -    if (idx < 0) {
+>>> -        /* Make space for the new entry */
+>>> -        idx = dict->nr_idx;
+>>> -        list = krealloc_array(dict->fwnode_list,
+>>> -                      idx + 1, sizeof(*dict->fwnode_list),
+>>> -                      GFP_KERNEL);
+>>> -        if (ZERO_OR_NULL_PTR(list)) {
+>>> -            idx = -ENOMEM;
+>>> -            goto done;
+>>> +    if (!of_property_read_string(node, "coresight-name", 
+>>> &coresight_name))
+>>> +        name = devm_kasprintf(dev, GFP_KERNEL, "%s", coresight_name);
+>>> +    else {
+>>> +        idx = coresight_search_device_idx(dict, dev_fwnode(dev));
+>>> +        if (idx < 0) {
+>>> +            /* Make space for the new entry */
+>>> +            idx = dict->nr_idx;
+>>> +            list = krealloc_array(dict->fwnode_list,
+>>> +                          idx + 1, sizeof(*dict->fwnode_list),
+>>> +                          GFP_KERNEL);
+>>> +            if (ZERO_OR_NULL_PTR(list))
+>>> +                goto done;
+>>> +
+>>> +            list[idx] = dev_fwnode(dev);
+>>> +            dict->fwnode_list = list;
+>>> +            dict->nr_idx = idx + 1;
+>>>           }
+>>>   -        list[idx] = dev_fwnode(dev);
+>>> -        dict->fwnode_list = list;
+>>> -        dict->nr_idx = idx + 1;
+>>> +        name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, 
+>>> idx);
+>>>       }
+>>> -
+>>> -    name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, idx);
+>>>   done:
+>>>       mutex_unlock(&coresight_mutex);
+>>>       return name;
+>>
+> _______________________________________________
+> CoreSight mailing list -- coresight@lists.linaro.org
+> To unsubscribe send an email to coresight-leave@lists.linaro.org
