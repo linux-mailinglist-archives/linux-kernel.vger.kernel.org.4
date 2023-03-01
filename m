@@ -2,104 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AE66A64CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796336A64CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 02:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjCAB25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 20:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S229662AbjCABaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 20:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjCAB2z (ORCPT
+        with ESMTP id S229486AbjCABaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 20:28:55 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53997B446;
-        Tue, 28 Feb 2023 17:28:47 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PRGpf0JHqz4f3jHj;
-        Wed,  1 Mar 2023 09:28:42 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP1 (Coremail) with SMTP id cCh0CgAnlS9Iqv5jSnztEA--.47939S2;
-        Wed, 01 Mar 2023 09:28:42 +0800 (CST)
-Subject: Re: [PATCH v2 00/20] Some bugfix and cleanup to mballoc
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc:     adilger.kernel@dilger.ca, jack@suse.cz, ojaswin@linux.ibm.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230228114306.3328235-1-shikemeng@huaweicloud.com>
- <87356pwxyc.fsf@doe.com> <Y/6AgYotmMdjei3w@mit.edu>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <81568343-36fb-aa90-2952-d1f26547541c@huaweicloud.com>
-Date:   Wed, 1 Mar 2023 09:28:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Tue, 28 Feb 2023 20:30:21 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8789EC9;
+        Tue, 28 Feb 2023 17:30:19 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o12so47688556edb.9;
+        Tue, 28 Feb 2023 17:30:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vZS4srdzYPX5rwf8hBmS3h/CSWlxeptJDidxpQ52/rY=;
+        b=jAZJqxNnaCbGp3Cn7I115sC3pbOLIoFPvymD9tvjSPw0mD8MYApBCMMkCAcdj8mh4M
+         CYNw1xXXsUQgDqAQwJSWMhpwGV560MZ6TvUwZPW5XxlgGBOVUQxzgAgWb/FAlfACMBTH
+         MSAmXvY5yDuOu8EgKMsqpKhQTl1+tPDCB02CE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vZS4srdzYPX5rwf8hBmS3h/CSWlxeptJDidxpQ52/rY=;
+        b=QfSPywj9Sd7jh4Rbx/uQ++iJdnn3aL+WzENboIAzjwlAN+Y6mBHQ0C+Hfjt7ui9Bi5
+         cDFbM6IYbAo9d0MGRHgBN8YSxMa2PEt3hBz61+3wIhg2Vv/O6Z6MzNwn6KvhEtHwZfXd
+         s+GrN40HrZYkX2HlvQlYTqYrLE9B4GyQ7ZcQ9klsPWyI/Rlh78SDj5AWOM4wH47AXZTq
+         DKKOO/UFy82WIDatQ+IJDpFd78On5oqLD3eCmArUeyXwyBkxXOeB9CCQmRpMZqvhvNAO
+         2bsrzYvjkPKbzq0XnPLR32T+xVUyZfad2PS4C7LgoBaNWXGB0h0sBTByBrH4OOzUSCeq
+         uTJQ==
+X-Gm-Message-State: AO0yUKU/m86dgsQjJf/EX6Jd45k57thUwMO53CcGMVtJZcYeC6AskzGi
+        Bupypk2HxNJ+RCggHzAci9TA2GGthlNXtRgV2S8=
+X-Google-Smtp-Source: AK7set/PW9p3+rsDwfdQvTVOa0cA7HHEYagI+NeYdL0zp0aQTvVe97kOvNfE5b67MEGgt5lDe1NN/RWcCezxLJstPSQ=
+X-Received: by 2002:a17:906:d82:b0:87b:db55:4887 with SMTP id
+ m2-20020a1709060d8200b0087bdb554887mr2237966eji.4.1677634218221; Tue, 28 Feb
+ 2023 17:30:18 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y/6AgYotmMdjei3w@mit.edu>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: cCh0CgAnlS9Iqv5jSnztEA--.47939S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArWUCr48Kry7CrW5XrWkWFg_yoW8Wr1Dpa
-        y8GF1akF4fKrWftr97ur1IgFyrtrZ5AFWUJF45Gw1UuFZ8Z3s2ga4xKr4rZF98AryI9r1a
-        ya1Iq3ZIg3Wxt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224000400.12226-1-zev@bewilderbeest.net> <20230224000400.12226-4-zev@bewilderbeest.net>
+In-Reply-To: <20230224000400.12226-4-zev@bewilderbeest.net>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 1 Mar 2023 01:30:05 +0000
+Message-ID: <CACPK8XdFT=+VJJ=iDhcmWPh9m9of2b+2UYxkrAisp6tdmWOWKg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: asrock: Correct firmware flash
+ SPI clocks
+To:     Zev Weiss <zev@bewilderbeest.net>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Cc:     Andrew Jeffery <andrew@aj.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-on 3/1/2023 6:30 AM, Theodore Ts'o wrote:
-> On Tue, Feb 28, 2023 at 10:04:35PM +0530, Ritesh Harjani wrote:
->> Kemeng Shi <shikemeng@huaweicloud.com> writes:
->>
->>> Hi, this series contain some random cleanup patches and some bugfix
->>> patches to make EXT4_MB_HINT_GOAL_ONLY work properly, protect pa->pa_free
->>> from race and so on. More details can be found in git log.
->>> Thanks!
->>
->> Hi Kemeng,
->>
->> Did you run any testing on these patches? Because I was very easily able
->> to hit ext/009 causing kernel BUG_ON with default mkfs/mount options.
->> It's always a good and recommended practice to ensure some level of
->> testing on any of the patches we submit to community for review
->> and call out in the cover letter on what has been tested and what is not.
-> 
-> Hi Kemeng,
-> 
-> If you need help running xfstests, I maintain a test appliance which
-> makes it very easy to run xfstests on development kernels.  Please see:
-> 
-> https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-xfstests.md
-> https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
-> 
-> This test appliance can also be run on Android devices and using
-> Google Compute Engine; for more information see:
-> 
-> 	https://thunk.org/android-xfstests
-> 	https://thunk.org/gce-xfstests
-> 
-> If you're just getting started, I recommend that you start with
-> kvm-xfstests, and this is the simplest way to get started.
-Hi, Theodore and Ritesh. Thanks for feedback. I will run xfstests before submitting
-next version. Thanks!
+On Fri, 24 Feb 2023 at 00:04, Zev Weiss <zev@bewilderbeest.net> wrote:
+>
+> While I'm not aware of any problems that have occurred running these
+> at 100 MHz, the official word from ASRock is that 50 MHz is the
+> correct speed to use, so let's be safe and use that instead.
 
--- 
-Best wishes
-Kemeng Shi
+:(
 
+Validated with which driver?
+
+C=C3=A9dric, do you have any thoughts on this?
+
+>
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Cc: stable@vger.kernel.org
+> Fixes: 2b81613ce417 ("ARM: dts: aspeed: Add ASRock E3C246D4I BMC")
+> Fixes: a9a3d60b937a ("ARM: dts: aspeed: Add ASRock ROMED8HM3 BMC")
+> ---
+>  arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts | 2 +-
+>  arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts b/arch/arm=
+/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
+> index 67a75aeafc2b..c4b2efbfdf56 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
+> @@ -63,7 +63,7 @@ flash@0 {
+>                 status =3D "okay";
+>                 m25p,fast-read;
+>                 label =3D "bmc";
+> -               spi-max-frequency =3D <100000000>; /* 100 MHz */
+> +               spi-max-frequency =3D <50000000>; /* 50 MHz */
+>  #include "openbmc-flash-layout.dtsi"
+>         };
+>  };
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts b/arch/arm=
+/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
+> index 00efe1a93a69..4554abf0c7cd 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
+> @@ -51,7 +51,7 @@ flash@0 {
+>                 status =3D "okay";
+>                 m25p,fast-read;
+>                 label =3D "bmc";
+> -               spi-max-frequency =3D <100000000>; /* 100 MHz */
+> +               spi-max-frequency =3D <50000000>; /* 50 MHz */
+>  #include "openbmc-flash-layout-64.dtsi"
+>         };
+>  };
+> --
+> 2.39.1.438.gdcb075ea9396.dirty
+>
