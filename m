@@ -2,261 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285626A6403
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB51A6A640A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjCAADo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 19:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
+        id S229585AbjCAAJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 19:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjCAADl (ORCPT
+        with ESMTP id S229437AbjCAAI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 19:03:41 -0500
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6653F302B7;
-        Tue, 28 Feb 2023 16:03:40 -0800 (PST)
-Received: by mail-il1-f171.google.com with SMTP id i4so7423424ils.1;
-        Tue, 28 Feb 2023 16:03:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677629019;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wqlh8BQKuxQaHWLyKXNgCkeWAA6Guq7VsUwjTAIoHs0=;
-        b=S6TTJVN4fOpTd9WQylK1e1I/+nUjvsTfwffHYj8ecdaRv5k9Z+bK2kfMCU/Lyak2Cx
-         uwxrC3miRMSs0BHfKksqg1m21IKdE+QZW115OEAsOi0EjQIo97/8q4T3KCcnFiVJ71i7
-         ovNkkzKBROxin5u2gPpgdCIBaO2mY35S72aHPT17zy6TCqmdPjWiE6yERPzVYYZvTKuf
-         wnTK0luuR/uZm+dAqnEpWq+5rJE+qGJnaN/L/uoP0uVsmw/GQc/KPJlLid+KYzXf3ExS
-         I8Fn+qora0r3espilXlHwUkPdjktQTTjeH6FPmHqBIAB7D1iHsF9BE0f5+uy8KOgw9Fs
-         w0Ow==
-X-Gm-Message-State: AO0yUKW3lJWzC4bH/dMikkOIebjI8398VNSRTkNqQ49DmwWseSM2az9N
-        idWuhBnfT6YP1slE/H0UUTJqbgo1oAnxF5cJMf8=
-X-Google-Smtp-Source: AK7set+GUKbLh5qalgpqMBZZB4Q0jnLgBVp/H8mRmWkJnfYp00sV4gjO/A/J+pu7vUTbX7hx9LX+bsCTsq75sIopSYo=
-X-Received: by 2002:a05:6e02:66b:b0:314:8c8:de65 with SMTP id
- l11-20020a056e02066b00b0031408c8de65mr2199182ilt.3.1677629019509; Tue, 28 Feb
- 2023 16:03:39 -0800 (PST)
+        Tue, 28 Feb 2023 19:08:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FC49002;
+        Tue, 28 Feb 2023 16:08:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46322B80ED7;
+        Wed,  1 Mar 2023 00:08:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D634BC433EF;
+        Wed,  1 Mar 2023 00:08:47 +0000 (UTC)
+Date:   Tue, 28 Feb 2023 19:08:46 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Uros Bizjak <ubizjak@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+Message-ID: <20230228190846.79b06089@gandalf.local.home>
+In-Reply-To: <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
+References: <20230228155121.3416-1-ubizjak@gmail.com>
+        <Y/5mguXPPqdP3MZF@google.com>
+        <20230228160324.2a7c1012@gandalf.local.home>
+        <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+        <20230228164124.77c126d2@gandalf.local.home>
+        <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230228115125.144172-1-leo.yan@linaro.org> <20230228115125.144172-10-leo.yan@linaro.org>
-In-Reply-To: <20230228115125.144172-10-leo.yan@linaro.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 28 Feb 2023 16:03:27 -0800
-Message-ID: <CAM9d7cgXkPw_op7tj7eZE4xP68reO8cDmwpHOa+13C1CSeOOjg@mail.gmail.com>
-Subject: Re: [PATCH v3 09/14] perf kvm: Use histograms list to replace cached list
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 3:53 AM Leo Yan <leo.yan@linaro.org> wrote:
->
-> perf kvm tool defines its own cached list which is managed with RB tree,
-> histograms also provide RB tree to manage data entries.  Since now we
-> have introduced histograms in the tool, it's not necessary to use the
-> self defined list and we can directly use histograms list to manage
-> KVM events.
->
-> This patch changes to use histograms list to track KVM events, and it
-> invokes the common function hists__output_resort_cb() to sort result,
-> this also give us flexibility to extend more sorting key words easily.
->
-> After histograms list supported, the cached list is redundant so remove
-> the relevant code for it.
->
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> Reviewed-by: James Clark <james.clark@arm.com>
-> ---
->  tools/perf/builtin-kvm.c   | 186 +++++++++++++++++++------------------
->  tools/perf/util/kvm-stat.h |   7 --
->  2 files changed, 94 insertions(+), 99 deletions(-)
->
-> diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-> index da84f5063d4d..32dc697ff707 100644
-> --- a/tools/perf/builtin-kvm.c
-> +++ b/tools/perf/builtin-kvm.c
-> @@ -421,44 +421,37 @@ struct vcpu_event_record {
->         struct kvm_event *last_event;
->  };
->
-> -
-> -static void init_kvm_event_record(struct perf_kvm_stat *kvm)
-> -{
-> -       unsigned int i;
-> -
-> -       for (i = 0; i < EVENTS_CACHE_SIZE; i++)
-> -               INIT_LIST_HEAD(&kvm->kvm_events_cache[i]);
-> -}
-> -
->  #ifdef HAVE_TIMERFD_SUPPORT
-> -static void clear_events_cache_stats(struct list_head *kvm_events_cache)
-> +static void clear_events_cache_stats(void)
->  {
-> -       struct list_head *head;
-> +       struct rb_root_cached *root;
-> +       struct rb_node *nd;
->         struct kvm_event *event;
-> -       unsigned int i;
-> -       int j;
-> -
-> -       for (i = 0; i < EVENTS_CACHE_SIZE; i++) {
-> -               head = &kvm_events_cache[i];
-> -               list_for_each_entry(event, head, hash_entry) {
-> -                       /* reset stats for event */
-> -                       event->total.time = 0;
-> -                       init_stats(&event->total.stats);
-> -
-> -                       for (j = 0; j < event->max_vcpu; ++j) {
-> -                               event->vcpu[j].time = 0;
-> -                               init_stats(&event->vcpu[j].stats);
-> -                       }
-> +       int i;
-> +
-> +       if (hists__has(&kvm_hists.hists, need_collapse))
-> +               root = &kvm_hists.hists.entries_collapsed;
-> +       else
-> +               root = kvm_hists.hists.entries_in;
-> +
-> +       for (nd = rb_first_cached(root); nd; nd = rb_next(nd)) {
-> +               struct hist_entry *he;
-> +
-> +               he = rb_entry(nd, struct hist_entry, rb_node_in);
-> +               event = container_of(he, struct kvm_event, he);
-> +
-> +               /* reset stats for event */
-> +               event->total.time = 0;
-> +               init_stats(&event->total.stats);
-> +
-> +               for (i = 0; i < event->max_vcpu; ++i) {
-> +                       event->vcpu[i].time = 0;
-> +                       init_stats(&event->vcpu[i].stats);
->                 }
->         }
->  }
->  #endif
->
-> -static int kvm_events_hash_fn(u64 key)
-> -{
-> -       return key & (EVENTS_CACHE_SIZE - 1);
-> -}
-> -
->  static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
->  {
->         int old_max_vcpu = event->max_vcpu;
-> @@ -484,21 +477,51 @@ static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
->         return true;
->  }
->
-> +static void *kvm_he_zalloc(size_t size)
-> +{
-> +       struct kvm_event *kvm_ev;
-> +
-> +       kvm_ev = zalloc(size + sizeof(*kvm_ev));
-> +       if (!kvm_ev)
-> +               return NULL;
-> +
-> +       return &kvm_ev->he;
-> +}
-> +
-> +static void kvm_he_free(void *he)
-> +{
-> +       struct kvm_event *kvm_ev;
-> +
-> +       kvm_ev = container_of(he, struct kvm_event, he);
-> +       free(kvm_ev);
-> +}
-> +
-> +static struct hist_entry_ops kvm_ev_entry_ops = {
-> +       .new    = kvm_he_zalloc,
-> +       .free   = kvm_he_free,
-> +};
-> +
->  static struct kvm_event *kvm_alloc_init_event(struct perf_kvm_stat *kvm,
->                                               struct event_key *key,
-> -                                             struct perf_sample *sample __maybe_unused)
-> +                                             struct perf_sample *sample)
->  {
->         struct kvm_event *event;
-> +       struct hist_entry *he;
->
-> -       event = zalloc(sizeof(*event));
-> -       if (!event) {
-> -               pr_err("Not enough memory\n");
-> +       he = hists__add_entry_ops(&kvm_hists.hists, &kvm_ev_entry_ops,
-> +                                 &kvm->al, NULL, NULL, NULL, sample, true);
-> +       if (he == NULL) {
-> +               pr_err("Failed to allocate hist entry\n");
->                 return NULL;
->         }
->
-> +       hists__inc_nr_samples(&kvm_hists.hists, 0);
-> +
-> +       event = container_of(he, struct kvm_event, he);
->         event->perf_kvm = kvm;
->         event->key = *key;
->         init_stats(&event->total.stats);
-> +
->         return event;
->  }
->
-> @@ -507,22 +530,26 @@ static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
->                                                struct perf_sample *sample)
->  {
->         struct kvm_event *event;
-> -       struct list_head *head;
-> +       struct rb_root_cached *root;
-> +       struct rb_node *nd;
->
->         BUG_ON(key->key == INVALID_KEY);
->
-> -       head = &kvm->kvm_events_cache[kvm_events_hash_fn(key->key)];
-> -       list_for_each_entry(event, head, hash_entry) {
-> +       if (hists__has(&kvm_hists.hists, need_collapse))
-> +               root = &kvm_hists.hists.entries_collapsed;
-> +       else
-> +               root = kvm_hists.hists.entries_in;
-> +
-> +       for (nd = rb_first_cached(root); nd; nd = rb_next(nd)) {
-> +               struct hist_entry *he = rb_entry(nd, struct hist_entry,
-> +                                                rb_node_in);
-> +
-> +               event = container_of(he, struct kvm_event, he);
->                 if (event->key.key == key->key && event->key.info == key->info)
->                         return event;
+On Tue, 28 Feb 2023 18:30:14 -0500
+Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > But looking at this use case, I'd actually NAK it, as it is misleading.  
+> 
+> I'm trying to parse this. You are saying it is misleading, because it
+> updates js when it doesn't need to?
 
-This seems inefficient and even unnecessary.  You should find
-the event based on the return value of hist_entry__cmp() from
-the root and go down.
+Correct.
 
-But I think that's what hists__add_entry_ops() does.  Maybe
-you may need to move the init logic (like init_stats) to the
-kvm_he_zalloc().
+> 
+> > As try_cmpxchg() is used to get rid of the updating of the old value. As in
+> > the ring buffer code we had:
+> >
+> > void ring_buffer_record_off(struct trace_buffer *buffer)
+> > {
+> >         unsigned int rd;
+> >         unsigned int new_rd;
+> >
+> >         do {
+> >                 rd = atomic_read(&buffer->record_disabled);
+> >                 new_rd = rd | RB_BUFFER_OFF;
+> >         } while (!atomic_cmpxchg(&buffer->record_disabled, &rd, new_rd) != rd);  
+> 
+> Hear you actually meant "rd" as the second parameter without the & ?
 
-Thanks,
-Namhyung
+Yes, I cut and pasted the updated code and incorrectly try to revert it in
+this example :-p
 
+> 
+> > }
+> >
+> > and the try_cmpxchg() converted it to:
+> >
+> > void ring_buffer_record_off(struct trace_buffer *buffer)
+> > {
+> >         unsigned int rd;
+> >         unsigned int new_rd;
+> >
+> >         rd = atomic_read(&buffer->record_disabled);
+> >         do {
+> >                 new_rd = rd | RB_BUFFER_OFF;
+> >         } while (!atomic_try_cmpxchg(&buffer->record_disabled, &rd, new_rd));
+> > }
+> >
+> > Which got rid of the need to constantly update the rd variable (cmpxchg
+> > will load rax with the value read, so it removes the need for an extra
+> > move).  
+> 
+> So that's a good thing?
 
->         }
->
-> -       event = kvm_alloc_init_event(kvm, key, sample);
-> -       if (!event)
-> -               return NULL;
-> -
-> -       list_add(&event->hash_entry, head);
-> -       return event;
-> +       return kvm_alloc_init_event(kvm, key, sample);
->  }
+Yes. For looping, try_cmpxchg() is the proper function to use. But in the
+RCU case (and other cases in the ring-buffer patch) there is no loop, and
+no need to modify the "old" variable.
+
+> 
+> >
+> > But in your case, we don't need to update js, in which case the
+> > try_cmpxchg() does.  
+> 
+> Right, it has lesser value here but I'm curious why you feel it also
+> doesn't belong in that ring buffer loop you shared (or did you mean,
+> it does belong there but not in other ftrace code modified by Uros?).
+
+The ring buffer patch had more than one change, where half the updates were
+fine, and half were not.
+
+-- Steve
