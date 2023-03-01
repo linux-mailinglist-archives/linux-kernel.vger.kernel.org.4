@@ -2,152 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30266A6BEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ABE6A6BF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjCALzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S229731AbjCALzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCALzR (ORCPT
+        with ESMTP id S229691AbjCALzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:55:17 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48632ED74
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:55:15 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id h9so13680173ljq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 03:55:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w85B/ds8bah1X1W6vnJsNpYqcqLRHd9ikwsnw5xxH4E=;
-        b=LDRjZdu0o8U35wWW9SM3dBhr4k26Z1BD/Gtfmy2AFX5eXEqKIUJrMjMFS9caVJ+9GJ
-         nznbO9mYSol07bh99sFoF1QTFRDI9PGdN4kGXSY44SP1rZ3PmPp17u9j+Cc9FKvI0fZu
-         8SyBPJgqYEJqLB26ukd9rN+EwDigc4zAN1c/g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w85B/ds8bah1X1W6vnJsNpYqcqLRHd9ikwsnw5xxH4E=;
-        b=jSlQwACeGjc4m8D8DHg2hRFhBJRQk8DHRLP6blIzsYn4EEe073UoN7MZwM+p4N95Nu
-         NykLkUuHHKIS87t4hRSyDak5ZF8eEij997YdgVGDFEXqk4B0bWeYQxgZ35uZM0Q4uuZ3
-         4JqX/GjRobDQ2WmRaVvVlY/fH+aNC76HSu1n0pkYT4plND7n6Fea5KET5QMWCKr2PKBK
-         OR0j++y086j7PB3oo623XOUdqWX8g5CexejJa3pGPArz3et+WiDq7i6ZP0To/ZBTwOH/
-         NcyiQU+399ZmbZdy++2iuP5KSc3suMOfpphboC32Gw13U/DuOreW291/1HWn6EGY0n4i
-         SkjQ==
-X-Gm-Message-State: AO0yUKW3jPeZC3Jqps6GEEw034ac/ll1yr9MHubP2kzNOTeKjZZFwZ0m
-        C3X8Z55c1BkuVFDKkMjAaAGEAg==
-X-Google-Smtp-Source: AK7set+Dy+OLzKZpmJhRw/aLsvwG2zeUj/R3+rmUKLGFe8tnnOQkM0y6PqxAOpDpbLdwwQkYISnuIw==
-X-Received: by 2002:a2e:a4d3:0:b0:295:9c2e:72ed with SMTP id p19-20020a2ea4d3000000b002959c2e72edmr1898245ljm.50.1677671714033;
-        Wed, 01 Mar 2023 03:55:14 -0800 (PST)
-Received: from localhost.localdomain ([87.54.42.112])
-        by smtp.gmail.com with ESMTPSA id bi36-20020a05651c232400b002934b5c5c67sm1638885ljb.32.2023.03.01.03.55.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 03:55:13 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: addac: ad74413r: fix Current Input, Loop Powered Mode
-Date:   Wed,  1 Mar 2023 12:55:11 +0100
-Message-Id: <20230301115511.849418-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Wed, 1 Mar 2023 06:55:24 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D64032522;
+        Wed,  1 Mar 2023 03:55:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47D752F4;
+        Wed,  1 Mar 2023 03:56:06 -0800 (PST)
+Received: from [10.57.16.41] (unknown [10.57.16.41])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE9183F587;
+        Wed,  1 Mar 2023 03:55:19 -0800 (PST)
+Message-ID: <04adb31d-06c5-b274-62c6-4f19dc681513@arm.com>
+Date:   Wed, 1 Mar 2023 11:55:17 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 06/28] arm64: RME: ioctls to create and configure
+ realms
+Content-Language: en-GB
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+ <20230127112932.38045-1-steven.price@arm.com>
+ <20230127112932.38045-7-steven.price@arm.com>
+ <20230213181044.00004994@gmail.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20230213181044.00004994@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the driver handles CH_FUNC_CURRENT_INPUT_LOOP_POWER and
-CH_FUNC_CURRENT_INPUT_EXT_POWER completely identically. But that's not
-correct. In order for CH_FUNC_CURRENT_INPUT_LOOP_POWER to work, two
-changes must be made:
+On 13/02/2023 16:10, Zhi Wang wrote:
+> On Fri, 27 Jan 2023 11:29:10 +0000
+> Steven Price <steven.price@arm.com> wrote:
+> 
+>> Add the KVM_CAP_ARM_RME_CREATE_FD ioctl to create a realm. This involves
+>> delegating pages to the RMM to hold the Realm Descriptor (RD) and for
+>> the base level of the Realm Translation Tables (RTT). A VMID also need
+>> to be picked, since the RMM has a separate VMID address space a
+>> dedicated allocator is added for this purpose.
+>>
+>> KVM_CAP_ARM_RME_CONFIG_REALM is provided to allow configuring the realm
+>> before it is created.
+>>
+>> Signed-off-by: Steven Price <steven.price@arm.com>
+>> ---
+>>  arch/arm64/include/asm/kvm_rme.h |  14 ++
+>>  arch/arm64/kvm/arm.c             |  19 ++
+>>  arch/arm64/kvm/mmu.c             |   6 +
+>>  arch/arm64/kvm/reset.c           |  33 +++
+>>  arch/arm64/kvm/rme.c             | 357 +++++++++++++++++++++++++++++++
+>>  5 files changed, 429 insertions(+)
+>>
+>> diff --git a/arch/arm64/include/asm/kvm_rme.h b/arch/arm64/include/asm/kvm_rme.h
+>> index c26bc2c6770d..055a22accc08 100644
+>> --- a/arch/arm64/include/asm/kvm_rme.h
+>> +++ b/arch/arm64/include/asm/kvm_rme.h
+>> @@ -6,6 +6,8 @@
+>>  #ifndef __ASM_KVM_RME_H
+>>  #define __ASM_KVM_RME_H
+>>  
+>> +#include <uapi/linux/kvm.h>
+>> +
+>>  enum realm_state {
+>>  	REALM_STATE_NONE,
+>>  	REALM_STATE_NEW,
+>> @@ -15,8 +17,20 @@ enum realm_state {
+>>  
+>>  struct realm {
+>>  	enum realm_state state;
+>> +
+>> +	void *rd;
+>> +	struct realm_params *params;
+>> +
+>> +	unsigned long num_aux;
+>> +	unsigned int vmid;
+>> +	unsigned int ia_bits;
+>>  };
+>>  
+> 
+> Maybe more comments for this structure?
 
-(1) expose access to the DAC_CODE_x register so that the intended
-output current can be set, i.e. expose the channel as both current
-output and current input, and
+Agreed, this series is a bit light on comments. I'll try to improve for v2.
 
-(2) per the data sheet
+<snip>
 
-  When selecting the current input loop powered function, tie the
-  VIOUTN_x pin to ground via the on-chip 200 kΩ resistor by enabling
-  the CH_200K_TO_GND bit in the ADC_CONFIGx registers.
+> 
+> Just curious. Wouldn't it be better to use IDR as this is ID allocation? There
+> were some efforts to change the use of bitmap allocation to IDR before.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
-There's of course also CH_FUNC_CURRENT_INPUT_LOOP_POWER_HART which is
-likely to require a similar fix, but as I don't have a ad74413r I
-can't test that. 
+I'm not sure it makes much difference really. This matches KVM's
+vmid_map, but here things are much more simple as there's no support for
+the likes of VMID rollover (the number of Realm VMs is just capped at
+the number of VMIDs).
 
- drivers/iio/addac/ad74413r.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+IDR provides a lot of functionality we don't need, but equally I don't
+think performance or memory usage are really a concern here.
 
-diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
-index f32c8c2fb26d..f5d072092709 100644
---- a/drivers/iio/addac/ad74413r.c
-+++ b/drivers/iio/addac/ad74413r.c
-@@ -99,6 +99,7 @@ struct ad74413r_state {
- #define AD74413R_REG_ADC_CONFIG_X(x)		(0x05 + (x))
- #define AD74413R_ADC_CONFIG_RANGE_MASK		GENMASK(7, 5)
- #define AD74413R_ADC_CONFIG_REJECTION_MASK	GENMASK(4, 3)
-+#define AD74413R_ADC_CONFIG_CH_200K_TO_GND	BIT(2)
- #define AD74413R_ADC_RANGE_10V			0b000
- #define AD74413R_ADC_RANGE_2P5V_EXT_POW		0b001
- #define AD74413R_ADC_RANGE_2P5V_INT_POW		0b010
-@@ -424,9 +425,20 @@ static int ad74413r_set_channel_dac_code(struct ad74413r_state *st,
- static int ad74413r_set_channel_function(struct ad74413r_state *st,
- 					 unsigned int channel, u8 func)
- {
--	return regmap_update_bits(st->regmap,
-+	int ret;
-+
-+	ret = regmap_update_bits(st->regmap,
- 				  AD74413R_REG_CH_FUNC_SETUP_X(channel),
- 				  AD74413R_CH_FUNC_SETUP_MASK, func);
-+	if (ret)
-+		return ret;
-+
-+	if (func == CH_FUNC_CURRENT_INPUT_LOOP_POWER)
-+		ret = regmap_set_bits(st->regmap,
-+				      AD74413R_REG_ADC_CONFIG_X(channel),
-+				      AD74413R_ADC_CONFIG_CH_200K_TO_GND);
-+
-+	return ret;
- }
- 
- static int ad74413r_set_adc_conv_seq(struct ad74413r_state *st,
-@@ -1112,6 +1124,11 @@ static struct iio_chan_spec ad74413r_current_input_channels[] = {
- 	AD74413R_ADC_CURRENT_CHANNEL,
- };
- 
-+static struct iio_chan_spec ad74413r_current_input_loop_channels[] = {
-+	AD74413R_DAC_CHANNEL(IIO_CURRENT, BIT(IIO_CHAN_INFO_SCALE)),
-+	AD74413R_ADC_CURRENT_CHANNEL,
-+};
-+
- static struct iio_chan_spec ad74413r_resistance_input_channels[] = {
- 	AD74413R_ADC_CHANNEL(IIO_RESISTANCE, BIT(IIO_CHAN_INFO_PROCESSED)),
- };
-@@ -1135,7 +1152,7 @@ static const struct ad74413r_channels ad74413r_channels_map[] = {
- 	[CH_FUNC_CURRENT_OUTPUT] = AD74413R_CHANNELS(current_output),
- 	[CH_FUNC_VOLTAGE_INPUT] = AD74413R_CHANNELS(voltage_input),
- 	[CH_FUNC_CURRENT_INPUT_EXT_POWER] = AD74413R_CHANNELS(current_input),
--	[CH_FUNC_CURRENT_INPUT_LOOP_POWER] = AD74413R_CHANNELS(current_input),
-+	[CH_FUNC_CURRENT_INPUT_LOOP_POWER] = AD74413R_CHANNELS(current_input_loop),
- 	[CH_FUNC_RESISTANCE_INPUT] = AD74413R_CHANNELS(resistance_input),
- 	[CH_FUNC_DIGITAL_INPUT_LOGIC] = AD74413R_CHANNELS(digital_input),
- 	[CH_FUNC_DIGITAL_INPUT_LOOP_POWER] = AD74413R_CHANNELS(digital_input),
--- 
-2.37.2
+Steve
+
+>> +/* Protects access to rme_vmid_bitmap */
+>> +static DEFINE_SPINLOCK(rme_vmid_lock);
+>> +static unsigned long *rme_vmid_bitmap;
+>> +
+>> +static int rme_vmid_init(void)
+>> +{
+>> +	unsigned int vmid_count = 1 << kvm_get_vmid_bits();
+>> +
+>> +	rme_vmid_bitmap = bitmap_zalloc(vmid_count, GFP_KERNEL);
+>> +	if (!rme_vmid_bitmap) {
+>> +		kvm_err("%s: Couldn't allocate rme vmid bitmap\n", __func__);
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int rme_vmid_reserve(void)
+>> +{
+>> +	int ret;
+>> +	unsigned int vmid_count = 1 << kvm_get_vmid_bits();
+>> +
+>> +	spin_lock(&rme_vmid_lock);
+>> +	ret = bitmap_find_free_region(rme_vmid_bitmap, vmid_count, 0);
+>> +	spin_unlock(&rme_vmid_lock);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static void rme_vmid_release(unsigned int vmid)
+>> +{
+>> +	spin_lock(&rme_vmid_lock);
+>> +	bitmap_release_region(rme_vmid_bitmap, vmid, 0);
+>> +	spin_unlock(&rme_vmid_lock);
+>> +}
+>> +
+>> +static int kvm_create_realm(struct kvm *kvm)
+>> +{
+>> +	struct realm *realm = &kvm->arch.realm;
+>> +	int ret;
+>> +
+>> +	if (!kvm_is_realm(kvm) || kvm_realm_state(kvm) != REALM_STATE_NONE)
+>> +		return -EEXIST;
+>> +
+>> +	ret = rme_vmid_reserve();
+>> +	if (ret < 0)
+>> +		return ret;
+>> +	realm->vmid = ret;
+>> +
+>> +	ret = realm_create_rd(kvm);
+>> +	if (ret) {
+>> +		rme_vmid_release(realm->vmid);
+>> +		return ret;
+>> +	}
+>> +
+>> +	WRITE_ONCE(realm->state, REALM_STATE_NEW);
+>> +
+>> +	/* The realm is up, free the parameters.  */
+>> +	free_page((unsigned long)realm->params);
+>> +	realm->params = NULL;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int config_realm_hash_algo(struct realm *realm,
+>> +				  struct kvm_cap_arm_rme_config_item *cfg)
+>> +{
+>> +	switch (cfg->hash_algo) {
+>> +	case KVM_CAP_ARM_RME_MEASUREMENT_ALGO_SHA256:
+>> +		if (!rme_supports(RMI_FEATURE_REGISTER_0_HASH_SHA_256))
+>> +			return -EINVAL;
+>> +		break;
+>> +	case KVM_CAP_ARM_RME_MEASUREMENT_ALGO_SHA512:
+>> +		if (!rme_supports(RMI_FEATURE_REGISTER_0_HASH_SHA_512))
+>> +			return -EINVAL;
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +	realm->params->measurement_algo = cfg->hash_algo;
+>> +	return 0;
+>> +}
+>> +
+>> +static int config_realm_sve(struct realm *realm,
+>> +			    struct kvm_cap_arm_rme_config_item *cfg)
+>> +{
+>> +	u64 features_0 = realm->params->features_0;
+>> +	int max_sve_vq = u64_get_bits(rmm_feat_reg0,
+>> +				      RMI_FEATURE_REGISTER_0_SVE_VL);
+>> +
+>> +	if (!rme_supports(RMI_FEATURE_REGISTER_0_SVE_EN))
+>> +		return -EINVAL;
+>> +
+>> +	if (cfg->sve_vq > max_sve_vq)
+>> +		return -EINVAL;
+>> +
+>> +	features_0 &= ~(RMI_FEATURE_REGISTER_0_SVE_EN |
+>> +			RMI_FEATURE_REGISTER_0_SVE_VL);
+>> +	features_0 |= u64_encode_bits(1, RMI_FEATURE_REGISTER_0_SVE_EN);
+>> +	features_0 |= u64_encode_bits(cfg->sve_vq,
+>> +				      RMI_FEATURE_REGISTER_0_SVE_VL);
+>> +
+>> +	realm->params->features_0 = features_0;
+>> +	return 0;
+>> +}
+>> +
+>> +static int kvm_rme_config_realm(struct kvm *kvm, struct kvm_enable_cap *cap)
+>> +{
+>> +	struct kvm_cap_arm_rme_config_item cfg;
+>> +	struct realm *realm = &kvm->arch.realm;
+>> +	int r = 0;
+>> +
+>> +	if (kvm_realm_state(kvm) != REALM_STATE_NONE)
+>> +		return -EBUSY;
+>> +
+>> +	if (copy_from_user(&cfg, (void __user *)cap->args[1], sizeof(cfg)))
+>> +		return -EFAULT;
+>> +
+>> +	switch (cfg.cfg) {
+>> +	case KVM_CAP_ARM_RME_CFG_RPV:
+>> +		memcpy(&realm->params->rpv, &cfg.rpv, sizeof(cfg.rpv));
+>> +		break;
+>> +	case KVM_CAP_ARM_RME_CFG_HASH_ALGO:
+>> +		r = config_realm_hash_algo(realm, &cfg);
+>> +		break;
+>> +	case KVM_CAP_ARM_RME_CFG_SVE:
+>> +		r = config_realm_sve(realm, &cfg);
+>> +		break;
+>> +	default:
+>> +		r = -EINVAL;
+>> +	}
+>> +
+>> +	return r;
+>> +}
+>> +
+>> +int kvm_realm_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
+>> +{
+>> +	int r = 0;
+>> +
+>> +	switch (cap->args[0]) {
+>> +	case KVM_CAP_ARM_RME_CONFIG_REALM:
+>> +		r = kvm_rme_config_realm(kvm, cap);
+>> +		break;
+>> +	case KVM_CAP_ARM_RME_CREATE_RD:
+>> +		if (kvm->created_vcpus) {
+>> +			r = -EBUSY;
+>> +			break;
+>> +		}
+>> +
+>> +		r = kvm_create_realm(kvm);
+>> +		break;
+>> +	default:
+>> +		r = -EINVAL;
+>> +		break;
+>> +	}
+>> +
+>> +	return r;
+>> +}
+>> +
+>> +void kvm_destroy_realm(struct kvm *kvm)
+>> +{
+>> +	struct realm *realm = &kvm->arch.realm;
+>> +	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+>> +	unsigned int pgd_sz;
+>> +	int i;
+>> +
+>> +	if (realm->params) {
+>> +		free_page((unsigned long)realm->params);
+>> +		realm->params = NULL;
+>> +	}
+>> +
+>> +	if (kvm_realm_state(kvm) == REALM_STATE_NONE)
+>> +		return;
+>> +
+>> +	WRITE_ONCE(realm->state, REALM_STATE_DYING);
+>> +
+>> +	rme_vmid_release(realm->vmid);
+>> +
+>> +	if (realm->rd) {
+>> +		phys_addr_t rd_phys = virt_to_phys(realm->rd);
+>> +
+>> +		if (WARN_ON(rmi_realm_destroy(rd_phys)))
+>> +			return;
+>> +		if (WARN_ON(rmi_granule_undelegate(rd_phys)))
+>> +			return;
+>> +		free_page((unsigned long)realm->rd);
+>> +		realm->rd = NULL;
+>> +	}
+>> +
+>> +	pgd_sz = kvm_pgd_pages(pgt->ia_bits, pgt->start_level);
+>> +	for (i = 0; i < pgd_sz; i++) {
+>> +		phys_addr_t pgd_phys = kvm->arch.mmu.pgd_phys + i * PAGE_SIZE;
+>> +
+>> +		if (WARN_ON(rmi_granule_undelegate(pgd_phys)))
+>> +			return;
+>> +	}
+>> +
+>> +	kvm_free_stage2_pgd(&kvm->arch.mmu);
+>> +}
+>> +
+>> +int kvm_init_realm_vm(struct kvm *kvm)
+>> +{
+>> +	struct realm_params *params;
+>> +
+>> +	params = (struct realm_params *)get_zeroed_page(GFP_KERNEL);
+>> +	if (!params)
+>> +		return -ENOMEM;
+>> +
+>> +	params->features_0 = create_realm_feat_reg0(kvm);
+>> +	kvm->arch.realm.params = params;
+>> +	return 0;
+>> +}
+>> +
+>>  int kvm_init_rme(void)
+>>  {
+>> +	int ret;
+>> +
+>>  	if (PAGE_SIZE != SZ_4K)
+>>  		/* Only 4k page size on the host is supported */
+>>  		return 0;
+>> @@ -43,6 +394,12 @@ int kvm_init_rme(void)
+>>  		/* Continue without realm support */
+>>  		return 0;
+>>  
+>> +	ret = rme_vmid_init();
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	WARN_ON(rmi_features(0, &rmm_feat_reg0));
+>> +
+>>  	/* Future patch will enable static branch kvm_rme_is_available */
+>>  
+>>  	return 0;
+> 
 
