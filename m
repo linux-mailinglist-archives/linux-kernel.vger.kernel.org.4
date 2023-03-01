@@ -2,123 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DE16A66CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 04:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580CD6A66CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 04:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjCADtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 22:49:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S229726AbjCADu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 22:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjCADs4 (ORCPT
+        with ESMTP id S229520AbjCADu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 22:48:56 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3D8173E;
-        Tue, 28 Feb 2023 19:48:48 -0800 (PST)
-Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PRKpW30wTzKmTh;
-        Wed,  1 Mar 2023 11:43:47 +0800 (CST)
-Received: from [10.174.178.159] (10.174.178.159) by
- kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 1 Mar 2023 11:48:45 +0800
-Message-ID: <9ddd30ab-164b-21c8-2f68-4ed13377bf68@huawei.com>
-Date:   Wed, 1 Mar 2023 11:48:44 +0800
+        Tue, 28 Feb 2023 22:50:27 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D099336471;
+        Tue, 28 Feb 2023 19:50:25 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id a2so2217602plm.4;
+        Tue, 28 Feb 2023 19:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677642625;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AG9TChwIFMajojqyXqEeGeimL/z1mkcKZGzrMps/uis=;
+        b=ajRS1aeLUGnojhe1k7eA812UZUIS3hY2jYVS9d5zFM0jhBxx21nQDwPW3geiY5KdeQ
+         BLJMUnJBC0FmwAMVRJEcPC9h0yvElO0Eg4yDrZbRdVlSIVYHyBj/m4hs6t8WNbsFUqIe
+         rH563UfNysxfDommzDram0sYc1BZmnZj2FUzWTi5xO0uTP2sfaVaeCQUeK1/IcD5cc6p
+         TzzxeiJ/hJHzTQVGK+QWUFWZ5uh72U6Idw9I1DX94dvL6OxxKIxwA+cvL2ZbI35X9A60
+         3qXtquqAHJ1GzCZtW3AsuAXPBYrJr472ZEbkXsI/W3Y33j9rgc+bJ/06sk2nvgjF+AwV
+         GZuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677642625;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AG9TChwIFMajojqyXqEeGeimL/z1mkcKZGzrMps/uis=;
+        b=41a3lXmC4MfI85dm6+Yy3cfmt1DAy4d1ccdAG3OXfJSLNVf72WtoeiB3bJEHnAv3ls
+         OsplHQkrx6aLOyuXA/A+2H+sEhCMcw7qoYfHR3Opm0qeYGMJdY4C9kQQYsgRrkBLKRm4
+         2LVOaqQFuXK5ZsEnaK6b3SJG4QA/wlKtIhAsGwbnCvgEqQYIddhyOvW9jzSpJtYRlWve
+         6IH5CtJNhZfEE8ARzmZCCQeqTfEUVyVAltv6KISDyVRe2vhBqBaP01QuBpy8r6ZZBqy+
+         W3V+Vs4VKhD7r6W1WHUaPd5YXhll+IYTfsfaOGfM+hIs+VZGzT6ZoEeWEQVPVCuxUed5
+         eDqQ==
+X-Gm-Message-State: AO0yUKXIbzjPvGSj+IiBeqcZIUOvY8Ad2cmfk4FkRHOiN3Lv4D2nB8q1
+        lZTIa0tyWvB5bLpQTDEPUEsg/6VC3G4=
+X-Google-Smtp-Source: AK7set81We+ge3qRlyt7CmGR9AL4sF3286rRoAlURb45cbwztk4MA141kwF+DBy8DFaVodZF3XnfTQ==
+X-Received: by 2002:a17:903:707:b0:19c:be57:9c6e with SMTP id kk7-20020a170903070700b0019cbe579c6emr3963565plb.39.1677642624977;
+        Tue, 28 Feb 2023 19:50:24 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-27.three.co.id. [180.214.232.27])
+        by smtp.gmail.com with ESMTPSA id x6-20020a1709029a4600b001992b8cf89bsm7279993plv.16.2023.02.28.19.50.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 19:50:24 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id D41941034B0; Wed,  1 Mar 2023 10:50:20 +0700 (WIB)
+Date:   Wed, 1 Mar 2023 10:50:20 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Christian =?utf-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?utf-8?Q?D=C3=A4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 01/15] dma-buf/dma-fence: Add deadline awareness
+Message-ID: <Y/7LfLxhIjDpD4D3@debian.me>
+References: <20230227193535.2822389-1-robdclark@gmail.com>
+ <20230227193535.2822389-2-robdclark@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH-next] nbd: fix incomplete validation of ioctl arg
-To:     <josef@toxicpanda.com>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yukuai3@huawei.com>, <houtao1@huawei.com>, <yangerkun@huawei.com>
-References: <20230206145805.2645671-1-zhongjinghua@huawei.com>
-From:   zhongjinghua <zhongjinghua@huawei.com>
-In-Reply-To: <20230206145805.2645671-1-zhongjinghua@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.159]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600002.china.huawei.com (7.193.23.29)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oTYOw6gqQhDOyhTR"
+Content-Disposition: inline
+In-Reply-To: <20230227193535.2822389-2-robdclark@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping...
 
-Hello，
+--oTYOw6gqQhDOyhTR
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Anyone looking this？
-
-在 2023/2/6 22:58, Zhong Jinghua 写道:
-> We tested and found an alarm caused by nbd_ioctl arg without verification.
-> The UBSAN warning calltrace like below:
->
-> UBSAN: Undefined behaviour in fs/buffer.c:1709:35
-> signed integer overflow:
-> -9223372036854775808 - 1 cannot be represented in type 'long long int'
-> CPU: 3 PID: 2523 Comm: syz-executor.0 Not tainted 4.19.90 #1
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->   dump_backtrace+0x0/0x3f0 arch/arm64/kernel/time.c:78
->   show_stack+0x28/0x38 arch/arm64/kernel/traps.c:158
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0x170/0x1dc lib/dump_stack.c:118
->   ubsan_epilogue+0x18/0xb4 lib/ubsan.c:161
->   handle_overflow+0x188/0x1dc lib/ubsan.c:192
->   __ubsan_handle_sub_overflow+0x34/0x44 lib/ubsan.c:206
->   __block_write_full_page+0x94c/0xa20 fs/buffer.c:1709
->   block_write_full_page+0x1f0/0x280 fs/buffer.c:2934
->   blkdev_writepage+0x34/0x40 fs/block_dev.c:607
->   __writepage+0x68/0xe8 mm/page-writeback.c:2305
->   write_cache_pages+0x44c/0xc70 mm/page-writeback.c:2240
->   generic_writepages+0xdc/0x148 mm/page-writeback.c:2329
->   blkdev_writepages+0x2c/0x38 fs/block_dev.c:2114
->   do_writepages+0xd4/0x250 mm/page-writeback.c:2344
->
-> The reason for triggering this warning is __block_write_full_page()
-> -> i_size_read(inode) - 1 overflow.
-> inode->i_size is assigned in __nbd_ioctl() -> nbd_set_size() -> bytesize.
-> We think it is necessary to limit the size of arg to prevent errors.
->
-> Moreover, __nbd_ioctl() -> nbd_add_socket(), arg will be cast to int.
-> Assuming the value of arg is 0x80000000000000001) (on a 64-bit machine),
-> it will become 1 after the coercion, which will return unexpected results.
->
-> Fix it by adding checks to prevent passing in too large numbers.
->
-> Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
-> ---
->   drivers/block/nbd.c | 6 ++++++
->   1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-> index 592cfa8b765a..e1c954094b6c 100644
-> --- a/drivers/block/nbd.c
-> +++ b/drivers/block/nbd.c
-> @@ -325,6 +325,9 @@ static int nbd_set_size(struct nbd_device *nbd, loff_t bytesize,
->   	if (blk_validate_block_size(blksize))
->   		return -EINVAL;
->   
-> +	if (bytesize < 0)
-> +		return -EINVAL;
+On Mon, Feb 27, 2023 at 11:35:07AM -0800, Rob Clark wrote:
+> diff --git a/Documentation/driver-api/dma-buf.rst b/Documentation/driver-=
+api/dma-buf.rst
+> index 622b8156d212..183e480d8cea 100644
+> --- a/Documentation/driver-api/dma-buf.rst
+> +++ b/Documentation/driver-api/dma-buf.rst
+> @@ -164,6 +164,12 @@ DMA Fence Signalling Annotations
+>  .. kernel-doc:: drivers/dma-buf/dma-fence.c
+>     :doc: fence signalling annotation
+> =20
+> +DMA Fence Deadline Hints
+> +~~~~~~~~~~~~~~~~~~~~~~~~
 > +
->   	nbd->config->bytesize = bytesize;
->   	nbd->config->blksize_bits = __ffs(blksize);
->   
-> @@ -1111,6 +1114,9 @@ static int nbd_add_socket(struct nbd_device *nbd, unsigned long arg,
->   	struct nbd_sock *nsock;
->   	int err;
->   
-> +	/* Arg will be cast to int, check it to avoid overflow */
-> +	if (arg > INT_MAX)
-> +		return -EINVAL;
->   	sock = nbd_get_socket(nbd, arg, &err);
->   	if (!sock)
->   		return err;
+> +.. kernel-doc:: drivers/dma-buf/dma-fence.c
+> +   :doc: deadline hints
+> +
+>  DMA Fences Functions Reference
+>  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> =20
+> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+> index 0de0482cd36e..e103e821d993 100644
+> --- a/drivers/dma-buf/dma-fence.c
+> +++ b/drivers/dma-buf/dma-fence.c
+> @@ -912,6 +912,65 @@ dma_fence_wait_any_timeout(struct dma_fence **fences=
+, uint32_t count,
+>  }
+>  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+> =20
+> +/**
+> + * DOC: deadline hints
+> + *
+> + * In an ideal world, it would be possible to pipeline a workload suffic=
+iently
+> + * that a utilization based device frequency governor could arrive at a =
+minimum
+> + * frequency that meets the requirements of the use-case, in order to mi=
+nimize
+> + * power consumption.  But in the real world there are many workloads wh=
+ich
+> + * defy this ideal.  For example, but not limited to:
+> + *
+> + * * Workloads that ping-pong between device and CPU, with alternating p=
+eriods
+> + *   of CPU waiting for device, and device waiting on CPU.  This can res=
+ult in
+> + *   devfreq and cpufreq seeing idle time in their respective domains an=
+d in
+> + *   result reduce frequency.
+> + *
+> + * * Workloads that interact with a periodic time based deadline, such a=
+s double
+> + *   buffered GPU rendering vs vblank sync'd page flipping.  In this sce=
+nario,
+> + *   missing a vblank deadline results in an *increase* in idle time on =
+the GPU
+> + *   (since it has to wait an additional vblank period), sending a singl=
+e to
+> + *   the GPU's devfreq to reduce frequency, when in fact the opposite is=
+ what is
+> + *   needed.
+> + *
+> + * To this end, deadline hint(s) can be set on a &dma_fence via &dma_fen=
+ce_set_deadline.
+> + * The deadline hint provides a way for the waiting driver, or userspace=
+, to
+> + * convey an appropriate sense of urgency to the signaling driver.
+> + *
+> + * A deadline hint is given in absolute ktime (CLOCK_MONOTONIC for users=
+pace
+> + * facing APIs).  The time could either be some point in the future (suc=
+h as
+> + * the vblank based deadline for page-flipping, or the start of a compos=
+itor's
+> + * composition cycle), or the current time to indicate an immediate dead=
+line
+> + * hint (Ie. forward progress cannot be made until this fence is signale=
+d).
+> + *
+> + * Multiple deadlines may be set on a given fence, even in parallel.  Se=
+e the
+> + * documentation for &dma_fence_ops.set_deadline.
+> + *
+> + * The deadline hint is just that, a hint.  The driver that created the =
+fence
+> + * may react by increasing frequency, making different scheduling choice=
+s, etc.
+> + * Or doing nothing at all.
+> + */
+> +
+> +/**
+> + * dma_fence_set_deadline - set desired fence-wait deadline hint
+> + * @fence:    the fence that is to be waited on
+> + * @deadline: the time by which the waiter hopes for the fence to be
+> + *            signaled
+> + *
+> + * Give the fence signaler a hint about an upcoming deadline, such as
+> + * vblank, by which point the waiter would prefer the fence to be
+> + * signaled by.  This is intended to give feedback to the fence signaler
+> + * to aid in power management decisions, such as boosting GPU frequency
+> + * if a periodic vblank deadline is approaching but the fence is not
+> + * yet signaled..
+> + */
+> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
+> +{
+> +	if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
+> +		fence->ops->set_deadline(fence, deadline);
+> +}
+> +EXPORT_SYMBOL(dma_fence_set_deadline);
+> +
+>  /**
+>   * dma_fence_describe - Dump fence describtion into seq_file
+>   * @fence: the 6fence to describe
+> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+> index 775cdc0b4f24..87c0d846dbb4 100644
+> --- a/include/linux/dma-fence.h
+> +++ b/include/linux/dma-fence.h
+> @@ -257,6 +257,24 @@ struct dma_fence_ops {
+>  	 */
+>  	void (*timeline_value_str)(struct dma_fence *fence,
+>  				   char *str, int size);
+> +
+> +	/**
+> +	 * @set_deadline:
+> +	 *
+> +	 * Callback to allow a fence waiter to inform the fence signaler of
+> +	 * an upcoming deadline, such as vblank, by which point the waiter
+> +	 * would prefer the fence to be signaled by.  This is intended to
+> +	 * give feedback to the fence signaler to aid in power management
+> +	 * decisions, such as boosting GPU frequency.
+> +	 *
+> +	 * This is called without &dma_fence.lock held, it can be called
+> +	 * multiple times and from any context.  Locking is up to the callee
+> +	 * if it has some state to manage.  If multiple deadlines are set,
+> +	 * the expectation is to track the soonest one.
+> +	 *
+> +	 * This callback is optional.
+> +	 */
+> +	void (*set_deadline)(struct dma_fence *fence, ktime_t deadline);
+>  };
+> =20
+>  void dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops =
+*ops,
+> @@ -583,6 +601,8 @@ static inline signed long dma_fence_wait(struct dma_f=
+ence *fence, bool intr)
+>  	return ret < 0 ? ret : 0;
+>  }
+> =20
+> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline);
+> +
+>  struct dma_fence *dma_fence_get_stub(void);
+>  struct dma_fence *dma_fence_allocate_private_stub(void);
+>  u64 dma_fence_context_alloc(unsigned num);
+
+The doc LGTM, thanks!
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--oTYOw6gqQhDOyhTR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY/7LdwAKCRD2uYlJVVFO
+o+yRAQCD//a9bLGYLjTrMNBYwCLBiPxnmV7phSin6w6b2ykgIgD+IsVkADZfyUA7
+J+62fGEud4jd/xybHjUgjSdSoJL4sQI=
+=yfmJ
+-----END PGP SIGNATURE-----
+
+--oTYOw6gqQhDOyhTR--
