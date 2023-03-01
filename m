@@ -2,66 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D746A715C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA396A715F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjCAQha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 11:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S229537AbjCAQi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 11:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjCAQhT (ORCPT
+        with ESMTP id S229774AbjCAQix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 11:37:19 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6D94988F;
-        Wed,  1 Mar 2023 08:36:53 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 321GZt9U126046;
-        Wed, 1 Mar 2023 10:35:55 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1677688555;
-        bh=sITZyv1tyFmXqgH0GUHmAT6tC2/cSlL5cr4fVh06Kh4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=TMKfEu8fok+w9L6/Xcqw1Oj/LKQVxc7mvi/SkZ77rUPp+51kH/rTTerY2KNN+Z51B
-         v09jnFhpRhPPmWzUhdnh5XiYrgf1Dbt7mdyTQkNWZupnBW3xZbrZ89zZPnMybRt4ep
-         nE+5jnKPHmu4o3E0qB0X2+IDwYJpJYq4iuefYoi4=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 321GZt8N058701
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 1 Mar 2023 10:35:55 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 1
- Mar 2023 10:35:54 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 1 Mar 2023 10:35:55 -0600
-Received: from [10.249.33.186] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 321GZsqx069950;
-        Wed, 1 Mar 2023 10:35:54 -0600
-Message-ID: <d4abf0c3-f5c8-fd54-87f6-4397596ae40f@ti.com>
-Date:   Wed, 1 Mar 2023 10:35:54 -0600
+        Wed, 1 Mar 2023 11:38:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A54988C
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 08:37:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677688561;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FkL7Uhy+cPKcXOPgtSYv7QM09B2YNOq91Gba4VHb6zU=;
+        b=P2WHxFxRK5T+Qbm3U0DTSgnZ3Klg+C5tIrtJamAvFyIxqtLR156VCM41ENHts35oPItMUm
+        MxQEM1ueS6/7K+6PmGPapE2X6tnxXLhwKmmd2DQQMwJj1V8b3b07onscCohYkib/kA2v0s
+        pWr/aLNGYGfal0QJ95EeMYuNiRwEXhA=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-114-ZjNJ2f6tPp242lnTS68P2w-1; Wed, 01 Mar 2023 11:36:00 -0500
+X-MC-Unique: ZjNJ2f6tPp242lnTS68P2w-1
+Received: by mail-qt1-f199.google.com with SMTP id c5-20020ac85185000000b003bfae3b8051so6913996qtn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 08:36:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677688560;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FkL7Uhy+cPKcXOPgtSYv7QM09B2YNOq91Gba4VHb6zU=;
+        b=XvRrUMoR3slgGvzpVVJs/7jKVUNgF27f3nMMVjrbp6SkivZNwFkUybn2wcPP7R9XxN
+         LbyCNAh6dwSp8Lz5hIPuxl36C75rGhaPhZNu7BFKhTNCJY/WwbSLnoRNzBQRQ00KHx+N
+         pz2imO+IyrvaCuBjHKyUBAXPpOFnBRprqgHnYFWGOjxH3uyWPCzh7fZGfpJ+FaFUhdvv
+         nDChD8L+iT+KZry+ZMGlthOsqtqwgvK7vHsMkWnDlpUn4MF1a7ik8Z1PuIZ2NtE8RfZY
+         DZWP+Q6wNi8SqjR4O2rQDU2zXA8kQjFnWZO/mBJuYSlPbtt8Ee17IrcQnZCdFwD9ZsC9
+         hsWw==
+X-Gm-Message-State: AO0yUKUFMvklSJ23phE29Q2QSplTaq8PqfEnr6sfeVaQEKHh3ATQ7WKa
+        D7n5r9XXdnft7Bum7ofzTTquBGw933Fjot8O9zX8j/oUpqltjvT5gqo8PxE2RJcfOzwBD3Yse7d
+        V73ryXAdjJV+KQTp1LIT2RPZq
+X-Received: by 2002:a05:622a:1993:b0:3bf:be4b:8094 with SMTP id u19-20020a05622a199300b003bfbe4b8094mr14665367qtc.0.1677688559660;
+        Wed, 01 Mar 2023 08:35:59 -0800 (PST)
+X-Google-Smtp-Source: AK7set8Cwi0eHdFAagaPGBeMs1+so6LN11xdXVXyv7QqXkjJci2aBg5qckwzm3APFdKOk2Zt7BkRJA==
+X-Received: by 2002:a05:622a:1993:b0:3bf:be4b:8094 with SMTP id u19-20020a05622a199300b003bfbe4b8094mr14665328qtc.0.1677688559357;
+        Wed, 01 Mar 2023 08:35:59 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id o26-20020ac8429a000000b003b64f1b1f40sm8613002qtl.40.2023.03.01.08.35.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 08:35:58 -0800 (PST)
+Date:   Wed, 1 Mar 2023 11:35:56 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Joey Gouly <joey.gouly@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
+Subject: Re: [PATCH v2 2/2] kselftest: vm: add tests for
+ memory-deny-write-execute
+Message-ID: <Y/9+7LMtZ1c/J8JV@x1n>
+References: <20230119160344.54358-1-joey.gouly@arm.com>
+ <20230119160344.54358-3-joey.gouly@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] mfd: tps65219: Add support for soft shutdown via sys-off
- API
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>, Jerome Neanne <jneanne@baylibre.com>
-CC:     <tony@atomide.com>, <linux-omap@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <khilman@baylibre.com>,
-        <nm@ti.com>, <msp@baylibre.com>
-References: <20230203140150.13071-1-jneanne@baylibre.com>
- <Y/94Pew4vr6FROcI@google.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <Y/94Pew4vr6FROcI@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: multipart/mixed; boundary="+HtziZPaMlI7+HbK"
+Content-Disposition: inline
+In-Reply-To: <20230119160344.54358-3-joey.gouly@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,139 +89,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 10:07 AM, Lee Jones wrote:
-> On Fri, 03 Feb 2023, Jerome Neanne wrote:
+
+--+HtziZPaMlI7+HbK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+On Thu, Jan 19, 2023 at 04:03:44PM +0000, Joey Gouly wrote:
+> From: Kees Cook <keescook@chromium.org>
 > 
->> Use new API for power-off mode support:
->> Link: https://lwn.net/Articles/894511/
->> Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
->>
->> sys-off API allows support of shutdown handler and restart handler.
->>
->> Shutdown was not supported before that enhancement.
->> This is required for platform that are not using PSCI.
->>
-
-Not sure what platform doesn't have PSCI off, since you tested on
-AM62-SK I'm guessing you manually disabled the PSCI off for testing?
-
-Anyway I don't see any huge issues with the code itself, small comment below.
-
->> Test:
->> - restart:
->>    # reboot
->>    Default is cold reset:
->>    # cat /sys/kernel/reboot/mode
->>    Switch boot mode to warm reset:
->>    # echo warm > /sys/kernel/reboot/mode
->> - power-off:
->>    # halt
->>
->> Tested on AM62-SP-SK board.
->>
->> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
->> Suggested-by: Andrew Davis <afd@ti.com>
+> Add some tests to cover the new PR_SET_MDWE prctl.
 > 
-> A review from Andrew would be helpful here.
-> 
->> ---
->>   drivers/mfd/tps65219.c | 45 +++++++++++++++++++++++++++++++-----------
->>   1 file changed, 34 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/mfd/tps65219.c b/drivers/mfd/tps65219.c
->> index 0e402fda206b..c134f3f6e202 100644
->> --- a/drivers/mfd/tps65219.c
->> +++ b/drivers/mfd/tps65219.c
->> @@ -25,25 +25,34 @@ static int tps65219_cold_reset(struct tps65219 *tps)
->>   				  TPS65219_MFP_COLD_RESET_I2C_CTRL_MASK);
->>   }
->>   
->> -static int tps65219_restart(struct notifier_block *this,
->> -			    unsigned long reboot_mode, void *cmd)
->> +static int tps65219_soft_shutdown(struct tps65219 *tps)
->>   {
->> -	struct tps65219 *tps;
->> +	return regmap_update_bits(tps->regmap, TPS65219_REG_MFP_CTRL,
->> +				  TPS65219_MFP_I2C_OFF_REQ_MASK,
->> +				  TPS65219_MFP_I2C_OFF_REQ_MASK);
->> +}
->>   
->> -	tps = container_of(this, struct tps65219, nb);
->> +static int tps65219_power_off_handler(struct sys_off_data *data)
->> +{
->> +	tps65219_soft_shutdown(data->cb_data);
->> +	return NOTIFY_DONE;
->> +}
->>   
->> +static int tps65219_restart(struct tps65219 *tps,
->> +			    unsigned long reboot_mode)
->> +{
->>   	if (reboot_mode == REBOOT_WARM)
->>   		tps65219_warm_reset(tps);
->>   	else
->>   		tps65219_cold_reset(tps);
->> -
->>   	return NOTIFY_DONE;
->>   }
->>   
->> -static struct notifier_block pmic_rst_restart_nb = {
->> -	.notifier_call = tps65219_restart,
->> -	.priority = 200,
->> -};
->> +static int tps65219_restart_handler(struct sys_off_data *data)
->> +{
->> +	tps65219_restart(data->cb_data, data->mode);
->> +	return NOTIFY_DONE;
->> +}
->>   
->>   static const struct resource tps65219_pwrbutton_resources[] = {
->>   	DEFINE_RES_IRQ_NAMED(TPS65219_INT_PB_FALLING_EDGE_DETECT, "falling"),
->> @@ -269,13 +278,27 @@ static int tps65219_probe(struct i2c_client *client)
->>   		}
->>   	}
->>   
->> -	tps->nb = pmic_rst_restart_nb;
->> -	ret = register_restart_handler(&tps->nb);
->> +	ret = devm_register_sys_off_handler(tps->dev,
->> +					    SYS_OFF_MODE_RESTART,
->> +					    SYS_OFF_PRIO_HIGH,
+> Co-developed-by: Joey Gouly <joey.gouly@arm.com>
+> Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Cc: Shuah Khan <shuah@kernel.org>
 
-Why not default prio? SYS_OFF_PRIO_DEFAULT
+May need to sync prctl.h into tools/include/uapi?  Otherwise selftests/mm
+build fails here.  There's also one compiler report.  A fixup attached
+which works for me.
 
-Then you can use this new helper devm_register_restart_handler()
+Thanks,
 
->> +					    tps65219_restart_handler,
->> +					    tps);
->> +
->>   	if (ret) {
->>   		dev_err(tps->dev, "cannot register restart handler, %d\n", ret);
->>   		return ret;
->>   	}
->>   
->> +	ret = devm_register_sys_off_handler(tps->dev,
->> +					    SYS_OFF_MODE_POWER_OFF,
->> +					    SYS_OFF_PRIO_DEFAULT,
->> +					    tps65219_power_off_handler,
->> +					    tps);
+-- 
+Peter Xu
+
+--+HtziZPaMlI7+HbK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment;
+	filename="0001-fixup-kselftest-vm-add-tests-for-memory-deny-write-e.patch"
+
+From ce8e17c244fcc743c7006316dd431c5650480756 Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Wed, 1 Mar 2023 11:33:34 -0500
+Subject: [PATCH] fixup! kselftest: vm: add tests for memory-deny-write-execute
+
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ tools/include/uapi/linux/prctl.h       | 6 ++++++
+ tools/testing/selftests/mm/mdwe_test.c | 3 +--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/tools/include/uapi/linux/prctl.h b/tools/include/uapi/linux/prctl.h
+index e4c629c1f1b0..759b3f53e53f 100644
+--- a/tools/include/uapi/linux/prctl.h
++++ b/tools/include/uapi/linux/prctl.h
+@@ -281,6 +281,12 @@ struct prctl_mm_map {
+ # define PR_SME_VL_LEN_MASK		0xffff
+ # define PR_SME_VL_INHERIT		(1 << 17) /* inherit across exec */
+ 
++/* Memory deny write / execute */
++#define PR_SET_MDWE			65
++# define PR_MDWE_REFUSE_EXEC_GAIN	1
++
++#define PR_GET_MDWE			66
++
+ #define PR_SET_VMA		0x53564d41
+ # define PR_SET_VMA_ANON_NAME		0
+ 
+diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
+index f466a099f1bf..bc91bef5d254 100644
+--- a/tools/testing/selftests/mm/mdwe_test.c
++++ b/tools/testing/selftests/mm/mdwe_test.c
+@@ -163,9 +163,8 @@ TEST_F(mdwe, mprotect_WRITE_EXEC)
+ 
+ TEST_F(mdwe, mmap_FIXED)
+ {
+-	void *p, *p2;
++	void *p;
+ 
+-	p2 = mmap(NULL, self->size, PROT_READ | PROT_EXEC, self->flags, 0, 0);
+ 	self->p = mmap(NULL, self->size, PROT_READ, self->flags, 0, 0);
+ 	ASSERT_NE(self->p, MAP_FAILED);
+ 
+-- 
+2.39.1
 
 
-devm_register_power_off_handler()?
+--+HtziZPaMlI7+HbK--
 
-Otherwise I see no major issues,
-
-Reviewed-by: Andrew Davis <afd@ti.com>
-
-Andrew
-
->> +	if (ret) {
->> +		dev_err(tps->dev, "failed to register sys-off handler: %d\n",
->> +			ret);
->> +		return ret;
->> +	}
->>   	return 0;
->>   }
->>   
->> -- 
->> 2.34.1
->>
-> 
