@@ -2,142 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0C56A6AF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C8C6A6AF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjCAKj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 05:39:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
+        id S229871AbjCAKka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 05:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjCAKjw (ORCPT
+        with ESMTP id S229854AbjCAKk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 05:39:52 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AED033443
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:39:39 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id i9so17018548lfc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 02:39:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UjHndKN1tS+EjYQpoHOpF9EKyx2gABq4MzoiM3edZ1U=;
-        b=upMI+E7EJLlCLqENGp+ai12ZHdrNra4+9PJ/r+CE4cX3qrSxLeuCPhnP8eynIoZAa0
-         7F64l/KZn3Su4IqA/nlVzKsyA8O8ijiTut5aTy0c2X1wwxmk1KT4pikQqjYdLyVFlI0g
-         tXuPTFc3OEPDnqZM8YL+U/31q8IStGpvMLHazGoWHy+vYq/qgZnky0354csDnNEZ5qzm
-         ayah7jFRqfo7BaSMb0e9HuiXw8Nzzb7/ehHM9fk39XCB8Li3hGPsu851SzylNoZU0CgV
-         VZJaLdi30hjhQ9G9nQTuRnFbtZjvV6ZpAzQFQvze61M6Ab5bAjIx5Hr3y3FaF5TDQibr
-         0qoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UjHndKN1tS+EjYQpoHOpF9EKyx2gABq4MzoiM3edZ1U=;
-        b=Jcw3MLf7WVkqp2q+5BA/oEg2+0oAluoSGCIL9ifetCzhJoeGujYWbGFuWa+yAds0LC
-         coBW5Zr8iO1qhi8ZSsB1O1GdsFYuLNlB92Rq+TrjPAc3jSTTM6Wp93OmDFHbq3ZyWGde
-         sCCRfOpR/BMmvsIWgyjQXKfWa+TiHAPWT1EqC+3bXohPCzXXxeNioBa2SgVNCX3aoeQA
-         EjN3GacZY2351vfsUuBeAMOdbqenuTImZQ/Pxk6hUp22t6I6Fc0C7TPntwckVu/Sk0kp
-         hKBBPPrvF0C3gapXaH2a+20f1O0WQXXeR6NQ0B8Ce9O8AMiCY/eKmRYsWVMvXYIxnXIS
-         31Bg==
-X-Gm-Message-State: AO0yUKXqJpPOVOrv393ZqlCdbevmnkgnK7tOYcjY55nG/Vue/0Nc2GaP
-        zwxsVexJ2oMweILxzZH1S3l3nQ==
-X-Google-Smtp-Source: AK7set8De0Z7lVNOT5/6YGenuD9ZOXuT9s3eKmwqLdIyhwvUdMF+fH3SusR++xsHxw/yflBI42d1ng==
-X-Received: by 2002:ac2:42d6:0:b0:4db:384c:bb8 with SMTP id n22-20020ac242d6000000b004db384c0bb8mr1556543lfl.69.1677667177662;
-        Wed, 01 Mar 2023 02:39:37 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id w9-20020a056512098900b004dc721ea6a1sm1665050lft.273.2023.03.01.02.39.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 02:39:37 -0800 (PST)
-Message-ID: <c59cbc7b-baa8-ec57-ec33-0455edf34c29@linaro.org>
-Date:   Wed, 1 Mar 2023 12:39:36 +0200
+        Wed, 1 Mar 2023 05:40:27 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565A5366AE;
+        Wed,  1 Mar 2023 02:40:13 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677667211;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L8EFrO2smvO54m4OlFPf+7U0da0HeQG774RYmh30c3o=;
+        b=M7SlDUYsit/VCp2jlJC1/KqExpU/rj+CFSY0PS48Cxwejvif+sKZnZVVuukjK0QrfiMtsB
+        YgbpdvXAm1EPL3z6R3og/8tjUvUtMtbOclgD43I67m06wCSey6DKcpQjxH2zcyLXpMS75B
+        DM3AhSr49OHBVsqIhntyQWjm8PnzJJEsrXSdlKHvN2+6ynB8dQoyOXU8ozB8+rPA61VQoW
+        iUT03UAyhAWuc8F6eYP1eY0fFrOHmEV6TfhW7r87t1gnj/gAWUebc9DqOyDyfQt/L42nyn
+        pjvBKz0OKgNqDCHu+R6NTvHwBnYfC9UOTdZNxCQdyx+vAIbvY1zgres7hV79EA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677667211;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L8EFrO2smvO54m4OlFPf+7U0da0HeQG774RYmh30c3o=;
+        b=VOLoWAGOtoPHyDNtDmdYKJB/i3SbPFZw92rCbug2tlts34N2qiQzsvtU6QV8OFRmJfgSUp
+        WwgbnRT/CFFw0VCA==
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>, x86@kernel.org,
+        Wangyang Guo <wangyang.guo@intel.com>,
+        Arjan van De Ven <arjan@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [patch 0/3] net, refcount: Address dst_entry reference count
+ scalability issues
+In-Reply-To: <20230228191705.3bc8bed6@kernel.org>
+References: <20230228132118.978145284@linutronix.de>
+ <CANn89iL2pYt2QA2sS4KkXrCSjprz9byE_p+Geom3MTNPMzfFDw@mail.gmail.com>
+ <87h6v5n3su.ffs@tglx>
+ <CANn89iL_ey=S=FjkhJ+mk7gabOdVag6ENKnu9GnZkcF31qOaZA@mail.gmail.com>
+ <871qm9mgkb.ffs@tglx> <20230228191705.3bc8bed6@kernel.org>
+Date:   Wed, 01 Mar 2023 11:40:11 +0100
+Message-ID: <87sfeolppw.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/4] firmware: scm: Modify only the DLOAD bit in TCSR
- register for download mode
-Content-Language: en-GB
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1677664555-30191-1-git-send-email-quic_mojha@quicinc.com>
- <1677664555-30191-3-git-send-email-quic_mojha@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1677664555-30191-3-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2023 11:55, Mukesh Ojha wrote:
-> CrashDump collection is based on the DLOAD bit of TCSR register.
-> To retain other bits, we read the register and modify only the
-> DLOAD bit as the other bits have their own significance.
-> 
-> Originally-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-> Changes in v2:
->   - Addressed comment made by Bjorn.
->   - Added download mask from patch 3 to this.
-> 
->   drivers/firmware/qcom_scm.c | 17 +++++++++++++++--
->   1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index 51eb853..c9f1fad 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -27,6 +27,8 @@ module_param(download_mode, bool, 0);
->   #define SCM_HAS_IFACE_CLK	BIT(1)
->   #define SCM_HAS_BUS_CLK		BIT(2)
->   
-> +#define QCOM_DOWNLOAD_MODE_MASK 0x30
-> +
->   struct qcom_scm {
->   	struct device *dev;
->   	struct clk *core_clk;
-> @@ -419,6 +421,7 @@ static void qcom_scm_set_download_mode(bool enable)
->   {
->   	bool avail;
->   	int ret = 0;
-> +	u32 val;
->   
->   	avail = __qcom_scm_is_call_available(__scm->dev,
->   					     QCOM_SCM_SVC_BOOT,
-> @@ -426,8 +429,18 @@ static void qcom_scm_set_download_mode(bool enable)
->   	if (avail) {
->   		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
->   	} else if (__scm->dload_mode_addr) {
-> -		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
-> -				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
-> +		ret = qcom_scm_io_readl(__scm->dload_mode_addr, &val);
-> +		if (ret) {
-> +			dev_err(__scm->dev,
-> +				"failed to read dload mode address value: %d\n", ret);
-> +			return;
-> +		}
-> +
-> +		val &= ~QCOM_DOWNLOAD_MODE_MASK;
-> +		if (enable)
-> +			val |= QCOM_SCM_BOOT_SET_DLOAD_MODE;
-> +
-> +		ret = qcom_scm_io_writel(__scm->dload_mode_addr, val);
+On Tue, Feb 28 2023 at 19:17, Jakub Kicinski wrote:
+> FWIW looks good to me, especially the refcount part.
+> We do see 10% of jitter in microbenchmarks due to random cache
+> effects, so forgive the questioning.
 
-Any locking for this RMW?
+Yes, those things are hard to measure. 
 
->   	} else {
->   		dev_err(__scm->dev,
->   			"No available mechanism for setting download mode\n");
+> But again, the refcount seems like an obvious win to my noob eyes.
+>
+> While I have you it would be remiss of me not to mention my ksoftirq
+> change which makes a large difference in production workloads:
+> https://lore.kernel.org/all/20221222221244.1290833-3-kuba@kernel.org/
 
--- 
-With best wishes
-Dmitry
+Let me find this again.
 
+> Is Peter's "rework" of softirq going in for 6.3?
+
+Not that I'm aware of. That had a few loose ends and got lost in space
+AFAICT.
+
+Thanks,
+
+        tglx
