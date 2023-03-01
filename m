@@ -2,245 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BA36A6C27
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7936A6A6C2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjCAMN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 07:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S229592AbjCAMP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjCAMN4 (ORCPT
+        with ESMTP id S229511AbjCAMPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 07:13:56 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5E6AD07
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:13:55 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id d30so52929549eda.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:13:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677672833;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gokx+4LNtbFhGF1+9ImIjOx1FRlpJQt/UgRW0h3GBJQ=;
-        b=VT4I3dsJFVvWNnIS1Q5oUxiNJDpFbJCngJuPuxb3f1TXG7XtKL3bZp/FLd9/jSXRtc
-         /qREEvABAgiCcZE+tUwVE0AUcIbNvBhs8YNJ9emkMRmPdcQgWHfl7t7ka6UgorR2JMof
-         XeiWiH+miOdtOOnGI8WcN/SwtJjvUAvM1hDC/SrdkngP6zgcGxWJ0BvYpSBRP7b5Qz4a
-         FC7Y1PPqaNY1rncsMjb7eiGNjm3oR51/G++kiXGaHfyj7HSq7sxjv2lSE3nZdVFXcJnd
-         OlVilzEwH7uD7XSO+tuNOm4dMecVRw5sMBgu3UzPaRzYFleVgj2lheFFdrwkNOVz9E8c
-         6Z8Q==
+        Wed, 1 Mar 2023 07:15:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DA0166C7
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:15:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677672911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bu+EPKiqWaJlFT+E8yHfU9ZpiuzC1YRS6XYz2PiEsE8=;
+        b=NI1cnLbWyuVfOIcj1X7UWnVfc6GAbDhNmqciq68dphk1dOj73n4uZOAwm8yowTtAxybsaE
+        nd6VtwmGcW1xfUHFXoT2SOxoZ1xj1NE3VZ4+sZ9vgCCPPrxNuHRWWfRk91UOn88hpo/JJv
+        bXEwZh+ZkRa2TjYrkUso6qTJsKYKcbM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-453-esgU-nxEP06o9O7GZ_mK4Q-1; Wed, 01 Mar 2023 07:15:07 -0500
+X-MC-Unique: esgU-nxEP06o9O7GZ_mK4Q-1
+Received: by mail-ed1-f70.google.com with SMTP id k12-20020a50c8cc000000b004accf30f6d3so18944596edh.14
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 04:15:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677672833;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gokx+4LNtbFhGF1+9ImIjOx1FRlpJQt/UgRW0h3GBJQ=;
-        b=SB/+S9y7u0qHmPBHkvBfCDZKv1XZnHAfWLStHRaJBuLIfPb6fp9V2LYvCNUhooEZVw
-         NELcbiSHfmzzUK5gG003BbqqP4AGyKIypc0PaaZmm2pSOF95V2WWerhVLdAUoHpFkiOd
-         +rvWnY0MnYssfxtPmdpMFpAXJHWgsdpIUgc2Bj+sevBxCwt0OKwq82+vYW+MCkDvJAcY
-         TZojj1DPCxOH05KzjhIAARbQiJjnC20gzA5dLqCkF1eotR6o5mdMuFklKs/r2Gz7ofWB
-         PXUAK2/vvNoA43yzbBLT/xRv5x3Y4BWMHDG3wwB3M/vfTrTRrdlUJWHpHeyFhmkDOZLR
-         Egew==
-X-Gm-Message-State: AO0yUKVG3HgYpwvTnas3sqL49/QjauNAxvoiYTNYDSB8u09roc0tOuXW
-        S9SAH760iH8dnPtaWMDUF/+Jnw==
-X-Google-Smtp-Source: AK7set9rRZIsbOH5GxrwzsEclKBLOmij+EPNDHcDCEEle0bL2wXOyffFqPEbBqQXbacQvzVN+vxppg==
-X-Received: by 2002:a17:906:271a:b0:88a:8e57:f063 with SMTP id z26-20020a170906271a00b0088a8e57f063mr5230235ejc.62.1677672833350;
-        Wed, 01 Mar 2023 04:13:53 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id h14-20020a17090619ce00b008f14cc5f2e4sm5740266ejd.68.2023.03.01.04.13.52
+        bh=bu+EPKiqWaJlFT+E8yHfU9ZpiuzC1YRS6XYz2PiEsE8=;
+        b=gRJqkFsP+yvrAsCTsyACNOBsCfEYgDwsz/VwNxtrCRIL+WWslnLC7cZwZMVP4+j76y
+         6eIjm1gRBTCZ5ANSQl2S7P8RILZ8ihFePxcBOIWvRBxAkqLBAG9Dc0UoNs8PRjem+BF3
+         WP2umHjYrdMyKFnjGB+NkmTj6j6WgDv+WipibsxqPD26RVjOT4Qihcd9JWIjMtpOc5Pj
+         CgDmf5KpdoDZ4m+nUmVqtkLb28T2vMiTIKJshQjTZDzLj3Me126LowRFco1l5TSG8tSj
+         gj7y90uZi8d6FxdUvPe30cqwQWEXULXJvzmd4imVPpfCffl35mCzZtm73hK/4v0wb86S
+         gWYw==
+X-Gm-Message-State: AO0yUKXr8xOyocp+2veLD1OLNNrKydMKM2KgxYbrAn0TVn24NfwF4IGq
+        3I7ODaG9OwVFzG7o4xK7nTPJSfMb1BDTMRLuImJWNI/dH/GtstWXkBANSGPyNTxBR1SzPUU42Gf
+        GjHuE2O6UNlFiJUWnzJqM7CreJ+1HKw==
+X-Received: by 2002:a17:907:38e:b0:88d:3c85:4ccf with SMTP id ss14-20020a170907038e00b0088d3c854ccfmr5340027ejb.25.1677672906130;
+        Wed, 01 Mar 2023 04:15:06 -0800 (PST)
+X-Google-Smtp-Source: AK7set9OTmWktppMquATQgyqnsl8b3YgTg0F/aRqE8fQ+5iI4ZqkI5gqr4VvdiSzTD1tE+BDH+TxbA==
+X-Received: by 2002:a17:907:38e:b0:88d:3c85:4ccf with SMTP id ss14-20020a170907038e00b0088d3c854ccfmr5340018ejb.25.1677672905806;
+        Wed, 01 Mar 2023 04:15:05 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id m15-20020a1709061ecf00b00882f9130eafsm5717500ejj.26.2023.03.01.04.15.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 04:13:53 -0800 (PST)
-Message-ID: <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
-Date:   Wed, 1 Mar 2023 12:13:51 +0000
+        Wed, 01 Mar 2023 04:15:05 -0800 (PST)
+Message-ID: <15d7b77d-c66e-6e31-e930-7595cdabcd11@redhat.com>
+Date:   Wed, 1 Mar 2023 13:15:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
- ext4_group_desc_csum
-Content-Language: en-US
-To:     syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu,
-        Lee Jones <joneslee@google.com>
-References: <000000000000ef6cf905f496e40b@google.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <000000000000ef6cf905f496e40b@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2 1/2] platform/x86: dell-ddv: Fix cache invalidation on
+ resume
+Content-Language: en-US, nl
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230218115318.20662-1-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230218115318.20662-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Hi,
 
-On 2/13/23 15:56, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+On 2/18/23 12:53, Armin Wolf wrote:
+> If one or both sensor buffers could not be initialized, either
+> due to missing hardware support or due to some error during probing,
+> the resume handler will encounter undefined behaviour when
+> attempting to lock buffers then protected by an uninitialized or
+> destroyed mutex.
+> Fix this by introducing a "active" flag which is set during probe,
+> and only invalidate buffers which where flaged as "active".
 > 
-> HEAD commit:    ceaa837f96ad Linux 6.2-rc8
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11727cc7480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14392a4f480000
+> Tested on a Dell Inspiron 3505.
 > 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/88042f9b5fc8/disk-ceaa837f.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/9945b57ec9ee/vmlinux-ceaa837f.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/72ff118ed96b/bzImage-ceaa837f.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/dabec17b2679/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in crc16+0x1fb/0x280 lib/crc16.c:58
-> Read of size 1 at addr ffff88807de00000 by task syz-executor.1/5339
-> 
-> CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted 6.2.0-rc8-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-> Call Trace:
->   <TASK>
->   __dump_stack lib/dump_stack.c:88 [inline]
->   dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
->   print_address_description mm/kasan/report.c:306 [inline]
->   print_report+0x163/0x4f0 mm/kasan/report.c:417
->   kasan_report+0x13a/0x170 mm/kasan/report.c:517
->   crc16+0x1fb/0x280 lib/crc16.c:58
->   ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
->   ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
->   ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
->   ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
->   ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
->   ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
->   ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
->   ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
->   ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
->   ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
->   evict+0x2a4/0x620 fs/inode.c:664
->   do_unlinkat+0x4f1/0x930 fs/namei.c:4327
->   __do_sys_unlink fs/namei.c:4368 [inline]
->   __se_sys_unlink fs/namei.c:4366 [inline]
->   __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fbc85a8c0f9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fbc86838168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
-> RAX: ffffffffffffffda RBX: 00007fbc85babf80 RCX: 00007fbc85a8c0f9
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
-> RBP: 00007fbc85ae7ae9 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffd5743beaf R14: 00007fbc86838300 R15: 0000000000022000
->   </TASK>
-> 
-> The buggy address belongs to the physical page:
-> page:ffffea0001f78000 refcount:0 mapcount:-128 mapping:0000000000000000 index:0x0 pfn:0x7de00
-> flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-> raw: 00fff00000000000 ffffea0001f86008 ffffea0001db2a08 0000000000000000
-> raw: 0000000000000000 0000000000000001 00000000ffffff7f 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as freed
-> page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, tgid 4855 (sshd), ts 43553490210, free_ts 58249059760
->   prep_new_page mm/page_alloc.c:2531 [inline]
->   get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
->   __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
->   alloc_slab_page+0x6a/0x160 mm/slub.c:1851
->   allocate_slab mm/slub.c:1998 [inline]
->   new_slab+0x84/0x2f0 mm/slub.c:2051
->   ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
->   __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
->   kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
->   mt_alloc_bulk lib/maple_tree.c:157 [inline]
->   mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
->   mas_node_count_gfp lib/maple_tree.c:1316 [inline]
->   mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
->   vma_expand+0x277/0x850 mm/mmap.c:541
->   mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
->   do_mmap+0x8c9/0xf70 mm/mmap.c:1411
->   vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> page last free stack trace:
->   reset_page_owner include/linux/page_owner.h:24 [inline]
->   free_pages_prepare mm/page_alloc.c:1446 [inline]
->   free_pcp_prepare mm/page_alloc.c:1496 [inline]
->   free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
->   free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
->   qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
->   kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
->   __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
->   kasan_slab_alloc include/linux/kasan.h:201 [inline]
->   slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
->   slab_alloc_node mm/slub.c:3452 [inline]
->   kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
->   __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
->   alloc_skb include/linux/skbuff.h:1270 [inline]
->   alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
->   sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
->   unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
->   sock_sendmsg_nosec net/socket.c:714 [inline]
->   sock_sendmsg net/socket.c:734 [inline]
->   __sys_sendto+0x475/0x5f0 net/socket.c:2117
->   __do_sys_sendto net/socket.c:2129 [inline]
->   __se_sys_sendto net/socket.c:2125 [inline]
->   __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Memory state around the buggy address:
->   ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->   ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->> ffff88807de00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->                     ^
->   ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->   ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> ==================================================================
-> 
+> Fixes: 3b7eeff93d29 ("platform/x86: dell-ddv: Add hwmon support")
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+> Changes in v2:
+> - move checking of the "active" flag inside
+>   dell_wmi_ddv_hwmon_cache_invalidate()
+
+Thanks, I've applied this patch to my review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+I'll rebase that branch once 6.3-rc1 is out and then push the rebased
+patch to the fixes branch and include it in my next 6.3 fixes pull-req
+to Linus.
+
+Regards,
+
+Hans
 
 
-I think the patch from below should fix it.
 
-I printed le16_to_cpu(sbi->s_es->s_desc_size) and it was greater than
-EXT4_MAX_DESC_SIZE. What I think it happens is that the contents of the
-super block in the buffer get corrupted sometime after the .get_tree
-(which eventually calls __ext4_fill_super()) is called. So instead of
-relying on the contents of the buffer, we should instead rely on the
-s_desc_size initialized at the __ext4_fill_super() time.
 
-If someone finds this good (or bad), or has a more in depth explanation,
-please let me know, it will help me better understand the subsystem. In
-the meantime I'll continue to investigate this and prepare a patch for
-it.
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index d547c9d09725..eff4e9649faf 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -96,6 +96,7 @@ struct combined_chip_info {
+>  };
+> 
+>  struct dell_wmi_ddv_sensors {
+> +	bool active;
+>  	struct mutex lock;	/* protect caching */
+>  	unsigned long timestamp;
+>  	union acpi_object *obj;
+> @@ -520,6 +521,9 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev
+> 
+>  static void dell_wmi_ddv_hwmon_cache_invalidate(struct dell_wmi_ddv_sensors *sensors)
+>  {
+> +	if (!sensors->active)
+> +		return;
+> +
+>  	mutex_lock(&sensors->lock);
+>  	kfree(sensors->obj);
+>  	sensors->obj = NULL;
+> @@ -530,6 +534,7 @@ static void dell_wmi_ddv_hwmon_cache_destroy(void *data)
+>  {
+>  	struct dell_wmi_ddv_sensors *sensors = data;
+> 
+> +	sensors->active = false;
+>  	mutex_destroy(&sensors->lock);
+>  	kfree(sensors->obj);
+>  }
+> @@ -549,6 +554,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
+>  		return ERR_PTR(ret);
+> 
+>  	mutex_init(&sensors->lock);
+> +	sensors->active = true;
+> 
+>  	ret = devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_hwmon_cache_destroy, sensors);
+>  	if (ret < 0)
+> @@ -852,7 +858,7 @@ static int dell_wmi_ddv_resume(struct device *dev)
+>  {
+>  	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+> 
+> -	/* Force re-reading of all sensors */
+> +	/* Force re-reading of all active sensors */
+>  	dell_wmi_ddv_hwmon_cache_invalidate(&data->fans);
+>  	dell_wmi_ddv_hwmon_cache_invalidate(&data->temps);
+> 
+> --
+> 2.30.2
+> 
 
-Cheers,
-ta
-
-index 260c1b3e3ef2..91d41e84da32 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3182,11 +3182,9 @@ static __le16 ext4_group_desc_csum(struct 
-super_block *sb, __u32 block_group,
-         crc = crc16(crc, (__u8 *)gdp, offset);
-         offset += sizeof(gdp->bg_checksum); /* skip checksum */
-         /* for checksum of struct ext4_group_desc do the rest...*/
--       if (ext4_has_feature_64bit(sb) &&
--           offset < le16_to_cpu(sbi->s_es->s_desc_size))
-+       if (ext4_has_feature_64bit(sb) && offset < sbi->s_desc_size)
-                 crc = crc16(crc, (__u8 *)gdp + offset,
--                           le16_to_cpu(sbi->s_es->s_desc_size) -
--                               offset);
-+                           sbi->s_desc_size - offset);
-
-  out:
-         return cpu_to_le16(crc);
