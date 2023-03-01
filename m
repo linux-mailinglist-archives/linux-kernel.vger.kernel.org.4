@@ -2,113 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3356A6D53
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9EC6A6D5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjCANpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 08:45:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        id S229920AbjCANsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 08:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjCANpj (ORCPT
+        with ESMTP id S229572AbjCANsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:45:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D973B207;
-        Wed,  1 Mar 2023 05:45:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC906121F;
-        Wed,  1 Mar 2023 13:45:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E7DC433D2;
-        Wed,  1 Mar 2023 13:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677678337;
-        bh=1dD0pfFSToxyyHnOfvS1/MB1SaH40n0HvBzGm/xGYgQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nP6fPks0nvwV8mXLCdjb4pNHMZDHId82gyBhyBiHJ3jK1Zli0+IT3ucPaSdF6cnQ4
-         4GL0XhGSxttxixLQ8Fin5ohtn0ve2kqkEUSOV3kj35Rqco1v/FGDpxH1DjOA8uxU8j
-         LinWi1/l2eQAokClHIdsAoikDUgopALAzA/UCgYE6kG/OGyPwQuyeXcJVknQwA9p/M
-         KKPZiCMT5i1/4BKcyV5t7L3f0l1MYAxOC/3VVVjka7o2xaxqpsZxWNx+7ZFGyg8R0U
-         QKqyS8TZw2I1FW/Lht912c910+pFSQ0LYkuYB0VoV5Fo7dswNjM2WSTroLTZYqsIfj
-         5WZo4YfiHlSNg==
-Date:   Wed, 1 Mar 2023 13:45:31 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Message-ID: <Y/9W+7fiRRMqw5LB@sirena.org.uk>
-References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
- <20230227120702.13180-3-kyarlagadda@nvidia.com>
- <Y/1oqr0RfD7KVA4y@kernel.org>
- <Y/3zVdgnVz8BvGGl@ziepe.ca>
- <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
- <Y/9EwTtmxcVBjiHz@nvidia.com>
- <Y/9HB/KF2Kjkihkg@sirena.org.uk>
- <Y/9VkGjCP48FHtyS@nvidia.com>
+        Wed, 1 Mar 2023 08:48:10 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B1ACA32;
+        Wed,  1 Mar 2023 05:48:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=iXxQGSxv4hSb0jR/Gu5QY74yz6G5/W/SnN5dKKpvlGk=; b=AgYILYsVpk2HPSQXJRfhwhBacb
+        d29RWYsFztUHNOx/RZE7My2WcL7cQ+qR4kRkumYGL+V4SAADM7pH5qSIrLg+XZyiViLuOvaL73G1V
+        0AGWw5y9IKKmZaT4FyydObOyYN/tughaxOcpUlaHy94HYeZVPC15tu7SrVjRhDv/okrcZfzycJc6R
+        RDcngSNWzhHt8cjMeo1+HKDA6U8XLje74+qudrcFD0iTl+wEAEJ779SzbndB5PFqozvgSmDoyhnaM
+        +gnchBmWPzuZFZ0AltAP5iy+Biq/KnDb24pNiHvUTdfKMPMNVpyvPFD+Ab0vY0vE/8sCOyIFTNkvp
+        rII3OZig==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1pXMoQ-00Dvjx-K0; Wed, 01 Mar 2023 15:48:06 +0200
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] firmware: tegra: bpmp: Fix error paths in debugfs
+Date:   Wed,  1 Mar 2023 15:47:55 +0200
+Message-Id: <20230301134756.999169-1-cyndis@kapsi.fi>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HlJqL3KQOXVxMEv/"
-Content-Disposition: inline
-In-Reply-To: <Y/9VkGjCP48FHtyS@nvidia.com>
-X-Cookie: Life -- Love It or Leave It.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
---HlJqL3KQOXVxMEv/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Some error paths in mrq_debug_read and bpmp_debug_show would overwrite
+the return error code with a subsequent call to mrq_debug_close.
 
-On Wed, Mar 01, 2023 at 09:39:28AM -0400, Jason Gunthorpe wrote:
-> On Wed, Mar 01, 2023 at 12:37:27PM +0000, Mark Brown wrote:
+Change the code to only change the error code if there was no prior
+error.
 
-> > It's not like these buses are hot pluggable - someone would have to
-> > design and manufacture a board which doesn't work.  It's probably
-> > reasonable for this to fail with the SPI subsystem saying it can't
-> > support things when the operation is tried.
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+---
+ drivers/firmware/tegra/bpmp-debugfs.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-> If the spi subsystem fails this request with these flags that would be
-> great, it would cause the TPM to fail probing reliably.
+diff --git a/drivers/firmware/tegra/bpmp-debugfs.c b/drivers/firmware/tegra/bpmp-debugfs.c
+index 3ca2b5d9e66f..6dfe3d34109e 100644
+--- a/drivers/firmware/tegra/bpmp-debugfs.c
++++ b/drivers/firmware/tegra/bpmp-debugfs.c
+@@ -193,7 +193,7 @@ static int mrq_debug_read(struct tegra_bpmp *bpmp, const char *name,
+ 		},
+ 	};
+ 	u32 fd = 0, len = 0;
+-	int remaining, err;
++	int remaining, err, close_err;
+ 
+ 	mutex_lock(&bpmp_debug_lock);
+ 	err = mrq_debug_open(bpmp, name, &fd, &len, 0);
+@@ -231,7 +231,9 @@ static int mrq_debug_read(struct tegra_bpmp *bpmp, const char *name,
+ 	*nbytes = len;
+ 
+ close:
+-	err = mrq_debug_close(bpmp, fd);
++	close_err = mrq_debug_close(bpmp, fd);
++	if (!err)
++		err = close_err;
+ out:
+ 	mutex_unlock(&bpmp_debug_lock);
+ 	return err;
+@@ -319,7 +321,7 @@ static int bpmp_debug_show(struct seq_file *m, void *p)
+ 		},
+ 	};
+ 	u32 fd = 0, len = 0;
+-	int remaining, err;
++	int remaining, err, close_err;
+ 
+ 	filename = get_filename(bpmp, file, fnamebuf, sizeof(fnamebuf));
+ 	if (!filename)
+@@ -353,7 +355,9 @@ static int bpmp_debug_show(struct seq_file *m, void *p)
+ 	}
+ 
+ close:
+-	err = mrq_debug_close(bpmp, fd);
++	close_err = mrq_debug_close(bpmp, fd);
++	if (!err)
++		err = close_err;
+ out:
+ 	mutex_unlock(&bpmp_debug_lock);
+ 	return err;
+-- 
+2.39.2
 
-> But does this patch do that? It looks like non-supporting half duplex
-> drivers will just ignore the new flag?
-
-That's something we can fix up in SPI, we shouldn't worry about it for
-the client drivers.
-
---HlJqL3KQOXVxMEv/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP/VvoACgkQJNaLcl1U
-h9BVlgf/fs6E4wmKL5YMg67Xab5gvjFCS0c76pnr1vNsg7oz4yBQBqQnyEcgAuBl
-tPyhDERF91NXkFa1bnJKd0aVFmq3cgUCp1bswLI2UfCXb+7T91yfHPR1zuJHXzX8
-S9WBmw8wZJYHHzgxVuOKaRjsg/SYUKSMYuPiW34HDhMKBlf94IiqsrK78Li5Gj5W
-9Z9DBv2CKGjP1JvcprBZQqhrgrDBWploLOh+5GqjKCDtoeSdntuUD+015K+EiajS
-RQpThQz4OfCWLfuGVb4O/L5tNoI0QSIzAz2DAq8Ow3XLzdGLK+nzeOuC/j9JVXh6
-wYcHaj8yHSm7/Esg05zt6MZzeMhK+g==
-=YiAy
------END PGP SIGNATURE-----
-
---HlJqL3KQOXVxMEv/--
