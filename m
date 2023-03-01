@@ -2,108 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CFB6A771B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D65C16A7720
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjCAWu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 17:50:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S229704AbjCAWxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 17:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAWuZ (ORCPT
+        with ESMTP id S229445AbjCAWxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 17:50:25 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FDC3D083;
-        Wed,  1 Mar 2023 14:50:24 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id i10so15630462plr.9;
-        Wed, 01 Mar 2023 14:50:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677711024;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hJIzTpqGYq1aPwE6q4LWD693tsN62qj8hDcVerLovGw=;
-        b=SdtqRQYKi88YwXrnI9JHaUREr154AOdkMxR3d1xEM3PX5LEF5QKr5qO7KTjBNlHrxW
-         Nz+Q56a264rxNWyAFAAFnh6T4TDm88mWoipcYvQehXCmGswwUtNHviHDnk48p/egquv9
-         Eu4mbC/lz4KsBROXWAQJxmBjgghxt6HDyNuGcUKcoeSBds1zejbeT1I9JvECYsUc01GK
-         Id42xVgZg5ckZ+bPsKRKPDBBGq5nfrY3kMcUL7L9QBSlcFHU26GTiLeWwQRQTIWS1m5Z
-         ziWpBs6LSUBMEPMhzyBpc550yuoyFuwsGO2AY3gqyeSYZfBsXiqgKe/ekT+jJnDjdTX+
-         eIOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677711024;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hJIzTpqGYq1aPwE6q4LWD693tsN62qj8hDcVerLovGw=;
-        b=oEXt3e8NqWJtRY77JMGuL7BL359bt3+HIFW7TZPk/FgNamqE/1E7V1NKGKizjUrDuU
-         UH+e2Jo8p5cS4bzcjdmvLVEePiQEsGP1LQwoQZ2t3R4CxxdCgTbW7OlSk9Bw5eWCu50x
-         4Uk1lvctBFUh6cn/xg1FbVU5qseYFcE5ZfPTwpre0B6eDGDrzCY50DPUded6JYg5jVjn
-         AJPvtBirnbJLHlyh70YHK4ymoPx0s6R3Oz5shHe5OqxqowtSwjeiMqXlzW85jmLmafxD
-         zeJY3dW/XA149PjGB5rpKJhILCRYVFgtXLY7fL55h2Pyv5UiXHDvzZjCnN6wxxV15CHb
-         KQGg==
-X-Gm-Message-State: AO0yUKUefWNxTHeR/cM3rVIbGZShdTLuhL8hEkr6m5xUHEoE9TWc2nxK
-        aOz9nWYY5LV8HtiKEdK/9P8=
-X-Google-Smtp-Source: AK7set8pPodOgFB0ymahSr5nfFgchcZ1ITY6rEzD5E6dobC9i0nxO328qmEyJY6OUjHZDmTWMDTKnw==
-X-Received: by 2002:a05:6a20:7da6:b0:cc:4118:75f4 with SMTP id v38-20020a056a207da600b000cc411875f4mr139633pzj.0.1677711024289;
-        Wed, 01 Mar 2023 14:50:24 -0800 (PST)
-Received: from [10.69.40.170] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id b20-20020a656694000000b00503006d9b50sm7781120pgw.92.2023.03.01.14.50.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 14:50:23 -0800 (PST)
-Message-ID: <2f4e0dd1-d428-3196-9315-5204a5a38263@gmail.com>
-Date:   Wed, 1 Mar 2023 14:50:22 -0800
+        Wed, 1 Mar 2023 17:53:47 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B64F1B2E3;
+        Wed,  1 Mar 2023 14:53:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677711226; x=1709247226;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TbdI4Y4Wwsm9UOJ+PB3HFSYFJE1MwNlUpSEMRYtwwsg=;
+  b=Z6wIdYGrJkI7l8ASPmJ+GedPxjowkV2QHRjTRjF/YRJDl2hzguj3zB/z
+   Q2ePOQzudSK1dHUcm7XIetaEveePrAHNHjTjT7frM1nadJTdV2/DnlK/J
+   KTBDaAlN+Ilpa6w46fhOJcuiuVrNzhK5iVcwhqCLkZnoXD9v0v0Oj2fXz
+   wSFLay4LbNrJXLqlL7RSA/niLPzjzcTN8rpSIfqITMml8LoAJtOMkG3jA
+   o8Jt4rYXikM2Iwa17AF0LzHGSXkqLFOhhoj7g0WlJoU+gj0rXlBO/5KMH
+   q67ZyCJyCaNTYC8nDhs8pOkj4HZfRtrf0b2g2+S/7kJg+r0AZBFZCWFWo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="362129302"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="362129302"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 14:53:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="674730270"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="674730270"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Mar 2023 14:53:38 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXVKL-0006Th-0z;
+        Wed, 01 Mar 2023 22:53:37 +0000
+Date:   Thu, 2 Mar 2023 06:53:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@redhat.com, dipenp@nvidia.com, treding@nvidia.com,
+        mwen@igalia.com, fmdefrancesco@gmail.com, arnd@arndb.de,
+        bvanassche@acm.org, ogabbay@kernel.org, axboe@kernel.dk,
+        mathieu.poirier@linaro.org, linux@zary.sk, masahiroy@kernel.org,
+        yangyicong@hisilicon.com, dan.j.williams@intel.com,
+        jacek.lawrynowicz@linux.intel.com, benjamin.tissoires@redhat.com,
+        devicetree@vger.kernel.org, furong.zhou@linux.intel.com,
+        andriy.shevchenko@intel.com, linus.walleij@linaro.org,
+        Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
+Subject: Re: [PATCHv3 2/4] wiegand: add Wiegand bus driver
+Message-ID: <202303020615.0F00suDa-lkp@intel.com>
+References: <20230301142835.19614-3-m.zatovic1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 6.2 00/16] 6.2.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230301180653.263532453@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20230301180653.263532453@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301142835.19614-3-m.zatovic1@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Martin,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.2 next-20230301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Martin-Za-ovi/dt-bindings-wiegand-add-Wiegand-controller-common-properties/20230301-223030
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230301142835.19614-3-m.zatovic1%40gmail.com
+patch subject: [PATCHv3 2/4] wiegand: add Wiegand bus driver
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230302/202303020615.0F00suDa-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c62b833f42989e355d82cd20b7803e0228e33792
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Martin-Za-ovi/dt-bindings-wiegand-add-Wiegand-controller-common-properties/20230301-223030
+        git checkout c62b833f42989e355d82cd20b7803e0228e33792
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/wiegand/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303020615.0F00suDa-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/wiegand/wiegand.c:441:27: error: initialization of 'void (*)(struct device *)' from incompatible pointer type 'int (*)(struct device *)' [-Werror=incompatible-pointer-types]
+     441 |         .remove         = wiegand_remove,
+         |                           ^~~~~~~~~~~~~~
+   drivers/wiegand/wiegand.c:441:27: note: (near initialization for 'wiegand_bus_type.remove')
+   cc1: some warnings being treated as errors
 
 
-On 3/1/2023 10:07 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.2 release.
-> There are 16 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+vim +441 drivers/wiegand/wiegand.c
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+   436	
+   437	static struct bus_type wiegand_bus_type = {
+   438		.name		= "wiegand",
+   439		.match		= wiegand_match_device,
+   440		.probe		= wiegand_probe,
+ > 441		.remove		= wiegand_remove,
+   442	};
+   443	
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Florian
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
