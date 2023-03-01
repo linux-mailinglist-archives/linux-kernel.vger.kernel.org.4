@@ -2,204 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95126A6AF7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9317D6A6AFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 11:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjCAKlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 05:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S229851AbjCAKmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 05:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAKlo (ORCPT
+        with ESMTP id S229445AbjCAKmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 05:41:44 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07E7270F;
-        Wed,  1 Mar 2023 02:41:42 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id m6so17032917lfq.5;
-        Wed, 01 Mar 2023 02:41:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677667301;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:date:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i+lwdyMLWrNCUvP02r0csUXgwLUgh7w7WbrI0pmUfWw=;
-        b=EPL5WVS3tFSDOLTSWnexGJFkVlGLQr63rDlUGz4KbfG1CDAdaTmo2PQBTQq6KzrjbW
-         Posj+feIgGObc/hvqjhm1JUTYHxypeB5N1OocI79dOg5jSq2bv+sk4pb2HdmvxOOmmd7
-         kRl1TGZgBle2bjJAoLH+sDKyB64RouLB6PL2gxNmqlYD0ypElu5VxW2EX+l9tByHslig
-         Y1z7C71RRCU/s/K3kV/UwHdMnBsKUCm9n3NLTbj+q8Hjdrkivc2LYA3SvekePOb1fwS3
-         LJe7wJqdjJRYBglMYo5q3AqhBRYqB9AgwFqATK7wS1TQR+nWogVw2Qa2+FLynzqPSsVq
-         5huA==
+        Wed, 1 Mar 2023 05:42:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04F13B664
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:41:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677667307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8HxbAZdFTdnp0zkdCbvj3RZFLfW7S0PsSk1ODrPqPrk=;
+        b=c+rydkEFPFoAwkNVF8FxPqUMe7ioXU2xXOPYC0tutIPHTg0TgFVeziJx7htj4MbVFgKbzg
+        5LpD/i0lTyTrFY2Z86v1a8QxMaE0pcoeWrq+tZeQD55LxmUNymJV5bYhgDPOUVL/DWLlKb
+        DBtcXCuNn0EigCBPxYgIvt1t2Q6h2QE=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-46-O-m6axBfMUyUMVK89WoTSg-1; Wed, 01 Mar 2023 05:41:46 -0500
+X-MC-Unique: O-m6axBfMUyUMVK89WoTSg-1
+Received: by mail-ed1-f72.google.com with SMTP id fj7-20020a0564022b8700b004bbcdf3751bso2999248edb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 02:41:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677667301;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i+lwdyMLWrNCUvP02r0csUXgwLUgh7w7WbrI0pmUfWw=;
-        b=PlgJ1QE0+5rgSSQTiAjMFJsu1JEDanFE9/VXZLUsECIBMG2AeCW6eUJ0iHq81p8TD9
-         Zz4shZG8gk3iPutUWnJV/UVPbncj3M/6ld7ValNzalVzuQOevJ62vbJQEjuURdJcUAfv
-         6FzvANSHcj6urA2sd6pQnggifKEKG1fIX2XR5+Il2MemtMMCmbU8uOj5vs1cGuLJg+Gt
-         POiBsgu2fEWTbs/lU7dUV/K6oPar25deBVMGyeA1cZA4PXE641Y4bQT6lGIE/WX8k+aK
-         feUNPFmM2IekbNnKZ/MAzPqYzyVH4H5uX4mOBdVkvJjdPegioeFfZtiucVakb5th6nwJ
-         1ADw==
-X-Gm-Message-State: AO0yUKWs+pqZOVN+e8e/0X44EH6P1Ywaxbi/OT8dKLEF7qaa1NmZu4rJ
-        zL0yBcDL3i0VdDMEo9I5Tlg=
-X-Google-Smtp-Source: AK7set+11Iny2EdWmD9hXw83EgIIV1mL8orIaUR+ppxy5FtPa7r6ToSfgxtS+0dWKUJcZtFHIvc0pg==
-X-Received: by 2002:ac2:5197:0:b0:4b5:3e6e:382e with SMTP id u23-20020ac25197000000b004b53e6e382emr1459043lfi.4.1677667300743;
-        Wed, 01 Mar 2023 02:41:40 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id h5-20020a05651211c500b004dc48d91061sm1680896lfr.304.2023.03.01.02.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 02:41:40 -0800 (PST)
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-X-Google-Original-From: Zhi Wang <zhi.wang.linux@intel.com>
-Date:   Wed, 1 Mar 2023 12:41:38 +0200
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>
-Subject: Re: [PATCH RFC v8 50/56] KVM: SEV: Handle restricted memory
- invalidations for SNP
-Message-ID: <20230301124138.000004f9@intel.com>
-In-Reply-To: <20230220183847.59159-51-michael.roth@amd.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
-        <20230220183847.59159-51-michael.roth@amd.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8HxbAZdFTdnp0zkdCbvj3RZFLfW7S0PsSk1ODrPqPrk=;
+        b=m7Zvh/j87tBUeR16zMl4xjnbydXwuqBGsxOdjk/ksj0xPwn4lXsFyr+x+1eX5HWNP5
+         GtQW7Orfx1aF0UEja9EmbtC1YTrLNvRGEQyxY9nUQ5u4hAwwTl32bYIqweZ1yEkILRjX
+         iYvqW+/b3kuIrGy7TZ1hFAH5UsJ7AMfu5YMyJfdRcf/cdkZtrhs7KBocUn7Ywx8aj45p
+         lkJ6UuqCCnXgBitEjLEPNdut5Bs2j6SNromHHRnUj96hClchmkNLX067P2MD9qTZ9JAa
+         O5qQ9GQBM25764VZe80c2pbLz9O1ljySV5YWI0J/ZJpA9DvkCPrq7LRJkQrMAP3X/fw3
+         C4yQ==
+X-Gm-Message-State: AO0yUKVMKi6pOvCy9sDWbrFm/qJVWvNux38LOvfgMv3ebIRIPtkZ0NBC
+        jaUM2hblZerTz9EVH8P7wlpfoieYTUVtURovCbHw//UvbfsLIx+yiBJTtKXHE50Ax3PznNoo9QJ
+        UUkO4SCb5nyWZk2iGps5Jp9Wx
+X-Received: by 2002:a17:907:a090:b0:8a5:3d1e:6302 with SMTP id hu16-20020a170907a09000b008a53d1e6302mr8328946ejc.56.1677667304600;
+        Wed, 01 Mar 2023 02:41:44 -0800 (PST)
+X-Google-Smtp-Source: AK7set9uUypKyMfmYd9MswS9i2cF1QytAOp5wk1WXq1QOr6zLSfsuR9Tau9OoLJEhBxNnyTofSUqEQ==
+X-Received: by 2002:a17:907:a090:b0:8a5:3d1e:6302 with SMTP id hu16-20020a170907a09000b008a53d1e6302mr8328929ejc.56.1677667304283;
+        Wed, 01 Mar 2023 02:41:44 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id f2-20020a170906824200b008f0143dfa9dsm5702009ejx.33.2023.03.01.02.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 02:41:43 -0800 (PST)
+Message-ID: <ae28faf8-c8a4-3f75-08d0-8e5233f2fa5d@redhat.com>
+Date:   Wed, 1 Mar 2023 11:41:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 0/3] media: pci: intel: ivsc: Add driver of Intel
+ Visual Sensing Controller(IVSC)
+Content-Language: en-US, nl
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wentong Wu <wentong.wu@intel.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        srinivas.pandruvada@intel.com,
+        pierre-louis.bossart@linux.intel.com, zhifeng.wang@intel.com,
+        xiang.ye@intel.com, tian.shu.qiu@intel.com, bingbu.cao@intel.com,
+        linux-kernel@vger.kernel.org
+References: <20230213022347.2480307-1-wentong.wu@intel.com>
+ <Y/8qJzScTfFucpP9@kekkonen.localdomain>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <Y/8qJzScTfFucpP9@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 12:38:41 -0600
-Michael Roth <michael.roth@amd.com> wrote:
+Hi,
 
-> Implement a platform hook to do the work of restoring the direct map
-> entries and cleaning up RMP table entries for restricted memory that is
-> being freed back to the host.
+On 3/1/23 11:34, Sakari Ailus wrote:
+> Hi Wentong,
 > 
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/kvm/svm/sev.c | 62 ++++++++++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/svm/svm.c |  1 +
->  arch/x86/kvm/svm/svm.h |  1 +
->  3 files changed, 64 insertions(+)
+> On Mon, Feb 13, 2023 at 10:23:44AM +0800, Wentong Wu wrote:
+>> Intel Visual Sensing Controller (IVSC), codenamed "Clover Falls", is a
+>> companion chip designed to provide secure and low power vision capability
+>> to IA platforms. IVSC is available in existing commercial platforms from
+>> multiple OEMs.
+>>
+>> The primary use case of IVSC is to bring in context awareness. IVSC
+>> interfaces directly with the platform main camera sensor via a CSI-2 link
+>> and processes the image data with the embedded AI engine. The detected
+>> events are sent over I2C to ISH (Intel Sensor Hub) for additional data
+>> fusion from multiple sensors. The fusion results are used to implement
+>> advanced use cases like:
+>>  - Face detection to unlock screen
+>>  - Detect user presence to manage backlight setting or waking up system
+>>
+>> Since the Image Processing Unit(IPU) used on the host processor needs to
+>> configure the CSI-2 link in normal camera usages, the CSI-2 link and
+>> camera sensor can only be used in mutually-exclusive ways by host IPU and
+>> IVSC. By default the IVSC owns the CSI-2 link and camera sensor. The IPU
+>> driver can take ownership of the CSI-2 link and camera sensor using
+>> interfaces provided by this IVSC driver.
+>>
+>> Switching ownership requires an interface with two different hardware
+>> modules inside IVSC. The software interface to these modules is via Intel
+>> MEI (The Intel Management Engine) commands. These two hardware modules
+>> have two different MEI UUIDs to enumerate. These hardware modules are:
+>>  - ACE (Algorithm Context Engine): This module is for algorithm computing
+>> when IVSC owns camera sensor. Also ACE module controls camera sensor's
+>> ownership. This hardware module is used to set ownership of camera sensor.
+>>  - CSI (Camera Serial Interface): This module is used to route camera
+>> sensor data either to IVSC or to host for IPU driver and application.
+>>
+>> IVSC also provides a privacy mode. When privacy mode is turned on,
+>> camera sensor can't be used. This means that both ACE and host IPU can't
+>> get image data. And when this mode is turned on, host IPU driver is
+>> informed via a registered callback, so that user can be notified.
+>>
+>> In summary, to acquire ownership of camera by IPU driver, first ACE
+>> module needs to be informed of ownership and then to setup MIPI CSI-2
+>> link for the camera sensor and IPU.
 > 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 7a74a92cb39a..bedec90d034f 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -4509,3 +4509,65 @@ bool sev_fault_is_private(struct kvm *kvm, gpa_t gpa, u64 error_code, bool *priv
->  
->  	return true;
->  }
-> +
-> +void sev_invalidate_private_range(struct kvm_memory_slot *slot, gfn_t start, gfn_t end)
-> +{
-> +	gfn_t gfn = start;
-> +
-> +	if (!sev_snp_guest(slot->kvm))
-> +		return;
-> +
-> +	if (!kvm_slot_can_be_private(slot)) {
-> +		pr_warn_ratelimited("SEV: Memslot for GFN: 0x%llx is not private.\n",
-> +				    gfn);
-> +		return;
-> +	}
-> +
+> I thought this for a while and did some research, and I can suggest the
+> following:
+> 
+> - The IVSC sub-device implements a control for privacy (V4L2_CID_PRIVACY
+>   is a good fit).
+> 
+> - Camera sensor access needs to be requested from IVSC before accessing the
+>   sensor via I²C. The IVSC ownership control needs to be in the right
+>   setting for this to work, and device links can be used for that purpose
+>   (see device_link_add()). With DL_FLAG_PM_RUNTIME and DL_FLAG_RPM_ACTIVE,
+>   the supplier devices will be PM runtime resumed before the consumer
+>   (camera sensor). As these devices are purely virtual on host side and has
+>   no power state as such, you can use runtime PM callbacks to transfer the
+>   ownership.
 
-This is a generic check for both SNP and TDX, it should be moved to
-kvm_restrictedmem_invalidate_begin().
+Interesting proposal to use device-links + runtime-pm for this instead
+of modelling this as an i2c-mux. FWIW I'm fine with going this route instead
+of using an i2c-mux approach.
 
-> +	while (gfn <= end) {
-> +		gpa_t gpa = gfn_to_gpa(gfn);
-> +		int level = PG_LEVEL_4K;
-> +		int order, rc;
-> +		kvm_pfn_t pfn;
-> +
-> +		rc = kvm_restrictedmem_get_pfn(slot, gfn, &pfn, &order);
-> +		if (rc) {
-> +			pr_warn_ratelimited("SEV: Failed to retrieve restricted PFN for GFN 0x%llx, rc: %d\n",
-> +					    gfn, rc);
-> +			gfn++;
-> +			continue;
-> +		}
-> +
-> +		if (order) {
-> +			int rmp_level;
-> +
-> +			if (IS_ALIGNED(gpa, page_level_size(PG_LEVEL_2M)) &&
-> +			    gpa + page_level_size(PG_LEVEL_2M) <= gfn_to_gpa(end))
-> +				level = PG_LEVEL_2M;
-> +			else
-> +				pr_debug("%s: GPA 0x%llx is not aligned to 2M, skipping 2M directmap restoration\n",
-> +					 __func__, gpa);
-> +
-> +			/*
-> +			 * TODO: It may still be possible to restore 2M mapping here,
-> +			 * but keep it simple for now.
-> +			 */
-> +			if (level == PG_LEVEL_2M &&
-> +			    (!snp_lookup_rmpentry(pfn, &rmp_level) || rmp_level == PG_LEVEL_4K)) {
-> +				pr_debug("%s: PFN 0x%llx is not mapped as 2M private range, skipping 2M directmap restoration\n",
-> +					 __func__, pfn);
-> +				level = PG_LEVEL_4K;
-> +			}
-> +		}
-> +
-> +		pr_debug("%s: GPA %llx PFN %llx order %d level %d\n",
-> +			 __func__, gpa, pfn, order, level);
-> +		rc = snp_make_page_shared(slot->kvm, gpa, pfn, level);
-> +		if (rc)
-> +			pr_err("SEV: Failed to restore page to shared, GPA: 0x%llx PFN: 0x%llx order: %d rc: %d\n",
-> +			       gpa, pfn, order, rc);
-> +
-> +		gfn += page_level_size(level) >> PAGE_SHIFT;
-> +		put_page(pfn_to_page(pfn));
-> +		cond_resched();
-> +	}
-> +}
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 18e4a6c17d11..3fe5f13b5f3a 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4862,6 +4862,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->  	.adjust_mapping_level = sev_adjust_mapping_level,
->  	.update_mem_attr = sev_update_mem_attr,
->  	.fault_is_private = sev_fault_is_private,
-> +	.invalidate_restricted_mem = sev_invalidate_private_range,
->  };
->  
->  /*
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 97038afa8020..857b674e68f0 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -727,6 +727,7 @@ void handle_rmp_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u64 error_code);
->  void sev_snp_init_protected_guest_state(struct kvm_vcpu *vcpu);
->  int sev_update_mem_attr(struct kvm_memory_slot *slot, unsigned int attr,
->  			gfn_t start, gfn_t end);
-> +void sev_invalidate_private_range(struct kvm_memory_slot *slot, gfn_t start, gfn_t end);
->  
->  bool sev_fault_is_private(struct kvm *kvm, gpa_t gpa, u64 error_code, bool *private_fault);
->  
+I have been thinking about the i2c-mux approach a bit and the problem is
+that we are not really muxing but want to turn on/off control and AFAIK
+the i2c-mux framework simply leaves the mux muxed to the last used i2c-chain,
+so control will never be released when the i2c transfers are done.
+
+And if were to somehow modify things (or maybe there already is some
+release callback) then the downside becomes that the i2c-mux core code
+operates at the i2c transfer level. So each i2c read/write would then
+enable + disavle control.
+
+Modelling this using something like runtime pm as such is a much better
+fit because then we request control once on probe / stream-on and
+release it once we are fully done, rather then requesting + releasing
+control once per i2c-transfer.
+
+Regards,
+
+Hans
+
+
+
+> 
+> - The CSI-2 configuration should take place when streaming starts on the
+>   sensor (as well as IVSC).
+> 
+> - Device links need to be set up via IPU bridge which now is called  CIO2
+>   bridge (cio2-bridge.c).
+> 
+> Any questions, comments?
+> 
 
