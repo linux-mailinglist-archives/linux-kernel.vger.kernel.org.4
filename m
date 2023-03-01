@@ -2,61 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EF46A69A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F586A69E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjCAJRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
+        id S229754AbjCAJiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCAJRD (ORCPT
+        with ESMTP id S229511AbjCAJix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:17:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1774B975B;
-        Wed,  1 Mar 2023 01:17:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4F326129A;
-        Wed,  1 Mar 2023 09:17:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13576C433A0;
-        Wed,  1 Mar 2023 09:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677662221;
-        bh=lovfDVL8Scu9QyarHVO8qpnpcBeZhltZD2l0DKHmN4I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qVrBIPeo0qRh+Qr6oXK8/vpk7W0jNsW4w7n0Kd53kI3rQBSxiULJKuqjgLMpUjd58
-         6I5m10JAbUhAMAouVVoN8XLRWks9rx2gsjEznJrHh5Ut2F/iZCS9ZJbf9hOgyJPgRl
-         Lmkl5K2lzpEUlMyuuTKC4i6TSueLS5/5ErOdHRDNtlgQLC/wWow3VDCf+1Holi/FUA
-         QAs3rNRS17scdzwJvz75kQRl7mUmCqKzzoskUeULK8AmqWzIshnyWq/Eo1snPNp/ia
-         PoRcZJQorQh6prF/C7QhC1/Op438MpxWlRD3SIlmWUrP6CqKiwFQaT8ZttjQEhry2m
-         4AmmPJu0V3Wwg==
-Received: by mail-lj1-f171.google.com with SMTP id b10so13300251ljr.0;
-        Wed, 01 Mar 2023 01:17:00 -0800 (PST)
-X-Gm-Message-State: AO0yUKVnbP2bvs02T8bPf5wgV9XytENvePlOAz7fuuC2fozWZbwsFbp3
-        RIDtbYL7OUORLOUNig1LBrHPhA15hCoe6uX+nEY=
-X-Google-Smtp-Source: AK7set8Jxay6/XzRPbvyFuBXH/4bCLtcWK7sNwXjsYGVnArLTvXs6uFBWyOYAFgn2PY3QJRfnMfcmoD/BEom1rGEImc=
-X-Received: by 2002:a2e:b989:0:b0:295:ba26:8ad4 with SMTP id
- p9-20020a2eb989000000b00295ba268ad4mr1803515ljp.2.1677662219042; Wed, 01 Mar
- 2023 01:16:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20230301085545.2373646-1-chenhuacai@loongson.cn>
-In-Reply-To: <20230301085545.2373646-1-chenhuacai@loongson.cn>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 1 Mar 2023 10:16:47 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFybJ=snO5YG=6Uy2Qoi98b-6YTKX0Z9=1GPn=JMdxUiQ@mail.gmail.com>
-Message-ID: <CAMj1kXFybJ=snO5YG=6Uy2Qoi98b-6YTKX0Z9=1GPn=JMdxUiQ@mail.gmail.com>
-Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
- relocate kernel
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, linux-efi@vger.kernel.org,
-        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Wed, 1 Mar 2023 04:38:53 -0500
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1E12C2412B;
+        Wed,  1 Mar 2023 01:38:51 -0800 (PST)
+Received: from ubuntu.localdomain (unknown [106.117.98.179])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCHCLVWGP9jxVKcDQ--.89S2;
+        Wed, 01 Mar 2023 17:18:25 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] media: usb: siano: Fix warning due to null work_func_t function pointer
+Date:   Wed,  1 Mar 2023 17:18:13 +0800
+Message-Id: <20230301091813.82543-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgCHCLVWGP9jxVKcDQ--.89S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAry8JFyDtFyDXrW5uFWxZwb_yoW5CFW3pw
+        18XrWjkFW8JF1Yyrn8Ar1UG3W5J3WxZa48GrW7Wr1rWF1rG3W7Xa48KFWjkryUtr4UZrya
+        yF90q34xtr1jgaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
+        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUIhFcUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgsBAVZdtd2CmAAIs4
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,59 +51,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 at 09:55, Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> Since Linux-6.3, LoongArch supports PIE kernel now, so let's reintroduce
-> efi_relocate_kernel() to relocate the core kernel.
->
+The previous commit ebad8e731c1c ("media: usb: siano: Fix use after
+free bugs caused by do_submit_urb") adds cancel_work_sync() in
+smsusb_stop_streaming(). But smsusb_stop_streaming() may be called,
+even if the work_struct surb->wq has not been initialized. As a result,
+the warning will occur. One of the processes that could lead to warning
+is shown below:
 
-Nice!
+smsusb_probe()
+  smsusb_init_device()
+    if (!dev->in_ep || !dev->out_ep || align < 0) {
+         smsusb_term_device(intf);
+           smsusb_stop_streaming()
+             cancel_work_sync(&dev->surbs[i].wq);
+               __cancel_work_timer()
+                 __flush_work()
+                   if (WARN_ON(!work->func)) // work->func is null
 
-I assume you will need to make a similar change for zboot?
+The log reported by syzbot is shown below:
 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++-------------
->  1 file changed, 7 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
-> index eee7ed43cdfb..72c71ae201f0 100644
-> --- a/drivers/firmware/efi/libstub/loongarch-stub.c
-> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-> @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
->                                  efi_loaded_image_t *image,
->                                  efi_handle_t image_handle)
->  {
-> -       int nr_pages = round_up(kernel_asize, EFI_ALLOC_ALIGN) / EFI_PAGE_SIZE;
-> -       efi_physical_addr_t kernel_addr = EFI_KIMG_PREFERRED_ADDRESS;
->         efi_status_t status;
-> +       unsigned long kernel_addr = 0;
->
-> -       /*
-> -        * Allocate space for the kernel image at the preferred offset. This is
-> -        * the only location in memory from where we can execute the image, so
-> -        * no point in falling back to another allocation.
-> -        */
-> -       status = efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
-> -                            EFI_LOADER_DATA, nr_pages, &kernel_addr);
-> -       if (status != EFI_SUCCESS)
-> -               return status;
-> -
-> -       *image_addr = EFI_KIMG_PREFERRED_ADDRESS;
-> -       *image_size = kernel_asize;
-> +       kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
-> +
-> +       status = efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
-> +                    EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min_align(), 0x0);
->
-> -       memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
-> -              (void *)&kernel_offset - kernel_offset,
-> -              kernel_fsize);
-> +       *image_addr = kernel_addr;
-> +       *image_size = kernel_asize;
->
->         return status;
->  }
-> --
-> 2.39.1
->
+WARNING: CPU: 0 PID: 897 at kernel/workqueue.c:3066 __flush_work+0x798/0xa80 kernel/workqueue.c:3063
+Modules linked in:
+CPU: 0 PID: 897 Comm: kworker/0:2 Not tainted 6.2.0-rc1-syzkaller #0
+RIP: 0010:__flush_work+0x798/0xa80 kernel/workqueue.c:3066
+...
+RSP: 0018:ffffc9000464ebf8 EFLAGS: 00010246
+RAX: 1ffff11002dbb420 RBX: 0000000000000021 RCX: 1ffffffff204fa4e
+RDX: dffffc0000000000 RSI: 0000000000000001 RDI: ffff888016dda0e8
+RBP: ffffc9000464ed98 R08: 0000000000000001 R09: ffffffff90253b2f
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff888016dda0e8
+R13: ffff888016dda0e8 R14: ffff888016dda100 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffd4331efe8 CR3: 000000000b48e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __cancel_work_timer+0x315/0x460 kernel/workqueue.c:3160
+ smsusb_stop_streaming drivers/media/usb/siano/smsusb.c:182 [inline]
+ smsusb_term_device+0xda/0x2d0 drivers/media/usb/siano/smsusb.c:344
+ smsusb_init_device+0x400/0x9ce drivers/media/usb/siano/smsusb.c:419
+ smsusb_probe+0xbbd/0xc55 drivers/media/usb/siano/smsusb.c:567
+...
+
+This patch adds check before cancel_work_sync(). If surb->wq has not
+been initialized, the cancel_work_sync() will not be executed.
+
+Fixes: ebad8e731c1c ("media: usb: siano: Fix use after free bugs caused by do_submit_urb")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/media/usb/siano/smsusb.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/siano/smsusb.c b/drivers/media/usb/siano/smsusb.c
+index 6f443c542c6..640737d3b8a 100644
+--- a/drivers/media/usb/siano/smsusb.c
++++ b/drivers/media/usb/siano/smsusb.c
+@@ -179,7 +179,8 @@ static void smsusb_stop_streaming(struct smsusb_device_t *dev)
+ 
+ 	for (i = 0; i < MAX_URBS; i++) {
+ 		usb_kill_urb(&dev->surbs[i].urb);
+-		cancel_work_sync(&dev->surbs[i].wq);
++		if (dev->surbs[i].wq.func)
++			cancel_work_sync(&dev->surbs[i].wq);
+ 
+ 		if (dev->surbs[i].cb) {
+ 			smscore_putbuffer(dev->coredev, dev->surbs[i].cb);
+-- 
+2.17.1
+
