@@ -2,206 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A15B6A6D08
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2734E6A6D0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 14:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCANaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 08:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S229675AbjCANam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 08:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCANaM (ORCPT
+        with ESMTP id S229437AbjCANak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:30:12 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF8514EBC
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 05:30:11 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id u20so7890973pfm.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 05:30:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NBZb9eF0SdnxfyqvLOV1YxJXos0+fQsdrq2uis2Kn2s=;
-        b=ESLM9pVcbCtAB17hY6wDpmZiYnWQOVl0P+fBOZsidw+gjzHJdipjSlix1NqfczGkS/
-         i1S7PZ2KfG8tGFf5n2G6pIYpPlKFYCstUrAVYze7FQTnO8WtGU5pRmFZl9niYit/XaDK
-         6fIREEjm7KBTU6gCV07sPTMGWYPrF2WeomNx514M++L3zJIT5xBgTNm/PxVY06ecrBv8
-         1QYOtJQrwFS6U1Krytsf8blj1wrMGTzRMtYs13jhfYoaG4eEonvhGVK8vxCJSpWMsguc
-         puYNx0N988xHZooCX7uaty7tRjOb7XbB1LL721dNcJNbRanTwhzqEk/uNIedBLsrR5Sc
-         kBDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NBZb9eF0SdnxfyqvLOV1YxJXos0+fQsdrq2uis2Kn2s=;
-        b=7CiWIoNQlxup3zgLCmvjsLeRE/4k1eDvRPWfQXPk2P2tvycjmXdSgfcj4bBQVanJ9V
-         2DaRYlVgKrtzqJIKB5Qu7S45UyspfFk24FPYELYKcbVkJCDjTEAGm2QM5o3wXl/zIOpf
-         EesLZKBc/mY3bW07CgA1pEAh3z+9jTxRSt6NOA6zk6wvHYqnoldLK3d4On7hnUmltxUe
-         lktPo2kS5mYxruoXAjd0Pwnop7AIQ+RMkLptp4UnJ0cc3eHo/r5y9EtJTUQuFTfmpK+q
-         YUsmgtIz+Dk3wdS7iARk+ptBbWsr7oM9KrhRnsNUP5GUnLgRYloB0VYJwFHfTHW3aGy9
-         MweQ==
-X-Gm-Message-State: AO0yUKUaD3ywAix/LplDLKCZxUf+MTMnOt9ia7fY2p88ZpZ3EfDmIxbe
-        nEz2O5eMXHeJ4AeCyZAxMrAyA5/zrAB5ivDgjkd2rw==
-X-Google-Smtp-Source: AK7set9YJBGCaTFkinZbdjLPo5ygtaraFsyfjeiMaTA4nyQ0QhmjFrjrvPTOW+iQqIxGqtyvOMnTyz2KsAyg7ohr1x0=
-X-Received: by 2002:a63:3508:0:b0:4fc:2058:fa2b with SMTP id
- c8-20020a633508000000b004fc2058fa2bmr2153689pga.3.1677677410528; Wed, 01 Mar
- 2023 05:30:10 -0800 (PST)
+        Wed, 1 Mar 2023 08:30:40 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F601CAEB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 05:30:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677677437; x=1709213437;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NmxyP4356gq5Xno/7bpT+rSOql6hU9mFKRogJkOZLYk=;
+  b=ftKKIhf9jQAZH8wcQ16SkAz5DXPAbp8pVY633gJo/AWIRA1zgVNr7dxk
+   4jcMFncr++5NzlMdFPdel2lQR/Jo0kqpPT+8PVGukQICAgRniEcjHKCNT
+   EL5+e67ZftFnroyXyRmDboS7oMiE316VzR0aVUyIPKogwl/5z9TDIXMdC
+   TYTFfSNnwx71ESSfB9+Uu7hCwURUlMpfnoNUswe2W1PdKaR1llen3eBcx
+   oNGUf8UY0ruvCG4wLeqEBrgNy8YjNVrpbak/a9fuvsy/bcLxRC7/NbHek
+   H3BkbPwT8zTKEf29SgeuaHfhxT3FTEqHldXK2dfpJ1OhQrIUbDLm+n1PG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="333133497"
+X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
+   d="scan'208";a="333133497"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 05:30:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="667868810"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="667868810"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 01 Mar 2023 05:30:19 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXMXC-0006Aj-0y;
+        Wed, 01 Mar 2023 13:30:18 +0000
+Date:   Wed, 1 Mar 2023 21:30:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     suijingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     oe-kbuild-all@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Li Yi <liyi@loongson.cn>
+Subject: Re: [PATCH v6 1/2] drm: add kms driver for loongson display
+ controller
+Message-ID: <202303012148.S6ymQNI9-lkp@intel.com>
+References: <20230301072306.572685-1-15330273260@189.cn>
 MIME-Version: 1.0
-References: <20230222080314.2146-1-xuewen.yan@unisoc.com> <Y/zO8WZV2kvcU78b@hirez.programming.kicks-ass.net>
- <20230227220735.3kaytmtt53uoegq7@airbuntu> <CAB8ipk--trBk-Acsjz7YDb5szPLc93ejPXVXQBJdomZO4OrpGQ@mail.gmail.com>
- <CAKfTPtBdMO6_APib1OBxW+fdAORX8vXdT-W3fWTRffa5-8bGxQ@mail.gmail.com>
- <CAB8ipk96OXJcmp_H5EcagrMUigSFdW_gd4wwGjfjBpyP6hqaTg@mail.gmail.com>
- <CAKfTPtAvuz0SEDX3izcOhZkC+pFddqrSwY+iYO2p7U6N3Z2hRA@mail.gmail.com>
- <20230228133111.6i5tlhvthnfljvmf@airbuntu> <CAKfTPtAsxz7s6W2peoVj+EcNVQp6bpO6qhPPTXgfJxVtXHbaKQ@mail.gmail.com>
- <CAB8ipk83Ofywn0T19dHxjJNXfKcd9DD_EopQupeepjSk-XceRQ@mail.gmail.com>
- <CAKfTPtDfSHnd7=ZG2S-x46kxw0Cc0RSXq+_B8Oe46fa3Fa75BA@mail.gmail.com>
- <CAB8ipk9uPMxwEUHkLWbKXQEO1UkwBPWbZb=NF7AE5JHnG8V6Dw@mail.gmail.com> <43e91964-cd34-2e84-03a3-3903aa94c5e6@arm.com>
-In-Reply-To: <43e91964-cd34-2e84-03a3-3903aa94c5e6@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 1 Mar 2023 14:29:59 +0100
-Message-ID: <CAKfTPtBMPV_cLck8yTW1hLEKXX6_FFgbq76UK1w4cxtvoUF+Bg@mail.gmail.com>
-Subject: Re: [RFC PATCH] sched/fair: update the vruntime to be max vruntime
- when yield
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Xuewen Yan <xuewen.yan94@gmail.com>,
-        Qais Yousef <qyousef@layalina.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, mingo@redhat.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        zhaoyang.huang@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301072306.572685-1-15330273260@189.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 at 12:23, Dietmar Eggemann <dietmar.eggemann@arm.com> wr=
-ote:
->
-> Hi Xuewen,
->
-> On 01/03/2023 09:20, Xuewen Yan wrote:
-> > On Wed, Mar 1, 2023 at 4:09=E2=80=AFPM Vincent Guittot
-> > <vincent.guittot@linaro.org> wrote:
-> >>
-> >> On Wed, 1 Mar 2023 at 08:30, Xuewen Yan <xuewen.yan94@gmail.com> wrote=
-:
-> >>>
-> >>> Hi Vincent
-> >>>
-> >>> I noticed the following patch:
-> >>> https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.d=
-e/
-> >>> And I notice the V2 had merged to mainline:
-> >>> https://lore.kernel.org/all/20230130122216.3555094-1-rkagan@amazon.de=
-/T/#u
-> >>>
-> >>> The patch fixed the inversing of the vruntime comparison, and I see
-> >>> that in my case, there also are some vruntime is inverted.
-> >>> Do you think which patch will work for our scenario? I would be very
-> >>> grateful if you could give us some advice.
-> >>> I would try this patch in our tree.
-> >>
-> >> By default use the one that is merged; The difference is mainly a
-> >> matter of time range. Also be aware that the case of newly migrated
-> >> task is not fully covered by both patches.
-> >
-> > Okay, Thank you very much!
-> >
-> >>
-> >> This patch fixes a problem with long sleeping entity in the presence
-> >> of low weight and always running entities. This doesn't seem to be
-> >> aligned with the description of your use case
-> >
-> > Thanks for the clarification! We would try it first to see whether it
-> > could resolve our problem.
->
-> Can you not run Vincent's rt-app example on your device and then report
-> `cat /sys/kernel/debug/sched/debug` of the CPU?
->
-> # rt-app /root/rt-app/cfs_yield.json
->
-> # cat /sys/kernel/debug/sched/debug
-> ...
-> cpu#2
->   .nr_running                    : 4
->   ...
->   .curr->pid                     : 2121
->   ...
->
-> cfs_rq[2]:/autogroup-15
->   .exec_clock                    : 0.000000
->   .MIN_vruntime                  : 32428.281204
->   .min_vruntime                  : 32428.281204
->   .max_vruntime                  : 32434.997784
->   ...
->   .nr_running                    : 4
->   .h_nr_running                  : 4
->
-> ...
->
->  S            task   PID         tree-key  switches  prio     wait-time  =
-           sum-exec        sum-sleep
-> -------------------------------------------------------------------------=
-------------------------------------
->  S         cpuhp/2    22      1304.405864        13   120         0.00000=
-0         0.270000         0.000000         0.000000 0 0 /
->  S     migration/2    23         0.000000         8     0         0.00000=
-0         7.460940         0.000000         0.000000 0 0 /
->  S     ksoftirqd/2    24    137721.092326        46   120         0.00000=
-0         1.821880         0.000000         0.000000 0 0 /
->  I    kworker/2:0H    26      2116.827393         4   100         0.00000=
-0         0.057220         0.000000         0.000000 0 0 /
->  I     kworker/2:1    45    204539.183593       322   120         0.00000=
-0       447.975440         0.000000         0.000000 0 0 /
->  I     kworker/2:3    80      1778.668364        33   120         0.00000=
-0        16.237320         0.000000         0.000000 0 0 /
->  I    kworker/2:1H   239    199388.093936        74   100         0.00000=
-0         1.892300         0.000000         0.000000 0 0 /
->  R         taskA-0  2120     32428.281204       582   120         0.00000=
-0      1109.911280         0.000000         0.000000 0 0 /autogroup-15
-> >R         taskB-1  2121     32430.693304       265   120         0.00000=
-0      1103.527660         0.000000         0.000000 0 0 /autogroup-15
->  R         taskB-2  2122     32432.137084       264   120         0.00000=
-0      1105.006760         0.000000         0.000000 0 0 /autogroup-15
->  R         taskB-3  2123     32434.997784       282   120         0.00000=
-0      1115.965120         0.000000         0.000000 0 0 /autogroup-15
->
-> ...
->
-> Not sure how Vincent's rt-app file looks like exactly but I crafted
-> something quick here:
+Hi suijingfeng,
 
-it was quite similar to yours below. I have just stopped to call yield
-after few seconds to see if the behavior changed
+Thank you for the patch! Perhaps something to improve:
 
->
-> {
->         "tasks" : {
->                 "taskA" : {
->                         "cpus" : [2],
->                         "yield" : "taskA",
->                         "run" : 1000
->                 },
->                 "taskB" : {
->                         "instance" : 3,
->                         "cpus" : [2],
->                         "run" : 1000000
->                 }
->         },
->         "global" : {
->                 "calibration" : 156,
->                 "default_policy" : "SCHED_OTHER",
->                 "duration" : 20
->         }
-> }
->
-> [...]
+[auto build test WARNING on drm-misc/drm-misc-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/suijingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230301-153240
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230301072306.572685-1-15330273260%40189.cn
+patch subject: [PATCH v6 1/2] drm: add kms driver for loongson display controller
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230301/202303012148.S6ymQNI9-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/125bbfe8c188e62159ecd4d143246d36b1801f79
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review suijingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230301-153240
+        git checkout 125bbfe8c188e62159ecd4d143246d36b1801f79
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/loongson/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303012148.S6ymQNI9-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/loongson/lsdc_plane.c: In function 'lsdc_update_primary_plane':
+>> drivers/gpu/drm/loongson/lsdc_plane.c:95:20: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+      95 |         if (IS_ERR((void *)bo_offset)) {
+         |                    ^
+--
+   In file included from include/linux/printk.h:566,
+                    from include/asm-generic/bug.h:22,
+                    from arch/mips/include/asm/bug.h:42,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/mips/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/kref.h:16,
+                    from include/drm/drm_device.h:5,
+                    from include/drm/drm_drv.h:35,
+                    from drivers/gpu/drm/loongson/lsdc_ttm.c:3:
+   drivers/gpu/drm/loongson/lsdc_ttm.c: In function 'lsdc_dumb_create':
+>> drivers/gpu/drm/loongson/lsdc_ttm.c:378:23: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~
+         |                                                   |
+         |                                                   size_t {aka unsigned int}
+   include/linux/dynamic_debug.h:223:29: note: in definition of macro '__dynamic_func_call_cls'
+     223 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   include/drm/drm_print.h:413:9: note: in expansion of macro '_dynamic_func_call_cls'
+     413 |         _dynamic_func_call_cls(cat, fmt, __drm_dev_dbg,         \
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:492:9: note: in expansion of macro 'drm_dev_dbg'
+     492 |         drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~
+   include/drm/drm_print.h:510:33: note: in expansion of macro 'drm_dbg_driver'
+     510 | #define drm_dbg(drm, fmt, ...)  drm_dbg_driver(drm, fmt, ##__VA_ARGS__)
+         |                                 ^~~~~~~~~~~~~~
+   drivers/gpu/drm/loongson/lsdc_ttm.c:378:9: note: in expansion of macro 'drm_dbg'
+     378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
+         |         ^~~~~~~
+   drivers/gpu/drm/loongson/lsdc_ttm.c:378:33: note: format string is defined here
+     378 |         drm_dbg(ddev, "pitch: %lu, height: %u\n", pitch, args->height);
+         |                               ~~^
+         |                                 |
+         |                                 long unsigned int
+         |                               %u
+
+
+vim +95 drivers/gpu/drm/loongson/lsdc_plane.c
+
+    77	
+    78	static void lsdc_update_primary_plane(struct drm_plane *plane,
+    79					      struct drm_atomic_state *state)
+    80	{
+    81		struct drm_device *ddev = plane->dev;
+    82		struct lsdc_device *ldev = to_lsdc(ddev);
+    83		struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(state, plane);
+    84		struct drm_crtc *crtc = new_plane_state->crtc;
+    85		struct drm_framebuffer *fb = new_plane_state->fb;
+    86		struct ttm_buffer_object *tbo = to_ttm_bo(fb->obj[0]);
+    87		unsigned int pipe = drm_crtc_index(crtc);
+    88		unsigned int fb_offset = lsdc_get_fb_offset(fb, new_plane_state, 0);
+    89		u64 bo_offset = lsdc_bo_gpu_offset(tbo);
+    90		u64 fb_addr = ldev->vram_base + bo_offset + fb_offset;
+    91		u32 stride = fb->pitches[0];
+    92		u32 cfg;
+    93		u32 lo, hi;
+    94	
+  > 95		if (IS_ERR((void *)bo_offset)) {
+    96			drm_warn(ddev, "bo not pinned, should not happen\n");
+    97			return;
+    98		}
+    99	
+   100		/* 40-bit width physical address bus */
+   101		lo = fb_addr & 0xFFFFFFFF;
+   102		hi = (fb_addr >> 32) & 0xFF;
+   103	
+   104		cfg = lsdc_crtc_rreg32(ldev, LSDC_CRTC0_CFG_REG, pipe);
+   105		if (cfg & CFG_FB_IN_USING) {
+   106			drm_dbg(ddev, "CRTC-%u(FB1) is in using\n", pipe);
+   107			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB1_LO_ADDR_REG, pipe, lo);
+   108			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB1_HI_ADDR_REG, pipe, hi);
+   109		} else {
+   110			drm_dbg(ddev, "CRTC-%u(FB0) is in using\n", pipe);
+   111			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB0_LO_ADDR_REG, pipe, lo);
+   112			lsdc_crtc_wreg32(ldev, LSDC_CRTC0_FB0_HI_ADDR_REG, pipe, hi);
+   113		}
+   114	
+   115		drm_dbg(ddev, "CRTC-%u scanout from 0x%llx\n", pipe, fb_addr);
+   116	
+   117		lsdc_crtc_wreg32(ldev, LSDC_CRTC0_STRIDE_REG, pipe, stride);
+   118	
+   119		cfg &= ~CFG_PIX_FMT_MASK;
+   120		cfg |= LSDC_PF_XRGB8888;
+   121	
+   122		lsdc_crtc_wreg32(ldev, LSDC_CRTC0_CFG_REG, pipe, cfg);
+   123	}
+   124	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
