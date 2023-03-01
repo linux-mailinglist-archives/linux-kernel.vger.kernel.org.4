@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBF66A71F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284126A71F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjCARTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
+        id S229760AbjCARU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:20:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjCARTt (ORCPT
+        with ESMTP id S229674AbjCARU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:19:49 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B634A27988;
-        Wed,  1 Mar 2023 09:19:45 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id az36so9094135wmb.1;
-        Wed, 01 Mar 2023 09:19:45 -0800 (PST)
+        Wed, 1 Mar 2023 12:20:26 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1612F78A;
+        Wed,  1 Mar 2023 09:20:25 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id o12so56766362edb.9;
+        Wed, 01 Mar 2023 09:20:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677691184;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lVLUoMBClRsLJTrNJuKg+DNnna+fSwHUpLxyvEvQJJU=;
-        b=hGIWnqpKj9B5BELlIG92XwTie5VSWrj2kGuAfpbs9LGD9wBDfsgvjaSNcr5apiJC68
-         8DWjmL1lt0KAuvqc7GOc9b6qnzi1zWY4VX8K+g83XUwOFhAjXwghbJ4UgwfGtAh5ydVq
-         oNZpbORAhThRkBVZMv58snaAA5M50UZqTBdiRJ4Ign8yEDbogLuEHLhSkXxPL/anYK4A
-         5I8ndV7qcjphHGcuOs40p0CPebJNIvHsLpwS8H5qSvnNSpfvogjiSGn4vv4MnDBNnprc
-         LFlNS7z42RB1g4m7hZvshlgTsC8IH81R36b19g3yiNwzXDrqp6apeoO3+JJ/oj34Kg3K
-         BAuQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PlUwDtADYHSrJPyoxSgDxKr9/apm1LHvBX2UdWMjnq8=;
+        b=kmY8+0jd0UO04TZ9LYpBCyQY03De4TqTrGm8NPfSf0vaW64b45be7w3o4md6WrYQzD
+         Nk6yyZvFj30UxurRBN3V+nafrvvrx3pvJOA6uGD4dKM4/Gosc9LXPYIpxLk+e8oI172a
+         epfY8bLQElCLQBG/G/D3aNXPmrvDqlpag/b383C6TarUk/MiYMkzu79s8/llnCqhyT5O
+         D0DyTUGP2J+daMOT78INprXwotujvJQOezk6R/D/0mdukTm1U+kZJaccajHohx1R8aHN
+         VoTMHHUgoDJ4yGdV/Y8WXYHEXZdPj2ytqmVAF6EIkcKvd8pySzX9ILVOqDzYmD/P2JvV
+         G4Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677691184;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lVLUoMBClRsLJTrNJuKg+DNnna+fSwHUpLxyvEvQJJU=;
-        b=EUPwpwn3ryNdccuEjlZMrgK/1l4CxxgY/Pyz8jzAtMdTYLtF4S0r60PCx7nXenxzs9
-         EZvMYFmy3GSoQNjEULOqLO12c+8OX3jlx+6QVj474XrBlfKuuBPiXkLr9U/VT3aS9q2+
-         HwoZOyPKRRQef3IP4EiJd0OyKnwg5xaqkYON/MN030VWCPBB7G17B8DurWNr10LJJdMF
-         x202maJCT65+WCkJbSRJy5wGa6DBja0DAgs1Hzp/UBzaVPDg+w1u0xobUoCCEm1w9DXP
-         mwjI+1NYS4lxF25zegfpualz0BlMBAUcMs/Wq0JRiVrDnQeClQq056YenhgLL12R4ea2
-         pqmg==
-X-Gm-Message-State: AO0yUKXZCnq47qjzZre6INzpq9rzqIdfxd/qOQaQf3Ni+ek/a+2emAMw
-        ornqR6PMFc3V5WwBHY0ugmQ=
-X-Google-Smtp-Source: AK7set8lQ8cqGjyf5GgzueugEeOGCskEuHNOA6VdFXO1Nx5pZJd05ym6Gw3DKRtCrczGsFG7hufDmA==
-X-Received: by 2002:a05:600c:3319:b0:3eb:383c:187d with SMTP id q25-20020a05600c331900b003eb383c187dmr5249410wmp.27.1677691184203;
-        Wed, 01 Mar 2023 09:19:44 -0800 (PST)
-Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
-        by smtp.gmail.com with ESMTPSA id j40-20020a05600c1c2800b003dd1bd0b915sm210956wms.22.2023.03.01.09.19.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 09:19:43 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 01 Mar 2023 18:19:41 +0100
-Message-Id: <CQV7W12MZX16.PLH1OAM17G7N@vincent-arch>
-To:     "Asahi Lina" <lina@asahilina.net>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <asahi@lists.linux.dev>, "Finn Behrens" <me@kloenk.dev>,
-        "Sumera Priyadarsini" <sylphrenadin@gmail.com>
-Subject: Re: [PATCH 3/3] rust: macros: Allow specifying multiple module
- aliases
-From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
-References: <20230224-rust-macros-v1-0-b39fae46e102@asahilina.net>
- <20230224-rust-macros-v1-3-b39fae46e102@asahilina.net>
-In-Reply-To: <20230224-rust-macros-v1-3-b39fae46e102@asahilina.net>
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PlUwDtADYHSrJPyoxSgDxKr9/apm1LHvBX2UdWMjnq8=;
+        b=YisyumKbbQ2QZXLGgjVKmcIonM5PvCm59ht8aeiw3qhiGvEM2Zb9FbWAzGIGA83eNK
+         81pn7xCLe+lEpQGppYmwf8Qh47UUiUOY+9TXk5pLf7vCiSr3lOG7cMZn+Attp0ktRIJp
+         TCrJYViUXdgNXnFKPsOicdgyrc0QSD/qvkei0MaObAqi+pp0oQnMEDls0dieaYouYEfQ
+         oSZPv5dNjN1ophFV5PzRhJVwEC58C/9VND0BtVYatJ6tcnmiZavJ6g/87BrgUW/3OaE/
+         /XUhWG9oHW4NuJOb2jv1+4gN+IgqPbDnDEZOOpqr7u0aQAcgNaTRPYvVxG1i6f3rxzpC
+         LMOw==
+X-Gm-Message-State: AO0yUKV4qbdGCq9lZPAcYZrISPxuE0joQKyTo6iECaq2wzRC1JJO9g/6
+        +H0F0HDiF4dSdI2ttMfvVD8=
+X-Google-Smtp-Source: AK7set9ce/Lg09giRLFyJlygFLDRlK0AJJHwRCRI7xF7/8PjhdMqFjMHxUup6B/jZkvyjMraBN7X5w==
+X-Received: by 2002:a17:907:2ce6:b0:8ec:439f:18fb with SMTP id hz6-20020a1709072ce600b008ec439f18fbmr7719468ejc.29.1677691223898;
+        Wed, 01 Mar 2023 09:20:23 -0800 (PST)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id oy26-20020a170907105a00b008b133f9b33dsm5894826ejb.169.2023.03.01.09.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 09:20:23 -0800 (PST)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Date:   Wed, 01 Mar 2023 18:20:18 +0100
+Subject: [PATCH] locks: avoid usage of list iterator after loop in
+ generic_delete_lease()
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230301-locks-avoid-iter-after-loop-v1-1-4d0529b03dc7@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAFGJ/2MC/x2NwQrCMBBEf6Xs2YU0RUF/RTxsNhu7WJOSlSKU/
+ ruJl4HHDG92MKkqBrdhhyqbmpbcYDwNwDPlp6DGxuCdn9zkRlwKvwxpKxpRP1KRUs+llBUdX5h
+ dCtFfz9AMgUwwVMo8d8ebrE17sVZJ+v3f3h/H8QOj02jQhgAAAA==
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677691223; l=1254;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=s8p60stXlwjtVT6XiuBNRX2nbAh1LO4y0YMOQFFePMk=;
+ b=fYRttOSj5AURDfVgB1PTV4Wf4V5JihCeOaPgiew3txrpcAzyUBZeXITuLbn0t9YBgzoJbXSeCnL5
+ wI62wyprA6nL2zskNxukFdOcdqBo22Kl68xaAvBOAGr2rP+bYAbA
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,25 +85,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Modules can (and usually do) have multiple alias tags, in order to
-> specify multiple possible device matches for autoloading. Allow this by
-> changing the alias ModuleInfo field to an Option<Vec<String>>.
->
-> Note: For normal device IDs this is autogenerated by modpost (which is
-> not properly integrated with Rust support yet), so it is useful to be
-> able to manually add device match aliases for now, and should still be
-> useful in the future for corner cases that modpost does not handle.
->
-> This pulls in the expect_group() helper from the rfl/rust branch
-> (with credit to authors).
->
-> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> Co-developed-by: Finn Behrens <me@kloenk.dev>
-> Signed-off-by: Finn Behrens <me@kloenk.dev>
-> Co-developed-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
-> Signed-off-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> ---
+'victim' and 'fl' are ensured to be equal at this point. For consistency
+both should use the same variable.
 
-Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Additionally, Linus proposed to avoid any use of the list iterator
+variable after the loop, in the attempt to move the list iterator
+variable declaration into the marcro to avoid any potential misuse after
+the loop [1].
+
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+---
+ fs/locks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/locks.c b/fs/locks.c
+index 66b4eef09db5..3f46d21a95f4 100644
+--- a/fs/locks.c
++++ b/fs/locks.c
+@@ -1841,7 +1841,7 @@ static int generic_delete_lease(struct file *filp, void *owner)
+ 	}
+ 	trace_generic_delete_lease(inode, victim);
+ 	if (victim)
+-		error = fl->fl_lmops->lm_change(victim, F_UNLCK, &dispose);
++		error = victim->fl_lmops->lm_change(victim, F_UNLCK, &dispose);
+ 	spin_unlock(&ctx->flc_lock);
+ 	percpu_up_read(&file_rwsem);
+ 	locks_dispose_list(&dispose);
+
+---
+base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
+change-id: 20230301-locks-avoid-iter-after-loop-0c6cc0fbd295
+
+Best regards,
+-- 
+Jakob Koschel <jkl820.git@gmail.com>
+
