@@ -2,93 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F466A758E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083BE6A7594
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjCAUqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S229774AbjCAUr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCAUqs (ORCPT
+        with ESMTP id S229756AbjCAUry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:46:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C712B43445;
-        Wed,  1 Mar 2023 12:46:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Mar 2023 15:47:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A885343445
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:47:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677703633;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2il8EePBRc7AgflT4XHq9yy6CUWbrrE2NEZTXgGKJCU=;
+        b=OuK3GGtAwgDoDQZ6CIW3q9KuH4rrFj9TO0gnpFysJHWyLkDgDlU/enEzNDtj65UZJnszWg
+        hU90sM85DzblySD9Nj8KKBLhESeldeyjZqvIBqBLmoR0yMKH4IznQxTmKIIUMh8gUB565H
+        ZE2M201SOJ129HRm5X1hd8ES6EfNZlk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-578-iXqunm27Mj-9JXP5nSkxuA-1; Wed, 01 Mar 2023 15:47:10 -0500
+X-MC-Unique: iXqunm27Mj-9JXP5nSkxuA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86A53B81126;
-        Wed,  1 Mar 2023 20:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3717EC433EF;
-        Wed,  1 Mar 2023 20:46:43 +0000 (UTC)
-Date:   Wed, 1 Mar 2023 15:46:41 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
-Message-ID: <20230301154641.695778bf@gandalf.local.home>
-In-Reply-To: <20230301203645.GG2948950@paulmck-ThinkPad-P17-Gen-1>
-References: <20230228160324.2a7c1012@gandalf.local.home>
-        <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
-        <20230228164124.77c126d2@gandalf.local.home>
-        <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
-        <20230228190846.79b06089@gandalf.local.home>
-        <CAFULd4aY3Y8tyLN70oebZDagBebvH0erwRxKDaEX8L83Xo8gYw@mail.gmail.com>
-        <20230301113813.4f16a689@gandalf.local.home>
-        <CAFULd4aWZ+fvVZ+MEt6JD1rFaQZeO5DDWAHtPKOrx8R8DETFBw@mail.gmail.com>
-        <20230301200820.GF2948950@paulmck-ThinkPad-P17-Gen-1>
-        <20230301151826.014c5977@gandalf.local.home>
-        <20230301203645.GG2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F525100F90B;
+        Wed,  1 Mar 2023 20:47:10 +0000 (UTC)
+Received: from swamp.redhat.com (unknown [10.39.192.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4BD8F140EBF4;
+        Wed,  1 Mar 2023 20:47:08 +0000 (UTC)
+From:   Petr Oros <poros@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     aleksander.lobakin@intel.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        scott.w.taylor@intel.com, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v3] ice: copy last block omitted in ice_get_module_eeprom()
+Date:   Wed,  1 Mar 2023 21:47:07 +0100
+Message-Id: <20230301204707.2592337-1-poros@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 12:36:45 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
+ice_get_module_eeprom() is broken since commit e9c9692c8a81 ("ice:
+Reimplement module reads used by ethtool") In this refactor,
+ice_get_module_eeprom() reads the eeprom in blocks of size 8.
+But the condition that should protect the buffer overflow
+ignores the last block. The last block always contains zeros.
 
-> Some years down the road, should cmpxchg_success() be on the tip of
-> the tongue of every kernel hacker, perhaps.  Or perhaps not.
+Bug uncovered by ethtool upstream commit 9538f384b535
+("netlink: eeprom: Defer page requests to individual parsers")
+After this commit, ethtool reads a block with length = 1;
+to read the SFF-8024 identifier value.
 
-A bit of a catch-22 I would say. It will only become something everyone
-knows if it exists.
+unpatched driver:
+$ ethtool -m enp65s0f0np0 offset 0x90 length 8
+Offset          Values
+------          ------
+0x0090:         00 00 00 00 00 00 00 00
+$ ethtool -m enp65s0f0np0 offset 0x90 length 12
+Offset          Values
+------          ------
+0x0090:         00 00 01 a0 4d 65 6c 6c 00 00 00 00
+$
 
-> 
-> In the meantime, we have yet another abysmally documented atomic
+$ ethtool -m enp65s0f0np0
+Offset          Values
+------          ------
+0x0000:         11 06 06 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x0010:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x0020:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x0030:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x0040:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x0050:         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x0060:         00 00 00 00 00 00 00 00 00 00 00 00 00 01 08 00
+0x0070:         00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-Is it?
+patched driver:
+$ ethtool -m enp65s0f0np0 offset 0x90 length 8
+Offset          Values
+------          ------
+0x0090:         00 00 01 a0 4d 65 6c 6c
+$ ethtool -m enp65s0f0np0 offset 0x90 length 12
+Offset          Values
+------          ------
+0x0090:         00 00 01 a0 4d 65 6c 6c 61 6e 6f 78
+$ ethtool -m enp65s0f0np0
+    Identifier                                : 0x11 (QSFP28)
+    Extended identifier                       : 0x00
+    Extended identifier description           : 1.5W max. Power consumption
+    Extended identifier description           : No CDR in TX, No CDR in RX
+    Extended identifier description           : High Power Class (> 3.5 W) not enabled
+    Connector                                 : 0x23 (No separable connector)
+    Transceiver codes                         : 0x88 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+    Transceiver type                          : 40G Ethernet: 40G Base-CR4
+    Transceiver type                          : 25G Ethernet: 25G Base-CR CA-N
+    Encoding                                  : 0x05 (64B/66B)
+    BR, Nominal                               : 25500Mbps
+    Rate identifier                           : 0x00
+    Length (SMF,km)                           : 0km
+    Length (OM3 50um)                         : 0m
+    Length (OM2 50um)                         : 0m
+    Length (OM1 62.5um)                       : 0m
+    Length (Copper or Active cable)           : 1m
+    Transmitter technology                    : 0xa0 (Copper cable unequalized)
+    Attenuation at 2.5GHz                     : 4db
+    Attenuation at 5.0GHz                     : 5db
+    Attenuation at 7.0GHz                     : 7db
+    Attenuation at 12.9GHz                    : 10db
+    ........
+    ....
 
-> operation that is not well known throughout the community.  And then the
-> people coming across this curse everyone who had anything to do with it,
-> as they search the source code, dig through assembly output, and so on
-> trying to work out exactly what this thing does.
-> 
-> Sorry, but no way.
-> 
-> Again, unless there is some sort of forward-progress argument or
-> similar convincing argument.
+Fixes: e9c9692c8a81 ("ice: Reimplement module reads used by ethtool")
+Signed-off-by: Petr Oros <poros@redhat.com>
+---
+v2: memcpy unified calls
+v3: copy_len is now declared in if scope
+    unwrapped line before memcpy
+---
+---
+ drivers/net/ethernet/intel/ice/ice_ethtool.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Speaking of forward progress...
+diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+index b360bd8f15998b..f86e814354a311 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
++++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+@@ -4331,6 +4331,8 @@ ice_get_module_eeprom(struct net_device *netdev,
+ 		 * SFP modules only ever use page 0.
+ 		 */
+ 		if (page == 0 || !(data[0x2] & 0x4)) {
++			u32 copy_len;
++
+ 			/* If i2c bus is busy due to slow page change or
+ 			 * link management access, call can fail. This is normal.
+ 			 * So we retry this a few times.
+@@ -4354,8 +4356,8 @@ ice_get_module_eeprom(struct net_device *netdev,
+ 			}
+ 
+ 			/* Make sure we have enough room for the new block */
+-			if ((i + SFF_READ_BLOCK_SIZE) < ee->len)
+-				memcpy(data + i, value, SFF_READ_BLOCK_SIZE);
++			copy_len = min_t(u32, SFF_READ_BLOCK_SIZE, ee->len - i);
++			memcpy(data + i, value, copy_len);
+ 		}
+ 	}
+ 	return 0;
+-- 
+2.39.2
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/atomic_t.txt#n316
-
-Anyway, I'm guessing this will not become part of rcu any time soon. But
-for the ring buffer, I would happily take it.
-
--- Steve
