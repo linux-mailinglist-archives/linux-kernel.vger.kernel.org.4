@@ -2,154 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493586A7221
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1796A7225
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjCARdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        id S230023AbjCAReR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCARdf (ORCPT
+        with ESMTP id S229674AbjCAReP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:33:35 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD8B22782;
-        Wed,  1 Mar 2023 09:33:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677692014; x=1709228014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5qeKohc7NtvHPnm/kxWP0+JfrFL0Yyv5fIjX8vlHQvw=;
-  b=TkHjvpuTP5wShNz/L4d9ZyM4PyA/31JSFHqgVogT04ptjyseK6jYfDGM
-   NR+Ate2LdpJ96F4D8liuc1EV7rRtRIyU3G2Dq9hBp1V8+60mNCtVDGQyx
-   VhScnrwmJbqyYMzK2dR8JUaPFKPnU5wAV3+6xkOzMU8W7jv34+8gEvgIN
-   +vFR039E2RNcjm7r5oDLBSHQMvU5WwfU9pJ47Qb+bDrfvckIwO20ev4/t
-   XEe8eoGQZ/yeSWgJh1AdkD6apFs36F8o23hdZLdAAtmYnkxpBDzAqut6A
-   HT9ZIVaTArg+VDRU8Bspb4JHZV6TZ74fN1vPo7QrhWZwgOAl8cPC8yunb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="335966922"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="335966922"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 09:33:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="763674803"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="763674803"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Mar 2023 09:33:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pXQKX-00DrEU-2j;
-        Wed, 01 Mar 2023 19:33:29 +0200
-Date:   Wed, 1 Mar 2023 19:33:29 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Implementation of fwnode_operations :: device_get_match_data()
- for software nodes?
-Message-ID: <Y/+MaRO4vrCRFXE8@smile.fi.intel.com>
-References: <20230223203713.hcse3mkbq3m6sogb@skbuf>
- <Y/0uC1LgeWR0V0ts@smile.fi.intel.com>
- <20230227234411.jqmwshzkeyx6iqyo@skbuf>
- <Y/9iLBWAO37y6lZZ@smile.fi.intel.com>
- <20230301143625.7kdnzujlv4psbhla@skbuf>
- <Y/9qtT0vckSikOKJ@smile.fi.intel.com>
- <20230301152527.khyzifds4w3rkebt@skbuf>
- <Y/9wlDkuh39auAgF@smile.fi.intel.com>
- <20230301171845.oliqbso7v2vmyqr3@skbuf>
+        Wed, 1 Mar 2023 12:34:15 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2048.outbound.protection.outlook.com [40.107.92.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCDC22782;
+        Wed,  1 Mar 2023 09:34:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tc8eKmINbzOZJK4awpuARWoh5XmgTVagOIh0kE2t0XQhXMiU8qGt+txXuCKT1+5gYJWyL3K0OBweQCy0XbPivoZkaCkqcJnqWT4L7cgXpn2JttvWlx7oeb9SpMSTiH/sAuUmD57B79yRG0S2ck36CZhV6MkrpRlYwCcWwrLkacp7yeugz8PCx54aztBLIJV001YJRMtBPSylrKNGNhy9tarfdK8n98DAtKIS59sNbQplJawXeLeqo3YuSskkKMVHSx+yymFhckjiAvnWPxZmE30NqDxFJ00gxggcd0Eh7aI/vN/dJZjEBKLGnRO5luS9RCRhHhkWxo97q53a5WFzhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wBpqDaMkEVmKXySxVI+2HjWfAB6R2pwtHL+AmuLzPW0=;
+ b=V1y5mFQSTxiAmB+zI6QEuGUdt74xlFSx8aUW6UbfJ5ZNYl4s+NFfAtUm+Su/TcqYenFVZJvr8DDcTObmoMAPLkOxYtNy5BhBfPenvZPAH+CKqZeiSMw9gRoyROFuN57PNksQ8w8QlQ0bP8Dfr1zCrZ45bSm53Tzuha9rsCVSCC1Wvt29d11y8fLJ9P8XARVkF+LBL/5YLiCFUQ8I36e4kq3YAPdUbH6hTRhqSZus68c3srY9OZoufUPT1HAVWvSdf7okObtEeK6eLESHZcnZTEcRF18yy7SgevC0I9Dx+nakv261Xwwzc5Webl1EnD/32H7ngRlkfMQIYh2ET4SPOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wBpqDaMkEVmKXySxVI+2HjWfAB6R2pwtHL+AmuLzPW0=;
+ b=gBX/oeiJoxq1rNNtd9gZ5mWrPZzo+ZFNN/iMXMyU5nV4oAVjTKsDqCzw+B83lVi5VLHGk8AHQ9CJ1fJxaEfOC2YaAmrIw9OSpZjym3cWBGzRX95kDu/7xXWa0yL2o2F963TURVQo4sYRwuPUp98nLJTOKoBR9FsSahivwrU8IIussu/0EdGvbgQ3lM6VH4y+6CKrsQsnRmSZTvDD4u0ayw37sJ6F3QJZ4dQZCx2MhT9CZ90TJPbC+flXWUMkVmhd/hd2GwJ+reW5dk9zi+EWYyAxlSv4jwTHSwpaq5yHEIgUg/egtHuBu7exLGkuuInBHfhI/PEJ8h/ycwH182uxgg==
+Received: from BN0PR04CA0166.namprd04.prod.outlook.com (2603:10b6:408:eb::21)
+ by DM6PR12MB4402.namprd12.prod.outlook.com (2603:10b6:5:2a5::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Wed, 1 Mar
+ 2023 17:34:12 +0000
+Received: from BL02EPF00010206.namprd05.prod.outlook.com
+ (2603:10b6:408:eb:cafe::af) by BN0PR04CA0166.outlook.office365.com
+ (2603:10b6:408:eb::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
+ Transport; Wed, 1 Mar 2023 17:34:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BL02EPF00010206.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.12 via Frontend Transport; Wed, 1 Mar 2023 17:34:11 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 1 Mar 2023
+ 09:34:00 -0800
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Wed, 1 Mar 2023 09:34:00 -0800
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.5 via Frontend
+ Transport; Wed, 1 Mar 2023 09:33:56 -0800
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <robh+dt@kernel.org>, <broonie@kernel.org>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>, <jarkko@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: [Patch V7 0/3] Tegra TPM driver with HW flow control
+Date:   Wed, 1 Mar 2023 23:03:50 +0530
+Message-ID: <20230301173353.28673-1-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301171845.oliqbso7v2vmyqr3@skbuf>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00010206:EE_|DM6PR12MB4402:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc5fa5b4-b4f6-41db-a7fa-08db1a7b2ba8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QdyGX/Bw6aAI1euTKcTOhXpWYyA1oVM5Tlb2YdtP6B3buYvqVCkZYphMvnBu7ashzeL3DvMvzrWGgbvi2wAgtOMjjT+1u5yVQWMFEDR8277K7Edxi59iieqf2m4SRlaJS9Iu7QOQp8Y6ZVqRoDZZv2mIofTkkNseOSDDsS2ov7QqM/wNfsuJQDPmfmblMJqYjWvtbVWlOgebjPG+Yv40guxuiZSJ+rS9Y9gR+sh9Poq6ddqrwvD1R1NpJsJWJtM+ySaVjS3n8aEVswaghqXkerBPwQGra97mXau+2EkcEVociyX3FMKTgaR9oil+yGYdx/5G5tirwQu9qxYBGPcc1KIitJOeJJVdg1pZ7e73wx3lJxRjGMhvlG5rWPnElTyliHPDuRWyeI4Bsbfqha85SLGg0jpSXSqSTD4vzWVPMpWkhFmnBTGw09m6lvQI1Z/q7HCvWiC7WhJDLDRornurZ0VKdgIRWcBCXBw2BcMcRZIH6/mQhV9OTTOIh7gnKk/Wy4qZweJ9IVfjDXYaQOpSEmb5TbkLHmwOVBCmnqNCO6XwK3aL8x1YpyVBkO+T+JcecPZPmjW6wrwgZJ2UgJcydZqjJlRMCQL7zpGFIrCSG0mOclTPPxAToFOSKoi/EYBux3k5bHtU+a9oEEWSbEO/5Swsll9S4woLnXL3VguadezRbpOYYJ90SEvXs66HMDJ3TTaubq0Trwmersh7wlpwyDkizPXNU+V1AO4XCrMWjFwS14vfWqzUfFUWoMCqsJTav2JgrEuIL9r96BboIx7Pnw==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(376002)(136003)(451199018)(40470700004)(36840700001)(46966006)(36756003)(82310400005)(54906003)(336012)(426003)(110136005)(478600001)(316002)(83380400001)(47076005)(107886003)(7696005)(186003)(2616005)(1076003)(40460700003)(26005)(6666004)(7416002)(8936002)(41300700001)(2906002)(921005)(356005)(86362001)(70586007)(5660300002)(70206006)(36860700001)(40480700001)(4326008)(7636003)(8676002)(82740400003)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:34:11.6955
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc5fa5b4-b4f6-41db-a7fa-08db1a7b2ba8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010206.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4402
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 07:18:45PM +0200, Vladimir Oltean wrote:
-> On Wed, Mar 01, 2023 at 05:34:44PM +0200, Andy Shevchenko wrote:
-> > On Wed, Mar 01, 2023 at 05:25:27PM +0200, Vladimir Oltean wrote:
-> > > On Wed, Mar 01, 2023 at 05:09:41PM +0200, Andy Shevchenko wrote:
-> > > > With overlays you can create the proper DT description stanza and end user's
-> > > > job is to just put it somewhere and upload via precoded script or so [1].
-> > > > 
-> > > > [1]:https://docs.kernel.org/devicetree/overlay-notes.html
-> > > 
-> > > Ah, okay, no, that's already a no-go, since existing device tree blobs
-> > > aren't compiled with the dtc "-@" flag which would generate the __symbols__
-> > > node necessary for DT overlays to be applied over them.
-> > > 
-> > > That, and it's clunky and uncalled for in general, both from my
-> > > perspective as a driver developer and that of a random user, if a driver
-> > > would just start requiring device tree overlays for more functionality.
-> > > Overlays address none of the complaints I had with large DT bindings
-> > > being large in general. They are still equally large, but now, they are
-> > > also spread into multiple files.
-> > 
-> > But isn't it what you would like to have working for your case?
-> > 
-> > Even taking into account the fixed HW layout, it would make sense to have more
-> > flexible approach to describe it, no?
-> 
-> Not really, no...
-> What I would like to have is a (partially) auto- (and dynamically-) generated
-> firmware description.
-> 
-> I'd need that in order to have a cleaner separation between the device
-> drivers for the various peripherals on that Ethernet switch SoC.
-> Currently, there's a lot of monolithic code to drive those peripherals
-> that lives in drivers/net/dsa/ but would belong to drivers/net/mdio,
-> drivers/irqchip/, drivers/gpio/, things like that.
-> 
-> What I want is the logic that gets me there, with none of the complications
-> for things I don't need.
-> 
-> > > > For the second one I'm not really the expert. But either FPGA framework (if
-> > > > they have anything working for this), or you also may look at Thunderbolt /
-> > > > USB4 which uses similar approach while being PCIe devices. Okay, the latter
-> > > > (USB4) is the PCIe topology, while FPGA is whatever behind the PCI switch.
-> > > > Meaning that FPGA case from HW p.o.v. is closer to your case.
-> > > 
-> > > A quick glance at Documentation/driver-api/fpga/ shows that it is a
-> > > framework for dealing with reprogrammable hardware, and has infra to
-> > > reprogram it. My hardware is fixed-function and doesn't need any of that.
-> > > 
-> > > Are you suggesting that I should look at reusing some common infra with
-> > > the fpga subsystem instead? A quick grep for device_add in drivers/fpga/
-> > > shows a bunch of open-coded device_add() and platform_device_add() calls.
-> > > Is this what you wanted me to see or is there something else?
-> > 
-> > Ah, so they don't have a mechanism on how to describe the hardware inside
-> > FPGA _after_ reconfiguration and apply it to the system? That's what I meant
-> > when referred to it.
-> 
-> Reading Documentation/devicetree/bindings/fpga/fpga-region.txt (with my
-> limited and ultra-superficial understanding), I guess that they still
-> use overlays to describe what should be probed on the reprogrammed regions.
+TPM devices may insert wait state on last clock cycle of ADDR phase.
+For SPI controllers that support full-duplex transfers, this can be
+detected using software by reading the MISO line. For SPI controllers
+that only support half-duplex transfers, such as the Tegra QSPI, it is
+not possible to detect the wait signal from software. The QSPI
+controller in Tegra234 and Tegra241 implement hardware detection of the
+wait signal which can be enabled in the controller for TPM devices.
 
-Yes, that's why I remember overlays approach and FPGA case.
+Add HW flow control in TIS driver and a flag in SPI data to indicate
+wait detection is required in HW. SPI controller driver determines if
+this is supported. Add HW detection in Tegra QSPI controller.
 
-I guess you have very similar requirements to get this done: your case is a
-particular one for FPGA, i.e. (re-)loading the same HW layout over and over.
+Updates in this patch set 
+ - Tegra QSPI identifies itself as half duplex.
+ - TPM TIS SPI driver skips flow control for half duplex and send
+   transfers in single message for controller to handle it.
+ - TPM device identifies as TPM device for controller to detect and
+   enable HW TPM wait poll feature.
 
-I believe it should be discussed with them being involved. We don't want to
-have two approaches of similar things in the kernel.
+Verified with a TPM device on Tegra241 ref board using TPM2 tools.
+
+V7:
+ - updated patch description.
+ - TPM flag set in probe.
+ - minor comments.
+V6:
+ - Fix typo in chip name Tegra234.
+ - Debug logs change skipped to be sent later.
+ - Consistent usage of soc flag.
+V5:
+ - No SPI bus locking.
+V4:
+ - Split api change to different patch.
+ - Describe TPM HW flow control.
+V3:
+ - Use SPI device mode flag and SPI controller flags.
+ - Drop usage of device tree flags.
+ - Generic TPM half duplex controller handling.
+ - HW & SW flow control for TPM. Drop additional driver.
+V2:
+ - Fix dt schema errors.
+
+Krishna Yarlagadda (3):
+  spi: Add TPM HW flow flag
+  tpm_tis-spi: Add hardware wait polling
+  spi: tegra210-quad: Enable TPM wait polling
+
+ drivers/char/tpm/tpm_tis_spi_main.c | 96 ++++++++++++++++++++++++++++-
+ drivers/spi/spi-tegra210-quad.c     | 14 +++++
+ include/linux/spi/spi.h             | 16 ++++-
+ 3 files changed, 121 insertions(+), 5 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
