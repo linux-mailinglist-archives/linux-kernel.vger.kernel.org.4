@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18076A6BD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA3A6A6BD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjCALjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S230083AbjCALi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjCALiy (ORCPT
+        with ESMTP id S230051AbjCALiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:38:54 -0500
+        Wed, 1 Mar 2023 06:38:51 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26963CE0B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:38:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245703C7A6
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:38:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677670728; x=1709206728;
+  t=1677670726; x=1709206726;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5tklInZTjxW7nUOT7xUU9g3nrOpxKYCG1GaGB1k0my8=;
-  b=nNgHoJw9tSmNmZWkIEx550NuYE+D4164Oq7oEnrT/5iRZ5BcM8IRSKjx
-   +OIzcM9ioQsGKQkycjszzroVCXwWA1bqv+6/0XO0M3FcokzyfPaDbinHq
-   NFhUNpvnVqh54da27dLk4Qf6rM8Jwe3JW0uXU6oTeudatKQL5GTiXEVn1
-   Zbnm8GzHq5hTkkKOHtZEypyV2q5iupaRm5E4flfDT8otmkGSmrKHqST20
-   keEZ935Mm32j57B5IHOv3IIhrCxGPEyy2PVBfuwsDYgfVCZ2Wd06e5EYn
-   iY4R4YO57Nfth+ls+RFMEhkZRyg8Giof06X5YqZgAubZVJqx8jMFfXvzj
-   Q==;
+  bh=XHLvCT8Nt8YmIKi30XtbTBcw6kinTTqUBJYbD4/6SFc=;
+  b=IJWlzW6G/68oNFWkomUemUvQ7pCpKVvgtQSJSrg9/HUr2zEqozY1maSp
+   31tqleUkX9msyGZ/deeYGwEBKX5xsJH0IH0pYEfHJf3V4D5/YNu4fKia3
+   y+C0dTUqotb+UwRXieYPCXFHKyfI4hsF5S93Gr8gxkGJyUikw2J+uNrDL
+   pD5hDW5wHZJjBLW1y+G4eMxJD+pzAIvvCYPaNv4cZQ7nt8TPKF6ViktNV
+   6mo9VKPKYy4gvgFsfyGkTb4cV07b5dTUhYISmNuwtCy/IlLCeDSwN5cFw
+   ZT4lhdnNsTcgpzxFVJBXbNAGDVdY8KKg12DzGC7pu1ztOZbpD5ORrXAZQ
+   g==;
 X-IronPort-AV: E=Sophos;i="5.98,224,1673938800"; 
-   d="scan'208";a="139640258"
+   d="scan'208";a="202995026"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Mar 2023 04:38:48 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Mar 2023 04:38:45 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 1 Mar 2023 04:38:41 -0700
+ 15.1.2507.16; Wed, 1 Mar 2023 04:38:45 -0700
 Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Wed, 1 Mar 2023 04:38:37 -0700
+ 15.1.2507.16 via Frontend Transport; Wed, 1 Mar 2023 04:38:42 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
         <tiwai@suse.com>, <nicolas.ferre@microchip.com>,
@@ -46,9 +46,9 @@ To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
 CC:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 4/8] ASoC: mchp-pdmc: use FIELD_PREP() where possible
-Date:   Wed, 1 Mar 2023 13:38:03 +0200
-Message-ID: <20230301113807.24036-5-claudiu.beznea@microchip.com>
+Subject: [PATCH 5/8] ASoC: mchp-pdmc: return directly ret
+Date:   Wed, 1 Mar 2023 13:38:04 +0200
+Message-ID: <20230301113807.24036-6-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230301113807.24036-1-claudiu.beznea@microchip.com>
 References: <20230301113807.24036-1-claudiu.beznea@microchip.com>
@@ -65,57 +65,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use FIELD_PREP() macro where possible instead of driver local defined
-macros.
+Return directly ret instead of having different branches for error and
+OK paths.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- sound/soc/atmel/mchp-pdmc.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ sound/soc/atmel/mchp-pdmc.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/sound/soc/atmel/mchp-pdmc.c b/sound/soc/atmel/mchp-pdmc.c
-index 1aed3baa9369..6ec5324fd65e 100644
+index 6ec5324fd65e..853a7adfd654 100644
 --- a/sound/soc/atmel/mchp-pdmc.c
 +++ b/sound/soc/atmel/mchp-pdmc.c
-@@ -8,6 +8,7 @@
+@@ -759,12 +759,10 @@ static int mchp_pdmc_pcm_new(struct snd_soc_pcm_runtime *rtd,
+ 	int ret;
  
- #include <dt-bindings/sound/microchip,pdmc.h>
+ 	ret = mchp_pdmc_add_chmap_ctls(rtd->pcm, dd);
+-	if (ret < 0) {
++	if (ret < 0)
+ 		dev_err(dd->dev, "failed to add channel map controls: %d\n", ret);
+-		return ret;
+-	}
  
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -49,8 +50,6 @@
- #define MCHP_PDMC_MR_OSR256		(3 << 16)
+-	return 0;
++	return ret;
+ }
  
- #define MCHP_PDMC_MR_SINCORDER_MASK	GENMASK(23, 20)
--#define MCHP_PDMC_MR_SINCORDER(order)	(((order) << 20) & \
--					 MCHP_PDMC_MR_SINCORDER_MASK)
- 
- #define MCHP_PDMC_MR_SINC_OSR_MASK	GENMASK(27, 24)
- #define MCHP_PDMC_MR_SINC_OSR_DIS	(0 << 24)
-@@ -62,8 +61,6 @@
- #define MCHP_PDMC_MR_SINC_OSR_256	(6 << 24)
- 
- #define MCHP_PDMC_MR_CHUNK_MASK		GENMASK(31, 28)
--#define MCHP_PDMC_MR_CHUNK(chunk)	(((chunk) << 28) & \
--					 MCHP_PDMC_MR_CHUNK_MASK)
- 
- /*
-  * ---- Configuration Register (Read/Write) ----
-@@ -617,10 +614,10 @@ static int mchp_pdmc_hw_params(struct snd_pcm_substream *substream,
- 
- 	mr_val |= mchp_pdmc_mr_set_osr(dd->audio_filter_en, osr);
- 
--	mr_val |= MCHP_PDMC_MR_SINCORDER(dd->sinc_order);
-+	mr_val |= FIELD_PREP(MCHP_PDMC_MR_SINCORDER_MASK, dd->sinc_order);
- 
- 	dd->addr.maxburst = mchp_pdmc_period_to_maxburst(snd_pcm_lib_period_bytes(substream));
--	mr_val |= MCHP_PDMC_MR_CHUNK(dd->addr.maxburst);
-+	mr_val |= FIELD_PREP(MCHP_PDMC_MR_CHUNK_MASK, dd->addr.maxburst);
- 	dev_dbg(comp->dev, "maxburst set to %d\n", dd->addr.maxburst);
- 
- 	snd_soc_component_update_bits(comp, MCHP_PDMC_MR,
+ static struct snd_soc_dai_driver mchp_pdmc_dai = {
 -- 
 2.34.1
 
