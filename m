@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FEA6A6568
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C6F6A656B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCACV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 21:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S229637AbjCACW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 21:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCACV6 (ORCPT
+        with ESMTP id S229676AbjCACWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 21:21:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A6DB445
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:21:57 -0800 (PST)
+        Tue, 28 Feb 2023 21:22:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D9E303F4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:22:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4F76611B7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:21:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000CFC4339B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:21:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D478B80ED2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E47C4339E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 02:22:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677637316;
-        bh=KymsAAZhTXhaULv7piniQQoD5iMV1Bl5HKPh08O2spg=;
+        s=k20201202; t=1677637340;
+        bh=U33P0NyrqWLHKl8GZ4YuPEs18eKHtUPecDCiQFZw5yo=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AHe3rlsmB5yHU7dV5GW8YekfdY+SO97C0WIKIBwkhDO9QpJ6TLLLXoYbzZqP5LfXl
-         M/z9mO1XGIRd5a2NFlSdI9L7VTu7PhcOna7anXC/4hkqfHL5mxUd+jwAyx8Myc48SQ
-         x3lOvdSgUfpR8TvVN6M641KWE8fw9NJs1dn2mFY3CzbppcWbZYreCyy+Z+C26betPJ
-         9he+4UUqNhU94ChC5ucbKzXdWNIS9sFxzProTxhB5N3xncdHbWt4zWoZoKl9yftUXI
-         1JISqHMH3Lrb7FDjbTsZShbAPuREUfGErFetQ3JDQZHvvhL9YqHEc3cSyCj/4FjbvB
-         I9HSz98H1gorg==
-Received: by mail-ed1-f44.google.com with SMTP id da10so48176329edb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:21:55 -0800 (PST)
-X-Gm-Message-State: AO0yUKViMOk2KT9hF0yY4Y6INPV8J4OJqh76bC2OEFR1GKrC0czQrCPG
-        mb787n69GLm9ifE3SVSIDm7idlkYtpR/5Nuzwrc=
-X-Google-Smtp-Source: AK7set+8Ojeh58hPB0HzS94VXKaeYHAwQIW/3HmewYHJro4+F02U2eYtE8TMWJArKu8qe7mttDVpspY1DxOjYZxtH+o=
-X-Received: by 2002:a17:906:5594:b0:877:7480:c568 with SMTP id
- y20-20020a170906559400b008777480c568mr2424754ejp.8.1677637314205; Tue, 28 Feb
- 2023 18:21:54 -0800 (PST)
+        b=fDVDgZ/vwaUIdgMHa//um6SNWnks3Bi8gYwRRPL32QTYJ8F2ODysA8RcYJzlsfaHH
+         VXJzzyJ9MsBw0uEjeed4hiRpJsTknxgZQ/4cQK/+bhfQkVprvlNEFF1I3o4pVBx8/4
+         jLl2842aAEgUn2nJyCmjuTf+JZ95SSdMPQXe33EnLRYceDv1kN4QPG2OOe8yNKK6Cy
+         rsj5dPNjBmtlK88vHSVxjVt/ZxRZcwQMGxj32UzD1R2UJcHVXM8Kfio+bE07QWXpO4
+         og0IpT8mGQIqHj0iGYIonCiaDIO/SIsCwUJO3QuDRMNfZoxuucWHpIN1FcvmNoCZji
+         +fdimsgww8jkw==
+Received: by mail-ed1-f54.google.com with SMTP id s26so47949988edw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:22:20 -0800 (PST)
+X-Gm-Message-State: AO0yUKVWb8H1PjEhB4K+sf6s4REaxpmXLjt4riMhK2iGOff7WMcj4jDE
+        37sPOgVRzOX4i7WcrjPoGbiN4zhcVTtiwEfD8mc=
+X-Google-Smtp-Source: AK7set8CC2LfBvQLsabLWQBvlwpphENbr9MVwvCMYqTjstMKH69q4QthOs9G4L7V4Vq2KUIHfX1hvVsfJmMLxKAIzSM=
+X-Received: by 2002:a17:907:2ce6:b0:8df:dc64:30d2 with SMTP id
+ hz6-20020a1709072ce600b008dfdc6430d2mr10384264ejc.1.1677637339026; Tue, 28
+ Feb 2023 18:22:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20230228215435.3366914-1-heiko@sntech.de>
-In-Reply-To: <20230228215435.3366914-1-heiko@sntech.de>
+References: <20230228215435.3366914-1-heiko@sntech.de> <20230228215435.3366914-2-heiko@sntech.de>
+In-Reply-To: <20230228215435.3366914-2-heiko@sntech.de>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 1 Mar 2023 10:21:43 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSG23qMp6UuF_zrHY-QvVCR4BNm2vA088BJTe3rF0vUkg@mail.gmail.com>
-Message-ID: <CAJF2gTSG23qMp6UuF_zrHY-QvVCR4BNm2vA088BJTe3rF0vUkg@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/2] RISC-V: T-Head vector handling
+Date:   Wed, 1 Mar 2023 10:22:07 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTJRy1ABdNTHJY+4SZpyAFnRgr6POT37JjS6bV_r+d7bQ@mail.gmail.com>
+Message-ID: <CAJF2gTTJRy1ABdNTHJY+4SZpyAFnRgr6POT37JjS6bV_r+d7bQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/2] RISC-V: define the elements of the VCSR vector CSR
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     palmer@dabbelt.com, linux-riscv@lists.infradead.org,
         samuel@sholland.org, christoph.muellner@vrull.eu,
@@ -55,8 +55,8 @@ Cc:     palmer@dabbelt.com, linux-riscv@lists.infradead.org,
         Heiko Stuebner <heiko.stuebner@vrull.eu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,48 +64,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Acked-by: Guo Ren <guoren@kernel.org>
+
 On Wed, Mar 1, 2023 at 5:54=E2=80=AFAM Heiko Stuebner <heiko@sntech.de> wro=
 te:
 >
 > From: Heiko Stuebner <heiko.stuebner@vrull.eu>
 >
-> As is widely known the T-Head C9xx cores used for example in the
-> Allwinner D1 implement an older non-ratified variant of the vector spec.
+> The VCSR CSR contains two elements VXRM[2:1] and VXSAT[0].
 >
-> While userspace will probably have a lot more problems implementing
-> support for both, on the kernel side the needed changes are actually
-> somewhat small'ish and can be handled via alternatives somewhat nicely.
+> Define constants for those to access the elements in a readable way.
 >
-> With this patchset I could run the same userspace program (picked from
-> some riscv-vector-test repository) that does some vector additions on
-> both qemu and a d1-nezha board. On both platforms it ran sucessfully and
-> even produced the same results.
-Great! Thx.
-
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> ---
+>  arch/riscv/include/asm/csr.h | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index add51662b7c3..8b06f2472915 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -176,6 +176,11 @@
+>  #define ENVCFG_CBIE_INV                        _AC(0x3, UL)
+>  #define ENVCFG_FIOM                    _AC(0x1, UL)
 >
-> As can be seen in the todo list, there are 2 places where the changed
-> SR_VS location still needs to be handled in the next revision
-> (assembly + ALTERNATIVES + constants + probably stringify resulted in
->  some grey hair so far already)
->
->
-> ToDo:
-> - follow along with the base vector patchset
-> - handle SR_VS access in _save_context and _secondary_start_sbi
->
->
-> Heiko Stuebner (2):
->   RISC-V: define the elements of the VCSR vector CSR
->   RISC-V: add T-Head vector errata handling
->
->  arch/riscv/Kconfig.erratas           |  13 +++
->  arch/riscv/errata/thead/errata.c     |  32 ++++++
->  arch/riscv/include/asm/csr.h         |  31 +++++-
->  arch/riscv/include/asm/errata_list.h |  62 +++++++++++-
->  arch/riscv/include/asm/vector.h      | 139 +++++++++++++++++++++++++--
->  5 files changed, 261 insertions(+), 16 deletions(-)
->
+> +/* VCSR flags */
+> +#define VCSR_VXRM_MASK                 3
+> +#define VCSR_VXRM_SHIFT                        1
+> +#define VCSR_VXSAT_MASK                        1
+> +
+>  /* symbolic CSR names: */
+>  #define CSR_CYCLE              0xc00
+>  #define CSR_TIME               0xc01
 > --
 > 2.39.0
 >
