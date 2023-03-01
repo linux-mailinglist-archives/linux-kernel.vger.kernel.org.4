@@ -2,127 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE26F6A6A14
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC036A69D1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjCAJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S229557AbjCAJac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCAJxJ (ORCPT
+        with ESMTP id S229481AbjCAJa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:53:09 -0500
-X-Greylist: delayed 846 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 01:53:07 PST
-Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DE63C01
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:53:07 -0800 (PST)
-Received: from pro2.mail.ovh.net (unknown [10.108.16.78])
-        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id 760CB243F90;
-        Wed,  1 Mar 2023 09:29:20 +0000 (UTC)
-Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
- (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 1 Mar
- 2023 10:29:19 +0100
-Message-ID: <e335b715-471c-8e25-8eea-95ca1f64d17c@traphandler.com>
-Date:   Wed, 1 Mar 2023 10:29:19 +0100
+        Wed, 1 Mar 2023 04:30:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900D536469;
+        Wed,  1 Mar 2023 01:30:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2432561298;
+        Wed,  1 Mar 2023 09:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C5B5C4339C;
+        Wed,  1 Mar 2023 09:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677663027;
+        bh=dHDrAbhiFfIkimlSzwEGwokvtLe8YoCQK1nhcFxqDD8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UYDi/e2yyVhan1vcohc2hSsaLpoqFdaclPUtpncNYYsPxzflGwMmRSEGV2SPEYyBM
+         Ew7hSZ4HYUq/T3UDsJhs5MJx+VUk1Cxtx3gaLS3ta1yCGQXneVx4A+MYJPFWRF98sL
+         t/JTCL4fKEEpMf7xLV4Elz+UsdHlXRgmhmbmRlRFHEP6vj6L1XCLtIloNWIP4nCro+
+         QFk9RIZ2FIgfhvba9ZJlo8d9HsSwb+UVL6jgJJ+MO7wrD78mJIgCkNTDPrbHlGnUGg
+         lURUqlIQgP80ZBK/WbfoX7aahmWH5vOQvc68lVZaUEaS3Y40guWUuwQmfUWj4lG8i5
+         RqsvaOM0As/SA==
+Received: by mail-ed1-f42.google.com with SMTP id s26so51053765edw.11;
+        Wed, 01 Mar 2023 01:30:27 -0800 (PST)
+X-Gm-Message-State: AO0yUKXdfvlmXRmcMdMaoM96o0WpupnUOtCnaWqVVey3FOclV47jtyPo
+        XINsePAz2AlUOZdLYu6C0IEqm9PZ9IthE6tO4ps=
+X-Google-Smtp-Source: AK7set+UDgLS0XyHzs6BuguZjxDrFvG7aGb9HhwrWrsyYsObQH9BFugsp3hv5+dOF0vnGi+l2aVptNo7FfwJvJTCRhM=
+X-Received: by 2002:a17:906:1582:b0:8b1:7de9:b39b with SMTP id
+ k2-20020a170906158200b008b17de9b39bmr2938780ejd.1.1677663025657; Wed, 01 Mar
+ 2023 01:30:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] of: property: Add missing of_node_get() in
- parse_interrupt()
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>
-CC:     <robh+dt@kernel.org>, <frowand.list@gmail.com>,
-        <gregkh@linuxfoundation.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Marc Zyngier <maz@kernel.org>
-References: <20230228174019.4004581-1-jjhiblot@traphandler.com>
- <CAGETcx-w4A3fz_DPqJG+9P6ETGAPv547DcnsO52gqTO1_vijsw@mail.gmail.com>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <CAGETcx-w4A3fz_DPqJG+9P6ETGAPv547DcnsO52gqTO1_vijsw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: DAG4EX2.emp2.local (172.16.2.32) To DAG1EX1.emp2.local
- (172.16.2.1)
-X-Ovh-Tracer-Id: 1941051441226463616
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgedguddviecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpedvfeekudegkeeuuedvueeuveejffdtvdethfelkefhfefftdetteffiefgvddtieenucfkphepuddvjedrtddrtddruddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdhrohgshhdoughtsehkvghrnhgvlhdrohhrghdpfhhrohifrghnugdrlhhishhtsehgmhgrihhlrdgtohhmpdhgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdpuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgriieskhgvrh
- hnvghlrdhorhhgpdfovfetjfhoshhtpehmoheftddtgedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230301085545.2373646-1-chenhuacai@loongson.cn> <aba37b65-6fc4-721e-ebc5-df52533e4791@loongson.cn>
+In-Reply-To: <aba37b65-6fc4-721e-ebc5-df52533e4791@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 1 Mar 2023 17:30:14 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
+Message-ID: <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
+Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
+ relocate kernel
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
+        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Youling,
 
-On 28/02/2023 20:07, Saravana Kannan wrote:
-> On Tue, Feb 28, 2023 at 9:40 AM Jean-Jacques Hiblot
-> <jjhiblot@traphandler.com> wrote:
->> From: Jean Jacques Hiblot <jjhiblot@traphandler.com>
->>
->> As all the other parsers do, parse_interrupt() must increase the refcount
->> of the device_node. Otherwise the refcount is decremented every time
->> parse_interrupt() is called on this node, leading to a potential
->> use-after-free.
->>
->> This is a regression introduced by commit f265f06af194 ("of: property:
->> Fix fw_devlink handling of interrupts/interrupts-extended"). The reason is
->> that of_irq_parse_one() does not increase the refcount while the previously
->> used of_irq_find_parent() does.
-> Thanks for catching the issue Jean!
+On Wed, Mar 1, 2023 at 5:21=E2=80=AFPM Youling Tang <tangyouling@loongson.c=
+n> wrote:
 >
-> This feels like a bug in of_irq_parse_one() to me. It's returning a
-> reference to a node without doing a of_node_get() on it.
+> Hi, Huacai
 >
-> Rob, Marc, Do you agree?
-
-Sarvana,
-
-it looks like you're right. The bug seems to be in of_irq_parse_one().
-
-It doesn't behave in the same way for "interrupts-extended" where it 
-does a get() and 'interrupts" where it doesn't.
-
-So please ignore this patch.
-
-Thanks
-
+> On 03/01/2023 04:55 PM, Huacai Chen wrote:
+> > Since Linux-6.3, LoongArch supports PIE kernel now, so let's reintroduc=
+e
+> > efi_relocate_kernel() to relocate the core kernel.
 >
-> Jean,
+> If we strongly rely on the PIE feature after the modification, we need
+> to modify it as follows,
+There is no strong rely, efi_relocate_kernel() can also handle the
+non-PIE kernel.
+
+Huacai
 >
-> If they agree, can you please fix of_irq_parse_one() and add a
-> of_node_put() to existing callers (if they aren't already doing a
-> put()).
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -137,6 +137,7 @@ config LOONGARCH
+>          select PCI_MSI_ARCH_FALLBACKS
+>          select PCI_QUIRKS
+>          select PERF_USE_VMALLOC
+> +       select RELOCATABLE
+>          select RTC_LIB
+>          select SMP
+>          select SPARSE_IRQ
 >
-> Thanks,
-> Saravana
+> or:
 >
->> Fixes: f265f06af194 ("of: property: Fix fw_devlink handling of interrupts/interrupts-extended")
->> Signed-off-by: Jean Jacques Hiblot <jjhiblot@traphandler.com>
->> ---
->>   drivers/of/property.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/of/property.c b/drivers/of/property.c
->> index 134cfc980b70b..1f23bcb765c4e 100644
->> --- a/drivers/of/property.c
->> +++ b/drivers/of/property.c
->> @@ -1380,7 +1380,10 @@ static struct device_node *parse_interrupts(struct device_node *np,
->>              strcmp(prop_name, "interrupts-extended"))
->>                  return NULL;
->>
->> -       return of_irq_parse_one(np, index, &sup_args) ? NULL : sup_args.np;
->> +       if (of_irq_parse_one(np, index, &sup_args))
->> +               return NULL;
->> +
->> +       return of_node_get(sup_args.np);
->>   }
->>
->>   static const struct supplier_bindings of_supplier_bindings[] = {
->> --
->> 2.25.1
->>
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -360,6 +360,7 @@ config EFI_STUB
+>          default y
+>          depends on EFI
+>          select EFI_GENERIC_STUB
+> +       select RELOCATABLE
+>          help
+>
+> Youling.
+>
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++-------------
+> >  1 file changed, 7 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/fi=
+rmware/efi/libstub/loongarch-stub.c
+> > index eee7ed43cdfb..72c71ae201f0 100644
+> > --- a/drivers/firmware/efi/libstub/loongarch-stub.c
+> > +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
+> > @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned long *ima=
+ge_addr,
+> >                                efi_loaded_image_t *image,
+> >                                efi_handle_t image_handle)
+> >  {
+> > -     int nr_pages =3D round_up(kernel_asize, EFI_ALLOC_ALIGN) / EFI_PA=
+GE_SIZE;
+> > -     efi_physical_addr_t kernel_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
+> >       efi_status_t status;
+> > +     unsigned long kernel_addr =3D 0;
+> >
+> > -     /*
+> > -      * Allocate space for the kernel image at the preferred offset. T=
+his is
+> > -      * the only location in memory from where we can execute the imag=
+e, so
+> > -      * no point in falling back to another allocation.
+> > -      */
+> > -     status =3D efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
+> > -                          EFI_LOADER_DATA, nr_pages, &kernel_addr);
+> > -     if (status !=3D EFI_SUCCESS)
+> > -             return status;
+> > -
+> > -     *image_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
+> > -     *image_size =3D kernel_asize;
+> > +     kernel_addr =3D (unsigned long)&kernel_offset - kernel_offset;
+> > +
+> > +     status =3D efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel=
+_asize,
+> > +                  EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min_align()=
+, 0x0);
+> >
+> > -     memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
+> > -            (void *)&kernel_offset - kernel_offset,
+> > -            kernel_fsize);
+> > +     *image_addr =3D kernel_addr;
+> > +     *image_size =3D kernel_asize;
+> >
+> >       return status;
+> >  }
+> >
+>
