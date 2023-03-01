@@ -2,314 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081DC6A6FDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EBB6A6FE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjCAPgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
+        id S229618AbjCAPil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjCAPgQ (ORCPT
+        with ESMTP id S229501AbjCAPik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:36:16 -0500
-Received: from out-38.mta0.migadu.com (out-38.mta0.migadu.com [91.218.175.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1120143458
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 07:36:13 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677684971;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=B997K50RBKGWXSrBUG5MoDdxxD/GnEcdYW4O1Qk10so=;
-        b=rhUgbe/zMFtHzohaoUHjz00r58lwNDU8QUQcr8CBPdudv8AUSkZ4hGI7C9I77mRdSKGjq4
-        exXPFbuLZKakbjwqikFgfSVZWZ/dP6zRZNQ0wMVBwAAEGxnmUtRFxNPCp6JNPKwjL8r2cw
-        FzNdpfR5PEz61bWQbZvvae3+9xbQKxk=
-From:   andrey.konovalov@linux.dev
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v3] kcov: improve documentation
-Date:   Wed,  1 Mar 2023 16:36:09 +0100
-Message-Id: <72be5c215c275f35891229b90622ed859f196a46.1677684837.git.andreyknvl@google.com>
+        Wed, 1 Mar 2023 10:38:40 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2085.outbound.protection.outlook.com [40.107.96.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B8013D6F;
+        Wed,  1 Mar 2023 07:38:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eBQDMjjGixJ7te901epFqY//SMqWOZOLpeC+HHY4ZieVpGLz4lllHdc2s33PZ3m3XQ2rfEjB1EsnTjxBgF30CCI0h1IEoagiGQKdPcG5J4/AhuZpqMIeIwyu9rLh2aXAzqDTM0rMkhR4KXz/i0VcGPsMJXnn6QZw7uohOvzjaEjE1785Z8MEzypZO55P1ofqpIjSBiR/0pCe02xmrLlhWiclVXbnqm1nFuLCmqUVfLu2cDOyJkw55dJLj/3/4A1VmocoC08uKu9yUvHKs1aN/tqtXiRKwbeMsXQTWl1RMrA74rxnEq9i9r2uEKXM2XQdNn+ngMkNEEAmVl5ub21Xhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=msDgC+eVwao4GCoq3xMepfhsqhuzAXTaQ53y8/BNOK8=;
+ b=S9B7+Bsu0xT8gQmbmZJ3gGbLKV/yzmITiD4wN3HmGcHu+ABsxRZJ8aCzAl1jMNNct7Q55Ldovo7DL4KVC0Y39F8XVRb7j7XCV84pw02Yvfu5O1weHvDMNkFsCk2cSTHtl9p3g6ZpzfCv8R8uB7D5oOSyohCVzTY0pVUsB4s2VV9nHpMjt2AK05+DMDsiQhlAo+VWzI4fDXVhS/i+2ev/QclSFfKtqueqk00bzUwd7NgS4obJwcrOOzqkWWJoxb/q84ihWNhpAakRzI1UGaLSaeN3qEOJSV3pjNMjqMeF+y07L/RGNo/+eZj/jnpe3nhHUfSVlIBWcykW/cKoW3WEgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=msDgC+eVwao4GCoq3xMepfhsqhuzAXTaQ53y8/BNOK8=;
+ b=LxiLWLCtSHZBRO7NKMqC5vjdYtGdjdoPEL3YNtHfRJKLVWDKLFDu0l0x0+ayv594mn+UPUBgc/K7nDD7Pfh+upVzM5FgUoY0p//A3HVTdTpkvMAYZjC2mhhUbubmhRDop9PBcIeoSbk2kg50iRzYXCnYPI9yeth4QFOSQPlfJw3kipxI16bPaTiMEFdpJlD8hn/vaoBYfr/cPY+nleEKWu/pEJ222N4n+QNZXXcRwp16G4bzhNUH/gJKuEskmcxuOHsN/vIlPUD5yib70yWaSprhB3l7lJQnLvFYGrFG7zKyGuD4rxsg6I1Mc9quhR1fSuPv8VTxZlkP1jN0vYeAXA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH0PR12MB7863.namprd12.prod.outlook.com (2603:10b6:510:28b::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
+ 2023 15:38:37 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.029; Wed, 1 Mar 2023
+ 15:38:37 +0000
+Date:   Wed, 1 Mar 2023 11:38:33 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
+Message-ID: <Y/9xec98YXB/6G11@nvidia.com>
+References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
+ <20230227120702.13180-3-kyarlagadda@nvidia.com>
+ <Y/1oqr0RfD7KVA4y@kernel.org>
+ <Y/3zVdgnVz8BvGGl@ziepe.ca>
+ <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <Y/9EwTtmxcVBjiHz@nvidia.com>
+ <Y/9HB/KF2Kjkihkg@sirena.org.uk>
+ <Y/9VkGjCP48FHtyS@nvidia.com>
+ <Y/9clKU9lAHxvOdd@orome>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/9clKU9lAHxvOdd@orome>
+X-ClientProxiedBy: BY5PR17CA0024.namprd17.prod.outlook.com
+ (2603:10b6:a03:1b8::37) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH0PR12MB7863:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f6f6106-dde0-46c0-f0a9-08db1a6b05fa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BvClaAieaBHO+C4OXBVRV5t32GOzqGTXTAvyhMoo/ATq74c5cSlhZbkzvZcsz351ixbMIHKh7FJ7tVxbCQ4WKVhxSqSebVLpuTrkEmLQ3nRG7iU+zUil9nJhI2gqDKdjS+RuiUKD5RH6kOZBvYexVgg+tLeP8ILzOyUefyOAW3P15/n0nRgH2UhKCX7YR0HKYE9eX7y+ddO/WFwqvagG2RW8GialDO9TuHp7L7vn4v2VmgpB/EirbST9IgVbewQ0uwYQJqYnD44V8igI4cgOgV43pkMhg0UbDfaPDye/fRsLkiojc4ABJLNDbLBGBRSWCwNRi4eDTJpuPB7jVpgvU3JNJP26HnzzDYCfJVAC97HnTZrN0Cxk8bMylHPmNacBw3LPORFuXbQlPVahsTuc7lXXsqU8X8T5DB3+tf2uVubgqurak7JZFUv05EtoQTpQdwahcZRiPpHWURBxcD289+ezu5ZIyx5w9V3DEk1Dm20pmdKk8jKdEo6fAXgiVyszStP7EsV9VEG3K439ZT0aR2+KLe3V5kkyXSk9aZhkZRaTCgaqp/cNeEWdlleJNHbAe39QASjM831N2pHcUe7vPH/5KEVx/9J1DU9MGbWbNv3Yshv6jzFHo5Y7FiH/unzmF54kc8n1z0kdbDKO29HA2g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(376002)(39860400002)(366004)(451199018)(41300700001)(66946007)(316002)(66556008)(66476007)(6486002)(86362001)(107886003)(36756003)(6506007)(478600001)(54906003)(6666004)(26005)(4326008)(6512007)(6916009)(8676002)(2616005)(186003)(2906002)(38100700002)(83380400001)(5660300002)(8936002)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3RUE1/6JAq7kQ7hzuP5lNHC3kCOMJUEtW3Pgw5S4cpY41t5goBsG6zqEMDfS?=
+ =?us-ascii?Q?ZI7tBK2geqwzoLEvkXfj4yEjBUMwqEYFghpncc4yH9Vu+qcF23HBN1YUdxFV?=
+ =?us-ascii?Q?nfoyItrNzKLjg9Jk79wceiZ2VaG3Ah1KnCkmap5xfX8ERLnNG3XqsYI43SNh?=
+ =?us-ascii?Q?ZVTp6so5LbZV1xWsaEZC1t71dFVP7JsFaMzOuZvm+Uyb7DXZR2N4eQuSYFMi?=
+ =?us-ascii?Q?OFoE2/h/iQ/oN8FqB7u+DLetYXZw4pRIn/RAMPFRRT5v/AflqzJgkYL4Ir+D?=
+ =?us-ascii?Q?9o076zmSKKP1qEPCwpQjzQP9VIrXAArOLSl6mkdrlJzXf8Qtaaz51HUUUmuW?=
+ =?us-ascii?Q?DVMfK9Z04oQlI8VzyvyQAiRogImI3+kapGXXFBXGOzohT0zbmtGIxd6XQLcC?=
+ =?us-ascii?Q?TmDvD908cPGA76Lorab1AvbJsU3Pg2n6y3cLsi1XU1TgviON58SQA5kpjxYv?=
+ =?us-ascii?Q?SyceUd973vvFTigB1RuRByZpNDmbrB+Kcriatuy9QL++CXpGRDP5s5pbX9Yu?=
+ =?us-ascii?Q?chfIDQ1z8SdTbaVwm2LNiDFWm8Csb1Iins4maxgMybJimGDTGApxDpoLTYUt?=
+ =?us-ascii?Q?w+jYB3m1ZXaJe+SekT8oD6K2+NYeeFNvzx9LAxP8nCPI61phIxj5yHMLxz1j?=
+ =?us-ascii?Q?3DD4sD0YTfw7ZHveESXsQbfKbkFwxAboDo3se4MXRYffKDEm/aIz9z8azokI?=
+ =?us-ascii?Q?PTc8jadSnLyk5+TN1uvOvuU+eWwDClT2H0/NRMNVqHuHFCdDiQQAldTiV+Mt?=
+ =?us-ascii?Q?l/1axGtQkzLtMD2amrd/bl+TxYMOBPf/iL/LJEDQiavt5uoDOs36+PYxYDaM?=
+ =?us-ascii?Q?JKmTVmyI/AJx0yLO/TwCS8Yd7892aGeFwIpIhNcNiPxbgLp0BWn5Xacg2zye?=
+ =?us-ascii?Q?CXIxF71DqN+z5HN4h52leyojuvg+JCBNMXYE+1SLycLmUy4ndy+H039cCTJm?=
+ =?us-ascii?Q?bfNjY+HERjSzWFv52bAUod6KN6DI+vKWbI5gFvSjZLLRnU+2FmelVDo1eICR?=
+ =?us-ascii?Q?xnml/MaDTwycTpwcSjIQufixDMxrIMcYeB9wVwW00qFh0yMYIuABxDw0bNOH?=
+ =?us-ascii?Q?RZ7SVmUqUJBsbFOOB0YfoEH5PKvbwWcjrfuCPG5FCFdngnXIRnUNDpWH6EsF?=
+ =?us-ascii?Q?IlYkBWTiKleLypMV8tkgw33e0Xr3/4ueQ0Fbw/YiOqVxDxYCjSQmB1e92UW6?=
+ =?us-ascii?Q?xHb+Vjq1rby3ioj1SHddrWafhWpr/rDJJwbcoH4bSSdu/SFYOm4uA6DMioC+?=
+ =?us-ascii?Q?BMlPQi2urEGrwGN3n+hbZ/ckj+0FJAuFs6N5EEIYGNU5BVldUXGyxSnWCe3k?=
+ =?us-ascii?Q?FgxFfpmECoWW2e6ea6hL1BZGzMZtjEEIrWLwehdAUlQ2r31tAHeCACqmR8iw?=
+ =?us-ascii?Q?EAPdLmT+s6mkVZS2N02Ftu3mwZunR+KFC8H1/Q/1vVZ+24AWkdoD6QyDMIit?=
+ =?us-ascii?Q?KEKeOs9Uha4IanXM4DgVP0kGFgurQhL/aGjmn00/TeV6P+KHOP91CEgXOj0D?=
+ =?us-ascii?Q?+hFv0hSyFe039ROXVdeXRFquVaV1h1QuJmMI68FWj27vP17dvozp0cx1hudn?=
+ =?us-ascii?Q?DRrziamWLSQ342JJHfKgWgbOsxd/viZsrvrL5VFv?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f6f6106-dde0-46c0-f0a9-08db1a6b05fa
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 15:38:37.0336
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oQpcIefbSRw33/jSZfJ8G1JoH/6CI1sBZwIcuY6dBLxVeXRyjBaF3RV9+J87UJQb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7863
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+On Wed, Mar 01, 2023 at 03:09:24PM +0100, Thierry Reding wrote:
+> On Wed, Mar 01, 2023 at 09:39:28AM -0400, Jason Gunthorpe wrote:
+> > On Wed, Mar 01, 2023 at 12:37:27PM +0000, Mark Brown wrote:
+> > > On Wed, Mar 01, 2023 at 08:27:45AM -0400, Jason Gunthorpe wrote:
+> > > > On Wed, Mar 01, 2023 at 11:56:53AM +0000, Krishna Yarlagadda wrote:
+> > > 
+> > > > > TPM device connected behind half duplex controller can only work
+> > > > > this way. So, no additional flag needed to check.
+> > > 
+> > > > Just because a DT hooks it up this way doesn't mean the kernel driver
+> > > > can support it, eg support hasn't been implemented in an older SPI
+> > > > driver or something.
+> > > 
+> > > > If the failure mode is anything other than the TPM doesn't probe we
+> > > > will need to check for support.
+> > > 
+> > > It's not like these buses are hot pluggable - someone would have to
+> > > design and manufacture a board which doesn't work.  It's probably
+> > > reasonable for this to fail with the SPI subsystem saying it can't
+> > > support things when the operation is tried.
+> > 
+> > If the spi subsystem fails this request with these flags that would be
+> > great, it would cause the TPM to fail probing reliably.
+> > 
+> > But does this patch do that? It looks like non-supporting half duplex
+> > drivers will just ignore the new flag?
+> 
+> I think the assumption is that there are currently no half duplex
+> drivers that would be impacted by this. If I understand correctly, the
+> TPM driver currently supports only full duplex controllers, because
+> that's required in order to detect the wait state in software.
+> 
+> So, yes, half duplex controllers would ignore this flag, but since they
+> couldn't have supported TPM flow control before anyway it doesn't make a
+> difference.
 
-Improve KCOV documentation:
+If more HW uses this feature it will likely look a lot like these
+tegra drivers where an existing supported SPI driver gains a HW bit to
+do the flow. Meaning DTs will exist configuring a TPM to a half duplex
+SPI and kernels will exist that don't have the HW driver that
+implements it.
 
-- Use KCOV instead of kcov, as the former is more widely-used.
+So, I would like it if old kernels running against a new DT do not
+mis-operate the SPI because their SPI driver does not support TPM
+operation. Either because the spi layer refuses the request as
+unsupported or the TPM layer refuses to use the spi driver as
+unsupported.
 
-- Mention Clang in compiler requirements.
+I do not like the idea that the SPI subsystem will take a request from
+a client driver and silently mis-execute it.
 
-- Use ``annotations`` for inline code.
-
-- Rework remote coverage collection documentation for better clarity.
-
-- Various smaller changes.
-
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-
----
-
-Changes v2->v3:
-- Fix ``annotation`` for KCOV_REMOTE_ENABLE.
-
-Changes v1->v2:
-- Add GCC version requirement for comparison operands collection.
----
- Documentation/dev-tools/kcov.rst | 169 +++++++++++++++++++------------
- 1 file changed, 102 insertions(+), 67 deletions(-)
-
-diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-index d83c9ab49427..6611434e2dd2 100644
---- a/Documentation/dev-tools/kcov.rst
-+++ b/Documentation/dev-tools/kcov.rst
-@@ -1,42 +1,50 @@
--kcov: code coverage for fuzzing
-+KCOV: code coverage for fuzzing
- ===============================
- 
--kcov exposes kernel code coverage information in a form suitable for coverage-
--guided fuzzing (randomized testing). Coverage data of a running kernel is
--exported via the "kcov" debugfs file. Coverage collection is enabled on a task
--basis, and thus it can capture precise coverage of a single system call.
-+KCOV collects and exposes kernel code coverage information in a form suitable
-+for coverage-guided fuzzing. Coverage data of a running kernel is exported via
-+the ``kcov`` debugfs file. Coverage collection is enabled on a task basis, and
-+thus KCOV can capture precise coverage of a single system call.
- 
--Note that kcov does not aim to collect as much coverage as possible. It aims
--to collect more or less stable coverage that is function of syscall inputs.
--To achieve this goal it does not collect coverage in soft/hard interrupts
--and instrumentation of some inherently non-deterministic parts of kernel is
--disabled (e.g. scheduler, locking).
-+Note that KCOV does not aim to collect as much coverage as possible. It aims
-+to collect more or less stable coverage that is a function of syscall inputs.
-+To achieve this goal, it does not collect coverage in soft/hard interrupts
-+(unless remove coverage collection is enabled, see below) and from some
-+inherently non-deterministic parts of the kernel (e.g. scheduler, locking).
- 
--kcov is also able to collect comparison operands from the instrumented code
--(this feature currently requires that the kernel is compiled with clang).
-+Besides collecting code coverage, KCOV can also collect comparison operands.
-+See the "Comparison operands collection" section for details.
-+
-+Besides collecting coverage data from syscall handlers, KCOV can also collect
-+coverage for annotated parts of the kernel executing in background kernel
-+tasks or soft interrupts. See the "Remote coverage collection" section for
-+details.
- 
- Prerequisites
- -------------
- 
--Configure the kernel with::
-+KCOV relies on compiler instrumentation and requires GCC 6.1.0 or later
-+or any Clang version supported by the kernel.
- 
--        CONFIG_KCOV=y
-+Collecting comparison operands is supported with GCC 8+ or with Clang.
- 
--CONFIG_KCOV requires gcc 6.1.0 or later.
-+To enable KCOV, configure the kernel with::
- 
--If the comparison operands need to be collected, set::
-+        CONFIG_KCOV=y
-+
-+To enable comparison operands collection, set::
- 
- 	CONFIG_KCOV_ENABLE_COMPARISONS=y
- 
--Profiling data will only become accessible once debugfs has been mounted::
-+Coverage data only becomes accessible once debugfs has been mounted::
- 
-         mount -t debugfs none /sys/kernel/debug
- 
- Coverage collection
- -------------------
- 
--The following program demonstrates coverage collection from within a test
--program using kcov:
-+The following program demonstrates how to use KCOV to collect coverage for a
-+single syscall from within a test program:
- 
- .. code-block:: c
- 
-@@ -84,7 +92,7 @@ program using kcov:
- 		perror("ioctl"), exit(1);
- 	/* Reset coverage from the tail of the ioctl() call. */
- 	__atomic_store_n(&cover[0], 0, __ATOMIC_RELAXED);
--	/* That's the target syscal call. */
-+	/* Call the target syscall call. */
- 	read(-1, NULL, 0);
- 	/* Read number of PCs collected. */
- 	n = __atomic_load_n(&cover[0], __ATOMIC_RELAXED);
-@@ -103,7 +111,7 @@ program using kcov:
- 	return 0;
-     }
- 
--After piping through addr2line output of the program looks as follows::
-+After piping through ``addr2line`` the output of the program looks as follows::
- 
-     SyS_read
-     fs/read_write.c:562
-@@ -121,12 +129,13 @@ After piping through addr2line output of the program looks as follows::
-     fs/read_write.c:562
- 
- If a program needs to collect coverage from several threads (independently),
--it needs to open /sys/kernel/debug/kcov in each thread separately.
-+it needs to open ``/sys/kernel/debug/kcov`` in each thread separately.
- 
- The interface is fine-grained to allow efficient forking of test processes.
--That is, a parent process opens /sys/kernel/debug/kcov, enables trace mode,
--mmaps coverage buffer and then forks child processes in a loop. Child processes
--only need to enable coverage (disable happens automatically on thread end).
-+That is, a parent process opens ``/sys/kernel/debug/kcov``, enables trace mode,
-+mmaps coverage buffer, and then forks child processes in a loop. The child
-+processes only need to enable coverage (it gets disabled automatically when
-+a thread exits).
- 
- Comparison operands collection
- ------------------------------
-@@ -205,52 +214,78 @@ Comparison operands collection is similar to coverage collection:
- 	return 0;
-     }
- 
--Note that the kcov modes (coverage collection or comparison operands) are
--mutually exclusive.
-+Note that the KCOV modes (collection of code coverage or comparison operands)
-+are mutually exclusive.
- 
- Remote coverage collection
- --------------------------
- 
--With KCOV_ENABLE coverage is collected only for syscalls that are issued
--from the current process. With KCOV_REMOTE_ENABLE it's possible to collect
--coverage for arbitrary parts of the kernel code, provided that those parts
--are annotated with kcov_remote_start()/kcov_remote_stop().
--
--This allows to collect coverage from two types of kernel background
--threads: the global ones, that are spawned during kernel boot in a limited
--number of instances (e.g. one USB hub_event() worker thread is spawned per
--USB HCD); and the local ones, that are spawned when a user interacts with
--some kernel interface (e.g. vhost workers); as well as from soft
--interrupts.
--
--To enable collecting coverage from a global background thread or from a
--softirq, a unique global handle must be assigned and passed to the
--corresponding kcov_remote_start() call. Then a userspace process can pass
--a list of such handles to the KCOV_REMOTE_ENABLE ioctl in the handles
--array field of the kcov_remote_arg struct. This will attach the used kcov
--device to the code sections, that are referenced by those handles.
--
--Since there might be many local background threads spawned from different
--userspace processes, we can't use a single global handle per annotation.
--Instead, the userspace process passes a non-zero handle through the
--common_handle field of the kcov_remote_arg struct. This common handle gets
--saved to the kcov_handle field in the current task_struct and needs to be
--passed to the newly spawned threads via custom annotations. Those threads
--should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
--
--Internally kcov stores handles as u64 integers. The top byte of a handle
--is used to denote the id of a subsystem that this handle belongs to, and
--the lower 4 bytes are used to denote the id of a thread instance within
--that subsystem. A reserved value 0 is used as a subsystem id for common
--handles as they don't belong to a particular subsystem. The bytes 4-7 are
--currently reserved and must be zero. In the future the number of bytes
--used for the subsystem or handle ids might be increased.
--
--When a particular userspace process collects coverage via a common
--handle, kcov will collect coverage for each code section that is annotated
--to use the common handle obtained as kcov_handle from the current
--task_struct. However non common handles allow to collect coverage
--selectively from different subsystems.
-+Besides collecting coverage data from handlers of syscalls issued from a
-+userspace process, KCOV can also collect coverage for parts of the kernel
-+executing in other contexts - so-called "remote" coverage.
-+
-+Using KCOV to collect remote coverage requires:
-+
-+1. Modifying kernel code to annotate the code section from where coverage
-+   should be collected with ``kcov_remote_start`` and ``kcov_remote_stop``.
-+
-+2. Using ``KCOV_REMOTE_ENABLE`` instead of ``KCOV_ENABLE`` in the userspace
-+   process that collects coverage.
-+
-+Both ``kcov_remote_start`` and ``kcov_remote_stop`` annotations and the
-+``KCOV_REMOTE_ENABLE`` ioctl accept handles that identify particular coverage
-+collection sections. The way a handle is used depends on the context where the
-+matching code section executes.
-+
-+KCOV supports collecting remote coverage from the following contexts:
-+
-+1. Global kernel background tasks. These are the tasks that are spawned during
-+   kernel boot in a limited number of instances (e.g. one USB ``hub_event``
-+   worker is spawned per one USB HCD).
-+
-+2. Local kernel background tasks. These are spawned when a userspace process
-+   interacts with some kernel interface and are usually killed when the process
-+   exits (e.g. vhost workers).
-+
-+3. Soft interrupts.
-+
-+For #1 and #3, a unique global handle must be chosen and passed to the
-+corresponding ``kcov_remote_start`` call. Then a userspace process must pass
-+this handle to ``KCOV_REMOTE_ENABLE`` in the ``handles`` array field of the
-+``kcov_remote_arg`` struct. This will attach the used KCOV device to the code
-+section referenced by this handle. Multiple global handles identifying
-+different code sections can be passed at once.
-+
-+For #2, the userspace process instead must pass a non-zero handle through the
-+``common_handle`` field of the ``kcov_remote_arg`` struct. This common handle
-+gets saved to the ``kcov_handle`` field in the current ``task_struct`` and
-+needs to be passed to the newly spawned local tasks via custom kernel code
-+modifications. Those tasks should in turn use the passed handle in their
-+``kcov_remote_start`` and ``kcov_remote_stop`` annotations.
-+
-+KCOV follows a predefined format for both global and common handles. Each
-+handle is a ``u64`` integer. Currently, only the one top and the lower 4 bytes
-+are used. Bytes 4-7 are reserved and must be zero.
-+
-+For global handles, the top byte of the handle denotes the id of a subsystem
-+this handle belongs to. For example, KCOV uses ``1`` as the USB subsystem id.
-+The lower 4 bytes of a global handle denote the id of a task instance within
-+that subsystem. For example, each ``hub_event`` worker uses the USB bus number
-+as the task instance id.
-+
-+For common handles, a reserved value ``0`` is used as a subsystem id, as such
-+handles don't belong to a particular subsystem. The lower 4 bytes of a common
-+handle identify a collective instance of all local tasks spawned by the
-+userspace process that passed a common handle to ``KCOV_REMOTE_ENABLE``.
-+
-+In practice, any value can be used for common handle instance id if coverage
-+is only collected from a single userspace process on the system. However, if
-+common handles are used by multiple processes, unique instance ids must be
-+used for each process. One option is to use the process id as the common
-+handle instance id.
-+
-+The following program demonstrates using KCOV to collect coverage from both
-+local tasks spawned by the process and the global task that handles USB bus #1:
- 
- .. code-block:: c
- 
--- 
-2.25.1
-
+Jason
