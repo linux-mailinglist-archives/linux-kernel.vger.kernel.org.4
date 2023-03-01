@@ -2,149 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2E06A63F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEAB6A6405
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjCAABv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 19:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S229872AbjCAAEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 19:04:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCAABs (ORCPT
+        with ESMTP id S229806AbjCAAEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 19:01:48 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBD336451
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:01:47 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id a2so1793948plm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:01:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dase/rKwb8olXZw4+LDNprv2RVCPainY9pi10HK+tM4=;
-        b=EoN6tMUySbv/wFvH2G/QeYhTnLIx3gjJeTQtsMNGzRTnISlnTeG8+r+tvwK6CmYT41
-         OeouGTxgJLPsn272MRkAGA4Olp0GdYTo6rrImv8mCMuQ/Wp44Ka7nK2wTZ0z0lgh/Qx+
-         dZJ9uNPfEhxRodhq6vnIxcWla5T03eiWYMPAFlMAt+7sFP9HaC7pVlTp+A52Wy/bSG5M
-         yDzO5Ph6nQh2T+pjRfVh0cVTEjft9Nbp2dpYrAeGm06yuGmsQ+JaGppvhOUkNS0W+raw
-         5tW+xZ9ho/DJ3URoql/D5S1tetpNq4lNmlxjBpF3L5XvUGZojRlGcBfn2gAnhMDOVRnC
-         lxyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dase/rKwb8olXZw4+LDNprv2RVCPainY9pi10HK+tM4=;
-        b=zGSRXnZB/wqpgNtPOheecARykW/lseBSbwCAtSXwYiWvMJMdv6GS0lCW0BXvCDg8Lp
-         hMNUVSL8dCA/K+jWd79qiWwAv+yBIzhkFPV+SlhMwnc3cLQkvdlM+zCwVf5+eONMgCsY
-         74xF3e5Ey+TEyeesyx8QDS/yOmeu080hh/aYECuQr6vGcFz+j3Vg3ZAkXhk+1xl0omXJ
-         AFmmaW05DJWkERKWx2HpognyLGGuGhztl/vto0qyXkNNW2raPM/UJtDUdBl1aAhhJAxU
-         yODXFZxgTGyo4E2tfEAuR66JfL9xSebxCBEEBDjO9WSEnRF+IXxDyZnZiu+RWBeknHk+
-         OFBA==
-X-Gm-Message-State: AO0yUKVvlSKgXzUl4qUKd8O460+fOLiNUVbeQHUesBE1GskrtdqcCeVm
-        elIiJnnBr6yftK/HDr57JfNo5Q==
-X-Google-Smtp-Source: AK7set/KzrMuIbnrMYbSMOuNfdjL2hXTWzj1HCDFNgudNuM3MC2YID6lT6+Gg5o1CKvOP0NhVRyMqQ==
-X-Received: by 2002:a17:902:e543:b0:19d:62b:f040 with SMTP id n3-20020a170902e54300b0019d062bf040mr5423860plf.37.1677628906585;
-        Tue, 28 Feb 2023 16:01:46 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
-        by smtp.gmail.com with ESMTPSA id u8-20020a656708000000b005004919b31dsm6278906pgf.72.2023.02.28.16.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 16:01:45 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pX9ug-003JtX-7K; Wed, 01 Mar 2023 11:01:42 +1100
-Date:   Wed, 1 Mar 2023 11:01:42 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     syzbot <syzbot+dd426ae4af71f1e74729@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Subject: Re: [syzbot] [ext4?] possible deadlock in evict (3)
-Message-ID: <20230301000142.GK2825702@dread.disaster.area>
-References: <00000000000065970505f5c5e3fb@google.com>
+        Tue, 28 Feb 2023 19:04:36 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AE330B28;
+        Tue, 28 Feb 2023 16:04:07 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.221.228])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 321022WE810372
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 28 Feb 2023 16:02:03 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 321022WE810372
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023020601; t=1677628925;
+        bh=9gydT6nRZVx6IYCzJ3hOzQNR3g6aSBQDwZj4A/UqP40=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=0wZgGOWf9IiVKL9MStuQYQ33JWOs3F5pd2797tODgNG4uKCNpjUrXuCrBE8nGrzgK
+         AKtvYhpI0lHQ2zDjk0qTozl/OhG6Tv9fgR9RlebTYDYLqngfq5j/TW/Q8dQnPcyIl+
+         0QhK+dPDszSDxOt+UeFJRaeoY9GnsVwfI3/+EBmh5bTqiBTJqN+023xMbVtf2jtd/v
+         uzF4NbCaXmUNKJL9P6kNPhOqUjJV92rDUkvtssDVLijbyPdWoJP0dwAJ4qiSRs7sqZ
+         MTJOug/2f2+LRcnIu79MN9OFkofvQ5XBRpBmPZPdH/nQnP3+tjcYL12L4Ois3ccyfm
+         TTHsCXS+oS/9A==
+Date:   Tue, 28 Feb 2023 16:02:00 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com
+Subject: Re: [PATCH v12 07/11] x86/smpboot: Remove early_gdt_descr on 64-bit
+User-Agent: K-9 Mail for Android
+In-Reply-To: <0E3AFDDA-039B-40F3-92A4-85CD96B1BB64@infradead.org>
+References: <20230226110802.103134-1-usama.arif@bytedance.com> <20230226110802.103134-8-usama.arif@bytedance.com> <878rghmrn2.ffs@tglx> <35264451eabdf967eb31069cb814e8a05ee3179b.camel@infradead.org> <cf7a1657159219cea61ffef567280e2e88d1f670.camel@infradead.org> <CAMzpN2hQArxf2mAVq55uMx9VhTjUD-VDEVAD406RScfsrjdAjQ@mail.gmail.com> <0E3AFDDA-039B-40F3-92A4-85CD96B1BB64@infradead.org>
+Message-ID: <CE9D5D21-63D3-40B8-BC71-11F1A5A93F7E@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000065970505f5c5e3fb@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[obvious one for the ext4 people]
+On February 28, 2023 3:42:55 PM PST, David Woodhouse <dwmw2@infradead=2Eorg=
+> wrote:
+>
+>
+>On 28 February 2023 22:48:42 GMT, Brian Gerst <brgerst@gmail=2Ecom> wrote=
+:
+>>On Tue, Feb 28, 2023 at 5:41=E2=80=AFPM David Woodhouse <dwmw2@infradead=
+=2Eorg> wrote:
+>>>
+>>> On Tue, 2023-02-28 at 21:57 +0000, David Woodhouse wrote:
+>>> >
+>>> > ----------------
+>>> > IN:
+>>> > 0xffffffffa20000b2:  48 31 d2                 xorq     %rdx, %rdx
+>>> > 0xffffffffa20000b5:  48 8b 82 c0 74 d5 a3     movq     -0x5c2a8b40(%=
+rdx), %rax
+>>> > 0xffffffffa20000bc:  48 8b a0 58 14 00 00     movq     0x1458(%rax),=
+ %rsp
+>>> > 0xffffffffa20000c3:  48 83 ec 10              subq     $0x10, %rsp
+>>> > 0xffffffffa20000c7:  66 c7 04 24 7f 00        movw     $0x7f, (%rsp)
+>>> > 0xffffffffa20000cd:  48 8d 82 00 10 81 a3     leaq     -0x5c7ef000(%=
+rdx), %rax
+>>> > 0xffffffffa20000d4:  48 89 44 24 02           movq     %rax, 2(%rsp)
+>>> > 0xffffffffa20000d9:  0f 01 14 24              lgdtq    (%rsp)
+>>> > 0xffffffffa20000dd:  48 83 c4 10              addq     $0x10, %rsp
+>>> > 0xffffffffa20000e1:  31 c0                    xorl     %eax, %eax
+>>> > 0xffffffffa20000e3:  8e d8                    movl     %eax, %ds
+>>> >
+>>> > I cannot work out where the value -0x5c7ef000 comes from, but it
+>>> > doesn't seem to be the 0xb000 you claimed, and my brain is hurting
+>>> > again=2E=2E=2E
+>>>
+>>> Turning off CONFIG_RANDOMIZE_BASE (or just looking at the vmlinux
+>>> disassembly instead as Brian did) helps to resolve that FWIW=2E
+>>>
+>>> I've changed it to zero all of %rdx and pushed it back to the v12bis
+>>> branch=2E
+>>
+>>xorl %edx, %edx is preferred, as a 32-bit operation zero-extends to
+>>the full 64-bit register=2E  Using xorq to clear any of the lower 8
+>>registers adds an unnecessary REX prefix=2E  Just one of many quirks of
+>>the x86 instruction set=2E=2E=2E
+>
+>Ewww=2E Couldn't the assembler choose to omit the REX prefix then? It doe=
+s more tricksy things than that already=2E
+>
+>I almost prefer having the prefix but (in the morning) if you prefer I ca=
+n put it back as it was with a comment about the zero-extension=2E
+>
 
-On Tue, Feb 28, 2023 at 09:25:55AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    ae3419fbac84 vc_screen: don't clobber return value in vcs_..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1136fe18c80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=ff98a3b3c1aed3ab
-> dashboard link: https://syzkaller.appspot.com/bug?extid=dd426ae4af71f1e74729
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+dd426ae4af71f1e74729@syzkaller.appspotmail.com
-> 
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 6.2.0-syzkaller-12913-gae3419fbac84 #0 Not tainted
-> ------------------------------------------------------
-> kswapd0/100 is trying to acquire lock:
-> ffff888047aea650 (sb_internal){.+.+}-{0:0}, at: evict+0x2ed/0x6b0 fs/inode.c:665
-> 
-> but task is already holding lock:
-> ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: set_task_reclaim_state mm/vmscan.c:200 [inline]
-> ffffffff8c8e29e0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0x170/0x1ac0 mm/vmscan.c:7338
-> 
-> which lock already depends on the new lock.
-> 
-> 
-> the existing dependency chain (in reverse order) is:
-> 
-> -> #3 (fs_reclaim){+.+.}-{0:0}:
->        __fs_reclaim_acquire mm/page_alloc.c:4716 [inline]
->        fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:4730
->        might_alloc include/linux/sched/mm.h:271 [inline]
->        prepare_alloc_pages+0x159/0x570 mm/page_alloc.c:5362
->        __alloc_pages+0x149/0x5c0 mm/page_alloc.c:5580
->        alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
->        __get_free_pages+0xc/0x40 mm/page_alloc.c:5641
->        kasan_populate_vmalloc_pte mm/kasan/shadow.c:309 [inline]
->        kasan_populate_vmalloc_pte+0x27/0x150 mm/kasan/shadow.c:300
->        apply_to_pte_range mm/memory.c:2578 [inline]
->        apply_to_pmd_range mm/memory.c:2622 [inline]
->        apply_to_pud_range mm/memory.c:2658 [inline]
->        apply_to_p4d_range mm/memory.c:2694 [inline]
->        __apply_to_page_range+0x68c/0x1030 mm/memory.c:2728
->        alloc_vmap_area+0x536/0x1f20 mm/vmalloc.c:1638
->        __get_vm_area_node+0x145/0x3f0 mm/vmalloc.c:2495
->        __vmalloc_node_range+0x250/0x1300 mm/vmalloc.c:3141
->        kvmalloc_node+0x156/0x1a0 mm/util.c:628
->        kvmalloc include/linux/slab.h:737 [inline]
->        ext4_xattr_move_to_block fs/ext4/xattr.c:2570 [inline]
-
-	buffer = kvmalloc(value_size, GFP_NOFS);
-
-Yeah, this doesn't work like the code says it should. The gfp mask
-is not passed down to the page table population code and it hard
-codes GFP_KERNEL allocations so you have to do:
-
-	memalloc_nofs_save();
-	buffer = kvmalloc(value_size, GFP_KERNEL);
-	memalloc_nofs_restore();
-
-to apply GFP_NOFS to allocations in the pte population code to avoid
-memory reclaim recursion in kvmalloc.
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Like it or not, that's how the assembler currently works=2E
