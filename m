@@ -2,47 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A416A74B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02D56A74BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjCAT6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S229689AbjCAUCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjCAT6w (ORCPT
+        with ESMTP id S229445AbjCAUCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:58:52 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E671BE1
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1677700704; bh=VAuRPN7+KGTNR1+VCFMHhxksGYKTXl+HO2HTsfXfvqM=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=DY4M36RwwqKcfemZNla36rdJ51NQMusT5P9slKXJawwaQr+C1iFOGLrkeHiUVY0EI
-         SpA/DuBFLGFVTT+EhT7Vin49qSoOeB8D2PbDvpzviRdMRCUN/eio7kEdjLujcuCFa0
-         NvqtJIOd5YBZPKua03yl38M4klXbNeUwFRiTYiEM=
-Received: by b221-3.in.mailobj.net [192.168.90.23] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Wed,  1 Mar 2023 20:58:24 +0100 (CET)
-X-EA-Auth: ZT5g9yCX4u6x+3sfSSH/SrdotTfxuHXI4qIJfeKi32aEOhGPEI++CpQ9p+GzxhETdiM3h23ngSjlySbwXad8tifFL2Y7TWJw
-Date:   Thu, 2 Mar 2023 01:28:20 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Alain Volmat <alain.volmat@foss.st.com>,
+        Wed, 1 Mar 2023 15:02:16 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BA94E5D7
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:02:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677700935; x=1709236935;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=6EAWrrc5IPUWooTbxGsI6tMEta8jrC1xOMHR2AXxGGw=;
+  b=cVEK5SD1VlQGI6iEAdKy7c1B4E8nEjgL5CZOyQXQ3VMkhml+nYq7rjNK
+   tYCnDnNwFANLYVK3NUWc4PQNUia+khfCeNqsLQhdA/eXJ0UREjgs4G99A
+   ab0UtZJA2UjnNQXnPZ/x/qQU2NqvaKDEmUVV8dtdKQbvEgCkT0r88Vagw
+   7zTkJHrIYr0q6E9S8lEvgHJJzZ9dBMdG9SaKYroBhhGZFUdPHu7yIz4oo
+   SA1UZSfsMmUxm9VBiVmxYtv/PW6AkGk6JUGMNJEGY4lzZrEGuLx1TPVdM
+   rb6Mta4E52i8MCaqsmp8C5zq6NLU57s1vtg8Bs7tJ/BkU4l07TS88aEO2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="335999793"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="335999793"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 12:02:15 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="624630698"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="624630698"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.115.221])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 12:02:08 -0800
+Date:   Wed, 01 Mar 2023 12:02:08 -0800
+Message-ID: <87r0u844vz.wl-ashutosh.dixit@intel.com>
+From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH RESEND] drm/sti: Avoid full proxy f_ops for sti debug
- attributes
-Message-ID: <Y/+uXCDxxA+3AzMq@ubun2204.myguest.virtualbox.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+Subject: Re: [PATCH RESEND] drm/nouveau/hwmon: Use sysfs_emit in show function callsbacks
+In-Reply-To: <Y/+pDaHOgG1x8Py2@ubun2204.myguest.virtualbox.org>
+References: <Y/+pDaHOgG1x8Py2@ubun2204.myguest.virtualbox.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,60 +68,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
-function adds the overhead of introducing a proxy file operation
-functions to wrap the original read/write inside file removal protection
-functions. This adds significant overhead in terms of introducing and
-managing the proxy factory file operations structure and function
-wrapping at runtime.
-As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
-with debugfs_create_file_unsafe() is suggested to be used instead.  The
-DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
-debugfs_file_put() wrappers to protect the original read and write
-function calls for the debug attributes. There is no need for any
-runtime proxy file operations to be managed by the debugfs core.
-Following coccicheck make command helped identify this change:
+On Wed, 01 Mar 2023 11:35:41 -0800, Deepak R Varma wrote:
+>
+> According to Documentation/filesystems/sysfs.rst, the show() callback
+> function of kobject attributes should strictly use sysfs_emit() instead
+> of sprintf() family functions. So, make this change.
+> Issue identified using the coccinelle device_attr_show.cocci script.
 
-make coccicheck M=drivers/gpu/drm/i915/ MODE=patch COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+Reviewed-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Note: Change cross compile tested using stm32_defconfig for arm
-      Resending patch for review and feedback. Initially sent on Jan 11 2023
-
-
-
- drivers/gpu/drm/sti/sti_drv.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/sti/sti_drv.c b/drivers/gpu/drm/sti/sti_drv.c
-index ef6a4e63198f..c9be82043638 100644
---- a/drivers/gpu/drm/sti/sti_drv.c
-+++ b/drivers/gpu/drm/sti/sti_drv.c
-@@ -67,8 +67,8 @@ static int sti_drm_fps_set(void *data, u64 val)
- 	return 0;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(sti_drm_fps_fops,
--			sti_drm_fps_get, sti_drm_fps_set, "%llu\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(sti_drm_fps_fops,
-+			 sti_drm_fps_get, sti_drm_fps_set, "%llu\n");
- 
- static int sti_drm_fps_dbg_show(struct seq_file *s, void *data)
- {
-@@ -97,8 +97,8 @@ static void sti_drm_dbg_init(struct drm_minor *minor)
- 				 ARRAY_SIZE(sti_drm_dbg_list),
- 				 minor->debugfs_root, minor);
- 
--	debugfs_create_file("fps_show", S_IRUGO | S_IWUSR, minor->debugfs_root,
--			    minor->dev, &sti_drm_fps_fops);
-+	debugfs_create_file_unsafe("fps_show", S_IRUGO | S_IWUSR, minor->debugfs_root,
-+				   minor->dev, &sti_drm_fps_fops);
- 
- 	DRM_INFO("%s: debugfs installed\n", DRIVER_NAME);
- }
--- 
-2.34.1
-
-
-
+>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> Note:
+>    Resending the patch for review and feedback. No functional changes.
+>
+>
+>  drivers/gpu/drm/nouveau/nouveau_hwmon.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_hwmon.c b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+> index a7db7c31064b..e844be49e11e 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+> @@ -41,7 +41,7 @@ static ssize_t
+>  nouveau_hwmon_show_temp1_auto_point1_pwm(struct device *d,
+>					 struct device_attribute *a, char *buf)
+>  {
+> -	return snprintf(buf, PAGE_SIZE, "%d\n", 100);
+> +	return sysfs_emit(buf, "%d\n", 100);
+>  }
+>  static SENSOR_DEVICE_ATTR(temp1_auto_point1_pwm, 0444,
+>			  nouveau_hwmon_show_temp1_auto_point1_pwm, NULL, 0);
+> @@ -54,8 +54,8 @@ nouveau_hwmon_temp1_auto_point1_temp(struct device *d,
+>	struct nouveau_drm *drm = nouveau_drm(dev);
+>	struct nvkm_therm *therm = nvxx_therm(&drm->client.device);
+>
+> -	return snprintf(buf, PAGE_SIZE, "%d\n",
+> -	      therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST) * 1000);
+> +	return sysfs_emit(buf, "%d\n",
+> +			  therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST) * 1000);
+>  }
+>  static ssize_t
+>  nouveau_hwmon_set_temp1_auto_point1_temp(struct device *d,
+> @@ -87,8 +87,8 @@ nouveau_hwmon_temp1_auto_point1_temp_hyst(struct device *d,
+>	struct nouveau_drm *drm = nouveau_drm(dev);
+>	struct nvkm_therm *therm = nvxx_therm(&drm->client.device);
+>
+> -	return snprintf(buf, PAGE_SIZE, "%d\n",
+> -	 therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST_HYST) * 1000);
+> +	return sysfs_emit(buf, "%d\n",
+> +			  therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST_HYST) * 1000);
+>  }
+>  static ssize_t
+>  nouveau_hwmon_set_temp1_auto_point1_temp_hyst(struct device *d,
+> --
+> 2.34.1
+>
+>
+>
