@@ -2,268 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1ED6A73E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931196A73E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjCASzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:55:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S229983AbjCAS4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjCASzk (ORCPT
+        with ESMTP id S229674AbjCAS4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:55:40 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A85D47406
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:55:39 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id s12so15411038qtq.11
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:55:39 -0800 (PST)
+        Wed, 1 Mar 2023 13:56:12 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A284742E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:56:10 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so223018pja.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:56:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3TgiKhi42q3wmBGdmYMiHUCevyqh6Uh75vpv8WVPRks=;
-        b=Nvam5+nR8S3y+Y2B55SxN0JnRfea2d/xXFDMc2DiAQ4NLLMcC5QtM1IX+bRmoqasi3
-         Qo84Th0ptQ4NBDEal1mMUscjKvAWBhR6nNrR/0RAv5un4R2koGPpwdo7jp8xu+vzLYN8
-         jlvuTr6W5//iyX4ois4HUaN3/uWk3Ns9wllzCzZp6VSuVAvLbsveFHMGT39+Egp0VMgE
-         KoCzt1jYszpGV4c4cMwpmokLmJHmSXnobaURMirxB8nWSHGyJg066X3C5nqGvMCllcHK
-         o/TWn80MhVmUIBKYJznLLT3/Si4vfFvA2R0tsnpyN/qvdtmav/eQTvoe7M2FDc19oYXs
-         09Ug==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vSpw3dBnLTxPr0uk82VR0oSTopLNz20E94PKNc5GO0Y=;
+        b=xwDWh4lifKaYJBTVi81JzJhZtxh1zdsjUspmFsIpRjYq0udQv7ej0R61Pmbq1nvBcD
+         0zDQgM/VYseleci/rQBvIDeHntMXnywDpC5XDIXPUf93DCzndtyx3PIYVH0E8xxEWxMM
+         8kDYGJ8mXxV+JblEhorQhFmB0AxvqL04CmPXApMCW4typZ275jpFDB0HUPJA/+JidLOm
+         qsckFvDDl3RDF8fQxEY/ojzRQHijpuAeFNNVtvUXmBghta5GH53IWr1f5gwJriYdBX5U
+         TCm3k/9RtbgY34/kvWhkfYPqS/M5QLDQMHr7YfTXb3kCYxicXV5K1Ci0BF12+EVrzIFQ
+         zFrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3TgiKhi42q3wmBGdmYMiHUCevyqh6Uh75vpv8WVPRks=;
-        b=iyslnfTZLMIJi1Y2aFEQrLLM3Np1RWdnV89QDlQqiJY1OBH3yrkKlb2yOcrj350HbV
-         fJy8grneQo+Zj5a0f3//bKAePjmXP9fxGvjAJqiceqIwwORzR9EEwSJ9zQ2Xw/3KL+sV
-         kzSXebMv7bZNPeLzL42WRDikGkobNL+XZd2ZmF2k+mqQyeJJy/kL5x33W/1N0MqbERkL
-         Rn8mZHzcLo2sMzY5OqKKAF+28ZpOfMflhjeDtxmO2lPXlrDnw/+Opq9ABf63b1nuXTWS
-         65uAtzTajAsgevIU3Rluhn9KLiKox6rA8mza8XaLg3eMRwg5C7s3IgwANavqBkMn1nRs
-         6mTA==
-X-Gm-Message-State: AO0yUKV2tWkfNQTrfJYugCZCKuedC5nzKXseWXPE3Xwmwhk+J0uWaEfg
-        GVSoS7Ar8Z53TzrMvpo998aHTQ==
-X-Google-Smtp-Source: AK7set8efE2ic1qDCl5vB6UuSzw5tDGfuj/AWkp5gIlZw4LegN7+lqFUd1Y4loxlJ7hLAeQjAsur5g==
-X-Received: by 2002:a05:622a:1650:b0:3b9:ca2b:a923 with SMTP id y16-20020a05622a165000b003b9ca2ba923mr13763023qtj.67.1677696938199;
-        Wed, 01 Mar 2023 10:55:38 -0800 (PST)
-Received: from ghost.leviathan.sladewatkins.net (pool-108-44-32-49.albyny.fios.verizon.net. [108.44.32.49])
-        by smtp.gmail.com with ESMTPSA id x11-20020a05620a0ecb00b00741b312c899sm9390094qkm.6.2023.03.01.10.55.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 10:55:36 -0800 (PST)
-Message-ID: <0ac05d7c-a885-2e13-93fc-20a58643abcb@sladewatkins.net>
-Date:   Wed, 1 Mar 2023 13:55:32 -0500
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vSpw3dBnLTxPr0uk82VR0oSTopLNz20E94PKNc5GO0Y=;
+        b=l5sOxhnjgOACnrcRr3zAD0aeOPzxUAyFi3Jl1/9lPzvAjMyecGdOqWjwJusQoj8Qbk
+         sqe54dN2N/Z9lBjbjzV0L0Ovl3sfytF3TsmHW4Qdh6apZg+QXLShKOvXxbxi5iKkqn81
+         AQQmDY5htg17IVl+E2hyncM3Gsa7kMIVmUUke6oHlcjsK1bUwwRa1w5rU/z/qiuLKRsY
+         t076rQSNOZcrxcC9Oirn5aQR8zvVi5iockd39lc3uX7s9CF7xV99zQRhVkD1R0nmdB/A
+         mRiWPp5SnxP2273O9F9BVuN8H/HNb5nTo0oFru8ee4rUdrtBpvZu6xKkUWOloyMDTE56
+         MaHg==
+X-Gm-Message-State: AO0yUKXNic1Ml3auO2dA6ixCrWIDZj1tc9Z/LBbatQquMKPzRzgdl2UQ
+        tc3iWu2hlpmvsg8ASLZ7YrVFbA==
+X-Google-Smtp-Source: AK7set+l+B1RWIWZcdT0G5HJVGUWcgXe4TE8oNiM8lSJ+x0hHcMvWRZVHLTy7swcJKxnuQvggcalGQ==
+X-Received: by 2002:a05:6a20:258b:b0:cc:868f:37b3 with SMTP id k11-20020a056a20258b00b000cc868f37b3mr6581409pzd.58.1677696969835;
+        Wed, 01 Mar 2023 10:56:09 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:a1e5:28cc:d6dd:89d0])
+        by smtp.gmail.com with ESMTPSA id i71-20020a63874a000000b00502e7115cbdsm7795640pge.51.2023.03.01.10.56.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 10:56:09 -0800 (PST)
+Date:   Wed, 1 Mar 2023 11:56:06 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v5] remoteproc: imx_dsp_rproc: add custom memory copy
+ implementation for i.MX DSP Cores
+Message-ID: <20230301185606.GB1326133@p14s>
+References: <20230221170356.27923-1-iuliana.prodan@oss.nxp.com>
+ <20230301184916.GA1326133@p14s>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Slade's Kernel Patch Bot <KernelPatchBot@sladewatkins.net>
-Subject: Re: [PATCH v2 4/7] scsi: ufs: core: Add hwq print for debug
-To:     =?UTF-8?B?UG93ZW4gS2FvICjpq5jkvK/mlocp?= <Powen.Kao@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "quic_ziqichen@quicinc.com" <quic_ziqichen@quicinc.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-Cc:     =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= 
-        <peter.wang@mediatek.com>,
-        =?UTF-8?B?RWRkaWUgSHVhbmcgKOm7g+aZuuWCkSk=?= 
-        <eddie.huang@mediatek.com>,
-        =?UTF-8?B?SmlhamllIEhhbyAo6YOd5Yqg6IqCKQ==?= 
-        <jiajie.hao@mediatek.com>,
-        =?UTF-8?B?Q0MgQ2hvdSAo5ZGo5b+X5p2wKQ==?= <cc.chou@mediatek.com>,
-        =?UTF-8?B?QWxpY2UgQ2hhbyAo6LaZ54+u5Z2HKQ==?= 
-        <Alice.Chao@mediatek.com>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        =?UTF-8?B?Q2h1bi1IdW5nIFd1ICjlt6vpp7/lro8p?= 
-        <Chun-hung.Wu@mediatek.com>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        =?UTF-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?= 
-        <Chaotian.Jing@mediatek.com>,
-        =?UTF-8?B?TmFvbWkgQ2h1ICjmnLHoqaDnlLAp?= <Naomi.Chu@mediatek.com>,
-        =?UTF-8?B?U3RhbmxleSBDaHUgKOacseWOn+mZnik=?= 
-        <stanley.chu@mediatek.com>,
-        =?UTF-8?B?TWFzb24gWmhhbmcgKOeroOi+iSk=?= <Mason.Zhang@mediatek.com>,
-        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
-        Slade Watkins <srw@sladewatkins.net>
-References: <20230222030427.957-1-powen.kao@mediatek.com>
- <20230222030427.957-5-powen.kao@mediatek.com>
- <1b9c2bc9-a349-062a-597c-336804c05394@quicinc.com>
- <74bedcff32df0c93c14b004814017f3344247528.camel@mediatek.com>
- <0c17dd26-b1aa-54b0-6dc4-561cd996cead@quicinc.com>
- <76f74b86-8ff1-2346-4f5e-0048543bd8b0@quicinc.com>
- <f629f1b72e4859d79aac279ef3327715000e3210.camel@mediatek.com>
-Content-Language: en-US
-In-Reply-To: <f629f1b72e4859d79aac279ef3327715000e3210.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301184916.GA1326133@p14s>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 21:17, Powen Kao (高伯文) wrote:
-> Hi Bao,
+On Wed, Mar 01, 2023 at 11:49:16AM -0700, Mathieu Poirier wrote:
+> Hi Iuliana,
 > 
-> Sure, we can first integrate ur patch and see if anything is missing
-> that need further upstream. Due to comapct schedule, I would kindly ask
-> if it will be ready by the end of this week? :) Thanks
+> On Tue, Feb 21, 2023 at 07:03:56PM +0200, Iuliana Prodan (OSS) wrote:
+> > From: Iuliana Prodan <iuliana.prodan@nxp.com>
+> > 
+> > The IRAM is part of the HiFi DSP.
+> > According to hardware specification only 32-bits write are allowed
+> > otherwise we get a Kernel panic.
+> > 
+> > Therefore add a custom memory copy and memset functions to deal with
+> > the above restriction.
+> > 
+> > Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+> > ---
+> > Changes since v4
+> > - use GENMASK;
+> > - s/ioread32/readl;
+> > - s/iowrite32/writel;
+> > - use for loop with writel instead of __iowrite32_copy;
+> > - update multi-line comment format.
+> > 
 > 
+> This looks good now.  I will queue this on March 13th when 6.3-rc2 is out.
+>
 
-This is Slade's kernel patch bot. When scanning his mailbox, I came across
-this message, which appears to be a top-post. Please do not top-post on Linux
-mailing lists.
+And out of curiosity, are the remote processors handled by imx_rproc.c also have
+the same 32-bit write constraints?  If so, it would be nice to have a patch that
+fixes that as well.  In such a case, imx_dsp_rproc_memcpy() and
+imx_dsp_rproc_memset() should be renamed to something more generic and re-used
+in imx_rproc.c.
 
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
-
-Please bottom-post to Linux mailing lists in the future. See also:
-https://daringfireball.net/2007/07/on_top
-
-If you believe this is an error, please address a message to Slade Watkins
-<srw@sladewatkins.net>.
-
-Thank you,
--- Slade's kernel patch bot
-
+> Thanks,
+> Mathieu
 > 
-> On Mon, 2023-02-27 at 18:57 -0800, Bao D. Nguyen wrote:
->> On 2/26/2023 7:14 Sure PM, Ziqi Chen wrote:
->>> Hi Powen,
->>>
->>> The Bao. D . Nguyen (quic_nguyenb@quicinc.com) from QCOM already
->>> made 
->>> patch to support MCQ abort.
->>>
->>> ++ Bao here to be aware of it in case your error handing patch 
->>> conflict with his abort handling patch.
->>>
->>>
->>> Best Regards,
->>>
->>> Ziqi
->>>
->>>
->>> On 2/23/2023 10:13 PM, Powen Kao (高伯文) wrote:
->>>> Hi Ziqi,
->>>>
->>>> Thanks for ur comments.
->>>>
->>>> This piece of code successfully dump relevent registers on our
->>>> platform. As you know, mcq error handling flow is not ready yet
->>>> so the
->>>> insertion point might not seems to be reasonable.
->>>>
->>>> Maybe drop this patch for now, I will send it later with error
->>>> handling
->>>> patches.
->>>>
->>>>
->>>> On Thu, 2023-02-23 at 18:14 +0800, Ziqi Chen wrote:
->>>>> Hi Po-Wen,
->>>>>
->>>>> On 2/22/2023 11:04 AM, Po-Wen Kao wrote:
->>>>>> +void ufshcd_mcq_print_hwqs(struct ufs_hba *hba, unsigned
->>>>>> long
->>>>>> bitmap)
->>>>>> +{
->>>>>> +    int id, i;
->>>>>> +    char prefix[15];
->>>>>> +
->>>>>> +    if (!is_mcq_enabled(hba))
->>>>>> +        return;
->>>>>> +
->>>>>> +    for_each_set_bit(id, &bitmap, hba->nr_hw_queues) {
->>>>>> +        snprintf(prefix, sizeof(prefix), "q%d SQCFG: ", id);
->>>>>> +        ufshcd_hex_dump(prefix,
->>>>>> +            hba->mcq_base + MCQ_QCFG_SIZE * id,
->>>>>> MCQ_QCFG_SQ_SIZE);
->>>>>
->>>>> Is your purpose dump per hardware queue registers here?  If
->>>>> yes, why
->>>>> don't use ufsmcq_readl() to save to a buffer and then use
->>>>> ufshcd_hex_dump()
->>>>>
->>>>> to dump ? Are you sure ufshcd_hex_dump() can dump register
->>>>> directly?
->>>>>
->>>>>> +
->>>>>> +        snprintf(prefix, sizeof(prefix), "q%d CQCFG: ", id);
->>>>>> +        ufshcd_hex_dump(prefix,
->>>>>> +            hba->mcq_base + MCQ_QCFG_SIZE * id +
->>>>>> MCQ_QCFG_SQ_SIZE, MCQ_QCFG_CQ_SIZE);
->>>>>
->>>>> Same to above comment.
->>>>>> +
->>>>>> +        for (i = 0; i < OPR_MAX ; i++) {
->>>>>> +            snprintf(prefix, sizeof(prefix), "q%d OPR%d: ",
->>>>>> id, i);
->>>>>> +            ufshcd_hex_dump(prefix, mcq_opr_base(hba, i,
->>>>>> id), mcq_opr_size[i]);
->>>>>
->>>>> Same.
->>>>>> +        }
->>>>>> +    }
->>>>>> +}
->>>>>> +
->>>>>>
->>>>>>    @@ -574,7 +569,16 @@ void ufshcd_print_trs(struct ufs_hba
->>>>>> *hba,
->>>>>> unsigned long bitmap, bool pr_prdt)
->>>>>>            if (pr_prdt)
->>>>>>                ufshcd_hex_dump("UPIU PRDT: ", lrbp-
->>>>>>> ucd_prdt_ptr,
->>>>>>
->>>>>>                    ufshcd_sg_entry_size(hba) *
->>>>>> prdt_length);
->>>>>> +
->>>>>> +        if (is_mcq_enabled(hba)) {
->>>>>> +            cmd = lrbp->cmd;
->>>>>> +            if (!cmd)
->>>>>> +                return;
->>>>>> +            hwq = ufshcd_mcq_req_to_hwq(hba,
->>>>>> scsi_cmd_to_rq(cmd));
->>>>>> +            ufshcd_mcq_print_hwqs(hba, 1 << hwq->id);
->>>>>
->>>>> Calling registers dump function in ufshcd_print_trs() is not
->>>>> reasonable,
->>>>> eg.. for each aborted request, it would print out all hwq
->>>>> registers,
->>>>> it's not make sense.
->>>>>
->>>>> I think we should move it out of ufshcd_print_trs().
->>>>>
->>>>>> +        }
->>>>>>        }
->>>>>> +
->>>>>>    }
->>>>>
->>>>> Best Regards,
->>>>>
->>>>> Ziqi
->>>>>
->>
->> Hi Powen,
->>
->> I am going to push the mcq abort handling and mcq error handling
->> code 
->> upstream for review in a couple days. Would that work for you?
->>
->> Regards,
->> Bao
->>
-
+> > Changes since v3
+> > - remove Reported-by
+> > 
+> > Changes since v2
+> > - fix warning "cast from pointer to integer of different size"
+> > reported by kernel test robot.
+> > 
+> > Changes since v1
+> > - added missing check for cases when the memory slot is bigger than the file size;
+> > - added a custom memset function
+> > - removed is_iomem flag since is not used here
+> > - updated custom memcpy function to avoid reading after end of source
+> > ---
+> >  drivers/remoteproc/imx_dsp_rproc.c | 187 ++++++++++++++++++++++++++++-
+> >  1 file changed, 186 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+> > index 81d3a01e1444..dcbb957bc7ac 100644
+> > --- a/drivers/remoteproc/imx_dsp_rproc.c
+> > +++ b/drivers/remoteproc/imx_dsp_rproc.c
+> > @@ -739,6 +739,191 @@ static void imx_dsp_rproc_kick(struct rproc *rproc, int vqid)
+> >  		dev_err(dev, "%s: failed (%d, err:%d)\n", __func__, vqid, err);
+> >  }
+> >  
+> > +/*
+> > + * Custom memory copy implementation for i.MX DSP Cores
+> > + *
+> > + * The IRAM is part of the HiFi DSP.
+> > + * According to hw specs only 32-bits writes are allowed.
+> > + */
+> > +static int imx_dsp_rproc_memcpy(void *dest, const void *src, size_t size)
+> > +{
+> > +	const u8 *src_byte = src;
+> > +	const u32 *source = src;
+> > +	u32 affected_mask;
+> > +	u32 *dst = dest;
+> > +	int i, q, r;
+> > +	u32 tmp;
+> > +
+> > +	/* destination must be 32bit aligned */
+> > +	if (!IS_ALIGNED((uintptr_t)dest, 4))
+> > +		return -EINVAL;
+> > +
+> > +	q = size / 4;
+> > +	r = size % 4;
+> > +
+> > +	/* copy data in units of 32 bits at a time */
+> > +	for (i = 0; i < q; i++)
+> > +		writel(source[i], &dst[i]);
+> > +
+> > +	if (r) {
+> > +		affected_mask = GENMASK(8 * r, 0);
+> > +
+> > +		/*
+> > +		 * first read the 32bit data of dest, then change affected
+> > +		 * bytes, and write back to dest.
+> > +		 * For unaffected bytes, it should not be changed
+> > +		 */
+> > +		tmp = readl(dest + q * 4);
+> > +		tmp &= ~affected_mask;
+> > +
+> > +		/* avoid reading after end of source */
+> > +		for (i = 0; i < r; i++)
+> > +			tmp |= (src_byte[q * 4 + i] << (8 * i));
+> > +
+> > +		writel(tmp, dest + q * 4);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +/*
+> > + * Custom memset implementation for i.MX DSP Cores
+> > + *
+> > + * The IRAM is part of the HiFi DSP.
+> > + * According to hw specs only 32-bits writes are allowed.
+> > + */
+> > +static int imx_dsp_rproc_memset(void *addr, u8 value, size_t size)
+> > +{
+> > +	u32 tmp_val = value;
+> > +	u32 *tmp_dst = addr;
+> > +	u32 affected_mask;
+> > +	int q, r;
+> > +	u32 tmp;
+> > +
+> > +	/* destination must be 32bit aligned */
+> > +	if (!IS_ALIGNED((uintptr_t)addr, 4))
+> > +		return -EINVAL;
+> > +
+> > +	tmp_val |= tmp_val << 8;
+> > +	tmp_val |= tmp_val << 16;
+> > +
+> > +	q = size / 4;
+> > +	r = size % 4;
+> > +
+> > +	while (q--)
+> > +		writel(tmp_val, tmp_dst++);
+> > +
+> > +	if (r) {
+> > +		affected_mask = GENMASK(8 * r, 0);
+> > +
+> > +		/*
+> > +		 * first read the 32bit data of addr, then change affected
+> > +		 * bytes, and write back to addr.
+> > +		 * For unaffected bytes, it should not be changed
+> > +		 */
+> > +		tmp = readl(tmp_dst);
+> > +		tmp &= ~affected_mask;
+> > +
+> > +		tmp |= (tmp_val & affected_mask);
+> > +		writel(tmp, tmp_dst);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +/**
+> > + * imx_dsp_rproc_elf_load_segments() - load firmware segments to memory
+> > + * @rproc: remote processor which will be booted using these fw segments
+> > + * @fw: the ELF firmware image
+> > + *
+> > + * This function loads the firmware segments to memory, where the remote
+> > + * processor expects them.
+> > + *
+> > + * Return: 0 on success and an appropriate error code otherwise
+> > + */
+> > +static int imx_dsp_rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+> > +{
+> > +	struct device *dev = &rproc->dev;
+> > +	const void *ehdr, *phdr;
+> > +	int i, ret = 0;
+> > +	u16 phnum;
+> > +	const u8 *elf_data = fw->data;
+> > +	u8 class = fw_elf_get_class(fw);
+> > +	u32 elf_phdr_get_size = elf_size_of_phdr(class);
+> > +
+> > +	ehdr = elf_data;
+> > +	phnum = elf_hdr_get_e_phnum(class, ehdr);
+> > +	phdr = elf_data + elf_hdr_get_e_phoff(class, ehdr);
+> > +
+> > +	/* go through the available ELF segments */
+> > +	for (i = 0; i < phnum; i++, phdr += elf_phdr_get_size) {
+> > +		u64 da = elf_phdr_get_p_paddr(class, phdr);
+> > +		u64 memsz = elf_phdr_get_p_memsz(class, phdr);
+> > +		u64 filesz = elf_phdr_get_p_filesz(class, phdr);
+> > +		u64 offset = elf_phdr_get_p_offset(class, phdr);
+> > +		u32 type = elf_phdr_get_p_type(class, phdr);
+> > +		void *ptr;
+> > +
+> > +		if (type != PT_LOAD || !memsz)
+> > +			continue;
+> > +
+> > +		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
+> > +			type, da, memsz, filesz);
+> > +
+> > +		if (filesz > memsz) {
+> > +			dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
+> > +				filesz, memsz);
+> > +			ret = -EINVAL;
+> > +			break;
+> > +		}
+> > +
+> > +		if (offset + filesz > fw->size) {
+> > +			dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
+> > +				offset + filesz, fw->size);
+> > +			ret = -EINVAL;
+> > +			break;
+> > +		}
+> > +
+> > +		if (!rproc_u64_fit_in_size_t(memsz)) {
+> > +			dev_err(dev, "size (%llx) does not fit in size_t type\n",
+> > +				memsz);
+> > +			ret = -EOVERFLOW;
+> > +			break;
+> > +		}
+> > +
+> > +		/* grab the kernel address for this device address */
+> > +		ptr = rproc_da_to_va(rproc, da, memsz, NULL);
+> > +		if (!ptr) {
+> > +			dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
+> > +				memsz);
+> > +			ret = -EINVAL;
+> > +			break;
+> > +		}
+> > +
+> > +		/* put the segment where the remote processor expects it */
+> > +		if (filesz) {
+> > +			ret = imx_dsp_rproc_memcpy(ptr, elf_data + offset, filesz);
+> > +			if (ret) {
+> > +				dev_err(dev, "memory copy failed for da 0x%llx memsz 0x%llx\n",
+> > +					da, memsz);
+> > +				break;
+> > +			}
+> > +		}
+> > +
+> > +		/* zero out remaining memory for this segment */
+> > +		if (memsz > filesz) {
+> > +			ret = imx_dsp_rproc_memset(ptr + filesz, 0, memsz - filesz);
+> > +			if (ret) {
+> > +				dev_err(dev, "memset failed for da 0x%llx memsz 0x%llx\n",
+> > +					da, memsz);
+> > +				break;
+> > +			}
+> > +		}
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> > +
+> >  static int imx_dsp_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
+> >  {
+> >  	if (rproc_elf_load_rsc_table(rproc, fw))
+> > @@ -753,7 +938,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
+> >  	.start		= imx_dsp_rproc_start,
+> >  	.stop		= imx_dsp_rproc_stop,
+> >  	.kick		= imx_dsp_rproc_kick,
+> > -	.load		= rproc_elf_load_segments,
+> > +	.load		= imx_dsp_rproc_elf_load_segments,
+> >  	.parse_fw	= imx_dsp_rproc_parse_fw,
+> >  	.sanity_check	= rproc_elf_sanity_check,
+> >  	.get_boot_addr	= rproc_elf_get_boot_addr,
+> > -- 
+> > 2.17.1
+> > 
