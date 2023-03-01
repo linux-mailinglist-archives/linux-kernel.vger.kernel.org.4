@@ -2,233 +2,571 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4BA6A6F9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AFA6A6FC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 16:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjCAPb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 10:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S230060AbjCAPci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 10:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjCAPb0 (ORCPT
+        with ESMTP id S229602AbjCAPcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 10:31:26 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2047.outbound.protection.outlook.com [40.107.95.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ADC42BD3;
-        Wed,  1 Mar 2023 07:31:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IortEY3UGlD6IWnv1VVwDFtrCaGGfIr7MhGKehh1SwNK34ReRYMwY2Svn+ZScTOqB2JfoBn0ndKM0LpLnXLSNCcmoMtqfCzwQGUutn9F+u+NHF1wEBEweXTrw4snFrXgCa6+da6Emsrqc8b5kiHGhXyRCSUPPChu9UVIYINNU7llyvYYBU1lqZ2ZvywgNmL+LW8+NHy/Li6LWzxNZzY1KwsLIuVZ2cmyHsybSIeQOX+vTc7J5JRFQJLsYQNubKVTmhItKI3FCyAl1QMFyeC2/jdidfyskSFRHPNMKR4B2F0VGZzgNm09jQ4b7Mbst8dawSJxFFrrz+WR9g3YVT8qBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tCgITldxH85lTmFRR0DXpctZfqmv0jvh34t5wy2kd/Q=;
- b=OLrCxIaUsDiRBIqfziXzw0Jl6pXW+ItE1eSlbF/DiYw7Llk2//7bLH2nGuuCiM0ej+u3tVBpoBzrtGp7fK8MWSwbYUcJqZXq3Fl8GLn3bSg0ghKiFvJqXUVw12wT3tEXOAY9bXrJeJIO56tpJhzM2g5mlZjkotaF4PwO7/Z4PFJZ2jmb/fRoQAkNAq9cWsOHNx1tR9vIVoGvs/ZD7X3TwDgK8l2CliAn5uuX+xahyBHnBW4SkWDx2Dw8E8z82usyvOxP6LRFQo958qlCHFGClvMvro/86QESlx+2FV/bFDHrW+T3+7r6hZanSgwAL3Dv4jThB8b+jkTpI4lVvme8cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tCgITldxH85lTmFRR0DXpctZfqmv0jvh34t5wy2kd/Q=;
- b=zfi1JKxpsuxH+n3MdcwNxlLc/Na7ko/aTa1OFM0dksDuBDr4tGtqL349u1uUPiby+OI0zGLtWbW81kzjiqkxXFF0uplxYdS7gWrZCqKqt0laUwSoyeOl4C6n+jamLIEE4nIrrlTYf03D0a88BZw1pzOZtcwrPTbOAQlu0fWFdb8=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MN2PR12MB4048.namprd12.prod.outlook.com (2603:10b6:208:1d5::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Wed, 1 Mar
- 2023 15:31:21 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a4e:62dd:d463:5614]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a4e:62dd:d463:5614%7]) with mapi id 15.20.6156.018; Wed, 1 Mar 2023
- 15:31:21 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>
-CC:     Mark Gross <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/2] platform/x86/amd: pmc: Add a helper for checking
- minimum SMU version
-Thread-Topic: [PATCH 1/2] platform/x86/amd: pmc: Add a helper for checking
- minimum SMU version
-Thread-Index: AQHZTE+38ckCb6quDUqXBktiSELovq7mDEYAgAAAKIA=
-Date:   Wed, 1 Mar 2023 15:31:21 +0000
-Message-ID: <MN0PR12MB6101781FC5089EA217CA48A9E2AD9@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <20230301150821.9791-1-mario.limonciello@amd.com>
- <846d6f46-07ab-4d4a-5623-417a469c3d0b@redhat.com>
-In-Reply-To: <846d6f46-07ab-4d4a-5623-417a469c3d0b@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-Mentions: Shyam-sundar.S-k@amd.com
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-03-01T15:31:19Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=270e0803-737a-464e-97bb-e52ec36807ec;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2023-03-01T15:31:19Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 05fdc8ce-48a4-406c-93c6-6f0b09cc418f
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|MN2PR12MB4048:EE_
-x-ms-office365-filtering-correlation-id: 8cb41336-3893-41f8-b845-08db1a6a0250
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: h1wc1wqqFrBpKqkvMqBessCQhzR8aRNgjcEeAB8hCB99uhsNx0+6jIJ6pd3yrzw3/5/pd2JudV3rNNhc/gF7EvplfrZhFFRCSBrnZ9MRWTkvxgOOKLRqcFiuRZO7KzJ/W1JESjqgA2SHMaq/xTpbAWwwCyyyjRyguV3RcSEMRONLsiLWEuGgmLmcZaJYcSwkivBov/7LuQgdo5CupP+VUVsfSUp/jGP/2GfUZgmOCzcbLF87+z7+QksL//gS31Ml+8gB1H7Q7W3OL99RF0p8NXn2VQVECFHEfIrdmHYTuBwLzp1pwlvTVNxQcjwvXjDoQOh47h+cS5GGTJwQu61gXyCryCjgoccWb9mgnvoLeEGondd1tz4HK8yJnfAt3FBH2jPZ2xnLlWZjydEo+ehTZ7Y0agCIGcMhlwUhjLrhKlYj/8iiElTCVZczSnMOonPduaOi28HLyS5XIBNpZD8ZvyMvpD3H5IcNEDz7TyPws/S7ZwtQBYkQavAi7PzpDPnfxrd0Vzb1YkGSAlLJKRUGg0PEg0I7ww2pMMOMNp9TrIbIkyxvjvj4BusX5UpFYQHCt97N5/ye5Roa1YEpvJBQBiIazDb4rZM8z97OZRjzFxSgidJCV6cNxRWpweOpxLnB7624tAuZhxlgPa/yeZCjz89fMxGG3WUxuN6LqRHWR6bD5ZYJF9ez76hFzKGiB3ttrzLx9AQ/dMoeyP0kb9j0Tg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(366004)(396003)(346002)(39860400002)(451199018)(5660300002)(33656002)(8936002)(86362001)(52536014)(55016003)(83380400001)(478600001)(7696005)(186003)(71200400001)(9686003)(53546011)(6506007)(26005)(66476007)(66556008)(66946007)(66446008)(76116006)(4326008)(38100700002)(54906003)(64756008)(41300700001)(38070700005)(8676002)(110136005)(6636002)(122000001)(316002)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?STkzdHloWHllNlh6SUtmR1BNNnZUYWF1Z1B1U2tOT0RyMmQrMHp4a0RSZk9G?=
- =?utf-8?B?cVdMODJsaWIxT3J5b2V3OEFWb1I1Q1lTUzgwajRpYlQ0cFRacldWUTB1VVpq?=
- =?utf-8?B?TVpxK3F0RGlBSW9GUUdCMThsWFVaQ2RwVXdVRFNDYVJYT2cxaEsrQjlITHdW?=
- =?utf-8?B?OHlDZmlNQWV3RktqNHhxazZwM0dyN1Y0ZFVFejQvZHJ1TTV4Q0RQbmp6bWxZ?=
- =?utf-8?B?Y3U0OFArdTBudHVqNEtheG9vbTNmLzRWdll4VFk2d0J1dnJwZHk4UUNEMlBv?=
- =?utf-8?B?ZHdHblo2QVc0R1hEUXlPUGsxTjRYcnJydTErM3QvM2tVakNtRVVOU09RNmxy?=
- =?utf-8?B?SnhvQXlwMjBRcnpJQWwveS9sbmR6R3BMenhrWk9pZmJJOGdqd1hoOW1PNlUr?=
- =?utf-8?B?d283aE1WSkZGMmhBRFFJSnB6eTkzZjBuQVd2THRDVFNFaDFMdnMzczc4dkRm?=
- =?utf-8?B?QjlEd2F4N2EvN2lXT3RlOTgxMUkrcitRUHBiSGYzMThJOWFOQ0FzZnNRQ3B3?=
- =?utf-8?B?NGI5SmErY1RVVWFFMzladkFRRlNtQ0VVV1NWcHR2dkhIcmFuWjBvVWxRUDhG?=
- =?utf-8?B?MVlFSGdDcHZ4Tyt1eEhwamxGWVZRanlZbWFBRnIzTjZWR1ZMeWd4elEzN0VM?=
- =?utf-8?B?K1hlL0FiWG10Z2JNbW9IRGFicER5cFVSUndUUXNLcFBZcXZlcFVqTlVDa2Ny?=
- =?utf-8?B?Mm9UeThZeXF2Smo1MWpFNEI1T0xoRUFrVms2TDlpdU14bDhKdXdFVkdrb1RE?=
- =?utf-8?B?TTNWS2FQRHl1V1oxVUlhcXNkZ0QvY01ObEl6UmlPNk50c2tuOWhzUUhwMmJr?=
- =?utf-8?B?N3VGVTNReEY5NmVJa3ZNb1pnZ1lUU2Q1VUFRemFkditvOVlTOUZYSVc3M2gv?=
- =?utf-8?B?Ymo0N2ZxMXhQVE4zZzZjYmVQQXBKa012Um5hY0I5bzFQUFhJWkpzMzhZRVBh?=
- =?utf-8?B?Mi9yQ00wcU9uOVZPZS9YeklpVnNRdTJZYVladmwzOWxPdFgvMUpLQytWTzhL?=
- =?utf-8?B?SjRDUXVOY0RrVktNTDNsSENlNWg1NlhFVnZzRHU1RVUzbFZYV0VWd3Y5RGZY?=
- =?utf-8?B?SDVtT09GMjd2OEN6RU42bTNuRUs1S1ByWHJDTThqY01OZlNpeXJRbytpSTFC?=
- =?utf-8?B?bXBWa3h5SXBETEZjRk5GeWFWM1pYYzFmTGROSjJJU2doV1p4dXpzQ1JWelU5?=
- =?utf-8?B?R3hOTzhqREZGTllQcjRnS1FPVW1uU3IzL3VnRG5CL1NrWFhReU83REhmSE5w?=
- =?utf-8?B?VXF3UXdybS9uNW5TODU1d0dQRC9sdUNQTXVEaStTZ0JIMnY2V0UzcVpQQ0Vw?=
- =?utf-8?B?bTJ0eWl3K1Zjd3k3OHdqNS9uVXRQajloL25udWVybXVtMWowVTNhTWJJcjEw?=
- =?utf-8?B?a1NsNnRiZE4xODVmZ0FVUUJ0dkt0VURSM3h2RTJtTmtBWFRUWkFBWDBGREpM?=
- =?utf-8?B?dHB3MHNoVGJlcnhrSzc1bWdoakVHeXV4aGY4L2RFUzI0L0pQOVBkbWZFZ2RN?=
- =?utf-8?B?Y29JdTRVR2NrRXRRVTJodG9VWlZ6REl4UGZFVVlUc0VscUlVbG0vTGg5YVA3?=
- =?utf-8?B?ZmNhaS8xODFWbnFZWlcvdkUxMEQydkNIYVh3b2h1bVV4bktjV200Y2ZxQmhO?=
- =?utf-8?B?ekRSVDE1cTFWRGE5ZE9jNTBqTUl2LzVQeWx5STFSdjNQb3UzOWUxWCthSVZM?=
- =?utf-8?B?ZXVENjJTeVMvbUtmdGV6MHZKcFdIaWI2M3ZBUThQbjhITzdQajg5RDZEdUww?=
- =?utf-8?B?bkJ4czIrazNXajNPdXROcW8rT3FGZXZRREQrQ3Flb1dPRDFBOUlJbG5mRlZB?=
- =?utf-8?B?L3huam1ucTdHdks2Zzg1d0JnbWdPVGlGU1ZSS2JBOU5BYnZNUUJ0VHpCWklr?=
- =?utf-8?B?QmF0ZE9SSTVQOU5hQUphOVljOVcyMzJub01RY0JzMU5tdnZjWkszTnFBWDFi?=
- =?utf-8?B?SmdsNzNxRnI4UzJDUWYxOVVPOU1OT2NGMHlrek5MbnNpV0QvNzBZRlhaMCtk?=
- =?utf-8?B?VEF4U2N2TE1rYXRXMmx6NHFBVk9jR2M0aWI5Qmx1V3hSWlF3WnhHQitpZEdC?=
- =?utf-8?B?QUY0aXpNR2c4bzBuV1dZVjF0YS92RXJFbFozM2ptZUJUditLd1hjMCs2bWFr?=
- =?utf-8?Q?iR44=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 1 Mar 2023 10:32:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE29342BDA
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 07:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677684699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yNyoXy19JMEuviZ5fPj0R11dS2gGpWHOEjKAHO4ERBI=;
+        b=T/DAcyYGXVKYg5NUlkpBLcKin3//YcQdJQzOgGu9ih/RIRzhaG/O5wWsXvOdK5g2NfGVGJ
+        bhL2CGZex0WB7fhkFBIRBowk1HbS80vzkEl7pUY32DvP/d+xr2/sMqCdRwyn+4V/EBWENJ
+        BzOEt3fSjm0vHJvhcYgJUGci4etrvP4=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-616-9YLEpFyDP02MqSNgLXYMwg-1; Wed, 01 Mar 2023 10:31:37 -0500
+X-MC-Unique: 9YLEpFyDP02MqSNgLXYMwg-1
+Received: by mail-lj1-f198.google.com with SMTP id b5-20020a2ebc05000000b00295bab7c7d0so3127792ljf.15
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 07:31:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yNyoXy19JMEuviZ5fPj0R11dS2gGpWHOEjKAHO4ERBI=;
+        b=ETrnKHLgu34M7Q3NKfj0adtrXduiKZCF7nMiHRLAXoJKx8jCAc2kGkj5qqDxex3sMj
+         ejCf2Bu+rIfn78FgT/0kkcTsFj1qGP3apRQw2KGP2N4KkwiixWN+2k+kq4OkgQRKKJnW
+         AfXC5PWig5ABHsguKP7f059eczBcAnCntN9u3cefxZVeQ7dLqwYiFQz70DJ1rrLfLvyt
+         Y76YBcsJ14KO+wesPL362Ol7ikurvVGQp2MMB2S28qCfbHtd4A7J2iMJsv8jbEnhcQ8Q
+         +lgBJwqhiGIfQsbqUi8yHYNnUcoFMoRaLTcycJ/t6X7N4pCd4TbJD4/g2guR58UhWZmQ
+         NT7A==
+X-Gm-Message-State: AO0yUKX2FlRyVcL3+wdxPsYWRzPLM9lx0CXlyAp3henJZ5jzeq8q9Fwq
+        /fO8bAD0G5fQW6W4EOUBLRY4CmvBL+QcfThLf2HfpMP8eWU+x/YKy9x4nKfwJS4EDu3oVU1ZKy/
+        dlA3NOIJsk2hUYGb7yeHY8M7aMQNEmEyhtjLllljj
+X-Received: by 2002:ac2:4837:0:b0:4dc:807a:d149 with SMTP id 23-20020ac24837000000b004dc807ad149mr1925403lft.10.1677684695663;
+        Wed, 01 Mar 2023 07:31:35 -0800 (PST)
+X-Google-Smtp-Source: AK7set9BdcrDdS+mCEP6ypJm4bmIzquCAMx1hXhH8M6KOrFseGMQv/QSVhFvN1oYeQljQKyjYzffFwi+T1BFF6n+ePI=
+X-Received: by 2002:ac2:4837:0:b0:4dc:807a:d149 with SMTP id
+ 23-20020ac24837000000b004dc807ad149mr1925371lft.10.1677684695168; Wed, 01 Mar
+ 2023 07:31:35 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cb41336-3893-41f8-b845-08db1a6a0250
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2023 15:31:21.0600
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 23guxBT8Y7VBOBaNuZprv1b+Ls0VRfGAP/hW5SX06MpwSlqP7XObJeFzCe9mNAA1cjCiCaBeHQNVrPBtHV2n5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4048
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230223113814.3010cedc@eldfell> <CAF6AEGuE89kuKTjjzwW1xMppcVw-M4-hcrtifed-mvsCA=cshQ@mail.gmail.com>
+ <20230224112630.313d7b76@eldfell> <a47e2686-1e35-39a3-0f0c-6c3b9522f8ff@linux.intel.com>
+ <20230224122403.6a088da1@eldfell> <582a9b92-d246-fce2-cf39-539d9a2db17f@linux.intel.com>
+ <20230224130053.3f8939e2@eldfell> <c5d046d6-ab8e-2bc7-5110-dba78b91348b@linux.intel.com>
+ <74e409dc-b642-779e-a755-b793c378e43a@amd.com> <CAF6AEGs_yzEj81yNP3KhmVP9Yo3rwTc5vntEVrm9tHw6+w1G_g@mail.gmail.com>
+ <Y/0iM+ycUozaVbbC@intel.com> <CAF6AEGtXSEyyjELjGtPvnAN7mX+NwzngmB0PbKHsZqjTm-xYsg@mail.gmail.com>
+ <CA+hFU4wtW6wNP2Y0e_iE6NhBSSfVRDxTBUk7kOUNHQPRXpSzrQ@mail.gmail.com>
+ <CAF6AEGtaxbJ83sfviVWMic6Q8XoyhLvWCdtYwiSd8A4sV4ZXSQ@mail.gmail.com>
+ <CA+hFU4x0VrQwF4JJcfHNwXrCUF8kP0d=Nhy5bboy=u5pJAgekQ@mail.gmail.com> <CAF6AEGtBFOvVK-p1Xox-6wp4frrmVqO5C5rq4OxUUMv8V51CVA@mail.gmail.com>
+In-Reply-To: <CAF6AEGtBFOvVK-p1Xox-6wp4frrmVqO5C5rq4OxUUMv8V51CVA@mail.gmail.com>
+From:   Sebastian Wick <sebastian.wick@redhat.com>
+Date:   Wed, 1 Mar 2023 16:31:23 +0100
+Message-ID: <CA+hFU4yEEo37YBKyhoz6wXWv8B_2JXwo7Ejg9hhufSGaQnBcqA@mail.gmail.com>
+Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W1B1YmxpY10NCg0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSGFu
-cyBkZSBHb2VkZSA8aGRlZ29lZGVAcmVkaGF0LmNvbT4NCj4gU2VudDogV2VkbmVzZGF5LCBNYXJj
-aCAxLCAyMDIzIDA5OjI4DQo+IFRvOiBMaW1vbmNpZWxsbywgTWFyaW8gPE1hcmlvLkxpbW9uY2ll
-bGxvQGFtZC5jb20+OyBTLWssIFNoeWFtLXN1bmRhcg0KPiA8U2h5YW0tc3VuZGFyLlMta0BhbWQu
-Y29tPg0KPiBDYzogTWFyayBHcm9zcyA8bWFya2dyb3NzQGtlcm5lbC5vcmc+OyBwbGF0Zm9ybS1k
-cml2ZXItDQo+IHg4NkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCAxLzJdIHBsYXRmb3JtL3g4Ni9hbWQ6IHBtYzogQWRk
-IGEgaGVscGVyIGZvciBjaGVja2luZw0KPiBtaW5pbXVtIFNNVSB2ZXJzaW9uDQo+IA0KPiBIaSwN
-Cj4gDQo+IE9uIDMvMS8yMyAxNjowOCwgTWFyaW8gTGltb25jaWVsbG8gd3JvdGU6DQo+ID4gSW4g
-YSBmZXcgbG9jYXRpb25zIHRoZXJlIGlzIHNvbWUgYm9pbGVycGxhdGUgY29kZSBmb3IgY2hlY2tp
-bmcNCj4gPiBtaW5pbXVtIFNNVSB2ZXJzaW9uLiAgU3dpdGNoIHRoaXMgdG8gYSBoZWxwZXIgZm9y
-IHRoaXMgY2hlY2suDQo+ID4NCj4gPiBObyBpbnRlbmRlZCBmdW5jdGlvbmFsIGNoYW5nZXMuDQo+
-ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBNYXJpbyBMaW1vbmNpZWxsbyA8bWFyaW8ubGltb25jaWVs
-bG9AYW1kLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9wbGF0Zm9ybS94ODYvYW1kL3BtYy5j
-IHwgNDkgKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICAxIGZpbGUgY2hh
-bmdlZCwgMjQgaW5zZXJ0aW9ucygrKSwgMjUgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9wbGF0Zm9ybS94ODYvYW1kL3BtYy5jDQo+IGIvZHJpdmVycy9wbGF0Zm9y
-bS94ODYvYW1kL3BtYy5jDQo+ID4gaW5kZXggMmVkYWFlMDRhNjkxLi5jNDJmYTQ3MzgxYzMgMTAw
-NjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9wbGF0Zm9ybS94ODYvYW1kL3BtYy5jDQo+ID4gKysrIGIv
-ZHJpdmVycy9wbGF0Zm9ybS94ODYvYW1kL3BtYy5jDQo+ID4gQEAgLTQxOCw2ICs0MTgsMjIgQEAg
-c3RhdGljIGludCBhbWRfcG1jX2dldF9zbXVfdmVyc2lvbihzdHJ1Y3QNCj4gYW1kX3BtY19kZXYg
-KmRldikNCj4gPiAgCXJldHVybiAwOw0KPiA+ICB9DQo+ID4NCj4gPiArc3RhdGljIGJvb2wgYW1k
-X3BtY192ZXJpZnlfbWluX3ZlcnNpb24oc3RydWN0IGFtZF9wbWNfZGV2ICpwZGV2LA0KPiBpbnQg
-bWFqb3IsIGludCBtaW5vcikNCj4gPiArew0KPiA+ICsJaWYgKCFwZGV2LT5tYWpvcikgew0KPiA+
-ICsJCWludCByYyA9IGFtZF9wbWNfZ2V0X3NtdV92ZXJzaW9uKHBkZXYpOw0KPiA+ICsNCj4gPiAr
-CQlpZiAocmMpIHsNCj4gPiArCQkJZGV2X3dhcm4ocGRldi0+ZGV2LCAiZmFpbGVkIHRvIHJlYWQg
-U01VIHZlcnNpb246DQo+ICVkXG4iLCByYyk7DQo+ID4gKwkJCXJldHVybiBmYWxzZTsNCj4gPiAr
-CQl9DQo+ID4gKwl9DQo+ID4gKwlpZiAocGRldi0+bWFqb3IgPiBtYWpvcikNCj4gPiArCQlyZXR1
-cm4gdHJ1ZTsNCj4gPiArDQo+ID4gKwlyZXR1cm4gcGRldi0+bWFqb3IgPT0gbWFqb3IgJiYgcGRl
-di0+bWlub3IgPj0gbWlub3I7DQo+ID4gK30NCj4gPiArDQo+ID4gIHN0YXRpYyBzc2l6ZV90IHNt
-dV9md192ZXJzaW9uX3Nob3coc3RydWN0IGRldmljZSAqZCwgc3RydWN0DQo+IGRldmljZV9hdHRy
-aWJ1dGUgKmF0dHIsDQo+ID4gIAkJCQkgICBjaGFyICpidWYpDQo+ID4gIHsNCj4gPiBAQCAtNTI2
-LDE0ICs1NDIsNyBAQCBzdGF0aWMgaW50IGFtZF9wbWNfaWRsZW1hc2tfc2hvdyhzdHJ1Y3Qgc2Vx
-X2ZpbGUNCj4gKnMsIHZvaWQgKnVudXNlZCkNCj4gPiAgCXN0cnVjdCBhbWRfcG1jX2RldiAqZGV2
-ID0gcy0+cHJpdmF0ZTsNCj4gPiAgCWludCByYzsNCj4gPg0KPiA+IC0JLyogd2UgaGF2ZW4ndCB5
-ZXQgcmVhZCBTTVUgdmVyc2lvbiAqLw0KPiA+IC0JaWYgKCFkZXYtPm1ham9yKSB7DQo+ID4gLQkJ
-cmMgPSBhbWRfcG1jX2dldF9zbXVfdmVyc2lvbihkZXYpOw0KPiA+IC0JCWlmIChyYykNCj4gPiAt
-CQkJcmV0dXJuIHJjOw0KPiA+IC0JfQ0KPiA+IC0NCj4gPiAtCWlmIChkZXYtPm1ham9yID4gNTYg
-fHwgKGRldi0+bWFqb3IgPj0gNTUgJiYgZGV2LT5taW5vciA+PSAzNykpIHsNCj4gDQo+IFRoZSAy
-IG1ham9yIGNoZWNrcyBoZXJlIG9yaWdpbmFsbHkgd2VyZSBub3QgaW4gc3luYywgc28gZm9yIG1h
-am9yID09IDU1DQo+ICphbmQqIG1ham9yID09IDU2IGl0IHdvdWxkIG9ubHkgc3VjY2VlZCBpZiBt
-aW5vciA+PSAzNy4NCj4gDQo+IFdoZXJlIGFzIGFmdGVyIHRoaXMgcGF0Y2ggZm9yIG1ham9yID09
-IDU2IGl0IHdpbGwgbm93IGFsd2F5cyBzdWNjZWVkLg0KPiANCj4gVGhpcyBmZWVscyBsaWtlIGEg
-YnVnIGluIHRoZSBvcmlnaW5hbCBjb2RlLCBidXQgbWlnaHQgaGF2ZSBiZWVuDQo+IGludGVudGlv
-bmFsID8gUGxlYXNlIHZlcmlmeSB0aGlzLg0KDQpAUy1rLCBTaHlhbS1zdW5kYXIgYXMgdGhlIG9y
-aWdpbmFsIGF1dGhvciBvZiB0aGF0LCBjYW4geW91IHBsZWFzZSBjb25maXJtPw0KDQo+IA0KPiBB
-ZnRlciB2ZXJpZnlpbmcgcGxlYXNlIHBvc3QgYSB2MiB1cGRhdGluZyB0aGUgY29tbWl0IG1lc3Nh
-Z2UgdG8NCj4gcG9pbnQgb3V0IHRoaXMgZnVuY3Rpb25hbCBjaGFuZ2UuDQo+IA0KDQpTdXJlLCB0
-aGFua3MuDQoNCj4gPiArCWlmIChhbWRfcG1jX3ZlcmlmeV9taW5fdmVyc2lvbihkZXYsIDU1LCAz
-NykpIHsNCj4gPiAgCQlyYyA9IGFtZF9wbWNfaWRsZW1hc2tfcmVhZChkZXYsIE5VTEwsIHMpOw0K
-PiA+ICAJCWlmIChyYykNCj4gPiAgCQkJcmV0dXJuIHJjOw0KPiA+IEBAIC02ODYsMTUgKzY5NSw4
-IEBAIHN0YXRpYyBpbnQgYW1kX3BtY19nZXRfb3NfaGludChzdHJ1Y3QNCj4gYW1kX3BtY19kZXYg
-KmRldikNCj4gPiAgc3RhdGljIGludCBhbWRfcG1jX2N6bl93YV9pcnExKHN0cnVjdCBhbWRfcG1j
-X2RldiAqcGRldikNCj4gPiAgew0KPiA+ICAJc3RydWN0IGRldmljZSAqZDsNCj4gPiAtCWludCBy
-YzsNCj4gPg0KPiA+IC0JaWYgKCFwZGV2LT5tYWpvcikgew0KPiA+IC0JCXJjID0gYW1kX3BtY19n
-ZXRfc211X3ZlcnNpb24ocGRldik7DQo+ID4gLQkJaWYgKHJjKQ0KPiA+IC0JCQlyZXR1cm4gcmM7
-DQo+ID4gLQl9DQo+ID4gLQ0KPiA+IC0JaWYgKHBkZXYtPm1ham9yID4gNjQgfHwgKHBkZXYtPm1h
-am9yID09IDY0ICYmIHBkZXYtPm1pbm9yID4gNjUpKQ0KPiA+ICsJaWYgKGFtZF9wbWNfdmVyaWZ5
-X21pbl92ZXJzaW9uKHBkZXYsIDY0LCA2NikpDQo+ID4gIAkJcmV0dXJuIDA7DQo+ID4NCj4gPiAg
-CWQgPSBidXNfZmluZF9kZXZpY2VfYnlfbmFtZSgmc2VyaW9fYnVzLCBOVUxMLCAic2VyaW8wIik7
-DQo+ID4gQEAgLTcxOCwxNCArNzIwLDEwIEBAIHN0YXRpYyBpbnQgYW1kX3BtY192ZXJpZnlfY3pu
-X3J0YyhzdHJ1Y3QNCj4gYW1kX3BtY19kZXYgKnBkZXYsIHUzMiAqYXJnKQ0KPiA+ICAJc3RydWN0
-IHJ0Y190aW1lIHRtOw0KPiA+ICAJaW50IHJjOw0KPiA+DQo+ID4gLQkvKiB3ZSBoYXZlbid0IHll
-dCByZWFkIFNNVSB2ZXJzaW9uICovDQo+ID4gLQlpZiAoIXBkZXYtPm1ham9yKSB7DQo+ID4gLQkJ
-cmMgPSBhbWRfcG1jX2dldF9zbXVfdmVyc2lvbihwZGV2KTsNCj4gPiAtCQlpZiAocmMpDQo+ID4g
-LQkJCXJldHVybiByYzsNCj4gPiAtCX0NCj4gPiArCWlmIChkaXNhYmxlX3dvcmthcm91bmRzKQ0K
-PiA+ICsJCXJldHVybiAwOw0KPiA+DQo+ID4gLQlpZiAocGRldi0+bWFqb3IgPCA2NCB8fCAocGRl
-di0+bWFqb3IgPT0gNjQgJiYgcGRldi0+bWlub3IgPCA1MykpDQo+ID4gKwlpZiAoIWFtZF9wbWNf
-dmVyaWZ5X21pbl92ZXJzaW9uKHBkZXYsIDY0LCA1MykpDQo+ID4gIAkJcmV0dXJuIDA7DQo+ID4N
-Cj4gPiAgCXJ0Y19kZXZpY2UgPSBydGNfY2xhc3Nfb3BlbigicnRjMCIpOw0KPiA+IEBAIC03NzIs
-MTMgKzc3MCwxNCBAQCBzdGF0aWMgdm9pZCBhbWRfcG1jX3MyaWRsZV9wcmVwYXJlKHZvaWQpDQo+
-ID4gIAkvKiBSZXNldCBhbmQgU3RhcnQgU01VIGxvZ2dpbmcgLSB0byBtb25pdG9yIHRoZSBzMGkz
-IHN0YXRzICovDQo+ID4gIAlhbWRfcG1jX3NldHVwX3NtdV9sb2dnaW5nKHBkZXYpOw0KPiA+DQo+
-ID4gLQkvKiBBY3RpdmF0ZSBDWk4gc3BlY2lmaWMgcGxhdGZvcm0gYnVnIHdvcmthcm91bmRzICov
-DQo+ID4gLQlpZiAocGRldi0+Y3B1X2lkID09IEFNRF9DUFVfSURfQ1pOICYmICFkaXNhYmxlX3dv
-cmthcm91bmRzKSB7DQo+ID4gKwlzd2l0Y2ggKHBkZXYtPmNwdV9pZCkgew0KPiA+ICsJY2FzZSBB
-TURfQ1BVX0lEX0NaTjoNCj4gPiAgCQlyYyA9IGFtZF9wbWNfdmVyaWZ5X2N6bl9ydGMocGRldiwg
-JmFyZyk7DQo+ID4gIAkJaWYgKHJjKSB7DQo+ID4gIAkJCWRldl9lcnIocGRldi0+ZGV2LCAiZmFp
-bGVkIHRvIHNldCBSVEM6ICVkXG4iLCByYyk7DQo+ID4gIAkJCXJldHVybjsNCj4gPiAgCQl9DQo+
-ID4gKwkJYnJlYWs7DQo+ID4gIAl9DQo+ID4NCj4gPiAgCW1zZyA9IGFtZF9wbWNfZ2V0X29zX2hp
-bnQocGRldik7DQo+IA0KPiANCj4gUGF0Y2ggMi8yIGxvb2tzIGdvb2QgdG8gbWUuDQo+IA0KPiBT
-aG91bGQgSSBxdWV1ZSB2MiAob25jZSBwb3N0ZWQpIHVwIGFzIGEgZml4IGZvciA2LjMtcmMjICA/
-DQoNClllcyBwbGVhc2UuICBJZiBpdCBtYWtlcyBpdCBlYXNpZXIgSSBjYW4gcmUtb3JkZXIgdGhl
-IHNlcmllcyBzbyB0aGF0DQp3ZSBhZGQgYSBjaGVjayBpbiAxLzIgYW5kIHN3aXRjaCB0byB0aGUg
-aGVscGVyIGFzIDIvMi4NCg0KVGhpcyBtaWdodCBtYWtlIGl0IGVhc2llciB0byB0YWtlIHRoZSBM
-VFMga2VybmVsIHRvbyBmb3Igc3RhYmxlLA0KYnV0IEkgZG9uJ3QgZmVlbCBzdHJvbmdseS4NCg0K
-PiANCj4gUmVnYXJkcywNCj4gDQo+IEhhbnMNCg==
+On Tue, Feb 28, 2023 at 11:52=E2=80=AFPM Rob Clark <robdclark@gmail.com> wr=
+ote:
+>
+> On Tue, Feb 28, 2023 at 6:30 AM Sebastian Wick
+> <sebastian.wick@redhat.com> wrote:
+> >
+> > On Tue, Feb 28, 2023 at 12:48=E2=80=AFAM Rob Clark <robdclark@gmail.com=
+> wrote:
+> > >
+> > > On Mon, Feb 27, 2023 at 2:44 PM Sebastian Wick
+> > > <sebastian.wick@redhat.com> wrote:
+> > > >
+> > > > On Mon, Feb 27, 2023 at 11:20 PM Rob Clark <robdclark@gmail.com> wr=
+ote:
+> > > > >
+> > > > > On Mon, Feb 27, 2023 at 1:36 PM Rodrigo Vivi <rodrigo.vivi@intel.=
+com> wrote:
+> > > > > >
+> > > > > > On Fri, Feb 24, 2023 at 09:59:57AM -0800, Rob Clark wrote:
+> > > > > > > On Fri, Feb 24, 2023 at 7:27 AM Luben Tuikov <luben.tuikov@am=
+d.com> wrote:
+> > > > > > > >
+> > > > > > > > On 2023-02-24 06:37, Tvrtko Ursulin wrote:
+> > > > > > > > >
+> > > > > > > > > On 24/02/2023 11:00, Pekka Paalanen wrote:
+> > > > > > > > >> On Fri, 24 Feb 2023 10:50:51 +0000
+> > > > > > > > >> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+> > > > > > > > >>
+> > > > > > > > >>> On 24/02/2023 10:24, Pekka Paalanen wrote:
+> > > > > > > > >>>> On Fri, 24 Feb 2023 09:41:46 +0000
+> > > > > > > > >>>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+> > > > > > > > >>>>
+> > > > > > > > >>>>> On 24/02/2023 09:26, Pekka Paalanen wrote:
+> > > > > > > > >>>>>> On Thu, 23 Feb 2023 10:51:48 -0800
+> > > > > > > > >>>>>> Rob Clark <robdclark@gmail.com> wrote:
+> > > > > > > > >>>>>>
+> > > > > > > > >>>>>>> On Thu, Feb 23, 2023 at 1:38 AM Pekka Paalanen <ppa=
+alanen@gmail.com> wrote:
+> > > > > > > > >>>>>>>>
+> > > > > > > > >>>>>>>> On Wed, 22 Feb 2023 07:37:26 -0800
+> > > > > > > > >>>>>>>> Rob Clark <robdclark@gmail.com> wrote:
+> > > > > > > > >>>>>>>>
+> > > > > > > > >>>>>>>>> On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <p=
+paalanen@gmail.com> wrote:
+> > > > > > > > >>>>>>
+> > > > > > > > >>>>>> ...
+> > > > > > > > >>>>>>
+> > > > > > > > >>>>>>>>>> On another matter, if the application uses SET_D=
+EADLINE with one
+> > > > > > > > >>>>>>>>>> timestamp, and the compositor uses SET_DEADLINE =
+on the same thing with
+> > > > > > > > >>>>>>>>>> another timestamp, what should happen?
+> > > > > > > > >>>>>>>>>
+> > > > > > > > >>>>>>>>> The expectation is that many deadline hints can b=
+e set on a fence.
+> > > > > > > > >>>>>>>>> The fence signaller should track the soonest dead=
+line.
+> > > > > > > > >>>>>>>>
+> > > > > > > > >>>>>>>> You need to document that as UAPI, since it is obs=
+ervable to userspace.
+> > > > > > > > >>>>>>>> It would be bad if drivers or subsystems would dif=
+fer in behaviour.
+> > > > > > > > >>>>>>>>
+> > > > > > > > >>>>>>>
+> > > > > > > > >>>>>>> It is in the end a hint.  It is about giving the dr=
+iver more
+> > > > > > > > >>>>>>> information so that it can make better choices.  Bu=
+t the driver is
+> > > > > > > > >>>>>>> even free to ignore it.  So maybe "expectation" is =
+too strong of a
+> > > > > > > > >>>>>>> word.  Rather, any other behavior doesn't really ma=
+ke sense.  But it
+> > > > > > > > >>>>>>> could end up being dictated by how the hw and/or fw=
+ works.
+> > > > > > > > >>>>>>
+> > > > > > > > >>>>>> It will stop being a hint once it has been implement=
+ed and used in the
+> > > > > > > > >>>>>> wild long enough. The kernel userspace regression ru=
+les make sure of
+> > > > > > > > >>>>>> that.
+> > > > > > > > >>>>>
+> > > > > > > > >>>>> Yeah, tricky and maybe a gray area in this case. I th=
+ink we eluded
+> > > > > > > > >>>>> elsewhere in the thread that renaming the thing might=
+ be an option.
+> > > > > > > > >>>>>
+> > > > > > > > >>>>> So maybe instead of deadline, which is a very strong =
+word, use something
+> > > > > > > > >>>>> along the lines of "present time hint", or "signalled=
+ time hint"? Maybe
+> > > > > > > > >>>>> reads clumsy. Just throwing some ideas for a start.
+> > > > > > > > >>>>
+> > > > > > > > >>>> You can try, but I fear that if it ever changes behavi=
+our and
+> > > > > > > > >>>> someone notices that, it's labelled as a kernel regres=
+sion. I don't
+> > > > > > > > >>>> think documentation has ever been the authoritative de=
+finition of UABI
+> > > > > > > > >>>> in Linux, it just guides drivers and userspace towards=
+ a common
+> > > > > > > > >>>> understanding and common usage patterns.
+> > > > > > > > >>>>
+> > > > > > > > >>>> So even if the UABI contract is not documented (ugh), =
+you need to be
+> > > > > > > > >>>> prepared to set the UABI contract through kernel imple=
+mentation.
+> > > > > > > > >>>
+> > > > > > > > >>> To be the devil's advocate it probably wouldn't be an A=
+BI regression but
+> > > > > > > > >>> just an regression. Same way as what nice(2) priorities=
+ mean hasn't
+> > > > > > > > >>> always been the same over the years, I don't think ther=
+e is a strict
+> > > > > > > > >>> contract.
+> > > > > > > > >>>
+> > > > > > > > >>> Having said that, it may be different with latency sens=
+itive stuff such
+> > > > > > > > >>> as UIs though since it is very observable and can be ve=
+ry painful to users.
+> > > > > > > > >>>
+> > > > > > > > >>>> If you do not document the UABI contract, then differe=
+nt drivers are
+> > > > > > > > >>>> likely to implement it differently, leading to differi=
+ng behaviour.
+> > > > > > > > >>>> Also userspace will invent wild ways to abuse the UABI=
+ if there is no
+> > > > > > > > >>>> documentation guiding it on proper use. If userspace o=
+r end users
+> > > > > > > > >>>> observe different behaviour, that's bad even if it's n=
+ot a regression.
+> > > > > > > > >>>>
+> > > > > > > > >>>> I don't like the situation either, but it is what it i=
+s. UABI stability
+> > > > > > > > >>>> trumps everything regardless of whether it was documen=
+ted or not.
+> > > > > > > > >>>>
+> > > > > > > > >>>> I bet userspace is going to use this as a "make it fas=
+ter, make it
+> > > > > > > > >>>> hotter" button. I would not be surprised if someone wr=
+ote a LD_PRELOAD
+> > > > > > > > >>>> library that stamps any and all fences with an expired=
+ deadline to
+> > > > > > > > >>>> just squeeze out a little more through some weird side=
+-effect.
+> > > > > > > > >>>>
+> > > > > > > > >>>> Well, that's hopefully overboard in scaring, but in th=
+e end, I would
+> > > > > > > > >>>> like to see UABI documented so I can have a feeling of=
+ what it is for
+> > > > > > > > >>>> and how it was intended to be used. That's all.
+> > > > > > > > >>>
+> > > > > > > > >>> We share the same concern. If you read elsewhere in the=
+se threads you
+> > > > > > > > >>> will notice I have been calling this an "arms race". If=
+ the ability to
+> > > > > > > > >>> make yourself go faster does not required additional pr=
+ivilege I also
+> > > > > > > > >>> worry everyone will do it at which point it becomes poi=
+ntless. So yes, I
+> > > > > > > > >>> do share this concern about exposing any of this as an =
+unprivileged uapi.
+> > > > > > > > >>>
+> > > > > > > > >>> Is it possible to limit access to only compositors in s=
+ome sane way?
+> > > > > > > > >>> Sounds tricky when dma-fence should be disconnected fro=
+m DRM..
+> > > > > > > > >>
+> > > > > > > > >> Maybe it's not that bad in this particular case, because=
+ we are talking
+> > > > > > > > >> only about boosting GPU clocks which benefits everyone (=
+except
+> > > > > > > > >> battery life) and it does not penalize other programs li=
+ke e.g.
+> > > > > > > > >> job priorities do.
+> > > > > > > > >
+> > > > > > > > > Apart from efficiency that you mentioned, which does not =
+always favor
+> > > > > > > > > higher clocks, sometimes thermal budget is also shared be=
+tween CPU and
+> > > > > > > > > GPU. So more GPU clocks can mean fewer CPU clocks. It's r=
+eally hard to
+> > > > > > > > > make optimal choices without the full coordination betwee=
+n both schedulers.
+> > > > > > > > >
+> > > > > > > > > But that is even not the main point, which is that if eve=
+ryone sets the
+> > > > > > > > > immediate deadline then having the deadline API is a bit =
+pointless. For
+> > > > > > > > > instance there is a reason negative nice needs CAP_SYS_AD=
+MIN.
+> > > > > > > > >
+> > > > > > > > > However Rob has also pointed out the existence of uclamp.=
+min via
+> > > > > > > > > sched_setattr which is unprivileged and can influence fre=
+quency
+> > > > > > > > > selection in the CPU world, so I conceded on that point. =
+If CPU world
+> > > > > > > > > has accepted it so can we I guess.
+> > > > > > > > >
+> > > > > > > > > So IMO we are back to whether we can agree defining it is=
+ a hint is good
+> > > > > > > > > enough, be in via the name of the ioctl/flag itself or vi=
+a documentation.
+> > > > > > > > >
+> > > > > > > > >> Drivers are not going to use the deadline for scheduling=
+ priorities,
+> > > > > > > > >> right? I don't recall seeing any mention of that.
+> > > > > > > > >>
+> > > > > > > > >> ...right?
+> > > > > > > > >
+> > > > > > > > > I wouldn't have thought it would be beneficial to preclud=
+e that, or
+> > > > > > > > > assume what drivers would do with the info to begin with.
+> > > > > > > > >
+> > > > > > > > > For instance in i915 we almost had a deadline based sched=
+uler which was
+> > > > > > > > > much fairer than the current priority sorted fifo and in =
+an ideal world
+> > > > > > > > > we would either revive or re-implement that idea. In whic=
+h case
+> > > > > > > > > considering the fence deadline would naturally slot in an=
+d give true
+> > > > > > > > > integration with compositor deadlines (not just boost clo=
+cks and pray it
+> > > > > > > > > helps).
+> > > > > > > > How is user-space to decide whether to use ioctl(SET_DEADLI=
+NE) or
+> > > > > > > > poll(POLLPRI)?
+> > > > > > >
+> > > > > > > Implementation of blocking gl/vk/cl APIs, like glFinish() wou=
+ld use
+> > > > > > > poll(POLLPRI).  It could also set an immediate deadline and t=
+hen call
+> > > > > > > poll() without POLLPRI.
+> > > > > > >
+> > > > > > > Other than compositors which do frame-pacing I expect the mai=
+n usage
+> > > > > > > of either of these is mesa.
+> > > > > >
+> > > > > > Okay, so it looks like we already agreed that having a way to b=
+ump frequency
+> > > > > > from userspace is acceptable. either because there are already =
+other ways
+> > > > > > that you can waste power and because this already acceptable in=
+ the CPU
+> > > > > > world.
+> > > > > >
+> > > > > > But why we are doing this in hidden ways then?
+> > > > > >
+> > > > > > Why can't we have this hint per context that is getting execute=
+d?
+> > > > > > (either with a boost-context flag or with some low/med/max or '=
+-1' to '1'
+> > > > > > value like the latency priority)?
+> > > > > >
+> > > > > > I don't like the waitboost because this heurisitic fails in som=
+e media cases.
+> > > > > > I don't like the global setting because we might be alternating=
+ a top-priority
+> > > > > > with low-priority cases...
+> > > > > >
+> > > > > > So, why not something per context in execution?
+> > > > > >
+> > > > >
+> > > > > It needs to be finer granularity than per-context, because not al=
+l
+> > > > > waits should trigger boosting.  For example, virglrenderer ends u=
+p
+> > > > > with a thread polling unsignaled fences to know when to signal an
+> > > > > interrupt to the guest virtgpu.  This alone shouldn't trigger
+> > > > > boosting.  (We also wouldn't want to completely disable boosting =
+for
+> > > > > virglrenderer.)  Or the usermode driver could be waiting on a fen=
+ce to
+> > > > > know when to do some cleanup.
+> > > > >
+> > > > > That is not to say that there isn't room for per-context flags to
+> > > > > disable/enable boosting for fences created by that context, meani=
+ng it
+> > > > > could be an AND operation for i915 if it needs to be.
+> > > >
+> > > > First of all, I believe that the fence deadline hint is a good idea=
+.
+> > > > With that being said, I also don't think it is sufficient in a lot =
+of
+> > > > cases.
+> > > >
+> > > > The one thing I was alluding to before and that Pekka mentioned as
+> > > > well is that mutter for example has a problem where we're missing t=
+he
+> > > > deadline consistently because the clocks don't ramp up fast enough =
+and
+> > > > there is a MR which is just trying to keep the GPU busy to avoid th=
+is.
+> > >
+> > > the dynamic double/triple buffer thing?
+> >
+> > Yes
+> >
+> > > > It would be much better if the kernel could make sure the clocks ar=
+e
+> > > > all ramped up when we start submitting work. In the compositor we
+> > > > actually have a lot of information that *should* influence clocks. =
+We
+> > > > know when we're going to start submitting work and when the deadlin=
+e
+> > > > for that work is beforehand. We know which windows are visible, and
+> > > > which one should have the highest priority.
+> > >
+> > > This sounds like something orthogonal.. something for cgroups?  Ie.
+> > > android moves visible/foreground apps to a different cgroup to given
+> > > them higher priority.  Tvrtko had a patchset to add drm cgroup
+> > > support..
+> >
+> > For the priority stuff, yes, probably. The visibility information on
+> > the other hand could be used to determine if we want to ramp up the
+> > GPU in the first place.
+>
+> Right, but I think that we could have multiple cgroup based knobs, one
+> that adjusts priority and one that limits/disables deadline based
+> boost?  This way the compositor could setup different policies for
+> visible vs hidden apps influencing both how much time they get on the
+> GPU and boost.
+
+I'm not sure if a negative control really makes sense. There are
+probably timing sensitive use cases where the result doesn't show up
+on the local screen and penalizing them when they are not focused or
+hidden might also not be the best idea.
+
+> > > > We know when there are
+> > > > input events which actually matter.
+> > >
+> > > This I see input as a different boost source for the driver.  (Ie. on=
+e
+> > > boost signal is missing fence deadlines, another is input events,
+> > > etc.)
+> > >
+> > > We end up using downstream input-handlers on the kernel side for this=
+.
+> > > Partially for the freq boost (but mostly not, UI interactive workload=
+s
+> > > like touchscreen scrolling don't generally need high GPU freqs, they
+> > > are more memory bandwidth limited if they are limited by anything)..
+> > > really the reason here is to get a head-start on the ~2ms that it
+> > > takes to power up the GPU if it is suspended.
+> >
+> > Right, but one of my main points I want to make here is that we could
+> > get the head-start not only in response to input events but also for
+> > the GPU work the compositor submits and in the future also to GPU work
+> > that clients commit. Except that we don't have a way to tell the
+> > kernel about it.
+> >
+> > > But this is not quite perfect, since for example some keys should be
+> > > handled on key-down but others on key-up.
+> > >
+> > > But again, this is something different from fence deadlines.  I'm
+> > > interested in proposals because we do need something for this.  But I
+> > > think it is something is orthogonal to this series.  For input, we
+> > > want the kernel to know long before userspace is ready to submit
+> > > rendering.
+> >
+> > We can do that in the compositor! Input events are really not
+> > something you should care about in the kernel. Input itself is also
+> > not the only indication of incoming animated content. Some network
+> > packets arriving could equally well result in the same situation.
+>
+> We do use input boost not just for GPU freq, but also for CPU freq.
+> It seems like triggering it from the kernel could happen somewhat
+> sooner than userspace.  (But just speculation.)
+
+Technically it has to be sooner but I doubt it makes any difference.
+Getting a lot of false-positives on the other hand does make a
+difference.
+
+> I'm not sure network packets count.  Or at least compared to a touch
+> interface, the user won't perceive the lag nearly as much, compared to
+> whether or not the UI tracks their fingertips.
+
+Sure, stutter in interactive cases is especially awful but stutter is
+awful in general. If we can solve it in all cases we should do so.
+
+> > > > We know when the deadline for
+> > > > client work is.
+> > > >
+> > > > In the future we also want to make sure clients know beforehand whe=
+n
+> > > > they should start their work and when the deadline is but that's al=
+l
+> > > > very much WIP in both wayland and vulkan.
+> > > >
+> > > > There are two issues:
+> > > >
+> > > > 1. The compositor has no way to communicate any of that information=
+ to
+> > > > the kernel.
+> > > > 2. The only connection to client work the compositor has is a fence=
+ to
+> > > > the last bit of work that must be done before the deadline after a
+> > > > wl_surface.commit.
+> > >
+> > > If the client isn't using multiple GPUs, a single fence should be
+> > > sufficient.  And even if it is, well we still have all the dependency
+> > > information on the kernel side.  Ie. drm/sched knows what fences it i=
+s
+> > > waiting on if it is waiting to schedule the work associated with the
+> > > last fence.  It would otherwise require drm/sched to be a bit more
+> > > tricky than it is so far in this series.
+> > >
+> > > But I think the normal dual-gpu case, the app is only dealing with a =
+single GPU?
+> >
+> > We generally don't know which GPU a client uses though. We know which
+> > one we're using and tell the client that the buffer should be
+> > compatible with it but that's the extent of information we have, until
+> > we get a fence but that fence usually gets to the compositor pretty
+> > late. Way too late for the compositor to tell the kernel to ramp up
+> > the GPU and still have an impact.
+>
+> Are you sure about that?  I'd have expected the app to hand off
+> fence+buffer to the compositor pretty quickly after rendering is
+> submitted.  This is what I've seen elsewhere.
+
+After rendering is submitted it is already too late if the GPU takes
+2ms to wake up. And if there is no rendering submitted there is no
+fence and if there is no fence it has no deadline. If we want to solve
+that we also need some kind of 'work will be submitted to the queue
+starting from this time' hint.
+
+> > It also seems like we're moving away from tracking execution
+> > dependencies with fences when we're switching to user mode fences.
+>
+> I suppose there are two cases..
+>
+> 1) dependent fences all from the same device.. no prob, the right
+> driver gets the signal that it needs to clk up, and figures out the
+> rest on it's own
+
+AFAIU with user mode fences it's impossible for the kernel to figure
+out what work depends on it and it might never signal. The whole
+deadline on fences thing breaks down with user mode fences.
+
+> 2) dependent fences from different devices.. I suppose if device B is
+> waiting for a fence from device A before it can make forward progress,
+> why not express this as a deadline hint on A's fence?  (But by the
+> time you have this problem, you are probably not really caring about
+> power consumption, so meh..)
+>
+> BR,
+> -R
+>
+> > > > So in both cases a fence is just not the right primitive for us. We
+> > > > need to be able to provide per-context/queue information for work t=
+hat
+> > > > will happen in the future and we need a way to refer to a
+> > > > context/queue generically and over IPC to boost the clocks of the
+> > > > device that a client is actually using and maybe even give priority=
+.
+> > > >
+> > > > But like I said, having a per-fence deadline is probably still a go=
+od
+> > > > idea and doesn't conflict with any of the more coarse information.
+> > >
+> > > Yeah, I think the thing is you need multiple things, and this is only
+> > > one of them ;-)
+> > >
+> > > BR,
+> > > -R
+> > >
+> >
+>
+
