@@ -2,65 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02D56A74BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B916A74C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 21:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjCAUCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 15:02:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
+        id S229872AbjCAUFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 15:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAUCQ (ORCPT
+        with ESMTP id S229953AbjCAUEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 15:02:16 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BA94E5D7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 12:02:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677700935; x=1709236935;
-  h=date:message-id:from:to:cc:subject:in-reply-to:
-   references:mime-version;
-  bh=6EAWrrc5IPUWooTbxGsI6tMEta8jrC1xOMHR2AXxGGw=;
-  b=cVEK5SD1VlQGI6iEAdKy7c1B4E8nEjgL5CZOyQXQ3VMkhml+nYq7rjNK
-   tYCnDnNwFANLYVK3NUWc4PQNUia+khfCeNqsLQhdA/eXJ0UREjgs4G99A
-   ab0UtZJA2UjnNQXnPZ/x/qQU2NqvaKDEmUVV8dtdKQbvEgCkT0r88Vagw
-   7zTkJHrIYr0q6E9S8lEvgHJJzZ9dBMdG9SaKYroBhhGZFUdPHu7yIz4oo
-   SA1UZSfsMmUxm9VBiVmxYtv/PW6AkGk6JUGMNJEGY4lzZrEGuLx1TPVdM
-   rb6Mta4E52i8MCaqsmp8C5zq6NLU57s1vtg8Bs7tJ/BkU4l07TS88aEO2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="335999793"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="335999793"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 12:02:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="624630698"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="624630698"
-Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.115.221])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 12:02:08 -0800
-Date:   Wed, 01 Mar 2023 12:02:08 -0800
-Message-ID: <87r0u844vz.wl-ashutosh.dixit@intel.com>
-From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
+        Wed, 1 Mar 2023 15:04:54 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6214ECE8;
+        Wed,  1 Mar 2023 12:04:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1677701077; bh=SkxO6ocDDrslWnzemAIXgnlRsRGtgWAqK1nWvppSEB8=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=QHsEMb/KrTcnyTB6UNjavqfGLt1j2d1fL0ym1Suwoa53CBCVnZBY7kmt9j2zCznL2
+         MdC56njcZuDWLnsStfHtIq+p+T7WUQ/oQZdeKXTtmPAwOuEvBlVzLLN6+TJ9I8/8rP
+         uIgt49qQJagPTxKgdGptMigRKmTN+arINl4m4Oew=
+Received: by b221-2.in.mailobj.net [192.168.90.22] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Wed,  1 Mar 2023 21:04:37 +0100 (CET)
+X-EA-Auth: DU2ysQMmY52E4ROFbJqtsDKo9YDpEmEu2WCkbqP9Vr5J2zznwaEaDw2Lq5mgK05twi4f9pSDcMAkBxxx3hn6q8WLeFXa0tjo
+Date:   Thu, 2 Mar 2023 01:34:33 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Satish Kharat <satishkh@cisco.com>,
+        Sesidhar Baddela <sebaddel@cisco.com>,
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>
-Subject: Re: [PATCH RESEND] drm/nouveau/hwmon: Use sysfs_emit in show function callsbacks
-In-Reply-To: <Y/+pDaHOgG1x8Py2@ubun2204.myguest.virtualbox.org>
-References: <Y/+pDaHOgG1x8Py2@ubun2204.myguest.virtualbox.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
- Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH RESEND] scsi: fnic: Use a variable for repeated mem_size
+ computation
+Message-ID: <Y/+v0QNRgsr18rwg@ubun2204.myguest.virtualbox.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,62 +52,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 01 Mar 2023 11:35:41 -0800, Deepak R Varma wrote:
->
-> According to Documentation/filesystems/sysfs.rst, the show() callback
-> function of kobject attributes should strictly use sysfs_emit() instead
-> of sprintf() family functions. So, make this change.
-> Issue identified using the coccinelle device_attr_show.cocci script.
+Use a variable to upfront compute memory size to be allocated,
+instead of repeatedly computing it at different instructions.
+The reduced instruction length also allows to tidy up the code.
+Issue identified using the array_size_dup Coccinelle semantic
+patch.
 
-Reviewed-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Note:
+   Proposed change compile tested only.
+   Resending patch for review and feedback. No functional changes.
 
->
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
-> Note:
->    Resending the patch for review and feedback. No functional changes.
->
->
->  drivers/gpu/drm/nouveau/nouveau_hwmon.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_hwmon.c b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
-> index a7db7c31064b..e844be49e11e 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_hwmon.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
-> @@ -41,7 +41,7 @@ static ssize_t
->  nouveau_hwmon_show_temp1_auto_point1_pwm(struct device *d,
->					 struct device_attribute *a, char *buf)
->  {
-> -	return snprintf(buf, PAGE_SIZE, "%d\n", 100);
-> +	return sysfs_emit(buf, "%d\n", 100);
->  }
->  static SENSOR_DEVICE_ATTR(temp1_auto_point1_pwm, 0444,
->			  nouveau_hwmon_show_temp1_auto_point1_pwm, NULL, 0);
-> @@ -54,8 +54,8 @@ nouveau_hwmon_temp1_auto_point1_temp(struct device *d,
->	struct nouveau_drm *drm = nouveau_drm(dev);
->	struct nvkm_therm *therm = nvxx_therm(&drm->client.device);
->
-> -	return snprintf(buf, PAGE_SIZE, "%d\n",
-> -	      therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST) * 1000);
-> +	return sysfs_emit(buf, "%d\n",
-> +			  therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST) * 1000);
->  }
->  static ssize_t
->  nouveau_hwmon_set_temp1_auto_point1_temp(struct device *d,
-> @@ -87,8 +87,8 @@ nouveau_hwmon_temp1_auto_point1_temp_hyst(struct device *d,
->	struct nouveau_drm *drm = nouveau_drm(dev);
->	struct nvkm_therm *therm = nvxx_therm(&drm->client.device);
->
-> -	return snprintf(buf, PAGE_SIZE, "%d\n",
-> -	 therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST_HYST) * 1000);
-> +	return sysfs_emit(buf, "%d\n",
-> +			  therm->attr_get(therm, NVKM_THERM_ATTR_THRS_FAN_BOOST_HYST) * 1000);
->  }
->  static ssize_t
->  nouveau_hwmon_set_temp1_auto_point1_temp_hyst(struct device *d,
-> --
-> 2.34.1
->
->
->
+
+ drivers/scsi/fnic/fnic_trace.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/scsi/fnic/fnic_trace.c b/drivers/scsi/fnic/fnic_trace.c
+index e03967463561..7b8ef74fc060 100644
+--- a/drivers/scsi/fnic/fnic_trace.c
++++ b/drivers/scsi/fnic/fnic_trace.c
+@@ -544,12 +544,10 @@ int fnic_fc_trace_init(void)
+ 	unsigned long fc_trace_buf_head;
+ 	int err = 0;
+ 	int i;
++	size_t mem_sz = array_size(PAGE_SIZE, fnic_fc_trace_max_pages);
+ 
+-	fc_trace_max_entries = (fnic_fc_trace_max_pages * PAGE_SIZE)/
+-				FC_TRC_SIZE_BYTES;
+-	fnic_fc_ctlr_trace_buf_p =
+-		(unsigned long)vmalloc(array_size(PAGE_SIZE,
+-						  fnic_fc_trace_max_pages));
++	fc_trace_max_entries = mem_sz / FC_TRC_SIZE_BYTES;
++	fnic_fc_ctlr_trace_buf_p = (unsigned long)vmalloc(mem_sz);
+ 	if (!fnic_fc_ctlr_trace_buf_p) {
+ 		pr_err("fnic: Failed to allocate memory for "
+ 		       "FC Control Trace Buf\n");
+@@ -557,13 +555,11 @@ int fnic_fc_trace_init(void)
+ 		goto err_fnic_fc_ctlr_trace_buf_init;
+ 	}
+ 
+-	memset((void *)fnic_fc_ctlr_trace_buf_p, 0,
+-			fnic_fc_trace_max_pages * PAGE_SIZE);
++	memset((void *)fnic_fc_ctlr_trace_buf_p, 0, mem_sz);
+ 
+ 	/* Allocate memory for page offset */
+-	fc_trace_entries.page_offset =
+-		vmalloc(array_size(fc_trace_max_entries,
+-				   sizeof(unsigned long)));
++	mem_sz = array_size(fc_trace_max_entries, sizeof(unsigned long));
++	fc_trace_entries.page_offset = vmalloc(mem_sz);
+ 	if (!fc_trace_entries.page_offset) {
+ 		pr_err("fnic:Failed to allocate memory for page_offset\n");
+ 		if (fnic_fc_ctlr_trace_buf_p) {
+@@ -574,8 +570,7 @@ int fnic_fc_trace_init(void)
+ 		err = -ENOMEM;
+ 		goto err_fnic_fc_ctlr_trace_buf_init;
+ 	}
+-	memset((void *)fc_trace_entries.page_offset, 0,
+-	       (fc_trace_max_entries * sizeof(unsigned long)));
++	memset((void *)fc_trace_entries.page_offset, 0, mem_sz);
+ 
+ 	fc_trace_entries.rd_idx = fc_trace_entries.wr_idx = 0;
+ 	fc_trace_buf_head = fnic_fc_ctlr_trace_buf_p;
+-- 
+2.34.1
+
+
+
