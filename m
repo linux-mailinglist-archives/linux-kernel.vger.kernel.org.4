@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDAC6A6A49
+	by mail.lfdr.de (Postfix) with ESMTP id CDDF56A6A4B
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjCAJ4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
+        id S229988AbjCAJ4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjCAJzy (ORCPT
+        with ESMTP id S229963AbjCAJz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:55:54 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89793928E;
-        Wed,  1 Mar 2023 01:55:42 -0800 (PST)
+        Wed, 1 Mar 2023 04:55:57 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716AF3B643;
+        Wed,  1 Mar 2023 01:55:43 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0A57D6602126;
-        Wed,  1 Mar 2023 09:55:40 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AEC4F66020E0;
+        Wed,  1 Mar 2023 09:55:41 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677664541;
-        bh=PCEc0bjMqNKvK0LPA4cYUgfpO8q6NztoEiiPWzh7jAw=;
+        s=mail; t=1677664542;
+        bh=MxY4ueOZBhNlSB3Ww60xM9JsVfchLfbcAG6Y8p1jhmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NiVE6nsAVdDP0ijo9ixkIlm+eqJxiTVQWljgzBTDIzaqUemLYuW/1v0W4KsPeFtRB
-         kFTjaw9Am7usIJ6GjxDPTEtmHOVhPkCKzJhRXrkDb+qeSpy6D6S/vwSIy+rqTbY2z8
-         fh138dHOHtXCDHg21dHqd1k1SWpvsAbYlH86GNfL4NO63Q64qNeiw8jI8vB2v0Kxbx
-         A9jEqWmbFLjs52ZhnHyu/1KxierwlrbgW7jVBiFoF022tcO+RN5QKysOeVzFApWwNg
-         n/D06rJYmx+aF9W19Wk9ijLI2Es3uioiCbRUsgLNWIcFrroqVF14jHBuwRqk7f5mLL
-         WQQBcmRaf9htw==
+        b=Vtqp1STq6IcNA22VmWpCX/xSfdrywj3W2JI2rwI+V3/0IxHQyu/+nOTYd/KSW+v8B
+         Sa8pOsOmmfWXo8TmrnKpjL+Zq3WM5VwZxJsCJRRn21jAXO+CuOquYanePxaxt9DWyK
+         whrAtX2aGdD2AZgj09COHUV4s1qRyDTPmjvk44ptZ68MF0H+Jw9/Cfh+oMbJSpu6bQ
+         1lAtpgahRbrBf9ApF7R2Idt/DMd0QVFszv9WSvPt5cVaMR5k1mfjrxD18qzDPJyWoO
+         GlqNC6AqgviRbX5lTl2mYm8frUmjezgg0c9NsEpAGKUCk9MLsi4mOCM6MbaWqsNLjh
+         1RCthkU9h7Jig==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -40,9 +40,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v4 18/19] arm64: dts: mediatek: mt8183-pumpkin: Override vgpu/vsram_gpu constraints
-Date:   Wed,  1 Mar 2023 10:55:22 +0100
-Message-Id: <20230301095523.428461-19-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v4 19/19] arm64: dts: mediatek: mt8183-evb: Override vgpu/vsram_gpu constraints
+Date:   Wed,  1 Mar 2023 10:55:23 +0100
+Message-Id: <20230301095523.428461-20-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
 References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
@@ -65,14 +65,14 @@ Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.c
 Suggested-by: Chen-Yu Tsai <wenst@chromium.org>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts | 6 ++++++
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-index c228f04d086b..526bcae7a3f8 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-@@ -176,11 +176,17 @@ &mmc1 {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+index fd327437e932..3e3f4b1b00f0 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+@@ -138,11 +138,17 @@ &mmc1 {
  };
  
  &mt6358_vgpu_reg {
