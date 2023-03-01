@@ -2,30 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9226A7468
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FD66A7469
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjCAToC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S229652AbjCATpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCAToA (ORCPT
+        with ESMTP id S229470AbjCATpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:44:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3572FCFE;
-        Wed,  1 Mar 2023 11:43:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED53614B3;
-        Wed,  1 Mar 2023 19:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648FEC433D2;
-        Wed,  1 Mar 2023 19:43:57 +0000 (UTC)
-Date:   Wed, 1 Mar 2023 14:43:55 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Wed, 1 Mar 2023 14:45:22 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A44F474F3
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:45:18 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id ne1so10087064qvb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:45:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1677699917;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n/wnenQxxqSVWtcT09qecF55THwUhusv3ZYljnGarCE=;
+        b=pKlQJ4kvdMBx1Dj10IwILdu9OjSAbqBUkUmeRr/625wmZMU1H8pTqbz0J/Uo09KXnB
+         T2ZHdVMVtNyLpiEybcsHU8hEWWHOqzZusWeuvakaO/fLs51kmnZxv073vILm3ilhvfzR
+         ZaX+rTXd6kRkpx7/+3AKnN+3yhNrspTRBs05o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677699917;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n/wnenQxxqSVWtcT09qecF55THwUhusv3ZYljnGarCE=;
+        b=yWv1wPYzjekfybRxyl4HrPEZbbnNTgGxNbrH83+3p9ulsG4SfqqoMa/3pfdKyJLABg
+         ekT4pqBxNCg/YgHNNlIWtPkJmwR6f1w+6push9oJEin8mGgJNeYDgP503JR5eGo49gN0
+         TobokMFsy7fmwrKoQO54+86yELmAZNsj9OhwCgI/ERTc3gX3KteJN4tE/6hIztnILbZ7
+         sU54qbp7wA/S3PpdIZrZBwvcOaCCDmKBG8nScISDzkm+3QhSNL6JEDawtMmw6U1c3jp1
+         JJVFyOr5keY3YqaGRTOeEcLzk21Y6QdDrfkXrVmaeSdOY+yaJ6FmlobbyLYCNc+F9Ved
+         ZGxg==
+X-Gm-Message-State: AO0yUKU/0xVBtv+tPGE4xqtRjRkTh7UXJEub3b0ymFn2qEijvbGjBMC4
+        /yMnR29oGxYx/uMCeo+p3UM2DN8D31+a36Vv
+X-Google-Smtp-Source: AK7set/5daSEJ8Hvb78FgjUmCxvUwCjUQePFwiIgMZlpmnG9RE57v/PZoIhy1ILm7jaVrb2W1Blwmg==
+X-Received: by 2002:a05:6214:2589:b0:56b:7cb:bdcd with SMTP id fq9-20020a056214258900b0056b07cbbdcdmr16581753qvb.39.1677699917080;
+        Wed, 01 Mar 2023 11:45:17 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id 6-20020a05620a06c600b0071ddbe8fe23sm9400158qky.24.2023.03.01.11.45.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 11:45:16 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
+Date:   Wed, 1 Mar 2023 14:45:05 -0500
+Message-Id: <E010E19D-94FD-4E23-BF46-A0F75734B8FB@joelfernandes.org>
+References: <CAFULd4YPP_5koKN5ZbdgOueXcpUgap97UkaxxyzzGcQ=GEV__Q@mail.gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
         "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Frederic Weisbecker <frederic@kernel.org>,
@@ -33,74 +63,77 @@ Cc:     Joel Fernandes <joel@joelfernandes.org>,
         Josh Triplett <josh@joshtriplett.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH] rcu: use try_cmpxchg in check_cpu_stall
-Message-ID: <20230301144355.338c62de@gandalf.local.home>
 In-Reply-To: <CAFULd4YPP_5koKN5ZbdgOueXcpUgap97UkaxxyzzGcQ=GEV__Q@mail.gmail.com>
-References: <20230228155121.3416-1-ubizjak@gmail.com>
-        <Y/5mguXPPqdP3MZF@google.com>
-        <20230228160324.2a7c1012@gandalf.local.home>
-        <20230228212911.GX2948950@paulmck-ThinkPad-P17-Gen-1>
-        <20230228164124.77c126d2@gandalf.local.home>
-        <CAEXW_YQ515_DOLVUm48GvDADuaY2mSrYTaKa7u6jYDNqBncJww@mail.gmail.com>
-        <20230228190846.79b06089@gandalf.local.home>
-        <CAFULd4aY3Y8tyLN70oebZDagBebvH0erwRxKDaEX8L83Xo8gYw@mail.gmail.com>
-        <20230301113813.4f16a689@gandalf.local.home>
-        <CAFULd4aWZ+fvVZ+MEt6JD1rFaQZeO5DDWAHtPKOrx8R8DETFBw@mail.gmail.com>
-        <20230301135201.59771b73@gandalf.local.home>
-        <CAFULd4YPP_5koKN5ZbdgOueXcpUgap97UkaxxyzzGcQ=GEV__Q@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Uros Bizjak <ubizjak@gmail.com>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 20:18:11 +0100
-Uros Bizjak <ubizjak@gmail.com> wrote:
 
+
+> On Mar 1, 2023, at 2:18 PM, Uros Bizjak <ubizjak@gmail.com> wrote:
+>=20
+> =EF=BB=BFOn Wed, Mar 1, 2023 at 7:52=E2=80=AFPM Steven Rostedt <rostedt@go=
+odmis.org> wrote:
+>>=20
+>>> On Wed, 1 Mar 2023 19:43:34 +0100
+>>> Uros Bizjak <ubizjak@gmail.com> wrote:
+>>>=20
+>>> On Wed, Mar 1, 2023 at 5:38=E2=80=AFPM Steven Rostedt <rostedt@goodmis.o=
+rg> wrote:
+>>>>=20
+>>>> On Wed, 1 Mar 2023 11:28:47 +0100
+>>>> Uros Bizjak <ubizjak@gmail.com> wrote:
+>>>>=20
+>>>>> These benefits are the reason the change to try_cmpxchg was accepted
+>>>>> also in the linear code elsewhere in the linux kernel, e.g. [2,3] to
+>>>>> name a few commits, with a thumbs-up and a claim that the new code is
+>>>>> actually *clearer* at the merge commit [4].
+>>>>=20
+>>>> I'll say it here too. I really like Joel's suggestion of having a
+>>>> cmpxchg_success() that does not have the added side effect of modifying=
+ the
+>>>> old variable.
+>>>>=20
+>>>> I think that would allow for the arch optimizations that you are trying=
+ to
+>>>> achieve, as well as remove the side effect that might cause issues down=
+ the
+>>>> road.
+>>>=20
+>>> Attached patch implements this suggestion.
+>>=20
+>> I like it!
+
+Me too :)
+
+> Thanks!
+>=20
+>> Anyway to make this more generic?
+>=20
 > If we want to put the definition in generic headers, then we also need
 > to define acquire/release/relaxed and 64bit variants. ATM, we have two
 > sites that require this definition and I think that for now we could
 > live with two instances of the same definition in two separate
 > subsystems. But this would definitely be a good future addition. There
 > is some code in the form of
-> 
-> if (cmpxchg (ptr, 0, 1) == 0)
-> 
+>=20
+> if (cmpxchg (ptr, 0, 1) =3D=3D 0)
+>=20
 > that can not be converted to try_cmpxchg, but can use cmpxchg_success.
 
-And even modify code that uses temp variables. For example, where you
-modified the ring buffer code to use try_cmpxchg(), I could convert your:
+I would prefer if we can put it in generic headers instead of duplicating
+across ftrace and RCU.
 
-static int rb_head_page_replace(struct buffer_page *old,
-				struct buffer_page *new)
-{
-	unsigned long *ptr = (unsigned long *)&old->list.prev->next;
-	unsigned long val;
+thanks,
 
-	val = *ptr & ~RB_FLAG_MASK;
-	val |= RB_PAGE_HEAD;
+ - Joel
 
-	return try_cmpxchg(ptr, &val, (unsigned long)&new->list);
-}
-
-Into just:
-
-static int rb_head_page_replace(struct buffer_page *old,
-				struct buffer_page *new)
-{
-	unsigned long *ptr = (unsigned long *)&old->list.prev->next;
-	unsigned long val;
-
-	val = *ptr & ~RB_FLAG_MASK;
-
-	return cmpxchg_success(ptr, val | RB_PAGE_HEAD, (unsigned long)&new->list);
-}
-
--- Steve
+>=20
+> Uros.
