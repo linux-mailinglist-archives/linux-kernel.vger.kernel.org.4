@@ -2,229 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD156A696E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A426A6972
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjCAJEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:04:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S229700AbjCAJFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjCAJEo (ORCPT
+        with ESMTP id S229632AbjCAJEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:04:44 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA451116E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:04:42 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so16512097pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 01:04:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=L8tn/v4aC2ukEl0jonB4oe0ZECIANi8VW58t3+cYdus=;
-        b=ZrrzLbNzuFqJ1Qm1WsDrm7SmRVdW2i6BRFAKgIfedUQcQ43CKj/IiGCVpRVQu8OkjN
-         F4qGw8sJCk4CKMbsuylpcHbSuyLl0BpffF7GlJv4O3Ix5crYwnARr5Kr0oAQzTwgbCTB
-         83ff7P1WqThaYcCriNbMD85FbXE1HV+tu+wYE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L8tn/v4aC2ukEl0jonB4oe0ZECIANi8VW58t3+cYdus=;
-        b=CdhSH8iJAlcK7KnTzhKbGZG4lZ809iLMSTFpbjWZwgroF00gwGOv74kB7pjzKuAtB5
-         +IZAhu6qdupz8FOXO2dgo5mmAv6j3MbMS4zZL04tZVm9HbMrKklfD+V8Msc8DnJHFGsC
-         RRJdBFKWCy0m8oHAp1p3CFQV9UKUhK8gPtknWgTF815y0rGP0RUyBUYd0qck2U8vrWUw
-         sz3ltd2hC6idP6nJG9wHQzPaE2ZecMIU68IanTIcHMj2/tYk1zT642tdS9rvSg28//JS
-         YmXwfLfjc8e5J7+EcHEkDvEK0k18ltmzQNILqRbf/V7V8si1nd9wiTpSVQlAyRyB2djT
-         rECw==
-X-Gm-Message-State: AO0yUKV293GqZeBHNynT6dmxRM4tQMxUZt4d4tcTZ96LuO7oKLfek3Kg
-        w6h40oHTcy4Wl6mxqBmQKZZoJhFz+yDwY3vr
-X-Google-Smtp-Source: AK7set8p9UVIwg8RmJj+bkwKARZtdsm0gWBK1rA3FvUiJxlsuIcbEXxu6kxuywn0EjVPr12Qf8cjBQ==
-X-Received: by 2002:a17:902:e5d0:b0:19d:1bbb:3547 with SMTP id u16-20020a170902e5d000b0019d1bbb3547mr7748117plf.43.1677661482027;
-        Wed, 01 Mar 2023 01:04:42 -0800 (PST)
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com. [209.85.216.49])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170902c25200b0017f5ad327casm7894252plg.103.2023.03.01.01.04.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 01:04:41 -0800 (PST)
-Received: by mail-pj1-f49.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so16512020pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 01:04:40 -0800 (PST)
-X-Received: by 2002:a17:90a:668d:b0:230:80d7:2158 with SMTP id
- m13-20020a17090a668d00b0023080d72158mr2307984pjj.4.1677661480192; Wed, 01 Mar
- 2023 01:04:40 -0800 (PST)
+        Wed, 1 Mar 2023 04:04:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FBF15566;
+        Wed,  1 Mar 2023 01:04:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E5FDB80EFA;
+        Wed,  1 Mar 2023 09:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3E8C433EF;
+        Wed,  1 Mar 2023 09:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677661490;
+        bh=nnWBYCpOWlTZ5z+s2bo2GClbIpIKpWepFx5Lp7X+MMk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xy575dxmp7KOEPQ3dRySjV+t9rt0HRXVkPTFFpVCD9CgtqTHolOJL2p3Yg1u1pA83
+         OBwCGNc6C8k3ZL3bdW1Uhqv2v3ifGqzl6HklCpkt16Hks0getdsvDYN42FK5Qa18bU
+         9SVa1TpG/t0MwmsBGcVToLrVf/pIMRkMRVPnCrbXcUlKXj11bBbCNOqRknSb0A+s1O
+         604+VCCzga2yw/BJ2+Dpvxupxvh4HFViJdbGk6xVceprBanHBTbyZNmCcaJNjoi8aW
+         rbRg0e1eOOIG6mcXcpu3hK9ZsS+IbtOq5GRbwQcdYQtMxbbS3FITc//PHL63fuXIe+
+         l3VosKQKL7GgQ==
+Date:   Wed, 1 Mar 2023 09:04:45 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Support Opensource <support.opensource@diasemi.com>
+Subject: Re: [PATCH 18/27] kbuild, mfd: remove MODULE_LICENSE in non-modules
+Message-ID: <Y/8VLcMlojbFmhZy@google.com>
+References: <20230222121453.91915-1-nick.alcock@oracle.com>
+ <20230222121453.91915-19-nick.alcock@oracle.com>
+ <OS3PR01MB8460D00B7C988DCC13173CAAC2AA9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
+ <Y/duxo1aKFibuZtF@google.com>
+ <87ttzcmbgu.fsf@esperi.org.uk>
+ <OS3PR01MB8460AA34CBDD0C2BBE6F2399C2A89@OS3PR01MB8460.jpnprd01.prod.outlook.com>
+ <87zg8zi71g.fsf@esperi.org.uk>
 MIME-Version: 1.0
-References: <20221101-instal-v1-0-d13d1331c4b5@chromium.org> <Y6z55cXTt5yXjIZj@pendragon.ideasonboard.com>
-In-Reply-To: <Y6z55cXTt5yXjIZj@pendragon.ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 1 Mar 2023 10:04:28 +0100
-X-Gmail-Original-Message-ID: <CANiDSCvbQ7uMgoxDsXDOphjANNZ2EuoV-Dra+wtT9LLL6USstQ@mail.gmail.com>
-Message-ID: <CANiDSCvbQ7uMgoxDsXDOphjANNZ2EuoV-Dra+wtT9LLL6USstQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND] media: uvcvideo: Disable autosuspend for Insta360 Link
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Yunke Cao <yunkec@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87zg8zi71g.fsf@esperi.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent
+On Mon, 27 Feb 2023, Nick Alcock wrote:
 
-We are back to this issue.
-
-
-On Thu, 29 Dec 2022 at 03:22, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> Thank you for the patch.
->
-> On Fri, Dec 02, 2022 at 05:48:52PM +0100, Ricardo Ribalda wrote:
-> > When the device suspends, it keeps power-cycling.
+> On 24 Feb 2023, DLG Adam Ward told this:
+> 
+> > On 23/02/2023 19:25, Nick Alcock wrote:
 > >
-> > The user notices it because the LED constanct oscillate between
-> > blue (ready) and no LED (off).
+> >>> Makes sense - but if you need to do a V2, would you mind removing the erroneous claim on DA9055 at the same time?
 > >
-> > <6>[95202.128542] usb 3-3-port4: attempt power cycle
-> > <6>[95206.070120] usb 3-3.4: new high-speed USB device number 49 using xhci_hcd
-> > <6>[95206.212027] usb 3-3.4: New USB device found, idVendor=2e1a, idProduct=4c01, bcdDevice= 2.00
-> > <6>[95206.212044] usb 3-3.4: New USB device strings: Mfr=1, Product=2, SerialNumber=<Serial: 1>
-> > <6>[95206.212050] usb 3-3.4: Product: Insta360 Link
-> > <6>[95206.212075] usb 3-3.4: Manufacturer: Amba
-> > <7>[95206.214862] usb 3-3.4: GPIO lookup for consumer privacy
-> > <7>[95206.214866] usb 3-3.4: using lookup tables for GPIO lookup
-> > <7>[95206.214869] usb 3-3.4: No GPIO consumer privacy found
-> > <6>[95206.214871] usb 3-3.4: Found UVC 1.10 device Insta360 Link (2e1a:4c01)
-> > <3>[95206.217113] usb 3-3.4: Failed to query (GET_INFO) UVC control 14 on unit 1: -32 (exp. 1).
-> > <3>[95206.217733] usb 3-3.4: Failed to query (GET_INFO) UVC control 16 on unit 1: -32 (exp. 1).
-> > <4>[95206.223544] usb 3-3.4: Warning! Unlikely big volume range (=32767), cval->res is probably wrong.
-> > <4>[95206.223554] usb 3-3.4: [9] FU [Mic Capture Volume] ch = 1, val = -32768/-1/1
-> > <6>[95210.698990] usb 3-3.4: USB disconnect, device number 49
-> > <6>[95211.963090] usb 3-3.4: new high-speed USB device number 50 using xhci_hcd
-> > <6>[95212.657061] usb 3-3.4: new full-speed USB device number 51 using xhci_hcd
-> > <3>[95212.783119] usb 3-3.4: device descriptor read/64, error -32
-> > <3>[95213.015076] usb 3-3.4: device descriptor read/64, error -32
-> > <6>[95213.120358] usb 3-3-port4: attempt power cycle
+> >>I don't know what this means. There are two references to DA9055 in this patch, both in context (not in modified lines), one in drivers/mfd/da9055-core.c, the other in rivers/mfd/da9055-i2c.c. To me these both seem likely to be DA9055-related. Are you saying that one of them isn't?
 > >
-> > Bus 001 Device 009: ID 2e1a:4c01 Amba Insta360 Link
-> > Device Descriptor:
-> >   bLength                18
-> >   bDescriptorType         1
-> >   bcdUSB               2.00
-> >   bDeviceClass          239 Miscellaneous Device
-> >   bDeviceSubClass         2
-> >   bDeviceProtocol         1 Interface Association
-> >   bMaxPacketSize0        64
-> >   idVendor           0x2e1a
-> >   idProduct          0x4c01
-> >   bcdDevice            2.00
-> >   iManufacturer           1 Amba
-> >   iProduct                2 Insta360 Link
-> >   iSerial                 0
-> >   bNumConfigurations      1
-> >
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> > media: uvcvideo: Disable autosuspend for Insta360
-> >
-> > The device does not handle properly the USB suspend and makes it barely usable.
->
-> Isn't this best handled with a quirk in the USB core ? Autosuspend is a
-> device feature, not an interface feature, so if the USB sound driver is
-> loaded but uvcvideo isn't, the kernel may still attempt to autosuspend
-> the device.
->
+> > The comment was followed by this link - https://elixir.bootlin.com/linux/latest/source/drivers/mfd/Kconfig#L36
+> > This files talks about the driver being a module, but, as you correctly point out, it is not.
+> > And never has been.
+> > So it is worth removing.
+> 
+> Ah! I never even thought of auditing the Kconfigs for erroneous
+> statements of modularity: that's a much harder-to-automate job.
+> 
+> I'm not planning to do this in general any time soon (because I'd have
+> to soup up Kconfig parsers and maybe write my own just for this), but
+> here's a reroll of this one patch that drops the erroneous Kconfig help
+> text:
+> 
+> -- >8 --
 
-Seems like USB_QUIRK_NO_AUTOSUSPEND was gone for a long time
-
-https://lore.kernel.org/lkml/20071115064457.GU19218@kroah.com/
-
-under the assumption that autosuspend was off by default and user
-space should only enable autosuspend on the devices that support it
-(if I understand it correctly).
-
-There are two other quirks still available: USB_QUIRK_RESET_RESUME and
-USB_QUIRK_DISCONNECT_SUSPEND, but they do not seem to work for this
-device (Yunke, thanks for looking into this)
-
-If we are explicitly enabling autosuspend on the driver, shouldn't we
-make sure that the device supports it?
-
-Regards!
-
-> > To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > To: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > Cc: linux-media@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > ---
-> >  drivers/media/usb/uvc/uvc_driver.c | 13 ++++++++++++-
-> >  drivers/media/usb/uvc/uvcvideo.h   |  1 +
-> >  2 files changed, 13 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index 215fb483efb0..ad95c7599863 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -2223,7 +2223,9 @@ static int uvc_probe(struct usb_interface *intf,
-> >       }
-> >
-> >       uvc_dbg(dev, PROBE, "UVC device initialized\n");
-> > -     usb_enable_autosuspend(udev);
-> > +     if (!(dev->quirks & UVC_QUIRK_DISABLE_AUTOSUSPEND))
-> > +             usb_enable_autosuspend(udev);
-> > +
-> >       return 0;
-> >
-> >  error:
-> > @@ -2967,6 +2969,15 @@ static const struct usb_device_id uvc_ids[] = {
-> >         .bInterfaceSubClass   = 1,
-> >         .bInterfaceProtocol   = 0,
-> >         .driver_info          = (kernel_ulong_t)&uvc_quirk_force_y8 },
-> > +     /* Insta360 Link */
-> > +     { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
-> > +                             | USB_DEVICE_ID_MATCH_INT_INFO,
-> > +       .idVendor             = 0x2e1a,
-> > +       .idProduct            = 0x4c01,
-> > +       .bInterfaceClass      = USB_CLASS_VIDEO,
-> > +       .bInterfaceSubClass   = 1,
-> > +       .bInterfaceProtocol   = 0,
-> > +       .driver_info          = UVC_INFO_QUIRK(UVC_QUIRK_DISABLE_AUTOSUSPEND) },
-> >       /* GEO Semiconductor GC6500 */
-> >       { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
-> >                               | USB_DEVICE_ID_MATCH_INT_INFO,
-> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > index df93db259312..47c86c7c6346 100644
-> > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > @@ -74,6 +74,7 @@
-> >  #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT      0x00000400
-> >  #define UVC_QUIRK_FORCE_Y8           0x00000800
-> >  #define UVC_QUIRK_FORCE_BPP          0x00001000
-> > +#define UVC_QUIRK_DISABLE_AUTOSUSPEND        0x00002000
-> >
-> >  /* Format flags */
-> >  #define UVC_FMT_FLAG_COMPRESSED              0x00000001
-> >
-> > ---
-> > base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
-> > change-id: 20221101-instal-9a77ba1cc448
->
-> --
-> Regards,
->
-> Laurent Pinchart
-
-
+Can you submit this as an orthogonal v2 please?
+ 
+> From 06d491176513f9fcd699871cb6815534068b664a Mon Sep 17 00:00:00 2001
+> From: Nick Alcock <nick.alcock@oracle.com>
+> Date: Thu, 23 Feb 2023 19:10:03 +0000
+> Subject: [PATCH v2 18/27] mfd: remove MODULE_LICENSE in non-modules
+> 
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Support Opensource <support.opensource@diasemi.com>
+> Cc: Lee Jones <lee@kernel.org>
+> ---
+>  drivers/mfd/Kconfig       | 3 ---
+>  drivers/mfd/da903x.c      | 1 -
+>  drivers/mfd/da9052-core.c | 1 -
+>  drivers/mfd/da9052-i2c.c  | 1 -
+>  drivers/mfd/da9052-spi.c  | 1 -
+>  drivers/mfd/da9055-core.c | 1 -
+>  drivers/mfd/da9055-i2c.c  | 1 -
+>  7 files changed, 9 deletions(-)
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 30db49f318668..751d38b30bb1f 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -361,9 +361,6 @@ config MFD_DA9055
+>  	  Additional drivers must be enabled in order to use the functionality
+>  	  of the device.
+>  
+> -	  This driver can be built as a module. If built as a module it will be
+> -	  called "da9055"
+> -
+>  config MFD_DA9062
+>  	tristate "Dialog Semiconductor DA9062/61 PMIC Support"
+>  	select MFD_CORE
+> diff --git a/drivers/mfd/da903x.c b/drivers/mfd/da903x.c
+> index 44a25d642ce94..6570b33a5a77b 100644
+> --- a/drivers/mfd/da903x.c
+> +++ b/drivers/mfd/da903x.c
+> @@ -563,4 +563,3 @@ module_exit(da903x_exit);
+>  MODULE_DESCRIPTION("PMIC Driver for Dialog Semiconductor DA9034");
+>  MODULE_AUTHOR("Eric Miao <eric.miao@marvell.com>");
+>  MODULE_AUTHOR("Mike Rapoport <mike@compulab.co.il>");
+> -MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/mfd/da9052-core.c b/drivers/mfd/da9052-core.c
+> index 8b42d2f7024f5..150448cd2eb08 100644
+> --- a/drivers/mfd/da9052-core.c
+> +++ b/drivers/mfd/da9052-core.c
+> @@ -653,4 +653,3 @@ void da9052_device_exit(struct da9052 *da9052)
+>  
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+>  MODULE_DESCRIPTION("DA9052 MFD Core");
+> -MODULE_LICENSE("GPL");
+> diff --git a/drivers/mfd/da9052-i2c.c b/drivers/mfd/da9052-i2c.c
+> index ecb8077cdaaf9..03db7a2ccf7a0 100644
+> --- a/drivers/mfd/da9052-i2c.c
+> +++ b/drivers/mfd/da9052-i2c.c
+> @@ -209,4 +209,3 @@ module_exit(da9052_i2c_exit);
+>  
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+>  MODULE_DESCRIPTION("I2C driver for Dialog DA9052 PMIC");
+> -MODULE_LICENSE("GPL");
+> diff --git a/drivers/mfd/da9052-spi.c b/drivers/mfd/da9052-spi.c
+> index b79a57b45c1e8..be5f2b34e18ae 100644
+> --- a/drivers/mfd/da9052-spi.c
+> +++ b/drivers/mfd/da9052-spi.c
+> @@ -102,4 +102,3 @@ module_exit(da9052_spi_exit);
+>  
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+>  MODULE_DESCRIPTION("SPI driver for Dialog DA9052 PMIC");
+> -MODULE_LICENSE("GPL");
+> diff --git a/drivers/mfd/da9055-core.c b/drivers/mfd/da9055-core.c
+> index c3bcbd8905c6c..768302e05baa1 100644
+> --- a/drivers/mfd/da9055-core.c
+> +++ b/drivers/mfd/da9055-core.c
+> @@ -398,5 +398,4 @@ void da9055_device_exit(struct da9055 *da9055)
+>  }
+>  
+>  MODULE_DESCRIPTION("Core support for the DA9055 PMIC");
+> -MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+> diff --git a/drivers/mfd/da9055-i2c.c b/drivers/mfd/da9055-i2c.c
+> index 702abff506a1a..537fd5de3e6d4 100644
+> --- a/drivers/mfd/da9055-i2c.c
+> +++ b/drivers/mfd/da9055-i2c.c
+> @@ -97,4 +97,3 @@ module_exit(da9055_i2c_exit);
+>  
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+>  MODULE_DESCRIPTION("I2C driver for Dialog DA9055 PMIC");
+> -MODULE_LICENSE("GPL");
+> -- 
+> 2.39.1.268.g9de2f9a303
 
 -- 
-Ricardo Ribalda
+Lee Jones [李琼斯]
