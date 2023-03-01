@@ -2,96 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA166A71FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7A96A71FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjCARWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S229825AbjCARWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:22:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjCARWF (ORCPT
+        with ESMTP id S229629AbjCARWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:22:05 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84950457F7;
-        Wed,  1 Mar 2023 09:22:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677691324; x=1709227324;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Niz37kpNrb24aJbPIb2oGvSA7MbMhlMx0//dlVBp93s=;
-  b=aGSfgY39UDGczOVdOFofUnF4XPrKzxIV9Ba9aSfXrERVAjN8mDPUqmLq
-   bi/2FtaNRCXaFqzXZr/LeSHuxgIS6Y8Qv1vxi+2b8/kl/PRGtYM6PdzKN
-   UF9XWLS+9J1TsnOXD1isIx0FDsjsWikX1QfVu0ouLtyleGRUqsLH1KECK
-   g/Cgjeb908E7RuGSMIMA7uKarjJ7LB85WRqfxPxRrRCXR5TMrrrZ+qzUb
-   aLufEJEKQYutgKxVkiLVKK5pvGLAtjJvlc9pTJryKuYhXQNSUq2xZmGRP
-   81HcrdfmCz2c0AR2nHJlU8gUlIrScAWKsaVEz3W6C/PpHVpSVGHMEnSWp
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="331949389"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="331949389"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 09:21:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="667933625"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="667933625"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 01 Mar 2023 09:21:55 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pXQ9K-00DqxI-0Y;
-        Wed, 01 Mar 2023 19:21:54 +0200
-Date:   Wed, 1 Mar 2023 19:21:53 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] leds: simatic-ipc-leds-gpio: move two extra gpio
- pins into another table
-Message-ID: <Y/+JsTpONdhk/nwG@smile.fi.intel.com>
-References: <20230301170215.23382-1-henning.schild@siemens.com>
- <20230301170215.23382-2-henning.schild@siemens.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301170215.23382-2-henning.schild@siemens.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 12:22:32 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01389460B9;
+        Wed,  1 Mar 2023 09:22:30 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id p16so9070148wmq.5;
+        Wed, 01 Mar 2023 09:22:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677691349;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kDQHP8BG8R5wdJ7RTb+80l2ekEuyVXCqz8ZnvG7NU2E=;
+        b=MXqcEB1rg/3NyMESFE4svUXado9uxbiDrvKogUtcjg2aU575GuICui5bKmW+87FGKM
+         OQIgHtE6lZ1rLlCzzoJwXR5yPulcZM/PumnU+lOGTwKL6jnmiPQhxcRn94NIithJvg/a
+         Yy2M7jN5wkOI9txLQZw0wNcP4db11DaA8wmIQSGjnWLUAuKXH2CiUmPa+5NRNy9OMuvr
+         OD/xdxkSHQsieJYpbtK7LjQwBRnvJSlUFBGTl0leWHR2Az/iixiPZJg4iye1bQW8w7CJ
+         y8sUsxOY5CT3nRjzfZPMlW4BRnk93AAlX3L0DrZ8z8iojrpG5/+bjuJMyJ7WwWrcDff/
+         lCLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677691349;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kDQHP8BG8R5wdJ7RTb+80l2ekEuyVXCqz8ZnvG7NU2E=;
+        b=AmENHsC/7lEXRQMGLnNfqAsEKt9uIbhM+8ucr4L3YCaVmppC2D5zl0HqQH3m12qNGD
+         dNC2hXKwe036b1+Ff0UJhKgxNPln941wRqP+aeaQ6FHa2liO0yTBT4764P9UYwPdriI+
+         ETILlXj0v3uKWIduFpuXJRtj4UNdMKdgasJ72c9Eb89SJRYgLD9+OONZqW4bZjxBgW01
+         bUPutpFkXne62qNkoxn+IDhFl9/HKjpsMeMPIP5ReYM+so3UYNNarzaIN1SSVrKLIPMY
+         3vKX7vTF6Lxgvh9NdtS3fLYMm+KPpAPzwM3QXBhkVWn/YYsAKv6K6sJVz0XU+ybmnCX+
+         lIcw==
+X-Gm-Message-State: AO0yUKWFhrG/YaBfs15w5j5+/GEJJLgv7BK2mwyaCNoPlwbqr9GCczUa
+        J4g6Lku22krkOhZrgpy5Kyo=
+X-Google-Smtp-Source: AK7set/xIQTGZ0oSP5Ir+iPChbH3yS0TpDGFVtf9t8yYtqEV3aMhGuoNbxDpLj4X7tn8uDDYAraJpw==
+X-Received: by 2002:a05:600c:3507:b0:3dc:4fd7:31e9 with SMTP id h7-20020a05600c350700b003dc4fd731e9mr6131748wmq.7.1677691349057;
+        Wed, 01 Mar 2023 09:22:29 -0800 (PST)
+Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
+        by smtp.gmail.com with ESMTPSA id p21-20020a05600c359500b003e0238d9101sm178410wmq.31.2023.03.01.09.22.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 09:22:28 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 01 Mar 2023 18:22:27 +0100
+Message-Id: <CQV7Y50LK5UL.2YJUX3W7B4NU9@vincent-arch>
+Cc:     <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <asahi@lists.linux.dev>
+Subject: Re: [PATCH 1/2] rust: sync: arc: implement Arc<dyn Any + Send +
+ Sync>::downcast()
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Asahi Lina" <lina@asahilina.net>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+References: <20230224-rust-arc-v1-0-568eea613a41@asahilina.net>
+ <20230224-rust-arc-v1-1-568eea613a41@asahilina.net>
+In-Reply-To: <20230224-rust-arc-v1-1-568eea613a41@asahilina.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 06:02:13PM +0100, Henning Schild wrote:
-> There are two special pins needed to init the LEDs. We used to have them
-> at the end of the gpiod_lookup table to give to "leds-gpio". A cleaner
-> way is to have a dedicated table for the special pins.
-
-...
-
-> +	.dev_id = NULL,
-
-Technically speaking this is redundant. Maybe you wanted to be more explicit
-with a comment like
-
-	.dev_id = NULL,		/* Filled during initialization */
-
-...
-
-> +	.dev_id = NULL,
-
-Ditto.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> This mirrors the standard library's alloc::sync::Arc::downcast().
+>
+> Based on the Rust standard library implementation, ver 1.62.0,
+> licensed under "Apache-2.0 OR MIT", from:
+>
+>     https://github.com/rust-lang/rust/tree/1.62.0/library/alloc/src
+>
+> For copyright details, please see:
+>
+>     https://github.com/rust-lang/rust/blob/1.62.0/COPYRIGHT
+>
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> ---
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
