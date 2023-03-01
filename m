@@ -2,210 +2,521 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020636A7437
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBD66A7439
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCAT1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S229709AbjCAT1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjCAT1H (ORCPT
+        with ESMTP id S229509AbjCAT1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:27:07 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B863D4DBE8;
-        Wed,  1 Mar 2023 11:27:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677698823; x=1709234823;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=VA5AI+a0IMK6/bsZx7/w2jj4OgK2xWypPdSxYuBXbCA=;
-  b=WLcgVrOrWB6cxPcnrRoTV3fcTuEpNRrVMWfJJNamh/Yxl9veG+F4ENU8
-   i5jB2Kj0lGmlrTkPzMIlFOBaHG1nSToUlhNM/Dl8VizixlnhzgC5y1h2y
-   31FJLmB3Pboy9WabxHWnU9w3X/xyghj2aieN+3f10awNDVclzR/c90cg9
-   OW7pUWBADuKZffohchapM24zbxZvNjFRxnjEMQhsAd2S3xtcSQ4BnVzGs
-   QIkeB9Vsttx28AW0ITI+XW7M80PG5ZMM9kiclQUcHOua+f26Uobm+hbki
-   bXvHieaoYEAM0wkT3NeKZaGtI+FC6He7HfGOcHHWUQxBUeBh7c0pRTwwZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322770003"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="322770003"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 11:27:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="798529592"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="798529592"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2023 11:27:02 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 1 Mar 2023 11:27:02 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 1 Mar 2023 11:27:02 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Wed, 1 Mar 2023 11:27:02 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.42) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 1 Mar 2023 11:27:01 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bTJ6m+GnNQuixDjx47IPprrmaNPoSc4OXZzk/dyUoPZ2cS8wWKP9J+XNJnlyNkn4X/q9WSrxg5Kd/pJi0jRle4jmj7e4DtzPirqUdB0+bJd1TqRUi4TGquIJlOBYx9DKTq24z/k6ZxEYEcWD0pzLeGuLfrnuEKnwzYkvICyGrDtKCEE3cA9nj929s/pzs6kMoy8b0PjpbbnScbhP8x0b1T/5Ggi0AcQtuFKzhDVPDbJW+FtNkNyGIPa5kc/A3x2/OpOATYQi+GlROLB1t7v74a7HxXeKQY06RYlS2lKv4v1ZC8dvUl252W78I5L4WTIx0+ZVsrmgeqNaaHYlRJE3lQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7UygToaJLeVccmVAMx0eTga7mjHMskNqRCDSezjClTY=;
- b=Ftsr7PVA6NzA0F9/Pb9MUGjXzCCFQHgAL+oM/zP9IjJEaVIjU8QDZg1ZzJ+CuJyUbfSVQDUhonog7KgJGGR4YWS0BlNGaI+k0yKHS7w/XVgCzKDmi/Ter9VOrvplg12/fZQOAKLuQx9t8eSRzHKxD4tESLFCkGo0eszabprEG6mxhuWRWDBV6yYetUZzyQsEu9agTPefKXd9iEOrkQ/AJUiDa+uoqfaMQFe85tMcDkQonuBrQwoQ/BNP/vARxuKJ3mKA4P3mBZ+jQoRLMcud3BSEup62+flPKTfi0lwyE0YD3JuoGnd8ekGgO18P+FP863i7aG8BkMru0LyASNcHlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4914.namprd11.prod.outlook.com (2603:10b6:303:90::24)
- by DS0PR11MB7309.namprd11.prod.outlook.com (2603:10b6:8:13e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
- 2023 19:26:58 +0000
-Received: from CO1PR11MB4914.namprd11.prod.outlook.com
- ([fe80::c2c3:34a1:b4cd:b162]) by CO1PR11MB4914.namprd11.prod.outlook.com
- ([fe80::c2c3:34a1:b4cd:b162%6]) with mapi id 15.20.6156.018; Wed, 1 Mar 2023
- 19:26:58 +0000
-Message-ID: <d062a735-ed89-d437-16cc-ca7456c7de08@intel.com>
-Date:   Wed, 1 Mar 2023 11:26:55 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net v2] ice: copy last block omitted in
- ice_get_module_eeprom()
-To:     Petr Oros <poros@redhat.com>, <netdev@vger.kernel.org>
-CC:     <aleksander.lobakin@intel.com>, <anthony.l.nguyen@intel.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <scott.w.taylor@intel.com>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-References: <20230228204139.2264495-1-poros@redhat.com>
- <20230301171452.2514734-1-poros@redhat.com>
-Content-Language: en-US
-From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
-In-Reply-To: <20230301171452.2514734-1-poros@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0041.namprd05.prod.outlook.com
- (2603:10b6:a03:33f::16) To CO1PR11MB4914.namprd11.prod.outlook.com
- (2603:10b6:303:90::24)
+        Wed, 1 Mar 2023 14:27:53 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F188E43463
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:27:49 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id f1so10030876qvx.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:27:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1677698869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JIiTxOqBtVJmmqfILDu4pzBpVT9EPwRlKJVqXgvs/LE=;
+        b=SPpOxIE4MFbKfT5oflMJuCUmCwTZXEWEpEG1wJIzbOVPgm78wM59YIPufNhx6J+xAY
+         uVAMJTeGKjNw/La0k0oS+DZnsX/O3juquDKDLaxoG3JHuebMZjvqVwW2OiSK8f5l7USh
+         kt/xAoIxRw79wuBJ1qtO6oGHHmYjmOXM3kL6A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677698869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JIiTxOqBtVJmmqfILDu4pzBpVT9EPwRlKJVqXgvs/LE=;
+        b=s3/pocpS40TNfoH5rt9UmgqspJIJnlnVHGPln5K9McYBI3HDn+/BCmRg84lIHlXybB
+         1F1ofkU003bZEEQS9DVEMOko07oHtd69vIEorrdHP+1rZNRXXN5+tlgFqXCmJG2jUyhm
+         3MMUw3GyYMtrACPAzc9G6Q0UrtFagewlBfErtMCnkNt9uSsnBGdUwSqThowU0EnKNkJz
+         tPa8YAR7WzuGuA3f+pkmVndm4UPfA22tpgJ7aIJKLeNOlsC1vuZ5Jj9f6skX0HVrXWzS
+         LHHhYaA27DnAZynLlkuKXOOVQCRK8zch4kGQrPaWujbMxDDiWpusVK73OEUvkzgX8CTh
+         HX0g==
+X-Gm-Message-State: AO0yUKWwHfzOZr1/ESy8ssJwSdiZYvyPyZ9JG4GiBrYBDMl0j7c/l3Da
+        GkQe7XR/pcL/oDQYoyLQpYWRgqf87KyrSpDcnajqwA==
+X-Google-Smtp-Source: AK7set8sXTIjoEIIkKXqh8MhkPOLOOdhPeMyWKaljr8NWvj+clELNhANgz7y7ObItSZPtTG6KHoFEg==
+X-Received: by 2002:ad4:4eac:0:b0:56c:2ee:2641 with SMTP id ed12-20020ad44eac000000b0056c02ee2641mr14904796qvb.22.1677698868635;
+        Wed, 01 Mar 2023 11:27:48 -0800 (PST)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id t143-20020a374695000000b007422eee8058sm9492494qka.125.2023.03.01.11.27.48
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 11:27:48 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id e194so1456062ybf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 11:27:48 -0800 (PST)
+X-Received: by 2002:a05:6902:c7:b0:a02:a44e:585c with SMTP id
+ i7-20020a05690200c700b00a02a44e585cmr4183238ybs.1.1677698867449; Wed, 01 Mar
+ 2023 11:27:47 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR11MB4914:EE_|DS0PR11MB7309:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca64a7ae-95b9-432a-f28d-08db1a8aec76
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AGvTk7B8g4fC9BetNvdQOVLxpjdw6TYkXjtiI0odwI04/pODxP4cjSlGl51CmptIio5qhpRqezcckIDtsx42cUNpb2FQQXL/KBAnXfLtrd33d5Y8nV4LGXTdToXFlNzK3Jh1x12hs8BSprCvucAey3u9pr1oN1CDfl/69QuRJICJZwdjO8gZTLbZemEN6Kn5Z6TN5oINgwtaUJ8nxz8+bMqr+xWCcK6hgwAQFR4+FnhVc/4X+Ua99qCANSf+vR1JSRkLrW2KfLmtYrcmWCLlvGbaM+4lIkNc7Pj1HbkMNOvgTeiHgFpMPJBubyIK+09BX8uZMKrbVU4YxCUM09M+qlgIROuZGS+b6gUS2I8L5srvktNi76yPymF7H8uHW7rx3xV5LeK6FrMud7lnkNhi2/i3tibcCwoUr4EWl3P3ypw4j2gYsvHOtuxtuE1NPCUwEnNzFfSNWxZTXtY7NQ44Wuh1RQgTM1QFmNCBVKmXT50vW/U4EeKpD0QR5noTdiEJc693pZZMTNqtH/LC/KDuGFni3bKK1XXgnnMALvlxNiz/XNl4BHT4gQczPcOJ0zfNpSsBXRZrLPR8t5T1Rcw+ElOf80s8RLel+oT19MsHLfCucCVy9r3fQ2B9f/PtqRPNQPDQgboShyqYZSA0wyvEudzJPkQA8sSxiaOmOIlEi6Rl8RlmMxSIkNsQ2GDFKqjDlmRZ2J9KpdcCd+64nXMBtlLOxNusB6rpAGQS+0BPMag=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4914.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(39860400002)(376002)(396003)(346002)(451199018)(82960400001)(38100700002)(8936002)(31696002)(86362001)(36756003)(44832011)(2906002)(66476007)(4326008)(5660300002)(66946007)(41300700001)(66556008)(8676002)(53546011)(186003)(6512007)(6506007)(2616005)(26005)(83380400001)(316002)(478600001)(6486002)(6666004)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGd0ZFJIcDErRHhubG5MWDlZdWRDYW85WUFXY3NIOGYvc05nTTBJWFg0S3JC?=
- =?utf-8?B?di9odFJmWVdqZTdhc2FWRGt0WE0yQ0hEZjdWeGthKzRBODI1UWNraHlzNHR0?=
- =?utf-8?B?Tlp5blhwWVFIYzhpZ2NJWWllY24wSWtyZUkySEwvazhzemZQWnhQYzF3QUlR?=
- =?utf-8?B?ME5oUlRaNkZraFZFL1NMR1BsRFlqQUpRN05wbXRuT2FocmtkNzUxenlyR3Bl?=
- =?utf-8?B?S1VIWVFGVTJ4SjFYWWtjc3lzWEw5TmRkbW1DU0ZaWlpVWlpTcVVRZEgyOFBa?=
- =?utf-8?B?K0lFUnFqbzZ3VW5HQjl4dGt3Sys1OTlOaFprYW9VWnorV2drMHhwQiszU0dh?=
- =?utf-8?B?S0c4ZzVWaTArYUROUkdTQnBtMTBoaUJ2VVRXSWQ5RXFQWW4rTDlxa1V5cDZN?=
- =?utf-8?B?aFdGMDE2UzNIUmhMempGRE9XeVRDMkI4YXZvSjZJTTJyejNyRnJmTzVLRTZP?=
- =?utf-8?B?VjF1dVJYa3ViUmN6M2dlSHVRUmxZaDMrdHEzeUtSazI3L2FGYjVKVXF0VFEx?=
- =?utf-8?B?c3VWam5idS9RbFNaOFo4akdZRWhmYnBqVURPdTJKMlIrZndhNkREdEkrWUk5?=
- =?utf-8?B?TTdvajFob216cExia1BTRGNSYTRFUW8vd29ydWMyRVRqZElNSUw4Tm1LMmNN?=
- =?utf-8?B?NVNKT09GaWZsMWRBdmpPTGlEeFJ5NlVoZ3dQb0hzMklxWWhYbGltQTlibHZD?=
- =?utf-8?B?MllQMDlUb0owQnVSOHRSdUMyMUFjZVg1RlVhT1krTGNzdVd6NGd1Ti9EYWY3?=
- =?utf-8?B?YmxyVTRNUDc3djh2NytaeUVTdk1oVlVsUGdzeDE5L2hxcW55RFJBM2Z3cXo0?=
- =?utf-8?B?NkNFUUE0Rm05T2hHaXY1eUxXMkhMRWkxUm1kVmpIYUtidmtzQWpEdGpwSGVC?=
- =?utf-8?B?S2JBZmdnd3lqajZaQ3o0ZisraUFTWWc5Qjc1ZHcxQjFLN0JPdm0rd3JlbEg2?=
- =?utf-8?B?RTdoVE94WXM4R2VzTmdSUjFJNk5pVlpXMHZaOHB6VzJ3NjZ0VHRqSjNYbjd6?=
- =?utf-8?B?aCs2cmJxM1h5RDNza3dQWFVyc0Y0bWpXRlQrRFU0bFlhSUs0c1FhQzM3OCtZ?=
- =?utf-8?B?MXBHbUdPR3ZNVndiL3JNUWFUZnVZSjdLUWIzNkltdWR5VGpUWE9nVnFPWWg3?=
- =?utf-8?B?ejVDWDhQU2tjNXdZSEJSQ3ltWFBUSmtHRHNFNWE0TEkyWGZRallXUTlObHox?=
- =?utf-8?B?SGlYa1FBb1VCTlBnV3JiZXRlOUJhdU0yZm5lT0NjNmFRQmxJVERMSEJSQmNj?=
- =?utf-8?B?SE1ycThMYm5ucVcxUlJ5YnVPV2Y5K2NZdzA2eU5WK1JONVpPaGVoMHY1ZVgz?=
- =?utf-8?B?eTZiUWVHRlhzVmZwNUw2d1B2VUgxRUJLczFJRUNVcUxvS29rSXFDc3VhMEdI?=
- =?utf-8?B?TTFGczBrTHZxOFlEY2xwYXpLM2xGNWsxRURKN29PdlVrSXVPeWdYbGNiQ2w0?=
- =?utf-8?B?UEVWQUtLMjdQVE1WR2tpdThieENGbVZEWm1pTUl5WHpvUmFuMjJzd2xtaUxq?=
- =?utf-8?B?UmJRUFVTRUpPUGdkeEsvZGx4OE4zQW1Pbm5zNWNIM2I3MEtLempiVnA0VXRK?=
- =?utf-8?B?Y1owQUdmNUNLQXFjczhkZ3V4cUpaNW10VVRzNlZzMU1NcC9uNTVSS1dXQXlU?=
- =?utf-8?B?dDRXUG9tSnYyTG5JNUQwL2ZBMDFYUElPdFdVUUEwalBBbFM1aGhJUG1abG96?=
- =?utf-8?B?eWxIeE1PSFdOQm45UTFYeGwrV1ZrcmlKMzJrTHpIMEY0NVhIVXZ0c051MFBN?=
- =?utf-8?B?NExvbmJZYzVDSzI0NjN2OTlkODExa2hZeUg0aWFScDRGT0dFbGszUmdpL2Q1?=
- =?utf-8?B?WVdBazl4NXlSRnNGZXNRU05NT2xoNjNXUUt3c0I2M0tmUit1R3l6cGVoaExZ?=
- =?utf-8?B?SVNCNXN0ZjB3U05PMUhzL2lldjMyL2hGTDdVU01kdWR6eFFNZjcvZkRDQ0Yv?=
- =?utf-8?B?SjVVbVFyMjZFZGx0SGVHSDhYUzVWVUtrNCtmdGJCclYvMU9XT21sblgrWUJw?=
- =?utf-8?B?QUZzbmcrcnI0Z3RVVU5ydUlWZ09sMlY3dTI4aWdRUnRTZ3AveWlIa0l6eE1E?=
- =?utf-8?B?RDlkQm43RjRNVzdDRkZMSE5ZRXpYSnBDMGlxWTFCUlB3OGp3VDhVNWQwRnhO?=
- =?utf-8?B?Z09mbElMaHloWG9NWkRDbXJHbk84TUJTVHRIVy9KQkd3OW9ubklPMHV5OVNa?=
- =?utf-8?B?Wnc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca64a7ae-95b9-432a-f28d-08db1a8aec76
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4914.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 19:26:58.5738
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2bPUTeDQhdZr6fYnL2yP2yTFAWTiljJVjK2jT3jDIxi+1sNP8GnvKDl5qZL04V8KP/ao9BlaWEsLWRPSNgrLjZEzZXEmfhkwOEjzAva8v5k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7309
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230222092409.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
+ <CAHUa44GUEtN4J_PKaeM4YEfL8dGBpCcSWw1C_pobwh9VFpWKTw@mail.gmail.com>
+ <CA+ddPcNnCwBVnpyT2cWYeRtUfqZFk-KodtMHfNMnQs=T9o3nyA@mail.gmail.com>
+ <CAHUa44FVrLDBNQqfFfwFAPHTjDNRpQJShCz2+H7X4nUbfe3QUQ@mail.gmail.com>
+ <CA+ddPcMBfVxF2HK8g_o84Ata7Cg3MedacfpG=EZWUn4Zu8m0Pw@mail.gmail.com>
+ <CAHUa44GhTnpyN6BrK69vOsjnDrQmYFsfm2mTX=sK97D2SWtrGQ@mail.gmail.com>
+ <CA+ddPcO4L55d2Uudkj8_NAY_5zSay-LBKWS=ZR0C6opPrzwRwQ@mail.gmail.com> <CAHUa44FCnJo4D8TJ+=8iE7pT=Y70MtW9R68Li+CgEOnCBbxotw@mail.gmail.com>
+In-Reply-To: <CAHUa44FCnJo4D8TJ+=8iE7pT=Y70MtW9R68Li+CgEOnCBbxotw@mail.gmail.com>
+From:   Jeffrey Kardatzke <jkardatzke@chromium.org>
+Date:   Wed, 1 Mar 2023 11:27:34 -0800
+X-Gmail-Original-Message-ID: <CA+ddPcPzVEd6TJ=xFF3iGPpMmPbphGyCSdxMd0Ts-5CzYvRG=Q@mail.gmail.com>
+Message-ID: <CA+ddPcPzVEd6TJ=xFF3iGPpMmPbphGyCSdxMd0Ts-5CzYvRG=Q@mail.gmail.com>
+Subject: Re: [PATCH] tee: optee: Add SMC for loading OP-TEE image
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     op-tee@lists.trustedfirmware.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/2023 9:14 AM, Petr Oros wrote:
+On Wed, Mar 1, 2023 at 12:44=E2=80=AFAM Jens Wiklander
+<jens.wiklander@linaro.org> wrote:
+>
+> On Tue, Feb 28, 2023 at 8:29 PM Jeffrey Kardatzke
+> <jkardatzke@chromium.org> wrote:
+> >
+> > On Tue, Feb 28, 2023 at 10:55=E2=80=AFAM Jens Wiklander
+> > <jens.wiklander@linaro.org> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Fri, Feb 24, 2023 at 9:17 PM Jeffrey Kardatzke
+> > > <jkardatzke@chromium.org> wrote:
+> > > >
+> > > > On Fri, Feb 24, 2023 at 12:25 AM Jens Wiklander
+> > > > <jens.wiklander@linaro.org> wrote:
+> > > > >
+> > > > > On Thu, Feb 23, 2023 at 8:09 PM Jeffrey Kardatzke
+> > > > > <jkardatzke@chromium.org> wrote:
+> > > > > >
+> > > > > > On Thu, Feb 23, 2023 at 1:28 AM Jens Wiklander
+> > > > > > <jens.wiklander@linaro.org> wrote:
+> > > > > > >
+> > > > > > > Hi,
+> > > > > > >
+> > > > > > > On Wed, Feb 22, 2023 at 6:24 PM Jeffrey Kardatzke
+> > > > > > > <jkardatzke@chromium.org> wrote:
+> > > > > > > >
+> > > > > > > > Adds an SMC call that will pass an OP-TEE binary image to E=
+L3 and
+> > > > > > > > instruct it to load it as the BL32 payload. This works in c=
+onjunction
+> > > > > > > > with a feature added to Trusted Firmware for ARM that suppo=
+rts this.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org>
+> > > > > > > > Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
+> > > > > > > > ---
+> > > > > > > >
+> > > > > > > >  drivers/tee/optee/Kconfig     | 10 +++++
+> > > > > > > >  drivers/tee/optee/optee_msg.h | 14 +++++++
+> > > > > > > >  drivers/tee/optee/optee_smc.h | 22 ++++++++++
+> > > > > > > >  drivers/tee/optee/smc_abi.c   | 77 +++++++++++++++++++++++=
+++++++++++++
+> > > > > > > >  4 files changed, 123 insertions(+)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/optee/=
+Kconfig
+> > > > > > > > index f121c224e682..5ffbeb3eaac0 100644
+> > > > > > > > --- a/drivers/tee/optee/Kconfig
+> > > > > > > > +++ b/drivers/tee/optee/Kconfig
+> > > > > > > > @@ -7,3 +7,13 @@ config OPTEE
+> > > > > > > >         help
+> > > > > > > >           This implements the OP-TEE Trusted Execution Envi=
+ronment (TEE)
+> > > > > > > >           driver.
+> > > > > > > > +
+> > > > > > > > +config OPTEE_LOAD_IMAGE
+> > > > > > > > +       bool "Load Op-Tee image as firmware"
+> > > > > > >
+> > > > > > > OP-TEE
+> > > > > > Done, fixed in next patch set.
+> > > > > > >
+> > > > > > > > +       default n
+> > > > > > > > +       depends on OPTEE
+> > > > > > > > +       help
+> > > > > > > > +         This loads the BL32 image for OP-TEE as firmware =
+when the driver is probed.
+> > > > > > > > +         This returns -EPROBE_DEFER until the firmware is =
+loadable from the
+> > > > > > > > +         filesystem which is determined by checking the sy=
+stem_state until it is in
+> > > > > > > > +         SYSTEM_RUNNING.
+> > > > > > > > diff --git a/drivers/tee/optee/optee_msg.h b/drivers/tee/op=
+tee/optee_msg.h
+> > > > > > > > index 70e9cc2ee96b..84c1b15032a9 100644
+> > > > > > > > --- a/drivers/tee/optee/optee_msg.h
+> > > > > > > > +++ b/drivers/tee/optee/optee_msg.h
+> > > > > > > > @@ -284,6 +284,20 @@ struct optee_msg_arg {
+> > > > > > > >   */
+> > > > > > > >  #define OPTEE_MSG_FUNCID_GET_OS_REVISION       0x0001
+> > > > > > > >
+> > > > > > > > +/*
+> > > > > > > > + * Load Trusted OS from optee/tee.bin in the Linux firmwar=
+e.
+> > > > > > > > + *
+> > > > > > > > + * WARNING: Use this cautiously as it could lead to insecu=
+re loading of the
+> > > > > > > > + * Trusted OS.
+> > > > > > > > + * This SMC instructs EL3 to load a binary and excute it a=
+s the Trusted OS.
+> > > > > > > > + * The first two params are the high and low 32 bits of th=
+e size of the payload
+> > > > > > > > + * and the third and fourth params are the high and low 32=
+ bits of the physical
+> > > > > > > > + * address of the payload. The payload is in the OP-TEE im=
+age format.
+> > > > > > > > + *
+> > > > > > > > + * Returns 0 on success and an error code otherwise.
+> > > > > > > > + */
+> > > > > > > > +#define OPTEE_MSG_FUNCID_LOAD_IMAGE   0x0002
+> > > > > > >
+> > > > > > > There's no need to add anything to this file, you can define
+> > > > > > > OPTEE_SMC_FUNCID_LOAD_IMAGE to 2 directly in optee_smc.h belo=
+w.
+> > > > > > >
+> > > > > > Done, fixed in next patch set.
+> > > > > > > > +
+> > > > > > > >  /*
+> > > > > > > >   * Do a secure call with struct optee_msg_arg as argument
+> > > > > > > >   * The OPTEE_MSG_CMD_* below defines what goes in struct o=
+ptee_msg_arg::cmd
+> > > > > > > > diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/op=
+tee/optee_smc.h
+> > > > > > > > index 73b5e7760d10..908b1005e9db 100644
+> > > > > > > > --- a/drivers/tee/optee/optee_smc.h
+> > > > > > > > +++ b/drivers/tee/optee/optee_smc.h
+> > > > > > > > @@ -104,6 +104,28 @@ struct optee_smc_call_get_os_revision_=
+result {
+> > > > > > > >         unsigned long reserved1;
+> > > > > > > >  };
+> > > > > > > >
+> > > > > > > > +/*
+> > > > > > > > + * Load Trusted OS from optee/tee.bin in the Linux firmwar=
+e.
+> > > > > > > > + *
+> > > > > > > > + * WARNING: Use this cautiously as it could lead to insecu=
+re loading of the
+> > > > > > > > + * Trusted OS.
+> > > > > > > > + * This SMC instructs EL3 to load a binary and excute it a=
+s the Trusted OS.
+> > > > > > >
+> > > > > > > execute
+> > > > > > >
+> > > > > > Done, fixed in next patch set.
+> > > > > > > > + *
+> > > > > > > > + * Call register usage:
+> > > > > > > > + * a0 SMC Function ID, OPTEE_SMC_CALL_LOAD_IMAGE
+> > > > > > > > + * a1 Upper 32bit of a 64bit size for the payload
+> > > > > > > > + * a2 Lower 32bit of a 64bit size for the payload
+> > > > > > > > + * a3 Upper 32bit of the physical address for the payload
+> > > > > > > > + * a4 Lower 32bit of the physical address for the payload
+> > > > > > > > + *
+> > > > > > > > + * The payload is in the OP-TEE image format.
+> > > > > > > > + *
+> > > > > > > > + * Returns result in a0, 0 on success and an error code ot=
+herwise.
+> > > > > > > > + */
+> > > > > > > > +#define OPTEE_SMC_FUNCID_LOAD_IMAGE OPTEE_MSG_FUNCID_LOAD_=
+IMAGE
+> > > > > > > > +#define OPTEE_SMC_CALL_LOAD_IMAGE \
+> > > > > > > > +       OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_LOAD_IMAGE=
+)
+> > > > > > > > +
+> > > > > > > >  /*
+> > > > > > > >   * Call with struct optee_msg_arg as argument
+> > > > > > > >   *
+> > > > > > > > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/opte=
+e/smc_abi.c
+> > > > > > > > index a1c1fa1a9c28..c1abbee86b39 100644
+> > > > > > > > --- a/drivers/tee/optee/smc_abi.c
+> > > > > > > > +++ b/drivers/tee/optee/smc_abi.c
+> > > > > > > > @@ -8,9 +8,11 @@
+> > > > > > > >
+> > > > > > > >  #include <linux/arm-smccc.h>
+> > > > > > > >  #include <linux/errno.h>
+> > > > > > > > +#include <linux/firmware.h>
+> > > > > > > >  #include <linux/interrupt.h>
+> > > > > > > >  #include <linux/io.h>
+> > > > > > > >  #include <linux/irqdomain.h>
+> > > > > > > > +#include <linux/kernel.h>
+> > > > > > > >  #include <linux/mm.h>
+> > > > > > > >  #include <linux/module.h>
+> > > > > > > >  #include <linux/of.h>
+> > > > > > > > @@ -1354,6 +1356,77 @@ static void optee_shutdown(struct pl=
+atform_device *pdev)
+> > > > > > > >                 optee_disable_shm_cache(optee);
+> > > > > > > >  }
+> > > > > > > >
+> > > > > > > > +#ifdef CONFIG_OPTEE_LOAD_IMAGE
+> > > > > > > > +
+> > > > > > > > +#define OPTEE_FW_IMAGE "optee/tee.bin"
+> > > > > > > > +
+> > > > > > > > +static int optee_load_fw(struct platform_device *pdev,
+> > > > > > > > +                        optee_invoke_fn *invoke_fn)
+> > > > > > > > +{
+> > > > > > > > +       const struct firmware *fw =3D NULL;
+> > > > > > > > +       struct arm_smccc_res res;
+> > > > > > > > +       phys_addr_t data_pa;
+> > > > > > > > +       u8 *data_buf =3D NULL;
+> > > > > > > > +       u64 data_size;
+> > > > > > > > +       u32 data_pa_high, data_pa_low;
+> > > > > > > > +       u32 data_size_high, data_size_low;
+> > > > > > > > +       int rc;
+> > > > > > > > +
+> > > > > > > > +       rc =3D request_firmware(&fw, OPTEE_FW_IMAGE, &pdev-=
+>dev);
+> > > > > > > > +       if (rc) {
+> > > > > > > > +               /*
+> > > > > > > > +                * The firmware in the rootfs will not be a=
+ccessible until we
+> > > > > > > > +                * are in the SYSTEM_RUNNING state, so retu=
+rn EPROBE_DEFER until
+> > > > > > > > +                * that point.
+> > > > > > > > +                */
+> > > > > > > > +               if (system_state < SYSTEM_RUNNING)
+> > > > > > > > +                       return -EPROBE_DEFER;
+> > > > > > > > +               goto fw_err;
+> > > > > > > > +       }
+> > > > > > > > +
+> > > > > > > > +       data_size =3D fw->size;
+> > > > > > > > +       /*
+> > > > > > > > +        * This uses the GFP_DMA flag to ensure we are allo=
+cated memory in the
+> > > > > > > > +        * 32-bit space since TF-A cannot map memory beyond=
+ the 32-bit boundary.
+> > > > > > > > +        */
+> > > > > > > > +       data_buf =3D kmalloc(fw->size, GFP_KERNEL | GFP_DMA=
+);
+> > > > > > > > +       if (!data_buf) {
+> > > > > > > > +               rc =3D -ENOMEM;
+> > > > > > > > +               goto fw_err;
+> > > > > > > > +       }
+> > > > > > > > +       memcpy(data_buf, fw->data, fw->size);
+> > > > > > > > +       data_pa =3D virt_to_phys(data_buf);
+> > > > > > > > +       reg_pair_from_64(&data_pa_high, &data_pa_low, data_=
+pa);
+> > > > > > > > +       reg_pair_from_64(&data_size_high, &data_size_low, d=
+ata_size);
+> > > > > > > > +       goto fw_load;
+> > > > > > > > +
+> > > > > > > > +fw_err:
+> > > > > > > > +       pr_warn("image loading failed\n");
+> > > > > > > > +       data_pa_high =3D data_pa_low =3D data_size_high =3D=
+ data_size_low =3D 0;
+> > > > > > > > +
+> > > > > > > > +fw_load:
+> > > > > > > > +       /*
+> > > > > > > > +        * Always invoke the SMC, even if loading the image=
+ fails, to indicate
+> > > > > > > > +        * to EL3 that we have passed the point where it sh=
+ould allow invoking
+> > > > > > > > +        * this SMC.
+> > > > > > > > +        */
+> > > > > > > > +       invoke_fn(OPTEE_SMC_CALL_LOAD_IMAGE, data_size_high=
+, data_size_low,
+> > > > > > > > +                 data_pa_high, data_pa_low, 0, 0, 0, &res)=
+;
+> > > > > > >
+> > > > > > > Prior to this, you've done nothing to check that the firmware=
+ might do
+> > > > > > > what you're expecting. optee_msg_api_uid_is_optee_api() does =
+this
+> > > > > > > under normal circumstances as that SMC function is defined in=
+ the SMC
+> > > > > > > Calling Convention. I'm not sure what is the best approach he=
+re
+> > > > > > > though.
+> > > > > > >
+> > > > > > The way I think about it is that we have to issue this SMC call=
+ once
+> > > > > > we are in the SYSTEM_RUNNING state no matter what. We need to c=
+lose
+> > > > > > the security hole this would leave open otherwise. Any other ch=
+ecks we
+> > > > > > would do that would prevent us from making that call could be o=
+ther
+> > > > > > attack vectors.
+> > > > >
+> > > > > This is clearly a weakness in the design. If the kernel config do=
+esn't
+> > > > > match exactly, we either have an open security hole in the secure
+> > > > > world or fail to initialize the driver.
+> > > > Yes, that's correct where if TF-A was built to enable the SMC call,
+> > > > but then the kernel wasn't built to include the OP-TEE driver, or w=
+ith
+> > > > the image loading SMC config or the driver doesn't get loaded; that=
+'s
+> > > > leaving an open security hole. It's understood as part of this desi=
+gn
+> > > > that there's a big open security hole if the system isn't configure=
+d
+> > > > properly.
+> > > > > The former can only happen in
+> > > > > systems designed like yours where the kernel up to this point has=
+ the
+> > > > > same level of security as the secure world. There's no need for m=
+e to
+> > > > > repeat my concerns over that, but this is now going to have an im=
+pact
+> > > > > on platforms that don't use your security model too. So far we've
+> > > > > managed to avoid configuration options in the OP-TEE driver that
+> > > > > breaks everything for a class of devices.
+> > > > I could change TF-A and the kernel driver so that if it somebody do=
+es
+> > > > enable the kernel option but not the TF-A option, that TF-A returns=
+ a
+> > > > specific error code (rather than passing the non-secure originating
+> > > > call to OP-TEE) and the kernel driver can recognize that and then
+> > > > continue as if OP-TEE was loaded. Then enabling this option won't
+> > > > break anything if the TF-A config doesn't match.
+> > >
+> > > Yes, that should help a bit. We may want to check some UUID of the
+> > > service too, just to avoid sending SMCs into the dark and not knowing
+> > > what it may hit. I believe we can sort out those details when
+> > > reviewing the TF-A patch.
+> > >
+> > After looking at the code again...I realize I could do this in TF-A or
+> > OP-TEE. In the current TF-A code (except when this option is enabled),
+> > all SMCs are passed to OP-TEE. So I could add this into the SMC
+> > handling code in OP-TEE to just return success in this case and that's
+> > always enabled (since OP-TEE knows it is already loaded that seems
+> > correct). I'd also want to change the TF-A code so that if it tries to
+> > load OP-TEE more than once, that it returns success to satisfy your
+> > concern about driver reloading if somebody is using this option
+> > (currently it returns -EPERM).  Does that sound fine to you?
+>
+> You're overlooking the problem with sending SMCs to an unknown entity.
+> It might not be entirely unknown at this stage due to the entry in
+> DTB, but I would rather not depend on that.
+>
+> Regarding the error code, that can actually be ignored as the driver
+> further down will discover if OP-TEE isn't there, see the call to
+> optee_msg_api_uid_is_optee_api(). The value defined for
+> OPTEE_SMC_CALLS_UID is also defined in the SMC Calling Convention,
+> https://developer.arm.com/documentation/den0028/latest, for this
+> purpose.
+>
 
->  drivers/net/ethernet/intel/ice/ice_ethtool.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-> index b360bd8f15998b..1dc3f9fc74bdfb 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-> @@ -4293,6 +4293,7 @@ ice_get_module_eeprom(struct net_device *netdev,
->  	bool is_sfp = false;
->  	unsigned int i, j;
->  	u16 offset = 0;
-> +	u32 copy_len;
-
-copy_len should only be declared in the "if" below so that it's only
-declared in the context it is used.
-
->  	u8 page = 0;
->  	int status;
->  
-> @@ -4354,8 +4355,9 @@ ice_get_module_eeprom(struct net_device *netdev,
->  			}
->  
->  			/* Make sure we have enough room for the new block */
-> -			if ((i + SFF_READ_BLOCK_SIZE) < ee->len)
-> -				memcpy(data + i, value, SFF_READ_BLOCK_SIZE);
-> +			copy_len = min_t(u32, SFF_READ_BLOCK_SIZE,
-> +					 ee->len - i);
-
-also this line can be unwrapped now.
-
-> +			memcpy(data + i, value, copy_len);
->  		}
->  	}
->  	return 0;
-
-I've tested this and it fixes the problem. Interestingly, the ethtool
-application when compiled without netlink support parsed the output
-correctly so caused a bit of confusion around this issue.
-
-Thank you Petr!
-
+OK, now I see what you're getting at regarding the unknown entity. How
+about I first invoke the UID call, and then in TF-A if it is in the
+state where it needs the image loaded still, it then returns an
+alternate UID.  In the kernel, if it has the alternate UID, then load
+the OP-TEE image. If it has the usual OP-TEE UID, then just proceed as
+normal.  We could even get rid of the kernel config option at that
+point too and always enable this. Would that be fine?
+> > > > >
+> > > > > Given how important this call is for your platform and at the sam=
+e
+> > > > > time harmful for all others perhaps this call should be done in a
+> > > > > separate driver.
+> > > > I'm not a kernel driver expert...but if I moved this into its own
+> > > > driver, then I think I'd need to have the OP-TEE driver defer loadi=
+ng
+> > > > until the image loading driver succeeds if it's enabled. So somebod=
+y
+> > > > enabling that other driver would hit the same issues as somebody
+> > > > enabling this config option for OP-TEE. (I have no problem moving t=
+his
+> > > > into a new driver if that's what you really want, but I want to be
+> > > > sure the same concerns don't come up if I do that).
+> > >
+> > > I was considering a way of trying to minimize the window where this
+> > > hole is open while taking care of that other problem. Let's say that
+> > > if something goes wrong and the OP-TEE driver isn't probed, then
+> > > you're in trouble if it doesn't crash badly. If you don't like it I
+> > > don't mind if you skip it.
+> > >
+> > For our config, I'm planning on including the driver directly rather
+> > than as a module (that's why I have the EDEFER logic in there...so
+> > both cases work...then I don't need to worry about probing). But yeah,
+> > if somebody builds it as a module and is using the image
+> > loading...they better be sure that the driver gets probed. And I would
+> > prefer to keep everything in the OP-TEE driver, so that the image
+> > loading is more straightforward.
+>
+> Makes sense.
+>
+> Cheers,
+> Jens
+>
+> > > >
+> > > > If your main concern is somebody enabling this option and breaking
+> > > > their use of OP-TEE...then what I mentioned above should resolve th=
+at.
+> > > > If not, let me know more specifically what issue you're trying to
+> > > > avoid here.
+> > >
+> > > Yes, that's my main concern.
+> > Great, thanks for confirming.
+> > >
+> > > Cheers,
+> > > Jens
+> > >
+> > > >
+> > > > Thanks,
+> > > > Jeff
+> > > > >
+> > > > > Thanks,
+> > > > > Jens
+> > > > >
+> > > > > > > > +       if (!rc)
+> > > > > > > > +               rc =3D res.a0;
+> > > > > > > > +       if (fw)
+> > > > > > > > +               release_firmware(fw);
+> > > > > > > > +       kfree(data_buf);
+> > > > > > > > +
+> > > > > > > > +       return rc;
+> > > > > > > > +}
+> > > > > > > > +#else
+> > > > > > > > +static inline int optee_load_fw(struct platform_device *__=
+unused,
+> > > > > > > > +               optee_invoke_fn *__unused) {
+> > > > > > > > +       return 0;
+> > > > > > > > +}
+> > > > > > > > +#endif
+> > > > > > > > +
+> > > > > > > >  static int optee_probe(struct platform_device *pdev)
+> > > > > > > >  {
+> > > > > > > >         optee_invoke_fn *invoke_fn;
+> > > > > > > > @@ -1372,6 +1445,10 @@ static int optee_probe(struct platfo=
+rm_device *pdev)
+> > > > > > > >         if (IS_ERR(invoke_fn))
+> > > > > > > >                 return PTR_ERR(invoke_fn);
+> > > > > > > >
+> > > > > > > > +       rc =3D optee_load_fw(pdev, invoke_fn);
+> > > > > > > > +       if (rc)
+> > > > > > > > +               return rc;
+> > > > > > >
+> > > > > > > What if OP-TEE already was loaded?
+> > > > > > > This also causes trouble if unloading and loading the driver =
+again.
+> > > > > > > I think we need a way of telling if OP-TEE must be loaded fir=
+st or not.
+> > > > > > >
+> > > > > > OK, I added some state tracking in the driver code to return th=
+e prior
+> > > > > > loading result if it was already loaded.
+> > > > > > > Thanks,
+> > > > > > > Jens
+> > > > > > >
+> > > > > > > > +
+> > > > > > > >         if (!optee_msg_api_uid_is_optee_api(invoke_fn)) {
+> > > > > > > >                 pr_warn("api uid mismatch\n");
+> > > > > > > >                 return -EINVAL;
+> > > > > > > > --
+> > > > > > > > 2.39.2.637.g21b0678d19-goog
+> > > > > > > >
