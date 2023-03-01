@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F031C6A67EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B523F6A67EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCAHFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 02:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S229758AbjCAHFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 02:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjCAHFK (ORCPT
+        with ESMTP id S229694AbjCAHFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 02:05:10 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A813757B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:04:45 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id bo22so823539pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:04:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1677654285;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7MP/ejAI3sruq8iFOBWkRKcy/cVwRiQeeMY1HpYcV4=;
-        b=SJQ1r2P/WYtOeX7MwiIFp3r8lUoIY4iCZ4Kh8f/qVe3/AEb21nYPjUH4Hv18AlxL6o
-         nVT66J/R/ENNcfrWJal9Qz4w0cc+bslDOrJZdbPYNnVSnTgdbZTaJK9WHrZXQyp5esb5
-         5Yb5IfeL8mYmG7NirZaZnEAGLW3cOpU3SzqTbD2G1D2wcGOpHrMOGHukLzBrvcI2LfOK
-         nyyyekRH4Vmof5eh3kwHztUg2NXk0tPlvHTc6LvetxHCdrpMGRsbCZszSca+yJa/vlTH
-         m7gCcVmwIKNfkmga+j1x3I3yZL0OhUfNzvPCHP2joI67VeydZ+7WbSMdGDVFWXF8aWyA
-         5x9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677654285;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/7MP/ejAI3sruq8iFOBWkRKcy/cVwRiQeeMY1HpYcV4=;
-        b=2WjPkeoYRpjVO9mQLQL29TspGcUDOLUkkkaYxGXTOIMnFZUaZdjdviVp8Rp2Qn1Q2p
-         tSfcNveP3saaMQ6RnxUwmMYydiGcWAquFSKbZymKZv4JJux4AkPc8Qa+keY8FZwk0jhq
-         Cu+6coL/sm0Y7U+HuCgojWpjTh/Lpq32xpBzbZ690+0oa03stEMw0m2AbNs1MeFhQbjn
-         prPVWuZ7x9+JOiTQdxb7F08P+fmFxfBEotRzZ11GalyNfQMnoIQh616VnEY5G0AfK0fy
-         RIwGV6m1v6vkc4NdzI5TKp8MvT8droFZugX4Lj0dWKJ2L4PMS9i0B3OhFBoZ07+Tk759
-         MQxQ==
-X-Gm-Message-State: AO0yUKV4NJ/mHTZEmaHhoxe5fPhdjGsOwJ8dd/dnYbdba2hcbxvEczX9
-        4uHJMpw+KC8lfvYIdbyEQc7SNL9UGzxIUtkM
-X-Google-Smtp-Source: AK7set+/jkVD/fqVCwDuBJSSHDh/BeXN+rwU+fD/gd7C3RkBNLPU9avj1wOQlqSbEwdnsqX5Ao/0Tg==
-X-Received: by 2002:a05:6a20:4320:b0:cc:c557:9ce with SMTP id h32-20020a056a20432000b000ccc55709cemr7634102pzk.61.1677654285266;
-        Tue, 28 Feb 2023 23:04:45 -0800 (PST)
-Received: from C02G705SMD6V.bytedance.net ([61.213.176.5])
-        by smtp.gmail.com with ESMTPSA id 4-20020a630104000000b004f27761a9e7sm6701485pgb.12.2023.02.28.23.04.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 23:04:44 -0800 (PST)
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-To:     xiang@kernel.org, chao@kernel.org, gerry@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jefflexu@linux.alibaba.com, huyue2@coolpad.com,
-        Jia Zhu <zhujia.zj@bytedance.com>,
-        Xin Yin <yinxin.x@bytedance.com>
-Subject: [PATCH] erofs: support for mounting a single block device with multiple devices
-Date:   Wed,  1 Mar 2023 15:04:17 +0800
-Message-Id: <20230301070417.13084-1-zhujia.zj@bytedance.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Wed, 1 Mar 2023 02:05:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4288938E8C;
+        Tue, 28 Feb 2023 23:05:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFB0DB80F62;
+        Wed,  1 Mar 2023 07:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3283C433D2;
+        Wed,  1 Mar 2023 07:05:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677654316;
+        bh=Al/hzYxPcRCS7bADT/4upQd1+LQPsshgrv4FzlQuAqE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o119JuOiXUBGz/aR+cbhSd1P84LqBk+owW5pTlnOzVA7hKAOHIb9rtlf9KXaJT8TX
+         dNKkXOelNgAzI+4ZTFWNYKpQzajrrDjgKJpYypUjatUAtIRQEiwO8k4p3MWiCU1Oxn
+         vmnwV1MkUI6eVP6xA/UBJBzNNe2TLRMtj4EKAB8OWwSHo3A0BEzKj9+Lw4VfFSreW6
+         68oF45JXqecWuAY48DDSqzHeHiBkn7kPF5nZ6gErjXrH/IhHSbRsE6rRh/PF0AoNt3
+         WQHmisCezMbHl9wRlxEb1X9BVv+jQZ2ijKqFr+74ha4x75LJuoccJzA36c14xyPjIp
+         typfch/4qtWMw==
+Date:   Wed, 1 Mar 2023 12:35:08 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Asutosh Das <quic_asutoshd@quicinc.com>
+Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
+        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
+        adrian.hunter@intel.com, bvanassche@acm.org, avri.altman@wdc.com,
+        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] ufs: mcq: qcom: Fix Smatch static checker warning
+Message-ID: <20230301070508.GA5409@thinkpad>
+References: <80523aada69f5cab90cac76c84aa153b1ea648ad.1677608784.git.quic_asutoshd@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <80523aada69f5cab90cac76c84aa153b1ea648ad.1677608784.git.quic_asutoshd@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,75 +62,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to support mounting multi-layer container image as a block
-device, add single block device with multiple devices feature for EROFS.
+On Tue, Feb 28, 2023 at 10:27:06AM -0800, Asutosh Das wrote:
+> The patch (c263b4ef737e: "scsi: ufs: core: mcq: Configure resource
+> regions") from Jan 13, 2023, leads to the following Smatch static
+> checker warning:
+> 
+> drivers/ufs/host/ufs-qcom.c:1455 ufs_qcom_mcq_config_resource() warn:
+> passing zero to 'PTR_ERR'
+> drivers/ufs/host/ufs-qcom.c:1469 ufs_qcom_mcq_config_resource() info:
+> returning a literal zero is cleaner
+> 
+> Fix the above warnings.
+> 
 
-In this mode, all meta/data contents will be mapped into one block address.
-User could directly mount the block device by EROFS.
+You should not name the subject after the tool that used to find the issues.
+Instead, subject should mention the actual issue like fixing return values,
+removing the devm_kfree in error path etc...
 
-Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-Reviewed-by: Xin Yin <yinxin.x@bytedance.com>
----
- fs/erofs/data.c  | 8 ++++++--
- fs/erofs/super.c | 5 +++++
- 2 files changed, 11 insertions(+), 2 deletions(-)
+Provided that, you should also split this patch into two as you are fixing
+two independent issues.
 
-diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-index e16545849ea7..870b1f7fe1d4 100644
---- a/fs/erofs/data.c
-+++ b/fs/erofs/data.c
-@@ -195,9 +195,9 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
- {
- 	struct erofs_dev_context *devs = EROFS_SB(sb)->devs;
- 	struct erofs_device_info *dif;
-+	bool flatdev = !!sb->s_bdev;
- 	int id;
- 
--	/* primary device by default */
- 	map->m_bdev = sb->s_bdev;
- 	map->m_daxdev = EROFS_SB(sb)->dax_dev;
- 	map->m_dax_part_off = EROFS_SB(sb)->dax_part_off;
-@@ -210,12 +210,16 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
- 			up_read(&devs->rwsem);
- 			return -ENODEV;
- 		}
-+		if (flatdev) {
-+			map->m_pa += blknr_to_addr(dif->mapped_blkaddr);
-+			map->m_deviceid = 0;
-+		}
- 		map->m_bdev = dif->bdev;
- 		map->m_daxdev = dif->dax_dev;
- 		map->m_dax_part_off = dif->dax_part_off;
- 		map->m_fscache = dif->fscache;
- 		up_read(&devs->rwsem);
--	} else if (devs->extra_devices) {
-+	} else if (devs->extra_devices && !flatdev) {
- 		down_read(&devs->rwsem);
- 		idr_for_each_entry(&devs->tree, dif, id) {
- 			erofs_off_t startoff, length;
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 19b1ae79cec4..4f9725b0950c 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -226,6 +226,7 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
- 	struct erofs_fscache *fscache;
- 	struct erofs_deviceslot *dis;
- 	struct block_device *bdev;
-+	bool flatdev = !!sb->s_bdev;
- 	void *ptr;
- 
- 	ptr = erofs_read_metabuf(buf, sb, erofs_blknr(*pos), EROFS_KMAP);
-@@ -248,6 +249,10 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
- 		if (IS_ERR(fscache))
- 			return PTR_ERR(fscache);
- 		dif->fscache = fscache;
-+	} else if (flatdev) {
-+		dif->bdev = sb->s_bdev;
-+		dif->dax_dev = EROFS_SB(sb)->dax_dev;
-+		dif->dax_part_off = sbi->dax_part_off;
- 	} else {
- 		bdev = blkdev_get_by_path(dif->path, FMODE_READ | FMODE_EXCL,
- 					  sb->s_type);
+Thanks,
+Mani
+
+> Fixes: c263b4ef737e ("scsi: ufs: core: mcq: Configure resource regions")
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+> ---
+>  drivers/ufs/host/ufs-qcom.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index 34fc453f3eb1..cb20c7136c2c 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -1451,8 +1451,8 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
+>  		if (IS_ERR(res->base)) {
+>  			dev_err(hba->dev, "Failed to map res %s, err=%d\n",
+>  					 res->name, (int)PTR_ERR(res->base));
+> -			res->base = NULL;
+>  			ret = PTR_ERR(res->base);
+> +			res->base = NULL;
+>  			return ret;
+>  		}
+>  	}
+> @@ -1466,7 +1466,7 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
+>  	/* Explicitly allocate MCQ resource from ufs_mem */
+>  	res_mcq = devm_kzalloc(hba->dev, sizeof(*res_mcq), GFP_KERNEL);
+>  	if (!res_mcq)
+> -		return ret;
+> +		return -ENOMEM;
+>  
+>  	res_mcq->start = res_mem->start +
+>  			 MCQ_SQATTR_OFFSET(hba->mcq_capabilities);
+> @@ -1478,7 +1478,7 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
+>  	if (ret) {
+>  		dev_err(hba->dev, "Failed to insert MCQ resource, err=%d\n",
+>  			ret);
+> -		goto insert_res_err;
+> +		return ret;
+>  	}
+>  
+>  	res->base = devm_ioremap_resource(hba->dev, res_mcq);
+> @@ -1495,8 +1495,6 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
+>  ioremap_err:
+>  	res->base = NULL;
+>  	remove_resource(res_mcq);
+> -insert_res_err:
+> -	devm_kfree(hba->dev, res_mcq);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.7.4
+> 
+
 -- 
-2.20.1
-
+மணிவண்ணன் சதாசிவம்
