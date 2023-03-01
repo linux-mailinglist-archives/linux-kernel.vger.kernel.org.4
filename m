@@ -2,154 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1026A7166
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D22A86A716D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjCAQku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 11:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
+        id S229920AbjCAQn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 11:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjCAQks (ORCPT
+        with ESMTP id S229661AbjCAQn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 11:40:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FA53D92E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 08:39:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677688784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NSJcgD+Y6L1I9dbPpK5kubARotLSu9co9Llr60nk3dc=;
-        b=aUajRa/J37lms02MRhaHSsHi5DUaZLguKTXRwQaKWOVBjd9xZ8PUSmnWiEjFTvlW526xHh
-        n6cPqr8W92E1cCxjQBnxrAbfhOvcOYwX0LVDESCqNVw+jRbXGhzws47WZywp2T9kMybCq4
-        96/hCqnmpfgeRKrQolCFAfd3RfOlqYU=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-402-uSyL-b7EP2e0rYDi05VSbw-1; Wed, 01 Mar 2023 11:39:43 -0500
-X-MC-Unique: uSyL-b7EP2e0rYDi05VSbw-1
-Received: by mail-pj1-f72.google.com with SMTP id f1-20020a17090aa78100b00239fd9e3e17so1837183pjq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 08:39:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677688782;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NSJcgD+Y6L1I9dbPpK5kubARotLSu9co9Llr60nk3dc=;
-        b=2O+fFIrxDQ6IJpJVNvFlIaSpmwiXco/VjVpYJR5OdSruPJAJ7F2vL3XZWYLj4M9EXB
-         m5TEpCBnsNJ9Qyw6iM6+s8GJd46Rwa3DVYuiEFT/0hkVUFlNxWMmTj62tsINs28wRhu4
-         K1f6LR9jNjFSZAaZmgnJZMrkuG/AKYJnOmsWy+vaqQxhqe0w5XK2fuTQyPgwO23jkR26
-         EGf20WaE74MF8tvzTAI7A0ukQQDFHaRNUfNhDAvAIt0waGyGMOliTssG7d/xWXnb8xJ1
-         prND0v7i9PnKmAhTHmVGi+Y308wEpnrL4d1H1qprIEF+PU244TeLhUqlEE9RxzBH/Kx2
-         i/gA==
-X-Gm-Message-State: AO0yUKWDzkjNg2vK0wWvPHdtUe3iiCa04XFE265jx286vLg2ygjdhnBw
-        PrEwB935IrbxKEKjG3Yc5tPRETBSi/LKDcED4ZR829PTwdwVHIik+gTXGg8DnuJkzzt0P9tOqxV
-        mE/RfBmMUrmNiPzfaX/g569Kv
-X-Received: by 2002:a17:902:f54e:b0:19a:98c9:8cea with SMTP id h14-20020a170902f54e00b0019a98c98ceamr8243572plf.39.1677688782464;
-        Wed, 01 Mar 2023 08:39:42 -0800 (PST)
-X-Google-Smtp-Source: AK7set+qO4JpSY8sVTIOnTnJXuzwrWx71YibPF0ctGLZforUa7b2hGsadOAQOW8IGnCxDARvr/Jtpg==
-X-Received: by 2002:a17:902:f54e:b0:19a:98c9:8cea with SMTP id h14-20020a170902f54e00b0019a98c98ceamr8243541plf.39.1677688782148;
-        Wed, 01 Mar 2023 08:39:42 -0800 (PST)
-Received: from localhost.localdomain ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
-        by smtp.gmail.com with ESMTPSA id x25-20020a63b219000000b00502ecc282e2sm7603216pge.5.2023.03.01.08.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 08:39:41 -0800 (PST)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        "sjur . brandeland @ stericsson . com" 
-        <sjur.brandeland@stericsson.com>,
-        syzbot+b563d33852b893653a9e@syzkaller.appspotmail.com
-Subject: [PATCH net v2] net: caif: Fix use-after-free in cfusbl_device_notify()
-Date:   Thu,  2 Mar 2023 01:39:13 +0900
-Message-Id: <20230301163913.391304-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.39.0
+        Wed, 1 Mar 2023 11:43:56 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA711ADCF;
+        Wed,  1 Mar 2023 08:43:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677689034; x=1709225034;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7lwWUU/sBD55Yf0l73aWsm94KQlTlscyZPnSOjeJeXw=;
+  b=KYAYRRQaJcdZC6jtPjJwhkkT/J/OVvdpBbjDqg2umXGk7nLKD1JNn99m
+   FVrZ1g0RrO4cafnhBQuVNTVOt8aDQTYV2v67jrIZLCO/chxCHlE6tbj6c
+   FEoNlg8vD/e00UrfeXfzAjB6yolaY5kqabreTUghl5cjIKzgflUPggMqy
+   I2umaSOuglpqZLriCPe8/PsaGfPUVuaJeGMJToLIggYmqH8QHi7p4WuVX
+   dMVqjMsnU+8risvZYTy7AguetOBwofoiucFOM9MgL0TEa+diT0RPursk4
+   y6NPSynTraHHqbnzNgNgVzvx14eABaP9LQES+OchligJXsH046Z2OJorZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="420719656"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="420719656"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 08:43:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="1003732247"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="1003732247"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Mar 2023 08:43:15 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pXPXt-00Dpv5-02;
+        Wed, 01 Mar 2023 18:43:13 +0200
+Date:   Wed, 1 Mar 2023 18:43:12 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@redhat.com, dipenp@nvidia.com, treding@nvidia.com,
+        mwen@igalia.com, fmdefrancesco@gmail.com, arnd@arndb.de,
+        bvanassche@acm.org, ogabbay@kernel.org, axboe@kernel.dk,
+        mathieu.poirier@linaro.org, linux@zary.sk, masahiroy@kernel.org,
+        yangyicong@hisilicon.com, dan.j.williams@intel.com,
+        jacek.lawrynowicz@linux.intel.com, benjamin.tissoires@redhat.com,
+        devicetree@vger.kernel.org, furong.zhou@linux.intel.com,
+        linus.walleij@linaro.org
+Subject: Re: [PATCHv3 4/4] wiegand: add Wiegand GPIO bitbanged controller
+ driver
+Message-ID: <Y/+AoJiGL8PwJZJC@smile.fi.intel.com>
+References: <20230301142835.19614-1-m.zatovic1@gmail.com>
+ <20230301142835.19614-5-m.zatovic1@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230301142835.19614-5-m.zatovic1@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot reported use-after-free in cfusbl_device_notify() [1].  This
-causes a stack trace like below:
+On Wed, Mar 01, 2023 at 03:28:35PM +0100, Martin Zaťovič wrote:
+> This controller formats the data to a Wiegand format and bit-bangs
+> the message on devicetree defined GPIO lines.
+> 
+> Several attributes need to be defined in the devicetree in order
+> for this driver to work, namely the data-hi-gpios, data-lo-gpios,
+> pulse-len, frame-gap and interval-len. These attributes are
+> documented in the devicetree bindings documentation files.
+> 
+> The driver creates a dev file for writing messages on the bus.
+> It also creates a sysfs file to control the payload length of
+> messages(in bits). If a message is shorter than the set payload
+> length, it will be discarded. On the other hand, if a message is
+> longer, the additional bits will be stripped off.
 
-BUG: KASAN: use-after-free in cfusbl_device_notify+0x7c9/0x870 net/caif/caif_usb.c:138
-Read of size 8 at addr ffff88807ac4e6f0 by task kworker/u4:6/1214
+...
 
-CPU: 0 PID: 1214 Comm: kworker/u4:6 Not tainted 5.19.0-rc3-syzkaller-00146-g92f20ff72066 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: netns cleanup_net
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- cfusbl_device_notify+0x7c9/0x870 net/caif/caif_usb.c:138
- notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1945
- call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
- call_netdevice_notifiers net/core/dev.c:1997 [inline]
- netdev_wait_allrefs_any net/core/dev.c:10227 [inline]
- netdev_run_todo+0xbc0/0x10f0 net/core/dev.c:10341
- default_device_exit_batch+0x44e/0x590 net/core/dev.c:11334
- ops_exit_list+0x125/0x170 net/core/net_namespace.c:167
- cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
- </TASK>
+> +Date:		January 2023
 
-When unregistering a net device, unregister_netdevice_many_notify()
-sets the device's reg_state to NETREG_UNREGISTERING, calls notifiers
-with NETDEV_UNREGISTER, and adds the device to the todo list.
+Blast from the past?
 
-Later on, devices in the todo list are processed by netdev_run_todo().
-netdev_run_todo() waits devices' reference count become 1 while
-rebdoadcasting NETDEV_UNREGISTER notification.
+...
 
-When cfusbl_device_notify() is called with NETDEV_UNREGISTER multiple
-times, the parent device might be freed.  This could cause UAF.
-Processing NETDEV_UNREGISTER multiple times also causes inbalance of
-reference count for the module.
+> +config WIEGAND_GPIO
+> +	tristate "GPIO-based wiegand master (write only)"
+> +	depends on WIEGAND
+> +	help
+> +	  This GPIO bitbanging Wiegand controller uses the libgpiod library to
+> +	  utilize GPIO lines for sending Wiegand data. Userspace may access
+> +	  the Wiegand GPIO interface via a dev entry.
 
-This patch fixes the issue by accepting only first NETDEV_UNREGISTER
-notification.
+What will be the name of the module if M?
 
-Fixes: 7ad65bf68d70 ("caif: Add support for CAIF over CDC NCM USB interface")
-CC: sjur.brandeland@stericsson.com <sjur.brandeland@stericsson.com>
-Link: https://syzkaller.appspot.com/bug?id=c3bfd8e2450adab3bffe4d80821fbbced600407f [1]
-Reported-by: syzbot+b563d33852b893653a9e@syzkaller.appspotmail.com
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- net/caif/caif_usb.c | 3 +++
- 1 file changed, 3 insertions(+)
+...
 
-diff --git a/net/caif/caif_usb.c b/net/caif/caif_usb.c
-index ebc202ffdd8d..bf61ea4b8132 100644
---- a/net/caif/caif_usb.c
-+++ b/net/caif/caif_usb.c
-@@ -134,6 +134,9 @@ static int cfusbl_device_notify(struct notifier_block *me, unsigned long what,
- 	struct usb_device *usbdev;
- 	int res;
- 
-+	if (what == NETDEV_UNREGISTER && dev->reg_state >= NETREG_UNREGISTERED)
-+		return 0;
-+
- 	/* Check whether we have a NCM device, and find its VID/PID. */
- 	if (!(dev->dev.parent && dev->dev.parent->driver &&
- 	      strcmp(dev->dev.parent->driver->name, "cdc_ncm") == 0))
+> +#include <linux/of.h>
+
+No way.
+
+...
+
+> +struct wiegand_gpio {
+> +	struct device *dev;
+> +	struct wiegand_controller *ctlr;
+
+> +	struct miscdevice misc_dev;
+
+Make it first, same idea as per previous patch comments.
+
+> +	struct mutex mutex;
+> +	struct gpio_desc *gpio_data_hi;
+> +	struct gpio_desc *gpio_data_lo;
+> +	struct file_operations fops;
+
+> +	u8 data[WIEGAND_MAX_PAYLEN_BYTES];
+
+Have you considered DMA alignment? Is it a problem or not here?
+
+> +};
+
+...
+
+> +static ssize_t store_ulong(u32 *val, const char *buf, size_t size, unsigned long max)
+> +{
+> +	int rc;
+> +	u32 new;
+
+> +	if (max != 0 && new > max)
+
+First part of the conditional is redundant. When you have such a user, you may
+add the restriction back.
+
+> +		return -EINVAL;
+> +
+> +	*val = new;
+> +	return size;
+> +}
+
+...
+
+> +static struct attribute *wiegand_gpio_attrs[] = {
+> +	&dev_attr_payload_len.attr,
+> +	NULL,
+
+No comma for the terminator entry.
+
+> +};
+> +
+
+Redundant blank line.
+
+> +ATTRIBUTE_GROUPS(wiegand_gpio);
+
+...
+
+> +void wiegand_gpio_send_bit(struct wiegand_gpio *wiegand_gpio, bool value, bool last)
+> +{
+> +	u32 pulse_len = wiegand_gpio->ctlr->pulse_len;
+> +	u32 interval_len = wiegand_gpio->ctlr->interval_len;
+> +	u32 frame_gap = wiegand_gpio->ctlr->frame_gap;
+> +	struct gpio_desc *gpio = value ? wiegand_gpio->gpio_data_hi : wiegand_gpio->gpio_data_lo;
+> +
+> +	gpiod_set_value_cansleep(gpio, 0);
+> +	udelay(pulse_len);
+> +	gpiod_set_value_cansleep(gpio, 1);
+> +
+> +	if (last)
+> +		udelay(frame_gap - pulse_len);
+> +	else
+> +		udelay(interval_len - pulse_len);
+
+This is quite dangerous. You may end up with CPU 100% load for a long time
+without any way out. What is the range and why udelay() can't be replaced
+with usleep_range() for longer waits?
+
+> +}
+
+...
+
+> +/* This function is used for writing from file in dev directory */
+> +static int wiegand_gpio_write_by_bits(struct wiegand_gpio *wiegand_gpio, u16 bitlen)
+> +{
+> +	size_t i;
+> +	bool bit_value, is_last_bit;
+> +
+> +	for (i = 0; i < bitlen; i++) {
+> +		bit_value = ((wiegand_gpio->data[i / 8] >> (7 - (i % 8))) & 0x01);
+
+Ah, your buffer should probably be a bitmap.
+Also consider bitmap_get_value8().
+
+> +		is_last_bit = (i + 1) == bitlen;
+> +		wiegand_gpio_send_bit(wiegand_gpio, bit_value, is_last_bit);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t wiegand_gpio_get_user_data(struct wiegand_gpio *wiegand_gpio, char __user const *buf,
+> +					  size_t len)
+> +{
+> +	size_t rc;
+> +
+> +	if (len > WIEGAND_MAX_PAYLEN_BYTES)
+> +		return -EBADMSG;
+
+> +	rc = copy_from_user(&wiegand_gpio->data[0], buf, WIEGAND_MAX_PAYLEN_BYTES);
+> +	if (rc < 0)
+> +		return rc;
+
+This is wrong. Homework: read the documentation and existing code to see why
+and how to fix.
+
+> +	return len;
+> +}
+
+...
+
+> +static ssize_t wiegand_gpio_fwrite(struct file *filp, char __user const *buf, size_t len,
+> +				loff_t *offset)
+> +{
+> +	struct wiegand_gpio_instance *info = filp->private_data;
+> +	struct wiegand_gpio *wiegand_gpio = info->dev;
+> +	u32 msg_length = wiegand_gpio->ctlr->payload_len;
+> +	int rc;
+> +
+> +	if (buf == NULL || len == 0 || len * 8 < msg_length)
+
+	!buf
+
+	DIV_ROUND_UP(msg_length / 8) > len
+
+less overflow prone.
+
+> +		return -EINVAL;
+> +
+> +	rc = wiegand_gpio_get_user_data(wiegand_gpio, buf, len);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	wiegand_gpio_write_by_bits(wiegand_gpio, msg_length);
+> +
+> +	return len;
+> +}
+
+> +static int wiegand_gpio_fopen(struct inode *ino, struct file *filp)
+> +{
+> +	int rc;
+> +	struct wiegand_gpio_instance *info;
+> +	struct wiegand_gpio *wiegand_gpio = container_of(filp->f_op, struct wiegand_gpio, fops);
+> +
+> +	mutex_lock(&wiegand_gpio->mutex);
+
+Can it be interrupted by a signal?
+
+> +	if ((filp->f_flags & O_ACCMODE) == O_RDONLY || (filp->f_flags & O_ACCMODE) == O_RDWR) {
+> +		dev_err(wiegand_gpio->dev, "Device is write only\n");
+> +		rc = -EIO;
+> +		goto err;
+> +	}
+> +
+> +	info = kzalloc(sizeof(*info), GFP_KERNEL);
+> +	if (!info) {
+> +		rc = -ENOMEM;
+> +		goto err;
+> +	}
+> +
+> +	info->dev = wiegand_gpio;
+> +	info->flags = filp->f_flags;
+> +	mutex_unlock(&wiegand_gpio->mutex);
+> +
+> +	filp->private_data = info;
+> +
+> +	return 0;
+> +err:
+> +	mutex_unlock(&wiegand_gpio->mutex);
+> +	return rc;
+> +}
+
+...
+
+> +	u8 msg_bytelength = (msg_bitlen % 8) ? (msg_bitlen / 8) + 1 : (msg_bitlen / 8);
+
+DIV_ROUND_UP() (you will need math.h)
+
+...
+
+> +	if (dev->of_node)
+> +		master->dev.of_node = device->dev.of_node;
+
+No.
+
+...
+
+> +	if (status)
+> +		return status;
+
+What's this and why is it here?
+I'm afraid you haven't compiled this code... :-(
+
+...
+
+> +	master->transfer_message = &wiegand_gpio_transfer_message;
+> +	master->payload_len = 26; /* set standard 26-bit format */
+
+Can you replace master with some of the suggested words?
+Or is this a terminology from the specification of the bus?
+
+...
+
+> +	status = wiegand_gpio_request(dev, wiegand_gpio);
+> +	if (status) {
+> +		dev_err(wiegand_gpio->dev, "failed at requesting GPIOs\n");
+> +		return status;
+
+		return dev_error_probe();
+
+Ditto for the rest.
+
+> +	}
+
+...
+
+> +	status = gpiod_direction_output(wiegand_gpio->gpio_data_hi, 1);
+> +	status |= gpiod_direction_output(wiegand_gpio->gpio_data_lo, 1);
+
+Huh?!
+
+...
+
+> +	wiegand_gpio->misc_dev.name = kasprintf(GFP_KERNEL, "wiegand-gpio%u", master->bus_num);
+
+No checks?
+
+...
+
+> +	dev->groups = wiegand_gpio_groups;
+
+Feels like this can be moved to dev_groups member of the struct driver.
+
+> +
+> +	return status;
+> +}
+
+...
+
+> +static const struct of_device_id wiegand_gpio_dt_idtable[] = {
+> +	{ .compatible = "wiegand-gpio", },
+
+> +	{},
+
+No comma for the terminator entry.
+
+> +};
+
+...
+
+> +
+
+Redundant blank line.
+
+> +module_platform_driver(wiegand_gpio_driver);
+
 -- 
-2.39.0
+With Best Regards,
+Andy Shevchenko
+
 
