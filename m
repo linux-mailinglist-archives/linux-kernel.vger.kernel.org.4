@@ -2,264 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06306A6C13
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B359D6A6C5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 13:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjCAMGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 07:06:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S229683AbjCAMax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 07:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjCAMGO (ORCPT
+        with ESMTP id S229492AbjCAMaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 07:06:14 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E348136FCC
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 04:06:11 -0800 (PST)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PRXtj1XHPzSkRq;
-        Wed,  1 Mar 2023 20:03:09 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 1 Mar
- 2023 20:06:03 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <s.hauer@pengutronix.de>,
-        <miquel.raynal@bootlin.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>
-Subject: [PATCH -next 2/2] ubifs: dirty_cow_znode: Fix memleak when insert_old_idx() failed
-Date:   Wed, 1 Mar 2023 20:29:19 +0800
-Message-ID: <20230301122919.266818-3-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230301122919.266818-1-chengzhihao1@huawei.com>
-References: <20230301122919.266818-1-chengzhihao1@huawei.com>
+        Wed, 1 Mar 2023 07:30:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5A839B98;
+        Wed,  1 Mar 2023 04:30:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EF74B81023;
+        Wed,  1 Mar 2023 12:30:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8EA4C433EF;
+        Wed,  1 Mar 2023 12:30:43 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <git@xen0n.name>
+Subject: [PATCH V2] LoongArch: Mark 3 symbol exports as non-GPL
+Date:   Wed,  1 Mar 2023 20:30:32 +0800
+Message-Id: <20230301123032.2452817-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following process will cause a memleak for copied up znode:
+vm_map_base, empty_zero_page and invalid_pmd_table could be accessed
+widely by some out-of-tree non-GPL but important file systems or drivers
+(e.g. OpenZFS). Let's use EXPORT_SYMBOL() instead of EXPORT_SYMBOL_GPL()
+to export them, so as to avoid build errors.
 
-dirty_cow_znode
-  zn = copy_znode(c, znode);
-  err = insert_old_idx(c, zbr->lnum, zbr->offs);
-  if (unlikely(err))
-     return ERR_PTR(err);   // No one refers to zn.
+1, Details about vm_map_base:
 
-Fetch a reproducer in [Link].
+This is a LoongArch-specific symbol and may be referenced through macros
+PCI_IOBASE, VMALLOC_START and VMALLOC_END.
 
-Function copy_znode() is split into 2 parts: resource allocation
-and znode replacement, insert_old_idx() is split in similar way,
-so resource cleanup could be done in error handling path without
-corrupting metadata(mem & disk).
-It's okay that old index inserting is put behind of add_idx_dirt(),
-old index is used in layout_leb_in_gaps(), so the two processes do
-not depend on each other.
+2, Details about empty_zero_page:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216705
-Fixes: 1e51764a3c2a ("UBIFS: add new flash file system")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+As it stands today, only 3 architectures export empty_zero_page as a GPL 
+symbol: IA64, LoongArch and MIPS. LoongArch gets the GPL export by 
+inheriting from MIPS, and the MIPS export was first introduced in commit 
+497d2adcbf50b ("[MIPS] Export empty_zero_page for sake of the ext4 
+module."). The IA64 export was similar: commit a7d57ecf4216e ("[IA64] 
+Export three symbols for module use") did so for kvm.
+
+In both IA64 and MIPS, the export of empty_zero_page was done for 
+satisfying some in-kernel component built as module (kvm and ext4 
+respectively), and given its reasonably low-level nature, GPL is a 
+reasonable choice. But looking at the bigger picture it is evident most 
+other architectures do not regard it as GPL, so in effect the symbol 
+probably should not be treated as such, in favor of consistency.
+
+3, Details about invalid_pmd_table:
+
+Keep consistency with invalid_pte_table and make it be possible by some
+modules.
+
+Reviewed-by: WANG Xuerui <git@xen0n.name>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- fs/ubifs/tnc.c | 137 +++++++++++++++++++++++++++++++------------------
- 1 file changed, 87 insertions(+), 50 deletions(-)
+V2: Update commit messages.
 
-diff --git a/fs/ubifs/tnc.c b/fs/ubifs/tnc.c
-index 2df56bbc6865..6b7d95b65f4b 100644
---- a/fs/ubifs/tnc.c
-+++ b/fs/ubifs/tnc.c
-@@ -44,6 +44,33 @@ enum {
- 	NOT_ON_MEDIA = 3,
- };
+ arch/loongarch/kernel/cpu-probe.c | 2 +-
+ arch/loongarch/mm/init.c          | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+index 008b0249905f..001e43dd94ca 100644
+--- a/arch/loongarch/kernel/cpu-probe.c
++++ b/arch/loongarch/kernel/cpu-probe.c
+@@ -60,7 +60,7 @@ static inline void set_elf_platform(int cpu, const char *plat)
  
-+static void do_insert_old_idx(struct ubifs_info *c,
-+			      struct ubifs_old_idx *old_idx)
-+{
-+	struct ubifs_old_idx *o;
-+	struct rb_node **p, *parent = NULL;
-+
-+	p = &c->old_idx.rb_node;
-+	while (*p) {
-+		parent = *p;
-+		o = rb_entry(parent, struct ubifs_old_idx, rb);
-+		if (old_idx->lnum < o->lnum)
-+			p = &(*p)->rb_left;
-+		else if (old_idx->lnum > o->lnum)
-+			p = &(*p)->rb_right;
-+		else if (old_idx->offs < o->offs)
-+			p = &(*p)->rb_left;
-+		else if (old_idx->offs > o->offs)
-+			p = &(*p)->rb_right;
-+		else {
-+			ubifs_err(c, "old idx added twice!");
-+			kfree(old_idx);
-+		}
-+	}
-+	rb_link_node(&old_idx->rb, parent, p);
-+	rb_insert_color(&old_idx->rb, &c->old_idx);
-+}
-+
- /**
-  * insert_old_idx - record an index node obsoleted since the last commit start.
-  * @c: UBIFS file-system description object
-@@ -69,35 +96,15 @@ enum {
-  */
- static int insert_old_idx(struct ubifs_info *c, int lnum, int offs)
+ /* MAP BASE */
+ unsigned long vm_map_base;
+-EXPORT_SYMBOL_GPL(vm_map_base);
++EXPORT_SYMBOL(vm_map_base);
+ 
+ static void cpu_probe_addrbits(struct cpuinfo_loongarch *c)
  {
--	struct ubifs_old_idx *old_idx, *o;
--	struct rb_node **p, *parent = NULL;
-+	struct ubifs_old_idx *old_idx;
+diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
+index e018aed34586..3b7d8129570b 100644
+--- a/arch/loongarch/mm/init.c
++++ b/arch/loongarch/mm/init.c
+@@ -41,7 +41,7 @@
+  * don't have to care about aliases on other CPUs.
+  */
+ unsigned long empty_zero_page, zero_page_mask;
+-EXPORT_SYMBOL_GPL(empty_zero_page);
++EXPORT_SYMBOL(empty_zero_page);
+ EXPORT_SYMBOL(zero_page_mask);
  
- 	old_idx = kmalloc(sizeof(struct ubifs_old_idx), GFP_NOFS);
- 	if (unlikely(!old_idx))
- 		return -ENOMEM;
- 	old_idx->lnum = lnum;
- 	old_idx->offs = offs;
-+	do_insert_old_idx(c, old_idx);
- 
--	p = &c->old_idx.rb_node;
--	while (*p) {
--		parent = *p;
--		o = rb_entry(parent, struct ubifs_old_idx, rb);
--		if (lnum < o->lnum)
--			p = &(*p)->rb_left;
--		else if (lnum > o->lnum)
--			p = &(*p)->rb_right;
--		else if (offs < o->offs)
--			p = &(*p)->rb_left;
--		else if (offs > o->offs)
--			p = &(*p)->rb_right;
--		else {
--			ubifs_err(c, "old idx added twice!");
--			kfree(old_idx);
--			return 0;
--		}
--	}
--	rb_link_node(&old_idx->rb, parent, p);
--	rb_insert_color(&old_idx->rb, &c->old_idx);
- 	return 0;
- }
- 
-@@ -199,23 +206,6 @@ static struct ubifs_znode *copy_znode(struct ubifs_info *c,
- 	__set_bit(DIRTY_ZNODE, &zn->flags);
- 	__clear_bit(COW_ZNODE, &zn->flags);
- 
--	ubifs_assert(c, !ubifs_zn_obsolete(znode));
--	__set_bit(OBSOLETE_ZNODE, &znode->flags);
--
--	if (znode->level != 0) {
--		int i;
--		const int n = zn->child_cnt;
--
--		/* The children now have new parent */
--		for (i = 0; i < n; i++) {
--			struct ubifs_zbranch *zbr = &zn->zbranch[i];
--
--			if (zbr->znode)
--				zbr->znode->parent = zn;
--		}
--	}
--
--	atomic_long_inc(&c->dirty_zn_cnt);
- 	return zn;
- }
- 
-@@ -233,6 +223,42 @@ static int add_idx_dirt(struct ubifs_info *c, int lnum, int dirt)
- 	return ubifs_add_dirt(c, lnum, dirt);
- }
- 
-+/**
-+ * replace_znode - replace old znode with new znode.
-+ * @c: UBIFS file-system description object
-+ * @new_zn: new znode
-+ * @old_zn: old znode
-+ * @zbr: the branch of parent znode
-+ *
-+ * Replace old znode with new znode in TNC.
-+ */
-+static void replace_znode(struct ubifs_info *c, struct ubifs_znode *new_zn,
-+			  struct ubifs_znode *old_zn, struct ubifs_zbranch *zbr)
-+{
-+	ubifs_assert(c, !ubifs_zn_obsolete(old_zn));
-+	__set_bit(OBSOLETE_ZNODE, &old_zn->flags);
-+
-+	if (old_zn->level != 0) {
-+		int i;
-+		const int n = new_zn->child_cnt;
-+
-+		/* The children now have new parent */
-+		for (i = 0; i < n; i++) {
-+			struct ubifs_zbranch *child = &new_zn->zbranch[i];
-+
-+			if (child->znode)
-+				child->znode->parent = new_zn;
-+		}
-+	}
-+
-+	zbr->znode = new_zn;
-+	zbr->lnum = 0;
-+	zbr->offs = 0;
-+	zbr->len = 0;
-+
-+	atomic_long_inc(&c->dirty_zn_cnt);
-+}
-+
- /**
-  * dirty_cow_znode - ensure a znode is not being committed.
-  * @c: UBIFS file-system description object
-@@ -265,21 +291,32 @@ static struct ubifs_znode *dirty_cow_znode(struct ubifs_info *c,
- 		return zn;
- 
- 	if (zbr->len) {
--		err = insert_old_idx(c, zbr->lnum, zbr->offs);
--		if (unlikely(err))
--			return ERR_PTR(err);
-+		struct ubifs_old_idx *old_idx;
-+
-+		old_idx = kmalloc(sizeof(struct ubifs_old_idx), GFP_NOFS);
-+		if (unlikely(!old_idx)) {
-+			err = -ENOMEM;
-+			goto out;
-+		}
-+		old_idx->lnum = zbr->lnum;
-+		old_idx->offs = zbr->offs;
-+
- 		err = add_idx_dirt(c, zbr->lnum, zbr->len);
--	} else
--		err = 0;
-+		if (err) {
-+			kfree(old_idx);
-+			goto out;
-+		}
- 
--	zbr->znode = zn;
--	zbr->lnum = 0;
--	zbr->offs = 0;
--	zbr->len = 0;
-+		do_insert_old_idx(c, old_idx);
-+	}
-+
-+	replace_znode(c, zn, znode, zbr);
- 
--	if (unlikely(err))
--		return ERR_PTR(err);
- 	return zn;
-+
-+out:
-+	kfree(zn);
-+	return ERR_PTR(err);
- }
- 
- /**
+ void setup_zero_pages(void)
+@@ -270,7 +270,7 @@ pud_t invalid_pud_table[PTRS_PER_PUD] __page_aligned_bss;
+ #endif
+ #ifndef __PAGETABLE_PMD_FOLDED
+ pmd_t invalid_pmd_table[PTRS_PER_PMD] __page_aligned_bss;
+-EXPORT_SYMBOL_GPL(invalid_pmd_table);
++EXPORT_SYMBOL(invalid_pmd_table);
+ #endif
+ pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
+ EXPORT_SYMBOL(invalid_pte_table);
 -- 
-2.31.1
+2.39.1
 
