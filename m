@@ -2,176 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B2E6A743F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3867B6A7452
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCAT33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S229670AbjCATbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCAT30 (ORCPT
+        with ESMTP id S229498AbjCATbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:29:26 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB58E72B4;
-        Wed,  1 Mar 2023 11:29:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677698958; x=1709234958;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/bqzJymSbCpnD+DCMHFdYYtceLwcfW75HuliFseCroI=;
-  b=Ui7l1egS6rwQKGxNEv6A6iJiif40jw6TyWVLc7/vqe0vp91gbQvmn0BY
-   ajCX3PkrRf8HbHH/Vs7CrllKNTERDVHti+f1ciWRe+GLQhEyjCel3VmR5
-   X24LvYOc/Rd3swqgRVrSv37KDwtYDJmo2cjXur64Dg2rUJ6pHg3EPUvYy
-   SXVwAOTdd8GchI/dSRr4ECT663aNYayXH1Rtb9gFWec+AXFWkTTSj4i5/
-   ujIoVMtQwY83B1Uj+j+1YAzq6DYZ099NRifjKVpvGgEQoMBOEHYRGlhNd
-   ZLpUJ91/l6ZREA+NIdAY8pW+sjaBReEf4T3SJfe4WdnIYis0zQNSlC+d7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="314923126"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="314923126"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 11:29:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="784475878"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="784475878"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Mar 2023 11:29:17 -0800
-Received: from [10.209.27.115] (kliang2-mobl1.ccr.corp.intel.com [10.209.27.115])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 85584580D28;
-        Wed,  1 Mar 2023 11:29:14 -0800 (PST)
-Message-ID: <3e766f0e-37d4-0f82-3868-31b14228868d@linux.intel.com>
-Date:   Wed, 1 Mar 2023 14:29:13 -0500
+        Wed, 1 Mar 2023 14:31:42 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ADE5FCC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 11:31:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1677699095; bh=ul8usQAbbNJQCZ/MrwvldJUTAiszHlywsZmtfrqpycM=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=Bz2FBPq6j0ogzuNRKFJtiFPIR4V9qUonmJ8vMNizdhH9PoqAAGL5YTRNf+eupjwka
+         FKo64ubX8800EGF0YyodGxmrFML5icKQJI36nO8PIJTfvy3RSJkyHisnJP1Q7OQF1s
+         C8gsKIzUPnuYkzRQ+Do0UBTwnAZPRZsmLgj/Itrk=
+Received: by b221-3.in.mailobj.net [192.168.90.23] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Wed,  1 Mar 2023 20:31:35 +0100 (CET)
+X-EA-Auth: 6hanWLmy7mT7Pe/X0hDdaRnPJixamWgy+Zw4ZXcjUzhjQX1YSHt5Pime91mPkUL69jOOQ71InQc+xBMupO72LgaySvodfS1N
+Date:   Thu, 2 Mar 2023 01:01:31 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+        Christian Gromm <christian.gromm@microchip.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH RESEND] most: core: Use sysfs_emit in show function callsbacks
+Message-ID: <Y/+oE46Cngid8g9B@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH v2 1/2] perf/x86/rapl: Fix energy-cores event
-Content-Language: en-US
-To:     Wyes Karny <wyes.karny@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        Stephane Eranian <eranian@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gautham.shenoy@amd.com,
-        ananth.narayan@amd.com,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-References: <20230301181449.14647-1-wyes.karny@amd.com>
- <20230301181449.14647-2-wyes.karny@amd.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230301181449.14647-2-wyes.karny@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+According to Documentation/filesystems/sysfs.rst, the show() callback
+function of kobject attributes should strictly use sysfs_emit instead
+of sprintf family functions.
+
+Issue identified using the coccinelle device_attr_show.cocci script.
+
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Note: Resending the patch for review and feedback. No functional changes.
 
 
-On 2023-03-01 1:14 p.m., Wyes Karny wrote:
-> For quite some time, energy-cores event is broken, because RAPL PMU
-> assumes all the events on this PMU are uncore and sets rapl_cpu_mask
-> with the first available CPU on the die. Therefore, for energy-cores
-> event if we read MSR form pmu->cpu, it's wrong. But the following two
-> changes helped to hide this issue.
-> 
-> - commit 704e2f5b700d ("perf stat: Use affinity for enabling/disabling
->   events")
-> - commit e64cd6f73ff5 ("perf/x86: Use PMUEF_READ_CPU_PKG in uncore
->   events")
-> 
-> These two changes together acted as a workaround for energy-cores event.
-> First change affined perf events to respective CPUs whereas the second
-> change helped to pick the local CPU to read the MSR. In this way, MSRs
-> were read from the correct CPU. This works unless it's the first
-> reading.  For the first reading the second patch doesn't apply and we
-> get wrong readings. Stephane reported this issue when a patch to enable
-> AMD energy-cores RAPL event was posted [1].
-> 
-> The right way to fix the issue is to get rid of RAPL being considered an
-> uncore event. That is a larger change. To enable current RAPL usage,
-> work around the issue by conditionally remove the
-> `PERF_EV_CAP_READ_ACTIVE_PKG` flag for energy-cores event. Also, use the
-> event's CPU instead for PMU's CPU to read the MSR.
+ drivers/most/core.c | 61 ++++++++++++++++++++++-----------------------
+ 1 file changed, 30 insertions(+), 31 deletions(-)
 
-The current RAPL PMU aka 'power' should be die/socket scope.
-The energy-cores event is also defined as a die/socket scope.
+diff --git a/drivers/most/core.c b/drivers/most/core.c
+index e4412c7d25b0..f9ca6a7d885c 100644
+--- a/drivers/most/core.c
++++ b/drivers/most/core.c
+@@ -208,8 +208,8 @@ static ssize_t number_of_packet_buffers_show(struct device *dev,
+ 	struct most_channel *c = to_channel(dev);
+ 	unsigned int i = c->channel_id;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
+-			c->iface->channel_vector[i].num_buffers_packet);
++	return sysfs_emit(buf, "%d\n",
++			  c->iface->channel_vector[i].num_buffers_packet);
+ }
+ 
+ static ssize_t number_of_stream_buffers_show(struct device *dev,
+@@ -219,8 +219,8 @@ static ssize_t number_of_stream_buffers_show(struct device *dev,
+ 	struct most_channel *c = to_channel(dev);
+ 	unsigned int i = c->channel_id;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
+-			c->iface->channel_vector[i].num_buffers_streaming);
++	return sysfs_emit(buf, "%d\n",
++			  c->iface->channel_vector[i].num_buffers_streaming);
+ }
+ 
+ static ssize_t size_of_packet_buffer_show(struct device *dev,
+@@ -230,8 +230,8 @@ static ssize_t size_of_packet_buffer_show(struct device *dev,
+ 	struct most_channel *c = to_channel(dev);
+ 	unsigned int i = c->channel_id;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
+-			c->iface->channel_vector[i].buffer_size_packet);
++	return sysfs_emit(buf, "%d\n",
++			  c->iface->channel_vector[i].buffer_size_packet);
+ }
+ 
+ static ssize_t size_of_stream_buffer_show(struct device *dev,
+@@ -241,8 +241,8 @@ static ssize_t size_of_stream_buffer_show(struct device *dev,
+ 	struct most_channel *c = to_channel(dev);
+ 	unsigned int i = c->channel_id;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
+-			c->iface->channel_vector[i].buffer_size_streaming);
++	return sysfs_emit(buf, "%d\n",
++			  c->iface->channel_vector[i].buffer_size_streaming);
+ }
+ 
+ static ssize_t channel_starving_show(struct device *dev,
+@@ -251,7 +251,7 @@ static ssize_t channel_starving_show(struct device *dev,
+ {
+ 	struct most_channel *c = to_channel(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", c->is_starving);
++	return sysfs_emit(buf, "%d\n", c->is_starving);
+ }
+ 
+ static ssize_t set_number_of_buffers_show(struct device *dev,
+@@ -260,7 +260,7 @@ static ssize_t set_number_of_buffers_show(struct device *dev,
+ {
+ 	struct most_channel *c = to_channel(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.num_buffers);
++	return sysfs_emit(buf, "%d\n", c->cfg.num_buffers);
+ }
+ 
+ static ssize_t set_buffer_size_show(struct device *dev,
+@@ -269,7 +269,7 @@ static ssize_t set_buffer_size_show(struct device *dev,
+ {
+ 	struct most_channel *c = to_channel(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.buffer_size);
++	return sysfs_emit(buf, "%d\n", c->cfg.buffer_size);
+ }
+ 
+ static ssize_t set_direction_show(struct device *dev,
+@@ -279,10 +279,10 @@ static ssize_t set_direction_show(struct device *dev,
+ 	struct most_channel *c = to_channel(dev);
+ 
+ 	if (c->cfg.direction & MOST_CH_TX)
+-		return snprintf(buf, PAGE_SIZE, "tx\n");
++		return sysfs_emit(buf, "tx\n");
+ 	else if (c->cfg.direction & MOST_CH_RX)
+-		return snprintf(buf, PAGE_SIZE, "rx\n");
+-	return snprintf(buf, PAGE_SIZE, "unconfigured\n");
++		return sysfs_emit(buf, "rx\n");
++	return sysfs_emit(buf, "unconfigured\n");
+ }
+ 
+ static ssize_t set_datatype_show(struct device *dev,
+@@ -294,10 +294,9 @@ static ssize_t set_datatype_show(struct device *dev,
+ 
+ 	for (i = 0; i < ARRAY_SIZE(ch_data_type); i++) {
+ 		if (c->cfg.data_type & ch_data_type[i].most_ch_data_type)
+-			return snprintf(buf, PAGE_SIZE, "%s",
+-					ch_data_type[i].name);
++			return sysfs_emit(buf, "%s", ch_data_type[i].name);
+ 	}
+-	return snprintf(buf, PAGE_SIZE, "unconfigured\n");
++	return sysfs_emit(buf, "unconfigured\n");
+ }
+ 
+ static ssize_t set_subbuffer_size_show(struct device *dev,
+@@ -306,7 +305,7 @@ static ssize_t set_subbuffer_size_show(struct device *dev,
+ {
+ 	struct most_channel *c = to_channel(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.subbuffer_size);
++	return sysfs_emit(buf, "%d\n", c->cfg.subbuffer_size);
+ }
+ 
+ static ssize_t set_packets_per_xact_show(struct device *dev,
+@@ -315,7 +314,7 @@ static ssize_t set_packets_per_xact_show(struct device *dev,
+ {
+ 	struct most_channel *c = to_channel(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.packets_per_xact);
++	return sysfs_emit(buf, "%d\n", c->cfg.packets_per_xact);
+ }
+ 
+ static ssize_t set_dbr_size_show(struct device *dev,
+@@ -323,7 +322,7 @@ static ssize_t set_dbr_size_show(struct device *dev,
+ {
+ 	struct most_channel *c = to_channel(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.dbr_size);
++	return sysfs_emit(buf, "%d\n", c->cfg.dbr_size);
+ }
+ 
+ #define to_dev_attr(a) container_of(a, struct device_attribute, attr)
+@@ -395,7 +394,7 @@ static ssize_t description_show(struct device *dev,
+ {
+ 	struct most_interface *iface = dev_get_drvdata(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", iface->description);
++	return sysfs_emit(buf, "%s\n", iface->description);
+ }
+ 
+ static ssize_t interface_show(struct device *dev,
+@@ -406,25 +405,25 @@ static ssize_t interface_show(struct device *dev,
+ 
+ 	switch (iface->interface) {
+ 	case ITYPE_LOOPBACK:
+-		return snprintf(buf, PAGE_SIZE, "loopback\n");
++		return sysfs_emit(buf, "loopback\n");
+ 	case ITYPE_I2C:
+-		return snprintf(buf, PAGE_SIZE, "i2c\n");
++		return sysfs_emit(buf, "i2c\n");
+ 	case ITYPE_I2S:
+-		return snprintf(buf, PAGE_SIZE, "i2s\n");
++		return sysfs_emit(buf, "i2s\n");
+ 	case ITYPE_TSI:
+-		return snprintf(buf, PAGE_SIZE, "tsi\n");
++		return sysfs_emit(buf, "tsi\n");
+ 	case ITYPE_HBI:
+-		return snprintf(buf, PAGE_SIZE, "hbi\n");
++		return sysfs_emit(buf, "hbi\n");
+ 	case ITYPE_MEDIALB_DIM:
+-		return snprintf(buf, PAGE_SIZE, "mlb_dim\n");
++		return sysfs_emit(buf, "mlb_dim\n");
+ 	case ITYPE_MEDIALB_DIM2:
+-		return snprintf(buf, PAGE_SIZE, "mlb_dim2\n");
++		return sysfs_emit(buf, "mlb_dim2\n");
+ 	case ITYPE_USB:
+-		return snprintf(buf, PAGE_SIZE, "usb\n");
++		return sysfs_emit(buf, "usb\n");
+ 	case ITYPE_PCIE:
+-		return snprintf(buf, PAGE_SIZE, "pcie\n");
++		return sysfs_emit(buf, "pcie\n");
+ 	}
+-	return snprintf(buf, PAGE_SIZE, "unknown\n");
++	return sysfs_emit(buf, "unknown\n");
+ }
+ 
+ static DEVICE_ATTR_RO(description);
+-- 
+2.34.1
 
- *  pp0 counter: consumption of all physical cores (power plane 0)
- * 	  event: rapl_energy_cores
- *    perf code: 0x1
 
-I don't think we want to change the scope of the energy-cores event.
-Otherwise Intel's energy-cores event probably be broken.
 
-It looks like you are looking for a new per-core RAPL event. I think
-it's better to create a new core scope RAPL PMU.
-
-Thanks,
-Kan
-
-> 
-> [1]: https://lore.kernel.org/lkml/CABPqkBQ_bSTC-OEe_LrgUrpj2VsseX1ThvO-yLcEtF8vb4+AAw@mail.gmail.com/#t
-> 
-> Fixes: e64cd6f73ff5 ("perf/x86: Use PMUEF_READ_CPU_PKG in uncore events")
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> ---
->  arch/x86/events/rapl.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-> index 52e6e7ed4f78..e6a0c077daf5 100644
-> --- a/arch/x86/events/rapl.c
-> +++ b/arch/x86/events/rapl.c
-> @@ -343,14 +343,15 @@ static int rapl_pmu_event_init(struct perf_event *event)
->  	if (event->cpu < 0)
->  		return -EINVAL;
->  
-> -	event->event_caps |= PERF_EV_CAP_READ_ACTIVE_PKG;
-> -
->  	if (!cfg || cfg >= NR_RAPL_DOMAINS + 1)
->  		return -EINVAL;
->  
->  	cfg = array_index_nospec((long)cfg, NR_RAPL_DOMAINS + 1);
->  	bit = cfg - 1;
->  
-> +	if (bit != PERF_RAPL_PP0)
-> +		event->event_caps |= PERF_EV_CAP_READ_ACTIVE_PKG;
-> +
->  	/* check event supported */
->  	if (!(rapl_cntr_mask & (1 << bit)))
->  		return -EINVAL;
-> @@ -363,7 +364,15 @@ static int rapl_pmu_event_init(struct perf_event *event)
->  	pmu = cpu_to_rapl_pmu(event->cpu);
->  	if (!pmu)
->  		return -EINVAL;
-> -	event->cpu = pmu->cpu;
-> +
-> +	/*
-> +	 * FIXME: RAPL PMU considers events are uncore and MSRs can be read from
-> +	 * the first available CPU of the die. But this is not true for energy-cores
-> +	 * event. Therefore as a workaround don't consider pmu->cpu here for PERF_RAPL_PP0.
-> +	 */
-> +	if (event->event_caps & PERF_EV_CAP_READ_ACTIVE_PKG)
-> +		event->cpu = pmu->cpu;
-> +
->  	event->pmu_private = pmu;
->  	event->hw.event_base = rapl_msrs[bit].msr;
->  	event->hw.config = cfg;
