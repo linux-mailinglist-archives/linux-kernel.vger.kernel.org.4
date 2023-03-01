@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0620E6A65B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D63F6A65BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 03:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjCACme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 21:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S229900AbjCACog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 21:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjCACmd (ORCPT
+        with ESMTP id S229493AbjCACoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 21:42:33 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ECC37554;
-        Tue, 28 Feb 2023 18:42:32 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id x34so11928297pjj.0;
-        Tue, 28 Feb 2023 18:42:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677638552;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TtEI17+g3+FYNmzjZog7TObGaEISKv33yP7XaUgcMpw=;
-        b=C2awFZi3UZK1zN88aASBwpbUmIyVjmgoYglFuONN/+0apTYd5IWDuLiOz1c1VN8upZ
-         6mlskXUv1yXAzEH8dxRsozpV2xWpBd80NAmpQGfUmvJrKEuXhVvb/V6prcMvsaRZiCo+
-         iXCFzMv9fj9v6B/f7hkrooQoUAGi4cO0UN3c8UHZpBrPIC1gOPBU49wHROJNBocEHvmp
-         tb3cm050fGMauVRXy7ifSfX1VzGGFhZ3tAEBXlF+mQg8FsIVHkeT8V5zrFCozrWvuK8Q
-         9rrdYm6eG1V39BS+g40xVcIy99Q0FgF6YWINYxQvQWe/rGwLsUCHKm73ixthff5BDTcM
-         E7mg==
+        Tue, 28 Feb 2023 21:44:34 -0500
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AFD10255;
+        Tue, 28 Feb 2023 18:44:34 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso6813283ota.1;
+        Tue, 28 Feb 2023 18:44:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677638552;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TtEI17+g3+FYNmzjZog7TObGaEISKv33yP7XaUgcMpw=;
-        b=shAOjRrwhDaOjkrBWbNlyVKXK37YWagk0WL05oh4d7Ab7zlfE95wjt/zLE/NIsyZGY
-         yPDI49te2tA+KuwM2sLT5ctGUndGfbHcyWfYelo6sWuSvdrbnKTMYkRnWn8weoCtmmQ4
-         bw3NrjPYwnP7ij+mrmHtLx3UUm6rnhPP+Air4/ZqndhbWK322QMJ8Wvq0LFJQDiKa+VG
-         X6l1X1B02el+56Fn9s1hYS4PlK99piK8oJBAHkWaW58UUMn2MoU12g/au8GBsNeRv99H
-         oJgxtvEpxUqae/686qheDvZ0fPe0uKdE9JmZTC02+nHeRcpp6qbLOPdOKQsTgqR2z7mk
-         YAIA==
-X-Gm-Message-State: AO0yUKXPhb9c6m3X0pENlO3U3Y/sjoXbQeNIZ+qINuIlUDdjrcc98X+S
-        KfO72sfapmL2jF0WgjX2ieA=
-X-Google-Smtp-Source: AK7set/i/rEne9Miy3soqJWFleyHZluwc5UHR+jsPgrNaLUUlsoxf8qLJ7q2HYdNV1zs/GO9IiWdsQ==
-X-Received: by 2002:a17:902:d54d:b0:19e:2298:c53d with SMTP id z13-20020a170902d54d00b0019e2298c53dmr4379817plf.10.1677638551793;
-        Tue, 28 Feb 2023 18:42:31 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-27.three.co.id. [180.214.232.27])
-        by smtp.gmail.com with ESMTPSA id ju4-20020a170903428400b0019a7563ff15sm7198090plb.115.2023.02.28.18.42.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 18:42:31 -0800 (PST)
-Message-ID: <7aaf6ed9-3da2-0535-f269-fc5c35e7aadc@gmail.com>
-Date:   Wed, 1 Mar 2023 09:42:14 +0700
+        bh=v2mASzywLLLz3SL9h6D/hbMI9Q5P67uUV6RN/jUkz1w=;
+        b=OR5zDjVCo2f7Mw833Y+AVPRqP4EgXXGFqkTIS2omfRi+ohz7cJG+2BE49DNocWzB60
+         rw+a6Of7PEAS500edZaZ3AFGguEotHG8TE0LlrG+a50NDz+5aWrW8RJAEd8ZaF/2saqV
+         tqXo0b56AeNUGPPqdZ66oAKYT+LmWICvXAjl7aMsG86dDLPjenfP8/xWjkER1McQ/scY
+         VYdKS96kUTbNFrrneyzCJOVR3KKJiii3nZ4+I72A9GBIWqnIfkIg1myAGPt8GR2Zu4eb
+         1UQjVAscNGuUsLgJ3C2stuXLmdy4laBmK7RPDZsEN7u/eWTMBpTcVQ5SzJDP12oBTSJh
+         tH4g==
+X-Gm-Message-State: AO0yUKW+0PMCwGz1GkK8uaJI3O7zpZ3O/ZjNqjJqT0mQxhr8mvIcv6/q
+        3UURgDYajf6bufmXi6+0Uw==
+X-Google-Smtp-Source: AK7set9UBWbgFA1YWvOE33zjSRJM6L7Ce9rJOQ8u6UdOLH1WrhEbJt1fAwKlmQilm3WSZq+MRsPCWg==
+X-Received: by 2002:a9d:17d0:0:b0:690:ece7:62d2 with SMTP id j74-20020a9d17d0000000b00690ece762d2mr2898278otj.19.1677638673290;
+        Tue, 28 Feb 2023 18:44:33 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c2-20020a9d75c2000000b0068bd6cf405dsm4451250otl.1.2023.02.28.18.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 18:44:32 -0800 (PST)
+Received: (nullmailer pid 260581 invoked by uid 1000);
+        Wed, 01 Mar 2023 02:44:31 -0000
+Date:   Tue, 28 Feb 2023 20:44:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
+ compatible strings
+Message-ID: <20230301024431.GA251215-robh@kernel.org>
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-8-arinc.unal@arinc9.com>
+ <20230227173333.GA496999-robh@kernel.org>
+ <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 00/15] dma-fence: Deadline awareness
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        intel-gfx@lists.freedesktop.org,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>
-References: <20230227193535.2822389-1-robdclark@gmail.com>
- <Y/320d96QmbLe1J8@debian.me>
- <CAF6AEGuqHDDQS22qcp8sk+5bj16XFiBarCLvpX=qNc2r2euMUw@mail.gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <CAF6AEGuqHDDQS22qcp8sk+5bj16XFiBarCLvpX=qNc2r2euMUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 22:44, Rob Clark wrote:
-> You can find my branch here:
+On Tue, Feb 28, 2023 at 07:46:36PM +0300, Arınç ÜNAL wrote:
+> On 27/02/2023 20:33, Rob Herring wrote:
+> > On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
+> > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> > > 
+> > > Add the ralink,rt2880-pinmux compatible string. It had been removed from
+> > > the driver which broke the ABI.
+> > > 
+> > > Add the mediatek compatible strings. Change the compatible string on the
+> > > examples with the mediatek compatible strings.
+> > > 
+> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> > > ---
+> > >   .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
+> > >   .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
+> > >   .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
+> > >   .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
+> > >   .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
+> > >   5 files changed, 25 insertions(+), 10 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+> > > index 1e63ea34146a..531b5f616c3d 100644
+> > > --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+> > > +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+> > > @@ -17,7 +17,10 @@ description:
+> > >   properties:
+> > >     compatible:
+> > > -    const: ralink,mt7620-pinctrl
+> > > +    enum:
+> > > +      - mediatek,mt7620-pinctrl
+> > > +      - ralink,mt7620-pinctrl
+> > 
+> > We don't update compatible strings based on acquistions nor marketing
+> > whims. If you want to use 'mediatek' for new things, then fine.
 > 
-> https://gitlab.freedesktop.org/robclark/msm/-/commits/dma-fence/deadline
+> Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs share
+> the same architecture from Ralink, so they were incorrectly called Ralink
+> SoCs.
 > 
+> I can remove the new strings from Ralink SoCs and add them only for MediaTek
+> SoCs. Or you could make an exception for this one, regarding the situation.
+> Whatever you think is best.
 
-Pulled, thanks!
+I'm not in a position to make an exception as I know little about this 
+platform. Carrying both strings is a NAK. Either you (and everyone using 
+these platforms) care about the ABI and are stuck with the "wrong" 
+string. In the end, they are just unique identifiers. Or you don't care 
+and break the ABI and rename everything. If you do that, do just that in 
+your patches and make it crystal clear in the commit msg that is your 
+intention and why that is okay.
 
--- 
-An old man doll... just what I always wanted! - Clara
-
+Rob
