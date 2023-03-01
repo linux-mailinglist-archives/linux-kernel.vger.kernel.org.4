@@ -2,212 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2FA6A6796
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 07:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5A46A6799
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 07:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCAGT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 01:19:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        id S229548AbjCAGXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 01:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjCAGTz (ORCPT
+        with ESMTP id S229437AbjCAGXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 01:19:55 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB64B83ED
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 22:19:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677651593; x=1709187593;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=f1EvyqOI7iFrXy5SrYy2Qs5gMHTyapwHJlT7PO8ZAYY=;
-  b=kQagKBOF9hI33/l7Vzv2qyADqYDIlvIINo018a/5D2wW7TjLaLzu45pg
-   D/01BmcF/nt4cP1VErvXJ0Kwm9La0y8PbIKFfKOU7nIkFcDnf+SvoW4mC
-   OfqjSsgoxsYUI09e6ToTO8sdG5JHl/rGAhQVRCkH8tuZUqJv8wnuu/kZ+
-   n7SIK0jFPos5ZrY0aJk6jxXt0U/h/2h00mvlk5Fb/YyDdKSXfeqFP9S5c
-   Fq5+himA4Rcv82I7kEYYo+E1zRsm/nnhDRZkEMgAeg4WUJbziNqvGVpxW
-   LheJSo0us4KVpWpLoev9SIgtjkh45XG5FMGfxTC+fwpoj2Vr30nH2Q0ic
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="314001789"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="314001789"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 22:19:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="676632503"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="676632503"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 22:19:47 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Hugh Dickins <hughd@google.com>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>,
-        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH 3/3] migrate_pages: try migrate in batch asynchronously
- firstly
-References: <20230224141145.96814-1-ying.huang@intel.com>
-        <20230224141145.96814-4-ying.huang@intel.com>
-        <a0c24dfe-3a07-fe9e-7edf-b51877d96c32@linux.alibaba.com>
-Date:   Wed, 01 Mar 2023 14:18:51 +0800
-In-Reply-To: <a0c24dfe-3a07-fe9e-7edf-b51877d96c32@linux.alibaba.com> (Baolin
-        Wang's message of "Wed, 1 Mar 2023 11:08:26 +0800")
-Message-ID: <87zg8x9epg.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 1 Mar 2023 01:23:41 -0500
+Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2150.outbound.protection.outlook.com [40.92.63.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80044EB7B;
+        Tue, 28 Feb 2023 22:23:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CN8NtEZSp0JKqxR7ZfucynchWuqL0oRmQKRIA0eHalIsPgGw1cCIq+1noP8FqPZRvWEpd5NK2IgoWrnLsiNN8nd2IwC5Qkypr6i4BQYhyT0fdTxMpYkgnbPsc1OeHExa+gSP6c4HPKt0CqwEZSLOLAfEMi/lQoRAKAFtPk071ZiLpBaQbkMmFZ3e5edmVEgqcyzCwfKLV4hz0AVJo6KI/rl8kENTqZnHsZZDuV+KR11kf1U8gWrise1dioqtXVG/UapWGzUV/4VFFZi9Rs6VhwqW1mptooIzSu2SM6tHb1qMs5MZCMxWqXN0v4PB1tMPmHxXIHQLUn1o6hYOc4HzFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iC3tAVvI/Z+WmYJP+we926ax8u1Ty2KNZwp4XoYmORU=;
+ b=dGClSGGX04aSMM4OcYJk8kPXKO4qwXYle0VS1XVMm8oVrviRSNdRV7Zr4rUfOhgJ+5j3TDCbQdwwi6yPZMqKzG8CeHdqKOrIU0cUbnSO9jM0HjegTSqlxn7pH/Bp4IyCcv+xsGVNiaHsxBWSTvg5R0tL1xjeDx3UVFbKL9sSBBFq4FYduSWC6uXOrVfKTIrbGtNCCKl/5afTAk7leJJjXH0RDLIjJhxngYD54Imhp5dACgcwV662DgrSHE0GFaPCbY8BR0POu/FoYrCfdw+S9HwD5JTYwBXYAgcu/GbzTe+pgyF5xRoSCIkl8uosTQsxo4hCKg+IL9M6YT2zfYbBrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iC3tAVvI/Z+WmYJP+we926ax8u1Ty2KNZwp4XoYmORU=;
+ b=TbgFQRIVq91fCiKaWtvUSndtk5dQhCaHB4GSkjpcaASc4MBbyWFHWjpqL87rcc5t65TxUS7U6HHGp4g6mAm+lxzCVyPB3xoF7NfdLJJ0t4n08t/umKJE/nHt0gTYnNJy8pq3KQYzjqRMqZ0Fm0Gyufq1vQnllv3S7Clf/H3E7LgRdcE5hTcIpfAZzy3JNJXDYNFcqhhZtsImyCgtpLc7sSLaFv9ylu5wHvyHzS9sx547ZzaMEYMSzNg9556OqBfD2PeTSegO0IrTQsYxSICJRBWxrE+O5pebsPa0LikpobuEdQMNKkJ8rxBhgof4o2sEMov2rC5EmIYJAMeCiOOKCA==
+Received: from SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:ac::13) by
+ SYBP282MB2253.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:99::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.30; Wed, 1 Mar 2023 06:23:35 +0000
+Received: from SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::637e:ae7f:4307:e5ab]) by SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::637e:ae7f:4307:e5ab%9]) with mapi id 15.20.6156.017; Wed, 1 Mar 2023
+ 06:23:35 +0000
+From:   Tianyi Liu <i.pear@outlook.com>
+To:     arnd@arndb.de
+Cc:     hjl.tools@gmail.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Tianyi Liu <i.pear@outlook.com>
+Subject: [PATCH] Discard .note.gnu.property in vmlinux
+Date:   Wed,  1 Mar 2023 14:22:32 +0800
+Message-ID: <SY4P282MB108446E9ED9FB180AE717D5F9DAD9@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.39.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [9WsfBkK33D7GDnVh1VWQAspsnhWr/um8ZmmcqDRnlIE3zu6sTDEp/A==]
+X-ClientProxiedBy: SG2PR01CA0171.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:28::27) To SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:10:ac::13)
+X-Microsoft-Original-Message-ID: <20230301062232.2708155-1-i.pear@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SY4P282MB1084:EE_|SYBP282MB2253:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46010a48-f4e7-413c-5275-08db1a1d7c9c
+X-MS-Exchange-SLBlob-MailProps: dx7TrgQSB6dAG8fEwqdvu3P4kJ8WfkSHJ/VyhTx8G9lQ63vz0cpjlF0PTPFU90JWrhUDsZh2UrTbxav7ZEEqVMwz6tVouVW6S0jVrctywqGkGCm394seECzmhJOGIKyC0t9p7P+HNshvJZCo5L0egl8WVf1UOiAfNwAmqPysfxrzs8RgBOnpDFtxKMmsSP4RlHJcCazNeW9x48el0TfxU4WWyHt+oDWEnlL+4X4e8PGF+a3i62aVZzUK9jEafJMNTir4NPAdBha5bNTXxVDETkpblzopb4c5UcA8JfYQ8Hv5nKKlH/ZoUJz3L8MN+Z8/KqLyY718xminA2ewHeMurD1mtZrKXRtH3GXKXbZZ0uHXt9LvEHULqJmK2KM2ScI69f+ZPdQQ/Esqkq3sbrNypMd9i6pfXkT6Ao4lCLy/PMJpsCY4JtC7vBbF9j0vb0iqChvglhlDjY5TGd8WnADfqEtZXdHhqWCihA/g1uE4HPqc6aYdiUcCK8jKW4z9nc/UzvFBSVlq6xckSdbdjexmwefRsiUvNS13RI8i6tpsgaX6NkMnFQvkUkmAszF8pSj7Ll5BAVfYt9eyggmuDGoYNndqayAGpIc+B2XJsAnuSXS7SEx6GYomMPvbZUrL36WJlpyLJw28ehev0VgrhXktyRBnZvypKhIJzbuN5WPwD4htY3Yb6I4BkrkfJ0rfDfvEm9cFYNPOslyfBupw2LvapTlNPdJdx8zzyMFVs/Nv/kCIuJG6CE9OQLxgVLvWRDT3vtQ8adSEYAA=
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ERm/MND+5l46Mg9aenW+YCkEL+FTZdSY1pKwsJqLoUor0rj3Lx18SJTKaQJ3A7hxG/VuOjXiiVFfETf1brk0hp6U3cg4xb9uDpp5BaWz/tOaLjOsXo9o23NXS5H7bqB2rbQkXzI4c+uL0vI/YUwb6P6Ddt/K82YpZeI61701eBDxG0/3S264NuerRA5ERzXp6ZGYFI10Y2OkV5tj6m5mk7sQnHpSBMn0E8EyMaylWSCbC0u8YxXws6p81OWqCneMx1A2+p4LRHI0DzfoQPSpQOAsrZ9JFDgYZ4BCfFWZm/CHJ9que2BIiN2gteEYlUIr9X02JJpLltcDPyq4kZDUSRtuKQ5QXVaylM0dllAARN6fgAO8jMyqG4qxUCyl1eQub0bqb5656Ks++e+WonNcV19fY4Rmf8evBFuh2p8xwyB3fMtuVCKKIhpzXIXGcjZQrRIueII11MEZww/cs/6dwFm7ibPwYmJpF1IOp0bOPrNyR0gD+Zq7MFz8Xd3iiftlJ+kQKxstM30tZxik2MQDceFNijLl1p+LpFhHReKYFNMwtt+OcdKdpBG+RKmdTabMj0+DZKLe8sEZWPsHy/e+DxA5RO2stSMdc5Pm10W/9Eha/6rtJGESTuva7HzpJxosdClPF9ljUYRBERgcVmXYcQM4MHlSrUXVJmJLD/MGJB+USE7+/x82HzBO9lgANLEh
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?U00cSVtQtoK1N2vZAExvgRYj/caskImZMiYAKc1qxb7sAEpxj7AxGlnzedyi?=
+ =?us-ascii?Q?pcj9dAPAjuJdkmIuFK2d2XaErW2z3OR7SXk450d9dwNsALrIGyn4zsY1t0Uu?=
+ =?us-ascii?Q?xgmyJs+cQkYfFWiUQTWsQ4xt4IAZj8+Lgcc2DPFnB23K2EsVllf+By8BJ7gk?=
+ =?us-ascii?Q?IBBkmF4eFJfgoaEn7qr7fA+1rPIJEgjU98PbR2PvgiK/YZ0QqZfeo1PtS5q2?=
+ =?us-ascii?Q?xEWTqMCq/zJxPF2hhEI8xoU3ATMwRxPd+8FeE9ryG75gVUTJZkD2me+a7z7u?=
+ =?us-ascii?Q?RMCM9tjViMEHjvZ9MdeluOD/5+wf/UXBsb8SFcHvS479ezKaIjkvsZ7q252s?=
+ =?us-ascii?Q?mXeb9LE1R3iPT6QjlxxKDym7Rd28qfasNWpK8FjczY5LOzueigyi8fUwUWRt?=
+ =?us-ascii?Q?j7orfR4SXFNLAQVVGS/HoynhmeQUk2IBiXBFwfIbV1PkLMD7fRqw94S3yxcA?=
+ =?us-ascii?Q?HEqRncHS/DXuGdiBVexN6hv/f918M3zbYBQ6U9YFzAPQHbX7YKQcClI+WkIq?=
+ =?us-ascii?Q?cUCzIFWHXxLyUsobUnwYgKPQLLjwzZgnPcs56B8hu3+wHkPlR3GxPGYFWYeW?=
+ =?us-ascii?Q?1BQrUOiLXDsY2rc2MSwEfalM3GgF4wVvIlc9vigpLlVHQ9lYTVYwHz9yo5ra?=
+ =?us-ascii?Q?2+gyxYYgltxFC61csOOqrrTMAYaLmOQ+akSOKOY+npPq16caVC6deWew9HDM?=
+ =?us-ascii?Q?icbyk7fbDGA1VnC3weSO6wLxJP4oaIcTw0BALnRRKQaCt71DJomdIU+kHb1r?=
+ =?us-ascii?Q?/3rr57KSA04Bf2Mx07LuywPH9biUCDqGZ96Gb3tCmm8EXES76pggOOq48SMs?=
+ =?us-ascii?Q?vY2SLP7rJrAZmKwGU0N4lWNTyp475CDYAdST0WTU/IFggHom0lLg3/1KXqMg?=
+ =?us-ascii?Q?gxveG6/Qs528kblzsW/mI8Ahe8WSac1BxvGNRJRpCP4LhGwrxvnVibHrZ0vp?=
+ =?us-ascii?Q?fepqYpnkO1g/EIO6NKzdmMssIaAjfRbYFqXyL1WpLYU+89mKnu03QgslzK3f?=
+ =?us-ascii?Q?Zf8pHixHjzToxQNoWjwjljrFZzVOlrUVFhnwVUjkMIDQuiTvDz5mRxVwEX2L?=
+ =?us-ascii?Q?t5LxTIjyqeHkYeGrYlA4BEkEvqMchOR3PFlP2MgBPb/qOLmhQljzRTXTYZkR?=
+ =?us-ascii?Q?1MgUNVuwrrtJnpY1llPFFEpRkYCIOW72lQdr/5049EpJ6MvG9qlzvv8adls1?=
+ =?us-ascii?Q?byqiL0JsJEL0bAJ34L4FkfIB4ejWasF2OEI1TnmT8FKmvRWqdN9Br08W8yNR?=
+ =?us-ascii?Q?Fa2rAY2ssXryVDOLBEz954UQqDAW+6VPEwfg89m+kasypEKYKICJTRQD5GQW?=
+ =?us-ascii?Q?cis=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46010a48-f4e7-413c-5275-08db1a1d7c9c
+X-MS-Exchange-CrossTenant-AuthSource: SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 06:23:35.1455
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SYBP282MB2253
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+When the kernel image is finally linked, all the notes are packed into a
+single .notes section, but these notes may have different alignments.
 
-> On 2/24/2023 10:11 PM, Huang Ying wrote:
->> When we have locked more than one folios, we cannot wait the lock or
->> bit (e.g., page lock, buffer head lock, writeback bit) synchronously.
->> Otherwise deadlock may be triggered.  This make it hard to batch the
->> synchronous migration directly.
->> This patch re-enables batching synchronous migration via trying to
->> migrate in batch asynchronously firstly.  And any folios that are
->> failed to be migrated asynchronously will be migrated synchronously
->> one by one.
->> Test shows that this can restore the TLB flushing batching
->> performance
->> for synchronous migration effectively.
->> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->> Cc: Hugh Dickins <hughd@google.com>
->> Cc: "Xu, Pengfei" <pengfei.xu@intel.com>
->> Cc: Christoph Hellwig <hch@lst.de>
->> Cc: Stefan Roesch <shr@devkernel.io>
->> Cc: Tejun Heo <tj@kernel.org>
->> Cc: Xin Hao <xhao@linux.alibaba.com>
->> Cc: Zi Yan <ziy@nvidia.com>
->> Cc: Yang Shi <shy828301@gmail.com>
->> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
->> Cc: Matthew Wilcox <willy@infradead.org>
->> Cc: Mike Kravetz <mike.kravetz@oracle.com>
->> ---
->>   mm/migrate.c | 65 ++++++++++++++++++++++++++++++++++++++++++++--------
->>   1 file changed, 55 insertions(+), 10 deletions(-)
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index 91198b487e49..c17ce5ee8d92 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1843,6 +1843,51 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->>   	return rc;
->>   }
->>   +static int migrate_pages_sync(struct list_head *from, new_page_t
->> get_new_page,
->> +		free_page_t put_new_page, unsigned long private,
->> +		enum migrate_mode mode, int reason, struct list_head *ret_folios,
->> +		struct list_head *split_folios, struct migrate_pages_stats *stats)
->> +{
->> +	int rc, nr_failed = 0;
->> +	LIST_HEAD(folios);
->> +	struct migrate_pages_stats astats;
->> +
->> +	memset(&astats, 0, sizeof(astats));
->> +	/* Try to migrate in batch with MIGRATE_ASYNC mode firstly */
->> +	rc = migrate_pages_batch(from, get_new_page, put_new_page, private, MIGRATE_ASYNC,
->> +				 reason, &folios, split_folios, &astats,
->> +				 NR_MAX_MIGRATE_PAGES_RETRY);
->> +	stats->nr_succeeded += astats.nr_succeeded;
->> +	stats->nr_thp_succeeded += astats.nr_thp_succeeded;
->> +	stats->nr_thp_split += astats.nr_thp_split;
->> +	if (rc < 0) {
->> +		stats->nr_failed_pages += astats.nr_failed_pages;
->> +		stats->nr_thp_failed += astats.nr_thp_failed;
->> +		list_splice_tail(&folios, ret_folios);
->> +		return rc;
->> +	}
->> +	stats->nr_thp_failed += astats.nr_thp_split;
->> +	nr_failed += astats.nr_thp_split;
->> +	/*
->> +	 * Fall back to migrate all failed folios one by one synchronously. All
->> +	 * failed folios except split THPs will be retried, so their failure
->> +	 * isn't counted
->> +	 */
->> +	list_splice_tail_init(&folios, from);
->> +	while (!list_empty(from)) {
->> +		list_move(from->next, &folios);
->> +		rc = migrate_pages_batch(&folios, get_new_page, put_new_page,
->> +					 private, mode, reason, ret_folios,
->> +					 split_folios, stats, NR_MAX_MIGRATE_PAGES_RETRY);
->> +		list_splice_tail_init(&folios, ret_folios);
->> +		if (rc < 0)
->> +			return rc;
->> +		nr_failed += rc;
->> +	}
->> +
->> +	return nr_failed;
->> +}
->> +
->>   /*
->>    * migrate_pages - migrate the folios specified in a list, to the free folios
->>    *		   supplied as the target for the page migration
->> @@ -1874,7 +1919,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>   		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
->>   {
->>   	int rc, rc_gather;
->> -	int nr_pages, batch;
->> +	int nr_pages;
->>   	struct folio *folio, *folio2;
->>   	LIST_HEAD(folios);
->>   	LIST_HEAD(ret_folios);
->> @@ -1890,10 +1935,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>   	if (rc_gather < 0)
->>   		goto out;
->>   -	if (mode == MIGRATE_ASYNC)
->> -		batch = NR_MAX_BATCHED_MIGRATION;
->> -	else
->> -		batch = 1;
->>   again:
->>   	nr_pages = 0;
->>   	list_for_each_entry_safe(folio, folio2, from, lru) {
->> @@ -1904,16 +1945,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>   		}
->>     		nr_pages += folio_nr_pages(folio);
->> -		if (nr_pages >= batch)
->> +		if (nr_pages >= NR_MAX_BATCHED_MIGRATION)
->>   			break;
->>   	}
->> -	if (nr_pages >= batch)
->> +	if (nr_pages >= NR_MAX_BATCHED_MIGRATION)
->>   		list_cut_before(&folios, from, &folio2->lru);
->>   	else
->>   		list_splice_init(from, &folios);
->> -	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
->> -				 mode, reason, &ret_folios, &split_folios, &stats,
->> -				 NR_MAX_MIGRATE_PAGES_RETRY);
->> +	if (mode == MIGRATE_ASYNC)
->> +		rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
->> +					 mode, reason, &ret_folios, &split_folios, &stats,
->> +					 NR_MAX_MIGRATE_PAGES_RETRY);
->> +	else
->> +		rc = migrate_pages_sync(&folios, get_new_page, put_new_page, private,
->> +					mode, reason, &ret_folios, &split_folios, &stats);
->
-> For split folios, it seems also reasonable to use migrate_pages_sync()
-> instead of always using fixed MIGRATE_ASYNC mode?
+binutils above 2.32 adds a ".note.gnu.property" section to the compiled
+output, which is 4-byte aligned on 32-bit, but 8-byte aligned on 64-bit.
+At present, the notes generated by both the ELFNOTE macro and the VDSO
+linker script are 4-byte aligned. So in a 64-bit kernel, packing segments
+with different alignments will cause LibElf and tools like readelf to
+crush or to read wrong values [1][2].
 
-For split folios, we only try to migrate them with minimal effort.
-Previously, we decrease the retry number from 10 to 1.  Now, I think
-that it's reasonable to change the migration mode to MIGRATE_ASYNC to
-reduce latency.  They have been counted as failure anyway.
+This patch discards ".note.gnu.property" from vmlinux.
 
->>   	list_splice_tail_init(&folios, &ret_folios);
->>   	if (rc < 0) {
->>   		rc_gather = rc;
+Note that H.J. Lu has submitted a similar patch in the past[3],
+but it was not merged.
 
-Best Regards,
-Huang, Ying
+[1] https://lore.kernel.org/bpf/57830c30-cd77-40cf-9cd1-3bb608aa602e@app.fastmail.com/
+[2] https://lore.kernel.org/linux-arm-kernel/20210428172847.GC4022@arm.com/
+[3] https://lore.kernel.org/lkml/20180924201459.35923-1-hjl.tools@gmail.com/
+
+Signed-off-by: Tianyi Liu <i.pear@outlook.com>
+---
+ include/asm-generic/vmlinux.lds.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index d1f57e4868ed..6db0f664c7d6 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -891,9 +891,13 @@
+ /*
+  * Discard .note.GNU-stack, which is emitted as PROGBITS by the compiler.
+  * Otherwise, the type of .notes section would become PROGBITS instead of NOTES.
++ *
++ * Discard .note.gnu.property, which is 8-byte aligned and emitted by the
++ * compiler. Otherwise, the .notes section will be 8-byte aligned and other
++ * notes cannot be read.
+  */
+ #define NOTES								\
+-	/DISCARD/ : { *(.note.GNU-stack) }				\
++	/DISCARD/ : { *(.note.GNU-stack) *(.note.gnu.property) }				\
+ 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
+ 		BOUNDED_SECTION_BY(.note.*, _notes)			\
+ 	} NOTES_HEADERS							\
+-- 
+2.39.2
+
