@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0510B6A686D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049CB6A6880
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 09:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjCAHyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 02:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S229686AbjCAH7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 02:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCAHyI (ORCPT
+        with ESMTP id S229602AbjCAH7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 02:54:08 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6215E2D153;
-        Tue, 28 Feb 2023 23:54:06 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 25CDF1BF209;
-        Wed,  1 Mar 2023 07:54:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677657244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QIPfap46sgUfW41E+nfp3rnvHFuK/61fahDXhiCtyh8=;
-        b=oYzlF/W6payIOjh2+itOFucKTzMNFPzCaGqb7H0IoZrzV+Vc6u8ZjpqKdX/+YlaLpvx89C
-        eUCsWsF9GPquNd2hPU2QmEkAO6zmTGkLFsgJd8d1fyzIdFeztaZSRR6qTlQHNDb3EyKKDx
-        mTwwSjs8IHOTD3yIex5plT8AnWxA8EGYy8Y7/dnZ1VWcUalQOFtQxBats2jOktfggN/YXq
-        xPp0WeSHVnPpdCZFDV/d/qA54AK59xOGBKkY9Zm+upePBR7xppp9JuzmO9iWiF84SbKMHt
-        ezYdYagJNw9WB0rvmk+tuF2UwRlAHvII6mOCST/OBaXrna54WkMz/Rg1NJty1Q==
-Date:   Wed, 1 Mar 2023 08:56:40 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Jean Jacques Hiblot <jjhiblot@traphandler.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] of/irq: add missing of_node_put() for interrupt parent
- node
-Message-ID: <20230301085640.52ccc334@fixe.home>
-In-Reply-To: <CAL_Jsq+eTmbjkOxutCLjgSSQ34yOVEQQQBtSH3v93heM_BYHRQ@mail.gmail.com>
-References: <20230117144929.423089-1-clement.leger@bootlin.com>
-        <CAL_Jsq+eTmbjkOxutCLjgSSQ34yOVEQQQBtSH3v93heM_BYHRQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Wed, 1 Mar 2023 02:59:44 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE2E22021
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:59:43 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id h9so13057369ljq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:59:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1677657581;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bA7nt4VKDa+62lfIEzrNwx8iY9x2ZjNkaV9QCRTZ5/M=;
+        b=Z0resYFKm/zwiRxf7dvMgqn8Sg8ExqwFPNjZ9+/6O/Co8Svyz5xRsqlReabbJIjyon
+         JFBBoYHAlIt9TH6xmTaLa0rhejyK9OkZvWVrsA8e5hgPhqYpRPsUtoLBqR/SNhgPqNA1
+         fgkV2Vf2twXfrqUY1apus6ubbHVCvlpcFrx8xlobdatRP4aop9gwpPlUbAmAfuI6n/Rw
+         MqMHCPUqiqcyScUV6KsRDvIH3ixZiQ8/IhclKeQ7fZTPATYf8U1PfLo9VSM1+oY/5CAm
+         VjJBgccnKjGTGNg9SvABERPeOJdIFrqZQ1G8/+vLaDBVMEKK+kCmpAsGzjuvfTuTfRdc
+         rpPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677657581;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bA7nt4VKDa+62lfIEzrNwx8iY9x2ZjNkaV9QCRTZ5/M=;
+        b=YsQ9DMyepbOmOcxiUPRycxW6YyIuk8poJvLN31II8AiKZTLWIbnYPHmbelS4aWeZ6W
+         9jazv9KitwCuVvo2xUjRwt3L6n8cTikIkFKKvttwZxA3sEigFyrv52p/z6/V9Why1R9W
+         XGZme1pJGDJmNYaLuV13Xz4SM03ftmS7109NTbfKhn7IL+V3wXgTFCa4RSkOqBX8Dbim
+         A2rSAIIUXTp7XkQ3pJJ97RpQSQQ7fSKCwDBH3o4bAp5MmYbVMTNyLGv9CfQ5ES0xNU8G
+         Y+Pis+xgQHHqj7DXnoo3KnZJfU1OkBGt0sSmsFTqRvQP5qMsV/sMVI2J+lJVxVGprfjo
+         qffQ==
+X-Gm-Message-State: AO0yUKWutoO+xVuA4zICMIa1E6yW97yW2agBrompSbulf9N4cqqP5awz
+        RV+Vsru2Dfh+V8CzoQwoMAaKAA==
+X-Google-Smtp-Source: AK7set/Rr8rGFuYqZf3NksYhKA4pQQPbk9F61v/Cqyf4oCoQ2ULFuK24NUohQIeVpam0A6KTMQJ7fQ==
+X-Received: by 2002:a2e:9cd9:0:b0:295:ad91:8811 with SMTP id g25-20020a2e9cd9000000b00295ad918811mr1738540ljj.36.1677657581421;
+        Tue, 28 Feb 2023 23:59:41 -0800 (PST)
+Received: from lmajczak1-l.roam.corp.google.com ([83.142.187.84])
+        by smtp.gmail.com with ESMTPSA id n9-20020a056512388900b004caf992bba9sm1631515lft.268.2023.02.28.23.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 23:59:41 -0800 (PST)
+From:   Lukasz Majczak <lma@semihalf.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Guenter Roeck <groeck@chromium.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, upstream@semihalf.com,
+        Lukasz Majczak <lma@semihalf.com>, stable@vger.kernel.org
+Subject: [PATCH] serial: core: fix broken console after suspend
+Date:   Wed,  1 Mar 2023 08:57:51 +0100
+Message-Id: <20230301075751.43839-1-lma@semihalf.com>
+X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 28 Feb 2023 17:14:18 -0600,
-Rob Herring <robh+dt@kernel.org> a =C3=A9crit :
+Re-enable the console device after suspending, causes its cflags,
+ispeed and ospeed to be set anew, basing on the values stored in
+uport->cons. The issue is that these values are set only once,
+when parsing console parameters after boot (see uart_set_options()),
+next after configuring a port in uart_port_startup() these parameteres
+(cflags, ispeed and ospeed) are copied to termios structure and
+the orginal one (stored in uport->cons) are cleared, but there is no place
+in code where those fields are checked against 0.
+When kernel calls uart_resume_port() and setups console, it copies cflags,
+ispeed and ospeed values from uart->cons,but those are alread cleared.
+The efect is that console is broken.
+This patch address this by preserving the cflags, ispeed and
+ospeed fields in uart->cons during uart_port_startup().
 
-> +Saravana, Jean
->=20
-> On Tue, Jan 17, 2023 at 8:47=E2=80=AFAM Cl=C3=A9ment L=C3=A9ger <clement.=
-leger@bootlin.com> wrote:
-> >
-> > After calling of_irq_parse_one(), the node provided in the of_phandle_a=
-rgs
-> > has a refcount increment by one. Add missing of_node_put in of_irq_get()
-> > to decrement the refcount once used.
-> >
-> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > ---
-> >
-> > While debugging a refcount problem with OF_DYNAMIC enabled (which is
-> > actually the only case were node refcount are really used), I noticed t=
-hat
-> > platform_get_irq() was actually incrementing the refcount of an interru=
-pt
-> > controller node. Digging into that function shows that it calls
-> > of_irq_get() which calls of_irq_parse_one() and finally of_irq_parse_ra=
-w().
-> > Since it seems sane that the node returned in the of_phandle_args has a
-> > refcount incremented, I thought it is better to put the of_node_put() in
-> > the user even though it was hard to find any user doing so. =20
->=20
-> While investigating [1], I stumbled back on this. Was the failing case
-> you had using interrupts-extended? It looks to me like that path has a
-> get, but the 'interrupts' path does not. If so, this change is wrong.
+Signed-off-by: Lukasz Majczak <lma@semihalf.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/tty/serial/serial_core.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-In my case, it was with a classic "interrupts" property. I can take
-another look at the internal code to be sure this fix is correct.
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 2bd32c8ece39..394a05c09d87 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -225,9 +225,6 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
+ 			tty->termios.c_cflag = uport->cons->cflag;
+ 			tty->termios.c_ispeed = uport->cons->ispeed;
+ 			tty->termios.c_ospeed = uport->cons->ospeed;
+-			uport->cons->cflag = 0;
+-			uport->cons->ispeed = 0;
+-			uport->cons->ospeed = 0;
+ 		}
+ 		/*
+ 		 * Initialise the hardware port settings.
+-- 
+2.39.2.722.g9855ee24e9-goog
 
-Cl=C3=A9ment
-
->=20
-> Rob
->=20
-> [1] https://lore.kernel.org/all/20230228174019.4004581-1-jjhiblot@traphan=
-dler.com/
->=20
->=20
-> >
-> >  drivers/of/irq.c | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-> > index e9bf5236ed89..174900072c18 100644
-> > --- a/drivers/of/irq.c
-> > +++ b/drivers/of/irq.c
-> > @@ -438,10 +438,16 @@ int of_irq_get(struct device_node *dev, int index)
-> >                 return rc;
-> >
-> >         domain =3D irq_find_host(oirq.np);
-> > -       if (!domain)
-> > -               return -EPROBE_DEFER;
-> > +       if (!domain) {
-> > +               rc =3D -EPROBE_DEFER;
-> > +               goto out;
-> > +       }
-> >
-> > -       return irq_create_of_mapping(&oirq);
-> > +       rc =3D irq_create_of_mapping(&oirq);
-> > +out:
-> > +       of_node_put(oirq.np);
-> > +
-> > +       return rc;
-> >  }
-> >  EXPORT_SYMBOL_GPL(of_irq_get);
-> >
-> > --
-> > 2.39.0
-> > =20
-
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
