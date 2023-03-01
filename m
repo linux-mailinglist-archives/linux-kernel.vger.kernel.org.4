@@ -2,608 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255956A769B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6026A769F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 23:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjCAWFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 17:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S229613AbjCAWIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 17:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjCAWFK (ORCPT
+        with ESMTP id S229471AbjCAWIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 17:05:10 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D092A3B854
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 14:05:07 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id n2so19574714lfb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 14:05:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677708306;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kpXITBYMyuu5wgvZKjEhdu4pIEnBPpUJCe0+xgDEcFU=;
-        b=SK4GW8aSnDBdshFSnFziKjSzTwgMBQujaNkOnEOrSkD/iTdz3sRz5Ymv0nvxDfzsxZ
-         CkO+6t4NmF5xNvm+u5kFJ4frU8IJknDV8KAcdrW7pgNlfkD1Avd43pNwgQlPE6ek6m0l
-         OM0Dg+Fb59/RmE5slETGbcRdz6NZht5HmgfPkgisPRZWC8QwHcsH6bdRHT4NA2I0nGts
-         aas4mRfvOACnGxizB1pKs+nMKSX1CS0yFMll+NUbEMKDYIsIhs9s81/gLEBbFn8jp4Jv
-         P5y5XB0UbB7Y89Jg+oFKvrVf6J1rwrv+0p/w2SrnDKJfIT/KYph3TMmc49KyOcNcY6+8
-         OD4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677708306;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kpXITBYMyuu5wgvZKjEhdu4pIEnBPpUJCe0+xgDEcFU=;
-        b=EHGgndt+SapOdSYjUiELmqPxx9OZbi2tsO7FmIuixdg1AFXHp0PiBn94J20wRmYtN6
-         AVrWnSXs2IrOmznQIMSHAarjhCz0b1Y5pkiJmf9mm2GcTPZvTt342nhtfjFY6w/KdaBY
-         FD17OmLmb31G+dnRYCMUdssFlGvUjxM6EJvl9RWMIP7zHF9a/d8bHbDYuLoNNkp3GYbz
-         X0uvU3y19Ft2pmQnDWnylXyDZHzKjuMe6eY3XIHTy4w77N8Cnv20u9Joingmlyn5GtxI
-         rvXzpWXo3A8venXdcAfCOdaQ4qinHeaX6pZ0QgQSSfQMSlV+pHjxD7blnLajFM6NYxtA
-         G22A==
-X-Gm-Message-State: AO0yUKXWCS7AwBB1pTfZVMOo6NefGWpk6j2nNIVYPqLfOgq7/4J/JIQO
-        Mf3LGeka6N1OoXi8YKUtOtSVeA==
-X-Google-Smtp-Source: AK7set+pOfxHxOoS+4dFDbyfn2cqKOkfQQQBO1WvJU1bCqCAnxCraKGycttYYDbaUQqTYbCfidFPhw==
-X-Received: by 2002:a19:f007:0:b0:4cc:73ff:579a with SMTP id p7-20020a19f007000000b004cc73ff579amr2002294lfc.38.1677708305968;
-        Wed, 01 Mar 2023 14:05:05 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id x23-20020ac24897000000b004b564e1a4e0sm1861357lfc.76.2023.03.01.14.05.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 14:05:04 -0800 (PST)
-Message-ID: <b33efef1-524d-5452-5043-323fa7294e7e@linaro.org>
-Date:   Wed, 1 Mar 2023 23:05:03 +0100
+        Wed, 1 Mar 2023 17:08:36 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D1C497FC;
+        Wed,  1 Mar 2023 14:08:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LRSt8gObeOol1eX1bBx0ok0s2fC5I6WNRf8wetnjwsdx/WwoFCZ5Ma9iTP6MDKuKRqdJL+K4+mGbRtb3LsoXl24gdDB4kfwHmQU+FJeBlw4gTKlC2WsF7SRQjqLykJ2UvdwskRYpXRVHWtPHz/fvUtUvkDEExhXiabZqq+pMqVrQ1wqW2igpxyIIaABvkgcvvTqb9yTw5RZkoVpCj/vnVY84VMa7k0q41NlfDIBPxj+VR2BeUa+q8lz2Nvee/a41dcgtCAGQXBmGrTdgQPNW8n2qtTxGh/t9nREDR5zeHf2RfBAIKmRDvvNgrX2D9WZVWC5ck+jTGIXtPPSxNANIxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8TX/sYRRTwI7HaMXt7FmKMVfXKf9LxyEzDeCjTNmHYo=;
+ b=mwHBV7U1P9dyy2KfmCNHr2OA+pD3eS8V2FtbNfPvotdiwo/aJG2KTBR3TOyTvvoC7m62N3glBFvbfIKqL4/MVGrRMk6gvGfWa6jXwGAeqIKbdYZxcK0IgT/gxOHRkX9cJXP+ya/sKNFa4pFjxWCQht6H0GQKEjIduT1Ko8rNNIGnbhxjqREyXeigbIFf46S5WZqOPWv+IrUemi543iKrZineVNT1/pMFDNp+XJhO3P3vD9rCNbRSeRdISsEKv1AlUHg1xyia69u3/f4GoGD/Qs6iI3KD+9WF8Xk8Sk8ESl+8SuwiU8nD+ELav+pLg2J4DQLcL/KwBJH99+4Xeoq2LQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8TX/sYRRTwI7HaMXt7FmKMVfXKf9LxyEzDeCjTNmHYo=;
+ b=F12qcXjmfEeYqMoHYgOsAX9oqwvDTGv0aZaTgt0Kh6UWJKGY2QUWwstanbyymzFFW/+fTNKmHEm1Y9LjNTIAI3NTUa+4ZNyRwLWCjXggBCmeHOsCA+PFn/EF4rqNUx/r1d9lHY3vlVvSIYV53Cwswk5O51VUi0SFU1CPIIl2yEg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by DS0PR12MB7584.namprd12.prod.outlook.com (2603:10b6:8:13b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
+ 2023 22:08:33 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::e62f:89e5:df27:9e45]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::e62f:89e5:df27:9e45%6]) with mapi id 15.20.6134.030; Wed, 1 Mar 2023
+ 22:08:32 +0000
+Date:   Wed, 1 Mar 2023 17:08:28 -0500
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH] x86/mce: Schedule work after restart from sysfs update
+Message-ID: <Y//M3M3X0ra0IF99@yaz-mtwr>
+References: <20230301202623.2092271-1-yazen.ghannam@amd.com>
+ <SJ1PR11MB60836DFF088E54BB770D1638FCAD9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SJ1PR11MB60836DFF088E54BB770D1638FCAD9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+X-ClientProxiedBy: CH2PR14CA0004.namprd14.prod.outlook.com
+ (2603:10b6:610:60::14) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc7180: Delete mrbland
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     mka@chromium.org, swboyd@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230301185007.1101006-1-dianders@chromium.org>
- <20230301104859.4.I79eee3b8e9eb3086ae02760e97a2e12ffa8eb4f0@changeid>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230301104859.4.I79eee3b8e9eb3086ae02760e97a2e12ffa8eb4f0@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|DS0PR12MB7584:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4d4a0da8-5cbd-4a60-80c0-08db1aa17f10
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mzM2mnodj9lL9P2MzlBQbx/zEV7xTEU+CNrYzdWtvfoFHukUYNhn58wmI7ykala1DTdl7g1h4tNbcvfyG56I4veac+FHhaYsubTo2dwepDWW1We5CKf61eWmMd0kXNEHNOcgTSOk0aSRNyTAmJaJhntIePGTHDj0rOrD90+87gvbf0cgIffLGZ8NBnFueeHqKKIm3c4SP04y2aSPV9wtjdgaywGrOJTgVVr2y+L+dCBlKKw/WscMlpXyOoOsPnQUfNeGMyurS37+nNIyTermqV0/Z6372AKmdeW5rbbnuirNoO1c6oxT+Rfyf4OMIbAHOiv1YQhGZtYGWG5lf5uS7zWDODFJE5rjXbKMSFZk50P2075kDkSy7BHzf9kFp+ytoH2cAVJPwTzt+WJNKxrvomByJkGKD1mKknxjmTbWujRVNVsnBh5TkUCVt7M+cZyEhypVQfDY1+emDeElThsS5HV2usKjyech9wBZdEqDFIn0n7vsoG0O3m4P1bhYQUhbT8qE3PMZKUCKR1C1wDtCEKi60c/iztPlgJC4+HjGMQDUXnndiOsSJaAlHtakfmKb/r8aQ+Kjo9tjXZQYvPwUPWHWhBIDLvAQ5Zk7NasSIpzmQjyxS14XSJBjfG7nchH2fQpgAOBpFSxKngT8jelxAw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(366004)(346002)(396003)(39860400002)(376002)(136003)(451199018)(4326008)(38100700002)(41300700001)(8936002)(86362001)(44832011)(66556008)(558084003)(66476007)(2906002)(15650500001)(6916009)(66946007)(5660300002)(8676002)(33716001)(6506007)(26005)(186003)(83380400001)(9686003)(6512007)(316002)(54906003)(6666004)(6486002)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jnopGb/w7R0ssv7doKqf07LiU5E6QdfScF5v3Gju9nMiHp5IiZMmII5Hc4wY?=
+ =?us-ascii?Q?l0QgwXcVJHuDSDqxOEMbSR4q89KCLXwdG30GqOR6WzCr+BAuYYuibG3oo82W?=
+ =?us-ascii?Q?Js3DmpTlxkVpweuOZSmOym2kvASIrFxTsDMhJ2D7H20qXpRN5h3uYs0u6maV?=
+ =?us-ascii?Q?ywqBATYvLaUYL0AQefHzwYgJQslEH7KPkhmd4ZTzzGQS3F+3uG2545XV59Sp?=
+ =?us-ascii?Q?3RfeLppcyu149PCUjLckAxaQUCdI4xXQca3jkYrQhElB6OhxBdHu2x7tVmz3?=
+ =?us-ascii?Q?zOxafXymDRN4+h7SM0GABnPamrODoH3Odo/l9EozBuAXNmfOUdrp58PGPv8S?=
+ =?us-ascii?Q?5XmykzLkRZmtfpOTdshn6/o+jCb+fR/8tO6crsd9R3nLRHmnJCI9HDEyNPp0?=
+ =?us-ascii?Q?rCkjFdYk/WS4KJodRpKt6M26bD3NcH8Pywco+WhKvL9TTp6fcGprmr534tCE?=
+ =?us-ascii?Q?STQ63hfg2FHendHIoTqKr5+gwT0v1Pp5DFR1oWcj5lN/g2fuX4ZDXoTi2NI6?=
+ =?us-ascii?Q?kuXbvIY2uJlb7TMino4hi8JSUr83oySHy1qkJHeK1FPUM17YaO89yh4+Vucj?=
+ =?us-ascii?Q?nZozFezQTPWemBfSx3aqd67WByVXCJ2BskXT+SJSf8KC4f48bRIizQIj4vyp?=
+ =?us-ascii?Q?3E01t+puIWnp27kGKRwyWSrebWwFVvZ5a6EkMRt3nKv55iaIsuUFPVltpr40?=
+ =?us-ascii?Q?4n2LM9dgcJ3TZq/YNWT2j6OsE+MtPZmUp72V0LZaP+C0zVwwZX2aVRkrJRoM?=
+ =?us-ascii?Q?DLnY1R9nlXR7aDBrs/D+1t3Qd92pf4p2c+vEfxUf2rWIZOmQ9lkSkrO3Luf4?=
+ =?us-ascii?Q?j3lclehyBGWfeaNHMWWJJ+z3QybMeOY+Eh2J7e2w847MxMbepXt0hFtYBzZc?=
+ =?us-ascii?Q?jKiPX/KbHSYJwe+g0xVDhbyYD5CkhK5FqVeL9RXZjUnuWSRicPnPXKC9Vfg/?=
+ =?us-ascii?Q?4Y6WFLBgcEexyT40hbync+EUPX1p5V57GDzpscSF0kMy1PzHiif4SviPlcn7?=
+ =?us-ascii?Q?jbT0L+KADFMjJMiHaEUOaNMOd5HckXGQsmU2aGcHwaxWkz8QacvYxXYs08as?=
+ =?us-ascii?Q?H05RHUnnHyRfR0JigiwpNimuvhHYRvm1OyWUA/8MTpo81yuv/M7a5azVrwXV?=
+ =?us-ascii?Q?p7q3CVvN7TtstEfs964fRYpBNaXZGjlbzSPHkCUppZRiRn3C9Cmt7M2Az3PA?=
+ =?us-ascii?Q?A2HZ46kWUce5/w9ffcA+yZ4cGVtu8IQBjR0A6whgFacoKSxcDUgalKKDu49x?=
+ =?us-ascii?Q?qq36/9ef975x9GtCylW/lqOllIqpFAH9xzcIr5x4YMJJRvU9QvvJ39ecKQhP?=
+ =?us-ascii?Q?wiLhJ4qSoHkA5LiA06lG4ZMXX02TehSYRZmoEvVDELA8pWx+kI1FmoKl2vY4?=
+ =?us-ascii?Q?3TmonHfxNBPbMQb33Y9ggOTuB3mOsbWPu6XtmnAfijo9jGDZLcTq/6B/i8ph?=
+ =?us-ascii?Q?LQrfkiQaewz2og6ZyP5YEfRjjbqHCMvPzTkDbN07X0Iy9wXcG9itX3LJzNWb?=
+ =?us-ascii?Q?N8JqT/70BqmoT/qLlcxx1TZwjJ5jshfKuEniGWWDxz0WRcFns0aLrbVcDLVx?=
+ =?us-ascii?Q?5B2xyIUWu6Tz5ZdeK7IFlRoCFGgOPp4XSA7a7eKT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d4a0da8-5cbd-4a60-80c0-08db1aa17f10
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 22:08:32.8620
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w+UMSlgHSpSke+haOi3Kf3znAiwYx/PePfI278iKKu1EWFB1qjS7os/PI5ZP7/a8iE2Iqs61G9iNeSKq/OousQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7584
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1.03.2023 19:50, Douglas Anderson wrote:
-> The mrbland board was never actually produced and there has been no
-> activity around the board for quite some time. It seems highly
-> unlikely to magically get revived. There should be nobody in need of
-> these device trees, so let's delete them. If somehow the project
-> resurrects itself then we can re-add support, perhaps just for -rev1+.
+On Wed, Mar 01, 2023 at 08:56:32PM +0000, Luck, Tony wrote:
+> > A number of sysfs updates call mce_cpu_restart() which goes through a
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> I think that should say "call mce_restart()"
+>
 
-Konrad
-> 
->  arch/arm64/boot/dts/qcom/Makefile             |   4 -
->  .../qcom/sc7180-trogdor-mrbland-rev0-auo.dts  |  22 --
->  .../qcom/sc7180-trogdor-mrbland-rev0-boe.dts  |  22 --
->  .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  36 --
->  .../qcom/sc7180-trogdor-mrbland-rev1-auo.dts  |  22 --
->  .../qcom/sc7180-trogdor-mrbland-rev1-boe.dts  |  24 --
->  .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi | 320 ------------------
->  7 files changed, 450 deletions(-)
->  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
->  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
->  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
->  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
->  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
->  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index e4190a648335..a0ad0a8a62d8 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -98,10 +98,6 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-r9.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r4.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r5.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r9.dtb
-> -dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-auo.dtb
-> -dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-boe.dtb
-> -dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-auo.dtb
-> -dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-boe.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-parade.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-ti.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-parade.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
-> deleted file mode 100644
-> index 2767817fb053..000000000000
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> -/*
-> - * Google Mrbland board device tree source
-> - *
-> - * Copyright 2021 Google LLC.
-> - *
-> - * SKU: 0x0 => 0
-> - *  - bits 7..4: Panel ID: 0x0 (AUO)
-> - */
-> -
-> -/dts-v1/;
-> -
-> -#include "sc7180-trogdor-mrbland-rev0.dtsi"
-> -
-> -/ {
-> -	model = "Google Mrbland rev0 AUO panel board";
-> -	compatible = "google,mrbland-rev0-sku0", "qcom,sc7180";
-> -};
-> -
-> -&panel {
-> -	compatible = "auo,b101uan08.3";
-> -};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
-> deleted file mode 100644
-> index 711485574a03..000000000000
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> -/*
-> - * Google Mrbland board device tree source
-> - *
-> - * Copyright 2021 Google LLC.
-> - *
-> - * SKU: 0x10 => 16
-> - *  - bits 7..4: Panel ID: 0x1 (BOE)
-> - */
-> -
-> -/dts-v1/;
-> -
-> -#include "sc7180-trogdor-mrbland-rev0.dtsi"
-> -
-> -/ {
-> -	model = "Google Mrbland rev0 BOE panel board";
-> -	compatible = "google,mrbland-rev0-sku16", "qcom,sc7180";
-> -};
-> -
-> -&panel {
-> -	compatible = "boe,tv101wum-n53";
-> -};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
-> deleted file mode 100644
-> index f4c1f3813664..000000000000
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> -/*
-> - * Google Mrbland board device tree source
-> - *
-> - * Copyright 2021 Google LLC.
-> - *
-> - */
-> -
-> -/dts-v1/;
-> -
-> -#include "sc7180-trogdor-mrbland.dtsi"
-> -
-> -&avdd_lcd {
-> -	gpio = <&tlmm 80 GPIO_ACTIVE_HIGH>;
-> -};
-> -
-> -&panel {
-> -	enable-gpios = <&tlmm 76 GPIO_ACTIVE_HIGH>;
-> -};
-> -
-> -&v1p8_mipi {
-> -	gpio = <&tlmm 81 GPIO_ACTIVE_HIGH>;
-> -};
-> -
-> -/* PINCTRL - modifications to sc7180-trogdor-mrbland.dtsi */
-> -&avdd_lcd_en {
-> -	pins = "gpio80";
-> -};
-> -
-> -&mipi_1800_en {
-> -	pins = "gpio81";
-> -};
-> -
-> -&vdd_reset_1800 {
-> -	pins = "gpio76";
-> -};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
-> deleted file mode 100644
-> index 275313ef7554..000000000000
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> -/*
-> - * Google Mrbland board device tree source
-> - *
-> - * Copyright 2021 Google LLC.
-> - *
-> - * SKU: 0x600 => 1536
-> - *  - bits 11..8: Panel ID: 0x6 (AUO)
-> - */
-> -
-> -/dts-v1/;
-> -
-> -#include "sc7180-trogdor-mrbland.dtsi"
-> -
-> -/ {
-> -	model = "Google Mrbland rev1+ AUO panel board";
-> -	compatible = "google,mrbland-sku1536", "qcom,sc7180";
-> -};
-> -
-> -&panel {
-> -	compatible = "auo,b101uan08.3";
-> -};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
-> deleted file mode 100644
-> index 87c6b6c30b5e..000000000000
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> -/*
-> - * Google Mrbland board device tree source
-> - *
-> - * Copyright 2021 Google LLC.
-> - *
-> - * SKU: 0x300 => 768
-> - *  - bits 11..8: Panel ID: 0x3 (BOE)
-> - */
-> -
-> -/dts-v1/;
-> -
-> -#include "sc7180-trogdor-mrbland.dtsi"
-> -
-> -/ {
-> -	model = "Google Mrbland (rev1 - 2) BOE panel board";
-> -	/* Uses ID 768 on rev1 and 1024 on rev2+ */
-> -	compatible = "google,mrbland-sku1024", "google,mrbland-sku768",
-> -		"qcom,sc7180";
-> -};
-> -
-> -&panel {
-> -	compatible = "boe,tv101wum-n53";
-> -};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
-> deleted file mode 100644
-> index ed12ee35f06b..000000000000
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
-> +++ /dev/null
-> @@ -1,320 +0,0 @@
-> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> -/*
-> - * Google Mrbland board device tree source
-> - *
-> - * Copyright 2021 Google LLC.
-> - */
-> -
-> -/dts-v1/;
-> -
-> -#include "sc7180-trogdor.dtsi"
-> -
-> -/* This board only has 1 USB Type-C port. */
-> -/delete-node/ &usb_c1;
-> -
-> -/ {
-> -	avdd_lcd: avdd-lcd-regulator {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "avdd_lcd";
-> -
-> -		gpio = <&tlmm 88 GPIO_ACTIVE_HIGH>;
-> -		enable-active-high;
-> -		pinctrl-names = "default";
-> -		pinctrl-0 = <&avdd_lcd_en>;
-> -
-> -		vin-supply = <&pp5000_a>;
-> -	};
-> -
-> -	avee_lcd: avee-lcd-regulator {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "avee_lcd";
-> -
-> -		gpio = <&tlmm 21 GPIO_ACTIVE_HIGH>;
-> -		enable-active-high;
-> -		pinctrl-names = "default";
-> -		pinctrl-0 = <&avee_lcd_en>;
-> -
-> -		vin-supply = <&pp5000_a>;
-> -	};
-> -
-> -	v1p8_mipi: v1p8-mipi-regulator {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "v1p8_mipi";
-> -
-> -		gpio = <&tlmm 86 GPIO_ACTIVE_HIGH>;
-> -		enable-active-high;
-> -		pinctrl-names = "default";
-> -		pinctrl-0 = <&mipi_1800_en>;
-> -
-> -		vin-supply = <&pp3300_a>;
-> -	};
-> -};
-> -
-> -&backlight {
-> -	pwms = <&cros_ec_pwm 0>;
-> -};
-> -
-> -&camcc {
-> -	status = "okay";
-> -};
-> -
-> -&cros_ec {
-> -	keyboard-controller {
-> -		compatible = "google,cros-ec-keyb-switches";
-> -	};
-> -};
-> -
-> -&dsi0 {
-> -
-> -	panel: panel@0 {
-> -		/* Compatible will be filled in per-board */
-> -		reg = <0>;
-> -		enable-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
-> -		pinctrl-names = "default";
-> -		pinctrl-0 = <&vdd_reset_1800>;
-> -		avdd-supply = <&avdd_lcd>;
-> -		avee-supply = <&avee_lcd>;
-> -		pp1800-supply = <&v1p8_mipi>;
-> -		pp3300-supply = <&pp3300_dx_edp>;
-> -		backlight = <&backlight>;
-> -		rotation = <270>;
-> -
-> -		ports {
-> -			#address-cells = <1>;
-> -			#size-cells = <0>;
-> -			port@0 {
-> -				reg = <0>;
-> -				panel_in: endpoint {
-> -					remote-endpoint = <&dsi0_out>;
-> -				};
-> -			};
-> -		};
-> -	};
-> -
-> -	ports {
-> -		port@1 {
-> -			endpoint {
-> -				remote-endpoint = <&panel_in>;
-> -				data-lanes = <0 1 2 3>;
-> -			};
-> -		};
-> -	};
-> -};
-> -
-> -&gpio_keys {
-> -	status = "okay";
-> -};
-> -
-> -&i2c4 {
-> -	status = "okay";
-> -	clock-frequency = <400000>;
-> -
-> -	ap_ts: touchscreen@5d {
-> -		compatible = "goodix,gt7375p";
-> -		reg = <0x5d>;
-> -		pinctrl-names = "default";
-> -		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
-> -
-> -		interrupt-parent = <&tlmm>;
-> -		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
-> -
-> -		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
-> -
-> -		vdd-supply = <&pp3300_ts>;
-> -	};
-> -};
-> -
-> -&pp1800_uf_cam {
-> -	status = "okay";
-> -};
-> -
-> -&pp1800_wf_cam {
-> -	status = "okay";
-> -};
-> -
-> -&pp2800_uf_cam {
-> -	status = "okay";
-> -};
-> -
-> -&pp2800_wf_cam {
-> -	status = "okay";
-> -};
-> -
-> -&wifi {
-> -	qcom,ath10k-calibration-variant = "GO_MRBLAND";
-> -};
-> -
-> -/*
-> - * No eDP on this board but it's logically the same signal so just give it
-> - * a new name and assign the proper GPIO.
-> - */
-> -pp3300_disp_on: &pp3300_dx_edp {
-> -	gpio = <&tlmm 85 GPIO_ACTIVE_HIGH>;
-> -};
-> -
-> -/* PINCTRL - modifications to sc7180-trogdor.dtsi */
-> -
-> -/*
-> - * No eDP on this board but it's logically the same signal so just give it
-> - * a new name and assign the proper GPIO.
-> - */
-> -
-> -tp_en: &en_pp3300_dx_edp {
-> -	pins = "gpio85";
-> -};
-> -
-> -/* PINCTRL - board-specific pinctrl */
-> -
-> -&tlmm {
-> -	gpio-line-names = "HUB_RST_L",
-> -			  "AP_RAM_ID0",
-> -			  "AP_SKU_ID2",
-> -			  "AP_RAM_ID1",
-> -			  "",
-> -			  "AP_RAM_ID2",
-> -			  "UF_CAM_EN",
-> -			  "WF_CAM_EN",
-> -			  "TS_RESET_L",
-> -			  "TS_INT_L",
-> -			  "",
-> -			  "",
-> -			  "AP_EDP_BKLTEN",
-> -			  "UF_CAM_MCLK",
-> -			  "WF_CAM_CLK",
-> -			  "",
-> -			  "",
-> -			  "UF_CAM_SDA",
-> -			  "UF_CAM_SCL",
-> -			  "WF_CAM_SDA",
-> -			  "WF_CAM_SCL",
-> -			  "AVEE_LCD_EN",
-> -			  "",
-> -			  "AMP_EN",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "HP_IRQ",
-> -			  "WF_CAM_RST_L",
-> -			  "UF_CAM_RST_L",
-> -			  "AP_BRD_ID2",
-> -			  "",
-> -			  "AP_BRD_ID0",
-> -			  "AP_H1_SPI_MISO",
-> -			  "AP_H1_SPI_MOSI",
-> -			  "AP_H1_SPI_CLK",
-> -			  "AP_H1_SPI_CS_L",
-> -			  "BT_UART_CTS",
-> -			  "BT_UART_RTS",
-> -			  "BT_UART_TXD",
-> -			  "BT_UART_RXD",
-> -			  "H1_AP_INT_ODL",
-> -			  "",
-> -			  "UART_AP_TX_DBG_RX",
-> -			  "UART_DBG_TX_AP_RX",
-> -			  "HP_I2C_SDA",
-> -			  "HP_I2C_SCL",
-> -			  "FORCED_USB_BOOT",
-> -			  "AMP_BCLK",
-> -			  "AMP_LRCLK",
-> -			  "AMP_DIN",
-> -			  "PEN_DET_ODL",
-> -			  "HP_BCLK",
-> -			  "HP_LRCLK",
-> -			  "HP_DOUT",
-> -			  "HP_DIN",
-> -			  "HP_MCLK",
-> -			  "AP_SKU_ID0",
-> -			  "AP_EC_SPI_MISO",
-> -			  "AP_EC_SPI_MOSI",
-> -			  "AP_EC_SPI_CLK",
-> -			  "AP_EC_SPI_CS_L",
-> -			  "AP_SPI_CLK",
-> -			  "AP_SPI_MOSI",
-> -			  "AP_SPI_MISO",
-> -			  /*
-> -			   * AP_FLASH_WP_L is crossystem ABI. Schematics
-> -			   * call it BIOS_FLASH_WP_L.
-> -			   */
-> -			  "AP_FLASH_WP_L",
-> -			  "",
-> -			  "AP_SPI_CS0_L",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "WLAN_SW_CTRL",
-> -			  "",
-> -			  "REPORT_E",
-> -			  "",
-> -			  "ID0",
-> -			  "",
-> -			  "ID1",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "CODEC_PWR_EN",
-> -			  "HUB_EN",
-> -			  "TP_EN",
-> -			  "MIPI_1.8V_EN",
-> -			  "VDD_RESET_1.8V",
-> -			  "AVDD_LCD_EN",
-> -			  "",
-> -			  "AP_SKU_ID1",
-> -			  "AP_RST_REQ",
-> -			  "",
-> -			  "AP_BRD_ID1",
-> -			  "AP_EC_INT_L",
-> -			  "SDM_GRFC_3",
-> -			  "",
-> -			  "",
-> -			  "BOOT_CONFIG_4",
-> -			  "BOOT_CONFIG_2",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "BOOT_CONFIG_3",
-> -			  "WCI2_LTE_COEX_TXD",
-> -			  "WCI2_LTE_COEX_RXD",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "",
-> -			  "FORCED_USB_BOOT_POL",
-> -			  "AP_TS_PEN_I2C_SDA",
-> -			  "AP_TS_PEN_I2C_SCL",
-> -			  "DP_HOT_PLUG_DET",
-> -			  "EC_IN_RW_ODL";
-> -
-> -	avdd_lcd_en: avdd-lcd-en-state {
-> -		pins = "gpio88";
-> -		function = "gpio";
-> -		drive-strength = <2>;
-> -		bias-disable;
-> -	};
-> -
-> -	avee_lcd_en: avee-lcd-en-state {
-> -		pins = "gpio21";
-> -		function = "gpio";
-> -		drive-strength = <2>;
-> -		bias-disable;
-> -	};
-> -
-> -	mipi_1800_en: mipi-1800-en-state {
-> -		pins = "gpio86";
-> -		function = "gpio";
-> -		drive-strength = <2>;
-> -		bias-disable;
-> -	};
-> -
-> -	vdd_reset_1800: vdd-reset-1800-state {
-> -		pins = "gpio87";
-> -		function = "gpio";
-> -		drive-strength = <2>;
-> -		bias-disable;
-> -	};
-> -};
+Yes, that's right. Thanks!
+
+-Yazen
