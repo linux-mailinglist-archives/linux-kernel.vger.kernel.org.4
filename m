@@ -2,171 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA8E6A732F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941E36A7332
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 19:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjCASNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 13:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S230130AbjCASOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 13:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjCASNq (ORCPT
+        with ESMTP id S230120AbjCASOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:13:46 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF601BD5;
-        Wed,  1 Mar 2023 10:13:45 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321CGDCb005351;
-        Wed, 1 Mar 2023 18:13:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=qcppdkim1;
- bh=PkCoY5YJaplAxoxuh+GGCM1Gzz64qER+fDDhom7xHj4=;
- b=fQWN89fcJdkqLMV2eKbK3SixilnfoD+GQmSin4g69HJTS9dwpdepqFNPyO3cCt0qeTta
- F8/UPhPpgzGlrV+Xu6yPrX8qR6MoCt9jc0xa8M/nxLdaEFjGt/n4t3x8m2cBU5Uebo/y
- HiTvLMvC6+6j4d7x9Cf10bBMZ4p3NUAxythO7pCouR9ZMbQMZlKFKtH+QZyW4rhwtFQc
- /fTSYt/n3nxQ8sBEesbZjjmzwBWoh931uuXmx0MFS+Cg9KXxmaXWOHplARFc57Tbm4DA
- A+xaHtMbmuFX6zdc67oosxayZAOU0m+tkDxIlKECVh3ooIhxcTKsesu/B84kaG0pqJ2U tA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1vgejs19-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Mar 2023 18:13:22 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 321IDKOx027145
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 1 Mar 2023 18:13:20 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 1 Mar 2023 10:13:20 -0800
-Date:   Wed, 1 Mar 2023 10:13:19 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-CC:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <quic_nguyenb@quicinc.com>,
-        <quic_xiaosenh@quicinc.com>, <stanley.chu@mediatek.com>,
-        <adrian.hunter@intel.com>, <bvanassche@acm.org>,
-        <avri.altman@wdc.com>, <beanhuo@micron.com>,
-        <linux-arm-msm@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "open list" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/1] ufs: mcq: qcom: Fix Smatch static checker warning
-Message-ID: <20230301181319.GE10301@asutoshd-linux1.qualcomm.com>
-References: <80523aada69f5cab90cac76c84aa153b1ea648ad.1677608784.git.quic_asutoshd@quicinc.com>
- <20230301070508.GA5409@thinkpad>
+        Wed, 1 Mar 2023 13:14:05 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C60028840
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 10:13:59 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id ec43so57458674edb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:13:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1677694437;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6/asb3PYi302CsLXOXWpBQTKIfyQX2PG5Qj/oLUdH5k=;
+        b=VcEiiaTfxPmiqwXoecvpahehdctu63BLGW4saFO/UrTcs1beWBHcWiztIw4qeMLbtN
+         UDhVjdTYZ+U8fsUpZKjsT4dWBeA5xIObDM5vZ0oqdg6xFxGAE/ONB29DGc4bgwj08Yi/
+         pe4O9bVEPFq8625OTiGntkymQ9EyiAsiFSpUs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677694437;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6/asb3PYi302CsLXOXWpBQTKIfyQX2PG5Qj/oLUdH5k=;
+        b=D4G9uEP3nJaWsGCnq60BBORDXfo6YdTRCruKWhbgiem63qwBA1XHsyMi5EiJRBQlzj
+         aj9/leoSYmI7dDQ2bddLW3NI/AAcldIqlN0/ez3siR//r/Gg2JRC8LJ2VLX5I5Cykri+
+         XjJbamFWoKzoFdBPrqKYsQQCOhiAZ5HNGePUILogD02qL+kgys+mOv4cDcvcZ+JFKkQw
+         ODJQG/2IYx4UrD/e6wCoh+AjX93a27T/Tgj8QUqw5DpTAsYvE0rgd9QBRTnh95T2DdJP
+         fSJpeMCByVRd6TaiI18tUrVD/7XkJp40TCjl9qxMbUnIeT+EFK/Xl9ETmsMwICk36VY6
+         1lfg==
+X-Gm-Message-State: AO0yUKUUtrDUvm57SRfbHX7ooecGjPgJs2jcj2oEg0krOmVCdJGu7fy2
+        S3Ey2DvjZZw30YAHjFiQANtA4xvj2j9dbpT4vdTlyg==
+X-Google-Smtp-Source: AK7set/MmIHzJy3FIvKLR2RVAKtiYeuRH3MEUqCUgiuUvRz3qLqMIQAkaVcoQjR71a4HkmS1BHoJTA==
+X-Received: by 2002:aa7:c9d9:0:b0:4ab:1625:908d with SMTP id i25-20020aa7c9d9000000b004ab1625908dmr8249940edt.16.1677694437379;
+        Wed, 01 Mar 2023 10:13:57 -0800 (PST)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id n28-20020a50935c000000b004bc15a440f1sm1112330eda.78.2023.03.01.10.13.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 10:13:56 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id u9so7988532edd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 10:13:56 -0800 (PST)
+X-Received: by 2002:a17:906:2ec8:b0:877:747e:f076 with SMTP id
+ s8-20020a1709062ec800b00877747ef076mr3586877eji.0.1677694436076; Wed, 01 Mar
+ 2023 10:13:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230301070508.GA5409@thinkpad>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: P4gXMN0J5Z2Iy4ftECDgsQ5Mag5xkoON
-X-Proofpoint-ORIG-GUID: P4gXMN0J5Z2Iy4ftECDgsQ5Mag5xkoON
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-01_13,2023-03-01_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
- bulkscore=0 impostorscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303010147
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125155557.37816-1-mjguzik@gmail.com> <CAHk-=wjz8O4XX=Mg6cv5Rq9w9877Xd4DCz5jk0onVKLnzzaPTA@mail.gmail.com>
+ <97465c08-7b6e-7fd7-488d-0f677ac22f81@schaufler-ca.com> <CAGudoHEV_aNymUq6v9Trn_ZRU45TL12AVXqQeV2kA90FuawxiQ@mail.gmail.com>
+ <CAHk-=wgCMTUV=5aE-V8WjxuCME8LTBh-8k5XTPKz6oRXJ_sgTg@mail.gmail.com>
+ <CAHk-=whwBb5Ws8x6aDV9u6CzMBQmsAtzF+UjWRnoe9xZxuW=qQ@mail.gmail.com>
+ <CAGudoHH-u3KkwSsrSQPGKmhL9uke4HEL8U1Z+aU9etk9-PmdQQ@mail.gmail.com> <CAHk-=wgsVFvGrmbedVgpUjUJaRTMVxvGkr-dcR7s30S_MyDZfA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgsVFvGrmbedVgpUjUJaRTMVxvGkr-dcR7s30S_MyDZfA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 1 Mar 2023 10:13:39 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whmk3EnmFU6XbLjMZW_ZBU8UJGDEyua7m5Aa3pmgtVQRg@mail.gmail.com>
+Message-ID: <CAHk-=whmk3EnmFU6XbLjMZW_ZBU8UJGDEyua7m5Aa3pmgtVQRg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] capability: add cap_isidentical
+To:     Mateusz Guzik <mjguzik@gmail.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Serge Hallyn <serge@hallyn.com>, viro@zeniv.linux.org.uk,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01 2023 at 23:05 -0800, Manivannan Sadhasivam wrote:
->On Tue, Feb 28, 2023 at 10:27:06AM -0800, Asutosh Das wrote:
->> The patch (c263b4ef737e: "scsi: ufs: core: mcq: Configure resource
->> regions") from Jan 13, 2023, leads to the following Smatch static
->> checker warning:
->>
->> drivers/ufs/host/ufs-qcom.c:1455 ufs_qcom_mcq_config_resource() warn:
->> passing zero to 'PTR_ERR'
->> drivers/ufs/host/ufs-qcom.c:1469 ufs_qcom_mcq_config_resource() info:
->> returning a literal zero is cleaner
->>
->> Fix the above warnings.
->>
+On Tue, Feb 28, 2023 at 1:29=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
->You should not name the subject after the tool that used to find the issues.
->Instead, subject should mention the actual issue like fixing return values,
->removing the devm_kfree in error path etc...
->
->Provided that, you should also split this patch into two as you are fixing
->two independent issues.
->
->Thanks,
->Mani
->
+> That said, the old code was worse. The only redeeming feature of the
+> old code was that "nobody has touched it in ages", so it was at least
+> stable.
 
-Thanks for taking a look.
-I will fix it in the next version.
+Bah. I've walked through that patch something like ten times now, and
+decided that there's no way it breaks anything. Famous last words.
 
--Asd
+It also means that I don't want to look at that ugly old code when I
+have the fix for it all, so I just moved it over from my experimental
+tree to the main tree, since it's still the merge window.
 
->> Fixes: c263b4ef737e ("scsi: ufs: core: mcq: Configure resource regions")
->> Reported-by: Dan Carpenter <error27@gmail.com>
->> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
->> ---
->>  drivers/ufs/host/ufs-qcom.c | 8 +++-----
->>  1 file changed, 3 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
->> index 34fc453f3eb1..cb20c7136c2c 100644
->> --- a/drivers/ufs/host/ufs-qcom.c
->> +++ b/drivers/ufs/host/ufs-qcom.c
->> @@ -1451,8 +1451,8 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
->>  		if (IS_ERR(res->base)) {
->>  			dev_err(hba->dev, "Failed to map res %s, err=%d\n",
->>  					 res->name, (int)PTR_ERR(res->base));
->> -			res->base = NULL;
->>  			ret = PTR_ERR(res->base);
->> +			res->base = NULL;
->>  			return ret;
->>  		}
->>  	}
->> @@ -1466,7 +1466,7 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
->>  	/* Explicitly allocate MCQ resource from ufs_mem */
->>  	res_mcq = devm_kzalloc(hba->dev, sizeof(*res_mcq), GFP_KERNEL);
->>  	if (!res_mcq)
->> -		return ret;
->> +		return -ENOMEM;
->>
->>  	res_mcq->start = res_mem->start +
->>  			 MCQ_SQATTR_OFFSET(hba->mcq_capabilities);
->> @@ -1478,7 +1478,7 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
->>  	if (ret) {
->>  		dev_err(hba->dev, "Failed to insert MCQ resource, err=%d\n",
->>  			ret);
->> -		goto insert_res_err;
->> +		return ret;
->>  	}
->>
->>  	res->base = devm_ioremap_resource(hba->dev, res_mcq);
->> @@ -1495,8 +1495,6 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
->>  ioremap_err:
->>  	res->base = NULL;
->>  	remove_resource(res_mcq);
->> -insert_res_err:
->> -	devm_kfree(hba->dev, res_mcq);
->>  	return ret;
->>  }
->>
->> --
->> 2.7.4
->>
->
->-- 
->மணிவண்ணன் சதாசிவம்
+Quod licet Iovi, non licet bovi, or something.
+
+                 Linus
