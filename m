@@ -2,249 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2CD6A6E9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13886A6EA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 15:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjCAOlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 09:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S229886AbjCAOmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 09:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjCAOlS (ORCPT
+        with ESMTP id S229600AbjCAOmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 09:41:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB3E4346E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 06:40:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677681612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BUe84QSOVYverBpq1niZlZhICIXFK69PLbV0XFl4JEU=;
-        b=G0lDtyJvBNYX56skDKwy94BXXhm2hdHqR5efEyfzgs2X0L+3buAKEFEKFwq+YwslccVr16
-        sKZFva4GxWywnG2w6gQ1L1smdCgX7154JA8931sKwJ70STT1taCTS2edGCvzx24MhzLBCZ
-        4BIUZXkyTIc4bXPYIgOJF7GygtPsPHo=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-519-SuSPdDRWNFuP4cytxhBfGw-1; Wed, 01 Mar 2023 09:40:11 -0500
-X-MC-Unique: SuSPdDRWNFuP4cytxhBfGw-1
-Received: by mail-ed1-f71.google.com with SMTP id dn8-20020a05640222e800b004bd35dd76a9so2225995edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 06:40:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BUe84QSOVYverBpq1niZlZhICIXFK69PLbV0XFl4JEU=;
-        b=SnvgZegd2hbE6pV42m336vT2IRh2kf3sgLFBzQ2f07gTLP1FHMnK8FrQ4wVu+t1utP
-         B9SRIvtpA9Sqzm9djI6hO2XXo3nXE3IIPsyXE9+UkMutpmT+mevRpupi2uHEhhepBsf6
-         IQE0gmxktsjPvHJUJWT1XVDx5WaSzp4qw07ehZXAKNDVAs6/o4yimKqLP6hbtzg3gbAq
-         YlpKpNxrrjIOMdL86YSujyYarTt3+yObK8/wj21gwBL4fG6zqPH30b4R2k0Wcf4K/wiS
-         yX9gRvkeDIFWURreMjlNSic4QTGwE4ehUyv/crH9uHpM4woPC6E38wkAW7ntgwjQ1x98
-         peug==
-X-Gm-Message-State: AO0yUKWYWWZLUrqw87NqQvIk0c0zv7957na0nTIn01e3yITLgv6s0KAB
-        EWsMOOG+Z98f9kCFXORDjwMtRaOFZvUAmGi8f/6dCNOhVzMlZarPTk0KwKIiwJoecrbysHKV6ul
-        XYfDRdVziDmtfqDd96Vh+ZnUu
-X-Received: by 2002:a17:906:7388:b0:87b:7c1d:e02b with SMTP id f8-20020a170906738800b0087b7c1de02bmr6791851ejl.36.1677681609832;
-        Wed, 01 Mar 2023 06:40:09 -0800 (PST)
-X-Google-Smtp-Source: AK7set8rY5wbw5ky+nn2/yCUAwhQkuYV4x9SsI264LFcCqMzD7Rt9yOQXfbo87zvMm1VEOUGhw1GMQ==
-X-Received: by 2002:a17:906:7388:b0:87b:7c1d:e02b with SMTP id f8-20020a170906738800b0087b7c1de02bmr6791830ejl.36.1677681609509;
-        Wed, 01 Mar 2023 06:40:09 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id kd5-20020a17090798c500b008c0b8dd4cbdsm5873065ejc.112.2023.03.01.06.40.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 06:40:08 -0800 (PST)
-Message-ID: <bba19fc3-0cbc-7829-6721-7d84ac4d9136@redhat.com>
-Date:   Wed, 1 Mar 2023 15:40:08 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 12/12] platform/x86: ISST: Add suspend/resume callbacks
-Content-Language: en-US, nl
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        markgross@kernel.org
+        Wed, 1 Mar 2023 09:42:07 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DD134F5A;
+        Wed,  1 Mar 2023 06:42:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677681725; x=1709217725;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=qf5c3OcXmb7uiP/lhAr/PAh3qrdRtnNooteLD32Encs=;
+  b=eleJ/TVSKaSN+fMdS0ddsVJ95Rm28aTmO69+QfX0OoOEe8kBj4Ph5oXS
+   luXN0i1wpmdV/at7OnI8ci9KqVoE7kmg7mtSIJqSruqq7tlQXjivw9agF
+   9c4O0ZN29Dp5VtBwoVPGYvsG+HemAK8Nvda6hwrvoBzkdtRZWMipw7sII
+   +pJvhcNObeNIVOv3Rtv+ghqdrwGFQBqySXoGSNuJOVok3KShVurZtHlHI
+   kJf0e6ktROzPpoHChAaNIjbBQGoumkld5ihpG5Xa6S23sMd4zR+/JFKvD
+   0arag9FD2HtzjsVCdSmUCtwUgpAyCIMvHlxT26/YBSAOwR2XFIjpcG9su
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="336715586"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="336715586"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 06:42:04 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="676787326"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="676787326"
+Received: from smeeranx-mobl2.gar.corp.intel.com ([10.213.113.101])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 06:42:01 -0800
+Message-ID: <d79bc5e85ca61cbd978d7b9b349e076b7b94770a.camel@linux.intel.com>
+Subject: Re: [PATCH 05/12] platform/x86: ISST: Add support for MSR 0x54
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org
 Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 01 Mar 2023 06:41:57 -0800
+In-Reply-To: <1950741c-b5a9-6883-0c16-391001540a25@redhat.com>
 References: <20230211063257.311746-1-srinivas.pandruvada@linux.intel.com>
- <20230211063257.311746-13-srinivas.pandruvada@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230211063257.311746-13-srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+         <20230211063257.311746-6-srinivas.pandruvada@linux.intel.com>
+         <1950741c-b5a9-6883-0c16-391001540a25@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2/11/23 07:32, Srinivas Pandruvada wrote:
-> To support S3/S4 with TPMI interface add suspend/resume callbacks.
-> Here HW state is stored in suspend callback and restored during
-> resume callback.
-> 
-> The hardware state which needs to be stored/restored:
-> - CLOS configuration
-> - CLOS Association
-> - SST-CP enable/disable status
-> - SST-PP perf level setting
-> 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  .../x86/intel/speed_select_if/isst_tpmi.c     | 21 ++++++++
->  .../intel/speed_select_if/isst_tpmi_core.c    | 49 +++++++++++++++++++
->  .../intel/speed_select_if/isst_tpmi_core.h    |  2 +
->  3 files changed, 72 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c b/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
-> index 7b4bdeefb8bc..ef39870c9829 100644
-> --- a/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
-> +++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
-> @@ -34,6 +34,24 @@ static void intel_sst_remove(struct auxiliary_device *auxdev)
->  	tpmi_sst_exit();
->  }
->  
-> +static int __maybe_unused intel_sst_suspend(struct device *dev)
-> +{
-> +	tpmi_sst_dev_suspend(to_auxiliary_dev(dev));
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused intel_sst_resume(struct device *dev)
-> +{
-> +	tpmi_sst_dev_resume(to_auxiliary_dev(dev));
-> +
-> +	return 0;
-> +}
-
-Please drop the __maybe_unused here; and
-
-> +
-> +static const struct dev_pm_ops intel_sst_pm = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(intel_sst_suspend, intel_sst_resume)
-> +};
-> +
-
-Replace this with:
-
-static DEFINE_SIMPLE_DEV_PM_OPS(intel_sst_pm, intel_sst_suspend, intel_sst_resume);
-
->  static const struct auxiliary_device_id intel_sst_id_table[] = {
->  	{ .name = "intel_vsec.tpmi-sst" },
->  	{}
-> @@ -44,6 +62,9 @@ static struct auxiliary_driver intel_sst_aux_driver = {
->  	.id_table       = intel_sst_id_table,
->  	.remove         = intel_sst_remove,
->  	.probe          = intel_sst_probe,
-> +	.driver = {
-> +		.pm = &intel_sst_pm,
-
-And use:
-
-		.pm = pm_sleep_ptr(&intel_sst_pm),
-
-
-Here, this is the new #ifdef and __maybe_unused free way of dealing with pm_ops.
-
-Regards,
-
-Hans
-
-
-> +	},
->  };
->  
->  module_auxiliary_driver(intel_sst_aux_driver);
-> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-> index 9eaff90bb649..e173167085ea 100644
-> --- a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-> +++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-> @@ -229,6 +229,10 @@ struct perf_level {
->   * @status_offset:	Store the status offset for each PP-level
->   * @sst_base:		Mapped SST base IO memory
->   * @auxdev:		Auxiliary device instance enumerated this instance
-> + * @saved_sst_cp_control: Save SST-CP control configuration to store restore for suspend/resume
-> + * @saved_clos_configs:	Save SST-CP CLOS configuration to store restore for suspend/resume
-> + * @saved_clos_assocs:	Save SST-CP CLOS association to store restore for suspend/resume
-> + * @saved_pp_control:	Save SST-PP control information to store restore for suspend/resume
->   *
->   * This structure is used store complete SST information for a power_domain. This information
->   * is used to read/write request for any SST IOCTL. Each physical CPU package can have multiple
-> @@ -250,6 +254,10 @@ struct tpmi_per_power_domain_info {
->  	struct pp_status_offset status_offset;
->  	void __iomem *sst_base;
->  	struct auxiliary_device *auxdev;
-> +	u64 saved_sst_cp_control;
-> +	u64 saved_clos_configs[4];
-> +	u64 saved_clos_assocs[4];
-> +	u64 saved_pp_control;
->  };
->  
->  /**
-> @@ -1333,6 +1341,47 @@ void tpmi_sst_dev_remove(struct auxiliary_device *auxdev)
->  }
->  EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_remove, INTEL_TPMI_SST);
->  
-> +void tpmi_sst_dev_suspend(struct auxiliary_device *auxdev)
-> +{
-> +	struct tpmi_sst_struct *tpmi_sst = auxiliary_get_drvdata(auxdev);
-> +	struct tpmi_per_power_domain_info *power_domain_info = tpmi_sst->power_domain_info;
-> +	void __iomem *cp_base;
-> +
-> +	cp_base = power_domain_info->sst_base + power_domain_info->sst_header.cp_offset;
-> +	power_domain_info->saved_sst_cp_control = readq(cp_base + SST_CP_CONTROL_OFFSET);
-> +
-> +	memcpy_fromio(power_domain_info->saved_clos_configs, cp_base + SST_CLOS_CONFIG_0_OFFSET,
-> +		      sizeof(power_domain_info->saved_clos_configs));
-> +
-> +	memcpy_fromio(power_domain_info->saved_clos_assocs, cp_base + SST_CLOS_ASSOC_0_OFFSET,
-> +		      sizeof(power_domain_info->saved_clos_assocs));
-> +
-> +	power_domain_info->saved_pp_control = readq(power_domain_info->sst_base +
-> +						    power_domain_info->sst_header.pp_offset +
-> +						    SST_PP_CONTROL_OFFSET);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_suspend, INTEL_TPMI_SST);
-> +
-> +void tpmi_sst_dev_resume(struct auxiliary_device *auxdev)
-> +{
-> +	struct tpmi_sst_struct *tpmi_sst = auxiliary_get_drvdata(auxdev);
-> +	struct tpmi_per_power_domain_info *power_domain_info = tpmi_sst->power_domain_info;
-> +	void __iomem *cp_base;
-> +
-> +	cp_base = power_domain_info->sst_base + power_domain_info->sst_header.cp_offset;
-> +	writeq(power_domain_info->saved_sst_cp_control, cp_base + SST_CP_CONTROL_OFFSET);
-> +
-> +	memcpy_toio(cp_base + SST_CLOS_CONFIG_0_OFFSET, power_domain_info->saved_clos_configs,
-> +		    sizeof(power_domain_info->saved_clos_configs));
-> +
-> +	memcpy_toio(cp_base + SST_CLOS_ASSOC_0_OFFSET, power_domain_info->saved_clos_assocs,
-> +		    sizeof(power_domain_info->saved_clos_assocs));
-> +
-> +	writeq(power_domain_info->saved_pp_control, power_domain_info->sst_base +
-> +				power_domain_info->sst_header.pp_offset + SST_PP_CONTROL_OFFSET);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_resume, INTEL_TPMI_SST);
-> +
->  #define ISST_TPMI_API_VERSION	0x02
->  
->  int tpmi_sst_init(void)
-> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
-> index 356cb02273b1..900b483703f9 100644
-> --- a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
-> +++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
-> @@ -13,4 +13,6 @@ int tpmi_sst_init(void);
->  void tpmi_sst_exit(void);
->  int tpmi_sst_dev_add(struct auxiliary_device *auxdev);
->  void tpmi_sst_dev_remove(struct auxiliary_device *auxdev);
-> +void tpmi_sst_dev_suspend(struct auxiliary_device *auxdev);
-> +void tpmi_sst_dev_resume(struct auxiliary_device *auxdev);
->  #endif
+T24gV2VkLCAyMDIzLTAzLTAxIGF0IDE1OjMwICswMTAwLCBIYW5zIGRlIEdvZWRlIHdyb3RlOgo+
+IEhpLAo+IAo+IE9uIDIvMTEvMjMgMDc6MzIsIFNyaW5pdmFzIFBhbmRydXZhZGEgd3JvdGU6Cj4g
+PiBUbyBtYXAgTGludXggQ1BVIG51bWJlcmluZyBzY2hlbWUgdG8gaGFyZHdhcmUgQ1BVIG51bWJl
+cmluZyBzY2hlbWUKPiA+IE1TUiAweDUzIGlzIGdldHRpbmcgdXNlZC4gQnV0IGZvciBuZXcgZ2Vu
+ZXJhdGlvbiBvZiBDUFVzLCB0aGlzIE1TUgo+ID4gaXMgbm90IHZhbGlkLiBTaW5jZSB0aGlzIGlz
+IG1vZGVsIHNwZWNpZmljIE1TUiwgdGhpcyBpcyBwb3NzaWJsZS4KPiA+IAo+ID4gQSBuZXcgTVNS
+IDB4NTQgaXMgZGVmaW5lZC4gVXNlIHRoaXMgTVNSIGFuZCBjb252ZXJ0IHRoZSBJT0NUTAo+ID4g
+Zm9ybWF0Cj4gPiB0byBtYXRjaCBleGlzdGluZyBNU1IgMHg1MywgaW4gdGhpcyBjYXNlIHVzZXIg
+c3BhY2VzIGRvbid0IG5lZWQgdG8KPiA+IGJlIGF3YXJlIG9mIHRoaXMgY2hhbmdlLgo+ID4gCj4g
+PiBTaWduZWQtb2ZmLWJ5OiBTcmluaXZhcyBQYW5kcnV2YWRhCj4gPiA8c3Jpbml2YXMucGFuZHJ1
+dmFkYUBsaW51eC5pbnRlbC5jb20+Cj4gCj4gSSBhbSBub3QgYSBmYW4gb2YgdGhpcy4gSSBleHBl
+Y3QgdGhhdCB1c2VycyBvZiB0aGVzZSBuZXcgQ1BVcyB3aWxsCj4gdmVyeSBsaWtlbHkgYWxzbyBu
+ZWVkIGEgbmV3IGludGVsLXNwZWVkLXNlbGVjdCB1c2Vyc3BhY2UgdG9vbAo+IHJlZ2FyZGxlc3MK
+PiBvZiBkb2luZyB0aGlzIE1TUiBtdW5naW5nL3NodWZmbGluZyBpbiB0aGUga2VybmVsLiBTbyB3
+aHkgbm90IGZpeAo+IHRoZSB0b29sIHRvIHRlYWNoIGl0IGFib3V0IHRoZSBNU1IgaW5zdGVhZCA/
+CgpTdXJlLgoKSSBjYW4gcmVtb3ZlIHRoZSBmb3JtYXQgY29udmVyc2lvbiBpbiB0aGUga2VybmVs
+LCBzbyB0aGF0IHVzZXIgc3BhY2UKdG9vbCB3aWxsIGRvIHRoYXQuCgpJIHRoaW5rIHRoYXQncyB3
+aGF0IHlvdSBtZWFuLgoKCgo+IAo+IElmIHlvdSBoYXZlIGdvb2QgYXJndW1lbnRzIGZvciBkb2lu
+ZyB0aGlzIGluIHRoZSBrZXJuZWwgcGxlYXNlCj4gYWRkIHRoZW0gdGhlIGNvbW1pdCBtZXNzYWdl
+IGZvciB0aGUgbmV4dCB2ZXJzaW9uLCBidXQgbXkgaW5pdGlhbAo+IHJlYWN0aW9uIHRvIHRoaXMg
+aXMgdGhhdCBpdCBpcyB3cm9uZyB0byBkbyB0aGlzIGluIHRoZSBrZXJuZWwKPiBhbmQgdGhhdCB0
+aGUgdG9vbCBzaG91bGQgYmUgZml4ZWQgaW5zdGVhZC4gU28gbXkgcHJlZmVyZW5jZQo+IHdvdWxk
+IGJlIGZvciB0aGlzIHBhdGNoIHRvIGJlIGRyb3BwZWQgZnJvbSB0aGUgbmV4dCB2ZXJzaW9uIG9m
+Cj4gdGhlIHBhdGNoLXNldC4KClNpbmNlIHdlIGNhbid0IHJlYWQgTVNSIGZyb20gdXNlciBzcGFj
+ZSwgdGhpcyBwYXRjaCBpcyBzdGlsbCByZXF1aXJlZAp0byByZWFkIG9ubHkgTVNSIDB4NTQuIEp1
+c3QgaXQgd2lsbCBub3QgZG8gYW55IGZvcm1hdCBjb252ZXJzaW9uLiBTbwpmb3JtYXQgY29udmVy
+c2lvbiB3aWxsIGhhcHBlbiBpbiB1c2VyIHNwYWNlIHRvb2wuCgpUaGFua3MsClNyaW5pdmFzCgoK
+PiAKPiBSZWdhcmRzLAo+IAo+IEhhbnMKPiAKPiAKPiAKPiAKPiAKPiAKPiAKPiA+IC0tLQo+ID4g
+wqAuLi4vaW50ZWwvc3BlZWRfc2VsZWN0X2lmL2lzc3RfaWZfY29tbW9uLmPCoMKgwqAgfCA1MQo+
+ID4gKysrKysrKysrKysrKysrKysrKwo+ID4gwqAxIGZpbGUgY2hhbmdlZCwgNTEgaW5zZXJ0aW9u
+cygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0Cj4gPiBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L2ludGVs
+L3NwZWVkX3NlbGVjdF9pZi9pc3N0X2lmX2NvbW1vbi5jCj4gPiBiL2RyaXZlcnMvcGxhdGZvcm0v
+eDg2L2ludGVsL3NwZWVkX3NlbGVjdF9pZi9pc3N0X2lmX2NvbW1vbi5jCj4gPiBpbmRleCA2MGU1
+OGIwYjM4MzUuLjk3ZDFiNDU2NjUzNSAxMDA2NDQKPiA+IC0tLSBhL2RyaXZlcnMvcGxhdGZvcm0v
+eDg2L2ludGVsL3NwZWVkX3NlbGVjdF9pZi9pc3N0X2lmX2NvbW1vbi5jCj4gPiArKysgYi9kcml2
+ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC9zcGVlZF9zZWxlY3RfaWYvaXNzdF9pZl9jb21tb24uYwo+
+ID4gQEAgLTE5LDkgKzE5LDEzIEBACj4gPiDCoCNpbmNsdWRlIDxsaW51eC91YWNjZXNzLmg+Cj4g
+PiDCoCNpbmNsdWRlIDx1YXBpL2xpbnV4L2lzc3RfaWYuaD4KPiA+IMKgCj4gPiArI2luY2x1ZGUg
+PGFzbS9jcHVfZGV2aWNlX2lkLmg+Cj4gPiArI2luY2x1ZGUgPGFzbS9pbnRlbC1mYW1pbHkuaD4K
+PiA+ICsKPiA+IMKgI2luY2x1ZGUgImlzc3RfaWZfY29tbW9uLmgiCj4gPiDCoAo+ID4gwqAjZGVm
+aW5lIE1TUl9USFJFQURfSURfSU5GT8KgwqDCoMKgwqAweDUzCj4gPiArI2RlZmluZSBNU1JfUE1f
+TE9HSUNBTF9JRMKgwqDCoMKgwqDCoDB4NTQKPiA+IMKgI2RlZmluZSBNU1JfQ1BVX0JVU19OVU1C
+RVLCoMKgwqDCoMKgMHgxMjgKPiA+IMKgCj4gPiDCoHN0YXRpYyBzdHJ1Y3QgaXNzdF9pZl9jbWRf
+Y2IgcHVuaXRfY2FsbGJhY2tzW0lTU1RfSUZfREVWX01BWF07Cj4gPiBAQCAtMzEsNiArMzUsNyBA
+QCBzdGF0aWMgaW50IHB1bml0X21zcl93aGl0ZV9saXN0W10gPSB7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgTVNSX0NPTkZJR19URFBfQ09OVFJPTCwKPiA+IMKgwqDCoMKgwqDCoMKgwqBNU1JfVFVSQk9f
+UkFUSU9fTElNSVQxLAo+ID4gwqDCoMKgwqDCoMKgwqDCoE1TUl9UVVJCT19SQVRJT19MSU1JVDIs
+Cj4gPiArwqDCoMKgwqDCoMKgwqBNU1JfUE1fTE9HSUNBTF9JRCwKPiA+IMKgfTsKPiA+IMKgCj4g
+PiDCoHN0cnVjdCBpc3N0X3ZhbGlkX2NtZF9yYW5nZXMgewo+ID4gQEAgLTczLDYgKzc4LDggQEAg
+c3RydWN0IGlzc3RfY21kIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqB1MzIgcGFyYW07Cj4gPiDCoH07
+Cj4gPiDCoAo+ID4gK3N0YXRpYyBib29sIGlzc3RfaHBtX3N1cHBvcnQ7Cj4gPiArCj4gPiDCoHN0
+YXRpYyBERUNMQVJFX0hBU0hUQUJMRShpc3N0X2hhc2gsIDgpOwo+ID4gwqBzdGF0aWMgREVGSU5F
+X01VVEVYKGlzc3RfaGFzaF9sb2NrKTsKPiA+IMKgCj4gPiBAQCAtNDExLDExICs0MTgsNDMgQEAg
+c3RhdGljIGludCBpc3N0X2lmX2NwdV9vbmxpbmUodW5zaWduZWQgaW50Cj4gPiBjcHUpCj4gPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlzc3RfY3B1X2luZm9bY3B1XS5wY2lfZGV2
+WzFdID0KPiA+IF9pc3N0X2lmX2dldF9wY2lfZGV2KGNwdSwgMSwgMzAsIDEpOwo+ID4gwqDCoMKg
+wqDCoMKgwqDCoH0KPiA+IMKgCj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoaXNzdF9ocG1fc3VwcG9y
+dCkgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHU2NCByYXdfZGF0YTsKPiA+
+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSByZG1zcmxfc2FmZShN
+U1JfUE1fTE9HSUNBTF9JRCwgJnJhd19kYXRhKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBpZiAoIXJldCkgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAvKgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgKiBVc2UgdGhlIHNhbWUgZm9ybWF0IGFzIE1TUiA1MywgZm9yIHVzZXIKPiA+
+IHNwYWNlIGhhcm1vbnkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgICrCoCBGb3JtYXQKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgICrCoMKgwqDCoMKgwqBCaXQgMCDigJMgdGhyZWFkIElECj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqwqDCoMKgwqDCoMKg
+Qml0IDg6MSDigJMgY29yZSBJRAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgKsKgwqDCoMKgwqDCoEJpdCAxMzo5IOKAkyBDb21wdXRlIGRvbWFpbiBJ
+RCAoYWthCj4gPiBkaWUgSUQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCAqIEZyb20gdGhlIE1TUiAweDU0IGZvcm1hdAo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKsKgwqDCoMKgwqDCoFsxNToxMV0g
+UE1fRE9NQUlOX0lECj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCAqwqDCoMKgwqDCoMKgWzEwOjNdIE1PRFVMRV9JRCAoYWthIElESV9BR0VOVF9JRCkK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICrCoMKg
+wqDCoMKgwqBbMjowXSBMUF9JRCAoV2UgZG9uJ3QgY2FyZSBhYm91dAo+ID4gdGhlc2UgYml0cyB3
+ZSBvbmx5Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjYXJlIGRpZSBh
+bmQgY29yZQo+ID4gaWQKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgICrCoMKgwqDCoMKgwqBGb3IgQXRvbToKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+WzJdIEFsd2F5cyAwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFsxOjBdIGNvcmUgSUQgd2l0aGlu
+IG1vZHVsZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgKsKgwqDCoMKgwqDCoEZvciBDb3JlCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFsyOjFdIEFs
+d2F5cyAwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFswXSB0aHJlYWQgSUQKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRhdGEgPSAocmF3X2RhdGEgPj4g
+MTEpICYgMHgxZjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgZGF0YSA8PD0gOTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgZGF0YSB8PSAoKChyYXdfZGF0YSA+PiAzKSAmIDB4ZmYpIDw8IDEpOwo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIHNldF9w
+dW5pdF9pZDsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKg
+wqDCoMKgwqB9Cj4gPiArCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gcmRtc3JsX3NhZmUoTVNS
+X1RIUkVBRF9JRF9JTkZPLCAmZGF0YSk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkgewo+
+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpc3N0X2NwdV9pbmZvW2NwdV0ucHVu
+aXRfY3B1X2lkID0gLTE7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
+biByZXQ7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gKwo+ID4gK3NldF9wdW5pdF9pZDoKPiA+
+IMKgwqDCoMKgwqDCoMKgwqBpc3N0X2NwdV9pbmZvW2NwdV0ucHVuaXRfY3B1X2lkID0gZGF0YTsK
+PiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgaXNzdF9yZXN0b3JlX21zcl9sb2NhbChjcHUpOwo+
+ID4gQEAgLTcwNCw2ICs3NDMsMTIgQEAgc3RhdGljIHN0cnVjdCBtaXNjZGV2aWNlIGlzc3RfaWZf
+Y2hhcl9kcml2ZXIgPQo+ID4gewo+ID4gwqDCoMKgwqDCoMKgwqDCoC5mb3BzwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoD0gJmlzc3RfaWZfY2hhcl9kcml2ZXJfb3BzLAo+ID4gwqB9Owo+ID4gwqAKPiA+
+ICtzdGF0aWMgY29uc3Qgc3RydWN0IHg4Nl9jcHVfaWQgaHBtX2NwdV9pZHNbXSA9IHsKPiA+ICvC
+oMKgwqDCoMKgwqDCoFg4Nl9NQVRDSF9JTlRFTF9GQU02X01PREVMKEdSQU5JVEVSQVBJRFNfWCzC
+oMKgwqDCoMKgTlVMTCksCj4gPiArwqDCoMKgwqDCoMKgwqBYODZfTUFUQ0hfSU5URUxfRkFNNl9N
+T0RFTChTSUVSUkFGT1JFU1RfWCzCoMKgwqDCoMKgwqBOVUxMKSwKPiA+ICvCoMKgwqDCoMKgwqDC
+oHt9Cj4gPiArfTsKPiA+ICsKPiA+IMKgc3RhdGljIGludCBpc3N0X21pc2NfcmVnKHZvaWQpCj4g
+PiDCoHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBtdXRleF9sb2NrKCZwdW5pdF9taXNjX2Rldl9yZWdf
+bG9jayk7Cj4gPiBAQCAtNzExLDYgKzc1NiwxMiBAQCBzdGF0aWMgaW50IGlzc3RfbWlzY19yZWco
+dm9pZCkKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byB1bmxvY2tfZXhp
+dDsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKCFtaXNjX3VzYWdlX2NvdW50KSB7Cj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29uc3Qgc3RydWN0IHg4Nl9jcHVfaWQg
+KmlkOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlkID0geDg2X21h
+dGNoX2NwdShocG1fY3B1X2lkcyk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+aWYgKGlkKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBpc3N0X2hwbV9zdXBwb3J0ID0gdHJ1ZTsKPiA+ICsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgbWlzY19kZXZpY2VfcmV0ID0gaXNzdF9pZl9jcHVfaW5mb19pbml0KCk7Cj4g
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChtaXNjX2RldmljZV9yZXQpCj4g
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIHVu
+bG9ja19leGl0Owo+IAoK
 
