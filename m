@@ -2,215 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071646A6BED
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F30266A6BEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjCALym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S229695AbjCALzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCALyk (ORCPT
+        with ESMTP id S229451AbjCALzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:54:40 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A8392CC46;
-        Wed,  1 Mar 2023 03:54:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81E9F2F4;
-        Wed,  1 Mar 2023 03:55:22 -0800 (PST)
-Received: from [10.57.16.41] (unknown [10.57.16.41])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1DA213F587;
-        Wed,  1 Mar 2023 03:54:35 -0800 (PST)
-Message-ID: <8e803abd-8856-3c44-6262-40c026216c9a@arm.com>
-Date:   Wed, 1 Mar 2023 11:54:34 +0000
+        Wed, 1 Mar 2023 06:55:17 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48632ED74
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:55:15 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id h9so13680173ljq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 03:55:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w85B/ds8bah1X1W6vnJsNpYqcqLRHd9ikwsnw5xxH4E=;
+        b=LDRjZdu0o8U35wWW9SM3dBhr4k26Z1BD/Gtfmy2AFX5eXEqKIUJrMjMFS9caVJ+9GJ
+         nznbO9mYSol07bh99sFoF1QTFRDI9PGdN4kGXSY44SP1rZ3PmPp17u9j+Cc9FKvI0fZu
+         8SyBPJgqYEJqLB26ukd9rN+EwDigc4zAN1c/g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w85B/ds8bah1X1W6vnJsNpYqcqLRHd9ikwsnw5xxH4E=;
+        b=jSlQwACeGjc4m8D8DHg2hRFhBJRQk8DHRLP6blIzsYn4EEe073UoN7MZwM+p4N95Nu
+         NykLkUuHHKIS87t4hRSyDak5ZF8eEij997YdgVGDFEXqk4B0bWeYQxgZ35uZM0Q4uuZ3
+         4JqX/GjRobDQ2WmRaVvVlY/fH+aNC76HSu1n0pkYT4plND7n6Fea5KET5QMWCKr2PKBK
+         OR0j++y086j7PB3oo623XOUdqWX8g5CexejJa3pGPArz3et+WiDq7i6ZP0To/ZBTwOH/
+         NcyiQU+399ZmbZdy++2iuP5KSc3suMOfpphboC32Gw13U/DuOreW291/1HWn6EGY0n4i
+         SkjQ==
+X-Gm-Message-State: AO0yUKW3jPeZC3Jqps6GEEw034ac/ll1yr9MHubP2kzNOTeKjZZFwZ0m
+        C3X8Z55c1BkuVFDKkMjAaAGEAg==
+X-Google-Smtp-Source: AK7set+Dy+OLzKZpmJhRw/aLsvwG2zeUj/R3+rmUKLGFe8tnnOQkM0y6PqxAOpDpbLdwwQkYISnuIw==
+X-Received: by 2002:a2e:a4d3:0:b0:295:9c2e:72ed with SMTP id p19-20020a2ea4d3000000b002959c2e72edmr1898245ljm.50.1677671714033;
+        Wed, 01 Mar 2023 03:55:14 -0800 (PST)
+Received: from localhost.localdomain ([87.54.42.112])
+        by smtp.gmail.com with ESMTPSA id bi36-20020a05651c232400b002934b5c5c67sm1638885ljb.32.2023.03.01.03.55.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 03:55:13 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: addac: ad74413r: fix Current Input, Loop Powered Mode
+Date:   Wed,  1 Mar 2023 12:55:11 +0100
+Message-Id: <20230301115511.849418-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 05/28] arm64: RME: Define the user ABI
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Joey Gouly <joey.gouly@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
- <20230127112932.38045-1-steven.price@arm.com>
- <20230127112932.38045-6-steven.price@arm.com>
- <20230213180413.00000392@gmail.com>
-Content-Language: en-GB
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20230213180413.00000392@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 16:04, Zhi Wang wrote:
-> On Fri, 27 Jan 2023 11:29:09 +0000
-> Steven Price <steven.price@arm.com> wrote:
-> 
->> There is one (multiplexed) CAP which can be used to create, populate and
->> then activate the realm.
->>
->> Signed-off-by: Steven Price <steven.price@arm.com>
->> ---
->>  Documentation/virt/kvm/api.rst    |  1 +
->>  arch/arm64/include/uapi/asm/kvm.h | 63 +++++++++++++++++++++++++++++++
->>  include/uapi/linux/kvm.h          |  2 +
->>  3 files changed, 66 insertions(+)
->>
->> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
->> index 0dd5d8733dd5..f1a59d6fb7fc 100644
->> --- a/Documentation/virt/kvm/api.rst
->> +++ b/Documentation/virt/kvm/api.rst
->> @@ -4965,6 +4965,7 @@ Recognised values for feature:
->>  
->>    =====      ===========================================
->>    arm64      KVM_ARM_VCPU_SVE (requires KVM_CAP_ARM_SVE)
->> +  arm64      KVM_ARM_VCPU_REC (requires KVM_CAP_ARM_RME)
->>    =====      ===========================================
->>  
->>  Finalizes the configuration of the specified vcpu feature.
->> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
->> index a7a857f1784d..fcc0b8dce29b 100644
->> --- a/arch/arm64/include/uapi/asm/kvm.h
->> +++ b/arch/arm64/include/uapi/asm/kvm.h
->> @@ -109,6 +109,7 @@ struct kvm_regs {
->>  #define KVM_ARM_VCPU_SVE		4 /* enable SVE for this CPU */
->>  #define KVM_ARM_VCPU_PTRAUTH_ADDRESS	5 /* VCPU uses address authentication */
->>  #define KVM_ARM_VCPU_PTRAUTH_GENERIC	6 /* VCPU uses generic authentication */
->> +#define KVM_ARM_VCPU_REC		7 /* VCPU REC state as part of Realm */
->>  
->>  struct kvm_vcpu_init {
->>  	__u32 target;
->> @@ -401,6 +402,68 @@ enum {
->>  #define   KVM_DEV_ARM_VGIC_SAVE_PENDING_TABLES	3
->>  #define   KVM_DEV_ARM_ITS_CTRL_RESET		4
->>  
->> +/* KVM_CAP_ARM_RME on VM fd */
->> +#define KVM_CAP_ARM_RME_CONFIG_REALM		0
->> +#define KVM_CAP_ARM_RME_CREATE_RD		1
->> +#define KVM_CAP_ARM_RME_INIT_IPA_REALM		2
->> +#define KVM_CAP_ARM_RME_POPULATE_REALM		3
->> +#define KVM_CAP_ARM_RME_ACTIVATE_REALM		4
->> +
-> 
-> It is a little bit confusing here. These seems more like 'commands' not caps.
-> Will leave more comments after reviewing the later patches.
+Currently, the driver handles CH_FUNC_CURRENT_INPUT_LOOP_POWER and
+CH_FUNC_CURRENT_INPUT_EXT_POWER completely identically. But that's not
+correct. In order for CH_FUNC_CURRENT_INPUT_LOOP_POWER to work, two
+changes must be made:
 
-Sorry for the slow response. Thank you for your review - I hope to post
-a new version of this series (rebased on 6.3-rc1) in the coming weeks
-with your comments addressed.
+(1) expose access to the DAC_CODE_x register so that the intended
+output current can be set, i.e. expose the channel as both current
+output and current input, and
 
-They are indeed commands - and using caps is a bit of a hack. The
-benefit here is that all the Realm commands are behind the one
-KVM_CAP_ARM_RME.
+(2) per the data sheet
 
-The options I can see are:
+  When selecting the current input loop powered function, tie the
+  VIOUTN_x pin to ground via the on-chip 200 kΩ resistor by enabling
+  the CH_200K_TO_GND bit in the ADC_CONFIGx registers.
 
-a) What I've got here - (ab)using KVM_ENABLE_CAP to perform commands.
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+There's of course also CH_FUNC_CURRENT_INPUT_LOOP_POWER_HART which is
+likely to require a similar fix, but as I don't have a ad74413r I
+can't test that. 
 
-b) Add new ioctls for each of the above stages (so 5 new ioctls on top
-of the CAP for discovery). With any future extensions requiring new ioctls.
+ drivers/iio/addac/ad74413r.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
-c) Add a single new multiplexing ioctl (along with the CAP for discovery).
-
-I'm not massively keen on defining a new multiplexing scheme (c), but
-equally (b) seems like it's burning through ioctl numbers. Which led me
-to stick with (a) which at least keeps the rebasing simple (there's only
-the one CAP number which could conflict) and there's already a
-multiplexing scheme.
-
-But I'm happy to change if there's consensus a different approach would
-be preferable.
-
-Thanks,
-
-Steve
-
->> +#define KVM_CAP_ARM_RME_MEASUREMENT_ALGO_SHA256		0
->> +#define KVM_CAP_ARM_RME_MEASUREMENT_ALGO_SHA512		1
->> +
->> +#define KVM_CAP_ARM_RME_RPV_SIZE 64
->> +
->> +/* List of configuration items accepted for KVM_CAP_ARM_RME_CONFIG_REALM */
->> +#define KVM_CAP_ARM_RME_CFG_RPV			0
->> +#define KVM_CAP_ARM_RME_CFG_HASH_ALGO		1
->> +#define KVM_CAP_ARM_RME_CFG_SVE			2
->> +#define KVM_CAP_ARM_RME_CFG_DBG			3
->> +#define KVM_CAP_ARM_RME_CFG_PMU			4
->> +
->> +struct kvm_cap_arm_rme_config_item {
->> +	__u32 cfg;
->> +	union {
->> +		/* cfg == KVM_CAP_ARM_RME_CFG_RPV */
->> +		struct {
->> +			__u8	rpv[KVM_CAP_ARM_RME_RPV_SIZE];
->> +		};
->> +
->> +		/* cfg == KVM_CAP_ARM_RME_CFG_HASH_ALGO */
->> +		struct {
->> +			__u32	hash_algo;
->> +		};
->> +
->> +		/* cfg == KVM_CAP_ARM_RME_CFG_SVE */
->> +		struct {
->> +			__u32	sve_vq;
->> +		};
->> +
->> +		/* cfg == KVM_CAP_ARM_RME_CFG_DBG */
->> +		struct {
->> +			__u32	num_brps;
->> +			__u32	num_wrps;
->> +		};
->> +
->> +		/* cfg == KVM_CAP_ARM_RME_CFG_PMU */
->> +		struct {
->> +			__u32	num_pmu_cntrs;
->> +		};
->> +		/* Fix the size of the union */
->> +		__u8	reserved[256];
->> +	};
->> +};
->> +
->> +struct kvm_cap_arm_rme_populate_realm_args {
->> +	__u64 populate_ipa_base;
->> +	__u64 populate_ipa_size;
->> +};
->> +
->> +struct kvm_cap_arm_rme_init_ipa_args {
->> +	__u64 init_ipa_base;
->> +	__u64 init_ipa_size;
->> +};
->> +
->>  /* Device Control API on vcpu fd */
->>  #define KVM_ARM_VCPU_PMU_V3_CTRL	0
->>  #define   KVM_ARM_VCPU_PMU_V3_IRQ	0
->> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
->> index 20522d4ba1e0..fec1909e8b73 100644
->> --- a/include/uapi/linux/kvm.h
->> +++ b/include/uapi/linux/kvm.h
->> @@ -1176,6 +1176,8 @@ struct kvm_ppc_resize_hpt {
->>  #define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
->>  #define KVM_CAP_DIRTY_LOG_RING_WITH_BITMAP 225
->>  
->> +#define KVM_CAP_ARM_RME 300 // FIXME: Large number to prevent conflicts
->> +
->>  #ifdef KVM_CAP_IRQ_ROUTING
->>  
->>  struct kvm_irq_routing_irqchip {
-> 
+diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+index f32c8c2fb26d..f5d072092709 100644
+--- a/drivers/iio/addac/ad74413r.c
++++ b/drivers/iio/addac/ad74413r.c
+@@ -99,6 +99,7 @@ struct ad74413r_state {
+ #define AD74413R_REG_ADC_CONFIG_X(x)		(0x05 + (x))
+ #define AD74413R_ADC_CONFIG_RANGE_MASK		GENMASK(7, 5)
+ #define AD74413R_ADC_CONFIG_REJECTION_MASK	GENMASK(4, 3)
++#define AD74413R_ADC_CONFIG_CH_200K_TO_GND	BIT(2)
+ #define AD74413R_ADC_RANGE_10V			0b000
+ #define AD74413R_ADC_RANGE_2P5V_EXT_POW		0b001
+ #define AD74413R_ADC_RANGE_2P5V_INT_POW		0b010
+@@ -424,9 +425,20 @@ static int ad74413r_set_channel_dac_code(struct ad74413r_state *st,
+ static int ad74413r_set_channel_function(struct ad74413r_state *st,
+ 					 unsigned int channel, u8 func)
+ {
+-	return regmap_update_bits(st->regmap,
++	int ret;
++
++	ret = regmap_update_bits(st->regmap,
+ 				  AD74413R_REG_CH_FUNC_SETUP_X(channel),
+ 				  AD74413R_CH_FUNC_SETUP_MASK, func);
++	if (ret)
++		return ret;
++
++	if (func == CH_FUNC_CURRENT_INPUT_LOOP_POWER)
++		ret = regmap_set_bits(st->regmap,
++				      AD74413R_REG_ADC_CONFIG_X(channel),
++				      AD74413R_ADC_CONFIG_CH_200K_TO_GND);
++
++	return ret;
+ }
+ 
+ static int ad74413r_set_adc_conv_seq(struct ad74413r_state *st,
+@@ -1112,6 +1124,11 @@ static struct iio_chan_spec ad74413r_current_input_channels[] = {
+ 	AD74413R_ADC_CURRENT_CHANNEL,
+ };
+ 
++static struct iio_chan_spec ad74413r_current_input_loop_channels[] = {
++	AD74413R_DAC_CHANNEL(IIO_CURRENT, BIT(IIO_CHAN_INFO_SCALE)),
++	AD74413R_ADC_CURRENT_CHANNEL,
++};
++
+ static struct iio_chan_spec ad74413r_resistance_input_channels[] = {
+ 	AD74413R_ADC_CHANNEL(IIO_RESISTANCE, BIT(IIO_CHAN_INFO_PROCESSED)),
+ };
+@@ -1135,7 +1152,7 @@ static const struct ad74413r_channels ad74413r_channels_map[] = {
+ 	[CH_FUNC_CURRENT_OUTPUT] = AD74413R_CHANNELS(current_output),
+ 	[CH_FUNC_VOLTAGE_INPUT] = AD74413R_CHANNELS(voltage_input),
+ 	[CH_FUNC_CURRENT_INPUT_EXT_POWER] = AD74413R_CHANNELS(current_input),
+-	[CH_FUNC_CURRENT_INPUT_LOOP_POWER] = AD74413R_CHANNELS(current_input),
++	[CH_FUNC_CURRENT_INPUT_LOOP_POWER] = AD74413R_CHANNELS(current_input_loop),
+ 	[CH_FUNC_RESISTANCE_INPUT] = AD74413R_CHANNELS(resistance_input),
+ 	[CH_FUNC_DIGITAL_INPUT_LOGIC] = AD74413R_CHANNELS(digital_input),
+ 	[CH_FUNC_DIGITAL_INPUT_LOOP_POWER] = AD74413R_CHANNELS(digital_input),
+-- 
+2.37.2
 
