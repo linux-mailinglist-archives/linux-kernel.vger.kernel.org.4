@@ -2,159 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE8A6A69FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FAA6A69FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 10:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjCAJoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 04:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S229618AbjCAJqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 04:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjCAJoX (ORCPT
+        with ESMTP id S229547AbjCAJqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 04:44:23 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F62710A94
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:44:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677663862; x=1709199862;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=7nWm1f6bPfOKsLZiND0bxe7rNCn2HYYOED5hRyMYTto=;
-  b=amgjS4bBk0UYZtL8hlgD2gDKZTDYMzq+RyQRqXOxMz/qJaOTJ3YOBHrk
-   fxxXtmDsvpixhtARFm2BiEZb0MKRb9ePEb4mK4UiW7+2Em1kJ09mg6q9/
-   ss1poHogpKiuoXc3XI1IIWATyaUPkRbh1TYVr8vLaIyhKayTpLkDmApkr
-   D3j5GMNRv8AvVYKlDod90tEApnJFKzu5dYQoWWwzSdfLhNzWFcIRXQy2R
-   e5BYmxhB0hbljq7jhuIlNBhHGx0PiSyrYAAAnXqzzR8ASEJ36nja+HAhC
-   H1i/TwDc1MTUjPVE4KcAx26GVDaFgugrvLFTpYRur1dKjmkgzGuiZ0jz/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="322627866"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="322627866"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 01:44:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="624419635"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="624419635"
-Received: from dsvarnas-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.46.249])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 01:44:10 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Siddh Raman Pant <code@siddh.me>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Suraj Upadhyay <usuraj35@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH v8 1/8] Revert "drm: mipi-dsi: Convert logging to drm_*
- functions."
-In-Reply-To: <e427dcb5cff953ace36df3225b8444da5cd83f8b.1677574322.git.code@siddh.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <cover.1677574322.git.code@siddh.me>
- <e427dcb5cff953ace36df3225b8444da5cd83f8b.1677574322.git.code@siddh.me>
-Date:   Wed, 01 Mar 2023 11:44:08 +0200
-Message-ID: <87edq8x0uv.fsf@intel.com>
+        Wed, 1 Mar 2023 04:46:19 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDD5392A0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 01:46:18 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id g21-20020a6be615000000b0074cb292f57dso8111045ioh.17
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 01:46:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/QrQUf6ej2wz53TIG3vIEKOpH2aHZ+BAGa988Q8VvIA=;
+        b=abfMD65dnG1fVayB1AqPvB4ixa6BjN3eA3cJhvwEEFSgYAcRLrys8VO3rMrAvprGvY
+         RoCAqr6vPCh7Do8TJph6V7uzd24jbiSz/b7CeW/HgxIWp1lcZA2vsoogRrPtshB/WffU
+         9VOboTotBm1ZSUgssDkcb125z7zmfBiRPruVBO5cJgskyd1qr8RC6i+mh40jMAQNmd6h
+         W1yCypcG38wsS7qs/2EUTyJ2xjZHZ9s4EN1Ccj5wIJENLQgevfzeO6hd4SMVb5v8PlTU
+         D4DG1PCpNNkFnJLchiEigYFiVlaX8ljYY9zw/CTVSTjQb6YASCawq/1zrJTML/pRK6av
+         +qMQ==
+X-Gm-Message-State: AO0yUKWHOFvWBWKlnVwTFX95Bdpi+1lTAUFoqYzQWKvbKiQSzhFbsltB
+        ydc2/7RIFIOMZ7tlwwyDcPgtXYDJwgtD68uBOWs5TfRHG6jX
+X-Google-Smtp-Source: AK7set8D145GSkzva4l9km20SwPR26iKGqrzXKn8D9F8M6Ur/iyipDU3jUtYVBIbT7RpC3k8f7l1Ef5rNi8gAgrBYxR5FJhQp1H9
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:dc09:0:b0:745:a722:4a15 with SMTP id
+ s9-20020a6bdc09000000b00745a7224a15mr2795120ioc.2.1677663978072; Wed, 01 Mar
+ 2023 01:46:18 -0800 (PST)
+Date:   Wed, 01 Mar 2023 01:46:18 -0800
+In-Reply-To: <20230301025550.2322-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000077347205f5d3954b@google.com>
+Subject: Re: [syzbot] [ext4?] possible deadlock in jbd2_log_wait_commit
+From:   syzbot <syzbot+9d16c39efb5fade84574@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023, Siddh Raman Pant <code@siddh.me> wrote:
-> This reverts commit 1040e424353f5f4d39f6f3aa8723eb3bd6ea6446.
->
-> It used an incorrect way to use drm_* functions. Only drm_device ptrs
-> should be passed, but the mentioned commit passed mipi_dsi_host ptr.
-> It worked by accident due to macro magic.
->
-> Reported-by: Jani Nikula <jani.nikula@linux.intel.com>
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+Hello,
 
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> ---
->  drivers/gpu/drm/drm_mipi_dsi.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
-> index 4bc15fbd009d..398fac95dfc0 100644
-> --- a/drivers/gpu/drm/drm_mipi_dsi.c
-> +++ b/drivers/gpu/drm/drm_mipi_dsi.c
-> @@ -33,7 +33,6 @@
->  
->  #include <drm/display/drm_dsc.h>
->  #include <drm/drm_mipi_dsi.h>
-> -#include <drm/drm_print.h>
->  
->  #include <video/mipi_display.h>
->  
-> @@ -156,18 +155,19 @@ static int mipi_dsi_device_add(struct mipi_dsi_device *dsi)
->  static struct mipi_dsi_device *
->  of_mipi_dsi_device_add(struct mipi_dsi_host *host, struct device_node *node)
->  {
-> +	struct device *dev = host->dev;
->  	struct mipi_dsi_device_info info = { };
->  	int ret;
->  	u32 reg;
->  
->  	if (of_modalias_node(node, info.type, sizeof(info.type)) < 0) {
-> -		drm_err(host, "modalias failure on %pOF\n", node);
-> +		dev_err(dev, "modalias failure on %pOF\n", node);
->  		return ERR_PTR(-EINVAL);
->  	}
->  
->  	ret = of_property_read_u32(node, "reg", &reg);
->  	if (ret) {
-> -		drm_err(host, "device node %pOF has no valid reg property: %d\n",
-> +		dev_err(dev, "device node %pOF has no valid reg property: %d\n",
->  			node, ret);
->  		return ERR_PTR(-EINVAL);
->  	}
-> @@ -202,21 +202,22 @@ mipi_dsi_device_register_full(struct mipi_dsi_host *host,
->  			      const struct mipi_dsi_device_info *info)
->  {
->  	struct mipi_dsi_device *dsi;
-> +	struct device *dev = host->dev;
->  	int ret;
->  
->  	if (!info) {
-> -		drm_err(host, "invalid mipi_dsi_device_info pointer\n");
-> +		dev_err(dev, "invalid mipi_dsi_device_info pointer\n");
->  		return ERR_PTR(-EINVAL);
->  	}
->  
->  	if (info->channel > 3) {
-> -		drm_err(host, "invalid virtual channel: %u\n", info->channel);
-> +		dev_err(dev, "invalid virtual channel: %u\n", info->channel);
->  		return ERR_PTR(-EINVAL);
->  	}
->  
->  	dsi = mipi_dsi_device_alloc(host);
->  	if (IS_ERR(dsi)) {
-> -		drm_err(host, "failed to allocate DSI device %ld\n",
-> +		dev_err(dev, "failed to allocate DSI device %ld\n",
->  			PTR_ERR(dsi));
->  		return dsi;
->  	}
-> @@ -227,7 +228,7 @@ mipi_dsi_device_register_full(struct mipi_dsi_host *host,
->  
->  	ret = mipi_dsi_device_add(dsi);
->  	if (ret) {
-> -		drm_err(host, "failed to add DSI device %d\n", ret);
-> +		dev_err(dev, "failed to add DSI device %d\n", ret);
->  		kfree(dsi);
->  		return ERR_PTR(ret);
->  	}
+Reported-and-tested-by: syzbot+9d16c39efb5fade84574@syzkaller.appspotmail.com
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Tested on:
+
+commit:         e492250d Merge tag 'pwm/for-6.3-rc1' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=10692674c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f763d89e26d3d4c4
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d16c39efb5fade84574
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=140fceb0c80000
+
+Note: testing is done by a robot and is best-effort only.
