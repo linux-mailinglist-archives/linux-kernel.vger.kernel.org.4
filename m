@@ -2,133 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2F36A725E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C09D26A7260
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjCARxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S229915AbjCARxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjCARxB (ORCPT
+        with ESMTP id S229823AbjCARxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:53:01 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2046.outbound.protection.outlook.com [40.107.102.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B4B2128;
-        Wed,  1 Mar 2023 09:52:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bM3do3m2hv73+/K4OEnYOlGKoMCquTqFRF9n8q4bJRml4hDTFF+6lYwavLJW/Lzf2bnn3mFEh19Z8Odph7fetsupUJ15A2Acx97JJdsYGaYLKEm2d537k3H25+atMssPQG5Ik9KcsxFuynOET7L8yFbFnXbJtXZ74wDfshexBfLhtHpO11waFAxv7IPBWrjDv7epkskDJJk2tTkDrecKLrMgpp3oVlwDDrpdbz6bH0ImkOfyWyAOnENZIfQCVh+or08YtdcDGKZJEfqNImrxtebCuvkyE979q7EnQpI6m9Z//aJ2mEWG2cHmE+wd8KgKy7XzkUNL1s9QpmSc3qk3PA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CdlBtt0WHQuhSrm1bxrrYQpP1CvyNck9uDPNo5Kj818=;
- b=Rga4CSgoJbva6TrgUyfvlaLD6c+G83jyBKA4sFjIsHZuS4BDqlFfTUKQLmND3YKlA/t0nZbHe/G/xdr3grjRKKnEtKSn0+Tc+NUSPKgmmkvShYQAH86r6pdZaZp/SnmcS6mXNeifhI1i79DDgtJKe6X0p5pxzrWloKvsAM9c+7vJDFkIrpZ8j6OiV06SIQOV2wZMIKw1ZhfhIp09Kn39yqqOdQJnKobRko/mAQp958GKh/u4QVEB76rU1DLl1c3P35OBKm07wsi69CKrvW9zlnc3jTuw3bGt+6jDHFUZQ4zgL/pbxAexsa+19lz3dBzEbsn85V2KqxtMFdlnuR5uLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CdlBtt0WHQuhSrm1bxrrYQpP1CvyNck9uDPNo5Kj818=;
- b=jur6mZgaswk6ihVzbODJDiATtC3Y1oKSMxgUkRBBTtieMpxnIH3SROfU7Da2vhp/jLg9YAGOOR0lyxhS6FHpMHlJvhjwvIXPMup/1ctKeNaYrcG+3/laISmvA6W9+DsEjwCglfG4952eMcT/jJK7rZbgJ24tgIOjsTK83wtrVBI=
-Received: from BN8PR15CA0058.namprd15.prod.outlook.com (2603:10b6:408:80::35)
- by DM6PR12MB4418.namprd12.prod.outlook.com (2603:10b6:5:28e::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Wed, 1 Mar
- 2023 17:52:49 +0000
-Received: from BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:80:cafe::17) by BN8PR15CA0058.outlook.office365.com
- (2603:10b6:408:80::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Wed, 1 Mar 2023 17:52:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT035.mail.protection.outlook.com (10.13.177.116) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.18 via Frontend Transport; Wed, 1 Mar 2023 17:52:49 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
- 2023 11:52:48 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
- 2023 09:52:47 -0800
-Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Wed, 1 Mar 2023 11:52:44 -0600
-From:   Srinivas Neeli <srinivas.neeli@amd.com>
-To:     <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@amd.com>,
-        <neelisrinivas18@gmail.com>
-CC:     <wim@linux-watchdog.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>, <git@amd.com>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH V2 4/4] MAINTAINERS: Add support for Xilinx versal watchdog
-Date:   Wed, 1 Mar 2023 23:22:29 +0530
-Message-ID: <20230301175229.342004-5-srinivas.neeli@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230301175229.342004-1-srinivas.neeli@amd.com>
-References: <20230301175229.342004-1-srinivas.neeli@amd.com>
+        Wed, 1 Mar 2023 12:53:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF6E497D1
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 09:52:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677693163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MsKaRV2UPDWx2k2al9TAoU24E6i1+owMfMqzm296OnU=;
+        b=HtBjhuyunDevA1kobcQ/aiWbRFFUWE7LhEeru0KfLTN0A9rbNm1mhl1+wg1o2DgE5awRFS
+        ZPFUjdtHDGm/W9Rzg4LVKSGgqDe5B1rd1BvKCRQb7H4ToARGwhXiYNNsGxwjBH6n9qmbWr
+        RkTtbtUjCHb0ryT5SLuVVlQeJfr0Ie0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-621-RuG-eKHeMaqJU6Pnk-XNHQ-1; Wed, 01 Mar 2023 12:52:41 -0500
+X-MC-Unique: RuG-eKHeMaqJU6Pnk-XNHQ-1
+Received: by mail-ed1-f72.google.com with SMTP id p36-20020a056402502400b004bb926a3d54so5080862eda.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 09:52:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MsKaRV2UPDWx2k2al9TAoU24E6i1+owMfMqzm296OnU=;
+        b=m4P88j2EukJ6a/c7t6MEvujNtJBpIB/YXSvq9sVfesb0yKmsEHlKy0GnyhDRr7uZUn
+         cpQuzLZg7hCvZpjZauO6+jOgAGAXAfVx6KR4/hxqJuKNhY6q9wEM9fZ1STpXu0J4q9oa
+         4/HFDDU2ghbCebitrI9DgKIJ5S+mUI928rKN6rZoC6P+Cw9/2Vbiad3G4SwhpLA/BFu6
+         C7ZarBhPjdR0YrkjBDEmckhJkbRVeTaQB/PJs28cA4v0TFBW6FYvhmWeZrfzqOjM65n5
+         fCw5V+JV9j8GiBLIoKwjCvPyazQnltagae722JSavA2z4jx0naPU2BqKLObaOX20NObV
+         9WKQ==
+X-Gm-Message-State: AO0yUKVsVGZJWnqdj+XDivD7W4ElZsG2HlhqqKQcVvZXm7/TOeF6Fi6u
+        JrhrHX4vBSRLdXiHAGUbQmlbOlKiuFVwA30yYBkYIEBuavVXLVcp9JwXKQLWIJuSyxuy0szb880
+        k5sOYqp1pYGcrtjYpzUc/VRo6
+X-Received: by 2002:a17:906:4e4d:b0:88f:13f0:4565 with SMTP id g13-20020a1709064e4d00b0088f13f04565mr6276468ejw.69.1677693160747;
+        Wed, 01 Mar 2023 09:52:40 -0800 (PST)
+X-Google-Smtp-Source: AK7set+GCeQl5p8Xm/KzbL2VBHC/SNevHflvEi0Rs1DGggBZ+oLYige539zOJVI+NB0PHroq5kVelg==
+X-Received: by 2002:a17:906:4e4d:b0:88f:13f0:4565 with SMTP id g13-20020a1709064e4d00b0088f13f04565mr6276449ejw.69.1677693160427;
+        Wed, 01 Mar 2023 09:52:40 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id gg4-20020a170906e28400b008b1779ba3c1sm6060831ejb.115.2023.03.01.09.52.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 09:52:39 -0800 (PST)
+Message-ID: <423ab967-502d-7edc-81f6-019ed2ca6d5e@redhat.com>
+Date:   Wed, 1 Mar 2023 18:52:38 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT035:EE_|DM6PR12MB4418:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e81c67e-1519-4f5f-f447-08db1a7dc5c4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S9o3z0x8VrB5fGxVlEsfytV9vrAPcr/Nn3t8yxJoX4M8dUi3eKrvVKyXwY26/svNlOiSygkqfifEWseYtMFxmZzJo06F33SX9XhUclLYocFp0SEvIcFkc9Wz2b6czGSk/pxuh/fNllnowZGfpGzPZBIFMvKZ+rJ28tbjZnU5BNXraGRKk4nqttpDpzNSTjzN9790EoBDc69AxogE8l8j8SaT9wijKJfcoNXeyqFLNTClk2bF1gxymM1W7nmRkOGJH0SKp9KCLcNVSFkw65dHSG+Qu7lo8VOIQUTO7WZLoqHJa5jOU3oKaEB2kRJV1q1RKzyCaG8G5Kk+vahEFFwb754FvQXfrHWYFuFFm0ULFp6Rxb/xl0R7sAH0qkJdd9kiKpTlXSo3mfRlnnnRNUoOKcCipuOiXK0KrbfJsRZb2DV25RlcaIK/pok7IT97CP3M6kcKOqVh8tWJvZESRPSOqJt41r5Gh3icR+6Tw2vNLWG2eBcpPJyJ6NSpfycOXO0YDd6Pk87GCBw5bVQ8z36pRfR7tvNd9LsRUdgYFw9pXKvncYavfZ7pbQMn7942lTJqR+xElSvwUSIQZ0+uLWIOUqOBO2BC6FySQ2+7Gg/tKONMOyIZUPtO4QjozBO3SSVJ+Jgt4rq0gTUHfPqoPai0nyWABk6UqmtNYGIQwb+Avt2sda1AvZYE+b0dWImBw57O28PxHRTBunFXysUqCfmOB+dqWXyfrH8DaLf6nBjDY3o=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199018)(36840700001)(46966006)(40470700004)(82310400005)(81166007)(82740400003)(40480700001)(70206006)(70586007)(36860700001)(6666004)(1076003)(36756003)(41300700001)(8936002)(356005)(40460700003)(2616005)(336012)(316002)(47076005)(426003)(478600001)(8676002)(110136005)(4326008)(54906003)(26005)(186003)(86362001)(5660300002)(7416002)(4744005)(2906002)(44832011)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:52:49.3841
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e81c67e-1519-4f5f-f447-08db1a7dc5c4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4418
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 0/2] Fix "Input: i8042 - add TUXEDO devices to i8042
+ quirk tables for partial fix"
+Content-Language: en-US, nl
+To:     Werner Sembach <wse@tuxedocomputers.com>,
+        dmitry.torokhov@gmail.com, swboyd@chromium.org,
+        gregkh@linuxfoundation.org, mkorpershoek@baylibre.com,
+        chenhuacai@kernel.org, wsa+renesas@sang-engineering.com,
+        tiwai@suse.de, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230227185907.569154-1-wse@tuxedocomputers.com>
+ <192c2eab-3b57-8a09-dfd7-5720b2b419b8@tuxedocomputers.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <192c2eab-3b57-8a09-dfd7-5720b2b419b8@tuxedocomputers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added entry for Xilinx versal watchdog driver.
+Hi,
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+On 3/1/23 17:57, Werner Sembach wrote:
+> 
+> Am 27.02.23 um 19:59 schrieb Werner Sembach:
+>> This is a continuation of
+>> https://lore.kernel.org/linux-input/20220708161005.1251929-3-wse@tuxedocomputers.com/
+>>
+>> That fix did fix the keyboard not responding at all sometimes after resume,
+>> but at the price of it being laggy for some time after boot. Additionally
+>> setting atkbd.reset removes that lag.
+>>
+>> This patch comes in 2 parts: The first one adds a quirk to atkbd to set
+>> atkbd.reset and the second one then applies that and the i8042 quirks to
+>> the affected devices.
+>>
+>>
+> Somehow, for my testing last week these patches seemed work, but now i still see occasional laggy keyboard after boot. So sadly the atkbd_reset quirk didn't fix the issue after all.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7731e3ccac0e..77a8cff9ef03 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22987,8 +22987,10 @@ M:	Srinivas Neeli <srinivas.neeli@amd.com>
- R:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
- R:	Michal Simek <michal.simek@amd.com>
- S:	Maintained
-+F:	Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
- F:	Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
- F:	drivers/watchdog/of_xilinx_wdt.c
-+F:	drivers/watchdog/xilinx_wwdt.c
- 
- XILINX XDMA DRIVER
- M:	Lizhi Hou <lizhi.hou@amd.com>
--- 
-2.25.1
+Ok, well I guess that also resolves the discussion about trying to avoid
+the duplicate DMI table entries.
+
+FWIW I did not realize that the other quirk was in another module and
+I don't have a good answer how to solve this in a way that avoids
+adding the DMI matches twice.
+
+Regards,
+
+Hans
 
