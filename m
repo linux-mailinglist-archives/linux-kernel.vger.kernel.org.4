@@ -2,90 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5626A709F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE526A70A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 17:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCAQOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 11:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S229740AbjCAQQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 11:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCAQOL (ORCPT
+        with ESMTP id S229451AbjCAQQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 11:14:11 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8804338B5B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 08:14:09 -0800 (PST)
-Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A9EE9660035A;
-        Wed,  1 Mar 2023 16:14:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677687247;
-        bh=ibq8tG/Rn3mz7zgxSTf/PU7OalowbC7NBcxP0K+8cTk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UTZoi4Wn4gduV3XJn/CRClcWktCwLpf9/LWFBW6gQoGKffROWQTOYLkfIC/YCioFo
-         hfGlfzao1evfor/9EO/Fb9d9av3T1wLNfZj67A2F4613dHrpd4TRr+jPtmPxSW9uci
-         xqaauJsPz/4EfIOpyd32i+AJBiDNv60KA4YT95Tf0ZYj2uc3M9BQisY+DbAG6JvOjH
-         e5joL64P/qtabF3i9i6Z12GJKs1hK08VFp14DlZRT25uYJMH9SpKpw66/F+qm9/qqY
-         JNyZSPyxpl5YMCXIgxnyl7tEeCJIZKKDji0KdfI4d393CedAd+p2mG1O7LP364AQ8J
-         HVLqNF7wklocw==
-Message-ID: <099945bb-8da6-7a47-5dff-6a1a457fbf7d@collabora.com>
-Date:   Wed, 1 Mar 2023 16:14:05 +0000
+        Wed, 1 Mar 2023 11:16:09 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC8B3E08D;
+        Wed,  1 Mar 2023 08:16:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677687366; x=1709223366;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1VIcxlNqALCE6K076ogEvaaxbdQU5+tCvUM4TI9dvy0=;
+  b=ZPg5gHIgj79GGF8IRo1tX0Ox2n6RKvpufBC/+hGXZ5+wggI82A5msyUQ
+   Lmsew0eQv3mxsrraRoJPUoQp0JSr45/81/TsliGTjMMwIonBRE80bt+pn
+   vsLwqP7Fnfo4EEcL/L6tv6ow+q1n5FNYch9gfqPyp6hAhtuLbmqwD+MPl
+   Ryo+gxvjxLPZXEdjdAGNWotrP+89E3IZmIY44iKRvkbiL0MnwaM2zOU6c
+   l2VcZZYl55k9V6kZeKElCnFyAn6QsfHbx2/6br+ffxCgZRtuoGfLXEUfQ
+   LnBjYE7xgbq8GDNBdvrFUGeNZmM6ki98DTlqyDGUeyeLPp0R4cpGP4EuR
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322714281"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="322714281"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 08:15:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="817622794"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="817622794"
+Received: from asaha3-mobl1.amr.corp.intel.com (HELO [10.251.12.67]) ([10.251.12.67])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 08:15:47 -0800
+Message-ID: <140c3675-376a-be37-56da-878b08df5507@intel.com>
+Date:   Wed, 1 Mar 2023 08:15:46 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] ASoC: cs35l41: Steam Deck Shared boost properties
- quirk
-To:     Mark Brown <broonie@kernel.org>
-Cc:     David Rhodes <david.rhodes@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai --cc=alsa-devel @ alsa-project . org" <tiwai@suse.com>,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230301124447.17672-1-lucas.tanure@collabora.com>
- <Y/9mT2ZVzf/5o4QV@sirena.org.uk>
+ Thunderbird/102.7.1
+Subject: Re: [PATCH RFC v8 15/56] x86/sev: Invalidate pages from the direct
+ map when adding them to the RMP table
 Content-Language: en-US
-From:   Lucas Tanure <lucas.tanure@collabora.com>
-In-Reply-To: <Y/9mT2ZVzf/5o4QV@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
+Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, Brijesh Singh <brijesh.singh@amd.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-16-michael.roth@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230220183847.59159-16-michael.roth@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-03-2023 14:50, Mark Brown wrote:
-> On Wed, Mar 01, 2023 at 12:44:47PM +0000, Lucas Tanure wrote:
->> Add support for Steam Deck bios old properties. If a Steam deck didn't
->> upgrade the BIOS, the driver should be able to handle the previous
->> properties for shared boost types.
+On 2/20/23 10:38, Michael Roth wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
 > 
-> This doesn't build:
+> The integrity guarantee of SEV-SNP is enforced through the RMP table.
+> The RMP is used with standard x86 and IOMMU page tables to enforce
+> memory restrictions and page access rights. The RMP check is enforced as
+> soon as SEV-SNP is enabled globally in the system. When hardware
+> encounters an RMP-check failure, it raises a page-fault exception.
 > 
-> /build/stage/linux/sound/soc/codecs/cs35l41.c: In function ‘cs35l41_handle_pdata’:
-> /build/stage/linux/sound/soc/codecs/cs35l41.c:1041:36: error: ‘CS35L41_SHD_BOOST_ACTV’ undeclared (first use in this function); did you mean ‘CS35L41_EXT_BOOST’?
->   1041 |                 hw_cfg->bst_type = CS35L41_SHD_BOOST_ACTV;
->        |                                    ^~~~~~~~~~~~~~~~~~~~~~
->        |                                    CS35L41_EXT_BOOST
-> /build/stage/linux/sound/soc/codecs/cs35l41.c:1041:36: note: each undeclared identifier is reported only once for each function it appears in
-> /build/stage/linux/sound/soc/codecs/cs35l41.c:1043:36: error: ‘CS35L41_SHD_BOOST_PASS’ undeclared (first use in this function); did you mean ‘CS35L41_EXT_BOOST’?
->   1043 |                 hw_cfg->bst_type = CS35L41_SHD_BOOST_PASS;
->        |                                    ^~~~~~~~~~~~~~~~~~~~~~
->        |                                    CS35L41_EXT_BOOST
-> 
-My mistake, it seems I checkout the wrong tree here with the Shared 
-boost patches already merged.
-This patches needed the previous Shared boost series merged.
-I will wait for that patches series to be merged.
-Sorry About that.
+> The rmp_make_private() and rmp_make_shared() helpers are used to add
+> or remove the pages from the RMP table. Improve the rmp_make_private()
+> to invalidate state so that pages cannot be used in the direct-map after
+> they are added the RMP table, and restored to their default valid
+> permission after the pages are removed from the RMP table.
+
+This is a purely "what" changelog.  It doesn't explain the "why" at all.
+
+Could you please elaborate on why this unmapping operation is necessary?
