@@ -2,419 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A696A71B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252F76A71BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 18:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjCARAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 12:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S229896AbjCARCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 12:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjCARAF (ORCPT
+        with ESMTP id S229600AbjCARCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:00:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24A9298FB
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 09:00:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99BE8B81035
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:00:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B51A5C433D2;
-        Wed,  1 Mar 2023 16:59:58 +0000 (UTC)
-Date:   Wed, 1 Mar 2023 16:59:55 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     =?utf-8?B?6KKB5biFKFNodWFpIFl1YW4p?= <yuanshuai@zeku.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        =?utf-8?B?5qyn6Ziz54Kc6ZKKKFdlaXpoYW8gT3V5YW5nKQ==?= 
-        <ouyangweizhao@zeku.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Weizhao Ouyang <o451686892@gmail.com>,
-        =?utf-8?B?5Lu756uL6bmPKFBlbmcgUmVuKQ==?= <renlipeng@zeku.com>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [PATCH v2] kasan: fix deadlock in start_report()
-Message-ID: <Y/+Ei5boQh+TFj7Q@arm.com>
-References: <20230209031159.2337445-1-ouyangweizhao@zeku.com>
- <CACT4Y+Zrz4KOU82jjEperYOM0sEp6TCmgse4XVMPkwAkS+dXrA@mail.gmail.com>
- <93b94f59016145adbb1e01311a1103f8@zeku.com>
- <CACT4Y+a=BaMNUf=_suQ5or9=ZksX2ht9gX8=XBSDEgHogyy3mg@mail.gmail.com>
- <CA+fCnZf3k-rsaOeti0Q7rqkmvsqDb2XxgxOq6V5Gqp6FGLH7Yg@mail.gmail.com>
- <b058a424e46d4f94a1f2fdc61292606b@zeku.com>
- <2b57491a9fab4ce9a643bd0922e03e73@zeku.com>
- <CA+fCnZcirNwdA=oaLLiDN+NxBPNcA75agPV1sRsKuZ0Wz6w_hQ@mail.gmail.com>
- <Y/4nJEHeUAEBsj6y@arm.com>
- <CA+fCnZcFaOAGYic-x7848TMom2Rt5-Bm5SpYd-uxdT3im8PHvg@mail.gmail.com>
+        Wed, 1 Mar 2023 12:02:31 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2055.outbound.protection.outlook.com [40.107.20.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB58443475;
+        Wed,  1 Mar 2023 09:02:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ADkC6sQYqJC8t2qa6pZp2SMSYg6YAm/6VFvb3JDbBz7YcMh+K2hF08/4Hgdtiou1GIqs0rtFDivi9CJwGPXVha+orhJkmB2ZNeV1dOTQRr5yoQjLkZ2YLU+9lrHbt6tRtN6+5FT3sILkaPaRRKjzMiTafWimphKM81iNbw0CULAMdsK6lFeMYFbcpT02852bVRBnmoFKysLT7JszkyThCs6oQ6VwZM8PyscqGv/SiXY7WmOnaF5yTiRgYBE0xE/+b5MRDGWeP3Ch5c0sYMwrazsSqSrPndAFp1n6j15LzoOKTQ1gqfwjhkJE50wj1Baw6GHhGSWS36jQoYIfM3xGXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0ZLt8ZpBAr6pucUnfNdW/90kw8QBzpHIM1LAHwNDSNk=;
+ b=Lg+WymewhrRZxkrgbACcKVhxCDIOP9lGoL2a2g3xPw+w5lkgDIPFgQl6tqCcSl5kpxRD92p93PwqMotwQtCyOWfKBoDaGlbig1ernxxDMlAnga86R7CXVHnpgIXXYkXA2DhI1UaG0el472E+ammy4rB46cE28ux9u98uQQCauu9qTpguLDYC6fDuCuXKKxTM5yfYF36Xb/ST9YamT2zzEO2aWqJE3+BBoJmBHLDkaOAx/x/K04kgglV806W2CK2/ElNuehog65hSQLDxaZvXCTBLzXYiiXsmat0sxjYVgh7TFkzLZieX6VenvliiXsK/g5AZeHWPedO8Si6h7wD38w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.75) smtp.rcpttodomain=ucw.cz smtp.mailfrom=siemens.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=siemens.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0ZLt8ZpBAr6pucUnfNdW/90kw8QBzpHIM1LAHwNDSNk=;
+ b=OCekZSniyVc2C1Q8pp3GJt97MzY3+vBtepm1cUuzEwDrVYP8srdd5g9k24PBY2HfW4Z/9QlUxtkggBLJaBJlR0EZh2ckqD0X4mUKP/jYRPjUZR/7YVbZz0NPBwFzarAqRqUJ3LushTYhEFFOro4GQonHU0ceh0KMbfH0r9fYTQu6W5gqNXOJRUKZhb2yNLifkrdcg0hSI2uxMTESpOWM8fmhQXu9yBmiAFuPvD/uK7Lqc+LW+Q+s3vci3D3Bd99nfYxEHzlVbwX+ViKijki025D3g7b+ISVndv2Sc0myWOmMTf4fyOoDSKz62ptWNOpk6VkTQZGwc0lEDcdg/G1kXQ==
+Received: from DUZPR01CA0032.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:468::11) by AS8PR10MB6795.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5bb::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17; Wed, 1 Mar
+ 2023 17:02:26 +0000
+Received: from DB5EUR01FT009.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:468:cafe::b2) by DUZPR01CA0032.outlook.office365.com
+ (2603:10a6:10:468::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
+ Transport; Wed, 1 Mar 2023 17:02:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.75)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.75; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.75) by
+ DB5EUR01FT009.mail.protection.outlook.com (10.152.4.124) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.18 via Frontend Transport; Wed, 1 Mar 2023 17:02:26 +0000
+Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
+ DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 1 Mar 2023 18:02:25 +0100
+Received: from md1za8fc.ad001.siemens.net (139.25.0.120) by
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.21; Wed, 1 Mar 2023 18:02:25 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>
+CC:     Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v2 0/3] leds: simatic-ipc-leds-gpio: split up
+Date:   Wed, 1 Mar 2023 18:02:12 +0100
+Message-ID: <20230301170215.23382-1-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+fCnZcFaOAGYic-x7848TMom2Rt5-Bm5SpYd-uxdT3im8PHvg@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [139.25.0.120]
+X-ClientProxiedBy: DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) To
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5EUR01FT009:EE_|AS8PR10MB6795:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6668f82b-427f-495f-fca3-08db1a76bbea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IQM1tMAOLRrQEKS1lmMlIFRDDK8o7S59ypCYdpEmsJUlkGl1sWJKtzB0PR7w9gSKTN/ZMir3EVh+HUugLqiVO53YM6Z9djIB1Pf728uKHSajQKItLC0IvI2eMWJuxJnaf7a87bH8gIH3ZW8tFeygqoZFFrZB6piqUYwOFikKSJkqNJvLGyVpE2aG0hSPWfas+EH0toKrSgFNXl4bBVvchPh5nFR0INY1P71V8rv6xSwgkYstx4CBgnlIOkE65RxyRXQnVaQgvBoLwhsRMfMT1rrolscQvV2q71lCX9GPg6if1bdfIwdAFavYHU4XRJgOKnThsG8cAErjwjPNTF8O8jzepXZVbMB8PAXGEfZ3qpgjQTBEYfx2GGiEQjHRN+xH504saYHNw6D+YEE4JrGYaVpSRDqOU8H7b1a5WVUeOa758Q32LjpVxF+pgDPz0GleGUadzjqBukb7bH6EIp1F3d+LUz0WxnP7pr3++NLMxLZXJSZ/miY4tV545gS9wWqPHp7G4IcZvW7VYkhjSL5TDxR9MDTBD0JC9GsZjj2hZNabhlsSXF72Vxt5lZo9dNRJPb6+/nptIvcOKfhoINjZR2k1olFpcZ7aTEA9FumdsjQMxw3A/n5feGYvs+3hrfBZARkp3mlrpaeA4a6BpKAKBj6ggP5J+NEIUkiXYU0IRw6AZU/8K8MKZHvjrdvmAmq6fOMW1j5UBSy9QUYqK5mq2xTKeqT9YYwUUUY81AfzePE=
+X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(136003)(396003)(451199018)(40470700004)(36840700001)(46966006)(316002)(86362001)(41300700001)(40460700003)(70586007)(107886003)(6666004)(70206006)(2616005)(8676002)(4326008)(336012)(82740400003)(82960400001)(956004)(47076005)(81166007)(5660300002)(36860700001)(186003)(16526019)(478600001)(36756003)(44832011)(2906002)(82310400005)(66899018)(110136005)(1076003)(26005)(356005)(8936002)(83380400001)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:02:26.3501
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6668f82b-427f-495f-fca3-08db1a76bbea
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT009.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB6795
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 10:50:46PM +0100, Andrey Konovalov wrote:
-> On Tue, Feb 28, 2023 at 5:09 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Mon, Feb 27, 2023 at 03:13:45AM +0100, Andrey Konovalov wrote:
-> > > +Catalin, would it be acceptable to implement a routine that disables
-> > > in-kernel MTE tag checking (until the next
-> > > mte_enable_kernel_sync/async/asymm call)? In a similar way an MTE
-> > > fault does this, but without the fault itself. I.e., expose the part
-> > > of do_tag_recovery functionality without report_tag_fault?
-> >
-> > I don't think we ever re-enable MTE after do_tag_recovery(). The
-> > mte_enable_kernel_*() are called at boot. We do call
-> > kasan_enable_tagging() explicitly in the kunit tests but that's a
-> > controlled fault environment.
-> 
-> Right, but here we don't want to re-enable MTE after a fault, we want
-> to suppress faults when printing an error report.
-> 
-> > IIUC, the problem is that the kernel already got an MTE fault, so at
-> > that point the error is not really recoverable.
-> 
-> No, the problem is with the following sequence of events:
-> 
-> 1. KASAN detects a memory corruption and starts printing a report
-> _without getting an MTE fault_. This happens when e.g. KASAN sees a
-> free of an invalid address.
-> 
-> 2. During error reporting, an MTE fault is triggered by the error
-> reporting code. E.g. while collecting information about the accessed
-> slab object.
-> 
-> 3. KASAN tries to print another report while printing a report and
-> goes into a deadlock.
-> 
-> If we could avoid MTE faults being triggered during error reporting,
-> this would solve the problem.
+changes since v1:
+ - move from header- to -core.c-based implementation
+ - style changes from review
 
-Ah, I get it now. So we just want to avoid triggering a benign MTE
-fault.
+This series mainly splits the one GPIO driver into two. The split allows
+to clearly model runtime and compile time dependencies on the GPIO chip
+drivers.
 
-> > If we want to avoid a
-> > fault in the first place, we could do something like
-> > __uaccess_enable_tco() (Vincenzo has some patches to generalise these
-> > routines)
-> 
-> Ah, this looks exactly like what we need. Adding
-> __uaccess_en/disable_tco to kasan_report_invalid_free solves the
-> problem.
-> 
-> Do you think it would be possible to expose these routines to KASAN?
+p1 is kind of not too related to that split but also prepares for more
+GPIO based drivers to come.
 
-Yes. I'm including Vincenzo's patch below (part of fixing some potential
-strscpy() faults with its unaligned accesses eager reading; we'll get to
-posting that eventually). You can add some arch_kasan_enable/disable()
-macros on top and feel free to include the patch below.
+p2 takes the driver we had and puts some of its content into a -core,
+to be used by the two drivers.
 
-Now, I wonder whether we should link those into kasan_disable_current().
-These functions only deal with the depth for KASAN_SW_TAGS but it would
-make sense for KASAN_HW_TAGS to enable tag-check-override so that we
-don't need to bother with a match-all tags on pointer dereferencing.
+p3 deals with more fine-grained configuration posibilities and compile
+time dependencies.
 
-----8<----------------------------
-From 0dcfc84d8b984001219cc3c9eaf698c26286624c Mon Sep 17 00:00:00 2001
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Date: Thu, 13 Oct 2022 07:46:23 +0100
-Subject: [PATCH] arm64: mte: Rename TCO routines
+It is based on
+[PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the GPIO providing driver
 
-The TCO related routines are used in uaccess methods and
-load_unaligned_zeropad() but are unrelated to both even if the naming
-suggest otherwise.
+Henning Schild (3):
+  leds: simatic-ipc-leds-gpio: move two extra gpio pins into another
+    table
+  leds: simatic-ipc-leds-gpio: split up into multiple drivers
+  leds: simatic-ipc-leds-gpio: introduce more Kconfig switches
 
-Improve the readability of the code moving the away from uaccess.h and
-pre-pending them with "mte".
+ drivers/leds/simple/Kconfig                   |  31 +++-
+ drivers/leds/simple/Makefile                  |   5 +-
+ .../simple/simatic-ipc-leds-gpio-apollolake.c |  64 ++++++++
+ .../leds/simple/simatic-ipc-leds-gpio-core.c  | 103 +++++++++++++
+ .../simple/simatic-ipc-leds-gpio-f7188x.c     |  64 ++++++++
+ drivers/leds/simple/simatic-ipc-leds-gpio.c   | 139 ------------------
+ drivers/leds/simple/simatic-ipc-leds-gpio.h   |  22 +++
+ drivers/platform/x86/simatic-ipc.c            |   7 +-
+ 8 files changed, 288 insertions(+), 147 deletions(-)
+ create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio-apollolake.c
+ create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio-core.c
+ create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio-f7188x.c
+ delete mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.c
+ create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.h
 
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
----
- arch/arm64/include/asm/mte-kasan.h      | 81 +++++++++++++++++++++++++
- arch/arm64/include/asm/mte.h            | 12 ----
- arch/arm64/include/asm/uaccess.h        | 66 +++-----------------
- arch/arm64/include/asm/word-at-a-time.h |  4 +-
- 4 files changed, 93 insertions(+), 70 deletions(-)
+-- 
+2.39.2
 
-diff --git a/arch/arm64/include/asm/mte-kasan.h b/arch/arm64/include/asm/mte-kasan.h
-index 9f79425fc65a..598be32ed811 100644
---- a/arch/arm64/include/asm/mte-kasan.h
-+++ b/arch/arm64/include/asm/mte-kasan.h
-@@ -13,8 +13,73 @@
- 
- #include <linux/types.h>
- 
-+#ifdef CONFIG_KASAN_HW_TAGS
-+
-+/* Whether the MTE asynchronous mode is enabled. */
-+DECLARE_STATIC_KEY_FALSE(mte_async_or_asymm_mode);
-+
-+static inline bool system_uses_mte_async_or_asymm_mode(void)
-+{
-+	return static_branch_unlikely(&mte_async_or_asymm_mode);
-+}
-+
-+#else /* CONFIG_KASAN_HW_TAGS */
-+
-+static inline bool system_uses_mte_async_or_asymm_mode(void)
-+{
-+	return false;
-+}
-+
-+#endif /* CONFIG_KASAN_HW_TAGS */
-+
- #ifdef CONFIG_ARM64_MTE
- 
-+/*
-+ * The Tag Check Flag (TCF) mode for MTE is per EL, hence TCF0
-+ * affects EL0 and TCF affects EL1 irrespective of which TTBR is
-+ * used.
-+ * The kernel accesses TTBR0 usually with LDTR/STTR instructions
-+ * when UAO is available, so these would act as EL0 accesses using
-+ * TCF0.
-+ * However futex.h code uses exclusives which would be executed as
-+ * EL1, this can potentially cause a tag check fault even if the
-+ * user disables TCF0.
-+ *
-+ * To address the problem we set the PSTATE.TCO bit in uaccess_enable()
-+ * and reset it in uaccess_disable().
-+ *
-+ * The Tag check override (TCO) bit disables temporarily the tag checking
-+ * preventing the issue.
-+ */
-+static inline void __mte_disable_tco(void)
-+{
-+	asm volatile(ALTERNATIVE("nop", SET_PSTATE_TCO(0),
-+				 ARM64_MTE, CONFIG_KASAN_HW_TAGS));
-+}
-+
-+static inline void __mte_enable_tco(void)
-+{
-+	asm volatile(ALTERNATIVE("nop", SET_PSTATE_TCO(1),
-+				 ARM64_MTE, CONFIG_KASAN_HW_TAGS));
-+}
-+
-+/*
-+ * These functions disable tag checking only if in MTE async mode
-+ * since the sync mode generates exceptions synchronously and the
-+ * nofault or load_unaligned_zeropad can handle them.
-+ */
-+static inline void __mte_disable_tco_async(void)
-+{
-+	if (system_uses_mte_async_or_asymm_mode())
-+		 __mte_disable_tco();
-+}
-+
-+static inline void __mte_enable_tco_async(void)
-+{
-+	if (system_uses_mte_async_or_asymm_mode())
-+		__mte_enable_tco();
-+}
-+
- /*
-  * These functions are meant to be only used from KASAN runtime through
-  * the arch_*() interface defined in asm/memory.h.
-@@ -138,6 +203,22 @@ void mte_enable_kernel_asymm(void);
- 
- #else /* CONFIG_ARM64_MTE */
- 
-+static inline void __mte_disable_tco(void)
-+{
-+}
-+
-+static inline void __mte_enable_tco(void)
-+{
-+}
-+
-+static inline void __mte_disable_tco_async(void)
-+{
-+}
-+
-+static inline void __mte_enable_tco_async(void)
-+{
-+}
-+
- static inline u8 mte_get_ptr_tag(void *ptr)
- {
- 	return 0xFF;
-diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
-index 20dd06d70af5..c028afb1cd0b 100644
---- a/arch/arm64/include/asm/mte.h
-+++ b/arch/arm64/include/asm/mte.h
-@@ -178,14 +178,6 @@ static inline void mte_disable_tco_entry(struct task_struct *task)
- }
- 
- #ifdef CONFIG_KASAN_HW_TAGS
--/* Whether the MTE asynchronous mode is enabled. */
--DECLARE_STATIC_KEY_FALSE(mte_async_or_asymm_mode);
--
--static inline bool system_uses_mte_async_or_asymm_mode(void)
--{
--	return static_branch_unlikely(&mte_async_or_asymm_mode);
--}
--
- void mte_check_tfsr_el1(void);
- 
- static inline void mte_check_tfsr_entry(void)
-@@ -212,10 +204,6 @@ static inline void mte_check_tfsr_exit(void)
- 	mte_check_tfsr_el1();
- }
- #else
--static inline bool system_uses_mte_async_or_asymm_mode(void)
--{
--	return false;
--}
- static inline void mte_check_tfsr_el1(void)
- {
- }
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index 5c7b2f9d5913..057ec1882326 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -136,55 +136,9 @@ static inline void __uaccess_enable_hw_pan(void)
- 			CONFIG_ARM64_PAN));
- }
- 
--/*
-- * The Tag Check Flag (TCF) mode for MTE is per EL, hence TCF0
-- * affects EL0 and TCF affects EL1 irrespective of which TTBR is
-- * used.
-- * The kernel accesses TTBR0 usually with LDTR/STTR instructions
-- * when UAO is available, so these would act as EL0 accesses using
-- * TCF0.
-- * However futex.h code uses exclusives which would be executed as
-- * EL1, this can potentially cause a tag check fault even if the
-- * user disables TCF0.
-- *
-- * To address the problem we set the PSTATE.TCO bit in uaccess_enable()
-- * and reset it in uaccess_disable().
-- *
-- * The Tag check override (TCO) bit disables temporarily the tag checking
-- * preventing the issue.
-- */
--static inline void __uaccess_disable_tco(void)
--{
--	asm volatile(ALTERNATIVE("nop", SET_PSTATE_TCO(0),
--				 ARM64_MTE, CONFIG_KASAN_HW_TAGS));
--}
--
--static inline void __uaccess_enable_tco(void)
--{
--	asm volatile(ALTERNATIVE("nop", SET_PSTATE_TCO(1),
--				 ARM64_MTE, CONFIG_KASAN_HW_TAGS));
--}
--
--/*
-- * These functions disable tag checking only if in MTE async mode
-- * since the sync mode generates exceptions synchronously and the
-- * nofault or load_unaligned_zeropad can handle them.
-- */
--static inline void __uaccess_disable_tco_async(void)
--{
--	if (system_uses_mte_async_or_asymm_mode())
--		 __uaccess_disable_tco();
--}
--
--static inline void __uaccess_enable_tco_async(void)
--{
--	if (system_uses_mte_async_or_asymm_mode())
--		__uaccess_enable_tco();
--}
--
- static inline void uaccess_disable_privileged(void)
- {
--	__uaccess_disable_tco();
-+	__mte_disable_tco();
- 
- 	if (uaccess_ttbr0_disable())
- 		return;
-@@ -194,7 +148,7 @@ static inline void uaccess_disable_privileged(void)
- 
- static inline void uaccess_enable_privileged(void)
- {
--	__uaccess_enable_tco();
-+	__mte_enable_tco();
- 
- 	if (uaccess_ttbr0_enable())
- 		return;
-@@ -302,8 +256,8 @@ do {									\
- #define get_user	__get_user
- 
- /*
-- * We must not call into the scheduler between __uaccess_enable_tco_async() and
-- * __uaccess_disable_tco_async(). As `dst` and `src` may contain blocking
-+ * We must not call into the scheduler between __mte_enable_tco_async() and
-+ * __mte_disable_tco_async(). As `dst` and `src` may contain blocking
-  * functions, we must evaluate these outside of the critical section.
-  */
- #define __get_kernel_nofault(dst, src, type, err_label)			\
-@@ -312,10 +266,10 @@ do {									\
- 	__typeof__(src) __gkn_src = (src);				\
- 	int __gkn_err = 0;						\
- 									\
--	__uaccess_enable_tco_async();					\
-+	__mte_enable_tco_async();					\
- 	__raw_get_mem("ldr", *((type *)(__gkn_dst)),			\
- 		      (__force type *)(__gkn_src), __gkn_err, K);	\
--	__uaccess_disable_tco_async();					\
-+	__mte_disable_tco_async();					\
- 									\
- 	if (unlikely(__gkn_err))					\
- 		goto err_label;						\
-@@ -388,8 +342,8 @@ do {									\
- #define put_user	__put_user
- 
- /*
-- * We must not call into the scheduler between __uaccess_enable_tco_async() and
-- * __uaccess_disable_tco_async(). As `dst` and `src` may contain blocking
-+ * We must not call into the scheduler between __mte_enable_tco_async() and
-+ * __mte_disable_tco_async(). As `dst` and `src` may contain blocking
-  * functions, we must evaluate these outside of the critical section.
-  */
- #define __put_kernel_nofault(dst, src, type, err_label)			\
-@@ -398,10 +352,10 @@ do {									\
- 	__typeof__(src) __pkn_src = (src);				\
- 	int __pkn_err = 0;						\
- 									\
--	__uaccess_enable_tco_async();					\
-+	__mte_enable_tco_async();					\
- 	__raw_put_mem("str", *((type *)(__pkn_src)),			\
- 		      (__force type *)(__pkn_dst), __pkn_err, K);	\
--	__uaccess_disable_tco_async();					\
-+	__mte_disable_tco_async();					\
- 									\
- 	if (unlikely(__pkn_err))					\
- 		goto err_label;						\
-diff --git a/arch/arm64/include/asm/word-at-a-time.h b/arch/arm64/include/asm/word-at-a-time.h
-index 1c8e4f2490bf..f3b151ed0d7a 100644
---- a/arch/arm64/include/asm/word-at-a-time.h
-+++ b/arch/arm64/include/asm/word-at-a-time.h
-@@ -55,7 +55,7 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
- {
- 	unsigned long ret;
- 
--	__uaccess_enable_tco_async();
-+	__mte_enable_tco_async();
- 
- 	/* Load word from unaligned pointer addr */
- 	asm(
-@@ -65,7 +65,7 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
- 	: "=&r" (ret)
- 	: "r" (addr), "Q" (*(unsigned long *)addr));
- 
--	__uaccess_disable_tco_async();
-+	__mte_disable_tco_async();
- 
- 	return ret;
- }
