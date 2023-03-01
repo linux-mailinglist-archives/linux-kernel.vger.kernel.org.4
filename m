@@ -2,117 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80826A743D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B2E6A743F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 20:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjCAT3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 14:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S229894AbjCAT33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 14:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCAT3E (ORCPT
+        with ESMTP id S229629AbjCAT30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 14:29:04 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02D05FCC;
-        Wed,  1 Mar 2023 11:29:03 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321INt8u001220;
-        Wed, 1 Mar 2023 19:28:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=mwoCZgmqEiqahH9LW1Tt7FC1N1PzUxjkbM41SSBaqCk=;
- b=re8/2evvPJnTwIwzBaeHt5LtN7XW26D/vaACSeCT+0h80f4vWc4Dt1PDP4VNHBTP97M6
- Jz5chrtwxNcfXyb53kSriruBOpWG0osrQAlEbvd9IP+w/+etv2bPqnbVEt1a4UUZ+Mog
- tsEwtI/ZcsHl889NoP3vQVQGOKruYSn2rM5STK66MOPmkA6WD8L6KNwjBPjTNlwQvPwf
- Y6z/rU35fzqUr+EPCp1eDAO/j1neEzVP17199iyiX6M/8anHiROrSPMyEntcblDdYjDL
- Dx/EdbGLnWyJfoM1gb8ODzfEYh3MfrMi/ddnsWSSiS7/IfIMlNU9i1jX0+BsPb6+uvRT kw== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2bxthnhb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Mar 2023 19:28:54 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 321H0bJY016417;
-        Wed, 1 Mar 2023 19:28:53 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3nybdkxqbg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Mar 2023 19:28:53 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 321JSpNL64356814
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Mar 2023 19:28:51 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8731058062;
-        Wed,  1 Mar 2023 19:28:51 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E8B058061;
-        Wed,  1 Mar 2023 19:28:50 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.163.79.233])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Mar 2023 19:28:50 +0000 (GMT)
-Message-ID: <cfe11fadc3d3e61ce6c7d6f00e1e427edea8a4e3.camel@linux.ibm.com>
-Subject: Re: [PATCH RESEND] scsi: libfc: Use refcount_* APIs for reference
- count management
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Deepak R Varma <drv@mailo.com>, Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Date:   Wed, 01 Mar 2023 14:28:49 -0500
-In-Reply-To: <Y/+hVSSFgeV+yPhY@ubun2204.myguest.virtualbox.org>
-References: <Y/+hVSSFgeV+yPhY@ubun2204.myguest.virtualbox.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qwF9oPbUN-OGDwGoLA_Qb4js0v65vxmp
-X-Proofpoint-GUID: qwF9oPbUN-OGDwGoLA_Qb4js0v65vxmp
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 1 Mar 2023 14:29:26 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB58E72B4;
+        Wed,  1 Mar 2023 11:29:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677698958; x=1709234958;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/bqzJymSbCpnD+DCMHFdYYtceLwcfW75HuliFseCroI=;
+  b=Ui7l1egS6rwQKGxNEv6A6iJiif40jw6TyWVLc7/vqe0vp91gbQvmn0BY
+   ajCX3PkrRf8HbHH/Vs7CrllKNTERDVHti+f1ciWRe+GLQhEyjCel3VmR5
+   X24LvYOc/Rd3swqgRVrSv37KDwtYDJmo2cjXur64Dg2rUJ6pHg3EPUvYy
+   SXVwAOTdd8GchI/dSRr4ECT663aNYayXH1Rtb9gFWec+AXFWkTTSj4i5/
+   ujIoVMtQwY83B1Uj+j+1YAzq6DYZ099NRifjKVpvGgEQoMBOEHYRGlhNd
+   ZLpUJ91/l6ZREA+NIdAY8pW+sjaBReEf4T3SJfe4WdnIYis0zQNSlC+d7
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="314923126"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="314923126"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 11:29:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="784475878"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="784475878"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga002.fm.intel.com with ESMTP; 01 Mar 2023 11:29:17 -0800
+Received: from [10.209.27.115] (kliang2-mobl1.ccr.corp.intel.com [10.209.27.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 85584580D28;
+        Wed,  1 Mar 2023 11:29:14 -0800 (PST)
+Message-ID: <3e766f0e-37d4-0f82-3868-31b14228868d@linux.intel.com>
+Date:   Wed, 1 Mar 2023 14:29:13 -0500
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-01_14,2023-03-01_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=915 suspectscore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 clxscore=1011
- adultscore=0 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303010154
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH v2 1/2] perf/x86/rapl: Fix energy-cores event
+Content-Language: en-US
+To:     Wyes Karny <wyes.karny@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
+        Stephane Eranian <eranian@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc:     x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gautham.shenoy@amd.com,
+        ananth.narayan@amd.com,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+References: <20230301181449.14647-1-wyes.karny@amd.com>
+ <20230301181449.14647-2-wyes.karny@amd.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230301181449.14647-2-wyes.karny@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-02 at 00:32 +0530, Deepak R Varma wrote:
-> The atomic_t API based object reference counter management is prone
-> to counter value overflows, object use-after-free issues and to
-> return puzzling values. The improved refcount_t APIs are designed to
-> address these known issues with atomic_t reference counter
-> management. This white paper [1] has detailed reasons for moving from
-> atomic_t to refcount_t APIs. Hence replace the atomic_* based
-> implementation by its refcount_* based equivalent.
-> The issue is identified using atomic_as_refcounter.cocci Coccinelle
-> semantic patch script.
+
+
+On 2023-03-01 1:14 p.m., Wyes Karny wrote:
+> For quite some time, energy-cores event is broken, because RAPL PMU
+> assumes all the events on this PMU are uncore and sets rapl_cpu_mask
+> with the first available CPU on the die. Therefore, for energy-cores
+> event if we read MSR form pmu->cpu, it's wrong. But the following two
+> changes helped to hide this issue.
 > 
->         [1] https://arxiv.org/pdf/1710.06175.pdf
+> - commit 704e2f5b700d ("perf stat: Use affinity for enabling/disabling
+>   events")
+> - commit e64cd6f73ff5 ("perf/x86: Use PMUEF_READ_CPU_PKG in uncore
+>   events")
+> 
+> These two changes together acted as a workaround for energy-cores event.
+> First change affined perf events to respective CPUs whereas the second
+> change helped to pick the local CPU to read the MSR. In this way, MSRs
+> were read from the correct CPU. This works unless it's the first
+> reading.  For the first reading the second patch doesn't apply and we
+> get wrong readings. Stephane reported this issue when a patch to enable
+> AMD energy-cores RAPL event was posted [1].
+> 
+> The right way to fix the issue is to get rid of RAPL being considered an
+> uncore event. That is a larger change. To enable current RAPL usage,
+> work around the issue by conditionally remove the
+> `PERF_EV_CAP_READ_ACTIVE_PKG` flag for energy-cores event. Also, use the
+> event's CPU instead for PMU's CPU to read the MSR.
 
-Citing long whitepapers in support of a patch isn't helpful to time
-pressed reviewers, particularly when it's evident you didn't understand
-the paper you cite. The argument in the paper for replacing atomics
-with refcounts can be summarized as: if a user can cause a counter
-overflow in an atomic_t simply by performing some action from userspace
-then that represents a source of potential overflow attacks on the
-kernel which should be mitigated by replacing the atomic_t in question
-with a refcount_t which is overflow resistant.
+The current RAPL PMU aka 'power' should be die/socket scope.
+The energy-cores event is also defined as a die/socket scope.
 
-What's missing from the quoted changelog is a justification of how a
-user could cause an overflow in the ex_refcnt atomic_t.
+ *  pp0 counter: consumption of all physical cores (power plane 0)
+ * 	  event: rapl_energy_cores
+ *    perf code: 0x1
 
-James
+I don't think we want to change the scope of the energy-cores event.
+Otherwise Intel's energy-cores event probably be broken.
 
+It looks like you are looking for a new per-core RAPL event. I think
+it's better to create a new core scope RAPL PMU.
+
+Thanks,
+Kan
+
+> 
+> [1]: https://lore.kernel.org/lkml/CABPqkBQ_bSTC-OEe_LrgUrpj2VsseX1ThvO-yLcEtF8vb4+AAw@mail.gmail.com/#t
+> 
+> Fixes: e64cd6f73ff5 ("perf/x86: Use PMUEF_READ_CPU_PKG in uncore events")
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> ---
+>  arch/x86/events/rapl.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+> index 52e6e7ed4f78..e6a0c077daf5 100644
+> --- a/arch/x86/events/rapl.c
+> +++ b/arch/x86/events/rapl.c
+> @@ -343,14 +343,15 @@ static int rapl_pmu_event_init(struct perf_event *event)
+>  	if (event->cpu < 0)
+>  		return -EINVAL;
+>  
+> -	event->event_caps |= PERF_EV_CAP_READ_ACTIVE_PKG;
+> -
+>  	if (!cfg || cfg >= NR_RAPL_DOMAINS + 1)
+>  		return -EINVAL;
+>  
+>  	cfg = array_index_nospec((long)cfg, NR_RAPL_DOMAINS + 1);
+>  	bit = cfg - 1;
+>  
+> +	if (bit != PERF_RAPL_PP0)
+> +		event->event_caps |= PERF_EV_CAP_READ_ACTIVE_PKG;
+> +
+>  	/* check event supported */
+>  	if (!(rapl_cntr_mask & (1 << bit)))
+>  		return -EINVAL;
+> @@ -363,7 +364,15 @@ static int rapl_pmu_event_init(struct perf_event *event)
+>  	pmu = cpu_to_rapl_pmu(event->cpu);
+>  	if (!pmu)
+>  		return -EINVAL;
+> -	event->cpu = pmu->cpu;
+> +
+> +	/*
+> +	 * FIXME: RAPL PMU considers events are uncore and MSRs can be read from
+> +	 * the first available CPU of the die. But this is not true for energy-cores
+> +	 * event. Therefore as a workaround don't consider pmu->cpu here for PERF_RAPL_PP0.
+> +	 */
+> +	if (event->event_caps & PERF_EV_CAP_READ_ACTIVE_PKG)
+> +		event->cpu = pmu->cpu;
+> +
+>  	event->pmu_private = pmu;
+>  	event->hw.event_base = rapl_msrs[bit].msr;
+>  	event->hw.config = cfg;
