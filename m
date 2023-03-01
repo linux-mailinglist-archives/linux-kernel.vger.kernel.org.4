@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BDF6A6B67
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F203B6A6B6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjCALJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S229934AbjCALLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjCALJs (ORCPT
+        with ESMTP id S229715AbjCALLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:09:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D454C1554F;
-        Wed,  1 Mar 2023 03:09:46 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677668984;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DDmcH3vpdG8t16J4lZS4RgAS5+xck9hqT5eR2siX/do=;
-        b=u9yZ9HmFB9OI9iNsUUl07BWnSLlAZZh6UapAfeHg/Oq1aShdOH7EM04f6rIU52wf29cUHt
-        dNnoFKTHxY/DYOWKsofnScXuel8emuHLkxYV29sMQkNHDDY6uxYxmk/PD/1qlgJZdR3thf
-        +1hMAldT1pWl4HpX7p3UCTHMlAQkunNOiXd7ATRTsgCbTu9nXwJSaFXKrsJfoP9jpfQp6Q
-        lu4OICEBWtYdzxcXZoQ76McLXNeSTmCbZCzhnigjzQ3Wm12xZiLtT1Ixf+Tk2enq/pa+hX
-        0yRG/YYKPFnXWEbP4kf2r5pBgVFY2WReiOKCSUAGLAc05M/nqXW2DA7ETTYJHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677668984;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DDmcH3vpdG8t16J4lZS4RgAS5+xck9hqT5eR2siX/do=;
-        b=Q+P85H//Wd5esL/W6IUnHt1E+WAfvha2sSwqh5DIdDMjj6rL3D6yJ98h5QCfxB1iMPpAij
-        94RLnjf1Rs255xDw==
-To:     Linus Torvalds <torvalds@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Wangyang Guo <wangyang.guo@intel.com>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: Re: [patch 2/3] atomics: Provide rcuref - scalable reference counting
-In-Reply-To: <CAHk-=wjeMbHK61Ee+Ug4w8AGHCSDx94GuLs5bPXhHNhA_+RjzA@mail.gmail.com>
-References: <20230228132118.978145284@linutronix.de>
- <20230228132910.991359171@linutronix.de>
- <CAHk-=wjeMbHK61Ee+Ug4w8AGHCSDx94GuLs5bPXhHNhA_+RjzA@mail.gmail.com>
-Date:   Wed, 01 Mar 2023 12:09:42 +0100
-Message-ID: <87pm9slocp.ffs@tglx>
+        Wed, 1 Mar 2023 06:11:09 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D73311F2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:11:00 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4C29E66020E6;
+        Wed,  1 Mar 2023 11:10:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677669057;
+        bh=4v4GBWA4PA/XVvMsfs2bisSUcSFmfwSDKbb1tUfLCw8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CFi+J3Ny2k8aOsMdFamx53fnd+38XmZ4i38wb42qoBWltE515E1u/HmWWoSUR5/LR
+         AV0XI9VZuhLKrZoOo+pPZeX/9gBZQwC5QeM0OcOzh3npjBHYvrWWe5Ii+WDayYVvNg
+         lb4zZT0GlB6YjVEFlZ8W5H8ywnh7cpl6CCadK3ZrDfq+XkMgn+tevzwEpWOg2Ifrnv
+         osABDshFWDg7bo5vasvt0ighqc+hwcFFePegOwRPPymnPGrapuyNKB7KMZGsIHgH+o
+         fDLPlZuSsvCIKlQoaidqOs/CSQequ8dxSf3mfE6C1QbaTmLrj0so4dLPTx4PVlZmuF
+         2OVzKZx3P0LDQ==
+Message-ID: <ab6d0e1a-996b-b17b-7573-9141640bf759@collabora.com>
+Date:   Wed, 1 Mar 2023 12:10:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/2] ASoC: mediatek: mt8195: add missing initialization
+Content-Language: en-US
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        matthias.bgg@gmail.com
+Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230301110200.26177-1-trevor.wu@mediatek.com>
+ <20230301110200.26177-3-trevor.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230301110200.26177-3-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,22 +60,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28 2023 at 16:42, Linus Torvalds wrote:
-> On Tue, Feb 28, 2023 at 6:33=E2=80=AFAM Thomas Gleixner <tglx@linutronix.=
-de> wrote:
-> This may seem like nit-picking, but I absolutely *HATE* our current
-> refcount interface for how absolutely horrid the code generation ends
-> up being. It's gotten better, but it's still not great.
->
-> So if we're introducing yet another refcount interface, and it's done
-> in the name of efficiency, I would *really* want it to actually be
-> exactly that: efficient. Not some half-way thing.
->
-> And yes, that may mean that it should have some architecture-specific
-> code (with fallback defaults for the generic case).
+Il 01/03/23 12:02, Trevor Wu ha scritto:
+> In etdm dai driver, dai_etdm_parse_of() function is used to parse dts
+> properties to get parameters. There are two for-loops which are
+> sepearately for all etdm and etdm input only cases. In etdm in only
+> loop, dai_id is not initialized, so it keeps the value intiliazed in
+> another loop.
+> 
+> In the patch, add the missing initialization to fix the unexpected
+> parsing problem.
+> 
+> Fixes: 1de9a54acafb ("ASoC: mediatek: mt8195: support etdm in platform driver")
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
 
-Let me stare at that some more.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Thanks,
-
-        tglx
