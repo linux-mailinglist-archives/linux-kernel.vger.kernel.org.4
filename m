@@ -2,163 +2,458 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EDA6A641B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A729E6A6424
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 01:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjCAARx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 19:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
+        id S229579AbjCAASz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 19:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAARw (ORCPT
+        with ESMTP id S229540AbjCAASv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 19:17:52 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C85A3756F;
-        Tue, 28 Feb 2023 16:17:49 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id s26so47117882edw.11;
-        Tue, 28 Feb 2023 16:17:49 -0800 (PST)
+        Tue, 28 Feb 2023 19:18:51 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5623771B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:18:49 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id c2-20020a9d6842000000b0068bc93e7e34so6648156oto.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 16:18:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CX/UlvUpEOObHnKgy2nGq9RLjTYBpOBbXecaXxjC6bU=;
-        b=TpkSu77EQxvtY0DpBTCQH9L31x0vlJwkJ0SVlP1ctEwuhdkUs2bR6FzJVSue8fxFzO
-         6Bu9QM0Fbt4l5TuQPkF/qObZn84TY760HzbWuI8a5jcta8y/m79lEyxkv0LYMbqVdhCx
-         8MMnGifFnuczhmWJnL2Nljafagvjs88t/oRno=
+        d=google.com; s=20210112; t=1677629928;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Izz44qr7bDiCTOSjOBm/fjv3W6825Xv3HiyTr4GeJo=;
+        b=Tgzd6tjrPZMzHGBO5mFdV4kwpMB0i8mPI+3UKQdGDRrk/KMcTxpEhxMdDm8ajyHgQA
+         +eLS8uZOwESVsloyR+Vlvl+BVQQbirICFCshC8C7cM9NPKmAFXqKPGZAk4K4aRTkF0OU
+         B6/jBOS7qQvZYDpvtDo/XOJojR6L6nx/6q+XeHGei+OwZfPcD76XwMYB/SSgxKR7lYDg
+         59ZDUUGX+9/EL5IG3uAMGJSw1BvnTMmKbNIXbMICM+Dg1LAuI/tO9BTzAr2RjGd6Wbs+
+         zXkq2aGGv4/LoLKwAzTYs2owM5lThPR0cLEvmHFEdyYjeZQV4WEhinPLNFOXTM89P4Nu
+         nBTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CX/UlvUpEOObHnKgy2nGq9RLjTYBpOBbXecaXxjC6bU=;
-        b=GxK8RPpTifvgMvbojNEAotQJC+i9ZDevqkMS60YrTEv9XFje3N13IhQuM7X+eFnHHc
-         DANU3OXubdzefr0XGYM8CtszeHXp7F7F/qTaSH7Sdn7tdzPN1xNGamlZ0ME1YV3a/xBn
-         IxCvHyvNHt9id4UCcMwuRnaQPTX/Fhf5KJwhrQUk1OSXO9GnOaGaN/rm3AzW9U7vvVck
-         WryFK1qjhPKc7/IvOY6Hi6+q0WJjxFd0913KhQ6S2Vp0zdBJopGZWS9JtaY/qI68O1C7
-         lKVznXm+Q7tiKmCw/+0kfGykJTaJsfDTocYsHA9ux/sEOIU231oUHAN57AZTww5XaG0Q
-         aspA==
-X-Gm-Message-State: AO0yUKUST68LPuBeAFaTdOHKS0pbYCyGxzkQfptYkH1ZPmBVhGyT55Wu
-        c4i/XsdXwwV2C/S7Z/LGPoHkYnhBENYuGSu8VbTc+O8m
-X-Google-Smtp-Source: AK7set9nqT3/GW3KWnP4XtzE5YzdIhzPhnt4YkcC+fIxbs0hJzMGO1mJKle+lI7WC2l6DTANxa9ZQuH9wieYVA0c1Vc=
-X-Received: by 2002:a05:6402:4494:b0:4af:6e95:85e9 with SMTP id
- er20-20020a056402449400b004af6e9585e9mr10379668edb.4.1677629867947; Tue, 28
- Feb 2023 16:17:47 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677629928;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4Izz44qr7bDiCTOSjOBm/fjv3W6825Xv3HiyTr4GeJo=;
+        b=NEFQKujDkY35uUWphjj2dNARTvhb8za2qpPxLmQhNR7bap3I/nQC1Mib08qAsQbDAR
+         1B21qLT6RlyYQwr0nniSb3/DbgpsHCSJhujEcxjWFtWDwDzcbHJ52elFv0lmtlzakzY/
+         FtXCXL6Rjk7HdmBImuHfOmYpOFvgDrdnbvnwfMHy7jDHyhBpUQTV/+Q027M0RDbv2dwP
+         rq52oUQG86/6mWUS1sUjzPrCTE2BaJSfaihaP2mMbaIYTp9E8PnUq5Y+pSVu4SFz4Hre
+         OtDhGCdCFWzHWuWOAiq30bVWO6y5EwBoJg+rR+L5YIQ05p4LVQIh5TVHgWJM3ao78c+n
+         leFA==
+X-Gm-Message-State: AO0yUKWLJtejfpDsW/AkN33xaIC7ROtZKlNFOWY+GkAeQgeuyTIob15D
+        DAzeS7raSuvh+T3WdrEa362u08dgCibm792q2aF3Hw==
+X-Google-Smtp-Source: AK7set+mAQ3mPz3SD4fQlKuTwTrYKwMtQSfzz418H3kR+kIGGaJMVvbggCz7Dxo9M8+u9hZjGjax2s/jFKewEBuDHUk=
+X-Received: by 2002:a9d:6001:0:b0:693:c98d:f9fd with SMTP id
+ h1-20020a9d6001000000b00693c98df9fdmr1584032otj.5.1677629928140; Tue, 28 Feb
+ 2023 16:18:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20230228102820.18477-1-chanh@os.amperecomputing.com>
-In-Reply-To: <20230228102820.18477-1-chanh@os.amperecomputing.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 1 Mar 2023 00:17:36 +0000
-Message-ID: <CACPK8XesuUATxCVEGpus=ZHTkjS=L=gjRHC3V+=XLSofU-WSSw@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: dts: aspeed: mtmitchell: Enable NCSI
-To:     Chanh Nguyen <chanh@os.amperecomputing.com>
-Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230224195313.1877313-1-jiangzp@google.com> <20230224115310.kernel.v2.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
+ <CABBYNZ+yVWssa09NB+ahp-N87sLXRqYF58-GJK-Vx8jn-Sa5Uw@mail.gmail.com>
+ <CAB4PzUrO32Z1AF-3UJviYqTr3YvachGgJ7NiqkNW46ioWigtfw@mail.gmail.com>
+ <CAB4PzUoErDkUzyj6sFQc_CSa7hibucX42yY+oVGw7C4DcJdQFA@mail.gmail.com>
+ <CABBYNZL=u88Ro1dR8fYWpiS6E1sZ4E8TXg8BVU7nEGBodYhTrA@mail.gmail.com>
+ <CAB4PzUr9vE2m-uWVvcTa0SaeryLxhj8sZbvRqSkqLKDFwMoeyQ@mail.gmail.com> <CABBYNZKVc3F_GdSfYTtXcQm9jGXkZJGBh3xV8eSxGkA4iKooGQ@mail.gmail.com>
+In-Reply-To: <CABBYNZKVc3F_GdSfYTtXcQm9jGXkZJGBh3xV8eSxGkA4iKooGQ@mail.gmail.com>
+From:   Zhengping Jiang <jiangzp@google.com>
+Date:   Tue, 28 Feb 2023 16:18:37 -0800
+Message-ID: <CAB4PzUpw7dqguZNuk45pk1sGvAtBabRqm1vuGNW_kPvHpgc=FA@mail.gmail.com>
+Subject: Re: [kernel PATCH v2 1/1] Bluetooth: hci_sync: clear workqueue before
+ clear mgmt cmd
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        mmandlik@google.com, chromeos-bluetooth-upstreaming@chromium.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,WEIRD_QUOTING autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 at 10:28, Chanh Nguyen <chanh@os.amperecomputing.com> wrote:
->
-> Support the mac3 (RGMII4) as an NC-SI stack instead of an MDIO PHY.
->
-> The OCP slot #0 and OCP slot #1 use a common the BMC_NCSI signal,
-> so we use only one of them at the same time. The OCP slot #0 will
-> be enabled by PCA9539's setting by default.
->
-> Also, enable the OCP Auxiliary Power during booting.
->
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+Hi Luiz,
 
-LGTM. I'll apply it once we have a -rc1.
+This looks good to me. I still have a question. Does this prevent a
+job scheduled between "hci_cmd_sync_work_list_clear(hdev);" and
+"__mgmt_power_off(hdev);"? Otherwise, the chance for a race condition
+is still there. Maybe using cancel_work_sync and re-init the workqueue
+timer is the right thing to do?
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Thanks,
+Zhengping
 
-> ---
-> Changes in v2:
->    - Change PCA9539APW node name.                     [Krzysztof]
-> ---
->  .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 37 ++++++++++++++++++-
->  1 file changed, 36 insertions(+), 1 deletion(-)
+On Tue, Feb 28, 2023 at 1:11=E2=80=AFPM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
 >
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> index 4b91600eaf62..1e0e88465254 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> @@ -251,6 +251,14 @@
->         pinctrl-0 = <&pinctrl_rgmii1_default>;
->  };
+> Hi Zhengping,
 >
-> +&mac3 {
-> +       status = "okay";
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_rmii4_default>;
-> +       clock-names = "MACCLK", "RCLK";
-> +       use-ncsi;
-> +};
-> +
->  &fmc {
->         status = "okay";
->         flash@0 {
-> @@ -439,6 +447,26 @@
->         status = "okay";
->  };
+> On Mon, Feb 27, 2023 at 3:58=E2=80=AFPM Zhengping Jiang <jiangzp@google.c=
+om> wrote:
+> >
+> > Hi Luiz,
+> >
+> > Sure. Hope this helps.
+> > Here is one log from the user.
+> >
+> > [   53.368740] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > [   53.376167] BUG: KASAN: use-after-free in set_ssp_sync+0x44/0x154 [b=
+luetooth]
+> > [   53.384303] Read of size 8 at addr ffffff80b7ee0318 by task kworker/=
+u17:0/190
+> > [   53.396342] CPU: 7 PID: 190 Comm: kworker/u17:0 Tainted: G        W
+> >         5.15.59-lockdep #1 29eed131ef0afd42bc369a6a0ca1c69d3653699b
+> > [   53.408868] Hardware name: Qualcomm Technologies, Inc. sc7280 CRD
+> > platform (rev5+) (DT)
+> > [   53.417095] Workqueue: hci0 hci_cmd_sync_work [bluetooth]
+> > [   53.422780] Call trace:
+> > [   53.425310]  dump_backtrace+0x0/0x424
+> > [   53.429108]  show_stack+0x20/0x2c
+> >
+> > [   53.432534]  dump_stack_lvl+0x84/0xb4
+> > [   53.436514]  print_address_description+0x30/0x2fc
+> > [   53.441369]  kasan_report+0x15c/0x19c
+> > [   53.445975]  __asan_report_load8_noabort+0x44/0x50
+> > [   53.450910]  set_ssp_sync+0x44/0x154 [bluetooth
+> > 34f6fa2bbf49f3d7faf6ea04e8755ae16590a6b3]
+> > [   53.460136]  hci_cmd_sync_work+0x1c8/0x2c8 [bluetooth
+> > 34f6fa2bbf49f3d7faf6ea04e8755ae16590a6b3]
+> > [   53.472214]  process_one_work+0x59c/0xa88
+> > [   53.476990]  worker_thread+0x81c/0xd18
+> > [   53.480854]  kthread+0x2d4/0x3d8
+> > [   53.484272]  ret_from_fork+0x10/0x20
+> >
+> > [   53.489733] Allocated by task 1162:
+> > [   53.493336]  kasan_save_stack+0x38/0x68
+> > [   53.498115]  __kasan_kmalloc+0xb4/0xd0
+> > [   53.501993]  kmem_cache_alloc_trace+0x29c/0x374
+> > [   53.506661]  mgmt_pending_new+0x74/0x200 [bluetooth]
+> > [   53.511905]  mgmt_pending_add+0x28/0xec [bluetooth]
+> > [   53.517059]  set_ssp+0x2d8/0x5b0 [bluetooth]
+> > [   53.521575]  hci_mgmt_cmd+0x5c4/0x8b0 [bluetooth]
+> > [   53.526538]  hci_sock_sendmsg+0x28c/0x95c [bluetooth]
+> > [   53.531850]  sock_sendmsg+0xb4/0xd8
+> > [   53.535454]  sock_write_iter+0x1c0/0x2d0
+> > [   53.539494]  do_iter_readv_writev+0x350/0x4e0
+> > [   53.543980]  do_iter_write+0xf0/0x2e4
+> > [   53.547747]  vfs_writev+0xd0/0x13c
+> > [   53.551254]  do_writev+0xe8/0x1fc
+> > [   53.554672]  __arm64_sys_writev+0x84/0x98
+> > [   53.558805]  invoke_syscall+0x78/0x20c
+> > [   53.562665]  el0_svc_common+0x12c/0x2f0
+> > [   53.566618]  do_el0_svc+0x94/0x13c
+> > [   53.570125]  el0_svc+0x5c/0x108
+> > [   53.573374]  el0t_64_sync_handler+0x78/0x108
+> > [   53.577773]  el0t_64_sync+0x1a4/0x1a8
+> >
+> > [   53.583089] Freed by task 3207:
+> > [   53.586325]  kasan_save_stack+0x38/0x68
+> > [   53.590282]  kasan_set_track+0x28/0x3c
+> > [   53.594153]  kasan_set_free_info+0x28/0x4c
+> > [   53.598369]  ____kasan_slab_free+0x138/0x17c
+> > [   53.602767]  __kasan_slab_free+0x18/0x28
+> > [   53.606803]  slab_free_freelist_hook+0x188/0x260
+> > [   53.611559]  kfree+0x138/0x29c
+> > [   53.614708]  mgmt_pending_free+0xac/0xdc [bluetooth]
+> > [   53.619948]  mgmt_pending_remove+0xd8/0xf0 [bluetooth]
+> > [   53.625357]  cmd_complete_rsp+0xc8/0x178 [bluetooth]
+> > [   53.630586]  mgmt_pending_foreach+0xa8/0xf8 [bluetooth]
+> > [   53.636076]  __mgmt_power_off+0x114/0x26c [bluetooth]
+> > [   53.641390]  hci_dev_close_sync+0x314/0x814 [bluetooth]
+> > [   53.646882]  hci_dev_do_close+0x3c/0x7c [bluetooth]
+> > [   53.652017]  hci_dev_close+0xa4/0x15c [bluetooth]
+> > [   53.656980]  hci_sock_ioctl+0x298/0x444 [bluetooth]
+> > [   53.662117]  sock_do_ioctl+0xd0/0x1e8
+> > [   53.665900]  sock_ioctl+0x4fc/0x72c
+> > [   53.669500]  __arm64_sys_ioctl+0x118/0x154
+> > [   53.673726]  invoke_syscall+0x78/0x20c
+> > [   53.677587]  el0_svc_common+0x12c/0x2f0
+> > [   53.681533]  do_el0_svc+0x94/0x13c
+> > [   53.685043]  el0_svc+0x5c/0x108
+> > [   53.688278]  el0t_64_sync_handler+0x78/0x108
+> > [   53.692677]  el0t_64_sync+0x1a4/0x1a8
+> >
+> > [   53.697988] Last potentially related work creation:
+> > [   53.703009]  kasan_save_stack+0x38/0x68
+> > [   53.706962]  kasan_record_aux_stack+0x104/0x130
+> > [   53.711622]  __call_rcu+0x14c/0x860
+> > [   53.715212]  call_rcu+0x18/0x24
+> > [   53.718448]  sk_filter_uncharge+0xc0/0x120
+> > [   53.722667]  __sk_destruct+0xb4/0x4a8
+> > [   53.726435]  sk_destruct+0x78/0xa0
+> > [   53.729941]  __sk_free+0x190/0x270
+> > [   53.733453]  sk_free+0x54/0x8c
+> > [   53.736603]  deferred_put_nlk_sk+0x1d4/0x20c
+> > [   53.741000]  rcu_do_batch+0x3e8/0xd08
+> > [   53.744772]  nocb_cb_wait+0xc8/0xa3c
+> > [   53.748453]  rcu_nocb_cb_kthread+0x48/0x134
+> > [   53.752768]  kthread+0x2d4/0x3d8
+> > [   53.756098]  ret_from_fork+0x10/0x20
+> >
+> > This is another one at a different function but with the same signature=
+.
+> >
+> > [   43.363512] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > [   43.370966] BUG: KASAN: use-after-free in
+> > mgmt_remove_adv_monitor_sync+0x40/0xcc [bluetooth]
+> > [   43.379813] Read of size 8 at addr ffffff8096c28d18 by task kworker/=
+u17:0/192
+> > [   43.387158]
+> > [   43.388705] CPU: 6 PID: 192 Comm: kworker/u17:0 Tainted: G        W
+> >         5.15.59-lockdep #1 59f35e3dfc07f6688b084869895c7a39892c891a
+> > localhost ~ # [   43.410184] Workqueue: hci0 hci_cmd_sync_work [bluetoo=
+th]
+> >
+> > [   43.418887] Call trace:
+> > [   43.422407]  dump_backtrace+0x0/0x424
+> > [   43.426191]  show_stack+0x20/0x2c
+> > [   43.429608]  dump_stack_lvl+0x84/0xb4
+> > [   43.433395]  print_address_description+0x30/0x2fc
+> > [   43.438243]  kasan_report+0x15c/0x19c
+> > [   43.442070]  __asan_report_load8_noabort+0x44/0x50
+> > hciconfig hci0 up
+> > [   43.447009]  mgmt_remove_adv_monitor_sync+0x40/0xcc [bluetooth
+> > 8dae3a82177133cfa9626e7322b3b0c8f665102d]
+> > [   43.458568]  hci_cmd_sync_work+0x1bc/0x2bc [bluetooth
+> > 8dae3a82177133cfa9626e7322b3b0c8f665102d]
+> > [   43.467656]  process_one_work+0x59c/0xa88
+> > [   43.472530]  worker_thread+0x81c/0xd18
+> > [   43.476410]  kthread+0x2d4/0x3d8
+> > localhost ~ # [   43.479753]  ret_from_fork+0x10/0x20
+> > [   43.486588]
+> > [   43.488156] Allocated by task 1118:
+> > [   43.491751]  kasan_save_stack+0x38/0x68
+> > [   43.495709]  __kasan_kmalloc+0xb4/0xd0
+> > [   43.499577]  kmem_cache_alloc_trace+0x29c/0x374
+> > [   43.504238]  mgmt_pending_new+0x74/0x200 [bluetooth]
+> > sleep 2[   43.509509]  mgmt_pending_add+0x28/0xec [bluetooth]
+> >
+> > [   43.515244]  remove_adv_monitor+0xf8/0x174 [bluetooth]
+> > [   43.521533]  hci_mgmt_cmd+0x5c4/0x8b0 [bluetooth]
+> > [   43.526527]  hci_sock_sendmsg+0x28c/0x95c [bluetooth]
+> > [   43.531873]  sock_sendmsg+0xb4/0xd8
+> > [   43.535472]  sock_write_iter+0x1c0/0x2d0
+> > [   43.539519]  do_iter_readv_writev+0x350/0x4e0
+> > [   43.544012]  do_iter_write+0xf0/0x2e4
+> > [   43.547788]  vfs_writev+0xd0/0x13c
+> > [   43.551295]  do_writev+0xe8/0x1fc
+> > [   43.554710]  __arm64_sys_writev+0x84/0x98
+> > [   43.558838]  invoke_syscall+0x78/0x20c
+> > [   43.562709]  el0_svc_common+0x12c/0x2f0
+> > [   43.566654]  do_el0_svc+0x94/0x13c
+> > [   43.570155]  el0_svc+0x5c/0x108
+> > [   43.573391]  el0t_64_sync_handler+0x78/0x108
+> > [   43.577785]  el0t_64_sync+0x1a4/0x1a8
+> > [   43.581564]
+> > [   43.583115] Freed by task 3217:
+> > [   43.586356]  kasan_save_stack+0x38/0x68
+> > [   43.590314]  kasan_set_track+0x28/0x3c
+> > [   43.594180]  kasan_set_free_info+0x28/0x4c
+> > [   43.598396]  ____kasan_slab_free+0x138/0x17c
+> > [   43.602794]  __kasan_slab_free+0x18/0x28
+> > [   43.606838]  slab_free_freelist_hook+0x188/0x260
+> > [   43.611591]  kfree+0x138/0x29c
+> > [   43.614741]  mgmt_pending_free+0xac/0xdc [bluetooth]
+> > [   43.620003]  mgmt_pending_remove+0xd8/0xf0 [bluetooth]
+> > [   43.625434]  cmd_complete_rsp+0xc8/0x178 [bluetooth]
+> > [   43.630686]  mgmt_pending_foreach+0xa8/0xf8 [bluetooth]
+> > [   43.636198]  __mgmt_power_off+0x114/0x26c [bluetooth]
+> > [   43.641532]  hci_dev_close_sync+0x2ec/0x7ec [bluetooth]
+> > [   43.647049]  hci_dev_do_close+0x3c/0x7c [bluetooth]
+> > [   43.652209]  hci_dev_close+0xac/0x164 [bluetooth]
+> > [   43.657190]  hci_sock_ioctl+0x298/0x444 [bluetooth]
+> > [   43.662353]  sock_do_ioctl+0xd0/0x1e8
+> > [   43.666134]  sock_ioctl+0x4fc/0x72c
+> > [   43.669736]  __arm64_sys_ioctl+0x118/0x154
+> > [   43.673961]  invoke_syscall+0x78/0x20c
+> > [   43.677820]  el0_svc_common+0x12c/0x2f0
+> > [   43.681770]  do_el0_svc+0x94/0x13c
+> > [   43.685278]  el0_svc+0x5c/0x108
+> > [   43.688514]  el0t_64_sync_handler+0x78/0x108
+> > [   43.692913]  el0t_64_sync+0x1a4/0x1a8
+> >
+> > Thanks,
+> > Zhengping
 >
-> +&i2c8 {
-> +       status = "okay";
-> +
-> +       gpio@77 {
-> +               compatible = "nxp,pca9539";
-> +               reg = <0x77>;
-> +               gpio-controller;
-> +               #address-cells = <1>;
-> +               #size-cells = <0>;
-> +               #gpio-cells = <2>;
-> +
-> +               bmc-ocp0-en-hog {
-> +                       gpio-hog;
-> +                       gpios = <7 GPIO_ACTIVE_LOW>;
-> +                       output-high;
-> +                       line-name = "bmc-ocp0-en-n";
-> +               };
-> +       };
-> +};
-> +
->  &i2c9 {
->         status = "okay";
->  };
-> @@ -530,13 +558,20 @@
->         /*V0-V7*/       "s0-hightemp-n","s0-fault-alert","s0-sys-auth-failure-n",
->                         "host0-reboot-ack-n","host0-ready","host0-shd-req-n",
->                         "host0-shd-ack-n","s0-overtemp-n",
-> -       /*W0-W7*/       "ocp-aux-pwren","ocp-main-pwren","ocp-pgood","",
-> +       /*W0-W7*/       "","ocp-main-pwren","ocp-pgood","",
->                         "bmc-ok","bmc-ready","spi0-program-sel","spi0-backup-sel",
->         /*X0-X7*/       "i2c-backup-sel","s1-fault-alert","s1-fw-boot-ok",
->                         "s1-hightemp-n","s0-spi-auth-fail-n","s1-sys-auth-failure-n",
->                         "s1-overtemp-n","s1-spi-auth-fail-n",
->         /*Y0-Y7*/       "","","","","","","","host0-special-boot",
->         /*Z0-Z7*/       "reset-button","ps0-pgood","ps1-pgood","","","","","";
-> +
-> +       ocp-aux-pwren-hog {
-> +               gpio-hog;
-> +               gpios = <ASPEED_GPIO(W, 0) GPIO_ACTIVE_HIGH>;
-> +               output-high;
-> +               line-name = "ocp-aux-pwren";
-> +       };
->  };
+> Ok, how about we do something like the following:
 >
->  &gpio1 {
+> https://gist.github.com/Vudentz/365d664275e4d2e2af157e47f0502f50
+>
+> The actual real culprit seem to be __mgmt_power_off does cleanup
+> mgmt_pending but that is still accessible via cmd_sync_work_list, this
+> is probably how hci_request was designed but in case of cmd_sync we
+> normally have the data as part of cmd_sync_work_list.
+>
+> > On Mon, Feb 27, 2023 at 3:41=E2=80=AFPM Luiz Augusto von Dentz
+> > <luiz.dentz@gmail.com> wrote:
+> > >
+> > > Hi Zhengping,
+> > >
+> > > On Sun, Feb 26, 2023 at 11:18=E2=80=AFPM Zhengping Jiang <jiangzp@goo=
+gle.com> wrote:
+> > > >
+> > > > Hi Luiz,
+> > > >
+> > > > I have a question. Given that each command in the cmd_sync queue
+> > > > should clean up the memory in a callback function. I was wondering =
+if
+> > > > the call to cmd_complete_rsp in __mgmt_power_off function is still
+> > > > necessary? Will this always risk a race condition that cmd has been
+> > > > released when the complete callback or _sync function is run?
+> > >
+> > > Not sure I follow you here, do you have a stack trace when the user
+> > > after free occurs?
+> > >
+> > > > Thanks,
+> > > > Zhengping
+> > > >
+> > > > On Fri, Feb 24, 2023 at 2:37=E2=80=AFPM Zhengping Jiang <jiangzp@go=
+ogle.com> wrote:
+> > > > >
+> > > > > Hi Luiz,
+> > > > >
+> > > > > > Any particular reason why you are not using hci_cmd_sync_clear
+> > > > > > instead?
+> > > > >
+> > > > > That is a good question and we used hci_cmd_sync_clear in the fir=
+st
+> > > > > version, but it will clear the queue and also close the timer. As=
+ a
+> > > > > result, when the adapter is turned on again, the timer will not
+> > > > > schedule any new jobs. So the option is to use hci_cmd_sync_clear=
+ and
+> > > > > re-initiate the queue or to write a new function which only clear=
+s the
+> > > > > queue.
+> > > > >
+> > > > > > We also may want to move the clearing logic to
+> > > > > > hci_dev_close_sync since it should be equivalent to
+> > > > > > hci_request_cancel_all.
+> > > > >
+> > > > > I actually have a question here. I saw
+> > > > > "drain_workqueue(hdev->workqueue)" in hci_dev_close_sync and thou=
+ght
+> > > > > it should force clearing the cmd_sync queue. But it seems cannot
+> > > > > prevent the use-after-free situation.
+> > > > >
+> > > > > Any suggestions to improve the solution?
+> > > > >
+> > > > > Thanks,
+> > > > > Zhengping
+> > > > >
+> > > > >
+> > > > > On Fri, Feb 24, 2023 at 1:02 PM Luiz Augusto von Dentz
+> > > > > <luiz.dentz@gmail.com> wrote:
+> > > > > >
+> > > > > > Hi Zhengping,
+> > > > > >
+> > > > > > On Fri, Feb 24, 2023 at 11:53 AM Zhengping Jiang <jiangzp@googl=
+e.com> wrote:
+> > > > > > >
+> > > > > > > Clear cmd_sync_work queue before clearing the mgmt cmd list t=
+o avoid
+> > > > > > > racing conditions which cause use-after-free.
+> > > > > > >
+> > > > > > > When powering off the adapter, the mgmt cmd list will be clea=
+red. If a
+> > > > > > > work is queued in the cmd_sync_work queue at the same time, i=
+t will
+> > > > > > > cause the risk of use-after-free, as the cmd pointer is not c=
+hecked
+> > > > > > > before use.
+> > > > > > >
+> > > > > > > Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+> > > > > > > ---
+> > > > > > >
+> > > > > > > Changes in v2:
+> > > > > > > - Add function to clear the queue without stop the timer
+> > > > > > >
+> > > > > > > Changes in v1:
+> > > > > > > - Clear cmd_sync_work queue before clearing the mgmt cmd list
+> > > > > > >
+> > > > > > >  net/bluetooth/hci_sync.c | 21 ++++++++++++++++++++-
+> > > > > > >  1 file changed, 20 insertions(+), 1 deletion(-)
+> > > > > > >
+> > > > > > > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_syn=
+c.c
+> > > > > > > index 117eedb6f709..b70365dfff0c 100644
+> > > > > > > --- a/net/bluetooth/hci_sync.c
+> > > > > > > +++ b/net/bluetooth/hci_sync.c
+> > > > > > > @@ -636,6 +636,23 @@ void hci_cmd_sync_init(struct hci_dev *h=
+dev)
+> > > > > > >         INIT_DELAYED_WORK(&hdev->adv_instance_expire, adv_tim=
+eout_expire);
+> > > > > > >  }
+> > > > > > >
+> > > > > > > +static void hci_pend_cmd_sync_clear(struct hci_dev *hdev)
+> > > > > > > +{
+> > > > > > > +       struct hci_cmd_sync_work_entry *entry, *tmp;
+> > > > > > > +
+> > > > > > > +       mutex_lock(&hdev->cmd_sync_work_lock);
+> > > > > > > +       list_for_each_entry_safe(entry, tmp, &hdev->cmd_sync_=
+work_list, list) {
+> > > > > > > +               if (entry->destroy) {
+> > > > > > > +                       hci_req_sync_lock(hdev);
+> > > > > > > +                       entry->destroy(hdev, entry->data, -EC=
+ANCELED);
+> > > > > > > +                       hci_req_sync_unlock(hdev);
+> > > > > > > +               }
+> > > > > > > +               list_del(&entry->list);
+> > > > > > > +               kfree(entry);
+> > > > > > > +       }
+> > > > > > > +       mutex_unlock(&hdev->cmd_sync_work_lock);
+> > > > > > > +}
+> > > > > > > +
+> > > > > > >  void hci_cmd_sync_clear(struct hci_dev *hdev)
+> > > > > > >  {
+> > > > > > >         struct hci_cmd_sync_work_entry *entry, *tmp;
+> > > > > > > @@ -4842,8 +4859,10 @@ int hci_dev_close_sync(struct hci_dev =
+*hdev)
+> > > > > > >
+> > > > > > >         if (!auto_off && hdev->dev_type =3D=3D HCI_PRIMARY &&
+> > > > > > >             !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
+> > > > > > > -           hci_dev_test_flag(hdev, HCI_MGMT))
+> > > > > > > +           hci_dev_test_flag(hdev, HCI_MGMT)) {
+> > > > > > > +               hci_pend_cmd_sync_clear(hdev);
+> > > > > >
+> > > > > > Any particular reason why you are not using hci_cmd_sync_clear
+> > > > > > instead? We also may want to move the clearing logic to
+> > > > > > hci_dev_close_sync since it should be equivalent to
+> > > > > > hci_request_cancel_all.
+> > > > > >
+> > > > > > >                 __mgmt_power_off(hdev);
+> > > > > > > +       }
+> > > > > > >
+> > > > > > >         hci_inquiry_cache_flush(hdev);
+> > > > > > >         hci_pend_le_actions_clear(hdev);
+> > > > > > > --
+> > > > > > > 2.39.2.722.g9855ee24e9-goog
+> > > > > > >
+> > > > > >
+> > > > > >
+> > > > > > --
+> > > > > > Luiz Augusto von Dentz
+> > >
+> > >
+> > >
+> > > --
+> > > Luiz Augusto von Dentz
+>
+>
+>
 > --
-> 2.17.1
->
+> Luiz Augusto von Dentz
