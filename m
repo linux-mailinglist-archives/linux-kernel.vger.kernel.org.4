@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140D36A683E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D46B6A682A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 08:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjCAHfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 02:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S229684AbjCAHe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 02:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjCAHfn (ORCPT
+        with ESMTP id S229560AbjCAHe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 02:35:43 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D28138B75;
-        Tue, 28 Feb 2023 23:35:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677656122; x=1709192122;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QWj3wCogW4CjdLXlAk1HmMqBbuONBPdK6zGHEvWlB+4=;
-  b=ckNVekjSWSpy054uSQgCeHuYMPoPBwfRtxhirTiCzzhZTWIBGVxttl3I
-   Rq0ClgwG8SrOhT5LON0kBV1G9RYrPE0KLbG6i4V79wa8TZJ3McX8Eulxm
-   Q0LVDs4tNizoUhXoGx+ZnIEUfuDSkK8cwORhCwKbwtR4ZGkapOcQ1KDRG
-   YmyQozZKOFSHVUypJ8o0NXcOcJ09XmlbxLyb6zKAEJZh1cNjrTfJiwFH0
-   gmAyHLlbtJFhauH1XgCF8SExQaOzAEUzcUaJSHL0pCFuFtg9zv5mVYi7n
-   km4rnF2eauzYC/XqpvqviA/RJ1bGhALyahjQ3ocDCKBolqdQrNQL5HiVD
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,224,1673938800"; 
-   d="scan'208";a="139599308"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Mar 2023 00:35:11 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 1 Mar 2023 00:35:08 -0700
-Received: from microchip1-OptiPlex-9020.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Wed, 1 Mar 2023 00:35:03 -0700
-From:   shravan kumar <shravan.chippa@microchip.com>
-To:     <paul.j.murphy@intel.com>, <daniele.alessandrelli@intel.com>,
-        <mchehab@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>
-CC:     <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <shravan.chippa@microchip.com>, Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v12 5/5] media: i2c: imx334: update pixel and link frequency
-Date:   Wed, 1 Mar 2023 13:04:12 +0530
-Message-ID: <20230301073412.1204574-6-shravan.chippa@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230301073412.1204574-1-shravan.chippa@microchip.com>
-References: <20230301073412.1204574-1-shravan.chippa@microchip.com>
+        Wed, 1 Mar 2023 02:34:27 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC41E1517C;
+        Tue, 28 Feb 2023 23:34:26 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pXGyl-0000Uc-Mv; Wed, 01 Mar 2023 08:34:23 +0100
+Message-ID: <d7fe697d-09eb-3a59-6cb3-8eec480d1407@leemhuis.info>
+Date:   Wed, 1 Mar 2023 08:34:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Regression] Bug 216961 - Severe IO scheduling starvation issues
+ with btrfs
+Content-Language: en-US, de-DE
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Wyatt Childers <kernel.dbwta@haxing.ninja>, pmacedo@gmail.com,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        dsterba@suse.cz
+References: <0ca02b1f-ab00-9fa6-aecc-c2c46d624e49@leemhuis.info>
+ <e0998928-0f4e-f2a9-2e77-3e4bab459688@leemhuis.info>
+ <CAEzrpqc6tweHqKKPZYyVuOXH1Wd+hmrTPfcrpa-5-btU_Z24Fg@mail.gmail.com>
+ <06a5ada1-d1b8-3139-3a60-f43958f90f79@leemhuis.info>
+ <20230228194039.GP10580@suse.cz>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <20230228194039.GP10580@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677656066;a6dd2248;
+X-HE-SMSGID: 1pXGyl-0000Uc-Mv
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,161 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravan Chippa <shravan.chippa@microchip.com>
+On 28.02.23 20:40, David Sterba wrote:
+> On Fri, Feb 17, 2023 at 06:17:58AM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> On 16.02.23 23:39, Josef Bacik wrote:
+>>> On Thu, Feb 16, 2023 at 12:43 PM Thorsten Leemhuis
+>>> <regressions@leemhuis.info> wrote:
+>>>>
+>>>> I might be missing something, but it looks like the report was ignored.
+>>>> Is there a reason for that?
+>>> Mostly just being blind.
+>> Happens.
+>>
+>>>  I've responded to the BZ, I'll investigate
+>>> through the BZ.
+> According to the bug it's a problem in BFQ.
 
-Update pixel_rate and link frequency for 1920x1080@30
-while changing mode.
+Yeah, I noticed yesterday, after I looked into the issue again, as it
+looked stalled. But as I already wrote in a comment in the ticket
+yesterday:
 
-Add support to handle multiple link frequencies.
+Did anyone tell the bfq developers about this?
 
-Add dummy ctrl cases for pixel_rate and link frequency
-to avoid error while changing the modes dynamically.
+Doesn't look like it. Adding them to the list of recipients them now,
+even if they might know about it. If not:
 
-Update default link frequency from device tree max link
-frequency value.
+Paolo, Jens, there seems to be a regression in BFQ likely introduced
+between 5.19 and 6.0 that people apparently notice often with Btrfs. For
+details see:
+https://bugzilla.kernel.org/show_bug.cgi?id=216961
 
-Update init_cfg() function to update the link frequency
-menu_skip_mask value.
+Josef apparently has seen report about this as well where switching to
+another io scheduler helped:
+https://bugzilla.kernel.org/show_bug.cgi?id=216961#c8
 
-Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
-Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
----
- drivers/media/i2c/imx334.c | 51 ++++++++++++++++++++++++++++----------
- 1 file changed, 38 insertions(+), 13 deletions(-)
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index 309c706114d2..7958c5b73f3e 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -49,7 +49,8 @@
- #define IMX334_INCLK_RATE	24000000
- 
- /* CSI2 HW configuration */
--#define IMX334_LINK_FREQ	891000000
-+#define IMX334_LINK_FREQ_891M	891000000
-+#define IMX334_LINK_FREQ_445M	445500000
- #define IMX334_NUM_DATA_LANES	4
- 
- #define IMX334_REG_MIN		0x00
-@@ -139,12 +140,14 @@ struct imx334 {
- 	u32 vblank;
- 	const struct imx334_mode *cur_mode;
- 	struct mutex mutex;
-+	unsigned long menu_skip_mask;
- 	u32 cur_code;
- 	bool streaming;
- };
- 
- static const s64 link_freq[] = {
--	IMX334_LINK_FREQ,
-+	IMX334_LINK_FREQ_891M,
-+	IMX334_LINK_FREQ_445M,
- };
- 
- /* Sensor mode registers for 1920x1080@30fps */
-@@ -468,7 +471,7 @@ static const struct imx334_mode supported_modes[] = {
- 		.vblank_min = 45,
- 		.vblank_max = 132840,
- 		.pclk = 297000000,
--		.link_freq_idx = 0,
-+		.link_freq_idx = 1,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
- 			.regs = mode_1920x1080_regs,
-@@ -598,6 +601,11 @@ static int imx334_update_controls(struct imx334 *imx334,
- 	if (ret)
- 		return ret;
- 
-+	ret = __v4l2_ctrl_modify_range(imx334->pclk_ctrl, mode->pclk,
-+				       mode->pclk, 1, mode->pclk);
-+	if (ret)
-+		return ret;
-+
- 	ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl, mode->hblank,
- 				       mode->hblank, 1, mode->hblank);
- 	if (ret)
-@@ -698,6 +706,8 @@ static int imx334_set_ctrl(struct v4l2_ctrl *ctrl)
- 		pm_runtime_put(imx334->dev);
- 
- 		break;
-+	case V4L2_CID_PIXEL_RATE:
-+	case V4L2_CID_LINK_FREQ:
- 	case V4L2_CID_HBLANK:
- 		ret = 0;
- 		break;
-@@ -885,7 +895,13 @@ static int imx334_init_pad_cfg(struct v4l2_subdev *sd,
- 	struct v4l2_subdev_format fmt = { 0 };
- 
- 	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
--	imx334_fill_pad_format(imx334, &supported_modes[0], &fmt);
-+	fmt->format.code = imx334->cur_code;
-+	imx334_fill_pad_format(imx334, imx334->cur_mode, &fmt);
-+
-+	__v4l2_ctrl_modify_range(imx334->link_freq_ctrl, 0,
-+				 __fls(imx334->menu_skip_mask),
-+				 ~(imx334->menu_skip_mask),
-+				 __ffs(imx334->menu_skip_mask));
- 
- 	return imx334_set_pad_format(sd, sd_state, &fmt);
- }
-@@ -1046,8 +1062,8 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
- 	};
- 	struct fwnode_handle *ep;
- 	unsigned long rate;
-+	unsigned int i, j;
- 	int ret;
--	int i;
- 
- 	if (!fwnode)
- 		return -ENXIO;
-@@ -1097,11 +1113,20 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
- 		goto done_endpoint_free;
- 	}
- 
--	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
--		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ)
-+	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
-+		for (j = 0; j < ARRAY_SIZE(link_freq); j++) {
-+			if (bus_cfg.link_frequencies[i] == link_freq[j]) {
-+				set_bit(j, &imx334->menu_skip_mask);
-+				break;
-+			}
-+		}
-+
-+		if (j == ARRAY_SIZE(link_freq)) {
-+			ret = dev_err_probe(imx334->dev, -EINVAL,
-+					    "no supported link freq found\n");
- 			goto done_endpoint_free;
--
--	ret = -EINVAL;
-+		}
-+	}
- 
- done_endpoint_free:
- 	v4l2_fwnode_endpoint_free(&bus_cfg);
-@@ -1232,10 +1257,10 @@ static int imx334_init_controls(struct imx334 *imx334)
- 	imx334->link_freq_ctrl = v4l2_ctrl_new_int_menu(ctrl_hdlr,
- 							&imx334_ctrl_ops,
- 							V4L2_CID_LINK_FREQ,
--							ARRAY_SIZE(link_freq) -
--							1,
--							mode->link_freq_idx,
-+							__fls(imx334->menu_skip_mask),
-+							__ffs(imx334->menu_skip_mask),
- 							link_freq);
-+
- 	if (imx334->link_freq_ctrl)
- 		imx334->link_freq_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 
-@@ -1302,7 +1327,7 @@ static int imx334_probe(struct i2c_client *client)
- 	}
- 
- 	/* Set default mode to max resolution */
--	imx334->cur_mode = &supported_modes[0];
-+	imx334->cur_mode = &supported_modes[__ffs(imx334->menu_skip_mask)];
- 	imx334->cur_code = imx334_mbus_codes[0];
- 	imx334->vblank = imx334->cur_mode->vblank;
- 
--- 
-2.34.1
-
+#regzbot title: bfq: severe IO scheduling starvation issues with btrfs
