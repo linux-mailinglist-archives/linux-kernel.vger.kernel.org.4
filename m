@@ -2,163 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90226A6BA2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45EF6A6BA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 12:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjCALXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 06:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
+        id S229998AbjCALZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 06:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjCALXv (ORCPT
+        with ESMTP id S229470AbjCALZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:23:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 525CF1E9D0
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:23:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DF1F2F4;
-        Wed,  1 Mar 2023 03:24:33 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B457D3F587;
-        Wed,  1 Mar 2023 03:23:47 -0800 (PST)
-Message-ID: <43e91964-cd34-2e84-03a3-3903aa94c5e6@arm.com>
-Date:   Wed, 1 Mar 2023 12:23:45 +0100
+        Wed, 1 Mar 2023 06:25:48 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420283B0C5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 03:25:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677669947; x=1709205947;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nhI8Qubg8WQl47vGteaEMeJxeUGgkrokzqxRYwakSMw=;
+  b=Y0DSyRe+PAh4FxoHkR1G4h88DA/2MYB1nxnQJIUrtgT5OFyw0Ymwaw8h
+   zvKtyhmYeEPx+B2hcQksE18tJW4Ar8866kCi/WGUANBhIfzR5L+5Z5atm
+   bOLMVgJaeiwU2aA0QOtAKwRqI/k5mJSa7vRWARsKZnN83MGTYk3fbneyY
+   AJpuyIp92QzRlsMCAkcxfKdtF1CfTT44++GSwVOq+aFAgYWIR8CiLvvn4
+   jyFKurIsymRTPpgbTrLOVaBEne8K4plECLEbqZEevKzWcBt+RYS6mlICx
+   9dV2mfFQVI3JLGdLom9iza5uAGvOapbleNxodKYtgu+p3rPoHyO8BYRUi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="335875442"
+X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
+   d="scan'208";a="335875442"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 03:25:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="798405746"
+X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
+   d="scan'208";a="798405746"
+Received: from nemesa.iind.intel.com ([10.190.239.22])
+  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2023 03:25:43 -0800
+From:   "Garg, Nemesa" <nemesa.garg@intel.com>
+To:     linux-kernel@vger.kernel.org, gfx-internal-devel@eclists.intel.com
+Cc:     matthew.d.roper@intel.com, chaitanya.kumar.borah@intel.com,
+        clinton.a.taylor@intel.com, Garg@vger.kernel.org,
+        Nemesa <nemesa.garg@intel.com>
+Subject: [PATCH dii-client 0/3] Adding Device Ids for ARL-S and ARL-P
+Date:   Wed,  1 Mar 2023 16:54:42 +0530
+Message-Id: <20230301112445.2207064-1-nemesa.garg@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH] sched/fair: update the vruntime to be max vruntime
- when yield
-Content-Language: en-US
-To:     Xuewen Yan <xuewen.yan94@gmail.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Qais Yousef <qyousef@layalina.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, mingo@redhat.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        zhaoyang.huang@unisoc.com
-References: <20230222080314.2146-1-xuewen.yan@unisoc.com>
- <Y/zO8WZV2kvcU78b@hirez.programming.kicks-ass.net>
- <20230227220735.3kaytmtt53uoegq7@airbuntu>
- <CAB8ipk--trBk-Acsjz7YDb5szPLc93ejPXVXQBJdomZO4OrpGQ@mail.gmail.com>
- <CAKfTPtBdMO6_APib1OBxW+fdAORX8vXdT-W3fWTRffa5-8bGxQ@mail.gmail.com>
- <CAB8ipk96OXJcmp_H5EcagrMUigSFdW_gd4wwGjfjBpyP6hqaTg@mail.gmail.com>
- <CAKfTPtAvuz0SEDX3izcOhZkC+pFddqrSwY+iYO2p7U6N3Z2hRA@mail.gmail.com>
- <20230228133111.6i5tlhvthnfljvmf@airbuntu>
- <CAKfTPtAsxz7s6W2peoVj+EcNVQp6bpO6qhPPTXgfJxVtXHbaKQ@mail.gmail.com>
- <CAB8ipk83Ofywn0T19dHxjJNXfKcd9DD_EopQupeepjSk-XceRQ@mail.gmail.com>
- <CAKfTPtDfSHnd7=ZG2S-x46kxw0Cc0RSXq+_B8Oe46fa3Fa75BA@mail.gmail.com>
- <CAB8ipk9uPMxwEUHkLWbKXQEO1UkwBPWbZb=NF7AE5JHnG8V6Dw@mail.gmail.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <CAB8ipk9uPMxwEUHkLWbKXQEO1UkwBPWbZb=NF7AE5JHnG8V6Dw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
+X-Git-Pile: INTEL_DII
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xuewen,
+	Add ARL P and S PCI IDs. Add ARL to the
+ false PCH logic and assign as PCH_MTP.
+---
+baseline: c1c71a12b19171be4dd368176809ec9cfb65ebcc
+pile-commit: 8b08df49ad0b7219aae3216c0b562b78825b5244
+range-diff:
+  -:  ------------ > 164:  a41c7f6e99c1 drm/pciid : Adding ARL-S and ARL-P PCI/device ids
+  -:  ------------ > 165:  dff452869c89 INTEL_DII: drm/i915/arl: ARL false PCH ID
 
-On 01/03/2023 09:20, Xuewen Yan wrote:
-> On Wed, Mar 1, 2023 at 4:09 PM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
->>
->> On Wed, 1 Mar 2023 at 08:30, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
->>>
->>> Hi Vincent
->>>
->>> I noticed the following patch:
->>> https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.de/
->>> And I notice the V2 had merged to mainline:
->>> https://lore.kernel.org/all/20230130122216.3555094-1-rkagan@amazon.de/T/#u
->>>
->>> The patch fixed the inversing of the vruntime comparison, and I see
->>> that in my case, there also are some vruntime is inverted.
->>> Do you think which patch will work for our scenario? I would be very
->>> grateful if you could give us some advice.
->>> I would try this patch in our tree.
->>
->> By default use the one that is merged; The difference is mainly a
->> matter of time range. Also be aware that the case of newly migrated
->> task is not fully covered by both patches.
-> 
-> Okay, Thank you very much!
-> 
->>
->> This patch fixes a problem with long sleeping entity in the presence
->> of low weight and always running entities. This doesn't seem to be
->> aligned with the description of your use case
-> 
-> Thanks for the clarification! We would try it first to see whether it
-> could resolve our problem.
+ series                                             |  2 +
+ ...iid-Adding-ARL-S-and-ARL-P-PCI-device-ids.patch | 94 ++++++++++++++++++++++
+ 0001-INTEL_DII-drm-i915-arl-ARL-false-PCH-ID.patch | 35 ++++++++
+ 3 files changed, 131 insertions(+)
 
-Can you not run Vincent's rt-app example on your device and then report
-`cat /sys/kernel/debug/sched/debug` of the CPU?
+diff --git a/series b/series
+index ec817b05d84c..25c5a4bce9bb 100644
+--- a/series
++++ b/series
+@@ -163,4 +163,6 @@
+ 0001-NOT_UPSTREAM-drm-i915-huc-load-HuC-via-non-POR-GSC-e.patch
+ 0001-END-SECTION-CI-only-patches-part-2.patch
+ 0001-START-SECTION-ARL-Platform-Enabling.patch
++0001-drm-pciid-Adding-ARL-S-and-ARL-P-PCI-device-ids.patch
++0001-INTEL_DII-drm-i915-arl-ARL-false-PCH-ID.patch
+ 0001-END-SECTION-ARL-Platform-Enabling.patch
+diff --git a/0001-drm-pciid-Adding-ARL-S-and-ARL-P-PCI-device-ids.patch b/0001-drm-pciid-Adding-ARL-S-and-ARL-P-PCI-device-ids.patch
+new file mode 100644
+index 000000000000..62deda9499dd
+--- /dev/null
++++ b/0001-drm-pciid-Adding-ARL-S-and-ARL-P-PCI-device-ids.patch
+@@ -0,0 +1,94 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++From: "Garg, Nemesa" <nemesa.garg@intel.com>
++Date: Thu, 16 Feb 2023 18:48:34 +0530
++Subject: [PATCH] drm/pciid : Adding ARL-S and ARL-P PCI/device ids
++
++Arrow Lake behaves the same as Meteor Lake with just minor differences.
++Add definitions for ARL_P. Update MTL and ARL definitions with new
++device IDs for ARL-S and ARL-P.
++
++Bspec: 55420
++
++Signed-off-by: Garg, Nemesa <nemesa.garg@intel.com>
++---
++ drivers/gpu/drm/i915/i915_drv.h          |  2 ++
++ drivers/gpu/drm/i915/intel_device_info.c |  7 +++++++
++ drivers/gpu/drm/i915/intel_device_info.h |  1 +
++ include/drm/i915_pciids.h                | 11 +++++++++--
++ 4 files changed, 19 insertions(+), 2 deletions(-)
++
++diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
++--- a/drivers/gpu/drm/i915/i915_drv.h
+++++ b/drivers/gpu/drm/i915/i915_drv.h
++@@ -574,6 +574,8 @@ IS_SUBPLATFORM(const struct drm_i915_private *i915,
++ 	IS_SUBPLATFORM(dev_priv, INTEL_METEORLAKE, INTEL_SUBPLATFORM_M)
++ #define IS_METEORLAKE_P(dev_priv) \
++ 	IS_SUBPLATFORM(dev_priv, INTEL_METEORLAKE, INTEL_SUBPLATFORM_P)
+++#define IS_ARROWLAKE_P(dev_priv) \
+++	IS_SUBPLATFORM(dev_priv, INTEL_METEORLAKE, INTEL_SUBPLATFORM_ARL_P)
++ #define IS_DG2_G10(dev_priv) \
++ 	IS_SUBPLATFORM(dev_priv, INTEL_DG2, INTEL_SUBPLATFORM_G10)
++ #define IS_DG2_G11(dev_priv) \
++diff --git a/drivers/gpu/drm/i915/intel_device_info.c b/drivers/gpu/drm/i915/intel_device_info.c
++--- a/drivers/gpu/drm/i915/intel_device_info.c
+++++ b/drivers/gpu/drm/i915/intel_device_info.c
++@@ -224,6 +224,10 @@ static const u16 subplatform_p_ids[] = {
++ 	INTEL_MTL_P_IDS(0),
++ };
++ 
+++static const u16 subplatform_arl_p_ids[] = {
+++	INTEL_ARL_P_IDS(0),
+++};
+++
++ static bool find_devid(u16 id, const u16 *p, unsigned int num)
++ {
++ 	for (; num; num--, p++) {
++@@ -284,6 +288,9 @@ static void intel_device_info_subplatform_init(struct drm_i915_private *i915)
++ 	} else if (find_devid(devid, subplatform_p_ids,
++ 			      ARRAY_SIZE(subplatform_p_ids))) {
++ 		mask = BIT(INTEL_SUBPLATFORM_P);
+++	} else if (find_devid(devid, subplatform_arl_p_ids,
+++				ARRAY_SIZE(subplatform_arl_p_ids))) {
+++		mask = BIT(INTEL_SUBPLATFORM_ARL_P);
++ 	}
++ 
++ 	GEM_BUG_ON(mask & ~INTEL_SUBPLATFORM_MASK);
++diff --git a/drivers/gpu/drm/i915/intel_device_info.h b/drivers/gpu/drm/i915/intel_device_info.h
++--- a/drivers/gpu/drm/i915/intel_device_info.h
+++++ b/drivers/gpu/drm/i915/intel_device_info.h
++@@ -131,6 +131,7 @@ enum intel_platform {
++ /* MTL */
++ #define INTEL_SUBPLATFORM_M	0
++ #define INTEL_SUBPLATFORM_P	1
+++#define INTEL_SUBPLATFORM_ARL_P 2
++ 
++ enum intel_ppgtt_type {
++ 	INTEL_PPGTT_NONE = I915_GEM_PPGTT_NONE,
++diff --git a/include/drm/i915_pciids.h b/include/drm/i915_pciids.h
++--- a/include/drm/i915_pciids.h
+++++ b/include/drm/i915_pciids.h
++@@ -738,15 +738,22 @@
++ /* MTL */
++ #define INTEL_MTL_M_IDS(info) \
++ 	INTEL_VGA_DEVICE(0x7D40, info), \
++-	INTEL_VGA_DEVICE(0x7D60, info)
+++	INTEL_VGA_DEVICE(0x7D41, info), \
+++	INTEL_VGA_DEVICE(0x7D60, info), \
+++	INTEL_VGA_DEVICE(0x7D67, info)
++ 
++ #define INTEL_MTL_P_IDS(info) \
++ 	INTEL_VGA_DEVICE(0x7D45, info), \
++ 	INTEL_VGA_DEVICE(0x7D55, info), \
++ 	INTEL_VGA_DEVICE(0x7DD5, info)
++ 
+++#define INTEL_ARL_P_IDS(info) \
+++	INTEL_VGA_DEVICE(0x7D51, info), \
+++	INTEL_VGA_DEVICE(0x7DD1, info)
+++
++ #define INTEL_MTL_IDS(info) \
++ 	INTEL_MTL_M_IDS(info), \
++-	INTEL_MTL_P_IDS(info)
+++	INTEL_MTL_P_IDS(info), \
+++	INTEL_ARL_P_IDS(info)
++ 
++ #endif /* _I915_PCIIDS_H */
+diff --git a/0001-INTEL_DII-drm-i915-arl-ARL-false-PCH-ID.patch b/0001-INTEL_DII-drm-i915-arl-ARL-false-PCH-ID.patch
+new file mode 100644
+index 000000000000..0585e8dc7c4c
+--- /dev/null
++++ b/0001-INTEL_DII-drm-i915-arl-ARL-false-PCH-ID.patch
+@@ -0,0 +1,35 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++From: "Garg, Nemesa" <nemesa.garg@intel.com>
++Date: Wed, 1 Mar 2023 11:21:53 +0530
++Subject: [PATCH] INTEL_DII: drm/i915/arl: ARL false PCH ID
++
++Add ARL to the fake PCH handler and assign PCH_MTP
++
++Signed-off-by: Garg, Nemesa <nemesa.garg@intel.com>
++---
++ drivers/gpu/drm/i915/soc/intel_pch.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/drivers/gpu/drm/i915/soc/intel_pch.c b/drivers/gpu/drm/i915/soc/intel_pch.c
++--- a/drivers/gpu/drm/i915/soc/intel_pch.c
+++++ b/drivers/gpu/drm/i915/soc/intel_pch.c
++@@ -171,7 +171,7 @@ intel_virt_detect_pch(const struct drm_i915_private *dev_priv,
++ 	 * make an educated guess as to which PCH is really there.
++ 	 */
++ 
++-	if (IS_METEORLAKE(dev_priv))
+++	if (IS_METEORLAKE(dev_priv) || IS_ARROWLAKE_P(dev_priv))
++ 		id = INTEL_PCH_MTP_DEVICE_ID_TYPE;
++ 	else if (IS_ALDERLAKE_S(dev_priv) || IS_ALDERLAKE_P(dev_priv))
++ 		id = INTEL_PCH_ADP_DEVICE_ID_TYPE;
++@@ -223,7 +223,9 @@ void intel_detect_pch(struct drm_i915_private *dev_priv)
++ 	} else if (IS_DG2(dev_priv)) {
++ 		dev_priv->pch_type = PCH_DG2;
++ 		return;
++-	}
+++	} else if (IS_ARROWLAKE_P(dev_priv)) {
+++		dev_priv->pch_type = PCH_MTP;
+++		return;
++ 
++ 	/*
++ 	 * The reason to probe ISA bridge instead of Dev31:Fun0 is to
+--
+git-pile 1.1
 
-# rt-app /root/rt-app/cfs_yield.json
-
-# cat /sys/kernel/debug/sched/debug
-...
-cpu#2
-  .nr_running                    : 4
-  ...
-  .curr->pid                     : 2121
-  ...
-
-cfs_rq[2]:/autogroup-15
-  .exec_clock                    : 0.000000
-  .MIN_vruntime                  : 32428.281204
-  .min_vruntime                  : 32428.281204
-  .max_vruntime                  : 32434.997784
-  ...
-  .nr_running                    : 4
-  .h_nr_running                  : 4
-
-...
-
- S            task   PID         tree-key  switches  prio     wait-time             sum-exec        sum-sleep
--------------------------------------------------------------------------------------------------------------
- S         cpuhp/2    22      1304.405864        13   120         0.000000         0.270000         0.000000         0.000000 0 0 /
- S     migration/2    23         0.000000         8     0         0.000000         7.460940         0.000000         0.000000 0 0 /
- S     ksoftirqd/2    24    137721.092326        46   120         0.000000         1.821880         0.000000         0.000000 0 0 /
- I    kworker/2:0H    26      2116.827393         4   100         0.000000         0.057220         0.000000         0.000000 0 0 /
- I     kworker/2:1    45    204539.183593       322   120         0.000000       447.975440         0.000000         0.000000 0 0 /
- I     kworker/2:3    80      1778.668364        33   120         0.000000        16.237320         0.000000         0.000000 0 0 /
- I    kworker/2:1H   239    199388.093936        74   100         0.000000         1.892300         0.000000         0.000000 0 0 /
- R         taskA-0  2120     32428.281204       582   120         0.000000      1109.911280         0.000000         0.000000 0 0 /autogroup-15
->R         taskB-1  2121     32430.693304       265   120         0.000000      1103.527660         0.000000         0.000000 0 0 /autogroup-15
- R         taskB-2  2122     32432.137084       264   120         0.000000      1105.006760         0.000000         0.000000 0 0 /autogroup-15
- R         taskB-3  2123     32434.997784       282   120         0.000000      1115.965120         0.000000         0.000000 0 0 /autogroup-15
-
-...
-
-Not sure how Vincent's rt-app file looks like exactly but I crafted
-something quick here:
-
-{
-        "tasks" : {
-                "taskA" : {
-                        "cpus" : [2],
-                        "yield" : "taskA",
-                        "run" : 1000
-                },
-                "taskB" : {
-                        "instance" : 3, 
-                        "cpus" : [2],
-                        "run" : 1000000
-                }
-        },
-        "global" : { 
-                "calibration" : 156,
-                "default_policy" : "SCHED_OTHER",
-                "duration" : 20
-        }
-} 
-
-[...]
