@@ -2,203 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD696A8B0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558716A8B0B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjCBVMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 16:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        id S229461AbjCBVQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 16:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCBVMt (ORCPT
+        with ESMTP id S229437AbjCBVP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 16:12:49 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8BE57D11;
-        Thu,  2 Mar 2023 13:12:21 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322KRihi009507;
-        Thu, 2 Mar 2023 21:11:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=C41PJKGqWAoHhNIrgZK/pcgj3ZWg/UjpjLf903DeDMI=;
- b=kNVaJKbNkaXZPgIV7S7uWzeZ77ALDtBopJRrGSPLXBf0NzWwE1+D1uXUTFGWA7A1kJLW
- z0lcazOwntdMekHSJ78uJKYPSuxX0H4sSeqtsLZD8GCnoHSyMqrEgKCiFKptHRZIOivp
- 6sCeX5FPLx6SL5LhuYThw3785P5lCrvTcFbFC3QoosMx0R58PnlVSlADA85b4nbj94Dz
- E0tgN85tdmJTGYHzIUCxFPjBcBcOWp+k1bzcd/zVCLh9qJRUqg3FVUwGolrYbd3S7qnP
- E0z5Cd5YkJR7MjlNPTYJPsnyq0ghK+Kv9X2k0/SObKM7DI4xy9ol8wx7tWBrNodx6ppy Ew== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p32uygxn8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 21:11:29 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 322KmKgQ040718;
-        Thu, 2 Mar 2023 21:11:28 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p32uygxmc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 21:11:28 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 322IOh2t016406;
-        Thu, 2 Mar 2023 21:11:26 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3nybdm6qvq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 21:11:26 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 322LBPmh7799472
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Mar 2023 21:11:25 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2CD965805F;
-        Thu,  2 Mar 2023 21:11:25 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 737F05805B;
-        Thu,  2 Mar 2023 21:11:15 +0000 (GMT)
-Received: from [9.65.199.252] (unknown [9.65.199.252])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Mar 2023 21:11:15 +0000 (GMT)
-Message-ID: <740d3ee7-e981-0812-f21e-296a7f350388@linux.ibm.com>
-Date:   Thu, 2 Mar 2023 23:11:13 +0200
+        Thu, 2 Mar 2023 16:15:59 -0500
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD1B2BEF6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 13:15:58 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-536af432ee5so7053307b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 13:15:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677791758;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eVpveqav39xHluf+wjGnRtJx3spTO96lIDpkUW7nSVw=;
+        b=xBLKuh7p4rfeRr1hJpT9ZP1BAneM71mAg5865L4dpgriIYX9E9EFVstGBP2PPh/gZD
+         stC5+e64V+62nDXtWD/PXR1PgGk1eJ2Vo+eIF9w81J5qKEovrz86hk+Le2dFkuvrRM35
+         4rgAGRefJvtWJZuYd1ERj0DyXagV2xqRVzFfqLQBgPysQq0+5Loh+gHtV9t4J23k9WRi
+         7B9z/1LPB4CwwE5f0Ogj6YbGRg0BtVHD82CYifYOfsI2cvmZcyprEAKAukhYIxT0U8lf
+         GgTaDO4m11UIOPSyR820t+CobLGp+e29xH1otCc6OL6Ao3BL0hlKtguT1snysn6z8F5f
+         EIDg==
+X-Gm-Message-State: AO0yUKWz+guteW8u51WUgGDIdc1a2tKaWjf71n0/CWYgDOoBzj2OBb26
+        Ppzas5otxLuLoySRxkpO61qW5ov9Ve9Ap6IG990=
+X-Google-Smtp-Source: AK7set+CQ6jI8lY1b7hKdCF6npSVRkwWGg8RBevqoZTgOF2umxfiVgWHhlT7z/gFAOKKeWti2LsuWw+SWMfG9KLq+B0=
+X-Received: by 2002:a81:ae0e:0:b0:534:7429:2eb4 with SMTP id
+ m14-20020a81ae0e000000b0053474292eb4mr7144251ywh.3.1677791758074; Thu, 02 Mar
+ 2023 13:15:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH RFC v8 52/56] ccp: Add support to decrypt the page
-Content-Language: en-US
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, hpa@zytor.com, ardb@kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        jmattson@google.com, luto@kernel.org, dave.hansen@linux.intel.com,
-        slp@redhat.com, pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        tobin@ibm.com, bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, Brijesh Singh <brijesh.singh@amd.com>,
-        Dov Murik <dovmurik@linux.ibm.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
- <20230220183847.59159-53-michael.roth@amd.com>
- <20230301232045.0000502e@intel.com>
- <e63ba525-644d-1a8c-afe7-2ced4a8fbb93@linux.ibm.com>
- <36734887-6474-b43e-51ae-34f37e6670a5@amd.com>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <36734887-6474-b43e-51ae-34f37e6670a5@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BH9z6nn2n8lzIHVH_MLBi3cktElaaSB7
-X-Proofpoint-ORIG-GUID: NKQS8NB6-1CcXMFAavhlGNyyCSi2rGOZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-02_13,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- clxscore=1015 lowpriorityscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303020182
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230228192145.2120675-1-song@kernel.org> <CAM9d7chLaXDU4mMkD1U6YuOGZXcu7PFWGOuEkFKSkbrCLS+zWg@mail.gmail.com>
+ <BBB1A458-25CA-4C0F-AF04-18534D092142@fb.com>
+In-Reply-To: <BBB1A458-25CA-4C0F-AF04-18534D092142@fb.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 2 Mar 2023 13:15:46 -0800
+Message-ID: <CAM9d7chCcz=o+XX_ruZ3+zfp2Z2sPDG43dpTZH_mf6zXYjTJ7w@mail.gmail.com>
+Subject: Re: [PATCH] perf: fix perf_event_context->time
+To:     Song Liu <songliubraving@meta.com>
+Cc:     Song Liu <song@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 1, 2023 at 3:16 PM Song Liu <songliubraving@meta.com> wrote:
+>
+>
+>
+> > On Mar 1, 2023, at 2:29 PM, Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > Hi Song,
+> >
+> > On Tue, Feb 28, 2023 at 11:22 AM Song Liu <song@kernel.org> wrote:
+> >>
+> >> Time readers rely on perf_event_context->[time|timestamp|timeoffset] to get
+> >> accurate time_enabled and time_running for an event. The difference between
+> >> ctx->timestamp and ctx->time is the among of time when the context is not
+> >> enabled. For cpuctx.ctx, time and timestamp should stay the same, however,
+> >
+> > I'm not sure if it's correct.  The timestamp can go when the context is disabled
+> > for example, in ctx_resched() even if the NMI watchdog is enabled, right?
+>
+> I think we do not disable EVENT_TIME for per cpu ctx?
 
+I can see ctx_sched_out(ctx, EVENT_TIME) in some places.
+Also it'd reset EVENT_TIME if both _PINNED and _FLEXIBLE is
+cleared.
 
-On 02/03/2023 16:33, Tom Lendacky wrote:
-> On 3/1/23 23:59, Dov Murik wrote:
->> Hi Mike, Zhi,
->>
->> On 01/03/2023 23:20, Zhi Wang wrote:
->>> On Mon, 20 Feb 2023 12:38:43 -0600
->>> Michael Roth <michael.roth@amd.com> wrote:
->>>
->>>> From: Brijesh Singh <brijesh.singh@amd.com>
->>>>
->>>> Add support to decrypt guest encrypted memory. These API interfaces can
->>>> be used for example to dump VMCBs on SNP guest exit.
->>>>
->>>
->>> What kinds of check will be applied from firmware when VMM decrypts this
->>> page? I suppose there has to be kinda mechanism to prevent VMM to
->>> decrypt
->>> any page in the guest. It would be nice to have some introduction about
->>> it in the comments.
->>>
->>
->> The SNP ABI spec says (section 8.27.2 SNP_DBG_DECRYPT):
->>
->>    The firmware checks that the guest's policy allows debugging. If not,
->>    the firmware returns POLICY_FAILURE.
->>
->> and in the Guest Policy (section 4.3):
->>
->>    Bit 19 - DEBUG
->>    0: Debugging is disallowed.
->>    1: Debugging is allowed.
->>
->> In the kernel, that firmware error code is defined as
->> SEV_RET_POLICY_FAILURE.
->>
->>
->>>> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
->>>> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
->>>> [mdr: minor commit fixups]
->>>> Signed-off-by: Michael Roth <michael.roth@amd.com>
->>>> ---
->>>>   drivers/crypto/ccp/sev-dev.c | 32 ++++++++++++++++++++++++++++++++
->>>>   include/linux/psp-sev.h      | 22 ++++++++++++++++++++--
->>>>   2 files changed, 52 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/crypto/ccp/sev-dev.c
->>>> b/drivers/crypto/ccp/sev-dev.c
->>>> index e65563bc8298..bf5167b2acfc 100644
->>>> --- a/drivers/crypto/ccp/sev-dev.c
->>>> +++ b/drivers/crypto/ccp/sev-dev.c
->>>> @@ -2017,6 +2017,38 @@ int sev_guest_df_flush(int *error)
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(sev_guest_df_flush);
->>>>   +int snp_guest_dbg_decrypt_page(u64 gctx_pfn, u64 src_pfn, u64
->>>> dst_pfn, int *error)
->>>> +{
->>>> +    struct sev_data_snp_dbg data = {0};
->>>> +    struct sev_device *sev;
->>>> +    int ret;
->>>> +
->>>> +    if (!psp_master || !psp_master->sev_data)
->>>> +        return -ENODEV;
->>>> +
->>>> +    sev = psp_master->sev_data;
->>>> +
->>>> +    if (!sev->snp_initialized)
->>>> +        return -EINVAL;
->>>> +
->>>> +    data.gctx_paddr = sme_me_mask | (gctx_pfn << PAGE_SHIFT);
->>>> +    data.src_addr = sme_me_mask | (src_pfn << PAGE_SHIFT);
->>>> +    data.dst_addr = sme_me_mask | (dst_pfn << PAGE_SHIFT);
->>
->> I guess this works, but I wonder why we need to turn on sme_me_mask on
->> teh dst_addr.  I thought that the firmware decrypts the guest page
->> (src_addr) to a plaintext page.  Couldn't find this requirement in the
->> SNP spec.
-> 
-> This sme_me_mask tells the firmware how to access the host memory
-> (similar to how DMA uses sme_me_mask when supplying addresses to devices
-> under SME). This needs to match the pagetable mapping being used by the
-> host, otherwise the contents will appears as ciphertext to the host if
-> they are not in sync. Since the default pagetable mapping is encrypted,
-> the sme_me_mask bit must be provided on the destination address. So it
-> is not a spec requirement, but an SME implementation requirement.
-> 
+Thanks,
+Namhyung
 
-Ah, OK, that's clear now. Thanks Tom.
-
--Dov
+>
+> >
+> >> it is not the case at the moment. To show this with drgn [1]:
+> >>
+> >>    drgn 0.0.22 (using Python 3.8.6, elfutils 0.185, with libkdumpfile)
+> >>    For help, type help(drgn).
+> >>    ...
+> >>>>> ctx = per_cpu_ptr(prog['pmu'].pmu_cpu_context, 0).ctx
+> >>>>> ctx.timestamp * 1.0 / ctx.time
+> >>    (double)1.0385869134111765
+> >>>>>
+> >>
+> >> ctx->timestamp is about 4% larger than ctx.time. This issue causes time
+> >> read by perf_event_read_local() goes back in some cases.
+> >
+> > I don't think the difference between the ctx.time and the timestamp
+> > itself is a problem.  I think the problem is it CAN update the timestamp
+> > (and the timeoffset) while the context is enabled.  Then depending on
+> > the timing, event times can return smaller values than before.
+>
+> For per cpu ctx, I think timeoffset should stay the same (may not be zero
+> though).
+>
+> Thanks,
+> Song
+>
+>
