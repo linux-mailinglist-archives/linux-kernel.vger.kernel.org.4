@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAF86A832E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005916A8332
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjCBNEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 08:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S229897AbjCBNFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjCBNET (ORCPT
+        with ESMTP id S229993AbjCBNFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 08:04:19 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B7919685;
-        Thu,  2 Mar 2023 05:04:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677762256; x=1709298256;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3Jpg3nHjmpvS3lM/CU+kVN/GW52lIe3SiJrFpzxvyCg=;
-  b=NZYJoglwCFY3uPjt5xO/p+Phnd8M8bcqfFSszGrb/k8FigslYIECeEsb
-   6hVL+UkeFcH6+mOgqlI9pflOvi8nCbaQ1HDMG1V16SnafKi8iyPuOocJC
-   0D+DrOKbef4bowufak+XZEQNsL5k121D5walfbMUJersPRhmrqfhyLjzM
-   HfWsERNtbGZ7amcAevOqxQ+uJiz8S8i8ZCvkslHRkGqS6rKUV8f1A+Qdw
-   aKzdzIplMfY0rT1dIjXMjXTlDBz6mBuO9u7anzVCGZTongDGRQ8alvmK5
-   c6L7m4DL9NXYm7WovSh3VHLm6+voiKG5HF49rcAfF1N+OE2T1UXEwiQ0o
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="336213549"
-X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
-   d="scan'208";a="336213549"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 05:04:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="818011391"
-X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
-   d="scan'208";a="818011391"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.214.218]) ([10.254.214.218])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 05:04:09 -0800
-Message-ID: <9663b2e8-6f5e-0da1-822d-20cdda130386@linux.intel.com>
-Date:   Thu, 2 Mar 2023 21:04:07 +0800
+        Thu, 2 Mar 2023 08:05:14 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2773400F;
+        Thu,  2 Mar 2023 05:05:12 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id s11so3299615edy.8;
+        Thu, 02 Mar 2023 05:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NuLOWhWrC2ZYcXfdcOiL8yPuEBe7t2pO8CMXuZCt8xw=;
+        b=ktrq8nUVhNvC1Qu22L5/jX0bNGgKqOYkpcPF9GEnKyWlv9TUBPegtLkSmjT/ua2C4W
+         E/fWKL5aVyd8srHxUvyf2Dgh7z9CJY3GLV075C3XSzXJeqvnkpzPVmcAR1rrMVr2+Ki2
+         h6osqCEAsMdKDoSmD8VybU1bw3q+P8eu3MhxMm1EXRUdHpDwpg20pfkHOS8iYV2Vo5Tq
+         bhCa3Q46sKSTmtnpNH2mydP04cOGpNkiE6p6O7ptvh7wNLnFMzMY3xiES0lPz4Ua8CAW
+         AX53e/mHN8h46B9CGgduEq4sT4+2/6+IVGxWn+R0vTdGIZyH8UregVuwZakroFH+JTu7
+         aM9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NuLOWhWrC2ZYcXfdcOiL8yPuEBe7t2pO8CMXuZCt8xw=;
+        b=tuc95lTbXjxF/E8TB1MfA/448Vk5ZYXYuqsavF7U9nbGJEvbjjDudZK+Tv+lRp1y5H
+         lDspMPA2a/qDNyUzVJffa8jc6XF09i+6jc6zS+iSomyHTFG+jqJlGAR1HgX9hmc7SDU+
+         VwvCUKmqTAGHAWbI89usTlRw98P9/kE5rh01tLQVJpGfUe5DbBBkheHnTnnHadwHuuv6
+         Xb5J8voZE2aw1NYUnt0tXdEdJwJf9H0PRTBZoXiCo140I5IXav++AIV0HvLC7PyAtv+q
+         5oZAbqCRxX4WK7wVtBUe065bJZa8421UtmxFvDzmuXaqbjXsEt1G9ZT27QOOO1JiAvZk
+         rUlQ==
+X-Gm-Message-State: AO0yUKXGs9ciwPUyEXQKTLE4szZ/sWaR+5VqH6+iTPUCBm6Cy47T7FSY
+        IDCTpfbJC/WXxnLdj2wrdDJ1+qrlGeo=
+X-Google-Smtp-Source: AK7set/jJ4KfZUe6vszyiFhHzlD7yUojvpO8zjksHWQah5yt+7I9bXne5ed3TwHNfDo3Gz/MtKlOww==
+X-Received: by 2002:aa7:c612:0:b0:4ad:7224:ce9d with SMTP id h18-20020aa7c612000000b004ad7224ce9dmr10155537edq.17.1677762311297;
+        Thu, 02 Mar 2023 05:05:11 -0800 (PST)
+Received: from carbian.corp.quobyte.com ([2a02:8109:aa3f:ead8::dc02])
+        by smtp.gmail.com with ESMTPSA id u7-20020a50d507000000b004af759bc79asm6932903edi.7.2023.03.02.05.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 05:05:10 -0800 (PST)
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     jic23@kernel.org, lars@metafoo.de,
+        andriy.shevchenko@linux.intel.com
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mehdi Djait <mehdi.djait.k@gmail.com>
+Subject: [PATCH v2 0/2] iio: Add kernel-docs and rename iio_trigger_poll_chained
+Date:   Thu,  2 Mar 2023 14:04:34 +0100
+Message-Id: <cover.1677761379.git.mehdi.djait.k@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v4 4/6] iommu/sva: Use GFP_KERNEL for pasid allocation
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, bp@alien8.de,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
- <20230301235646.2692846-5-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230301235646.2692846-5-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/2 7:56, Jacob Pan wrote:
-> We’re not using  spinlock-protected IOASID allocation anymore, there’s
-> no need for GFP_ATOMIC.
-> 
-> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
+The main goal behind the kernel-docs is to give a hint where the
+functions are expected to be called. 
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Renaming iio_trigger_poll_chained() to iio_trigger_poll_nested() came
+from a Jonathan's suggestion in [1]
 
-Best regards,
-baolu
+I am a little bit unsure about moving the kernel-doc of iio_trigger_poll
+to industrialio-trigger.c 
+My motivation behind it:
+- having the source code together with the documentation tends to be 
+better for understanding 
+- make it easier to understand the _nested in iio_trigger_poll_nested 
+(the call to handle_nested_irq)
+
+[1] https://lore.kernel.org/linux-iio/Y+6QoBLh1k82cJVN@carbian/
+
+--
+Kind Regards
+Mehdi Djait
+
+Mehdi Djait (2):
+  iio: Improve the kernel-doc of iio_trigger_poll
+  iio: Rename iio_trigger_poll_chained and add kernel-doc
+
+ drivers/iio/accel/bma400_core.c               |  2 +-
+ drivers/iio/accel/kionix-kx022a.c             |  2 +-
+ drivers/iio/accel/mma8452.c                   |  2 +-
+ drivers/iio/accel/msa311.c                    |  2 +-
+ drivers/iio/adc/ad7606.c                      |  2 +-
+ drivers/iio/adc/at91-sama5d2_adc.c            |  2 +-
+ drivers/iio/adc/max11410.c                    |  2 +-
+ .../common/st_sensors/st_sensors_trigger.c    |  4 ++--
+ drivers/iio/gyro/fxas21002c_core.c            |  2 +-
+ drivers/iio/gyro/mpu3050-core.c               |  2 +-
+ drivers/iio/humidity/hts221_buffer.c          |  2 +-
+ drivers/iio/industrialio-trigger.c            | 19 +++++++++++++++++--
+ drivers/iio/light/acpi-als.c                  |  2 +-
+ drivers/iio/light/rpr0521.c                   |  2 +-
+ drivers/iio/light/st_uvis25_core.c            |  2 +-
+ drivers/iio/light/vcnl4000.c                  |  2 +-
+ drivers/iio/light/vcnl4035.c                  |  2 +-
+ drivers/iio/potentiostat/lmp91000.c           |  2 +-
+ drivers/iio/pressure/zpa2326.c                |  2 +-
+ drivers/iio/proximity/as3935.c                |  2 +-
+ drivers/iio/trigger/iio-trig-loop.c           |  2 +-
+ include/linux/iio/trigger.h                   |  8 +-------
+ 22 files changed, 39 insertions(+), 30 deletions(-)
+
+-- 
+2.30.2
+
