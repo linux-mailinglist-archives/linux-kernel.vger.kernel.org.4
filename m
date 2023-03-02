@@ -2,104 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389E46A86BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C236A86DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjCBQfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S229535AbjCBQiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjCBQfS (ORCPT
+        with ESMTP id S229538AbjCBQiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:35:18 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E121589A;
-        Thu,  2 Mar 2023 08:34:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=roYQIsSpHz5fL2zIngizuTvBFCJoqJp/J086FjeBQYc=; b=fdCWnu2itzSlf8Amrp12KHSkko
-        z1BlPi8wPPf+TvuuSYyYzCix6x51jb+zhdBmO2UZfMJSLR2domMYDPJ0K+cwTJ1bfz2kf+Lx4TtC2
-        J1k55PyjpVEgbWRgnE+9oxSWD6+NENEa0EgPoep1I/UsgD38fmtM06m5hpTWJD3xPXVsJwCgJ+IOP
-        pdszMOXSjE4bRXfc0W5x2whSDsnXwhsf3yc6J6gQrTRA8GT6FFpiqfRQMHQ+slSPJ/eIhapFmyqoo
-        lf3xtqMd+fy+E0fP9VYcR5UvG5WYoAb5bmAiG5n7V9adINsnqE9jCuqfo3SJlf1OjYWCnC5aF6BTu
-        FsgF//Ww==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pXltO-002qTG-CG; Thu, 02 Mar 2023 16:34:54 +0000
-Message-ID: <9332c041-4cb4-b0f8-4cc7-8fd57e394610@infradead.org>
-Date:   Thu, 2 Mar 2023 08:34:53 -0800
+        Thu, 2 Mar 2023 11:38:20 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EEC57D3C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:37:34 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id o15so67500998edr.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 08:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tfY1Ul1QnfuQtui+4Ej95F51iCd9NVPI2d94LXtRwmo=;
+        b=bDoI/39/km5XuwmNOoWn9p3W5zwRXDGImrlqwgWO1zuWUu1uLGMwSch+pf0z7lOVEk
+         73JivL/5QyrKUaadxgCH/zBN/F+kuk2N5+pmDTVCqty5ou9Lp5ebIvJuY0sM6+2Ye5lX
+         Ct4Fw8SaWySke/s2OpZJIlJv6gBiooF1l0PkA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tfY1Ul1QnfuQtui+4Ej95F51iCd9NVPI2d94LXtRwmo=;
+        b=gw0GBwmmPA4XepNNDo2+V1DbUkzRaj9tmzyQ6Va5R05h2jiQGPSzeVEcjws39hBpqN
+         kDqPXQSYfcJHKxrOoKhtPrlGZEw0+LhphB2Q1rj4JNnql/LckyyA8pN7RbVFT8nbD/FI
+         0LfrrxWlRzr/TSGyP7dQGWw6qP90XAhDc/lPjpDrRJsY8JPLVgfEZWvNUawwOU0LLOoC
+         nQ0NwRheMfPNs34Lw/4N2APIja51LTEkdcJbjCiMxroy6cCt3muBhHJWYhVqW57CcoqU
+         /oJmov9VNyg2solPwc1Djp8Y8SLqVzsZjhNxiY1AD0QBrYvyLEzkFqa+zY3NwA31SuD1
+         u8Zw==
+X-Gm-Message-State: AO0yUKUwTCyhs/zhKSRPiPv/KU27dXkRWZamUyKI5viQ6xpY2u4keK7b
+        lVa3Wb2YZLORLlIF3C5RfUdh0A==
+X-Google-Smtp-Source: AK7set9auJrOCtINNaTDbetFrZVlHmp0QiBEME8aEHEdjzC6Rn02Ru1UVtQvJaLObY5/foEdxrwdfw==
+X-Received: by 2002:a17:906:6543:b0:8a9:e031:c4ae with SMTP id u3-20020a170906654300b008a9e031c4aemr10818449ejn.2.1677775047510;
+        Thu, 02 Mar 2023 08:37:27 -0800 (PST)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id os6-20020a170906af6600b008f7f6943d1dsm7173547ejb.42.2023.03.02.08.37.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 08:37:27 -0800 (PST)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yadi Brar <yadi.brar01@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Felipe Balbi <balbi@ti.com>
+Cc:     alsa-devel@alsa-project.org,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: u_audio: don't let userspace block driver unbind
+Date:   Thu,  2 Mar 2023 17:36:47 +0100
+Message-Id: <20230302163648.3349669-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] perf: arm_cspmu: Fix compiler warning
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Besar Wicaksono <bwicaksono@nvidia.com>,
-        catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, treding@nvidia.com,
-        jonathanh@nvidia.com, vsethi@nvidia.com
-References: <20230301225657.30211-1-bwicaksono@nvidia.com>
- <7db8f057-e1d8-101d-19f4-1d4efb900f1f@arm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <7db8f057-e1d8-101d-19f4-1d4efb900f1f@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
+In the unbind callback for f_uac1 and f_uac2, a call to snd_card_free()
+via g_audio_cleanup() will disconnect the card and then wait for all
+resources to be released, which happens when the refcount falls to zero.
+Since userspace can keep the refcount incremented by not closing the
+relevant file descriptor, the call to unbind may block indefinitely.
+This can cause a deadlock during reboot, as evidenced by the following
+blocked task observed on my machine:
 
-On 3/2/23 04:01, Suzuki K Poulose wrote:
-> On 01/03/2023 22:56, Besar Wicaksono wrote:
->> Fix following compiler warning message
->>    | smatch warnings:
->>    | drivers/perf/arm_cspmu/arm_cspmu.c:1075 arm_cspmu_find_cpu_container()
->>    |    warn: variable dereferenced before check 'cpu_dev' (see line 1073)
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Reported-by: Dan Carpenter <error27@gmail.com>
->> Link: https://lore.kernel.org/r/202302191227.kc0V8fM7-lkp@intel.com/
->> Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
-> 
-> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+  task:reboot  state:D stack:0   pid:2827  ppid:569    flags:0x0000000c
+  Call trace:
+   __switch_to+0xc8/0x140
+   __schedule+0x2f0/0x7c0
+   schedule+0x60/0xd0
+   schedule_timeout+0x180/0x1d4
+   wait_for_completion+0x78/0x180
+   snd_card_free+0x90/0xa0
+   g_audio_cleanup+0x2c/0x64
+   afunc_unbind+0x28/0x60
+   ...
+   kernel_restart+0x4c/0xac
+   __do_sys_reboot+0xcc/0x1ec
+   __arm64_sys_reboot+0x28/0x30
+   invoke_syscall+0x4c/0x110
+   ...
 
-in Subject:, s/compiler/smatch/
+The issue can also be observed by opening the card with arecord and
+then stopping the process through the shell before unbinding:
 
->> ---
->>   drivers/perf/arm_cspmu/arm_cspmu.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
->> index e31302ab7e37..a3f1c410b417 100644
->> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
->> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
->> @@ -1078,12 +1078,14 @@ static int arm_cspmu_request_irq(struct arm_cspmu *cspmu)
->>   static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
->>   {
->>       u32 acpi_uid;
->> -    struct device *cpu_dev = get_cpu_device(cpu);
->> -    struct acpi_device *acpi_dev = ACPI_COMPANION(cpu_dev);
->> +    struct device *cpu_dev;
->> +    struct acpi_device *acpi_dev;
->>   +    cpu_dev = get_cpu_device(cpu);
->>       if (!cpu_dev)
->>           return -ENODEV;
->>   +    acpi_dev = ACPI_COMPANION(cpu_dev);
->>       while (acpi_dev) {
->>           if (!strcmp(acpi_device_hid(acpi_dev),
->>                   ACPI_PROCESSOR_CONTAINER_HID) &&
->>
->> base-commit: 7f7a8831520f12a3cf894b0627641fad33971221
-> 
+  # arecord -D hw:UAC2Gadget -f S32_LE -c 2 -r 48000 /dev/null
+  Recording WAVE '/dev/null' : Signed 32 bit Little Endian, Rate 48000 Hz, Stereo
+  ^Z[1]+  Stopped                    arecord -D hw:UAC2Gadget -f S32_LE -c 2 -r 48000 /dev/null
+  # echo gadget.0 > /sys/bus/gadget/drivers/configfs-gadget/unbind
+  (observe that the unbind command never finishes)
 
+Fix the problem by using snd_card_free_when_closed() instead, which will
+still disconnect the card as desired, but defer the task of freeing the
+resources to the core once userspace closes its file descriptor.
+
+Fixes: 132fcb460839 ("usb: gadget: Add Audio Class 2.0 Driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+ drivers/usb/gadget/function/u_audio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index c1f62e91b012..4a42574b4a7f 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -1422,7 +1422,7 @@ void g_audio_cleanup(struct g_audio *g_audio)
+ 	uac = g_audio->uac;
+ 	card = uac->card;
+ 	if (card)
+-		snd_card_free(card);
++		snd_card_free_when_closed(card);
+ 
+ 	kfree(uac->p_prm.reqs);
+ 	kfree(uac->c_prm.reqs);
 -- 
-~Randy
+2.39.1
+
