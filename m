@@ -2,137 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EEE6A8054
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE366A8066
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjCBKwc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Mar 2023 05:52:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S229807AbjCBKzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjCBKw3 (ORCPT
+        with ESMTP id S229662AbjCBKzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:52:29 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3937930197;
-        Thu,  2 Mar 2023 02:52:26 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 052EA24E3E0;
-        Thu,  2 Mar 2023 18:52:24 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 2 Mar
- 2023 18:52:23 +0800
-Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
- by EXMBX068.cuchost.com (172.16.6.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Thu, 2 Mar 2023 18:52:23 +0800
-From:   William Qiu <william.qiu@starfivetech.com>
-To:     <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        William Qiu <william.qiu@starfivetech.com>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-Subject: [PATCH v1 2/2] spi: cadence-quadspi: Add support for StarFive JH7110 QSPI
-Date:   Thu, 2 Mar 2023 18:52:21 +0800
-Message-ID: <20230302105221.197421-3-william.qiu@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230302105221.197421-1-william.qiu@starfivetech.com>
-References: <20230302105221.197421-1-william.qiu@starfivetech.com>
+        Thu, 2 Mar 2023 05:55:11 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342F13D939
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:55:08 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v16so13271626wrn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:55:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677754506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0kjxBm4+DoG4C2wkKxFrUZYN+G/AbIQR/qTtaSDrIN0=;
+        b=OltRJZx0wGBWq11qdaiOynKDK4Zovlj1Cqp67B71vJ4hfuI2sFXjgoUuVEU2kyKkgm
+         D1O70YbsKsxsUeP4307Q9vwwD+JkLHels1coONwCgRjrOWy0WyMnwJdQelpTzsY6Y9bC
+         coAn2teeexMAaYv/5ih5qMtH+mbgaYpgEQMR/zTnYTbe3Ol/8EwpGdq9+F5V7QjRCXg0
+         qufSooKI4b9bM118gEgXEklxl6NfI/fpE30hSjmZYQkuu+WVYKy/dTVk25R3Gi2RS7yX
+         dbH8hvvumvlM+GzPFdNOQIYGdoNKHPSgIVUL4cWn5ml2/2Oa3rz+bNrJXmAv31lgBQIV
+         gepA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677754506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0kjxBm4+DoG4C2wkKxFrUZYN+G/AbIQR/qTtaSDrIN0=;
+        b=1N6Rs/GKf6mYmuSHQR5oB9Wl4Qx1uBaaf1ZAjo51+McWVza0T12xzkUSyWWE9OPiGR
+         bMpWZ0TiHgyvR/fPYt5QanP80f+6dE7L42Vmffo3lJ4Zsfj981p8nVuJ4mutrzw16xSp
+         xZftp1Tj6GNi1m3v2r8zMyh3n5aZ4Gy4zEpNqFHDBbY3IzcT2x/956DdcUQkxbjS/2Yu
+         RS0oKLwuc+q2sCLb7PPVyJyiSw6XmsEQaYQrtJt4YNJYH6DaHlxmF0E4G9MCX8m0GQD4
+         Fbq3U7wfRNjX4yiHLBYkRX0MXJVE68i5/XZJs1KtfRBb+fqCLI/8prd8GXucF/OU8AIe
+         eSzw==
+X-Gm-Message-State: AO0yUKXWjne31T3Oo6GEyEB12vKKX0QW0nrnmSStNC4dChAkpQe4700s
+        CdR5PALmEgrnqFXRPMaZX1xIpQ==
+X-Google-Smtp-Source: AK7set9yfancJC9F/8+0XfOWQfqS1+KlikHyR2NYbUWgAu3Rsx3a/IRK/+MfzAe0tCHzWfXDpMcIqA==
+X-Received: by 2002:a5d:6b10:0:b0:2c5:55cf:b1ab with SMTP id v16-20020a5d6b10000000b002c555cfb1abmr7109270wrw.48.1677754506664;
+        Thu, 02 Mar 2023 02:55:06 -0800 (PST)
+Received: from [192.168.74.175] (89.red-88-28-21.dynamicip.rima-tde.net. [88.28.21.89])
+        by smtp.gmail.com with ESMTPSA id k28-20020a5d525c000000b002c556a4f1casm14839206wrc.42.2023.03.02.02.55.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 02:55:06 -0800 (PST)
+Message-ID: <ecb9af84-a2a5-1414-13ea-be00e9203da3@linaro.org>
+Date:   Thu, 2 Mar 2023 11:54:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v2.1 09/24] mips/cpu: Expose play_dead()'s prototype
+ definition
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, linux-alpha@vger.kernel.org,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+References: <cover.1676358308.git.jpoimboe@kernel.org>
+ <39835bc75af2e812fce56400533cb2ab41bcf0e2.1676358308.git.jpoimboe@kernel.org>
+ <080a5ccb-7fa0-1a75-538f-a09dc146fc4e@linaro.org>
+ <20230214181101.3a2tscbmwdnwbqpu@treble>
+ <c56dc4b9-035d-7773-ecb2-0e1ac6af7abc@linaro.org>
+ <20230216184249.ogaqsaykottpxtcb@treble>
+ <20230301181639.ajqdeh7g3m3fpqhk@treble>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230301181639.ajqdeh7g3m3fpqhk@treble>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add QSPI reset operation in device probe and add RISCV support to
-QUAD SPI Kconfig.
+On 1/3/23 19:16, Josh Poimboeuf wrote:
 
-Co-developed-by: Ziv Xu <ziv.xu@starfivetech.com>
-Signed-off-by: Ziv Xu <ziv.xu@starfivetech.com>
-Signed-off-by: William Qiu <william.qiu@starfivetech.com>
----
- drivers/spi/Kconfig               |  2 +-
- drivers/spi/spi-cadence-quadspi.c | 21 ++++++++++++++++++++-
- 2 files changed, 21 insertions(+), 2 deletions(-)
+> The latest version of this patch triggered a new kbuild warning which is
+> fixed by the below patch.  If there are no objections I'll bundle it in
+> with the rest of the set for merging.
+> 
+> ---8<---
+> 
+> Subject: [PATCH] mips/smp: Add CONFIG_SMP guard for raw_smp_processor_id()
+> Content-type: text/plain
+> 
+> Without CONFIG_SMP, raw_smp_processor_id() is not expected to be defined
+> by the arch.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202302220755.HM8J8GOR-lkp@intel.com/
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>   arch/mips/include/asm/smp.h | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/mips/include/asm/smp.h b/arch/mips/include/asm/smp.h
+> index 4eee29b7845c..cf992b8b1e46 100644
+> --- a/arch/mips/include/asm/smp.h
+> +++ b/arch/mips/include/asm/smp.h
+> @@ -25,6 +25,7 @@ extern cpumask_t cpu_sibling_map[];
+>   extern cpumask_t cpu_core_map[];
+>   extern cpumask_t cpu_foreign_map[];
+>   
+> +#ifdef CONFIG_SMP
+>   static inline int raw_smp_processor_id(void)
+>   {
+>   #if defined(__VDSO__)
+> @@ -36,6 +37,7 @@ static inline int raw_smp_processor_id(void)
+>   #endif
+>   }
+>   #define raw_smp_processor_id raw_smp_processor_id
+> +#endif
+>   
+>   /* Map from cpu id to sequential logical cpu number.  This will only
+>      not be idempotent when cpus failed to come on-line.	*/
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 3b1c0878bb85..c64edea53af6 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -230,7 +230,7 @@ config SPI_CADENCE
- 
- config SPI_CADENCE_QUADSPI
- 	tristate "Cadence Quad SPI controller"
--	depends on OF && (ARM || ARM64 || X86 || COMPILE_TEST)
-+	depends on OF && (ARM || ARM64 || X86 || RISCV || COMPILE_TEST)
- 	help
- 	  Enable support for the Cadence Quad SPI Flash controller.
- 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 676313e1bdad..d9795e108ec5 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1583,7 +1583,7 @@ static int cqspi_setup_flash(struct cqspi_st *cqspi)
- static int cqspi_probe(struct platform_device *pdev)
- {
- 	const struct cqspi_driver_platdata *ddata;
--	struct reset_control *rstc, *rstc_ocp;
-+	struct reset_control *rstc, *rstc_ocp, *rstc_ref;
- 	struct device *dev = &pdev->dev;
- 	struct spi_master *master;
- 	struct resource *res_ahb;
-@@ -1673,6 +1673,17 @@ static int cqspi_probe(struct platform_device *pdev)
- 		goto probe_reset_failed;
- 	}
- 
-+	if (of_device_is_compatible(pdev->dev.of_node, "starfive,jh7110-qspi")) {
-+		rstc_ref = devm_reset_control_get_optional_exclusive(dev, "rstc_ref");
-+		if (IS_ERR(rstc_ref)) {
-+			ret = PTR_ERR(rstc_ref);
-+			dev_err(dev, "Cannot get QSPI REF reset.\n");
-+			goto probe_reset_failed;
-+		}
-+		reset_control_assert(rstc_ref);
-+		reset_control_deassert(rstc_ref);
-+	}
-+
- 	reset_control_assert(rstc);
- 	reset_control_deassert(rstc);
- 
-@@ -1825,6 +1836,10 @@ static const struct cqspi_driver_platdata versal_ospi = {
- 	.get_dma_status = cqspi_get_versal_dma_status,
- };
- 
-+static const struct cqspi_driver_platdata jh7110_qspi = {
-+	.quirks = CQSPI_DISABLE_DAC_MODE,
-+};
-+
- static const struct of_device_id cqspi_dt_ids[] = {
- 	{
- 		.compatible = "cdns,qspi-nor",
-@@ -1850,6 +1865,10 @@ static const struct of_device_id cqspi_dt_ids[] = {
- 		.compatible = "intel,socfpga-qspi",
- 		.data = &socfpga_qspi,
- 	},
-+	{
-+		.compatible = "starfive,jh7110-qspi",
-+		.data = &jh7110_qspi,
-+	},
- 	{ /* end of table */ }
- };
- 
--- 
-2.34.1
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
