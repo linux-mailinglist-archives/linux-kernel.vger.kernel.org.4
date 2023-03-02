@@ -2,156 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC23C6A89D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2756A89C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCBTyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
+        id S229740AbjCBTwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjCBTyw (ORCPT
+        with ESMTP id S229437AbjCBTwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:54:52 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D9139B93;
-        Thu,  2 Mar 2023 11:54:51 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.221.228])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 322JolfB1654568
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 2 Mar 2023 11:50:48 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 322JolfB1654568
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023020601; t=1677786658;
-        bh=n/GRsm1pImWCPNm4dPoe5zec7Kp4K3JReb8gPrI8/mc=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=EoMqj2NrvtdnnKP1K3ZY31x6mzZLyhmRVv+AfJ7wKdoAJbCxWwA+q2O/5sMmJVAVH
-         CBl1NaM0Y8H4KZuzvQjbNwKYV6dXCiIfmDalzvbDgGVmn+bMayegSv6UvQXFNOV7kH
-         d/WVC69GzUYAENKo48YQjfv0/LuQNbAN20Le/uIDHGiGr9P8B8oHP2fS95eG5xB58F
-         uasUM1VqxwzDuwffGGAapL9uswmgoHxhnTzGnsDohaOFjOu2pxA/e5nnYVugsNl2zn
-         98XlC/4jazJIi0XM8kFrS6seI0EpKbWqSgJdlLGlfl4yBTPVtfQW74gM369HHmiIcn
-         4YRgUzYFXGcXg==
-Date:   Thu, 02 Mar 2023 11:50:45 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>, hca@linux.ibm.com
-CC:     geert@linux-m68k.org, alexghiti@rivosinc.com, corbet@lwn.net,
-        Richard Henderson <richard.henderson@linaro.org>,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, chenhuacai@kernel.org,
-        kernel@xen0n.name, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.osdn.me, dalias@libc.org, davem@davemloft.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net,
-        jcmvbkbc@gmail.com, Arnd Bergmann <arnd@arndb.de>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
-User-Agent: K-9 Mail for Android
-In-Reply-To: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
-References: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
-Message-ID: <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
+        Thu, 2 Mar 2023 14:52:34 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEE530B11;
+        Thu,  2 Mar 2023 11:52:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9rkbBGcTOZSGthlsZfNwLzZTlKqZ5d5oAGtqyHXmTgs=; b=Zd76kEN1ty0OKus/3hTd2y0IG4
+        cWuYqOo5k5Uwk97TL7KplHDnSGUYabwS2nyyxCanBxKxVmc8eX0C3r/pDKX2Jq+bdRlyWcKtr4prX
+        0kNUzgN90mQG7Ou/E0bL/IFf22sMja1GC9aVRu+DQb59dPEmEKzml367ySKYCQTr/MUnpWQpUkzwd
+        CevrVFvbmobvkRRKNRiCgLPJIe6hujbpCnG4HdpAeade89I55Hhi5A0ABmIwxUC7xSfbWcIRXhAJZ
+        yz5MNezj7TygzSObOMRTTSL18fnkb2qt750eSRka7rC2hyDXzOdNbUFcj2QVDmEQLllbbSoAWKAmC
+        13NeRsVA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pXoyQ-003CGY-1t; Thu, 02 Mar 2023 19:52:18 +0000
+Date:   Thu, 2 Mar 2023 11:52:18 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Meng Tang <tangmeng@uniontech.com>
+Cc:     Peng Zhang <zhangpeng362@huawei.com>,
+        Joel Granados <j.granados@samsung.com>, keescook@chromium.org,
+        yzaikin@google.com, ebiederm@xmission.com, willy@infradead.org,
+        kbuild-all@lists.01.org, nixiaoming@huawei.com,
+        sujiaxun@uniontech.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] fs/proc: optimize register ctl_tables
+Message-ID: <ZAD+cpbrqlc5vmry@bombadil.infradead.org>
+References: <20220304112341.19528-1-tangmeng@uniontech.com>
+ <202203081905.IbWENTfU-lkp@intel.com>
+ <Y7xWUQQIJYLMk5fO@bombadil.infradead.org>
+ <Y8iKjJYMFRSthxzn@bombadil.infradead.org>
+ <Y//4B2Bw4O2umKgW@bombadil.infradead.org>
+ <541B117370C84093+1a6c9c3b-20a0-cbb5-56e4-5ab0f5e42f03@uniontech.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <541B117370C84093+1a6c9c3b-20a0-cbb5-56e4-5ab0f5e42f03@uniontech.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On March 1, 2023 7:17:18 PM PST, Palmer Dabbelt <palmer@dabbelt=2Ecom> wrot=
-e:
->On Tue, 14 Feb 2023 01:19:02 PST (-0800), hca@linux=2Eibm=2Ecom wrote:
->> On Tue, Feb 14, 2023 at 09:58:17AM +0100, Geert Uytterhoeven wrote:
->>> Hi Heiko,
->>>=20
->>> On Tue, Feb 14, 2023 at 9:39 AM Heiko Carstens <hca@linux=2Eibm=2Ecom>=
- wrote:
->>> > On Tue, Feb 14, 2023 at 08:49:01AM +0100, Alexandre Ghiti wrote:
->>> > > This all came up in the context of increasing COMMAND_LINE_SIZE in=
- the
->>> > > RISC-V port=2E  In theory that's a UABI break, as COMMAND_LINE_SIZ=
-E is the
->>> > > maximum length of /proc/cmdline and userspace could staticly rely =
-on
->>> > > that to be correct=2E
->>> > >
->>> > > Usually I wouldn't mess around with changing this sort of thing, b=
-ut
->>> > > PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LIN=
-E_SIZE
->>> > > to 2048")=2E  There are also a handful of examples of COMMAND_LINE=
-_SIZE
->>> > > increasing, but they're from before the UAPI split so I'm not quit=
-e sure
->>> > > what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE =
-from
->>> > > asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to ker=
-nel
->>> > > boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE=
-"),
->>> > > and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
->>> > > asm-generic/setup=2Eh=2E")=2E
->>> > >
->>> > > It seems to me like COMMAND_LINE_SIZE really just shouldn't have b=
-een
->>> > > part of the uapi to begin with, and userspace should be able to ha=
-ndle
->>> > > /proc/cmdline of whatever length it turns out to be=2E  I don't se=
-e any
->>> > > references to COMMAND_LINE_SIZE anywhere but Linux via a quick Goo=
-gle
->>> > > search, but that's not really enough to consider it unused on my e=
-nd=2E
->>> > >
->>> > > The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE r=
-eally
->>> > > shouldn't be part of uapi, so this now touches all the ports=2E  I=
-'ve
->>> > > tried to split this all out and leave it bisectable, but I haven't
->>> > > tested it all that aggressively=2E
->>> >
->>> > Just to confirm this assumption a bit more: that's actually the same
->>> > conclusion that we ended up with when commit 3da0243f906a ("s390: ma=
-ke
->>> > command line configurable") went upstream=2E
->
->Thanks, I guess I'd missed that one=2E  At some point I think there was s=
-ome discussion of making this a Kconfig for everyone, which seems reasonabl=
-e to me -- our use case for this being extended is syzkaller, but we're sor=
-t of just picking a value that's big enough for now and running with it=2E
->
->Probably best to get it out of uapi first, though, as that way at least i=
-t's clear that it's not uABI=2E
->
->>> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
->>> I assume?
->>=20
->> Yes, sorry for that=2E I got distracted while writing and used the wron=
-g
->> branch to look this up=2E
->
->Alex: Probably worth adding that to the list in the cover letter as it lo=
-oks like you were planning on a v4 anyway (which I guess you now have to do=
-, given that I just added the issue to RISC-V)=2E
+On Thu, Mar 02, 2023 at 10:45:32AM +0800, Meng Tang wrote:
+> 
+> On 2023/3/2 09:12, Luis Chamberlain wrot
+> > 
+> > I've taken the time to rebase this but I'm not a big fan of how fragile
+> > it is, you can easily forget to do the proper accounting or bailing out.
+> > 
+> > Upon looking at all this it reminded me tons of times Eric has
+> > said a few calls are just compatibility wrappers, and otherwise they are
+> > deprecated. Ie, they exist just to old users but we should have new
+> > users move on to the new helpers. When / if we can move the older ones
+> 
+> When a user registers sysctl, the entry is register_sysctl. In order to be
+> compatible with the previous method, I added the following statement:
+> 
+> +#define register_sysctl(path, table) register_sysctl_with_num(path, table,
+> ARRAY_SIZE(table))
+> 
+> On this basis, we can provide both register_sysctl and
+> register_sysctl_with_num.
 
-The only use that is uapi is the *default* length of the command line if t=
-he kernel header doesn't include it (in the case of x86, it is in the bzIma=
-ge header, but that is atchitecture- or even boot format-specific=2E)
+Yes, I get that, but *how* the code uses the number argument is what
+gives me concern. There's just too many changes.
+
+> > away that'd be great. Knowing that simplifies the use-cases we have to
+> > address for this case too.
+> 
+> We need to modify the helper description information, but this does not
+> affect the compatible use of the current old method and the new method now.
+
+Yes I get that. But it can easily regress for new users if you did miss
+out on doing proper accounting in a few places.
+
+> > So I phased out completely register_sysctl_paths() and then started to
+> > work on register_sysctl_table(). I didn't complete phasing out
+> > register_sysctl_table() but with a bit of patience and looking at the
+> > few last examples I did I think we can quickly phase it out with coccinelle.
+> > Here's where I'm at:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing
+> > 
+> > On top of that I've rebased your patches but I'm not confident in them
+> > so I just put this out here in case others want to work on it:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing-opt
+> > 
+> > What I think we should do first instead is do a non-functional change
+> > which transforms all loops to list_for_each_table_entry() and then
+> > we can consider using the bail out *within* the list_for_each_table_entry()
+> > macro itself.
+> > 
+> > That would solve the first part -- the fragile odd checks to bail out
+> > early.  But not the odd accounting we have to do at times. So it begs
+> > the question if we can instead deprecate register_sysctl_table() and
+> > then have a counter for us at all times. Also maybe an even simpler
+> > alternative may just be to see to have the nr_entries be inferred with
+> > ARRAY_SIZE() if count_subheaders() == 1? I haven't looked into that yet.
+> > 
+> 
+> Do you want to know here is whether it is possible to accurately calculate
+> nr_entries if entry->child is established?
+
+Not really, if you see, when count_subheaders() == 1 it means there are
+no subdirectories and just only file entries exist and so
+__register_sysctl_table() is used. That code path does not recurse.
+
+The code path with a child already is supposed to do the right thing.
+
+The *new* code path we're dealing with is in the world where count_subheaders() == 1
+but we don't even use count_subheaders() in the new code path. register_sysctl()
+calls the simple path of __register_sysctl_table() too as it is implied
+count_subheaders() == 1.
+
+My point then was that for *that* case, of __register_sysctl_table(),
+it already does its own accounting for number of entries with an initial
+list_for_each_table_entry(). Since the list_for_each_table_entry()
+always only moves forwards if its not dealing with an empty entry,
+it effectively does proper accounting for the old cases.
+
+In the new use cases we want to strive to get to a point of not having
+to add an extra entry, and as you have pointed out ARRAY_SIZE() must be
+used prior to having the pointer passed.
+
+My point was rather that by deprecating the world with
+count_subheaders() != 1 makes *all* code paths what we want, where we
+could then just replace the first part of __register_sysctl_table()
+which gets num_entries with the passed number of entries. Deprecating
+the old users will take time. But it means we should keep in mind that
+is the goal. Most / all code should go through these paths eventually
+and we should tidy things up for it.
+
+I was hoping we could leverage the existing use of nr_entries
+computation early __register_sysctl_table() and just go with that by
+modifying the list_for_each_table_entry().
+
+The odd accounting needed today where you set 'num = register_by_num'
+tons of times, perhaps just split the routine up ? Would that help
+so to not have to do that?
+
+We want to make as changes first which are non-functional, and keeping
+in midn long term we *will* always use the num_entries passed as you
+have done.
+
+  Luis
