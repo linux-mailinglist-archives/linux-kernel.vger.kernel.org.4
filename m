@@ -2,151 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE81D6A838F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862696A8393
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjCBNcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 08:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S230047AbjCBNcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCBNcT (ORCPT
+        with ESMTP id S229541AbjCBNcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 08:32:19 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4F53B675;
-        Thu,  2 Mar 2023 05:32:18 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322DFZvZ010455;
-        Thu, 2 Mar 2023 13:32:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=Ba61TMgbgtq2qCLloS89YKVV6TrsoEUxqPkJmjoGD+Q=;
- b=rnzVAew6rlusCElG0+c9Ft8GCJZwxOCj9pEbrQJH+tbt377GnwnW5K7LZNsm7LkH6h7D
- 3FMv95yDnAFSaN+R+B/pqQnEyh7H/PgW64tPAo+aMa0WViiNSm+uPom4zsUS2QdW+y1H
- ll1DU3Q2g91JJ9xAMaFuxpWI5Vbb7IWg1PVFK80T2xE7NLG3KmSB5KvHvjYcWd5ud6VY
- XUXBJ2GRH270NMAN3ZY6qxpD80fpT3CZfsH2LkFTLPYY587jtpGRMpSod+cvVnzmLr89
- M3VahycIScDLF7CY0xRfMBBjiYK5cge1YedI9OPgkfY1Gz2xFCk/ubdGygBh82tU6miC hQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2vhcrfbw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 13:32:03 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32264nRo013030;
-        Thu, 2 Mar 2023 13:32:00 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3nybcq5uj8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 13:32:00 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 322DVv9a64094476
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Mar 2023 13:31:57 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F284920043;
-        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 81DE520040;
-        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
-Received: from thinkpad-T15 (unknown [9.152.212.238])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
-Date:   Thu, 2 Mar 2023 14:31:54 +0100
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 21/34] s390: Implement the new page table range API
-Message-ID: <20230302143154.1886c213@thinkpad-T15>
-In-Reply-To: <20230228213738.272178-22-willy@infradead.org>
-References: <20230228213738.272178-1-willy@infradead.org>
-        <20230228213738.272178-22-willy@infradead.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        Thu, 2 Mar 2023 08:32:46 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C734108E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:32:44 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id o2so22364187vss.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:32:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e+JOa9pZ7+ghAgpItfrprFVqlWXmHMHYenIGtlQBzKw=;
+        b=F2k5RDZeoIE5VJbWxYIWjjFQMBpubb9nOElNeKL6kxhHkh+1ag7CjXfXi9IkwbNaWC
+         7h4n5E9dSML3Oy9qh3EQhg/yzXRGsLMgc3U82wwuyvsyjhSDS51YM962HebyssumV59V
+         KH6NnWO7EVVa/LoLb+vKEYM6427Vr2RLBGLyYJmdBTTSgAI7oNMmy/2jDjX6/uy6nxSi
+         0xMphofecLvx3/bJAKv4G7viTet8/aUB0+eXZadXdimALk3R+ifpT8Y3bZkea5yKFtqa
+         Mkob0wLPQWTUEcE4UUvj+pcRwl7i2vW2Vu7Nq/qfGPztYMXTBZweVckdx7bFb/kRZQ1R
+         h1Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e+JOa9pZ7+ghAgpItfrprFVqlWXmHMHYenIGtlQBzKw=;
+        b=r5L0Cym+3FPxUnr9iIhfAyT7ntVpMAGtw3xwjwp4qej+KTUJ9rDnXAak2dr3+GYm0/
+         ew+F8Gpr5Y5GMm8dK6Ig6F6YfOz/jewTZuiI5+b28T2IwK+MonU+cDO+/uyHmFtNIsgW
+         dXn1wu9bCqq05I9oTb0/p8JWXz5NpLDUZHhgtgVl1axqDPwOXwpnP9lEhxK0pfgaFNkb
+         uCesFFVC1BKbGamXDZwqkMqgdOief60XDY/e14nyAtaZoUReqQMwv0K3/QrPIT/q7a+j
+         vhe2hf19+dW5hoMVc4GhSAM2lqERmxrdZNpGBQJaei3pLADsR5h7wkweluoQSn7yxaWl
+         +Dwg==
+X-Gm-Message-State: AO0yUKW+ZOZnXiQSjkFtX9ED5Mlh9l0hlh0lwPdvQdWIoD/PnhVg/PS+
+        Ajcv4ppcoFb7pQkb/RCIOmGlbZZeKZ3tNS555N9Pyg==
+X-Google-Smtp-Source: AK7set8PXR+poX2YcXj7iCgYydTF+Ao1o9SGyiLg8mU8hDre6+aCk1K8aMCxotCIKFtKAoNrlqhM17w7h8cWXXNfNOc=
+X-Received: by 2002:a67:f6d5:0:b0:41f:641c:f775 with SMTP id
+ v21-20020a67f6d5000000b0041f641cf775mr6258638vso.3.1677763963739; Thu, 02 Mar
+ 2023 05:32:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aAeGP5EBVBGILPMKK7Fm47tHFTlZ37R7
-X-Proofpoint-GUID: aAeGP5EBVBGILPMKK7Fm47tHFTlZ37R7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-02_07,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- clxscore=1011 suspectscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
- priorityscore=1501 mlxlogscore=640 mlxscore=0 adultscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303020113
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230301180652.658125575@linuxfoundation.org>
+In-Reply-To: <20230301180652.658125575@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 2 Mar 2023 19:02:31 +0530
+Message-ID: <CA+G9fYt_2bZ3AXe49PkGF3s-WLY4=+oDa20dYR5YHZr+tV1haQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/22] 5.15.97-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 21:37:24 +0000
-"Matthew Wilcox (Oracle)" <willy@infradead.org> wrote:
+On Wed, 1 Mar 2023 at 23:41, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.97 release.
+> There are 22 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.97-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> Add set_ptes() and update_mmu_cache_range().
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> ---
->  arch/s390/include/asm/pgtable.h | 34 ++++++++++++++++++++++++---------
->  1 file changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-> index 2c70b4d1263d..46bf475116f1 100644
-> --- a/arch/s390/include/asm/pgtable.h
-> +++ b/arch/s390/include/asm/pgtable.h
-> @@ -50,6 +50,7 @@ void arch_report_meminfo(struct seq_file *m);
->   * tables contain all the necessary information.
->   */
->  #define update_mmu_cache(vma, address, ptep)     do { } while (0)
-> +#define update_mmu_cache_range(vma, addr, ptep, nr)	do { } while (0)
->  #define update_mmu_cache_pmd(vma, address, ptep) do { } while (0)
->  
->  /*
-> @@ -1317,21 +1318,36 @@ pgprot_t pgprot_writecombine(pgprot_t prot);
->  pgprot_t pgprot_writethrough(pgprot_t prot);
->  
->  /*
-> - * Certain architectures need to do special things when PTEs
-> - * within a page table are directly modified.  Thus, the following
-> - * hook is made available.
-> + * Set multiple PTEs to consecutive pages with a single call.  All PTEs
-> + * are within the same folio, PMD and VMA.
->   */
-> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t entry)
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +			      pte_t *ptep, pte_t entry, unsigned int nr)
->  {
->  	if (pte_present(entry))
->  		entry = clear_pte_bit(entry, __pgprot(_PAGE_UNUSED));
-> -	if (mm_has_pgste(mm))
-> -		ptep_set_pte_at(mm, addr, ptep, entry);
-> -	else
-> -		set_pte(ptep, entry);
-> +	if (mm_has_pgste(mm)) {
-> +		for (;;) {
-> +			ptep_set_pte_at(mm, addr, ptep, entry);
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-There might be room for additional optimization here, regarding the
-preempt_disable/enable() in ptep_set_pte_at(), i.e. move it out of
-ptep_set_pte_at() and do it only once in this loop.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-We could add that later with an add-on patch, but for this series it
-all looks good.
+## Build
+* kernel: 5.15.97-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 6e657625508dd663e1229f6f6677c578cf36755c
+* git describe: v5.15.96-23-g6e657625508d
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.96-23-g6e657625508d
 
-Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+## Test Regressions (compared to v5.15.96)
+
+## Metric Regressions (compared to v5.15.96)
+
+## Test Fixes (compared to v5.15.96)
+
+## Metric Fixes (compared to v5.15.96)
+
+## Test result summary
+total: 139666, pass: 116363, fail: 4228, skip: 18769, xfail: 306
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 115 total, 114 passed, 1 failed
+* arm64: 42 total, 40 passed, 2 failed
+* i386: 33 total, 30 passed, 3 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 27 total, 26 passed, 1 failed
+* riscv: 11 total, 11 passed, 0 failed
+* s390: 12 total, 11 passed, 1 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 36 total, 34 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
