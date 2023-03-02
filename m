@@ -2,91 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979E46A7830
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 01:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C796A7839
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 01:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjCBAEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 19:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S229720AbjCBAKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 19:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjCBAD6 (ORCPT
+        with ESMTP id S229589AbjCBAKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 19:03:58 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E2E2128;
-        Wed,  1 Mar 2023 16:03:56 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pXWQH-0000kl-0o;
-        Thu, 02 Mar 2023 01:03:49 +0100
-Date:   Thu, 2 Mar 2023 00:03:45 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [RFC PATCH v11 08/12] net: ethernet: mtk_eth_soc: fix RX data
- corruption issue
-Message-ID: <Y//n4R2QuWvySDbg@makrotopia.org>
-References: <cover.1677699407.git.daniel@makrotopia.org>
- <9a788bb6984c836e63a7ecbdadff11a723769c37.1677699407.git.daniel@makrotopia.org>
- <20230301233121.trnzgverxndxgunu@skbuf>
+        Wed, 1 Mar 2023 19:10:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D702311DF;
+        Wed,  1 Mar 2023 16:10:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A9DA614F1;
+        Thu,  2 Mar 2023 00:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66D83C4339B;
+        Thu,  2 Mar 2023 00:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677715817;
+        bh=/KZu7Xbm0gvacVMiG2ePS5ncksSUI7Fd/RGGQsjPEj4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RxqgF/YryoV1uznKSvz5+rHIEkHIfCnWGKb1pSQwHz4FvlE5TXaCuGIMHPdG68Cji
+         Dgh3fkk/Ar9dnoFpxrP2TB4TCZzH1iY+GWTKox9FD6DbAbQ6lJ7j5er/cVCfZgN+91
+         jAWLWXtA9USiPNHaEykHOLM9mSl5Z/F6qPbw7q3yfelb9dVnAWXWKYz8ky5TWLmLT+
+         NStKq7xzkXXJUye4x+30Fss1eMmmmU4WiePedWNQFTtc9G9nV2l4x7pjr6rqpGq3eU
+         4tb7PWLFhF86JLUhkSNiIxMiV4Y40uwNAGfVxF22+h2wlIdS+VV3t2xwjo6/HJnD1H
+         7UF9ots64pDmg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 48D5DC395EC;
+        Thu,  2 Mar 2023 00:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230301233121.trnzgverxndxgunu@skbuf>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix doxygen comments for dynptr slice
+ kfuncs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167771581729.5276.2981278847430408937.git-patchwork-notify@kernel.org>
+Date:   Thu, 02 Mar 2023 00:10:17 +0000
+References: <20230301194910.602738-1-void@manifault.com>
+In-Reply-To: <20230301194910.602738-1-void@manifault.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 01:31:21AM +0200, Vladimir Oltean wrote:
-> On Wed, Mar 01, 2023 at 07:55:05PM +0000, Daniel Golle wrote:
-> > Also set bit 12 which disabled the RX FIDO clear function when setting up
-> > MAC MCR, as MediaTek SDK did the same change stating:
-> > "If without this patch, kernel might receive invalid packets that are
-> > corrupted by GMAC."[1]
-> > This fixes issues with <= 1G speed where we could previously observe
-> > about 30% packet loss while the bad packet counter was increasing.
-> > 
-> > [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/d8a2975939a12686c4a95c40db21efdc3f821f63
-> > Tested-by: Bjørn Mork <bjorn@mork.no>
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Wed,  1 Mar 2023 13:49:09 -0600 you wrote:
+> In commit 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and
+> bpf_dynptr_slice_rdwr"), the bpf_dynptr_slice() and
+> bpf_dynptr_slice_rdwr() kfuncs were added to BPF. These kfuncs included
+> doxygen headers, but unfortunately those headers are not properly
+> formatted according to [0], and causes the following warnings during the
+> docs build:
 > 
-> Should this patch be submitted separately from the series, to the
-> net.git tree, to be backported to stable kernels?
+> [...]
 
-Maybe yes, as this issue may affect e.g. the BPi-R3 board when used
-with 1G SFP modules. Previously this has just never been a problem as
-all practically all boards with MediaTek SoCs using SGMII also use the
-MediaTek MT7531 switch connecting in 2500Base-X mode.
+Here is the summary with links:
+  - [bpf-next,1/2] bpf: Fix doxygen comments for dynptr slice kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/7ce60b110eec
+  - [bpf-next,2/2] bpf, docs: Fix __uninit kfunc doc section
+    https://git.kernel.org/bpf/bpf-next/c/db52b587c67f
 
-Should the Fixes:-tag hence reference the commit adding support for the
-BPi-R3?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
