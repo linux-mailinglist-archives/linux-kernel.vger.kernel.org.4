@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8656A7E5E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8EA6A7E57
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCBJqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        id S229876AbjCBJpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjCBJqH (ORCPT
+        with ESMTP id S230047AbjCBJp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:46:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5223A3CE28
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:45:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677750305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3rbcPl/Xo1gbrdEEEeeBIbRO9JdxpAp6+JEpsGQF+O8=;
-        b=fwonGpL4SmBouGV91r4Z5jmQiDIH4Hsd1tyG22r158Sp1Xk1UdiILbhfhk5DGDqOSC0aRG
-        qKcmaX2XLP6oVDp9xRffLmZkEjzn4YCMhq6q3Fqy8IvIBbaN+n++k10YlOMv12oG+6u/3U
-        YkTycaQYufuyWIMj2AAAC1OFmGo7zH8=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-404-G0FRTevaOAui-EUJSJzRZA-1; Thu, 02 Mar 2023 04:45:04 -0500
-X-MC-Unique: G0FRTevaOAui-EUJSJzRZA-1
-Received: by mail-wr1-f69.google.com with SMTP id x3-20020a5d6503000000b002c8c421fdfaso3083342wru.15
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:45:04 -0800 (PST)
+        Thu, 2 Mar 2023 04:45:29 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D4A1ABC8;
+        Thu,  2 Mar 2023 01:45:12 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id i34so65099291eda.7;
+        Thu, 02 Mar 2023 01:45:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677750311;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LFKciaVxWsI1bdvVTVhhU90af8xSaJ1NLkAZ/qUOn7E=;
+        b=a9XWIOYMn7P9Z+cEl7wXFnuLGkEgDKUpmy7ZtmviWsGxWHvLg8Dat8g4ULDtHOHPAB
+         2/FU0/jReybRbj7xEFsIdVV7yEE6DmHVqd1SLSj165X6etlS1KYDBApMtaVwD0Buoan7
+         vCwI+q56gpcW/lg+nvVwRndgeeuz5rdMQs0A2RTNbyL4imXQBh2aV+2HtNSlJFbv35JE
+         11KuCmsSqLJELfE/fnVMnhQTeGSPpdwvkg687bvYTuUuPxQm9ZlIohkP8aWy3hMuYjaZ
+         EK2R0xzt1BPQuuXTNIwu2f+lJhmx84AHPpGtYG73nSCKzgt24/fNcibHy+48qzKAcrjt
+         vt2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3rbcPl/Xo1gbrdEEEeeBIbRO9JdxpAp6+JEpsGQF+O8=;
-        b=KZCa1fXPc0F385pvAdbzcuEUP5gC4vbYIem2eFLCdkSQvhATEjC7k3KGL157HV7RTb
-         TetYm+VqO7fpBxo0eqWnHS9jGOXxfzov8X941heshoXQENRawC3K54TA86sb+fZOI0pB
-         oOhkmlr36P1wGkelzn3V2uI6DcDdZfSuhBi4UGtNVpEV4NRf/V5RL7wz4NIVn1gA7Oca
-         YZdT6pPIrvzRzIJTh5Vy8MsTETzA+qR337h/mqJSX9xT7Y3FBj/FV36sKmKCppO/bvzy
-         QkYN7evMmjKKSApPQgFRTFr1fkX64nUt+lB2MofqZm46lnx3KiOqqDBVcloOpv6toCeR
-         loZw==
-X-Gm-Message-State: AO0yUKWU/+fqMcfKl8T5OzTlUGVK9PcdiloBozVeLBWLjW/DLJwawlcx
-        HppJPZ/22if43JhpwRUuDLcaPYsFA4M6Syf5dzvUR5fCgDIe4SCc3YQg27Au9L1uo05llpreOxo
-        fy3HDA+p9ZDS5CMKGmDO2f/k1
-X-Received: by 2002:a05:600c:3d99:b0:3dc:5ae4:c13d with SMTP id bi25-20020a05600c3d9900b003dc5ae4c13dmr7473027wmb.4.1677750303105;
-        Thu, 02 Mar 2023 01:45:03 -0800 (PST)
-X-Google-Smtp-Source: AK7set9SGMecLsQHbDU+Ep5cCFFYOkidvt2LbJLkJ2KQmGNnd8Vc3XSsNc9dy5AVwYOCPDjAt0XbIA==
-X-Received: by 2002:a05:600c:3d99:b0:3dc:5ae4:c13d with SMTP id bi25-20020a05600c3d9900b003dc5ae4c13dmr7473013wmb.4.1677750302818;
-        Thu, 02 Mar 2023 01:45:02 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id x16-20020a1c7c10000000b003e70a7c1b73sm2296348wmc.16.2023.03.02.01.45.01
+        d=1e100.net; s=20210112; t=1677750311;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LFKciaVxWsI1bdvVTVhhU90af8xSaJ1NLkAZ/qUOn7E=;
+        b=CvzYCPjtyPJfTZPxFLZlJABqYIWHjqS+ZjsrRL4vVKP1jRW+OVH6oQ0E9s2P3CccCV
+         2v3dTxsVgYE0apgIO2qSmCMknErPJCrQT/RkD98QwzuBw/aaQOdaN4KfdQHrCvo7XO8R
+         mX5A9UBiSv6eZJ94/vEDMYhSi6Ql/H2J5XpSYU1eZubyQHBMJB10/tbaep6ZRd3pWO9n
+         nsT/lZF5RIzJizJmg3VsdppE5d4IWLkxSzO14TNL6vQmuGP7HfHuJzRLrMZCO+q9ZJCA
+         vinhp0MpHXzF9TjGbmYxkF/lVqbGbrs+8ttm8PRx7URYaqriMmgB4gPuqmM4eolq5OXd
+         YKJg==
+X-Gm-Message-State: AO0yUKUc43zKxMjA5zd6BArOvowAiYWKFRKGWasLkSpOdh43QXNYVDRg
+        unQvJ4dFzYQdEk/DINGTh30=
+X-Google-Smtp-Source: AK7set9Y5XlSQ6knYqYq6GGsCOUL4uhbYjMqg8SF5P4GAkGL+yKACErElBM2m9HkPcwCjQzmsRe9TQ==
+X-Received: by 2002:aa7:c413:0:b0:4bf:4b5c:1d66 with SMTP id j19-20020aa7c413000000b004bf4b5c1d66mr2671972edq.31.1677750311073;
+        Thu, 02 Mar 2023 01:45:11 -0800 (PST)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id l9-20020a50d6c9000000b004a9b5c957bfsm5397803edj.77.2023.03.02.01.45.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 01:45:02 -0800 (PST)
-Message-ID: <82084397a98d55e17657b32a09c2909912498b41.camel@redhat.com>
-Subject: Re: [PATCH v3] virtio-net: Fix probe of virtio-net on kvmtool
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     rbradford@rivosinc.com, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 02 Mar 2023 10:45:00 +0100
-In-Reply-To: <CACGkMEsG10CWigz+S6JgSVK8XfbpT=L=30hZ8LDvohtaanAiZQ@mail.gmail.com>
-References: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com>
-         <20230301093054-mutt-send-email-mst@kernel.org>
-         <CACGkMEsG10CWigz+S6JgSVK8XfbpT=L=30hZ8LDvohtaanAiZQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 02 Mar 2023 01:45:10 -0800 (PST)
+Date:   Thu, 2 Mar 2023 10:45:09 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v4 16/19] thermal/drivers/tegra: Remove unneeded lock
+ when setting a trip point
+Message-ID: <ZABwJdBk/Z1NHc12@orome>
+References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
+ <20230228112238.2312273-17-daniel.lezcano@linaro.org>
+ <Y/9eohV9h26hPuFn@orome>
+ <e5a4aaf1-af0a-aac4-6f77-94c3c9bfcc67@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cGvBIU0HUBvYGA1q"
+Content-Disposition: inline
+In-Reply-To: <e5a4aaf1-af0a-aac4-6f77-94c3c9bfcc67@linaro.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,129 +87,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-02 at 16:10 +0800, Jason Wang wrote:
-> On Wed, Mar 1, 2023 at 10:44=E2=80=AFPM Michael S. Tsirkin <mst@redhat.co=
-m> wrote:
-> >=20
-> > On Wed, Mar 01, 2023 at 01:59:52PM +0000, Rob Bradford via B4 Relay wro=
-te:
-> > > From: Rob Bradford <rbradford@rivosinc.com>
+
+--cGvBIU0HUBvYGA1q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Mar 01, 2023 at 03:35:13PM +0100, Daniel Lezcano wrote:
+> On 01/03/2023 15:18, Thierry Reding wrote:
+> > On Tue, Feb 28, 2023 at 12:22:35PM +0100, Daniel Lezcano wrote:
+> > > The function tegra_tsensor_enable_hw_channel() takes the thermal zone
+> > > lock to prevent "a potential" race with a call to set_trips()
+> > > callback.
 > > >=20
-> > > Since the following commit virtio-net on kvmtool has printed a warnin=
-g
-> > > during the probe:
+> > > The driver must not play with the thermal framework core code
+> > > internals.
 > > >=20
-> > > commit dbcf24d153884439dad30484a0e3f02350692e4c
-> > > Author: Jason Wang <jasowang@redhat.com>
-> > > Date:   Tue Aug 17 16:06:59 2021 +0800
+> > > The tegra_tsensor_enable_hw_channel() is called by:
 > > >=20
-> > >     virtio-net: use NETIF_F_GRO_HW instead of NETIF_F_LRO
+> > >   - the suspend / resume callbacks
+> > >   - the probe function after the thermal zones are registered
 > > >=20
-> > > [    1.865992] net eth0: Fail to set guest offload.
-> > > [    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); =
-wanted 0x0000000000134829, left 0x0080000000134829
+> > > The thermal zone lock taken in this function is supposed to protect
+> > > from a call to the set_trips() callback which writes in the same
+> > > register.
 > > >=20
-> > > This is because during the probing the underlying netdev device has
-> > > identified that the netdev features on the device has changed and
-> > > attempts to update the virtio-net offloads through the virtio-net
-> > > control queue. kvmtool however does not have a control queue that sup=
-ports
-> > > offload changing (VIRTIO_NET_F_CTRL_GUEST_OFFLOADS is not advertised)
+> > > The potential race is when suspend / resume are called at the same
+> > > time as set_trips. This one is called only in
+> > > thermal_zone_device_update().
 > > >=20
-> > > The netdev features have changed due to validation checks in
-> > > netdev_fix_features():
+> > >   - At suspend time, the 'in_suspend' is set, thus the
+> > >     thermal_zone_device_update() bails out immediately and set_trips =
+is
+> > >     not called during this moment.
 > > >=20
-> > > if (!(features & NETIF_F_RXCSUM)) {
-> > >       /* NETIF_F_GRO_HW implies doing RXCSUM since every packet
-> > >        * successfully merged by hardware must also have the
-> > >        * checksum verified by hardware.  If the user does not
-> > >        * want to enable RXCSUM, logically, we should disable GRO_HW.
-> > >        */
-> > >       if (features & NETIF_F_GRO_HW) {
-> > >               netdev_dbg(dev, "Dropping NETIF_F_GRO_HW since no RXCSU=
-M feature.\n");
-> > >               features &=3D ~NETIF_F_GRO_HW;
-> > >       }
-> > > }
+> > >   - At resume time, the thermal zone is updated at PM_POST_SUSPEND,
+> > >     thus the driver has already set the TH2 temperature.
 > > >=20
-> > > Since kvmtool does not advertise the VIRTIO_NET_F_GUEST_CSUM feature =
-the
-> > > NETIF_F_RXCSUM bit is not present and so the NETIF_F_GRO_HW bit is
-> > > cleared. This results in the netdev features changing, which triggers
-> > > the attempt to reprogram the virtio-net offloads which then fails.
+> > >   - At probe time, we register the thermal zone and then we set the
+> > >     TH2. The only scenario I can see so far is the interrupt fires, t=
+he
+> > >     thermal_zone_update() is called exactly at the moment
+> > >     tegra_tsensor_enable_hw_channel() a few lines after registering i=
+t.
 > > >=20
-> > > This commit prevents that set of netdev features from changing by
-> > > preemptively applying the same validation and only setting
-> > > NETIF_F_GRO_HW if NETIF_F_RXCSUM is set because the device supports b=
-oth
-> > > VIRTIO_NET_F_GUEST_CSUM and VIRTIO_NET_F_GUEST_TSO{4,6}
+> > > Disable the interrupt before setting up the hw channels and then
+> > > enable it. We close the potential race window without using the
+> > > thermal zone's lock.
 > > >=20
-> > > Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
+> > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > > > ---
-> > > Changes in v3:
-> > > - Identified root-cause of feature bit changing and updated condition=
-s
-> > >   check
-> > > - Link to v2: https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v=
-2-1-8ec93511e67f@rivosinc.com
+> > >   drivers/thermal/tegra/tegra30-tsensor.c | 17 ++++++++++++-----
+> > >   1 file changed, 12 insertions(+), 5 deletions(-)
 > > >=20
-> > > Changes in v2:
-> > > - Use parentheses to group logical OR of features
-> > > - Link to v1:
-> > >   https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v1-1-fc23d29b=
-9d7a@rivosinc.com
-> > > ---
-> > >  drivers/net/virtio_net.c | 10 ++++++----
-> > >  1 file changed, 6 insertions(+), 4 deletions(-)
-> > >=20
-> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > index 61e33e4dd0cd..2e7705142ca5 100644
-> > > --- a/drivers/net/virtio_net.c
-> > > +++ b/drivers/net/virtio_net.c
-> > > @@ -3778,11 +3778,13 @@ static int virtnet_probe(struct virtio_device=
- *vdev)
-> > >                       dev->features |=3D dev->hw_features & NETIF_F_A=
-LL_TSO;
-> > >               /* (!csum && gso) case will be fixed by register_netdev=
-() */
-> > >       }
-> > > -     if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
-> > > +     if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM)) {
-> > >               dev->features |=3D NETIF_F_RXCSUM;
-> > > -     if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-> > > -         virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
-> > > -             dev->features |=3D NETIF_F_GRO_HW;
-> > > +             /* This dependency is enforced by netdev_fix_features *=
-/
-> > > +             if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) |=
-|
-> > > +                 virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
-> > > +                     dev->features |=3D NETIF_F_GRO_HW;
-> > > +     }
-> > >       if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
-> > >               dev->hw_features |=3D NETIF_F_GRO_HW;
->=20
-> Should we move this also under the check of RXCSUM, otherwise we may
-> end up the following case:
->=20
-> when CSUM is not negotiated but GUEST_OFFLOADS, can still try to
-> enable-or-disable guest offloads? Or do we need to fail the probe in
-> the case via virtnet_validate_features()?
->=20
-> > >=20
+> > > diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/therma=
+l/tegra/tegra30-tsensor.c
+> > > index 4b2ea17910cd..3506c3f3c474 100644
+> > > --- a/drivers/thermal/tegra/tegra30-tsensor.c
+> > > +++ b/drivers/thermal/tegra/tegra30-tsensor.c
+> > > @@ -359,9 +359,6 @@ static int tegra_tsensor_enable_hw_channel(const =
+struct tegra_tsensor *ts,
+> > >   	tegra_tsensor_get_hw_channel_trips(tzd, &hot_trip, &crit_trip);
+> > > -	/* prevent potential racing with tegra_tsensor_set_trips() */
+> > > -	mutex_lock(&tzd->lock);
+> > > -
+> > >   	dev_info_once(ts->dev, "ch%u: PMC emergency shutdown trip set to %=
+dC\n",
+> > >   		      id, DIV_ROUND_CLOSEST(crit_trip, 1000));
+> > > @@ -404,8 +401,6 @@ static int tegra_tsensor_enable_hw_channel(const =
+struct tegra_tsensor *ts,
+> > >   	val |=3D FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_INTR_THERMAL_RST_EN, 1=
+);
+> > >   	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG0);
+> > > -	mutex_unlock(&tzd->lock);
+> > > -
+> > >   	err =3D thermal_zone_device_enable(tzd);
+> > >   	if (err) {
+> > >   		dev_err(ts->dev, "ch%u: failed to enable zone: %d\n", id, err);
+> > > @@ -592,12 +587,24 @@ static int tegra_tsensor_probe(struct platform_=
+device *pdev)
+> > >   		return dev_err_probe(&pdev->dev, err,
+> > >   				     "failed to request interrupt\n");
+> > > +	/*
+> > > +	 * Disable the interrupt so set_trips() can not be called
+> > > +	 * while we are setting up the register
+> > > +	 * TSENSOR_SENSOR0_CONFIG1. With this we close a potential
+> > > +	 * race window where we are setting up the TH2 and the
+> > > +	 * temperature hits TH1 resulting to an update of the
+> > > +	 * TSENSOR_SENSOR0_CONFIG1 register in the ISR.
+> > > +	 */
+> > > +	disable_irq(irq);
+> > > +
+> > >   	for (i =3D 0; i < ARRAY_SIZE(ts->ch); i++) {
+> > >   		err =3D tegra_tsensor_enable_hw_channel(ts, i);
+> > >   		if (err)
+> > >   			return err;
+> > >   	}
+> > > +	enable_irq(irq);
 > >=20
-> > I see. It is annoying that we are duplicating the logic from
-> > netdev_fix_features here though :(
-> > Maybe we should call netdev_update_features, in the callback check
-> > the flags and decide what to set and what to clear?
-> > Or export netdev_fix_features to modules?
+> > Instead of disabling and reenabling the interrupt, could we simply move
+> > the channel enabling code a couple of lines above, before the IRQ
+> > request call? If enabling the channels were to trigger an interrupt, it
+> > should get triggered right after requesting the IRQ.
 >=20
-> There's a ndo_fix_features() that might be used here.
+> Won't we have a spurious interrupt if that situation happen ?
 
-I agree with Jason: I think a virtio_net specific ndo_fix_features()
-should be the right place to implement the above logic.
+It wouldn't be a spurious interrupt, but rather something that we want
+to react to. It's ultimately the same result as your patch. In your
+variant we basically request the IRQ (which automatically enables it),
+then immediately disable it, enable the HW channels and then reenable
+the interrupt. If enabling the HW channels were to trigger an interrupt,
+that interrupt would be raised immediately after enable_irq() as well,
+as far as I can tell.
 
-Cheers,
+Thierry
 
-Paolo
+--cGvBIU0HUBvYGA1q
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQAcCQACgkQ3SOs138+
+s6HbKRAAwcPUT4wfSwfpFIk557lM4eZo8pJS4TjDvE4EGGf4Gs7Ke04igpYdkjbk
+IGz+YJSY99p0ceoUIDyZL+oFrxtY1GA+cNLasbPs4f8lODO+cEx/pAmhj6Es4QgW
+0SuHg7GGv3djTDtdgssXZGkZ9qSufziQw9nIOxcpL/qGfhB6u1ci57aK43UrMXvZ
+XVemVK1RDUrKG2juxH90jqBUXQMcrjyvPbzoAn6J/q0gX4UF9jAjxbKDsieSzeb+
+q82kh/OGp+rIVwPJ+1HuqtCm55fVUc0rJqANv5x9O5nZC1iT9FNX9tLzoGdr9IhO
+d9e+rLgXlRAse7CVJ0S7nLq9EXDcaP9VGfA2djb53mEURX9VBLDxWxb1xK5FC+qQ
+57zI0TW8k/6PSP+1I6NZLufV0uBwP3HjK2AGlI9+L7L4aYJ0QGOhuRqPGSdwT2Va
+ofGTaM+vRS00GsGDyVdSFpDEX/+n3Vl8jc+SUJ0BbjZQgcMaEl/xog7/kz3xBn97
+k40jIaq0OdrmKcTdfAFYmL6VlMkXBWgLk4oIfSSl7PiSKjcgbKmD4oHkmKx7hqs7
+zuXY82vtIWVl23GlA+SoRrzovjKKkNa1g9rfadfEk5iTqkjk4g667nL181uN6PIY
+PI2HjpN53+0zuUBQBdnYHzuEbR23C1UV9Dumw5zeCnwPCyOR1bM=
+=Eg99
+-----END PGP SIGNATURE-----
+
+--cGvBIU0HUBvYGA1q--
