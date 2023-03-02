@@ -2,104 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A946A7D79
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0011F6A7D76
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCBJS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S229727AbjCBJSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjCBJSs (ORCPT
+        with ESMTP id S229523AbjCBJSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:18:48 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF33136D4
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:18:39 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c3so13029922qtc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:18:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ur3zzFSZ+L9nV38J9531/+rGzVcRq8CFrus3AZSDIC4=;
-        b=Ql31hrT5twUkGostOsh1nmd4im63SgW755GgYt3GS4BXhnbkG8ne6ZyhfUlLgo3t3+
-         iHwbogagcCXr5FD+AzXCJpunon2xqnGpMzm80nAQm0mANklMJf8j8B3PQGQrRUQ5Blc1
-         /rkyJwI0DYUpJJOg0eRIs6XQuQiYNJ3bKPicHU39NmmbjEGTCkm0VDdiE9TJ/VpEwhWp
-         cO0JTYBI3RV+TMRJJg0r5lOtSTr7d+mFrg2+q8RSU7YPcX7zsDBYZZnREYN63dEYwcG7
-         wgwOWNUl4z9697pEaT35wQBct/CVnR4ZBDtcLPRKpNKJVUfhXNicZxu9kdWysS+NOW2b
-         zX/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ur3zzFSZ+L9nV38J9531/+rGzVcRq8CFrus3AZSDIC4=;
-        b=O/qu5kleHFKz5X7qNB0n/NumYMBkStVXXGjSfRNOiQnnsVzrAtHQnAXHDBh00tn2GG
-         M4KMgJppWvtbNhM4wVXrynbYiiBtzEb+qocwLfBz1D1Vn6/6gNqRYGKKdtMmMCHu8Mlk
-         SHjD9sPe4YrSOgu5UmnQ7kz1aEzGJGCDBzsF02E2etuDHDJfEndh4JZ5F6fo0TmkFm6C
-         51SL4k8HhlVgMYfCeVbIR2DAM5Xhl6UeaMfRlVcVsFbAB3rtAkhn39Qep4LpDIqC6+3T
-         dwaHBgT1shIytxptU+OUxcGMvXqUBnvmUWozXJoTnM5EG27w3tZqgJHnXFumBg4N4CwB
-         vlZw==
-X-Gm-Message-State: AO0yUKUueM1GZaNBj+tRSuui7XTSyZQ+H7masbuwRKwiNAyayVd1A1HT
-        +x9HPgGTpmbiieRs3DgQeRA=
-X-Google-Smtp-Source: AK7set9SuQ0AOlZ1zc7C0byxOux2y+v0hR+O7KZZvVydEwsFnjb+4DOp3GVQQK7F6g3bXCqz65vwnw==
-X-Received: by 2002:a05:622a:15c2:b0:3bf:db42:777f with SMTP id d2-20020a05622a15c200b003bfdb42777fmr16599569qty.0.1677748718118;
-        Thu, 02 Mar 2023 01:18:38 -0800 (PST)
-Received: from localhost ([45.61.188.240])
-        by smtp.gmail.com with ESMTPSA id n19-20020a05620a153300b0073df51b5127sm10505174qkk.43.2023.03.02.01.18.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 01:18:37 -0800 (PST)
-From:   Jeff Pang <jeff.pang.chn@gmail.com>
-To:     evan.quan@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Jeff Pang <jeff.pang.chn@gmail.com>
-Subject: [PATCH] gpu: amd/pm: mark symbols static where possible for smu11
-Date:   Thu,  2 Mar 2023 17:16:14 +0800
-Message-Id: <20230302091614.62093-1-jeff.pang.chn@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 2 Mar 2023 04:18:23 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEB5A279;
+        Thu,  2 Mar 2023 01:18:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677748676; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=f+cbxQpidciw61Ai4fHYox3YKeRDX3z7qesLmnaZ1mvjxn41iQsq7KygwU1P1etnpqZpmnVd+xrDS99XDbAGDy3F5pC27+YnZY7fjtboKa/THUKxXwaPjW8gh59mrJJnPbGDfkP7oVm+hcDkBltiRV6m3v97GOuoGAdr+AIUvbY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1677748676; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=8UQu7Yj/AOQFcJkYHaTLkH9SnUKz3EcObiDmRQFm3+c=; 
+        b=Ng+Pd3Y2VNogHtnErqh6VNFg4xKJhgPIAX6j4p+fyQ7HDBfuWfCUc1v96jNT1cqZXF0dLipQnaEw2jyKQePeFHpGd1Vsl72yQjQAJYQvmmRbeGpRxBn8Sd9zA+BrJgVjpvzGRK/bkXgfnjEn2/WagilmE3bzR0MXW6VdkTK2y2s=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677748676;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=8UQu7Yj/AOQFcJkYHaTLkH9SnUKz3EcObiDmRQFm3+c=;
+        b=cp+cOrRIfczEg5dwhzgglAIfVMIZ9kXVpPYmz6rA48XDWFiSWHVvjdMLfxJVn2ya
+        RbX1rknYrUG0Ll8kURPd2kkRuXAW9STh8m4OaLVi9awuLOr/oVZLRriFdtt/zhkc/u2
+        0srk5NFEYhe/yDnAoQHHEF1iN4o5gCGSnj70kxGg=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1677748673495252.80618880931172; Thu, 2 Mar 2023 01:17:53 -0800 (PST)
+Message-ID: <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
+Date:   Thu, 2 Mar 2023 12:17:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
+ compatible strings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-8-arinc.unal@arinc9.com>
+ <20230227173333.GA496999-robh@kernel.org>
+ <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
+ <20230301024431.GA251215-robh@kernel.org>
+ <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
+ <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I get one warning when building kernel with -Werror=missing-prototypes :
+On 2.03.2023 11:28, Krzysztof Kozlowski wrote:
+> On 01/03/2023 09:15, Arınç ÜNAL wrote:
+>> On 1.03.2023 05:44, Rob Herring wrote:
+>>> On Tue, Feb 28, 2023 at 07:46:36PM +0300, Arınç ÜNAL wrote:
+>>>> On 27/02/2023 20:33, Rob Herring wrote:
+>>>>> On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
+>>>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>>>
+>>>>>> Add the ralink,rt2880-pinmux compatible string. It had been removed from
+>>>>>> the driver which broke the ABI.
+>>>>>>
+>>>>>> Add the mediatek compatible strings. Change the compatible string on the
+>>>>>> examples with the mediatek compatible strings.
+>>>>>>
+>>>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>>> ---
+>>>>>>     .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
+>>>>>>     .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
+>>>>>>     .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
+>>>>>>     .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
+>>>>>>     .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
+>>>>>>     5 files changed, 25 insertions(+), 10 deletions(-)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>>> index 1e63ea34146a..531b5f616c3d 100644
+>>>>>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>>> @@ -17,7 +17,10 @@ description:
+>>>>>>     properties:
+>>>>>>       compatible:
+>>>>>> -    const: ralink,mt7620-pinctrl
+>>>>>> +    enum:
+>>>>>> +      - mediatek,mt7620-pinctrl
+>>>>>> +      - ralink,mt7620-pinctrl
+>>>>>
+>>>>> We don't update compatible strings based on acquistions nor marketing
+>>>>> whims. If you want to use 'mediatek' for new things, then fine.
+>>>>
+>>>> Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs share
+>>>> the same architecture from Ralink, so they were incorrectly called Ralink
+>>>> SoCs.
+>>>>
+>>>> I can remove the new strings from Ralink SoCs and add them only for MediaTek
+>>>> SoCs. Or you could make an exception for this one, regarding the situation.
+>>>> Whatever you think is best.
+>>>
+>>> I'm not in a position to make an exception as I know little about this
+>>> platform. Carrying both strings is a NAK. Either you (and everyone using
+>>> these platforms) care about the ABI and are stuck with the "wrong"
+>>> string. In the end, they are just unique identifiers. Or you don't care
+>>> and break the ABI and rename everything. If you do that, do just that in
+>>> your patches and make it crystal clear in the commit msg that is your
+>>> intention and why that is okay.
+>>
+>> Ralink had their MIPS SoCs pre-acquisition, RT2880, etc. MediaTek
+>> introduced new SoCs post-acquisition, MT7620, MT7621, MT7628, and
+>> MT7688, utilising the same platform from Ralink, sharing the same
+>> architecture code, pinctrl core driver, etc.
+>>
+>> I don't intend to break the ABI at all. On the contrary, I fix it where
+>> possible.
+>>
+>> If I understand correctly, from this conversation and what Krzysztof
+>> said, all strings must be kept on the schemas so I can do what I said on
+>> the composed mail. Only match the pin muxing information on the strings
+>> that won't match multiple pin muxing information from other schemas.
+>>
+>> This way we don't break the ABI, introduce new compatible strings while
+>> keeping the remaining ones, and make schemas match correctly.
+>>
+>> Let me know if this is acceptable to you.
+> 
+> If by "introduce new compatible strings" you mean duplicate compatibles
+> to fix the ralink->mediatek, then you ignored entire email from Rob -
+> this and previous. We don't do this. Leave them as is.
+> 
+> If you meant something else, explain more...
 
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:1600:5:
-error: no previous prototype for ‘vangogh_set_apu_thermal_limit’
-[-Werror=missing-prototypes]
-int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
+Let me put them in a group to better explain.
 
-In fact, this function don't need a declaration due to it's only used
-in the file which they are.
-So this patch marks the function with 'static'.
+## Fix ABI
 
-Signed-off-by: Jeff Pang <jeff.pang.chn@gmail.com>
----
- drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ralink,rt2880-pinmux was there before, it was removed which broke the 
+ABI. I'm reintroducing it to fix it.
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-index 016d5621e0b3..24046af60933 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-@@ -1597,7 +1597,7 @@ static int vangogh_get_apu_thermal_limit(struct smu_context *smu, uint32_t *limi
- 					      0, limit);
- }
- 
--int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
-+static int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
- {
- 	return smu_cmn_send_smc_msg_with_param(smu,
- 					      SMU_MSG_SetReducedThermalLimit,
--- 
-2.34.1
+## New strings to be able to split bindings
 
+New strings are needed for MT7628/MT7688 and some RT SoCs to be able to 
+properly document the pin muxing information.
+
+## Incorrect naming
+
+MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink, 
+introduce new ralink->mediatek compatible strings to address it.
+
+## Exception for RT SoCs to be called MediaTek
+
+This is where I was asking an exception to be made. Rob told us here 
+they know little about the platform so I explained it.
+
+MediaTek acquired Ralink and then introduced new MediaTek SoCs utilising 
+the same platform from Ralink.
+
+Anyway, now that I look at this again, it makes sense to me as well not 
+to rename the Ralink SoCs. I'll call the RT SoCs Ralink on the kconfig, 
+pinctrl driver, and dt-binding schemas on my next version.
+
+Arınç
