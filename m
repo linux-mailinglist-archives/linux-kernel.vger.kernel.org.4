@@ -2,460 +2,406 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320046A7C0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A646A7BE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjCBHuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 02:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
+        id S229958AbjCBHfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 02:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCBHuL (ORCPT
+        with ESMTP id S229692AbjCBHf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 02:50:11 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7571F2CC5B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 23:50:01 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id eg37so63897860edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 23:50:01 -0800 (PST)
+        Thu, 2 Mar 2023 02:35:28 -0500
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2109.outbound.protection.outlook.com [40.107.135.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FDB166D0;
+        Wed,  1 Mar 2023 23:35:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BdvI6jxl06e8QldAKyf/mcytGn/hkhDLQ3dNULEFivWr6tRHEPtA3nVzuQx8HUHu+gZgl9m+eCK7H2DR0Gt5g47NLtrbzIYhBSe/8PzKH8n4HNM+ymcdN4R4af7LbqRklXF/dG8rC24l57nUva93CGyhd9yvfvh1+g/zGPEPQ1Ilu616ibcRhRBS733YIdnSIt4FAu+3qDflzmNualUhfNTVtn75I5rzEQcma+YC3xvz6EVPOgnHtrm2c7wu38SGfmnoaRV0EiqmZCCUySMFHj4Ac1VazMrJbKtZKbSnGk5iCZ/V1bu54WyZNR8tl5ZI7LymAfR4JfN828HH5DsLVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cHM07Ia9kNgnR44Rp/k4/tqMVZIVlJJHGkJIRPI9Jw0=;
+ b=hIxhTlfW7wGE0A5+GoyWwoDZMGRNw91a4UdW5/FKTNBh0QUbzDLyRI2FNLLYan9Z2TXZw/+k5QLjW8fvf1ZKt7uvaco68DF4CJKpG0Ksao1XgJR2lRIeBhD3mqDsnHDG11VwX/fcrKLBj47+jnOzwzRQ8ZtKOrRt9JAx1Da6GOhe5CTJQVo9KCBCHe7pjh+cXt+43ml8eOdXJdoq1TCoT3vtkMzZp/PXP4sxtOkW/WPHGT+P341NrkX0SxdZrOssZAXhVzWDcooneOe9uUz/biVTV1K0FmvpSa0tEELEXb5+ulOSAAdxV+3F3Q+FDeUNEAfl88XU26dFfSGOcGEYXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=1A2rEQ2sVOAEBmIUTVjRQunPB3wAbgp8yiTBUyyacpw=;
-        b=Utrf1Svh5iXGj5CAQTI0aTYjfXsW6sUJJNHQvTUcGVAJaAlMHvqFX+nsuQlmi2GPrI
-         wT3z7Wx9fLpHVLD1ILZHHXh4I1UUYRkiGGDrVTBJTmjci8ytJxlMnn6uSoiBAtGNJ4+B
-         kmZvQ1fvyU9gyv9Y/DA8WiOxfWmBPepL9nZQV5ea9y+Uj46CW+KutffnQlUed7FdoH+m
-         +gdAXpjZSSHTbjPJC9DuX/Gmr8QRUIym3eirft59YduldnZaL58N75BANdkfPJCXZutA
-         iA+sapCHo1pfkDEQGMp6knS8Uv6vl3VPQDqCZ12GG1o+kkYfdvJvwCxgxkAZzbiHApFc
-         3M0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1A2rEQ2sVOAEBmIUTVjRQunPB3wAbgp8yiTBUyyacpw=;
-        b=cC2wW2Xf5lnlr+OfgX2wrs4/VdmGO7AaClwwCMsxarfIiXQFOMwU7D9dAi+l7uQ4RB
-         U1EvV8keh5TJ4lRqNceImLb0uEITSNn3Rl5kLtBJsNyHsvvU0lmx3NdC8p2KqFtkm75F
-         m3oSVZGyQ2mnI+FJKTJxlnIrO8G3CzyC3ybjbuQMvr8/XanXdOMKOhWpOyWOCWpAi0/I
-         iSU3Lnaz6MpQbWVXH33V3qMGRVQ36qEznkLn3Y1XU7GtVXpbXUyVxK/dXJp2euPy6R0e
-         3YgSEieLlwFoLsEPtfIM3HV5y3Aa0yKadYokgTCNe2eE1EnPTVrWYeL+MVpj3ad0RTCW
-         XvXw==
-X-Gm-Message-State: AO0yUKW7u4J/PtVBV2kNBTshe7ccIWaZlT/70kqUs5wyncv+/7J1RO1w
-        Xj4MaeuFSkTC922z3QtS7dMiMg==
-X-Google-Smtp-Source: AK7set+PG9gMjoECldY46ibitnhOLWvSlQV35od4AsbawdxyNMr22tnnVl1KD+4loBQ9UqPiLks5yw==
-X-Received: by 2002:a17:906:f44:b0:884:3707:bd83 with SMTP id h4-20020a1709060f4400b008843707bd83mr9858525ejj.69.1677743399839;
-        Wed, 01 Mar 2023 23:49:59 -0800 (PST)
-Received: from localhost ([194.62.217.4])
-        by smtp.gmail.com with ESMTPSA id ha12-20020a170906a88c00b008f100fd50e5sm6917268ejb.140.2023.03.01.23.49.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 23:49:59 -0800 (PST)
-References: <20230224200502.391570-1-nmi@metaspace.dk> <ZAAPBFfqP671N4ue@T590>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        kernel test robot <lkp@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        open list <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: Re: [PATCH v2] block: ublk: enable zoned storage support
-Date:   Thu, 02 Mar 2023 08:31:07 +0100
-In-reply-to: <ZAAPBFfqP671N4ue@T590>
-Message-ID: <87o7pblhi1.fsf@metaspace.dk>
+ d=rohmsemiconductor.onmicrosoft.com;
+ s=selector2-rohmsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cHM07Ia9kNgnR44Rp/k4/tqMVZIVlJJHGkJIRPI9Jw0=;
+ b=Toaj3g1iZBO7rA1sbFjzKWNOTF+J5dlgZxEb7Y2jhCKtZNaQ226TbY28VyS8nCh6WUghIS8qwYuN0UbkrhGlTdgOmB/fMRowStl+Frglc0xAN73l7qVffpuR0oOUZWXfoLiTkVBiRJKU1vQXznntx2ZPOiCHOvKWhaJEN78ZIEk=
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:59::10)
+ by BEZP281MB2978.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:75::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
+ 2023 07:35:22 +0000
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::f504:16e7:71d4:2fd8]) by BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::f504:16e7:71d4:2fd8%5]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
+ 07:35:22 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+CC:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Liam Beguin <liambeguin@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
+Thread-Topic: [RFC PATCH 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
+Thread-Index: AQHZRtj7z7K/u6iCTU+V9BreEYjFrq7hfZiAgAWnzIA=
+Date:   Thu, 2 Mar 2023 07:35:21 +0000
+Message-ID: <103531fc-e7c1-090f-a172-073a399f6380@fi.rohmeurope.com>
+References: <cover.1677080089.git.mazziesaccount@gmail.com>
+ <63a2dbedf54e2e00e3b63dd16aae190ff6596355.1677080089.git.mazziesaccount@gmail.com>
+ <20230226171329.4ff6ac8b@jic23-huawei>
+In-Reply-To: <20230226171329.4ff6ac8b@jic23-huawei>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BEZP281MB2454:EE_|BEZP281MB2978:EE_
+x-ms-office365-filtering-correlation-id: aff2a9ae-376a-4721-97fa-08db1af0ae24
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: re/Zh9NwYzqgHjTBRzvLzLwT/ZOy+CPKeZUBf38IdBE5o/jvHNsT4I0k/ErTjyXbaWUf8nxNyv2FeXsr89IyzQv05TKdUbDHMXGtNdBCHZ6/G6+04W8LibMyIjeE0PHQPdSqturLdbMvnmEg3BSqXaQAfpnr4YTEn2CRRbu4jh0NBCMccfL0Zl40D81WJ3JhsC2juoEhB8xsON1FDd2I9lmwRHPPqdlZnNjbMvoA3emFGK0ZHcPOk7DjCbPx7ISOJQI/bqv6MLNOPtonRtIJB2fthta9Rt6g/AWZWXTzUdM/CqhhAhp22G10Vo9EAGfFNjtwHETaDdGL9ZgHrdEBbjQsEfXMiZVVPZFh3PrngumpM30N7X+fjxcutFMjS+9eZviPVTEWKoliPuRtPBQSEcMeV77gSYrjm6rdyonm6G1TJXUIjp4VyhG2l+uR0ci4W+WeZZ/oyUBCYxf/jSZ7ZgBkAyumvSxkoxutEHdGA/Q77ykNLTWRw0eu5zubbzbzqXDkNm6Avuznwoi0x7cIHXCjg9dcysktj+qeXh+K3o/itgsiNegkXGtiOP9Qv9jmSLeTjA6wucTKoasLzzLqDM8eTSvNKEdIIza9PY4wHAQrFBpVfDxDjVKG0KkdEQyjNa0XohMyrHuAuIsPcLgHHe73TqBiVSP/oSyHqba8B0Ya61l0m4zF04LV8t8QBPm0oacdemUalWtuI7oHvm8fuSLvY+NE943M6ysF2S+gDcN4d0q3V/yFWFbyi65ir4FF
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(366004)(39850400004)(396003)(376002)(451199018)(83380400001)(66556008)(31686004)(122000001)(5660300002)(8936002)(478600001)(7416002)(66476007)(71200400001)(31696002)(86362001)(38070700005)(38100700002)(2616005)(186003)(6512007)(6486002)(966005)(53546011)(6506007)(8676002)(66446008)(76116006)(30864003)(2906002)(64756008)(4326008)(66946007)(316002)(91956017)(41300700001)(110136005)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VGJsNFZIS3hmSmlsRUZmd3I5eTFvb0toUS9OSktVRjBia2haT2dlczlpSWpu?=
+ =?utf-8?B?MTQ2U3ZCcVJTMW1mN1k2bStRZ3pWS3BxdWdRZjVqN1pUUGpBVGFDeE1TM0Vo?=
+ =?utf-8?B?cU12WXAwTXRpeUpDQjZTWXBHR1MrcVJWcjhmQlM2V2hIa2hkY1NjTFVWbnNO?=
+ =?utf-8?B?aHNjMzBWQVcxWHoreDFvbjlRN0tvemc4ZUdNNjFtMUJiU3l6ajRML1daT3Js?=
+ =?utf-8?B?T2RLSnEwaXd3V0dYZmRONEVzanltVXFKb3dkWUFrQjl3MDJjck1mamVTTjVa?=
+ =?utf-8?B?UVlOdmRHUkhqc3RCb3RTbDNGYU1rMFBhd0hxZWNmUnpxeXRLTTByZ2ZTUFFs?=
+ =?utf-8?B?T245NDJFWEwrZlR0bll1aU1DN0JQbm52ZVU0VEpGTG1nU29ZdnZtQml6NGgr?=
+ =?utf-8?B?cmpRMURMeENQNC9aZ2NEZ3lxVmoyc1Y2Z1I2dTJObjZheFJ0a0hhYXA0SFRP?=
+ =?utf-8?B?czM1SkIrUEI5UE1ZMjVrT2ZmcU5scVZIY1hPUFpFMmdpNDBvWUlpdUtyVVNt?=
+ =?utf-8?B?VlFXeGtxYWRkcmRyM1o0UHE4QWQ5Wlg5d0hhMFhmQjJTZHVIayt1dE9aMGtH?=
+ =?utf-8?B?TTk2bjdNZ2ZORG1JSXg1K3Yxd1UxaGR2UE1ROEZxVjk2dy9XUzcwVHZMdlYx?=
+ =?utf-8?B?NmNIOTRXaVZsZXcyenRIZ05Zb2M5N21tSGlVRVFGM2liZ3ovQjFQT1gzcHp2?=
+ =?utf-8?B?N3FxZURMSEtNa1RWeGljUlpEM0FIRTFHTVdKay9mRm9kZWp0SXNJUytxc0lu?=
+ =?utf-8?B?TEljaXVEd3VRQVJTYnFoWWlRSXBOcSt4L1lLKzhFVnVVUXk0RHRyUXJnYzA4?=
+ =?utf-8?B?U3JpdnMyRzN2ejNOTGlsRlJ5RkMxaGM5UDFWVmhPQlRLMzlRdXFuYUJ1Tnh4?=
+ =?utf-8?B?M2hUdGQ2MGhVMC9LWTBuak9nN2hpWVBGUTJ6VWN3MWlCR0R1SzU4YlFwMFNy?=
+ =?utf-8?B?d2daWEhIOEt2U3d1ZVl5cGZYZHFseGRLZkpIV0Nqd0hMWGNHcTZleVgzQTJs?=
+ =?utf-8?B?cFZKTXRCR0FPa2dOM1FjK0w5anRIT0I5dEF3UUVJZk1SU041Tkd0YkVjcUdC?=
+ =?utf-8?B?QTlmTFpOOTZxUGhZbGh5dVRqcjlzTjI1Q1RaYmVWa1d1MkY1L3hoTlNhaHpO?=
+ =?utf-8?B?MTFZdVlNcDJRRkE3ZUJFaEcyOGVBdUNHUmdnZkpsM2UxOWdwZm1DVHJ6WHlG?=
+ =?utf-8?B?KzdsTStuZWd1a0xTNm5TOXFjYVdkMWVtZW44RVhVanJTSFB3dm05RlpLYWlj?=
+ =?utf-8?B?MUpiWVpxcmVJdUNQUDVhNGk1emZUd3p0SU5Ma3JvNEpwSklPQlY0VXZwdG1a?=
+ =?utf-8?B?bTB6SGIzdGNmSzNDZkNXa0kvQkIvbmI4NFl5NVMvc1VtR212NUdLQ2V5Vjdu?=
+ =?utf-8?B?UjJnZlBmM2VlSEJFSFRaSXovNnBoZjMzV2dTRjd0cll0Zmo4OFZGUGhpZVE4?=
+ =?utf-8?B?MCt4L1Vxcm9PaTAyYk02aFh0MXlTaWNuckQ4QWxBMGM3MVIzdDE2c25GeG5R?=
+ =?utf-8?B?cHV5ZFFHOUlvZVVzczY5Nms2MktRTWZkQ2o2d3MyUklvYkhXQ2ZUQU1ISTRV?=
+ =?utf-8?B?Uy9IUC91Uzh5b3BSREtESUZrVW93akVmUC9XbE1uYndEOUk3NVdDNCtQQjlP?=
+ =?utf-8?B?dkRhcU1JTWF4dW9yS2hGL05DMHQ3MDBtaHgrY0RhZFQyc0NOL1FLN0NwWk9T?=
+ =?utf-8?B?dXhpZDF4K1VpdlBWV0VKSCt2RnJyUTEvMGt2cGp6YmVTTUhMb3hhd2VmQkRZ?=
+ =?utf-8?B?eEZKbjh2S3d6dEV4VTJ6b081aVA0WFNtNXRnVklrWU53amRyM0MrOXBvK3Ur?=
+ =?utf-8?B?TFc5UVJ5TURtdTRMK3lyeW1hTHg2TW1CQzJEWVRBNExmMUJvV3JNRnJWbjNs?=
+ =?utf-8?B?ZXBLZ2FiY3RHeHpobjZSdXJVQktzdVJSdVZSS0pVWE9YNk5kYWVadmMxb3JE?=
+ =?utf-8?B?YjRPVlBvbEdwNDFzanFVeWpDTEFTWEhTc0ZrRHdaOHFvY1hoSkVIeExHNFdh?=
+ =?utf-8?B?RHlQd3RweWhiYTZDaXJ4UWU2TDZWR0ZMTTZ5MUpZN0tkKytLY3lNTnBReGRR?=
+ =?utf-8?B?d29OMWZUUnB5bFZJMW5TYlNNS1ZocG9xeCs3bVdvWU14MFh0MWErZ3hQeGU0?=
+ =?utf-8?B?QVdIZmtaNDhscUIyYkJHODRlNVJmVUkvV29tMDNPdGlUK2NZbi81bXlhT2FS?=
+ =?utf-8?Q?D8uLHVBYT1EuIY5k/KQJk10=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1627E61E283EDE4F86E8AE1E85A2EE0D@DEUP281.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: aff2a9ae-376a-4721-97fa-08db1af0ae24
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 07:35:21.8695
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b24d4f96-5b40-44b1-ac2e-2ed7fdbde1c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0V5/Z+DtOKyW7qx2wWpjTBtp5DkA/IAy2LvMEjGMYneVQ4yxG3A09Jc0Vz8kveEET34zt9r9Ap6MiKun6+M4U9baq4G0sb+O6xz9/UJ29cok8cZRca0warxhFrlWafBi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB2978
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Ming,
-
-Ming Lei <ming.lei@redhat.com> writes:
-
-> On Fri, Feb 24, 2023 at 09:05:01PM +0100, Andreas Hindborg wrote:
->> Add zoned storage support to ublk: report_zones and operations:
->>  - REQ_OP_ZONE_OPEN
->>  - REQ_OP_ZONE_CLOSE
->>  - REQ_OP_ZONE_FINISH
->>  - REQ_OP_ZONE_RESET
->> 
->> This allows implementation of zoned storage devices in user space. An
->> example user space implementation based on ubdsrv is available [1].
->> 
->> [1] https://github.com/metaspace/ubdsrv/commit/14a2b708f74f70cfecb076d92e680dc718cc1f6d
->
-> As I suggested, please write one simple & clean zoned target for verifying
-> the interface, and better to not add to tgt_null.c.
-
-For ubdsrv, I understand that you prefer to reimplement null and loop targets for
-zoned storage. I don't understand why you think this is a good idea,
-since we will have massive code duplication. This would be comparable to
-having a separate null_blk driver for zoned storage. Am I understanding
-you correctly?
-
-Anyway, I think we can discuss the kernel patch even though the ubdsrv
-implementation is not a separate target yet? The code would be almost
-identical, it would just live in a separate translation unit.
-
->
->> 
->> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
->> ---
->> Changes since v1:
->>  - Fixed conditional compilation bug
->>  - Refactored to collect conditional code additions together
->>  - Fixed style errors
->>  - Zero stack allocated value used for zone report
->> 
->> Reported-by: Niklas Cassel <Niklas.Cassel@wdc.com>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/oe-kbuild-all/202302250222.XOrw9j6z-lkp@intel.com/
->> v1: https://lore.kernel.org/linux-block/20230224125950.214779-1-nmi@metaspace.dk/
->> 
->>  drivers/block/ublk_drv.c      | 150 ++++++++++++++++++++++++++++++++--
->>  include/uapi/linux/ublk_cmd.h |  18 ++++
->>  2 files changed, 162 insertions(+), 6 deletions(-)
->> 
->> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
->> index 6368b56eacf1..37e516903867 100644
->> --- a/drivers/block/ublk_drv.c
->> +++ b/drivers/block/ublk_drv.c
->> @@ -20,6 +20,7 @@
->>  #include <linux/major.h>
->>  #include <linux/wait.h>
->>  #include <linux/blkdev.h>
->> +#include <linux/blkzoned.h>
->>  #include <linux/init.h>
->>  #include <linux/swap.h>
->>  #include <linux/slab.h>
->> @@ -51,10 +52,12 @@
->>  		| UBLK_F_URING_CMD_COMP_IN_TASK \
->>  		| UBLK_F_NEED_GET_DATA \
->>  		| UBLK_F_USER_RECOVERY \
->> -		| UBLK_F_USER_RECOVERY_REISSUE)
->> +		| UBLK_F_USER_RECOVERY_REISSUE \
->> +		| UBLK_F_ZONED)
->>  
->>  /* All UBLK_PARAM_TYPE_* should be included here */
->> -#define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DISCARD)
->> +#define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DISCARD \
->> +			     | UBLK_PARAM_TYPE_ZONED)
->>  
->>  struct ublk_rq_data {
->>  	struct llist_node node;
->> @@ -187,6 +190,98 @@ static DEFINE_MUTEX(ublk_ctl_mutex);
->>  
->>  static struct miscdevice ublk_misc;
->>  
->> +#ifdef CONFIG_BLK_DEV_ZONED
->> +static void ublk_set_nr_zones(struct ublk_device *ub)
->> +{
->> +	const struct ublk_param_basic *p = &ub->params.basic;
->> +
->> +	if (ub->dev_info.flags & UBLK_F_ZONED && p->chunk_sectors)
->> +		ub->ub_disk->nr_zones = p->dev_sectors / p->chunk_sectors;
->> +}
->> +
->> +static void ublk_dev_param_zoned_apply(struct ublk_device *ub)
->> +{
->> +	const struct ublk_param_zoned *p = &ub->params.zoned;
->> +
->> +	if (ub->dev_info.flags & UBLK_F_ZONED) {
->> +		disk_set_max_active_zones(ub->ub_disk, p->max_active_zones);
->> +		disk_set_max_open_zones(ub->ub_disk, p->max_open_zones);
->> +	}
->> +}
->> +
->> +static int ublk_revalidate_disk_zones(struct gendisk *disk)
->> +{
->> +	return blk_revalidate_disk_zones(disk, NULL);
->> +}
->> +
->> +static int ublk_report_zones(struct gendisk *disk, sector_t sector,
->> +			     unsigned int nr_zones, report_zones_cb cb,
->> +			     void *data)
->> +{
->> +	struct ublk_device *ub;
->> +	unsigned int zone_size;
->> +	unsigned int first_zone;
->> +	int ret = 0;
->> +
->> +	ub = disk->private_data;
->> +
->> +	if (!(ub->dev_info.flags & UBLK_F_ZONED))
->> +		return -EINVAL;
->> +
->> +	zone_size = disk->queue->limits.chunk_sectors;
->> +	first_zone = sector >> ilog2(zone_size);
->> +	nr_zones = min(ub->ub_disk->nr_zones - first_zone, nr_zones);
->> +
->> +	for (unsigned int i = 0; i < nr_zones; i++) {
->
-> The local variable 'i' needs to be declared in the front part
-> of this function body.
-
-Ok.
-
->
->> +		struct request *req;
->> +		blk_status_t status;
->> +		struct blk_zone info = {0};
->> +
->> +		req = blk_mq_alloc_request(disk->queue, REQ_OP_DRV_IN, 0);
->> +
->> +		if (IS_ERR(req)) {
->> +			ret = PTR_ERR(req);
->> +			goto out;
->> +		}
->> +
->> +		req->__sector = sector;
->
-> Why is req->__sector set?
-
-I use it to carry information about the first zone of the report request.
-
->
->> +
->> +		ret = blk_rq_map_kern(disk->queue, req, &info, sizeof(info),
->> +				      GFP_KERNEL);
->> +
->> +		if (ret)
->> +			goto out;
->> +
->> +		status = blk_execute_rq(req, 0);
->> +		ret = blk_status_to_errno(status);
->> +		if (ret)
->> +			goto out;
->> +
->> +		blk_mq_free_request(req);
->> +
->> +		ret = cb(&info, i, data);
->> +		if (ret)
->> +			goto out;
->> +
->> +		/* A zero length zone means don't ask for more zones */
->> +		if (!info.len) {
->> +			nr_zones = i;
->> +			break;
->> +		}
->> +
->> +		sector += zone_size;
->> +	}
->
-> I'd suggest to report as many as possible zones in one command, and
-> the dev_info.max_io_buf_bytes is the max allowed buffer size for one
-> command, please refer to nvme_ns_report_zones().
-
-I agree about fetching more zones. However, it is no good to fetch up to
-a max, since the requested zone report may less than max. I was
-considering overloading req->__data_len and iod->nr_sectors to convey
-the number of requested zones. What do you think about that?
-
->
-> Also we are going to extend ublk in the multiple LUN/NS style, and I
-> guess that won't be one issue since ->report_zones() is always done on
-> disk level, right?
-
-Yes, that should be fine.
-
->
->> +	ret = nr_zones;
->> +
->> + out:
->> +	return ret;
->> +}
->> +#else
->> +void ublk_set_nr_zones(struct ublk_device *ub);
->> +void ublk_dev_param_zoned_apply(struct ublk_device *ub);
->> +int ublk_revalidate_disk_zones(struct gendisk *disk);
->> +#endif
->> +
->>  static void ublk_dev_param_basic_apply(struct ublk_device *ub)
->>  {
->>  	struct request_queue *q = ub->ub_disk->queue;
->> @@ -212,6 +307,9 @@ static void ublk_dev_param_basic_apply(struct ublk_device *ub)
->>  		set_disk_ro(ub->ub_disk, true);
->>  
->>  	set_capacity(ub->ub_disk, p->dev_sectors);
->> +
->> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED))
->> +		ublk_set_nr_zones(ub);
->>  }
->>  
->>  static void ublk_dev_param_discard_apply(struct ublk_device *ub)
->> @@ -268,6 +366,9 @@ static int ublk_apply_params(struct ublk_device *ub)
->>  	if (ub->params.types & UBLK_PARAM_TYPE_DISCARD)
->>  		ublk_dev_param_discard_apply(ub);
->>  
->> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) && (ub->params.types & UBLK_PARAM_TYPE_ZONED))
->> +		ublk_dev_param_zoned_apply(ub);
->> +
->>  	return 0;
->>  }
->>  
->> @@ -361,9 +462,13 @@ static void ublk_free_disk(struct gendisk *disk)
->>  	put_device(&ub->cdev_dev);
->>  }
->>  
->> +
->>  static const struct block_device_operations ub_fops = {
->> -	.owner =	THIS_MODULE,
->> -	.free_disk =	ublk_free_disk,
->> +	.owner = THIS_MODULE,
->> +	.free_disk = ublk_free_disk,
->> +#ifdef CONFIG_BLK_DEV_ZONED
->> +	.report_zones = ublk_report_zones,
->> +#endif
->
-> Define one null ublk_report_zones in #else branch of the above #ifdef, then we
-> can save one #ifdef.
-
-I would have to define it as a null pointer in the #else case then?
-
->
->>  };
->>  
->>  #define UBLK_MAX_PIN_PAGES	32
->> @@ -499,7 +604,7 @@ static int ublk_unmap_io(const struct ublk_queue *ubq,
->>  {
->>  	const unsigned int rq_bytes = blk_rq_bytes(req);
->>  
->> -	if (req_op(req) == REQ_OP_READ && ublk_rq_has_data(req)) {
->> +	if ((req_op(req) == REQ_OP_READ || req_op(req) == REQ_OP_DRV_IN) && ublk_rq_has_data(req)) {
->>  		struct ublk_map_data data = {
->>  			.ubq	=	ubq,
->>  			.rq	=	req,
->> @@ -566,6 +671,26 @@ static blk_status_t ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
->>  	case REQ_OP_WRITE_ZEROES:
->>  		ublk_op = UBLK_IO_OP_WRITE_ZEROES;
->>  		break;
->> +#ifdef CONFIG_BLK_DEV_ZONED
->> +	case REQ_OP_ZONE_OPEN:
->> +		ublk_op = UBLK_IO_OP_ZONE_OPEN;
->> +		break;
->> +	case REQ_OP_ZONE_CLOSE:
->> +		ublk_op = UBLK_IO_OP_ZONE_CLOSE;
->> +		break;
->> +	case REQ_OP_ZONE_FINISH:
->> +		ublk_op = UBLK_IO_OP_ZONE_FINISH;
->> +		break;
->> +	case REQ_OP_ZONE_RESET:
->> +		ublk_op = UBLK_IO_OP_ZONE_RESET;
->> +		break;
->> +	case REQ_OP_DRV_IN:
->> +		ublk_op = UBLK_IO_OP_DRV_IN;
->> +		break;
->> +	case REQ_OP_ZONE_APPEND:
->> +		/* We do not support zone append yet */
->> +		fallthrough;
->> +#endif
->
-> The above '#ifdef' is needn't, since  OP_ZONE should be defined no
-> matter if CONFIG_BLK_DEV_ZONED is enabled or not.
-
-I see. But do we want to process the requests if BLK_DEV_ZONED is not
-enabled, or do we want to fail the IO?
-
->
->>  	default:
->>  		return BLK_STS_IOERR;
->>  	}
->> @@ -612,7 +737,8 @@ static void ublk_complete_rq(struct request *req)
->>  	 *
->>  	 * Both the two needn't unmap.
->>  	 */
->> -	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE) {
->> +	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE &&
->> +	    req_op(req) != REQ_OP_DRV_IN) {
->>  		blk_mq_end_request(req, BLK_STS_OK);
->>  		return;
->>  	}
->> @@ -1535,6 +1661,15 @@ static int ublk_ctrl_start_dev(struct io_uring_cmd *cmd)
->>  	if (ret)
->>  		goto out_put_disk;
->>  
->> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
->> +	    ub->dev_info.flags & UBLK_F_ZONED) {
->> +		disk_set_zoned(disk, BLK_ZONED_HM);
->> +		blk_queue_required_elevator_features(disk->queue, ELEVATOR_F_ZBD_SEQ_WRITE);
->> +		ret = ublk_revalidate_disk_zones(disk);
->> +		if (ret)
->> +			goto out_put_disk;
->> +	}
->> +
->>  	get_device(&ub->cdev_dev);
->>  	ret = add_disk(disk);
->>  	if (ret) {
->> @@ -1673,6 +1808,9 @@ static int ublk_ctrl_add_dev(struct io_uring_cmd *cmd)
->>  	if (!IS_BUILTIN(CONFIG_BLK_DEV_UBLK))
->>  		ub->dev_info.flags |= UBLK_F_URING_CMD_COMP_IN_TASK;
->>  
->> +	if (!IS_ENABLED(CONFIG_BLK_DEV_ZONED))
->> +		ub->dev_info.flags &= ~UBLK_F_ZONED;
->> +
->>  	/* We are not ready to support zero copy */
->>  	ub->dev_info.flags &= ~UBLK_F_SUPPORT_ZERO_COPY;
->>  
->> diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.h
->> index 8f88e3a29998..074b97821575 100644
->> --- a/include/uapi/linux/ublk_cmd.h
->> +++ b/include/uapi/linux/ublk_cmd.h
->> @@ -78,6 +78,10 @@
->>  #define UBLK_F_USER_RECOVERY	(1UL << 3)
->>  
->>  #define UBLK_F_USER_RECOVERY_REISSUE	(1UL << 4)
->> +/*
->> + * Enable zoned device support
->> + */
->> +#define UBLK_F_ZONED (1ULL << 5)
->>  
->>  /* device state */
->>  #define UBLK_S_DEV_DEAD	0
->> @@ -129,6 +133,12 @@ struct ublksrv_ctrl_dev_info {
->>  #define		UBLK_IO_OP_DISCARD	3
->>  #define		UBLK_IO_OP_WRITE_SAME	4
->>  #define		UBLK_IO_OP_WRITE_ZEROES	5
->> +#define		UBLK_IO_OP_ZONE_OPEN		10
->> +#define		UBLK_IO_OP_ZONE_CLOSE		11
->> +#define		UBLK_IO_OP_ZONE_FINISH		12
->> +#define		UBLK_IO_OP_ZONE_APPEND		13
->> +#define		UBLK_IO_OP_ZONE_RESET		15
->> +#define		UBLK_IO_OP_DRV_IN		34
->>  
->>  #define		UBLK_IO_F_FAILFAST_DEV		(1U << 8)
->>  #define		UBLK_IO_F_FAILFAST_TRANSPORT	(1U << 9)
->> @@ -214,6 +224,12 @@ struct ublk_param_discard {
->>  	__u16	reserved0;
->>  };
->>  
->> +struct ublk_param_zoned {
->> +	__u64	max_open_zones;
->> +	__u64	max_active_zones;
->> +	__u64	max_append_size;
->> +};
->
-> Is the above zoned parameter enough for future extension?
-> Does ZNS need extra parameter? Or some zoned new(important) features?
-
-@Damien, @Hans, @Matias, what do you think?
-
->
-> I highly suggest to reserve some fields for extension, given
-> it is one ABI interface, which is supposed to be defined well
-> enough from the beginning.
-
-How many bytes would you reserve?
-
-Thanks!
-
-Best regards,
-Andreas
-
+VGhhbmtzIGZvciB0aGUgcmV2aWV3IGFnYWluIQ0KDQpJIHJld29ya2VkIHRoZSBjb2RlIGZvciB2
+MiBJIGFtIGFib3V0IHRvIHNlbmQgb3V0LiBJIHRoaW5rIEkgZW5kZWQgdXAgDQpoYXZpbmcgcXVp
+dGUgYSBiaXQgY2hhbmdlcyBidXQgSSBoYXZlIHRyaWVkIHRvIGFkZHJlc3MgbW9zdCBvZiB3aGF0
+IHlvdSANCnBvaW50ZWQgb3V0LiBUaGFua3MgZm9yIGFsbCB0aGUgaW1wcm92ZW1lbnRzIGFuZCB0
+aGUgdGltZSB5b3UgaGF2ZSANCmludmVzdGVkIHRvIHRoaXMgYWxyZWFkeSENCg0KT24gMi8yNi8y
+MyAxOToxMywgSm9uYXRoYW4gQ2FtZXJvbiB3cm90ZToNCj4gT24gV2VkLCAyMiBGZWIgMjAyMyAx
+ODoxNTo1OCArMDIwMA0KPiBNYXR0aSBWYWl0dGluZW4gPG1henppZXNhY2NvdW50QGdtYWlsLmNv
+bT4gd3JvdGU6DQo+IA0KPj4gKwkuc2Nhbl90eXBlID0gewkJCQkJCQlcDQo+PiArCQkuc2lnbiA9
+ICd1JywJCQkJCQlcDQo+PiArCQkucmVhbGJpdHMgPSAxNiwJCQkJCQlcDQo+PiArCQkuc3RvcmFn
+ZWJpdHMgPSAxNiwJCQkJCVwNCj4+ICsJCS5lbmRpYW5uZXNzID0gSUlPX0xFLAkJCQkJXA0KPiAN
+Cj4gVW5sZXNzIHlvdSBoYXZlIGJ1ZmZlcmVkIHN1cHBvcnQsIGFueXRoaW5nIHNjYW5fKiBpcyB1
+bnVzZWQgYW5kIHNob3VsZG4ndCBiZQ0KPiBzZXQuDQoNCkJ1ZmZlciBpbXBsZW1lbnRlZCBmb3Ig
+djIgOikNCg0KPiANCj4+ICsJfSwJCQkJCQkJCVwNCj4+ICsJLmluZGV4ZWQgPSAxCQkJCQkJCVwN
+Cj4+ICt9DQo+PiArDQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCBpaW9fY2hhbl9zcGVjIGJ1Mjcw
+MzRfY2hhbm5lbHNbXSA9IHsNCj4+ICsJew0KPj4gKwkJLnR5cGUgPSBJSU9fTElHSFQsDQo+PiAr
+CQkuaW5mb19tYXNrX3NlcGFyYXRlID0gQklUKElJT19DSEFOX0lORk9fUFJPQ0VTU0VEKSwNCj4+
+ICsJCS5jaGFubmVsID0gQlUyNzAzNF9DSEFOX0FMUywNCj4+ICsJfSwNCj4+ICsJQlUyNzAzNF9D
+SEFOX0RBVEEoREFUQTAsIElJT19NT0RfTElHSFRfQ0xFQVIpLA0KPj4gKwlCVTI3MDM0X0NIQU5f
+REFUQShEQVRBMSwgSUlPX01PRF9MSUdIVF9DTEVBUiksDQo+IA0KPiBUaGF0J3MgdW51c3VhbC4g
+V2h5IGRvZXMgaXQgaGF2ZSB0d28gY2xlYXIgY2hhbm5lbHM/DQo+IFBlcmhhcHMgYWRkIGEgY29t
+bWVudCBvbiBob3cgdGhleSBkaWZmZXIuICBGcm9tIGEgcXVpY2sgZ2xhbmNlIGF0IHRoZQ0KPiBk
+YXRhc2hlZXQgdGhleSBoYXZlIGRpZmZlcmVudCBzZW5zaXRpdml0aWVzLCBidXQgaW5kZWVkIGJv
+dGggaW4gdGhlIHZpc2libGUNCj4gbGlnaHQgcmFuZ2UgKG1vc3RseSkNCj4gDQo+IFlvdSBjb3Vs
+ZCBhcmd1ZSBvbmUgaXMgYmx1ZSBhbmQgb25lIGlzIHJlZCBiYXNlZCBvbiBwZWFrcyBvZiB0aGUg
+Y3VydmVzIGJ1dA0KPiB0aGV5IGFyZSB2ZXJ5IGJyb2FkIHNvIHBlcmhhcHMgY2xlYXIgaXMgdGhl
+IGJlc3QgbmFtaW5nLg0KDQpZZXAuIEkgd2FzIG5vdCB0aHJpbGxlZCBhYm91dCB0aGlzIG15c2Vs
+Zi4gVGhlIHNlbnNpdGl2aXR5IHBlYWtzIGFyZSBhdCANCjUwMCBubSBhbmQgNjAwIG5tIC0gd2hp
+Y2ggKGFjY29yZGluZyB0byBzb21lIHF1aWNrbHkgY2hlY2tlZCBzcGVjdHJ1bSANCnBpY3R1cmVz
+IGluIHRoZSB3ZWJzIC0gbm8gcHJvcGVyIGZhY3QgY2hlY2sgZG9uZSAtIA0KaHR0cHM6Ly9jaGVt
+LmxpYnJldGV4dHMub3JnL0Jvb2tzaGVsdmVzL1BoeXNpY2FsX2FuZF9UaGVvcmV0aWNhbF9DaGVt
+aXN0cnlfVGV4dGJvb2tfTWFwcy9QaHlzaWNhbF9DaGVtaXN0cnlfKExpYnJlVGV4dHMpLzEzJTNB
+X01vbGVjdWxhcl9TcGVjdHJvc2NvcHkvMTMuMDElM0FfVGhlX0VsZWN0cm9tYWduZXRpY19TcGVj
+dHJ1bSANCikgYXJlIGxhbmRpbmcgc29tZXdoZXJlIGJldHdlZW4gdGhlIGJsdWUgYW5kIGdyZWVu
+IGFuZCBuZWFyIHRoZSBvcmFuZ2UgDQphcmVhcy4gWWV0LCBlc3BlY2lhbGx5IHRoZSBkYXRhMCBo
+YXMgYSB2ZXJ5IHdpZGUgc2Vuc2l0aXZpdHkgYXJlYSBhcyB5b3UgDQpwb2ludGVkIG91dC4gQnV0
+IHllcywgdGhpcyB3YXJyYW50cyBhdCBsZWFzdCBhIGNvbW1lbnQuDQoNClRoaXMgaXMgYWN0dWFs
+bHkgYWxzbyBhIHRvcGljIEkgc2VudCBhIHZlcnkgbG93IHByaW9yaXR5IGVtYWlsIGVhcmxpZXIg
+DQo6KSBJIHdhcyB3b25kZXJpbmcgaWYgZXhwb3J0aW5nIHNldCBvZiBkYXRhLXBvaW50cyByZXBy
+ZXNlbnRpbmcgdGhlc2UgDQpjdXJ2ZXMgdmlhIHN5c2ZzIGVudHJ5IHdvdWxkIGJlIHNvbWV0aGlu
+ZyB1c2VyLXNwYWNlIGFwcGxpY2F0aW9ucyBjb3VsZCANCnVzZS4uLiBEZXNjcmliaW5nL2NhdGVn
+b3JpemluZyB0aGUgYXJiaXRyYXJpbHkgc2hhcGVkIGN1cnZlcyBtYXkgYmUgDQpvdGhlcnZpY2Ug
+aGFyZC4gVXNlcmxhbmQgY291bGQgdGhlbiBiZSBydW5uaW5nIGRpZmZlcmVudCBmaXR0aW5nIA0K
+YWxnb3JpdGhtcyBkZXBlbmRpbmcgb24gdGhlaXIgbmVlZHMgLSBhbmQgc2VlIHRoZSBlcnJvciBs
+ZXZlbHMgb24gdGhlIA0KYXJlYSB0aGV5IGFyZSBpbnRlcmVzdGVkIGluLiBCdXQgYXMgSSBzYWlk
+IGluIHRoYXQgbWFpbCB0aHJlYWQgLSBJIGRvbid0IA0KaGF2ZSB1c2UtY2FzZSBmb3IgdGhpcyBz
+byB0aGlzIHdhcyBqdXN0IHNvbWUgbG93IHByaW9yaXR5IHBvbmRlcmluZy4gDQpOb3RoaW5nIHRo
+YXQgc2hvdWxkIGJlIG1peGVkIHdpdGggdGhpcyBwYXRjaCBtYWlsIDspDQoNCj4gLi4uDQo+PiAr
+DQo+PiArCQlmb3IgKGkgPSAwOyBpIDwgMjsgaSsrKSB7DQo+IA0KPiBXaHkgdHdpY2U/DQoNClRv
+IHRlc3QgdGhlIHNoYXJwbmVzcyBvZiByZXZpZXdlcnM/IEJUVywgWW91IHBhc3NlZCB3aXRoIGV4
+Y2VsbGVudCBncmFkZSENCg0KKE5vLCByZWFsbHkgYmVjYXVzZSBJIHdhcyBpbnRlcnJ1cHRlZCBp
+biB0aGUgbWlkZGxlIG9mIHdyaXRpbmcgdGhlIGNvZGUgDQpeX147IFdhcyBvcmlnaW5hbGx5IHdy
+aXRpbmcgYSBsb29wIHRvIHJlYWQgdGhlIGNoYW5uZWxzIC0gYnV0IGZvcmdvdCBpdCANCndoZW4g
+Y29udGludWVkLiBJIGZpbmQgaXQgaW1wcmVzc2l2ZSB5b3Ugc3BvdHRlZCB0aGlzIC0gdGhhbmtz
+IGEgbG90ISkNCg0KDQo+PiArc3RhdGljIGludCBfYnUyNzAzNF9nZXRfcmVzdWx0KHN0cnVjdCBi
+dTI3MDM0X2RhdGEgKmRhdGEsIHUxNiAqcmVzLCBib29sIGxvY2spDQo+PiArew0KPj4gKwlpbnQg
+cmV0ID0gMDsNCj4+ICsNCj4+ICtyZXRyeToNCj4+ICsJaWYgKGxvY2spDQo+PiArCQltdXRleF9s
+b2NrKCZkYXRhLT5tdXRleCk7DQo+PiArCS8qIEdldCBuZXcgdmFsdWUgZnJvbSBzZW5zb3IgaWYg
+ZGF0YSBpcyByZWFkeSAtIG9yIHVzZSBjYWNoZWQgdmFsdWUgKi8NCj4+ICsJaWYgKGJ1MjcwMzRf
+aGFzX3ZhbGlkX3NhbXBsZShkYXRhKSkgew0KPj4gKwkJcmV0ID0gcmVnbWFwX2J1bGtfcmVhZChk
+YXRhLT5yZWdtYXAsIEJVMjcwMzRfUkVHX0RBVEEwX0xPLA0KPj4gKwkJCQkgICAgICAgJmRhdGEt
+PnJhd1swXSwgc2l6ZW9mKGRhdGEtPnJhdykpOw0KPj4gKwkJaWYgKHJldCkNCj4+ICsJCQlnb3Rv
+IHVubG9ja19vdXQ7DQo+PiArDQo+PiArCQlkYXRhLT5jYWNoZWQgPSB0cnVlOw0KPj4gKwkJYnUy
+NzAzNF9pbnZhbGlkYXRlX3JlYWRfZGF0YShkYXRhKTsNCj4+ICsJfSBlbHNlIGlmICh1bmxpa2Vs
+eSghZGF0YS0+Y2FjaGVkKSkgew0KPj4gKwkJLyogTm8gbmV3IGRhdGEgaW4gc2Vuc29yIGFuZCBu
+byB2YWx1ZSBjYWNoZWQuIFdhaXQgYW5kIHJldHJ5ICovDQo+PiArCQlpZiAobG9jaykNCj4+ICsJ
+CQltdXRleF91bmxvY2soJmRhdGEtPm11dGV4KTsNCj4gDQo+IEhtbS4gV2UgZG9uJ3QgcmVhbGx5
+IG5lZWQgdG8gZml4IHRoaXMgaW4gZHJpdmVyLiBDb3VsZCBqdXN0IHJldHVybiAtRUFHQUlOIGFu
+ZCBsZXQNCj4gdXNlcnNwYWNlIHdvcmsgb3V0IHRoYXQgaXQgbmVlZHMgdG8gdHJ5IGFnYWluIGFm
+dGVyIGEgd2hpbGU/DQo+IEkgZ3Vlc3Mgbm90IGFsbCB1c2Vyc3BhY2UgaXMgZ29pbmcgdG8gYmUg
+c21hcnQgZW5vdWdoIHRvIGhhbmRsZSB0aGF0IHRob3VnaCBhbmQNCj4geW91IG5lZWQgdGhpcyB0
+byBlbnN1cmUgd2UgZ2V0IGEgbmV3IHZhbHVlIGFmdGVyIGEgcGFyYW1ldGVyIGNoYW5nZS4NCj4g
+ID4NCj4gSWYgeW91IGRvIHRoYXQgdGhlbiB0aGUgbG9ja2luZyBkYW5jZSBnZXRzIG11Y2ggc2lt
+cGxlci4NCg0KSSBjaGFuZ2VkIHRoZSBhcHByb2FjaCBmb3IgdGhlIHYyICh0byBiZSBzZW50IHNv
+b24oaXNoKSkuIEkgZGlkIA0KaW1wbGVtZW50IHRoZSBidWZmZXJpbmcgLSBhbmQgZ2F2ZSB1cCBh
+bnkgYXR0ZW1wdCBvZiBjYWNoaW5nIHZhbHVlcyBmb3IgDQpyYXdfcmVhZHMuIEluc3RlYWQsIEkg
+d2lsbCBhbHdheXMgc3RhcnQgdGhlIG1lYXN1cmVtZW50IC0gd2FpdCAtIHJlYWQgDQpyZXN1bHQg
+LSBzdG9wIHRoZSBtZWFzdXJlbWVudCBmb3IgZWFjaCByZWFkX3Jhdy4NCg0KSXQgbWVhbnMgdGhh
+dDoNCg0KYSkgVGhlICh0eXBpY2FsIG9jY2FzaW9uYWw/KSB1c2VyIGNhbiBzdGlsbCByZWFkIHRo
+ZSBwcm9jZXNzZWQgY2hhbm5lbCANCndpdGggcmVhZF9yYXcgZXZlcnkgbm93IGFuZCB0aGVuLiBJ
+dCB3aWxsIGJlIHNsb3csIGJ1dCBpdCB3aWxsIG9ubHkgYmUgDQoxeCBtZWFzLXRpbWUgc2xvdy4N
+Cg0KYikgUmVhZGluZyBhbGwgdGhlIGNoYW5uZWxzIHdpdGggcmVhZF9yYXcgdXNpbmcgbG9uZyBp
+bnRlZ3JhdGlvbiB0aW1lcyANCndpbGwgYmUgcmVhbGx5IHNsb3cgLSBhbmQgaWYgbGlnaHQgbGV2
+ZWxzIGFyZSBjaGFuZ2luZyBiZXR3ZWVuIHRoZSANCnJlYWRzLCB0aGUgY2hhbm5lbCB2YWx1ZXMg
+YXJlIG5vdCByZWZsZWN0aW5nIHRoZSBzYW1lIGxpZ2h0IGxldmVscy4NCg0KYykgV2UgZ2V0IHRo
+ZSBwb3dlci1zYXZpbmcgYXMgbWVhc3VyZW1lbnQgaXMgbm90IHJ1bm5pbmcgYWxsIHRoZSB0aW1l
+Lg0KDQpkKSBBbnkgdXNlciB3aG8gbmVlZHMgc29tZSBwZXJmb3JtYW5jZSAtIG9yIGlzIGludGVy
+ZXN0ZWQgaW4gZ2V0dGluZyANCmRhdGEgZm9yIGFsbCB0aGUgY2hhbm5lbHMgLSBjYW4gdXNlIHRo
+ZSBidWZmZXJlZCBtb2RlLg0KDQpTbywgYSkgYW5kIGIpIG1lYW4gdGhhdCByZWFkX3JhdyBpcyBw
+cmV0dHkgbXVjaCBvbmx5IHVzYWJsZSBmb3IgdXNlcnMgDQppbnRlcmVzdGVkIGluIHJlYWRpbmcg
+b25lIGNoYW5uZWwgYXQgYSB0aW1lIC0gb3IgZG9pbmcgc29tZSBkZWJ1Z2dpbmcuIEkgDQp3YXMg
+YWN0dWFsbHkgY29uc2lkZXJpbmcgZHJvcHBpbmcgdGhlIHJlYWRfcmF3IHN1cHBvcnQgZm9yIA0K
+aW50ZW5zaXR5LWNoYW5uZWxzLCBidXQgZGlkbid0IGRvIGl0IGJlY2F1c2UgdGhvc2Ugd2hvIHVz
+ZSB0aGVzZSANCnJhdy12YWx1ZXMgc2hvdWxkIHJlYWxseSBrbm93IHdoYXQgdGhleSByZXByZXNl
+bnQgKHRoZXkgcHJvYmFibHkga25vdyANCnRoZSBzZW5zb3IgYW5kIGl0J3MgbGltaXRhdGlvbnMp
+LiBBbHNvLCByZWFkaW5nIGZvciBleGFtcGxlIG9ubHkgdGhlIA0KZGF0YTIgY2hhbm5lbCAod2hp
+Y2ggSSB0aGluayBpcyBub3QgcHJvcGVybHkgZGVzY3JpYmVkIGluIHRoZSANCmRhdGEtc2hlZXQp
+IGNhbiBiZSBhIHZhbGlkIHVzZS1jYXNlIGZvciBzb21lb25lIGludGVyZXN0aW5nIGluIHRoZSBJ
+Ui1hcmVhLg0KDQpJbiBhbnkgY2FzZSwgdGhlIGRhdGEtcmVhZGluZyBjb2RlIGdvdCBzb21lIGNo
+YW5nZXMgZm9yIHYyLi4uDQoNCj4+ICsgKiBUaGVuOg0KPj4gKyAqIGlmIChEMS9EMCA8IDAuODcp
+DQo+PiArICoJbHggPSAoMC4wMDEzMzEgKiBEMCArIDAuMDAwMDM1NCAqIEQxKSAqICgoRDEgLyBE
+MCAtIDAuODcpICogMy40NSArIDEpDQo+PiArICogZWxzZSBpZiAoRDEvRDAgPCAxKQ0KPj4gKyAq
+CWx4ID0gKDAuMDAxMzMxICogRDAgKyAwLjAwMDAzNTQgKiBEMSkgKiAoKEQxIC8gRDAgLSAwLjg3
+KSAqIDAuMzg1ICsgMSkNCj4+ICsgKiBlbHNlDQo+PiArICoJbHggPSAoMC4wMDEzMzEgKiBEMCAr
+IDAuMDAwMDM1NCAqIEQxKSAqICgoRDEgLyBEMCAtIDIpICogLTAuMDUgKyAxKQ0KPj4gKyAqDQo+
+PiArICogd2UgdHJ5IGltcGxlbWVudGluZyBpdCBoZXJlLiBVc2VycyB3aG8gaGF2ZSBmb3IgZXhh
+bXBsZSBzb21lIGNvbG9yZWQgbGVucw0KPiANCj4gVGhlcmUgaXMgbm8gdHJ5LCB0aGVyZSBpcyBq
+dXN0IGRvIDopDQoNCkl0IGRpZG4ndCBmZWVsIGxpa2UgdGhhdCB3aGVuIEkgd2FzIGltcGxlbWVu
+dGluZyB0aGUgY29kZSA6cm9sbGV5ZXM6DQoNCj4gDQo+PiArICogbmVlZCB0byBtb2RpZnkgdGhl
+IGNhbGN1bGF0aW9uIGJ1dCBJIGhvcGUgdGhpcyBnaXZlcyBhIHN0YXJ0aW5nIHBvaW50IGZvcg0K
+Pj4gKyAqIHRob3NlIHdvcmtpbmcgd2l0aCBzdWNoIGRldmljZXMuDQo+IA0KPiBUaGF0IHdpbGwg
+bmVlZCBzb21lIGR0IGJpbmRpbmdzIC0gdGhvdWdoIGZvciBub3cgSSBndWVzcyB3ZSBoYXZlIG5v
+IGlkZWENCj4gd2hhdCB0aGV5IHdvdWxkIGJlIHVubGVzcyB0aGVyZSBhcmUgc29tZSBoaW50cyBv
+biB0aGUgZGF0YXNoZWV0Pw0KPiANCg0KWWVzLiBUaGF0IGlzIHRoZSBwcm9ibGVtLiBBbmQgZXZl
+biB0aG91Z2ggd2Ugd291bGQgaG9wZSB3ZSBnZXQgdGhlIA0KY29tcGxldGUgYmluZGluZ3MgZnJv
+bSBkYXkgMSAtIEkgZG9uJ3Qgc2VlIGl0IHJlYWxseSBhIHByb2JsZW0gdG8gYWRkIA0KdGhpbmdz
+IGxpa2UgdGhlICdsZW5zLXdoYXRldmVyaXR3aWxsYmUnIHdoZW4gbmVlZGVkLiBXaGF0IHNob3Vs
+ZCBiZSANCmVuc3VyZWQgdGhlbiBpcyB0aGUgInByb3BlcnR5IG5vdCBmb3VuZCIgY2FzZSB3aWxs
+IGRlZmF1bHQgdG8gdGhlIG9wZW4tYWlyLg0KDQpUaGUgb25lIHRoaW5nIHdlIGNvdWxkIGFkZCBp
+cyBzeXNmcyBhdHRyaWJ1dGUgc3RhdGluZyB0aGUgJ29wZW4tYWlyJyBmb3IgDQp0aG9zZSB3aG8g
+dXNlIHRoZSByYXctdmFsdWVzIGFzIHRoZXkgd2lsbCBiZSBpbXBhY3RlZCBieSBsZW5zIGFuZCB3
+b24ndCANCmJlIGNvbXBlbnNhdGVkIGJ5IHRoZSBkcml2ZXIgbGlrZSBwcmVwcm9jZXNzZWQgdmFs
+dWVzIHNob3VsZCBiZS4gTm90IA0Kc3VyZSBpZiB3ZSB3YW50IHRvIGRvIGl0IHlldCB0aG91Z2gg
+YXMgSSBkb24ndCBrbm93IGlmIHRoZXJlIHdpbGwgYmUgYW55IA0KdXNlIGZvciBpdCBpbiB1cHN0
+cmVhbS4NCg0KPj4gKyAqDQo+PiArICogVGhlIGZpcnN0IGNhc2UgKEQxL0QwIDwgMC44NykgY2Fu
+IGJlIGNvbXB1dGVkIHRvIGEgZm9ybToNCj4+ICsgKiBseCA9IDAuMDA0NTIxMDk3ICogRDEgLSAw
+LjAwMjY2Mzk5NiAqIEQwICsgMC4wMDAxMjIxMyAqIEQxICogRDEgLyBEMA0KPj4gKyAqLw0KPj4g
+K3N0YXRpYyBpbnQgYnUyNzAzNF9nZXRfbHV4KHN0cnVjdCBidTI3MDM0X2RhdGEgKmRhdGEsIGlu
+dCAqdmFsKQ0KPj4gK3sNCj4+ICsJdW5zaWduZWQgaW50IGdhaW4wLCBnYWluMSwgbWVhc3RpbWU7
+DQo+PiArCXVuc2lnbmVkIGludCBkMV9kMF9yYXRpb19zY2FsZWQ7DQo+PiArCXUxNiByZXNbM10s
+IGNoMCwgY2gxOw0KPj4gKwl1NjQgaGVscGVyNjQ7DQo+PiArCWludCByZXQ7DQo+PiArDQo+PiAr
+CW11dGV4X2xvY2soJmRhdGEtPm11dGV4KTsNCj4+ICsJcmV0ID0gYnUyNzAzNF9nZXRfcmVzdWx0
+X3VubG9ja2VkKGRhdGEsICZyZXNbMF0pOw0KPiANCj4gcmVzDQo+IGFzIGl0IGlzIGV4cGVjdGlu
+ZyBhIHBvaW50IHRvIGFuIGFycmF5IHNvIHRoYXQgaXMgbW9yZSBuYXR1cmFsIHRoYW4gcG9pbnRp
+bmcNCj4gdG8gdGhlIGZpcnN0IGVsZW1lbnQgZXZlbiBpZiB0aGF0J3MgdGhlIHNhbWUgcmVzdWx0
+Lg0KDQpUaGlzIGlzIHByZXR0eSBtdWNoIHRoZSBvbmx5IHRoaW5nIEkgZGlzYWdyZWUgd2l0aCB5
+b3UgOikgRm9yIG1lIGl0IGhhcyANCmFsd2F5cyBiZWVuIG11Y2ggY2xlYXJlciB0byB1c2UgcG9p
+bnRlciB0byBmaXJzdCBlbGVtZW50IC0gYXMgdGhlIHR5cGUgDQpvZiBmaXJzdCBlbGVtZW50IGlz
+IHdoYXQgd2UgYXJlIHVzaW5nLiBUeXBlIG9mIGFuIGFycmF5IChpbiBteSBoZWFkKSBpcyANCnNv
+bWV0aGluZyBsZXNzIHdlbGwgZGVmaW5lZC4gSSB0aGluayB0aGlzIGRpZmZlcmVuY2UgaXMgYmVz
+dCB2aXNpYmxlIA0Kd2l0aCB0aGUgc2l6ZW9mKGFycikgVnMuIHNpemVvZigmYXJyWzBdKS4NCg0K
+SSB0aGluayBJIGRpZG4ndCBjaGFuZ2UgdGhpcyBmb3IgdjIuIEkgaW4gYW55IGNhc2UgZXhwZWN0
+IHRvIHNlZSB2MyBhbmQgDQpwcm9iYWJseSBhIGZldyBvdGhlcnMgYXMgd2VsbCAtIHNvIEkgd2ls
+bCBjaGFuZ2UgdGhpcyB0byBzb21lIG9mIHRoZSANCmxhdGVyIHZlcnNpb25zIGlmIEkgZGlkbid0
+IGdldCB5b3UgY29udmluY2VkIHRoYXQgdGhlICZyZXNbMF0gaXMgT2suDQoNCj4gDQo+PiArCWlm
+IChyZXQpDQo+PiArCQlnb3RvIHVubG9ja19vdXQ7DQo+PiArDQo+PiArCS8qIEF2b2lkIGRpdiBi
+eSB6ZXJvICovDQo+PiArCWlmICghcmVzWzBdKQ0KPiANCj4gcmVzWzBdID0gbWF4KDEsIHJlc1sw
+XSk7IHBlcmhhcHM/DQoNClRoaXMgd291bGQgaGF2ZSBiZWVuIGJldHRlciwgeWVzLiBIb3dldmVy
+LCBJIGRpZCBjaGFuZ2UgdGhlIGRhdGEgDQpjb2xsZWN0aW9uIHF1aXRlIGEgYml0IGZvciB2MiAt
+IGFuZCB0aGVyZSB0aGVzZSB2YWx1ZXMgbWF5IG5vdCBiZSBpbiANCm5hdGl2ZSBieXRlIG9yZGVy
+IC0gc28gY2hlY2sgZm9yICFyZXNbMF0gZmVlbHMgbW9yZSBjb3JyZWN0IGZvciB2MiB0aGFuIA0K
+Y29tcGFyaW5nIHRvIHZhbHVlIHdoZW4gdGhlIHZhbHVlIGZvcm1hdCBpcyBub3QgImNvcnJlY3Qi
+Lg0KDQo+PiArCWNhc2UgSUlPX0NIQU5fSU5GT19SQVc6DQo+PiArCXsNCj4+ICsJCXUxNiByZXNb
+M107DQo+PiArDQo+PiArCQlpZiAoY2hhbi0+dHlwZSAhPSBJSU9fSU5URU5TSVRZKQ0KPj4gKwkJ
+CXJldHVybiAtRUlOVkFMOw0KPj4gKw0KPj4gKwkJaWYgKGNoYW4tPmNoYW5uZWwgPCBCVTI3MDM0
+X0NIQU5fREFUQTAgfHwNCj4+ICsJCSAgICBjaGFuLT5jaGFubmVsID4gQlUyNzAzNF9DSEFOX0RB
+VEEyKQ0KPj4gKwkJCXJldHVybiAtRUlOVkFMOw0KPj4gKwkJLyoNCj4+ICsJCSAqIFJlYWRpbmcg
+b25lIGNoYW5uZWwgYXQgYSB0aW1lIGlzIGluZWZmaWNpZW50Lg0KPj4gKwkJICoNCj4+ICsJCSAq
+IEhlbmNlIHdlIHJ1biB0aGUgbWVhc3VyZW1lbnQgb24gdGhlIGJhY2tncm91bmQgYW5kIGFsd2F5
+cw0KPj4gKwkJICogcmVhZCBhbGwgdGhlIGNoYW5uZWxzLiBUaGVyZSBhcmUgZm9sbG93aW5nIGNh
+dmVhdHM6DQo+PiArCQkgKiAxKSBUaGUgVkFMSUQgYml0IGhhbmRsaW5nIGlzIHJhY3kuIFZhbGlk
+IGJpdCBjbGVhcmluZyBpcyBub3QNCj4+ICsJCSAqIHRpZWQgdG8gcmVhZGluZyB0aGUgZGF0YSBp
+biB0aGUgaGFyZHdhcmUuIFdlIGNsZWFyIHRoZQ0KPj4gKwkJICogdmFsaWQtYml0IG1hbnVhbGx5
+IF9hZnRlcl8gd2UgaGF2ZSByZWFkIHRoZSBkYXRhIC0gYnV0IHRoaXMNCj4+ICsJCSAqIG1lYW5z
+IHRoZXJlIGlzIGEgc21hbGwgdGltZS13aW5kb3cgd2hlcmUgbmV3IHJlc3VsdCBtYXkNCj4+ICsJ
+CSAqIGFycml2ZSBiZXR3ZWVuIHJlYWQgYW5kIGNsZWFyLiBUaGlzIG1lYW5zIHdlIGNhbiBtaXNz
+IGENCj4+ICsJCSAqIHNhbXBsZS4gRm9yIG5vcm1hbCB1c2UgdGhpcyBzaG91bGQgbm90IGJlIGZh
+dGFsIGJlY2F1c2UNCj4+ICsJCSAqIHVzdWFsbHkgdGhlIGxpZ2h0IGlzIGNoYW5naW5nIHNsb3ds
+eS4gVGhlcmUgbWlnaHQgYmUNCj4+ICsJCSAqIHVzZS1jYXNlcyBmb3IgbWVhc3VyaW5nIG1vcmUg
+cmFwaWRseSBjaGFuZ2luZyBsaWdodCBidXQgdGhpcw0KPj4gKwkJICogZHJpdmVyIGlzIHVuc3Vp
+dGFibGUgZm9yIHRob3NlIGNhc2VzIGFueXdheXMuIChTbWFsbGVzdA0KPj4gKwkJICogbWVhc3Vy
+ZW1lbnQgdGltZSB3ZSBzdXBwb3J0IGlzIDU1IG1TLikNCj4gDQo+IEdpdmVuIHRoZXJlIGlzIG5v
+IGdlbmVyYWwgZml4IGZvciB0aGF0LCBub3QgbXVjaCB5b3UgY2FuIGRvIGV2ZW4gaWYgeW91IGRv
+bid0IHdhbnQgdG8NCj4gbWlzcyB0aGUgZGF0YS4NCj4gDQo+PiArCQkgKiAyKSBEYXRhIHJlYWRp
+bmdzIG1vcmUgZnJlcXVlbnQgdGhhbiB0aGUgbWVhc190aW1lIHdpbGwgcmV0dXJuDQo+PiArCQkg
+KiB0aGUgc2FtZSBjYWNoZWQgdmFsdWVzLiBUaGlzIHNob3VsZCBub3QgYmUgYSBwcm9ibGVtIGZv
+ciB0aGUNCj4+ICsJCSAqIHZlcnkgc2FtZSByZWFzb24gMSkgaXMgbm90IGEgcHJvYmxlbS4NCj4g
+DQo+IEhtbS4gSSdtIG5ldmVyIHRoYXQga2VlbiBvbiBkcml2ZXJzIGRvaW5nIHRoYXQgaWYgd2Ug
+Y2FuIGF2b2lkIGl0IGJ1dCBwZXJoYXBzIHdlDQo+IGNhbid0IGhlcmUuDQoNCldlbGwsIEkgZHJv
+cHBlZCB0aGUgY2FjaGluZyBvZiB2YWx1ZXMgZm9yIHJlYWRfcmF3LiBJIHRoaW5rIGl0IGdvdCBy
+aWQgDQpvZiB0aGVzZSBwYXJ0aWN1bGFyIHByb2JsZW1zLiBUaGUgaXNzdWUgMSkgaXMgc3RpbGwg
+dGhlcmUgZm9yIGJ1ZmZlcmVkIA0KbW9kZSBidXQgSSBndWVzcyB3ZSBqdXN0IG5lZWQgdG8gbGl2
+ZSB3aXRoIGl0LiBPbiB0aGUgYnJpZ2h0IHNpZGUsIA0KbWlzc2luZyBhIHNhbXBsZSBvbmNlIGlu
+IGEgYmx1ZSBtb29uIGlzIG5vdCBmYXRhbCBmb3IgbW9zdCBvZiB0aGUgDQp1c2UtY2FzZXMgSSBj
+YW4gdGhpbmsgb2YgcmlnaHQgbm93LiAoQmVzaWRlcywgdGhlcmUgaXMgbm8gZ2VuZXJhbCBmaXgg
+YXMgDQp5b3Ugc2FpZCBzbyB3b3JyeWluZyBhYm91dCB0aGUgdW5rbm93biB1c2UtY2FzZXMgcmln
+aHQgbm93IGRvZXMgbm90IGZlZWwgDQpsaWtlIHRoZSBzYW5lc3QgdGhpbmcuIEkgaGF2ZSBlbm91
+Z2ggb2Ygd29ycnlpbmcgd2l0aCB0aGUgdGhpbmdzIHRoYXQgDQpyZWFsbHkgYXJlIGEgcHJvYmxl
+bS4uLikNCg0KPj4gKwkvKg0KPj4gKwkgKiBEZWxheSB0byBhbGxvdyBJQyB0byBpbml0aWFsaXpl
+LiBXZSBkb24ndCBjYXJlIGlmIHdlIGRlbGF5DQo+PiArCSAqIGZvciBtb3JlIHRoYW4gMSBtcyBz
+byBtc2xlZXAoKSBpcyBPay4gV2UganVzdCBkb24ndCB3YW50IHRvDQo+PiArCSAqIGJsb2NrDQo+
+IA0KPiBUaGUgbXNsZWVwIGJpdCBpcyBraW5kIG9mIG9idmlvdXMgZm9yIGEgcmVzZXQuIEknZCBu
+b3QgYm90aGVyIGRvY3VtZW50aW5nIHRoYXQNCj4gZGV0YWlsLg0KDQpXZWxsLCB0aGUgZG9jdW1l
+bnRhdGlvbiBpcyB0byBzdXBwcmVzcyByZXZpZXcgY29tbWVudHMgcmVnYXJkaW5nIDFtUyANCm1z
+bGVlcCA6KSBBbmQsIEkgY2FuJ3QgYmxhbWUgcmV2aWV3ZXJzIGFzIHRoZSBjaGVja3BhdGNoIGlz
+IHBpY2tpbmcgdGhpcyANCnVwIHRvby4gSGVuY2UgSSB0aGluayBpdCdzIE9rIHRvIHRlbGwgdGhh
+dDogIlllcywgSSBrbm93IHRoZSBzbGVlcCBpcyANCmxpa2VseSB0byBsYXN0IGxvbmdlciB0aGFu
+IHRoZSByZXF1ZXN0ZWQgMSBtUyBidXQgaXQgZG9lcyBub3QgbWF0dGVyIGZvciANCm91ciB1c2Ut
+Y2FzZSBzbyB3ZSBzdGlsbCBjb25zY2lvdXNseSBjaG9zZSB0byB1c2UgbXNsZWVwKCkuIg0KDQo+
+IA0KPj4gKwkgKi8NCj4+ICsJbXNsZWVwKDEpOw0KPj4gKw0KPj4gKwkvKg0KPj4gKwkgKiBDb25z
+aWRlciBkaXNhYmxpbmcgdGhlIG1lYXN1cmVtZW50IChhbmQgcG93ZXJpbmcgb2ZmIHRoZSBzZW5z
+b3IpIGZvcg0KPj4gKwkgKiBydW50aW1lIHBtDQo+IA0KPiBOb3RlcyBsaWtlIHRoaXMgcHJvYmFi
+bHkgd2FudCB0byBnbyBhd2F5IG9uY2UgdGhlIGRyaXZlciBpcyAnZmluaXNoZWQnLg0KDQpJIGhv
+cGUgSSBraWxsZWQgdGhlIHdvcnN0IHBvd2VyIGNvbnN1bXB0aW9uIGF0IHYyIGJ5IG5vdCBydW5u
+aW5nIHRoZSANCm1lYXN1cmVtZW50IGFsbCB0aGUgdGltZSBhdCB0aGUgYmFja2dyb3VuZC4gSSBk
+b24ndCBhdCB0aGUgbW9tZW50IGhhdmUgYSANCnVzZS1jYXNlIGZvciBydW50aW1lIHBtIC0gYW5k
+IGFzIHJ1bnRpbWUgcG0gdGVuZHMgdG8gYmUgIm5vdCB0cml2aWFsIiAtIA0KSSB3aWxsIGxlYXZl
+IHRob3NlIGJ1Z3MgdG8gYmUgbWFkZSBvbmx5IHdoZW4gbmVlZGVkLi4uIEJ1dCB5ZXMsIHRoaXMg
+DQpjb21tZW50IGNhbiBnbyBhcyBpdCBhZGRzIHByZXR0eSBtdWNoIG5vIHZhbHVlLg0KDQo+IA0K
+Pj4gKwkgKi8NCj4+ICsJcmV0ID0gYnUyNzAzNF9tZWFzX2VuKGRhdGEpOw0KPj4gKwlpZiAocmV0
+KQ0KPj4gKwkJcmV0dXJuIHJldDsNCj4+ICsNCj4+ICsJcmV0dXJuIGRldm1fYWRkX2FjdGlvbl9v
+cl9yZXNldChkYXRhLT5kZXYsIGJ1MjcwMzRfbWVhc19zdG9wLCBkYXRhKTsNCj4+ICt9DQo+PiAr
+DQo+PiArc3RhdGljIGludCBidTI3MDM0X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICppMmMpDQo+
+PiArew0KPj4gKwlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmaTJjLT5kZXY7DQo+PiArCXN0cnVjdCBm
+d25vZGVfaGFuZGxlICpmd25vZGU7DQo+PiArCXN0cnVjdCBidTI3MDM0X2RhdGEgKmRhdGE7DQo+
+PiArCXN0cnVjdCByZWdtYXAgKnJlZ21hcDsNCj4+ICsJc3RydWN0IGlpb19kZXYgKmlkZXY7DQo+
+PiArCXVuc2lnbmVkIGludCBwYXJ0X2lkOw0KPj4gKwlpbnQgcmV0Ow0KPj4gKw0KPj4gKwlyZWdt
+YXAgPSBkZXZtX3JlZ21hcF9pbml0X2kyYyhpMmMsICZidTI3MDM0X3JlZ21hcCk7DQo+PiArCWlm
+IChJU19FUlIocmVnbWFwKSkNCj4+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgUFRSX0VS
+UihyZWdtYXApLA0KPj4gKwkJCQkgICAgICJGYWlsZWQgdG8gaW5pdGlhbGl6ZSBSZWdtYXBcbiIp
+Ow0KPj4gKw0KPj4gKwlmd25vZGUgPSBkZXZfZndub2RlKGRldik7DQo+IA0KPiB3aHkgZG8gd2Ug
+Y2FyZT8gIFNvIGZhciB0aGlzIHNob3VsZCB3b3JrIGZpbmUgd2l0aCB0aGUgb3RoZXIgdHlwZXMg
+b2YgaTJjDQo+IHByb2JlLg0KDQpUcnVlISBJIGRpZG4ndCBldmVuIHRoaW5rIG9mIHN1Y2ggYSBj
+YXNlLg0KDQo+PiArCWlkZXYgPSBkZXZtX2lpb19kZXZpY2VfYWxsb2MoZGV2LCBzaXplb2YoKmRh
+dGEpKTsNCj4+ICsJaWYgKCFpZGV2KQ0KPj4gKwkJcmV0dXJuIC1FTk9NRU07DQo+PiArDQo+PiAr
+CXJldCA9IGRldm1fcmVndWxhdG9yX2dldF9lbmFibGVfb3B0aW9uYWwoZGV2LCAidmRkIik7DQo+
+IHZkZCBpc24ndCBvcHRpb25hbCAtIG9yIGF0IGxlYXN0IGl0IHdvdWxkIGJlIGFuIHVudXN1YWwg
+ZGV2aWNlIHRoYXQgZG9lc24ndA0KPiBuZWVkIHRoYXQgc3VwcGx5IGxpbmUuDQo+IA0KPiBLZXkg
+aGVyZSBpcyB0aGF0IG9wdGlvbmFsIGluIERUIGlzIGRpZmZlcmVudCBmcm9tIHRoaXMgY2FsbC4N
+Cj4gSWYgbm90IHByZXNlbnQgaW4gRFQgYW5kIGRldm1fcmVndWxhdG9yX2dldF9lbmFibGUoKSBj
+YWxsZWQgdGhlbiB3ZSdsbCBub3JtYWxseQ0KPiBnZXQgYSBzdHViIHJlZ3VsYXRvci4NCg0KWWVz
+LiBJIHRoaW5rIHdlIHdpbGwgYWxzbyBoYXZlIGEgd2FybmluZyBpbiBhIGxvZyAtIHdoaWNoIEkg
+d2FzIG5vdCANCmxpa2luZy4gT1RPSCwgYXMgdGhlIGNvbXBvbmVudCBjbGVhcmx5IG5lZWRzIHRo
+ZSBWREQsIG1heWJlIHRoZSB3YXJuaW5nIA0KYWJvdXQgbWlzc2luZyBvbmUgaW4gRFQgaXMgYWxz
+byBPay4NCg0KPj4gKwlpZiAocmV0ICE9IC1FTk9ERVYpDQo+PiArCQlyZXR1cm4gZGV2X2Vycl9w
+cm9iZShkZXYsIHJldCwgIkZhaWxlZCB0byBnZXQgcmVndWxhdG9yXG4iKTsNCj4+ICsNCj4+ICsJ
+ZGF0YSA9IGlpb19wcml2KGlkZXYpOw0KPj4gKw0KPj4gKwlyZXQgPSByZWdtYXBfcmVhZChyZWdt
+YXAsIEJVMjcwMzRfUkVHX1NZU1RFTV9DT05UUk9MLCAmcGFydF9pZCk7DQo+PiArCWlmIChyZXQp
+DQo+PiArCQlyZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIHJldCwgIkZhaWxlZCB0byBhY2Nlc3Mg
+c2Vuc29yXG4iKTsNCj4+ICsNCj4+ICsJcGFydF9pZCAmPSBCVTI3MDM0X01BU0tfUEFSVF9JRDsN
+Cj4+ICsNCj4+ICsJaWYgKHBhcnRfaWQgIT0gQlUyNzAzNF9JRCkgew0KPj4gKwkJZGV2X2Vycihk
+ZXYsICJ1bnN1cHBvcnRlZCBkZXZpY2UgMHgleFxuIiwgcGFydF9pZCk7DQo+IA0KPiBGYWxsYmFj
+ayBjb21wYXRpYmxlcyByZXF1aXJlIHRoYXQgb24gYSBmYWlsdXJlIHRvIG1hdGNoIElEIHdlIHN0
+aWxsIGxldCB0aGUgZHJpdmVyDQo+IGNhcnJ5IG9uLiAgSG93ZXZlciB3ZSBjYW4gcHJpbnQgc29t
+ZXRoaW5nIGluIHRoZSBsb2cgdG8gc2F5IHdlIGRvbid0IHJlY29nbmlzZQ0KPiB0aGUgZGV2aWNl
+LiAgVGhlIGludGVudCBpcyB0aGF0IGF0IGZ1dHVyZSBwYXJ0IGNhbiBiZSBzdXBwb3J0ZWQgYnkg
+b2xkIGtlcm5lbHMganVzdA0KPiBiZSBoYXZpbmcgdGhlIGR0IGxpc3QgbXVsdGlwbGUgY29tcGF0
+aWJsZXMgaWYgdGhlIGRldmljZSByZWFsbHkgYXJlIGJhY2t3YXJkcw0KPiBjb21wYXRpYmxlIHdp
+dGggcGFydHMgYWxyZWFkeSBzdXBwb3J0ZWQuDQoNCk1ha2VzIHNlbnNlLiBCZXNpZGVzLCB3ZSBz
+aG91bGQgYmUgYWJsZSB0byB0cnVzdCB0aGUgZHQgaGFzIGNvcnJlY3QgDQpjb21wYXRpYmxlcyAt
+IEknbSBub3Qgc3VyZSB3ZSBzaG91bGQgZG8gdGhlc2UgcnVudGltZSBjaGVja3MgZm9yIHBhcnQg
+DQpJRHMgYXQgYWxsLiBJIGRyb3BwZWQgdGhlIGVycm9yIC0gcmV0dXJuIGFuZCBjaGFuZ2VkIHRo
+ZSBwcmludCB0byB3YXJuLg0KDQo+PiArDQo+PiArCWlkZXYtPmNoYW5uZWxzID0gYnUyNzAzNF9j
+aGFubmVsczsNCj4+ICsJaWRldi0+bnVtX2NoYW5uZWxzID0gQVJSQVlfU0laRShidTI3MDM0X2No
+YW5uZWxzKTsNCj4+ICsJaWRldi0+bmFtZSA9ICJidTI3MDM0LWFscyI7DQo+IA0KPiBJZiB0aGUg
+Y2hpcCBkb2Vzbid0IGhhdmUgYSBtdWx0aXBsZSBmdW5jdGlvbnMgKGFuZCBtdWx0aXBsZSBpaW9f
+ZGV2cyksIHdlJ2Qgbm9ybWFsbHkNCj4gbm90IGJvdGhlciB3aXRoIHRoZSBhbHMgcGFydCBpbiB0
+aGUgbmFtZS4gIEFkZCBhIGNvbW1lbnQgaWYgdGhlcmUgaXMgYSByZWFzb24gZm9yDQo+IGl0IGhl
+cmUuDQoNCk9rLCB0aGFua3MhDQoNCllvdXJzLA0KCS0tIE1hdHRpDQoNCi0tIA0KTWF0dGkgVmFp
+dHRpbmVuDQpMaW51eCBrZXJuZWwgZGV2ZWxvcGVyIGF0IFJPSE0gU2VtaWNvbmR1Y3RvcnMNCk91
+bHUgRmlubGFuZA0KDQp+fiBXaGVuIHRoaW5ncyBnbyB1dHRlcmx5IHdyb25nIHZpbSB1c2VycyBj
+YW4gYWx3YXlzIHR5cGUgOmhlbHAhIH5+DQoNCg==
