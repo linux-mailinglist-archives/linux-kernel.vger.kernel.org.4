@@ -2,107 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E08E6A829A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050AE6A8292
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjCBMtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S229725AbjCBMsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjCBMtV (ORCPT
+        with ESMTP id S229453AbjCBMsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:49:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AD01259F
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:48:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677761313;
+        Thu, 2 Mar 2023 07:48:33 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427B418B2B;
+        Thu,  2 Mar 2023 04:48:32 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BBA871EC04F0;
+        Thu,  2 Mar 2023 13:48:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677761310;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qWubdolcTPcYZMWRbItbBs4vyBxRKmavcU+qlGC7gI4=;
-        b=eUvQLSgB4lvqePnLEFQZ2ozTi8sM5Y2G5USsHBAQ7dfRi+atOurZ6D6G7OIkfTTDqMzWul
-        benvq65FrMeJwjFAu+2QCxN0SEBU5r5OJMCrjl9IlF8Tsg0TQHmd0G+ittgq7xudrx2RHj
-        ZS0lQmo69ccVfdWUIyVyTS/4KhIXVNY=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-371-IK3w7Zd7NkSPDNNgeDYctQ-1; Thu, 02 Mar 2023 07:48:31 -0500
-X-MC-Unique: IK3w7Zd7NkSPDNNgeDYctQ-1
-Received: by mail-qk1-f200.google.com with SMTP id z23-20020a376517000000b00731b7a45b7fso10018369qkb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:48:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677761311;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qWubdolcTPcYZMWRbItbBs4vyBxRKmavcU+qlGC7gI4=;
-        b=3x7khO5sMQ3nbobOjg8WJVV8A8920JITVrC7jzJJ4D7B+kkk0hnbQOTCqnaDUMSzD7
-         Y4YYVvQPhl20Aj8RXPUgDx81yZV7rvdH/Cjs55XZmMZxiZ8y0KCadNYF8Ukwdnybsj0t
-         jTj4+se9VI+myjeV6vbwa5TRxGrViIybZ0chcLsn1iU6uR1FBZWGKqbVO7zdXTjH7O4+
-         OaxzgM8qmsjFB1rYn0m7Gba+Yk731vJI3Cw4cXx3sCf+OKpuplsw+oxJWyF9vsuatZfh
-         OgTJL3YVrjbG3uOZ+ZOpd6rhWwfeV0mJVVkQtQlYNn6l9+qQHLZ6jNogN9GheFPENTcb
-         xgzg==
-X-Gm-Message-State: AO0yUKUUweZJ1lLKThyBbjGWnC2t1M/840b0mMJENptxBQZi6Cb97X5X
-        QGxkrH7U8D/5eJgINFMRKieSI7OKRrQiEP26KUC7Czksn6DLziE8KZw+XIm5Ml55h1RU5FjE6rF
-        TKFWgkiyddp/ydR3zMYGsNwgtcg3KyA==
-X-Received: by 2002:a05:622a:5cf:b0:3bf:db54:b622 with SMTP id d15-20020a05622a05cf00b003bfdb54b622mr17085758qtb.30.1677761311190;
-        Thu, 02 Mar 2023 04:48:31 -0800 (PST)
-X-Google-Smtp-Source: AK7set9I+TSl84uLi9L/hA047N42TNQ2RbkOPTsi+FcB8UwVS5/djJiPNP8Zc/AXLoClAtyGqLq6XA==
-X-Received: by 2002:a05:622a:5cf:b0:3bf:db54:b622 with SMTP id d15-20020a05622a05cf00b003bfdb54b622mr17085737qtb.30.1677761310938;
-        Thu, 02 Mar 2023 04:48:30 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id b9-20020ac801c9000000b003bfd8e2ab40sm7585267qtg.16.2023.03.02.04.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 04:48:30 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com,
-        airlied@gmail.com, daniel@ffwll.ch, gsamaiya@nvidia.com
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/nouveau/nvfw/acr: set wpr_generic_header_dump storage-class-specifier to static
-Date:   Thu,  2 Mar 2023 07:48:19 -0500
-Message-Id: <20230302124819.686469-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4MfiBkMkz5ebUfMAXrylF6PkikHE4wLk3HTn0lHaOb8=;
+        b=R49PSVoU67TzEd1On6SpyLZ5WN+gqAjISYxKzodjcp2/ghuXDA5b8QNG5KBnMO6cXj5YsF
+        WpCPRF0NmdOGSrDnKXws+eFjaG91CTVWNqlrOkaSjyjNIHM7nBkjL7+VWFZt1SHGYHoUg0
+        xc2yxp3B4WH91qCi1Cnu2Lbg6fCdzg4=
+Date:   Thu, 2 Mar 2023 13:48:21 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v7 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
+Message-ID: <ZACbFc55bcVYRXpG@zn.tnic>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-15-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230227222957.24501-15-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gcc with W=1 reports
-drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c:49:1: error: no previous
-  prototype for ‘wpr_generic_header_dump’ [-Werror=missing-prototypes]
-   49 | wpr_generic_header_dump(struct nvkm_subdev *subdev,
-      | ^~~~~~~~~~~~~~~~~~~~~~~
+On Mon, Feb 27, 2023 at 02:29:30PM -0800, Rick Edgecombe wrote:
+> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+> index 0646ad00178b..56b374d1bffb 100644
+> --- a/arch/x86/include/asm/pgtable_types.h
+> +++ b/arch/x86/include/asm/pgtable_types.h
+> @@ -21,7 +21,8 @@
+>  #define _PAGE_BIT_SOFTW2	10	/* " */
+>  #define _PAGE_BIT_SOFTW3	11	/* " */
+>  #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
+> -#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
+> +#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
+> +#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
+>  #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
+>  #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
+>  #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
+> @@ -34,6 +35,15 @@
+>  #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
+>  #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
+>  
+> +/*
+> + * Indicates a Saved Dirty bit page.
+> + */
+> +#ifdef CONFIG_X86_USER_SHADOW_STACK
+> +#define _PAGE_BIT_SAVED_DIRTY		_PAGE_BIT_SOFTW5 /* Saved Dirty bit */
+> +#else
+> +#define _PAGE_BIT_SAVED_DIRTY		0
+> +#endif
+> +
+>  /* If _PAGE_BIT_PRESENT is clear, we use these: */
+>  /* - if the user mapped it with PROT_NONE; pte_present gives true */
+>  #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
+> @@ -117,6 +127,25 @@
+>  #define _PAGE_SOFTW4	(_AT(pteval_t, 0))
+>  #endif
+>  
+> +/*
+> + * The hardware requires shadow stack to be Write=0,Dirty=1. However,
+> + * there are valid cases where the kernel might create read-only PTEs that
+> + * are dirty (e.g., fork(), mprotect(), uffd-wp(), soft-dirty  tracking). In
+> + * this case, the _PAGE_SAVED_DIRTY bit is used instead of the HW-dirty bit,
+> + * to avoid creating a wrong "shadow stack" PTEs. Such PTEs have
+> + * (Write=0,SavedDirty=1,Dirty=0) set.
+> + *
+> + * Note that on processors without shadow stack support, the 
 
-wpr_generic_header_dump is only used in acr.c, so it should be static
+.git/rebase-apply/patch:154: trailing whitespace.
+ * Note that on processors without shadow stack support, the 
+warning: 1 line adds whitespace errors.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hm, apparently git checks for that too - not only trailing empty lines.
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c b/drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c
-index 83a9c48bc58c..7ac90c495737 100644
---- a/drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c
-@@ -45,7 +45,7 @@ wpr_header_v1_dump(struct nvkm_subdev *subdev, const struct wpr_header_v1 *hdr)
- 	nvkm_debug(subdev, "\tstatus        : %d\n", hdr->status);
- }
- 
--void
-+static void
- wpr_generic_header_dump(struct nvkm_subdev *subdev, const struct wpr_generic_header *hdr)
- {
- 	nvkm_debug(subdev, "wprGenericHeader\n");
 -- 
-2.27.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
