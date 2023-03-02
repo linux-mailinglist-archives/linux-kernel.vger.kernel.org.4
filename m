@@ -2,127 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8076A8640
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47A66A8642
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCBQXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S229874AbjCBQXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjCBQX3 (ORCPT
+        with ESMTP id S229876AbjCBQXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:23:29 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB2D17CC0;
-        Thu,  2 Mar 2023 08:23:26 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 740EE21FD2;
-        Thu,  2 Mar 2023 16:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677774205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TWP+794MyCIWP+G+s4FT51Bi2rDWxsLNhSxzg1q2+dk=;
-        b=AQXyAurahCpZQ/er1h3ERHbroqld5zzRgHyJzW3DsH7dcDqZctGiROLW6FOg95me3zhlVb
-        S6XAUPxmZyTVUgjyw6NGXwJaxPI9/Ls/OuWFqq0BzjANLaHPcVjsAaE6uKr0qAm3Nxyxht
-        BQNpi8MkN1fvH4koRYf1y2AN6N7u5C0=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 73AEB2C141;
-        Thu,  2 Mar 2023 16:23:24 +0000 (UTC)
-Date:   Thu, 2 Mar 2023 17:23:18 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Tomohiro Misono (Fujitsu)" <misono.tomohiro@fujitsu.com>
-Cc:     "'madvenka@linux.microsoft.com'" <madvenka@linux.microsoft.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "Keiya Nobuta (Fujitsu)" <nobuta.keiya@fujitsu.com>,
-        "sjitindarsingh@gmail.com" <sjitindarsingh@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
- pointer validation
-Message-ID: <ZADNdp5U+lP10Oqo@alley>
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
- <TYCPR01MB69938E7E2E14697FCF166155E5AD9@TYCPR01MB6993.jpnprd01.prod.outlook.com>
+        Thu, 2 Mar 2023 11:23:44 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9A31A64C;
+        Thu,  2 Mar 2023 08:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677774223; x=1709310223;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TtSfFHfwjReVtU3EoxFAIwjjqKwQJVfyLsn5VHQ7vBU=;
+  b=YoB1EHZ7zUaOjhTQLGKsPRXIoND90+UkA+V6oWMPTnOh/uo5ODkx+pgw
+   mPyv0W9fdZQYpRaWMWADmqpf0RBAy1ZJrsdME5FkgYXy4UZdAXGkTgXXx
+   dRtdvcTKmWZ7HvUFKXV9vYNo/dJbo0upJuHDLpGVWxjgyNd7+kknIxqWC
+   3yw5Z4DsM6XhxvwZOv5pN8fWgEJDc89vFZQ4f4kmylAme9T7Fm5sz6OQ0
+   aY/9f02ffdyEL+TWZcgkEAXBrgsFxIdl3r9SuJXB2I+q8knQEYb8s2mxj
+   mK5KD6ZaHFwf/Nuu+8/hKxRs+MFFKVQUItYexWCp3G2J5JY/xNLFq3PQF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="315184947"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="315184947"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 08:23:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="677275714"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="677275714"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Mar 2023 08:23:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pXliF-00EQSo-1J;
+        Thu, 02 Mar 2023 18:23:23 +0200
+Date:   Thu, 2 Mar 2023 18:23:23 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] iio: Improve the kernel-doc of iio_trigger_poll
+Message-ID: <ZADNexu/8SnwfI0B@smile.fi.intel.com>
+References: <cover.1677761379.git.mehdi.djait.k@gmail.com>
+ <bd84fc17e9d22eab998bf48720297f9a77689f45.1677761379.git.mehdi.djait.k@gmail.com>
+ <ZADGnRILByq1/1ch@smile.fi.intel.com>
+ <ZADMRsDgxKZ/UfJj@carbian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TYCPR01MB69938E7E2E14697FCF166155E5AD9@TYCPR01MB6993.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZADMRsDgxKZ/UfJj@carbian>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-03-01 03:12:08, Tomohiro Misono (Fujitsu) wrote:
-> <snip>
-> > Testing
-> > =======
+On Thu, Mar 02, 2023 at 05:18:14PM +0100, Mehdi Djait wrote:
+> On Thu, Mar 02, 2023 at 05:54:05PM +0200, Andy Shevchenko wrote:
+> > On Thu, Mar 02, 2023 at 02:04:35PM +0100, Mehdi Djait wrote:
+> > > Move the kernel-doc of the function to industrialio-trigger.c
+> > > Add a note on the context where the function is expected to be called.
+
+...
+
+> > > v2:
+> > > - Changed the expected context of from interrupt to hard IRQ context
 > > 
-> > - I have run all of the livepatch selftests successfully. I have written a
-> >   couple of extra selftests myself which I will be posting separately
-> Hi,
+> > Thank you for an update.
+> > 
+> > But it seems I messed up with this and my previous remark shouldn't be
+> > taken into consideration.
+> > 
+> > The "relevant hardware interrupt handler" may be hard and threaded IRQ context,
+> > which looks like your first version was correct.
+> > 
+> > Let's wait for Jonathan opinion on this as he is a native speaker.
 > 
-> What test configuration/environment you are using for test?
-> When I tried kselftest with fedora based config on VM, I got errors
-> because livepatch transition won't finish until signal is sent
-> (i.e. it takes 15s for every transition).
+> If I understood the function correctly I think you were right. It should
+> be hard IRQ context
 > 
-> [excerpt from test result]
->   ```
->   $ sudo ./test-livepatch.sh
->   TEST: basic function patching ... not ok
->   
->   --- expected
->   +++ result
->   @@ -2,11 +2,13 @@
->    livepatch: enabling patch 'test_klp_livepatch'
->    livepatch: 'test_klp_livepatch': initializing patching transition
->    livepatch: 'test_klp_livepatch': starting patching transition
->   +livepatch: signaling remaining tasks
->    livepatch: 'test_klp_livepatch': completing patching transition
->   ```
+> The relevant functions calls:
+> iio_trigger_poll --> generic_handle_irq --> handle_irq_desc
+> 
+> handle_irq_desc: returns Operation not permitted if !in_hardirq() && handle_enforce_irqctx 
+> and it is the reason why the sysfs trigger uses the irq_framework to call iio_trigger_poll 
+> from hard IRQ context [1][2]
 
-It might be interesting to see what process is blocking the
-transition. The transition state is visible in
-/proc/<pid>/patch_state.
+Cool, thank you for elaboration!
 
-The transition is blocked when a process is in KLP_UNPATCHED state.
-It is defined in include/linux/livepatch.h:
+In any case it's up to Jonathan now what to do. With your explanation it seems
+correct to phrase as you did in v2. Hence,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-#define KLP_UNPATCHED	 0
+> [1] https://lwn.net/Articles/411605/ 
+> [2] https://lore.kernel.org/all/1346922337-17088-1-git-send-email-lars@metafoo.de/
 
-Well, the timing against the transition is important. The following
-might help to see the blocking processes:
+-- 
+With Best Regards,
+Andy Shevchenko
 
-$> modprobe livepatch-sample ; \
-   sleep 1; \
-   for proc_path in \
-       `grep "\-1"  /proc/*/patch_state | cut -d '/'  -f-3` ; \
-   do \
-       cat $proc_path/comm ; \
-       cat $proc_path/stack ; \
-       echo ===  ; \
-   done
 
-After this the livepatch has to be manualy disabled and removed
-
-$> echo 0 >/sys/kernel/livepatch/livepatch_sample/enabled
-$> rmmod livepatch_sample
-
-Best Regards,
-Petr
