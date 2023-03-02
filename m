@@ -2,76 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904956A7D86
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C596A7D94
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjCBJVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S229752AbjCBJXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjCBJU5 (ORCPT
+        with ESMTP id S229972AbjCBJWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:20:57 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A62130E81;
-        Thu,  2 Mar 2023 01:20:19 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so2086016pjp.2;
-        Thu, 02 Mar 2023 01:20:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677748819;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SpjbL0+tw0OXVT5Ll6YWgAqfA/dRw9VkkcHAS6chO0U=;
-        b=hPKSs0z3YSeSHFQpz6+z0j9+1VULH7/s0dtcFUMqao5zn3thKxAg9JFflOgmoOw+RM
-         XVOEw/bwOGLQa6RATBJNBV306BRHj/p5vLgMbkJqUMQquL9xHnuOSDEkdzomk+fdTPL4
-         4cwMLYuMihpOqE5DtnYZX9VHpnu8DWRihSpIfn/N11XNVR8GXYa5mhNBDf71NP27XMaz
-         7OYfGIfDOoit7sswLMogqVOa1385DjdO9fIfGBiS5OgZWfMOm2oxDcFhQOkKF1IX6NQ8
-         HbSFUNu04/5tgqqrmr304NKU/WNcVh4QnpAqD0jsOP5rLnxlIU8XokyO62QgK6XMSaI6
-         ectQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677748819;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SpjbL0+tw0OXVT5Ll6YWgAqfA/dRw9VkkcHAS6chO0U=;
-        b=C9aJmKFeazSLPVDlGAxeb+ZMCKHAaFQNFjCvjgAx1S3qAM2JGTpnGwbYxrgwYwKp29
-         2WfR2HKoYGGv3zLcQHZ+fXz/IHgRntX9QRBRVMpjSpGvJe3jvdJZKZawq8l2tg3KvhY7
-         PSyBV2ku1+ZfBwkOgO0bCTtulRCN20xnEBz9F9voltYwoO2/0JQXjQ4ejoga6iq1EHjj
-         1YBSMtYAncdOthfIr0zhjSNzpNWFOWSSten3N+6nkakfR9tP5xR1faedy2z60YLOaDKi
-         sUX/EJzxJllK+LOBtPLEuo9fJTowVuqQd29yG+9IoRsCyA5vCLwUGxoUFqpqVtOSwCjw
-         yRCg==
-X-Gm-Message-State: AO0yUKW4zLxnTBwueKSGmI5KuGLz+BEqYwrhBktK2/OBqcoCOiPL/P/l
-        ELPCzCOu6Jh1uhUJrSwVI+0=
-X-Google-Smtp-Source: AK7set9QsFevYUQW2fyMF+c6lKXWoncb6uV6ik8S+7NwOyKqENuxfjUcUQ7zwvVpKkVk3AjyWC++WA==
-X-Received: by 2002:a05:6a21:6d87:b0:cc:39c5:1241 with SMTP id wl7-20020a056a216d8700b000cc39c51241mr14207793pzb.16.1677748818666;
-        Thu, 02 Mar 2023 01:20:18 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-3.three.co.id. [180.214.232.3])
-        by smtp.gmail.com with ESMTPSA id g6-20020a62e306000000b005ded5d2d571sm9346972pfh.185.2023.03.02.01.20.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 01:20:18 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id DE979106674; Thu,  2 Mar 2023 16:20:13 +0700 (WIB)
-Date:   Thu, 2 Mar 2023 16:20:13 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/22] 5.15.97-rc1 review
-Message-ID: <ZABqTfAa/aHtJQQL@debian.me>
-References: <20230301180652.658125575@linuxfoundation.org>
+        Thu, 2 Mar 2023 04:22:35 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2054.outbound.protection.outlook.com [40.107.102.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AC0410B7;
+        Thu,  2 Mar 2023 01:22:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d4JQAW9bwKeeNYpEn73xtfJkCzeWWg4r/FYPgKn0nenF9smoWpJDvmprGezdllufJGiejeg9rII6b2JrIJq4g6PZmnRgAM+v9vIU/WUIlW/TAlt/4bRQvyDnQuaMP+e7tjyzhnqdXuDwtrCLwDSYF87ulAaEPBAfSxAeFx6ORGFRjG/tQe2Tiai7V3lvNRlhAMQ1OnS8kmmCqrPFV470l2weDAb4QNE3O+zUhXnu9dXsVLvKrQXvOEM6aNeJ6WtiraMj93K+3f8vRoFd+27n3YLJOwkOwxu+WuZqlLz5/4MtBBEqKHaG7Y87RXFRLNFPlyqpro24r+QjExbA5gCbIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n5GwyyEz0CxOu4K+uVKqVsG3raMsVp4JNKQIZqu4fYY=;
+ b=TGbEhnHB6C1J17CcbBMEtPKs94Fr8iJS/gyLYo6uCMejN3+l5slOLN9P22fSldpsHDaFo0AxovY1jTBO0GYgju7wn2JbZHqe81c/bvJ7KFTiQEVARyxSkG+fs2Y6KKyam8Z/Jb5J427VnoeeYmdykhOGVZBf4PaGYNGJbtOynZJEFDHiFbil2A+jEKW8/xeLTDUGukKrWmIPaDSA7e3z+6MaXNjrTFkUZUBoj/b++MKRNx3/S6WvG461MfU9i1Q4OItD4r6epUEYt/O92k0TqohohVt3Mw23fNlOUtU3gTFABxEQAHHGAvTUhWfIgss0WP0Wx1oJRhFw9LrYi56Uag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n5GwyyEz0CxOu4K+uVKqVsG3raMsVp4JNKQIZqu4fYY=;
+ b=o3i9Y3i1HfQd6hNp4xaKomSs9IDiQc4NulQ3UnDmSkKeeC5rVfyjxU6z1yE+zqrR87hoao37OyjOkb1Vz43IQ40dPPOUDKlQYGwJHlLIQ95xuUoWyWXhXmOMF84VTMr1pRgS4HXgXJSo9aAJoboShYZlQ0XeTN8C1ajKmNlGbL8=
+Received: from BN0PR04CA0021.namprd04.prod.outlook.com (2603:10b6:408:ee::26)
+ by PH8PR12MB6986.namprd12.prod.outlook.com (2603:10b6:510:1bd::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Thu, 2 Mar
+ 2023 09:22:09 +0000
+Received: from BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ee:cafe::19) by BN0PR04CA0021.outlook.office365.com
+ (2603:10b6:408:ee::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
+ Transport; Thu, 2 Mar 2023 09:22:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT006.mail.protection.outlook.com (10.13.177.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6156.19 via Frontend Transport; Thu, 2 Mar 2023 09:22:08 +0000
+Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Mar
+ 2023 03:21:55 -0600
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+To:     <peterz@infradead.org>
+CC:     <ravi.bangoria@amd.com>, <eranian@google.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <irogers@google.com>, <bp@alien8.de>, <x86@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
+        <santosh.shukla@amd.com>
+Subject: [PATCH 0/2] perf/ibs: Fix interface via core pmu events
+Date:   Thu, 2 Mar 2023 14:51:07 +0530
+Message-ID: <20230302092109.367-1-ravi.bangoria@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0sGyj5cQz5+LDbLw"
-Content-Disposition: inline
-In-Reply-To: <20230301180652.658125575@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT006:EE_|PH8PR12MB6986:EE_
+X-MS-Office365-Filtering-Correlation-Id: e58c8566-c36d-4768-388f-08db1aff990e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OB/9uszZNiKY2hpntT4d8U5GPP+ibUKGKvIjguh5Ksl/v0gNDnY4GYhCWrJt/iI09YnIxHkyceUDr2/1Z9Z+S6UjZl+olyFGI71PagjRiYHYGh8EICNvqSBvRSnVl5fMY12pfHbnu4ocMtQNajnJG1AmS5j9ChhkoC3xKSx8hI52a/030+FgTRfYzUGqZTeRJlk7EkVVUzOncRuRctRpaoFJgL5DhSdOwyV/Q0wM0zp7LCtsxsfROSdr8Vqp6hIYeiYnKIWtTOcCO2oSosjzM9luDl0/o5zLb9sb8UBzI4ToNGi22k2EaMVFB8GOyBvqNaDl3rq2zFDLX7DmzdL6H/apr8wytY+3HB8UjtpnUxWe9oksioxgAcy6sknYzBD02R9i1NzuIy01JWRBXHu3Wdagxn4qnRwGLS9ERpJBqetq8WSZS7qIN72CLoyn8NNm8zlAGWSBKHdMdKJBqndQZFKB3ZhgkoL3YJdSmOswugvNDqRG77OFLt/F347iukjJUf7+vCOxy2TC/2qt3dxELFq4qpaiG2/uula4lMUVWsi61WudKZd0W6LftVQThdJIIhAjqPP8Bbwjv/HaZ0WYzhji78RJ0h9mJ1XP5Sl1IalQR9cIW0t8/uwQVc3da1J4FglkCLxZWqAc58owe/z0N6TdadV+ijptLl4yhzWCOMwLNM3+RjD+s8b0RNlm81k01RjFWZF6BPYfHafQHrAjQTX/dCR7lKp7CtOXC25VQlk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199018)(40470700004)(46966006)(36840700001)(86362001)(36860700001)(81166007)(356005)(82740400003)(36756003)(2906002)(44832011)(7416002)(70206006)(5660300002)(8936002)(6916009)(41300700001)(4326008)(8676002)(70586007)(4744005)(40460700003)(82310400005)(336012)(40480700001)(26005)(1076003)(2616005)(186003)(16526019)(83380400001)(47076005)(54906003)(426003)(6666004)(316002)(478600001)(7696005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 09:22:08.9573
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e58c8566-c36d-4768-388f-08db1aff990e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6986
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +101,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+IBS used to allow event creation via core pmu events with precise_ip
+attribute set, but it's broken since late 2019. 1st patch fixes the
+issue and 2nd patch adds simple perf test for the same.
 
---0sGyj5cQz5+LDbLw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ravi Bangoria (2):
+  perf/ibs: Fix interface via core pmu events
+  perf test: Add selftest to test IBS invocation via core pmu events
 
-On Wed, Mar 01, 2023 at 07:08:33PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.97 release.
-> There are 22 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+ arch/x86/events/amd/core.c          |  5 +++
+ arch/x86/events/core.c              |  2 +
+ arch/x86/events/perf_event.h        |  3 ++
+ include/linux/perf_event.h          |  1 +
+ kernel/events/core.c                | 11 +++--
+ tools/perf/tests/Build              |  1 +
+ tools/perf/tests/builtin-test.c     |  1 +
+ tools/perf/tests/ibs-via-core-pmu.c | 70 +++++++++++++++++++++++++++++
+ tools/perf/tests/tests.h            |  1 +
+ 9 files changed, 92 insertions(+), 3 deletions(-)
+ create mode 100644 tools/perf/tests/ibs-via-core-pmu.c
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+-- 
+2.39.2
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---0sGyj5cQz5+LDbLw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZABqRwAKCRD2uYlJVVFO
-owQHAQCHMKQacALiPmNDxiV58N6vcreRm1WH6Bc7B5ZgW2QqtQD/Vs2d9/zfD0DH
-etfb0hVHhPTtCVTI3I9t2HjJX1uNUgk=
-=CYtw
------END PGP SIGNATURE-----
-
---0sGyj5cQz5+LDbLw--
