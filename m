@@ -2,117 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832356A83EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137FF6A83ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjCBOC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjCBOCY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229747AbjCBOCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 2 Mar 2023 09:02:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F37330EB5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:01:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677765697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X853Jg3cnR4uj49XXzsgp4yTPwwc+lfJj/lENOT9FE0=;
-        b=R3ZEhrJA5qzzCI7KBqpkCsba2bAhFfanbjDNEZ0qQxnPZgKZK0sbbrEVd9kYFaoe9QnDJk
-        q+5QLxdE0TmgWFuBW6iWFRCOa8tTPuvYx31KLm+9gR0Wa4Ncl0GV7rbJB6gJx7vT73ros5
-        bY3xdZ6AnfaiVyxNbs+jhFrBMLMWfgI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-265-WmV29igcOtiEn5Ya6kX2XQ-1; Thu, 02 Mar 2023 09:01:30 -0500
-X-MC-Unique: WmV29igcOtiEn5Ya6kX2XQ-1
-Received: by mail-wm1-f71.google.com with SMTP id r7-20020a05600c35c700b003eb3f2c4fb4so1123196wmq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 06:01:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X853Jg3cnR4uj49XXzsgp4yTPwwc+lfJj/lENOT9FE0=;
-        b=PPcUUBdY8UuY/UPjp/QXyq9iau/VaF4SEDhn0P6dSD4Gbis6FDxL+B5zFW+AbqAJ5D
-         NsMfYdjBBicMT2e1ToQoOZDwvnp/zkeG0FF9/v6Jur+LZ/qlBVULp72Vf0czZT+iJ0MU
-         W8LjA/F9F8syoaRsaHJooyPnmHVYj3Evc5rJ5vP1t8lj0xKBMZ5SObpvNdQgAtWOan0t
-         B90Vzzu0LAUj9wB2Fv9bX2MHCgEsu9AruWRH5/BuTioqx4qanbCXkghaQReiZZ/BFGHB
-         HI07jkr5SiEUluebGe6OTgqmLYRy0XLAvXttAbnpvqDEiidQoRar6LHRxMc6ABtqm+Ls
-         mrNA==
-X-Gm-Message-State: AO0yUKWFTsSemrqckUda3IZDhbn7n+XlqVX2C3jN5EAgrdGVI3qq5Zns
-        4IRjRPByKeJ24z4Eo4mNpMtAlDx35NBqvvi139BqGbURmeYjSlAB5STCOMZv3CYLqCyBhqxCZA/
-        gDvIe4bJGLmeu81JhuBBFX1hk
-X-Received: by 2002:a5d:6ac4:0:b0:2c7:1d70:561 with SMTP id u4-20020a5d6ac4000000b002c71d700561mr7379550wrw.45.1677765688802;
-        Thu, 02 Mar 2023 06:01:28 -0800 (PST)
-X-Google-Smtp-Source: AK7set/2Wx2szV1QS3+CwX3F47nzraKBbC+iHmfJSmogaJrsx8GaNXcHjv+xuPmWHssxbfzuGkG4FA==
-X-Received: by 2002:a5d:6ac4:0:b0:2c7:1d70:561 with SMTP id u4-20020a5d6ac4000000b002c71d700561mr7379525wrw.45.1677765688446;
-        Thu, 02 Mar 2023 06:01:28 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:4f00:87ba:e9e9:3821:677b? (p200300cbc70e4f0087bae9e93821677b.dip0.t-ipconnect.de. [2003:cb:c70e:4f00:87ba:e9e9:3821:677b])
-        by smtp.gmail.com with ESMTPSA id c18-20020adfed92000000b002c54c9bd71fsm15760107wro.93.2023.03.02.06.01.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 06:01:27 -0800 (PST)
-Message-ID: <982c1623-ac28-2743-d6a3-4faf42f72d47@redhat.com>
-Date:   Thu, 2 Mar 2023 15:01:26 +0100
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229449AbjCBOCX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Mar 2023 09:02:23 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 436F032CD9;
+        Thu,  2 Mar 2023 06:02:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 402881FB;
+        Thu,  2 Mar 2023 06:03:04 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 266073F587;
+        Thu,  2 Mar 2023 06:02:19 -0800 (PST)
+Date:   Thu, 2 Mar 2023 14:02:16 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     "lihuisong (C)" <lihuisong@huawei.com>
+Cc:     robbiek@xsightlabs.com, linux-acpi@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
+        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
+        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
+        wangkefeng.wang@huawei.com, huangdaode@huawei.com
+Subject: Re: [PATCH 2/2] mailbox: pcc: Support shared interrupt for multiple
+ subspaces
+Message-ID: <20230302140216.m4m3452vexyrnuln@bogus>
+References: <20221016034043.52227-1-lihuisong@huawei.com>
+ <20230216063653.1995-1-lihuisong@huawei.com>
+ <20230216063653.1995-3-lihuisong@huawei.com>
+ <20230301133626.gchca3fdaqijxwzq@bogus>
+ <2a165476-2e96-17b1-a50b-c8749462e8a1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "kernel@collabora.com" <kernel@collabora.com>
-References: <20230227230044.1596744-1-peterx@redhat.com>
- <Y/1Mh5uivFt+zWKM@x1n> <e1e0ed70-76df-647f-30ac-0bb6ae8dc05c@collabora.com>
- <Y/4kjnom6MQqh9iA@x1n> <fb7ec372-2b16-14e1-a8cd-a90f4449661f@collabora.com>
- <640319be-ddb6-d74f-b731-eee5ceab3d01@collabora.com> <Y/9tA2EVglOJ0Ap1@x1n>
- <fc95fd2c-d661-926c-3bdb-8709cb49de3b@collabora.com>
- <8783f47e-76ea-cd24-e373-f2156884cd05@redhat.com> <ZACrOWKWdVYO/EAI@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZACrOWKWdVYO/EAI@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2a165476-2e96-17b1-a50b-c8749462e8a1@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.03.23 14:57, Peter Xu wrote:
-> On Thu, Mar 02, 2023 at 10:37:44AM +0100, David Hildenbrand wrote:
->> Especially for such large sparse VMAs, the current way of allocating
->> pagetables to place markers/zeropages is far from optimal.
+On Thu, Mar 02, 2023 at 10:17:07AM +0800, lihuisong (C) wrote:
 > 
-> IMHO that's not a generic workload.  As mentioned in the reply there, I
-> would suggest we go with simple then we have space to optimize it in the
-> future if necessary, because the API will be the same.
-> 
+> 在 2023/3/1 21:36, Sudeep Holla 写道:
+> > On Thu, Feb 16, 2023 at 02:36:53PM +0800, Huisong Li wrote:
+> > > If the platform acknowledge interrupt is level triggered, then it can
+> > > be shared by multiple subspaces provided each one has a unique platform
+> > > interrupt ack preserve and ack set masks.
+> > > 
+> > > If it can be shared, then we can request the irq with IRQF_SHARED and
+> > > IRQF_ONESHOT flags. The first one indicating it can be shared and the
+> > > latter one to keep the interrupt disabled until the hardirq handler
+> > > finished.
+> > > 
+> > > Further, since there is no way to detect if the interrupt is for a given
+> > > channel as the interrupt ack preserve and ack set masks are for clearing
+> > > the interrupt and not for reading the status(in case Irq Ack register
+> > > may be write-only on some platforms), we need a way to identify if the
+> > > given channel is in use and expecting the interrupt.
+> > > 
+> > > PCC type0, type1 and type5 do not support shared level triggered interrupt.
+> > > The methods of determining whether a given channel for remaining types
+> > > should respond to an interrupt are as follows:
+> > >   - type2: Whether the interrupt belongs to a given channel is only
+> > >            determined by the status field in Generic Communications Channel
+> > >            Shared Memory Region, which is done in rx_callback of PCC client.
+> > >   - type3: This channel checks chan_in_use flag first and then checks the
+> > >            command complete bit(value '1' indicates that the command has
+> > >            been completed).
+> > >   - type4: Platform ensure that the default value of the command complete
+> > >            bit corresponding to the type4 channel is '1'. This command
+> > >            complete bit is '0' when receive a platform notification.
+> > > 
+> > > Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> > > ---
+> > >   drivers/mailbox/pcc.c | 45 ++++++++++++++++++++++++++++++++++++++++---
+> > >   1 file changed, 42 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+> > > index ecd54f049de3..04c2d73a0473 100644
+> > > --- a/drivers/mailbox/pcc.c
+> > > +++ b/drivers/mailbox/pcc.c
+> > > @@ -92,6 +92,10 @@ struct pcc_chan_reg {
+> > >    * @error: PCC register bundle for the error status register
+> > >    * @plat_irq: platform interrupt
+> > >    * @type: PCC subspace type
+> > > + * @plat_irq_flags: platform interrupt flags
+> > > + * @chan_in_use: flag indicating whether the channel is in use or not when use
+> > > + *		platform interrupt, and only use it for communication from OSPM
+> > > + *		to Platform, like type 3.
+> > Also add a node that since only one transfer can occur at a time and the
+> > mailbox takes care of locking, this flag needs no locking and is used just
+> > to check if the interrupt needs handling when it is shared.
+> Add a per-channel lock. Is this your mean?
 
-I disagree with "generic workload", we use sparse mmaps all over the 
-place, and when blindly used by e.g., CRIU, we'll simply end up wasting 
-memory and time.
+No. I meant a comment saying it is not need since only one transfer can occur
+at a time and mailbox takes care of locking. So chan_in_use can be accessed
+without a lock.
 
-But I already agreed that this optimization that is a separate thing to 
-implement.
+> > 
+> > >    */
+> > >   struct pcc_chan_info {
+> > >   	struct pcc_mbox_chan chan;
+> > > @@ -102,6 +106,8 @@ struct pcc_chan_info {
+> > >   	struct pcc_chan_reg error;
+> > >   	int plat_irq;
+> > >   	u8 type;
+> > > +	unsigned int plat_irq_flags;
+> > > +	bool chan_in_use;
+> > >   };
+> > >   #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
+> > > @@ -225,6 +231,12 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
+> > >   	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
+> > >   }
+> > > +static bool pcc_chan_plat_irq_can_be_shared(struct pcc_chan_info *pchan)
+> > > +{
+> > > +	return (pchan->plat_irq_flags & ACPI_PCCT_INTERRUPT_MODE) ==
+> > > +		ACPI_LEVEL_SENSITIVE;
+> > > +}
+> > > +
+> > >   static bool pcc_chan_command_complete(struct pcc_chan_info *pchan,
+> > >   				      u64 cmd_complete_reg_val)
+> > >   {
+> > > @@ -277,6 +289,9 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
+> > >   	int ret;
+> > >   	pchan = chan->con_priv;
+> > > +	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE &&
+> > > +	    !pchan->chan_in_use)
+> > > +		return IRQ_NONE;
+> > >   	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
+> > >   	if (ret)
+> > > @@ -302,9 +317,13 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
+> > >   	/*
+> > >   	 * The PCC slave subspace channel needs to set the command complete bit
+> > >   	 * and ring doorbell after processing message.
+> > > +	 *
+> > > +	 * The PCC master subspace channel clears chan_in_use to free channel.
+> > >   	 */
+> > >   	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE)
+> > >   		pcc_send_data(chan, NULL);
+> > > +	else if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE)
+> > > +		pchan->chan_in_use = false;
+> > Just wondering if this has to be for type 3 only. I am trying to avoid
+> > conditional update of this flag, can we not do it for everything except type4 ?
+> > (I mean just in unconditional else part)
+> But type2 do not need this flag.
 
--- 
-Thanks,
+Yes
 
-David / dhildenb
+> For types no need this flag, it is always hard to understand and redundant
+> design.
 
+But does it matter ? You can even support shared interrupt for type 1&2.
+They support level interrupt, so we can add them too. I understand you can
+test only type 3, but this driver caters for all and the code must be generic
+as much as possible. I don't see any point in check for type 3 only. Only
+type 4 is slave and operates quite opposite compared to other types and makes
+sense to handle it differently.
+
+> If no this condition, we don't know what is the impact on the furture types.
+
+We can add/extend the check if necessary while adding the support for that
+in the future.
+
+--
+Regards,
+Sudeep
