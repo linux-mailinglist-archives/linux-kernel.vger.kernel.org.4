@@ -2,119 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AFA6A8584
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAED6A8586
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjCBPrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
+        id S229816AbjCBPrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:47:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCBPrE (ORCPT
+        with ESMTP id S229480AbjCBPrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:47:04 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A053E61A;
-        Thu,  2 Mar 2023 07:47:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677772021; x=1709308021;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=JAipvvtID4UIsHFYIMs4dTvpzhPgRpYEfN79S7XKdlo=;
-  b=JF/Z+PcmyTkpkWhW9ADXA6qJ7638J9e8SaovHjk023fGlhW3dFe7r4aI
-   7BoAjB+XdTLHQcHLys5uLpyJJWM5fkUAtFfjkIw71Cd0L/K/I3hwWJNOk
-   ks/LhDUiPat5ryCevpxoI4YSu5YmHhxxaWexjvQP7bJvoDX5SamYnEZM2
-   dNMHKhlDMa5VSRkSxNFdfSkxCwMoP4xsW7OLTmgwPz93f9pkILXX5Ns0j
-   OmzAgK8325zGOSJiWirTQzXGXw9bEbbWAqj85/SNeIgNVQjBZGeEd/Zkr
-   hz6fMVMSJQcSOvxeyDGk6/YHDbmELwAF/hhHiLVxtv14QklrdDZiDOrnd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="318571371"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="318571371"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 07:47:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="707452421"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="707452421"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 02 Mar 2023 07:46:55 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pXl8w-00EPc3-14;
-        Thu, 02 Mar 2023 17:46:54 +0200
-Date:   Thu, 2 Mar 2023 17:46:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] leds: simatic-ipc-leds-gpio: split up into
- multiple drivers
-Message-ID: <ZADE7kBB9HzTlpul@smile.fi.intel.com>
-References: <20230301170215.23382-1-henning.schild@siemens.com>
- <20230301170215.23382-3-henning.schild@siemens.com>
- <Y/+LLICwh3T25IGv@smile.fi.intel.com>
- <20230302094009.74b5d368@md1za8fc.ad001.siemens.net>
+        Thu, 2 Mar 2023 10:47:32 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25E243919
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:47:29 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id da10so69419423edb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677772048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dqKWlu4oafIDXkVsoZON4g5bm9TG0oS+avsiFLrIa3Q=;
+        b=dI3OZkhzR51j0QCnviAzJ9aE0wGV6BZvCMMRbDsHnW9+P7rZpVWshptUoWtBAezIMv
+         M1bD9kbBeGnvJsVAZuRII/g7VSMEiJwtYPMSC+QXEpoahldjS4eMhBnRWr97eMyzSdGI
+         bpXcnCXa7LT/+VvCcMXkMC6EGOVF7Y3ZDEsSD4JZ+QUFFt5GmGBWABMUZ4ps5fw+y0iS
+         vb5Z/HmtH8p1SvyltnudBktW4pyzQMQHuqiSyDGZ0dFODOAYssdzWf0SHeegf5ZAFKn9
+         p8iIXiB/CmDLLmL2Lt9yN/3oAS7E7DXN+Lpf4eBEhEo8XMg3V0XakMxhkew1R9awU+X7
+         tC0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677772048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dqKWlu4oafIDXkVsoZON4g5bm9TG0oS+avsiFLrIa3Q=;
+        b=QHt69IzaVUrg4VBVcCJEtS0qphFOIuzAT+xxGY1idEqwaBLIUenYTUwVztULPmoOL8
+         zPPNP1+j0UI48YIioCKb/bFi0ViAT/eWJkY6sS8TITkKIuAc7Film3qBoKo8gutf7c64
+         zDDq19r6Ik99aBRuT5ngU9tgYwBPl9dEZjjyPNeeWd48SzU2xDsFkJZHt6uhmjBbs58J
+         b0ZwhaFOQQO01o/fCBtR69eRE/JmlSKxWoVfJX1n7plDkc56SAtTDorf3gRAacYtE2Hx
+         GeNFINzsY/XWbQ3RCTmIhhIToiKIpEWdCw2fy5O5JGZooxS85620PsyJoNxXawbKrdH2
+         xZ0Q==
+X-Gm-Message-State: AO0yUKU9rUVgW7u6o05OLp+C5UgHBKDkMYJH5f/FC6SxKY433N2ow6zv
+        hsGeiKbNpYn+8/j8by7bV+9euw==
+X-Google-Smtp-Source: AK7set9/EL5xiW42z57i/oU9/T0u9AToZFmXQSD3kl1JB7H8E5wlu3l7bUoHaceJZ+Cd3P92WWxE5g==
+X-Received: by 2002:aa7:cc0e:0:b0:4af:6c25:ed6a with SMTP id q14-20020aa7cc0e000000b004af6c25ed6amr9969049edt.3.1677772048193;
+        Thu, 02 Mar 2023 07:47:28 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u2-20020a50eac2000000b0049e1f167956sm9987edp.9.2023.03.02.07.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 07:47:27 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sm8550: fix LPASS pinctrl slew base address
+Date:   Thu,  2 Mar 2023 16:47:24 +0100
+Message-Id: <20230302154724.856062-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230302094009.74b5d368@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 09:40:09AM +0100, Henning Schild wrote:
-> Am Wed, 1 Mar 2023 19:28:12 +0200
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > On Wed, Mar 01, 2023 at 06:02:14PM +0100, Henning Schild wrote:
+The second LPASS pin controller IO address is supposed to be the MCC
+range which contains the slew rate registers.  The Linux driver then
+accesses slew rate register with hard-coded offset (0xa000).  However
+the DTS contained the address of slew rate register as the second IO
+address, thus any reads were effectively pass the memory space and lead
+to "Internal error: synchronous external aborts" when applying pin
+configuration.
 
-...
+Fixes: 6de7f9c34358 ("arm64: dts: qcom: sm8550: add GPR and LPASS pin controller")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > > +	.driver = {
-> > > +		.name = KBUILD_MODNAME,  
-> > 
-> > Strictly speaking this is an ABI (as something may instantiate the
-> > driver from the user space or elsewhere by this name. At the same
-> > time this may change with the file name change.
-> > 
-> > Personally I prefer explicit string literal here.
-> 
-> Switching from one module to three the names have to change. People who
-> explicitly loaded the old module which supported multiple machines,
-> will now how to load either both oŕ know which one to load.
+---
 
-Wait, are you telling that now users load modules _manually_?!
+Fix for current cycle - v6.3-rc1.
+---
+ arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I personally think the ABI change is acceptable, the assumption would
-> be that the drivers load automatically anyhow. And since there are no
-> params i doubt users will have /etc/modprobe.d/ or /sys/module/ stuff
-> around.
-> 
-> And with the split i guess an ABI change can not be fully avoided.
-> Whether the names is explicit or implicit is another discussion and
-> just a matter of style. I prefer to stay with the currently used
-> pattern, it is not un-common in the kernel.
-
-The problem with that pattern is possible, while unlikely, renaming of the file
-which triggers this to be updated.
-
-Under sysfs the folder will change its name. If user has a script relying on
-this, it will be broken. So, I prefer mine.
-
-> > > +	},  
-
+diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+index 1dea055a6815..6296eb7adecd 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+@@ -2001,7 +2001,7 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
+ 		lpass_tlmm: pinctrl@6e80000 {
+ 			compatible = "qcom,sm8550-lpass-lpi-pinctrl";
+ 			reg = <0 0x06e80000 0 0x20000>,
+-			      <0 0x0725a000 0 0x10000>;
++			      <0 0x07250000 0 0x10000>;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+ 			gpio-ranges = <&lpass_tlmm 0 0 23>;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
