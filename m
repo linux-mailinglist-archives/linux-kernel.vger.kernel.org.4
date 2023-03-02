@@ -2,160 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C596A7E9A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DC86A7E9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCBJsu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Mar 2023 04:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S230283AbjCBJtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCBJsc (ORCPT
+        with ESMTP id S230232AbjCBJsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:48:32 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973BC1F5C0;
-        Thu,  2 Mar 2023 01:48:07 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id l13so17405161qtv.3;
-        Thu, 02 Mar 2023 01:48:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SFYMa4F5zx6QmdN+xdk9xuKBVfUQIkEC+rLl+xVi7rY=;
-        b=EfWCg05Dz/dIbTXy8d2dQdWFtNHulqzR5EmYrJOAWtetN56edOc/BaF2idN6KAtGMv
-         opLrvdZbPb9X+UprI3QsRj9fMZZfsDlMBtsPl68xxLKA1kn5tjSTzWXyCm6xlPhnB+xz
-         otE4rBY/2jKe1fKwVD4sYB8yq6JvRO6t5W7qaUzpPjK1Vz+l911AdHurr6Ij00EGAwER
-         6xnLNpSqAJ+hKClqQv++dhRSSmVEyVn3w0Ym5molSy/+o96NGs0uNL+1yRKOGD0lM5N3
-         Ty+i4/9XKXfBskLwETb40iZ9FHxLAMW1XmkSMHBgtcuNHFp6jqFL9vt8pxO3uqpXuUe/
-         wDwA==
-X-Gm-Message-State: AO0yUKXKX8sJ4VHXrlnHjrU6pDWVI13jwSCl3Pk36ofUfOqiYXZpBWHB
-        ASg/FHuiu1O8Ki2y3CWgeu4I7J0FPx+ppQ==
-X-Google-Smtp-Source: AK7set/8n0Vqjnq+nbmuXuxHIwYDhUAg1l+gXXyY1EkLs/qabGOfH5PkBGr8PPpz0kMiSJVhaw07kw==
-X-Received: by 2002:a05:622a:1a8c:b0:3b9:bc8c:c1fb with SMTP id s12-20020a05622a1a8c00b003b9bc8cc1fbmr2434895qtc.6.1677750486350;
-        Thu, 02 Mar 2023 01:48:06 -0800 (PST)
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com. [209.85.160.177])
-        by smtp.gmail.com with ESMTPSA id s184-20020a372cc1000000b0073bb00eb0besm10573028qkh.22.2023.03.02.01.48.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 01:48:05 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id cf14so17332967qtb.10;
-        Thu, 02 Mar 2023 01:48:03 -0800 (PST)
-X-Received: by 2002:a81:ad43:0:b0:533:91d2:9d94 with SMTP id
- l3-20020a81ad43000000b0053391d29d94mr5972312ywk.5.1677750462713; Thu, 02 Mar
- 2023 01:47:42 -0800 (PST)
+        Thu, 2 Mar 2023 04:48:46 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB64013526
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:48:26 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pXfXz-0004e8-AG; Thu, 02 Mar 2023 10:48:23 +0100
+Message-ID: <3275c17f-1a62-4e4a-4a5b-06b34098f8d2@leemhuis.info>
+Date:   Thu, 2 Mar 2023 10:48:22 +0100
 MIME-Version: 1.0
-References: <20230302093539.372962-1-alexghiti@rivosinc.com>
-In-Reply-To: <20230302093539.372962-1-alexghiti@rivosinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Mar 2023 10:47:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
-Message-ID: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/24] Remove COMMAND_LINE_SIZE from uapi
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, de-DE
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Aleksandr Nogikh <nogikh@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Theodore Ts'o <tytso@mit.edu>
+References: <cover.1674217480.git.linux@leemhuis.info>
+ <bb5dfd55ea2026303ab2296f4a6df3da7dd64006.1674217480.git.linux@leemhuis.info>
+ <20230301204602.5e9bf3c0@kernel.org>
+ <ff62632d-7558-a86c-5541-a54de6e107e7@leemhuis.info>
+ <20230301214023.610a9feb@kernel.org>
+ <CACT4Y+bxUA1v14y0SGC887er5Nif3ZEanjO_m=K4WBwyNfmZHA@mail.gmail.com>
+ <17fdf6f1-60ab-bfde-afc8-5afef6cc797b@leemhuis.info>
+ <CACT4Y+Zm3d9jqK=R-E4xTihEUNdahagPyMPcinWowx8RABawrw@mail.gmail.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v4 2/3] checkpatch: warn when Reported-by: is not followed
+ by Link:
+In-Reply-To: <CACT4Y+Zm3d9jqK=R-E4xTihEUNdahagPyMPcinWowx8RABawrw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1677750506;3464115c;
+X-HE-SMSGID: 1pXfXz-0004e8-AG
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+On 02.03.23 10:11, Dmitry Vyukov wrote:
+> On Thu, 2 Mar 2023 at 10:04, Thorsten Leemhuis <linux@leemhuis.info> wrote:
+>> On 02.03.23 09:27, Dmitry Vyukov wrote:
+>>> On Thu, 2 Mar 2023 at 06:40, Jakub Kicinski <kuba@kernel.org> wrote:
+>>>> On Thu, 2 Mar 2023 06:17:22 +0100 Thorsten Leemhuis wrote:
+>>>>> On 02.03.23 05:46, Jakub Kicinski wrote:
+>>>>>> On Fri, 20 Jan 2023 13:35:19 +0100 Thorsten Leemhuis wrote:
+>>>>>>> Encourage patch authors to link to reports by issuing a warning, if
+>>>>>>> a Reported-by: is not accompanied by a link to the report. Those links
+>>>>>>> are often extremely useful for any code archaeologist that wants to know
+>>>>>>> more about the backstory of a change than the commit message provides.
+>>>>>>> That includes maintainers higher up in the patch-flow hierarchy, which
+>>>>>>> is why Linus asks developers to add such links [1, 2, 3]. To quote [1]:
+>>>>>>
+>>>>>> Is it okay if we exclude syzbot reports from this rule?
+>>>>>> If full syzbot report ID is provided - it's as good as a link.
+>>>>>
+>>>>> Hmmm. Not sure. Every special case makes things harder for humans and
+>>>>> software that looks at a commits downstream. Clicking on a link also
+>>>>> makes things easy for code archaeologists that might look into the issue
+>>>>> months or years later (which might not even know how to find the report
+>>>>> and potential discussions on lore from the syzbot report ID).
+>>>>
+>>>> No other system comes close to syzbot in terms of reporting meaningful
+>>>> bugs, IMHO special casing it doesn't risk creep.
+>>>>
+>>>> Interestingly other bots attach links which are 100% pointless noise:
+>>>>
+>>>> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>>>> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4174
+>>>>
+>>>> Oh, eh. Let's see how noisy this check is once the merge window is over.
+>>>>
+>>>>> Hence, wouldn't it be better to ask the syzbot folks to change their
+>>>>> reporting slightly and suggest something like this instead in their
+>>>>> reports (the last line is the new one):
+>>>>>
+>>>>> ```
+>>>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>>>>> Reported-by: syzbot+bba886ab504fcafecafe@syzkaller.appspotmail.com
+>>>>> Link: https://lore.kernel.org/r/cafecaca0cafecaca0cafecaca0@google.com/
+>>>>> ```
+>>>>>
+>>>>> This might not be to hard if they known the message-id in advance. Maybe
+>>>>> they could even use the syzbot report ID as msg-id to make things even
+>>>>> easier. And for developers not much would change afaics, they just need
+>>>>> to copy and paste two lines instead of one.
+>>>>
+>>>> Dmitry, WDYT?
+>>>
+>>> Adding a Link to syzbot reports should be relatively trivial.
+>>
+>> Sounds good.
+>>
+>>> Ted proposed to use Link _instead_ of Reported-by:
+>>> https://github.com/google/syzkaller/issues/3596
+>>>> in fact, it might be nice if we could encourage upstream developers
+>>>> put in the commit trailer:
+>>>> Link: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
+>>>> in addition to, or better yet, instead of:
+>>>> Reported-by: syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
+>>>
+>>> We could also use a link in the Reported-by tag, e.g.:
+>>>
+>>> Reported-by: https://syzkaller.appspot.com/b/5266d464285a03cee9db
+>>>
+>>> Some folks parse Reported-by to collect stats.
+>>>
+>>> What is better?
+>>
+>> Here are my thoughts:
+>>
+>> * we should definitely have a "Link:" to the report in lore, as that's
+>> the long-term archive under our own control and also where discussions
+>> happen after the report was posted; but I'm biased here, as such a tag
+>> would make tracking with regzbot a no-brainer ;)
+>>
+>> * "Reported-by:" IMHO should stay for the hat tip and stats aspects; I
+>> don't care if it includes the syzbot report ID or not (omitting it might
+>> be good for the stats aspects and is more friendly to the eyes, but
+>> those are just details)
+>>
+>> * a Link: to the syzkaller web ui might be nice, too -- and likely is
+>> the easiest thing to look out for on the syzbot server side
+>>
+>> IOW something like this maybe:
+>>
+>> Reported-by: syzbot+cafecafecaca0cafecafe@syzkaller.appspotmail.com
+>> Link: https://lore.kernel.org/r/cafecafecaca0cafecafe@google.com/
+>> Link: https://syzkaller.appspot.com/b/cafecafecaca0cafecafe
+>>
+>> Something like the following would look more normal, but of course is
+>> only possible if syzbot starts out to look for such Link: tags (not sure
+>> if the msgid is valid here, but you get the idea):
+>>
+>> Reported-by: syzbot@syzkaller.appspotmail.com
+>> Link:
+>> https://lore.kernel.org/r/syzbot+cafecafecaca0cafecafe-syzkaller-appspotmail-com@google.com/
+> 
+> Oh, you mean lore link.
+> 
+> We can parse out our hash from any tag, but the problem is that the
+> current email api we use, does not allow to specify Message-ID before
+> sending, so we don't know it when generating the text.
+> We don't even know it after sending, the API is super simple:
+> https://pkg.go.dev/google.golang.org/appengine/mail
+> So we don't know what the lore link will be...
 
-On Thu, Mar 2, 2023 at 10:35 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
-> This all came up in the context of increasing COMMAND_LINE_SIZE in the
-> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
-> maximum length of /proc/cmdline and userspace could staticly rely on
-> that to be correct.
->
-> Usually I wouldn't mess around with changing this sort of thing, but
-> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
-> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
-> increasing, but they're from before the UAPI split so I'm not quite sure
-> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
-> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
-> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
-> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-> asm-generic/setup.h.").
->
-> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
-> part of the uapi to begin with, and userspace should be able to handle
-> /proc/cmdline of whatever length it turns out to be.  I don't see any
-> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
-> search, but that's not really enough to consider it unused on my end.
->
-> This issue was already considered in s390 and they reached the same
-> conclusion in commit 622021cd6c56 ("s390: make command line
-> configurable").
->
-> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
-> shouldn't be part of uapi, so this now touches all the ports.  I've
-> tried to split this all out and leave it bisectable, but I haven't
-> tested it all that aggressively.
->
-> Changes since v3 <https://lore.kernel.org/all/20230214074925.228106-1-alexghiti@rivosinc.com/>:
-> * Added RB/AB
-> * Added a mention to commit 622021cd6c56 ("s390: make command line
->   configurable") in the cover letter
+That's... unfortunate, as from my understanding of things that would be
+the most important "Link:" to have in any patches that fix issues report
+by syzbot. But well, that's how it is for now. In that case I'd vote for
+this:
 
-Thanks for the update!
+Reported-by: syzbot@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/b/cafecafecaca0cafecafe
 
- Apparently you forgot to add your own SoB?
+Regzbot can handle this, as long as somebody tells it about that URL.
+IOW: it creates a little extra work for some human. But that is not much
+of a problem, especially as of now, as I only track syzbot reports that
+for one reason or another make me go "I should better track this".
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Ciao, Thorsten
