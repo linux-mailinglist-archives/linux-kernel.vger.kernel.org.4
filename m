@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADFA6A7A79
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 05:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF02F6A7A7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 05:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjCBE1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 23:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S229703AbjCBEcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 23:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCBE1X (ORCPT
+        with ESMTP id S229518AbjCBEcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 23:27:23 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2F441084;
-        Wed,  1 Mar 2023 20:27:22 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id x34so15654233pjj.0;
-        Wed, 01 Mar 2023 20:27:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677731242;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=A8sq97E4LLj418sQlGio/HhmJSoILHKR0ZewV5pABeQ=;
-        b=ZXaj9stBfP59NXhlrT4eSv3OR0T27ii6EnM3aWoGLdyG5LcFXPPTafX3o7hBshR/3M
-         0NdpveDViNLFyH5cRB4HLAVomNw7jrbouwryny+rH0ENrWNP4yFXNZElL7WPhwiBKFtK
-         HZTcQoIGlcinarKTfbS0BvksI9M8Wf1PeNze1zfdcWoWqcLxybw3DhGq81gPL9J1Gjx2
-         vAiFD598tQ6Ls9cvnLaJgagWljnCGlCNMSL6YOz5AB3E/M0d76nPY/JFa9o1exR7+DLI
-         jaqbgLloijr33H/Fa6HNwxrh1XCTrke4CiKvnSt/43Z+757RjBoAg83yvNeKva7cBjWV
-         kdtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677731242;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A8sq97E4LLj418sQlGio/HhmJSoILHKR0ZewV5pABeQ=;
-        b=krctxuCfNfUlO/ooWh1m7llL9WHDg0YXgS26HIMPq2CZdK3Ufjfiq2sAra4sL4GNqH
-         KF6eJGxvS36ZulsgD/Gn8egFdjHgG8qBqxJ3OycnE91dFmeDIIUhPZywI6JTF8S1yADb
-         l+fIIVwFLaRQLu0E2hVtIpx9hB05K1rSn0gUA/aUJrG0ftz/ZYnpp/2Z0qgq3xBQcJOA
-         QmFbvIocyXskAoPYCDfPaN1sb5taOwPazzy+gDbE4wkvcYXWuFxkQW2hYyLNOjw7Avl8
-         44dZX8pc5MqCOPUGa/36uRrsq8cTLSAAG6KVxms5kUScmspRTa9vU27mzgpYi/T/uiff
-         D+Mw==
-X-Gm-Message-State: AO0yUKWwrX4WPeHbXZb69LQ3pmURdKJOr9eGD8e+2Dhm8ubqriMiNrt8
-        LvpFUaQmAB7txGxZZWxLvEQ=
-X-Google-Smtp-Source: AK7set9oCDyq9E0UIU80iSzEKydP+3Vg+K+pewr2hrWawInDgMGoTmjWIbJTaHrAhkWf/vETMtzHfQ==
-X-Received: by 2002:a17:902:c407:b0:19c:d0c9:8fdd with SMTP id k7-20020a170902c40700b0019cd0c98fddmr10870118plk.52.1677731242186;
-        Wed, 01 Mar 2023 20:27:22 -0800 (PST)
-Received: from debian.me (subs32-116-206-28-17.three.co.id. [116.206.28.17])
-        by smtp.gmail.com with ESMTPSA id i6-20020a170902eb4600b00196251ca124sm9213881pli.75.2023.03.01.20.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 20:27:21 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4DF3E100634; Thu,  2 Mar 2023 11:27:17 +0700 (WIB)
-Date:   Thu, 2 Mar 2023 11:27:16 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
-Message-ID: <ZAAlpHB87vVbOV3z@debian.me>
-References: <20230301180657.003689969@linuxfoundation.org>
+        Wed, 1 Mar 2023 23:32:16 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3871E497C0;
+        Wed,  1 Mar 2023 20:32:14 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321MxKgE017202;
+        Thu, 2 Mar 2023 04:32:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=SzY3TSGeoxLLZE49ifvuQ2pf50uYOD/2poZwGo/0E5c=;
+ b=KkCb+iKjzv9Xc5Fe/bLcZE2B2XSItLWEiyhahDQ/Wza5Egp4Gp+1LZicvQx8v/qQ2Tb+
+ OolIYGMLToUC6PFjnprhdpptTtuCb82ByJHsIALEAtoqJfkcD17c19yOPP3SdcMVBDGK
+ FatHEFaBeJX1lsiSCftkE/cZdIA6DTma29S1hW5OBgy+sYS3Qef2OcG70RoeYas0st6u
+ HOkdABhVy0oPpqgxycdvkV3CYSn+nW13Z8J5ORs3I2BpkulWsUA1It/zX8gHeEVa07yW
+ qEQ2n8tO1NhIXA8eV/0X/75YFKLUcrGzg19iBpEFfw2+Kp3GrI/FIyVchLdMPGqwXkzz IQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nybaktnax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 02 Mar 2023 04:32:09 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 3223eOfq031525;
+        Thu, 2 Mar 2023 04:32:09 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ny8sga7dg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 02 Mar 2023 04:32:09 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3224W8eS012677;
+        Thu, 2 Mar 2023 04:32:08 GMT
+Received: from localhost.localdomain (dhcp-10-191-129-161.vpn.oracle.com [10.191.129.161])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ny8sga7bn-1;
+        Thu, 02 Mar 2023 04:32:08 +0000
+From:   Imran Khan <imran.f.khan@oracle.com>
+To:     tj@kernel.org, gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        joe.jin@oracle.com
+Subject: [PATCH 0/3] kernfs: Introduce separate rwsem to protect inode
+Date:   Thu,  2 Mar 2023 15:32:00 +1100
+Message-Id: <20230302043203.1695051-1-imran.f.khan@oracle.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kNky+vExhl07LyK6"
-Content-Disposition: inline
-In-Reply-To: <20230301180657.003689969@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_01,2023-03-01_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=991 mlxscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303020035
+X-Proofpoint-GUID: rqgWtyKN2cg7YmGm9ddbBNJlis2Kj5K_
+X-Proofpoint-ORIG-GUID: rqgWtyKN2cg7YmGm9ddbBNJlis2Kj5K_
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This change set is consolidating the changes discussed and/or mentioned
+in [1] and [2]. I have not received any feedback about any of the
+patches included in this change set, so I am rebasing them on current
+linux-next tip and bringing them all in one place.
 
---kNky+vExhl07LyK6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As mentioned in [1], since changing per-fs kernfs_rwsem into a hashed
+rwsem is not working for all scenarios, PATCH-1 here tries to address
+the same issue with the help of another newly introduced per-fs rwsem.
+PATCH-2 and PATCH-3 are basically resend of PATCH-1 and PATCH-2
+respectively in [2].
 
-On Wed, Mar 01, 2023 at 07:08:21PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.15 release.
-> There are 42 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+It would be really helpful if I could get some feedback about this
+changeset so that we can reduce the kernfs_rwsem contention and make
+sysfs access more scalable for large-scale systems.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+The patches in this change set are as follows:
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+PATCH-1: kernfs: Introduce separate rwsem to protect inode attributes.
 
---=20
-An old man doll... just what I always wanted! - Clara
+PATCH-2: kernfs: Use a per-fs rwsem to protect per-fs list of
+kernfs_super_info.
 
---kNky+vExhl07LyK6
-Content-Type: application/pgp-signature; name="signature.asc"
+PATCH-3: kernfs: change kernfs_rename_lock into a read-write lock.
 
------BEGIN PGP SIGNATURE-----
+Imran Khan (3):
+  kernfs: Introduce separate rwsem to protect inode attributes.
+  Use a per-fs rwsem to protect per-fs list of kernfs_super_info.
+  kernfs: change kernfs_rename_lock into a read-write lock.
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAAlnwAKCRD2uYlJVVFO
-oycIAP9uweOOeMpxQk+Az3hTQIepVpAWbU6zo3sQmBmF6clWWAEArGy3atPJXcvn
-QLRaMSGriCUwhsv8TaZK4dMnsk93SAU=
-=pCie
------END PGP SIGNATURE-----
+ fs/kernfs/dir.c             | 26 +++++++++++++++++---------
+ fs/kernfs/file.c            |  2 ++
+ fs/kernfs/inode.c           | 16 ++++++++--------
+ fs/kernfs/kernfs-internal.h |  2 ++
+ fs/kernfs/mount.c           |  8 ++++----
+ 5 files changed, 33 insertions(+), 21 deletions(-)
 
---kNky+vExhl07LyK6--
+
+base-commit: 7f7a8831520f12a3cf894b0627641fad33971221
+
+[1]:https://lore.kernel.org/all/74969b22-e0b6-30bd-a1f0-132f4b8485cf@oracle.com/
+[2]:https://lore.kernel.org/all/20220810111017.2267160-1-imran.f.khan@oracle.com/
+-- 
+2.34.1
+
