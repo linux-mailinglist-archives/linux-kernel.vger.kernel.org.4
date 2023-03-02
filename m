@@ -2,55 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1BE6A8185
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8116A818E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjCBLuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        id S229727AbjCBLvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCBLuA (ORCPT
+        with ESMTP id S229513AbjCBLv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:50:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764B516313;
-        Thu,  2 Mar 2023 03:49:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18A38B811D5;
-        Thu,  2 Mar 2023 11:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93833C433D2;
-        Thu,  2 Mar 2023 11:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677757796;
-        bh=kISUd984NFkh845jniWJy2ik9HyMHSZeIQWhpEj02M0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=s7i81caKyadNyGN+BIhicOUkLw0eQbZXKjlT/xxuJyetXO2mmUHGZgCBfZhpQfVJ1
-         hMfet/zE2xVJSW2xXclErqUCsN9AouemyGJIpoyfK5zch4g0ft9R/uNnaOz259+AFx
-         Y+Mu1c3psVTPuO+ZxfNhnaqLNeFKXglPCIciRj9sbon4C4Ai7eacM8pk5puTVmTIiE
-         RzZz9wiFsMjrAcfcBhKpsBqm+MyywZr9GklPkok8gH8Mt8CzqijG446p2983L/GMTk
-         xoiqDmRp5Iq8bjeD+qxjopZjYKhwlIIii9/M6XA8W9DJSiIfm/I4p2IpzDPLrN6vlw
-         CxOXfPZLYUhkw==
-Message-ID: <92700518-46e3-88af-9be1-db18767754f5@kernel.org>
-Date:   Thu, 2 Mar 2023 08:49:53 -0300
+        Thu, 2 Mar 2023 06:51:29 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA0735255;
+        Thu,  2 Mar 2023 03:51:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677757864; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SN9puppPB/171h6AH8Mr5hidGWd4fY/hXs7wKplQ+spCW5r49QgeSuVD9YeYdJFNYE+7MzFqVsucDWq/pf4FNFEaENsm4MH2Gt7vWW3eE3v78r/OclWWeLZyS58mMg6AzH59iChPOloh7LXGunsi8+TkRM0KhPqV59rzFKz4UFY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1677757864; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=leLmz9qeZA+jfwuaL6YwWi5P1E3ee6MYIL5R31QpwuA=; 
+        b=MPb6uLjaPAJiQ+KFzmDwl8PLJRznHybYD1CTOZ5ZD4EJxQaz/x96lXpAZhCNVpMbyrtiYa6FroMq7WxwgOTXEFxugZiDdiKpwSEL9qDTXXL6MOb13lmNZfBLWX0TV5LJD6uBsHYbuJwpnQVwUvSqD/QCdC/WiOHiwvuF1q4DDis=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677757864;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=leLmz9qeZA+jfwuaL6YwWi5P1E3ee6MYIL5R31QpwuA=;
+        b=FouMHzSLkUwW2vcXEEDRN411mAHMT8cdma9sbLsp0TZfR4S8Uc4rMO4mqCjzLUzj
+        oEVNeMI2V0QR74WaknuglXXIclVafbAFcPzb4Q61AWDJ5FtecTfZdlKmWn4gjwnhnIs
+        tATFiNSqtPLXxm4fjF2B75eNNP25JhWOebGOyFKk=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1677757862877899.0721856528986; Thu, 2 Mar 2023 03:51:02 -0800 (PST)
+Message-ID: <11d10e4e-65ec-3bec-3e0c-7e57feb03506@arinc9.com>
+Date:   Thu, 2 Mar 2023 14:50:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] trace/hwlat: Do not restart per-cpu threads if they are
- already running
-To:     Tero Kristo <tero.kristo@linux.intel.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20230302113654.2984709-1-tero.kristo@linux.intel.com>
+Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
+ compatible strings
 Content-Language: en-US
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20230302113654.2984709-1-tero.kristo@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-8-arinc.unal@arinc9.com>
+ <20230227173333.GA496999-robh@kernel.org>
+ <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
+ <20230301024431.GA251215-robh@kernel.org>
+ <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
+ <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
+ <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
+ <1aae7ac9-c83d-71b4-4fce-325f02fcd722@linaro.org>
+ <89588f69-9cf0-e7a4-b976-5ce87d42e296@arinc9.com>
+ <2ccb573d-39f4-cb80-7a3e-63a60c2bc0a8@linaro.org>
+ <b48e0a5e-dd45-8b8a-4ee3-357a0985ca9c@arinc9.com>
+ <83a03258-9e52-3d09-67fe-12e9e5ed4b76@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <83a03258-9e52-3d09-67fe-12e9e5ed4b76@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,76 +89,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tero,
-
-On 3/2/23 08:36, Tero Kristo wrote:
-> Check if the hwlatd thread for the cpu is already running, before
-> starting a new one. This avoids running multiple instances of the same
-> CPU thread on the system. Also, do not wipe the contents of the
-> per-cpu kthread data when starting the tracer, as this can completely
-> forget about already running instances and start new additional per-cpu
-> threads. Fixes issues where fiddling with either the mode of the hwlat
-> tracer or doing cpu-hotplugs messes up the internal book-keeping
-> resulting in stale hwlatd threads.
-
-Thanks for your patch.
-
-Would you mind explaining how do you hit the problem? that is, how can
-I reproduce the same problem you faced.
-
-I tried reproducing it by dispatching the hwlat tracer in two instances,
-but the system already blocks me...
-
-[root@vm tracing]# echo hwlat > current_tracer 
-[root@vm tracing]# cd instances/
-[root@vm instances]# mkdir hwlat_2
-[root@vm instances]# cd hwlat_2/
-[root@vm hwlat_2]# echo hwlat > current_tracer 
--bash: echo: write error: Device or resource busy
-
-[root@vm hwlat_2]# cd ../../
-[root@vm tracing]# echo nop > current_tracer 
-[root@vm tracing]# cd instances/hwlat_2/
-[root@vm hwlat_2]# echo hwlat > current_tracer 
-[root@vm hwlat_2]# cd ..
-[root@vm instances]# mkdir hwlat_1
-[root@vm instances]# cd hwlat_1/
-[root@vm hwlat_1]# echo hwlat > current_tracer 
--bash: echo: write error: Device or resource busy
-[root@vm hwlat_1]# 
-
-Having a reproducer helps us to think better about the problem.
-
--- Daniel
-
-> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
-> ---
->  kernel/trace/trace_hwlat.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+On 2.03.2023 14:36, Krzysztof Kozlowski wrote:
+> On 02/03/2023 11:47, Arınç ÜNAL wrote:
+>> On 2.03.2023 13:29, Krzysztof Kozlowski wrote:
+>>> On 02/03/2023 11:22, Arınç ÜNAL wrote:
+>>>>>>
+>>>>>> ## Incorrect naming
+>>>>>>
+>>>>>> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink,
+>>>>>> introduce new ralink->mediatek compatible strings to address it.
+>>>>>
+>>>>> So this part was addressed by Rob - we don't do it, because it does not
+>>>>> matter. Ralink is now Mediatek, thus there is no conflict and no issues
+>>>>> with different vendor used.
+>>>>
+>>>> I think Rob was rather addressing that updating compatible strings based
+>>>> on acquisition or marketing whims is not permitted. This condition does
+>>>> not apply here as these SoCs were never Ralink.
+>>>>
+>>>> I understand your point that Ralink is now MediaTek but still, calling
+>>>> these SoCs Ralink would be a bit misleading, don't you think?
+>>>
+>>> Misleading yes, but also does not matter. At least matter not enough to
+>>> justify ABI break, so you would need to deprecate old ones and keep
+>>> everything backwards compatible. You still would affect 3rd party users
+>>> of DTS, though...
+>>
+>> I intend to do just that. Introduce new mediatek strings, keep the old
+>> ones so it's backwards compatible, therefore don't break the ABI.
+>>
+>> Instead of deprecating old strings, I intend to introduce the checks I
+>> mentioned, on the schema, so the pin muxing bindings only apply if the
+>> DT has got a string that won't match multiple schemas. This way it
+>> shouldn't affect 3rd party DTs.
 > 
-> diff --git a/kernel/trace/trace_hwlat.c b/kernel/trace/trace_hwlat.c
-> index d440ddd5fd8b..c4945f8adc11 100644
-> --- a/kernel/trace/trace_hwlat.c
-> +++ b/kernel/trace/trace_hwlat.c
-> @@ -492,6 +492,10 @@ static int start_cpu_kthread(unsigned int cpu)
->  {
->  	struct task_struct *kthread;
->  
-> +	/* Do not start a new hwlatd thread if it is already running */
-> +	if (per_cpu(hwlat_per_cpu_data, cpu).kthread)
-> +		return 0;
-> +
->  	kthread = kthread_run_on_cpu(kthread_fn, NULL, cpu, "hwlatd/%u");
->  	if (IS_ERR(kthread)) {
->  		pr_err(BANNER "could not start sampling thread\n");
-> @@ -584,9 +588,6 @@ static int start_per_cpu_kthreads(struct trace_array *tr)
->  	 */
->  	cpumask_and(current_mask, cpu_online_mask, tr->tracing_cpumask);
->  
-> -	for_each_online_cpu(cpu)
-> -		per_cpu(hwlat_per_cpu_data, cpu).kthread = NULL;
-> -
->  	for_each_cpu(cpu, current_mask) {
->  		retval = start_cpu_kthread(cpu);
->  		if (retval)
+> I meant, 3rd party users of DTS. You will replace the compatible in the
+> DTS, right? So the DTS exported and used in all other projects, OS,
+> firmwares, bootloaders, out of tree kernel forks will stop working.
 
+I plan to change it on the DTs for MediaTek SoCs, yes. Is this a 
+problem? From what I can tell, what must be ensured is that old DTs must 
+work with newer kernels, not new DTs on older kernels.
+
+Arınç
