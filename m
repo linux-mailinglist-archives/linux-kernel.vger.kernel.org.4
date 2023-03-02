@@ -2,147 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D046A8525
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EDD6A852B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjCBPao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
+        id S229683AbjCBPcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:32:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCBPaV (ORCPT
+        with ESMTP id S229674AbjCBPcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:30:21 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF5126D2
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:30:19 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id jo29so11931143qvb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:30:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1677771018;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MLSfo+hz5vTJ5ohI3IndEOkVuqNdnrD+B9QuUnbZ7t0=;
-        b=Yuc3GjL5Ae3STASZNhGMCqtIxArcAh5Wnnbvn4E9b8+BMSkHR1RoivucbdqQ/fcWMb
-         pUqUgMFarQvdmGoZEOycuK8epRhiUmc3k8itieZ6PwaIla/rlWd8hVJjACl/b3oqemuw
-         7JN1JLE/p0Jd9o/WpjBcsFZ9qAJ2kAZ0XvvIW28lUpEwsJgluteqYbfF0IDigG6MlJfI
-         KbHP+F86TOuVcoSsouz+IUw9UwdSOg5N3LugwO1HlldQl2spyTX/dh5e5grSMQOhdIrq
-         XnvvCM7U4ynFjeQLWUvR3t0P/dTBiWq7LQN6dRssMQtt5fGIJ5psvko5kv1o0ITqDoGt
-         slJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677771018;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MLSfo+hz5vTJ5ohI3IndEOkVuqNdnrD+B9QuUnbZ7t0=;
-        b=q4ZGjCatGK2I3eFp9+J1dWED8hcpnPTI2FiIl78hxxYFwg8fKiUr6jxz9xgHykOvo2
-         oB4Y8CVAm9JmuNfKjnbiIGbYpCDMzpPSOuPvNBd+bZqty5IXgd+PNInCsESLk4C7Jk8O
-         t/Tax3ARAXcEUiw2ERd5xotyGnLPf7d4hTwmnCdkKnxmjLKlECkmdlpRs8itNZv52xzi
-         fSMJdS1QiY6rlOIBsK1XABmcII55Lw8Xe2tIkOFz/JuNvijiMHTdRgOG+eI4r98dBe6J
-         liewesDe8PIKfZcqWQ5C6vI5P4fsa4mj0+M+PPZqltLAI3yZNQCsjW74CxRjK3EF3qmQ
-         gh4w==
-X-Gm-Message-State: AO0yUKXXtfgT93Xif1BstLgJv6/7sU5i0kOcTji0d+cNr8p1HcWKqEyx
-        9V4o3f2v037IghUPGgpynJALpg==
-X-Google-Smtp-Source: AK7set8Zi94EO/G0MiD2tk0zJB/YMF0sCaWg4Nr73waCi4EUvedOqA7UJ9O/l9aYTW8lBwtkvGMozw==
-X-Received: by 2002:a05:6214:e8f:b0:537:7061:89d7 with SMTP id hf15-20020a0562140e8f00b00537706189d7mr19950984qvb.40.1677771018035;
-        Thu, 02 Mar 2023 07:30:18 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:19d])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05620a034300b006fa16fe93bbsm11111379qkm.15.2023.03.02.07.30.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 07:30:17 -0800 (PST)
-Date:   Thu, 2 Mar 2023 10:30:16 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, peterz@infradead.org,
-        johunt@akamai.com, mhocko@suse.com, keescook@chromium.org,
-        quic_sudaraja@quicinc.com, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] psi: remove 500ms min window size limitation for
- triggers
-Message-ID: <ZADBCEk68W1aGJAV@cmpxchg.org>
-References: <20230301193403.1507484-1-surenb@google.com>
- <Y/+wlg5L8A1iebya@cmpxchg.org>
- <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
+        Thu, 2 Mar 2023 10:32:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CAA199C7;
+        Thu,  2 Mar 2023 07:32:32 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D1FD76602F90;
+        Thu,  2 Mar 2023 15:32:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677771151;
+        bh=1f/oX2S4XQLn2VKQigkcWoRHEZPUsJtOVJNHPLo3jIQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LdKMV36r4oIJvm8klCfUdNbkFj8uuY4Kr2bS3kYTEZwUOTQZHO+REiLSaXfXRZIAb
+         xZlFc5xXX4RuZvxW8tSH8gSC7WlScnFbo8nAEOgnmDgttftKZpkbLgsyvL1TPqUhCZ
+         D3a2CfXtOfzMuujSJuZJjlW0XnEkTqwT0YH6QTZF0uyQVThXT6J1iIXncNhoepphAO
+         waxlTYUCqm3eyc2yVhpD3h8zPTE7QftOO20XEFtNJtOToN0K2AUeFPe1dlytO7t6tf
+         AlSSRJcb7cRgPw4A404XBZ2NcHc8fEjTorcou4yoM2acIVdCG44sPwByUj63CB7CFb
+         wK7hImM6+tO0g==
+Message-ID: <c15c9766-4a46-04fc-ab42-2396d0a6750f@collabora.com>
+Date:   Thu, 2 Mar 2023 16:32:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/2] soc: mediatek: pm-domains: Add support for MT6735
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230302122708.73848-1-y.oudjana@protonmail.com>
+ <20230302122708.73848-3-y.oudjana@protonmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230302122708.73848-3-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 12:48:38PM -0800, Suren Baghdasaryan wrote:
-> On Wed, Mar 1, 2023 at 12:07 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> >
-> > On Wed, Mar 01, 2023 at 11:34:03AM -0800, Suren Baghdasaryan wrote:
-> > > Current 500ms min window size for psi triggers limits polling interval
-> > > to 50ms to prevent polling threads from using too much cpu bandwidth by
-> > > polling too frequently. However the number of cgroups with triggers is
-> > > unlimited, so this protection can be defeated by creating multiple
-> > > cgroups with psi triggers (triggers in each cgroup are served by a single
-> > > "psimon" kernel thread).
-> > > Instead of limiting min polling period, which also limits the latency of
-> > > psi events, it's better to limit psi trigger creation to authorized users
-> > > only, like we do for system-wide psi triggers (/proc/pressure/* files can
-> > > be written only by processes with CAP_SYS_RESOURCE capability). This also
-> > > makes access rules for cgroup psi files consistent with system-wide ones.
-> > > Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers and
-> > > remove the psi window min size limitation.
-> > >
-> > > Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-> > > Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraja@quicinc.com/
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > ---
-> > >  kernel/cgroup/cgroup.c | 10 ++++++++++
-> > >  kernel/sched/psi.c     |  4 +---
-> > >  2 files changed, 11 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> > > index 935e8121b21e..b600a6baaeca 100644
-> > > --- a/kernel/cgroup/cgroup.c
-> > > +++ b/kernel/cgroup/cgroup.c
-> > > @@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct kernfs_open_file *of,
-> > >       return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
-> > >  }
-> > >
-> > > +static int cgroup_pressure_open(struct kernfs_open_file *of)
-> > > +{
-> > > +     return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESOURCE)) ?
-> > > +             -EPERM : 0;
-> > > +}
-> >
-> > I agree with the change, but it's a bit unfortunate that this check is
-> > duplicated between system and cgroup.
-> >
-> > What do you think about psi_trigger_create() taking the file and
-> > checking FMODE_WRITE and CAP_SYS_RESOURCE against file->f_cred?
+Il 02/03/23 13:27, Yassine Oudjana ha scritto:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
 > 
-> That's definitely doable and we don't even need to pass file to
-> psi_trigger_create() since it's called only when we write to the file.
-> However by moving the capability check into psi_trigger_create() we
-> also postpone the check until write() instead of failing early in
-> open(). I always assumed failing early is preferable but if
-> consolidating the code here makes more sense then I can make the
-> switch. Please let me know if you still prefer to move the check.
+> Add support for SCPSYS power domains of MT6735. All non-CPU power domains
 
-Just for context, a person on our team is working on allowing
-unprivileged polls with windows that are multiples of 2s, which can be
-triggered from the regular aggregator threads. This should be useful
-for container delegation, and also for the desktop monitor app usecase
-that Chris Down brought up some time ago. At that point, everybody can
-open the file for write, and permissions are checked against the
-trigger parameters.
+For the CPU power domains, I was cooking something locally.... but then I
+stopped for some other higher priority stuff.
 
-So I don't think it's a big deal to check this particular permission
-at write time. But if you prefer we can also merge your patch as-is
-and do the refactor as part of the other series.
+I'll make sure to ping you when ready, as I think you'll be interested to that.
 
-Your call. In either case, please feel free to add
+> are added except for MD2 (C2K modem), which is left out due to issues
+> with powering it on.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
