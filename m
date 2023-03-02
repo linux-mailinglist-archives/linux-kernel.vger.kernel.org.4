@@ -2,894 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C286A82E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFEF6A8300
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjCBM4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S229879AbjCBM6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:58:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjCBMzm (ORCPT
+        with ESMTP id S229758AbjCBM6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:55:42 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04154E5EE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:55:35 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s11so3188134edy.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:55:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112; t=1677761734;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bl+f61gPv3YcHhSpJ6d/UUGcw0+eXxBFZehJkRpUHGw=;
-        b=K2RP+/lGH+k+L4Cbo4avoDUNprO2ipBUFUy46uePWDXzkTieb+qcAcdSxPZ84JPV2p
-         onpGZdAXuUZnHF9xrVcyifuNa+VNjTJmiBKPbwNgXo1QrdIVGDkiE5e6oZNkJf/ZQgcl
-         iIzj4ES+yk/c7OcEA0j1ygeY0nRxM5OQgcTPIsk4adoTHkoeRCDuOTdJxYeecsof684e
-         KaboK3nBVsPkbr44V9hsdIpGjPBHv4ldTTP7lk3P8wu68oTRu6lQhuiSbn7cFfsH2JuS
-         IgKCV2IPIQbRCTXQxPIFPivC7n4ML5zucpe9k13EQmA077vyKknLIfvIEphtOiKbCVz3
-         CrOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677761734;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bl+f61gPv3YcHhSpJ6d/UUGcw0+eXxBFZehJkRpUHGw=;
-        b=pJ6XnyAUK9SBWpM3ISZOT174Zi9O0NFlDtQypamhAnnoU1oozJJkWPfDok2+4+FF7d
-         T9OGQfnwjA+6LgfYALkhinCa4q8LrZz/fnh8zg6N0b5wacVAkH7fr80Fy6lCxLtL4h+X
-         tUq4CmeWuBL2B3UxGnoFKfjmojXuRaQUbasuZFOjLpbgOQEP8EXBS+2axZnCkUsmgLcr
-         OXPHL9n8lDokQbZ7nQkx/ld++T57F6/ecHE0AECmcErycOPnFYnhXSuZ+Dg/TslvXA62
-         FYZBHzZje5SoZzKs22+7jF1JnCFTXszlsnplHWRhrKI8/GhVPZSY8VsHEyTzfX5uK3wB
-         eZWg==
-X-Gm-Message-State: AO0yUKXwGM2Fxjrz0i8PwTWVXj5fqC1R91+AYG25XQqjkPQVv+XTAS07
-        +bHM6o3DMug/Qg+6pI9M6l23qw==
-X-Google-Smtp-Source: AK7set+yogQJRR/F1w7YjP4cHex15idSc3lBTb7v2iHiyvGCNjT2veL2jX6JHz8AwF85sjxC0WTnRw==
-X-Received: by 2002:a17:906:f751:b0:887:8f6:c1d7 with SMTP id jp17-20020a170906f75100b0088708f6c1d7mr11551109ejb.38.1677761734332;
-        Thu, 02 Mar 2023 04:55:34 -0800 (PST)
-Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id a98-20020a509eeb000000b004ad601533a3sm6955034edf.55.2023.03.02.04.55.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 04:55:33 -0800 (PST)
-From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        linux-block@vger.kernel.org,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-Subject: [PATCH v2 7/7] drbd: Pass a peer device to the resync and online verify functions
-Date:   Thu,  2 Mar 2023 13:54:45 +0100
-Message-Id: <20230302125445.2653493-8-christoph.boehmwalder@linbit.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230302125445.2653493-1-christoph.boehmwalder@linbit.com>
-References: <20230302125445.2653493-1-christoph.boehmwalder@linbit.com>
+        Thu, 2 Mar 2023 07:58:37 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2085.outbound.protection.outlook.com [40.107.101.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC5E72AD;
+        Thu,  2 Mar 2023 04:57:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UcJtWWczvH+zlh2taxszbPuRyFerbFTMfpte2u504bGvQeaUicTkYOgI9nEubntRMwt5PekalLE569CaHLkccoX68Lg1ElqJXF6A0eo9RJRQIpl4q7VdQznDyTlbOC7u4CfmDCCif8GuxixdqI1twi3RYB2lgxoe4l+Aw1JePkUqAbCAe0tLINBFOa/Goa1B1jNPkO7QeDWeWl13SaUGO5Nt62c1mei2s/lskp4VlGHCctlKJs7xLAUwsdrdPQdKS++np6hx4ZldSh5l+h7D+Dq4lZGXvx8nGqQrxDHWv1eAW739fM9jQuGJ6YGSbgDx5l1+iZAcQZI/yZK0FevYyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VbcKwHFRFpr+ZNu4C4YZUCpP7uM3/Tdj0toQK/MGByg=;
+ b=c+uoMXZ5GV3HpinBIksFLIAAcw/odaU6GWMk3fDBZ9xf+jzRINaEXE653ZvA8n8fp4mJsI9WSMp6RXVJEBNfHbYhG5cLE2Wvd19OUcbxImDHUt4WKTP/ceWuL7AUlmRaZ03Sba8KVVvu2Y66LtaqHabkhpaWaPu+6OAxnThrhQd2HGI9cJgr0+GUk/HYJfkKtLLJVvE3Gs7WkMya/Pc4dSeJm7M2alNPZUuHfPeuU7W8+cPq7ZGQENuT44N8yOSLt9Q2Xow4WomVrWB2U0jp6qfz1pp6caxAPUdDcOS/DgEw2x+i5g8U9GZLg7b3DHlBce5HePiV+msp0+21MGPGLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VbcKwHFRFpr+ZNu4C4YZUCpP7uM3/Tdj0toQK/MGByg=;
+ b=hE27fPoB2b3GxUoYHVGdM7jKJKvEXDD+mEtxDFQ+H3bZQm2DvOoGt2sFM4adeG9VHtxOrbKcfZ7zPPx9ftotwNPJSf5hkIiIgVAqlCTwlwz7+zyqWqjTRqLWZrB9tI+WI1lxKsnB8oh8MLzW6bD7wAp8fb5M1wHUgo/+uiisX97d/vPwBms2VR+waSSSGfB6hEC5ydc8V97USFzubZrnavfQWwhKs3HkgbxtFBMPJ9nl2+8/bQdVOn2rE9aePK7u49hsRDdOtfgNx4AmaG2bRbkJ/8oPRqrG+mAvy65HbN3qgzeMIq4hUxQInu/ehdbYbh//4h+1M+Ny1YS1aKGyHg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5288.namprd12.prod.outlook.com (2603:10b6:208:314::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
+ 2023 12:57:51 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%5]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
+ 12:57:50 +0000
+Date:   Thu, 2 Mar 2023 08:57:48 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: Re: [PATCH 4/4] dmaengine/idxd: Re-enable kernel workqueue under DMA
+ API
+Message-ID: <ZACdTG4QZSHF2QRj@nvidia.com>
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+ <20230302005959.2695267-5-jacob.jun.pan@linux.intel.com>
+ <BN9PR11MB527624EDB9FCD26751C73B128CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB527624EDB9FCD26751C73B128CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: SJ0PR13CA0067.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::12) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5288:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c155d91-1fe2-453d-1767-08db1b1dbae5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IGzzwFqk+rozVYautXUpdwo7YM3W9XPZ0npiL3B9eRkPezj1/e7JjGvzBEVCyX+eUCDA2uOSFC+4iDtKNqTJ+xsvP6CFKevbqHNT/eK0bS4HLCB53+tfntRZcdGb8QZqIeSG1vB8TZcrsSX1W1eXb/6adO8SRhdXfrCS/7BIc5EN6eRMTzC+54L8HYw0Y3JULcr3zGzE6hY+Vfy2apyJ5iSbi3sykqbogjAHll/lXz/zMoAAHrIvc6/KNx4HQ5nBlVExnjPpbV7xHuenWkB6D02EnU7XGAlpKtnu3pHIqvH5gaGAaniHfQtl2SZ/SSV5oqqMqiy+RKA1Vtf7lvdYnp6YQUgon7CG22v7+DROG3dg/S4oPTYNBDlapzq0NVDbFBhfo48f9TwAyECYtjDYz0xDxJpkV2n+i77AuJVIFdXv65mkh7yezYg4wNo7ULtfOAIwIDnLtf2DcDCrVy4BNxLZfXBfLfbLxWJSFK8/3vqIVQrBbEHdy7Ie/vvDgRXdsYUNNd0PcvsfIX1rnPy1ew+MS8eoJ/VzHqPxxGzrsBc2UxjHy/5O3CvJOwFbUCaylUss29+cHWd23JNzxwrwgSZs9+3yy0AbjNCpU6K7Sb4W851OsqAo20mwlwLi3n4BZYIz3MO/nsn6X9Tg8fCESg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(366004)(376002)(39860400002)(346002)(451199018)(38100700002)(36756003)(86362001)(4744005)(2906002)(66556008)(66946007)(7416002)(41300700001)(66476007)(8676002)(6916009)(5660300002)(4326008)(8936002)(186003)(6512007)(6506007)(26005)(2616005)(83380400001)(478600001)(316002)(6486002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4QORlVsWLbQieJ1KfyA8FR6FdE/FIVVxTcwZeC4a4KeSkY9hD3OjtmW8WEd9?=
+ =?us-ascii?Q?+Z1+k/KHz+c/UmyagaaqTxIZ9Yx0rsPx1+WQC5i/hCzgZBgsSnwGPZRQjX1B?=
+ =?us-ascii?Q?5a2qLjCOabE9KMjaBB07z3RG02cYx+f3thj8GHjQlWAf/ySCNxkGjl6yxh4x?=
+ =?us-ascii?Q?DUAyRCfGymQ3eukYd5Q4YqSnkSuM7Dmrlc/hoNJCwoQEExYg2yBAwdD8Wg8z?=
+ =?us-ascii?Q?nQBQJHlI4iMAxSbTc9BqOUHfoxtmA2zH9dOF56lYeIfpbQBH76UGaRxuG0y5?=
+ =?us-ascii?Q?OWdM6NbB3ttn6hVS1saiyBznknSvWFMTtQ/yPHFZacp+YvdLZn2wWo3e9twj?=
+ =?us-ascii?Q?aPZpcMWINzHtk2JZl+lYXrYcjnFUSkf6KyoVbSxmOgicwy4pyWcvHERgxPlT?=
+ =?us-ascii?Q?YO4mvzWY3ixPRBc2QihjG9ONkD7fKnRtA2iCy2SPahAWRwZ8EOz7kmswR9kW?=
+ =?us-ascii?Q?SSGdOwWZjr2xqN8App8pJIvvaxO5jGjkd3NOHPOwt8q5pHso7sBfjLcYNSQG?=
+ =?us-ascii?Q?U0q9I6msBm6AGU7sm+gSSl9ELRTdCRO5w4jEf+zP/aP/7oyNpH6SG4Z1D/5A?=
+ =?us-ascii?Q?kUdG8heCiIlDqqSYxqAJQgA6uVpGDynrByBcrKkGShgUXFxEHAzn56sB5Qdj?=
+ =?us-ascii?Q?7mLBvqTozSHXbLwmrEoQiTegFoUyN3jFASPJh8AFTnZW63l4FYS9fosqx5rc?=
+ =?us-ascii?Q?9HTWbbrEaUxetkk5MZ9+yBRaYgNWGi8Hq7oZuTv+qFKqTN+hMMSb1FpQy3eC?=
+ =?us-ascii?Q?AKbhdZWQE1p+/nIIhUmMY2po21IYiEPzK6WNVVtSxctEWA6ufqPPAHOa+xnB?=
+ =?us-ascii?Q?rQhLOBvx2n8lMdif4+SeCQz4DHII0nAeBpP3J3NhDG3ewkCKcc3EnybjQ/Lx?=
+ =?us-ascii?Q?o0/l9yndJkG3OlDlxVyQ7R8KoDR0YFZ4cRiJWeXH9zVBRkK++OHaW2yM2a8z?=
+ =?us-ascii?Q?z0H4TxZRQ5Yq4Yk0cN5QW8LXfF/vMBC2SBtBGikl2jh/lt6u+WchNxijQ11J?=
+ =?us-ascii?Q?86i0QpcuUT4iwurl/OGRmVjPuVJ5493p/jIwM8ImmOpUsvUnog48WUBQ46pb?=
+ =?us-ascii?Q?B01VqQ39K5v4HZn7qZl3CGnMtRMiRii8/VfAs//8/2RjmlI+pFOEBSCkLXdj?=
+ =?us-ascii?Q?k/tMmuU+lRKJeA7gfuTjNQSETuf8Y6xQC2OBAx6b1dFPJeF2cK59NQsNQg5F?=
+ =?us-ascii?Q?YNVippbzMLISaPqdNFCuRrm8SUnXbJqcM7afgNsZTUbQ15BlMSlbgTTuKMQM?=
+ =?us-ascii?Q?GYrKJ0dY1WsHtJy7cPDxSBrvm0UMCKrLNWhN6CQjBIaHnS8AbBANLFYJY5O8?=
+ =?us-ascii?Q?xuogwHqFurYmLFUCwD53HoW4CMq3ibS967C65squI2zw53wBs0hp+PCYOl7r?=
+ =?us-ascii?Q?zNU3uVhiJ2BxL5nPDaOLQT3xfWP/NMOtrhw7bYgZjm1Q0sq5lHxvGSQtkIex?=
+ =?us-ascii?Q?4NnZ5JEQHnVf36DeepGCDeTzwAaLm533ss0/hxmC1TldvtLASQdIY6XqvitZ?=
+ =?us-ascii?Q?t4vXhdxNwnpHK/o6ArrEC9FoM8akhaXY6z/qz7HprGjE1Z2MKRKjB6OF4CKW?=
+ =?us-ascii?Q?PbNAzLiehvafNMMa3zcmJL1r707VfT7jBxbcuOGf?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c155d91-1fe2-453d-1767-08db1b1dbae5
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 12:57:50.8522
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Bi4JQZF0lcEyPwAL6WOqmZrqJN5k/ZYUvEkM+fhhhtv6tVNMERxdUFVHyVBVQlm9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5288
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Originally-from: Andreas Grünbacher <agruen@linbit.com>
-Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
----
- drivers/block/drbd/drbd_actlog.c   | 13 ++--
- drivers/block/drbd/drbd_int.h      | 46 +++++++-------
- drivers/block/drbd/drbd_receiver.c | 59 +++++++++---------
- drivers/block/drbd/drbd_req.c      |  9 +--
- drivers/block/drbd/drbd_state.c    | 10 +--
- drivers/block/drbd/drbd_worker.c   | 97 ++++++++++++++++--------------
- 6 files changed, 126 insertions(+), 108 deletions(-)
+On Thu, Mar 02, 2023 at 09:47:00AM +0000, Tian, Kevin wrote:
+> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > Sent: Thursday, March 2, 2023 9:00 AM
+> > 
+> >  static int idxd_enable_system_pasid(struct idxd_device *idxd)
+> >  {
+> > -	return -EOPNOTSUPP;
+> > +	struct pci_dev *pdev = idxd->pdev;
+> > +	struct device *dev = &pdev->dev;
+> > +	struct iommu_domain *domain;
+> > +	union gencfg_reg gencfg;
+> > +	ioasid_t pasid;
+> > +	int ret;
+> > +
+> > +	domain = iommu_get_domain_for_dev(dev);
+> > +	if (!domain || domain->type == IOMMU_DOMAIN_BLOCKED)
+> > +		return -EPERM;
+> 
+> what about UNMANAGED?
 
-diff --git a/drivers/block/drbd/drbd_actlog.c b/drivers/block/drbd/drbd_actlog.c
-index 429255876800..64b3a1c76f03 100644
---- a/drivers/block/drbd/drbd_actlog.c
-+++ b/drivers/block/drbd/drbd_actlog.c
-@@ -735,8 +735,9 @@ static bool update_rs_extent(struct drbd_device *device,
- 	return false;
- }
- 
--void drbd_advance_rs_marks(struct drbd_device *device, unsigned long still_to_go)
-+void drbd_advance_rs_marks(struct drbd_peer_device *peer_device, unsigned long still_to_go)
- {
-+	struct drbd_device *device = peer_device->device;
- 	unsigned long now = jiffies;
- 	unsigned long last = device->rs_mark_time[device->rs_last_mark];
- 	int next = (device->rs_last_mark + 1) % DRBD_SYNC_MARKS;
-@@ -819,7 +820,7 @@ static int update_sync_bits(struct drbd_device *device,
- 		if (mode == SET_IN_SYNC) {
- 			unsigned long still_to_go = drbd_bm_total_weight(device);
- 			bool rs_is_done = (still_to_go <= device->rs_failed);
--			drbd_advance_rs_marks(device, still_to_go);
-+			drbd_advance_rs_marks(first_peer_device(device), still_to_go);
- 			if (cleared || rs_is_done)
- 				maybe_schedule_on_disk_bitmap_update(device, rs_is_done);
- 		} else if (mode == RECORD_RS_FAILED)
-@@ -843,10 +844,11 @@ static bool plausible_request_size(int size)
-  * called by worker on C_SYNC_TARGET and receiver on SyncSource.
-  *
-  */
--int __drbd_change_sync(struct drbd_device *device, sector_t sector, int size,
-+int __drbd_change_sync(struct drbd_peer_device *peer_device, sector_t sector, int size,
- 		enum update_sync_bits_mode mode)
- {
- 	/* Is called from worker and receiver context _only_ */
-+	struct drbd_device *device = peer_device->device;
- 	unsigned long sbnr, ebnr, lbnr;
- 	unsigned long count = 0;
- 	sector_t esector, nr_sectors;
-@@ -1009,14 +1011,15 @@ int drbd_rs_begin_io(struct drbd_device *device, sector_t sector)
-  * tries to set it to BME_LOCKED. Returns 0 upon success, and -EAGAIN
-  * if there is still application IO going on in this area.
-  */
--int drbd_try_rs_begin_io(struct drbd_device *device, sector_t sector)
-+int drbd_try_rs_begin_io(struct drbd_peer_device *peer_device, sector_t sector)
- {
-+	struct drbd_device *device = peer_device->device;
- 	unsigned int enr = BM_SECT_TO_EXT(sector);
- 	const unsigned int al_enr = enr*AL_EXT_PER_BM_SECT;
- 	struct lc_element *e;
- 	struct bm_extent *bm_ext;
- 	int i;
--	bool throttle = drbd_rs_should_slow_down(device, sector, true);
-+	bool throttle = drbd_rs_should_slow_down(peer_device, sector, true);
- 
- 	/* If we need to throttle, a half-locked (only marked BME_NO_WRITES,
- 	 * not yet BME_LOCKED) extent needs to be kicked out explicitly if we
-diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
-index 97c091990bf6..a30a5ed811be 100644
---- a/drivers/block/drbd/drbd_int.h
-+++ b/drivers/block/drbd/drbd_int.h
-@@ -1433,21 +1433,24 @@ void drbd_resync_after_changed(struct drbd_device *device);
- extern void drbd_start_resync(struct drbd_device *device, enum drbd_conns side);
- extern void resume_next_sg(struct drbd_device *device);
- extern void suspend_other_sg(struct drbd_device *device);
--extern int drbd_resync_finished(struct drbd_device *device);
-+extern int drbd_resync_finished(struct drbd_peer_device *peer_device);
- /* maybe rather drbd_main.c ? */
- extern void *drbd_md_get_buffer(struct drbd_device *device, const char *intent);
- extern void drbd_md_put_buffer(struct drbd_device *device);
- extern int drbd_md_sync_page_io(struct drbd_device *device,
- 		struct drbd_backing_dev *bdev, sector_t sector, enum req_op op);
--extern void drbd_ov_out_of_sync_found(struct drbd_device *, sector_t, int);
-+extern void drbd_ov_out_of_sync_found(struct drbd_peer_device *peer_device,
-+		sector_t sector, int size);
- extern void wait_until_done_or_force_detached(struct drbd_device *device,
- 		struct drbd_backing_dev *bdev, unsigned int *done);
--extern void drbd_rs_controller_reset(struct drbd_device *device);
-+extern void drbd_rs_controller_reset(struct drbd_peer_device *peer_device);
- 
--static inline void ov_out_of_sync_print(struct drbd_device *device)
-+static inline void ov_out_of_sync_print(struct drbd_peer_device *peer_device)
- {
-+	struct drbd_device *device = peer_device->device;
-+
- 	if (device->ov_last_oos_size) {
--		drbd_err(device, "Out of sync: start=%llu, size=%lu (sectors)\n",
-+		drbd_err(peer_device, "Out of sync: start=%llu, size=%lu (sectors)\n",
- 		     (unsigned long long)device->ov_last_oos_start,
- 		     (unsigned long)device->ov_last_oos_size);
- 	}
-@@ -1486,7 +1489,7 @@ extern int drbd_ack_receiver(struct drbd_thread *thi);
- extern void drbd_send_ping_wf(struct work_struct *ws);
- extern void drbd_send_acks_wf(struct work_struct *ws);
- extern bool drbd_rs_c_min_rate_throttle(struct drbd_device *device);
--extern bool drbd_rs_should_slow_down(struct drbd_device *device, sector_t sector,
-+extern bool drbd_rs_should_slow_down(struct drbd_peer_device *peer_device, sector_t sector,
- 		bool throttle_if_app_is_waiting);
- extern int drbd_submit_peer_request(struct drbd_peer_request *peer_req);
- extern int drbd_free_peer_reqs(struct drbd_device *, struct list_head *);
-@@ -1542,22 +1545,22 @@ extern void drbd_al_begin_io(struct drbd_device *device, struct drbd_interval *i
- extern void drbd_al_complete_io(struct drbd_device *device, struct drbd_interval *i);
- extern void drbd_rs_complete_io(struct drbd_device *device, sector_t sector);
- extern int drbd_rs_begin_io(struct drbd_device *device, sector_t sector);
--extern int drbd_try_rs_begin_io(struct drbd_device *device, sector_t sector);
-+extern int drbd_try_rs_begin_io(struct drbd_peer_device *peer_device, sector_t sector);
- extern void drbd_rs_cancel_all(struct drbd_device *device);
- extern int drbd_rs_del_all(struct drbd_device *device);
--extern void drbd_rs_failed_io(struct drbd_device *device,
-+extern void drbd_rs_failed_io(struct drbd_peer_device *peer_device,
- 		sector_t sector, int size);
--extern void drbd_advance_rs_marks(struct drbd_device *device, unsigned long still_to_go);
-+extern void drbd_advance_rs_marks(struct drbd_peer_device *peer_device, unsigned long still_to_go);
- 
- enum update_sync_bits_mode { RECORD_RS_FAILED, SET_OUT_OF_SYNC, SET_IN_SYNC };
--extern int __drbd_change_sync(struct drbd_device *device, sector_t sector, int size,
-+extern int __drbd_change_sync(struct drbd_peer_device *peer_device, sector_t sector, int size,
- 		enum update_sync_bits_mode mode);
--#define drbd_set_in_sync(device, sector, size) \
--	__drbd_change_sync(device, sector, size, SET_IN_SYNC)
--#define drbd_set_out_of_sync(device, sector, size) \
--	__drbd_change_sync(device, sector, size, SET_OUT_OF_SYNC)
--#define drbd_rs_failed_io(device, sector, size) \
--	__drbd_change_sync(device, sector, size, RECORD_RS_FAILED)
-+#define drbd_set_in_sync(peer_device, sector, size) \
-+	__drbd_change_sync(peer_device, sector, size, SET_IN_SYNC)
-+#define drbd_set_out_of_sync(peer_device, sector, size) \
-+	__drbd_change_sync(peer_device, sector, size, SET_OUT_OF_SYNC)
-+#define drbd_rs_failed_io(peer_device, sector, size) \
-+	__drbd_change_sync(peer_device, sector, size, RECORD_RS_FAILED)
- extern void drbd_al_shrink(struct drbd_device *device);
- extern int drbd_al_initialize(struct drbd_device *, void *);
- 
-@@ -1945,15 +1948,16 @@ static inline int __dec_ap_pending(struct drbd_device *device)
-  * C_SYNC_SOURCE sends P_RS_DATA_REPLY   (and expects P_WRITE_ACK with ID_SYNCER)
-  *					   (or P_NEG_ACK with ID_SYNCER)
-  */
--static inline void inc_rs_pending(struct drbd_device *device)
-+static inline void inc_rs_pending(struct drbd_peer_device *peer_device)
- {
--	atomic_inc(&device->rs_pending_cnt);
-+	atomic_inc(&peer_device->device->rs_pending_cnt);
- }
- 
--#define dec_rs_pending(device) ((void)expect((device), __dec_rs_pending(device) >= 0))
--static inline int __dec_rs_pending(struct drbd_device *device)
-+#define dec_rs_pending(peer_device) \
-+	((void)expect((peer_device), __dec_rs_pending(peer_device) >= 0))
-+static inline int __dec_rs_pending(struct drbd_peer_device *peer_device)
- {
--	return atomic_dec_return(&device->rs_pending_cnt);
-+	return atomic_dec_return(&peer_device->device->rs_pending_cnt);
- }
- 
- /* counts how many answers we still need to send to the peer.
-diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
-index 856c0e3a6630..e54404c632e7 100644
---- a/drivers/block/drbd/drbd_receiver.c
-+++ b/drivers/block/drbd/drbd_receiver.c
-@@ -2044,11 +2044,11 @@ static int e_end_resync_block(struct drbd_work *w, int unused)
- 	D_ASSERT(device, drbd_interval_empty(&peer_req->i));
- 
- 	if (likely((peer_req->flags & EE_WAS_ERROR) == 0)) {
--		drbd_set_in_sync(device, sector, peer_req->i.size);
-+		drbd_set_in_sync(peer_device, sector, peer_req->i.size);
- 		err = drbd_send_ack(peer_device, P_RS_WRITE_ACK, peer_req);
- 	} else {
- 		/* Record failure to sync */
--		drbd_rs_failed_io(device, sector, peer_req->i.size);
-+		drbd_rs_failed_io(peer_device, sector, peer_req->i.size);
- 
- 		err  = drbd_send_ack(peer_device, P_NEG_ACK, peer_req);
- 	}
-@@ -2067,7 +2067,7 @@ static int recv_resync_read(struct drbd_peer_device *peer_device, sector_t secto
- 	if (!peer_req)
- 		goto fail;
- 
--	dec_rs_pending(device);
-+	dec_rs_pending(peer_device);
- 
- 	inc_unacked(device);
- 	/* corresponding dec_unacked() in e_end_resync_block()
-@@ -2220,7 +2220,7 @@ static int e_end_block(struct drbd_work *w, int cancel)
- 				P_RS_WRITE_ACK : P_WRITE_ACK;
- 			err = drbd_send_ack(peer_device, pcmd, peer_req);
- 			if (pcmd == P_RS_WRITE_ACK)
--				drbd_set_in_sync(device, sector, peer_req->i.size);
-+				drbd_set_in_sync(peer_device, sector, peer_req->i.size);
- 		} else {
- 			err = drbd_send_ack(peer_device, P_NEG_ACK, peer_req);
- 			/* we expect it to be marked out of sync anyways...
-@@ -2691,7 +2691,7 @@ static int receive_Data(struct drbd_connection *connection, struct packet_info *
- 
- 	if (device->state.pdsk < D_INCONSISTENT) {
- 		/* In case we have the only disk of the cluster, */
--		drbd_set_out_of_sync(device, peer_req->i.sector, peer_req->i.size);
-+		drbd_set_out_of_sync(peer_device, peer_req->i.sector, peer_req->i.size);
- 		peer_req->flags &= ~EE_MAY_SET_IN_SYNC;
- 		drbd_al_begin_io(device, &peer_req->i);
- 		peer_req->flags |= EE_CALL_AL_COMPLETE_IO;
-@@ -2730,9 +2730,10 @@ static int receive_Data(struct drbd_connection *connection, struct packet_info *
-  * The current sync rate used here uses only the most recent two step marks,
-  * to have a short time average so we can react faster.
-  */
--bool drbd_rs_should_slow_down(struct drbd_device *device, sector_t sector,
-+bool drbd_rs_should_slow_down(struct drbd_peer_device *peer_device, sector_t sector,
- 		bool throttle_if_app_is_waiting)
- {
-+	struct drbd_device *device = peer_device->device;
- 	struct lc_element *tmp;
- 	bool throttle = drbd_rs_c_min_rate_throttle(device);
- 
-@@ -2844,7 +2845,7 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
- 			break;
- 		case P_OV_REPLY:
- 			verb = 0;
--			dec_rs_pending(device);
-+			dec_rs_pending(peer_device);
- 			drbd_send_ack_ex(peer_device, P_OV_RESULT, sector, size, ID_IN_SYNC);
- 			break;
- 		default:
-@@ -2915,7 +2916,7 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
- 			/* track progress, we may need to throttle */
- 			atomic_add(size >> 9, &device->rs_sect_in);
- 			peer_req->w.cb = w_e_end_ov_reply;
--			dec_rs_pending(device);
-+			dec_rs_pending(peer_device);
- 			/* drbd_rs_begin_io done when we sent this request,
- 			 * but accounting still needs to be done. */
- 			goto submit_for_resync;
-@@ -2978,7 +2979,7 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
- 
- 	update_receiver_timing_details(connection, drbd_rs_should_slow_down);
- 	if (device->state.peer != R_PRIMARY
--	&& drbd_rs_should_slow_down(device, sector, false))
-+	&& drbd_rs_should_slow_down(peer_device, sector, false))
- 		schedule_timeout_uninterruptible(HZ/10);
- 	update_receiver_timing_details(connection, drbd_rs_begin_io);
- 	if (drbd_rs_begin_io(device, sector))
-@@ -4450,7 +4451,7 @@ static int receive_state(struct drbd_connection *connection, struct packet_info
- 		else if (os.conn >= C_SYNC_SOURCE &&
- 			 peer_state.conn == C_CONNECTED) {
- 			if (drbd_bm_total_weight(device) <= device->rs_failed)
--				drbd_resync_finished(device);
-+				drbd_resync_finished(peer_device);
- 			return 0;
- 		}
- 	}
-@@ -4458,8 +4459,8 @@ static int receive_state(struct drbd_connection *connection, struct packet_info
- 	/* explicit verify finished notification, stop sector reached. */
- 	if (os.conn == C_VERIFY_T && os.disk == D_UP_TO_DATE &&
- 	    peer_state.conn == C_CONNECTED && real_peer_disk == D_UP_TO_DATE) {
--		ov_out_of_sync_print(device);
--		drbd_resync_finished(device);
-+		ov_out_of_sync_print(peer_device);
-+		drbd_resync_finished(peer_device);
- 		return 0;
- 	}
- 
-@@ -4937,7 +4938,7 @@ static int receive_out_of_sync(struct drbd_connection *connection, struct packet
- 				drbd_conn_str(device->state.conn));
- 	}
- 
--	drbd_set_out_of_sync(device, be64_to_cpu(p->sector), be32_to_cpu(p->blksize));
-+	drbd_set_out_of_sync(peer_device, be64_to_cpu(p->sector), be32_to_cpu(p->blksize));
- 
- 	return 0;
- }
-@@ -4958,7 +4959,7 @@ static int receive_rs_deallocated(struct drbd_connection *connection, struct pac
- 	sector = be64_to_cpu(p->sector);
- 	size = be32_to_cpu(p->blksize);
- 
--	dec_rs_pending(device);
-+	dec_rs_pending(peer_device);
- 
- 	if (get_ldev(device)) {
- 		struct drbd_peer_request *peer_req;
-@@ -5650,12 +5651,12 @@ static int got_IsInSync(struct drbd_connection *connection, struct packet_info *
- 
- 	if (get_ldev(device)) {
- 		drbd_rs_complete_io(device, sector);
--		drbd_set_in_sync(device, sector, blksize);
-+		drbd_set_in_sync(peer_device, sector, blksize);
- 		/* rs_same_csums is supposed to count in units of BM_BLOCK_SIZE */
- 		device->rs_same_csum += (blksize >> BM_BLOCK_SHIFT);
- 		put_ldev(device);
- 	}
--	dec_rs_pending(device);
-+	dec_rs_pending(peer_device);
- 	atomic_add(blksize >> 9, &device->rs_sect_in);
- 
- 	return 0;
-@@ -5701,8 +5702,8 @@ static int got_BlockAck(struct drbd_connection *connection, struct packet_info *
- 	update_peer_seq(peer_device, be32_to_cpu(p->seq_num));
- 
- 	if (p->block_id == ID_SYNCER) {
--		drbd_set_in_sync(device, sector, blksize);
--		dec_rs_pending(device);
-+		drbd_set_in_sync(peer_device, sector, blksize);
-+		dec_rs_pending(peer_device);
- 		return 0;
- 	}
- 	switch (pi->cmd) {
-@@ -5747,8 +5748,8 @@ static int got_NegAck(struct drbd_connection *connection, struct packet_info *pi
- 	update_peer_seq(peer_device, be32_to_cpu(p->seq_num));
- 
- 	if (p->block_id == ID_SYNCER) {
--		dec_rs_pending(device);
--		drbd_rs_failed_io(device, sector, size);
-+		dec_rs_pending(peer_device);
-+		drbd_rs_failed_io(peer_device, sector, size);
- 		return 0;
- 	}
- 
-@@ -5761,7 +5762,7 @@ static int got_NegAck(struct drbd_connection *connection, struct packet_info *pi
- 		   request is no longer in the collision hash. */
- 		/* In Protocol B we might already have got a P_RECV_ACK
- 		   but then get a P_NEG_ACK afterwards. */
--		drbd_set_out_of_sync(device, sector, size);
-+		drbd_set_out_of_sync(peer_device, sector, size);
- 	}
- 	return 0;
- }
-@@ -5806,13 +5807,13 @@ static int got_NegRSDReply(struct drbd_connection *connection, struct packet_inf
- 
- 	update_peer_seq(peer_device, be32_to_cpu(p->seq_num));
- 
--	dec_rs_pending(device);
-+	dec_rs_pending(peer_device);
- 
- 	if (get_ldev_if_state(device, D_FAILED)) {
- 		drbd_rs_complete_io(device, sector);
- 		switch (pi->cmd) {
- 		case P_NEG_RS_DREPLY:
--			drbd_rs_failed_io(device, sector, size);
-+			drbd_rs_failed_io(peer_device, sector, size);
- 			break;
- 		case P_RS_CANCEL:
- 			break;
-@@ -5869,21 +5870,21 @@ static int got_OVResult(struct drbd_connection *connection, struct packet_info *
- 	update_peer_seq(peer_device, be32_to_cpu(p->seq_num));
- 
- 	if (be64_to_cpu(p->block_id) == ID_OUT_OF_SYNC)
--		drbd_ov_out_of_sync_found(device, sector, size);
-+		drbd_ov_out_of_sync_found(peer_device, sector, size);
- 	else
--		ov_out_of_sync_print(device);
-+		ov_out_of_sync_print(peer_device);
- 
- 	if (!get_ldev(device))
- 		return 0;
- 
- 	drbd_rs_complete_io(device, sector);
--	dec_rs_pending(device);
-+	dec_rs_pending(peer_device);
- 
- 	--device->ov_left;
- 
- 	/* let's advance progress step marks only for every other megabyte */
- 	if ((device->ov_left & 0x200) == 0x200)
--		drbd_advance_rs_marks(device, device->ov_left);
-+		drbd_advance_rs_marks(peer_device, device->ov_left);
- 
- 	if (device->ov_left == 0) {
- 		dw = kmalloc(sizeof(*dw), GFP_NOIO);
-@@ -5893,8 +5894,8 @@ static int got_OVResult(struct drbd_connection *connection, struct packet_info *
- 			drbd_queue_work(&peer_device->connection->sender_work, &dw->w);
- 		} else {
- 			drbd_err(device, "kmalloc(dw) failed.");
--			ov_out_of_sync_print(device);
--			drbd_resync_finished(device);
-+			ov_out_of_sync_print(peer_device);
-+			drbd_resync_finished(peer_device);
- 		}
- 	}
- 	put_ldev(device);
-diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
-index 528f29ebf369..380e6584a4ee 100644
---- a/drivers/block/drbd/drbd_req.c
-+++ b/drivers/block/drbd/drbd_req.c
-@@ -122,12 +122,13 @@ void drbd_req_destroy(struct kref *kref)
- 		 * before it even was submitted or sent.
- 		 * In that case we do not want to touch the bitmap at all.
- 		 */
-+		struct drbd_peer_device *peer_device = first_peer_device(device);
- 		if ((s & (RQ_POSTPONED|RQ_LOCAL_MASK|RQ_NET_MASK)) != RQ_POSTPONED) {
- 			if (!(s & RQ_NET_OK) || !(s & RQ_LOCAL_OK))
--				drbd_set_out_of_sync(device, req->i.sector, req->i.size);
-+				drbd_set_out_of_sync(peer_device, req->i.sector, req->i.size);
- 
- 			if ((s & RQ_NET_OK) && (s & RQ_LOCAL_OK) && (s & RQ_NET_SIS))
--				drbd_set_in_sync(device, req->i.sector, req->i.size);
-+				drbd_set_in_sync(peer_device, req->i.sector, req->i.size);
- 		}
- 
- 		/* one might be tempted to move the drbd_al_complete_io
-@@ -620,7 +621,7 @@ int __req_mod(struct drbd_request *req, enum drbd_req_event what,
- 		break;
- 
- 	case READ_COMPLETED_WITH_ERROR:
--		drbd_set_out_of_sync(device, req->i.sector, req->i.size);
-+		drbd_set_out_of_sync(peer_device, req->i.sector, req->i.size);
- 		drbd_report_io_error(device, req);
- 		__drbd_chk_io_error(device, DRBD_READ_ERROR);
- 		fallthrough;
-@@ -1131,7 +1132,7 @@ static int drbd_process_write_request(struct drbd_request *req)
- 	if (remote) {
- 		_req_mod(req, TO_BE_SENT, peer_device);
- 		_req_mod(req, QUEUE_FOR_NET_WRITE, peer_device);
--	} else if (drbd_set_out_of_sync(device, req->i.sector, req->i.size))
-+	} else if (drbd_set_out_of_sync(peer_device, req->i.sector, req->i.size))
- 		_req_mod(req, QUEUE_FOR_SEND_OOS, peer_device);
- 
- 	return remote;
-diff --git a/drivers/block/drbd/drbd_state.c b/drivers/block/drbd/drbd_state.c
-index c92dc6093b0a..563e67f1ead9 100644
---- a/drivers/block/drbd/drbd_state.c
-+++ b/drivers/block/drbd/drbd_state.c
-@@ -1222,9 +1222,11 @@ void drbd_resume_al(struct drbd_device *device)
- }
- 
- /* helper for _drbd_set_state */
--static void set_ov_position(struct drbd_device *device, enum drbd_conns cs)
-+static void set_ov_position(struct drbd_peer_device *peer_device, enum drbd_conns cs)
- {
--	if (first_peer_device(device)->connection->agreed_pro_version < 90)
-+	struct drbd_device *device = peer_device->device;
-+
-+	if (peer_device->connection->agreed_pro_version < 90)
- 		device->ov_start_sector = 0;
- 	device->rs_total = drbd_bm_bits(device);
- 	device->ov_position = 0;
-@@ -1387,7 +1389,7 @@ _drbd_set_state(struct drbd_device *device, union drbd_state ns,
- 		unsigned long now = jiffies;
- 		int i;
- 
--		set_ov_position(device, ns.conn);
-+		set_ov_position(peer_device, ns.conn);
- 		device->rs_start = now;
- 		device->rs_last_sect_ev = 0;
- 		device->ov_last_oos_size = 0;
-@@ -1398,7 +1400,7 @@ _drbd_set_state(struct drbd_device *device, union drbd_state ns,
- 			device->rs_mark_time[i] = now;
- 		}
- 
--		drbd_rs_controller_reset(device);
-+		drbd_rs_controller_reset(peer_device);
- 
- 		if (ns.conn == C_VERIFY_S) {
- 			drbd_info(device, "Starting Online Verify from sector %llu\n",
-diff --git a/drivers/block/drbd/drbd_worker.c b/drivers/block/drbd/drbd_worker.c
-index 6455edca7aa9..4352a50fbb3f 100644
---- a/drivers/block/drbd/drbd_worker.c
-+++ b/drivers/block/drbd/drbd_worker.c
-@@ -28,8 +28,8 @@
- #include "drbd_protocol.h"
- #include "drbd_req.h"
- 
--static int make_ov_request(struct drbd_device *, int);
--static int make_resync_request(struct drbd_device *, int);
-+static int make_ov_request(struct drbd_peer_device *, int);
-+static int make_resync_request(struct drbd_peer_device *, int);
- 
- /* endio handlers:
-  *   drbd_md_endio (defined here)
-@@ -124,7 +124,7 @@ void drbd_endio_write_sec_final(struct drbd_peer_request *peer_req) __releases(l
- 		 * In case of a write error, send the neg ack anyways. */
- 		if (!__test_and_set_bit(__EE_SEND_WRITE_ACK, &peer_req->flags))
- 			inc_unacked(device);
--		drbd_set_out_of_sync(device, peer_req->i.sector, peer_req->i.size);
-+		drbd_set_out_of_sync(peer_device, peer_req->i.sector, peer_req->i.size);
- 	}
- 
- 	spin_lock_irqsave(&device->resource->req_lock, flags);
-@@ -363,7 +363,7 @@ static int w_e_send_csum(struct drbd_work *w, int cancel)
- 		 * drbd_alloc_pages due to pp_in_use > max_buffers. */
- 		drbd_free_peer_req(device, peer_req);
- 		peer_req = NULL;
--		inc_rs_pending(device);
-+		inc_rs_pending(peer_device);
- 		err = drbd_send_drequest_csum(peer_device, sector, size,
- 					      digest, digest_size,
- 					      P_CSUM_RS_REQUEST);
-@@ -430,10 +430,10 @@ int w_resync_timer(struct drbd_work *w, int cancel)
- 
- 	switch (device->state.conn) {
- 	case C_VERIFY_S:
--		make_ov_request(device, cancel);
-+		make_ov_request(first_peer_device(device), cancel);
- 		break;
- 	case C_SYNC_TARGET:
--		make_resync_request(device, cancel);
-+		make_resync_request(first_peer_device(device), cancel);
- 		break;
- 	}
- 
-@@ -493,8 +493,9 @@ struct fifo_buffer *fifo_alloc(unsigned int fifo_size)
- 	return fb;
- }
- 
--static int drbd_rs_controller(struct drbd_device *device, unsigned int sect_in)
-+static int drbd_rs_controller(struct drbd_peer_device *peer_device, unsigned int sect_in)
- {
-+	struct drbd_device *device = peer_device->device;
- 	struct disk_conf *dc;
- 	unsigned int want;     /* The number of sectors we want in-flight */
- 	int req_sect; /* Number of sectors to request in this turn */
-@@ -545,8 +546,9 @@ static int drbd_rs_controller(struct drbd_device *device, unsigned int sect_in)
- 	return req_sect;
- }
- 
--static int drbd_rs_number_requests(struct drbd_device *device)
-+static int drbd_rs_number_requests(struct drbd_peer_device *peer_device)
- {
-+	struct drbd_device *device = peer_device->device;
- 	unsigned int sect_in;  /* Number of sectors that came in since the last turn */
- 	int number, mxb;
- 
-@@ -556,7 +558,7 @@ static int drbd_rs_number_requests(struct drbd_device *device)
- 	rcu_read_lock();
- 	mxb = drbd_get_max_buffers(device) / 2;
- 	if (rcu_dereference(device->rs_plan_s)->size) {
--		number = drbd_rs_controller(device, sect_in) >> (BM_BLOCK_SHIFT - 9);
-+		number = drbd_rs_controller(peer_device, sect_in) >> (BM_BLOCK_SHIFT - 9);
- 		device->c_sync_rate = number * HZ * (BM_BLOCK_SIZE / 1024) / SLEEP_TIME;
- 	} else {
- 		device->c_sync_rate = rcu_dereference(device->ldev->disk_conf)->resync_rate;
-@@ -580,9 +582,9 @@ static int drbd_rs_number_requests(struct drbd_device *device)
- 	return number;
- }
- 
--static int make_resync_request(struct drbd_device *const device, int cancel)
-+static int make_resync_request(struct drbd_peer_device *const peer_device, int cancel)
- {
--	struct drbd_peer_device *const peer_device = first_peer_device(device);
-+	struct drbd_device *const device = peer_device->device;
- 	struct drbd_connection *const connection = peer_device ? peer_device->connection : NULL;
- 	unsigned long bit;
- 	sector_t sector;
-@@ -598,7 +600,7 @@ static int make_resync_request(struct drbd_device *const device, int cancel)
- 
- 	if (device->rs_total == 0) {
- 		/* empty resync? */
--		drbd_resync_finished(device);
-+		drbd_resync_finished(peer_device);
- 		return 0;
- 	}
- 
-@@ -618,7 +620,7 @@ static int make_resync_request(struct drbd_device *const device, int cancel)
- 	}
- 
- 	max_bio_size = queue_max_hw_sectors(device->rq_queue) << 9;
--	number = drbd_rs_number_requests(device);
-+	number = drbd_rs_number_requests(peer_device);
- 	if (number <= 0)
- 		goto requeue;
- 
-@@ -653,7 +655,7 @@ static int make_resync_request(struct drbd_device *const device, int cancel)
- 
- 		sector = BM_BIT_TO_SECT(bit);
- 
--		if (drbd_try_rs_begin_io(device, sector)) {
-+		if (drbd_try_rs_begin_io(peer_device, sector)) {
- 			device->bm_resync_fo = bit;
- 			goto requeue;
- 		}
-@@ -729,13 +731,13 @@ static int make_resync_request(struct drbd_device *const device, int cancel)
- 		} else {
- 			int err;
- 
--			inc_rs_pending(device);
-+			inc_rs_pending(peer_device);
- 			err = drbd_send_drequest(peer_device,
- 						 size == discard_granularity ? P_RS_THIN_REQ : P_RS_DATA_REQUEST,
- 						 sector, size, ID_SYNCER);
- 			if (err) {
- 				drbd_err(device, "drbd_send_drequest() failed, aborting...\n");
--				dec_rs_pending(device);
-+				dec_rs_pending(peer_device);
- 				put_ldev(device);
- 				return err;
- 			}
-@@ -760,8 +762,9 @@ static int make_resync_request(struct drbd_device *const device, int cancel)
- 	return 0;
- }
- 
--static int make_ov_request(struct drbd_device *device, int cancel)
-+static int make_ov_request(struct drbd_peer_device *peer_device, int cancel)
- {
-+	struct drbd_device *device = peer_device->device;
- 	int number, i, size;
- 	sector_t sector;
- 	const sector_t capacity = get_capacity(device->vdisk);
-@@ -770,7 +773,7 @@ static int make_ov_request(struct drbd_device *device, int cancel)
- 	if (unlikely(cancel))
- 		return 1;
- 
--	number = drbd_rs_number_requests(device);
-+	number = drbd_rs_number_requests(peer_device);
- 
- 	sector = device->ov_position;
- 	for (i = 0; i < number; i++) {
-@@ -788,7 +791,7 @@ static int make_ov_request(struct drbd_device *device, int cancel)
- 
- 		size = BM_BLOCK_SIZE;
- 
--		if (drbd_try_rs_begin_io(device, sector)) {
-+		if (drbd_try_rs_begin_io(peer_device, sector)) {
- 			device->ov_position = sector;
- 			goto requeue;
- 		}
-@@ -796,9 +799,9 @@ static int make_ov_request(struct drbd_device *device, int cancel)
- 		if (sector + (size>>9) > capacity)
- 			size = (capacity-sector)<<9;
- 
--		inc_rs_pending(device);
-+		inc_rs_pending(peer_device);
- 		if (drbd_send_ov_request(first_peer_device(device), sector, size)) {
--			dec_rs_pending(device);
-+			dec_rs_pending(peer_device);
- 			return 0;
- 		}
- 		sector += BM_SECT_PER_BIT;
-@@ -818,8 +821,8 @@ int w_ov_finished(struct drbd_work *w, int cancel)
- 		container_of(w, struct drbd_device_work, w);
- 	struct drbd_device *device = dw->device;
- 	kfree(dw);
--	ov_out_of_sync_print(device);
--	drbd_resync_finished(device);
-+	ov_out_of_sync_print(first_peer_device(device));
-+	drbd_resync_finished(first_peer_device(device));
- 
- 	return 0;
- }
-@@ -831,7 +834,7 @@ static int w_resync_finished(struct drbd_work *w, int cancel)
- 	struct drbd_device *device = dw->device;
- 	kfree(dw);
- 
--	drbd_resync_finished(device);
-+	drbd_resync_finished(first_peer_device(device));
- 
- 	return 0;
- }
-@@ -846,9 +849,10 @@ static void ping_peer(struct drbd_device *device)
- 		   test_bit(GOT_PING_ACK, &connection->flags) || device->state.conn < C_CONNECTED);
- }
- 
--int drbd_resync_finished(struct drbd_device *device)
-+int drbd_resync_finished(struct drbd_peer_device *peer_device)
- {
--	struct drbd_connection *connection = first_peer_device(device)->connection;
-+	struct drbd_device *device = peer_device->device;
-+	struct drbd_connection *connection = peer_device->connection;
- 	unsigned long db, dt, dbdt;
- 	unsigned long n_oos;
- 	union drbd_state os, ns;
-@@ -1129,7 +1133,7 @@ int w_e_end_rsdata_req(struct drbd_work *w, int cancel)
- 		err = drbd_send_ack(peer_device, P_RS_CANCEL, peer_req);
- 	} else if (likely((peer_req->flags & EE_WAS_ERROR) == 0)) {
- 		if (likely(device->state.pdsk >= D_INCONSISTENT)) {
--			inc_rs_pending(device);
-+			inc_rs_pending(peer_device);
- 			if (peer_req->flags & EE_RS_THIN_REQ && all_zero(peer_req))
- 				err = drbd_send_rs_deallocated(peer_device, peer_req);
- 			else
-@@ -1148,7 +1152,7 @@ int w_e_end_rsdata_req(struct drbd_work *w, int cancel)
- 		err = drbd_send_ack(peer_device, P_NEG_RS_DREPLY, peer_req);
- 
- 		/* update resync data with failure */
--		drbd_rs_failed_io(device, peer_req->i.sector, peer_req->i.size);
-+		drbd_rs_failed_io(peer_device, peer_req->i.sector, peer_req->i.size);
- 	}
- 
- 	dec_unacked(device);
-@@ -1199,12 +1203,12 @@ int w_e_end_csum_rs_req(struct drbd_work *w, int cancel)
- 		}
- 
- 		if (eq) {
--			drbd_set_in_sync(device, peer_req->i.sector, peer_req->i.size);
-+			drbd_set_in_sync(peer_device, peer_req->i.sector, peer_req->i.size);
- 			/* rs_same_csums unit is BM_BLOCK_SIZE */
- 			device->rs_same_csum += peer_req->i.size >> BM_BLOCK_SHIFT;
- 			err = drbd_send_ack(peer_device, P_RS_IS_IN_SYNC, peer_req);
- 		} else {
--			inc_rs_pending(device);
-+			inc_rs_pending(peer_device);
- 			peer_req->block_id = ID_SYNCER; /* By setting block_id, digest pointer becomes invalid! */
- 			peer_req->flags &= ~EE_HAS_DIGEST; /* This peer request no longer has a digest pointer */
- 			kfree(di);
-@@ -1257,10 +1261,10 @@ int w_e_end_ov_req(struct drbd_work *w, int cancel)
- 	 * drbd_alloc_pages due to pp_in_use > max_buffers. */
- 	drbd_free_peer_req(device, peer_req);
- 	peer_req = NULL;
--	inc_rs_pending(device);
-+	inc_rs_pending(peer_device);
- 	err = drbd_send_drequest_csum(peer_device, sector, size, digest, digest_size, P_OV_REPLY);
- 	if (err)
--		dec_rs_pending(device);
-+		dec_rs_pending(peer_device);
- 	kfree(digest);
- 
- out:
-@@ -1270,15 +1274,16 @@ int w_e_end_ov_req(struct drbd_work *w, int cancel)
- 	return err;
- }
- 
--void drbd_ov_out_of_sync_found(struct drbd_device *device, sector_t sector, int size)
-+void drbd_ov_out_of_sync_found(struct drbd_peer_device *peer_device, sector_t sector, int size)
- {
-+	struct drbd_device *device = peer_device->device;
- 	if (device->ov_last_oos_start + device->ov_last_oos_size == sector) {
- 		device->ov_last_oos_size += size>>9;
- 	} else {
- 		device->ov_last_oos_start = sector;
- 		device->ov_last_oos_size = size>>9;
- 	}
--	drbd_set_out_of_sync(device, sector, size);
-+	drbd_set_out_of_sync(peer_device, sector, size);
- }
- 
- int w_e_end_ov_reply(struct drbd_work *w, int cancel)
-@@ -1328,9 +1333,9 @@ int w_e_end_ov_reply(struct drbd_work *w, int cancel)
- 	 * drbd_alloc_pages due to pp_in_use > max_buffers. */
- 	drbd_free_peer_req(device, peer_req);
- 	if (!eq)
--		drbd_ov_out_of_sync_found(device, sector, size);
-+		drbd_ov_out_of_sync_found(peer_device, sector, size);
- 	else
--		ov_out_of_sync_print(device);
-+		ov_out_of_sync_print(peer_device);
- 
- 	err = drbd_send_ack_ex(peer_device, P_OV_RESULT, sector, size,
- 			       eq ? ID_IN_SYNC : ID_OUT_OF_SYNC);
-@@ -1341,14 +1346,14 @@ int w_e_end_ov_reply(struct drbd_work *w, int cancel)
- 
- 	/* let's advance progress step marks only for every other megabyte */
- 	if ((device->ov_left & 0x200) == 0x200)
--		drbd_advance_rs_marks(device, device->ov_left);
-+		drbd_advance_rs_marks(peer_device, device->ov_left);
- 
- 	stop_sector_reached = verify_can_do_stop_sector(device) &&
- 		(sector + (size>>9)) >= device->ov_stop_sector;
- 
- 	if (device->ov_left == 0 || stop_sector_reached) {
--		ov_out_of_sync_print(device);
--		drbd_resync_finished(device);
-+		ov_out_of_sync_print(peer_device);
-+		drbd_resync_finished(peer_device);
- 	}
- 
- 	return err;
-@@ -1668,8 +1673,9 @@ void drbd_resync_after_changed(struct drbd_device *device)
- 	} while (changed);
- }
- 
--void drbd_rs_controller_reset(struct drbd_device *device)
-+void drbd_rs_controller_reset(struct drbd_peer_device *peer_device)
- {
-+	struct drbd_device *device = peer_device->device;
- 	struct gendisk *disk = device->ldev->backing_bdev->bd_disk;
- 	struct fifo_buffer *plan;
- 
-@@ -1891,10 +1897,10 @@ void drbd_start_resync(struct drbd_device *device, enum drbd_conns side)
- 				rcu_read_unlock();
- 				schedule_timeout_interruptible(timeo);
- 			}
--			drbd_resync_finished(device);
-+			drbd_resync_finished(peer_device);
- 		}
- 
--		drbd_rs_controller_reset(device);
-+		drbd_rs_controller_reset(peer_device);
- 		/* ns.conn may already be != device->state.conn,
- 		 * we may have been paused in between, or become paused until
- 		 * the timer triggers.
-@@ -1909,8 +1915,9 @@ void drbd_start_resync(struct drbd_device *device, enum drbd_conns side)
- 	mutex_unlock(device->state_mutex);
- }
- 
--static void update_on_disk_bitmap(struct drbd_device *device, bool resync_done)
-+static void update_on_disk_bitmap(struct drbd_peer_device *peer_device, bool resync_done)
- {
-+	struct drbd_device *device = peer_device->device;
- 	struct sib_info sib = { .sib_reason = SIB_SYNC_PROGRESS, };
- 	device->rs_last_bcast = jiffies;
- 
-@@ -1919,7 +1926,7 @@ static void update_on_disk_bitmap(struct drbd_device *device, bool resync_done)
- 
- 	drbd_bm_write_lazy(device, 0);
- 	if (resync_done && is_sync_state(device->state.conn))
--		drbd_resync_finished(device);
-+		drbd_resync_finished(peer_device);
- 
- 	drbd_bcast_event(device, &sib);
- 	/* update timestamp, in case it took a while to write out stuff */
-@@ -2018,7 +2025,7 @@ static void do_device_work(struct drbd_device *device, const unsigned long todo)
- 		do_md_sync(device);
- 	if (test_bit(RS_DONE, &todo) ||
- 	    test_bit(RS_PROGRESS, &todo))
--		update_on_disk_bitmap(device, test_bit(RS_DONE, &todo));
-+		update_on_disk_bitmap(first_peer_device(device), test_bit(RS_DONE, &todo));
- 	if (test_bit(GO_DISKLESS, &todo))
- 		go_diskless(device);
- 	if (test_bit(DESTROY_DISK, &todo))
--- 
-2.39.1
+Why are we checking this anyhow?
 
+Get the domain the DMA API is using and feed it to
+iommu_attach_device_pasid(). If the driver can't mirror the DMA API's
+domain onto the PASID then it will just fail the attach. A domain
+cannot even be NULL on x86.
+
+Jason
