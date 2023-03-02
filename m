@@ -2,89 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4396A87DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8814D6A87EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCBR1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 12:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
+        id S230104AbjCBR2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 12:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjCBR1u (ORCPT
+        with ESMTP id S229572AbjCBR2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 12:27:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598D1144A5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 09:27:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E976E61607
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 17:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84F8C433D2;
-        Thu,  2 Mar 2023 17:27:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677778068;
-        bh=iilU92fnhVkjswDzFSRq9gc9hVZYATbY55ueOQu1GxE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sMfIx0K78J3pzDSDmxKqRKBpqAlExyLj9g/oTCz+YNOVMQViOSImdurWPYoxw1134
-         XIoMKr/HCrQuBnEkclLZ/BW16rgj8+gwsjSBngGa9Ro+TeZaQJmsp6S52NXAO/4OnZ
-         FzpSdU3nqjkYNIRJTAydtZ1lQ/XF32zv6m1BoCgn7PCoVD7jcn/S3q+dY3XCiOAvkl
-         rDGrUen3h0Uvp6gKR3GlhF+lHImAnCE6pfZGpkAN6qg7JrR6yTYorspYDcfOHMP1/9
-         ut/EFMtY06nf7dfOjMouMYfL6JXFBqckHPdujCpeu/xrrP1zcS02fnPptuz7zmSgGz
-         Hq20jqvlMCY4g==
-Date:   Thu, 2 Mar 2023 17:27:43 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vlad Karpovich <vkarpovi@opensource.cirrus.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] ASoC: cs35l45: Hibernation support
-Message-ID: <e25417af-e524-4462-9d78-c66cf994eb1e@sirena.org.uk>
-References: <20230302172636.2344058-1-vkarpovi@opensource.cirrus.com>
+        Thu, 2 Mar 2023 12:28:35 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D36A3A859;
+        Thu,  2 Mar 2023 09:28:28 -0800 (PST)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322HNOAc016779;
+        Thu, 2 Mar 2023 17:28:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=76hz/LoZrb9hKz2kKw8dK3i0sE3tDLtAmUawebTB45g=;
+ b=KhkHkaN+qY8ZQ4jEr3Lb4yDk4DpjRxLQKDInF18W39eb1V5LrLAg7s9GNRHWRSqH2dsw
+ nmNQA4ibVP7QxFaWNfvvho5SHSBWkqAAY+hJOnIyKf0wEqlg/Zi0GQzLddQzrcMg8uia
+ EetbPO4KZXMZCsGbYu6igddJ6lqHwCZ3tKCmy0qZuQO30PCT+KUT+MTD2TfN86gxao6/
+ 8MIkQRITakFgvpWALwN9dDCrugJeXsmWx2zvAJWXdG4Y/czhKWm5FQg2tLzV6rlSbmrx
+ uLoH3Yv5CzFPZfMQW897ad3SeqYCO9MGuOuHDrTOzyrV3SkZCq3DQU9YpaAYBw/Ug065 MQ== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nyb7wvk4x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 02 Mar 2023 17:28:21 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 322HBVE4004832;
+        Thu, 2 Mar 2023 17:28:19 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ny8sanysx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 02 Mar 2023 17:28:19 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 322HR3ls035594;
+        Thu, 2 Mar 2023 17:28:19 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ny8sanyry-1;
+        Thu, 02 Mar 2023 17:28:19 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To:     dmitry.osipenko@collabora.com, stable@vger.kernel.org
+Cc:     kraxel@redhat.com, linux-kernel@vger.kernel.org,
+        emil.l.velikov@gmail.com, airlied@linux.ie, error27@gmail.com,
+        gregkh@linuxfoundation.org, darren.kenny@oracle.com,
+        vegard.nossum@oracle.com,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 5.10.y] drm/virtio: Fix error code in virtio_gpu_object_shmem_init()
+Date:   Thu,  2 Mar 2023 09:28:16 -0800
+Message-Id: <20230302172816.3508816-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+XSwFAWCKUTMt1r3"
-Content-Disposition: inline
-In-Reply-To: <20230302172636.2344058-1-vkarpovi@opensource.cirrus.com>
-X-Cookie: Who messed with my anti-paranoia shot?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_11,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 phishscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303020150
+X-Proofpoint-GUID: wF5R1rrLWcL1sa7LcLRQ-IXNUnEz6a0D
+X-Proofpoint-ORIG-GUID: wF5R1rrLWcL1sa7LcLRQ-IXNUnEz6a0D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In virtio_gpu_object_shmem_init() we are passing NULL to PTR_ERR, which
+is returning 0/success.
 
---+XSwFAWCKUTMt1r3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by storing error value in 'ret' variable before assigning
+shmem->pages to NULL.
 
-On Thu, Mar 02, 2023 at 11:26:36AM -0600, Vlad Karpovich wrote:
-> From: "Vlad.Karpovich" <vkarpovi@opensource.cirrus.com>
->=20
-> Adds support for the amplifier hibernation controlled by
-> DSP firmware.
+Found using static analysis with Smatch.
 
-I've now got three copies of this patch (just this one, the first four
-only came once).
+Fixes: 64b88afbd92f ("drm/virtio: Correct drm_gem_shmem_get_sg_table() error handling")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+Only compile tested.
 
---+XSwFAWCKUTMt1r3
-Content-Type: application/pgp-signature; name="signature.asc"
+Upstream commit b5c9ed70d1a9 ("drm/virtio: Improve DMA API usage for shmem BOs")
+deleted this code, so this patch is not necessary in linux-6.1.y and
+linux-6.2.y.
+---
+ drivers/gpu/drm/virtio/virtgpu_object.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/gpu/drm/virtio/virtgpu_object.c b/drivers/gpu/drm/virtio/virtgpu_object.c
+index 168148686001..49fa59e09187 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_object.c
++++ b/drivers/gpu/drm/virtio/virtgpu_object.c
+@@ -159,8 +159,9 @@ static int virtio_gpu_object_shmem_init(struct virtio_gpu_device *vgdev,
+ 	shmem->pages = drm_gem_shmem_get_sg_table(&bo->base.base);
+ 	if (IS_ERR(shmem->pages)) {
+ 		drm_gem_shmem_unpin(&bo->base.base);
++		ret = PTR_ERR(shmem->pages);
+ 		shmem->pages = NULL;
+-		return PTR_ERR(shmem->pages);
++		return ret;
+ 	}
+ 
+ 	if (use_dma_api) {
+-- 
+2.31.1
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQA3I4ACgkQJNaLcl1U
-h9BxTwf8CqFx8xiI5xarOP7OEAY77GoBP2ovOFBb2GlIQB2nkvZ/QnmIaVkLtPi/
-G+CLiA/LI45Z3ZXAUOjCKG28yB0LdZqisw+PfkLuv6Ei4CseO3a5uZtByDxHXjg2
-+iQ2oeMd+laVmVlSe7U4Ee8OA8OC3AZvSerMtfZKQNck+ort8T5Aq/CGPMBJpvMY
-eFVToM2V7HtI/UricmyQav8gDQ4jMDBi4x8oF8ge65hK/3xszfvTSDLrAh7kmqNW
-qRbrz3TLlrhAkIi+Oyjps7udEGG5gLEoAqC2z/4B5a+Oikk8PE5RWNG4p7cH3CoB
-Ix5yHl9JCErMJxuU3D2GOUBpNd12uA==
-=Jlgw
------END PGP SIGNATURE-----
-
---+XSwFAWCKUTMt1r3--
