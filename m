@@ -2,124 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0456A885D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5E56A8860
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbjCBSM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 13:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S229966AbjCBSNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 13:13:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjCBSMz (ORCPT
+        with ESMTP id S229963AbjCBSNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 13:12:55 -0500
+        Thu, 2 Mar 2023 13:13:00 -0500
 Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B000E4495
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 10:12:54 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id n18so4408704ybm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 10:12:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629D31ACC5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 10:12:59 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id n18so4408911ybm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 10:12:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677780774;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lLoyHNK1vziQhkEs+RUlvsDPEUYRvadH5i0VRyRqsjE=;
-        b=FWUtR8Sx1lDO8zyv/3JVO8/sUNCn+1eEEbb3yyJk7vveX/HS2jRBRDyPTheGFJu1RH
-         VJQfUyVe6WKrCzDnCz9wOWi0VJ3F4FB0/7PAVeKMDPA+edZaxLsGBZnnqzlwbzQw1OQN
-         Wxq3XXtMKK4AjShLhhfFr71521O6/T6Xicm7p/RmsxTBN94q+r97PuMHd4h3fg449Nth
-         NvaeHUrI7wGtm7qpfkVrYR31sOBnsNYjUbJPT9GOPoTKOQkOs2SQpZj3K8lHMEN/+ZYM
-         89X3sEnDrVlufyeAIxPhWwA/CAGI/Pt0TIfkODDD+OPdL8WXUOg5kBtUuFjJuBaIIOne
-         ZUrg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=my5Rp2ScgeNAadltfdN1BBBN3oTSxseZtW+z/F++nfw=;
+        b=oyabO+gAFW3VSmK38stdm+0a/WuznOZ3QoMc07Ytap1Z8P3K4GsOtvxxNK53xjYzql
+         AQh+82sTAKf62LArk+871wi0XFteu7SDfWBe1chBCPfGU5aCXR4WQ25FfOyYC+ZZymFX
+         9fKbQilu2Y0TN2V9Td8jYa/+UKOYMpT2l/U96NRY2AIa7t7TtiD5v6YV4xGbypYE2m1z
+         6LQhEoniFs7QLVpRoNoloJ+dnJ99IWpUd9NnXLclurIiP4kgRWbmzOv5NU6p3mran05C
+         VhRHJlDYjkc+NNTNQD9JWO7Htts/q35K1byzbDkjaFdD9bKsuU1Jl5Fl4EoE01MRPAf4
+         gEYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677780774;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lLoyHNK1vziQhkEs+RUlvsDPEUYRvadH5i0VRyRqsjE=;
-        b=cRexLe6Z8kcYpjFIpNwObYGzMgxUG3lvDHpwz6SWp66iARv2cojbWcPvU8+t5CSxkJ
-         zYoyZf/jhZ3G1arv1ret9Px7GWcIsQMBdajV+uFrr5MxPA63aGpZAECp3WNba+du4O6i
-         cDS+kTEHx2GmiWU0m2PJ5Qy93UO4ESLBRMv/uauGZKAc609Tv2PJgeiONuiqU3pwO0iU
-         tqOU0Vn2M4oImfeN1TPCrNdS13tlCX90+jaCgmoe2lPOLUcgkLqUzHJw2dYCtfq2+QTm
-         HnMa7w3iWBDmiKRz15FYyX1xgbXBelauu7Y2hbZ9Yw13372jpK8oWlP6sxf7SCpbcMDT
-         la5A==
-X-Gm-Message-State: AO0yUKV/oOOyDam9r4GrOk6E/cTyF6T2LluHZQPYA5UIA5QZ4onEQfeT
-        /R8X71w57kow+3RjoIP9JP1pn2RmtAnYhg/DKnLWAw==
-X-Google-Smtp-Source: AK7set8ZA6ooiZktSnFTcb00/q54o0hRUdGDxWj/zbrfHift+7SwFKXkJ6dYkjCeL4c1nlpvbj6j87Gu684dGQ3h1q4=
-X-Received: by 2002:a5b:dcd:0:b0:aa9:bd2e:373a with SMTP id
- t13-20020a5b0dcd000000b00aa9bd2e373amr4968921ybr.10.1677780773640; Thu, 02
- Mar 2023 10:12:53 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=my5Rp2ScgeNAadltfdN1BBBN3oTSxseZtW+z/F++nfw=;
+        b=ebAYmzTV0v18wNHe3uyzY2uLFBZSWvLISykK/ni9FM+YA39xVW2od1RKgzhcBXPqFB
+         i0IlZD6vVG4O6jOI/5eehR2DnmRYIM7ovJedrVBQSTVMjba/mZhZLlhyhzuyqHwfN0hI
+         63Epffp56S+o2eROY9rWXKHZmAfZE9CxM0EMZch9HJ9o9RTIA8yPLVzXnit+GSoYgkCW
+         u7xV7OThd8NbB6JQKEC/tkgEmwIWmK4OL1oxhRnekrg0fANNVeA6GE3J6/RhsdG/Ud/Q
+         vtbS6cOmqWCu12eyg5kRUC53Xy8nGz2eqBUjwr6xA5xNm7PuJpGFJxUS+0s5QSyOd1Az
+         zmvw==
+X-Gm-Message-State: AO0yUKVoJvvqkrtGeHf0v6ooitW8igdz1cUmSyo6CfMA90EzT+M5PMdi
+        vYfcKk4d5lt0C0qecTgTu1cg5Ctx8LGoR5C8SeiG4A==
+X-Google-Smtp-Source: AK7set9nQV1O5yVi7gd4+EWG/co5nR98/s6dYA+kHt1Tx4bt5HqOC6zDFtpHkRsep+/3835WmvCnOzmf6EZ7+K/TEx0=
+X-Received: by 2002:a05:6902:50b:b0:8e2:6b58:5fe8 with SMTP id
+ x11-20020a056902050b00b008e26b585fe8mr6212716ybs.10.1677780778998; Thu, 02
+ Mar 2023 10:12:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20230301133841.18007-1-wei.w.wang@intel.com> <CALzav=eRYpnfg7bVQpVawAMraFdHu3OzqWr55Pg1SJC_Uh8t=Q@mail.gmail.com>
- <DS0PR11MB637348F1351260F8B7E97A15DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
- <ZAAsIBUuIIO1prZT@google.com> <DS0PR11MB6373DAA05CEF9AB8A83A6499DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
-In-Reply-To: <DS0PR11MB6373DAA05CEF9AB8A83A6499DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Thu, 2 Mar 2023 10:12:17 -0800
-Message-ID: <CAL715WLo90-JkJe6=GfX755t1jvaW-kqD_w++hv3Ed53fhLC3w@mail.gmail.com>
-Subject: Re: [PATCH v1] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
-To:     "Wang, Wei W" <wei.w.wang@intel.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230302123051.12440-1-a39.skl@gmail.com> <20230302123051.12440-2-a39.skl@gmail.com>
+ <CAA8EJpoxtKQfmdbX+CGmri6RUf3YauxNUc1z62Xn1TczcsWhDw@mail.gmail.com>
+In-Reply-To: <CAA8EJpoxtKQfmdbX+CGmri6RUf3YauxNUc1z62Xn1TczcsWhDw@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 2 Mar 2023 20:12:48 +0200
+Message-ID: <CAA8EJpquXEq=ppd_RahhguPHH0yMf1QoCOjxFxNTcma8qt8tbg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: msm8956-loire: Provide rate for
+ xo_board clock
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 2:26=E2=80=AFAM Wang, Wei W <wei.w.wang@intel.com> w=
-rote:
+On Thu, 2 Mar 2023 at 18:38, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> On Thursday, March 2, 2023 12:55 PM, Mingwei Zhang wrote:
-> > I don't get it. Why bothering the type if we just do this?
+> On Thu, 2 Mar 2023 at 14:31, Adam Skladowski <a39.skl@gmail.com> wrote:
 > >
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h index
-> > 4f26b244f6d0..10455253c6ea 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -848,7 +848,7 @@ static inline void kvm_vm_bugged(struct kvm *kvm)
+> > As xo_board is part of board not soc we define rates per device tree,
+> > assign common 19.2Mhz rate to make consumers happy.
 > >
-> >  #define KVM_BUG(cond, kvm, fmt...)                           \
-> >  ({                                                           \
-> > -     int __ret =3D (cond);                                     \
-> > +     int __ret =3D !!(cond);                                   \
+> > Fixes: ff7f6d34ca07 ("arm64: dts: qcom: Add support for SONY Xperia X/X Compact")
+> > Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi b/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi
+> > index 67baced639c9..085d79542e1b 100644
+> > --- a/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi
+> > @@ -280,3 +280,7 @@ &usb_hs_phy {
+> >         vdda3p3-supply = <&pm8950_l13>;
+> >         status = "okay";
+> >  };
+> > +
+> > +&xo_board {
+> > +       clock-frequency = <19200000>;
 >
-> This is essentially "bool __ret". No biggie to change it this way.
+> This doesn't seem to be board-specific. Please move it to msm8976.dtsi.
 
-!! will return an int, not a boolean, but it is used as a boolean.
-This is consistent with the original code which _is_ returning an
-integer.
+Adam pointed out the clock frequency is now thought to be a
+board-specific thing.
 
-> But I'm inclined to retain the original intention to have the macro retur=
-n
-> the value that was passed in:
-> typeof(cond) __ret =3D (cond);
-
-hmm, I think it is appropriate to retain the original type of 'cond'
-especially since it may also involve other arithmetic operations. But
-I doubt it will be very useful. For instance, who is going to write
-this code?
-
-......
-if (KVM_BUG(cond, true) & some_mask)
-  do_something()
-......
-
->
-> Let's what others vote for.
-
-Please fix this bug first before introducing nice features.
-
-Thanks.
--Mingwei
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 
--Mingwei
+-- 
+With best wishes
+Dmitry
