@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614556A7CD9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F076A7CE7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjCBIgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 03:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S229720AbjCBIho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 03:37:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjCBIgl (ORCPT
+        with ESMTP id S229613AbjCBIhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 03:36:41 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2338C126C9
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:36:40 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id y11so12652180plg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:36:40 -0800 (PST)
+        Thu, 2 Mar 2023 03:37:42 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB761BACA
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:37:25 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id o12so64408199edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jmxYusaZZcaCSm0sR5ZUszZ82Vp7I8hpbdJ8Cb+CdPo=;
-        b=r9craTUyVx3uiDtRuxr4/PsO6K1XvUWzzxWl78/dUjOl/L8wD227JYgVbaPKALXV7d
-         AwT7JyTJwWwqbbltakIJvLX7CLUB9tmZ1FAl26xyS0zQ4e2XWy2rNSyswo+znHykXIiC
-         L64ErgYtW/eym+pT0buE046/tPbGvVYkktuAY8B6bPd8sNrozAnmkfHC/vmZLEAOoMp3
-         M4qfTRtDIzP6p9xtkg40jGtlNXciUo0Qs2fXCIdEmBrglff/9oNBHZIWaxlkD1cMMpzg
-         c2+DVFhE+Ma6GV881wTGMjyGitPtrtUuS8A3BgZf7ykT6iVpDyqmxJh1+m01dAvEkO4M
-         JaWw==
+        d=linaro.org; s=google; t=1677746244;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6talumXK2uMHhQXk9Ozx4A/KVBVKmEQwXmevjpT/aWQ=;
+        b=daXv/RAD3pTBtQuSn3rWRwSy2KenXxp9z1jQ753estabbztN1I4TuHoAZeEZaYVuY8
+         C/9+5nrsyx2tw+2MkshxUyuubpVpEZzNkHI9ezwjtKgQHOhtsAvjXqJa+3ajNufVQ5xP
+         cGbLW2GUJS4kf0OduNznN1E6g0Qv+/rss/qUfGhINTLhecshxv8WUAvIM9bGRowlZZry
+         gLRLxA3iiT+eLRKOv5q3p05llSF3pdeGK+z2wzNfTVAAHqDnS3ZMSBlERzB4PD4VPXj5
+         BjN/3LCIu68KCa3JPsvaB6XTobrWVCAoz50/HMcemERK6AXzPt8ngZvq0cMgT1Itk8CK
+         lrAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jmxYusaZZcaCSm0sR5ZUszZ82Vp7I8hpbdJ8Cb+CdPo=;
-        b=J5oJip+y51aPKj3ejD0M8+ps6uE9HK36VbruduzIGGhP0rGqtxiiKP0Gnso5RD9OQM
-         CsOFZbAhomQ1J7Qm5GI0ZYhXzL33S/d6N6EfuPQn0iBOK6rq1QIJD+C3nyr9t7kUHGH0
-         4ftYlF2aTZ1+pC5hHygspQLlzeNUrFC2esp7w2ghTjxozyVv+MsyWzrzzcwzFfc+8vSK
-         69eG2mKjni5z8JFfOv694tCe9/yTDQwUUFMZ9sfHTFaFYi3jyTGxOKNDE7VMHv+Asb2x
-         0dW51qG6dkkBHSZDSP+LmSwpbjJX/OV1d2Z2/aBZB2kridNH3RYm6nUatLrL2jQEyhh8
-         QJ8w==
-X-Gm-Message-State: AO0yUKVDix+4RrOBOYxZtKcGfaptO34seQ+fwHgWiTXI2PCV7qKEHryt
-        brstpXFsMA0KU6nJZeLWlRdA
-X-Google-Smtp-Source: AK7set/z9bTIY3KHWMDcd0q6mvDWU2SD8PHHfPO+bvu6xJYNkMZLXx5iYVwJ6PLrvUr0JyNNI9Jlzw==
-X-Received: by 2002:a17:902:da90:b0:19c:e405:4446 with SMTP id j16-20020a170902da9000b0019ce4054446mr10433381plx.30.1677746199325;
-        Thu, 02 Mar 2023 00:36:39 -0800 (PST)
-Received: from localhost.localdomain ([59.97.53.52])
-        by smtp.gmail.com with ESMTPSA id p7-20020a1709028a8700b00198ef93d556sm9791912plo.147.2023.03.02.00.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 00:36:38 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
-        mka@chromium.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Dhruva Gole <d-gole@ti.com>
-Subject: [PATCH v2 1/1] PCI: qcom: Add support for system suspend and resume
-Date:   Thu,  2 Mar 2023 14:06:25 +0530
-Message-Id: <20230302083625.188482-2-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230302083625.188482-1-manivannan.sadhasivam@linaro.org>
-References: <20230302083625.188482-1-manivannan.sadhasivam@linaro.org>
+        d=1e100.net; s=20210112; t=1677746244;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6talumXK2uMHhQXk9Ozx4A/KVBVKmEQwXmevjpT/aWQ=;
+        b=Fgc9MCkE7PsWZc696ObC6djRZEjRo/s5RDhCIE1b5sQJXhmA6qaLGdHvCkcSd/h8j1
+         tmIiNYRpW6BevDnQF9VvJZVOn8k9AxCcaUYKgo9lsdfO3BpnGa3ye/io4N7K6lBDHJI0
+         6LRxKZhJNbIrFa4+Ksi4lFJ0vAyzxRAg/1ugFfsSwKY0D1TkkqFPcmTLorIYTSAUi5PV
+         KajlTDCb5X9yIrfxole5rK1TUpQtkCPZpdjvIcZQbWbd7TUQCO6m39ZoCGdN+dh6s6ZD
+         lIQV/sJSAvrDqP6rrbHQhrDtFiffweV9hnzC/08OjugNc2Lq7K861DzN6ZtqKL1nVo0Z
+         bEGw==
+X-Gm-Message-State: AO0yUKUVgbW2AfQb+MMbyLwHZNQ3Uar4zdEd15LhwuD6HkWfW0a1/RKT
+        953ijS78hwG5piDcR47W8FynPA==
+X-Google-Smtp-Source: AK7set97fBpL6H42gYlUxVUXNAa5KOqEFcoLVnbLCsNCoalgkJr0oOLpkdMBPHkzwy+SNaRvquhCww==
+X-Received: by 2002:a17:906:784f:b0:8b2:8876:2a11 with SMTP id p15-20020a170906784f00b008b288762a11mr9150260ejm.28.1677746244373;
+        Thu, 02 Mar 2023 00:37:24 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170906680100b008b17de9d1f2sm6928653ejr.15.2023.03.02.00.37.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 00:37:23 -0800 (PST)
+Message-ID: <8b5bea40-6f7b-1d00-ac23-83a28c7dacbc@linaro.org>
+Date:   Thu, 2 Mar 2023 09:37:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Patch v6] dt-bindings: media: s5p-mfc: convert bindings to
+ json-schema
+Content-Language: en-US
+To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
+        david.plowman@raspberrypi.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
+        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com
+References: <CGME20230301035153epcas5p40f576188a9a69835c1050135219a3720@epcas5p4.samsung.com>
+ <20230301035144.8645-1-aakarsh.jain@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230301035144.8645-1-aakarsh.jain@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,112 +86,297 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the system suspend, vote for minimal interconnect bandwidth and
-also turn OFF the resources like clock and PHY if there are no active
-devices connected to the controller. For the controllers with active
-devices, the resources are kept ON as removing the resources will
-trigger access violation during the late end of suspend cycle as kernel
-tries to access the config space of PCIe devices to mask the MSIs.
+On 01/03/2023 04:51, Aakarsh Jain wrote:
+> Convert s5p-mfc bindings to DT schema format using json-schema.
+> 
+> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+> ---
+> changes since v5:
+> kept compatible strings under enum
+> sorted compatible strings
+> added iommu maxItems:2
+> Added indentation with 4 spaces in dts example
+> 
+> changes since v4:
+> Removed items from oneOf section
+> dropped black line
+> defined the iommus names items as
+> items:
+> -const left
+> -const right
+> 
+> changes since v3:
+> fixed dt-schema warnings and errors while running make dtbs_check and make dt_binding_check for ARMv7
+> Since, obsolete properties are not part of dt-node so we are not including these properties in dt-schema.
+> 
+> changes since v2:
+> changed Commit message from Adds to Convert
+> Removed text "This file has moved to samsung,s5p-mfc.yaml" from s5p-mfc.txt
+> fixed dt-schema warnings and errors while running make dtbs_check and make dt_binding_check
+> 
+> changes since v1:
+> fixed dt-schema warnings and errors while running make dtbs_check and make dt_binding_check
+> Removed description.
+> Listed items.
+> Added allOf:if:then for restricting two items to specific compatible
+> 
+> This patch is independent from the previous MFC v12 patch series for HW3 support.
+> 
+>  .../devicetree/bindings/media/s5p-mfc.txt     |  78 ---------
+>  .../bindings/media/samsung,s5p-mfc.yaml       | 151 ++++++++++++++++++
+>  2 files changed, 151 insertions(+), 78 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> index 8eb90c043d5d..e69de29bb2d1 100644
+> --- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> +++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> @@ -1,78 +0,0 @@
+> -* Samsung Multi Format Codec (MFC)
+> -
+> -Multi Format Codec (MFC) is the IP present in Samsung SoCs which
+> -supports high resolution decoding and encoding functionalities.
+> -The MFC device driver is a v4l2 driver which can encode/decode
+> -video raw/elementary streams and has support for all popular
+> -video codecs.
+> -
+> -Required properties:
+> -  - compatible : value should be either one among the following
+> -	(a) "samsung,mfc-v5" for MFC v5 present in Exynos4 SoCs
+> -	(b) "samsung,mfc-v6" for MFC v6 present in Exynos5 SoCs
+> -	(c) "samsung,exynos3250-mfc", "samsung,mfc-v7" for MFC v7
+> -	     present in Exynos3250 SoC
+> -	(d) "samsung,mfc-v7" for MFC v7 present in Exynos5420 SoC
+> -	(e) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
+> -	(f) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433 SoC
+> -	(g) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
+> -
+> -  - reg : Physical base address of the IP registers and length of memory
+> -	  mapped region.
+> -
+> -  - interrupts : MFC interrupt number to the CPU.
+> -  - clocks : from common clock binding: handle to mfc clock.
+> -  - clock-names : from common clock binding: must contain "mfc",
+> -		  corresponding to entry in the clocks property.
+> -
+> -Optional properties:
+> -  - power-domains : power-domain property defined with a phandle
+> -			   to respective power domain.
+> -  - memory-region : from reserved memory binding: phandles to two reserved
+> -	memory regions, first is for "left" mfc memory bus interfaces,
+> -	second if for the "right" mfc memory bus, used when no SYSMMU
+> -	support is available; used only by MFC v5 present in Exynos4 SoCs
+> -
+> -Obsolete properties:
+> -  - samsung,mfc-r, samsung,mfc-l : support removed, please use memory-region
+> -	property instead
+> -
+> -
+> -Example:
+> -SoC specific DT entry:
+> -
+> -mfc: codec@13400000 {
+> -	compatible = "samsung,mfc-v5";
+> -	reg = <0x13400000 0x10000>;
+> -	interrupts = <0 94 0>;
+> -	power-domains = <&pd_mfc>;
+> -	clocks = <&clock 273>;
+> -	clock-names = "mfc";
+> -};
+> -
+> -Reserved memory specific DT entry for given board (see reserved memory binding
+> -for more information):
+> -
+> -reserved-memory {
+> -	#address-cells = <1>;
+> -	#size-cells = <1>;
+> -	ranges;
+> -
+> -	mfc_left: region@51000000 {
+> -		compatible = "shared-dma-pool";
+> -		no-map;
+> -		reg = <0x51000000 0x800000>;
+> -	};
+> -
+> -	mfc_right: region@43000000 {
+> -		compatible = "shared-dma-pool";
+> -		no-map;
+> -		reg = <0x43000000 0x800000>;
+> -	};
+> -};
+> -
+> -Board specific DT entry:
+> -
+> -codec@13400000 {
+> -	memory-region = <&mfc_left>, <&mfc_right>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml b/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+> index 000000000000..da48d0493cdd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+> @@ -0,0 +1,151 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/samsung,s5p-mfc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Samsung Exynos Multi Format Codec (MFC)
+> +
+> +maintainers:
+> +  - Marek Szyprowski <m.szyprowski@samsung.com>
+> +  - Aakarsh Jain <aakarsh.jain@samsung.com>
+> +
+> +description:
+> +  Multi Format Codec (MFC) is the IP present in Samsung SoCs which
+> +  supports high resolution decoding and encoding functionalities.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - samsung,exynos5433-mfc        # Exynos5433
+> +          - samsung,mfc-v5                # Exynos4
+> +          - samsung,mfc-v6                # Exynos5
+> +          - samsung,mfc-v7                # Exynos5420
+> +          - samsung,mfc-v8                # Exynos5800
+> +          - samsung,mfc-v10               # Exynos7880
+> +      - items:
+> +          - enum:
+> +              - samsung,exynos3250-mfc    # Exynos3250
+> +          - const: samsung,mfc-v7         # Fall back for Exynos3250
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  iommus:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  iommu-names:
+> +    items:
+> +      - const: left
+> +      - const: right
 
-Also, it is not desirable to put the link into L2/L3 state as that
-implies VDD supply will be removed and the devices may go into powerdown
-state. This will affect the lifetime of storage devices like NVMe.
+That's confusing now... The iommu-names above says it requires two
+iommus, but your iommus property says one item is enough. You need here
+minItems: 1... but then why one IOMMU (for such variants) is always
+"left"? Probably then the meaning of first IOMMU changes, right? If
+that's correct, then I propose to leave it as minItems:1/maxItems:2
+without defining the items here and...
 
-And finally, during resume, turn ON the resources if the controller was
-truly suspended (resources OFF) and update the interconnect bandwidth
-based on PCIe Gen speed.
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  memory-region:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - samsung,mfc-v5
+> +              - samsung,exynos3250-mfc
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: mfc
+> +            - const: sclk_mfc
 
-Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Acked-by: Dhruva Gole <d-gole@ti.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 53 ++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+iommus:
+  maxItems: 1
+iommu-names: false
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index a232b04af048..7147f0103026 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -227,6 +227,7 @@ struct qcom_pcie {
- 	struct gpio_desc *reset;
- 	struct icc_path *icc_mem;
- 	const struct qcom_pcie_cfg *cfg;
-+	bool suspended;
- };
- 
- #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-@@ -1820,6 +1821,53 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static int qcom_pcie_suspend_noirq(struct device *dev)
-+{
-+	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-+	int ret;
-+
-+	/* Set minimum bandwidth required to keep data path functional during suspend */
-+	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
-+	if (ret) {
-+		dev_err(pcie->pci->dev, "Failed to set interconnect bandwidth: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Turn OFF the resources only for controllers without active PCIe devices. For controllers
-+	 * with active devices, the resources are kept ON and the link is expected to be in L0/L1
-+	 * (sub)states.
-+	 *
-+	 * Turning OFF the resources for controllers with active PCIe devices will trigger access
-+	 * violation during the end of the suspend cycle, as kernel tries to access the PCIe devices
-+	 * config space for masking MSIs.
-+	 *
-+	 * Also, it is not desirable to put the link into L2/L3 state as that implies VDD supply
-+	 * will be removed and the devices may go into powerdown state. This will affect the
-+	 * lifetime of the storage devices like NVMe.
-+	 */
-+	if (!dw_pcie_link_up(pcie->pci)) {
-+		qcom_pcie_host_deinit(&pcie->pci->pp);
-+		pcie->suspended = true;
-+	}
-+
-+	return 0;
-+}
-+
-+static int qcom_pcie_resume_noirq(struct device *dev)
-+{
-+	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-+
-+	if (pcie->suspended) {
-+		qcom_pcie_host_init(&pcie->pci->pp);
-+		pcie->suspended = false;
-+	}
-+
-+	qcom_pcie_icc_update(pcie);
-+
-+	return 0;
-+}
-+
- static const struct of_device_id qcom_pcie_match[] = {
- 	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
- 	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-@@ -1856,12 +1904,17 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
- 
-+static const struct dev_pm_ops qcom_pcie_pm_ops = {
-+	NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq, qcom_pcie_resume_noirq)
-+};
-+
- static struct platform_driver qcom_pcie_driver = {
- 	.probe = qcom_pcie_probe,
- 	.driver = {
- 		.name = "qcom-pcie",
- 		.suppress_bind_attrs = true,
- 		.of_match_table = qcom_pcie_match,
-+		.pm = &qcom_pcie_pm_ops,
- 	},
- };
- builtin_platform_driver(qcom_pcie_driver);
--- 
-2.25.1
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - samsung,mfc-v6
+> +              - samsung,mfc-v8
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 1
+> +        clock-names:
+> +          items:
+> +            - const: mfc
+> +        iommus:
+> +          maxItems: 2
+
+... and here:
+iommu-names:
+  items:
+    - const: left
+    - const: right
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - samsung,exynos5433-mfc
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 3
+> +        clock-names:
+> +          items:
+> +            - const: pclk
+> +            - const: aclk
+> +            - const: aclk_xiu
+> +        iommus:
+> +          maxItems: 2
+
+the same here
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - samsung,mfc-v7
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 1
+> +          maxItems: 2
+
+iommus:
+  maxItems: 1
+iommu-names: false
+
+
+Best regards,
+Krzysztof
 
