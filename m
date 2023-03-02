@@ -2,158 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194936A7CD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FF06A7CD6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjCBIgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 03:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S229629AbjCBIgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 03:36:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCBIg2 (ORCPT
+        with ESMTP id S229744AbjCBIgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 03:36:28 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9687B14221;
-        Thu,  2 Mar 2023 00:36:26 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id da10so64540813edb.3;
-        Thu, 02 Mar 2023 00:36:26 -0800 (PST)
+        Thu, 2 Mar 2023 03:36:40 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4113B199CC
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:36:35 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id v11so13260896plz.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:36:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jeu2rejC7ALr4xJCaVvexwWFSyD3FJ1WGHKuY7P9Vfk=;
-        b=gy6WYAUhPjCzDjYcBcwVYMJZNJqEGdfEtgTsJQdzZFbChfJc6OELVYJw1PDc1gtL78
-         TYKCZoV7D06fuqQnTdyGeOg3mMHVjTpRu0DibqIvgbzD9UWbFsSJ5Gs13gTkb8D5zb0Z
-         JBMYmdbYtIe7FNDGaMgb18mgrDT50bCu1C1rGjhYpNdxQa1z1VS11aitl/rz3ju9Z7Ts
-         PQhyr0umfdiOkVbj1WfyMmA5biXNmw1qaKOZs1NYVZk/eUiYgU3tWbEU+GJzP66UFbEA
-         zfAIpRA9NVmz55s9SKfRwvnFDgxI7hMVuD/8kT/W/26xmYm/hoULhs3i5FLn9XhsYkdU
-         KJRQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lzrqYLYLaVpd0UyrhZ0yR0aqCz0cuXCviR24aa0kuPw=;
+        b=D43eGydreZR1VKVNvxdCLXaLMjZQGQzTS38Jo088r8l4Eepbu5JxDDCNecIGPi38Su
+         Je57YvFacOR6isjgT/KYGTV+qijaz6DVD9kcCtAbbfJORvRabkcBs28mgi/cbR9t24rr
+         RIz8+acB3dX6x8c03CjeFen3gCE3t4dHY20BH+LY3KybsYfa4XJ0lVTsDDKt2oSOf1sG
+         HSx5utpv50HwHOGOnPimcYmU1oo7gPSrkwHHvukr4cc34DxI3Umw+1bjFkSx7UKZJymE
+         jDHZ23+4P0UHnUZEthOHPNPHWh7bBsi71sZSBsI7MOqVgGz3yKIZoTloQV0i6X8MoFSn
+         BvjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jeu2rejC7ALr4xJCaVvexwWFSyD3FJ1WGHKuY7P9Vfk=;
-        b=nPxRnj7Zumjx1c+6igelVE+fN1wWiwoKpTdrfpCGh40/CbURH2+m1U8KIVxoSB3Tw4
-         O1PHTCK7wJ/wXqygVPRxdgveXp4vKLMu8xv2rx6Puj+3iejb6U8Q5zzEgwXflwiYO+KO
-         97UwC/7fXvIm0WUtdz6mqwVvnDhUWGljlov4wsvvLeGM4fiwmKFzny0l85/qOs7YmcPU
-         gO0A3hXv8C0EcscsZpgPPDpHWMedMAKEIa1Tovlvs40RQd6i80IkYS16Ab5RwATzPu1P
-         aKzzRx1ayT5js9gDqZXXppT0ExwKjjoJrsV4w7NlXaep5DAxL5jRe7LZI9SlZ5KVRXFe
-         DLAw==
-X-Gm-Message-State: AO0yUKV7IGJGRsluNlX3VgqjfYDUBQBp6B/OFE6RLCVk0metqlolPsvU
-        x3cX4HV+pgacnoaSxYFYLVs=
-X-Google-Smtp-Source: AK7set9fLLZJOXn1J6rQFaJEofA0z/w+K8ekwQdW33ZgC+u1ri5CMmPoim+VtKyA56aaChTmNA0unA==
-X-Received: by 2002:a17:906:190b:b0:8f2:da10:c69e with SMTP id a11-20020a170906190b00b008f2da10c69emr11039594eje.52.1677746184870;
-        Thu, 02 Mar 2023 00:36:24 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id g19-20020a50d0d3000000b004c09527d62dsm292113edf.30.2023.03.02.00.36.23
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lzrqYLYLaVpd0UyrhZ0yR0aqCz0cuXCviR24aa0kuPw=;
+        b=p+BdF5o01KgCWBIg1sF/1aEvq8bcPiRu9H1IAcgLegnmBw7p+WOGfjWQ+9WMVx/5Fu
+         FVwIYyuP0k6TrsYOwOOk3VlcKD15az/AmDToQgPmXVx52SX+PonpRaQzlax50U3ZOvAS
+         98LNRPPItZOmIcDioK9nkJdphnc8FM24dqhmDiIWvrFa64YESDuldWw6+MgIIsL+8Saj
+         eSmIMrdkWU/Z5RDKgupDcwSfw8pnYX0oVdzaq8RhlPwRoi0SzEk/ar2LoxUsEs9WyFqa
+         vJs866zy7xhfDT1s1qRgIWLiT78hDGCo94Oe7C6XDhdwJJXKWDHxUHQsQUgkf6qULCZP
+         HumQ==
+X-Gm-Message-State: AO0yUKU9WcQbFrbkj+HxZ/kHK/m35mUx9iSESe7KW5HGLLGwp/msVkab
+        1FpaabO+GKAbfIesHSXXSY2C
+X-Google-Smtp-Source: AK7set+xaajcB0h5+hW2z33NsHRILEH9Ei8CBCfMkADOQc25cHl8/XAnaxyjni8gx1mPCvkbvVuKuw==
+X-Received: by 2002:a17:902:8603:b0:19e:711b:83c with SMTP id f3-20020a170902860300b0019e711b083cmr878146plo.39.1677746194689;
+        Thu, 02 Mar 2023 00:36:34 -0800 (PST)
+Received: from localhost.localdomain ([59.97.53.52])
+        by smtp.gmail.com with ESMTPSA id p7-20020a1709028a8700b00198ef93d556sm9791912plo.147.2023.03.02.00.36.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 00:36:24 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 2 Mar 2023 09:35:39 +0100
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>
-Subject: Re: [RFC v2 bpf-next 0/9] mm/bpf/perf: Store build id in inode object
-Message-ID: <ZABf26mV0D0LS7r/@krava>
-References: <20230228093206.821563-1-jolsa@kernel.org>
- <20230228220714.GJ2825702@dread.disaster.area>
+        Thu, 02 Mar 2023 00:36:34 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
+        mka@chromium.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 0/1] PCI: qcom: Add support for system suspend and resume
+Date:   Thu,  2 Mar 2023 14:06:24 +0530
+Message-Id: <20230302083625.188482-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228220714.GJ2825702@dread.disaster.area>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 09:07:14AM +1100, Dave Chinner wrote:
-> On Tue, Feb 28, 2023 at 10:31:57AM +0100, Jiri Olsa wrote:
-> > hi,
-> > this is RFC patchset for adding build id under inode's object.
-> > 
-> > The main change to previous post [1] is to use inode object instead of file
-> > object for build id data.
-> 
-> Please explain what a "build id" is, the use case for it, why we
-> need to store it in VFS objects, what threat model it is protecting
-> the system against, etc.
+Hello,
 
-hum I still did not get your email from mailing list, just saw it
-from Arnaldo's reply and downloaded it from lore
+This series (a single patch) adds the system suspend and resume support
+to the Qualcomm PCIe RC controller.
 
-our use case is for hubble/tetragon [1] and we are asked to report
-buildid of executed binary.. but the monitoring process is running
-in its own pod and can't access the the binaries outside of it, so
-we need to be able to read it in kernel
+Background
+==========
 
-we want to read build id from BPF program attached to sched_exec
-tracepoint, and from BPF iterator
+There were previous attempts [1][2] to add system suspend and resume
+support to this driver.
 
-we considered adding BPF helper and then kfunc for that, but it turned
-out it'd be usefull for other use cases (like retrieving build id from
-atomic context [2]) to have the build id stored in file (or inode) object
+In previous versions, the controller was put into low power mode by turning
+OFF the resources even if there were active PCIe devices connected. Thanks
+to Qualcomm's internal power topology, the link did not enter L2/L3 state
+and the devices were still powered ON. But during very late end of suspend
+cycle, kernel tried to disable MSIs of the PCIe devices. This caused access
+violations as the resources needed to access the PCIe devices config space
+were turned OFF. Series [1] worked around this issue by not accessing the
+PCIe config space if the link was down in dw_msi_{un}mask_irq() functions.
+But that approach was not accepted.
 
-[1] https://github.com/cilium/tetragon/
-[2] https://lore.kernel.org/bpf/CA+khW7juLEcrTOd7iKG3C_WY8L265XKNo0iLzV1fE=o-cyeHcQ@mail.gmail.com/
+Then, series [2] implemented the suspend and resume operations using the
+syscore framework that disabled the resources at the end of the suspend
+cycle. But that approach also did not get much acceptance.
 
-> 
-> > 
-> > However.. ;-) while using inode as build id storage place saves some memory
-> > by keeping just one copy of the build id for all file instances, there seems
-> > to be another problem.
-> 
-> Yes, the problem being that we can cache hundreds of millions of
-> inodes in memory, and only a very small subset of them are going to
-> have open files associated with them. And an even smaller subset are
-> going to be mmapped.
+Proposal
+========
 
-ok, file seems like better option now
+So the proposal here is to just vote for minimal interconnect bandwidth and
+not turn OFF the resources if there are active PCIe devices connected to
+the controllers. This avoids the access violation issue during suspend and
+also saves some power due to the lower interconnect bandwidth used.
 
-> 
-> So, in reality, this proposal won't save any memory at all - it
-> costs memory for every inode that is not currently being used as
-> a mmapped elf executable, right?
+Then if there are no active PCIe devices connected to the controller,
+the resources are turned OFF completely and brought back during resume.
+This also saves power if there are controllers in a system without any
+devices connected.
 
-right
+Testing
+=======
 
-> 
-> > The problem is that we read the build id when the file is mmap-ed.
-> 
-> Why? I'm completely clueless as to what this thing does or how it's
-> used....
+This series has been tested on Lenovo Thinkpad X13s.
 
-we need the build id only when the file is mmap-ed, so it seemed like
-the best way to read it when the file is mmaped
+Thanks,
+Mani
 
-> 
-> > Which is fine for our use case,
-> 
-> Which is?
+[1] https://lore.kernel.org/linux-pci/1656055682-18817-1-git-send-email-quic_krichai@quicinc.com/
+[2] https://lore.kernel.org/linux-pci/1663669347-29308-1-git-send-email-quic_krichai@quicinc.com/
 
-please see above
+Changes in v2:
 
-thanks,
-jirka
+* Used minimum icc vote to keep data path functional during suspend
+* Collected Ack
+
+Manivannan Sadhasivam (1):
+  PCI: qcom: Add support for system suspend and resume
+
+ drivers/pci/controller/dwc/pcie-qcom.c | 53 ++++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+
+-- 
+2.25.1
+
