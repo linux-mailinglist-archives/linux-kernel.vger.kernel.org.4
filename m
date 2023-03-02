@@ -2,150 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003376A8956
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAC16A898C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjCBTPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
+        id S229938AbjCBThn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCBTP3 (ORCPT
+        with ESMTP id S229547AbjCBThl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:15:29 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C469917CF4
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:15:01 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id u9so1288838edd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:15:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677784500;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4YofVDSHg39nKsEEw4I8NJ9sshTvgvGYTyuR7oI/AtQ=;
-        b=MoN/izdYZ/m18s5sMhtfvE1gFU8FB8lhQyZqH8Mq0zsJGvdgQYLjjjUOmaM3LF70MC
-         /McQoxYeGzdQFF8uamMR6lzCFPowuRfRbYgtdREHgzFv9syhjF6b5KJJey4A2gf3Q60J
-         /CxegrI/e8tctswNCqS1JIoTrS18tauyLrEcAs0kMPrIOox6jdgHXmFgAlBz+TNAjOL9
-         fA8DluK2YXL3vIY62VqLBV10+CTxLXCkAu+wzaX+HPi+mXwIR6EEciSVhfx/84h9HiFO
-         WzdTHiAF0zQzoV3+YeVwWajqbdFYbUuWdDUVJHlAC8FqCmmGRCUiBQjAkkwplMRprDQq
-         ukeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677784500;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4YofVDSHg39nKsEEw4I8NJ9sshTvgvGYTyuR7oI/AtQ=;
-        b=vVrtZAyyRhEpwI6FuaBhrobMyhk9eTs9dqk1Ul6JZOHUXubcVkLrCqDuF2BC27B8yu
-         bRFWTVujjcg18cSgY9Rlqn18pcs2HeqXf5gg7k77BLCYBn7cLBkMOCgRSHNEY9Tf0iKo
-         99KnVyysiyHc2TrvxASmKoczvLZA/E1MsUXZjShm3+pn6ya/rcf55Ik0iSrZzdqxhxkS
-         0qOB++ikVECd+ZgcSgoISx1soqklAzl0TpSi4OetLBgS5z/T8adGxi/OvviXKPWG2tGp
-         oRvGaPMBEH9gsx7b8oAZT1YcoeLpmB7T6c080A+XgI94f4U2d7WX7PQx1FHtWUbC+F8F
-         49RQ==
-X-Gm-Message-State: AO0yUKWNwcmhEGZuAJPejWlus3CKLz7aCjf8QiqgLMfyDBT7rxGR7G4H
-        7paGZ9noHYM2sLwkIGI8Ul5YRxZsDF4=
-X-Google-Smtp-Source: AK7set+kEPeDeoCt7o2283sE86Jz+CpdYPGMtxKWrpeSiMFaldSqXJNzauM4RX2E957AjG8M954YCA==
-X-Received: by 2002:a05:6402:524f:b0:4bc:235c:dcb8 with SMTP id t15-20020a056402524f00b004bc235cdcb8mr8179330edd.1.1677784500093;
-        Thu, 02 Mar 2023 11:15:00 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id o26-20020a50c29a000000b004ac54d4da22sm227961edf.71.2023.03.02.11.14.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 11:14:59 -0800 (PST)
-Date:   Thu, 2 Mar 2023 20:14:57 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8192e: Change filename r8192E_hwimg.x to table.x
-Message-ID: <20230302191457.GA17628@matrix-ESPRIMO-P710>
+        Thu, 2 Mar 2023 14:37:41 -0500
+X-Greylist: delayed 1228 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 11:37:40 PST
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1DD47412;
+        Thu,  2 Mar 2023 11:37:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-ID:Content-Description;
+        bh=87JKjmVsuv8rIF34mdQmg/4fonoAxbnoQcy8w4pOxC8=; b=Isa2W5G/aXeD2eH1yhZOcjnyPY
+        o1a2makI6Kvj33x1f5eY4mxN54iFIOc2Ye3GDGM95efsqUVkimk1BusyztXQzENx089/ffpbjP4dc
+        TWZ0wInn5QjFDidAHtJkTGd8XpI2bDR08VX7gy9YLN2o9cLIo6+EmiWQTfVedHf27huz/HT9rr7kK
+        7nB5V8Y3M8++Ipi24KFr1cay62Kc47Y7vkgOM+oMYEkLozZ8RH/q8fCqwiahYfpYSjqCWimDZLkfT
+        V+Gb6u6An9/YUcti+97tsKhx8OdrYJ2xoFpOag5/WVBs6Hw0oPpj3ilwjI2SsYp01JM7HJj0G0Ukc
+        gn+h3LoQ==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1pXoQ5-0000qA-J8;
+        Thu, 02 Mar 2023 19:16:49 +0000
+Date:   Thu, 2 Mar 2023 19:16:48 +0000
+From:   John Keeping <john@metanate.com>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yadi Brar <yadi.brar01@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Felipe Balbi <balbi@ti.com>, alsa-devel@alsa-project.org,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: u_audio: don't let userspace block driver
+ unbind
+Message-ID: <ZAD2IPJFyg0e7r7N@donbot>
+References: <20230302163648.3349669-1-alvin@pqrs.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230302163648.3349669-1-alvin@pqrs.dk>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change r8192E_hwimg.c to table.c and r8192E_hwimg.h to table.h to adapt
-filenames from drivers/net/wireless/realtek/rtlwifi rtl8192ee and
-rtl8192se. Task is from TODO file.
+On Thu, Mar 02, 2023 at 05:36:47PM +0100, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+> 
+> In the unbind callback for f_uac1 and f_uac2, a call to snd_card_free()
+> via g_audio_cleanup() will disconnect the card and then wait for all
+> resources to be released, which happens when the refcount falls to zero.
+> Since userspace can keep the refcount incremented by not closing the
+> relevant file descriptor, the call to unbind may block indefinitely.
+> This can cause a deadlock during reboot, as evidenced by the following
+> blocked task observed on my machine:
+> 
+>   task:reboot  state:D stack:0   pid:2827  ppid:569    flags:0x0000000c
+>   Call trace:
+>    __switch_to+0xc8/0x140
+>    __schedule+0x2f0/0x7c0
+>    schedule+0x60/0xd0
+>    schedule_timeout+0x180/0x1d4
+>    wait_for_completion+0x78/0x180
+>    snd_card_free+0x90/0xa0
+>    g_audio_cleanup+0x2c/0x64
+>    afunc_unbind+0x28/0x60
+>    ...
+>    kernel_restart+0x4c/0xac
+>    __do_sys_reboot+0xcc/0x1ec
+>    __arm64_sys_reboot+0x28/0x30
+>    invoke_syscall+0x4c/0x110
+>    ...
+> 
+> The issue can also be observed by opening the card with arecord and
+> then stopping the process through the shell before unbinding:
+> 
+>   # arecord -D hw:UAC2Gadget -f S32_LE -c 2 -r 48000 /dev/null
+>   Recording WAVE '/dev/null' : Signed 32 bit Little Endian, Rate 48000 Hz, Stereo
+>   ^Z[1]+  Stopped                    arecord -D hw:UAC2Gadget -f S32_LE -c 2 -r 48000 /dev/null
+>   # echo gadget.0 > /sys/bus/gadget/drivers/configfs-gadget/unbind
+>   (observe that the unbind command never finishes)
+> 
+> Fix the problem by using snd_card_free_when_closed() instead, which will
+> still disconnect the card as desired, but defer the task of freeing the
+> resources to the core once userspace closes its file descriptor.
+> 
+> Fixes: 132fcb460839 ("usb: gadget: Add Audio Class 2.0 Driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
-Did check MAINTAINERS for update: Not required
+Reviewed-by: John Keeping <john@metanate.com>
 
-Tested with rtl8192e
-Transferred this patch over wlan connection of rtl8192e
----
- drivers/staging/rtl8192e/rtl8192e/Makefile                    | 2 +-
- drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c           | 2 +-
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c                | 2 +-
- drivers/staging/rtl8192e/rtl8192e/{r8192E_hwimg.c => table.c} | 2 +-
- drivers/staging/rtl8192e/rtl8192e/{r8192E_hwimg.h => table.h} | 0
- 5 files changed, 4 insertions(+), 4 deletions(-)
- rename drivers/staging/rtl8192e/rtl8192e/{r8192E_hwimg.c => table.c} (99%)
- rename drivers/staging/rtl8192e/rtl8192e/{r8192E_hwimg.h => table.h} (100%)
-
-diff --git a/drivers/staging/rtl8192e/rtl8192e/Makefile b/drivers/staging/rtl8192e/rtl8192e/Makefile
-index 75e6ec510555..a442d79ea71e 100644
---- a/drivers/staging/rtl8192e/rtl8192e/Makefile
-+++ b/drivers/staging/rtl8192e/rtl8192e/Makefile
-@@ -4,7 +4,7 @@ r8192e_pci-objs :=		\
- 	r8192E_phy.o		\
- 	r8192E_firmware.o	\
- 	r8192E_cmdpkt.o		\
--	r8192E_hwimg.o		\
-+	table.o			\
- 	r8190P_rtl8256.o	\
- 	rtl_cam.o		\
- 	rtl_core.o		\
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
-index b011ec8c8a41..ddf998cf2041 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
-@@ -6,7 +6,7 @@
-  */
- #include "rtl_core.h"
- #include "r8192E_hw.h"
--#include "r8192E_hwimg.h"
-+#include "table.h"
- #include "r8192E_firmware.h"
- #include "r8192E_cmdpkt.h"
- #include <linux/firmware.h>
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index c6cbdea6d5b2..6388f1220575 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -12,7 +12,7 @@
- #include "r8192E_phy.h"
- #include "rtl_dm.h"
- 
--#include "r8192E_hwimg.h"
-+#include "table.h"
- 
- static u32 RF_CHANNEL_TABLE_ZEBRA[] = {
- 	0,
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_hwimg.c b/drivers/staging/rtl8192e/rtl8192e/table.c
-similarity index 99%
-rename from drivers/staging/rtl8192e/rtl8192e/r8192E_hwimg.c
-rename to drivers/staging/rtl8192e/rtl8192e/table.c
-index e6fce749e65b..1f80dbeb17b5 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_hwimg.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/table.c
-@@ -4,7 +4,7 @@
-  *
-  * Contact Information: wlanfae <wlanfae@realtek.com>
-  */
--#include "r8192E_hwimg.h"
-+#include "table.h"
- 
- u32 Rtl8192PciEPHY_REGArray[PHY_REGArrayLengthPciE] = {0x0,};
- 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_hwimg.h b/drivers/staging/rtl8192e/rtl8192e/table.h
-similarity index 100%
-rename from drivers/staging/rtl8192e/rtl8192e/r8192E_hwimg.h
-rename to drivers/staging/rtl8192e/rtl8192e/table.h
--- 
-2.39.2
-
+> ---
+>  drivers/usb/gadget/function/u_audio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+> index c1f62e91b012..4a42574b4a7f 100644
+> --- a/drivers/usb/gadget/function/u_audio.c
+> +++ b/drivers/usb/gadget/function/u_audio.c
+> @@ -1422,7 +1422,7 @@ void g_audio_cleanup(struct g_audio *g_audio)
+>  	uac = g_audio->uac;
+>  	card = uac->card;
+>  	if (card)
+> -		snd_card_free(card);
+> +		snd_card_free_when_closed(card);
+>  
+>  	kfree(uac->p_prm.reqs);
+>  	kfree(uac->c_prm.reqs);
+> -- 
+> 2.39.1
+> 
