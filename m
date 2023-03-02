@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898FB6A8545
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A84B76A8552
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjCBPfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S229976AbjCBPg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCBPfv (ORCPT
+        with ESMTP id S229848AbjCBPg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:35:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80FC3431B;
-        Thu,  2 Mar 2023 07:35:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F83B615B3;
-        Thu,  2 Mar 2023 15:35:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 695B1C433EF;
-        Thu,  2 Mar 2023 15:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677771349;
-        bh=pc7zBjw7UfGXRZI0stjXTMByutXTDJN9+Po9UIw9cSU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EQFQtsF/TcfbZwLaqNsvKrHPZ2wh7TNPvCa0FVcn2JeVSAZoiZeqZEI9T7YWU7LaE
-         HKEAVa58pC0+itOG+LFfFzEVwPMrtOeIdbzeI9XkSI5CcruhVYV2WTbVAoO7yt8XGr
-         UUfnf7SJvzYBE9qc8TK41IBpKWJQV8f0TI5Iodr/Zu3MgNw05QiVLHaCfbBfGIJBnz
-         KsLLB/GqF8VUMelEmIjX6u5bELRlz9TAjP+HmazVKn65heFY5bdYoGzZ/wiCTnAG7+
-         Ghfj63jVNgEW8xiB9Qjsa+Q+CrldZlazxdQOK3WXz0Q/f53MGt7q3atS/p8TDzkSYG
-         EN62iyA+5ngqA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7C82B4049F; Thu,  2 Mar 2023 12:35:46 -0300 (-03)
-Date:   Thu, 2 Mar 2023 12:35:46 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Derek Barbosa <debarbos@redhat.com>,
-        rust-for-linux@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] rust: bindgen: Add `alt_instr` as opaque type
-Message-ID: <ZADCUvbeZrbjz8QR@kernel.org>
-References: <ZACvxNOuuyifQ9Nx@kernel.org>
- <37578649-c696-f3b5-a216-196e210929e5@gmail.com>
+        Thu, 2 Mar 2023 10:36:27 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16077360BD
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:36:26 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id s22so22627239lfi.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:36:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677771384;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2skxjP7BUf3M+vL/Xs0pd7p3mFaPMienCoBwSMkX1P4=;
+        b=yAXM3clwa02STwV8+occXXG6D8d4YXdurxOxMl7mcOkXm1H8u68Xg2XQHWpr1pCM5b
+         Xej7iimsE3QYatrYMb+6bCnwZpmbF3uFEeqYkvwOHYK7BtO/pRhceH9clcTP/Bgxejby
+         2+AhI8tmtHpPs/dcHNBuY/1kigeMlXf416bP6gF/wWOM7rfZSBasKf9ZQllKN+3jc6pT
+         bg/FZmazyEAQ4WJxPagbDtTp955EFoDlfCNLtxksfOvvcJ0C21W0UCIVt4tY5PLDP7PV
+         JW1raU/0zJ7nHPHJ87kixs5Plm0+FOS8dyKdKF3GNZNKjLyP/CF6nKzHytlaxkORK0KF
+         c2wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677771384;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2skxjP7BUf3M+vL/Xs0pd7p3mFaPMienCoBwSMkX1P4=;
+        b=eXaqi5rum+XYFxvR/nIm2Y00iJHKL8rgZck30lymyEL3zsmZJB3ivX9cBNGMuCgYOI
+         diEGJButcZO44z0WNUjiGGAVkG8I0RMKeKHmGrps/uO0RnYKGRxnXND+SvcZXH8H9BIf
+         0922472n6RlQTpwmPrYzmX92xloGVYLUMuHWBgQtKAq4j8R9ZB9iQ6NS3qPVQ9SmORp7
+         hIY7tlSjk+Q9+bEemd/oXeuI3ZP6iehM/CHjdUAeC3aQOikb5WdKTxL3gEVqbcB7YZcN
+         nM11TmVu0M5Hxl0ZNUOxZbc//r9TDTBxDgJzbJTowSZ3Yv9tq9Cw8Gjrn0cA0NkjLXAj
+         /BWw==
+X-Gm-Message-State: AO0yUKUE6X/TgoiKjOCotdUR4veY19MLYbVaZfVnrirWTtWTVIa/wxBa
+        Vx5WsMzh8HhvZgXkCvuoI20k9w==
+X-Google-Smtp-Source: AK7set+Jqeb3nj72ML3ccr7EIT/TCR54d4WT0pNWcYQQNRKHebYYqfo/YWX29+K4TOX5g+xDAKKw7g==
+X-Received: by 2002:ac2:548d:0:b0:4cb:3a60:65c3 with SMTP id t13-20020ac2548d000000b004cb3a6065c3mr2769014lfk.1.1677771384302;
+        Thu, 02 Mar 2023 07:36:24 -0800 (PST)
+Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
+        by smtp.gmail.com with ESMTPSA id p17-20020a05651238d100b004db2978e330sm2170509lft.258.2023.03.02.07.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 07:36:23 -0800 (PST)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     stable@vger.kernel.org, tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joneslee@google.com, Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH][for stable 5.{15, 10} 0/4] ext4: Fix kernel BUG in ext4_free_blocks
+Date:   Thu,  2 Mar 2023 15:36:06 +0000
+Message-Id: <20230302153610.1204653-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <37578649-c696-f3b5-a216-196e210929e5@gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,108 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Mar 02, 2023 at 11:59:00AM -0300, Martin Rodriguez Reboredo escreveu:
-> On 3/2/23 11:16, Arnaldo Carvalho de Melo wrote:
-> > To address this build error:
-> > 
-> >     BINDGEN rust/bindings/bindings_generated.rs
-> >     BINDGEN rust/bindings/bindings_helpers_generated.rs
-> >     EXPORTS rust/exports_core_generated.h
-> >     RUSTC P rust/libmacros.so
-> >     RUSTC L rust/compiler_builtins.o
-> >     RUSTC L rust/alloc.o
-> >     RUSTC L rust/bindings.o
-> >     RUSTC L rust/build_error.o
-> >     EXPORTS rust/exports_alloc_generated.h
-> >   error[E0588]: packed type cannot transitively contain a `#[repr(align)]` type
-> >        --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10094:1
-> >         |
-> >   10094 | / pub struct alt_instr {
-> >   10095 | |     pub instr_offset: s32,
-> >   10096 | |     pub repl_offset: s32,
-> >   10097 | |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1,
-> >   10098 | |     pub instrlen: u8_,
-> >   10099 | |     pub replacementlen: u8_,
-> >   10100 | | }
-> >         | |_^
-> >         |
-> >   note: `alt_instr__bindgen_ty_1__bindgen_ty_1` has a `#[repr(align)]` attribute
-> >        --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10111:1
-> >         |
-> >   10111 | / pub struct alt_instr__bindgen_ty_1__bindgen_ty_1 {
-> >   10112 | |     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize], u16>,
-> >   10113 | | }
-> >         | |_^
-> >   note: `alt_instr` contains a field of type `alt_instr__bindgen_ty_1`
-> >        --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10097:9
-> >         |
-> >   10097 |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1,
-> >         |         ^^^^^^^^^^^^^^^^
-> >   note: ...which contains a field of type `alt_instr__bindgen_ty_1__bindgen_ty_1`
-> >        --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10104:9
-> >         |
-> >   10104 |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1__bindgen_ty_1,
-> >         |         ^^^^^^^^^^^^^^^^
-> > 
-> 
-> Reading the kernel sources this field corresponds to an u16 which indeed
-> represents a bit set and it says so in a comment on the field. I
-> couldn't replicate this issue, though, because this struct is used only
-> inside arch pretty much internally, then there's no problem to make it
-> opaque. Still, we have to be careful if these kind of things appear in
-> the future.
+Hi,
 
-ok
- 
-> And I notice that You haven't mentioned the version of Bindgen that
-> You've used, including its linked libclang too. Otherwise I think this
-> could be accepted.
+This patch set is intended for stable/linux-5.{15, 10}.y. The patches
+applied cleanly without deviations from the original upstream patches.
+The last patch is fixing the bug reported at [1]. The other three are
+prerequisites for the last commit. I tested the patches and I confirm
+that the reproducer no longer complains on linux-5.{15, 10}.y. Older
+LTS kernels have more dependencies, let's fix these until I sort out
+what else should be backported for the older LTS kernels.
 
-⬢[acme@toolbox linux]$ bindgen --version
-bindgen 0.56.0
-⬢[acme@toolbox linux]$ which bindgen
-/var/home/acme/.cargo/bin/bindgen
-⬢[acme@toolbox linux]$ ldd /var/home/acme/.cargo/bin/bindgen
-	linux-vdso.so.1 (0x00007ffe543be000)
-	libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00007f7b69e94000)
-	libm.so.6 => /lib64/libm.so.6 (0x00007f7b69db4000)
-	libc.so.6 => /lib64/libc.so.6 (0x00007f7b69bd7000)
-	/lib64/ld-linux-x86-64.so.2 (0x00007f7b6a235000)
-⬢[acme@toolbox linux]$ clang --version &| head -2
-bash: syntax error near unexpected token `|'
-⬢[acme@toolbox linux]$ clang --version |& head -2
-clang version 15.0.7 (Fedora 15.0.7-1.fc37)
-Target: x86_64-redhat-linux-gnu
-⬢[acme@toolbox linux]$
- 
-> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> 
-> >   error: aborting due to previous error
-> > 
-> >   For more information about this error, try `rustc --explain E0588`.
-> >   make[1]: *** [rust/Makefile:389: rust/bindings.o] Error 1
-> >   make: *** [Makefile:1293: prepare] Error 2
-> > 
-> > Cc: Derek Barbosa <debarbos@redhat.com>
-> > Cc: Miguel Ojeda <ojeda@kernel.org>
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > ---
-> >  rust/bindgen_parameters | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/rust/bindgen_parameters b/rust/bindgen_parameters
-> > index be4963bf720304da..552d9a85925b9945 100644
-> > --- a/rust/bindgen_parameters
-> > +++ b/rust/bindgen_parameters
-> > @@ -6,6 +6,7 @@
-> >  --opaque-type local_apic
-> >  
-> >  # Packed type cannot transitively contain a `#[repr(align)]` type.
-> > +--opaque-type alt_instr
-> >  --opaque-type x86_msi_data
-> >  --opaque-type x86_msi_addr_lo
-> >  
+[1] LINK: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c 
+
+Cheers,
+ta
+
+Lukas Czerner (1):
+  ext4: block range must be validated before use in ext4_mb_clear_bb()
+
+Ritesh Harjani (3):
+  ext4: refactor ext4_free_blocks() to pull out ext4_mb_clear_bb()
+  ext4: add ext4_sb_block_valid() refactored out of
+    ext4_inode_block_valid()
+  ext4: add strict range checks while freeing blocks
+
+ fs/ext4/block_validity.c |  26 +++--
+ fs/ext4/ext4.h           |   3 +
+ fs/ext4/mballoc.c        | 205 +++++++++++++++++++++++----------------
+ 3 files changed, 139 insertions(+), 95 deletions(-)
 
 -- 
+2.40.0.rc0.216.gc4246ad0f0-goog
 
-- Arnaldo
