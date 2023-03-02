@@ -2,141 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940706A7C67
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2558D6A7C79
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjCBITj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 03:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
+        id S229728AbjCBIXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 03:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjCBITi (ORCPT
+        with ESMTP id S229566AbjCBIW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 03:19:38 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827A910F3
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:19:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1677745174; x=1709281174;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KKyEdtNDOhebKEQjj/Qmh1erCfjwM0PsZRUXNGv/4xM=;
-  b=F2Qt4magEaGefouD+pfgrPS8ngWV2YdQp55RtdwvVIt2qsy5qF9HeqhB
-   2wxncRHSupm+2BQkSwYrgCMOqhouVinc8+CIoimFlVc4MqWcqAb/hs3YC
-   Cfrobu3aYhJztTDDGTVfwIQ50enQjM5Y4XM/IPL/PhVzwc1mLiZEUyhTQ
-   ONogJJ0Xz/xMdrOaN/KcGRfYm1bOVJv4GrvY/nSQo8tnxhd9hvaqkHueQ
-   m+p/Afi6wUuFkzvdC1EkpUENyITYcYGPVz813ukMff3Ir5IvTQWhwhpJq
-   KcmagUf020u3CsmTapLo3x1VhsC5Le6G03jBMQH0teyc+k8Xx77GZTV/Y
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,227,1673884800"; 
-   d="scan'208";a="224390337"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Mar 2023 16:19:23 +0800
-IronPort-SDR: pan+VCVTgmWCxRgjIpjj7OncvVKey13HMo0KmaL7yTJnwu4S6jLUiYEZtd6UkF10hGrwQ+vAej
- G0F9WiYCEYVeYVG6J470O9OyXHkxDIhMcchTrA6FHkOf9/316JPPDfBdaL4zwQgPCBDIGSz81J
- heJZlv3AUADFSUU7tO6iPCNrfDb53Jjw1nrXEgP6IEe2f3Uwh+oH11FeudBfZcOrV1BJMWIXbo
- OUKadQiny4Hz6nihWiu+gZ5P7NfyeHrUZJPAATF1RyWVUuA+WUXkCkBV21HqWu9alHYwid3c/l
- SGs=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Mar 2023 23:30:28 -0800
-IronPort-SDR: GfmfME/QGAxFTewS80NOHIE43EsY+xLvMU/x4de0lhPajT/XqRPqlT0fPPlgtEMy9OvgmjaqlH
- DMHDZ/DpC8g790y+PIu8ksf6XrazVcUtVIP2e9ljKRzMBmZ3kvl/AksiOsQwGiz/eBBz69jZ+z
- UATc5PWjVrKw9SN8vmPRoEbn1+ULUyG3+0VQrOpCJNCZjQv5ip45WzO1p3YVW8sduzB79DWVTu
- fC0BrstFTfP5Q7rHam5Jipda9LILDGMSd+Vl5K2Oa9hkvsCxD85vEyvx7ypdy/l0i5G6dXv10Q
- 6Qo=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Mar 2023 00:19:24 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PS3t35MNJz1Rwt8
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:19:23 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1677745163; x=1680337164; bh=KKyEdtNDOhebKEQjj/Qmh1erCfjwM0PsZRU
-        XNGv/4xM=; b=mB50Sf+llKHkJMt2P6iQ54lvHazfPTk3E14GwdXQZ76Dt5TeIfy
-        Xhgf3q8XToFWxnX+uuq3NQWieTZy3ayXjXTbVhmOVaq9VDdMJINmFuWJwxMKscu4
-        380mtcNlv8B/6LQe/gdlkN8NVNCjkpjs7Q4h6gbfWnR+JXAAD97ngo8r95Os8LsF
-        rWLti251f9BjnClZqh4N6I2MzGKE5FnDnpUPetdNgwkrCUfjeOvmXfcbSl/uEmID
-        IpVFZP/A2mdwwOjH5xH5lwqLYrbGMeNBQFQqF2gDnQGVOxU5OXakJ/ijVq81bo7Y
-        Hs6bPxEgMOOuyA8XcAMvl+SyrJHyOWMfqVQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 7jLG0j7JY-DW for <linux-kernel@vger.kernel.org>;
-        Thu,  2 Mar 2023 00:19:23 -0800 (PST)
-Received: from [10.225.163.47] (unknown [10.225.163.47])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PS3t15fGpz1RvLy;
-        Thu,  2 Mar 2023 00:19:21 -0800 (PST)
-Message-ID: <0d0e5c63-a155-d2ad-1829-c016c61acad6@opensource.wdc.com>
-Date:   Thu, 2 Mar 2023 17:19:20 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] block: ublk: enable zoned storage support
+        Thu, 2 Mar 2023 03:22:59 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762B89023;
+        Thu,  2 Mar 2023 00:22:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677745378; x=1709281378;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=wwVQGDLYkqK7EMEYCyqGxhrW6z4/l7JXg2t8RIUPEPo=;
+  b=XNjf1eKXjs9o1P0lwL6n5+PNYlz91QbnUB6IX3rE+a2g7d61rTTCzeq0
+   qBq2lP04LK1SQQz06zJtJprrXSiVgkcw9gI401100jnBV13B08u9uQOnt
+   MFxfNODuec8BUdDjrJiOVvomli/QAk8zHJmvQ6QEm1xkRziBLeXelRMHH
+   sdZsjbK75oitZqsxCuw+TBKwV5Zagb+1jzVDcdJUipSw+a4hvi10diO8j
+   fxwajUV2uj1XYNVL97I+B1+Om1N4OfX0KLoAYz0ppdUclL4EHoSO01xAE
+   S3nWeqJKxwu+6GPw0VWy1VXq9ThU1WuLD70DyWoPSq/e42vV77RS8AZ9P
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="315076480"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="315076480"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 00:22:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="705175334"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="705175334"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga008.jf.intel.com with ESMTP; 02 Mar 2023 00:22:57 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 2 Mar 2023 00:22:56 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 2 Mar 2023 00:22:56 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 2 Mar 2023 00:22:56 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l7k7zO2If/3H5gEAettnmWHIoxaRHpMZbZ+KKGjaUInKScjviEvKm6ad5Z5VWuxXiCtsZV9++z379pHkfhSU18HJFr2Y8qf+eS/yFPL5GZSE9INcnGOa6RJdPLu1nHaA8F387jMJr8k+hFri0NwldBxpUT3t2gtlnLxNJgIwXEqfaUAW+N4tzMz/+l4/AaMkkp7ii8+OPJNFiJUx6dEotiSEX1xf5AYUmkZl8FLSqcByMgBx/w/b7H1u6t4KKdubCxKxeG3iU4foAeTwLiUXISjyXZTCb01v68u8jlofGuB5N9GfgmFfRxHqh4UO6ksmzLkmAygTMkqnCBlzCGtHdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wwVQGDLYkqK7EMEYCyqGxhrW6z4/l7JXg2t8RIUPEPo=;
+ b=LcTjomo4kgrm4HWSJkjPVITstNTj0tgRS5UGn3v1/oBwB+hX04XKCp792E456L2Qj4AjN8DgiFQdZVUnf2rcbO2b5B3TT0WRBb6agI99Jc67hRvS8cWDkrDeAZrjOmYKPlxiF9fgvhB3b1MDQlbhiB7Y6uf0cbk2/cVw4J6aWJgb/Ag5kmQM6ncnXVbnTJ3HbBs5oVpQgOJ445b0Plw/OgnGobmQ2R+EG0xSEIA9L+yVVdaBzjvHtrdj20I8lhv7Jhoo0LyaVO5W11ZbxRDDUwq9oc+UDrsdUntblp4i0HeDpfOXVMu0seK0ZH2V0TyqZl+avStvTiCh08oyiN31oA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BL1PR11MB5335.namprd11.prod.outlook.com (2603:10b6:208:31b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Thu, 2 Mar
+ 2023 08:22:55 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
+ 08:22:55 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>
+Subject: RE: [PATCH v3 1/5] vfio: Do not allow !ops->dma_unmap in
+ vfio_pin/unpin_pages()
+Thread-Topic: [PATCH v3 1/5] vfio: Do not allow !ops->dma_unmap in
+ vfio_pin/unpin_pages()
+Thread-Index: AQHZSLveuA6C8LGdn0q8vh3fvbjPg67nLszQ
+Date:   Thu, 2 Mar 2023 08:22:55 +0000
+Message-ID: <BN9PR11MB5276EA5CB036503BC5FD31DC8CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1677288789.git.nicolinc@nvidia.com>
+ <0f8d110eabc40e71fd2c37f63b1bc8888c67414f.1677288789.git.nicolinc@nvidia.com>
+In-Reply-To: <0f8d110eabc40e71fd2c37f63b1bc8888c67414f.1677288789.git.nicolinc@nvidia.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Andreas Hindborg <nmi@metaspace.dk>, Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        kernel test robot <lkp@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230224200502.391570-1-nmi@metaspace.dk> <ZAAPBFfqP671N4ue@T590>
- <87o7pblhi1.fsf@metaspace.dk>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <87o7pblhi1.fsf@metaspace.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BL1PR11MB5335:EE_
+x-ms-office365-filtering-correlation-id: b5f3fbb6-a059-49df-90e4-08db1af752cd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OCnKIOstA1cESaOL9j6N3f8gEpMPt1QPNZU3uEgXSdHRRcCI18KH8QpMN4Y1Ed9IskMCJBu2dp0JzW5b7tr3ODbKpUqD+KnorcFdAFaD3A+AhnP1oDeIHJye3jrcXd1FajgB20y4KVtIUSbWdFzP8WY/k6tUHZGFTHeL+6RPcB9SzRYlJpg6Yg3yN/IP6IpiiJaSwRV7ynf64aS539AemrvjDplSGv7g8ZnchLxioDddBbWUwOOIr8sGwRoyC8b0n0Og7EWDzhIeKbcFcksWPTuF/LojR9Z+fZxh2ULXFzOWLE8M+P7qtklULfC0BEkk1MDRxlrwRHuzo5kUoVmAS130+cn7sbWB9Kj4DNGJWT9oHZKqet7JzjcbaqmPsK9XWSDv9S8UEuqSvu8X1z1nKtN2KTbf9STsIUfG1NutO9vIBrRrhJloiGdTZHTTx7N9mJDWGDBcnVrzx1X24Yp019CylfYxI/FZBvclzgZqAMK7JONlu8kCXpf1Y29hLJ8tJ9D8fOOSwTx/mT2JtjLpSUnvBdTSrpw/G9XPjB9zUBaDIQ+AwHKHewcvaOe5hm1/eKblrQKelEjh5ACh4o3xhQHfZv1rtS1zC88cLKXJXC8KHJR7ugZ10gYYsg+Yp0QS4PjLJpGwarArxjVaRsCm1xoAWzY/EXjOHCqSFfYZG5Wcs6uqn+BWXn9eU0mzv4bw
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(366004)(346002)(136003)(39860400002)(376002)(451199018)(83380400001)(122000001)(38100700002)(8936002)(5660300002)(478600001)(82960400001)(7416002)(66946007)(55016003)(33656002)(86362001)(71200400001)(38070700005)(26005)(186003)(9686003)(6506007)(76116006)(64756008)(66446008)(66476007)(66556008)(4744005)(7696005)(2906002)(52536014)(8676002)(316002)(4326008)(41300700001)(110136005)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?aW9Q+r+KyIcePTQfHi3avtzCZLdQvg2BlqpLEEz3+tXB/eiZc/e6BqyMm6yB?=
+ =?us-ascii?Q?zT4oCEiuO8bIVU0KvWrBJQ3YhZR5XYyrabP/9YpGCNqkaGZoo0PZq3oakGa1?=
+ =?us-ascii?Q?i2tkB0bxd65ph4zIqOLEBMr+geXfkpc7UnxH8oVoveDvHEYjQx/fyrTtyc0a?=
+ =?us-ascii?Q?Vu3gEeFiS7N6zLEKN6g6MGx4ZAeiZjY/uHDHdqPPI/blMKT7J5z6Xx1NAFKH?=
+ =?us-ascii?Q?yIsnyDTAixza8jtKYtlGdqpP73Ki9It7L5uGM2fjxS2GHV/EoLX+GX6MKtwg?=
+ =?us-ascii?Q?OrO0O/9/i2gdO5uTNyQuyCHDdjUHO33au5LjA22VP1xzEVSBJLZiYl++EM+d?=
+ =?us-ascii?Q?C4zbzin8IlY5SYv0FzFce3x97umhyE2tjFJ0ZZEABUnCvD9cughgR+9kcf46?=
+ =?us-ascii?Q?RohBkhSxQ0c/9Y6JXCZ+yBmpNmZJFiaua7lcpo8TjnoVWpgqJoxSuqldlFBg?=
+ =?us-ascii?Q?BoI3GhWDIHPUmpVmE/rVRQoEdL3Vjk5Npuv0O0JE4MLnsrJrQQJ6xDxeWhWr?=
+ =?us-ascii?Q?B4TXe/RopCkZAxOmKtNuOldAe0YQtDX1uPdsHJgTbzv3esXtirKn62KfS3KE?=
+ =?us-ascii?Q?jgKzV5lb4MRtAxqrVlhJqnHLFQ81Fg1zVvpixxhVh2RENc57VMTFmKnUO9WZ?=
+ =?us-ascii?Q?mLYp+SP4AxakJlQCC78MMN0+p14y6ocyWxQknhyBEnCyZjkLf0ezsAdTO09k?=
+ =?us-ascii?Q?8lHH8Cpm+iLPxUN+cm1EebYKXBIGSo33GiGUHXfVkchjOnDJQHF671XYoW2R?=
+ =?us-ascii?Q?OR60WZj1161PubSFAnEKyAAzn6O95hqAQVH8F0GXmq//DxNboXIf5wa/7aHk?=
+ =?us-ascii?Q?epg73IB/oKzZ7a2/PKEqije1xzdG1uQvg9oBrHHSbCSegkEIvAxbf4Gy+//J?=
+ =?us-ascii?Q?R7n/xae1Mzb7AWsz024AQVb4ADwctwAosfoYhlTGqPIOReNemHmHPDEq4j9E?=
+ =?us-ascii?Q?9vEJ1NdcmFJ4rH5R0imTr7/iY/DgB+KU0tE7i9OS8II8wAz9Gj9HMg72/bkJ?=
+ =?us-ascii?Q?rL576o2Si4R3NunRO4FK25tlSAqHwQlT5vJwhgATTDrpsarkiNfSgjx6YgeY?=
+ =?us-ascii?Q?RTdJuFlpN34No0ecRRGIvwP6Nin84DDLDMCDR8URkMSSPevIJVdE+a0xx/Mu?=
+ =?us-ascii?Q?GqClYphQtOefP3vnIvKcLHbvBbX7lF0wRRP7746Gc9easvA4d9gOcR/cQhIE?=
+ =?us-ascii?Q?ZCQhCg1F0hDp7EN3fBBb+hfY2ac1esg96tm4qA/jYkYVn6bwsyo55psJpjMv?=
+ =?us-ascii?Q?nTRDA15zn/+KdhUe9MyClR1pIRHotEmmnXu1s2FMDxl6oJoykECWaJt51cQW?=
+ =?us-ascii?Q?uecD3NkInWKRx6vqfDyJTuZR3UXdO+uorbIoHDsYqnQneg9SJZNTT4jMAlY5?=
+ =?us-ascii?Q?uRIdjPrdk7elArWlmhQIszuH2FeX+faskXtwwmoRAzzGCAHVN2SlvQraWLxi?=
+ =?us-ascii?Q?XOwnIi/GTPU5S7Wm1a3mcaRnbSgNzwa8RD3cqaSEm8GM4S+fP2/go1VMyyxX?=
+ =?us-ascii?Q?nXiPKxPzsygNe0oBdDGasezRUcMhPdKd83/rOCTuZtcB8Ys8Itac3iFkqoOQ?=
+ =?us-ascii?Q?qeYz6fzIVbwxJpVrq/bSJjnHHaTlwZ/7ierbzxJy?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5f3fbb6-a059-49df-90e4-08db1af752cd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 08:22:55.1348
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kAP9JoxJvbYcFdTH96M8RZS/NqTSZJmIQPN6TZhNR0z5Mu8eYZmCExBGXqDt1Z492ORrg369vEoKNeNolyw54g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5335
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 16:31, Andreas Hindborg wrote:
->>> +struct ublk_param_zoned {
->>> +	__u64	max_open_zones;
->>> +	__u64	max_active_zones;
->>> +	__u64	max_append_size;
->>> +};
->>
->> Is the above zoned parameter enough for future extension?
->> Does ZNS need extra parameter? Or some zoned new(important) features?
-> 
-> @Damien, @Hans, @Matias, what do you think?
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Saturday, February 25, 2023 9:52 AM
+>=20
+> A driver that doesn't implement ops->dma_unmap shouldn't be allowed to
+> do
+> vfio_pin/unpin_pages(), though it can use vfio_dma_rw() to access an iova
+> range. Deny !ops->dma_unmap cases in vfio_pin/unpin_pages().
+>=20
+> Suggested-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 
-Yes, add some reserved fields. The struct is 24 B for now, you can make it 32 B.
-But it is a little odd: why 64 bits for max open/active zones and max append ?
-bio len is 32 bits and number of zones also 32 bits. You do not need 64 bits for
-all these fields. Also, no zone model reported with this ? What about write
-granularity (for SMR HDDs) too ?
-
-So something like:
-
-struct ublk_param_zoned {
-	__u32	model;
-	__u32	write_granularity;
-	__u32	max_open_zones;
-	__u32	max_active_zones;
-	__u32	max_append_size;
-	__u8	reserved[12];
-};
-
-looks better to me. Note sure about the need for model and write_granularity
-here though. I did not follow zoned ublk patches.
-
-
--- 
-Damien Le Moal
-Western Digital Research
-
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
