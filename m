@@ -2,65 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E136A7910
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCBE6A7916
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjCBBi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 20:38:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
+        id S229616AbjCBBlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 20:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjCBBio (ORCPT
+        with ESMTP id S229471AbjCBBln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:38:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C9137B61;
-        Wed,  1 Mar 2023 17:38:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6AA761543;
-        Thu,  2 Mar 2023 01:38:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53C4C4339B;
-        Thu,  2 Mar 2023 01:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677721110;
-        bh=8V/QzCKxoD3493UXD/fF79fcE0FqXapWjtJR7YpxH1U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oQSOuVS5Mo1uHlylczcUBWIFIj3dtpl6ppG3ilqpFnPZgekhqFNCX0Dkl/P5GQUSO
-         ZYOkUN+WfAijW/KzyfW+fOcyYhvWoTxWMd6wcHLj48Jw5LUdNDmYrpCOXAJcqhzONu
-         j3t5S85JnvwSQQE+Ua3OALKQci40SB7Vi68jgkTrYsV+Yz/PMjHGM3WyboWZvnhZPx
-         HpB9hTg8ht5Z/U9IEAP7gVSc3O1Y5bCJ8vtkpAucL+MzizProarnnhDXlNBPqaDaEw
-         Luwlu47wgwLL2fuS0C2JcYJ1R2/zf+Xy+tc9DAT8lv65DDKsCCpeqQs7HRRMimkGh2
-         aPeeUN/lMwOrQ==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH 8/8] clk: Add KUnit tests for clks registered with struct clk_parent_data
-Date:   Wed,  1 Mar 2023 17:38:21 -0800
-Message-Id: <20230302013822.1808711-9-sboyd@kernel.org>
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-In-Reply-To: <20230302013822.1808711-1-sboyd@kernel.org>
-References: <20230302013822.1808711-1-sboyd@kernel.org>
+        Wed, 1 Mar 2023 20:41:43 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB10957D39;
+        Wed,  1 Mar 2023 17:41:11 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321KRMSx003384;
+        Thu, 2 Mar 2023 01:40:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=t+ox/ua+WNtH76S6Rpnio0sQR5LltkxRqkoaHGKqzc4=;
+ b=Wjh/xxP4FmDM3mBJTljDkC/nVkpZLJlwanXO7Bx16hZN2VPIr5hf1/UHAnCb7oY1d+2p
+ ZkII8EV02Y3IEJBXuhVc3LMXfhwY++bCjtmNVm9SM4GkVOvDsEWKY8zGqyo9qGRcx89h
+ KmqQqPmlmUAIwYauUu+3/WC4KISw+h1+v9dAKqU8u29tIw1iMd6g4519JfNIj5uNeMgI
+ IR7hoqmzimHSozO5HjH4Zsy0Pk7qoYiLvkpqQsEBNJGzJJTekkax4xumn8dSX74S7OB0
+ HkIuKST7oq6CZPEPcQccX5euVNEJLt53rrUPeRpGy2O7+KUgh8RBbdugA0osKmo8zejN uQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p25jwj2jk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 01:40:29 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3221eSeG023002
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Mar 2023 01:40:28 GMT
+Received: from [10.134.65.165] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 1 Mar 2023
+ 17:40:27 -0800
+Message-ID: <9003dd79-00eb-72d4-18e5-51c0f52833f8@quicinc.com>
+Date:   Wed, 1 Mar 2023 17:40:26 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 03/26] gunyah: Common types and error codes for Gunyah
+ hypercalls
+Content-Language: en-US
+To:     Alex Elder <alex.elder@linaro.org>, Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214211229.3239350-4-quic_eberman@quicinc.com>
+ <5d67ee67-e63f-1393-1455-bfb6b2ddaeb5@linaro.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <5d67ee67-e63f-1393-1455-bfb6b2ddaeb5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: XcWIMnHC-9wL9xi4R89QapkhQrFr9KaT
+X-Proofpoint-ORIG-GUID: XcWIMnHC-9wL9xi4R89QapkhQrFr9KaT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-01_17,2023-03-01_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 mlxlogscore=676 spamscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 suspectscore=0 phishscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2303020011
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,534 +99,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test that clks registered with 'struct clk_parent_data' work as
-intended and can find their parents.
 
-Cc: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <davidgow@google.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/clk_test.c    | 456 +++++++++++++++++++++++++++++++++++++-
- drivers/of/kunit/clk.dtsi |  15 ++
- 2 files changed, 470 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index f9a5c2964c65..ad63958b809d 100644
---- a/drivers/clk/clk_test.c
-+++ b/drivers/clk/clk_test.c
-@@ -4,10 +4,14 @@
-  */
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
- 
- /* Needed for clk_hw_get_clk() */
- #include "clk.h"
-+#include "clk-kunit.h"
- 
-+#include <kunit/platform_driver.h>
- #include <kunit/test.h>
- 
- #define DUMMY_CLOCK_INIT_RATE	(42 * 1000 * 1000)
-@@ -2394,6 +2398,454 @@ static struct kunit_suite clk_mux_notifier_test_suite = {
- 	.test_cases = clk_mux_notifier_test_cases,
- };
- 
-+struct clk_register_clk_parent_data_test_case {
-+	const char *desc;
-+	struct clk_parent_data pdata;
-+};
-+
-+static void
-+clk_register_clk_parent_data_test_case_to_desc(
-+		const struct clk_register_clk_parent_data_test_case *t, char *desc)
-+{
-+	strcpy(desc, t->desc);
-+}
-+
-+static const struct clk_register_clk_parent_data_test_case
-+clk_register_clk_parent_data_of_cases[] = {
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device_node can
-+		 * find a parent based on struct clk_parent_data::index.
-+		 */
-+		.desc = "clk_parent_data_of_index_test",
-+		.pdata.index = 0,
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device_node can
-+		 * find a parent based on struct clk_parent_data::fwname.
-+		 */
-+		.desc = "clk_parent_data_of_fwname_test",
-+		.pdata.fw_name = "parent_fwname",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device_node can
-+		 * find a parent based on struct clk_parent_data::name.
-+		 */
-+		.desc = "clk_parent_data_of_name_test",
-+		/* The index must be negative to indicate firmware not used */
-+		.pdata.index = -1,
-+		.pdata.name = "1mhz_fixed_legacy",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device_node can
-+		 * find a parent based on struct
-+		 * clk_parent_data::{fw_name,name}.
-+		 */
-+		.desc = "clk_parent_data_of_fwname_name_test",
-+		.pdata.fw_name = "parent_fwname",
-+		.pdata.name = "not_matching",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device_node can
-+		 * find a parent based on struct clk_parent_data::{index,name}.
-+		 * Index takes priority.
-+		 */
-+		.desc = "clk_parent_data_of_index_name_priority_test",
-+		.pdata.index = 0,
-+		.pdata.name = "not_matching",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device_node can
-+		 * find a parent based on struct
-+		 * clk_parent_data::{index,fwname,name}. The fw_name takes
-+		 * priority over index and name.
-+		 */
-+		.desc = "clk_parent_data_of_index_fwname_name_priority_test",
-+		.pdata.index = 1,
-+		.pdata.fw_name = "parent_fwname",
-+		.pdata.name = "not_matching",
-+	},
-+};
-+
-+KUNIT_ARRAY_PARAM(clk_register_clk_parent_data_of_test, clk_register_clk_parent_data_of_cases,
-+		  clk_register_clk_parent_data_test_case_to_desc)
-+
-+/**
-+ * struct clk_register_clk_parent_data_of_ctx - Context for clk_parent_data OF tests
-+ * @np: device node of clk under test
-+ * @hw: clk_hw for clk under test
-+ */
-+struct clk_register_clk_parent_data_of_ctx {
-+	struct device_node *np;
-+	struct clk_hw hw;
-+};
-+
-+static int clk_register_clk_parent_data_of_test_init(struct kunit *test)
-+{
-+	struct clk_register_clk_parent_data_of_ctx *ctx;
-+
-+	if (!IS_ENABLED(CONFIG_OF_KUNIT))
-+		kunit_skip(test, "requires CONFIG_OF_KUNIT");
-+
-+	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+	test->priv = ctx;
-+
-+	ctx->np = of_find_compatible_node(NULL, NULL, "linux,clk-kunit-parent-data");
-+	if (!ctx->np)
-+		return -ENODEV;
-+
-+	return 0;
-+}
-+
-+static void clk_register_clk_parent_data_of_test_exit(struct kunit *test)
-+{
-+	struct clk_register_clk_parent_data_of_ctx *ctx = test->priv;
-+
-+	of_node_put(ctx->np);
-+}
-+
-+/*
-+ * Test that a clk registered with a struct device_node can find a parent based on
-+ * struct clk_parent_data when the hw member isn't set.
-+ */
-+static void clk_register_clk_parent_data_of_test(struct kunit *test)
-+{
-+	struct clk_register_clk_parent_data_of_ctx *ctx = test->priv;
-+	struct clk_hw *parent_hw;
-+	const struct clk_register_clk_parent_data_test_case *test_param;
-+	struct clk_init_data init = { };
-+	struct clk *expected_parent, *actual_parent;
-+
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->np);
-+
-+	expected_parent = kunit_of_clk_get(test, ctx->np, 0);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected_parent);
-+
-+	test_param = test->param_value;
-+	init.parent_data = &test_param->pdata;
-+	init.num_parents = 1;
-+	init.name = "parent_data_of_test_clk";
-+	init.ops = &clk_dummy_single_parent_ops;
-+	ctx->hw.init = &init;
-+	KUNIT_ASSERT_EQ(test, 0, kunit_of_clk_hw_register(test, ctx->np, &ctx->hw));
-+
-+	parent_hw = clk_hw_get_parent(&ctx->hw);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent_hw);
-+
-+	actual_parent = kunit_clk_hw_get_clk(test, parent_hw, __func__);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, actual_parent);
-+
-+	KUNIT_EXPECT_TRUE(test, clk_is_match(expected_parent, actual_parent));
-+}
-+
-+static struct kunit_case clk_register_clk_parent_data_of_test_cases[] = {
-+	KUNIT_CASE_PARAM(clk_register_clk_parent_data_of_test,
-+			 clk_register_clk_parent_data_of_test_gen_params),
-+	{}
-+};
-+
-+/*
-+ * Test suite for registering clks with struct clk_parent_data and a struct
-+ * device_node.
-+ */
-+static struct kunit_suite clk_register_clk_parent_data_of_suite = {
-+	.name = "clk_register_clk_parent_data_of",
-+	.init = clk_register_clk_parent_data_of_test_init,
-+	.exit = clk_register_clk_parent_data_of_test_exit,
-+	.test_cases = clk_register_clk_parent_data_of_test_cases,
-+};
-+
-+/**
-+ * struct clk_register_clk_parent_data_device_ctx - Context for clk_parent_data device tests
-+ * @dev: device of clk under test
-+ * @hw: clk_hw for clk under test
-+ * @pdrv: driver to attach to find @dev
-+ */
-+struct clk_register_clk_parent_data_device_ctx {
-+	struct device *dev;
-+	struct clk_hw hw;
-+	struct platform_driver pdrv;
-+};
-+
-+static inline struct clk_register_clk_parent_data_device_ctx *
-+clk_register_clk_parent_data_driver_to_test_context(struct platform_device *pdev)
-+{
-+	return container_of(to_platform_driver(pdev->dev.driver),
-+			    struct clk_register_clk_parent_data_device_ctx, pdrv);
-+}
-+
-+static int clk_register_clk_parent_data_device_probe(struct platform_device *pdev)
-+{
-+	struct clk_register_clk_parent_data_device_ctx *ctx;
-+
-+	ctx = clk_register_clk_parent_data_driver_to_test_context(pdev);
-+	ctx->dev = &pdev->dev;
-+
-+	return 0;
-+}
-+
-+static void clk_register_clk_parent_data_device_driver(struct kunit *test)
-+{
-+	struct clk_register_clk_parent_data_device_ctx *ctx = test->priv;
-+	static const struct of_device_id match_table[] = {
-+		{ .compatible = "linux,clk-kunit-parent-data" },
-+		{ }
-+	};
-+
-+	ctx->pdrv.probe = clk_register_clk_parent_data_device_probe;
-+	ctx->pdrv.driver.of_match_table = match_table;
-+	ctx->pdrv.driver.name = __func__;
-+	ctx->pdrv.driver.owner = THIS_MODULE;
-+
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_driver_register(test, &ctx->pdrv));
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->dev);
-+}
-+
-+static const struct clk_register_clk_parent_data_test_case
-+clk_register_clk_parent_data_device_cases[] = {
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::index.
-+		 */
-+		.desc = "clk_parent_data_device_index_test",
-+		.pdata.index = 1,
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::fwname.
-+		 */
-+		.desc = "clk_parent_data_device_fwname_test",
-+		.pdata.fw_name = "50",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::name.
-+		 */
-+		.desc = "clk_parent_data_device_name_test",
-+		/* The index must be negative to indicate firmware not used */
-+		.pdata.index = -1,
-+		.pdata.name = "50_clk",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::{fw_name,name}.
-+		 */
-+		.desc = "clk_parent_data_device_fwname_name_test",
-+		.pdata.fw_name = "50",
-+		.pdata.name = "not_matching",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::{index,name}. Index
-+		 * takes priority.
-+		 */
-+		.desc = "clk_parent_data_device_index_name_priority_test",
-+		.pdata.index = 1,
-+		.pdata.name = "not_matching",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::{index,fwname,name}.
-+		 * The fw_name takes priority over index and name.
-+		 */
-+		.desc = "clk_parent_data_device_index_fwname_name_priority_test",
-+		.pdata.index = 0,
-+		.pdata.fw_name = "50",
-+		.pdata.name = "not_matching",
-+	},
-+};
-+
-+KUNIT_ARRAY_PARAM(clk_register_clk_parent_data_device_test,
-+		  clk_register_clk_parent_data_device_cases,
-+		  clk_register_clk_parent_data_test_case_to_desc)
-+
-+/*
-+ * Test that a clk registered with a struct device can find a parent based on
-+ * struct clk_parent_data when the hw member isn't set.
-+ */
-+static void clk_register_clk_parent_data_device_test(struct kunit *test)
-+{
-+	struct clk_register_clk_parent_data_device_ctx *ctx;
-+	const struct clk_register_clk_parent_data_test_case *test_param;
-+	struct clk_hw *parent_hw;
-+	struct clk_init_data init = { };
-+	struct clk *expected_parent, *actual_parent;
-+
-+	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-+	test->priv = ctx;
-+
-+	clk_register_clk_parent_data_device_driver(test);
-+
-+	expected_parent = kunit_clk_get(test, ctx->dev, "50");
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected_parent);
-+
-+	test_param = test->param_value;
-+	init.parent_data = &test_param->pdata;
-+	init.num_parents = 1;
-+	init.name = "parent_data_device_test_clk";
-+	init.ops = &clk_dummy_single_parent_ops;
-+	ctx->hw.init = &init;
-+	KUNIT_ASSERT_EQ(test, 0, kunit_clk_hw_register(test, ctx->dev, &ctx->hw));
-+
-+	parent_hw = clk_hw_get_parent(&ctx->hw);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent_hw);
-+
-+	actual_parent = kunit_clk_hw_get_clk(test, parent_hw, __func__);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, actual_parent);
-+
-+	KUNIT_EXPECT_TRUE(test, clk_is_match(expected_parent, actual_parent));
-+}
-+
-+static const struct clk_register_clk_parent_data_test_case
-+clk_register_clk_parent_data_device_hw_cases[] = {
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::hw.
-+		 */
-+		.desc = "clk_parent_data_device_hw_index_test",
-+		/* The index must be negative to indicate firmware not used */
-+		.pdata.index = -1,
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::hw when
-+		 * struct clk_parent_data::fw_name is set.
-+		 */
-+		.desc = "clk_parent_data_device_hw_fwname_test",
-+		.pdata.fw_name = "50",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::hw when struct
-+		 * clk_parent_data::name is set.
-+		 */
-+		.desc = "clk_parent_data_device_hw_name_test",
-+		/* The index must be negative to indicate firmware not used */
-+		.pdata.index = -1,
-+		.pdata.name = "50_clk",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::hw when struct
-+		 * clk_parent_data::{fw_name,name} are set.
-+		 */
-+		.desc = "clk_parent_data_device_hw_fwname_name_test",
-+		.pdata.fw_name = "50",
-+		.pdata.name = "not_matching",
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::hw when struct
-+		 * clk_parent_data::index is set. The hw pointer takes
-+		 * priority.
-+		 */
-+		.desc = "clk_parent_data_device_hw_index_priority_test",
-+		.pdata.index = 0,
-+	},
-+	{
-+		/*
-+		 * Test that a clk registered with a struct device can find a
-+		 * parent based on struct clk_parent_data::hw when
-+		 * struct clk_parent_data::{index,fwname,name} are set.
-+		 * The hw pointer takes priority over everything else.
-+		 */
-+		.desc = "clk_parent_data_device_hw_index_fwname_name_priority_test",
-+		.pdata.index = 0,
-+		.pdata.fw_name = "50",
-+		.pdata.name = "not_matching",
-+	},
-+};
-+
-+KUNIT_ARRAY_PARAM(clk_register_clk_parent_data_device_hw_test,
-+		  clk_register_clk_parent_data_device_hw_cases,
-+		  clk_register_clk_parent_data_test_case_to_desc)
-+
-+/*
-+ * Test that a clk registered with a struct device can find a
-+ * parent based on struct clk_parent_data::hw.
-+ */
-+static void clk_register_clk_parent_data_device_hw_test(struct kunit *test)
-+{
-+	struct clk_register_clk_parent_data_device_ctx *ctx;
-+	const struct clk_register_clk_parent_data_test_case *test_param;
-+	struct clk_dummy_context *parent;
-+	struct clk_hw *parent_hw;
-+	struct clk_parent_data pdata = { };
-+	struct clk_init_data init = { };
-+
-+	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-+	test->priv = ctx;
-+
-+	clk_register_clk_parent_data_device_driver(test);
-+
-+	parent = kunit_kzalloc(test, sizeof(*parent), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
-+
-+	parent_hw = &parent->hw;
-+	parent_hw->init = CLK_HW_INIT_NO_PARENT("parent-clk",
-+						&clk_dummy_rate_ops, 0);
-+
-+	KUNIT_ASSERT_EQ(test, 0, kunit_clk_hw_register(test, ctx->dev, parent_hw));
-+
-+	test_param = test->param_value;
-+	memcpy(&pdata, &test_param->pdata, sizeof(pdata));
-+	pdata.hw = parent_hw;
-+	init.parent_data = &pdata;
-+	init.num_parents = 1;
-+	init.ops = &clk_dummy_single_parent_ops;
-+	init.name = "parent_data_device_hw_test_clk";
-+	ctx->hw.init = &init;
-+	KUNIT_ASSERT_EQ(test, 0, kunit_clk_hw_register(test, ctx->dev, &ctx->hw));
-+
-+	KUNIT_EXPECT_PTR_EQ(test, parent_hw, clk_hw_get_parent(&ctx->hw));
-+}
-+
-+static struct kunit_case clk_register_clk_parent_data_device_test_cases[] = {
-+	KUNIT_CASE_PARAM(clk_register_clk_parent_data_device_test,
-+			 clk_register_clk_parent_data_device_test_gen_params),
-+	KUNIT_CASE_PARAM(clk_register_clk_parent_data_device_hw_test,
-+			 clk_register_clk_parent_data_device_hw_test_gen_params),
-+	{}
-+};
-+
-+static int clk_register_clk_parent_data_device_init(struct kunit *test)
-+{
-+	if (!IS_ENABLED(CONFIG_OF_KUNIT))
-+		kunit_skip(test, "requires CONFIG_OF_KUNIT");
-+
-+	return 0;
-+}
-+
-+/*
-+ * Test suite for registering clks with struct clk_parent_data and a struct
-+ * device.
-+ */
-+static struct kunit_suite clk_register_clk_parent_data_device_suite = {
-+	.name = "clk_register_clk_parent_data_device",
-+	.init = clk_register_clk_parent_data_device_init,
-+	.test_cases = clk_register_clk_parent_data_device_test_cases,
-+};
-+
- kunit_test_suites(
- 	&clk_leaf_mux_set_rate_parent_test_suite,
- 	&clk_test_suite,
-@@ -2405,7 +2857,9 @@ kunit_test_suites(
- 	&clk_range_test_suite,
- 	&clk_range_maximize_test_suite,
- 	&clk_range_minimize_test_suite,
-+	&clk_register_clk_parent_data_of_suite,
-+	&clk_register_clk_parent_data_device_suite,
- 	&clk_single_parent_mux_test_suite,
--	&clk_uncached_test_suite
-+	&clk_uncached_test_suite,
- );
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/of/kunit/clk.dtsi b/drivers/of/kunit/clk.dtsi
-index e3466bcfeb4b..4ac14dd78063 100644
---- a/drivers/of/kunit/clk.dtsi
-+++ b/drivers/of/kunit/clk.dtsi
-@@ -6,10 +6,25 @@ fixed_50MHz: clock-50MHz {
- 		#clock-cells = <0>;
- 		clock-frequency = <50000000>;
- 		clock-accuracy = <300>;
-+		clock-output-names = "50_clk";
- 	};
- 
- 	clock-consumer-fixed-50 {
- 		compatible = "linux,clk-kunit-fixed-rate";
- 		clocks = <&fixed_50MHz>;
- 	};
-+
-+	fixed_parent: clock-1MHz {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <1000000>;
-+		clock-output-names = "1mhz_fixed_legacy";
-+	};
-+
-+	clock-provider-of {
-+		compatible = "linux,clk-kunit-parent-data";
-+		clocks = <&fixed_parent>, <&fixed_50MHz>;
-+		clock-names = "parent_fwname", "50";
-+		#clock-cells = <1>;
-+	};
- };
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+On 2/23/2023 1:58 PM, Alex Elder wrote:
+> On 2/14/23 3:12 PM, Elliot Berman wrote:
+>> Add architecture-independent standard error codes, types, and macros for
+>> Gunyah hypercalls.
+>>
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>> ---
+>>   include/linux/gunyah.h | 82 ++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 82 insertions(+)
+>>   create mode 100644 include/linux/gunyah.h
+>>
+>> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
+>> new file mode 100644
+>> index 000000000000..59ef4c735ae8
+>> --- /dev/null
+>> +++ b/include/linux/gunyah.h
+>> @@ -0,0 +1,82 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
+>> rights reserved.
+>> + */
+>> +
+>> +#ifndef _LINUX_GUNYAH_H
+>> +#define _LINUX_GUNYAH_H
+>> +
+>> +#include <linux/errno.h>
+>> +#include <linux/limits.h>
+>> +
+>> +/******************************************************************************/
+>> +/* Common arch-independent definitions for Gunyah 
+>> hypercalls                  */
+>> +#define GH_CAPID_INVAL    U64_MAX
+>> +#define GH_VMID_ROOT_VM    0xff
+>> +
+>> +enum gh_error {
+>> +    GH_ERROR_OK            = 0,
+>> +    GH_ERROR_UNIMPLEMENTED        = -1,
+>> +    GH_ERROR_RETRY            = -2,
+> 
+> Do you expect this type to have a particular size?
+> Since you specify negative values, it matters, and
+> it's possible that this forces it to be a 4-byte value
+> (though I'm not sure what the rules are).  In other
+> words, UNIMPLEMENTED could conceivably have value 0xff
+> or 0xffffffff.  I'm not even sure you can tell whether
+> an enum is interpreted as signed or unsigned.
 
+I'm not a C expert, but my understanding is that enums are signed. 
+Gunyah will be returning a signed 64-bit register, however there's no 
+intention to go beyond 32 bits of error codes since we want to work on 
+32-bit architectures.
+
+> 
+> It's not usually a good thing to do, but this *could*
+> be a case where you do a typedef to represent this as
+> a signed value of a certain bit width.  (But don't do
+> that unless someone else says that's worth doing.)
+> 
+>                      -Alex
+> 
+>> +
+>> +    GH_ERROR_ARG_INVAL        = 1,
+>> +    GH_ERROR_ARG_SIZE        = 2,
+>> +    GH_ERROR_ARG_ALIGN        = 3,
+>> +
+>> +    GH_ERROR_NOMEM            = 10,
+>> +
+>> +    GH_ERROR_ADDR_OVFL        = 20,
+>> +    GH_ERROR_ADDR_UNFL        = 21,
+>> +    GH_ERROR_ADDR_INVAL        = 22,
+>> +
+>> +    GH_ERROR_DENIED            = 30,
+>> +    GH_ERROR_BUSY            = 31,
+>> +    GH_ERROR_IDLE            = 32,
+>> +
+>> +    GH_ERROR_IRQ_BOUND        = 40,
+>> +    GH_ERROR_IRQ_UNBOUND        = 41,
+>> +
+>> +    GH_ERROR_CSPACE_CAP_NULL    = 50,
+>> +    GH_ERROR_CSPACE_CAP_REVOKED    = 51,
+>> +    GH_ERROR_CSPACE_WRONG_OBJ_TYPE    = 52,
+>> +    GH_ERROR_CSPACE_INSUF_RIGHTS    = 53,
+>> +    GH_ERROR_CSPACE_FULL        = 54,
+>> +
+>> +    GH_ERROR_MSGQUEUE_EMPTY        = 60,
+>> +    GH_ERROR_MSGQUEUE_FULL        = 61,
+>> +};
+>> +
+>> +/**
+>> + * gh_remap_error() - Remap Gunyah hypervisor errors into a Linux 
+>> error code
+>> + * @gh_error: Gunyah hypercall return value
+>> + */
+>> +static inline int gh_remap_error(enum gh_error gh_error)
+>> +{
+>> +    switch (gh_error) {
+>> +    case GH_ERROR_OK:
+>> +        return 0;
+>> +    case GH_ERROR_NOMEM:
+>> +        return -ENOMEM;
+>> +    case GH_ERROR_DENIED:
+>> +    case GH_ERROR_CSPACE_CAP_NULL:
+>> +    case GH_ERROR_CSPACE_CAP_REVOKED:
+>> +    case GH_ERROR_CSPACE_WRONG_OBJ_TYPE:
+>> +    case GH_ERROR_CSPACE_INSUF_RIGHTS:
+>> +    case GH_ERROR_CSPACE_FULL:
+>> +        return -EACCES;
+>> +    case GH_ERROR_BUSY:
+>> +    case GH_ERROR_IDLE:
+>> +    case GH_ERROR_IRQ_BOUND:
+>> +    case GH_ERROR_IRQ_UNBOUND:
+>> +    case GH_ERROR_MSGQUEUE_FULL:
+>> +    case GH_ERROR_MSGQUEUE_EMPTY:
+> 
+> Is an empty message queue really busy?
+> 
+
+Changed to -EIO.
+
+>> +        return -EBUSY;
+>> +    case GH_ERROR_UNIMPLEMENTED:
+>> +    case GH_ERROR_RETRY:
+>> +        return -EOPNOTSUPP;
+>> +    default:
+>> +        return -EINVAL;
+>> +    }
+>> +}
+>> +
+>> +#endif
+> 
