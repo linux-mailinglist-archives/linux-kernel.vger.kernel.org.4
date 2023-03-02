@@ -2,99 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593C96A8210
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C3B6A8215
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjCBMU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S229600AbjCBMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjCBMU0 (ORCPT
+        with ESMTP id S229494AbjCBMVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:20:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED30341B7A;
-        Thu,  2 Mar 2023 04:20:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79761615A4;
-        Thu,  2 Mar 2023 12:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38027C433D2;
-        Thu,  2 Mar 2023 12:20:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677759624;
-        bh=UkLrRZGFWz4j9QDCZEWFzdN5QysERiBI8gpLVzs0Ss8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jc+2QXJZDZRysL8lvu7f7BBWGcMnP656F43eWCBBO6elfthqASaUNwc8v0VOImKy/
-         njDycTe4B8sWChXD2RV62gSsRmf2IXDanTXbNF8NU7W4Wdq+1peRTUvrAyGorQXsBJ
-         GnuSyD0azT3DH65uaO2zWZM8v0uFdNxvsMdZ/JiOyi9jUQQVS9q/2NhTPmCx19dpIy
-         yWunxw9UuUMhics9ohLCBvKmDiH0bKBh6SI/+wUuayFXwxTD9Z9C1guTl6bsDuYDat
-         J0Y4U69qR1lhbkq474DsoGGasaSPrWg54Dul3Wt+RWUQq1czUW3TA9hwA06kK5bShG
-         JY6fj0Oxuj/Dw==
-Date:   Thu, 2 Mar 2023 12:20:18 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     richard.leitner@linux.dev
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ladislav Michl <ladis@linux-mips.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: Re: [PATCH 3/3] ASoC: maxim,max9867: add "mclk" support
-Message-ID: <b0a5c0c2-dfbd-460a-af0d-c9d498607d72@sirena.org.uk>
-References: <20230302-max9867-v1-0-aa9f7f25db5e@skidata.com>
- <20230302-max9867-v1-3-aa9f7f25db5e@skidata.com>
+        Thu, 2 Mar 2023 07:21:49 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15743BDB2;
+        Thu,  2 Mar 2023 04:21:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677759705; x=1709295705;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Of/AsuqTwoVolH92KoxBEtDCauJhEREASxt+u67TwW4=;
+  b=dB4cOwx5cIvsVsp8mIVusPsF52U3dykltZBcsNi9FibK5yiM8W33DjU+
+   lwnsO0cf/H3YQq7s1U1qg59bA87hy7VKsdC53yhV9i2Y4D35U/k4DYK90
+   LuJaFMEwuIh/r2U4iC4cpEfZahEkvb4yS5WFzo676IVoAcoje6AVxVq1A
+   bQCWDW+Aw9snFE8au0Wfx1j13J4zWHJDEkuliYyGMlym7963O8eeXvTD4
+   SYVP7//d50dcLPn0BfU2Pbkxm6L58yxMElRHzaUUUMBvZ4bY0hsG3AZ+u
+   BuL4Hyr4+kD5fshDeSKmJ9eLJKij0Gj8Ldrs4ScEkP4Uh/t3ZmmE05j4b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="397270902"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="397270902"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 04:21:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="817988909"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="817988909"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.214.218]) ([10.254.214.218])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 04:21:35 -0800
+Message-ID: <5b441119-59ff-997f-ee59-a062ac2ddcca@linux.intel.com>
+Date:   Thu, 2 Mar 2023 20:21:33 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vZhJFgRVoDnGJw+Q"
-Content-Disposition: inline
-In-Reply-To: <20230302-max9867-v1-3-aa9f7f25db5e@skidata.com>
-X-Cookie: Who messed with my anti-paranoia shot?
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v4 2/6] iommu/sva: Move PASID helpers to sva code
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
+ <20230301235646.2692846-3-jacob.jun.pan@linux.intel.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230301235646.2692846-3-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/3/2 7:56, Jacob Pan wrote:
+> Preparing to remove IOASID infrastructure, PASID management will be
+> under SVA code. Decouple mm code from IOASID. Use iommu-help.h instead
+> of iommu.h to prevent circular inclusion.
+> 
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> ---
+> v4: (Jason's comments)
+> 	- delete and open code mm_set_pasid
+> 	- keep mm_init_pasid() as inline for fork performance
+> ---
+>   drivers/iommu/iommu-sva.c    | 10 +++++++++-
+>   include/linux/ioasid.h       |  2 +-
+>   include/linux/iommu-helper.h |  1 +
+>   include/linux/sched/mm.h     | 18 ++----------------
+>   4 files changed, 13 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+> index 24bf9b2b58aa..376b2a9e2543 100644
+> --- a/drivers/iommu/iommu-sva.c
+> +++ b/drivers/iommu/iommu-sva.c
+> @@ -44,7 +44,7 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
+>   	if (!pasid_valid(pasid))
+>   		ret = -ENOMEM;
+>   	else
+> -		mm_pasid_set(mm, pasid);
+> +		mm->pasid = ret;
 
---vZhJFgRVoDnGJw+Q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This seems obviously incorrect.
 
-On Thu, Mar 02, 2023 at 12:55:03PM +0100, richard.leitner@linux.dev wrote:
+		mm->pasid = pasid;
 
-> +	max9867->mclk = devm_clk_get(&i2c->dev, "mclk");
-> +	if (IS_ERR(max9867->mclk))
-> +		return PTR_ERR(max9867->mclk);
-> +	ret = clk_prepare_enable(max9867->mclk);
-> +	if (ret < 0)
-> +		dev_err(&i2c->dev, "Failed to enable MCLK: %d\n", ret);
+?
+
+>   out:
+>   	mutex_unlock(&iommu_sva_lock);
+>   	return ret;
+> @@ -238,3 +238,11 @@ iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
+>   
+>   	return status;
+>   }
 > +
+> +void mm_pasid_drop(struct mm_struct *mm)
+> +{
+> +	if (pasid_valid(mm->pasid)) {
+> +		ioasid_free(mm->pasid);
+> +		mm->pasid = INVALID_IOASID;
+> +	}
+> +}
+> diff --git a/include/linux/ioasid.h b/include/linux/ioasid.h
+> index af1c9d62e642..2c502e77ee78 100644
+> --- a/include/linux/ioasid.h
+> +++ b/include/linux/ioasid.h
+> @@ -4,8 +4,8 @@
+>   
+>   #include <linux/types.h>
+>   #include <linux/errno.h>
+> +#include <linux/iommu-helper.h>
+>   
+> -#define INVALID_IOASID ((ioasid_t)-1)
+>   typedef unsigned int ioasid_t;
+>   typedef ioasid_t (*ioasid_alloc_fn_t)(ioasid_t min, ioasid_t max, void *data);
+>   typedef void (*ioasid_free_fn_t)(ioasid_t ioasid, void *data);
+> diff --git a/include/linux/iommu-helper.h b/include/linux/iommu-helper.h
+> index 74be34f3a20a..0aa922f6bfad 100644
+> --- a/include/linux/iommu-helper.h
+> +++ b/include/linux/iommu-helper.h
+> @@ -40,5 +40,6 @@ static inline unsigned long iommu_num_pages(unsigned long addr,
+>   
+>   	return DIV_ROUND_UP(size, io_page_size);
+>   }
+> +#define INVALID_IOASID	(-1U)
+>   
+>   #endif
+> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> index 2a243616f222..ae5a3f16b321 100644
+> --- a/include/linux/sched/mm.h
+> +++ b/include/linux/sched/mm.h
+> @@ -8,7 +8,7 @@
+>   #include <linux/mm_types.h>
+>   #include <linux/gfp.h>
+>   #include <linux/sync_core.h>
+> -#include <linux/ioasid.h>
+> +#include <linux/iommu-helper.h>
+>   
+>   /*
+>    * Routines for handling mm_structs
+> @@ -456,23 +456,9 @@ static inline void mm_pasid_init(struct mm_struct *mm)
+>   {
+>   	mm->pasid = INVALID_IOASID;
+>   }
+> -
+> -/* Associate a PASID with an mm_struct: */
+> -static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid)
+> -{
+> -	mm->pasid = pasid;
+> -}
+> -
+> -static inline void mm_pasid_drop(struct mm_struct *mm)
+> -{
+> -	if (pasid_valid(mm->pasid)) {
+> -		ioasid_free(mm->pasid);
+> -		mm->pasid = INVALID_IOASID;
+> -	}
+> -}
+> +void mm_pasid_drop(struct mm_struct *mm);
+>   #else
+>   static inline void mm_pasid_init(struct mm_struct *mm) {}
+> -static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid) {}
+>   static inline void mm_pasid_drop(struct mm_struct *mm) {}
 
-Nothing ever disables the clock - we need a disable in the remove path
-at least.
+Above mm_pasid_drop() should also be removed.
 
---vZhJFgRVoDnGJw+Q
-Content-Type: application/pgp-signature; name="signature.asc"
+>   #endif
+>   
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQAlIEACgkQJNaLcl1U
-h9CpjQf8DCWgZStUPCJltIYPDoRugIPverAChi1iNMKLKqO9Rwi3VF2ulGPf9639
-hTE+u7lHCXrsfWLn0BpvQk+RZ4aJTnbTbj9ndDlnSPWStGpcl6pIK4i5S3R7RvYJ
-KesklhoL1nRCoBlYpwEdpnfRz6TL0NMo3bsqxHZqhGAxNcXuT/8ylPr3dPWYSljP
-FiqTg6fqtBAuXES4A9OxtllOrcYMc5VbvEdNtIOyfVs3gNzJaMiiVX2LUG1t4bS3
-6QXssdNh5JQHzZwkwKHE2gKiTHR3i3nK4RNBD9WB//DVCDaPuzPLASiyNz5m72T4
-zDHfnV2WYtGr2tKlR82hF3AV8C1vfg==
-=YJvp
------END PGP SIGNATURE-----
-
---vZhJFgRVoDnGJw+Q--
+Best regards,
+baolu
