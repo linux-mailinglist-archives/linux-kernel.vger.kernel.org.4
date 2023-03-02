@@ -2,79 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352B36A8134
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD54A6A8139
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCBLgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S229728AbjCBLgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjCBLfk (ORCPT
+        with ESMTP id S229935AbjCBLf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:35:40 -0500
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D69936FCC;
-        Thu,  2 Mar 2023 03:35:33 -0800 (PST)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1pXhDX-0000l2-92; Thu, 02 Mar 2023 12:35:23 +0100
-Date:   Thu, 2 Mar 2023 12:35:23 +0100
-From:   Florian Westphal <fw@strlen.de>
-To:     Madhu Koriginja <madhu.koriginja@nxp.com>
-Cc:     gerrit@erg.abdn.ac.uk, davem@davemloft.net, kuznet@ms2.inr.ac.ru,
-        yoshfuji@linux-ipv6.org, edumazet@google.com, dccp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vani.namala@nxp.com
-Subject: Re: [PATCH] [net:netfilter]: Keep conntrack reference until IPsecv6
- policy checks are done
-Message-ID: <20230302113523.GD23204@breakpoint.cc>
-References: <20230302112324.906365-1-madhu.koriginja@nxp.com>
+        Thu, 2 Mar 2023 06:35:58 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8193215546;
+        Thu,  2 Mar 2023 03:35:35 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso1528740wmb.0;
+        Thu, 02 Mar 2023 03:35:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677756934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pFP4w9yXQRwkuHy+AS0IYRfVLFJDnB9DWr4aqzGFuFI=;
+        b=nLUd9e7sjiOgddgiUGeMV90O35ulPhUfP/V/F9D9WRpEQHZWa6c/AhCLzvvzDW0GDE
+         1FGsX4k59/SHzk3B1Y2wb++Pljn5Iakar2uHRhGkLyb78J2AyzwesLmFz985o254RnIF
+         Uc0CX12kdKFr76dZse38HzPoch+O24rffJJ84evSaO2IkLo3xWqlxigq1YXrNuj5mNYi
+         BlQZBaZJgH9ojaO898T9XcdnNYcb6zFX6aCnPD/UmRr7yqUkmbN3ga4js1j4qjqR31qP
+         3qHMe6uUo4do72aiumAEmiSfSiIb14iM69s5ice3i3ACH0GlufHAyyymVKNT59z1LUSA
+         KOhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677756934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pFP4w9yXQRwkuHy+AS0IYRfVLFJDnB9DWr4aqzGFuFI=;
+        b=iIVWbHK0QPslsJcAp0KIX/44QXtEmPNbP24+lSkvC1zSSfS3xATLDEQk0Ll/5L/gXx
+         xVwYUor4tr4X2I1c6wsSV39Z5vjMIFt68qr/P9D6iRp9fvXmCw9E3yIzHjthH6oYOiPQ
+         XRg58myRsNFAg5TQF5Densul7IJWq/QwuiyQE9AEl2gSU4eaXpXf1yLqW4kipVBtPbyR
+         8uVVeSGYcaRkV7/CnfmvqJf15pm8eMJx4CU4fGTgtISEI2zCIugFS7l7OKcjcCk1Zbbx
+         3NZYWl0SFtlQmyBFuYNzOTJog4dzbCNAmncUr78+zKPI1pb4AIj0NYOMNjt1Af7sz/PI
+         RSJw==
+X-Gm-Message-State: AO0yUKWiod/Fw+Mzyy01Jg8iOqYApNQyEQxOaFwh140ld9H4TtQBxZoq
+        dRRufvn4ZWM16FyA4TWebo8=
+X-Google-Smtp-Source: AK7set/00cHFsu+tJ6BN+vsST01MHRYZnj94o5Qp9+xbBG33vZtqB8skwAWVnzxCjE2KEUBF5NEONw==
+X-Received: by 2002:a05:600c:90a:b0:3eb:2b88:5af1 with SMTP id m10-20020a05600c090a00b003eb2b885af1mr7464514wmp.18.1677756933651;
+        Thu, 02 Mar 2023 03:35:33 -0800 (PST)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id f12-20020adfe90c000000b002c3f9404c45sm15007009wrm.7.2023.03.02.03.35.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 03:35:33 -0800 (PST)
+Date:   Thu, 2 Mar 2023 11:35:31 +0000
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/22] 5.15.97-rc1 review
+Message-ID: <ZACKAw4rA6CzXg/e@debian>
+References: <20230301180652.658125575@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230302112324.906365-1-madhu.koriginja@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230301180652.658125575@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Madhu Koriginja <madhu.koriginja@nxp.com> wrote:
-> Keep the conntrack reference until policy checks have been performed for
-> IPsec V6 NAT support. The reference needs to be dropped before a packet is
-> queued to avoid having the conntrack module unloadable.
+Hi Greg,
 
-Subject Line should be:
+On Wed, Mar 01, 2023 at 07:08:33PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.97 release.
+> There are 22 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> Anything received after that time might be too late.
 
-[PATCH net] net: netfilter: Keep conntrack reference until IPsecv6 policy checks are done
-or
-[PATCH net-next] net: netfilter: Keep ..
+Build test (gcc version 12.2.1 20230210):
+mips: 62 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-see below why net-next makes more sense to me.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
-> Signed-off-by: Madhu Koriginja <madhu.koriginja@nxp.com>
-> 	V1-V2: added missing () in ip6_input.c in below condition
-> 	if (!(ipprot->flags & INET6_PROTO_NOPOLICY))
+[1]. https://openqa.qa.codethink.co.uk/tests/2974
+[2]. https://openqa.qa.codethink.co.uk/tests/2980
+[3]. https://openqa.qa.codethink.co.uk/tests/2982
 
-This should appear before your signed-off-by, or 
-> ---
->  net/dccp/ipv6.c      |  1 +
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-... here.
-
-I think its fine to place it here because in this case
-the mini-changelog doesn't provide any additional context
-worth keeping in git.
-
-Paolo, Jakub, David: This is a bug, but its not a regression
-either.  I would suggest that Madhu resubmits this AFTER
-net-next re-opens.
-
-Madhu, if thats the agreed-upon procedure, you may include
-
-Reviewed-by: Florian Westphal <fw@strlen.de>
-
-when you resend this patch as-is.
+-- 
+Regards
+Sudip
