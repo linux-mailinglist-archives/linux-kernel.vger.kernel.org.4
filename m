@@ -2,245 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C150D6A8B66
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925136A8B50
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCBWB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:01:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCBWBx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:01:53 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9C25A6DD;
-        Thu,  2 Mar 2023 14:01:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677794489; x=1709330489;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=NLC14dQOC6LGKEwzg159yXmmJSbHjJ3LCxKnaKgBMMs=;
-  b=IOBBvdyqFdqB4BX8IYND20SrsiKj+Y8mm0alYgjGrbp0bIz9T8GqyhaM
-   KCPe2SJDoY9NglSs0RNPdvZmpjK/O/734Kp2F6mICpd3E84j9zlx165/z
-   ioJS5O4Q9Nc5+xoA6zP/+BevlKF1cOMpTTxGEBv+8A5FC/roPdyGaDA1F
-   xkh5oK590xo/C4XwyzfomynpC7xJIjjRKfbU8rqcuZS9f4nM19YW20Ysq
-   JQnJdiBGBoSk/eXLPg2UBe1YYDGMN8cpOeofolt5z7wZwbhlI01JuJDXl
-   cB7/xADhYJeZe8cidqrSQPX2dcVdAPPZHzGkAHClurz+WQtOgkFc8ymL+
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="337177536"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="337177536"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 13:48:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="675117272"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="675117272"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga002.jf.intel.com with ESMTP; 02 Mar 2023 13:48:36 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 2 Mar 2023 13:48:36 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 2 Mar 2023 13:48:36 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 2 Mar 2023 13:48:36 -0800
+        id S229689AbjCBV41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 16:56:27 -0500
+Received: from mail-dm6nam11on2054.outbound.protection.outlook.com ([40.107.223.54]:54933
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229732AbjCBV4T (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Mar 2023 16:56:19 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AlexctPUlBYmtNezt8XGToNhJESgJmnlRH93xRG67Ir4niP3Bg2zh1IoiZNjYRJ+GZpn3K5fsa5CHOi/O8m159YBqwalwc/NSE9xnDNzm5T4la0wKr7UokvPVP6If+2iMy9epkxErTtr7UKtyQ/UQlCtgDC+8E9u9Vd2fvqdvtSc05XMHilfdebxHVoGr+FZtBi9pDyGasf4Di+AJ8XZn0NoDuZ/O59yWuPP44JYIm0jZMkT/FbubgnhaQf/KYu1l5m884I+ccqZrCa4aISB6x5pen5tT0zwGRz3K7HFPAp1Kd14AHX/DlQeiHVugylku4ZkAfUU5Tetuo/64+Xujw==
+ b=VEJfIyUrfHSCszc0I+FDExSkouk9jOYRySsWUuPml0nQwG7titRlzd3aC4gEMWzOkrWwp5OKUy21E9QACr9YTdLfwma9LqlQEj/v6tSUiQhe0SV5vbTBxYiuNWI0r/g28dUYaoDQYxt1Dj3tvg28aFEecsq7Ogt1MjZJAU97HxCvs9fxe7HSdJawDZtQoJzsnLjMTCRYbjPJcR2OHui2QJkgsOjhTQ2zYJm7Qb03HYWU9dMy4KQu16IN8fQQUce78ZoUxVThbgdNusN2tvOru1tbu8MufSsNzYpBq9pR6dcgt8XHXc92wUjkC3h9A40dCb2BCHGo0XduqVVcfX/5aw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NLC14dQOC6LGKEwzg159yXmmJSbHjJ3LCxKnaKgBMMs=;
- b=lFn84w3nthv1YFajaLcgFTUf1hkPNTl1F6z1yIDyIz5d1Nwd9L3xH1AUhC2MFcJOF/9qXnmQTz/5me5EPwE+ehsQ7vvD+WCsmbiCavdEl/P733Cp4PpXuD+3p1YxvF4ueeBGGZJeb1TuqffEDBFW5bESJjo3oFfwLAjQtCrqVPCMvIHy3L+eHCdWyYzc8PjwWqmIUekR6cLji4aBMJNO6FB7M5gPwe7UYzREhImxiX7v9tjGV3VQ22GGVsVVWLCrkvARBfHZ45bI1hO8QQIhrE6S4yG6GWHOdF7/MHPtavq/iatJeZ41QEWdT2RDcP5qZMuGzWENat3y90tfun2mcg==
+ bh=uenbkF+hIyglmZu+JiAxVYzBJvQapganUcr6fOtgUsQ=;
+ b=jwXn8uYX4zQman7ZQKxTTVGNFkZ64IdPZl8trZOMFOZPcVAWNsvlP1CvujPdCicXjtwp1g1Fn1GnmyrBvzVHsmSOd+1FQZUgcrh4AHnVzighdh/ALYlsye0xl1ueF4GPwga3mYdO466AbP9xtI3R13WgN5v0vCXgqLAH2vW0ynly55mgG/ZKt44+iUfXS/WdVVnk8IudrPK2Fbo05jz2RuX9JEFdP/v8u0uXmnDaEDY3wkwg3OkPvmuD7uqzl5AK3na1sheSGPjtbToraFsaKX6QUcQgOKBMneknxpWzv9SEKsWAySMlAV+lDI4Q1VrmygaBwVH1sK3L455TkAz3kA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by PH7PR11MB7962.namprd11.prod.outlook.com (2603:10b6:510:245::7) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uenbkF+hIyglmZu+JiAxVYzBJvQapganUcr6fOtgUsQ=;
+ b=p5BBfbRyqFlNz5D+cn5Sa10B9Un4Sp2trNZCtP010rVqyYPjicBFgCdZph303LVBRtKg0wAn35vd+IAWzeXZ7kWN6iZXLFjhY1RzXYcVoxJZyCBFH1K9NyPPNBY6xYsDnjGXkcRYd5AW3jo/VgLvAFoupA8oVUNZxy+T438A17c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by BY5PR12MB4050.namprd12.prod.outlook.com (2603:10b6:a03:207::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Thu, 2 Mar
- 2023 21:48:33 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
- 21:48:32 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-CC:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>,
-        "al.grant@arm.com" <al.grant@arm.com>
-Subject: Re: [PATCH v7 30/41] x86/shstk: Handle thread shadow stack
-Thread-Topic: [PATCH v7 30/41] x86/shstk: Handle thread shadow stack
-Thread-Index: AQHZSvtG+2WnM2cLTkqogSV10ayPpq7nxJIAgABG7IA=
-Date:   Thu, 2 Mar 2023 21:48:32 +0000
-Message-ID: <7fbf0e04699eae5595108349c99bd270e5d9a0a0.camel@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
-         <20230227222957.24501-31-rick.p.edgecombe@intel.com>
-         <ZADeMDFETi7bfcz+@arm.com>
-In-Reply-To: <ZADeMDFETi7bfcz+@arm.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Thu, 2 Mar
+ 2023 21:51:48 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::6cc0:9c7a:bd00:441c]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::6cc0:9c7a:bd00:441c%6]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
+ 21:51:48 +0000
+Message-ID: <b52c68e6-2501-67c8-1fbd-60a35537c1f2@amd.com>
+Date:   Thu, 2 Mar 2023 15:51:46 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 7/9] crypto: ccp: Add support for ringing a platform
+ doorbell
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|PH7PR11MB7962:EE_
-x-ms-office365-filtering-correlation-id: 7bc9c21a-ad49-4493-7b93-08db1b67de3b
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6+y4if5re41C8r/bdNFjekyh5fiQ5L2lKjcrbehjbgPzh5ZjzHkNmzb+ECv7JeDC22yCyejPbMePWnCDvnkFRlG3aTTRhkjVTaCGWcw2qO/goYtWM0SkehnAeHI8CLwsd9czayQBfq91RNU7ZUJIRyWfgPVCZmD8hpwduC1Ew5AESJTzsl5752WMZzKzjANjVQ6zm0YzuBCFAenPt4GlZOAlmDai5qCHoFBFQ3AK9QVPdbREMeRfxmUqK9VzroBjF7dlIOq1o0nTWRrP1RU3cdLjqSC/+ekGV3XGKKnQXpkMzocaH8indxR4UC2bkWx7DkIZO9SGruJX3r6SlcRf85niCImgYMk9kim26lf9ov8/tXcJNZPSXCSWvZQCtGL6hiEt0ZlB3fTUIrbDxXZk2V20Je2GhgvDrDju/Ggx3uL6N4WmfBTsLBK1lo5yqxZmy7bfi2tMFnVU8zJWrF5VXULh2htRxVK8zyhLnqfsNaWl4jJXWwbVEXk0iv5YfXxdAs3ubYzSwC818GIkpVZbW3fk5VgxfPKzkHAN4U62HgfnBHl0vWpIhklw7FSiS3J8bqoxa8UWWtNVbhC0e+jRCNS4wdyd+MACxs0BIBel2sVFEUYuOndxtx5U8qjZqB/Z5xX4oUw2ZG89xCCKOC11JRd4/bVx+iKj7qSVl5GMV6YkTHNWebAf2VZJ9plf35PmPDzWWzWI6HVFauR+TTKJIRu4ImUhyjeIe7wrZkwoF1nlb5r8BNsuEnbXo7geLAvB
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(39860400002)(376002)(136003)(396003)(451199018)(54906003)(4326008)(7406005)(36756003)(66946007)(86362001)(5660300002)(66556008)(8676002)(7416002)(41300700001)(64756008)(8936002)(66476007)(66446008)(2906002)(921005)(122000001)(82960400001)(38070700005)(38100700002)(6486002)(478600001)(91956017)(316002)(76116006)(71200400001)(83380400001)(110136005)(186003)(6506007)(26005)(2616005)(6512007)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bklRdkhrYXZaRVF4b0oweDFES0M3ZFFBalgyWTdRM2xBQm5FTnZENXpSSi9o?=
- =?utf-8?B?NEJSK0w1Y2cyU01PalFqbm9pQ2NoODRSc2hHOXFoaDRTZk41OUVES3FhbU5i?=
- =?utf-8?B?am12STh5dGd3WkxPL0RtVjFHdk9qZWVuK2luQlR2UjVweExFQUkycVRoSVF3?=
- =?utf-8?B?RUZFMFpSMzJpQmt5M2hmam83d2xHRm40Y2NUQlZ4d2NSMFp4dFpoR1VhM3JE?=
- =?utf-8?B?TnhVS3cvSDR4Z0ZpblhyQWVOaStYM0VKMlBHUFlhcThmR2U3MGxIL1AxTzFB?=
- =?utf-8?B?Q2dNeWJjaTFTREJ5N0NHWlRyN05TWXpnTlBFM2ZoZittY2t0MUFHOENoVVd6?=
- =?utf-8?B?aFJMR0JZT1k1cnM4NGhnUHhNMkh1TzcwbUp1MUFqdlVYcHFkbmovZURhNy9D?=
- =?utf-8?B?WnB1aVBzSFF4eU9xcU0yL3JKMHJFVDlUZHh3ZjQyUVhtNGFrVWNteURlcHVX?=
- =?utf-8?B?SUJjUGI1bWhGK1drQmtPUVFGL0dVN0t3WmptSllkUjBFdjhWNUtncWRxbFpB?=
- =?utf-8?B?N0VSaVc2dVVHb0NnOWEveEN2MktXZWovbHNONlhweXo4akFweUllRmo0ZGds?=
- =?utf-8?B?Y2lVcmxHREVSTEMwOGpML09oK0ZLakpydndCTTcxK1VxWFFXS01rUzVKRWlG?=
- =?utf-8?B?bWUwbUM0dTJVdDdqMTBkdzdTbGs1eTROeFJpb096VkxTTmt0ZG5VWGV5WWo5?=
- =?utf-8?B?enkvQThMR1ZYZjF3WldXcWdhbmV4ancxdFVWKzQyaG9zRU1idDVKYU9PdFBz?=
- =?utf-8?B?dG9YYTZyZlIyNjlEc3R3MWM1OTJuQUhHNTg2VmRRL1F2NVBueG5lQXpUcW16?=
- =?utf-8?B?bkEvT2syYkQxUXJJb0pReFV3NGtaNWg0UCtnR3hJY1VyY1pwY0Jmb1dRUmw2?=
- =?utf-8?B?R2QrTlFyN3pWVUpVRFJWUytNZ0dRZ0tjclc3UE15WDNWN2dXdzlJKzNSUkR4?=
- =?utf-8?B?a1licW5kdUNUV0x1c0owOHU3Vm1JUjd2REE5R1hkckphSlNpeFd2MWptZFVW?=
- =?utf-8?B?MTh1M0lBQkFVMUN0OU0ydUx1bVVqeHBKRlh2WWpTbG9IQ2RoeHpUUjlTa2V2?=
- =?utf-8?B?ckVxdjNiSXd6YXpZUlIxVHNGOG5pTjh2cm9jWWtvVEljWThCNGM2T2dQS0dq?=
- =?utf-8?B?L2w2SEZGMU5kU0QyLzg4OGJUbFAxblNrVUxzY1J2SkZiTTNHdlVJTTgxL3dS?=
- =?utf-8?B?TU1CSU5YMnh2RHQ1KzVSWTNOdllYQjI5Nis0dWltQVV6NE80SFZZY29LbnZK?=
- =?utf-8?B?cHBIZUp6d3ZrNHJuVDV3azhkYzIydUFuTko5amVFTldKbHVmakJwOTVJRmcr?=
- =?utf-8?B?QlpjbkdPbDZieGhsdGhEaW1TSEs2VXFPUUhrQ1VMeDM5RENuYTBBZkpuYUJU?=
- =?utf-8?B?WGsrbWZMNEw0c0hqOFg1Y2d2UEpJZG44cVdkY2NhSUJUdS9DdE8veHV2VXhy?=
- =?utf-8?B?Q2lPSjM3UDNtT202SnpZTlRXN0RjdkFKMUFSTGxZeC9UcGpuOVdPbmUyRVBw?=
- =?utf-8?B?QlNMWHlxd0tpOGE0dHdQQkNTdFFpNEZIaUVTeUQ5ZitiRzNzM1o3dXhpK3kv?=
- =?utf-8?B?R2ZmeE9SQyswbml2K0lHY2EyWWtTaVM4bHVEUGEvL3NMUitQTFduRWxaQTJy?=
- =?utf-8?B?clgxdmVHeXFNdXp0bzB0VzJsU0Z2N2p6eXVaNEJJa3ZCWXpMRnduazc5cmV4?=
- =?utf-8?B?bGxBQXZnSzFZdWtEMjZQTFEyYjZtd1dNaGhMM0N6dDI4OXovNHRNcDc2aTdU?=
- =?utf-8?B?UUoxUFV2d2x5SlFKUkMydXkveWJtZi9iUkYzdmtTbUxXeU5EeW5NVmNNVTBG?=
- =?utf-8?B?VmVPWGhta3FhaEdwM3JXNjFCV05QVVBnWDlVWXRTcDBTb0JwSERkR1dPU0pE?=
- =?utf-8?B?Tk56aVRRV2o2eGw2d1ZXajNxL2ZIL0svaDJjaXB4c3FqTWZKZWxIR2lDd3p5?=
- =?utf-8?B?QVlRbnFIeHFaOEVmY01qME1KUStPZHBlMUduVzBkSWxtWmpUdzFxY08rNnE1?=
- =?utf-8?B?SDZOdzJ5RVFhdjg4Z0RNMTB2MUkrb0ZoMXBEdGEwdVptbjJ4c2JYQ01IQmRi?=
- =?utf-8?B?bkdySG1JYWpTbW92dlYzcjhTamc5bHMzREg4R3FxYUFlbzAxQnVqaXpGb1Rv?=
- =?utf-8?B?cXBlQmZmbHlCeWRWb0xLZWZqMkhyNFZTQmUreitNazVyQUY3UVQ3VXdacUZj?=
- =?utf-8?Q?ySJBJ832u6RXQ7wwxT1xYK8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D68B5FA5B949AE49B4865587AC471B3E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>, Rijo-john.Thomas@amd.com,
+        herbert@gondor.apana.org.au, John Allen <john.allen@amd.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230302194235.1724-1-mario.limonciello@amd.com>
+ <20230302194235.1724-8-mario.limonciello@amd.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230302194235.1724-8-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR01CA0008.prod.exchangelabs.com (2603:10b6:805:b6::21)
+ To DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|BY5PR12MB4050:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a1cacb3-0f85-49eb-9e8b-08db1b6852e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KeRC4DRUOj8IodvxzQHqfzLEm3cqOLp8FjjcWmYTJfur6VRDoeKCYPUT54erqlxomIZhKRHJzwT+HooyUuUBT0I6z9zjc8xaYE5Swi4iQDdUhjhd1LzKAgeaSDxNQN/nQ9qW5dDYZOyRqrnKAQ6VstNl/FCotmH4p0gDynRJAMm6c3UqQ7xtW93WUXouDNaeRmn7HiKJFnfN0EnvS7ntiAlZygSTQhVNvdA4A5YWZ7QrHvfXl0cSIkpeI/1PKaehcbw7VzE0fCvUUQU6f11oUhLDsD6BcIOzgTP9+xvFIqAZjICQW0q8QrX38HX5zU4GDy6vMROVub8QurlZmNO1V2CNLAQT7CZV6rSfS0LEVnO/KgbWLhEM2sthEf04t8m4rkPxBX6hcljKyc/P6mTtMy/0uW+Lawz1Fh/U8/AmHYrjcLWo8FJrCnD4bFMJWpgVcV76jv/JYV09RwmaREs0HA9icaFHXHf0Y0ffgRj1w0b9WgMbSdPiqDrSvqU3LkwwWiF4zyD14azB71WyaP8U1MQvcW+t2a/285AKTLtJ6wM4+s4A5FZQIIrJhcge1IK/XxBxRY4S9AN+fU2Z0Enk8lEf7VeoV0kagRN/DRzMGDaLlNOSSK1vpbPRQ+eeGflkpqUV0r0cUYm2BUBayFXPrPKkRr99uqVxPbTLvBhoT+tyftlWGpsC5B6b1XOL30tZyDWeTQZuv472s0JssFXYeUH4j0NAAksYE4rd5tZYX20Byu+KsoRoj5oNSv4gSoEl
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(396003)(366004)(39860400002)(451199018)(86362001)(31696002)(38100700002)(36756003)(2906002)(66476007)(66946007)(41300700001)(8676002)(4326008)(8936002)(66556008)(5660300002)(53546011)(6506007)(186003)(6512007)(83380400001)(2616005)(26005)(110136005)(6636002)(316002)(478600001)(966005)(6486002)(31686004)(43740500002)(45980500001)(134885004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekMxVmU4RzhsTk16ZDFVbUdydlZ2RHEra0dGM2tzS2VHSnkycjZBZmdDLy8r?=
+ =?utf-8?B?VE15V1V0UVFCSFFOQ3ozdmFxY29jdm0xWk5nb3ZUbmNTUmJuT0Y2dFBhWlRR?=
+ =?utf-8?B?RXBRVFhOZTlRVlc4UE5VL1psUFhHUUI3TWxKalVVZFBFR3RvRUQrMnE4TCtW?=
+ =?utf-8?B?akczYUtWREhnKzU1MDdsMmp4U0gxczdMc3VrWFBheTRrQXlPUzVjelFPd2FU?=
+ =?utf-8?B?Q3phUnN5WTVZN0ViSGxvUStoQjV0M1Q5TG5FUVY4c2doOVh0MVF1akdTY0dL?=
+ =?utf-8?B?UzVyZEU5TE5wcExRc1ZVUUNjNlpDYldBZTVPbXpxTzh6bkJmYmZoQm9JNitv?=
+ =?utf-8?B?aWorbjJUOVhsNEJSUTZPa2lFUjV6L3l3K2R1UVZudms2aHlhSk5pT2xnR2tI?=
+ =?utf-8?B?cXFnY242QlBtcmEzMGtUMU1UMG4zZGxpZHIxVi9zeGNQNEVuMjlSWGJoVE1m?=
+ =?utf-8?B?NVlOYzg3SzFFQ1BVS05tTldhcXFYdGFWQVc2d0dkYW14OUFLWG9Wcy9xcUtU?=
+ =?utf-8?B?WjVEVUk2TENKcDBNcUkvTDY2WVV2Z1ZhdHlkakdyOVJPNDg5bytyWjNtRWhR?=
+ =?utf-8?B?VEFaL0pDTUR4S0VpcDBWVzBxUXhjRmdvVlpvNWRGZ0pvM0d2ZjlnYk9pM1hi?=
+ =?utf-8?B?aC90ZzdiRWt1N2c1bEF0SjluUHJjOWVkTGV1TjF1SGx0R001bDV6N0JSMlRP?=
+ =?utf-8?B?ZFdEcUlsbkFGS3JaSTJrVU9lYnp5VWhmZkx0bHB6ZmgvbFZJZjFTMHJJMXh0?=
+ =?utf-8?B?MFdsV0o4cDB2R25GbnBQZksrRk5KUjA2OG1LaXlTV29jR1plZnUrb2JmeDdv?=
+ =?utf-8?B?Qkl5V2lUaEpMTXBpay96VDl3SFlyK3U1dWhGMGFwUXhPNGp0VGpEbFJjUlIx?=
+ =?utf-8?B?bmhFa2h1bktTRS9nSTV1MWZKMUR3aUhpLzBRQkdZMlA5VERISk1TNUw3Y21s?=
+ =?utf-8?B?b3Y2UGlFTDFoYS94Zk5NTktGd21YeFBxMUZRWGdjb2JRZjdKaHdxU3Q3Qy9W?=
+ =?utf-8?B?amVMaXU3V2VFci9JeE5oeHpyVStzcHBxS2laYzVMMi9yRHFmdE95S3Y4T29M?=
+ =?utf-8?B?ampFVFNKU0pITlNta2Q2emdOSnU3RHlwb0dPQUxYYUNuSFhyam5OSVNCZGIr?=
+ =?utf-8?B?cXlTdTlYVTZ3ZXZRRlp4R2FkSjh3WkJ4VUtHNDZrcG9nYnlJd0Q3V2Q3WVV1?=
+ =?utf-8?B?WXNrd2xyL3hkbEYyVGRqTlJpR3lrZkZPQVVzRUE3RG1nNHRkdC82VmplcDAz?=
+ =?utf-8?B?WjBIS0V4WTBacE9Fd3A2TG9Ma1dHc1BvRVFWU1hsRnBRYkFnRVpiZDIxclM3?=
+ =?utf-8?B?NjQrVWRXU0tJLzdrOG4zRkNBa2wxcldiUElFV0VScmxZMDl0QWl1anpMa3By?=
+ =?utf-8?B?SHQ2QUtGV3FjcnNlQ0RPaGlzbDNwYnhmMDZJMjFldDI0YzRRT3JOU0dRdzVo?=
+ =?utf-8?B?a29lTm1wMkh3Y2JvcXl2eHF4TWp2ZU9ZZkF6dDJKcG9mNGFQc3hJd0VwTUl3?=
+ =?utf-8?B?d3E0dHF2TlNyWjBOV21yRW1EaGtOYThUME1OLzRybnpEWDE4d2hDb1JoaUps?=
+ =?utf-8?B?K1A4a05sN285b2gwYXJTQndkSk13REp1cDlkNXQ2V0RTWEw5Uld3bEFWUkxn?=
+ =?utf-8?B?TnhGREE1QXloQmsxR3FLeTdiV2ViRmJjWWRyb05MTDBpa0trNkM5WHc1OURv?=
+ =?utf-8?B?Y1krWmRnOS9WcU5lclEvbTljeVJ2UzFrT0t6UjI5VDAwMTcwWjd2c3VKYVN4?=
+ =?utf-8?B?eDNEbXBYQnc0c2VneUl1eVJiMEJKR0ZnRVU2UXdIbXMyWFRwbEcwMmxnbEpK?=
+ =?utf-8?B?QTBGWTNhdkFpR3BLSVQvZjVKL2JXdFZlTERmQWxYNG1wU2xHTG9iQTVwWXEw?=
+ =?utf-8?B?azFCUmUvSWNwRm9jc3B0U1dlUjR6TzU3MVFDZ1AxS3MzeWtKVGwzTmVtUlFs?=
+ =?utf-8?B?V1loWDlnaXg4UGY2cU1NWVZuUFltU1BmbGJjdVVEV1NSODZpYzMxd2JpdW5O?=
+ =?utf-8?B?ODhpZGh0M2dWclVqMGdhYjRqTm5GWHF6SW92UGQvSVdFeFQwcUFwS0Z1QWxU?=
+ =?utf-8?B?ZGVCbmpsTW9zNlorZWR4UjQ4blAvOHZqaWxVNFIzUlErSDFNVHpKdmlWY0cv?=
+ =?utf-8?Q?I2oYcj5YB3CEJOMuTPajpLzKp?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a1cacb3-0f85-49eb-9e8b-08db1b6852e7
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bc9c21a-ad49-4493-7b93-08db1b67de3b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 21:48:32.6922
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 21:51:48.6079
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /PtSkarg4o9w+QkVK9lUlzzJ5i1O2fF2WASuTaQyf1hIaKnqlQnNJhyBmZbkBfoUdAKJitx3Urc/NtrwAPmomSQ3+T5o1ijneGzfg7fG52Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7962
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WpOym5HmDF5heN4qo0hpZIfxM4tyrcMg6AjQMIlILDjBH984n7FhnPmizO/i1Qawe0EDQhYBjCsTh5oegbmYfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4050
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTAzLTAyIGF0IDE3OjM0ICswMDAwLCBTemFib2xjcyBOYWd5IHdyb3RlOg0K
-PiBUaGUgMDIvMjcvMjAyMyAxNDoyOSwgUmljayBFZGdlY29tYmUgd3JvdGU6DQo+ID4gRm9yIHNo
-YWRvdyBzdGFjayBlbmFibGVkIHZmb3JrKCksIHRoZSBwYXJlbnQgYW5kIGNoaWxkIGNhbiBzaGFy
-ZQ0KPiA+IHRoZSBzYW1lDQo+ID4gc2hhZG93IHN0YWNrLCBsaWtlIHRoZXkgY2FuIHNoYXJlIGEg
-bm9ybWFsIHN0YWNrLiBTaW5jZSB0aGUgcGFyZW50DQo+ID4gaXMNCj4gPiBzdXNwZW5kZWQgdW50
-aWwgdGhlIGNoaWxkIHRlcm1pbmF0ZXMsIHRoZSBjaGlsZCB3aWxsIG5vdCBpbnRlcmZlcmUNCj4g
-PiB3aXRoDQo+ID4gdGhlIHBhcmVudCB3aGlsZSBleGVjdXRpbmcgYXMgbG9uZyBhcyBpdCBkb2Vz
-bid0IHJldHVybiBmcm9tIHRoZQ0KPiA+IHZmb3JrKCkNCj4gPiBhbmQgb3ZlcndyaXRlIHVwIHRo
-ZSBzaGFkb3cgc3RhY2suIFRoZSBjaGlsZCBjYW4gc2FmZWx5IG92ZXJ3cml0ZQ0KPiA+IGRvd24N
-Cj4gPiB0aGUgc2hhZG93IHN0YWNrLCBhcyB0aGUgcGFyZW50IGNhbiBqdXN0IG92ZXJ3cml0ZSB0
-aGlzIGxhdGVyLiBTbw0KPiA+IENFVCBkb2VzDQo+ID4gbm90IGFkZCBhbnkgYWRkaXRpb25hbCBs
-aW1pdGF0aW9ucyBmb3IgdmZvcmsoKS4NCj4gPiANCj4gPiBVc2Vyc3BhY2UgaW1wbGVtZW50aW5n
-IHBvc2l4IHZmb3JrKCkgY2FuIGFjdHVhbGx5IHByZXZlbnQgdGhlIGNoaWxkDQo+ID4gZnJvbQ0K
-PiA+IHJldHVybmluZyBmcm9tIHRoZSB2Zm9yaygpIGNhbGxpbmcgZnVuY3Rpb24sIHVzaW5nIENF
-VC4gR2xpYmMgZG9lcw0KPiA+IHRoaXMNCj4gPiBieSBhZGp1c3RpbmcgdGhlIHNoYWRvdyBzdGFj
-ayBwb2ludGVyIGluIHRoZSBjaGlsZCwgc28gdGhhdCB0aGUNCj4gPiBjaGlsZA0KPiA+IHJlY2Vp
-dmVzIGEgI0NQIGlmIGl0IHRyaWVzIHRvIHJldHVybiBmcm9tIHZmb3JrKCkgY2FsbGluZyBmdW5j
-dGlvbi4NCj4gDQo+IHRoaXMgY29tbWl0IG1lc3NhZ2UgaW1wbGllcyB0aGVyZSBpcyBwcm90ZWN0
-aW9uIGFnYWluc3QNCj4gdGhlIHZmb3JrIGNoaWxkIGNsb2JiZXJpbmcgdGhlIHBhcmVudCdzIHNo
-YWRvdyBzdGFjaywNCj4gYnV0IGFjdHVhbGx5IHRoZSBjaGlsZCBjYW4gSU5DU1NQIChvciBsb25n
-am1wKSBhbmQgdGhlbg0KPiBjbG9iYmVyIGl0Lg0KDQpJdCdzIHRydWUgdGhlIHZmb3JrIGNoaWxk
-IGNvdWxkIHVzZSBJTkNTU1AgYW5kIGNsb2JiZXIgdG8gY3JlYXRlDQpwcm9ibGVtcywgc28gaXQg
-aXMgbm90IGEgc3Ryb25nIGd1YXJhbnRlZSBvZiBzaGFkb3cgc3RhY2sgaW50ZWdyaXR5Lg0KQnV0
-IHRoYXQncyBub3QgY2xhaW1lZCBlaXRoZXIuIEl0IGRvZXMgInByZXZlbnQgdGhlIGNoaWxkIGZy
-b20NCnJldHVybmluZyBmcm9tIHRoZSB2Zm9yaygpIGNhbGxpbmcgZnVuY3Rpb24iIGFzIG11Y2gg
-YXMgc2hhZG93IHN0YWNrDQpwcm90ZWN0aW9ucyBhcHBseSwgd2hpY2ggSSB0aGluayB3b3VsZCBi
-ZSByZWFzb25hYmx5IHVuZGVyc3Rvb2QuIFRoZQ0KdmZvcmsgY2hpbGQgY291bGQgYWxzbyB1c2Ug
-d3JzcyB0byB3cml0ZSB0aGUgcmV0dXJuIGFkZHJlc3MgdG8gdGhlDQpzaGFkb3cgc3RhY2sgYW5k
-IGFjdHVhbGx5IHJldHVybiwgb3IgZGlzYWJsZSBzaGFkb3cgc3RhY2sgYW5kIHJldHVybiwNCmFz
-IG90aGVyIHdheXMgdG8gY3JlYXRlIHByb2JsZW1zLg0KDQo+IA0KPiBzbyB0aGUgZ2xpYmMgY29k
-ZSBqdXN0IHRyaWVzIHRvIGNhdGNoIGJ1Z3MgYW5kIGFjY2lkZW50cw0KPiBub3QgYSBzdHJvbmcg
-c2VjdXJpdHkgbWVjaGFuaXNtLiBpJ2Qgc2tpcCB0aGlzIHBhcmFncmFwaC4NCg0KWWVwLiBJIHRo
-aW5rIGl0J3MgdmVyeSBtdWNoIGEgIm5pY2UgdG8gaGF2ZSIgdGhpbmcgYW5kIG5vdCBpbnRlbmRl
-ZCBmb3INCnNlY3VyaXR5LiBUaGUgcGFyYWdyYXBoIGlzIGFuIGFzaWRlIGFueXdheSwgYmVjYXVz
-ZSBpdCBpcyBzcGVjaWZpY3MNCmFib3V0IGFub3RoZXIgcHJvamVjdC4gSSBkb24ndCBoYXZlIGFu
-eSBvYmplY3Rpb24gdG8gZHJvcHBpbmcgaXQgaWYgdGhlDQpvcHBvcnR1bml0eSBjb21lcyB1cC4g
-SUlSQyBpdCB3YXMgYWRkZWQgYmVjYXVzZSBzb21lb25lIHRob3VnaHQgdmZvcmsNCmNvdWxkbid0
-IHdvcmsgd2l0aCBzaGFkb3cgc3RhY2ssIHNvIHBlb3BsZSBtaWdodCBsaWtlIHRvIGhhdmUgdGhl
-DQpkZXRhaWxzIG9mIGhvdyBjYW4gYmUgZG9uZS4NCg0KSSB3b3VsZG4ndCBldmVuIGJlIHRvbyBi
-b3RoZXJlZCBpZiB0aGUgZGlzY3Vzc2VkIGdsaWJjIGJlaGF2aW9yIHdhcw0KZHJvcHBlZCBlaXRo
-ZXIuIHZmb3JrKCkgY2FuIGdvIHdyb25nIG1hbnkgd2F5cyByZWdhcmRsZXNzIG9mIHNoYWRvdw0K
-c3RhY2suIElzIGl0IHdvcnRoIHRoZSBleHRyYSBzcGVjaWFsIGJlaGF2aW9yPyBNYXliZSBqdXN0
-IGJhcmVseS4uLg0K
+On 3/2/23 13:42, Mario Limonciello wrote:
+> Some platforms support using a doorbell to communicate. Export
+> this feature for other drivers to utilize as well.
+> 
+> Link: https://lore.kernel.org/linux-i2c/20220916131854.687371-3-jsd@semihalf.com/
+> Suggested-by: Jan Dabros <jsd@semihalf.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>   * New patch
+> ---
+>   drivers/crypto/ccp/platform-access.c | 47 ++++++++++++++++++++++++++++
+>   drivers/crypto/ccp/sp-dev.h          |  1 +
+>   include/linux/psp-platform-access.h  | 15 +++++++++
+>   include/linux/psp.h                  |  3 ++
+>   4 files changed, 66 insertions(+)
+> 
+> diff --git a/drivers/crypto/ccp/platform-access.c b/drivers/crypto/ccp/platform-access.c
+> index af3a1e97abfe..0763389a2814 100644
+> --- a/drivers/crypto/ccp/platform-access.c
+> +++ b/drivers/crypto/ccp/platform-access.c
+> @@ -135,6 +135,53 @@ int psp_send_platform_access_msg(enum psp_platform_access_msg msg,
+>   }
+>   EXPORT_SYMBOL_GPL(psp_send_platform_access_msg);
+>   
+> +int psp_ring_platform_doorbell(enum psp_platform_access_msg msg)
+> +{
+> +	struct psp_device *psp = psp_get_master_device();
+> +	struct psp_platform_access_device *pa_dev;
+> +	u32 __iomem *drbl;
+> +	u32 drbl_reg;
+
+Lets spell out doorbell for these two variable names.
+
+> +	int ret;
+> +
+> +	if (!psp || !psp->platform_access_data)
+> +		return -ENODEV;
+> +
+> +	pa_dev = psp->platform_access_data;
+> +	drbl = psp->io_regs + pa_dev->vdata->doorbell_reg;
+> +
+> +	if (!drbl)
+> +		return -ENODEV;
+
+This will be non-zero because psp->io_regs will always be non-zero. Maybe 
+you meant to check the actual pa_dev->vdata->doorbell_reg value?
+
+I think you should squash this and patch #9 together so that patch #8 just 
+works right away.
+
+> +
+> +	mutex_lock(&pa_dev->mutex);
+
+Does the doorbell register operate independently from the other registers 
+(C2PMSG_28 - C2PMSG_30)? If it does, you could probably just introduce a 
+doorbell mutex.
+
+> +
+> +	if (check_recovery(drbl)) {
+> +		dev_dbg(psp->dev, "in recovery\n");
+
+Maybe a bit more info as to what is "in recovery" (that goes for patch #4, 
+too) or just prefix it with "doorbell" (and "platform" in #4) since you 
+now have duplicated messages.
+
+> +		ret = -EBUSY;
+> +		goto unlock;
+> +	}
+> +
+> +	if (wait_cmd(drbl)) {
+> +		dev_dbg(psp->dev, "not done processing command\n");
+
+Ditto.
+
+Thanks,
+Tom
+
+> +		ret = -EBUSY;
+> +		goto unlock;
+> +	}
+> +
+> +	drbl_reg = FIELD_PREP(PSP_DRBL_MSG, msg) | PSP_DRBL_RING;
+> +	iowrite32(drbl_reg, drbl);
+> +
+> +	if (wait_cmd(drbl)) {
+> +		ret = -ETIMEDOUT;
+> +		goto unlock;
+> +	}
+> +
+> +	ret = 0;
+> +unlock:
+> +	mutex_unlock(&pa_dev->mutex);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(psp_ring_platform_doorbell);
+> +
+>   void platform_access_dev_destroy(struct psp_device *psp)
+>   {
+>   	struct psp_platform_access_device *pa_dev = psp->platform_access_data;
+> diff --git a/drivers/crypto/ccp/sp-dev.h b/drivers/crypto/ccp/sp-dev.h
+> index 5ec6c219a731..87c0b9350bc2 100644
+> --- a/drivers/crypto/ccp/sp-dev.h
+> +++ b/drivers/crypto/ccp/sp-dev.h
+> @@ -54,6 +54,7 @@ struct tee_vdata {
+>   };
+>   
+>   struct platform_access_vdata {
+> +	const unsigned int doorbell_reg;
+>   	const unsigned int cmdresp_reg;
+>   	const unsigned int cmdbuff_addr_lo_reg;
+>   	const unsigned int cmdbuff_addr_hi_reg;
+> diff --git a/include/linux/psp-platform-access.h b/include/linux/psp-platform-access.h
+> index f5a03cd11f10..1e1d0e077cec 100644
+> --- a/include/linux/psp-platform-access.h
+> +++ b/include/linux/psp-platform-access.h
+> @@ -35,6 +35,21 @@ struct psp_request {
+>    */
+>   int psp_send_platform_access_msg(enum psp_platform_access_msg, struct psp_request *req);
+>   
+> +/**
+> + * psp_ring_platform_doorbell() - Ring platform doorbell
+> + *
+> + * This function is intended to be used by drivers outside of ccp to ring the
+> + * platform doorbell with a message.
+> + *
+> + * Returns:
+> + *  0:           success
+> + *  -%EBUSY:     mailbox in recovery or in use
+> + *  -%ENODEV:    driver not bound with PSP device
+> + *  -%ETIMEDOUT: request timed out
+> + *  -%EIO:       unknown error (see kernel log)
+> + */
+> +int psp_ring_platform_doorbell(enum psp_platform_access_msg);
+> +
+>   /**
+>    * psp_check_platform_access_status() - Checks whether platform features is ready
+>    *
+> diff --git a/include/linux/psp.h b/include/linux/psp.h
+> index d3424790a70e..92e60aeef21e 100644
+> --- a/include/linux/psp.h
+> +++ b/include/linux/psp.h
+> @@ -23,4 +23,7 @@
+>   #define PSP_CMDRESP_RECOVERY	BIT(30)
+>   #define PSP_CMDRESP_RESP	BIT(31)
+>   
+> +#define PSP_DRBL_MSG		PSP_CMDRESP_CMD
+> +#define PSP_DRBL_RING		BIT(0)
+> +
+>   #endif /* __PSP_H */
