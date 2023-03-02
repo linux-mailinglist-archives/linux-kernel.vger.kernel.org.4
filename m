@@ -2,192 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0011F6A7D76
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B846A7D78
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjCBJSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
+        id S229540AbjCBJS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:18:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCBJSX (ORCPT
+        with ESMTP id S229523AbjCBJSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:18:23 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEB5A279;
-        Thu,  2 Mar 2023 01:18:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677748676; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=f+cbxQpidciw61Ai4fHYox3YKeRDX3z7qesLmnaZ1mvjxn41iQsq7KygwU1P1etnpqZpmnVd+xrDS99XDbAGDy3F5pC27+YnZY7fjtboKa/THUKxXwaPjW8gh59mrJJnPbGDfkP7oVm+hcDkBltiRV6m3v97GOuoGAdr+AIUvbY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677748676; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=8UQu7Yj/AOQFcJkYHaTLkH9SnUKz3EcObiDmRQFm3+c=; 
-        b=Ng+Pd3Y2VNogHtnErqh6VNFg4xKJhgPIAX6j4p+fyQ7HDBfuWfCUc1v96jNT1cqZXF0dLipQnaEw2jyKQePeFHpGd1Vsl72yQjQAJYQvmmRbeGpRxBn8Sd9zA+BrJgVjpvzGRK/bkXgfnjEn2/WagilmE3bzR0MXW6VdkTK2y2s=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677748676;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=8UQu7Yj/AOQFcJkYHaTLkH9SnUKz3EcObiDmRQFm3+c=;
-        b=cp+cOrRIfczEg5dwhzgglAIfVMIZ9kXVpPYmz6rA48XDWFiSWHVvjdMLfxJVn2ya
-        RbX1rknYrUG0Ll8kURPd2kkRuXAW9STh8m4OaLVi9awuLOr/oVZLRriFdtt/zhkc/u2
-        0srk5NFEYhe/yDnAoQHHEF1iN4o5gCGSnj70kxGg=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1677748673495252.80618880931172; Thu, 2 Mar 2023 01:17:53 -0800 (PST)
-Message-ID: <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
-Date:   Thu, 2 Mar 2023 12:17:46 +0300
+        Thu, 2 Mar 2023 04:18:25 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE01A279
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:18:24 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so1070355wmi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:18:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677748702;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+v85GLUDrQ2zVLBvlWtS8ia1HQWcVPpr7GzHsjdX2Jw=;
+        b=MswMY0eyIVOvB1BGlIsjT7T7ZB+Coenk8J9ktojT2m4Q1VRDdt++rgRUovNUXlnJ8+
+         0n9yemw+T01QZcvWjHA+IRLf1JeQT4kgvMDTRAYyxhxbxVWsHDg9iQgAYLNOQNwzA9OF
+         sDZz74KhVDusvK5O1ZzeFkSdIarEHU0F40BXnkkl9lMTBvYQ5MhVKpY3D2OmLJcBkAEy
+         KcO16Kf5TQjdh+qmv8d3ljlMfUjsN/SwOUJhPHytWIHGEv2W78sjXEO3RFhRyQIfEBHP
+         PMv71bBDjxuLO7cV0gbppJac2jsSFYaYorLS8teQTqi/lzN5ml/LLJzfs4CWnvoIVFYD
+         TWyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677748703;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+v85GLUDrQ2zVLBvlWtS8ia1HQWcVPpr7GzHsjdX2Jw=;
+        b=bxCvrYUUs6IDdYpIEo2TaSZhtyMGYkWz3CT1SWfT2LnCwBfMKJjetjgfzJcgKYZP8L
+         LvfMrPJGnXQwbrn5Q7k6Lv3rR9b1XxHs4y7PixJlOdQU2AJUwX+sFONoltjOoSv0ANwJ
+         8DJxCZAkVVvKK4fTgJSI91Ti0A2znbFcCtqHLyZdLjLa+PIpUF0aCFhGeag5mVby2k2F
+         56g0dqyeigTiCOxR0uw3alUcLAY2YAABKXYHwTgvlZkR6dB5MkgzT59TAOYZ5FYmY277
+         zWE/ngXk+bAqwa0xvo2qSVu8F1ZwA1OgC1OSF86P6LzMS+wg/1Aky9hSfv509AxAP7Fi
+         dTwg==
+X-Gm-Message-State: AO0yUKW7VxcB0nUArX1ZMTb5kKYZgh0Vt0LXTTpZlQm2FD/0ZhetzOGB
+        YAyXyG912h9Tj+WEdnddZH/95g==
+X-Google-Smtp-Source: AK7set+YPw1lyaEwaI48fxgT8GolHPnYxo9XVJyK/m4+bNoNPlN8Bml3v5HR6wybgri48X3tq2AU1w==
+X-Received: by 2002:a05:600c:3d8e:b0:3ea:bc08:b55e with SMTP id bi14-20020a05600c3d8e00b003eabc08b55emr6973744wmb.25.1677748702713;
+        Thu, 02 Mar 2023 01:18:22 -0800 (PST)
+Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
+        by smtp.gmail.com with ESMTPSA id x14-20020adfec0e000000b002c54536c662sm14745006wrn.34.2023.03.02.01.18.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 01:18:22 -0800 (PST)
+Date:   Thu, 2 Mar 2023 09:18:24 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Itaru Kitayama <itaru.kitayama@gmail.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
+Subject: Re: [RFC] Support for Arm CCA VMs on Linux
+Message-ID: <ZABp4KhrhsHcKmh2@myrica>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+ <Y9PtKJ3Wicc19JF1@myrica>
+ <CANW9uyud8RTkqgiL=64wV712QMxtAyubqeyCJ0vpcADJ42VqJA@mail.gmail.com>
+ <Y/8Y3WLmiw6+Z5AS@myrica>
+ <CANW9uysnvGCwANu+_6dp9+3rvHGOkThT9d0K2qpQV4exdmYWoA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
- compatible strings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-8-arinc.unal@arinc9.com>
- <20230227173333.GA496999-robh@kernel.org>
- <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
- <20230301024431.GA251215-robh@kernel.org>
- <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
- <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANW9uysnvGCwANu+_6dp9+3rvHGOkThT9d0K2qpQV4exdmYWoA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2.03.2023 11:28, Krzysztof Kozlowski wrote:
-> On 01/03/2023 09:15, Arınç ÜNAL wrote:
->> On 1.03.2023 05:44, Rob Herring wrote:
->>> On Tue, Feb 28, 2023 at 07:46:36PM +0300, Arınç ÜNAL wrote:
->>>> On 27/02/2023 20:33, Rob Herring wrote:
->>>>> On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
->>>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>>
->>>>>> Add the ralink,rt2880-pinmux compatible string. It had been removed from
->>>>>> the driver which broke the ABI.
->>>>>>
->>>>>> Add the mediatek compatible strings. Change the compatible string on the
->>>>>> examples with the mediatek compatible strings.
->>>>>>
->>>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>> ---
->>>>>>     .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
->>>>>>     .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
->>>>>>     .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
->>>>>>     .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
->>>>>>     .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
->>>>>>     5 files changed, 25 insertions(+), 10 deletions(-)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
->>>>>> index 1e63ea34146a..531b5f616c3d 100644
->>>>>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
->>>>>> @@ -17,7 +17,10 @@ description:
->>>>>>     properties:
->>>>>>       compatible:
->>>>>> -    const: ralink,mt7620-pinctrl
->>>>>> +    enum:
->>>>>> +      - mediatek,mt7620-pinctrl
->>>>>> +      - ralink,mt7620-pinctrl
->>>>>
->>>>> We don't update compatible strings based on acquistions nor marketing
->>>>> whims. If you want to use 'mediatek' for new things, then fine.
->>>>
->>>> Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs share
->>>> the same architecture from Ralink, so they were incorrectly called Ralink
->>>> SoCs.
->>>>
->>>> I can remove the new strings from Ralink SoCs and add them only for MediaTek
->>>> SoCs. Or you could make an exception for this one, regarding the situation.
->>>> Whatever you think is best.
->>>
->>> I'm not in a position to make an exception as I know little about this
->>> platform. Carrying both strings is a NAK. Either you (and everyone using
->>> these platforms) care about the ABI and are stuck with the "wrong"
->>> string. In the end, they are just unique identifiers. Or you don't care
->>> and break the ABI and rename everything. If you do that, do just that in
->>> your patches and make it crystal clear in the commit msg that is your
->>> intention and why that is okay.
->>
->> Ralink had their MIPS SoCs pre-acquisition, RT2880, etc. MediaTek
->> introduced new SoCs post-acquisition, MT7620, MT7621, MT7628, and
->> MT7688, utilising the same platform from Ralink, sharing the same
->> architecture code, pinctrl core driver, etc.
->>
->> I don't intend to break the ABI at all. On the contrary, I fix it where
->> possible.
->>
->> If I understand correctly, from this conversation and what Krzysztof
->> said, all strings must be kept on the schemas so I can do what I said on
->> the composed mail. Only match the pin muxing information on the strings
->> that won't match multiple pin muxing information from other schemas.
->>
->> This way we don't break the ABI, introduce new compatible strings while
->> keeping the remaining ones, and make schemas match correctly.
->>
->> Let me know if this is acceptable to you.
+On Thu, Mar 02, 2023 at 07:12:24AM +0900, Itaru Kitayama wrote:
+> On Wed, Mar 1, 2023 at 6:20 PM Jean-Philippe Brucker
+> <jean-philippe@linaro.org> wrote:
+> >
+> > Hi Itaru,
+> >
+> > On Wed, Mar 01, 2023 at 08:35:05AM +0900, Itaru Kitayama wrote:
+> > > Hi Jean,
+> > > I've tried your series in Real on CCA Host, but the KVM arch init
+> > > emits an Invalid argument error and terminates.
+> >
+> > Do you know which call returns this error?  Normally the RMEGuest support
+> > should print more detailed errors. Are you able to launch normal guests
+> > (without the rme-guest object and confidential-guest-support machine
+> > parameter)?  Could you give the complete QEMU command-line?
 > 
-> If by "introduce new compatible strings" you mean duplicate compatibles
-> to fix the ralink->mediatek, then you ignored entire email from Rob -
-> this and previous. We don't do this. Leave them as is.
+> No, I cant say which. Yes, the CCA-capable QEMU boots if I don't set
+> RME-related options.
 > 
-> If you meant something else, explain more...
+> Here's mine (based upon your command-line):
+> qemu-system-aarch64 -cpu host -accel kvm -machine
+> virt,gic-version=3,confidential-guest-support=rme0 -smp 2 -m 256M
+> -nographic -object rme-guest,id=rme0,measurement-algo=sha512 -kernel
+> Image -initrd rootfs.ext2 -append 'console=ttyAMA0 earlycon'
+> -overcommit mem-lock=on
 
-Let me put them in a group to better explain.
+Thank you, this works on my setup so I'm not sure what's wrong. Check that
+KVM initialized successfully, with this in the host kernel log:
+"[    0.267019] kvm [1]: Using prototype RMM support (version 56.0)"
 
-## Fix ABI
+Next step would be to find out where the EINVAL comes from, with printfs
+or GDB. This seems rather specific so I'll email you directly to avoid
+filling up everyone's inbox.
 
-ralink,rt2880-pinmux was there before, it was removed which broke the 
-ABI. I'm reintroducing it to fix it.
-
-## New strings to be able to split bindings
-
-New strings are needed for MT7628/MT7688 and some RT SoCs to be able to 
-properly document the pin muxing information.
-
-## Incorrect naming
-
-MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink, 
-introduce new ralink->mediatek compatible strings to address it.
-
-## Exception for RT SoCs to be called MediaTek
-
-This is where I was asking an exception to be made. Rob told us here 
-they know little about the platform so I explained it.
-
-MediaTek acquired Ralink and then introduced new MediaTek SoCs utilising 
-the same platform from Ralink.
-
-Anyway, now that I look at this again, it makes sense to me as well not 
-to rename the Ralink SoCs. I'll call the RT SoCs Ralink on the kconfig, 
-pinctrl driver, and dt-binding schemas on my next version.
-
-Arınç
+Thanks,
+Jean
