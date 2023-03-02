@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7147F6A78BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BF36A78BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjCBBLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 20:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S229637AbjCBBNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 20:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjCBBLy (ORCPT
+        with ESMTP id S229470AbjCBBNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:11:54 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584CC23102;
-        Wed,  1 Mar 2023 17:11:51 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id y2so15237809pjg.3;
-        Wed, 01 Mar 2023 17:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677719511;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n+zNU2traPyY4e76JjN6VQpIVRi1XnP7HB+q7Nr0E/4=;
-        b=Mmro2sTZ/dgxsJ+grrWfL89raBn2OGoq/Drc+R2Mlxr8qJCZmZLA/1ORflcpcarfXt
-         gR3GoQYhl30tZ7KPX+gAhc/hDJ16+pItSV0/mZpg2Ps+DmYasaNQb6/pMUTAmboZxyc3
-         a6C95G2ajIvCLC/IFymCnpOcnEkjmMcLl7txXSfLXVMGXJnbPcu6hRnd4EZyRE1cSHrH
-         zOve4LFDhYzUTiHz9O8jevSmwTDVnLCRJSQVKt5brPYmp3tkz4aaCoB4ajw1Y8iduHgx
-         D16+EfXt1trqM6KVaN2fcJoJf3K3aST0AqjOMqTNlAIIrcb+p9RqZ8OFHPkx1Y3GXj+F
-         Lemg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677719511;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n+zNU2traPyY4e76JjN6VQpIVRi1XnP7HB+q7Nr0E/4=;
-        b=xx1RHmBB/hcO4G5kUKFQa9NUaXcP/kwxEJ4CZH8LxNBHhzx9lW4/xepxJQGVqPWj7w
-         nXK80h9PxbBwjJ+TQs9DmpYKlJW/DIJCkak9sDGjVLTUeCmsWu/kNfcCfgiySQq2e+y2
-         Z1BkauF916KL47jnvNYrpNZRjZS4qvjlKByKaZ/OZ9GlKSGmkDZVVCvn0JAmF2cGN3a2
-         W+ncI6iovFu2JdNuXAZmQGaig+HP7psMInQFbewSyY/cqrUXVYJLzitSLMXqIQkVbTnV
-         JrZpW4NJWhYTCrqHKW7jLSD7kO3fGbjChq3SQQXAWVyU5s/vzqi84Wr4knvgXCrJ2774
-         cLSA==
-X-Gm-Message-State: AO0yUKVtCH07IPhZPo3E0x6xqjX238d6I5/Y1/FPqVmgsENiECTrMf9J
-        X9ffmuaNRI1KXVPoNco7Ufo=
-X-Google-Smtp-Source: AK7set//9F6BtGJ1V3XpntmKtzHp1dSvX+v72vFs+x5Hmv+o7wUqfqc6rRldy2GK86dl72DVeRjtRA==
-X-Received: by 2002:a05:6a20:9388:b0:cc:59b7:79e6 with SMTP id x8-20020a056a20938800b000cc59b779e6mr330718pzh.24.1677719510548;
-        Wed, 01 Mar 2023 17:11:50 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id l72-20020a63914b000000b005030a00085asm8139712pge.46.2023.03.01.17.11.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 17:11:49 -0800 (PST)
-Date:   Wed, 1 Mar 2023 17:11:48 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Chenyi Qiang <chenyi.qiang@intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v12 013/106] KVM: TDX: create/destroy VM structure
-Message-ID: <20230302011148.GA2069594@ls.amr.corp.intel.com>
-References: <cover.1677484918.git.isaku.yamahata@intel.com>
- <fd52ff91fbce051ecf9781af2e5c54138c995230.1677484918.git.isaku.yamahata@intel.com>
- <e23b30cc-80a1-774f-7d58-a676d989b5ce@intel.com>
+        Wed, 1 Mar 2023 20:13:14 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6AA6E8D;
+        Wed,  1 Mar 2023 17:13:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1zLLJNUSIPfrita6qBmhQbtBT9F7jhfSipHpHTTdjA0=; b=IARImd/855rty/UA31tNFB+wlM
+        iOU+MlhzUC7XMLUfZcwU9hNmVWghqCoa4QMLocT2rO64ptdyJal83s+7fZJmhZQylpGGR1Zi6csfq
+        CRuuDbEmu8cRC3CpgOwUG/b02a2rcrR36V2qxLp9urX8q/GuR/no6PRaLmyhHk+s4HWDN0wd87t8S
+        5i5Fy0cHfcJBhvOF3Sx8oE33XKtn3GbkVXno9KcpShMK26SuH5UMCt6kUq1WlW532NYenkeG5sS6c
+        vrrI2SfQgNUMFjVdvjIHp8DmOINwc2FsDAIQdcNCx/TAya6yVDAhyisCzt4cTWrZFq6OrICTnxFHF
+        2NWQzMMQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pXXUt-000QuI-7u; Thu, 02 Mar 2023 01:12:39 +0000
+Date:   Wed, 1 Mar 2023 17:12:39 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Meng Tang <tangmeng@uniontech.com>,
+        Peng Zhang <zhangpeng362@huawei.com>,
+        Joel Granados <j.granados@samsung.com>
+Cc:     keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
+        willy@infradead.org, kbuild-all@lists.01.org,
+        nixiaoming@huawei.com, nizhen@uniontech.com,
+        zhanglianjie@uniontech.com, sujiaxun@uniontech.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] fs/proc: optimize register ctl_tables
+Message-ID: <Y//4B2Bw4O2umKgW@bombadil.infradead.org>
+References: <20220304112341.19528-1-tangmeng@uniontech.com>
+ <202203081905.IbWENTfU-lkp@intel.com>
+ <Y7xWUQQIJYLMk5fO@bombadil.infradead.org>
+ <Y8iKjJYMFRSthxzn@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e23b30cc-80a1-774f-7d58-a676d989b5ce@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y8iKjJYMFRSthxzn@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,37 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 03:24:49PM +0800,
-Chenyi Qiang <chenyi.qiang@intel.com> wrote:
+On Wed, Jan 18, 2023 at 04:10:52PM -0800, Luis Chamberlain wrote:
+> On Mon, Jan 09, 2023 at 10:00:49AM -0800, Luis Chamberlain wrote:
+> > On Tue, Mar 08, 2022 at 07:22:51PM +0800, kernel test robot wrote:
+> > > Hi Meng,
+> > > 
+> > > Thank you for the patch! Perhaps something to improve:
+> > 
+> > Meng, can you re-send with a fix? We're early in the merge window to
+> > help test stuff now.
+> 
+> *re-poke* if you can't work on this please let me know!
 
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > +	max_pkgs = topology_max_packages();
-> > +	tdx_mng_key_config_lock = kcalloc(max_pkgs, sizeof(*tdx_mng_key_config_lock),
-> > +				   GFP_KERNEL);
-> > +	if (!tdx_mng_key_config_lock)
-> > +		return -ENOMEM;
-> > +	for (i = 0; i < max_pkgs; i++)
-> > +		mutex_init(&tdx_mng_key_config_lock[i]);
-> > +
-> >  	/* TDX requires VMX. */
-> >  	r = vmxon_all();
-> >  	if (!r)
-> > @@ -168,3 +600,9 @@ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
-> >  
-> >  	return r;
-> >  }
-> > +
-> > +void tdx_hardware_unsetup(void)
-> > +{
-> 
-> To align with tdx_hardware_setup(), add some check like:
-> 
-> if (!enable_ept || !enable_tdx)
-> 	return;
-> 
+I've taken the time to rebase this but I'm not a big fan of how fragile
+it is, you can easily forget to do the proper accounting or bailing out.
 
-Oh yes, thanks for catching it.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Upon looking at all this it reminded me tons of times Eric has
+said a few calls are just compatibility wrappers, and otherwise they are
+deprecated. Ie, they exist just to old users but we should have new
+users move on to the new helpers. When / if we can move the older ones
+away that'd be great. Knowing that simplifies the use-cases we have to
+address for this case too.
+
+So I phased out completely register_sysctl_paths() and then started to
+work on register_sysctl_table(). I didn't complete phasing out
+register_sysctl_table() but with a bit of patience and looking at the
+few last examples I did I think we can quickly phase it out with coccinelle.
+Here's where I'm at:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing
+
+On top of that I've rebased your patches but I'm not confident in them
+so I just put this out here in case others want to work on it:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing-opt
+
+What I think we should do first instead is do a non-functional change
+which transforms all loops to list_for_each_table_entry() and then 
+we can consider using the bail out *within* the list_for_each_table_entry()
+macro itself.
+
+That would solve the first part -- the fragile odd checks to bail out
+early.  But not the odd accounting we have to do at times. So it begs
+the question if we can instead deprecate register_sysctl_table() and
+then have a counter for us at all times. Also maybe an even simpler
+alternative may just be to see to have the nr_entries be inferred with
+ARRAY_SIZE() if count_subheaders() == 1? I haven't looked into that yet.
+
+  Luis
