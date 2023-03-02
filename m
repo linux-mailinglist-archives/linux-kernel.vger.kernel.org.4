@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4032B6A85ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAAD6A85EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjCBQNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S229780AbjCBQOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjCBQNa (ORCPT
+        with ESMTP id S229500AbjCBQOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:13:30 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2ED2D179
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:13:28 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id bx12so13903715wrb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 08:13:28 -0800 (PST)
+        Thu, 2 Mar 2023 11:14:07 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25B2231ED
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:14:05 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id x199so4066683ybg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 08:14:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677773607;
+        d=google.com; s=20210112; t=1677773645;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uGmvl0w1UaO+7YwbOGpW1Lh19XgfKEMnXjggTPBH7iw=;
-        b=fI9i5jmEeBf8SzuDbY4cEXwiAtJKAJFRebLR5Z3AyLjhYbnuXR0IUs79WAWBqvZBMK
-         UD3NMCJAyATMkilMmBy3zLRJ402cMm2WEYE2Ptr5d6xZw64Atcll6c5WAKMskM1mSOJA
-         JdGX5Q3hTbaXgwR9Huwm0Z6OowSBxYdQ8wlVitWvi6AAU36zGm3ufT/V7m1mQ1cKO5sM
-         RF5tqWF6Z5AU8XdQ7aJWIZEwOAUDQdLQldk6TaQOpHYFc2MXe2xvBaJU27vAXb0n83Qq
-         8zm1p4zqqckQok4tAeCVY46Y4X9xCI26PshcqsZ+fAyjRV0rTglTvxNj2lg6MUO9+9YK
-         w+sw==
+        bh=pk3jxwGhDgrO97j71qZC7hN119s30TroFhBoZ90aiOw=;
+        b=HOLaGjYG+E2moOTroF7Lrc+FT8kjPg8eO+2zq2UinSgu1L3KwflN5gtuQz0aDv9ZXP
+         KckvhiQgN1sVCm2Hc5Yn1+cw9i8SMozFfdHsbL+AU7QVUr4jkT41uTH8LZGQmb0a6Zyi
+         no4FFwYyuvgxDpfoo1taagMzOvHW+ePVVwvWXz9LTXbSNMqosnxaF+IsYpUHOzyH/Tkz
+         /mwwZKGFNHwd/jt6Ud2+aiJBOGFURPV4LXpc9DU863O/dmd53NCqR/t6vQL5cmqrwzq8
+         BjAV+kKZjlzQjPbo/AWcbYqHbGcwwvSf8THi1bV9ZERZZazHoRYC2q3QV6kNacTBeMmq
+         XXQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677773607;
+        d=1e100.net; s=20210112; t=1677773645;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uGmvl0w1UaO+7YwbOGpW1Lh19XgfKEMnXjggTPBH7iw=;
-        b=sKHkBcFi+/QgDOVk6YBIXb/7LbYguG9W2lo6ijPG2tp0xXkqKbRyDXGZTeL0RO6MwZ
-         tf9+IouAtVJscgQXMvCD0f/yJV83QU/drnDhXDvn+WV9JyfV9cVW/bdFtiF/y3QhQobw
-         wpNStgjxRx/enQp9atu1AGEeF7IzeSPQIfGdtcn3tAGogyEjGUu4RV7hV3Q1WzXHyknP
-         /DK0DDVKmqURal74SkOf/wURx3IfOTGt1YfLnPWiBfOC9awllIdgq2iYd8Zag7JwFtMK
-         Nx0sxXBHhpt/a3Yby7+akbLeyyfIK5mBqwQ+gSXJGR2dgRAts0TWQo1ym3nTZ8JkUpxb
-         1wIA==
-X-Gm-Message-State: AO0yUKVBr399zi3Iq5qLxDo6Qr1TjN3VO3BptEcW5tQ2sclGKBoG5X+U
-        9e6BHyEL8ZAc2bqNNE43zTHLYz0mSLZX+kGIwNhATw==
-X-Google-Smtp-Source: AK7set+tx+/oGn5fviTIibTvPRjFX79icV90Nm18T2byUVU/Fo0ImIBddLj8xkjHbzmqrXVqZPxX0cM9wNNEoBQ9jRU=
-X-Received: by 2002:a5d:4dc3:0:b0:2c9:868e:91a with SMTP id
- f3-20020a5d4dc3000000b002c9868e091amr1801456wru.9.1677773607051; Thu, 02 Mar
- 2023 08:13:27 -0800 (PST)
+        bh=pk3jxwGhDgrO97j71qZC7hN119s30TroFhBoZ90aiOw=;
+        b=KC+ZDaasO8RCn62QtPAND1BGix25KxKhXluhmlN3LxtDzhCO373ogiSfbABLU3tPjq
+         TVX9pO0IvSeND9QOSWklDwkqvPD4+1SGFxjKP1XCQHkkLu1ndvgBgpxluey09FMGgv8Y
+         YECwc5cMDojILZBKGjwRhvKxPNOkkGkcs+dpeW1pkfQ+V5sQLe3JLz08kX+q4qbWNEca
+         GcvNYXa3pkfQLcIAIQEDlRfAbyawfw4CRy6ILZ655e6PQL5E04UlEVyl0eMFAoSF87Ei
+         R2lbey/B4uz473gEp6YWutN8uz5xACUW5F4HBP2kbs/5IHY1dOD78ht5pZ7HVSLW9kTI
+         nvrw==
+X-Gm-Message-State: AO0yUKWPmEMM3gnqbBG3XfL4O3qrETncJ8QqRNBDDUsYYsSaS86XHDi5
+        CxRk3Ar49InuIoDysFax+pFFOAAAfvalHEvL3SvRFw==
+X-Google-Smtp-Source: AK7set9+bTrTQ51qMnNEYy8g/1SOF00A9AhrNkytx6kl+1TS0DOeSRD0r4Sq47w1fENuH5Bq/GsXLlw477NZXu+8vAM=
+X-Received: by 2002:a5b:650:0:b0:997:bdfe:78c5 with SMTP id
+ o16-20020a5b0650000000b00997bdfe78c5mr5867671ybq.6.1677773644842; Thu, 02 Mar
+ 2023 08:14:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20230302041211.852330-1-irogers@google.com> <20230302041211.852330-8-irogers@google.com>
- <ZAC1FK0EHA4reQid@kernel.org>
-In-Reply-To: <ZAC1FK0EHA4reQid@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 2 Mar 2023 08:13:12 -0800
-Message-ID: <CAP-5=fWRH3RzhMnjXOkw5-shwFDp-H+cGS=HYDDwjqETzyizxQ@mail.gmail.com>
-Subject: Re: [PATCH v1 07/10] perf evsel: Add function to compute pmu_name
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
+References: <20230301193403.1507484-1-surenb@google.com> <Y/+wlg5L8A1iebya@cmpxchg.org>
+ <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com> <ZADBCEk68W1aGJAV@cmpxchg.org>
+In-Reply-To: <ZADBCEk68W1aGJAV@cmpxchg.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 2 Mar 2023 08:13:54 -0800
+Message-ID: <CAJuCfpHF=9Dv_Yzph5jNmR1ZfTf7Lf=_oShztyLUq0ps_D=osQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] psi: remove 500ms min window size limitation for triggers
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, peterz@infradead.org,
+        johunt@akamai.com, mhocko@suse.com, keescook@chromium.org,
+        quic_sudaraja@quicinc.com, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,90 +73,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 6:39=E2=80=AFAM Arnaldo Carvalho de Melo <acme@kerne=
-l.org> wrote:
+On Thu, Mar 2, 2023 at 7:30 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
 >
-> Em Wed, Mar 01, 2023 at 08:12:08PM -0800, Ian Rogers escreveu:
-> > The computed pmu_name respects software events and aux event groups,
-> > such that the pmu_name is changed to be that of the aux event leader
-> > or group leader for software events. This is done as a later change
-> > will split events that are in different PMUs into different groups.
+> On Wed, Mar 01, 2023 at 12:48:38PM -0800, Suren Baghdasaryan wrote:
+> > On Wed, Mar 1, 2023 at 12:07=E2=80=AFPM Johannes Weiner <hannes@cmpxchg=
+.org> wrote:
+> > >
+> > > On Wed, Mar 01, 2023 at 11:34:03AM -0800, Suren Baghdasaryan wrote:
+> > > > Current 500ms min window size for psi triggers limits polling inter=
+val
+> > > > to 50ms to prevent polling threads from using too much cpu bandwidt=
+h by
+> > > > polling too frequently. However the number of cgroups with triggers=
+ is
+> > > > unlimited, so this protection can be defeated by creating multiple
+> > > > cgroups with psi triggers (triggers in each cgroup are served by a =
+single
+> > > > "psimon" kernel thread).
+> > > > Instead of limiting min polling period, which also limits the laten=
+cy of
+> > > > psi events, it's better to limit psi trigger creation to authorized=
+ users
+> > > > only, like we do for system-wide psi triggers (/proc/pressure/* fil=
+es can
+> > > > be written only by processes with CAP_SYS_RESOURCE capability). Thi=
+s also
+> > > > makes access rules for cgroup psi files consistent with system-wide=
+ ones.
+> > > > Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers=
+ and
+> > > > remove the psi window min size limitation.
+> > > >
+> > > > Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+> > > > Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraj=
+a@quicinc.com/
+> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > > ---
+> > > >  kernel/cgroup/cgroup.c | 10 ++++++++++
+> > > >  kernel/sched/psi.c     |  4 +---
+> > > >  2 files changed, 11 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> > > > index 935e8121b21e..b600a6baaeca 100644
+> > > > --- a/kernel/cgroup/cgroup.c
+> > > > +++ b/kernel/cgroup/cgroup.c
+> > > > @@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct =
+kernfs_open_file *of,
+> > > >       return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
+> > > >  }
+> > > >
+> > > > +static int cgroup_pressure_open(struct kernfs_open_file *of)
+> > > > +{
+> > > > +     return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RE=
+SOURCE)) ?
+> > > > +             -EPERM : 0;
+> > > > +}
+> > >
+> > > I agree with the change, but it's a bit unfortunate that this check i=
+s
+> > > duplicated between system and cgroup.
+> > >
+> > > What do you think about psi_trigger_create() taking the file and
+> > > checking FMODE_WRITE and CAP_SYS_RESOURCE against file->f_cred?
+> >
+> > That's definitely doable and we don't even need to pass file to
+> > psi_trigger_create() since it's called only when we write to the file.
+> > However by moving the capability check into psi_trigger_create() we
+> > also postpone the check until write() instead of failing early in
+> > open(). I always assumed failing early is preferable but if
+> > consolidating the code here makes more sense then I can make the
+> > switch. Please let me know if you still prefer to move the check.
 >
-> Adrian, can you please take a look and provide an Ack or Reviewed-by?
+> Just for context, a person on our team is working on allowing
+> unprivileged polls with windows that are multiples of 2s, which can be
+> triggered from the regular aggregator threads. This should be useful
+> for container delegation, and also for the desktop monitor app usecase
+> that Chris Down brought up some time ago. At that point, everybody can
+> open the file for write, and permissions are checked against the
+> trigger parameters.
 >
-> - Arnaldo
+> So I don't think it's a big deal to check this particular permission
+> at write time. But if you prefer we can also merge your patch as-is
+> and do the refactor as part of the other series.
 
-Adrian's input would be greatly appreciated! The handling of aux
-events/grouping was done to make sure the "Miscellaneous Intel PT
-testing" was passing, so there is some confidence it is correct :-)
+Let's roll this check without additional changes and then consolidate
+the checking inside psi_trigger_create() in a separate patch. If
+anybody objects to the late permission check we will just revert that
+last change without affecting anything else.
 
-Thanks,
-Ian
+>
+> Your call. In either case, please feel free to add
+>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
-> >  tools/perf/util/evsel.h |  1 +
-> >  2 files changed, 25 insertions(+)
-> >
-> > diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> > index 2dc2c24252bb..9c6b486f8bd4 100644
-> > --- a/tools/perf/util/evsel.c
-> > +++ b/tools/perf/util/evsel.c
-> > @@ -821,6 +821,30 @@ const char *evsel__name(struct evsel *evsel)
-> >       return "unknown";
-> >  }
-> >
-> > +const char *evsel__pmu_name(const struct evsel *evsel)
-> > +{
-> > +     const struct evsel *leader;
-> > +
-> > +     /* If the pmu_name is set use it. pmu_name isn't set for CPU and =
-software events. */
-> > +     if (evsel->pmu_name)
-> > +             return evsel->pmu_name;
-> > +     /*
-> > +      * Software events may be in a group with other uncore PMU events=
-. Use
-> > +      * the pmu_name of the group leader to avoid breaking the softwar=
-e event
-> > +      * out of the group.
-> > +      *
-> > +      * Aux event leaders, like intel_pt, expect a group with events f=
-rom
-> > +      * other PMUs, so substitute the AUX event's PMU in this case.
-> > +      */
-> > +     leader  =3D evsel__leader(evsel);
-> > +     if ((evsel->core.attr.type =3D=3D PERF_TYPE_SOFTWARE || evsel__is=
-_aux_event(leader)) &&
-> > +         leader->pmu_name) {
-> > +             return leader->pmu_name;
-> > +     }
-> > +
-> > +     return "cpu";
-> > +}
-> > +
-> >  const char *evsel__metric_id(const struct evsel *evsel)
-> >  {
-> >       if (evsel->metric_id)
-> > diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> > index 676c499323e9..72121194d3b1 100644
-> > --- a/tools/perf/util/evsel.h
-> > +++ b/tools/perf/util/evsel.h
-> > @@ -280,6 +280,7 @@ int arch_evsel__hw_name(struct evsel *evsel, char *=
-bf, size_t size);
-> >
-> >  int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char=
- *bf, size_t size);
-> >  const char *evsel__name(struct evsel *evsel);
-> > +const char *evsel__pmu_name(const struct evsel *evsel);
-> >  const char *evsel__metric_id(const struct evsel *evsel);
-> >
-> >  static inline bool evsel__is_tool(const struct evsel *evsel)
-> > --
-> > 2.39.2.722.g9855ee24e9-goog
-> >
->
-> --
->
-> - Arnaldo
+Thanks! Will post the final patch with Ack's later today. Originally
+it was purely cgroup-related change but now it's more of a PSI change.
+Therefore Peter's tree will probably be the right place for it.
