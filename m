@@ -2,286 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2526A7BC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E2F6A7BCA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCBHVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 02:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S229952AbjCBHXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 02:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjCBHVk (ORCPT
+        with ESMTP id S229840AbjCBHX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 02:21:40 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDFE23D98
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 23:21:37 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id z42so16598788ljq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 23:21:37 -0800 (PST)
+        Thu, 2 Mar 2023 02:23:29 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417E31421A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 23:23:27 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id bx12so12377168wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 23:23:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8SbwyaTUhRFFkR5W3MkeaNXpKy7rQS9sahOylLJtXPo=;
-        b=B0Y9pEUC4la/OMDA2aCD5zt72F/UBm2s+7zXkXnq+HDv3UX5Qv1Xk5NlK7cY09Rd9f
-         w96TA9fqQjVC+YfHHVLvXEW3yU9EAJDHCeqG9BKLXbsEcO2mN5qcuoSU4UnK1Ptw7Zd+
-         PHnJGlmTlSwmi4ytaTmkgCJlk+7jS9neByE00=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZNmbAi9ibC3osBXGji3FRkCEqZZDLyW4fjAwSlALjys=;
+        b=RgT+JvStPZx+VLRlvGOvrD5lqIL9jYgVVSBVlxtIgYefWg2TkvW3ShdDgF84ov9fvx
+         1uoaOexExbaq2x3iw6SDfZYzAZSTZrnlIwxSHaDZgFbMIxHfFycDPr07uu9t9ViBmjQ1
+         PaaItK37d/WmBhG/SSX4hPqxTk5QAyx+bJDu1lqZnDIVzE7vP2ewJfJ9VVtdjhvyML/E
+         0+h0FYn0BqaAKqnRHFWZsbOBWpsi2W3Dl2MuhHzxf546epgaWb9N/HO1rW2K4w4ineAc
+         4JYREqcjtOJQY5cjihipZO+is+kbQGSJQ8odI7kG3uzTT+38P4ovnvb3beF2tF6r285X
+         XOZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8SbwyaTUhRFFkR5W3MkeaNXpKy7rQS9sahOylLJtXPo=;
-        b=ShM5QxhyEZK69hlodss0ZQKxzAjK8pCKsLUjc+yrzAsjZIWrDwWxvfMN1KRaZ12+qc
-         VErRi/Cs5l/1xtxzhXnBw0xkxzkDOt0hJ5FOe81F7lOQG5mwOdmlYK9PQpE9IGayu87U
-         wOczkg8Dot9GIGRBSW0f1FAT6E6kQYlFCYsEpQ61VAo5LDzKSQR/sGY+TfLNZ/dOLWd/
-         MQTLN3MyQlVABf1asXupZwTk7LDWrulbjA07x/QvM/7VrYJFm4nG+J2PYt/3+RLld7U+
-         4FwxbeLYOBDba8nQ0DS2V1c1AVZDsTYZ2s0ZcN32kVSLJSmK9o3azdLWE0iLBOHVq/7/
-         weGg==
-X-Gm-Message-State: AO0yUKV5pj2xucvUnqQieHcdrypjA/TeLbhtPws5ETGRGkWPsScosJG2
-        4GMgnOOpbJxgtLZNCXUsN0aVDiR68r/wmiD2tcE=
-X-Google-Smtp-Source: AK7set/PbDMi51VZWaCXp9fyye4UKVxz8prgIbI0/8QPgJA0ZsVDT+ZZ8eC52tKodckAedLozPqNsg==
-X-Received: by 2002:a2e:2c12:0:b0:293:5002:80ef with SMTP id s18-20020a2e2c12000000b00293500280efmr2872343ljs.20.1677741695398;
-        Wed, 01 Mar 2023 23:21:35 -0800 (PST)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id s8-20020a05651c048800b00290679ebac1sm1988821ljc.9.2023.03.01.23.21.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 23:21:35 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] pinctrl: freescale: remove generic pin config core support
-Date:   Thu,  2 Mar 2023 08:21:31 +0100
-Message-Id: <20230302072132.1051590-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZNmbAi9ibC3osBXGji3FRkCEqZZDLyW4fjAwSlALjys=;
+        b=YeKB7iDFbPaPmUqSqSqVqhIFu6q4G14X9BjJhZxE5RxVDhD0QW3Fj90RxC1VEejZJc
+         DiP+r5BbeZYiACl6FfJJyWnaTwTkl1UDxYuX6qe/JjjIRYYyswfnWSH8a7fzw25epMQ/
+         LklBXs2KQOtWb4nuDGKs7Wxo7+sPWC2IDrlbiHJq1DudP9i9J+xmGUFSyO0imyMTrK6N
+         3WiPxVVSndJmh9g+A80rop1av+6xAhlGTmfrvCNCWPfrXh+dbCET75Rv4Oc8ZCwncLha
+         3S/H7wmKw2y/Qo/p617IIAudXoEBVt5v3EpsyZ4rssdM6sRnMX2x+5E82+F6qKCmE3oI
+         eUiA==
+X-Gm-Message-State: AO0yUKVSc+3PWomD4KaolI6uU4NGo8M9EItFVbAXBN0P7kzD6WJcnBkJ
+        66UzV7xXCdF/32bdRg+0lyCBWYSzJeSn/oJI0WmPuQ==
+X-Google-Smtp-Source: AK7set+JvLvSpMajeV2Oh7FYBZ3uTNH1UrAId995fYLR8kxfNgSHC2LuYolmYUg+UAIblDTd2HbGfLHEGLSj9qh9SYM=
+X-Received: by 2002:a5d:500a:0:b0:2cd:e125:4553 with SMTP id
+ e10-20020a5d500a000000b002cde1254553mr276850wrt.3.1677741805499; Wed, 01 Mar
+ 2023 23:23:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230222092409.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
+ <CAHUa44GUEtN4J_PKaeM4YEfL8dGBpCcSWw1C_pobwh9VFpWKTw@mail.gmail.com>
+ <CA+ddPcNnCwBVnpyT2cWYeRtUfqZFk-KodtMHfNMnQs=T9o3nyA@mail.gmail.com>
+ <CAHUa44FVrLDBNQqfFfwFAPHTjDNRpQJShCz2+H7X4nUbfe3QUQ@mail.gmail.com>
+ <CA+ddPcMBfVxF2HK8g_o84Ata7Cg3MedacfpG=EZWUn4Zu8m0Pw@mail.gmail.com>
+ <CAHUa44GhTnpyN6BrK69vOsjnDrQmYFsfm2mTX=sK97D2SWtrGQ@mail.gmail.com>
+ <CA+ddPcO4L55d2Uudkj8_NAY_5zSay-LBKWS=ZR0C6opPrzwRwQ@mail.gmail.com>
+ <CAHUa44FCnJo4D8TJ+=8iE7pT=Y70MtW9R68Li+CgEOnCBbxotw@mail.gmail.com> <CA+ddPcPzVEd6TJ=xFF3iGPpMmPbphGyCSdxMd0Ts-5CzYvRG=Q@mail.gmail.com>
+In-Reply-To: <CA+ddPcPzVEd6TJ=xFF3iGPpMmPbphGyCSdxMd0Ts-5CzYvRG=Q@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 2 Mar 2023 08:23:14 +0100
+Message-ID: <CAHUa44GCzi3oTrko0_JS=-HGZisbwOwG2gT+mpHJziqr4LAcOQ@mail.gmail.com>
+Subject: Re: [PATCH] tee: optee: Add SMC for loading OP-TEE image
+To:     Jeffrey Kardatzke <jkardatzke@chromium.org>
+Cc:     op-tee@lists.trustedfirmware.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No instance of "struct imx_pinctrl_soc_info" sets '.generic_pinconf =
-true', so all of this is effectively dead code.
+On Wed, Mar 1, 2023 at 8:27=E2=80=AFPM Jeffrey Kardatzke
+<jkardatzke@chromium.org> wrote:
+>
+> On Wed, Mar 1, 2023 at 12:44=E2=80=AFAM Jens Wiklander
+> <jens.wiklander@linaro.org> wrote:
+> >
+> > On Tue, Feb 28, 2023 at 8:29 PM Jeffrey Kardatzke
+> > <jkardatzke@chromium.org> wrote:
+> > >
+> > > On Tue, Feb 28, 2023 at 10:55=E2=80=AFAM Jens Wiklander
+> > > <jens.wiklander@linaro.org> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Fri, Feb 24, 2023 at 9:17 PM Jeffrey Kardatzke
+> > > > <jkardatzke@chromium.org> wrote:
+> > > > >
+> > > > > On Fri, Feb 24, 2023 at 12:25 AM Jens Wiklander
+> > > > > <jens.wiklander@linaro.org> wrote:
+> > > > > >
+> > > > > > On Thu, Feb 23, 2023 at 8:09 PM Jeffrey Kardatzke
+> > > > > > <jkardatzke@chromium.org> wrote:
+> > > > > > >
+> > > > > > > On Thu, Feb 23, 2023 at 1:28 AM Jens Wiklander
+> > > > > > > <jens.wiklander@linaro.org> wrote:
+> > > > > > > >
+> > > > > > > > Hi,
+> > > > > > > >
+> > > > > > > > On Wed, Feb 22, 2023 at 6:24 PM Jeffrey Kardatzke
+> > > > > > > > <jkardatzke@chromium.org> wrote:
+> > > > > > > > >
+> > > > > > > > > Adds an SMC call that will pass an OP-TEE binary image to=
+ EL3 and
+> > > > > > > > > instruct it to load it as the BL32 payload. This works in=
+ conjunction
+> > > > > > > > > with a feature added to Trusted Firmware for ARM that sup=
+ports this.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org=
+>
+> > > > > > > > > Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
+> > > > > > > > > ---
+> > > > > > > > >
+> > > > > > > > >  drivers/tee/optee/Kconfig     | 10 +++++
+> > > > > > > > >  drivers/tee/optee/optee_msg.h | 14 +++++++
+> > > > > > > > >  drivers/tee/optee/optee_smc.h | 22 ++++++++++
+> > > > > > > > >  drivers/tee/optee/smc_abi.c   | 77 +++++++++++++++++++++=
+++++++++++++++
+> > > > > > > > >  4 files changed, 123 insertions(+)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/opte=
+e/Kconfig
+> > > > > > > > > index f121c224e682..5ffbeb3eaac0 100644
+> > > > > > > > > --- a/drivers/tee/optee/Kconfig
+> > > > > > > > > +++ b/drivers/tee/optee/Kconfig
+> > > > > > > > > @@ -7,3 +7,13 @@ config OPTEE
+> > > > > > > > >         help
+> > > > > > > > >           This implements the OP-TEE Trusted Execution En=
+vironment (TEE)
+> > > > > > > > >           driver.
+> > > > > > > > > +
+> > > > > > > > > +config OPTEE_LOAD_IMAGE
+> > > > > > > > > +       bool "Load Op-Tee image as firmware"
+> > > > > > > >
+> > > > > > > > OP-TEE
+> > > > > > > Done, fixed in next patch set.
+> > > > > > > >
+> > > > > > > > > +       default n
+> > > > > > > > > +       depends on OPTEE
+> > > > > > > > > +       help
+> > > > > > > > > +         This loads the BL32 image for OP-TEE as firmwar=
+e when the driver is probed.
+> > > > > > > > > +         This returns -EPROBE_DEFER until the firmware i=
+s loadable from the
+> > > > > > > > > +         filesystem which is determined by checking the =
+system_state until it is in
+> > > > > > > > > +         SYSTEM_RUNNING.
+> > > > > > > > > diff --git a/drivers/tee/optee/optee_msg.h b/drivers/tee/=
+optee/optee_msg.h
+> > > > > > > > > index 70e9cc2ee96b..84c1b15032a9 100644
+> > > > > > > > > --- a/drivers/tee/optee/optee_msg.h
+> > > > > > > > > +++ b/drivers/tee/optee/optee_msg.h
+> > > > > > > > > @@ -284,6 +284,20 @@ struct optee_msg_arg {
+> > > > > > > > >   */
+> > > > > > > > >  #define OPTEE_MSG_FUNCID_GET_OS_REVISION       0x0001
+> > > > > > > > >
+> > > > > > > > > +/*
+> > > > > > > > > + * Load Trusted OS from optee/tee.bin in the Linux firmw=
+are.
+> > > > > > > > > + *
+> > > > > > > > > + * WARNING: Use this cautiously as it could lead to inse=
+cure loading of the
+> > > > > > > > > + * Trusted OS.
+> > > > > > > > > + * This SMC instructs EL3 to load a binary and excute it=
+ as the Trusted OS.
+> > > > > > > > > + * The first two params are the high and low 32 bits of =
+the size of the payload
+> > > > > > > > > + * and the third and fourth params are the high and low =
+32 bits of the physical
+> > > > > > > > > + * address of the payload. The payload is in the OP-TEE =
+image format.
+> > > > > > > > > + *
+> > > > > > > > > + * Returns 0 on success and an error code otherwise.
+> > > > > > > > > + */
+> > > > > > > > > +#define OPTEE_MSG_FUNCID_LOAD_IMAGE   0x0002
+> > > > > > > >
+> > > > > > > > There's no need to add anything to this file, you can defin=
+e
+> > > > > > > > OPTEE_SMC_FUNCID_LOAD_IMAGE to 2 directly in optee_smc.h be=
+low.
+> > > > > > > >
+> > > > > > > Done, fixed in next patch set.
+> > > > > > > > > +
+> > > > > > > > >  /*
+> > > > > > > > >   * Do a secure call with struct optee_msg_arg as argumen=
+t
+> > > > > > > > >   * The OPTEE_MSG_CMD_* below defines what goes in struct=
+ optee_msg_arg::cmd
+> > > > > > > > > diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/=
+optee/optee_smc.h
+> > > > > > > > > index 73b5e7760d10..908b1005e9db 100644
+> > > > > > > > > --- a/drivers/tee/optee/optee_smc.h
+> > > > > > > > > +++ b/drivers/tee/optee/optee_smc.h
+> > > > > > > > > @@ -104,6 +104,28 @@ struct optee_smc_call_get_os_revisio=
+n_result {
+> > > > > > > > >         unsigned long reserved1;
+> > > > > > > > >  };
+> > > > > > > > >
+> > > > > > > > > +/*
+> > > > > > > > > + * Load Trusted OS from optee/tee.bin in the Linux firmw=
+are.
+> > > > > > > > > + *
+> > > > > > > > > + * WARNING: Use this cautiously as it could lead to inse=
+cure loading of the
+> > > > > > > > > + * Trusted OS.
+> > > > > > > > > + * This SMC instructs EL3 to load a binary and excute it=
+ as the Trusted OS.
+> > > > > > > >
+> > > > > > > > execute
+> > > > > > > >
+> > > > > > > Done, fixed in next patch set.
+> > > > > > > > > + *
+> > > > > > > > > + * Call register usage:
+> > > > > > > > > + * a0 SMC Function ID, OPTEE_SMC_CALL_LOAD_IMAGE
+> > > > > > > > > + * a1 Upper 32bit of a 64bit size for the payload
+> > > > > > > > > + * a2 Lower 32bit of a 64bit size for the payload
+> > > > > > > > > + * a3 Upper 32bit of the physical address for the payloa=
+d
+> > > > > > > > > + * a4 Lower 32bit of the physical address for the payloa=
+d
+> > > > > > > > > + *
+> > > > > > > > > + * The payload is in the OP-TEE image format.
+> > > > > > > > > + *
+> > > > > > > > > + * Returns result in a0, 0 on success and an error code =
+otherwise.
+> > > > > > > > > + */
+> > > > > > > > > +#define OPTEE_SMC_FUNCID_LOAD_IMAGE OPTEE_MSG_FUNCID_LOA=
+D_IMAGE
+> > > > > > > > > +#define OPTEE_SMC_CALL_LOAD_IMAGE \
+> > > > > > > > > +       OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_LOAD_IMA=
+GE)
+> > > > > > > > > +
+> > > > > > > > >  /*
+> > > > > > > > >   * Call with struct optee_msg_arg as argument
+> > > > > > > > >   *
+> > > > > > > > > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/op=
+tee/smc_abi.c
+> > > > > > > > > index a1c1fa1a9c28..c1abbee86b39 100644
+> > > > > > > > > --- a/drivers/tee/optee/smc_abi.c
+> > > > > > > > > +++ b/drivers/tee/optee/smc_abi.c
+> > > > > > > > > @@ -8,9 +8,11 @@
+> > > > > > > > >
+> > > > > > > > >  #include <linux/arm-smccc.h>
+> > > > > > > > >  #include <linux/errno.h>
+> > > > > > > > > +#include <linux/firmware.h>
+> > > > > > > > >  #include <linux/interrupt.h>
+> > > > > > > > >  #include <linux/io.h>
+> > > > > > > > >  #include <linux/irqdomain.h>
+> > > > > > > > > +#include <linux/kernel.h>
+> > > > > > > > >  #include <linux/mm.h>
+> > > > > > > > >  #include <linux/module.h>
+> > > > > > > > >  #include <linux/of.h>
+> > > > > > > > > @@ -1354,6 +1356,77 @@ static void optee_shutdown(struct =
+platform_device *pdev)
+> > > > > > > > >                 optee_disable_shm_cache(optee);
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > > +#ifdef CONFIG_OPTEE_LOAD_IMAGE
+> > > > > > > > > +
+> > > > > > > > > +#define OPTEE_FW_IMAGE "optee/tee.bin"
+> > > > > > > > > +
+> > > > > > > > > +static int optee_load_fw(struct platform_device *pdev,
+> > > > > > > > > +                        optee_invoke_fn *invoke_fn)
+> > > > > > > > > +{
+> > > > > > > > > +       const struct firmware *fw =3D NULL;
+> > > > > > > > > +       struct arm_smccc_res res;
+> > > > > > > > > +       phys_addr_t data_pa;
+> > > > > > > > > +       u8 *data_buf =3D NULL;
+> > > > > > > > > +       u64 data_size;
+> > > > > > > > > +       u32 data_pa_high, data_pa_low;
+> > > > > > > > > +       u32 data_size_high, data_size_low;
+> > > > > > > > > +       int rc;
+> > > > > > > > > +
+> > > > > > > > > +       rc =3D request_firmware(&fw, OPTEE_FW_IMAGE, &pde=
+v->dev);
+> > > > > > > > > +       if (rc) {
+> > > > > > > > > +               /*
+> > > > > > > > > +                * The firmware in the rootfs will not be=
+ accessible until we
+> > > > > > > > > +                * are in the SYSTEM_RUNNING state, so re=
+turn EPROBE_DEFER until
+> > > > > > > > > +                * that point.
+> > > > > > > > > +                */
+> > > > > > > > > +               if (system_state < SYSTEM_RUNNING)
+> > > > > > > > > +                       return -EPROBE_DEFER;
+> > > > > > > > > +               goto fw_err;
+> > > > > > > > > +       }
+> > > > > > > > > +
+> > > > > > > > > +       data_size =3D fw->size;
+> > > > > > > > > +       /*
+> > > > > > > > > +        * This uses the GFP_DMA flag to ensure we are al=
+located memory in the
+> > > > > > > > > +        * 32-bit space since TF-A cannot map memory beyo=
+nd the 32-bit boundary.
+> > > > > > > > > +        */
+> > > > > > > > > +       data_buf =3D kmalloc(fw->size, GFP_KERNEL | GFP_D=
+MA);
+> > > > > > > > > +       if (!data_buf) {
+> > > > > > > > > +               rc =3D -ENOMEM;
+> > > > > > > > > +               goto fw_err;
+> > > > > > > > > +       }
+> > > > > > > > > +       memcpy(data_buf, fw->data, fw->size);
+> > > > > > > > > +       data_pa =3D virt_to_phys(data_buf);
+> > > > > > > > > +       reg_pair_from_64(&data_pa_high, &data_pa_low, dat=
+a_pa);
+> > > > > > > > > +       reg_pair_from_64(&data_size_high, &data_size_low,=
+ data_size);
+> > > > > > > > > +       goto fw_load;
+> > > > > > > > > +
+> > > > > > > > > +fw_err:
+> > > > > > > > > +       pr_warn("image loading failed\n");
+> > > > > > > > > +       data_pa_high =3D data_pa_low =3D data_size_high =
+=3D data_size_low =3D 0;
+> > > > > > > > > +
+> > > > > > > > > +fw_load:
+> > > > > > > > > +       /*
+> > > > > > > > > +        * Always invoke the SMC, even if loading the ima=
+ge fails, to indicate
+> > > > > > > > > +        * to EL3 that we have passed the point where it =
+should allow invoking
+> > > > > > > > > +        * this SMC.
+> > > > > > > > > +        */
+> > > > > > > > > +       invoke_fn(OPTEE_SMC_CALL_LOAD_IMAGE, data_size_hi=
+gh, data_size_low,
+> > > > > > > > > +                 data_pa_high, data_pa_low, 0, 0, 0, &re=
+s);
+> > > > > > > >
+> > > > > > > > Prior to this, you've done nothing to check that the firmwa=
+re might do
+> > > > > > > > what you're expecting. optee_msg_api_uid_is_optee_api() doe=
+s this
+> > > > > > > > under normal circumstances as that SMC function is defined =
+in the SMC
+> > > > > > > > Calling Convention. I'm not sure what is the best approach =
+here
+> > > > > > > > though.
+> > > > > > > >
+> > > > > > > The way I think about it is that we have to issue this SMC ca=
+ll once
+> > > > > > > we are in the SYSTEM_RUNNING state no matter what. We need to=
+ close
+> > > > > > > the security hole this would leave open otherwise. Any other =
+checks we
+> > > > > > > would do that would prevent us from making that call could be=
+ other
+> > > > > > > attack vectors.
+> > > > > >
+> > > > > > This is clearly a weakness in the design. If the kernel config =
+doesn't
+> > > > > > match exactly, we either have an open security hole in the secu=
+re
+> > > > > > world or fail to initialize the driver.
+> > > > > Yes, that's correct where if TF-A was built to enable the SMC cal=
+l,
+> > > > > but then the kernel wasn't built to include the OP-TEE driver, or=
+ with
+> > > > > the image loading SMC config or the driver doesn't get loaded; th=
+at's
+> > > > > leaving an open security hole. It's understood as part of this de=
+sign
+> > > > > that there's a big open security hole if the system isn't configu=
+red
+> > > > > properly.
+> > > > > > The former can only happen in
+> > > > > > systems designed like yours where the kernel up to this point h=
+as the
+> > > > > > same level of security as the secure world. There's no need for=
+ me to
+> > > > > > repeat my concerns over that, but this is now going to have an =
+impact
+> > > > > > on platforms that don't use your security model too. So far we'=
+ve
+> > > > > > managed to avoid configuration options in the OP-TEE driver tha=
+t
+> > > > > > breaks everything for a class of devices.
+> > > > > I could change TF-A and the kernel driver so that if it somebody =
+does
+> > > > > enable the kernel option but not the TF-A option, that TF-A retur=
+ns a
+> > > > > specific error code (rather than passing the non-secure originati=
+ng
+> > > > > call to OP-TEE) and the kernel driver can recognize that and then
+> > > > > continue as if OP-TEE was loaded. Then enabling this option won't
+> > > > > break anything if the TF-A config doesn't match.
+> > > >
+> > > > Yes, that should help a bit. We may want to check some UUID of the
+> > > > service too, just to avoid sending SMCs into the dark and not knowi=
+ng
+> > > > what it may hit. I believe we can sort out those details when
+> > > > reviewing the TF-A patch.
+> > > >
+> > > After looking at the code again...I realize I could do this in TF-A o=
+r
+> > > OP-TEE. In the current TF-A code (except when this option is enabled)=
+,
+> > > all SMCs are passed to OP-TEE. So I could add this into the SMC
+> > > handling code in OP-TEE to just return success in this case and that'=
+s
+> > > always enabled (since OP-TEE knows it is already loaded that seems
+> > > correct). I'd also want to change the TF-A code so that if it tries t=
+o
+> > > load OP-TEE more than once, that it returns success to satisfy your
+> > > concern about driver reloading if somebody is using this option
+> > > (currently it returns -EPERM).  Does that sound fine to you?
+> >
+> > You're overlooking the problem with sending SMCs to an unknown entity.
+> > It might not be entirely unknown at this stage due to the entry in
+> > DTB, but I would rather not depend on that.
+> >
+> > Regarding the error code, that can actually be ignored as the driver
+> > further down will discover if OP-TEE isn't there, see the call to
+> > optee_msg_api_uid_is_optee_api(). The value defined for
+> > OPTEE_SMC_CALLS_UID is also defined in the SMC Calling Convention,
+> > https://developer.arm.com/documentation/den0028/latest, for this
+> > purpose.
+> >
+>
+> OK, now I see what you're getting at regarding the unknown entity. How
+> about I first invoke the UID call, and then in TF-A if it is in the
+> state where it needs the image loaded still, it then returns an
+> alternate UID.  In the kernel, if it has the alternate UID, then load
+> the OP-TEE image. If it has the usual OP-TEE UID, then just proceed as
+> normal.  We could even get rid of the kernel config option at that
+> point too and always enable this. Would that be fine?
 
-To make it easier to understand the actual code, remove all the unused
-cruft. This effectively reverts a5cadbbb081c ("pinctrl: imx: add
-generic pin config core support").
+Yes, that's what I had in mind, except that I think it should still be
+under a config option, but I don't suppose that's a big deal.
 
-It was only in use by a single SOC (imx7ulp) for a few releases, and
-the commit message of dbffda08f0e9 ("pinctrl: fsl: imx7ulp: change to
-use imx legacy binding") suggests that it won't be used in the
-future. Certainly no new user has appeared in 20+ releases, and should
-the need arise, this can be dug out of git history again.
-
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/pinctrl/freescale/Kconfig       |  2 +-
- drivers/pinctrl/freescale/pinctrl-imx.c | 80 ++-----------------------
- drivers/pinctrl/freescale/pinctrl-imx.h | 24 --------
- 3 files changed, 6 insertions(+), 100 deletions(-)
-
-diff --git a/drivers/pinctrl/freescale/Kconfig b/drivers/pinctrl/freescale/Kconfig
-index 7a32f77792d9..27bdc548f3a7 100644
---- a/drivers/pinctrl/freescale/Kconfig
-+++ b/drivers/pinctrl/freescale/Kconfig
-@@ -4,7 +4,7 @@ config PINCTRL_IMX
- 	depends on OF
- 	select GENERIC_PINCTRL_GROUPS
- 	select GENERIC_PINMUX_FUNCTIONS
--	select GENERIC_PINCONF
-+	select PINCONF
- 	select REGMAP
- 
- config PINCTRL_IMX_SCU
-diff --git a/drivers/pinctrl/freescale/pinctrl-imx.c b/drivers/pinctrl/freescale/pinctrl-imx.c
-index e9aef764138f..93ffb5fc04e7 100644
---- a/drivers/pinctrl/freescale/pinctrl-imx.c
-+++ b/drivers/pinctrl/freescale/pinctrl-imx.c
-@@ -292,62 +292,6 @@ struct pinmux_ops imx_pmx_ops = {
- 	.set_mux = imx_pmx_set,
- };
- 
--/* decode generic config into raw register values */
--static u32 imx_pinconf_decode_generic_config(struct imx_pinctrl *ipctl,
--					      unsigned long *configs,
--					      unsigned int num_configs)
--{
--	const struct imx_pinctrl_soc_info *info = ipctl->info;
--	const struct imx_cfg_params_decode *decode;
--	enum pin_config_param param;
--	u32 raw_config = 0;
--	u32 param_val;
--	int i, j;
--
--	WARN_ON(num_configs > info->num_decodes);
--
--	for (i = 0; i < num_configs; i++) {
--		param = pinconf_to_config_param(configs[i]);
--		param_val = pinconf_to_config_argument(configs[i]);
--		decode = info->decodes;
--		for (j = 0; j < info->num_decodes; j++) {
--			if (param == decode->param) {
--				if (decode->invert)
--					param_val = !param_val;
--				raw_config |= (param_val << decode->shift)
--					      & decode->mask;
--				break;
--			}
--			decode++;
--		}
--	}
--
--	if (info->fixup)
--		info->fixup(configs, num_configs, &raw_config);
--
--	return raw_config;
--}
--
--static u32 imx_pinconf_parse_generic_config(struct device_node *np,
--					    struct imx_pinctrl *ipctl)
--{
--	const struct imx_pinctrl_soc_info *info = ipctl->info;
--	struct pinctrl_dev *pctl = ipctl->pctl;
--	unsigned int num_configs;
--	unsigned long *configs;
--	int ret;
--
--	if (!info->generic_pinconf)
--		return 0;
--
--	ret = pinconf_generic_parse_dt_config(np, pctl, &configs,
--					      &num_configs);
--	if (ret)
--		return 0;
--
--	return imx_pinconf_decode_generic_config(ipctl, configs, num_configs);
--}
--
- static int imx_pinconf_get_mmio(struct pinctrl_dev *pctldev, unsigned pin_id,
- 				unsigned long *config)
- {
-@@ -500,7 +444,6 @@ static const struct pinconf_ops imx_pinconf_ops = {
- /*
-  * Each pin represented in fsl,pins consists of a number of u32 PIN_FUNC_ID
-  * and 1 u32 CONFIG, the total size is PIN_FUNC_ID + CONFIG for each pin.
-- * For generic_pinconf case, there's no extra u32 CONFIG.
-  *
-  * PIN_FUNC_ID format:
-  * Default:
-@@ -548,18 +491,12 @@ static void imx_pinctrl_parse_pin_mmio(struct imx_pinctrl *ipctl,
- 	pin_mmio->mux_mode = be32_to_cpu(*list++);
- 	pin_mmio->input_val = be32_to_cpu(*list++);
- 
--	if (info->generic_pinconf) {
--		/* generic pin config decoded */
--		pin_mmio->config = imx_pinconf_parse_generic_config(np, ipctl);
--	} else {
--		/* legacy pin config read from devicetree */
--		config = be32_to_cpu(*list++);
-+	config = be32_to_cpu(*list++);
- 
--		/* SION bit is in mux register */
--		if (config & IMX_PAD_SION)
--			pin_mmio->mux_mode |= IOMUXC_CONFIG_SION;
--		pin_mmio->config = config & ~IMX_PAD_SION;
--	}
-+	/* SION bit is in mux register */
-+	if (config & IMX_PAD_SION)
-+		pin_mmio->mux_mode |= IOMUXC_CONFIG_SION;
-+	pin_mmio->config = config & ~IMX_PAD_SION;
- 
- 	*list_p = list;
- 
-@@ -587,9 +524,6 @@ static int imx_pinctrl_parse_groups(struct device_node *np,
- 	else
- 		pin_size = FSL_PIN_SIZE;
- 
--	if (info->generic_pinconf)
--		pin_size -= 4;
--
- 	/* Initialise group */
- 	grp->name = np->name;
- 
-@@ -855,10 +789,6 @@ int imx_pinctrl_probe(struct platform_device *pdev,
- 	imx_pinctrl_desc->confops = &imx_pinconf_ops;
- 	imx_pinctrl_desc->owner = THIS_MODULE;
- 
--	/* for generic pinconf */
--	imx_pinctrl_desc->custom_params = info->custom_params;
--	imx_pinctrl_desc->num_custom_params = info->num_custom_params;
--
- 	/* platform specific callback */
- 	imx_pmx_ops.gpio_set_direction = info->gpio_set_direction;
- 
-diff --git a/drivers/pinctrl/freescale/pinctrl-imx.h b/drivers/pinctrl/freescale/pinctrl-imx.h
-index fd8c4b6b3e36..f65ff45b4003 100644
---- a/drivers/pinctrl/freescale/pinctrl-imx.h
-+++ b/drivers/pinctrl/freescale/pinctrl-imx.h
-@@ -11,7 +11,6 @@
- #ifndef __DRIVERS_PINCTRL_IMX_H
- #define __DRIVERS_PINCTRL_IMX_H
- 
--#include <linux/pinctrl/pinconf-generic.h>
- #include <linux/pinctrl/pinmux.h>
- 
- struct platform_device;
-@@ -67,14 +66,6 @@ struct imx_pin_reg {
- 	s16 conf_reg;
- };
- 
--/* decode a generic config into raw register value */
--struct imx_cfg_params_decode {
--	enum pin_config_param param;
--	u32 mask;
--	u8 shift;
--	bool invert;
--};
--
- /**
-  * @dev: a pointer back to containing device
-  * @base: the offset to the controller in virtual memory
-@@ -100,15 +91,6 @@ struct imx_pinctrl_soc_info {
- 	unsigned int mux_mask;
- 	u8 mux_shift;
- 
--	/* generic pinconf */
--	bool generic_pinconf;
--	const struct pinconf_generic_params *custom_params;
--	unsigned int num_custom_params;
--	const struct imx_cfg_params_decode *decodes;
--	unsigned int num_decodes;
--	void (*fixup)(unsigned long *configs, unsigned int num_configs,
--		      u32 *raw_config);
--
- 	int (*gpio_set_direction)(struct pinctrl_dev *pctldev,
- 				  struct pinctrl_gpio_range *range,
- 				  unsigned offset,
-@@ -122,12 +104,6 @@ struct imx_pinctrl_soc_info {
- 				      const __be32 **list_p);
- };
- 
--#define IMX_CFG_PARAMS_DECODE(p, m, o) \
--	{ .param = p, .mask = m, .shift = o, .invert = false, }
--
--#define IMX_CFG_PARAMS_DECODE_INVERT(p, m, o) \
--	{ .param = p, .mask = m, .shift = o, .invert = true, }
--
- #define SHARE_MUX_CONF_REG	BIT(0)
- #define ZERO_OFFSET_VALID	BIT(1)
- #define IMX_USE_SCU		BIT(2)
--- 
-2.37.2
-
+Cheers,
+Jens
