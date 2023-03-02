@@ -2,211 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293F96A8988
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D876A898E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjCBTgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
+        id S229564AbjCBTiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCBTgv (ORCPT
+        with ESMTP id S229547AbjCBTiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:36:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BDC54DBFD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:36:42 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 479122F4;
-        Thu,  2 Mar 2023 11:37:25 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F02523F587;
-        Thu,  2 Mar 2023 11:36:39 -0800 (PST)
-Message-ID: <c81955c0-5f2e-e0e9-1a9a-5d005066df06@arm.com>
-Date:   Thu, 2 Mar 2023 20:36:38 +0100
+        Thu, 2 Mar 2023 14:38:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6821FEA;
+        Thu,  2 Mar 2023 11:38:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C725361642;
+        Thu,  2 Mar 2023 19:38:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EFFC4339C;
+        Thu,  2 Mar 2023 19:38:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677785888;
+        bh=OwB+3XfZc2i42C5aZfJlWvgZsNqnG1TajYYk4Tqce0s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dM7iCk4GESFgO7/GKgncJQ45ojgnOsk6O7X51HFcUN2QFVzFSwzjlnBM1fr3e0GKR
+         zkrwIdnUzmxZmpBh45bjPRSMSjIAyKI9LmuivP84LFFAhatpJqFQJatxM5CmoAO+ZI
+         q/2WEhsBTsG0el8rL4iks5IkCV+vw8kQy79X1F/NYqI3LEzrkXg9muLQ8LeoQ3jJ1j
+         au2WJDs2zmRCVmF/o/9+k0E3olUF1d6Af2MqrPJjRu6q/WbgBXmjoHwcT/BoSaZEAf
+         U9E8FPGCNYSNirEnXMq0bbQVfYXlNTLSY165B+4vv3UCYNwD5N/6brTWBhUUre0AlH
+         Fxder5gVhWfdw==
+Received: by mail-ua1-f48.google.com with SMTP id x1so82912uav.9;
+        Thu, 02 Mar 2023 11:38:08 -0800 (PST)
+X-Gm-Message-State: AO0yUKXfJORkk08EdDeBv525Q9ifcO61NAhvpI2S1enoiSKSmMG92PEb
+        NwLnOjO5zwUTXoZGjT1LD8juwuNuQslByawf+Q==
+X-Google-Smtp-Source: AK7set9lyn00Q1i05eh6fNXilq1IfTL9R/2RHvpC+p+smuMyxf3GQ5zh5P/zWXTMVD45PfuVAi9rjjGShbS50wU/j+E=
+X-Received: by 2002:ab0:1059:0:b0:68b:8665:a73b with SMTP id
+ g25-20020ab01059000000b0068b8665a73bmr6760746uab.1.1677785887108; Thu, 02 Mar
+ 2023 11:38:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Jian-Min Liu <jian-min.liu@mediatek.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Qais Yousef <qais.yousef@arm.com>,
+References: <20230301152239.531194-1-miquel.raynal@bootlin.com> <20230301152239.531194-3-miquel.raynal@bootlin.com>
+In-Reply-To: <20230301152239.531194-3-miquel.raynal@bootlin.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 2 Mar 2023 13:37:55 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJE43qfYzHUuCJsbaPPBTbYX05Q7FFmPTjPFZ3Dmz_mXg@mail.gmail.com>
+Message-ID: <CAL_JsqJE43qfYzHUuCJsbaPPBTbYX05Q7FFmPTjPFZ3Dmz_mXg@mail.gmail.com>
+Subject: Re: [PATCH 2/8] of: Change of_device_get_modalias() main argument
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         linux-kernel@vger.kernel.org,
-        Jonathan JMChen <jonathan.jmchen@mediatek.com>
-References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
- <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
- <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
- <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
- <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
- <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
- <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
- <20221108194843.i4qckcu7zwqstyis@airbuntu>
- <Y2vMBWpPlIArwnI7@hirez.programming.kicks-ass.net>
- <424e2c81-987d-f10e-106d-8b4c611768bc@arm.com>
- <CAKfTPtD0ZOndFef3-JxBn3G9tcX=cZEObjHZ0iqiVTJz7+QrmQ@mail.gmail.com>
- <249816c9-c2b5-8016-f9ce-dab7b7d384e4@arm.com>
- <CAKfTPtA4gSZAmi3FtU2Y57cuqCzC5LCR=+7Q8Xh=VtkbfaQP5Q@mail.gmail.com>
- <36bfd828-5af7-3bcb-d642-3361820c6071@arm.com>
-Content-Language: en-US
-In-Reply-To: <36bfd828-5af7-3bcb-d642-3361820c6071@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        rafal@milecki.pl
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 21:13, Dietmar Eggemann wrote:
-> On 20/02/2023 14:54, Vincent Guittot wrote:
->> On Fri, 17 Feb 2023 at 14:54, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>>
->>> On 09/02/2023 17:16, Vincent Guittot wrote:
->>>> On Tue, 7 Feb 2023 at 11:29, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>>>>
->>>>> On 09/11/2022 16:49, Peter Zijlstra wrote:
->>>>>> On Tue, Nov 08, 2022 at 07:48:43PM +0000, Qais Yousef wrote:
->>>>>>> On 11/07/22 14:41, Peter Zijlstra wrote:
->>>>>>>> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
-> 
-> [...]
-> 
->>>> Graphics Pipeline short task, hasn't uclamp_min been designed for and
->>>> a better solution ?
->>>
->>> Yes, it has. I'm not sure how feasible this is to do for all tasks
->>> involved. I'm thinking about the Binder threads here for instance.
->>
->> Yes, that can probably not help for all threads but some system
->> threads like surfaceflinger and graphic composer should probably
->> benefit from min uclamp
-> 
-> Yes, and it looks like that the Android version I'm using
-> SQ1D.220205.004 (Feb '22) (automatic system updates turned off) is
-> already using uclamp_min != 0 for tasks like UI thread. It's not one
-> particular value but different values  from [0 .. 512] over the runtime
-> of a Jankbench iteration. I have to have a closer look.
+On Wed, Mar 1, 2023 at 9:22=E2=80=AFAM Miquel Raynal <miquel.raynal@bootlin=
+.com> wrote:
+>
+> This function needs "struct device_node" to work, but for convenience
+> the author and only user of this helper did use a "struct device". As
+> this helper is a static helper, let's keep the "struct device" for
+> exported methods and use the OF structure internally.
+>
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  drivers/of/device.c | 27 ++++++++++++++++-----------
+>  1 file changed, 16 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/of/device.c b/drivers/of/device.c
+> index 877f50379fab..3efc17de1d57 100644
+> --- a/drivers/of/device.c
+> +++ b/drivers/of/device.c
+> @@ -248,7 +248,7 @@ const void *of_device_get_match_data(const struct dev=
+ice *dev)
+>  }
+>  EXPORT_SYMBOL(of_device_get_match_data);
+>
+> -static ssize_t of_device_get_modalias(struct device *dev, char *str, ssi=
+ze_t len)
+> +static ssize_t of_device_get_modalias(struct device_node *np, char *str,=
+ ssize_t len)
 
-I did more Jankbench and Speedometer testing especially to understand
-the influence of the already used uclamp_min boosting (Android Dynamic
-Performance Framework (ADPF) `CPU performance hints` feature:
-https://developer.android.com/games/optimize/adpf#cpu-hints) for some
-App tasks.
+Humm, this is static so fine here, but based on my comments on patch
+3, it would need to move too as base.c having a dependency on device.c
+is backwards.
 
-The following notebooks show which of the App tasks are uclamp_min
-boosted (their diagram title carries an additional 'uclamp_min_boost'
-tag and how uclamp_min boost relates to the other boost values:
-This is probably not a fixed mapping and could change between test runs.
-I assume that Android will issue performance hints in form of uclamp_min
-boosting when it detects certain scenarios like a specific jankframe
-threshold or something similar.
+How about moving everything module related to drivers/of/module.c. Put
+the new functions in of.h (rather than an of_module.h). Then maybe the
+rest of device.c could move to inline wrappers or elsewhere.
 
-https://nbviewer.org/github/deggeman/lisa/blob/ipynbs/ipynb/scratchpad/jankbench_uclamp_min_boost.ipynb
-
-https://nbviewer.org/github/deggeman/lisa/blob/ipynbs/ipynb/scratchpad/speedometer_uclamp_min_boost.ipynb
-
-`base` has changed compared to `base-a30b17f016b0`. It now also
-contains: e5ed0550c04c - sched/fair: unlink misfit task from cpu
-overutilized (2023-02-11 Vincent Guittot)
-
-Former `max_util_scaled_util_est_faster_rbl_freq` has been renamed to
-`cpu_rbl_freq`.
-
-Jankbench:
-
-Max_frame_duration:
-+-----------------------------+------------+
-|             kernel          |    value   |
-+-----------------------------+------------+
-|            base             | 156.299159 |
-|       base_wo_uclamp        | 171.063764 | uclamp disabled*
-|         pelt-hl-m2          | 126.190232 |
-|         pelt-hl-m4          | 100.865171 |
-| scaled_util_est_faster_freq | 126.074194 |
-|        cpu_rbl_freq         | 153.123089 |
-+-----------------------------+------------+
-
-* We still let Android set the uclamp_min values.
-Just the uclamp setter are bypassed now.
-
-Mean_frame_duration:
-+-----------------------------+-------+-----------+
-|           kernel            | value | perc_diff |
-+-----------------------------+-------+-----------+
-|            base             | 15.5  |   0.0%    |
-|       base_wo_uclamp        | 16.6  |   7.76%   |
-|         pelt-hl-m2          | 14.9  |  -3.27%   |
-|         pelt-hl-m4          | 13.6  |  -12.16%  |
-| scaled_util_est_faster_freq | 14.7  |  -4.88%   |
-|        cpu_rbl_freq         | 12.2  |  -20.84%  |
-+-----------------------------+-------+-----------+
-
-Jank percentage (Jank deadline 16ms):
-+-----------------------------+-------+-----------+
-|           kernel            | value | perc_diff |
-+-----------------------------+-------+-----------+
-|            base             |  2.6  |   0.0%    |
-|       base_wo_uclamp        |  3.0  |  17.47%   |
-|         pelt-hl-m2          |  2.0  |  -23.33%  |
-|         pelt-hl-m4          |  1.3  |  -48.55%  |
-| scaled_util_est_faster_freq |  1.7  |  -32.21%  |
-|        cpu_rbl_freq         |  0.7  |  -71.36%  |
-+-----------------------------+-------+-----------+
-
-Power usage [mW] (total - all CPUs):
-+-----------------------------+-------+-----------+
-|           kernel            | value | perc_diff |
-+-----------------------------+-------+-----------+
-|            base             | 141.1 |   0.0%    |
-|       base_wo_uclamp        | 116.6 |  -17.4%   |
-|         pelt-hl-m2          | 138.7 |   -1.7%   |
-|         pelt-hl-m4          | 156.5 |  10.87%   |
-| scaled_util_est_faster_freq | 147.6 |   4.57%   |
-|        cpu_rbl_freq         | 135.0 |  -4.33%   |
-+-----------------------------+-------+-----------+
-
-Speedometer:
-
-Score:
-+-----------------------------+-------+-----------+
-|           kernel            | value | perc_diff |
-+-----------------------------+-------+-----------+
-|            base             | 108.4 |   0.0%    |
-|       base_wo_uclamp        | 95.2  |  -12.17%  |
-|         pelt-hl-m2          | 112.9 |   4.13%   |
-| scaled_util_est_faster_freq | 114.7 |   5.77%   |
-|        cpu_rbl_freq         | 127.7 |  17.75%   |
-+-----------------------------+-------+-----------+
-
-Power usage [mW] (total - all CPUs):
-+-----------------------------+--------+-----------+
-|           kernel            | value  | perc_diff |
-+-----------------------------+--------+-----------+
-|            base             | 2268.4 |   0.0%    |
-|       base_wo_uclamp        | 1789.5 |  -21.11%  |
-|         pelt-hl-m2          | 2386.5 |   5.21%   |
-| scaled_util_est_faster_freq | 2292.3 |   1.05%   |
-|        cpu_rbl_freq         | 2198.3 |  -3.09%   |
-+-----------------------------+--------+-----------+
-
-The explanation I have is that the `CPU performance hints` feature
-tries to recreate the information about contention for a specific set of
-tasks. Since there is also contention in which only non uclamp_min
-boosted tasks are runnable, mechanisms like `util_est_faster` or
-`cpu_runnable boosting` can help on top of what's already provided with
-uclamp_min boosting from userspace.
-
-[...]
-
+Rob
