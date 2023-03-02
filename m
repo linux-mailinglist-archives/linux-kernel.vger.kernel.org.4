@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9736A8492
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED6E6A8498
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjCBOtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
+        id S230115AbjCBOtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjCBOrz (ORCPT
+        with ESMTP id S230137AbjCBOr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:47:55 -0500
+        Thu, 2 Mar 2023 09:47:58 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2753C32
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:47:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978AD4215
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:47:54 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDg-00045Y-9l; Thu, 02 Mar 2023 15:47:44 +0100
+        id 1pXkDg-00046X-MP; Thu, 02 Mar 2023 15:47:44 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDf-001Lsj-1f; Thu, 02 Mar 2023 15:47:43 +0100
+        id 1pXkDf-001Lsv-Ep; Thu, 02 Mar 2023 15:47:43 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDe-001Zqz-A7; Thu, 02 Mar 2023 15:47:42 +0100
+        id 1pXkDe-001Zr7-Gn; Thu, 02 Mar 2023 15:47:42 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Hans de Goede <hdegoede@redhat.com>,
@@ -34,15 +34,15 @@ To:     Hans de Goede <hdegoede@redhat.com>,
 Cc:     kernel@pengutronix.de,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 27/29] platform/x86: serial-multi-instantiate: Convert to platform remove callback returning void
-Date:   Thu,  2 Mar 2023 15:47:30 +0100
-Message-Id: <20230302144732.1903781-28-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 28/29] platform/x86: wmi: Convert to platform remove callback returning void
+Date:   Thu,  2 Mar 2023 15:47:31 +0100
+Message-Id: <20230302144732.1903781-29-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230302144732.1903781-1-u.kleine-koenig@pengutronix.de>
 References: <20230302144732.1903781-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1609; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=zZdMBuHYK98FB0/gRnuDVS6LFfhuk4IBzInMCTmznJA=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkALb1rvceOGPBsIzcSYQ/ZFLJcwFZMlPe0/ZcU 7fMoesuAWWJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAC29QAKCRDB/BR4rcrs CS7/B/0bdPvjYrFNATZEQCmNbthFqiFhuxnRTvZN+E0wDqVtaT2CbcJSjHSy3aohyBK95vdj9/R 7WuH6QrYjEgh2JhkBIABMfcFNX9WW0Bu2vB7CO9Lix4idGxV2eb7BgMrVZoB5Cc21FtRULd9OnZ KmttsreCmRbBoyH5VOyaM89tAtbVBvrhTrXBA/tXOjQRqEHOtnX+WoeJfMXvfGEunRllDOM45H+ 7QpuQlnuwk1B46v2MB0z4MyFg0orhkS5YFbsUIrJ5talKoynhSlIENRpc0n/ondSjv4bmBUL7Nf MQhlA9LWraaOMM7XWp194iNSAvfVQWGF3JpjriASL0NVMcF/
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1794; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=vINht6ojUFDqgv3t7NnT5jRF+UmY6wpfnULDkHfIdto=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkALb6O68NAGyM825FA1GeI2kBnh4ZSeuQ+fR2u yAw6iq7r0eJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAC2+gAKCRDB/BR4rcrs Cc+XB/4lFYU8LTWGolMf3K0oUcggqVhrI+67SZELHpQlMDMfyWJX+LlcPKRSZmvYs3Q6T2nehtt JIJUBYSnoVPqTE/SpLPCR3cwK3rajXld6eDxKP1jX7ObtBVTaUK9nEuttiC+gsxjIiYp/Xzh9H9 2SncwaWdNIS0TWl5EwEm2mmtNH2mHdSxziFo70KxABJof7BJSBnsh/M9AIQgodLKhZeJ9/9IxOU F1z3xN45EF+Q7ukBSHC8Z5XKpfDJKoWYp/9DPg9WQEePE5MLfXUBKPw7MjooXPou9KX/1KMcf3j zZ1oPMkLQtH8l7H8MyZiUUl+DKDl72tGf8e1+m3sPI3EU3BQ
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -71,37 +71,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/platform/x86/serial-multi-instantiate.c | 6 ++----
+ drivers/platform/x86/wmi.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
-index 5362f1a7b77c..cd25125b7923 100644
---- a/drivers/platform/x86/serial-multi-instantiate.c
-+++ b/drivers/platform/x86/serial-multi-instantiate.c
-@@ -265,13 +265,11 @@ static int smi_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
+index 4fe7650dd014..d81319a502ef 100644
+--- a/drivers/platform/x86/wmi.c
++++ b/drivers/platform/x86/wmi.c
+@@ -1369,7 +1369,7 @@ static void acpi_wmi_notify_handler(acpi_handle handle, u32 event,
+ 		event, 0);
  }
  
--static int smi_remove(struct platform_device *pdev)
-+static void smi_remove(struct platform_device *pdev)
+-static int acpi_wmi_remove(struct platform_device *device)
++static void acpi_wmi_remove(struct platform_device *device)
  {
- 	struct smi *smi = platform_get_drvdata(pdev);
+ 	struct acpi_device *acpi_device = ACPI_COMPANION(&device->dev);
  
- 	smi_devs_unregister(smi);
+@@ -1379,8 +1379,6 @@ static int acpi_wmi_remove(struct platform_device *device)
+ 				ACPI_ADR_SPACE_EC, &acpi_wmi_ec_space_handler);
+ 	wmi_free_devices(acpi_device);
+ 	device_unregister(dev_get_drvdata(&device->dev));
 -
 -	return 0;
  }
  
- static const struct smi_node bsg1160_data = {
-@@ -339,7 +337,7 @@ static struct platform_driver smi_driver = {
- 		.acpi_match_table = smi_acpi_ids,
+ static int acpi_wmi_probe(struct platform_device *device)
+@@ -1468,7 +1466,7 @@ static struct platform_driver acpi_wmi_driver = {
+ 		.acpi_match_table = wmi_device_ids,
  	},
- 	.probe = smi_probe,
--	.remove = smi_remove,
-+	.remove_new = smi_remove,
+ 	.probe = acpi_wmi_probe,
+-	.remove = acpi_wmi_remove,
++	.remove_new = acpi_wmi_remove,
  };
- module_platform_driver(smi_driver);
  
+ static int __init acpi_wmi_init(void)
 -- 
 2.39.1
 
