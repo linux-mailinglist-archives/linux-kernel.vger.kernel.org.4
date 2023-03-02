@@ -2,107 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3796A7FFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6286A8005
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjCBKax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S229861AbjCBKhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCBKaw (ORCPT
+        with ESMTP id S229504AbjCBKhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:30:52 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D401CF4D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:30:51 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v16so13200972wrn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:30:51 -0800 (PST)
+        Thu, 2 Mar 2023 05:37:37 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2757D3B646
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:37:35 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id q189so9483730pga.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:37:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677753050;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=HwOZUGKJ+t9xe2A8iPH5J+XMLtNu9Kocbw3QWISBg/Q=;
-        b=rnUUn5sP1r2EjF/AbEZsiOH35KiPKcSVRw3zrhLUi/h8WCInyq69fZaYpbfyMcffpz
-         ZSKqKfmeWal1hMaCy5AyFUeKaB+h3upCXVHiMEnd60uRBJ3ewsLz4lAB7cr9x8TjiFMo
-         i8bnNrg5K+UtjIMty7JgeQrVdDhlRu3+GTYXkPslUXSr4gsJSXCjAz67lSJ/s+Q3k9hD
-         PkEDe/4CBsipCFOlWGzRqinqu4F71vZUSgXjjkUvGe346mUeVKoBKfwoaE7RaOy8/O4K
-         m/GgU876uW2RO3BqBZQLn0v9MxFspvNZJbSTYMcfXr6koV8G36p89HFLNuVzsbqh+goB
-         VjGQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2DvH5++MlDywKUnWf+1loQwzv2jg1mWmFa8pnuwjqdM=;
+        b=CArXlKRa5bv3qRQell+oUvTIEi+MvMAR9T9N3YQpRL12m7q0/lh+DQRBYtazTeLamN
+         q7z8p5r31Dfjqp3wg350PMMy+EN5mx2LMQ40lZHYsWL9Md8HmIvksmp9QzpRoPA6tXJw
+         +OGzhmJ/UBcbM3aHt/WTCtQGywfYhiGNJ8gVrSfBJfGWxSOepjgSyz9gtcJm9q22UUGn
+         0B3n1KjzjWM4PkN21PNaE/ZHxsDqkwVaud1pRpF2o52WavI8OYG5qh3oV9tB+GXGW0XJ
+         g5ZG3VWgzvRIzScqpqhOF9zm4PaOgC1lWUkq/Cr+GMsLPGRXJl7duV3TIFKTvXQWIyvF
+         gImQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677753050;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HwOZUGKJ+t9xe2A8iPH5J+XMLtNu9Kocbw3QWISBg/Q=;
-        b=hm7RokQnz4DIjhFmqU7krQYNlS9678WjZdfHcwVZ6hTWya1ws00ogWyYJftoHz2dUu
-         XVsEr3GTXyZfIrkHYqnBom3bx9M+XxmDG5rh2v+7Wyr5/rEc8Wn8fb8Jj/M96EQcRXUL
-         0jN6tiket+uqkynxALqR67rHaMUwjeT+XmoLSMzOqZn5hToGR/tuc9qUNXbK9MVSdT9p
-         FlGGFMSM/Ww2CMa/kK93iSQE5WjelzVIMYhyMVO0V4XlH8jsPR9ADHEU2bVSxgSDZbgy
-         MQMjxrfiUKJ9DV9lmvpeOzEKmjY2Rr6T9Fs5LH5QoCVFZvOkZwpwD6ZvuyfqDw2BpMAu
-         Wo0A==
-X-Gm-Message-State: AO0yUKXDrpGn1Qqje2JpbxOakD7Ui0bBMkUeKw4ivKN9lfij/5S4+ZUJ
-        C467ORZkan/oTbCDs+mKUvjYnQ==
-X-Google-Smtp-Source: AK7set9kQJz6aP9As/ms2j7f0QJlW4EWyc4zj5sDWLQQCRQzwb0ak3Hc3kqXRa2Z8yAId/FNkIDm/g==
-X-Received: by 2002:a5d:40ca:0:b0:2c7:4ec:8d79 with SMTP id b10-20020a5d40ca000000b002c704ec8d79mr6613894wrq.21.1677753049937;
-        Thu, 02 Mar 2023 02:30:49 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:217a:db24:fe27:6b35? ([2a01:e0a:982:cbb0:217a:db24:fe27:6b35])
-        by smtp.gmail.com with ESMTPSA id u9-20020a5d5149000000b002c54c92e125sm15031866wrt.46.2023.03.02.02.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 02:30:49 -0800 (PST)
-Message-ID: <583403fa-c104-42ad-c628-cfcb8da5eb05@linaro.org>
-Date:   Thu, 2 Mar 2023 11:30:48 +0100
+        bh=2DvH5++MlDywKUnWf+1loQwzv2jg1mWmFa8pnuwjqdM=;
+        b=syUZoOnAJ+menM1iwpMRTsFHv2mNYapk3gPFvMjP5GyZwnYZ43GNEuU43U0MFSRfDF
+         t9tVMM/ar9Mq0uzwKuZHxk+u4Ym+spIyzTrxUEH8L7Kis/MVw1c2iCpN42Xhwr5RRvXm
+         vky6bmI1nNmrwCtcOMmlyulmgkIkgAwlwL6lBswDvbJFNyq7u53neD5vajyWaPtmZ2Yu
+         C+30mw2zWeLmi8tYLOR0VOPimM7fucshQlPKLysQtiXRJj0FR/je9zEai4SEul85krWe
+         NhA9gi0zZYsS6YpgwFYnjkw04tG8dTM3MQdscRpWYc6VFpm/cujV0FnoaugZAgPCu8hW
+         VZwA==
+X-Gm-Message-State: AO0yUKUaSTZFr5lU9eBl1ln6AdIA76PeAktCAiksgie/r35fYdcWR7/U
+        XzdZPrECw5P9MSPh8g2gESzV8+qBBBHV8kMhaQt1LQLOFPu13rDl
+X-Google-Smtp-Source: AK7set97u0zAstt60brd/DEvp8rkt1vEK1Zs7cBKJ8KNFM0kwIC9D72SwDaTRtCCYH7xz1TcI3XO17bEKAKts14WXxE=
+X-Received: by 2002:a63:b21b:0:b0:503:a8:2792 with SMTP id x27-20020a63b21b000000b0050300a82792mr3273725pge.5.1677753454377;
+ Thu, 02 Mar 2023 02:37:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2] MAINTAINERS: Add myself as maintainer for DRM Panels
- drivers
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jagan Teki <jagan@amarulasolutions.com>
-References: <20230216-topic-drm-panel-upstream-maintainance-v2-1-ffd262b72f16@linaro.org>
- <167775297427.128880.7902941265688645008.b4-ty@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <167775297427.128880.7902941265688645008.b4-ty@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJ+vNU2SC_Q3RWdeO9-mKDYC_TK8_vzefvGz_++O8StJer_h3Q@mail.gmail.com>
+In-Reply-To: <CAJ+vNU2SC_Q3RWdeO9-mKDYC_TK8_vzefvGz_++O8StJer_h3Q@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 2 Mar 2023 11:36:58 +0100
+Message-ID: <CAPDyKFq23_vCunapQ=OHFFGXs5a8_cr8w7hBUP=HQ5f2zaTBUg@mail.gmail.com>
+Subject: Re: mmc: core: Disable card detect during shutdown
+To:     Tim Harvey <tharvey@gateworks.com>,
+        Robert Richter <rric@kernel.org>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Jan Glauber <jan.glauber@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2023 11:29, Neil Armstrong wrote:
-> Hi,
-> 
-> On Wed, 01 Mar 2023 10:47:35 +0100, Neil Armstrong wrote:
->> Add myself as co-maintainer for DRM Panel Drivers in order to help
->> reviewing and getting new panels drivers merged, and Remove Thierry
->> as he suggested since he wasn't active for a while.
->>
->> Thanks Thierry for all your work!
->>
->>
->> [...]
-> 
-> Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next-fixes)
++ Robert
 
-It's a typo from b4, it was applied on drm-misc-next.
-No idea why b4 uses drm-misc-next-fixes, the commit isn't in this branch...
+On Thu, 2 Mar 2023 at 00:32, Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> Greetings,
+>
+> I've encountered a hang on shutdown on octeontx (CN8030 SoC, THUNDERX
+> architecture) that I bisected to commit 66c915d09b94 ("mmc: core:
+> Disable card detect during shutdown").
+>
+> It looks like the OMP5 Pyra ran into this as well related to a
+> malfunctioning driver [1]
+>
+> In the case of MMC_CAVIUM_THUNDERX the host controller supports
+> multiple slots each having their own CMD signal but shared clk/data
+> via the following dt:
+>
+> mmc@1,4 {
+>         compatible = "cavium,thunder-8890-mmc";
+>         reg = <0xc00 0x00 0x00 0x00 0x00>;
+>         #address-cells = <0x01>;
+>         #size-cells = <0x00>;
+>         clocks = <0x0b>;
+>
+>         /* eMMC */
+>         mmc-slot@0 {
+>                 compatible = "mmc-slot";
+>                 reg = <0>;
+>                 vmmc-supply = <&mmc_supply_3v3>;
+>                 max-frequency = <35000000>;
+>                 no-1-8-v;
+>                 bus-width = <8>;
+>                 no-sdio;
+>                 no-sd;
+>                 mmc-ddr-3_3v;
+>                 cap-mmc-highspeed;
+>         };
+>
+>         /* microSD */
+>         mmc-slot@1 {
+>                 compatible = "mmc-slot";
+>                 reg = <1>;
+>                 vmmc-supply = <&mmc_supply_3v3>;
+>                 max-frequency = <35000000>;
+>                 no-1-8-v;
+>                 broken-cd;
+>                 bus-width = <4>;
+>                 cap-sd-highspeed;
+>         };
+> };
+>
+> mmc_add_host is only called once for mmc0 and I can't see any printk
 
-Neil
+That looks wrong. There needs to be one mmc host registered per slot,
+otherwise things will, for sure, not work.
 
-> 
-> [1/1] MAINTAINERS: Add myself as maintainer for DRM Panels drivers
->        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=4ddeb90d602ac58bcf99924eb34d8b2f820ce11d
-> 
+I suggest you have a closer look to see what goes on in thunder_mmc_probe().
 
+> debugging added to __mmc_stop_host (maybe because serial/console has
+> been disabled by that point?).
+
+The serial console should work fine at this point, at least on those
+systems that I have tested this code with.
+
+Perhaps you added the debug print too late in the function, if the
+calls to disable_irq() or cancel_delayed_work_sync() are hanging?
+
+>
+> It appears that what causes this hang is the 'broken-cd' which enables
+> the detect change polling on mmc1. I have the ability to flip the CMD
+> signal routing thus making mmc0 the microSD and mmc1 the eMMC and when
+> I do that there isn't an issue so I think what happens is in the case
+> where mmc polling is enabled on mmc1 but not mmc0 (as above) the
+> polling causes a hang after __mmc_stop_host() is called for mmc0.
+
+The code in __mmc_stop_host() has been tested for both polling and
+gpio card detections. That said, it looks to me that there is
+something weird going on in the cavium mmc driver.
+
+What makes this even tricker, is that it's uncommon and not
+recommended to use more than one mmc slot per host instance.
+
+>
+> Any ideas?
+
+I hope the above thoughts can point you in a direction to narrow down
+this problem.
+
+>
+> Best Regards,
+>
+> Tim
+>
+> [1] https://lore.kernel.org/all/55A0788B-03E8-457E-B093-40FD93F1B9F3@goldelico.com/
+
+Kind regards
+Uffe
