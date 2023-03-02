@@ -2,117 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB176A8B6B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F5F6A8B89
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCBWDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S229876AbjCBWMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCBWD1 (ORCPT
+        with ESMTP id S229530AbjCBWMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:03:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711C75D762
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:02:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677794497;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YNPJ7wFmL9Bjmsbmp9sfS53qgtUQl6YCPNnALnAdSXo=;
-        b=fRD7N+I2Qi7GrNCkp+Xtl6V/4xxyiHpwnXv3PMoNLDX+KX2eOr1+kfEGxd2nIwTt3Q4sbA
-        9gHi4K53DIxVHD4OMoDjeCvko81glzj30sSBMcIN6hbnizxu+2EC+rK4TYC2BR4evNaD/L
-        Dw9M1TdabNksRL3Y33oa5+YBlnPHFKc=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-270-2v2oBapxPSyOBMz5BUaxZg-1; Thu, 02 Mar 2023 16:30:43 -0500
-X-MC-Unique: 2v2oBapxPSyOBMz5BUaxZg-1
-Received: by mail-qk1-f198.google.com with SMTP id ea22-20020a05620a489600b00742cec04043so220615qkb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 13:30:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677792643;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YNPJ7wFmL9Bjmsbmp9sfS53qgtUQl6YCPNnALnAdSXo=;
-        b=KQk8jQV3sV+iObfH1/zYvM01YO057i3pBSmvbdPC61JJJrpwOHGOuDYP22B8mAKURu
-         +MpnEoEnVbSIFkTy4+VPV9MZfnmyh6VDttKLwyvpwn67oAAM9uHuGalqhm/P7D61ufHP
-         VqJoih5r4Dpoxz0hgwR8wfNGi76+oBrEHpdPz4FvT1Tz/UGcSMH+rHttrwVBkMbAzS6/
-         cIuibvblkrqw8ySD11iJXP10kRQvr1nbqrNQk7Qm9wKN/J10N7OIzo+IEsixOj8GFssY
-         xtWq5TnhOv+JIglMW4cxfLqM87/5xsBK5O0rEsp9VDBTHxV36R/HCveC7qx+uE25GM9h
-         c2gA==
-X-Gm-Message-State: AO0yUKW8Up6DFHzAUYhept5rfPsWTdSqmEOej3NzSwzbJZuhwvsw0QJ8
-        RYBLtl6lyRljKArXFLz7jSpk4hALk2PBlPmGOVqV0GUSHm9qU3+SZsTuAI9CTqgGyUl8LgKPdVZ
-        ngYZy8sHPZlKSw+ZeFbBBbv4vCO2+hw==
-X-Received: by 2002:a05:622a:1896:b0:3bd:1c0f:74f3 with SMTP id v22-20020a05622a189600b003bd1c0f74f3mr23306190qtc.2.1677792643043;
-        Thu, 02 Mar 2023 13:30:43 -0800 (PST)
-X-Google-Smtp-Source: AK7set95CLuUQKexyjQ3U1S1wxyvTeP0rp/DQhoJgHiGd+bfzFi75dfCI1NKl6jxyl4NPK8spqjF+Q==
-X-Received: by 2002:a05:622a:1896:b0:3bd:1c0f:74f3 with SMTP id v22-20020a05622a189600b003bd1c0f74f3mr23306159qtc.2.1677792642751;
-        Thu, 02 Mar 2023 13:30:42 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id n190-20020a37bdc7000000b0071a291f0a4asm453257qkf.27.2023.03.02.13.30.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 13:30:42 -0800 (PST)
-Date:   Thu, 2 Mar 2023 16:30:41 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 10/11] mm/vmstat: switch vmstat shepherd to flush
- per-CPU counters remotely
-Message-ID: <ZAEVge3W3bL+GNtx@x1n>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.901518530@redhat.com>
- <ZAEOk7GdJ0c8NS+y@x1n>
- <ZAESOs/EeMCNp7YX@tpad>
+        Thu, 2 Mar 2023 17:12:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA50C15C8A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:12:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08BEA61629
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 21:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E528C433D2;
+        Thu,  2 Mar 2023 21:32:55 +0000 (UTC)
+Date:   Thu, 2 Mar 2023 16:32:53 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
+        Midas Chien <midaschieh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Tony Luck <tony.luck@intel.com>, kernel-team@android.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
+Message-ID: <20230302163253.541ac3a8@gandalf.local.home>
+In-Reply-To: <20230302152103.2618f1b7@gandalf.local.home>
+References: <20230302062741.483079-1-jstultz@google.com>
+        <20230302082414.77613351@gandalf.local.home>
+        <CANDhNCo4ruC4pP+iDe49b3e1nAcWtYQj4bx82+oZhyLFYkdFJQ@mail.gmail.com>
+        <20230302152103.2618f1b7@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZAESOs/EeMCNp7YX@tpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 06:16:42PM -0300, Marcelo Tosatti wrote:
-> On Thu, Mar 02, 2023 at 04:01:07PM -0500, Peter Xu wrote:
-> > On Thu, Feb 09, 2023 at 12:02:00PM -0300, Marcelo Tosatti wrote:
-> > > +#ifdef CONFIG_HAVE_CMPXCHG_LOCAL
-> > > +/* Flush counters remotely if CPU uses cmpxchg to update its per-CPU counters */
-> > > +static void vmstat_shepherd(struct work_struct *w)
-> > > +{
-> > > +	int cpu;
-> > > +
-> > > +	cpus_read_lock();
-> > > +	for_each_online_cpu(cpu) {
-> > > +		cpu_vm_stats_fold(cpu);
-> > 
-> > Nitpick: IIUC this line is the only change with CONFIG_HAVE_CMPXCHG_LOCAL
-> > to replace the queuing.  Would it be cleaner to move the ifdef into
-> > vmstat_shepherd, then, and keep the common logic?
-> 
-> https://lore.kernel.org/lkml/20221223144150.GA79369@lothringen/
+On Thu, 2 Mar 2023 15:21:03 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-:-)
+> I could possibly add a patch, and see if that also works.
 
-[...]
+Can you try this patch to see if it improves the situation.
 
-> So it seems the current separation is quite readable
-> (unless you have a suggestion).
+A few of things about this patch. It is lightly tested. It can be optimized
+to cache the top waiter and not need to grab the spin lock and disable
+interrupts for every loop, but right now I want to see if this improves the
+situation. As when PREEMPT_RT becomes more mainline, we may need this.
 
-No, feel free to ignore any of my nitpicks when you don't think proper. :)
-Keeping it is fine to me.
+Another thing I noticed is I think there's a bug in the existing code.
 
--- 
-Peter Xu
 
+   CPU1					CPU2
+   ----					----
+rt_mutex_slowlock_block() {
+  raw_spin_lock_irq(wait_lock);
+  owner = rt_mutex_owner();
+  raw_spin_unlock_irq(wait_lock);
+
+  rtmutex_spin_on_owner(owner) {
+    owner = rt_mutex_owner();
+
+    [ task preempted! (could also be a long interrupt) ]
+
+				   owner releases lock and exits
+				   owner is freed
+
+    [ task resumes ]
+
+    if (!owner_on_cpu(owner)
+
+      READ_ONCE(owner->on_cpu)
+     *** BOOM invalid pointer dereference ***
+
+I think we need a get_task_struct() somewhere there.
+
+Anyway, that's another issue. Could you try this patch? I even added a
+trace_printk() in there to see if it gets hit.
+
+Thanks!
+
+-- Steve
+
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index 010cf4e6d0b8..6c602775bb23 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -1399,6 +1399,7 @@ static bool rtmutex_spin_on_owner(struct rt_mutex_base *lock,
+ 				  struct rt_mutex_waiter *waiter,
+ 				  struct task_struct *owner)
+ {
++	struct rt_mutex_waiter *top_waiter;
+ 	bool res = true;
+ 
+ 	rcu_read_lock();
+@@ -1421,11 +1422,25 @@ static bool rtmutex_spin_on_owner(struct rt_mutex_base *lock,
+ 		 *    for CONFIG_PREEMPT_RCU=y)
+ 		 *  - the VCPU on which owner runs is preempted
+ 		 */
+-		if (!owner_on_cpu(owner) || need_resched() ||
+-		    !rt_mutex_waiter_is_top_waiter(lock, waiter)) {
++		if (!owner_on_cpu(owner) || need_resched()) {
+ 			res = false;
+ 			break;
+ 		}
++		top_waiter = rt_mutex_top_waiter(lock);
++		if (top_waiter != waiter) {
++			raw_spin_lock_irq(&lock->wait_lock);
++			top_waiter = rt_mutex_top_waiter(lock);
++			if (top_waiter && top_waiter != waiter) {
++				trace_printk("spin on waiter! %s:%d\n",
++					     top_waiter->task->comm,
++					     top_waiter->task->pid);
++				if (!owner_on_cpu(top_waiter->task))
++					res = false;
++			}
++			raw_spin_unlock_irq(&lock->wait_lock);
++			if (!res)
++				break;
++		}
+ 		cpu_relax();
+ 	}
+ 	rcu_read_unlock();
