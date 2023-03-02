@@ -2,79 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E59C6A8383
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDADF6A8385
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjCBNaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 08:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
+        id S230047AbjCBNaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjCBNaP (ORCPT
+        with ESMTP id S229919AbjCBNaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 08:30:15 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8353B232
+        Thu, 2 Mar 2023 08:30:17 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C299D3B3EB
         for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:30:14 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id l1so13479555wry.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:30:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YyJzHuLKs+zr/cuVKBWD3Qz/nQMZpEHffUi+K+l+1QU=;
-        b=Vc2Pf73L1VCdRibbTZ7bMQcFCG6AF1mApr0/+mlHaJSBJLAw+khTFC7jWoGpOkJ63m
-         reSKbpM5T8a+7snDwCdVBOgxKDkRfIVz6Yxvx6fHWe2A3t/yamsT28hniJhm2XPD0Sj9
-         k9DXKxpxBzLIVg0gSYBA38zoLUAPJg9JWiJFr3AAE3QSLzbbpvVfailTSkWDObn2c/2u
-         gpwwprROZEKQIHZ3z596Xe8qDaqjSmz+yuC4LJN66x1+WLdTwLbPSLIzVwWlkNoRB7xq
-         6Kj6B/v8gvzUbnNAjPP0kPaRFE/3LW8uB+W24jJz66hTaA9PPt5CkHlrgvnhJchqaFFN
-         sx4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YyJzHuLKs+zr/cuVKBWD3Qz/nQMZpEHffUi+K+l+1QU=;
-        b=CZqLKkyU8cD9VgJqTuOhx1WtM0YzjUuoHPZZ0ujyN4NslqoMq1DmSJfckyWZ6UgPM9
-         sveyegPcnuhntJOTRaOtQG1U4ANF+cT2029aR5JL2l00sMK3xHe3MYOMuwl653JbEEPC
-         uNWNUxSECzYAnQvbGtBOTWPBxgY7DRbQsptQj161KosKzSCQ4er3yxiOYp5ATYdMInQn
-         MqUH2ZLGIMQSldxliiRkRgZ2T8jsKQg6Ic2PN7TSI1SlcwewIEQ02wUbNXT6yrlioOBV
-         AGUYXpRFCoMbkHwehZH21GLs//jcBAlxJD/K3nnAY7MKOad9R+LuYzN3mWPBLE+29leB
-         otCg==
-X-Gm-Message-State: AO0yUKV8HBryaI0DelXe+B0dLnGFI6tTzramgh08AP+l6sYyoRAikDGU
-        yi023t6bw/4L22OSQIAiil5yZP4ZsAuHljME
-X-Google-Smtp-Source: AK7set99EhUVwt6NFx97KT++nJGpHjdKwN3zuTgRTWITeq9YaOOXLCpMSiEfB6wd19z0oAYnyHIo0A==
-X-Received: by 2002:a5d:62c6:0:b0:2c5:4c9c:e15d with SMTP id o6-20020a5d62c6000000b002c54c9ce15dmr7904802wrv.17.1677763812805;
-        Thu, 02 Mar 2023 05:30:12 -0800 (PST)
-Received: from localhost ([194.62.217.4])
-        by smtp.gmail.com with ESMTPSA id f12-20020adffccc000000b002c705058773sm15214427wrs.74.2023.03.02.05.30.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 05:30:12 -0800 (PST)
-References: <20230224200502.391570-1-nmi@metaspace.dk>
- <ZAAPBFfqP671N4ue@T590> <87o7pblhi1.fsf@metaspace.dk>
- <ZABfFW+28Jlxq+Ew@T590> <ZABmAR6Du1tUVEa7@T590>
- <CAFj5m9+o4yNA5rNDA+EXWZthMtB+dOLOW0O788i77=Qn1eJ0qQ@mail.gmail.com>
- <87h6v3l9up.fsf@metaspace.dk> <ZAChttVoCHsnXmvF@T590>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        kernel test robot <lkp@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        open list <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: Re: [PATCH v2] block: ublk: enable zoned storage support
-Date:   Thu, 02 Mar 2023 14:28:33 +0100
-In-reply-to: <ZAChttVoCHsnXmvF@T590>
-Message-ID: <875ybjl1r0.fsf@metaspace.dk>
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VcxX7ku_1677763810;
+Received: from 30.97.48.239(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VcxX7ku_1677763810)
+          by smtp.aliyun-inc.com;
+          Thu, 02 Mar 2023 21:30:11 +0800
+Message-ID: <415e4402-03b8-e192-0b40-08e479e510d4@linux.alibaba.com>
+Date:   Thu, 2 Mar 2023 21:30:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3 1/2] erofs: avoid hardcoded blocksize for subpage block
+ support
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230220025046.103777-1-jefflexu@linux.alibaba.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230220025046.103777-1-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,68 +45,292 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Ming Lei <ming.lei@redhat.com> writes:
 
-> On Thu, Mar 02, 2023 at 11:07:15AM +0100, Andreas Hindborg wrote:
->>=20
->> Ming Lei <ming.lei@redhat.com> writes:
->>=20
->> > On Thu, Mar 2, 2023 at 5:02=E2=80=AFPM Ming Lei <ming.lei@redhat.com> =
-wrote:
->> >>
->> >> On Thu, Mar 02, 2023 at 04:32:21PM +0800, Ming Lei wrote:
->> >> > On Thu, Mar 02, 2023 at 08:31:07AM +0100, Andreas Hindborg wrote:
->> >> > >
->> >>
->> >> ...
->> >>
->> >> > >
->> >> > > I agree about fetching more zones. However, it is no good to fetc=
-h up to
->> >> > > a max, since the requested zone report may less than max. I was
->> >> >
->> >> > Short read should always be supported, so the interface may need to
->> >> > return how many zones in single command, please refer to nvme_ns_re=
-port_zones().
->> >>
->> >> blk_zone is part of uapi, maybe the short read can be figured out by
->> >> one all-zeroed 'blk_zone'?  then no extra uapi data is needed for
->> >> reporting zones.
->> >
->> > oops, we have blk_zone_report data for reporting zones to userspace al=
-ready,
->> > see blkdev_report_zones_ioctl(), then this way can be re-used for gett=
-ing zone
->> > report from ublk server too, right?
->>=20
->> Yes that would be nice. But I did the report_zone command like a read
->> operation, so we are not currently copying any buffers to user space
->> when issuing the command, we just rely on the iod.
->
-> What I meant is to reuse the format of blk_zone_report for returning
-> multiple 'blk_zone' info in single command.
->
-> The only change is that you need to allocate one bigger kernel buffer
-> to hold more 'blk_zone' in single report zone request.
->
->> I think it would be
->> better to use the start_sectors and nr_sectors of the iod instead. Then
->> we don't have to copy the blk_zone_report. What do you think?
->
-> For IN parameter of report zone command, you still can reuse
-> blk_zone_report:
->
-> struct blk_zone_report {
->         __u64           sector;
->         __u32           nr_zones;
->         __u32           flags;
-> };
->
-> Just by using the 1st two 64b words of iod for holding 'blk_zone_report',=
- and
-> keep the iod->addr field not touched.
+On 2023/2/20 10:50, Jingbo Xu wrote:
+> As the first step of converting hardcoded blocksize to that specified in
+> on-disk superblock, convert all call sites of hardcoded blocksize to
+> sb->s_blocksize except for:
+> 
+> 1) use sbi->blkszbits instead of sb->s_blocksize in
+> erofs_superblock_csum_verify() since sb->s_blocksize has not been
+> updated with the on-disk blocksize yet when the function is called.
+> 
+> 2) use inode->i_blkbits instead of sb->s_blocksize in erofs_bread(),
+> since the inode operated on may be an anonymous inode in fscache mode.
+> Currently the anonymous inode is allocated from an anonymous mount
+> maintained in erofs, while in the near future we may allocate anonymous
+> inodes from a generic API directly and thus have no access to the
+> anonymous inode's i_sb.  Thus we keep the block size in i_blkbits for
+> anonymous inodes in fscache mode.
+> 
+> Be noted that this patch only gets rid of the hardcoded blocksize, in
+> preparation for actually setting the on-disk block size in the following
+> patch.  The hard limit of constraining the block size to PAGE_SIZE still
+> exists until the next patch.
+> 
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> ---
+> v3: introduce erofs_iblks() to avoid potential warning of "undefined
+> reference to `__divdi3'" [1]
+> 
+> [1] https://lore.kernel.org/all/202302180056.Qg8HFrkU-lkp@intel.com/
+> 
+> v1: https://lore.kernel.org/all/20230216094745.47868-1-jefflexu@linux.alibaba.com/
+> v2: https://lore.kernel.org/all/20230217055016.71462-2-jefflexu@linux.alibaba.com/
+> ---
+>   fs/erofs/data.c              | 48 ++++++++++++++++++++----------------
+>   fs/erofs/decompressor.c      |  6 ++---
+>   fs/erofs/decompressor_lzma.c |  4 +--
+>   fs/erofs/dir.c               | 21 ++++++++--------
+>   fs/erofs/fscache.c           |  5 ++--
+>   fs/erofs/inode.c             | 20 ++++++++-------
+>   fs/erofs/internal.h          | 20 ++++++---------
+>   fs/erofs/namei.c             | 14 +++++------
+>   fs/erofs/super.c             | 24 +++++++++---------
+>   fs/erofs/xattr.c             | 40 ++++++++++++++----------------
+>   fs/erofs/xattr.h             | 10 ++++----
+>   fs/erofs/zdata.c             | 18 ++++++++------
+>   fs/erofs/zmap.c              | 29 +++++++++++-----------
+>   include/trace/events/erofs.h |  4 +--
+>   14 files changed, 134 insertions(+), 129 deletions(-)
+> 
+> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> index 032e12dccb84..5ad40734fd77 100644
+> --- a/fs/erofs/data.c
+> +++ b/fs/erofs/data.c
+> @@ -27,11 +27,15 @@ void erofs_put_metabuf(struct erofs_buf *buf)
+>   	buf->page = NULL;
+>   }
+>   
+> +/*
+> + * Derive the block size from inode->i_blkbits to make compatible with
+> + * anonymous inode in fscache mode.
+> + */
+>   void *erofs_bread(struct erofs_buf *buf, struct inode *inode,
+>   		  erofs_blk_t blkaddr, enum erofs_kmap_type type)
+>   {
+> +	erofs_off_t offset = blkaddr << inode->i_blkbits;
+>   	struct address_space *const mapping = inode->i_mapping;
+> -	erofs_off_t offset = blknr_to_addr(blkaddr);
+>   	pgoff_t index = offset >> PAGE_SHIFT;
+>   	struct page *page = buf->page;
+>   	struct folio *folio;
+> @@ -79,24 +83,25 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
+>   	erofs_blk_t nblocks, lastblk;
+>   	u64 offset = map->m_la;
+>   	struct erofs_inode *vi = EROFS_I(inode);
+> +	struct super_block *sb = inode->i_sb;
+>   	bool tailendpacking = (vi->datalayout == EROFS_INODE_FLAT_INLINE);
+>   
+> -	nblocks = DIV_ROUND_UP(inode->i_size, EROFS_BLKSIZ);
+> +	nblocks = erofs_iblks(inode);
+>   	lastblk = nblocks - tailendpacking;
+>   
+>   	/* there is no hole in flatmode */
+>   	map->m_flags = EROFS_MAP_MAPPED;
+> -	if (offset < blknr_to_addr(lastblk)) {
+> -		map->m_pa = blknr_to_addr(vi->raw_blkaddr) + map->m_la;
+> -		map->m_plen = blknr_to_addr(lastblk) - offset;
+> +	if (offset < erofs_pos(sb, lastblk)) {
+> +		map->m_pa = erofs_pos(sb, vi->raw_blkaddr) + map->m_la;
+> +		map->m_plen = erofs_pos(sb, lastblk) - offset;
+>   	} else if (tailendpacking) {
+>   		map->m_pa = erofs_iloc(inode) + vi->inode_isize +
+> -			vi->xattr_isize + erofs_blkoff(offset);
+> +			vi->xattr_isize + erofs_blkoff(sb, offset);
+>   		map->m_plen = inode->i_size - offset;
+>   
+>   		/* inline data should be located in the same meta block */
+> -		if (erofs_blkoff(map->m_pa) + map->m_plen > EROFS_BLKSIZ) {
+> -			erofs_err(inode->i_sb,
+> +		if (erofs_blkoff(sb, map->m_pa) + map->m_plen > sb->s_blocksize) {
+> +			erofs_err(sb,
+>   				  "inline data cross block boundary @ nid %llu",
 
-I see. Would you make the first part of `struct ublksrv_io_desc` a union
-for this, or would you just cast it at the use site?
+Could we save a line for this?  I think we don't need to keep 80-char for
+the print message line.
 
-BR Andreas
+
+>   				  vi->nid);
+>   			DBG_BUGON(1);
+> @@ -104,7 +109,7 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
+>   		}
+>   		map->m_flags |= EROFS_MAP_META;
+>   	} else {
+> -		erofs_err(inode->i_sb,
+> +		erofs_err(sb,
+>   			  "internal error @ nid: %llu (size %llu), m_la 0x%llx",
+>   			  vi->nid, inode->i_size, map->m_la);
+
+Same here.
+
+
+>   		DBG_BUGON(1);
+> @@ -148,29 +153,29 @@ int erofs_map_blocks(struct inode *inode, struct erofs_map_blocks *map)
+>   	pos = ALIGN(erofs_iloc(inode) + vi->inode_isize +
+>   		    vi->xattr_isize, unit) + unit * chunknr;
+>   
+> -	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos), EROFS_KMAP);
+> +	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(sb, pos), EROFS_KMAP);
+>   	if (IS_ERR(kaddr)) {
+>   		err = PTR_ERR(kaddr);
+>   		goto out;
+>   	}
+>   	map->m_la = chunknr << vi->chunkbits;
+>   	map->m_plen = min_t(erofs_off_t, 1UL << vi->chunkbits,
+> -			    roundup(inode->i_size - map->m_la, EROFS_BLKSIZ));
+> +			round_up(inode->i_size - map->m_la, sb->s_blocksize));
+>   
+>   	/* handle block map */
+>   	if (!(vi->chunkformat & EROFS_CHUNK_FORMAT_INDEXES)) {
+> -		__le32 *blkaddr = kaddr + erofs_blkoff(pos);
+> +		__le32 *blkaddr = kaddr + erofs_blkoff(sb, pos);
+>   
+>   		if (le32_to_cpu(*blkaddr) == EROFS_NULL_ADDR) {
+>   			map->m_flags = 0;
+>   		} else {
+> -			map->m_pa = blknr_to_addr(le32_to_cpu(*blkaddr));
+> +			map->m_pa = erofs_pos(sb, le32_to_cpu(*blkaddr));
+>   			map->m_flags = EROFS_MAP_MAPPED;
+>   		}
+>   		goto out_unlock;
+>   	}
+>   	/* parse chunk indexes */
+> -	idx = kaddr + erofs_blkoff(pos);
+> +	idx = kaddr + erofs_blkoff(sb, pos);
+>   	switch (le32_to_cpu(idx->blkaddr)) {
+>   	case EROFS_NULL_ADDR:
+>   		map->m_flags = 0;
+> @@ -178,7 +183,7 @@ int erofs_map_blocks(struct inode *inode, struct erofs_map_blocks *map)
+>   	default:
+>   		map->m_deviceid = le16_to_cpu(idx->device_id) &
+>   			EROFS_SB(sb)->device_id_mask;
+> -		map->m_pa = blknr_to_addr(le32_to_cpu(idx->blkaddr));
+> +		map->m_pa = erofs_pos(sb, le32_to_cpu(idx->blkaddr));
+>   		map->m_flags = EROFS_MAP_MAPPED;
+>   		break;
+>   	}
+> @@ -222,8 +227,8 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
+>   
+>   			if (!dif->mapped_blkaddr)
+>   				continue;
+> -			startoff = blknr_to_addr(dif->mapped_blkaddr);
+> -			length = blknr_to_addr(dif->blocks);
+> +			startoff = erofs_pos(sb, dif->mapped_blkaddr);
+> +			length = erofs_pos(sb, dif->blocks);
+>   
+>   			if (map->m_pa >= startoff &&
+>   			    map->m_pa < startoff + length) {
+> @@ -244,6 +249,7 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+>   		unsigned int flags, struct iomap *iomap, struct iomap *srcmap)
+>   {
+>   	int ret;
+> +	struct super_block *sb = inode->i_sb;
+>   	struct erofs_map_blocks map;
+>   	struct erofs_map_dev mdev;
+>   
+> @@ -258,7 +264,7 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+>   		.m_deviceid = map.m_deviceid,
+>   		.m_pa = map.m_pa,
+>   	};
+> -	ret = erofs_map_dev(inode->i_sb, &mdev);
+> +	ret = erofs_map_dev(sb, &mdev);
+>   	if (ret)
+>   		return ret;
+>   
+> @@ -284,11 +290,11 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+>   		struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+>   
+>   		iomap->type = IOMAP_INLINE;
+> -		ptr = erofs_read_metabuf(&buf, inode->i_sb,
+> -					 erofs_blknr(mdev.m_pa), EROFS_KMAP);
+> +		ptr = erofs_read_metabuf(&buf, sb,
+> +				erofs_blknr(sb, mdev.m_pa), EROFS_KMAP);
+>   		if (IS_ERR(ptr))
+>   			return PTR_ERR(ptr);
+> -		iomap->inline_data = ptr + erofs_blkoff(mdev.m_pa);
+> +		iomap->inline_data = ptr + erofs_blkoff(sb, mdev.m_pa);
+>   		iomap->private = buf.base;
+>   	} else {
+>   		iomap->type = IOMAP_MAPPED;
+> diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
+> index 51b7ac7166d9..21fc6897d225 100644
+> --- a/fs/erofs/decompressor.c
+> +++ b/fs/erofs/decompressor.c
+> @@ -42,7 +42,7 @@ int z_erofs_load_lz4_config(struct super_block *sb,
+>   		if (!sbi->lz4.max_pclusterblks) {
+>   			sbi->lz4.max_pclusterblks = 1;	/* reserved case */
+>   		} else if (sbi->lz4.max_pclusterblks >
+> -			   Z_EROFS_PCLUSTER_MAX_SIZE / EROFS_BLKSIZ) {
+> +			   Z_EROFS_PCLUSTER_MAX_SIZE >> sb->s_blocksize_bits) {
+>   			erofs_err(sb, "too large lz4 pclusterblks %u",
+>   				  sbi->lz4.max_pclusterblks);
+>   			return -EINVAL;
+> @@ -221,13 +221,13 @@ static int z_erofs_lz4_decompress_mem(struct z_erofs_lz4_decompress_ctx *ctx,
+>   		support_0padding = true;
+>   		ret = z_erofs_fixup_insize(rq, headpage + rq->pageofs_in,
+>   				min_t(unsigned int, rq->inputsize,
+> -				      EROFS_BLKSIZ - rq->pageofs_in));
+> +				      rq->sb->s_blocksize - rq->pageofs_in));
+>   		if (ret) {
+>   			kunmap_atomic(headpage);
+>   			return ret;
+>   		}
+>   		may_inplace = !((rq->pageofs_in + rq->inputsize) &
+> -				(EROFS_BLKSIZ - 1));
+> +				(rq->sb->s_blocksize - 1));
+>   	}
+>   
+>   	inputmargin = rq->pageofs_in;
+> diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
+> index 091fd5adf818..d44c377c5b69 100644
+> --- a/fs/erofs/decompressor_lzma.c
+> +++ b/fs/erofs/decompressor_lzma.c
+> @@ -166,8 +166,8 @@ int z_erofs_lzma_decompress(struct z_erofs_decompress_req *rq,
+>   	/* 1. get the exact LZMA compressed size */
+>   	kin = kmap(*rq->in);
+>   	err = z_erofs_fixup_insize(rq, kin + rq->pageofs_in,
+> -				   min_t(unsigned int, rq->inputsize,
+> -					 EROFS_BLKSIZ - rq->pageofs_in));
+> +			min_t(unsigned int, rq->inputsize,
+> +			      rq->sb->s_blocksize - rq->pageofs_in));
+>   	if (err) {
+>   		kunmap(*rq->in);
+>   		return err;
+> diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
+> index 6970b09b8307..849319457181 100644
+> --- a/fs/erofs/dir.c
+> +++ b/fs/erofs/dir.c
+> @@ -50,9 +50,11 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+>   {
+>   	struct inode *dir = file_inode(f);
+>   	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+> +	struct super_block *sb = dir->i_sb;
+> +	unsigned long bsz = sb->s_blocksize;
+>   	const size_t dirsize = i_size_read(dir);
+> -	unsigned int i = ctx->pos / EROFS_BLKSIZ;
+> -	unsigned int ofs = ctx->pos % EROFS_BLKSIZ;
+> +	unsigned int i = erofs_blknr(sb, ctx->pos);
+> +	unsigned int ofs = erofs_blkoff(sb, ctx->pos);
+>   	int err = 0;
+>   	bool initial = true;
+>   
+> @@ -62,7 +64,7 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+>   
+>   		de = erofs_bread(&buf, dir, i, EROFS_KMAP);
+>   		if (IS_ERR(de)) {
+> -			erofs_err(dir->i_sb,
+> +			erofs_err(sb,
+
+
+Same here,
+
+Otherwise it looks good to me,
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Thanks,
+Gao Xiang
+
+>   				  "fail to readdir of logical block %u of nid %llu",
+>   				  i, EROFS_I(dir)->nid);
+>   			err = PTR_ERR(de);
