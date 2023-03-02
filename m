@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7846A7C45
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7D26A7C53
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjCBILX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 03:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S229676AbjCBIOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 03:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjCBILU (ORCPT
+        with ESMTP id S229501AbjCBIOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 03:11:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11772D149
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:10:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677744633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a4doVFCQ5KJmZV+lPvurw3orc9Atjymj2EsOoEfGZFo=;
-        b=YHmZeeMn0+glyhJXXTg6YyNFWJnO11eWDxxCM4loTivkRwxX2G5RcRoW83RZm4AKp/eHTB
-        qmKp+/lpLjCgiyigJLeem38pmuT6IiFLAGjEmrS2SwzgN4lbcRlBNu59j58ZJwY9G93CkU
-        fV6siZzXvDyGwNqidsIdcpe1geSKXlY=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-9-vuRN8TStN7WrmHlRajlOMQ-1; Thu, 02 Mar 2023 03:10:32 -0500
-X-MC-Unique: vuRN8TStN7WrmHlRajlOMQ-1
-Received: by mail-ot1-f71.google.com with SMTP id m20-20020a05683026d400b006942d0ed1d1so1902040otu.18
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:10:32 -0800 (PST)
+        Thu, 2 Mar 2023 03:14:10 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573061B56B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:14:08 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id v27so21675012vsa.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:14:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677744847;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dA9eTi+sEXqmF96lTD8aREyPwLI7gaUh3LiRN8mNjFY=;
+        b=dTwUp9bUkpH4tq61ZPrtEdf+ZfanUy6chaBUzdL/VNknfZYf4fh/nHeUQ18FOGvbPX
+         BFODp9fz4X1tOoU5zfk+eYWHR+qATJoNkRo66QS4cuST8EfSntbdDniVT9LKCyW/HO/3
+         h7MwgtU1goYRx4t+2q+nnC7VXn7J1HP9WvBqs99vjnTc9yGRy0mSnh5GxvmgG1P5ongJ
+         L02v7sC/DHJX943spOMb/Oa+Fu2v7WLypSzdiMhVuo2uuTTRqRicYmLqgsoVR9xZPTVj
+         4CIW/3bGlxHuapOr36Nu1qyInTfrcO0oQEsNCcIIJIyaV67GeeEMZ4eg8UNZVLhVbmkU
+         rnNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a4doVFCQ5KJmZV+lPvurw3orc9Atjymj2EsOoEfGZFo=;
-        b=k0yjqbzFOfh/Vqg74fsPt9ZQNxaRbm6v6hpuplHayAA4BV65RPsPZnnjPb9EDT6MOY
-         MUA+xFSaf030orWIVLwQXErOqi8Rglizprk0c7NxjJ56q/2/2L7WXq0Iuv2IyBHDrXZQ
-         /+qdnd5LdY10fIoBIOJ4aR+S4EW/ZGGY5mcKeJkQqCnK8i8zmXyLoje2NT5JU1xRu3ZQ
-         hiiCQTRK51ie300gYb5IeApu/xaUpsCI4tdhSMLiMsSKgTFxdBWQm3k5YN3/+1UHjsqH
-         0NCHUX3OP2eZWlKIXUhK/7UPHwSMYoOx+vET07dFCK+5ASu7zNNSIt/vDZZjfgNMKCIi
-         lquA==
-X-Gm-Message-State: AO0yUKWyRNaEgoVryOsqYJv1qO8bQx58SEwfw6l4kJ44KTSqRob9tvYj
-        UIB4ANUBvyJunrgnI++uohL8IbIHdA6ecR6T7XbmUdqZQmUInJIQ39CBnf2S53ZPz2HdP/xPHr/
-        mEPEwjk3BglT6EBa5HrgNSFYoZkntKNGurYWPKJ9L
-X-Received: by 2002:a54:480c:0:b0:36e:f6f5:604c with SMTP id j12-20020a54480c000000b0036ef6f5604cmr2797467oij.9.1677744631915;
-        Thu, 02 Mar 2023 00:10:31 -0800 (PST)
-X-Google-Smtp-Source: AK7set+sj3fbXt8XiifY046sFFbf1plye0Fiy4DTIoY+gujjAl0FnNe8UJAkIsvsAya6Z4XPKOwpwLtdFB2CiXVSkd4=
-X-Received: by 2002:a54:480c:0:b0:36e:f6f5:604c with SMTP id
- j12-20020a54480c000000b0036ef6f5604cmr2797460oij.9.1677744631216; Thu, 02 Mar
- 2023 00:10:31 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677744847;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dA9eTi+sEXqmF96lTD8aREyPwLI7gaUh3LiRN8mNjFY=;
+        b=ZojvP6+xrYlisHjTGFfz3cTZhK+uEMwwmFB7Bht2Isp0bfFvoOHLBf1lXBpx45ou2w
+         4GDd0PxrsNWzOijHvRZMnwTV9Oz2kwk0Ml+Vj+PyTNWncNO9+wCuIN7kkDgGbtbEdDWN
+         fh723qKFsXd7RroRGYkEGvc6CqV1S5nbptdH7AUJDXBIrNvUWmm+9oKvUMJ70FCa5mf6
+         ItHejdIl9BoOqOBXwgIOLOS7FWRvUHeGZrpPYgc6y7GIHnr+29s5jm77bpujJ+ywdfHu
+         M6hYY+1KLVuU0lK37lHKMWfeVy+oJZRZwGpB6xbiTZX9WNM8N2MEvctSqfQESWCM1SCv
+         l6Jw==
+X-Gm-Message-State: AO0yUKXHLQEmvzf24tA/8H18F/aHT9HjJYtyG20BHBSWjNljaZN4N1d3
+        Yg+6pLz2wgvxfwejDd/fIq2Tbrmz7aiecqUOnrMYAw==
+X-Google-Smtp-Source: AK7set+eo05sdidE0iL7vRNRctC8Kzb5aINrjn8iUyRsSTBfKC7KHzh5BN+ZIpYkcfrr9iEzBzhiQG+RzBhvC94luMg=
+X-Received: by 2002:a67:cd05:0:b0:414:2d02:6c96 with SMTP id
+ u5-20020a67cd05000000b004142d026c96mr6109677vsl.7.1677744847283; Thu, 02 Mar
+ 2023 00:14:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com> <20230301093054-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230301093054-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 2 Mar 2023 16:10:20 +0800
-Message-ID: <CACGkMEsG10CWigz+S6JgSVK8XfbpT=L=30hZ8LDvohtaanAiZQ@mail.gmail.com>
-Subject: Re: [PATCH v3] virtio-net: Fix probe of virtio-net on kvmtool
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     rbradford@rivosinc.com, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230302013822.1808711-1-sboyd@kernel.org>
+In-Reply-To: <20230302013822.1808711-1-sboyd@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 2 Mar 2023 16:13:55 +0800
+Message-ID: <CABVgOSnpMNCtEEsJV28OzUoxdDuiT4a2T0avP0AYf9xFW1jxrw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ab387e05f5e6695c"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,168 +83,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 10:44=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
->
-> On Wed, Mar 01, 2023 at 01:59:52PM +0000, Rob Bradford via B4 Relay wrote=
-:
-> > From: Rob Bradford <rbradford@rivosinc.com>
-> >
-> > Since the following commit virtio-net on kvmtool has printed a warning
-> > during the probe:
-> >
-> > commit dbcf24d153884439dad30484a0e3f02350692e4c
-> > Author: Jason Wang <jasowang@redhat.com>
-> > Date:   Tue Aug 17 16:06:59 2021 +0800
-> >
-> >     virtio-net: use NETIF_F_GRO_HW instead of NETIF_F_LRO
-> >
-> > [    1.865992] net eth0: Fail to set guest offload.
-> > [    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); wa=
-nted 0x0000000000134829, left 0x0080000000134829
-> >
-> > This is because during the probing the underlying netdev device has
-> > identified that the netdev features on the device has changed and
-> > attempts to update the virtio-net offloads through the virtio-net
-> > control queue. kvmtool however does not have a control queue that suppo=
-rts
-> > offload changing (VIRTIO_NET_F_CTRL_GUEST_OFFLOADS is not advertised)
-> >
-> > The netdev features have changed due to validation checks in
-> > netdev_fix_features():
-> >
-> > if (!(features & NETIF_F_RXCSUM)) {
-> >       /* NETIF_F_GRO_HW implies doing RXCSUM since every packet
-> >        * successfully merged by hardware must also have the
-> >        * checksum verified by hardware.  If the user does not
-> >        * want to enable RXCSUM, logically, we should disable GRO_HW.
-> >        */
-> >       if (features & NETIF_F_GRO_HW) {
-> >               netdev_dbg(dev, "Dropping NETIF_F_GRO_HW since no RXCSUM =
-feature.\n");
-> >               features &=3D ~NETIF_F_GRO_HW;
-> >       }
-> > }
-> >
-> > Since kvmtool does not advertise the VIRTIO_NET_F_GUEST_CSUM feature th=
-e
-> > NETIF_F_RXCSUM bit is not present and so the NETIF_F_GRO_HW bit is
-> > cleared. This results in the netdev features changing, which triggers
-> > the attempt to reprogram the virtio-net offloads which then fails.
-> >
-> > This commit prevents that set of netdev features from changing by
-> > preemptively applying the same validation and only setting
-> > NETIF_F_GRO_HW if NETIF_F_RXCSUM is set because the device supports bot=
-h
-> > VIRTIO_NET_F_GUEST_CSUM and VIRTIO_NET_F_GUEST_TSO{4,6}
-> >
-> > Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
-> > ---
-> > Changes in v3:
-> > - Identified root-cause of feature bit changing and updated conditions
-> >   check
-> > - Link to v2: https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v2-=
-1-8ec93511e67f@rivosinc.com
-> >
-> > Changes in v2:
-> > - Use parentheses to group logical OR of features
-> > - Link to v1:
-> >   https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v1-1-fc23d29b9d=
-7a@rivosinc.com
-> > ---
-> >  drivers/net/virtio_net.c | 10 ++++++----
-> >  1 file changed, 6 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > index 61e33e4dd0cd..2e7705142ca5 100644
-> > --- a/drivers/net/virtio_net.c
-> > +++ b/drivers/net/virtio_net.c
-> > @@ -3778,11 +3778,13 @@ static int virtnet_probe(struct virtio_device *=
-vdev)
-> >                       dev->features |=3D dev->hw_features & NETIF_F_ALL=
-_TSO;
-> >               /* (!csum && gso) case will be fixed by register_netdev()=
- */
-> >       }
-> > -     if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
-> > +     if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM)) {
-> >               dev->features |=3D NETIF_F_RXCSUM;
-> > -     if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-> > -         virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
-> > -             dev->features |=3D NETIF_F_GRO_HW;
-> > +             /* This dependency is enforced by netdev_fix_features */
-> > +             if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-> > +                 virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
-> > +                     dev->features |=3D NETIF_F_GRO_HW;
-> > +     }
-> >       if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
-> >               dev->hw_features |=3D NETIF_F_GRO_HW;
+--000000000000ab387e05f5e6695c
+Content-Type: text/plain; charset="UTF-8"
 
-Should we move this also under the check of RXCSUM, otherwise we may
-end up the following case:
-
-when CSUM is not negotiated but GUEST_OFFLOADS, can still try to
-enable-or-disable guest offloads? Or do we need to fail the probe in
-the case via virtnet_validate_features()?
-
-> >
+On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
 >
-> I see. It is annoying that we are duplicating the logic from
-> netdev_fix_features here though :(
-> Maybe we should call netdev_update_features, in the callback check
-> the flags and decide what to set and what to clear?
-> Or export netdev_fix_features to modules?
-
-There's a ndo_fix_features() that might be used here.
-
+> This patch series adds unit tests for the clk fixed rate basic type and
+> the clk registration functions that use struct clk_parent_data. To get
+> there, we add support for loading a DTB into the UML kernel that's
+> running the unit tests along with probing platform drivers to bind to
+> device nodes specified in DT.
 >
->
->
-> Also re-reading Documentation/networking/netdev-features.rst -
->
->  1. netdev->hw_features set contains features whose state may possibly
->     be changed (enabled or disabled) for a particular device by user's
->     request.  This set should be initialized in ndo_init callback and not
->     changed later.
->
->  2. netdev->features set contains features which are currently enabled
->     for a device.  This should be changed only by network core or in
->     error paths of ndo_set_features callback.
->
->
-> is it then wrong that virtio sets NETIF_F_RXCSUM and NETIF_F_GRO_HW in
-> dev->features and not in dev->hw_features?
-
-Looks not the core can try to enable and disable features according to
-the diff between features and hw_features
-
-static inline netdev_features_t netdev_get_wanted_features(
-        struct net_device *dev)
-{
-        return (dev->features & ~dev->hw_features) | dev->wanted_features;
-}
-
-Thanks
-
-> We set it there because
-> without ctrl guest offload these can not be changed.
-> I suspect this is just a minor documentation bug yes? Maybe devices
-> where features can't be cleared are uncommon.
->
-> Also:
->         if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
->                 dev->hw_features |=3D NETIF_F_GRO_HW;
->
-> but should we not set NETIF_F_RXCSUM there too?
->
->
->
-> > ---
-> > base-commit: c39cea6f38eefe356d64d0bc1e1f2267e282cdd3
-> > change-id: 20230223-virtio-net-kvmtool-87f37515be22
-> >
-> > Best regards,
-> > --
-> > Rob Bradford <rbradford@rivosinc.com>
+> With this series, we're able to exercise some of the code in the common
+> clk framework that uses devicetree lookups to find parents and the fixed
+> rate clk code that scans devicetree directly and creates clks. Please
+> review.
 >
 
+Thanks Stephen -- this is really neat!
+
+This works well here, and I love all of the tests for the
+KUnit/device-tree integration as well.
+
+I'm still looking through the details of it (alas, I've mostly lived
+in x86-land, so my device-tree knowledge is, uh, spotty to say the
+least), but apart from possibly renaming some things or similarly
+minor tweaks, I've not got any real suggestions thus far.
+
+I do wonder whether we'll want, on the KUnit side, to have some way of
+supporting KUnit device trees on non-UML architecctures (e.g., if we
+need to test something architecture-specific, or on a big-endian
+platform, etc), but I think that's a question for the future, rather
+than something that affects this series.
+
+Similarly, I wonder if there's something we could do with device tree
+overlays, in order to make it possible for tests to swap nodes in and
+out for testing.
+
+I don't think either of those ideas should block this from getting in though.
+
+> I Cced everyone to all the patches so they get the full context. I'm
+> hoping I can take the whole pile through the clk tree as they almost all
+> depend on each other. In the future I imagine it will be easy to add
+> more test nodes to the clk.dtsi file and not need to go across various
+> maintainer trees like this series does.
+
+That seems pretty sensible to me. I expect there'll be a few minor
+conflicts on the KUnit side (there are a bunch of small
+lib/kunit/Makefile changes in 6.3, and there's a plan to do some more
+serious changes to the kunit_resource API at some point, though I have
+my doubts they'll all hit in 6.4), but I doubt they'll cause too much
+strife.
+
+Cheers,
+-- David
+
+>
+> Stephen Boyd (8):
+>   dt-bindings: Add linux,kunit binding
+>   of: Enable DTB loading on UML for KUnit tests
+>   kunit: Add test managed platform_device/driver APIs
+>   clk: Add test managed clk provider/consumer APIs
+>   dt-bindings: kunit: Add fixed rate clk consumer test
+>   clk: Add KUnit tests for clk fixed rate basic type
+>   dt-bindings: clk: Add KUnit clk_parent_data test
+>   clk: Add KUnit tests for clks registered with struct clk_parent_data
+>
+>  .../clock/linux,clk-kunit-parent-data.yaml    |  47 ++
+>  .../kunit/linux,clk-kunit-fixed-rate.yaml     |  35 ++
+>  .../bindings/kunit/linux,kunit.yaml           |  24 +
+>  arch/um/kernel/dtb.c                          |  29 +-
+>  drivers/clk/.kunitconfig                      |   3 +
+>  drivers/clk/Kconfig                           |   7 +
+>  drivers/clk/Makefile                          |   6 +
+>  drivers/clk/clk-fixed-rate_test.c             | 296 ++++++++++++
+>  drivers/clk/clk-kunit.c                       | 204 ++++++++
+>  drivers/clk/clk-kunit.h                       |  28 ++
+>  drivers/clk/clk_test.c                        | 456 +++++++++++++++++-
+>  drivers/of/Kconfig                            |  26 +
+>  drivers/of/Makefile                           |   1 +
+>  drivers/of/kunit/.kunitconfig                 |   4 +
+>  drivers/of/kunit/Makefile                     |   4 +
+>  drivers/of/kunit/clk.dtsi                     |  30 ++
+>  drivers/of/kunit/kunit.dtsi                   |   9 +
+>  drivers/of/kunit/kunit.dtso                   |   4 +
+>  drivers/of/kunit/uml_dtb_test.c               |  55 +++
+>  include/kunit/platform_driver.h               |  15 +
+>  lib/kunit/Makefile                            |   6 +
+>  lib/kunit/platform_driver-test.c              | 107 ++++
+>  lib/kunit/platform_driver.c                   | 207 ++++++++
+>  23 files changed, 1599 insertions(+), 4 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/linux,clk-kunit-parent-data.yaml
+>  create mode 100644 Documentation/devicetree/bindings/kunit/linux,clk-kunit-fixed-rate.yaml
+>  create mode 100644 Documentation/devicetree/bindings/kunit/linux,kunit.yaml
+>  create mode 100644 drivers/clk/clk-fixed-rate_test.c
+>  create mode 100644 drivers/clk/clk-kunit.c
+>  create mode 100644 drivers/clk/clk-kunit.h
+>  create mode 100644 drivers/of/kunit/.kunitconfig
+>  create mode 100644 drivers/of/kunit/Makefile
+>  create mode 100644 drivers/of/kunit/clk.dtsi
+>  create mode 100644 drivers/of/kunit/kunit.dtsi
+>  create mode 100644 drivers/of/kunit/kunit.dtso
+>  create mode 100644 drivers/of/kunit/uml_dtb_test.c
+>  create mode 100644 include/kunit/platform_driver.h
+>  create mode 100644 lib/kunit/platform_driver-test.c
+>  create mode 100644 lib/kunit/platform_driver.c
+>
+>
+> base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+> --
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+>
+
+--000000000000ab387e05f5e6695c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCZ
+WaucD0NMjqOIX/IMKoUJSNguWt3ohrR3VskZhSO4ozAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMDIwODE0MDdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAkKhR147ibw/Y/5t4aVdv
+my6ZP/2qL+aRhFp2DDXIclXZkiNm74sswMSGVhENlYvOsqDQueHA9q2WWlCc1hRhZPjqinBrASq2
+1F9kkWUfRoS1xqb32Fq21cfC49mPWJc/dBzS8mf0DuzIoFhlW6uR9uAA+94sUo7DisSGAiffY5Oi
+eWDSCPbnbwH1K0XA3lrV9mnLy5X2JsqN5LWdwUfL12zmRIvsJhgrZlvOzuVfwQNlrHV7Jf4SR9y3
+DPhbhHhZA+uczwPIz1UuPg9Sg+0Sa0JTPk4L+0cJcfIdPVo+YUODIDqdeoRuT5jtjoM2DJp5EGBD
+EDhF2YHampLaXjk6Dw==
+--000000000000ab387e05f5e6695c--
