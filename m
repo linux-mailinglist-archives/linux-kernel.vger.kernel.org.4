@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE126A8897
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8A96A889C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbjCBSh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 13:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        id S229518AbjCBSjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 13:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCBSh4 (ORCPT
+        with ESMTP id S229455AbjCBSjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 13:37:56 -0500
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E975E272D;
-        Thu,  2 Mar 2023 10:37:54 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|hussein@unixcat.org
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 8DAF514168F;
-        Thu,  2 Mar 2023 18:37:52 +0000 (UTC)
-Received: from pdx1-sub0-mail-a274.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id BABA4141DAC;
-        Thu,  2 Mar 2023 18:37:50 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1677782272; a=rsa-sha256;
-        cv=none;
-        b=OKy4sgheNwKlxNve2m6H5HROKa+v2fBtaRDEx1x2viH7ZcdTBGmS4Tn0ZxZQW5lBPrDAHf
-        55x8WtTNNAT8cHXTKLVYPztaoz+OM+UscjDuFdBMf6pxKdVGo2HAGxSJxUbSAfrJN8KlIr
-        NDVgOLfnr/BAP8ByQGjRFMHdEE1G4Gc7pbF/trtKj1wd4GKzGQ3TfyrOcBRCjdu4+NI83v
-        FL1T2aKvfuUWWhI4KAwNrhZPUhVonjJFfPLFQSCav0Lrsq0d2aiE4ryl+uL4cUZ/yKWARm
-        9lMYphu0YJ8kpgEes1yG0V67gbceMhBsAHNNbqElDPuYNFbOMKffTjAiK553IA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1677782272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=KbIa0sIStAMO0mMB6RiYRVtu/9/bZPgLeoihDTD5mi4=;
-        b=9sjKMRafB9B4eEaYMWycd1R0zVh6xziYy4i+NY4af5A9KzSKKO2cfVLD4U7tGAQbz3xIgB
-        cxJGoGTD6nthq/9CDmdOOzGKNj9lDUoyMSQJcNnJ+F6F1AgjpzlAAvdbB/fH5fA9gfHXtr
-        lq1svAquWr+3KqlxYIf2wcySDVBYwbANDT2Z2PQ65kojGNuYNs2VmmBUMIQVJyEPDZj7Fz
-        BswyMuR3rIcOMqrspQN/H7JT4Bymm9C2+VD8+9CojexCqwESdPPZmLwtOA5zWW4/AELm7K
-        sYSfupO8mqJGlNI1dfrUmeGlMBybAqvakjeHkJe4lSHfkDQN1jPzGnpRpBIIsA==
-ARC-Authentication-Results: i=1;
-        rspamd-69778c65cd-pq5gk;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=hussein@unixcat.org
-X-Sender-Id: dreamhost|x-authsender|hussein@unixcat.org
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|hussein@unixcat.org
-X-MailChannels-Auth-Id: dreamhost
-X-Abortive-Ruddy: 3435e4f700994e25_1677782272310_2097792675
-X-MC-Loop-Signature: 1677782272310:2704307466
-X-MC-Ingress-Time: 1677782272310
-Received: from pdx1-sub0-mail-a274.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.110.64.199 (trex/6.7.2);
-        Thu, 02 Mar 2023 18:37:52 +0000
-Received: from localhost (unknown [175.144.191.112])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hussein@unixcat.org)
-        by pdx1-sub0-mail-a274.dreamhost.com (Postfix) with ESMTPSA id 4PSKbR6pG8z186;
-        Thu,  2 Mar 2023 10:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=unixcat.org;
-        s=dreamhost; t=1677782260;
-        bh=KbIa0sIStAMO0mMB6RiYRVtu/9/bZPgLeoihDTD5mi4=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=jSnnFZrojsRpN1LhK3lJnGHbvrV6IY1p+fuRiPXuDXZX3Z04j0Tbo+B6OAvNmbQol
-         YfjYA9WuOipfphFkKhjFqdrJgyH4BskoxRRL3xOxvQQqlaa2m+uRTP+PAgwPCBa18P
-         jgEfj9ie64/dZsu8Ho8WUtHnhU5o29B6TwOVXwpo=
-From:   Nur Hussein <hussein@unixcat.org>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Nur Hussein <hussein@unixcat.org>
-Subject: [PATCH RESEND] scsi: Add error checking to sysfs_update_group in drivers/scsi/scsi_transport_spi.c
-Date:   Fri,  3 Mar 2023 02:37:35 +0800
-Message-Id: <20230302183735.1281237-1-hussein@unixcat.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 2 Mar 2023 13:39:22 -0500
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871D410263;
+        Thu,  2 Mar 2023 10:39:21 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id o3so172652qvr.1;
+        Thu, 02 Mar 2023 10:39:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677782360;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xh37jVV18tU4XLWiHUq7/XGNNCrD2HtDOL15WPjQ7Os=;
+        b=UsnBUeY4APLvnG5/lRzdQ/TXh9PiHQak3KDRUUCmWER4CPcHySsjncprXkd7S4jdmA
+         2YeWSlMRTsYlMfUD66uyMKjX2vX5T8MH3dTJi4xd6//DR4R9xeJ2PxPUfY5nx1afQ536
+         lpmk/AJHwTc3xZA3jrEzMQvAvm1tWoJkCSlFKfpJLs4qksgeWxuhi484scGo98gQQl6w
+         mTqdLpVz4unLadv3BSlnk99H7wc58UxkXZKWQtHxD9fIHOVg9lk3lmAfK6X4ZmPpPol4
+         rsa/7qZQZou9XrPkqXz+w+JsAU6RYqOtr/YDqfhwZ9XMfdHoMkKmTjdNypUizexGCHjv
+         7NVg==
+X-Gm-Message-State: AO0yUKUsA4xGZLKxdUHpIdDH5yaAt6O8+P6YGitcKqt98zwWP3ZOSdWc
+        WBPkLFWeE5mkzGtEAV86zH+504YHga35g+qB
+X-Google-Smtp-Source: AK7set+a+m30hD1vItmKf8TpDPISS8DbpLHPihQyCZGszCawPXeoyfqm3JnZaq4siDBbK13eXYDWMQ==
+X-Received: by 2002:a05:6214:248c:b0:56e:b1d2:9c2a with SMTP id gi12-20020a056214248c00b0056eb1d29c2amr22091937qvb.28.1677782360212;
+        Thu, 02 Mar 2023 10:39:20 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:5434])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05620a211300b007423c122457sm150050qkl.63.2023.03.02.10.39.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 10:39:19 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH bpf-next 1/2] bpf, docs: Fix link to netdev-FAQ target
+Date:   Thu,  2 Mar 2023 12:39:17 -0600
+Message-Id: <20230302183918.54190-1-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An instance of sysfs_update_group now checks the result and on error,
-logs it via pr_err().
+The BPF devel Q&A documentation page makes frequent reference to the
+netdev-QA page via the netdev-FAQ rst link. This link is currently
+broken, as is evidenced by the build output when making BPF docs:
 
-Signed-off-by: Nur Hussein <hussein@unixcat.org>
+./Documentation/bpf/bpf_devel_QA.rst:150: WARNING: undefined label: 'netdev-faq'
+./Documentation/bpf/bpf_devel_QA.rst:206: WARNING: undefined label: 'netdev-faq'
+./Documentation/bpf/bpf_devel_QA.rst:231: WARNING: undefined label: 'netdev-faq'
+./Documentation/bpf/bpf_devel_QA.rst:396: WARNING: undefined label: 'netdev-faq'
+./Documentation/bpf/bpf_devel_QA.rst:412: WARNING: undefined label: 'netdev-faq'
+
+Fix the links to point to the actual netdev-faq page.
+
+Signed-off-by: David Vernet <void@manifault.com>
 ---
- drivers/scsi/scsi_transport_spi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ Documentation/bpf/bpf_devel_QA.rst | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_spi.c b/drivers/scsi/scsi_transport_spi.c
-index 2442d4d2e3f3..f905b4787a42 100644
---- a/drivers/scsi/scsi_transport_spi.c
-+++ b/drivers/scsi/scsi_transport_spi.c
-@@ -1559,8 +1559,9 @@ static int spi_target_configure(struct transport_container *tc,
- {
- 	struct kobject *kobj = &cdev->kobj;
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+index 03d4993eda6f..5f5f9ccc3862 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -128,7 +128,7 @@ into the bpf-next tree will make their way into net-next tree. net and
+ net-next are both run by David S. Miller. From there, they will go
+ into the kernel mainline tree run by Linus Torvalds. To read up on the
+ process of net and net-next being merged into the mainline tree, see
+-the :ref:`netdev-FAQ`
++the `netdev-FAQ`_.
  
--	/* force an update based on parameters read from the device */
--	sysfs_update_group(kobj, &target_attribute_group);
-+	/* force an update based on parameters read from the device, log an error on failure */
-+	if (sysfs_update_group(kobj, &target_attribute_group))
-+		pr_err("Unable to update sysfs entries\n");
  
- 	return 0;
- }
+ 
+@@ -147,7 +147,7 @@ request)::
+ Q: How do I indicate which tree (bpf vs. bpf-next) my patch should be applied to?
+ ---------------------------------------------------------------------------------
+ 
+-A: The process is the very same as described in the :ref:`netdev-FAQ`,
++A: The process is the very same as described in the `netdev-FAQ`_,
+ so please read up on it. The subject line must indicate whether the
+ patch is a fix or rather "next-like" content in order to let the
+ maintainers know whether it is targeted at bpf or bpf-next.
+@@ -206,7 +206,7 @@ ii) run extensive BPF test suite and
+ Once the BPF pull request was accepted by David S. Miller, then
+ the patches end up in net or net-next tree, respectively, and
+ make their way from there further into mainline. Again, see the
+-:ref:`netdev-FAQ` for additional information e.g. on how often they are
++`netdev-FAQ`_ for additional information e.g. on how often they are
+ merged to mainline.
+ 
+ Q: How long do I need to wait for feedback on my BPF patches?
+@@ -230,7 +230,7 @@ Q: Are patches applied to bpf-next when the merge window is open?
+ -----------------------------------------------------------------
+ A: For the time when the merge window is open, bpf-next will not be
+ processed. This is roughly analogous to net-next patch processing,
+-so feel free to read up on the :ref:`netdev-FAQ` about further details.
++so feel free to read up on the `netdev-FAQ`_ about further details.
+ 
+ During those two weeks of merge window, we might ask you to resend
+ your patch series once bpf-next is open again. Once Linus released
+@@ -394,7 +394,7 @@ netdev kernel mailing list in Cc and ask for the fix to be queued up:
+   netdev@vger.kernel.org
+ 
+ The process in general is the same as on netdev itself, see also the
+-:ref:`netdev-FAQ`.
++`netdev-FAQ`_.
+ 
+ Q: Do you also backport to kernels not currently maintained as stable?
+ ----------------------------------------------------------------------
+@@ -410,7 +410,7 @@ Q: The BPF patch I am about to submit needs to go to stable as well
+ What should I do?
+ 
+ A: The same rules apply as with netdev patch submissions in general, see
+-the :ref:`netdev-FAQ`.
++the `netdev-FAQ`_.
+ 
+ Never add "``Cc: stable@vger.kernel.org``" to the patch description, but
+ ask the BPF maintainers to queue the patches instead. This can be done
+@@ -685,7 +685,7 @@ when:
+ 
+ .. Links
+ .. _Documentation/process/: https://www.kernel.org/doc/html/latest/process/
+-.. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
++.. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+ .. _selftests:
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/
+ .. _Documentation/dev-tools/kselftest.rst:
 -- 
-2.34.1
+2.39.0
 
