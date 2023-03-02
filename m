@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F254E6A8109
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FEB6A810B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjCBLbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S229673AbjCBLb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:31:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjCBLbr (ORCPT
+        with ESMTP id S229632AbjCBLbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:31:47 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A958227AF;
-        Thu,  2 Mar 2023 03:31:45 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so1976345wms.0;
-        Thu, 02 Mar 2023 03:31:45 -0800 (PST)
+        Thu, 2 Mar 2023 06:31:51 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2CB231FC;
+        Thu,  2 Mar 2023 03:31:50 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id j2so16174454wrh.9;
+        Thu, 02 Mar 2023 03:31:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677756704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YxUs9fQ/V1M0mvAOjqgHaLDvTdZPjpXWiCFQQKoRef8=;
-        b=X9G8Um8lNvQnCQ2XEDiNS52KENiWE3MzXGpyyqtLwyNTINESdlkQvKstE2YVhJ5ymE
-         4EpeWaeiKQf5uoLqgv5S+AKDN0AS9p5ieIZjoa6FBBFU1gZuu1++gjCYVU1b88YhIVCI
-         I5I2CzILdhSd/FzG0bCNFtwag2fRLhyDiLF18w8HFxfReXQDwCcTNevpKPqy+7IfFECB
-         snGtbDksKb/eNd8nAnC3m7znkzF1ncUW1LU03GciiDRFByObZtjsj1qcd3O9v2Lgp23I
-         OCODtP1w2UKjytsnQrQ/Yvd1scDnQ3CwZQyiDuQ9JNZianpT+9XRuMZluN0GwUs4cvOo
-         ej6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677756704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YxUs9fQ/V1M0mvAOjqgHaLDvTdZPjpXWiCFQQKoRef8=;
-        b=N7T04vvZhDlCLc8MgrMjU4umHFpX3qyqlOxjUwAWV00In5HwP9YDCdi8Kkwdr8VvZF
-         8dPmmcBjbGVi2EwiH3SbtZopXtVVaCs9MdNi7yrzwiXo6NeJGMTNnIlbMN9T1u4b5W6L
-         CCuU3KDlFEn7R0GHQ/KJZh912ebbgiSQuOB7FVRxQ/d/mZa/SXWSGeAhinHDBr1/bAl2
-         WfyDdPzzuGsVsdGXL617pNiQWMTKfJ8u9N7EIlyIjGj5kMN2esNmb8m081aNRHoqEZ4v
-         fBEDC2RNOCe2BTKO4Ftrmo8bG4iHgrC9gEU9dVZCIrBcsX4bDGzuCD6xqJETCGgNYk6B
-         BdLA==
-X-Gm-Message-State: AO0yUKWimmYJf0cX99Rt0gF/PozgKBEgxJhA3WWPXBHPGjWJ/1EQyoDR
-        fpqeKBfuyycFy5f/5h0VTTc=
-X-Google-Smtp-Source: AK7set+39WtzZQ8rxQtBAPLpClVuwY6Ygm+lRAIOqb8ODnldgD+6kl5CDffdMQIPnyDfhBJvYMBlUw==
-X-Received: by 2002:a05:600c:3093:b0:3e2:153e:6940 with SMTP id g19-20020a05600c309300b003e2153e6940mr7461131wmn.3.1677756703833;
-        Thu, 02 Mar 2023 03:31:43 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id l8-20020a05600c4f0800b003b47b80cec3sm3171681wmq.42.2023.03.02.03.31.43
+        bh=bx+PVsncwZDKHuskc1x0Kqy1fJLkTEStG1WLlrUYmaQ=;
+        b=eHcaBjAB8Xy9X/NH4Kj2RIOTbBSKGdswSuCCK1eBdEQdYPmUmSksaMR9PsbxYj+X+o
+         6kYhpANIs9moaSPxW1NWx2nLpO9KVuVig6i/p16+UolXvUmsgE/mh/lHJFDMOzLjADZk
+         sXSxwzkAkFOXb7BQF3Ik6eHtikKR3GS0Yzx+Gg8IXquGkUi3zmNF0Q/40BxfbxClaTRc
+         QitCny6zQCG44rbd9Gf1GHnnvUxM4k6eoAIgYrD5+fKsLoxb64fIAeRbjq6pi5dwzGrL
+         QjjqVr9N9co/6rv5e3DwKXfDEUeaVxtvbGP0ym13z5WUj9VmI5JY05F60vpC2KLlTecP
+         HfhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bx+PVsncwZDKHuskc1x0Kqy1fJLkTEStG1WLlrUYmaQ=;
+        b=TPF3vu7EzAbaLObuWdmZubnQWNNSkZYPNUvVTd/JRr6V0d3hrFrGQ7INDQMugb22J3
+         SVgIb7N2VH5mHe94ClkRCwMZTIcKZcyGC9A96oeUXtHMB8N27E/kakiA4wclbpDZxL8F
+         gazIdmHu2AT3F6QrMMPzsOdKwNxru58zu+2if9ajIcFFFaLOkHAoGotHJK4P3PGoMP1J
+         rNq6NcHJO73qtVpgqx5XK3jngAoVUcn4PS1R4kHMCHmi4YF9z6dNjgoZZJjcTiNuOcNi
+         jMr7hKz9C8Cf6fItWuGG7vYZrw6xSL7TRU3myw1Sw4FlcQ9I16Gg9Mr2o8/d3A0Un6fH
+         MuTw==
+X-Gm-Message-State: AO0yUKWrWfHtKAfFn7QEhGOAXxl9eduShnMMKyGUEhUQabXT0ZDRB6Ht
+        VQYZuArrtlOZrxiRy0WGT+w=
+X-Google-Smtp-Source: AK7set9JLbLhbSNQk4Sf9xcHO+93ZUsRLRuD//8wsjVdOqKIcDPzeoFxevwlbxbmiEOM2b5yUCLPdA==
+X-Received: by 2002:a5d:5692:0:b0:2c7:1524:eb07 with SMTP id f18-20020a5d5692000000b002c71524eb07mr7235380wrv.67.1677756708612;
+        Thu, 02 Mar 2023 03:31:48 -0800 (PST)
+Received: from suse.localnet (host-82-61-39-134.retail.telecomitalia.it. [82.61.39.134])
+        by smtp.gmail.com with ESMTPSA id v12-20020adfedcc000000b002c5a1bd527dsm15030597wro.96.2023.03.02.03.31.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 03:31:43 -0800 (PST)
-Date:   Thu, 2 Mar 2023 11:31:41 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 0/9] 4.19.275-rc1 review
-Message-ID: <ZACJHW152iBecARu@debian>
-References: <20230301180650.395562988@linuxfoundation.org>
+        Thu, 02 Mar 2023 03:31:47 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [git pull] vfs.git sysv pile
+Date:   Thu, 02 Mar 2023 12:31:46 +0100
+Message-ID: <9074146.CDJkKcVGEf@suse>
+In-Reply-To: <20230302095931.jwyrlgtxcke7iwuu@quack3>
+References: <Y/gugbqq858QXJBY@ZenIV> <Y/9duET0Mt5hPu2L@ZenIV>
+ <20230302095931.jwyrlgtxcke7iwuu@quack3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301180650.395562988@linuxfoundation.org>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,37 +73,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On gioved=EC 2 marzo 2023 10:59:31 CET Jan Kara wrote:
+> On Wed 01-03-23 14:14:16, Al Viro wrote:
+> > On Wed, Mar 01, 2023 at 02:00:18PM +0100, Jan Kara wrote:
+> > > On Wed 01-03-23 12:20:56, Fabio M. De Francesco wrote:
+> > > > On venerd=EC 24 febbraio 2023 04:26:57 CET Al Viro wrote:
+> > > > > 	Fabio's "switch to kmap_local_page()" patchset (originally after=
+ the
+> > > > >=20
+> > > > > ext2 counterpart, with a lot of cleaning up done to it; as the=20
+matter
+> > > > > of
+> > > > > fact, ext2 side is in need of similar cleanups - calling conventi=
+ons
+> > > > > there
+> > > > > are bloody awful).
+> > > >=20
+> > > > If nobody else is already working on these cleanups in ext2 followi=
+ng
+> > > > your
+> > > > suggestion, I'd be happy to work on this by the end of this week. I=
+=20
+only
+> > > > need
+> > > > a confirmation because I'd hate to duplicate someone else work.
+> > > >=20
+> > > > > Plus the equivalents of minix stuff...
+> > > >=20
+> > > > I don't know this other filesystem but I could take a look and see
+> > > > whether it
+> > > > resembles somehow sysv and ext2 (if so, this work would be pretty=20
+simple
+> > > > too,
+> > > > thanks to your kind suggestions when I worked on sysv and ufs).
+> > > >=20
+> > > > I'm adding Jan to the Cc list to hear whether he is aware of anybody
+> > > > else
+> > > > working on this changes for ext2. I'm waiting for a reply from you=
+=20
+(@Al)
+> > > > or
+> > > > Jan to avoid duplication (as said above).
+> > >=20
+> > > I'm not sure what exactly Al doesn't like about how ext2 handles page=
+s=20
+and
+> > > mapping but if you have some cleanups in mind, sure go ahead. I don't=
+=20
+have
+> > > any plans on working on that code in the near term.
+> >=20
+> > I think I've pushed a demo patchset to vfs.git at some point back in
+> > January... Yep - see #work.ext2 in there; completely untested, though.
+>=20
+> OK, I think your changes to ext2_rename() in PATCH 1 leak a reference and
+> mapping of old_page but otherwise I like the patches. So Fabio, if you can
+> pick them up and push this to completion, it would be nice. Thanks!
+>=20
 
-On Wed, Mar 01, 2023 at 07:07:16PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.275 release.
-> There are 9 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
+@Jan,
 
-Build test (gcc version 11.3.1 20230210):
-mips: 63 configs -> no  failure
-arm: 115 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+I was sure you would have liked them :-)
+I'm happy to pick them up and push them to completion.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+But... when yesterday Al showed his demo patchset I probably interpreted hi=
+s=20
+reply the wrong way and thought that since he spent time for the demo he=20
+wanted to put this to completion on his own.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2971
+Now I see that you are interpreting his message as an invite to use them to=
+=20
+shorten the time...=20
+
+=46urthermore I'm not sure about how I should credit him. Should I merely a=
+dd a=20
+"Suggested-by:" tag or more consistent "Co-authored-by: Al Viro <...>"? Sin=
+ce=20
+he did so much I'd rather the second but I need his permission.
+
+@Al,
+
+Can I really proceed with *your* work? What should the better suited tag be=
+ to=20
+credit you for the patches?
+
+If you can reply today or at least by Friday, I'll pick your demo patchset,=
+=20
+put it to completion, make the patches and test them with (x)fstests on a=20
+QEMU/KVM x86_32 bit VM, with 6GB RAM, running an HIGHMEM64GB enabled kernel.
+
+Thanks,
+
+=46abio
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
--- 
-Regards
-Sudip
