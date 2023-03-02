@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05DF6A845A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D006A84B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjCBOps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
+        id S230237AbjCBO4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjCBOpr (ORCPT
+        with ESMTP id S230182AbjCBO4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:45:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F5C3E626;
-        Thu,  2 Mar 2023 06:45:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 2 Mar 2023 09:56:04 -0500
+X-Greylist: delayed 537 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 06:55:32 PST
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710C247410
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:55:32 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl [83.9.32.99])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B8CAB8122A;
-        Thu,  2 Mar 2023 14:45:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF57C433D2;
-        Thu,  2 Mar 2023 14:45:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677768342;
-        bh=Cdp+fzAk3TXRE5mc3Ioe3GgwQcA8HQfOrkZ9V3g4Kpw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mk80df8L8TkuG0GIllo9Olh/po96Ww5tPU5YvaD4EMB1os67PKP6XgAZOpIdUKhAC
-         q6Zf1iQr34m1lyVM2LJWoRYtibPKfOsrCt9JbalEksPsggYPB6Cqr7XZZVoHzjbdAt
-         5OeW2XjGR6N45ufHWEr6asv3+Z15ceJkMfQzlmIM6qGvBu9REHb8e4AKm1bd+7NcbV
-         3nfbDTbeeC9AhSU7yWTAK03CBg9OE/EnWjSDG3SOyjSSxV+zBSElZ1rrTbOE4cNlY5
-         wX/csEkDusJ/JyOhbw9tb9DrhLP5xePAcqEjvPzI1f2SFnP4F8Ji9TkrrJI68wexJ1
-         vegt4KvdAAcTg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D429A4049F; Thu,  2 Mar 2023 11:45:39 -0300 (-03)
-Date:   Thu, 2 Mar 2023 11:45:39 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 08/10] perf parse-events: Pass ownership of the group
- name
-Message-ID: <ZAC2k4I8rEPQWL/o@kernel.org>
-References: <20230302041211.852330-1-irogers@google.com>
- <20230302041211.852330-9-irogers@google.com>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id AFBE83F8F4;
+        Thu,  2 Mar 2023 15:46:29 +0100 (CET)
+Message-ID: <7da47edd-60ba-d8fc-9d30-4dc0e5969bb2@somainline.org>
+Date:   Thu, 2 Mar 2023 15:46:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302041211.852330-9-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] cpuidle: psci: Iterate backwards over list in
+ psci_pd_remove()
+Content-Language: en-US
+To:     Shawn Guo <shawn.guo@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220308082931.3385902-1-shawn.guo@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220308082931.3385902-1-shawn.guo@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Mar 01, 2023 at 08:12:09PM -0800, Ian Rogers escreveu:
-> Pass ownership of the group name rather than copying and freeing the
-> original. This saves a memory allocation and copy.
 
-Looks ok.
 
-- Arnaldo
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+On 8.03.2022 09:29, Shawn Guo wrote:
+> In case that psci_pd_init_topology() fails for some reason,
+> psci_pd_remove() will be responsible for deleting provider and removing
+> genpd from psci_pd_providers list.  There will be a failure when removing
+> the cluster PD, because the cpu (child) PDs haven't been removed.
+> 
+> [    0.050232] CPUidle PSCI: init PM domain cpu0
+> [    0.050278] CPUidle PSCI: init PM domain cpu1
+> [    0.050329] CPUidle PSCI: init PM domain cpu2
+> [    0.050370] CPUidle PSCI: init PM domain cpu3
+> [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
+> [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
+> [    0.051412] PM: genpd_remove: removed cpu3
+> [    0.051449] PM: genpd_remove: removed cpu2
+> [    0.051499] PM: genpd_remove: removed cpu1
+> [    0.051546] PM: genpd_remove: removed cpu0
+> 
+> Fix the problem by iterating the provider list reversely, so that parent
+> PD gets removed after child's PDs like below.
+> 
+> [    0.029052] CPUidle PSCI: init PM domain cpu0
+> [    0.029076] CPUidle PSCI: init PM domain cpu1
+> [    0.029103] CPUidle PSCI: init PM domain cpu2
+> [    0.029124] CPUidle PSCI: init PM domain cpu3
+> [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
+> [    0.029647] PM: genpd_remove: removed cpu0
+> [    0.029666] PM: genpd_remove: removed cpu1
+> [    0.029690] PM: genpd_remove: removed cpu2
+> [    0.029714] PM: genpd_remove: removed cpu3
+> [    0.029738] PM: genpd_remove: removed cpu-cluster0
+> 
+> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 > ---
->  tools/perf/util/parse-events.c | 3 ++-
->  tools/perf/util/parse-events.y | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-> index 0336ff27c15f..1be454697d57 100644
-> --- a/tools/perf/util/parse-events.c
-> +++ b/tools/perf/util/parse-events.c
-> @@ -1761,6 +1761,7 @@ parse_events__set_leader_for_uncore_aliase(char *name, struct list_head *list,
->  
->  handled:
->  	ret = 1;
-> +	free(name);
->  out:
->  	free(leaders);
->  	return ret;
-> @@ -1786,7 +1787,7 @@ void parse_events__set_leader(char *name, struct list_head *list,
->  
->  	leader = arch_evlist__leader(list);
->  	__perf_evlist__set_leader(list, &leader->core);
-> -	leader->group_name = name ? strdup(name) : NULL;
-> +	leader->group_name = name;
->  	list_move(&leader->core.node, list);
->  }
->  
-> diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-> index be8c51770051..541b8dde2063 100644
-> --- a/tools/perf/util/parse-events.y
-> +++ b/tools/perf/util/parse-events.y
-> @@ -202,8 +202,8 @@ PE_NAME '{' events '}'
->  	struct list_head *list = $3;
->  
->  	inc_group_count(list, _parse_state);
-> +	/* Takes ownership of $1. */
->  	parse_events__set_leader($1, list, _parse_state);
-> -	free($1);
->  	$$ = list;
->  }
->  |
-> -- 
-> 2.39.2.722.g9855ee24e9-goog
-> 
+Looks like this was never picked up or followed up on?
 
--- 
-
-- Arnaldo
+Konrad
+> Changes since v1:
+> - Fix commit log
+> - Pick up Reviewed-by tag from Sudeep and Ulf (Thanks!)
+> - Add Fixes tag as suggested by Ulf
+> 
+>  drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> index ff2c3f8e4668..ce5c415fb04d 100644
+> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> @@ -182,7 +182,8 @@ static void psci_pd_remove(void)
+>  	struct psci_pd_provider *pd_provider, *it;
+>  	struct generic_pm_domain *genpd;
+>  
+> -	list_for_each_entry_safe(pd_provider, it, &psci_pd_providers, link) {
+> +	list_for_each_entry_safe_reverse(pd_provider, it,
+> +					 &psci_pd_providers, link) {
+>  		of_genpd_del_provider(pd_provider->node);
+>  
+>  		genpd = of_genpd_remove_last(pd_provider->node);
+> 
