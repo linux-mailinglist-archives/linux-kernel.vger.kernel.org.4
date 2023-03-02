@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515276A80D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CFE6A80D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjCBLNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S230308AbjCBLNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjCBLNB (ORCPT
+        with ESMTP id S230226AbjCBLNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:13:01 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4852E42BEE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:12:35 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso1451938wmq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 03:12:35 -0800 (PST)
+        Thu, 2 Mar 2023 06:13:04 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0D24617F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:12:36 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id l1so13087510wry.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 03:12:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aUjr+8cgLd6gmPZkTuHe/Ygcx47oBqmxT7R6x/XWqS8=;
-        b=QiP702M8d2g1rhZRLiFT1ZfHq4ZYhfhJs1aYHwtS2cYINk2eFUDzaBwLHNGicloQa/
-         nTqJismigumbvfnUiQ4L25UbfCeyfDNZbgRAHnaOKmqb4qkTDibyXiUai0i0U5saQpq/
-         BKcm2HcXEn9wpVj+iA7x5Um3UJ14qQAo+YtBvssIyiw1C9EMCr8GOGqtV87evzSWIDIk
-         +Xb1AHEKxpOLFviEdQ3sGDOzmKQlklzVteyJO9sWgi7zRydvRxBEcrtO/s/FnqBD/yco
-         /cYS6atM7v0tlpXNi59r9rJbNqc/wGnrgPp9+Fq5ChtfIvyI8X+9Kn56QxRFlCwd0Kmj
-         FrGg==
+        bh=QbZumu4dMY0Za38bxLjojwYOtrQ4rJ/sJrcRrt0N9M0=;
+        b=R//11aKpZxnJ84W5/jenLPaya5L5StTTSawCO+Bk212Vh0tzmmd1+lfRpTKu5+Oi2/
+         0rumVOeOGSHNkPUdqqOUH1xBQm76RTYcUXJJVzEVhJVx916BpgR5hfHTmP1ZA+8XvVO5
+         +LSUV3OcKuiODkbZ2oYfKXThWspnmHR4j27clCJWcdthy154eGZwGkrHyQcPnTKLL/ZM
+         HMnaDPzv/OkRJnaelUOiUyt3OLurJ4jIfnVUaBGSCwhqGQ2G36yI6+o+O2Glda0lHhGE
+         vCTndLLfjb8sO5VYWDbARKmF82Iq3o3hgpjcZKWch0mvh6q+9Nd09pZ6JtLWzXbenUi6
+         GlpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aUjr+8cgLd6gmPZkTuHe/Ygcx47oBqmxT7R6x/XWqS8=;
-        b=JY7ypjUIAfLAwp7gIRgD4ZzzykXr+2+onn9WFK//gaW5XNNkX4ymCYnxu39jS20vh/
-         qC97azwnE6ep767wLS/gZrpVHJqO4zxYdRO5SQI9H/GAuPWmQfRhAUQsVc5ja5Lr+ySW
-         SAy+xMQSHJd4R/J1QQ3gbbCHt/ebB+lmLKOxNejdeKRAZM6nWH0v4TbQyI+cOabn3PWp
-         NYwUUeVrQldteB62WEO0Krgs2Bo0C6TUXerlekSU0ocXCKUZR+w4rkz9PQ1Zk69rty6s
-         uhgAzyOqMDVHOXdEi8uz7KALHR09dXhtefn8rUAkjaWuDsbIYs7gAm+fOtooJs8chjEd
-         G5eA==
-X-Gm-Message-State: AO0yUKWDP1jfr1I/V1ZS+U/DSmWyRQb/+pUHU+fIM8KmDIOw3R4AobAQ
-        WHMoYH23qGDR7ukTY/JNIHSuVA==
-X-Google-Smtp-Source: AK7set8zdtGPOtgq8y58fmuw70wGYv2J5COgb2ZrUTzJoSN8BhhtP5QD1ceIPUHXuU0LtBmq6QjrXg==
-X-Received: by 2002:a05:600c:a694:b0:3e0:6c4:6a38 with SMTP id ip20-20020a05600ca69400b003e006c46a38mr7120495wmb.33.1677755553734;
-        Thu, 02 Mar 2023 03:12:33 -0800 (PST)
+        bh=QbZumu4dMY0Za38bxLjojwYOtrQ4rJ/sJrcRrt0N9M0=;
+        b=fyN8plNBSskht6CljXNGNcQFxiQMXi7NTormCtjFro97Ewgom5fo8OYtezGcqyRhj5
+         U5uj8Fzq6o7G1AMxoG8itzZSjpCcHbBi6EZln/U7v6NpCAkSKLRkA0zublH8QsbSQw0k
+         MxTkdpjDFvZ8f1RTJpmCggOQW5h7bwA6JUKcRBbqaBN3XqS26+8sKKyZ6t7qy0umcnty
+         GcdQX834NR49L7GfMj+ioL70QEttziHCSzFq7dA0yofYQgld4WVPqPVRncieM+HmI1gh
+         r5s6K/uh4umGSnvgIB9I16YmHkpUOQG7MFeFrOQ60LSaFGNpa9TolZyvJs6tBVZg8uVm
+         BsGg==
+X-Gm-Message-State: AO0yUKWTyViyZbLsH3UHtH0kieCOM3BWDrszPBEVYAjvOMhBMoRtYyx6
+        UaSOUa5FzLSbnBnwJiKk0oBqxQ==
+X-Google-Smtp-Source: AK7set+2dnYqy8jzWaIa/tyb50qRFr/6tCdf48L6R64Qom86QnDLs6wUt/Lb4JGMf2qsZBOc+VB/kg==
+X-Received: by 2002:a05:6000:108c:b0:2c7:760:2539 with SMTP id y12-20020a056000108c00b002c707602539mr7182126wrw.50.1677755554593;
+        Thu, 02 Mar 2023 03:12:34 -0800 (PST)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:11aa:3c13:d3e:eb29])
-        by smtp.gmail.com with ESMTPSA id a5-20020a5d4565000000b002c3f81c51b6sm14724830wrc.90.2023.03.02.03.12.32
+        by smtp.gmail.com with ESMTPSA id a5-20020a5d4565000000b002c3f81c51b6sm14724830wrc.90.2023.03.02.03.12.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 03:12:33 -0800 (PST)
+        Thu, 02 Mar 2023 03:12:34 -0800 (PST)
 From:   Usama Arif <usama.arif@bytedance.com>
 To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
         brgerst@gmail.com
@@ -65,9 +65,9 @@ Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
         David Woodhouse <dwmw@amazon.co.uk>,
         Usama Arif <usama.arif@bytedance.com>,
         "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Subject: [PATCH v13 03/11] cpu/hotplug: Add dynamic parallel bringup states before CPUHP_BRINGUP_CPU
-Date:   Thu,  2 Mar 2023 11:12:19 +0000
-Message-Id: <20230302111227.2102545-4-usama.arif@bytedance.com>
+Subject: [PATCH v13 04/11] x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+Date:   Thu,  2 Mar 2023 11:12:20 +0000
+Message-Id: <20230302111227.2102545-5-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230302111227.2102545-1-usama.arif@bytedance.com>
 References: <20230302111227.2102545-1-usama.arif@bytedance.com>
@@ -75,7 +75,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,41 +85,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-There is often significant latency in the early stages of CPU bringup,
-and time is wasted by waking each CPU (e.g. with SIPI/INIT/INIT on x86)
-and then waiting for it to respond before moving on to the next.
+When bringing up a secondary CPU from do_boot_cpu(), the warm reset flag
+is set in CMOS and the starting IP for the trampoline written inside the
+BDA at 0x467. Once the CPU is running, the CMOS flag is unset and the
+value in the BDA cleared.
 
-Allow a platform to register a set of pre-bringup CPUHP states to which
-each CPU can be stepped in parallel, thus absorbing some of that latency.
+To allow for parallel bringup of CPUs, add a reference count to track the
+number of CPUs currently bring brought up, and clear the state only when
+the count reaches zero.
 
-There is a subtlety here: even with an empty CPUHP_BP_PARALLEL_DYN step,
-this means that *all* CPUs are brought through the prepare states and to
-CPUHP_BP_PREPARE_DYN before any of them are taken to CPUHP_BRINGUP_CPU
-and then are allowed to run for themselves to CPUHP_ONLINE.
-
-So any combination of prepare/start calls which depend on A-B ordering
-for each CPU in turn, such as the X2APIC code which used to allocate a
-cluster mask 'just in case' and store it in a global variable in the
-prep stage, then potentially consume that preallocated structure from
-the AP and set the global pointer to NULL to be reallocated in
-CPUHP_X2APIC_PREPARE for the next CPU... would explode horribly.
-
-Any platform enabling the CPUHP_BP_PARALLEL_DYN steps must be reviewed
-and tested to ensure that such issues do not exist, and the existing
-behaviour of bringing CPUs to CPUHP_BP_PREPARE_DYN and then immediately
-to CPUHP_BRINGUP_CPU and CPUHP_ONLINE only one at a time does not change
-unless such a state is registered.
-
-Note that the new parallel stages do *not* yet bring each AP to the
-CPUHP_BRINGUP_CPU state at the same time, only to the new states which
-exist before it. The final loop in bringup_nonboot_cpus() is untouched,
-bringing each AP in turn from the final PARALLEL_DYN state (or all the
-way from CPUHP_OFFLINE) to CPUHP_BRINGUP_CPU and then waiting for that
-AP to do its own processing and reach CPUHP_ONLINE before releasing the
-next.
-
-Parallelising that part by bringing them all to CPUHP_BRINGUP_CPU
-and then waiting for them all is an exercise for the future.
+Since the RTC spinlock is required to write to the CMOS, it can be used
+for mutual exclusion on the refcount too.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
@@ -127,87 +104,54 @@ Tested-by: Kim Phillips <kim.phillips@amd.com>
 Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 ---
- include/linux/cpuhotplug.h |  2 ++
- kernel/cpu.c               | 31 +++++++++++++++++++++++++++++--
- 2 files changed, 31 insertions(+), 2 deletions(-)
+ arch/x86/kernel/smpboot.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 6c6859bfc454..e5a73ae6ccc0 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -133,6 +133,8 @@ enum cpuhp_state {
- 	CPUHP_MIPS_SOC_PREPARE,
- 	CPUHP_BP_PREPARE_DYN,
- 	CPUHP_BP_PREPARE_DYN_END		= CPUHP_BP_PREPARE_DYN + 20,
-+	CPUHP_BP_PARALLEL_DYN,
-+	CPUHP_BP_PARALLEL_DYN_END		= CPUHP_BP_PARALLEL_DYN + 4,
- 	CPUHP_BRINGUP_CPU,
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 55cad72715d9..3a793772a2aa 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -121,17 +121,20 @@ int arch_update_cpu_topology(void)
+ 	return retval;
+ }
  
- 	/*
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6c0a92ca6bb5..fffb0da61ccc 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1504,8 +1504,30 @@ int bringup_hibernate_cpu(unsigned int sleep_cpu)
- 
- void bringup_nonboot_cpus(unsigned int setup_max_cpus)
++
++static unsigned int smpboot_warm_reset_vector_count;
++
+ static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
  {
-+	unsigned int n = setup_max_cpus - num_online_cpus();
- 	unsigned int cpu;
+ 	unsigned long flags;
  
-+	/*
-+	 * An architecture may have registered parallel pre-bringup states to
-+	 * which each CPU may be brought in parallel. For each such state,
-+	 * bring N CPUs to it in turn before the final round of bringing them
-+	 * online.
-+	 */
-+	if (n > 0) {
-+		enum cpuhp_state st = CPUHP_BP_PARALLEL_DYN;
-+
-+		while (st <= CPUHP_BP_PARALLEL_DYN_END && cpuhp_hp_states[st].name) {
-+			int i = n;
-+
-+			for_each_present_cpu(cpu) {
-+				cpu_up(cpu, st);
-+				if (!--i)
-+					break;
-+			}
-+			st++;
-+		}
+ 	spin_lock_irqsave(&rtc_lock, flags);
+-	CMOS_WRITE(0xa, 0xf);
++	if (!smpboot_warm_reset_vector_count++) {
++		CMOS_WRITE(0xa, 0xf);
++		*((volatile unsigned short *)phys_to_virt(TRAMPOLINE_PHYS_HIGH)) = start_eip >> 4;
++		*((volatile unsigned short *)phys_to_virt(TRAMPOLINE_PHYS_LOW)) = start_eip & 0xf;
 +	}
-+
- 	for_each_present_cpu(cpu) {
- 		if (num_online_cpus() >= setup_max_cpus)
- 			break;
-@@ -1882,6 +1904,10 @@ static int cpuhp_reserve_state(enum cpuhp_state state)
- 		step = cpuhp_hp_states + CPUHP_BP_PREPARE_DYN;
- 		end = CPUHP_BP_PREPARE_DYN_END;
- 		break;
-+	case CPUHP_BP_PARALLEL_DYN:
-+		step = cpuhp_hp_states + CPUHP_BP_PARALLEL_DYN;
-+		end = CPUHP_BP_PARALLEL_DYN_END;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1906,14 +1932,15 @@ static int cpuhp_store_callbacks(enum cpuhp_state state, const char *name,
- 	/*
- 	 * If name is NULL, then the state gets removed.
- 	 *
--	 * CPUHP_AP_ONLINE_DYN and CPUHP_BP_PREPARE_DYN are handed out on
-+	 * CPUHP_AP_ONLINE_DYN and CPUHP_BP_P*_DYN are handed out on
- 	 * the first allocation from these dynamic ranges, so the removal
- 	 * would trigger a new allocation and clear the wrong (already
- 	 * empty) state, leaving the callbacks of the to be cleared state
- 	 * dangling, which causes wreckage on the next hotplug operation.
+ 	spin_unlock_irqrestore(&rtc_lock, flags);
+-	*((volatile unsigned short *)phys_to_virt(TRAMPOLINE_PHYS_HIGH)) =
+-							start_eip >> 4;
+-	*((volatile unsigned short *)phys_to_virt(TRAMPOLINE_PHYS_LOW)) =
+-							start_eip & 0xf;
+ }
+ 
+ static inline void smpboot_restore_warm_reset_vector(void)
+@@ -143,10 +146,12 @@ static inline void smpboot_restore_warm_reset_vector(void)
+ 	 * to default values.
  	 */
- 	if (name && (state == CPUHP_AP_ONLINE_DYN ||
--		     state == CPUHP_BP_PREPARE_DYN)) {
-+		     state == CPUHP_BP_PREPARE_DYN ||
-+		     state == CPUHP_BP_PARALLEL_DYN)) {
- 		ret = cpuhp_reserve_state(state);
- 		if (ret < 0)
- 			return ret;
+ 	spin_lock_irqsave(&rtc_lock, flags);
+-	CMOS_WRITE(0, 0xf);
++	if (!--smpboot_warm_reset_vector_count) {
++		CMOS_WRITE(0, 0xf);
++		*((volatile u32 *)phys_to_virt(TRAMPOLINE_PHYS_LOW)) = 0;
++	}
+ 	spin_unlock_irqrestore(&rtc_lock, flags);
+ 
+-	*((volatile u32 *)phys_to_virt(TRAMPOLINE_PHYS_LOW)) = 0;
+ }
+ 
+ /*
 -- 
 2.25.1
 
