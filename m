@@ -2,90 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811356A882E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7286A883B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjCBR71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 12:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S229800AbjCBSF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 13:05:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCBR7Z (ORCPT
+        with ESMTP id S229494AbjCBSFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 12:59:25 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A37D34C11
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 09:59:21 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3226u9RS031295;
-        Thu, 2 Mar 2023 11:59:08 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=hfZGSmFBT/xzIYEjag0JyBPNqsj8KWXPKjm4UN+XDHs=;
- b=guDveCFAYEc3Qgm0TSx1rv909VdBAhqiYuKzzGGE7go69ldpWZ2UrqfpSCZLLhOJU5/W
- 6b/wNFxok+lPxOhf4rwEQ0eH49ya0aLmy3UZRraAw+JIUcvCBN+5uii3aGCZwYcavF+z
- QzM89Hq6QxbWACiGTa7Ax9+t/Z3sHYDpn/HP28yccR3Il+LTptWcLVBREFlqiEaKEuRx
- 2m2G+jYXlmcGms0PApwJxvOy2utIYdyEnpAejfsxAe2p8FtFMkCI4+lUeFsctHuTMiYj
- 9qXkO7sC+BTLQEvZgd2/Z7BQ+DOCgAn2ACB0vF9m9AgLbHP/ncZpLgIxocCvmQzU/hpC cg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3nyfmt94bj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 11:59:08 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 2 Mar
- 2023 11:59:06 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Thu, 2 Mar 2023 11:59:06 -0600
-Received: from [141.131.206.93] (vkarpovich-ThinkStation-P620.ad.cirrus.com [141.131.206.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C40FA11AC;
-        Thu,  2 Mar 2023 17:59:05 +0000 (UTC)
-Message-ID: <6f34d2c8-21b5-5b75-a3cd-15f88ba0f760@opensource.cirrus.com>
-Date:   Thu, 2 Mar 2023 11:59:05 -0600
+        Thu, 2 Mar 2023 13:05:25 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAFF1817B;
+        Thu,  2 Mar 2023 10:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677780324; x=1709316324;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=Bf3iWqZn8ZHJC8UqH7R7YhZdFebd0SSSAZOsxRPZafQ=;
+  b=gaQ9R4dmUK3WN1p5f+G5k5yswoQgOy93tV/JsJx+nQrZ6a6y/Qfmuejr
+   T2E7p623Fd3g/kEMsDi1DSmGfBWjjrBXvRe7/PXkV6smrJR4fo34VVz1j
+   vcmSVIKIsskDhQhUXlRBR5HLBb7RqZidZqsZvdLiPjsJSREXz/bXpr7zC
+   voGHrDs75c4BUGCRsI7uz3dOFBnCIw17qC+G1kR9pbOkgjZ+gkLKrhTSh
+   AKSWXV063jt5z+5i0lx7CCmtH8fuQNLI4b4/38RyOreYoTLR7oNVqBxz3
+   yyW9nP5mLxoHTrTK9uMHrHKobnvWgWA0/SyIeGxpx0doefDIQRnEZwKKa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="333522917"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="333522917"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 10:05:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="1004222764"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="1004222764"
+Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Mar 2023 10:05:20 -0800
+From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        alexander.shishkin@linux.intel.com
+Subject: Re: [PATCH] stm: class: Add MIPI OST protocol support
+In-Reply-To: <20230208124053.18533-1-quic_jinlmao@quicinc.com>
+References: <20230208124053.18533-1-quic_jinlmao@quicinc.com>
+Date:   Thu, 02 Mar 2023 20:05:20 +0200
+Message-ID: <87lekfni5b.fsf@ubik.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5/5] ASoC: cs34l45: Hibernation support
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
-References: <20230302171154.2342527-1-vkarpovi@opensource.cirrus.com>
- <20230302171154.2342527-5-vkarpovi@opensource.cirrus.com>
- <8aef2c0c-9bd0-4c3a-86e1-7732ddedabfd@sirena.org.uk>
-From:   Vlad Karpovich <vkarpovi@opensource.cirrus.com>
-In-Reply-To: <8aef2c0c-9bd0-4c3a-86e1-7732ddedabfd@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: sYWc5fOdMqr9WDkM3aoyWZyDTRU7qa_5
-X-Proofpoint-GUID: sYWc5fOdMqr9WDkM3aoyWZyDTRU7qa_5
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CS35L45 features a low-power Hibernation State. In this state, all 
-register contents are lost, but the contents of
-RAM are retained. In the Hibernation State, only always-on digital 
-functions to support wake-up are enabled.
-Entry to this state is achieved via the register interface (either by an 
-external driver using the control port, or the
-programmable DSP). Exit from this state is triggered by activity on 
-device GPIO pins, intended SPI transaction, or I2C
-transaction with intended slave address
+Mao Jinlong <quic_jinlmao@quicinc.com> writes:
 
-On 3/2/23 11:19, Mark Brown wrote:
-> On Thu, Mar 02, 2023 at 11:11:54AM -0600, Vlad Karpovich wrote:
->> From: "Vlad.Karpovich" <vkarpovi@opensource.cirrus.com>
->>
->> Adds support for the amplifier hibernation controlled by
->> DSP firmware.
-> What is amplifier hibernation?
+> Add MIPI OST protocol support for stm to format the traces.
+
+Missing an explanation of what OST is, what it's used for, how it is
+different from the SyS-T and others.
+
+> Framework copied from drivers/hwtracing/stm.p-sys-t.c as of
+
+You mean stm/p_sys-t.c. Also, it's not a framework, it's a driver.
+
+> commit d69d5e83110f ("stm class: Add MIPI SyS-T protocol
+> support").
+
+Why is this significant?
+
+> diff --git a/drivers/hwtracing/stm/p_ost.c b/drivers/hwtracing/stm/p_ost.c
+> new file mode 100644
+> index 000000000000..2ca1a3fda57f
+> --- /dev/null
+> +++ b/drivers/hwtracing/stm/p_ost.c
+> @@ -0,0 +1,95 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copied from drivers/hwtracing/stm.p-sys-t.c as of commit d69d5e83110f
+> + * ("stm class: Add MIPI SyS-T protocol support").
+
+Same as in the commit message.
+
+[...]
+
+> +#define OST_TOKEN_STARTSIMPLE		(0x10)
+> +#define OST_VERSION_MIPI1		(0x10 << 8)
+> +#define OST_ENTITY_FTRACE		(0x01 << 16)
+> +#define OST_CONTROL_PROTOCOL		(0x0 << 24)
+
+These could use an explanation.
+
+> +#define DATA_HEADER (OST_TOKEN_STARTSIMPLE | OST_VERSION_MIPI1 | \
+> +			OST_ENTITY_FTRACE | OST_CONTROL_PROTOCOL)
+
+Does this mean that everything is ftrace? Because it's not.
+
+> +
+> +#define STM_MAKE_VERSION(ma, mi)	((ma << 8) | mi)
+> +#define STM_HEADER_MAGIC		(0x5953)
+> +
+> +static ssize_t notrace ost_write(struct stm_data *data,
+> +		struct stm_output *output, unsigned int chan,
+> +		const char *buf, size_t count)
+> +{
+> +	unsigned int c = output->channel + chan;
+> +	unsigned int m = output->master;
+> +	const unsigned char nil = 0;
+> +	u32 header = DATA_HEADER;
+> +	u8 trc_hdr[24];
+> +	ssize_t sz;
+> +
+> +	/*
+> +	 * STP framing rules for OST frames:
+> +	 *   * the first packet of the OST frame is marked;
+> +	 *   * the last packet is a FLAG.
+
+Which in your case is also timestamped.
+
+> +	 */
+> +	/* Message layout: HEADER / DATA / TAIL */
+> +	/* HEADER */
+> +
+> +	sz = data->packet(data, m, c, STP_PACKET_DATA, STP_PACKET_MARKED,
+> +			  4, (u8 *)&header);
+
+The /* HEADER */ comment applies to the above line, so it should
+probably be directly before it.
+
+> +	if (sz <= 0)
+> +		return sz;
+> +	*(uint16_t *)(trc_hdr) = STM_MAKE_VERSION(0, 3);
+> +	*(uint16_t *)(trc_hdr + 2) = STM_HEADER_MAGIC;
+> +	*(uint32_t *)(trc_hdr + 4) = raw_smp_processor_id();
+> +	*(uint64_t *)(trc_hdr + 8) = sched_clock();
+
+Why sched_clock()? It should, among other things, be called with
+interrupts disabled, which is not the case here.
+
+> +	*(uint64_t *)(trc_hdr + 16) = task_tgid_nr(get_current());
+
+Is there a reason why trc_hdr is not a struct?
+
+Thanks,
+--
+Alex
