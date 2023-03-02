@@ -2,148 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D355F6A8D5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F156A8D66
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjCBXxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 18:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S229685AbjCBXyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 18:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCBXxU (ORCPT
+        with ESMTP id S229486AbjCBXyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 18:53:20 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2081.outbound.protection.outlook.com [40.107.212.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8AFEFB0;
-        Thu,  2 Mar 2023 15:53:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JKqe2Q5tmiCXT2UkAEb+PXmg2IViUKQrSxy3uit7FrRnqzNkJjmSLS+OMKz3pQuAXIGefjmfepMEOWrVkjTzNc9IvVMfAJpcN0pazwqf+aXIHTGYfAOIBgM/Qoj9C6C5kcKGmzh1P6bFfCw5UkFmJn/LhHMOBFn3tlKo5//fw6RZhhqKIotxIwxI/qSXOT+WW6u4rMtoBL5fkchb0jkdKRRVRXaj/ddNAzDKUdEb45KreQI6VB3cBqSMSoXj0h73gDNLaLBHOpnqpsKjoRpNsIzBiDAh1uXZczvoVuMemXHHHlvsVIMtdbj0YVMGMd+x9yB5aKWGxDceT63VNeTd2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=moWfVH4QsSUw7vyFEjfh1cCM8dMMOBnh7IGFqGrTElU=;
- b=PxXIWrblxNBJdQdaNaPOb26kovv0TVa9v8y+prl9fipk28dkKkHhW/l56o9oyEguzid7vFOBX8HuQXeCTmTLKVHHfM3a5A1TVkWqS2Q5XNQRzMPKE+38HiDCa6XevZPAjoJfMALYCsSaJkdW1mcQ4SfFQAJQvF1leavRL+8I8NqPMD+j1gCpnQxKY3oTk3cM4I7zVzkRNnoIq4RhKZFvb9xMicLuTRFMIx4W9+d5GSQ1v6DtpODQGsZlq/hkzN5J9x3IhRhbgw69qBeFYGTCVe/DEAhTSEQAB8Fo4jfb5vcYIIVH0P8E1mGHaHdnc/GFQov6lJKqoj5g/LpN0SAU7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=moWfVH4QsSUw7vyFEjfh1cCM8dMMOBnh7IGFqGrTElU=;
- b=nuhzwNAe5hnFCxQ1+4XoXVwg4vKz84oseQq0/U4GQKeH23Yjkm1hvECG7V5FnKYcFNcRIQkFknvxRFw1KJur5jm6y7JrRdd5pyYenRBh9NfphtzRNPrzj0QZ6z5mTGFmU5P/GP3Lt3q2Cwy0y2VFusDdbjPAbtGzacrqep/umSnGvpwECHhmPvQELPk/2aeoSeOH80dP6VzlXMm8FDWC8Eknjz8ylAfNqKKi0aPD7EmQgrr7/Fpy6uHXiqSjbqcHczwIAQkapLx8yUh1/S76MZfrD6KEj98WbswAlDiHx13IF4dmbWVPdEGjBf3TojKCwRyExhLpaa0NsPXTHvTkpg==
-Received: from DS7PR03CA0105.namprd03.prod.outlook.com (2603:10b6:5:3b7::20)
- by SJ0PR12MB6783.namprd12.prod.outlook.com (2603:10b6:a03:44e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.20; Thu, 2 Mar
- 2023 23:53:13 +0000
-Received: from DS1PEPF0000E63B.namprd02.prod.outlook.com
- (2603:10b6:5:3b7:cafe::85) by DS7PR03CA0105.outlook.office365.com
- (2603:10b6:5:3b7::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
- Transport; Thu, 2 Mar 2023 23:53:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS1PEPF0000E63B.mail.protection.outlook.com (10.167.17.73) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.12 via Frontend Transport; Thu, 2 Mar 2023 23:53:13 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 2 Mar 2023
- 15:53:11 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 2 Mar 2023
- 15:53:10 -0800
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
- Transport; Thu, 2 Mar 2023 15:53:09 -0800
-Date:   Thu, 2 Mar 2023 15:53:08 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>
-Subject: Re: [PATCH v3 4/5] iommufd: Add replace support in
- iommufd_access_set_ioas()
-Message-ID: <ZAE25M7ZhKmk6CIY@Asurada-Nvidia>
-References: <cover.1677288789.git.nicolinc@nvidia.com>
- <a104b334d3cc148620ac1f2aa465fc14be556e63.1677288789.git.nicolinc@nvidia.com>
- <BN9PR11MB527636AE29756D8A188912998CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Thu, 2 Mar 2023 18:54:00 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A15EFB0;
+        Thu,  2 Mar 2023 15:53:59 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id oj5so789899pjb.5;
+        Thu, 02 Mar 2023 15:53:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677801239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OyLSbx0/2HCKV+XyudDPIH5gu/TF1itqU6uI7DgybHU=;
+        b=ccDb0QmiaSI/g5fDtKbFAD05MSRs9JZ4ogr4LJUmKiUwzSEGozDJ1U/5R76cxhoeic
+         cN9RNZlczzWk2davyP3aE0KL4vAiSrEdtZyEhAMnUHwtrfRVfqgb9D8xHuubKWXZZ5jx
+         UKrDRn7dtMawjAkoY0VFrpKfDyK/bu4qSuX58sjvZwjRAE89qK/Dhl8JOi4RoVX4nto+
+         a+/vDm4KPxcjrzQ4qWNDA5XaLhaS1PkHLFI050zCmEZeoCNFlzumszgiDttYqM3mR+0b
+         ciZapKd/Gg0yFNkHQF0LMQ7I3Zam3W0xJXfKTJiP7tyOTban3KNhI2TzqS+SUNb6QjNc
+         yXuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677801239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OyLSbx0/2HCKV+XyudDPIH5gu/TF1itqU6uI7DgybHU=;
+        b=sYJDtxgYb4H7I+4AY6K9EkOqv9I1L4ZIbHkWHn44QKU0wD46JlmjfXOEzUKd9ocJhv
+         W0wbLzc0t1JDRzs+XsZhktXGEUSnBOg3/L8SRZLfjiz3e8ow6cRwCbq8NWZNADPP39nK
+         2shxiaJYYYenvzB0TUMX/B6/RTVnWG4URnEY0AZtU2Ik6NrO4f1e4CeWlcd1XeZlcA+w
+         sQE8lcFIDEpaZfhFa4dsitJ9reDwaHKLsSXjY90HeUrj1cS0xwO4MrFV6S1jDJEcBBFU
+         Ihcd9FmthhToo93JJI2g4eVjw4nZX/OTM88kICFb7GDDBVlibyrDxepUI5w8nbTFZvZU
+         rjpQ==
+X-Gm-Message-State: AO0yUKVHqBYV7M/Hjd0W3co+2Y8bWfRnYe7198gA99BeLQubGyQ4ZOdc
+        pPu9FYbqRXRrGrr7blSM/pg=
+X-Google-Smtp-Source: AK7set9/35wq0ATBCUsBq2tY0e+DqZ3e2ousn8AqoHPi9aaZQyqe5DO6bshHIRX2pfb1eGjcABG68w==
+X-Received: by 2002:a17:90b:1bd2:b0:237:8338:ef4c with SMTP id oa18-20020a17090b1bd200b002378338ef4cmr13364433pjb.9.1677801238781;
+        Thu, 02 Mar 2023 15:53:58 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id u65-20020a17090a51c700b00233ccd04a15sm2086251pjh.24.2023.03.02.15.53.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 15:53:58 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        intel-gfx@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
+        FRAMEWORK),
+        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list),
+        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
+        Liu Shixin <liushixin2@huawei.com>,
+        Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>
+Subject: [PATCH v9 00/15] dma-fence: Deadline awareness
+Date:   Thu,  2 Mar 2023 15:53:22 -0800
+Message-Id: <20230302235356.3148279-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB527636AE29756D8A188912998CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E63B:EE_|SJ0PR12MB6783:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6be67238-4029-43e8-c026-08db1b794906
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1gpQlQ9ILSuC2/gknpDS1S1a0/ID5xScbv01SWP6UmrVhyDhFJ+/Z7auzn1Qs28FUbMkxHLj9ft9WqPfyxPvZF2z/LXiQBQh7+LiZnpfqJK46R2piCwxBqvJqgXNFVQrdbh0Ak8ucW8cm3xBOJjVncmHYxXBzvtUfTDag5wTGtXkLc2Xjw7uGDzMRjo8a25P9xvUPak5Puh2tHn9PU3n+WQy6IMwo9ysstbz6LVZOXVjsBkGWJdWaYc6VrqcugFugXG2gdN3iQ66JOQaBhv5ncsjnBPvFgVXpzOifnKx0ot/jIDZuKIfCS2xBrO7/Szv1myyEAOcZKjh+IjNMe85sOcScYAm7DhNQlk1+oQImW61KGKuBZT1I0Y+fXKv7DfnCRbLdGuZtMyD03TZzqZAYNqhUtqDi8eZlIWD3dzfKuTFRXzUWUkzeQoPl+sIsdDgIe5GX3mNAt1OmsJXKazIfN+vnRG9FW3j9upeUnZZrbvjzLxXRiZAHV36vZC+lbgEU3/KQFrCDBor1/0vWmYGFY/w7/H2OqBPhdhfGyDVEKIRcXK9fsVGJyFoaI85K2A++d1HFuJ1ePits1pRs96B9bswVxgnjHOmSf4STaDqYbg4Z3UlJek7xlA7aC8sAa7JCoxH9GR/bFAcVN9yokAouScXafIo41LMRl+z+w65bu6uq23GfZd2YeuY9TndAFMS/wPWx45SCnecvuOICq6z9w==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199018)(36840700001)(40470700004)(46966006)(83380400001)(36860700001)(426003)(47076005)(40460700003)(478600001)(7636003)(82740400003)(7416002)(5660300002)(356005)(40480700001)(86362001)(82310400005)(55016003)(8936002)(336012)(9686003)(186003)(26005)(33716001)(8676002)(70586007)(2906002)(4326008)(4744005)(6916009)(70206006)(316002)(41300700001)(54906003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 23:53:13.1822
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6be67238-4029-43e8-c026-08db1b794906
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E63B.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6783
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 08:23:54AM +0000, Tian, Kevin wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Saturday, February 25, 2023 9:52 AM
-> >
-> > +     /*
-> > +      * Set ioas to NULL to block any further iommufd_access_pin_pages().
-> > +      * iommufd_access_unpin_pages() can continue using access-
-> > >ioas_unpin.
-> > +      */
-> > +     access->ioas = NULL;
-> > +
-> > +     mutex_unlock(&access->ioas_lock);
-> > +     access->ops->unmap(access->data, 0, ULONG_MAX);
-> > +     mutex_lock(&access->ioas_lock);
-> 
-> This should check whether @unmap is valid.
+From: Rob Clark <robdclark@chromium.org>
 
-Will change to 
-+	if (access->ops->unmap) {
-+		mutex_unlock(&access->ioas_lock);
-+		access->ops->unmap(access->data, 0, ULONG_MAX);
-+		mutex_lock(&access->ioas_lock);
-+	}
+This series adds a deadline hint to fences, so realtime deadlines
+such as vblank can be communicated to the fence signaller for power/
+frequency management decisions.
 
-Thanks!
-Nic
+This is partially inspired by a trick i915 does, but implemented
+via dma-fence for a couple of reasons:
+
+1) To continue to be able to use the atomic helpers
+2) To support cases where display and gpu are different drivers
+
+This iteration adds a dma-fence ioctl to set a deadline (both to
+support igt-tests, and compositors which delay decisions about which
+client buffer to display), and a sw_sync ioctl to read back the
+deadline.  IGT tests utilizing these can be found at:
+
+  https://gitlab.freedesktop.org/robclark/igt-gpu-tools/-/commits/fence-deadline
+
+
+v1: https://patchwork.freedesktop.org/series/93035/
+v2: Move filtering out of later deadlines to fence implementation
+    to avoid increasing the size of dma_fence
+v3: Add support in fence-array and fence-chain; Add some uabi to
+    support igt tests and userspace compositors.
+v4: Rebase, address various comments, and add syncobj deadline
+    support, and sync_file EPOLLPRI based on experience with perf/
+    freq issues with clvk compute workloads on i915 (anv)
+v5: Clarify that this is a hint as opposed to a more hard deadline
+    guarantee, switch to using u64 ns values in UABI (still absolute
+    CLOCK_MONOTONIC values), drop syncobj related cap and driver
+    feature flag in favor of allowing count_handles==0 for probing
+    kernel support.
+v6: Re-work vblank helper to calculate time of _start_ of vblank,
+    and work correctly if the last vblank event was more than a
+    frame ago.  Add (mostly unrelated) drm/msm patch which also
+    uses the vblank helper.  Use dma_fence_chain_contained().  More
+    verbose syncobj UABI comments.  Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
+v7: Fix kbuild complaints about vblank helper.  Add more docs.
+v8: Add patch to surface sync_file UAPI, and more docs updates.
+v9: Drop (E)POLLPRI support.. I still like it, but not essential and
+    it can always be revived later.  Fix doc build warning.
+
+Rob Clark (15):
+  dma-buf/dma-fence: Add deadline awareness
+  dma-buf/fence-array: Add fence deadline support
+  dma-buf/fence-chain: Add fence deadline support
+  dma-buf/dma-resv: Add a way to set fence deadline
+  dma-buf/sync_file: Surface sync-file uABI
+  dma-buf/sync_file: Add SET_DEADLINE ioctl
+  dma-buf/sw_sync: Add fence deadline support
+  drm/scheduler: Add fence deadline support
+  drm/syncobj: Add deadline support for syncobj waits
+  drm/vblank: Add helper to get next vblank time
+  drm/atomic-helper: Set fence deadline for vblank
+  drm/msm: Add deadline based boost support
+  drm/msm: Add wait-boost support
+  drm/msm/atomic: Switch to vblank_start helper
+  drm/i915: Add deadline based boost support
+
+ Documentation/driver-api/dma-buf.rst    | 16 ++++-
+ drivers/dma-buf/dma-fence-array.c       | 11 ++++
+ drivers/dma-buf/dma-fence-chain.c       | 12 ++++
+ drivers/dma-buf/dma-fence.c             | 60 ++++++++++++++++++
+ drivers/dma-buf/dma-resv.c              | 22 +++++++
+ drivers/dma-buf/sw_sync.c               | 81 +++++++++++++++++++++++++
+ drivers/dma-buf/sync_debug.h            |  2 +
+ drivers/dma-buf/sync_file.c             | 19 ++++++
+ drivers/gpu/drm/drm_atomic_helper.c     | 36 +++++++++++
+ drivers/gpu/drm/drm_syncobj.c           | 64 +++++++++++++++----
+ drivers/gpu/drm/drm_vblank.c            | 53 +++++++++++++---
+ drivers/gpu/drm/i915/i915_request.c     | 20 ++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 15 -----
+ drivers/gpu/drm/msm/msm_atomic.c        |  8 ++-
+ drivers/gpu/drm/msm/msm_drv.c           | 12 ++--
+ drivers/gpu/drm/msm/msm_fence.c         | 74 ++++++++++++++++++++++
+ drivers/gpu/drm/msm/msm_fence.h         | 20 ++++++
+ drivers/gpu/drm/msm/msm_gem.c           |  5 ++
+ drivers/gpu/drm/msm/msm_kms.h           |  8 ---
+ drivers/gpu/drm/scheduler/sched_fence.c | 46 ++++++++++++++
+ drivers/gpu/drm/scheduler/sched_main.c  |  2 +-
+ include/drm/drm_vblank.h                |  1 +
+ include/drm/gpu_scheduler.h             | 17 ++++++
+ include/linux/dma-fence.h               | 22 +++++++
+ include/linux/dma-resv.h                |  2 +
+ include/uapi/drm/drm.h                  | 17 ++++++
+ include/uapi/drm/msm_drm.h              | 14 ++++-
+ include/uapi/linux/sync_file.h          | 59 +++++++++++-------
+ 28 files changed, 639 insertions(+), 79 deletions(-)
+
+-- 
+2.39.1
+
