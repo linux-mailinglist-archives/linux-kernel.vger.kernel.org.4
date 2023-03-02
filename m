@@ -2,105 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2084B6A791E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB9C6A791F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjCBBmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 20:42:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S229783AbjCBBnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 20:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCBBmd (ORCPT
+        with ESMTP id S229509AbjCBBnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:42:33 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2236C457DB
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:42:11 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id i4so9611283ils.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 17:42:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1677721325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wHgJd2c1+EDM3fHoog+7zpbx7+QkK+zQV9gtvUQdxhc=;
-        b=WqpMGlw8tI3RBq0liEC9WqQpwXo/q1lUUD3X1jP+OpuGuJTLb4bkOz8YxxQ1f0LV3m
-         +ctyX+H30xdWALHH2kRq0ARd96uvjcTozDN1XeBsf3PC++n+hpFEVTPuCR0wpnHcNWd8
-         nhtkalQRzoQBjcWvM5XA1KyL89kdtQdlVv2hA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677721325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wHgJd2c1+EDM3fHoog+7zpbx7+QkK+zQV9gtvUQdxhc=;
-        b=qw9qKN7vcbVgurYm01sR5gYwo21bbIRqUWL6KKfqR5dTtBiYbA9vs1LbtEEK7v4705
-         ZiQyGGEiwt7hcdFiSXtCdIvIIYWT2aK5I1nHmCqPE8C3x6BYthfmSuBObbnLLDUS1X7Y
-         NB8IQghGqsJay4L2mpmBYsCeUt45T6KVel5LxWqgGni4UUKb73gq7HlyS5yKpFtX54Hj
-         1O0Bdgy3vLtk74PBuH1y+DosV9SrIdbd/uleMK7VI4kAA7DWnU+0McET+wBjfpYr/aS6
-         V9pDag5r9IJw0qjf4AvJV46BFRAuADHJdzooK4lg2VVSzJsFpcxxL8iqlaSkqMryNQrq
-         bwHg==
-X-Gm-Message-State: AO0yUKUQ/80NAVGbgYV/Tc8yXt1P6ynzZoC3pDmTZYKTBvZkEqrpsWis
-        hwPPMuXhMpWjPuNNd4+2/2AteA==
-X-Google-Smtp-Source: AK7set9xHkiu9dXiF/tr/Vw5b7l40+kd9CZCRhOLGAZoeecy4rPwbi8IkZd/kSC9JD2cHqY2yTQmrg==
-X-Received: by 2002:a92:6c0e:0:b0:317:16bc:dc97 with SMTP id h14-20020a926c0e000000b0031716bcdc97mr5581633ilc.3.1677721325167;
-        Wed, 01 Mar 2023 17:42:05 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t5-20020a02ab85000000b003ab21c8fa84sm4322772jan.121.2023.03.01.17.42.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 17:42:04 -0800 (PST)
-Message-ID: <1b98398f-0608-2ebd-3739-515645cd1cfd@linuxfoundation.org>
-Date:   Wed, 1 Mar 2023 18:42:03 -0700
+        Wed, 1 Mar 2023 20:43:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEE34C39
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:42:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32FBF614EF
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:42:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9084BC433EF;
+        Thu,  2 Mar 2023 01:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677721345;
+        bh=mu/VeF97BaWJgUa3G8oGpMfuSHjcTeGpOnWmliV4PZM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XcvKIaTwxJudTFmvywTtGyJIz91AjUThFFeVp26rtf5TKV+pGHq7Cw4h+HsICZ5M2
+         AhA15s+kXyPwwp4cYU0+hocqGhxOpbpIls6pzJbYAmJmLmSpW+/nHKg+SYc2j+lCFx
+         MJEKD21gRX+EHM+zetWzsSnti0wfex0gGzCKt23xNT6G7AiCQzvNIsshs5CR9MdTkQ
+         FgMsk+LkwTuJ/jaLQWIDWmdzoAOhpFiA+qvDgJ4ueW4gLOPmB/oLUvYEPJYsd5vkVv
+         qNvG0/a2pHJV0q5ir+tWW6UKJyQ5KXHbNMRb9WjMfsRYaZnnU6sO3NQjmGBq5GeOLn
+         EKzNQESMsthDg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 209CC5C0377; Wed,  1 Mar 2023 17:42:25 -0800 (PST)
+Date:   Wed, 1 Mar 2023 17:42:25 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <20230302014225.GP2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
+ <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230226010110.GA1576556@paulmck-ThinkPad-P17-Gen-1>
+ <Y/rEH2r9i0BtfxEW@rowland.harvard.edu>
+ <Y/0HEESX2wDWtPS1@andrea>
+ <bf2881fb-039b-06ab-68f9-806b29a84188@huaweicloud.com>
+ <20230227222120.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <9b5a04e9-39e7-ffa1-b43e-831a4f0c4b73@huaweicloud.com>
+ <20230228154030.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <90270e25-e272-d3f7-0c1b-04e74d2af6f9@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6.2 00/16] 6.2.2-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230301180653.263532453@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230301180653.263532453@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90270e25-e272-d3f7-0c1b-04e74d2af6f9@huaweicloud.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_SBL_A autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 11:07, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.2 release.
-> There are 16 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Mar 01, 2023 at 11:52:09AM +0100, Jonas Oberhauser wrote:
 > 
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
+> On 2/28/2023 4:40 PM, Paul E. McKenney wrote:
+> > On Tue, Feb 28, 2023 at 09:49:07AM +0100, Jonas Oberhauser wrote:
+> > > 
+> > > On 2/27/2023 11:21 PM, Paul E. McKenney wrote:
+> > > > On Mon, Feb 27, 2023 at 09:13:01PM +0100, Jonas Oberhauser wrote:
+> > > > > On 2/27/2023 8:40 PM, Andrea Parri wrote:
+> > > > > > > The LKMM doesn't believe that a control or data dependency orders a
+> > > > > > > plain write after a marked read.  Hence in this test it thinks that P1's
+> > > > > > > store to u0 can happen before the load of x1.  I don't remember why we
+> > > > > > > did it this way -- probably we just wanted to minimize the restrictions
+> > > > > > > on when plain accesses can execute.  (I do remember the reason for
+> > > > > > > making address dependencies induce order; it was so RCU would work.)
+> > > > > > > 
+> > > > > > > The patch below will change what the LKMM believes.  It eliminates the
+> > > > > > > positive outcome of the litmus test and the data race.  Should it be
+> > > > > > > adopted into the memory model?
+> > > > > > (Unpopular opinion I know,) it should drop dependencies ordering, not
+> > > > > > add/promote it.
+> > > > > > 
+> > > > > >      Andrea
+> > > > > Maybe not as unpopular as you think... :)
+> > > > > But either way IMHO it should be consistent; either take all the
+> > > > > dependencies that are true and add them, or drop them all.
+> > > > > In the latter case, RCU should change to an acquire barrier. (also, one
+> > > > > would have to deal with OOTA in some yet different way).
+> > > > > 
+> > > > > Generally my position is that unless there's a real-world benchmark with
+> > > > > proven performance benefits of relying on dependency ordering, one should
+> > > > > use an acquire barrier. I haven't yet met such a case, but maybe one of you
+> > > > > has...
+> > > > https://www.msully.net/thesis/thesis.pdf page 128 (PDF page 141).
+> > > > 
+> > > > Though this is admittedly for ARMv7 and PowerPC.
+> > > > 
+> > > Thanks for the link.
+> > > 
+> > > It's true that on architectures that don't have an acquire load (and have to
+> > > use a fence), the penalty will be bigger.
+> > > 
+> > > But the more obvious discussion would be what constitutes a real-world
+> > > benchmark : )
+> > > In my experience you can get a lot of performance benefits out of optimizing
+> > > barriers in code if all you execute is that code.
+> > > But once you embed that into a real-world application, often 90%-99% of time
+> > > spent will be in the business logic, not in the data structure.
+> > > 
+> > > And then the benefits suddenly disappear.
+> > > Note that a lot of barriers are a lot cheaper as well when there's no
+> > > contention.
+> > > 
+> > > Because of that, making optimization decisions based on microbenchmarks can
+> > > sometimes lead to a very poor "time invested" vs "total product improvement"
+> > > ratio.
+> > All true, though that 2x and 4x should be worth something.
 > 
-> thanks,
-> 
-> greg k-h
-> 
+> I think the most egregious case we had (not barrier related, but cache
+> related) was something like ~100x in specific benchmarks and then I think
+> somewhere around 1% system-wide. I think the issue was that in the larger
+> system, we couldn't keep the cache hot, so our greatly improved data
+> locality was being diluted.
+> But of course it always depends on how much that component actually
+> contributes to the overall system performance.
+> Which IMHO should be one of the measurements taken before starting to invest
+> heavily into optimizations.
 
-Compiled and booted on my test system. No dmesg regressions.
+Agreed, it is all too easy for profound local optimizations to have
+near-zero global effect.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+> Surprisingly, many people don't want to do that. I think it's something
+> about the misleading calculus of "2 months implementing the optimization + 2
+> weeks building robust benchmarks & profiling infrastructure > 2 months
+> implementing the optimization" instead of "2 weeks building robust
+> benchmarks & profiling infrastructure + 0 months implementing a useless
+> optimization < 2 months implementing the optimization", which seems to be
+> the more common case.
 
-thanks,
--- Shuah
+Or, for that matter, having the investigation locate a five-minute change
+that produces large benefits.
+
+> > The real-world examples I know of involved garbage collectors, and the
+> > improvement was said to be a few percent system-wide.  But that was a
+> > verbal exchange, so I don't have a citation for you.
+> 
+> Thanks for the example, it sounds very reasonable (at least for platforms
+> like PowerPC).
+> GC has all the hallmarks of a good optimization target: measurable impact on
+> system wide throughput and latency, and pointer chasing (=dependency
+> ordering) being a hot part inside the algorithm.
+
+I believe that the target was ARM.  It was definitely not PowerPC.
+
+But yes, GCs are indeed intense exercise for pointer chasing.
+
+							Thanx, Paul
