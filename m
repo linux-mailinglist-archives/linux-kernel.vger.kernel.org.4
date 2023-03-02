@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AF06A85BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F81E6A85CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjCBQCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S229723AbjCBQEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCBQCe (ORCPT
+        with ESMTP id S229693AbjCBQEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:02:34 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE46C647;
-        Thu,  2 Mar 2023 08:02:32 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 5C9285FD13;
-        Thu,  2 Mar 2023 19:02:29 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1677772949;
-        bh=pH2/BwYk/ccvRyZeYLpUS9yuCtPjv0uFSqqBycYa3+w=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=NrQDWL1D/S2DwS0paqi4/35Oc9QzCAYJuamgniaczeKEmMiddE+LdwvlczVH4SXkW
-         reA8Rh9S6xCnBxtSx5J9ydCdvEns1EMTAT+B8bZNkMCFRgSoHZKGu8SMumvx0B6DB5
-         2rwY1Ok8av/N2IMUk5H6MczJZ2swgESpmtBDYH94ZWduE5P1LtGojTylhF/aJn9fnb
-         YoqLNfOPwdxdmDM2jIeUs0TsEt5BEY+QXZZLOtUH0lEVBBMd+R4/JNEXVIFGDeu20b
-         Qlz0pwmRJMUZtyxiZPoDGw/52Tp97OHIElHe7jwEtJjCwTycZP/uDnbK+ZRWvTjRr9
-         4nsCB4KnQb1/g==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  2 Mar 2023 19:02:28 +0300 (MSK)
-Message-ID: <6a4abcc5-5246-20ac-e25b-f88ee90c1331@sberdevices.ru>
-Date:   Thu, 2 Mar 2023 19:02:28 +0300
+        Thu, 2 Mar 2023 11:04:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5EA18B33;
+        Thu,  2 Mar 2023 08:04:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0657615F3;
+        Thu,  2 Mar 2023 16:04:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39C2BC433D2;
+        Thu,  2 Mar 2023 16:04:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677773071;
+        bh=jBtL4yxIYG0lXE20Kh9eNgExexa/lorfkanKaYeucsE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eDLJ2jv7BL0kSBPrpWzeyv4YVnK2aVeM2k5522SDhwpQ/oJSBle3pBe4cd/I/IW3o
+         JwEPKRA5YkJrc3YhmAXdjyd91gCxxvUXy14HE1p3KQ7m/DCJ4dUcaJefdg4zNg3CFx
+         OPkPkWfd9nOmiFSYsvYITEzFeAHgb5RJnu6VwByy9oTOEzMU5pJyPHji3ETv7qxVL/
+         oVQIeuxJVRF2atQ8B7stPlcE3jqWKGEjaqNm13V3vIa+pQFdOJXb2b0hhokqrWFT7H
+         nMXGHv8r00cIeKqMw9lxPwd5zEwQZ2hcMeVHusjUS4UWF5OkeM94BvgB301KX3IKth
+         GskWoeJP5sfaQ==
+Date:   Thu, 2 Mar 2023 16:04:26 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ian Pilcher <arequipeno@gmail.com>
+Cc:     pavel@ucw.cz, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kabel@kernel.org
+Subject: Re: [PATCH v13 0/2] Introduce block device LED trigger
+Message-ID: <ZADJCmMSCSuWFavm@google.com>
+References: <20221227225226.546489-1-arequipeno@gmail.com>
+ <Y/9gvmPwcTaY3pRA@google.com>
+ <a7ff3338-3d5e-4402-aaba-16e740f4ed5b@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: leds: add binding for aw200xx
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>
-References: <20230228211046.109693-1-mmkurbanov@sberdevices.ru>
- <20230228211046.109693-2-mmkurbanov@sberdevices.ru>
- <8c3a16f6-f1fb-911b-b935-31ed8e227f8f@linaro.org>
-From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
-In-Reply-To: <8c3a16f6-f1fb-911b-b935-31ed8e227f8f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/02 07:22:00 #20908555
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a7ff3338-3d5e-4402-aaba-16e740f4ed5b@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-02 10:48, Krzysztof Kozlowski wrote:
+On Wed, 01 Mar 2023, Ian Pilcher wrote:
 
->> +  For more product information please see the link below:
->> +  aw20036 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151532_5eb65894d205a.pdf
->> +  aw20054 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151602_5eb658b2b77cb.pdf
->> +  aw20072 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151754_5eb659227a145.pdf
+> On 3/1/23 08:27, Lee Jones wrote:
+> > Pavel,
+> > 
+> > I see that you are active now - could you please prioritise this one.
+> > 
 > 
-> Links do not work. Error 401
-
-They are changed the links. I will correct in the next version.
-
->> +  awinic,display-rows:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      Leds matrix size
+> Lee -
 > 
-> Why do you need this property? Number of LEDs are known from the number
-> of children. Matrix size is fixed in compatible, isn't it?
+> Just FYI, Pavel did respond.  Unfortunately, he doesn't feel that this
+> can go in with its current sysfs interface, and making the change that
+> he wants would require changes to the block subsystem (adding an in-
+> kernel API to look up a block device by its kernel name, rather than its
+> major & minor numbers or a special file path).
+> 
+> Similar changes have been rejected in the past by the block subsystem
+> maintainers.  The position I have seen is that major & minor numbers,
+> or device special files from which they can be determined, is *the*
+> interface to block devices.
+> 
+> I've also had some pretty negative experiences when interacting with the
+> block subsystem community - unnecessary profanity, etc.
+> 
+> Given that history, I don't see much prospect that I (an unknown newb)
+> would succeed in convincing the block subsystem maintainers to add the
+> API required to implement the interface that Pavel wants.  So I'm pretty
+> much done trying to push this thing unless something changes that leads
+> me to think that there's actually a decent chance of success.
+> 
+> Hopefully that makes sense.
 
-Number of LEDs are known, but matrix size are programmable.
-Example for the aw20036, the matrix size can be 1x12, 2x12, 3x12.
+I understand and empathise with the situation.
+
+Pavel is the boss here, so I cannot over-rule the decisions he makes.
+Hopefully the two of you can find some middle ground and work something
+out between you.  Best of luck.
 
 -- 
-Best Regards,
-Kurbanov Martin
-
+Lee Jones [李琼斯]
