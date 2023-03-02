@@ -2,110 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F686A7FC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B996A7FCC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjCBKQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:16:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S230072AbjCBKRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjCBKQy (ORCPT
+        with ESMTP id S229735AbjCBKRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:16:54 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D00434311
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:16:53 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id p188-20020a6b8dc5000000b0074c96ca271bso10337039iod.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:16:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gfU34tRPzjFsfIGICwAUSyYWO7y40eQRHesXaw40d8s=;
-        b=aSNuvnyp/AEHJZ83RKqVy5Rgu1/4jEo29JHByryMCN8iuCrf0RcRGueae57Waq/LnB
-         maJAoL3RHAHk3wyce6mQRHHgDS+CIpAp++Pu1FIo0xUihYL4OiY7eHukIPiM7IjbGssk
-         hxeccTOiLRVqxfJRmqw97HGaaJSYTbjrePrwZIwjGUgFSimlo7dafhBOge6q0b2rZR2j
-         RspVvKYzkU3FA0RtBLufEmyDA+mzGIA03kpSxSO+9qkP6eSfiFGc+RbuWKgbslsAhquP
-         sBtzuvzNfE+RPC7cLDj1amBoeyzVl7jHMAgt9YGwrl8OSoky9zQzRZ3FsvmebP4K2K7y
-         v7Lw==
-X-Gm-Message-State: AO0yUKUh6U/IZvIvICtM9Ury6qt9zf9MCeAL6KVdnHgtcqFNGaNoqk2S
-        a9JQMDkZzYUi6BSPLUsYDkyVulWH6bKG+wpDxzr0dLwpPVYl
-X-Google-Smtp-Source: AK7set+/K3PFd/KL6aqokazUrBlm0Z0tvxLV672j3djpKYOCKyBsMKiRM1UiJba0CXhjSPWzLaKdu1YfYoeIRHv5TkCoXGLj2GRQ
+        Thu, 2 Mar 2023 05:17:18 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF333B0F1;
+        Thu,  2 Mar 2023 02:17:17 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 09DD96602E5A;
+        Thu,  2 Mar 2023 10:17:15 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677752236;
+        bh=o7ImUOBWJocC9IE4w/doapnXAOm4lxDZbXD8YD8dd4M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KIkRDQIORgXA/JtkgBUDzdxgOgnBoCEig6Lp2q8g58I0F4raynLoL6kwtDyDRrGk0
+         Cqt1KU04//2mmbVqjmV3Ia0mNY/qIMNxa1f1YwEHRblxvlcjSWFOSbf5IzXcHv8exN
+         FQLNWCTHVgyp3+ylDkzs0Xr638oVKA2GaStFbRKjDR3e8vODI6llTkL+ah0pvb6RcE
+         zYsIWcRTCI9ey2meVJL2XaZt9GlQ/etqv1Q6HMa42EKE6zJ/LUPJUoKrMoGtFCx3zO
+         fT24Dx6Mocw65XersYHWcQ8e8f6OLKsCyKseS1Dt+GL6ESI7F2RjRR8Outd9r+YUj4
+         frtmC8FIxFMbg==
+Message-ID: <5dba27e1-d480-ea24-c1ba-03bb7f77b1b1@collabora.com>
+Date:   Thu, 2 Mar 2023 11:17:14 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:180b:0:b0:310:a298:1c95 with SMTP id
- 11-20020a92180b000000b00310a2981c95mr4344576ily.6.1677752212861; Thu, 02 Mar
- 2023 02:16:52 -0800 (PST)
-Date:   Thu, 02 Mar 2023 02:16:52 -0800
-In-Reply-To: <000000000000057d3e05edbd51b9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab3bcc05f5e82073@google.com>
-Subject: Re: [syzbot] [net?] WARNING in default_device_exit_batch (4)
-From:   syzbot <syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, roman.gushchin@linux.dev, shakeelb@google.com,
-        shaozhengchao@huawei.com, syzkaller-bugs@googlegroups.com,
-        vasily.averin@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 12/19] arm64: dts: mediatek: mt8192-asurada: Couple
+ VGPU and VSRAM_OTHER regulators
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
+ <20230301095523.428461-13-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5GHdtbheL6wxtDo-szk+=3BGk2z93SBowd4Z=E9XupZkw@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5GHdtbheL6wxtDo-szk+=3BGk2z93SBowd4Z=E9XupZkw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Il 02/03/23 11:03, Chen-Yu Tsai ha scritto:
+> On Wed, Mar 1, 2023 at 5:55 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Add coupling for these regulators, as VSRAM_OTHER is used to power the
+>> GPU SRAM, and they have a strict voltage output relation to satisfy in
+>> order to ensure GPU stable operation.
+>> While at it, also add voltage constraint overrides for the GPU SRAM
+>> regulator "mt6359_vsram_others" so that we stay in a safe range of
+>> 0.75-0.80V.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>> index 8570b78c04a4..f858eca219d7 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>> @@ -447,6 +447,13 @@ &mt6359_vrf12_ldo_reg {
+>>          regulator-always-on;
+>>   };
+>>
+>> +&mt6359_vsram_others_ldo_reg {
+>> +       regulator-min-microvolt = <750000>;
+>> +       regulator-max-microvolt = <800000>;
+>> +       regulator-coupled-with = <&mt6315_7_vbuck1>;
+>> +       regulator-coupled-max-spread = <10000>;
+> 
+> Looking again at the downstream OPP table, it seems there's no voltage
+> difference requirement. It only needs V_SRAM >= V_GPU. Same applies to
+> MT8195. Looks like only MT8183 and MT8186 need V_SRAM - V_GPU >= 10000.
 
-HEAD commit:    5b7c4cabbb65 Merge tag 'net-next-6.3' of git://git.kernel...
-git tree:       net-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12e7db64c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c74c134cc415a89b
-dashboard link: https://syzkaller.appspot.com/bug?extid=9dfc3f3348729cc82277
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13158898c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11c52674c80000
+On MT8195 we don't need any regulator coupling. There, the GPU-SRAM voltage
+is fixed at .. I don't remember, 0.7V? - anyway - MT8195 doesn't need to
+scale the vsram.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/65932a118570/disk-5b7c4cab.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8de67fb8c522/vmlinux-5b7c4cab.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/2b90e329d792/bzImage-5b7c4cab.xz
+> 
+> Would setting max-spread to 0 work? I ask because with both regulator's
+> maximum voltage set to 0.8V, there's no way we can reach the highest
+> OPP.
+> 
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
+No that doesn't work. I can raise the Vgpu max voltage to 0.88V to solve the
+issue right here and right now, or we can leave it like that and revisit it
+later.
 
-bond7 (unregistering): Released all slaves
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 56 at net/core/dev.c:10867 unregister_netdevice_many_notify+0x14cf/0x19f0 net/core/dev.c:10867
-Modules linked in:
-CPU: 1 PID: 56 Comm: kworker/u4:4 Not tainted 6.2.0-syzkaller-05251-g5b7c4cabbb65 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-Workqueue: netns cleanup_net
-RIP: 0010:unregister_netdevice_many_notify+0x14cf/0x19f0 net/core/dev.c:10867
-Code: af 1a 00 00 48 c7 c6 00 1c 5c 8b 48 c7 c7 40 1c 5c 8b c6 05 28 d4 4c 06 01 e8 5d 45 37 f9 0f 0b e9 01 f9 ff ff e8 f1 c8 6f f9 <0f> 0b e9 d8 f8 ff ff e8 85 66 c1 f9 e9 11 ed ff ff 4c 89 ef e8 d8
-RSP: 0018:ffffc90001577a38 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 000000007db3f601 RCX: 0000000000000000
-RDX: ffff888017d61d40 RSI: ffffffff8814e53f RDI: 0000000000000001
-RBP: ffff88807bc46100 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88807bc46100 R14: ffff88802ab70000 R15: dffffc0000000000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffcb678e960 CR3: 00000000768f2000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- unregister_netdevice_many net/core/dev.c:10897 [inline]
- default_device_exit_batch+0x451/0x5b0 net/core/dev.c:11350
- ops_exit_list+0x125/0x170 net/core/net_namespace.c:174
- cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
- process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+I would at this point go for setting mt6315_7_vbuck1's max-microvolt to
+880000, as this is the maximum recommended voltage for the GPU as per the
+MT8192 datasheet, it would also make sense as we would be still describing
+the hardware in a correct manner.
+
+What do you think?
+
+Angelo
+
+> ChenYu
+> 
+> 
+>> +};
+>> +
+>>   &mt6359_vufs_ldo_reg {
+>>          regulator-always-on;
+>>   };
+>> @@ -1411,6 +1418,8 @@ mt6315_7_vbuck1: vbuck1 {
+>>                                  regulator-max-microvolt = <800000>;
+>>                                  regulator-enable-ramp-delay = <256>;
+>>                                  regulator-allowed-modes = <0 1 2>;
+>> +                               regulator-coupled-with = <&mt6359_vsram_others_ldo_reg>;
+>> +                               regulator-coupled-max-spread = <10000>;
+>>                          };
+>>                  };
+>>          };
+>> --
+>> 2.39.2
+>>
+
+-- 
+AngeloGioacchino Del Regno
+Software Engineer
+
+Collabora Ltd.
+Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
+Registered in England & Wales, no. 5513718
 
