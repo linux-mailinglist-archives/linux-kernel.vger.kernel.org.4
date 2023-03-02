@@ -2,128 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9566A8A8F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 21:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA826A8A91
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 21:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCBUkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 15:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S230136AbjCBUk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 15:40:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjCBUkp (ORCPT
+        with ESMTP id S230152AbjCBUku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 15:40:45 -0500
-Received: from cmx-torrgo002.bell.net (mta-tor-002.bell.net [209.71.212.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0FD559C3;
-        Thu,  2 Mar 2023 12:40:42 -0800 (PST)
-X-RG-CM-BuS: 0
-X-RG-CM-SC: 0
-X-RG-CM: Clean
-X-Originating-IP: [174.88.80.104]
-X-RG-Env-Sender: dave.anglin@bell.net
-X-RG-Rigid: 63F52EA4010FFA11
-X-CM-Envelope: MS4xfBMbnnIrk9fOtS+ErDc2D/Y8SAVdLFz3sxDNB/LAE2dng6CmGuhfnSDFmZYFbU4YOSpw3n1ogKnZUCMS1oYtPVIZwQu8UqNQV1oRZcBsCwu+1zJlO9mY
- 8xG/mr4jfqUFcwjEpkasc/yXfWTPRGptN2pZkBAtnP6GVVNTvpR1TtxJv8pmu8KjbxiKTtGGa9JEC+YWpWz6I1fHm8b1wP5efX5TqdpuSns26h0WfPQf+XJt
- t+TIwZCEEVWh6BEhrQUxBs9XRckJdPkfOGC2mP25nUQ5j3vnKyEYJcbr75szp+AnZx7NS5IM1FBL09rn//p8Zlwg4y4kqA9V8gS0AFNDm6oDYkdgrmRiFMFY
- FE8G1XGyBe0cMLOTS1Cfp6iUVj06cJYAY/RDCmdBt7QuCj1VSLWSszzuIoGY5bwPImPbZhzRVT97PeeeIPh2j6DEtMjvuXvRlt1LEJOdg98Sxp02KAhg54px
- gUtN4kMk/zBkufae
-X-CM-Analysis: v=2.4 cv=ULS+oATy c=1 sm=1 tr=0 ts=640109c1
- a=jp24WXWxBM5iMX8AJ3NPbw==:117 a=jp24WXWxBM5iMX8AJ3NPbw==:17
- a=IkcTkHD0fZMA:10 a=FBHGMhGWAAAA:8 a=2RFP64wVy-t9rOqPcicA:9 a=QEXdDO2ut3YA:10
- a=9gvnlMMaQFpL9xblJ6ne:22
-Received: from [192.168.2.49] (174.88.80.104) by cmx-torrgo002.bell.net (5.8.814) (authenticated as dave.anglin@bell.net)
-        id 63F52EA4010FFA11; Thu, 2 Mar 2023 15:40:33 -0500
-Message-ID: <1d0efde0-a7a5-11ca-158a-a30825d44516@bell.net>
-Date:   Thu, 2 Mar 2023 15:40:32 -0500
+        Thu, 2 Mar 2023 15:40:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226C851FA4;
+        Thu,  2 Mar 2023 12:40:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8388361648;
+        Thu,  2 Mar 2023 20:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E4AC433EF;
+        Thu,  2 Mar 2023 20:40:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677789646;
+        bh=pGMbS0TOxGlgoa8LXKcPCt0vONuP7PJlA1WB0iyh8bY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZmDACi3s6lSeGPOfqgoeW8L0vlNtXxdewTVzUmmumt62IgjD3aEtxVNlES/S0PGex
+         /78vToeN/z2gzX16nwn4QBJ/sQzdT+lgnIYkflZUY/N6aNL65UZWF087E9XfeFFrH2
+         Ovjju4je9K7QoZxZUTd3y0nI2NbPNoGV/GrRu97+Cgtm73iI2flF1e8ixeSTrTpGaP
+         FHlKchaoCvMdh7gQlg+xjGBM8XJOhWwx7RzYOEf5wscFwQGDWFBXyiq3y830onOD0l
+         J0eIgENd2Ns43Ojg0fWkkuDXpm+9JtTWZwUfp+UyMlo1Bxdb3m2/DFS+cnSeSQxsZg
+         pAM37jgzTw3MA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 417624049F; Thu,  2 Mar 2023 17:40:43 -0300 (-03)
+Date:   Thu, 2 Mar 2023 17:40:43 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Claire Jensen <cjense@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] perf tests stat+csv_output: Switch CSV separator
+ to @
+Message-ID: <ZAEJy6RXAGjd7Erb@kernel.org>
+References: <20230223071818.329671-1-irogers@google.com>
+ <Y/dq4yO+zXYLCQ8d@kernel.org>
+ <CAP-5=fXuZ=sWJcKFUSPVSpjmHFHzSWQEMfoisvjqzJz2dDOXWQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 18/34] parisc: Implement the new page table range API
-Content-Language: en-US
-From:   John David Anglin <dave.anglin@bell.net>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
-References: <20230228213738.272178-1-willy@infradead.org>
- <20230228213738.272178-19-willy@infradead.org>
- <9bb5280e-c875-6eee-b28e-2abc03427e5f@bell.net>
-In-Reply-To: <9bb5280e-c875-6eee-b28e-2abc03427e5f@bell.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAP-5=fXuZ=sWJcKFUSPVSpjmHFHzSWQEMfoisvjqzJz2dDOXWQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-02 11:43 a.m., John David Anglin wrote:
-> On 2023-02-28 4:37 p.m., Matthew Wilcox (Oracle) wrote:
->> Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio()
->> and flush_icache_pages().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
->> from being per-page to per-folio.
-> I have tested this change on rp3440 at mainline commit e492250d5252635b6c97d52eddf2792ec26f1ec1
-> and c8000 at mainline commit ee3f96b164688dae21e2466a57f2e806b64e8a37.
-Here's another one:
+Em Thu, Mar 02, 2023 at 11:30:36AM -0800, Ian Rogers escreveu:
+> On Thu, Feb 23, 2023 at 5:32 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Wed, Feb 22, 2023 at 11:18:17PM -0800, Ian Rogers escreveu:
+> > > Commas may appear in events like:
+> > > cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/
+> > > which causes the commachecker to see more fields than expected. Use @
+> > > as the CSV separator to avoid this.
+> >
+> > Thanks, applied both patches.
+> 
+> Thanks Arnaldo, I don't see the patches in the git branches so perhaps
+> something went wrong?
 
-------------[ cut here ]------------
-kernel BUG at mm/memory.c:3865!
-CPU: 1 PID: 6972 Comm: sbuild Not tainted 6.2.0+ #1
-Hardware name: 9000/800/rp3440
-
-      YZrvWESTHLNXBCVMcbcbcbcbOGFRQPDI
-PSW: 00001000000001101111111100001111 Not tainted
-r00-03  000000000806ff0f 000000004fab8d40 00000000404584b0 000000004fab8d40
-r04-07  0000000040c2f4c0 0000000047fe60c0 000000004fab8b98 0000000000000953
-r08-11  000000004de3de00 0000000000000000 0000000047fe60c0 0000004093ff4660
-r12-15  0000000000000001 0000000047fe60c0 0000000040000540 000000022f8e9540
-r16-19  0000000000000000 000000004c694c40 000000004fab8860 00000000000003d0
-r20-23  0000000007be3a40 0000000000000fff 0000000000000000 000000004109f1a0
-r24-27  0000000000000000 0000000000000cc0 0000000046de3a68 0000000040c2f4c0
-r28-31  80e00000000a0435 000000004fab8df0 000000004fab8e20 0000000000000001
-sr00-03  0000000000207c00 0000000000000000 0000000000000000 0000000002f11c00
-sr04-07  0000000000000000 0000000000000000 0000000000000000 0000000000000000
-
-IASQ: 0000000000000000 0000000000000000 IAOQ: 000000004045908c 0000000040459090
-  IIR: 03ffe01f    ISR: 0000000000000000  IOR: 0000000000000000
-  CPU:        1   CR30: 0000004095d64c20 CR31: ffffffffffffffff
-  ORIG_R28: 000000001c569ad0
-  IAOQ[0]: do_swap_page+0x108c/0x1168
-  IAOQ[1]: do_swap_page+0x1090/0x1168
-  RP(r2): do_swap_page+0x4b0/0x1168
-Backtrace:
-  [<000000004045a554>] handle_pte_fault+0x244/0x358
-  [<000000004045c58c>] __handle_mm_fault+0x104/0x1b8
-  [<000000004045c81c>] handle_mm_fault+0x1dc/0x318
-  [<000000004044cb38>] faultin_page+0xa8/0x178
-  [<000000004044e848>] __get_user_pages+0x328/0x560
-  [<0000000040450ac4>] get_dump_page+0x9c/0x128
-  [<0000000040596cb8>] dump_user_range+0xc0/0x2d8
-  [<000000004058e790>] elf_core_dump+0x5f8/0x708
-  [<0000000040596384>] do_coredump+0xc2c/0x14a0
-  [<0000000040259040>] get_signal+0x4a8/0xb60
-  [<000000004021a570>] do_signal+0x50/0x228
-  [<000000004021ab38>] do_notify_resume+0x68/0x150
-  [<0000000040203ee0>] syscall_do_signal+0x54/0xa0
-
-CPU: 1 PID: 6972 Comm: sbuild Not tainted 6.2.0+ #1
-Hardware name: 9000/800/rp3440
-Backtrace:
-  [<000000004020af50>] show_stack+0x70/0x90
-  [<0000000040b7d408>] dump_stack_lvl+0xd8/0x128
-  [<0000000040b7d48c>] dump_stack+0x34/0x48
-  [<000000004020b160>] die_if_kernel+0x1d0/0x388
-  [<000000004020c1c4>] handle_interruption+0xc34/0xc88
-  [<000000004020307c>] intr_check_sig+0x0/0x3c
-
----[ end trace 0000000000000000 ]---
-note: sbuild[6972] exited with preempt_count 1
-
-Dave
+Its in my local branch, I'll push it.
+ 
+> Ian
+> 
+> > - Arnaldo
+> >
+> >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/tests/shell/stat+csv_output.sh | 23 ++++++++++++-----------
+> > >  1 file changed, 12 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/tools/perf/tests/shell/stat+csv_output.sh b/tools/perf/tests/shell/stat+csv_output.sh
+> > > index b7f050aa6210..324fc9e6edd7 100755
+> > > --- a/tools/perf/tests/shell/stat+csv_output.sh
+> > > +++ b/tools/perf/tests/shell/stat+csv_output.sh
+> > > @@ -7,6 +7,7 @@
+> > >  set -e
+> > >
+> > >  skip_test=0
+> > > +csv_sep=@
+> > >
+> > >  function commachecker()
+> > >  {
+> > > @@ -34,7 +35,7 @@ function commachecker()
+> > >               [ "$x" = "Failed" ] && continue
+> > >
+> > >               # Count the number of commas
+> > > -             x=$(echo $line | tr -d -c ',')
+> > > +             x=$(echo $line | tr -d -c $csv_sep)
+> > >               cnt="${#x}"
+> > >               # echo $line $cnt
+> > >               [[ ! "$cnt" =~ $exp ]] && {
+> > > @@ -54,7 +55,7 @@ function ParanoidAndNotRoot()
+> > >  check_no_args()
+> > >  {
+> > >       echo -n "Checking CSV output: no args "
+> > > -     perf stat -x, true 2>&1 | commachecker --no-args
+> > > +     perf stat -x$csv_sep true 2>&1 | commachecker --no-args
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > @@ -66,7 +67,7 @@ check_system_wide()
+> > >               echo "[Skip] paranoid and not root"
+> > >               return
+> > >       fi
+> > > -     perf stat -x, -a true 2>&1 | commachecker --system-wide
+> > > +     perf stat -x$csv_sep -a true 2>&1 | commachecker --system-wide
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > @@ -79,14 +80,14 @@ check_system_wide_no_aggr()
+> > >               return
+> > >       fi
+> > >       echo -n "Checking CSV output: system wide no aggregation "
+> > > -     perf stat -x, -A -a --no-merge true 2>&1 | commachecker --system-wide-no-aggr
+> > > +     perf stat -x$csv_sep -A -a --no-merge true 2>&1 | commachecker --system-wide-no-aggr
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > >  check_interval()
+> > >  {
+> > >       echo -n "Checking CSV output: interval "
+> > > -     perf stat -x, -I 1000 true 2>&1 | commachecker --interval
+> > > +     perf stat -x$csv_sep -I 1000 true 2>&1 | commachecker --interval
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > @@ -94,7 +95,7 @@ check_interval()
+> > >  check_event()
+> > >  {
+> > >       echo -n "Checking CSV output: event "
+> > > -     perf stat -x, -e cpu-clock true 2>&1 | commachecker --event
+> > > +     perf stat -x$csv_sep -e cpu-clock true 2>&1 | commachecker --event
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > @@ -106,7 +107,7 @@ check_per_core()
+> > >               echo "[Skip] paranoid and not root"
+> > >               return
+> > >       fi
+> > > -     perf stat -x, --per-core -a true 2>&1 | commachecker --per-core
+> > > +     perf stat -x$csv_sep --per-core -a true 2>&1 | commachecker --per-core
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > @@ -118,7 +119,7 @@ check_per_thread()
+> > >               echo "[Skip] paranoid and not root"
+> > >               return
+> > >       fi
+> > > -     perf stat -x, --per-thread -a true 2>&1 | commachecker --per-thread
+> > > +     perf stat -x$csv_sep --per-thread -a true 2>&1 | commachecker --per-thread
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > @@ -130,7 +131,7 @@ check_per_die()
+> > >               echo "[Skip] paranoid and not root"
+> > >               return
+> > >       fi
+> > > -     perf stat -x, --per-die -a true 2>&1 | commachecker --per-die
+> > > +     perf stat -x$csv_sep --per-die -a true 2>&1 | commachecker --per-die
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > @@ -142,7 +143,7 @@ check_per_node()
+> > >               echo "[Skip] paranoid and not root"
+> > >               return
+> > >       fi
+> > > -     perf stat -x, --per-node -a true 2>&1 | commachecker --per-node
+> > > +     perf stat -x$csv_sep --per-node -a true 2>&1 | commachecker --per-node
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > @@ -154,7 +155,7 @@ check_per_socket()
+> > >               echo "[Skip] paranoid and not root"
+> > >               return
+> > >       fi
+> > > -     perf stat -x, --per-socket -a true 2>&1 | commachecker --per-socket
+> > > +     perf stat -x$csv_sep --per-socket -a true 2>&1 | commachecker --per-socket
+> > >       echo "[Success]"
+> > >  }
+> > >
+> > > --
+> > > 2.39.2.637.g21b0678d19-goog
+> > >
+> >
+> > --
+> >
+> > - Arnaldo
 
 -- 
-John David Anglin  dave.anglin@bell.net
 
+- Arnaldo
