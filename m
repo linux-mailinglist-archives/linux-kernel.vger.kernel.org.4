@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8EE6A81AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6116A81AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjCBL5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:57:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S229972AbjCBL5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjCBL50 (ORCPT
+        with ESMTP id S229871AbjCBL5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:57:26 -0500
-Received: from out-23.mta1.migadu.com (out-23.mta1.migadu.com [IPv6:2001:41d0:203:375::17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC1834007
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:57:22 -0800 (PST)
+        Thu, 2 Mar 2023 06:57:31 -0500
+Received: from out-39.mta1.migadu.com (out-39.mta1.migadu.com [IPv6:2001:41d0:203:375::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596AD37569
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:57:23 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
         t=1677758241;
@@ -22,17 +22,17 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AR5vfcbTzXg9GS9xts3Lxqv5/GJy7ozqxusymEf3afo=;
-        b=xEL5MwbqhEW/vkHHggpCjUihFiwwscme7Ym7cn7njoh9i5up9Qq5IN3roJUWuLzSrwAafy
-        6nuRb4mUGB2rYjivL9tVTqWqY5tLYIXPLoUSW9Vz2vB7CDL6bQzXpkO3bkIBiZEbAM1xoJ
-        yA+F9n/NbDz/Uhp8IWXq03+Y4rYqF+M=
+        bh=sredrf5PjZ7jQFXwhsTWfhRpimvvGAc4wV/iwzTmZq0=;
+        b=p3i2oWfXX64J/GM40FQzzz9ICV3FS6E6pH4lDCCyy7YOp2GeNRWM0L6LgWvaaDUFYG8nrS
+        JsC4lt9h3nfU1JJGScOJBu6/x+XrQKJnq360TuI5WChEuOL3dC/CGCuPgG3RaxCBz9v/4o
+        SuxS+lrnpNYeCA30kp61Se0VWYaGU0A=
 From:   richard.leitner@linux.dev
-Date:   Thu, 02 Mar 2023 12:55:02 +0100
-Subject: [PATCH 2/3] ASoC: dt-bindings: maxim,max9867: add "mclk" property
+Date:   Thu, 02 Mar 2023 12:55:03 +0100
+Subject: [PATCH 3/3] ASoC: maxim,max9867: add "mclk" support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230302-max9867-v1-2-aa9f7f25db5e@skidata.com>
+Message-Id: <20230302-max9867-v1-3-aa9f7f25db5e@skidata.com>
 References: <20230302-max9867-v1-0-aa9f7f25db5e@skidata.com>
 In-Reply-To: <20230302-max9867-v1-0-aa9f7f25db5e@skidata.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -46,65 +46,73 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
 Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Richard Leitner <richard.leitner@skidata.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1153;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1453;
  i=richard.leitner@skidata.com; h=from:subject:message-id;
- bh=bMNg7GqHmP3qmoCg4huIjZzqkxCE2jKo6J6fNpJ+8ks=;
- b=owGbwMvMwCX2R2KahkXN7wuMp9WSGFIY+uUZl4XzaBlcvvyYkbF0S63p1x1bTl9f5Xlnb0Dkcb27
- GZ9+dJSyMIhxMciKKbLYG3O1u+eWva9U1MmFmcPKBDKEgYtTACYiu47hv/fyK+tYfm98tmiN8OOAnI
- qsGz/bv/7fPXeyr52E2+cH6rqMDGt92Cs2bOXVTyg35Ih2NQlPrZJ1vR6+MKpgV/9tVg45DgA=
+ bh=t7JeLv5Avx9AQ87GdXmgLhpXQCWm8ePC8Uj/0k4VhNI=;
+ b=owGbwMvMwCX2R2KahkXN7wuMp9WSGFIY+uU7ly5v9/95II6d2/TEmpl/JRpjl/9oubQ0q6J9w9Pg
+ BJ1PHaUsDGJcDLJiiiz2xlzt7rll7ysVdXJh5rAygQxh4OIUgImcimX4p+Rb7Xtxr/wJwSKfq3Jq+z
+ 3TBM53av9zm7Gv/Nbi8hlPpjH8lanmVk9hWxPJdoeZ6dvrUyq+6x84Fxjm/T4//3H/R2tLZgA=
 X-Developer-Key: i=richard.leitner@skidata.com; a=openpgp;
  fpr=3F330A87476D76EF79212C6DFC189628387CFBD0
 X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Leitner <richard.leitner@skidata.com>
+From: Benjamin Bara <benjamin.bara@skidata.com>
 
-Add clocks and clock-names properties to require a "mclk" definition for
-the maxim,max9867 codec.
+Add basic support for the codecs mclk by enabling it during probing.
 
-Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
- Documentation/devicetree/bindings/sound/maxim,max9867.yaml | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ sound/soc/codecs/max9867.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/maxim,max9867.yaml b/Documentation/devicetree/bindings/sound/maxim,max9867.yaml
-index cefa43c3d34e..152340fe9cc7 100644
---- a/Documentation/devicetree/bindings/sound/maxim,max9867.yaml
-+++ b/Documentation/devicetree/bindings/sound/maxim,max9867.yaml
-@@ -35,9 +35,17 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/sound/soc/codecs/max9867.c b/sound/soc/codecs/max9867.c
+index e161ab037bf7..b92dd61bb2b2 100644
+--- a/sound/soc/codecs/max9867.c
++++ b/sound/soc/codecs/max9867.c
+@@ -6,6 +6,7 @@
+ // Copyright 2018 Ladislav Michl <ladis@linux-mips.org>
+ //
  
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: "mclk"
-+
- required:
-   - compatible
-   - reg
-+  - clocks
-+  - clock-names
++#include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+@@ -16,6 +17,7 @@
+ #include "max9867.h"
  
- examples:
-   - |
-@@ -46,6 +54,8 @@ examples:
-                     compatible = "maxim,max9867";
-                     #sound-dai-cells = <0>;
-                     reg = <0x18>;
-+                    clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_SAI3_MCLK1>;
-+                    clock-names = "mclk";
-             };
-     };
- ...
+ struct max9867_priv {
++	struct clk *mclk;
+ 	struct regmap *regmap;
+ 	const struct snd_pcm_hw_constraint_list *constraints;
+ 	unsigned int sysclk, pclk;
+@@ -663,8 +665,18 @@ static int max9867_i2c_probe(struct i2c_client *i2c)
+ 	dev_info(&i2c->dev, "device revision: %x\n", reg);
+ 	ret = devm_snd_soc_register_component(&i2c->dev, &max9867_component,
+ 			max9867_dai, ARRAY_SIZE(max9867_dai));
+-	if (ret < 0)
++	if (ret < 0) {
+ 		dev_err(&i2c->dev, "Failed to register component: %d\n", ret);
++		return ret;
++	}
++
++	max9867->mclk = devm_clk_get(&i2c->dev, "mclk");
++	if (IS_ERR(max9867->mclk))
++		return PTR_ERR(max9867->mclk);
++	ret = clk_prepare_enable(max9867->mclk);
++	if (ret < 0)
++		dev_err(&i2c->dev, "Failed to enable MCLK: %d\n", ret);
++
+ 	return ret;
+ }
+ 
 
 -- 
 2.39.2
