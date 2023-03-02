@@ -2,105 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62E76A8B5F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E346A8B6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjCBWB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S229834AbjCBWCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjCBWBW (ORCPT
+        with ESMTP id S229821AbjCBWB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:01:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EEC5A6E1
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:00:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677794423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zpF+61RhbjBED9gh9OlDPVvD+1GeHmY73K8Lmm1HO1w=;
-        b=Z95kFgtdGfyhOqfPmAxmrn79PNMq0gCems5a1QG8QMEernV/EsnzJRgaMKiHIy+Qr1+aCb
-        f8h1l+d/MN8gxJg5bORvfeAfVzvwkV6L5v3f+rJ8PWKc6OyBGSiGKNoW151OIpivCH/MfK
-        iWeyQz7fY87neaaEJFhujIZ9Wjw2pyc=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-82-YRKvC3e9PgqHyB-PYBl1sw-1; Thu, 02 Mar 2023 17:00:21 -0500
-X-MC-Unique: YRKvC3e9PgqHyB-PYBl1sw-1
-Received: by mail-qt1-f199.google.com with SMTP id c5-20020ac85185000000b003bfae3b8051so452598qtn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:00:21 -0800 (PST)
+        Thu, 2 Mar 2023 17:01:58 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F0C5F6D9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:01:33 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id g3so525449wri.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:01:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677794489;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eoLlFIKo+0HC5z28LpcjtRJj56OW9StYTeb8Ufax9js=;
+        b=YpQcR7Fk9iV2T9fMbhThZBBI3/6zaasRJaHdsjGW9xKGPo4O7Ce+woLxIidUTkLdVW
+         YnlO0mK+ywg8Z/jbg7gaL8bVeFN3Z6RmaW9l4An+tbGZeCmkgbaS6mevIiDp9uGG6icN
+         3blWigkKz42aFytge/FoW+om2fZGXhxo7KRLSA6wUp4mg/Yl7VcToGqD5LhnIYqxD6bg
+         XqQL8r+ee3LjdXEWrulYuu5wyUNZMQiKgCKfWkSjVxEshFQVDceePd5egARutR758B1d
+         +xUUkUp16H4qrgvOk64HJpu+bNBpSgRm11PFhEOkXNTItmLGdZkKC01ySrfirtaa1PnS
+         Sw5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677794420;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zpF+61RhbjBED9gh9OlDPVvD+1GeHmY73K8Lmm1HO1w=;
-        b=zF1pESBVMbulSjvI7ob07YlktAWBnBzy1V09DC4bKbLCr35ANDGnf+eP1g8a7s10jX
-         3SvJWk/Rkm8H7W2nvTZAz22yU1xhiEEgs6aqkrfg/mtvhC0GgWZeWoIj46LyB1GKMs+/
-         MmKDkW547IRvvfxPyLXEC7Y3hKyAHMysWD6ek+BFjqUssLC3gpiwuWlq1skGytqUf03l
-         rr+4rr6T0rWSkPKsoMe1EioGTqzedc2GwzjbZeBG4Ep+0Y+gExJwcs7eQ39XbA4xv6xn
-         7LMtB0tixZzgSevgMrD87jeMlEWNHD+IVHnJaGOH7/eJ0NZuHs0Gj3aePxUEpeOGzXhd
-         eusg==
-X-Gm-Message-State: AO0yUKXArSk3PbxqBVx3gf+GZqCOiM029AEWDMrbAk4MuzCNpUrqhCNm
-        Gs3vK/hZu89BVEQ+1Re94hefHvJpFg1fjPJZWvv7x2F+BQCB7GhmHvAwPi1Dvsml2WV+9Sv19rO
-        46lmKxJQgKcnxQBlY/MG8i2J3
-X-Received: by 2002:ac8:580f:0:b0:3bf:daa8:cacc with SMTP id g15-20020ac8580f000000b003bfdaa8caccmr22832383qtg.3.1677794420495;
-        Thu, 02 Mar 2023 14:00:20 -0800 (PST)
-X-Google-Smtp-Source: AK7set+Dd+YGqo/SioYo2gFqWFziGqP77BVBRsHhvTjzMkmzleJIrVboVo66FWVtVnDVZtABxKAS4w==
-X-Received: by 2002:ac8:580f:0:b0:3bf:daa8:cacc with SMTP id g15-20020ac8580f000000b003bfdaa8caccmr22832326qtg.3.1677794420075;
-        Thu, 02 Mar 2023 14:00:20 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id a191-20020ae9e8c8000000b007423843d879sm427457qkg.93.2023.03.02.14.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 14:00:19 -0800 (PST)
-Date:   Thu, 2 Mar 2023 17:00:18 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: [PATCH v2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
-Message-ID: <ZAEccqZfZtw4XtSm@x1n>
-References: <e1e0ed70-76df-647f-30ac-0bb6ae8dc05c@collabora.com>
- <Y/4kjnom6MQqh9iA@x1n>
- <fb7ec372-2b16-14e1-a8cd-a90f4449661f@collabora.com>
- <640319be-ddb6-d74f-b731-eee5ceab3d01@collabora.com>
- <Y/9tA2EVglOJ0Ap1@x1n>
- <fc95fd2c-d661-926c-3bdb-8709cb49de3b@collabora.com>
- <8783f47e-76ea-cd24-e373-f2156884cd05@redhat.com>
- <ZACrOWKWdVYO/EAI@x1n>
- <982c1623-ac28-2743-d6a3-4faf42f72d47@redhat.com>
- <fad40511-3909-4362-5760-bcb57c94e534@collabora.com>
+        d=1e100.net; s=20210112; t=1677794489;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eoLlFIKo+0HC5z28LpcjtRJj56OW9StYTeb8Ufax9js=;
+        b=xT825yd8LCfKZSjS3dCLoxhNu18/CVwf7cOywKpB2CP+r/wIJAZROxNLCxsBjuWM59
+         1fvEPQLx4PO3gXeJrp8C6JJaCfBWsL4bks5Aq7pJiW3WP7xAxaeKBi4cN4mK4BVCKDuI
+         Q0adRwDgKMDlXXtX8fp3hR6yrqsC4mFH9VcUZU1Iq3KD/Z/uFtWvlp8sHyyNK+8Q0Our
+         tZ68eBkEB2IwmC5DhVaax6maED8tBNk/nQJOSA2wIblpRPKq0LJO/Tw4lizctSd9VFnG
+         SXcICRdr5CCzVgEXbLY0VbgwJRe+jNerbmZAdhRadKOwUhDiSao0bTRwwYmDx9Xw80HS
+         ngIw==
+X-Gm-Message-State: AO0yUKUoVM7l9+GkYR5Xvslo1jgcrKp3YsNiwvZgDszPBznx8A3vj/xL
+        vzETpd2fXKMM7ZE5Bw9FJEKdKsLTl/bk/G62G3qPNg==
+X-Google-Smtp-Source: AK7set8p2o8BjVZaPWOCquuwzj0H6Ba4FS/Y1kR8lKWg5AU835kdnwYfmn8lUlm0xHF4LlpzwHVVxhlKuA+A81J4M70=
+X-Received: by 2002:adf:f7cb:0:b0:2c7:a39:78ae with SMTP id
+ a11-20020adff7cb000000b002c70a3978aemr1975071wrq.13.1677794489531; Thu, 02
+ Mar 2023 14:01:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <fad40511-3909-4362-5760-bcb57c94e534@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230228130215.289081-1-nick.alcock@oracle.com> <20230228130215.289081-9-nick.alcock@oracle.com>
+In-Reply-To: <20230228130215.289081-9-nick.alcock@oracle.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 2 Mar 2023 15:01:18 -0700
+Message-ID: <CANLsYkxBR3Gi42Tsv-=QQ70BtvJCRcVPz6gn=9Q-zXzkt6Vz+A@mail.gmail.com>
+Subject: Re: [PATCH 08/20] remoteproc: remove MODULE_LICENSE in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-remoteproc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 08:14:05PM +0500, Muhammad Usama Anjum wrote:
-> I've heard about a use case where a file of size 10s of GBs can be mapped
-> to the memory and then accessed off and on. We need to handle this
-> correctly and efficiently.
+On Tue, 28 Feb 2023 at 06:03, Nick Alcock <nick.alcock@oracle.com> wrote:
+>
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: linux-remoteproc@vger.kernel.org
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 1cd4815a6dd19..de1ace44cb57b 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -2765,5 +2765,4 @@ static void __exit remoteproc_exit(void)
+>  }
+>  module_exit(remoteproc_exit);
+>
+> -MODULE_LICENSE("GPL v2");
 
-Note again that besides any slowness it'll stop working for generic FSs.
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-One way is we can consider enabling uffd-wp async for all archs, but I need
-to think more about it, and it will not be compatible with any other modes.
-
--- 
-Peter Xu
-
+>  MODULE_DESCRIPTION("Generic Remote Processor Framework");
+> --
+> 2.39.1.268.g9de2f9a303
+>
