@@ -2,217 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A61D6A7DC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19386A7DC9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjCBJgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:36:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S229914AbjCBJg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCBJgU (ORCPT
+        with ESMTP id S229862AbjCBJgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:36:20 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D76D38660
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:36:16 -0800 (PST)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PS5Wf09jhz16NxT;
-        Thu,  2 Mar 2023 17:33:34 +0800 (CST)
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 2 Mar 2023 17:36:13 +0800
-Message-ID: <1cd19d3f-18c4-92f9-257a-378cc18cfbc7@huawei.com>
-Date:   Thu, 2 Mar 2023 17:36:13 +0800
+        Thu, 2 Mar 2023 04:36:24 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4594A15C96;
+        Thu,  2 Mar 2023 01:36:20 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id j2so15834854wrh.9;
+        Thu, 02 Mar 2023 01:36:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677749779;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dwotgqIloMzONTq30JRRScBiGhbpTJ7y9dF3roP3jSw=;
+        b=W2kO4E6+jzJftiTzk82HJ8DCHC5py2yVoF/dmuN2riWSN4fvxpCVBTFWewt7+Kfcv8
+         xDn3O2zLDmvIjpoHzyvvHcw04cV04rqy7UXiWDk/nCBrYslKd6MqjLHiHlDNx2SkAmys
+         FBBss1RsF8AzaxOTpequgnWUv1GDJl/K6h0EcjrL9MrR8d8TJnFvxgawKUX/4ZkAgqIu
+         AdYcpSMmpr8CJDXUdBwyzi/NYIbxLiDdCxI5RPb64YNmNRrYaHCMv7RhjoC6BcT7pYIC
+         kZ5vQlBkXY6Nrh1SZp9kPk1PNZ9WAkyo7lSZ6VhdinOP3+6cwYoVbovZPFmK3P/m4yhZ
+         e2mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677749779;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dwotgqIloMzONTq30JRRScBiGhbpTJ7y9dF3roP3jSw=;
+        b=0lF3mCySWqWdjzsEKUnEOIv1sF80E5mBaUmpPNfrIalVKYMasbpjAUrBLD0MP2A8SN
+         ci7OohSYk2j5pt92nMT6XvZmmytXjoF4df9aBvCsfr2Tui894KBRD+kn9iCqKLnwrTPO
+         IGq/T9x3TjDFNivtuzEa52q3gcIQLLCjLz+z04hCWRq/F3VSEYCN64+dJEDeqjeCp5fP
+         fBQo+jGQvyqzGn30Uy1yA3nnGGDbchzKlz/V5FEVm3gFfm2naGIn94n5tMuqgKwxwKIr
+         VXd3BPC6IeN91le+cHGKjHK6CY1jrBPgZdnKKEUPxZFQeZ1Ca55bDSlS/a1CjkEW5Imo
+         0ncQ==
+X-Gm-Message-State: AO0yUKXHKjWZxCkJFyrlRpd1ViCzeH/m2DHZSAgRrde7fnK6q/TaZncs
+        v3ryNVEdfsnWiXvvD9uLYZ2cIlZ3mlXxgA==
+X-Google-Smtp-Source: AK7set+UFPK2DJPNQSgoPOs8icPPSpDHiZkmVqQ3dyDTUnQHUukDDBzTOjU6nyCbDZtW5WADxWPpkQ==
+X-Received: by 2002:adf:f4cb:0:b0:2bf:d940:29b6 with SMTP id h11-20020adff4cb000000b002bfd94029b6mr7770316wrp.54.1677749778575;
+        Thu, 02 Mar 2023 01:36:18 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id s2-20020a5d6a82000000b002c53cc7504csm15177622wru.78.2023.03.02.01.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 01:36:18 -0800 (PST)
+Message-ID: <b4fc6bd8-e300-0f40-4216-8b99589c21cc@gmail.com>
+Date:   Thu, 2 Mar 2023 10:36:14 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v3] sched/fair: sanitize vruntime of entity being placed
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-References: <20230209193107.1432770-1-rkagan@amazon.de>
- <CAKfTPtB7ZDyCh0MiNQtyimVhYJ6E3C+2bTptj9CX3+mepH8YAQ@mail.gmail.com>
- <Y/T36NvaCxSfS8Z/@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtCDxdVEmPQf=6g7n7Y+bkozXAJT1NG92wDc_quNaDiHMg@mail.gmail.com>
- <Y/xtDWYTKLutOqrM@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtAq3yBYBxpR=RO8zxrQduOymqkdAEhigjfCuGfsY1uHsg@mail.gmail.com>
-CC:     Roman Kagan <rkagan@amazon.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <CAKfTPtAq3yBYBxpR=RO8zxrQduOymqkdAEhigjfCuGfsY1uHsg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org
+References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v4 00/19] Enable GPU with DVFS support on MediaTek SoCs
+In-Reply-To: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Series looks good but from my understanding has a dependency on:
+[PATCH v4 00/12] Panfrost: Improve and add MediaTek SoCs support 
+(https://lore.kernel.org/linux-mediatek/20230228102610.707605-1-angelogioacchino.delregno@collabora.com/)
 
+Did I get that right?
 
-在 2023/2/27 22:37, Vincent Guittot 写道:
-> On Mon, 27 Feb 2023 at 09:43, Roman Kagan <rkagan@amazon.de> wrote:
->>
->> On Tue, Feb 21, 2023 at 06:26:11PM +0100, Vincent Guittot wrote:
->>> On Tue, 21 Feb 2023 at 17:57, Roman Kagan <rkagan@amazon.de> wrote:
->>>> What scares me, though, is that I've got a message from the test robot
->>>> that this commit drammatically affected hackbench results, see the quote
->>>> below.  I expected the commit not to affect any benchmarks.
->>>>
->>>> Any idea what could have caused this change?
->>>
->>> Hmm, It's most probably because se->exec_start is reset after a
->>> migration and the condition becomes true for newly migrated task
->>> whereas its vruntime should be after min_vruntime.
->>>
->>> We have missed this condition
->>
->> Makes sense to me.
->>
->> But what would then be the reliable way to detect a sched_entity which
->> has slept for long and risks overflowing in .vruntime comparison?
+Regards,
+Matthias
+
+On 01/03/2023 10:55, AngeloGioacchino Del Regno wrote:
+> Changes in v4:
+>   - Added a fix for MT8192 Vgpu voltage constraints
+>   - Changed constraints for MT8192 VSRAM-GPU to reflect the maximum
+>     achievable voltage as per the actual vsram-vgpu relation constraint
 > 
-> For now I don't have a better idea than adding the same check in
-> migrate_task_rq_fair()
-
-Hi, Vincent，
-I fixed this condition as you said, and the test results are as follows.
-
-testcase: hackbench -g 44 -f 20 --process --pipe -l 60000 -s 100
-version1: v6.2
-version2: v6.2 + commit 829c1651e9c4
-version3: v6.2 + commit 829c1651e9c4 + this patch
-
--------------------------------------------------
-	version1	version2	version3
-test1	81.0 		118.1 		82.1
-test2	82.1 		116.9 		80.3
-test3	83.2 		103.9 		83.3
-avg(s)	82.1 		113.0 		81.9
-
--------------------------------------------------
-After deal with the task migration case, the hackbench result has restored.
-
-The patch as follow, how does this look?
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ff4dbbae3b10..3a88d20fd29e 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4648,6 +4648,26 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
- #endif
- }
-
-+static inline u64 sched_sleeper_credit(struct sched_entity *se)
-+{
-+
-+       unsigned long thresh;
-+
-+       if (se_is_idle(se))
-+               thresh = sysctl_sched_min_granularity;
-+       else
-+               thresh = sysctl_sched_latency;
-+
-+       /*
-+        * Halve their sleep time's effect, to allow
-+        * for a gentler effect of sleepers:
-+        */
-+       if (sched_feat(GENTLE_FAIR_SLEEPERS))
-+               thresh >>= 1;
-+
-+       return thresh;
-+}
-+
- static void
- place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- {
-@@ -4664,23 +4684,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
-                vruntime += sched_vslice(cfs_rq, se);
-
-        /* sleeps up to a single latency don't count. */
--       if (!initial) {
--               unsigned long thresh;
--
--               if (se_is_idle(se))
--                       thresh = sysctl_sched_min_granularity;
--               else
--                       thresh = sysctl_sched_latency;
--
--               /*
--                * Halve their sleep time's effect, to allow
--                * for a gentler effect of sleepers:
--                */
--               if (sched_feat(GENTLE_FAIR_SLEEPERS))
--                       thresh >>= 1;
--
--               vruntime -= thresh;
--       }
-+       if (!initial)
-+               vruntime -= sched_sleeper_credit(se);
-
-        /*
-         * Pull vruntime of the entity being placed to the base level of
-@@ -4690,7 +4695,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
-         * inversed due to s64 overflow.
-         */
-        sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
--       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
-+       if (se->exec_start != 0 && (s64)sleep_time > 60LL * NSEC_PER_SEC)
-                se->vruntime = vruntime;
-        else
-                se->vruntime = max_vruntime(se->vruntime, vruntime);
-@@ -7634,8 +7639,12 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
-         */
-        if (READ_ONCE(p->__state) == TASK_WAKING) {
-                struct cfs_rq *cfs_rq = cfs_rq_of(se);
-+               u64 sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-
--               se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-+               if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
-+                       se->vruntime = -sched_sleeper_credit(se);
-+               else
-+                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-        }
-
-        if (!task_on_rq_migrating(p)) {
-
-
-
-Thanks.
-Zhang Qiao.
-
+> Changes in v3:
+>   - Changed MT8186 compatibles for new bindings
+>   - Added min/max voltage overrides for vgpu/vsram_gpu on
+>     mt8183-pumpkin and evb as suggested by Chen-Yu
+>   - Cosmetic fixes for "arm64: dts: mediatek: mt8192: Add GPU nodes"
 > 
->>
->> Thanks,
->> Roman.
->>
->>
->>
->> Amazon Development Center Germany GmbH
->> Krausenstr. 38
->> 10117 Berlin
->> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
->> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
->> Sitz: Berlin
->> Ust-ID: DE 289 237 879
->>
->>
->>
-> .
+> Changes in v2:
+>   - Changed MT8186 to use only two power domains for the GPU.
+> 
+> We finally have working GPU DVFS on MediaTek SoCs.
+> On Panfrost.
+> For real.
+> ...and the best part is that it's going upstream.
+> 
+> In order to get GPU DVFS working, it was necessary to satisfy a
+> specific constraint (which is different, depending on the SoC)
+> between two regulators: GPU VCORE and GPU SRAM.
+> This was done through adding the mtk-regulator-coupler driver,
+> which transparently manages the voltage relation between these
+> two vregs, hence completely eliminating the need to manage these
+> regulators in the Panfrost driver; this solves the long standing
+> issue with devfreq+opp tables not supporting managing voltages
+> for two regulators per opp entry out of the box, due to which
+> we never got GPU DVFS on those SoCs, often locking them out to
+> a low GPU frequency.
+> 
+> This changes. Right now!
+> 
+> Tested on MT8192, MT8195 Chromebooks.
+> 
+> This series depends on [1].
+> 
+> [1]: https://lore.kernel.org/lkml/20230228102704.708150-1-angelogioacchino.delregno@collabora.com/
+> 
+> Alyssa Rosenzweig (2):
+>    arm64: dts: mediatek: mt8192: Add GPU nodes
+>    arm64: dts: mediatek: mt8192-asurada: Enable GPU
+> 
+> AngeloGioacchino Del Regno (16):
+>    arm64: dts: mediatek: mt8183-kukui: Couple VGPU and VSRAM_GPU
+>      regulators
+>    arm64: dts: mediatek: mt8183-kukui: Override vgpu/vsram_gpu
+>      constraints
+>    arm64: dts: mediatek: mt8183: Remove second opp-microvolt entries from
+>      gpu table
+>    arm64: dts: mt8183-pumpkin: Couple VGPU and VSRAM_GPU regulators
+>    arm64: dts: mediatek: mt8183-evb: Couple VGPU and VSRAM_GPU regulators
+>    arm64: dts: mediatek: mt8183: Use mediatek,mt8183b-mali as GPU
+>      compatible
+>    arm64: dts: mediatek: mt8192: Add mfg_ref_sel clock to MFG0 domain
+>    arm64: dts: mediatek: mt8192-asurada: Assign sram supply to MFG1 pd
+>    arm64: dts: mediatek: mt8192-asurada: Fix voltage constraint for Vgpu
+>    arm64: dts: mediatek: mt8192-asurada: Couple VGPU and VSRAM_OTHER
+>      regulators
+>    arm64: dts: mediatek: mt8195: Add mfg_core_tmp clock to MFG1 domain
+>    arm64: dts: mt8195: Add panfrost node for Mali-G57 Valhall Natt GPU
+>    arm64: dts: mediatek: mt8195-cherry: Enable Mali-G57 GPU
+>    arm64: dts: mediatek: mt8186: Add GPU node
+>    arm64: dts: mediatek: mt8183-pumpkin: Override vgpu/vsram_gpu
+>      constraints
+>    arm64: dts: mediatek: mt8183-evb: Override vgpu/vsram_gpu constraints
+> 
+> Nícolas F. R. A. Prado (1):
+>    arm64: dts: mediatek: mt8192-asurada: Add MFG0 domain supply
+> 
+>   arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  17 ++-
+>   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  17 ++-
+>   .../boot/dts/mediatek/mt8183-pumpkin.dts      |  17 ++-
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  34 ++---
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  17 +++
+>   .../boot/dts/mediatek/mt8192-asurada.dtsi     |  24 +++-
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 116 +++++++++++++++++-
+>   .../boot/dts/mediatek/mt8195-cherry.dtsi      |   5 +
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  95 +++++++++++++-
+>   9 files changed, 315 insertions(+), 27 deletions(-)
 > 
