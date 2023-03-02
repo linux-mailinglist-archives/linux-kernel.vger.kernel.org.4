@@ -2,600 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37CE6A8B07
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD696A8B0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCBVLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 16:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S229637AbjCBVMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 16:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjCBVLl (ORCPT
+        with ESMTP id S229447AbjCBVMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 16:11:41 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AD056526
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 13:11:32 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so310955pjz.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 13:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mTSddxTNpAgHZ5lc7mqypY8tb8IcInCtWAIfix9BByA=;
-        b=CsWPp14tPvYYFTnl1aWTP1atXLEaAdLGolHJDAtt1atCsoKGDqPS3HdshJBkVVi1Av
-         3fOghTmBGjj/Mlb1EfzfUxPVAd3cfQ6/AUJOWM5NIh9CtXjtcdtphSrrvKSdk2VSoziF
-         mNfoDi7vqsoPM/58FjPn2bEyVklmL38kD2hTg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mTSddxTNpAgHZ5lc7mqypY8tb8IcInCtWAIfix9BByA=;
-        b=wFFFZPGEuij2srPuOFQ+7DMhhbBjlYnTT4S+T5jv2VC/UuvVZzTUK/fd//eep6kdfy
-         OQcgYkhALfiI26dvh0jyMj1UUDXNbeklk0eEgyisXL+hJB3Ml9u6S7Oj+G/dlEhTCNZR
-         jcgkmTKYI0X5jlXvoX3fgXmJ8pqom9a+YL9sbHxEvkYpuxxutHgszypa4xT9WN/Xc08x
-         yTXqcmleuYyAEJnLtUEaM2xNpJVdT28k3ucjWPROKdsXUt43AuIzCGV4j54XStQi+Osd
-         jn8r1tvgWbTHrWLKfVyN3pWUgBX4PTTgW99JZ7ZGAthOg21ltZSwnb3lRTZ6OpWIx+jR
-         X8eg==
-X-Gm-Message-State: AO0yUKXssYNXYTw8XG84XVseBp6xSwTsCk9D3egzRosXgdb2txRb3kYa
-        RkkyGHgHoQCcoV9+ZS98bYHsHQ==
-X-Google-Smtp-Source: AK7set+WiXcdeDFUj3oZxYcq8m4UHPVuvDJBKj57aUnsP8Pd3LwOAR6xHF26hIEB0DCnQJqNysslIQ==
-X-Received: by 2002:a17:903:40c2:b0:19c:f096:bbef with SMTP id t2-20020a17090340c200b0019cf096bbefmr9727595pld.49.1677791492085;
-        Thu, 02 Mar 2023 13:11:32 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:a558:99c0:81e9:a93c])
-        by smtp.gmail.com with ESMTPSA id a16-20020a170902b59000b00195f242d0a0sm114497pls.194.2023.03.02.13.11.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 13:11:31 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>, mka@chromium.org,
-        swboyd@chromium.org, Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] arm64: dts: qcom: sc7180: Delete mrbland
-Date:   Thu,  2 Mar 2023 13:11:07 -0800
-Message-Id: <20230302131031.v2.4.I79eee3b8e9eb3086ae02760e97a2e12ffa8eb4f0@changeid>
-X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-In-Reply-To: <20230302211108.2129598-1-dianders@chromium.org>
-References: <20230302211108.2129598-1-dianders@chromium.org>
+        Thu, 2 Mar 2023 16:12:49 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8BE57D11;
+        Thu,  2 Mar 2023 13:12:21 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322KRihi009507;
+        Thu, 2 Mar 2023 21:11:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=C41PJKGqWAoHhNIrgZK/pcgj3ZWg/UjpjLf903DeDMI=;
+ b=kNVaJKbNkaXZPgIV7S7uWzeZ77ALDtBopJRrGSPLXBf0NzWwE1+D1uXUTFGWA7A1kJLW
+ z0lcazOwntdMekHSJ78uJKYPSuxX0H4sSeqtsLZD8GCnoHSyMqrEgKCiFKptHRZIOivp
+ 6sCeX5FPLx6SL5LhuYThw3785P5lCrvTcFbFC3QoosMx0R58PnlVSlADA85b4nbj94Dz
+ E0tgN85tdmJTGYHzIUCxFPjBcBcOWp+k1bzcd/zVCLh9qJRUqg3FVUwGolrYbd3S7qnP
+ E0z5Cd5YkJR7MjlNPTYJPsnyq0ghK+Kv9X2k0/SObKM7DI4xy9ol8wx7tWBrNodx6ppy Ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p32uygxn8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 21:11:29 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 322KmKgQ040718;
+        Thu, 2 Mar 2023 21:11:28 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p32uygxmc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 21:11:28 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 322IOh2t016406;
+        Thu, 2 Mar 2023 21:11:26 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3nybdm6qvq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 21:11:26 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 322LBPmh7799472
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Mar 2023 21:11:25 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2CD965805F;
+        Thu,  2 Mar 2023 21:11:25 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 737F05805B;
+        Thu,  2 Mar 2023 21:11:15 +0000 (GMT)
+Received: from [9.65.199.252] (unknown [9.65.199.252])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Mar 2023 21:11:15 +0000 (GMT)
+Message-ID: <740d3ee7-e981-0812-f21e-296a7f350388@linux.ibm.com>
+Date:   Thu, 2 Mar 2023 23:11:13 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFC v8 52/56] ccp: Add support to decrypt the page
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>,
+        Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, hpa@zytor.com, ardb@kernel.org,
+        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        jmattson@google.com, luto@kernel.org, dave.hansen@linux.intel.com,
+        slp@redhat.com, pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        tobin@ibm.com, bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, Brijesh Singh <brijesh.singh@amd.com>,
+        Dov Murik <dovmurik@linux.ibm.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-53-michael.roth@amd.com>
+ <20230301232045.0000502e@intel.com>
+ <e63ba525-644d-1a8c-afe7-2ced4a8fbb93@linux.ibm.com>
+ <36734887-6474-b43e-51ae-34f37e6670a5@amd.com>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <36734887-6474-b43e-51ae-34f37e6670a5@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BH9z6nn2n8lzIHVH_MLBi3cktElaaSB7
+X-Proofpoint-ORIG-GUID: NKQS8NB6-1CcXMFAavhlGNyyCSi2rGOZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_13,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303020182
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mrbland board was never actually produced and there has been no
-activity around the board for quite some time. It seems highly
-unlikely to magically get revived. There should be nobody in need of
-these device trees, so let's delete them. If somehow the project
-resurrects itself then we can re-add support, perhaps just for -rev1+.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
 
-(no changes since v1)
+On 02/03/2023 16:33, Tom Lendacky wrote:
+> On 3/1/23 23:59, Dov Murik wrote:
+>> Hi Mike, Zhi,
+>>
+>> On 01/03/2023 23:20, Zhi Wang wrote:
+>>> On Mon, 20 Feb 2023 12:38:43 -0600
+>>> Michael Roth <michael.roth@amd.com> wrote:
+>>>
+>>>> From: Brijesh Singh <brijesh.singh@amd.com>
+>>>>
+>>>> Add support to decrypt guest encrypted memory. These API interfaces can
+>>>> be used for example to dump VMCBs on SNP guest exit.
+>>>>
+>>>
+>>> What kinds of check will be applied from firmware when VMM decrypts this
+>>> page? I suppose there has to be kinda mechanism to prevent VMM to
+>>> decrypt
+>>> any page in the guest. It would be nice to have some introduction about
+>>> it in the comments.
+>>>
+>>
+>> The SNP ABI spec says (section 8.27.2 SNP_DBG_DECRYPT):
+>>
+>>    The firmware checks that the guest's policy allows debugging. If not,
+>>    the firmware returns POLICY_FAILURE.
+>>
+>> and in the Guest Policy (section 4.3):
+>>
+>>    Bit 19 - DEBUG
+>>    0: Debugging is disallowed.
+>>    1: Debugging is allowed.
+>>
+>> In the kernel, that firmware error code is defined as
+>> SEV_RET_POLICY_FAILURE.
+>>
+>>
+>>>> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+>>>> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+>>>> [mdr: minor commit fixups]
+>>>> Signed-off-by: Michael Roth <michael.roth@amd.com>
+>>>> ---
+>>>>   drivers/crypto/ccp/sev-dev.c | 32 ++++++++++++++++++++++++++++++++
+>>>>   include/linux/psp-sev.h      | 22 ++++++++++++++++++++--
+>>>>   2 files changed, 52 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/crypto/ccp/sev-dev.c
+>>>> b/drivers/crypto/ccp/sev-dev.c
+>>>> index e65563bc8298..bf5167b2acfc 100644
+>>>> --- a/drivers/crypto/ccp/sev-dev.c
+>>>> +++ b/drivers/crypto/ccp/sev-dev.c
+>>>> @@ -2017,6 +2017,38 @@ int sev_guest_df_flush(int *error)
+>>>>   }
+>>>>   EXPORT_SYMBOL_GPL(sev_guest_df_flush);
+>>>>   +int snp_guest_dbg_decrypt_page(u64 gctx_pfn, u64 src_pfn, u64
+>>>> dst_pfn, int *error)
+>>>> +{
+>>>> +    struct sev_data_snp_dbg data = {0};
+>>>> +    struct sev_device *sev;
+>>>> +    int ret;
+>>>> +
+>>>> +    if (!psp_master || !psp_master->sev_data)
+>>>> +        return -ENODEV;
+>>>> +
+>>>> +    sev = psp_master->sev_data;
+>>>> +
+>>>> +    if (!sev->snp_initialized)
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    data.gctx_paddr = sme_me_mask | (gctx_pfn << PAGE_SHIFT);
+>>>> +    data.src_addr = sme_me_mask | (src_pfn << PAGE_SHIFT);
+>>>> +    data.dst_addr = sme_me_mask | (dst_pfn << PAGE_SHIFT);
+>>
+>> I guess this works, but I wonder why we need to turn on sme_me_mask on
+>> teh dst_addr.  I thought that the firmware decrypts the guest page
+>> (src_addr) to a plaintext page.  Couldn't find this requirement in the
+>> SNP spec.
+> 
+> This sme_me_mask tells the firmware how to access the host memory
+> (similar to how DMA uses sme_me_mask when supplying addresses to devices
+> under SME). This needs to match the pagetable mapping being used by the
+> host, otherwise the contents will appears as ciphertext to the host if
+> they are not in sync. Since the default pagetable mapping is encrypted,
+> the sme_me_mask bit must be provided on the destination address. So it
+> is not a spec requirement, but an SME implementation requirement.
+> 
 
- arch/arm64/boot/dts/qcom/Makefile             |   4 -
- .../qcom/sc7180-trogdor-mrbland-rev0-auo.dts  |  22 --
- .../qcom/sc7180-trogdor-mrbland-rev0-boe.dts  |  22 --
- .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  36 --
- .../qcom/sc7180-trogdor-mrbland-rev1-auo.dts  |  22 --
- .../qcom/sc7180-trogdor-mrbland-rev1-boe.dts  |  24 --
- .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi | 320 ------------------
- 7 files changed, 450 deletions(-)
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+Ah, OK, that's clear now. Thanks Tom.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index e4190a648335..a0ad0a8a62d8 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -98,10 +98,6 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-r9.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r4.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r9.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-auo.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-boe.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-auo.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-boe.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-parade.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-ti.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-parade.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
-deleted file mode 100644
-index 2767817fb053..000000000000
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
-+++ /dev/null
-@@ -1,22 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
--/*
-- * Google Mrbland board device tree source
-- *
-- * Copyright 2021 Google LLC.
-- *
-- * SKU: 0x0 => 0
-- *  - bits 7..4: Panel ID: 0x0 (AUO)
-- */
--
--/dts-v1/;
--
--#include "sc7180-trogdor-mrbland-rev0.dtsi"
--
--/ {
--	model = "Google Mrbland rev0 AUO panel board";
--	compatible = "google,mrbland-rev0-sku0", "qcom,sc7180";
--};
--
--&panel {
--	compatible = "auo,b101uan08.3";
--};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
-deleted file mode 100644
-index 711485574a03..000000000000
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
-+++ /dev/null
-@@ -1,22 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
--/*
-- * Google Mrbland board device tree source
-- *
-- * Copyright 2021 Google LLC.
-- *
-- * SKU: 0x10 => 16
-- *  - bits 7..4: Panel ID: 0x1 (BOE)
-- */
--
--/dts-v1/;
--
--#include "sc7180-trogdor-mrbland-rev0.dtsi"
--
--/ {
--	model = "Google Mrbland rev0 BOE panel board";
--	compatible = "google,mrbland-rev0-sku16", "qcom,sc7180";
--};
--
--&panel {
--	compatible = "boe,tv101wum-n53";
--};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
-deleted file mode 100644
-index f4c1f3813664..000000000000
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
-+++ /dev/null
-@@ -1,36 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
--/*
-- * Google Mrbland board device tree source
-- *
-- * Copyright 2021 Google LLC.
-- *
-- */
--
--/dts-v1/;
--
--#include "sc7180-trogdor-mrbland.dtsi"
--
--&avdd_lcd {
--	gpio = <&tlmm 80 GPIO_ACTIVE_HIGH>;
--};
--
--&panel {
--	enable-gpios = <&tlmm 76 GPIO_ACTIVE_HIGH>;
--};
--
--&v1p8_mipi {
--	gpio = <&tlmm 81 GPIO_ACTIVE_HIGH>;
--};
--
--/* PINCTRL - modifications to sc7180-trogdor-mrbland.dtsi */
--&avdd_lcd_en {
--	pins = "gpio80";
--};
--
--&mipi_1800_en {
--	pins = "gpio81";
--};
--
--&vdd_reset_1800 {
--	pins = "gpio76";
--};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
-deleted file mode 100644
-index 275313ef7554..000000000000
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
-+++ /dev/null
-@@ -1,22 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
--/*
-- * Google Mrbland board device tree source
-- *
-- * Copyright 2021 Google LLC.
-- *
-- * SKU: 0x600 => 1536
-- *  - bits 11..8: Panel ID: 0x6 (AUO)
-- */
--
--/dts-v1/;
--
--#include "sc7180-trogdor-mrbland.dtsi"
--
--/ {
--	model = "Google Mrbland rev1+ AUO panel board";
--	compatible = "google,mrbland-sku1536", "qcom,sc7180";
--};
--
--&panel {
--	compatible = "auo,b101uan08.3";
--};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
-deleted file mode 100644
-index 87c6b6c30b5e..000000000000
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
-+++ /dev/null
-@@ -1,24 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
--/*
-- * Google Mrbland board device tree source
-- *
-- * Copyright 2021 Google LLC.
-- *
-- * SKU: 0x300 => 768
-- *  - bits 11..8: Panel ID: 0x3 (BOE)
-- */
--
--/dts-v1/;
--
--#include "sc7180-trogdor-mrbland.dtsi"
--
--/ {
--	model = "Google Mrbland (rev1 - 2) BOE panel board";
--	/* Uses ID 768 on rev1 and 1024 on rev2+ */
--	compatible = "google,mrbland-sku1024", "google,mrbland-sku768",
--		"qcom,sc7180";
--};
--
--&panel {
--	compatible = "boe,tv101wum-n53";
--};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
-deleted file mode 100644
-index ed12ee35f06b..000000000000
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
-+++ /dev/null
-@@ -1,320 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
--/*
-- * Google Mrbland board device tree source
-- *
-- * Copyright 2021 Google LLC.
-- */
--
--/dts-v1/;
--
--#include "sc7180-trogdor.dtsi"
--
--/* This board only has 1 USB Type-C port. */
--/delete-node/ &usb_c1;
--
--/ {
--	avdd_lcd: avdd-lcd-regulator {
--		compatible = "regulator-fixed";
--		regulator-name = "avdd_lcd";
--
--		gpio = <&tlmm 88 GPIO_ACTIVE_HIGH>;
--		enable-active-high;
--		pinctrl-names = "default";
--		pinctrl-0 = <&avdd_lcd_en>;
--
--		vin-supply = <&pp5000_a>;
--	};
--
--	avee_lcd: avee-lcd-regulator {
--		compatible = "regulator-fixed";
--		regulator-name = "avee_lcd";
--
--		gpio = <&tlmm 21 GPIO_ACTIVE_HIGH>;
--		enable-active-high;
--		pinctrl-names = "default";
--		pinctrl-0 = <&avee_lcd_en>;
--
--		vin-supply = <&pp5000_a>;
--	};
--
--	v1p8_mipi: v1p8-mipi-regulator {
--		compatible = "regulator-fixed";
--		regulator-name = "v1p8_mipi";
--
--		gpio = <&tlmm 86 GPIO_ACTIVE_HIGH>;
--		enable-active-high;
--		pinctrl-names = "default";
--		pinctrl-0 = <&mipi_1800_en>;
--
--		vin-supply = <&pp3300_a>;
--	};
--};
--
--&backlight {
--	pwms = <&cros_ec_pwm 0>;
--};
--
--&camcc {
--	status = "okay";
--};
--
--&cros_ec {
--	keyboard-controller {
--		compatible = "google,cros-ec-keyb-switches";
--	};
--};
--
--&dsi0 {
--
--	panel: panel@0 {
--		/* Compatible will be filled in per-board */
--		reg = <0>;
--		enable-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&vdd_reset_1800>;
--		avdd-supply = <&avdd_lcd>;
--		avee-supply = <&avee_lcd>;
--		pp1800-supply = <&v1p8_mipi>;
--		pp3300-supply = <&pp3300_dx_edp>;
--		backlight = <&backlight>;
--		rotation = <270>;
--
--		ports {
--			#address-cells = <1>;
--			#size-cells = <0>;
--			port@0 {
--				reg = <0>;
--				panel_in: endpoint {
--					remote-endpoint = <&dsi0_out>;
--				};
--			};
--		};
--	};
--
--	ports {
--		port@1 {
--			endpoint {
--				remote-endpoint = <&panel_in>;
--				data-lanes = <0 1 2 3>;
--			};
--		};
--	};
--};
--
--&gpio_keys {
--	status = "okay";
--};
--
--&i2c4 {
--	status = "okay";
--	clock-frequency = <400000>;
--
--	ap_ts: touchscreen@5d {
--		compatible = "goodix,gt7375p";
--		reg = <0x5d>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
--
--		interrupt-parent = <&tlmm>;
--		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
--
--		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
--
--		vdd-supply = <&pp3300_ts>;
--	};
--};
--
--&pp1800_uf_cam {
--	status = "okay";
--};
--
--&pp1800_wf_cam {
--	status = "okay";
--};
--
--&pp2800_uf_cam {
--	status = "okay";
--};
--
--&pp2800_wf_cam {
--	status = "okay";
--};
--
--&wifi {
--	qcom,ath10k-calibration-variant = "GO_MRBLAND";
--};
--
--/*
-- * No eDP on this board but it's logically the same signal so just give it
-- * a new name and assign the proper GPIO.
-- */
--pp3300_disp_on: &pp3300_dx_edp {
--	gpio = <&tlmm 85 GPIO_ACTIVE_HIGH>;
--};
--
--/* PINCTRL - modifications to sc7180-trogdor.dtsi */
--
--/*
-- * No eDP on this board but it's logically the same signal so just give it
-- * a new name and assign the proper GPIO.
-- */
--
--tp_en: &en_pp3300_dx_edp {
--	pins = "gpio85";
--};
--
--/* PINCTRL - board-specific pinctrl */
--
--&tlmm {
--	gpio-line-names = "HUB_RST_L",
--			  "AP_RAM_ID0",
--			  "AP_SKU_ID2",
--			  "AP_RAM_ID1",
--			  "",
--			  "AP_RAM_ID2",
--			  "UF_CAM_EN",
--			  "WF_CAM_EN",
--			  "TS_RESET_L",
--			  "TS_INT_L",
--			  "",
--			  "",
--			  "AP_EDP_BKLTEN",
--			  "UF_CAM_MCLK",
--			  "WF_CAM_CLK",
--			  "",
--			  "",
--			  "UF_CAM_SDA",
--			  "UF_CAM_SCL",
--			  "WF_CAM_SDA",
--			  "WF_CAM_SCL",
--			  "AVEE_LCD_EN",
--			  "",
--			  "AMP_EN",
--			  "",
--			  "",
--			  "",
--			  "",
--			  "HP_IRQ",
--			  "WF_CAM_RST_L",
--			  "UF_CAM_RST_L",
--			  "AP_BRD_ID2",
--			  "",
--			  "AP_BRD_ID0",
--			  "AP_H1_SPI_MISO",
--			  "AP_H1_SPI_MOSI",
--			  "AP_H1_SPI_CLK",
--			  "AP_H1_SPI_CS_L",
--			  "BT_UART_CTS",
--			  "BT_UART_RTS",
--			  "BT_UART_TXD",
--			  "BT_UART_RXD",
--			  "H1_AP_INT_ODL",
--			  "",
--			  "UART_AP_TX_DBG_RX",
--			  "UART_DBG_TX_AP_RX",
--			  "HP_I2C_SDA",
--			  "HP_I2C_SCL",
--			  "FORCED_USB_BOOT",
--			  "AMP_BCLK",
--			  "AMP_LRCLK",
--			  "AMP_DIN",
--			  "PEN_DET_ODL",
--			  "HP_BCLK",
--			  "HP_LRCLK",
--			  "HP_DOUT",
--			  "HP_DIN",
--			  "HP_MCLK",
--			  "AP_SKU_ID0",
--			  "AP_EC_SPI_MISO",
--			  "AP_EC_SPI_MOSI",
--			  "AP_EC_SPI_CLK",
--			  "AP_EC_SPI_CS_L",
--			  "AP_SPI_CLK",
--			  "AP_SPI_MOSI",
--			  "AP_SPI_MISO",
--			  /*
--			   * AP_FLASH_WP_L is crossystem ABI. Schematics
--			   * call it BIOS_FLASH_WP_L.
--			   */
--			  "AP_FLASH_WP_L",
--			  "",
--			  "AP_SPI_CS0_L",
--			  "",
--			  "",
--			  "",
--			  "",
--			  "WLAN_SW_CTRL",
--			  "",
--			  "REPORT_E",
--			  "",
--			  "ID0",
--			  "",
--			  "ID1",
--			  "",
--			  "",
--			  "",
--			  "CODEC_PWR_EN",
--			  "HUB_EN",
--			  "TP_EN",
--			  "MIPI_1.8V_EN",
--			  "VDD_RESET_1.8V",
--			  "AVDD_LCD_EN",
--			  "",
--			  "AP_SKU_ID1",
--			  "AP_RST_REQ",
--			  "",
--			  "AP_BRD_ID1",
--			  "AP_EC_INT_L",
--			  "SDM_GRFC_3",
--			  "",
--			  "",
--			  "BOOT_CONFIG_4",
--			  "BOOT_CONFIG_2",
--			  "",
--			  "",
--			  "",
--			  "",
--			  "",
--			  "",
--			  "",
--			  "BOOT_CONFIG_3",
--			  "WCI2_LTE_COEX_TXD",
--			  "WCI2_LTE_COEX_RXD",
--			  "",
--			  "",
--			  "",
--			  "",
--			  "FORCED_USB_BOOT_POL",
--			  "AP_TS_PEN_I2C_SDA",
--			  "AP_TS_PEN_I2C_SCL",
--			  "DP_HOT_PLUG_DET",
--			  "EC_IN_RW_ODL";
--
--	avdd_lcd_en: avdd-lcd-en-state {
--		pins = "gpio88";
--		function = "gpio";
--		drive-strength = <2>;
--		bias-disable;
--	};
--
--	avee_lcd_en: avee-lcd-en-state {
--		pins = "gpio21";
--		function = "gpio";
--		drive-strength = <2>;
--		bias-disable;
--	};
--
--	mipi_1800_en: mipi-1800-en-state {
--		pins = "gpio86";
--		function = "gpio";
--		drive-strength = <2>;
--		bias-disable;
--	};
--
--	vdd_reset_1800: vdd-reset-1800-state {
--		pins = "gpio87";
--		function = "gpio";
--		drive-strength = <2>;
--		bias-disable;
--	};
--};
--- 
-2.40.0.rc0.216.gc4246ad0f0-goog
-
+-Dov
