@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013416A8344
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C316A8348
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCBNId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 08:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S229897AbjCBNKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCBNIb (ORCPT
+        with ESMTP id S229688AbjCBNKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 08:08:31 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC1C12BEA;
-        Thu,  2 Mar 2023 05:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677762510; x=1709298510;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WtYIpDBBiL9YlLuc0kTeb0RvJ7uZrN2G35B30YewrS8=;
-  b=P7Gon2cZtnTxY8zQc4/Sw/+PJ2o4zbCphbtzYyZqNIV7EgKj8Rlnh6C/
-   2lnML8he1bntnkvf6rFjNAgI/8bUZaQ6qxteGYvIYG0/+LvnGZfLX41h5
-   CYXtsxW+DrdToUEX8phB6oOYp29n6yjKPAPGP8HsJN9lAQYy1HTTZMI95
-   55JBLHowGp7tFp48SwJRr8x8uj40DSRozOU+AG119yjLXuaAN1Klock5X
-   wC0vuy/9Qk1Zi8WfeGDWnlqaXQX600n5ALxIHb4S18zqPwWbRL0KGd0oD
-   2uZkINUVPZHERq6XOtrnhXjcP0/iUc60gjXWAGTyG7AwcmqPbw3YhMbHG
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="318511966"
-X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
-   d="scan'208";a="318511966"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 05:08:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="674945868"
-X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
-   d="scan'208";a="674945868"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.214.218]) ([10.254.214.218])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 05:08:17 -0800
-Message-ID: <7807c798-3e6e-0447-9a73-233b1d91060b@linux.intel.com>
-Date:   Thu, 2 Mar 2023 21:08:15 +0800
+        Thu, 2 Mar 2023 08:10:37 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5341A15C96
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:10:35 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id r18so16491871wrx.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677762634;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LTMb2uiAKQy8zkbJrBkzpMbRkO+dwt0YiEEiYQBT8oM=;
+        b=RQh0pRw3GZQXbuvLXDlP/waEUyZWHkYkc0rlKmxYZpkshO94bQ7StbBQ1MtI3m2kDU
+         KzH1v7ZpIiP6QCzqx4vsx2CV8F9WfIPKzeFrYTe7sCiXIVlHgAuLatKo0cjH+Oy3g927
+         PmrQkT9MQv12j2neob8toCo4kW/kb+xG/bQAbNNIDLAlN2jCDZ3Ag3ILQYl8ynlogXXO
+         kjLhWz4Z00knAmyth4KuQYshKND2D1o4hOaJw4KnALM7ucc1PjbfA0GKF9JRljTSuZZe
+         UrV4v7degPV2NP3gxGd/BRB3oGSoGZqYEn4i7kFx/cPiVwbvyuDCaOtZLtXJcM3BY3Eq
+         po9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677762634;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LTMb2uiAKQy8zkbJrBkzpMbRkO+dwt0YiEEiYQBT8oM=;
+        b=KogAy3G032L8Nrb1eBXx2MFEFUW7FFbgBq1C69eGrn1O2uFbAZKVoQHMY2llLP+73d
+         UYD+/MK6HKkKjzguACyVpeKhUCTxbkNLrgNZW1AYt9zlNtM+PLQORu4gjye/0fLgJeOF
+         gpq2cWWm5KouyM6DDRqJBUUP8OeanfZ52JDGSyqeivgsycCQB5cdV+XY0taE1ihHv8nD
+         4foSd+Ht9wa0eWfBn2bkxEdUtEv+c57rKGtx0OndwTs35OUl8S/njsGpDdL+f591qa3y
+         YK7z/eW/Faa/pTXCJGoes4/ptn1zPyPgCyyF0CD68UGPmj4huEsLwdumYA9NOlTKXgFh
+         hIYQ==
+X-Gm-Message-State: AO0yUKXcyOXtOd0Nna2cSv/fB0+AMRQ/l0gwrwgONtFtdfeYhf2Ej1KQ
+        /4LCDcGfBVjbfoRELAdsJonRLcYFEECIGg5z
+X-Google-Smtp-Source: AK7set/UY2mu+bVvyesOlReohTFVfVRqwfeXA8qbg0d09zP+0hh61PBsHLM+AjPQwB0/GuENcMxemw==
+X-Received: by 2002:a5d:4dd2:0:b0:2cb:c66d:6ac1 with SMTP id f18-20020a5d4dd2000000b002cbc66d6ac1mr7025325wru.3.1677762633759;
+        Thu, 02 Mar 2023 05:10:33 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id t14-20020adfe44e000000b002c5503a8d21sm15622256wrm.70.2023.03.02.05.10.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 05:10:33 -0800 (PST)
+Message-ID: <ee0a09bd-831b-9ac4-7b9c-d584497cd7a0@linaro.org>
+Date:   Thu, 2 Mar 2023 13:10:30 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v4 6/6] iommu: Remove ioasid infrastructure
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] ASoC: qcom: q6prm: fix incorrect clk_root passed to ADSP
 Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, bp@alien8.de,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
- <20230301235646.2692846-7-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230301235646.2692846-7-jacob.jun.pan@linux.intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20230302122908.221398-1-krzysztof.kozlowski@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230302122908.221398-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/2 7:56, Jacob Pan wrote:
-> From: Jason Gunthorpe<jgg@nvidia.com>
-> 
-> This has no use anymore, delete it all.
-> 
-> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
-> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-Best regards,
-baolu
+On 02/03/2023 12:29, Krzysztof Kozlowski wrote:
+> The second to last argument is clk_root (root of the clock), however the
+> code called q6prm_request_lpass_clock() with clk_attr instead
+> (copy-paste error).  This effectively was passing value of 1 as root
+> clock which worked on some of the SoCs (e.g. SM8450) but fails on
+> others, depending on the ADSP.  For example on SM8550 this "1" as root
+> clock is not accepted and results in errors coming from ADSP.
+> 
+> Fixes: 2f20640491ed ("ASoC: qdsp6: qdsp6: q6prm: handle clk disable correctly")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Nice Find, Tested on sc8280xp
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Tested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+> ---
+>   sound/soc/qcom/qdsp6/q6prm.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/sound/soc/qcom/qdsp6/q6prm.c b/sound/soc/qcom/qdsp6/q6prm.c
+> index 8aa1a213bfb7..c1dc5bae715a 100644
+> --- a/sound/soc/qcom/qdsp6/q6prm.c
+> +++ b/sound/soc/qcom/qdsp6/q6prm.c
+> @@ -183,9 +183,9 @@ int q6prm_set_lpass_clock(struct device *dev, int clk_id, int clk_attr, int clk_
+>   			  unsigned int freq)
+>   {
+>   	if (freq)
+> -		return q6prm_request_lpass_clock(dev, clk_id, clk_attr, clk_attr, freq);
+> +		return q6prm_request_lpass_clock(dev, clk_id, clk_attr, clk_root, freq);
+>   
+> -	return q6prm_release_lpass_clock(dev, clk_id, clk_attr, clk_attr, freq);
+> +	return q6prm_release_lpass_clock(dev, clk_id, clk_attr, clk_root, freq);
+>   }
+>   EXPORT_SYMBOL_GPL(q6prm_set_lpass_clock);
+>   
