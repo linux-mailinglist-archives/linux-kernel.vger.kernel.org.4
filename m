@@ -2,164 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F966A88C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8AB6A88CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjCBS6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 13:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
+        id S229621AbjCBTBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:01:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjCBS6c (ORCPT
+        with ESMTP id S229623AbjCBTBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 13:58:32 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892FD13DF7;
-        Thu,  2 Mar 2023 10:58:31 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so372pjz.1;
-        Thu, 02 Mar 2023 10:58:31 -0800 (PST)
+        Thu, 2 Mar 2023 14:01:04 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E40C241DA
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:01:01 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id cp12so84999pfb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:01:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=VrTnLYcBM5sdj/5jPc/8vHx06BJ4wuh8IZTgTZbTpM4=;
-        b=f4oD1kCTLGwpj+45qsJH2wR5kcuUwNCgFI83sgqApq+KcuxSkpEFTZMvw4L9N7nrEY
-         V1a66afSo/Ed1CIXbt5D3SKFpHgaQfmKSwVlGazXMBxumYAzMspN+frw8ABUyvj36dr+
-         aI9eUd0klLaSKKz0G+W8JMhkEBUtF0DWiGDskrk/cICKUbCr3KsJG47GVmCEgan8q5js
-         ZvZ3hDMI07g8GZjl+3bfsQaGRN8ARa795eOI0dLdfHyK/JrcOrW4dCpRdw2g9nKHnL/q
-         +mDFdI1fw1T67ghJbdShjcRw5WC1YHybndr71JS06XQyQNPDs7k7XI2g4Ty2ypxiqsQj
-         Uk1w==
+        d=paul-moore.com; s=google; t=1677783660;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sbKqTB1BWmST+UKS3o/pcnOIniBYA6/WBLEtc9haQn4=;
+        b=f6CB0s+KV2OW0hRLDgrai9rYXWAdgEzOd1HKjzgncsSTbWytg8B0shiJ79cVHIi1vO
+         NfrTj+lMOtmVES/SN5tUizQ34VKdLqix9CWELeH+KrTcEymXdzPIEexDiBaqMU7ww0GK
+         sGzZ7mXcF5H5dCoMBQm44MSvQYc8W4Wy/Uzn9pe7oVpFrQ270ldOFxuD0OsCggJ0HBqc
+         bMLhtiOMAAtD+EpZC0R6O8ttn+ahurnj9OFXO0sVBcvxvdJHFYhROyspmOHRH+P1DqMB
+         PN1J3UoPaWpHoy6A49mEBkZV5JgSIJF6mSkQjZ9rqaOJmSJo8zGtxSMzri02uyU/YtOE
+         ipwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VrTnLYcBM5sdj/5jPc/8vHx06BJ4wuh8IZTgTZbTpM4=;
-        b=v3SSE0VTIyLNmhjPn0NmqtvX18Gv2+RSkT8tUliCKL6wpQ9TAaRoR4Ssf0AGvj2VSh
-         BnXPX0RQPAyn5FJvAZDHngkYvQ+3T+JMYsrseAkA0x2DgvHkeaTAMjDFI10Et7+sMr5G
-         IfTmUsWzT5HO6rf8b+3i4gvFsmcStBokOgJLenNtr6xTg2rUg4Hgjd8rN/3aViNUj4Cl
-         4o0rno+7NQnzttstaK1mLzz1qLfjqnziE++H/1j8K0t5BSsOxesNRnDkTyaTcd9nkDfL
-         Bve/co+ZsIw/WMPwljjBPH/+i1nEfcNdzsi1sDTjjJo1UkUApzMcLP+juzJ+uy322FFM
-         0DZg==
-X-Gm-Message-State: AO0yUKUOXU2fei2MOrntg81+d3+lCj+rWu2CWYClMZSGYVprWl6ZX6Qy
-        Zr5ooXBdsI3iPqZAdBlvyLc=
-X-Google-Smtp-Source: AK7set+BPAfEO94Eo0SfyhLJQVlqmnpLTONljPq0+jMirkpZVrDEjvhEr5rnm92FbaTbdkU1+M+4+A==
-X-Received: by 2002:a17:902:d2c5:b0:19a:a9d8:e48a with SMTP id n5-20020a170902d2c500b0019aa9d8e48amr13650135plc.22.1677783510785;
-        Thu, 02 Mar 2023 10:58:30 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:7baa])
-        by smtp.gmail.com with ESMTPSA id kn14-20020a170903078e00b0019460ac7c6asm24980plb.283.2023.03.02.10.58.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 10:58:29 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 2 Mar 2023 08:58:28 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, Dave Marchevsky <davemarchevsky@meta.com>,
-        David Vernet <void@manifault.com>,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: [PATCH bpf-next] bpf: Make bpf_get_current_[ancestor_]cgroup_id()
- available for all program types
-Message-ID: <ZADx1NQBOGeImnrC@slm.duckdns.org>
+        d=1e100.net; s=20210112; t=1677783660;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sbKqTB1BWmST+UKS3o/pcnOIniBYA6/WBLEtc9haQn4=;
+        b=zsSaPXHmFspAs9eK627s0EZOeNu/PjqiynOxpn3nwipl+YY1ori0p1PFt+1iCpjBuB
+         YclUNQvjs9BttkLES8nUiPRY5lJlp2+r9WU+gcxicqRQkRrh67D98egeBZQUrrCryaWN
+         P/jlQAIaOwMxYMpmcg32n/Me8vGJiCgk9+FCkuWzRQ1u5NFJzuAbPkk6juCnU2d+kJ6M
+         kLduczcD4FkgPpuApz0glyYKBabPGYwaqCSfecGTHhpoS9LEyLzY3QocrSBnK+mHTCy5
+         g8Xn8avVSZsgq4PnQuwPL50Q6QUegh0n/xnLMT+k+ElXm2M6ErTlMuQBfOGgL2N9kf82
+         hEYg==
+X-Gm-Message-State: AO0yUKVlKCqb4Mb7854HsOxwL1lRQyl7QkDMY4d9H1KlvSdoUa3s8L5o
+        YKm/yYRGhI3or5JRnOV0LXPPXpgMoKXCnWNGIYwc
+X-Google-Smtp-Source: AK7set/JqphcjYj9seuvS6xKNvURMu+S3V/LEScKzhxHP7SqFb0AhXhOojS1vVfFsCMHm+0xdSDtgJ0BLFb+6ahFIIw=
+X-Received: by 2002:a63:2953:0:b0:503:91ff:8dd8 with SMTP id
+ bu19-20020a632953000000b0050391ff8dd8mr2858904pgb.4.1677783659129; Thu, 02
+ Mar 2023 11:00:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com> <1675119451-23180-2-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1675119451-23180-2-git-send-email-wufan@linux.microsoft.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 2 Mar 2023 14:00:48 -0500
+Message-ID: <CAHC9VhTtXC=HMUF8uak-29E__xLN2Kh_znn0xdRbm-GkgqBNiA@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 01/16] security: add ipe lsm
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These helpers are safe to call from any context and there's no reason to
-restrict access to them. Remove them from bpf_trace and filter lists and add
-to bpf_base_func_proto() under perfmon_capable().
+On Mon, Jan 30, 2023 at 5:58=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
+>
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
+>
+> Integrity Policy Enforcement (IPE) is an LSM that provides an
+> complimentary approach to Mandatory Access Control than existing LSMs
+> today.
+>
+> Existing LSMs have centered around the concept of access to a resource
+> should be controlled by the current user's credentials. IPE's approach,
+> is that access to a resource should be controlled by the system's trust
+> of a current resource.
+>
+> The basis of this approach is defining a global policy to specify which
+> resource can be trusted.
+>
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 
-Please note that while test_verifier results remain the same, I'm unsure
-whether subjecting their availability to perfmon_capable() is the right
-decision.
+...
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
----
- kernel/bpf/cgroup.c      | 4 ----
- kernel/bpf/helpers.c     | 6 ++++++
- kernel/trace/bpf_trace.c | 4 ----
- net/core/filter.c        | 6 ------
- 4 files changed, 6 insertions(+), 14 deletions(-)
+> ---
+>  MAINTAINERS           |  5 +++++
+>  security/Kconfig      | 11 ++++++-----
+>  security/Makefile     |  1 +
+>  security/ipe/Kconfig  | 17 +++++++++++++++++
+>  security/ipe/Makefile | 10 ++++++++++
+>  security/ipe/ipe.c    | 40 ++++++++++++++++++++++++++++++++++++++++
+>  security/ipe/ipe.h    | 13 +++++++++++++
+>  7 files changed, 92 insertions(+), 5 deletions(-)
+>  create mode 100644 security/ipe/Kconfig
+>  create mode 100644 security/ipe/Makefile
+>  create mode 100644 security/ipe/ipe.c
+>  create mode 100644 security/ipe/ipe.h
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8a5c25c20d00..5e27e84763cc 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10273,6 +10273,11 @@ T:     git git://git.kernel.org/pub/scm/linux/ke=
+rnel/git/zohar/linux-integrity.git
+>  F:     security/integrity/ima/
+>  F:     security/integrity/
+>
+> +INTEGRITY POLICY ENFORCEMENT (IPE)
+> +M:     Fan Wu <wufan@linux.microsoft.com>
+> +S:     Supported
+> +F:     security/ipe/
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index bf2fdb33fb31..a4ae422b8f12 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -2529,10 +2529,6 @@ cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_current_pid_tgid_proto;
- 	case BPF_FUNC_get_current_comm:
- 		return &bpf_get_current_comm_proto;
--	case BPF_FUNC_get_current_cgroup_id:
--		return &bpf_get_current_cgroup_id_proto;
--	case BPF_FUNC_get_current_ancestor_cgroup_id:
--		return &bpf_get_current_ancestor_cgroup_id_proto;
- #ifdef CONFIG_CGROUP_NET_CLASSID
- 	case BPF_FUNC_get_cgroup_classid:
- 		return &bpf_get_cgroup_classid_curr_proto;
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 49a2ab8eb0bb..6f8545738a19 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1726,6 +1726,12 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_task_pt_regs_proto;
- 	case BPF_FUNC_trace_vprintk:
- 		return bpf_get_trace_vprintk_proto();
-+#ifdef CONFIG_CGROUPS
-+	case BPF_FUNC_get_current_cgroup_id:
-+		return &bpf_get_current_cgroup_id_proto;
-+	case BPF_FUNC_get_current_ancestor_cgroup_id:
-+		return &bpf_get_current_ancestor_cgroup_id_proto;
-+#endif
- 	default:
- 		return NULL;
- 	}
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index c58baf9983cc..489942354a90 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1455,10 +1455,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		       NULL : &bpf_probe_read_compat_str_proto;
- #endif
- #ifdef CONFIG_CGROUPS
--	case BPF_FUNC_get_current_cgroup_id:
--		return &bpf_get_current_cgroup_id_proto;
--	case BPF_FUNC_get_current_ancestor_cgroup_id:
--		return &bpf_get_current_ancestor_cgroup_id_proto;
- 	case BPF_FUNC_cgrp_storage_get:
- 		return &bpf_cgrp_storage_get_proto;
- 	case BPF_FUNC_cgrp_storage_delete:
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 1d6f165923bf..0f2589ea70f3 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8144,12 +8144,6 @@ sk_msg_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_storage_delete_proto;
- 	case BPF_FUNC_get_netns_cookie:
- 		return &bpf_get_netns_cookie_sk_msg_proto;
--#ifdef CONFIG_CGROUPS
--	case BPF_FUNC_get_current_cgroup_id:
--		return &bpf_get_current_cgroup_id_proto;
--	case BPF_FUNC_get_current_ancestor_cgroup_id:
--		return &bpf_get_current_ancestor_cgroup_id_proto;
--#endif
- #ifdef CONFIG_CGROUP_NET_CLASSID
- 	case BPF_FUNC_get_cgroup_classid:
- 		return &bpf_get_cgroup_classid_curr_proto;
--- 
-2.39.2
+You should probably add a mailing list (L:) and source tree URL (T:)
+to the IPE entry.  You can use the LSM mailing list to start if you
+like, there are several LSMs that do that today, e.g. Smack, Landlock,
+etc.  As far as the source tree is concerned, probably the easiest
+option is a simple GitHub repo, but there are plenty of other choices
+too.
 
+Both the mailing list and the source URLs can always be updated in the
+future so don't worry too much about being stuck with either long
+term.
+
+--
+paul-moore.com
