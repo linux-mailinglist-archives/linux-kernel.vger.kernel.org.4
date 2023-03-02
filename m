@@ -2,74 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8610E6A8BA7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7CA6A8BAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjCBWVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
+        id S229958AbjCBWWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjCBWV2 (ORCPT
+        with ESMTP id S229966AbjCBWWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:21:28 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069073B237
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:21:27 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id x20-20020a17090a8a9400b00233ba727724so4271236pjn.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:21:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1677795686;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sqaDMJkfZlaBf387zIPkPPqYIp4w31qGTsCwBc2LaNg=;
-        b=U9jW3W/0nX/tB3yQS15Ol1Hnwe3FYIzbnIGT6VLdTeHw+lT9orFaoGAnK0gsQpz+vM
-         pItPNyJZRQQ93kJPSdTXCKMYZnTANtsEyfrWZDmS+30OFBSVnR5xzyjT0duLbvqGzKiM
-         GI0+TnGwAUUkVOvdwFsqB6LwVWrF2tht+UIw9gUQxz75GjIcDKwjeaBJfQSNjY1LTf5A
-         ooiodduLz2hB4+6QRKJYfi0qFnIYJf8F7eDeaN9P581KUzjXYk/o38vQ1Vemk+urI7Hs
-         Jgsob17owkjIei+veogh6M7N9foYAAIzyqtJUNwmV1gJZzQvGLW2t24NQmPrQ6vsLPYl
-         at+A==
+        Thu, 2 Mar 2023 17:22:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED98B457C5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:21:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677795687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yEbCEWqVbNsPXldhkX+B6BlDOXfOqO0gMIhL1iJ/rOI=;
+        b=ImLvidLZf6CErhDej7s2DbFrn6R8iqZ/4JjQqWIgx8GECG1UlIOipOPJ6I8jHyTkuITocC
+        EDATa0iWfwBNzGEn062llpxityN5OcVYKDmVzE+6TwVdkKAynNhw/dbzf7Q5TW/q0QI5+y
+        y3MrO3WDvWJ40OFo3fUJY7w8wKYI9LY=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-562-PDHdC8srPdGprZ9C3eaJ8Q-1; Thu, 02 Mar 2023 17:21:26 -0500
+X-MC-Unique: PDHdC8srPdGprZ9C3eaJ8Q-1
+Received: by mail-qt1-f197.google.com with SMTP id b7-20020ac85407000000b003bfb9cff263so444610qtq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:21:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1677795686;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sqaDMJkfZlaBf387zIPkPPqYIp4w31qGTsCwBc2LaNg=;
-        b=LFtyUkO34Q4oPvhV83GfFDHfYDlOMdBRhTF/DgwXmIxA1pg04zxRgLeZqqxSoKwWve
-         iwhlvvOiZr/rqgiFCUlWBn4viz3UEFhNAlS4CE/5gAxQrAUnFuvtrCoyTdKqGnmA6YI4
-         g2pXIYZxswWX48vfiD8FDJm3mU55DoZ1WXrWFNdBfKHWXTLSy6TPktEBTPjmdM2u5qmv
-         ysKmU/QnbTI26vnNSvPP2CD3UE6Wmq5OgDYh3pFfENzzxdgelzrg8FnaYcAak1xVxd88
-         P2/B3LbSyt+i4Lfyg+41V5B+GU5txLZjdX+oHPwTWCkUS6JxPI2ECbfEgFmbh3XxSwhk
-         EAVQ==
-X-Gm-Message-State: AO0yUKWRSVNEOg6HFtdACVfwMFY8g4FXvOOu7IaLgjMTjyGI2itPcieF
-        BUuapRUgy7nKhaAxHxxKvwkSmw==
-X-Google-Smtp-Source: AK7set/EODVNSi77M77LXutCMLGRhE693lonQd3jU3ZAa0dwaxpiAt6d0Ub1+0xiBAQiQ6Kag/wlbA==
-X-Received: by 2002:a05:6a20:1609:b0:cc:d44a:bec2 with SMTP id l9-20020a056a20160900b000ccd44abec2mr84229pzj.1.1677795686414;
-        Thu, 02 Mar 2023 14:21:26 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
-        by smtp.gmail.com with ESMTPSA id u21-20020a63ef15000000b004eecc3080f8sm168123pgh.29.2023.03.02.14.21.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yEbCEWqVbNsPXldhkX+B6BlDOXfOqO0gMIhL1iJ/rOI=;
+        b=nfwuhjq/XoH2Qu1GK1eFxjk6qhkIiCxeb8mkUQuyPjsosX2H6Rv4Giu5WbHaqumVJh
+         RNhyyTSc6kOtcmWz+USd6ynerlUKRAnyrXEzVhhvZO0B/jX8TRLFbNEyBCVTOgLA6IaJ
+         0b+g23QDsWqaWZWhUYQBoeYS3MeNyWgz/tKCDCOT06vXu8bYuoBk9yukBcLIkKzG1sE5
+         58uqMYqpOS/a2rsEEJOphmPUovdjfGf/zqEDbBfWjGUeTUmfUxR7Zk7sorGp6HBrI9rI
+         0tPwPmTdgz6B2c4FOngBBsXEMJ4yCIvr0X50tFVUZtAY1OZlKUTURi6tQujmRREeo43v
+         nYsg==
+X-Gm-Message-State: AO0yUKWxzjjMfJ7sdk/FEhTnRFs7dk24Gw7kgGUYcbfoyDMLLmtM2n6J
+        PmCdeHoNwOp8QfoEjyjGzDMmrW4i7U7ST9CGkL5dK7vVvcVYosts0cwKsCud7pVK/omcBOCsGTe
+        aokZE89rEfDJVK9plguCXdaWdtzHphA==
+X-Received: by 2002:a0c:b45b:0:b0:539:aae2:8dc4 with SMTP id e27-20020a0cb45b000000b00539aae28dc4mr17153747qvf.4.1677795685597;
         Thu, 02 Mar 2023 14:21:25 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pXrIg-00455X-Jw; Fri, 03 Mar 2023 09:21:22 +1100
-Date:   Fri, 3 Mar 2023 09:21:22 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     Dave Chinner <dchinner@redhat.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org
-Subject: Re: [linus:master] [xfs] 304a68b9c6:
- WARNING:at_fs/iomap/buffered-io.c:#iomap_write_delalloc_release
-Message-ID: <20230302222122.GJ360264@dread.disaster.area>
-References: <202302281653.51938721-yujie.liu@intel.com>
- <20230228221107.GD360264@dread.disaster.area>
- <ZABgp1uBzcE49EG9@yujie-X299>
+X-Google-Smtp-Source: AK7set/myZPO3o575xsu/DEZMYZFH8KZmiW3qhXoX3GTstgHvA8TYzx+QH0MjGi9kY+0Oc9Jev1kIg==
+X-Received: by 2002:a0c:b45b:0:b0:539:aae2:8dc4 with SMTP id e27-20020a0cb45b000000b00539aae28dc4mr17153715qvf.4.1677795685201;
+        Thu, 02 Mar 2023 14:21:25 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id y22-20020a05620a44d600b0074270440092sm528742qkp.51.2023.03.02.14.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 14:21:24 -0800 (PST)
+Date:   Thu, 2 Mar 2023 17:21:23 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: [PATCH v2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
+Message-ID: <ZAEhY5lrxziDqpv5@x1n>
+References: <20230227230044.1596744-1-peterx@redhat.com>
+ <Y/1Mh5uivFt+zWKM@x1n>
+ <9aa69bfb-c726-ac2c-127a-b21fd35ab40b@collabora.com>
+ <92f2fd13-59f2-468d-d989-9b998a098795@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZABgp1uBzcE49EG9@yujie-X299>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <92f2fd13-59f2-468d-d989-9b998a098795@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,110 +88,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 04:39:03PM +0800, Yujie Liu wrote:
-> On Wed, Mar 01, 2023 at 09:11:07AM +1100, Dave Chinner wrote:
-> > On Tue, Feb 28, 2023 at 04:40:01PM +0800, kernel test robot wrote:
-> > > Greeting,
+On Thu, Mar 02, 2023 at 06:38:20PM +0100, David Hildenbrand wrote:
+> On 02.03.23 18:19, Muhammad Usama Anjum wrote:
+> > On 2/28/23 5:36 AM, Peter Xu wrote:
+> > > On Mon, Feb 27, 2023 at 06:00:44PM -0500, Peter Xu wrote:
+> > > > This is a new feature that controls how uffd-wp handles none ptes.  When
+> > > > it's set, the kernel will handle anonymous memory the same way as file
+> > > > memory, by allowing the user to wr-protect unpopulated ptes.
+> > > > 
+> > > > File memories handles none ptes consistently by allowing wr-protecting of
+> > > > none ptes because of the unawareness of page cache being exist or not.  For
+> > > > anonymous it was not as persistent because we used to assume that we don't
+> > > > need protections on none ptes or known zero pages.
+> > > > 
+> > > > One use case of such a feature bit was VM live snapshot, where if without
+> > > > wr-protecting empty ptes the snapshot can contain random rubbish in the
+> > > > holes of the anonymous memory, which can cause misbehave of the guest when
+> > > > the guest OS assumes the pages should be all zeros.
+> > > > 
+> > > > QEMU worked it around by pre-populate the section with reads to fill in
+> > > > zero page entries before starting the whole snapshot process [1].
+> > > > 
+> > > > Recently there's another need raised on using userfaultfd wr-protect for
+> > > > detecting dirty pages (to replace soft-dirty in some cases) [2].  In that
+> > > > case if without being able to wr-protect none ptes by default, the dirty
+> > > > info can get lost, since we cannot treat every none pte to be dirty (the
+> > > > current design is identify a page dirty based on uffd-wp bit being cleared).
+> > > > 
+> > > > In general, we want to be able to wr-protect empty ptes too even for
+> > > > anonymous.
+> > > > 
+> > > > This patch implements UFFD_FEATURE_WP_UNPOPULATED so that it'll make
+> > > > uffd-wp handling on none ptes being consistent no matter what the memory
+> > > > type is underneath.  It doesn't have any impact on file memories so far
+> > > > because we already have pte markers taking care of that.  So it only
+> > > > affects anonymous.
+> > > > 
+> > > > The feature bit is by default off, so the old behavior will be maintained.
+> > > > Sometimes it may be wanted because the wr-protect of none ptes will contain
+> > > > overheads not only during UFFDIO_WRITEPROTECT (by applying pte markers to
+> > > > anonymous), but also on creating the pgtables to store the pte markers. So
+> > > > there's potentially less chance of using thp on the first fault for a none
+> > > > pmd or larger than a pmd.
+> > > > 
+> > > > The major implementation part is teaching the whole kernel to understand
+> > > > pte markers even for anonymously mapped ranges, meanwhile allowing the
+> > > > UFFDIO_WRITEPROTECT ioctl to apply pte markers for anonymous too when the
+> > > > new feature bit is set.
+> > > > 
+> > > > Note that even if the patch subject starts with mm/uffd, there're a few
+> > > > small refactors to major mm path of handling anonymous page faults. But
+> > > > they should be straightforward.
+> > > > 
+> > > > So far, add a very light smoke test within the userfaultfd kselftest
+> > > > pagemap unit test to make sure anon pte markers work.
+> > > > 
+> > > > [1] https://lore.kernel.org/all/20210401092226.102804-4-andrey.gruzdev@virtuozzo.com/
+> > > > [1] https://lore.kernel.org/all/Y+v2HJ8+3i%2FKzDBu@x1n/
+> > > > 
+> > > > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > > > ---
+> > > > v1->v2:
+> > > > - Use pte markers rather than populate zero pages when protect [David]
+> > > > - Rename WP_ZEROPAGE to WP_UNPOPULATED [David]
 > > > 
-> > > FYI, we noticed WARNING:at_fs/iomap/buffered-io.c:#iomap_write_delalloc_release due to commit (built with gcc-11):
+> > > Some very initial performance numbers (I only ran in a VM but it should be
+> > > similar, unit is "us") below as requested.  The measurement is about time
+> > > spent when wr-protecting 10G range of empty but mapped memory.  It's done
+> > > in a VM, assuming we'll get similar results on bare metal.
 > > > 
-> > > commit: 304a68b9c63bbfc1f6e159d68e8892fc54a06067 ("xfs: use iomap_valid method to detect stale cached iomaps")
-> > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> > > Four test cases:
 > > > 
-> > > [test failed on linux-next/master 058f4df42121baadbb8a980c06011e912784dbd2]
-> > > in testcase: xfstests
-> > > version: xfstests-i386-5a5e419-1_20220926
-> > > with following parameters:
+> > >          - default UFFDIO_WP
+> > >          - pre-read the memory, then UFFDIO_WP (what QEMU does right now)
+> > >          - pre-fault using MADV_POPULATE_READ, then default UFFDIO_WP
+> > >          - UFFDIO_WP with WP_UNPOPULATED
 > > > 
-> > > 	disk: 4HDD
-> > > 	fs: xfs
-> > > 	test: generic-group-32
+> > > Results:
+> > > 
+> > >          Test DEFAULT: 2
+> > >          Test PRE-READ: 3277099 (pre-fault 3253826)
+> > >          Test MADVISE: 2250361 (pre-fault 2226310)
+> > >          Test WP-UNPOPULATE: 20850
+> > In your case:
+> > Default < WP-UNPOPULATE < MADVISE < PRE-READ
 > > 
-> > Which fstest was running at the time this warning was thrown?
+> > 
+> > In my testing on next-20230228 with this patch and my uffd async patch:
+> > 
+> > Test DEFAULT: 6
+> > Test PRE-READ: 37157 (pre-fault 37006)
+> > Test MADVISE: 4884 (pre-fault 4465)
+> > Test WP-UNPOPULATE: 17794
+> > 
+> > DEFAULT < MADVISE < WP-UNPOPULATE < PRE-READ
+> > 
+> > On my setup, MADVISE is performing better than WP-UNPOPULATE consistently.
+> > I'm not sure why I'm getting this discrepancy here. I've liked your results
+> > to be honest where we perform better with WP-UNPOPULATE than MADVISE. What
+> > can be done to get consistent benchmarks over your and my side?
 > 
-> It is fstests generic/648 running at that time.
+> Probably because the current approach from Peter uses uffd-wp markers, and
+> these markers can currently only reside on the PTE level, not on the PMD
+> level yet.
+> 
+> With MADVISE you get a huge zeropage and avoid dealing with PTEs.
 
-Ok.
+Yes, probably.  But then when write happens it'll be done there when split,
+so the overhead was delayed.
 
-Can you add this patch and see if it fixes the problem?
+Meanwhile I'll retest again (probably tomorrow..) with bare metals with THP
+on/off to double check.
 
-https://lore.kernel.org/linux-xfs/20230301221227.GH360264@dread.disaster.area/
+Muhammad, do you think the current performance will work for you?
 
-> [ 70.647665][ T1431] run fstests generic/648 at 2023-02-28 01:01:42
-> [ 71.823863][ T6673] XFS (sda4): Mounting V5 Filesystem
-> [ 71.883835][ T6673] XFS (sda4): Ending clean mount
-> [ 71.889345][ T6673] xfs filesystem being mounted at /fs/scratch supports timestamps until 2038 (0x7fffffff)
-> [ 71.942655][ T6686] XFS (sda4): Unmounting Filesystem
-> [ 72.055909][ T6718] loop: module verification failed: signature and/or required key missing - tainting kernel
-> [ 72.066111][ T6718] calling loop_init+0x0/0x1000 [ loop] @ 6718
-> [ 72.073700][ T6718] loop: module loaded
-> [ 72.077534][ T6718] initcall loop_init+0x0/0x1000 [ loop] returned 0 after 5536 usecs
-> [ 73.097330][ T6767] XFS (dm-0): Mounting V5 Filesystem
-> [ 73.261204][ T6767] XFS (dm-0): Ending clean mount
-> [ 73.267558][ T6767] xfs filesystem being mounted at /fs/scratch supports timestamps until 2038 (0x7fffffff)
-> [ 73.335169][ T6801] loop0: detected capacity change from 0 to 138745493
-> [ 73.374666][ T6801] XFS (loop0): Mounting V5 Filesystem
-> [ 73.382659][ T6801] XFS (loop0): Ending clean mount
-> [ 73.387588][ T6801] xfs filesystem being mounted at /tmp/6480.mount supports timestamps until 2038 (0x7fffffff)
-> [ 74.446227][ T3540] Buffer I/O error on dev dm-1, logical block 52428784, async page read
-> [ 74.457497][ T66] dm-0: writeback error on inode 131, offset 131072, sector 78144
-> [ 74.457500][ T66] dm-0: writeback error on inode 131, offset 262144, sector 74928
-> [ 74.459752][ T3540] Buffer I/O error on dev dm-0, logical block 52428784, async page read
-> [ 74.465109][ T66] dm-0: writeback error on inode 131, offset 2228224, sector 78400
-> [ 74.480852][ T66] dm-0: writeback error on inode 131, offset 3969024, sector 78504
-> [ 74.488596][ T66] dm-0: writeback error on inode 131, offset 4005888, sector 78576
-> [ 74.496292][ T66] dm-0: writeback error on inode 131, offset 4063232, sector 192
-> [ 74.496418][ C3] I/O error, dev loop0, sector 69373014 op 0x1:(WRITE) flags 0x9800 phys_seg 1 prio class 2
-> [ 74.521346][ T144] XFS (loop0): log I/O error -5
-> [ 74.526022][ T144] XFS (loop0): Filesystem has been shut down due to log error (0x2).
-> [ 74.533882][ T144] XFS (loop0): Please unmount the filesystem and rectify the problem(s).
-> [ 74.542294][ T67] dm-0: writeback error on inode 131, offset 53279154176, sector 78688
-> [ 74.542299][ C3] I/O error, dev loop0, sector 0 op 0x1:(WRITE) flags 0x800 phys_seg 0 prio class 2
-> [ 75.364416][ T6868] XFS (loop0): Unmounting Filesystem
-> [ 75.370061][ T164] XFS (dm-0): log I/O error -5
-> [ 75.374652][ T164] XFS (dm-0): Filesystem has been shut down due to log error (0x2).
-> [ 75.382433][ T164] XFS (dm-0): Please unmount the filesystem and rectify the problem(s).
-> [ 75.390581][ C6] I/O error, dev loop0, sector 0 op 0x1:(WRITE) flags 0x800 phys_seg 0 prio class 2
-> [ 76.403161][ T6876] XFS (dm-0): Unmounting Filesystem
-> [ 76.554265][ T6888] XFS (dm-0): Mounting V5 Filesystem
-> [ 76.602707][ T6888] XFS (dm-0): Starting recovery (logdev: internal)
-> [ 76.678261][ T6888] XFS (dm-0): Ending recovery (logdev: internal)
-> [ 76.705011][ T6888] xfs filesystem being mounted at /fs/scratch supports timestamps until 2038 (0x7fffffff)
-> [ 76.720823][ T6905] loop0: detected capacity change from 0 to 138745493
-> [ 76.765868][ T6905] XFS (loop0): Mounting V5 Filesystem
-> [ 76.811151][ T6905] XFS (loop0): Starting recovery (logdev: internal)
-> [ 76.820611][ T6905] XFS (loop0): Ending recovery (logdev: internal)
-> [ 76.826950][ T6905] xfs filesystem being mounted at /tmp/6480.mount supports timestamps until 2038 (0x7fffffff)
-> [ 78.565703][ T59] ------------[ cut here ]------------
-> [ 78.570983][ T59] WARNING: CPU: 4 PID: 59 at fs/iomap/buffered-io.c:984 iomap_write_delalloc_release (fs/iomap/buffered-io.c:984 (discriminator 1))
+Especially I want to double check with you again on whether
+XFS/EXT4/... will be needed for the tracking purpose so you can reply here
+together.  We shouldn't merge anything that doesn't have at least one
+existing good use case, and we may need to rethink if it's not.
 
-Ok, that is:
+For performance, one approach is probably making uffd-wp async separate
+from other features, where we can revert the meaning of uffd-wp bit to
+mimic what soft-dirty does (I think this will look closer to what David
+mentioned in the other thread), by defining uffd-wp=1 as "written" and
+uffd-wp=0 as clean.
 
-	WARN_ON_ONCE(start_byte < punch_start_byte);
+IIUC that'll make it one bit and work as fast as soft-dirty, meanwhile all
+uffd-wp marker things can hopefully still be maintained.  However I really
+don't like it to violate a lot of things, e.g., when UFFDIO_WRITEPROTECT
+another round we'll need to DROP uffd-wp if async, but APPLY uffd-wp if
+sync...  So in general it'll need more thoughts and slower to do.
 
-Which I can't immediately see how that happens. This is a 32-bit
-i386 kernel which we largely don't test or support, so maybe there's
-32/64 bit variable size change problem somewhere in the code path
-being executed.
-
-> [ 78.671542][ T59] Hardware name: Dell Inc. OptiPlex 7040/0Y7WYT, BIOS 1.2.8 01/26/2016
-> [ 78.679578][ T59] Workqueue: loop0 loop_rootcg_workfn [ loop]
-
-Ok, so this is happening while writing to the loopback image file
-which is racing with cloning and removing the clone of the image
-file.
-
-Looking at the rest of the trace, IO to the entire loopback file
-hung, but this warning doesn't explain that happening either.
-
-I'll try to reproduce it, but I don't actually have an i386 test
-environment here (I haven't tested i386 at all the last 5-6
-years!) so it might be a while before I can get to testing this
-specific environment.
-
-Do you see it reproduce on any other architecture, of just this one?
-
--Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+Peter Xu
+
