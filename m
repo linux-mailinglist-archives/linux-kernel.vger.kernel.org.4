@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A886A7967
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E6E6A796E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjCBCRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 21:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S229831AbjCBCUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 21:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjCBCRN (ORCPT
+        with ESMTP id S229541AbjCBCUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 21:17:13 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D76C22A22;
-        Wed,  1 Mar 2023 18:17:11 -0800 (PST)
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PRvn00kjdznWDY;
-        Thu,  2 Mar 2023 10:14:28 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 2 Mar 2023 10:17:07 +0800
-Message-ID: <2a165476-2e96-17b1-a50b-c8749462e8a1@huawei.com>
-Date:   Thu, 2 Mar 2023 10:17:07 +0800
+        Wed, 1 Mar 2023 21:20:19 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEC0C23C5B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 18:20:12 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Axu5ezBwBkLRgHAA--.7908S3;
+        Thu, 02 Mar 2023 10:19:31 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx6r05BwBkwXtFAA--.57447S3;
+        Thu, 02 Mar 2023 10:17:29 +0800 (CST)
+Message-ID: <f1d5f169-898a-9d7a-b932-ce0de20a217a@loongson.cn>
+Date:   Thu, 2 Mar 2023 10:17:29 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 2/2] mailbox: pcc: Support shared interrupt for multiple
- subspaces
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     <robbiek@xsightlabs.com>, <linux-acpi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rafael@kernel.org>,
-        <rafael.j.wysocki@intel.com>, <wanghuiqiang@huawei.com>,
-        <zhangzekun11@huawei.com>, <wangxiongfeng2@huawei.com>,
-        <tanxiaofei@huawei.com>, <guohanjun@huawei.com>,
-        <xiexiuqi@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <huangdaode@huawei.com>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20230216063653.1995-1-lihuisong@huawei.com>
- <20230216063653.1995-3-lihuisong@huawei.com>
- <20230301133626.gchca3fdaqijxwzq@bogus>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230301133626.gchca3fdaqijxwzq@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3] LoongArch: add checksum optimization for 64-bit system
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        David Laight <David.Laight@aculab.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230216130914.156613-1-maobibo@loongson.cn>
+ <CAAhV-H6T_F4=D1i6GkJTczHY5i-FSa6o_oXiRdZFGOXBU=pwXg@mail.gmail.com>
+Content-Language: en-US
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <CAAhV-H6T_F4=D1i6GkJTczHY5i-FSa6o_oXiRdZFGOXBU=pwXg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Dx6r05BwBkwXtFAA--.57447S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKF4DCF48Gw17GryUGF1DAwb_yoWfAF43pF
+        yDtrn0gF48Xr1xtr12v3y3tFnxWws7GrnrKryagFy8Ar9Ivw1xJrn8KrZ09a43Jw1fGFy0
+        vFWYgry3GFn3JaDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8q2NtUUUUU==
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,145 +69,292 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2023/3/1 21:36, Sudeep Holla 写道:
-> On Thu, Feb 16, 2023 at 02:36:53PM +0800, Huisong Li wrote:
->> If the platform acknowledge interrupt is level triggered, then it can
->> be shared by multiple subspaces provided each one has a unique platform
->> interrupt ack preserve and ack set masks.
+
+在 2023/3/1 20:54, Huacai Chen 写道:
+> Hi, Bibo,
+> 
+> I found the version here [1] provides more functions than this one. So
+> is it possible to take advantages from both versions?
+csum and copy user will take me much time:(  Just for csum there is no obvious
+results between uint128 and interleave method, it depends on compiler version
+also. I want to re-investigate two methods after LoongArch gcc optimization
+version is stable.
+
+Three methods are tested on LoongArch 3A5000 machine: uint128/asm/interleave
+methods, interleave method gets double performance on x86 box compared with
+uint128 method, however no better than LoongArch 3A5000 machine and one
+ARM64 machine. The three test methods are listed at website:
+https://github.com/bibo-mao/bench/tree/master/csum
+
+Here is the result on 3A5000 machine, time unit is us, smaller for
+better performance.
+
+buf size    loops      uint128      asm       interleave
+4096       0x100000     279824     373401     291508
+1472       0x100000     109137     138224     106035
+250        0x100000     29008      35838      23408
+40         0x100000     9789       23408      9122
+
+Regards
+Bibo, mao
+> 
+> [1] https://github.com/loongson/linux/commit/92a6df48ccb73dd2c3dc1799add08adf0e0b0deb
+> 
+> Huacai
+> 
+> On Thu, Feb 16, 2023 at 9:09 PM Bibo Mao <maobibo@loongson.cn> wrote:
 >>
->> If it can be shared, then we can request the irq with IRQF_SHARED and
->> IRQF_ONESHOT flags. The first one indicating it can be shared and the
->> latter one to keep the interrupt disabled until the hardirq handler
->> finished.
+>> loongArch platform is 64-bit system, which supports 8 bytes memory
+>> accessing, generic checksum function uses 4 byte memory access.
+>> This patch adds 8-bytes memory access optimization for checksum
+>> function on loongArch. And the code comes from arm64 system.
 >>
->> Further, since there is no way to detect if the interrupt is for a given
->> channel as the interrupt ack preserve and ack set masks are for clearing
->> the interrupt and not for reading the status(in case Irq Ack register
->> may be write-only on some platforms), we need a way to identify if the
->> given channel is in use and expecting the interrupt.
+>> When network hw checksum is disabled, iperf performance improves
+>> about 10% with this patch.
 >>
->> PCC type0, type1 and type5 do not support shared level triggered interrupt.
->> The methods of determining whether a given channel for remaining types
->> should respond to an interrupt are as follows:
->>   - type2: Whether the interrupt belongs to a given channel is only
->>            determined by the status field in Generic Communications Channel
->>            Shared Memory Region, which is done in rx_callback of PCC client.
->>   - type3: This channel checks chan_in_use flag first and then checks the
->>            command complete bit(value '1' indicates that the command has
->>            been completed).
->>   - type4: Platform ensure that the default value of the command complete
->>            bit corresponding to the type4 channel is '1'. This command
->>            complete bit is '0' when receive a platform notification.
->>
->> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 >> ---
->>   drivers/mailbox/pcc.c | 45 ++++++++++++++++++++++++++++++++++++++++---
->>   1 file changed, 42 insertions(+), 3 deletions(-)
+>> Changelog:
+>> v3: modify function accumulate() to handle better on loongarch platform,
+>>     maybe it's compiler optimization issue.
+>> v2: use rotation API in function csum_fold to reduce one instruction.
+>> ---
+>>  arch/loongarch/include/asm/checksum.h |  65 ++++++++++++
+>>  arch/loongarch/lib/Makefile           |   2 +-
+>>  arch/loongarch/lib/csum.c             | 141 ++++++++++++++++++++++++++
+>>  3 files changed, 207 insertions(+), 1 deletion(-)
+>>  create mode 100644 arch/loongarch/include/asm/checksum.h
+>>  create mode 100644 arch/loongarch/lib/csum.c
 >>
->> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
->> index ecd54f049de3..04c2d73a0473 100644
->> --- a/drivers/mailbox/pcc.c
->> +++ b/drivers/mailbox/pcc.c
->> @@ -92,6 +92,10 @@ struct pcc_chan_reg {
->>    * @error: PCC register bundle for the error status register
->>    * @plat_irq: platform interrupt
->>    * @type: PCC subspace type
->> + * @plat_irq_flags: platform interrupt flags
->> + * @chan_in_use: flag indicating whether the channel is in use or not when use
->> + *		platform interrupt, and only use it for communication from OSPM
->> + *		to Platform, like type 3.
-> Also add a node that since only one transfer can occur at a time and the
-> mailbox takes care of locking, this flag needs no locking and is used just
-> to check if the interrupt needs handling when it is shared.
-Add a per-channel lock. Is this your mean?
->
->>    */
->>   struct pcc_chan_info {
->>   	struct pcc_mbox_chan chan;
->> @@ -102,6 +106,8 @@ struct pcc_chan_info {
->>   	struct pcc_chan_reg error;
->>   	int plat_irq;
->>   	u8 type;
->> +	unsigned int plat_irq_flags;
->> +	bool chan_in_use;
->>   };
->>   
->>   #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
->> @@ -225,6 +231,12 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
->>   	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
->>   }
->>   
->> +static bool pcc_chan_plat_irq_can_be_shared(struct pcc_chan_info *pchan)
+>> diff --git a/arch/loongarch/include/asm/checksum.h b/arch/loongarch/include/asm/checksum.h
+>> new file mode 100644
+>> index 000000000000..8a7d368d801d
+>> --- /dev/null
+>> +++ b/arch/loongarch/include/asm/checksum.h
+>> @@ -0,0 +1,65 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (C) 2016 ARM Ltd.
+>> + * Copyright (C) 2023 Loongson Technology Corporation Limited
+>> + */
+>> +#ifndef __ASM_CHECKSUM_H
+>> +#define __ASM_CHECKSUM_H
+>> +
+>> +#include <linux/in6.h>
+>> +
+>> +#define _HAVE_ARCH_IPV6_CSUM
+>> +__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
+>> +                       const struct in6_addr *daddr,
+>> +                       __u32 len, __u8 proto, __wsum sum);
+>> +
+>> +/*
+>> + * turns a 32-bit partial checksum (e.g. from csum_partial) into a
+>> + * 1's complement 16-bit checksum.
+>> + */
+>> +static inline __sum16 csum_fold(__wsum sum)
 >> +{
->> +	return (pchan->plat_irq_flags & ACPI_PCCT_INTERRUPT_MODE) ==
->> +		ACPI_LEVEL_SENSITIVE;
+>> +       u32 tmp = (__force u32)sum;
+>> +
+>> +       /*
+>> +        * swap the two 16-bit halves of sum
+>> +        * if there is a carry from adding the two 16-bit halves,
+>> +        * it will carry from the lower half into the upper half,
+>> +        * giving us the correct sum in the upper half.
+>> +        */
+>> +       return (__force __sum16)(~(tmp + rol32(tmp, 16)) >> 16);
+>> +}
+>> +#define csum_fold csum_fold
+>> +
+>> +/*
+>> + * This is a version of ip_compute_csum() optimized for IP headers,
+>> + * which always checksum on 4 octet boundaries.  ihl is the number
+>> + * of 32-bit words and is always >= 5.
+>> + */
+>> +static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
+>> +{
+>> +       __uint128_t tmp;
+>> +       u64 sum;
+>> +       int n = ihl; /* we want it signed */
+>> +
+>> +       tmp = *(const __uint128_t *)iph;
+>> +       iph += 16;
+>> +       n -= 4;
+>> +       tmp += ((tmp >> 64) | (tmp << 64));
+>> +       sum = tmp >> 64;
+>> +       do {
+>> +               sum += *(const u32 *)iph;
+>> +               iph += 4;
+>> +       } while (--n > 0);
+>> +
+>> +       sum += ror64(sum, 32);
+>> +       return csum_fold((__force __wsum)(sum >> 32));
+>> +}
+>> +#define ip_fast_csum ip_fast_csum
+>> +
+>> +extern unsigned int do_csum(const unsigned char *buff, int len);
+>> +#define do_csum do_csum
+>> +
+>> +#include <asm-generic/checksum.h>
+>> +
+>> +#endif /* __ASM_CHECKSUM_H */
+>> diff --git a/arch/loongarch/lib/Makefile b/arch/loongarch/lib/Makefile
+>> index 40bde632900f..6ba6df411f90 100644
+>> --- a/arch/loongarch/lib/Makefile
+>> +++ b/arch/loongarch/lib/Makefile
+>> @@ -4,4 +4,4 @@
+>>  #
+>>
+>>  lib-y  += delay.o memset.o memcpy.o memmove.o \
+>> -          clear_user.o copy_user.o dump_tlb.o unaligned.o
+>> +          clear_user.o copy_user.o dump_tlb.o unaligned.o csum.o
+>> diff --git a/arch/loongarch/lib/csum.c b/arch/loongarch/lib/csum.c
+>> new file mode 100644
+>> index 000000000000..a5e84b403c3b
+>> --- /dev/null
+>> +++ b/arch/loongarch/lib/csum.c
+>> @@ -0,0 +1,141 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +// Copyright (C) 2019-2020 Arm Ltd.
+>> +
+>> +#include <linux/compiler.h>
+>> +#include <linux/kasan-checks.h>
+>> +#include <linux/kernel.h>
+>> +
+>> +#include <net/checksum.h>
+>> +
+>> +static u64 accumulate(u64 sum, u64 data)
+>> +{
+>> +       sum += data;
+>> +       if (sum < data)
+>> +               sum += 1;
+>> +       return sum;
 >> +}
 >> +
->>   static bool pcc_chan_command_complete(struct pcc_chan_info *pchan,
->>   				      u64 cmd_complete_reg_val)
->>   {
->> @@ -277,6 +289,9 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
->>   	int ret;
->>   
->>   	pchan = chan->con_priv;
->> +	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE &&
->> +	    !pchan->chan_in_use)
->> +		return IRQ_NONE;
->>   
->>   	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
->>   	if (ret)
->> @@ -302,9 +317,13 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
->>   	/*
->>   	 * The PCC slave subspace channel needs to set the command complete bit
->>   	 * and ring doorbell after processing message.
->> +	 *
->> +	 * The PCC master subspace channel clears chan_in_use to free channel.
->>   	 */
->>   	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE)
->>   		pcc_send_data(chan, NULL);
->> +	else if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE)
->> +		pchan->chan_in_use = false;
-> Just wondering if this has to be for type 3 only. I am trying to avoid
-> conditional update of this flag, can we not do it for everything except type4 ?
-> (I mean just in unconditional else part)
-But type2 do not need this flag.
-For types no need this flag, it is always hard to understand and 
-redundant design.
-If no this condition, we don't know what is the impact on the furture 
-types.
->
->>   	return IRQ_HANDLED;
->>   }
->> @@ -353,10 +372,13 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
->>   	spin_unlock_irqrestore(&chan->lock, flags);
->>   
->>   	if (pchan->plat_irq > 0) {
->> +		unsigned long irqflags;
->>   		int rc;
->>   
->> -		rc = devm_request_irq(dev, pchan->plat_irq, pcc_mbox_irq, 0,
->> -				      MBOX_IRQ_NAME, chan);
->> +		irqflags = pcc_chan_plat_irq_can_be_shared(pchan) ?
->> +					IRQF_SHARED | IRQF_ONESHOT : 0;
->> +		rc = devm_request_irq(dev, pchan->plat_irq, pcc_mbox_irq,
->> +				      irqflags, MBOX_IRQ_NAME, chan);
->>   		if (unlikely(rc)) {
->>   			dev_err(dev, "failed to register PCC interrupt %d\n",
->>   				pchan->plat_irq);
->> @@ -418,7 +440,17 @@ static int pcc_send_data(struct mbox_chan *chan, void *data)
->>   	if (ret)
->>   		return ret;
->>   
->> -	return pcc_chan_reg_read_modify_write(&pchan->db);
->> +	ret = pcc_chan_reg_read_modify_write(&pchan->db);
->> +	/*
->> +	 * For the master subspace channel, set chan_in_use flag to true after
->> +	 * ring doorbell, and clear this flag when the reply message is
->> +	 * processed.
->> +	 */
->> +	if (!ret && pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE &&
->> +	    pchan->plat_irq > 0)
->> +		pchan->chan_in_use = true;
-> Ditto here(for all type except type 4?)
-Above is my concern.
->
+>> +/*
+>> + * We over-read the buffer and this makes KASAN unhappy. Instead, disable
+>> + * instrumentation and call kasan explicitly.
+>> + */
+>> +unsigned int __no_sanitize_address do_csum(const unsigned char *buff, int len)
+>> +{
+>> +       unsigned int offset, shift, sum;
+>> +       const u64 *ptr;
+>> +       u64 data, sum64 = 0;
+>> +
+>> +       if (unlikely(len == 0))
+>> +               return 0;
+>> +
+>> +       offset = (unsigned long)buff & 7;
+>> +       /*
+>> +        * This is to all intents and purposes safe, since rounding down cannot
+>> +        * result in a different page or cache line being accessed, and @buff
+>> +        * should absolutely not be pointing to anything read-sensitive. We do,
+>> +        * however, have to be careful not to piss off KASAN, which means using
+>> +        * unchecked reads to accommodate the head and tail, for which we'll
+>> +        * compensate with an explicit check up-front.
+>> +        */
+>> +       kasan_check_read(buff, len);
+>> +       ptr = (u64 *)(buff - offset);
+>> +       len = len + offset - 8;
+>> +
+>> +       /*
+>> +        * Head: zero out any excess leading bytes. Shifting back by the same
+>> +        * amount should be at least as fast as any other way of handling the
+>> +        * odd/even alignment, and means we can ignore it until the very end.
+>> +        */
+>> +       shift = offset * 8;
+>> +       data = *ptr++;
+>> +       data = (data >> shift) << shift;
+>> +
+>> +       /*
+>> +        * Body: straightforward aligned loads from here on (the paired loads
+>> +        * underlying the quadword type still only need dword alignment). The
+>> +        * main loop strictly excludes the tail, so the second loop will always
+>> +        * run at least once.
+>> +        */
+>> +       while (unlikely(len > 64)) {
+>> +               __uint128_t tmp1, tmp2, tmp3, tmp4;
+>> +
+>> +               tmp1 = *(__uint128_t *)ptr;
+>> +               tmp2 = *(__uint128_t *)(ptr + 2);
+>> +               tmp3 = *(__uint128_t *)(ptr + 4);
+>> +               tmp4 = *(__uint128_t *)(ptr + 6);
+>> +
+>> +               len -= 64;
+>> +               ptr += 8;
+>> +
+>> +               /* This is the "don't dump the carry flag into a GPR" idiom */
+>> +               tmp1 += (tmp1 >> 64) | (tmp1 << 64);
+>> +               tmp2 += (tmp2 >> 64) | (tmp2 << 64);
+>> +               tmp3 += (tmp3 >> 64) | (tmp3 << 64);
+>> +               tmp4 += (tmp4 >> 64) | (tmp4 << 64);
+>> +               tmp1 = ((tmp1 >> 64) << 64) | (tmp2 >> 64);
+>> +               tmp1 += (tmp1 >> 64) | (tmp1 << 64);
+>> +               tmp3 = ((tmp3 >> 64) << 64) | (tmp4 >> 64);
+>> +               tmp3 += (tmp3 >> 64) | (tmp3 << 64);
+>> +               tmp1 = ((tmp1 >> 64) << 64) | (tmp3 >> 64);
+>> +               tmp1 += (tmp1 >> 64) | (tmp1 << 64);
+>> +               tmp1 = ((tmp1 >> 64) << 64) | sum64;
+>> +               tmp1 += (tmp1 >> 64) | (tmp1 << 64);
+>> +               sum64 = tmp1 >> 64;
+>> +       }
+>> +       while (len > 8) {
+>> +               __uint128_t tmp;
+>> +
+>> +               sum64 = accumulate(sum64, data);
+>> +               tmp = *(__uint128_t *)ptr;
+>> +
+>> +               len -= 16;
+>> +               ptr += 2;
+>> +
+>> +               data = tmp >> 64;
+>> +               sum64 = accumulate(sum64, tmp);
+>> +       }
+>> +       if (len > 0) {
+>> +               sum64 = accumulate(sum64, data);
+>> +               data = *ptr;
+>> +               len -= 8;
+>> +       }
+>> +       /*
+>> +        * Tail: zero any over-read bytes similarly to the head, again
+>> +        * preserving odd/even alignment.
+>> +        */
+>> +       shift = len * -8;
+>> +       data = (data << shift) >> shift;
+>> +       sum64 = accumulate(sum64, data);
+>> +
+>> +       /* Finally, folding */
+>> +       sum64 += (sum64 >> 32) | (sum64 << 32);
+>> +       sum = sum64 >> 32;
+>> +       sum += (sum >> 16) | (sum << 16);
+>> +       if (offset & 1)
+>> +               return (u16)swab32(sum);
+>> +
+>> +       return sum >> 16;
+>> +}
+>> +
+>> +__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
+>> +                       const struct in6_addr *daddr,
+>> +                       __u32 len, __u8 proto, __wsum csum)
+>> +{
+>> +       __uint128_t src, dst;
+>> +       u64 sum = (__force u64)csum;
+>> +
+>> +       src = *(const __uint128_t *)saddr->s6_addr;
+>> +       dst = *(const __uint128_t *)daddr->s6_addr;
+>> +
+>> +       sum += (__force u32)htonl(len);
+>> +       sum += (u32)proto << 24;
+>> +       src += (src >> 64) | (src << 64);
+>> +       dst += (dst >> 64) | (dst << 64);
+>> +
+>> +       sum = accumulate(sum, src >> 64);
+>> +       sum = accumulate(sum, dst >> 64);
+>> +
+>> +       sum += ((sum >> 32) | (sum << 32));
+>> +       return csum_fold((__force __wsum)(sum >> 32));
+>> +}
+>> +EXPORT_SYMBOL(csum_ipv6_magic);
+>> --
+>> 2.27.0
+>>
+
