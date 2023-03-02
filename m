@@ -2,187 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C626A7D4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 258C46A7D47
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCBJFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:05:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S229820AbjCBJFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjCBJFp (ORCPT
+        with ESMTP id S229661AbjCBJFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:05:45 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F463CE01;
-        Thu,  2 Mar 2023 01:05:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677747943; x=1709283943;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ZIwVy14DkpyPVjkMETlZF6v3qm6gnPICu2aR8MiXxL0=;
-  b=jns2I5TNu2qTXumpwtgQHyOQIn2Ei7qNFH2I/zoCBC8zFoKQxH509mA3
-   G9P+jwGgJ6i1oedldtq/tiP5eWRnggWC8xAwZMa+70MvnjM5obNu6jxgS
-   wuqD3KA1FodYMdHDpQmljuSQXs8H1XoPPFlh5Rnnb4qAfishnx80OMkJp
-   FhnbxY3X9YscbT4L1Z1JwsOUtsdVXGlnwlPU0MhrRfCRkg6A+w+eAFrjF
-   zfnJ9VUZMWH2B3lAKyt+p8tWunc3MvKVOj4b/+S1iKZZAkx3SddImtEWL
-   f25+Yf3H6qB+ctGJfg3NVS7r1s3bTcjyq0nijfNYlsoDGSb6wBxisP1wi
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="318467332"
-X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
-   d="scan'208";a="318467332"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 01:03:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="784731711"
-X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
-   d="scan'208";a="784731711"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Mar 2023 01:03:56 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 2 Mar 2023 01:03:56 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 2 Mar 2023 01:03:55 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 2 Mar 2023 01:03:55 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 2 Mar 2023 01:03:55 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nD2qmeMZDNXifd/3fpxWjQxqRvrTpG16Izy14HDKSHTRFEjk/1B+f3nfPf0hkF1Qg2Iel0PZSm1t8n0VqI08PwN7bGj670MzGuiEtzZogRqn3v7ejHDb6oWFDcMtd6iJz7YtoXNECix/oma58VvX4wqG3vnK8psFAD/7G28N9FQPLWEALq6X8ORdNZm8J7bgxbB5atBxnAUSWndjSvH77clrEzXjCdLWq56WRZT/89da2Dwf58Ytnire+KzM2GXg17dIyy7JzRg1osaIxoh6lYTAEB7tRjVtDS5Smf+84ZlMHiPUSdZVgnjeFKnmfShdX3EH9RvrhNr3Eo55Gm5NZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y10TuUh7fcM9yIfrsNibSYuobyQdCBlfQutsn5Zi+Jo=;
- b=Woqp8VlypMxqU7/2gtVzqNIEsgl1beqnDAF14KZCPRI7qlKcGyoK23vVHWhoA8rRZukpo12FkhPRiI4lqr0oLiqUYQnCGKoOK0MUjCJnXg+GR4GrWuhJkqO/Wqkj2oLEnmq0q8F7vzp7e2BoBjr0BhMBKEIOhua84FChEssaD+JWGs2cZno+nIv7f2b8ytHn244BgcJtCTNJxXaMqVMzhZPA8fasGw0A3R+zl+AvWgWBIn773zBRXJ+00KhL9Ynz5pOKAGLS7Agp3jCjBBCCJ1n+JHSAw3bVfqbhey29X/mpDb3x9xO88i+9ByN1POvxY4pPoBRhueolqpHiMFsglA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CH0PR11MB5379.namprd11.prod.outlook.com (2603:10b6:610:ba::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Thu, 2 Mar
- 2023 09:03:52 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
- 09:03:52 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-CC:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>
-Subject: RE: [PATCH v4 2/6] iommu/sva: Move PASID helpers to sva code
-Thread-Topic: [PATCH v4 2/6] iommu/sva: Move PASID helpers to sva code
-Thread-Index: AQHZTJj5HnHa9YIa9kO1Q/LNXU7+Oq7nMkNQ
-Date:   Thu, 2 Mar 2023 09:03:52 +0000
-Message-ID: <BN9PR11MB5276E466C33CB6240B06B0728CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
- <20230301235646.2692846-3-jacob.jun.pan@linux.intel.com>
-In-Reply-To: <20230301235646.2692846-3-jacob.jun.pan@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CH0PR11MB5379:EE_
-x-ms-office365-filtering-correlation-id: b15c8992-6441-4043-519b-08db1afd0b5d
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7W5NGPnjUR7rveaf0Tx4SeEL7D6D8kdVif7jC2P5xqtg+qoTEJ6X7svf1Lu79h5579bnyj2hG6PRubumutIV1Tx76xK01N+y6v6X3VfCoCwiqGLt2idV2X5S42Fl/B3/sGKYZtFeKaqQoFKScEr1E3jbwWvO84uyClRjujEFSQqquxwrrogqiq+Q2XuWmw/SfN5QdD6D09tWCaNij7G78eZmiWvn0+EOxZmvPVQWjNzxkSTzxclVwzvHlnS0vBGcGwSBF4zpbT50yrdpflbGvq2dk+GJrauJJ47UPCxn2jvEkbs4PFgx9gdi6YXtG1rPswm8qJAbTRfQZ/g6ccLY6jGBX/V51rJ3KNGh6HfG5VnBu0i5SgGtgrdZMvoPM76o39DOY0OWsDOizHaG6xwWp2WWS21+JX4B0YkZNU+MSFkMDaylnNp9GUVBYLD15gE0HARfJxEAmdsJgKI/8JSAiY5pVezW112zHm++xP6q3QUe5Axd2fIqYzIuGITx4IR5O+/tiB5YbpZjpVX1fVm+kTstyHjies7F/aF7xbqJ/8brdb82jHVXbofMwb5ZvcAr0NGS2FrsClwG7oLKA+A/ErWtYwxJ5vkq1CklGtwo6e+L0l/81BNpsQRLOoinLQR0RtpFdlVMYeQtP5tFGg5PKns8S/HOF0UNWbqzhJoIe9L17UXOjsPcBXIzbwJHQkkPW7zAUasqe42gu1aFwtKVmQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(39860400002)(396003)(366004)(376002)(346002)(451199018)(38100700002)(122000001)(5660300002)(478600001)(8936002)(82960400001)(7416002)(921005)(66946007)(33656002)(71200400001)(86362001)(38070700005)(55016003)(26005)(186003)(9686003)(6506007)(64756008)(66446008)(66476007)(66556008)(7696005)(2906002)(4744005)(52536014)(8676002)(76116006)(316002)(41300700001)(4326008)(110136005)(54906003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?08RKR70ScGzzgvurcMJvbSW7SNFxNDtLHupeKflaVwWxL+F63ZnpuRirCg6s?=
- =?us-ascii?Q?aGijFLb6kbBN5XzaGpqHm55g2NKlrSromcJ9tGRk9aVCTB4fJHHc9dZ0YPRc?=
- =?us-ascii?Q?DhSbpEyRJpBPrZZjmAZMhOkC1QDWIX5mNPHjOGBqM4eV+I9/wbhxAwQOGOg2?=
- =?us-ascii?Q?tsV6LhRrOm1+66pT1jcT634KgYmyZyTEy0JhpMQxCBKwSKQgCoq7SYds92d7?=
- =?us-ascii?Q?4psJwaENNWKnKQfW4GKScZS3X4RNUcyo9hPFecnr+SRKNWb1IAqPj7dLU8u/?=
- =?us-ascii?Q?a7m780De6WiS373OmzTo6GjjrHaUkOagHoswTvqvlug36LizNTWZjgk7YZvx?=
- =?us-ascii?Q?+6+yqqjeDpP18TfGdgco+ZdlNqGbuaTEZdbhp+b0hytbkSainNELL0Kudiqa?=
- =?us-ascii?Q?TT2K/5EZPozYtCiSyYgW/ujPPMm5DQ8aeGxdbC5nlSpqSP4AmEqp9ABsB2Tl?=
- =?us-ascii?Q?Z3G/inDY7OuqrBsQPTo3toZ2vbEl7b5cXatGDab3zDAqhQPRr+745lQ5vgU3?=
- =?us-ascii?Q?/Z38KRKeRVv1PW4XzPzMxgyMOIKJMQ3m7RK8oVGUKe3Sbeag3vaYvemX8zQ6?=
- =?us-ascii?Q?njVdNSEn0t/VuDitgzg1h6rP/bIyMjrnyNHMb5pFBFoa/NFIUpDLLJqcHYYz?=
- =?us-ascii?Q?IgRYozKCFMAXnWbu/DOCoa3PlpQdT775XwPei20CvSycEoD3CInu0mDGPt52?=
- =?us-ascii?Q?llxZdL1es073xuSxij6zpLUPqTJwYCztB2vImnpHZIuQunpXmYb/GrSqxqEO?=
- =?us-ascii?Q?gYTaiHcMHvQtlW2CQRJs02+62FV3HKMTdFvajSp+U/xDDlbJGOZvxztAx+6R?=
- =?us-ascii?Q?Kwroy+lWPzngkH+Ncv7Heu351B8kXXekRoxfZcLkHfH1+zl0uoCxrXRR5tuR?=
- =?us-ascii?Q?mY7pehw237RLdaorHv2tboULtOQ9ew/pwPZZvjM3EnD+YlZ1XjbBQatDzMeA?=
- =?us-ascii?Q?V7vV990AcceBKBO1/izpA2izNgtdVLQh2gY82VrSo0bEea2W1BoZiZj5Q9/r?=
- =?us-ascii?Q?7HP1yYk4byGifWQqnGszKYA3FYEhuuEL5AK2nEiWK74GGmeJorCVOiRJvoGv?=
- =?us-ascii?Q?7C3MyoEmw+gqogYfnuEGd/oG70TvoKizbDiy+bbnRvXsZUgRT7TJcd2sD673?=
- =?us-ascii?Q?CGaXu59saoIf/COlAgpohWDZ89nfOGULYdGsZk8Mjhzvm+QEIWNAj1WHJlQ7?=
- =?us-ascii?Q?GM7YrmCLOhkDH/xxUpkI8XihgE1UfG66MMkPz2ZNT5H1gEQsCh0qruK2/CGi?=
- =?us-ascii?Q?iTie+0cPwMt+mi9XkcCP0Tdp57XtGCiNZTeCVTABEHQbutqJy0N8lygfLaOy?=
- =?us-ascii?Q?3r/A0UX+4vaGSZWyur8YRPkVP9u40bz9U/JvtPWVH/xaMWCDk3P4RNrIwCBi?=
- =?us-ascii?Q?s0vxBTPs1YH1uH8cyQBC0VuRcWqyZqr9j4Apzd6zZgIf0WqkvLFDLstKA69P?=
- =?us-ascii?Q?gtb8MIkYVIg0ibKOK5YM+GDtJYHnCxDJrAxIrczy+BXYrdiD8PzwBhbgvUnH?=
- =?us-ascii?Q?AcOLvAhEOvMF0zqs3xmQzEh3UvXFGL6aJ3ST7Keapk3ahD6BBdbu4NxtWnh5?=
- =?us-ascii?Q?+wO6sIdhef0lrLHDpP0zBIB4b4JzIaYLdlYXt0OM?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 2 Mar 2023 04:05:09 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22A31BAD3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:04:57 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pXerX-0004Wq-3b; Thu, 02 Mar 2023 10:04:31 +0100
+Message-ID: <17fdf6f1-60ab-bfde-afc8-5afef6cc797b@leemhuis.info>
+Date:   Thu, 2 Mar 2023 10:04:30 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b15c8992-6441-4043-519b-08db1afd0b5d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 09:03:52.2614
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yj47OKPRdt/DHw+uBwBfYp2BTS/SFVZ51wtM+st9vYpMZr5mxFgGMRIzmfq7cOM+g6nZARNDt47ZeNoRRMqj7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5379
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, de-DE
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Aleksandr Nogikh <nogikh@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Theodore Ts'o <tytso@mit.edu>
+References: <cover.1674217480.git.linux@leemhuis.info>
+ <bb5dfd55ea2026303ab2296f4a6df3da7dd64006.1674217480.git.linux@leemhuis.info>
+ <20230301204602.5e9bf3c0@kernel.org>
+ <ff62632d-7558-a86c-5541-a54de6e107e7@leemhuis.info>
+ <20230301214023.610a9feb@kernel.org>
+ <CACT4Y+bxUA1v14y0SGC887er5Nif3ZEanjO_m=K4WBwyNfmZHA@mail.gmail.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v4 2/3] checkpatch: warn when Reported-by: is not followed
+ by Link:
+In-Reply-To: <CACT4Y+bxUA1v14y0SGC887er5Nif3ZEanjO_m=K4WBwyNfmZHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1677747897;ea3bf67d;
+X-HE-SMSGID: 1pXerX-0004Wq-3b
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> Sent: Thursday, March 2, 2023 7:57 AM
->
-> -static inline void mm_pasid_drop(struct mm_struct *mm)
-> -{
-> -	if (pasid_valid(mm->pasid)) {
-> -		ioasid_free(mm->pasid);
-> -		mm->pasid =3D INVALID_IOASID;
-> -	}
-> -}
-> +void mm_pasid_drop(struct mm_struct *mm);
+On 02.03.23 09:27, Dmitry Vyukov wrote:
+> On Thu, 2 Mar 2023 at 06:40, Jakub Kicinski <kuba@kernel.org> wrote:
+>> On Thu, 2 Mar 2023 06:17:22 +0100 Thorsten Leemhuis wrote:
+>>> On 02.03.23 05:46, Jakub Kicinski wrote:
+>>>> On Fri, 20 Jan 2023 13:35:19 +0100 Thorsten Leemhuis wrote:
+>>>>> Encourage patch authors to link to reports by issuing a warning, if
+>>>>> a Reported-by: is not accompanied by a link to the report. Those links
+>>>>> are often extremely useful for any code archaeologist that wants to know
+>>>>> more about the backstory of a change than the commit message provides.
+>>>>> That includes maintainers higher up in the patch-flow hierarchy, which
+>>>>> is why Linus asks developers to add such links [1, 2, 3]. To quote [1]:
+>>>>
+>>>> Is it okay if we exclude syzbot reports from this rule?
+>>>> If full syzbot report ID is provided - it's as good as a link.
+>>>
+>>> Hmmm. Not sure. Every special case makes things harder for humans and
+>>> software that looks at a commits downstream. Clicking on a link also
+>>> makes things easy for code archaeologists that might look into the issue
+>>> months or years later (which might not even know how to find the report
+>>> and potential discussions on lore from the syzbot report ID).
+>>
+>> No other system comes close to syzbot in terms of reporting meaningful
+>> bugs, IMHO special casing it doesn't risk creep.
+>>
+>> Interestingly other bots attach links which are 100% pointless noise:
+>>
+>> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4174
+>>
+>> Oh, eh. Let's see how noisy this check is once the merge window is over.
+>>
+>>> Hence, wouldn't it be better to ask the syzbot folks to change their
+>>> reporting slightly and suggest something like this instead in their
+>>> reports (the last line is the new one):
+>>>
+>>> ```
+>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>>> Reported-by: syzbot+bba886ab504fcafecafe@syzkaller.appspotmail.com
+>>> Link: https://lore.kernel.org/r/cafecaca0cafecaca0cafecaca0@google.com/
+>>> ```
+>>>
+>>> This might not be to hard if they known the message-id in advance. Maybe
+>>> they could even use the syzbot report ID as msg-id to make things even
+>>> easier. And for developers not much would change afaics, they just need
+>>> to copy and paste two lines instead of one.
+>>
+>> Dmitry, WDYT?
+> 
+> Adding a Link to syzbot reports should be relatively trivial.
 
-Is it good to have a function declared in a header file of one
-subsystem while being implemented in another subsystem?
+Sounds good.
+
+> Ted proposed to use Link _instead_ of Reported-by:
+> https://github.com/google/syzkaller/issues/3596
+>> in fact, it might be nice if we could encourage upstream developers
+>> put in the commit trailer:
+>> Link: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
+>> in addition to, or better yet, instead of:
+>> Reported-by: syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
+> 
+> We could also use a link in the Reported-by tag, e.g.:
+> 
+> Reported-by: https://syzkaller.appspot.com/b/5266d464285a03cee9db
+> 
+> Some folks parse Reported-by to collect stats.
+> 
+> What is better?
+
+Here are my thoughts:
+
+* we should definitely have a "Link:" to the report in lore, as that's
+the long-term archive under our own control and also where discussions
+happen after the report was posted; but I'm biased here, as such a tag
+would make tracking with regzbot a no-brainer ;)
+
+* "Reported-by:" IMHO should stay for the hat tip and stats aspects; I
+don't care if it includes the syzbot report ID or not (omitting it might
+be good for the stats aspects and is more friendly to the eyes, but
+those are just details)
+
+* a Link: to the syzkaller web ui might be nice, too -- and likely is
+the easiest thing to look out for on the syzbot server side
+
+IOW something like this maybe:
+
+Reported-by: syzbot+cafecafecaca0cafecafe@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/cafecafecaca0cafecafe@google.com/
+Link: https://syzkaller.appspot.com/b/cafecafecaca0cafecafe
+
+Something like the following would look more normal, but of course is
+only possible if syzbot starts out to look for such Link: tags (not sure
+if the msgid is valid here, but you get the idea):
+
+Reported-by: syzbot@syzkaller.appspotmail.com
+Link:
+https://lore.kernel.org/r/syzbot+cafecafecaca0cafecafe-syzkaller-appspotmail-com@google.com/
+
+Ciao, Thorsten
