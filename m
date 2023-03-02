@@ -2,196 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E100F6A858E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75EC6A859B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjCBPsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S229885AbjCBPtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCBPsu (ORCPT
+        with ESMTP id S229747AbjCBPt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:48:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C223D6EAE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:48:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677772088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=07sLndxtEbNcERZvee6i0lRr3/Y/p7RWfWIjrJTakUw=;
-        b=RrtFQsum9nkTOzbQOV/sDgYVJfstKS06HYQak4ZLrz0WBWrSjQZiDS73CGlfGqEljz/h+I
-        TibqEKwv0i15MiZ/IfobyGpE97pt3pmLdW/Wes4FIaDhAn8ciqPjOtTGwWrBZ21ZF1gbho
-        AnKMgAOstK2QmsXbLq1Ii441q++p+dU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-44-okuLD5UbPwOSWhhuek_S9A-1; Thu, 02 Mar 2023 10:48:06 -0500
-X-MC-Unique: okuLD5UbPwOSWhhuek_S9A-1
-Received: by mail-wm1-f70.google.com with SMTP id m28-20020a05600c3b1c00b003e7d4662b83so1467851wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:48:05 -0800 (PST)
+        Thu, 2 Mar 2023 10:49:28 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2500839280
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:49:12 -0800 (PST)
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 15C2E3F22C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677772143;
+        bh=26437nXpVLIvdfg2JB4Z5LtSENxYNL+8c1al12BRcCM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=VTMeHmkAhZfyk+Id97d0vsia8x3WRlqbL3JQG+dezPONxUdWrJUXeamyohmEtv9KO
+         Ckk37EI3vvvrotfGhcCGuVSuUfgS12msr4PEx6jINlMt+Goj8pEOccavaeOQoe9Ezx
+         NlsAaxfjPgDVoWewXSyAy8Lh1Gv5UDl2xStuBBF7wso8fOAoM/usZlddEaQL88uOcW
+         FE22yyxQ1GJJKKcSqTqMJM/q+Lfj99dzr8HOuGAv+MgUJ+ngiyOhCjEoBui3d+tE66
+         DMAj697Es02vwIJA53CPSGl38pzLUITh/TNQ+0HMgMNCyhdbSe58Xe7lr1HB4h0cEA
+         hcaoqII4u165A==
+Received: by mail-qt1-f200.google.com with SMTP id z22-20020ac86b96000000b003bfc3f97097so8642505qts.14
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:49:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677772084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=07sLndxtEbNcERZvee6i0lRr3/Y/p7RWfWIjrJTakUw=;
-        b=PL7ZK94Gjfkvcumw4FDL6La8RQbtqEzQbyBEviIZTL1b+GbOlbKW9/vzthv9+wZcKN
-         ERlvWE8bBYaKByLR+96KzIJRaIwAxQGdeAMOaIH9oQPsWsXn+cm3PZvvEISnLELLshXy
-         kuLO8jWWtW3pTbtpoVD4IPT8Unt1+PMoOC7l/ZEFkeUVTucqB8Nq/27WDMi+ZdEFceGa
-         l42wTKUgNh/TA0ZHYyaPjcUxWtOyh510Ty4tKOAznjKHpvJ44aL+/VxqOR+AVcswdqdY
-         MRjEb2R9edZzETWa1bobj4o28aM7Fj+vRIL9WcHg3AUVFc8Vsmb1CSIKUxZp/iV2JpjY
-         US5A==
-X-Gm-Message-State: AO0yUKUMeIvdVOjv39I2gVXLmlN0frDeCdUXEIXcnJxGd/gAM5pf0IxG
-        UDcIsb3l/Mcc35N9lN8wCpUv+VxCJlsR6RBDKJ32sX4luHc5221sbTCW3eavzIcJPvGPVwRtzNd
-        3WfVhr5f/yaQJ7Itvdx2QvpHr
-X-Received: by 2002:a05:6000:1a42:b0:2c3:be89:7c2a with SMTP id t2-20020a0560001a4200b002c3be897c2amr1809002wry.13.1677772084120;
-        Thu, 02 Mar 2023 07:48:04 -0800 (PST)
-X-Google-Smtp-Source: AK7set/EzktI0OlHucSuQTWKTKC3fqx8GzoJhXbuJEu5Rqstra/4hZCkq7D6l1IWXwedBvmq/luXbw==
-X-Received: by 2002:a05:6000:1a42:b0:2c3:be89:7c2a with SMTP id t2-20020a0560001a4200b002c3be897c2amr1808989wry.13.1677772083843;
-        Thu, 02 Mar 2023 07:48:03 -0800 (PST)
-Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
-        by smtp.gmail.com with ESMTPSA id s18-20020a7bc392000000b003eb20d4d4a8sm3202128wmj.44.2023.03.02.07.48.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 07:48:03 -0800 (PST)
-Date:   Thu, 2 Mar 2023 16:48:00 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 6/8] vdpa_sim: use kthread worker
-Message-ID: <20230302154800.z3i4fpjlvtb74efu@sgarzare-redhat>
-References: <20230302113421.174582-1-sgarzare@redhat.com>
- <20230302113421.174582-7-sgarzare@redhat.com>
- <ZADA/GgpbDoi+SzU@corigine.com>
+        d=1e100.net; s=20210112; t=1677772142;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=26437nXpVLIvdfg2JB4Z5LtSENxYNL+8c1al12BRcCM=;
+        b=2w4nWEOiNt/xvn+xWL0qXCLlUWMJLK0pb+BCh/wOYngs8y0TpeOpjzgNR7gUkim2h0
+         ThcFaBvwqZziz3RtYt0P8YI5tc0vpKUnN/OiMktW8gn7m6wS7p+bDSJBcbwRohlxgLtb
+         iW8SAbkVzg/Of7yRu105UKA64dq4k90cdgvUTeYTPiJWlaqRYye7cG4+w/aaxlu+D4Wm
+         3d/ddoSsxEquTT0eV3MRrMB8kHqQEwUVloBzHRmNW5YvdA/+x/o4ihoV69q3ZrbfnE86
+         bO7Dz5prt9771//twQRIMolDODTyIxycON6w3t6qK9JYkUZg+OwOTetdDYZ++VxZoAsj
+         l7lw==
+X-Gm-Message-State: AO0yUKWaUOKfvTzmcprThpBuTUiCSSccXfKOVJxukgxuTHfDmQXCDXeL
+        CS6JIAo2cb3ay/c+jYWWmZXEC346Ap5U2ibv2LbUbKQffkZL1S6AFIy9G6n6982qmWX58AlZJTn
+        fDGUCOiY8vVKZvTVqm72N+uEr3Fn5dXHswsTJJOCTHflWF8uMdvTSpmsMlQ==
+X-Received: by 2002:a05:620a:8507:b0:742:72c6:a140 with SMTP id pe7-20020a05620a850700b0074272c6a140mr2742715qkn.7.1677772142053;
+        Thu, 02 Mar 2023 07:49:02 -0800 (PST)
+X-Google-Smtp-Source: AK7set85+Cm77MyzMrEEH75ngClLjWoi9FAzp9hBuPRmAfS8DG4Ui7kSmFYG8gaN7QUtuqikVXUnTy2DIKbarZK//fw=
+X-Received: by 2002:a05:620a:8507:b0:742:72c6:a140 with SMTP id
+ pe7-20020a05620a850700b0074272c6a140mr2742708qkn.7.1677772141789; Thu, 02 Mar
+ 2023 07:49:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZADA/GgpbDoi+SzU@corigine.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230221083323.302471-1-xingyu.wu@starfivetech.com> <20230221083323.302471-10-xingyu.wu@starfivetech.com>
+In-Reply-To: <20230221083323.302471-10-xingyu.wu@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Thu, 2 Mar 2023 16:48:45 +0100
+Message-ID: <CAJM55Z8XnBtBJK8tgDBoQ0FLFY10NQ3es7Aj0TwiTG6vfzqUSQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/11] clk: starfive: Add StarFive JH7110 Video-Output
+ clock driver
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 04:30:04PM +0100, Simon Horman wrote:
->On Thu, Mar 02, 2023 at 12:34:19PM +0100, Stefano Garzarella wrote:
->> Let's use our own kthread to run device jobs.
->> This allows us more flexibility, especially we can attach the kthread
->> to the user address space when vDPA uses user's VA.
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> ---
->>  drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 ++-
->>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 17 ++++++++++++-----
->>  2 files changed, 14 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->> index acee20faaf6a..ce83f9130a5d 100644
->> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
->> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->> @@ -57,7 +57,8 @@ struct vdpasim_dev_attr {
->>  struct vdpasim {
->>  	struct vdpa_device vdpa;
->>  	struct vdpasim_virtqueue *vqs;
->> -	struct work_struct work;
->> +	struct kthread_worker *worker;
->> +	struct kthread_work work;
->>  	struct vdpasim_dev_attr dev_attr;
->>  	/* spinlock to synchronize virtqueue state */
->>  	spinlock_t lock;
->> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> index a6ee830efc38..6feb29726c2a 100644
->> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> @@ -11,8 +11,8 @@
->>  #include <linux/module.h>
->>  #include <linux/device.h>
->>  #include <linux/kernel.h>
->> +#include <linux/kthread.h>
->>  #include <linux/slab.h>
->> -#include <linux/sched.h>
->>  #include <linux/dma-map-ops.h>
->>  #include <linux/vringh.h>
->>  #include <linux/vdpa.h>
->> @@ -116,7 +116,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
->>  static const struct vdpa_config_ops vdpasim_config_ops;
->>  static const struct vdpa_config_ops vdpasim_batch_config_ops;
->>
->> -static void vdpasim_work_fn(struct work_struct *work)
->> +static void vdpasim_work_fn(struct kthread_work *work)
->>  {
->>  	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
->>
->> @@ -159,7 +159,13 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->>
->>  	vdpasim = vdpa_to_sim(vdpa);
->>  	vdpasim->dev_attr = *dev_attr;
->> -	INIT_WORK(&vdpasim->work, vdpasim_work_fn);
->> +
->> +	kthread_init_work(&vdpasim->work, vdpasim_work_fn);
->> +	vdpasim->worker = kthread_create_worker(0, "vDPA sim worker: %s",
->> +						dev_attr->name);
->> +	if (IS_ERR(vdpasim->worker))
->> +		goto err_iommu;
+On Tue, 21 Feb 2023 at 09:40, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
 >
->Branching to err_iommu will result in a call to put_device(dev)...
+> Add driver for the StarFive JH7110 Video-Output clock controller.
+>
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+>  drivers/clk/starfive/Kconfig                  |  11 +
+>  drivers/clk/starfive/Makefile                 |   1 +
+>  .../clk/starfive/clk-starfive-jh7110-vout.c   | 261 ++++++++++++++++++
+>  3 files changed, 273 insertions(+)
+>  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-vout.c
+>
+> diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
+> index 59499acb95f7..5ebf1ed08627 100644
+> --- a/drivers/clk/starfive/Kconfig
+> +++ b/drivers/clk/starfive/Kconfig
+> @@ -64,3 +64,14 @@ config CLK_STARFIVE_JH7110_ISP
+>         help
+>           Say yes here to support the Image-Signal-Process clock controller
+>           on the StarFive JH7110 SoC.
+> +
+> +config CLK_STARFIVE_JH7110_VOUT
+> +       tristate "StarFive JH7110 Video-Output clock support"
+> +       depends on CLK_STARFIVE_JH7110_SYS && JH71XX_PMU
+> +       select AUXILIARY_BUS
+> +       select CLK_STARFIVE_JH71X0
+> +       select RESET_STARFIVE_JH7110
+> +       default CLK_STARFIVE_JH7110_SYS
 
-Good catch!
+default m if ARCH_STARFIVE
 
->
->> +
->>  	spin_lock_init(&vdpasim->lock);
->>  	spin_lock_init(&vdpasim->iommu_lock);
->
->... but dev is not initialised until the line following this hunk,
->which is:
->
->	dev = &vdpasim->vdpa.dev;
->
->In order to avoid leaking dev I _think_ the correct approach
->is to move the initialisation of dev above the branch to
->err_iommu, perhaps above the call to kthread_init_work()
->is a good place.
+> +       help
+> +         Say yes here to support the Video-Output clock controller
+> +         on the StarFive JH7110 SoC.
+> diff --git a/drivers/clk/starfive/Makefile b/drivers/clk/starfive/Makefile
+> index 76fb9f8d628b..841377e45bb6 100644
+> --- a/drivers/clk/starfive/Makefile
+> +++ b/drivers/clk/starfive/Makefile
+> @@ -8,3 +8,4 @@ obj-$(CONFIG_CLK_STARFIVE_JH7110_SYS)   += clk-starfive-jh7110-sys.o
+>  obj-$(CONFIG_CLK_STARFIVE_JH7110_AON)  += clk-starfive-jh7110-aon.o
+>  obj-$(CONFIG_CLK_STARFIVE_JH7110_STG)  += clk-starfive-jh7110-stg.o
+>  obj-$(CONFIG_CLK_STARFIVE_JH7110_ISP)  += clk-starfive-jh7110-isp.o
+> +obj-$(CONFIG_CLK_STARFIVE_JH7110_VOUT) += clk-starfive-jh7110-vout.o
+> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-vout.c b/drivers/clk/starfive/clk-starfive-jh7110-vout.c
+> new file mode 100644
+> index 000000000000..d786537563a4
+> --- /dev/null
+> +++ b/drivers/clk/starfive/clk-starfive-jh7110-vout.c
+> @@ -0,0 +1,261 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * StarFive JH7110 Video-Output Clock Driver
+> + *
+> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/io.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/reset.h>
+> +
+> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
+> +
+> +#include "clk-starfive-jh71x0.h"
+> +
+> +/* external clocks */
+> +#define JH7110_VOUTCLK_VOUT_SRC                        (JH7110_VOUTCLK_END + 0)
+> +#define JH7110_VOUTCLK_VOUT_TOP_AHB            (JH7110_VOUTCLK_END + 1)
+> +#define JH7110_VOUTCLK_VOUT_TOP_AXI            (JH7110_VOUTCLK_END + 2)
+> +#define JH7110_VOUTCLK_VOUT_TOP_HDMITX0_MCLK   (JH7110_VOUTCLK_END + 3)
+> +#define JH7110_VOUTCLK_I2STX0_BCLK             (JH7110_VOUTCLK_END + 4)
+> +#define JH7110_VOUTCLK_HDMITX0_PIXELCLK                (JH7110_VOUTCLK_END + 5)
+> +#define JH7110_VOUTCLK_EXT_END                 (JH7110_VOUTCLK_END + 6)
+> +
+> +static const struct jh71x0_clk_data jh7110_voutclk_data[] = {
+> +       /* divider */
+> +       JH71X0__DIV(JH7110_VOUTCLK_APB, "apb", 8, JH7110_VOUTCLK_VOUT_TOP_AHB),
+> +       JH71X0__DIV(JH7110_VOUTCLK_DC8200_PIX, "dc8200_pix", 63, JH7110_VOUTCLK_VOUT_SRC),
+> +       JH71X0__DIV(JH7110_VOUTCLK_DSI_SYS, "dsi_sys", 31, JH7110_VOUTCLK_VOUT_SRC),
+> +       JH71X0__DIV(JH7110_VOUTCLK_TX_ESC, "tx_esc", 31, JH7110_VOUTCLK_VOUT_TOP_AHB),
+> +       /* dc8200 */
+> +       JH71X0_GATE(JH7110_VOUTCLK_DC8200_AXI, "dc8200_axi", 0, JH7110_VOUTCLK_VOUT_TOP_AXI),
+> +       JH71X0_GATE(JH7110_VOUTCLK_DC8200_CORE, "dc8200_core", 0, JH7110_VOUTCLK_VOUT_TOP_AXI),
+> +       JH71X0_GATE(JH7110_VOUTCLK_DC8200_AHB, "dc8200_ahb", 0, JH7110_VOUTCLK_VOUT_TOP_AHB),
+> +       JH71X0_GMUX(JH7110_VOUTCLK_DC8200_PIX0, "dc8200_pix0", 0, 2,
+> +                   JH7110_VOUTCLK_DC8200_PIX,
+> +                   JH7110_VOUTCLK_HDMITX0_PIXELCLK),
+> +       JH71X0_GMUX(JH7110_VOUTCLK_DC8200_PIX1, "dc8200_pix1", 0, 2,
+> +                   JH7110_VOUTCLK_DC8200_PIX,
+> +                   JH7110_VOUTCLK_HDMITX0_PIXELCLK),
+> +       /* LCD */
+> +       JH71X0_GMUX(JH7110_VOUTCLK_DOM_VOUT_TOP_LCD, "dom_vout_top_lcd", 0, 2,
+> +                   JH7110_VOUTCLK_DC8200_PIX0,
+> +                   JH7110_VOUTCLK_DC8200_PIX1),
+> +       /* dsiTx */
+> +       JH71X0_GATE(JH7110_VOUTCLK_DSITX_APB, "dsiTx_apb", 0, JH7110_VOUTCLK_DSI_SYS),
+> +       JH71X0_GATE(JH7110_VOUTCLK_DSITX_SYS, "dsiTx_sys", 0, JH7110_VOUTCLK_DSI_SYS),
+> +       JH71X0_GMUX(JH7110_VOUTCLK_DSITX_DPI, "dsiTx_dpi", 0, 2,
+> +                   JH7110_VOUTCLK_DC8200_PIX,
+> +                   JH7110_VOUTCLK_HDMITX0_PIXELCLK),
+> +       JH71X0_GATE(JH7110_VOUTCLK_DSITX_TXESC, "dsiTx_txesc", 0, JH7110_VOUTCLK_TX_ESC),
+> +       /* mipitx DPHY */
+> +       JH71X0_GATE(JH7110_VOUTCLK_MIPITX_DPHY_TXESC, "mipitx_dphy_txesc", 0,
+> +                   JH7110_VOUTCLK_TX_ESC),
+> +       /* hdmi */
+> +       JH71X0_GATE(JH7110_VOUTCLK_HDMI_TX_MCLK, "hdmi_tx_mclk", 0,
+> +                   JH7110_VOUTCLK_VOUT_TOP_HDMITX0_MCLK),
+> +       JH71X0_GATE(JH7110_VOUTCLK_HDMI_TX_BCLK, "hdmi_tx_bclk", 0,
+> +                   JH7110_VOUTCLK_I2STX0_BCLK),
+> +       JH71X0_GATE(JH7110_VOUTCLK_HDMI_TX_SYS, "hdmi_tx_sys", 0, JH7110_VOUTCLK_APB),
+> +};
+> +
+> +struct vout_top_crg {
+> +       struct clk_bulk_data *top_clks;
+> +       struct reset_control *top_rst;
+> +       int top_clks_num;
+> +       void __iomem *base;
+> +};
+> +
+> +static struct clk_bulk_data jh7110_vout_top_clks[] = {
+> +       { .id = "vout_src" },
+> +       { .id = "vout_top_ahb" }
+> +};
+> +
+> +static struct vout_top_crg *top_crg_from(void __iomem **base)
+> +{
+> +       return container_of(base, struct vout_top_crg, base);
+> +}
+> +
+> +static int jh7110_vout_top_crg_get(struct jh71x0_clk_priv *priv, struct vout_top_crg *top)
+> +{
+> +       int ret;
+> +
+> +       top->top_clks = jh7110_vout_top_clks;
+> +       top->top_clks_num = ARRAY_SIZE(jh7110_vout_top_clks);
+> +       ret = devm_clk_bulk_get(priv->dev, top->top_clks_num, top->top_clks);
+> +       if (ret) {
+> +               dev_err(priv->dev, "top clks get failed: %d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       /* The reset should be shared and other Vout modules will use its. */
+> +       top->top_rst = devm_reset_control_get_shared(priv->dev, NULL);
+> +       if (IS_ERR(top->top_rst)) {
+> +               dev_err(priv->dev, "top rst get failed\n");
+> +               return PTR_ERR(top->top_rst);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int jh7110_vout_top_crg_enable(struct vout_top_crg *top)
+> +{
+> +       int ret;
+> +
+> +       ret = clk_bulk_prepare_enable(top->top_clks_num, top->top_clks);
+> +       if (ret)
+> +               return ret;
 
-Yep, I agree. I'll fix in v3.
+Hmm.. do all the clocks used as input really need to be enabled for
+any one of the vout clocks to work?
 
-Thanks,
-Stefano
+In other words: suppose you just need a single clock in the VOUTCRG
+domain. Do we really need to turn on all the input clocks for the
+VOUTCRG for that one clock to work? Normally I'd expect the clock
+framework to make sure all parents of that clock are enabled.
 
->
->This does move the assignment outside the locks above.
->But I _think_ that is ok.
->
->> @@ -212,7 +218,7 @@ EXPORT_SYMBOL_GPL(vdpasim_create);
->>
->>  void vdpasim_schedule_work(struct vdpasim *vdpasim)
->>  {
->> -	schedule_work(&vdpasim->work);
->> +	kthread_queue_work(vdpasim->worker, &vdpasim->work);
->>  }
->>  EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
->>
->> @@ -612,7 +618,8 @@ static void vdpasim_free(struct vdpa_device *vdpa)
->>  	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>  	int i;
->>
->> -	cancel_work_sync(&vdpasim->work);
->> +	kthread_cancel_work_sync(&vdpasim->work);
->> +	kthread_destroy_worker(vdpasim->worker);
->>
->>  	for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
->>  		vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
->> --
->> 2.39.2
->>
->
+> +
+> +       return reset_control_deassert(top->top_rst);
+> +}
+> +
+> +static void jh7110_vout_top_crg_disable(struct vout_top_crg *top)
+> +{
+> +       clk_bulk_disable_unprepare(top->top_clks_num, top->top_clks);
+> +}
+> +
+> +static struct clk_hw *jh7110_voutclk_get(struct of_phandle_args *clkspec, void *data)
+> +{
+> +       struct jh71x0_clk_priv *priv = data;
+> +       unsigned int idx = clkspec->args[0];
+> +
+> +       if (idx < JH7110_VOUTCLK_END)
+> +               return &priv->reg[idx].hw;
+> +
+> +       return ERR_PTR(-EINVAL);
+> +}
+> +
+> +static int jh7110_voutcrg_probe(struct platform_device *pdev)
+> +{
+> +       struct jh71x0_clk_priv *priv;
+> +       struct vout_top_crg *top;
+> +       unsigned int idx;
+> +       int ret;
+> +
+> +       priv = devm_kzalloc(&pdev->dev,
+> +                           struct_size(priv, reg, JH7110_VOUTCLK_END),
+> +                           GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +
+> +       top = devm_kzalloc(&pdev->dev, sizeof(*top), GFP_KERNEL);
+> +       if (!top)
+> +               return -ENOMEM;
+> +
+> +       spin_lock_init(&priv->rmw_lock);
+> +       priv->dev = &pdev->dev;
+> +       priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(priv->base))
+> +               return PTR_ERR(priv->base);
+> +
+> +       top->base = priv->base;
+> +       dev_set_drvdata(priv->dev, (void *)(&top->base));
+> +
+> +       pm_runtime_enable(priv->dev);
+> +       ret = pm_runtime_get_sync(priv->dev);
+> +       if (ret < 0) {
+> +               dev_err(priv->dev, "failed to turn power: %d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       ret = jh7110_vout_top_crg_get(priv, top);
+> +       if (ret)
+> +               goto err_clk;
+> +
+> +       ret = jh7110_vout_top_crg_enable(top);
+> +       if (ret)
+> +               goto err_clk;
+> +
+> +       for (idx = 0; idx < JH7110_VOUTCLK_END; idx++) {
+> +               u32 max = jh7110_voutclk_data[idx].max;
+> +               struct clk_parent_data parents[4] = {};
+> +               struct clk_init_data init = {
+> +                       .name = jh7110_voutclk_data[idx].name,
+> +                       .ops = starfive_jh71x0_clk_ops(max),
+> +                       .parent_data = parents,
+> +                       .num_parents =
+> +                               ((max & JH71X0_CLK_MUX_MASK) >> JH71X0_CLK_MUX_SHIFT) + 1,
+> +                       .flags = jh7110_voutclk_data[idx].flags,
+> +               };
+> +               struct jh71x0_clk *clk = &priv->reg[idx];
+> +               unsigned int i;
+> +               char *fw_name[JH7110_VOUTCLK_EXT_END - JH7110_VOUTCLK_END] = {
 
+this can be const char *const fw_name[...] right?
+
+> +                       "vout_src",
+> +                       "vout_top_ahb",
+> +                       "vout_top_axi",
+> +                       "vout_top_hdmitx0_mclk",
+> +                       "i2stx0_bclk",
+> +                       "hdmitx0_pixelclk"
+> +               };
+> +
+> +               for (i = 0; i < init.num_parents; i++) {
+> +                       unsigned int pidx = jh7110_voutclk_data[idx].parents[i];
+> +
+> +                       if (pidx < JH7110_VOUTCLK_END)
+> +                               parents[i].hw = &priv->reg[pidx].hw;
+> +                       else if (pidx < JH7110_VOUTCLK_EXT_END)
+> +                               parents[i].fw_name = fw_name[pidx - JH7110_VOUTCLK_END];
+> +               }
+> +
+> +               clk->hw.init = &init;
+> +               clk->idx = idx;
+> +               clk->max_div = max & JH71X0_CLK_DIV_MASK;
+> +
+> +               ret = devm_clk_hw_register(&pdev->dev, &clk->hw);
+> +               if (ret)
+> +                       goto err_exit;
+> +       }
+> +
+> +       ret = devm_of_clk_add_hw_provider(&pdev->dev, jh7110_voutclk_get, priv);
+> +       if (ret)
+> +               goto err_exit;
+> +
+> +       ret = jh7110_reset_controller_register(priv, "reset-vout", 4);
+> +       if (ret)
+> +               goto err_exit;
+> +
+> +       return 0;
+> +
+> +err_exit:
+> +       jh7110_vout_top_crg_disable(top);
+> +err_clk:
+> +       pm_runtime_put_sync(priv->dev);
+> +       pm_runtime_disable(priv->dev);
+> +       return ret;
+> +}
+> +
+> +static int jh7110_voutcrg_remove(struct platform_device *pdev)
+> +{
+> +       void __iomem **base = dev_get_drvdata(&pdev->dev);
+> +       struct vout_top_crg *top = top_crg_from(base);
+> +
+> +       jh7110_vout_top_crg_disable(top);
+> +       pm_runtime_disable(&pdev->dev);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct of_device_id jh7110_voutcrg_match[] = {
+> +       { .compatible = "starfive,jh7110-voutcrg" },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, jh7110_voutcrg_match);
+> +
+> +static struct platform_driver jh7110_voutcrg_driver = {
+> +       .probe = jh7110_voutcrg_probe,
+> +       .remove = jh7110_voutcrg_remove,
+> +       .driver = {
+> +               .name = "clk-starfive-jh7110-vout",
+> +               .of_match_table = jh7110_voutcrg_match,
+> +       },
+> +};
+> +module_platform_driver(jh7110_voutcrg_driver);
+> +
+> +MODULE_AUTHOR("Xingyu Wu <xingyu.wu@starfivetech.com>");
+> +MODULE_DESCRIPTION("StarFive JH7110 Video-Output clock driver");
+> +MODULE_LICENSE("GPL");
+> --
+> 2.25.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
