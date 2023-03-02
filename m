@@ -2,157 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34186A7E83
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C596A7E9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjCBJrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S230134AbjCBJsu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Mar 2023 04:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjCBJrH (ORCPT
+        with ESMTP id S230061AbjCBJsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:47:07 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8759A1ABC8;
-        Thu,  2 Mar 2023 01:47:06 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x3so2168382edb.10;
-        Thu, 02 Mar 2023 01:47:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677750425;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/qe0Li2oGvWX18ZM3w3rNfX+KQMA8rRBxTKHfoJQVdc=;
-        b=Gvh7PfztBNgT/nyPAtEUwJ4hQBaRLHoypcVeP8M6hVcxDj9RhwyOX4BA3ZzUUD3XO7
-         lNb6t6Jv5lRRsxSGHGvOpirFMaP0cQ26J66/IA+73Bbr8f8y4itjlQIycqfdj6jt0B+q
-         nXMIco/+D85fayGa0OYBk07GFpRJxd5y/UVQ/y8fVPofMqOwRPFbzAGrBzn6EJTSjccy
-         byInFR+NzGL3JGK+9vWt4ImM9MTCsgOUQKnB/7XnX1eHvwZDFJyHt2lsDSPHbS2Bgol0
-         7KI9jQ+Zl+C9CMI7iKmmGzTZl4aSHtRD3/ojB4KjZGWP0488WTJladMtXcp31UctjQSE
-         DpxA==
+        Thu, 2 Mar 2023 04:48:32 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973BC1F5C0;
+        Thu,  2 Mar 2023 01:48:07 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id l13so17405161qtv.3;
+        Thu, 02 Mar 2023 01:48:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677750425;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/qe0Li2oGvWX18ZM3w3rNfX+KQMA8rRBxTKHfoJQVdc=;
-        b=VK/NRm3EgBLOhNC1t/9ICy9eN4BMtvlIN20Hwmfg3HlSkTR+SkY22WzIIOxD8C/8Gq
-         s0/R4jiGB82YeCybwQ1HgKpgINZtmdNuBA5IYlwkGJpc7eS8GhhfOtFhpU5Nn8F0mBR+
-         n9Epv/8VH4xyhoDIHptwf0hDER9Oq/9/ilZBG7CzWgIXpT8d0CC1H8mBnmV50r/evp13
-         6W5DPFPopUHOMMc2dqgefYzS4AsWIvp+QBEn+WFAGK5Po13Ipxl0BPll903Y6UG7EoOm
-         gTFkkilAp8OFNsk2OZ16gPLriH7ihrXdVQWFd2hCO0do1FRphNLzg+1oBGkATUAed6z0
-         g2Zw==
-X-Gm-Message-State: AO0yUKVmZoGOOqIRQami+nxCJuKIVhWaTd/PpUWjTwdvGFBcIyBh3Y7j
-        3Uxs47zXFbIjnvOb0DSpCPQ=
-X-Google-Smtp-Source: AK7set+w7t5FsEyn281dLvfHhYds09jPRD2GXvdbMLLEJvaa9rt5QhaL4eqoRmCCneTAs+OrP13Pjw==
-X-Received: by 2002:a17:906:a9a:b0:878:4bc1:dd19 with SMTP id y26-20020a1709060a9a00b008784bc1dd19mr9097818ejf.52.1677750424867;
-        Thu, 02 Mar 2023 01:47:04 -0800 (PST)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id o11-20020a170906358b00b008baeb5c9bdbsm7016571ejb.141.2023.03.02.01.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 01:47:04 -0800 (PST)
-Date:   Thu, 2 Mar 2023 10:47:02 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v5 16/18] thermal/drivers/tegra: Remove unneeded lock
- when setting a trip point
-Message-ID: <ZABwllXuTHbUhnue@orome>
-References: <20230301201446.3713334-1-daniel.lezcano@linaro.org>
- <20230301201446.3713334-17-daniel.lezcano@linaro.org>
+        bh=SFYMa4F5zx6QmdN+xdk9xuKBVfUQIkEC+rLl+xVi7rY=;
+        b=EfWCg05Dz/dIbTXy8d2dQdWFtNHulqzR5EmYrJOAWtetN56edOc/BaF2idN6KAtGMv
+         opLrvdZbPb9X+UprI3QsRj9fMZZfsDlMBtsPl68xxLKA1kn5tjSTzWXyCm6xlPhnB+xz
+         otE4rBY/2jKe1fKwVD4sYB8yq6JvRO6t5W7qaUzpPjK1Vz+l911AdHurr6Ij00EGAwER
+         6xnLNpSqAJ+hKClqQv++dhRSSmVEyVn3w0Ym5molSy/+o96NGs0uNL+1yRKOGD0lM5N3
+         Ty+i4/9XKXfBskLwETb40iZ9FHxLAMW1XmkSMHBgtcuNHFp6jqFL9vt8pxO3uqpXuUe/
+         wDwA==
+X-Gm-Message-State: AO0yUKXKX8sJ4VHXrlnHjrU6pDWVI13jwSCl3Pk36ofUfOqiYXZpBWHB
+        ASg/FHuiu1O8Ki2y3CWgeu4I7J0FPx+ppQ==
+X-Google-Smtp-Source: AK7set/8n0Vqjnq+nbmuXuxHIwYDhUAg1l+gXXyY1EkLs/qabGOfH5PkBGr8PPpz0kMiSJVhaw07kw==
+X-Received: by 2002:a05:622a:1a8c:b0:3b9:bc8c:c1fb with SMTP id s12-20020a05622a1a8c00b003b9bc8cc1fbmr2434895qtc.6.1677750486350;
+        Thu, 02 Mar 2023 01:48:06 -0800 (PST)
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com. [209.85.160.177])
+        by smtp.gmail.com with ESMTPSA id s184-20020a372cc1000000b0073bb00eb0besm10573028qkh.22.2023.03.02.01.48.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 01:48:05 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id cf14so17332967qtb.10;
+        Thu, 02 Mar 2023 01:48:03 -0800 (PST)
+X-Received: by 2002:a81:ad43:0:b0:533:91d2:9d94 with SMTP id
+ l3-20020a81ad43000000b0053391d29d94mr5972312ywk.5.1677750462713; Thu, 02 Mar
+ 2023 01:47:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4/U54hRVG0VAzoU8"
-Content-Disposition: inline
-In-Reply-To: <20230301201446.3713334-17-daniel.lezcano@linaro.org>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230302093539.372962-1-alexghiti@rivosinc.com>
+In-Reply-To: <20230302093539.372962-1-alexghiti@rivosinc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 2 Mar 2023 10:47:31 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
+Message-ID: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/24] Remove COMMAND_LINE_SIZE from uapi
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alex,
 
---4/U54hRVG0VAzoU8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 2, 2023 at 10:35 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+> This all came up in the context of increasing COMMAND_LINE_SIZE in the
+> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+> maximum length of /proc/cmdline and userspace could staticly rely on
+> that to be correct.
+>
+> Usually I wouldn't mess around with changing this sort of thing, but
+> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+> increasing, but they're from before the UAPI split so I'm not quite sure
+> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+> asm-generic/setup.h.").
+>
+> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+> part of the uapi to begin with, and userspace should be able to handle
+> /proc/cmdline of whatever length it turns out to be.  I don't see any
+> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+> search, but that's not really enough to consider it unused on my end.
+>
+> This issue was already considered in s390 and they reached the same
+> conclusion in commit 622021cd6c56 ("s390: make command line
+> configurable").
+>
+> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
+> shouldn't be part of uapi, so this now touches all the ports.  I've
+> tried to split this all out and leave it bisectable, but I haven't
+> tested it all that aggressively.
+>
+> Changes since v3 <https://lore.kernel.org/all/20230214074925.228106-1-alexghiti@rivosinc.com/>:
+> * Added RB/AB
+> * Added a mention to commit 622021cd6c56 ("s390: make command line
+>   configurable") in the cover letter
 
-On Wed, Mar 01, 2023 at 09:14:44PM +0100, Daniel Lezcano wrote:
-> The function tegra_tsensor_enable_hw_channel() takes the thermal zone
-> lock to prevent "a potential" race with a call to set_trips()
-> callback.
->=20
-> The driver must not play with the thermal framework core code
-> internals.
->=20
-> The tegra_tsensor_enable_hw_channel() is called by:
->=20
->  - the suspend / resume callbacks
->  - the probe function after the thermal zones are registered
->=20
-> The thermal zone lock taken in this function is supposed to protect
-> from a call to the set_trips() callback which writes in the same
-> register.
->=20
-> The potential race is when suspend / resume are called at the same
-> time as set_trips. This one is called only in
-> thermal_zone_device_update().
->=20
->  - At suspend time, the 'in_suspend' is set, thus the
->    thermal_zone_device_update() bails out immediately and set_trips is
->    not called during this moment.
->=20
->  - At resume time, the thermal zone is updated at PM_POST_SUSPEND,
->    thus the driver has already set the TH2 temperature.
->=20
->  - At probe time, we register the thermal zone and then we set the
->    TH2. The only scenario I can see so far is the interrupt fires, the
->    thermal_zone_update() is called exactly at the moment
->    tegra_tsensor_enable_hw_channel() a few lines after registering it.
->=20
-> Enable the channels before setting up the interrupt. We close the
-> potential race window without using the thermal zone's lock.
->=20
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Suggested-by: Thierry Reding <thierry.reding@gmail.com>
-> ---
->  drivers/thermal/tegra/tegra30-tsensor.c | 25 ++++++++++++++-----------
->  1 file changed, 14 insertions(+), 11 deletions(-)
+Thanks for the update!
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+ Apparently you forgot to add your own SoB?
 
---4/U54hRVG0VAzoU8
-Content-Type: application/pgp-signature; name="signature.asc"
+Gr{oetje,eeting}s,
 
------BEGIN PGP SIGNATURE-----
+                        Geert
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQAcJYACgkQ3SOs138+
-s6HAow//bXdkecSf8BK7JCcXO2dmg2HCFrd0N4Kt/cY/86hVZKL4rmqgEz8gqwaG
-k/PhFwYLrLWqdenFyA47E1rj5Np2uQy6b5+iS6345abC3k0nA/j6wwDzNOXCiQKn
-vMC7ZJwJx2nZxmaFiv46z2SJ3k8sdA3ew6dACrRXUAtbOerUZtdOKU0JQjzyIKBo
-JURmhfexudw1oVkg8GqUmpc1dfO8pJ40jDu93QoPS1y/JPPzy5lJ6sjxaWRbELa8
-tRSza/pyNm3fkJp18iOvoj3IIoVYLIuvT7shF9DuAI7FL+zXDU4o3JBs1jvBcqUE
-dzQY/MNyeekQFwiq1XNxc42JzBLSWWfeuwV/LSNyfyvoYieHXaWCcjPSqK/X+JmD
-UcRvrKc8rO0q6XkWneMk1RTzMyKNw17LofYHWt1WFHt82zJxTa8wSE6z2Rvx8ebK
-e/MrYzuGrPiyzxzwugtVYu0fOUzdFlEip9s/iFHrhn8x/1QKR4tloJEUd5c557ap
-bhUvsjYcy2zyjWVUE0gg2RbT4QG8TkO7EjpUkIFwDJIHxn1ASVlV9eE6L8TOan9P
-lrGfvfmu+NrsHWjhhr1wNbxyQeA/ns83CV3nAKcz+5pxMLjtzWfpbLoqSx6e9H6G
-6YekX1Yizxss8/93IskqGB5I9Y9xzE36+y1iqnTFO2XjQXmZbYg=
-=jAUw
------END PGP SIGNATURE-----
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---4/U54hRVG0VAzoU8--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
