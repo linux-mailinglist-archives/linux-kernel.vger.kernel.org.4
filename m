@@ -2,110 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5CC6A81D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545016A81E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjCBMDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
+        id S229890AbjCBMGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:06:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjCBMDl (ORCPT
+        with ESMTP id S229494AbjCBMGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:03:41 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B78BF96F
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:03:40 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id bx12so13123672wrb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:03:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677758619;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=//nTMjC91UXahku8+Tdgj1LSFzE35LjlMWcyU1qZ1CQ=;
-        b=xC3lGcWemHgD69Qa6SjC7iLvsWcoyMqrRP2tbnso0lWItT3NJRh97pgog8qb12RHPd
-         vcYzmy4CqHGya/xFYdqheKBrfkkMNCDsdpfECVxn/sOr07JdI+bN8RQzQipunChja1SW
-         THeCPlrarcDbbQ2ghM3lMuli9UboDI5yFER6FuoxnqVQw52CGhvNSzPB74o1RZ2iY5VC
-         55EBjwBlSKzE2/5qIwbkbSHrG3Q7Ty+Qb5kT+CRJ7LM3Z9PBmoQfFtyh3zkZU1IOHzNh
-         P3Gxz9Vvvbga2/CjT2Y+BjNSO2yfAAgbnrKzt6vKAAL4EXJq0dEBNHqH2lbiEN+ivuMl
-         bfnQ==
+        Thu, 2 Mar 2023 07:06:30 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4F63B3DA
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:06:29 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id y6-20020a056602120600b0074c87f954bfso10619479iot.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:06:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677758619;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=//nTMjC91UXahku8+Tdgj1LSFzE35LjlMWcyU1qZ1CQ=;
-        b=HzALXiQSPy+J/nK1HkVPdCFAXX/4HPbcQTpd4OrogiSElwT2uQPcLLRfi5G5newx1q
-         ZSBJFdn+4/2tMFas5abCFgZVbsxBuyeBvR0lgq3akROKemu2kIsQqyYDNjbyYcbwRR2j
-         dRYExTx6C3RBIdYraSvyGdLD3DTkoq6/4bmUUmUbyvZhy8SSTjJBGZv/umqTf7BBHA8v
-         DeFMGlVkkkx+z4XbBScNHy0lj/vyImQZzK6rCQKLUpJT+86x3S+2wULZEy9Ps96a4mfD
-         FHNasjL0T6ARDSgLjXOH69pyQscCNEsq8PWliRMxH79RHWei/y2cEhJxQvFx1BcOyMHH
-         6TaQ==
-X-Gm-Message-State: AO0yUKWzAVAFcKOBBx26yJd6sshK6tjlNYAc/T4GgsSQhFvIxfCTmat4
-        VzZFJK6ZYR0Lp8VVdUELD1xVpA==
-X-Google-Smtp-Source: AK7set/cuxTBk2fSWYhYU5b2FKv5Yqgg6rOXfNsTT+RpLAGnq0BSBmhWdoPN6utwXYOimmwl91XfaA==
-X-Received: by 2002:adf:f6c5:0:b0:2c7:148c:b04f with SMTP id y5-20020adff6c5000000b002c7148cb04fmr7122753wrp.37.1677758619031;
-        Thu, 02 Mar 2023 04:03:39 -0800 (PST)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id a4-20020a5d5704000000b002c559843748sm15293422wrv.10.2023.03.02.04.03.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 04:03:38 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        steev@kali.org, johan+linaro@kernel.org, quic_bjorande@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH] ASoC: qcom: common: add default jack dapm pins
-Date:   Thu,  2 Mar 2023 12:03:27 +0000
-Message-Id: <20230302120327.10823-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W+vGFryJyHO/kcxpjviopstdV6X7mkFZpRf95EKbss4=;
+        b=FlsEU18oGGR1Ipdgng2z9ocP5pCKbRGv+yAiQfVQcheebrnWp2c52G9YZ2kTmFvyF8
+         FosFE+rdFSEGd/p9oweg0OCdpK0MnOZgvicorPya7g2rq6Hg27Pjeiss1YdkkZLETZOe
+         31Gm7eNX2EpKybA2U6mfTpmtmxSdELqRmCIVm4194QCSPzaK2aDjFAPjdMk6FkX8Cqwy
+         CfdghR1POBuduKB8sjYj6kToP8qEpz6vwzvzDpHF6QbSqhsVXblaJIzmHMNI3Fq9HmpT
+         eikcPEtUfxPMHUsUeJtkmGA5gmzuoksG5YNZk0uXGIqlww2wBfnz56tHaoC2LxavTihG
+         Gkeg==
+X-Gm-Message-State: AO0yUKV0bRTCwy/7Qui7FOXYwsd4/oFkIHOX317nqJ+ctxWrl3y3m+EU
+        0IJ1oNd9qCGZ9Qo8GLEFnDHVfibNb+rusFPE0+NubW+bLpBh
+X-Google-Smtp-Source: AK7set86njqnlQ595UPhEtBjsAoU+5M3f42yKnl+lTOrhfk8tX5iXCF1LaW4id7AOPgZ9ZLcR5qAulh3/EHAi4uFzqSSok1mm5p4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:9465:0:b0:3e0:6875:f5e2 with SMTP id
+ a92-20020a029465000000b003e06875f5e2mr4612504jai.6.1677758788383; Thu, 02 Mar
+ 2023 04:06:28 -0800 (PST)
+Date:   Thu, 02 Mar 2023 04:06:28 -0800
+In-Reply-To: <000000000000e794f505f5e0029c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000099b9c905f5e9a820@google.com>
+Subject: Re: [syzbot] [mm?] INFO: task hung in write_cache_pages (2)
+From:   syzbot <syzbot+0adf31ecbba886ab504f@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, davem@davemloft.net, dvyukov@google.com,
+        edumazet@google.com, elver@google.com, glider@google.com,
+        hdanton@sina.com, kasan-dev@googlegroups.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the soundcard does not specify the dapm pins, let the common
-code add these pins for jack.
+syzbot has bisected this issue to:
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/qcom/common.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+commit 17bb55487988c5dac32d55a4f085e52f875f98cc
+Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+Date:   Tue May 17 22:12:25 2022 +0000
 
-diff --git a/sound/soc/qcom/common.c b/sound/soc/qcom/common.c
-index c1f24af17506..555feb845c41 100644
---- a/sound/soc/qcom/common.c
-+++ b/sound/soc/qcom/common.c
-@@ -8,6 +8,11 @@
- #include "qdsp6/q6afe.h"
- #include "common.h"
- 
-+static const struct snd_soc_dapm_widget qcom_jack_snd_widgets[] = {
-+	SND_SOC_DAPM_HP("Headphone Jack", NULL),
-+	SND_SOC_DAPM_MIC("Mic Jack", NULL),
-+};
-+
- int qcom_snd_parse_of(struct snd_soc_card *card)
- {
- 	struct device_node *np;
-@@ -169,6 +174,11 @@ int qcom_snd_parse_of(struct snd_soc_card *card)
- 		of_node_put(platform);
- 	}
- 
-+	if (!card->dapm_widgets) {
-+		card->dapm_widgets = qcom_jack_snd_widgets;
-+		card->num_dapm_widgets = ARRAY_SIZE(qcom_jack_snd_widgets);
-+	}
-+
- 	return 0;
- err:
- 	of_node_put(cpu);
--- 
-2.21.0
+    ntfs: Remove check for PageError
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13fd6e54c80000
+start commit:   489fa31ea873 Merge branch 'work.misc' of git://git.kernel...
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10036e54c80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17fd6e54c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbfa7a73c540248d
+dashboard link: https://syzkaller.appspot.com/bug?extid=0adf31ecbba886ab504f
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16dc6960c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f39d50c80000
+
+Reported-by: syzbot+0adf31ecbba886ab504f@syzkaller.appspotmail.com
+Fixes: 17bb55487988 ("ntfs: Remove check for PageError")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
