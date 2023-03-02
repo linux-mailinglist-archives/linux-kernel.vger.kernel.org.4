@@ -2,240 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38676A844C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5D16A8449
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCBOj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S230003AbjCBOjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjCBOjX (ORCPT
+        with ESMTP id S229873AbjCBOjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:39:23 -0500
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC26D2A6E6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:39:21 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R531e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vcxl6A1_1677767957;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vcxl6A1_1677767957)
-          by smtp.aliyun-inc.com;
-          Thu, 02 Mar 2023 22:39:18 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] erofs: set block size to the on-disk block size
-Date:   Thu,  2 Mar 2023 22:39:15 +0800
-Message-Id: <20230302143915.111739-3-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230302143915.111739-1-jefflexu@linux.alibaba.com>
-References: <20230302143915.111739-1-jefflexu@linux.alibaba.com>
+        Thu, 2 Mar 2023 09:39:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B320B2A6FC;
+        Thu,  2 Mar 2023 06:39:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4655E615D2;
+        Thu,  2 Mar 2023 14:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EE8DC433D2;
+        Thu,  2 Mar 2023 14:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677767959;
+        bh=+6aE/Q/gEbdk0VnH+27QNOv9p1fOfMaR+j7PKnHb2Ao=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hP0Yc6MqGVGWZnrbC7ATGwlQXJ44QSEOk4XDYBAxaB6CuKfjhWy41MEGRFzXbtvXQ
+         GbRSvIhL8x8ctWOTKSTC8FqfdFrD1hjmmPZfbOLjoG66qC8L2ta3H+x/Bqn7iV97yM
+         S5QRScb8IpWUa/8tXNqQovOEk9zm2uPp3Y1J+zJrmR51WGFk/yUbWqeRtXDVSkF7SZ
+         7u8SkTJOyksWFg+UNvvYC/1EbwT5x/JAX3EoDVSQ+GspYGM0ZG9+XR/YmjrbFYvDq4
+         80s3ZsA7xFquhw1ImLwH4zHb9ZQ2oARKCTCiqlIHSDTUMQ89uHH8O3H/3Y2boJS7E8
+         H4wE+uRGrXZtA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DD6844049F; Thu,  2 Mar 2023 11:39:16 -0300 (-03)
+Date:   Thu, 2 Mar 2023 11:39:16 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 07/10] perf evsel: Add function to compute pmu_name
+Message-ID: <ZAC1FK0EHA4reQid@kernel.org>
+References: <20230302041211.852330-1-irogers@google.com>
+ <20230302041211.852330-8-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302041211.852330-8-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set the block size to that specified in on-disk superblock.
+Em Wed, Mar 01, 2023 at 08:12:08PM -0800, Ian Rogers escreveu:
+> The computed pmu_name respects software events and aux event groups,
+> such that the pmu_name is changed to be that of the aux event leader
+> or group leader for software events. This is done as a later change
+> will split events that are in different PMUs into different groups.
 
-Also remove the hard constraint of PAGE_SIZE block size for the
-uncompressed device backend.  This constraint is temporarily remained
-for compressed device and fscache backend, as there is more work needed
-to handle the condition where the block size is not equal to PAGE_SIZE.
+Adrian, can you please take a look and provide an Ack or Reviewed-by?
 
-It is worth noting that the on-disk block size is read prior to
-erofs_superblock_csum_verify(), as the read block size is needed in the
-latter.
+- Arnaldo
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
+>  tools/perf/util/evsel.h |  1 +
+>  2 files changed, 25 insertions(+)
+> 
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 2dc2c24252bb..9c6b486f8bd4 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -821,6 +821,30 @@ const char *evsel__name(struct evsel *evsel)
+>  	return "unknown";
+>  }
+>  
+> +const char *evsel__pmu_name(const struct evsel *evsel)
+> +{
+> +	const struct evsel *leader;
+> +
+> +	/* If the pmu_name is set use it. pmu_name isn't set for CPU and software events. */
+> +	if (evsel->pmu_name)
+> +		return evsel->pmu_name;
+> +	/*
+> +	 * Software events may be in a group with other uncore PMU events. Use
+> +	 * the pmu_name of the group leader to avoid breaking the software event
+> +	 * out of the group.
+> +	 *
+> +	 * Aux event leaders, like intel_pt, expect a group with events from
+> +	 * other PMUs, so substitute the AUX event's PMU in this case.
+> +	 */
+> +	leader  = evsel__leader(evsel);
+> +	if ((evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) &&
+> +	    leader->pmu_name) {
+> +		return leader->pmu_name;
+> +	}
+> +
+> +	return "cpu";
+> +}
+> +
+>  const char *evsel__metric_id(const struct evsel *evsel)
+>  {
+>  	if (evsel->metric_id)
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 676c499323e9..72121194d3b1 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -280,6 +280,7 @@ int arch_evsel__hw_name(struct evsel *evsel, char *bf, size_t size);
+>  
+>  int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char *bf, size_t size);
+>  const char *evsel__name(struct evsel *evsel);
+> +const char *evsel__pmu_name(const struct evsel *evsel);
+>  const char *evsel__metric_id(const struct evsel *evsel);
+>  
+>  static inline bool evsel__is_tool(const struct evsel *evsel)
+> -- 
+> 2.39.2.722.g9855ee24e9-goog
+> 
 
-Besides, later we are going to make erofs refer to tar data blobs (which
-is 512-byte aligned) for OCI containers, where the block size is 512
-bytes.  In this case, the 512-byte block size may not be adequate for a
-directory to contain enough dirents.  To fix this, we are also going to
-introduce directory block size independent on the block size.
-
-Due to we have already supported block size smaller than PAGE_SIZE now,
-disable all these images with such separated directory block size until
-we supported this feature later.
-
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/erofs_fs.h |  5 +++--
- fs/erofs/inode.c    |  3 ++-
- fs/erofs/internal.h | 11 ++---------
- fs/erofs/super.c    | 46 +++++++++++++++++++++++++++++----------------
- 4 files changed, 37 insertions(+), 28 deletions(-)
-
-diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
-index dbcd24371002..ac9c2ff3aa66 100644
---- a/fs/erofs/erofs_fs.h
-+++ b/fs/erofs/erofs_fs.h
-@@ -53,7 +53,7 @@ struct erofs_super_block {
- 	__le32 magic;           /* file system magic number */
- 	__le32 checksum;        /* crc32c(super_block) */
- 	__le32 feature_compat;
--	__u8 blkszbits;         /* support block_size == PAGE_SIZE only */
-+	__u8 blkszbits;         /* filesystem block size */
- 	__u8 sb_extslots;	/* superblock size = 128 + sb_extslots * 16 */
- 
- 	__le16 root_nid;	/* nid of root directory */
-@@ -75,7 +75,8 @@ struct erofs_super_block {
- 	} __packed u1;
- 	__le16 extra_devices;	/* # of devices besides the primary device */
- 	__le16 devt_slotoff;	/* startoff = devt_slotoff * devt_slotsize */
--	__u8 reserved[6];
-+	__u8 dirblkbits;	/* directory block size */
-+	__u8 reserved[5];
- 	__le64 packed_nid;	/* nid of the special packed inode */
- 	__u8 reserved2[24];
- };
-diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-index de26dac4e07e..0e6ff8a98c68 100644
---- a/fs/erofs/inode.c
-+++ b/fs/erofs/inode.c
-@@ -291,7 +291,8 @@ static int erofs_fill_inode(struct inode *inode)
- 	}
- 
- 	if (erofs_inode_is_data_compressed(vi->datalayout)) {
--		if (!erofs_is_fscache_mode(inode->i_sb))
-+		if (!erofs_is_fscache_mode(inode->i_sb) &&
-+		    inode->i_sb->s_blocksize_bits == PAGE_SHIFT)
- 			err = z_erofs_fill_inode(inode);
- 		else
- 			err = -EOPNOTSUPP;
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index d8019d835405..f99ba4061a3b 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -148,7 +148,8 @@ struct erofs_sb_info {
- 	u16 device_id_mask;	/* valid bits of device id to be used */
- 
- 	unsigned char islotbits;	/* inode slot unit size in bit shift */
--	unsigned char blkszbits;
-+	unsigned char blkszbits;	/* filesystem block size */
-+	unsigned char dirblkbits;	/* directory block size */
- 
- 	u32 sb_size;			/* total superblock size */
- 	u32 build_time_nsec;
-@@ -240,14 +241,6 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
- 					VAL != EROFS_LOCKED_MAGIC);
- }
- 
--/* we strictly follow PAGE_SIZE and no buffer head yet */
--#define LOG_BLOCK_SIZE		PAGE_SHIFT
--#define EROFS_BLKSIZ		(1 << LOG_BLOCK_SIZE)
--
--#if (EROFS_BLKSIZ % 4096 || !EROFS_BLKSIZ)
--#error erofs cannot be used in this platform
--#endif
--
- enum erofs_kmap_type {
- 	EROFS_NO_KMAP,		/* don't map the buffer */
- 	EROFS_KMAP,		/* use kmap_local_page() to map the buffer */
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index c97615c96ef8..d5fa0f582cbe 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -330,7 +330,6 @@ static int erofs_read_superblock(struct super_block *sb)
- 	struct erofs_sb_info *sbi;
- 	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
- 	struct erofs_super_block *dsb;
--	unsigned int blkszbits;
- 	void *data;
- 	int ret;
- 
-@@ -349,6 +348,17 @@ static int erofs_read_superblock(struct super_block *sb)
- 		goto out;
- 	}
- 
-+	sbi->blkszbits  = dsb->blkszbits;
-+	sbi->dirblkbits = dsb->dirblkbits;
-+	if (sbi->blkszbits < 9 || sbi->blkszbits > PAGE_SHIFT) {
-+		erofs_err(sb, "blkszbits %u isn't supported", sbi->blkszbits);
-+		goto out;
-+	}
-+	if (sbi->dirblkbits) {
-+		erofs_err(sb, "dirblkbits %u isn't supported", sbi->dirblkbits);
-+		goto out;
-+	}
-+
- 	sbi->feature_compat = le32_to_cpu(dsb->feature_compat);
- 	if (erofs_sb_has_sb_chksum(sbi)) {
- 		ret = erofs_superblock_csum_verify(sb, data);
-@@ -357,19 +367,11 @@ static int erofs_read_superblock(struct super_block *sb)
- 	}
- 
- 	ret = -EINVAL;
--	blkszbits = dsb->blkszbits;
--	/* 9(512 bytes) + LOG_SECTORS_PER_BLOCK == LOG_BLOCK_SIZE */
--	if (blkszbits != LOG_BLOCK_SIZE) {
--		erofs_err(sb, "blkszbits %u isn't supported on this platform",
--			  blkszbits);
--		goto out;
--	}
--
- 	if (!check_layout_compatibility(sb, dsb))
- 		goto out;
- 
- 	sbi->sb_size = 128 + dsb->sb_extslots * EROFS_SB_EXTSLOT_SIZE;
--	if (sbi->sb_size > EROFS_BLKSIZ) {
-+	if (sbi->sb_size > PAGE_SIZE - EROFS_SUPER_OFFSET) {
- 		erofs_err(sb, "invalid sb_extslots %u (more than a fs block)",
- 			  sbi->sb_size);
- 		goto out;
-@@ -736,8 +738,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sbi->blkszbits = PAGE_SHIFT;
- 	if (erofs_is_fscache_mode(sb)) {
--		sb->s_blocksize = EROFS_BLKSIZ;
--		sb->s_blocksize_bits = LOG_BLOCK_SIZE;
-+		sb->s_blocksize = PAGE_SIZE;
-+		sb->s_blocksize_bits = PAGE_SHIFT;
- 
- 		err = erofs_fscache_register_fs(sb);
- 		if (err)
-@@ -747,8 +749,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 		if (err)
- 			return err;
- 	} else {
--		if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
--			erofs_err(sb, "failed to set erofs blksize");
-+		if (!sb_set_blocksize(sb, PAGE_SIZE)) {
-+			errorfc(fc, "failed to set initial blksize");
- 			return -EINVAL;
- 		}
- 
-@@ -761,12 +763,24 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 	if (err)
- 		return err;
- 
--	if (test_opt(&sbi->opt, DAX_ALWAYS)) {
--		BUILD_BUG_ON(EROFS_BLKSIZ != PAGE_SIZE);
-+	if (sb->s_blocksize_bits != sbi->blkszbits) {
-+		if (erofs_is_fscache_mode(sb)) {
-+			errorfc(fc, "unsupported blksize for fscache mode");
-+			return -EINVAL;
-+		}
-+		if (!sb_set_blocksize(sb, 1 << sbi->blkszbits)) {
-+			errorfc(fc, "failed to set erofs blksize");
-+			return -EINVAL;
-+		}
-+	}
- 
-+	if (test_opt(&sbi->opt, DAX_ALWAYS)) {
- 		if (!sbi->dax_dev) {
- 			errorfc(fc, "DAX unsupported by block device. Turning off DAX.");
- 			clear_opt(&sbi->opt, DAX_ALWAYS);
-+		} else if (sbi->blkszbits != PAGE_SHIFT) {
-+			errorfc(fc, "unsupported blocksize for DAX");
-+			clear_opt(&sbi->opt, DAX_ALWAYS);
- 		}
- 	}
- 
 -- 
-2.19.1.6.gb485710b
 
+- Arnaldo
