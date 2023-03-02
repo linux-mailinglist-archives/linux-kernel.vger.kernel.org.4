@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E0B6A8D17
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173AA6A8D12
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjCBXdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 18:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S229888AbjCBXdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 18:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCBXdt (ORCPT
+        with ESMTP id S229607AbjCBXdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 18:33:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F200AEF8B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677799985;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5AKnwm11CuV/ZxP8F1kL9kNO/YucYb6B9hOTf3x61Ss=;
-        b=WKPWDaQXJaje6ej1B8yf3GCv00uC4P0zeAaiXFbMsqoveOrsDVDZ+hRCqg7g/rQxIjgx0F
-        pv+3XdChG4zNiRgHhDGjYH3gY7/0XBN7TjQyFkjtH3UoDhDoLCDH1bb2oIgUmvx5W62/GG
-        vNnJ5knREnzBc4lc0ZH1vWQWpAYGbFs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-50-E7TjwiinNbuZZv7n31dibw-1; Thu, 02 Mar 2023 18:32:59 -0500
-X-MC-Unique: E7TjwiinNbuZZv7n31dibw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6E640380450A;
-        Thu,  2 Mar 2023 23:32:58 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A6C12492C3E;
-        Thu,  2 Mar 2023 23:32:56 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <521914.1677799750@warthog.procyon.org.uk>
-References: <521914.1677799750@warthog.procyon.org.uk> <521671.1677799421@warthog.procyon.org.uk> <20230302231638.521280-1-dhowells@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com, Vishal Moola <vishal.moola@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Paulo Alcantara <pc@cjr.nz>, Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Test patch to make afs use its own version of write_cache_pages()
+        Thu, 2 Mar 2023 18:33:20 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3700C12BC2
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:33:19 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-172334d5c8aso1182666fac.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 15:33:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677799998;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oWQrOjmlTF/eT/5hix+xLxcrGdhqmVIvOhIR8FuYfOE=;
+        b=lN4O5IHRLWyhbSMEcD8F0G8wFR8QiH6oGXMFIJfZTiCWkg7XROh8F8SsG/qP0wNKCe
+         d4SHivhy9etlsWR1U8y5/kMeCRe8w5lHrcTALEy7lbd6LtUv2lYr32C/yjBI4Gf+xlRb
+         enRjQMho94lsdGs00WCpvhX4YXlG/IKd+cnt/3dPJJzUOPV6ot6s1+Tu7m52rbzbSFOM
+         IHkdVS8emNIuPxontdSocYsaudiDw1/JD6xcBFcyOir5AKQ3D0A2Hoo+ANqSynw/aWPv
+         hgy4aQjOmZcJf6UXNp1wRnvRFN0iy1L1vtJ45ZNmf+AUo6Z2CGemofvuhFDkPKIHs2k+
+         V6QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677799998;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oWQrOjmlTF/eT/5hix+xLxcrGdhqmVIvOhIR8FuYfOE=;
+        b=72YTRhDvQyBm/PLE0lRBX+yJZkYmikFcAIQT7MELvGxU9Y7LdELxkLhxRBSic+Hrzr
+         /YET/97wE3ETwo97xw7lksEwQFsHiCcdGUktBR6gII25qMajbqK5V8VhtZbSa7oHflnF
+         sUTCRh2nr98N0uHT9U1v0uGsN5Z7G3wIVqObKDcEr5rhdapBmbp1Eby/fOnXnYub5fXM
+         wQdOLf70+9RjqNf1FhENG2sbkCveEQS7xTFTK1sfR0zZT7csqfyONirS6T7nK6BjAR/H
+         qtyEZ570pQs7vnu9Pxg2RIxuuVWGTH1WWT8lFPRK8/I41GtrEN/+PtAPBhrtc0m+ypv6
+         yX4w==
+X-Gm-Message-State: AO0yUKUPZTiRluFPqlsRA5yrfGc8c7us6I+8meBhHW+xWD2nMBhTgbQH
+        7sDP0m+b0WnTwJNjTxUuf+3KfDZiKGy7tAcI0vE=
+X-Google-Smtp-Source: AK7set8T8UHOZvlKDyCHvWaZjZeVjVEqLrtjJRHYusFiiklAQLDMFXAgieBae3bnu4+f7KLJ3bIMqyww1KsFqKWgDSk=
+X-Received: by 2002:a05:6871:6ba1:b0:176:6af1:1122 with SMTP id
+ zh33-20020a0568716ba100b001766af11122mr31222oab.3.1677799998081; Thu, 02 Mar
+ 2023 15:33:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <522121.1677799976.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 02 Mar 2023 23:32:56 +0000
-Message-ID: <522122.1677799976@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230301185432.3010939-1-robdclark@gmail.com> <6eb2cde8-f548-73ba-6091-131c1848690c@collabora.com>
+ <20230302072531.375i6xetk72nis75@sirius.home.kraxel.org>
+In-Reply-To: <20230302072531.375i6xetk72nis75@sirius.home.kraxel.org>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 2 Mar 2023 15:33:07 -0800
+Message-ID: <CAF6AEGtzdty5m9ccRZqYNN=+OCa0KogNQxR41AD-LWC5fjbujw@mail.gmail.com>
+Subject: Re: [PATCH v5] drm/virtio: Add option to disable KMS support
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        dri-devel@lists.freedesktop.org, Chia-I Wu <olvaffe@gmail.com>,
+        Ryan Neph <ryanneph@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,197 +77,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
+On Wed, Mar 1, 2023 at 11:25 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
+>
+> On Thu, Mar 02, 2023 at 12:39:33AM +0300, Dmitry Osipenko wrote:
+> > On 3/1/23 21:54, Rob Clark wrote:
+> > >  /* virtgpu_display.c */
+> > > +#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
+> > >  int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev);
+> > >  void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev);
+> > > +#else
+> > > +static inline int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev)
+> > > +{
+> > > +   return 0;
+> > > +}
+> > > +static inline void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev)
+> > > +{
+> > > +}
+> > > +#endif
+> >
+> > In v4 Gerd wanted to keep building the virtgpu_display.o and instead add
+> > the KSM config check to virtio_gpu_modeset_init/fini().
+>
+> The main point is that the code workflow should be the same in both
+> cases.  The patch does that for virtio_gpu_modeset_init() but doesn't
+> for virtio_gpu_modeset_fini().
+>
+> Return early in the functions (and drop the #ifdef here) is how I would
+> implement this, but I wouldn't insist on that, there are other ways to
+> solve this too ;)
 
-> AFS firstly. ...
-> =
+Ahh, true, I guess omitting that one file doesn't save anything and
+early return makes for a bit simpler/smaller patch
 
->   Base + Page-dirty-region tracking removed + Own write_cache_pages()
-> 	WRITE: bw=3D302MiB/s (316MB/s), 75.1MiB/s-76.1MiB/s (78.7MB/s-79.8MB/s)
-> 	WRITE: bw=3D302MiB/s (316MB/s), 74.5MiB/s-76.1MiB/s (78.1MB/s-79.8MB/s)
-> 	WRITE: bw=3D301MiB/s (316MB/s), 75.2MiB/s-75.5MiB/s (78.9MB/s-79.1MB/s)
-
-
-This goes on top of "Test patch to remove per-page dirty region tracking f=
-rom
-afs" and "Test patch to make afs use write_cache_pages()"
-
-David
----
- write.c |  141 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-++++--
- 1 file changed, 138 insertions(+), 3 deletions(-)
-
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 86b6e7cbe17c..d66c05acda8c 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -463,9 +463,9 @@ static int afs_writepages_submit(struct address_space =
-*mapping,
-  * Add a page to the set and flush when large enough.
-  */
- static int afs_writepages_add_folio(struct folio *folio,
--				    struct writeback_control *wbc, void *data)
-+				    struct writeback_control *wbc,
-+				    struct afs_writepages_context *ctx)
- {
--	struct afs_writepages_context *ctx =3D data;
- 	struct afs_vnode *vnode =3D AFS_FS_I(folio->mapping->host);
- 	int ret;
- =
-
-@@ -499,6 +499,141 @@ static int afs_writepages_add_folio(struct folio *fo=
-lio,
- 	}
- 	return 0;
- }
-+static int afs_write_cache_pages(struct address_space *mapping,
-+				 struct writeback_control *wbc,
-+				 struct afs_writepages_context *ctx)
-+{
-+	int ret =3D 0;
-+	int done =3D 0;
-+	int error;
-+	struct folio_batch fbatch;
-+	int nr_folios;
-+	pgoff_t index;
-+	pgoff_t end;		/* Inclusive */
-+	pgoff_t done_index;
-+	int range_whole =3D 0;
-+	xa_mark_t tag;
-+
-+	folio_batch_init(&fbatch);
-+	if (wbc->range_cyclic) {
-+		index =3D mapping->writeback_index; /* prev offset */
-+		end =3D -1;
-+	} else {
-+		index =3D wbc->range_start >> PAGE_SHIFT;
-+		end =3D wbc->range_end >> PAGE_SHIFT;
-+		if (wbc->range_start =3D=3D 0 && wbc->range_end =3D=3D LLONG_MAX)
-+			range_whole =3D 1;
-+	}
-+	if (wbc->sync_mode =3D=3D WB_SYNC_ALL || wbc->tagged_writepages) {
-+		tag_pages_for_writeback(mapping, index, end);
-+		tag =3D PAGECACHE_TAG_TOWRITE;
-+	} else {
-+		tag =3D PAGECACHE_TAG_DIRTY;
-+	}
-+	done_index =3D index;
-+	while (!done && (index <=3D end)) {
-+		int i;
-+
-+		nr_folios =3D filemap_get_folios_tag(mapping, &index, end,
-+				tag, &fbatch);
-+
-+		if (nr_folios =3D=3D 0)
-+			break;
-+
-+		for (i =3D 0; i < nr_folios; i++) {
-+			struct folio *folio =3D fbatch.folios[i];
-+
-+			done_index =3D folio->index;
-+
-+			folio_lock(folio);
-+
-+			/*
-+			 * Page truncated or invalidated. We can freely skip it
-+			 * then, even for data integrity operations: the page
-+			 * has disappeared concurrently, so there could be no
-+			 * real expectation of this data integrity operation
-+			 * even if there is now a new, dirty page at the same
-+			 * pagecache address.
-+			 */
-+			if (unlikely(folio->mapping !=3D mapping)) {
-+continue_unlock:
-+				folio_unlock(folio);
-+				continue;
-+			}
-+
-+			if (!folio_test_dirty(folio)) {
-+				/* someone wrote it for us */
-+				goto continue_unlock;
-+			}
-+
-+			if (folio_test_writeback(folio)) {
-+				if (wbc->sync_mode !=3D WB_SYNC_NONE)
-+					folio_wait_writeback(folio);
-+				else
-+					goto continue_unlock;
-+			}
-+
-+			BUG_ON(folio_test_writeback(folio));
-+			if (!folio_clear_dirty_for_io(folio))
-+				goto continue_unlock;
-+
-+			//trace_wbc_writepage(wbc, inode_to_bdi(mapping->host));
-+			error =3D afs_writepages_add_folio(folio, wbc, ctx);
-+			if (unlikely(error)) {
-+				/*
-+				 * Handle errors according to the type of
-+				 * writeback. There's no need to continue for
-+				 * background writeback. Just push done_index
-+				 * past this page so media errors won't choke
-+				 * writeout for the entire file. For integrity
-+				 * writeback, we must process the entire dirty
-+				 * set regardless of errors because the fs may
-+				 * still have state to clear for each page. In
-+				 * that case we continue processing and return
-+				 * the first error.
-+				 */
-+				if (error =3D=3D AOP_WRITEPAGE_ACTIVATE) {
-+					folio_unlock(folio);
-+					error =3D 0;
-+				} else if (wbc->sync_mode !=3D WB_SYNC_ALL) {
-+					ret =3D error;
-+					done_index =3D folio->index +
-+						folio_nr_pages(folio);
-+					done =3D 1;
-+					break;
-+				}
-+				if (!ret)
-+					ret =3D error;
-+			}
-+
-+			/*
-+			 * We stop writing back only if we are not doing
-+			 * integrity sync. In case of integrity sync we have to
-+			 * keep going until we have written all the pages
-+			 * we tagged for writeback prior to entering this loop.
-+			 */
-+			if (--wbc->nr_to_write <=3D 0 &&
-+			    wbc->sync_mode =3D=3D WB_SYNC_NONE) {
-+				done =3D 1;
-+				break;
-+			}
-+		}
-+		folio_batch_release(&fbatch);
-+		cond_resched();
-+	}
-+
-+	/*
-+	 * If we hit the last page and there is more work to be done: wrap
-+	 * back the index back to the start of the file for the next
-+	 * time we are called.
-+	 */
-+	if (wbc->range_cyclic && !done)
-+		done_index =3D 0;
-+	if (wbc->range_cyclic || (range_whole && wbc->nr_to_write > 0))
-+		mapping->writeback_index =3D done_index;
-+
-+	return ret;
-+}
- =
-
- /*
-  * write some of the pending data back to the server
-@@ -523,7 +658,7 @@ int afs_writepages(struct address_space *mapping,
- 	else if (!down_read_trylock(&vnode->validate_lock))
- 		return 0;
- =
-
--	ret =3D write_cache_pages(mapping, wbc, afs_writepages_add_folio, &ctx);
-+	ret =3D afs_write_cache_pages(mapping, wbc, &ctx);
- 	if (ret >=3D 0 && ctx.begun)
- 		ret =3D afs_writepages_submit(mapping, wbc, &ctx);
- =
-
+BR,
+-R
