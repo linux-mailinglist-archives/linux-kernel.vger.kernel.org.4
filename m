@@ -2,146 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C296A8CFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DF36A8CB4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjCBX1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 18:27:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S229520AbjCBXIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 18:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjCBX1P (ORCPT
+        with ESMTP id S229453AbjCBXIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 18:27:15 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4EA58B57;
-        Thu,  2 Mar 2023 15:27:12 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322K6cKq005226;
-        Thu, 2 Mar 2023 21:19:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=7jpMoXnBh5eLGnV4A4XN9U55Y8SkHFS7NVga94qZ9FU=;
- b=OVvzde8XGMtx2B3VbSZGQehKl00391ECmUAQDryifcQvWllU+JwCzUcPzJDbW06UO6sE
- YGrU5PqtpvQvN49pLyaa5LHRCthjIEiRkXzWsD2gynr7Pgx8CfTdutLco1gA2oWYpbhN
- 9v0iZRmlMKsNbcavznKbj0ecNny1sajJlhpXZmzPpw9R4GTlLRHy7CJE5YEEo6At5c1G
- Foj53WVu26KnQ/kdVR870ZMvb01C0S29xkV2WUQN+uTesh3FNDmJfrMTRC6OKjwFkEUO
- UQ8NThI2hZvCngCJtEo5cvyvWs0a0A/7Q8eZqG5YSwJNoOV+qWFSurXCyoXSli5M75xd 4Q== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nyba7mw83-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Mar 2023 21:19:01 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 322KkpPs002200;
-        Thu, 2 Mar 2023 21:19:00 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ny8sacfdg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Mar 2023 21:19:00 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B5aBHWZHAc19rcCsmLnlG9hxiiqiwDkmvtrHjRMsuAjnFurYKsJhuq/GJCIbwOeYkqtK/47GE5ywtqJS0mu/7iXwDMondZou/9jXLHBvbOv7J8huIyjYHHGHB15Q7afCk4cDsGhY4AI8VWdtXbrJVe4lFCHLYQFW2vT5YZAftWcCOE+Obd4HPWZP5hj33CZQYmMcoMMP2BXHy9usXz5FM4906iTEPhUoGZ7E97WWL37e7TycGjkEG8pU+tkZ1LHT6QzGc6NlwrMa65VHzuyd93TVt/hgj+906cWxt9ByLI4ChQkGg0sy+vIjhqCZdRF4GqmCO/YxwrkYstJpGVz7aw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7jpMoXnBh5eLGnV4A4XN9U55Y8SkHFS7NVga94qZ9FU=;
- b=YmSKR/hXlgOFF6be0gH1q3I/rfdLJqXUdsj/pxXKw/tuPodVZQQSae7ECeygVGAleeigPXM0lEVlspJ6RriE7c0aB5O18u8/hQFIRB+/FmYtjtB5yp2vQMOO8d0ZLGt6UUVWvfoV2Wvdwt8LRXoqQgLxn16OOppIVKp1D83Vk9gAuasof0I4rGsLgeF/44zzqRjzO3knCbPQ6wZguBlsFRigz023o/lrjpru9BtK+/usc2SScvvmD06Ee/2auA8pnfVYJ+M1GLMA+KWF2UdJlZH0kocwNA8i3hqPO+qaBLlnYajkMgO4gtJF0U4vJvUU/otMIPVFr1JAoQqd6VwBcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 2 Mar 2023 18:08:13 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F43710AA8
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:08:12 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id d30so3433595eda.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 15:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7jpMoXnBh5eLGnV4A4XN9U55Y8SkHFS7NVga94qZ9FU=;
- b=J8+9IXMHPZinrjaVq8Tiwkz6Lp0u6Ip1rafYC+vQor2FuP+V0JKEkKcpJPAXv/pt9s10EIUdCDf6PJA/Ntxm1hqbkJXNLbGPBal74EC8+NtanqlUsPP3PdfNdF8Durb1e2JI8iVuz/wWFmfroepSjU6MX89DC+8CJPy2aqsSfLk=
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
- by PH0PR10MB5819.namprd10.prod.outlook.com (2603:10b6:510:141::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17; Thu, 2 Mar
- 2023 21:18:58 +0000
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760%4]) with mapi id 15.20.6156.017; Thu, 2 Mar 2023
- 21:18:58 +0000
-From:   Nick Alcock <nick.alcock@oracle.com>
-To:     mcgrof@kernel.org
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-Date:   Thu,  2 Mar 2023 21:17:52 +0000
-Message-Id: <20230302211759.30135-11-nick.alcock@oracle.com>
-X-Mailer: git-send-email 2.39.1.268.g9de2f9a303
-In-Reply-To: <20230302211759.30135-1-nick.alcock@oracle.com>
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0290.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:196::7) To DS0PR10MB6798.namprd10.prod.outlook.com
- (2603:10b6:8:13c::20)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XBCcE4j+5QhHkdhXbZQDkqVeb3GW1AAcxnhgQP25R8s=;
+        b=Ij6FjBwwmDQiMP3RzeeOqxPrWegfn2uo8PXnnoayhGe1muWEJOD2D55Ij09vATf1MV
+         7PcAHwnrtUNxXUeg0qcuM+ykiM8F694aaJIT/NjBTZibHbaKbhYWqv+TayB4RBcmQSiw
+         xCf+nizxgSeWe49pdZcwVUFRv6I2Wdk179PhcNbPfV0NhPckVuhbMmAJMjDjPFu9gOfN
+         hu9tlHYEkjJ67YTGjSWvb4GUIkNYbTQEsQTpM2TLYS14rTOggXAO9TS/bu3W6M7CIp9U
+         zgHFb0UEurpNiIg6KaW3XbIxjs/AMB3rT6Yeu5WeNp2HWg9e9pyE/tvVdBM0ZZm/AXgT
+         M/Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XBCcE4j+5QhHkdhXbZQDkqVeb3GW1AAcxnhgQP25R8s=;
+        b=QJG0ecegByF4gdIMm+AHdbCXIB0m9e69FDVRvajPNcujeaGjPAbiTXrCgXDDKwEW6L
+         cztmMPur6yaAdTLu+07W/pRmPt6QSflms/jOMqivAGrfP1tM00cc26s59VKeGBlbe/it
+         hf8EXpLP1G6RqQq1V5KY3bItIZc+wUG8qZfgdJgwMxd9ubpUJD22qA/AAZzUVdiRJ+lF
+         r5xOCJPMmNagF/q7IW7w+Lj2BKuE1gcCHPteHmvgp65Ea4IrPug55UEflRAyq5lxh3j9
+         z/5LquS4LgJeDRvOTaQdfpzfXyyMgQT8cQ8362ehExcW5Ims4v7J9/ddfWXMrbDMyyEX
+         L3bw==
+X-Gm-Message-State: AO0yUKX+6ncIIer7Ee5nBFaETKCA2I0E2Mnrq/vDTsqP6xTdx2lJiK7+
+        18p4goHRNvQPoCHN3ELaXC7yCb6xaafa9tOOB2I=
+X-Google-Smtp-Source: AK7set+gPK0SD+pFdXNeswKd1DxolYCeR0d/AGJIEi8+muv0d+KMnSylYiN6rVSXJKDT5+UNvVrFHOPOhBsCXUSb3dY=
+X-Received: by 2002:a17:906:3586:b0:895:58be:964 with SMTP id
+ o6-20020a170906358600b0089558be0964mr6247318ejb.2.1677798490282; Thu, 02 Mar
+ 2023 15:08:10 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|PH0PR10MB5819:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ef90a28-0c0c-4d60-f052-08db1b63bc74
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Jwk9AjtwAs2KUSC7mCUVarMec3UcQcCxQsClPHPyh49m9sZRIhz2lfw6cHRfhPgvoqDwacby0aHcvmW41+jen3k3bUki1QTGCoin6U8gRwixvos9wUTXVONwPA+7779MLfB5Tjh1IkvT1Iyzl2Sbp9H0XmjJ7i4jXA5FgSUsKhTK4KfkgCrPp/78I5AryhHScOFvTSXs7hPxnQczD1EXJNo9udAMKiHbi4dYsuV3wqnnGdBkEJJnYmGMIQJsYML2KpBDPbSaoiCcUTN5wLDlPpNWTiJ3l3vfdZSJSmd98HvxY1wWAHUeNdMrrJKX04q3D4OZTFpmXuiI2K6HGcQMfYD1JJpy9vjK90rlRJ50dAdyB/282DHqMJg7KQ8xLq2aH/RL+oimeV+ptOKMU3zNERG7ZoJV6KBVl2eDMKMcpnKX37593U3U43Jr4DbYzZgNJ9vWyEmF7pMK+6xhUVrJEyMOMNCVgAEeN6WBJUvHN7TWmHSqYX91sSUTjff8RKmI1uWzOAekS50btDKjh2LmTO0bZhb/6AE4+OlzppAkJdw14MsVlhPZBAs0NQIJGN9TrnqiXNs3AlP2nbb286LSe88Rmeciqtp1DFCawuYa8p0U1oDoc9xPHDjp38+1TB7zVm+rymzOb81kUo/hMoudSw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199018)(5660300002)(44832011)(83380400001)(41300700001)(6916009)(4326008)(8676002)(8936002)(66476007)(66556008)(66946007)(54906003)(316002)(38100700002)(36756003)(2906002)(6486002)(478600001)(86362001)(6506007)(186003)(6512007)(6666004)(1076003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ewU/kKWlPCIQQRA3XzTfGglomemxpFAt4XEjOnhwDGdjycSvSQ0oDvUZZkuv?=
- =?us-ascii?Q?OKk2ZZDmt7WvIVXajGit591JkKT3wrrWz+SB1EQp+6jqxI5ENAgVckbwHl+q?=
- =?us-ascii?Q?e/z8jKRdgmy126pvtZkQPIktxicQCe/KLKegSvkCUzk+I56A147Ogyt91eoA?=
- =?us-ascii?Q?R5F7GWlXjWfEea1W7f4Ij4HZZkkRB6bQnxXs4dsE81l87tKJ4czmm4VQEvhp?=
- =?us-ascii?Q?WjEYsXLwSzdTtKTh9RIz8KyT4tn/g5IKVwm9pmbD+A8V+UlXDFpwaiOahKZV?=
- =?us-ascii?Q?w0NDvwDO9+XpnmMaQDAnZzVWgQIq1tAun1lYaTL0eG+KPmH0ixSGc78SqdQd?=
- =?us-ascii?Q?IrjnLlGZIYHeCvZj4szRipCVEO9IduLJWusgehZPqoUlBymVg3PsE9ukhPr9?=
- =?us-ascii?Q?uSeEC1CkIWTF6FCXI/sQ13Oq/B7CnCXkpWFH9yvqj3i9huns9/3Lsdg7w4Ng?=
- =?us-ascii?Q?8gSeQUE3TFlFbv8rHG+dH0H1s4BUrCxya61ORDcjo8Fh7pOhzEtJI9txfRl/?=
- =?us-ascii?Q?gZmR83oIHPQedup07AoqeXt9dTfPHCXMRyIhghkxRKKb/KNPpE0PnQq9LPfx?=
- =?us-ascii?Q?2jeHh/Sv5GfT1TKHkjF7hICvcjzaWx03sK7Uv8mntfvSe4cNOAvASXTp7w3v?=
- =?us-ascii?Q?WFSc+kk/u3iLw9QM1s7Qt/MfzMzbyvVof4aaOv1w46a21DcQ2wyIJWYFkOp4?=
- =?us-ascii?Q?haxX+eFSmYsSa7S6/BS/EqThEpfnAH/KD35XxuYf4wXYoUW8HXeSuOcKlzk7?=
- =?us-ascii?Q?d+1TfMOrRU/V40kM6ZEwGuqBgXx9jfnxFG+Nmo21BghPygm8kaCfRW6nGPgN?=
- =?us-ascii?Q?W3JduXcIp+QzRZ3R/4R6rBEsasetxuVVmbbEyrSClX7caKefC7cUCf8oQGGQ?=
- =?us-ascii?Q?w5auDVkHINIGrlRaS4XpinFNJ9/OZADHXn/Qcu/r7snjxMoF+Rg6k2GBaind?=
- =?us-ascii?Q?fBDTVlffCTGGp7If6Dk0QGqVdM1CLYYpA5sO2J8Q2Alb56AJOIA72aXmQFRD?=
- =?us-ascii?Q?Wxo4RQql0Vsx9CKuY16Twd6AGwBEyifXMeFub7UBj3J2NUxHNUDnfyOqq5la?=
- =?us-ascii?Q?RYhpSe4celcNG9rn7aGmRbHFpBgcOCLAQPyKsw87WMkh0ohvRvppKz1EAULD?=
- =?us-ascii?Q?Hbe21P1kU9TOcpdxwnR7eRFGIQWoM83YtJmeuDO8vIPcaf1oHkOtegtYgNx9?=
- =?us-ascii?Q?0AeWvLoXDGaUdTk6Uuyxaeu4zzd/d10cY/C0P26ksCKzHORO+xZ5do9BbEnI?=
- =?us-ascii?Q?9wyN+hc+FD2fQKfYxhcGwr7omXRwRfSwHrN0p1QUHLJazm/EOYFelVN13q0h?=
- =?us-ascii?Q?Dz/AkMfQvBixc0H7yKUT9OIQqP1vlyRWPRaVOcb3NlqPykckMtjIrV2VF0xd?=
- =?us-ascii?Q?fNL826GGasj5boOZeOiENis4SYxCkS0VNo4s0yk8emauPlM+ely5L/SIXaOl?=
- =?us-ascii?Q?XJqW1b20OfjTWG7a2Un7caWyux1CB4S15HuXCPWme554T3rYTcKO+k7BEQuO?=
- =?us-ascii?Q?ZIA1n7NTbnumsS6s1zRGdT4DdEUUgis8iJmFxMfe/1affdK2TZalNsSJ96a8?=
- =?us-ascii?Q?5FhqvAhHUmu/KEur2m0+TacAcWXUt2BJ/TEdXL7OkoWutPKWpJxxHLDh2zFp?=
- =?us-ascii?Q?xmbhRoLJGNzHv7okgvTzYWo=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: ScWTLufpqZVEeuhB7eZEiCq69aTXNmPNd+UPnxlUNQu9sXHdUdiNRO51UwRNTxRH1XjsBS1JoO2bO9Cc4xY+s/eeQ0aks6VSoVjxdoVphCzjyRNfg3LCoQXYvPGmRUK9Z6F8V1zCGhqn18r56uDipjeI8LAD8FA9RgXCgJ70j5SRDh5iv7L0lcVqABNhX64kELkg857l/skxvBTOk0GntaSe5Ov2wuPZpC/tBa8sRc0QCstqR1zL8uJPIkXw9NV+OgIE5DU4+Jb5b6zgd53RJEwYa7G2C5IU1bnavgmJWI8B6sn+qpkXlOaxb58tQmJ7/4SoJa5E/gv5zIxiAYgcvKj8bHu/VqSiUWxcK3J+47ivZW+xjtMf/cCwlhY9hylvPQui5I1uf0XEOGFLZq2Z/4lgh8IJtnOvfMzAUGuiqGBH/btpAPMgch5SgU7WIXO5xJUr+VsqI9TfytB4O24oISaJk65G0QWW2ReZ2gt/8YkovHrUBSQek987BPCsosdrlIPsWS4Y7xyHctWnhI50jMRa1VRToD8HFd+SNkkKjRvAhgTUkUYpAgaGGGIDiK7j8B0jheaIsm12IJQJ+wVOFYSzGtRbvTrkdu0tWf9L1h4E7ncbsVNLT61W+FObH5jrttWiFCuFZ1aplvyvChL2NfSYdpXCreGcop3HP/Rvp2LNw5VJLhjFLvbKlDcIWrwN78e2E7bZ+fisFcpVSaIBn1F519hXjzk7oTlU16wW3zsGtqVZFK7IorSpuz5OaNOiA2vhs+sEnrGyBtlDDdar67HbkwPx3dgcTwXUGmqL5iY6+qVQRplfpXinWeba2iozjf5Omy6jcE7tJMHTsKBxtHT/u7wdXBcna+9MUeGuXF12Mll/CzRm1Yc5OzU3oAaK
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ef90a28-0c0c-4d60-f052-08db1b63bc74
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 21:18:58.1487
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j2UVbsyVLDTJSLqnhLLCFiF93aHJcN7IdcPlFBLW6wHjOxkujkDfTUe+wp3j3P7OT3txptep2AcRx75Oi4MTjw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5819
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-02_15,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 spamscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303020183
-X-Proofpoint-ORIG-GUID: OBS94HZ598bRzthn_jKBLi-TIhOesPxc
-X-Proofpoint-GUID: OBS94HZ598bRzthn_jKBLi-TIhOesPxc
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 3 Mar 2023 09:07:58 +1000
+Message-ID: <CAPM=9tzkY1=9Lv4sejpcHTNbMcZWNgzYY6UdPFX4TZcU5g20Rw@mail.gmail.com>
+Subject: [git pull] drm-next-fixes for 6.3-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -149,40 +67,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-are used to identify modules. As a consequence, uses of the macro
-in non-modules will cause modprobe to misidentify their containing
-object file as a module when it is not (false positives), and modprobe
-might succeed rather than failing with a suitable error message.
+Hi Linus,
 
-So remove it in the files in this commit, none of which can be built as
-modules.
+This is the fixes for the last couple of weeks on top of the drm-next,
+I don't think this contains any next content it should be all fixes.
+amdgpu and i915 mostly, the amdgpu ones are bigger because it's two
+weeks in one.
 
-Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
----
- drivers/tty/n_null.c | 1 -
- 1 file changed, 1 deletion(-)
+hopefully this week I got the subject line right.
 
-diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
-index f913b665af725..c24f75942c49d 100644
---- a/drivers/tty/n_null.c
-+++ b/drivers/tty/n_null.c
-@@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
- module_init(n_null_init);
- module_exit(n_null_exit);
- 
--MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Alan Cox");
- MODULE_ALIAS_LDISC(N_NULL);
- MODULE_DESCRIPTION("Null ldisc driver");
--- 
-2.39.1.268.g9de2f9a303
+Dave.
 
+drm-next-2023-03-03-1:
+drm-next-fixes for 6.3-rc1
+
+fbdev:
+- fix uninit var in error path
+
+shmem:
+- revert unGPLing an export
+
+i915:
+- Don't use stolen memory or BAR mappings for ring buffers with LLC
+- Add inverted backlight quirk for HP 14-r206nv
+- Fix GSI offset for MCR lookups
+- GVT fixes (memleak, debugfs attributes, kconfig, typos)
+
+amdgpu:
+- SMU 13 fixes
+- Enable TMZ for GC 10.3.6
+- Misc display fixes
+- Buddy allocator fixes
+- GC 11 fixes
+- S0ix fix
+- INFO IOCTL queries for GC 11
+- VCN harvest fixes for SR-IOV
+- UMC 8.10 RAS fixes
+- Don't restrict bpc to 8
+- NBIO 7.5 fix
+- Allow freesync on PCon for more devices
+
+amdkfd:
+- SDMA fix
+- Illegal memory access fix
+The following changes since commit a48bba98380cb0b43dcd01d276c7efc282e3c33f=
+:
+
+  msm/fbdev: fix unused variable warning with clang. (2023-02-23 09:48:05 +=
+1000)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-next-2023-03-03-1
+
+for you to fetch changes up to 54ceb92724a8cf5294c284d5e9f770fc763cdab2:
+
+  Merge tag 'amd-drm-fixes-6.3-2023-03-02' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-next (2023-03-03
+08:26:59 +1000)
+
+----------------------------------------------------------------
+drm-next-fixes for 6.3-rc1
+
+fbdev:
+- fix uninit var in error path
+
+shmem:
+- revert unGPLing an export
+
+i915:
+- Don't use stolen memory or BAR mappings for ring buffers with LLC
+- Add inverted backlight quirk for HP 14-r206nv
+- Fix GSI offset for MCR lookups
+- GVT fixes (memleak, debugfs attributes, kconfig, typos)
+
+amdgpu:
+- SMU 13 fixes
+- Enable TMZ for GC 10.3.6
+- Misc display fixes
+- Buddy allocator fixes
+- GC 11 fixes
+- S0ix fix
+- INFO IOCTL queries for GC 11
+- VCN harvest fixes for SR-IOV
+- UMC 8.10 RAS fixes
+- Don't restrict bpc to 8
+- NBIO 7.5 fix
+- Allow freesync on PCon for more devices
+
+amdkfd:
+- SDMA fix
+- Illegal memory access fix
+
+----------------------------------------------------------------
+Alex Hung (1):
+      drm/amd/display: fix shift-out-of-bounds in CalculateVMAndRowBytes
+
+Aric Cyr (1):
+      Revert "drm/amd/display: Do not set DRR on pipe commit"
+
+Asahi Lina (1):
+      drm/shmem-helper: Revert accidental non-GPL export
+
+Candice Li (3):
+      drm/amdgpu: Add convert_error_address function for umc v8_10
+      drm/amdgpu: Add ecc info query interface for umc v8_10
+      drm/amdgpu: Make umc_v8_10_convert_error_address static and
+remove unused variable
+
+Colin Ian King (1):
+      i915/gvt: Fix spelling mistake "vender" -> "vendor"
+
+Dave Airlie (3):
+      Merge tag 'drm-misc-next-fixes-2023-02-28' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-next
+      Merge tag 'drm-intel-next-fixes-2023-02-27' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-next
+      Merge tag 'amd-drm-fixes-6.3-2023-03-02' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-next
+
+Deepak R Varma (2):
+      drm/i915/gvt: Avoid full proxy f_ops for debugfs attributes
+      drm/i915/gvt: Remove extra semicolon
+
+Evan Quan (2):
+      drm/amd/pm: correct the baco state setting for ArmD3 scenario
+      drm/amd/pm: no pptable resetup on runpm exiting
+
+Greg Kroah-Hartman (1):
+      i915: fix memory leak with using debugfs_lookup()
+
+Guchun Chen (1):
+      drm/amd/pm: downgrade log level upon SMU IF version mismatch
+
+Hamza Mahfooz (1):
+      drm/amd/display: only warn once in dce110_edp_wait_for_hpd_ready()
+
+Harry Wentland (2):
+      drm/amdgpu: Select DRM_DISPLAY_HDCP_HELPER in amdgpu
+      drm/amd/display: Don't restrict bpc to 8 bpc
+
+Hawking Zhang (1):
+      drm/amdgpu: fix incorrect active rb bitmap for gfx11
+
+Horatio Zhang (1):
+      drm/amdgpu: fix ttm_bo calltrace warning in psp_hw_fini
+
+Jane Jian (1):
+      drm/amdgpu/vcn: set and use harvest config
+
+Jani Nikula (1):
+      Merge tag 'gvt-next-fixes-2023-02-23' of
+https://github.com/intel/gvt-linux into drm-intel-next-fixes
+
+Jesse Zhang (1):
+      drm/amdgpu: add tmz support for GC 10.3.6
+
+John Harrison (2):
+      drm/i915: Don't use stolen memory for ring buffers with LLC
+      drm/i915: Don't use BAR mappings for ring buffers with LLC
+
+Kenneth Feng (1):
+      drm/amd/pm: re-enable ac/dc on smu_v13_0_0/10
+
+Marek Ol=C5=A1=C3=A1k (1):
+      drm/amdgpu: add more fields into device info, caches sizes, etc.
+
+Mario Limonciello (2):
+      drm/amd: Don't allow s0ix on APUs older than Raven
+      drm/amd: Fix initialization for nbio 7.5.1
+
+Mark Hawrylak (1):
+      drm/radeon: Fix eDP for single-display iMac11,2
+
+Matt Roper (1):
+      drm/i915/xelpmp: Consider GSI offset when doing MCR lookups
+
+Mavroudis Chatzilaridis (1):
+      drm/i915/quirks: Add inverted backlight quirk for HP 14-r206nv
+
+Nathan Chancellor (1):
+      drm: omapdrm: Do not use helper unininitialized in omap_fbdev_init()
+
+Qu Huang (1):
+      drm/amdkfd: Fix an illegal memory access
+
+Randy Dunlap (1):
+      drm/i915: move a Kconfig symbol to unbreak the menu presentation
+
+Ruili Ji (1):
+      drm/amdkfd: To fix sdma page fault issue for GC 11
+
+Ryan Lin (1):
+      drm/amd/display: Ext displays with dock can't recognized after resume
+
+Shane Xiao (2):
+      drm/amdgpu: remove TOPDOWN flags when allocating VRAM in large bar sy=
+stem
+      drm/amdgpu: optimize VRAM allocation when using drm buddy
+
+Sung Joon Kim (1):
+      drm/amd/display: Extend Freesync over PCon support for more devices
+
+Tao Zhou (4):
+      drm/amdgpu: add umc retire unit element
+      drm/amdgpu: exclude duplicate pages from UMC RAS UE count
+      drm/amdgpu: change default behavior of bad_page_threshold parameter
+      drm/amdgpu: add bad_page_threshold check in ras_eeprom_check_err
+
+Thomas Zimmermann (1):
+      drm/msm: Fix possible uninitialized access in fbdev
+
+Tom Rix (1):
+      drm/amdgpu: remove unused variable ring
+
+bobzhou (1):
+      drm/amdgpu/vcn: fix compilation issue with legacy gcc
+
+tiancyin (1):
+      drm/amd/display: fix dm irq error message in gpu recover
+
+ drivers/gpu/drm/amd/amdgpu/Kconfig                 |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c           |   3 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  14 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h            |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gmc.c            |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c            |  11 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c            |   6 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c            |  23 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.h            |   3 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras_eeprom.c     |  23 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_umc.c            |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_umc.h            |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c       |   3 +-
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c             |  83 ++++++---
+ drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c             |   1 +
+ drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c             |   1 +
+ drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c              |   3 +
+ drivers/gpu/drm/amd/amdgpu/nbio_v7_2.c             |   5 +
+ drivers/gpu/drm/amd/amdgpu/umc_v8_10.c             | 202 +++++++++++++++++=
+----
+ drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c              |  25 +--
+ .../gpu/drm/amd/amdkfd/kfd_device_queue_manager.c  |   5 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_events.c            |   9 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_mqd_manager_v11.c   |  15 +-
+ drivers/gpu/drm/amd/display/Kconfig                |   1 -
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  16 +-
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c  |   2 +
+ .../amd/display/dc/dce110/dce110_hw_sequencer.c    |   6 +-
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c |   3 +
+ .../amd/display/dc/dml/dcn30/display_mode_vba_30.c |   5 +-
+ .../drm/amd/display/dc/link/protocols/link_ddc.h   |   1 +
+ .../display/dc/link/protocols/link_dp_capability.c |   2 -
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c          |  15 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c     |   4 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c     |   4 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c     |  25 ++-
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   |   1 +
+ drivers/gpu/drm/drm_gem_shmem_helper.c             |   2 +-
+ drivers/gpu/drm/i915/Kconfig                       |   6 +-
+ drivers/gpu/drm/i915/display/intel_quirks.c        |   2 +
+ drivers/gpu/drm/i915/gt/intel_gt_mcr.c             |   5 +-
+ drivers/gpu/drm/i915/gt/intel_ring.c               |   6 +-
+ drivers/gpu/drm/i915/gvt/debugfs.c                 |  16 +-
+ drivers/gpu/drm/i915/gvt/firmware.c                |   2 +-
+ drivers/gpu/drm/i915/gvt/kvmgt.c                   |   2 +-
+ drivers/gpu/drm/i915/gvt/vgpu.c                    |   2 +-
+ drivers/gpu/drm/msm/msm_fbdev.c                    |   2 +-
+ drivers/gpu/drm/omapdrm/omap_fbdev.c               |   2 +-
+ drivers/gpu/drm/radeon/atombios_encoders.c         |   5 +-
+ include/uapi/drm/amdgpu_drm.h                      |  11 ++
+ 50 files changed, 446 insertions(+), 149 deletions(-)
