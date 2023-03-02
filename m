@@ -2,94 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212F76A7A33
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76096A7A37
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjCBDxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 22:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S229699AbjCBDzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 22:55:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjCBDxT (ORCPT
+        with ESMTP id S229496AbjCBDzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 22:53:19 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C88D16896;
-        Wed,  1 Mar 2023 19:53:16 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so1427060pjz.1;
-        Wed, 01 Mar 2023 19:53:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677729196;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ar0XxaRzkCTA8E2JFdUWamlA7+uw4UZJbuAUnYzNZgs=;
-        b=okq5JpU0rUq6hpQSLXVeTssVE20LYTIrY5bIPmoeky15NtC/cfWmWfUvDabcXyGxos
-         nAIKLjEmXGDStRQEuLQtSZLGte5IGiANqeB+pVHx0G1XqPVE9LCJ0cX4bDNofKi63y4F
-         9b2klZrfobA4CjHc4cbt61biiCHlmf+F/5rD781Bs+u12GEH8KfeKkkUlh2bSxQMTgHI
-         pqArtUaxl8G7kQN3uEHDm7MeLT7V+VAEI9Yp7awuoDPqyN4XrnhlNKyajr5A4Pt0ZqWt
-         SuKLkgMKywAaHAziko2oAS7xreolzPMQ72KZmn6SH+Pye7kuh+CrnuXM2C4HMzv+842U
-         JN0Q==
+        Wed, 1 Mar 2023 22:55:33 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625602DE46
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 19:55:29 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id b4-20020a92c844000000b00317983ace21so2125072ilq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 19:55:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677729196;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ar0XxaRzkCTA8E2JFdUWamlA7+uw4UZJbuAUnYzNZgs=;
-        b=oh4ATyLpNQ3Rs2YfNpjLYf+NL/kZ6R05v2/D+gttBPJpd08lFIXcu2ke4Z6w1skcIV
-         QwJj+hoAWNk/sHdj/7hhC9WM+ykYTzNFVZsgg0wpJxltQcT1sWEkY6bw/8n+DQRdg9ZJ
-         IGJKdXW0CpfAgJ+j3pgdHsNp/szdk7bC+PertBValsh3rnPk7NGJT9xucBctaFQ2gNs0
-         RE7sm6SLHbB2sNhN/SMVRDS3G9DXJQzIOdiNY2uVbqoHmqbII4ni4+ywGY502yLfcycC
-         YnCC+Itu4UaEBfyniZtYOSEiHiTNj47ujR4pYJKor0hFD0zgmWSQj3nLxkHv0iQp6TTU
-         BvZA==
-X-Gm-Message-State: AO0yUKWdV87xteY2dFXVx+b7ITFK804nZWURcAt0W8g6K9XRzQmkN68G
-        aZX7jIuKNA6/PHD2SlznvpA=
-X-Google-Smtp-Source: AK7set9pEhkDcOvNaUZ+nbW1+O1Ffb/lnv60lzghhfXKe7ia18SG2SXQMj5xEMa7VT5QKofHYACHSw==
-X-Received: by 2002:a17:902:dad1:b0:19c:d32a:befc with SMTP id q17-20020a170902dad100b0019cd32abefcmr9763318plx.15.1677729195657;
-        Wed, 01 Mar 2023 19:53:15 -0800 (PST)
-Received: from [192.168.1.108] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id i15-20020a170902cf0f00b0019b06263bdasm9220619plg.69.2023.03.01.19.53.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 19:53:15 -0800 (PST)
-Message-ID: <c90281a5-ea45-46b1-0bc2-81e543becef5@gmail.com>
-Date:   Wed, 1 Mar 2023 19:53:13 -0800
+        bh=00xfrrClzURlGRUuK1OunWq/lrQQId5kjwoGp/zS80k=;
+        b=IKo2dcAi8I+lo/2q0I3ejUDEiRdNMwe/DIEMe0UHLwP3guWVit6Kos1cm/kSShZ+vr
+         boKogLTyi/usj2tBsORA/KuKRWWFvo3lLF1j/f8dHNxBTds+UefFrV4q9DAM3Yjjl8p9
+         fvmFeE0WZwgxMCaNPbu/zroeaURuMWE0iLt5lrgX/SWtpjT/wgq+xHqCLfdqSILzuaiC
+         YG5K16JSG1GONMEkzW39I2zrOetghjyQbbI2HpzVje3gQJt7imYaP+RIyucLv0G5cgJU
+         nEfTsyIGhyawndZnL3Ms3V2V6IbIxvq6p7JfMr4xSDVY2gwjLqWxsEBvZfUmdkG0hTU3
+         GYAg==
+X-Gm-Message-State: AO0yUKU+duJFVIqcnVhmBfbO+1KQnd4jytNX4JbZR+AcxobU+Pqe3vjz
+        uQpgMHtOkQxpN/zpm9nd1CYrfvRT3VRPSmLCVWlAchIbr0gZ
+X-Google-Smtp-Source: AK7set/Ivxu+6VBFeZdxqtudeToANn2v+72BNTzgsUdh0pYZsufFqBp+QYVhk6lvWww5TRW2zAiqQgcmWUrh/Lzuzt9luWsOT9A1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] serdev: Set fwnode for serdev devices
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>, kernel-team@android.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230302023509.319903-1-saravanak@google.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230302023509.319903-1-saravanak@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:6d05:0:b0:315:8de2:2163 with SMTP id
+ i5-20020a926d05000000b003158de22163mr4021695ilc.5.1677729328748; Wed, 01 Mar
+ 2023 19:55:28 -0800 (PST)
+Date:   Wed, 01 Mar 2023 19:55:28 -0800
+In-Reply-To: <20230302032608.2457-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ab607205f5e2ccea@google.com>
+Subject: Re: [syzbot] [mm?] INFO: task hung in write_cache_pages (2)
+From:   syzbot <syzbot+0adf31ecbba886ab504f@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-On 3/1/2023 6:35 PM, Saravana Kannan wrote:
-> This allow fw_devlink to do dependency tracking for serdev devices.
-> 
-> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-> Link: https://lore.kernel.org/lkml/03b70a8a-0591-f28b-a567-9d2f736f17e5@gmail.com/
-> Cc: Stefan Wahren <stefan.wahren@i2se.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+Reported-and-tested-by: syzbot+0adf31ecbba886ab504f@syzkaller.appspotmail.com
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Tested on:
 
-Thanks for the quick fix!
--- 
-Florian
+commit:         489fa31e Merge branch 'work.misc' of git://git.kernel...
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=127939f8c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbfa7a73c540248d
+dashboard link: https://syzkaller.appspot.com/bug?extid=0adf31ecbba886ab504f
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13c7e422c80000
+
+Note: testing is done by a robot and is best-effort only.
