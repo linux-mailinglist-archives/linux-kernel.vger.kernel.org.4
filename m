@@ -2,139 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D90E6A83BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB076A83C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjCBNpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 08:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S229883AbjCBNrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:47:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCBNpo (ORCPT
+        with ESMTP id S229480AbjCBNrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 08:45:44 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252B3303C2
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:45:42 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q16so16602706wrw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677764740;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BM0l+s6uNh8ujrLQdhKpUj2tUsRahju9wGyQPOkFRZI=;
-        b=vQFlXb9PnW0B3GLtWxKLmK2Mw8JhqWFzmcTl4tRRMZPGiYIm9uwH8B02EVAggbrSJL
-         tyJGAWX6qqZPeQ0FoMcmZKBTUeqk57ZYMO/JTOvohT5jUYU3/TUp7SiuikpjvWnomPC9
-         GkQJ/s9toj6c1y08uGuglU8cLvDOrQdN8dht874IclIXUYfmhFtZ9VF/EQAbYl/NhueC
-         h7r+bkAEpLSI4/DXghQRrQIDO9F8HEw9EaEtl1M0FesXFa94DDHpQzRmCpZFSBmYpIJX
-         L1OYT92BzxSoHt7VJfuZkOxqwfAlBkhpPrCgwmTGpkkgJMYjPi8JSPft3AAUpdB4Qpxz
-         OsVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677764740;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BM0l+s6uNh8ujrLQdhKpUj2tUsRahju9wGyQPOkFRZI=;
-        b=QIh5yTk136UEGnkhsZuGT3nqSWC9RbrJM7pNwpM76X50oscCV78tPnNYCBiumz5E5L
-         1S6rPCcJB2osL4FljY133FtwuRENLWNQACfX892VbQZYID4nUcPJxfCYjuTmHIDeo9Ji
-         fYXX+nmGvZsvPLcIn+iAy4TlOurHiVFJSolSB80esb3eHOFIAMhRCMyPFVKdTCuC2Dc/
-         RWGm4xZeZXjq+Oen0jzAa/XYCaBilPJvq0WH7fB9eSQOAdIPLhcXvMe5DElaD9x1WIS8
-         k2/v1eBcDnf4X2LfiCCbdK5ZFsob0B2/wUPmZ9WhJwt7LYEQ0OjBc8ZNfZMy3EXm91JC
-         j+3g==
-X-Gm-Message-State: AO0yUKXSIg061LvBzUMZA8QxvxJ9y0b+jz/+h7ziA1En02YIUv7TjVMx
-        BFFf0LeULhtvMAqcU34gQpPG9Q==
-X-Google-Smtp-Source: AK7set/yUdNjILl9drkxcU+bma3yQLvF2CUOptYScpVcH+/Cx82pqRwSs92ECrWo4dFsqQALifXFcg==
-X-Received: by 2002:a5d:4842:0:b0:2c7:1c4e:1d11 with SMTP id n2-20020a5d4842000000b002c71c4e1d11mr7018864wrs.63.1677764740646;
-        Thu, 02 Mar 2023 05:45:40 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id n16-20020a5d4850000000b002c6e8cb612fsm15003619wrs.92.2023.03.02.05.45.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 05:45:39 -0800 (PST)
-Message-ID: <812aa961-05a6-5ad5-7389-74a71a9c7e7d@linaro.org>
-Date:   Thu, 2 Mar 2023 13:45:36 +0000
+        Thu, 2 Mar 2023 08:47:19 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0848130B24
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:47:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677764837; x=1709300837;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=74uO7+KfA34hp7SC7YFi68Y3Lewfq+9vwVsNne1TVTE=;
+  b=E/y6m3nVdwbRzZwybATtovlz2IESkuxYl8X/32DGxEk10xgVqqN+DKlg
+   4qYDTSWeFooZYH4jR4I249iQncrbQst2I3mgAv1h+lF15vF6YZoNNGDNK
+   EHwXT1Zo4qqVradOCghzBFMY2bQw0hEq6AJ8ZQjp36dwkVh2q29XrY8vS
+   IF6I1lHKEaH/Y08gTdhd0qiiJB0Nwf9SXbp6zTuaOpMfts4ZucHw43HSd
+   ZVMiZ+hVkRsW5xi4IjtuHg299pzlXkjYzwzli3iqO9jna+ZcnpC36IQ8A
+   iV0Xu3NHbg3iaWcocz1KJmk6vlEPubCuDaax7MD0OSBfQWPOGr/mVC/pQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322996247"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="322996247"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 05:47:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="705251418"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="705251418"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 02 Mar 2023 05:47:15 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXjH8-0000VE-1w;
+        Thu, 02 Mar 2023 13:47:14 +0000
+Date:   Thu, 2 Mar 2023 21:46:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: io_uring/io_uring.c:2932:40: error: variable 'prev' set but not used
+Message-ID: <202303022133.y7FMQVJo-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp-x13s: fix va dmic dai
- links and routing
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
-        andersson@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230302115741.7726-1-srinivas.kandagatla@linaro.org>
- <20230302115741.7726-5-srinivas.kandagatla@linaro.org>
- <f39890de-54a9-297b-68ee-41dedd7bdf27@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <f39890de-54a9-297b-68ee-41dedd7bdf27@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jens,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ee3f96b164688dae21e2466a57f2e806b64e8a37
+commit: ed29b0b4fd835b058ddd151c49d021e28d631ee6 io_uring: move to separate directory
+date:   7 months ago
+config: x86_64-sof-customedconfig-edison-defconfig (https://download.01.org/0day-ci/archive/20230302/202303022133.y7FMQVJo-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed29b0b4fd835b058ddd151c49d021e28d631ee6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ed29b0b4fd835b058ddd151c49d021e28d631ee6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303022133.y7FMQVJo-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   io_uring/io_uring.c: In function '__io_submit_flush_completions':
+>> io_uring/io_uring.c:2932:40: error: variable 'prev' set but not used [-Werror=unused-but-set-variable]
+    2932 |         struct io_wq_work_node *node, *prev;
+         |                                        ^~~~
+   cc1: all warnings being treated as errors
 
 
-On 02/03/2023 12:28, Konrad Dybcio wrote:
-> 
-> 
-> On 2.03.2023 12:57, Srinivas Kandagatla wrote:
->> VA dmics 0, 1, 2 micbias on X13s are connected to WCD MICBIAS1, WCD MICBIAS1
->> and WCD MICBIAS3 respectively. Reflect this in dt to get dmics working.
-> I'm far from good when it comes to sound, but is it expected that
-> (VA DMICn) are are connected to both (MIC BIASn) and (VA MIC BIAS{1, 1, 3})?
-> 
-one DMIC data lane can be used to connect to two DMICs, for L and R 
-data. So the MIC Bias line too, so for DMIC0, and DMIC1 which is 
-connected to MICBIAS1 and DMIC2 is connected to BIAS3. Why its bias3 
-line instead of bias2 is totally board dependent and how the wiring is done.
+vim +/prev +2932 io_uring/io_uring.c
 
->> Also fix dmics to go via VA Macro instead of TX macro to fix device switching.
->>
->> Fixes: 8c1ea87e80b4 ("arm64: dts: qcom: sc8280xp-x13s: Add soundcard support")
-> If that doesn't depend on any driver changes, please Cc stable
-> so that distros will pick this up.
-These patches are about to appear in rc1.. so I don't see any help 
-adding stable.
+7a743e225b2a9d fs/io_uring.c Pavel Begunkov 2020-03-03  2928  
+c450178d9be9dc fs/io_uring.c Pavel Begunkov 2021-09-08  2929  static void __io_submit_flush_completions(struct io_ring_ctx *ctx)
+a141dd896f544d fs/io_uring.c Jens Axboe     2021-08-12  2930  	__must_hold(&ctx->uring_lock)
+905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2931  {
+6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24 @2932  	struct io_wq_work_node *node, *prev;
+cd0ca2e048dc0d fs/io_uring.c Pavel Begunkov 2021-08-09  2933  	struct io_submit_state *state = &ctx->submit_state;
+905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2934  
+3d4aeb9f98058c fs/io_uring.c Pavel Begunkov 2021-11-10  2935  	if (state->flush_cqes) {
+79ebeaee8a21a0 fs/io_uring.c Jens Axboe     2021-08-10  2936  		spin_lock(&ctx->completion_lock);
+6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24  2937  		wq_list_for_each(node, prev, &state->compl_reqs) {
+6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24  2938  			struct io_kiocb *req = container_of(node, struct io_kiocb,
+6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24  2939  						    comp_list);
+5182ed2e332e8e fs/io_uring.c Pavel Begunkov 2021-06-26  2940  
+f43de1f88841d5 fs/io_uring.c Pavel Begunkov 2022-06-15  2941  			if (!(req->flags & REQ_F_CQE_SKIP))
+91ef75a7db0d08 fs/io_uring.c Pavel Begunkov 2022-06-15  2942  				__io_fill_cqe_req(ctx, req);
+905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2943  		}
+3d4aeb9f98058c fs/io_uring.c Pavel Begunkov 2021-11-10  2944  
+905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2945  		io_commit_cqring(ctx);
+79ebeaee8a21a0 fs/io_uring.c Jens Axboe     2021-08-10  2946  		spin_unlock(&ctx->completion_lock);
+905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2947  		io_cqring_ev_posted(ctx);
+3d4aeb9f98058c fs/io_uring.c Pavel Begunkov 2021-11-10  2948  		state->flush_cqes = false;
+3d4aeb9f98058c fs/io_uring.c Pavel Begunkov 2021-11-10  2949  	}
+5182ed2e332e8e fs/io_uring.c Pavel Begunkov 2021-06-26  2950  
+1cce17aca621c3 fs/io_uring.c Pavel Begunkov 2021-09-24  2951  	io_free_batch_list(ctx, state->compl_reqs.first);
+6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24  2952  	INIT_WQ_LIST(&state->compl_reqs);
+7a743e225b2a9d fs/io_uring.c Pavel Begunkov 2020-03-03  2953  }
+7a743e225b2a9d fs/io_uring.c Pavel Begunkov 2020-03-03  2954  
 
---srini
-> 
-> Konrad
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> ---
->>   .../arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
->> index d18d405d1776..89230112e288 100644
->> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
->> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
->> @@ -933,9 +933,9 @@
->>   		"VA DMIC0", "MIC BIAS1",
->>   		"VA DMIC1", "MIC BIAS1",
->>   		"VA DMIC2", "MIC BIAS3",
->> -		"TX DMIC0", "MIC BIAS1",
->> -		"TX DMIC1", "MIC BIAS2",
->> -		"TX DMIC2", "MIC BIAS3",
->> +		"VA DMIC0", "VA MIC BIAS1",
->> +		"VA DMIC1", "VA MIC BIAS1",
->> +		"VA DMIC2", "VA MIC BIAS3",
->>   		"TX SWR_ADC1", "ADC2_OUTPUT";
->>   
->>   	wcd-playback-dai-link {
->> @@ -986,7 +986,7 @@
->>   	va-dai-link {
->>   		link-name = "VA Capture";
->>   		cpu {
->> -			sound-dai = <&q6apmbedai TX_CODEC_DMA_TX_3>;
->> +			sound-dai = <&q6apmbedai VA_CODEC_DMA_TX_0>;
->>   		};
->>   
->>   		platform {
+:::::: The code at line 2932 was first introduced by commit
+:::::: 6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862 io_uring: use slist for completion batching
+
+:::::: TO: Pavel Begunkov <asml.silence@gmail.com>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
