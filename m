@@ -2,207 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B846A8451
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECBF6A8455
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjCBOn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S229808AbjCBOnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCBOn1 (ORCPT
+        with ESMTP id S229456AbjCBOnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:43:27 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE442CC76;
-        Thu,  2 Mar 2023 06:43:24 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AC5B0FF804;
-        Thu,  2 Mar 2023 14:43:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677768203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YBEu4313wvc8JjbyIn5rJNCdAk7pwRKJxkVhQRUIhS0=;
-        b=QcPI/XpDPw9RvoeywOApGHiUk+wYKTcQ3R73FbwKdbHd8k/oXBtODScU15QU/vDDOi8veX
-        zKuF/Bi4l2/DhzDCDkcIywYwR1gzgr7H/WIqIBoXzbebGS3DFzL5PpnQCtha/eB+orUiN5
-        P858d/Srqivw0A/DfBsQI+zjUNWCnS4n4Bih80v0JQA4r9hMQW1R7TteSMUrDXQ8y8ksds
-        vPAAsinr7ZQw8Lzd4zcu1ITIArpH6XufhIMehX6cNRUqyyNA/kvWfuPYdnYtWy3/5uyiTW
-        mPdG0h0VCQdJyT1+PF5mGIHpFfoI3YORcdi0523gSFmJ+Bry8ZDa0Mk0xxQxXw==
-Date:   Thu, 2 Mar 2023 15:43:18 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [patch 05/39] genirq/msi: Remove filter from
- msi_free_descs_free_range()
-Message-ID: <20230302154318.380c6cff@xps-13>
-In-Reply-To: <87mt4wkwnv.ffs@tglx>
-References: <20221111120501.026511281@linutronix.de>
-        <20221111122013.888850936@linutronix.de>
-        <20230301115530.5ccea5ae@xps-13>
-        <87mt4wkwnv.ffs@tglx>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 2 Mar 2023 09:43:42 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D3838653
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:43:39 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id x6so12229884ljq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 06:43:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NuIrQyu9sctpk8pQFgxNkYy00s89JzuKjWNu0rz86k=;
+        b=SXXi6eB+umI9ANFEoFGqSrifMaE0poWztgSMyQ22TTInkNboO5fBzmLJu8AVy9bLju
+         M6kRnEzSFF0tIKScNEJKtwGknd9HA8jIlBSeNTpA9OQ0f9rWBw0Ac3o87OdBq5qpWH6L
+         Hp9grmmptCV5jVYnuggL0wtHznofM7v2nu7ZWEw049NOOS9E5JjcztTeVp7gPUE4C+L7
+         W9KHKjq1tugzlmCOetH33O/q2pd/nVAr1GvLh4ynoV7NG6AHClJbXB+UVxoFI1aYc4Cl
+         LGS6rl1Q9iruf4NB+fghiDV8qU5Rqb4VK4VKXOSyITorbvahOUZuOjakf6L33nu6LEu7
+         yeHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+NuIrQyu9sctpk8pQFgxNkYy00s89JzuKjWNu0rz86k=;
+        b=q/4LmIo2Iu9Hie2uaG/ylPRHd5mhfE0Qr9CIze7kfg/k9T2jOKyf73IIEldJU9Jdx7
+         N510gKU+tVyIXShrLtbxfmU9OwHWFYpV8m9zAFDKRvlsqe6SxWfTXloL0XWKGadt8K9I
+         UALFw2TAyczlkK918GZ3GXzBybsdOluGmZWmacSSzXrRIP4eTTUzERxIOmed2iTEVJdg
+         x7dVC//mz6HPg4V+iHjITqKl3KvmxnJS1CmAF0S558XoEzEpkMFLjYTOtDMynT2OHtkM
+         10eUyvc+PvGtTAAaY8l00JBx11sLRWMefROEhNKJGNw+yFHZv0Ch7LacXxEnJVpqZPVi
+         +Qfg==
+X-Gm-Message-State: AO0yUKVXkjvGc3IMe9i2oCjaboGv3ekzVbJIgKuS3DZzguPFN+v++qSv
+        jmzuWOMspUbrhIefwhM4naaldRDULZ6NBHTo
+X-Google-Smtp-Source: AK7set9G/UyUxQKn0i1rnrYbqkFSeGhuf1tIk4E+t5lr32TMrrq16Jkgq8TWOo69tqns9sf6xocjZA==
+X-Received: by 2002:a2e:b98c:0:b0:295:a446:cd08 with SMTP id p12-20020a2eb98c000000b00295a446cd08mr2838122ljp.6.1677768217230;
+        Thu, 02 Mar 2023 06:43:37 -0800 (PST)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id n15-20020a2e86cf000000b0029597ebacd0sm2070791ljj.64.2023.03.02.06.43.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 06:43:36 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Wenchao Chen <wenchao.chen666@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Christian Lohle <cloehle@hyperstone.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an internal cache
+Date:   Thu,  2 Mar 2023 15:43:30 +0100
+Message-Id: <20230302144330.274947-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+REQ_FUA is in general supported for eMMC cards, which translates into so
+called "reliable writes". To support these write operations, the CMD23
+(MMC_CAP_CMD23), needs to be supported by the mmc host too, which is common
+but not always the case.
 
-tglx@linutronix.de wrote on Wed, 01 Mar 2023 22:07:48 +0100:
+For some eMMC devices, it has been reported that reliable writes are quite
+costly, leading to performance degradations.
 
-> Miquel!
->=20
-> On Wed, Mar 01 2023 at 11:55, Miquel Raynal wrote:
-> > tglx@linutronix.de wrote on Fri, 11 Nov 2022 14:54:22 +0100 (CET):
-> > =20
-> >> When a range of descriptors is freed then all of them are not associat=
-ed to
-> >> a linux interrupt. Remove the filter and add a warning to the free fun=
-ction.
-> >> +		/* Leak the descriptor when it is still referenced */
-> >> +		if (WARN_ON_ONCE(msi_desc_match(desc, MSI_DESC_ASSOCIATED)))
-> >> +			continue;
-> >> +		msi_free_desc(desc);
-> >>  	}
-> >>  } =20
-> >
-> > It looks like since this commit I am getting warnings upon EPROBE_DEFER
-> > errors in the mvpp2 Marvell Ethernet driver. I looked a bit at the
-> > internals to understand why this warning was shown, and it seems that
-> > nothing "de-references" the descriptors, which would mean here:
-> > resetting desc->irq to 0. =20
->=20
-> Correct. This platform-msi ^(*&!@&^ hack really needs to die ASAP.
+In a way to improve the situation, let's avoid announcing REQ_FUA support
+if the eMMC supports an internal cache, as that allows us to rely solely on
+flush-requests (REQ_OP_FLUSH) instead, which seems to be a lot cheaper.
+Note that, those mmc hosts that lacks CMD23 support are already using this
+type of configuration, whatever that could mean.
 
-:-)
+Reported-by: Wenchao Chen <wenchao.chen666@gmail.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
-> Marc, where are we on that? Is this still in limbo?
->=20
-> > I am wondering how useful thisd WARN_ON() is, or otherwise where the =20
->=20
-> It is useful as it caught bugs already.
+Note that, I haven't been able to test this patch myself, but are relying on
+Wenchao and others to help out. Sharing some performance number before and
+after the patch, would be nice.
 
-Sure.
+Moreover, what is not clear to me (hence the RFC), is whether relying solely on
+flush requests are sufficient and as such if it's a good idea after all.
+Comments are highly appreciated in this regards.
 
-> > desc->irq entry should be zeroed (if I understand that correctly), any
-> > help will be appreciated. =20
->=20
-> Untested workaround below.
+Kind regards
+Ulf Hansson
 
-Excellent!
+---
+ drivers/mmc/core/block.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-> I hate it with a passion, but *shrug*.
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 672ab90c4b2d..2a49531bf023 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -2490,15 +2490,20 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
+ 			md->flags |= MMC_BLK_CMD23;
+ 	}
+ 
+-	if (md->flags & MMC_BLK_CMD23 &&
+-	    ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
+-	     card->ext_csd.rel_sectors)) {
++	/*
++	 * REQ_FUA is supported through eMMC reliable writes, which has been
++	 * reported to be quite costly for some eMMCs. Therefore, let's rely
++	 * on flush requests (REQ_OP_FLUSH), if an internal cache is supported.
++	 */
++	if (mmc_cache_enabled(card->host)) {
++		cache_enabled  = true;
++	} else if (md->flags & MMC_BLK_CMD23 &&
++		  (card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN ||
++		   card->ext_csd.rel_sectors)) {
+ 		md->flags |= MMC_BLK_REL_WR;
+ 		fua_enabled = true;
+ 		cache_enabled = true;
+ 	}
+-	if (mmc_cache_enabled(card->host))
+-		cache_enabled  = true;
+ 
+ 	blk_queue_write_cache(md->queue.queue, cache_enabled, fua_enabled);
+ 
+-- 
+2.34.1
 
-:'D
-
-> Thanks,
->=20
->         tglx
-> ---
->  drivers/base/platform-msi.c |    1 +
->  include/linux/msi.h         |    2 ++
->  kernel/irq/msi.c            |   23 ++++++++++++++++++++++-
->  3 files changed, 25 insertions(+), 1 deletion(-)
-
-Kudos for the diff, which indeed works perfectly in my case. I guess
-you'll make a proper patch soon, if that's the case you can add my:
-
-Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Let me know otherwise.
-
-Thanks a lot for the very quick fix!
-Miqu=C3=A8l
-
-> --- a/drivers/base/platform-msi.c
-> +++ b/drivers/base/platform-msi.c
-> @@ -324,6 +324,7 @@ void platform_msi_device_domain_free(str
->  	struct platform_msi_priv_data *data =3D domain->host_data;
-> =20
->  	msi_lock_descs(data->dev);
-> +	msi_domain_depopulate_descs(data->dev, virq, nr_irqs);
->  	irq_domain_free_irqs_common(domain, virq, nr_irqs);
->  	msi_free_msi_descs_range(data->dev, virq, virq + nr_irqs - 1);
->  	msi_unlock_descs(data->dev);
-> --- a/include/linux/msi.h
-> +++ b/include/linux/msi.h
-> @@ -631,6 +631,8 @@ int msi_domain_prepare_irqs(struct irq_d
->  			    int nvec, msi_alloc_info_t *args);
->  int msi_domain_populate_irqs(struct irq_domain *domain, struct device *d=
-ev,
->  			     int virq, int nvec, msi_alloc_info_t *args);
-> +void msi_domain_depopulate_descs(struct device *dev, int virq, int nvec);
-> +
->  struct irq_domain *
->  __platform_msi_create_device_domain(struct device *dev,
->  				    unsigned int nvec,
-> --- a/kernel/irq/msi.c
-> +++ b/kernel/irq/msi.c
-> @@ -1109,14 +1109,35 @@ int msi_domain_populate_irqs(struct irq_
->  	return 0;
-> =20
->  fail:
-> -	for (--virq; virq >=3D virq_base; virq--)
-> +	for (--virq; virq >=3D virq_base; virq--) {
-> +		msi_domain_depopulate_descs(dev, virq, 1);
->  		irq_domain_free_irqs_common(domain, virq, 1);
-> +	}
->  	msi_domain_free_descs(dev, &ctrl);
->  unlock:
->  	msi_unlock_descs(dev);
->  	return ret;
->  }
-> =20
-> +void msi_domain_depopulate_descs(struct device *dev, int virq_base, int =
-nvec)
-> +{
-> +	struct msi_ctrl ctrl =3D {
-> +		.domid	=3D MSI_DEFAULT_DOMAIN,
-> +		.first  =3D virq_base,
-> +		.last	=3D virq_base + nvec - 1,
-> +	};
-> +	struct msi_desc *desc;
-> +	struct xarray *xa;
-> +	unsigned long idx;
-> +
-> +	if (!msi_ctrl_valid(dev, &ctrl))
-> +		return;
-> +
-> +	xa =3D &dev->msi.data->__domains[ctrl.domid].store;
-> +	xa_for_each_range(xa, idx, desc, ctrl.first, ctrl.last)
-> +		desc->irq =3D 0;
-> +}
-> +
->  /*
->   * Carefully check whether the device can use reservation mode. If
->   * reservation mode is enabled then the early activation will assign a
