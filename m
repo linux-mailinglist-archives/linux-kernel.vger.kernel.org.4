@@ -2,218 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C026A855F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB746A8564
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjCBPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S229806AbjCBPh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjCBPgj (ORCPT
+        with ESMTP id S229504AbjCBPh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:36:39 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C45D36693
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:36:29 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id m7so22634166lfj.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:36:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677771388;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xPP3HXcCysfTznKsDYThrcBwtl/yG8ZLYuAVSZJtJ+o=;
-        b=xdv5/7ylluaW3v2WHm00b1OBIYqoIirvCXVySNdVpvERx7L9jAqYcDxPVx8FDDCBO0
-         fOtWyr9llberWp31txlJjjvV0GlGXeFFN6o3rszBGThkl/Qa6Et90HUAX5pZvBI7ABWY
-         8hDCjzIxf82i5tOGFzKndrK/uF7lJ9LQTcO8lapnOyOyhlUw00J0739fUp8iQR69J7Ch
-         8X0sMGCGb9S6Rk1jluOjLw6G8bT/zqQD4+FC/MOIRZvvW6XjNecX3UGlz7c1BTlvXZZn
-         hj5S6GEMtQlJ1VHq0TC7Tdt4YuOWBg3yb93cLSH0zqdWafPKJcIAv/Gac7lJOOja72qL
-         zFwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677771388;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xPP3HXcCysfTznKsDYThrcBwtl/yG8ZLYuAVSZJtJ+o=;
-        b=TisxBwTiIwsCU+/EeZOQv2CUIKdBYTbeMpxkhSEc9jxbOdGw7xkhH3z8llO0jt5AJw
-         /fipsJW/PejmsB5smQy1B0S0IewwFT8nbuvX3FLXbHxbDstpWQzyttFDtQwbRdshVSgs
-         TvS6MTClOncO0+q1N1/IzAsxplv+JojH2KhJXgOFhMo5s3XjxGv6lJdRzDknxFAoUnRV
-         NlR1XUUoF0/i1RYU4B4XuWO1NMGcySwmuS9/ftW6DMU25FxaEPk4gI2Un5Rnkp+sK+zb
-         pAETRjQegTu2toyCBhrG21tKNkCGEszNecSA/ozfTd6gpJg5Ii3SheP6WCDaUTDYln0/
-         FMow==
-X-Gm-Message-State: AO0yUKW05/Ac1DOULTmft4zSaC/67YgstNbQ1DWuZ5h6MIMEnalv/voX
-        GGe5GsWo9HiqedfDyTMfaAhnMg==
-X-Google-Smtp-Source: AK7set93ZYW1xBaJdP9TfUcpnqshkEhG0x6bOeCHFRSevglUZ/k28gZkEwXDaNLfG3E4qRUrgCVDEg==
-X-Received: by 2002:ac2:5330:0:b0:4e1:46e9:ec3e with SMTP id f16-20020ac25330000000b004e146e9ec3emr2826110lfh.61.1677771387836;
-        Thu, 02 Mar 2023 07:36:27 -0800 (PST)
-Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id p17-20020a05651238d100b004db2978e330sm2170509lft.258.2023.03.02.07.36.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 07:36:27 -0800 (PST)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     stable@vger.kernel.org, tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joneslee@google.com, Lukas Czerner <lczerner@redhat.com>,
-        syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH][for stable 5.{15, 10} 4/4] ext4: block range must be validated before use in ext4_mb_clear_bb()
-Date:   Thu,  2 Mar 2023 15:36:10 +0000
-Message-Id: <20230302153610.1204653-5-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-In-Reply-To: <20230302153610.1204653-1-tudor.ambarus@linaro.org>
-References: <20230302153610.1204653-1-tudor.ambarus@linaro.org>
+        Thu, 2 Mar 2023 10:37:28 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DCF4E5E1;
+        Thu,  2 Mar 2023 07:37:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677771421; x=1709307421;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8w0enhCLX1f+XCXsd7ygezqUJO541MvWiVCDSNNqZJI=;
+  b=i4ShmjirPkVWBiGIfv8NoF3sxKGJbX/9ds2kh1A7uftkPMLlb2MPcvek
+   Br2b2/Nu7vlnsJSIrKFoEb2nKlgQO7MHGnxcoEeDlEBjDKL+gcDpXP/ka
+   yvzeTHNFwxhoVu3bNaqx9OX5tEwBfYw41tm4w+C97Xcwg0awansbKc5d3
+   tQgU7BywlxjuMQ+1hyT6TXQsxpTRRxNVtLnulo1Cm/NU7QrOQ7I0gc/hS
+   zV9CW23NSXsWvPFWGOlBcfN3p+J/BPeHtu/cvq7Zj9iikxkCebvYI2tpr
+   9cZwYG3iOqynMM+Jlxoc9Fv3fTklCoru5Qtcyd/mJmWePzRm0Ufz+1haE
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="337065569"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="337065569"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 07:37:01 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="784874350"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="784874350"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.30.53]) ([10.212.30.53])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 07:37:00 -0800
+Message-ID: <e10b60ab-f666-8124-eb8f-6a2da6c0f989@intel.com>
+Date:   Thu, 2 Mar 2023 08:36:59 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.0
+Subject: Re: [PATCH] cxl/hdm: Fix hdm decoder init by adding COMMIT field
+ check
+Content-Language: en-US
+To:     Fan Ni <fan.ni@samsung.com>
+Cc:     "alison.schofield@intel.com" <alison.schofield@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20230228224029uscas1p1e2fb92a8a595f80fa2985b452899d785@uscas1p1.samsung.com>
+ <20230228224014.1402545-1-fan.ni@samsung.com>
+ <346a8225-609e-0188-ec8a-4abe8d271a09@intel.com>
+ <20230302062305.GA1444578@bgt-140510-bm03>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230302062305.GA1444578@bgt-140510-bm03>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Czerner <lczerner@redhat.com>
 
-[ Upstream commit 1e1c2b86ef86a8477fd9b9a4f48a6bfe235606f6 ]
 
-Block range to free is validated in ext4_free_blocks() using
-ext4_inode_block_valid() and then it's passed to ext4_mb_clear_bb().
-However in some situations on bigalloc file system the range might be
-adjusted after the validation in ext4_free_blocks() which can lead to
-troubles on corrupted file systems such as one found by syzkaller that
-resulted in the following BUG
+On 3/1/23 11:23 PM, Fan Ni wrote:
+> On Wed, Mar 01, 2023 at 11:54:08AM -0700, Dave Jiang wrote:
+>>
+> Hi Dave,
+> Thanks for looking into this.
+>>
+>> On 2/28/23 3:40 PM, Fan Ni wrote:
+>>> Add COMMIT field check aside with existing COMMITTED field check during
+>>> hdm decoder initialization to avoid a system crash during module removal
+>>> after destroying a region which leaves the COMMIT field being reset while
+>>> the COMMITTED field still being set.
+>>
+>> Hi Fan. Are you seeing this issue on qemu emulation or hardware? The
+> I run into the issue with qemu emulation.
+>> situation does not make sense to me. If we clear the COMMIT bit, then the
+>> COMMITTED bit should be cleared by the hardware shortly after right?
+> 
+>  From the spec, I cannot find any statement saying clearing the COMMIT bit
+> will automatically clear the COMMITTED. If I have not missed the statement in
+> the spec, I assume we should not make the assumption that it will be
+> cleared automatically for real hardware. But you may be right, leaving the
+> COMMITTED bit set can potentially cause some issue? Need to check more.
 
-kernel BUG at fs/ext4/ext4.h:3319!
-PREEMPT SMP NOPTI
-CPU: 28 PID: 4243 Comm: repro Kdump: loaded Not tainted 5.19.0-rc6+ #1
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1.fc35 04/01/2014
-RIP: 0010:ext4_free_blocks+0x95e/0xa90
-Call Trace:
- <TASK>
- ? lock_timer_base+0x61/0x80
- ? __es_remove_extent+0x5a/0x760
- ? __mod_timer+0x256/0x380
- ? ext4_ind_truncate_ensure_credits+0x90/0x220
- ext4_clear_blocks+0x107/0x1b0
- ext4_free_data+0x15b/0x170
- ext4_ind_truncate+0x214/0x2c0
- ? _raw_spin_unlock+0x15/0x30
- ? ext4_discard_preallocations+0x15a/0x410
- ? ext4_journal_check_start+0xe/0x90
- ? __ext4_journal_start_sb+0x2f/0x110
- ext4_truncate+0x1b5/0x460
- ? __ext4_journal_start_sb+0x2f/0x110
- ext4_evict_inode+0x2b4/0x6f0
- evict+0xd0/0x1d0
- ext4_enable_quotas+0x11f/0x1f0
- ext4_orphan_cleanup+0x3de/0x430
- ? proc_create_seq_private+0x43/0x50
- ext4_fill_super+0x295f/0x3ae0
- ? snprintf+0x39/0x40
- ? sget_fc+0x19c/0x330
- ? ext4_reconfigure+0x850/0x850
- get_tree_bdev+0x16d/0x260
- vfs_get_tree+0x25/0xb0
- path_mount+0x431/0xa70
- __x64_sys_mount+0xe2/0x120
- do_syscall_64+0x5b/0x80
- ? do_user_addr_fault+0x1e2/0x670
- ? exc_page_fault+0x70/0x170
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7fdf4e512ace
+I have not been able to find direct verbiage that indicates this either. 
+However, logically it would make sense. Otherwise, the COMMITTED field 
+never clears and prevents reprogramming of the HDM decoders. The current 
+QEMU implementation is creating a situation where the HDM decoder is 
+always active after COMMIT bit is set the first time, regardless whether 
+COMMIT field has been cleared later on during a teardown. It does sound 
+like a bug with QEMU emulation currently.
 
-Fix it by making sure that the block range is properly validated before
-used every time it changes in ext4_free_blocks() or ext4_mb_clear_bb().
+DJ
 
-Link: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
-Reported-by: syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
-Signed-off-by: Lukas Czerner <lczerner@redhat.com>
-Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
-Tested-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Link: https://lore.kernel.org/r/20220714165903.58260-1-lczerner@redhat.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- fs/ext4/mballoc.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 7b4359862a60..e6718bfc6c55 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -5916,6 +5916,15 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
- 
- 	sbi = EXT4_SB(sb);
- 
-+	if (!(flags & EXT4_FREE_BLOCKS_VALIDATED) &&
-+	    !ext4_inode_block_valid(inode, block, count)) {
-+		ext4_error(sb, "Freeing blocks in system zone - "
-+			   "Block = %llu, count = %lu", block, count);
-+		/* err = 0. ext4_std_error should be a no op */
-+		goto error_return;
-+	}
-+	flags |= EXT4_FREE_BLOCKS_VALIDATED;
-+
- do_more:
- 	overflow = 0;
- 	ext4_get_group_no_and_offset(sb, block, &block_group, &bit);
-@@ -5932,6 +5941,8 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
- 		overflow = EXT4_C2B(sbi, bit) + count -
- 			EXT4_BLOCKS_PER_GROUP(sb);
- 		count -= overflow;
-+		/* The range changed so it's no longer validated */
-+		flags &= ~EXT4_FREE_BLOCKS_VALIDATED;
- 	}
- 	count_clusters = EXT4_NUM_B2C(sbi, count);
- 	bitmap_bh = ext4_read_block_bitmap(sb, block_group);
-@@ -5946,7 +5957,8 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
- 		goto error_return;
- 	}
- 
--	if (!ext4_inode_block_valid(inode, block, count)) {
-+	if (!(flags & EXT4_FREE_BLOCKS_VALIDATED) &&
-+	    !ext4_inode_block_valid(inode, block, count)) {
- 		ext4_error(sb, "Freeing blocks in system zone - "
- 			   "Block = %llu, count = %lu", block, count);
- 		/* err = 0. ext4_std_error should be a no op */
-@@ -6069,6 +6081,8 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
- 		block += count;
- 		count = overflow;
- 		put_bh(bitmap_bh);
-+		/* The range changed so it's no longer validated */
-+		flags &= ~EXT4_FREE_BLOCKS_VALIDATED;
- 		goto do_more;
- 	}
- error_return:
-@@ -6115,6 +6129,7 @@ void ext4_free_blocks(handle_t *handle, struct inode *inode,
- 			   "block = %llu, count = %lu", block, count);
- 		return;
- 	}
-+	flags |= EXT4_FREE_BLOCKS_VALIDATED;
- 
- 	ext4_debug("freeing block %llu\n", block);
- 	trace_ext4_free_blocks(inode, block, count, flags);
-@@ -6146,6 +6161,8 @@ void ext4_free_blocks(handle_t *handle, struct inode *inode,
- 			block -= overflow;
- 			count += overflow;
- 		}
-+		/* The range changed so it's no longer validated */
-+		flags &= ~EXT4_FREE_BLOCKS_VALIDATED;
- 	}
- 	overflow = EXT4_LBLK_COFF(sbi, count);
- 	if (overflow) {
-@@ -6156,6 +6173,8 @@ void ext4_free_blocks(handle_t *handle, struct inode *inode,
- 				return;
- 		} else
- 			count += sbi->s_cluster_ratio - overflow;
-+		/* The range changed so it's no longer validated */
-+		flags &= ~EXT4_FREE_BLOCKS_VALIDATED;
- 	}
- 
- 	if (!bh && (flags & EXT4_FREE_BLOCKS_FORGET)) {
--- 
-2.40.0.rc0.216.gc4246ad0f0-goog
-
+> 
+> Fan
+> 
+>> Otherwise, how would one reprogram the decoder if the decoder is indicating
+>> to be active?
+>>
+>> DJ
+>>
+>>>
+>>> In current kernel implementation, when destroying a region (cxl
+>>> destroy-region),the decoders associated to the region will be reset
+>>> as that in cxl_decoder_reset, where the COMMIT field will be reset.
+>>> However, resetting COMMIT field will not automatically reset the
+>>> COMMITTED field, causing a situation where COMMIT is reset (0) while
+>>> COMMITTED is set (1) after the region is destroyed. Later, when
+>>> init_hdm_decoder is called (during modprobe), current code only check
+>>> the COMMITTED to decide whether the decoder is enabled or not. Since
+>>> the COMMITTED will be 1 and the code treats the decoder as enabled,
+>>> which will cause unexpected behaviour.
+>>>
+>>> Before the fix, a system crash was observed when performing following
+>>> steps:
+>>> 1. modprobe -a cxl_acpi cxl_core cxl_pci cxl_port cxl_mem
+>>> 2. cxl create-region -m -d decoder0.0 -w 1 mem0 -s 256M
+>>> 3. cxl destroy-region region0 -f
+>>> 4. rmmod cxl_acpi cxl_pci cxl_port cxl_mem cxl_pmem cxl_core
+>>> 5. modprobe -a cxl_acpi cxl_core cxl_pci cxl_port cxl_mem (showing
+>>> "no CXL window for range 0x0:0xffffffffffffffff" error message)
+>>> 6. rmmod cxl_acpi cxl_pci cxl_port cxl_mem cxl_pmem cxl_core (kernel
+>>> crash at cxl_dpa_release due to dpa_res has been freed when destroying
+>>> the region).
+>>>
+>>> The patch fixed the above issue, and is tested based on follow patch series:
+>>>
+>>> [PATCH 00/18] CXL RAM and the 'Soft Reserved' => 'System RAM' default
+>>> Message-ID: 167601992097.1924368.18291887895351917895.stgit@dwillia2-xfh.jf.intel.com
+>>>
+>>> Signed-off-by: Fan Ni <fan.ni@samsung.com>
+>>> ---
+>>>    drivers/cxl/core/hdm.c | 8 +++++---
+>>>    1 file changed, 5 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
+>>> index 80eccae6ba9e..6cf854c949f0 100644
+>>> --- a/drivers/cxl/core/hdm.c
+>>> +++ b/drivers/cxl/core/hdm.c
+>>> @@ -695,6 +695,7 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
+>>>    	struct cxl_endpoint_decoder *cxled = NULL;
+>>>    	u64 size, base, skip, dpa_size;
+>>>    	bool committed;
+>>> +	bool should_commit;
+>>>    	u32 remainder;
+>>>    	int i, rc;
+>>>    	u32 ctrl;
+>>> @@ -710,10 +711,11 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
+>>>    	base = ioread64_hi_lo(hdm + CXL_HDM_DECODER0_BASE_LOW_OFFSET(which));
+>>>    	size = ioread64_hi_lo(hdm + CXL_HDM_DECODER0_SIZE_LOW_OFFSET(which));
+>>>    	committed = !!(ctrl & CXL_HDM_DECODER0_CTRL_COMMITTED);
+>>> +	should_commit = !!(ctrl & CXL_HDM_DECODER0_CTRL_COMMIT);
+>>>    	cxld->commit = cxl_decoder_commit;
+>>>    	cxld->reset = cxl_decoder_reset;
+>>> -	if (!committed)
+>>> +	if (!should_commit || !committed)
+>>>    		size = 0;
+>>>    	if (base == U64_MAX || size == U64_MAX) {
+>>>    		dev_warn(&port->dev, "decoder%d.%d: Invalid resource range\n",
+>>> @@ -727,7 +729,7 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
+>>>    	};
+>>>    	/* decoders are enabled if committed */
+>>> -	if (committed) {
+>>> +	if (should_commit && committed) {
+>>>    		cxld->flags |= CXL_DECODER_F_ENABLE;
+>>>    		if (ctrl & CXL_HDM_DECODER0_CTRL_LOCK)
+>>>    			cxld->flags |= CXL_DECODER_F_LOCK;
+>>> @@ -772,7 +774,7 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
+>>>    		return 0;
+>>>    	}
+>>> -	if (!committed)
+>>> +	if (!should_commit || !committed)
+>>>    		return 0;
+>>>    	dpa_size = div_u64_rem(size, cxld->interleave_ways, &remainder);
