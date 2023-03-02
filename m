@@ -2,149 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5D16A8449
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B846A8451
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjCBOjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+        id S229660AbjCBOn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjCBOjV (ORCPT
+        with ESMTP id S229456AbjCBOn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:39:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B320B2A6FC;
-        Thu,  2 Mar 2023 06:39:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4655E615D2;
-        Thu,  2 Mar 2023 14:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EE8DC433D2;
-        Thu,  2 Mar 2023 14:39:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677767959;
-        bh=+6aE/Q/gEbdk0VnH+27QNOv9p1fOfMaR+j7PKnHb2Ao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hP0Yc6MqGVGWZnrbC7ATGwlQXJ44QSEOk4XDYBAxaB6CuKfjhWy41MEGRFzXbtvXQ
-         GbRSvIhL8x8ctWOTKSTC8FqfdFrD1hjmmPZfbOLjoG66qC8L2ta3H+x/Bqn7iV97yM
-         S5QRScb8IpWUa/8tXNqQovOEk9zm2uPp3Y1J+zJrmR51WGFk/yUbWqeRtXDVSkF7SZ
-         7u8SkTJOyksWFg+UNvvYC/1EbwT5x/JAX3EoDVSQ+GspYGM0ZG9+XR/YmjrbFYvDq4
-         80s3ZsA7xFquhw1ImLwH4zHb9ZQ2oARKCTCiqlIHSDTUMQ89uHH8O3H/3Y2boJS7E8
-         H4wE+uRGrXZtA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id DD6844049F; Thu,  2 Mar 2023 11:39:16 -0300 (-03)
-Date:   Thu, 2 Mar 2023 11:39:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 07/10] perf evsel: Add function to compute pmu_name
-Message-ID: <ZAC1FK0EHA4reQid@kernel.org>
-References: <20230302041211.852330-1-irogers@google.com>
- <20230302041211.852330-8-irogers@google.com>
+        Thu, 2 Mar 2023 09:43:27 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE442CC76;
+        Thu,  2 Mar 2023 06:43:24 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id AC5B0FF804;
+        Thu,  2 Mar 2023 14:43:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1677768203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YBEu4313wvc8JjbyIn5rJNCdAk7pwRKJxkVhQRUIhS0=;
+        b=QcPI/XpDPw9RvoeywOApGHiUk+wYKTcQ3R73FbwKdbHd8k/oXBtODScU15QU/vDDOi8veX
+        zKuF/Bi4l2/DhzDCDkcIywYwR1gzgr7H/WIqIBoXzbebGS3DFzL5PpnQCtha/eB+orUiN5
+        P858d/Srqivw0A/DfBsQI+zjUNWCnS4n4Bih80v0JQA4r9hMQW1R7TteSMUrDXQ8y8ksds
+        vPAAsinr7ZQw8Lzd4zcu1ITIArpH6XufhIMehX6cNRUqyyNA/kvWfuPYdnYtWy3/5uyiTW
+        mPdG0h0VCQdJyT1+PF5mGIHpFfoI3YORcdi0523gSFmJ+Bry8ZDa0Mk0xxQxXw==
+Date:   Thu, 2 Mar 2023 15:43:18 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [patch 05/39] genirq/msi: Remove filter from
+ msi_free_descs_free_range()
+Message-ID: <20230302154318.380c6cff@xps-13>
+In-Reply-To: <87mt4wkwnv.ffs@tglx>
+References: <20221111120501.026511281@linutronix.de>
+        <20221111122013.888850936@linutronix.de>
+        <20230301115530.5ccea5ae@xps-13>
+        <87mt4wkwnv.ffs@tglx>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302041211.852330-8-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Mar 01, 2023 at 08:12:08PM -0800, Ian Rogers escreveu:
-> The computed pmu_name respects software events and aux event groups,
-> such that the pmu_name is changed to be that of the aux event leader
-> or group leader for software events. This is done as a later change
-> will split events that are in different PMUs into different groups.
+Hi Thomas,
 
-Adrian, can you please take a look and provide an Ack or Reviewed-by?
+tglx@linutronix.de wrote on Wed, 01 Mar 2023 22:07:48 +0100:
 
-- Arnaldo
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Miquel!
+>=20
+> On Wed, Mar 01 2023 at 11:55, Miquel Raynal wrote:
+> > tglx@linutronix.de wrote on Fri, 11 Nov 2022 14:54:22 +0100 (CET):
+> > =20
+> >> When a range of descriptors is freed then all of them are not associat=
+ed to
+> >> a linux interrupt. Remove the filter and add a warning to the free fun=
+ction.
+> >> +		/* Leak the descriptor when it is still referenced */
+> >> +		if (WARN_ON_ONCE(msi_desc_match(desc, MSI_DESC_ASSOCIATED)))
+> >> +			continue;
+> >> +		msi_free_desc(desc);
+> >>  	}
+> >>  } =20
+> >
+> > It looks like since this commit I am getting warnings upon EPROBE_DEFER
+> > errors in the mvpp2 Marvell Ethernet driver. I looked a bit at the
+> > internals to understand why this warning was shown, and it seems that
+> > nothing "de-references" the descriptors, which would mean here:
+> > resetting desc->irq to 0. =20
+>=20
+> Correct. This platform-msi ^(*&!@&^ hack really needs to die ASAP.
+
+:-)
+
+> Marc, where are we on that? Is this still in limbo?
+>=20
+> > I am wondering how useful thisd WARN_ON() is, or otherwise where the =20
+>=20
+> It is useful as it caught bugs already.
+
+Sure.
+
+> > desc->irq entry should be zeroed (if I understand that correctly), any
+> > help will be appreciated. =20
+>=20
+> Untested workaround below.
+
+Excellent!
+
+> I hate it with a passion, but *shrug*.
+
+:'D
+
+> Thanks,
+>=20
+>         tglx
 > ---
->  tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
->  tools/perf/util/evsel.h |  1 +
->  2 files changed, 25 insertions(+)
-> 
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index 2dc2c24252bb..9c6b486f8bd4 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -821,6 +821,30 @@ const char *evsel__name(struct evsel *evsel)
->  	return "unknown";
->  }
->  
-> +const char *evsel__pmu_name(const struct evsel *evsel)
-> +{
-> +	const struct evsel *leader;
+>  drivers/base/platform-msi.c |    1 +
+>  include/linux/msi.h         |    2 ++
+>  kernel/irq/msi.c            |   23 ++++++++++++++++++++++-
+>  3 files changed, 25 insertions(+), 1 deletion(-)
+
+Kudos for the diff, which indeed works perfectly in my case. I guess
+you'll make a proper patch soon, if that's the case you can add my:
+
+Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+Let me know otherwise.
+
+Thanks a lot for the very quick fix!
+Miqu=C3=A8l
+
+> --- a/drivers/base/platform-msi.c
+> +++ b/drivers/base/platform-msi.c
+> @@ -324,6 +324,7 @@ void platform_msi_device_domain_free(str
+>  	struct platform_msi_priv_data *data =3D domain->host_data;
+> =20
+>  	msi_lock_descs(data->dev);
+> +	msi_domain_depopulate_descs(data->dev, virq, nr_irqs);
+>  	irq_domain_free_irqs_common(domain, virq, nr_irqs);
+>  	msi_free_msi_descs_range(data->dev, virq, virq + nr_irqs - 1);
+>  	msi_unlock_descs(data->dev);
+> --- a/include/linux/msi.h
+> +++ b/include/linux/msi.h
+> @@ -631,6 +631,8 @@ int msi_domain_prepare_irqs(struct irq_d
+>  			    int nvec, msi_alloc_info_t *args);
+>  int msi_domain_populate_irqs(struct irq_domain *domain, struct device *d=
+ev,
+>  			     int virq, int nvec, msi_alloc_info_t *args);
+> +void msi_domain_depopulate_descs(struct device *dev, int virq, int nvec);
 > +
-> +	/* If the pmu_name is set use it. pmu_name isn't set for CPU and software events. */
-> +	if (evsel->pmu_name)
-> +		return evsel->pmu_name;
-> +	/*
-> +	 * Software events may be in a group with other uncore PMU events. Use
-> +	 * the pmu_name of the group leader to avoid breaking the software event
-> +	 * out of the group.
-> +	 *
-> +	 * Aux event leaders, like intel_pt, expect a group with events from
-> +	 * other PMUs, so substitute the AUX event's PMU in this case.
-> +	 */
-> +	leader  = evsel__leader(evsel);
-> +	if ((evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) &&
-> +	    leader->pmu_name) {
-> +		return leader->pmu_name;
+>  struct irq_domain *
+>  __platform_msi_create_device_domain(struct device *dev,
+>  				    unsigned int nvec,
+> --- a/kernel/irq/msi.c
+> +++ b/kernel/irq/msi.c
+> @@ -1109,14 +1109,35 @@ int msi_domain_populate_irqs(struct irq_
+>  	return 0;
+> =20
+>  fail:
+> -	for (--virq; virq >=3D virq_base; virq--)
+> +	for (--virq; virq >=3D virq_base; virq--) {
+> +		msi_domain_depopulate_descs(dev, virq, 1);
+>  		irq_domain_free_irqs_common(domain, virq, 1);
 > +	}
+>  	msi_domain_free_descs(dev, &ctrl);
+>  unlock:
+>  	msi_unlock_descs(dev);
+>  	return ret;
+>  }
+> =20
+> +void msi_domain_depopulate_descs(struct device *dev, int virq_base, int =
+nvec)
+> +{
+> +	struct msi_ctrl ctrl =3D {
+> +		.domid	=3D MSI_DEFAULT_DOMAIN,
+> +		.first  =3D virq_base,
+> +		.last	=3D virq_base + nvec - 1,
+> +	};
+> +	struct msi_desc *desc;
+> +	struct xarray *xa;
+> +	unsigned long idx;
 > +
-> +	return "cpu";
+> +	if (!msi_ctrl_valid(dev, &ctrl))
+> +		return;
+> +
+> +	xa =3D &dev->msi.data->__domains[ctrl.domid].store;
+> +	xa_for_each_range(xa, idx, desc, ctrl.first, ctrl.last)
+> +		desc->irq =3D 0;
 > +}
 > +
->  const char *evsel__metric_id(const struct evsel *evsel)
->  {
->  	if (evsel->metric_id)
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index 676c499323e9..72121194d3b1 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -280,6 +280,7 @@ int arch_evsel__hw_name(struct evsel *evsel, char *bf, size_t size);
->  
->  int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char *bf, size_t size);
->  const char *evsel__name(struct evsel *evsel);
-> +const char *evsel__pmu_name(const struct evsel *evsel);
->  const char *evsel__metric_id(const struct evsel *evsel);
->  
->  static inline bool evsel__is_tool(const struct evsel *evsel)
-> -- 
-> 2.39.2.722.g9855ee24e9-goog
-> 
-
--- 
-
-- Arnaldo
+>  /*
+>   * Carefully check whether the device can use reservation mode. If
+>   * reservation mode is enabled then the early activation will assign a
