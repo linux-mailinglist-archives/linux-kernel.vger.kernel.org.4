@@ -2,483 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755B66A7CC0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3D06A7CB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjCBIdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 03:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S229684AbjCBIdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 03:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjCBIdb (ORCPT
+        with ESMTP id S229530AbjCBIdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 03:33:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D84A38B5E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:32:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677745962;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pa46/tf59jw++qihe2yOHoYOhP7Ie6wHeVDILetA9S4=;
-        b=Mc/hMh6QDTDIx2pRm95hjgGXx7Il30yDPhoBOCZcZI20uU/sQaAIzkXVVRVov2CvW0b4OH
-        jXS+pDVE1tdVUNHr4YWzW8aWja5LF+bcKSFpb0IOrs9VWAFmtTS3fBfmtMjXA8k3AK0KOA
-        o7fFwGyI3inghNz1MMwiHjQ8akd5Faw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-N5-0bu9XMYWRHYRCL2fFqA-1; Thu, 02 Mar 2023 03:32:38 -0500
-X-MC-Unique: N5-0bu9XMYWRHYRCL2fFqA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2597F18E5381;
-        Thu,  2 Mar 2023 08:32:38 +0000 (UTC)
-Received: from T590 (ovpn-8-26.pek2.redhat.com [10.72.8.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 684F71121319;
-        Thu,  2 Mar 2023 08:32:27 +0000 (UTC)
-Date:   Thu, 2 Mar 2023 16:32:21 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     linux-block@vger.kernel.org, Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        kernel test robot <lkp@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        open list <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        ming.lei@redhat.com
-Subject: Re: [PATCH v2] block: ublk: enable zoned storage support
-Message-ID: <ZABfFW+28Jlxq+Ew@T590>
-References: <20230224200502.391570-1-nmi@metaspace.dk>
- <ZAAPBFfqP671N4ue@T590>
- <87o7pblhi1.fsf@metaspace.dk>
+        Thu, 2 Mar 2023 03:33:22 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59517126F9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:33:19 -0800 (PST)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230302083315epoutp0250b3dd444fec221691222f90790af7ae~IjRgckI9h1402514025epoutp02P
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:33:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230302083315epoutp0250b3dd444fec221691222f90790af7ae~IjRgckI9h1402514025epoutp02P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1677745995;
+        bh=T8RyhlDdaifqEagOpD0TWqG/7bMAHq9anrgvcNKNIw4=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=E4um0Yv8r2M759AXcknBj+7LwOJIpsHG4vItMzuPL4PVQ2wchowMGKwSI8h/8nMH+
+         //6pCA4SyQtD+tKQ2ByoWuB2K0TVL00TIooWRTH/g+3LLI4ryfBrQQ+ByspATGp9kG
+         saw8wlXNfbOOnjWY9XeLmMpNAu7Rhe7eHqzbUIiQ=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230302083315epcas1p24618b7402d6c07a06c632d9668475735~IjRgB1taR2703227032epcas1p25;
+        Thu,  2 Mar 2023 08:33:15 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.36.227]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4PS4B23W1fz4x9QK; Thu,  2 Mar
+        2023 08:33:14 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B4.C3.55531.94F50046; Thu,  2 Mar 2023 17:33:13 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230302083313epcas1p2287eebc4b4f1858e2844d85155be04aa~IjRdw3_M72175921759epcas1p2B;
+        Thu,  2 Mar 2023 08:33:13 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230302083312epsmtrp1f8cafc75b881a2b258622e9d95359745~IjRdv8cPv2124921249epsmtrp1V;
+        Thu,  2 Mar 2023 08:33:12 +0000 (GMT)
+X-AuditID: b6c32a35-d9fff7000000d8eb-cd-64005f498d65
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        40.2B.18071.84F50046; Thu,  2 Mar 2023 17:33:12 +0900 (KST)
+Received: from bw365lee03 (unknown [10.88.97.170]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230302083312epsmtip2e2cf26948b2c458c1c1113c57d233580~IjRdmdXj61694216942epsmtip2g;
+        Thu,  2 Mar 2023 08:33:12 +0000 (GMT)
+From:   "Bumwoo Lee" <bw365.lee@samsung.com>
+To:     <myungjoo.ham@samsung.com>,
+        "'Chanwoo Choi'" <cw00.choi@samsung.com>,
+        <linux-kernel@vger.kernel.org>
+In-Reply-To: 
+Subject: RE: RE: [PATCH v2 2/4] extcon: Added extcon_alloc_cables to
+ simplify extcon register function
+Date:   Thu, 2 Mar 2023 17:33:12 +0900
+Message-ID: <006f01d94ce1$a0751300$e15f3900$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7pblhi1.fsf@metaspace.dk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQMs5Xzd7TX9SfVksmmJQ2eqp0be4gEndo8vAX4NdCIBRRvN4gEPThYuAeHKeESsCP48gIAAGpzg
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrIKsWRmVeSWpSXmKPExsWy7bCmvq5nPEOKweerfBbXvzxntbi8aw6b
+        xe3GFWwOzB59W1YxenzeJBfAFJVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6k
+        kJeYm2qr5OIToOuWmQO0Q0mhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYFagV5yY
+        W1yal66Xl1piZWhgYGQKVJiQnfH32gK2ghaliv0bOpkaGOcpdDFyckgImEhc+LyVuYuRi0NI
+        YAejxKSjB9ggnE+MElu+7mSFcL4xSlzc/Z4RpuX/li1gtpDAXkaJqdOgOp4D2Z/7mUESbAJa
+        EgvnzGcDsUUEsiSu/HgNZHNwcArwSkz4Zw0SFhbIkDj0agpYOYuAisSLW4eZQUp4BSwl2iYa
+        gYR5BQQlTs58wgJiMwtoSyxb+JoZ4gQFiZ9Pl7FCTI+S2Nvyhg2iRkRidmcb2DcSAtfYJaZf
+        fsoKMlNCwEXiyj9TiF5hiVfHt7BD2FISL/vboOx0iZVX7kDZORKv77dDvWss8e7tWrDTmAU0
+        Jdbv0ocIK0rs/D2XEWItn8S7rz1Qm3glOtqEIEqUJbofvGCCsCUlFj+9AzXRQ2LSuROsExgV
+        ZyF5chaSJ2cheWYWwuIFjCyrGMVSC4pz01OLDQsM4TGdnJ+7iRGc9rRMdzBOfPtB7xAjEwfj
+        IUYJDmYlEd6Ft/8kC/GmJFZWpRblxxeV5qQWH2I0BYb6RGYp0eR8YOLNK4k3NLE0MDEzMrEw
+        tjQ2UxLnFbc9mSwkkJ5YkpqdmlqQWgTTx8TBKdXA5Pqp4lfVljZz7ohV98SCuo4JfJ6xTUDJ
+        Xq7U9Nvt8IePTVfvmm10xcrR5ErMYoELz6sOpU8MeWL9PdaitWWpw+RF+p9eci+Next2uCC/
+        +5jeZPGDvXtMfn6xz1gRPi0j6uY8prBjkv5xn3PCeZj9jQ77ZCn9tJFlOr8govqayLOdLnNa
+        2SPXNUXy/73U8sbgz6yvs9L93c8/0qq6w+d70Sx+nax34lPN244/2hm+uLzTWnebpb2vx/Os
+        jqqJ041zP+/4npr/QEjmz6WH9l7O2tkuM8qf3BF42a65yI9r7pe/k79N9K+8svxBtnLmZbsz
+        j4z2LhXbcnjjYcYm99z7KnluTTzh9scFTgqFb/HXVGIpzkg01GIuKk4EAABOv/MEBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrELMWRmVeSWpSXmKPExsWy7bCSvK5HPEOKwdOHFhbXvzxntbi8aw6b
+        xe3GFWwOzB59W1YxenzeJBfAFMVlk5Kak1mWWqRvl8CV8XrBVLaCbvGKR+862BsYpwp2MXJy
+        SAiYSPzfsoWxi5GLQ0hgN6PEqtczmSASkhJnlz9i72LkALKFJQ4fLoaoecoocelZGztIDZuA
+        lsTCOfPZQGwRgRyJA+unsEMUPWKS+HvwEitIM6cAr8SEf9YgNcICaRK3f3aC9bIIqEi8uHWY
+        GaSEV8BSom2iEUiYV0BQ4uTMJywgNrOAtsTTm0/h7GULXzNDnKYg8fPpMlaItVESe1vesEHU
+        iEjM7mxjnsAoNAvJqFlIRs1CMmoWkpYFjCyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNz
+        NzGCg11Lcwfj9lUf9A4xMnEwHmKU4GBWEuFdePtPshBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHe
+        C10n44UE0hNLUrNTUwtSi2CyTBycUg1MKt9N5HmDd/c9MF6s9vpwZ5JW9uVXy1+Ivj+Xnrxr
+        QzjLLF/xNc1XZuovnVoSt1V/ibX89OT0n7kF0bZvxH22bDUN3bXNoHtjFt+q9vX/Ph/3vxFn
+        xNL1ps520eRvrjzfHTWP3+2UW7i6uP/6jy1uvF8yGrfYfTpSVPgwOPb0+9sH/+34zL7zSU++
+        dKK5dniZ3UWJ7lnSpV9m28woyo7wjsjYd+1H3+WGHza2XM57H26Zwr5WYfm7nX0Nwh/mxM05
+        bXRC2avq+94nd4PeSh/4/EfB0Epf6uva7/O2CGziF9VIm5DqETTrQrVoFkvONY0PT3ews86c
+        3b+MX8mf9bdDtegts12nrud9+7HU9+KNU0osxRmJhlrMRcWJAI4nOXHlAgAA
+X-CMS-MailID: 20230302083313epcas1p2287eebc4b4f1858e2844d85155be04aa
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925
+References: <091101d94ca7$a4ad23c0$ee076b40$@samsung.com>
+        <20230220054513.27385-3-bw365.lee@samsung.com>
+        <20230220054513.27385-1-bw365.lee@samsung.com>
+        <20230224100325epcms1p3e8886e278e23f610c8490cb69f1d452d@epcms1p3>
+        <CGME20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925@epcms1p1>
+        <20230302063312epcms1p1e0cd1a2d74dbd3daa4c7b7407b975803@epcms1p1> 
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 08:31:07AM +0100, Andreas Hindborg wrote:
-> 
-> Hi Ming,
-> 
-> Ming Lei <ming.lei@redhat.com> writes:
-> 
-> > On Fri, Feb 24, 2023 at 09:05:01PM +0100, Andreas Hindborg wrote:
-> >> Add zoned storage support to ublk: report_zones and operations:
-> >>  - REQ_OP_ZONE_OPEN
-> >>  - REQ_OP_ZONE_CLOSE
-> >>  - REQ_OP_ZONE_FINISH
-> >>  - REQ_OP_ZONE_RESET
-> >> 
-> >> This allows implementation of zoned storage devices in user space. An
-> >> example user space implementation based on ubdsrv is available [1].
-> >> 
-> >> [1] https://github.com/metaspace/ubdsrv/commit/14a2b708f74f70cfecb076d92e680dc718cc1f6d
+
+> -----Original Message-----
+> From: Bumwoo Lee <bw365.lee=40samsung.com>
+> Sent: Thursday, March 2, 2023 4:12 PM
+> To: 'myungjoo.ham=40samsung.com' <myungjoo.ham=40samsung.com>; 'Chanwoo C=
+hoi'
+> <cw00.choi=40samsung.com>; 'linux-kernel=40vger.kernel.org' <linux-
+> kernel=40vger.kernel.org>
+> Subject: RE: RE: =5BPATCH v2 2/4=5D extcon: Added extcon_alloc_cables to
+> simplify extcon register function
+>=20
+>=20
+> > -----Original Message-----
+> > From: MyungJoo Ham <myungjoo.ham=40samsung.com>
+> > Sent: Thursday, March 2, 2023 3:33 PM
+> > To: Bumwoo Lee <bw365.lee=40samsung.com>; Chanwoo Choi
+> > <cw00.choi=40samsung.com>; linux-kernel=40vger.kernel.org
+> > Subject: RE: RE: =5BPATCH v2 2/4=5D extcon: Added extcon_alloc_cables t=
+o
+> > simplify extcon register function
 > >
-> > As I suggested, please write one simple & clean zoned target for verifying
-> > the interface, and better to not add to tgt_null.c.
-> 
-> For ubdsrv, I understand that you prefer to reimplement null and loop targets for
-> zoned storage. I don't understand why you think this is a good idea,
-> since we will have massive code duplication. This would be comparable to
-> having a separate null_blk driver for zoned storage. Am I understanding
-> you correctly?
-
-It is userspace, code duplication isn't a big deal, but putting lots
-of un-related things together is just one mess.
-
-> 
-> Anyway, I think we can discuss the kernel patch even though the ubdsrv
-> implementation is not a separate target yet? The code would be almost
-> identical, it would just live in a separate translation unit.
-
-I just suggest to make the userspace test code clean & easy, which plays
-big role for looking kernel interface from user side.
-
-> 
-> >
-> >> 
-> >> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
-> >> ---
-> >> Changes since v1:
-> >>  - Fixed conditional compilation bug
-> >>  - Refactored to collect conditional code additions together
-> >>  - Fixed style errors
-> >>  - Zero stack allocated value used for zone report
-> >> 
-> >> Reported-by: Niklas Cassel <Niklas.Cassel@wdc.com>
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >> Link: https://lore.kernel.org/oe-kbuild-all/202302250222.XOrw9j6z-lkp@intel.com/
-> >> v1: https://lore.kernel.org/linux-block/20230224125950.214779-1-nmi@metaspace.dk/
-> >> 
-> >>  drivers/block/ublk_drv.c      | 150 ++++++++++++++++++++++++++++++++--
-> >>  include/uapi/linux/ublk_cmd.h |  18 ++++
-> >>  2 files changed, 162 insertions(+), 6 deletions(-)
-> >> 
-> >> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> >> index 6368b56eacf1..37e516903867 100644
-> >> --- a/drivers/block/ublk_drv.c
-> >> +++ b/drivers/block/ublk_drv.c
-> >> @@ -20,6 +20,7 @@
-> >>  #include <linux/major.h>
-> >>  #include <linux/wait.h>
-> >>  #include <linux/blkdev.h>
-> >> +#include <linux/blkzoned.h>
-> >>  #include <linux/init.h>
-> >>  #include <linux/swap.h>
-> >>  #include <linux/slab.h>
-> >> @@ -51,10 +52,12 @@
-> >>  		| UBLK_F_URING_CMD_COMP_IN_TASK \
-> >>  		| UBLK_F_NEED_GET_DATA \
-> >>  		| UBLK_F_USER_RECOVERY \
-> >> -		| UBLK_F_USER_RECOVERY_REISSUE)
-> >> +		| UBLK_F_USER_RECOVERY_REISSUE \
-> >> +		| UBLK_F_ZONED)
-> >>  
-> >>  /* All UBLK_PARAM_TYPE_* should be included here */
-> >> -#define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DISCARD)
-> >> +#define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DISCARD \
-> >> +			     | UBLK_PARAM_TYPE_ZONED)
-> >>  
-> >>  struct ublk_rq_data {
-> >>  	struct llist_node node;
-> >> @@ -187,6 +190,98 @@ static DEFINE_MUTEX(ublk_ctl_mutex);
-> >>  
-> >>  static struct miscdevice ublk_misc;
-> >>  
-> >> +#ifdef CONFIG_BLK_DEV_ZONED
-> >> +static void ublk_set_nr_zones(struct ublk_device *ub)
-> >> +{
-> >> +	const struct ublk_param_basic *p = &ub->params.basic;
-> >> +
-> >> +	if (ub->dev_info.flags & UBLK_F_ZONED && p->chunk_sectors)
-> >> +		ub->ub_disk->nr_zones = p->dev_sectors / p->chunk_sectors;
-> >> +}
-> >> +
-> >> +static void ublk_dev_param_zoned_apply(struct ublk_device *ub)
-> >> +{
-> >> +	const struct ublk_param_zoned *p = &ub->params.zoned;
-> >> +
-> >> +	if (ub->dev_info.flags & UBLK_F_ZONED) {
-> >> +		disk_set_max_active_zones(ub->ub_disk, p->max_active_zones);
-> >> +		disk_set_max_open_zones(ub->ub_disk, p->max_open_zones);
-> >> +	}
-> >> +}
-> >> +
-> >> +static int ublk_revalidate_disk_zones(struct gendisk *disk)
-> >> +{
-> >> +	return blk_revalidate_disk_zones(disk, NULL);
-> >> +}
-> >> +
-> >> +static int ublk_report_zones(struct gendisk *disk, sector_t sector,
-> >> +			     unsigned int nr_zones, report_zones_cb cb,
-> >> +			     void *data)
-> >> +{
-> >> +	struct ublk_device *ub;
-> >> +	unsigned int zone_size;
-> >> +	unsigned int first_zone;
-> >> +	int ret = 0;
-> >> +
-> >> +	ub = disk->private_data;
-> >> +
-> >> +	if (!(ub->dev_info.flags & UBLK_F_ZONED))
-> >> +		return -EINVAL;
-> >> +
-> >> +	zone_size = disk->queue->limits.chunk_sectors;
-> >> +	first_zone = sector >> ilog2(zone_size);
-> >> +	nr_zones = min(ub->ub_disk->nr_zones - first_zone, nr_zones);
-> >> +
-> >> +	for (unsigned int i = 0; i < nr_zones; i++) {
-> >
-> > The local variable 'i' needs to be declared in the front part
-> > of this function body.
-> 
-> Ok.
-> 
-> >
-> >> +		struct request *req;
-> >> +		blk_status_t status;
-> >> +		struct blk_zone info = {0};
-> >> +
-> >> +		req = blk_mq_alloc_request(disk->queue, REQ_OP_DRV_IN, 0);
-> >> +
-> >> +		if (IS_ERR(req)) {
-> >> +			ret = PTR_ERR(req);
-> >> +			goto out;
-> >> +		}
-> >> +
-> >> +		req->__sector = sector;
-> >
-> > Why is req->__sector set?
-> 
-> I use it to carry information about the first zone of the report request.
-
-No, please do not use __sector in this way, which is supposed to be used by
-driver for ZNS/ZONE_APPEND only.
-
-> 
-> >
-> >> +
-> >> +		ret = blk_rq_map_kern(disk->queue, req, &info, sizeof(info),
-> >> +				      GFP_KERNEL);
-> >> +
-> >> +		if (ret)
-> >> +			goto out;
-> >> +
-> >> +		status = blk_execute_rq(req, 0);
-> >> +		ret = blk_status_to_errno(status);
-> >> +		if (ret)
-> >> +			goto out;
-> >> +
-> >> +		blk_mq_free_request(req);
-> >> +
-> >> +		ret = cb(&info, i, data);
-> >> +		if (ret)
-> >> +			goto out;
-> >> +
-> >> +		/* A zero length zone means don't ask for more zones */
-> >> +		if (!info.len) {
-> >> +			nr_zones = i;
-> >> +			break;
-> >> +		}
-> >> +
-> >> +		sector += zone_size;
-> >> +	}
-> >
-> > I'd suggest to report as many as possible zones in one command, and
-> > the dev_info.max_io_buf_bytes is the max allowed buffer size for one
-> > command, please refer to nvme_ns_report_zones().
-> 
-> I agree about fetching more zones. However, it is no good to fetch up to
-> a max, since the requested zone report may less than max. I was
-
-Short read should always be supported, so the interface may need to 
-return how many zones in single command, please refer to nvme_ns_report_zones().
-
-> considering overloading req->__data_len and iod->nr_sectors to convey
-> the number of requested zones. What do you think about that?
-
-Any field pre-suffixed with "__" in 'struct request' should be only for
-block layer, but __sector is one exception and its scenario is obvious.
-
-So please do not misuse req->__data_len, but using iod is fine.
-
-> 
-> >
-> > Also we are going to extend ublk in the multiple LUN/NS style, and I
-> > guess that won't be one issue since ->report_zones() is always done on
-> > disk level, right?
-> 
-> Yes, that should be fine.
-> 
-> >
-> >> +	ret = nr_zones;
-> >> +
-> >> + out:
-> >> +	return ret;
-> >> +}
-> >> +#else
-> >> +void ublk_set_nr_zones(struct ublk_device *ub);
-> >> +void ublk_dev_param_zoned_apply(struct ublk_device *ub);
-> >> +int ublk_revalidate_disk_zones(struct gendisk *disk);
-> >> +#endif
-> >> +
-> >>  static void ublk_dev_param_basic_apply(struct ublk_device *ub)
-> >>  {
-> >>  	struct request_queue *q = ub->ub_disk->queue;
-> >> @@ -212,6 +307,9 @@ static void ublk_dev_param_basic_apply(struct ublk_device *ub)
-> >>  		set_disk_ro(ub->ub_disk, true);
-> >>  
-> >>  	set_capacity(ub->ub_disk, p->dev_sectors);
-> >> +
-> >> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED))
-> >> +		ublk_set_nr_zones(ub);
-> >>  }
-> >>  
-> >>  static void ublk_dev_param_discard_apply(struct ublk_device *ub)
-> >> @@ -268,6 +366,9 @@ static int ublk_apply_params(struct ublk_device *ub)
-> >>  	if (ub->params.types & UBLK_PARAM_TYPE_DISCARD)
-> >>  		ublk_dev_param_discard_apply(ub);
-> >>  
-> >> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) && (ub->params.types & UBLK_PARAM_TYPE_ZONED))
-> >> +		ublk_dev_param_zoned_apply(ub);
-> >> +
-> >>  	return 0;
-> >>  }
-> >>  
-> >> @@ -361,9 +462,13 @@ static void ublk_free_disk(struct gendisk *disk)
-> >>  	put_device(&ub->cdev_dev);
-> >>  }
-> >>  
-> >> +
-> >>  static const struct block_device_operations ub_fops = {
-> >> -	.owner =	THIS_MODULE,
-> >> -	.free_disk =	ublk_free_disk,
-> >> +	.owner = THIS_MODULE,
-> >> +	.free_disk = ublk_free_disk,
-> >> +#ifdef CONFIG_BLK_DEV_ZONED
-> >> +	.report_zones = ublk_report_zones,
-> >> +#endif
-> >
-> > Define one null ublk_report_zones in #else branch of the above #ifdef, then we
-> > can save one #ifdef.
-> 
-> I would have to define it as a null pointer in the #else case then?
-
-#define ublk_report_zones       NULL
-
-> 
-> >
-> >>  };
-> >>  
-> >>  #define UBLK_MAX_PIN_PAGES	32
-> >> @@ -499,7 +604,7 @@ static int ublk_unmap_io(const struct ublk_queue *ubq,
-> >>  {
-> >>  	const unsigned int rq_bytes = blk_rq_bytes(req);
-> >>  
-> >> -	if (req_op(req) == REQ_OP_READ && ublk_rq_has_data(req)) {
-> >> +	if ((req_op(req) == REQ_OP_READ || req_op(req) == REQ_OP_DRV_IN) && ublk_rq_has_data(req)) {
-> >>  		struct ublk_map_data data = {
-> >>  			.ubq	=	ubq,
-> >>  			.rq	=	req,
-> >> @@ -566,6 +671,26 @@ static blk_status_t ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
-> >>  	case REQ_OP_WRITE_ZEROES:
-> >>  		ublk_op = UBLK_IO_OP_WRITE_ZEROES;
-> >>  		break;
-> >> +#ifdef CONFIG_BLK_DEV_ZONED
-> >> +	case REQ_OP_ZONE_OPEN:
-> >> +		ublk_op = UBLK_IO_OP_ZONE_OPEN;
-> >> +		break;
-> >> +	case REQ_OP_ZONE_CLOSE:
-> >> +		ublk_op = UBLK_IO_OP_ZONE_CLOSE;
-> >> +		break;
-> >> +	case REQ_OP_ZONE_FINISH:
-> >> +		ublk_op = UBLK_IO_OP_ZONE_FINISH;
-> >> +		break;
-> >> +	case REQ_OP_ZONE_RESET:
-> >> +		ublk_op = UBLK_IO_OP_ZONE_RESET;
-> >> +		break;
-> >> +	case REQ_OP_DRV_IN:
-> >> +		ublk_op = UBLK_IO_OP_DRV_IN;
-> >> +		break;
-> >> +	case REQ_OP_ZONE_APPEND:
-> >> +		/* We do not support zone append yet */
-> >> +		fallthrough;
-> >> +#endif
-> >
-> > The above '#ifdef' is needn't, since  OP_ZONE should be defined no
-> > matter if CONFIG_BLK_DEV_ZONED is enabled or not.
-> 
-> I see. But do we want to process the requests if BLK_DEV_ZONED is not
-> enabled, or do we want to fail the IO?
-
-Here we should trust block core code.
-
-> 
-> >
-> >>  	default:
-> >>  		return BLK_STS_IOERR;
-> >>  	}
-> >> @@ -612,7 +737,8 @@ static void ublk_complete_rq(struct request *req)
-> >>  	 *
-> >>  	 * Both the two needn't unmap.
-> >>  	 */
-> >> -	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE) {
-> >> +	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE &&
-> >> +	    req_op(req) != REQ_OP_DRV_IN) {
-> >>  		blk_mq_end_request(req, BLK_STS_OK);
-> >>  		return;
-> >>  	}
-> >> @@ -1535,6 +1661,15 @@ static int ublk_ctrl_start_dev(struct io_uring_cmd *cmd)
-> >>  	if (ret)
-> >>  		goto out_put_disk;
-> >>  
-> >> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
-> >> +	    ub->dev_info.flags & UBLK_F_ZONED) {
-> >> +		disk_set_zoned(disk, BLK_ZONED_HM);
-> >> +		blk_queue_required_elevator_features(disk->queue, ELEVATOR_F_ZBD_SEQ_WRITE);
-> >> +		ret = ublk_revalidate_disk_zones(disk);
-> >> +		if (ret)
-> >> +			goto out_put_disk;
-> >> +	}
-> >> +
-> >>  	get_device(&ub->cdev_dev);
-> >>  	ret = add_disk(disk);
-> >>  	if (ret) {
-> >> @@ -1673,6 +1808,9 @@ static int ublk_ctrl_add_dev(struct io_uring_cmd *cmd)
-> >>  	if (!IS_BUILTIN(CONFIG_BLK_DEV_UBLK))
-> >>  		ub->dev_info.flags |= UBLK_F_URING_CMD_COMP_IN_TASK;
-> >>  
-> >> +	if (!IS_ENABLED(CONFIG_BLK_DEV_ZONED))
-> >> +		ub->dev_info.flags &= ~UBLK_F_ZONED;
-> >> +
-> >>  	/* We are not ready to support zero copy */
-> >>  	ub->dev_info.flags &= ~UBLK_F_SUPPORT_ZERO_COPY;
-> >>  
-> >> diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.h
-> >> index 8f88e3a29998..074b97821575 100644
-> >> --- a/include/uapi/linux/ublk_cmd.h
-> >> +++ b/include/uapi/linux/ublk_cmd.h
-> >> @@ -78,6 +78,10 @@
-> >>  #define UBLK_F_USER_RECOVERY	(1UL << 3)
-> >>  
-> >>  #define UBLK_F_USER_RECOVERY_REISSUE	(1UL << 4)
-> >> +/*
-> >> + * Enable zoned device support
-> >> + */
-> >> +#define UBLK_F_ZONED (1ULL << 5)
-> >>  
-> >>  /* device state */
-> >>  #define UBLK_S_DEV_DEAD	0
-> >> @@ -129,6 +133,12 @@ struct ublksrv_ctrl_dev_info {
-> >>  #define		UBLK_IO_OP_DISCARD	3
-> >>  #define		UBLK_IO_OP_WRITE_SAME	4
-> >>  #define		UBLK_IO_OP_WRITE_ZEROES	5
-> >> +#define		UBLK_IO_OP_ZONE_OPEN		10
-> >> +#define		UBLK_IO_OP_ZONE_CLOSE		11
-> >> +#define		UBLK_IO_OP_ZONE_FINISH		12
-> >> +#define		UBLK_IO_OP_ZONE_APPEND		13
-> >> +#define		UBLK_IO_OP_ZONE_RESET		15
-> >> +#define		UBLK_IO_OP_DRV_IN		34
-> >>  
-> >>  #define		UBLK_IO_F_FAILFAST_DEV		(1U << 8)
-> >>  #define		UBLK_IO_F_FAILFAST_TRANSPORT	(1U << 9)
-> >> @@ -214,6 +224,12 @@ struct ublk_param_discard {
-> >>  	__u16	reserved0;
-> >>  };
-> >>  
-> >> +struct ublk_param_zoned {
-> >> +	__u64	max_open_zones;
-> >> +	__u64	max_active_zones;
-> >> +	__u64	max_append_size;
-> >> +};
-> >
-> > Is the above zoned parameter enough for future extension?
-> > Does ZNS need extra parameter? Or some zoned new(important) features?
-> 
-> @Damien, @Hans, @Matias, what do you think?
-> 
-> >
-> > I highly suggest to reserve some fields for extension, given
-> > it is one ABI interface, which is supposed to be defined well
-> > enough from the beginning.
-> 
-> How many bytes would you reserve?
-
-It really depends on storage/zoned field knowledge.
-
-
-Thanks,
-Ming
-
+> > >
+> > >
+> > >--------- Original Message ---------
+> > >Sender : =EC=9D=B4=EB=B2=94=EC=9A=B0=20<bw365.lee=40samsung.com>Produc=
+t=20S/W=20Lab(VD)/=EC=82=BC=EC=84=B1=EC=A0=84=EC=9E=90=20Date=20:=0D=0A>=20=
+>=20>2023-03-02=2010:38=20(GMT+9)=20Title=20:=20RE:=20=5BPATCH=20v2=202/4=
+=5D=20extcon:=20Added=0D=0A>=20>=20>extcon_alloc_cables=20to=20simplify=20e=
+xtcon=20register=20function=0D=0A>=20>=20>=0D=0A>=20>=20>Hello.=0D=0A>=20>=
+=20>=0D=0A>=20>=20>As=20you=20can=20see,=20edev->cables=20are=20freed=20if=
+=20extcon_alloc_cables()=0D=0A>=20>=20>function=20return=20error=20handling=
+=20in=20extcon_dev_register()=20Other=20added=0D=0A>=20>=20functions=20are=
+=20also=20same.=0D=0A>=20>=20>=0D=0A>=20>=20>Because=20it's=20functionalize=
+d,=20apart=20from=20this,=20do=20you=20want=20to=20mention=0D=0A>=20>=20>th=
+at=0D=0A>=20>=20it=20should=20be=20freed=20within=20the=20function?=0D=0A>=
+=20>=20>Please=20let=20me=20know=20your=20opinion.=0D=0A>=20>=20>=0D=0A>=20=
+>=20>extcon_dev_register(struct=20extcon_dev=20*edev)=7B=20...=0D=0A>=20>=
+=20>=0D=0A>=20>=20>=20=20=20=20=20=20=20=20ret=20=3D=20extcon_alloc_cables(=
+edev);=0D=0A>=20>=20>=20=20=20=20=20=20=20=20if=20(ret)=0D=0A>=20>=20>=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20goto=20err_alloc_cables;=0D=0A=
+>=20>=20>=0D=0A>=20>=20>...=0D=0A>=20>=20>=0D=0A>=20>=20>err_alloc_cables:=
+=0D=0A>=20>=20>=20=20=20=20=20=20=20=20=20if=20(edev->max_supported)=0D=0A>=
+=20>=20>=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20kfree(edev->cabl=
+es);=0D=0A>=20>=20>=0D=0A>=20>=20>=0D=0A>=20>=20>Regards,=0D=0A>=20>=20>Bum=
+woo=0D=0A>=20>=0D=0A>=20>=20In=20such=20a=20case,=20you=20are=20doing=20kfr=
+ee(NULL);=20with=20the=20following:=0D=0A>=20=0D=0A>=20Yes,=20you=20are=20r=
+ight.=0D=0A>=20But=20Kfree()=20is=20checking=20NULL=20internally.=20So=20it=
+=20does=20not=20a=20problem=20I=20think.=0D=0A>=20Anyway=20I=20added=20kfre=
+e(edev->cables)=20before=20exit=20extcon_alloc_cables()=20like=0D=0A>=20bel=
+ow=20on=20v3=20patches.=0D=0A>=20=0D=0A>=20static=20int=20extcon_alloc_cabl=
+es(struct=20extcon_dev=20*edev)=20=7B=20...=0D=0A>=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20for=20(index--;=20ind=
+ex=20>=3D=200;=20index--)=20=7B=0D=0A>=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20cable=20=
+=3D=20&edev->cables=5Bindex=5D;=0D=0A>=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20kfree(cab=
+le->attr_g.name);=0D=0A>=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=7D=0D=0A>=20=0D=0A>=20+=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20kfree(edev->cables);=0D=0A>=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20return=20-ENOMEM;=0D=0A>=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=7D=0D=0A>=20=0D=0A=0D=0AIn=20order=20to=20avoid=20unnecessary=20kfre=
+e(NULL),=20the=20position=20will=20be=20moved=20like=20below=20on=20v4=20pa=
+tch.=0D=0A=0D=0Aerr_alloc_muex:=0D=0A=09for=20(index=20=3D=200;=20index=20<=
+=20edev->max_supported;=20index++)=0D=0A=20=20=20=20=20=20=20=20=09kfree(ed=
+ev->cables=5Bindex=5D.attr_g.name);=0D=0A+=09if=20(edev->max_supported)=0D=
+=0A+=09=09kfree(edev->cables);=0D=0Aerr_alloc_cables:=0D=0A-=09if=20(edev->=
+max_supported)=0D=0A-=09=09kfree(edev->cables);=20=0D=0A=20=20=20=20=20=20=
+=20=20return=20ret;=0D=0A=0D=0A=0D=0A>=20Regards,=0D=0A>=20Bumwoo=0D=0A=0D=
+=0A
