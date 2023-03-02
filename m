@@ -2,108 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A186A889D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2746A88A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjCBSj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 13:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
+        id S229662AbjCBSmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 13:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCBSjX (ORCPT
+        with ESMTP id S229471AbjCBSlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 13:39:23 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED5C10A84;
-        Thu,  2 Mar 2023 10:39:23 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id r5so284210qtp.4;
-        Thu, 02 Mar 2023 10:39:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677782362;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l9Tp7zR6q1GyOD5xTyxBxaVoqQfeB4d9SNa5DQ/cXfo=;
-        b=1rDOgWFFX9XIIYIJIF9BRP/O94wmWU1xfXMk1gj6gSl/Q8BWDaTclfnGc5r8wozaOk
-         rZQPTu+fMeDs39SrljuadTEzZAaiKlQS6aH5WOET+619Y7IPmerofIbCcvb6SEdSrDUW
-         frAVCi4UHT6/aHZdNNrAjyKlmisgYq4rkutYHoHxDWTH9WInEKOF2z+r1IIDsS6a/onS
-         HiqZ6A7y9N/yVpDgGw+a6aR1EyQMiF7YP33eMUdwsCLT2TaFEfJr3bAN/GXY9UI4wfH+
-         kB3ArPeZ4uRG3uyGyhkgWqqgVyL+YhYbDN9o9Bm9Zh4u7KKyMJp210sLkh49ha/01CbX
-         rusw==
-X-Gm-Message-State: AO0yUKU0o2V5EuxSv7S5d+d0fNZXBlK5ipzurFGuhLgKGMhl6pZhyxo6
-        uuKgcDBG1nsryjo3Elv5NlpF/yxm5mnx3h6U
-X-Google-Smtp-Source: AK7set8n4cJm54ba3dZ8nvQpYXj5CGYFDI1IP+skV4sKxo4OhqLVy4ffD/6lUlZKoHqoPPh0XQYeiQ==
-X-Received: by 2002:ac8:5c88:0:b0:3b8:293c:24eb with SMTP id r8-20020ac85c88000000b003b8293c24ebmr5250856qta.30.1677782361831;
-        Thu, 02 Mar 2023 10:39:21 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:5434])
-        by smtp.gmail.com with ESMTPSA id l18-20020ac84592000000b003b9b48cdbe8sm172206qtn.58.2023.03.02.10.39.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 10:39:21 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH bpf-next 2/2] bpf, docs: Fix final bpf docs build failure
-Date:   Thu,  2 Mar 2023 12:39:18 -0600
-Message-Id: <20230302183918.54190-2-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230302183918.54190-1-void@manifault.com>
-References: <20230302183918.54190-1-void@manifault.com>
+        Thu, 2 Mar 2023 13:41:52 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC3E48E3C;
+        Thu,  2 Mar 2023 10:41:50 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322IcJhO030783;
+        Thu, 2 Mar 2023 18:41:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bRyFc/Kw+nJ5cLiX0s250+UlY1w1KLIoKi80xX2p8XU=;
+ b=VHleJXsE/Ppb1Bqfbi2HwWKWI99LfcpjKmTrWR97nwNA8FflU/DN0WqOEDQZ59g4hBcX
+ 0WdpgqqPh+fatjki/+tWXWf/HwRHVEa2IEz1Ofozr5oQKDuE1lnDdp6w9b3G/QBvuyV5
+ qz9rd1PblUtsimSBDTo+S5Lcx3yllRymAavJjXYdUV1QzNJezrDlVYncLkVX7I0oiriu
+ K3uTuy7wTjPwVyVHyAvQ1tqYJ/fXgLq0yj1fhCsyIj0bM3SbB0abwMwzFCtKzO+Myx23
+ skDFE/UHX8y80ZC2XcrYs9jCtQGnvCe4jlrVtADIHCho4NkuPfbs6V95TfWqY7ogLi+z 6g== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2veerwb1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 18:41:38 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 322IfbON001668
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Mar 2023 18:41:37 GMT
+Received: from [10.110.57.196] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 2 Mar 2023
+ 10:41:36 -0800
+Message-ID: <dddd3f2f-28e7-2188-5498-399cdb75adb4@quicinc.com>
+Date:   Thu, 2 Mar 2023 10:41:35 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] drm/msm/dp: check core_initialized flag at both
+ host_init() and host_deinit()
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@gmail.com>, <agross@kernel.org>, <andersson@kernel.org>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1677629817-18891-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAA8EJpquZAhn+HswNxardN1fE8Zu1CKrCU5EiX=B8mGWuxfWnQ@mail.gmail.com>
+ <38bf75b4-799a-9758-aae3-69a7e0fc3f58@quicinc.com>
+ <86787af0-aa95-a2d8-d68c-555be54a3784@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <86787af0-aa95-a2d8-d68c-555be54a3784@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2_UMr3e9xJVKv31_Koa9X_PBO2l-oaHA
+X-Proofpoint-GUID: 2_UMr3e9xJVKv31_Koa9X_PBO2l-oaHA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_11,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 mlxlogscore=999 impostorscore=0 bulkscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303020159
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-maps.rst in the BPF documentation links to the
-/userspace-api/ebpf/syscall document
-(Documentation/userspace-api/ebpf/syscall.rst). For some reason, if you
-try to reference the document with :doc:, the docs build emits the
-following warning:
 
-./Documentation/bpf/maps.rst:13: WARNING: \
-    unknown document: '/userspace-api/ebpf/syscall'
+On 3/1/2023 1:15 PM, Dmitry Baryshkov wrote:
+> On 01/03/2023 18:57, Kuogee Hsieh wrote:
+>>
+>> On 2/28/2023 6:16 PM, Dmitry Baryshkov wrote:
+>>> On Wed, 1 Mar 2023 at 02:17, Kuogee Hsieh <quic_khsieh@quicinc.com> 
+>>> wrote:
+>>>> There is a reboot/suspend test case where system suspend is forced
+>>>> during system booting up. Since dp_display_host_init() of external
+>>>> DP is executed at hpd thread context, this test case may created a
+>>>> scenario that dp_display_host_deinit() from pm_suspend() run before
+>>>> dp_display_host_init() if hpd thread has no chance to run during
+>>>> booting up while suspend request command was issued. At this scenario
+>>>> system will crash at aux register access at dp_display_host_deinit()
+>>>> since aux clock had not yet been enabled by dp_display_host_init().
+>>>> Therefore we have to ensure aux clock enabled by checking
+>>>> core_initialized flag before access aux registers at pm_suspend.
+>>> Can a call to dp_display_host_init() be moved from
+>>> dp_display_config_hpd() to dp_display_bind()?
+>>
+>> yes,  Sankeerth's  "drm/msm/dp: enable pm_runtime support for dp 
+>> driver" patch is doing that which is under review.
+>>
+>> https://patchwork.freedesktop.org/patch/523879/?series=114297&rev=1
+>
+> No, he is doing another thing. He is moving these calls to pm_runtime 
+> callbacks, not to the dp_display_bind().
+>
+>>> Related question: what is the primary reason for having
+>>> EV_HPD_INIT_SETUP and calling dp_display_config_hpd() via the event
+>>> thread? Does DP driver really depend on DPU irqs being installed? As
+>>> far as I understand, DP device uses MDSS interrupts and those IRQs are
+>>> available and working at the time of dp_display_probe() /
+>>> dp_display_bind().
+>>
+>> HDP gpio pin has to run through DP aux module 100ms denouncing logic 
+>> and have its mask bits.
+>>
+>> Therefore DP irq has to be enabled to receive DP isr with mask bits set.
+>
+> So... DP irq is enabled by the MDSS, not by the DPU. Again, why does 
+> DP driver depend on DPU irqs being installed?
 
-It appears that other places in the docs tree also don't support using
-:doc:. Elsewhere in the BPF documentation, we just reference the kernel
-docs page directly. Let's do that here to clean up the last remaining
-noise in the docs build.
+sorry, previously i mis understand your question -- why does DP driver 
+depend on DPU irqs being installed?
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- Documentation/bpf/maps.rst | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+now, I think you are asking why  dpu_irq_postinstall() ==> 
+msm_dp_irq_postinstall() ==> event_thread ==> dp_display_config_hdp() 
+==> enable_irq(dp->irq)
 
-diff --git a/Documentation/bpf/maps.rst b/Documentation/bpf/maps.rst
-index 4906ff0f8382..6f069f3d6f4b 100644
---- a/Documentation/bpf/maps.rst
-+++ b/Documentation/bpf/maps.rst
-@@ -11,9 +11,9 @@ maps are accessed from BPF programs via BPF helpers which are documented in the
- `man-pages`_ for `bpf-helpers(7)`_.
- 
- BPF maps are accessed from user space via the ``bpf`` syscall, which provides
--commands to create maps, lookup elements, update elements and delete
--elements. More details of the BPF syscall are available in
--:doc:`/userspace-api/ebpf/syscall` and in the `man-pages`_ for `bpf(2)`_.
-+commands to create maps, lookup elements, update elements and delete elements.
-+More details of the BPF syscall are available in `ebpf-syscall`_ and in the
-+`man-pages`_ for `bpf(2)`_.
- 
- Map Types
- =========
-@@ -79,3 +79,4 @@ Find and delete element by key in a given map using ``attr->map_fd``,
- .. _man-pages: https://www.kernel.org/doc/man-pages/
- .. _bpf(2): https://man7.org/linux/man-pages/man2/bpf.2.html
- .. _bpf-helpers(7): https://man7.org/linux/man-pages/man7/bpf-helpers.7.html
-+.. _ebpf-syscall: https://docs.kernel.org/userspace-api/ebpf/syscall.html
--- 
-2.39.0
+With the below test i had run, i think the reason is to make sure 
+dp->irq be requested before enable it.
 
+I just run the execution timing order test and collect execution order 
+as descending order at below,
+
+1) dp_display_probe() -- start
+
+2) dp_display_bind()
+
+3) msm_dp_modeset_init()  ==> dp_display_request_irq() ==> 
+dp_display_get_next_bridge()
+
+4) dpu_irq_postinstall() ==> msm_dp_irq_postinstall() ==> 
+enable_irq(dp->irq)
+
+5) dp_display_probe() -- end
+
+dp->irq is request at msm_dp_modeset_init() and enabled after.
+
+That bring up the issue to move DP's dp_display_host_init() executed at 
+dp_display_bind().
+
+Since eDP have dp_dispaly_host_init() executed at 
+dp_display_get_next_bridge() which executed after dp_display_bind().
+
+If moved DP's dp_display_host_init() to dp_dispaly_bind() which means DP 
+will be ready to receive HPD irq before eDP ready.
+
+This may create some uncertainties at execution flow and complicate 
+things up.
+
+
+>
+>> Similar mechanism is used for mdp, dsi, etc.
+>
+> And none of them uses irq_postinstall callback.
+>
+>>
+>>
+>>>> Changes in v2:
+>>>> -- at commit text, dp_display_host_init() instead of host_init()
+>>>> -- at commit text, dp_display_host_deinit() instead of host_deinit()
+>>>>
+>>>> Changes in v3:
+>>>> -- re arrange to avoid commit text line over 75 chars
+>>>>
+>>>> Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until 
+>>>> plugin interrupt received")
+>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>>>> ---
+>>>>   drivers/gpu/drm/msm/dp/dp_display.c | 20 ++++++++++++--------
+>>>>   1 file changed, 12 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
+>>>> b/drivers/gpu/drm/msm/dp/dp_display.c
+>>>> index bde1a7c..1850738 100644
+>>>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>>>> @@ -460,10 +460,12 @@ static void dp_display_host_init(struct 
+>>>> dp_display_private *dp)
+>>>>                  dp->dp_display.connector_type, dp->core_initialized,
+>>>>                  dp->phy_initialized);
+>>>>
+>>>> -       dp_power_init(dp->power, false);
+>>>> -       dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+>>>> -       dp_aux_init(dp->aux);
+>>>> -       dp->core_initialized = true;
+>>>> +       if (!dp->core_initialized) {
+>>>> +               dp_power_init(dp->power, false);
+>>>> +               dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+>>>> +               dp_aux_init(dp->aux);
+>>>> +               dp->core_initialized = true;
+>>>> +       }
+>>>>   }
+>>>>
+>>>>   static void dp_display_host_deinit(struct dp_display_private *dp)
+>>>> @@ -472,10 +474,12 @@ static void dp_display_host_deinit(struct 
+>>>> dp_display_private *dp)
+>>>>                  dp->dp_display.connector_type, dp->core_initialized,
+>>>>                  dp->phy_initialized);
+>>>>
+>>>> -       dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
+>>>> -       dp_aux_deinit(dp->aux);
+>>>> -       dp_power_deinit(dp->power);
+>>>> -       dp->core_initialized = false;
+>>>> +       if (dp->core_initialized) {
+>>>> +               dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
+>>>> +               dp_aux_deinit(dp->aux);
+>>>> +               dp_power_deinit(dp->power);
+>>>> +               dp->core_initialized = false;
+>>>> +       }
+>>>>   }
+>>>>
+>>>>   static int dp_display_usbpd_configure_cb(struct device *dev)
+>>>> -- 
+>>>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+>>>> Forum,
+>>>> a Linux Foundation Collaborative Project
+>>>>
+>>>
+>
