@@ -2,58 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847C66A882B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5BE6A882D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjCBRzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 12:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S229836AbjCBR7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 12:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCBRzP (ORCPT
+        with ESMTP id S229659AbjCBR7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 12:55:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CB118A97
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 09:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677779670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=QzwEJy0ykd0+2iEjjzeHmHZle6okB7GtXUTcdZ9p+og=;
-        b=ePEUTLxsvFyRHeyJG6dHGj0FGVdnA3GGSribyBretg26IVbFERQ7Qr9W6A60hJ3prnDZAh
-        yOhpLSAsFgpt77hbfvpoVdc/FojDJhyMbtVuqIG3OMpdhiKLl+1LxJ8ccufdlB3Q6h/sJn
-        MgFndV8V8vTOgD2lwL6CoyzFNLKsccc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-569-eGLh9503PxWADPCgNxdsbg-1; Thu, 02 Mar 2023 12:54:27 -0500
-X-MC-Unique: eGLh9503PxWADPCgNxdsbg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 823BC2823809;
-        Thu,  2 Mar 2023 17:54:26 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.254])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 727E4140EBF6;
-        Thu,  2 Mar 2023 17:54:24 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Jerome Glisse <jglisse@redhat.com>, Shaohua Li <shli@fb.com>
-Subject: [PATCH v1] mm/userfaultfd: propagate uffd-wp bit when PTE-mapping the huge zeropage
-Date:   Thu,  2 Mar 2023 18:54:23 +0100
-Message-Id: <20230302175423.589164-1-david@redhat.com>
+        Thu, 2 Mar 2023 12:59:01 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02CE3251E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 09:58:59 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id o3so84414qvr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 09:58:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1677779939;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WPFA+ANTHDEBDLlZRcRzWYR3HIDFousSy5BF6H/rVWk=;
+        b=naATl86IWiASMsZEMEtqQ+PD07Qk9nnv5YUVcaW9FQIJfbmh/SqrKAZaAlTStOXBfs
+         VpyJQjWkV1J7R9kthjOZdY/Li2litcV+POzFGN5H+fy2Y+QgqhNWcBXzsZLVVNfsTfXl
+         xVxQ4YLBBlAJB8mZiu72uw0Jcs68wd8oAFrs9UOpmVFgBLp9oGQEB4H1aTC5ImPGaNMI
+         QmD5pw9MRANsc6w3P7ZBQb4/izMDCzPX+WYFfuP5NgTpwOvThB8vj+H8kDO3pgw2BoME
+         71dhCM5qsABYq5QZ7pUSshDg0IMq81sR9yvhpSZiXSz7SNr51GPtJzSl2czZCB1tl81s
+         RP+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677779939;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WPFA+ANTHDEBDLlZRcRzWYR3HIDFousSy5BF6H/rVWk=;
+        b=Uf6VHzJ0ELNFt83iKJey907tH3wlNeanKpY+1/uAkIGL3O48NUaJ1MlE3hOqCVLrnA
+         nFylPXT4w+XnCsJ1RhKzPf7Rv92l5GnhTKKH32oQ6iBwbn+s7iapQqis8eunBjU+55Bt
+         KGwv4QlZNnqgi8btsxoL3pFAYD0SKbfhh0wBhiVxbNj7Ys5rP8gHcZ94gubA9Y0QrodG
+         hJ3iDaxWAvWplukld7XxCAihO543RZGBKxAjbTAVK9ZWtpNm3XvqZ88K1Usk4ZS+M4rR
+         A6ULARmujubj6ZV0tIUR63VYN56z5cPZ4s79n+uFiLrsvfYMKyzDd9qucpxcreSmG1OT
+         piCg==
+X-Gm-Message-State: AO0yUKWlNZGWY9MDX8hsQFoyd9SadxZbb4imJ7gPKUUpUD8q3i5yvjJR
+        D7JMaGoiTlfC6K/vBKfpeXyeBg==
+X-Google-Smtp-Source: AK7set+paF+Pqf/e2YzrNVugGgZIGX/naMYWpQ7Yrxf6nOwBA/wPtgfnFsGGM3Ce2R4segpcwmHMXg==
+X-Received: by 2002:ad4:5745:0:b0:56e:ab31:199d with SMTP id q5-20020ad45745000000b0056eab31199dmr22633759qvx.40.1677779938798;
+        Thu, 02 Mar 2023 09:58:58 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:19d])
+        by smtp.gmail.com with ESMTPSA id c133-20020ae9ed8b000000b0074280fc7bd8sm93896qkg.60.2023.03.02.09.58.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 09:58:58 -0800 (PST)
+Date:   Thu, 2 Mar 2023 12:58:57 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, tj@kernel.org,
+        lizefan.x@bytedance.com, peterz@infradead.org, johunt@akamai.com,
+        keescook@chromium.org, quic_sudaraja@quicinc.com,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] psi: remove 500ms min window size limitation for
+ triggers
+Message-ID: <ZADj4YX4uftK/Frh@cmpxchg.org>
+References: <20230301193403.1507484-1-surenb@google.com>
+ <Y/+wlg5L8A1iebya@cmpxchg.org>
+ <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
+ <ZADBCEk68W1aGJAV@cmpxchg.org>
+ <CAJuCfpHF=9Dv_Yzph5jNmR1ZfTf7Lf=_oShztyLUq0ps_D=osQ@mail.gmail.com>
+ <ZADf27Kx5mbFev+I@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZADf27Kx5mbFev+I@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,221 +79,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we'd lose the userfaultfd-wp marker when PTE-mapping a huge
-zeropage, resulting in the next write faults in the PMD range
-not triggering uffd-wp events.
+On Thu, Mar 02, 2023 at 06:41:47PM +0100, Michal Hocko wrote:
+> On Thu 02-03-23 08:13:54, Suren Baghdasaryan wrote:
+> [...]
+> > Let's roll this check without additional changes and then consolidate
+> > the checking inside psi_trigger_create() in a separate patch. If
+> > anybody objects to the late permission check we will just revert that
+> > last change without affecting anything else.
+> 
+> Permissions checks at write time are problematic because userspace
+> cannot drop privileges. Also I think it would be an antipattern for how
+> we do this in general. 
 
-Various actions (partial MADV_DONTNEED, partial mremap, partial munmap,
-partial mprotect) could trigger this. However, most importantly,
-un-protecting a single sub-page from the userfaultfd-wp handler when
-processing a uffd-wp event will PTE-map the shared huge zeropage and
-lose the uffd-wp bit for the remainder of the PMD.
+The permissions can be checked against opener privileges through
+file->f_cred. This allows dropping privileges, as well as passing the
+fd to a trusted but unprivileged process to delegate trigger setup.
 
-Let's properly propagate the uffd-wp bit to the PMDs.
-
----
- #define _GNU_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
- #include <stdint.h>
- #include <stdbool.h>
- #include <inttypes.h>
- #include <fcntl.h>
- #include <unistd.h>
- #include <errno.h>
- #include <poll.h>
- #include <pthread.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/ioctl.h>
- #include <linux/userfaultfd.h>
-
- static size_t pagesize;
- static int uffd;
- static volatile bool uffd_triggered;
-
- #define barrier() __asm__ __volatile__("": : :"memory")
-
- static void uffd_wp_range(char *start, size_t size, bool wp)
- {
- 	struct uffdio_writeprotect uffd_writeprotect;
-
- 	uffd_writeprotect.range.start = (unsigned long) start;
- 	uffd_writeprotect.range.len = size;
- 	if (wp) {
- 		uffd_writeprotect.mode = UFFDIO_WRITEPROTECT_MODE_WP;
- 	} else {
- 		uffd_writeprotect.mode = 0;
- 	}
- 	if (ioctl(uffd, UFFDIO_WRITEPROTECT, &uffd_writeprotect)) {
- 		fprintf(stderr, "UFFDIO_WRITEPROTECT failed: %d\n", errno);
- 		exit(1);
- 	}
- }
-
- static void *uffd_thread_fn(void *arg)
- {
- 	static struct uffd_msg msg;
- 	ssize_t nread;
-
- 	while (1) {
- 		struct pollfd pollfd;
- 		int nready;
-
- 		pollfd.fd = uffd;
- 		pollfd.events = POLLIN;
- 		nready = poll(&pollfd, 1, -1);
- 		if (nready == -1) {
- 			fprintf(stderr, "poll() failed: %d\n", errno);
- 			exit(1);
- 		}
-
- 		nread = read(uffd, &msg, sizeof(msg));
- 		if (nread <= 0)
- 			continue;
-
- 		if (msg.event != UFFD_EVENT_PAGEFAULT ||
- 		    !(msg.arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WP)) {
- 			printf("FAIL: wrong uffd-wp event fired\n");
- 			exit(1);
- 		}
-
- 		/* un-protect the single page. */
- 		uffd_triggered = true;
- 		uffd_wp_range((char *)(uintptr_t)msg.arg.pagefault.address,
- 			      pagesize, false);
- 	}
- 	return arg;
- }
-
- static int setup_uffd(char *map, size_t size)
- {
- 	struct uffdio_api uffdio_api;
- 	struct uffdio_register uffdio_register;
- 	pthread_t thread;
-
- 	uffd = syscall(__NR_userfaultfd,
- 		       O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
- 	if (uffd < 0) {
- 		fprintf(stderr, "syscall() failed: %d\n", errno);
- 		return -errno;
- 	}
-
- 	uffdio_api.api = UFFD_API;
- 	uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP;
- 	if (ioctl(uffd, UFFDIO_API, &uffdio_api) < 0) {
- 		fprintf(stderr, "UFFDIO_API failed: %d\n", errno);
- 		return -errno;
- 	}
-
- 	if (!(uffdio_api.features & UFFD_FEATURE_PAGEFAULT_FLAG_WP)) {
- 		fprintf(stderr, "UFFD_FEATURE_WRITEPROTECT missing\n");
- 		return -ENOSYS;
- 	}
-
- 	uffdio_register.range.start = (unsigned long) map;
- 	uffdio_register.range.len = size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_WP;
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) < 0) {
- 		fprintf(stderr, "UFFDIO_REGISTER failed: %d\n", errno);
- 		return -errno;
- 	}
-
- 	pthread_create(&thread, NULL, uffd_thread_fn, NULL);
-
- 	return 0;
- }
-
- int main(void)
- {
- 	const size_t size = 4 * 1024 * 1024ull;
- 	char *map, *cur;
-
- 	pagesize = getpagesize();
-
- 	map = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON, -1, 0);
- 	if (map == MAP_FAILED) {
- 		fprintf(stderr, "mmap() failed\n");
- 		return -errno;
- 	}
-
- 	if (madvise(map, size, MADV_HUGEPAGE)) {
- 		fprintf(stderr, "MADV_HUGEPAGE failed\n");
- 		return -errno;
- 	}
-
- 	if (setup_uffd(map, size))
- 		return 1;
-
- 	/* Read the whole range, populating zeropages. */
- 	madvise(map, size, MADV_POPULATE_READ);
-
- 	/* Write-protect the whole range. */
- 	uffd_wp_range(map, size, true);
-
- 	/* Make sure uffd-wp triggers on each page. */
- 	for (cur = map; cur < map + size; cur += pagesize) {
- 		uffd_triggered = false;
-
- 		barrier();
- 		/* Trigger a write fault. */
- 		*cur = 1;
- 		barrier();
-
- 		if (!uffd_triggered) {
- 			printf("FAIL: uffd-wp did not trigger\n");
- 			return 1;
- 		}
- 	}
-
- 	printf("PASS: uffd-wp triggered\n");
- 	return 0;
- }
----
-
-Fixes: e06f1e1dd499 ("userfaultfd: wp: enabled write protection in userfaultfd API")
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Jerome Glisse <jglisse@redhat.com>
-Cc: Shaohua Li <shli@fb.com>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/huge_memory.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 4fc43859e59a..032fb0ef9cd1 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2037,7 +2037,7 @@ static void __split_huge_zero_page_pmd(struct vm_area_struct *vma,
- {
- 	struct mm_struct *mm = vma->vm_mm;
- 	pgtable_t pgtable;
--	pmd_t _pmd;
-+	pmd_t _pmd, old_pmd;
- 	int i;
- 
- 	/*
-@@ -2048,7 +2048,7 @@ static void __split_huge_zero_page_pmd(struct vm_area_struct *vma,
- 	 *
- 	 * See Documentation/mm/mmu_notifier.rst
- 	 */
--	pmdp_huge_clear_flush(vma, haddr, pmd);
-+	old_pmd = pmdp_huge_clear_flush(vma, haddr, pmd);
- 
- 	pgtable = pgtable_trans_huge_withdraw(mm, pmd);
- 	pmd_populate(mm, &_pmd, pgtable);
-@@ -2057,6 +2057,8 @@ static void __split_huge_zero_page_pmd(struct vm_area_struct *vma,
- 		pte_t *pte, entry;
- 		entry = pfn_pte(my_zero_pfn(haddr), vma->vm_page_prot);
- 		entry = pte_mkspecial(entry);
-+		if (pmd_uffd_wp(old_pmd))
-+			entry = pte_mkuffd_wp(entry);
- 		pte = pte_offset_map(&_pmd, haddr);
- 		VM_BUG_ON(!pte_none(*pte));
- 		set_pte_at(mm, haddr, pte, entry);
--- 
-2.39.2
-
+I agree with keeping it in open() for now. But it will matter when we
+distinguish between privileged and unprivileged trigger parameters.
