@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD366A7A20
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCCC6A7A23
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCBDir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 22:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S229661AbjCBDoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 22:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjCBDiq (ORCPT
+        with ESMTP id S229445AbjCBDoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 22:38:46 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8057423337
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 19:38:10 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id p6so9052021pga.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 19:38:10 -0800 (PST)
+        Wed, 1 Mar 2023 22:44:10 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73ED199CC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 19:44:08 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id l13so16829648qtv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 19:44:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677728289;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kK3Dj4U5YWACwWutML+PY+76X37EOgEhaC4TqzyvWlU=;
-        b=pywJb+/Tkb6jZ0dtEJc61IeBWwab3zuYwcrOJIFfK4ZdLD06jRk9oOaxBC6T+xwpIU
-         onPF300X9ZGD3USf2qbIz9Qguzb00oCva3x+BE3pjIN8HLWHNI2YiOb84eZ2LPL+AMyv
-         SO3sPkz6D3jePbXdkIjPEZSm2Eifl4fdh8dxv0xN/asnolR7RO/LKua3HL833DqIG0+K
-         eaQ4l8Tqijdh2J4cjBXF0QqHkUyajKDc4wULcYkDrMVY1bgb4U0Bmw8SdbDEEPLv9uNl
-         csATgBRuwbLwZZQd/35PYJvObI6nCU4biI8eXAQ7d3X8Dqg3WeQwGR/Bvltq307q9t6/
-         REmA==
+        d=sladewatkins.net; s=googled;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9mQQWQ0QpJBc3je7KutpjYJ3sQ0eek1XLz027wHmEQc=;
+        b=DHwtadMw/OrS63w0GQ/Zv/CqMSLqLn+etKj7T9vwzgGrPidTsWUf+RWzeIcNvg0vd2
+         X8l3RS8MKCnoCKymkXmmMvW5CJcgZTfNBOfgqmuWiwBwvjs3YCaDcOC71tay6KcXtiwS
+         HlzmAbKdv3nGfrwRQx0JWWJ5ZFiS5R0N9hm00kcqKdKd8yREDRs0RWxL42GUUw+3Ngf8
+         kAlgXJz8Nwm/WpNGEN3nLJgsnlJZLsKNl5hYHUTHgzvz/HtxA/huqt9maU5+vgbwtiib
+         JCXF1ct3mUewcFSS5Y4ikWyCUQKnONefh/8TaonRPqifJ/e4tJRBdAgs7C/1/qwqAXPS
+         vg5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677728289;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kK3Dj4U5YWACwWutML+PY+76X37EOgEhaC4TqzyvWlU=;
-        b=wrtsPMYGjuuUnBHJ73++dyYzEuDgpIpbnNj39cfiHe3DAowhQFFLV9Jsud0OEEEdHa
-         OFSy36n4Kyisfn397y1Wo8HlA4luUiTpOQiTT88lH1V8OqV8FQMZLAHra6zx3fnsvZZC
-         Dsh9b5SES6wqown+iRI32DnpYPv3k47ai17ZPP6jcQPRQy2W8kZYeTGh50m3vnx3TX1K
-         LMDDddrxSmHYWlJaK4qUbooWS/NdJsFE6yGVyXFOHoMQqc4DJ2zzCmrtSZ0he3Qkisxp
-         5FHOyPxxPsrfdYWkBoLdI7mfWOnuvLnK7LAovXSPFRPTiIk0Ffley+E6W8/IIu9phBcP
-         N/PA==
-X-Gm-Message-State: AO0yUKWZqsntLRUzi4ofFPt7cxK+e5y5YRqvmDr4Jjpr9P8CmVrax7zT
-        217JdOsSV601zTOxg2Vqu0A=
-X-Google-Smtp-Source: AK7set9tbuX/GOWCL8Qz0mnmgzpvBUsivAmbJZvW+TcGU6gx/z9iDCBZ2BsU1IFaTgZxMd3RDt8w8w==
-X-Received: by 2002:aa7:990f:0:b0:5a8:ad6c:cd43 with SMTP id z15-20020aa7990f000000b005a8ad6ccd43mr8323105pff.31.1677728289365;
-        Wed, 01 Mar 2023 19:38:09 -0800 (PST)
-Received: from archlinux.localdomain ([140.121.198.213])
-        by smtp.googlemail.com with ESMTPSA id i22-20020aa787d6000000b00593a1f7c3dbsm8882731pfo.10.2023.03.01.19.38.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 19:38:08 -0800 (PST)
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chih-En Lin <shiyn.lin@gmail.com>
-Subject: [PATCH] mm/x86: Cleanup unnecessary tsk variable
-Date:   Thu,  2 Mar 2023 11:42:21 +0800
-Message-Id: <20230302034221.1078251-1-shiyn.lin@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9mQQWQ0QpJBc3je7KutpjYJ3sQ0eek1XLz027wHmEQc=;
+        b=BUuJB5ub9yie9TE5ifKrFOSKB3DBEqH3nXMQlf0XxjlaU21KW0TtmoFwcq5YhoTs14
+         7qid34sP6wy7LEaAft3Ebhye1Wx4TyM48ns+fcO0sn8bq1xM9C9JX67yYbDBjGktyZfZ
+         PTE4Ynb/r9jEtu0dnQxUzYP0Mq+rlZBPNYPDmWh6yKwKvCPPpvxrU9h/IAPxR0A8mIjb
+         7qSxHKq7Hypyml4lxCCV0WZQlHmNgf5fHxSvspFxK0aJx+8TKxzRDpGWLl8ncBpgou/g
+         9xYzt7HhCnO+81YovWzsESWQDH6zFtezWvX/wQFCuYpVZKltLG7kOnTgF8Ds14VZspcC
+         zgaw==
+X-Gm-Message-State: AO0yUKVKA+mdo50YsFgwzsNjZs04eo8JhHt6ylrlPB8T6nP/lTeuyzWm
+        E6tfSB+tZZgx4WrqeTy3R2Nag09wOBRVLv+qVvDHmnM3jhsm6AcSH/BsIxlv5P2MeTMH9dn4wpQ
+        0cS7z6+vypXLhtashSls=
+X-Google-Smtp-Source: AK7set8CpUzq8g90UOmFq8VsipXa/6ZvF13DGEytpa7CzIZBTnvyMe7Ejf9+dLJM91gAI1RS7IgYig==
+X-Received: by 2002:ac8:5a56:0:b0:3bf:ce15:ff2c with SMTP id o22-20020ac85a56000000b003bfce15ff2cmr15375101qta.20.1677728647867;
+        Wed, 01 Mar 2023 19:44:07 -0800 (PST)
+Received: from ghost.leviathan.sladewatkins.net (pool-108-44-32-49.albyny.fios.verizon.net. [108.44.32.49])
+        by smtp.gmail.com with ESMTPSA id q27-20020a05620a025b00b0073b575f3603sm9989340qkn.101.2023.03.01.19.44.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 19:44:07 -0800 (PST)
+Message-ID: <6bae12cb-f15e-e50f-7c77-016f94aa8fdd@sladewatkins.net>
+Date:   Wed, 1 Mar 2023 22:44:06 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/4] extcon: Added extcon_alloc_cables to simplify
+ extcon register function
+Content-Language: en-US, en-AU
+To:     Bumwoo Lee <bw365.lee@samsung.com>
+References: <20230220054513.27385-3-bw365.lee@samsung.com>
+ <20230220054513.27385-1-bw365.lee@samsung.com>
+ <CGME20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925@epcms1p3>
+ <20230224100325epcms1p3e8886e278e23f610c8490cb69f1d452d@epcms1p3>
+ <091101d94ca7$a4ad23c0$ee076b40$@samsung.com>
+Cc:     'Chanwoo Choi' <cw00.choi@samsung.com>, myungjoo.ham@samsung.com,
+        linux-kernel@vger.kernel.org, Slade Watkins <srw@sladewatkins.net>
+From:   Slade's Kernel Patch Bot <KernelPatchBot@sladewatkins.net>
+In-Reply-To: <091101d94ca7$a4ad23c0$ee076b40$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-SWM-Antispam: Scanned by proxmox-gateway.frozen.leviathan.sladewatkins.net
+X-SWM-Root-Server: frozen.leviathan.sladewatkins.net
+X-SWM-TLS-Policy-Status: enforced
+X-Gm-Spam: 0
+X-Gm-Phishy: 0
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,70 +86,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's unnecessary to use tsk to access current if tsk is used by one
-time only. In such a case, drop variable tsk by using current.
+On 3/1/23 20:38, Bumwoo Lee wrote:
+> Hello.
+> 
+> As you can see, edev->cables are freed if extcon_alloc_cables() function return error handling in extcon_dev_register()
+> Other added functions are also same.
+> 
+> Because it's functionalized, apart from this, do you want to mention that it should be freed within the function? 
+> Please let me know your opinion.
+> 
+> extcon_dev_register(struct extcon_dev *edev){
+> ...
+> 
+> 	ret = extcon_alloc_cables(edev);
+> 	if (ret)
+> 		goto err_alloc_cables;
+> 
+> ...
+> 
+> err_alloc_cables:
+>  	if (edev->max_supported)
+>  		kfree(edev->cables);
+> 
+> 
+> Regards,
+> Bumwoo
 
-Signed-off-by: Chih-En Lin <shiyn.lin@gmail.com>
----
- arch/x86/mm/fault.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+This is Slade's kernel patch bot. When scanning his mailbox, I came across
+this message, which appears to be a top-post. Please do not top-post on Linux
+mailing lists.
 
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index 7b0d4ab894c8..841ccf340ce8 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -605,16 +605,14 @@ static noinline void
- pgtable_bad(struct pt_regs *regs, unsigned long error_code,
- 	    unsigned long address)
- {
--	struct task_struct *tsk;
- 	unsigned long flags;
- 	int sig;
- 
- 	flags = oops_begin();
--	tsk = current;
- 	sig = SIGKILL;
- 
- 	printk(KERN_ALERT "%s: Corrupted page table at address %lx\n",
--	       tsk->comm, address);
-+	       current->comm, address);
- 	dump_pagetable(address);
- 
- 	if (__die("Bad pagetable", regs, error_code))
-@@ -831,8 +829,6 @@ static void
- __bad_area_nosemaphore(struct pt_regs *regs, unsigned long error_code,
- 		       unsigned long address, u32 pkey, int si_code)
- {
--	struct task_struct *tsk = current;
--
- 	if (!user_mode(regs)) {
- 		kernelmode_fixup_or_oops(regs, error_code, address,
- 					 SIGSEGV, si_code, pkey);
-@@ -867,7 +863,7 @@ __bad_area_nosemaphore(struct pt_regs *regs, unsigned long error_code,
- 		return;
- 
- 	if (likely(show_unhandled_signals))
--		show_signal_msg(regs, error_code, address, tsk);
-+		show_signal_msg(regs, error_code, address, current);
- 
- 	set_signal_archinfo(address, error_code);
- 
-@@ -1253,14 +1249,10 @@ void do_user_addr_fault(struct pt_regs *regs,
- 			unsigned long address)
- {
- 	struct vm_area_struct *vma;
--	struct task_struct *tsk;
--	struct mm_struct *mm;
-+	struct mm_struct *mm = current->mm;
- 	vm_fault_t fault;
- 	unsigned int flags = FAULT_FLAG_DEFAULT;
- 
--	tsk = current;
--	mm = tsk->mm;
--
- 	if (unlikely((error_code & (X86_PF_USER | X86_PF_INSTR)) == X86_PF_INSTR)) {
- 		/*
- 		 * Whoops, this is kernel mode code trying to execute from
--- 
-2.39.1
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
+
+Please bottom-post to Linux mailing lists in the future. See also:
+https://daringfireball.net/2007/07/on_top
+
+If you believe this is an error, please address a message to Slade Watkins
+<srw@sladewatkins.net>.
+
+Thank you,
+-- Slade's kernel patch bot
+
+> 
+> -----Original Message-----
+> From: MyungJoo Ham <myungjoo.ham@samsung.com> 
+> Sent: Friday, February 24, 2023 7:03 PM
+> To: Bumwoo Lee <bw365.lee@samsung.com>; Chanwoo Choi <cw00.choi@samsung.com>; linux-kernel@vger.kernel.org
+> Subject: RE: [PATCH v2 2/4] extcon: Added extcon_alloc_cables to simplify extcon register function
+> 
+>> --------- Original Message ---------
+>> Sender : 이범우 <bw365.lee@samsung.com>Product S/W Lab(VD)/삼성전자 Date : 
+>> 2023-02-20 14:45 (GMT+9) Title : [PATCH v2 2/4] extcon: Added 
+>> extcon_alloc_cables to simplify extcon register function
+>>
+>> The cable allocation part is functionalized from extcon_dev_register.
+>>
+>> Signed-off-by: Bumwoo Lee <bw365.lee@samsung.com>
+>> ---
+>> drivers/extcon/extcon.c | 104 +++++++++++++++++++++++-----------------
+>> 1 file changed, 59 insertions(+), 45 deletions(-)
+>>
+>> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c index 
+>> adcf01132f70..3c2f540785e8 100644
+>> --- a/drivers/extcon/extcon.c
+>> +++ b/drivers/extcon/extcon.c
+>> @@ -1070,6 +1070,61 @@ void extcon_dev_free(struct extcon_dev *edev)  }  
+>> EXPORT_SYMBOL_GPL(extcon_dev_free);
+>>
+>> +/**
+>> + * extcon_alloc_cables() - alloc the cables for extcon device
+>> + * @edev:        extcon device which has cables
+>> + *
+>> + * Returns 0 if success or error number if fail.
+>> + */
+>> +static int extcon_alloc_cables(struct extcon_dev *edev) {
+>> +        int index;
+>> +        char *str;
+>> +        struct extcon_cable *cable;
+>> +
+>> +        if (!edev->max_supported)
+>> +                return 0;
+>> +
+>> +        edev->cables = kcalloc(edev->max_supported,
+>> +                               sizeof(struct extcon_cable),
+>> +                               GFP_KERNEL);
+>> +        if (!edev->cables)
+>> +                return -ENOMEM;
+>> +
+>> +        for (index = 0; index < edev->max_supported; index++) {
+>> +                cable = &edev->cables[index];
+>> +
+>> +                str = kasprintf(GFP_KERNEL, "cable.%d", index);
+>> +                if (!str) {
+>> +                        for (index--; index >= 0; index--) {
+>> +                                cable = &edev->cables[index];
+>> +                                kfree(cable->attr_g.name);
+>> +                        }
+>> +                        return -ENOMEM;
+> 
+> You have a memory leak.
+> edev->cables is allocated and
+> you are not freeing it.
+> 
+> In the previous code, it was freed by
+> having different err-goto labels.
+> 
+> Please check if you have similar errors
+> in other patches of this series.
+> 
+> ...
+> 
+>> @@ -1282,7 +1296,7 @@ int extcon_dev_register(struct extcon_dev *edev)
+>> err_alloc_cables:
+>>         if (edev->max_supported)
+>>                 kfree(edev->cables);
+>> -err_sysfs_alloc:
+>> +
+>>         return ret;
+>> }
+>> EXPORT_SYMBOL_GPL(extcon_dev_register);
+>> --
+>> 2.35.1
+>>
+>>
+> 
+> Cheers,
+> MyungJoo.
+> 
+> 
+> 
 
