@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814A56A81D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A716A8156
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCBMAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S229719AbjCBLj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:39:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCBMAr (ORCPT
+        with ESMTP id S229760AbjCBLjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:00:47 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FC9166FD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:00:46 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PS8G7442ZzqVFL;
-        Thu,  2 Mar 2023 19:37:03 +0800 (CST)
+        Thu, 2 Mar 2023 06:39:19 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38BF2BF02
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:38:54 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PS8CX2XSLzSkTR;
+        Thu,  2 Mar 2023 19:34:48 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2 5/7] mm: memory: use folio_throttle_swaprate() in do_anonymous_page()
-Date:   Thu, 2 Mar 2023 19:58:33 +0800
-Message-ID: <20230302115835.105364-6-wangkefeng.wang@huawei.com>
+Subject: [PATCH v2 6/7] mm: memory: use folio_throttle_swaprate() in do_cow_fault()
+Date:   Thu, 2 Mar 2023 19:58:34 +0800
+Message-ID: <20230302115835.105364-7-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230302115835.105364-1-wangkefeng.wang@huawei.com>
 References: <20230302115835.105364-1-wangkefeng.wang@huawei.com>
@@ -57,18 +57,18 @@ Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/memory.c b/mm/memory.c
-index e068635d21cf..841737d5690d 100644
+index 841737d5690d..b24c618d7348 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -4065,7 +4065,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+@@ -4527,7 +4527,7 @@ static vm_fault_t do_cow_fault(struct vm_fault *vmf)
+ 		put_page(vmf->cow_page);
+ 		return VM_FAULT_OOM;
+ 	}
+-	cgroup_throttle_swaprate(vmf->cow_page, GFP_KERNEL);
++	folio_throttle_swaprate(page_folio(vmf->cow_page), GFP_KERNEL);
  
- 	if (mem_cgroup_charge(folio, vma->vm_mm, GFP_KERNEL))
- 		goto oom_free_page;
--	cgroup_throttle_swaprate(&folio->page, GFP_KERNEL);
-+	folio_throttle_swaprate(folio, GFP_KERNEL);
- 
- 	/*
- 	 * The memory barrier inside __folio_mark_uptodate makes sure that
+ 	ret = __do_fault(vmf);
+ 	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY)))
 -- 
 2.35.3
 
