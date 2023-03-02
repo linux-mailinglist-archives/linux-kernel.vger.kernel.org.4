@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D476A80ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937A66A80F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjCBLTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S229546AbjCBLXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCBLTh (ORCPT
+        with ESMTP id S229447AbjCBLXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:19:37 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED781206E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:19:35 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id bx14so5910700uab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 03:19:35 -0800 (PST)
+        Thu, 2 Mar 2023 06:23:17 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3F3FF2E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:23:16 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id f23so22005690vsa.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 03:23:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UpoYsX/wcX1BKUpmOF97rT/5TG0r4tQZUsDLiVIcjh4=;
-        b=LwDWn5Nt2IAkaWo9dUqFcLRfElg1ai2BCo3iFdJM2sQzjBPx5HoxsBdhTxg5hf3+Px
-         j+97E+e944Mu+PJyA3RQ6Q/4HGim2Y+YeK3eHnvDVk4Hgkt8RME7t9LIg28bhB7jnSPF
-         gHIcw59Hshb2Iv2LyESKJ7ecGjqVx+ExSRlr3uSiF1y2nJcjk/Om9YU8yJX/bRMxpga2
-         lI8FBBSMt67hGup0AJFqcFoQKSO6FXZQhxDCvPqKjhx8sthvfzYQAcUiZK2AO9Mr5mjR
-         dJclpeSLZSi5JnWEFzROHXVSECWixlvpFJaOq8iAJ372Tx3MB4nTaHaxD/dI2KIiMGoU
-         NDNQ==
+        bh=ZXJcpekVJsbf05nQkG74Sggw1Qq7M2Hhxe/99xjhW+0=;
+        b=PIN9Xd0BS6NZmE7GIp9DfduhYOcFG5F3437KwQbDfTMk+mHR9ICEpZcUJWafSRmI2n
+         9/hB6hmJmyTZlDgR223DpQt7V8PfZUNWKRqwi2sU+/LS8rHYQmF9otH1guS2aYX1IfCC
+         wmFl+5l/Hl0d4ab6+Mn8YficsrHpAwgpyEsmVrCnQVzfKqNqaKIn6eZHcNLfGdooz1Hk
+         Pr7Ifvdokus8dk60vHGd7RY6t5LFyGHyn6xfoR4cIaFmdRCU3c2ttyo/LI9/MwtcdyW0
+         0KvJWY7AZd/LalYwL2JDhTdDnIhUxygnFD4v1GEJZYez0LCKBTdjTITCIaMVt67g4AAQ
+         cJEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UpoYsX/wcX1BKUpmOF97rT/5TG0r4tQZUsDLiVIcjh4=;
-        b=e1DlTUwF4EHy8rMO+24MqWKOT8JzQKROZbThUNmgM/8Ga8cQG8/WW/rODj1QlqLJ+J
-         8fcsQJQbJWXLJHZ8HpGIk6nKfPc4+OyPAWh7b8SzWyNwf1njJabBDTAUXB1ulsJbhosJ
-         nUlPJqiygAMjEOAbd6PkkSNDHhlVA5M5SltvLISm/2BHpvDN9+/gsKUsCWLy23IrtxXy
-         xPxf6RnVQXUWech6u1CWHRP9xvvk5DGTXA/C4ld2m4xBhf2nX9tUeT+b9CNM56VECER8
-         IJ5BpZZVBRlXAJoGPGBFIpEvIBjY7U06N2Ei6Hoh0r7DBYAuaTtqyfKWp5i0Kp34PY4R
-         6CGg==
-X-Gm-Message-State: AO0yUKXBClcJLQcceTT/roQq0MXW6qlfO9+XvHSgjjSV0MpiTMvLNFc3
-        AiPwp+3O2UNThx9yid/i4GUQHnQel2BadmAXrCqyeA==
-X-Google-Smtp-Source: AK7set8pAGt3Pxj8EsVzgstq7VhTF8idjtE4IBSBO5saiDwLhWLaq6tv1oezXFrOWflpsWeWrNLIhpFj41mJrk5HIVA=
-X-Received: by 2002:a05:6122:e0f:b0:406:8403:4e64 with SMTP id
- bk15-20020a0561220e0f00b0040684034e64mr5028140vkb.2.1677755975009; Thu, 02
- Mar 2023 03:19:35 -0800 (PST)
+        bh=ZXJcpekVJsbf05nQkG74Sggw1Qq7M2Hhxe/99xjhW+0=;
+        b=jYvTDHYd7aXhld6M1KeUr+lviHVH1qagI2aeA1RomK6Jo/i7fcmlgOu84b5xrw9/gu
+         pQeL9RVIRom2argzLOZw5ilzhSz4og6Q9yur5BOqNXsJpXEGu0DUB/wRseudg/wSqDiy
+         RYmtHmcpsZ8rBnEtfeYzZLcKObQ4WJr1VtKFwVlEVT3w5iJpLyID6BvCr69nZuexrSlj
+         3Sa9BJ7T/u/IVdTZi2FPazgQeVOPOOiJO1+kSrBDEotnBDCICX0Fh8xB17FI2LdVxqnd
+         uwZ7iOJEaxu8ebWra1KS00QskHhKLAxWBYSj+03s1a3NcexgfXSsW1NqqTzkNBCLCwj8
+         CHhA==
+X-Gm-Message-State: AO0yUKWAfNB7xd/RRQgJ0La82wdYt8Vi9Go1safrsALYVfaQs7eP5/e8
+        2BE4hwCu/OIOs1+HQ7utPeP6WWcJM7kC1SjdBHKj9w==
+X-Google-Smtp-Source: AK7set/jIWJRqDWo7AdMl27Z2cGJ9tTD2Y9soJ5svr/gGiePeoQZ21mQhPpNv0T6BykpxNdBwtsC0lwsoVbx2Cuv/2A=
+X-Received: by 2002:a05:6102:10c5:b0:412:6a3:2276 with SMTP id
+ t5-20020a05610210c500b0041206a32276mr6437205vsr.4.1677756195604; Thu, 02 Mar
+ 2023 03:23:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20230301143933.2374658-1-glider@google.com> <20230301143933.2374658-3-glider@google.com>
-In-Reply-To: <20230301143933.2374658-3-glider@google.com>
+References: <20230301143933.2374658-1-glider@google.com> <20230301143933.2374658-4-glider@google.com>
+In-Reply-To: <20230301143933.2374658-4-glider@google.com>
 From:   Marco Elver <elver@google.com>
-Date:   Thu, 2 Mar 2023 12:18:59 +0100
-Message-ID: <CANpmjNMd6YA1FGaE2ePsHU4OvTz=-2yXxCOwPDyDpCFTD5ns2Q@mail.gmail.com>
-Subject: Re: [PATCH 3/4] x86: kmsan: use C versions of memset16/memset32/memset64
+Date:   Thu, 2 Mar 2023 12:22:39 +0100
+Message-ID: <CANpmjNO0GBpfRbT1YnNnoupVG7TOcuBbTHzxNyZwdJaH3W7w5g@mail.gmail.com>
+Subject: Re: [PATCH 4/4] kmsan: add memsetXX tests
 To:     Alexander Potapenko <glider@google.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
         dave.hansen@linux.intel.com, hpa@zytor.com,
         akpm@linux-foundation.org, dvyukov@google.com, nathan@kernel.org,
-        ndesaulniers@google.com, kasan-dev@googlegroups.com,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+        ndesaulniers@google.com, kasan-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -74,54 +71,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 at 15:39, 'Alexander Potapenko' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
+On Wed, 1 Mar 2023 at 15:39, Alexander Potapenko <glider@google.com> wrote:
 >
-> KMSAN must see as many memory accesses as possible to prevent false
-> positive reports. Fall back to versions of
-> memset16()/memset32()/memset64() implemented in lib/string.c instead of
-> those written in assembly.
+> Add tests ensuring that memset16()/memset32()/memset64() are
+> instrumented by KMSAN and correctly initialize the memory.
 >
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Helge Deller <deller@gmx.de>
-> Suggested-by: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
 > Signed-off-by: Alexander Potapenko <glider@google.com>
-
-Reviewed-by: Marco Elver <elver@google.com>
-
 > ---
->  arch/x86/include/asm/string_64.h | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  mm/kmsan/kmsan_test.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 >
-> diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
-> index 9be401d971a99..e9c736f4686f5 100644
-> --- a/arch/x86/include/asm/string_64.h
-> +++ b/arch/x86/include/asm/string_64.h
-> @@ -22,6 +22,11 @@ extern void *__memcpy(void *to, const void *from, size_t len);
->  void *memset(void *s, int c, size_t n);
->  void *__memset(void *s, int c, size_t n);
->
-> +/*
-> + * KMSAN needs to instrument as much code as possible. Use C versions of
-> + * memsetXX() from lib/string.c under KMSAN.
-> + */
-> +#if !defined(CONFIG_KMSAN)
->  #define __HAVE_ARCH_MEMSET16
->  static inline void *memset16(uint16_t *s, uint16_t v, size_t n)
->  {
-> @@ -57,6 +62,7 @@ static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
->                      : "memory");
->         return s;
+> diff --git a/mm/kmsan/kmsan_test.c b/mm/kmsan/kmsan_test.c
+> index cc98a3f4e0899..e450a000441fb 100644
+> --- a/mm/kmsan/kmsan_test.c
+> +++ b/mm/kmsan/kmsan_test.c
+> @@ -503,6 +503,25 @@ static void test_memcpy_aligned_to_unaligned2(struct kunit *test)
+>         KUNIT_EXPECT_TRUE(test, report_matches(&expect));
 >  }
-> +#endif
 >
->  #define __HAVE_ARCH_MEMMOVE
->  void *memmove(void *dest, const void *src, size_t count);
+> +/* Generate test cases for memset16(), memset32(), memset64(). */
+> +#define DEFINE_TEST_MEMSETXX(size, var_ty)                                  \
+> +       static void test_memset##size(struct kunit *test)                   \
+> +       {                                                                   \
+> +               EXPECTATION_NO_REPORT(expect);                              \
+> +               volatile var_ty uninit;                                     \
+
+This could just be 'uint##size##_t' and you can drop 'var_ty'.
+
+> +                                                                            \
+> +               kunit_info(test,                                            \
+> +                          "memset" #size "() should initialize memory\n"); \
+> +               DO_NOT_OPTIMIZE(uninit);                                    \
+> +               memset##size((var_ty *)&uninit, 0, 1);                      \
+> +               kmsan_check_memory((void *)&uninit, sizeof(uninit));        \
+> +               KUNIT_EXPECT_TRUE(test, report_matches(&expect));           \
+> +       }
+> +
+> +DEFINE_TEST_MEMSETXX(16, uint16_t)
+> +DEFINE_TEST_MEMSETXX(32, uint32_t)
+> +DEFINE_TEST_MEMSETXX(64, uint64_t)
+> +
+>  static noinline void fibonacci(int *array, int size, int start)
+>  {
+>         if (start < 2 || (start == size))
+> @@ -549,6 +568,9 @@ static struct kunit_case kmsan_test_cases[] = {
+>         KUNIT_CASE(test_memcpy_aligned_to_aligned),
+>         KUNIT_CASE(test_memcpy_aligned_to_unaligned),
+>         KUNIT_CASE(test_memcpy_aligned_to_unaligned2),
+> +       KUNIT_CASE(test_memset16),
+> +       KUNIT_CASE(test_memset32),
+> +       KUNIT_CASE(test_memset64),
+>         KUNIT_CASE(test_long_origin_chain),
+>         {},
+>  };
 > --
 > 2.39.2.722.g9855ee24e9-goog
 >
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20230301143933.2374658-3-glider%40google.com.
