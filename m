@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334F36A8769
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB776A8772
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjCBQyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:54:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        id S230099AbjCBQ74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjCBQyM (ORCPT
+        with ESMTP id S229468AbjCBQ7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:54:12 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F388830EB3;
-        Thu,  2 Mar 2023 08:54:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677776052; x=1709312052;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DwsJhH9kOHV7GD3CBh4CQOdjsIKuVme3C7GZneWT9P4=;
-  b=SeJCAmKs7u/4uulm2XIxHahugRiqU6PbhMxhUPQ3czrDF0D+ZvWU0jCS
-   x4MGNNA1XJiJx3/cy5bIj5dfYL650VZkNI5ykZV6Vjl/fHr8+bXA5QWSb
-   dzibAUlUmJnWr1xUkHtuowJyOJetJgSTSZS/PiboEGBhYn5xgTcDG+7AP
-   UHw+aGbbeL0tOOp9QFezsOKyS1W7vfxIUnSy3WxrqvxaTQnrNtQ7BRPoT
-   8voZ2L8cYNeDuK8kEYjrc5mehgw9VRPafXq87mSsytandort4lj2ecDr+
-   uWHR2ZP0Hu+/hzNsJjUcfgTErymVRcrEBt8P8muob9Rp4eUQwQAuqJnmv
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="314438160"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="314438160"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 08:54:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="625014743"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="625014743"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 08:54:01 -0800
-Date:   Thu, 2 Mar 2023 08:57:51 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v4 3/6] iommu/sva: Stop using ioasid_set for SVA
-Message-ID: <20230302085751.1e7f02bd@jacob-builder>
-In-Reply-To: <BN9PR11MB52769D24FF395C1D42F33E2A8CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
-        <20230301235646.2692846-4-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB52769D24FF395C1D42F33E2A8CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 2 Mar 2023 11:59:55 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4B525975;
+        Thu,  2 Mar 2023 08:59:54 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id cw28so21073606edb.5;
+        Thu, 02 Mar 2023 08:59:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677776393;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pBZBNslhtwlIzlUkHWxR7XOVSQ6+M0SjUmCkItVPLxw=;
+        b=hIWwZQaphQFIlBeWy/YHad+gu9IXge/z9zUs/TxBp52fxwsQtFKFOl/VBz+dUUrhW6
+         Z42IRXSmBdUXecuduyR8BY10OPbASajVmFl364VSd6SGu1r0a1aMkX3EU13vYFmcs42l
+         Gmpn+cj+Ya7AdJ6hSVQ6oCoTVwJLzHTKadgekQEBt0zNoznYX1yPIFlinGxU+QYtICw5
+         CMdf8XCfC4fCHQmoV8Z/ef6Hpm7AHq0tg/I6Hbdz4/JsB+pmTMJhz0XD5kNdmrDW4F3i
+         zvXioByq/UOJkJ6IfYjdYuN7zwQe6liacCg8nREG/DRJB6YLGOr/WGcNkXlxTd5obv2e
+         AWzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677776393;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pBZBNslhtwlIzlUkHWxR7XOVSQ6+M0SjUmCkItVPLxw=;
+        b=uj0AWPNtbumrwMB/u+hoW6AxKu7eYVBQ4uGlm2zI3PtPJKmQ9QTZ7EcZQ+qCnyjjnT
+         dJ4OkutrzCwjLrPuY4qOkQ7CxwPbobdErTAdWMJX6+PF/6WJqZoMfJZspOCp67NzACQp
+         SpWSOtaRghbrcdk8cFcJVURyJ1OeWZmsY9odPF1Nhex+VRRuvacvHjN6qdiz+CAlHyyV
+         BvYW9+zW5qRR8VKCZ3YX6F4ioPvfaGKot4/pwcPRNEOaYN7ND87toZxV52reZscfA61b
+         X7/RmEHLA7z5SE/Qies9FEVVpoARKSIQDp7we22uCsKDvjOjGwwnpzWOotNwfjz75INW
+         4jHw==
+X-Gm-Message-State: AO0yUKVyyLL3ZQoYKaTvQsRsbFKybEmm2fnc+YBG29vL3OG1Ioyf3ZqO
+        a4z9tJW9+fqzh7Qthv5iGjypbE2Bb4I=
+X-Google-Smtp-Source: AK7set8k62H0tqVcoPpTkhWBbYRPxLzWoHl+dxM/Usmc5uMh03YrDqSV7J5wtztCGcsWKlaxUQrISQ==
+X-Received: by 2002:a05:6402:164a:b0:4ae:e4ec:cf9d with SMTP id s10-20020a056402164a00b004aee4eccf9dmr2933039edx.9.1677776392876;
+        Thu, 02 Mar 2023 08:59:52 -0800 (PST)
+Received: from zambezi.local (ip-94-112-104-28.bb.vodafone.cz. [94.112.104.28])
+        by smtp.gmail.com with ESMTPSA id up22-20020a170907cc9600b008ee84860964sm7256745ejc.35.2023.03.02.08.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 08:59:52 -0800 (PST)
+From:   Ilya Dryomov <idryomov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Ceph fixes for 6.3-rc1
+Date:   Thu,  2 Mar 2023 17:59:43 +0100
+Message-Id: <20230302165943.254479-1-idryomov@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
+Hi Linus,
 
-On Thu, 2 Mar 2023 08:58:21 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
+The following changes since commit c9c3395d5e3dcc6daee66c6908354d47bf98cb0c:
 
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Thursday, March 2, 2023 7:57 AM
-> > 
-> > 
-> > -	if (min == INVALID_IOASID || max == INVALID_IOASID ||
-> > +	if (min == IOMMU_PASID_INVALID || max ==
-> > IOMMU_PASID_INVALID ||
-> >  	    min == 0 || max < min)
-> >  		return -EINVAL;
-> >   
-> 
-> if (!pasid_valid(min) || !pasid_valid(max) || ...)
-> 
-will do
-> with that,
-> 
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> 
+  Linux 6.2 (2023-02-19 14:24:22 -0800)
 
+are available in the Git repository at:
 
-Thanks,
+  https://github.com/ceph/ceph-client.git tags/ceph-for-6.3-rc1
 
-Jacob
+for you to fetch changes up to f7c4d9b133c7a04ca619355574e96b6abf209fba:
+
+  rbd: avoid use-after-free in do_rbd_add() when rbd_dev_create() fails (2023-02-26 20:03:14 +0100)
+
+----------------------------------------------------------------
+Two small fixes from Xiubo and myself, marked for stable.
+
+----------------------------------------------------------------
+Ilya Dryomov (1):
+      rbd: avoid use-after-free in do_rbd_add() when rbd_dev_create() fails
+
+Xiubo Li (1):
+      ceph: update the time stamps and try to drop the suid/sgid
+
+ drivers/block/rbd.c | 20 +++++++++-----------
+ fs/ceph/file.c      |  8 ++++++++
+ 2 files changed, 17 insertions(+), 11 deletions(-)
