@@ -2,108 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAED6A8586
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E100F6A858E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjCBPrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S229692AbjCBPsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCBPrc (ORCPT
+        with ESMTP id S229486AbjCBPsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:47:32 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25E243919
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:47:29 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id da10so69419423edb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677772048;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dqKWlu4oafIDXkVsoZON4g5bm9TG0oS+avsiFLrIa3Q=;
-        b=dI3OZkhzR51j0QCnviAzJ9aE0wGV6BZvCMMRbDsHnW9+P7rZpVWshptUoWtBAezIMv
-         M1bD9kbBeGnvJsVAZuRII/g7VSMEiJwtYPMSC+QXEpoahldjS4eMhBnRWr97eMyzSdGI
-         bpXcnCXa7LT/+VvCcMXkMC6EGOVF7Y3ZDEsSD4JZ+QUFFt5GmGBWABMUZ4ps5fw+y0iS
-         vb5Z/HmtH8p1SvyltnudBktW4pyzQMQHuqiSyDGZ0dFODOAYssdzWf0SHeegf5ZAFKn9
-         p8iIXiB/CmDLLmL2Lt9yN/3oAS7E7DXN+Lpf4eBEhEo8XMg3V0XakMxhkew1R9awU+X7
-         tC0g==
+        Thu, 2 Mar 2023 10:48:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C223D6EAE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:48:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677772088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=07sLndxtEbNcERZvee6i0lRr3/Y/p7RWfWIjrJTakUw=;
+        b=RrtFQsum9nkTOzbQOV/sDgYVJfstKS06HYQak4ZLrz0WBWrSjQZiDS73CGlfGqEljz/h+I
+        TibqEKwv0i15MiZ/IfobyGpE97pt3pmLdW/Wes4FIaDhAn8ciqPjOtTGwWrBZ21ZF1gbho
+        AnKMgAOstK2QmsXbLq1Ii441q++p+dU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-44-okuLD5UbPwOSWhhuek_S9A-1; Thu, 02 Mar 2023 10:48:06 -0500
+X-MC-Unique: okuLD5UbPwOSWhhuek_S9A-1
+Received: by mail-wm1-f70.google.com with SMTP id m28-20020a05600c3b1c00b003e7d4662b83so1467851wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:48:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677772048;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dqKWlu4oafIDXkVsoZON4g5bm9TG0oS+avsiFLrIa3Q=;
-        b=QHt69IzaVUrg4VBVcCJEtS0qphFOIuzAT+xxGY1idEqwaBLIUenYTUwVztULPmoOL8
-         zPPNP1+j0UI48YIioCKb/bFi0ViAT/eWJkY6sS8TITkKIuAc7Film3qBoKo8gutf7c64
-         zDDq19r6Ik99aBRuT5ngU9tgYwBPl9dEZjjyPNeeWd48SzU2xDsFkJZHt6uhmjBbs58J
-         b0ZwhaFOQQO01o/fCBtR69eRE/JmlSKxWoVfJX1n7plDkc56SAtTDorf3gRAacYtE2Hx
-         GeNFINzsY/XWbQ3RCTmIhhIToiKIpEWdCw2fy5O5JGZooxS85620PsyJoNxXawbKrdH2
-         xZ0Q==
-X-Gm-Message-State: AO0yUKU9rUVgW7u6o05OLp+C5UgHBKDkMYJH5f/FC6SxKY433N2ow6zv
-        hsGeiKbNpYn+8/j8by7bV+9euw==
-X-Google-Smtp-Source: AK7set9/EL5xiW42z57i/oU9/T0u9AToZFmXQSD3kl1JB7H8E5wlu3l7bUoHaceJZ+Cd3P92WWxE5g==
-X-Received: by 2002:aa7:cc0e:0:b0:4af:6c25:ed6a with SMTP id q14-20020aa7cc0e000000b004af6c25ed6amr9969049edt.3.1677772048193;
-        Thu, 02 Mar 2023 07:47:28 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u2-20020a50eac2000000b0049e1f167956sm9987edp.9.2023.03.02.07.47.26
+        d=1e100.net; s=20210112; t=1677772084;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=07sLndxtEbNcERZvee6i0lRr3/Y/p7RWfWIjrJTakUw=;
+        b=PL7ZK94Gjfkvcumw4FDL6La8RQbtqEzQbyBEviIZTL1b+GbOlbKW9/vzthv9+wZcKN
+         ERlvWE8bBYaKByLR+96KzIJRaIwAxQGdeAMOaIH9oQPsWsXn+cm3PZvvEISnLELLshXy
+         kuLO8jWWtW3pTbtpoVD4IPT8Unt1+PMoOC7l/ZEFkeUVTucqB8Nq/27WDMi+ZdEFceGa
+         l42wTKUgNh/TA0ZHYyaPjcUxWtOyh510Ty4tKOAznjKHpvJ44aL+/VxqOR+AVcswdqdY
+         MRjEb2R9edZzETWa1bobj4o28aM7Fj+vRIL9WcHg3AUVFc8Vsmb1CSIKUxZp/iV2JpjY
+         US5A==
+X-Gm-Message-State: AO0yUKUMeIvdVOjv39I2gVXLmlN0frDeCdUXEIXcnJxGd/gAM5pf0IxG
+        UDcIsb3l/Mcc35N9lN8wCpUv+VxCJlsR6RBDKJ32sX4luHc5221sbTCW3eavzIcJPvGPVwRtzNd
+        3WfVhr5f/yaQJ7Itvdx2QvpHr
+X-Received: by 2002:a05:6000:1a42:b0:2c3:be89:7c2a with SMTP id t2-20020a0560001a4200b002c3be897c2amr1809002wry.13.1677772084120;
+        Thu, 02 Mar 2023 07:48:04 -0800 (PST)
+X-Google-Smtp-Source: AK7set/EzktI0OlHucSuQTWKTKC3fqx8GzoJhXbuJEu5Rqstra/4hZCkq7D6l1IWXwedBvmq/luXbw==
+X-Received: by 2002:a05:6000:1a42:b0:2c3:be89:7c2a with SMTP id t2-20020a0560001a4200b002c3be897c2amr1808989wry.13.1677772083843;
+        Thu, 02 Mar 2023 07:48:03 -0800 (PST)
+Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
+        by smtp.gmail.com with ESMTPSA id s18-20020a7bc392000000b003eb20d4d4a8sm3202128wmj.44.2023.03.02.07.48.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 07:47:27 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: sm8550: fix LPASS pinctrl slew base address
-Date:   Thu,  2 Mar 2023 16:47:24 +0100
-Message-Id: <20230302154724.856062-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 02 Mar 2023 07:48:03 -0800 (PST)
+Date:   Thu, 2 Mar 2023 16:48:00 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 6/8] vdpa_sim: use kthread worker
+Message-ID: <20230302154800.z3i4fpjlvtb74efu@sgarzare-redhat>
+References: <20230302113421.174582-1-sgarzare@redhat.com>
+ <20230302113421.174582-7-sgarzare@redhat.com>
+ <ZADA/GgpbDoi+SzU@corigine.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ZADA/GgpbDoi+SzU@corigine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The second LPASS pin controller IO address is supposed to be the MCC
-range which contains the slew rate registers.  The Linux driver then
-accesses slew rate register with hard-coded offset (0xa000).  However
-the DTS contained the address of slew rate register as the second IO
-address, thus any reads were effectively pass the memory space and lead
-to "Internal error: synchronous external aborts" when applying pin
-configuration.
+On Thu, Mar 02, 2023 at 04:30:04PM +0100, Simon Horman wrote:
+>On Thu, Mar 02, 2023 at 12:34:19PM +0100, Stefano Garzarella wrote:
+>> Let's use our own kthread to run device jobs.
+>> This allows us more flexibility, especially we can attach the kthread
+>> to the user address space when vDPA uses user's VA.
+>>
+>> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> ---
+>>  drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 ++-
+>>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 17 ++++++++++++-----
+>>  2 files changed, 14 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>> index acee20faaf6a..ce83f9130a5d 100644
+>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>> @@ -57,7 +57,8 @@ struct vdpasim_dev_attr {
+>>  struct vdpasim {
+>>  	struct vdpa_device vdpa;
+>>  	struct vdpasim_virtqueue *vqs;
+>> -	struct work_struct work;
+>> +	struct kthread_worker *worker;
+>> +	struct kthread_work work;
+>>  	struct vdpasim_dev_attr dev_attr;
+>>  	/* spinlock to synchronize virtqueue state */
+>>  	spinlock_t lock;
+>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>> index a6ee830efc38..6feb29726c2a 100644
+>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>> @@ -11,8 +11,8 @@
+>>  #include <linux/module.h>
+>>  #include <linux/device.h>
+>>  #include <linux/kernel.h>
+>> +#include <linux/kthread.h>
+>>  #include <linux/slab.h>
+>> -#include <linux/sched.h>
+>>  #include <linux/dma-map-ops.h>
+>>  #include <linux/vringh.h>
+>>  #include <linux/vdpa.h>
+>> @@ -116,7 +116,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
+>>  static const struct vdpa_config_ops vdpasim_config_ops;
+>>  static const struct vdpa_config_ops vdpasim_batch_config_ops;
+>>
+>> -static void vdpasim_work_fn(struct work_struct *work)
+>> +static void vdpasim_work_fn(struct kthread_work *work)
+>>  {
+>>  	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+>>
+>> @@ -159,7 +159,13 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+>>
+>>  	vdpasim = vdpa_to_sim(vdpa);
+>>  	vdpasim->dev_attr = *dev_attr;
+>> -	INIT_WORK(&vdpasim->work, vdpasim_work_fn);
+>> +
+>> +	kthread_init_work(&vdpasim->work, vdpasim_work_fn);
+>> +	vdpasim->worker = kthread_create_worker(0, "vDPA sim worker: %s",
+>> +						dev_attr->name);
+>> +	if (IS_ERR(vdpasim->worker))
+>> +		goto err_iommu;
+>
+>Branching to err_iommu will result in a call to put_device(dev)...
 
-Fixes: 6de7f9c34358 ("arm64: dts: qcom: sm8550: add GPR and LPASS pin controller")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Good catch!
 
----
+>
+>> +
+>>  	spin_lock_init(&vdpasim->lock);
+>>  	spin_lock_init(&vdpasim->iommu_lock);
+>
+>... but dev is not initialised until the line following this hunk,
+>which is:
+>
+>	dev = &vdpasim->vdpa.dev;
+>
+>In order to avoid leaking dev I _think_ the correct approach
+>is to move the initialisation of dev above the branch to
+>err_iommu, perhaps above the call to kthread_init_work()
+>is a good place.
 
-Fix for current cycle - v6.3-rc1.
----
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yep, I agree. I'll fix in v3.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index 1dea055a6815..6296eb7adecd 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -2001,7 +2001,7 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
- 		lpass_tlmm: pinctrl@6e80000 {
- 			compatible = "qcom,sm8550-lpass-lpi-pinctrl";
- 			reg = <0 0x06e80000 0 0x20000>,
--			      <0 0x0725a000 0 0x10000>;
-+			      <0 0x07250000 0 0x10000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
- 			gpio-ranges = <&lpass_tlmm 0 0 23>;
--- 
-2.34.1
+Thanks,
+Stefano
+
+>
+>This does move the assignment outside the locks above.
+>But I _think_ that is ok.
+>
+>> @@ -212,7 +218,7 @@ EXPORT_SYMBOL_GPL(vdpasim_create);
+>>
+>>  void vdpasim_schedule_work(struct vdpasim *vdpasim)
+>>  {
+>> -	schedule_work(&vdpasim->work);
+>> +	kthread_queue_work(vdpasim->worker, &vdpasim->work);
+>>  }
+>>  EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
+>>
+>> @@ -612,7 +618,8 @@ static void vdpasim_free(struct vdpa_device *vdpa)
+>>  	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>>  	int i;
+>>
+>> -	cancel_work_sync(&vdpasim->work);
+>> +	kthread_cancel_work_sync(&vdpasim->work);
+>> +	kthread_destroy_worker(vdpasim->worker);
+>>
+>>  	for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+>>  		vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
+>> --
+>> 2.39.2
+>>
+>
 
