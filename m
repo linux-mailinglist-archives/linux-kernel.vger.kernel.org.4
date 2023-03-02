@@ -2,331 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C316A84E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6106A84EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjCBPGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S230151AbjCBPGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjCBPFo (ORCPT
+        with ESMTP id S230324AbjCBPGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:05:44 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3877E457C1
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:05:42 -0800 (PST)
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 2 Mar 2023 10:06:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5506C55072
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:06:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 296D53F11D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:05:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677769540;
-        bh=ennINZICblkLNJRKAL6C7ysXY/vpm4KR2muFA6qF6vI=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=EZyd6UebuPiuudYZItBUpKLm87N5nanSwg54SBSo+D6K/6xS1F9xMpfiBKPwVu08Q
-         9idxxiJBRDzs7CZzLgbPT3R2xSyvgDchBGb7xGLqt1joXsrGv/bQUMnl1aQBahhOFt
-         FLRD2IWc/GbpxwjsFgLfJ5Lc1WCStUSfc9YiHG01z57zjM+gyf47zIu3NYRYw7kDlX
-         el29ib94TxhnwBUMZnDDXo+X/VgZKAVNL0fhcw8uCvI6MoQCO9xRg5KJP88kgYHi7i
-         KJ4VuQz0so4n4Lq4z56VnPxjiD1/+hnY0dUBSlMTFxniJnHNu2Q2g0t+7s6LTMCfqS
-         PwWyWjER4jVNA==
-Received: by mail-qv1-f69.google.com with SMTP id l13-20020ad44d0d000000b004c74bbb0affso8914515qvl.21
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:05:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677769539;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ennINZICblkLNJRKAL6C7ysXY/vpm4KR2muFA6qF6vI=;
-        b=1H7QDCpbFgC3Lru1nSc5WQN0f3xOwGbR1crq4m9GKnLVuvS1q8JRzTuUlqHEHy/U8Y
-         JVVlbS8SmLPW/98RsS8VMHkjpLM73Y5inrEJ6J4YqHbsm5SS+xw0cZWpVigushsanost
-         vfCUNuJ3N/yLPcEZpy3YrE257KvezLwBqYnxGejpDzKVNQrxjaV9/8jE9QJxKUGWR7Aw
-         XxtRMY/oG70PIXN2qi3ZT2F+tBxnwLiTfB467gHUDhL4k+iwbObo4ctEiLHTJPYcoruL
-         BIjd/9ZNnBOxmkLMHCmzqVtFHTfxniDptYE/YrmhFMkSU/rKZ0gFNJyZvse9Ot+I+wpH
-         h6bQ==
-X-Gm-Message-State: AO0yUKVyGN7HANFIwYEgCFrbNTksE2wQHDzr7cp4sHr2UfxggGTmyGjb
-        wyCNOM3rtGheVmaC4kFvnyrJm7xzngyunMMKMrU1lsWJdGlOR1KH0i05IkzfF0+4JsjM5bShLpI
-        SOHa92wU2fLbRC1KW79QHeu6lCNgL14LQyjVWVn/hMkORuFUqtHLhPxyi/A==
-X-Received: by 2002:a37:4385:0:b0:721:5339:2c89 with SMTP id q127-20020a374385000000b0072153392c89mr2581674qka.7.1677769539182;
-        Thu, 02 Mar 2023 07:05:39 -0800 (PST)
-X-Google-Smtp-Source: AK7set/wLIZz+wN48cyx3bobDbJlcRdqTIx95pf2ooXaqJzdzUrI6PfTcx9xyTHMIuV8BHgY8aHD9TzSIKUGk43rNDo=
-X-Received: by 2002:a37:4385:0:b0:721:5339:2c89 with SMTP id
- q127-20020a374385000000b0072153392c89mr2581660qka.7.1677769538838; Thu, 02
- Mar 2023 07:05:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20230221083323.302471-1-xingyu.wu@starfivetech.com> <20230221083323.302471-2-xingyu.wu@starfivetech.com>
-In-Reply-To: <20230221083323.302471-2-xingyu.wu@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Thu, 2 Mar 2023 16:05:22 +0100
-Message-ID: <CAJM55Z_O+Gh0RGaAuLPxs4aSi4=5Aa3UksN_SnU-4pOn3X5fDw@mail.gmail.com>
-Subject: Re: [PATCH v2 01/11] dt-bindings: clock: Add StarFive JH7110
- System-Top-Group clock and reset generator
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D839E615F6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:06:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF997C433A1;
+        Thu,  2 Mar 2023 15:06:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677769594;
+        bh=FdJDrtgvO+zazRZyI/ANj+54LorzkRO9vTG33XftdBc=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=Xkgd+P4X22UqIdrQRfjP6APYKx49gMV6gtd9XZM13QSdO5jBK3Na/LetFYAO9YcKp
+         t9q9Z6RAC7Hbv6a7+KYBm5F38FeVB8XLEliWhAWXvRW3s2hdhvbuwNna4f5X5DMsuk
+         3USIvYsF2LVjASIRUt/QjrPWyWJemlnPPFHNVEbB0fkw2g7m/UlrzbYh3+QRG34g2o
+         U9/tzia6M4IuA+/1Ws2PtXF7RiLSoruSBCt4aKKEfDGu/k2mSjGa8V5HjMNq6e1fIc
+         QE4L+J2deLAPwcMgBpGPDnOmYL9CBWLv0eoWXA4ij8ryjybqTT+TfXaqinIUkLg+5t
+         X80DoqGhNnGmQ==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id CB72B27C0054;
+        Thu,  2 Mar 2023 10:06:32 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Thu, 02 Mar 2023 10:06:32 -0500
+X-ME-Sender: <xms:eLsAZE-qQDzCbrpsyM4U0d3X7KDbBAVP4tK0ph4wjJuA7HCdpTFwZg>
+    <xme:eLsAZMuZVYtg1iRWCcJgzBKzUfIaN1Q-D19Uhr1oWRYXNkjJxwLbFBXlJHP2e4vjI
+    sB1LskPvVQl_1xalFY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeljedgjeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepveffgfevhfeiteduueetgeevvdevudevteefveffudeiveefuddt
+    leeitdeludfgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhguhidomhgvshhmthhprghu
+    thhhphgvrhhsohhnrghlihhthidqudduiedukeehieefvddqvdeifeduieeitdekqdhluh
+    htoheppehkvghrnhgvlhdrohhrgheslhhinhhugidrlhhuthhordhush
+X-ME-Proxy: <xmx:eLsAZKA1IwRoJ0fiCagLCdLL2GpG_N-sIMppDO_d5PHjXEiGTpT9mA>
+    <xmx:eLsAZEcBj9l8chUf6ddnub-0IpYEM9KjEvuHKg0CoulnZx5LX_NdjA>
+    <xmx:eLsAZJMZwRgqg5Cjj3unkIUeXe3wwfw5ZcEQ0wnn_NbCTVCl0YZu6g>
+    <xmx:eLsAZCam0NvcafK4tTtrLWeHYZjsxYfrX2j2M1l8nSExG2rct2EtYg>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 54A4F31A0064; Thu,  2 Mar 2023 10:06:32 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <840dcfd4-0d6c-400a-9cf7-8fe56d55ac7f@app.fastmail.com>
+In-Reply-To: <ZAB/b+FjHjuRqe/S@zn.tnic>
+References: <20210601075354.5149-2-rppt@kernel.org>
+ <162274330352.29796.17521974349959809425.tip-bot2@tip-bot2>
+ <7d344756-aec4-4df2-9427-da742ef9ce6b@app.fastmail.com>
+ <ZAB/b+FjHjuRqe/S@zn.tnic>
+Date:   Thu, 02 Mar 2023 07:06:11 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Borislav Petkov" <bp@alien8.de>
+Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Mike Rapoport" <rppt@linux.ibm.com>,
+        "Hugh Dickins" <hughd@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Subject: Re: [tip: x86/urgent] x86/setup: Always reserve the first 1M of RAM
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 at 09:37, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
-> Add bindings for the System-Top-Group clock and reset generator (STGCRG)
-> on the JH7110 RISC-V SoC by StarFive Ltd.
+
+
+On Thu, Mar 2, 2023, at 2:50 AM, Borislav Petkov wrote:
+> On Wed, Mar 01, 2023 at 07:51:43PM -0800, Andy Lutomirski wrote:
+>> This is quite broken.  The comments in the patch seem to understand
+>> that Linux tries twice to allocate the real mode trampoline, but the
+>> code has some issues.
+>> 
+>> First, it actively breaks the logic here:
+>> 
+>> +               /*
+>> +                * Don't free memory under 1M for two reasons:
+>> +                * - BIOS might clobber it
+>> +                * - Crash kernel needs it to be reserved
+>> +                */
+>> +               if (start + size < SZ_1M)
+>> +                       continue;
+>> +               if (start < SZ_1M) {
+>> +                       size -= (SZ_1M - start);
+>> +                       start = SZ_1M;
+>> +               }
+>> +
 >
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
->  .../clock/starfive,jh7110-stgcrg.yaml         | 82 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  .../dt-bindings/clock/starfive,jh7110-crg.h   | 34 ++++++++
->  .../dt-bindings/reset/starfive,jh7110-crg.h   | 28 +++++++
->  4 files changed, 145 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+> Are you refering, per-chance, here to your comment in that same function
+> a bit higher?
 >
-> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
-> new file mode 100644
-> index 000000000000..b64ccd84200a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-stgcrg.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 System-Top-Group Clock and Reset Generator
-> +
-> +maintainers:
-> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: starfive,jh7110-stgcrg
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Main Oscillator (24 MHz)
-> +      - description: HIFI4 core
-> +      - description: STG AXI/AHB
-> +      - description: USB (125 MHz)
-> +      - description: CPU Bus
-> +      - description: HIFI4 Axi
-> +      - description: NOC STG Bus
-> +      - description: APB Bus
-> +
-> +  clock-names:
-> +    items:
-> +      - const: osc
-> +      - const: hifi4_core
-> +      - const: stg_axiahb
-> +      - const: usb_125m
-> +      - const: cpu_bus
-> +      - const: hifi4_axi
-> +      - const: nocstg_bus
-> +      - const: apb_bus
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +    description:
-> +      See <dt-bindings/clock/starfive,jh7110-crg.h> for valid indices.
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +    description:
-> +      See <dt-bindings/reset/starfive,jh7110-crg.h> for valid indices.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +  - '#reset-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/starfive,jh7110-crg.h>
-> +
-> +    stgcrg: clock-controller@10230000 {
-> +        compatible = "starfive,jh7110-stgcrg";
-> +        reg = <0x10230000 0x10000>;
-> +        clocks = <&osc>,
-> +                 <&syscrg JH7110_SYSCLK_HIFI4_CORE>,
-> +                 <&syscrg JH7110_SYSCLK_STG_AXIAHB>,
-> +                 <&syscrg JH7110_SYSCLK_USB_125M>,
-> +                 <&syscrg JH7110_SYSCLK_CPU_BUS>,
-> +                 <&syscrg JH7110_SYSCLK_HIFI4_AXI>,
-> +                 <&syscrg JH7110_SYSCLK_NOCSTG_BUS>,
-> +                 <&syscrg JH7110_SYSCLK_APB_BUS>;
-> +        clock-names = "osc", "hifi4_core",
-> +                      "stg_axiahb", "usb_125m",
-> +                      "cpu_bus", "hifi4_axi",
-> +                      "nocstg_bus", "apb_bus";
-> +        #clock-cells = <1>;
-> +        #reset-cells = <1>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 93eb504c3b21..2e70c9f21989 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19914,6 +19914,7 @@ F:      arch/riscv/boot/dts/starfive/
->  STARFIVE JH71X0 CLOCK DRIVERS
->  M:     Emil Renner Berthing <kernel@esmil.dk>
->  M:     Hal Feng <hal.feng@starfivetech.com>
-> +M:     Xingyu Wu <xingyu.wu@starfivetech.com>
->  S:     Maintained
->  F:     Documentation/devicetree/bindings/clock/starfive,jh71*.yaml
->  F:     drivers/clk/starfive/clk-starfive-jh71*
-> diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
-> index 5e4f21ca0642..5ac8a4d90a7a 100644
-> --- a/include/dt-bindings/clock/starfive,jh7110-crg.h
-> +++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
-> @@ -1,6 +1,7 @@
->  /* SPDX-License-Identifier: GPL-2.0 OR MIT */
->  /*
->   * Copyright 2022 Emil Renner Berthing <kernel@esmil.dk>
-> + * Copyright 2022 StarFive Technology Co., Ltd.
->   */
+> Introduced by this thing here:
 >
->  #ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
-> @@ -222,4 +223,37 @@
+> 5bc653b73182 ("x86/efi: Allocate a trampoline if needed in 
+> efi_free_boot_services()")
 >
->  #define JH7110_AONCLK_END                      14
+> ?
 
-Hi Xingyu,
+Yes.
 
-The clock and reset names below have been shortened from the very long
-names in the documentation. I see you've come to the same shortened
-names as I used in the first STGCRG driver I pushed, which is great,
-but I find it highly unlikely to have happened without looking at /
-copying my code like you did for the SYSCRG and AONCRG drivers Hal has
-posted. Unfortunately the commit message above doesn't reflect that,
-so please add a
-Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-
-I do have some updated suggestions for short names below though:
-
-> +/* STGCRG clocks */
-> +#define JH7110_STGCLK_HIFI4_CLK_CORE           0
-> +#define JH7110_STGCLK_USB0_APB                 1
-> +#define JH7110_STGCLK_USB0_UTMI_APB            2 unli
-> +#define JH7110_STGCLK_USB0_AXI                 3
-> +#define JH7110_STGCLK_USB0_LPM                 4
-> +#define JH7110_STGCLK_USB0_STB                 5
-> +#define JH7110_STGCLK_USB0_APP_125             6
-> +#define JH7110_STGCLK_USB0_REFCLK              7
-> +#define JH7110_STGCLK_PCIE0_AXI_MST0           8
-> +#define JH7110_STGCLK_PCIE0_APB                        9
-> +#define JH7110_STGCLK_PCIE0_TL                 10
-> +#define JH7110_STGCLK_PCIE1_AXI_MST0           11
-> +#define JH7110_STGCLK_PCIE1_APB                        12
-> +#define JH7110_STGCLK_PCIE1_TL                 13
-> +#define JH7110_STGCLK_PCIE01_SLV_DEC_MAINCLK   14
-
-Does PCIE01 here mean that the clock is used by both pcie0 and pcie1?
-If so then maybe just call it JH7110_PCIE_SLV_MAIN
-
-> +#define JH7110_STGCLK_SEC_HCLK                 15
-
-For other clocks I think "hclk" means ahb clock, so maybe JH7110_STGCLK_SEC_AHB
-
-> +#define JH7110_STGCLK_SEC_MISCAHB              16
-
-I find something like JH7110_STGCLK_SEC_MISC_AHB a little easier to read.
-
-> +#define JH7110_STGCLK_GRP0_MAIN                        17
-> +#define JH7110_STGCLK_GRP0_BUS                 18
-> +#define JH7110_STGCLK_GRP0_STG                 19
-> +#define JH7110_STGCLK_GRP1_MAIN                        20
-> +#define JH7110_STGCLK_GRP1_BUS                 21
-> +#define JH7110_STGCLK_GRP1_STG                 22
-> +#define JH7110_STGCLK_GRP1_HIFI                        23
-> +#define JH7110_STGCLK_E2_RTC                   24
-> +#define JH7110_STGCLK_E2_CORE                  25
-> +#define JH7110_STGCLK_E2_DBG                   26
-> +#define JH7110_STGCLK_DMA1P_AXI                        27
-> +#define JH7110_STGCLK_DMA1P_AHB                        28
-> +
-> +#define JH7110_STGCLK_END                      29
-> +
->  #endif /* __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__ */
-> diff --git a/include/dt-bindings/reset/starfive,jh7110-crg.h b/include/dt-bindings/reset/starfive,jh7110-crg.h
-> index d78e38690ceb..4a865ded78b8 100644
-> --- a/include/dt-bindings/reset/starfive,jh7110-crg.h
-> +++ b/include/dt-bindings/reset/starfive,jh7110-crg.h
-> @@ -1,6 +1,7 @@
->  /* SPDX-License-Identifier: GPL-2.0 OR MIT */
->  /*
->   * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->   */
 >
->  #ifndef __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__
-> @@ -151,4 +152,31 @@
+> Also, it looks like Mike did pay attention to your commit:
 >
->  #define JH7110_AONRST_END                      8
->
-> +/* STGCRG resets */
-> +#define JH7110_STGRST_SYSCON                   0
-> +#define JH7110_STGRST_HIFI4_CORE               1
-> +#define JH7110_STGRST_HIFI4_AXI                        2
-> +#define JH7110_STGRST_SEC_TOP_HRESETN          3
+> https://lore.kernel.org/all/YLZsEaimyAe0x6b3@kernel.org/
 
-JH7110_STGRST_SEC_AHB to match the clock above.
+He definitely did.  But I'm still pretty sure the patch in question broke it :-/
 
-> +#define JH7110_STGRST_E24_CORE                 4
-> +#define JH7110_STGRST_DMA1P_AXI                        5
-> +#define JH7110_STGRST_DMA1P_AHB                        6
-> +#define JH7110_STGRST_USB0_AXI                 7
-> +#define JH7110_STGRST_USB0_APB                 8
-> +#define JH7110_STGRST_USB0_UTMI_APB            9
-> +#define JH7110_STGRST_USB0_PWRUP               10
-> +#define JH7110_STGRST_PCIE0_AXI_MST0           11
-> +#define JH7110_STGRST_PCIE0_AXI_SLV0           12
-> +#define JH7110_STGRST_PCIE0_AXI_SLV            13
-> +#define JH7110_STGRST_PCIE0_BRG                        14
-> +#define JH7110_STGRST_PCIE0_CORE               15
-> +#define JH7110_STGRST_PCIE0_APB                        16
-> +#define JH7110_STGRST_PCIE1_AXI_MST0           17
-> +#define JH7110_STGRST_PCIE1_AXI_SLV0           18
-> +#define JH7110_STGRST_PCIE1_AXI_SLV            19
-> +#define JH7110_STGRST_PCIE1_BRG                        20
-> +#define JH7110_STGRST_PCIE1_CORE               21
-> +#define JH7110_STGRST_PCIE1_APB                        22
-> +
-> +#define JH7110_STGRST_END                      23
-> +
->  #endif /* __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__ */
-> --
-> 2.25.1
 >
+> And then there's the whole deal with kdump kernel needing lowmem. The
+> function which became obsolete and got removed by:
 >
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 23721c8e92f7 ("x86/crash: Remove crash_reserve_low_1M()")
+>
+> So, considering how yours is the only report that breaks booting and
+> this reservation of <=1M has been out there for ~2 years without any
+> complaints, I'm thinking what we should do now is fix that logic.
+>
+> Btw, this whole effort started with
+>
+>   a799c2bd29d1 ("x86/setup: Consolidate early memory reservations")
+>
+> Also see this:
+>
+> ec35d1d93bf8 ("x86/setup: Document that Windows reserves the first MiB")
+>
+> and with shit like that, we're "piggybacking" on Windoze since there
+> certification happens at least.
+>
+> Which begs the question: how does your laptop even boot on windoze if
+> windoze reserves that 1M too?!
+
+I haven't booted Windoze on this thing in years.  But...
+
+There is no possible way that Windoze genuinely reserves the first 1M. It does SMP, and x86 needs <1M memory for SMP, so Windoze uses <1M memory.  QED :)
+
+>
+>> I real the commit message and the linked bug, and I'm having trouble
+>> finding evidence of anything actually fixed by this patch.  Can we
+>> just revert it?  If not, it would be nice to get a fixup patch that
+>> genuinely cleans this up -- the whole structure of the code (first,
+>> try to allocate trampoline, then free boot services, then try again)
+>> isn't really conducive to a model where we *don't* free boot services
+>> < 1M.
+>
+> Yes, I think this makes most sense. And that whole area is a minefield
+> so the less we upset the current universe, the better.
+
+I'll send a revert patch.
+
+Thinking about this a bit more, if we actually want to "reserve" <1M, we should implement it completely differently by treating <1M as its very own special thing and teaching the memblock allocator to refuse to allocate <1M unless specifically requested.  There's only a very small number of allocations that need it (crashkernel for some reason?), and there are at least two spurious users of memblock_phys_alloc_range that curently may use <1M but have no business doing so (ramdisk code and the NUMA distance table).  But let's only do that if there's an actual problem to solve.
+
+>
+>> Discovered by my delightful laptop, which does not boot with this patch applied.
+>
+> How come your laptop hasn't booted new Linux since then?!? Tztztztz
+
+Honestly, no clue.  Looking at the logs, I'm pretty sure I *did* boot an affected (6.0) kernel.  The actual problematic memory map on this laptop seems to show up a bit inconsistently as some horrible combination of firmware settings (especially SGX) and who-knows-what else.  My best guess is that a GRUB update I installed yesterday caused some tiny memory map change that triggered it.
+
+I did install a new kernel yesterday too, but the *previous* kernel stopped booting too.
+
+>
+> Thx.
+>
+> -- 
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
