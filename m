@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6516A8484
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B216A849B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjCBOsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S229736AbjCBOtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjCBOrw (ORCPT
+        with ESMTP id S230139AbjCBOr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:47:52 -0500
+        Thu, 2 Mar 2023 09:47:58 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8F74615B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:47:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B104C423B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:47:54 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDd-0003vc-BQ; Thu, 02 Mar 2023 15:47:41 +0100
+        id 1pXkDe-0003wI-Fi; Thu, 02 Mar 2023 15:47:42 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDc-001Lrx-MA; Thu, 02 Mar 2023 15:47:40 +0100
+        id 1pXkDc-001Ls1-QW; Thu, 02 Mar 2023 15:47:40 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDb-001ZqJ-Vx; Thu, 02 Mar 2023 15:47:40 +0100
+        id 1pXkDc-001ZqN-5d; Thu, 02 Mar 2023 15:47:40 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>
 Cc:     kernel@pengutronix.de,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 16/29] platform/x86: intel: chtdc_ti_pwrbtn: Convert to platform remove callback returning void
-Date:   Thu,  2 Mar 2023 15:47:19 +0100
-Message-Id: <20230302144732.1903781-17-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 17/29] platform/x86: intel: chtwc_int33fe: Convert to platform remove callback returning void
+Date:   Thu,  2 Mar 2023 15:47:20 +0100
+Message-Id: <20230302144732.1903781-18-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230302144732.1903781-1-u.kleine-koenig@pengutronix.de>
 References: <20230302144732.1903781-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1743; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=0FfJsPYwKB4jfuUCcPtgucO0ayHu8PD4oizQzml1AH0=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkALbHYN1EOHZvD7l11dIMQJzyoun4YkwBQNCyA 2bvZ8S9P/OJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAC2xwAKCRDB/BR4rcrs CZF+B/9fI4K2aRPUXCIfLqsznjaTirvwYRUDQhGrKP1fIQPXc+cJ5y6M5+XQVyct0f8sXIIXyH8 Hp4cYQOK/nN2PjVWKDxAn94MI4NKgK2Z19dhQF4hEKFIWZO+yrr92fwNjJMVM+YABrjAWqqDkVM X4zLxJXZ+ZTFXXB+9V3jdRlzLvyMi4P3Htyy9XjhCSuZZ6ZfvkQ/4ww9374sMosD759Dar1K97u NyOO3vbhT0y6vJFVPsjpxr69h5oCscAKq4Yr4RCJWVcFKN3OZh3slLgspdeWsIHwClZ+iIx4G9Y D6wwQWrzAFy+J7+sDD2TOicVX1EVzKWL0TG1fTKXqlR/ECAQ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1892; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=QVO6dKKemFdskHjiF8vZD9pCO2k/PVTJ/KaR9VN2t/A=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkALbM3iGaNjk9rUPjk1X1CVhZ/lW1RT7BMjzm4 WS+CUGLvRiJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAC2zAAKCRDB/BR4rcrs CdyIB/98Uza7jBnNrGDjo63pDRiw1Bc222LHFRiCTGDDT0Wh/OntnnUftyaWqIQfFJsOxTc25tU K22JLqgJChyTGgjUCj4UOUxsl8OMfe8unXibaATEUHv/d2Y0o4CWxpTiVP2Xu3KfTyNUITkuGHq 8nl7AB/5lD45Fu2cZ4CsFEauvxsaZJKd4szFnmuYHmS9WinC5liaqyNq9WrEwllFqewKaq32fiO QFB7O0AmyTIAhITjl/i1caMfZwEJIwTfn+d5x4xzLQvcTLn3WOFXzAE+1aIElQGGDtZP4lkm1AO qsuksMER3UeqWLX1v1yRPImOMS0d6g0doEOuCO8iJ9CA4SQs
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -71,35 +75,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/platform/x86/intel/chtdc_ti_pwrbtn.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/platform/x86/intel/chtwc_int33fe.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/chtdc_ti_pwrbtn.c b/drivers/platform/x86/intel/chtdc_ti_pwrbtn.c
-index 9606a994af22..615f8d1a0c68 100644
---- a/drivers/platform/x86/intel/chtdc_ti_pwrbtn.c
-+++ b/drivers/platform/x86/intel/chtdc_ti_pwrbtn.c
-@@ -67,11 +67,10 @@ static int chtdc_ti_pwrbtn_probe(struct platform_device *pdev)
- 	return 0;
+diff --git a/drivers/platform/x86/intel/chtwc_int33fe.c b/drivers/platform/x86/intel/chtwc_int33fe.c
+index 2c9a7d52be07..848baecc1bb0 100644
+--- a/drivers/platform/x86/intel/chtwc_int33fe.c
++++ b/drivers/platform/x86/intel/chtwc_int33fe.c
+@@ -405,7 +405,7 @@ static int cht_int33fe_typec_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
--static int chtdc_ti_pwrbtn_remove(struct platform_device *pdev)
-+static void chtdc_ti_pwrbtn_remove(struct platform_device *pdev)
+-static int cht_int33fe_typec_remove(struct platform_device *pdev)
++static void cht_int33fe_typec_remove(struct platform_device *pdev)
  {
- 	dev_pm_clear_wake_irq(&pdev->dev);
- 	device_init_wakeup(&pdev->dev, false);
+ 	struct cht_int33fe_data *data = platform_get_drvdata(pdev);
+ 
+@@ -414,8 +414,6 @@ static int cht_int33fe_typec_remove(struct platform_device *pdev)
+ 	i2c_unregister_device(data->battery_fg);
+ 
+ 	cht_int33fe_remove_nodes(data);
+-
 -	return 0;
  }
  
- static const struct platform_device_id chtdc_ti_pwrbtn_id_table[] = {
-@@ -85,7 +84,7 @@ static struct platform_driver chtdc_ti_pwrbtn_driver = {
- 		.name	= KBUILD_MODNAME,
+ static const struct acpi_device_id cht_int33fe_acpi_ids[] = {
+@@ -429,7 +427,7 @@ static struct platform_driver cht_int33fe_typec_driver = {
+ 		.acpi_match_table = ACPI_PTR(cht_int33fe_acpi_ids),
  	},
- 	.probe		= chtdc_ti_pwrbtn_probe,
--	.remove		= chtdc_ti_pwrbtn_remove,
-+	.remove_new	= chtdc_ti_pwrbtn_remove,
- 	.id_table	= chtdc_ti_pwrbtn_id_table,
+ 	.probe = cht_int33fe_typec_probe,
+-	.remove = cht_int33fe_typec_remove,
++	.remove_new = cht_int33fe_typec_remove,
  };
- module_platform_driver(chtdc_ti_pwrbtn_driver);
+ 
+ module_platform_driver(cht_int33fe_typec_driver);
 -- 
 2.39.1
 
