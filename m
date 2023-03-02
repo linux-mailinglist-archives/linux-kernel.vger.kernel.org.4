@@ -2,128 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACFB6A7C88
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFDD6A7C95
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjCBI0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 03:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S229557AbjCBI1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 03:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCBI0O (ORCPT
+        with ESMTP id S229510AbjCBI1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 03:26:14 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4939538E83
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:26:13 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id d30so64409364eda.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:26:13 -0800 (PST)
+        Thu, 2 Mar 2023 03:27:53 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A792B4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:27:51 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id z5so16758547ljc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:27:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677745572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qF8dljky4ONoFIZIMt0AmOCbbWROQiuEBW80nDTpnbc=;
-        b=JND/hOZrRZB2DYjUvPTbFXmjVmjFuWlRHyvseoPlgtNxsYgJ4mmX+0iO45+7aICQ6k
-         wryisL9XAtARegCrPikiRm2gSiOA3OXUkEmqRrqn9CTPNjIjzDsZZK1VGMDcKGtq+olA
-         sF55nWLSfPNSHLCfNJKrN1CIYWbn5UU70uuA7USQHH9L+MkjhoV+nuUdJD8ycn7o47xe
-         Pp7dea/0vRNHDlOVEBgVQuWznjkyKNAwgW80essaXbNzt8zRILWHx+NwzfOXzOuvP//F
-         0j3umPIKOqGDOAb9npSD8AUVQnV0l8KxtK/YK3wQBI9o0bPCYC0tW4VyoDzn1H8zOUAA
-         S9eQ==
+        d=google.com; s=20210112; t=1677745669;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UvH0qWq2voeqICqThZWox9cofodtW3GD3fZuZJYXbfk=;
+        b=JlXxNWkZ94/0B9RzyMbYrbB+djHS5nODibI5oFhOR4jwrHPinhhxJMbwweAZVpV0eD
+         wWIlWObAbRBNrUwQk2tBO6AVJ0ezGtwgU+VfWGCywrX8pwHC3uD6Pi4Ck3/16KFuhk1h
+         Z1JOwLPWIvrsonspOwhCzmRUJfFNVdxzHkd1sUc72bYaCy6ObHS44dSj0CEMhMQv78nE
+         Ytml7ohdatezqcouv3Jb1nJ8aRPM+GtFmfPq22o5PvQhlJlb/CF2h+CQhUKxr6dEnnEx
+         /Av5zZQ8N6PMxyUISrQnvZsCaGhGcugukf7DzwMCyJQhHqjqwbic34lCgF6qUjSAeTLV
+         sNGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677745572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qF8dljky4ONoFIZIMt0AmOCbbWROQiuEBW80nDTpnbc=;
-        b=Q3eZhnuYgKB0SJbIy29hZedWA1UdMWsSw4sFZMS7I/UZPXJ3Mz5iA0piZaiDCMKEOO
-         xMjwongRsQ6PiIJ2+QvbKwKeWQ+PvPwanylcW8qCpr9Wqn5Ng3Twx/c2HWZQk1G92s0X
-         1/+LWk59Y7X9Qz1F9WheuOQa5IoozKh0oV/vLFglt2IXp2QkY9PEdYwcm2KXI/IJwJQy
-         DMBX24VnZfKBjN2J5b8UZCrZwlPJ6pzx0n23RvFY8o9uLHb3ZMkOjv+lwcneou5iXgeC
-         UCeEA8fNqxZXEjxkIpdgnKwUr1TYDuoQFHOnLfM8LeEBPCoW4950x+BgK2KwIw649UQy
-         nmfw==
-X-Gm-Message-State: AO0yUKWa291Rwr92g3f84m75PnZoLmzBaMbOKYN+oYwIU1nz4DR0dYuT
-        qenDuBXb//2IbjR7J5uVxRX8Vw==
-X-Google-Smtp-Source: AK7set8yhCkIAjMSqdf425HNhmIcVIL5UZnj7FbIiO+n95PoVmjF1Yx/1oFoTv65o+yYJ9f8SwKWBg==
-X-Received: by 2002:aa7:d456:0:b0:4ac:bd84:43d9 with SMTP id q22-20020aa7d456000000b004acbd8443d9mr9961151edr.2.1677745571741;
-        Thu, 02 Mar 2023 00:26:11 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q8-20020a50aa88000000b004bc422b58a2sm1684180edc.88.2023.03.02.00.26.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 00:26:11 -0800 (PST)
-Message-ID: <dcace8f8-8591-40df-895b-155f0604665d@linaro.org>
-Date:   Thu, 2 Mar 2023 09:26:09 +0100
+        d=1e100.net; s=20210112; t=1677745669;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UvH0qWq2voeqICqThZWox9cofodtW3GD3fZuZJYXbfk=;
+        b=z7eGCOfR7pDx+fmu2vowm/i0Ks0YYngBLDp9+uKl7ovOfWEq0t23b1SVdbKqMRvTvF
+         avanvP1VIeT3/oIAG56p9FIK/JmkzI1P1e3dsu9VWzhdd74e+7Zwudo487DIvMRVRl2v
+         TgL/emZttyf4ZUWO2UlO/ezRcjQgdHTAfhBQzFuLdSZ7FaUToanqbpgEZUYfc2O5Q0Bw
+         HdM8yqnvSL4l4sPC9kfPgViWBKPG1JUmj6MAu2ypsMCpsbeWrBRtdvlS1SfzLaJCHpGS
+         BhCM/ggn/03m0D8Vuelv91gV+r9TarmMJBueBmcmg8OO+SzkV0iv8Rim7EMfx6rA0V37
+         fOlA==
+X-Gm-Message-State: AO0yUKVorL0ejtYHHgoRm49TfkdX+jZ6yIzaog5SNK5GUAulRnr3pS4B
+        arkXxF2yoR+15i4einzlIf3iU9zt2l/Ppt9eIFUWYw==
+X-Google-Smtp-Source: AK7set+ddZNt1rtcoQRdowhfguIDsicZwiCLb+zLaQuAg8DVckOwrtBbOg5qknB6r2tId5AwAR3RGtC69IWoFrceyrQ=
+X-Received: by 2002:a05:651c:386:b0:295:d63a:949e with SMTP id
+ e6-20020a05651c038600b00295d63a949emr1557158ljp.4.1677745668950; Thu, 02 Mar
+ 2023 00:27:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] dt-bindings: mfd: Add MAX5970 and MAX5978
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230301091234.3159953-1-Naresh.Solanki@9elements.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230301091234.3159953-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1674217480.git.linux@leemhuis.info> <bb5dfd55ea2026303ab2296f4a6df3da7dd64006.1674217480.git.linux@leemhuis.info>
+ <20230301204602.5e9bf3c0@kernel.org> <ff62632d-7558-a86c-5541-a54de6e107e7@leemhuis.info>
+ <20230301214023.610a9feb@kernel.org>
+In-Reply-To: <20230301214023.610a9feb@kernel.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 2 Mar 2023 09:27:36 +0100
+Message-ID: <CACT4Y+bxUA1v14y0SGC887er5Nif3ZEanjO_m=K4WBwyNfmZHA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] checkpatch: warn when Reported-by: is not followed
+ by Link:
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=C3=A4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Aleksandr Nogikh <nogikh@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2023 10:12, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
-> 
-> The MAX597x is a hot swap controller with configurable fault protection.
-> It also has 10bit ADC for current & voltage measurements.
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Co-developed-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+On Thu, 2 Mar 2023 at 06:40, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Thu, 2 Mar 2023 06:17:22 +0100 Thorsten Leemhuis wrote:
+> > On 02.03.23 05:46, Jakub Kicinski wrote:
+> > > On Fri, 20 Jan 2023 13:35:19 +0100 Thorsten Leemhuis wrote:
+> > >> Encourage patch authors to link to reports by issuing a warning, if
+> > >> a Reported-by: is not accompanied by a link to the report. Those links
+> > >> are often extremely useful for any code archaeologist that wants to know
+> > >> more about the backstory of a change than the commit message provides.
+> > >> That includes maintainers higher up in the patch-flow hierarchy, which
+> > >> is why Linus asks developers to add such links [1, 2, 3]. To quote [1]:
+> > >
+> > > Is it okay if we exclude syzbot reports from this rule?
+> > > If full syzbot report ID is provided - it's as good as a link.
+> >
+> > Hmmm. Not sure. Every special case makes things harder for humans and
+> > software that looks at a commits downstream. Clicking on a link also
+> > makes things easy for code archaeologists that might look into the issue
+> > months or years later (which might not even know how to find the report
+> > and potential discussions on lore from the syzbot report ID).
+>
+> No other system comes close to syzbot in terms of reporting meaningful
+> bugs, IMHO special casing it doesn't risk creep.
+>
+> Interestingly other bots attach links which are 100% pointless noise:
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4174
+>
+> Oh, eh. Let's see how noisy this check is once the merge window is over.
+>
+> > Hence, wouldn't it be better to ask the syzbot folks to change their
+> > reporting slightly and suggest something like this instead in their
+> > reports (the last line is the new one):
+> >
+> > ```
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+bba886ab504fcafecafe@syzkaller.appspotmail.com
+> > Link: https://lore.kernel.org/r/cafecaca0cafecaca0cafecaca0@google.com/
+> > ```
+> >
+> > This might not be to hard if they known the message-id in advance. Maybe
+> > they could even use the syzbot report ID as msg-id to make things even
+> > easier. And for developers not much would change afaics, they just need
+> > to copy and paste two lines instead of one.
+>
+> Dmitry, WDYT?
 
-It's v12 or what? Where are previous tags? Or you ignored entire review
-and sent something new?
+Hi Jakub, Thorsten,
 
-You already got the comments about it, so basically you ignore it second
-time...
+Adding a Link to syzbot reports should be relatively trivial.
 
-Where is the changelog?
+Ted proposed to use Link _instead_ of Reported-by:
 
-> ---
->  .../bindings/mfd/maxim,max5970.yaml           | 151 ++++++++++++++++++
->  1 file changed, 151 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
-> new file mode 100644
-> index 000000000000..6ee269afdab2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
-> @@ -0,0 +1,151 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/maxim,max5970.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Regulator for MAX5970 smart switch from Maxim Integrated.
+https://github.com/google/syzkaller/issues/3596
+> in fact, it might be nice if we could encourage upstream developers
+> put in the commit trailer:
+> Link: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
+> in addition to, or better yet, instead of:
+> Reported-by: syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
 
-Drop the full stop. It's title, so follows the title grammar rules (you
-could also capitalize it but it's matter of style
-https://www.grammarly.com/blog/capitalization-in-the-titles/).
+We could also use a link in the Reported-by tag, e.g.:
 
-I don't know whether I should review rest or not... just in case I don't
-want to waste my time, so I'll skip it.
+Reported-by: https://syzkaller.appspot.com/b/5266d464285a03cee9db
 
+Some folks parse Reported-by to collect stats.
 
-Best regards,
-Krzysztof
-
+What is better?
