@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAA26A8B86
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8041C6A8B8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjCBWKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
+        id S229926AbjCBWMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCBWK3 (ORCPT
+        with ESMTP id S229530AbjCBWMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:10:29 -0500
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEEF15568;
-        Thu,  2 Mar 2023 14:10:28 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-536be69eadfso8858597b3.1;
-        Thu, 02 Mar 2023 14:10:28 -0800 (PST)
+        Thu, 2 Mar 2023 17:12:50 -0500
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4028E17CFC;
+        Thu,  2 Mar 2023 14:12:41 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id n18so334851ybm.10;
+        Thu, 02 Mar 2023 14:12:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677795028;
+        d=1e100.net; s=20210112; t=1677795160;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zhQo+b+1L2wPuwPzC2ELNrP0CnHtD1+PEmOhfxOBoQU=;
-        b=KHwQe6NIzphc1VNd4yxdEeKGpJWfySzJP0mDqseWe/OeKo2F3QrVBB/6YKJNMF7dzS
-         mgCZTTuwyBce55Rnh9TM85Yq63L6U6vBDiyMyL1hUn2gTA9tATojdOw3+V54F/W0un2Q
-         n/UsL43t9/Xw6CYfABqk0J0ze8Eqe0H2xKIw8SD1nXCumg7AOBRb6zImyvxhEjz9JhOg
-         ZJyVkxbAQn6IL9GmlPiD98KdHBFaRxd/+6XLTJadkBko44ijTseG3eVufLqrRbCUE0ld
-         RBSIMsB0xmjNeo38Yi4UY2guzl2df8IcHV6xaGCKMD4Qsyk0PoeMJ33w9eITP4XhV7WQ
-         Qt1g==
-X-Gm-Message-State: AO0yUKWm24W4yKshFVy7tibdO4OFQsrt/vlEnLTN44fxFrDysqzY3r1g
-        lDVK55yYfsmwTnorTA754BJjilLDXv0eSahtr0I=
-X-Google-Smtp-Source: AK7set+T4K6DFTJ2cBU3SFmBEfq0p84TKpv76uCYD+Bugbz6Adt1eE0eqkhewHa2Qr4TzZYALgnzvNKpebxbk/AjZkI=
-X-Received: by 2002:a81:b609:0:b0:52f:24ac:9575 with SMTP id
- u9-20020a81b609000000b0052f24ac9575mr7051994ywh.3.1677795027610; Thu, 02 Mar
- 2023 14:10:27 -0800 (PST)
+        bh=6saCZ3E79yVnYszzUQo6SvNydCkpTtwym9Ni4bS0DrU=;
+        b=zPSxTLO9lJzfC7IvUxY1Lg3QpE1gX0EZ35GE1oPm/1w5Gz90f1pUARaW/5ZoXTEYT0
+         HOy0OwamIk5gE+5xTyF0+Dbj0/0MPcdNXmNcLMeSveNdpStBTsViywAjmGib5fOT1jb5
+         T9o5eI8HeRVeXoOMoLhfM4u/QTrg8wHJgT3i3MjUUF+khhlabpDcYBwo2aEvaTVjFS1X
+         yAyV7FBQsGe22huJalN5o5irjcDRrIO13XD/xy/NHClRc1oYwf+RQR9Kq/zKzqhFLpyK
+         Ygeq84J2JGEOSnIbu7WjlzAP65NYtKFpie/ErpJ4iYkZ+m5CLlvJF9ZKIh0mYS+lyxd1
+         IS+g==
+X-Gm-Message-State: AO0yUKUNCjGAVYKKpkefScur9Bx5ug1/TBzUFGstgUwphcm8Gc+RHT6b
+        uW4Q6wHFBpcpRfH6LJpqLOdbtlFRvqhKO5P3sx87wn00
+X-Google-Smtp-Source: AK7set+fy6p2dKVVJB3IiTU3fB42sqBJ+/a+xqn0gvOcAV9xu2BE3AViUN0Kwud/ov2Fy9iVx6LeWD7SRyexs4ou/KA=
+X-Received: by 2002:a05:6902:4d1:b0:ab8:1ed9:cfd2 with SMTP id
+ v17-20020a05690204d100b00ab81ed9cfd2mr5554203ybs.5.1677795160369; Thu, 02 Mar
+ 2023 14:12:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20230302092109.367-1-ravi.bangoria@amd.com> <20230302092109.367-2-ravi.bangoria@amd.com>
-In-Reply-To: <20230302092109.367-2-ravi.bangoria@amd.com>
+References: <20230302092109.367-1-ravi.bangoria@amd.com> <20230302092109.367-3-ravi.bangoria@amd.com>
+In-Reply-To: <20230302092109.367-3-ravi.bangoria@amd.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 2 Mar 2023 14:10:16 -0800
-Message-ID: <CAM9d7cjEvjcYwjA+HfsDHKDX8FGZCECTZ8vDMPHBUSqfQSCOfA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf/ibs: Fix interface via core pmu events
+Date:   Thu, 2 Mar 2023 14:12:29 -0800
+Message-ID: <CAM9d7chQA27aD_mPe=3-9jZLWP_a64ztihuK=upgNL++kMFSNw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] perf test: Add selftest to test IBS invocation via
+ core pmu events
 To:     Ravi Bangoria <ravi.bangoria@amd.com>
 Cc:     peterz@infradead.org, eranian@google.com, acme@kernel.org,
         mark.rutland@arm.com, jolsa@kernel.org, irogers@google.com,
@@ -59,147 +60,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ravi,
-
 On Thu, Mar 2, 2023 at 1:22 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
 >
-> Although, IBS pmu can be invoked via it's own interface, indirect
-> IBS invocation via core pmu event is also supported with fixed set
-> of events: cpu-cycles:p, r076:p (same as cpu-cycles:p) and r0C1:p
-> (micro-ops) for user convenience.
+> IBS pmu can be invoked via fixed set of core pmu events. Add simple
+> event open test for all these events.
 >
-> This indirect IBS invocation is broken since commit 66d258c5b048
-> ("perf/core: Optimize perf_init_event()"), which added RAW pmu
-> under pmu_idr list and thus if event_init() fails with RAW pmu,
-> it started returning error instead of trying other pmus.
+> Without kernel fix:
+>   $ sudo ./perf test -vv 76
+>    76: IBS via core pmu                                                :
+>   --- start ---
+>   test child forked, pid 6553
+>   Using CPUID AuthenticAMD-25-1-1
+>   type: 0x0, config: 0x0, fd: 3  -  Pass
+>   type: 0x0, config: 0x1, fd: -1  -  Pass
+>   type: 0x4, config: 0x76, fd: -1  -  Fail
+>   type: 0x4, config: 0xc1, fd: -1  -  Fail
+>   type: 0x4, config: 0x12, fd: -1  -  Pass
+>   test child finished with -1
+>   ---- end ----
+>   IBS via core pmu: FAILED!
 >
-> Fix it by introducing new pmu capability PERF_PMU_CAP_FORWARD_EVENT.
-> Kernel will try to open event on other pmus if user requested pmu,
-> having this capability, fails to open event.
+> With kernel fix:
+>   $ sudo ./perf test -vv 76
+>    76: IBS via core pmu                                                :
+>   --- start ---
+>   test child forked, pid 7526
+>   Using CPUID AuthenticAMD-25-1-1
+>   type: 0x0, config: 0x0, fd: 3  -  Pass
+>   type: 0x0, config: 0x1, fd: -1  -  Pass
+>   type: 0x4, config: 0x76, fd: 3  -  Pass
+>   type: 0x4, config: 0xc1, fd: 3  -  Pass
+>   type: 0x4, config: 0x12, fd: -1  -  Pass
+>   test child finished with 0
+>   ---- end ----
+>   IBS via core pmu: Ok
 >
-> Without patch:
->   $ sudo ./perf record -C 0 -e r076:p -- sleep 1
->   Error:
->   The r076:p event is not supported.
->
-> With patch:
->   $ sudo ./perf record -C 0 -e r076:p -- sleep 1
->   [ perf record: Woken up 1 times to write data ]
->   [ perf record: Captured and wrote 0.341 MB perf.data (37 samples) ]
->
-> This new capability does not have a notion of forward pmu mapping.
-> i.e. it doesn't know which pmu(or set of pmus) the event should be
-> forwarded to. As of now, only AMD core pmu forwards a set of events
-> to IBS pmu when precise_ip attribute is set and thus trying with all
-> pmus works. But if more pmus start using this capability, some sort
-> of forward pmu mapping needs to be introduced through which the event
-> can directly get forwarded to only mapped pmus. Otherwise, trying all
-> pmus can inadvertently open event on wrong pmu.
->
-> Fixes: 66d258c5b048 ("perf/core: Optimize perf_init_event()")
-> Reported-by: Stephane Eranian <eranian@google.com>
 > Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 > ---
->  arch/x86/events/amd/core.c   |  5 +++++
->  arch/x86/events/core.c       |  2 ++
->  arch/x86/events/perf_event.h |  3 +++
->  include/linux/perf_event.h   |  1 +
->  kernel/events/core.c         | 11 ++++++++---
->  5 files changed, 19 insertions(+), 3 deletions(-)
+>  tools/perf/tests/Build              |  1 +
+>  tools/perf/tests/builtin-test.c     |  1 +
+>  tools/perf/tests/ibs-via-core-pmu.c | 70 +++++++++++++++++++++++++++++
+>  tools/perf/tests/tests.h            |  1 +
+>  4 files changed, 73 insertions(+)
+>  create mode 100644 tools/perf/tests/ibs-via-core-pmu.c
 >
-> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> index 8c45b198b62f..f4c67362cfde 100644
-> --- a/arch/x86/events/amd/core.c
-> +++ b/arch/x86/events/amd/core.c
-> @@ -1264,6 +1264,11 @@ static __initconst const struct x86_pmu amd_pmu = {
->         .cpu_dead               = amd_pmu_cpu_dead,
+> diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
+> index fb9ac5dc4079..1a232cf13c33 100644
+> --- a/tools/perf/tests/Build
+> +++ b/tools/perf/tests/Build
+> @@ -69,6 +69,7 @@ perf-y += dlfilter-test.o
+>  perf-y += sigtrap.o
+>  perf-y += event_groups.o
+>  perf-y += symbols.o
+> +perf-y += ibs-via-core-pmu.o
 >
->         .amd_nb_constraints     = 1,
-> +       /*
-> +        * Raw events with precise attribute set needs to be
-> +        * forwarded to IBS pmu.
-> +        */
-> +       .capabilities           = PERF_PMU_CAP_FORWARD_EVENT,
+>  $(OUTPUT)tests/llvm-src-base.c: tests/bpf-script-example.c tests/Build
+>         $(call rule_mkdir)
+> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+> index 35cc3807cc9e..aed887234500 100644
+> --- a/tools/perf/tests/builtin-test.c
+> +++ b/tools/perf/tests/builtin-test.c
+> @@ -119,6 +119,7 @@ static struct test_suite *generic_tests[] = {
+>         &suite__sigtrap,
+>         &suite__event_groups,
+>         &suite__symbols,
+> +       &suite__ibs_via_core_pmu,
+>         NULL,
 >  };
 >
->  static ssize_t branches_show(struct device *cdev,
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index d096b04bf80e..3f27b44f337a 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -2156,6 +2156,8 @@ static int __init init_hw_perf_events(void)
->         if (err)
->                 goto out1;
->
-> +       pmu.capabilities |= x86_pmu.capabilities;
+> diff --git a/tools/perf/tests/ibs-via-core-pmu.c b/tools/perf/tests/ibs-via-core-pmu.c
+> new file mode 100644
+> index 000000000000..6ac539509791
+> --- /dev/null
+> +++ b/tools/perf/tests/ibs-via-core-pmu.c
+> @@ -0,0 +1,70 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "linux/perf_event.h"
+> +#include "tests.h"
+> +#include "pmu.h"
+> +#include "pmus.h"
+> +#include "../perf-sys.h"
+> +#include "debug.h"
 > +
->         if (!is_hybrid()) {
->                 err = perf_pmu_register(&pmu, "cpu", PERF_TYPE_RAW);
->                 if (err)
-> diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-> index d6de4487348c..41e792bb442d 100644
-> --- a/arch/x86/events/perf_event.h
-> +++ b/arch/x86/events/perf_event.h
-> @@ -941,6 +941,9 @@ struct x86_pmu {
->         int                             num_hybrid_pmus;
->         struct x86_hybrid_pmu           *hybrid_pmu;
->         u8 (*get_hybrid_cpu_type)       (void);
+> +#define NR_SUB_TESTS 5
 > +
-> +       /* Capabilities that needs to be forwarded to pmu->capabilities */
-> +       int                             capabilities;
->  };
->
->  struct x86_perf_task_context_opt {
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index d5628a7b5eaa..4459e0918e28 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -292,6 +292,7 @@ struct perf_event_pmu_context;
->  #define PERF_PMU_CAP_NO_EXCLUDE                        0x0080
->  #define PERF_PMU_CAP_AUX_OUTPUT                        0x0100
->  #define PERF_PMU_CAP_EXTENDED_HW_TYPE          0x0200
-> +#define PERF_PMU_CAP_FORWARD_EVENT             0x0400
->
->  struct perf_output_handle;
->
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index a5a51dfdd622..c3f59d937280 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -11633,9 +11633,13 @@ static struct pmu *perf_init_event(struct perf_event *event)
->                         goto fail;
->
->                 ret = perf_try_init_event(pmu, event);
-> -               if (ret == -ENOENT && event->attr.type != type && !extended_type) {
-> -                       type = event->attr.type;
-> -                       goto again;
-> +               if (ret == -ENOENT) {
-> +                       if (event->attr.type != type && !extended_type) {
-> +                               type = event->attr.type;
-> +                               goto again;
-> +                       }
-> +                       if (pmu->capabilities & PERF_PMU_CAP_FORWARD_EVENT)
-> +                               goto try_all;
+> +static struct sub_tests {
+> +       int type;
+> +       unsigned long config;
+> +       bool valid;
+> +} sub_tests[NR_SUB_TESTS] = {
+> +       { PERF_TYPE_HARDWARE, PERF_COUNT_HW_CPU_CYCLES, true },
+> +       { PERF_TYPE_HARDWARE, PERF_COUNT_HW_INSTRUCTIONS, false },
+> +       { PERF_TYPE_RAW, 0x076, true },
+> +       { PERF_TYPE_RAW, 0x0C1, true },
+> +       { PERF_TYPE_RAW, 0x012, false },
+> +};
+> +
+> +static int event_open(int type, unsigned long config)
+> +{
+> +       struct perf_event_attr attr;
+> +
+> +       memset(&attr, 0, sizeof(struct perf_event_attr));
+> +       attr.type = type;
+> +       attr.size = sizeof(struct perf_event_attr);
+> +       attr.config = config;
+> +       attr.disabled = 1;
+> +       attr.precise_ip = 1;
+> +       attr.sample_type = PERF_SAMPLE_IP | PERF_SAMPLE_TID;
+> +       attr.sample_period = 100000;
+> +
+> +       return sys_perf_event_open(&attr, -1, 0, -1, 0);
+> +}
+> +
+> +static int test__ibs_via_core_pmu(struct test_suite *text __maybe_unused,
+> +                                 int subtest __maybe_unused)
+> +{
+> +       struct perf_pmu *ibs_pmu;
+> +       int ret = TEST_OK;
+> +       int fd, i;
+> +
+> +       if (list_empty(&pmus))
+> +               perf_pmu__scan(NULL);
+> +
+> +       ibs_pmu = perf_pmu__find("ibs_op");
+> +       if (!ibs_pmu)
+> +               return TEST_SKIP;
+> +
+> +       for (i = 0; i < NR_SUB_TESTS; i++) {
+> +               fd = event_open(sub_tests[i].type, sub_tests[i].config);
+> +               pr_debug("type: 0x%x, config: 0x%lx, fd: %d  -  ", sub_tests[i].type,
+> +                        sub_tests[i].config, fd);
+> +               if ((sub_tests[i].valid && fd == -1) ||
+> +                   (!sub_tests[i].valid && fd > 0)) {
+> +                       pr_debug("Fail\n");
+> +                       ret = TEST_FAIL;
 
-Wouldn't it be better to use a different error code to indicate
-it's about precise_ip (or forwarding in general)?  Otherwise
-other invalid config might cause the forwarding unnecessarily..
+You need to close(fd) when it's succeeded for invalid one.
 
 Thanks,
 Namhyung
 
 
->                 }
+> +               } else {
+> +                       pr_debug("Pass\n");
+> +                       close(fd);
+> +               }
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +DEFINE_SUITE("IBS via core pmu", ibs_via_core_pmu);
+> diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
+> index 9a0f3904e53d..36339fdf9c36 100644
+> --- a/tools/perf/tests/tests.h
+> +++ b/tools/perf/tests/tests.h
+> @@ -149,6 +149,7 @@ DECLARE_SUITE(dlfilter);
+>  DECLARE_SUITE(sigtrap);
+>  DECLARE_SUITE(event_groups);
+>  DECLARE_SUITE(symbols);
+> +DECLARE_SUITE(ibs_via_core_pmu);
 >
->                 if (ret)
-> @@ -11644,6 +11648,7 @@ static struct pmu *perf_init_event(struct perf_event *event)
->                 goto unlock;
->         }
->
-> +try_all:
->         list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
->                 ret = perf_try_init_event(pmu, event);
->                 if (!ret)
+>  /*
+>   * PowerPC and S390 do not support creation of instruction breakpoints using the
 > --
 > 2.39.2
 >
