@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E0F6A7FF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3796A7FFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCBKaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S229921AbjCBKax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCBKaG (ORCPT
+        with ESMTP id S229534AbjCBKaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:30:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C383136EF;
-        Thu,  2 Mar 2023 02:30:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1257B8121B;
-        Thu,  2 Mar 2023 10:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D117BC433EF;
-        Thu,  2 Mar 2023 10:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677752999;
-        bh=VvcAnQ+5Q4FRZDFzuGAf9xyjKRrbK5mQvXIVydLiOVo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ts9RSQVZs75WtFtpUl4k/CkEqhJd+vGaa2xhEsIcF43LwKqWX2Di5vHzdhS+OSfr9
-         4afjz9Q9yCG9KDzvenW7NfiIor5twdOilctuAgzBondmBt3zL9DKuHIxwvIo4fwZHP
-         54ihnB9lmVpF+vHm7mlQKjkkjo/w051hISgLGfkk=
-Date:   Thu, 2 Mar 2023 11:29:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        mptcp@lists.linux.dev, Florian Westphal <fw@strlen.de>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
-Message-ID: <ZAB6pP3MNy152f+7@kroah.com>
-References: <20230301180657.003689969@linuxfoundation.org>
- <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
+        Thu, 2 Mar 2023 05:30:52 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D401CF4D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:30:51 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id v16so13200972wrn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:30:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677753050;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=HwOZUGKJ+t9xe2A8iPH5J+XMLtNu9Kocbw3QWISBg/Q=;
+        b=rnUUn5sP1r2EjF/AbEZsiOH35KiPKcSVRw3zrhLUi/h8WCInyq69fZaYpbfyMcffpz
+         ZSKqKfmeWal1hMaCy5AyFUeKaB+h3upCXVHiMEnd60uRBJ3ewsLz4lAB7cr9x8TjiFMo
+         i8bnNrg5K+UtjIMty7JgeQrVdDhlRu3+GTYXkPslUXSr4gsJSXCjAz67lSJ/s+Q3k9hD
+         PkEDe/4CBsipCFOlWGzRqinqu4F71vZUSgXjjkUvGe346mUeVKoBKfwoaE7RaOy8/O4K
+         m/GgU876uW2RO3BqBZQLn0v9MxFspvNZJbSTYMcfXr6koV8G36p89HFLNuVzsbqh+goB
+         VjGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677753050;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HwOZUGKJ+t9xe2A8iPH5J+XMLtNu9Kocbw3QWISBg/Q=;
+        b=hm7RokQnz4DIjhFmqU7krQYNlS9678WjZdfHcwVZ6hTWya1ws00ogWyYJftoHz2dUu
+         XVsEr3GTXyZfIrkHYqnBom3bx9M+XxmDG5rh2v+7Wyr5/rEc8Wn8fb8Jj/M96EQcRXUL
+         0jN6tiket+uqkynxALqR67rHaMUwjeT+XmoLSMzOqZn5hToGR/tuc9qUNXbK9MVSdT9p
+         FlGGFMSM/Ww2CMa/kK93iSQE5WjelzVIMYhyMVO0V4XlH8jsPR9ADHEU2bVSxgSDZbgy
+         MQMjxrfiUKJ9DV9lmvpeOzEKmjY2Rr6T9Fs5LH5QoCVFZvOkZwpwD6ZvuyfqDw2BpMAu
+         Wo0A==
+X-Gm-Message-State: AO0yUKXDrpGn1Qqje2JpbxOakD7Ui0bBMkUeKw4ivKN9lfij/5S4+ZUJ
+        C467ORZkan/oTbCDs+mKUvjYnQ==
+X-Google-Smtp-Source: AK7set9kQJz6aP9As/ms2j7f0QJlW4EWyc4zj5sDWLQQCRQzwb0ak3Hc3kqXRa2Z8yAId/FNkIDm/g==
+X-Received: by 2002:a5d:40ca:0:b0:2c7:4ec:8d79 with SMTP id b10-20020a5d40ca000000b002c704ec8d79mr6613894wrq.21.1677753049937;
+        Thu, 02 Mar 2023 02:30:49 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:217a:db24:fe27:6b35? ([2a01:e0a:982:cbb0:217a:db24:fe27:6b35])
+        by smtp.gmail.com with ESMTPSA id u9-20020a5d5149000000b002c54c92e125sm15031866wrt.46.2023.03.02.02.30.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 02:30:49 -0800 (PST)
+Message-ID: <583403fa-c104-42ad-c628-cfcb8da5eb05@linaro.org>
+Date:   Thu, 2 Mar 2023 11:30:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2] MAINTAINERS: Add myself as maintainer for DRM Panels
+ drivers
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jagan Teki <jagan@amarulasolutions.com>
+References: <20230216-topic-drm-panel-upstream-maintainance-v2-1-ffd262b72f16@linaro.org>
+ <167775297427.128880.7902941265688645008.b4-ty@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <167775297427.128880.7902941265688645008.b4-ty@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,132 +81,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 03:49:31PM +0530, Naresh Kamboju wrote:
-> On Wed, 1 Mar 2023 at 23:42, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.1.15 release.
-> > There are 42 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.15-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
+On 02/03/2023 11:29, Neil Armstrong wrote:
+> Hi,
 > 
-> Regression found on Linux version 6.1.15-rc1 on 32-bit arm x15 and i386.
+> On Wed, 01 Mar 2023 10:47:35 +0100, Neil Armstrong wrote:
+>> Add myself as co-maintainer for DRM Panel Drivers in order to help
+>> reviewing and getting new panels drivers merged, and Remove Thierry
+>> as he suggested since he wasn't active for a while.
+>>
+>> Thanks Thierry for all your work!
+>>
+>>
+>> [...]
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next-fixes)
+
+It's a typo from b4, it was applied on drm-misc-next.
+No idea why b4 uses drm-misc-next-fixes, the commit isn't in this branch...
+
+Neil
+
 > 
-> ## Build
-> * kernel: 6.1.15-rc1
-> * git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-> * git branch: linux-6.1.y
-> * git commit: b6150251d4ddf8a80510c185d839631e252e6317
-> * git describe: v6.1.14-43-gb6150251d4dd
-> * test details:
-> https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.14-43-gb6150251d4dd
+> [1/1] MAINTAINERS: Add myself as maintainer for DRM Panels drivers
+>        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=4ddeb90d602ac58bcf99924eb34d8b2f820ce11d
 > 
-> Regression test cases,
-> i386:
-> x15:
->   * kselftest-net-mptcp/net_mptcp_mptcp_sockopt_sh
-> 
-> # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> 
-> test log:
-> ----------
-> 
-> # selftests: net/mptcp: mptcp_sockopt.sh
-> [  918.263983] IPv6: ADDRCONF(NETDEV_CHANGE): ns1eth1: link becomes ready
-> [  918.398851] IPv6: ADDRCONF(NETDEV_CHANGE): ns1eth2: link becomes ready
-> [  918.538987] IPv6: ADDRCONF(NETDEV_CHANGE): ns1eth3: link becomes ready
-> [  918.678270] IPv6: ADDRCONF(NETDEV_CHANGE): ns1eth4: link becomes ready
-> [  918.800671] audit: type=1325 audit(1677748585.128:33): table=filter
-> family=2 entries=0 op=xt_register pid=18489 subj=kernel
-> comm=\"iptables\"
-> [  918.813228] audit: type=1300 audit(1677748585.128:33):
-> arch=40000003 syscall=102 success=yes exit=0 a0=f a1=bf94ed3c a2=40
-> a3=b7edfe3c items=0 ppid=18412 pid=18489 auid=4294967295 uid=0 gid=0
-> euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=4294967295
-> comm=\"iptables\" exe=\"/usr/sbin/xtables-legacy-multi\" subj=kernel
-> key=(null)
-> [  918.842987] audit: type=1327 audit(1677748585.128:33):
-> proctitle=69707461626C6573002D41004F5554505554002D7000746370002D2D73796E002D6D006D61726B002D2D6D61726B0031002D6A00414343455054
-> [  918.859285] audit: type=1325 audit(1677748585.128:34): table=filter
-> family=2 entries=4 op=xt_replace pid=18489 subj=kernel
-> comm=\"iptables\"
-> [  918.871788] audit: type=1300 audit(1677748585.128:34):
-> arch=40000003 syscall=102 success=yes exit=0 a0=e a1=bf94ef64 a2=40
-> a3=b7edfe3c items=0 ppid=18412 pid=18489 auid=4294967295 uid=0 gid=0
-> euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=4294967295
-> comm=\"iptables\" exe=\"/usr/sbin/xtables-legacy-multi\" subj=kernel
-> key=(null)
-> [  918.901496] audit: type=1327 audit(1677748585.128:34):
-> proctitle=69707461626C6573002D41004F5554505554002D7000746370002D2D73796E002D6D006D61726B002D2D6D61726B0031002D6A00414343455054
-> [  918.934555] audit: type=1325 audit(1677748585.262:35): table=filter
-> family=2 entries=5 op=xt_replace pid=18490 subj=kernel
-> comm=\"iptables\"
-> [  918.947242] audit: type=1300 audit(1677748585.262:35):
-> arch=40000003 syscall=102 success=yes exit=0 a0=e a1=bfc21cd4 a2=40
-> a3=b7f27e3c items=0 ppid=18412 pid=18490 auid=4294967295 uid=0 gid=0
-> euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=4294967295
-> comm=\"iptables\" exe=\"/usr/sbin/xtables-legacy-multi\" subj=kernel
-> key=(null)
-> [  918.976905] audit: type=1327 audit(1677748585.262:35):
-> proctitle=69707461626C6573002D41004F5554505554002D7000746370002D2D7463702D666C6167730052535400525354002D6D006D61726B002D2D6D61726B0030002D6A00414343455054
-> [  919.013445] audit: type=1325 audit(1677748585.341:36): table=filter
-> family=2 entries=6 op=xt_replace pid=18491 subj=kernel
-> comm=\"iptables\"
-> # Created /tmp/tmp.CG4evZjYl7 (size 1 KB) containing data sent by client
-> # Created /tmp/tmp.urARJfNrFp (size 1 KB) containing data sent by server
-> # PASS: all packets had packet mark set
-> # mptcp_[  944.426054] kauditd_printk_skb: 50 callbacks suppressed
-> sockopt: mptcp_s[  944.426057] audit: type=1701
-> audit(1677748610.753:53): auid=4294967295 uid=0 gid=0 ses=4294967295
-> subj=kernel pid=18532 comm=\"mptcp_sockopt\"
-> exe=\"/opt/kselftests/default-in-kernel/net/mptcp/mptcp_sockopt\"
-> sig=6 res=1
-> [  944.452415] audit: type=1701 audit(1677748610.753:54):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=18533
-> comm=\"mptcp_sockopt\"
-> exe=\"/opt/kselftests/default-in-kernel/net/mptcp/mptcp_sockopt\"
-> sig=6 res=1
-> ockopt.c:353: do_getsockopt_tcp_info: Assertion `ti.d.size_user ==
-> sizeof(struct tcp_info)' failed.
 
-
-Nit, wrapping a log like this makes it hard to read, don't you think?
-
-> # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> # server killed by signal 6
-> #
-> # FAIL: SOL_MPTCP getsockopt
-> # PASS: TCP_INQ cmsg/ioctl -t tcp
-> # PASS: TCP_INQ cmsg/ioctl -6 -t tcp
-> # PASS: TCP_INQ cmsg/ioctl -r tcp
-> # PASS: TCP_INQ cmsg/ioctl -6 -r tcp
-> # PASS: TCP_INQ cmsg/ioctl -r tcp -t tcp
-> not ok 6 selftests: net/mptcp: mptcp_sockopt.sh # exit=1
-
-Any chance you can bisect?
-
-And is this an issue on 6.2 and/or Linus's tree?  I don't see any mptcp
-changes in this 6.1-rc cycle, they were in the last one...
-
-thanks,
-
-greg k-h
