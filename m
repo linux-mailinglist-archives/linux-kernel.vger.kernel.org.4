@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDDB6A8271
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B556A8274
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjCBMkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        id S229648AbjCBMkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCBMkp (ORCPT
+        with ESMTP id S229673AbjCBMku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:40:45 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4DE37720;
-        Thu,  2 Mar 2023 04:40:44 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id g3so11555845eda.1;
-        Thu, 02 Mar 2023 04:40:44 -0800 (PST)
+        Thu, 2 Mar 2023 07:40:50 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646964BEB8;
+        Thu,  2 Mar 2023 04:40:49 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id f13so67024411edz.6;
+        Thu, 02 Mar 2023 04:40:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677760843;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hn3uP3hG8mSuCgFEmDW7AQETpkM5xpSS4nxH3Vo41Mg=;
-        b=F6yLifQw2+wSRFA91PWf6xiJWYz1XeiVirHLY3leajb9mvZxs8eyezgWF5WJa/LxJ3
-         h1ExhzjjUVkUVBG+BSgjA0Q3dje326x6XI7LzWNt0z/zmN264oz0Enp8yfetTEYNvJqm
-         sw1MReyZok/9+Sb0Q1judaERrI4HJFOf28jiQjsZa3theTfBBx8rANX73M+VDKje8NAC
-         iTy5kp+DEbTpVTm1iMgIRvbl+q5bvkNkwOlchPhJpXL7FYKCJZWdvwCZm2bxktHskeVO
-         THz9hYNt3zZyw/hKC81/QsU2tEg8kxwV+MY9mIGkjiYA8AjvorUStd6L5v7d4EWxW0AI
-         yeEg==
+        d=gmail.com; s=20210112; t=1677760848;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NjhrqpxloWE6ONs+Pg7avedoS40plQhwR7tQyDf+1NI=;
+        b=gbmgoI6laQc6/BL/YNgDPvv1PN2ZRWGhLBi8S8/A7u4bqe/ANj4oQc6GPQglRPVuA9
+         Yy5YRPkTen1Z/Swqt6UwBSkjqBHDXSRN2O3YqSWBDguoqCFFm6gCQccnR5IsA258ikYg
+         oMCBC4P720JczFNcfpEA3H0dXicB8rkA6JzF9u/wTpJXi5Ks81wDDmhY0ZD9GUKzGbW+
+         0hv0t5GhorZ1+n8e8b01+06ahUUp/ZJW7nVQag2BC6XZhB5kR6BqzFUaMOK4SIubEVJ5
+         77OlUgZ/nl/Z3IOneSqFlKA12SHBmJy9GApBvWJFi9B4VQueoGcGfT3oOBZqYz5vcTTk
+         lcGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677760843;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hn3uP3hG8mSuCgFEmDW7AQETpkM5xpSS4nxH3Vo41Mg=;
-        b=1dxCVNyYpjvDnHaD29HKG+sIq/X+X+x0Qn4y59eCvrZcIt/dKNgPCRKakL5kRj+HFj
-         WxE2BHyYvcgHngNgJ00o3DfUcbGBg42r0iUgIR2pp65xFQEMKk2Sr/uxd+83e/8C/pp3
-         uxgrEoNIu0tJ4amhaE6Z4tvOUkBvnd9EBhqSEH9jS6Ct6VYImidO2W87E9QDJFjOFEfB
-         ATpAZLpXfR8PIILcigFGBWwLUHeUwEZ7rGBCBgE+zG8oS3Do8T9UQ2rg2JMbU8r5dwoP
-         5ZfJsm7BzRLwKVTbDCIjyGFZ1kO032FYxz+gTSkhWvKKVhyjLSbnp+iT8oprhXaBgLgo
-         xNTw==
-X-Gm-Message-State: AO0yUKWeRX0Us9Aom2/2XY+AJ+c4RfqHJ4ARyACwHphxiUb+mIh2uNxy
-        QQw3er1wJFAnvTo0rM+mcPo=
-X-Google-Smtp-Source: AK7set/eg1rJI3CgQygd7/y7nq7/G8E9a0Z+NUEzgN8bRJRpOn2n1NscB60sb28X6jp+i7qfk2Q3zA==
-X-Received: by 2002:aa7:da4f:0:b0:4af:62af:460a with SMTP id w15-20020aa7da4f000000b004af62af460amr11488535eds.8.1677760842735;
-        Thu, 02 Mar 2023 04:40:42 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677760848;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NjhrqpxloWE6ONs+Pg7avedoS40plQhwR7tQyDf+1NI=;
+        b=bRG6yHty25WsLSHzRKGhlw+QpzPmoS8pdwzo6S0yghTcT3ARA8XnEjXtp2mXLRJiu1
+         Y5BA0sgQyNIljsxIQLL5Je8b7aHwZLT6vNZVKAUPMUrwdFWCAg3ANo9qUkVwe9RseeJk
+         vlW2CzBG7QGw7o1m3Ve2hP4JpfCCnJ726NPNUwsIkITt2iQbHgZEu3hQ4xIGxGJ4eVCI
+         qnBUzKC0DZjKCjG4n2f/9Zjv35MA8db78GEGhfpyRMAxb8EpfHfgK4RKyM/+rQjRqMH8
+         leJ4K0jHbwWt0qzlZBYLZdB0+RfIQCw/m8W0ZIu9ArFAqBhjBB4IoGE5P1/le6vcUVLn
+         xF8w==
+X-Gm-Message-State: AO0yUKUsXPW/M9V1Aych7k8vQpO5wLhS+V/ms8zuDQdQO2/Tg22I4oIe
+        qXO2RShw1eHL0RIFTxOkriw=
+X-Google-Smtp-Source: AK7set8/HK/oMZWKO35qnjajVW9FaD8X1JDnnELZEJrBvVOwMD1Ga4Z+YkLOvrNIWmDciTgh4LpShg==
+X-Received: by 2002:aa7:d6d8:0:b0:4bf:d8d9:4b0e with SMTP id x24-20020aa7d6d8000000b004bfd8d94b0emr2145093edr.22.1677760847970;
+        Thu, 02 Mar 2023 04:40:47 -0800 (PST)
 Received: from localhost.localdomain ([95.183.227.97])
-        by smtp.gmail.com with ESMTPSA id c22-20020a50f616000000b004c07b11deb8sm599036edn.64.2023.03.02.04.40.40
+        by smtp.gmail.com with ESMTPSA id c22-20020a50f616000000b004c07b11deb8sm599036edn.64.2023.03.02.04.40.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 04:40:42 -0800 (PST)
+        Thu, 02 Mar 2023 04:40:47 -0800 (PST)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -64,10 +65,12 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 0/2] MediaTek MT6735 TOPRGU/WDT support
-Date:   Thu,  2 Mar 2023 15:40:13 +0300
-Message-Id: <20230302124015.75546-1-y.oudjana@protonmail.com>
+Subject: [PATCH 1/2] dt-bindings: reset: Add binding for MediaTek MT6735 TOPRGU/WDT
+Date:   Thu,  2 Mar 2023 15:40:14 +0300
+Message-Id: <20230302124015.75546-2-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230302124015.75546-1-y.oudjana@protonmail.com>
+References: <20230302124015.75546-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,26 +85,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-These patches are part of a larger effort to support the MT6735 SoC family in
-mainline Linux. More patches (unsent or sent and pending review or revision)
-can be found here[1].
+Add a DT binding for the MT6735 top reset generation unit/watchdog timer.
 
-This series adds support for the top reset generation unit (TOPRGU) found on
-the MediaTek MT6735 SoC. TOPRGU generates several reset signals and provides
-watchdog timer functionality.
-
-[1] https://gitlab.com/mt6735-mainline/linux/-/commits/mt6735-staging
-
-Yassine Oudjana (2):
-  dt-bindings: reset: Add binding for MediaTek MT6735 TOPRGU/WDT
-  watchdog: mtk_wdt: Add support for MT6735 WDT
-
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+---
  .../bindings/watchdog/mediatek,mtk-wdt.yaml     |  1 +
- drivers/watchdog/mtk_wdt.c                      | 12 ++++++++++++
  include/dt-bindings/reset/mediatek,mt6735-wdt.h | 17 +++++++++++++++++
- 3 files changed, 30 insertions(+)
+ 2 files changed, 18 insertions(+)
  create mode 100644 include/dt-bindings/reset/mediatek,mt6735-wdt.h
 
+diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+index 55b34461df1b..009ccdb60b84 100644
+--- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+@@ -22,6 +22,7 @@ properties:
+       - enum:
+           - mediatek,mt2712-wdt
+           - mediatek,mt6589-wdt
++          - mediatek,mt6735-wdt
+           - mediatek,mt6795-wdt
+           - mediatek,mt7986-wdt
+           - mediatek,mt8183-wdt
+diff --git a/include/dt-bindings/reset/mediatek,mt6735-wdt.h b/include/dt-bindings/reset/mediatek,mt6735-wdt.h
+new file mode 100644
+index 000000000000..c6056e676d46
+--- /dev/null
++++ b/include/dt-bindings/reset/mediatek,mt6735-wdt.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++
++#ifndef _DT_BINDINGS_RESET_MEDIATEK_MT6735_WDT_H_
++#define _DT_BINDINGS_RESET_MEDIATEK_MT6735_WDT_H_
++
++#define MT6735_TOPRGU_MM_RST		1
++#define MT6735_TOPRGU_MFG_RST		2
++#define MT6735_TOPRGU_VENC_RST		3
++#define MT6735_TOPRGU_VDEC_RST		4
++#define MT6735_TOPRGU_IMG_RST		5
++#define MT6735_TOPRGU_MD_RST		7
++#define MT6735_TOPRGU_CONN_RST		9
++#define MT6735_TOPRGU_C2K_SW_RST	14
++#define MT6735_TOPRGU_C2K_RST		15
++#define MT6735_TOPRGU_RST_NUM		9
++
++#endif
 -- 
 2.39.2
 
