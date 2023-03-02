@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7876A86A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4766A86AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjCBQfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S229951AbjCBQfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCBQev (ORCPT
+        with ESMTP id S229949AbjCBQe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:34:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E401589A;
-        Thu,  2 Mar 2023 08:34:22 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322Eidnk028132;
-        Thu, 2 Mar 2023 16:34:18 GMT
+        Thu, 2 Mar 2023 11:34:59 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A08A4391A;
+        Thu,  2 Mar 2023 08:34:26 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322EdGWc003184;
+        Thu, 2 Mar 2023 16:34:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=IkDwVdh/UbkTY7/llJM4mil3nF7z+5IQWtSFZVOR4FY=;
- b=bponEC72MEs9lrC8O6HqLBzsFRtaw8qLh+KZ7NU145IIKkif/D9eY8cZ9qQpWoDkUhul
- Pgj8GptlmINzSasCC6p4fTPtFwWat9LFNND+qzgqtxI24o2vGzdF39jWRueNbqHTjRbt
- ytj7d/whq8mtjVlKeY3oZ+HxRlsZQhXFdhdhYDNSTofz1LxJFHFcMtI0tgiiPavH2vJp
- 89mAz4eGBV2sO+nYdMofxJcfAejHZM+NFthKB/osBYMtBYkyeFNOrdnTALs0qquoWNKQ
- fgta/TRhcp/Ko6Kq0+SRCfkLMeANW/sF1UKnZ6RlrznuEs8r1poT+0XjUPBjD8P9cj4x iA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2rbg99bm-1
+ bh=eo2nQg77us1PQ8ET6X6MkgsO2Gdmg3yPFXTsx/qwwBQ=;
+ b=LIWLaFhnsc0OiICTifnTXibasCpykKpAZa+GPTYS658qErsrLkmgXafP7NJ4hAXO+NLj
+ xtH49v9dwpD5WfR1uSh8nxw8sy4hzyOW02Hv2EBRLmu2CYS1oT+e9rx9SdUiZnSebaYF
+ 42GvWNh53j2jBES/kBED+JgJGpNP0lARUFvNikbWJLCcBXeGGY4pZs6o42hjvANX5Rec
+ yWnlVlcMopF2A99zlJYrDQLZn5YJYc2O2vau0KfWCeXSXGwiMqjkzF2QAynjBQ3eM8wF
+ Ym1S/aJluISZj06wylh2XMo9tloKsdg5upTDl3pf6NV42dkLXiGlS+jD0TO5aBafOVMI cA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p28cfbq84-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 16:34:18 +0000
+        Thu, 02 Mar 2023 16:34:23 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 322GYG3k005256
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 322GYMd9019936
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Mar 2023 16:34:16 GMT
+        Thu, 2 Mar 2023 16:34:22 GMT
 Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 2 Mar 2023 08:34:11 -0800
+ 15.2.986.41; Thu, 2 Mar 2023 08:34:17 -0800
 From:   Vinod Polimera <quic_vpolimer@quicinc.com>
 To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
         <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
@@ -49,9 +49,9 @@ CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
         <quic_bjorande@quicinc.com>, <quic_abhinavk@quicinc.com>,
         <quic_sbillaka@quicinc.com>
-Subject: [PATCH v14 07/14] drm/msm/disp/dpu: reset the datapath after timing engine disable
-Date:   Thu, 2 Mar 2023 22:03:10 +0530
-Message-ID: <1677774797-31063-8-git-send-email-quic_vpolimer@quicinc.com>
+Subject: [PATCH v14 08/14] drm/msm/dp: use atomic callbacks for DP bridge ops
+Date:   Thu, 2 Mar 2023 22:03:11 +0530
+Message-ID: <1677774797-31063-9-git-send-email-quic_vpolimer@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1677774797-31063-1-git-send-email-quic_vpolimer@quicinc.com>
 References: <1677774797-31063-1-git-send-email-quic_vpolimer@quicinc.com>
@@ -62,47 +62,111 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GHiqkoKJbczhPFD4vsVA3-gTHZ8H4hhF
-X-Proofpoint-ORIG-GUID: GHiqkoKJbczhPFD4vsVA3-gTHZ8H4hhF
+X-Proofpoint-GUID: U6g8OU3P1zh0uUCw3WJ-3lZ5DvoSOSMk
+X-Proofpoint-ORIG-GUID: U6g8OU3P1zh0uUCw3WJ-3lZ5DvoSOSMk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-02_10,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 impostorscore=0
- mlxscore=0 spamscore=0 malwarescore=0 adultscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303020144
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ definitions=2023-03-02_08,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 clxscore=1015 phishscore=0
+ bulkscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=903
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303020142
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reset the datapath after disabling the timing gen, such that
-it can start on a clean slate when the intf is enabled back.
-This was a recommended sequence from the DPU HW programming guide.
+Use atomic variants for DP bridge callback functions so that
+the atomic state can be accessed in the interface drivers.
+The atomic state will help the driver find out if the display
+is in self refresh state.
 
+Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/msm/dp/dp_display.c | 9 ++++++---
+ drivers/gpu/drm/msm/dp/dp_drm.c     | 6 +++---
+ drivers/gpu/drm/msm/dp/dp_drm.h     | 9 ++++++---
+ 3 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-index 0396084..3a37429 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-@@ -588,6 +588,7 @@ static void dpu_encoder_phys_vid_disable(struct dpu_encoder_phys *phys_enc)
- 		}
- 	}
- 
-+	dpu_encoder_helper_phys_cleanup(phys_enc);
- 	phys_enc->enable_state = DPU_ENC_DISABLED;
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index bde1a7c..985287e 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1652,7 +1652,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 	return 0;
  }
  
+-void dp_bridge_enable(struct drm_bridge *drm_bridge)
++void dp_bridge_atomic_enable(struct drm_bridge *drm_bridge,
++			     struct drm_bridge_state *old_bridge_state)
+ {
+ 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+ 	struct msm_dp *dp = dp_bridge->dp_display;
+@@ -1707,7 +1708,8 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 	mutex_unlock(&dp_display->event_mutex);
+ }
+ 
+-void dp_bridge_disable(struct drm_bridge *drm_bridge)
++void dp_bridge_atomic_disable(struct drm_bridge *drm_bridge,
++			      struct drm_bridge_state *old_bridge_state)
+ {
+ 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+ 	struct msm_dp *dp = dp_bridge->dp_display;
+@@ -1718,7 +1720,8 @@ void dp_bridge_disable(struct drm_bridge *drm_bridge)
+ 	dp_ctrl_push_idle(dp_display->ctrl);
+ }
+ 
+-void dp_bridge_post_disable(struct drm_bridge *drm_bridge)
++void dp_bridge_atomic_post_disable(struct drm_bridge *drm_bridge,
++				   struct drm_bridge_state *old_bridge_state)
+ {
+ 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+ 	struct msm_dp *dp = dp_bridge->dp_display;
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+index 275370f..3252d50 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.c
++++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+@@ -94,9 +94,9 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
+ 	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+ 	.atomic_destroy_state   = drm_atomic_helper_bridge_destroy_state,
+ 	.atomic_reset           = drm_atomic_helper_bridge_reset,
+-	.enable       = dp_bridge_enable,
+-	.disable      = dp_bridge_disable,
+-	.post_disable = dp_bridge_post_disable,
++	.atomic_enable          = dp_bridge_atomic_enable,
++	.atomic_disable         = dp_bridge_atomic_disable,
++	.atomic_post_disable    = dp_bridge_atomic_post_disable,
+ 	.mode_set     = dp_bridge_mode_set,
+ 	.mode_valid   = dp_bridge_mode_valid,
+ 	.get_modes    = dp_bridge_get_modes,
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.h b/drivers/gpu/drm/msm/dp/dp_drm.h
+index 250f7c6..afe79b8 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.h
++++ b/drivers/gpu/drm/msm/dp/dp_drm.h
+@@ -23,9 +23,12 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display, struct dr
+ struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 			struct drm_encoder *encoder);
+ 
+-void dp_bridge_enable(struct drm_bridge *drm_bridge);
+-void dp_bridge_disable(struct drm_bridge *drm_bridge);
+-void dp_bridge_post_disable(struct drm_bridge *drm_bridge);
++void dp_bridge_atomic_enable(struct drm_bridge *drm_bridge,
++			     struct drm_bridge_state *old_bridge_state);
++void dp_bridge_atomic_disable(struct drm_bridge *drm_bridge,
++			      struct drm_bridge_state *old_bridge_state);
++void dp_bridge_atomic_post_disable(struct drm_bridge *drm_bridge,
++				   struct drm_bridge_state *old_bridge_state);
+ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
+ 					  const struct drm_display_info *info,
+ 					  const struct drm_display_mode *mode);
 -- 
 2.7.4
 
