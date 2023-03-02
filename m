@@ -2,196 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DE46A7A16
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF486A7A17
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjCBDd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 22:33:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S229716AbjCBDfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 22:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjCBDd1 (ORCPT
+        with ESMTP id S229632AbjCBDfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 22:33:27 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C126C193D6;
-        Wed,  1 Mar 2023 19:33:25 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3223XEXB072518;
-        Wed, 1 Mar 2023 21:33:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1677727994;
-        bh=9Pl5fygjp5stmLuLjka+wkg0YviQ8JidHpMMzLX23sI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=WBzUxObUzAs42ieSnCNNxKzM8W6LjmaGkAKckvKlR6YjE2SX3zG3fLJw84xfDVkrj
-         jDOE+9VN601eQJTHPbmTRiXMUacF1ednSw5od6jetp3hukJ7MtefrgqeBJ+JqTYIXp
-         GP0f+k5ZPEQ/BFB+qH4yYDlXAbwAaFZ+Uqa2lSWk=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3223XEwJ053071
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 1 Mar 2023 21:33:14 -0600
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 1
- Mar 2023 21:33:13 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 1 Mar 2023 21:33:13 -0600
-Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3223XABw023374;
-        Wed, 1 Mar 2023 21:33:11 -0600
-Message-ID: <7843adf0-f883-280b-1d87-44010ceef767@ti.com>
-Date:   Thu, 2 Mar 2023 09:03:09 +0530
+        Wed, 1 Mar 2023 22:35:24 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013CF36453
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 19:35:21 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id D2F544248E;
+        Thu,  2 Mar 2023 03:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1677728119; bh=XntsFOuZW9EokA7P5o8/kS/05TnqCestwaz1ek9MS4o=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=C5awr6rG2rTbwRyewM+f42lUZ4SMwFrrQoNaa0bwRCcIvxElUf+ZTBE6qxULDyuiH
+         FeSpVWCfdg/AXlIYyKumYoJ8qRWqyxR7hF6O+AXFquofPkzvlMBBT48gPWoLQL3J8P
+         H+CcrPcmScZmtEQlPMSPP/LtEiyosn03OG2F7/izC/P9dGzSgwTKQfgCzblaMDbGq5
+         0giZPRcleInF8zSabl+P0/3WS8O7a/Hm4kX254O+CWzDWmgaPKP8G9s2rR1eIws8+a
+         I0iuvWeyI30jY93e6Yjf6HW1fCrSzOJAU4SngAWTzljs5eV1fPCnkgPLsGZsMKwEKd
+         AeI1nfQ3AdeSg==
+Message-ID: <c1bf62a2-e381-c796-2219-17a578987a76@marcan.st>
+Date:   Thu, 2 Mar 2023 12:35:15 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v12 3/8] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support
- of OSPI
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
-        <vaishnav.a@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230301091136.17862-1-r-gunasekaran@ti.com>
- <20230301091136.17862-4-r-gunasekaran@ti.com>
- <61fab807-42df-cc2c-51de-f54e9ea477c8@ti.com>
-From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
-In-Reply-To: <61fab807-42df-cc2c-51de-f54e9ea477c8@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Richard Acayan <mailingradian@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Asahi Lina <lina@asahilina.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Michael Dolan <mdolan@linuxfoundation.org>
+References: <Y820a/niMYtHfe8k@radian>
+ <58a5ad01-dbfc-04a7-2234-c57bb627ee84@marcan.st> <Y84K1N3fzz/J4Pxa@radian>
+ <6d96fb3c-9027-c612-fca4-e22c7c19186f@marcan.st> <ZAAVuo81E3XA6/LS@radian>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: Linux kernel DCO
+In-Reply-To: <ZAAVuo81E3XA6/LS@radian>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 01/03/23 9:27 pm, Andrew Davis wrote:
-> On 3/1/23 3:11 AM, Ravi Gunasekaran wrote:
->> From: Aswath Govindraju <a-govindraju@ti.com>
->>
->> Add support for two instance of OSPI in J721S2 SoC.
->>
->> Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
->> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->> Signed-off-by: Matt Ranostay <mranostay@ti.com>
->> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
->> ---
->> Changes from v11:
->> * Cleaned up comments
->>
->> Changes from v10:
->> * Documented the reason for disabling the nodes by default.
->> * Removed Link tag from commmit message
->>
->> Changes from v9:
->> * Disabled fss, ospi nodes by default in common DT file
->>
->> Changes from v8:
->> * Updated "ranges" property to fix dtbs warnings
->>
->> Changes from v7:
->> * Removed "reg" property from syscon node
->> * Renamed the "syscon" node to "bus" to after change in
->>    compatible property
->>
->> Changes from v6:
->> * Fixed the syscon node's compatible property
->>
->> Changes from v5:
->> * Updated the syscon node's compatible property
->> * Removed Cc tags from commit message
->>
->> Changes from v4:
->> * No change
->>
->> Changes from v3:
->> * No change
->>
->> Changes from v2:
->> * No change
->>
->> Changes from v1:
->> * No change
->>
->>   .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 46 +++++++++++++++++++
->>   1 file changed, 46 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> index 0af242aa9816..ab3ce8be7216 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> @@ -306,4 +306,50 @@
->>               ti,cpts-periodic-outputs = <2>;
->>           };
->>       };
->> +
->> +    fss: bus@47000000 {
->> +        compatible = "simple-bus";
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
->> +        ranges = <0x00 0x47000000 0x00 0x47000000 0x00 0x00068400>,
->> +             <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>,
->> +             <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>;
->> +
->> +        status = "disabled";
+On 02/03/2023 12.19, Richard Acayan wrote:
+>> I agree that this should be changed (for many reasons, I could write
+>> about this at length), and as I'm sure you can imagine, such change
+>> would probably have to be a coordinated push with buy-in from several
+>> kernel stakeholders. So I would appreciate it if you don't turn this
+>> into a public discussion at this time, and let us figure out how to deal
+>> with it when the time comes.
 > 
-> Since this node doesn't need pinmux, why is it default disabled? Same for
-> the other parent nodes in this series.
+> Sorry to bother you, but what happened?
+
+An offline discussion happened ;)
+
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d4563201f33a022fc0353033d9dfeb1606a88330
 > 
-> Andrew
+> Two Acked-by's are a bit underwhelming for a coordinated push with
+> buy-in from several kernel stakeholders.
 
-In this patch and others in this series, since child node is disabled,
-I thought of disabling the parent as well. And to later enable the
-parent node at the time when the child node needs to be enabled.
+The patch is by Linus, it's acked by Greg (who originally introduced the
+"real name" wording) and by Mike (SVP of Projects & Legal at the Linux
+Foundation, i.e. a lawyer). What more do you want?
 
-> 
->> +
->> +        ospi0: spi@47040000 {
->> +            compatible = "ti,am654-ospi", "cdns,qspi-nor";
->> +            reg = <0x00 0x47040000 0x00 0x100>,
->> +                  <0x05 0x00000000 0x01 0x00000000>;
->> +            interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
->> +            cdns,fifo-depth = <256>;
->> +            cdns,fifo-width = <4>;
->> +            cdns,trigger-address = <0x0>;
->> +            clocks = <&k3_clks 109 5>;
->> +            assigned-clocks = <&k3_clks 109 5>;
->> +            assigned-clock-parents = <&k3_clks 109 7>;
->> +            assigned-clock-rates = <166666666>;
->> +            power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
->> +            #address-cells = <1>;
->> +            #size-cells = <0>;
->> +
->> +            status = "disabled"; /* Needs pinmux */
->> +        };
->> +
->> +        ospi1: spi@47050000 {
->> +            compatible = "ti,am654-ospi", "cdns,qspi-nor";
->> +            reg = <0x00 0x47050000 0x00 0x100>,
->> +                  <0x07 0x00000000 0x01 0x00000000>;
->> +            interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
->> +            cdns,fifo-depth = <256>;
->> +            cdns,fifo-width = <4>;
->> +            cdns,trigger-address = <0x0>;
->> +            clocks = <&k3_clks 110 5>;
->> +            power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
->> +            #address-cells = <1>;
->> +            #size-cells = <0>;
->> +
->> +            status = "disabled"; /* Needs pinmux */
->> +        };
->> +    };
->>   };
+Things don't always happen as one envisioned, but now the problem is
+fixed either way. Linus ultimately gets to write the rules on this,
+there's no need for more acks.
 
--- 
-Regards,
-Ravi
+> Of course, it's easy to call this naive and ignorant. I accepted this
+> explanation and respected this request to not turn this into a public
+> discussion until the time comes. Now, I wonder if this patch was written
+> and applied later than it should have been because we misunderstood the
+> kernel contribution process as an aristocracy for this specific case.
+
+Ultimately the reality is that enforcement of the "real name" rule has
+been wildly inconsistent and some subsystems (like DRM) have always
+accepted pseudonyms. The original wording was misguided and conflated
+names with identity, leading to the eventual divergence of opinion on
+how it should be enforced. The subject came up offline, and now the
+official wording has been changed to match reality (i.e. that what the
+kernel actually wants is knowing who people are in an abstract sense of
+trust/continuity/reachability, not their "real" name whatever that might
+mean).
+
+- Hector
