@@ -2,76 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D463A6A7BF0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C7B6A7BF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjCBHim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 02:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S229510AbjCBHjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 02:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjCBHij (ORCPT
+        with ESMTP id S229455AbjCBHjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 02:38:39 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC78C5273
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 23:38:37 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id ec43so63938565edb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 23:38:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677742716;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rXBpuovAno/5WCGDBV+AisE7CduBEJt/pA7c+lDgz+U=;
-        b=CtKIX0svb8mSkZgFLyFr9jWV5y+5hXYP7lDRB7ItN9JP+1Y2FepFoLwhA1GetDiSKW
-         1ucgVAHyAUIqfv/yzvVsAf7sMF82M5fJaQIZZYmfTvxyozPPVhqQZLlX8fl4vA4W0aIi
-         5cj2rJU4LVe7WMFMZBAUWC5xa80DX4GpniOrXlj/y+8lu5U2LlOY48rvOcjZQM3+PnyI
-         a7J75lhYwwhYMyiKf6SfDHaKuuAgB/S3T0Jfm8sFU+p6gBbLuyyhE3Z32dmo4ZgWqK33
-         8B5fmQDVDhYWaQ+IbpwQCfvir3buV9XbMTbXfAgQdSZwu7Fh6/ySm7XXzU7pRGR2/fRM
-         h8ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677742716;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rXBpuovAno/5WCGDBV+AisE7CduBEJt/pA7c+lDgz+U=;
-        b=hGqkUe2j/81Q1/2nqMJC+SSH41B5WJQw2ARliAdGQ3S9DUrv72mbUFUG+7GXx66PCn
-         MmJU6EF0OKkVZexd61IKds60wrfWsA0yTt50SZx578+0R1kqB5FUWUjiprCpXtAEGVBv
-         btBfzAdWN1qtoCpWreHRK19JhDqx8SuKk4fXSqIjyzxe9WMv4mHbejzyPK7YPwMYbewU
-         yxB7vTikWUNw3Mks1Hg0td0rimURuol3TGhewn9qy36f4OwWnjBpJ+LhHgGMEyfFawaO
-         CJrRGnC1INR6qLDmhk2cmz6qZCT8EqzJVN6M2bSwtH3v2tyOVK61eQ4LOTmgoavZFiPd
-         LxLQ==
-X-Gm-Message-State: AO0yUKUGYD2G3ET9qgzl/mf61S2CvtmuWuJ2U2NUqfvoG564FAYRI+36
-        rPlZnBM6zbhcM2dRqu9bAKpVGQ==
-X-Google-Smtp-Source: AK7set+XPLhKndG5E75elshInMBO12jf2Y0kWOxB2hX9mc2dJBDx5XFbqaU8SlL3kW9dxo76L4ZYMA==
-X-Received: by 2002:a17:907:7e91:b0:907:89d1:1ba9 with SMTP id qb17-20020a1709077e9100b0090789d11ba9mr2367300ejc.51.1677742716300;
-        Wed, 01 Mar 2023 23:38:36 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m29-20020a50931d000000b004c0459c20f9sm334103eda.66.2023.03.01.23.38.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 23:38:35 -0800 (PST)
-Message-ID: <99fbc30c-7239-f63b-c76d-0b55a377eea7@linaro.org>
-Date:   Thu, 2 Mar 2023 08:38:34 +0100
+        Thu, 2 Mar 2023 02:39:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4063D30B;
+        Wed,  1 Mar 2023 23:39:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CB77B81157;
+        Thu,  2 Mar 2023 07:39:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E1B7C433D2;
+        Thu,  2 Mar 2023 07:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677742759;
+        bh=iP38PmJa3Kna7d3rQK1LrMyR11nxjBvibst1AjEzKN0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mnHJXetfuAQ8+BBRn0Wh85AMOpRevoND4VUUfpvJz4garY4R8yxLqx8w9AXXuHzZa
+         J6BJJi3gKjw7AVKpySNBorhRRsRvPyUBEJkKv7s3u4U7vKZEvG65E1oA4MthvRbotA
+         5509H9WX5hi6x1Fm3UCj1d5WNl8w7sokhfNARelA=
+Date:   Thu, 2 Mar 2023 08:39:17 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Slade Watkins <srw@sladewatkins.net>, Pavel Machek <pavel@denx.de>,
+        kuniyu@amazon.com, stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/19] 5.10.171-rc1 review
+Message-ID: <ZABSpbAUYfxqxtBS@kroah.com>
+References: <20230301180652.316428563@linuxfoundation.org>
+ <Y//Lw/zL168J3spQ@duo.ucw.cz>
+ <31339d95-a318-ba2e-fdb0-ea7b102fd6fd@sladewatkins.net>
+ <8e32bdd6-652f-f7db-15a0-9647f74275a1@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V2 2/4] dt-bindings: watchdog: xlnx,versal-wwdt: Add
- versal watchdog bindings
-Content-Language: en-US
-To:     Srinivas Neeli <srinivas.neeli@amd.com>, linux@roeck-us.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@amd.com, neelisrinivas18@gmail.com
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, git@amd.com, devicetree@vger.kernel.org
-References: <20230301175229.342004-1-srinivas.neeli@amd.com>
- <20230301175229.342004-3-srinivas.neeli@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230301175229.342004-3-srinivas.neeli@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e32bdd6-652f-f7db-15a0-9647f74275a1@roeck-us.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,82 +58,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2023 18:52, Srinivas Neeli wrote:
-> Versal watchdog driver uses window watchdog mode. Window watchdog
-> timer(WWDT) contains closed(first) and open(second) window with
-> 32 bit width. Write to the watchdog timer within predefined window
-> periods of time. This means a period that is not too soon and
-> a period that is not too late.
+On Wed, Mar 01, 2023 at 09:03:51PM -0800, Guenter Roeck wrote:
+> On 3/1/23 14:09, Slade Watkins wrote:
+> > On 3/1/23 17:03, Pavel Machek wrote:
+> > > Hi!
+> > > 
+> > > > This is the start of the stable review cycle for the 5.10.171 release.
+> > > > There are 19 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > 
+> > > AFAICT we should not need this patch -- we don't have b5fc29233d28 in
+> > > 5.10, so the assertion seems to be at the correct place here.
+> > 
+> > This (b5fc29233d28be7a3322848ebe73ac327559cdb9) appears to be in linux-5.10.y,
+> > though?
+> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.10.y&id=b5fc29233d28be7a3322848ebe73ac327559cdb9
+> > 
+> > Confused,
+> > -- Slade
+> > 
 > 
-> Updated devicetree bindings for adding versal window watchdog device.
+> Also confused. My script tells me that it is _not_ in v5.10.y, and that it isn't
+> queued either.
 > 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
-> ---
-> Changes in V2:
-> - Added watchdog ref
-> - Removed timeout-sec property
-> - Used 4 spaces for example indentation.
-> ---
->  .../bindings/watchdog/xlnx,versal-wwdt.yaml   | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+> Upstream commit b5fc29233d2 ("inet6: Remove inet6_destroy_sock() in sk->sk_prot->destroy().")
+>   Integrated in v6.2-rc1
+>   Not in 6.1.y
+>   Not in 5.15.y
+>   Not in 5.10.y
+>   Not in 5.4.y
+>   Not in 4.19.y
+>   Not in 4.14.y
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
-> new file mode 100644
-> index 000000000000..733de1ac60e8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/xlnx,versal-wwdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx Versal window watchdog timer controller
-> +
-> +maintainers:
-> +  - Neeli Srinivas <srinivas.neeli@amd.com>
-> +
-> +description:
-> +  Versal watchdog driver uses window watchdog mode. Window watchdog
-> +  timer(WWDT) contains closed(first) and open(second) window with
-> +  32 bit width. Write to the watchdog timer within predefined window
-> +  periods of time. This means a period that is not too soon and a
-> +  period that is not too late. The WWDT has to be restarted within
-> +  the open window time. If software tries to restart WWDT outside of
-> +  the open window time period, it generates a reset.
-> +
-> +allOf:
-> +  - $ref: /schemas/watchdog/watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - xlnx,versal-wwdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  xlnx,close_percent:
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    minimum: 1
-> +    maximum: 99
-> +    default: 50
-> +    description: closed window percentage
+> and:
+> 
+> $ git describe --contains b5fc29233d28be7a3322848ebe73ac327559cdb9
+> v6.2-rc1~99^2~393^2~4
+> 
+> However, it looks like 62ec33b44e0 is queued everywhere.
+> 
+> Upstream commit 62ec33b44e0 ("net: Remove WARN_ON_ONCE(sk->sk_forward_alloc) from sk_stream_kill_queues().")
+>   Integrated in v6.2
+>   Expected to be fixed in 6.1.y with next stable release (sha 29d108dc216d)
+>   Expected to be fixed in 5.15.y with next stable release (sha 07c26a42efc3)
+>   Expected to be fixed in 5.10.y with next stable release (sha 3ecdc3798eb9)
+>   Expected to be fixed in 5.4.y with next stable release (sha a88c26a1210e)
+>   Expected to be fixed in 4.19.y with next stable release (sha 60b390c291e9)
+>   Expected to be fixed in 4.14.y with next stable release (sha b53a2b4858c2)
 
-There was no such property before and your changelog does not explain
-it. Don't add new stuff silently in new versions.
+Please see the email from Kuniyuki here:
+	https://lore.kernel.org/r/20230227205531.12036-1-kuniyu@amazon.com
+that should explain this.
 
-There are several issues with this - missing dscription (you just copied
-name of property!), unneeded quotes, using underscore, incorrect name
-suffix... but what's the most important - what is the justification to
-put it into DT? IOW, why this is suitable for DT?
+The backport to older kernels is here:
+	https://lore.kernel.org/r/20230227211548.13923-1-kuniyu@amazon.com
 
+If you all think this should not be in any of these kernels, please let
+work with Kuniyuki to figure it out.
 
-Best regards,
-Krzysztof
+thanks,
 
+greg k-h
