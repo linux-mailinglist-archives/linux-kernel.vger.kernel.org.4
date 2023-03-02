@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6116A81AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7876A81A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjCBL5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S229781AbjCBL5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjCBL5b (ORCPT
+        with ESMTP id S229579AbjCBL5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:57:31 -0500
-Received: from out-39.mta1.migadu.com (out-39.mta1.migadu.com [IPv6:2001:41d0:203:375::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596AD37569
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:57:23 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677758241;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sredrf5PjZ7jQFXwhsTWfhRpimvvGAc4wV/iwzTmZq0=;
-        b=p3i2oWfXX64J/GM40FQzzz9ICV3FS6E6pH4lDCCyy7YOp2GeNRWM0L6LgWvaaDUFYG8nrS
-        JsC4lt9h3nfU1JJGScOJBu6/x+XrQKJnq360TuI5WChEuOL3dC/CGCuPgG3RaxCBz9v/4o
-        SuxS+lrnpNYeCA30kp61Se0VWYaGU0A=
-From:   richard.leitner@linux.dev
-Date:   Thu, 02 Mar 2023 12:55:03 +0100
-Subject: [PATCH 3/3] ASoC: maxim,max9867: add "mclk" support
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230302-max9867-v1-3-aa9f7f25db5e@skidata.com>
-References: <20230302-max9867-v1-0-aa9f7f25db5e@skidata.com>
-In-Reply-To: <20230302-max9867-v1-0-aa9f7f25db5e@skidata.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 2 Mar 2023 06:57:08 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B2C311E5;
+        Thu,  2 Mar 2023 03:57:05 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pXhYR-0004Hm-2H;
+        Thu, 02 Mar 2023 12:56:59 +0100
+Date:   Thu, 2 Mar 2023 11:56:56 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ladislav Michl <ladis@linux-mips.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Richard Leitner <richard.leitner@skidata.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1453;
- i=richard.leitner@skidata.com; h=from:subject:message-id;
- bh=t7JeLv5Avx9AQ87GdXmgLhpXQCWm8ePC8Uj/0k4VhNI=;
- b=owGbwMvMwCX2R2KahkXN7wuMp9WSGFIY+uU7ly5v9/95II6d2/TEmpl/JRpjl/9oubQ0q6J9w9Pg
- BJ1PHaUsDGJcDLJiiiz2xlzt7rll7ysVdXJh5rAygQxh4OIUgImcimX4p+Rb7Xtxr/wJwSKfq3Jq+z
- 3TBM53av9zm7Gv/Nbi8hlPpjH8lanmVk9hWxPJdoeZ6dvrUyq+6x84Fxjm/T4//3H/R2tLZgA=
-X-Developer-Key: i=richard.leitner@skidata.com; a=openpgp;
- fpr=3F330A87476D76EF79212C6DFC189628387CFBD0
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: Re: [RFC PATCH v11 08/12] net: ethernet: mtk_eth_soc: fix RX data
+ corruption issue
+Message-ID: <ZACPCHxbuD7deGTa@makrotopia.org>
+References: <cover.1677699407.git.daniel@makrotopia.org>
+ <9a788bb6984c836e63a7ecbdadff11a723769c37.1677699407.git.daniel@makrotopia.org>
+ <20230301233121.trnzgverxndxgunu@skbuf>
+ <Y//n4R2QuWvySDbg@makrotopia.org>
+ <20230302100022.vcw5kqpiy6jpmq3r@skbuf>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230302100022.vcw5kqpiy6jpmq3r@skbuf>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+On Thu, Mar 02, 2023 at 12:00:22PM +0200, Vladimir Oltean wrote:
+> On Thu, Mar 02, 2023 at 12:03:45AM +0000, Daniel Golle wrote:
+> > On Thu, Mar 02, 2023 at 01:31:21AM +0200, Vladimir Oltean wrote:
+> > > On Wed, Mar 01, 2023 at 07:55:05PM +0000, Daniel Golle wrote:
+> > > > Also set bit 12 which disabled the RX FIDO clear function when setting up
+> > > > MAC MCR, as MediaTek SDK did the same change stating:
+> > > > "If without this patch, kernel might receive invalid packets that are
+> > > > corrupted by GMAC."[1]
+> > > > This fixes issues with <= 1G speed where we could previously observe
+> > > > about 30% packet loss while the bad packet counter was increasing.
+> > > > 
+> > > > [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/d8a2975939a12686c4a95c40db21efdc3f821f63
+> > > > Tested-by: Bjørn Mork <bjorn@mork.no>
+> > > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > > > ---
+> > > 
+> > > Should this patch be submitted separately from the series, to the
+> > > net.git tree, to be backported to stable kernels?
+> > 
+> > Maybe yes, as this issue may affect e.g. the BPi-R3 board when used
+> > with 1G SFP modules. Previously this has just never been a problem as
+> > all practically all boards with MediaTek SoCs using SGMII also use the
+> > MediaTek MT7531 switch connecting in 2500Base-X mode.
+> > 
+> > Should the Fixes:-tag hence reference the commit adding support for the
+> > BPi-R3?
+> 
+> If it's not an issue that affects existing setups, there is no need to
+> backport the patch. But it needs to be clearly described as such in the
+> commit message.
+> 
+> You mention <= 1G speeds, but then only talk about 1G SFP modules.
+> I see that the mtk_eth_soc driver also sets "gmii" and "rgmii" in
+> phylink's supported_interfaces. Those are also <= 1G speeds. There could
+> also be SGMII on-board PHYs. Does the RX FIFO clearing issue not affect
+> those?
 
-Add basic support for the codecs mclk by enabling it during probing.
+The issues affects PHYs (and potentially switch PHY ICs) connected via
+SGMII operating at 1.25Mbaud.
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- sound/soc/codecs/max9867.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+The only officially supported board affected by this is the BPi-R3 where
+it affects the SFP cages -- the on-board MT7531 switch which is also
+used on all other boards using these SoCs is connected with 2500Base-X.
 
-diff --git a/sound/soc/codecs/max9867.c b/sound/soc/codecs/max9867.c
-index e161ab037bf7..b92dd61bb2b2 100644
---- a/sound/soc/codecs/max9867.c
-+++ b/sound/soc/codecs/max9867.c
-@@ -6,6 +6,7 @@
- // Copyright 2018 Ladislav Michl <ladis@linux-mips.org>
- //
- 
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
-@@ -16,6 +17,7 @@
- #include "max9867.h"
- 
- struct max9867_priv {
-+	struct clk *mclk;
- 	struct regmap *regmap;
- 	const struct snd_pcm_hw_constraint_list *constraints;
- 	unsigned int sysclk, pclk;
-@@ -663,8 +665,18 @@ static int max9867_i2c_probe(struct i2c_client *i2c)
- 	dev_info(&i2c->dev, "device revision: %x\n", reg);
- 	ret = devm_snd_soc_register_component(&i2c->dev, &max9867_component,
- 			max9867_dai, ARRAY_SIZE(max9867_dai));
--	if (ret < 0)
-+	if (ret < 0) {
- 		dev_err(&i2c->dev, "Failed to register component: %d\n", ret);
-+		return ret;
-+	}
-+
-+	max9867->mclk = devm_clk_get(&i2c->dev, "mclk");
-+	if (IS_ERR(max9867->mclk))
-+		return PTR_ERR(max9867->mclk);
-+	ret = clk_prepare_enable(max9867->mclk);
-+	if (ret < 0)
-+		dev_err(&i2c->dev, "Failed to enable MCLK: %d\n", ret);
-+
- 	return ret;
- }
- 
-
--- 
-2.39.2
-
+The issue does **not** affect RGMII or GMII on the MT7623 SoC, but I
+don't have any way to try RGMII or GMII on more recent SoCs as I lack
+hardware making use of that to connect a PHY.
