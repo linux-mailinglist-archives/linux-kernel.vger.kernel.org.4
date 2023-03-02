@@ -2,117 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290006A7D2C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A03B6A7D2F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjCBJAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S229541AbjCBJAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:00:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCBJAC (ORCPT
+        with ESMTP id S229750AbjCBJAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:00:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF56515578;
-        Thu,  2 Mar 2023 01:00:00 -0800 (PST)
+        Thu, 2 Mar 2023 04:00:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A9A392BC;
+        Thu,  2 Mar 2023 01:00:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63885B811F6;
-        Thu,  2 Mar 2023 08:59:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C8EC433EF;
-        Thu,  2 Mar 2023 08:59:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DF22B811A1;
+        Thu,  2 Mar 2023 09:00:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3020DC433D2;
+        Thu,  2 Mar 2023 09:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677747598;
-        bh=7vsJJ2UWnbA5yPqyrOOw+/4k4if8YpbZ3L78wTns+mk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=djPhtteGfc7rhC+rbH7RwqdDKFvj9ACvNesN+NQ1tfpElhz51rQngnHKV8GTHU2Xw
-         tGsvTNOew3QWPxpFPZgb6pNxq+wC/uuw+zKHBiO+JMJaK6n/sk/j8CWDA4w4a8oyD7
-         r+xBiwYp+PeXemm7WAd7N/VgKHexP6IiUzuSurfRCEhyMKmvlFYVPqzabG9Ry/Ze75
-         oqbdFD3l+nfgR8areP0z6FEKYfIEU32JzSWqHB9IHoRo64j4xNt241B67IEosR4LSL
-         VMu4RWnVSlozgV0uNkWcwPvEGSPzi0r59KeVvytZJVOrtaTb8RvO7KPRckiiScuG/y
-         bbIP1izBNyxXA==
-Message-ID: <9a540967-c1a6-b9df-a662-b8a729d7d64b@kernel.org>
-Date:   Thu, 2 Mar 2023 09:59:49 +0100
+        s=k20201202; t=1677747638;
+        bh=Ebb3ot/MKrEX9PZqTOLwhhuImbtXpjRuOQVB90BniQY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cpzf7ma+ctc+LuCj9wJ7uRvZWsBa/ogBWcU5vYxz+PUs1CmIJ2euxkIoy+twdxpxM
+         Ed6rzepfq8FUOAHgkagE3ojujl0E1MWtifIWCTxKXKKLi1sFFrkhMnBeH5iQUoOOIt
+         MFUSpEPXruw1IEE+h/EpiGHOCFvQ/mrWCJORjGRIA5o4MH5yYv7KHnHPU2LKyKKPpf
+         jjzwu6/IJiVnxj/s3GqKTTiypI6o/MK9duqV7aOIDkkJryupHzjk4eGX3F7YmCRnWY
+         zbIyv7+WLvsfPatfvzqHDJC1eqPVMqu2pGmLWnwy54EeJt2Mr3pna9i0kXwYcfhuHw
+         +WfWCq4yQu/QA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Matt Evans <mev@rivosinc.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH] asm-generic: avoid __generic_cmpxchg_local warnings
+Date:   Thu,  2 Mar 2023 10:00:22 +0100
+Message-Id: <20230302090032.3740505-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: net: adin: Document bindings for fast
- link down disable
-Content-Language: en-US
-To:     Ken Sloat <ken.s@variscite.com>
-Cc:     noname.nuno@gmail.com, pabeni@redhat.com, edumazet@google.com,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228144056.2246114-1-ken.s@variscite.com>
- <20230228184956.2309584-1-ken.s@variscite.com>
- <20230228184956.2309584-2-ken.s@variscite.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230228184956.2309584-2-ken.s@variscite.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2023 19:49, Ken Sloat wrote:
-> The ADI PHY contains a feature commonly known as "Fast Link Down" and
-> called "Enhanced Link Detection" by ADI. This feature is enabled by
-> default and provides earlier detection of link loss in certain
-> situations.
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+Code that passes a 32-bit constant into cmpxchg() produces a harmless
+sparse warning because of the truncation in the branch that is not taken:
 
-> Document the new optional flags "adi,disable-fast-down-1000base-t" and
-> "adi,disable-fast-down-100base-tx" which disable the "Fast Link Down"
-> feature in the ADI PHY.
+fs/erofs/zdata.c: note: in included file (through /home/arnd/arm-soc/arch/arm/include/asm/cmpxchg.h, /home/arnd/arm-soc/arch/arm/include/asm/atomic.h, /home/arnd/arm-soc/include/linux/atomic.h, ...):
+include/asm-generic/cmpxchg-local.h:29:33: warning: cast truncates bits from constant value (5f0ecafe becomes fe)
+include/asm-generic/cmpxchg-local.h:33:34: warning: cast truncates bits from constant value (5f0ecafe becomes cafe)
+include/asm-generic/cmpxchg-local.h:29:33: warning: cast truncates bits from constant value (5f0ecafe becomes fe)
+include/asm-generic/cmpxchg-local.h:30:42: warning: cast truncates bits from constant value (5f0edead becomes ad)
+include/asm-generic/cmpxchg-local.h:33:34: warning: cast truncates bits from constant value (5f0ecafe becomes cafe)
+include/asm-generic/cmpxchg-local.h:34:44: warning: cast truncates bits from constant value (5f0edead becomes dead)
 
-You did not explain why do you need it.
+This was reported as a regression to Matt's recent __generic_cmpxchg_local
+patch, though this patch only added more warnings on top of the ones
+that were already there.
 
-> 
-> Signed-off-by: Ken Sloat <ken.s@variscite.com>
-> ---
+Rewording the truncation to use an explicit bitmask instead of a cast
+to a smaller type avoids the warning but otherwise leaves the code
+unchanged.
 
-Don't attach your new patchsets to your old threads. It buries them deep
-and make usage of our tools difficult.
+I had another look at why the cast is even needed for atomic_cmpxchg(),
+and as Matt describes the problem here is that atomic_t contains a
+signed 'int', but cmpxchg() takes an 'unsigned long' argument, and
+converting between the two leads to a 64-bit sign-extension of
+negative 32-bit atomics.
 
+I checked the other implementations of arch_cmpxchg() and did not find
+any others that run into the same problem as __generic_cmpxchg_local(),
+but it's easy to be on the safe side here and always convert the
+signed int into an unsigned int when calling arch_cmpxchg(), as this
+will work even when any of the arch_cmpxchg() implementations run
+into the same problem.
 
->  Documentation/devicetree/bindings/net/adi,adin.yaml | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/adi,adin.yaml b/Documentation/devicetree/bindings/net/adi,adin.yaml
-> index 64ec1ec71ccd..923baff26c3e 100644
-> --- a/Documentation/devicetree/bindings/net/adi,adin.yaml
-> +++ b/Documentation/devicetree/bindings/net/adi,adin.yaml
-> @@ -52,6 +52,18 @@ properties:
->      description: Enable 25MHz reference clock output on CLK25_REF pin.
->      type: boolean
->  
-> +  adi,disable-fast-down-1000base-t:
-> +    $ref: /schemas/types.yaml#definitions/flag
-> +    description: |
-> +      If set, disables any ADI fast link down ("Enhanced Link Detection")
-> +      function bits for 1000base-t interfaces.
+Fixes: 624654152284 ("locking/atomic: cmpxchg: Make __generic_cmpxchg_local compare against zero-extended 'old' value")
+Reviewed-by: Matt Evans <mev@rivosinc.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ include/asm-generic/atomic.h        |  4 ++--
+ include/asm-generic/cmpxchg-local.h | 12 ++++++------
+ include/asm-generic/cmpxchg.h       |  6 +++---
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-And why disabling it per board should be a property of DT?
-
-Best regards,
-Krzysztof
+diff --git a/include/asm-generic/atomic.h b/include/asm-generic/atomic.h
+index 04b8be9f1a77..e271d6708c87 100644
+--- a/include/asm-generic/atomic.h
++++ b/include/asm-generic/atomic.h
+@@ -130,7 +130,7 @@ ATOMIC_OP(xor, ^)
+ #define arch_atomic_read(v)			READ_ONCE((v)->counter)
+ #define arch_atomic_set(v, i)			WRITE_ONCE(((v)->counter), (i))
+ 
+-#define arch_atomic_xchg(ptr, v)		(arch_xchg(&(ptr)->counter, (v)))
+-#define arch_atomic_cmpxchg(v, old, new)	(arch_cmpxchg(&((v)->counter), (old), (new)))
++#define arch_atomic_xchg(ptr, v)		(arch_xchg(&(ptr)->counter, (u32)(v)))
++#define arch_atomic_cmpxchg(v, old, new)	(arch_cmpxchg(&((v)->counter), (u32)(old), (u32)(new)))
+ 
+ #endif /* __ASM_GENERIC_ATOMIC_H */
+diff --git a/include/asm-generic/cmpxchg-local.h b/include/asm-generic/cmpxchg-local.h
+index c3e7315b7c1d..3df9f59a544e 100644
+--- a/include/asm-generic/cmpxchg-local.h
++++ b/include/asm-generic/cmpxchg-local.h
+@@ -26,16 +26,16 @@ static inline unsigned long __generic_cmpxchg_local(volatile void *ptr,
+ 	raw_local_irq_save(flags);
+ 	switch (size) {
+ 	case 1: prev = *(u8 *)ptr;
+-		if (prev == (u8)old)
+-			*(u8 *)ptr = (u8)new;
++		if (prev == (old & 0xffu))
++			*(u8 *)ptr = (new & 0xffu);
+ 		break;
+ 	case 2: prev = *(u16 *)ptr;
+-		if (prev == (u16)old)
+-			*(u16 *)ptr = (u16)new;
++		if (prev == (old & 0xffffu))
++			*(u16 *)ptr = (new & 0xffffu);
+ 		break;
+ 	case 4: prev = *(u32 *)ptr;
+-		if (prev == (u32)old)
+-			*(u32 *)ptr = (u32)new;
++		if (prev == (old & 0xffffffffffu))
++			*(u32 *)ptr = (new & 0xffffffffu);
+ 		break;
+ 	case 8: prev = *(u64 *)ptr;
+ 		if (prev == old)
+diff --git a/include/asm-generic/cmpxchg.h b/include/asm-generic/cmpxchg.h
+index dca4419922a9..848de25fc4bf 100644
+--- a/include/asm-generic/cmpxchg.h
++++ b/include/asm-generic/cmpxchg.h
+@@ -32,7 +32,7 @@ unsigned long __generic_xchg(unsigned long x, volatile void *ptr, int size)
+ #else
+ 		local_irq_save(flags);
+ 		ret = *(volatile u8 *)ptr;
+-		*(volatile u8 *)ptr = x;
++		*(volatile u8 *)ptr = (x & 0xffu);
+ 		local_irq_restore(flags);
+ 		return ret;
+ #endif /* __xchg_u8 */
+@@ -43,7 +43,7 @@ unsigned long __generic_xchg(unsigned long x, volatile void *ptr, int size)
+ #else
+ 		local_irq_save(flags);
+ 		ret = *(volatile u16 *)ptr;
+-		*(volatile u16 *)ptr = x;
++		*(volatile u16 *)ptr = (x & 0xffffu);
+ 		local_irq_restore(flags);
+ 		return ret;
+ #endif /* __xchg_u16 */
+@@ -54,7 +54,7 @@ unsigned long __generic_xchg(unsigned long x, volatile void *ptr, int size)
+ #else
+ 		local_irq_save(flags);
+ 		ret = *(volatile u32 *)ptr;
+-		*(volatile u32 *)ptr = x;
++		*(volatile u32 *)ptr = (x & 0xffffffffu);
+ 		local_irq_restore(flags);
+ 		return ret;
+ #endif /* __xchg_u32 */
+-- 
+2.39.2
 
