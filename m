@@ -2,266 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011166A8429
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916096A8437
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjCBO3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
+        id S229870AbjCBOc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjCBO3g (ORCPT
+        with ESMTP id S229471AbjCBOcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:29:36 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595151E2B8
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:29:32 -0800 (PST)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PSD203bqVznWdY;
-        Thu,  2 Mar 2023 22:26:48 +0800 (CST)
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 2 Mar 2023 22:29:29 +0800
-Message-ID: <aef87465-221b-3aff-3501-af1a516bbd98@huawei.com>
-Date:   Thu, 2 Mar 2023 22:29:29 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v3] sched/fair: sanitize vruntime of entity being placed
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     Roman Kagan <rkagan@amazon.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Thu, 2 Mar 2023 09:32:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A76F3A88;
+        Thu,  2 Mar 2023 06:32:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99AD7615D4;
+        Thu,  2 Mar 2023 14:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98650C433EF;
+        Thu,  2 Mar 2023 14:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677767570;
+        bh=4kWn2IUOqTgbuPNR7J4g0aISgONkKWz1waYvnH8empk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dkkIEyq0IRXUm4Vrc0c7Kh9DKTxUvUemhN6YlRmM6E4OclRg3z3vuklxMRcZ3jxg2
+         AThhMXlTnOohw04BC+gKnTf92taSteFgy5JdPF+U0j/KBiWgXShmPjekpVz70JG4/N
+         pssmglc7IBnJ5tQ/ot+Vv7WrxRA8VPSaKkQihEZb6cIj/YvTgbFswNQQI3xxzA/H0x
+         AhnGmab+mpSxX7AfllzWg8bnvU9agleWXloyGxI78EQ8pJS7bB/i6wRmBpBDSEfdfW
+         No0unzTjL54P8HtijPCNyJThUCekfVZdBEeTf65vhXzNKBaKnfDmo/kqDfI0pLjyZ9
+         4nSf16QZWDMVQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2E7E54049F; Thu,  2 Mar 2023 11:32:48 -0300 (-03)
+Date:   Thu, 2 Mar 2023 11:32:48 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-References: <20230209193107.1432770-1-rkagan@amazon.de>
- <CAKfTPtB7ZDyCh0MiNQtyimVhYJ6E3C+2bTptj9CX3+mepH8YAQ@mail.gmail.com>
- <Y/T36NvaCxSfS8Z/@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtCDxdVEmPQf=6g7n7Y+bkozXAJT1NG92wDc_quNaDiHMg@mail.gmail.com>
- <Y/xtDWYTKLutOqrM@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtAq3yBYBxpR=RO8zxrQduOymqkdAEhigjfCuGfsY1uHsg@mail.gmail.com>
- <1cd19d3f-18c4-92f9-257a-378cc18cfbc7@huawei.com>
- <CAKfTPtB9oYsKHLF--nVwNT5z-9tCR3bBWd8mPe4NWZ5S3y43Lg@mail.gmail.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <CAKfTPtB9oYsKHLF--nVwNT5z-9tCR3bBWd8mPe4NWZ5S3y43Lg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 03/10] perf record: Early auxtrace initialization
+ before event parsing
+Message-ID: <ZACzkOmDFuRQ5MiR@kernel.org>
+References: <20230302041211.852330-1-irogers@google.com>
+ <20230302041211.852330-4-irogers@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302041211.852330-4-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/3/2 21:34, Vincent Guittot 写道:
-> On Thu, 2 Mar 2023 at 10:36, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>
->>
->>
->> 在 2023/2/27 22:37, Vincent Guittot 写道:
->>> On Mon, 27 Feb 2023 at 09:43, Roman Kagan <rkagan@amazon.de> wrote:
->>>>
->>>> On Tue, Feb 21, 2023 at 06:26:11PM +0100, Vincent Guittot wrote:
->>>>> On Tue, 21 Feb 2023 at 17:57, Roman Kagan <rkagan@amazon.de> wrote:
->>>>>> What scares me, though, is that I've got a message from the test robot
->>>>>> that this commit drammatically affected hackbench results, see the quote
->>>>>> below.  I expected the commit not to affect any benchmarks.
->>>>>>
->>>>>> Any idea what could have caused this change?
->>>>>
->>>>> Hmm, It's most probably because se->exec_start is reset after a
->>>>> migration and the condition becomes true for newly migrated task
->>>>> whereas its vruntime should be after min_vruntime.
->>>>>
->>>>> We have missed this condition
->>>>
->>>> Makes sense to me.
->>>>
->>>> But what would then be the reliable way to detect a sched_entity which
->>>> has slept for long and risks overflowing in .vruntime comparison?
->>>
->>> For now I don't have a better idea than adding the same check in
->>> migrate_task_rq_fair()
->>
->> Hi, Vincent，
->> I fixed this condition as you said, and the test results are as follows.
->>
->> testcase: hackbench -g 44 -f 20 --process --pipe -l 60000 -s 100
->> version1: v6.2
->> version2: v6.2 + commit 829c1651e9c4
->> version3: v6.2 + commit 829c1651e9c4 + this patch
->>
->> -------------------------------------------------
->>         version1        version2        version3
->> test1   81.0            118.1           82.1
->> test2   82.1            116.9           80.3
->> test3   83.2            103.9           83.3
->> avg(s)  82.1            113.0           81.9
->>
->> -------------------------------------------------
->> After deal with the task migration case, the hackbench result has restored.
->>
->> The patch as follow, how does this look?
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index ff4dbbae3b10..3a88d20fd29e 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -4648,6 +4648,26 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>  #endif
->>  }
->>
->> +static inline u64 sched_sleeper_credit(struct sched_entity *se)
->> +{
->> +
->> +       unsigned long thresh;
->> +
->> +       if (se_is_idle(se))
->> +               thresh = sysctl_sched_min_granularity;
->> +       else
->> +               thresh = sysctl_sched_latency;
->> +
->> +       /*
->> +        * Halve their sleep time's effect, to allow
->> +        * for a gentler effect of sleepers:
->> +        */
->> +       if (sched_feat(GENTLE_FAIR_SLEEPERS))
->> +               thresh >>= 1;
->> +
->> +       return thresh;
->> +}
->> +
->>  static void
->>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>  {
->> @@ -4664,23 +4684,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>                 vruntime += sched_vslice(cfs_rq, se);
->>
->>         /* sleeps up to a single latency don't count. */
->> -       if (!initial) {
->> -               unsigned long thresh;
->> -
->> -               if (se_is_idle(se))
->> -                       thresh = sysctl_sched_min_granularity;
->> -               else
->> -                       thresh = sysctl_sched_latency;
->> -
->> -               /*
->> -                * Halve their sleep time's effect, to allow
->> -                * for a gentler effect of sleepers:
->> -                */
->> -               if (sched_feat(GENTLE_FAIR_SLEEPERS))
->> -                       thresh >>= 1;
->> -
->> -               vruntime -= thresh;
->> -       }
->> +       if (!initial)
->> +               vruntime -= sched_sleeper_credit(se);
->>
->>         /*
->>          * Pull vruntime of the entity being placed to the base level of
->> @@ -4690,7 +4695,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>          * inversed due to s64 overflow.
->>          */
->>         sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->> +       if (se->exec_start != 0 && (s64)sleep_time > 60LL * NSEC_PER_SEC)
->>                 se->vruntime = vruntime;
->>         else
->>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
->> @@ -7634,8 +7639,12 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>          */
->>         if (READ_ONCE(p->__state) == TASK_WAKING) {
->>                 struct cfs_rq *cfs_rq = cfs_rq_of(se);
->> +               u64 sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>
->> -               se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->> +               if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+Em Wed, Mar 01, 2023 at 08:12:04PM -0800, Ian Rogers escreveu:
+> This allows event parsing to use the evsel__is_aux_event function,
+> which is important when determining event grouping.
 > 
-> You also need to test (se->exec_start !=0) here because the task might
-
-Hi,
-
-I don't understand when the another migration happend. Could you tell me in more detail?
-
-I think the next migration will happend after the wakee task enqueued, but at this time
-the p->__state isn't TASK_WAKING, p->__state already be changed to TASK_RUNNING at ttwu_do_wakeup().
-
-If such a migration exists, Previous code "se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);" maybe
-perform multiple times，wouldn't it go wrong in this way?
-
-> migrate another time before being scheduled. You should create a
-> helper function like below and use it in both place
-
-Ok, I will update at next version.
-
-
-Thanks,
-ZhangQiao.
-
->
-> static inline bool entity_long_sleep(se)
-> {
->         struct cfs_rq *cfs_rq;
->         u64 sleep_time;
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/arch/x86/util/auxtrace.c | 17 +++++++++++++----
+>  tools/perf/builtin-record.c         |  6 ++++++
+>  tools/perf/util/auxtrace.h          |  2 ++
+>  3 files changed, 21 insertions(+), 4 deletions(-)
 > 
->         if (se->exec_start == 0)
->                 return false;
+> diff --git a/tools/perf/arch/x86/util/auxtrace.c b/tools/perf/arch/x86/util/auxtrace.c
+> index 3da506e13f49..de1e4842ea2e 100644
+> --- a/tools/perf/arch/x86/util/auxtrace.c
+> +++ b/tools/perf/arch/x86/util/auxtrace.c
+> @@ -15,6 +15,19 @@
+>  #include "../../../util/intel-bts.h"
+>  #include "../../../util/evlist.h"
+>  
+> +void auxtrace__early_init(void)
+> +{
+> +	struct perf_pmu *intel_pt_pmu;
+> +	struct perf_pmu *intel_bts_pmu;
+> +
+> +	intel_pt_pmu = perf_pmu__find(INTEL_PT_PMU_NAME);
+> +	if (intel_pt_pmu)
+> +		intel_pt_pmu->auxtrace = true;
+> +	intel_bts_pmu = perf_pmu__find(INTEL_BTS_PMU_NAME);
+> +	if (intel_bts_pmu)
+> +		intel_bts_pmu->auxtrace = true;
+> +}
+> +
+>  static
+>  struct auxtrace_record *auxtrace_record__init_intel(struct evlist *evlist,
+>  						    int *err)
+> @@ -26,11 +39,7 @@ struct auxtrace_record *auxtrace_record__init_intel(struct evlist *evlist,
+>  	bool found_bts = false;
+>  
+>  	intel_pt_pmu = perf_pmu__find(INTEL_PT_PMU_NAME);
+> -	if (intel_pt_pmu)
+> -		intel_pt_pmu->auxtrace = true;
+
+In this case, can't we do it as:
+
+	if (intel_pt_pmu == NULL && intel_bts_pmu == NULL)
+		auxtrace__early_init();
+
+To avoid possibly doing the finds again?
+
+- Arnaldo
+
+>  	intel_bts_pmu = perf_pmu__find(INTEL_BTS_PMU_NAME);
+> -	if (intel_bts_pmu)
+> -		intel_bts_pmu->auxtrace = true;
+>  
+>  	evlist__for_each_entry(evlist, evsel) {
+>  		if (intel_pt_pmu && evsel->core.attr.type == intel_pt_pmu->type)
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 8374117e66f6..a0870c076dc0 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -3940,6 +3940,10 @@ static int record__init_thread_masks(struct record *rec)
+>  	return ret;
+>  }
+>  
+> +__weak void auxtrace__early_init(void)
+> +{
+> +}
+> +
+>  int cmd_record(int argc, const char **argv)
+>  {
+>  	int err;
+> @@ -3985,6 +3989,8 @@ int cmd_record(int argc, const char **argv)
+>  	if (err)
+>  		return err;
+>  
+> +	auxtrace__early_init();
+> +
+>  	argc = parse_options(argc, argv, record_options, record_usage,
+>  			    PARSE_OPT_STOP_AT_NON_OPTION);
+>  	if (quiet)
+> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
+> index 29eb82dff574..49a86aa6ac94 100644
+> --- a/tools/perf/util/auxtrace.h
+> +++ b/tools/perf/util/auxtrace.h
+> @@ -457,6 +457,8 @@ struct addr_filters {
+>  
+>  struct auxtrace_cache;
+>  
+> +void auxtrace__early_init(void);
+> +
+>  #ifdef HAVE_AUXTRACE_SUPPORT
+>  
+>  u64 compat_auxtrace_mmap__read_head(struct auxtrace_mmap *mm);
+> -- 
+> 2.39.2.722.g9855ee24e9-goog
 > 
->         cfs_rq = cfs_rq_of(se);
->         sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->         if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->                 return true;
-> 
->         return false;
-> }
-> 
-> 
->> +                       se->vruntime = -sched_sleeper_credit(se);
->> +               else
->> +                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->>         }
->>
->>         if (!task_on_rq_migrating(p)) {
->>
->>
->>
->> Thanks.
->> Zhang Qiao.
->>
->>>
->>>>
->>>> Thanks,
->>>> Roman.
->>>>
->>>>
->>>>
->>>> Amazon Development Center Germany GmbH
->>>> Krausenstr. 38
->>>> 10117 Berlin
->>>> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
->>>> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
->>>> Sitz: Berlin
->>>> Ust-ID: DE 289 237 879
->>>>
->>>>
->>>>
->>> .
->>>
-> .
-> 
+
+-- 
+
+- Arnaldo
