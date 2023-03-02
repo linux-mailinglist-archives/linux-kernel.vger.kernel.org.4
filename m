@@ -2,125 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2D36A7D44
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80E26A7D4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjCBJE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S229826AbjCBJFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjCBJEZ (ORCPT
+        with ESMTP id S229880AbjCBJFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:04:25 -0500
+        Thu, 2 Mar 2023 04:05:35 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307251817C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:03:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CB915CB6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:04:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677747759;
+        s=mimecast20190719; t=1677747774;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Rzx2MwJyGFazUQ+bL7x8PG/wxOPeZdsHQ/JpovqZTbo=;
-        b=b3+mnCpe8JGvfzKWouVTEkA1jSTW1gJaZQCLT150qQ5IxQPQwEm7OMAOqJBpttGZNSND8V
-        9RFf7r7vOg5Rr/uPzNGMny3W9oQRNSXUwx4Itki9a0lgkOcy4o56V8eccJLPvtA58U/LmA
-        PTFQe9Z1pT03TG8SD/zdGV3H/d2GBRo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-42-vmwexXWBPumUPwcqn1yqBw-1; Thu, 02 Mar 2023 04:02:36 -0500
-X-MC-Unique: vmwexXWBPumUPwcqn1yqBw-1
-Received: by mail-wm1-f70.google.com with SMTP id e17-20020a05600c219100b003e21fa60ec1so790115wme.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:02:36 -0800 (PST)
+        bh=TlVfN0P5CKyDg1R2VL26O9A7BMyZXcfHAYywGAXDTrs=;
+        b=YCV4HJ6cMY8cgOrFOwn0HiKFEcaKeZ6GVVS3GBAXGZ6YkqnPrXxFm7NdcQ0J13JtVw5hor
+        y12ZDY92FZgkNxx46aoqj49vxxxSbVw4GvJm80c1W2/SFidz0WNxKhKKyZR9oYB4tTCXYR
+        Nmq8E0oXvF2fxTQuo0pVIRORwO2g4Zs=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-182-prT4tRRYNVmRhU7PUg3iGA-1; Thu, 02 Mar 2023 04:02:53 -0500
+X-MC-Unique: prT4tRRYNVmRhU7PUg3iGA-1
+Received: by mail-ed1-f72.google.com with SMTP id eh16-20020a0564020f9000b004acc4f8aa3fso23141722edb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:02:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rzx2MwJyGFazUQ+bL7x8PG/wxOPeZdsHQ/JpovqZTbo=;
-        b=L03aZxU4RJb9/u8Er6S0Rm7e4kVGyDvfevOW4nV4uk9rGQFVk4j7z5wQxLh0633k8+
-         bGVYyjIsgbcTPDaXVG4YlTPL18wByOt8K2YGri0NAag+KBHeJZh9WO8z1J29sfVzBc7y
-         LmdaeEQwATodkkfI/FIpPsH+e8XPyAk6gMEYYi86j4YQngWFLyeYg5ACl9UBVJCa7MD7
-         MMj6f9VWBNGNweCmgItPIDLmNEBKuY08YRPMIVJW/bWdvO4qG2LMnbOD542xsIH+IPYJ
-         9gEmZjOoiWlC9TXgwgWAZjgrgekwiAS4r3WrK8tOYtDdFfH4R0hbXJhPGNz1EoG/M+78
-         m99A==
-X-Gm-Message-State: AO0yUKU/1dckv5n5RCos+brf+iXOp48EDufwreycoYkSI1PRymIc9d3O
-        uywkwdURWAMpjHcMnnfvZPgKxEqRGbdsmhSEk6drZ+IOX9dzMa8z+No4sfr9p4rt1ccofIonQIE
-        K5uLXuEpeYk+W9ioMggobKl7Z
-X-Received: by 2002:adf:f18d:0:b0:2c9:5a1f:5864 with SMTP id h13-20020adff18d000000b002c95a1f5864mr7629281wro.21.1677747755292;
-        Thu, 02 Mar 2023 01:02:35 -0800 (PST)
-X-Google-Smtp-Source: AK7set/b4hGgvgRD+4LWvfowqtA9986Zt0gXO0AP3E31VaZ2FjsborxxglzdVgHluaBsx+EJCrSayg==
-X-Received: by 2002:adf:f18d:0:b0:2c9:5a1f:5864 with SMTP id h13-20020adff18d000000b002c95a1f5864mr7629264wro.21.1677747754963;
-        Thu, 02 Mar 2023 01:02:34 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:4f00:87ba:e9e9:3821:677b? (p200300cbc70e4f0087bae9e93821677b.dip0.t-ipconnect.de. [2003:cb:c70e:4f00:87ba:e9e9:3821:677b])
-        by smtp.gmail.com with ESMTPSA id s2-20020adfeb02000000b002cda9aa1dc1sm4385622wrn.111.2023.03.02.01.02.34
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TlVfN0P5CKyDg1R2VL26O9A7BMyZXcfHAYywGAXDTrs=;
+        b=31Pab173+pkIBypVmP6/XWj1WxRs288HtM1tvadRt14Xllp98sU6MHgx+GSVpn6ab3
+         4kqD5G0/+JTUHIM+8pmPH+mQkbOCHdzgoxGu63aqXyIz04VfN5bZBqqZEoGB5+iSBSNy
+         V4RH9u7yUOJf2EavKuyqkfi2wT9y/9q79o1Fh4yk316Uwj1r0VJvfeqRDv4c1x1UNMND
+         PXo7YNOzKKToulRTXPfaez/VwUj5rBFMnmQCmDPrO1IFmkgZkA0aSVLNTpmJVk6RDpL4
+         Q7shjpR36txWvWj9XVMNhRTNa4fYKYQeZKpAILvlVLT18EmHcJHgoO2MnX4jl7ij8Cwh
+         F3ZA==
+X-Gm-Message-State: AO0yUKWjtaNLCx+WcU7UTQySmqKmwVaeR6g+9OmRhIomDWEytGyNPDyp
+        NvpPwIOLWSyldDz4064sZddft9g7t4deCSwpDsbB017GbNYV4Z9vzo6k9MWdqHaXvj9673Rfnh0
+        9loD/7AzMWsUE0TKA8UWh1kmf
+X-Received: by 2002:a05:6402:120f:b0:4ad:66b:84a5 with SMTP id c15-20020a056402120f00b004ad066b84a5mr9906836edw.22.1677747772598;
+        Thu, 02 Mar 2023 01:02:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set8XlkFFOKD9qpmhdRM8AFLH4f/Dy7wDns1LtyFfGwFSrJ/fIHM2tvkGHM/R/a5GX1AxbWiMbg==
+X-Received: by 2002:a05:6402:120f:b0:4ad:66b:84a5 with SMTP id c15-20020a056402120f00b004ad066b84a5mr9906816edw.22.1677747772276;
+        Thu, 02 Mar 2023 01:02:52 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id t19-20020a50d713000000b004af73333d6esm6641517edi.53.2023.03.02.01.02.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 01:02:34 -0800 (PST)
-Message-ID: <39c91d34-9d77-8e63-388c-6893b40c31d9@redhat.com>
-Date:   Thu, 2 Mar 2023 10:02:33 +0100
+        Thu, 02 Mar 2023 01:02:51 -0800 (PST)
+Message-ID: <bfa3ede3-8cc0-ca6c-8e88-17e374aedcb6@redhat.com>
+Date:   Thu, 2 Mar 2023 10:02:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mm/migrate: Drop pte_mkhuge() in remove_migration_pte()
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     mike.kravetz@oracle.com, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20230302025349.358341-1-anshuman.khandual@arm.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230302025349.358341-1-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 3/3] leds: simatic-ipc-leds-gpio: introduce more
+ Kconfig switches
+Content-Language: en-US, nl
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20230301170215.23382-1-henning.schild@siemens.com>
+ <20230301170215.23382-4-henning.schild@siemens.com>
+ <a6281345-95e1-3e8d-b6fb-146c1852373f@redhat.com>
+ <20230302094728.563c04ce@md1za8fc.ad001.siemens.net>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230302094728.563c04ce@md1za8fc.ad001.siemens.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.03.23 03:53, Anshuman Khandual wrote:
-> Since the following commit, arch_make_huge_pte() should be used directly in
-> generic memory subsystem as a platform provided page table helper, instead
-> of pte_mkhuge(). This just drops pte_mkhuge() from remove_migration_pte(),
-> which has now become redundant.
-> 
-> 'commit 16785bd77431 ("mm: merge pte_mkhuge() call into arch_make_huge_pte()")'
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Link: https://lore.kernel.org/all/1ea45095-0926-a56a-a273-816709e9075e@csgroup.eu/
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
-> This applies on latest mainline.
-> 
->   mm/migrate.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 37865f85df6d..d3964c414010 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -249,7 +249,6 @@ static bool remove_migration_pte(struct folio *folio,
->   		if (folio_test_hugetlb(folio)) {
->   			unsigned int shift = huge_page_shift(hstate_vma(vma));
->   
-> -			pte = pte_mkhuge(pte);
->   			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
->   			if (folio_test_anon(folio))
->   				hugepage_add_anon_rmap(new, vma, pvmw.address,
+Hi,
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+On 3/2/23 09:47, Henning Schild wrote:
+> Am Wed, 1 Mar 2023 19:04:01 +0100
+> schrieb Hans de Goede <hdegoede@redhat.com>:
+> 
+>> Hi,
+>>
+>> On 3/1/23 18:02, Henning Schild wrote:
+>>> To describe the dependency chain better and allow for potential
+>>> fine-grained config tuning, introduce Kconfig switch for the
+>>> individual GPIO based drivers.
+>>>
+>>> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+>>> ---
+>>>  drivers/leds/simple/Kconfig  | 31 ++++++++++++++++++++++++++++---
+>>>  drivers/leds/simple/Makefile |  7 +++----
+>>>  2 files changed, 31 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/drivers/leds/simple/Kconfig
+>>> b/drivers/leds/simple/Kconfig index fd2b8225d926..44fa0f93cb3b
+>>> 100644 --- a/drivers/leds/simple/Kconfig
+>>> +++ b/drivers/leds/simple/Kconfig
+>>> @@ -1,11 +1,36 @@
+>>>  # SPDX-License-Identifier: GPL-2.0-only
+>>>  config LEDS_SIEMENS_SIMATIC_IPC
+>>>  	tristate "LED driver for Siemens Simatic IPCs"
+>>> -	depends on LEDS_GPIO  
+>>
+>> Since it is simatic-ipc-leds-gpio-core.c which actually registers
+>> the LEDs GPIO platform device, this one should stay IMHO.
+> 
+> No this one is now only for the port-IO based driver. The GPIO core is
+> built under the two new switches only.
 
--- 
-Thanks,
+You are right, I thought this would enable building
+simatic-ipc-leds-gpio-core.o into its own .ko which would
+then be used by both other gpio LED drivers. But upon a closer
+look at the Makefile changes I see that is not the case.
 
-David / dhildenb
+Note that with your current solution you are linking that into
+the kernel twice.
+
+As long this is build into modules that is fine. But if both are builtin
+I *think* you may get linker errors because of duplicate symbols?
+
+I believe this is why Andy asked to try a build with all 3 options set to Y.
+
+>>>  	depends on SIEMENS_SIMATIC_IPC
+>>>  	help
+>>>  	  This option enables support for the LEDs of several
+>>> Industrial PCs from Siemens.
+>>>  
+>>> -	  To compile this driver as a module, choose M here: the
+>>> modules
+>>> -	  will be called simatic-ipc-leds and
+>>> simatic-ipc-leds-gpio.
+>>> +	  To compile this driver as a module, choose M here: the
+>>> module
+>>> +	  will be called simatic-ipc-leds.
+>>> +
+>>> +config LEDS_SIEMENS_SIMATIC_IPC_APOLLOLAKE
+>>> +	tristate "LED driver for Siemens Simatic IPCs based on
+>>> Intel Apollo Lake GPIO"
+>>> +	depends on LEDS_GPIO  
+>>
+>> And then it can be dropped here.
+>>
+>>> +	depends on PINCTRL_BROXTON  
+>>
+>>> +	depends on SIEMENS_SIMATIC_IPC  
+>>
+>> This should be "depends on LEDS_SIEMENS_SIMATIC_IPC" since it
+>> actually uses symbol from that module.
+> 
+> Same as above, the GPIO based drivers do not depend on the port-IO
+> based driver.
+
+Ack.
+
+Regards,
+
+Hans
+
+
+
+
+
+
+>>> +	default LEDS_SIEMENS_SIMATIC_IPC
+>>> +	help
+>>> +	  This option enables support for the LEDs of several
+>>> Industrial PCs
+>>> +	  from Siemens based on Apollo Lake GPIO i.e. IPC127E.
+>>> +
+>>> +	  To compile this driver as a module, choose M here: the
+>>> module
+>>> +	  will be called simatic-ipc-leds-gpio-apollolake.
+>>> +
+>>> +config LEDS_SIEMENS_SIMATIC_IPC_F7188X
+>>> +	tristate "LED driver for Siemens Simatic IPCs based on
+>>> Nuvoton GPIO"
+>>> +	depends on LEDS_GPIO  
+>>
+>> Idem.
+>>
+>>> +	depends on GPIO_F7188X
+>>> +	depends on SIEMENS_SIMATIC_IPC  
+>>
+>> Idem.
+>>
+>>> +	default LEDS_SIEMENS_SIMATIC_IPC
+>>> +	help
+>>> +	  This option enables support for the LEDs of several
+>>> Industrial PCs
+>>> +	  from Siemens based on Nuvoton GPIO i.e. IPC227G.
+>>> +
+>>> +	  To compile this driver as a module, choose M here: the
+>>> module
+>>> +	  will be called simatic-ipc-leds-gpio-f7188x.
+>>> diff --git a/drivers/leds/simple/Makefile
+>>> b/drivers/leds/simple/Makefile index ed9057f7b6da..e3e840cea275
+>>> 100644 --- a/drivers/leds/simple/Makefile
+>>> +++ b/drivers/leds/simple/Makefile
+>>> @@ -1,5 +1,4 @@
+>>>  # SPDX-License-Identifier: GPL-2.0
+>>> -obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+= simatic-ipc-leds.o
+>>> -obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)  +=
+>>> simatic-ipc-leds-gpio-core.o
+>>> -obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+=
+>>> simatic-ipc-leds-gpio-apollolake.o
+>>> -obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+=
+>>> simatic-ipc-leds-gpio-f7188x.o
+>>> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)			+=
+>>> simatic-ipc-leds.o
+>>> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_APOLLOLAKE)	+=
+>>> simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-apollolake.o
+>>> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_F7188X)		+=
+>>> simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-f7188x.o  
+>>
+>> Regards,
+>>
+>> Hans
+>>
+> 
 
