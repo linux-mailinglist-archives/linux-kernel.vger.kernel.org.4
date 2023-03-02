@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7DE6A8D9F
+	by mail.lfdr.de (Postfix) with ESMTP id 504AF6A8D9E
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjCBXy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 18:54:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S230105AbjCBXzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 18:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjCBXyu (ORCPT
+        with ESMTP id S230229AbjCBXyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 18:54:50 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B177618A84
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:54:21 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id d10so472878pgt.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 15:54:21 -0800 (PST)
+        Thu, 2 Mar 2023 18:54:52 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C426C4ECE6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:54:27 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id b20so528379pfo.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 15:54:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677801260;
+        d=gmail.com; s=20210112; t=1677801262;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ip3Zm9fB4YGz5nKO4uRGWvdUBo1kk9r+HbO76l3v604=;
-        b=NPnuc36DwWV6jfH6r3yVJ4b59Wf35Duqu6e1nD7BgWf2yneUDE6kVoCoE+xb389eMT
-         EZ/ikHqIomQkk+RGfyNR+DzhA8rz5MR99SlyiJPrYYe1dkFP8OF1LpL+bjCISYGfsAnW
-         eXzV6jM2sM5KOmtQjt29kK+XX2RXrDudysKCCUDXIvydIFPw7ydGZ+GKydpRuA25pQDy
-         fsJa+0QwtfU+3uPb5Di9+IJSFSO01jcMmUW1ignhuMUv9igemtSrGFTwGp8BjbkxblaH
-         kICCw+tMtNgLFdrlyzQ/tWg6WEXNm2A6NcVFZvv9qnxSnyb2vrlh5z8g294FUtDwh2lu
-         04NQ==
+        bh=MXVtv6kxe3TDMQ2pw6mJDt0CFb+4GUA2rpUfR00AfQQ=;
+        b=Z61bfh00Rec8zY5KmfpfHiKo+C2+EC3BX+zxN86/3V50gTS1EA+yUmnvTqbEF5gU2o
+         ue2/h/GeUQXz4CmaZG3BWbKWHplzMfNB8f0i3AXm32c5V25DzEhWkHABjVgEuXuqlrsE
+         PfVcfkB8vgPByxFw8lj7KewXv+0Zi+kLga1mF5h5+/FdebTukkwwBgL5MP4NIR3nVhGA
+         wBBjWaaPJ1PKzLiKFKuOdCdJOW7DYKuax/FSynCJeRJsfOswB5Plvm7XptszT7I9KXRF
+         K446aSXTE3vqRlEXjp/7AlsoHI98maOY4kjkl1+C+0iu95/kZekWobxS+hvob6ScpD3K
+         9UnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677801260;
+        d=1e100.net; s=20210112; t=1677801262;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ip3Zm9fB4YGz5nKO4uRGWvdUBo1kk9r+HbO76l3v604=;
-        b=b167EF+ePZQbL8pc9rV+g6ufUry+6JS7O7duJUCIYoUhmBAAUazxYnmdeq53v5LZKl
-         0w6awXnqxzvcD0CEdxIhcFHj9uZSS0gslxcc7n1kEzhSUnPBbDrZFKphpIOWh9dW6arf
-         uMQtAcNChpM1dCTTIhfOdvgoD0wGoalhaZ1M43C7akw5h3TqWTxNVmE92ednjOTlx5Z/
-         KIMxCxCGyQZlKSBn8wAkfcS5Q8AhpVInztN1F2gvB2h6t1AV7SIszPquqqHoXC28c8R7
-         NlyKOqzSvfc8q3pEBB2wZkXiAsLW9If83Mahkv03TNFdEa4PkAhF8lvzNfE1DRnMrcXa
-         FTqA==
-X-Gm-Message-State: AO0yUKVc+02gjZ7xwDd/qfdCsEPv8rjg13UrTv+MGcCW0I9K3e2xaXqo
-        fb0gJcxvRvblaVoaxvYJD8I=
-X-Google-Smtp-Source: AK7set9ewq8g2UINVf25gy6LzGcHT8o0VBZ0takvw3RJyEoTXa7FhIG3EiWkXQhyiXUYSioIGvwevg==
-X-Received: by 2002:a62:1741:0:b0:5b9:49a5:5ddc with SMTP id 62-20020a621741000000b005b949a55ddcmr262457pfx.3.1677801260254;
-        Thu, 02 Mar 2023 15:54:20 -0800 (PST)
+        bh=MXVtv6kxe3TDMQ2pw6mJDt0CFb+4GUA2rpUfR00AfQQ=;
+        b=cRlzS7NoRVyf9Znqsft/zfVcxr/sUKkcavRCirRtDHFbgypxUE6pSc/vlrXhbf4EV9
+         1uDD1e9jLgFR1IZJ1IVgtJWus2e4MZ+X7xxtKRi0k1Rm9UiYinhuexBYPidXq4OTalUZ
+         94Sa8V2IrWNfbvpixk0+52LEzRwBXVTF3rW40aOXizgVsuD6Egz+8oNFQVURo9UDi6kv
+         0+48seVhhNhXBg2icJnQ4hdNXC7zB/j7ARtp+mtk0H1hZ4mwgfImWCIum1pRgwn+zGIn
+         v5CD/ydOgojM4eXzskzfCmNw4rNBs/01ofsvf0B5AxyHujhPIyBB+3SaSLpmtEp5S4Kc
+         RFqw==
+X-Gm-Message-State: AO0yUKUqgGJ3P5izwy97BDHqcMVzF9bTUmfp5MJEYS/+SzL3ZTC/7NoU
+        zuJukbsZY2LVAn+VTEX5ts4=
+X-Google-Smtp-Source: AK7set/NIuV3qeeo1RK5MQFd9CggFAdL5hfgAIUNfnCuspzyu6Q6fMwz5vrHANFyeqfgydjNY+lvUg==
+X-Received: by 2002:a62:1dd4:0:b0:5aa:6125:dbf4 with SMTP id d203-20020a621dd4000000b005aa6125dbf4mr186424pfd.11.1677801262188;
+        Thu, 02 Mar 2023 15:54:22 -0800 (PST)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id u4-20020aa78484000000b00575d1ba0ecfsm234624pfn.133.2023.03.02.15.54.19
+        by smtp.gmail.com with ESMTPSA id n4-20020a62e504000000b005a8c92f7c27sm216478pff.212.2023.03.02.15.54.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 15:54:19 -0800 (PST)
+        Thu, 02 Mar 2023 15:54:21 -0800 (PST)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -63,15 +63,15 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Simon Ser <contact@emersion.fr>,
         Luben Tuikov <luben.tuikov@amd.com>,
         Rob Clark <robdclark@chromium.org>,
-        Mario Kleiner <mario.kleiner.de@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@gmail.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v9 10/15] drm/vblank: Add helper to get next vblank time
-Date:   Thu,  2 Mar 2023 15:53:32 -0800
-Message-Id: <20230302235356.3148279-11-robdclark@gmail.com>
+Subject: [PATCH v9 11/15] drm/atomic-helper: Set fence deadline for vblank
+Date:   Thu,  2 Mar 2023 15:53:33 -0800
+Message-Id: <20230302235356.3148279-12-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230302235356.3148279-1-robdclark@gmail.com>
 References: <20230302235356.3148279-1-robdclark@gmail.com>
@@ -89,124 +89,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Will be used in the next commit to set a deadline on fences that an
-atomic update is waiting on.
+For an atomic commit updating a single CRTC (ie. a pageflip) calculate
+the next vblank time, and inform the fence(s) of that deadline.
 
-v2: Calculate time at *start* of vblank period, not end
-v3: Fix kbuild complaints
+v2: Comment typo fix (danvet)
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Mario Kleiner <mario.kleiner.de@gmail.com>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/drm_vblank.c | 53 ++++++++++++++++++++++++++++++------
- include/drm/drm_vblank.h     |  1 +
- 2 files changed, 45 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/drm_atomic_helper.c | 36 +++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-index 2ff31717a3de..299fa2a19a90 100644
---- a/drivers/gpu/drm/drm_vblank.c
-+++ b/drivers/gpu/drm/drm_vblank.c
-@@ -844,10 +844,9 @@ bool drm_crtc_vblank_helper_get_vblank_timestamp(struct drm_crtc *crtc,
- EXPORT_SYMBOL(drm_crtc_vblank_helper_get_vblank_timestamp);
- 
- /**
-- * drm_get_last_vbltimestamp - retrieve raw timestamp for the most recent
-- *                             vblank interval
-- * @dev: DRM device
-- * @pipe: index of CRTC whose vblank timestamp to retrieve
-+ * drm_crtc_get_last_vbltimestamp - retrieve raw timestamp for the most
-+ *                                  recent vblank interval
-+ * @crtc: CRTC whose vblank timestamp to retrieve
-  * @tvblank: Pointer to target time which should receive the timestamp
-  * @in_vblank_irq:
-  *     True when called from drm_crtc_handle_vblank().  Some drivers
-@@ -865,10 +864,9 @@ EXPORT_SYMBOL(drm_crtc_vblank_helper_get_vblank_timestamp);
-  * True if timestamp is considered to be very precise, false otherwise.
-  */
- static bool
--drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
--			  ktime_t *tvblank, bool in_vblank_irq)
-+drm_crtc_get_last_vbltimestamp(struct drm_crtc *crtc, ktime_t *tvblank,
-+			       bool in_vblank_irq)
- {
--	struct drm_crtc *crtc = drm_crtc_from_index(dev, pipe);
- 	bool ret = false;
- 
- 	/* Define requested maximum error on timestamps (nanoseconds). */
-@@ -876,8 +874,6 @@ drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
- 
- 	/* Query driver if possible and precision timestamping enabled. */
- 	if (crtc && crtc->funcs->get_vblank_timestamp && max_error > 0) {
--		struct drm_crtc *crtc = drm_crtc_from_index(dev, pipe);
--
- 		ret = crtc->funcs->get_vblank_timestamp(crtc, &max_error,
- 							tvblank, in_vblank_irq);
- 	}
-@@ -891,6 +887,15 @@ drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
- 	return ret;
+diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+index d579fd8f7cb8..d8ee98ce2fc5 100644
+--- a/drivers/gpu/drm/drm_atomic_helper.c
++++ b/drivers/gpu/drm/drm_atomic_helper.c
+@@ -1511,6 +1511,40 @@ void drm_atomic_helper_commit_modeset_enables(struct drm_device *dev,
  }
+ EXPORT_SYMBOL(drm_atomic_helper_commit_modeset_enables);
  
-+static bool
-+drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
-+			  ktime_t *tvblank, bool in_vblank_irq)
-+{
-+	struct drm_crtc *crtc = drm_crtc_from_index(dev, pipe);
-+
-+	return drm_crtc_get_last_vbltimestamp(crtc, tvblank, in_vblank_irq);
-+}
-+
- /**
-  * drm_crtc_vblank_count - retrieve "cooked" vblank counter value
-  * @crtc: which counter to retrieve
-@@ -980,6 +985,36 @@ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
- }
- EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
- 
-+/**
-+ * drm_crtc_next_vblank_start - calculate the time of the next vblank
-+ * @crtc: the crtc for which to calculate next vblank time
-+ * @vblanktime: pointer to time to receive the next vblank timestamp.
-+ *
-+ * Calculate the expected time of the start of the next vblank period,
-+ * based on time of previous vblank and frame duration
++/*
++ * For atomic updates which touch just a single CRTC, calculate the time of the
++ * next vblank, and inform all the fences of the deadline.
 + */
-+int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblanktime)
++static void set_fence_deadline(struct drm_device *dev,
++			       struct drm_atomic_state *state)
 +{
-+	unsigned int pipe = drm_crtc_index(crtc);
-+	struct drm_vblank_crtc *vblank = &crtc->dev->vblank[pipe];
-+	struct drm_display_mode *mode = &vblank->hwmode;
-+	u64 vblank_start;
++	struct drm_crtc *crtc, *wait_crtc = NULL;
++	struct drm_crtc_state *new_crtc_state;
++	struct drm_plane *plane;
++	struct drm_plane_state *new_plane_state;
++	ktime_t vbltime;
++	int i;
 +
-+	if (!vblank->framedur_ns || !vblank->linedur_ns)
-+		return -EINVAL;
++	for_each_new_crtc_in_state (state, crtc, new_crtc_state, i) {
++		if (wait_crtc)
++			return;
++		wait_crtc = crtc;
++	}
 +
-+	if (!drm_crtc_get_last_vbltimestamp(crtc, vblanktime, false))
-+		return -EINVAL;
++	/* If no CRTCs updated, then nothing to do: */
++	if (!wait_crtc)
++		return;
 +
-+	vblank_start = DIV_ROUND_DOWN_ULL(
-+			(u64)vblank->framedur_ns * mode->crtc_vblank_start,
-+			mode->crtc_vtotal);
-+	*vblanktime  = ktime_add(*vblanktime, ns_to_ktime(vblank_start));
++	if (drm_crtc_next_vblank_start(wait_crtc, &vbltime))
++		return;
 +
-+	return 0;
++	for_each_new_plane_in_state (state, plane, new_plane_state, i) {
++		if (!new_plane_state->fence)
++			continue;
++		dma_fence_set_deadline(new_plane_state->fence, vbltime);
++	}
 +}
-+EXPORT_SYMBOL(drm_crtc_next_vblank_start);
 +
- static void send_vblank_event(struct drm_device *dev,
- 		struct drm_pending_vblank_event *e,
- 		u64 seq, ktime_t now)
-diff --git a/include/drm/drm_vblank.h b/include/drm/drm_vblank.h
-index 733a3e2d1d10..7f3957943dd1 100644
---- a/include/drm/drm_vblank.h
-+++ b/include/drm/drm_vblank.h
-@@ -230,6 +230,7 @@ bool drm_dev_has_vblank(const struct drm_device *dev);
- u64 drm_crtc_vblank_count(struct drm_crtc *crtc);
- u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
- 				   ktime_t *vblanktime);
-+int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblanktime);
- void drm_crtc_send_vblank_event(struct drm_crtc *crtc,
- 			       struct drm_pending_vblank_event *e);
- void drm_crtc_arm_vblank_event(struct drm_crtc *crtc,
+ /**
+  * drm_atomic_helper_wait_for_fences - wait for fences stashed in plane state
+  * @dev: DRM device
+@@ -1540,6 +1574,8 @@ int drm_atomic_helper_wait_for_fences(struct drm_device *dev,
+ 	struct drm_plane_state *new_plane_state;
+ 	int i, ret;
+ 
++	set_fence_deadline(dev, state);
++
+ 	for_each_new_plane_in_state(state, plane, new_plane_state, i) {
+ 		if (!new_plane_state->fence)
+ 			continue;
 -- 
 2.39.1
 
