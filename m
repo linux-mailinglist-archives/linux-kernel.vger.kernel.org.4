@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735E56A83FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F26E6A8400
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjCBOOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S229844AbjCBOQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:16:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCBOOp (ORCPT
+        with ESMTP id S229471AbjCBOQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:14:45 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAB4234EC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:14:44 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id g6so6760708iov.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 06:14:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=732b5wP+BowSmRkkbJVoygYQGzzLcyCOL0CaRiRQkbI=;
-        b=BD98PveroswgOLELzmE6VIl8n5CeYoqZMduPI7QJjqPZcji78t1C+pPl48AT3pxbwQ
-         9YFmNgz7El1VQScoFHzJ/svLim3JH8+fNMBeIIF55REHFVhILd9TYSE1mbWUrmzDjdQX
-         JhCPLu0x1Y4hZ08/PIDJLAdpOulYuSVSbM2l6mrBF+jh3dNYXdwXuyOraXslQv8GB3/U
-         m8YSl6J32I7O/gC5LP8m67dzVO53BpkcVNJtsJ9OEJC80r/DJBvPKmn/0te+GaxLspBC
-         XwAThV+qvJH4tBxFu9ez6RFGYc6hVFwMX9eE5KSnNkwkOqVU1vzNjKS4gJxnZxAhFFCJ
-         zFDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=732b5wP+BowSmRkkbJVoygYQGzzLcyCOL0CaRiRQkbI=;
-        b=NiTnd1A0U4p1VXoSJ5gIQe4BbP5OGwXwmjGqmsvP+xzJv0GebclAp5EG/aujcLi/eC
-         1qg9Q/ktVHxP17Bk6K+EKJLYzcWWFNwfek0mEgSdmRHJcBMFi0a4slQW3rEG1j7Cg3A/
-         jCPjwYX2Ebf8Xfl3Zw66L1e2DO0hSheakuS93p4MUaaplWvtJ/jUQyC24bjg7tsfqGCx
-         0eyEB7mFnkKUqzUa12+CyKFBlFGE0PgyC/HSW0VkZPAJg+AQl1aC0Z/C5TGHIqiT1ILB
-         scVyG/Nge2v5WCHcMwZBdDpC0UA4xY3u4Y6x1kipNMo2onskt9ij5qFzCjgb12y8FhLg
-         HqjA==
-X-Gm-Message-State: AO0yUKX3d2azq7gM70FtFRq/z5kNOkA3BeHXK7EpXpLZFYUbHIXlXFGQ
-        olJvruKs2Btz3vsiLCbDnPn4mMQUSu6g5ujeVDlzGNbhX4PAfJwz
-X-Google-Smtp-Source: AK7set8+wlmmGu++ONW5xj7HgngOtl9j0r1Dk7jOzX6yp6wc8kOvY/ReR7vw83x0DvUspbDl2cFQU9++XrxQ5wokKbY=
-X-Received: by 2002:a5e:c243:0:b0:745:70d7:4962 with SMTP id
- w3-20020a5ec243000000b0074570d74962mr4904464iop.0.1677766484171; Thu, 02 Mar
- 2023 06:14:44 -0800 (PST)
+        Thu, 2 Mar 2023 09:16:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845333252E;
+        Thu,  2 Mar 2023 06:16:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3AA1615B3;
+        Thu,  2 Mar 2023 14:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFE4C433EF;
+        Thu,  2 Mar 2023 14:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677766598;
+        bh=OEBZAjntrzt45cN/wrw8P1FyBTzRzs8XJnWRa3aAwdE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HIGFwEaq+JSHzpiCLw0ppfq/bRH0TUocrrYcfarwp1zZoLiKOg+jbK7DzkVxZPDbE
+         Ppg4UbmdGv676SLkMShGKkW69hc1X8nJdt35oWnb/7dMKt3KwEkRXa1/xYJeItP7M4
+         E7YP7YMqwd/gQPTcuPAEh+ahTN1YmFcZzUr0dwTTyg2/N0ryQlUykxCr0V3USF3O3C
+         eaO9kfUjrkU8F4Seq6Lt2ZP2BxL1mNjpmFIuetfw4aBvjp0y9LmaYkTTJuPrJLeETx
+         O7Ho6Ok3lMOao9W/DSCpImoiLceHqs6V08aD4O/5hCCV2OPa3CjSjwesB/0N/51wZA
+         /Tb9Gi5DLJ0VQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 19ABA4049F; Thu,  2 Mar 2023 11:16:36 -0300 (-03)
+Date:   Thu, 2 Mar 2023 11:16:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Derek Barbosa <debarbos@redhat.com>,
+        rust-for-linux@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/1] rust: bindgen: Add `alt_instr` as opaque type
+Message-ID: <ZACvxNOuuyifQ9Nx@kernel.org>
 MIME-Version: 1.0
-References: <20230301143933.2374658-1-glider@google.com> <20230301143933.2374658-4-glider@google.com>
- <CANpmjNO0GBpfRbT1YnNnoupVG7TOcuBbTHzxNyZwdJaH3W7w5g@mail.gmail.com>
-In-Reply-To: <CANpmjNO0GBpfRbT1YnNnoupVG7TOcuBbTHzxNyZwdJaH3W7w5g@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 2 Mar 2023 15:14:07 +0100
-Message-ID: <CAG_fn=VjYhMrXuAR=tyXeC6-wTYA+EmkHQZf5nGwCCKwpApjUQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] kmsan: add memsetXX tests
-To:     Marco Elver <elver@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        akpm@linux-foundation.org, dvyukov@google.com, nathan@kernel.org,
-        ndesaulniers@google.com, kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 12:23=E2=80=AFPM Marco Elver <elver@google.com> wrot=
-e:
->
-> On Wed, 1 Mar 2023 at 15:39, Alexander Potapenko <glider@google.com> wrot=
-e:
-> >
-> > Add tests ensuring that memset16()/memset32()/memset64() are
-> > instrumented by KMSAN and correctly initialize the memory.
-> >
-> > Signed-off-by: Alexander Potapenko <glider@google.com>
-> > ---
-> >  mm/kmsan/kmsan_test.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/mm/kmsan/kmsan_test.c b/mm/kmsan/kmsan_test.c
-> > index cc98a3f4e0899..e450a000441fb 100644
-> > --- a/mm/kmsan/kmsan_test.c
-> > +++ b/mm/kmsan/kmsan_test.c
-> > @@ -503,6 +503,25 @@ static void test_memcpy_aligned_to_unaligned2(stru=
-ct kunit *test)
-> >         KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> >  }
-> >
-> > +/* Generate test cases for memset16(), memset32(), memset64(). */
-> > +#define DEFINE_TEST_MEMSETXX(size, var_ty)                            =
-      \
-> > +       static void test_memset##size(struct kunit *test)              =
-     \
-> > +       {                                                              =
-     \
-> > +               EXPECTATION_NO_REPORT(expect);                         =
-     \
-> > +               volatile var_ty uninit;                                =
-     \
->
-> This could just be 'uint##size##_t' and you can drop 'var_ty'.
+To address this build error:
 
-Indeed, thanks!
+    BINDGEN rust/bindings/bindings_generated.rs
+    BINDGEN rust/bindings/bindings_helpers_generated.rs
+    EXPORTS rust/exports_core_generated.h
+    RUSTC P rust/libmacros.so
+    RUSTC L rust/compiler_builtins.o
+    RUSTC L rust/alloc.o
+    RUSTC L rust/bindings.o
+    RUSTC L rust/build_error.o
+    EXPORTS rust/exports_alloc_generated.h
+  error[E0588]: packed type cannot transitively contain a `#[repr(align)]` type
+       --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10094:1
+        |
+  10094 | / pub struct alt_instr {
+  10095 | |     pub instr_offset: s32,
+  10096 | |     pub repl_offset: s32,
+  10097 | |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1,
+  10098 | |     pub instrlen: u8_,
+  10099 | |     pub replacementlen: u8_,
+  10100 | | }
+        | |_^
+        |
+  note: `alt_instr__bindgen_ty_1__bindgen_ty_1` has a `#[repr(align)]` attribute
+       --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10111:1
+        |
+  10111 | / pub struct alt_instr__bindgen_ty_1__bindgen_ty_1 {
+  10112 | |     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize], u16>,
+  10113 | | }
+        | |_^
+  note: `alt_instr` contains a field of type `alt_instr__bindgen_ty_1`
+       --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10097:9
+        |
+  10097 |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1,
+        |         ^^^^^^^^^^^^^^^^
+  note: ...which contains a field of type `alt_instr__bindgen_ty_1__bindgen_ty_1`
+       --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10104:9
+        |
+  10104 |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1__bindgen_ty_1,
+        |         ^^^^^^^^^^^^^^^^
+
+  error: aborting due to previous error
+
+  For more information about this error, try `rustc --explain E0588`.
+  make[1]: *** [rust/Makefile:389: rust/bindings.o] Error 1
+  make: *** [Makefile:1293: prepare] Error 2
+
+Cc: Derek Barbosa <debarbos@redhat.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ rust/bindgen_parameters | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/rust/bindgen_parameters b/rust/bindgen_parameters
+index be4963bf720304da..552d9a85925b9945 100644
+--- a/rust/bindgen_parameters
++++ b/rust/bindgen_parameters
+@@ -6,6 +6,7 @@
+ --opaque-type local_apic
+ 
+ # Packed type cannot transitively contain a `#[repr(align)]` type.
++--opaque-type alt_instr
+ --opaque-type x86_msi_data
+ --opaque-type x86_msi_addr_lo
+ 
+-- 
+2.39.2
+
