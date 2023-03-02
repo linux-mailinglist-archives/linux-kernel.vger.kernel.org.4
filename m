@@ -2,158 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104B36A8796
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B44D6A879E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjCBRO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 12:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50792 "EHLO
+        id S229744AbjCBRPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 12:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjCBROZ (ORCPT
+        with ESMTP id S229476AbjCBRPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 12:14:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5596426878;
-        Thu,  2 Mar 2023 09:14:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 2 Mar 2023 12:15:04 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E882B1ACD7;
+        Thu,  2 Mar 2023 09:15:01 -0800 (PST)
+Received: from pan.home (unknown [IPv6:2a00:23c6:c311:3401:45a5:b946:dcd1:2820])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9D40ECE1F60;
-        Thu,  2 Mar 2023 17:14:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B13C4339C;
-        Thu,  2 Mar 2023 17:14:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677777252;
-        bh=sxh36iZQRth6PcbEK8rBaNdhPJuIjt084P0tIKyNndg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TAJj++imQypJWlswGfOoct5GpNWCJQsD7oCXqgQ+ZDG8uNTAaoEaYgHDCMmVXcK2X
-         jB2C7tAJYpWiuL6YafBBMtsMVUYOCQrRTkfpoH2WH0W3qjbUP53Vj0Fw8x928o5+H0
-         B3X0tkSkIQsoJKkhoOAQNwr3MaqnneespIRdTZKbtUtbpCq3wtLWfzBYaQCGuJznp5
-         +2+jmuUHw6CUofbdurXFfoqeC+3fpZ523uvG5P3p8jI8KoD8MZuo1DwBAtxlhXwW0M
-         i1AGLygTd9avSKC1IuYZNT7A91xL/Q075a1GwO/YFePebxenzP5rnDD7KFjGYoXuyQ
-         w+gk9vEAOiauQ==
-Received: by mail-ua1-f52.google.com with SMTP id n4so6667442ual.13;
-        Thu, 02 Mar 2023 09:14:12 -0800 (PST)
-X-Gm-Message-State: AO0yUKW35DVvKJjBldBaNEYrFwt4o8X496Y5l3to8M1KsFKZluJNM52c
-        gU4Z3mAPMRbjIjlwCFJIxbcUWGin6IltBU61Bw==
-X-Google-Smtp-Source: AK7set/cWK8giFKY8fRLWeGOHTziXVw5azzC2FP84wrmvxubHnP5GVl40pOdsWrs8+z15dRYvJSehk78bGu43zZqZQU=
-X-Received: by 2002:a05:6122:b55:b0:40f:2033:6994 with SMTP id
- 21-20020a0561220b5500b0040f20336994mr6152564vko.2.1677777250943; Thu, 02 Mar
- 2023 09:14:10 -0800 (PST)
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F3816602F05;
+        Thu,  2 Mar 2023 17:15:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677777300;
+        bh=MKf13LLrF97Xk6jvSCKLeu38G4LeLT4CpYwHqJ0gXCo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YJoW6/ka66QlJHMHOuVwNMdmHdV0K5WZ1PIh68Thkmwp4lJjFLGZxoTOMkVAN5HUO
+         FHQT4sGRnUSCAageWClckm9JJTGyfyF6rnX+/8FvgzguFwZcfunZY320ze+9/7tZcC
+         hT+svAdfTb7puZBUD45MtQ5nk5DLb8teexvJlCvRjDMfe/MhAHJ4JbOXuVYJxowXbw
+         Z7Ix386zEhS++gH/5hDNkd6+YtMQuaWVshG39LdkCcbkhVQ6Hnn+Muc2Jo2OrGAxDD
+         hvXD1WRfmpr3L8SUAqmHsPrfGvyXbMSLQHQzpl1N7nwdeyghG9QexS7Vi6cyOryXav
+         9jzK0Dkl+hJag==
+From:   Martyn Welch <martyn.welch@collabora.com>
+To:     andersson@kernel.org, mathieu.poirier@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        hnagalla@ti.com, p.zabel@pengutronix.de
+Cc:     kernel@collabora.com, Martyn Welch <martyn.welch@collabora.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] TI K3 M4F support on AM64x and AM62x SoCs
+Date:   Thu,  2 Mar 2023 17:14:47 +0000
+Message-Id: <20230302171450.1598576-1-martyn.welch@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230302013822.1808711-1-sboyd@kernel.org>
-In-Reply-To: <20230302013822.1808711-1-sboyd@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 2 Mar 2023 11:13:59 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLVQVZhYTSZgrvA-V-xOUbiBdyDxqPOZk=89YS33EahBQ@mail.gmail.com>
-Message-ID: <CAL_JsqLVQVZhYTSZgrvA-V-xOUbiBdyDxqPOZk=89YS33EahBQ@mail.gmail.com>
-Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 7:38=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wrot=
-e:
->
-> This patch series adds unit tests for the clk fixed rate basic type and
-> the clk registration functions that use struct clk_parent_data. To get
-> there, we add support for loading a DTB into the UML kernel that's
-> running the unit tests along with probing platform drivers to bind to
-> device nodes specified in DT.
->
-> With this series, we're able to exercise some of the code in the common
-> clk framework that uses devicetree lookups to find parents and the fixed
-> rate clk code that scans devicetree directly and creates clks. Please
-> review.
->
-> I Cced everyone to all the patches so they get the full context. I'm
-> hoping I can take the whole pile through the clk tree as they almost all
-> depend on each other. In the future I imagine it will be easy to add
-> more test nodes to the clk.dtsi file and not need to go across various
-> maintainer trees like this series does.
->
-> Stephen Boyd (8):
->   dt-bindings: Add linux,kunit binding
->   of: Enable DTB loading on UML for KUnit tests
->   kunit: Add test managed platform_device/driver APIs
->   clk: Add test managed clk provider/consumer APIs
->   dt-bindings: kunit: Add fixed rate clk consumer test
->   clk: Add KUnit tests for clk fixed rate basic type
->   dt-bindings: clk: Add KUnit clk_parent_data test
->   clk: Add KUnit tests for clks registered with struct clk_parent_data
+The following series introduces K3 M4F remoteproc driver support for
+AM64x and AM62x SoC families. These SoCs have a ARM Cortex M4F core in
+the MCU voltage domain. For safety oriented applications, this core is
+operated independently with out any IPC to other cores on the SoC.
+However, for non safety applications, some customers use it as a remote
+processor and so linux remote proc support is extended to the M4F core.
 
-Good to see bindings for this. I've been meaning to do something about
-the DT unittest ones being undocumented, but I hadn't really decided
-whether it was worth writing schemas for them. The compatibles at
-least show up with 'make dt_compatible_check'. Perhaps we want to just
-define some vendor (not 'linux') that's an exception rather than
-requiring schemas (actually, that already works for 'foo'). It's
-likely that we want test DTs that fail normal checks and schemas get
-in the way of that as we don't have a way to turn off checks.
+See AM64x Technical Reference Manual (SPRUIM2C – SEPTEMBER 2021) for
+further details: https://www.ti.com/lit/pdf/SPRUIM2
 
-We already have GPIO tests in the DT unittests, so why is clocks
-different? Or should the GPIO tests be moved out (yes, please!)?
+This series was originally submitted by Hari in Jan 2022. Review
+comments were made, however I've been unable to find any further
+submissions. I have tried to contact the author and have received no
+reply. As we are interested in using this functionality, we have decided
+to pick this up and see if we can get it merged.
 
-What happens when/if the DT unittest is converted to kunit? I think
-that would look confusing from the naming. My initial thought is
-'kunit' should be dropped from the naming of a lot of this. Note that
-the original kunit submission converted the DT unittests. I would
-still like to see that happen. Frank disagreed over what's a unit test
-or not, then agreed, then didn't... I don't really care. If there's a
-framework to use, then we should use it IMO.
 
->
->  .../clock/linux,clk-kunit-parent-data.yaml    |  47 ++
->  .../kunit/linux,clk-kunit-fixed-rate.yaml     |  35 ++
->  .../bindings/kunit/linux,kunit.yaml           |  24 +
->  arch/um/kernel/dtb.c                          |  29 +-
->  drivers/clk/.kunitconfig                      |   3 +
->  drivers/clk/Kconfig                           |   7 +
->  drivers/clk/Makefile                          |   6 +
->  drivers/clk/clk-fixed-rate_test.c             | 296 ++++++++++++
->  drivers/clk/clk-kunit.c                       | 204 ++++++++
->  drivers/clk/clk-kunit.h                       |  28 ++
->  drivers/clk/clk_test.c                        | 456 +++++++++++++++++-
->  drivers/of/Kconfig                            |  26 +
->  drivers/of/Makefile                           |   1 +
->  drivers/of/kunit/.kunitconfig                 |   4 +
->  drivers/of/kunit/Makefile                     |   4 +
->  drivers/of/kunit/clk.dtsi                     |  30 ++
->  drivers/of/kunit/kunit.dtsi                   |   9 +
->  drivers/of/kunit/kunit.dtso                   |   4 +
->  drivers/of/kunit/uml_dtb_test.c               |  55 +++
->  include/kunit/platform_driver.h               |  15 +
->  lib/kunit/Makefile                            |   6 +
->  lib/kunit/platform_driver-test.c              | 107 ++++
->  lib/kunit/platform_driver.c                   | 207 ++++++++
+Hari Nagalla (1):
+  dt-bindings: remoteproc: k3-m4f: Add bindings for K3 AM64x SoCs
 
-Humm, we have DT platform driver unittests too. What's the difference?
+Martyn Welch (2):
+  remoteproc: k4: Split out functions common with M4 driver
+  remoteproc: k4-m4: Add a remoteproc driver for M4F subsystem
 
-Anyways, that's all just my initial reaction from only halfway looking
-at this. :)
+ .../bindings/remoteproc/ti,k3-m4f-rproc.yaml  | 158 ++++++
+ drivers/remoteproc/Kconfig                    |  13 +
+ drivers/remoteproc/Makefile                   |   3 +-
+ drivers/remoteproc/ti_k3_common.c             | 375 +++++++++++++
+ drivers/remoteproc/ti_k3_common.h             | 107 ++++
+ drivers/remoteproc/ti_k3_dsp_remoteproc.c     | 462 +---------------
+ drivers/remoteproc/ti_k3_m4_remoteproc.c      | 491 ++++++++++++++++++
+ 7 files changed, 1174 insertions(+), 435 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
+ create mode 100644 drivers/remoteproc/ti_k3_common.c
+ create mode 100644 drivers/remoteproc/ti_k3_common.h
+ create mode 100644 drivers/remoteproc/ti_k3_m4_remoteproc.c
 
-Rob
+-- 
+2.39.1
+
