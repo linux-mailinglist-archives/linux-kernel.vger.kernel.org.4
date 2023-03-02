@@ -2,463 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5676A7E3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A7D6A7E31
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjCBJn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S230082AbjCBJnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjCBJny (ORCPT
+        with ESMTP id S230051AbjCBJnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:43:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2151ACF3
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:43:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677750184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d89OVXlxjMSQtumMo8iJ9aTVkJfH2plqezFb7xBWsgk=;
-        b=eqn+G+P+Qt33gWo+dBLIfPRw78+VyfFV1EWhmB7V33XO1dbE5jd3Z0L0mBWkTY/eGy0Yee
-        8pGUXhSbGsqc3D0OVIatdX/M10oA/B3mf6vXB4rKpbvej9UrRNVTjdVYLXKCgLnVh1FsNd
-        zZa/JNC3cAJoF3Oa1pJQ6ZJFBxbHXBo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-540-ZGDH_coqN12HEx-pB-bD6g-1; Thu, 02 Mar 2023 04:43:02 -0500
-X-MC-Unique: ZGDH_coqN12HEx-pB-bD6g-1
-Received: by mail-wm1-f71.google.com with SMTP id l16-20020a05600c1d1000b003e77552705cso829359wms.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:43:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677750180;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d89OVXlxjMSQtumMo8iJ9aTVkJfH2plqezFb7xBWsgk=;
-        b=OBAFfvKyPeNGWOhevOdYpSRtLD8ZMwqTYbgR+4VI3+YeXNHMrVIa3CJllAKwwKqczB
-         we3LGxoveQ6oiSHozVpnCEzQLbwI2NKmqIHas20fNYnnSD2TV+1cRQSjfXaOeYjmeOIS
-         DhVlEDddpR1l+jHsA5eE6D8SkJR5+4ejFM3VilLM5zpz04gvmYmtt1Ef6e8yf8+dhkvT
-         nQt5M1zy874/GhuUzhyzVXVHEm42ewJCKxowd+fK/Gh2xFOQb/sJ1XMMFJjzFkW5y1fL
-         36Za5b6dWZF1oN7MEnMAJ+sfiF3m5n3Esmbnl6n1VspmgWZnV0SCUDzmkKJlu4CR1qxq
-         o65w==
-X-Gm-Message-State: AO0yUKVH3HNgVITwujCU+Rbp/LQVDVf4J84LdHIRVZU1cKFT8LnJQ9W/
-        chBQ9OSXIlSUNQE0e24+ZeRqYBS1kpXhmX5D58eG3e+Yov2fuxBHiL2K16dFuo5BZ1zOoKQixue
-        6qpTcCQ8TT28WBf+pF8+VucTS
-X-Received: by 2002:a05:6000:109:b0:2c7:832:8ccf with SMTP id o9-20020a056000010900b002c708328ccfmr6829236wrx.53.1677750180705;
-        Thu, 02 Mar 2023 01:43:00 -0800 (PST)
-X-Google-Smtp-Source: AK7set9nk5hBKDN8uFgpRMSqC2bK9CM1B9gpcwEU3K7OKO3TTS1sST4u6uiJc3UO9g93rBdogImeAQ==
-X-Received: by 2002:a05:6000:109:b0:2c7:832:8ccf with SMTP id o9-20020a056000010900b002c708328ccfmr6829215wrx.53.1677750180357;
-        Thu, 02 Mar 2023 01:43:00 -0800 (PST)
-Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
-        by smtp.gmail.com with ESMTPSA id o8-20020a5d4a88000000b002c70c99db74sm14580816wrq.86.2023.03.02.01.42.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 01:42:59 -0800 (PST)
-Date:   Thu, 2 Mar 2023 10:42:52 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net-next v3 1/3] vsock: support sockmap
-Message-ID: <20230302094252.r3qnhdhlbpp7unna@sgarzare-redhat>
-References: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
- <20230227-vsock-sockmap-upstream-v3-1-7e7f4ce623ee@bytedance.com>
+        Thu, 2 Mar 2023 04:43:08 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070DD144B4;
+        Thu,  2 Mar 2023 01:43:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677750187; x=1709286187;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=+iZWxfl+e0M6chnZcbPXdHB/qASyOWkNRwpDQI8M9ww=;
+  b=nSnEGL5u7Yj1t8b9NJ6hORRovIIju9tlVqyNRIkOJA/rgoLVwniNemmU
+   /SOOqEsHYKU9olzeV9L6lXewBVArD5KTFe2X+KDTOTvK/qOlmKi67dZ7z
+   XaGf+r1b9GsuiqeQCY65oxV0xBylDK66sLl487zWtuU1TaPEM2gD55gop
+   cHP6lBQLLoNwkuRvCVA8YziXhgT62Xt22kKgNbuIqjJqYygQs+I6hfQRs
+   h7+vKfk7I40HxafKecneJFHIQEiFQVHcUSIQOy+8R2QEbrPxRtttY2msZ
+   NL4i0KB5c/sf1t4jgWn30kHBSO3qgxr+IkUlR9u17zGTWjLsNFZCRn42j
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="362266294"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="362266294"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 01:43:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="1004047206"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="1004047206"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Mar 2023 01:43:05 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 2 Mar 2023 01:43:05 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 2 Mar 2023 01:43:05 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 2 Mar 2023 01:43:05 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LuJX8eTphAQxY+SWHpPCg4bn0rGyLwqmvyLy+qPhbn24fmAK8xQ9oBMc6sbfNMK+18awaj45TvGMEld07pebkFq77yVXXqQMbrisVCCFz8rp/n/QCWTGDJFJ7HgzqVR81RKnCizUl1wCEoHCXf7AuJKl/hP1QjaPBvRIq2ndBF6c7WbRFG6aW/5hMMH7WKuZ2BN8mImuoEEf+rKTmDYOuR/sMMWFfEUtrNNjn0mQgNrusMb30BLg4lgjI+DEIRNadqg3NXWrefcWF2IePYnTUhfzbwvRaCs3/SNhFMAwO098cUmFXCxmreGXj3p9vTUw66y2goWkbrCZt9WMAxPO6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eVBnND5Nqr7uZYX0oADWJU97B0DrvSvAOTIIBhpUVjY=;
+ b=kFDxJ3nJ4wY0perutHbAxOdssQRX/i2XZ52r2M8WTg+ZnSiRXfFb5XG3ySAHirtvmqaNuQdaUOqlRqoAWhQ+IFzc24jbGuE5aI2BnMt7K+ywxcjxASgAFpDMrXQ+wOj+vpX2JB9Rq/CpSs/d00In5cwhkFZgDNjsFySIUowYlUdNAAmaMegkza/XmAn0MnmGgUo5l0yQnXqbSU4Fq3IXeZ8z9rSwVYS+eY/ii+aGFbbUWV9pi5OA0RfRkvXPKwmfvDOlJGkuUevQgNQxAj6EJEecg1bnpR5LlLjQbnEbdPkhyTEaMUSymkAGG0iNWxaaKmE5SznYDnZ4nzRWl5KUvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by PH7PR11MB8122.namprd11.prod.outlook.com (2603:10b6:510:235::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
+ 2023 09:43:03 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
+ 09:43:03 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+CC:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: RE: [PATCH 3/4] iommu/sva: Support reservation of global PASIDs
+Thread-Topic: [PATCH 3/4] iommu/sva: Support reservation of global PASIDs
+Thread-Index: AQHZTKHLpFv8Ca2hQ0+TT/QlO+gFRa7nPClw
+Date:   Thu, 2 Mar 2023 09:43:03 +0000
+Message-ID: <BN9PR11MB52765C5E0DC0759880C08E258CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+ <20230302005959.2695267-4-jacob.jun.pan@linux.intel.com>
+In-Reply-To: <20230302005959.2695267-4-jacob.jun.pan@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB8122:EE_
+x-ms-office365-filtering-correlation-id: 07922732-21d4-4fa7-fc75-08db1b0284b7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IAAzz5WCQUeYkBAsF64Fc6Yn43CIUoz2TQ0bCgi8sVm0L7DhVE2l4iHck6voPmkR6ALfQcoROGPfvXHicu/0jGKMKzm0YesQW5gnCgGVCQ27POLmV/ZCuq0LcGvEq/OtDdh42NAyV/+dINg2Ah5W1NuSsDv834miTNGRT8CPdFq8ZFFImKqcJ00YTT6WBWoFeUlYKnJKkMzy4whGZtMqct+uimEw06BE6akNGX9PRKWdV8V4AiuDjUWoS8jkRpRsEErCvK49RTpb5yLP1Fy2jLnhDcadw96qWd8b7gLiuYnojHTLj3ncLldFLux7y6FFHCDuXwUyaPNaXtjA7euZF/gySsHvqCyRthS5BffNxrxpVgDk0NQ8htFx4BrWCSvjH/O/bQu8tqhbhPloIW7B3tk/F31+EthpU0vFiHqvRPDbT/cCKAqLK4jBZCGoiz+7tuXONxOWllTLcnkpyZMWWJfopqC6AvSNP/jKLfuvXrSNofOL0pt784WoQElAXd9KYbe63fHQ6eqoVvNRHU73k9Z0KtmSM6Kr5T9EeHqaOoOreFpfEbyxANP87Pof4j+E+s8rg9FQvPFf4RD6GTL3LCGxLD4UHgg5KSvMzq+cnX1jf8yRtZCMsh+B6P4eO4yaB3s0vBTYYVxL2ewKhmBKI1PK/RGxcPyJl+sy6ATZEhr55POELi0pnYBDnvwhSRgX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(346002)(136003)(376002)(396003)(451199018)(38100700002)(186003)(122000001)(26005)(9686003)(82960400001)(8936002)(52536014)(38070700005)(966005)(2906002)(6506007)(7416002)(5660300002)(33656002)(478600001)(64756008)(8676002)(66556008)(66946007)(76116006)(66476007)(66446008)(4326008)(55016003)(41300700001)(71200400001)(110136005)(316002)(54906003)(86362001)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wpwJFpChuAlZXKS4Yj5bQJucN/JpY6vgEbPBQPMUW/y8byc5kfeaqAjfwzVX?=
+ =?us-ascii?Q?Uji9cuAvnJCBgOZLo3Zj+f0JVSfP/tEUi5NNoKiCkT6DFqYEVW8KGgOULSTx?=
+ =?us-ascii?Q?OzBU4nobVsDytY2U+qEEn6lvo6AJlC5fFqCBj3Mi9oBwnG5vqd1ZtmqgAiXQ?=
+ =?us-ascii?Q?osCNEKFdJogKVz4CzYUvbUEWegReCs+fQWuISw3BN6n7S+Io3+2vLSRrj1iL?=
+ =?us-ascii?Q?LGJCF3xvVYktMBQgPAZPIVntV8XMLlNQnckBpO4hoWhDY0AS9MiRhMXB25+m?=
+ =?us-ascii?Q?M5JHJLsVekIcLm5J6z89facyGKTjV/K0b2LnVafgCNvwIT64Vu+8gE4XSzNd?=
+ =?us-ascii?Q?Jp4c4mU90KEa5LoiflkIMe3XJ2XKDbeLBNwbHEzp8C4eJwW/Gmrzm5k2IzfV?=
+ =?us-ascii?Q?aohyNUrxV4OsoxAq7ZlOy6VFIEFFGXXvWK1Im7Lr03g+gMnAiYAD7BrVuJbw?=
+ =?us-ascii?Q?IZOBdtEcMfjz73wysya+WDdlrA+Y2iJTF6Q1EziP/lSdl4jFMBvovnMRbj0P?=
+ =?us-ascii?Q?xOLN02z+bBd3xm8O5HHNqFH5X9WaTaEVuyTWRs2OXWFMd5vKTZda489ZdYDj?=
+ =?us-ascii?Q?pTjAXDNAWxq5KEvwQShZDBm2K+08CZOyimIgFSjNEKtwulKbeXSPssLoZ+pP?=
+ =?us-ascii?Q?IrWZ9ilCqlbk6Ms+Mf5aT5UAXZT9erlhV/3kIVQVEK4hT3QKkRE6vRdGpLtQ?=
+ =?us-ascii?Q?EVRefdGokOgiGEB5WosuAz8t+lv5+gMFAKgboUJbw4odomy9g3maRi2Jix7B?=
+ =?us-ascii?Q?YjAVD9oxXglWLPY7dq1uQF+H3obWoUOUC/J269mBj3ct5QVMXSsGIywenyiD?=
+ =?us-ascii?Q?nENSZJxmy2YM470cM+jFWSQ66E6PW+MCfO3YnL4Z8TSmbkAlrMtFGCxM5xH3?=
+ =?us-ascii?Q?L15lPYsbfJSb6wl/VJ41RLbpIOtyETG3OF7TGgLeMNHkyMRnDqeDZ9uEqtcH?=
+ =?us-ascii?Q?NJtXRYn4bIM+59CjbPAn6MCYfLUpQg4iWkhY36U+TcWrO6s1Ab0sBj+duXB3?=
+ =?us-ascii?Q?3ZWZic4JqiYOHyPm97fQddTmKRYoz0F4rFRseURQer/ePIHzsLoAxeQGWbKU?=
+ =?us-ascii?Q?XlrvokzgLBZWcUiIx9EvpciWk2qdaIaunIbyW3pEPnhpmF2snfwhwWwtGAEY?=
+ =?us-ascii?Q?O63TNO1YGxT/U+tXZYUxfrfm8nQcA1JdVxpz5Ruhrqdjcjyiw3BByf+3OXHz?=
+ =?us-ascii?Q?e8de2+Af8Ts7Nl81e1qWaYq5DyzGp/ETA87w7XTrcN4iTdjUTSVHz36EX1OV?=
+ =?us-ascii?Q?Eb8mNcGfESGiXySe75qGqvU/vAeXEo3ffKm+q3T8ROidJ8ZEG+OlC3BsA6Aw?=
+ =?us-ascii?Q?o5M6tlBlwvn0NEEdz8MMrAX6IU6IiO1raCkFP7B08z2JC2qsqZ/g4uTf5IXf?=
+ =?us-ascii?Q?Et5fNnomiNcfO77bRUfDwNo7YPRHOBRKZv5W6OAeaOSi0T1e9vWjSZPLZN1A?=
+ =?us-ascii?Q?KjQRSstXW2Up3KDc86j3gRRa08CLwlqjNWSrQ3q2wu89ca4ogsaoExBdwNMx?=
+ =?us-ascii?Q?zcEhKqBFZL0uk8DpZ3qVUfkf8bRRFC0tYwP02Rk31Qh16u3HT4bp5NOvUD41?=
+ =?us-ascii?Q?IlyfHwoqhBB9KzwiYD36aIQ4vtEGk9YDbh1rUXgB?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230227-vsock-sockmap-upstream-v3-1-7e7f4ce623ee@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07922732-21d4-4fa7-fc75-08db1b0284b7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 09:43:03.3435
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +ubRo8bxbQeOmQfyM9qBmBxCfIedl1klnpKp+EPCCWdDAK0njoX6RCJKt8wgly1Rdy0Hf13RX0i985wO1ZC6Ag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8122
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 07:04:34PM +0000, Bobby Eshleman wrote:
->This patch adds sockmap support for vsock sockets. It is intended to be
->usable by all transports, but only the virtio transport is implemented.
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->---
-> drivers/vhost/vsock.c                   |   1 +
-> include/linux/virtio_vsock.h            |   1 +
-> include/net/af_vsock.h                  |  17 ++++
-> net/vmw_vsock/Makefile                  |   1 +
-> net/vmw_vsock/af_vsock.c                |  55 ++++++++--
-> net/vmw_vsock/virtio_transport.c        |   2 +
-> net/vmw_vsock/virtio_transport_common.c |  25 +++++
-> net/vmw_vsock/vsock_bpf.c               | 174 ++++++++++++++++++++++++++++++++
-> net/vmw_vsock/vsock_loopback.c          |   2 +
-> 9 files changed, 272 insertions(+), 6 deletions(-)
->
->diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
->index 1f3b89c885cc..3c6dc036b904 100644
->--- a/drivers/vhost/vsock.c
->+++ b/drivers/vhost/vsock.c
->@@ -439,6 +439,7 @@ static struct virtio_transport vhost_transport = {
-> 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
-> 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
->
->+		.read_skb = virtio_transport_read_skb,
-> 	},
->
-> 	.send_pkt = vhost_transport_send_pkt,
->diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
->index 3f9c16611306..c58453699ee9 100644
->--- a/include/linux/virtio_vsock.h
->+++ b/include/linux/virtio_vsock.h
->@@ -245,4 +245,5 @@ u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 wanted);
-> void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
-> void virtio_transport_deliver_tap_pkt(struct sk_buff *skb);
-> int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *list);
->+int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t read_actor);
-> #endif /* _LINUX_VIRTIO_VSOCK_H */
->diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
->index 568a87c5e0d0..a73f5fbd296a 100644
->--- a/include/net/af_vsock.h
->+++ b/include/net/af_vsock.h
->@@ -75,6 +75,7 @@ struct vsock_sock {
-> 	void *trans;
-> };
->
->+s64 vsock_connectible_has_data(struct vsock_sock *vsk);
-> s64 vsock_stream_has_data(struct vsock_sock *vsk);
-> s64 vsock_stream_has_space(struct vsock_sock *vsk);
-> struct sock *vsock_create_connected(struct sock *parent);
->@@ -173,6 +174,9 @@ struct vsock_transport {
->
-> 	/* Addressing. */
-> 	u32 (*get_local_cid)(void);
->+
->+	/* Read a single skb */
->+	int (*read_skb)(struct vsock_sock *, skb_read_actor_t);
-> };
->
-> /**** CORE ****/
->@@ -225,5 +229,18 @@ int vsock_init_tap(void);
-> int vsock_add_tap(struct vsock_tap *vt);
-> int vsock_remove_tap(struct vsock_tap *vt);
-> void vsock_deliver_tap(struct sk_buff *build_skb(void *opaque), void *opaque);
->+int vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
->+			      int flags);
->+int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
->+			       size_t len, int flags);
+> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Sent: Thursday, March 2, 2023 9:00 AM
+>=20
+> Global PASID allocation is under IOMMU SVA code since it is the primary
+> use case.  However, some architecture such as VT-d, global PASIDs are
+> necessary for its internal use of DMA API with PASID.
 
-Just because you have to resend a v4, here we can align as `checkpatch
---strict` suggests:
+No, global PASID is not a VT-d restriction. It's from ENQCMD/S hence a
+device requirement.
 
-CHECK: Alignment should match open parenthesis
-#63: FILE: include/net/af_vsock.h:235:
-+int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
-+			      size_t len, int flags);
+>=20
+> This patch introduces SVA APIs to reserve and release global PASIDs.
+>=20
+> Link: https://lore.kernel.org/all/20230301235646.2692846-4-
+> jacob.jun.pan@linux.intel.com/
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> ---
+>  drivers/iommu/iommu-sva.c | 25 +++++++++++++++++++++++++
+>  include/linux/iommu.h     | 14 ++++++++++++++
+>  2 files changed, 39 insertions(+)
+>=20
+> diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+> index 8c92a145e15d..cfdeafde88a9 100644
+> --- a/drivers/iommu/iommu-sva.c
+> +++ b/drivers/iommu/iommu-sva.c
+> @@ -149,6 +149,31 @@ u32 iommu_sva_get_pasid(struct iommu_sva
+> *handle)
+>  }
+>  EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+>=20
+> +ioasid_t iommu_sva_reserve_pasid(ioasid_t min, ioasid_t max)
+> +{
+> +	int ret;
+> +
+> +	if (min =3D=3D IOMMU_PASID_INVALID || max =3D=3D
+> IOMMU_PASID_INVALID ||
+> +	    min =3D=3D 0 || max < min)
+> +		return IOMMU_PASID_INVALID;
+> +
+> +	ret =3D ida_alloc_range(&iommu_global_pasid_ida, min, max,
+> GFP_KERNEL);
+> +	if (ret < 0)
+> +		return IOMMU_PASID_INVALID;
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_sva_reserve_pasid);
+> +
 
->+
->+#ifdef CONFIG_BPF_SYSCALL
->+extern struct proto vsock_proto;
->+int vsock_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore);
->+void __init vsock_bpf_build_proto(void);
->+#else
->+static inline void __init vsock_bpf_build_proto(void)
->+{}
->+#endif
->
-> #endif /* __AF_VSOCK_H__ */
->diff --git a/net/vmw_vsock/Makefile b/net/vmw_vsock/Makefile
->index 6a943ec95c4a..5da74c4a9f1d 100644
->--- a/net/vmw_vsock/Makefile
->+++ b/net/vmw_vsock/Makefile
->@@ -8,6 +8,7 @@ obj-$(CONFIG_HYPERV_VSOCKETS) += hv_sock.o
-> obj-$(CONFIG_VSOCKETS_LOOPBACK) += vsock_loopback.o
->
-> vsock-y += af_vsock.o af_vsock_tap.o vsock_addr.o
->+vsock-$(CONFIG_BPF_SYSCALL) += vsock_bpf.o
->
-> vsock_diag-y += diag.o
->
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index 19aea7cba26e..f2cc04fb8b13 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -116,10 +116,13 @@ static void vsock_sk_destruct(struct sock *sk);
-> static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
->
-> /* Protocol family. */
->-static struct proto vsock_proto = {
->+struct proto vsock_proto = {
-> 	.name = "AF_VSOCK",
-> 	.owner = THIS_MODULE,
-> 	.obj_size = sizeof(struct vsock_sock),
->+#ifdef CONFIG_BPF_SYSCALL
->+	.psock_update_sk_prot = vsock_bpf_update_proto,
->+#endif
-> };
->
-> /* The default peer timeout indicates how long we will wait for a peer response
->@@ -865,7 +868,7 @@ s64 vsock_stream_has_data(struct vsock_sock *vsk)
-> }
-> EXPORT_SYMBOL_GPL(vsock_stream_has_data);
->
->-static s64 vsock_connectible_has_data(struct vsock_sock *vsk)
->+s64 vsock_connectible_has_data(struct vsock_sock *vsk)
-> {
-> 	struct sock *sk = sk_vsock(vsk);
->
->@@ -874,6 +877,7 @@ static s64 vsock_connectible_has_data(struct vsock_sock *vsk)
-> 	else
-> 		return vsock_stream_has_data(vsk);
-> }
->+EXPORT_SYMBOL_GPL(vsock_connectible_has_data);
->
-> s64 vsock_stream_has_space(struct vsock_sock *vsk)
-> {
->@@ -1131,6 +1135,13 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
-> 	return mask;
-> }
->
->+static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
->+{
->+	struct vsock_sock *vsk = vsock_sk(sk);
->+
->+	return vsk->transport->read_skb(vsk, read_actor);
->+}
->+
-> static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
-> 			       size_t len)
-> {
->@@ -1241,19 +1252,34 @@ static int vsock_dgram_connect(struct socket *sock,
->
-> 	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
-> 	sock->state = SS_CONNECTED;
->+	sk->sk_state = TCP_ESTABLISHED;
->
-> out:
-> 	release_sock(sk);
-> 	return err;
-> }
->
->-static int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
->-			       size_t len, int flags)
->+int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
->+			size_t len, int flags)
-> {
->-	struct vsock_sock *vsk = vsock_sk(sock->sk);
->+#ifdef CONFIG_BPF_SYSCALL
->+	const struct proto *prot;
->+#endif
->+	struct vsock_sock *vsk;
->+	struct sock *sk;
->+
->+	sk = sock->sk;
->+	vsk = vsock_sk(sk);
->+
->+#ifdef CONFIG_BPF_SYSCALL
->+	prot = READ_ONCE(sk->sk_prot);
->+	if (prot != &vsock_proto)
->+		return prot->recvmsg(sk, msg, len, flags, NULL);
->+#endif
->
-> 	return vsk->transport->dgram_dequeue(vsk, msg, len, flags);
-> }
->+EXPORT_SYMBOL_GPL(vsock_dgram_recvmsg);
->
-> static const struct proto_ops vsock_dgram_ops = {
-> 	.family = PF_VSOCK,
->@@ -1272,6 +1298,7 @@ static const struct proto_ops vsock_dgram_ops = {
-> 	.recvmsg = vsock_dgram_recvmsg,
-> 	.mmap = sock_no_mmap,
-> 	.sendpage = sock_no_sendpage,
->+	.read_skb = vsock_read_skb,
-> };
->
-> static int vsock_transport_cancel_pkt(struct vsock_sock *vsk)
->@@ -2086,13 +2113,16 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
-> 	return err;
-> }
->
->-static int
->+int
-> vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
-> 			  int flags)
-> {
-> 	struct sock *sk;
-> 	struct vsock_sock *vsk;
-> 	const struct vsock_transport *transport;
->+#ifdef CONFIG_BPF_SYSCALL
->+	const struct proto *prot;
->+#endif
-> 	int err;
->
-> 	sk = sock->sk;
->@@ -2139,6 +2169,14 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
-> 		goto out;
-> 	}
->
->+#ifdef CONFIG_BPF_SYSCALL
->+	prot = READ_ONCE(sk->sk_prot);
->+	if (prot != &vsock_proto) {
->+		release_sock(sk);
->+		return prot->recvmsg(sk, msg, len, flags, NULL);
->+	}
->+#endif
->+
-> 	if (sk->sk_type == SOCK_STREAM)
-> 		err = __vsock_stream_recvmsg(sk, msg, len, flags);
-> 	else
->@@ -2148,6 +2186,7 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
-> 	release_sock(sk);
-> 	return err;
-> }
->+EXPORT_SYMBOL_GPL(vsock_connectible_recvmsg);
->
-> static int vsock_set_rcvlowat(struct sock *sk, int val)
-> {
->@@ -2188,6 +2227,7 @@ static const struct proto_ops vsock_stream_ops = {
-> 	.mmap = sock_no_mmap,
-> 	.sendpage = sock_no_sendpage,
-> 	.set_rcvlowat = vsock_set_rcvlowat,
->+	.read_skb = vsock_read_skb,
-> };
->
-> static const struct proto_ops vsock_seqpacket_ops = {
->@@ -2209,6 +2249,7 @@ static const struct proto_ops vsock_seqpacket_ops = {
-> 	.recvmsg = vsock_connectible_recvmsg,
-> 	.mmap = sock_no_mmap,
-> 	.sendpage = sock_no_sendpage,
->+	.read_skb = vsock_read_skb,
-> };
->
-> static int vsock_create(struct net *net, struct socket *sock,
->@@ -2348,6 +2389,8 @@ static int __init vsock_init(void)
-> 		goto err_unregister_proto;
-> 	}
->
->+	vsock_bpf_build_proto();
->+
-> 	return 0;
->
-> err_unregister_proto:
->diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
->index 28b5a8e8e094..e95df847176b 100644
->--- a/net/vmw_vsock/virtio_transport.c
->+++ b/net/vmw_vsock/virtio_transport.c
->@@ -457,6 +457,8 @@ static struct virtio_transport virtio_transport = {
-> 		.notify_send_pre_enqueue  = virtio_transport_notify_send_pre_enqueue,
-> 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
-> 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
->+
->+		.read_skb = virtio_transport_read_skb,
-> 	},
->
-> 	.send_pkt = virtio_transport_send_pkt,
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index a1581c77cf84..f64527f32385 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -1388,6 +1388,31 @@ int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *queue)
-> }
-> EXPORT_SYMBOL_GPL(virtio_transport_purge_skbs);
->
->+int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t recv_actor)
->+{
->+	struct virtio_vsock_sock *vvs = vsk->trans;
->+	struct sock *sk = sk_vsock(vsk);
->+	struct sk_buff *skb;
->+	int off = 0;
->+	int copied;
->+	int err;
->+
->+	spin_lock_bh(&vvs->rx_lock);
->+	/* Use __skb_recv_datagram() for race-free handling of the receive. It
->+	 * works for types other than dgrams.
->+	 */
->+	skb = __skb_recv_datagram(sk, &vvs->rx_queue, MSG_DONTWAIT, &off, &err);
->+	spin_unlock_bh(&vvs->rx_lock);
->+
->+	if (!skb)
->+		return err;
->+
->+	copied = recv_actor(sk, skb);
->+	kfree_skb(skb);
->+	return copied;
->+}
->+EXPORT_SYMBOL_GPL(virtio_transport_read_skb);
->+
-> MODULE_LICENSE("GPL v2");
-> MODULE_AUTHOR("Asias He");
-> MODULE_DESCRIPTION("common code for virtio vsock");
->diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
->new file mode 100644
->index 000000000000..9c71c163c684
->--- /dev/null
->+++ b/net/vmw_vsock/vsock_bpf.c
->@@ -0,0 +1,174 @@
->+// SPDX-License-Identifier: GPL-2.0
->+/* Copyright (c) 2022 Bobby Eshleman <bobby.eshleman@bytedance.com>
->+ *
->+ * Based off of net/unix/unix_bpf.c
->+ */
->+
->+#include <linux/bpf.h>
->+#include <linux/module.h>
->+#include <linux/skmsg.h>
->+#include <linux/socket.h>
->+#include <linux/wait.h>
->+#include <net/af_vsock.h>
->+#include <net/sock.h>
->+
->+#define vsock_sk_has_data(__sk, __psock)				\
->+		({	!skb_queue_empty(&(__sk)->sk_receive_queue) ||	\
->+			!skb_queue_empty(&(__psock)->ingress_skb) ||	\
->+			!list_empty(&(__psock)->ingress_msg);		\
->+		})
->+
->+static struct proto *vsock_prot_saved __read_mostly;
->+static DEFINE_SPINLOCK(vsock_prot_lock);
->+static struct proto vsock_bpf_prot;
->+
->+static bool vsock_has_data(struct sock *sk, struct sk_psock *psock)
->+{
->+	struct vsock_sock *vsk = vsock_sk(sk);
->+	s64 ret;
->+
->+	ret = vsock_connectible_has_data(vsk);
->+	if (ret > 0)
->+		return true;
->+
->+	return vsock_sk_has_data(sk, psock);
->+}
->+
->+static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
->+{
->+	int ret;
+I'm not sure it's the right way. It's not related to SVA.
 
-`ret` can be bool now.
+We should move iommu_global_pasid_ida to iomm.c and then have
+another interface for allocation.
 
-The rest LGTM.
+Above is pretty generic so probably a general one like:
 
-Thanks,
-Stefano
+	ioasid_t iommu_allocate_global_pasid(struct device *dev)
+
+internally it can use [1, dev->iommu->max_pasids] as min/max instead
+of passed in from the caller.
+
 
