@@ -2,110 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3924D6A7D54
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2876A7D57
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjCBJKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
+        id S229625AbjCBJKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjCBJKI (ORCPT
+        with ESMTP id S229461AbjCBJKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:10:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7AC144A0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677748167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BAmp8cQXmAY8O+zkFjEu1kD8x7lwlOJ1BmEXR6luRcA=;
-        b=AxDawPApns2lZvmjYsj/mudAIM7a3JCuZmRXJgR26ZqUxL3w83uh47W2mKBkIhxHdb5qN7
-        ct4BJJXajFbt7d+uB637GriKWiiHBk+pX04+5914eB0zK7Ls0Fgw1bZB34ELG1G/xybP9o
-        4lBIHgAuP8+2qavyDtwE21bWdwBql2o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-357-S7owwZrhMpm03B2s7hegTg-1; Thu, 02 Mar 2023 04:09:23 -0500
-X-MC-Unique: S7owwZrhMpm03B2s7hegTg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 2 Mar 2023 04:10:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF802A6C2;
+        Thu,  2 Mar 2023 01:10:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C59DD80351F;
-        Thu,  2 Mar 2023 09:09:22 +0000 (UTC)
-Received: from localhost (ovpn-12-142.pek2.redhat.com [10.72.12.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E8382492B00;
-        Thu,  2 Mar 2023 09:09:21 +0000 (UTC)
-Date:   Thu, 2 Mar 2023 17:09:18 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mips: add <asm-generic/io.h> including
-Message-ID: <ZABnvqNJR/8oQbbM@bhe.users.ipa.redhat.com>
-References: <20230301102208.148490-1-bhe@redhat.com>
- <20230301102208.148490-2-bhe@redhat.com>
- <5edd5304-ef11-4607-9189-a07613ecfee2@app.fastmail.com>
- <ZAAiJcx80RU0QuHw@MiWiFi-R3L-srv>
- <b2958824-786b-46d7-a880-17c948fbe2b0@app.fastmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9083A6153A;
+        Thu,  2 Mar 2023 09:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118F2C433EF;
+        Thu,  2 Mar 2023 09:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677748212;
+        bh=UZHjTt3WcAHN0hlxS276lYr5jPZwtybl0ohiW2kCEiU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N1x2z3qXQML4+BOJD7c4cF7FwMgMh8QfPe2mlaTVD8B7t6djp/P7UqujWYwC9gjUG
+         6xd4i4FZVm3LkaQjKgJ0HtC2RbpPuv5ycZmCWy84ZYinZzhcG4L6ZMSFxfHJU0D3I2
+         bY1UjGO68LlkSzeikb6tDF08t+oPLJ5KB1JMlJXgCXTWbNfEHW0YVew6ZxXwbQsV40
+         RKO65PdWaVB3K5Y1SgAuCR2oMm6JIs5YW7cGg4W6bFCyKRW2IBQm3AOLlJDX2aR+wm
+         LpJ1kG4yXWAck9Shifpf6M9Ln4TLJeRofygXvesY+dC6H6UXHz4oZeiyo2SVKfX9zT
+         LRXHhJPWM3KgA==
+Date:   Thu, 2 Mar 2023 11:10:08 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND net v1 0/2] iavf: fix double-broken HW hash report
+Message-ID: <20230302091008.GA561905@unreal>
+References: <20230301115908.47995-1-aleksander.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b2958824-786b-46d7-a880-17c948fbe2b0@app.fastmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230301115908.47995-1-aleksander.lobakin@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/23 at 08:12am, Arnd Bergmann wrote:
-> On Thu, Mar 2, 2023, at 05:12, Baoquan He wrote:
-> > On 03/01/23 at 03:06pm, Arnd Bergmann wrote:
-> >
-> > Yeah, defining mmiowb() to wmb() directly is also good to me. I tried
-> > to comb including sequence and find where asm/io.h is included, but
-> > failed. Mainly asm/mmiowb.h including asm/io.h will cause below
-> > compiling error, the asm/io.h need see mmiowb_set_pending which is
-> > defnined in asm-generic/mmiowb.h. Moving asm-generic/mmiowb.h to above
-> > asm/io.h can also fix the compiling error.
-> >
-> > =============
-> > diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
-> > index a40824e3ef8e..cae2745935bc 100644
-> > --- a/arch/mips/include/asm/mmiowb.h
-> > +++ b/arch/mips/include/asm/mmiowb.h
-> > @@ -2,10 +2,8 @@
-> >  #ifndef _ASM_MMIOWB_H
-> >  #define _ASM_MMIOWB_H
-> > 
-> > +#include <asm-generic/mmiowb.h>
-> >  #include <asm/io.h>
-> > 
-> >  #define mmiowb()       iobarrier_w()
-> > -
-> > -#include <asm-generic/mmiowb.h>
-> > -
-> >  #endif /* _ASM_MMIOWB_H */
+On Wed, Mar 01, 2023 at 12:59:06PM +0100, Alexander Lobakin wrote:
+> Currently, passing HW hash from descriptors to skb is broken two times.
+> The first bug effectively disables hash from being filled at all, unless
+> %NETIF_F_RXHASH is *disabled* via Ethtool. The second incorrectly says
+> that IPv6 UDP packets are L3, which also triggers CPU hashing when
+> needed (the networking core treats only L4 HW hash as "true").
+> The very same problems were fixed in i40e and ice, but not in iavf,
+> although each of the original commits bugged at least two drivers.
+> It's never too late (I hope), so fix iavf this time.
 > 
-> According to the comment in asm-generic/mmiowb.h, the intention is
-> to have the mmiowb definition before the #include, though this would
-> only be necessary if there was an "#ifndef mmiowb" fallback in that
-> file. If the definition to wmb() works, I'd go for that one and
-> leave the include order unchanged.
+> Alexander Lobakin (2):
+>   iavf: fix inverted Rx hash condition leading to disabled hash
+>   iavf: fix non-tunneled IPv6 UDP packet type and hashing
+> 
 
-Ah, I didn't notice the comment. Then will change the definition to
-wmb(). Thanks.
-
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
