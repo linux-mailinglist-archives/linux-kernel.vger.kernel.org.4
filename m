@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529E06A89EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C756A89ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjCBT6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
+        id S230083AbjCBT6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjCBT5w (ORCPT
+        with ESMTP id S230029AbjCBT5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Mar 2023 14:57:52 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A55B48E31;
-        Thu,  2 Mar 2023 11:57:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A78E48E3C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:57:51 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677787067;
+        s=2020; t=1677787068;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BQXtIuVdKd6aYDdz0BrUrqG+XHrNJCfdUZckqmV0CGk=;
-        b=lKgPdymx4ineOUjiWIUNWjOABTzLnRXZY8vvYPeuGMuZWqnHBPU9P2t7cAZ2XErOH9TERp
-        mZFVRGlsJDT9mmyXB2vyT/So853g8vXuVt0VrWgeqBDYsl2CQQ0l/JwodkN74KwAeCGd7h
-        GbpcdgKqBRioGBN6RgjmRl6VGTdc6mG/ld1dhiHAbSFr325qgbqtxcA6nLqVVVwzYoamSw
-        5bzTiusEtufwdgqd2sHwYpbUlebWmaJfgTvsT4WsSdbX//sVYn4zvF7Fe7ewscZJUCIgOq
-        D1Om2f5V4LFfkUtA+45GZzB61yGT32SHDtw4CnLx9Ttz5eih0506JYBj2XPFog==
+        bh=pInHvcVDhlPvPce/Y/2kDlCM4xbrektXByOcawRj+0U=;
+        b=h1FbnCMGHQDvQR5n7qJZizMYJFjX9il2feilw35+EzPvA/b1gvi3IxQZhoGDSqoMBfkAFC
+        bcdmRZrczX/5lWhxyohoBiY5o8FEch1kiZht4hLoVSOFdv51lFEsyzcxkb4slBKtDyDtKR
+        X3W8eSvKqfAFUcdpW/Labe6N7r83IPxdily+bPw7jLdYCgn6JXNaDRYyUxbS16gpd3kuPz
+        OwrGiI/0vV/syNp/sQlbeWl9OU0RFDODOIPAKst6+L09Ctc5iOFCVPPcLtFeyCUIiMvXUA
+        5UF6fxZILwMDXChTqqDICPzKk7wpwpcG3b8QHTDYzo3cO9lf/VPHRYot9H5QwA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677787067;
+        s=2020e; t=1677787068;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BQXtIuVdKd6aYDdz0BrUrqG+XHrNJCfdUZckqmV0CGk=;
-        b=Ivxb5hj77f/zf0BVQiuddIlSIi9XtkPI5IZVsai/WeryhUuVI7T0Rj3XQdt8Hfl+dPYn3e
-        khSAw2pY/t5rqSBQ==
+        bh=pInHvcVDhlPvPce/Y/2kDlCM4xbrektXByOcawRj+0U=;
+        b=maOqQIw3FYXH1/cDnM8pH2rfYr5sExWFW5Ascwc4DyQUHDC3ZKkIMwpmoF5qNS7tzvuH3d
+        7/dLoL+9MjTNiYCA==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org
-Subject: [PATCH printk v1 17/18] rcu: Add atomic write enforcement for rcu stalls
-Date:   Thu,  2 Mar 2023 21:02:17 +0106
-Message-Id: <20230302195618.156940-18-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v1 18/18] printk: Perform atomic flush in console_flush_on_panic()
+Date:   Thu,  2 Mar 2023 21:02:18 +0106
+Message-Id: <20230302195618.156940-19-john.ogness@linutronix.de>
 In-Reply-To: <20230302195618.156940-1-john.ogness@linutronix.de>
 References: <20230302195618.156940-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -66,58 +59,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Invoke the atomic write enforcement functions for rcu stalls to
-ensure that the information gets out to the consoles.
+Typically the panic() function will take care of atomic flushing the
+non-BKL consoles on panic. However, there are several users of
+console_flush_on_panic() outside of panic().
 
-It is important to note that if there are any legacy consoles
-registered, they will be attempting to directly print from the
-printk-caller context, which may jeopardize the reliability of the
-atomic consoles. Optimally there should be no legacy consoles
-registered.
+Also perform atomic flushing in console_flush_on_panic(). A new
+function cons_force_seq() is implemented to support the
+mode=CONSOLE_REPLAY_ALL feature.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- kernel/rcu/tree_stall.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ kernel/printk/internal.h     |  2 ++
+ kernel/printk/printk.c       | 28 ++++++++++++++++++++++------
+ kernel/printk/printk_nobkl.c | 24 ++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index 5653560573e2..25207a213e7a 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -8,6 +8,7 @@
+diff --git a/kernel/printk/internal.h b/kernel/printk/internal.h
+index a417e3992b7a..f147ca386afa 100644
+--- a/kernel/printk/internal.h
++++ b/kernel/printk/internal.h
+@@ -79,6 +79,7 @@ bool cons_nobkl_init(struct console *con);
+ bool cons_alloc_percpu_data(struct console *con);
+ void cons_kthread_create(struct console *con);
+ void cons_wake_threads(void);
++void cons_force_seq(struct console *con, u64 seq);
+ 
+ /*
+  * Check if the given console is currently capable and allowed to print
+@@ -148,6 +149,7 @@ static inline void cons_kthread_create(struct console *con) { }
+ static inline bool printk_percpu_data_ready(void) { return false; }
+ static inline bool cons_nobkl_init(struct console *con) { return true; }
+ static inline void cons_nobkl_cleanup(struct console *con) { }
++static inline void cons_force_seq(struct console *con, u64 seq) { }
+ 
+ #endif /* CONFIG_PRINTK */
+ 
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 015c240f9f04..9a8ba8b3dca5 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -3160,6 +3160,28 @@ void console_unblank(void)
   */
- 
- #include <linux/kvm_para.h>
-+#include <linux/console.h>
- 
- //////////////////////////////////////////////////////////////////////////////
- //
-@@ -551,6 +552,7 @@ static void rcu_check_gp_kthread_expired_fqs_timer(void)
- 
- static void print_other_cpu_stall(unsigned long gp_seq, unsigned long gps)
+ void console_flush_on_panic(enum con_flush_mode mode)
  {
-+	enum cons_prio prev_prio;
- 	int cpu;
- 	unsigned long flags;
- 	unsigned long gpa;
-@@ -566,6 +568,8 @@ static void print_other_cpu_stall(unsigned long gp_seq, unsigned long gps)
- 	if (rcu_stall_is_suppressed())
++	struct console *c;
++	short flags;
++	int cookie;
++	u64 seq;
++
++	seq = prb_first_valid_seq(prb);
++
++	/*
++	 * Safely flush the atomic consoles before trying to flush any
++	 * BKL/legacy consoles.
++	 */
++	if (mode == CONSOLE_REPLAY_ALL) {
++		cookie = console_srcu_read_lock();
++		for_each_console_srcu(c) {
++			flags = console_srcu_read_flags(c);
++			if (flags & CON_NO_BKL)
++				cons_force_seq(c, seq);
++		}
++		console_srcu_read_unlock(cookie);
++	}
++	cons_atomic_flush(NULL, true);
++
+ 	if (!have_bkl_console)
  		return;
  
-+	prev_prio = cons_atomic_enter(CONS_PRIO_EMERGENCY);
-+
- 	/*
- 	 * OK, time to rat on our buddy...
- 	 * See Documentation/RCU/stallwarn.rst for info on how to debug
-@@ -620,6 +624,8 @@ static void print_other_cpu_stall(unsigned long gp_seq, unsigned long gps)
- 	panic_on_rcu_stall();
+@@ -3174,12 +3196,6 @@ void console_flush_on_panic(enum con_flush_mode mode)
+ 	console_may_schedule = 0;
  
- 	rcu_force_quiescent_state();  /* Kick them all. */
-+
-+	cons_atomic_exit(CONS_PRIO_EMERGENCY, prev_prio);
+ 	if (mode == CONSOLE_REPLAY_ALL) {
+-		struct console *c;
+-		int cookie;
+-		u64 seq;
+-
+-		seq = prb_first_valid_seq(prb);
+-
+ 		cookie = console_srcu_read_lock();
+ 		for_each_console_srcu(c) {
+ 			/*
+diff --git a/kernel/printk/printk_nobkl.c b/kernel/printk/printk_nobkl.c
+index 53989c8f1dbc..ac2ba785500e 100644
+--- a/kernel/printk/printk_nobkl.c
++++ b/kernel/printk/printk_nobkl.c
+@@ -233,6 +233,30 @@ static void cons_seq_init(struct console *con)
+ #endif
  }
  
- static void print_cpu_stall(unsigned long gps)
++/**
++ * cons_force_seq - Force a specified sequence number for a console
++ * @con:	Console to work on
++ * @seq:	Sequence number to force
++ *
++ * This function is only intended to be used in emergency situations. In
++ * particular: console_flush_on_panic(CONSOLE_REPLAY_ALL)
++ */
++void cons_force_seq(struct console *con, u64 seq)
++{
++#ifdef CONFIG_64BIT
++	struct cons_state old;
++	struct cons_state new;
++
++	do {
++		cons_state_read(con, CON_STATE_CUR, &old);
++		copy_bit_state(new, old);
++		new.seq = seq;
++	} while (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &old, &new));
++#else
++	atomic_set(&ACCESS_PRIVATE(con, atomic_seq), seq);
++#endif
++}
++
+ static inline u64 cons_expand_seq(u64 seq)
+ {
+ 	u64 rbseq;
 -- 
 2.30.2
 
