@@ -2,95 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9F76A7A0C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843046A7A31
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjCBD3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 22:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S229760AbjCBDwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 22:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCBD3Q (ORCPT
+        with ESMTP id S229445AbjCBDwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 22:29:16 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AACB1630B;
-        Wed,  1 Mar 2023 19:29:15 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321JY32C025972;
-        Wed, 1 Mar 2023 19:29:03 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=NNLvYJGSY6WpFKcOab3eDXfODfphueuuKW4IyeoblG4=;
- b=OY/sUO4RCUbRn5+sgxFk7hJKbUgBdrtM9sKxBq/Ko5AiyVpfh8uKu3vrQl31z0PM/Ulc
- 5LQ9I/XxX/r+eUqNoVnIvTYdXtz6XLbas1v4zxzoCr2lnOEsqjXuZI40PGdAxkEGdF2X
- WABM6lXEL8j5VDma0jpCZnpOLHOtLsM8Rr/g+kkGzhCTd23XWvANKM8UMoDLgWWHjSvL
- HsIKkNExHiOvFKfypUOzaf2LCEYvmDmfYN0fhidHe1XE5tjJ8q25j6cbJI59ZS8f+Ck5
- 3uNrI5ZgA70feIw2iutcvTsnOqq89ZwUHCOU6r1n4OTusyZ+KEwbnsjmCXKNf70ZpZGK Xg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3p1wr9pmge-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 01 Mar 2023 19:29:03 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Mar
- 2023 19:29:01 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Wed, 1 Mar 2023 19:29:01 -0800
-Received: from localhost.localdomain (unknown [10.28.36.165])
-        by maili.marvell.com (Postfix) with ESMTP id 690215B6928;
-        Wed,  1 Mar 2023 19:28:58 -0800 (PST)
-From:   Ratheesh Kannoth <rkannoth@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <leon@kernel.org>
-CC:     <sgoutham@marvell.com>, Ratheesh Kannoth <rkannoth@marvell.com>
-Subject: [net PATCH] octeontx2-af: Fix start and end bit for scan config
-Date:   Thu, 2 Mar 2023 08:58:55 +0530
-Message-ID: <20230302032855.831573-1-rkannoth@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 1 Mar 2023 22:52:42 -0500
+X-Greylist: delayed 868 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 19:52:41 PST
+Received: from mail-m11874.qiye.163.com (mail-m11874.qiye.163.com [115.236.118.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF5532532;
+        Wed,  1 Mar 2023 19:52:41 -0800 (PST)
+Received: from [172.16.12.93] (unknown [58.22.7.114])
+        by mail-m11874.qiye.163.com (Hmail) with ESMTPA id 946593C0196;
+        Thu,  2 Mar 2023 11:29:45 +0800 (CST)
+Message-ID: <b86a53d7-778e-5ec7-cc5b-8e741af10986@rock-chips.com>
+Date:   Thu, 2 Mar 2023 11:29:45 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: J3q9HEDujG_aX_pNKG7Gvu8tZoNCcQwF
-X-Proofpoint-GUID: J3q9HEDujG_aX_pNKG7Gvu8tZoNCcQwF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-01_17,2023-03-01_03,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 3/8] gpio: gpio-rockchip: parse gpio-ranges for bank id
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, linus.walleij@linaro.org,
+        brgl@bgdev.pl
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sjg@chromium.org, philipp.tomsich@vrull.eu, john@metanate.com,
+        quentin.schulz@theobroma-systems.com
+References: <03627216-54b5-5d9b-f91d-adcd637819e3@gmail.com>
+ <890be9a0-8e82-a8f4-bc15-d5d1597343c2@gmail.com>
+From:   Kever Yang <kever.yang@rock-chips.com>
+In-Reply-To: <890be9a0-8e82-a8f4-bc15-d5d1597343c2@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0JDTlYfTktCTExMSR1PHktVEwETFh
+        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLT0tDVUpLS1VLWQ
+        Y+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MTo6ASo*Aj0QPkIoOQ0SLjAW
+        FglPC1ZVSlVKTUxMTElMTENNTk9DVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFIQkhONwY+
+X-HM-Tid: 0a86a05e64182eb0kusn946593c0196
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-for_each_set_bit_from() needs start bit as one bit prior
-and end bit as one bit post position in the bit map
+Hi Johan,
 
-Fixes: 88fffc65f940 (octeontx2-af: Exact match scan from kex profile)
-Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
-Reviewed-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On 2023/1/21 19:08, Johan Jonker wrote:
+> Parse the gpio-ranges property in Rockchip gpio nodes to be
+> independent from aliases and probe order for our bank id.
+>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-index 327d3c6b1175..9c7bbef27e31 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-@@ -603,9 +603,8 @@ static int npc_scan_kex(struct rvu *rvu, int blkaddr, u8 intf)
- 	 * exact match code.
- 	 */
- 	masked_cfg = cfg & NPC_EXACT_NIBBLE;
--	bitnr = NPC_EXACT_NIBBLE_START;
--	for_each_set_bit_from(bitnr, (unsigned long *)&masked_cfg,
--			      NPC_EXACT_NIBBLE_START) {
-+	bitnr = NPC_EXACT_NIBBLE_START - 1;
-+	for_each_set_bit_from(bitnr, (unsigned long *)&masked_cfg, NPC_EXACT_NIBBLE_END + 1) {
- 		npc_scan_exact_result(mcam, bitnr, key_nibble, intf);
- 		key_nibble++;
- 	}
--- 
-2.25.1
+Looks good to me.
 
+Reviewed-by: Kever Yang <kever.yang@rock-chips.com>
+
+
+Thanks,
+- Kever
+> ---
+>   drivers/gpio/gpio-rockchip.c | 24 ++++++++++++++++++------
+>   1 file changed, 18 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+> index e5de15a2a..df74b71aa 100644
+> --- a/drivers/gpio/gpio-rockchip.c
+> +++ b/drivers/gpio/gpio-rockchip.c
+> @@ -702,24 +702,36 @@ static int rockchip_gpio_probe(struct platform_device *pdev)
+>   {
+>   	struct device *dev = &pdev->dev;
+>   	struct device_node *np = dev->of_node;
+> -	struct device_node *pctlnp = of_get_parent(np);
+> +	struct device_node *pctlnp;
+>   	struct pinctrl_dev *pctldev = NULL;
+>   	struct rockchip_pin_bank *bank = NULL;
+>   	struct rockchip_pin_deferred *cfg;
+> +	struct of_phandle_args args;
+>   	static int gpio;
+>   	int id, ret;
+>
+> -	if (!np || !pctlnp)
+> +	if (!np)
+> +		return -ENODEV;
+> +
+> +	ret = of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3, 0, &args);
+> +	if (ret == 0) {
+> +		pctlnp = args.np;
+> +		id = args.args[1] / 32;
+> +	} else {
+> +		pctlnp = of_get_parent(np);
+> +		id = of_alias_get_id(np, "gpio");
+> +		if (id < 0)
+> +			id = gpio++;
+> +	}
+> +
+> +	if (!pctlnp)
+>   		return -ENODEV;
+>
+>   	pctldev = of_pinctrl_get(pctlnp);
+> +	of_node_put(pctlnp);
+>   	if (!pctldev)
+>   		return -EPROBE_DEFER;
+>
+> -	id = of_alias_get_id(np, "gpio");
+> -	if (id < 0)
+> -		id = gpio++;
+> -
+>   	bank = rockchip_gpio_find_bank(pctldev, id);
+>   	if (!bank)
+>   		return -EINVAL;
+> --
+> 2.20.1
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
