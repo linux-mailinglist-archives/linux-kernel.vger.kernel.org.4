@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64CE6A83E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832356A83EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjCBOAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
+        id S229769AbjCBOC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCBOAj (ORCPT
+        with ESMTP id S229740AbjCBOCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:00:39 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E581E2333F;
-        Thu,  2 Mar 2023 06:00:36 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id C17005FD11;
-        Thu,  2 Mar 2023 17:00:33 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1677765633;
-        bh=OrOwfh5mJRiMyU5mosrTfgs9+CKcxqZAEXZ0UG6pCW8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=S10oa6xEdsy6Rf/BtUgrQGr8euxwm2wZ3ZhC9UKVjBNWW/yg5b0wDbc7yox23afwO
-         5EN1qkdP19HKbihfYGfMRTxdhosKhVcQ8VVxcmvbllfjTm9snXdy2cUYKJe5BPgwWj
-         4LJ3nWYuUQ7qCsmDpZkyWSYJZds8etV83W5Epv4XBmX4sIaC25dTgtJSXF/c4B5tuH
-         3mRr8YC+A3KhbOYulREHtfx5bFscRqEk6zM9g0ZzCVAAtvo3bfSfkpchvgjlL5uO+R
-         D07sB89XshHGFADe6RAZCuGjZAQslvil3p26WNh7DquN/mzhHv4pghoHVTFVokGi0L
-         VTmIGXCcwkG8w==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  2 Mar 2023 17:00:32 +0300 (MSK)
-Message-ID: <1a1017f5-b18f-b952-2504-e4301512c52b@sberdevices.ru>
-Date:   Thu, 2 Mar 2023 17:00:31 +0300
+        Thu, 2 Mar 2023 09:02:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F37330EB5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677765697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X853Jg3cnR4uj49XXzsgp4yTPwwc+lfJj/lENOT9FE0=;
+        b=R3ZEhrJA5qzzCI7KBqpkCsba2bAhFfanbjDNEZ0qQxnPZgKZK0sbbrEVd9kYFaoe9QnDJk
+        q+5QLxdE0TmgWFuBW6iWFRCOa8tTPuvYx31KLm+9gR0Wa4Ncl0GV7rbJB6gJx7vT73ros5
+        bY3xdZ6AnfaiVyxNbs+jhFrBMLMWfgI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-265-WmV29igcOtiEn5Ya6kX2XQ-1; Thu, 02 Mar 2023 09:01:30 -0500
+X-MC-Unique: WmV29igcOtiEn5Ya6kX2XQ-1
+Received: by mail-wm1-f71.google.com with SMTP id r7-20020a05600c35c700b003eb3f2c4fb4so1123196wmq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 06:01:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X853Jg3cnR4uj49XXzsgp4yTPwwc+lfJj/lENOT9FE0=;
+        b=PPcUUBdY8UuY/UPjp/QXyq9iau/VaF4SEDhn0P6dSD4Gbis6FDxL+B5zFW+AbqAJ5D
+         NsMfYdjBBicMT2e1ToQoOZDwvnp/zkeG0FF9/v6Jur+LZ/qlBVULp72Vf0czZT+iJ0MU
+         W8LjA/F9F8syoaRsaHJooyPnmHVYj3Evc5rJ5vP1t8lj0xKBMZ5SObpvNdQgAtWOan0t
+         B90Vzzu0LAUj9wB2Fv9bX2MHCgEsu9AruWRH5/BuTioqx4qanbCXkghaQReiZZ/BFGHB
+         HI07jkr5SiEUluebGe6OTgqmLYRy0XLAvXttAbnpvqDEiidQoRar6LHRxMc6ABtqm+Ls
+         mrNA==
+X-Gm-Message-State: AO0yUKWFTsSemrqckUda3IZDhbn7n+XlqVX2C3jN5EAgrdGVI3qq5Zns
+        4IRjRPByKeJ24z4Eo4mNpMtAlDx35NBqvvi139BqGbURmeYjSlAB5STCOMZv3CYLqCyBhqxCZA/
+        gDvIe4bJGLmeu81JhuBBFX1hk
+X-Received: by 2002:a5d:6ac4:0:b0:2c7:1d70:561 with SMTP id u4-20020a5d6ac4000000b002c71d700561mr7379550wrw.45.1677765688802;
+        Thu, 02 Mar 2023 06:01:28 -0800 (PST)
+X-Google-Smtp-Source: AK7set/2Wx2szV1QS3+CwX3F47nzraKBbC+iHmfJSmogaJrsx8GaNXcHjv+xuPmWHssxbfzuGkG4FA==
+X-Received: by 2002:a5d:6ac4:0:b0:2c7:1d70:561 with SMTP id u4-20020a5d6ac4000000b002c71d700561mr7379525wrw.45.1677765688446;
+        Thu, 02 Mar 2023 06:01:28 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:4f00:87ba:e9e9:3821:677b? (p200300cbc70e4f0087bae9e93821677b.dip0.t-ipconnect.de. [2003:cb:c70e:4f00:87ba:e9e9:3821:677b])
+        by smtp.gmail.com with ESMTPSA id c18-20020adfed92000000b002c54c9bd71fsm15760107wro.93.2023.03.02.06.01.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 06:01:27 -0800 (PST)
+Message-ID: <982c1623-ac28-2743-d6a3-4faf42f72d47@redhat.com>
+Date:   Thu, 2 Mar 2023 15:01:26 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/2] leds: add aw20xx driver
+Subject: Re: [PATCH v2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
 Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>
-References: <20230228211046.109693-1-mmkurbanov@sberdevices.ru>
- <20230228211046.109693-3-mmkurbanov@sberdevices.ru>
- <Y/5xBGFC3b9Chdtb@duo.ucw.cz>
-From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
-In-Reply-To: <Y/5xBGFC3b9Chdtb@duo.ucw.cz>
-Content-Type: text/plain; charset="UTF-8"
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <20230227230044.1596744-1-peterx@redhat.com>
+ <Y/1Mh5uivFt+zWKM@x1n> <e1e0ed70-76df-647f-30ac-0bb6ae8dc05c@collabora.com>
+ <Y/4kjnom6MQqh9iA@x1n> <fb7ec372-2b16-14e1-a8cd-a90f4449661f@collabora.com>
+ <640319be-ddb6-d74f-b731-eee5ceab3d01@collabora.com> <Y/9tA2EVglOJ0Ap1@x1n>
+ <fc95fd2c-d661-926c-3bdb-8709cb49de3b@collabora.com>
+ <8783f47e-76ea-cd24-e373-f2156884cd05@redhat.com> <ZACrOWKWdVYO/EAI@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZACrOWKWdVYO/EAI@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/02 07:22:00 #20908555
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-01 00:24, Pavel Machek wrote:
-> Hi!
+On 02.03.23 14:57, Peter Xu wrote:
+> On Thu, Mar 02, 2023 at 10:37:44AM +0100, David Hildenbrand wrote:
+>> Especially for such large sparse VMAs, the current way of allocating
+>> pagetables to place markers/zeropages is far from optimal.
 > 
->> +config LEDS_AW200XX
->> +	tristate "LED support for Awinic AW20036/AW20054/AW20072"
->> +	depends on LEDS_CLASS
->> +	depends on I2C
->> +	help
->> +	  This option enables support for the AW20036/AW20054/AW20072 LED driver.
->> +	  It is a 3x12/6x9/6x12 matrix LED driver programmed via
->> +	  an I2C interface, up to 36/54/72 LEDs or 12/18/24 RGBs,
->> +	  3 pattern controllers for auto breathing or group dimming control.
+> IMHO that's not a generic workload.  As mentioned in the reply there, I
+> would suggest we go with simple then we have space to optimize it in the
+> future if necessary, because the API will be the same.
 > 
-> I'm afraid this should be handled as a display, not as an array of
-> individual LEDs.
 
-Hello Pavel,
+I disagree with "generic workload", we use sparse mmaps all over the 
+place, and when blindly used by e.g., CRIU, we'll simply end up wasting 
+memory and time.
 
-Thank you for the quick feedback and your detailed thoughts, appreciate
-it!
-I'm totally agree with you, that matrix LED controllers should be
-interpreted as display and it must be controlled as display from
-userspace. But actually, AW20036 controller usage status is strongly
-dependent from board PCB. In the our internal projects AW20036 controls
-LEDs line. Each LED brightness/pattern/etc are managed from userspace
-independently. From the current registers specification I can't imagine
-that it's possible to develop display driver for that. All controller
-features involve LED independent managing, like hardware patterns and
-brightness setup. Therefore I suppose for AW20036 controller LED
-subsystem is more suitable.
+But I already agreed that this optimization that is a separate thing to 
+implement.
 
 -- 
-Best Regards,
-Kurbanov Martin
+Thanks,
+
+David / dhildenb
 
