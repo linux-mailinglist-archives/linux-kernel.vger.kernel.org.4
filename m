@@ -2,142 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF086A8990
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 589416A8995
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjCBTim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S229547AbjCBTj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCBTik (ORCPT
+        with ESMTP id S230017AbjCBTi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:38:40 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0F3166D5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:38:38 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id r18so231178wrx.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:38:38 -0800 (PST)
+        Thu, 2 Mar 2023 14:38:57 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31F52056D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:38:52 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id i10so370549plr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:38:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677785917;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xd8mmUQDD7YDBjit7BkvCM2rUfsuWe0DKRJ2xHROhnA=;
-        b=gm7Jo0/ui30UfldWPBkbfaDsSLJZN1a3TG/Nqn6TheqH+P7zzyfstcz0c0XS5wH7c4
-         pihNBXBjs2bv68RGqr/24viCXrsaBXp6cbw8yvH23g6CELbhq957owz+8OUciywIFEtU
-         61O7JBAuxlSw23RyXyveQ7UFK0K1wShEtN8K8up7xuLKkochYqe9XaJLBviocYwO7mCw
-         1e4OnviqCWdtBPJkUU+8sWkHQk9udQ2FFCwpZB5LRDVZxNn9i2Q9/hRaY66dmxkn+yud
-         shgYx8/nwbba+L4ixftFGxXS6UYEWP6KQRrkCV5lqNe3KGHHbkfHd7jKrV/czpRpjBa4
-         C9BA==
+        d=chromium.org; s=google; t=1677785932;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4s1PB0aDKExEegP9jlohCN7POU8aMDSrP9HExeQX7hE=;
+        b=PDwrHB+wGAdVzxzh75ThVl/h+cmP6p1si7veW3AAIKwCIO3UEkxX9+U45yDNqu6b2K
+         MoZQy6HdF7M5G3YZw5E9QldquMwEJy5BroncERHgeG83qG6I5pLKQvsbHTgcjn+2ddop
+         NX6kzzmXhsdobsAQGPaC1LbvkYW5AedmhRY6o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677785917;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xd8mmUQDD7YDBjit7BkvCM2rUfsuWe0DKRJ2xHROhnA=;
-        b=fJyZyvWDZ5wLkvzmDOQlRFdBYxOKKPwMuD1KYPmdazG2L4GJzBW4PFQN4rkYejCewU
-         j0tpR79JjGoHjRKEMtgKe39w2K0fkkb1OfdwtRe9/dWXvM2OMgsIlmbBLi77PA3t2uwX
-         sbJt8E5UsBcGHXRqDT3UkCB1gM5LFymStaJV5+VgcL0oqNIEh4DgU1wuQdgAbXbo8nLI
-         2lEOx3eM4qbTNPrBeK/OtIQWMtqxNDz/N4zJNgI+pG1AYXmObSijNg+CzfYIU+wwEka0
-         oioBPNtKmo0EFARt6WLkJRp8DmZMhwDgfc3z4V3pf54L/tzJAajPtazxvvAiSek8KVGh
-         007A==
-X-Gm-Message-State: AO0yUKXAT2KH53WB8NEodGzhJjnQ4yK6JuBXXbwVNLbf+OKpaZBZcqIs
-        5aqXiEjB6eF0rOMfkb9vOAZgXIGjVaKo64LrzyRAiw==
-X-Google-Smtp-Source: AK7set8YzgemtxzRriQC7Q8SF1lU5jdJaxwoOh3mFpKG71vgAxCKqjHS9tuOsgQ3by7jKKYJV8j9IGc43vVMmIozGWg=
-X-Received: by 2002:a5d:6041:0:b0:2ca:c865:51b4 with SMTP id
- j1-20020a5d6041000000b002cac86551b4mr2291188wrt.9.1677785917090; Thu, 02 Mar
- 2023 11:38:37 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677785932;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4s1PB0aDKExEegP9jlohCN7POU8aMDSrP9HExeQX7hE=;
+        b=mCioV+54rBQ+Vi4L53r5xk9gkcw/49oOQ6jyXfdY0KfBlZmnpR52FmIa/uSU0La9dk
+         ryUtO1ZkKxzDeLwI8cahSTD7A2BwruOx+TIZxViMwGabcIxbFix/88aZZP3DH8ioqFx8
+         cFB+LqFPJ8Sm1kYztLNde817lnRJzN02YJue+NZCkdEYYn6rWE6pD6+oWGQ5Qz4eATfL
+         wZ+8eLhSmISK5z3DBVRiQf00jqzNgHv1SfsiFvlkFqYsZyblndd2Rel07wslSrIOYLJx
+         r0sKIRMP1CqYqSoDvUEFDcWjiKrcG112218gn+vGoSZxwnfYAyrbJUAu5XYtkL34g0zz
+         /8Eg==
+X-Gm-Message-State: AO0yUKUAA9XvHWOoICykv68P/0Sf5OCaRWUNFEk+DVQHelivHuiNptUr
+        4969XbQ4AOt99gsFonlN5mjA7A==
+X-Google-Smtp-Source: AK7set8ZFHS1yuQhcmnpgyrHR8bfbE/pwCOzBeXngxgWgAjy+v7kcD0MAWpsfDqJo/89d6UfZ2E4RQ==
+X-Received: by 2002:a05:6a20:6605:b0:cb:c276:58d6 with SMTP id n5-20020a056a20660500b000cbc27658d6mr10116611pzh.34.1677785932135;
+        Thu, 02 Mar 2023 11:38:52 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id z23-20020aa785d7000000b005d6cb790c35sm63736pfn.119.2023.03.02.11.38.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 11:38:51 -0800 (PST)
+Message-ID: <6400fb4b.a70a0220.39788.048e@mx.google.com>
+X-Google-Original-Message-ID: <202303021127.@keescook>
+Date:   Thu, 2 Mar 2023 11:38:50 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>
+Cc:     Mateusz Guzik <mjguzik@gmail.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if
+ possible
+References: <20230125155557.37816-1-mjguzik@gmail.com>
+ <20230125155557.37816-2-mjguzik@gmail.com>
+ <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
+ <20230302083025.khqdizrnjkzs2lt6@wittgenstein>
+ <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
+ <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
+ <ZADoeOiJs6BRLUSd@ZenIV>
+ <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
+ <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
+ <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230302041211.852330-1-irogers@google.com> <20230302041211.852330-6-irogers@google.com>
- <b7597055-5fb3-c253-f9b7-190d3daf105e@linux.intel.com>
-In-Reply-To: <b7597055-5fb3-c253-f9b7-190d3daf105e@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 2 Mar 2023 11:38:23 -0800
-Message-ID: <CAP-5=fXkCqSz32zA0GvLV7cQ4Xcp=MQAE6sb06pNTZf4gsPtdg@mail.gmail.com>
-Subject: Re: [PATCH v1 05/10] perf evsel: Limit in group test to CPUs
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 7:24=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.co=
-m> wrote:
->
->
->
-> On 2023-03-01 11:12 p.m., Ian Rogers wrote:
-> > Don't just match on the event name, restict based on the PMU too.
+On Thu, Mar 02, 2023 at 11:10:03AM -0800, Linus Torvalds wrote:
+> On Thu, Mar 2, 2023 at 11:03 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/arch/x86/util/evsel.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/uti=
-l/evsel.c
-> > index ea3972d785d1..580b0a172136 100644
-> > --- a/tools/perf/arch/x86/util/evsel.c
-> > +++ b/tools/perf/arch/x86/util/evsel.c
-> > @@ -61,6 +61,9 @@ bool arch_evsel__must_be_in_group(const struct evsel =
-*evsel)
-> >       if (!evsel__sys_has_perf_metrics(evsel))
-> >               return false;
-> >
-> > +     if (evsel->pmu_name && strncmp(evsel->pmu_name, "cpu", 3))
-> > +             return false;
->
-> I'm not sure why we want to check the pmu name. It seems better to move
-> it into evsel__sys_has_perf_metrics(), since perf_metrics is a core PMU
-> only feature.
->
-> I think the strncmp(evsel->pmu_name, "cpu", 3) is to check whether it is
-> a core PMU. It is also used in other places. I think it's better to
-> factor out it, e.g., arch_evsel__is_core_pmu(). It will deliver a clear
-> message of what we are doing here.
->
-> Thanks,
-> Kan
+> > It might be best if we actually exposed it as a SLAB_SKIP_ZERO thing,
+> > just to make it possible to say - exactly in situations like this -
+> > that this particular slab cache has no advantage from pre-zeroing.
+> 
+> Actually, maybe it's just as well to keep it per-allocation, and just
+> special-case getname_flags() itself.
+> 
+> We could replace the __getname() there with just a
+> 
+>         kmem_cache_alloc(names_cachep, GFP_KERNEL | __GFP_SKIP_ZERO);
+> 
+> we're going to overwrite the beginning of the buffer with the path we
+> copy from user space, and then we'd have to make people comfortable
+> with the fact that even with zero initialization hardening on, the
+> space after the filename wouldn't be initialized...
 
-I missed the behavior of evsel__sys_has_perf_metrics and think we can
-just drop this change. We should probably rename
-evsel__sys_has_perf_metrics perhaps something like
-arch_evsel__pmu_has_topdown_events.
+Yeah, I'd love to have a way to safely opt-out of always-zero. The
+discussion[1] when we originally did this devolved into a guessing
+game on performance since no one could actually point to workloads
+that were affected by it, beyond skbuff[2]. So in the interest of not
+over-engineering a solution to an unknown problem, the plan was once
+someone found a problem, we could find a sensible solution at that
+time. And so here we are! :)
 
-Thanks,
-Ian
+I'd always wanted to avoid a "don't zero" flag and instead adjust APIs so
+the allocation could include a callback to do the memory content filling
+that would return a size-that-was-initialized result. That way we don't
+end up in the situations we've seen so many times with drivers, etc,
+where an uninit buffer is handed off and some path fails to actually
+fill it with anything. However, in practice, I think this kind of API
+change becomes really hard to do.
 
-> > +
-> >       return evsel->name &&
-> >               (strcasestr(evsel->name, "slots") ||
-> >                strcasestr(evsel->name, "topdown"));
+-Kees
+
+[1] https://lore.kernel.org/all/20190514143537.10435-4-glider@google.com/
+[2] https://lore.kernel.org/all/20190514143537.10435-5-glider@google.com/
+
+-- 
+Kees Cook
