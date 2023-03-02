@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11296A829E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAF86A832E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjCBMtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:49:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S229988AbjCBNEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjCBMth (ORCPT
+        with ESMTP id S229793AbjCBNET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:49:37 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1364529E09;
-        Thu,  2 Mar 2023 04:49:28 -0800 (PST)
-Received: from kwepemm600015.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PS9pY6mcpz16P2D;
-        Thu,  2 Mar 2023 20:46:45 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 2 Mar
- 2023 20:49:25 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <linkinjeon@kernel.org>, <sfrench@samba.org>,
-        <senozhatsky@chromium.org>, <lsahlber@redhat.com>,
-        <hyc.lee@gmail.com>
-CC:     <linux-cifs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chenxiaosong2@huawei.com>, <yi.zhang@huawei.com>,
-        <zhangxiaoxu5@huawei.com>, <yanaijie@huawei.com>
-Subject: [PATCH] ksmbd: fix possible refcount leak in smb2_open()
-Date:   Thu, 2 Mar 2023 21:58:04 +0800
-Message-ID: <20230302135804.2583061-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 2 Mar 2023 08:04:19 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B7919685;
+        Thu,  2 Mar 2023 05:04:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677762256; x=1709298256;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3Jpg3nHjmpvS3lM/CU+kVN/GW52lIe3SiJrFpzxvyCg=;
+  b=NZYJoglwCFY3uPjt5xO/p+Phnd8M8bcqfFSszGrb/k8FigslYIECeEsb
+   6hVL+UkeFcH6+mOgqlI9pflOvi8nCbaQ1HDMG1V16SnafKi8iyPuOocJC
+   0D+DrOKbef4bowufak+XZEQNsL5k121D5walfbMUJersPRhmrqfhyLjzM
+   HfWsERNtbGZ7amcAevOqxQ+uJiz8S8i8ZCvkslHRkGqS6rKUV8f1A+Qdw
+   aKzdzIplMfY0rT1dIjXMjXTlDBz6mBuO9u7anzVCGZTongDGRQ8alvmK5
+   c6L7m4DL9NXYm7WovSh3VHLm6+voiKG5HF49rcAfF1N+OE2T1UXEwiQ0o
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="336213549"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="336213549"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 05:04:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="818011391"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="818011391"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.214.218]) ([10.254.214.218])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 05:04:09 -0800
+Message-ID: <9663b2e8-6f5e-0da1-822d-20cdda130386@linux.intel.com>
+Date:   Thu, 2 Mar 2023 21:04:07 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v4 4/6] iommu/sva: Use GFP_KERNEL for pasid allocation
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
+ <20230301235646.2692846-5-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230301235646.2692846-5-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reference count of acls will leak when memory allocation fails. Fix this
-by adding the missing posix_acl_release().
+On 2023/3/2 7:56, Jacob Pan wrote:
+> We’re not using  spinlock-protected IOASID allocation anymore, there’s
+> no need for GFP_ATOMIC.
+> 
+> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
 
-Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
----
- fs/ksmbd/smb2pdu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 0685c1c77b9f..f04d810a2588 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -2977,8 +2977,11 @@ int smb2_open(struct ksmbd_work *work)
- 							sizeof(struct smb_acl) +
- 							sizeof(struct smb_ace) * ace_num * 2,
- 							GFP_KERNEL);
--					if (!pntsd)
-+					if (!pntsd) {
-+						posix_acl_release(fattr.cf_acls);
-+						posix_acl_release(fattr.cf_dacls);
- 						goto err_out;
-+					}
- 
- 					rc = build_sec_desc(idmap,
- 							    pntsd, NULL, 0,
--- 
-2.31.1
-
+Best regards,
+baolu
