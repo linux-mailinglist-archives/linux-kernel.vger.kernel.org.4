@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3C26A84FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDCA6A84FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjCBPNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
+        id S229760AbjCBPOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjCBPNu (ORCPT
+        with ESMTP id S229607AbjCBPOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:13:50 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B37055B2
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:13:49 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id f20so6377784uam.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:13:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H2cHLqdllPliHQfcCj7lym6e5ewTgURvCIfBNx7SCko=;
-        b=ikUsdVcNgtnIXHXltHp1Oq8CF97RiSySooyPoONAmpw3Y/PAua4f5xRjAU/L67FH2C
-         Rs0IJEC8Wvw0AaHN4c5V37eSHjxmsHIl450kEJ/+BDmL9UfiPfmP/7p+3FPP1fmx717O
-         CK3xF1sVVJmaHcWAp00OrWLkGrCxufREaVR4N9LyRHsIRjMmR7IUvJ3eTdRxGLr8K7v+
-         5GvhrD/SoRBQRhZaQ+RoDXMnwgZ98ZH3TGduO3inFG7VoILhwGxhpHVR325ZfTjq6vre
-         +2KkdcMinXy1Z76xwoxOfE5XZU3uWXIHFd8V6huUHEIIFg6XSqWokUInJNnW6lOOAXxV
-         NMmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H2cHLqdllPliHQfcCj7lym6e5ewTgURvCIfBNx7SCko=;
-        b=CIYBs1xjaGyoPAcxlJUVpgS4nKz8rKkH5GoECSRJrGY6lkQ382MdHQvZhxTLM8Q1mJ
-         orFbuS7SU8uk0/3+W7N84/Qroz/FwnLeRE0yoLiGn2w8ccLB/WFXqpgL1LBqfrN7dkxT
-         FpYYjuLMFaM/w/j7b0221gUGS6gjY0knNekdNNyfgrrCnWjLBJthuzmSjgODeNQyU0WB
-         X1/IAtrutrtITjM93S1E3o6zC7yh/UnExY78uu47AnHeMaV0datxooyLyLdFi7DVDvtT
-         6xBbDT6FtdIlljh8MpCH73IlTxs6njQB7oztngh6Hyv4SmJx/fajz9aygNqxypffzH9z
-         VHBw==
-X-Gm-Message-State: AO0yUKXR9JP9lTfAXzM0hQSAlVIf9A1NGXFsG3nCOiXGJ5APxzpYWNF7
-        L1smEKy5BYBYSWeJuYXmSpU4gv1r/+zLlCgxn6rYWQ==
-X-Google-Smtp-Source: AK7set/GcwBOjcTFsgk/DbmJ9D0TZt2yW0e3Oau6qlGq/CFy0t7Fp+vUEvcNwe2GpSTcIsPBMwawsaQE2J8JV/Vklf0=
-X-Received: by 2002:ab0:5b59:0:b0:68b:9eed:1c7d with SMTP id
- v25-20020ab05b59000000b0068b9eed1c7dmr6233732uae.0.1677770028306; Thu, 02 Mar
- 2023 07:13:48 -0800 (PST)
+        Thu, 2 Mar 2023 10:14:18 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A959D5274
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:14:17 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A60366018CA;
+        Thu,  2 Mar 2023 15:14:09 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677770056;
+        bh=CcEqHND5mbOVDN70lUAK9blEjv5boHx15r9OKCOPiBw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=hVqkMEDQ84QHoJNQe0kTCcPHsKDUFpk/1SRmYQtPjbYFeM94fajVPlOX8Fu6LNnv7
+         8hZR7OjZlrl5f7U86WL08LhzXM+aINLLCotPxs0eL+j2m6rbq853KKLCf9kZP08+y7
+         f9tG/h58lU7IcmNXyl9t84lK7PMdRJ8OwJlSANzkWvQ/c1MTz1+PnNvSnM5OjDQmSA
+         62vNnWRNHk+/5eDMMqTUKhrl4s9XenOqEyQA4p3DlUJ8f26jmte/KmZONQAwUpG1Bg
+         2LNyKZJSq0aMCYYPt4JRqORGUz8okXNFydnyI8PTuTx1OY56Flp2Y2ry5ncD9GI9FK
+         a+VbBmjF1RXpg==
+Message-ID: <fad40511-3909-4362-5760-bcb57c94e534@collabora.com>
+Date:   Thu, 2 Mar 2023 20:14:05 +0500
 MIME-Version: 1.0
-References: <20230301143933.2374658-1-glider@google.com> <CANpmjNMR5ExTdo+EiLs=_b0M=SpN_gKAZTbSZmyfWFpBh4kN-w@mail.gmail.com>
- <CAG_fn=U9H2bmUxkJA6vyD15j+=GJTkSgKuMRbd=CWVZsRwR7TQ@mail.gmail.com>
-In-Reply-To: <CAG_fn=U9H2bmUxkJA6vyD15j+=GJTkSgKuMRbd=CWVZsRwR7TQ@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 2 Mar 2023 16:13:12 +0100
-Message-ID: <CANpmjNMtXudXbVy4cZDAUUVjHX+hQ0P+FY6La3bsp2zp4t-pZw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] x86: kmsan: Don't rename memintrinsics in
- uninstrumented files
-To:     Alexander Potapenko <glider@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        akpm@linux-foundation.org, dvyukov@google.com, nathan@kernel.org,
-        ndesaulniers@google.com, kasan-dev@googlegroups.com,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: [PATCH v2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
+To:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>
+References: <20230227230044.1596744-1-peterx@redhat.com>
+ <Y/1Mh5uivFt+zWKM@x1n> <e1e0ed70-76df-647f-30ac-0bb6ae8dc05c@collabora.com>
+ <Y/4kjnom6MQqh9iA@x1n> <fb7ec372-2b16-14e1-a8cd-a90f4449661f@collabora.com>
+ <640319be-ddb6-d74f-b731-eee5ceab3d01@collabora.com> <Y/9tA2EVglOJ0Ap1@x1n>
+ <fc95fd2c-d661-926c-3bdb-8709cb49de3b@collabora.com>
+ <8783f47e-76ea-cd24-e373-f2156884cd05@redhat.com> <ZACrOWKWdVYO/EAI@x1n>
+ <982c1623-ac28-2743-d6a3-4faf42f72d47@redhat.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <982c1623-ac28-2743-d6a3-4faf42f72d47@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Mar 2023 at 15:28, Alexander Potapenko <glider@google.com> wrote:
->
-> On Thu, Mar 2, 2023 at 12:14=E2=80=AFPM Marco Elver <elver@google.com> wr=
-ote:
-> >
-> > On Wed, 1 Mar 2023 at 15:39, Alexander Potapenko <glider@google.com> wr=
-ote:
-> > >
-> > > KMSAN should be overriding calls to memset/memcpy/memmove and their
-> >
-> > You mean that the compiler will override calls?
-> > All supported compilers that have fsanitize=3Dkernel-memory replace
-> > memintrinsics with __msan_mem*() calls, right?
->
-> Right. Changed to:
->
-> KMSAN already replaces calls to to memset/memcpy/memmove and their
-> __builtin_ versions with __msan_memset/__msan_memcpy/__msan_memmove in
-> instrumented files, so there is no need to override them.
+On 3/2/23 7:01 PM, David Hildenbrand wrote:
+> On 02.03.23 14:57, Peter Xu wrote:
+>> On Thu, Mar 02, 2023 at 10:37:44AM +0100, David Hildenbrand wrote:
+>>> Especially for such large sparse VMAs, the current way of allocating
+>>> pagetables to place markers/zeropages is far from optimal.
+>>
+>> IMHO that's not a generic workload.  As mentioned in the reply there, I
+>> would suggest we go with simple then we have space to optimize it in the
+>> future if necessary, because the API will be the same.
+This is a good idea.
 
-But it's not KMSAN - KMSAN is the combined end result of runtime and
-compiler - in this case we need to be specific and point out it's the
-compiler that's doing it. There is no code in the Linux kernel that
-does this replacement.
+I'm trying to understand why aren't we going with most optimized
+implementation. Why aren't we targeting it at this point in time?
 
->
-> >
-> > > __builtin_ versions in instrumented files, so there is no need to
-> > > override them. In non-instrumented versions we are now required to
-> > > leave memset() and friends intact, so we cannot replace them with
-> > > __msan_XXX() functions.
-> > >
-> > > Cc: Kees Cook <keescook@chromium.org>
-> > > Suggested-by: Marco Elver <elver@google.com>
-> > > Signed-off-by: Alexander Potapenko <glider@google.com>
-> >
-> > Other than that,
-> >
-> > Reviewed-by: Marco Elver <elver@google.com>
-> Thanks!
+>>
+> 
+> I disagree with "generic workload", we use sparse mmaps all over the place,
+> and when blindly used by e.g., CRIU, we'll simply end up wasting memory and
+> time.
+I've heard about a use case where a file of size 10s of GBs can be mapped
+to the memory and then accessed off and on. We need to handle this
+correctly and efficiently.
+
+> 
+> But I already agreed that this optimization that is a separate thing to
+> implement.
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
