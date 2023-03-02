@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDCA6A84FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5A76A84FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjCBPOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S229787AbjCBPO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjCBPOS (ORCPT
+        with ESMTP id S229716AbjCBPOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:14:18 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A959D5274
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:14:17 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.217.110])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A60366018CA;
-        Thu,  2 Mar 2023 15:14:09 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677770056;
-        bh=CcEqHND5mbOVDN70lUAK9blEjv5boHx15r9OKCOPiBw=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=hVqkMEDQ84QHoJNQe0kTCcPHsKDUFpk/1SRmYQtPjbYFeM94fajVPlOX8Fu6LNnv7
-         8hZR7OjZlrl5f7U86WL08LhzXM+aINLLCotPxs0eL+j2m6rbq853KKLCf9kZP08+y7
-         f9tG/h58lU7IcmNXyl9t84lK7PMdRJ8OwJlSANzkWvQ/c1MTz1+PnNvSnM5OjDQmSA
-         62vNnWRNHk+/5eDMMqTUKhrl4s9XenOqEyQA4p3DlUJ8f26jmte/KmZONQAwUpG1Bg
-         2LNyKZJSq0aMCYYPt4JRqORGUz8okXNFydnyI8PTuTx1OY56Flp2Y2ry5ncD9GI9FK
-         a+VbBmjF1RXpg==
-Message-ID: <fad40511-3909-4362-5760-bcb57c94e534@collabora.com>
-Date:   Thu, 2 Mar 2023 20:14:05 +0500
+        Thu, 2 Mar 2023 10:14:22 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F2055B2
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:14:21 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id y144so3868512yby.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i9qMDgluQ/cZqemfQqN+zkisdC/D/UT8rYvJMo/g8vQ=;
+        b=gse/Q2qYVdsWIHsneCUj75fKAvWwlha7XCN7Lv+IqCDcORt/SNVn+WdyRwGo9HRKWa
+         M/JTshQifXO+q10VJ4SG1ipkLDZ50iI4p1nsyzUEIxY2f5W7kOgrkcjJQl1ojq1Gq8MW
+         gPDZjzRk9Lf/baxCDxS360rXfYznTQuHoU/SC/WYr2SVs5+Mugh2v7wtBQnKuo6CGAUH
+         7DADx2lxEIuz92bU3JysQsQ7d+BYGprXywwO4+ipAcFEfPIfSH1ck1Hx022mq1vnKZ02
+         Dj6lkBBCo+FWjp0DC37kwKi8/wmyUjXEAlgExogR7BH+G5GiTDBjb2+9ijKzdyCn3loj
+         bnnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i9qMDgluQ/cZqemfQqN+zkisdC/D/UT8rYvJMo/g8vQ=;
+        b=RHqHl3JWrta+TxybgTZ047a0qfWGjEhm0GOhkd5lbUV3NdgA28zevdhlLPEKuN6oTY
+         Hb4aRfAyXujT4jQxEdDq7c3F6GvTqm4v49cBKikbrZLWHuv0PZZu1ylVQVpRM9VSajG/
+         rj8uAFOM6hby7o5bucIF/vSoLmGJnmzBnpjBCeCgAxZj/qoNgxg0Mkj2aAKO7oJbNtv8
+         sJKHIET9R531cRptLW7+jDrmbrbueM+wb0SfG3Lg4HpzlurIu8ay6ABTeGw+ljWt5rug
+         fvObJDzIeCS3BeFYgUvgbLOatXW4XbyO2lpJ69PiwHnVKvgEiqf4hkyPEMmZxv3o9Oz+
+         M8mQ==
+X-Gm-Message-State: AO0yUKUphT0a0acZSLXGMTF7zedqch8dNlVCxePEcrO/LP1HfZswUaVm
+        tNfqSK2FLdwIjl8qrNbXxI+PsCQxKnZ807Xw/07r1Q==
+X-Google-Smtp-Source: AK7set+FGGX80FAbGl6Gz+M3hmtr4hLGC4c5SSXvjFM1vVp178zHsOU3Qz77GkmNoTps02GebJxu/s3qCKoJNXL+Jlc=
+X-Received: by 2002:a25:9b86:0:b0:a8a:a652:2a69 with SMTP id
+ v6-20020a259b86000000b00a8aa6522a69mr4544525ybo.10.1677770060764; Thu, 02 Mar
+ 2023 07:14:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: [PATCH v2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
-To:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>
-References: <20230227230044.1596744-1-peterx@redhat.com>
- <Y/1Mh5uivFt+zWKM@x1n> <e1e0ed70-76df-647f-30ac-0bb6ae8dc05c@collabora.com>
- <Y/4kjnom6MQqh9iA@x1n> <fb7ec372-2b16-14e1-a8cd-a90f4449661f@collabora.com>
- <640319be-ddb6-d74f-b731-eee5ceab3d01@collabora.com> <Y/9tA2EVglOJ0Ap1@x1n>
- <fc95fd2c-d661-926c-3bdb-8709cb49de3b@collabora.com>
- <8783f47e-76ea-cd24-e373-f2156884cd05@redhat.com> <ZACrOWKWdVYO/EAI@x1n>
- <982c1623-ac28-2743-d6a3-4faf42f72d47@redhat.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <982c1623-ac28-2743-d6a3-4faf42f72d47@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <b9cc99c3-7dd3-6a57-b67c-e9e0ddd60a49@linaro.org>
+In-Reply-To: <b9cc99c3-7dd3-6a57-b67c-e9e0ddd60a49@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 2 Mar 2023 17:14:10 +0200
+Message-ID: <CAA8EJpoDustJL5ua-cVW1DZcknSfbtudPaGNZeH1v2aFmhzoKg@mail.gmail.com>
+Subject: Re: [bug report] regulator-fixed-domain can't sleep
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 7:01 PM, David Hildenbrand wrote:
-> On 02.03.23 14:57, Peter Xu wrote:
->> On Thu, Mar 02, 2023 at 10:37:44AM +0100, David Hildenbrand wrote:
->>> Especially for such large sparse VMAs, the current way of allocating
->>> pagetables to place markers/zeropages is far from optimal.
->>
->> IMHO that's not a generic workload.  As mentioned in the reply there, I
->> would suggest we go with simple then we have space to optimize it in the
->> future if necessary, because the API will be the same.
-This is a good idea.
+Hello,
 
-I'm trying to understand why aren't we going with most optimized
-implementation. Why aren't we targeting it at this point in time?
+On Thu, 2 Mar 2023 at 15:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+> Hello,
+>
+> I've noticed that regulator-fixed-domain sets the performance state of the
+> attached genpd to 0 correctly, but will never actually let the power domain
+> it's attached to enter idle, as it has no PM ops. I was trying to come up
+> with a good set of PM ops, but I'm not sure what PM ops for a regulator
+> should look like.
 
->>
-> 
-> I disagree with "generic workload", we use sparse mmaps all over the place,
-> and when blindly used by e.g., CRIU, we'll simply end up wasting memory and
-> time.
-I've heard about a use case where a file of size 10s of GBs can be mapped
-to the memory and then accessed off and on. We need to handle this
-correctly and efficiently.
+I think the regulator-fixed-domain should not be used, it has been
+replaced with using power-domains directly. I think we should remove
+it now.
 
-> 
-> But I already agreed that this optimization that is a separate thing to
-> implement.
-> 
+>
+> Konrad
+
+
 
 -- 
-BR,
-Muhammad Usama Anjum
+With best wishes
+Dmitry
