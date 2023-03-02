@@ -2,140 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4CB6A7D8C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 904956A7D86
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjCBJV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S229713AbjCBJVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjCBJVp (ORCPT
+        with ESMTP id S229708AbjCBJU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:21:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DD830EA3
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:20:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677748820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mNAh7WwsaV0kOk2ITHv/T/MFdHkpYUKS8lAASyQo12s=;
-        b=cUMnoJruM/FiQCbLzYKR+v1jwYiCKkN3NTRfoYKkw4UnUWf7wmcVJ9Rk9KbKuYm0isTBie
-        zvG1Ajk9oaaty4OL7koiRtxLXpJPwmP204GZ4gxLS1l4/EuJPes5SeEAO+P6pTKssBW+YN
-        1eULUJeiyfH2N9o7LJaUAiOpTw8f/sM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-356-GcS8EYWlNfGYu2NDuO6BEQ-1; Thu, 02 Mar 2023 04:20:19 -0500
-X-MC-Unique: GcS8EYWlNfGYu2NDuO6BEQ-1
-Received: by mail-wr1-f69.google.com with SMTP id r14-20020a0560001b8e00b002cdb76f7e80so1173324wru.19
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:20:19 -0800 (PST)
+        Thu, 2 Mar 2023 04:20:57 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A62130E81;
+        Thu,  2 Mar 2023 01:20:19 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so2086016pjp.2;
+        Thu, 02 Mar 2023 01:20:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677748819;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SpjbL0+tw0OXVT5Ll6YWgAqfA/dRw9VkkcHAS6chO0U=;
+        b=hPKSs0z3YSeSHFQpz6+z0j9+1VULH7/s0dtcFUMqao5zn3thKxAg9JFflOgmoOw+RM
+         XVOEw/bwOGLQa6RATBJNBV306BRHj/p5vLgMbkJqUMQquL9xHnuOSDEkdzomk+fdTPL4
+         4cwMLYuMihpOqE5DtnYZX9VHpnu8DWRihSpIfn/N11XNVR8GXYa5mhNBDf71NP27XMaz
+         7OYfGIfDOoit7sswLMogqVOa1385DjdO9fIfGBiS5OgZWfMOm2oxDcFhQOkKF1IX6NQ8
+         HbSFUNu04/5tgqqrmr304NKU/WNcVh4QnpAqD0jsOP5rLnxlIU8XokyO62QgK6XMSaI6
+         ectQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677748818;
+        d=1e100.net; s=20210112; t=1677748819;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mNAh7WwsaV0kOk2ITHv/T/MFdHkpYUKS8lAASyQo12s=;
-        b=aJoXhSQnBiq2rvrnZfEVE0p8KFegXOaU3F3/N02ZnNxUkYhFV2yxNAdjYMmxQzVJ4s
-         BrajolJ7AABncTWYfPxdU246tACpAevaeJwJnM1ftD6SBNsdRfjCPZtdSnag/snWDmYF
-         Ct7OB0E9RergJZ1Uwjgr+nwXQFjgSGTB1ZQF265HQc/20z7iNaAp0eCnAU2l90MJ5wo7
-         v+lALIDPRVIVBikmGsnnP5DEnXYWBRTtnz9+f7GZDsXatQ1/DIQ3c3LXNT/LYtToX2DR
-         7g5YIMxDXBkOuZChgNsU58zfwkMyRoMWixXToqNl7etlJ60ydtfU9scZnfhXhPPBxv3x
-         AEVg==
-X-Gm-Message-State: AO0yUKXmNgb1NJSwUaUlA+aI8rt3j+sJ+vjkYD4QCZ38Bs1ODLLV1HJP
-        vmrDqz20E64/BNmVarjLdkFUX5NrOYPN9dUbSyh1iHFIZtfq+YkDejUg+a05tX5DwpavbKC+JO0
-        iHyAZx1leMARDC3all9zLT2T1
-X-Received: by 2002:adf:ce09:0:b0:2c5:52c3:3f05 with SMTP id p9-20020adfce09000000b002c552c33f05mr6913058wrn.37.1677748818283;
+        bh=SpjbL0+tw0OXVT5Ll6YWgAqfA/dRw9VkkcHAS6chO0U=;
+        b=C9aJmKFeazSLPVDlGAxeb+ZMCKHAaFQNFjCvjgAx1S3qAM2JGTpnGwbYxrgwYwKp29
+         2WfR2HKoYGGv3zLcQHZ+fXz/IHgRntX9QRBRVMpjSpGvJe3jvdJZKZawq8l2tg3KvhY7
+         PSyBV2ku1+ZfBwkOgO0bCTtulRCN20xnEBz9F9voltYwoO2/0JQXjQ4ejoga6iq1EHjj
+         1YBSMtYAncdOthfIr0zhjSNzpNWFOWSSten3N+6nkakfR9tP5xR1faedy2z60YLOaDKi
+         sUX/EJzxJllK+LOBtPLEuo9fJTowVuqQd29yG+9IoRsCyA5vCLwUGxoUFqpqVtOSwCjw
+         yRCg==
+X-Gm-Message-State: AO0yUKW4zLxnTBwueKSGmI5KuGLz+BEqYwrhBktK2/OBqcoCOiPL/P/l
+        ELPCzCOu6Jh1uhUJrSwVI+0=
+X-Google-Smtp-Source: AK7set9QsFevYUQW2fyMF+c6lKXWoncb6uV6ik8S+7NwOyKqENuxfjUcUQ7zwvVpKkVk3AjyWC++WA==
+X-Received: by 2002:a05:6a21:6d87:b0:cc:39c5:1241 with SMTP id wl7-20020a056a216d8700b000cc39c51241mr14207793pzb.16.1677748818666;
         Thu, 02 Mar 2023 01:20:18 -0800 (PST)
-X-Google-Smtp-Source: AK7set9PN/kdkIqrGoMb6UfHqEwEV9RSL6zdzJVeFnieVx1t6UmihOxwNslkLjNRDZls5mCSN7BIMA==
-X-Received: by 2002:adf:ce09:0:b0:2c5:52c3:3f05 with SMTP id p9-20020adfce09000000b002c552c33f05mr6913041wrn.37.1677748818002;
-        Thu, 02 Mar 2023 01:20:18 -0800 (PST)
-Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
-        by smtp.gmail.com with ESMTPSA id x16-20020a5d54d0000000b002c71703876bsm14635935wrv.14.2023.03.02.01.20.11
+Received: from debian.me (subs02-180-214-232-3.three.co.id. [180.214.232.3])
+        by smtp.gmail.com with ESMTPSA id g6-20020a62e306000000b005ded5d2d571sm9346972pfh.185.2023.03.02.01.20.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 01:20:17 -0800 (PST)
-Date:   Thu, 2 Mar 2023 10:20:09 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>, kvm@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Song Liu <song@kernel.org>, Eric Dumazet <edumazet@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Paolo Abeni <pabeni@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, Hao Luo <haoluo@google.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v3 1/3] vsock: support sockmap
-Message-ID: <20230302092009.xohos3cvowrrykck@sgarzare-redhat>
-References: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
- <20230227-vsock-sockmap-upstream-v3-1-7e7f4ce623ee@bytedance.com>
- <20230228163518-mutt-send-email-mst@kernel.org>
- <Y/B9ddkfQw6Ae/lY@bullseye>
+        Thu, 02 Mar 2023 01:20:18 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id DE979106674; Thu,  2 Mar 2023 16:20:13 +0700 (WIB)
+Date:   Thu, 2 Mar 2023 16:20:13 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/22] 5.15.97-rc1 review
+Message-ID: <ZABqTfAa/aHtJQQL@debian.me>
+References: <20230301180652.658125575@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0sGyj5cQz5+LDbLw"
 Content-Disposition: inline
-In-Reply-To: <Y/B9ddkfQw6Ae/lY@bullseye>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230301180652.658125575@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 07:25:41AM +0000, Bobby Eshleman wrote:
->On Tue, Feb 28, 2023 at 04:36:22PM -0500, Michael S. Tsirkin wrote:
->> On Tue, Feb 28, 2023 at 07:04:34PM +0000, Bobby Eshleman wrote:
->> > @@ -1241,19 +1252,34 @@ static int vsock_dgram_connect(struct socket *sock,
->> >
->> >  	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
->> >  	sock->state = SS_CONNECTED;
->> > +	sk->sk_state = TCP_ESTABLISHED;
->> >
->> >  out:
->> >  	release_sock(sk);
->> >  	return err;
->> >  }
->>
->>
->> How is this related? Maybe add a comment to explain? Does
->> TCP_ESTABLISHED make sense for all types of sockets?
->>
->
->Hey Michael, definitely, I can leave a comment.
 
-I agree, since I had the same doubt in previous versions, I think it's 
-worth putting a comment in the code to explain why.
+--0sGyj5cQz5+LDbLw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Since there may be a v4, I'll leave some small comments in a separate 
-email.
+On Wed, Mar 01, 2023 at 07:08:33PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.97 release.
+> There are 22 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Thanks,
-Stefano
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
->
->The real reason is due to this piece of logic in sockmap:
->https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/sock_map.c?h=v6.2#n531
->
->And because of it, you see the same thing in (for example)
->unix_dgram_connect():
->https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/unix/af_unix.c?h=v6.2#n1394
->
->I believe it makes sense for these other socket types.
->
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--0sGyj5cQz5+LDbLw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZABqRwAKCRD2uYlJVVFO
+owQHAQCHMKQacALiPmNDxiV58N6vcreRm1WH6Bc7B5ZgW2QqtQD/Vs2d9/zfD0DH
+etfb0hVHhPTtCVTI3I9t2HjJX1uNUgk=
+=CYtw
+-----END PGP SIGNATURE-----
+
+--0sGyj5cQz5+LDbLw--
