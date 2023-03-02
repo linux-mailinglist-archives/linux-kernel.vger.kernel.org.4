@@ -2,49 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA98A6A7A13
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DE46A7A16
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjCBDdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 22:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S229809AbjCBDd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 22:33:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCBDdB (ORCPT
+        with ESMTP id S229815AbjCBDd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 22:33:01 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60C283FD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 19:32:58 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PRxSS15SbzfbPn;
-        Thu,  2 Mar 2023 11:30:16 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 2 Mar 2023 11:32:56 +0800
-Subject: Re: [PATCH v3] arm64: kdump: simplify the reservation behaviour of
- crashkernel=,high
-To:     Baoquan He <bhe@redhat.com>, <linux-kernel@vger.kernel.org>
-CC:     <catalin.marinas@arm.com>, <horms@kernel.org>,
-        <John.p.donnelly@oracle.com>, <will@kernel.org>,
-        <kexec@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
-References: <20230223124532.128744-1-bhe@redhat.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <7971ddbe-aefb-271e-647c-59d81c5840a7@huawei.com>
-Date:   Thu, 2 Mar 2023 11:32:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 1 Mar 2023 22:33:27 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C126C193D6;
+        Wed,  1 Mar 2023 19:33:25 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3223XEXB072518;
+        Wed, 1 Mar 2023 21:33:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1677727994;
+        bh=9Pl5fygjp5stmLuLjka+wkg0YviQ8JidHpMMzLX23sI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=WBzUxObUzAs42ieSnCNNxKzM8W6LjmaGkAKckvKlR6YjE2SX3zG3fLJw84xfDVkrj
+         jDOE+9VN601eQJTHPbmTRiXMUacF1ednSw5od6jetp3hukJ7MtefrgqeBJ+JqTYIXp
+         GP0f+k5ZPEQ/BFB+qH4yYDlXAbwAaFZ+Uqa2lSWk=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3223XEwJ053071
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 1 Mar 2023 21:33:14 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 1
+ Mar 2023 21:33:13 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 1 Mar 2023 21:33:13 -0600
+Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3223XABw023374;
+        Wed, 1 Mar 2023 21:33:11 -0600
+Message-ID: <7843adf0-f883-280b-1d87-44010ceef767@ti.com>
+Date:   Thu, 2 Mar 2023 09:03:09 +0530
 MIME-Version: 1.0
-In-Reply-To: <20230223124532.128744-1-bhe@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v12 3/8] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support
+ of OSPI
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Andrew Davis <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
+        <vaishnav.a@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230301091136.17862-1-r-gunasekaran@ti.com>
+ <20230301091136.17862-4-r-gunasekaran@ti.com>
+ <61fab807-42df-cc2c-51de-f54e9ea477c8@ti.com>
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+In-Reply-To: <61fab807-42df-cc2c-51de-f54e9ea477c8@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,173 +74,124 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/2/23 20:45, Baoquan He wrote:
-> On arm64, reservation for 'crashkernel=xM,high' is taken by searching for
-> suitable memory region top down. If the 'xM' of crashkernel high memory
-> is reserved from high memory successfully, it will try to reserve
-> crashkernel low memory later accoringly. Otherwise, it will try to search
-> low memory area for the 'xM' suitable region. Please see the details in
-> Documentation/admin-guide/kernel-parameters.txt.
+On 01/03/23 9:27 pm, Andrew Davis wrote:
+> On 3/1/23 3:11 AM, Ravi Gunasekaran wrote:
+>> From: Aswath Govindraju <a-govindraju@ti.com>
+>>
+>> Add support for two instance of OSPI in J721S2 SoC.
+>>
+>> Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+>> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+>> ---
+>> Changes from v11:
+>> * Cleaned up comments
+>>
+>> Changes from v10:
+>> * Documented the reason for disabling the nodes by default.
+>> * Removed Link tag from commmit message
+>>
+>> Changes from v9:
+>> * Disabled fss, ospi nodes by default in common DT file
+>>
+>> Changes from v8:
+>> * Updated "ranges" property to fix dtbs warnings
+>>
+>> Changes from v7:
+>> * Removed "reg" property from syscon node
+>> * Renamed the "syscon" node to "bus" to after change in
+>>    compatible property
+>>
+>> Changes from v6:
+>> * Fixed the syscon node's compatible property
+>>
+>> Changes from v5:
+>> * Updated the syscon node's compatible property
+>> * Removed Cc tags from commit message
+>>
+>> Changes from v4:
+>> * No change
+>>
+>> Changes from v3:
+>> * No change
+>>
+>> Changes from v2:
+>> * No change
+>>
+>> Changes from v1:
+>> * No change
+>>
+>>   .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 46 +++++++++++++++++++
+>>   1 file changed, 46 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> index 0af242aa9816..ab3ce8be7216 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> @@ -306,4 +306,50 @@
+>>               ti,cpts-periodic-outputs = <2>;
+>>           };
+>>       };
+>> +
+>> +    fss: bus@47000000 {
+>> +        compatible = "simple-bus";
+>> +        #address-cells = <2>;
+>> +        #size-cells = <2>;
+>> +        ranges = <0x00 0x47000000 0x00 0x47000000 0x00 0x00068400>,
+>> +             <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>,
+>> +             <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>;
+>> +
+>> +        status = "disabled";
 > 
-> While we observed an unexpected case where a reserved region crosses the
-> high and low meomry boundary. E.g on a system with 4G as low memory end,
-> user added the kernel parameters like: 'crashkernel=512M,high', it could
-> finally have [4G-126M, 4G+386M], [1G, 1G+128M] regions in running kernel.
-> The crashkernel high region crossing low and high memory boudary will bring
-> issues:
+> Since this node doesn't need pinmux, why is it default disabled? Same for
+> the other parent nodes in this series.
 > 
-> 1) For crashkernel=x,high, if getting crashkernel high region across
-> low and high memory boundary, then user will see two memory regions in
-> low memory, and one memory region in high memory. The two crashkernel
-> low memory regions are confusing as shown in above example.
-> 
-> 2) If people explicityly specify "crashkernel=x,high crashkernel=y,low"
-> and y <= 128M, when crashkernel high region crosses low and high memory
-> boundary and the part of crashkernel high reservation below boundary is
-> bigger than y, the expected crahskernel low reservation will be skipped.
-> But the expected crashkernel high reservation is shrank and could not
-> satisfy user space requirement.
-> 
-> 3) The crossing boundary behaviour of crahskernel high reservation is
-> different than x86 arch. On x86_64, the low memory end is 4G fixedly,
-> and the memory near 4G is reserved by system, e.g for mapping firmware,
-> pci mapping, so the crashkernel reservation crossing boundary never happens.
->>From distros point of view, this brings inconsistency and confusion. Users
-> need to dig into x86 and arm64 system details to find out why.
-> 
-> For kernel itself, the impact of issue 3) could be slight. While issue
-> 1) and 2) cause actual impact because it brings obscure semantics and
-> behaviour to crashkernel=,high reservation.
-> 
-> Here, for crashkernel=xM,high, search the high memory for the suitable
-> region only in high memory. If failed, try reserving the suitable
-> region only in low memory. Like this, the crashkernel high region will
-> only exist in high memory, and crashkernel low region only exists in low
-> memory. The reservation behaviour for crashkernel=,high is clearer and
-> simpler.
-> 
-> Note: On arm64, the high and low memory boudary could be 1G if it's RPi4
-> system, or 4G if other normal systems.
+> Andrew
 
-There are two minor review comments, see below. Otherwise:
-
-Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
+In this patch and others in this series, since child node is disabled,
+I thought of disabling the parent as well. And to later enable the
+parent node at the time when the child node needs to be enabled.
 
 > 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
-> v2->v3:
->  - Rephrase patch log to clarify the current crashkernel high
->    reservation could cross the high and low memory boundary, but not 
->    4G boundary only, because RPi4 of arm64 has high and low memory
->    boudary as 1G. The v3 patch log could mislead people that the RPi4
->    also use 4G as high,low memory boundary.
-> v1->v2:
->  - Fold patch 2 of v1 into patch 1 for better reviewing.
->  - Update patch log to add more details.
->  arch/arm64/mm/init.c | 43 +++++++++++++++++++++++++++++++++----------
->  1 file changed, 33 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index 58a0bb2c17f1..b8cb780df0cb 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -127,12 +127,13 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
->   */
->  static void __init reserve_crashkernel(void)
->  {
-> -	unsigned long long crash_base, crash_size;
-> -	unsigned long long crash_low_size = 0;
-> +	unsigned long long crash_base, crash_size, search_base;
->  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
-> +	unsigned long long crash_low_size = 0;
->  	char *cmdline = boot_command_line;
-> -	int ret;
->  	bool fixed_base = false;
-> +	bool high = false;
-> +	int ret;
->  
->  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
->  		return;
-> @@ -155,7 +156,9 @@ static void __init reserve_crashkernel(void)
->  		else if (ret)
->  			return;
->  
-> +		search_base = CRASH_ADDR_LOW_MAX;
->  		crash_max = CRASH_ADDR_HIGH_MAX;
-> +		high = true;
->  	} else if (ret || !crash_size) {
->  		/* The specified value is invalid */
->  		return;
-> @@ -166,31 +169,51 @@ static void __init reserve_crashkernel(void)
->  	/* User specifies base address explicitly. */
->  	if (crash_base) {
->  		fixed_base = true;
-> +		search_base = crash_base;
->  		crash_max = crash_base + crash_size;
->  	}
->  
->  retry:
->  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
-> -					       crash_base, crash_max);
-> +					       search_base, crash_max);
->  	if (!crash_base) {
->  		/*
-> -		 * If the first attempt was for low memory, fall back to
-> -		 * high memory, the minimum required low memory will be
-> -		 * reserved later.
-> +		 * For crashkernel=size[KMG]@offset[KMG], print out failure
-> +		 * message if can't reserve the specified region.
->  		 */
-> -		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
-> +		if (fixed_base) {
-> +			pr_info("crashkernel reservation failed - memory is in use.\n");
-
-How about changing pr_info to pr_warn?
-
-> +			return;
-> +		}
-> +
-> +		/*
-> +		 * For crashkernel=size[KMG], if the first attempt was for
-> +		 * low memory, fall back to high memory, the minimum required
-> +		 * low memory will be reserved later.
-> +		 */
-> +		if (!high && crash_max == CRASH_ADDR_LOW_MAX) {
->  			crash_max = CRASH_ADDR_HIGH_MAX;
-> +			search_base = CRASH_ADDR_LOW_MAX;
->  			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
->  			goto retry;
->  		}
->  
-> +		/*
-> +		 * For crashkernel=size[KMG],high, if the first attempt was
-> +		 * for high memory, fall back to low memory.
-> +		 */
-> +		if (high && crash_max == CRASH_ADDR_HIGH_MAX) {
-
-Adding unlikely to indicate that it is rare would be better.
-
-if (unlikely(high && crash_max == CRASH_ADDR_HIGH_MAX))
-
-> +			crash_max = CRASH_ADDR_LOW_MAX;
-> +			search_base = 0;
-> +			goto retry;
-> +		}
->  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
->  			crash_size);
->  		return;
->  	}
->  
-> -	if ((crash_base > CRASH_ADDR_LOW_MAX - crash_low_size) &&
-> -	     crash_low_size && reserve_crashkernel_low(crash_low_size)) {
-> +	if ((crash_base >= CRASH_ADDR_LOW_MAX) && crash_low_size &&
-> +	     reserve_crashkernel_low(crash_low_size)) {
->  		memblock_phys_free(crash_base, crash_size);
->  		return;
->  	}
-> 
+>> +
+>> +        ospi0: spi@47040000 {
+>> +            compatible = "ti,am654-ospi", "cdns,qspi-nor";
+>> +            reg = <0x00 0x47040000 0x00 0x100>,
+>> +                  <0x05 0x00000000 0x01 0x00000000>;
+>> +            interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
+>> +            cdns,fifo-depth = <256>;
+>> +            cdns,fifo-width = <4>;
+>> +            cdns,trigger-address = <0x0>;
+>> +            clocks = <&k3_clks 109 5>;
+>> +            assigned-clocks = <&k3_clks 109 5>;
+>> +            assigned-clock-parents = <&k3_clks 109 7>;
+>> +            assigned-clock-rates = <166666666>;
+>> +            power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +
+>> +            status = "disabled"; /* Needs pinmux */
+>> +        };
+>> +
+>> +        ospi1: spi@47050000 {
+>> +            compatible = "ti,am654-ospi", "cdns,qspi-nor";
+>> +            reg = <0x00 0x47050000 0x00 0x100>,
+>> +                  <0x07 0x00000000 0x01 0x00000000>;
+>> +            interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
+>> +            cdns,fifo-depth = <256>;
+>> +            cdns,fifo-width = <4>;
+>> +            cdns,trigger-address = <0x0>;
+>> +            clocks = <&k3_clks 110 5>;
+>> +            power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +
+>> +            status = "disabled"; /* Needs pinmux */
+>> +        };
+>> +    };
+>>   };
 
 -- 
 Regards,
-  Zhen Lei
+Ravi
