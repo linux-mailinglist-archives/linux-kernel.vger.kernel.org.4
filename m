@@ -2,180 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BA86A8871
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027336A8874
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjCBSUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 13:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S229872AbjCBSVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 13:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCBSUI (ORCPT
+        with ESMTP id S229634AbjCBSVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 13:20:08 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9256457CF
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 10:20:05 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5384ff97993so443279387b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 10:20:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uZAPXM0LrNiqSTWbCG2CR8IPVb5EwH+3MFjYQTbFfCc=;
-        b=TI8oAEznTj0VbOLCat1DPNqMU06vdate7f6rAjVdP5wpmvMipvaE7Y+c4QzmwWSIXM
-         lAaN4vVSZ7VQi2YHztan6+crDPP0eLCnNq/7pjcQ+HxaMlq3epLNaIsGS/s0pBjuUNc8
-         HoBc9LdjkUHbEN6yCc87Hl6kAkNUlBPeq8S3QBTZZlzPjq7jCZuANxpZQWdVMCjHOhON
-         lYNbySLjyjujXc1zizmCIW+lexghQWo6DM8gquFowDffkmpE1THRLdvmk4sx9E1VSvEp
-         AD3Lj5P3sxY4EaM3IKTF03UwF+Q9iwroahk/JpaLH86fM9TNvfDEx5cb6nQXY59CyW8t
-         Er1A==
+        Thu, 2 Mar 2023 13:21:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0165056793
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 10:20:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677781233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zwu6siX51Sx+jV6fphFzEZqVIx1UGmcNzvqx/+gJ8D4=;
+        b=SQ3K7dwYTi/MkmJ88XwN5Eww16uSeCOA8a5NudnD2kUNpIXaP6UdgrmP8Z6YZMIs2nyvn7
+        eytu02Dbo+Npd2swABl67KtCVFOuqGdHOLIRyQWBjSjJo+LSvUsQzcV8DsI+N7yDu9903F
+        ASC7TVPqkecZnt3LsaVNBDRa7zDA+Bk=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-636-lgNN-7NZP5ux5IEwTY_kAA-1; Thu, 02 Mar 2023 13:20:32 -0500
+X-MC-Unique: lgNN-7NZP5ux5IEwTY_kAA-1
+Received: by mail-yb1-f199.google.com with SMTP id c192-20020a25c0c9000000b0092aabd4fa90so4922251ybf.18
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 10:20:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
+        d=1e100.net; s=20210112; t=1677781231;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uZAPXM0LrNiqSTWbCG2CR8IPVb5EwH+3MFjYQTbFfCc=;
-        b=QCSA/rjdxGiRSi4tR5uLcRf27+BoJyml3M5XMkXlnK1iIyF92tvol2aY0TPMFTrJ2v
-         PK+n5wVN/mFXrI9vaISqJLzLrnkRUgHruAyKcwiJ00HltoAkiMLO8AQK9olb/YYTC3VD
-         PEni4TlvF8OP576to/xUoMQrqC9iDPrJqH83cAlr3IJZy4MdtWIqhIH9aWRxJIctDOo3
-         KO83dKciFj96HL86bbQKtVAgRpnZ4AFM6jAfPdnoUUTf0pIng7j9X5zduatkSCitHViC
-         D9LgaOxuhg4qJXokvhxrr66sBbkEH0Yzr2PaS/KAIh7cOqLnT3SoYrbTGzDvVpWi/9/A
-         IAGA==
-X-Gm-Message-State: AO0yUKVIp/QfeZz2kfh9/vjd9a+TRue/5A3x7cgw8XTgrU0LgHiqQn6K
-        r4DCsostBfh/spjRBnXgxxmFDzXBfMVy+tRSbnC98g==
-X-Google-Smtp-Source: AK7set8MuWxgyggg2x5O2vzdSY/MWzzPRlU35FhPBPzcMfaqX0BnsN2Uz7YPLspM/KtBSWLbypAoRUS5my77kUFM1R4=
-X-Received: by 2002:a0d:d946:0:b0:52e:c5f1:a0d4 with SMTP id
- b67-20020a0dd946000000b0052ec5f1a0d4mr1859997ywe.4.1677781204806; Thu, 02 Mar
- 2023 10:20:04 -0800 (PST)
+        bh=zwu6siX51Sx+jV6fphFzEZqVIx1UGmcNzvqx/+gJ8D4=;
+        b=sVjyi/yl5pdKwjRp2ctMsaGYAxAmQ8Z8Ll+O0HpUxeM2AAnWCNHJPQtjXHkalG415t
+         DPRAH6x3kg0Kvp2f4v/NRuq+w6ikKZMH7uy2jjadYlddOSCHYmV2IbOFUAqSRhykcRo3
+         w9ya4Kc319JgIRQCsVX6DfCmRbVbtNr7w/5Oo1iYtXvT4pqZrKX5rxiJuaVubCoaKJjv
+         x6VBn3785MJdeCaK1AMF8mTnljDrABQVFOvg2ByKnAlYseOUbAtacCaZki9MUrPsFQkc
+         8OqjsGDIOwuaAFRJrro+sV1wWgWthUMdXe5UzYChrXqu6COWSMjiCJIjzeqRVeWQQi0+
+         nTeA==
+X-Gm-Message-State: AO0yUKWbphbyUol2kmjUcs6O+XS2RgCq9gr+MVEB18Nq7sHn42TfPLnQ
+        4AT7DBUiw162ICvaguAuIJ7sbkQAhZmuQwfajOqi8J7qd6vSUmZvTECSxEs6o0HA9MxQmRKX2nW
+        XimpGsl9uB5RK99FotlbynCWQSxJDczoSWh0H5DyaJX3BZ3Mp
+X-Received: by 2002:a81:ae24:0:b0:52e:b48f:7349 with SMTP id m36-20020a81ae24000000b0052eb48f7349mr5345752ywh.6.1677781231456;
+        Thu, 02 Mar 2023 10:20:31 -0800 (PST)
+X-Google-Smtp-Source: AK7set/NyT5OxQwUDgiRdA4ewLAQ1LhRtmuu3s+ZeylMuM0jBrrWScji41Fk7liqls858pllMiwIPi23gCnZ7dEUCsg=
+X-Received: by 2002:a81:ae24:0:b0:52e:b48f:7349 with SMTP id
+ m36-20020a81ae24000000b0052eb48f7349mr5345742ywh.6.1677781231228; Thu, 02 Mar
+ 2023 10:20:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20230131141756.RFT.v2.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
- <CAPY8ntAUhVB6UtQTeHAcxNW950Ou+NcEoGwk3JnVWLay89_0Nw@mail.gmail.com>
- <CAD=FV=UNx7ivymvpGKcuyvvepvo-T2B2aREJy2GyawTHCnazsw@mail.gmail.com>
- <e077d60d-5881-1ccc-a17a-fbe64392e29d@linaro.org> <CAD=FV=W_FVUOD6T0Lx-JTqrqaP9gPgb4R-2TaSqKwkaBkqHJmQ@mail.gmail.com>
-In-Reply-To: <CAD=FV=W_FVUOD6T0Lx-JTqrqaP9gPgb4R-2TaSqKwkaBkqHJmQ@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 2 Mar 2023 20:19:54 +0200
-Message-ID: <CAA8EJpq-gHjtNzDya-50K3mz5Odhgfd=cSKYfNReSnoRf5reTQ@mail.gmail.com>
-Subject: Re: [RFT PATCH v2 1/3] drm/bridge: tc358762: Set pre_enable_prev_first
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        freedreno@lists.freedesktop.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>, linux-arm-msm@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org
+References: <20230203142501.300125-1-eperezma@redhat.com> <20230228071109-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230228071109-mutt-send-email-mst@kernel.org>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Thu, 2 Mar 2023 19:19:55 +0100
+Message-ID: <CAJaqyWcc8pxG-0uakdrvu5_xFAU+yZF7vYHMr-bTHvZEpJVGDA@mail.gmail.com>
+Subject: Re: [PATCH v2] vdpa_sim: set last_used_idx as last_avail_idx in vdpasim_queue_ready
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     lulu@redhat.com, virtualization@lists.linux-foundation.org,
+        si-wei.liu@oracle.com, leiyang@redhat.com,
+        Gautam Dawar <gdawar@xilinx.com>, Eli Cohen <elic@nvidia.com>,
+        longpeng2@huawei.com, parav@nvidia.com,
+        linux-kernel@vger.kernel.org, sgarzare@redhat.com,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        alvaro.karsz@solid-run.com, Laurent Vivier <lvivier@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Mar 2023 at 19:26, Doug Anderson <dianders@chromium.org> wrote:
+On Tue, Feb 28, 2023 at 1:13 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> Hi,
->
-> On Mon, Feb 27, 2023 at 5:24=E2=80=AFPM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
+> On Fri, Feb 03, 2023 at 03:25:01PM +0100, Eugenio P=C3=A9rez wrote:
+> > Starting from an used_idx different than 0 is needed in use cases like
+> > virtual machine migration.  Not doing so and letting the caller set an
+> > avail idx different than 0 causes destination device to try to use old
+> > buffers that source driver already recover and are not available
+> > anymore.
 > >
-> > On 28/02/2023 02:26, Doug Anderson wrote:
-> > > Hi,
-> > >
-> > > On Wed, Feb 1, 2023 at 1:51=E2=80=AFAM Dave Stevenson
-> > > <dave.stevenson@raspberrypi.com> wrote:
-> > >>
-> > >> On Tue, 31 Jan 2023 at 22:22, Douglas Anderson <dianders@chromium.or=
-g> wrote:
-> > >>>
-> > >>> Set the "pre_enable_prev_first" as provided by commit 4fb912e5e190
-> > >>> ("drm/bridge: Introduce pre_enable_prev_first to alter bridge init
-> > >>> order"). This should allow us to revert commit ec7981e6c614
-> > >>> ("drm/msm/dsi: don't powerup at modeset time for parade-ps8640") an=
-d
-> > >>> commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
-> > >>> time").
-> > >>
-> > >> I see no reference in the TC358762 datasheet to requiring the DSI
-> > >> interface to be in any particular state.
-> > >> However, setting this flag does mean that the DSI host doesn't need =
-to
-> > >> power up and down for each host_transfer request from
-> > >> tc358762_pre_enable/tc358762_init, so on that basis I'm good with it=
-.
-> > >>
-> > >> Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > >>
-> > >>> Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > >>> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > >>> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> > >>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > >>> ---
-> > >>>
-> > >>> (no changes since v1)
-> > >>>
-> > >>>   drivers/gpu/drm/bridge/tc358762.c | 1 +
-> > >>>   1 file changed, 1 insertion(+)
-> > >>>
-> > >>> diff --git a/drivers/gpu/drm/bridge/tc358762.c b/drivers/gpu/drm/br=
-idge/tc358762.c
-> > >>> index 0b6a28436885..77f7f7f54757 100644
-> > >>> --- a/drivers/gpu/drm/bridge/tc358762.c
-> > >>> +++ b/drivers/gpu/drm/bridge/tc358762.c
-> > >>> @@ -229,6 +229,7 @@ static int tc358762_probe(struct mipi_dsi_devic=
-e *dsi)
-> > >>>          ctx->bridge.funcs =3D &tc358762_bridge_funcs;
-> > >>>          ctx->bridge.type =3D DRM_MODE_CONNECTOR_DPI;
-> > >>>          ctx->bridge.of_node =3D dev->of_node;
-> > >>> +       ctx->bridge.pre_enable_prev_first =3D true;
-> > >>>
-> > >>>          drm_bridge_add(&ctx->bridge);
-> > >
-> > > Abhinav asked what the plan was for landing this [1]. Since this isn'=
-t
-> > > urgent, I guess the plan is to land patch #1 in drm-misc-next. Then w=
-e
-> > > sit and wait until it percolates into mainline and, once it does, the=
-n
-> > > patch #2 and #3 can land.
-> > >
-> > > Since I have Dave's review I can commit this to drm-misc-next myself.
-> > > My plan will be to wait until Thursday or Friday of this week (to giv=
-e
-> > > people a bit of time to object) and then land patch #1. Then I'll
-> > > snooze things for a while and poke Abhinav and Dmitry to land patch #=
-2
-> > > / #3 when I notice it in mainline. If, at any point, someone comes ou=
-t
-> > > of the woodwork and yells that this is breaking them then, worst case=
+> > Since vdpa_sim does not support receive inflight descriptors as a
+> > destination of a migration, let's set both avail_idx and used_idx the
+> > same at vq start.  This is how vhost-user works in a
+> > VHOST_SET_VRING_BASE call.
+> >
+> > Although the simple fix is to set last_used_idx at vdpasim_set_vq_state=
 ,
-> > > we can revert.
+> > it would be reset at vdpasim_queue_ready.  The last_avail_idx case is
+> > fixed with commit a09f493c ("vdpa_sim: not reset state in
+> > vdpasim_queue_ready").  Since the only option is to make it equal to
+> > last_avail_idx, adding the only change needed here.
 > >
-> > This plan sounds good to me.
+> > This was discovered and tested live migrating the vdpa_sim_net device.
+> >
+> > Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
+> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > ---
+> > Cherry-picked from patch 2/2 of the series [1]. Differences are:
+> > * Set the value of used_idx at vdpasim_queue_ready instead of fetching
+> >   from the guest vring like vhost-kernel.
+> >
+> > v2: Actually update last_used_idx only at vdpasim_queue_ready.
+> >
+> > Note that commit id present in the patch text is not in master but in
+> > git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git.
+> >
+> > [1] https://lkml.org/lkml/2023/1/18/1041
 >
-> Pushed to drm-misc-next:
 >
-> 55cac10739d5 drm/bridge: tc358762: Set pre_enable_prev_first
+> Can you post with a fixed hash please?
 >
-> If my math is right then I'd expect that to get into mainline for
-> 6.4-rc1. I guess that means it'll be in Linus's tree mid-May. I'll
-> schedule a reminder to suggest landing at patches #2 and #3 again in
-> late May.
 
-It might be earlier, if msm-next merges drm-misc earlier (e.g. for the
-PSR patches).
+Sent v3, please let me know if I need to do further modifications.
 
---=20
-With best wishes
-Dmitry
+Thanks!
+
+> > ---
+> >  drivers/vdpa/vdpa_sim/vdpa_sim.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/v=
+dpa_sim.c
+> > index 6a0a65814626..79ac585e40b9 100644
+> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > @@ -68,6 +68,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpas=
+im, unsigned int idx)
+> >                         (uintptr_t)vq->device_addr);
+> >
+> >       vq->vring.last_avail_idx =3D last_avail_idx;
+> > +     vq->vring.last_used_idx =3D last_avail_idx;
+> >       vq->vring.notify =3D vdpasim_vq_notify;
+> >  }
+> >
+> > --
+> > 2.31.1
+>
+
