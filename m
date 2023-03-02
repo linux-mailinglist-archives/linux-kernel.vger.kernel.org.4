@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF466A79C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22166A79BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCBDAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 22:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S229844AbjCBC6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 21:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCBDAm (ORCPT
+        with ESMTP id S229537AbjCBC6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 22:00:42 -0500
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320733C790;
-        Wed,  1 Mar 2023 19:00:39 -0800 (PST)
-X-QQ-mid: bizesmtp78t1677725772tk8jj3m4
-Received: from [10.4.23.76] ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 02 Mar 2023 10:56:11 +0800 (CST)
-X-QQ-SSF: 01400000000000I0Z000000A0000000
-X-QQ-FEAT: I8hG9CuxGDI8RgNbmt91L6VRJG5I7OKfHsGeL4b/xn3lN3jr5ygkvWUrwfvd6
-        OxHnJIhC6zQ1M3pYOuNLH63VEKZx196Ajv4/ik1JYsOkWqpEgSjxtcg8jnRLpaFmW0ghgS6
-        OtoH/1Mdn0LoYajsY+6gxlZcl47yEoUI/Qo0r/COy6pIqp5aW3bNTAL3wB8/iRf6xdBXTPc
-        CPhFnlIIB3iP1BMPQWTqhCoHvnzcB8koaDB/Opcgn/1jDafMjkdc6LyppB4hqRxlZKT4HDu
-        vVL3a10MqlBF+GLOT5rYNWjnpcKbaP4Fw+NnYHSkdvuhv5W6ANZ+LxR0AgLK6MHGyC2wEbC
-        WyY3SCgjCFnRK6qOr0FyBXJ8iO6iTcAACkEV9HMT9dzUg46O/LFz3iatrLYxe4g258vCgBb
-        JBb1fmZDh40=
-X-QQ-GoodBg: 1
-Message-ID: <7B4C8B8B94D621CB+fbf73a3a-6a10-5fbc-e5e5-87e2f56f6878@uniontech.com>
-Date:   Thu, 2 Mar 2023 10:56:10 +0800
+        Wed, 1 Mar 2023 21:58:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF954222CA;
+        Wed,  1 Mar 2023 18:58:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ABD8614CD;
+        Thu,  2 Mar 2023 02:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C069FC433D2;
+        Thu,  2 Mar 2023 02:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677725927;
+        bh=Lm55R6YOVaMYqHurjS8beoPC3BoLl7gUtCBQIKg2wk4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t2ToGB3938f31cpLy5gjCtQSFWv2aZRrQ+eM3WpAKF2FRMBEnN2456nZKaKGhrXR3
+         OsCIhzX6yYW7/KWVkO2CuqcFgHYnre1ftgH3YTMJ2jqP1svLLKfkSuznK+ATkEjAf3
+         FTVY8TVIFbwTT6i99n0xyo0Dy6VgDYriMDVDa1B2YPPJYkyqF4+iD84p+9pWk8u4Qz
+         zylbZJWMC4klXXm3Befd42Uemkxb4DDcUT4Y8o423Gz1Tk99b/l0yPPjfeWIeFx+ZY
+         SBCJpUUpBy9AreOifKzaN17l2ROiwikl+lmB55E+bMTMZTR67wuR/RYF5QP5ovDNVr
+         de1w8q75cqfBg==
+Date:   Wed, 1 Mar 2023 18:58:47 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ext4: Fix comment about the 64BIT feature
+Message-ID: <ZAAQ5wxf16dBhvZl@magnolia>
+References: <20230301133842.671821-1-tudor.ambarus@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 1/2] fs/proc: optimize register ctl_tables
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Peng Zhang <zhangpeng362@huawei.com>,
-        Joel Granados <j.granados@samsung.com>
-Cc:     keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
-        willy@infradead.org, kbuild-all@lists.01.org,
-        nixiaoming@huawei.com, nizhen@uniontech.com,
-        sujiaxun@uniontech.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-References: <20220304112341.19528-1-tangmeng@uniontech.com>
- <202203081905.IbWENTfU-lkp@intel.com>
- <Y7xWUQQIJYLMk5fO@bombadil.infradead.org>
- <Y8iKjJYMFRSthxzn@bombadil.infradead.org>
- <Y//4B2Bw4O2umKgW@bombadil.infradead.org>
-From:   Meng Tang <tangmeng@uniontech.com>
-In-Reply-To: <Y//4B2Bw4O2umKgW@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301133842.671821-1-tudor.ambarus@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/2 09:12, Luis Chamberlain wrote:
-
-> That would solve the first part -- the fragile odd checks to bail out
-> early.  But not the odd accounting we have to do at times. So it begs
-> the question if we can instead deprecate register_sysctl_table() and
-> then have a counter for us at all times. Also maybe an even simpler
-> alternative may just be to see to have the nr_entries be inferred with
-> ARRAY_SIZE() if count_subheaders() == 1? I haven't looked into that yet.
+On Wed, Mar 01, 2023 at 01:38:42PM +0000, Tudor Ambarus wrote:
+> 64BIT is part of the incompatible feature set, update the comment
+> accordingly.
 > 
->    Luis
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  fs/ext4/ext4.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-The current difficulty is to get the ARRAY_SIZE() of table->child table.
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 140e1eb300d1..85c153e120b9 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -1387,7 +1387,7 @@ struct ext4_super_block {
+>  	__le32	s_first_meta_bg;	/* First metablock block group */
+>  	__le32	s_mkfs_time;		/* When the filesystem was created */
+>  	__le32	s_jnl_blocks[17];	/* Backup of the journal inode */
+> -	/* 64bit support valid if EXT4_FEATURE_COMPAT_64BIT */
+> +	/* 64bit support valid if EXT4_FEATURE_INCOMPAT_64BIT */
 
-It would be great if have a better way to solve this problem.
+Correct.
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-      Meng
+--D
+
+>  /*150*/	__le32	s_blocks_count_hi;	/* Blocks count */
+>  	__le32	s_r_blocks_count_hi;	/* Reserved blocks count */
+>  	__le32	s_free_blocks_count_hi;	/* Free blocks count */
+> -- 
+> 2.39.2.722.g9855ee24e9-goog
+> 
