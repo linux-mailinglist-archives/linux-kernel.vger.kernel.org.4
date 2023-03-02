@@ -2,134 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744906A8592
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0EB6A85A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCBPtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S229706AbjCBPwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjCBPtA (ORCPT
+        with ESMTP id S229453AbjCBPwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:49:00 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411E9F741
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:48:59 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id k13-20020a5d9d4d000000b0074caed3a2d2so11144307iok.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:48:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/n/K/3RHA4xTQoVXC4jaK6WOJ78Yt5GL4rZVXOaD90Q=;
-        b=7ghaAgKQsEoza4MOt28G0WeSxtNaYiKz9jR3Paz9NAwHoEU62mGChgD9WlKx4hE8LQ
-         A+8uFDsjvR1E7YOaWquwmHprGEUM/vAZDAkFZf65QOm5opy09UuzdRNRJH7Kf3GjWJ5h
-         6fTi6fltaxzmZnGDa0NzGaxDzKqO44Vf+bHHCQAlRS+DH2SKBnBKkjzCNJBuLAay8azj
-         i1K/ydLDGSoNuPcjyAe9F9I18tQomjCuLQGVhtNddrDIDaCtywIWIW0EV6orbXKQeDI2
-         Oxef5oeQS3fVsDyASmJM83QvWCeYJnwuGO2D2DoafBQ33+lUlImUA5V7K6z1P8zrmKkc
-         9y/g==
-X-Gm-Message-State: AO0yUKX1m+WaOYyQ4zr48YCbIsX9h7AKoM2llh6cCpKcmoQhn9Uq4Q+E
-        vzbMBN9Yk6BPWcCJBGQxGNnSiFGbHcjNRkQvVZ5rdXNDp8Kf
-X-Google-Smtp-Source: AK7set/znnO3YPzxVExuJmcztdQN+pgOa3zswTUqOVqNKOeXhuNuoBX4V/MbspPKMQlXP1igfFl0tyEvJwqmClChuztQ1+u+pJpr
+        Thu, 2 Mar 2023 10:52:34 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDD442BCC;
+        Thu,  2 Mar 2023 07:52:31 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EAE1656A;
+        Thu,  2 Mar 2023 16:52:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1677772349;
+        bh=B3YUBYx+IdonkuytCXScmef79tJe7ktce0HB6tmAONA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=wjKJCeAJKwqc91icmw7y9i1YYuYFcLuWX+/Xq9wA36DUhh296ewxd50r8jYhdy6ui
+         iaCehT/I+9qmyQzwyOEX9lqREbu3jQP43q6eVSb1gBCJomtxxfvufgTX+GHOWfaceW
+         Nam91YstjMKgiEAFQfAUhU0Tfpxeg1T7sa8S41e0=
+Message-ID: <96f8e0f9-d8cf-fa9b-a224-a5caad445992@ideasonboard.com>
+Date:   Thu, 2 Mar 2023 17:52:24 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:11ad:b0:315:459e:177d with SMTP id
- 13-20020a056e0211ad00b00315459e177dmr1173113ilj.2.1677772138620; Thu, 02 Mar
- 2023 07:48:58 -0800 (PST)
-Date:   Thu, 02 Mar 2023 07:48:58 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000562d8105f5ecc4ca@google.com>
-Subject: [syzbot] [ext4?] kernel BUG in ext4_write_inline_data_end
-From:   syzbot <syzbot+198e7455f3a4f38b838a@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v9 0/8] i2c-atr and FPDLink
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230216140747.445477-1-tomi.valkeinen@ideasonboard.com>
+ <Y+5Rb17FTG4IxcE0@smile.fi.intel.com>
+ <e4141652-53c0-fce1-dac7-5da5368e2240@ideasonboard.com>
+ <Y+9j3cYOG+Z0zmyC@smile.fi.intel.com>
+ <9f3f0744-f771-cd2c-3b8e-5b79f7a430c7@ideasonboard.com>
+ <Y++E+Rr54p3vd8Jn@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y++E+Rr54p3vd8Jn@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 17/02/2023 15:45, Andy Shevchenko wrote:
+> On Fri, Feb 17, 2023 at 02:57:02PM +0200, Tomi Valkeinen wrote:
+>> On 17/02/2023 13:24, Andy Shevchenko wrote:
+>>> On Fri, Feb 17, 2023 at 08:57:32AM +0200, Tomi Valkeinen wrote:
+>>>> On 16/02/2023 17:53, Andy Shevchenko wrote:
+>>>>> On Thu, Feb 16, 2023 at 04:07:39PM +0200, Tomi Valkeinen wrote:
+> 
+> ...
+> 
+>>>>>>     	struct i2c_board_info ser_info = {
+>>>>>> -		.of_node = to_of_node(rxport->remote_fwnode),
+>>>>>> -		.fwnode = rxport->remote_fwnode,
+>>>>>
+>>>>>> +		.of_node = to_of_node(rxport->ser.fwnode),
+>>>>>> +		.fwnode = rxport->ser.fwnode,
+>>>>>
+>>>>> Why do you need to have both?!
+>>>>
+>>>> I didn't debug it, but having only fwnode there will break the probing (no
+>>>> match).
+>>>
+>>> This needs to be investigated. The whole fwnode approach, when we have both
+>>> fwnode and legacy of_node fields in the same data structure, is that fwnode
+>>> _OR_ of_node initialization is enough, when both are defined the fwnode
+>>> should take precedence.
+>>>
+>>> If your testing is correct (and I have no doubts) it means we have a serious
+>>> bug lurking somewhere.
+>>
+>> Having both defined or only of_node defined works for me.
+> 
+> But of_node is _legacy_ stuff. We should not really consider this option in the
+> new code.
+> 
+>> Perhaps the issue is that these drivers only add of_match_table, and thus
+>> having only .fwnode above is not enough.
+> 
+> No, the code should work with fwnode that carrying DT node or another.
+> The matching table shouldn't affect this either.
+> 
+>> Looking at i2c_device_match(), i2c_of_match_device() only uses of_node, so
+>> perhaps I would need CONFIG_ACPI for acpi_driver_match_device to do matching
+>> with of_node? Although I don't see the acpi code using fwnode, just of_node.
+>> Well, I have to say I have no idea without spending more time on this.
+> 
+> Again, there is a bug and that bug seems nasty one as it would allow to
+> work the device in one environment and not in another.
+> 
+> Since it's about I²C board files, I believe that an issue is in I²C core.
 
-syzbot found the following issue on:
+I don't know if this is related in any way, but I see these when probing:
 
-HEAD commit:    2ebd1fbb946d Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13de1350c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
-dashboard link: https://syzkaller.appspot.com/bug?extid=198e7455f3a4f38b838a
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160fccacc80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17e5963cc80000
+[   36.952697] i2c 4-0044: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer/i2c/sensor@21/port/endpoint
+[   36.969268] i2c 4-0044: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/ports/port@0/endpoint
+[   36.983001] i2c 4-0044: Failed to create device link with 4-0044
+[   36.992828] ds90ub953 4-0044: Found ub953 rev/mask 0x20
+[   37.017761] i2c 5-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer/ports/port@0/endpoint
+[   37.033843] i2c 5-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer
+[   37.117492] i2c 4-0045: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer/i2c/sensor@21/port/endpoint
+[   37.134033] i2c 4-0045: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/ports/port@1/endpoint
+[   37.147735] i2c 4-0045: Failed to create device link with 4-0045
+[   37.156097] ds90ub953 4-0045: Found ub953 rev/mask 0x20
+[   37.186584] i2c 6-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer/ports/port@0/endpoint
+[   37.202636] i2c 6-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/16985cc7a274/disk-2ebd1fbb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fd3452567115/vmlinux-2ebd1fbb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c75510922212/Image-2ebd1fbb.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/0427397bf5ad/mount_0.gz
+Then again, I see similar warnings/errors for some other devices too, when booting up (TI's DRA76 EVM).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+198e7455f3a4f38b838a@syzkaller.appspotmail.com
+  Tomi
 
-------------[ cut here ]------------
-kernel BUG at fs/ext4/inline.c:226!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 6191 Comm: syz-executor142 Not tainted 6.2.0-syzkaller-18300-g2ebd1fbb946d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : ext4_write_inline_data fs/ext4/inline.c:226 [inline]
-pc : ext4_write_inline_data_end+0xe28/0xf84 fs/ext4/inline.c:767
-lr : ext4_write_inline_data fs/ext4/inline.c:226 [inline]
-lr : ext4_write_inline_data_end+0xe28/0xf84 fs/ext4/inline.c:767
-sp : ffff80001eac7520
-x29: ffff80001eac7630 x28: ffff0000d7a63680 x27: dfff800000000000
-x26: 0000000000000060 x25: ffff80001eac75c0 x24: 0000000040000000
-x23: 000000000000006c x22: 0000000000000060 x21: 000000000000000c
-x20: ffff0000de2e48e8 x19: 0000000000000000 x18: ffff80001eac70d8
-x17: ffff800015b8d000 x16: ffff80001231393c x15: 00000000200002c0
-x14: 1ffff00002b720af x13: 0000000000000007 x12: 0000000000000001
-x11: ff80800008e4087c x10: 0000000000000000 x9 : ffff800008e4087c
-x8 : ffff0000d7a63680 x7 : ffff800008de16f0 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 00000000000008a5 x3 : ffff800008b36a88
-x2 : 0000000000000001 x1 : 0000000000000060 x0 : 000000000000006c
-Call trace:
- ext4_write_inline_data fs/ext4/inline.c:226 [inline]
- ext4_write_inline_data_end+0xe28/0xf84 fs/ext4/inline.c:767
- ext4_da_write_end+0x330/0x9fc fs/ext4/inode.c:3150
- generic_perform_write+0x384/0x55c mm/filemap.c:3784
- ext4_buffered_write_iter+0x2e0/0x538 fs/ext4/file.c:285
- ext4_file_write_iter+0x188/0x16c0
- call_write_iter include/linux/fs.h:2189 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x610/0x914 fs/read_write.c:584
- ksys_write+0x15c/0x26c fs/read_write.c:637
- __do_sys_write fs/read_write.c:649 [inline]
- __se_sys_write fs/read_write.c:646 [inline]
- __arm64_sys_write+0x7c/0x90 fs/read_write.c:646
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Code: 14000043 97db2731 d4210000 97db272f (d4210000) 
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
