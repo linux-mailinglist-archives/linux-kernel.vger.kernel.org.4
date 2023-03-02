@@ -2,145 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96636A891A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1D16A8935
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjCBTI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S229929AbjCBTLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjCBTIT (ORCPT
+        with ESMTP id S229899AbjCBTK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:08:19 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E5F272E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:08:15 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so3786123pjg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:08:15 -0800 (PST)
+        Thu, 2 Mar 2023 14:10:58 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A4556514
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:10:45 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id cy23so1014267edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:10:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1677784095;
+        d=linux-foundation.org; s=google; t=1677784221;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vdu6kOAJ1Ups+aUuKMhdxW9mbKAGnc9mpfEPZtQ5oYc=;
-        b=QCBxot5UEe92USFtl63SUB/c1YdLVxScPQJ1P4QKkUVllAOjkExvExOlk22Y+cAPLp
-         7weEoPvxZ0D+WDb8BBKIVp9dG4Qk6OQkdh8kKA3dGVcxvksE7MJCCR2RE4qhTXvYfGvU
-         jgj/tDTwkb4LQQic+6FFlgFTo6sCZEIGs5slvhlNdP2IW3PkjwzxqzAKtaNvhqrh1ARk
-         Fk945S48pTjqSBexPAR6DDMtcXU3MwN4FBw5DjJSxESA4tj2RXONXJlXtInGbuPs/1lK
-         6Em3Vjg2pr05lfKVnhLnuoPez7jPU4XUgCaO4BKItyg6p/BwZcZW+iA8dgGN98E+y8bW
-         DE3Q==
+        bh=vjZUS58uO/4cp4F+HOOvaFHdemHu/dQSnYjcnUBCECA=;
+        b=XS9jwU97vp2iRecHS67+yW7nKfBIjGIVzjTCrxTZji4bmZ/TtJNTQFZcHTB67qLslK
+         vg4hnoT/zFqmLndtWoXwBhXFKB/ARtUn24UU95MilbxGow59e08QdvIZhx1hn6hJNUC7
+         HryP3hmdj9llUUHbeaUHyKTOPtsywMF4rTFl4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677784095;
+        d=1e100.net; s=20210112; t=1677784221;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Vdu6kOAJ1Ups+aUuKMhdxW9mbKAGnc9mpfEPZtQ5oYc=;
-        b=5nWTgpHeGqPclN5vNV6J6bDn/J5sNCnDrL6S1PnK5NahOHN2bDzXk1HeK3Dzz1xXS5
-         ycs4JPyfgRf/UTz17YOO7utXHoVX3QVn2pFM7hnc1Ku96pLLemQKwydoZLtsLvN+xGvx
-         JqXwTjr+TuDlpA2eS/9wugjVNDHFsSZ/5QuJqT+ImGgLiIjXVCdRdel7QGLwIbNc/D7u
-         GDVRT4aSV5m4T7ysbm5MteXW2LybQQAEpHTyRjTQg+RFYMvWdFltB4AePyLgs7ZUKSKa
-         +AhpP8rWn7W59NHhZsUNtXqmFu+ynPAm7H3fNs5bBuuTPDeJkrMdo5ehS7vOOqQ28yJF
-         MLbQ==
-X-Gm-Message-State: AO0yUKUshQ4mK9jFNjQ4WHp4cz3prsX+mW/I7pwmN+b6gW4/wq6gko79
-        FJ4lgrPE7ZNOivnpBQ6CeKL/GLJ2Y2zJ5GrS71Ei
-X-Google-Smtp-Source: AK7set9s3MxX+z1dx88uX1Fs1h5mTCDHnH5bToYcnqr8ZticQMwTWq2upjnKLw2DFG5CIW3NG3MUdlWUtltns+RDwxc=
-X-Received: by 2002:a17:903:1d1:b0:19c:cb32:bfef with SMTP id
- e17-20020a17090301d100b0019ccb32bfefmr4510758plh.3.1677784095231; Thu, 02 Mar
- 2023 11:08:15 -0800 (PST)
+        bh=vjZUS58uO/4cp4F+HOOvaFHdemHu/dQSnYjcnUBCECA=;
+        b=gIirR7DehSfvX/30v/dOGTWvWgxNuvsHoElMncKihBNJZyk3nKdPvgzE/2TJjzsMLI
+         rn8akwA8FhY4fm4XlRSfaxhRnIN1eu9AkK+tBt4neWfRqtKEDQr1rC03y6zFM+KJKckU
+         FPBY9ovEaVA8g+qauUOI4ZbmCmYwOaeUeLeZpkGVx3V2aaLo8zV5u2q/G3cTF72akc9A
+         v2gKJmbbJ0Bc0ca80XhQLAffrg3QOrwbn8NEdOL+NccewmUWGjN/hlHIh83Z+p7s65yN
+         +ti9jKg9q98Ez83Y1Eth0Y1RcKUZ+fDMKG9EirqimsbrNgrDpCM23d0KmrulI4T3HoVs
+         kjcg==
+X-Gm-Message-State: AO0yUKWVc/BfO6qANEzqodVXgbD1TrI8X65thIFfHC3Wlbc1cV7D6Ps2
+        ecgRLCWUF2EemS6OKSpcbKi9es7gpuANR8Xxw4A=
+X-Google-Smtp-Source: AK7set/BlngRV6XENJ/RK7XWn8HPEvONKwe6tGpYxylY2M1v5cQW99VLxnRXmAoFuj+t3PZuuKbbCg==
+X-Received: by 2002:a17:906:24c2:b0:877:a9d2:e5e9 with SMTP id f2-20020a17090624c200b00877a9d2e5e9mr11218461ejb.42.1677784220709;
+        Thu, 02 Mar 2023 11:10:20 -0800 (PST)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id k7-20020a170906578700b008b904cb2bcdsm32710ejq.11.2023.03.02.11.10.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 11:10:20 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id i34so1126859eda.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:10:20 -0800 (PST)
+X-Received: by 2002:a50:cdd5:0:b0:4bc:13f5:68a5 with SMTP id
+ h21-20020a50cdd5000000b004bc13f568a5mr3966173edj.5.1677784219765; Thu, 02 Mar
+ 2023 11:10:19 -0800 (PST)
 MIME-Version: 1.0
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com> <1675119451-23180-12-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1675119451-23180-12-git-send-email-wufan@linux.microsoft.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 2 Mar 2023 14:08:04 -0500
-Message-ID: <CAHC9VhRdm_xpXNQvSVO2hkx2js=_zzo2DiQ6PvEjAEet4OjxNw@mail.gmail.com>
-Subject: Re: [RFC PATCH v9 11/16] ipe: add support for dm-verity as a trust provider
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
+References: <20230125155557.37816-1-mjguzik@gmail.com> <20230125155557.37816-2-mjguzik@gmail.com>
+ <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
+ <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
+ <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
+ <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
+ <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 2 Mar 2023 11:10:03 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
+Message-ID: <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
+To:     Mateusz Guzik <mjguzik@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Alexander Potapenko <glider@google.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 5:58=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
-wrote:
+On Thu, Mar 2, 2023 at 11:03=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> From: Deven Bowers <deven.desai@linux.microsoft.com>
->
-> Allows author of IPE policy to indicate trust for a singular dm-verity
-> volume, identified by roothash, through "dmverity_roothash" and all
-> signed dm-verity volumes, through "dmverity_signature".
->
-> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> It might be best if we actually exposed it as a SLAB_SKIP_ZERO thing,
+> just to make it possible to say - exactly in situations like this -
+> that this particular slab cache has no advantage from pre-zeroing.
 
-...
+Actually, maybe it's just as well to keep it per-allocation, and just
+special-case getname_flags() itself.
 
-> ---
->  security/ipe/Kconfig         |  20 +++++
->  security/ipe/Makefile        |   2 +
->  security/ipe/audit.c         |  24 ++++++
->  security/ipe/digest.c        | 144 +++++++++++++++++++++++++++++++++++
->  security/ipe/digest.h        |  26 +++++++
->  security/ipe/eval.c          | 103 +++++++++++++++++++++++++
->  security/ipe/eval.h          |  13 ++++
->  security/ipe/hooks.c         |  51 +++++++++++++
->  security/ipe/hooks.h         |   8 ++
->  security/ipe/ipe.c           |  15 ++++
->  security/ipe/ipe.h           |   4 +
->  security/ipe/policy.h        |   3 +
->  security/ipe/policy_parser.c |  16 ++++
->  13 files changed, 429 insertions(+)
->  create mode 100644 security/ipe/digest.c
->  create mode 100644 security/ipe/digest.h
->
-> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
-> index ac4d558e69d5..16e835ce61b0 100644
-> --- a/security/ipe/Kconfig
-> +++ b/security/ipe/Kconfig
-> @@ -15,3 +15,23 @@ menuconfig SECURITY_IPE
->           admins to reconfigure trust requirements on the fly.
->
->           If unsure, answer N.
-> +
-> +if SECURITY_IPE
-> +menu "IPE Trust Providers"
-> +
-> +config IPE_PROP_DM_VERITY
-> +       bool "Enable support for dm-verity volumes"
-> +       depends on DM_VERITY && DM_VERITY_VERIFY_ROOTHASH_SIG
-> +       default Y
-> +       help
-> +         This option enables the properties 'dmverity_signature' and
-> +         'dmverity_roothash' in IPE policy. These properties evaluates
-> +         to TRUE when a file is evaluated against a dm-verity volume
-> +         that was mounted with a signed root-hash or the volume's
-> +         root hash matches the supplied value in the policy.
-> +
-> +         If unsure, answer Y.
+We could replace the __getname() there with just a
 
-If you had both IPE and dm-verity enabled in your kernel build, is
-there ever a case where you wouldn't want IPE_PROP_DM_VERITY?  I
-suspect you can just have IPE and dm-verity select IPE_PROP_DM_VERITY
-and not bother the user/admin with the additional Kconfig knob.
+        kmem_cache_alloc(names_cachep, GFP_KERNEL | __GFP_SKIP_ZERO);
 
-> +endmenu
-> +
-> +endif
+we're going to overwrite the beginning of the buffer with the path we
+copy from user space, and then we'd have to make people comfortable
+with the fact that even with zero initialization hardening on, the
+space after the filename wouldn't be initialized...
 
---
-paul-moore.com
+            Linus
