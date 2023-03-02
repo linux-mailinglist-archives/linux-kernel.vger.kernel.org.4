@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5879C6A8D71
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D551C6A8D78
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjCBXyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 18:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
+        id S229971AbjCBXyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 18:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjCBXyM (ORCPT
+        with ESMTP id S229802AbjCBXyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 18:54:12 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C351C16323;
-        Thu,  2 Mar 2023 15:54:06 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so4445601pjb.3;
-        Thu, 02 Mar 2023 15:54:06 -0800 (PST)
+        Thu, 2 Mar 2023 18:54:13 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65CA16334;
+        Thu,  2 Mar 2023 15:54:08 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id z2so947246plf.12;
+        Thu, 02 Mar 2023 15:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677801246;
+        d=gmail.com; s=20210112; t=1677801248;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l4ehVbwCT75xnP/ECU7XAGaXEnBwLlSeDxhb5qTgwac=;
-        b=NUH74MoMlFjyHOoQOc3Tof5RqeryUU+TpxADwdecLbscsf67tEJFGhdRs5OWz2/eTD
-         TiLDpF0n8UeoLj2nlfhjnUo8HWIroTQsFdMjRz3T8ZqPaP+qGQXWYPlzbuX5L2PKmK2A
-         0jC6PSe+O7Q2xNLrCnTVKAUdK3IXA7sY0mler06fvzHsOkx+hfv+ibsPiqd2d9neDEgs
-         w/RMn11V5lkdSlkYR+t6K3Zoh6Qlc8CBHrHcs+E9+BSxFMdEs6ht9x3dpgxcLNnK/RYU
-         L6QanlZS1tad8ALNEB7qe3o8tbuTg/z0in+tZN4tPjzXP7abOw6YrX5drli2n2JuAPdO
-         tZsg==
+        bh=MUhwCn+Xf/Lh0tYXdZ7kyW7NLgJoG2FRHZEn6JIAUnU=;
+        b=n4k1ckMh3giJvFe1dSs5mXbnyBq7dAtRHbbnbnKXFhK8PYZk8pogyMlFcsBynV1L1H
+         l4mvD5qCNioTI2SDCz7INN0q4TWt30+OYzpKAn1SmwUEi6BdXLTh3tqON+zQ34mXNGfC
+         lHMc4nJKUOoLL3ZaL9xzGryyZ7zjmnJnIltjSZgzIQH1mC/ZJ4dM0gU/sh0kP7XOZWxq
+         BMKsYDWtGLQrZJZZfFXpiM++ER1vgYTvKaPvg39gORhAW1Oqwg/CazEiPjm7a46m1HX/
+         N64iIVGysWdZDNdXUCupajwqTLy/tPShN2EL+skRmxJ9mVH5aC8tWqdNyxpSBrZj76av
+         +kNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677801246;
+        d=1e100.net; s=20210112; t=1677801248;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l4ehVbwCT75xnP/ECU7XAGaXEnBwLlSeDxhb5qTgwac=;
-        b=Zzlfj0FuQHlSrMKEGVjCwGZu190XV1aUeNWKjsyW7yfTSjP7EbuuCruE+H3JPb90T2
-         45Ujf49g7hv6vtG29wNKZ4QyhwJ3hxz/PQvG9kwQOrPkIm5hIAl1fZuGKt3pDiAEx2e4
-         WTEoLKJBBqO9tS5sEZ7TdhbNBpRH4D0dKFKPUfFWBJNoNywZzG2OXJcPxHFsjNuTX9a5
-         DWrf31IZ1BITDrRSVSUdewXjuIPKcqrlDdAgi77QNeQiIc+13RRqT3p+zZa2C0bDridz
-         x7BV7YPw1uuzra8a/W5qoEsOa4rbAKd49fD9f8f1oE6xFPFtAWXBsAeA0yejocq1JquB
-         2/fw==
-X-Gm-Message-State: AO0yUKU+2zUVPCxBntGs8G2fL4/nOSNzns/LcSfwn8pUiyOzmXIRJBFe
-        nNeR0GXaEL1Gja/+M2PLn4o=
-X-Google-Smtp-Source: AK7set9yFD6Y5yJLKU6vm3DlNq9ITibopHzdU7+nBSZ1Vfy3oUeJJSkMSehminR0BguhikQjch98Ig==
-X-Received: by 2002:a17:902:ea0c:b0:19a:727e:d4f3 with SMTP id s12-20020a170902ea0c00b0019a727ed4f3mr4273475plg.5.1677801244532;
-        Thu, 02 Mar 2023 15:54:04 -0800 (PST)
+        bh=MUhwCn+Xf/Lh0tYXdZ7kyW7NLgJoG2FRHZEn6JIAUnU=;
+        b=SMC+8YcFJ1OPcw9XqFWHcFEPrjFKTZfeh9ruHl7rgtmH8Hz0yvhjXwbSVsE/qkH5fm
+         nm7qhTwFB/oYqidE5Or+jdACm9J2brvjDP77eH11+ToTo6OK7zrLnWHl+2MnbndwF9jq
+         fZ2TNxRmMbONFgn3ZEH7uHM5Mc8YLgVYWKvXmSfYYRxyKP+6WfVZTAsI6yJZYXKCBPti
+         Y13wJdaaCzY2s672a35yaSaDyeduY7xmeMt6Hh2SfuhTGrINxrK3avF3EyM9QX+RM8Ex
+         ZsFfx0Fkd4rgxGWGZ/5NdGCX5YFbgOckAGlU1+Ud4utzMNa6V0MR/0isoIBA8JlFNSG1
+         OrzA==
+X-Gm-Message-State: AO0yUKV3v+rGfHkBMhWgKjkl/GDpg2x64YA5czFvwfe0LncRkxLI85hV
+        ji/2TPLkyXLrc6hqKGWgdyc=
+X-Google-Smtp-Source: AK7set921xfMXVsnYw9T4RPmUpLjAtAtAEqhwoqAHYp2Un6T9E9TKJIZ0DgU5t2RL257s06BxTvP2Q==
+X-Received: by 2002:a17:902:7594:b0:19e:6659:90db with SMTP id j20-20020a170902759400b0019e665990dbmr26033pll.45.1677801248258;
+        Thu, 02 Mar 2023 15:54:08 -0800 (PST)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id ka3-20020a170903334300b0019e21d2ed2esm226622plb.88.2023.03.02.15.54.03
+        by smtp.gmail.com with ESMTPSA id kj15-20020a17090306cf00b0019aa8149cb9sm226754plb.79.2023.03.02.15.54.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 15:54:04 -0800 (PST)
+        Thu, 02 Mar 2023 15:54:07 -0800 (PST)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -65,13 +65,12 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Rob Clark <robdclark@chromium.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        linux-media@vger.kernel.org (open list:SYNC FILE FRAMEWORK),
+        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
         linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
         FRAMEWORK), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v9 03/15] dma-buf/fence-chain: Add fence deadline support
-Date:   Thu,  2 Mar 2023 15:53:25 -0800
-Message-Id: <20230302235356.3148279-4-robdclark@gmail.com>
+Subject: [PATCH v9 04/15] dma-buf/dma-resv: Add a way to set fence deadline
+Date:   Thu,  2 Mar 2023 15:53:26 -0800
+Message-Id: <20230302235356.3148279-5-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230302235356.3148279-1-robdclark@gmail.com>
 References: <20230302235356.3148279-1-robdclark@gmail.com>
@@ -90,45 +89,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Propagate the deadline to all the fences in the chain.
-
-v2: Use dma_fence_chain_contained [Tvrtko]
+Add a way to set a deadline on remaining resv fences according to the
+requested usage.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Christian König <christian.koenig@amd.com> for this one.
+Reviewed-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-fence-chain.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/dma-buf/dma-resv.c | 22 ++++++++++++++++++++++
+ include/linux/dma-resv.h   |  2 ++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/drivers/dma-buf/dma-fence-chain.c b/drivers/dma-buf/dma-fence-chain.c
-index a0d920576ba6..9663ba1bb6ac 100644
---- a/drivers/dma-buf/dma-fence-chain.c
-+++ b/drivers/dma-buf/dma-fence-chain.c
-@@ -206,6 +206,17 @@ static void dma_fence_chain_release(struct dma_fence *fence)
- 	dma_fence_free(fence);
+diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+index 1c76aed8e262..2a594b754af1 100644
+--- a/drivers/dma-buf/dma-resv.c
++++ b/drivers/dma-buf/dma-resv.c
+@@ -684,6 +684,28 @@ long dma_resv_wait_timeout(struct dma_resv *obj, enum dma_resv_usage usage,
  }
+ EXPORT_SYMBOL_GPL(dma_resv_wait_timeout);
  
-+
-+static void dma_fence_chain_set_deadline(struct dma_fence *fence,
-+					 ktime_t deadline)
++/**
++ * dma_resv_set_deadline - Set a deadline on reservation's objects fences
++ * @obj: the reservation object
++ * @usage: controls which fences to include, see enum dma_resv_usage.
++ * @deadline: the requested deadline (MONOTONIC)
++ *
++ * May be called without holding the dma_resv lock.  Sets @deadline on
++ * all fences filtered by @usage.
++ */
++void dma_resv_set_deadline(struct dma_resv *obj, enum dma_resv_usage usage,
++			   ktime_t deadline)
 +{
-+	dma_fence_chain_for_each(fence, fence) {
-+		struct dma_fence *f = dma_fence_chain_contained(fence);
++	struct dma_resv_iter cursor;
++	struct dma_fence *fence;
 +
-+		dma_fence_set_deadline(f, deadline);
++	dma_resv_iter_begin(&cursor, obj, usage);
++	dma_resv_for_each_fence_unlocked(&cursor, fence) {
++		dma_fence_set_deadline(fence, deadline);
 +	}
++	dma_resv_iter_end(&cursor);
 +}
-+
- const struct dma_fence_ops dma_fence_chain_ops = {
- 	.use_64bit_seqno = true,
- 	.get_driver_name = dma_fence_chain_get_driver_name,
-@@ -213,6 +224,7 @@ const struct dma_fence_ops dma_fence_chain_ops = {
- 	.enable_signaling = dma_fence_chain_enable_signaling,
- 	.signaled = dma_fence_chain_signaled,
- 	.release = dma_fence_chain_release,
-+	.set_deadline = dma_fence_chain_set_deadline,
- };
- EXPORT_SYMBOL(dma_fence_chain_ops);
++EXPORT_SYMBOL_GPL(dma_resv_set_deadline);
+ 
+ /**
+  * dma_resv_test_signaled - Test if a reservation object's fences have been
+diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
+index 0637659a702c..8d0e34dad446 100644
+--- a/include/linux/dma-resv.h
++++ b/include/linux/dma-resv.h
+@@ -479,6 +479,8 @@ int dma_resv_get_singleton(struct dma_resv *obj, enum dma_resv_usage usage,
+ int dma_resv_copy_fences(struct dma_resv *dst, struct dma_resv *src);
+ long dma_resv_wait_timeout(struct dma_resv *obj, enum dma_resv_usage usage,
+ 			   bool intr, unsigned long timeout);
++void dma_resv_set_deadline(struct dma_resv *obj, enum dma_resv_usage usage,
++			   ktime_t deadline);
+ bool dma_resv_test_signaled(struct dma_resv *obj, enum dma_resv_usage usage);
+ void dma_resv_describe(struct dma_resv *obj, struct seq_file *seq);
  
 -- 
 2.39.1
