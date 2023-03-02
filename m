@@ -2,133 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3A56A8405
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 384AD6A8408
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjCBORo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:17:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
+        id S229764AbjCBOTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCBORn (ORCPT
+        with ESMTP id S229471AbjCBOTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:17:43 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CECA3402F;
-        Thu,  2 Mar 2023 06:17:41 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id h14so16681913wru.4;
-        Thu, 02 Mar 2023 06:17:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BjohpdSIx4yaxuaDVY5TpnPa4luLE8HDX4jbWDHwIPc=;
-        b=K5p8NGxOe6DelD8nhXPy5T3e7evSJ+gBT1HgUA/ObGto9qjv+/k/4gM0+PkTk9E5uy
-         Ejwe2usdR6ovFl081nwdhE/kPKUv3TF7C8BpJ0KhgPN6XV13WAconCTfOs1TZoCqVPc+
-         KAQz3hi5c5PDaDYt2H1fvJvCr/MqRfunIatU2d5rOfMZFkKJftPAWf5jlkSNDQw/br4H
-         yjfncFyd53a8DG7JZZpkgdZFUYxmxnTzqFdMCNI/xs2kgDQT+OOiU6nQgjZ5PIY6B7Hp
-         o0XZLVITFavn1XR98sQStlGhjIWg3xYMm14173jzEDBSfZX18sT784XEyD8itvPQQgpI
-         OlmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BjohpdSIx4yaxuaDVY5TpnPa4luLE8HDX4jbWDHwIPc=;
-        b=Jw8A8hjZXu67lhvbg6nQX+92c7xyA/gPo/ap9NUTNFCyVxrfaVF6zlYqhEIQBTC92d
-         tt8ugCQITH1+1+6V7m74Dtaa5aXoq3Gv473+Osl2Had//JehBHnq4xCa/NtUA5ROXf3i
-         bpITgwoOsa43i0sy0cbxjlUUALslMgB7CQ7a57I/rpUP/nQefhNrY2R5BTrB0V+vLCp7
-         amV86rTulA9uv2BVVe/OkDl/ugoxox/3Vsk1nSsSEWNkH7ISv4VVeeZI+OtYPkKd+rds
-         ggMJKB7DGa8XtKw5t/B/JlTs79qqL843S0ir6qwh6NyJYhI6OhO3u2/OgdrsFkWt5023
-         b5vA==
-X-Gm-Message-State: AO0yUKV3T3CwcnsG+vr7qClPED/RDJYpLmhMBKsiojFf4oeDKSS+5K9S
-        KH1F0Li+KgE5i8ucI2ajl12ap7WFJp42Af7thf+r/VUsYMc=
-X-Google-Smtp-Source: AK7set/geGmdqqs74xRrdi+v0+/yQAYstdadBC5jK4HV+Z3RCoYO9Pvxt4kecOzcNGIrIsno1/5f+Rr/gE9wPUIdkes=
-X-Received: by 2002:adf:ea52:0:b0:2c4:80a:e849 with SMTP id
- j18-20020adfea52000000b002c4080ae849mr2069931wrn.1.1677766659703; Thu, 02 Mar
- 2023 06:17:39 -0800 (PST)
+        Thu, 2 Mar 2023 09:19:18 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A03813513;
+        Thu,  2 Mar 2023 06:19:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 378B11FB;
+        Thu,  2 Mar 2023 06:20:00 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.26.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 10BA03F587;
+        Thu,  2 Mar 2023 06:19:15 -0800 (PST)
+Date:   Thu, 2 Mar 2023 14:18:52 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] tracing: Check field value in hist_field_name()
+Message-ID: <ZACwTKyIkq5MyPHd@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230302010051.044209550@goodmis.org>
+ <20230302020810.762384440@goodmis.org>
 MIME-Version: 1.0
-References: <cover.1677750859.git.mazziesaccount@gmail.com> <874d59be98703bb58a98fea72138de5b94d71a52.1677750859.git.mazziesaccount@gmail.com>
-In-Reply-To: <874d59be98703bb58a98fea72138de5b94d71a52.1677750859.git.mazziesaccount@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Date:   Thu, 2 Mar 2023 16:17:28 +0200
-Message-ID: <CANhJrGOnG0r+t02wGHfbwqJh6k7xVE=1ah=w4m0s9JjqAGV-9w@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302020810.762384440@goodmis.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-to 2. maalisk. 2023 klo 12.59 Matti Vaittinen
-(mazziesaccount@gmail.com) kirjoitti:
->
-> ROHM BU27034 is an ambient light sesnor with 3 channels and 3 photo diodes
-> capable of detecting a very wide range of illuminance. Typical application
-> is adjusting LCD and backlight power of TVs and mobile phones.
->
-> Add initial  support for the ROHM BU27034 ambient light sensor.
->
-> NOTE:
->         - Driver exposes 4 channels. One IIO_LIGHT channel providing the
->           calculated lux values based on measured data from diodes #0 and
->           #1. Additionally 3 IIO_INTENSITY channels are emitting the raw
->           register data from all diodes for more intense user-space
->           computations.
->         - Sensor has adjustible GAIN values ranging from 1x to 4096x.
->         - Sensor has adjustible measurement times 5, 55, 100, 200 and
->           400 mS. Driver does not support 5 mS which has special
->           limitations.
->         - Driver exposes standard 'scale' adjustment which is
->           implemented by:
->                 1) Trying to adjust only the GAIN
->                 2) If GAIN adjustment only can't provide requested
->                    scale, adjusting both the time and the gain is
->                    attempted.
->         - Driver exposes writable INT_TIME property which can be used
->           for adjusting the measurement time. Time adjustment will also
->           cause the driver to adjust the GAIN so that the overall scale
->           is not changed.
->         - Runtime PM is not implemented.
->         - Driver starts the measurement on the background when it is
->           probed. This improves the respnse time to read-requests
+On Wed, Mar 01, 2023 at 08:00:53PM -0500, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> The function hist_field_name() cannot handle being passed a NULL field
+> parameter. It should never be NULL, but due to a previous bug, NULL was
+> passed to the function and the kernel crashed due to a NULL dereference.
+> Mark Rutland reported this to me on IRC.
+> 
+> The bug was fixed, but to prevent future bugs from crashing the kernel,
+> check the field and add a WARN_ON() if it is NULL.
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: Mark Rutland <mark.rutland@arm.com>
+> Fixes: c6afad49d127f ("tracing: Add hist trigger 'sym' and 'sym-offset' modifiers")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Seems like I forgot to update the commit message. Note to self: change
-this when preparing the v3
+Tested-by: Mark Rutland <mark.rutland@arm.com>
 
-,,,
+I gave this patch a spin on its own (without the prior patch), and it behaves
+as expected. When deliberately triggering the aforementioned bug I hit the
+WARN_ON_ONCE() without crashing the kernel:
 
-> +config ROHM_BU27034
-> +       tristate "ROHM BU27034 ambient light sensor"
-> +       depends on I2C
-> +       select REGMAP_I2C
-> +       select IIO_GTS_HELPER
+| # echo 'p:copy_to_user __arch_copy_to_user n=$arg2' >> /sys/kernel/tracing/kprobe_events
+| # echo 'hist:keys=n:vals=hitcount.buckets=8:sort=hitcount' > /sys/kernel/tracing/events/kprobes/copy_to_user/trigger
+| # cat /sys/kernel/tracing/events/kprobes/copy_to_user/hist 
+| ------------[ cut here ]------------
+| WARNING: CPU: 0 PID: 133 at kernel/trace/trace_events_hist.c:1337 hist_field_name+0x94/0x144
+| Modules linked in:
+| CPU: 0 PID: 133 Comm: cat Not tainted 6.2.0-00003-g785bb684c534 #2
+| Hardware name: linux,dummy-virt (DT)
+| pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+| pc : hist_field_name+0x94/0x144
+| lr : hist_field_name+0xbc/0x144
+| sp : ffff800008343a60
+| x29: ffff800008343a60 x28: 0000000000000001 x27: 0000000000400cc0
+| x26: ffffaed00953fcd0 x25: 0000000000000000 x24: ffff65c743e8bf00
+| x23: ffffaed0093d2488 x22: ffff65c743fadc00 x21: 0000000000000001
+| x20: ffff65c743ec1000 x19: ffff65c743fadc00 x18: 0000000000000000
+| x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+| x14: 0000000000000000 x13: 203a6f666e692072 x12: 6567676972742023
+| x11: 0a230a6d6172676f x10: 000000000000002c x9 : ffffaed007be1fcc
+| x8 : 000000000000002c x7 : 7f7f7f7f7f7f7f7f x6 : 000000000000002c
+| x5 : ffff65c743b0103e x4 : ffffaed00953fcd1 x3 : 000000000000003d
+| x2 : 0000000000020001 x1 : 0000000000000001 x0 : 0000000000000000
+| Call trace:
+|  hist_field_name+0x94/0x144
+|  hist_field_print+0x28/0x14c
+|  event_hist_trigger_print+0x174/0x4d0
+|  hist_show+0xf8/0x980
+|  seq_read_iter+0x1bc/0x4b0
+|  seq_read+0x8c/0xc4
+|  vfs_read+0xc8/0x2a4
+|  ksys_read+0x70/0xfc
+|  __arm64_sys_read+0x24/0x30
+|  invoke_syscall+0x50/0x120
+|  el0_svc_common.constprop.0+0x4c/0x100
+|  do_el0_svc+0x44/0xd0
+|  el0_svc+0x2c/0x84
+|  el0t_64_sync_handler+0xbc/0x140
+|  el0t_64_sync+0x190/0x194
+| ---[ end trace 0000000000000000 ]---
+| # event histogram
+| #
+| # trigger info: hist:keys=n:vals=hitcount,.buckets=8:sort=hitcount:size=2048 [active]
+| #
+| 
+| { n: 18446574505247538232 } hitcount:          1  :          1
+| { n: 18446574505249480120 } hitcount:          1  :          1
+| { n: 18446574505255937966 } hitcount:          1  :          1
+| { n: 18446574505234423224 } hitcount:          1  :          1
 
-And, judging some other fixes - it seems this one would also need the
-select IIO_BUFFER and IIO_KFIFO_BUF now...
+[...]
 
+| Totals:
+|     Hits: 371
+|     Entries: 263
+|     Dropped: 0
 
--- 
+Note: the 'n' values are large because '$arg2' is actually the 'from' pointer
+here, another mistake of mine (I had meant to capture '$arg3').
 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+Thanks,
+Mark.
 
-~~ When things go utterly wrong vim users can always type :help! ~~
-
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));
+> ---
+>  kernel/trace/trace_events_hist.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+> index 6e8ab726a7b5..486cca3c2b75 100644
+> --- a/kernel/trace/trace_events_hist.c
+> +++ b/kernel/trace/trace_events_hist.c
+> @@ -1331,6 +1331,9 @@ static const char *hist_field_name(struct hist_field *field,
+>  {
+>  	const char *field_name = "";
+>  
+> +	if (WARN_ON_ONCE(!field))
+> +		return field_name;
+> +
+>  	if (level > 1)
+>  		return field_name;
+>  
+> -- 
+> 2.39.1
