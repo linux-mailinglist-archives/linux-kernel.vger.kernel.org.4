@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5496A7D66
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A946A7D79
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjCBJPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:15:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S229937AbjCBJS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjCBJPR (ORCPT
+        with ESMTP id S229930AbjCBJSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:15:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AD7136EA
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:14:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677748467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gn95fNZsWohda/Gt3RBIsmBf9yhGLuJiMqSDf2HskJM=;
-        b=fkXzPlapp2zgEJDhGu8AV064fTCv7+977MxLRU//NHw5J3ADaV2uOn8cS+6AOQWKBgvJVg
-        ojz6PSb0H4qyhItoFwRSfEJ2RR7z3BnKrzRM1I/49WqWssrH9oR6CKJIgaCyJUXISOxe0R
-        0wtZSks57FwTWHb71N8b3ry1dKN9btA=
-Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
- [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-158-ExsDxMD_Ow2rZzLPG5r3WQ-1; Thu, 02 Mar 2023 04:14:26 -0500
-X-MC-Unique: ExsDxMD_Ow2rZzLPG5r3WQ-1
-Received: by mail-vs1-f72.google.com with SMTP id f18-20020a0561020c9200b004216d910ebeso5384283vst.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:14:26 -0800 (PST)
+        Thu, 2 Mar 2023 04:18:48 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF33136D4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:18:39 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id c3so13029922qtc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:18:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ur3zzFSZ+L9nV38J9531/+rGzVcRq8CFrus3AZSDIC4=;
+        b=Ql31hrT5twUkGostOsh1nmd4im63SgW755GgYt3GS4BXhnbkG8ne6ZyhfUlLgo3t3+
+         iHwbogagcCXr5FD+AzXCJpunon2xqnGpMzm80nAQm0mANklMJf8j8B3PQGQrRUQ5Blc1
+         /rkyJwI0DYUpJJOg0eRIs6XQuQiYNJ3bKPicHU39NmmbjEGTCkm0VDdiE9TJ/VpEwhWp
+         cO0JTYBI3RV+TMRJJg0r5lOtSTr7d+mFrg2+q8RSU7YPcX7zsDBYZZnREYN63dEYwcG7
+         wgwOWNUl4z9697pEaT35wQBct/CVnR4ZBDtcLPRKpNKJVUfhXNicZxu9kdWysS+NOW2b
+         zX/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677748465;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gn95fNZsWohda/Gt3RBIsmBf9yhGLuJiMqSDf2HskJM=;
-        b=Kq9YFc3ws0bkIce+k+iHoOjZ9p9K1uqeFmbvq3FKP6P77BSyXuaN4cU22oVSPeTXTN
-         MA8luW24/8SMxVpYWuxV9npwxoGQsisbyCV1g184Jp+7+lgAUmB/YFjLW4Ps95scLEnh
-         bzLRANeUIrgUVmbHwaIgWunVk7EwlxeYEPj3gwrpVChV1TN03x83s1ssUiazjH0wnW6g
-         nkUKyrZb0LPVWUJvXjnGst/LQtwJR8hm2yZwNxcHqNCLX+REa6i4Mx8n4e4d6mgNxWLd
-         pOT2BkVUiSkBJn4WZg1K2XB6sAO7+0pNAOFVAnBThvTfapWkVKaWrJcPLAIzwzvI1aQN
-         ov4A==
-X-Gm-Message-State: AO0yUKVlBjmRwQLlPfdM2MHfNysKLqHJ6MX3N8z9VjMSyIKu0XjiAXq6
-        8i0DTHcI2LXyup48VSgh052u+fcyS/a49JIRWUOn2fwJRJZfVakqL2WcAn037C1HzDKmP3y0Yod
-        G5xS4QFmeWQRP96wxM5h1LxqDKuctaJ/Vvw4mcpCvSOC2hzZLchU=
-X-Received: by 2002:a67:b910:0:b0:412:364c:68be with SMTP id q16-20020a67b910000000b00412364c68bemr6074226vsn.7.1677748465725;
-        Thu, 02 Mar 2023 01:14:25 -0800 (PST)
-X-Google-Smtp-Source: AK7set9yW7PU8Zj8MjrA77EC8H0DigRUOzdN0Dz8qC8KWJKL3ib/eNM3P5KnWHbX3gi8isXs+lAWQfcMSDapi1ZlXxs=
-X-Received: by 2002:a67:b910:0:b0:412:364c:68be with SMTP id
- q16-20020a67b910000000b00412364c68bemr6074220vsn.7.1677748465514; Thu, 02 Mar
- 2023 01:14:25 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ur3zzFSZ+L9nV38J9531/+rGzVcRq8CFrus3AZSDIC4=;
+        b=O/qu5kleHFKz5X7qNB0n/NumYMBkStVXXGjSfRNOiQnnsVzrAtHQnAXHDBh00tn2GG
+         M4KMgJppWvtbNhM4wVXrynbYiiBtzEb+qocwLfBz1D1Vn6/6gNqRYGKKdtMmMCHu8Mlk
+         SHjD9sPe4YrSOgu5UmnQ7kz1aEzGJGCDBzsF02E2etuDHDJfEndh4JZ5F6fo0TmkFm6C
+         51SL4k8HhlVgMYfCeVbIR2DAM5Xhl6UeaMfRlVcVsFbAB3rtAkhn39Qep4LpDIqC6+3T
+         dwaHBgT1shIytxptU+OUxcGMvXqUBnvmUWozXJoTnM5EG27w3tZqgJHnXFumBg4N4CwB
+         vlZw==
+X-Gm-Message-State: AO0yUKUueM1GZaNBj+tRSuui7XTSyZQ+H7masbuwRKwiNAyayVd1A1HT
+        +x9HPgGTpmbiieRs3DgQeRA=
+X-Google-Smtp-Source: AK7set9SuQ0AOlZ1zc7C0byxOux2y+v0hR+O7KZZvVydEwsFnjb+4DOp3GVQQK7F6g3bXCqz65vwnw==
+X-Received: by 2002:a05:622a:15c2:b0:3bf:db42:777f with SMTP id d2-20020a05622a15c200b003bfdb42777fmr16599569qty.0.1677748718118;
+        Thu, 02 Mar 2023 01:18:38 -0800 (PST)
+Received: from localhost ([45.61.188.240])
+        by smtp.gmail.com with ESMTPSA id n19-20020a05620a153300b0073df51b5127sm10505174qkk.43.2023.03.02.01.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 01:18:37 -0800 (PST)
+From:   Jeff Pang <jeff.pang.chn@gmail.com>
+To:     evan.quan@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Jeff Pang <jeff.pang.chn@gmail.com>
+Subject: [PATCH] gpu: amd/pm: mark symbols static where possible for smu11
+Date:   Thu,  2 Mar 2023 17:16:14 +0800
+Message-Id: <20230302091614.62093-1-jeff.pang.chn@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230224200502.391570-1-nmi@metaspace.dk> <ZAAPBFfqP671N4ue@T590>
- <87o7pblhi1.fsf@metaspace.dk> <ZABfFW+28Jlxq+Ew@T590> <ZABmAR6Du1tUVEa7@T590>
-In-Reply-To: <ZABmAR6Du1tUVEa7@T590>
-From:   Ming Lei <ming.lei@redhat.com>
-Date:   Thu, 2 Mar 2023 17:14:13 +0800
-Message-ID: <CAFj5m9+o4yNA5rNDA+EXWZthMtB+dOLOW0O788i77=Qn1eJ0qQ@mail.gmail.com>
-Subject: Re: [PATCH v2] block: ublk: enable zoned storage support
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     linux-block@vger.kernel.org, Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        kernel test robot <lkp@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        open list <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,34 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 5:02=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wrote=
-:
->
-> On Thu, Mar 02, 2023 at 04:32:21PM +0800, Ming Lei wrote:
-> > On Thu, Mar 02, 2023 at 08:31:07AM +0100, Andreas Hindborg wrote:
-> > >
->
-> ...
->
-> > >
-> > > I agree about fetching more zones. However, it is no good to fetch up=
- to
-> > > a max, since the requested zone report may less than max. I was
-> >
-> > Short read should always be supported, so the interface may need to
-> > return how many zones in single command, please refer to nvme_ns_report=
-_zones().
->
-> blk_zone is part of uapi, maybe the short read can be figured out by
-> one all-zeroed 'blk_zone'?  then no extra uapi data is needed for
-> reporting zones.
+I get one warning when building kernel with -Werror=missing-prototypes :
 
-oops, we have blk_zone_report data for reporting zones to userspace already=
-,
-see blkdev_report_zones_ioctl(), then this way can be re-used for getting z=
-one
-report from ublk server too, right?
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:1600:5:
+error: no previous prototype for ‘vangogh_set_apu_thermal_limit’
+[-Werror=missing-prototypes]
+int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
 
-Thanks,
-Ming
+In fact, this function don't need a declaration due to it's only used
+in the file which they are.
+So this patch marks the function with 'static'.
+
+Signed-off-by: Jeff Pang <jeff.pang.chn@gmail.com>
+---
+ drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
+index 016d5621e0b3..24046af60933 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
+@@ -1597,7 +1597,7 @@ static int vangogh_get_apu_thermal_limit(struct smu_context *smu, uint32_t *limi
+ 					      0, limit);
+ }
+ 
+-int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
++static int vangogh_set_apu_thermal_limit(struct smu_context *smu, uint32_t limit)
+ {
+ 	return smu_cmn_send_smc_msg_with_param(smu,
+ 					      SMU_MSG_SetReducedThermalLimit,
+-- 
+2.34.1
 
