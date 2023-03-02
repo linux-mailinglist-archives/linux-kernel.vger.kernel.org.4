@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394FE6A7A5B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 05:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1AA6A7A53
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 05:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjCBEPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 23:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S229920AbjCBENe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 23:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjCBEOj (ORCPT
+        with ESMTP id S229849AbjCBENQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 23:14:39 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38614FA88
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 20:14:05 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536cb268ab8so304722037b3.17
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 20:14:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677730442;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=edRZozQBIL0WlfafeNLLWxRrsV4anV+EoxBdmB1IrUI=;
-        b=Zgfun8QgnPZ+Nr/wCJafylCn0XSjYqgFUdlDHJO5cnTR1+b1ZCQZiYGq9UW8k9FyKS
-         tHG8x2ePXnPC9SgiV4oCVFSB3tf1IcZkl0V6w2y9YNvCzNT/oDDTrh05HwJ5yqenfyS2
-         D+Ej5lO+Je/Clb4lSWjSPfFhYLb/5/YcAX2xUt0pKvbw3Bsy2PKgzfkVq9agFvrhMjQ4
-         HLk6X0knBvDkY+Vve+qw4XtKybCGqxpMnEg4/Sp74fd2N0I6ocEs7J0nbhrvVfDzsBm4
-         qQZ9rWmjhw6JggL/4gIWcTu+Nx3tCkwloMbV1StkBOlhfyllHLDKIbpOGI1IdTuEuzUI
-         Q/uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677730442;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=edRZozQBIL0WlfafeNLLWxRrsV4anV+EoxBdmB1IrUI=;
-        b=q31gVmziw3SS2DBdhWeA+OQI75sZI9PFPxMlZctjIYWa9envlTOt+c9kCHFF38q1dM
-         UGb1E4sx3A58LGTmYyqH42KfbRlnFkUielY9+7SAsIRUy02k3yn9vgsHmmUr0HtBtG3k
-         R+dggz/3BXC9qPz+oWtMmlQmbh8bVsJ/y2NF0s/R2v6frJjS49xbQ0jQ+Pw3JJttIfRM
-         A3ur+f0cn5XLiJkUGL8UzHHeK8E3z1H2hotFfZJv7TPG4cYQVx1ujLKRoqdIWmsJ0pAc
-         hJaGPrZhB06XEePOSiOcgz1xcs+HTa9qexLV3EbzDMXIF+9WNazhBUqLXjUoZCLLaVlc
-         q+XQ==
-X-Gm-Message-State: AO0yUKXE88gO26CSvPOMUg48lSOjbWZmuWk5mzQ0QwuV6/Wu8/yvlSgV
-        j6JmgPaKqdrdoRc87PcEN/FYRoPehrVk
-X-Google-Smtp-Source: AK7set8DhJwkzTqFj0DOHspQzxw83fzJ+xaJxRLmIms2ft3h9ZyiSzUWS+YDsk9Q8cBzNsg4wWls8cgC7kaF
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bdf9:f5cb:d05:c4d5])
- (user=irogers job=sendgmr) by 2002:a5b:744:0:b0:914:fc5e:bbec with SMTP id
- s4-20020a5b0744000000b00914fc5ebbecmr3944683ybq.13.1677730442368; Wed, 01 Mar
- 2023 20:14:02 -0800 (PST)
-Date:   Wed,  1 Mar 2023 20:12:11 -0800
-In-Reply-To: <20230302041211.852330-1-irogers@google.com>
-Message-Id: <20230302041211.852330-11-irogers@google.com>
-Mime-Version: 1.0
-References: <20230302041211.852330-1-irogers@google.com>
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Subject: [PATCH v1 10/10] perf evsel: Remove use_uncore_alias
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Wed, 1 Mar 2023 23:13:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3EB497D6
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 20:12:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677730350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tno3Vr1mvpPmJU/vowr9H20am1PHtRl+UdqDzn6fuo4=;
+        b=aK3WopYSjFu82vtIgFXvrpPLxFvREYLYThZwjrVBntirXcHVN30ZPGXd2YrsvPvTWf+qZM
+        pBI4zm3c8J4GDzUqDzTaJBBVVYGKRGzOyqgecfdBAQV6v5tLjQlpbtNR5/7oD+QizNRO8O
+        8R1pvF+WjYVdLK6iW8J/1ipbooBaTNM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-ynaR-CPyMDCVg9CUd9qrGA-1; Wed, 01 Mar 2023 23:12:26 -0500
+X-MC-Unique: ynaR-CPyMDCVg9CUd9qrGA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0651985A588;
+        Thu,  2 Mar 2023 04:12:26 +0000 (UTC)
+Received: from localhost (ovpn-12-47.pek2.redhat.com [10.72.12.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EDD291121315;
+        Thu,  2 Mar 2023 04:12:24 +0000 (UTC)
+Date:   Thu, 2 Mar 2023 12:12:21 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mips: add <asm-generic/io.h> including
+Message-ID: <ZAAiJcx80RU0QuHw@MiWiFi-R3L-srv>
+References: <20230301102208.148490-1-bhe@redhat.com>
+ <20230301102208.148490-2-bhe@redhat.com>
+ <5edd5304-ef11-4607-9189-a07613ecfee2@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5edd5304-ef11-4607-9189-a07613ecfee2@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,165 +71,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This flag used to be used when regrouping uncore events in particular
-due to wildcard matches. This is now handled by sorting evlist and so
-the flag is redundant.
+On 03/01/23 at 03:06pm, Arnd Bergmann wrote:
+> On Wed, Mar 1, 2023, at 11:22, Baoquan He wrote:
+> > With the adding, some default ioremap_xx methods defined in
+> > asm-generic/io.h can be used. E.g the default ioremap_uc() returning
+> > NULL.
+> >
+> > Here, remove the <asm/io.h> including in asm/mmiowb.h, otherwise nested
+> > including will cause compiling error.
+> >
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Cc: linux-mips@vger.kernel.org
+> 
+> This looks good to me,
+> 
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> but it obviously needs to be properly reviewed by the MIPS
+> maintainers as well. I think others have tried to do this
+> in the past but did not make it in.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/evsel.c        |  1 -
- tools/perf/util/evsel.h        |  1 -
- tools/perf/util/parse-events.c | 12 +++---------
- tools/perf/util/parse-events.h |  3 +--
- tools/perf/util/parse-events.y | 11 +++++++----
- 5 files changed, 11 insertions(+), 17 deletions(-)
+Thanks for reviewing. Then let's wait for MIPS people to help check
+this.
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 9c6b486f8bd4..5446128be03b 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -458,7 +458,6 @@ struct evsel *evsel__clone(struct evsel *orig)
- 	evsel->per_pkg = orig->per_pkg;
- 	evsel->percore = orig->percore;
- 	evsel->precise_max = orig->precise_max;
--	evsel->use_uncore_alias = orig->use_uncore_alias;
- 	evsel->is_libpfm_event = orig->is_libpfm_event;
+> 
+> > @@ -548,6 +552,46 @@ extern void (*_dma_cache_inv)(unsigned long start, 
+> > unsigned long size);
+> >  #define csr_out32(v, a) (*(volatile u32 *)((unsigned long)(a) + 
+> > __CSR_32_ADJUST) = (v))
+> >  #define csr_in32(a)    (*(volatile u32 *)((unsigned long)(a) + 
+> > __CSR_32_ADJUST))
+> > 
+> > +
+> > +#define inb_p inb_p
+> > +#define inw_p inw_p
+> > +#define inl_p inl_p
+> > +#define insb insb
+> > +#define insw insw
+> > +#define insl insl
+> 
+> I would prefer to put the #defines next to the function declarations,
+> even when they come from macros.
+
+Yeah, sounds reasonable, will change.
+
+> 
+> > 
+> > -#include <asm/io.h>
+> > -
+> >  #define mmiowb()	iobarrier_w()
+> > 
+> 
+> I think this only works as long as asm/spinlock.h also includes
+> asm/io.h, otherwise linux/spinlock.h will be missing the
+> iobarrier_w definition.
+> 
+> Most likely this is implicitly included from somewhere else
+> below linux/spinlock.h, but it would be better not to rely
+> on that, and instead define mmiowb() to wmb() directly.
+
+Yeah, defining mmiowb() to wmb() directly is also good to me. I tried
+to comb including sequence and find where asm/io.h is included, but
+failed. Mainly asm/mmiowb.h including asm/io.h will cause below
+compiling error, the asm/io.h need see mmiowb_set_pending which is
+defnined in asm-generic/mmiowb.h. Moving asm-generic/mmiowb.h to above
+asm/io.h can also fix the compiling error.
+
+=============
+diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
+index a40824e3ef8e..cae2745935bc 100644
+--- a/arch/mips/include/asm/mmiowb.h
++++ b/arch/mips/include/asm/mmiowb.h
+@@ -2,10 +2,8 @@
+ #ifndef _ASM_MMIOWB_H
+ #define _ASM_MMIOWB_H
  
- 	evsel->exclude_GH = orig->exclude_GH;
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 72121194d3b1..9a8d08fcad1c 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -89,7 +89,6 @@ struct evsel {
- 		bool			per_pkg;
- 		bool			percore;
- 		bool			precise_max;
--		bool			use_uncore_alias;
- 		bool			is_libpfm_event;
- 		bool			auto_merge_stats;
- 		bool			collect_stat;
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index d6eb0a54dd2d..ac7709c1c5b7 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1445,15 +1445,13 @@ static int parse_events__inside_hybrid_pmu(struct parse_events_state *parse_stat
- int parse_events_add_pmu(struct parse_events_state *parse_state,
- 			 struct list_head *list, char *name,
- 			 struct list_head *head_config,
--			 bool auto_merge_stats,
--			 bool use_alias)
-+			 bool auto_merge_stats)
- {
- 	struct perf_event_attr attr;
- 	struct perf_pmu_info info;
- 	struct perf_pmu *pmu;
- 	struct evsel *evsel;
- 	struct parse_events_error *err = parse_state->error;
--	bool use_uncore_alias;
- 	LIST_HEAD(config_terms);
++#include <asm-generic/mmiowb.h>
+ #include <asm/io.h>
  
- 	pmu = parse_state->fake_pmu ?: perf_pmu__find(name);
-@@ -1488,8 +1486,6 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 		memset(&attr, 0, sizeof(attr));
- 	}
- 
--	use_uncore_alias = (pmu->is_uncore && use_alias);
+ #define mmiowb()       iobarrier_w()
 -
- 	if (!head_config) {
- 		attr.type = pmu->type;
- 		evsel = __add_event(list, &parse_state->idx, &attr,
-@@ -1499,7 +1495,6 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 				    /*cpu_list=*/NULL);
- 		if (evsel) {
- 			evsel->pmu_name = name ? strdup(name) : NULL;
--			evsel->use_uncore_alias = use_uncore_alias;
- 			return 0;
- 		} else {
- 			return -ENOMEM;
-@@ -1560,7 +1555,6 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 		evsel->use_config_name = true;
- 
- 	evsel->pmu_name = name ? strdup(name) : NULL;
--	evsel->use_uncore_alias = use_uncore_alias;
- 	evsel->percore = config_term_percore(&evsel->config_terms);
- 
- 	if (parse_state->fake_pmu)
-@@ -1622,7 +1616,7 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
- 				parse_events_copy_term_list(head, &orig_head);
- 				if (!parse_events_add_pmu(parse_state, list,
- 							  pmu->name, orig_head,
--							  true, true)) {
-+							  /*auto_merge_stats=*/true)) {
- 					pr_debug("%s -> %s/%s/\n", str,
- 						 pmu->name, alias->str);
- 					ok++;
-@@ -1634,7 +1628,7 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
- 
- 	if (parse_state->fake_pmu) {
- 		if (!parse_events_add_pmu(parse_state, list, str, head,
--					  true, true)) {
-+					  /*auto_merge_stats=*/true)) {
- 			pr_debug("%s -> %s/%s/\n", str, "fake_pmu", str);
- 			ok++;
- 		}
-diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
-index 22fc11b0bd59..fdac44dc696b 100644
---- a/tools/perf/util/parse-events.h
-+++ b/tools/perf/util/parse-events.h
-@@ -183,8 +183,7 @@ int parse_events_add_breakpoint(struct list_head *list, int *idx,
- int parse_events_add_pmu(struct parse_events_state *parse_state,
- 			 struct list_head *list, char *name,
- 			 struct list_head *head_config,
--			 bool auto_merge_stats,
--			 bool use_alias);
-+			 bool auto_merge_stats);
- 
- struct evsel *parse_events__add_event(int idx, struct perf_event_attr *attr,
- 				      const char *name, const char *metric_id,
-diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index 90d12f2bc8be..f1b153c72d67 100644
---- a/tools/perf/util/parse-events.y
-+++ b/tools/perf/util/parse-events.y
-@@ -313,7 +313,7 @@ event_pmu_name opt_pmu_config
- 	list = alloc_list();
- 	if (!list)
- 		CLEANUP_YYABORT;
--	if (parse_events_add_pmu(_parse_state, list, $1, $2, false, false)) {
-+	if (parse_events_add_pmu(_parse_state, list, $1, $2, /*auto_merge_stats=*/false)) {
- 		struct perf_pmu *pmu = NULL;
- 		int ok = 0;
- 
-@@ -330,8 +330,10 @@ event_pmu_name opt_pmu_config
- 			    !perf_pmu__match(pattern, pmu->alias_name, $1)) {
- 				if (parse_events_copy_term_list(orig_terms, &terms))
- 					CLEANUP_YYABORT;
--				if (!parse_events_add_pmu(_parse_state, list, pmu->name, terms, true, false))
-+				if (!parse_events_add_pmu(_parse_state, list, pmu->name, terms,
-+							  /*auto_merge_stats=*/true)) {
- 					ok++;
-+				}
- 				parse_events_terms__delete(terms);
- 			}
- 		}
-@@ -407,7 +409,8 @@ PE_PMU_EVENT_FAKE sep_dc
- 	if (!list)
- 		YYABORT;
- 
--	err = parse_events_add_pmu(_parse_state, list, $1, NULL, false, false);
-+	err = parse_events_add_pmu(_parse_state, list, $1, /*head_config=*/NULL,
-+				   /*auto_merge_stats=*/false);
- 	free($1);
- 	if (err < 0) {
- 		free(list);
-@@ -425,7 +428,7 @@ PE_PMU_EVENT_FAKE opt_pmu_config
- 	if (!list)
- 		YYABORT;
- 
--	err = parse_events_add_pmu(_parse_state, list, $1, $2, false, false);
-+	err = parse_events_add_pmu(_parse_state, list, $1, $2, /*auto_merge_stats=*/false);
- 	free($1);
- 	parse_events_terms__delete($2);
- 	if (err < 0) {
--- 
-2.39.2.722.g9855ee24e9-goog
+-#include <asm-generic/mmiowb.h>
+-
+ #endif /* _ASM_MMIOWB_H */
+
+
+============
+  CC      arch/mips/kernel/asm-offsets.s
+In file included from ./arch/mips/include/asm/io.h:602,
+                 from ./arch/mips/include/asm/mmiowb.h:6,
+                 from ./include/linux/spinlock.h:65,
+                 from ./include/linux/ipc.h:5,
+                 from ./include/uapi/linux/sem.h:5,
+                 from ./include/linux/sem.h:5,
+                 from ./include/linux/compat.h:14,
+                 from arch/mips/kernel/asm-offsets.c:12:
+./include/asm-generic/io.h: In function ‘_outb’:
+./include/asm-generic/io.h:46:24: error: implicit declaration of function ‘mmiowb_set_pending’ [-Werror=implicit-function-declaration]
+   46 | #define __io_aw()      mmiowb_set_pending()
+      |                        ^~~~~~~~~~~~~~~~~~
+./include/asm-generic/io.h:54:24: note: in expansion of macro ‘__io_aw’
+   54 | #define __io_paw()     __io_aw()
+      |                        ^~~~~~~
+./include/asm-generic/io.h:585:9: note: in expansion of macro ‘__io_paw’
+  585 |         __io_paw();
+      |         ^~~~~~~~
 
