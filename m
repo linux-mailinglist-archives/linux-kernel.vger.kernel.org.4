@@ -2,149 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384AD6A8408
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF726A8416
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjCBOTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S229661AbjCBOXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCBOTS (ORCPT
+        with ESMTP id S229506AbjCBOXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:19:18 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A03813513;
-        Thu,  2 Mar 2023 06:19:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 378B11FB;
-        Thu,  2 Mar 2023 06:20:00 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.26.133])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 10BA03F587;
-        Thu,  2 Mar 2023 06:19:15 -0800 (PST)
-Date:   Thu, 2 Mar 2023 14:18:52 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] tracing: Check field value in hist_field_name()
-Message-ID: <ZACwTKyIkq5MyPHd@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230302010051.044209550@goodmis.org>
- <20230302020810.762384440@goodmis.org>
+        Thu, 2 Mar 2023 09:23:22 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62D4193FE;
+        Thu,  2 Mar 2023 06:23:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677767000; x=1709303000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=1xUvPOheqw1hT95eEnqs5hbaLI/RpHD0dWMUlZ70aOY=;
+  b=j8afqEY5GUIpkClBzFDQ9NTT4ZtEE0Dmgs8FGR+I9epNqV/xL+wOz9Se
+   mOppjAPOgqGVGqP1B/+sfUw+V2YYb8u17e2BJDFfaZR+fpN0tJccuPXr9
+   Qed4xeUQuWpB8vRj/+4HIkWpgqLGiaAAkkNkq5x6vf8O/Ut8VOrEA15v8
+   EbxNKQB8qHxIF+KTpm/MpEz9iMn4wV+vaxvG61MTAx0D+qC8Lc11qHLyW
+   +k+C3RyTMLsyDmNpaydNGLJ7H1zDjE2t4TobnUVMMiDlSmdYzp1AfmDfR
+   HulvUF406gzh7CDgZsWPXG9mCIFJOjY+M3xa+8lUekovXdjPSStOfepm+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="362324884"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="362324884"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 06:23:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="677230474"
+X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
+   d="scan'208";a="677230474"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Mar 2023 06:23:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pXjpz-00ENdZ-0o;
+        Thu, 02 Mar 2023 16:23:15 +0200
+Date:   Thu, 2 Mar 2023 16:23:14 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+Cc:     devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] iio: adc: Add TI ADS1100 and ADS1000
+Message-ID: <ZACxUpzCtlrMehrA@smile.fi.intel.com>
+References: <20230228063151.17598-1-mike.looijmans@topic.nl>
+ <20230228063151.17598-2-mike.looijmans@topic.nl>
+ <Y/9vez/fzLD5dRVF@smile.fi.intel.com>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.0685d97e-4a28-499e-a9e3-3bafec126832@emailsignatures365.codetwo.com>
+ <a2ba706f-888b-0a72-03a5-cbf761dfaf19@topic.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230302020810.762384440@goodmis.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a2ba706f-888b-0a72-03a5-cbf761dfaf19@topic.nl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 08:00:53PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Thu, Mar 02, 2023 at 08:49:22AM +0100, Mike Looijmans wrote:
+> On 01-03-2023 16:30, Andy Shevchenko wrote:
+> > On Tue, Feb 28, 2023 at 07:31:51AM +0100, Mike Looijmans wrote:
+
+...
+
+> > > +	/* Shift result to compensate for bit resolution vs. sample rate */
+> > > +	value <<= 16 - ads1100_data_bits(data);
+> > > +	*val = sign_extend32(value, 15);
+> > Why not simply
+> > 
+> > 	*val = sign_extend32(value, ads1100_data_bits(data) - 1);
+> > 
+> > ?
 > 
-> The function hist_field_name() cannot handle being passed a NULL field
-> parameter. It should never be NULL, but due to a previous bug, NULL was
-> passed to the function and the kernel crashed due to a NULL dereference.
-> Mark Rutland reported this to me on IRC.
+> As discussed with  Jonathan Cameron, the register is right-justified and the
+> number of bits depend on the data rate. Rather than having the "scale"
+> change when the sample rate changes, we chose to adjust the sample result so
+> it's always left-justified.
+
+Hmm... OK, but it adds unneeded code I think.
+
+...
+
+> > > +	for (i = 0; i < 4; i++) {
+> > > +		if (BIT(i) == gain) {
+> > ffs()/__ffs() (look at the documentation for the difference and use proper one).
 > 
-> The bug was fixed, but to prevent future bugs from crashing the kernel,
-> check the field and add a WARN_ON() if it is NULL.
+> Thought of it, but I'd rather have it return EINVAL for attempting to set
+> the analog gain to "7" (0nly 1,2,4,8 allowed).
+
+I'm not sure what you are implying.
+
+You have open coded something that has already to be a function which on some
+architectures become a single assembly instruction.
+
+That said, drop your for-loop if-cond and use one of the proposed directly.
+Then you may compare the result to what ever you want to be a limit and return
+whatever error code you want to.
+
+...
+
+> > > +	for (i = 0; i < size; ++i) {
+> > Why pre-increment?
 > 
-> Cc: stable@vger.kernel.org
-> Reported-by: Mark Rutland <mark.rutland@arm.com>
-> Fixes: c6afad49d127f ("tracing: Add hist trigger 'sym' and 'sym-offset' modifiers")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Spent too much time with other coding guidelines, missed this one... Will
+> change.
 
-Tested-by: Mark Rutland <mark.rutland@arm.com>
+I don't remember that's in coding guidelines, but it's standard practice in the
+Linux kernel project. Yeah, we have a few hundreds of the pre-increments, but
+reasons may be quite different for those.
 
-I gave this patch a spin on its own (without the prior patch), and it behaves
-as expected. When deliberately triggering the aforementioned bug I hit the
-WARN_ON_ONCE() without crashing the kernel:
+...
 
-| # echo 'p:copy_to_user __arch_copy_to_user n=$arg2' >> /sys/kernel/tracing/kprobe_events
-| # echo 'hist:keys=n:vals=hitcount.buckets=8:sort=hitcount' > /sys/kernel/tracing/events/kprobes/copy_to_user/trigger
-| # cat /sys/kernel/tracing/events/kprobes/copy_to_user/hist 
-| ------------[ cut here ]------------
-| WARNING: CPU: 0 PID: 133 at kernel/trace/trace_events_hist.c:1337 hist_field_name+0x94/0x144
-| Modules linked in:
-| CPU: 0 PID: 133 Comm: cat Not tainted 6.2.0-00003-g785bb684c534 #2
-| Hardware name: linux,dummy-virt (DT)
-| pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-| pc : hist_field_name+0x94/0x144
-| lr : hist_field_name+0xbc/0x144
-| sp : ffff800008343a60
-| x29: ffff800008343a60 x28: 0000000000000001 x27: 0000000000400cc0
-| x26: ffffaed00953fcd0 x25: 0000000000000000 x24: ffff65c743e8bf00
-| x23: ffffaed0093d2488 x22: ffff65c743fadc00 x21: 0000000000000001
-| x20: ffff65c743ec1000 x19: ffff65c743fadc00 x18: 0000000000000000
-| x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-| x14: 0000000000000000 x13: 203a6f666e692072 x12: 6567676972742023
-| x11: 0a230a6d6172676f x10: 000000000000002c x9 : ffffaed007be1fcc
-| x8 : 000000000000002c x7 : 7f7f7f7f7f7f7f7f x6 : 000000000000002c
-| x5 : ffff65c743b0103e x4 : ffffaed00953fcd1 x3 : 000000000000003d
-| x2 : 0000000000020001 x1 : 0000000000000001 x0 : 0000000000000000
-| Call trace:
-|  hist_field_name+0x94/0x144
-|  hist_field_print+0x28/0x14c
-|  event_hist_trigger_print+0x174/0x4d0
-|  hist_show+0xf8/0x980
-|  seq_read_iter+0x1bc/0x4b0
-|  seq_read+0x8c/0xc4
-|  vfs_read+0xc8/0x2a4
-|  ksys_read+0x70/0xfc
-|  __arm64_sys_read+0x24/0x30
-|  invoke_syscall+0x50/0x120
-|  el0_svc_common.constprop.0+0x4c/0x100
-|  do_el0_svc+0x44/0xd0
-|  el0_svc+0x2c/0x84
-|  el0t_64_sync_handler+0xbc/0x140
-|  el0t_64_sync+0x190/0x194
-| ---[ end trace 0000000000000000 ]---
-| # event histogram
-| #
-| # trigger info: hist:keys=n:vals=hitcount,.buckets=8:sort=hitcount:size=2048 [active]
-| #
-| 
-| { n: 18446574505247538232 } hitcount:          1  :          1
-| { n: 18446574505249480120 } hitcount:          1  :          1
-| { n: 18446574505255937966 } hitcount:          1  :          1
-| { n: 18446574505234423224 } hitcount:          1  :          1
-
-[...]
-
-| Totals:
-|     Hits: 371
-|     Entries: 263
-|     Dropped: 0
-
-Note: the 'n' values are large because '$arg2' is actually the 'from' pointer
-here, another mistake of mine (I had meant to capture '$arg3').
-
-Thanks,
-Mark.
-
-> ---
->  kernel/trace/trace_events_hist.c | 3 +++
->  1 file changed, 3 insertions(+)
+> > > +	int millivolts = regulator_get_voltage(data->reg_vdd) / 1000;
+> > units.h?
 > 
-> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> index 6e8ab726a7b5..486cca3c2b75 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -1331,6 +1331,9 @@ static const char *hist_field_name(struct hist_field *field,
->  {
->  	const char *field_name = "";
->  
-> +	if (WARN_ON_ONCE(!field))
-> +		return field_name;
-> +
->  	if (level > 1)
->  		return field_name;
->  
-> -- 
-> 2.39.1
+> Should I write:
+> 
+> regulator_get_voltage(data->reg_vdd) / (MICROS / MILLIS);
+> 
+> I doubt that improves readability.
+
+Yeah, it should be something like MICROVOLT_PER_MILLIVOLT.
+But it's not defined yet.
+
+...
+
+> > > +static int ads1100_runtime_suspend(struct device *dev)
+> > > +{
+> > > +	struct iio_dev *indio_dev = i2c_get_clientdata(to_i2c_client(dev));
+> > > +	struct ads1100_data *data = iio_priv(indio_dev);
+> > > +
+> > > +	ads1100_set_config_bits(data, ADS1100_CFG_SC, ADS1100_SINGLESHOT);
+> > > +	regulator_disable(data->reg_vdd);
+> > Wrong devm / non-devm ordering.
+> 
+> Don't understand your remark, can you explain further please?
+> 
+> devm / non-devm ordering would be related to the "probe" function. As far as
+> I can tell, I'm not allocating resources after the devm calls. And the
+> "remove" is empty.
+
+Ah, it's my mistake, I misread it as ->remove().
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
