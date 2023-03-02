@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6BD6A8660
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4086A8674
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjCBQbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S229600AbjCBQds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjCBQbb (ORCPT
+        with ESMTP id S229449AbjCBQdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:31:31 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6662938B52;
-        Thu,  2 Mar 2023 08:31:29 -0800 (PST)
-Received: from [IPV6:2001:861:4a40:8620:656e:de35:bfcf:ff5d] (unknown [IPv6:2001:861:4a40:8620:656e:de35:bfcf:ff5d])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A3634660206A;
-        Thu,  2 Mar 2023 16:31:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677774687;
-        bh=bXW4FE1NNRdrxRwNvl1HA9uGv5Kt5tBRB3ts7PpRZV8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YNdMqiynLRmvhtUHREjx5ca3AlePKdZ6h7YZO7DxQZZc+1gVB+iLak2WyMF5d8v07
-         d+uYdDhq2NCdzxPOn2AKTzIsriLqPIHHoBsnvkOgYLgz0XsewlE4Br4wXmba+G3JEl
-         XpqBFmoQXdFXrTbfwqzD97Y9XAS482Aaq1R0dXndRCLC69C5slbeXBu9jP2N3Pci5J
-         3wTf4EnEhuj3t3KalRKSN50mx+6EnXVRb1mmFH33hd+11sgtupFiKZqasTc6YAWY70
-         dIIJhYicNqKxur6fgwQPkw31maQfq2BuEhZXu3OWZJZ11lU+pqnedEdLnfpHrDhRV2
-         vdj18lu64W7QA==
-Message-ID: <4706bd68-fddd-05e5-137b-cf46c95a2ee5@collabora.com>
-Date:   Thu, 2 Mar 2023 17:32:12 +0100
+        Thu, 2 Mar 2023 11:33:46 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCB115895;
+        Thu,  2 Mar 2023 08:33:44 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322EiXND014795;
+        Thu, 2 Mar 2023 16:33:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=quExULxqwktiCqvwqBilD9v+P4OLIQqOgu545Ik7ilE=;
+ b=JYLRNdRxRb8t6hXFdyfpTjNtAJXn2XFvKvjdBLrmAhctFrZtac1hHblGal5VlfMgNyMJ
+ trCX69B7OhYiWurxQw84ulVoibFoPRm6JhKD9eMxcva/YLB+otvkn9W0dU+zt1D19iSP
+ Q+tfQS34k+eHfZWtMh+3eIuGgtq2rufv2yjnm3z+tZ41KfqnLndqkc9pON/7J3ZC+qvW
+ ArHsOjEJ6WJvkQh2/TgsO4R0z+KCUkIANc6h3vgfsh975j11aJ40eow1F0xk5pntHJE+
+ 9tk+T5Ljd0Rsv+DjUXP5oAd5jlT3ptUfGkiWzNINthu3wPo8nwjvmzBGu7VELh8t978L vA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p288r3t7y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 16:33:41 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 322GXeXs019061
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Mar 2023 16:33:40 GMT
+Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Thu, 2 Mar 2023 08:33:35 -0800
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
+CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <robdclark@gmail.com>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <quic_kalyant@quicinc.com>, <dmitry.baryshkov@linaro.org>,
+        <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
+        <quic_bjorande@quicinc.com>, <quic_abhinavk@quicinc.com>,
+        <quic_sbillaka@quicinc.com>
+Subject: [PATCH v14 00/14] Add PSR support for eDP
+Date:   Thu, 2 Mar 2023 22:03:03 +0530
+Message-ID: <1677774797-31063-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] selftests: amd-pstate: fix TEST_FILES
-Content-Language: en-US
-To:     Shuah Khan <shuah@kernel.org>, Huang Rui <ray.huang@amd.com>,
-        Meng Li <li.meng@amd.com>, Doug Smythies <dsmythies@telus.net>
-Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernelci@lists.linux.dev
-References: <20230204133454.260066-1-guillaume.tucker@collabora.com>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <20230204133454.260066-1-guillaume.tucker@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Qxk7w2WKmgKPwoHJbz7_Iz3BEkxdHYI6
+X-Proofpoint-ORIG-GUID: Qxk7w2WKmgKPwoHJbz7_Iz3BEkxdHYI6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_09,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 phishscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1011 mlxscore=0 priorityscore=1501 suspectscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303020143
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,58 +78,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shuah,
+Changes in v2:
+  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+  - Don't modify whitespaces.
+  - Set self refresh aware from atomic_check.
+  - Set self refresh aware only if psr is supported.
+  - Provide a stub for msm_dp_display_set_psr.
+  - Move dp functions to bridge code.
 
-On 04/02/2023 14:34, Guillaume Tucker wrote:
-> Bring back the Python scripts that were initially added with
-> TEST_GEN_FILES but now with TEST_FILES to avoid having them deleted
-> when doing a clean.  Also fix the way the architecture is being
-> determined as they should also be installed when ARCH=x86_64 is
-> provided explicitly.  Then also append extra files to TEST_FILES and
-> TEST_PROGS with += so they don't get discarded.
-> 
-> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
-> Fixes: ac527cee87c9 ("selftests: amd-pstate: Don't delete source files via Makefile")
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-> ---
->  tools/testing/selftests/amd-pstate/Makefile | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-> index 5fd1424db37d..c382f579fe94 100644
-> --- a/tools/testing/selftests/amd-pstate/Makefile
-> +++ b/tools/testing/selftests/amd-pstate/Makefile
-> @@ -4,10 +4,15 @@
->  # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
->  all:
->  
-> -uname_M := $(shell uname -m 2>/dev/null || echo not)
-> -ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-> +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-> +ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
->  
-> -TEST_PROGS := run.sh
-> -TEST_FILES := basic.sh tbench.sh gitsource.sh
-> +ifeq (x86,$(ARCH))
-> +TEST_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> +TEST_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> +endif
-> +
-> +TEST_PROGS += run.sh
-> +TEST_FILES += basic.sh tbench.sh gitsource.sh
->  
->  include ../lib.mk
+Changes in v3:
+  - Change callback names to reflect atomic interfaces.
+  - Move bridge callback change to separate patch as suggested by Dmitry.
+  - Remove psr function declaration from msm_drv.h.
+  - Set self_refresh_aware flag only if psr is supported.
+  - Modify the variable names to simpler form.
+  - Define bit fields for PSR settings.
+  - Add comments explaining the steps to enter/exit psr.
+  - Change DRM_INFO to drm_dbg_db. 
 
-Is there anything blocking this patch from being applied?  It
-brings back the tools needed to run the amd-pstate tests into the
-kselftest installation directory.
+Changes in v4:
+  - Move the get crtc functions to drm_atomic.
+  - Add atomic functions for DP bridge too.
+  - Add ternary operator to choose eDP or DP ops.
+  - Return true/false instead of 1/0.
+  - mode_valid missing in the eDP bridge ops.
+  - Move the functions to get crtc into drm_atomic.c.
+  - Fix compilation issues.
+  - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
+  - Check for crtc state enable while reserving resources.
 
-I could try to run the test on an AMD platform and check it's
-working as before, but there was no change in the tools
-themselves and I've checked the scripts get installed correctly
-now like before.  We might also actually run this test in
-KernelCI since there are a few AMD platforms available.
+Changes in v5:
+  - Move the mode_valid changes into a different patch.
+  - Complete psr_op_comp only when isr is set.
+  - Move the DP atomic callback changes to a different patch.
+  - Get crtc from drm connector state crtc.
+  - Move to separate patch for check for crtc state enable while
+reserving resources.
 
-Thanks,
-Guillaume
+Changes in v6:
+  - Remove crtc from dpu_encoder_virt struct.
+  - fix crtc check during vblank toggle crtc.
+  - Misc changes. 
+
+Changes in v7:
+  - Add fix for underrun issue on kasan build.
+
+Changes in v8:
+  - Drop the enc spinlock as it won't serve any purpose in
+protetcing conn state.(Dmitry/Doug)
+
+Changes in v9:
+  - Update commit message and fix alignment using spaces.(Marijn)
+  - Misc changes.(Marijn)
+
+Changes in v10:
+  - Get crtc cached in dpu_enc during obj init.(Dmitry)
+
+Changes in v11:
+  - Remove crtc cached in dpu_enc during obj init.
+  - Update dpu_enc crtc state on crtc enable/disable during self refresh.
+
+Changes in v12:
+  - Update sc7180 intf mask to get intf timing gen status
+based on DPU_INTF_STATUS_SUPPORTED bit.(Dmitry)
+  - Remove "clear active interface in the datapath cleanup" change
+as it is already included.
+
+Changes in v13:
+  - Move core changes to top of the series.(Dmitry)
+  - Drop self refresh aware disable change after psr entry.(Dmitry)
+
+Changes in v14:
+  - Set self_refresh_aware for the PSR to kick in.
+
+Vinod Polimera (14):
+  drm: add helper functions to retrieve old and new crtc
+  drm/bridge: use atomic enable/disable callbacks for panel bridge
+  drm/bridge: add psr support for panel bridge callbacks
+  drm/msm/disp/dpu: check for crtc enable rather than crtc active to
+    release shared resources
+  drm/msm/disp/dpu: get timing engine status from intf status register
+  drm/msm/disp/dpu: wait for extra vsync till timing engine status is
+    disabled
+  drm/msm/disp/dpu: reset the datapath after timing engine disable
+  drm/msm/dp: use atomic callbacks for DP bridge ops
+  drm/msm/dp: Add basic PSR support for eDP
+  drm/msm/dp: use the eDP bridge ops to validate eDP modes
+  drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
+    functions
+  drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
+  drm/msm/disp/dpu: update dpu_enc crtc state on crtc enable/disable
+    during self refresh
+  drm/msm/dp: set self refresh aware based on psr support
+
+ drivers/gpu/drm/bridge/panel.c                     |  68 +++++++-
+ drivers/gpu/drm/drm_atomic.c                       |  60 +++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c           |  40 ++++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  26 +++-
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  22 +++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   3 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  12 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        |   8 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   2 +-
+ drivers/gpu/drm/msm/dp/dp_catalog.c                |  80 ++++++++++
+ drivers/gpu/drm/msm/dp/dp_catalog.h                |   4 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  80 ++++++++++
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   3 +
+ drivers/gpu/drm/msm/dp/dp_display.c                |  36 +++--
+ drivers/gpu/drm/msm/dp/dp_display.h                |   2 +
+ drivers/gpu/drm/msm/dp/dp_drm.c                    | 173 ++++++++++++++++++++-
+ drivers/gpu/drm/msm/dp/dp_drm.h                    |   9 +-
+ drivers/gpu/drm/msm/dp/dp_link.c                   |  36 +++++
+ drivers/gpu/drm/msm/dp/dp_panel.c                  |  22 +++
+ drivers/gpu/drm/msm/dp/dp_panel.h                  |   6 +
+ drivers/gpu/drm/msm/dp/dp_reg.h                    |  27 ++++
+ include/drm/drm_atomic.h                           |   7 +
+ 22 files changed, 683 insertions(+), 43 deletions(-)
+
+-- 
+2.7.4
 
