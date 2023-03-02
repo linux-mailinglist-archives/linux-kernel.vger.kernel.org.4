@@ -2,67 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C896A826A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2006A827B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjCBMj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
+        id S229644AbjCBMlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjCBMjW (ORCPT
+        with ESMTP id S229610AbjCBMlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:39:22 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA3515541;
-        Thu,  2 Mar 2023 04:39:13 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id p6so16538658plf.0;
-        Thu, 02 Mar 2023 04:39:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677760753;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+LXlqIeNp8LEupB8hKVZMY8i9ZwtQRmL/aw5lsfFuKU=;
-        b=VIaN60ZkgYiUYRl03IfK7KUvb5pOpEQ95QxUoFaxXLGl58dE+V5v/+D90jOyLrN6iF
-         uwmRjTccr+mNAWQPMtyi5XKZZhQBYmP4RQ/Y41Oy/ftk4g6wqAv76QzrKKHtCtIq3Whi
-         iDSTRdqC1CzTUvqFMWzj0mRu0/+LxSpJrBiiJaLNrxXFDy68HJKcI5bhHq6m9+WDLJuJ
-         oEjH2iWE4iWlq3CBal4xIamHSt5wquBsFzD/POr05zlv6lqJbRWCmYlbX3ofBNprdjtm
-         2sVnmGCCv3rAU635CaEGWskTcjxC8PIZvlDQI5i6jO8OQV2QhHjmzlc1AaZ74CDl4f2P
-         8vaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677760753;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+LXlqIeNp8LEupB8hKVZMY8i9ZwtQRmL/aw5lsfFuKU=;
-        b=Lfr2mn1PmD3FJ68NM4F8C5GHOsuFE5EM0RZtC1JxC9zU+tU61UM7GJDqNUadycAqeE
-         MDWNyUQbrlQHnawEEV//TFkRQmYvb5ZOXj9DOalUzZ/OGP+cu8igjXbDd0OFeHbKwNJX
-         XgPhvplreBEiV2lY41xcyVUB6cdaJ9Y9wIN9kpiAB6RulXKBWW900Z458hUQxI6Bj8xe
-         5AD7YEHvrkAX8iBcAHbUMB3xTIqvDtfDNxmTLEPto/gbZHeWeOV08Adugt9AxK2Velsi
-         8xW/Q5byvOrR+bkE5+uLO+iSOBVIREYoP6Kl0Z9AgNHLFFPYGkM4VqKUAGOizEbxhx2H
-         X1Ag==
-X-Gm-Message-State: AO0yUKVTTjI7DztC7FVivrHglTOzeKc+Pm+pjefkuJCCswYvWoOWMJzH
-        UBEnLdW8C2VCogfjz0la6mZpA9N6qm4ZBw==
-X-Google-Smtp-Source: AK7set/A8EbzED/MWzofxxiKkcgIO7/nyw90AJEsO4XYL6NG/5MAWINHprbSrqjRiHdbW+W9O7Tq/Q==
-X-Received: by 2002:a17:902:db04:b0:19d:f7e:9864 with SMTP id m4-20020a170902db0400b0019d0f7e9864mr12108322plx.57.1677760753284;
-        Thu, 02 Mar 2023 04:39:13 -0800 (PST)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id v8-20020a170902b7c800b001948ff5cc32sm10236881plz.215.2023.03.02.04.39.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 04:39:13 -0800 (PST)
-From:   harperchen <harperchen1110@gmail.com>
-To:     mchehab@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, daniel.lee.kruse@proton.me,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        harperchen <harperchen1110@gmail.com>
-Subject: [PATCH] media: cx23885: Fix a null-ptr-deref bug in buffer_prepare() and buffer_finish()
-Date:   Thu,  2 Mar 2023 12:39:05 +0000
-Message-Id: <20230302123905.762755-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Thu, 2 Mar 2023 07:41:47 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2055.outbound.protection.outlook.com [40.107.21.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C27498B5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:41:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X6BfUFwMxBG29ON2/C3di1XmBBhcvfmdMFJdYMYWMbVF8KRtyqMn050wG0y2MBtGYUdU9khpahWrgBfjQMEBHWT8UdBM0++6lGL+uVkOYfYrbNrFzSEX8t5TUJKcG+GM8siFs/u6M3vmGAEesSveFskOFXJcGzr/NFwWFyf040LI95rseszEMWyUYzg9Mk631GmO0rmGEGMW/9r3PVRHlAt6qxuqsWw1kb0zjHPhEgsatNGdTFhyP/oUA9SP9CGwaPToWuHjzQfu+tFWeqL8hHNPknMPiKLcKwZT/go2SM5H4Ihlx3V72fDZhk2m/5Cwna8Hp2/3IL8xdZOsKvLinw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TrwQhU0q8pA2DL9u5e2P0tkoSCOTiVokBgBDBOJf+MM=;
+ b=LxwN5W3HU1iMZ5wupZIlP+GDhqdACp2xQdmF18nrSU0mNm3SdSIuunnBa3MXCY57mdVFsQHhO5b7eWIPT4xFBvXTIZYEiQMKx3Eiulwi1zIZmrektmFX8NjR1T/sOgj+PaYrbkE8MTyX+ikk0cMEMQjoZhKnyMN7GKQfdr2SvqgMWRZxK1+9sXUhxW0qP9yXcavtWqReHogR51eEC0JcTvBJzBAidKpRw1HGvTMf7/l3WCSekwjnxLlbF6icVTIWWDyROloItxcIPWYIacVeDwm2Jiq9IOISczMnIevOTnmo9Ft82/GFBTtygkNmVWtgrpq9FTqxnNFrN/MxldAR2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TrwQhU0q8pA2DL9u5e2P0tkoSCOTiVokBgBDBOJf+MM=;
+ b=P3g7MjjecuGgViI0HwAcJRUXGaMv7QrJHI2GTiKgJjJLg/SPGIvBw0jlTe4oNviBgDBlErCEFpOVk/N6SQyUdPdpScn6lXfD3wE07islW8HFlS8SzCbAq4o5Ess+40ufqlA9ZnOGjpLwrKk1m8Zwu1okQ4CbuLE0T0aSm/IN/+A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VI1PR08MB4544.eurprd08.prod.outlook.com (2603:10a6:803:100::13)
+ by DB9PR08MB8673.eurprd08.prod.outlook.com (2603:10a6:10:3d3::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
+ 2023 12:41:39 +0000
+Received: from VI1PR08MB4544.eurprd08.prod.outlook.com
+ ([fe80::cbc1:150c:e3af:5ee7]) by VI1PR08MB4544.eurprd08.prod.outlook.com
+ ([fe80::cbc1:150c:e3af:5ee7%7]) with mapi id 15.20.6156.018; Thu, 2 Mar 2023
+ 12:41:39 +0000
+From:   Gerald Loacker <gerald.loacker@wolfvision.net>
+To:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>
+Subject: [PATCH] drm/rockchip: vop2: add polarity flags to RGB output
+Date:   Thu,  2 Mar 2023 13:39:49 +0100
+Message-Id: <20230302123949.957998-1-gerald.loacker@wolfvision.net>
+X-Mailer: git-send-email 2.37.2
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0502CA0033.eurprd05.prod.outlook.com
+ (2603:10a6:803:1::46) To VI1PR08MB4544.eurprd08.prod.outlook.com
+ (2603:10a6:803:100::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR08MB4544:EE_|DB9PR08MB8673:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35fbd6fc-f654-4cd3-d436-08db1b1b7817
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: il5oqvPi5jdFRXi2qBLXlVjwodYzAGf8fCUwzeTKUAqk83HB+KccYYPuxnaWzsyMgltgxgP2qoT9KrIgq+HudnMgCSV1Sxrus6+W8xVv5MEJihgXP/DqRcXosLE7PvJPnxHz551axy+AhejVz7fCp6xCYMTxLDWnX85BXExRznuPRf3AvFhYKE5zTqHjV6p7PwpFoxztz3YWZLHIy4FOfJjNzcCjSp43tBoXJmPtdmKwhbRQsG4d6ZoKeBI8TuQea9UqYtzjzsqLdDsCDH8cpLsE2vmbdnUhYgrVcy4DbvF5/MhEiav5p5s4UAGr6VQH4oP/GB6eLHVy1UX8epcO3GE/Yf3GJNDbSsHebfGDtGHtITuT4lR5KvhUmCLDhr+WFz5eX5KXQbx/zGrLnN++/zDhtAljNhT1dDTAJ379v6l3WuzSuAVyY3i8AxLMYa7lAH/K96JKeCKBkfksHSSIkK8+q9RcSgwpgUPRLTqLnCH4gpEKD+eNQjmmGtGMG7ftw+mvZnDJwFxSs5FvBFAKkOW8p+yT9vzFTs/jWl4T93iM+WTwThsZ0Gt9N3g9SjQ2DI0tnfYytg8Ylz/bkXs97UuAwHmEOkR+PIZQjV0Dg1XyYGttc0itaE3zjpluwVJbyHtkH/aBqYNR5jKtZGplgmAxsH1BDBw+Td9+vciZu7jgyX78FUO3LLI+GV+lt2Ji/x05dDwjEAOmTFUSTut4Yw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4544.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(39850400004)(136003)(396003)(376002)(451199018)(66946007)(4326008)(66476007)(8676002)(66556008)(41300700001)(26005)(6666004)(6512007)(186003)(6506007)(107886003)(1076003)(36756003)(86362001)(4744005)(44832011)(2906002)(38350700002)(8936002)(5660300002)(38100700002)(83380400001)(54906003)(316002)(6486002)(2616005)(478600001)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ctFbKZH7axD3X417Fb6lC/J0DDvKeyIjKoJMMDhO7e+fKDehASGneHRiSb4E?=
+ =?us-ascii?Q?ogQrudiWHZvgVXly8eJ1LT5VaFoBq4f3wySrSPahbXpSOTi/J4YIFSgIPZS1?=
+ =?us-ascii?Q?ye6l9YCbkATiE0A0pkyCW4n4ct9YgV59b4KC1H/LD2Gx3MBv3donZGHG2CoG?=
+ =?us-ascii?Q?Y/jtcAs6tQNLkfu5OaP1uIbgyBRR6RB6zud80h9C0Dx3f/mTXd13j4yD8sMZ?=
+ =?us-ascii?Q?iA0nTi2+nv7CzFWlTTeHIFBXjIBpK+a0KkVK2Of7eY6dyst8UUj6ibug98mj?=
+ =?us-ascii?Q?KO52Timhwyg2HIJcaRMliyYijhnm+KZ11W3ScwINRi3ts+0eYFULOBm098Gj?=
+ =?us-ascii?Q?vCAJPij2LGD4ruGvuj3QlZwKLBlWy3QlJgJfiK1lpX0widIYEFoVD42kwaX6?=
+ =?us-ascii?Q?AvnAZ76iu+PQk5JnAuSnl+cAXIEJ66mtw4oBhpFtQ4jiMAVCjgkHHe9qk8Be?=
+ =?us-ascii?Q?UUGQsOqPy0w5v1leJPGox8AoRlWdIx+VM9Lt5gLgVph7LkzONnnLuioZ23Hl?=
+ =?us-ascii?Q?cI9hch4a6nq8ccvt5ge3OQjVs4yMJizApyLV/mv6S3U7VPfceS9gwTU9R1/t?=
+ =?us-ascii?Q?EUhFo9otaJschRw538MShQ2DzCTFbzl549F2aag78ez2IpAVNKK0s7EXF8RM?=
+ =?us-ascii?Q?UcQpzg1pOqXARmMjX7/bq9xrQQakTXOqVld+NhEpGTdsxzaBZb6WXEqReFL+?=
+ =?us-ascii?Q?aPIlGlKaTtA6Vx3er7TxtP7bRJk4myv4QziNYZjWgD+IoI/G7jC9DeE8qc6l?=
+ =?us-ascii?Q?YIVCbjT6lBCEuSmLZs9oqisEe58648Nj9RA0+ckDsYBO3Dx/mTD7Rc/bSeAb?=
+ =?us-ascii?Q?MsTQKtcwPaghuS02YYqb0xV/u6kJB7M9PSZ/igW1qc9HtYbKyBSv/zFxpIr+?=
+ =?us-ascii?Q?35DI4IbiQU7A+XFcyweIp7mw/GfEuei8IBbzjllg0ZDIs0dMxKjH3kq3Fsbw?=
+ =?us-ascii?Q?egfQwRmfN6KNLJToP5aj58GTkZCAWxZiHZgPOFSRNHONzEWaGAMgRjq8XPhl?=
+ =?us-ascii?Q?j+uR4Bl6XyVhBW5NBHIXiCgzC9YzOnVy8vcp9SlRo/45rIrMzdQ5daXvlSTT?=
+ =?us-ascii?Q?3PuVBpws4tAi8wgVS0suIcl/SrVtduHCmlSRF1MIYEcWw0l8jd5rFF2QgKBP?=
+ =?us-ascii?Q?+pqTy21Ufyq78l4mmOKHRBE7m648oYUDV+R6lrWWOxFc+Un5nO+qsGe4sHmg?=
+ =?us-ascii?Q?w81P4qEHCnMwwTKKwA1A+JeQLyAsC4hrdQ1ER4IDJBbhPgmVCUGVxszwsEt+?=
+ =?us-ascii?Q?ZEhSAAhy3XH5deg/4P4c5L23uqSNGzGZDiYFQD1nSwTdosoVi/JEi7Ubi5cO?=
+ =?us-ascii?Q?1CUjM8O2PrHZyCJ6hox7LWW+0+ewBbIA13uNk4WfJNHEYngT70JQvKK1NUaq?=
+ =?us-ascii?Q?3d/tN7zHOQ9j+MzdrLSxNkOGEe8wHhCrfMVKk6R742gbDTcpUkMgX/ZnfSM+?=
+ =?us-ascii?Q?Ac6jJUNj987NehAjfQ8FcP071A3H8oPpmuWW6okDXxqfu2CbrTDNivFUPyPv?=
+ =?us-ascii?Q?PM/xkmmUcuXQAlwxtRY9T++PzVm2BB0zZWQPIIQhykFcM+t0+0JT9VtHz1Fd?=
+ =?us-ascii?Q?VaXkWtLlsK1JT72R0s2YWpcHoQv9qC6wYCPm9H1L6hv8akD/As1zmgD23DD8?=
+ =?us-ascii?Q?Cmc0rOP5h2Wfq4HASEMpSp0=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35fbd6fc-f654-4cd3-d436-08db1b1b7817
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB4544.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 12:41:39.7201
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6BiRASMInPPjxIad8QxH2xXdUxXtkGtMkbnz20cCvasKOQOPoNkkSFP1QOLWxnCNFFDg6g1CUqy6aUvkqT0TXNAZP4dDZXdznu0FQBacvHE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB8673
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,100 +119,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the driver calls cx23885_risc_buffer() to prepare the buffer, the
-function call dma_alloc_coherent may fail, resulting in a empty buffer
-risc->cpu. Later when we free the buffer or access the buffer, null ptr
-deref is triggered.
+Use h/v-sync and pixel clock polarity flags for RGB output. For all other
+outputs this is already implemented.
 
-This bug is similar to the following one:
-https://git.linuxtv.org/media_stage.git/commit/?id=2b064d91440b33fba5b452f2d1b31f13ae911d71.
-
-We believe the bug can be also dynamically triggered from user side.
-Similarly, we fix this by checking the return value of cx23885_risc_buffer()
-and the value of risc->cpu before buffer free.
-
-Signed-off-by: harperchen <harperchen1110@gmail.com>
+Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
 ---
- drivers/media/pci/cx23885/cx23885-core.c  |  4 +++-
- drivers/media/pci/cx23885/cx23885-video.c | 13 +++++++------
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
-index 9232a966bcab..2ce2914576cf 100644
---- a/drivers/media/pci/cx23885/cx23885-core.c
-+++ b/drivers/media/pci/cx23885/cx23885-core.c
-@@ -1325,7 +1325,9 @@ void cx23885_free_buffer(struct cx23885_dev *dev, struct cx23885_buffer *buf)
- {
- 	struct cx23885_riscmem *risc = &buf->risc;
- 
--	dma_free_coherent(&dev->pci->dev, risc->size, risc->cpu, risc->dma);
-+	if (risc->cpu)
-+		dma_free_coherent(&dev->pci->dev, risc->size, risc->cpu, risc->dma);
-+	memset(risc, 0, sizeof(*risc));
- }
- 
- static void cx23885_tsport_reg_dump(struct cx23885_tsport *port)
-diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
-index 3d03f5e95786..671fc0588e43 100644
---- a/drivers/media/pci/cx23885/cx23885-video.c
-+++ b/drivers/media/pci/cx23885/cx23885-video.c
-@@ -342,6 +342,7 @@ static int queue_setup(struct vb2_queue *q,
- 
- static int buffer_prepare(struct vb2_buffer *vb)
- {
-+	int ret;
- 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
- 	struct cx23885_dev *dev = vb->vb2_queue->drv_priv;
- 	struct cx23885_buffer *buf =
-@@ -358,12 +359,12 @@ static int buffer_prepare(struct vb2_buffer *vb)
- 
- 	switch (dev->field) {
- 	case V4L2_FIELD_TOP:
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl, 0, UNSET,
- 				buf->bpl, 0, dev->height);
- 		break;
- 	case V4L2_FIELD_BOTTOM:
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl, UNSET, 0,
- 				buf->bpl, 0, dev->height);
- 		break;
-@@ -391,21 +392,21 @@ static int buffer_prepare(struct vb2_buffer *vb)
- 			line0_offset = 0;
- 			line1_offset = buf->bpl;
- 		}
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl, line0_offset,
- 				line1_offset,
- 				buf->bpl, buf->bpl,
- 				dev->height >> 1);
- 		break;
- 	case V4L2_FIELD_SEQ_TB:
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl,
- 				0, buf->bpl * (dev->height >> 1),
- 				buf->bpl, 0,
- 				dev->height >> 1);
- 		break;
- 	case V4L2_FIELD_SEQ_BT:
--		cx23885_risc_buffer(dev->pci, &buf->risc,
-+		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
- 				sgt->sgl,
- 				buf->bpl * (dev->height >> 1), 0,
- 				buf->bpl, 0,
-@@ -418,7 +419,7 @@ static int buffer_prepare(struct vb2_buffer *vb)
- 		buf, buf->vb.vb2_buf.index,
- 		dev->width, dev->height, dev->fmt->depth, dev->fmt->fourcc,
- 		(unsigned long)buf->risc.dma);
--	return 0;
-+	return ret;
- }
- 
- static void buffer_finish(struct vb2_buffer *vb)
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+index 8cecf81a5ae0..e8b61973ade2 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+@@ -1435,6 +1435,8 @@ static void rk3568_set_intf_mux(struct vop2_video_port *vp, int id,
+ 		die &= ~RK3568_SYS_DSP_INFACE_EN_RGB_MUX;
+ 		die |= RK3568_SYS_DSP_INFACE_EN_RGB |
+ 			   FIELD_PREP(RK3568_SYS_DSP_INFACE_EN_RGB_MUX, vp->id);
++		dip &= ~RK3568_DSP_IF_POL__RGB_LVDS_PIN_POL;
++		dip |= FIELD_PREP(RK3568_DSP_IF_POL__RGB_LVDS_PIN_POL, polflags);
+ 		if (polflags & POLFLAG_DCLK_INV)
+ 			regmap_write(vop2->grf, RK3568_GRF_VO_CON1, BIT(3 + 16) | BIT(3));
+ 		else
 -- 
-2.25.1
+2.37.2
 
