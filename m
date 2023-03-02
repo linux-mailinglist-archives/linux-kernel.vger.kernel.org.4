@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6286A8005
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4484C6A800B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjCBKhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
+        id S229515AbjCBKit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjCBKhh (ORCPT
+        with ESMTP id S229498AbjCBKip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:37:37 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2757D3B646
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:37:35 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id q189so9483730pga.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:37:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2DvH5++MlDywKUnWf+1loQwzv2jg1mWmFa8pnuwjqdM=;
-        b=CArXlKRa5bv3qRQell+oUvTIEi+MvMAR9T9N3YQpRL12m7q0/lh+DQRBYtazTeLamN
-         q7z8p5r31Dfjqp3wg350PMMy+EN5mx2LMQ40lZHYsWL9Md8HmIvksmp9QzpRoPA6tXJw
-         +OGzhmJ/UBcbM3aHt/WTCtQGywfYhiGNJ8gVrSfBJfGWxSOepjgSyz9gtcJm9q22UUGn
-         0B3n1KjzjWM4PkN21PNaE/ZHxsDqkwVaud1pRpF2o52WavI8OYG5qh3oV9tB+GXGW0XJ
-         g5ZG3VWgzvRIzScqpqhOF9zm4PaOgC1lWUkq/Cr+GMsLPGRXJl7duV3TIFKTvXQWIyvF
-         gImQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2DvH5++MlDywKUnWf+1loQwzv2jg1mWmFa8pnuwjqdM=;
-        b=syUZoOnAJ+menM1iwpMRTsFHv2mNYapk3gPFvMjP5GyZwnYZ43GNEuU43U0MFSRfDF
-         t9tVMM/ar9Mq0uzwKuZHxk+u4Ym+spIyzTrxUEH8L7Kis/MVw1c2iCpN42Xhwr5RRvXm
-         vky6bmI1nNmrwCtcOMmlyulmgkIkgAwlwL6lBswDvbJFNyq7u53neD5vajyWaPtmZ2Yu
-         C+30mw2zWeLmi8tYLOR0VOPimM7fucshQlPKLysQtiXRJj0FR/je9zEai4SEul85krWe
-         NhA9gi0zZYsS6YpgwFYnjkw04tG8dTM3MQdscRpWYc6VFpm/cujV0FnoaugZAgPCu8hW
-         VZwA==
-X-Gm-Message-State: AO0yUKUaSTZFr5lU9eBl1ln6AdIA76PeAktCAiksgie/r35fYdcWR7/U
-        XzdZPrECw5P9MSPh8g2gESzV8+qBBBHV8kMhaQt1LQLOFPu13rDl
-X-Google-Smtp-Source: AK7set97u0zAstt60brd/DEvp8rkt1vEK1Zs7cBKJ8KNFM0kwIC9D72SwDaTRtCCYH7xz1TcI3XO17bEKAKts14WXxE=
-X-Received: by 2002:a63:b21b:0:b0:503:a8:2792 with SMTP id x27-20020a63b21b000000b0050300a82792mr3273725pge.5.1677753454377;
- Thu, 02 Mar 2023 02:37:34 -0800 (PST)
-MIME-Version: 1.0
-References: <CAJ+vNU2SC_Q3RWdeO9-mKDYC_TK8_vzefvGz_++O8StJer_h3Q@mail.gmail.com>
-In-Reply-To: <CAJ+vNU2SC_Q3RWdeO9-mKDYC_TK8_vzefvGz_++O8StJer_h3Q@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 2 Mar 2023 11:36:58 +0100
-Message-ID: <CAPDyKFq23_vCunapQ=OHFFGXs5a8_cr8w7hBUP=HQ5f2zaTBUg@mail.gmail.com>
-Subject: Re: mmc: core: Disable card detect during shutdown
-To:     Tim Harvey <tharvey@gateworks.com>,
-        Robert Richter <rric@kernel.org>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Tony Lindgren <tony@atomide.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Jan Glauber <jan.glauber@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Thu, 2 Mar 2023 05:38:45 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDC110AA4;
+        Thu,  2 Mar 2023 02:38:42 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PS6yn1MxLz501Ql;
+        Thu,  2 Mar 2023 18:38:41 +0800 (CST)
+Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
+        by mse-fl1.zte.com.cn with SMTP id 322AcWuY047569;
+        Thu, 2 Mar 2023 18:38:32 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Thu, 2 Mar 2023 18:38:35 +0800 (CST)
+Date:   Thu, 2 Mar 2023 18:38:35 +0800 (CST)
+X-Zmail-TransId: 2b0364007cab2e9c168d
+X-Mailer: Zmail v1.0
+Message-ID: <202303021838359696196@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <davem@davemloft.net>
+Cc:     <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <shuah@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhang.yunkai@zte.com.cn>, <xu.xin16@zte.com.cn>,
+        <jiang.xuexin@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIHNlbGZ0ZXN0czogbmV0OiB1ZHBnc29fYmVuY2hfdHg6IEFkZCB0ZXN0IGZvciBJUCBmcmFnbWVudGF0aW9uIG9mIFVEUCBwYWNrZXRz?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 322AcWuY047569
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 64007CB1.000/4PS6yn1MxLz501Ql
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,100 +55,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Robert
+From: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
 
-On Thu, 2 Mar 2023 at 00:32, Tim Harvey <tharvey@gateworks.com> wrote:
->
-> Greetings,
->
-> I've encountered a hang on shutdown on octeontx (CN8030 SoC, THUNDERX
-> architecture) that I bisected to commit 66c915d09b94 ("mmc: core:
-> Disable card detect during shutdown").
->
-> It looks like the OMP5 Pyra ran into this as well related to a
-> malfunctioning driver [1]
->
-> In the case of MMC_CAVIUM_THUNDERX the host controller supports
-> multiple slots each having their own CMD signal but shared clk/data
-> via the following dt:
->
-> mmc@1,4 {
->         compatible = "cavium,thunder-8890-mmc";
->         reg = <0xc00 0x00 0x00 0x00 0x00>;
->         #address-cells = <0x01>;
->         #size-cells = <0x00>;
->         clocks = <0x0b>;
->
->         /* eMMC */
->         mmc-slot@0 {
->                 compatible = "mmc-slot";
->                 reg = <0>;
->                 vmmc-supply = <&mmc_supply_3v3>;
->                 max-frequency = <35000000>;
->                 no-1-8-v;
->                 bus-width = <8>;
->                 no-sdio;
->                 no-sd;
->                 mmc-ddr-3_3v;
->                 cap-mmc-highspeed;
->         };
->
->         /* microSD */
->         mmc-slot@1 {
->                 compatible = "mmc-slot";
->                 reg = <1>;
->                 vmmc-supply = <&mmc_supply_3v3>;
->                 max-frequency = <35000000>;
->                 no-1-8-v;
->                 broken-cd;
->                 bus-width = <4>;
->                 cap-sd-highspeed;
->         };
-> };
->
-> mmc_add_host is only called once for mmc0 and I can't see any printk
+The UDP GSO bench only tests the performance of userspace payload splitting
+and UDP GSO. But we are also concerned about the performance comparing with
+IP fragmentation and UDP GSO. In other words comparing IP fragmentation and
+segmentation.
 
-That looks wrong. There needs to be one mmc host registered per slot,
-otherwise things will, for sure, not work.
+So we add testcase of IP fragmentation of UDP packets, then user would easy
+to get to know the performance promotion of UDP GSO compared with IP
+fragmentation. We add a new option "-f", which is to send big data using
+IP fragmentation instead of using UDP GSO or userspace payload splitting.
 
-I suggest you have a closer look to see what goes on in thunder_mmc_probe().
+In the QEMU environment we could see obvious promotion of UDP GSO.
+The first test is to get the performance of userspace payload splitting.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST"
+udp tx:     21 MB/s    15162 calls/s    361 msg/s
+udp tx:     21 MB/s    15498 calls/s    369 msg/s
+udp tx:     18 MB/s    13440 calls/s    320 msg/s
+udp tx:     19 MB/s    13776 calls/s    328 msg/s
 
-> debugging added to __mmc_stop_host (maybe because serial/console has
-> been disabled by that point?).
+The second test is to get the performance of IP fragmentation.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST" -f
+udp tx:     41 MB/s      711 calls/s    711 msg/s
+udp tx:     41 MB/s      700 calls/s    700 msg/s
+udp tx:     43 MB/s      738 calls/s    738 msg/s
+udp tx:     40 MB/s      693 calls/s    693 msg/s
 
-The serial console should work fine at this point, at least on those
-systems that I have tested this code with.
+The third test is to get the performance of UDP GSO.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
+udp tx:     45 MB/s      775 calls/s    775 msg/s
+udp tx:     47 MB/s      800 calls/s    800 msg/s
+udp tx:     47 MB/s      814 calls/s    814 msg/s
+udp tx:     47 MB/s      812 calls/s    812 msg/s
 
-Perhaps you added the debug print too late in the function, if the
-calls to disable_irq() or cancel_delayed_work_sync() are hanging?
+v2: Suggested by Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+- Use IP_PMTUDISC_OMIT to disable PMTU discovery and to avoid send
+  returning with error after ICMP destination unreachable messages if MTU
+  is exceeded in the path.
 
->
-> It appears that what causes this hang is the 'broken-cd' which enables
-> the detect change polling on mmc1. I have the ability to flip the CMD
-> signal routing thus making mmc0 the microSD and mmc1 the eMMC and when
-> I do that there isn't an issue so I think what happens is in the case
-> where mmc polling is enabled on mmc1 but not mmc0 (as above) the
-> polling causes a hang after __mmc_stop_host() is called for mmc0.
+Signed-off-by: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+Reviewed-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
+Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
+Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
+---
+ tools/testing/selftests/net/udpgso_bench_tx.c | 49 ++++++++++++++++++++++-----
+ 1 file changed, 40 insertions(+), 9 deletions(-)
 
-The code in __mmc_stop_host() has been tested for both polling and
-gpio card detections. That said, it looks to me that there is
-something weird going on in the cavium mmc driver.
+diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+index 477392715a9a..b3333b39bb87 100644
+--- a/tools/testing/selftests/net/udpgso_bench_tx.c
++++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+@@ -64,6 +64,7 @@ static int	cfg_runtime_ms	= -1;
+ static bool	cfg_poll;
+ static int	cfg_poll_loop_timeout_ms = 2000;
+ static bool	cfg_segment;
++static bool	cfg_fragment;
+ static bool	cfg_sendmmsg;
+ static bool	cfg_tcp;
+ static uint32_t	cfg_tx_ts = SOF_TIMESTAMPING_TX_SOFTWARE;
+@@ -375,6 +376,21 @@ static int send_udp_sendmmsg(int fd, char *data)
+ 	return ret;
+ }
 
-What makes this even tricker, is that it's uncommon and not
-recommended to use more than one mmc slot per host instance.
++static int send_udp_fragment(int fd, char *data)
++{
++	int ret;
++
++	ret = sendto(fd, data, cfg_payload_len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
++			cfg_connected ? NULL : (void *)&cfg_dst_addr,
++			cfg_connected ? 0 : cfg_alen);
++	if (ret == -1)
++		error(1, errno, "write");
++	if (ret != cfg_payload_len)
++		error(1, errno, "write: %uB != %uB\n", ret, cfg_payload_len);
++
++	return 1;
++}
++
+ static void send_udp_segment_cmsg(struct cmsghdr *cm)
+ {
+ 	uint16_t *valp;
+@@ -429,7 +445,7 @@ static int send_udp_segment(int fd, char *data)
 
->
-> Any ideas?
+ static void usage(const char *filepath)
+ {
+-	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
++	error(1, 0, "Usage: %s [-46acfmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
+ 		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+ 		    filepath);
+ }
+@@ -440,7 +456,7 @@ static void parse_opts(int argc, char **argv)
+ 	int max_len, hdrlen;
+ 	int c;
 
-I hope the above thoughts can point you in a direction to narrow down
-this problem.
+-	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
++	while ((c = getopt(argc, argv, "46acC:D:fHl:L:mM:p:s:PS:tTuvz")) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			if (cfg_family != PF_UNSPEC)
+@@ -469,6 +485,9 @@ static void parse_opts(int argc, char **argv)
+ 		case 'l':
+ 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
+ 			break;
++		case 'f':
++			cfg_fragment = true;
++			break;
+ 		case 'L':
+ 			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
+ 			break;
+@@ -527,10 +546,10 @@ static void parse_opts(int argc, char **argv)
+ 		error(1, 0, "must pass one of -4 or -6");
+ 	if (cfg_tcp && !cfg_connected)
+ 		error(1, 0, "connectionless tcp makes no sense");
+-	if (cfg_segment && cfg_sendmmsg)
+-		error(1, 0, "cannot combine segment offload and sendmmsg");
+-	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg))
+-		error(1, 0, "Options -T and -H require either -S or -m option");
++	if ((cfg_segment + cfg_sendmmsg + cfg_fragment) > 1)
++		error(1, 0, "cannot combine segment offload, fragment and sendmmsg");
++	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg || cfg_fragment))
++		error(1, 0, "Options -T and -H require either -S or -m or -f option");
 
->
-> Best Regards,
->
-> Tim
->
-> [1] https://lore.kernel.org/all/55A0788B-03E8-457E-B093-40FD93F1B9F3@goldelico.com/
+ 	if (cfg_family == PF_INET)
+ 		hdrlen = sizeof(struct iphdr) + sizeof(struct udphdr);
+@@ -551,14 +570,24 @@ static void set_pmtu_discover(int fd, bool is_ipv4)
+ {
+ 	int level, name, val;
 
-Kind regards
-Uffe
++	/* IP fragmentation test uses IP_PMTUDISC_OMIT to disable PMTU discovery and
++	 * to avoid send returning with error after ICMP destination unreachable
++	 * messages if MTU is exceeded in the path.
++	 */
+ 	if (is_ipv4) {
+ 		level	= SOL_IP;
+ 		name	= IP_MTU_DISCOVER;
+-		val	= IP_PMTUDISC_DO;
++		if (cfg_segment)
++			val	= IP_PMTUDISC_DO;
++		else if (cfg_fragment)
++			val	= IP_PMTUDISC_OMIT;
+ 	} else {
+ 		level	= SOL_IPV6;
+ 		name	= IPV6_MTU_DISCOVER;
+-		val	= IPV6_PMTUDISC_DO;
++		if (cfg_segment)
++			val	= IPV6_PMTUDISC_DO;
++		else if (cfg_fragment)
++			val	= IPV6_PMTUDISC_OMIT;
+ 	}
+
+ 	if (setsockopt(fd, level, name, &val, sizeof(val)))
+@@ -674,7 +703,7 @@ int main(int argc, char **argv)
+ 	    connect(fd, (void *)&cfg_dst_addr, cfg_alen))
+ 		error(1, errno, "connect");
+
+-	if (cfg_segment)
++	if (cfg_segment || cfg_fragment)
+ 		set_pmtu_discover(fd, cfg_family == PF_INET);
+
+ 	if (cfg_tx_tstamp)
+@@ -695,6 +724,8 @@ int main(int argc, char **argv)
+ 			num_sends += send_udp_segment(fd, buf[i]);
+ 		else if (cfg_sendmmsg)
+ 			num_sends += send_udp_sendmmsg(fd, buf[i]);
++		else if (cfg_fragment)
++			num_sends += send_udp_fragment(fd, buf[i]);
+ 		else
+ 			num_sends += send_udp(fd, buf[i]);
+ 		num_msgs++;
+-- 
+2.15.2
