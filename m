@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4566D6A8305
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 717716A8310
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjCBM7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
+        id S229625AbjCBNBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:01:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbjCBM7A (ORCPT
+        with ESMTP id S229504AbjCBNBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:59:00 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269E528215
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:58:47 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id g3so11745030eda.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:58:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677761925;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2vVmmF2sI36t+dGidCoWeCzXUPaa6cM0yHfnPJQrwvs=;
-        b=iyt20uqVFfkgyTkctVAvDZBFnnRN4DWQ+rcJp97tmuIUL6e1KbZdg5sPhd9wSNev92
-         TPh6QuSgs9IhlckgwHWn63+pjXuXyNBOwXdOqdoohO2uudkYtCMNkSig0KpVRi4rwaHq
-         VYud+w7JKGAId/rR6WmYMaWcMeg5n21FdL0EXP0F0DCxzd8S/c6CDfECsR/GKXkoOOFJ
-         4qbSkcwU0k0rI4NfWgLP+dzAqWuvbgvJFl+9w7CPmiwFiIfgep9B4bTRez31pweIZiuB
-         VeJFlU4ND0hlbFtj58Mc3P62nrWUqQ9raJy3cInOVy7o3bVdyGW5SQ9XD9VER0FAHUZ0
-         M+ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677761925;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2vVmmF2sI36t+dGidCoWeCzXUPaa6cM0yHfnPJQrwvs=;
-        b=XASdmQ9f92o7jbhkfh7SxM47BmujNBwOsHE2xpcLvY37InDoJp/ohjff2EsSZzwYqk
-         D9zaXcltc5T6NRjAE/r8SaWYReX9AJ6u8brQKZoK7P6PBuLdLzU+ngxqBG4cnHAsQkTf
-         Q39Sk6zGQErfECvA8E42CHoLjBFVc/GcYxx0YA9cemVKvYdSy6KdLcY0yVqtL3TEDmEd
-         a26c9i3JcMYQGgOe30cGr3mTTF30FN0JnAUdNmR+3Ve2fia4hIMcD6WLkQYxcaCoGUOK
-         5gozPlVpEoH0EMR+YAb4OyOzGhLCXgBC+y3K1P2P/JfRq1b6bT0fsV1gpfW5aqHwPdxj
-         /uLw==
-X-Gm-Message-State: AO0yUKU3CE8xAoHqZ3Dsd3TKr+1vPsndy7QeiUXI7TzwWxreR7w9foQG
-        C8Z58y3GCY+psl7wkIo8LzxmMw==
-X-Google-Smtp-Source: AK7set9yzFoHBRZALvxYMI2qZ2Dhgl4YUhY3JtG91zpveRyK5yXkIoq9AHTSTjq6ovYpZ7Ra0ZwR7w==
-X-Received: by 2002:aa7:c98c:0:b0:4ac:bdf3:36ca with SMTP id c12-20020aa7c98c000000b004acbdf336camr11290426edt.10.1677761925672;
-        Thu, 02 Mar 2023 04:58:45 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id d27-20020a50cd5b000000b004c0eac41829sm463097edj.63.2023.03.02.04.58.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 04:58:45 -0800 (PST)
-Message-ID: <d29d44b2-3848-e64e-c397-9ccf6dba7eaa@linaro.org>
-Date:   Thu, 2 Mar 2023 13:58:43 +0100
+        Thu, 2 Mar 2023 08:01:23 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221323251E;
+        Thu,  2 Mar 2023 05:01:21 -0800 (PST)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4D37820003;
+        Thu,  2 Mar 2023 13:01:18 +0000 (UTC)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Subject: [PATCH 1/2] HID: logitech-hidpp: Don't use the USB serial for USB devices
+Date:   Thu,  2 Mar 2023 14:01:16 +0100
+Message-Id: <20230302130117.3975-1-hadess@hadess.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 5/5] dt-bindings: gpio: Add Loongson-1 GPIO
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230302125215.214014-1-keguang.zhang@gmail.com>
- <20230302125215.214014-6-keguang.zhang@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230302125215.214014-6-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2023 13:52, Keguang Zhang wrote:
-> Add devicetree binding document for Loongson-1 GPIO.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
-> V1 -> V2: Use the same consistent quotes
->           Delete superfluous examples
-> ---
+For devices that support the 0x0003 feature (Device Information) version 4,
+set the serial based on the output of that feature, rather than relying
+on the usbhid code setting the USB serial.
 
+This should allow the serial when connected through USB to (nearly)
+match the one when connected through a unifying receiver.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+For example, on the serials on a G903 wired/wireless mouse:
+- Unifying: 4067-e8-ce-cd-45
+- USB before patch: 017C385C3837
+- USB after patch: c086-e8-ce-cd-45
 
-Best regards,
-Krzysztof
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/hid/hid-logitech-hidpp.c | 51 ++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index c7d81b4241ad..99ce2c49facc 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -969,6 +969,55 @@ static int hidpp_root_get_protocol_version(struct hidpp_device *hidpp)
+ 	return 0;
+ }
+ 
++/* -------------------------------------------------------------------------- */
++/* 0x0003: Device Information                                                 */
++/* -------------------------------------------------------------------------- */
++
++#define HIDPP_PAGE_DEVICE_INFORMATION			0x0003
++
++#define CMD_GET_DEVICE_INFO				0x00
++
++static int hidpp_get_serial(struct hidpp_device *hidpp, u32 *serial)
++{
++	struct hidpp_report response;
++	u8 feature_type;
++	u8 feature_index;
++	int ret;
++
++	ret = hidpp_root_get_feature(hidpp, HIDPP_PAGE_DEVICE_INFORMATION,
++				     &feature_index,
++				     &feature_type);
++	if (ret)
++		return ret;
++
++	ret = hidpp_send_fap_command_sync(hidpp, feature_index,
++					  CMD_GET_DEVICE_INFO,
++					  NULL, 0, &response);
++	if (ret)
++		return ret;
++
++	/* See hidpp_unifying_get_serial() */
++	*serial = *((u32 *)&response.rap.params[1]);
++	return 0;
++}
++
++static int hidpp_serial_init(struct hidpp_device *hidpp)
++{
++	struct hid_device *hdev = hidpp->hid_dev;
++	u32 serial;
++	int ret;
++
++	ret = hidpp_get_serial(hidpp, &serial);
++	if (ret)
++		return ret;
++
++	snprintf(hdev->uniq, sizeof(hdev->uniq), "%04x-%4phD",
++		 hdev->product, &serial);
++	dbg_hid("HID++ DeviceInformation: Got serial: %s\n", hdev->uniq);
++
++	return 0;
++}
++
+ /* -------------------------------------------------------------------------- */
+ /* 0x0005: GetDeviceNameType                                                  */
+ /* -------------------------------------------------------------------------- */
+@@ -4398,6 +4447,8 @@ static int hidpp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 
+ 	if (hidpp->quirks & HIDPP_QUIRK_UNIFYING)
+ 		hidpp_unifying_init(hidpp);
++	else if (hid_is_usb(hidpp->hid_dev))
++		hidpp_serial_init(hidpp);
+ 
+ 	connected = hidpp_root_get_protocol_version(hidpp) == 0;
+ 	atomic_set(&hidpp->connected, connected);
+-- 
+2.39.2
 
