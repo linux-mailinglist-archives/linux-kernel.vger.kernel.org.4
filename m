@@ -2,187 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3F36A7983
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851956A7988
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjCBCb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 21:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S229702AbjCBCdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 21:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjCBCbZ (ORCPT
+        with ESMTP id S229470AbjCBCdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 21:31:25 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD08C497C9
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 18:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677724283; x=1709260283;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zXsz0L2xHLtSQ1rP40WgNGCJVV1zdFVoJYTu07FMoLE=;
-  b=GGeolP/NG3bwKh8mX9aU+xvCZfVZD9k5EPyldNPVRKAUzcI+f+YZzvUp
-   J5U9N7+5jApG1Z8gFXdr0kpm6t4wwfI+YnFsUgVTi0iCIl7QPdPus1ONd
-   MkXEk6A/VQTVs17XoIm8NKVupdfGHwdTZ8RzJnb4phKt57wFrnOjFlg99
-   W8mezo+86MydkS4gFejFAvO3x96Y63K9Ka6Z8NEgqGzu5a9P6CeGh/HtE
-   I83VE+H6YxLCWkbISjzkW0W1OzzC0kVtO22imdo0SRrKk4CLG9S8zHT82
-   vcUClB67JClXln9A7K6f+fALEydSkWC+Rk5y3KqOorGIcYD3XnIcF0Qks
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322865160"
-X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
-   d="scan'208";a="322865160"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 18:31:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="677002232"
-X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
-   d="scan'208";a="677002232"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Mar 2023 18:31:17 -0800
-Message-ID: <da143a6f-3eda-0292-d86b-a9283ba61a72@linux.intel.com>
-Date:   Thu, 2 Mar 2023 10:30:25 +0800
+        Wed, 1 Mar 2023 21:33:35 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9E91ACE3
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 18:33:31 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id a2so5671162plm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 18:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1677724410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b0lZNoVt9lJ6J8uwaJdMmpDSpbdScMq/0KTuhIjVkUQ=;
+        b=LBK+rKiKoXKZ/dbsn6xOP1h/1DdhUKpftUh9e+mkGx24Ct1QSUdx91ynl9oxmsdOmu
+         AY8rWlxThr7PyU90SvB4UXjE6M5VHvjWx4KfK9GsYGkN3hLA/9NX+ZGRYO521cn5HoV/
+         L4jLAkDTaJkUj2nKsaBy/Az+XIjOhnJpuKJKZ477nIPry0z8rgcjlZ2QsKxicDEtQVKp
+         qFpzchl85bH4lVPP54ms7k/a61sS9zFQWXTwWJRVD0naVRlEs9F3Hyi4XBBHf5kj6brb
+         ssow4TEkTpN1pS5sL1n+r5CheMH8kPZkPSRkwSE7afnWqqvApSlU63NoKvUKbd68prZj
+         EoXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677724410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b0lZNoVt9lJ6J8uwaJdMmpDSpbdScMq/0KTuhIjVkUQ=;
+        b=oqtcDEk3Jr6kEuJR9h06j7st+Ma6LstgyDrdaNiveN3bsDbL/fdqeVnEaGWOGNlbAn
+         ESDL8I9iOnXOCRGUaxSZEHdFFcNPBzw8RsWHnY+5Dzfq0N2qjX4A48m7YMviPHnM7PPz
+         E6G3jbnMc3h+n1uJosVcpPgGSQu8nWOm7TW8/e0NbbJwRjrZb+KRUTvF5H1ia7I6DTVS
+         lSNxu6iiSpsk3dhxWy+eHQnUYR0VSvzqxOiuFxRBDTmzri+aVfxgf9bfzkCLrwx1pRGe
+         NgkEvfCHOQ3uePQVbJvEyJ/iVUJ0lQIm1am0/aEM/Bxbn5x/1lwJGhOMKkq6QRp/1Y/S
+         BosA==
+X-Gm-Message-State: AO0yUKUdxv76m8tBecw57tDjqKleYWQzL6eC4nsabvs0GI0b0a+eeSU1
+        +YBh1t0ld0JTz8WRK1zMl0pQKVtMRgzopz2DvwrR
+X-Google-Smtp-Source: AK7set+xzLCM6twBgJCibMqi0G3TLp91UnzEQU5FoUMwEXykcRoWlNU/HbsG/K6w+XprDCA87nJQJ5CJfxasDk2ZryU=
+X-Received: by 2002:a17:903:2782:b0:19b:373:94ad with SMTP id
+ jw2-20020a170903278200b0019b037394admr3206594plb.3.1677724410550; Wed, 01 Mar
+ 2023 18:33:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Kevin Tian <kevin.tian@intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] iommu/vt-d: Add opt-in for ATS support on discrete
- devices
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20230228023341.973671-1-baolu.lu@linux.intel.com>
- <Y/3yNaQD5Pkvf61k@nvidia.com>
- <3891a9a8-c796-2644-9473-aafc9ecea64e@linux.intel.com>
- <Y/9bWMoAYF10ynO3@nvidia.com> <0f162421-479e-6ab3-bbaf-0090b1a2472c@arm.com>
- <Y/+OobufnmGhg/R7@nvidia.com> <9aec8741-9394-60ad-70c5-f8da773d7da8@arm.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <9aec8741-9394-60ad-70c5-f8da773d7da8@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-4-git-send-email-wufan@linux.microsoft.com>
+ <061df661004a06ef1e8790d48157c7ba4ecfc009.camel@huaweicloud.com> <20230210232154.GA17962@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20230210232154.GA17962@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 1 Mar 2023 21:33:19 -0500
+Message-ID: <CAHC9VhShcgFtdxxoFX9x+QOM3Qb7xWa-AJuJGrHgaK_N8nKtzQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 03/16] ipe: add evaluation loop and introduce
+ 'boot_verified' as a trust provider
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 2:19 AM, Robin Murphy wrote:
-> On 2023-03-01 17:42, Jason Gunthorpe wrote:
->> On Wed, Mar 01, 2023 at 05:15:33PM +0000, Robin Murphy wrote:
->>> On 2023-03-01 14:04, Jason Gunthorpe wrote:
->>>> On Wed, Mar 01, 2023 at 12:22:23PM +0800, Baolu Lu wrote:
->>>>> On 2/28/23 8:23 PM, Jason Gunthorpe wrote:
->>>>>> On Tue, Feb 28, 2023 at 10:33:41AM +0800, Lu Baolu wrote:
->>>>>>> In normal processing of PCIe ATS requests, the IOMMU performs 
->>>>>>> address
->>>>>>> translation and returns the device a physical memory address which
->>>>>>> will be stored in that device's IOTLB. The device may subsequently
->>>>>>> issue Translated DMA request containing physical memory address. The
->>>>>>> IOMMU only checks that the device was allowed to issue such requests
->>>>>>> and does not attempt to validate the physical address.
->>>>>>>
->>>>>>> The Intel IOMMU implementation only allows PCIe ATS on several SOC-
->>>>>>> integrated devices which are opt-in’ed through the ACPI tables to
->>>>>>> prevent any compromised device from accessing arbitrary physical
->>>>>>> memory.
->>>>>>>
->>>>>>> Add a kernel option intel_iommu=relax_ats to allow users to have an
->>>>>>> opt-in to allow turning on ATS at as wish, especially for CSP-owned
->>>>>>> vertical devices. In any case, risky devices are not allowed to use
->>>>>>> ATS.
->>>>>> Why is this an intel specific option?
->>>>>
->>>>> I only see similar situation on ARM SMMUv3 platforms. The device 
->>>>> ATS is
->>>>> only allowed when the ATS bit is set in RC node of the ACPI/IORT 
->>>>> table.
->>>>
->>>> It should be common, all iommus using ATS need this logic.
->>>
->>> The IORT flags are not this kind of policy, they are a necessary 
->>> description
->>> of the hardware. The mix-and-match nature of licensable IP means that 
->>> just
->>> because an SMMU supports the ATS-relevant features defined by the SMMU
->>> architecture, that doesn't say that whatever PCIe IP the customer has 
->>> chosen
->>> to pair it with also supports ATS. Even when both ends nominally 
->>> support it,
->>> it's still possible to integrate them together in ways where ATS 
->>> wouldn't be
->>> functional.
->>>
->>> In general, if a feature is marked as unsupported in IORT, the only 
->>> way to
->>> "relax" that would be if you have a silicon fab handy. If any system 
->>> vendor
->>> *was* to misuse IORT to impose arbitrary and unwelcome usage policy 
->>> on their
->>> customers, then those customers should demand a firmware update (or 
->>> at least
->>> use their own patched IORT, which is pretty trivial with the kernel's
->>> existing ACPI table override mechanism).
->>
->> This makes sense.
->>
->> I think Intel has confused their version of the IORT.
->>
->> The ACPI tables read by the iommu driver should be strictly about
->> IOMMU HW capability, like Robin describes for ARM.
->>
->> Security policy flows through the ExternalFacingPort ACPI via
->> pci_acpi_set_external_facing() and triggers pdev->untrusted.
->>
->> When an iommu driver sees pdev->untrusted it is supposed to ensure
->> that translated TLPs are blocked. Since nothing does this explicitly
->> it is presumably happening because ATS being disabled also blocks
->> translated TLPs and we check untrusted as part of pci_enable_ats()
-> 
-> At least for SMMU, we seem to be relying on pci_ats_supported() 
-> including pdev->untrusted in its decision - that will propagate back to 
-> master->ats_enabled = false inside the driver, which in turn will lead 
-> to arm_smmu_write_strtab_ent() leaving STE.EATS at the default setting 
-> which aborts all translation requests and translated transactions.
+On Fri, Feb 10, 2023 at 6:21=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
+> On Tue, Jan 31, 2023 at 04:49:44PM +0100, Roberto Sassu wrote:
+> > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > >
+> > > IPE must have a centralized function to evaluate incoming callers
+> > > against IPE's policy. This iteration of the policy against the rules
+> > > for that specific caller is known as the evaluation loop.
+> >
+> > Not sure if you check the properties at every access.
+> >
+> > >From my previous comments (also for previous versions of the patches)
+> > you could evaluate the property once, by calling the respective
+> > functions in the other subsystems.
+> >
+> > Then, you reserve space in the security blob for inodes and superblocks
+> > to cache the decision. The format could be a policy sequence number, to
+> > ensure that the cache is valid only for the current policy, and a bit
+> > for every hook you enforce.
+>
+> Thanks for raising this idea. I agree that if the property evaluation
+> leads to a performance issue, it will be better to cache the evaluation
+> result. But for this version, all the property evaluations are simple,
+> so it is just as fast as accessing a cache. Also, for the initial
+> version we prefer to keep the patch as minimal as possible.
 
-Intel VT-d does the same thing.
+FWIW, I think that is the right decision.  Keeping the initial
+submission relatively small and focused has a lot of advantages when
+it comes both to review and prematurely optimizing things that might
+not need optimization.
 
-> 
->> If Intel BIOS's have populated the "satcu" to say that ATS is not
->> supported by the HW when the HW supports ATS perfectly fine, then get
->> the BIOS fixed or patch the ACPI until it is fixed. The BIOS should
->> not be saying that the HW does not support ATS when it does, it is a
->> simple BIOS bug.
->>
->> Alternatively if you have some definitive way to know that the HW
->> supports ATS then you should route the satcu information to
->> pdev->untrusted and ignore it at the iommu driver level.
-> 
->  From a quick look at the VT-d spec, it sounds like the ATSR structure 
-> is intended to be functionally equivalent to IORT's Root Complex "ATS 
-> Attribute", while the SATC is a slightly specialised version for RCiEPs. 
-> The spec even says "Software must enable ATS on endpoint devices behind 
-> a Root Port only if the Root Port is reported as supporting ATS 
-> transactions". It also seems to be implied that this should be based on 
-> what Intel themselves have validated, so an option for the user to say 
-> "sure, ATS works everywhere, I know better" and simply bypass all the 
-> existing checks doesn't really seem safe to me :/
-> 
-> I'd be inclined to hold the same opinion as for IORT here - if a user 
-> ever really does need to engage expert mode to safely work around a bad 
-> BIOS with known-good information, they should already have the tools to 
-> override the whole DMAR table as they see fit.
-
-Make sense to me. BIOS upgrading or ACPI table overriding should help in
-such cases. I will stop this patch unless there're any other special
-reasons.
-
-> Thanks,
-> Robin.
-
-Best regards,
-baolu
+--=20
+paul-moore.com
