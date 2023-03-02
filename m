@@ -2,283 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E576A85FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6466A8649
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjCBQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S229900AbjCBQYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:24:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjCBQQl (ORCPT
+        with ESMTP id S229892AbjCBQYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:16:41 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA9155049
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:16:37 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id i6so4069777ybu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 08:16:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6bTl116Kr1XU6F/NPToEFfhk6YODIOIDxPIctTgjztw=;
-        b=aqneeDam4oaMg/I69ISFEDq36Kcr0ynFogW33oVzz4qRxVQlx7hMZRBqDckfi2j1P7
-         VI7+1r+P3n1tia6NALtbh3fn4DbzRHc8jPv3UjB1T6NZK0xCZXn4w+2SM0vOUSmvf0/m
-         R3bS75JfuJTr5JWPPavms9fdRS/vC5jddPqA9waL27zc2Xvw12EMcGFKqk1CvV+j6JrJ
-         wQk+xrr3tpx++ElVzwsAFYl84D4Z2J5ajJUyH2Ai6rs9JtxdPCIKuTrNcyg/m0iiXgzW
-         EIYwQBcjKqhlC079wZSAFemnbwKneuq1tuwl6sKNqFubsY7DkWpz4JJzSZrKx2QnEM5E
-         c/2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6bTl116Kr1XU6F/NPToEFfhk6YODIOIDxPIctTgjztw=;
-        b=vI7ueZK74glJHgeWsCHTJf6HjZwJVtG8RhaG/QhDsXzNba7FbA2oQ/tLZjmpQ1OxdS
-         FRmUH5/oM0I6FlLJXhHwZXPPrskOrHs6/5PsOukJI844ipNFg47MxNBbxeMA8jo11w+4
-         4YZds0tdNI3Gzc4xLgLoMp/UtP6+fqPre7sLWZ2QnlPMDbDrq4l4I1W2pjRqFF1UY3zA
-         wHGBvBXuZERUyKblKWQO8uFDOuVJn2ght2VmuCfn49D8WBynVHm2hvM9LYgaQnDcjpHN
-         dlL/rXMoj8kQFZWWg6sVTSSwsEhrPJKzgL4zKghs72HI0GfTNwnKnikqiWj+yzUfUTpN
-         Yzzw==
-X-Gm-Message-State: AO0yUKXQDXpVd4/F8+ybRpZX0n2oqxHKrPkCSFrcnK73fGEljbZyt/ow
-        19gIoYWGpm1qFiHZXMzRW/HLw9tThSBmTIxETK2A12Iv/5v2Ag==
-X-Google-Smtp-Source: AK7set/vmR+e+9jyiR1auQAC0vDaQhK6yUPCuQUCwZ9Hwji+EyQge/IQD95mrwgA78UuzE2CSIZPtDUADuzTHnPlIw4=
-X-Received: by 2002:a05:6902:10d:b0:a4a:a708:2411 with SMTP id
- o13-20020a056902010d00b00a4aa7082411mr5709951ybh.10.1677773796324; Thu, 02
- Mar 2023 08:16:36 -0800 (PST)
+        Thu, 2 Mar 2023 11:24:18 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572E746156;
+        Thu,  2 Mar 2023 08:24:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677774246; x=1709310246;
+  h=date:from:cc:subject:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to;
+  bh=TFwgDL0789xDmjxNmBV6y3MQ4MQjbev1D7zf/lwGBDY=;
+  b=F/Q5YX8kVlV9itSa+QdarfP5M860KIrLUYfD43Frugv7wdmWE77FMWki
+   sgCl/k1GLxRYe2v0AfvePITrzTNT1Sgrc4Gi6WhalZ//zkgzx4aM89Yz9
+   xmaDJ6eobMtWIBcuX+j+bbZPZsTmZeksfmwVvyu+wBCuC4M7ah4tpnaZH
+   My1xEvbrf3o4m9uCjeq2PHt2/3CmvfEczrPozD5MaD3T9P/WQ7ubOns28
+   XjgjsjgzuxLUty5acVyLdrhJmlZ2Y3zu9+vFOQV/ZvHQwF6xNFy39Ia6M
+   PzmeTDg40N/1Ns9WTGMwAjQKxB+oBLKgrmEg9k+vtrltfcpo5UQYE6UOW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="397354061"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="397354061"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 08:16:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="739140687"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="739140687"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Mar 2023 08:16:47 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pXlbo-00EQJk-0m;
+        Thu, 02 Mar 2023 18:16:44 +0200
+Date:   Thu, 2 Mar 2023 18:16:43 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+Subject: Re: [PATCH v9 0/8] i2c-atr and FPDLink
+Message-ID: <ZADL62W6Mv6uNjKf@smile.fi.intel.com>
+References: <20230216140747.445477-1-tomi.valkeinen@ideasonboard.com>
+ <Y+5Rb17FTG4IxcE0@smile.fi.intel.com>
+ <e4141652-53c0-fce1-dac7-5da5368e2240@ideasonboard.com>
+ <Y+9j3cYOG+Z0zmyC@smile.fi.intel.com>
+ <9f3f0744-f771-cd2c-3b8e-5b79f7a430c7@ideasonboard.com>
+ <Y++E+Rr54p3vd8Jn@smile.fi.intel.com>
+ <96f8e0f9-d8cf-fa9b-a224-a5caad445992@ideasonboard.com>
 MIME-Version: 1.0
-References: <cover.1677749625.git.quic_varada@quicinc.com> <b0f93b77e059791f6fe51a6c42535644cec90d70.1677749625.git.quic_varada@quicinc.com>
-In-Reply-To: <b0f93b77e059791f6fe51a6c42535644cec90d70.1677749625.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 2 Mar 2023 18:16:25 +0200
-Message-ID: <CAA8EJpqn2gVcUiELAgGofZ9DS-L1BYU-WBir8NovQCUQ-7wWLQ@mail.gmail.com>
-Subject: Re: [PATCH 6/8] phy: qcom: qmp: Update IPQ9574 USB Phy initialization Sequence
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Praveenkumar I <ipkumar@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <96f8e0f9-d8cf-fa9b-a224-a5caad445992@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Mar 2023 at 11:57, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> Updated USB QMP PHY Init sequence based on HPG for IPQ9574.
-> Reused clock and reset list from existing targets.
->
-> Signed-off-by: Praveenkumar I <ipkumar@codeaurora.org>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 130 ++++++++++++++++++++++++++++++++
->  1 file changed, 130 insertions(+)
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> index a49711c..a44c15b 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> @@ -91,9 +91,15 @@ enum qphy_reg_layout {
->         /* PCS registers */
->         QPHY_SW_RESET,
->         QPHY_START_CTRL,
-> +       QPHY_FLL_CNTRL1,
-> +       QPHY_FLL_CNTRL2,
-> +       QPHY_FLL_CNT_VAL_L,
-> +       QPHY_FLL_CNT_VAL_H_TOL,
-> +       QPHY_FLL_MAN_CODE,
++Cc: Saravana (for devlink issues)
 
-You don't seem to be using indirect register addressing for these
-registers, so these bits are unused and can be dropped.
+On Thu, Mar 02, 2023 at 05:52:24PM +0200, Tomi Valkeinen wrote:
+> On 17/02/2023 15:45, Andy Shevchenko wrote:
+> > On Fri, Feb 17, 2023 at 02:57:02PM +0200, Tomi Valkeinen wrote:
+> > > On 17/02/2023 13:24, Andy Shevchenko wrote:
+> > > > On Fri, Feb 17, 2023 at 08:57:32AM +0200, Tomi Valkeinen wrote:
+> > > > > On 16/02/2023 17:53, Andy Shevchenko wrote:
+> > > > > > On Thu, Feb 16, 2023 at 04:07:39PM +0200, Tomi Valkeinen wrote:
 
->         QPHY_PCS_STATUS,
->         QPHY_PCS_AUTONOMOUS_MODE_CTRL,
->         QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR,
-> +       QPHY_PCS_LFPS_RXTERM_IRQ_STATUS,
->         QPHY_PCS_POWER_DOWN_CONTROL,
->         /* Keep last to ensure regs_layout arrays are properly initialized */
->         QPHY_LAYOUT_SIZE
-> @@ -139,6 +145,103 @@ static const unsigned int qmp_v5_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
->         [QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V5_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR,
->  };
->
-> +static const unsigned int usb3phy_regs_layout[] = {
-> +       [QPHY_FLL_CNTRL1]                       = 0xc0,
-> +       [QPHY_FLL_CNTRL2]                       = 0xc4,
-> +       [QPHY_FLL_CNT_VAL_L]                    = 0xc8,
-> +       [QPHY_FLL_CNT_VAL_H_TOL]                = 0xcc,
-> +       [QPHY_FLL_MAN_CODE]                     = 0xd0,
-> +       [QPHY_SW_RESET]                         = 0x00,
-> +       [QPHY_START_CTRL]                       = 0x08,
-> +       [QPHY_PCS_STATUS]                       = 0x17c,
-> +       [QPHY_PCS_AUTONOMOUS_MODE_CTRL]         = 0x0d4,
-> +       [QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR]        = 0x0d8,
-> +       [QPHY_PCS_LFPS_RXTERM_IRQ_STATUS]       = 0x178,
-> +       [QPHY_PCS_POWER_DOWN_CONTROL]           = 0x04,
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_usb3_serdes_tbl[] = {
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SYSCLK_EN_SEL, 0x1a),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_BIAS_EN_CLKBUFLR_EN, 0x08),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_CLK_SELECT, 0x30),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_BG_TRIM, 0x0f),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_UCDR_FASTLOCK_FO_GAIN, 0x0b),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SVS_MODE_CLK_SEL, 0x01),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_HSCLK_SEL, 0x00),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_CMN_CONFIG, 0x06),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_PLL_IVCO, 0x0f),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SYS_CLK_CTRL, 0x06),
-> +       /* PLL and Loop filter settings */
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_DEC_START_MODE0, 0x68),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_DIV_FRAC_START1_MODE0, 0xAB),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_DIV_FRAC_START2_MODE0, 0xAA),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_DIV_FRAC_START3_MODE0, 0x02),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_CP_CTRL_MODE0, 0x09),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_PLL_RCTRL_MODE0, 0x16),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_PLL_CCTRL_MODE0, 0x28),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_INTEGLOOP_GAIN0_MODE0, 0xA0),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_LOCK_CMP1_MODE0, 0xAA),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_LOCK_CMP2_MODE0, 0x29),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_LOCK_CMP3_MODE0, 0x00),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_CORE_CLK_EN, 0x00),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_LOCK_CMP_CFG, 0x00),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_VCO_TUNE_MAP, 0x00),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_BG_TIMER, 0x0a),
-> +       /* SSC settings */
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_EN_CENTER, 0x01),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_PER1, 0x7D),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_PER2, 0x01),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_ADJ_PER1, 0x00),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_ADJ_PER2, 0x00),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_STEP_SIZE1, 0x0A),
-> +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_STEP_SIZE2, 0x05),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_usb3_tx_tbl[] = {
-> +       QMP_PHY_INIT_CFG(QSERDES_TX_HIGHZ_TRANSCEIVEREN_BIAS_DRVR_EN, 0x45),
-> +       QMP_PHY_INIT_CFG(QSERDES_TX_RCV_DETECT_LVL_2, 0x12),
-> +       QMP_PHY_INIT_CFG(QSERDES_TX_LANE_MODE, 0x06),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_usb3_rx_tbl[] = {
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_UCDR_SO_GAIN, 0x06),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQU_ADAPTOR_CNTRL2, 0x02),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQU_ADAPTOR_CNTRL3, 0x6c),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQU_ADAPTOR_CNTRL3, 0x4c),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQU_ADAPTOR_CNTRL4, 0xb8),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQ_OFFSET_ADAPTOR_CNTRL1, 0x77),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_OFFSET_ADAPTOR_CNTRL2, 0x80),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_SIGDET_CNTRL, 0x03),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_SIGDET_DEGLITCH_CNTRL, 0x16),
-> +       QMP_PHY_INIT_CFG(QSERDES_RX_SIGDET_ENABLES, 0x0c),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_usb3_pcs_tbl[] = {
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TXDEEMPH_M6DB_V0, 0x15),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TXDEEMPH_M3P5DB_V0, 0x0e),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_CNTRL2, 0x83),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_CNTRL1, 0x02),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_CNT_VAL_L, 0x09),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_CNT_VAL_H_TOL, 0xa2),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_MAN_CODE, 0x85),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_LOCK_DETECT_CONFIG1, 0xd1),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_LOCK_DETECT_CONFIG2, 0x1f),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_LOCK_DETECT_CONFIG3, 0x47),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_POWER_STATE_CONFIG2, 0x1b),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RXEQTRAINING_WAIT_TIME, 0x75),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RXEQTRAINING_RUN_TIME, 0x13),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_LFPS_TX_ECSTART_EQTLOCK, 0x86),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_PWRUP_RESET_DLY_TIME_AUXCLK, 0x04),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TSYNC_RSYNC_TIME, 0x44),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RCVR_DTCT_DLY_P1U2_L, 0xe7),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RCVR_DTCT_DLY_P1U2_H, 0x03),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RCVR_DTCT_DLY_U3_L, 0x40),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RCVR_DTCT_DLY_U3_H, 0x00),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RX_SIGDET_LVL, 0x88),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TXDEEMPH_M6DB_V0, 0x17),
-> +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TXDEEMPH_M3P5DB_V0, 0x0f),
-> +};
-> +
->  static const struct qmp_phy_init_tbl ipq8074_usb3_serdes_tbl[] = {
->         QMP_PHY_INIT_CFG(QSERDES_COM_SYSCLK_EN_SEL, 0x1a),
->         QMP_PHY_INIT_CFG(QSERDES_COM_BIAS_EN_CLKBUFLR_EN, 0x08),
-> @@ -1558,6 +1661,10 @@ static const char * const qmp_phy_vreg_l[] = {
->         "vdda-phy", "vdda-pll",
->  };
->
-> +static const char * const ipq9574_phy_clk_l[] = {
+...
 
-Please move clocks to the clocks section.
+> > > > > > >     	struct i2c_board_info ser_info = {
+> > > > > > > -		.of_node = to_of_node(rxport->remote_fwnode),
+> > > > > > > -		.fwnode = rxport->remote_fwnode,
+> > > > > > 
+> > > > > > > +		.of_node = to_of_node(rxport->ser.fwnode),
+> > > > > > > +		.fwnode = rxport->ser.fwnode,
+> > > > > > 
+> > > > > > Why do you need to have both?!
+> > > > > 
+> > > > > I didn't debug it, but having only fwnode there will break the probing (no
+> > > > > match).
+> > > > 
+> > > > This needs to be investigated. The whole fwnode approach, when we have both
+> > > > fwnode and legacy of_node fields in the same data structure, is that fwnode
+> > > > _OR_ of_node initialization is enough, when both are defined the fwnode
+> > > > should take precedence.
+> > > > 
+> > > > If your testing is correct (and I have no doubts) it means we have a serious
+> > > > bug lurking somewhere.
+> > > 
+> > > Having both defined or only of_node defined works for me.
+> > 
+> > But of_node is _legacy_ stuff. We should not really consider this option in the
+> > new code.
+> > 
+> > > Perhaps the issue is that these drivers only add of_match_table, and thus
+> > > having only .fwnode above is not enough.
+> > 
+> > No, the code should work with fwnode that carrying DT node or another.
+> > The matching table shouldn't affect this either.
+> > 
+> > > Looking at i2c_device_match(), i2c_of_match_device() only uses of_node, so
+> > > perhaps I would need CONFIG_ACPI for acpi_driver_match_device to do matching
+> > > with of_node? Although I don't see the acpi code using fwnode, just of_node.
+> > > Well, I have to say I have no idea without spending more time on this.
+> > 
+> > Again, there is a bug and that bug seems nasty one as it would allow to
+> > work the device in one environment and not in another.
+> > 
+> > Since it's about I²C board files, I believe that an issue is in I²C core.
+> 
+> I don't know if this is related in any way, but I see these when probing:
 
-> +       "aux", "cfg_ahb",
-> +};
-> +
->  static const struct qmp_usb_offsets qmp_usb_offsets_v5 = {
->         .serdes         = 0,
->         .pcs            = 0x0200,
-> @@ -1939,6 +2046,26 @@ static const struct qmp_phy_cfg qcm2290_usb3phy_cfg = {
->         .regs                   = qmp_v3_usb3phy_regs_layout,
->  };
->
-> +static const struct qmp_phy_cfg ipq9574_usb3phy_cfg = {
+I believe this is for devlink (Saravana Cc'ed).
 
-Please keep the data sorted.
-
-> +       .lanes                  = 1,
-> +
-> +       .serdes_tbl             = ipq9574_usb3_serdes_tbl,
-> +       .serdes_tbl_num         = ARRAY_SIZE(ipq9574_usb3_serdes_tbl),
-> +       .tx_tbl                 = ipq9574_usb3_tx_tbl,
-> +       .tx_tbl_num             = ARRAY_SIZE(ipq9574_usb3_tx_tbl),
-> +       .rx_tbl                 = ipq9574_usb3_rx_tbl,
-> +       .rx_tbl_num             = ARRAY_SIZE(ipq9574_usb3_rx_tbl),
-> +       .pcs_tbl                = ipq9574_usb3_pcs_tbl,
-> +       .pcs_tbl_num            = ARRAY_SIZE(ipq9574_usb3_pcs_tbl),
-> +       .clk_list               = ipq9574_phy_clk_l,
-> +       .num_clks               = ARRAY_SIZE(ipq9574_phy_clk_l),
-> +       .reset_list             = msm8996_usb3phy_reset_l,
-> +       .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
-> +       .vreg_list              = qmp_phy_vreg_l,
-> +       .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
-> +       .regs                   = usb3phy_regs_layout,
-> +};
-
-You will get an undefined symbol error here.
-
-> +
->  static void qmp_usb_configure_lane(void __iomem *base,
->                                         const struct qmp_phy_init_tbl tbl[],
->                                         int num,
-> @@ -2607,6 +2734,9 @@ static const struct of_device_id qmp_usb_of_match_table[] = {
->                 .compatible = "qcom,sc8280xp-qmp-usb3-uni-phy",
->                 .data = &sc8280xp_usb3_uniphy_cfg,
->         }, {
-> +               .compatible = "qcom,ipq9574-qmp-usb3-phy",
-> +               .data = &ipq9574_usb3phy_cfg,
-> +       }, {
-
-Please choose a less random place for your driver data. The match
-table is sorted, please keep it this way.
-
->                 .compatible = "qcom,sdm845-qmp-usb3-phy",
->                 .data = &qmp_v3_usb3phy_cfg,
->         }, {
-> --
-> 2.7.4
->
-
+> [   36.952697] i2c 4-0044: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer/i2c/sensor@21/port/endpoint
+> [   36.969268] i2c 4-0044: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/ports/port@0/endpoint
+> [   36.983001] i2c 4-0044: Failed to create device link with 4-0044
+> [   36.992828] ds90ub953 4-0044: Found ub953 rev/mask 0x20
+> [   37.017761] i2c 5-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer/ports/port@0/endpoint
+> [   37.033843] i2c 5-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer
+> [   37.117492] i2c 4-0045: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer/i2c/sensor@21/port/endpoint
+> [   37.134033] i2c 4-0045: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/ports/port@1/endpoint
+> [   37.147735] i2c 4-0045: Failed to create device link with 4-0045
+> [   37.156097] ds90ub953 4-0045: Found ub953 rev/mask 0x20
+> [   37.186584] i2c 6-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer/ports/port@0/endpoint
+> [   37.202636] i2c 6-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer
+> 
+> Then again, I see similar warnings/errors for some other devices too, when booting up (TI's DRA76 EVM).
 
 -- 
-With best wishes
-Dmitry
+With Best Regards,
+Andy Shevchenko
+
+
