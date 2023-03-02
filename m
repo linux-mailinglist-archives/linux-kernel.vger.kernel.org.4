@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053696A7FA0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408666A7FFE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjCBKHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S229534AbjCBKfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCBKHO (ORCPT
+        with ESMTP id S229610AbjCBKfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:07:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75D017CD7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:06:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677751587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xXAIi3FZLIk/yQi9mz4FXN1H3EGTGEpaBHWX86aG/j0=;
-        b=SqVUvC52rTx2kwbOE0r/ic898iU3WU3hW3DvtGn3Ix5wSnxtlNQRoqdbeIy7TrVhlpzy2w
-        9fJLoQYeRQxehRodfkvjexGZQ4sLcPd36NdbZk9gFXIwXfY4ACyUuLa/0w9v21BDDkmKt/
-        if+Vb8HSoBENd80HSxBspdnSMisJa20=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-6-X4bHhbe9MIe13Jw0vKm2JQ-1; Thu, 02 Mar 2023 05:06:26 -0500
-X-MC-Unique: X4bHhbe9MIe13Jw0vKm2JQ-1
-Received: by mail-wm1-f69.google.com with SMTP id c7-20020a7bc847000000b003e00be23a70so1049680wml.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:06:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677751585;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 2 Mar 2023 05:35:15 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93F32ED71
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:35:13 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id f11so4123377wrv.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:35:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xXAIi3FZLIk/yQi9mz4FXN1H3EGTGEpaBHWX86aG/j0=;
-        b=ksi8gBpEaEIBrPBLar/GLe2hUESz9qAX54FJ8yp5giQIcVD1q034CFm8clR/75oMaQ
-         ItYFRLfSBk8zE0CK2/1NdHo4UigtNh2Hj3azbB1CuFiOUfamyVtLDI/4WJ+DlxbkyqyZ
-         5lWGIuOgNGcJjmXJI25YBhH/lwXZFG/tPAmk9q8ezIMKKk9Zwyukgu5Qq6TKLB/30cPM
-         RrsGUpOb3i0PbBRW4s0X94y8Lc5fTzHAgrZ9FEPqbJnLZApgmS2fkFBRGlaZEs0d3Jba
-         ks/Qnx9kW3/tHkpZefW8jXSPdQkFh/e/Dqfz9j/bzpdo+Br8tfRmHlEuAMHvvJmDlPIB
-         wsRQ==
-X-Gm-Message-State: AO0yUKVi90sXrTsbVil5pzXxa4H/H+dPuKqQeX02QZip/d5bSLKGz7R1
-        ZN98YtfaT4vDoRY4lOKJRt6IEdSecqDEiv+W5MPUJPcPqdtCJVqn5lqrdBNB8Vmpm/10UnkDiSz
-        5smALOj+jvsI6hp5qIod/qUUQ
-X-Received: by 2002:a05:600c:170a:b0:3eb:37ce:4c3d with SMTP id c10-20020a05600c170a00b003eb37ce4c3dmr3352983wmn.38.1677751585590;
-        Thu, 02 Mar 2023 02:06:25 -0800 (PST)
-X-Google-Smtp-Source: AK7set+/xE0Y8UibIuJEFr88ZiU69bExip1GW+fSy6pdjECNlMGo6eFU0GAAnaHnmHflDCn7D3uYEg==
-X-Received: by 2002:a05:600c:170a:b0:3eb:37ce:4c3d with SMTP id c10-20020a05600c170a00b003eb37ce4c3dmr3352969wmn.38.1677751585285;
-        Thu, 02 Mar 2023 02:06:25 -0800 (PST)
-Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
-        by smtp.gmail.com with ESMTPSA id w9-20020a05600c474900b003eb5a0873e0sm2571290wmo.39.2023.03.02.02.06.23
+        bh=C52m1tVljJD1+vZ8f1h3Rfg+EcUxCxDMLMwQrEVeskg=;
+        b=Y4uGA2YtfxC/k4u+qAD3ZoxcQBK4FrMcGo8flvdcH8rOao2YVEz+Cwg6D0vYcIJfzH
+         GyC6r/kvfqUYWXNAn3c+En32gETcOv/1pqo7w9pysC6LjcOfkPtBW+QsbdEadZe2OUsw
+         tV4XisRy7HsMC/O5VVRaUDeto5Ul5aV3FkU7k/xLMhtWlpiyPltMCNyDz/DXMOvDaoBQ
+         2xAJFOK2e5Ru2Grpdf4wmjiufWmWYWMWeK+zATAmWyb7QBD7AWyaW1w2WHok8AyDruOK
+         zc9SYdG110FZnQXTkJWXAme8hVl7LFAU3h8bdmqfqsctAykwLBSZJKa9myYvcKLZInLQ
+         kdCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=C52m1tVljJD1+vZ8f1h3Rfg+EcUxCxDMLMwQrEVeskg=;
+        b=hDzDFJGeKS9VmJblyQUde1FOWXldpDWJ/DBjdYZK8qzaU8J/PHPlWvri02urtU5/jc
+         cDRP57m3gBzyv+PEZucc+ebcO72zhFEDlFdKQIZ5NKXAofpoS/TgB2fdmokmPpqe422p
+         Sw+WAUv+JBHLPCIh6t022ri7gVJ1wdELc6IOHotkyKwsDsjAJGS0Ddnl/ILhK19vCUwT
+         YJPCqrbMznc5a8MoaUun5om5M/XbwMUGsNnWgyp49TazsVRpnjlHZlsc7gGw8Hzl9SwV
+         62D41RhN4o1O7m7gZEIpXgM7gzLS7JFzyr1TiLcpqhkXhpx0NRJJJPqPXmstj+l9Nm+k
+         f7vg==
+X-Gm-Message-State: AO0yUKViajdky/3gYl6FfYn2lw/XxgMPc1U3VKwJaipUZ39owy6/3fkv
+        TRUIWk2WOpXgLkd4qTachfePiQ==
+X-Google-Smtp-Source: AK7set8TgU9pB6ImsSse7I0wmVLMeTLVWQIMctXtF6Tm7YmwMYVIjoe1hdG/Rszo0Ql6qKWL9efJUQ==
+X-Received: by 2002:a5d:6084:0:b0:2ca:e856:5a4 with SMTP id w4-20020a5d6084000000b002cae85605a4mr1112818wrt.26.1677753312359;
+        Thu, 02 Mar 2023 02:35:12 -0800 (PST)
+Received: from localhost ([165.225.194.195])
+        by smtp.gmail.com with ESMTPSA id s2-20020a5d6a82000000b002c53cc7504csm15329231wru.78.2023.03.02.02.35.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 02:06:24 -0800 (PST)
-Date:   Thu, 2 Mar 2023 11:06:21 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, oxffffaa@gmail.com,
-        kernel@sberdevices.ru, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-Subject: Re: [RFC PATCH v1] vsock: check error queue to set EPOLLERR
-Message-ID: <20230302100621.gk45unegjbqjgpxh@sgarzare-redhat>
-References: <76e7698d-890b-d14d-fa34-da5dd7dd13d8@sberdevices.ru>
+        Thu, 02 Mar 2023 02:35:11 -0800 (PST)
+References: <20230224200502.391570-1-nmi@metaspace.dk>
+ <ZAAPBFfqP671N4ue@T590> <87o7pblhi1.fsf@metaspace.dk>
+ <ZABfFW+28Jlxq+Ew@T590> <ZABmAR6Du1tUVEa7@T590>
+ <CAFj5m9+o4yNA5rNDA+EXWZthMtB+dOLOW0O788i77=Qn1eJ0qQ@mail.gmail.com>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-block@vger.kernel.org, Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        Niklas Cassel <Niklas.Cassel@wdc.com>,
+        kernel test robot <lkp@intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        open list <linux-kernel@vger.kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: Re: [PATCH v2] block: ublk: enable zoned storage support
+Date:   Thu, 02 Mar 2023 11:07:15 +0100
+In-reply-to: <CAFj5m9+o4yNA5rNDA+EXWZthMtB+dOLOW0O788i77=Qn1eJ0qQ@mail.gmail.com>
+Message-ID: <87h6v3l9up.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <76e7698d-890b-d14d-fa34-da5dd7dd13d8@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,44 +80,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 08:19:45AM +0300, Arseniy Krasnov wrote:
->EPOLLERR must be set not only when there is error on the socket, but also
->when error queue of it is not empty (may be it contains some control
->messages). Without this patch 'poll()' won't detect data in error queue.
 
-Do you have a reproducer?
+Ming Lei <ming.lei@redhat.com> writes:
 
->This patch is based on 'tcp_poll()'.
-
-LGTM but we should add a Fixes tag.
-It's not clear to me whether the problem depends on when we switched to 
-using sk_buff or was pre-existing.
-
-Do you have any idea when we introduced this issue?
-
-Thanks,
-Stefano
-
+> On Thu, Mar 2, 2023 at 5:02=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wro=
+te:
+>>
+>> On Thu, Mar 02, 2023 at 04:32:21PM +0800, Ming Lei wrote:
+>> > On Thu, Mar 02, 2023 at 08:31:07AM +0100, Andreas Hindborg wrote:
+>> > >
+>>
+>> ...
+>>
+>> > >
+>> > > I agree about fetching more zones. However, it is no good to fetch u=
+p to
+>> > > a max, since the requested zone report may less than max. I was
+>> >
+>> > Short read should always be supported, so the interface may need to
+>> > return how many zones in single command, please refer to nvme_ns_repor=
+t_zones().
+>>
+>> blk_zone is part of uapi, maybe the short read can be figured out by
+>> one all-zeroed 'blk_zone'?  then no extra uapi data is needed for
+>> reporting zones.
 >
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/af_vsock.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index 19aea7cba26e..b5e51ef4a74c 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -1026,7 +1026,7 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
-> 	poll_wait(file, sk_sleep(sk), wait);
-> 	mask = 0;
->
->-	if (sk->sk_err)
->+	if (sk->sk_err || !skb_queue_empty_lockless(&sk->sk_error_queue))
-> 		/* Signify that there has been an error on this socket. */
-> 		mask |= EPOLLERR;
->
->-- 
->2.25.1
->
+> oops, we have blk_zone_report data for reporting zones to userspace alrea=
+dy,
+> see blkdev_report_zones_ioctl(), then this way can be re-used for getting=
+ zone
+> report from ublk server too, right?
 
+Yes that would be nice. But I did the report_zone command like a read
+operation, so we are not currently copying any buffers to user space
+when issuing the command, we just rely on the iod. I think it would be
+better to use the start_sectors and nr_sectors of the iod instead. Then
+we don't have to copy the blk_zone_report. What do you think?
+
+BR Andreas
