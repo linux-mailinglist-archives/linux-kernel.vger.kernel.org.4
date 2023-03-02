@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA256A8AEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A34466A8AE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjCBVDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 16:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S229592AbjCBVCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 16:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjCBVDO (ORCPT
+        with ESMTP id S229512AbjCBVCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 16:03:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34E227D44
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 13:02:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677790882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=68hVvuNII7UySVqdF6okTR6mypxI58Mkyx++AN+Buts=;
-        b=Wst88w666+GRWa2SM6q9ThaXa9T1VnsW9S7T57EBEjg6n/7Eozk1csgJZd7++2Yx1xaPxo
-        GRrippFYbz+XxQUY+ILXw0VbSip6wASSA8jb1yCOwssZ1hqo7Ell44SackvFbFOvJEsgHm
-        +/AUv5G67ksTJZKmQtzb7r5wfpFgG+o=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-580-aC1RrzXsPeuuMM9_uERHWA-1; Thu, 02 Mar 2023 16:01:11 -0500
-X-MC-Unique: aC1RrzXsPeuuMM9_uERHWA-1
-Received: by mail-qt1-f197.google.com with SMTP id g20-20020ac870d4000000b003b9c1013018so309832qtp.18
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 13:01:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677790870;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=68hVvuNII7UySVqdF6okTR6mypxI58Mkyx++AN+Buts=;
-        b=8RE2KlOOFcs32QTROP7O3hrMHwgMcyVY2HkCmIeZMuPv0loIjhZfk7NZZYBWaMMfNK
-         oEwbjBowe4z3sMrwr97ZuWUqN6wi3+QmGPzrQOm7mTSRPBgxkHaxs9+HVeXdBKeH4q+5
-         49ct+yQwoSFA+Nyj/MoFBz1tshB1zvrxunOWduoOINE8SMrjHIU7An5M2sMjrk1+vRwJ
-         v69/4zXVH5GWPU5RWqM2W15i4eIBnzDYefBKydCcgkeQwnXqAp2KXkTqxQu/ywnxpXSj
-         vq94uLt4uga5MCaUnu0u1rUn0eTiHRxfsi/aUl8cX3avBMrky4n0TxbbsbASGAfS1Vsh
-         G4Rw==
-X-Gm-Message-State: AO0yUKVgPaDun8ahMASP9g/l9Eo1EO4Nw5MaCm3KCH7OpnSYqwFW9GNQ
-        ko9MlYWyqMT6LLSJi9Szr6uIFSqn9lCULeE3ctoi3gQCDLg5QUxIb7AjtTFiLbaYvBrPDUKW7ef
-        Q+yWMcuYL22+c3VmBHGZHMr3P8A3MUQ==
-X-Received: by 2002:a05:622a:1391:b0:3bf:c38c:1d6c with SMTP id o17-20020a05622a139100b003bfc38c1d6cmr19756222qtk.2.1677790870349;
-        Thu, 02 Mar 2023 13:01:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set84DR6At0AqCEYfzBCgau6wBISij6DWtBRh9Re0wFHCqoyD80hktYpaO3sgfY0al6wWNRDkQA==
-X-Received: by 2002:a05:622a:1391:b0:3bf:c38c:1d6c with SMTP id o17-20020a05622a139100b003bfc38c1d6cmr19756119qtk.2.1677790869559;
-        Thu, 02 Mar 2023 13:01:09 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id 73-20020a370c4c000000b007423ccd892csm397038qkm.47.2023.03.02.13.01.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 13:01:09 -0800 (PST)
-Date:   Thu, 2 Mar 2023 16:01:07 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 10/11] mm/vmstat: switch vmstat shepherd to flush
- per-CPU counters remotely
-Message-ID: <ZAEOk7GdJ0c8NS+y@x1n>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.901518530@redhat.com>
+        Thu, 2 Mar 2023 16:02:45 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFBD2DE61;
+        Thu,  2 Mar 2023 13:02:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=KhVHEoAb9JfdAO2DxL948x9Ihcm4qsbUc5kdCrwD8u8=; b=WhSAR761ty2OjAg8YyLpdRDhaH
+        Naamu6793d2nTTdzrrkTgYTO5dwD9VyUW0Pir8DDLItM8dwaAMuKq9nN0hkZla7PoZuv8oiX/MLKQ
+        HYRmmgVqPInORzair0b/kr2gPGZm/iKZUErPau2XL6+9Ov/DzE2opH8E0iAGKGVRno7oHtYQl5PrI
+        QyOASTAvv7ezMIYAPY2HCIp8VLK0m610yDL2TwjxJxzt0NXnPPcHm9Ulbd0a+CBKDeMqIMLwy0101
+        j3OhsulzlNaYUnw91t6AfZiC/h7y/n2m+EMY31UKn8aLaQ+PFBKLW17kJdetTQRiG94qispzLs+1a
+        jPzSj21Q==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pXq4W-003JoZ-4L; Thu, 02 Mar 2023 21:02:40 +0000
+Message-ID: <2e5bb985-782b-db43-b555-dabee885a737@infradead.org>
+Date:   Thu, 2 Mar 2023 13:02:39 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230209153204.901518530@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] perf: arm_cspmu: Fix variable dereference warning
+Content-Language: en-US
+To:     Besar Wicaksono <bwicaksono@nvidia.com>, suzuki.poulose@arm.com,
+        catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, treding@nvidia.com,
+        jonathanh@nvidia.com, vsethi@nvidia.com
+References: <20230302205701.35323-1-bwicaksono@nvidia.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230302205701.35323-1-bwicaksono@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 12:02:00PM -0300, Marcelo Tosatti wrote:
-> +#ifdef CONFIG_HAVE_CMPXCHG_LOCAL
-> +/* Flush counters remotely if CPU uses cmpxchg to update its per-CPU counters */
-> +static void vmstat_shepherd(struct work_struct *w)
-> +{
-> +	int cpu;
-> +
-> +	cpus_read_lock();
-> +	for_each_online_cpu(cpu) {
-> +		cpu_vm_stats_fold(cpu);
 
-Nitpick: IIUC this line is the only change with CONFIG_HAVE_CMPXCHG_LOCAL
-to replace the queuing.  Would it be cleaner to move the ifdef into
-vmstat_shepherd, then, and keep the common logic?
 
-> +		cond_resched();
-> +	}
-> +	cpus_read_unlock();
-> +
-> +	schedule_delayed_work(&shepherd,
-> +		round_jiffies_relative(sysctl_stat_interval));
-> +}
-> +#else
->  static void vmstat_shepherd(struct work_struct *w)
+On 3/2/23 12:57, Besar Wicaksono wrote:
+> Fix warning message from smatch tool:
+>   | smatch warnings:
+>   | drivers/perf/arm_cspmu/arm_cspmu.c:1075 arm_cspmu_find_cpu_container()
+>   |    warn: variable dereferenced before check 'cpu_dev' (see line 1073)
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/r/202302191227.kc0V8fM7-lkp@intel.com/
+> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+> 
+> Changes from v1:
+>  * Update commit subject and description
+>  * Added Reviewed-by from Suzuki
+> v1: https://lore.kernel.org/linux-arm-kernel/20230301225657.30211-1-bwicaksono@nvidia.com/T/#u
+> 
+> ---
+>  drivers/perf/arm_cspmu/arm_cspmu.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
+> index e31302ab7e37..a3f1c410b417 100644
+> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
+> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
+> @@ -1078,12 +1078,14 @@ static int arm_cspmu_request_irq(struct arm_cspmu *cspmu)
+>  static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
 >  {
->  	int cpu;
-> @@ -2026,6 +2043,7 @@ static void vmstat_shepherd(struct work_
->  	schedule_delayed_work(&shepherd,
->  		round_jiffies_relative(sysctl_stat_interval));
->  }
-> +#endif
+>  	u32 acpi_uid;
+> -	struct device *cpu_dev = get_cpu_device(cpu);
+> -	struct acpi_device *acpi_dev = ACPI_COMPANION(cpu_dev);
+> +	struct device *cpu_dev;
+> +	struct acpi_device *acpi_dev;
 >  
->  static void __init start_shepherd_timer(void)
->  {
+> +	cpu_dev = get_cpu_device(cpu);
+>  	if (!cpu_dev)
+>  		return -ENODEV;
+>  
+> +	acpi_dev = ACPI_COMPANION(cpu_dev);
+>  	while (acpi_dev) {
+>  		if (!strcmp(acpi_device_hid(acpi_dev),
+>  			    ACPI_PROCESSOR_CONTAINER_HID) &&
 > 
-> 
-> 
+> base-commit: 7f7a8831520f12a3cf894b0627641fad33971221
 
 -- 
-Peter Xu
-
+~Randy
