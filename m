@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2D96A796A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932886A796D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjCBCSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 21:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S229759AbjCBCTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 21:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjCBCSd (ORCPT
+        with ESMTP id S229541AbjCBCTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 21:18:33 -0500
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A211ADDB;
-        Wed,  1 Mar 2023 18:18:31 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vcv580w_1677723496;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Vcv580w_1677723496)
-          by smtp.aliyun-inc.com;
-          Thu, 02 Mar 2023 10:18:28 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     pkshih@realtek.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v3] wifi: rtl8192se: Remove some unused variables
-Date:   Thu,  2 Mar 2023 10:18:13 +0800
-Message-Id: <20230302021813.30349-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 1 Mar 2023 21:19:50 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2087C22794
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 18:19:44 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 32225huK008905;
+        Thu, 2 Mar 2023 10:05:43 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 2 Mar
+ 2023 10:19:08 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <airlied@redhat.com>, <tzimmermann@suse.de>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/ast: Fix ARM compatibility
+Date:   Thu, 2 Mar 2023 10:19:05 +0800
+Message-ID: <20230302021905.2777-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 32225huK008905
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable bcntime_cfg, bcn_cw and bcn_ifs are not effectively used, so
-delete it.
+ARM architecture only has 'memory', so all devices are accessed by MMIO.
 
-drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c:1555:6: warning: variable 'bcntime_cfg' set but not used.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4240
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
 ---
-Changes in v3:
-  -Change the subject.
+ drivers/gpu/drm/ast/ast_main.c | 17 +----------------
+ 1 file changed, 1 insertion(+), 16 deletions(-)
 
- drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c | 9 ---------
- 1 file changed, 9 deletions(-)
+diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
+index 794ffd4a29c5..f86d01e9f024 100644
+--- a/drivers/gpu/drm/ast/ast_main.c
++++ b/drivers/gpu/drm/ast/ast_main.c
+@@ -424,22 +424,7 @@ struct ast_device *ast_device_create(const struct drm_driver *drv,
+ 	if (!ast->regs)
+ 		return ERR_PTR(-EIO);
+ 
+-	/*
+-	 * If we don't have IO space at all, use MMIO now and
+-	 * assume the chip has MMIO enabled by default (rev 0x20
+-	 * and higher).
+-	 */
+-	if (!(pci_resource_flags(pdev, 2) & IORESOURCE_IO)) {
+-		drm_info(dev, "platform has no IO space, trying MMIO\n");
+-		ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
+-	}
+-
+-	/* "map" IO regs if the above hasn't done so already */
+-	if (!ast->ioregs) {
+-		ast->ioregs = pcim_iomap(pdev, 2, 0);
+-		if (!ast->ioregs)
+-			return ERR_PTR(-EIO);
+-	}
++	ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
+ 
+ 	ast_detect_chip(dev, &need_post);
+ 
 
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c
-index bd0b7e365edb..a8b5bf45b1bb 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c
-@@ -1552,8 +1552,6 @@ void rtl92se_set_beacon_related_registers(struct ieee80211_hw *hw)
- {
- 	struct rtl_priv *rtlpriv = rtl_priv(hw);
- 	struct rtl_mac *mac = rtl_mac(rtl_priv(hw));
--	u16 bcntime_cfg = 0;
--	u16 bcn_cw = 6, bcn_ifs = 0xf;
- 	u16 atim_window = 2;
- 
- 	/* ATIM Window (in unit of TU). */
-@@ -1576,13 +1574,6 @@ void rtl92se_set_beacon_related_registers(struct ieee80211_hw *hw)
- 	 * other ad hoc STA */
- 	rtl_write_byte(rtlpriv, BCN_ERR_THRESH, 100);
- 
--	/* Beacon Time Configuration */
--	if (mac->opmode == NL80211_IFTYPE_ADHOC)
--		bcntime_cfg |= (bcn_cw << BCN_TCFG_CW_SHIFT);
--
--	/* TODO: bcn_ifs may required to be changed on ASIC */
--	bcntime_cfg |= bcn_ifs << BCN_TCFG_IFS;
--
- 	/*for beacon changed */
- 	rtl92s_phy_set_beacon_hwreg(hw, mac->beacon_interval);
- }
+base-commit: 254986e324add8a30d0019c6da59f81adc8b565f
 -- 
-2.20.1.7.g153144c
+2.25.1
 
