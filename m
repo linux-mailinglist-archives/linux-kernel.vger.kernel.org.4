@@ -2,128 +2,999 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5118B6A88D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083EF6A88DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCBTCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
+        id S229702AbjCBTCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjCBTCR (ORCPT
+        with ESMTP id S229673AbjCBTCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:02:17 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EC3193F3;
-        Thu,  2 Mar 2023 11:02:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lpBNVR74iubjvON2wguO4B8ttWa6FZ0mrtSI3Z/IcA8=; b=rL03dt7h2WxlaKHIIhcEPhjJxg
-        bn28ifI4tDnDJLbkFxlRtgBxfHTWBCn3JNL/d67e3Qek5xAdY9QlEWOeA2rtKVd8FI/HWCLZtWTA3
-        bBEGr74fT+YeSYz6BKm1vQQc7m1zT7oZ+Kr6ixxkfHdmgsp2m5+pEkOvmTBTUWAe7EnQQC92qcCWw
-        0/b6MbJRr2vvy0BChdIuu5UlRVaKuRNo3giHvqq8i1e3Qi2J/3v5fUzuris51tvCvNdQuRFNrcQkp
-        R8v4jASZ7AcFUyk97Ebmvr/yK3LI1XZyQEPz67Mw38spqI95ibMVF2ht8IY4n+Ui+ynvR4fDbv8cA
-        Gw530wDA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pXoBv-00DNPR-05;
-        Thu, 02 Mar 2023 19:02:11 +0000
-Date:   Thu, 2 Mar 2023 19:02:10 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Mateusz Guzik <mjguzik@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if
- possible
-Message-ID: <ZADysodnEPRqhKqc@ZenIV>
-References: <20230125155557.37816-1-mjguzik@gmail.com>
- <20230125155557.37816-2-mjguzik@gmail.com>
- <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
- <20230302083025.khqdizrnjkzs2lt6@wittgenstein>
- <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
- <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
- <ZADoeOiJs6BRLUSd@ZenIV>
- <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
- <ZADuWxU963sInrj/@ZenIV>
+        Thu, 2 Mar 2023 14:02:49 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B98521CE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:02:44 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id ce7so74610pfb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:02:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1677783764;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7eNgkNkO7kUzRzMyg6Huq3bqtBmJhOsXt5NyJWkplV0=;
+        b=IRkcm4bF5M7GmgsGyPytmQAZNfZw/tFWZ9EyQ6ddQeFvOYW3TkR5wbW8OSzjBWxJFL
+         lhPtOOG/I3+5etwsvaiSAmZ6PpwMk1MEBeCaDifbVqRNd3DK4XO2DsVE7F5Ca6r1Tf+s
+         5voFyhaqDsVU8CYJw1Udhg2W8tHArgyt5rKcsEULy+tHL5hhWLp3kKaKMHRSR+PB5Ghg
+         yrShemyN3edbmyiHWYe9MPGD8V0oHTYqeyErshGguAn2n9tpyqy4CxOqnQLrAFU0iLzi
+         GyWyjKOi+QivXtLuClOMPxR4m4t/kzkbzbWgX8FQHVQcicrHqj70I92wiqJRZis/87wH
+         MqHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677783764;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7eNgkNkO7kUzRzMyg6Huq3bqtBmJhOsXt5NyJWkplV0=;
+        b=tb/28jDYsCDWleX4XaEDysK/4gTznBEInKje+o9whA7V5xH30fWY5mDU6m0QvjXZNq
+         LV1FliGbR4CyNRwFjXXGX8F8xcgR6tcoyqSogC9D5rl7xVmBfzdNCXtndPPVYiIU+0qF
+         aRXWEUnBk/Pp4zQNZVfJ/wYcfdBTjoJOy8cFL5u2c6kkf6Fy/NNft49EgSt0MjUCQLVz
+         L7XRm2rhDCqSnK6STHgohm0XUruEpBJ1JhSSOwe9eekviJbe4zcGAOU0Png8Zz6aH2lj
+         j7qrR7PPGZL7YAcsEy4u3B0GfdhlksGcWH3Cwx6V70fOLLQo1VwEQXzuM77XWLeBckIv
+         oyQw==
+X-Gm-Message-State: AO0yUKXO+3uk2jaTlc7x6hCBoaeBU1xHPaGSpK/frO26lo1+1yVK/fCi
+        EpWo4YevCiQRb+L6NtcQOMrqLkuK7GFr7auNOS6c
+X-Google-Smtp-Source: AK7set/ZgQ1PLxjzqfjnZhDwNZUZSnS+oEiRfFID9zN0H+NiVUb8QA+kx+QEtd5OoGJV/vgGc+ziesiZ5qkQNGGFv8w=
+X-Received: by 2002:a63:e113:0:b0:4f0:2691:a0ee with SMTP id
+ z19-20020a63e113000000b004f02691a0eemr1157233pgh.0.1677783763707; Thu, 02 Mar
+ 2023 11:02:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZADuWxU963sInrj/@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com> <1675119451-23180-3-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1675119451-23180-3-git-send-email-wufan@linux.microsoft.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 2 Mar 2023 14:02:32 -0500
+Message-ID: <CAHC9VhRguGeb8=oNVFebshL_2LLZ4hf0qO97YBVm8OObLsLNTw@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 02/16] ipe: add policy parser
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 06:43:39PM +0000, Al Viro wrote:
-> On Thu, Mar 02, 2023 at 07:22:17PM +0100, Mateusz Guzik wrote:
-> 
-> > Ops, I meant "names_cache", here:
-> > 	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
-> > 			SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL);
-> > 
-> > it is fs/dcache.c and I brainfarted into the above.
-> 
-> So you mean __getname() stuff?
+On Mon, Jan 30, 2023 at 5:58=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
+>
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
+>
+> IPE's interpretation of the what the user trusts is accomplished through
+> its policy. IPE's design is to not provide support for a single trust
+> provider, but to support multiple providers to enable the end-user to
+> choose the best one to seek their needs.
+>
+> This requires the policy to be rather flexible and modular so that
+> integrity providers, like fs-verity, dm-verity, dm-integrity, or
+> some other system, can plug into the policy with minimal code changes.
+>
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 
-The thing is, getname_flags()/getname_kernel() is not the only user of that
-thing; grep and you'll see (and keep in mind that cifs alloc_dentry_path()
-is a __getname() wrapper, with its own callers).  We might have bugs papered
-over^W^Whardened away^W^Wpapered over in some of those users.
+...
 
-I agree that getname_flags()/getname_kernel()/sys_getcwd() have no need of
-pre-zeroing; fw_get_filesystem_firmware(), ceph_mdsc_build_path(),
-[hostfs]dentry_name() and ima_d_path() seem to be safe.  So's
-vboxsf_path_from_dentry() (I think).  But with this bunch I'd need
-a review before I'd be willing to say "this security theatre buys us
-nothing here":
+> ---
+>  security/ipe/Makefile        |   2 +
+>  security/ipe/policy.c        |  99 +++++++
+>  security/ipe/policy.h        |  77 ++++++
+>  security/ipe/policy_parser.c | 515 +++++++++++++++++++++++++++++++++++
+>  security/ipe/policy_parser.h |  11 +
+>  5 files changed, 704 insertions(+)
+>  create mode 100644 security/ipe/policy.c
+>  create mode 100644 security/ipe/policy.h
+>  create mode 100644 security/ipe/policy_parser.c
+>  create mode 100644 security/ipe/policy_parser.h
+>
+> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+> index 571648579991..16bbe80991f1 100644
+> --- a/security/ipe/Makefile
+> +++ b/security/ipe/Makefile
+> @@ -8,3 +8,5 @@
+>  obj-$(CONFIG_SECURITY_IPE) +=3D \
+>         hooks.o \
+>         ipe.o \
+> +       policy.o \
+> +       policy_parser.o \
+> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> new file mode 100644
+> index 000000000000..e446f4b84152
+> --- /dev/null
+> +++ b/security/ipe/policy.c
+> @@ -0,0 +1,99 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +
+> +#include "ipe.h"
+> +#include "policy.h"
+> +#include "policy_parser.h"
+> +#include "digest.h"
+> +
+> +#include <linux/verification.h>
 
-fs/cifs/cifsproto.h:67: return __getname();
-fs/exfat/dir.c:195:     nb->lfn = __getname();
-fs/fat/dir.c:287:               *unicode = __getname();
-fs/fat/namei_vfat.c:598:        uname = __getname();
-fs/ntfs3/dir.c:394:     name = __getname();
-fs/ntfs3/inode.c:1289:  new_de = __getname();
-fs/ntfs3/inode.c:1694:  de = __getname();
-fs/ntfs3/inode.c:1732:  de = __getname();
-fs/ntfs3/namei.c:71:    struct cpu_str *uni = __getname();
-fs/ntfs3/namei.c:286:   de = __getname();
-fs/ntfs3/namei.c:355:   struct cpu_str *uni = __getname();
-fs/ntfs3/namei.c:494:   uni = __getname();
-fs/ntfs3/namei.c:555:   uni1 = __getname();
-fs/ntfs3/xattr.c:532:   buf = __getname();
+Generally speaking the system/kernel-wide header files, e.g. headers
+using '<...>', tend to come before the local header files, e.g.
+headers using '"..."'.  I wouldn't consider this a hard rule, but
+unless you have a reason to put the local header files first I would
+stick with convention here.
 
-fs/cifs/cifs_dfs_ref.c:168:     page = alloc_dentry_path();
-fs/cifs/cifsacl.c:1697: page = alloc_dentry_path();
-fs/cifs/cifsacl.c:1760: page = alloc_dentry_path();
-fs/cifs/cifsproto.h:65:static inline void *alloc_dentry_path(void)
-fs/cifs/dir.c:187:      void *page = alloc_dentry_path();
-fs/cifs/dir.c:604:      page = alloc_dentry_path();
-fs/cifs/dir.c:664:      page = alloc_dentry_path();
-fs/cifs/file.c:594:     page = alloc_dentry_path();
-fs/cifs/file.c:796:     page = alloc_dentry_path();
-fs/cifs/file.c:2223:    void *page = alloc_dentry_path();
-fs/cifs/file.c:2255:    void *page = alloc_dentry_path();
-fs/cifs/inode.c:1663:   page = alloc_dentry_path();
-fs/cifs/inode.c:1938:   page = alloc_dentry_path();
-fs/cifs/inode.c:2001:   void *page = alloc_dentry_path();
-fs/cifs/inode.c:2170:   page1 = alloc_dentry_path();
-fs/cifs/inode.c:2171:   page2 = alloc_dentry_path();
-fs/cifs/inode.c:2446:   page = alloc_dentry_path();
-fs/cifs/inode.c:2738:   void *page = alloc_dentry_path();
-fs/cifs/inode.c:2893:   void *page = alloc_dentry_path();
-fs/cifs/ioctl.c:34:     void *page = alloc_dentry_path();
-fs/cifs/link.c:491:     page1 = alloc_dentry_path();
-fs/cifs/link.c:492:     page2 = alloc_dentry_path();
-fs/cifs/misc.c:803:     page = alloc_dentry_path();
-fs/cifs/readdir.c:1071: void *page = alloc_dentry_path();
-fs/cifs/smb2ops.c:2059: void *page = alloc_dentry_path();
-fs/cifs/xattr.c:112:    page = alloc_dentry_path();
-fs/cifs/xattr.c:277:    page = alloc_dentry_path();
-fs/cifs/xattr.c:382:    page = alloc_dentry_path();
+> +/**
+> + * ipe_free_policy - Deallocate a given IPE policy.
+> + * @p: Supplies the policy to free.
+> + *
+> + * Safe to call on IS_ERR/NULL.
+> + */
+> +void ipe_free_policy(struct ipe_policy *p)
+> +{
+> +       if (IS_ERR_OR_NULL(p))
+> +               return;
+> +
+> +       free_parsed_policy(p->parsed);
+> +       if (!p->pkcs7)
+> +               kfree(p->text);
+> +       kfree(p->pkcs7);
+> +       kfree(p);
+> +}
+> +
+> +static int set_pkcs7_data(void *ctx, const void *data, size_t len,
+> +                         size_t asn1hdrlen)
+> +{
+> +       struct ipe_policy *p =3D ctx;
+> +
+> +       p->text =3D (const char *)data;
+> +       p->textlen =3D len;
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * ipe_new_policy - Allocate and parse an ipe_policy structure.
+> + *
+> + * @text: Supplies a pointer to the plain-text policy to parse.
+> + * @textlen: Supplies the length of @text.
+> + * @pkcs7: Supplies a pointer to a pkcs7-signed IPE policy.
+> + * @pkcs7len: Supplies the length of @pkcs7.
+> + *
+> + * @text/@textlen Should be NULL/0 if @pkcs7/@pkcs7len is set.
+> + *
+> + * The result will still need to be associated with a context via
+> + * ipe_add_policy.
+> + *
+> + * Return:
+> + * * !IS_ERR   - Success
+> + * * -EBADMSG  - Policy is invalid
+> + * * -ENOMEM   - Out of memory
+> + */
+> +struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+> +                                 const char *pkcs7, size_t pkcs7len)
+> +{
+> +       int rc =3D 0;
+> +       struct ipe_policy *new =3D NULL;
+> +
+> +       new =3D kzalloc(sizeof(*new), GFP_KERNEL);
+> +       if (!new)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       if (!text) {
+> +               new->pkcs7len =3D pkcs7len;
+> +               new->pkcs7 =3D kmemdup(pkcs7, pkcs7len, GFP_KERNEL);
+> +               if (!new->pkcs7) {
+> +                       rc =3D -ENOMEM;
+> +                       goto err;
+
+As Roberto already pointed out, and you acknowledged, this leaks @new.
+However, as a FYI for future work, if you have a label with only one
+return instruction after the jump, e.g. the 'err' label here, you
+should replace the 'goto' with the single return instruction.  Jumping
+just to immediately return is a bit silly, but if you also need to
+cleanup, e.g. free some memory, that's okay to use the goto/jump.
+
+> +               }
+> +
+> +               rc =3D verify_pkcs7_signature(NULL, 0, new->pkcs7, pkcs7l=
+en, NULL,
+> +                                           VERIFYING_UNSPECIFIED_SIGNATU=
+RE,
+> +                                           set_pkcs7_data, new);
+> +               if (rc)
+> +                       goto err;
+> +       } else {
+> +               new->textlen =3D textlen;
+> +               new->text =3D kstrdup(text, GFP_KERNEL);
+> +               if (!new->text) {
+> +                       rc =3D -ENOMEM;
+> +                       goto err;
+> +               }
+> +       }
+> +
+> +       rc =3D parse_policy(new);
+> +       if (rc)
+> +               goto err;
+> +
+> +       return new;
+> +err:
+> +       return ERR_PTR(rc);
+> +}
+
+...
+
+> diff --git a/security/ipe/policy.h b/security/ipe/policy.h
+> new file mode 100644
+> index 000000000000..6af2d9a811ec
+> --- /dev/null
+> +++ b/security/ipe/policy.h
+> @@ -0,0 +1,77 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +#ifndef IPE_POLICY_H
+> +#define IPE_POLICY_H
+> +
+> +#include <linux/list.h>
+> +#include <linux/types.h>
+> +
+> +enum ipe_op_type {
+> +       ipe_op_exec =3D 0,
+> +       ipe_op_firmware,
+> +       ipe_op_kernel_module,
+> +       ipe_op_kexec_image,
+> +       ipe_op_kexec_initramfs,
+> +       ipe_op_ima_policy,
+> +       ipe_op_ima_x509,
+> +       ipe_op_max
+> +};
+
+I'm used to seeing enum values defined in ALL_CAPS to help visually
+distinguish them from variables and other assorted symbols, for
+example:
+
+  enum ipe_op_type {
+    IPE_OP_EXEC =3D 0,
+    ...
+    IPE_OP_MAX,
+  };
+
+You might also want to consider prefixing IPE_OP_MAX with a couple
+underscores, e.g. __IPE_OP_MAX, to help distinguish it as a sentinel
+value and provide some protection in case you think you might ever
+want an op named "max".  However, this really is a judgement call that
+is up to you.
+
+(Similar comments apply to the other IPE enums)
+
+> +enum ipe_action_type {
+> +       ipe_action_allow =3D 0,
+> +       ipe_action_deny,
+> +       ipe_action_max
+> +};
+> +
+> +enum ipe_prop_type {
+> +       ipe_prop_max
+> +};
+> +
+> +struct ipe_prop {
+> +       struct list_head next;
+> +       enum ipe_prop_type type;
+> +       void *value;
+> +};
+> +
+> +struct ipe_rule {
+> +       enum ipe_op_type op;
+> +       enum ipe_action_type action;
+> +       struct list_head props;
+> +       struct list_head next;
+> +};
+> +
+> +struct ipe_op_table {
+> +       struct list_head rules;
+> +       enum ipe_action_type default_action;
+> +};
+> +
+> +struct ipe_parsed_policy {
+> +       const char *name;
+> +       struct {
+> +               u16 major;
+> +               u16 minor;
+> +               u16 rev;
+> +       } version;
+> +
+> +       enum ipe_action_type global_default_action;
+> +
+> +       struct ipe_op_table rules[ipe_op_max];
+> +};
+> +
+> +struct ipe_policy {
+> +       const char     *pkcs7;
+> +       size_t          pkcs7len;
+> +
+> +       const char     *text;
+> +       size_t          textlen;
+> +
+> +       struct ipe_parsed_policy *parsed;
+> +};
+
+None of the other structs in this header file have horizontally
+aligned variable names, you should pick one style and stick with it
+... and that style should be the un-aligned style, e.g. what was used
+in 'struct ipe_rule'
+
+> +struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+> +                                 const char *pkcs7, size_t pkcs7len);
+> +void ipe_free_policy(struct ipe_policy *pol);
+> +
+> +#endif /* IPE_POLICY_H */
+> diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
+> new file mode 100644
+> index 000000000000..c7ba0e865366
+> --- /dev/null
+> +++ b/security/ipe/policy_parser.c
+> @@ -0,0 +1,515 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +
+> +#include "policy.h"
+> +#include "policy_parser.h"
+> +#include "digest.h"
+> +
+> +#include <linux/parser.h>
+> +
+> +#define START_COMMENT  '#'
+> +
+> +/**
+> + * new_parsed_policy - Allocate and initialize a parsed policy.
+> + *
+> + * Return:
+> + * * !IS_ERR   - OK
+> + * * -ENOMEM   - Out of memory
+> + */
+> +static struct ipe_parsed_policy *new_parsed_policy(void)
+> +{
+> +       size_t i =3D 0;
+> +       struct ipe_parsed_policy *p =3D NULL;
+> +       struct ipe_op_table *t =3D NULL;
+> +
+> +       p =3D kzalloc(sizeof(*p), GFP_KERNEL);
+> +       if (!p)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       p->global_default_action =3D ipe_action_max;
+
+I'm assuming you're using the "ipe_action_max" as an intentional bogus
+placeholder value here, yes?  If that is the case, have you considered
+creating an "invalid" enum with an explicit zero value to save you
+this additional assignment (you are already using kzalloc())?  For
+example:
+
+  enum ipe_op_type {
+    IPE_OP_INVALID =3D 0,
+    IPE_OP_EXEC,
+    ...
+    IPE_OP_MAX,
+  };
+
+  enum ipe_action_type {
+    IPE_ACTION_INVALID =3D 0,
+    IPE_ACTION_ALLOW,
+    ...
+    IPE_ACTION_MAX,
+  };
+
+> +       for (i =3D 0; i < ARRAY_SIZE(p->rules); ++i) {
+> +               t =3D &p->rules[i];
+> +
+> +               t->default_action =3D ipe_action_max;
+> +               INIT_LIST_HEAD(&t->rules);
+> +       }
+> +
+> +       return p;
+> +}
+> +
+> +/**
+> + * remove_comment - Truncate all chars following START_COMMENT in a stri=
+ng.
+> + *
+> + * @line: Supplies a poilcy line string for preprocessing.
+
+"policy" :)
+
+I'm definitely guilty of adding a lot of silly spelling errors to
+codebases over the years, so no worries here, but in case you haven't
+seen the codespell tool already, it might be something worth taking a
+look at sometime.
+
+* https://github.com/codespell-project/codespell
+
+> + */
+> +static void remove_comment(char *line)
+> +{
+> +       size_t i, len =3D 0;
+> +
+> +       len =3D strlen(line);
+> +       for (i =3D 0; i < len && line[i] !=3D START_COMMENT; ++i)
+> +               ;
+
+The kernel has a strchr() implementation which could simplify this,
+and possibly speed things up if there is an arch specific optimized
+implementation.
+
+> +       line[i] =3D '\0';
+> +}
+> +
+> +/**
+> + * remove_trailing_spaces - Truncate all trailing spaces in a string.
+> + *
+> + * @line: Supplies a poilcy line string for preprocessing.
+> + */
+> +static void remove_trailing_spaces(char *line)
+> +{
+> +       size_t i, len =3D 0;
+> +
+> +       len =3D strlen(line);
+> +       for (i =3D len; i > 0 && (line[i - 1] =3D=3D ' ' || line[i - 1] =
+=3D=3D '\t'); --i)
+> +               ;
+
+You can probably drop the @len variable and just assign 'i =3D
+strlen(line)' in the for-loop initializer.
+
+> +       line[i] =3D '\0';
+> +}
+> +
+> +/**
+> + * parse_version - Parse policy version.
+> + * @ver: Supplies a version string to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * 0 - OK
+> + * * !0        - Standard errno
+> + */
+> +static int parse_version(char *ver, struct ipe_parsed_policy *p)
+> +{
+> +       int rc =3D 0;
+> +       size_t sep_count =3D 0;
+> +       char *token;
+> +       u16 *const cv[] =3D { &p->version.major, &p->version.minor, &p->v=
+ersion.rev };
+> +
+> +       while ((token =3D strsep(&ver, ".")) !=3D NULL) {
+> +               /* prevent overflow */
+> +               if (sep_count >=3D ARRAY_SIZE(cv)) {
+> +                       rc =3D -EBADMSG;
+> +                       goto err;
+
+Remember what I said above about not needing a 'goto' here? ;)
+
+> +               }
+> +
+> +               rc =3D kstrtou16(token, 10, cv[sep_count]);
+> +               if (rc)
+> +                       goto err;
+> +
+> +               ++sep_count;
+> +       }
+> +
+> +       /* prevent underflow */
+> +       if (sep_count !=3D ARRAY_SIZE(cv))
+> +               rc =3D -EBADMSG;
+> +
+> +err:
+> +       return rc;
+> +}
+> +
+> +enum header_opt {
+> +       ipe_header_policy_name =3D 0,
+> +       ipe_header_policy_version,
+> +       ipe_header_max
+> +};
+> +
+> +static const match_table_t header_tokens =3D {
+> +       {ipe_header_policy_name,        "policy_name=3D%s"},
+> +       {ipe_header_policy_version,     "policy_version=3D%s"},
+> +       {ipe_header_max,                NULL}
+> +};
+> +
+> +/**
+> + * parse_header - Parse policy header information.
+> + * @line: Supplies header line to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * 0 - OK
+> + * * !0        - Standard errno
+> + */
+> +static int parse_header(char *line, struct ipe_parsed_policy *p)
+> +{
+> +       int rc =3D 0;
+> +       char *t, *ver =3D NULL;
+> +       substring_t args[MAX_OPT_ARGS];
+> +       size_t idx =3D 0;
+> +
+> +       while ((t =3D strsep(&line, " \t")) !=3D NULL) {
+> +               int token;
+> +
+> +               if (*t =3D=3D '\0')
+> +                       continue;
+> +               if (idx >=3D ipe_header_max) {
+> +                       rc =3D -EBADMSG;
+> +                       goto err;
+> +               }
+> +
+> +               token =3D match_token(t, header_tokens, args);
+> +               if (token !=3D idx) {
+> +                       rc =3D -EBADMSG;
+> +                       goto err;
+> +               }
+> +
+> +               switch (token) {
+> +               case ipe_header_policy_name:
+> +                       p->name =3D match_strdup(&args[0]);
+> +                       if (!p->name)
+> +                               rc =3D -ENOMEM;
+> +                       break;
+> +               case ipe_header_policy_version:
+> +                       ver =3D match_strdup(&args[0]);
+> +                       if (!ver) {
+> +                               rc =3D -ENOMEM;
+> +                               break;
+> +                       }
+> +                       rc =3D parse_version(ver, p);
+> +                       break;
+> +               default:
+> +                       rc =3D -EBADMSG;
+> +               }
+> +               if (rc)
+> +                       goto err;
+> +               ++idx;
+> +       }
+> +
+> +       if (idx !=3D ipe_header_max) {
+> +               rc =3D -EBADMSG;
+> +               goto err;
+> +       }
+> +       goto out;
+
+Generally the normal, non-error case is structured so that the
+function can continue to fall through to the correct code without
+needed a 'goto'.  I would suggest moving the 'err' label/code *after*
+the 'out' label/code so the normal case can just fall through without
+the goto; you will have to add a 'goto out' at the end of 'err', but
+that's the error case so we aren't going to worry too much about that.
+
+Put another (shorter) way, structure your code to optimize for the
+common, non-error case.
+
+Needless to say, this applies to other functions in this patch(set).
+
+> +err:
+> +       kfree(p->name);
+> +       p->name =3D NULL;
+> +out:
+> +       kfree(ver);
+> +       return rc;
+> +}
+> +
+> +/**
+> + * is_default - Determine if the given token is "DEFAULT".
+> + * @token: Supplies the token string to be compared.
+> + *
+> + * Return:
+> + * * 0 - The token is not "DEFAULT"
+> + * * !0        - The token is "DEFAULT"
+> + */
+> +static bool is_default(char *token)
+> +{
+> +       return !strcmp(token, "DEFAULT");
+> +}
+
+Let's be honest, "is_default()" isn't a great name, and it's a pretty
+trivial function too; I'm wondering if hiding the simple strcmp()
+behind an oddly named function is really all that helpful.  I'm okay
+if you want to keep the function, but can we name it something else?
+Maybe "token_default(...)" or something similar?
+
+> +/**
+> + * free_rule - Free the supplied ipe_rule struct.
+> + * @r: Supplies the ipe_rule struct to be freed.
+> + */
+
+It might be worth mentioning that @r should be removed from any lists,
+e.g. list_empty() is true.
+
+> +static void free_rule(struct ipe_rule *r)
+> +{
+> +       struct ipe_prop *p, *t;
+> +
+> +       if (IS_ERR_OR_NULL(r))
+> +               return;
+> +
+> +       list_for_each_entry_safe(p, t, &r->props, next) {
+> +               kfree(p);
+> +       }
+
+That's interesting, I'm used to seeing a 'list_del()' call (or
+similar) before the list entry is freed.  Although looking at
+list_for_each_entry_safe() I guess it is safe with the current
+implementation ... did you see this pattern elsewhere in the kernel?
+If so, where?
+
+Unless this is performance critical (I don't think it is?), it might
+be safer to do an explicit `list_del()` before free'ing the entries
+... unless this is now a common pattern in the kernel and I just
+missed the memo.
+
+> +       kfree(r);
+> +}
+> +
+> +static const match_table_t operation_tokens =3D {
+> +       {ipe_op_exec,                   "op=3DEXECUTE"},
+> +       {ipe_op_firmware,               "op=3DFIRMWARE"},
+> +       {ipe_op_kernel_module,          "op=3DKMODULE"},
+> +       {ipe_op_kexec_image,            "op=3DKEXEC_IMAGE"},
+> +       {ipe_op_kexec_initramfs,        "op=3DKEXEC_INITRAMFS"},
+> +       {ipe_op_ima_policy,             "op=3DIMA_POLICY"},
+> +       {ipe_op_ima_x509,               "op=3DIMA_X509_CERT"},
+> +       {ipe_op_max,                    NULL}
+> +};
+> +
+> +/**
+> + * parse_operation - Parse the opeartion type given a token string.
+> + * @t: Supplies the token string to be parsed.
+> + *
+> + * Return: The parsed opeartion type.
+> + */
+> +static enum ipe_op_type parse_operation(char *t)
+> +{
+> +       substring_t args[MAX_OPT_ARGS];
+> +
+> +       return match_token(t, operation_tokens, args);
+> +}
+> +
+> +static const match_table_t action_tokens =3D {
+> +       {ipe_action_allow,      "action=3DALLOW"},
+> +       {ipe_action_deny,       "action=3DDENY"},
+> +       {ipe_action_max,        NULL}
+> +};
+> +
+> +/**
+> + * parse_action - Parse the action type given a token string.
+> + * @t: Supplies the token string to be parsed.
+> + *
+> + * Return: The parsed action type.
+> + */
+> +static enum ipe_action_type parse_action(char *t)
+> +{
+> +       substring_t args[MAX_OPT_ARGS];
+> +
+> +       return match_token(t, action_tokens, args);
+> +}
+> +
+> +static const match_table_t property_tokens =3D {
+> +       {ipe_prop_max,                                  NULL}
+> +};
+> +
+> +/**
+> + * parse_property - Parse the property type given a token string.
+> + * @t: Supplies the token string to be parsed.
+> + * @r: Supplies the ipe_rule the parsed property will be associated with=
+.
+> + *
+> + * Return:
+> + * * !IS_ERR   - OK
+> + * * -ENOMEM   - Out of memory
+> + * * -EBADMSG  - The supplied token cannot be parsed
+> + */
+> +int parse_property(char *t, struct ipe_rule *r)
+> +{
+> +       substring_t args[MAX_OPT_ARGS];
+> +       struct ipe_prop *p =3D NULL;
+> +       int rc =3D 0;
+> +       int token;
+> +       char *dup =3D NULL;
+> +
+> +       p =3D kzalloc(sizeof(*p), GFP_KERNEL);
+> +       if (!p) {
+> +               rc =3D -ENOMEM;
+> +               goto err;
+> +       }
+> +
+> +       token =3D match_token(t, property_tokens, args);
+> +
+> +       switch (token) {
+> +       case ipe_prop_max:
+> +       default:
+> +               rc =3D -EBADMSG;
+> +               break;
+> +       }
+> +       list_add_tail(&p->next, &r->props);
+> +
+> +err:
+> +       kfree(dup);
+> +       return rc;
+> +}
+
+There is a lot of stuff in 'parse_property()' that doesn't make sense
+at this point in the patchset, including lots of unused variables.
+Considering that no valid properties are defined yet, why not just
+make this function return -EBADMSG in this patch?  You can always
+populate it later when it becomes useful.
+
+int parse_property(...)
+{
+  return -EBADMSG;
+}
+
+> +/**
+> + * parse_rule - parse a policy rule line.
+> + * @line: Supplies rule line to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * !IS_ERR   - OK
+> + * * -ENOMEM   - Out of memory
+> + * * -EBADMSG  - Policy syntax error
+> + */
+> +static int parse_rule(char *line, struct ipe_parsed_policy *p)
+> +{
+> +       int rc =3D 0;
+> +       bool first_token =3D true, is_default_rule =3D false;
+> +       bool op_parsed =3D false;
+> +       enum ipe_op_type op =3D ipe_op_max;
+> +       enum ipe_action_type action =3D ipe_action_max;
+> +       struct ipe_rule *r =3D NULL;
+> +       char *t;
+> +
+> +       r =3D kzalloc(sizeof(*r), GFP_KERNEL);
+> +       if (!r) {
+> +               rc =3D -ENOMEM;
+> +               goto err;
+> +       }
+> +
+> +       INIT_LIST_HEAD(&r->next);
+> +       INIT_LIST_HEAD(&r->props);
+> +
+> +       while (t =3D strsep(&line, " \t"), line) {
+> +               if (*t =3D=3D '\0')
+> +                       continue;
+> +               if (first_token && is_default(t)) {
+> +                       is_default_rule =3D true;
+> +               } else {
+> +                       if (!op_parsed) {
+> +                               op =3D parse_operation(t);
+> +                               if (op =3D=3D ipe_op_max)
+> +                                       rc =3D -EBADMSG;
+> +                               else
+> +                                       op_parsed =3D true;
+> +                       } else {
+> +                               rc =3D parse_property(t, r);
+> +                       }
+> +               }
+> +
+> +               if (rc)
+> +                       goto err;
+> +               first_token =3D false;
+> +       }
+> +
+> +       action =3D parse_action(t);
+> +       if (action =3D=3D ipe_action_max) {
+> +               rc =3D -EBADMSG;
+> +               goto err;
+> +       }
+> +
+> +       if (is_default_rule) {
+> +               if (op =3D=3D ipe_op_max) {
+> +                       if (p->global_default_action !=3D ipe_action_max)
+> +                               rc =3D -EBADMSG;
+> +                       else
+> +                               p->global_default_action =3D action;
+> +               } else {
+> +                       if (p->rules[op].default_action !=3D ipe_action_m=
+ax)
+> +                               rc =3D -EBADMSG;
+> +                       else
+> +                               p->rules[op].default_action =3D action;
+> +               }
+> +               free_rule(r);
+> +       } else if (op !=3D ipe_op_max && action !=3D ipe_action_max) {
+> +               r->op =3D op;
+> +               r->action =3D action;
+> +               list_add_tail(&r->next, &p->rules[op].rules);
+
+There is no way @rc could be non-zero here, right?  If there is some
+chance of it being non-zero we could have a problem with the @rc check
+below jumping us to the 'err' label and free'ing a rule that has been
+added to the list.
+
+It might be better to move the list addition after the last error check.
+
+> +       } else {
+> +               rc =3D -EBADMSG;
+> +       }
+> +
+> +       if (rc)
+> +               goto err;
+> +
+> +       goto out;
+> +
+> +err:
+> +       free_rule(r);
+> +out:
+> +       return rc;
+> +}
+> +
+> +/**
+> + * free_parsed_policy - free a parsed policy structure.
+> + * @p: Supplies the parsed policy.
+> + */
+> +void free_parsed_policy(struct ipe_parsed_policy *p)
+> +{
+> +       size_t i =3D 0;
+> +       struct ipe_rule *pp, *t;
+> +
+> +       if (IS_ERR_OR_NULL(p))
+> +               return;
+> +
+> +       for (i =3D 0; i < ARRAY_SIZE(p->rules); ++i)
+> +               list_for_each_entry_safe(pp, t, &p->rules[i].rules, next)
+> +                       free_rule(pp);
+> +
+> +       kfree(p);
+> +}
+> +
+> +/**
+> + * validate_policy - validate a parsed policy.
+> + * @p: Supplies the fully parsed policy.
+> + *
+> + * Given a policy structure that was just parsed, validate that all
+> + * necessary fields are present, initialized correctly, and all lines
+> + * parsed are have been consumed.
+> + *
+> + * A parsed policy can be an invalid state for use (a default was
+> + * undefined, a header was undefined) by just parsing the policy.
+> + *
+> + * Return:
+> + * * 0         - OK
+> + * * -EBADMSG  - Policy is invalid
+> + */
+> +static int validate_policy(const struct ipe_parsed_policy *p)
+> +{
+> +       int i =3D 0;
+> +
+> +       if (p->global_default_action !=3D ipe_action_max)
+> +               return 0;
+> +
+> +       for (i =3D 0; i < ARRAY_SIZE(p->rules); ++i) {
+> +               if (p->rules[i].default_action =3D=3D ipe_action_max)
+> +                       return -EBADMSG;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * parse_policy - Given a string, parse the string into an IPE policy.
+> + * @p: partially filled ipe_policy structure to populate with the result=
+.
+> + *     it must have text and textlen set.
+> + *
+> + * Return:
+> + * * 0         - OK
+> + * * -EBADMSG  - Policy is invalid
+> + * * -ENOMEM   - Out of Memory
+> + */
+> +int parse_policy(struct ipe_policy *p)
+> +{
+> +       int rc =3D 0;
+> +       size_t len;
+> +       char *policy =3D NULL, *dup =3D NULL;
+> +       char *line =3D NULL;
+> +       bool header_parsed =3D false;
+> +       struct ipe_parsed_policy *pp =3D NULL;
+> +
+> +       if (!p->textlen)
+> +               return -EBADMSG;
+> +
+> +       policy =3D kmemdup_nul(p->text, p->textlen, GFP_KERNEL);
+> +       if (!policy)
+> +               return -ENOMEM;
+> +       dup =3D policy;
+> +
+> +       pp =3D new_parsed_policy();
+> +       if (IS_ERR(pp)) {
+> +               rc =3D PTR_ERR(pp);
+> +               goto out;
+> +       }
+> +
+> +       while ((line =3D strsep(&policy, "\n\r")) !=3D NULL) {
+> +               remove_comment(line);
+> +               remove_trailing_spaces(line);
+
+I think it might be very easy for 'remove_trailing_spaces()' to return
+the length of the string as it already knows where the string ends;
+perhaps the function could return the string length and we could get
+rid of the 'strlen()' call below?
+
+> +               len =3D strlen(line);
+> +               if (!len)
+> +                       continue;
+> +
+> +               if (!header_parsed) {
+> +                       rc =3D parse_header(line, pp);
+> +                       if (rc)
+> +                               goto err;
+> +                       header_parsed =3D true;
+> +                       continue;
+
+Instead of the 'continue' above, why not just put the 'parse_rule()'
+call into the 'else' block of this if-then-else?
+
+> +               }
+> +
+> +               rc =3D parse_rule(line, pp);
+> +               if (rc)
+> +                       goto err;
+> +       }
+> +
+> +       if (!header_parsed || validate_policy(pp)) {
+> +               rc =3D -EBADMSG;
+> +               goto err;
+> +       }
+> +
+> +       p->parsed =3D pp;
+> +
+> +       goto out;
+> +err:
+> +       free_parsed_policy(pp);
+> +out:
+> +       kfree(dup);
+> +
+> +       return rc;
+> +}
+> diff --git a/security/ipe/policy_parser.h b/security/ipe/policy_parser.h
+> new file mode 100644
+> index 000000000000..699ca58a5a32
+> --- /dev/null
+> +++ b/security/ipe/policy_parser.h
+> @@ -0,0 +1,11 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +#ifndef IPE_POLICY_PARSER_H
+> +#define IPE_POLICY_PARSER_H
+> +
+> +int parse_policy(struct ipe_policy *p);
+> +void free_parsed_policy(struct ipe_parsed_policy *p);
+> +
+> +#endif /* IPE_POLICY_PARSER */
+> --
+> 2.39.0
+
+--
+paul-moore.com
