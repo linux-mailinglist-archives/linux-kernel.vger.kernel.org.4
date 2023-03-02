@@ -2,138 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6032A6A8635
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B0F6A8634
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjCBQVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:21:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
+        id S229809AbjCBQV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjCBQVl (ORCPT
+        with ESMTP id S229613AbjCBQV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:21:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A21A34C03
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677774054;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9xOfU4PlP9FaVWqoxDuTqEGSCMk6PXW1QbyGJ2/dDF0=;
-        b=e2W80ARGZ9uVHXsMgQ4pR/k6/7KQr1DBFVjkceclo8Z/8kRnEcqtWLRBM8wfODQFRoRBkW
-        LZWOznEgOacIezuDQnxz5WJMHUMQIEtFgHj0qxJ8IswWjPPeG6sc95qLkrkKpzU+etA7Uk
-        oGCRtphT65N3PNRzpazORl4M1SkqLv0=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-640-n6HKBBaQNVuci_S--f0DtQ-1; Thu, 02 Mar 2023 11:20:53 -0500
-X-MC-Unique: n6HKBBaQNVuci_S--f0DtQ-1
-Received: by mail-qt1-f197.google.com with SMTP id c11-20020ac85a8b000000b003bfdd43ac76so6682783qtc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 08:20:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677774051;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9xOfU4PlP9FaVWqoxDuTqEGSCMk6PXW1QbyGJ2/dDF0=;
-        b=c32u8zx4wMrwBhYuLmu2uAMuuln8NWC9Jbs7RmuD5TBDjnXq7btMADvOxiogQ/jnQ9
-         GoZVuQXm2AHNvExnoJ1bY09ZZAKAMrULzSgumChIystHv0Cn7TpcZGQFDEWiREVS/uRb
-         jWplm66IUaPlbNUsNc2ejPCVOzQRUnyKYmjC1BBfZVh80W6jDg2bni/9O4ozseBVy6M9
-         euDI5JDi3jwFycUTxagrMPILL9+4CZ8NsTi1NByiV2s1oZMrG3JqQbMihaljQYswRF83
-         s+LFyCXnmwb9V19gb0hxC0td2bBMCZfBTfBbz2AAteloH28iYJj+wl+xaKt1aUCeFz15
-         Dh2Q==
-X-Gm-Message-State: AO0yUKWbzty8GXW1+YOfyepOc43fiVc7MTe5zz3CxUDNGtGaZTPK4Vhb
-        THEGwrjGPGJxZNFwsR9ntmBU6xHm8KF3aKlXFn0UOmXxWz5svdhln7+t+d/mfzQwD6rqFjTE2L9
-        2+c2EiO3bUgg0z7XQFVTHxmC3
-X-Received: by 2002:a05:622a:34d:b0:3bf:d71e:5b08 with SMTP id r13-20020a05622a034d00b003bfd71e5b08mr20514554qtw.3.1677774051269;
-        Thu, 02 Mar 2023 08:20:51 -0800 (PST)
-X-Google-Smtp-Source: AK7set9qq3ZPjFIsnOOEXZugxAvUqaHVsX6sqUyPztiC+UlkHco3HAQ8ZWbJPfUT6dNx7Q2La1DP9w==
-X-Received: by 2002:a05:622a:34d:b0:3bf:d71e:5b08 with SMTP id r13-20020a05622a034d00b003bfd71e5b08mr20514481qtw.3.1677774050715;
-        Thu, 02 Mar 2023 08:20:50 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id s184-20020a372cc1000000b0073bb00eb0besm11147177qkh.22.2023.03.02.08.20.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 08:20:50 -0800 (PST)
-Date:   Thu, 2 Mar 2023 11:20:49 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 08/11] mm/vmstat: switch counter modification to
- cmpxchg
-Message-ID: <ZADM4U49g+g4S5Xf@x1n>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.846239718@redhat.com>
- <3331790c-95a1-6ab9-2667-86aae3d28d7d@redhat.com>
- <ZAC3BxPIxAplvTzT@tpad>
+        Thu, 2 Mar 2023 11:21:26 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F205504C;
+        Thu,  2 Mar 2023 08:21:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677774085; x=1709310085;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=502TDYPD+P5WlMFQrS9KeOupKAiUNlCfEA+GuL2sdNU=;
+  b=U4pxqokuSXDC3LypaumrPxAbTwoxYcZnQyb3sH/qcZaoPiVDIfHQwkEj
+   LE+pmDqOgNlPz14b2OW1EoPqL8qX4Jd9+YxZ/srGbeqnoFu8LmgyXSUqO
+   b02saAcY5CZe48g5iaK5YoqnlIK7fYBgIt2KJrBTxhAsDLkEYtNJoAG67
+   KmQasGF/cWLTvixp5qBRK18j42SCUlIHpDVbNQc5/vNazj3xzU5GpfsFJ
+   vLMQdFsUiF4a3eh1dNFDtUKst4XjWFbrUK3UcPla3vDsjdc8FGfWbfBiJ
+   LX0ipw46YAtX1/JetvA6ipFEa770S6gejZc0YagfbHfdepFzrWbvTLfvC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="315184452"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="315184452"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 08:21:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="920759225"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="920759225"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Mar 2023 08:21:22 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pXlgH-00EQQJ-0u;
+        Thu, 02 Mar 2023 18:21:21 +0200
+Date:   Thu, 2 Mar 2023 18:21:21 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] leds: simatic-ipc-leds-gpio: split up into
+ multiple drivers
+Message-ID: <ZADNAQbmxC3hdgl3@smile.fi.intel.com>
+References: <20230301170215.23382-1-henning.schild@siemens.com>
+ <20230301170215.23382-3-henning.schild@siemens.com>
+ <Y/+LLICwh3T25IGv@smile.fi.intel.com>
+ <20230302094009.74b5d368@md1za8fc.ad001.siemens.net>
+ <ZADE7kBB9HzTlpul@smile.fi.intel.com>
+ <20230302165824.4868f6da@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZAC3BxPIxAplvTzT@tpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230302165824.4868f6da@md1za8fc.ad001.siemens.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 11:47:35AM -0300, Marcelo Tosatti wrote:
-> So it will be:
+On Thu, Mar 02, 2023 at 04:58:24PM +0100, Henning Schild wrote:
+> Am Thu, 2 Mar 2023 17:46:54 +0200
+> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+> > On Thu, Mar 02, 2023 at 09:40:09AM +0100, Henning Schild wrote:
+> > > Am Wed, 1 Mar 2023 19:28:12 +0200
+> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:  
+> > > > On Wed, Mar 01, 2023 at 06:02:14PM +0100, Henning Schild wrote:  
+
+...
+
+> > > > > +	.driver = {
+> > > > > +		.name = KBUILD_MODNAME,    
+> > > > 
+> > > > Strictly speaking this is an ABI (as something may instantiate the
+> > > > driver from the user space or elsewhere by this name. At the same
+> > > > time this may change with the file name change.
+> > > > 
+> > > > Personally I prefer explicit string literal here.  
+> > > 
+> > > Switching from one module to three the names have to change. People
+> > > who explicitly loaded the old module which supported multiple
+> > > machines, will now how to load either both oŕ know which one to
+> > > load.  
+> > 
+> > Wait, are you telling that now users load modules _manually_?!
 > 
-> #ifdef CONFIG_HAVE_CMPXCHG_LOCAL
-> mod_zone_page_state
-> inc_zone_page_state
-> dec_zone_page_state
-> mod_node_page_state
-> inc_node_page_state
-> dec_node_page_state
-> __mod_zone_page_state (new function, calls mod_zone_page_state).
-> __mod_node_page_state (new function, calls mod_node_page_state).
-> __inc_zone_page_state
-> __inc_node_page_state
-> __dec_zone_page_state
-> __dec_node_page_state
-> #else
-> __mod_zone_page_state (old, shared function for both CONFIG_HAVE_CMPXCHG_LOCAL and not)
-> __mod_node_page_state
-> __inc_zone_page_state
-> __inc_node_page_state
-> __dec_zone_page_state
-> __dec_node_page_state
-> mod_zone_page_state
-> inc_zone_page_state
-> dec_zone_page_state
-> mod_node_page_state
-> inc_node_page_state
-> dec_node_page_state
-> #endif
+> No i am not, the modules all load automatically. I was trying to
+> construct a hypothetical case where the name change could affect users
+> doing unexpected things.
 > 
-> Any suggestion on how to split this into multiple patchsets for easier
-> reviewing? (can't think of anything obvious).
+> > > I personally think the ABI change is acceptable, the assumption
+> > > would be that the drivers load automatically anyhow. And since
+> > > there are no params i doubt users will have /etc/modprobe.d/ or
+> > > /sys/module/ stuff around.
+> > > 
+> > > And with the split i guess an ABI change can not be fully avoided.
+> > > Whether the names is explicit or implicit is another discussion and
+> > > just a matter of style. I prefer to stay with the currently used
+> > > pattern, it is not un-common in the kernel.  
+> > 
+> > The problem with that pattern is possible, while unlikely, renaming
+> > of the file which triggers this to be updated.
+> > 
+> > Under sysfs the folder will change its name. If user has a script
+> > relying on this, it will be broken. So, I prefer mine.
+> 
+> Yes, the name of the module will change ... and the location of module
+> metadata and params in sysfs, both not a big deal here. Because there
+> are no params, and there is not need to modprobe manually.
 
-I figured this out before saw this, but it did take me some time to read
-carefully into the code base..  maybe it'll be a good idea to mention
-something like above in the commit message to ease future reviewers (and
-more likelyhood to attract the experts to start chim in)?
+It's not only one folder AFAIU. Also folder in the drivers will change
+its name. Parameters is one thing, the folder presence is another.
 
-One fundamental (but maybe another naive.. :) question on this code piece
-(so not directly related to the changeset but maybe it is still..):
+Yes, the case is quite unlikely to happen (to break anyone's setup)
+that's why I started this with 'Strictly speaking...'. So, seems you
+are staying on your side, I will leave this to maintainers. If they
+are fine, I will have no objections.
 
-AFAICT CONFIG_HAVE_CMPXCHG_LOCAL only means we can do cmpxchg() without
-locking memory bus, however when !CONFIG_HAVE_CMPXCHG_LOCAL here we're not
-using non-local version but using preempt_disable_nested() to make sure the
-read is atomic.  Does it really worth it?  What happens if we use cmpxchg()
-unconditionally, but just use local (e.g. no "LOCK" prefix) version when
-CONFIG_HAVE_CMPXCHG_LOCAL?
+> > > > > +	},    
 
 -- 
-Peter Xu
+With Best Regards,
+Andy Shevchenko
+
 
