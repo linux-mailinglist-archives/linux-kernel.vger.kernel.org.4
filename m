@@ -2,149 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BBC6A7F7C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A61D6A7DC7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCBKB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:01:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S229437AbjCBJgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjCBKBV (ORCPT
+        with ESMTP id S229457AbjCBJgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:01:21 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBAA460BC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:00:52 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id e13so4401634wro.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:00:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1677751223;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wjatsIL5XK1QQSQeDPGE4hkKEq8N3SCj7VakQ0NSqR4=;
-        b=Joyk5NhrHhXbmkVlsjdNjv7dcYw86m4IQXIHczn/d6XUPDtRe82TXjk6QIyr/nAcFn
-         MX2FQnoHCLHYesMqTw42aFXg8FeamIT9bJtNWCT4XKrQMXs/jktz5/Nx+swnuYN1PRth
-         GdeUYDHU8Rq2h+VUt3Z5AaXI0poDy3pXFui49SUz3kEebQhq8gsyZLkWdwQ6+seP70Nd
-         CC4VM7zZtrGV37YSvEdV6WxtBpL6mc7M0o8rXEYbsdrz8Cp7qphJJB2Eo6BdJN1Hp8LY
-         31w6Brsh9FbsVAudFSGz2JlUD2vPhmH7ibCYajgltR1FOyaPhYccx8K4QTf4rZalSKJ6
-         MX4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677751223;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wjatsIL5XK1QQSQeDPGE4hkKEq8N3SCj7VakQ0NSqR4=;
-        b=w+cQigGDKB5W2nf7LiWhU6qnCIdr5c1F0DrEMAeZUVgZ/QaAd6/GJpQqL4n1IZELEv
-         uoHCmkz67tFAM48n4V99I5JuVm5SY3w3swfQy6dIwloJcddtoo/owy4prOajm8fZWpad
-         UUnL1vBmRiYrwOhVegmEO5rEd2Zt31EURp7pUp6MTcTWzw6kSEpsVwt2LaxfaNxn/2K+
-         /7v8FXuJ10/nqmQagMc8XmrS+mCRGCMz/h906KIymBWGZtuNZRz+QmjIHZaOTbLuoykU
-         nfcO2XeklqjHCdemjZfPV4fJnMIJ1ZfQNm/9Smm6TVPBy68EM+oDKJn3Q9Da8BUda16/
-         Cl+Q==
-X-Gm-Message-State: AO0yUKUsP8jXJFjQ5YEIi3Oh4c9rngl8L+tf40Jv9jqDM7PuVk8vsrZF
-        yDfTYrt65D4oR61E9iXaBcNDvQ==
-X-Google-Smtp-Source: AK7set/CkJN9ffHE13FKP+VJpVHJ02VAHrAXz8N5LmAg/BmaZS6Y4p/fBx2ye/D55AcGQcIeL/RfNg==
-X-Received: by 2002:adf:ce82:0:b0:2cb:85ba:24f9 with SMTP id r2-20020adfce82000000b002cb85ba24f9mr5152414wrn.66.1677751223633;
-        Thu, 02 Mar 2023 02:00:23 -0800 (PST)
-Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id g9-20020a056000118900b002c794495f6fsm14428724wrx.117.2023.03.02.02.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 02:00:23 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: [PATCH v4 24/24] s390: Remove empty <uapi/asm/setup.h>
-Date:   Thu,  2 Mar 2023 10:35:39 +0100
-Message-Id: <20230302093539.372962-25-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230302093539.372962-1-alexghiti@rivosinc.com>
-References: <20230302093539.372962-1-alexghiti@rivosinc.com>
+        Thu, 2 Mar 2023 04:36:20 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D76D38660
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:36:16 -0800 (PST)
+Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PS5Wf09jhz16NxT;
+        Thu,  2 Mar 2023 17:33:34 +0800 (CST)
+Received: from [10.67.111.186] (10.67.111.186) by
+ dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 2 Mar 2023 17:36:13 +0800
+Message-ID: <1cd19d3f-18c4-92f9-257a-378cc18cfbc7@huawei.com>
+Date:   Thu, 2 Mar 2023 17:36:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH v3] sched/fair: sanitize vruntime of entity being placed
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+References: <20230209193107.1432770-1-rkagan@amazon.de>
+ <CAKfTPtB7ZDyCh0MiNQtyimVhYJ6E3C+2bTptj9CX3+mepH8YAQ@mail.gmail.com>
+ <Y/T36NvaCxSfS8Z/@u40bc5e070a0153.ant.amazon.com>
+ <CAKfTPtCDxdVEmPQf=6g7n7Y+bkozXAJT1NG92wDc_quNaDiHMg@mail.gmail.com>
+ <Y/xtDWYTKLutOqrM@u40bc5e070a0153.ant.amazon.com>
+ <CAKfTPtAq3yBYBxpR=RO8zxrQduOymqkdAEhigjfCuGfsY1uHsg@mail.gmail.com>
+CC:     Roman Kagan <rkagan@amazon.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+From:   Zhang Qiao <zhangqiao22@huawei.com>
+In-Reply-To: <CAKfTPtAq3yBYBxpR=RO8zxrQduOymqkdAEhigjfCuGfsY1uHsg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.111.186]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500018.china.huawei.com (7.185.36.186)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
 
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
----
- arch/s390/include/asm/setup.h      | 1 -
- arch/s390/include/uapi/asm/setup.h | 1 -
- 2 files changed, 2 deletions(-)
- delete mode 100644 arch/s390/include/uapi/asm/setup.h
 
-diff --git a/arch/s390/include/asm/setup.h b/arch/s390/include/asm/setup.h
-index 177bf6deaa27..99c1cc97350a 100644
---- a/arch/s390/include/asm/setup.h
-+++ b/arch/s390/include/asm/setup.h
-@@ -7,7 +7,6 @@
- #define _ASM_S390_SETUP_H
- 
- #include <linux/bits.h>
--#include <uapi/asm/setup.h>
- #include <linux/build_bug.h>
- 
- #define PARMAREA		0x10400
-diff --git a/arch/s390/include/uapi/asm/setup.h b/arch/s390/include/uapi/asm/setup.h
-deleted file mode 100644
-index 598d769e76df..000000000000
---- a/arch/s390/include/uapi/asm/setup.h
-+++ /dev/null
-@@ -1 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--- 
-2.37.2
+在 2023/2/27 22:37, Vincent Guittot 写道:
+> On Mon, 27 Feb 2023 at 09:43, Roman Kagan <rkagan@amazon.de> wrote:
+>>
+>> On Tue, Feb 21, 2023 at 06:26:11PM +0100, Vincent Guittot wrote:
+>>> On Tue, 21 Feb 2023 at 17:57, Roman Kagan <rkagan@amazon.de> wrote:
+>>>> What scares me, though, is that I've got a message from the test robot
+>>>> that this commit drammatically affected hackbench results, see the quote
+>>>> below.  I expected the commit not to affect any benchmarks.
+>>>>
+>>>> Any idea what could have caused this change?
+>>>
+>>> Hmm, It's most probably because se->exec_start is reset after a
+>>> migration and the condition becomes true for newly migrated task
+>>> whereas its vruntime should be after min_vruntime.
+>>>
+>>> We have missed this condition
+>>
+>> Makes sense to me.
+>>
+>> But what would then be the reliable way to detect a sched_entity which
+>> has slept for long and risks overflowing in .vruntime comparison?
+> 
+> For now I don't have a better idea than adding the same check in
+> migrate_task_rq_fair()
 
+Hi, Vincent，
+I fixed this condition as you said, and the test results are as follows.
+
+testcase: hackbench -g 44 -f 20 --process --pipe -l 60000 -s 100
+version1: v6.2
+version2: v6.2 + commit 829c1651e9c4
+version3: v6.2 + commit 829c1651e9c4 + this patch
+
+-------------------------------------------------
+	version1	version2	version3
+test1	81.0 		118.1 		82.1
+test2	82.1 		116.9 		80.3
+test3	83.2 		103.9 		83.3
+avg(s)	82.1 		113.0 		81.9
+
+-------------------------------------------------
+After deal with the task migration case, the hackbench result has restored.
+
+The patch as follow, how does this look?
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index ff4dbbae3b10..3a88d20fd29e 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4648,6 +4648,26 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ #endif
+ }
+
++static inline u64 sched_sleeper_credit(struct sched_entity *se)
++{
++
++       unsigned long thresh;
++
++       if (se_is_idle(se))
++               thresh = sysctl_sched_min_granularity;
++       else
++               thresh = sysctl_sched_latency;
++
++       /*
++        * Halve their sleep time's effect, to allow
++        * for a gentler effect of sleepers:
++        */
++       if (sched_feat(GENTLE_FAIR_SLEEPERS))
++               thresh >>= 1;
++
++       return thresh;
++}
++
+ static void
+ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+ {
+@@ -4664,23 +4684,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+                vruntime += sched_vslice(cfs_rq, se);
+
+        /* sleeps up to a single latency don't count. */
+-       if (!initial) {
+-               unsigned long thresh;
+-
+-               if (se_is_idle(se))
+-                       thresh = sysctl_sched_min_granularity;
+-               else
+-                       thresh = sysctl_sched_latency;
+-
+-               /*
+-                * Halve their sleep time's effect, to allow
+-                * for a gentler effect of sleepers:
+-                */
+-               if (sched_feat(GENTLE_FAIR_SLEEPERS))
+-                       thresh >>= 1;
+-
+-               vruntime -= thresh;
+-       }
++       if (!initial)
++               vruntime -= sched_sleeper_credit(se);
+
+        /*
+         * Pull vruntime of the entity being placed to the base level of
+@@ -4690,7 +4695,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+         * inversed due to s64 overflow.
+         */
+        sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+-       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
++       if (se->exec_start != 0 && (s64)sleep_time > 60LL * NSEC_PER_SEC)
+                se->vruntime = vruntime;
+        else
+                se->vruntime = max_vruntime(se->vruntime, vruntime);
+@@ -7634,8 +7639,12 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+         */
+        if (READ_ONCE(p->__state) == TASK_WAKING) {
+                struct cfs_rq *cfs_rq = cfs_rq_of(se);
++               u64 sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+
+-               se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
++               if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
++                       se->vruntime = -sched_sleeper_credit(se);
++               else
++                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+        }
+
+        if (!task_on_rq_migrating(p)) {
+
+
+
+Thanks.
+Zhang Qiao.
+
+> 
+>>
+>> Thanks,
+>> Roman.
+>>
+>>
+>>
+>> Amazon Development Center Germany GmbH
+>> Krausenstr. 38
+>> 10117 Berlin
+>> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+>> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+>> Sitz: Berlin
+>> Ust-ID: DE 289 237 879
+>>
+>>
+>>
+> .
+> 
