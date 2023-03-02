@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71116A899A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61F36A899B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjCBTjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S229833AbjCBTj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjCBTjk (ORCPT
+        with ESMTP id S229821AbjCBTjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:39:40 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7765025E02
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:39:24 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id e82so4626811ybh.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:39:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ahWOmlQ1UhPXqZ/fqMWkLunHfpvvJIgGILeEthfduoA=;
-        b=m2iwped2kqIlOgzuLe3VXH3l2cAhwdleoyqMhyFO4N6X00vdx5R2qZTfuFquxody38
-         X04I7aQs7KddGblTSsLRgXUTjZVsa65Vlh38gFtbccrNpaGJUpvTpMBipMKsCT41UECF
-         JQuEHRYNcdtlTGD6KP69Gplof2QBQZaCDUSjGauZ95aGdOs/ykOmX3xtMP+K/R3FdQgr
-         4Fps46cUDkjwLrox2YDULkm907rn/TJ9CLGsSYT3KGbrCVwXvE3xO8dwwHUDVLHMk3ss
-         Y1QsXqy36POpCe50Rbb5WaTd2B0pOVFWc2otq5e1T7XO02boeHhpItEwm+RN071CPHCc
-         tiQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ahWOmlQ1UhPXqZ/fqMWkLunHfpvvJIgGILeEthfduoA=;
-        b=cumNYLuZM4Apq9FkS+H5Sbjno0rL3CkWoWECCX8PAb5ZfS2g4XZEHUQQtaNiUr+bp/
-         sG9Y5E9OfuYCZJLjddVUMmCvc4MjLEpBaZKeEUnvrXaYIbV62Xh+NG/E/xuVap5ZqKho
-         5LyGzrS0K+2pLCJNUb/mIDYgenBKpAJBlEhudrjKwKXh5yyKvFpiq22HpvCpdDosoWBA
-         vPZkrB7MCNcybvNefKg9aloL85x6bc843bynEC8ezYjD+wJ29bfbVvcmLUiuS2k6xvMt
-         leTVQAEFm7mm43uqESyHzwb1boC5fe4gTT28BtE6Gc+hxGZSBTXXU0exL+xCw04XCQgn
-         mFwQ==
-X-Gm-Message-State: AO0yUKXETaWqNMSEnE5oFUrAstXB8Axj0DzrlSErsCe1TjxagqizHP38
-        A5e/CVFNCUx3IHg5s6VYs7uhQFu/ANsdTZauAMrts86EwSnCGZw=
-X-Google-Smtp-Source: AK7set+CBZBciT/92gEbb+ZPdu0tB3tVStXfg67iqqa14dc5bEj8wC3OZBLri922lTommI7AJOJZl9HN+z4E7dy/OeU=
-X-Received: by 2002:a25:9105:0:b0:ac2:ffe:9cb8 with SMTP id
- v5-20020a259105000000b00ac20ffe9cb8mr3285101ybl.3.1677785963482; Thu, 02 Mar
- 2023 11:39:23 -0800 (PST)
+        Thu, 2 Mar 2023 14:39:46 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3219230EA3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:39:40 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B10B2F4;
+        Thu,  2 Mar 2023 11:40:23 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C32113F587;
+        Thu,  2 Mar 2023 11:39:37 -0800 (PST)
+Message-ID: <7afae848-fab2-9403-62cc-6ad799eee47f@arm.com>
+Date:   Thu, 2 Mar 2023 20:39:36 +0100
 MIME-Version: 1.0
-References: <20230302062741.483079-1-jstultz@google.com> <20230302082414.77613351@gandalf.local.home>
-In-Reply-To: <20230302082414.77613351@gandalf.local.home>
-From:   John Stultz <jstultz@google.com>
-Date:   Thu, 2 Mar 2023 11:39:12 -0800
-Message-ID: <CANDhNCo4ruC4pP+iDe49b3e1nAcWtYQj4bx82+oZhyLFYkdFJQ@mail.gmail.com>
-Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
-        Midas Chien <midaschieh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tony Luck <tony.luck@intel.com>, kernel-team@android.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>
+References: <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
+ <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
+ <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
+ <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
+ <20221108194843.i4qckcu7zwqstyis@airbuntu>
+ <Y2vMBWpPlIArwnI7@hirez.programming.kicks-ass.net>
+ <424e2c81-987d-f10e-106d-8b4c611768bc@arm.com>
+ <CAKfTPtD0ZOndFef3-JxBn3G9tcX=cZEObjHZ0iqiVTJz7+QrmQ@mail.gmail.com>
+ <20230223153700.55zydy7jyfwidkis@airbuntu>
+ <CAKfTPtDVGcvmR5BoJpyoOBE19PcWZP+6NjSD7MnJyBAc7VMnmg@mail.gmail.com>
+ <20230301172458.intrgsirjauzqmo3@airbuntu>
+ <CAKfTPtDwDdpiQnUqi_OtER5EE0EN4ykDMqtwzHi3d7AyBd_aQA@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtDwDdpiQnUqi_OtER5EE0EN4ykDMqtwzHi3d7AyBd_aQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,54 +67,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 5:24=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
->
-> On Thu,  2 Mar 2023 06:27:41 +0000
-> John Stultz <jstultz@google.com> wrote:
->
-> > This reverts commit 76d62f24db07f22ccf9bc18ca793c27d4ebef721.
-> >
-> > So while priority inversion on the pmsg_lock is an occasional
-> > problem that an rt_mutex would help with, in uses where logging
-> > is writing to pmsg heavily from multiple threads, the pmsg_lock
-> > can be heavily contended.
-> >
-> > Normal mutexes can do adaptive spinning, which keeps the
-> > contention overhead fairly low maybe adding on the order of 10s
-> > of us delay waiting, but the slowpath w/ rt_mutexes makes the
-> > blocked tasks sleep & wake. This makes matters worse when there
-> > is heavy contentention, as it just allows additional threads to
-> > run and line up to try to take the lock.
-> >
-> > It devolves to a worse case senerio where the lock acquisition
-> > and scheduling overhead dominates, and each thread is waiting on
-> > the order of ~ms to do ~us of work.
-> >
-> > Obviously, having tons of threads all contending on a single
-> > lock for logging is non-optimal, so the proper fix is probably
-> > reworking pstore pmsg to have per-cpu buffers so we don't have
-> > contention.
->
-> Or perhaps we should convert rt_mutex to have adaptive spinning too. This
-> will likely be needed for PREEMPT_RT anyway. IIRC, in the PREEMPT_RT patc=
-h,
-> only the spinlock converted rt_mutexes used adaptive spinning and the
-> argument against converting the mutex to rt_mutex to adaptive spinning wa=
-s
-> because the normal one (at that time) did not have it, and we wanted to
-> keep it the same as mainline. But it appears that that reason is no longe=
-r
-> the case, and perhaps the real answer is to have all mutexes have adaptiv=
-e
-> spinning?
+On 02/03/2023 09:00, Vincent Guittot wrote:
+> On Wed, 1 Mar 2023 at 18:25, Qais Yousef <qyousef@layalina.io> wrote:
+>>
+>> On 03/01/23 11:39, Vincent Guittot wrote:
+>>> On Thu, 23 Feb 2023 at 16:37, Qais Yousef <qyousef@layalina.io> wrote:
+>>>>
+>>>> On 02/09/23 17:16, Vincent Guittot wrote:
 
-This sounds like something to try as well (though I'd still want to
-push this revert in the meantime to avoid regressions).
+[...]
 
-Do you have a more specific pointer to this adaptive spinning
-rt_mutexes for spinlocks? Looking at the current PREEMPT_RT patch I'm
-not seeing any changes to locking.
+>>>> Just to understand why we're heading into this direction now.
+>>>>
+>>>> AFAIU the desired outcome to have faster rampup time (and on HMP faster up
+>>>> migration) which both are tied to utilization signal.
+>>>>
+>>>> Wouldn't make the util response time faster help not just for rampup, but
+>>>> rampdown too?
+>>>>
+>>>> If we improve util response time, couldn't this mean we can remove util_est or
+>>>> am I missing something?
+>>>
+>>> not sure because you still have a ramping step whereas util_est
+>>> directly gives you the final tager
+>>
+>> I didn't get you. tager?
+> 
+> target
 
-thanks
--john
+uclamp_min boosting (ADPF's `CPU performance hints` feature) could
+eclipse util_est but only if it's higher and only for those tasks
+affected the feature,
+
+[...]
+
+>>>> I think if we can allow improving general util response time by tweaking PELT
+>>>> HALFLIFE we can potentially remove util_est and potentially that magic 25%
+>>>> margin too.
+>>>>
+>>>> Why the approach of further tweaking util_est is better?
+>>>
+>>> note that in this case it doesn't really tweak util_est but Dietmar
+>>> has taken into account runnable_avg to increase the freq in case of
+>>> contention
+>>>
+>>> Also IIUC Dietmar's results, the problem seems more linked to the
+>>> selection of a higher freq than increasing the utilization;
+>>> runnable_avg tests give similar perf results than shorter half life
+>>> and better power consumption.
+>>
+>> Does it ramp down faster too?
+> 
+> I don't think so.
+> 
+> To be honest, I'm not convinced that modifying the half time is the
+> right way to solve this. If it was only a matter of half life not
+> being suitable for a system, the halk life would be set once at boot
+> and people would not ask to modify it at run time.
+
+IMHO, what people don't like about PELT halflife mods is the fact that
+all sched entities and every functionality based on PELT signals would
+be affected even though it might not be beneficial or even harmful for
+system behaviour not covered by the specific benchmark numbers shown.
+
+That's why we wanted to figure out what is the actual reason which
+improves those Jankbench (or Speedometer resp. game FPS numbers). In
+this case we would be able to boost more selectively than PELT halflife
+modding can do.
+
+Util_est_faster (1) is an approach to only boost the CPU util signal
+depending on the current task's activation duration (sum of task's
+running time). This time is multiplied by 2 when calculating the fake
+PELT signal which is then max-compared with the existing CPU util.
+
+And the idea to max-compare CPU util and CPU runnable (2) is to help
+tasks under contention. Android testing showed that contention very
+often accompanies jankframe occurrences for example.
+
+I only applied (1) and (2) to DVFS requests in my testing.
+
+[...]
