@@ -2,114 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5166A7F19
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA30A6A7F05
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjCBJ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
+        id S230335AbjCBJzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjCBJzc (ORCPT
+        with ESMTP id S230251AbjCBJzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:55:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E62A17CD7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677750888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jl4deYgtYQ06Ijfay6FIS+BGHtz4sq6QUOH6s3fzXLM=;
-        b=dRzBmyCVfCWFKJwGIAfbVXk52s5aFDzqkIJw0kdr6S/5LWpsu0qENizIybVInV6RJgki2d
-        TOhljfpc7w6zChD9UcflF3W19wqGYdF4EWKimFKXrYVe3NfGoGWvM5viObjO/qGad/AF6K
-        H0UYT983mnCZim3yhKWEVTdroVjX2ic=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-414-8zppfjGBND6L-VIRT6Xo_g-1; Thu, 02 Mar 2023 04:54:47 -0500
-X-MC-Unique: 8zppfjGBND6L-VIRT6Xo_g-1
-Received: by mail-qv1-f72.google.com with SMTP id px25-20020a056214051900b0056f0794632bso8536983qvb.18
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:54:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677750886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jl4deYgtYQ06Ijfay6FIS+BGHtz4sq6QUOH6s3fzXLM=;
-        b=GhRv2rfp45lrkz3sCbAKhrjDGRNUIT4ZjOz96TEBqpP+oGKgWTXSIJkgJsjjb01tK4
-         1wJ2gMaaeYqEqAIHPBf1KsCsjzdEA9S8SD4N0wMMA5f1/NQOcuCovUVdqpWC2f3qhuNM
-         HquMBf3Uvm1o4JeAtgPFrhZT1/u7GjVPOgcH1ZtERoeKB7mF8NUkaCXQFnUCWNw1gEkB
-         wpWi/fZGk42uAkkjjfqjiKwjTWELmMpXzIwXbzItfwoy8oe80xC2wRb2HJSR2qlmbrmL
-         nlwZQOwa+L2yTkaEYMFo/Ct0Ayyx37nbHaRg63XxiO7ZGxYnQilMfZ/sS1TV54WWqxHe
-         UcwA==
-X-Gm-Message-State: AO0yUKVA+MlyHs/MZ6o8BZivv0FLse5nvHQVPwSBpuqbIzSEnILdWBBG
-        2+kkZ+odob8ip25VQIFYqvcY8fesQSDCAX5Gn2lAcvnFNrL3uhlZ2n+JVaV62jNP3dSng5KHqNU
-        /OJSAelAp/MXuGecyEwVDLwIe
-X-Received: by 2002:a05:6214:1c4f:b0:56e:ad32:2d66 with SMTP id if15-20020a0562141c4f00b0056ead322d66mr20116644qvb.10.1677750886514;
-        Thu, 02 Mar 2023 01:54:46 -0800 (PST)
-X-Google-Smtp-Source: AK7set/zHXtLONQKHsTMxBoLmedRcRQY43vgPItc+r7atw2mN0yr6/437PDMUCFGDoA9aWymkxnO/g==
-X-Received: by 2002:a05:6214:1c4f:b0:56e:ad32:2d66 with SMTP id if15-20020a0562141c4f00b0056ead322d66mr20116604qvb.10.1677750885976;
-        Thu, 02 Mar 2023 01:54:45 -0800 (PST)
-Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
-        by smtp.gmail.com with ESMTPSA id q11-20020a37430b000000b00742a252ba06sm8395133qka.135.2023.03.02.01.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 01:54:45 -0800 (PST)
-Date:   Thu, 2 Mar 2023 10:54:34 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net-next v3 3/3] selftests/bpf: add a test case for vsock
- sockmap
-Message-ID: <20230302095434.opufchwk7efiw4dv@sgarzare-redhat>
-References: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
- <20230227-vsock-sockmap-upstream-v3-3-7e7f4ce623ee@bytedance.com>
+        Thu, 2 Mar 2023 04:55:14 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E312E125B2;
+        Thu,  2 Mar 2023 01:55:12 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3229giH1001800;
+        Thu, 2 Mar 2023 09:55:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=R0Z4E2YGg3YStUNJXj+bRr0mBgUwf/rrCLLWjjUXfrQ=;
+ b=igbe7EPKq3hXGUNxMgZ1SQ2+4gwFIMY7uWQWz1B/3Okv4ehwnsx9+nnI/zfQXXTjmgE5
+ uFH2CW+8WOacmQdXaYzqK/r+NGslByrT5FKICncM9Hizi+GDCvr03ueQtdbw8YXfPjZh
+ OuAt0o2HIRKTqqOSkP2KgC1cRPbKQwnPKs6M/6Lnl9EkBP6MI+U4QA4p+eTAUaVu9gbw
+ xcrC1oa/2aQXAuJ9RNQFPMvtfH+7rwz65nV0tn+IfmNGRGf25Cof7pCh63rc13WBM0wR
+ Rt4XtOjPC8tQqf204FOgmX/ksiwKvQY8jXHpf5q2yRpLmiXta6uj8ugD08CnxNP5je8O /Q== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2cur1r2j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 09:55:01 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3229t0nn023470
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Mar 2023 09:55:00 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Thu, 2 Mar 2023 01:54:54 -0800
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        "Varadarajan Narayanan" <quic_varada@quicinc.com>
+Subject: [PATCH 0/8] Enable IPQ9754 USB
+Date:   Thu, 2 Mar 2023 15:24:39 +0530
+Message-ID: <cover.1677749625.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230227-vsock-sockmap-upstream-v3-3-7e7f4ce623ee@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Z6URMhTjq3UewHaiTkifOH7i7DfQBNBT
+X-Proofpoint-ORIG-GUID: Z6URMhTjq3UewHaiTkifOH7i7DfQBNBT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_04,2023-03-02_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 suspectscore=0 mlxlogscore=392
+ lowpriorityscore=0 adultscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303020085
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 07:04:36PM +0000, Bobby Eshleman wrote:
->Add a test case testing the redirection from connectible AF_VSOCK
->sockets to connectible AF_UNIX sockets.
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->---
-> .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++++
-> 1 file changed, 163 insertions(+)
+This patch series adds the relevant phy and controller
+configurations for enabling USB on IPQ9754
 
-Ditto.
+Depends on:
+https://lore.kernel.org/all/20230217142030.16012-1-quic_devipriy@quicinc.com/
 
-For the vsock part:
+Varadarajan Narayanan (8):
+  usb: dwc3: core: Handle fladj becoming zero
+  dt-bindings: phy: qcom,qusb2: Document IPQ9574 compatible
+  dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3 PHY
+  clk: qcom: gcc-ipq9574: Add USB related clocks
+  phy: qcom-qusb2: add QUSB2 support for IPQ9574
+  phy: qcom: qmp: Update IPQ9574 USB Phy initialization Sequence
+  arm64: dts: qcom: ipq9574: Add USB related nodes
+  arm64: dts: qcom: ipq9574: Enable USB
 
-Acked-by: Stefano Garzarella <sgarzare@redhat.com>
+ .../bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    |   1 +
+ .../devicetree/bindings/phy/qcom,qusb2-phy.yaml    |   1 +
+ arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts       |   4 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              |  92 +++++++++++++++
+ drivers/clk/qcom/gcc-ipq9574.c                     |  35 ++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c            | 130 +++++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c              |   3 +
+ drivers/usb/dwc3/core.c                            |  27 +++++
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h       |   2 +
+ 9 files changed, 295 insertions(+)
+
+-- 
+2.7.4
 
