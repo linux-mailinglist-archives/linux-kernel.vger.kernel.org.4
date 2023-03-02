@@ -2,160 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE786A81D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5CC6A81D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjCBMCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:02:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S229955AbjCBMDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCBMCm (ORCPT
+        with ESMTP id S229803AbjCBMDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:02:42 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDAD1C581;
-        Thu,  2 Mar 2023 04:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677758561; x=1709294561;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qRnn8N3qEnPLW3FCyY/dBp3w9m26bLe2i0v5nSystnw=;
-  b=WT2jRfxVS4Kltsj2RtNTFAWzdt0AyxMS9EH55j7l35Zqv2ZqjzPHHibP
-   hJGw74FXfFRuvwgjgz1udnOLFTjlS/k5n8hz8sEqU6GBfHHbdVS59TS+o
-   H1aC5qy2O809FDvBb0AWHLP85zt99fuj4KC7B33kEs/6Tl/90PUII0ft0
-   icUclxVMvU+1w/R5VaTX6RK+IkFw0h0PdCJfaSFphNeJuVdtLEfOgoZMO
-   +FKztmJdSW15fPetAGyAeRDT4f6sG6G7/NoUei7CtutrnpcVWXcdw2EIL
-   8XT/7rY28+S8axSz1NEIgceQS0M72UAgtugKXfzyiSAtg3jEXTaf319Um
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="420963073"
-X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
-   d="scan'208";a="420963073"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 04:02:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="763979032"
-X-IronPort-AV: E=Sophos;i="5.98,227,1673942400"; 
-   d="scan'208";a="763979032"
-Received: from pplank-mobl1.ger.corp.intel.com (HELO [10.251.217.71]) ([10.251.217.71])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 04:02:39 -0800
-Message-ID: <189d0e91-3216-edd0-b9b6-d2df3bb9618d@linux.intel.com>
-Date:   Thu, 2 Mar 2023 14:02:37 +0200
+        Thu, 2 Mar 2023 07:03:41 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B78BF96F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:03:40 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id bx12so13123672wrb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677758619;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=//nTMjC91UXahku8+Tdgj1LSFzE35LjlMWcyU1qZ1CQ=;
+        b=xC3lGcWemHgD69Qa6SjC7iLvsWcoyMqrRP2tbnso0lWItT3NJRh97pgog8qb12RHPd
+         vcYzmy4CqHGya/xFYdqheKBrfkkMNCDsdpfECVxn/sOr07JdI+bN8RQzQipunChja1SW
+         THeCPlrarcDbbQ2ghM3lMuli9UboDI5yFER6FuoxnqVQw52CGhvNSzPB74o1RZ2iY5VC
+         55EBjwBlSKzE2/5qIwbkbSHrG3Q7Ty+Qb5kT+CRJ7LM3Z9PBmoQfFtyh3zkZU1IOHzNh
+         P3Gxz9Vvvbga2/CjT2Y+BjNSO2yfAAgbnrKzt6vKAAL4EXJq0dEBNHqH2lbiEN+ivuMl
+         bfnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677758619;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=//nTMjC91UXahku8+Tdgj1LSFzE35LjlMWcyU1qZ1CQ=;
+        b=HzALXiQSPy+J/nK1HkVPdCFAXX/4HPbcQTpd4OrogiSElwT2uQPcLLRfi5G5newx1q
+         ZSBJFdn+4/2tMFas5abCFgZVbsxBuyeBvR0lgq3akROKemu2kIsQqyYDNjbyYcbwRR2j
+         dRYExTx6C3RBIdYraSvyGdLD3DTkoq6/4bmUUmUbyvZhy8SSTjJBGZv/umqTf7BBHA8v
+         DeFMGlVkkkx+z4XbBScNHy0lj/vyImQZzK6rCQKLUpJT+86x3S+2wULZEy9Ps96a4mfD
+         FHNasjL0T6ARDSgLjXOH69pyQscCNEsq8PWliRMxH79RHWei/y2cEhJxQvFx1BcOyMHH
+         6TaQ==
+X-Gm-Message-State: AO0yUKWzAVAFcKOBBx26yJd6sshK6tjlNYAc/T4GgsSQhFvIxfCTmat4
+        VzZFJK6ZYR0Lp8VVdUELD1xVpA==
+X-Google-Smtp-Source: AK7set/cuxTBk2fSWYhYU5b2FKv5Yqgg6rOXfNsTT+RpLAGnq0BSBmhWdoPN6utwXYOimmwl91XfaA==
+X-Received: by 2002:adf:f6c5:0:b0:2c7:148c:b04f with SMTP id y5-20020adff6c5000000b002c7148cb04fmr7122753wrp.37.1677758619031;
+        Thu, 02 Mar 2023 04:03:39 -0800 (PST)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id a4-20020a5d5704000000b002c559843748sm15293422wrv.10.2023.03.02.04.03.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 04:03:38 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        steev@kali.org, johan+linaro@kernel.org, quic_bjorande@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] ASoC: qcom: common: add default jack dapm pins
+Date:   Thu,  2 Mar 2023 12:03:27 +0000
+Message-Id: <20230302120327.10823-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] trace/hwlat: Do not restart per-cpu threads if they are
- already running
-Content-Language: en-US
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20230302113654.2984709-1-tero.kristo@linux.intel.com>
- <92700518-46e3-88af-9be1-db18767754f5@kernel.org>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-In-Reply-To: <92700518-46e3-88af-9be1-db18767754f5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+If the soundcard does not specify the dapm pins, let the common
+code add these pins for jack.
 
-On 02/03/2023 13:49, Daniel Bristot de Oliveira wrote:
-> Hi Tero,
->
-> On 3/2/23 08:36, Tero Kristo wrote:
->> Check if the hwlatd thread for the cpu is already running, before
->> starting a new one. This avoids running multiple instances of the same
->> CPU thread on the system. Also, do not wipe the contents of the
->> per-cpu kthread data when starting the tracer, as this can completely
->> forget about already running instances and start new additional per-cpu
->> threads. Fixes issues where fiddling with either the mode of the hwlat
->> tracer or doing cpu-hotplugs messes up the internal book-keeping
->> resulting in stale hwlatd threads.
-> Thanks for your patch.
->
-> Would you mind explaining how do you hit the problem? that is, how can
-> I reproduce the same problem you faced.
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ sound/soc/qcom/common.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-For example, this script snippet reproduces it for me every time:
+diff --git a/sound/soc/qcom/common.c b/sound/soc/qcom/common.c
+index c1f24af17506..555feb845c41 100644
+--- a/sound/soc/qcom/common.c
++++ b/sound/soc/qcom/common.c
+@@ -8,6 +8,11 @@
+ #include "qdsp6/q6afe.h"
+ #include "common.h"
+ 
++static const struct snd_soc_dapm_widget qcom_jack_snd_widgets[] = {
++	SND_SOC_DAPM_HP("Headphone Jack", NULL),
++	SND_SOC_DAPM_MIC("Mic Jack", NULL),
++};
++
+ int qcom_snd_parse_of(struct snd_soc_card *card)
+ {
+ 	struct device_node *np;
+@@ -169,6 +174,11 @@ int qcom_snd_parse_of(struct snd_soc_card *card)
+ 		of_node_put(platform);
+ 	}
+ 
++	if (!card->dapm_widgets) {
++		card->dapm_widgets = qcom_jack_snd_widgets;
++		card->num_dapm_widgets = ARRAY_SIZE(qcom_jack_snd_widgets);
++	}
++
+ 	return 0;
+ err:
+ 	of_node_put(cpu);
+-- 
+2.21.0
 
-#!/bin/sh
-cd /sys/kernel/debug/tracing
-echo 0 > tracing_on
-echo hwlat > current_tracer
-echo per-cpu > hwlat_detector/mode
-echo 100000 > hwlat_detector/width
-echo 200000 > hwlat_detector/window
-echo 200 > tracing_thresh
-echo 1 > tracing_on
-
-Another case where something wonky happens is if you offline/online a 
-large number of CPUs (which takes a lot of time), and you start/disable 
-the hwlat tracer at the same time.
-
--Tero
-
-
->
-> I tried reproducing it by dispatching the hwlat tracer in two instances,
-> but the system already blocks me...
->
-> [root@vm tracing]# echo hwlat > current_tracer
-> [root@vm tracing]# cd instances/
-> [root@vm instances]# mkdir hwlat_2
-> [root@vm instances]# cd hwlat_2/
-> [root@vm hwlat_2]# echo hwlat > current_tracer
-> -bash: echo: write error: Device or resource busy
->
-> [root@vm hwlat_2]# cd ../../
-> [root@vm tracing]# echo nop > current_tracer
-> [root@vm tracing]# cd instances/hwlat_2/
-> [root@vm hwlat_2]# echo hwlat > current_tracer
-> [root@vm hwlat_2]# cd ..
-> [root@vm instances]# mkdir hwlat_1
-> [root@vm instances]# cd hwlat_1/
-> [root@vm hwlat_1]# echo hwlat > current_tracer
-> -bash: echo: write error: Device or resource busy
-> [root@vm hwlat_1]#
->
-> Having a reproducer helps us to think better about the problem.
->
-> -- Daniel
->
->> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
->> ---
->>   kernel/trace/trace_hwlat.c | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/trace/trace_hwlat.c b/kernel/trace/trace_hwlat.c
->> index d440ddd5fd8b..c4945f8adc11 100644
->> --- a/kernel/trace/trace_hwlat.c
->> +++ b/kernel/trace/trace_hwlat.c
->> @@ -492,6 +492,10 @@ static int start_cpu_kthread(unsigned int cpu)
->>   {
->>   	struct task_struct *kthread;
->>   
->> +	/* Do not start a new hwlatd thread if it is already running */
->> +	if (per_cpu(hwlat_per_cpu_data, cpu).kthread)
->> +		return 0;
->> +
->>   	kthread = kthread_run_on_cpu(kthread_fn, NULL, cpu, "hwlatd/%u");
->>   	if (IS_ERR(kthread)) {
->>   		pr_err(BANNER "could not start sampling thread\n");
->> @@ -584,9 +588,6 @@ static int start_per_cpu_kthreads(struct trace_array *tr)
->>   	 */
->>   	cpumask_and(current_mask, cpu_online_mask, tr->tracing_cpumask);
->>   
->> -	for_each_online_cpu(cpu)
->> -		per_cpu(hwlat_per_cpu_data, cpu).kthread = NULL;
->> -
->>   	for_each_cpu(cpu, current_mask) {
->>   		retval = start_cpu_kthread(cpu);
->>   		if (retval)
