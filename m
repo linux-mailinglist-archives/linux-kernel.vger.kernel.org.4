@@ -2,54 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12EB6A876B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334F36A8769
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjCBQzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S230143AbjCBQyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjCBQzn (ORCPT
+        with ESMTP id S230063AbjCBQyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:55:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCDB17CCE;
-        Thu,  2 Mar 2023 08:55:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=AUBDDw7Nqbnm0w1FvorVxn1rzYs+CIAdfSAqMk4EzQ4=; b=R6yGvig9Ts9hZ9YwIX7jE+KDXP
-        t31zY8KiwuOsRoiwpeGfE+OrMOFm4gTOnw4nyKd6TM3bSAhrlb1PLEjRa00eW8Kf1wdRRpZ8NQkhk
-        a7rdnzajEhXBPW6gLQxVymspP49NBrj2KAVp5JPdx40sKNzrVmVNyUNDhTq1qi24PgcGc2iLUhkD8
-        d5LRLYrUUx9JoX7ha8djnfD4E0CnW4f9f+hG4otHypje/2R55Oa4NlVa12HbSq2DZVdDXNK1U9sRB
-        slhEZ8ACbxzjqLBPTT6w2i7xP56Pep5DYBsgQHZVPtgM82CQPCzpES7klG728dqqGq2vOYuwWEahF
-        scVLpqEQ==;
-Received: from [54.239.6.186] (helo=[192.168.10.135])
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pXmDE-002WtU-Us; Thu, 02 Mar 2023 16:55:25 +0000
-Message-ID: <65d872db2e1be29bb03b43ed606e7cc9e74ec08d.camel@infradead.org>
-Subject: Re: [PATCH v2 0/2] [RFC] virtio-rng entropy leak reporting feature
-From:   Amit Shah <amit@infradead.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Babis Chalios <bchalios@amazon.es>
-Cc:     Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
-        amit@kernel.org, graf@amazon.de, xmarcalx@amazon.co.uk
-Date:   Thu, 02 Mar 2023 17:55:23 +0100
-In-Reply-To: <Y9lBeymca9eFaJ33@zx2c4.com>
-References: <20230131145543.86369-1-bchalios@amazon.es>
-         <Y9lBeymca9eFaJ33@zx2c4.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 2 Mar 2023 11:54:12 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F388830EB3;
+        Thu,  2 Mar 2023 08:54:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677776052; x=1709312052;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DwsJhH9kOHV7GD3CBh4CQOdjsIKuVme3C7GZneWT9P4=;
+  b=SeJCAmKs7u/4uulm2XIxHahugRiqU6PbhMxhUPQ3czrDF0D+ZvWU0jCS
+   x4MGNNA1XJiJx3/cy5bIj5dfYL650VZkNI5ykZV6Vjl/fHr8+bXA5QWSb
+   dzibAUlUmJnWr1xUkHtuowJyOJetJgSTSZS/PiboEGBhYn5xgTcDG+7AP
+   UHw+aGbbeL0tOOp9QFezsOKyS1W7vfxIUnSy3WxrqvxaTQnrNtQ7BRPoT
+   8voZ2L8cYNeDuK8kEYjrc5mehgw9VRPafXq87mSsytandort4lj2ecDr+
+   uWHR2ZP0Hu+/hzNsJjUcfgTErymVRcrEBt8P8muob9Rp4eUQwQAuqJnmv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="314438160"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="314438160"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 08:54:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="625014743"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="625014743"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 08:54:01 -0800
+Date:   Thu, 2 Mar 2023 08:57:51 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v4 3/6] iommu/sva: Stop using ioasid_set for SVA
+Message-ID: <20230302085751.1e7f02bd@jacob-builder>
+In-Reply-To: <BN9PR11MB52769D24FF395C1D42F33E2A8CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
+        <20230301235646.2692846-4-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB52769D24FF395C1D42F33E2A8CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,25 +86,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey=C2=A0all,
+Hi Kevin,
 
-On Tue, 2023-01-31 at 17:27 +0100, Jason A. Donenfeld wrote:
-> You sent a v2, but I'm not back until the 11th to provide comments on
-> v1. I still think this isn't the right direction, as this needs tie-ins
-> to the rng to actually be useful. Please stop posting new versions of
-> this for now, so that somebody doesn't accidentally merge it; that'd be
-> a big mistake. I'll paste what I wrote you prior:
+On Thu, 2 Mar 2023 08:58:21 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
 
-I sat down to review the patchset but looks like there's some
-background I'm not aware of.
+> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > Sent: Thursday, March 2, 2023 7:57 AM
+> > 
+> > 
+> > -	if (min == INVALID_IOASID || max == INVALID_IOASID ||
+> > +	if (min == IOMMU_PASID_INVALID || max ==
+> > IOMMU_PASID_INVALID ||
+> >  	    min == 0 || max < min)
+> >  		return -EINVAL;
+> >   
+> 
+> if (!pasid_valid(min) || !pasid_valid(max) || ...)
+> 
+will do
+> with that,
+> 
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> 
 
-It looks like Babis has implemented the guest side here according to
-the spec change that Michael has posted.
 
-Jason, do you have an alternative in mind?  In that case, we should
-pick this up in the spec update thread instead.
+Thanks,
 
-Somehow it feels like I don't have the complete story for this feature
-set, having missed the discussion during LPC.
-
-	Amit
+Jacob
