@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FC06A7B31
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 07:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1406A7B30
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 07:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjCBGFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 01:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S229887AbjCBGFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 01:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbjCBGFW (ORCPT
+        with ESMTP id S229848AbjCBGFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 01:05:22 -0500
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35022FCD4;
-        Wed,  1 Mar 2023 22:05:03 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pXc3S-00H7uu-Jl; Thu, 02 Mar 2023 14:04:39 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 02 Mar 2023 14:04:38 +0800
-Date:   Thu, 2 Mar 2023 14:04:38 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Subject: Re: [v4 PATCH] crypto: stm32 - Save and restore between each request
-Message-ID: <ZAA8doNUjYmTRScB@gondor.apana.org.au>
-References: <Y/c7iVW67Xhhdu8e@gondor.apana.org.au>
- <Y/hQdzsKMYgkIfMY@gondor.apana.org.au>
- <Y/yIbPBVCPx9K/0s@gondor.apana.org.au>
- <CACRpkdZC4z2Xng4=k94rmM=AFzNzTdXkvtkArMnK7afouz=7VA@mail.gmail.com>
- <Y/3FYZJeLE7DVPBf@gondor.apana.org.au>
- <Y/3IA4OjmUmjMgh1@gondor.apana.org.au>
- <Y/3N6zFOZeehJQ/p@gondor.apana.org.au>
- <CACRpkdZ3rCsOWqooNkPL6m7vZ2Z2Frh2sdxruKhrS0t3QHcSKw@mail.gmail.com>
- <Y/6sCC2nH0FcD6kJ@gondor.apana.org.au>
- <CACRpkdYN-SDfxXKLt3HWGVkWb3V1rABwvWuytwDrzfTqm81fNA@mail.gmail.com>
+        Thu, 2 Mar 2023 01:05:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BB230DB;
+        Wed,  1 Mar 2023 22:05:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EA6861549;
+        Thu,  2 Mar 2023 06:05:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D0ADC433EF;
+        Thu,  2 Mar 2023 06:04:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677737099;
+        bh=UPFD5M3RVbBS0qN7MTanJdpyBZCfZDcQn5iRqw47oeg=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Fyu1GXV2qVnZzBlykZrNbOU2wjehz/3/nmygTqKOeWeYZed9aF+o9iW0dT9m30W+5
+         ddTcfuOdAKJqNknGUSIaIg1306JPrtU2SE/aDiKUx9ycs8hXfqWcEmJ3KgyXgRCbyb
+         WHEaPyIYxT7kfu9qDEORL348WpbTPG1Qm3b/13VAoqy1Miq3UlBWvztbCZ1uuurR54
+         l3OfpO6/l3vxAkcSZ5oSCUquLdpVlX8Rct5uBv9LZgsinHIaFzrnWpcHoTwrHdVB2F
+         iRz3sBJkqpGP0kQeuORr1j6Uwxa8Zw9dN5cD3VBormZ6BtUbQx/jTr2kpBg4+gADQb
+         5PQiXx718w0eg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     pkshih@realtek.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v4] wifi: rtlwifi: rtl8192se: Remove some unused variables
+References: <20230302023911.59278-1-jiapeng.chong@linux.alibaba.com>
+Date:   Thu, 02 Mar 2023 08:04:53 +0200
+In-Reply-To: <20230302023911.59278-1-jiapeng.chong@linux.alibaba.com> (Jiapeng
+        Chong's message of "Thu, 2 Mar 2023 10:39:11 +0800")
+Message-ID: <87wn3zzo1m.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdYN-SDfxXKLt3HWGVkWb3V1rABwvWuytwDrzfTqm81fNA@mail.gmail.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 01:22:13PM +0100, Linus Walleij wrote:
->
-> It's Ux500 but I had no problem with import/export before,
-> and yeah it has state save/restore in HW.
+Jiapeng Chong <jiapeng.chong@linux.alibaba.com> writes:
 
-I think I see the problem.  My patch wasn't waiting for the hash
-computation to complete before saving the state so obviously it
-will get the wrong hash state every single time.
+> Variable bcntime_cfg, bcn_cw and bcn_ifs are not effectively used, so
+> delete it.
 
-I'll fix this up and some other inconsistencies (my reading of the
-documentation is that there are 54 registers (0-53), not 53) and
-resend the patch.
+I'll do s/it/them/ during commit, no need to resend because of this.
 
-Cheers,
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
