@@ -2,110 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C846A88EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A7A6A88F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCBTEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
+        id S229681AbjCBTFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCBTEp (ORCPT
+        with ESMTP id S229634AbjCBTFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:04:45 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333FD56536
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:04:21 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id f13so1086459edz.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:04:21 -0800 (PST)
+        Thu, 2 Mar 2023 14:05:15 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DAB57D3A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:04:54 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id z2so257893plf.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:04:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677783859;
+        d=paul-moore.com; s=google; t=1677783893;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0AnYuQNqFQzpvHhao5pD6YcV74LJjlnHRsuGa2HUaWQ=;
-        b=SsugrDxTzxQaFR4GfzqNTP07kufWy48KpQ6Tgqx9YqxlSUMdjbwKXpsZfyQdfu19v7
-         bLlUbt5oZ11YyQwxfAIPuCFCEcBAOdwB0hX8i282S4mGyermCha8uIDspd5yJEgf4sT7
-         1BhWIOmng/AcxZVFVolW8cVBXu7aJI3tL4r6Y=
+        bh=LRVimYCKhvDiUDPfm5kwf3o6VQDi4G7m6HXxXYMXUFM=;
+        b=ft/viqzCkTLwW6EhkDpC3VazoKVAkUJYltQAAdCTwnd9bafcpSMDaQPKSVafTdr0WW
+         hnhUPhxUelD0fxHuGH3j9xRL8OQBTgTg8OTQaBDbqxqZpMqWtW8NEuCYFSGQirO02J63
+         h0Pq0R1AnqVBRt19s3QVGSiWWXQFKWPD1MmrDXV/KH6wIBUNFVAWd8GO4F1s3esSSJ97
+         tjlnWdZmE45usWwpu86183HKv10lKSOdXVYU07Dpovrnld5ZrlsQI1q6wK3U2HtZhNtO
+         B8sj/nGKL2Kdp+mFWaFq7Z6Po3kHhxKlyNaDlJO4Q3raImBfrjgsOCDZR0mTnjsGUIBm
+         oSPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677783859;
+        d=1e100.net; s=20210112; t=1677783893;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0AnYuQNqFQzpvHhao5pD6YcV74LJjlnHRsuGa2HUaWQ=;
-        b=Wgm9/OWuwy0fLGy0a5gOLWPmp/tyYjjr9cO2FZZYfYK68GK/WiEvC+EOkLNealxJbU
-         zFaMz8nflvUyONYn5sllL+xnFO97sP8lXWiljrrpkadODDJEj2AxALXsVoD/eMrV+fsm
-         Y+ql9yTsf1h+wXMfTTO5Q2szY5hvFhNJkRnUWPJ75XgRdtkV89Pylvbha/nqzQ6t0AkQ
-         NJUukYNPakiqkS/rRdnS3gek9Da4b07fiTJNjIM3VFbeOSyXtVt4V073jcDFNshCIXKG
-         J/Wu9KsobQRXlpbf9W8gVfLlw0v4+nBa+MF7SHfVwSIfipNClJHo3PBVVSnLriNkXmMX
-         LUFw==
-X-Gm-Message-State: AO0yUKVS3RKCYsIrR4j6+A0X1SFwc2pnpKOnPcCxivQWdPUtohMutGDm
-        SHzuZZl8mvSjKClT+NaoJzfzLf3qgRaCuVxwARg=
-X-Google-Smtp-Source: AK7set/uTJcnM50cmdZv7Hjti585hDnAcABgr1JVRUXPWloHyocKIT9wvxg4NYyqz8F9WQmWy0FIfA==
-X-Received: by 2002:a17:907:1deb:b0:7c0:e30a:d3e5 with SMTP id og43-20020a1709071deb00b007c0e30ad3e5mr11151919ejc.18.1677783859001;
-        Thu, 02 Mar 2023 11:04:19 -0800 (PST)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id v10-20020a1709062f0a00b008d47cd2edfbsm20414eji.60.2023.03.02.11.04.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 11:04:17 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id s26so969509edw.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:04:16 -0800 (PST)
-X-Received: by 2002:a50:aa94:0:b0:4c2:1a44:642e with SMTP id
- q20-20020a50aa94000000b004c21a44642emr1116225edc.5.1677783856044; Thu, 02 Mar
- 2023 11:04:16 -0800 (PST)
+        bh=LRVimYCKhvDiUDPfm5kwf3o6VQDi4G7m6HXxXYMXUFM=;
+        b=Im88EgyNGD5OB5fjBSzBwWZ98yApwNif/GKIniTuDRDSdyZm3M5nUyoMmDIj5UVYzr
+         9MfEVAnTO5TCUE2DGObBXv6D9tbenXL7DUEjkKXQEuggtuItRTgE2HwhD1gAkCKdvfSE
+         +Iw0J2PrTLPbTpx5FXz9JHkymzL65fM82GB0E58hPS2TyoZuA6mh5e5cU03THy5lcmro
+         pFgaOZcH/OPTRabwXreyDMT4LEvm8x2Ti+OmDFam42LaD9z69aKCv02uNDw+wTXhv5/F
+         Qhy2RZ8Mhsl9iFR1HcBpnL/YiDplaL0KLckttPsznTcUh/+CYdYr5Lz+14VEHCuE/gDf
+         8esw==
+X-Gm-Message-State: AO0yUKXqd+buN/giyKf9d1OuoKRMemFKgfM2QVxSWuicDdsxFCEymnjP
+        9T4NKXvvJvM7qzlaCT0B5X8edIWVc+E1DL766rqz
+X-Google-Smtp-Source: AK7set8jr8w++GEdWwicBErVrQxXYcvRZv+4pkR2mJOP8drvGUq4551NSSMlqb/wqBBEjbF+WJsHq3GFxyqHmReivT0=
+X-Received: by 2002:a17:902:f7d1:b0:19a:f9d9:28d4 with SMTP id
+ h17-20020a170902f7d100b0019af9d928d4mr4094339plw.3.1677783893526; Thu, 02 Mar
+ 2023 11:04:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20230125155557.37816-1-mjguzik@gmail.com> <20230125155557.37816-2-mjguzik@gmail.com>
- <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
- <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
- <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
- <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
-In-Reply-To: <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 Mar 2023 11:03:59 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
-Message-ID: <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
-To:     Mateusz Guzik <mjguzik@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Alexander Potapenko <glider@google.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com> <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 2 Mar 2023 14:04:42 -0500
+Message-ID: <CAHC9VhRa+NwKzLfQBmHfMgUp6_d5soQG7JBq-Vn=MUeUAt4tuQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 05/16] ipe: add userspace interface
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 10:22=E2=80=AFAM Mateusz Guzik <mjguzik@gmail.com> w=
-rote:
+On Mon, Jan 30, 2023 at 5:58=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
 >
-> Ops, I meant "names_cache", here:
->         names_cachep =3D kmem_cache_create_usercopy("names_cache", PATH_M=
-AX, 0,
->                         SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL)=
-;
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
+>
+> As is typical with LSMs, IPE uses securityfs as its interface with
+> userspace. for a complete list of the interfaces and the respective
+> inputs/outputs, please see the documentation under
+> admin-guide/LSM/ipe.rst
+>
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 
-That code just needs a __GFP_SKIP_ZERO.
+...
 
-It might be best if we actually exposed it as a SLAB_SKIP_ZERO thing,
-just to make it possible to say - exactly in situations like this -
-that this particular slab cache has no advantage from pre-zeroing.
+> ---
+>  security/ipe/Makefile    |   2 +
+>  security/ipe/fs.c        | 101 +++++++++
+>  security/ipe/fs.h        |  17 ++
+>  security/ipe/ipe.c       |   3 +
+>  security/ipe/ipe.h       |   2 +
+>  security/ipe/policy.c    | 135 ++++++++++++
+>  security/ipe/policy.h    |   7 +
+>  security/ipe/policy_fs.c | 459 +++++++++++++++++++++++++++++++++++++++
+>  8 files changed, 726 insertions(+)
+>  create mode 100644 security/ipe/fs.c
+>  create mode 100644 security/ipe/fs.h
+>  create mode 100644 security/ipe/policy_fs.c
 
-This doesn't sound like a vfs issue, this is a hardening issue where
-apparently people now use that INIT_ON_ALLOC_DEFAULT_ON in "real use"
-and then you notice how horrid the performance impact can be.
+...
 
-But there might also be some possible interactions with KASAN etc.
+> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> index 772d876b1087..a5e9c6e5691b 100644
+> --- a/security/ipe/policy.c
+> +++ b/security/ipe/policy.c
+> @@ -4,12 +4,39 @@
+>   */
+>
+>  #include "ipe.h"
+> +#include "eval.h"
+> +#include "fs.h"
+>  #include "policy.h"
+>  #include "policy_parser.h"
+>  #include "digest.h"
+>
+>  #include <linux/verification.h>
+>
+> +/* lock for synchronizing writers across ipe policy */
+> +DEFINE_SPINLOCK(ipe_policy_lock);
+> +
+> +/**
+> + * ver_to_u64 - Convert an internal ipe_policy_version to a u64.
+> + * @p: Policy to extract the version from.
+> + *
+> + * Bits (LSB is index 0):
+> + *     [48,32] -> Major
+> + *     [32,16] -> Minor
+> + *     [16, 0] -> Revision
+> + *
+> + * Return: u64 version of the embedded version structure.
+> + */
+> +static inline u64 ver_to_u64(const struct ipe_policy *const p)
+> +{
+> +       u64 r =3D 0;
 
-Adding some hardening people to the cc.
+No need to set @r to 0 since you set it to the version immediately below.
 
-           Linus
+> +       r =3D (((u64)p->parsed->version.major) << 32)
+> +         | (((u64)p->parsed->version.minor) << 16)
+> +         | ((u64)(p->parsed->version.rev));
+> +
+> +       return r;
+> +}
+> +
+>  /**
+>   * ipe_free_policy - Deallocate a given IPE policy.
+>   * @p: Supplies the policy to free.
+> @@ -21,6 +48,7 @@ void ipe_free_policy(struct ipe_policy *p)
+>         if (IS_ERR_OR_NULL(p))
+>                 return;
+>
+> +       ipe_del_policyfs_node(p);
+>         free_parsed_policy(p->parsed);
+>         if (!p->pkcs7)
+>                 kfree(p->text);
+> @@ -39,6 +67,70 @@ static int set_pkcs7_data(void *ctx, const void *data,=
+ size_t len,
+>         return 0;
+>  }
+>
+> +/**
+> + * ipe_update_policy - parse a new policy and replace @old with it.
+> + * @addr: Supplies a pointer to the i_private for saving policy.
+> + * @text: Supplies a pointer to the plain text policy.
+> + * @textlen: Supplies the length of @text.
+> + * @pkcs7: Supplies a pointer to a buffer containing a pkcs7 message.
+> + * @pkcs7len: Supplies the length of @pkcs7len.
+> + *
+> + * @text/@textlen is mutually exclusive with @pkcs7/@pkcs7len - see
+> + * ipe_new_policy.
+> + *
+> + * Return:
+> + * * !IS_ERR   - OK
+> + * * -ENOENT   - Policy doesn't exist
+> + * * -EINVAL   - New policy is invalid
+> + */
+> +struct ipe_policy *ipe_update_policy(struct ipe_policy __rcu **addr,
+> +                                    const char *text, size_t textlen,
+> +                                    const char *pkcs7, size_t pkcs7len)
+> +{
+> +       int rc =3D 0;
+> +       struct ipe_policy *old, *new;
+> +
+> +       old =3D ipe_get_policy_rcu(*addr);
+> +       if (!old) {
+> +               rc =3D -ENOENT;
+> +               goto err;
+> +       }
+> +
+> +       new =3D ipe_new_policy(text, textlen, pkcs7, pkcs7len);
+> +       if (IS_ERR(new)) {
+> +               rc =3D PTR_ERR(new);
+> +               goto err;
+> +       }
+> +
+> +       if (strcmp(new->parsed->name, old->parsed->name)) {
+> +               rc =3D -EINVAL;
+> +               goto err;
+> +       }
+> +
+> +       if (ver_to_u64(old) > ver_to_u64(new)) {
+> +               rc =3D -EINVAL;
+> +               goto err;
+> +       }
+> +
+> +       if (ipe_is_policy_active(old)) {
+
+I don't understand the is-active check, you want to make @new the new
+active policy regardless, right?  Could this is-active check ever be
+false?
+
+> +               spin_lock(&ipe_policy_lock);
+> +               rcu_assign_pointer(ipe_active_policy, new);
+> +               spin_unlock(&ipe_policy_lock);
+> +               synchronize_rcu();
+> +       }
+> +
+> +       rcu_assign_pointer(*addr, new);
+> +
+> +       swap(new->policyfs, old->policyfs);
+> +       ipe_free_policy(old);
+> +
+> +       goto out;
+> +err:
+> +       ipe_free_policy(new);
+> +out:
+> +       return (rc < 0) ? ERR_PTR(rc) : new;
+> +}
+> +
+>  /**
+>   * ipe_new_policy - Allocate and parse an ipe_policy structure.
+>   *
+> @@ -117,3 +209,46 @@ struct ipe_policy *ipe_get_policy_rcu(struct ipe_pol=
+icy __rcu *p)
+>
+>         return rv;
+>  }
+> +
+> +/**
+> + * ipe_set_active_pol - Make @p the active policy.
+> + * @p: Supplies a pointer to the policy to make active.
+> + */
+> +int ipe_set_active_pol(const struct ipe_policy *p)
+> +{
+> +       int rc =3D 0;
+> +       struct ipe_policy *ap =3D NULL;
+> +
+> +       ap =3D ipe_get_policy_rcu(ipe_active_policy);
+> +       if (ap && ver_to_u64(ap) > ver_to_u64(p)) {
+> +               rc =3D -EINVAL;
+> +               goto out;
+> +       }
+> +
+> +       spin_lock(&ipe_policy_lock);
+> +       rcu_assign_pointer(ipe_active_policy, p);
+> +       spin_unlock(&ipe_policy_lock);
+> +       synchronize_rcu();
+> +
+> +out:
+> +       return rc;
+> +}
+> +
+> +/**
+> + * ipe_is_policy_active - Determine wehther @p is the active policy.
+> + * @p: Supplies a pointer to the policy to check.
+> + *
+> + * Return:
+> + * * true      - @p is the active policy
+> + * * false     - @p is not the active policy
+> + */
+> +bool ipe_is_policy_active(const struct ipe_policy *p)
+> +{
+> +       bool rv;
+> +
+> +       rcu_read_lock();
+> +       rv =3D rcu_access_pointer(ipe_active_policy) =3D=3D p;
+> +       rcu_read_unlock();
+> +
+> +       return rv;
+> +}
+
+--
+paul-moore.com
