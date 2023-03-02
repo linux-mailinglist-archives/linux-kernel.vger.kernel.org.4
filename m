@@ -2,152 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA766A7B60
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 07:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 727586A7B62
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 07:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCBG1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 01:27:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S229818AbjCBGdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 01:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCBG1q (ORCPT
+        with ESMTP id S229447AbjCBGdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 01:27:46 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52591BF9
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 22:27:44 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id cl18-20020a17090af69200b0023470d96ae6so1624396pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 22:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1s9VZXOhJ7DsOR8N1/cvuhFDdJDJYtoiVm83KN71Avo=;
-        b=sS4d3/dlStG8D73OoSC5Gh4GlPDzm5bigEQTEoTH5Rsdt+9eAchZ+PIbrl6RGoJB1u
-         ZpHwXibPE5F3+gnZcTnrR0AeAn9Zp3++9pAD7s4Fskd0cnPzN/t9OPd7B4q03tXobnEA
-         6qF5DCbrXoy0UmUi9fBP/s5bjV1eMUaf6Mmz2mWLvnkjLsY/gDM2YVo9pBNbOuHtMrQN
-         jf3gI1XceQ0y8HsBqz5HG+hHXHfHR6t7ApqIkK9cDO9fJYn8LYMJ9+9CQduvYiUnKxXF
-         LYV5ZsCzmlnOrHmPrn1+oMbYR/RP3bgbZGjcHPX1rWlZd2tvqzQxcjizAXMdg8cq86RQ
-         Xs0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1s9VZXOhJ7DsOR8N1/cvuhFDdJDJYtoiVm83KN71Avo=;
-        b=Vx+TYq0hOmybsKYED5VvcZi3ftJylSj+H8J/bOLdsQDGSCk5JMqeQ36ESvxfqk8sZo
-         N4GNDhhggkAJC8U7Qip4hLbL97NPxx+0t7wNfFc9UvSl7QBWcFXcG2cdJIdXuluqFQv+
-         d3/+jqVmRKPtmWYRpqvPd83E2fK3G136OZPvQUTlt0lt+ZlJurWvO+J32jp/YErLfzdD
-         y0LOFWxaXaTZ6DyzaI+G5lvdXBP1DF3RHfgpYf5R9PM3CIV1iv1vFPcqnmvj3RGEaJYe
-         X+NcGn28TmAGhDCZmoruAypV1kolD7TGM8Nsl7Q37xCm5QBB/vNwQCXGEuJbCM3ITdGM
-         yQFQ==
-X-Gm-Message-State: AO0yUKUnd4m9pJ7leUPYC9hN0looJ2LX3c3iR2sC6wZ9D58kpfWW1Elg
-        sfiewmhcpzzgnS98bAnbjppfC9w7qe1o8QuWFcBAx2Ku1aYikUjR0QdhF0Bmb2SCwvDe+9C3Tso
-        Kc4YflAtA949HO0DYsLt6I9WQXThJ9ULmOOxkse3qBPrDF7Eeze0+JigjbO3AcB/5dTyetbw=
-X-Google-Smtp-Source: AK7set9kj1lE0RtF/CbpcTvi8LZqcI4CFVpapVVclots2Yp5QpJRrNhoMA3vDtZ7ljf1AeHBJazbbjs2g6XN
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a05:6a00:be1:b0:5aa:310c:e65b with SMTP id
- x33-20020a056a000be100b005aa310ce65bmr3419431pfu.2.1677738463969; Wed, 01 Mar
- 2023 22:27:43 -0800 (PST)
-Date:   Thu,  2 Mar 2023 06:27:41 +0000
+        Thu, 2 Mar 2023 01:33:21 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3932DE61
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 22:33:16 -0800 (PST)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230302063314epoutp039f63479afccce707ee697000aca2f143~IhouDeRp90241102411epoutp03I
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:33:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230302063314epoutp039f63479afccce707ee697000aca2f143~IhouDeRp90241102411epoutp03I
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1677738794;
+        bh=eOuPkQNe/DWIdgy5LMwVkWzUv/hbcc1qgAqf2n0WsSo=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=rLo7T/4vzK2WsA6A1SVBvTlyTe9+z4IXlr5dVFBqvQVlOBLIuOR8DU66R0Don9SUy
+         GKqzNkqUS2Rzc+vmfxAoU+rGUCAA+EBPA//dV8iC2c1imR1JM+zeohdnvY6+CbC9Um
+         qAh93Ars6t0FH/dMWJCJVQiklEliAeF0kT8A9M70=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230302063314epcas1p2f02bcd481a85940f9d4596c5069e5b36~IhotuB26c3266732667epcas1p2Y;
+        Thu,  2 Mar 2023 06:33:14 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.36.133]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4PS1WY1qD3z4x9QC; Thu,  2 Mar
+        2023 06:33:13 +0000 (GMT)
+X-AuditID: b6c32a36-bfdff70000023112-d8-6400432801ef
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BF.D4.12562.82340046; Thu,  2 Mar 2023 15:33:12 +0900 (KST)
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230302062741.483079-1-jstultz@google.com>
-Subject: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <jstultz@google.com>, Wei Wang <wvw@google.com>,
-        Midas Chien <midaschieh@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tony Luck <tony.luck@intel.com>, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: RE: [PATCH v2 2/4] extcon: Added extcon_alloc_cables to
+ simplify extcon register function
+Reply-To: myungjoo.ham@samsung.com
+Sender: MyungJoo Ham <myungjoo.ham@samsung.com>
+From:   MyungJoo Ham <myungjoo.ham@samsung.com>
+To:     Bumwoo Lee <bw365.lee@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <091101d94ca7$a4ad23c0$ee076b40$@samsung.com>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230302063312epcms1p1e0cd1a2d74dbd3daa4c7b7407b975803@epcms1p1>
+Date:   Thu, 02 Mar 2023 15:33:12 +0900
+X-CMS-MailID: 20230302063312epcms1p1e0cd1a2d74dbd3daa4c7b7407b975803
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPKsWRmVeSWpSXmKPExsWy7bCmnq6GM0OKwZlvShYn1ixisrj+5Tmr
+        xeVdc9gcmD36tqxi9Pi8SS6AKSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJ
+        IS8xN9VWycUnQNctMwdoh5JCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLRArzgx
+        t7g0L10vL7XEytDAwMgUqDAhO6N3ywXGgh1CFf3t11gaGH8JdjFyckgImEi8P/mGqYuRi0NI
+        YAejxL5HO4EcDg5eAUGJvzuEQWqEBTIkDr2awgxiCwkoSTTc3McMEdeX6HiwjRHEZhPQldi6
+        4S4LyBwRgX5GIOcvM8QCXokZ7U9ZIGxpie3Lt4I1cApYSTxes4MNIi4qcXP1W3YY+/2x+YwQ
+        tohE672zUHMEJR783A0Vl5J4snMyG8gyCYHJjBInTxxnhHDmMEpM2/AOaqq+xJm5J8FsXgFf
+        iT0vpjKB2CwCqhJ/57dDXeQi8ebOMbDNzALaEssWvmYG+Z5ZQFNi/S59iDCfxLuvPawwz+yY
+        94QJwlaTOLR7CdTRMhKnpy+EOtRDYtK5E6yQEF3OJDHz7BSWCYxysxCBOgvJtlkI2xYwMq9i
+        FEstKM5NTy02LDCCx2Nyfu4mRnDK0jLbwTjp7Qe9Q4xMHIyHGCU4mJVEeBfe/pMsxJuSWFmV
+        WpQfX1Sak1p8iNEU6M+JzFKiyfnApJlXEm9oYmlgYmZkbGJhaGaoJM4rbnsyWUggPbEkNTs1
+        tSC1CKaPiYNTqoHJkOn1b76Hj3gmNJ9r0VWu2/37xFLWVyX3bnvUqIZvm3DEKSZ9q+PFIwds
+        JyXf0/ZN3HG8ujFrrZOwv+HVB6tT7noVpnz6FsOZ8LFW4RTzf+Yds67fUrzl+3rrg6WZPBsd
+        Z5rYvtxb0hliUjIp/Zu0l47k/1MWn1YLyi7OEsu6veIaz5ETdrUVVhdXmmqEOJ7uO+jfECMT
+        NedZoIGO5N7ERMG7CVd2ZVxkaFjBmfHryW/RlfZMKzbPX/OmaYHWI7+LH+4H57hfUNhz5Ypu
+        iVDvzC2a/z/LensEV3F2LVFc296mkZPTu0BVscluYffJw0yHWOyWzGiJvBopb28kdr5leaWC
+        3s87sxN8lP7Hei1WYinOSDTUYi4qTgQASlJ9VuIDAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925
+References: <091101d94ca7$a4ad23c0$ee076b40$@samsung.com>
+        <20230220054513.27385-3-bw365.lee@samsung.com>
+        <20230220054513.27385-1-bw365.lee@samsung.com>
+        <20230224100325epcms1p3e8886e278e23f610c8490cb69f1d452d@epcms1p3>
+        <CGME20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925@epcms1p1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 76d62f24db07f22ccf9bc18ca793c27d4ebef721.
-
-So while priority inversion on the pmsg_lock is an occasional
-problem that an rt_mutex would help with, in uses where logging
-is writing to pmsg heavily from multiple threads, the pmsg_lock
-can be heavily contended.
-
-Normal mutexes can do adaptive spinning, which keeps the
-contention overhead fairly low maybe adding on the order of 10s
-of us delay waiting, but the slowpath w/ rt_mutexes makes the
-blocked tasks sleep & wake. This makes matters worse when there
-is heavy contentention, as it just allows additional threads to
-run and line up to try to take the lock.
-
-It devolves to a worse case senerio where the lock acquisition
-and scheduling overhead dominates, and each thread is waiting on
-the order of ~ms to do ~us of work.
-
-Obviously, having tons of threads all contending on a single
-lock for logging is non-optimal, so the proper fix is probably
-reworking pstore pmsg to have per-cpu buffers so we don't have
-contention.
-
-But in the short term, lets revert the change to the rt_mutex
-and go back to normal mutexes to avoid a potentially major
-performance regression.
-
-Cc: Wei Wang <wvw@google.com>
-Cc: Midas Chien<midaschieh@google.com>
-Cc: Chunhui Li (=E6=9D=8E=E6=98=A5=E8=BE=89)" <chunhui.li@mediatek.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Anton Vorontsov <anton@enomsg.org>
-Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: kernel-team@android.com
-Fixes: 76d62f24db07 ("pstore: Switch pmsg_lock to an rt_mutex to avoid prio=
-rity inversion")
-Reported-by: Chunhui Li (=E6=9D=8E=E6=98=A5=E8=BE=89)" <chunhui.li@mediatek=
-.com>
-Signed-off-by: John Stultz <jstultz@google.com>
----
- fs/pstore/pmsg.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/fs/pstore/pmsg.c b/fs/pstore/pmsg.c
-index ab82e5f05346..b31c9c72d90b 100644
---- a/fs/pstore/pmsg.c
-+++ b/fs/pstore/pmsg.c
-@@ -7,10 +7,9 @@
- #include <linux/device.h>
- #include <linux/fs.h>
- #include <linux/uaccess.h>
--#include <linux/rtmutex.h>
- #include "internal.h"
-=20
--static DEFINE_RT_MUTEX(pmsg_lock);
-+static DEFINE_MUTEX(pmsg_lock);
-=20
- static ssize_t write_pmsg(struct file *file, const char __user *buf,
- 			  size_t count, loff_t *ppos)
-@@ -29,9 +28,9 @@ static ssize_t write_pmsg(struct file *file, const char _=
-_user *buf,
- 	if (!access_ok(buf, count))
- 		return -EFAULT;
-=20
--	rt_mutex_lock(&pmsg_lock);
-+	mutex_lock(&pmsg_lock);
- 	ret =3D psinfo->write_user(&record, buf);
--	rt_mutex_unlock(&pmsg_lock);
-+	mutex_unlock(&pmsg_lock);
- 	return ret ? ret : count;
- }
-=20
---=20
-2.39.2.722.g9855ee24e9-goog
-
+>=C2=A0=0D=0A>=C2=A0=0D=0A>---------=20Original=20Message=20---------=0D=0A=
+>Sender=20:=20=EC=9D=B4=EB=B2=94=EC=9A=B0=C2=A0<bw365.lee=40samsung.com>Pro=
+duct=20S/W=20Lab(VD)/=EC=82=BC=EC=84=B1=EC=A0=84=EC=9E=90=0D=0A>Date=20:=20=
+2023-03-02=2010:38=20(GMT+9)=0D=0A>Title=20:=20RE:=20=5BPATCH=20v2=202/4=5D=
+=20extcon:=20Added=20extcon_alloc_cables=20to=20simplify=20extcon=20registe=
+r=20function=0D=0A>=C2=A0=0D=0A>Hello.=0D=0A>=0D=0A>As=20you=20can=20see,=
+=20edev->cables=20are=20freed=20if=20extcon_alloc_cables()=20function=20ret=
+urn=20error=20handling=20in=20extcon_dev_register()=0D=0A>Other=20added=20f=
+unctions=20are=20also=20same.=0D=0A>=0D=0A>Because=20it's=20functionalized,=
+=20apart=20from=20this,=20do=20you=20want=20to=20mention=20that=20it=20shou=
+ld=20be=20freed=20within=20the=20function?=20=0D=0A>Please=20let=20me=20kno=
+w=20your=20opinion.=0D=0A>=0D=0A>extcon_dev_register(struct=20extcon_dev=20=
+*edev)=7B=0D=0A>...=0D=0A>=0D=0A>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0ret=20=
+=3D=20extcon_alloc_cables(edev);=0D=0A>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
+if=20(ret)=0D=0A>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
+=C2=A0=20=C2=A0goto=20err_alloc_cables;=0D=0A>=0D=0A>...=0D=0A>=0D=0A>err_a=
+lloc_cables:=0D=0A>=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(edev->ma=
+x_supported)=0D=0A>=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
+=C2=A0=20=C2=A0=20=C2=A0kfree(edev->cables);=0D=0A>=0D=0A>=0D=0A>Regards,=
+=0D=0A>Bumwoo=0D=0A=0D=0AIn=20such=20a=20case,=20you=20are=20doing=20kfree(=
+NULL);=20with=20the=20following:=0D=0A=0D=0A>+static=20int=20extcon_alloc_c=
+ables(struct=20extcon_dev=20*edev)=20=7B=0D=0A...=0D=0A>+=20=20=20=20=20=20=
+=20=20if=20(=21edev->max_supported)=0D=0A>+=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20return=200;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=20=20edev->=
+cables=20=3D=20kcalloc(edev->max_supported,=0D=0A>+=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20sizeof=
+(struct=20extcon_cable),=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20GFP_KERNEL);=0D=0A>+=20=
+=20=20=20=20=20=20=20if=20(=21edev->cables)=0D=0A>+=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20return=20-ENOMEM;=0D=0A=0D=0A=0D=0A=0D=0A=0D=0AChee=
+rs,=0D=0AMyungJoo=0D=0A=0D=0A
