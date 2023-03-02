@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED6E6A8498
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F6A6A8490
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjCBOtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S230282AbjCBOsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjCBOr6 (ORCPT
+        with ESMTP id S230117AbjCBOrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:47:58 -0500
+        Thu, 2 Mar 2023 09:47:55 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978AD4215
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:47:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2098755B7
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:47:53 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDg-00046X-MP; Thu, 02 Mar 2023 15:47:44 +0100
+        id 1pXkDg-00047D-P2; Thu, 02 Mar 2023 15:47:44 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDf-001Lsv-Ep; Thu, 02 Mar 2023 15:47:43 +0100
+        id 1pXkDf-001Lsy-K7; Thu, 02 Mar 2023 15:47:43 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXkDe-001Zr7-Gn; Thu, 02 Mar 2023 15:47:42 +0100
+        id 1pXkDe-001ZrA-PF; Thu, 02 Mar 2023 15:47:42 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Hans de Goede <hdegoede@redhat.com>,
@@ -34,15 +34,15 @@ To:     Hans de Goede <hdegoede@redhat.com>,
 Cc:     kernel@pengutronix.de,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 28/29] platform/x86: wmi: Convert to platform remove callback returning void
-Date:   Thu,  2 Mar 2023 15:47:31 +0100
-Message-Id: <20230302144732.1903781-29-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 29/29] platform/x86: xo1-rfkill: Convert to platform remove callback returning void
+Date:   Thu,  2 Mar 2023 15:47:32 +0100
+Message-Id: <20230302144732.1903781-30-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230302144732.1903781-1-u.kleine-koenig@pengutronix.de>
 References: <20230302144732.1903781-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1794; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=vINht6ojUFDqgv3t7NnT5jRF+UmY6wpfnULDkHfIdto=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkALb6O68NAGyM825FA1GeI2kBnh4ZSeuQ+fR2u yAw6iq7r0eJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAC2+gAKCRDB/BR4rcrs Cc+XB/4lFYU8LTWGolMf3K0oUcggqVhrI+67SZELHpQlMDMfyWJX+LlcPKRSZmvYs3Q6T2nehtt JIJUBYSnoVPqTE/SpLPCR3cwK3rajXld6eDxKP1jX7ObtBVTaUK9nEuttiC+gsxjIiYp/Xzh9H9 2SncwaWdNIS0TWl5EwEm2mmtNH2mHdSxziFo70KxABJof7BJSBnsh/M9AIQgodLKhZeJ9/9IxOU F1z3xN45EF+Q7ukBSHC8Z5XKpfDJKoWYp/9DPg9WQEePE5MLfXUBKPw7MjooXPou9KX/1KMcf3j zZ1oPMkLQtH8l7H8MyZiUUl+DKDl72tGf8e1+m3sPI3EU3BQ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1613; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=/cHo/OCIZQ5qmf/ucqmCGmO1pyy35MQ6zTCo8fFg0vg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkALb+CScRPFDRsjjCksIWibKoudblETkcH6IrZ Xb/qz0BJV+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAC2/gAKCRDB/BR4rcrs CVFdB/90zGKMc6uqyCIs6l3icW8VpmwLQ0oPsoq8vzU3e8rzwoxbZmGuMlA9aeLsDqh4UivkfAq jzRjdEEYrK3z9DuxGFmpqHVgF7DZom3ovHvfEQ/ScVj8RGrWOYuOKZLg4z6tQGzfKC948MaN8VT VlUmToaVFtPkNyl4VG9F3AocSbCEmeurnTE2GtEBIdu9pGx14HkfPRhD2d395XPjujV5N0I1HBe WFxgUGcISQgdcO9A4z+DVCSnX7G1IHR+2+hd9E7eB/a4CgWo2eJTS5iWdzRgdbBeoFnN2NOsVuz Z4vusWPbWzzmmMXYf4xe1K+5KfY/vY6RFIgbj7Kxr7HWPMLx
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -71,40 +71,36 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/platform/x86/wmi.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/platform/x86/xo1-rfkill.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
-index 4fe7650dd014..d81319a502ef 100644
---- a/drivers/platform/x86/wmi.c
-+++ b/drivers/platform/x86/wmi.c
-@@ -1369,7 +1369,7 @@ static void acpi_wmi_notify_handler(acpi_handle handle, u32 event,
- 		event, 0);
+diff --git a/drivers/platform/x86/xo1-rfkill.c b/drivers/platform/x86/xo1-rfkill.c
+index cb3253c10ef3..e64d5646b4c7 100644
+--- a/drivers/platform/x86/xo1-rfkill.c
++++ b/drivers/platform/x86/xo1-rfkill.c
+@@ -56,12 +56,11 @@ static int xo1_rfkill_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--static int acpi_wmi_remove(struct platform_device *device)
-+static void acpi_wmi_remove(struct platform_device *device)
+-static int xo1_rfkill_remove(struct platform_device *pdev)
++static void xo1_rfkill_remove(struct platform_device *pdev)
  {
- 	struct acpi_device *acpi_device = ACPI_COMPANION(&device->dev);
- 
-@@ -1379,8 +1379,6 @@ static int acpi_wmi_remove(struct platform_device *device)
- 				ACPI_ADR_SPACE_EC, &acpi_wmi_ec_space_handler);
- 	wmi_free_devices(acpi_device);
- 	device_unregister(dev_get_drvdata(&device->dev));
--
+ 	struct rfkill *rfk = platform_get_drvdata(pdev);
+ 	rfkill_unregister(rfk);
+ 	rfkill_destroy(rfk);
 -	return 0;
  }
  
- static int acpi_wmi_probe(struct platform_device *device)
-@@ -1468,7 +1466,7 @@ static struct platform_driver acpi_wmi_driver = {
- 		.acpi_match_table = wmi_device_ids,
+ static struct platform_driver xo1_rfkill_driver = {
+@@ -69,7 +68,7 @@ static struct platform_driver xo1_rfkill_driver = {
+ 		.name = "xo1-rfkill",
  	},
- 	.probe = acpi_wmi_probe,
--	.remove = acpi_wmi_remove,
-+	.remove_new = acpi_wmi_remove,
+ 	.probe		= xo1_rfkill_probe,
+-	.remove		= xo1_rfkill_remove,
++	.remove_new	= xo1_rfkill_remove,
  };
  
- static int __init acpi_wmi_init(void)
+ module_platform_driver(xo1_rfkill_driver);
 -- 
 2.39.1
 
