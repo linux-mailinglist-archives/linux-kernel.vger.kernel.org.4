@@ -2,99 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FFC6A80C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8FD6A80D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjCBLLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S230174AbjCBLNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:13:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjCBLLr (ORCPT
+        with ESMTP id S230062AbjCBLM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:11:47 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D428930B24;
-        Thu,  2 Mar 2023 03:11:45 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id o12so66008121edb.9;
-        Thu, 02 Mar 2023 03:11:45 -0800 (PST)
+        Thu, 2 Mar 2023 06:12:58 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7245C3E082
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:12:32 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id j2so16119920wrh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 03:12:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I24OPDq/kLlSuHGPflRm2uXznKj1xztkIch5YbiVGGE=;
-        b=TJomh1mcGrs7i47cr1rc9TMO9xm/mM/qr5if6bZuCS7KnWYb1jG1oY/48lvGoZyXvv
-         20Xg9apPCvX2+/DgSVN/TvjCuPIU8Wn347+PIh8Bv7av77WnLHfGm4H23AitQ3gnEcfd
-         cx2hFn8qtTJDmDqxPzlAKs6mFIM/YTxw8PPoU3Kkrki4JGiEow3hOf/Z416Vk10UnvoJ
-         vhpfuRuZgcZezt3+ICXBy3bktHDu88Kq7AxzyGtOaB/OZJhP9Lm3wnRsAu7yi1prn8NN
-         OCxYJiuq7VJdNL0Q2srwazM7FzqiX5VDEZR8k95pImv9lWUMN14mplK1O/uELmCAr8va
-         HT8A==
+        d=bytedance.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SmbgYBfsiP69zAShGBqEQbH1PuV83xuFSvcJJxGMMf4=;
+        b=DrUlMSLxCfk+wenY5dGy8zdp8YdI8rwkdVkiM9b4xwhFqbBcP8gKQGiVekkShAMDGb
+         siTZabe8yR4OsN5yFqEf8tWw23l9QEZd1B8mQN/xwWdY2GwRCgDaxdwXnDBXjWcOhFep
+         zmavEFKBv6RbLcB3Y4wZJ7XWc2Fw37ZaUdqhU2vo9HMB8jdBrrHp5RvaQSaEkhP0n5dw
+         ozot/+J4p8hyqVnp0u0amlEz5wYTixfb5YB7sMyyJkGiJlNuYRzrFRAk57eMqqeeEF3P
+         UCxjArfwFZ+h97ZOj0DuNvdL4gSBPKxwVkKyrRIUuILFpN+yMY6Wce6+3NqU2ghB2TcL
+         RRJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I24OPDq/kLlSuHGPflRm2uXznKj1xztkIch5YbiVGGE=;
-        b=rxAETuxqKUkwqQ+gIhVZEmghkWqSs2tCEwGuTig+fpb0fObpqbb4wUd1B+WBUoXWsI
-         /gcHUWoajgGCFdoFu6x2vq9ppDLq+OG/nGXQXSJACLMq1Q/oF/wYzI9va/3u3ENWX/ju
-         uQlLF6UxQHYzutftlFUNfMlMXexDH2zl+HRUl0DXc8+fGq6lby24EX5qX0SIVFxa+bSF
-         o+f4lALATVDIT0ER5JgOrsbQ4hHz44XQN7rHmq26R5k890gSvNMM1btyqfH64RzQK0o6
-         cS/alsEwzODvPbM6JXlTaqtZ+ixz7I4P5uDYNnJ4+cKlYduGGA2SxmTqarB4G9YaupTL
-         qrFg==
-X-Gm-Message-State: AO0yUKUzNCEp13rLEKmqkYghQ+NBLa6+avAJfbVk3ygItRtLcN8VSsNm
-        s4t8M+ot7VQn6gdQulL4PanPi2+WIlVWxpL81vc=
-X-Google-Smtp-Source: AK7set87dFh2ULeTzYdjiEUjlSali6yM7p8x0e9gJKkw3KGbj/oaX3bqDk/rZnTirFKciv/eBiPu1AJkl4YKrflj6tE=
-X-Received: by 2002:a50:cdce:0:b0:4ad:7389:d298 with SMTP id
- h14-20020a50cdce000000b004ad7389d298mr5770007edj.4.1677755504278; Thu, 02 Mar
- 2023 03:11:44 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SmbgYBfsiP69zAShGBqEQbH1PuV83xuFSvcJJxGMMf4=;
+        b=kjAZDS8M++0LPY0gBhanrztmRDXCzaRIi/H6aWQmyUtTdvjoxHBtMbbpWGBmCYOEeV
+         Zn8FQF+Xg2B6jNVdOSrIDRtW+Iqh1avCClxKanZhcPRCIzJchnLNwctVs59/xla0BeFN
+         mTqfkUXeFtyeNoh3PFqQiNVixYhhOKoRfOyzQMVQ2xyBIExvIJlv2FSr9w5ZPvvbOVhJ
+         n7xPK1p4dqWb7EUCLjZayCKEsROkYIQUblOxCi+1Nz9FRVZaw1ScNjCWzXsJjzBylYzx
+         wtyfj97yNDrZEWgJALJQNKUKjL1RZxFhNiYF/0L84DlMUdsUC7VCJPuYXi0BqbjOpFD9
+         +3lg==
+X-Gm-Message-State: AO0yUKUt6dPbGGBiJVkhbPlaVX2hLoSjO1yr43o/Ticxxk3gDuOO5tp8
+        khDGzm1SaQ0VHjdPFe3bFj2HmQ==
+X-Google-Smtp-Source: AK7set8stG171ZthA0QcwqafyhjqZwITvDb+KuMxue867lfxfi1qj++EXyGP7MIcPGEUAMVOKk8S1Q==
+X-Received: by 2002:adf:fecd:0:b0:2c7:13e4:2094 with SMTP id q13-20020adffecd000000b002c713e42094mr7740020wrs.42.1677755550902;
+        Thu, 02 Mar 2023 03:12:30 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:11aa:3c13:d3e:eb29])
+        by smtp.gmail.com with ESMTPSA id a5-20020a5d4565000000b002c3f81c51b6sm14724830wrc.90.2023.03.02.03.12.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 03:12:30 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH v13 00/11] Parallel CPU bringup for x86_64
+Date:   Thu,  2 Mar 2023 11:12:16 +0000
+Message-Id: <20230302111227.2102545-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230222111213.2241633-1-keguang.zhang@gmail.com>
- <20230222111213.2241633-3-keguang.zhang@gmail.com> <Y/YIDobQW8W3QAAh@surfacebook>
-In-Reply-To: <Y/YIDobQW8W3QAAh@surfacebook>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Thu, 2 Mar 2023 19:11:28 +0800
-Message-ID: <CAJhJPsUYR55aLNWi-VC2wmNEZZj=7E1aPpFTB6a+Bzhw=E4y5g@mail.gmail.com>
-Subject: Re: [PATCH 2/4] gpio: loongson1: Introduce ls1x_gpio_chip struct
-To:     andy.shevchenko@gmail.com
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 8:18=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
->
-> Wed, Feb 22, 2023 at 07:12:11PM +0800, Keguang Zhang kirjoitti:
-> > Introduce and allocate ls1x_gpio_chip struct containing
-> > gpio_chip and reg_base to avoid global gpio_reg_base.
-> >
-> > Use readl() & writel() instead of __raw_readl() & __raw_writel().
->
-> Please, split this to two pathes.
->
-Sure.
-Thanks!
+The main code change over v12 is to fix the build error when
+CONFIG_FORCE_NR_CPUS is present.
 
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+The commit message for removing initial stack has also been improved, typos
+have been fixed and extra comments have been added to make code clearer.
 
+Thanks,
+Usama
 
---=20
-Best regards,
+Changes across versions:
+v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
+v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+    in preparation for more parallelisation.
+v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
+    avoid scribbling on initial_gs in common_cpu_up(), and to allow all
+    24 bits of the physical X2APIC ID to be used. That patch still needs
+    a Signed-off-by from its original author, who once claimed not to
+    remember writing it at all. But now we've fixed it, hopefully he'll
+    admit it now :)
+v5: rebase to v6.1 and remeasure performance, disable parallel bringup
+    for AMD CPUs.
+v6: rebase to v6.2-rc6, disabled parallel boot on amd as a cpu bug and
+    reused timer calibration for secondary CPUs.
+v7: [David Woodhouse] iterate over all possible CPUs to find any existing
+    cluster mask in alloc_clustermask. (patch 1/9)
+    Keep parallel AMD support enabled in AMD, using APIC ID in CPUID leaf
+    0x0B (for x2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
+    Included sanity checks for APIC id from 0x0B. (patch 6/9)
+    Removed patch for reusing timer calibration for secondary CPUs.
+    commit message and code improvements.
+v8: Fix CPU0 hotplug by setting up the initial_gs, initial_stack and
+    early_gdt_descr.
+    Drop trampoline lock and bail if APIC ID not found in find_cpunr.
+    Code comments improved and debug prints added.
+v9: Drop patch to avoid repeated saves of MTRR at boot time.
+    rebased and retested at v6.2-rc8.
+    added kernel doc for no_parallel_bringup and made do_parallel_bringup
+    __ro_after_init.
+v10: Fixed suspend/resume not working with parallel smpboot.
+     rebased and retested to 6.2.
+     fixed checkpatch errors.
+v11: Added patches from Brian Gerst to remove the global variables initial_gs,
+     initial_stack, and early_gdt_descr from the 64-bit boot code
+     (https://lore.kernel.org/all/20230222221301.245890-1-brgerst@gmail.com/).
+v12: Fixed compilation errors, acquire tr_lock for every stack setup in
+     trampoline_64.S.
+     Rearranged commits for a cleaner git history.
+v13: Fix build error with CONFIG_FORCE_NR_CPUS.
+     Commit message improved, typos fixed and extra comments added.
 
-Kelvin Cheung
+Brian Gerst (3):
+  x86/smpboot: Remove initial_stack on 64-bit
+  x86/smpboot: Remove early_gdt_descr on 64-bit
+  x86/smpboot: Remove initial_gs
+
+David Woodhouse (8):
+  x86/apic/x2apic: Allow CPU cluster_mask to be populated in parallel
+  cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
+  cpu/hotplug: Add dynamic parallel bringup states before
+    CPUHP_BRINGUP_CPU
+  x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+  x86/smpboot: Split up native_cpu_up into separate phases and document
+    them
+  x86/smpboot: Support parallel startup of secondary CPUs
+  x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+  x86/smpboot: Serialize topology updates for secondary bringup
+
+ .../admin-guide/kernel-parameters.txt         |   3 +
+ arch/x86/include/asm/processor.h              |   6 +-
+ arch/x86/include/asm/realmode.h               |   4 +-
+ arch/x86/include/asm/smp.h                    |  15 +-
+ arch/x86/include/asm/topology.h               |   2 -
+ arch/x86/kernel/acpi/sleep.c                  |  30 +-
+ arch/x86/kernel/apic/apic.c                   |   2 +-
+ arch/x86/kernel/apic/x2apic_cluster.c         | 126 ++++---
+ arch/x86/kernel/asm-offsets.c                 |   1 +
+ arch/x86/kernel/cpu/common.c                  |   6 +-
+ arch/x86/kernel/head_64.S                     | 132 +++++--
+ arch/x86/kernel/smpboot.c                     | 350 +++++++++++++-----
+ arch/x86/realmode/init.c                      |   3 +
+ arch/x86/realmode/rm/trampoline_64.S          |  27 +-
+ arch/x86/xen/smp_pv.c                         |   4 +-
+ arch/x86/xen/xen-head.S                       |   2 +-
+ include/linux/cpuhotplug.h                    |   2 +
+ include/linux/smpboot.h                       |   7 +
+ kernel/cpu.c                                  |  31 +-
+ kernel/smpboot.h                              |   2 -
+ 20 files changed, 556 insertions(+), 199 deletions(-)
+
+-- 
+2.25.1
+
