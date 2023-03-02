@@ -2,188 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497746A78EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A23F6A78EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjCBBhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 20:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        id S229696AbjCBBiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 20:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjCBBha (ORCPT
+        with ESMTP id S229509AbjCBBiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:37:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8748434332;
-        Wed,  1 Mar 2023 17:37:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A3F35CE1DF2;
-        Thu,  2 Mar 2023 01:37:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF23C433EF;
-        Thu,  2 Mar 2023 01:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677721045;
-        bh=5TPfW2FAVzvukO9C6PIlJTa5cqjUicEsT/o6u0kTLzo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=EVR6tNVfJ2FRRUnVY8lhdnD9R/MkQqbe+bKD4xGjOYgAZ4jR4dz24HvMcSIrISHN4
-         ll3u7AOOIbHdQuM3MdAhhIR1i2PL3hXzmXIRL6v8j5oBR3LoiwZVGTcZUqZMnJFxSm
-         8AxSzdmYorgSkgOAKuN3MIsCZ8XGypUm/fDTVVyDHNsNZNW+Bnt1FroEdlHEPlAz3H
-         0y5O/zgVQxBsY71HGd759CyoPRiuwiMRh8YzLzplsUVn+EFYH29l81do49W9Kk8wdl
-         0ZszCVZHgRChG27O9Pmz71wfZWGXzIYRt7FnCe/ydt536Rs91zLZqpJjVEjfXwGakR
-         HAUt8rJuoiXxw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9F1975C0377; Wed,  1 Mar 2023 17:37:24 -0800 (PST)
-Date:   Wed, 1 Mar 2023 17:37:24 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
-        kim.phillips@amd.com, brgerst@gmail.com, piotrgorski@cachyos.org,
-        oleksandr@natalenko.name, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com, David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [PATCH v12 07/11] x86/smpboot: Remove early_gdt_descr on 64-bit
-Message-ID: <20230302013724.GO2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230226110802.103134-1-usama.arif@bytedance.com>
- <20230226110802.103134-8-usama.arif@bytedance.com>
- <878rghmrn2.ffs@tglx>
- <96c0c723-9976-a222-8dc8-a5da6a1a558e@linux.intel.com>
- <Y/+2Wuunn1sIF8eT@localhost>
- <20230301221632.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y//Q4Mh6/65Keruu@localhost>
- <20230302002851.GK2948950@paulmck-ThinkPad-P17-Gen-1>
- <41baeedf-f3ee-7342-7a5e-097f9a3c4de0@infradead.org>
+        Wed, 1 Mar 2023 20:38:16 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E682E2310E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:38:13 -0800 (PST)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230302013811epoutp03553db3c0793d8153a94455739584b1b1~IdnGHhE1V2858028580epoutp03g
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:38:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230302013811epoutp03553db3c0793d8153a94455739584b1b1~IdnGHhE1V2858028580epoutp03g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1677721091;
+        bh=Upm4LHqrFj+Ba7ZBgyJPHcoCjI/gROHC2Z7FPc4nVX8=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=lYeEDw0pw+o6LHYmp1W2zwkRRmJV9teMpBuPCiXhfM6XUt3IQC1l7c03mwugtY8la
+         uCsQ++hIB4miP3JClMjgbvhRIK29NiQ1IYrWZ6qStlgSijyp4d/ZZeSoyuEsvlNemw
+         1HJBYo1O/FBBmMojviwhwmWavpJPvP8BWPJamnk0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20230302013810epcas1p33430e99dcd3c4e9aec0ad6ec1661fe89~IdnFxhrX-1012510125epcas1p3M;
+        Thu,  2 Mar 2023 01:38:10 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.248]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4PRtz568wzz4x9QG; Thu,  2 Mar
+        2023 01:38:09 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FB.4C.54823.10EFFF36; Thu,  2 Mar 2023 10:38:09 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230302013809epcas1p1d0c8fac83192cae6fa5efaed17840509~IdnEhhSt71453714537epcas1p14;
+        Thu,  2 Mar 2023 01:38:09 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230302013809epsmtrp192b5b2219d935a294d44c9b21bd16744~IdnEgxMoW1351913519epsmtrp1B;
+        Thu,  2 Mar 2023 01:38:09 +0000 (GMT)
+X-AuditID: b6c32a39-a97ff7000000d627-ca-63fffe018232
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        54.83.05839.10EFFF36; Thu,  2 Mar 2023 10:38:09 +0900 (KST)
+Received: from bw365lee03 (unknown [10.88.97.170]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230302013809epsmtip20a9fdf22ca210c6faaea1cb0cfb21007~IdnENq6pk1094910949epsmtip2I;
+        Thu,  2 Mar 2023 01:38:09 +0000 (GMT)
+From:   "Bumwoo Lee" <bw365.lee@samsung.com>
+To:     <myungjoo.ham@samsung.com>,
+        "'Chanwoo Choi'" <cw00.choi@samsung.com>,
+        <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230224100325epcms1p3e8886e278e23f610c8490cb69f1d452d@epcms1p3>
+Subject: RE: [PATCH v2 2/4] extcon: Added extcon_alloc_cables to simplify
+ extcon register function
+Date:   Thu, 2 Mar 2023 10:38:08 +0900
+Message-ID: <091101d94ca7$a4ad23c0$ee076b40$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41baeedf-f3ee-7342-7a5e-097f9a3c4de0@infradead.org>
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQEndo8vt+Nxhu23TcqVP1cSXfBwDwF+DXQiAV3ksbMBRRvN4rApV6YQ
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMKsWRmVeSWpSXmKPExsWy7bCmvi7jv//JBj9eGFpc//Kc1eLyrjls
+        FrcbV7A5MHv0bVnF6PF5k1wAU1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmS
+        Ql5ibqqtkotPgK5bZg7QDiWFssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgVmBXnFi
+        bnFpXrpeXmqJlaGBgZEpUGFCdsacjScZCx6pVzRMf8vUwHhJtYuRk0NCwERi+Yml7F2MXBxC
+        AjsYJRZ/n8MIkhAS+MQosa/TCyLxjVHi8py1jDAdt3pWMkIk9jJKHPg7Fcp5ziix/MUCFpAq
+        NgEtiYVz5rOB2CICWRJXfrwGszkF/CT23T7ODGILC6RITN18gx3EZhFQkZjwroO1i5GDg1fA
+        UqKnURIkzCsgKHFy5hOwkcwC2hLLFr5mhjhCQeLn02WsEOPdJBqnLICqEZGY3dnGDHKPhMAl
+        dolbqyZBXe0iMf38RjYIW1ji1fEt7BC2lMTL/jYoO11i5ZU7UHaOxOv77VC9xhLv3q5lBrmN
+        WUBTYv0ufYiwosTO33MZIfbySbz72gN2voQAr0RHmxBEibJE94MXTBC2pMTip3egJnpITDp3
+        gnUCo+IsJF/OQvLlLCTfzEJYvICRZRWjWGpBcW56arFhgSk8rpPzczcxglOfluUOxulvP+gd
+        YmTiYDzEKMHBrCTCu/D2n2Qh3pTEyqrUovz4otKc1OJDjKbAYJ/ILCWanA9Mvnkl8YYmlgYm
+        ZkYmFsaWxmZK4rzitieThQTSE0tSs1NTC1KLYPqYODilGphWdD86eyru9+ql/237jojeTpxx
+        wuzkj5nlRy6H/POYM9dzxddQ09NtnJJ1peVsza8tnDZmpexcYbNHaPq383omq1Q//En//O9D
+        8IK3LxrYeg+wr5f0ONP5QGaa00o+r2v3pdcWxq5azOE2wX3Fj2839igr/tU+xMt+ivfpdpO3
+        xxeubZetVUgynuAuqReodOFy49RXs4vXs2W3Hen8ymK59cy1B+k7dH8f/W+ueCvEfovc/eIH
+        DndL9deG7doyUdz2e8wR/4VbQmpfV2xYf2sf1zbRbV945US36szt2yWrrrNwmtDsuy932S3b
+        L1A9UXZx4oyF1V3epo1HFF8qMUqHZi4/tdD5mNaGew/mz/y1W0aJpTgj0VCLuag4EQBPdaF7
+        BgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrILMWRmVeSWpSXmKPExsWy7bCSvC7jv//JBncm8lpc//Kc1eLyrjls
+        FrcbV7A5MHv0bVnF6PF5k1wAUxSXTUpqTmZZapG+XQJXxpYdXcwFf6UqtnxezdLAOFWki5GT
+        Q0LAROJWz0pGEFtIYDejxNcTkhBxSYmzyx+xdzFyANnCEocPF3cxcgGVPGWUWPtvDRtIDZuA
+        lsTCOfPBbBGBHIkD66ewQ8z5yCgxeW8ciM0p4Cex7/ZxZhBbWCBJYsm67WA1LAIqEhPedbCC
+        zOcVsJToaQRbyysgKHFy5hMWEJtZQFui92ErI4y9bOFrZojTFCR+Pl3GCrHWTaJxygKoehGJ
+        2Z1tzBMYhWYhGTULyahZSEbNQtKygJFlFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZG
+        cKhrae5g3L7qg94hRiYOxkOMEhzMSiK8C2//SRbiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6Hr
+        ZLyQQHpiSWp2ampBahFMlomDU6qBqXa7zqkvUvUyrTuE9HcFnn8Vvi51YbrFR0nm7sqLlf/v
+        qa71ufoox18nhH+S2c4jbLsFfXdzZSnuawu4mbrOq31jg9JX8R0HD0+MOde0RKFq3VwTjxmV
+        disuZqca7DW+5739WWaf6wT2bqMLf8QaJ285evPE1fNcorzPWm8b3b0qEhA8s05npcHVO/cW
+        ymQ1sp5izRCP+TX71wnLOOt493ONTjeu/ephdrZ74sl4/MiVecU2mvVLxKPUp7+P6DvgdHE/
+        zzqFpUGx2/fM/b+L0SjgitEJhoLNTtJCsexLbfwXZ3AIq0o4vX/5yavvnn/e6cn7m2U36i0P
+        Wp++qjZywQ1fG89F2w/1uam2P943U4mlOCPRUIu5qDgRAAhkRmTkAgAA
+X-CMS-MailID: 20230302013809epcas1p1d0c8fac83192cae6fa5efaed17840509
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925
+References: <20230220054513.27385-3-bw365.lee@samsung.com>
+        <20230220054513.27385-1-bw365.lee@samsung.com>
+        <CGME20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925@epcms1p3>
+        <20230224100325epcms1p3e8886e278e23f610c8490cb69f1d452d@epcms1p3>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 05:05:39PM -0800, Randy Dunlap wrote:
-> 
-> 
-> On 3/1/23 16:28, Paul E. McKenney wrote:
-> > On Wed, Mar 01, 2023 at 02:25:36PM -0800, Josh Triplett wrote:
-> >> On Wed, Mar 01, 2023 at 02:16:32PM -0800, Paul E. McKenney wrote:
-> >>> On Wed, Mar 01, 2023 at 12:32:26PM -0800, Josh Triplett wrote:
-> >>>> On Tue, Feb 28, 2023 at 01:02:33PM -0800, Arjan van de Ven wrote:
-> >>>>   Thomas Gleixner wrote:
-> >>>>>>
-> >>>>>> Maybe we should enforce CONFIG_SMP=y first :)
-> >>>>>>
-> >>>>>> Thanks,
-> >>>>>
-> >>>>> for 64 bit I can see the point of removing the !SMP case entirely from arch/x86 .
-> >>>>> maybe even for 32 bit if it just makes the code simpler I suppose
-> >>>>
-> >>>> As one of the folks keeping an eye on tinyconfig and kernel size, I
-> >>>> actually think we *should* make this change and rip out !CONFIG_SMP,
-> >>>> albeit carefully.
-> >>>>
-> >>>> In particular, I would propose that we rip out !CONFIG_SMP, *but* we
-> >>>> allow building with CONFIG_NR_CPUS=1. (And we could make sure in that
-> >>>> case that the compiler can recognize that at compile time and optimize
-> >>>> accordingly, so that it might provide some of the UP optimizations for
-> >>>> us.)
-> >>>>
-> >>>> Then, any *optimizations* for the "will only have one CPU, ever" case
-> >>>> can move to CONFIG_NR_CPUS=1 rather than !CONFIG_SMP. I think many of
-> >>>> those optimizations may be worth keeping for small embedded systems, or
-> >>>> for cases like Linux-as-bootloader or similar.
-> >>>>
-> >>>> The difference here would be that code written for !CONFIG_SMP today
-> >>>> needs to account for the UP case for *correctness*, whereas code written
-> >>>> for CONFIG_SMP can *optionally* consider CONFIG_NR_CPUS=1 for
-> >>>> *performance*.
-> >>>
-> >>> It certainly would not make much sense to keep Tiny RCU and Tiny SRCU
-> >>> around if there was no CONFIG_SMP=n.
-> >>
-> >> On the contrary, I think it's entirely appropriate to keep them for
-> >> CONFIG_NR_CPUS=1; that's exactly the kind of simple optimization that
-> >> seems well worth having. (Ideal optimization: "very very simple for UP,
-> >> complex for SMP"; non-ideal optimization: "complex for SMP, differently
-> >> complex for UP".)
-> > 
-> > Fair enough, but how does removing CONFIG_SMP help with that?  Given that
-> > it is not all that hard to work around the lack of CONFIG_SMP for Tiny
-> > RCU and Tiny SRCU, then it cannot be all that hard to work around that
-> > lack for the use cases that you are trying to get rid of, right?
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> > index 9071182b1284b..7487bee3d4341 100644
-> > --- a/kernel/rcu/Kconfig
-> > +++ b/kernel/rcu/Kconfig
-> > @@ -7,7 +7,7 @@ menu "RCU Subsystem"
-> >  
-> >  config TREE_RCU
-> >  	bool
-> > -	default y if SMP
-> > +	default y if CONFIG_NR_CPUS = 1
-> >  	# Dynticks-idle tracking
-> >  	select CONTEXT_TRACKING_IDLE
-> >  	help
-> > @@ -31,7 +31,7 @@ config PREEMPT_RCU
-> >  
-> >  config TINY_RCU
-> >  	bool
-> > -	default y if !PREEMPTION && !SMP
-> > +	default y if !PREEMPTION && CONFIG_NR_CPUS != 1
-> >  	help
-> >  	  This option selects the RCU implementation that is
-> >  	  designed for UP systems from which real-time response
-> 
-> but drop the CONFIG_ prefixes...
+Hello.
 
-Indeed.  What I don't understand is how the above passed some light
-rcutorture testing.  And the comparisons are backwards as well.
-Perhaps this time two bugs make working code?
+As you can see, edev->cables are freed if extcon_alloc_cables() function re=
+turn error handling in extcon_dev_register()
+Other added functions are also same.
 
-How about the following?
+Because it's functionalized, apart from this, do you want to mention that i=
+t should be freed within the function?=20
+Please let me know your opinion.
 
-							Thanx, Paul
+extcon_dev_register(struct extcon_dev *edev)=7B
+...
 
-------------------------------------------------------------------------
+	ret =3D extcon_alloc_cables(edev);
+	if (ret)
+		goto err_alloc_cables;
 
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index 9071182b1284b..a2ba97b949498 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -7,7 +7,7 @@ menu "RCU Subsystem"
- 
- config TREE_RCU
- 	bool
--	default y if SMP
-+	default y if NR_CPUS != 1
- 	# Dynticks-idle tracking
- 	select CONTEXT_TRACKING_IDLE
- 	help
-@@ -31,7 +31,7 @@ config PREEMPT_RCU
- 
- config TINY_RCU
- 	bool
--	default y if !PREEMPTION && !SMP
-+	default y if !PREEMPTION && NR_CPUS = 1
- 	help
- 	  This option selects the RCU implementation that is
- 	  designed for UP systems from which real-time response
+...
+
+err_alloc_cables:
+ 	if (edev->max_supported)
+ 		kfree(edev->cables);
+
+
+Regards,
+Bumwoo
+
+-----Original Message-----
+From: MyungJoo Ham <myungjoo.ham=40samsung.com>=20
+Sent: Friday, February 24, 2023 7:03 PM
+To: Bumwoo Lee <bw365.lee=40samsung.com>; Chanwoo Choi <cw00.choi=40samsung=
+.com>; linux-kernel=40vger.kernel.org
+Subject: RE: =5BPATCH v2 2/4=5D extcon: Added extcon_alloc_cables to simpli=
+fy extcon register function
+
+>--------- Original Message ---------
+>Sender : =EC=9D=B4=EB=B2=94=EC=9A=B0=20<bw365.lee=40samsung.com>Product=20=
+S/W=20Lab(VD)/=EC=82=BC=EC=84=B1=EC=A0=84=EC=9E=90=20Date=20:=20=0D=0A>2023=
+-02-20=2014:45=20(GMT+9)=20Title=20:=20=5BPATCH=20v2=202/4=5D=20extcon:=20A=
+dded=20=0D=0A>extcon_alloc_cables=20to=20simplify=20extcon=20register=20fun=
+ction=0D=0A>=20=0D=0A>The=20cable=20allocation=20part=20is=20functionalized=
+=20from=20extcon_dev_register.=0D=0A>=0D=0A>Signed-off-by:=20Bumwoo=20Lee=
+=20<bw365.lee=40samsung.com>=0D=0A>---=0D=0A>=20drivers/extcon/extcon.c=20=
+=7C=20104=20+++++++++++++++++++++++-----------------=0D=0A>=201=20file=20ch=
+anged,=2059=20insertions(+),=2045=20deletions(-)=0D=0A>=0D=0A>diff=20--git=
+=20a/drivers/extcon/extcon.c=20b/drivers/extcon/extcon.c=20index=20=0D=0A>a=
+dcf01132f70..3c2f540785e8=20100644=0D=0A>---=20a/drivers/extcon/extcon.c=0D=
+=0A>+++=20b/drivers/extcon/extcon.c=0D=0A>=40=40=20-1070,6=20+1070,61=20=40=
+=40=20void=20extcon_dev_free(struct=20extcon_dev=20*edev)=20=20=7D=20=20=0D=
+=0A>EXPORT_SYMBOL_GPL(extcon_dev_free);=0D=0A>=20=0D=0A>+/**=0D=0A>+=20*=20=
+extcon_alloc_cables()=20-=20alloc=20the=20cables=20for=20extcon=20device=0D=
+=0A>+=20*=20=40edev:=20=20=20=20=20=20=20=20extcon=20device=20which=20has=
+=20cables=0D=0A>+=20*=0D=0A>+=20*=20Returns=200=20if=20success=20or=20error=
+=20number=20if=20fail.=0D=0A>+=20*/=0D=0A>+static=20int=20extcon_alloc_cabl=
+es(struct=20extcon_dev=20*edev)=20=7B=0D=0A>+=20=20=20=20=20=20=20=20int=20=
+index;=0D=0A>+=20=20=20=20=20=20=20=20char=20*str;=0D=0A>+=20=20=20=20=20=
+=20=20=20struct=20extcon_cable=20*cable;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=
+=20=20if=20(=21edev->max_supported)=0D=0A>+=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20return=200;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=20=20edev->=
+cables=20=3D=20kcalloc(edev->max_supported,=0D=0A>+=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20sizeof=
+(struct=20extcon_cable),=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20GFP_KERNEL);=0D=0A>+=20=
+=20=20=20=20=20=20=20if=20(=21edev->cables)=0D=0A>+=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20return=20-ENOMEM;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=
+=20=20for=20(index=20=3D=200;=20index=20<=20edev->max_supported;=20index++)=
+=20=7B=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20cable=20=3D=
+=20&edev->cables=5Bindex=5D;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20str=20=3D=20kasprintf(GFP_KERNEL,=20=22cable.%d=22,=20ind=
+ex);=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20if=20(=21str)=
+=20=7B=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20for=20(index--;=20index=20>=3D=200;=20index--)=20=7B=0D=0A>+=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20cable=20=3D=20&edev->cables=5Bindex=5D;=0D=0A>+=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20kfree(cable->attr_g.name);=0D=0A>+=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=7D=0D=0A>+=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20return=20-ENOMEM;=0D=
+=0A=0D=0AYou=20have=20a=20memory=20leak.=0D=0Aedev->cables=20is=20allocated=
+=20and=0D=0Ayou=20are=20not=20freeing=20it.=0D=0A=0D=0AIn=20the=20previous=
+=20code,=20it=20was=20freed=20by=0D=0Ahaving=20different=20err-goto=20label=
+s.=0D=0A=0D=0APlease=20check=20if=20you=20have=20similar=20errors=0D=0Ain=
+=20other=20patches=20of=20this=20series.=0D=0A=0D=0A...=0D=0A=0D=0A>=40=40=
+=20-1282,7=20+1296,7=20=40=40=20int=20extcon_dev_register(struct=20extcon_d=
+ev=20*edev)=0D=0A>=20err_alloc_cables:=0D=0A>=20=20=20=20=20=20=20=20=20if=
+=20(edev->max_supported)=0D=0A>=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20kfree(edev->cables);=0D=0A>-err_sysfs_alloc:=0D=0A>+=0D=0A>=20=20=
+=20=20=20=20=20=20=20return=20ret;=0D=0A>=20=7D=0D=0A>=20EXPORT_SYMBOL_GPL(=
+extcon_dev_register);=0D=0A>--=0D=0A>2.35.1=0D=0A>=0D=0A>=0D=0A=0D=0ACheers=
+,=0D=0AMyungJoo.=0D=0A=0D=0A=0D=0A
