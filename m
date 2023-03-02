@@ -2,140 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B15D6A8C2E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396A56A8C3B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjCBWt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S230231AbjCBWwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:52:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjCBWtz (ORCPT
+        with ESMTP id S230214AbjCBWvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:49:55 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C77F23650
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:49:53 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id z2so823373plf.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:49:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1677797393;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=87r3ryuddMp2n2OJgEocLi5hCbxjRwWfqUz8IuAFVl0=;
-        b=KJYLa2os+yE0S+tQquXclEo5UjbB3+Ix9L7t+KQV3eWYy49UoX7lkm4pdsI0DCG2xP
-         1Zb5VEgb0JZwWKs5XjvOkNJmi2QFtZJxCjvVNdN4NIi6tT4yT1bRDmW6x7vkkY/W0SBp
-         grxfEqQ+YXXSh+Uj6LgzHidfiHyt2I/MWu8XU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677797393;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=87r3ryuddMp2n2OJgEocLi5hCbxjRwWfqUz8IuAFVl0=;
-        b=mEdO/xBlxVFCGnBGCBZcv/iwNqrUKpRg+3Vyv97mDLPnFO3aY/OS9GFvfqRi0JemX9
-         wItl8w2xdUKPNKU5W7cEVyclH4+PJ3XwPSxPcUYuB4lzPfUDPLP7uZIRs9N8SPtxw7Q/
-         hFQeqdytnyVtDfwZZw9uDRtt4iC6n2u6p2+oeUk59SVPdKXChdMJoim3zgA15Cq08Reu
-         Q+++9Ywr/hzf4bLZTOT63RYhfpnaSpBbGdlK9JgwdzefPaU6/PYSqsSGxdqYqOFk3FgZ
-         gEHUbqmzuSsBzC8SzlUKd5jlzyvsnBJK7F9hiaKqEOnjvu+/+SXczlh9EdDKZlYwU/Kh
-         0JpQ==
-X-Gm-Message-State: AO0yUKUSkd+Biq93L+fAZmXLoLSeJE0n4LFnmaMayeZ4TOBVf6jUe5E3
-        h6CJkrqPjwDlra+E69z1gFU4Lg==
-X-Google-Smtp-Source: AK7set8jKAerELLqXHm7NocBIiVApMHkGJPa8LPJV/dR2Nkty1/Zi+585lESapSslKGeBs+DF51TEQ==
-X-Received: by 2002:a05:6a20:160c:b0:cd:1cce:d892 with SMTP id l12-20020a056a20160c00b000cd1cced892mr139958pzj.9.1677797393110;
-        Thu, 02 Mar 2023 14:49:53 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e19-20020a62aa13000000b005b6f63c6cf4sm217194pff.30.2023.03.02.14.49.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 14:49:52 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>, stable@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] kheaders: Use array declaration instead of char
-Date:   Thu,  2 Mar 2023 14:49:50 -0800
-Message-Id: <20230302224946.never.243-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 2 Mar 2023 17:51:52 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247A35329A;
+        Thu,  2 Mar 2023 14:51:51 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 6E3503F123;
+        Thu,  2 Mar 2023 22:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677797507;
+        bh=bioryjk+aw7umCRjJRv4QvVIBgleMXFeIjs93Jwz0DU=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Cj7XrX8b3UMGQ4YO23XrAP0FCwraXl+y1is+aXBHq4Yaq0NJ8Y8zOoX9mLwzMi+cA
+         W3HPuGOFaftga2KXhKyZ5/4wS3BJLQBJ5S66CQM0hrX5LMpBQztUXGj1ZJW8M57Tj9
+         E70gT7F19dTUoCRQak+Bmmjm6DiRshfhlHBeKvil8gT2zCWDPf/XMYo1iREmsccTjN
+         W73jiILx6RoqVEa9UN6TtrU3KE8vHdtwQu/Blp/WvArnFFzabJzHpde6FZkpMk6+tz
+         aA8hHzFDIvRxA5sc+RxL5w2jCZ/b5qSxjxwm4eMptgFrVN4BVZW/vH7z72DRLHmUiF
+         E9HGDOJeYK7xg==
+Message-ID: <0767e9c6-b255-7c66-a75b-e3fc59f129f9@canonical.com>
+Date:   Thu, 2 Mar 2023 14:51:40 -0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2075; h=from:subject:message-id; bh=eLj/PflKjatP3hFY0i0HHeuMwWpjFzg2cBxv81U9QkM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkASgOFlZ1ftATS5I9PtciOtLxZpppkpTfsbekhvi0 AiYPKIuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZAEoDgAKCRCJcvTf3G3AJkeqD/ 0UKRxmCYQN06lvmilRYvIyKjBpP1mKZf3n4bjCclIFAOJ/ZLkeIiUPLMpOo34kP1jZOaaJapJsc3th WwaEdtGNaVCu8UyDipj4c1YBMdSYL1xekEJtkPnelZnDwEutxQNxEy38mpAgoCb541wlTw9w0YbPAi yyJa+NJI5l/x2IxhPwKD3F19cxe9JlWTBqC82IpvTUY7l9jxv1XcnM4ZJA0D5mlyDzOovN10GhQdVj aEPKTTjm8ifvUsuiODnrsguQPwwvoadopjqjwgGLlmxM9G6IfAD8F1zIWFo6XFsPfrxhRaQvO/bjcm GLXRBa3GPb0I05K21/lSkajRvk5xOfs+FSpF9S+PztoqgHOnI4wDRrL6zhdp7JzxZQ6IzVsukq1Xqe UUuvWc4OfJN2Q8j3Jkb4aq3NPpQPMnvOip9hlQdEpgRR4foO95+kX2XpQ3nK1uODIiDxCb3y+ScURs iI+/TAUPcYLIV6i59xNWz9yNv2kfisiAXVg5AQdf9jcJbJn6LhGEaW0GlpQc6ocYRRliSxzE91OD9l UKkvUONcTKTMx7q7/bUY+E+2qmFHnoN1HUb//TPtpO1Km4DypVSVz7flMS9OWbF8y6sX/eP2Bk1ceM c8dEuWg6AeUgSV0SwOuqvYletGKA8FxVGpvNRif+xcgiCXHeBQE6QmbVeyjw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 04/11] apparmor: simplify sysctls with
+ register_sysctl_init()
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, ebiederm@xmission.com,
+        keescook@chromium.org, yzaikin@google.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, luto@amacapital.net,
+        wad@chromium.org, dverkamp@chromium.org, paulmck@kernel.org,
+        baihaowen@meizu.com, frederic@kernel.org, jeffxu@google.com,
+        ebiggers@kernel.org, tytso@mit.edu, guoren@kernel.org
+Cc:     j.granados@samsung.com, zhangpeng362@huawei.com,
+        tangmeng@uniontech.com, willy@infradead.org, nixiaoming@huawei.com,
+        sujiaxun@uniontech.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230302202826.776286-1-mcgrof@kernel.org>
+ <20230302202826.776286-5-mcgrof@kernel.org>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20230302202826.776286-5-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under CONFIG_FORTIFY_SOURCE, memcpy() will check the size of destination
-and source buffers. Defining kernel_headers_data as "char" would trip
-this check. Since these addresses are treated as byte arrays, define
-them as arrays (as done everywhere else).
+On 3/2/23 12:28, Luis Chamberlain wrote:
+> Using register_sysctl_paths() is really only needed if you have
+> subdirectories with entries. We can use the simple register_sysctl()
+> instead.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-This was seen with:
-
-  $ cat /sys/kernel/kheaders.tar.xz >> /dev/null
-
-  detected buffer overflow in memcpy
-  kernel BUG at lib/string_helpers.c:1027!
-  ...
-  RIP: 0010:fortify_panic+0xf/0x20
-  [...]
-  Call Trace:
-   <TASK>
-   ikheaders_read+0x45/0x50 [kheaders]
-   kernfs_fop_read_iter+0x1a4/0x2f0
-  ...
-
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Link: https://lore.kernel.org/bpf/20230302112130.6e402a98@kernel.org/
-Tested-by: Jakub Kicinski <kuba@kernel.org>
-Fixes: 43d8ce9d65a5 ("Provide in-kernel headers to make extending kernel easier")
-Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- kernel/kheaders.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-index 8f69772af77b..42163c9e94e5 100644
---- a/kernel/kheaders.c
-+++ b/kernel/kheaders.c
-@@ -26,15 +26,15 @@ asm (
- "	.popsection				\n"
- );
- 
--extern char kernel_headers_data;
--extern char kernel_headers_data_end;
-+extern char kernel_headers_data[];
-+extern char kernel_headers_data_end[];
- 
- static ssize_t
- ikheaders_read(struct file *file,  struct kobject *kobj,
- 	       struct bin_attribute *bin_attr,
- 	       char *buf, loff_t off, size_t len)
- {
--	memcpy(buf, &kernel_headers_data + off, len);
-+	memcpy(buf, &kernel_headers_data[off], len);
- 	return len;
- }
- 
-@@ -48,8 +48,8 @@ static struct bin_attribute kheaders_attr __ro_after_init = {
- 
- static int __init ikheaders_init(void)
- {
--	kheaders_attr.size = (&kernel_headers_data_end -
--			      &kernel_headers_data);
-+	kheaders_attr.size = (kernel_headers_data_end -
-+			      kernel_headers_data);
- 	return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
--- 
-2.34.1
+> ---
+>   security/apparmor/lsm.c | 8 +-------
+>   1 file changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index d6cc4812ca53..47c7ec7e5a80 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -1764,11 +1764,6 @@ static int apparmor_dointvec(struct ctl_table *table, int write,
+>   	return proc_dointvec(table, write, buffer, lenp, ppos);
+>   }
+>   
+> -static struct ctl_path apparmor_sysctl_path[] = {
+> -	{ .procname = "kernel", },
+> -	{ }
+> -};
+> -
+>   static struct ctl_table apparmor_sysctl_table[] = {
+>   	{
+>   		.procname       = "unprivileged_userns_apparmor_policy",
+> @@ -1790,8 +1785,7 @@ static struct ctl_table apparmor_sysctl_table[] = {
+>   
+>   static int __init apparmor_init_sysctl(void)
+>   {
+> -	return register_sysctl_paths(apparmor_sysctl_path,
+> -				     apparmor_sysctl_table) ? 0 : -ENOMEM;
+> +	return register_sysctl("kernel", apparmor_sysctl_table) ? 0 : -ENOMEM;
+>   }
+>   #else
+>   static inline int apparmor_init_sysctl(void)
 
