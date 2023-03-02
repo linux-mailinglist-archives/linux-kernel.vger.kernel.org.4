@@ -2,210 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A23F6A78EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAB96A78F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjCBBiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 20:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S229732AbjCBBih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 20:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCBBiQ (ORCPT
+        with ESMTP id S229701AbjCBBib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:38:16 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E682E2310E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:38:13 -0800 (PST)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230302013811epoutp03553db3c0793d8153a94455739584b1b1~IdnGHhE1V2858028580epoutp03g
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:38:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230302013811epoutp03553db3c0793d8153a94455739584b1b1~IdnGHhE1V2858028580epoutp03g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1677721091;
-        bh=Upm4LHqrFj+Ba7ZBgyJPHcoCjI/gROHC2Z7FPc4nVX8=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=lYeEDw0pw+o6LHYmp1W2zwkRRmJV9teMpBuPCiXhfM6XUt3IQC1l7c03mwugtY8la
-         uCsQ++hIB4miP3JClMjgbvhRIK29NiQ1IYrWZ6qStlgSijyp4d/ZZeSoyuEsvlNemw
-         1HJBYo1O/FBBmMojviwhwmWavpJPvP8BWPJamnk0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20230302013810epcas1p33430e99dcd3c4e9aec0ad6ec1661fe89~IdnFxhrX-1012510125epcas1p3M;
-        Thu,  2 Mar 2023 01:38:10 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.248]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4PRtz568wzz4x9QG; Thu,  2 Mar
-        2023 01:38:09 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FB.4C.54823.10EFFF36; Thu,  2 Mar 2023 10:38:09 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230302013809epcas1p1d0c8fac83192cae6fa5efaed17840509~IdnEhhSt71453714537epcas1p14;
-        Thu,  2 Mar 2023 01:38:09 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230302013809epsmtrp192b5b2219d935a294d44c9b21bd16744~IdnEgxMoW1351913519epsmtrp1B;
-        Thu,  2 Mar 2023 01:38:09 +0000 (GMT)
-X-AuditID: b6c32a39-a97ff7000000d627-ca-63fffe018232
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        54.83.05839.10EFFF36; Thu,  2 Mar 2023 10:38:09 +0900 (KST)
-Received: from bw365lee03 (unknown [10.88.97.170]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230302013809epsmtip20a9fdf22ca210c6faaea1cb0cfb21007~IdnENq6pk1094910949epsmtip2I;
-        Thu,  2 Mar 2023 01:38:09 +0000 (GMT)
-From:   "Bumwoo Lee" <bw365.lee@samsung.com>
-To:     <myungjoo.ham@samsung.com>,
-        "'Chanwoo Choi'" <cw00.choi@samsung.com>,
-        <linux-kernel@vger.kernel.org>
-In-Reply-To: <20230224100325epcms1p3e8886e278e23f610c8490cb69f1d452d@epcms1p3>
-Subject: RE: [PATCH v2 2/4] extcon: Added extcon_alloc_cables to simplify
- extcon register function
-Date:   Thu, 2 Mar 2023 10:38:08 +0900
-Message-ID: <091101d94ca7$a4ad23c0$ee076b40$@samsung.com>
+        Wed, 1 Mar 2023 20:38:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E76305C4;
+        Wed,  1 Mar 2023 17:38:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13DCDB811EC;
+        Thu,  2 Mar 2023 01:38:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EACC433D2;
+        Thu,  2 Mar 2023 01:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677721103;
+        bh=rKtcHDStlDpmev0wSqFyH2j1eZ3mNsvHeJTuTDd60rk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Oq0iRiKSGI3z/jJpMgBfNOss+Xzar8RB/Cw11ZHp3oGjPiMZ8vs68LTw4qreqA/VI
+         BpgpwOQ7uCgJEavC3zsKuuWBqfeTXaf9ydAm/THAWCV3L/MnQaQRKF4K2PxQx38FMG
+         jcAYlN7XG4iU1l4mUBLFCEkHlxhkRocvuUyFc+j6o0KrZPtq1MmHjxUqW90wYKbbFj
+         I5Uj9I+R30xd5TSwLaH39w3rJcKu8h482yW5Uh/XW/XHjBt9QXk2l5oOjQujJuMQYg
+         RXaTU21Its7pzaW8Z11gOGGd1A3RixrpdaW0goxxiLK0qu400p2dBU8NcuE0fOYvSB
+         rCqxUyZLJZKUg==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
+Date:   Wed,  1 Mar 2023 17:38:13 -0800
+Message-Id: <20230302013822.1808711-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQEndo8vt+Nxhu23TcqVP1cSXfBwDwF+DXQiAV3ksbMBRRvN4rApV6YQ
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMKsWRmVeSWpSXmKPExsWy7bCmvi7jv//JBj9eGFpc//Kc1eLyrjls
-        FrcbV7A5MHv0bVnF6PF5k1wAU1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmS
-        Ql5ibqqtkotPgK5bZg7QDiWFssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgVmBXnFi
-        bnFpXrpeXmqJlaGBgZEpUGFCdsacjScZCx6pVzRMf8vUwHhJtYuRk0NCwERi+Yml7F2MXBxC
-        AjsYJRZ/n8MIkhAS+MQosa/TCyLxjVHi8py1jDAdt3pWMkIk9jJKHPg7Fcp5ziix/MUCFpAq
-        NgEtiYVz5rOB2CICWRJXfrwGszkF/CT23T7ODGILC6RITN18gx3EZhFQkZjwroO1i5GDg1fA
-        UqKnURIkzCsgKHFy5hOwkcwC2hLLFr5mhjhCQeLn02WsEOPdJBqnLICqEZGY3dnGDHKPhMAl
-        dolbqyZBXe0iMf38RjYIW1ji1fEt7BC2lMTL/jYoO11i5ZU7UHaOxOv77VC9xhLv3q5lBrmN
-        WUBTYv0ufYiwosTO33MZIfbySbz72gN2voQAr0RHmxBEibJE94MXTBC2pMTip3egJnpITDp3
-        gnUCo+IsJF/OQvLlLCTfzEJYvICRZRWjWGpBcW56arFhgSk8rpPzczcxglOfluUOxulvP+gd
-        YmTiYDzEKMHBrCTCu/D2n2Qh3pTEyqrUovz4otKc1OJDjKbAYJ/ILCWanA9Mvnkl8YYmlgYm
-        ZkYmFsaWxmZK4rzitieThQTSE0tSs1NTC1KLYPqYODilGphWdD86eyru9+ql/237jojeTpxx
-        wuzkj5nlRy6H/POYM9dzxddQ09NtnJJ1peVsza8tnDZmpexcYbNHaPq383omq1Q//En//O9D
-        8IK3LxrYeg+wr5f0ONP5QGaa00o+r2v3pdcWxq5azOE2wX3Fj2839igr/tU+xMt+ivfpdpO3
-        xxeubZetVUgynuAuqReodOFy49RXs4vXs2W3Hen8ymK59cy1B+k7dH8f/W+ueCvEfovc/eIH
-        DndL9deG7doyUdz2e8wR/4VbQmpfV2xYf2sf1zbRbV945US36szt2yWrrrNwmtDsuy932S3b
-        L1A9UXZx4oyF1V3epo1HFF8qMUqHZi4/tdD5mNaGew/mz/y1W0aJpTgj0VCLuag4EQBPdaF7
-        BgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrILMWRmVeSWpSXmKPExsWy7bCSvC7jv//JBncm8lpc//Kc1eLyrjls
-        FrcbV7A5MHv0bVnF6PF5k1wAUxSXTUpqTmZZapG+XQJXxpYdXcwFf6UqtnxezdLAOFWki5GT
-        Q0LAROJWz0pGEFtIYDejxNcTkhBxSYmzyx+xdzFyANnCEocPF3cxcgGVPGWUWPtvDRtIDZuA
-        lsTCOfPBbBGBHIkD66ewQ8z5yCgxeW8ciM0p4Cex7/ZxZhBbWCBJYsm67WA1LAIqEhPedbCC
-        zOcVsJToaQRbyysgKHFy5hMWEJtZQFui92ErI4y9bOFrZojTFCR+Pl3GCrHWTaJxygKoehGJ
-        2Z1tzBMYhWYhGTULyahZSEbNQtKygJFlFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZG
-        cKhrae5g3L7qg94hRiYOxkOMEhzMSiK8C2//SRbiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6Hr
-        ZLyQQHpiSWp2ampBahFMlomDU6qBqXa7zqkvUvUyrTuE9HcFnn8Vvi51YbrFR0nm7sqLlf/v
-        qa71ufoox18nhH+S2c4jbLsFfXdzZSnuawu4mbrOq31jg9JX8R0HD0+MOde0RKFq3VwTjxmV
-        disuZqca7DW+5739WWaf6wT2bqMLf8QaJ285evPE1fNcorzPWm8b3b0qEhA8s05npcHVO/cW
-        ymQ1sp5izRCP+TX71wnLOOt493ONTjeu/ephdrZ74sl4/MiVecU2mvVLxKPUp7+P6DvgdHE/
-        zzqFpUGx2/fM/b+L0SjgitEJhoLNTtJCsexLbfwXZ3AIq0o4vX/5yavvnn/e6cn7m2U36i0P
-        Wp++qjZywQ1fG89F2w/1uam2P943U4mlOCPRUIu5qDgRAAhkRmTkAgAA
-X-CMS-MailID: 20230302013809epcas1p1d0c8fac83192cae6fa5efaed17840509
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925
-References: <20230220054513.27385-3-bw365.lee@samsung.com>
-        <20230220054513.27385-1-bw365.lee@samsung.com>
-        <CGME20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925@epcms1p3>
-        <20230224100325epcms1p3e8886e278e23f610c8490cb69f1d452d@epcms1p3>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+This patch series adds unit tests for the clk fixed rate basic type and
+the clk registration functions that use struct clk_parent_data. To get
+there, we add support for loading a DTB into the UML kernel that's
+running the unit tests along with probing platform drivers to bind to
+device nodes specified in DT.
 
-As you can see, edev->cables are freed if extcon_alloc_cables() function re=
-turn error handling in extcon_dev_register()
-Other added functions are also same.
+With this series, we're able to exercise some of the code in the common
+clk framework that uses devicetree lookups to find parents and the fixed
+rate clk code that scans devicetree directly and creates clks. Please
+review.
 
-Because it's functionalized, apart from this, do you want to mention that i=
-t should be freed within the function?=20
-Please let me know your opinion.
+I Cced everyone to all the patches so they get the full context. I'm
+hoping I can take the whole pile through the clk tree as they almost all
+depend on each other. In the future I imagine it will be easy to add
+more test nodes to the clk.dtsi file and not need to go across various
+maintainer trees like this series does.
 
-extcon_dev_register(struct extcon_dev *edev)=7B
-...
+Stephen Boyd (8):
+  dt-bindings: Add linux,kunit binding
+  of: Enable DTB loading on UML for KUnit tests
+  kunit: Add test managed platform_device/driver APIs
+  clk: Add test managed clk provider/consumer APIs
+  dt-bindings: kunit: Add fixed rate clk consumer test
+  clk: Add KUnit tests for clk fixed rate basic type
+  dt-bindings: clk: Add KUnit clk_parent_data test
+  clk: Add KUnit tests for clks registered with struct clk_parent_data
 
-	ret =3D extcon_alloc_cables(edev);
-	if (ret)
-		goto err_alloc_cables;
+ .../clock/linux,clk-kunit-parent-data.yaml    |  47 ++
+ .../kunit/linux,clk-kunit-fixed-rate.yaml     |  35 ++
+ .../bindings/kunit/linux,kunit.yaml           |  24 +
+ arch/um/kernel/dtb.c                          |  29 +-
+ drivers/clk/.kunitconfig                      |   3 +
+ drivers/clk/Kconfig                           |   7 +
+ drivers/clk/Makefile                          |   6 +
+ drivers/clk/clk-fixed-rate_test.c             | 296 ++++++++++++
+ drivers/clk/clk-kunit.c                       | 204 ++++++++
+ drivers/clk/clk-kunit.h                       |  28 ++
+ drivers/clk/clk_test.c                        | 456 +++++++++++++++++-
+ drivers/of/Kconfig                            |  26 +
+ drivers/of/Makefile                           |   1 +
+ drivers/of/kunit/.kunitconfig                 |   4 +
+ drivers/of/kunit/Makefile                     |   4 +
+ drivers/of/kunit/clk.dtsi                     |  30 ++
+ drivers/of/kunit/kunit.dtsi                   |   9 +
+ drivers/of/kunit/kunit.dtso                   |   4 +
+ drivers/of/kunit/uml_dtb_test.c               |  55 +++
+ include/kunit/platform_driver.h               |  15 +
+ lib/kunit/Makefile                            |   6 +
+ lib/kunit/platform_driver-test.c              | 107 ++++
+ lib/kunit/platform_driver.c                   | 207 ++++++++
+ 23 files changed, 1599 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/linux,clk-kunit-parent-data.yaml
+ create mode 100644 Documentation/devicetree/bindings/kunit/linux,clk-kunit-fixed-rate.yaml
+ create mode 100644 Documentation/devicetree/bindings/kunit/linux,kunit.yaml
+ create mode 100644 drivers/clk/clk-fixed-rate_test.c
+ create mode 100644 drivers/clk/clk-kunit.c
+ create mode 100644 drivers/clk/clk-kunit.h
+ create mode 100644 drivers/of/kunit/.kunitconfig
+ create mode 100644 drivers/of/kunit/Makefile
+ create mode 100644 drivers/of/kunit/clk.dtsi
+ create mode 100644 drivers/of/kunit/kunit.dtsi
+ create mode 100644 drivers/of/kunit/kunit.dtso
+ create mode 100644 drivers/of/kunit/uml_dtb_test.c
+ create mode 100644 include/kunit/platform_driver.h
+ create mode 100644 lib/kunit/platform_driver-test.c
+ create mode 100644 lib/kunit/platform_driver.c
 
-...
 
-err_alloc_cables:
- 	if (edev->max_supported)
- 		kfree(edev->cables);
+base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
 
-
-Regards,
-Bumwoo
-
------Original Message-----
-From: MyungJoo Ham <myungjoo.ham=40samsung.com>=20
-Sent: Friday, February 24, 2023 7:03 PM
-To: Bumwoo Lee <bw365.lee=40samsung.com>; Chanwoo Choi <cw00.choi=40samsung=
-.com>; linux-kernel=40vger.kernel.org
-Subject: RE: =5BPATCH v2 2/4=5D extcon: Added extcon_alloc_cables to simpli=
-fy extcon register function
-
->--------- Original Message ---------
->Sender : =EC=9D=B4=EB=B2=94=EC=9A=B0=20<bw365.lee=40samsung.com>Product=20=
-S/W=20Lab(VD)/=EC=82=BC=EC=84=B1=EC=A0=84=EC=9E=90=20Date=20:=20=0D=0A>2023=
--02-20=2014:45=20(GMT+9)=20Title=20:=20=5BPATCH=20v2=202/4=5D=20extcon:=20A=
-dded=20=0D=0A>extcon_alloc_cables=20to=20simplify=20extcon=20register=20fun=
-ction=0D=0A>=20=0D=0A>The=20cable=20allocation=20part=20is=20functionalized=
-=20from=20extcon_dev_register.=0D=0A>=0D=0A>Signed-off-by:=20Bumwoo=20Lee=
-=20<bw365.lee=40samsung.com>=0D=0A>---=0D=0A>=20drivers/extcon/extcon.c=20=
-=7C=20104=20+++++++++++++++++++++++-----------------=0D=0A>=201=20file=20ch=
-anged,=2059=20insertions(+),=2045=20deletions(-)=0D=0A>=0D=0A>diff=20--git=
-=20a/drivers/extcon/extcon.c=20b/drivers/extcon/extcon.c=20index=20=0D=0A>a=
-dcf01132f70..3c2f540785e8=20100644=0D=0A>---=20a/drivers/extcon/extcon.c=0D=
-=0A>+++=20b/drivers/extcon/extcon.c=0D=0A>=40=40=20-1070,6=20+1070,61=20=40=
-=40=20void=20extcon_dev_free(struct=20extcon_dev=20*edev)=20=20=7D=20=20=0D=
-=0A>EXPORT_SYMBOL_GPL(extcon_dev_free);=0D=0A>=20=0D=0A>+/**=0D=0A>+=20*=20=
-extcon_alloc_cables()=20-=20alloc=20the=20cables=20for=20extcon=20device=0D=
-=0A>+=20*=20=40edev:=20=20=20=20=20=20=20=20extcon=20device=20which=20has=
-=20cables=0D=0A>+=20*=0D=0A>+=20*=20Returns=200=20if=20success=20or=20error=
-=20number=20if=20fail.=0D=0A>+=20*/=0D=0A>+static=20int=20extcon_alloc_cabl=
-es(struct=20extcon_dev=20*edev)=20=7B=0D=0A>+=20=20=20=20=20=20=20=20int=20=
-index;=0D=0A>+=20=20=20=20=20=20=20=20char=20*str;=0D=0A>+=20=20=20=20=20=
-=20=20=20struct=20extcon_cable=20*cable;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=
-=20=20if=20(=21edev->max_supported)=0D=0A>+=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20return=200;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=20=20edev->=
-cables=20=3D=20kcalloc(edev->max_supported,=0D=0A>+=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20sizeof=
-(struct=20extcon_cable),=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20GFP_KERNEL);=0D=0A>+=20=
-=20=20=20=20=20=20=20if=20(=21edev->cables)=0D=0A>+=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20return=20-ENOMEM;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=
-=20=20for=20(index=20=3D=200;=20index=20<=20edev->max_supported;=20index++)=
-=20=7B=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20cable=20=3D=
-=20&edev->cables=5Bindex=5D;=0D=0A>+=0D=0A>+=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20str=20=3D=20kasprintf(GFP_KERNEL,=20=22cable.%d=22,=20ind=
-ex);=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20if=20(=21str)=
-=20=7B=0D=0A>+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20for=20(index--;=20index=20>=3D=200;=20index--)=20=7B=0D=0A>+=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20cable=20=3D=20&edev->cables=5Bindex=5D;=0D=0A>+=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20kfree(cable->attr_g.name);=0D=0A>+=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=7D=0D=0A>+=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20return=20-ENOMEM;=0D=
-=0A=0D=0AYou=20have=20a=20memory=20leak.=0D=0Aedev->cables=20is=20allocated=
-=20and=0D=0Ayou=20are=20not=20freeing=20it.=0D=0A=0D=0AIn=20the=20previous=
-=20code,=20it=20was=20freed=20by=0D=0Ahaving=20different=20err-goto=20label=
-s.=0D=0A=0D=0APlease=20check=20if=20you=20have=20similar=20errors=0D=0Ain=
-=20other=20patches=20of=20this=20series.=0D=0A=0D=0A...=0D=0A=0D=0A>=40=40=
-=20-1282,7=20+1296,7=20=40=40=20int=20extcon_dev_register(struct=20extcon_d=
-ev=20*edev)=0D=0A>=20err_alloc_cables:=0D=0A>=20=20=20=20=20=20=20=20=20if=
-=20(edev->max_supported)=0D=0A>=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20kfree(edev->cables);=0D=0A>-err_sysfs_alloc:=0D=0A>+=0D=0A>=20=20=
-=20=20=20=20=20=20=20return=20ret;=0D=0A>=20=7D=0D=0A>=20EXPORT_SYMBOL_GPL(=
-extcon_dev_register);=0D=0A>--=0D=0A>2.35.1=0D=0A>=0D=0A>=0D=0A=0D=0ACheers=
-,=0D=0AMyungJoo.=0D=0A=0D=0A=0D=0A
