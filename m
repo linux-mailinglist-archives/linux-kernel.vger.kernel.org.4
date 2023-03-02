@@ -2,238 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D036A83A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AD46A83AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjCBNiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 08:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
+        id S230071AbjCBNjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCBNiO (ORCPT
+        with ESMTP id S229449AbjCBNjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 08:38:14 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D71113DC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:38:13 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id m10so22432912vso.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:38:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OOEEtslPUkXBnAZ4G8QHTVVmCfs3+xDdc9qKPeUwmBY=;
-        b=Rp+6IjakE3xl4YEMRy9Q/Ldl35S6qCk/X8Hq1IvebTG9vVx991nSc/HUwWSL44kqmt
-         Ql/Nob4paBUDZ0tjVxV6TmG5ricBasUOoW5quWr5oeStBBI5VEqjXhHSXzUu5WRpirhn
-         jCEj3aIGLIW+DngJ4O1euHZ1+2whkdga+CRixjgc5iJ7Ff/sJTzUZAxNkpN4Huf5ZcOd
-         RKBxMTx4TYk653UHh8mJcS0zIxcOXIXBQfhY7PmTx1tDbs0sDY1fUJvJRABv9I5zbTK7
-         cixL+dAuren1DjZ2orR6LWKIQXkX1ko2QI3mmU6b8cji135UWlp2Fd6ey5PGskoIpDmT
-         vENw==
+        Thu, 2 Mar 2023 08:39:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F32D11648
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:38:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677764332;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ZdM39Rwm+APVNSKOoKjEHl8iHMadAxZ6z3x8N7ucVs=;
+        b=EUYuugItQqifD4HLNp5pFaOzc0VFc3cO/W5qm54ydaTlN1+f+JNO5uZopsHfsV8ZF+Bn2j
+        VPylE6qvPCsdxEzakbQiQgghK1E/ciHWJOxBf2cYDLQDBDkw9cvdQyOYAbY05yEZI3p6SX
+        PTDpwyRPFou+cgVuouyzxq7Zr/Vz5cw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-513-2DBfFDDxMz221bF0AGgN2A-1; Thu, 02 Mar 2023 08:38:51 -0500
+X-MC-Unique: 2DBfFDDxMz221bF0AGgN2A-1
+Received: by mail-wm1-f72.google.com with SMTP id k26-20020a05600c0b5a00b003dfe4bae099so1114629wmr.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:38:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OOEEtslPUkXBnAZ4G8QHTVVmCfs3+xDdc9qKPeUwmBY=;
-        b=M+oXj8HtxmwiDbAmIBWVi6YIhCHe28WROtqZgUTsg5Ujw5GBx4Y91gxqhkn+u4TRwY
-         VAy1L3DkqQGcij9D8tGJQJdFM8NJ+WxXPSEEWT73acHxzrauZa9f8XTTUKgrkss/Rw/g
-         Facu+xFSYDQWfAzsUDfHN66I7obzl70FbkevA4nM3E2jZR1Wv1T92HKVlmyak2arhktA
-         feW4OyBK1b1Tg5RyoySSk7jBNoHPzTzKkeow5mkk/jBk2dcdvF4UluspwzgbTyQkCN0Z
-         LmjIJeRdqrnkHn4QYpNsIy5qYmo+WiqNqr6EZP2RuVEn/P4/Z24t1VBZVDylSBe57DaA
-         lZcg==
-X-Gm-Message-State: AO0yUKWrG8kUfSxRsUUIvCSAYdDscTXr+gVB/HZICSOqYmrEV9zH5hFF
-        zg5vGaQ96FOY/8KSphkmRN/AB8ZKducNO3fvhXt0Jw==
-X-Google-Smtp-Source: AK7set/IIrp2otjUC2O0wlh3ZAloIYXoL8bth5vYbe8l/Enz35s/6D0CTFf9y+4mq/yctG/aDHa3ofsq70FJdRLYZao=
-X-Received: by 2002:a05:6102:21b6:b0:421:7f84:f3d9 with SMTP id
- i22-20020a05610221b600b004217f84f3d9mr1316449vsb.3.1677764292073; Thu, 02 Mar
- 2023 05:38:12 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677764330;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZdM39Rwm+APVNSKOoKjEHl8iHMadAxZ6z3x8N7ucVs=;
+        b=JogchZrizArqAZXc8t/3H/cu3kowTbP6NId8UIvl1u8fUMC5GURlEk8Q+I25tX0xYI
+         GikgNNhBq7G3SBvdaCOnJ8wnlzXF8BFpWzes1sZtNnhWkxURE0m/gx71tLvBUeFAFSZo
+         HQsf/zuvKWt4EQMfN+AJYOzfYjwrP+JIJwRJmDr/HvIMX1ZQqrfqsK1/oZZXH0vUzN85
+         JnrgwGzjatY9Hn7u0QpqHJ64HbggyJagmRK9sTYBhXEal+3A+KCCIfVvixu/2CpOAOM6
+         k1/V16z9acrUgGIJHhqHMNyBs9bepK+zo5o9eC2UP6B5PaISkV+90Ke20TLnh/Vr1LGS
+         K0FA==
+X-Gm-Message-State: AO0yUKVncXd3R+sXrnfAa6b9ZKbN9I/C2m8Eu01bqLwJ+hCFx6Q378Ae
+        6lJCesU9b+HlSgLEcPmCygtUjrNAqhUlF+IrdeA6KgCH96tuvm487ggMUrJ7Os6Y8r8SXKIXK4V
+        enaBDF7/VsdJM8fw95d5hWab8
+X-Received: by 2002:a5d:56cb:0:b0:2c7:1b3d:1fb9 with SMTP id m11-20020a5d56cb000000b002c71b3d1fb9mr7355477wrw.50.1677764329883;
+        Thu, 02 Mar 2023 05:38:49 -0800 (PST)
+X-Google-Smtp-Source: AK7set86niPGr89uB0anqISxCl4PutLnmZ7/ReX6UXFcr5ISdGk14j6U7XkC6IbLZNuiZojlUcc9Bw==
+X-Received: by 2002:a5d:56cb:0:b0:2c7:1b3d:1fb9 with SMTP id m11-20020a5d56cb000000b002c71b3d1fb9mr7355466wrw.50.1677764329563;
+        Thu, 02 Mar 2023 05:38:49 -0800 (PST)
+Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
+        by smtp.gmail.com with ESMTPSA id hg13-20020a05600c538d00b003d9aa76dc6asm3022317wmb.0.2023.03.02.05.38.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 05:38:49 -0800 (PST)
+Date:   Thu, 2 Mar 2023 14:38:45 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, oxffffaa@gmail.com,
+        kernel@sberdevices.ru, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+Subject: Re: [RFC PATCH v1] vsock: check error queue to set EPOLLERR
+Message-ID: <20230302133845.hglm4uregjsvrcrc@sgarzare-redhat>
+References: <76e7698d-890b-d14d-fa34-da5dd7dd13d8@sberdevices.ru>
+ <20230302100621.gk45unegjbqjgpxh@sgarzare-redhat>
+ <3b38870c-7606-bf2e-8b17-21a75a1ed751@sberdevices.ru>
 MIME-Version: 1.0
-References: <20230301180651.177668495@linuxfoundation.org>
-In-Reply-To: <20230301180651.177668495@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 2 Mar 2023 19:08:01 +0530
-Message-ID: <CA+G9fYtdkp842ZUcv+Bp-4NfUB+33b7h94Jxi3mrbZ6GbUXcGA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/13] 5.4.234-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3b38870c-7606-bf2e-8b17-21a75a1ed751@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 at 23:38, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu, Mar 02, 2023 at 02:41:29PM +0300, Arseniy Krasnov wrote:
+>Hello!
 >
-> This is the start of the stable review cycle for the 5.4.234 release.
-> There are 13 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>On 02.03.2023 13:06, Stefano Garzarella wrote:
+>> On Wed, Mar 01, 2023 at 08:19:45AM +0300, Arseniy Krasnov wrote:
+>>> EPOLLERR must be set not only when there is error on the socket, but also
+>>> when error queue of it is not empty (may be it contains some control
+>>> messages). Without this patch 'poll()' won't detect data in error queue.
+>>
+>> Do you have a reproducer?
+>>
+>Dedicated reproducer - no:)
+>To reproduce this issue, i used last MSG_ZEROCOPY patches. Completion was inserted to
+>error queue, and 'poll()' didn't report about it. That was the reason, why this patch
+>was included to MSG_ZEROCOPY patchset. But also i think it is better to reduce number
+>of patches in it(i'm working on v2), so it is good to handle this patch separately.
+
+Yep, absolutely!
+
+>May be one way to reproduce it is use SO_TIMESTAMP(time info about skbuff will be queued
+>to the error queue). IIUC this feature is implemented at socket layer and may work in
+>vsock (but i'm not sure). Ok, i'll check it and try to implement reproducer.
 >
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
+>IIUC, for future, policy for fixes is "for each fix implement reproducer in vsock_test"?
+
+Nope, but for each fix we should have a Fixes tag.
+
+Usually we use vsock_test to check regressions on features and also the
+behaviour of different transports.
+My question was more about whether this problem was there before
+supporting sk_buff or not, to figure out which Fixes tag to use.
+
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.234-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
+>>> This patch is based on 'tcp_poll()'.
+>>
+>> LGTM but we should add a Fixes tag.
+>> It's not clear to me whether the problem depends on when we switched to using sk_buff or was pre-existing.
+>>
+>> Do you have any idea when we introduced this issue?
+>git blame shows, that this code exists since first commit to vsock:
+
+Okay, but did we use sk_error_queue before supporting sk_buff?
+
+Anyway, if we are not sure I think we can use the following Fixes tag,
+I don't see any issue if we backport this patch also before supporting
+sk_buff.
+
+Thanks,
+Stefano
+
 >
-> thanks,
+>commit d021c344051af91f42c5ba9fdedc176740cbd238
+>Author: Andy King <acking@vmware.com>
+>Date:   Wed Feb 6 14:23:56 2013 +0000
 >
-> greg k-h
+>    VSOCK: Introduce VM Sockets
+>
+>For TCP same logic was added by:
+>
+>commit 4ed2d765dfaccff5ebdac68e2064b59125033a3b
+>Author: Willem de Bruijn <willemb@google.com>
+>Date:   Mon Aug 4 22:11:49 2014 -0400
+>
+>    net-timestamp: TCP timestamping
+>
+>
+>>
+>> Thanks,
+>> Stefano
+>>
+>
+>Thanks Arseniy
+>
+>>>
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>> net/vmw_vsock/af_vsock.c | 2 +-
+>>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>>> index 19aea7cba26e..b5e51ef4a74c 100644
+>>> --- a/net/vmw_vsock/af_vsock.c
+>>> +++ b/net/vmw_vsock/af_vsock.c
+>>> @@ -1026,7 +1026,7 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+>>>     poll_wait(file, sk_sleep(sk), wait);
+>>>     mask = 0;
+>>>
+>>> -    if (sk->sk_err)
+>>> +    if (sk->sk_err || !skb_queue_empty_lockless(&sk->sk_error_queue))
+>>>         /* Signify that there has been an error on this socket. */
+>>>         mask |= EPOLLERR;
+>>>
+>>> -- 
+>>> 2.25.1
+>>>
+>>
+>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.4.234-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 71be0366b84f5ed2ce06bcc6feddf31053a41c73
-* git describe: v5.4.233-14-g71be0366b84f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
-33-14-g71be0366b84f
-
-## Test Regressions (compared to v5.4.233)
-
-## Metric Regressions (compared to v5.4.233)
-
-## Test Fixes (compared to v5.4.233)
-
-## Metric Fixes (compared to v5.4.233)
-
-## Test result summary
-total: 124659, pass: 103137, fail: 3281, skip: 17853, xfail: 388
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 144 total, 143 passed, 1 failed
-* arm64: 44 total, 40 passed, 4 failed
-* i386: 26 total, 20 passed, 6 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 30 total, 30 passed, 0 failed
-* riscv: 12 total, 10 passed, 2 failed
-* s390: 6 total, 6 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 37 total, 35 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
