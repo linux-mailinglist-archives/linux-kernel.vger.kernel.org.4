@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5546A89DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BF36A89DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjCBT6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S230045AbjCBT6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCBT5p (ORCPT
+        with ESMTP id S229779AbjCBT5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Mar 2023 14:57:45 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EF54743A
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61787474D7
         for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:57:44 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,35 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bn4hK/pc8yfuTHf2lVQ6K39OCmfHLmDwBEQ4LD+VvX8=;
-        b=sVHSx/LE7UqM7m9QqJqsI82I3YhkAegnS1wj0KV1SpI9PJKxnb/I07juk3E23hRkXfc2D6
-        E93VCEpd5hBOfkTcqtKMqdM9Bqq4/eZi6MzoPvWe4psYtIkpoQu60kDH0sLmcaiU7QkY0X
-        oDq5R/XP1V0TGr6dCS4tfdp9e3DMGiTaUD1jcFG32b1bHe9GxpBVT+NeVHY6xsi7tXZV5h
-        z81xAF0OvvZ4rAgVg7Rm83bheDM1no0axFc4D6eWG0otXxz5IZgHm1Xf85D/23B5Hs4Njo
-        BlNGym9rw1vlZ2oDc+dInihAYTmNb2UuXy5Ssxs8wXPTFtkEMuf3GwXXZdlUQA==
+        bh=+RiY4OM6UJRNz/WSBX/5KTZe1S/q7JPH46lONkiG6+g=;
+        b=Y//5m69smqt/3rvjKkJp+AlCiSiSrJ2hIBzpHRCpeJXg/jOSGUYgrqzG6OPRuopLBUgI93
+        drFPLWbNUW/fRZlcONLMavFXa5Ibf1mkU0drw9z2KBEmFfJsksGvn1r5BQExYV/wcjj/D9
+        Lhx/bq9/xUikhZhko9k7557OS/3qwp2w3O2W9RgfQBrbQwwcZUi7nOQVxdn6PbbK0ZVTNR
+        p9N6Y1bTFLq74dYQ9u4Iv62cwBG27Gy0I7yiG8WBav5uqHe7as38pYd49SanoYvV+CQl1N
+        f4tx5rN4Cndz1RU2q5bwq6uoZMmD4xhgtDWyLhUarNHhzL1TuU+ycaxQ+E++iQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1677787062;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bn4hK/pc8yfuTHf2lVQ6K39OCmfHLmDwBEQ4LD+VvX8=;
-        b=95Ms7ku4PtEVQkCu9sJ1bRajCtfp7nzS53jwqnhi/CkI9LIirtg2epuND9iUDCiYb5LQd8
-        TSNC5vetA4XLnrDA==
+        bh=+RiY4OM6UJRNz/WSBX/5KTZe1S/q7JPH46lONkiG6+g=;
+        b=5mkIXmg8E1wb4LxyOtqUWqr3pPJWzahz+3aLJVXlzhMk3YTSTUrSC36xyMS9fCgNetkQGg
+        J14n8LFF4jHNUMBg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net
-Subject: [PATCH printk v1 01/18] kdb: do not assume write() callback available
-Date:   Thu,  2 Mar 2023 21:02:01 +0106
-Message-Id: <20230302195618.156940-2-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v1 02/18] printk: Add NMI check to down_trylock_console_sem()
+Date:   Thu,  2 Mar 2023 21:02:02 +0106
+Message-Id: <20230302195618.156940-3-john.ogness@linutronix.de>
 In-Reply-To: <20230302195618.156940-1-john.ogness@linutronix.de>
 References: <20230302195618.156940-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -65,29 +59,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is allowed for consoles to provide no write() callback. For
-example ttynull does this.
+The printk path is NMI safe because it only adds content to the
+buffer and then triggers the delayed output via irq_work. If the
+console is flushed or unblanked (on panic) from NMI then it can
+deadlock in down_trylock_console_sem() because the semaphore is not
+NMI safe.
 
-Check if a write() callback is available before using it.
+Avoid try-locking the console from NMI and assume it failed.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- kernel/debug/kdb/kdb_io.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/printk/printk.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/debug/kdb/kdb_io.c b/kernel/debug/kdb/kdb_io.c
-index 5c7e9ba7cd6b..e9139dfc1f0a 100644
---- a/kernel/debug/kdb/kdb_io.c
-+++ b/kernel/debug/kdb/kdb_io.c
-@@ -576,6 +576,8 @@ static void kdb_msg_write(const char *msg, int msg_len)
- 			continue;
- 		if (c == dbg_io_ops->cons)
- 			continue;
-+		if (!c->write)
-+			continue;
- 		/*
- 		 * Set oops_in_progress to encourage the console drivers to
- 		 * disregard their internal spin locks: in the current calling
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 40c5f4170ac7..84af038292d9 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -318,6 +318,10 @@ static int __down_trylock_console_sem(unsigned long ip)
+ 	int lock_failed;
+ 	unsigned long flags;
+ 
++	/* Semaphores are not NMI-safe. */
++	if (in_nmi())
++		return 1;
++
+ 	/*
+ 	 * Here and in __up_console_sem() we need to be in safe mode,
+ 	 * because spindump/WARN/etc from under console ->lock will
 -- 
 2.30.2
 
