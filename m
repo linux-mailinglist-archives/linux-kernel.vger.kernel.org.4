@@ -2,185 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AD46A83AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CFC6A83B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjCBNjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 08:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        id S229866AbjCBNnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCBNjg (ORCPT
+        with ESMTP id S229986AbjCBNnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 08:39:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F32D11648
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677764332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4ZdM39Rwm+APVNSKOoKjEHl8iHMadAxZ6z3x8N7ucVs=;
-        b=EUYuugItQqifD4HLNp5pFaOzc0VFc3cO/W5qm54ydaTlN1+f+JNO5uZopsHfsV8ZF+Bn2j
-        VPylE6qvPCsdxEzakbQiQgghK1E/ciHWJOxBf2cYDLQDBDkw9cvdQyOYAbY05yEZI3p6SX
-        PTDpwyRPFou+cgVuouyzxq7Zr/Vz5cw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-513-2DBfFDDxMz221bF0AGgN2A-1; Thu, 02 Mar 2023 08:38:51 -0500
-X-MC-Unique: 2DBfFDDxMz221bF0AGgN2A-1
-Received: by mail-wm1-f72.google.com with SMTP id k26-20020a05600c0b5a00b003dfe4bae099so1114629wmr.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:38:50 -0800 (PST)
+        Thu, 2 Mar 2023 08:43:22 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8624D11178
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:43:21 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id h3so17618270lja.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:43:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677764600;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gvThOI3c/D2W1hH94FvijcrC2B39aEuaUhDrKSDvEDw=;
+        b=OasYL1QrRCcxcFhhEEsOqzpzB0+1r3sjaUvOrMnTAbiZpGnmOIJkXBc2OgKYy3WYeu
+         qVEeZZhC7MJa+OoRffnPlFOPf0MFjMHAM08B5SAU/p+VZrLFKbZpwmG4YvuHt/fA/8td
+         J+rGjBI4XK1mwpvA2ZHjFlZ44oFD2cwNdwZeOHjL7u/J375Sg2Lx0BFKKiTjdAB8Jk8R
+         AZiNJhZzwipTbFsce1wm2FaxRQChUZpqvCk5Pvaa67IxdOUJUOsPqp2kV/b6Yn7apv0r
+         x/sDjaGLP+TxfSni2GpSA0Bi3TOIqsYKRHbKtTyZvGu9dfirjZADdG/0zyzuJdbDO4ta
+         u62g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677764330;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZdM39Rwm+APVNSKOoKjEHl8iHMadAxZ6z3x8N7ucVs=;
-        b=JogchZrizArqAZXc8t/3H/cu3kowTbP6NId8UIvl1u8fUMC5GURlEk8Q+I25tX0xYI
-         GikgNNhBq7G3SBvdaCOnJ8wnlzXF8BFpWzes1sZtNnhWkxURE0m/gx71tLvBUeFAFSZo
-         HQsf/zuvKWt4EQMfN+AJYOzfYjwrP+JIJwRJmDr/HvIMX1ZQqrfqsK1/oZZXH0vUzN85
-         JnrgwGzjatY9Hn7u0QpqHJ64HbggyJagmRK9sTYBhXEal+3A+KCCIfVvixu/2CpOAOM6
-         k1/V16z9acrUgGIJHhqHMNyBs9bepK+zo5o9eC2UP6B5PaISkV+90Ke20TLnh/Vr1LGS
-         K0FA==
-X-Gm-Message-State: AO0yUKVncXd3R+sXrnfAa6b9ZKbN9I/C2m8Eu01bqLwJ+hCFx6Q378Ae
-        6lJCesU9b+HlSgLEcPmCygtUjrNAqhUlF+IrdeA6KgCH96tuvm487ggMUrJ7Os6Y8r8SXKIXK4V
-        enaBDF7/VsdJM8fw95d5hWab8
-X-Received: by 2002:a5d:56cb:0:b0:2c7:1b3d:1fb9 with SMTP id m11-20020a5d56cb000000b002c71b3d1fb9mr7355477wrw.50.1677764329883;
-        Thu, 02 Mar 2023 05:38:49 -0800 (PST)
-X-Google-Smtp-Source: AK7set86niPGr89uB0anqISxCl4PutLnmZ7/ReX6UXFcr5ISdGk14j6U7XkC6IbLZNuiZojlUcc9Bw==
-X-Received: by 2002:a5d:56cb:0:b0:2c7:1b3d:1fb9 with SMTP id m11-20020a5d56cb000000b002c71b3d1fb9mr7355466wrw.50.1677764329563;
-        Thu, 02 Mar 2023 05:38:49 -0800 (PST)
-Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
-        by smtp.gmail.com with ESMTPSA id hg13-20020a05600c538d00b003d9aa76dc6asm3022317wmb.0.2023.03.02.05.38.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 05:38:49 -0800 (PST)
-Date:   Thu, 2 Mar 2023 14:38:45 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, oxffffaa@gmail.com,
-        kernel@sberdevices.ru, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-Subject: Re: [RFC PATCH v1] vsock: check error queue to set EPOLLERR
-Message-ID: <20230302133845.hglm4uregjsvrcrc@sgarzare-redhat>
-References: <76e7698d-890b-d14d-fa34-da5dd7dd13d8@sberdevices.ru>
- <20230302100621.gk45unegjbqjgpxh@sgarzare-redhat>
- <3b38870c-7606-bf2e-8b17-21a75a1ed751@sberdevices.ru>
+        d=1e100.net; s=20210112; t=1677764600;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gvThOI3c/D2W1hH94FvijcrC2B39aEuaUhDrKSDvEDw=;
+        b=uxSAbXrqP0+BmCjMTu3j7/EFN+m/2YCVR3BHla7gTn+yygO5IvnRh+sbC9v9kF/jAd
+         HsS0dHD26IHBJjS8Xu0IypgXnOQLJg0O+u40XvrcniyO+8StFLz1JN/QL6fnaXYTdHUZ
+         umOFQgly+ppYtiQurv9gmbTKa5WEFfg7BZNG6Dq34QhiQ6xQq+lnQF04Z5nJEsE+N+yh
+         VY2pH9CkAK/truUhoG2VfvBLUyPDAzSts/kCFBvbs9beKQceUybyjYaJNi1BDTQKlD6n
+         w4WsxtB/2rBFL9/eLeJItfDss0gdS1ZqVMlqxF2ueBbhmytQFPvC1ZFME+8FGz6i70El
+         CT8g==
+X-Gm-Message-State: AO0yUKV/VHLqH/iL8O2oaJ5NVOw6PYbEgHVvBz8TeCDYEDjUQiZiIg8e
+        oyBmrgCA3+oXYr+j7nhVPOlJyw==
+X-Google-Smtp-Source: AK7set9dE7L3wLklbFDASmQCO8Q1iJSW+ft98cIZRQzR1oqhhLyyoIMVUuvhwIvCrwYYoKKbM1Modg==
+X-Received: by 2002:a2e:960d:0:b0:295:b432:2055 with SMTP id v13-20020a2e960d000000b00295b4322055mr2830910ljh.32.1677764599785;
+        Thu, 02 Mar 2023 05:43:19 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id g7-20020a2eb5c7000000b002946be8475esm2108320ljn.135.2023.03.02.05.43.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 05:43:19 -0800 (PST)
+Message-ID: <b9cc99c3-7dd3-6a57-b67c-e9e0ddd60a49@linaro.org>
+Date:   Thu, 2 Mar 2023 14:43:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3b38870c-7606-bf2e-8b17-21a75a1ed751@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [bug report] regulator-fixed-domain can't sleep
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 02:41:29PM +0300, Arseniy Krasnov wrote:
->Hello!
->
->On 02.03.2023 13:06, Stefano Garzarella wrote:
->> On Wed, Mar 01, 2023 at 08:19:45AM +0300, Arseniy Krasnov wrote:
->>> EPOLLERR must be set not only when there is error on the socket, but also
->>> when error queue of it is not empty (may be it contains some control
->>> messages). Without this patch 'poll()' won't detect data in error queue.
->>
->> Do you have a reproducer?
->>
->Dedicated reproducer - no:)
->To reproduce this issue, i used last MSG_ZEROCOPY patches. Completion was inserted to
->error queue, and 'poll()' didn't report about it. That was the reason, why this patch
->was included to MSG_ZEROCOPY patchset. But also i think it is better to reduce number
->of patches in it(i'm working on v2), so it is good to handle this patch separately.
+Hello,
 
-Yep, absolutely!
+I've noticed that regulator-fixed-domain sets the performance state of the
+attached genpd to 0 correctly, but will never actually let the power domain
+it's attached to enter idle, as it has no PM ops. I was trying to come up
+with a good set of PM ops, but I'm not sure what PM ops for a regulator
+should look like.
 
->May be one way to reproduce it is use SO_TIMESTAMP(time info about skbuff will be queued
->to the error queue). IIUC this feature is implemented at socket layer and may work in
->vsock (but i'm not sure). Ok, i'll check it and try to implement reproducer.
->
->IIUC, for future, policy for fixes is "for each fix implement reproducer in vsock_test"?
-
-Nope, but for each fix we should have a Fixes tag.
-
-Usually we use vsock_test to check regressions on features and also the
-behaviour of different transports.
-My question was more about whether this problem was there before
-supporting sk_buff or not, to figure out which Fixes tag to use.
-
->
->>> This patch is based on 'tcp_poll()'.
->>
->> LGTM but we should add a Fixes tag.
->> It's not clear to me whether the problem depends on when we switched to using sk_buff or was pre-existing.
->>
->> Do you have any idea when we introduced this issue?
->git blame shows, that this code exists since first commit to vsock:
-
-Okay, but did we use sk_error_queue before supporting sk_buff?
-
-Anyway, if we are not sure I think we can use the following Fixes tag,
-I don't see any issue if we backport this patch also before supporting
-sk_buff.
-
-Thanks,
-Stefano
-
->
->commit d021c344051af91f42c5ba9fdedc176740cbd238
->Author: Andy King <acking@vmware.com>
->Date:   Wed Feb 6 14:23:56 2013 +0000
->
->    VSOCK: Introduce VM Sockets
->
->For TCP same logic was added by:
->
->commit 4ed2d765dfaccff5ebdac68e2064b59125033a3b
->Author: Willem de Bruijn <willemb@google.com>
->Date:   Mon Aug 4 22:11:49 2014 -0400
->
->    net-timestamp: TCP timestamping
->
->
->>
->> Thanks,
->> Stefano
->>
->
->Thanks Arseniy
->
->>>
->>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>> ---
->>> net/vmw_vsock/af_vsock.c | 2 +-
->>> 1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->>> index 19aea7cba26e..b5e51ef4a74c 100644
->>> --- a/net/vmw_vsock/af_vsock.c
->>> +++ b/net/vmw_vsock/af_vsock.c
->>> @@ -1026,7 +1026,7 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
->>>     poll_wait(file, sk_sleep(sk), wait);
->>>     mask = 0;
->>>
->>> -    if (sk->sk_err)
->>> +    if (sk->sk_err || !skb_queue_empty_lockless(&sk->sk_error_queue))
->>>         /* Signify that there has been an error on this socket. */
->>>         mask |= EPOLLERR;
->>>
->>> -- 
->>> 2.25.1
->>>
->>
->
-
+Konrad
