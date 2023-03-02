@@ -2,134 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050AE6A8292
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DA66A8299
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCBMsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S229567AbjCBMtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCBMsd (ORCPT
+        with ESMTP id S229471AbjCBMtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:48:33 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427B418B2B;
-        Thu,  2 Mar 2023 04:48:32 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BBA871EC04F0;
-        Thu,  2 Mar 2023 13:48:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677761310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4MfiBkMkz5ebUfMAXrylF6PkikHE4wLk3HTn0lHaOb8=;
-        b=R49PSVoU67TzEd1On6SpyLZ5WN+gqAjISYxKzodjcp2/ghuXDA5b8QNG5KBnMO6cXj5YsF
-        WpCPRF0NmdOGSrDnKXws+eFjaG91CTVWNqlrOkaSjyjNIHM7nBkjL7+VWFZt1SHGYHoUg0
-        xc2yxp3B4WH91qCi1Cnu2Lbg6fCdzg4=
-Date:   Thu, 2 Mar 2023 13:48:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v7 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
-Message-ID: <ZACbFc55bcVYRXpG@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-15-rick.p.edgecombe@intel.com>
+        Thu, 2 Mar 2023 07:49:10 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3281ABC1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:49:08 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id d30so67148427eda.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:49:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OQI/f+ntz5M4Olnk/oXWleUzJcGh7PHcTDgD3KqTpU4=;
+        b=VO8QARkqui3bdk9IgDxRJ8tx4sSXbFs0G9I1UfkB/mPtW5qbuuRsLbAz7IEJvCR5WZ
+         e213cGsSB5qapFM9ybYeGn0bw2vDHRbh8qMRlfP+AgEKhs9iG3p4fD7rxJmiKWzXLigi
+         8c22CgDUW8KROMfWXzj/ZMY4lr20WOXr7c457N3rJ2mSerL1XnkdtddJiBy2/lGmHsnx
+         nisdhFNONZ4ytJM+aJHTFnh7U/EIkIJJDW7HpDTNvr4Q7UOiT7PmBLipBtp0w3uCeu9I
+         iSw+vbkDFZQ9k0kzEGPifWsRB4nsgIR4DKKOcgY90ODVDMPLkq/3eWEeL4uGL4aCU37a
+         pa1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OQI/f+ntz5M4Olnk/oXWleUzJcGh7PHcTDgD3KqTpU4=;
+        b=yezYkR1rYOr+sLyKIFzrRp4IAaDf61uyZPTfJLXDxPL+GtPrPrTFRvZOpRCjwLcu5j
+         nx1tB1epF6kipNYIHrkqkhe+eVKnDH8kspfgYMG85SSSfqqlH3vDhNATXGpg/puxXYr/
+         BJ0i2xzVVBEzAAYPodrJ6wSMEFXCp8IoyjrzlsyX+Ly0BbMBIN4+jEExHlsUTuOwts3t
+         YVjDCTDtuZ1Ka08Po/Db5V69CcBuzVODC0SZ1AQcwWfEmZT/Alps8U5pmEgcuFXSZsTj
+         72EkqxGcUcIQLKNpGoHeaqPVyMCurhTcIth44HJrH4KyDu4GctZoT40iaZNWPAIUDRzM
+         oQNw==
+X-Gm-Message-State: AO0yUKXFxJDcYRVfYvJsjKGClLOC1bQ3DAvsAYZg338fHARfdvscqxYZ
+        +8oOYZdhC8KSzIjKcRocoFl+9m4UOZ279l7JTCv+jQ==
+X-Google-Smtp-Source: AK7set+GzA4Iz2XRep1CHwWhdZQyez9Dskjo5QaBGEhnmuAfr806wQ+LW8fFYLjuNxLZakZkKnor0eSJ5dZ8PgbqZ9M=
+X-Received: by 2002:a17:906:9d90:b0:8d0:2c55:1aa with SMTP id
+ fq16-20020a1709069d9000b008d02c5501aamr4713780ejc.0.1677761346825; Thu, 02
+ Mar 2023 04:49:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-15-rick.p.edgecombe@intel.com>
+References: <20230301180652.316428563@linuxfoundation.org>
+In-Reply-To: <20230301180652.316428563@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 2 Mar 2023 18:18:54 +0530
+Message-ID: <CA+G9fYud5NoObu9b4qAbFtWibgwgmMHyMs8rRhXV+1MzKvS0cg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/19] 5.10.171-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:30PM -0800, Rick Edgecombe wrote:
-> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-> index 0646ad00178b..56b374d1bffb 100644
-> --- a/arch/x86/include/asm/pgtable_types.h
-> +++ b/arch/x86/include/asm/pgtable_types.h
-> @@ -21,7 +21,8 @@
->  #define _PAGE_BIT_SOFTW2	10	/* " */
->  #define _PAGE_BIT_SOFTW3	11	/* " */
->  #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
-> -#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
-> +#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
-> +#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
->  #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
->  #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
->  #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
-> @@ -34,6 +35,15 @@
->  #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
->  #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
->  
-> +/*
-> + * Indicates a Saved Dirty bit page.
-> + */
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +#define _PAGE_BIT_SAVED_DIRTY		_PAGE_BIT_SOFTW5 /* Saved Dirty bit */
-> +#else
-> +#define _PAGE_BIT_SAVED_DIRTY		0
-> +#endif
-> +
->  /* If _PAGE_BIT_PRESENT is clear, we use these: */
->  /* - if the user mapped it with PROT_NONE; pte_present gives true */
->  #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
-> @@ -117,6 +127,25 @@
->  #define _PAGE_SOFTW4	(_AT(pteval_t, 0))
->  #endif
->  
-> +/*
-> + * The hardware requires shadow stack to be Write=0,Dirty=1. However,
-> + * there are valid cases where the kernel might create read-only PTEs that
-> + * are dirty (e.g., fork(), mprotect(), uffd-wp(), soft-dirty  tracking). In
-> + * this case, the _PAGE_SAVED_DIRTY bit is used instead of the HW-dirty bit,
-> + * to avoid creating a wrong "shadow stack" PTEs. Such PTEs have
-> + * (Write=0,SavedDirty=1,Dirty=0) set.
-> + *
-> + * Note that on processors without shadow stack support, the 
+On Wed, 1 Mar 2023 at 23:40, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.171 release.
+> There are 19 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.171-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-.git/rebase-apply/patch:154: trailing whitespace.
- * Note that on processors without shadow stack support, the 
-warning: 1 line adds whitespace errors.
 
-Hm, apparently git checks for that too - not only trailing empty lines.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--- 
-Regards/Gruss,
-    Boris.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-https://people.kernel.org/tglx/notes-about-netiquette
+## Build
+* kernel: 5.10.171-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 032c569d266c83563696ed018f5679bf7b5afe45
+* git describe: v5.10.170-20-g032c569d266c
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.170-20-g032c569d266c
+
+## Test Regressions (compared to v5.10.170)
+
+## Metric Regressions (compared to v5.10.170)
+
+## Test Fixes (compared to v5.10.170)
+
+## Metric Fixes (compared to v5.10.170)
+
+## Test result summary
+total: 134470, pass: 112238, fail: 3614, skip: 18316, xfail: 302
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 112 total, 111 passed, 1 failed
+* arm64: 39 total, 37 passed, 2 failed
+* i386: 30 total, 28 passed, 2 failed
+* mips: 24 total, 24 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 23 total, 18 passed, 5 failed
+* riscv: 9 total, 9 passed, 0 failed
+* s390: 9 total, 9 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 33 total, 31 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
