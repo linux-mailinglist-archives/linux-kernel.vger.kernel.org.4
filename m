@@ -2,182 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5DD6A7974
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D316A7979
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjCBCWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 21:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
+        id S229864AbjCBC0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 21:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjCBCWG (ORCPT
+        with ESMTP id S229786AbjCBC0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 21:22:06 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6F91286A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 18:22:05 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id 82so2305774ybn.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 18:22:05 -0800 (PST)
+        Wed, 1 Mar 2023 21:26:07 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3CA38031
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 18:26:04 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id me6-20020a17090b17c600b0023816b0c7ceso1355222pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 18:26:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677723725;
+        d=paul-moore.com; s=google; t=1677723964;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=icYcAz4iENgGguq1MUlInM5/6GsRcXFU+8O5VO7eInA=;
-        b=ICNzManCzUgms4+COGza4gk5YsyseuO5Ijt4EWhpqNEDkAg12yxO+M+x6EF7wlGyGp
-         18xfcjTQdZvnANZNl2A9rF7rCOHTU3O7UgOEldBj8JFxYXSdYiuqfdORdbYK3a8OzBha
-         GPx1R+762t651JyT8Cj6YRDfJYCZzRhsZnsEISTad9RtLN+lwUYObGJty8p+v5C9AyGP
-         3XXAHVdDVphOLPBe2/6syAoOKCOBT/gqoC22awkzHgd0AJ3EE9WzeagQuz79d2V/uPYP
-         8Lqoil99Y13JGIIeKOkn5jKR1Pgy1Y4lYmhZVpRrJLR83i3rnovCLcQAjwV4uywIdJzG
-         i4rA==
+        bh=5kZhp2tKo46U38ss1g+Tr12yiIRs24hB+InVptDfZko=;
+        b=Ngt4aMkBbFynugEGmeXivW0MGt97hNWmyZvta0AYdKJoKEmYux9Ut6I76AzioRRbt+
+         v8xMEfjMJkSCPgeTdcTOVp1kWGQmHh9VQDm36VGwe2ay4U/TzI965QBf72fZPFg4yxna
+         X9oiACKEmVj9+ch9Pbs63eYNwqns0E27JpTfH1iHXNI7wuDQemukVyzTXSQ8IysosiNq
+         R++5bGICu/67hZOMwjIYDFRbyBGkimzxhkfA/lLptKR4VxvNkO6hpIeNWI+z1lGOzJCI
+         3oivxaOHEFkmBC4zSi7X2HuGuyoERx3ojw/aL96huRmuJHPWBr3tdKpG5iQwrpUsassW
+         5ihg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677723725;
+        d=1e100.net; s=20210112; t=1677723964;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=icYcAz4iENgGguq1MUlInM5/6GsRcXFU+8O5VO7eInA=;
-        b=GCfasrrgBQehLqrE9sdp1jrMgMsk8kzXTQpvmjzpxNvpS0Q/TjDwvWU+evT6TLRFs2
-         oKKu80+6AAaoGmMosLU396bb7yqW7UgOIe6rXAdp+2mh8m6o7RytqWdM4M29ovoBkxRi
-         fWo1akFmVxC9cIr1UqcxZdLDo92KFAFsBF5M9fCzNreyQnv5zVgX+aOLQFIOznwY/9j4
-         MMvVO/nlE9iY836PGq2kWKw3kxsWj9Aa7KRrN4Dd9Nt0tM8BdtRw2RnliCvwY4KSTHXi
-         PPaMlVn29+5BN0XXSptGy2VCRrspYG6Nz04ry4ChIeqaaKJgCn0BT980TBxbRcExG6TJ
-         wP0w==
-X-Gm-Message-State: AO0yUKX0qiveGDtl9RaI9Co/kA2rJV+1nSdM9stn15b9QHkrxNWsmRP7
-        hY+Oe1dDbwjulLyOuTwnLcFo26gQwGebDxnT+lCZpQ==
-X-Google-Smtp-Source: AK7set8f8UCPLp9V1R6/ru3EOI4J1mkBQgV1T32GNF0OvprkrFWWd8Ter81Ipe29QBKiksN2yO0CRLf6M0naPga3SGQ=
-X-Received: by 2002:a25:aa03:0:b0:a06:538f:265f with SMTP id
- s3-20020a25aa03000000b00a06538f265fmr407354ybi.4.1677723724623; Wed, 01 Mar
- 2023 18:22:04 -0800 (PST)
+        bh=5kZhp2tKo46U38ss1g+Tr12yiIRs24hB+InVptDfZko=;
+        b=xduEVucuztJqsDcgHbvQLROP8NJm3zBRBtl1f4GD+lmtQ+CWDCiXom3M8va24Cj99i
+         deM3snBXVxSXavJRoI2xQTt0azxtB6KJmWKzsyaJV/u7/0prEoEUHtQ6NmQDDyhLkv6N
+         db/vHdx279gZvMCQyPX1zOZOAzMNHeDFfBLkbP/L0JwJ8xAnW5mTBz53Ybh3MCXy3v2Q
+         G8qoaARAh1mEhNUQ1ld6g1SP76NhMatI5uC5JYFyFPpWfayFM+blY7EhNVSaGaL7T/Jz
+         iVvF8Z7rwJFtp8DBc5o9lw+DLRqRNWt1cH7nZuunOZsUCkIwPiIAC1EPkSTKt0zY8MhD
+         yR2A==
+X-Gm-Message-State: AO0yUKUNawjh0luydM5mouJHzrIN3tXh404rcJMceEXVc4xzwJwFZKOv
+        MjsuIATZMAM8ZwmBg9H1mjFukgpswAdY9zkn306x
+X-Google-Smtp-Source: AK7set9WUw3+7nNvCV3Bh3Gll8iuNqsjHAmQe9Tu1euD/45Z6kjZ9of1ysLgcadbAHHlepgnWkqpZweQJ53NX5QDgk0=
+X-Received: by 2002:a17:903:2587:b0:19a:80b9:78ce with SMTP id
+ jb7-20020a170903258700b0019a80b978cemr250097plb.0.1677723963655; Wed, 01 Mar
+ 2023 18:26:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20230227173632.3292573-1-surenb@google.com> <20230227173632.3292573-19-surenb@google.com>
- <Y/8CJQGNuMUTdLwP@localhost> <Y/8FNM9czzPHb5eG@localhost> <CAJuCfpHYT++MBC6T-p80n_m5hHWRRC4Y1bO9J-bFFZZDqNX-BQ@mail.gmail.com>
- <CAJuCfpFax8LSdcq1qiz3sp0XPLaNZnkFFky2tQekG2_Azvw9_g@mail.gmail.com> <Y//zmYeu6uexiyOY@localhost>
-In-Reply-To: <Y//zmYeu6uexiyOY@localhost>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 1 Mar 2023 18:21:53 -0800
-Message-ID: <CAJuCfpEhwye9dn3eUaYE1gSHt+8M5ztBR3ZMoTYyBR7+uSL5aQ@mail.gmail.com>
-Subject: Re: [PATCH v4 18/33] mm: write-lock VMAs before removing them from
- VMA tree
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
+References: <20230301113415.47664-1-michael.weiss@aisec.fraunhofer.de>
+In-Reply-To: <20230301113415.47664-1-michael.weiss@aisec.fraunhofer.de>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 1 Mar 2023 21:25:52 -0500
+Message-ID: <CAHC9VhQ_zvTqck4A7HvqH2rcwxuato_9nVWMk_Yf=ip3q9omgA@mail.gmail.com>
+Subject: Re: [PATCH] dm verity: log audit events for dm-verity target
+To:     =?UTF-8?Q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        gyroidos@aisec.fraunhofer.de, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        "maintainer:DEVICE-MAPPER (LVM)" <dm-devel@redhat.com>,
+        Eric Paris <eparis@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:AUDIT SUBSYSTEM" <audit@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 4:54 PM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+On Wed, Mar 1, 2023 at 6:34=E2=80=AFAM Michael Wei=C3=9F
+<michael.weiss@aisec.fraunhofer.de> wrote:
 >
-> On Wed, Mar 01, 2023 at 10:42:48AM -0800, Suren Baghdasaryan wrote:
-> > On Wed, Mar 1, 2023 at 10:34=E2=80=AFAM Suren Baghdasaryan <surenb@goog=
-le.com> wrote:
-> > >
-> > > On Tue, Feb 28, 2023 at 11:57=E2=80=AFPM Hyeonggon Yoo <42.hyeyoo@gma=
-il.com> wrote:
-> > > >
-> > > > On Wed, Mar 01, 2023 at 07:43:33AM +0000, Hyeonggon Yoo wrote:
-> > > > > On Mon, Feb 27, 2023 at 09:36:17AM -0800, Suren Baghdasaryan wrot=
-e:
-> > > > > > Write-locking VMAs before isolating them ensures that page faul=
-t
-> > > > > > handlers don't operate on isolated VMAs.
-> > > > > >
-> > > > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > > > > ---
-> > > > > >  mm/mmap.c  | 1 +
-> > > > > >  mm/nommu.c | 5 +++++
-> > > > > >  2 files changed, 6 insertions(+)
-> > > > > >
-> > > > > > diff --git a/mm/mmap.c b/mm/mmap.c
-> > > > > > index 1f42b9a52b9b..f7ed357056c4 100644
-> > > > > > --- a/mm/mmap.c
-> > > > > > +++ b/mm/mmap.c
-> > > > > > @@ -2255,6 +2255,7 @@ int split_vma(struct vma_iterator *vmi, s=
-truct vm_area_struct *vma,
-> > > > > >  static inline int munmap_sidetree(struct vm_area_struct *vma,
-> > > > > >                                struct ma_state *mas_detach)
-> > > > > >  {
-> > > > > > +   vma_start_write(vma);
-> > > > > >     mas_set_range(mas_detach, vma->vm_start, vma->vm_end - 1);
-> > > > >
-> > > > > I may be missing something, but have few questions:
-> > > > >
-> > > > >       1) Why does a writer need to both write-lock a VMA and mark=
- the VMA detached
-> > > > >          when unmapping it, isn't it enough to just only write-lo=
-ck a VMA?
-> > >
-> > > We need to mark the VMA detached to avoid handling page fault in a
-> > > detached VMA. The possible scenario is:
-> > >
-> > > lock_vma_under_rcu
-> > >   vma =3D mas_walk(&mas)
-> > >                                                         munmap_sidetr=
-ee
-> > >                                                           vma_start_w=
-rite(vma)
-> > >
-> > > mas_store_gfp() // remove VMA from the tree
-> > >                                                           vma_end_wri=
-te_all()
-> > >   vma_start_read(vma)
-> > >   // we locked the VMA but it is not part of the tree anymore.
-> > >
-> > > So, marking the VMA locked before vma_end_write_all() and checking
-> >
-> > Sorry, I should have said "marking the VMA *detached* before
-> > vma_end_write_all() and checking vma->detached after vma_start_read()
-> > helps us avoid handling faults in the detached VMA."
-> >
-> > > vma->detached after vma_start_read() helps us avoid handling faults i=
-n
-> > > the detached VMA.
+> dm-verity signals integrity violations by returning I/O errors
+> to user space. To identify integrity violations by a controlling
+> instance, the kernel audit subsystem can be used to emit audit
+> events to user space. Analogous to dm-integrity, we also use the
+> dm-audit submodule allowing to emit audit events on verification
+> failures of metadata and data blocks as well as if max corrupted
+> errors are reached.
 >
-> Thank you for explanation, that makes sense!
+> The construction and destruction of verity device mappings are
+> also relevant for auditing a system. Thus, those events are also
+> logged as audit events.
 >
-> By the way, if there are no 32bit users of Per-VMA lock (are there?),
-> "detached" bool could be a VMA flag (i.e. making it depend on 64BIT
-> and selecting ARCH_USES_HIGH_VMA_FLAGS)
+> We tested this by starting a container with the container manager
+> (cmld) of GyroidOS which uses a dm-verity protected rootfs image
+> root.img mapped to /dev/mapper/<uuid>-root. We than manipulated
+> one block in the underlying image file and reading it from the
+> protected mapper device again and again until we reach the max
+> corrupted errors like this:
+>
+>   dd if=3D/dev/urandom of=3Droot.img bs=3D512 count=3D1 seek=3D1000
+>   for i in range {1..101}; do \
+>     dd if=3D/dev/mapper/<uuid>-root of=3D/dev/null bs=3D4096 \
+>        count=3D1 skip=3D1000 \
+>   done
+>
+> The resulting audit log looks as follows:
+>
+>   type=3DDM_CTRL msg=3Daudit(1677618791.876:962):
+>     module=3Dverity op=3Dctr ppid=3D4876 pid=3D29102 auid=3D0 uid=3D0 gid=
+=3D0
+>     euid=3D0 suid=3D0 fsuid=3D0 egid=3D0 sgid=3D0 fsgid=3D0 tty=3D(none) =
+ses=3D44
+>     comm=3D"cmld" exe=3D"/usr/sbin/cml/cmld" subj=3Dunconfined
+>     dev=3D254:3 error_msg=3D'success' res=3D1
+>
+>   type=3DDM_EVENT msg=3Daudit(1677619463.786:1074): module=3Dverity
+>     op=3Dverify-data dev=3D7:0 sector=3D1000 res=3D0
+>   ...
+>   type=3DDM_EVENT msg=3Daudit(1677619596.727:1162): module=3Dverity
+>     op=3Dverify-data dev=3D7:0 sector=3D1000 res=3D0
+>
+>   type=3DDM_EVENT msg=3Daudit(1677619596.731:1163): module=3Dverity
+>     op=3Dmax-corrupted-errors dev=3D254:3 sector=3D? res=3D0
+>
+> Signed-off-by: Michael Wei=C3=9F <michael.weiss@aisec.fraunhofer.de>
+> ---
+>  drivers/md/dm-verity-target.c | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
 
-Yeah, I thought about it but didn't want to make assumptions about
-potential users just yet. Besides, I heard there are attempts to make
-vm_flags to be always 64-bit (I think Matthew mentioned that to me
-once). If that happens, we won't need any dependencies here. Either
-way, this conversion into a flag can be done as an additional
-optimization later on. I prefer to keep the main patchset as simple as
-possible for now.
-Thanks,
-Suren.
+This looks reasonable to me from an audit perspective.
 
+Acked-by: Paul Moore <paul@paul-moore.com>
+
+> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.=
+c
+> index ade83ef3b439..8beeb4ea66d1 100644
+> --- a/drivers/md/dm-verity-target.c
+> +++ b/drivers/md/dm-verity-target.c
+> @@ -16,6 +16,7 @@
+>  #include "dm-verity.h"
+>  #include "dm-verity-fec.h"
+>  #include "dm-verity-verify-sig.h"
+> +#include "dm-audit.h"
+>  #include <linux/module.h>
+>  #include <linux/reboot.h>
+>  #include <linux/scatterlist.h>
+> @@ -248,8 +249,10 @@ static int verity_handle_err(struct dm_verity *v, en=
+um verity_block_type type,
+>         DMERR_LIMIT("%s: %s block %llu is corrupted", v->data_dev->name,
+>                     type_str, block);
 >
-> Thanks,
-> Hyeonggon
+> -       if (v->corrupted_errs =3D=3D DM_VERITY_MAX_CORRUPTED_ERRS)
+> +       if (v->corrupted_errs =3D=3D DM_VERITY_MAX_CORRUPTED_ERRS) {
+>                 DMERR("%s: reached maximum errors", v->data_dev->name);
+> +               dm_audit_log_target(DM_MSG_PREFIX, "max-corrupted-errors"=
+, v->ti, 0);
+> +       }
 >
+>         snprintf(verity_env, DM_VERITY_ENV_LENGTH, "%s=3D%d,%llu",
+>                 DM_VERITY_ENV_VAR_NAME, type, block);
+> @@ -340,6 +343,11 @@ static int verity_verify_level(struct dm_verity *v, =
+struct dm_verity_io *io,
+>                 else if (verity_handle_err(v,
+>                                            DM_VERITY_BLOCK_TYPE_METADATA,
+>                                            hash_block)) {
+> +                       struct bio *bio =3D
+> +                               dm_bio_from_per_bio_data(io,
+> +                                                        v->ti->per_io_da=
+ta_size);
+> +                       dm_audit_log_bio(DM_MSG_PREFIX, "verify-metadata"=
+, bio,
+> +                                        block, 0);
+>                         r =3D -EIO;
+>                         goto release_ret_r;
+>                 }
+> @@ -590,8 +598,11 @@ static int verity_verify_io(struct dm_verity_io *io)
+>                                 return -EIO;
+>                         }
+>                         if (verity_handle_err(v, DM_VERITY_BLOCK_TYPE_DAT=
+A,
+> -                                             cur_block))
+> +                                             cur_block)) {
+> +                               dm_audit_log_bio(DM_MSG_PREFIX, "verify-d=
+ata",
+> +                                                bio, cur_block, 0);
+>                                 return -EIO;
+> +                       }
+>                 }
+>         }
+>
+> @@ -975,6 +986,8 @@ static void verity_dtr(struct dm_target *ti)
+>                 static_branch_dec(&use_tasklet_enabled);
+>
+>         kfree(v);
+> +
+> +       dm_audit_log_dtr(DM_MSG_PREFIX, ti, 1);
+>  }
+>
+>  static int verity_alloc_most_once(struct dm_verity *v)
+> @@ -1429,11 +1442,14 @@ static int verity_ctr(struct dm_target *ti, unsig=
+ned int argc, char **argv)
+>
+>         verity_verify_sig_opts_cleanup(&verify_args);
+>
+> +       dm_audit_log_ctr(DM_MSG_PREFIX, ti, 1);
+> +
+>         return 0;
+>
+>  bad:
+>
+>         verity_verify_sig_opts_cleanup(&verify_args);
+> +       dm_audit_log_ctr(DM_MSG_PREFIX, ti, 0);
+>         verity_dtr(ti);
+>
+>         return r;
 > --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+> 2.30.2
+
+--=20
+paul-moore.com
