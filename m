@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853456A8116
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ABF6A8129
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCBLeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S229790AbjCBLff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjCBLeM (ORCPT
+        with ESMTP id S229754AbjCBLfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:34:12 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC7612F0A;
-        Thu,  2 Mar 2023 03:34:06 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id j2so16180954wrh.9;
-        Thu, 02 Mar 2023 03:34:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677756845;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ep+S3pdxbMooIqcVhUAKETVhQpGPPtmS5sMfXUnAbNg=;
-        b=b0no65LLKsRpUmmcmRl1u/JvAI7+XvzWtViUzj+AoA5pAT+4DwYqvQW/QKdECLi5FM
-         B1QALlBl3KSRhE4SbQx16FNOdrhQ1KRt0aFlpTmfeZtxU7ZrL5q/JKiPA5dqB97VdYmt
-         ExHiAFdIErMC4DzM+u+UP3/4474djemkmtQeNZeU6du56BR9wvW2oPkmNSX8zBtXsHw0
-         XMS+lPza4/00prh44j/qwZRF43FIFkp97oPJlmGjDs+0wJbeTLxAmfpqGTitMPQ11mCZ
-         /+TI9sXsxNRHfMfXk1d2NdmHM7EQXGJ4Y0/SjthwFKj5I0ynstUCAvvh5GD7QzFLL8fq
-         bCQw==
+        Thu, 2 Mar 2023 06:35:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE1E12F0A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:34:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677756869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VN5H8jXkUyi7b3gGlXy5t9+JY6Ep4JlnJplI0XClENQ=;
+        b=TfyNVyTq0bd/Hsk9NFkWTNTl7hbnJNoRCbq0nZ5oChb+1pT0T1fNc1jbhC9JKFJ+eZ2Voo
+        Zr32PHjmORyQTtSydm/+fwz8sCTxHrRo9PmU9URFujs4dQsoQIz5J/pR+KbZ/sqdkcRy4d
+        h4PZFtoV3pyZnrJ26WG8qrbcbX4hDew=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-427-1wwjAgUnNl6aEI5t643qPQ-1; Thu, 02 Mar 2023 06:34:28 -0500
+X-MC-Unique: 1wwjAgUnNl6aEI5t643qPQ-1
+Received: by mail-qt1-f200.google.com with SMTP id g13-20020ac8124d000000b003bfba5d76a3so8301672qtj.15
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 03:34:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677756845;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ep+S3pdxbMooIqcVhUAKETVhQpGPPtmS5sMfXUnAbNg=;
-        b=gtox9wMUSjhk+kSt0SMYPjoFPIr4+0kH0vQa29A4le3If3TSIXwzWC5k3DbkVk4yQs
-         OeSafihRvoaZ1h4Le2/GQguRQekl6qmFuft0rfK6toD599PqpPhqZUv4JqRk4aG7iSsv
-         rSWkY0F3tTuKBmRaoizZ/7jDhvDHBQ+MDfvAwgqlR1w5tp+rvcR8BoFDO0vU3rYpGGZT
-         XOZAVZKFDlINUCi8c8mulRUE/ISKFk2x6PFD3nsjS2sENXtXGyfcr7ge9vktRy8inw8r
-         aaNeuwtdIll7Q2EXYKLtALCkhhcEX4Hezq884OxrjXyQTkh2ydwdHj/tv6pWlX/c/xrD
-         cYbw==
-X-Gm-Message-State: AO0yUKWIVXxWe2vpfyv8Y1DMJnfJoWZPSrnsX/qEaszzfRWV5fZdcqrD
-        y6URhrCUvjPlp2HPK8r+cvk=
-X-Google-Smtp-Source: AK7set+cyTQaoBhhaVcjFd4R5kFai5kVb6/v8uNSJ3IYQabfEdWwxGyhAGxeOhKWySIvuXOpeInPhw==
-X-Received: by 2002:a05:6000:1b8f:b0:2cb:72c2:3d12 with SMTP id r15-20020a0560001b8f00b002cb72c23d12mr7254295wru.68.1677756844799;
-        Thu, 02 Mar 2023 03:34:04 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id p10-20020a5d458a000000b002c559def236sm14735520wrq.57.2023.03.02.03.34.04
+        d=1e100.net; s=20210112; t=1677756868;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VN5H8jXkUyi7b3gGlXy5t9+JY6Ep4JlnJplI0XClENQ=;
+        b=qF9oHjIhARBDXxycn/LgU3/57Wu7EfiDJmk0HzAJsQ2VYqnCAM0NXOQtiONPYWxaCQ
+         9U1Y1lAyl7YcJ/+NrwJ4klza2W1Bp2W6JAm35Pn7Bd52U4ESws64OXpBRanOsvbVsxP5
+         Dxzpb7jIYoLozwJYsP9hNh7DxYFn0mFwFTmZCf0be2zYV5++rm3kYoaGspOwYuviKVfy
+         UcC2GD0IsDxgz90LDZdM3fa/eUcQsS6GuIC5ywFlm/JaNUkptfsr2IoKlxqTcavlrR1X
+         7pHUG3rrQCSeoQvHxjOzCzB9AekvecFmio5fr1B0ncrV7XiPHQuITQTkXb/Wup4zfevO
+         fKYQ==
+X-Gm-Message-State: AO0yUKWZ4czXgZHB1MJCH3CEUwncs5euKO8zATzkpQx8y2vcePdjKBqr
+        p9R/tSu8kyPToCwpaLtkOKOuX1BbOZl5tnDnFVti7SL3oKUmeOCS0IGMSVBEKyLrsu6d6NmSG71
+        k9onwM/KMqvSpEqTOGwxWmFMr
+X-Received: by 2002:ac8:5784:0:b0:3b9:bd05:bde1 with SMTP id v4-20020ac85784000000b003b9bd05bde1mr17927064qta.8.1677756868185;
+        Thu, 02 Mar 2023 03:34:28 -0800 (PST)
+X-Google-Smtp-Source: AK7set/2/Vd4OA7axFE8KFaebdPNos2qTeW2fYUlVEyXvnFpPWZ0y0QARAa9MZDYbM3lH3FNvX4jMA==
+X-Received: by 2002:ac8:5784:0:b0:3b9:bd05:bde1 with SMTP id v4-20020ac85784000000b003b9bd05bde1mr17927037qta.8.1677756867876;
+        Thu, 02 Mar 2023 03:34:27 -0800 (PST)
+Received: from step1.redhat.com (c-115-213.cust-q.wadsl.it. [212.43.115.213])
+        by smtp.gmail.com with ESMTPSA id o12-20020ac8698c000000b003ba19e53e43sm10084156qtq.25.2023.03.02.03.34.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 03:34:04 -0800 (PST)
-Date:   Thu, 2 Mar 2023 11:34:02 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/19] 5.10.171-rc1 review
-Message-ID: <ZACJqpfGw1EleS/g@debian>
-References: <20230301180652.316428563@linuxfoundation.org>
+        Thu, 02 Mar 2023 03:34:27 -0800 (PST)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH v2 0/8] vdpa_sim: add support for user VA
+Date:   Thu,  2 Mar 2023 12:34:13 +0100
+Message-Id: <20230302113421.174582-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.39.2
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301180652.316428563@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +79,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+v2:
+- rebased on Linus' tree, commit ae3419fbac84 ("vc_screen: don't clobber
+  return value in vcs_read")
+- removed `struct task_struct *owner` param (unused for now, maybe
+  useful to support cgroups) [Jason]
+- add unbind_mm callback [Jason]
+- call the new unbind_mm callback during the release [Jason]
+- avoid to call bind_mm callback after the reset, since the device
+  is not detaching it now during the reset
+- added new patch replace kmap_atomic() with kmap_local_page() since
+  checkpatch.pl complained about deprecation of kmap_atomic() touched
+  by a patch in this series
+- fix cast warnings when build with W=1 C=1
+- added new patch to replace the spinlock with a mutex [Jason]
+- `use_va` set to true by default [Eugenio]
+- supported the new unbind_mm callback [Jason]
+- removed the unbind_mm call in vdpasim_do_reset() [Jason]
+- avoided to release the lock while call kthread_flush_work() since
+  we are now using a mutex to protect the device state
 
-On Wed, Mar 01, 2023 at 07:08:29PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.171 release.
-> There are 19 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
+RFC v1: https://lore.kernel.org/lkml/20221214163025.103075-1-sgarzare@redhat.com/
 
-Build test (gcc version 11.3.1 20230210):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+This series adds support for the use of user virtual addresses in the
+vDPA simulator devices.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+The main reason for this change is to lift the pinning of all guest memory.
+Especially with virtio devices implemented in software.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2977
-[2]. https://openqa.qa.codethink.co.uk/tests/2978
+The next step would be to generalize the code in vdpa-sim to allow the
+implementation of in-kernel software devices. Similar to vhost, but using vDPA
+so we can reuse the same software stack (e.g. in QEMU) for both HW and SW
+devices.
 
+For example, we have never merged vhost-blk, and lately there has been interest.
+So it would be nice to do it directly with vDPA to reuse the same code in the
+VMM for both HW and SW vDPA block devices.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+The main problem (addressed by this series) was due to the pinning of all
+guest memory, which thus prevented the overcommit of guest memory.
+
+Thanks,
+Stefano
+
+Stefano Garzarella (8):
+  vdpa: add bind_mm/unbind_mm callbacks
+  vhost-vdpa: use bind_mm/unbind_mm device callbacks
+  vringh: replace kmap_atomic() with kmap_local_page()
+  vringh: support VA with iotlb
+  vdpa_sim: make devices agnostic for work management
+  vdpa_sim: use kthread worker
+  vdpa_sim: replace the spinlock with a mutex to protect the state
+  vdpa_sim: add support for user VA
+
+ drivers/vdpa/vdpa_sim/vdpa_sim.h     |  11 +-
+ include/linux/vdpa.h                 |  10 ++
+ include/linux/vringh.h               |   5 +-
+ drivers/vdpa/mlx5/net/mlx5_vnet.c    |   2 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim.c     | 160 ++++++++++++++---
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  10 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  10 +-
+ drivers/vhost/vdpa.c                 |  30 ++++
+ drivers/vhost/vringh.c               | 247 +++++++++++++++++++++------
+ 9 files changed, 395 insertions(+), 90 deletions(-)
 
 -- 
-Regards
-Sudip
+2.39.2
+
