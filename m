@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0586A7B48
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 07:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CC26A7B46
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 07:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjCBGTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 01:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S229990AbjCBGTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 01:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjCBGTP (ORCPT
+        with ESMTP id S229972AbjCBGTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 01:19:15 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2052.outbound.protection.outlook.com [40.107.243.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202BC1E1F7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 22:18:54 -0800 (PST)
+        Thu, 2 Mar 2023 01:19:12 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2041.outbound.protection.outlook.com [40.107.244.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B752DE77
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 22:18:52 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nX5GtOcp4BaVdoDKFC0XC/w57cTZi2Riwgka9x6KKGegayuppn64HsTw7o/UxK0xxy6w0uWbyL46dN5tC7ss00YzaZivtqDfgUm79LeG89+tcjd6Lrcp9UT2BgbDNxcV1yPsaTYpaLa60GjVWRxFW59oCnC+Xf112JERTnucZ7rs8kH9U7xG3wqNj9re/jje/hHw8V+xTQjps/EKXa5+kfo4k9LklCRMIohHzZVO5leEEu0wWp3vhYul9CPcY4lOxYEGoUIt0Laom28ilB/okLcC/EJSO3UHL/8g86kgloJt69SkfWVLGalqXCyaisufuL/IAVNv7KjpsjlyRFC3AA==
+ b=A0nbobrc2TPde6Zp4szh025o+anyc/ju19A/3qSlSjAvmXMwHi4oWW0GUf/kt59DbCzBcibTtCM0X92KnIcAmhy1uITqVYvV4nQ2Mhn6el9vDHqokmAhLftZb/+qiCkkb6LzM3DoXUKomMYDL8NWT6Sm2E8f/uVTg8G0NqFquO0T7qFF8OGDcgv0qg6lku62pzlHrtD9FRc5qwxt1O8aZ14X5gD7/o+JC3ZzN1pV4J7xnQIGbjuf1/IzWS3sYDyM1VzGPepFtkUAV9qemmPjoEuDkW+3qpY1BWvRHf7SQUI1OVFBQPAF0WmP5jRnRomDiS3b3KG+DsVI3SM8KR28UA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pFrRn2OKsmWybz70u+W503UnxnGJ3xqVwYbus6+6UyE=;
- b=k/VAPkMXNBcoxQf/0ku0VNRui9MaGtxdBDS+u9OQNh4KcdIYNEyp2PS3CdrSYV6MQQ80SvDiObmE6MHdvfPWzgi5iGWIMAWcizXRTn6ETi+xqr+zvcCdWsGuKmU3XoymQcZ+uLZikJkUcDVJ2w9XIfb4jBMmybnqDs8mcZvuCyi2QsbjSbuqPrXe95AE/vDkrUhvL57JCCU/dhHKU3OH7GMx9r4azzU3UYvTe9bnLtee2VfM3RMFK/p4wDLN+mhMJNUFAePilaH9cOrSeeWX/U5byxxcWXAtgauhngUpmbB4SvQlgukd5/ugW3cSlF9mGLd+GlhAFLRVn0OMDVPyxg==
+ bh=VQ7RdSH3JZNd2G4YyAyN3SuErlTNHebE/R4/V24nR5g=;
+ b=HfTIicY+uXLqCkuRYklTJ0CbKc8jA7NqPZ0R1Bb5eLtYXlYGcuH7NW26JiHa6jzHZP2niblIiJjDYxG5b69AxMr6tN/WGGQvQEqefq3GinAPss1tspVbauFV9rUq3Hax83cZMZ/eg5B76m+8VJGGp/L27/z0dvRXpEgo8weNaIMyj3oCqKknFBu1Ssczh2OjsJssT7RG/L+v49cSkc+125/aL5haO+45Wfd3oAZ5+x3q4C165Ws/S4a1XepAPx7EGGDX3Hjmq8uVehNh0vqO97v6w2dfFtzODNKl/9yp3D0jbK8ihnWDnMKT8Q1UtS7Wo8yjsDF3312TREZ+/ca6bw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pFrRn2OKsmWybz70u+W503UnxnGJ3xqVwYbus6+6UyE=;
- b=EoveOIUnASACsZES3mb9GpG69U5NHHtvJILAXj7sgvJOzQEE39jm6Zg8mk2CEDRFj0oGLfD67T8IIC1u5E+oV1pG1OuKFT2Q9uNiYVVVVcXU9k9TveBKv1WdBhfC0Ve8knLmeEPJznls/dK1f31a2TvLCGHDn90e4F/vVWkEhhc=
-Received: from BN0PR04CA0080.namprd04.prod.outlook.com (2603:10b6:408:ea::25)
- by CY5PR12MB6383.namprd12.prod.outlook.com (2603:10b6:930:3d::12) with
+ bh=VQ7RdSH3JZNd2G4YyAyN3SuErlTNHebE/R4/V24nR5g=;
+ b=USIFqGjkq+Djx6egVmOhAAATdfa+zY1OwQ3NY15YrTZxBFVeluhr1gccDVnSOdhL7Rf6Uvjtut9UoajhcAzx0rozeUZN5LNNTLXC5ZlSFoLfzZ4vG/xvCKXtq5JL25xW2uvc64SaS5w4StXN6vA/DJZubVzFFmsPX3FOdLbRq4I=
+Received: from BN0PR04CA0069.namprd04.prod.outlook.com (2603:10b6:408:ea::14)
+ by SJ0PR12MB6830.namprd12.prod.outlook.com (2603:10b6:a03:47c::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.27; Thu, 2 Mar
- 2023 06:18:50 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
+ 2023 06:18:49 +0000
 Received: from BN8NAM11FT090.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ea:cafe::41) by BN0PR04CA0080.outlook.office365.com
- (2603:10b6:408:ea::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Thu, 2 Mar 2023 06:18:50 +0000
+ (2603:10b6:408:ea:cafe::61) by BN0PR04CA0069.outlook.office365.com
+ (2603:10b6:408:ea::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
+ Transport; Thu, 2 Mar 2023 06:18:48 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,18 +49,18 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  BN8NAM11FT090.mail.protection.outlook.com (10.13.177.105) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.19 via Frontend Transport; Thu, 2 Mar 2023 06:18:50 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ 15.20.6156.19 via Frontend Transport; Thu, 2 Mar 2023 06:18:48 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Mar
- 2023 00:18:30 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Mar
- 2023 00:17:43 -0600
+ 2023 00:18:47 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
+ 2023 22:18:34 -0800
 Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34
- via Frontend Transport; Thu, 2 Mar 2023 00:17:39 -0600
+ via Frontend Transport; Thu, 2 Mar 2023 00:18:30 -0600
 From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 To:     <vkoul@kernel.org>
 CC:     <alsa-devel@alsa-project.org>,
@@ -72,9 +72,9 @@ CC:     <alsa-devel@alsa-project.org>,
         Bard Liao <yung-chuan.liao@linux.intel.com>,
         Sanyog Kale <sanyog.r.kale@intel.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH V5 2/8] soundwire: amd: Add support for AMD Manager driver
-Date:   Thu, 2 Mar 2023 11:51:01 +0530
-Message-ID: <20230302062107.207845-3-Vijendar.Mukunda@amd.com>
+Subject: [PATCH V5 3/8] soundwire: amd: register SoundWire manager dai ops
+Date:   Thu, 2 Mar 2023 11:51:02 +0530
+Message-ID: <20230302062107.207845-4-Vijendar.Mukunda@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230302062107.207845-1-Vijendar.Mukunda@amd.com>
 References: <20230302062107.207845-1-Vijendar.Mukunda@amd.com>
@@ -83,23 +83,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT090:EE_|CY5PR12MB6383:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71cb1ad5-4f02-4045-f3d7-08db1ae5fd64
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT090:EE_|SJ0PR12MB6830:EE_
+X-MS-Office365-Filtering-Correlation-Id: 978bf477-e934-45e2-2a47-08db1ae5fc74
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C8wt4BrIUt3dE2JfF5Ot0mqqbtSJH4r/lLS7qeEAZe4aOs1yLJoAlLmmOgUdCTe23qWzluUKzq/OVsOKtmIUWJwOEAAD6FyDkyhj/Rpgr+EUl8eZS3QbMFZ8Qkf8CC3LnkDakxsW7PICUyb+mYYdtuNGqr/7bxR3WXHi8HzMz/x+IriwQUCjisa+ghh3vZBTlNpKVaBrqbbAsVlaLl5VLAdIksTOT4MgImKQ5mmG82HXZEw7ZltfIRY6PEHUm2eOMJxPxrNCidb/2EnQRsUBUKlaVVae3nn6cYMO3zNNwatGCg1IAoWEwUOpYmwVLnsCcv441By4HH0KU0GtJgvhJFiC+/cwp3edga4do07H8txXHRxZVIVVdjBiKNo9FsIchJnU2kImfzeXAxgs+2BDgDjvUW5SA6ba/sP4BgdBSOhbhTJfeDMauT1jsOYZtYGDJlz+aYWBkgh/tuCuXMUw4H0vHcJs9YQwYTvvHfIMsAi8YKI8mYRqnrwNiIoei54MHK5cBAgAysvyYYVpqnEF9WwWVbBo3vnHuekjdYRl7xB+itmu+oeADDQlHey4ilwO5FGnZ44Ffpdvy+jD92MzvRsIGUQfErLZABZRP+oOB/TQ6RdsDgFYDSw/DyZIYuJxysaHpvvAcMmfzp+e7/cVTBNeWvWUIDB6Xmx/SSLXCUGWbg0Nl4b2ltSbwqYi5VT5D0VkqjLDz+qm8yIHLo0trwLuKR5Ek94v5IKneqjrAI0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(346002)(39860400002)(136003)(451199018)(40470700004)(36840700001)(46966006)(36756003)(40460700003)(86362001)(6666004)(1076003)(478600001)(26005)(70586007)(336012)(186003)(54906003)(2616005)(41300700001)(6916009)(4326008)(2906002)(70206006)(7696005)(316002)(5660300002)(82740400003)(81166007)(40480700001)(356005)(426003)(82310400005)(8936002)(47076005)(36860700001)(30864003)(8676002)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Nu0fhatSVhxm/JKSa1fpWU9NaFd/MIHxfC4W47z08flitEVlLdfZsAG+ernariGC+/Ni4AvJGtXVvdxSLhvfcwuwJ4yw33ZQU3p06WNj2qMTOX2wTHiSdF87UFEM9QTKCulYRWhwb3IKIJ/jo3DlpopG6kvD9jmvF2xrP4W4VG+bTqwPS6FUJZzjxPZuTNpOwPY7yWzrH50PZM0/FPdg3v3JQ2CntpCjNta7qG3uPGw65ZSh3+vn5d9QG3d+aZ7hu7SCVlpSG50URqaOfawHSShqtLZl6IOeHR5Zi5bkOnD0orsa0ew+6NvdEw3lP93WNPF9vRXi5VuPnVgImotYL09gvqK+ESknmycuAOon0ynGw1b+qcKeRkQs84mSIxQS6lQ7dBOH50V/1cEBlHacLKQFzP97nUPjjRG5otXhKvtD5u1xQewuUkOkuexrrcpnSxL6eNLrbNjsgYbSiDWvrvJMOfmnX/87Akb2H5Fa1sWXqishoFehWPY4pS8BW7mtuMhpTgeqj0OFWkHVBHn6rcSTbL5nje1ONWqBt6QW/ZSWy9hhUo+sscSEE+vGm5ssSXK0XdTuhz7HNm5FwfCihQjDUoD1mkKVE5VE5BkJ3TQoxCL7wvX1zlXeW/Rm0kVQaoerf2HHpKxBb4uC6OLiRwK9NL0RVp4NFV3uvTmitLTgVHqrmr6yizPO9kqAXOehIaJ79n30cdRI9BWFwSIrT3ONyyC/W806OheLex2q3SA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(396003)(376002)(346002)(451199018)(36840700001)(46966006)(40470700004)(36756003)(82310400005)(82740400003)(426003)(54906003)(47076005)(478600001)(336012)(316002)(83380400001)(2616005)(966005)(6666004)(7696005)(4326008)(186003)(1076003)(26005)(41300700001)(356005)(2906002)(8936002)(86362001)(5660300002)(70206006)(70586007)(8676002)(36860700001)(6916009)(40480700001)(81166007)(40460700003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 06:18:50.3829
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 06:18:48.7892
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71cb1ad5-4f02-4045-f3d7-08db1ae5fd64
+X-MS-Exchange-CrossTenant-Network-Message-Id: 978bf477-e934-45e2-2a47-08db1ae5fc74
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT090.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6383
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6830
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -110,1116 +110,288 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD ACP(v6.x) IP block has two SoundWire manager devices.
-Add support for
-  - Manager driver probe & remove sequence
-  - Helper functions to enable/disable interrupts,
-    Initialize sdw manager, enable sdw pads
-  - Manager driver sdw_master_ops & port_ops callbacks
+Register dai ops for SoundWire manager instances.
 
 Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/lkml/20230227154801.50319-4-Vijendar.Mukunda@amd.com
 ---
- drivers/soundwire/amd_manager.c   | 756 ++++++++++++++++++++++++++++++
- drivers/soundwire/amd_manager.h   | 252 ++++++++++
- include/linux/soundwire/sdw_amd.h |  67 +++
- 3 files changed, 1075 insertions(+)
- create mode 100644 drivers/soundwire/amd_manager.c
- create mode 100644 drivers/soundwire/amd_manager.h
- create mode 100644 include/linux/soundwire/sdw_amd.h
+ drivers/soundwire/amd_manager.c   | 182 ++++++++++++++++++++++++++++++
+ drivers/soundwire/amd_manager.h   |  18 +++
+ include/linux/soundwire/sdw_amd.h |  18 +++
+ 3 files changed, 218 insertions(+)
 
 diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_manager.c
-new file mode 100644
-index 000000000000..32fb17df465a
---- /dev/null
+index 32fb17df465a..4b7b29a71f61 100644
+--- a/drivers/soundwire/amd_manager.c
 +++ b/drivers/soundwire/amd_manager.c
-@@ -0,0 +1,756 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * SoundWire AMD Manager driver
-+ *
-+ * Copyright 2023 Advanced Micro Devices, Inc.
-+ */
-+
-+#include <linux/completion.h>
-+#include <linux/device.h>
-+#include <linux/io.h>
-+#include <linux/jiffies.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/soundwire/sdw.h>
-+#include <linux/soundwire/sdw_registers.h>
-+#include <linux/wait.h>
-+#include <sound/pcm_params.h>
-+#include <sound/soc.h>
-+#include "bus.h"
-+#include "amd_manager.h"
-+
-+#define DRV_NAME "amd_sdw_manager"
-+
-+#define to_amd_sdw(b)	container_of(b, struct amd_sdw_manager, bus)
-+
-+static void amd_enable_sdw_pads(struct amd_sdw_manager *amd_manager)
+@@ -639,6 +639,182 @@ static const struct sdw_master_ops amd_sdw_ops = {
+ 	.read_ping_status = amd_sdw_read_ping_status,
+ };
+ 
++static int amd_sdw_hw_params(struct snd_pcm_substream *substream,
++			     struct snd_pcm_hw_params *params,
++			     struct snd_soc_dai *dai)
 +{
-+	u32 sw_pad_pulldown_val;
-+	u32 val;
-+
-+	mutex_lock(amd_manager->acp_sdw_lock);
-+	val = acp_reg_readl(amd_manager->acp_mmio + ACP_SW_PAD_KEEPER_EN);
-+	val |= amd_manager->reg_mask->sw_pad_enable_mask;
-+	acp_reg_writel(val, amd_manager->acp_mmio + ACP_SW_PAD_KEEPER_EN);
-+	usleep_range(1000, 1500);
-+
-+	sw_pad_pulldown_val = acp_reg_readl(amd_manager->acp_mmio + ACP_PAD_PULLDOWN_CTRL);
-+	sw_pad_pulldown_val &= amd_manager->reg_mask->sw_pad_pulldown_mask;
-+	acp_reg_writel(sw_pad_pulldown_val, amd_manager->acp_mmio + ACP_PAD_PULLDOWN_CTRL);
-+	mutex_unlock(amd_manager->acp_sdw_lock);
-+}
-+
-+static int amd_init_sdw_manager(struct amd_sdw_manager *amd_manager)
-+{
-+	u32 val;
-+	u32 timeout = 0;
-+	u32 retry_count = 0;
-+
-+	acp_reg_writel(AMD_SDW_ENABLE, amd_manager->mmio + ACP_SW_EN);
-+	do {
-+		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
-+		if (val)
-+			break;
-+		usleep_range(10, 20);
-+	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
-+
-+	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
-+		return -ETIMEDOUT;
-+
-+	/* SoundWire manager bus reset */
-+	acp_reg_writel(AMD_SDW_BUS_RESET_REQ, amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
-+	val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
-+	while (!(val & AMD_SDW_BUS_RESET_DONE)) {
-+		val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
-+		if (timeout > AMD_DELAY_LOOP_ITERATION)
-+			break;
-+		usleep_range(1, 5);
-+		timeout++;
-+	}
-+	if (timeout > AMD_DELAY_LOOP_ITERATION)
-+		return -ETIMEDOUT;
-+
-+	timeout = 0;
-+	acp_reg_writel(AMD_SDW_BUS_RESET_CLEAR_REQ, amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
-+	val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
-+	while (val) {
-+		val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
-+		if (timeout > AMD_DELAY_LOOP_ITERATION)
-+			break;
-+		usleep_range(1, 5);
-+		timeout++;
-+	}
-+	if (timeout > AMD_DELAY_LOOP_ITERATION) {
-+		dev_err(amd_manager->dev, "Failed to reset SoundWire manager instance%d\n",
-+			amd_manager->instance);
-+		return -ETIMEDOUT;
-+	}
-+
-+	retry_count = 0;
-+	acp_reg_writel(AMD_SDW_DISABLE, amd_manager->mmio + ACP_SW_EN);
-+	do {
-+		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
-+		if (!val)
-+			break;
-+		usleep_range(10, 20);
-+	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
-+
-+	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
-+		return -ETIMEDOUT;
-+	return 0;
-+}
-+
-+static int amd_enable_sdw_manager(struct amd_sdw_manager *amd_manager)
-+{
-+	u32 val;
-+	u32 retry_count = 0;
-+
-+	acp_reg_writel(AMD_SDW_ENABLE, amd_manager->mmio + ACP_SW_EN);
-+	do {
-+		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
-+		if (val)
-+			break;
-+		usleep_range(10, 20);
-+	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
-+
-+	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
-+		return -ETIMEDOUT;
-+	return 0;
-+}
-+
-+static int amd_disable_sdw_manager(struct amd_sdw_manager *amd_manager)
-+{
-+	u32 val;
-+	u32 retry_count = 0;
-+
-+	acp_reg_writel(AMD_SDW_DISABLE, amd_manager->mmio + ACP_SW_EN);
-+	/*
-+	 * After invoking manager disable sequence, check whether
-+	 * manager has executed clock stop sequence. In this case,
-+	 * manager should ignore checking enable status register.
-+	 */
-+	val = acp_reg_readl(amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
-+	if (val)
-+		return 0;
-+
-+	do {
-+		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
-+		if (!val)
-+			break;
-+		usleep_range(10, 20);
-+	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
-+
-+	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
-+		return -ETIMEDOUT;
-+	return 0;
-+}
-+
-+static void amd_enable_sdw_interrupts(struct amd_sdw_manager *amd_manager)
-+{
-+	struct sdw_manager_reg_mask *reg_mask = amd_manager->reg_mask;
-+	u32 val;
-+
-+	mutex_lock(amd_manager->acp_sdw_lock);
-+	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
-+	val |= reg_mask->acp_sdw_intr_mask;
-+	acp_reg_writel(val, amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
-+	mutex_unlock(amd_manager->acp_sdw_lock);
-+
-+	acp_reg_writel(AMD_SDW_IRQ_MASK_0TO7, amd_manager->mmio +
-+		       ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
-+	acp_reg_writel(AMD_SDW_IRQ_MASK_8TO11, amd_manager->mmio +
-+		       ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
-+	acp_reg_writel(AMD_SDW_IRQ_ERROR_MASK, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
-+}
-+
-+static void amd_disable_sdw_interrupts(struct amd_sdw_manager *amd_manager)
-+{
-+	struct sdw_manager_reg_mask *reg_mask = amd_manager->reg_mask;
-+	u32 val;
-+
-+	mutex_lock(amd_manager->acp_sdw_lock);
-+	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
-+	val &= ~reg_mask->acp_sdw_intr_mask;
-+	acp_reg_writel(val, amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
-+	mutex_unlock(amd_manager->acp_sdw_lock);
-+
-+	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
-+	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
-+	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
-+}
-+
-+static void amd_sdw_set_frameshape(struct amd_sdw_manager *amd_manager)
-+{
-+	u32 frame_size;
-+
-+	frame_size = (amd_manager->rows_index << 3) | amd_manager->cols_index;
-+	acp_reg_writel(frame_size, amd_manager->mmio + ACP_SW_FRAMESIZE);
-+}
-+
-+static void amd_sdw_ctl_word_prep(u32 *lower_word, u32 *upper_word, u32 cmd_type,
-+				  struct sdw_msg *msg, int cmd_offset)
-+{
-+	u32 upper_data;
-+	u32 lower_data = 0;
-+	u16 addr;
-+	u8 addr_upper, addr_lower;
-+	u8 data = 0;
-+
-+	addr = msg->addr + cmd_offset;
-+	addr_upper = (addr & 0xFF00) >> 8;
-+	addr_lower = addr & 0xFF;
-+
-+	if (cmd_type == AMD_SDW_CMD_WRITE)
-+		data = msg->buf[cmd_offset];
-+
-+	upper_data = FIELD_PREP(AMD_SDW_MCP_CMD_DEV_ADDR, msg->dev_num);
-+	upper_data |= FIELD_PREP(AMD_SDW_MCP_CMD_COMMAND, cmd_type);
-+	upper_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_ADDR_HIGH, addr_upper);
-+	lower_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_ADDR_LOW, addr_lower);
-+	lower_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_DATA, data);
-+
-+	*upper_word = upper_data;
-+	*lower_word = lower_data;
-+}
-+
-+static u64 amd_sdw_send_cmd_get_resp(struct amd_sdw_manager *amd_manager, u32 lower_word,
-+				     u32 upper_word)
-+{
-+	u64 resp;
-+	u32 resp_lower, resp_upper;
-+	u32 sts;
-+	u32 timeout = 0;
-+
-+	sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
-+	while (sts & AMD_SDW_IMM_CMD_BUSY) {
-+		if (timeout++ > AMD_SDW_RETRY_COUNT) {
-+			dev_err(amd_manager->dev, "SDW%x previous cmd status clear failed\n",
-+				amd_manager->instance);
-+			return -ETIMEDOUT;
-+		}
-+		usleep_range(5, 10);
-+		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
-+	}
-+
-+	timeout = 0;
-+	if (sts & AMD_SDW_IMM_RES_VALID) {
-+		dev_err(amd_manager->dev, "SDW%x manager is in bad state\n", amd_manager->instance);
-+		acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_IMM_CMD_STS);
-+	}
-+	acp_reg_writel(upper_word, amd_manager->mmio + ACP_SW_IMM_CMD_UPPER_WORD);
-+	acp_reg_writel(lower_word, amd_manager->mmio + ACP_SW_IMM_CMD_LOWER_QWORD);
-+
-+	sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
-+	while (!(sts & AMD_SDW_IMM_RES_VALID)) {
-+		if (timeout++ > AMD_SDW_RETRY_COUNT) {
-+			dev_err(amd_manager->dev, "SDW%x cmd response timeout occurred\n",
-+				amd_manager->instance);
-+			return -ETIMEDOUT;
-+		}
-+		usleep_range(5, 10);
-+		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
-+	}
-+	resp_upper = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_RESP_UPPER_WORD);
-+	resp_lower = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_RESP_LOWER_QWORD);
-+
-+	timeout = 0;
-+	acp_reg_writel(AMD_SDW_IMM_RES_VALID, amd_manager->mmio + ACP_SW_IMM_CMD_STS);
-+	sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
-+	while ((sts & AMD_SDW_IMM_RES_VALID)) {
-+		if (timeout++ > AMD_SDW_RETRY_COUNT) {
-+			dev_err(amd_manager->dev, "SDW%x cmd status retry failed\n",
-+				amd_manager->instance);
-+			return -ETIMEDOUT;
-+		}
-+		usleep_range(5, 10);
-+		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
-+	}
-+	resp = resp_upper;
-+	resp = (resp << 32) | resp_lower;
-+	return resp;
-+}
-+
-+static enum sdw_command_response
-+amd_program_scp_addr(struct amd_sdw_manager *amd_manager, struct sdw_msg *msg)
-+{
-+	struct sdw_msg scp_msg = {0};
-+	u64 response_buf[2] = {0};
-+	u32 upper_word = 0, lower_word = 0;
-+	int nack = 0, no_ack = 0;
-+	int index, timeout = 0;
-+
-+	scp_msg.dev_num = msg->dev_num;
-+	scp_msg.addr = SDW_SCP_ADDRPAGE1;
-+	scp_msg.buf = &msg->addr_page1;
-+	amd_sdw_ctl_word_prep(&lower_word, &upper_word, AMD_SDW_CMD_WRITE, &scp_msg, 0);
-+	response_buf[0] = amd_sdw_send_cmd_get_resp(amd_manager, lower_word, upper_word);
-+	scp_msg.addr = SDW_SCP_ADDRPAGE2;
-+	scp_msg.buf = &msg->addr_page2;
-+	amd_sdw_ctl_word_prep(&lower_word, &upper_word, AMD_SDW_CMD_WRITE, &scp_msg, 0);
-+	response_buf[1] = amd_sdw_send_cmd_get_resp(amd_manager, lower_word, upper_word);
-+
-+	for (index = 0; index < 2; index++) {
-+		if (response_buf[index] == -ETIMEDOUT) {
-+			dev_err(amd_manager->dev, "Program SCP cmd timeout\n");
-+			timeout = 1;
-+		} else if (!(response_buf[index] & AMD_SDW_MCP_RESP_ACK)) {
-+			no_ack = 1;
-+			if (response_buf[index] & AMD_SDW_MCP_RESP_NACK) {
-+				nack = 1;
-+				dev_err(amd_manager->dev, "Program SCP NACK received\n");
-+			}
-+		}
-+	}
-+
-+	if (timeout) {
-+		dev_err_ratelimited(amd_manager->dev,
-+				    "SCP_addrpage command timeout for Slave %d\n", msg->dev_num);
-+		return SDW_CMD_TIMEOUT;
-+	}
-+
-+	if (nack) {
-+		dev_err_ratelimited(amd_manager->dev,
-+				    "SCP_addrpage NACKed for Slave %d\n", msg->dev_num);
-+		return SDW_CMD_FAIL;
-+	}
-+
-+	if (no_ack) {
-+		dev_dbg_ratelimited(amd_manager->dev,
-+				    "SCP_addrpage ignored for Slave %d\n", msg->dev_num);
-+		return SDW_CMD_IGNORED;
-+	}
-+	return SDW_CMD_OK;
-+}
-+
-+static int amd_prep_msg(struct amd_sdw_manager *amd_manager, struct sdw_msg *msg, int *cmd)
-+{
++	struct amd_sdw_manager *amd_manager = snd_soc_dai_get_drvdata(dai);
++	struct sdw_amd_dai_runtime *dai_runtime;
++	struct sdw_stream_config sconfig;
++	struct sdw_port_config *pconfig;
++	int ch, dir;
 +	int ret;
 +
-+	if (msg->page) {
-+		ret = amd_program_scp_addr(amd_manager, msg);
-+		if (ret) {
-+			msg->len = 0;
-+			return ret;
-+		}
-+	}
-+	switch (msg->flags) {
-+	case SDW_MSG_FLAG_READ:
-+		*cmd = AMD_SDW_CMD_READ;
-+		break;
-+	case SDW_MSG_FLAG_WRITE:
-+		*cmd = AMD_SDW_CMD_WRITE;
-+		break;
-+	default:
-+		dev_err(amd_manager->dev, "Invalid msg cmd: %d\n", msg->flags);
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static enum sdw_command_response amd_sdw_fill_msg_resp(struct amd_sdw_manager *amd_manager,
-+						       struct sdw_msg *msg, u64 response,
-+						       int offset)
-+{
-+	int nack = 0, no_ack = 0;
-+	int timeout = 0;
-+
-+	if (response & AMD_SDW_MCP_RESP_ACK) {
-+		if (msg->flags == SDW_MSG_FLAG_READ)
-+			msg->buf[offset] = FIELD_GET(AMD_SDW_MCP_RESP_RDATA, response);
-+	} else {
-+		no_ack = 1;
-+		if (response == -ETIMEDOUT) {
-+			timeout = 1;
-+		} else if (response & AMD_SDW_MCP_RESP_NACK) {
-+			nack = 1;
-+			dev_err(amd_manager->dev, "Program SCP NACK received\n");
-+		}
-+	}
-+
-+	if (timeout) {
-+		dev_err_ratelimited(amd_manager->dev, "command timeout for Slave %d\n",
-+				    msg->dev_num);
-+		return SDW_CMD_TIMEOUT;
-+	}
-+	if (nack) {
-+		dev_err_ratelimited(amd_manager->dev,
-+				    "command response NACK received for Slave %d\n", msg->dev_num);
-+		return SDW_CMD_FAIL;
-+	}
-+
-+	if (no_ack) {
-+		dev_err_ratelimited(amd_manager->dev, "command is ignored for Slave %d\n",
-+				    msg->dev_num);
-+		return SDW_CMD_IGNORED;
-+	}
-+	return SDW_CMD_OK;
-+}
-+
-+static unsigned int _amd_sdw_xfer_msg(struct amd_sdw_manager *amd_manager, struct sdw_msg *msg,
-+				      int cmd, int cmd_offset)
-+{
-+	u64 response;
-+	u32 upper_word = 0, lower_word = 0;
-+
-+	amd_sdw_ctl_word_prep(&lower_word, &upper_word, cmd, msg, cmd_offset);
-+	response = amd_sdw_send_cmd_get_resp(amd_manager, lower_word, upper_word);
-+	return amd_sdw_fill_msg_resp(amd_manager, msg, response, cmd_offset);
-+}
-+
-+static enum sdw_command_response amd_sdw_xfer_msg(struct sdw_bus *bus, struct sdw_msg *msg)
-+{
-+	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
-+	int ret, i;
-+	int cmd = 0;
-+
-+	ret = amd_prep_msg(amd_manager, msg, &cmd);
-+	if (ret)
-+		return SDW_CMD_FAIL_OTHER;
-+	for (i = 0; i < msg->len; i++) {
-+		ret = _amd_sdw_xfer_msg(amd_manager, msg, cmd, i);
-+		if (ret)
-+			return ret;
-+	}
-+	return SDW_CMD_OK;
-+}
-+
-+static u32 amd_sdw_read_ping_status(struct sdw_bus *bus)
-+{
-+	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
-+	u64 response;
-+	u32 slave_stat;
-+
-+	response = amd_sdw_send_cmd_get_resp(amd_manager, 0, 0);
-+	/* slave status from ping response */
-+	slave_stat = FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_0_3, response);
-+	slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
-+	dev_dbg(amd_manager->dev, "slave_stat:0x%x\n", slave_stat);
-+	return slave_stat;
-+}
-+
-+static int amd_sdw_compute_params(struct sdw_bus *bus)
-+{
-+	struct sdw_transport_data t_data = {0};
-+	struct sdw_master_runtime *m_rt;
-+	struct sdw_port_runtime *p_rt;
-+	struct sdw_bus_params *b_params = &bus->params;
-+	int port_bo, hstart, hstop, sample_int;
-+	unsigned int rate, bps;
-+
-+	port_bo = 0;
-+	hstart = 1;
-+	hstop = bus->params.col - 1;
-+	t_data.hstop = hstop;
-+	t_data.hstart = hstart;
-+
-+	list_for_each_entry(m_rt, &bus->m_rt_list, bus_node) {
-+		rate = m_rt->stream->params.rate;
-+		bps = m_rt->stream->params.bps;
-+		sample_int = (bus->params.curr_dr_freq / rate);
-+		list_for_each_entry(p_rt, &m_rt->port_list, port_node) {
-+			port_bo = (p_rt->num * 64) + 1;
-+			dev_dbg(bus->dev, "p_rt->num=%d hstart=%d hstop=%d port_bo=%d\n",
-+				p_rt->num, hstart, hstop, port_bo);
-+			sdw_fill_xport_params(&p_rt->transport_params, p_rt->num,
-+					      false, SDW_BLK_GRP_CNT_1, sample_int,
-+					      port_bo, port_bo >> 8, hstart, hstop,
-+					      SDW_BLK_PKG_PER_PORT, 0x0);
-+
-+			sdw_fill_port_params(&p_rt->port_params,
-+					     p_rt->num, bps,
-+					     SDW_PORT_FLOW_MODE_ISOCH,
-+					     b_params->m_data_mode);
-+			t_data.hstart = hstart;
-+			t_data.hstop = hstop;
-+			t_data.block_offset = port_bo;
-+			t_data.sub_block_offset = 0;
-+		}
-+		sdw_compute_slave_ports(m_rt, &t_data);
-+	}
-+	return 0;
-+}
-+
-+static int amd_sdw_port_params(struct sdw_bus *bus, struct sdw_port_params *p_params,
-+			       unsigned int bank)
-+{
-+	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
-+	u32 frame_fmt_reg, dpn_frame_fmt;
-+
-+	dev_dbg(amd_manager->dev, "p_params->num:0x%x\n", p_params->num);
-+	switch (amd_manager->instance) {
-+	case ACP_SDW0:
-+		frame_fmt_reg = sdw0_manager_dp_reg[p_params->num].frame_fmt_reg;
-+		break;
-+	case ACP_SDW1:
-+		frame_fmt_reg = sdw1_manager_dp_reg[p_params->num].frame_fmt_reg;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	dpn_frame_fmt = acp_reg_readl(amd_manager->mmio + frame_fmt_reg);
-+	u32p_replace_bits(&dpn_frame_fmt, p_params->flow_mode, AMD_DPN_FRAME_FMT_PFM);
-+	u32p_replace_bits(&dpn_frame_fmt, p_params->data_mode, AMD_DPN_FRAME_FMT_PDM);
-+	u32p_replace_bits(&dpn_frame_fmt, p_params->bps - 1, AMD_DPN_FRAME_FMT_WORD_LEN);
-+	acp_reg_writel(dpn_frame_fmt, amd_manager->mmio + frame_fmt_reg);
-+	return 0;
-+}
-+
-+static int amd_sdw_transport_params(struct sdw_bus *bus,
-+				    struct sdw_transport_params *params,
-+				    enum sdw_reg_bank bank)
-+{
-+	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
-+	u32 dpn_frame_fmt;
-+	u32 dpn_sampleinterval;
-+	u32 dpn_hctrl;
-+	u32 dpn_offsetctrl;
-+	u32 dpn_lanectrl;
-+	u32 frame_fmt_reg, sample_int_reg, hctrl_dp0_reg;
-+	u32 offset_reg, lane_ctrl_ch_en_reg;
-+
-+	switch (amd_manager->instance) {
-+	case ACP_SDW0:
-+		frame_fmt_reg  = sdw0_manager_dp_reg[params->port_num].frame_fmt_reg;
-+		sample_int_reg  = sdw0_manager_dp_reg[params->port_num].sample_int_reg;
-+		hctrl_dp0_reg  = sdw0_manager_dp_reg[params->port_num].hctrl_dp0_reg;
-+		offset_reg  = sdw0_manager_dp_reg[params->port_num].offset_reg;
-+		lane_ctrl_ch_en_reg  = sdw0_manager_dp_reg[params->port_num].lane_ctrl_ch_en_reg;
-+		break;
-+	case ACP_SDW1:
-+		frame_fmt_reg  = sdw1_manager_dp_reg[params->port_num].frame_fmt_reg;
-+		sample_int_reg  = sdw1_manager_dp_reg[params->port_num].sample_int_reg;
-+		hctrl_dp0_reg  = sdw1_manager_dp_reg[params->port_num].hctrl_dp0_reg;
-+		offset_reg  = sdw1_manager_dp_reg[params->port_num].offset_reg;
-+		lane_ctrl_ch_en_reg  = sdw1_manager_dp_reg[params->port_num].lane_ctrl_ch_en_reg;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	acp_reg_writel(AMD_SDW_SSP_COUNTER_VAL, amd_manager->mmio + ACP_SW_SSP_COUNTER);
-+
-+	dpn_frame_fmt = acp_reg_readl(amd_manager->mmio + frame_fmt_reg);
-+	u32p_replace_bits(&dpn_frame_fmt, params->blk_pkg_mode, AMD_DPN_FRAME_FMT_BLK_PKG_MODE);
-+	u32p_replace_bits(&dpn_frame_fmt, params->blk_grp_ctrl, AMD_DPN_FRAME_FMT_BLK_GRP_CTRL);
-+	u32p_replace_bits(&dpn_frame_fmt, SDW_STREAM_PCM, AMD_DPN_FRAME_FMT_PCM_OR_PDM);
-+	acp_reg_writel(dpn_frame_fmt, amd_manager->mmio + frame_fmt_reg);
-+
-+	dpn_sampleinterval = params->sample_interval - 1;
-+	acp_reg_writel(dpn_sampleinterval, amd_manager->mmio + sample_int_reg);
-+
-+	dpn_hctrl = FIELD_PREP(AMD_DPN_HCTRL_HSTOP, params->hstop);
-+	dpn_hctrl |= FIELD_PREP(AMD_DPN_HCTRL_HSTART, params->hstart);
-+	acp_reg_writel(dpn_hctrl, amd_manager->mmio + hctrl_dp0_reg);
-+
-+	dpn_offsetctrl = FIELD_PREP(AMD_DPN_OFFSET_CTRL_1, params->offset1);
-+	dpn_offsetctrl |= FIELD_PREP(AMD_DPN_OFFSET_CTRL_2, params->offset2);
-+	acp_reg_writel(dpn_offsetctrl, amd_manager->mmio + offset_reg);
-+
-+	/*
-+	 * lane_ctrl_ch_en_reg will be used to program lane_ctrl and ch_mask
-+	 * parameters.
-+	 */
-+	dpn_lanectrl = acp_reg_readl(amd_manager->mmio + lane_ctrl_ch_en_reg);
-+	u32p_replace_bits(&dpn_lanectrl, params->lane_ctrl, AMD_DPN_CH_EN_LCTRL);
-+	acp_reg_writel(dpn_lanectrl, amd_manager->mmio + lane_ctrl_ch_en_reg);
-+	return 0;
-+}
-+
-+static int amd_sdw_port_enable(struct sdw_bus *bus,
-+			       struct sdw_enable_ch *enable_ch,
-+			       unsigned int bank)
-+{
-+	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
-+	u32 dpn_ch_enable;
-+	u32 lane_ctrl_ch_en_reg;
-+
-+	switch (amd_manager->instance) {
-+	case ACP_SDW0:
-+		lane_ctrl_ch_en_reg  = sdw0_manager_dp_reg[enable_ch->port_num].lane_ctrl_ch_en_reg;
-+		break;
-+	case ACP_SDW1:
-+		lane_ctrl_ch_en_reg  = sdw1_manager_dp_reg[enable_ch->port_num].lane_ctrl_ch_en_reg;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * lane_ctrl_ch_en_reg will be used to program lane_ctrl and ch_mask
-+	 * parameters.
-+	 */
-+	dpn_ch_enable = acp_reg_readl(amd_manager->mmio + lane_ctrl_ch_en_reg);
-+	u32p_replace_bits(&dpn_ch_enable, enable_ch->ch_mask, AMD_DPN_CH_EN_CHMASK);
-+	if (enable_ch->enable)
-+		acp_reg_writel(dpn_ch_enable, amd_manager->mmio + lane_ctrl_ch_en_reg);
-+	else
-+		acp_reg_writel(0, amd_manager->mmio + lane_ctrl_ch_en_reg);
-+	return 0;
-+}
-+
-+static int sdw_master_read_amd_prop(struct sdw_bus *bus)
-+{
-+	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
-+	struct fwnode_handle *link;
-+	struct sdw_master_prop *prop;
-+	u32 quirk_mask = 0;
-+	u32 wake_en_mask = 0;
-+	u32 power_mode_mask = 0;
-+	char name[32];
-+
-+	prop = &bus->prop;
-+	/* Find manager handle */
-+	snprintf(name, sizeof(name), "mipi-sdw-link-%d-subproperties", bus->link_id);
-+	link = device_get_named_child_node(bus->dev, name);
-+	if (!link) {
-+		dev_err(bus->dev, "Manager node %s not found\n", name);
++	dai_runtime = amd_manager->dai_runtime_array[dai->id];
++	if (!dai_runtime)
 +		return -EIO;
-+	}
-+	fwnode_property_read_u32(link, "amd-sdw-enable", &quirk_mask);
-+	if (!(quirk_mask & AMD_SDW_QUIRK_MASK_BUS_ENABLE))
-+		prop->hw_disabled = true;
-+	prop->quirks = SDW_MASTER_QUIRKS_CLEAR_INITIAL_CLASH |
-+		       SDW_MASTER_QUIRKS_CLEAR_INITIAL_PARITY;
 +
-+	fwnode_property_read_u32(link, "amd-sdw-wakeup-enable", &wake_en_mask);
-+	amd_manager->wake_en_mask = wake_en_mask;
-+	fwnode_property_read_u32(link, "amd-sdw-power-mode", &power_mode_mask);
-+	amd_manager->power_mode_mask = power_mode_mask;
++	ch = params_channels(params);
++	if (substream->stream == SNDRV_PCM_STREAM_CAPTURE)
++		dir = SDW_DATA_DIR_RX;
++	else
++		dir = SDW_DATA_DIR_TX;
++	dev_dbg(amd_manager->dev, "dir:%d dai->id:0x%x\n", dir, dai->id);
++
++	sconfig.direction = dir;
++	sconfig.ch_count = ch;
++	sconfig.frame_rate = params_rate(params);
++	sconfig.type = dai_runtime->stream_type;
++
++	sconfig.bps = snd_pcm_format_width(params_format(params));
++
++	/* Port configuration */
++	pconfig = kzalloc(sizeof(*pconfig), GFP_KERNEL);
++	if (!pconfig) {
++		ret =  -ENOMEM;
++		goto error;
++	}
++
++	pconfig->num = dai->id;
++	pconfig->ch_mask = (1 << ch) - 1;
++	ret = sdw_stream_add_master(&amd_manager->bus, &sconfig,
++				    pconfig, 1, dai_runtime->stream);
++	if (ret)
++		dev_err(amd_manager->dev, "add manager to stream failed:%d\n", ret);
++
++	kfree(pconfig);
++error:
++	return ret;
++}
++
++static int amd_sdw_hw_free(struct snd_pcm_substream *substream, struct snd_soc_dai *dai)
++{
++	struct amd_sdw_manager *amd_manager = snd_soc_dai_get_drvdata(dai);
++	struct sdw_amd_dai_runtime *dai_runtime;
++	int ret;
++
++	dai_runtime = amd_manager->dai_runtime_array[dai->id];
++	if (!dai_runtime)
++		return -EIO;
++
++	ret = sdw_stream_remove_master(&amd_manager->bus, dai_runtime->stream);
++	if (ret < 0)
++		dev_err(dai->dev, "remove manager from stream %s failed: %d\n",
++			dai_runtime->stream->name, ret);
++	return ret;
++}
++
++static int amd_set_sdw_stream(struct snd_soc_dai *dai, void *stream, int direction)
++{
++	struct amd_sdw_manager *amd_manager = snd_soc_dai_get_drvdata(dai);
++	struct sdw_amd_dai_runtime *dai_runtime;
++
++	dai_runtime = amd_manager->dai_runtime_array[dai->id];
++	if (stream) {
++		/* first paranoia check */
++		if (dai_runtime) {
++			dev_err(dai->dev,
++				"dai_runtime already allocated for dai %s\n",
++				dai->name);
++			return -EINVAL;
++		}
++
++		/* allocate and set dai_runtime info */
++		dai_runtime = kzalloc(sizeof(*dai_runtime), GFP_KERNEL);
++		if (!dai_runtime)
++			return -ENOMEM;
++
++		dai_runtime->stream_type = SDW_STREAM_PCM;
++		dai_runtime->bus = &amd_manager->bus;
++		dai_runtime->stream = stream;
++		amd_manager->dai_runtime_array[dai->id] = dai_runtime;
++	} else {
++		/* second paranoia check */
++		if (!dai_runtime) {
++			dev_err(dai->dev,
++				"dai_runtime not allocated for dai %s\n",
++				dai->name);
++			return -EINVAL;
++		}
++
++		/* for NULL stream we release allocated dai_runtime */
++		kfree(dai_runtime);
++		amd_manager->dai_runtime_array[dai->id] = NULL;
++	}
 +	return 0;
 +}
 +
-+static int amd_prop_read(struct sdw_bus *bus)
++static int amd_pcm_set_sdw_stream(struct snd_soc_dai *dai, void *stream, int direction)
 +{
-+	sdw_master_read_prop(bus);
-+	sdw_master_read_amd_prop(bus);
-+	return 0;
++	return amd_set_sdw_stream(dai, stream, direction);
 +}
 +
-+static const struct sdw_master_port_ops amd_sdw_port_ops = {
-+	.dpn_set_port_params = amd_sdw_port_params,
-+	.dpn_set_port_transport_params = amd_sdw_transport_params,
-+	.dpn_port_enable_ch = amd_sdw_port_enable,
-+};
-+
-+static const struct sdw_master_ops amd_sdw_ops = {
-+	.read_prop = amd_prop_read,
-+	.xfer_msg = amd_sdw_xfer_msg,
-+	.read_ping_status = amd_sdw_read_ping_status,
-+};
-+
-+static void amd_sdw_probe_work(struct work_struct *work)
++static void *amd_get_sdw_stream(struct snd_soc_dai *dai, int direction)
 +{
-+	struct amd_sdw_manager *amd_manager = container_of(work, struct amd_sdw_manager,
-+							   probe_work);
-+	struct sdw_master_prop *prop;
-+	int ret;
++	struct amd_sdw_manager *amd_manager = snd_soc_dai_get_drvdata(dai);
++	struct sdw_amd_dai_runtime *dai_runtime;
 +
-+	prop = &amd_manager->bus.prop;
-+	if (!prop->hw_disabled) {
-+		amd_enable_sdw_pads(amd_manager);
-+		ret = amd_init_sdw_manager(amd_manager);
-+		if (ret)
-+			return;
-+		amd_enable_sdw_interrupts(amd_manager);
-+		ret = amd_enable_sdw_manager(amd_manager);
-+		if (ret)
-+			return;
-+		amd_sdw_set_frameshape(amd_manager);
-+	}
++	dai_runtime = amd_manager->dai_runtime_array[dai->id];
++	if (!dai_runtime)
++		return ERR_PTR(-EINVAL);
++
++	return dai_runtime->stream;
 +}
 +
-+static int amd_sdw_manager_probe(struct platform_device *pdev)
++static const struct snd_soc_dai_ops amd_sdw_dai_ops = {
++	.hw_params = amd_sdw_hw_params,
++	.hw_free = amd_sdw_hw_free,
++	.set_stream = amd_pcm_set_sdw_stream,
++	.get_stream = amd_get_sdw_stream,
++};
++
++static const struct snd_soc_component_driver amd_sdw_dai_component = {
++	.name = "soundwire",
++};
++
++static int amd_sdw_register_dais(struct amd_sdw_manager *amd_manager)
 +{
-+	const struct acp_sdw_pdata *pdata = pdev->dev.platform_data;
-+	struct resource *res;
-+	struct device *dev = &pdev->dev;
-+	struct sdw_master_prop *prop;
-+	struct sdw_bus_params *params;
-+	struct amd_sdw_manager *amd_manager;
-+	int ret;
++	struct sdw_amd_dai_runtime **dai_runtime_array;
++	struct snd_soc_dai_driver *dais;
++	struct snd_soc_pcm_stream *stream;
++	struct device *dev;
++	int i, num_dais;
 +
-+	amd_manager = devm_kzalloc(dev, sizeof(struct amd_sdw_manager), GFP_KERNEL);
-+	if (!amd_manager)
++	dev = amd_manager->dev;
++	num_dais = amd_manager->num_dout_ports + amd_manager->num_din_ports;
++	dais = devm_kcalloc(dev, num_dais, sizeof(*dais), GFP_KERNEL);
++	if (!dais)
 +		return -ENOMEM;
 +
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res)
++	dai_runtime_array = devm_kcalloc(dev, num_dais,
++					 sizeof(struct sdw_amd_dai_runtime *),
++					 GFP_KERNEL);
++	if (!dai_runtime_array)
 +		return -ENOMEM;
++	amd_manager->dai_runtime_array = dai_runtime_array;
++	for (i = 0; i < num_dais; i++) {
++		dais[i].name = devm_kasprintf(dev, GFP_KERNEL, "SDW%d Pin%d", amd_manager->instance,
++					      i);
++		if (!dais[i].name)
++			return -ENOMEM;
++		if (i < amd_manager->num_dout_ports)
++			stream = &dais[i].playback;
++		else
++			stream = &dais[i].capture;
 +
-+	amd_manager->acp_mmio = devm_ioremap(dev, res->start, resource_size(res));
-+	if (IS_ERR(amd_manager->mmio)) {
-+		dev_err(dev, "mmio not found\n");
-+		return PTR_ERR(amd_manager->mmio);
-+	}
-+	amd_manager->instance = pdata->instance;
-+	amd_manager->mmio = amd_manager->acp_mmio +
-+			    (amd_manager->instance * SDW_MANAGER_REG_OFFSET);
-+	amd_manager->acp_sdw_lock = pdata->acp_sdw_lock;
-+	amd_manager->cols_index = sdw_find_col_index(AMD_SDW_DEFAULT_COLUMNS);
-+	amd_manager->rows_index = sdw_find_row_index(AMD_SDW_DEFAULT_ROWS);
-+	amd_manager->dev = dev;
-+	amd_manager->bus.ops = &amd_sdw_ops;
-+	amd_manager->bus.port_ops = &amd_sdw_port_ops;
-+	amd_manager->bus.compute_params = &amd_sdw_compute_params;
-+	amd_manager->bus.clk_stop_timeout = 200;
-+	amd_manager->bus.link_id = amd_manager->instance;
-+	switch (amd_manager->instance) {
-+	case ACP_SDW0:
-+		amd_manager->num_dout_ports = AMD_SDW0_MAX_TX_PORTS;
-+		amd_manager->num_din_ports = AMD_SDW0_MAX_RX_PORTS;
-+		break;
-+	case ACP_SDW1:
-+		amd_manager->num_dout_ports = AMD_SDW1_MAX_TX_PORTS;
-+		amd_manager->num_din_ports = AMD_SDW1_MAX_RX_PORTS;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	amd_manager->reg_mask = &sdw_manager_reg_mask_array[amd_manager->instance];
-+	params = &amd_manager->bus.params;
-+	params->max_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
-+	params->curr_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
-+	params->col = AMD_SDW_DEFAULT_COLUMNS;
-+	params->row = AMD_SDW_DEFAULT_ROWS;
-+	prop = &amd_manager->bus.prop;
-+	prop->clk_freq = &amd_sdw_freq_tbl[0];
-+	prop->mclk_freq = AMD_SDW_BUS_BASE_FREQ;
++		stream->channels_min = 2;
++		stream->channels_max = 2;
++		stream->rates = SNDRV_PCM_RATE_48000;
++		stream->formats = SNDRV_PCM_FMTBIT_S16_LE;
 +
-+	ret = sdw_bus_master_add(&amd_manager->bus, dev, dev->fwnode);
++		dais[i].ops = &amd_sdw_dai_ops;
++		dais[i].id = i;
++	}
++
++	return devm_snd_soc_register_component(dev, &amd_sdw_dai_component,
++					       dais, num_dais);
++}
++
+ static void amd_sdw_probe_work(struct work_struct *work)
+ {
+ 	struct amd_sdw_manager *amd_manager = container_of(work, struct amd_sdw_manager,
+@@ -722,6 +898,12 @@ static int amd_sdw_manager_probe(struct platform_device *pdev)
+ 		dev_err(dev, "Failed to register SoundWire manager(%d)\n", ret);
+ 		return ret;
+ 	}
++	ret = amd_sdw_register_dais(amd_manager);
 +	if (ret) {
-+		dev_err(dev, "Failed to register SoundWire manager(%d)\n", ret);
++		dev_err(dev, "CPU DAI registration failed\n");
++		sdw_bus_master_delete(&amd_manager->bus);
 +		return ret;
 +	}
-+	dev_set_drvdata(dev, amd_manager);
-+	INIT_WORK(&amd_manager->probe_work, amd_sdw_probe_work);
-+	/*
-+	 * Instead of having lengthy probe sequence, use deferred probe.
-+	 */
-+	schedule_work(&amd_manager->probe_work);
-+	return 0;
-+}
-+
-+static int amd_sdw_manager_remove(struct platform_device *pdev)
-+{
-+	struct amd_sdw_manager *amd_manager = dev_get_drvdata(&pdev->dev);
-+
-+	cancel_work_sync(&amd_manager->probe_work);
-+	amd_disable_sdw_interrupts(amd_manager);
-+	sdw_bus_master_delete(&amd_manager->bus);
-+	return amd_disable_sdw_manager(amd_manager);
-+}
-+
-+static struct platform_driver amd_sdw_driver = {
-+	.probe	= &amd_sdw_manager_probe,
-+	.remove = &amd_sdw_manager_remove,
-+	.driver = {
-+		.name	= "amd_sdw_manager",
-+	}
-+};
-+module_platform_driver(amd_sdw_driver);
-+
-+MODULE_AUTHOR("Vijendar.Mukunda@amd.com");
-+MODULE_DESCRIPTION("AMD SoundWire driver");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:" DRV_NAME);
+ 	dev_set_drvdata(dev, amd_manager);
+ 	INIT_WORK(&amd_manager->probe_work, amd_sdw_probe_work);
+ 	/*
 diff --git a/drivers/soundwire/amd_manager.h b/drivers/soundwire/amd_manager.h
-new file mode 100644
-index 000000000000..811ed9ee3d86
---- /dev/null
+index 811ed9ee3d86..78d7d5c911e4 100644
+--- a/drivers/soundwire/amd_manager.h
 +++ b/drivers/soundwire/amd_manager.h
-@@ -0,0 +1,252 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
+@@ -205,6 +205,24 @@ struct sdw_manager_dp_reg {
+ 	u32 lane_ctrl_ch_en_reg;
+ };
+ 
 +/*
-+ * Copyright (C) 2023 Advanced Micro Devices, Inc. All rights reserved.
++ * SDW0 Manager instance registers  6 CPU DAI (3 TX & 3 RX Ports)
++ * whereas SDW1  Manager Instance registers 2 CPU DAI (one TX & one RX port)
++ * Below is the CPU DAI <->Manager port number mapping
++ * i.e SDW0 Pin0 -> port number 0 -> AUDIO0 TX
++ *     SDW0 Pin1 -> Port number 1 -> AUDIO1 TX
++ *     SDW0 Pin2 -> Port number 2 -> AUDIO2 TX
++ *     SDW0 Pin3 -> port number 3 -> AUDIO0 RX
++ *     SDW0 Pin4 -> Port number 4 -> AUDIO1 RX
++ *     SDW0 Pin5 -> Port number 5 -> AUDIO2 RX
++ *  Whereas for SDW1 instance
++ *  SDW1 Pin0 -> port number 0 -> AUDIO1 TX
++ *  SDW1 Pin1 -> Port number 1 -> AUDIO1 RX
++ *  Same mapping should be used for programming DMA controller registers in SoundWire DMA driver.
++ * i.e if AUDIO0 TX channel is selected then we need to use AUDIO0 TX registers for DMA programming
++ * in SoundWire DMA driver.
 + */
 +
-+#ifndef __AMD_MANAGER_H
-+#define __AMD_MANAGER_H
-+
-+#include <linux/soundwire/sdw_amd.h>
-+
-+#define SDW_MANAGER_REG_OFFSET				0xC00
-+#define AMD_SDW_DEFAULT_ROWS				50
-+#define AMD_SDW_DEFAULT_COLUMNS				10
-+#define ACP_PAD_PULLDOWN_CTRL				0x0001448
-+#define ACP_SW_PAD_KEEPER_EN				0x0001454
-+#define ACP_SW0_WAKE_EN					0x0001458
-+#define ACP_EXTERNAL_INTR_CNTL0				0x0001A04
-+#define ACP_EXTERNAL_INTR_STAT0				0x0001A0C
-+#define ACP_EXTERNAL_INTR_CNTL(i)			(ACP_EXTERNAL_INTR_CNTL0 + ((i) * 4))
-+#define ACP_EXTERNAL_INTR_STAT(i)			(ACP_EXTERNAL_INTR_STAT0 + ((i) * 4))
-+#define ACP_SW_WAKE_EN(i)				(ACP_SW0_WAKE_EN + ((i) * 8))
-+
-+#define ACP_SW_EN					0x0003000
-+#define ACP_SW_EN_STATUS				0x0003004
-+#define ACP_SW_FRAMESIZE				0x0003008
-+#define ACP_SW_SSP_COUNTER				0x000300C
-+#define ACP_SW_AUDIO0_TX_EN				0x0003010
-+#define ACP_SW_AUDIO0_TX_EN_STATUS			0x0003014
-+#define ACP_SW_AUDIO0_TX_FRAME_FORMAT			0x0003018
-+#define ACP_SW_AUDIO0_TX_SAMPLEINTERVAL			0x000301C
-+#define ACP_SW_AUDIO0_TX_HCTRL_DP0			0x0003020
-+#define ACP_SW_AUDIO0_TX_HCTRL_DP1			0x0003024
-+#define ACP_SW_AUDIO0_TX_HCTRL_DP2			0x0003028
-+#define ACP_SW_AUDIO0_TX_HCTRL_DP3			0x000302C
-+#define ACP_SW_AUDIO0_TX_OFFSET_DP0			0x0003030
-+#define ACP_SW_AUDIO0_TX_OFFSET_DP1			0x0003034
-+#define ACP_SW_AUDIO0_TX_OFFSET_DP2			0x0003038
-+#define ACP_SW_AUDIO0_TX_OFFSET_DP3			0x000303C
-+#define ACP_SW_AUDIO0_TX_CHANNEL_ENABLE_DP0		0x0003040
-+#define ACP_SW_AUDIO0_TX_CHANNEL_ENABLE_DP1		0x0003044
-+#define ACP_SW_AUDIO0_TX_CHANNEL_ENABLE_DP2		0x0003048
-+#define ACP_SW_AUDIO0_TX_CHANNEL_ENABLE_DP3		0x000304C
-+#define ACP_SW_AUDIO1_TX_EN				0x0003050
-+#define ACP_SW_AUDIO1_TX_EN_STATUS			0x0003054
-+#define ACP_SW_AUDIO1_TX_FRAME_FORMAT			0x0003058
-+#define ACP_SW_AUDIO1_TX_SAMPLEINTERVAL			0x000305C
-+#define ACP_SW_AUDIO1_TX_HCTRL				0x0003060
-+#define ACP_SW_AUDIO1_TX_OFFSET				0x0003064
-+#define ACP_SW_AUDIO1_TX_CHANNEL_ENABLE_DP0		0x0003068
-+#define ACP_SW_AUDIO2_TX_EN				0x000306C
-+#define ACP_SW_AUDIO2_TX_EN_STATUS			0x0003070
-+#define ACP_SW_AUDIO2_TX_FRAME_FORMAT			0x0003074
-+#define ACP_SW_AUDIO2_TX_SAMPLEINTERVAL			0x0003078
-+#define ACP_SW_AUDIO2_TX_HCTRL				0x000307C
-+#define ACP_SW_AUDIO2_TX_OFFSET				0x0003080
-+#define ACP_SW_AUDIO2_TX_CHANNEL_ENABLE_DP0		0x0003084
-+#define ACP_SW_AUDIO0_RX_EN				0x0003088
-+#define ACP_SW_AUDIO0_RX_EN_STATUS			0x000308C
-+#define ACP_SW_AUDIO0_RX_FRAME_FORMAT			0x0003090
-+#define ACP_SW_AUDIO0_RX_SAMPLEINTERVAL			0x0003094
-+#define ACP_SW_AUDIO0_RX_HCTRL_DP0			0x0003098
-+#define ACP_SW_AUDIO0_RX_HCTRL_DP1			0x000309C
-+#define ACP_SW_AUDIO0_RX_HCTRL_DP2			0x0003100
-+#define ACP_SW_AUDIO0_RX_HCTRL_DP3			0x0003104
-+#define ACP_SW_AUDIO0_RX_OFFSET_DP0			0x0003108
-+#define ACP_SW_AUDIO0_RX_OFFSET_DP1			0x000310C
-+#define ACP_SW_AUDIO0_RX_OFFSET_DP2			0x0003110
-+#define ACP_SW_AUDIO0_RX_OFFSET_DP3			0x0003114
-+#define ACP_SW_AUDIO0_RX_CHANNEL_ENABLE_DP0		0x0003118
-+#define ACP_SW_AUDIO0_RX_CHANNEL_ENABLE_DP1		0x000311C
-+#define ACP_SW_AUDIO0_RX_CHANNEL_ENABLE_DP2		0x0003120
-+#define ACP_SW_AUDIO0_RX_CHANNEL_ENABLE_DP3		0x0003124
-+#define ACP_SW_AUDIO1_RX_EN				0x0003128
-+#define ACP_SW_AUDIO1_RX_EN_STATUS			0x000312C
-+#define ACP_SW_AUDIO1_RX_FRAME_FORMAT			0x0003130
-+#define ACP_SW_AUDIO1_RX_SAMPLEINTERVAL			0x0003134
-+#define ACP_SW_AUDIO1_RX_HCTRL				0x0003138
-+#define ACP_SW_AUDIO1_RX_OFFSET				0x000313C
-+#define ACP_SW_AUDIO1_RX_CHANNEL_ENABLE_DP0		0x0003140
-+#define ACP_SW_AUDIO2_RX_EN				0x0003144
-+#define ACP_SW_AUDIO2_RX_EN_STATUS			0x0003148
-+#define ACP_SW_AUDIO2_RX_FRAME_FORMAT			0x000314C
-+#define ACP_SW_AUDIO2_RX_SAMPLEINTERVAL			0x0003150
-+#define ACP_SW_AUDIO2_RX_HCTRL				0x0003154
-+#define ACP_SW_AUDIO2_RX_OFFSET				0x0003158
-+#define ACP_SW_AUDIO2_RX_CHANNEL_ENABLE_DP0		0x000315C
-+#define ACP_SW_BPT_PORT_EN				0x0003160
-+#define ACP_SW_BPT_PORT_EN_STATUS			0x0003164
-+#define ACP_SW_BPT_PORT_FRAME_FORMAT			0x0003168
-+#define ACP_SW_BPT_PORT_SAMPLEINTERVAL			0x000316C
-+#define ACP_SW_BPT_PORT_HCTRL				0x0003170
-+#define ACP_SW_BPT_PORT_OFFSET				0x0003174
-+#define ACP_SW_BPT_PORT_CHANNEL_ENABLE			0x0003178
-+#define ACP_SW_BPT_PORT_FIRST_BYTE_ADDR			0x000317C
-+#define ACP_SW_CLK_RESUME_CTRL				0x0003180
-+#define ACP_SW_CLK_RESUME_DELAY_CNTR			0x0003184
-+#define ACP_SW_BUS_RESET_CTRL				0x0003188
-+#define ACP_SW_PRBS_ERR_STATUS				0x000318C
-+#define ACP_SW_IMM_CMD_UPPER_WORD			0x0003230
-+#define ACP_SW_IMM_CMD_LOWER_QWORD			0x0003234
-+#define ACP_SW_IMM_RESP_UPPER_WORD			0x0003238
-+#define ACP_SW_IMM_RESP_LOWER_QWORD			0x000323C
-+#define ACP_SW_IMM_CMD_STS				0x0003240
-+#define ACP_SW_BRA_BASE_ADDRESS				0x0003244
-+#define ACP_SW_BRA_TRANSFER_SIZE			0x0003248
-+#define ACP_SW_BRA_DMA_BUSY				0x000324C
-+#define ACP_SW_BRA_RESP					0x0003250
-+#define ACP_SW_BRA_RESP_FRAME_ADDR			0x0003254
-+#define ACP_SW_BRA_CURRENT_TRANSFER_SIZE		0x0003258
-+#define ACP_SW_STATE_CHANGE_STATUS_0TO7			0x000325C
-+#define ACP_SW_STATE_CHANGE_STATUS_8TO11		0x0003260
-+#define ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7		0x0003264
-+#define ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11		0x0003268
-+#define ACP_SW_CLK_FREQUENCY_CTRL			0x000326C
-+#define ACP_SW_ERROR_INTR_MASK				0x0003270
-+#define ACP_SW_PHY_TEST_MODE_DATA_OFF			0x0003274
-+
-+#define AMD_DELAY_LOOP_ITERATION			1000
-+#define AMD_SDW_DEFAULT_CLK_FREQ			12000000
-+#define AMD_SDW_RETRY_COUNT				1000
-+
-+#define AMD_SDW_MCP_RESP_ACK				BIT(0)
-+#define AMD_SDW_MCP_RESP_NACK				BIT(1)
-+#define AMD_SDW_MCP_RESP_RDATA				GENMASK(14, 7)
-+
-+#define AMD_SDW_MCP_CMD_SSP_TAG				BIT(31)
-+#define AMD_SDW_MCP_CMD_COMMAND				GENMASK(14, 12)
-+#define AMD_SDW_MCP_CMD_DEV_ADDR			GENMASK(11, 8)
-+#define AMD_SDW_MCP_CMD_REG_ADDR_HIGH			GENMASK(7, 0)
-+#define AMD_SDW_MCP_CMD_REG_ADDR_LOW			GENMASK(31, 24)
-+#define AMD_SDW_MCP_CMD_REG_DATA			GENMASK(14, 7)
-+#define AMD_SDW_MCP_SLAVE_STAT_0_3			GENMASK(14, 7)
-+#define AMD_SDW_MCP_SLAVE_STAT_4_11			GENMASK_ULL(39, 24)
-+#define AMD_SDW_MCP_SLAVE_STATUS_MASK			GENMASK(1, 0)
-+#define AMD_SDW_MCP_SLAVE_STATUS_BITS			GENMASK(3, 2)
-+#define AMD_SDW_MCP_SLAVE_STATUS_8TO_11			GENMASK_ULL(15, 0)
-+#define AMD_SDW_MCP_SLAVE_STATUS_VALID_MASK(x)		BIT(((x) * 4))
-+#define AMD_SDW_MCP_SLAVE_STAT_SHIFT_MASK(x)		(((x) * 4) + 1)
-+
-+#define AMD_SDW_MASTER_SUSPEND_DELAY_MS			2000
-+#define AMD_SDW_CLK_STOP_MAX_RETRY_COUNT		100
-+#define AMD_SDW_QUIRK_MASK_BUS_ENABLE			BIT(0)
-+
-+#define AMD_SDW_IMM_RES_VALID		1
-+#define AMD_SDW_IMM_CMD_BUSY		2
-+#define AMD_SDW_ENABLE			1
-+#define AMD_SDW_DISABLE			0
-+#define AMD_SDW_BUS_RESET_CLEAR_REQ	0
-+#define AMD_SDW_BUS_RESET_REQ		1
-+#define AMD_SDW_BUS_RESET_DONE		2
-+#define AMD_SDW_BUS_BASE_FREQ		24000000
-+
-+#define AMD_SDW0_EXT_INTR_MASK		0x200000
-+#define AMD_SDW1_EXT_INTR_MASK		4
-+#define AMD_SDW_IRQ_MASK_0TO7		0x77777777
-+#define AMD_SDW_IRQ_MASK_8TO11		0x000D7777
-+#define AMD_SDW_IRQ_ERROR_MASK		0xFF
-+#define AMD_SDW_MAX_FREQ_NUM		1
-+#define AMD_SDW0_MAX_TX_PORTS		3
-+#define AMD_SDW0_MAX_RX_PORTS		3
-+#define AMD_SDW1_MAX_TX_PORTS		1
-+#define AMD_SDW1_MAX_RX_PORTS		1
-+#define AMD_SDW0_MAX_DAI		6
-+#define AMD_SDW1_MAX_DAI		2
-+#define AMD_SDW_SLAVE_0_ATTACHED	5
-+#define AMD_SDW_SSP_COUNTER_VAL		3
-+
-+#define AMD_DPN_FRAME_FMT_PFM				GENMASK(1, 0)
-+#define AMD_DPN_FRAME_FMT_PDM				GENMASK(3, 2)
-+#define AMD_DPN_FRAME_FMT_BLK_PKG_MODE			BIT(4)
-+#define AMD_DPN_FRAME_FMT_BLK_GRP_CTRL			GENMASK(6, 5)
-+#define AMD_DPN_FRAME_FMT_WORD_LEN			GENMASK(12, 7)
-+#define AMD_DPN_FRAME_FMT_PCM_OR_PDM			BIT(13)
-+#define AMD_DPN_HCTRL_HSTOP				GENMASK(3, 0)
-+#define AMD_DPN_HCTRL_HSTART				GENMASK(7, 4)
-+#define AMD_DPN_OFFSET_CTRL_1				GENMASK(7, 0)
-+#define AMD_DPN_OFFSET_CTRL_2				GENMASK(15, 8)
-+#define AMD_DPN_CH_EN_LCTRL				GENMASK(2, 0)
-+#define AMD_DPN_CH_EN_CHMASK				GENMASK(10, 3)
-+#define AMD_SDW_STAT_MAX_RETRY_COUNT			100
-+#define AMD_SDW0_PAD_PULLDOWN_CTRL_ENABLE_MASK		0x7F9F
-+#define AMD_SDW1_PAD_PULLDOWN_CTRL_ENABLE_MASK		0x7FFA
-+#define AMD_SDW0_PAD_PULLDOWN_CTRL_DISABLE_MASK		0x60
-+#define AMD_SDW1_PAD_PULLDOWN_CTRL_DISABLE_MASK		5
-+#define AMD_SDW0_PAD_KEEPER_EN_MASK			1
-+#define AMD_SDW1_PAD_KEEPER_EN_MASK			0x10
-+#define AMD_SDW0_PAD_KEEPER_DISABLE_MASK		0x1E
-+#define AMD_SDW1_PAD_KEEPER_DISABLE_MASK		0xF
-+
-+enum amd_sdw_cmd_type {
-+	AMD_SDW_CMD_PING = 0,
-+	AMD_SDW_CMD_READ = 2,
-+	AMD_SDW_CMD_WRITE = 3,
-+};
-+
-+static u32 amd_sdw_freq_tbl[AMD_SDW_MAX_FREQ_NUM] = {
-+	AMD_SDW_DEFAULT_CLK_FREQ,
-+};
-+
-+struct sdw_manager_dp_reg {
-+	u32 frame_fmt_reg;
-+	u32 sample_int_reg;
-+	u32 hctrl_dp0_reg;
-+	u32 offset_reg;
-+	u32 lane_ctrl_ch_en_reg;
-+};
-+
-+static struct sdw_manager_dp_reg sdw0_manager_dp_reg[AMD_SDW0_MAX_DAI] =  {
-+	{ACP_SW_AUDIO0_TX_FRAME_FORMAT, ACP_SW_AUDIO0_TX_SAMPLEINTERVAL, ACP_SW_AUDIO0_TX_HCTRL_DP0,
-+	 ACP_SW_AUDIO0_TX_OFFSET_DP0, ACP_SW_AUDIO0_TX_CHANNEL_ENABLE_DP0},
-+	{ACP_SW_AUDIO1_TX_FRAME_FORMAT, ACP_SW_AUDIO1_TX_SAMPLEINTERVAL, ACP_SW_AUDIO1_TX_HCTRL,
-+	 ACP_SW_AUDIO1_TX_OFFSET, ACP_SW_AUDIO1_TX_CHANNEL_ENABLE_DP0},
-+	{ACP_SW_AUDIO2_TX_FRAME_FORMAT, ACP_SW_AUDIO2_TX_SAMPLEINTERVAL, ACP_SW_AUDIO2_TX_HCTRL,
-+	 ACP_SW_AUDIO2_TX_OFFSET, ACP_SW_AUDIO2_TX_CHANNEL_ENABLE_DP0},
-+	{ACP_SW_AUDIO0_RX_FRAME_FORMAT, ACP_SW_AUDIO0_RX_SAMPLEINTERVAL, ACP_SW_AUDIO0_RX_HCTRL_DP0,
-+	 ACP_SW_AUDIO0_RX_OFFSET_DP0, ACP_SW_AUDIO0_RX_CHANNEL_ENABLE_DP0},
-+	{ACP_SW_AUDIO1_RX_FRAME_FORMAT, ACP_SW_AUDIO1_RX_SAMPLEINTERVAL, ACP_SW_AUDIO1_RX_HCTRL,
-+	 ACP_SW_AUDIO1_RX_OFFSET, ACP_SW_AUDIO1_RX_CHANNEL_ENABLE_DP0},
-+	{ACP_SW_AUDIO2_RX_FRAME_FORMAT, ACP_SW_AUDIO2_RX_SAMPLEINTERVAL, ACP_SW_AUDIO2_RX_HCTRL,
-+	 ACP_SW_AUDIO2_RX_OFFSET, ACP_SW_AUDIO2_RX_CHANNEL_ENABLE_DP0},
-+};
-+
-+static struct sdw_manager_dp_reg sdw1_manager_dp_reg[AMD_SDW1_MAX_DAI] =  {
-+	{ACP_SW_AUDIO1_TX_FRAME_FORMAT, ACP_SW_AUDIO1_TX_SAMPLEINTERVAL, ACP_SW_AUDIO1_TX_HCTRL,
-+	 ACP_SW_AUDIO1_TX_OFFSET, ACP_SW_AUDIO1_TX_CHANNEL_ENABLE_DP0},
-+	{ACP_SW_AUDIO1_RX_FRAME_FORMAT, ACP_SW_AUDIO1_RX_SAMPLEINTERVAL, ACP_SW_AUDIO1_RX_HCTRL,
-+	 ACP_SW_AUDIO1_RX_OFFSET, ACP_SW_AUDIO1_RX_CHANNEL_ENABLE_DP0}
-+};
-+
-+static struct sdw_manager_reg_mask sdw_manager_reg_mask_array[2] =  {
-+	{
-+		AMD_SDW0_PAD_KEEPER_EN_MASK,
-+		AMD_SDW0_PAD_PULLDOWN_CTRL_ENABLE_MASK,
-+		AMD_SDW0_EXT_INTR_MASK
-+	},
-+	{
-+		AMD_SDW1_PAD_KEEPER_EN_MASK,
-+		AMD_SDW1_PAD_PULLDOWN_CTRL_ENABLE_MASK,
-+		AMD_SDW1_EXT_INTR_MASK
-+	}
-+};
-+
-+static inline u32 acp_reg_readl(void __iomem *base_addr)
-+{
-+	return readl(base_addr);
-+}
-+
-+static inline void acp_reg_writel(u32 val, void __iomem *base_addr)
-+{
-+	writel(val, base_addr);
-+}
-+#endif
+ static struct sdw_manager_dp_reg sdw0_manager_dp_reg[AMD_SDW0_MAX_DAI] =  {
+ 	{ACP_SW_AUDIO0_TX_FRAME_FORMAT, ACP_SW_AUDIO0_TX_SAMPLEINTERVAL, ACP_SW_AUDIO0_TX_HCTRL_DP0,
+ 	 ACP_SW_AUDIO0_TX_OFFSET_DP0, ACP_SW_AUDIO0_TX_CHANNEL_ENABLE_DP0},
 diff --git a/include/linux/soundwire/sdw_amd.h b/include/linux/soundwire/sdw_amd.h
-new file mode 100644
-index 000000000000..c14a291a40e8
---- /dev/null
+index c14a291a40e8..ac537419301d 100644
+--- a/include/linux/soundwire/sdw_amd.h
 +++ b/include/linux/soundwire/sdw_amd.h
-@@ -0,0 +1,67 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright (C) 2023 Advanced Micro Devices, Inc. All rights reserved.
-+ */
-+
-+#ifndef __SDW_AMD_H
-+#define __SDW_AMD_H
-+
-+#include <linux/soundwire/sdw.h>
-+
-+#define ACP_SDW0	0
-+#define ACP_SDW1	1
-+
-+struct acp_sdw_pdata {
-+	u16 instance;
-+	/* mutex to protect acp common register access */
-+	struct mutex *acp_sdw_lock;
-+};
-+
-+struct sdw_manager_reg_mask {
-+	u32 sw_pad_enable_mask;
-+	u32 sw_pad_pulldown_mask;
-+	u32 acp_sdw_intr_mask;
-+};
-+
+@@ -23,6 +23,21 @@ struct sdw_manager_reg_mask {
+ 	u32 acp_sdw_intr_mask;
+ };
+ 
 +/**
-+ * struct amd_sdw_manager - amd manager driver context
-+ * @bus: bus handle
-+ * @dev: linux device
-+ * @mmio: SoundWire registers mmio base
-+ * @acp_mmio: acp registers mmio base
-+ * @reg_mask: register mask structure per manager instance
-+ * @probe_work: SoundWire manager probe workqueue
-+ * @acp_sdw_lock: mutex to protect acp share register access
-+ * @num_din_ports: number of input ports
-+ * @num_dout_ports: number of output ports
-+ * @cols_index: Column index in frame shape
-+ * @rows_index: Rows index in frame shape
-+ * @instance: SoundWire manager instance
-+ * @quirks: SoundWire manager quirks
-+ * @wake_en_mask: wake enable mask per SoundWire manager
-+ * @power_mode_mask: flag interprets amd SoundWire manager power mode
++ * struct sdw_amd_dai_runtime: AMD sdw dai runtime  data
++ *
++ * @name: SoundWire stream name
++ * @stream: stream runtime
++ * @bus: Bus handle
++ * @stream_type: Stream type
 + */
-+struct amd_sdw_manager {
-+	struct sdw_bus bus;
-+	struct device *dev;
-+
-+	void __iomem *mmio;
-+	void __iomem *acp_mmio;
-+
-+	struct sdw_manager_reg_mask *reg_mask;
-+	struct work_struct probe_work;
-+	/* mutex to protect acp common register access */
-+	struct mutex *acp_sdw_lock;
-+
-+	int num_din_ports;
-+	int num_dout_ports;
-+
-+	int cols_index;
-+	int rows_index;
-+
-+	u32 instance;
-+	u32 quirks;
-+	u32 wake_en_mask;
-+	u32 power_mode_mask;
++struct sdw_amd_dai_runtime {
++	char *name;
++	struct sdw_stream_runtime *stream;
++	struct sdw_bus *bus;
++	enum sdw_stream_type stream_type;
 +};
-+#endif
++
+ /**
+  * struct amd_sdw_manager - amd manager driver context
+  * @bus: bus handle
+@@ -40,6 +55,7 @@ struct sdw_manager_reg_mask {
+  * @quirks: SoundWire manager quirks
+  * @wake_en_mask: wake enable mask per SoundWire manager
+  * @power_mode_mask: flag interprets amd SoundWire manager power mode
++ * @dai_runtime_array: dai runtime array
+  */
+ struct amd_sdw_manager {
+ 	struct sdw_bus bus;
+@@ -63,5 +79,7 @@ struct amd_sdw_manager {
+ 	u32 quirks;
+ 	u32 wake_en_mask;
+ 	u32 power_mode_mask;
++
++	struct sdw_amd_dai_runtime **dai_runtime_array;
+ };
+ #endif
 -- 
 2.34.1
 
