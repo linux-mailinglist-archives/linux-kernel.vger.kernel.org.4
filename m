@@ -2,166 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC976A89A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77E26A89BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjCBTnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
+        id S229971AbjCBTqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:46:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCBTnD (ORCPT
+        with ESMTP id S229480AbjCBTqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:43:03 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB14E10FE;
-        Thu,  2 Mar 2023 11:43:02 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so3911839pjb.1;
-        Thu, 02 Mar 2023 11:43:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XqgGCr3Y2hQqsVtgaOtDgK2Itfj2+UP+twnkCNai0cM=;
-        b=j+O/08s9jmfUCAMCfB8jGXd4RmvK3IS0rq4XnrCtdk8IvWSvCAGdq0bvGXadxvRZj2
-         l7i7Am/m06dl4up4n1MC8wdarKc92aoa4VrYUnP/5/w2H59pRsl3wk9o6+MNwI0TyHmZ
-         wSxght6cfzaDf62ZYwbT/Guf+RUH2Rp7jHEUexj95KgIZH8/QO8LAtSdVC6oGHDXA9/5
-         8mQup7l+XDewrf8Xk54Qe3w5Fj0mWsOVq0Tsz7NH0JQ8p3IgIfq2WoBNgoKzXtJCyuC7
-         2O3pvl0wX0tKq3t16drYxeUslXGzQUAAz9i0HhhDa7wfOcY8ribsapPELNR4/1DL7oMT
-         czlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XqgGCr3Y2hQqsVtgaOtDgK2Itfj2+UP+twnkCNai0cM=;
-        b=aFKVKkBZpZ+wf8JrHcmAhv9VPtm5D8RvfzlRlXovWpn/3YdVmaWPyViEI/5kW6fjiV
-         B9qoug+ZbYu+vNTtzLEoHG/J93wfAOMe92L8D2qllVbG+tkXx4JQZZy2f/47tGhINWqa
-         IGVWuibxazjdNShRxYFO0eROrDhkgEHagQS9M+XsERLNAHc5bUuhfeC784Il0WXdN5+q
-         Bg2ekAt/Sb3jAAXBfmr7EUNwD2aHuI6gfawHfbs3vIRQbdvAoaw4qgXaQvEfAA5J8GZG
-         LKQRk1AcgjlqU3DZfGDRj5ntixqB4MR160KqHA80RYqHmG9MeiielmVykAOR2vjqn3bo
-         E3pg==
-X-Gm-Message-State: AO0yUKXceu8Aj8NxQgPaCy3qfQRJ+Hl+uAKZOBeQvntlbSH1huIDMN8e
-        zXo/Z4ueEha2FYog8y0L5Gs=
-X-Google-Smtp-Source: AK7set/sZtsf3xPnv3Hffw0z40IesHhJQBrBrtqUL+usj73Y4HahnCy+FUxT7W32S9ShkwOacCYZmw==
-X-Received: by 2002:a05:6a20:12c5:b0:cd:40b4:bc75 with SMTP id v5-20020a056a2012c500b000cd40b4bc75mr14202674pzg.48.1677786182169;
-        Thu, 02 Mar 2023 11:43:02 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:7baa])
-        by smtp.gmail.com with ESMTPSA id c5-20020a62e805000000b005a7f8a326a3sm86794pfi.50.2023.03.02.11.43.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 11:43:01 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 2 Mar 2023 09:42:59 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, Dave Marchevsky <davemarchevsky@meta.com>,
-        David Vernet <void@manifault.com>,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: [PATCH v2 bpf-next] bpf: Make bpf_get_current_[ancestor_]cgroup_id()
- available for all program types
-Message-ID: <ZAD8QyoszMZiTzBY@slm.duckdns.org>
-References: <ZADx1NQBOGeImnrC@slm.duckdns.org>
+        Thu, 2 Mar 2023 14:46:42 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7E0168B5;
+        Thu,  2 Mar 2023 11:45:54 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 26D0D1251A42;
+        Thu,  2 Mar 2023 20:45:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1677786349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Lwk05NDKiJ+Dz6W3pRoHDF7STJZCibWKfIpahhJPNMM=;
+        b=wrIscrOk4++AgxbUBlJw/7I3xktNaykgyH2aH3nOVPsS29SXwg7Rmi/JXNohRoBq7eO5in
+        t5A4+BTFKDpRtjygREIlDGBzXwC7UY0btqWRGqvav1KqwrRdAfghtT7h1Sui48OKdgZOwz
+        uLzaJKgJ5s0Ld+Ywl3WUz/GHmJ3ZW0I=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
+        Stephane Eranian <eranian@google.com>,
+        Wyes Karny <wyes.karny@amd.com>
+Cc:     x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gautham.shenoy@amd.com,
+        ananth.narayan@amd.com,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Wyes Karny <wyes.karny@amd.com>
+Subject: Re: [RFC PATCH v2 0/2] Enable Core RAPL for AMD
+Date:   Thu, 02 Mar 2023 20:45:47 +0100
+Message-ID: <2670154.mvXUDI8C0e@natalenko.name>
+In-Reply-To: <20230301181449.14647-1-wyes.karny@amd.com>
+References: <20230301181449.14647-1-wyes.karny@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZADx1NQBOGeImnrC@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These helpers are safe to call from any context and there's no reason to
-restrict access to them. Remove them from bpf_trace and filter lists and add
-to bpf_base_func_proto() under perfmon_capable().
+Hello.
 
-v2: After consulting with Andrii, relocated in bpf_base_func_proto() so that
-    they require bpf_capable() but not perfomon_capable() as it doesn't read
-    from or affect others on the system.
+On st=C5=99eda 1. b=C5=99ezna 2023 19:14:47 CET Wyes Karny wrote:
+> This is v2 patch set for enabling per-core RAPL counters through
+> energy-cores event on RAPL PMU. Added RFC tag because a new patch is
+> added and this additional patch may need clarification from the
+> community.
+>=20
+> While enabling this support with v1 patch [1], Stephane reported an
+> issue where for the first reading of energy-cores event for every core was
+> invalid [2]. This issue is addressed with patch 1 of this series. There
+> is no change in patch 2.
+>=20
+> [1]: https://lore.kernel.org/lkml/20230217161354.129442-1-wyes.karny@amd.=
+com/
+> [2]: https://lore.kernel.org/lkml/CABPqkBQ_bSTC-OEe_LrgUrpj2VsseX1ThvO-yL=
+cEtF8vb4+AAw@mail.gmail.com/
+>=20
+> Change log:
+> v1 -> v2:
+> - Added new patch to fix the issue reported by Stephane
+> - Added RFC tag
+>=20
+> Wyes Karny (2):
+>   perf/x86/rapl: Fix energy-cores event
+>   perf/x86/rapl: Enable Core RAPL for AMD
+>=20
+>  arch/x86/events/rapl.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/cgroup.c      | 4 ----
- kernel/bpf/helpers.c     | 4 ++++
- kernel/trace/bpf_trace.c | 4 ----
- net/core/filter.c        | 6 ------
- 4 files changed, 4 insertions(+), 14 deletions(-)
+Since I was asked to re-test v2:
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index bf2fdb33fb31..a4ae422b8f12 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -2529,10 +2529,6 @@ cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_current_pid_tgid_proto;
- 	case BPF_FUNC_get_current_comm:
- 		return &bpf_get_current_comm_proto;
--	case BPF_FUNC_get_current_cgroup_id:
--		return &bpf_get_current_cgroup_id_proto;
--	case BPF_FUNC_get_current_ancestor_cgroup_id:
--		return &bpf_get_current_ancestor_cgroup_id_proto;
- #ifdef CONFIG_CGROUP_NET_CLASSID
- 	case BPF_FUNC_get_cgroup_classid:
- 		return &bpf_get_cgroup_classid_curr_proto;
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 49a2ab8eb0bb..d4e910fbbda9 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1693,6 +1693,10 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_cgrp_storage_get_proto;
- 	case BPF_FUNC_cgrp_storage_delete:
- 		return &bpf_cgrp_storage_delete_proto;
-+	case BPF_FUNC_get_current_cgroup_id:
-+		return &bpf_get_current_cgroup_id_proto;
-+	case BPF_FUNC_get_current_ancestor_cgroup_id:
-+		return &bpf_get_current_ancestor_cgroup_id_proto;
- #endif
- 	default:
- 		break;
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index c58baf9983cc..489942354a90 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1455,10 +1455,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		       NULL : &bpf_probe_read_compat_str_proto;
- #endif
- #ifdef CONFIG_CGROUPS
--	case BPF_FUNC_get_current_cgroup_id:
--		return &bpf_get_current_cgroup_id_proto;
--	case BPF_FUNC_get_current_ancestor_cgroup_id:
--		return &bpf_get_current_ancestor_cgroup_id_proto;
- 	case BPF_FUNC_cgrp_storage_get:
- 		return &bpf_cgrp_storage_get_proto;
- 	case BPF_FUNC_cgrp_storage_delete:
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 1d6f165923bf..0f2589ea70f3 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8144,12 +8144,6 @@ sk_msg_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_storage_delete_proto;
- 	case BPF_FUNC_get_netns_cookie:
- 		return &bpf_get_netns_cookie_sk_msg_proto;
--#ifdef CONFIG_CGROUPS
--	case BPF_FUNC_get_current_cgroup_id:
--		return &bpf_get_current_cgroup_id_proto;
--	case BPF_FUNC_get_current_ancestor_cgroup_id:
--		return &bpf_get_current_ancestor_cgroup_id_proto;
--#endif
- #ifdef CONFIG_CGROUP_NET_CLASSID
- 	case BPF_FUNC_get_cgroup_classid:
- 		return &bpf_get_cgroup_classid_curr_proto;
--- 
-2.39.2
+```
+$ sudo perf stat -a --per-core -C 0-15 -e power/energy-cores/ -- dd if=3D/d=
+ev/zero of=3D/dev/null bs=3D1M count=3D1000000
+1000000+0 records in
+1000000+0 records out
+1048576000000 bytes (1,0 TB, 977 GiB) copied, 17,0321 s, 61,6 GB/s
+
+Performance counter stats for 'system wide':
+
+S0-D0-C0              1               6,67 Joules power/energy-cores/
+S0-D0-C1              1             197,93 Joules power/energy-cores/
+S0-D0-C2              1              11,32 Joules power/energy-cores/
+S0-D0-C3              1              13,88 Joules power/energy-cores/
+S0-D0-C4              1              12,40 Joules power/energy-cores/
+S0-D0-C5              1               5,10 Joules power/energy-cores/
+S0-D0-C6              1               3,92 Joules power/energy-cores/
+S0-D0-C7              1               5,65 Joules power/energy-cores/
+S0-D0-C8              1               4,91 Joules power/energy-cores/
+S0-D0-C9              1              57,18 Joules power/energy-cores/
+S0-D0-C10             1             174,95 Joules power/energy-cores/
+S0-D0-C11             1               3,58 Joules power/energy-cores/
+S0-D0-C12             1               5,41 Joules power/energy-cores/
+S0-D0-C13             1               5,33 Joules power/energy-cores/
+S0-D0-C14             1               2,89 Joules power/energy-cores/
+S0-D0-C15             1               5,61 Joules power/energy-cores/
+
+17,034519241 seconds time elapsed
+```
+
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+
+Thanks.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
 
