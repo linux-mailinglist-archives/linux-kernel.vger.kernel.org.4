@@ -2,717 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C654C6A8CF4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CDC6A8CF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjCBXYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 18:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S229848AbjCBXZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 18:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjCBXYe (ORCPT
+        with ESMTP id S229482AbjCBXZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 18:24:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8139E1689A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:23:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677799427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lnx3/NVhevje7xRs6jQfMiw8eOmAu/z4kjbV7YxLpFU=;
-        b=K7wBrIGHXTNnFSKQN133ZGG7edabcBDAfPqewq1QjsUyvzqnKWamiZ4H46ZSmOitRnxpfZ
-        sjPHWEfzMZ0fvsEpUBMGJApJL5fPWBDfBk0/FSnLkqv/VyFiwR9QBrBc1ynx54+ZpzSd46
-        6veVwvWkPQYLiCBzT3evUmHgke6IAZM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-164-LSj61p7LPEmXn6HCBRDYYg-1; Thu, 02 Mar 2023 18:23:44 -0500
-X-MC-Unique: LSj61p7LPEmXn6HCBRDYYg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 2 Mar 2023 18:25:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00B434006
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:25:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2CE3811E6E;
-        Thu,  2 Mar 2023 23:23:43 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E03432166B26;
-        Thu,  2 Mar 2023 23:23:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230302231638.521280-1-dhowells@redhat.com>
-References: <20230302231638.521280-1-dhowells@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com, Vishal Moola <vishal.moola@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Paulo Alcantara <pc@cjr.nz>, Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Test patch to remove per-page dirty region tracking from afs
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <521670.1677799421.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 02 Mar 2023 23:23:41 +0000
-Message-ID: <521671.1677799421@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78702B815A6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 23:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13332C4339B;
+        Thu,  2 Mar 2023 23:25:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677799549;
+        bh=souZATXtXYX70l/pZZC0A+gYJ1Sr5C2ttdWcq7vgKAw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kl/4BH0M8Oa2YwvEgLlCyGXbKAzS4H7kVuvJ9+lVw1OHvKvMd0MtMHkmP6m6tkbQr
+         hyzYK2f7Nm9sobicyaf0sldvh+ue5+FN0jm/VZL6HudEjlxnzOoA5/370JW+1El2ri
+         p1hKHS6wkSJD9XfMwhB9Vk5bzFHA44ltt8x1C805GkPWCFRveFrvzsWXwW8lTT4cRz
+         8Cv0fWk+agzbjbKzKVAb7NS6rgQcA/NvugehwmC3otO+/xNdlzDQ1unFu5V0qQLwMJ
+         2A+Ap+R8vOKFh2IUBIxKk7XpSHVYrH4Kqj5ozAbQoelQTHIxrJqL+wjLVAVmdZ9Uzp
+         mIbutwItUPCSA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pXsJ0-00EVIG-R1;
+        Thu, 02 Mar 2023 23:25:46 +0000
+Date:   Thu, 02 Mar 2023 23:25:37 +0000
+Message-ID: <865ybizqfi.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Aristeu Rozanski <aris@redhat.com>,
+        Darren Hart <darren@os.amperecomputing.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Error reports at boot time in Ampere Altra machines since c733ebb7c
+In-Reply-To: <20230302201732.pwnhg46mum6st2bv@redhat.com>
+References: <20230302201732.pwnhg46mum6st2bv@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: aris@redhat.com, darren@os.amperecomputing.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
+On Thu, 02 Mar 2023 20:17:32 +0000,
+Aristeu Rozanski <aris@redhat.com> wrote:
+> 
+> Hi Marc,
+> 
+> Since c733ebb7cb67d ("irqchip/gic-v3-its: Reset each ITS's BASERn
+> register before probe"), Ampere Altra machines are reporting corrected
+> errors during boot:
+> 
+> 	[    0.294334] HEST: Table parsing has been initialized.
+> 	[    0.294397] sdei: SDEIv1.0 (0x0) detected in firmware.
+> 	[    0.299622] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 0
+> 	[    0.299626] {1}[Hardware Error]: event severity: recoverable
+> 	[    0.299629] {1}[Hardware Error]:  Error 0, type: recoverable
+> 	[    0.299633] {1}[Hardware Error]:   section type: unknown, e8ed898d-df16-43cc-8ecc-54f060ef157f
+> 	[    0.299638] {1}[Hardware Error]:   section length: 0x30
+> 	[    0.299645] {1}[Hardware Error]:   00000000: 00000005 ec30000e 00080110 80001001  ......0.........
+> 	[    0.299648] {1}[Hardware Error]:   00000010: 00000300 00000000 00000000 00000000  ................
+> 	[    0.299650] {1}[Hardware Error]:   00000020: 00000000 00000000 00000000 00000000  ................
+> 	[    0.299714] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 3
+> 	[    0.299716] {2}[Hardware Error]: event severity: recoverable
+> 	[    0.299717] {2}[Hardware Error]:  Error 0, type: recoverable
+> 	[    0.299718] {2}[Hardware Error]:   section type: unknown, e8ed898d-df16-43cc-8ecc-54f060ef157f
+> 	[    0.299720] {2}[Hardware Error]:   section length: 0x30
+> 	[    0.299722] {2}[Hardware Error]:   00000000: 40000005 ec30000e 00080110 80005001  ...@..0......P..
+> 	[    0.299724] {2}[Hardware Error]:   00000010: 00000300 00000000 00000000 00000000  ................
+> 	[    0.299726] {2}[Hardware Error]:   00000020: 00000000 00000000 00000000 00000000  ................
+> 	[    0.299912] GHES: APEI firmware first mode is enabled by APEI bit.
+> 
+> Because the errors are being reported later in boot, it's hard to
+> pinpoint exactly what's causing it without decoding the error information,
+> which I currently don't know how to do it.
 
-> AFS firstly. ...
-> =
++ Darren
 
->   Base + Page-dirty-region removed:
-> 	WRITE: bw=3D301MiB/s (315MB/s), 70.4MiB/s-80.2MiB/s (73.8MB/s-84.1MB/s)
-> 	WRITE: bw=3D325MiB/s (341MB/s), 78.5MiB/s-87.1MiB/s (82.3MB/s-91.3MB/s)
-> 	WRITE: bw=3D320MiB/s (335MB/s), 71.6MiB/s-88.6MiB/s (75.0MB/s-92.9MB/s)
+Hopefully someone at Ampere can decode this and tell us what is happening.
 
-Here's a patch to remove the use of page->private data to track the dirty =
-part
-of a page from afs.
+> There're no problems other than of course triggering tests because of
+> the warnings.
 
-David
----
- fs/afs/file.c              |   68 ----------------
- fs/afs/internal.h          |   56 -------------
- fs/afs/write.c             |  187 +++++++++------------------------------=
-------
- fs/cifs/file.c             |    1 =
+It says "Hardware Error". In my book, that's pretty bad. Do you see
+this on more than a single machine?
 
- include/trace/events/afs.h |   14 ---
- 5 files changed, 45 insertions(+), 281 deletions(-)
+> Do you know what's going on here?
 
-diff --git a/fs/afs/file.c b/fs/afs/file.c
-index 68d6d5dc608d..a2f3316fa174 100644
---- a/fs/afs/file.c
-+++ b/fs/afs/file.c
-@@ -402,80 +402,18 @@ int afs_write_inode(struct inode *inode, struct writ=
-eback_control *wbc)
- 	return 0;
- }
- =
+No idea. I haven't seen this on the Altra I have access to so far,
 
--/*
-- * Adjust the dirty region of the page on truncation or full invalidation=
-,
-- * getting rid of the markers altogether if the region is entirely invali=
-dated.
-- */
--static void afs_invalidate_dirty(struct folio *folio, size_t offset,
--				 size_t length)
--{
--	struct afs_vnode *vnode =3D AFS_FS_I(folio_inode(folio));
--	unsigned long priv;
--	unsigned int f, t, end =3D offset + length;
--
--	priv =3D (unsigned long)folio_get_private(folio);
--
--	/* we clean up only if the entire page is being invalidated */
--	if (offset =3D=3D 0 && length =3D=3D folio_size(folio))
--		goto full_invalidate;
--
--	 /* If the page was dirtied by page_mkwrite(), the PTE stays writable
--	  * and we don't get another notification to tell us to expand it
--	  * again.
--	  */
--	if (afs_is_folio_dirty_mmapped(priv))
--		return;
--
--	/* We may need to shorten the dirty region */
--	f =3D afs_folio_dirty_from(folio, priv);
--	t =3D afs_folio_dirty_to(folio, priv);
--
--	if (t <=3D offset || f >=3D end)
--		return; /* Doesn't overlap */
--
--	if (f < offset && t > end)
--		return; /* Splits the dirty region - just absorb it */
--
--	if (f >=3D offset && t <=3D end)
--		goto undirty;
--
--	if (f < offset)
--		t =3D offset;
--	else
--		f =3D end;
--	if (f =3D=3D t)
--		goto undirty;
--
--	priv =3D afs_folio_dirty(folio, f, t);
--	folio_change_private(folio, (void *)priv);
--	trace_afs_folio_dirty(vnode, tracepoint_string("trunc"), folio);
--	return;
--
--undirty:
--	trace_afs_folio_dirty(vnode, tracepoint_string("undirty"), folio);
--	folio_clear_dirty_for_io(folio);
--full_invalidate:
--	trace_afs_folio_dirty(vnode, tracepoint_string("inval"), folio);
--	folio_detach_private(folio);
--}
--
- /*
-  * invalidate part or all of a page
-  * - release a page and clean up its private data if offset is 0 (indicat=
-ing
-  *   the entire page)
-  */
- static void afs_invalidate_folio(struct folio *folio, size_t offset,
--			       size_t length)
-+				 size_t length)
- {
--	_enter("{%lu},%zu,%zu", folio->index, offset, length);
--
--	BUG_ON(!folio_test_locked(folio));
--
--	if (folio_get_private(folio))
--		afs_invalidate_dirty(folio, offset, length);
-+	struct afs_vnode *vnode =3D AFS_FS_I(folio_inode(folio));
- =
+It could be related to firmware and/or things like power management,
+but again, someone needs to help us with the error report above.
 
-+	trace_afs_folio_dirty(vnode, tracepoint_string("inval"), folio);
- 	folio_wait_fscache(folio);
--	_leave("");
- }
- =
+Thanks,
 
- /*
-diff --git a/fs/afs/internal.h b/fs/afs/internal.h
-index ad8523d0d038..90d66b20ca8c 100644
---- a/fs/afs/internal.h
-+++ b/fs/afs/internal.h
-@@ -890,62 +890,6 @@ static inline void afs_invalidate_cache(struct afs_vn=
-ode *vnode, unsigned int fl
- 			   i_size_read(&vnode->netfs.inode), flags);
- }
- =
+	M.
 
--/*
-- * We use folio->private to hold the amount of the folio that we've writt=
-en to,
-- * splitting the field into two parts.  However, we need to represent a r=
-ange
-- * 0...FOLIO_SIZE, so we reduce the resolution if the size of the folio
-- * exceeds what we can encode.
-- */
--#ifdef CONFIG_64BIT
--#define __AFS_FOLIO_PRIV_MASK		0x7fffffffUL
--#define __AFS_FOLIO_PRIV_SHIFT		32
--#define __AFS_FOLIO_PRIV_MMAPPED	0x80000000UL
--#else
--#define __AFS_FOLIO_PRIV_MASK		0x7fffUL
--#define __AFS_FOLIO_PRIV_SHIFT		16
--#define __AFS_FOLIO_PRIV_MMAPPED	0x8000UL
--#endif
--
--static inline unsigned int afs_folio_dirty_resolution(struct folio *folio=
-)
--{
--	int shift =3D folio_shift(folio) - (__AFS_FOLIO_PRIV_SHIFT - 1);
--	return (shift > 0) ? shift : 0;
--}
--
--static inline size_t afs_folio_dirty_from(struct folio *folio, unsigned l=
-ong priv)
--{
--	unsigned long x =3D priv & __AFS_FOLIO_PRIV_MASK;
--
--	/* The lower bound is inclusive */
--	return x << afs_folio_dirty_resolution(folio);
--}
--
--static inline size_t afs_folio_dirty_to(struct folio *folio, unsigned lon=
-g priv)
--{
--	unsigned long x =3D (priv >> __AFS_FOLIO_PRIV_SHIFT) & __AFS_FOLIO_PRIV_=
-MASK;
--
--	/* The upper bound is immediately beyond the region */
--	return (x + 1) << afs_folio_dirty_resolution(folio);
--}
--
--static inline unsigned long afs_folio_dirty(struct folio *folio, size_t f=
-rom, size_t to)
--{
--	unsigned int res =3D afs_folio_dirty_resolution(folio);
--	from >>=3D res;
--	to =3D (to - 1) >> res;
--	return (to << __AFS_FOLIO_PRIV_SHIFT) | from;
--}
--
--static inline unsigned long afs_folio_dirty_mmapped(unsigned long priv)
--{
--	return priv | __AFS_FOLIO_PRIV_MMAPPED;
--}
--
--static inline bool afs_is_folio_dirty_mmapped(unsigned long priv)
--{
--	return priv & __AFS_FOLIO_PRIV_MMAPPED;
--}
--
- #include <trace/events/afs.h>
- =
-
- /************************************************************************=
-*****/
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 571f3b9a417e..d2f6623c8eab 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -14,11 +14,6 @@
- #include <linux/netfs.h>
- #include "internal.h"
- =
-
--static int afs_writepages_region(struct address_space *mapping,
--				 struct writeback_control *wbc,
--				 loff_t start, loff_t end, loff_t *_next,
--				 bool max_one_loop);
--
- static void afs_write_to_cache(struct afs_vnode *vnode, loff_t start, siz=
-e_t len,
- 			       loff_t i_size, bool caching);
- =
-
-@@ -43,25 +38,6 @@ static void afs_folio_start_fscache(bool caching, struc=
-t folio *folio)
- }
- #endif
- =
-
--/*
-- * Flush out a conflicting write.  This may extend the write to the surro=
-unding
-- * pages if also dirty and contiguous to the conflicting region..
-- */
--static int afs_flush_conflicting_write(struct address_space *mapping,
--				       struct folio *folio)
--{
--	struct writeback_control wbc =3D {
--		.sync_mode	=3D WB_SYNC_ALL,
--		.nr_to_write	=3D LONG_MAX,
--		.range_start	=3D folio_pos(folio),
--		.range_end	=3D LLONG_MAX,
--	};
--	loff_t next;
--
--	return afs_writepages_region(mapping, &wbc, folio_pos(folio), LLONG_MAX,
--				     &next, true);
--}
--
- /*
-  * prepare to perform part of a write to a page
-  */
-@@ -71,10 +47,6 @@ int afs_write_begin(struct file *file, struct address_s=
-pace *mapping,
- {
- 	struct afs_vnode *vnode =3D AFS_FS_I(file_inode(file));
- 	struct folio *folio;
--	unsigned long priv;
--	unsigned f, from;
--	unsigned t, to;
--	pgoff_t index;
- 	int ret;
- =
-
- 	_enter("{%llx:%llu},%llx,%x",
-@@ -88,49 +60,17 @@ int afs_write_begin(struct file *file, struct address_=
-space *mapping,
- 	if (ret < 0)
- 		return ret;
- =
-
--	index =3D folio_index(folio);
--	from =3D pos - index * PAGE_SIZE;
--	to =3D from + len;
--
- try_again:
--	/* See if this page is already partially written in a way that we can
--	 * merge the new write with.
--	 */
--	if (folio_test_private(folio)) {
--		priv =3D (unsigned long)folio_get_private(folio);
--		f =3D afs_folio_dirty_from(folio, priv);
--		t =3D afs_folio_dirty_to(folio, priv);
--		ASSERTCMP(f, <=3D, t);
--
--		if (folio_test_writeback(folio)) {
--			trace_afs_folio_dirty(vnode, tracepoint_string("alrdy"), folio);
--			folio_unlock(folio);
--			goto wait_for_writeback;
--		}
--		/* If the file is being filled locally, allow inter-write
--		 * spaces to be merged into writes.  If it's not, only write
--		 * back what the user gives us.
--		 */
--		if (!test_bit(AFS_VNODE_NEW_CONTENT, &vnode->flags) &&
--		    (to < f || from > t))
--			goto flush_conflicting_write;
-+	if (folio_test_writeback(folio)) {
-+		trace_afs_folio_dirty(vnode, tracepoint_string("alrdy"), folio);
-+		folio_unlock(folio);
-+		goto wait_for_writeback;
- 	}
- =
-
- 	*_page =3D folio_file_page(folio, pos / PAGE_SIZE);
- 	_leave(" =3D 0");
- 	return 0;
- =
-
--	/* The previous write and this write aren't adjacent or overlapping, so
--	 * flush the page out.
--	 */
--flush_conflicting_write:
--	trace_afs_folio_dirty(vnode, tracepoint_string("confl"), folio);
--	folio_unlock(folio);
--
--	ret =3D afs_flush_conflicting_write(mapping, folio);
--	if (ret < 0)
--		goto error;
--
- wait_for_writeback:
- 	ret =3D folio_wait_writeback_killable(folio);
- 	if (ret < 0)
-@@ -156,9 +96,6 @@ int afs_write_end(struct file *file, struct address_spa=
-ce *mapping,
- {
- 	struct folio *folio =3D page_folio(subpage);
- 	struct afs_vnode *vnode =3D AFS_FS_I(file_inode(file));
--	unsigned long priv;
--	unsigned int f, from =3D offset_in_folio(folio, pos);
--	unsigned int t, to =3D from + copied;
- 	loff_t i_size, write_end_pos;
- =
-
- 	_enter("{%llx:%llu},{%lx}",
-@@ -188,25 +125,10 @@ int afs_write_end(struct file *file, struct address_=
-space *mapping,
- 		fscache_update_cookie(afs_vnode_cache(vnode), NULL, &write_end_pos);
- 	}
- =
-
--	if (folio_test_private(folio)) {
--		priv =3D (unsigned long)folio_get_private(folio);
--		f =3D afs_folio_dirty_from(folio, priv);
--		t =3D afs_folio_dirty_to(folio, priv);
--		if (from < f)
--			f =3D from;
--		if (to > t)
--			t =3D to;
--		priv =3D afs_folio_dirty(folio, f, t);
--		folio_change_private(folio, (void *)priv);
--		trace_afs_folio_dirty(vnode, tracepoint_string("dirty+"), folio);
--	} else {
--		priv =3D afs_folio_dirty(folio, from, to);
--		folio_attach_private(folio, (void *)priv);
--		trace_afs_folio_dirty(vnode, tracepoint_string("dirty"), folio);
--	}
--
- 	if (folio_mark_dirty(folio))
--		_debug("dirtied %lx", folio_index(folio));
-+		trace_afs_folio_dirty(vnode, tracepoint_string("dirty"), folio);
-+	else
-+		trace_afs_folio_dirty(vnode, tracepoint_string("dirty+"), folio);
- =
-
- out:
- 	folio_unlock(folio);
-@@ -465,18 +387,16 @@ static void afs_extend_writeback(struct address_spac=
-e *mapping,
- 				 bool caching,
- 				 unsigned int *_len)
- {
--	struct pagevec pvec;
-+	struct folio_batch batch;
- 	struct folio *folio;
--	unsigned long priv;
--	unsigned int psize, filler =3D 0;
--	unsigned int f, t;
-+	size_t psize;
- 	loff_t len =3D *_len;
- 	pgoff_t index =3D (start + len) / PAGE_SIZE;
- 	bool stop =3D true;
- 	unsigned int i;
--
- 	XA_STATE(xas, &mapping->i_pages, index);
--	pagevec_init(&pvec);
-+
-+	folio_batch_init(&batch);
- =
-
- 	do {
- 		/* Firstly, we gather up a batch of contiguous dirty pages
-@@ -493,7 +413,6 @@ static void afs_extend_writeback(struct address_space =
-*mapping,
- 				break;
- 			if (folio_index(folio) !=3D index)
- 				break;
--
- 			if (!folio_try_get_rcu(folio)) {
- 				xas_reset(&xas);
- 				continue;
-@@ -518,24 +437,13 @@ static void afs_extend_writeback(struct address_spac=
-e *mapping,
- 			}
- =
-
- 			psize =3D folio_size(folio);
--			priv =3D (unsigned long)folio_get_private(folio);
--			f =3D afs_folio_dirty_from(folio, priv);
--			t =3D afs_folio_dirty_to(folio, priv);
--			if (f !=3D 0 && !new_content) {
--				folio_unlock(folio);
--				folio_put(folio);
--				break;
--			}
--
--			len +=3D filler + t;
--			filler =3D psize - t;
-+			len +=3D psize;
-+			stop =3D false;
- 			if (len >=3D max_len || *_count <=3D 0)
- 				stop =3D true;
--			else if (t =3D=3D psize || new_content)
--				stop =3D false;
- =
-
- 			index +=3D folio_nr_pages(folio);
--			if (!pagevec_add(&pvec, &folio->page))
-+			if (!folio_batch_add(&batch, folio))
- 				break;
- 			if (stop)
- 				break;
-@@ -548,11 +456,11 @@ static void afs_extend_writeback(struct address_spac=
-e *mapping,
- 		/* Now, if we obtained any pages, we can shift them to being
- 		 * writable and mark them for caching.
- 		 */
--		if (!pagevec_count(&pvec))
-+		if (!folio_batch_count(&batch))
- 			break;
- =
-
--		for (i =3D 0; i < pagevec_count(&pvec); i++) {
--			folio =3D page_folio(pvec.pages[i]);
-+		for (i =3D 0; i < folio_batch_count(&batch); i++) {
-+			folio =3D batch.folios[i];
- 			trace_afs_folio_dirty(vnode, tracepoint_string("store+"), folio);
- =
-
- 			if (!folio_clear_dirty_for_io(folio))
-@@ -565,7 +473,7 @@ static void afs_extend_writeback(struct address_space =
-*mapping,
- 			folio_unlock(folio);
- 		}
- =
-
--		pagevec_release(&pvec);
-+		folio_batch_release(&batch);
- 		cond_resched();
- 	} while (!stop);
- =
-
-@@ -583,8 +491,7 @@ static ssize_t afs_write_back_from_locked_folio(struct=
- address_space *mapping,
- {
- 	struct afs_vnode *vnode =3D AFS_FS_I(mapping->host);
- 	struct iov_iter iter;
--	unsigned long priv;
--	unsigned int offset, to, len, max_len;
-+	unsigned int len, max_len;
- 	loff_t i_size =3D i_size_read(&vnode->netfs.inode);
- 	bool new_content =3D test_bit(AFS_VNODE_NEW_CONTENT, &vnode->flags);
- 	bool caching =3D fscache_cookie_enabled(afs_vnode_cache(vnode));
-@@ -599,18 +506,14 @@ static ssize_t afs_write_back_from_locked_folio(stru=
-ct address_space *mapping,
- =
-
- 	count -=3D folio_nr_pages(folio);
- =
-
--	/* Find all consecutive lockable dirty pages that have contiguous
--	 * written regions, stopping when we find a page that is not
--	 * immediately lockable, is not dirty or is missing, or we reach the
--	 * end of the range.
-+	/* Find all consecutive lockable dirty pages, stopping when we find a
-+	 * page that is not immediately lockable, is not dirty or is missing,
-+	 * or we reach the end of the range.
- 	 */
--	priv =3D (unsigned long)folio_get_private(folio);
--	offset =3D afs_folio_dirty_from(folio, priv);
--	to =3D afs_folio_dirty_to(folio, priv);
- 	trace_afs_folio_dirty(vnode, tracepoint_string("store"), folio);
- =
-
--	len =3D to - offset;
--	start +=3D offset;
-+	len =3D folio_size(folio);
-+	start =3D folio_pos(folio);
- 	if (start < i_size) {
- 		/* Trim the write to the EOF; the extra data is ignored.  Also
- 		 * put an upper limit on the size of a single storedata op.
-@@ -619,8 +522,7 @@ static ssize_t afs_write_back_from_locked_folio(struct=
- address_space *mapping,
- 		max_len =3D min_t(unsigned long long, max_len, end - start + 1);
- 		max_len =3D min_t(unsigned long long, max_len, i_size - start);
- =
-
--		if (len < max_len &&
--		    (to =3D=3D folio_size(folio) || new_content))
-+		if (len < max_len)
- 			afs_extend_writeback(mapping, vnode, &count,
- 					     start, max_len, new_content,
- 					     caching, &len);
-@@ -909,7 +811,6 @@ vm_fault_t afs_page_mkwrite(struct vm_fault *vmf)
- 	struct inode *inode =3D file_inode(file);
- 	struct afs_vnode *vnode =3D AFS_FS_I(inode);
- 	struct afs_file *af =3D file->private_data;
--	unsigned long priv;
- 	vm_fault_t ret =3D VM_FAULT_RETRY;
- =
-
- 	_enter("{{%llx:%llu}},{%lx}", vnode->fid.vid, vnode->fid.vnode, folio_in=
-dex(folio));
-@@ -942,15 +843,7 @@ vm_fault_t afs_page_mkwrite(struct vm_fault *vmf)
- 		goto out;
- 	}
- =
-
--	priv =3D afs_folio_dirty(folio, 0, folio_size(folio));
--	priv =3D afs_folio_dirty_mmapped(priv);
--	if (folio_test_private(folio)) {
--		folio_change_private(folio, (void *)priv);
--		trace_afs_folio_dirty(vnode, tracepoint_string("mkwrite+"), folio);
--	} else {
--		folio_attach_private(folio, (void *)priv);
--		trace_afs_folio_dirty(vnode, tracepoint_string("mkwrite"), folio);
--	}
-+	trace_afs_folio_dirty(vnode, tracepoint_string("mkwrite"), folio);
- 	file_update_time(file);
- =
-
- 	ret =3D VM_FAULT_LOCKED;
-@@ -992,33 +885,33 @@ void afs_prune_wb_keys(struct afs_vnode *vnode)
-  */
- int afs_launder_folio(struct folio *folio)
- {
--	struct afs_vnode *vnode =3D AFS_FS_I(folio_inode(folio));
-+	struct inode *inode =3D folio_inode(folio);
-+	struct afs_vnode *vnode =3D AFS_FS_I(inode);
- 	struct iov_iter iter;
- 	struct bio_vec bv;
--	unsigned long priv;
--	unsigned int f, t;
- 	int ret =3D 0;
- =
-
- 	_enter("{%lx}", folio->index);
- =
-
--	priv =3D (unsigned long)folio_get_private(folio);
- 	if (folio_clear_dirty_for_io(folio)) {
--		f =3D 0;
--		t =3D folio_size(folio);
--		if (folio_test_private(folio)) {
--			f =3D afs_folio_dirty_from(folio, priv);
--			t =3D afs_folio_dirty_to(folio, priv);
--		}
-+		unsigned long long i_size =3D i_size_read(inode);
-+		unsigned long long pos =3D folio_pos(folio);
-+		size_t size =3D folio_size(folio);
- =
-
--		bvec_set_folio(&bv, folio, t - f, f);
--		iov_iter_bvec(&iter, ITER_SOURCE, &bv, 1, bv.bv_len);
-+		if (pos >=3D i_size)
-+			goto out;
-+		if (i_size - pos < size)
-+			size =3D i_size - pos;
-+		=
-
-+		bvec_set_folio(&bv, folio, size, 0);
-+		iov_iter_bvec(&iter, ITER_SOURCE, &bv, 1, size);
- =
-
- 		trace_afs_folio_dirty(vnode, tracepoint_string("launder"), folio);
--		ret =3D afs_store_data(vnode, &iter, folio_pos(folio) + f, true);
-+		ret =3D afs_store_data(vnode, &iter, pos, true);
- 	}
- =
-
-+out:
- 	trace_afs_folio_dirty(vnode, tracepoint_string("laundered"), folio);
--	folio_detach_private(folio);
- 	folio_wait_fscache(folio);
- 	return ret;
- }
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 4d4a2d82636d..3d304d4a54d6 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -2674,7 +2674,6 @@ static void cifs_extend_writeback(struct address_spa=
-ce *mapping,
- 				break;
- 			}
- =
-
--			max_pages -=3D nr_pages;
- 			psize =3D folio_size(folio);
- 			len +=3D psize;
- 			stop =3D false;
-diff --git a/include/trace/events/afs.h b/include/trace/events/afs.h
-index e9d412d19dbb..4540aa801edd 100644
---- a/include/trace/events/afs.h
-+++ b/include/trace/events/afs.h
-@@ -1025,26 +1025,16 @@ TRACE_EVENT(afs_folio_dirty,
- 		    __field(struct afs_vnode *,		vnode		)
- 		    __field(const char *,		where		)
- 		    __field(pgoff_t,			index		)
--		    __field(unsigned long,		from		)
--		    __field(unsigned long,		to		)
- 			     ),
- =
-
- 	    TP_fast_assign(
--		    unsigned long priv =3D (unsigned long)folio_get_private(folio);
- 		    __entry->vnode =3D vnode;
- 		    __entry->where =3D where;
- 		    __entry->index =3D folio_index(folio);
--		    __entry->from  =3D afs_folio_dirty_from(folio, priv);
--		    __entry->to    =3D afs_folio_dirty_to(folio, priv);
--		    __entry->to   |=3D (afs_is_folio_dirty_mmapped(priv) ?
--				      (1UL << (BITS_PER_LONG - 1)) : 0);
- 			   ),
- =
-
--	    TP_printk("vn=3D%p %lx %s %lx-%lx%s",
--		      __entry->vnode, __entry->index, __entry->where,
--		      __entry->from,
--		      __entry->to & ~(1UL << (BITS_PER_LONG - 1)),
--		      __entry->to & (1UL << (BITS_PER_LONG - 1)) ? " M" : "")
-+	    TP_printk("vn=3D%p %lx %s",
-+		      __entry->vnode, __entry->index, __entry->where)
- 	    );
- =
-
- TRACE_EVENT(afs_call_state,
-
+-- 
+Without deviation from the norm, progress is not possible.
