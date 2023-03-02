@@ -2,125 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8346A7880
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 01:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6406A7881
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 01:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjCBAxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 19:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S229667AbjCBAyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 19:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCBAxJ (ORCPT
+        with ESMTP id S229445AbjCBAyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 19:53:09 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD3412F0A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 16:53:08 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m3-20020a17090ade0300b00229eec90a7fso2428271pjv.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 16:53:08 -0800 (PST)
+        Wed, 1 Mar 2023 19:54:06 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B491ACDD
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 16:54:03 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so1095125pjp.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 16:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GwrMZ5I3T6uRzM3A6umaOXwCbm8OAAi/5ZzWIFWyy2o=;
-        b=c0q7KpplWoYrLdb1E4hjrHNFSpijbfkD5k4sqqT0x4LldOcDkUJpwG3TRM+7p1tWTy
-         glH165cj6R4HZrDQAvGxHhBjAEutnAdw4S9yow/04ImQ5hd8QKlb4D3JBGtF3er+DAde
-         LEn4oJEqbkMbt9WYfN94xXss9xMZjFQb8QK8U=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1p7gLBnjTY2NzqqDfZ3+sK3ELM0whxNqoGWgGrbWZok=;
+        b=dIuwnaIQ2bBUUz2optFpHImdgLTXLjc71Pyskqyty88uSV5WuiXl4EF6AzbQz/NvDA
+         bnewBQ8MDcrZ3ZNu5L92lqAmIdJYxFkE39GdDnGIB1WAuljQTRNHcNkW6Ug1O76YUDIq
+         ii9cc5JIQNsExXmUEy6NT3bGWAn0vrvp6IUyDQHQGe9STLpLDGrPNztuq+gJuPBVf1sW
+         knhPQtyF1OhCU9vVlwi3oypfLyPDcxoNZW9OvJANM9vYeephCdst1w6i6OPbiK24p0Ye
+         WpobOonjOm828sKMocXSeQ/i3h3VC8YHc62eF6VDSwVoPyhmf1FldFlcNVZEtveAyPgR
+         b4eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GwrMZ5I3T6uRzM3A6umaOXwCbm8OAAi/5ZzWIFWyy2o=;
-        b=2wGeS41JQgwHxZGODY2i+6l1SzQ16CfnPtyJF1+isLBdegRZYMWlm6q9pmsnfBEnAk
-         tQVtx2kaQBV3+UZ9kLMNfR0M0RG1shWRlBX6ajqc1s+VadRm5fkhPqb+UtT6d776F5Tl
-         Q4GuYgB6xNh9crdXXjbeXMlegsgCMkE1jo2tXsY12ElfatNZt6+FSdhul1O+kN12AqjF
-         4C92ZMDoIB2h5X+tI88yG1Ddqq/dKjAb9kI5ESfY6c7j1lk7uGsJdq6h8IACYEmlO95d
-         hY1hJ4OmdztYrxNjWXksONZI0AVqZk/VyI2vuI3sxK/pGL2aJCkE7ny1ge4HKXrrj5rN
-         b5IQ==
-X-Gm-Message-State: AO0yUKW2dpzRV/ujKnQ7LF/TVq3/8DvoHyNa6ybLWvBVId/tjD3Q4+DN
-        aZNoXDy4qqSjaJXUgyINUnDHmHKFqlrlh19b
-X-Google-Smtp-Source: AK7set/izjfhBX+baQBD+A+keogk0r5KJ+0emXgJ8WYMdRTSYVl2r0bX24AaK4s6QlLzF6TZw0QMRw==
-X-Received: by 2002:a17:902:f7c2:b0:19a:b588:6fe2 with SMTP id h2-20020a170902f7c200b0019ab5886fe2mr309199plw.13.1677718387837;
-        Wed, 01 Mar 2023 16:53:07 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id w5-20020a170902d70500b0019d397b0effsm5731347ply.270.2023.03.01.16.53.05
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1p7gLBnjTY2NzqqDfZ3+sK3ELM0whxNqoGWgGrbWZok=;
+        b=QJ/iMsHQ0GECY/CQd0iKQPljmLnH1owvixsUdH6WqytKFVJl79d610IBLyiZ5qUwnI
+         vhZBpAs1v6jVqZy0UkOKQNRS9xAUQ7FvW9eOdkrhdusnfndlAtJn/qda7pNfWTNQ/O+r
+         tMgcViuORtwYipTUGk6bNPErsCFpcJI/UTeGeExfA1Trg0BYZUQJVyUKS8qj2ID62b90
+         c2o4si50UsH/5bgUGbW0VtuRaJ+PU95/gHC+Xp0x8qS78GvrEb6YzZ6QxjgMpmAvQ6gv
+         93HtV5q1s6q1i1JoK/MbliL3E6uCMJARp8Ezs0i8zOOmfGGpgf2VVbokxk0wziJL6dE2
+         1MCg==
+X-Gm-Message-State: AO0yUKXE8tsmCZP5TCS3qncJNm5kdoZ7Q3pa4+BDAkHiJ0wNo4VLjHOF
+        8EcuxIeZuBISS2MZcYvo/6k=
+X-Google-Smtp-Source: AK7set9xYz9SPyOCt7tLgYDSF/C0yAQqSuW6dLV1Fq6uvubFXXpgs+hx2VuoCASTSYarsrrYwT4C/g==
+X-Received: by 2002:a17:902:e886:b0:19a:ad2f:2df9 with SMTP id w6-20020a170902e88600b0019aad2f2df9mr10366596plg.55.1677718442825;
+        Wed, 01 Mar 2023 16:54:02 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902900b00b0019a9637b2d3sm8999040plp.279.2023.03.01.16.53.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 16:53:07 -0800 (PST)
-Date:   Thu, 2 Mar 2023 09:53:03 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2 3/6] zsmalloc: fine-grained inuse ratio based fullness
- grouping
-Message-ID: <Y//zbxEmAmoA69ed@google.com>
-References: <20230223030451.543162-1-senozhatsky@chromium.org>
- <20230223030451.543162-4-senozhatsky@chromium.org>
- <Y/f2WvhNlwhsf2Cz@google.com>
- <Y/riPlQ2UK00WirI@google.com>
- <Y/6GAYJ4c9W0bPzp@google.com>
- <Y/8TENp78WSQ0UW3@google.com>
- <Y//tqFQgsCeMimg5@google.com>
+        Wed, 01 Mar 2023 16:54:01 -0800 (PST)
+Date:   Thu, 2 Mar 2023 00:53:45 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 18/33] mm: write-lock VMAs before removing them from
+ VMA tree
+Message-ID: <Y//zmYeu6uexiyOY@localhost>
+References: <20230227173632.3292573-1-surenb@google.com>
+ <20230227173632.3292573-19-surenb@google.com>
+ <Y/8CJQGNuMUTdLwP@localhost>
+ <Y/8FNM9czzPHb5eG@localhost>
+ <CAJuCfpHYT++MBC6T-p80n_m5hHWRRC4Y1bO9J-bFFZZDqNX-BQ@mail.gmail.com>
+ <CAJuCfpFax8LSdcq1qiz3sp0XPLaNZnkFFky2tQekG2_Azvw9_g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y//tqFQgsCeMimg5@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpFax8LSdcq1qiz3sp0XPLaNZnkFFky2tQekG2_Azvw9_g@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/03/01 16:28), Minchan Kim wrote:
-> On Wed, Mar 01, 2023 at 05:55:44PM +0900, Sergey Senozhatsky wrote:
-> > On (23/02/28 14:53), Minchan Kim wrote:
-> > > BTW, I still prefer the enum instead of 10 define.
-> > > 
-> > > enum fullness_group {
-> > >     ZS_EMPTY,
-> > >     ZS_INUSE_RATIO_MIN,
-> > >     ZS_INUSE_RATIO_ALMOST_FULL = 7,
-> > >     ZS_INUSE_RATIO_MAX = 10,
-> > >     ZS_FULL,
-> > >     NR_ZS_FULLNESS,
-> > > }
-> > 
-> > For educational purposes, may I ask what do enums give us? We
-> > always use integers - int:4 in zspage fullness, int for arrays
-> > offsets and we cast to plain integers in get/set stats. So those
-> > enums exist only at declaration point, and plain int otherwise.
-> > What are the benefits over #defines?
+On Wed, Mar 01, 2023 at 10:42:48AM -0800, Suren Baghdasaryan wrote:
+> On Wed, Mar 1, 2023 at 10:34 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Tue, Feb 28, 2023 at 11:57 PM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+> > >
+> > > On Wed, Mar 01, 2023 at 07:43:33AM +0000, Hyeonggon Yoo wrote:
+> > > > On Mon, Feb 27, 2023 at 09:36:17AM -0800, Suren Baghdasaryan wrote:
+> > > > > Write-locking VMAs before isolating them ensures that page fault
+> > > > > handlers don't operate on isolated VMAs.
+> > > > >
+> > > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > > > ---
+> > > > >  mm/mmap.c  | 1 +
+> > > > >  mm/nommu.c | 5 +++++
+> > > > >  2 files changed, 6 insertions(+)
+> > > > >
+> > > > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > > > index 1f42b9a52b9b..f7ed357056c4 100644
+> > > > > --- a/mm/mmap.c
+> > > > > +++ b/mm/mmap.c
+> > > > > @@ -2255,6 +2255,7 @@ int split_vma(struct vma_iterator *vmi, struct vm_area_struct *vma,
+> > > > >  static inline int munmap_sidetree(struct vm_area_struct *vma,
+> > > > >                                struct ma_state *mas_detach)
+> > > > >  {
+> > > > > +   vma_start_write(vma);
+> > > > >     mas_set_range(mas_detach, vma->vm_start, vma->vm_end - 1);
+> > > >
+> > > > I may be missing something, but have few questions:
+> > > >
+> > > >       1) Why does a writer need to both write-lock a VMA and mark the VMA detached
+> > > >          when unmapping it, isn't it enough to just only write-lock a VMA?
+> >
+> > We need to mark the VMA detached to avoid handling page fault in a
+> > detached VMA. The possible scenario is:
+> >
+> > lock_vma_under_rcu
+> >   vma = mas_walk(&mas)
+> >                                                         munmap_sidetree
+> >                                                           vma_start_write(vma)
+> >
+> > mas_store_gfp() // remove VMA from the tree
+> >                                                           vma_end_write_all()
+> >   vma_start_read(vma)
+> >   // we locked the VMA but it is not part of the tree anymore.
+> >
+> > So, marking the VMA locked before vma_end_write_all() and checking
 > 
-> Well, I just didn't like the 12 hard coded define *list* values
-> and never used other places except zs_stats_size_show since
+> Sorry, I should have said "marking the VMA *detached* before
+> vma_end_write_all() and checking vma->detached after vma_start_read()
+> helps us avoid handling faults in the detached VMA."
+> 
+> > vma->detached after vma_start_read() helps us avoid handling faults in
+> > the detached VMA.
 
-If we have two enums, then we need more lines
+Thank you for explanation, that makes sense!
 
-enum fullness {
-	ZS_INUSE_RATIO_0
-	...
-	ZS_INUSE_RATIO_100
-}
+By the way, if there are no 32bit users of Per-VMA lock (are there?),
+"detached" bool could be a VMA flag (i.e. making it depend on 64BIT
+and selecting ARCH_USES_HIGH_VMA_FLAGS)
 
-enum stats {
-	INUSE_RATIO_0
-	...
-	INUSE_RATIO_100
+Thanks,
+Hyeonggon
 
-	// the rest of stats
-}
-
-and then we use int:4 fullness value to access stats.
-
-> I thought we could handle zs_stats_size_show in the loop without
-> the specific each ratio definary.
-
-For per inuse ratio zs_stats_size_show() we need to access stats
-individually:
-
-	inuse10, inuse20, inuse30, ... inuse99
