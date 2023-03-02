@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2CC6A803E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC9E6A8043
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjCBKrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:47:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
+        id S230032AbjCBKsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjCBKre (ORCPT
+        with ESMTP id S229727AbjCBKsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:47:34 -0500
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6E837731;
-        Thu,  2 Mar 2023 02:47:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677754035; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=c2ZehWxZUtp/cl4T5HNT9vLkzpL5ZwhAJLPiij4+5DTFylmtKpIj/tkT2gErnjGXFessHP1oP/FEub2sFkX6ELT0iu/R5yHXQYsUAQPOZM3jnpkgd4ELTVJwLDYUBw/kYN8i5OZi1jAT5bKwn061+neWje2ZCZAcfaeRZ3mrcOs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677754035; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=UUcOfchS4C2fgxhPjvGjSCiIN/7y7uTOoaWrQDYPRTM=; 
-        b=I54FU9r9Q+ybNILluTJpCNr5r7Y6HsASeCWFBbE4PjnMoVk8u3wwVumSQTBxNQCuD17z+BpQ6d2UUBje+2vLGxyExel+TbYrkDSHdrgc2YUqP0AVTRa5w6haDkghwCODghjto5CRefiUZm+T0tp2KbwNWRSZ/oSM2jxa9A+4C7g=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677754035;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=UUcOfchS4C2fgxhPjvGjSCiIN/7y7uTOoaWrQDYPRTM=;
-        b=A0A3gKeO6HpQ6VZt5x+Be4cJ3ia0MXGxzuevNkr6FkDoh/8oj88j9epiI175TUDM
-        kx2jOgtkNul1YxLnHPtWbDQqlqSOjjBVyb2/oRi9SGbhDuRPBSLsPF6VHERd64cyde7
-        NIwvdDHiCp/splvG6QbuE2OutO/DPpCer5zXQZ68=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1677754033173751.0132443007599; Thu, 2 Mar 2023 02:47:13 -0800 (PST)
-Message-ID: <b48e0a5e-dd45-8b8a-4ee3-357a0985ca9c@arinc9.com>
-Date:   Thu, 2 Mar 2023 13:47:05 +0300
+        Thu, 2 Mar 2023 05:48:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF033771B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:47:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677754059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5S8M7VFiIrjWBjAA3FzviIVL8rgISq30wNe4WT8BzAg=;
+        b=TL7wKq/9P7idYtkeYxVycYYw9J69238xmCZxUPCn36vAxian84qTzoCwwLDO2ccTjrxeya
+        XnGspdXp6Xe4wFj5ZlXccGvurrgL+LO79d0ZeHMVecM3Ap4YFa+cxSRacMn+vTqeePISkO
+        4WxfoETv5AMK3xlvLGvPozY0tKXZEVw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-260-7PkbwasgMVO2A5pxHfr-5Q-1; Thu, 02 Mar 2023 05:47:38 -0500
+X-MC-Unique: 7PkbwasgMVO2A5pxHfr-5Q-1
+Received: by mail-wr1-f71.google.com with SMTP id u5-20020a5d6da5000000b002cd82373455so2016971wrs.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:47:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5S8M7VFiIrjWBjAA3FzviIVL8rgISq30wNe4WT8BzAg=;
+        b=YVbGaCBZ6ih5U7nJa3dpvLOmKHANDBacZMxq+o7a9+XLfgkL4MwRxS6h9Ej4sNXEmq
+         MwfrhpKODD3c+F5WMfrwJMBtN83Nz9QqFjzhXlC2irM3qssflYr5MvBva/SYxNi/svrh
+         BvSxt1asJIb/wB9MgUojMjI/sed5l4fDPQ6/XVU8CzWpUaVT903b9FzIOmfLuhY12Xv7
+         2DcHP3elS1x3VL4jqBrG/OnyfHtI8aTiJXuOrP26Ab4tj/JVNNl1wZO3clEUPIeo6FDG
+         BQTxZbJX2272p379pvie5IJQ1RlYObdrmQr9we9rY6t0nXXmlZ5HenD5UT+SUAuq3+F7
+         VjdQ==
+X-Gm-Message-State: AO0yUKVgUlPvcWgeraK4MbwIe8ErqgBraPvYuyIgYW+zEkY+rUgs81ka
+        IjiIGZZWpigsFCXr53P6C5dfSxF0j6k5VmbhKSk92tD3CsTW6mNiMApPI8DI2YPzPvepUa/hCCC
+        ubJHI+8K/m7xm2cT4hIoglFDB
+X-Received: by 2002:a5d:63c6:0:b0:2ca:101e:1056 with SMTP id c6-20020a5d63c6000000b002ca101e1056mr6974944wrw.1.1677754056950;
+        Thu, 02 Mar 2023 02:47:36 -0800 (PST)
+X-Google-Smtp-Source: AK7set8AlFkoEPhUXgQ2qZuUUweAAfw6iklrEvSxh3Ozh0PDQfe1FKMeP5ddXBc216eHMfeobx/RnA==
+X-Received: by 2002:a5d:63c6:0:b0:2ca:101e:1056 with SMTP id c6-20020a5d63c6000000b002ca101e1056mr6974932wrw.1.1677754056612;
+        Thu, 02 Mar 2023 02:47:36 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:4f00:87ba:e9e9:3821:677b? (p200300cbc70e4f0087bae9e93821677b.dip0.t-ipconnect.de. [2003:cb:c70e:4f00:87ba:e9e9:3821:677b])
+        by smtp.gmail.com with ESMTPSA id w3-20020adff9c3000000b002c7e1a39adcsm15095664wrr.23.2023.03.02.02.47.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 02:47:36 -0800 (PST)
+Message-ID: <3331790c-95a1-6ab9-2667-86aae3d28d7d@redhat.com>
+Date:   Thu, 2 Mar 2023 11:47:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
- compatible strings
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 08/11] mm/vmstat: switch counter modification to
+ cmpxchg
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-8-arinc.unal@arinc9.com>
- <20230227173333.GA496999-robh@kernel.org>
- <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
- <20230301024431.GA251215-robh@kernel.org>
- <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
- <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
- <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
- <1aae7ac9-c83d-71b4-4fce-325f02fcd722@linaro.org>
- <89588f69-9cf0-e7a4-b976-5ce87d42e296@arinc9.com>
- <2ccb573d-39f4-cb80-7a3e-63a60c2bc0a8@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <2ccb573d-39f4-cb80-7a3e-63a60c2bc0a8@linaro.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Christoph Lameter <cl@linux.com>
+Cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20230209150150.380060673@redhat.com>
+ <20230209153204.846239718@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230209153204.846239718@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2.03.2023 13:29, Krzysztof Kozlowski wrote:
-> On 02/03/2023 11:22, Arınç ÜNAL wrote:
->>>>
->>>> ## Incorrect naming
->>>>
->>>> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink,
->>>> introduce new ralink->mediatek compatible strings to address it.
->>>
->>> So this part was addressed by Rob - we don't do it, because it does not
->>> matter. Ralink is now Mediatek, thus there is no conflict and no issues
->>> with different vendor used.
->>
->> I think Rob was rather addressing that updating compatible strings based
->> on acquisition or marketing whims is not permitted. This condition does
->> not apply here as these SoCs were never Ralink.
->>
->> I understand your point that Ralink is now MediaTek but still, calling
->> these SoCs Ralink would be a bit misleading, don't you think?
+On 09.02.23 16:01, Marcelo Tosatti wrote:
+> In preparation to switch vmstat shepherd to flush
+> per-CPU counters remotely, switch all functions that
+> modify the counters to use cmpxchg.
 > 
-> Misleading yes, but also does not matter. At least matter not enough to
-> justify ABI break, so you would need to deprecate old ones and keep
-> everything backwards compatible. You still would affect 3rd party users
-> of DTS, though...
+> To test the performance difference, a page allocator microbenchmark:
+> https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/mm/bench/page_bench01.c
+> with loops=1000000 was used, on Intel Core i7-11850H @ 2.50GHz.
+> 
+> For the single_page_alloc_free test, which does
+> 
+>          /** Loop to measure **/
+>          for (i = 0; i < rec->loops; i++) {
+>                  my_page = alloc_page(gfp_mask);
+>                  if (unlikely(my_page == NULL))
+>                          return 0;
+>                  __free_page(my_page);
+>          }
+> 
+> Unit is cycles.
+> 
+> Vanilla			Patched		Diff
+> 159			165		3.7%
+> 
+> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+> 
+> Index: linux-vmstat-remote/mm/vmstat.c
+> ===================================================================
+> --- linux-vmstat-remote.orig/mm/vmstat.c
+> +++ linux-vmstat-remote/mm/vmstat.c
+> @@ -334,6 +334,188 @@ void set_pgdat_percpu_threshold(pg_data_
+>   	}
+>   }
 
-I intend to do just that. Introduce new mediatek strings, keep the old 
-ones so it's backwards compatible, therefore don't break the ABI.
+I wonder why we get a diff that is rather hard to review because it 
+removes all existing codes and replaces it by almost-identical code. Are 
+you maybe moving a bunch of code while modifying some tiny bits at the 
+same time?
 
-Instead of deprecating old strings, I intend to introduce the checks I 
-mentioned, on the schema, so the pin muxing bindings only apply if the 
-DT has got a string that won't match multiple schemas. This way it 
-shouldn't affect 3rd party DTs.
+-- 
+Thanks,
 
-Arınç
+David / dhildenb
+
