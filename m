@@ -2,104 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69F76A7D3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F506A7F76
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjCBJCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
+        id S230044AbjCBKBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjCBJCP (ORCPT
+        with ESMTP id S230322AbjCBKB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:02:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49383BD82
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:02:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 176EA61563
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 09:02:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CCE4C433D2;
-        Thu,  2 Mar 2023 09:02:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677747731;
-        bh=Bcfx6nVDLJrWKBsWRtdfRmhrHrEZ4wJahsgLTst7PpY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C+4iM+EmMvS1TmmMh+A7fca0q3jWPaiD1O/os062ZtxMV6Mp9/+LQjnWamJcCK6Zr
-         0Mu/8A0e8Om+YqRyV/kM42Ml5LGIcVGx6v0wOeoaQLC/o509OK2SpwZklQELkr17D2
-         e9Apui9OzQDZdtcarqTg7T9TPd9eUqNkGg5dYjkk8Qg2HxOG634oulRpFpmp54gZAe
-         6Y1z3Oz69eZJMpZSncDN+IEyHg5q7FbpbqCuiyFmGgeB3swfy/Uywa0118iAQMk0D6
-         Z+lsEyepmtNLUzlUWcqTojoMivnAt1dH+44dbEAaGrMDU7VqkoRIcLBShet9znQuN8
-         mIJHMsdl84j0g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pXepj-0003yA-K7; Thu, 02 Mar 2023 10:02:39 +0100
-Date:   Thu, 2 Mar 2023 10:02:39 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Bingbu Cao <bingbu.cao@linux.intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        johan+linaro@kernel.org, hsinyi@chromium.org,
-        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        david.e.box@linux.intel.com
-Subject: Re: System boot failure related to commit 'irqdomain: Switch to
- per-domain locking'
-Message-ID: <ZABmL3/4oeN9EFsT@hovoldconsulting.com>
-References: <d2290916-f78c-4b0a-d706-0955ae0aa4ff@linux.intel.com>
- <d595de9168d45bb5e863942ab7a78e3d@kernel.org>
- <32175259-ee22-9288-475c-db0da1ccee41@linux.intel.com>
- <87o7pch6lo.wl-maz@kernel.org>
- <bc72258e-ce88-6812-08bf-0f16f15e02ce@linux.intel.com>
+        Thu, 2 Mar 2023 05:01:26 -0500
+X-Greylist: delayed 3572 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 02:00:58 PST
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545EE46156
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:00:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EogLFcVbQRUQ3zsIo9NgsjC0jIGju+sWk3KgrzT8SDw=; b=C6HxO8R6Gc2VQjuH4s9M7qH34W
+        D4ss9HzmLIJF6Mb4QTcFYgl2imZa1vRrmpPlK+BwCe5pCc/XqSWiPmB9lc1WJ+BiCECgkawAtd+WW
+        hRbfJaGhY57PHUFRI5D3XPgzquVebXrX5rLN+gpfG+5shzs1DTcZmXu7/n7PRncP8bSQjWJ1TS2Bc
+        qiMhh6PNdsvgbC1fjPqOlh0gfkm3+QNOSVMqNLjaLDp1E9/tS6XHL1KiExSRIYjvwVKrR1OVpM+mg
+        tcViiKmt0TaX6ZiQJV6Qt1QNr72u1BT/15xafsiJLo5FOfXiirQQP9f0sVu4osL3FXxwzmLLvYWno
+        Qm0ge9lQ==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:48406 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1pXduG-00Bpix-20;
+        Thu, 02 Mar 2023 09:03:16 +0100
+Message-ID: <be465a23-7f31-004c-3bb7-d8021187da5d@norik.com>
+Date:   Thu, 2 Mar 2023 09:03:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc72258e-ce88-6812-08bf-0f16f15e02ce@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] watchdog: imx2_wdg: Declare local symbols static
+Content-Language: en-GB
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230228151648.4087637-1-linux@roeck-us.net>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <20230228151648.4087637-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 04:55:21PM +0800, Bingbu Cao wrote:
+On 28. 02. 23 16:16, Guenter Roeck wrote:
+> 0-day complains:
+> 
+> drivers/watchdog/imx2_wdt.c:442:22: sparse:
+> 	symbol 'imx_wdt' was not declared. Should it be static?
+> drivers/watchdog/imx2_wdt.c:446:22: sparse:
+> 	symbol 'imx_wdt_legacy' was not declared. Should it be static?
+> 
+> Declare as static variables.
+> 
+> Fixes: e42c73f1ef0d ("watchdog: imx2_wdg: suspend watchdog in WAIT mode")
+> Cc: Andrej Picej <andrej.picej@norik.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-> I can dump the log by initramfs-tool now and checked that the change
-> https://lore.kernel.org/all/20230223083800.31347-1-jgross@suse.com/ 
-> can fix my problem, thanks for your help.
+Hi Guenter,
 
-Thanks for confirming.
+thanks for the fix. Sorry for the trouble.
 
-> [    1.726080] BUG: kernel NULL pointer dereference, address: 0000000000000050
-> [    1.726874] #PF: supervisor read access in kernel mode
-> [    1.727687] #PF: error_code(0x0000) - not-present page
-> [    1.728491] PGD 0 P4D 0 
-> [    1.729280] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [    1.730078] CPU: 3 PID: 154 Comm: systemd-udevd Not tainted 6.2.0-ipu #10
-> [    1.730870] Hardware name: Dell Inc. XPS 9315/, BIOS 0.0.22 12/23/2021
-> [    1.731670] RIP: 0010:irq_domain_create_hierarchy+0x2d/0x70
-> [    1.732470] Code: 00 00 55 48 89 e5 41 55 49 89 fd 48 89 cf 41 54 53 89 f3 85 d2 74 3f 89 d6 31 c9 89 d2 e8 6b fd ff ff 49 89 c4 4d 85 e4 74 1e <49> 8b 45 50 41 09 5c 24 28 4c 89 e7 4d 89 ac 24 80 00 00 00 49 89
-> [    1.733321] RSP: 0018:ffffb811c08e38f8 EFLAGS: 00010282
-> [    1.734156] RAX: ffff975001456540 RBX: 0000000000000010 RCX: 0000000000000000
-> [    1.734993] RDX: ffffffffadf8be90 RSI: ffffffffac7290a0 RDI: ffff975001456570
-> [    1.735841] RBP: ffffb811c08e3910 R08: ffff975001452900 R09: ffff975001452900
-> [    1.736676] R10: ffff975001452900 R11: ffff97510145206f R12: ffff975001456540
-> [    1.737515] R13: 0000000000000000 R14: 0000000000000013 R15: ffff975011860628
-> [    1.738349] FS:  00007f20175c08c0(0000) GS:ffff97537f8c0000(0000) knlGS:0000000000000000
-> [    1.739198] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    1.740042] CR2: 0000000000000050 CR3: 0000000111e1c004 CR4: 0000000000770ee0
-> [    1.740892] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [    1.741741] DR3: 0000000000000000 DR6: 00000000ffff07f0 DR7: 0000000000000400
-> [    1.742592] PKRU: 55555554
-> [    1.743415] Call Trace:
-> [    1.744226]  <TASK>
-> [    1.745045]  __msi_create_irq_domain+0xb8/0x180
-> [    1.745863]  msi_create_irq_domain+0x13/0x20
-> [    1.746680]  pci_msi_create_irq_domain+0x7a/0xe0
-> [    1.747493]  vmd_probe+0x85e/0x9a0 [vmd]
-> [    1.748313]  local_pci_probe+0x48/0xb0
-> [    1.749133]  pci_device_probe+0xc8/0x280
-> [    1.749961]  really_probe+0x186/0x3f0
-
-Johan
+Best regards,
+Andrej
