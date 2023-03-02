@@ -2,157 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA4E6A7A82
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 05:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0A06A7A85
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 05:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCBEcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 23:32:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S229720AbjCBEdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 23:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjCBEc0 (ORCPT
+        with ESMTP id S229711AbjCBEdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 23:32:26 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0581C4A1FC;
-        Wed,  1 Mar 2023 20:32:23 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321MuxpR010778;
-        Thu, 2 Mar 2023 04:32:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2022-7-12;
- bh=YN/Ch07oSsUOLr3lFWqb7Mfe8tp5H4NhoNi2kvbRIPc=;
- b=s//Pg01Sz8r4OWSXfIpCwmdlGJzXXlfDsHX3/dZyRC9uqemlp7j7tegI4ZtctDyjGEVz
- Ec6iXuTKnE74uxEzl3A42ToGB5BX4OERHD0ujGXLBYoo5vQtd3puQewV6D5YQKj7Ziqj
- jO3dfZelirwJfzoocqtM63rwxo7xYbF55uwqlNC8o7DrXiu3XENm3ZsdkPGfR7fqeLaG
- OSnws33h+/nw8tNeTUabXfcBx0G/R2lU3Kf7FEt0y9exTwE0wSnGIZKYtrPdI6ihTe/C
- Zd+EWxsTSLyDhL3zrN5iG9UFu75EvmHFajXwr6UgS6jfgCLHlJx9FImmarT+/1VQnM8I Bw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nybb2jnhu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Mar 2023 04:32:20 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 3222fxjh031538;
-        Thu, 2 Mar 2023 04:32:18 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ny8sga7hq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Mar 2023 04:32:18 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3224W8eY012677;
-        Thu, 2 Mar 2023 04:32:18 GMT
-Received: from localhost.localdomain (dhcp-10-191-129-161.vpn.oracle.com [10.191.129.161])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ny8sga7bn-4;
-        Thu, 02 Mar 2023 04:32:17 +0000
-From:   Imran Khan <imran.f.khan@oracle.com>
-To:     tj@kernel.org, gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        joe.jin@oracle.com
-Subject: [PATCH 3/3] kernfs: change kernfs_rename_lock into a read-write lock.
-Date:   Thu,  2 Mar 2023 15:32:03 +1100
-Message-Id: <20230302043203.1695051-4-imran.f.khan@oracle.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230302043203.1695051-1-imran.f.khan@oracle.com>
-References: <20230302043203.1695051-1-imran.f.khan@oracle.com>
+        Wed, 1 Mar 2023 23:33:02 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBD85BBA
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 20:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677731578; x=1709267578;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=z7XH4Pck2obKvHWgumzadusXlBkpmVZ9RS92+m5IOSk=;
+  b=BwErcUf2JB9/nvEp2h/eV+o+zk3geSYuWlkCuYOvjjMAwRUSqNJWFQf6
+   +klByw/PxYVE0HYmF6v6cuBUD0otw8SCtQ4IdA34Fr1kYyI6ecUVoAIW1
+   hBqHvxhihXPCVZ6BL9omyN6QH9j9vMBBjr8BcigMvpIwY/3aLjUBcfk6N
+   L1gxLVsGDTVYgsor5mBI2WOEOTXG5Sx/jM7D1ki7UdhY7hcImO/TXqwRW
+   yNQvh0d+Xrq0OQaJybHlBzHGREk64qU4QTBg9JfUnsQNBK4MkfTn7KVjL
+   uWYuYczz26Okz56LM2uPuUu6zI7JdRLY1ugosFxYFb9pwfw3ZeDW8uYkB
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,226,1673938800"; 
+   d="scan'208";a="203185791"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Mar 2023 21:32:56 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 1 Mar 2023 21:32:56 -0700
+Received: from [10.40.24.88] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Wed, 1 Mar 2023 21:32:52 -0700
+Message-ID: <c379dc5d-46ec-613e-22ec-eba94c399a90@microchip.com>
+Date:   Thu, 2 Mar 2023 10:02:51 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-02_01,2023-03-01_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 mlxscore=0
- adultscore=0 bulkscore=0 malwarescore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303020035
-X-Proofpoint-GUID: KApAJvKGxjQeBdVv7hOdaI69gaix-Q-T
-X-Proofpoint-ORIG-GUID: KApAJvKGxjQeBdVv7hOdaI69gaix-Q-T
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 7/8] MAINTAINERS: add myself as maintainer for Microchip
+ AT91 sound drivers
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <alexandre.belloni@bootlin.com>
+CC:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230301113807.24036-1-claudiu.beznea@microchip.com>
+ <20230301113807.24036-8-claudiu.beznea@microchip.com>
+Content-Language: en-US
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230301113807.24036-8-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernfs_rename_lock protects a node's ->parent and thus kernfs topology.
-Thus it can be used in cases that rely on a stable kernfs topology.
-Change it to a read-write lock for better scalability.
+On 01/03/2023 at 17:08, Claudiu Beznea wrote:
+> Codrin is not with Microchip anymore. As I worked lately with Microchip
+> AT91 sound drivers add myself as maintainer for these.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Suggested by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
----
- fs/kernfs/dir.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 2cdb8516e5287..06e27b36216fe 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -17,7 +17,7 @@
- 
- #include "kernfs-internal.h"
- 
--static DEFINE_SPINLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
-+static DEFINE_RWLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
- /*
-  * Don't use rename_lock to piggy back on pr_cont_buf. We don't want to
-  * call pr_cont() while holding rename_lock. Because sometimes pr_cont()
-@@ -196,9 +196,9 @@ int kernfs_name(struct kernfs_node *kn, char *buf, size_t buflen)
- 	unsigned long flags;
- 	int ret;
- 
--	spin_lock_irqsave(&kernfs_rename_lock, flags);
-+	read_lock_irqsave(&kernfs_rename_lock, flags);
- 	ret = kernfs_name_locked(kn, buf, buflen);
--	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
-+	read_unlock_irqrestore(&kernfs_rename_lock, flags);
- 	return ret;
- }
- 
-@@ -224,9 +224,9 @@ int kernfs_path_from_node(struct kernfs_node *to, struct kernfs_node *from,
- 	unsigned long flags;
- 	int ret;
- 
--	spin_lock_irqsave(&kernfs_rename_lock, flags);
-+	read_lock_irqsave(&kernfs_rename_lock, flags);
- 	ret = kernfs_path_from_node_locked(to, from, buf, buflen);
--	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
-+	read_unlock_irqrestore(&kernfs_rename_lock, flags);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(kernfs_path_from_node);
-@@ -294,10 +294,10 @@ struct kernfs_node *kernfs_get_parent(struct kernfs_node *kn)
- 	struct kernfs_node *parent;
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&kernfs_rename_lock, flags);
-+	read_lock_irqsave(&kernfs_rename_lock, flags);
- 	parent = kn->parent;
- 	kernfs_get(parent);
--	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
-+	read_unlock_irqrestore(&kernfs_rename_lock, flags);
- 
- 	return parent;
- }
-@@ -1731,7 +1731,7 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
- 	kernfs_get(new_parent);
- 
- 	/* rename_lock protects ->parent and ->name accessors */
--	spin_lock_irq(&kernfs_rename_lock);
-+	write_lock_irq(&kernfs_rename_lock);
- 
- 	old_parent = kn->parent;
- 	kn->parent = new_parent;
-@@ -1742,7 +1742,7 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
- 		kn->name = new_name;
- 	}
- 
--	spin_unlock_irq(&kernfs_rename_lock);
-+	write_unlock_irq(&kernfs_rename_lock);
- 
- 	kn->hash = kernfs_name_hash(kn->name, kn->ns);
- 	kernfs_link_sibling(kn);
+Thanks Claudiu for taking this responsibility!
+
+Best regards,
+   Nicolas
+
+> ---
+>   MAINTAINERS | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1e246c16aff6..252cc33f0f5c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13666,7 +13666,7 @@ F:	Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+>   F:	drivers/spi/spi-at91-usart.c
+>   
+>   MICROCHIP AUDIO ASOC DRIVERS
+> -M:	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+>   L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+>   S:	Supported
+>   F:	sound/soc/atmel
+> @@ -13833,7 +13833,7 @@ S:	Supported
+>   F:	drivers/spi/spi-atmel.*
+>   
+>   MICROCHIP SSC DRIVER
+> -M:	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+>   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>   S:	Supported
+>   F:	drivers/misc/atmel-ssc.c
+
 -- 
-2.34.1
+Nicolas Ferre
 
