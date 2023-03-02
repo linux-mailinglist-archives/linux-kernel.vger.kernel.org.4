@@ -2,112 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E346A8B6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EA36A8B7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjCBWCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:02:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S229823AbjCBWIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjCBWB6 (ORCPT
+        with ESMTP id S229600AbjCBWH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:01:58 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F0C5F6D9
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:01:33 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id g3so525449wri.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:01:33 -0800 (PST)
+        Thu, 2 Mar 2023 17:07:58 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F40A7296;
+        Thu,  2 Mar 2023 14:07:57 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id k23so310232ybk.13;
+        Thu, 02 Mar 2023 14:07:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677794489;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eoLlFIKo+0HC5z28LpcjtRJj56OW9StYTeb8Ufax9js=;
-        b=YpQcR7Fk9iV2T9fMbhThZBBI3/6zaasRJaHdsjGW9xKGPo4O7Ce+woLxIidUTkLdVW
-         YnlO0mK+ywg8Z/jbg7gaL8bVeFN3Z6RmaW9l4An+tbGZeCmkgbaS6mevIiDp9uGG6icN
-         3blWigkKz42aFytge/FoW+om2fZGXhxo7KRLSA6wUp4mg/Yl7VcToGqD5LhnIYqxD6bg
-         XqQL8r+ee3LjdXEWrulYuu5wyUNZMQiKgCKfWkSjVxEshFQVDceePd5egARutR758B1d
-         +xUUkUp16H4qrgvOk64HJpu+bNBpSgRm11PFhEOkXNTItmLGdZkKC01ySrfirtaa1PnS
-         Sw5Q==
+        d=gmail.com; s=20210112; t=1677794876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Afscz4XnGfIY4qhRbHWfBYoZhXBwOKJhBXE1v93mr9o=;
+        b=qT/jzOw3H83kLrDUfvQQFCq+WzmUhDojVJ3B/uuRt6INhZh/++dgP4snXXXBF1+VnR
+         w4DGehxKkftvvXGBbdY7FO+tYH5IuvI6jEBpoa6JIh4/lK1YcEB1T6yL9+j7IP1IGTzz
+         oWKVZYCIvd5abvPcQFdLAY3XZ19ZuCdcNZBzDoN5NOIecVKYMX+eKObx5ayk0GWM3bKL
+         MQqtWS7dHDm+GHlaGpNx1FdKAVrWKPJbdduvxkPeEmS5fZVaMJMrk0HZRXmP65R1Cg3u
+         sgRnkBeV9ysfeyoNTp/9A/o3lgUjmPZNoU67v04WXMQ8cswTtDhynnt7qymUpIt6rrAg
+         yHqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677794489;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eoLlFIKo+0HC5z28LpcjtRJj56OW9StYTeb8Ufax9js=;
-        b=xT825yd8LCfKZSjS3dCLoxhNu18/CVwf7cOywKpB2CP+r/wIJAZROxNLCxsBjuWM59
-         1fvEPQLx4PO3gXeJrp8C6JJaCfBWsL4bks5Aq7pJiW3WP7xAxaeKBi4cN4mK4BVCKDuI
-         Q0adRwDgKMDlXXtX8fp3hR6yrqsC4mFH9VcUZU1Iq3KD/Z/uFtWvlp8sHyyNK+8Q0Our
-         tZ68eBkEB2IwmC5DhVaax6maED8tBNk/nQJOSA2wIblpRPKq0LJO/Tw4lizctSd9VFnG
-         SXcICRdr5CCzVgEXbLY0VbgwJRe+jNerbmZAdhRadKOwUhDiSao0bTRwwYmDx9Xw80HS
-         ngIw==
-X-Gm-Message-State: AO0yUKUoVM7l9+GkYR5Xvslo1jgcrKp3YsNiwvZgDszPBznx8A3vj/xL
-        vzETpd2fXKMM7ZE5Bw9FJEKdKsLTl/bk/G62G3qPNg==
-X-Google-Smtp-Source: AK7set8p2o8BjVZaPWOCquuwzj0H6Ba4FS/Y1kR8lKWg5AU835kdnwYfmn8lUlm0xHF4LlpzwHVVxhlKuA+A81J4M70=
-X-Received: by 2002:adf:f7cb:0:b0:2c7:a39:78ae with SMTP id
- a11-20020adff7cb000000b002c70a3978aemr1975071wrq.13.1677794489531; Thu, 02
- Mar 2023 14:01:29 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677794876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Afscz4XnGfIY4qhRbHWfBYoZhXBwOKJhBXE1v93mr9o=;
+        b=edeM19zAQ2v6AoidyJ3FAhg5lD/dZdg26zlmJDb02lUs4fCcinAaAZwH+yd7KIRuFl
+         YTY0VaApMNwWE/zIMkoCwzAzOSX70Z0Avq8F4lPav/BXbAbQ8TUajoHvtX1PsUuyUsl2
+         dRUZWydQzzV2RDGlbOnQF4wnJwOsQxKLqLUABn3F2Qn5eXs2+vK9sMkuywy+d45qgoed
+         14NWBChjQ20VyjlJfvfSpJw+okZSg6qX67TSzsGQ+Y1sNd0lP/YQ8moRvDh1enaMx6n9
+         3U3L3zu2q3gE0/mfmx2qOJUZFWCk4cEV2BKUQw+4/jtuj1JF3aIh6darA/shqmZ72kTE
+         bpPw==
+X-Gm-Message-State: AO0yUKUAv3/kw1VmbFsN0DPigMQmjxJgYp9yjW9jrGvTQvMHUY69qlCI
+        9YdYF+5GrQIq7qRm2CpZyldZX9nyhZV5rzC2MQQ=
+X-Google-Smtp-Source: AK7set8VIdr4R8bYsvgCrid/f+ICd4JT5bwL3QhEubSE3TqdK6fhTWw/po1QIYLeakpSrF5KGAkcLYZaVal0bl8dto4=
+X-Received: by 2002:a05:6902:c7:b0:a6f:b921:cded with SMTP id
+ i7-20020a05690200c700b00a6fb921cdedmr5355244ybs.2.1677794876573; Thu, 02 Mar
+ 2023 14:07:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20230228130215.289081-1-nick.alcock@oracle.com> <20230228130215.289081-9-nick.alcock@oracle.com>
-In-Reply-To: <20230228130215.289081-9-nick.alcock@oracle.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 2 Mar 2023 15:01:18 -0700
-Message-ID: <CANLsYkxBR3Gi42Tsv-=QQ70BtvJCRcVPz6gn=9Q-zXzkt6Vz+A@mail.gmail.com>
-Subject: Re: [PATCH 08/20] remoteproc: remove MODULE_LICENSE in non-modules
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-remoteproc@vger.kernel.org
+References: <ZACvxNOuuyifQ9Nx@kernel.org>
+In-Reply-To: <ZACvxNOuuyifQ9Nx@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 2 Mar 2023 23:07:45 +0100
+Message-ID: <CANiq72mUTnVxD4H_mYzdE0+RU3MMbBxugfgFUKCHp1jw=kvMjg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] rust: bindgen: Add `alt_instr` as opaque type
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Derek Barbosa <debarbos@redhat.com>,
+        rust-for-linux@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 at 06:03, Nick Alcock <nick.alcock@oracle.com> wrote:
+On Thu, Mar 2, 2023 at 3:16=E2=80=AFPM Arnaldo Carvalho de Melo <acme@kerne=
+l.org> wrote:
 >
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
->
-> So remove it in the files in this commit, none of which can be built as
-> modules.
->
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: linux-remoteproc@vger.kernel.org
-> ---
->  drivers/remoteproc/remoteproc_core.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 1cd4815a6dd19..de1ace44cb57b 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -2765,5 +2765,4 @@ static void __exit remoteproc_exit(void)
->  }
->  module_exit(remoteproc_exit);
->
-> -MODULE_LICENSE("GPL v2");
+> To address this build error:
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Applied to `rust-fixes` for tomorrow's -next run.
 
->  MODULE_DESCRIPTION("Generic Remote Processor Framework");
-> --
-> 2.39.1.268.g9de2f9a303
->
+Thanks!
+
+Cheers,
+Miguel
