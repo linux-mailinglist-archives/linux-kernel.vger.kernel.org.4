@@ -2,106 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D876A898E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF086A8990
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjCBTiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S229667AbjCBTim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCBTiL (ORCPT
+        with ESMTP id S229547AbjCBTik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:38:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6821FEA;
-        Thu,  2 Mar 2023 11:38:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C725361642;
-        Thu,  2 Mar 2023 19:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EFFC4339C;
-        Thu,  2 Mar 2023 19:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677785888;
-        bh=OwB+3XfZc2i42C5aZfJlWvgZsNqnG1TajYYk4Tqce0s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dM7iCk4GESFgO7/GKgncJQ45ojgnOsk6O7X51HFcUN2QFVzFSwzjlnBM1fr3e0GKR
-         zkrwIdnUzmxZmpBh45bjPRSMSjIAyKI9LmuivP84LFFAhatpJqFQJatxM5CmoAO+ZI
-         q/2WEhsBTsG0el8rL4iks5IkCV+vw8kQy79X1F/NYqI3LEzrkXg9muLQ8LeoQ3jJ1j
-         au2WJDs2zmRCVmF/o/9+k0E3olUF1d6Af2MqrPJjRu6q/WbgBXmjoHwcT/BoSaZEAf
-         U9E8FPGCNYSNirEnXMq0bbQVfYXlNTLSY165B+4vv3UCYNwD5N/6brTWBhUUre0AlH
-         Fxder5gVhWfdw==
-Received: by mail-ua1-f48.google.com with SMTP id x1so82912uav.9;
-        Thu, 02 Mar 2023 11:38:08 -0800 (PST)
-X-Gm-Message-State: AO0yUKXfJORkk08EdDeBv525Q9ifcO61NAhvpI2S1enoiSKSmMG92PEb
-        NwLnOjO5zwUTXoZGjT1LD8juwuNuQslByawf+Q==
-X-Google-Smtp-Source: AK7set9lyn00Q1i05eh6fNXilq1IfTL9R/2RHvpC+p+smuMyxf3GQ5zh5P/zWXTMVD45PfuVAi9rjjGShbS50wU/j+E=
-X-Received: by 2002:ab0:1059:0:b0:68b:8665:a73b with SMTP id
- g25-20020ab01059000000b0068b8665a73bmr6760746uab.1.1677785887108; Thu, 02 Mar
- 2023 11:38:07 -0800 (PST)
+        Thu, 2 Mar 2023 14:38:40 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0F3166D5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:38:38 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id r18so231178wrx.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 11:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677785917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xd8mmUQDD7YDBjit7BkvCM2rUfsuWe0DKRJ2xHROhnA=;
+        b=gm7Jo0/ui30UfldWPBkbfaDsSLJZN1a3TG/Nqn6TheqH+P7zzyfstcz0c0XS5wH7c4
+         pihNBXBjs2bv68RGqr/24viCXrsaBXp6cbw8yvH23g6CELbhq957owz+8OUciywIFEtU
+         61O7JBAuxlSw23RyXyveQ7UFK0K1wShEtN8K8up7xuLKkochYqe9XaJLBviocYwO7mCw
+         1e4OnviqCWdtBPJkUU+8sWkHQk9udQ2FFCwpZB5LRDVZxNn9i2Q9/hRaY66dmxkn+yud
+         shgYx8/nwbba+L4ixftFGxXS6UYEWP6KQRrkCV5lqNe3KGHHbkfHd7jKrV/czpRpjBa4
+         C9BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677785917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xd8mmUQDD7YDBjit7BkvCM2rUfsuWe0DKRJ2xHROhnA=;
+        b=fJyZyvWDZ5wLkvzmDOQlRFdBYxOKKPwMuD1KYPmdazG2L4GJzBW4PFQN4rkYejCewU
+         j0tpR79JjGoHjRKEMtgKe39w2K0fkkb1OfdwtRe9/dWXvM2OMgsIlmbBLi77PA3t2uwX
+         sbJt8E5UsBcGHXRqDT3UkCB1gM5LFymStaJV5+VgcL0oqNIEh4DgU1wuQdgAbXbo8nLI
+         2lEOx3eM4qbTNPrBeK/OtIQWMtqxNDz/N4zJNgI+pG1AYXmObSijNg+CzfYIU+wwEka0
+         oioBPNtKmo0EFARt6WLkJRp8DmZMhwDgfc3z4V3pf54L/tzJAajPtazxvvAiSek8KVGh
+         007A==
+X-Gm-Message-State: AO0yUKXAT2KH53WB8NEodGzhJjnQ4yK6JuBXXbwVNLbf+OKpaZBZcqIs
+        5aqXiEjB6eF0rOMfkb9vOAZgXIGjVaKo64LrzyRAiw==
+X-Google-Smtp-Source: AK7set8YzgemtxzRriQC7Q8SF1lU5jdJaxwoOh3mFpKG71vgAxCKqjHS9tuOsgQ3by7jKKYJV8j9IGc43vVMmIozGWg=
+X-Received: by 2002:a5d:6041:0:b0:2ca:c865:51b4 with SMTP id
+ j1-20020a5d6041000000b002cac86551b4mr2291188wrt.9.1677785917090; Thu, 02 Mar
+ 2023 11:38:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20230301152239.531194-1-miquel.raynal@bootlin.com> <20230301152239.531194-3-miquel.raynal@bootlin.com>
-In-Reply-To: <20230301152239.531194-3-miquel.raynal@bootlin.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 2 Mar 2023 13:37:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJE43qfYzHUuCJsbaPPBTbYX05Q7FFmPTjPFZ3Dmz_mXg@mail.gmail.com>
-Message-ID: <CAL_JsqJE43qfYzHUuCJsbaPPBTbYX05Q7FFmPTjPFZ3Dmz_mXg@mail.gmail.com>
-Subject: Re: [PATCH 2/8] of: Change of_device_get_modalias() main argument
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        rafal@milecki.pl
+References: <20230302041211.852330-1-irogers@google.com> <20230302041211.852330-6-irogers@google.com>
+ <b7597055-5fb3-c253-f9b7-190d3daf105e@linux.intel.com>
+In-Reply-To: <b7597055-5fb3-c253-f9b7-190d3daf105e@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 2 Mar 2023 11:38:23 -0800
+Message-ID: <CAP-5=fXkCqSz32zA0GvLV7cQ4Xcp=MQAE6sb06pNTZf4gsPtdg@mail.gmail.com>
+Subject: Re: [PATCH v1 05/10] perf evsel: Limit in group test to CPUs
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 9:22=E2=80=AFAM Miquel Raynal <miquel.raynal@bootlin=
-.com> wrote:
+On Thu, Mar 2, 2023 at 7:24=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.co=
+m> wrote:
 >
-> This function needs "struct device_node" to work, but for convenience
-> the author and only user of this helper did use a "struct device". As
-> this helper is a static helper, let's keep the "struct device" for
-> exported methods and use the OF structure internally.
 >
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/of/device.c | 27 ++++++++++++++++-----------
->  1 file changed, 16 insertions(+), 11 deletions(-)
 >
-> diff --git a/drivers/of/device.c b/drivers/of/device.c
-> index 877f50379fab..3efc17de1d57 100644
-> --- a/drivers/of/device.c
-> +++ b/drivers/of/device.c
-> @@ -248,7 +248,7 @@ const void *of_device_get_match_data(const struct dev=
-ice *dev)
->  }
->  EXPORT_SYMBOL(of_device_get_match_data);
+> On 2023-03-01 11:12 p.m., Ian Rogers wrote:
+> > Don't just match on the event name, restict based on the PMU too.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/arch/x86/util/evsel.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/uti=
+l/evsel.c
+> > index ea3972d785d1..580b0a172136 100644
+> > --- a/tools/perf/arch/x86/util/evsel.c
+> > +++ b/tools/perf/arch/x86/util/evsel.c
+> > @@ -61,6 +61,9 @@ bool arch_evsel__must_be_in_group(const struct evsel =
+*evsel)
+> >       if (!evsel__sys_has_perf_metrics(evsel))
+> >               return false;
+> >
+> > +     if (evsel->pmu_name && strncmp(evsel->pmu_name, "cpu", 3))
+> > +             return false;
 >
-> -static ssize_t of_device_get_modalias(struct device *dev, char *str, ssi=
-ze_t len)
-> +static ssize_t of_device_get_modalias(struct device_node *np, char *str,=
- ssize_t len)
+> I'm not sure why we want to check the pmu name. It seems better to move
+> it into evsel__sys_has_perf_metrics(), since perf_metrics is a core PMU
+> only feature.
+>
+> I think the strncmp(evsel->pmu_name, "cpu", 3) is to check whether it is
+> a core PMU. It is also used in other places. I think it's better to
+> factor out it, e.g., arch_evsel__is_core_pmu(). It will deliver a clear
+> message of what we are doing here.
+>
+> Thanks,
+> Kan
 
-Humm, this is static so fine here, but based on my comments on patch
-3, it would need to move too as base.c having a dependency on device.c
-is backwards.
+I missed the behavior of evsel__sys_has_perf_metrics and think we can
+just drop this change. We should probably rename
+evsel__sys_has_perf_metrics perhaps something like
+arch_evsel__pmu_has_topdown_events.
 
-How about moving everything module related to drivers/of/module.c. Put
-the new functions in of.h (rather than an of_module.h). Then maybe the
-rest of device.c could move to inline wrappers or elsewhere.
+Thanks,
+Ian
 
-Rob
+> > +
+> >       return evsel->name &&
+> >               (strcasestr(evsel->name, "slots") ||
+> >                strcasestr(evsel->name, "topdown"));
