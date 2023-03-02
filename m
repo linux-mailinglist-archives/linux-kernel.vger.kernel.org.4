@@ -2,549 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 170136A7C1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A916A7C1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjCBHu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 02:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S229639AbjCBHxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 02:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCBHu4 (ORCPT
+        with ESMTP id S229447AbjCBHxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 02:50:56 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB361303DA
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 23:50:31 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso1967410pjr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 23:50:31 -0800 (PST)
+        Thu, 2 Mar 2023 02:53:05 -0500
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F955C66A;
+        Wed,  1 Mar 2023 23:53:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1677743580; x=1709279580;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=DLHWcsIqCGWKTlybs8vaKjLBtaFFyDnDpmw3pTjlfIk=;
+  b=ebvKcxytT8dnFbZCceyVH4idT9wZCxhWWx2YeNlxZjeyYHxbHnmHrUgh
+   ncIzTo0UTxx+DxrbdjiQqMws/lnhhUsFUkhhF+4VLC6kmAGzhBUi3ovhD
+   VW8R37R1WvESslosJ0VO10VkJQSvLt5wet+vBBlngoeLWZVydAvnmqn1M
+   uD7QF99p3pWRvMddX83XMz6EBrbtWiIWV+W70sk0C/fanCuth2RFbueLi
+   RD7dZQ0esCwK4jCmd6le6Dmnjd1myjo1bdfsp/Oe6a2D+SyWUAB3NNvcb
+   AFqcDl0im5Ob9Kq/2D9UxdUgLC1GZwM1i1LMYessgbtotSe0qr5Gh8qAV
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,227,1673884800"; 
+   d="scan'208";a="328930811"
+Received: from mail-mw2nam10lp2104.outbound.protection.outlook.com (HELO NAM10-MW2-obe.outbound.protection.outlook.com) ([104.47.55.104])
+  by ob1.hgst.iphmx.com with ESMTP; 02 Mar 2023 15:52:58 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cktyq4qhwxVFi+FnfN8Si4Z3DFl/F9hF3mqAdps514ojywFnwoWr2Y51eK+c9Z+LEzbZcveu7XEelftNu/0CVu4HHhfy1AYngxzwD22W88aCU9hRpkRqcVOdA93c0ggYbH62kY98MFPvA2f/k/pf4uXdNNqSSVD3WSLgf3zOxzpl4KXY9M09e8HAq+QXppRDtXv+32PKR8vq1DVaoMssBa1uMRBETjQUjwj1/EmmgxrtdcXoyYvlq2n1BFEFXQfHhEkG/WTEtWmjFlL7JbEBg0CgInKt8kVMS+Dp6rAu6Bv1HWzn9yf4+sGZGiIVPdthQJLd5bulOeppuJAk6d7kOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DLHWcsIqCGWKTlybs8vaKjLBtaFFyDnDpmw3pTjlfIk=;
+ b=QbtJsZPJKdubWVhz5OqR5JKz/Qpu8F/kuq7lbby7vwedEZHXmG+2IBeh59luoC8lGCGey39EtAa9hZU3Yr6GTf8qwwUf+YDHAF3oAb2LnHl9zA+Gn6KAuAAp2yfjKsEG+OW6+/jmqfplQpid5ZhKkeBAP9vklXDtvrNEXIDosFtg33E1wjkH6tBs8+3StAaNRC0WYvizni1Gudt6ZJgYnvYlz5BWtQkldShb6WM18S143lPgFhb8qr/8KmqFJkb8QnrgoL8dagz75oCQs5UyuBNr0iuSSQJsORFJwFkf0n32Do3T0e8SB7/Aq49OXb5/ATXwFUQtc8aGRMfH2OeiHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Vqc1mz3axpFAzdg7lT6JZvRhrAE9v/sPglj8irXA34=;
-        b=A4/2a1stP2RqZvmdHdWzCHl/MoO4AaMK6NYTVU/hWPu+lgAh9L1mcGEzGs7eUVWBk3
-         qkSqKQ+K9tmPRcgCSbGuAOVjo7OP5rBAhq9IY+JCzinIxLKfaVcITcfZh4kLEOY96sn8
-         BMjLXNV9CoLzJgzGkeUD94ur8yyv0fxdTQVniXvF1iMLhj8jb/Ig1gToZoKuqHVDGzkE
-         2OIdAZeyFzeC82PI0QLAhBQb4fMmyeZKBnD+feQl1KG0HL/b+WKIZyKoLhDWDg3MuA//
-         9onYgEvGxQgje2kep4xtVazaYkoFZU/ew+1MPllbhqev2mV5lt7LKEZwc1dFyGp1d7yA
-         OqeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Vqc1mz3axpFAzdg7lT6JZvRhrAE9v/sPglj8irXA34=;
-        b=IpD4IlAUTUzG9RgbMvox0NparpUdtxbctOo0L2IFnZE4MnX7s6nGb2Sz4JALuZsmeQ
-         Wo0OT9WlXrxD2o7me1F04HAk8ZkbKiNk2YfvCiCUD4mXEq7eR80RXXbbe0QviSROxIkJ
-         HW/aRDLyoWPtI4G4nufg2Pe7gGpBe6OO3u3L2Tr0vcMx6KB6fiGZzcRASzS8eeeF+HBl
-         PCQvNZ37Krp9Uy4Etbpoz+EwOmGqS4l0CmbRRL/cKSFM9+3vc2swolMrUl0mZnEtCl4l
-         8EuY58a9nvhcYMgk8tBgh0Gbq8L+wK6RgXRxQL0NyD8FkyOSwqaumGjrLVfmniaFPVqv
-         ioag==
-X-Gm-Message-State: AO0yUKV8N4uNiVqQpNyYj9i3toNXG4rQ+pGVouX2qstKunPufTXjSd5s
-        A8XohWc/ZYjlKNB1DgKka5GTk4XYxnnho1l6Fbe/ow==
-X-Google-Smtp-Source: AK7set/WU+TdS91gbQDp55cM7T6gOGevfshMX5qLYUUCi4vvlJRIdW3N3DRCsaALsxlOyOlhSBVGppifKccE6/zEA8c=
-X-Received: by 2002:a17:902:a3cc:b0:19a:fa2f:559e with SMTP id
- q12-20020a170902a3cc00b0019afa2f559emr472492plb.3.1677743431224; Wed, 01 Mar
- 2023 23:50:31 -0800 (PST)
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DLHWcsIqCGWKTlybs8vaKjLBtaFFyDnDpmw3pTjlfIk=;
+ b=t4Ho7FIh2ANxajh7l9SRVTjP27wOAERKqPjHp6JIYeDT+6otK1RMu6TZnBfb4yfU8ruaqlpeQbdU9EamXoNr1pen4pHgoDyWIzhZtddOahONHCUFgTyGMHksTkKL7+WJKz04rap56XLmzAwd/2gp2dHz8T0uNsYVDTwrVcrvVdA=
+Received: from BY5PR04MB6327.namprd04.prod.outlook.com (2603:10b6:a03:1e8::20)
+ by SJ0PR04MB7472.namprd04.prod.outlook.com (2603:10b6:a03:294::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Thu, 2 Mar
+ 2023 07:52:57 +0000
+Received: from BY5PR04MB6327.namprd04.prod.outlook.com
+ ([fe80::d4d7:5772:65c9:e4d1]) by BY5PR04MB6327.namprd04.prod.outlook.com
+ ([fe80::d4d7:5772:65c9:e4d1%2]) with mapi id 15.20.6156.018; Thu, 2 Mar 2023
+ 07:52:57 +0000
+From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+CC:     "beanhuo@micron.com" <beanhuo@micron.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/2] include: uapi: scsi: Change utp_upiu_query struct
+Thread-Topic: [PATCH 1/2] include: uapi: scsi: Change utp_upiu_query struct
+Thread-Index: AQHZRtAnEVxdCbOh6UqEvS4KnyORTa7bFjkAgAfhZ3CAABSDgIACqcwQgACYCgCAANxAoA==
+Date:   Thu, 2 Mar 2023 07:52:56 +0000
+Message-ID: <BY5PR04MB6327A013D41E595F7A21A4F7EDB29@BY5PR04MB6327.namprd04.prod.outlook.com>
+References: <1677078770-30994-1-git-send-email-Arthur.Simchaev@wdc.com>
+ <1677078770-30994-2-git-send-email-Arthur.Simchaev@wdc.com>
+ <b1f0ed44-d707-5593-7449-8a6bd23c9902@acm.org>
+ <BY5PR04MB632717453EB0D403388B4F1EEDAF9@BY5PR04MB6327.namprd04.prod.outlook.com>
+ <21f73bfd-1d91-106f-d3a8-eb4674c517e6@acm.org>
+ <BY5PR04MB632701F87296BEE554D3F055EDAD9@BY5PR04MB6327.namprd04.prod.outlook.com>
+ <e6518637-4e78-3935-133d-79afea67cf80@acm.org>
+In-Reply-To: <e6518637-4e78-3935-133d-79afea67cf80@acm.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR04MB6327:EE_|SJ0PR04MB7472:EE_
+x-ms-office365-filtering-correlation-id: 26416ee9-1c46-4f6d-8bd3-08db1af322f6
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9zstEJ0Cj4sCbJVxGUiHPHA985Igp2qwQnLNqcGAcn2FGiO9LCxUoGbkZsAeuYaqqq/L2cD23IAhLzxqFn3l35uyDX4ORM8DC6sXC1gosUzbifWURs2pDhhjBd4YRjlBWro+/tEooZHu0LqnZmfNdBOZAoFaSKsiHBeJaA3Ybddxjvh2Uuk0IK94Kt8XjGLOjDbsJjRgJBj77jNyz9rz3qeKcvRXihTR1P51EaGMJEWoB0igfXXQ9J+JdUOdOAdODluKzPn41UdUAcG99jT/mQoSmymsNlhB1mteHgGF6sUgQITShWhfaPWmWviZTlne3EgYtF5WRoKe4e7bzfXj2po7zFonFpPuQ/bRDB+K9CeNW7oZ1pjex+SM2RS1PSm6C5tVAe1rJ8OI62/s45Ww9YRaf/m0eyl1Pd8Q3lBo+LyZKav47yjTRTqx5ktpULJHIt53NqwMclwxI+hC21eXluUaCFGhozhu3dlROkixC9gAXNA6/HyBk9E2Alvke47dM89ldl1yrYbxuvekpCEI0B3Zuj0Uf8GtfpDZ8pKRzcP8TEuqRTb5N++IHqq/eyCv0O5wc4CmBX1mM2Djr4IciyzrJt796UOU4pPFjEKMp7IVP8BzukIFUKs8n2Ypw1Fvlnry3pw6tOZgO1REgiEHli+AHymjfGKCBwJ/AhJvTUYaeXhf0wDQsr+nL9w4YfMaVkWz8kaqj0jICsxhKJ5Acg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6327.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(366004)(39860400002)(396003)(451199018)(53546011)(6506007)(26005)(9686003)(186003)(316002)(41300700001)(110136005)(54906003)(4326008)(76116006)(66946007)(64756008)(66446008)(66476007)(66556008)(8676002)(7696005)(2906002)(71200400001)(52536014)(8936002)(5660300002)(478600001)(82960400001)(122000001)(38100700002)(86362001)(55016003)(33656002)(38070700005)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VGN3YS8wNFdiOEJ4TXArVllsVEdkV2U0VXUzZm9EYmtWcGt6RmVtbkR2Wlln?=
+ =?utf-8?B?RDljVmNLQldDWE1sTmNzYVNKUC9BOHRPTC9EUm1wckk3Y2ZWSHZqalZUSlBI?=
+ =?utf-8?B?dVMzaDBMamZQSERKKzgrcC9TdjVYY25tNHk5aFNFaEhBTjVtUEJaamFiTVJr?=
+ =?utf-8?B?ZnF2N1crQ2NmR3QxMnptWlhuYWUrbXFpcTFFZGRWOEJ1b0k4M2IyeEFXbmQ5?=
+ =?utf-8?B?TWZDMG55ZzR0UlpmUlFENnFKT0lZRTEvV3VvVUxZR0ZuUkoxejEvbVlmTzZB?=
+ =?utf-8?B?cENBaXlTVzVEaXN3cEViUy9Uc1FrczM0Zk1TNkFES0dpOUJRTlU0Vk1mVEkw?=
+ =?utf-8?B?T3dJWGp6YzJ2cFdrZmF2NVZpN2hmdDJKcHZ0dXd3bWVIT2x2alppZGJmOHl4?=
+ =?utf-8?B?dGtYZFM2c0ZveFBYS2Rxa3R6eUhNR1pLNUUyNDNwczNRV3N0WVJpN1RBV1hC?=
+ =?utf-8?B?dWNEWUtHaGxzc2UxOTlpUmhuWXBtazlTK21RazZYUE9mSFlzWDBPZFNpVHpR?=
+ =?utf-8?B?T1pRVy9sakJzb2hyUVpNOVUzZ1QvdmdKN0FkMjkwOGptaGR5aXNUOWRwS3Rp?=
+ =?utf-8?B?ZU8wa1ZJc05mQVcrdG9jbWpUdUxiakRaRmJXeGZaaDJITUN3SnQ0ZHlObkY5?=
+ =?utf-8?B?aEhrNWpxTTBsbW42MWJNNklUdGlUc1UweWlTVkptTGozR3VXVW1Nalk1QUg0?=
+ =?utf-8?B?WjRwRS9ESDM2eFBLMVhDZzhwbzVwdE9MTWhtdVI4WEpHY2RKRDJzdFdiRDBr?=
+ =?utf-8?B?TUh2R3A1NVNGV0M5R2N0OXZIclRqWmt3WmV0UTFnM0lsTEpzQ3Bwc1lJV2lI?=
+ =?utf-8?B?SmhVbTZzNndQYlc5UTh2VElyQmUrb28rZW1qV0tDYlBtWE5YNVpEc2Jnb3FG?=
+ =?utf-8?B?a0pEekNWUUVVZVlVSnE0VkpGYVprM0E3ek1DQWc5RERPOXV0M21veU9aN1Ry?=
+ =?utf-8?B?dFlYcnJFdXdFVUpkVTFvandsMkh2ekN4RnJndDJxcVJFSXd2cnFkYmhYc2E1?=
+ =?utf-8?B?WnpJZTBLaVR5U2hyVG1lMFh4a2pxRTZrdjRqZWpaUmdxUXRMQ3JOd25hZXRr?=
+ =?utf-8?B?MDdPK2M0S3NMNytFTjYrMmU4dzFiUkV0Sk1FOUF4YnMxM1kzMmhUYkgxUE9t?=
+ =?utf-8?B?blkyR3pjWW9Ccy9SR0I2RDdKS251SGtDTFVRMjdndHhKaEtYd1hXakthT3Ex?=
+ =?utf-8?B?RlNmeFhKK1lpWjE2aCtkcHE0dWphVDBvUEl2VW5BMlFLMDJsWXdTSDZoVDE0?=
+ =?utf-8?B?ZHVkZm9HN3lCeXFjK1R2alh6Sk42ZE80V25SOFhLL2JlQk5pRHB6MDgvMHpi?=
+ =?utf-8?B?TitKdkttLzZDd2pleG5kRi9PVlJXc0Z0UUkwTEFaWk1ZVHVpY092WmdYZTBO?=
+ =?utf-8?B?cTU3WFhiSlR0bE5pNm5GNXoydGY0WWlibFYyTTlPZGh5QXFNditYd01WeTlt?=
+ =?utf-8?B?VldMN3ZIa0ZGclcxWDNaL3lnWkMzQkNiWTFlb1NhazJvbm9qdnhrZFBJd0RJ?=
+ =?utf-8?B?bnVsRnJuSjE0Si9LY3dHN3lpVGdGQW9oOFRsZVd4OU02dnU3cTFmb21CUWhH?=
+ =?utf-8?B?WUIrcHgveTZYQ0RZYXhkTzJyanNLejllb2s2SXZYaDB6VmF4YlhwelNuK0Nt?=
+ =?utf-8?B?UUxoS3dIcWRHM3FKbEQrV3ozdnJVSFIzYVRBbjgwMXBqQmFmUXgxV3AyNy9I?=
+ =?utf-8?B?emdMcldnWmdORXJIelVzaE9ydld6TXFLSDRselI3UXhPZDk1YjlJRjJpMHJk?=
+ =?utf-8?B?SXg2ZTlMdUpGZzh6TzFBamxyOXZRM1FPSUdDaUprR2habzhpeDFTaXBUOXM5?=
+ =?utf-8?B?RXlTOWswNjJmYkI4UFJUMlVkT0E4MExxMHRqd0ZjdjBCemtnZHVWbjJMVS9R?=
+ =?utf-8?B?S2RpMFhHVS9EVVVVMEExWVF3OGkyMk9TUjN4SXg4dGl2cXhwa2NRRDEwYjlh?=
+ =?utf-8?B?UkZYVEkxSHJQdjRrODZsOU1OTldaSEZYcUpsMHpjbHhLMnBaeFBLbEhHVTFj?=
+ =?utf-8?B?QjJKNWpmdzVLb3RYMDZ6OU5peWRkZm5vOHAzOGt4dDhQeWtsZE50N0ovYWZo?=
+ =?utf-8?B?VTZlOXQ0a1BWcWYzVldJT1g1eWY5WjhvbWdvSzdibUkwTHB1Ykc3ZHJKVWlT?=
+ =?utf-8?Q?pKUBDJuOHF0PI7jQ7nzRWm/Li?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230224093454.956298-1-vincent.guittot@linaro.org>
- <20230224093454.956298-9-vincent.guittot@linaro.org> <4982b608-f8c7-531c-3322-c055643a5b2d@linux.vnet.ibm.com>
-In-Reply-To: <4982b608-f8c7-531c-3322-c055643a5b2d@linux.vnet.ibm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 2 Mar 2023 08:50:20 +0100
-Message-ID: <CAKfTPtAEbzrxKOGXYRxp0qMM-TPj1q8BdcaVpK7ObZfe8QWn4g@mail.gmail.com>
-Subject: Re: [PATCH v12 8/8] sched/fair: Add latency list
-To:     shrikanth hegde <sshegde@linux.vnet.ibm.com>
-Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: vJIALCdlvLJQX/VB3UN9Ql5ZjrMY891gobdYkRXc+Stmn/NLBkYaE6F/+UpVYLpxoGxkd9gttomGs9lE5yKQQHhhx38JTWeFSiR4UpmNfxCL/HXA8ut2e5JVxDOjgtWjzNg7VSrfFirKR0Vmd0/i+PJwphYQsht81sEzy8lDPAIOFQLfM3nniDAvX8NnFdrHcNXI9l4UmJh5VAaIj7p+rnZKD5JIn87Zg8PkWcsrMW5bUutuuFOPsNpX9bVK9nxrfkxZpkPh91JIbjsQpliFg1TnUQXrgz6/KsdQ5TTnxrOPvtTENEoriWU0+Tya1QFJ24mgALvxg0TukTQTEEk5Zv5C8WIqKXBRGkgVYwEoPyCypPO7afcBS2sdeucPAN8uRAHImcDb4cJQoWunMURQFDPGa8HUSnls00k3z/gcilQ/Viyav8Kv59L9bNA+IHzhzefPE7DssZ2XxbkaZ9/nhtEaiYpEHiZSehOUhz0PL/QyuxPoxNYXe5hTIOqxAJjaDZAnYbg9iuuzNaVd5w5tITXtmO9VgLbY273ZEvd5W+wKGMyaOSpDZ2Q5SfZOEM70KuuoDl+1lBLJyPRH20G2zb3RIP5QBmDrX/vbK3yGB0c7uoYRvFN+7nU2rTlI7n89rKPir7pGLxQ82Tz/DOBg/T4DPtEyyH2CrNKaDbwWiZdyTWdVtrdWvFKHbxmn4tbtYPV8JoeZodn6NCKeFQVN5X0EwUWRs7vk1Q1hZ6w14+PWTF3+E3F9lGFv8kMd4YjvP1uQHOijyxi1sx9tBOWHra4w9Fr+ebg1ifaWdO02JHBk1k+Iah70qOZOoF+HIec5wqPyLP7y7QcG+2H67lYII7U4GC+MldVIfoY7ovpTDpA=
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6327.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26416ee9-1c46-4f6d-8bd3-08db1af322f6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 07:52:56.8390
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: N/zS+W+oXd+Qk1H/zG8BFgoZfkOVMeHDaQC0pLwDMsAneeqtLIUn7kBF0T1eITsxRpxw//D97+abjPoyKmdDBg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR04MB7472
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 at 19:48, shrikanth hegde <sshegde@linux.vnet.ibm.com> wrote:
->
->
-> On 2/24/23 3:04 PM, Vincent Guittot wrote:
-> > Add a rb tree for latency sensitive entities so we can schedule the most
-> > sensitive one first even when it failed to preempt current at wakeup or
-> > when it got quickly preempted by another entity of higher priority.
-> >
-> > In order to keep fairness, the latency is used once at wakeup to get a
-> > minimum slice and not during the following scheduling slice to prevent
-> > long running entity to got more running time than allocated to his nice
-> > priority.
-> >
-> > The rb tree enables to cover the last corner case where latency
-> > sensitive entity can't got schedule quickly after the wakeup.
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
-> > ---
-> >  include/linux/sched.h |   1 +
-> >  kernel/sched/core.c   |   1 +
-> >  kernel/sched/fair.c   | 109 ++++++++++++++++++++++++++++++++++++++++--
-> >  kernel/sched/sched.h  |   1 +
-> >  4 files changed, 109 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > index 38decae3e156..41bb92be5ecc 100644
-> > --- a/include/linux/sched.h
-> > +++ b/include/linux/sched.h
-> > @@ -548,6 +548,7 @@ struct sched_entity {
-> >       /* For load-balancing: */
-> >       struct load_weight              load;
-> >       struct rb_node                  run_node;
-> > +     struct rb_node                  latency_node;
->
-> Ran pahole to see if the frequently accessed fields change across cachelines.
-> There is no change in cachelines of task_struct, whereas sched_entity differs
-> due to latency_node.  Maybe the latency_node could be placed after
-> runnable_weight as there is space available in that cacheline.
-
-I will run some test on my system to confimr your results but we can
-move latency_node field if it helps cache hit stats
-
->
->
-> 6.2
-> #pahole sched_entity
-> struct sched_entity {
->         struct load_weight         load;                 /*     0    16 */
->
->         /* XXX last struct has 4 bytes of padding */
->
->         struct rb_node             run_node;             /*    16    24 */
->         struct list_head           group_node;           /*    40    16 */
->         unsigned int               on_rq;                /*    56     4 */
->
->         /* XXX 4 bytes hole, try to pack */
->
->         u64                        exec_start;           /*    64     8 */
->         u64                        sum_exec_runtime;     /*    72     8 */
->         u64                        vruntime;             /*    80     8 */
->         u64                        prev_sum_exec_runtime; /*    88     8 */
->         u64                        nr_migrations;        /*    96     8 */
->         int                        depth;                /*   104     4 */
->
->         /* XXX 4 bytes hole, try to pack */
->
->         struct sched_entity *      parent;               /*   112     8 */
->         struct cfs_rq *            cfs_rq;               /*   120     8 */
->         /* --- cacheline 1 boundary (128 bytes) --- */
->         struct cfs_rq *            my_q;                 /*   128     8 */
->         long unsigned int          runnable_weight;      /*   136     8 */
->
->         /* XXX 112 bytes hole, try to pack */
->
->         /* --- cacheline 2 boundary (256 bytes) --- */
->         struct sched_avg           avg;                  /*   256   128 */
->
->
-> 6.2 + V12 patch
-> #pahole sched_entity
-> struct sched_entity {
->         struct load_weight         load;                 /*     0    16 */
->
->         /* XXX last struct has 4 bytes of padding */
->
->         struct rb_node             run_node;             /*    16    24 */
->         struct rb_node             latency_node;         /*    40    24 */
->         struct list_head           group_node;           /*    64    16 */
->         unsigned int               on_rq;                /*    80     4 */
->
->         /* XXX 4 bytes hole, try to pack */
->
->         u64                        exec_start;           /*    88     8 */
->         u64                        sum_exec_runtime;     /*    96     8 */
->         u64                        vruntime;             /*   104     8 */
->         u64                        prev_sum_exec_runtime; /*   112     8 */
->         u64                        nr_migrations;        /*   120     8 */
->         /* --- cacheline 1 boundary (128 bytes) --- */
->         int                        depth;                /*   128     4 */
->
->         /* XXX 4 bytes hole, try to pack */
->
->         struct sched_entity *      parent;               /*   136     8 */
->         struct cfs_rq *            cfs_rq;               /*   144     8 */
->         struct cfs_rq *            my_q;                 /*   152     8 */
->
->
-> 6.2 + V12 patch + Re-shuffle of latency_node
-> #pahole sched_entity
-> struct sched_entity {
->         struct load_weight         load;                 /*     0    16 */
->
->         /* XXX last struct has 4 bytes of padding */
->
->         struct rb_node             run_node;             /*    16    24 */
->         struct list_head           group_node;           /*    40    16 */
->         unsigned int               on_rq;                /*    56     4 */
->
->         /* XXX 4 bytes hole, try to pack */
->
->         u64                        exec_start;           /*    64     8 */
->         u64                        sum_exec_runtime;     /*    72     8 */
->         u64                        vruntime;             /*    80     8 */
->         u64                        prev_sum_exec_runtime; /*    88     8 */
->         u64                        nr_migrations;        /*    96     8 */
->         int                        depth;                /*   104     4 */
->
->         /* XXX 4 bytes hole, try to pack */
->
->         struct sched_entity *      parent;               /*   112     8 */
->         struct cfs_rq *            cfs_rq;               /*   120     8 */
->         /* --- cacheline 1 boundary (128 bytes) --- */
->         struct cfs_rq *            my_q;                 /*   128     8 */
->         long unsigned int          runnable_weight;      /*   136     8 */
->         struct rb_node             latency_node;         /*   144    24 */
->         long int                   latency_offset;       /*   168     8 */
->
->         /* XXX 80 bytes hole, try to pack */
->
->         /* --- cacheline 2 boundary (256 bytes) --- */
->
->
->
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index a2b52cf5e1bb..1e93aaaeead2 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -548,7 +548,6 @@ struct sched_entity {
->         /* For load-balancing: */
->         struct load_weight              load;
->         struct rb_node                  run_node;
-> -       struct rb_node                  latency_node;
->         struct list_head                group_node;
->         unsigned int                    on_rq;
->
-> @@ -569,6 +568,7 @@ struct sched_entity {
->         /* cached value of my_q->h_nr_running */
->         unsigned long                   runnable_weight;
->  #endif
-> +       struct rb_node                  latency_node;
->         /* preemption offset in ns */
->         long                            latency_offset;
->
->
-> Ran the schbench and hackbench with this patch series. Here comparison is
-> between 6.2 stable tree, 6.2 + Patch and 6.2 + patch + above re-arrange of
-> latency_node. Ran two cgroups, in one cgroup running stress-ng at 50%(group1)
-> and other is running these benchmarks (group2). Set the latency nice
-> of group2 to -20. These are run on Power system with 12 cores with SMT=8.
-> Total of 96 CPU.
->
-> schbench gets lower latency compared to stabletree. Whereas hackbench seems
-> to regress under this case. Maybe i am doing something wrong. I will re-run
-> and attach the numbers to series.
-> Please suggest if any variation in the test i need to try.
-
-hackbench takes advanatge of a latency nice 19 as it mainly wants to
-run longer slice to move forward rather than preempting others all the
-time
-
->
-> Re-arrange seems to help the patch series by avoiding an cacheline miss.
->
-> =========================
-> schbench
-> =========================
->                  6.2   |  6.2 + V12     |     6.2 + V12 + re-arrange
-> 1 Thread
->   50.0th:        9.00  |    9.00        |        9.50
->   75.0th:       10.50  |   10.00        |        9.50
->   90.0th:       11.00  |   11.00        |       10.50
->   95.0th:       11.00  |   11.00        |       11.00
->   99.0th:       11.50  |   11.50        |       11.50
->   99.5th:       12.50  |   12.00        |       12.00
->   99.9th:       14.50  |   13.50        |       12.00
-> 2 Threads
->   50.0th:        9.50  |    9.50        |        8.50
->   75.0th:       11.00  |   10.50        |        9.50
->   90.0th:       13.50  |   11.50        |       10.50
->   95.0th:       14.00  |   12.00        |       11.00
->   99.0th:       15.50  |   13.50        |       12.00
->   99.5th:       16.00  |   14.00        |       12.00
->   99.9th:       17.00  |   16.00        |       16.50
-> 4 Threads
->   50.0th:       11.50  |   11.50        |       10.50
->   75.0th:       13.50  |   12.50        |       12.50
->   90.0th:       15.50  |   14.50        |       14.00
->   95.0th:       16.50  |   15.50        |       14.50
->   99.0th:       20.00  |   17.50        |       16.50
->   99.5th:       20.50  |   18.50        |       17.00
->   99.9th:       22.50  |   21.00        |       19.00
-> 8 Threads
->   50.0th:       14.00  |   14.00        |       14.00
->   75.0th:       16.00  |   16.00        |       16.00
->   90.0th:       18.00  |   18.00        |       17.50
->   95.0th:       18.50  |   18.50        |       18.50
->   99.0th:       20.00  |   20.00        |       20.00
->   99.5th:       20.50  |   21.50        |       21.00
->   99.9th:       22.50  |   23.50        |       23.00
-> 16 Threads
->   50.0th:       19.00  |   18.50        |       19.00
->   75.0th:       23.00  |   22.50        |       23.00
->   90.0th:       25.00  |   25.50        |       25.00
->   95.0th:       26.50  |   26.50        |       26.00
->   99.0th:       28.50  |   29.00        |       28.50
->   99.5th:       31.00  |   30.00        |       30.00
->   99.9th:     5626.00  | 4761.50        |       32.50
-> 32 Threads
->   50.0th:       27.00  |   27.50        |       29.00
->   75.0th:       35.50  |   36.50        |       38.50
->   90.0th:       42.00  |   44.00        |       50.50
->   95.0th:      447.50  | 2959.00        |     8544.00
->   99.0th:     7372.00  | 17032.00       |    19136.00
->   99.5th:    15360.00  | 19808.00       |    20704.00
->   99.9th:    20640.00  | 30048.00       |    30048.00
->
-> ====================
-> hackbench
-> ====================
->                         6.2     |  6.2 + V12        |     6.2+ V12 +re-arrange
->
-> Process 10 Time:        0.35    |       0.42        |           0.41
-> Process 20 Time:        0.61    |       0.76        |           0.76
-> Process 30 Time:        0.87    |       1.06        |           1.05
-> thread 10 Time:         0.35    |       0.43        |           0.42
-> thread 20 Time:         0.66    |       0.79        |           0.78
-> Process(Pipe) 10 Time:  0.21    |       0.33        |           0.32
-> Process(Pipe) 20 Time:  0.34    |       0.52        |           0.52
-> Process(Pipe) 30 Time:  0.46    |       0.72        |           0.71
-> thread(Pipe) 10 Time:   0.21    |       0.34        |           0.34
-> thread(Pipe) 20 Time:   0.36    |       0.56        |           0.56
->
->
-> >       struct list_head                group_node;
-> >       unsigned int                    on_rq;
-> >
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 093cc1af73dc..752fd364216c 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -4434,6 +4434,7 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
-> >       p->se.nr_migrations             = 0;
-> >       p->se.vruntime                  = 0;
-> >       INIT_LIST_HEAD(&p->se.group_node);
-> > +     RB_CLEAR_NODE(&p->se.latency_node);
-> >
-> >  #ifdef CONFIG_FAIR_GROUP_SCHED
-> >       p->se.cfs_rq                    = NULL;
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 125a6ff53378..e2aeb4511686 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -680,7 +680,85 @@ struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq)
-> >
-> >       return __node_2_se(last);
-> >  }
-> > +#endif
-> >
-> > +/**************************************************************
-> > + * Scheduling class tree data structure manipulation methods:
-> > + * for latency
-> > + */
-> > +
-> > +static inline bool latency_before(struct sched_entity *a,
-> > +                             struct sched_entity *b)
-> > +{
-> > +     return (s64)(a->vruntime + a->latency_offset - b->vruntime - b->latency_offset) < 0;
-> > +}
-> > +
-> > +#define __latency_node_2_se(node) \
-> > +     rb_entry((node), struct sched_entity, latency_node)
-> > +
-> > +static inline bool __latency_less(struct rb_node *a, const struct rb_node *b)
-> > +{
-> > +     return latency_before(__latency_node_2_se(a), __latency_node_2_se(b));
-> > +}
-> > +
-> > +/*
-> > + * Enqueue an entity into the latency rb-tree:
-> > + */
-> > +static void __enqueue_latency(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> > +{
-> > +
-> > +     /* Only latency sensitive entity can be added to the list */
-> > +     if (se->latency_offset >= 0)
-> > +             return;
-> > +
-> > +     if (!RB_EMPTY_NODE(&se->latency_node))
-> > +             return;
-> > +
-> > +     /*
-> > +      * The entity is always added the latency list at wakeup.
-> > +      * Then, a not waking up entity that is put back in the list after an
-> > +      * execution time less than sysctl_sched_min_granularity, means that
-> > +      * the entity has been preempted by a higher sched class or an entity
-> > +      * with higher latency constraint. In thi case, the entity is also put
-> > +      * back in the latency list so it gets a chance to run 1st during the
-> > +      * next slice.
-> > +      */
-> > +     if (!(flags & ENQUEUE_WAKEUP)) {
-> > +             u64 delta_exec = se->sum_exec_runtime - se->prev_sum_exec_runtime;
-> > +
-> > +             if (delta_exec >= sysctl_sched_min_granularity)
-> > +                     return;
-> > +     }
-> > +
-> > +     rb_add_cached(&se->latency_node, &cfs_rq->latency_timeline, __latency_less);
-> > +}
-> > +
-> > +/*
-> > + * Dequeue an entity from the latency rb-tree and return true if it was really
-> > + * part of the rb-tree:
-> > + */
-> > +static bool __dequeue_latency(struct cfs_rq *cfs_rq, struct sched_entity *se)
-> > +{
-> > +     if (!RB_EMPTY_NODE(&se->latency_node)) {
-> > +             rb_erase_cached(&se->latency_node, &cfs_rq->latency_timeline);
-> > +             RB_CLEAR_NODE(&se->latency_node);
-> > +             return true;
-> > +     }
-> > +
-> > +     return false;
-> > +}
-> > +
-> > +static struct sched_entity *__pick_first_latency(struct cfs_rq *cfs_rq)
-> > +{
-> > +     struct rb_node *left = rb_first_cached(&cfs_rq->latency_timeline);
-> > +
-> > +     if (!left)
-> > +             return NULL;
-> > +
-> > +     return __latency_node_2_se(left);
-> > +}
-> > +
-> > +#ifdef CONFIG_SCHED_DEBUG
-> >  /**************************************************************
-> >   * Scheduling class statistics methods:
-> >   */
-> > @@ -4758,8 +4836,10 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> >       check_schedstat_required();
-> >       update_stats_enqueue_fair(cfs_rq, se, flags);
-> >       check_spread(cfs_rq, se);
-> > -     if (!curr)
-> > +     if (!curr) {
-> >               __enqueue_entity(cfs_rq, se);
-> > +             __enqueue_latency(cfs_rq, se, flags);
-> > +     }
-> >       se->on_rq = 1;
-> >
-> >       if (cfs_rq->nr_running == 1) {
-> > @@ -4845,8 +4925,10 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> >
-> >       clear_buddies(cfs_rq, se);
-> >
-> > -     if (se != cfs_rq->curr)
-> > +     if (se != cfs_rq->curr) {
-> >               __dequeue_entity(cfs_rq, se);
-> > +             __dequeue_latency(cfs_rq, se);
-> > +     }
-> >       se->on_rq = 0;
-> >       account_entity_dequeue(cfs_rq, se);
-> >
-> > @@ -4941,6 +5023,7 @@ set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
-> >                */
-> >               update_stats_wait_end_fair(cfs_rq, se);
-> >               __dequeue_entity(cfs_rq, se);
-> > +             __dequeue_latency(cfs_rq, se);
-> >               update_load_avg(cfs_rq, se, UPDATE_TG);
-> >       }
-> >
-> > @@ -4979,7 +5062,7 @@ static struct sched_entity *
-> >  pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >  {
-> >       struct sched_entity *left = __pick_first_entity(cfs_rq);
-> > -     struct sched_entity *se;
-> > +     struct sched_entity *latency, *se;
-> >
-> >       /*
-> >        * If curr is set we have to see if its left of the leftmost entity
-> > @@ -5021,6 +5104,12 @@ pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >               se = cfs_rq->last;
-> >       }
-> >
-> > +     /* Check for latency sensitive entity waiting for running */
-> > +     latency = __pick_first_latency(cfs_rq);
-> > +     if (latency && (latency != se) &&
-> > +         wakeup_preempt_entity(latency, se) < 1)
-> > +             se = latency;
-> > +
-> >       return se;
-> >  }
-> >
-> > @@ -5044,6 +5133,7 @@ static void put_prev_entity(struct cfs_rq *cfs_rq, struct sched_entity *prev)
-> >               update_stats_wait_start_fair(cfs_rq, prev);
-> >               /* Put 'current' back into the tree. */
-> >               __enqueue_entity(cfs_rq, prev);
-> > +             __enqueue_latency(cfs_rq, prev, 0);
-> >               /* in !on_rq case, update occurred at dequeue */
-> >               update_load_avg(cfs_rq, prev, 0);
-> >       }
-> > @@ -12222,6 +12312,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
-> >  void init_cfs_rq(struct cfs_rq *cfs_rq)
-> >  {
-> >       cfs_rq->tasks_timeline = RB_ROOT_CACHED;
-> > +     cfs_rq->latency_timeline = RB_ROOT_CACHED;
-> >       u64_u32_store(cfs_rq->min_vruntime, (u64)(-(1LL << 20)));
-> >  #ifdef CONFIG_SMP
-> >       raw_spin_lock_init(&cfs_rq->removed.lock);
-> > @@ -12378,6 +12469,7 @@ void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
-> >       se->my_q = cfs_rq;
-> >
-> >       se->latency_offset = calc_latency_offset(tg->latency_prio);
-> > +     RB_CLEAR_NODE(&se->latency_node);
-> >
-> >       /* guarantee group entities always have weight */
-> >       update_load_set(&se->load, NICE_0_LOAD);
-> > @@ -12529,8 +12621,19 @@ int sched_group_set_latency(struct task_group *tg, int prio)
-> >
-> >       for_each_possible_cpu(i) {
-> >               struct sched_entity *se = tg->se[i];
-> > +             struct rq *rq = cpu_rq(i);
-> > +             struct rq_flags rf;
-> > +             bool queued;
-> > +
-> > +             rq_lock_irqsave(rq, &rf);
-> >
-> > +             queued = __dequeue_latency(se->cfs_rq, se);
-> >               WRITE_ONCE(se->latency_offset, latency_offset);
-> > +             if (queued)
-> > +                     __enqueue_latency(se->cfs_rq, se, ENQUEUE_WAKEUP);
-> > +
-> > +
-> > +             rq_unlock_irqrestore(rq, &rf);
-> >       }
-> >
-> >       mutex_unlock(&shares_mutex);
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index 9a2e71231083..21dd309e98a9 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -570,6 +570,7 @@ struct cfs_rq {
-> >  #endif
-> >
-> >       struct rb_root_cached   tasks_timeline;
-> > +     struct rb_root_cached   latency_timeline;
-> >
-> >       /*
-> >        * 'curr' points to currently running entity on this cfs_rq.
->
+PiBIaSBBcnRodXIsDQo+IA0KPiBJIGRvdWJ0IHRoYXQgcmVuYW1pbmcgc3RydWN0dXJlIG1lbWJl
+cnMgaXMgYWNjZXB0YWJsZSBmb3IgVUFQSSBoZWFkZXJzLg0KPiBIb3cgYWJvdXQgaW50cm9kdWNp
+bmcgYSBzZWNvbmQgc3RydWN0IG5leHQgdG8gdGhlIHV0cF91cGl1X3F1ZXJ5IHN0cnVjdD8NCj4g
+DQo+IFRoYW5rcywNCj4gDQo+IEJhcnQuDQoNCkRvbmUNCg0KUmVnYXJkcw0KQXJ0aHVyDQoNCj4g
+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQmFydCBWYW4gQXNzY2hlIDxidmFu
+YXNzY2hlQGFjbS5vcmc+DQo+IFNlbnQ6IFdlZG5lc2RheSwgTWFyY2ggMSwgMjAyMyA4OjQ0IFBN
+DQo+IFRvOiBBcnRodXIgU2ltY2hhZXYgPEFydGh1ci5TaW1jaGFldkB3ZGMuY29tPjsNCj4gbWFy
+dGluLnBldGVyc2VuQG9yYWNsZS5jb20NCj4gQ2M6IGJlYW5odW9AbWljcm9uLmNvbTsgbGludXgt
+c2NzaUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+
+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS8yXSBpbmNsdWRlOiB1YXBpOiBzY3NpOiBDaGFuZ2UgdXRw
+X3VwaXVfcXVlcnkgc3RydWN0DQo+IA0KPiBDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQg
+ZnJvbSBvdXRzaWRlIG9mIFdlc3Rlcm4gRGlnaXRhbC4gRG8gbm90IGNsaWNrDQo+IG9uIGxpbmtz
+IG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSByZWNvZ25pemUgdGhlIHNlbmRlciBhbmQg
+a25vdyB0aGF0DQo+IHRoZSBjb250ZW50IGlzIHNhZmUuDQo+IA0KPiANCj4gT24gMy8xLzIzIDAx
+OjQ2LCBBcnRodXIgU2ltY2hhZXYgd3JvdGU6DQo+ID4+Pj4+ICAgIHN0cnVjdCB1dHBfdXBpdV9x
+dWVyeSB7DQo+ID4+Pj4+ICAgICAgX191OCBvcGNvZGU7DQo+ID4+Pj4+ICAgICAgX191OCBpZG47
+DQo+ID4+Pj4+ICAgICAgX191OCBpbmRleDsNCj4gPj4+Pj4gICAgICBfX3U4IHNlbGVjdG9yOw0K
+PiA+Pj4+PiAtICAgX19iZTE2IHJlc2VydmVkX29zZjsNCj4gPj4+Pj4gLSAgIF9fYmUxNiBsZW5n
+dGg7DQo+ID4+Pj4+IC0gICBfX2JlMzIgdmFsdWU7DQo+ID4+Pj4+IC0gICBfX2JlMzIgcmVzZXJ2
+ZWRbMl07DQo+ID4+Pj4+ICsgICBfX3U4IG9zZjM7DQo+ID4+Pj4+ICsgICBfX3U4IG9zZjQ7DQo+
+ID4+Pj4+ICsgICBfX2JlMTYgb3NmNTsNCj4gPj4+Pj4gKyAgIF9fYmUzMiBvc2Y2Ow0KPiA+Pj4+
+PiArICAgX19iZTMyIG9zZjc7DQo+ID4+Pj4+ICAgIH07DQo+ID4+Pj4gQWxsIGNoYW5nZXMgaW4g
+VUFQSSBoZWFkZXJzIG11c3QgYmUgYmFja3dhcmRzIGNvbXBhdGlibGUuIFRoZSBhYm92ZQ0KPiA+
+PiBkb2Vzbid0IGxvb2sgbGlrZSBhIGJhY2t3YXJkcyBjb21wYXRpYmxlIGNoYW5nZSB0byBtZS4N
+Cj4gPj4+DQo+ID4+PiBUaGlzIEFQSSB3YXMgb3JpZ2luYWxseSBpbnZlbnRlZCB0byBzdXBwb3J0
+IHVmcy1ic2cuDQo+ID4+PiBBRkFJSywgdWZzLXV0aWxzIGlzIHRoZSBvbmx5IGFwcCB0aGF0IG1h
+a2VzIHVzZSBvZiB0aGlzIEFQSSwNCj4gPj4+IGFuZCBpdCBkb2Vzbid0IGRpZyBpbnRvIHN0cnVj
+dCB1dHBfdXBpdV9xdWVyeSBpbm5lciBmaWVsZHMuDQo+ID4+DQo+ID4+IFRoYXQgZG9lcyBub3Qg
+bWF0Y2ggd2hhdCBJIHNlZS4gSSBzZWUgdGhhdCBjb2RlIGluIHVmcy11dGlscyBhY2Nlc3Nlcw0K
+PiA+PiB0aGUgJ2xlbmd0aCcgYW5kICd2YWx1ZScgbWVtYmVycyBvZiB0aGUgYWJvdmUgZGF0YSBz
+dHJ1Y3R1cmUuDQo+ID4+DQo+ID4+IFBsZWFzZSBmb2xsb3cgdGhlIHJ1bGVzIGZvciBVQVBJIGhl
+YWRlciBmaWxlcy4NCj4gPj4NCj4gPj4gVGhhbmtzLA0KPiA+Pg0KPiA+PiBCYXJ0Lg0KPiA+DQo+
+ID4gWW91IGFyZSByaWdodCAsIG15IGZhdWx0Lg0KPiA+IEFueXdheSwgSXQganVzdCByZXR1cm4g
+cmVzZXJ2ZWQgZmllbGQgdG8gdGhlIHN0cnVjdC4NCj4gPiBBbHNvIEkgY2FuIHVwZGF0ZSB0aGUg
+dG9vbCBhY2NvcmRpbmdseS4gSW5zdGVhZCBsZW5ndGggYW5kIHZhbHVlIGZpZWxkcywNCj4gPiB1
+c2luZyBvc2Y1IGFuZCBvc2Y2Lg0KPiA+IEluIHRoaXMgY2FzZSB3ZSB3aWxsIGtlZXAgaXQgYmFj
+a3dhcmQgY29tcGF0aWJsZS4NCj4gPiBJcyBpdCBPSz8NCj4gDQo+IEhpIEFydGh1ciwNCj4gDQo+
+IEkgZG91YnQgdGhhdCByZW5hbWluZyBzdHJ1Y3R1cmUgbWVtYmVycyBpcyBhY2NlcHRhYmxlIGZv
+ciBVQVBJIGhlYWRlcnMuDQo+IEhvdyBhYm91dCBpbnRyb2R1Y2luZyBhIHNlY29uZCBzdHJ1Y3Qg
+bmV4dCB0byB0aGUgdXRwX3VwaXVfcXVlcnkgc3RydWN0Pw0KPiANCj4gVGhhbmtzLA0KPiANCj4g
+QmFydC4NCg0K
