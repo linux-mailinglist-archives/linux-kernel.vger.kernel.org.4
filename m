@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBB86A8B4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 22:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9FE6A8BE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjCBVUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 16:20:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S230154AbjCBWfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:35:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjCBVUv (ORCPT
+        with ESMTP id S230151AbjCBWfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 16:20:51 -0500
+        Thu, 2 Mar 2023 17:35:41 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5F9580E2;
-        Thu,  2 Mar 2023 13:19:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D204E5CA;
+        Thu,  2 Mar 2023 14:35:38 -0800 (PST)
 Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
         by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322K6gW6007832;
         Thu, 2 Mar 2023 21:19:29 GMT
@@ -140,8 +140,9 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 ml
 X-Proofpoint-GUID: M7iNwr6l8zqH0N7E3WWW6CrpvsjtcXq6
 X-Proofpoint-ORIG-GUID: M7iNwr6l8zqH0N7E3WWW6CrpvsjtcXq6
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_NONE,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
