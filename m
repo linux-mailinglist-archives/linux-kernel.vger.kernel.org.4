@@ -2,146 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB75D6A7FB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91A26A7FB7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjCBKKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
+        id S229694AbjCBKLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCBKJp (ORCPT
+        with ESMTP id S229982AbjCBKLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:09:45 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD1911EB3;
-        Thu,  2 Mar 2023 02:09:42 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0EC1E60002;
-        Thu,  2 Mar 2023 10:09:27 +0000 (UTC)
-Message-ID: <c0dd1a6e-8e8e-5cdb-bc92-755462704edf@ghiti.fr>
-Date:   Thu, 2 Mar 2023 11:09:27 +0100
+        Thu, 2 Mar 2023 05:11:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B283D919
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:10:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677751808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LUPUq9rwM+2uCcwp+cjvg22RkhBv6eu14BsYsubV2S4=;
+        b=TFgoaezw1ZICY41EGsUSdUxkJcgCx51RBfdg5Gd/xa/hVyY++9fY7piM6xfgmNZ2Ah1gML
+        SHCP5hCOZnOGgNVCsGsEEcHN9xmtnQcscT1F5nwoAw3Si4N1VcDOnANjbvLQDSaiP4O6CK
+        Wok0cw3CIGDRN7+9FWTEd147cBRvpxY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-279-icqTaHY8PIWNyOk7ZAVIgQ-1; Thu, 02 Mar 2023 05:10:06 -0500
+X-MC-Unique: icqTaHY8PIWNyOk7ZAVIgQ-1
+Received: by mail-wm1-f69.google.com with SMTP id m28-20020a05600c3b1c00b003e7d4662b83so1069150wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:10:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LUPUq9rwM+2uCcwp+cjvg22RkhBv6eu14BsYsubV2S4=;
+        b=jAA/XwXvTvRyv8fEJzanxJ8Ne2dYIB7Oln15fGTiS3UzCKlZI2AWI+mL8P4qmGXZBb
+         ivchN9EYdhHs/48KRHRxmOFWwSvcnIRAwDIXmVf5V12D+DIg/f0g3JW7BBeIXvU46kzT
+         SUX/mJZR4LgVF/ZFSCYFh+mOu/0zTvToIPmlWr1HlZ34EA/4Sz7d2lS22mvTMPDn9A3e
+         GvoXtuzQPvak5+iSixXuSbrgQI5YGXxfXUAyIqhmL+hYmk3CsQcop/sAbF1cJnUIH7Kx
+         7WQ3qUhTPRf34qL0KGHgn6Ci78xjzoGf5UtnkjiRkUQ+3n1csdmZk5hshcR+i9rQJooz
+         nWTw==
+X-Gm-Message-State: AO0yUKVss2QOdoyUH0ehUESpvGGJhSLoVfBjNedqm9ZLojMXVnCfqhu8
+        QUY9dtFVi4KDwQ103R+IUTdzYk5pkDIzZNb8eTWSPH831wgfgI1hdqOl6egnZPzSrqF0ddyG5hv
+        1hUZWHY5GGEngFWDVsP1v7RiH
+X-Received: by 2002:a05:600c:4590:b0:3eb:3945:d3f1 with SMTP id r16-20020a05600c459000b003eb3945d3f1mr6873241wmo.5.1677751805512;
+        Thu, 02 Mar 2023 02:10:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set9K2AzGQBPeisGsiHzjscpGYd24l7mhU6n0z2IIo/uIK6J3kzQV4bxrLrhC3WeAmqQld33fvA==
+X-Received: by 2002:a05:600c:4590:b0:3eb:3945:d3f1 with SMTP id r16-20020a05600c459000b003eb3945d3f1mr6873222wmo.5.1677751805149;
+        Thu, 02 Mar 2023 02:10:05 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:4f00:87ba:e9e9:3821:677b? (p200300cbc70e4f0087bae9e93821677b.dip0.t-ipconnect.de. [2003:cb:c70e:4f00:87ba:e9e9:3821:677b])
+        by smtp.gmail.com with ESMTPSA id j8-20020a056000124800b002c71d206329sm14655629wrx.55.2023.03.02.02.10.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 02:10:04 -0800 (PST)
+Message-ID: <3329f63e-5671-1500-0730-cd46ba461d04@redhat.com>
+Date:   Thu, 2 Mar 2023 11:10:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 00/24] Remove COMMAND_LINE_SIZE from uapi
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 01/11] mm/vmstat: remove remote node draining
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-References: <20230302093539.372962-1-alexghiti@rivosinc.com>
- <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>
+References: <20230209150150.380060673@redhat.com>
+ <20230209153204.656996515@redhat.com>
+ <6b6cd2fe-2309-b471-8950-3c4334462e69@redhat.com> <Y/5XoAnv43zYzxLR@tpad>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y/5XoAnv43zYzxLR@tpad>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+[...]
 
-On 3/2/23 10:47, Geert Uytterhoeven wrote:
-> Hi Alex,
->
-> On Thu, Mar 2, 2023 at 10:35 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->> This all came up in the context of increasing COMMAND_LINE_SIZE in the
->> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
->> maximum length of /proc/cmdline and userspace could staticly rely on
->> that to be correct.
->>
->> Usually I wouldn't mess around with changing this sort of thing, but
->> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
->> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
->> increasing, but they're from before the UAPI split so I'm not quite sure
->> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
->> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
->> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
->> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
->> asm-generic/setup.h.").
->>
->> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
->> part of the uapi to begin with, and userspace should be able to handle
->> /proc/cmdline of whatever length it turns out to be.  I don't see any
->> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
->> search, but that's not really enough to consider it unused on my end.
->>
->> This issue was already considered in s390 and they reached the same
->> conclusion in commit 622021cd6c56 ("s390: make command line
->> configurable").
->>
->> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
->> shouldn't be part of uapi, so this now touches all the ports.  I've
->> tried to split this all out and leave it bisectable, but I haven't
->> tested it all that aggressively.
->>
->> Changes since v3 <https://lore.kernel.org/all/20230214074925.228106-1-alexghiti@rivosinc.com/>:
->> * Added RB/AB
->> * Added a mention to commit 622021cd6c56 ("s390: make command line
->>    configurable") in the cover letter
-> Thanks for the update!
->
->   Apparently you forgot to add your own SoB?
+> 
+>> (2) drain_zone_pages() documents that we're draining the PCP
+>>      (bulk-freeing them) of the current CPU on remote nodes. That bulk-
+>>      freeing will properly adjust free memory counters. What exactly is
+>>      the impact when no longer doing that? Won't the "snapshot" of some
+>>      counters eventually be wrong? Do we care?
+> 
+> Don't see why the snapshot of counters will be wrong.
+> 
+> Instead of freeing pages on pcp list of remote nodes after they are
+> considered idle ("3 seconds idle till flush"), what will happen is that
+> drain_all_pages() will free those pcps, for example after an allocation
+> fails on direct reclaim:
+> 
+>          page = get_page_from_freelist(gfp_mask, order, alloc_flags, ac);
+> 
+>          /*
+>           * If an allocation failed after direct reclaim, it could be because
+>           * pages are pinned on the per-cpu lists or in high alloc reserves.
+>           * Shrink them and try again
+>           */
+>          if (!page && !drained) {
+>                  unreserve_highatomic_pageblock(ac, false);
+>                  drain_all_pages(NULL);
+>                  drained = true;
+>                  goto retry;
+>          }
+> 
+> In both cases the pages are freed (and counters maintained) here:
+> 
+> static inline void __free_one_page(struct page *page,
+>                  unsigned long pfn,
+>                  struct zone *zone, unsigned int order,
+>                  int migratetype, fpi_t fpi_flags)
+> {
+>          struct capture_control *capc = task_capc(zone);
+>          unsigned long buddy_pfn = 0;
+>          unsigned long combined_pfn;
+>          struct page *buddy;
+>          bool to_tail;
+> 
+>          VM_BUG_ON(!zone_is_initialized(zone));
+>          VM_BUG_ON_PAGE(page->flags & PAGE_FLAGS_CHECK_AT_PREP, page);
+> 
+>          VM_BUG_ON(migratetype == -1);
+>          if (likely(!is_migrate_isolate(migratetype)))
+>                  __mod_zone_freepage_state(zone, 1 << order, migratetype);
+> 
+>          VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
+>          VM_BUG_ON_PAGE(bad_range(zone, page), page);
+> 
+>          while (order < MAX_ORDER - 1) {
+>                  if (compaction_capture(capc, page, order, migratetype)) {
+>                          __mod_zone_freepage_state(zone, -(1 << order),
+>                                                                  migratetype);
+>                          return;
+>                  }
+> 
+>> Describing the difference between instructed refresh of vmstat and "remotely
+>> drain per-cpu lists" in order to move free memory from the pcp to the buddy
+>> would be great.
+> 
+> The difference is that now remote PCPs will be drained on demand, either via
+> kcompactd or direct reclaim (through drain_all_pages), when memory is
+> low.
+> 
+> For example, with the following test:
+> 
+> dd if=/dev/zero of=file bs=1M count=32000 on a tmpfs filesystem:
+> 
+>        kcompactd0-116     [005] ...1 228232.042873: drain_all_pages <-kcompactd_do_work
+>        kcompactd0-116     [005] ...1 228232.042873: __drain_all_pages <-kcompactd_do_work
+>                dd-479485  [003] ...1 228232.455130: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+>                dd-479485  [011] ...1 228232.721994: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+>       gnome-shell-3750    [015] ...1 228232.723729: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+> 
+> The commit message was indeed incorrect. Updated one:
+> 
+> "mm/vmstat: remove remote node draining
+> 
+> Draining of pages from the local pcp for a remote zone should not be
+> necessary, since once the system is low on memory (or compaction on a
+> zone is in effect), drain_all_pages should be called freeing any unused
+> pcps."
+> 
+> Thanks!
 
+Thanks for the explanation, that makes sense to me. Feel free to add my
 
-I do not know, should I? Palmer did all the work, I only fixed 3 minor 
-things
+Acked-by: David Hildenbrand <david@redhat.com>
 
+... hoping that some others (Mel, Vlastimil?) can have another look.
 
->
-> Gr{oetje,eeting}s,
->
->                          Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+-- 
+Thanks,
+
+David / dhildenb
+
