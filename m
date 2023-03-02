@@ -2,118 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129BD6A791C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C246A7919
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjCBBm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 20:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
+        id S229703AbjCBBl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 20:41:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjCBBm0 (ORCPT
+        with ESMTP id S229674AbjCBBlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:42:26 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D45580D4;
-        Wed,  1 Mar 2023 17:41:59 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321NUdGF019557;
-        Thu, 2 Mar 2023 01:41:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=W5Fsj0D2PjEqi7yD+R6eoQDUqd0GGArIuCqk2z+tAGI=;
- b=f9YM4Yg9/eZQPYRd3j1t2EZqV8enTvuE7uaPsGgyTn78rxeVmMe9tIsbcsBOaYiv/7oB
- coLZpQzCxsBNeSuIukYmK9g2dlvQjGJVxrWn4lSEEojilIgfgo7tDszi3A2wnwRresEL
- Mcnd4divDnXL2dEaRUMb6afjxXT8V2IL8kGTYe4b8NNMGD6BxqfwZEVk//pVdQwdXymv
- VuEU5KR+YQbg/mp+VO94Za2o6ccR2sE7vk8VJZK50Tg+eFr3c0eO3C5+Ve8gNn8HblBz
- L+1XQAbihgjRW3rCi+5UfXWv89ZfGMkc1BO9LoUt5TmB1rUUNeccwJdTw602LEG9tOeQ dQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2asps50w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 01:41:26 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3221fPPq010144
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Mar 2023 01:41:25 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 1 Mar 2023 17:41:20 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
-        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
-        <bvanassche@acm.org>, <avri.altman@wdc.com>, <mani@kernel.org>,
-        <beanhuo@micron.com>, Asutosh Das <quic_asutoshd@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "open list" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/1] ufs: mcq: qcom: Fix passing zero to PTR_ERR
-Date:   Wed, 1 Mar 2023 17:41:06 -0800
-Message-ID: <94ca99b327af634799ce5f25d0112c28cd00970d.1677721072.git.quic_asutoshd@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 1 Mar 2023 20:41:55 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589FE51F8D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:41:23 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id x34so15356435pjj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 17:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nQ/k+I6vg3DIpuQkWsbGXKaDuFnWAPV+R/MRhIWgerE=;
+        b=M1faUwzF8K9LVMgFawTxpJg0odDzVyBttN0AF69uG9guWjiSvbhav1cNgD35gDMKu0
+         j1niW9n0QqE3EKJ1dLgwNzvMTsr/XSuX4cXlnqhLDSoEXOlwHLpg/HIGgMwqwQFoKLTY
+         /3p1wvO6ecQ1YgClypzXuo5Z+9McY/e//LJVhv3UX6Kpq0CIXJKrgmeQRoYvzMI1gJrs
+         GhDh8QtNI7ubX9ks3+BO7j6DV36t9q0rMBQcG43GtBzfzhnaGmfxqQjy6q1mxlVc/mvD
+         dmoYB0/AEPJc7ihdJU3WdhAsnYUJK781v7iYPrrNrt88tgTT5g7Myt5GjBx8YtQisLfu
+         4ZrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nQ/k+I6vg3DIpuQkWsbGXKaDuFnWAPV+R/MRhIWgerE=;
+        b=WC4XKQu2mru7I9/i10Q+06cSrboi3usCzHTHNLKwLACcxtjK+XoEb8qLaRuvqloBm2
+         qvO2TdVxh4Xuu8PB4KZIu2EjLzPwm9aoBnPSTYXs56rNael0teGSY62lZ0mGU3r8olDx
+         HVCXyYvyghhqDkRsBpY66CdGBVzKY9//8634cpuQYEhcIMW0lZO+e+Jb+IDU4OafYoiq
+         k1aBUMWDoH55u/voQ1gFrU0px5v1XyRaSU8jnz6HCTU5iAHAgCwrPQsAHaSPFuHT/6Zi
+         DgAdowe4QLwcaos+rpfhucQPPGMao4MQHRbXqRRGca2A/INHc5Pv2cXOnkDyO0KhpRB4
+         FdeA==
+X-Gm-Message-State: AO0yUKUqkOOVl4p0yzW5yUN1Y48z+PJEXA6RduD7ofipu99zvC8DRfAm
+        dD0oDSK8NJXNHUn0bjGMb9MABsmBWtI+hkUCcSCLyWDG1A8f2Y2Sp6U=
+X-Google-Smtp-Source: AK7set96nV5WxVAFJCuff1YfyXG1LVejzmkonDIYcfNUk89kau/aG+VyPFxYaHWrc+2i5u58w4j88wEOxo3FDLY30SQ=
+X-Received: by 2002:a17:902:7841:b0:19d:1dfe:eac6 with SMTP id
+ e1-20020a170902784100b0019d1dfeeac6mr3274257pln.1.1677721282551; Wed, 01 Mar
+ 2023 17:41:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 72ft9D9LAwQDz6VfaaxDTcyu-YShsEqr
-X-Proofpoint-ORIG-GUID: 72ft9D9LAwQDz6VfaaxDTcyu-YShsEqr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-01_17,2023-03-01_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 mlxscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
- priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303020010
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230220183847.59159-1-michael.roth@amd.com> <20230220183847.59159-55-michael.roth@amd.com>
+ <20230302020245.00006f57@gmail.com>
+In-Reply-To: <20230302020245.00006f57@gmail.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Wed, 1 Mar 2023 17:41:11 -0800
+Message-ID: <CAAH4kHY6jm9PHjuGj18eyCC8H4oksuNkVL=igAh4P4BTsKs2xA@mail.gmail.com>
+Subject: Re: [PATCH RFC v8 54/56] x86/sev: Add KVM commands for instance certs
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix an error case in ufs_qcom_mcq_config_resource(), where the
-return value is set to 0 before passing it to PTR_ERR.
+> > @@ -2089,6 +2089,7 @@ static void *snp_context_create(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> >               goto e_free;
+> >
+> >       sev->snp_certs_data = certs_data;
+> > +     sev->snp_certs_len = 0;
+> >
+> >       return context;
+> >
+>
+> Better to move the fix to PATCH 45.
+>
 
-This led to Smatch warning:
-drivers/ufs/host/ufs-qcom.c:1455 ufs_qcom_mcq_config_resource() warn:
-passing zero to 'PTR_ERR'
+This part isn't a fix, but part of the implementation since
+snp_certs_len is added in this patch here
 
-Fixes: c263b4ef737e ("scsi: ufs: core: mcq: Configure resource regions")
-Reported-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> > index 221b38d3c845..dced46559508 100644
+> > --- a/arch/x86/kvm/svm/svm.h
+> > +++ b/arch/x86/kvm/svm/svm.h
+> > @@ -94,6 +94,7 @@ struct kvm_sev_info {
+> >       u64 snp_init_flags;
+> >       void *snp_context;      /* SNP guest context page */
+> >       void *snp_certs_data;
+> > +     unsigned int snp_certs_len; /* Size of instance override for certs */
+> >       struct mutex guest_req_lock; /* Lock for guest request handling */
+> >
+> >       u64 sev_features;       /* Features set at VMSA creation */
 
---
-v1 -> v2
-- Split to 2 patches
-- Addressed Mani's comments
---
----
- drivers/ufs/host/ufs-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 34fc453f3eb1..43b1fc1ad33e 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1451,8 +1451,8 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
- 		if (IS_ERR(res->base)) {
- 			dev_err(hba->dev, "Failed to map res %s, err=%d\n",
- 					 res->name, (int)PTR_ERR(res->base));
--			res->base = NULL;
- 			ret = PTR_ERR(res->base);
-+			res->base = NULL;
- 			return ret;
- 		}
- 	}
 -- 
-2.7.4
-
+-Dionna Glaze, PhD (she/her)
