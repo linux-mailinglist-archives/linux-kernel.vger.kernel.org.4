@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD4F6A90FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAAF6A914D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjCCGZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 01:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S229512AbjCCG5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 01:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjCCGZv (ORCPT
+        with ESMTP id S229704AbjCCG5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 01:25:51 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE434DBE6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:25:18 -0800 (PST)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230303062459epoutp01cee2f0c4992f7f70608a02b35c99e84e~I1KzO_RFE2396023960epoutp01Y
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:24:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230303062459epoutp01cee2f0c4992f7f70608a02b35c99e84e~I1KzO_RFE2396023960epoutp01Y
+        Fri, 3 Mar 2023 01:57:18 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1129E241D4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:57:13 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230303065711epoutp02a424555f3e98133c30a26f43bdd03779~I1m50i1x-2877828778epoutp02m
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:57:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230303065711epoutp02a424555f3e98133c30a26f43bdd03779~I1m50i1x-2877828778epoutp02m
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1677824699;
-        bh=sv2hnfV+RZAA1n52R0aeU8NHCNtbzK89lktgJrilOZc=;
+        s=mail20170921; t=1677826631;
+        bh=OzCLQkmjrZXPNZemecRxifP1D52YdU29Dr/WUBWtLSc=;
         h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=BzFyFbiwX01CjwL/2H7ZuK9vLk+lQX21u6bR1qYyNkL+a2u8VfsVB6kYdbthjBkze
-         w2TPFz50V9213DDCHY/4VmthTzx+RcrSbDyOviPFGxOY6+rKsVYDCLJrd6qMGUwR8t
-         0Z+WpKZCIRP+uZKMuiQWixtnzFmIO728RkqDgA2M=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230303062459epcas5p3ea6871064e48c6efd24ff13ca3bc0dcf~I1Kypaotc0229702297epcas5p3B;
-        Fri,  3 Mar 2023 06:24:59 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4PSdHY23n6z4x9QF; Fri,  3 Mar
-        2023 06:24:57 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B4.86.06765.9B291046; Fri,  3 Mar 2023 15:24:57 +0900 (KST)
+        b=Y18VVlS7kq5Ye2pCBxD6sxsdbRQ3Rty9CojDoy77uKgnkWk3pLLA5n1k52Jeofu3a
+         V1pQROSj/9hF8xh/WSpehQxA2pdzTHcwNOtYU9yFjrPXmUdzoQ+s3Uu8heRtoy6wdm
+         SWgKSOeP4cprAgSQNttn53cJor2quZw5HJB/+/+M=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230303065710epcas5p1592a12f05fe16d46a49117cd260a9984~I1m5J-vzu0169801698epcas5p1d;
+        Fri,  3 Mar 2023 06:57:10 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4PSf0h1R7Yz4x9Pw; Fri,  3 Mar
+        2023 06:57:08 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3A.4C.10528.44A91046; Fri,  3 Mar 2023 15:57:08 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230302131016epcas5p3084bc8d556da7316c3ca50cba044a836~InDXxiSmB1466014660epcas5p3R;
-        Thu,  2 Mar 2023 13:10:16 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230302151835epcas5p142e2fc60df73b926a1be1455975b5755~IozZkHRNP2145221452epcas5p1S;
+        Thu,  2 Mar 2023 15:18:35 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230302131016epsmtrp19162c5513b2eff120490acdd5e7d7d3b~InDXwiMBR0832508325epsmtrp1P;
-        Thu,  2 Mar 2023 13:10:16 +0000 (GMT)
-X-AuditID: b6c32a4b-46dfa70000011a6d-3d-640192b92341
+        20230302151835epsmtrp18931461fdfa8497175c3b300d9a34f12~IozZjFo891997819978epsmtrp1Y;
+        Thu,  2 Mar 2023 15:18:35 +0000 (GMT)
+X-AuditID: b6c32a49-c17ff70000012920-d1-64019a447202
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        05.84.18071.830A0046; Thu,  2 Mar 2023 22:10:16 +0900 (KST)
-Received: from FDSFTE462 (unknown [107.122.81.248]) by epsmtip2.samsung.com
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        25.58.31821.B4EB0046; Fri,  3 Mar 2023 00:18:35 +0900 (KST)
+Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20230302131013epsmtip20cb8ea82f30448f73cc63032ab2e84dd~InDVC3y-i2302723027epsmtip2r;
-        Thu,  2 Mar 2023 13:10:13 +0000 (GMT)
-From:   "Shradha Todi" <shradha.t@samsung.com>
+        20230302151831epsmtip29d910af96e24e054b0531028007242af~IozWfThvo0220602206epsmtip2i;
+        Thu,  2 Mar 2023 15:18:31 +0000 (GMT)
+From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
 To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        <lpieralisi@kernel.org>, <kw@linux.com>, <robh@kernel.org>,
-        <bhelgaas@google.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <alim.akhtar@samsung.com>, <jingoohan1@gmail.com>,
-        <Sergey.Semin@baikalelectronics.ru>, <lukas.bulwahn@gmail.com>,
-        <hongxing.zhu@nxp.com>, <tglx@linutronix.de>,
-        <m.szyprowski@samsung.com>, <jh80.chung@samsung.co>,
-        <pankaj.dubey@samsung.com>
-Cc:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <a0c79665-adb9-a846-5a84-d85e0684c25f@linaro.org>
-Subject: RE: [PATCH 15/16] PCI: samsung: Add structure to hold resource
- operations
-Date:   Thu, 2 Mar 2023 18:40:12 +0530
-Message-ID: <139901d94d08$54fb9030$fef2b090$@samsung.com>
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
+        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
+        <benjamin.gaignard@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <stanimir.varbanov@linaro.org>, <dillon.minfei@gmail.com>,
+        <david.plowman@raspberrypi.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <andi@etezian.org>,
+        <alim.akhtar@samsung.com>, <aswani.reddy@samsung.com>,
+        <pankaj.dubey@samsung.com>
+In-Reply-To: <8b5bea40-6f7b-1d00-ac23-83a28c7dacbc@linaro.org>
+Subject: RE: [Patch v6] dt-bindings: media: s5p-mfc: convert bindings to
+ json-schema
+Date:   Thu, 2 Mar 2023 20:48:30 +0530
+Message-ID: <046b01d94d1a$418146a0$c483d3e0$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHB3D0FgV9/Br8Y35oSVRdB1anKHwH9qfdGAn+u9fwBvPnmbq7khR1w
 Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUxTZxTGfXtve1sEdwU2XzGy7sq2gOOjUroXQ90yK7tTl5FowmKY0NAb
-        ipS26W0FxxLLAsII4HeAWr4RRjdQi2DLx6YF5tgmc4PJxjBTVzOciMIaNkPdRrl147/nnPye
-        POe8b44QC/YKwoTZWiNj0Co1lCAA7xmMjIp2ngCquJP2QHSrrkeAWj5Uo/qhUT6y9NQCNLc4
-        iqOPPTUEqpy+jaGB+90EMpcv8pH91xt8NNZrFaBrdVcFqPrbz3ioyFuEo6LhEhx1DN0kUFO3
-        h0D/9DsI5K16hKMu+2ns9VB6xv4nQTstNwm6wW6i7baPBPTUjX4BPTs6StDu8Soe3dVymL4w
-        6+DRTeY5AV150QboP+zhKYH7cpLUjFLFGMSMNlOnytZmyalde9K3pyfI4iTRkkT0KiXWKnMZ
-        OaXYnRKdnK1Z2pMSH1RqTEutFCXLUrHbkgw6k5ERq3WsUU4xepVGL9XHsMpc1qTNitEyxq2S
-        uLgtCUtgRo664YyHr5/fnG+dayPMoCmiDAiFkJRCpy2vDAQIg8k+AO19dwmumAdwZqpKwBUL
-        AF564OGXAdGyw1Ey7qcGACzx9gKumAaww/IE91EC8hXoHvdiPh1K2jHoKqF9EEZ2AuhurOD5
-        wkXkNui25fuYEHIvPO78btmLkxGw9pvhZW8QmQi9lRUEp9fCkRr3MoORm2Fr432Mm0gMH99t
-        5XNZyfD24EWCY9bB4cflmC8Xkm0iWFxq43EGBVyccfh1CPz9KmeAZBi8d/SIX2fB9q5qf4AG
-        LnS1+PnX4OVxK+6bHyMj4bneWK69EZ7+qpPH5a6BFYtuPx4EHXVP9SboedKPc3o9rPtijH8M
-        UJYVq1lWrGZZsYLl/7QGgNvAekbP5mYxbII+Xsvk/ffhmbpcO1g+g6hdDnDn1qMYF+AJgQtA
-        IUaFBhWYV6mCg1TKQ+8zBl26waRhWBdIWHrv41jYs5m6pTvSGtMl0sQ4qUwmkybGyyTUuqCX
-        5SOZwWSW0sjkMIyeMTz18YSiMDNP8eBU/Wrr/raeubVvpxn2Xi+9ol0tSqsttJq/NO3ccfjo
-        ZAHa8H16Zttv3UP4OTR26EzEbOOx6YLOhxMj2Eup7/24+0D4xCL7ibNaMPWGvJkojhTrQR6W
-        NP2QuDBv/fx64NfJRz6YM7dviG1tVxRe217evF8h7+OfH87f+rcu46cdGy/h3uyDZ80hxGSu
-        p1zxTs3AllWyPeoX8QxXaeyV9s41+zJ0MvepH9wnPvW6XJeFg6JnAg7UFdcn/xX6wqa08DvG
-        5z2ixPHGnyeJMGnKcxMnU22S1IU3zRqyvZ7ZeS9KLOah0V86nFHl4oiZ5taz+RPvDp03xhve
-        ogoD80C4zjpJ4axaKYnCDKzyX7OLPGePBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa2xLYRzGveec9pyVJkdX9pq41WUMo8K8EoYQOcaHbSEucSs91sVuThVT
-        rJPK0rFlcdtWNrNUN41ZVmvXUUq7mrmUMUNqsVImNssYmbGUVCPZt1/yPM8v/w9/Che9IyKp
-        lPR9LJcuS5XwBYTVJZkwG5UPk8/NKZyIOsqsfGQ4pkAXGz08pLeWAvT1t4dAVd9LSFTwyYej
-        W10WEmlO/uYh8/s2Hnp+4wIfPS5r4qPiJ7cxpB3UEkjrziVQdWM7iSos30n0x24j0WBRL4Gu
-        m8/iy8RMt7mfZBr07SRTblYxZpOOz7xps/OZHo+HZPytRRhz3ZDN1PbYMKZC85XPFNSZANNn
-        Hp8wYrNgsZxNTdnPcnPidggUA4ZJmfeiD/aeqAMa8E2SB8IoSM+HttxWMg8IKBF9E8CuygIQ
-        CsbAvpZrWIjD4ZVAJxlkEf0RwAe2uCDz6VnQ3zqI5wGKEtNOHOZmBT04bQawz1iNh6TdAPY2
-        f8SCpTA6DvpNB4PbcDoJGl74iCAT9BRY+siNB1lIL4KDBflkiEfC5hL/vw5Oz4T5vuPgPxsv
-        deGh2ybCgQ9GXpDF9Croc9WRoU4EdA+cxAtBuH6ISj9EpR+i0g+ZlAPCBMawmcq05DSlNFOa
-        zh6IUcrSlKr05JhdGWlm8O8NomfYQL2pN8YJMAo4AaRwiVio1gyTi4RyWdYhlsvYzqlSWaUT
-        jKUISYTwaV7zdhGdLNvH7mHZTJb7n2JUWKQGW+G5XXKkxJftuBrb5InurHRZ2pcGGhyWw8VJ
-        EW3qlJfD4xOKuV/rc4SeFyI0Lk5b+/61O7to4aptUdOO+s+4CcupUd84a/fkA2t2vuq526Cz
-        lwaOxBq3rJdrHLU1d1X9NabGTi1vb/2KJK93g2JghOH03KlbcmqeOLxkVUtipLiiDGNd2qyo
-        TfVi5wxy05L40T9malz2y1sPP6zWzY9N6G45oQhf95jnlb4K3FdnHFrTAZsCup+lK5PCVr+8
-        Uba8/3yxQP2UkwTUC9p1bzr6vhi1iflry99eszbZZ+k23pHOTs2f3vn5g+Oc85Nq67rd3qWF
-        z/x7EpdFZf24uWHe/RwJoVTIpNE4p5T9BTLGqm11AwAA
-X-CMS-MailID: 20230302131016epcas5p3084bc8d556da7316c3ca50cba044a836
+Thread-Index: AQHxIgKtygHqPU4mHAhqu15r4A65nwLsA7LZAklDK9yujjyZkA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTZxT3u/f2xdbl8jB8EGdYRTZBaKuFfV14TYm7DhNJ5pYIJtC1dy2j
+        tLW3jMmWjWQDEYGJipNKYAplGQ+BWhgC8mx9FOLmg8eUDhgyQLOFwB4yH1nLhY3/fud3fud8
+        53e+HD7uU8oL5KfrTLRRp9CKuF5E28C218ITzEAlefIFD01WtnFR9eNZDE1ULxGo/1IrD9nu
+        nsPRt9d6OajKfpODvu/7hUAtc+7srXIXgWarLgI0b/6Zi0rmpnB05ZG7wjo9wkF3Oiq4qKi5
+        lYMa7S4esozewlCt9SmGLrT+wUN5V+w89GW+HYv3pxoqGwDV7qoB1GjNIk5dNrt4VHXXPEZZ
+        645xqfGRLi51qeZzKs/xD0GV2OoAVWgf5VJL1s2U888lXpIwOSNaQytUtDGI1in1qnSdOkaU
+        +E7q7tTIKIk0XCpHr4uCdIpMOkaUsC8pfE+61u1eFPSRQpvlppIUDCMSx0Yb9VkmOkijZ0wx
+        Itqg0hpkhghGkclk6dQROtr0hlQi2RHpFqZlaCbydxuWsj/uGH+I5YIiTSEQ8CEpg2XPFniF
+        wIvvQ3YC2HivG2ODRQAtY5cBGywBOPxTM2etZGzxKodNdAB4v6QHZ4NZAE/9vQA8Ki4phhPO
+        ohWVH+kAcNI2taLCyaMELL2du6ISkLGwteA514N9yffgVEuBG/P5BBkMfx2We2ghKYeVJ29i
+        LPaGN8ofEB6Mk2Gw9vwjnB0pCC7P1HJY3h86lotWeD9yFxy1nVnVOAXQVYN72kMyAVZfVbO0
+        L3x4zcZjcSCc/yp/FSvh9IX51VItbOo6TbA4DvberSA8bXByG2zqELP0y7DMeRFjJ3gJFj95
+        gLG8ELZXruEQWDH+eHWJm+BAvQWcACLzOmPmdcbM68yY/3/tG0DUgQDawGSqaSbSINXR2f/9
+        t1KfaQUrtxG6tx24Jhci+gHGB/0A8nGRn/CT3A0qH6FKcSSHNupTjVlamukHke5ll+KBG5V6
+        93HpTKlSmVwii4qKksl3RklF/sJXY24ofUi1wkRn0LSBNq7VYXxBYC4WcrKv64f4sIGNz+sD
+        +tIcs1u8xb6j2or9v72YfUDzVv3E4vZ0ZfykaU/PK1bvXYcLytuij8o7Es4c37c3z1SX5NiQ
+        kj67/OOp7YeOvW2rTXGaI77zPTLYmeFszvb9dFOD885OC5NzP7m4tsnil/N7z9mDcXWOxIa8
+        hIgZ8bxBfG9/sP7w8cCkyBdO2DTTW4Ycb0Z/Fpu8S1ePYWkBsCSxZLhzWi/tLi/7i048RMxI
+        2rx6i0cE15M/3EF5NQYEmws2+wya3+UUXX+mnHtf2JoT091VddDODB3IHVJWx50VD+YTsnFl
+        i/9URsq5D+LagtXnpVuXGzqp5d6xsNCvn1q23g4RiAhGo5CG4kZG8S8Sg7FgpAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNIsWRmVeSWpSXmKPExsWy7bCSvK73PoYUg1ubWCwezNvGZrH4x3Mm
+        i/uLP7NYHNq8ld1iy5XZzBbLjx9gtZh/5ByrxfaDj1gsNr4Ayl6ceZfF4vn8dYwWL2fdY7Po
+        e/GQ2WLva6COTY+vsVpc3jWHzaJnw1ZWi7VH7rJbLL1+kcli2aY/TBaLtn5ht2jde4TdoqXt
+        CJODuMeaeWsYPXbcXcLocX3JJ2aPnbPusnss3vOSyWPTqk42jzvX9rB5bF5S79F69BeLR9+W
+        VYweXUeus3l83iTncerrZ/YA3igum5TUnMyy1CJ9uwSujF3Lu9gKtsRWbJtwla2BcYVzFyMn
+        h4SAicSNT8dYuxi5OIQEdjBKnL7wnBUiISPxv+0YO4QtLLHy33MwW0jgKaPEl9NZIDabgL7E
+        /VM9YM0iAicZJfrPtIA5zAIzWSSuTjjGBDH2AKPE58+nmUBaOAXsJLZ2/GMDsYUFQiR+NWwF
+        6uDgYBFQkXh21RIkzCtgKTFv0jkmCFtQ4uTMJywgNrOAtkTvw1ZGGHvZwtfMENcpSPx8uowV
+        Ii4ucfRnD1hcRMBJ4vqWacwTGIVnIRk1C8moWUhGzULSvoCRZRWjZGpBcW56brFhgVFearle
+        cWJucWleul5yfu4mRnD60NLawbhn1Qe9Q4xMHIyHGCU4mJVEeKsbGFKEeFMSK6tSi/Lji0pz
+        UosPMUpzsCiJ817oOhkvJJCeWJKanZpakFoEk2Xi4JRqYNps+/7a1unBD16ZPvDflqj+4ocV
+        A5vF62VzKpwX6n1q9Zy/pc1pStKS1f3GX2/vXsu+rlBZ/9RtVi+R9XwXsqTOW97bczdgueak
+        o5UmzkLpn584sKjP9dwosGrHju9Sn6J13PNu3gtnqdA5W1nR6DD5B8eiL4WMivJPvJWuJD+7
+        UvWm1lI1VaraW6i9UaPhz53EBxuvnMtbckdvCnehsK9MhuLsXR0fz2+s157r9OzNz7W/n2xp
+        XBF7IX6GWcCJLVNYLiY/io45OLEiKd0hprlauOvenqU/suse+2ZWXn5kdtnp7xrbp1myOapb
+        5qe+02A12xSxPmdOBfffDVd7mc9PaZ463Uzln8aXxHdJFcJKLMUZiYZazEXFiQBgmPuEjgMA
+        AA==
+X-CMS-MailID: 20230302151835epcas5p142e2fc60df73b926a1be1455975b5755
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230214121503epcas5p291dce2b37ec4cdabcfecbf8fbdfcca51
-References: <20230214121333.1837-1-shradha.t@samsung.com>
-        <CGME20230214121503epcas5p291dce2b37ec4cdabcfecbf8fbdfcca51@epcas5p2.samsung.com>
-        <20230214121333.1837-16-shradha.t@samsung.com>
-        <a0c79665-adb9-a846-5a84-d85e0684c25f@linaro.org>
+X-CMS-RootMailID: 20230301035153epcas5p40f576188a9a69835c1050135219a3720
+References: <CGME20230301035153epcas5p40f576188a9a69835c1050135219a3720@epcas5p4.samsung.com>
+        <20230301035144.8645-1-aakarsh.jain@samsung.com>
+        <8b5bea40-6f7b-1d00-ac23-83a28c7dacbc@linaro.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -136,168 +138,321 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 > -----Original Message-----
 > From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
-> Sent: 16 February 2023 16:42
-> To: Shradha Todi <shradha.t=40samsung.com>; lpieralisi=40kernel.org;
-> kw=40linux.com; robh=40kernel.org; bhelgaas=40google.com;
-> krzysztof.kozlowski+dt=40linaro.org; alim.akhtar=40samsung.com;
-> jingoohan1=40gmail.com; Sergey.Semin=40baikalelectronics.ru;
-> lukas.bulwahn=40gmail.com; hongxing.zhu=40nxp.com; tglx=40linutronix.de;
-> m.szyprowski=40samsung.com; jh80.chung=40samsung.co;
+> Sent: 02 March 2023 14:07
+> To: Aakarsh Jain <aakarsh.jain=40samsung.com>; linux-arm-
+> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
+> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
+> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
+> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
+> benjamin.gaignard=40collabora.com; krzysztof.kozlowski+dt=40linaro.org;
+> stanimir.varbanov=40linaro.org; dillon.minfei=40gmail.com;
+> david.plowman=40raspberrypi.com; mark.rutland=40arm.com;
+> robh+dt=40kernel.org; krzk+dt=40kernel.org; andi=40etezian.org;
+> alim.akhtar=40samsung.com; aswani.reddy=40samsung.com;
 > pankaj.dubey=40samsung.com
-> Cc: linux-pci=40vger.kernel.org; devicetree=40vger.kernel.org; linux-arm-
-> kernel=40lists.infradead.org; linux-samsung-soc=40vger.kernel.org; linux-
-> kernel=40vger.kernel.org
-> Subject: Re: =5BPATCH 15/16=5D PCI: samsung: Add structure to hold resour=
-ce
-> operations
+> Subject: Re: =5BPatch v6=5D dt-bindings: media: s5p-mfc: convert bindings=
+ to json-
+> schema
 >=20
-> On 14/02/2023 13:13, Shradha Todi wrote:
-> > Some resources might differ based on platforms and we
->=20
-> Please wrap commit message according to Linux coding style / submission
-> process (neither too early nor over the limit):
-> https://protect2.fireeye.com/v1/url?k=3D66656d8a-07ee78a5-6664e6c5-
-> 74fe485cbfe7-a61191c61bcf38f7&q=3D1&e=3D80994c2d-d0ca-4b83-a7ca-
-> 5242c4bb701f&u=3Dhttps%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18-
-> rc4%2Fsource%2FDocumentation%2Fprocess%2Fsubmitting-
-> patches.rst%23L586
->=20
-> Wrapping looks a bit short...
-
-Ack
-
->=20
-> > need platform specific functions to initialize or alter them. For
-> > better code reusibility, making a separate
->=20
-> typo, I think it is: re-usability
-
-Ack
-
->=20
-> > res_ops which will hold all such function pointers or other resource
-> > specific data.
->=20
-> Are you saying that interrupts differ in different devices?
->=20
-
-Yes, the interrupts are routed and integrated differently for the different=
- platforms
-
+> On 01/03/2023 04:51, Aakarsh Jain wrote:
+> > Convert s5p-mfc bindings to DT schema format using json-schema.
 > >
-> > This patch includes adding function pointer for IRQ
->=20
-> Do not use =22This commit/patch=22.
-> https://protect2.fireeye.com/v1/url?k=3Dffdc2502-9e57302d-ffddae4d-
-> 74fe485cbfe7-49aeaacd1141660f&q=3D1&e=3D80994c2d-d0ca-4b83-a7ca-
-> 5242c4bb701f&u=3Dhttps%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.17.1%2
-> Fsource%2FDocumentation%2Fprocess%2Fsubmitting-patches.rst%23L95
->=20
-
-Ack
-
-> > initialization which will help to move common operations for host init
-> > into the probe sequence.
-> >
-> > Suggested-by: Pankaj Dubey <pankaj.dubey=40samsung.com>
-> > Signed-off-by: Shradha Todi <shradha.t=40samsung.com>
+> > Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
 > > ---
-> >  drivers/pci/controller/dwc/pci-samsung.c =7C 26
-> > ++++++++++++++++--------
-> >  1 file changed, 17 insertions(+), 9 deletions(-)
+> > changes since v5:
+> > kept compatible strings under enum
+> > sorted compatible strings
+> > added iommu maxItems:2
+> > Added indentation with 4 spaces in dts example
 > >
-> > diff --git a/drivers/pci/controller/dwc/pci-samsung.c
-> > b/drivers/pci/controller/dwc/pci-samsung.c
-> > index 47ca2a6a545d..01882f2d06c7 100644
-> > --- a/drivers/pci/controller/dwc/pci-samsung.c
-> > +++ b/drivers/pci/controller/dwc/pci-samsung.c
-> > =40=40 -55,6 +55,7 =40=40 struct samsung_pcie_pdata =7B
-> >  	struct pci_ops				*pci_ops;
-> >  	const struct dw_pcie_ops		*dwc_ops;
-> >  	const struct dw_pcie_host_ops		*host_ops;
-> > +	const struct samsung_res_ops		*res_ops;
-> >  =7D;
+> > changes since v4:
+> > Removed items from oneOf section
+> > dropped black line
+> > defined the iommus names items as
+> > items:
+> > -const left
+> > -const right
 > >
-> >  /*
-> > =40=40 -77,6 +78,10 =40=40 struct samsung_pcie =7B
-> >  	struct regulator_bulk_data	supplies=5B2=5D;
-> >  =7D;
+> > changes since v3:
+> > fixed dt-schema warnings and errors while running make dtbs_check and
+> > make dt_binding_check for ARMv7 Since, obsolete properties are not part
+> of dt-node so we are not including these properties in dt-schema.
 > >
-> > +struct samsung_res_ops =7B
-> > +	int (*irq_init)(struct samsung_pcie *sp, struct platform_device
-> > +*pdev); =7D;
-> > +
-> >  static int samsung_pcie_init_clk_resources(struct samsung_pcie *sp)
-> > =7B
-> >  	struct device *dev =3D sp->pci.dev;
-> > =40=40 -276,7 +281,7 =40=40 static const struct dw_pcie_host_ops
-> exynos_pcie_host_ops =3D =7B
-> >  	.host_init =3D exynos_pcie_host_init,
-> >  =7D;
+> > changes since v2:
+> > changed Commit message from Adds to Convert Removed text =22This file
+> > has moved to samsung,s5p-mfc.yaml=22 from s5p-mfc.txt fixed dt-schema
+> > warnings and errors while running make dtbs_check and make
+> > dt_binding_check
 > >
-> > -static int exynos_add_pcie_port(struct samsung_pcie *sp,
-> > +static int exynos_irq_init(struct samsung_pcie *sp,
-> >  				       struct platform_device *pdev)  =7B
-> >  	struct dw_pcie *pci =3D &sp->pci;
-> > =40=40 -295,15 +300,8 =40=40 static int exynos_add_pcie_port(struct
-> samsung_pcie *sp,
-> >  		return ret;
-> >  	=7D
+> > changes since v1:
+> > fixed dt-schema warnings and errors while running make dtbs_check and
+> > make dt_binding_check Removed description.
+> > Listed items.
+> > Added allOf:if:then for restricting two items to specific compatible
 > >
-> > -	pp->ops =3D &exynos_pcie_host_ops;
-> >  	pp->msi_irq=5B0=5D =3D -ENODEV;
+> > This patch is independent from the previous MFC v12 patch series for HW=
+3
+> support.
 > >
-> > -	ret =3D dw_pcie_host_init(pp);
-> > -	if (ret) =7B
-> > -		dev_err(dev, =22failed to initialize host=5Cn=22);
-> > -		return ret;
-> > -	=7D
+> >  .../devicetree/bindings/media/s5p-mfc.txt     =7C  78 ---------
+> >  .../bindings/media/samsung,s5p-mfc.yaml       =7C 151
+> ++++++++++++++++++
+> >  2 files changed, 151 insertions(+), 78 deletions(-)  create mode
+> > 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> > b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> > index 8eb90c043d5d..e69de29bb2d1 100644
+> > --- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> > +++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> > =40=40 -1,78 +0,0 =40=40
+> > -* Samsung Multi Format Codec (MFC)
 > > -
-> >  	return 0;
-> >  =7D
+> > -Multi Format Codec (MFC) is the IP present in Samsung SoCs which
+> > -supports high resolution decoding and encoding functionalities.
+> > -The MFC device driver is a v4l2 driver which can encode/decode -video
+> > raw/elementary streams and has support for all popular -video codecs.
+> > -
+> > -Required properties:
+> > -  - compatible : value should be either one among the following
+> > -	(a) =22samsung,mfc-v5=22 for MFC v5 present in Exynos4 SoCs
+> > -	(b) =22samsung,mfc-v6=22 for MFC v6 present in Exynos5 SoCs
+> > -	(c) =22samsung,exynos3250-mfc=22, =22samsung,mfc-v7=22 for MFC v7
+> > -	     present in Exynos3250 SoC
+> > -	(d) =22samsung,mfc-v7=22 for MFC v7 present in Exynos5420 SoC
+> > -	(e) =22samsung,mfc-v8=22 for MFC v8 present in Exynos5800 SoC
+> > -	(f) =22samsung,exynos5433-mfc=22 for MFC v8 present in Exynos5433 SoC
+> > -	(g) =22samsung,mfc-v10=22 for MFC v10 present in Exynos7880 SoC
+> > -
+> > -  - reg : Physical base address of the IP registers and length of memo=
+ry
+> > -	  mapped region.
+> > -
+> > -  - interrupts : MFC interrupt number to the CPU.
+> > -  - clocks : from common clock binding: handle to mfc clock.
+> > -  - clock-names : from common clock binding: must contain =22mfc=22,
+> > -		  corresponding to entry in the clocks property.
+> > -
+> > -Optional properties:
+> > -  - power-domains : power-domain property defined with a phandle
+> > -			   to respective power domain.
+> > -  - memory-region : from reserved memory binding: phandles to two
+> reserved
+> > -	memory regions, first is for =22left=22 mfc memory bus interfaces,
+> > -	second if for the =22right=22 mfc memory bus, used when no SYSMMU
+> > -	support is available; used only by MFC v5 present in Exynos4 SoCs
+> > -
+> > -Obsolete properties:
+> > -  - samsung,mfc-r, samsung,mfc-l : support removed, please use memory-
+> region
+> > -	property instead
+> > -
+> > -
+> > -Example:
+> > -SoC specific DT entry:
+> > -
+> > -mfc: codec=4013400000 =7B
+> > -	compatible =3D =22samsung,mfc-v5=22;
+> > -	reg =3D <0x13400000 0x10000>;
+> > -	interrupts =3D <0 94 0>;
+> > -	power-domains =3D <&pd_mfc>;
+> > -	clocks =3D <&clock 273>;
+> > -	clock-names =3D =22mfc=22;
+> > -=7D;
+> > -
+> > -Reserved memory specific DT entry for given board (see reserved
+> > memory binding -for more information):
+> > -
+> > -reserved-memory =7B
+> > -	=23address-cells =3D <1>;
+> > -	=23size-cells =3D <1>;
+> > -	ranges;
+> > -
+> > -	mfc_left: region=4051000000 =7B
+> > -		compatible =3D =22shared-dma-pool=22;
+> > -		no-map;
+> > -		reg =3D <0x51000000 0x800000>;
+> > -	=7D;
+> > -
+> > -	mfc_right: region=4043000000 =7B
+> > -		compatible =3D =22shared-dma-pool=22;
+> > -		no-map;
+> > -		reg =3D <0x43000000 0x800000>;
+> > -	=7D;
+> > -=7D;
+> > -
+> > -Board specific DT entry:
+> > -
+> > -codec=4013400000 =7B
+> > -	memory-region =3D <&mfc_left>, <&mfc_right>;
+> > -=7D;
+> > diff --git
+> > a/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+> > b/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+> > index 000000000000..da48d0493cdd
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+> > =40=40 -0,0 +1,151 =40=40
+> > +=23 SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause %YAML 1.2
+> > +---
+> > +=24id:
+> > +https://protect2.fireeye.com/v1/url?k=3Dd24ef7e4-8dd5cefd-d24f7cab-
+> 000b
+> > +abff3793-d3511b88da8176a3&q=3D1&e=3D3ebd99e2-81bd-4303-988b-
+> 085ab2449cc1&
 > >
-> > =40=40 -314,6 +312,10 =40=40 static const struct dw_pcie_ops
-> exynos_dw_pcie_ops =3D =7B
-> >  	.start_link =3D exynos_pcie_start_link,  =7D;
-> >
-> > +static const struct samsung_res_ops exynos_res_ops_data =3D =7B
-> > +	.irq_init		=3D exynos_irq_init,
-> > +=7D;
+> +u=3Dhttp%3A%2F%2Fdevicetree.org%2Fschemas%2Fmedia%2Fsamsung%2Cs
+> 5p-mfc.y
+> > +aml%23
+> > +=24schema:
+> > +https://protect2.fireeye.com/v1/url?k=3D5aeac908-0571f011-5aeb4247-
+> 000b
+> > +abff3793-01e9fec8ce4d48cc&q=3D1&e=3D3ebd99e2-81bd-4303-988b-
+> 085ab2449cc1&
+> > +u=3Dhttp%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
 > > +
-> >  static int samsung_pcie_probe(struct platform_device *pdev)  =7B
-> >  	struct device *dev =3D &pdev->dev;
-> > =40=40 -357,7 +359,12 =40=40 static int samsung_pcie_probe(struct
-> > platform_device *pdev)
-> >
-> >  	platform_set_drvdata(pdev, sp);
-> >
-> > -	ret =3D exynos_add_pcie_port(sp, pdev);
-> > +	if (pdata->res_ops->irq_init)
-> > +		pdata->res_ops->irq_init(sp, pdev);
->=20
-> Check return value and handle errors.
->=20
-
-Ack
-
+> > +title: Samsung Exynos Multi Format Codec (MFC)
 > > +
-> > +	sp->pci.pp.ops =3D pdata->host_ops;
+> > +maintainers:
+> > +  - Marek Szyprowski <m.szyprowski=40samsung.com>
+> > +  - Aakarsh Jain <aakarsh.jain=40samsung.com>
 > > +
-> > +	ret =3D dw_pcie_host_init(&sp->pci.pp);
-> >  	if (ret < 0)
-> >  		goto fail_probe;
-> >
-> > =40=40 -428,6 +435,7 =40=40 static const struct samsung_pcie_pdata
-> exynos_5433_pcie_rc_pdata =3D =7B
-> >  	.dwc_ops		=3D &exynos_dw_pcie_ops,
-> >  	.pci_ops		=3D &exynos_pci_ops,
-> >  	.host_ops		=3D &exynos_pcie_host_ops,
-> > +	.res_ops		=3D &exynos_res_ops_data,
-> >  =7D;
-> >
-> >  static const struct of_device_id samsung_pcie_of_match=5B=5D =3D =7B
+> > +description:
+> > +  Multi Format Codec (MFC) is the IP present in Samsung SoCs which
+> > +  supports high resolution decoding and encoding functionalities.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - enum:
+> > +          - samsung,exynos5433-mfc        =23 Exynos5433
+> > +          - samsung,mfc-v5                =23 Exynos4
+> > +          - samsung,mfc-v6                =23 Exynos5
+> > +          - samsung,mfc-v7                =23 Exynos5420
+> > +          - samsung,mfc-v8                =23 Exynos5800
+> > +          - samsung,mfc-v10               =23 Exynos7880
+> > +      - items:
+> > +          - enum:
+> > +              - samsung,exynos3250-mfc    =23 Exynos3250
+> > +          - const: samsung,mfc-v7         =23 Fall back for Exynos3250
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    minItems: 1
+> > +    maxItems: 3
+> > +
+> > +  clock-names:
+> > +    minItems: 1
+> > +    maxItems: 3
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  iommus:
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +
+> > +  iommu-names:
+> > +    items:
+> > +      - const: left
+> > +      - const: right
 >=20
-> Best regards,
-> Krzysztof
-
-
+> That's confusing now... The iommu-names above says it requires two
+> iommus, but your iommus property says one item is enough. You need here
+> minItems: 1... but then why one IOMMU (for such variants) is always =22le=
+ft=22?
+> Probably then the meaning of first IOMMU changes, right? If that's correc=
+t,
+> then I propose to leave it as minItems:1/maxItems:2 without defining the
+> items here and...
+>=20
+Agreed. That=E2=80=99s=20why=20I=20initially=20kept=20=20as=20minItems:1/ma=
+xItems:2.=20=20Will=20keep=20it=20now=20as=20it=20is.=0D=0A=20=20iommu-name=
+s:=0D=0A=20=20=20=20minItems:=201=0D=0A=20=20=20=20maxItems:=202=0D=0A>=20>=
+=20+=0D=0A>=20>=20+=20=20power-domains:=0D=0A>=20>=20+=20=20=20=20maxItems:=
+=201=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20memory-region:=0D=0A>=20>=20+=20=20=
+=20=20minItems:=201=0D=0A>=20>=20+=20=20=20=20maxItems:=202=0D=0A>=20>=20+=
+=0D=0A>=20>=20+required:=0D=0A>=20>=20+=20=20-=20compatible=0D=0A>=20>=20+=
+=20=20-=20reg=0D=0A>=20>=20+=20=20-=20clocks=0D=0A>=20>=20+=20=20-=20clock-=
+names=0D=0A>=20>=20+=20=20-=20interrupts=0D=0A>=20>=20+=0D=0A>=20>=20+addit=
+ionalProperties:=20false=0D=0A>=20>=20+=0D=0A>=20>=20+allOf:=0D=0A>=20>=20+=
+=20=20-=20if:=0D=0A>=20>=20+=20=20=20=20=20=20properties:=0D=0A>=20>=20+=20=
+=20=20=20=20=20=20=20compatible:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=
+=20contains:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20enum:=0D=0A>=
+=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20=20=20-=20samsung,mfc-v5=0D=0A>=
+=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20=20=20-=20samsung,exynos3250-mf=
+c=0D=0A>=20>=20+=20=20=20=20then:=0D=0A>=20>=20+=20=20=20=20=20=20propertie=
+s:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20clocks:=0D=0A>=20>=20+=20=20=20=20=
+=20=20=20=20=20=20maxItems:=202=0D=0A>=20>=20+=20=20=20=20=20=20=20=20clock=
+-names:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20items:=0D=0A>=20>=20+=
+=20=20=20=20=20=20=20=20=20=20=20=20-=20const:=20mfc=0D=0A>=20>=20+=20=20=
+=20=20=20=20=20=20=20=20=20=20-=20const:=20sclk_mfc=0D=0A>=20=0D=0A>=20iomm=
+us:=0D=0A>=20=20=20maxItems:=201=0D=0A>=20iommu-names:=20false=0D=0A>=20=0D=
+=0AI=20am=20getting=20compilation=20errors=20with=20above=20property=20set=
+=20and=20its=20breaking=20the=20bindings.=0D=0AIf=20we=20see=20these=20two=
+=20nodes=20in=20dtsi=20files.=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20mfc:=20codec=4013400000=20=7B=0D=0A=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20compatible=20=3D=20=22samsung,mfc-v5=
+=22;=0D=0A..=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20iommus=20=3D=20<&sysmmu_mfc_l>,=20<&sysmmu_mfc_r>;=0D=0A=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20iommu-=
+names=20=3D=20=22left=22,=20=22right=22;=0D=0A=7D=0D=0AAnd=20=0D=0A=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20mfc:=20codec=4013400000=20=7B=0D=0A=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20compat=
+ible=20=3D=20=22samsung,exynos3250-mfc=22,=20=22samsung,mfc-v7=22;=0D=0A=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20reg=20=
+=3D=20<0x13400000=200x10000>;=0D=0A...=0D=0A=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20iommus=20=3D=20<&sysmmu_mfc>;=0D=
+=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=7D;=0D=0AThere=20is=20n=
+o=20iommu-names=20property=20for=20compatible=20=22samsung,exynos3250-mfc,=
+=20samsung,mfc-v7=22,=20that=E2=80=99s=20why=20I=20kept=0D=0A=20=20=20=20=
+=20=20=20=20iommus:=0D=0A=20=20=20=20=20=20=20=20=20=20minItems:=201=0D=0A=
+=20=20=20=20=20=20=20=20=20=20maxItems:=202=0D=0AI=20would=20even=20go=20wi=
+th=20below=20if=20you=20agree?=0D=0A=20=20=20=20=20=20=20=20iommus:=0D=0A=
+=20=20=20=20=20=20=20=20=20=20minItems:=201=0D=0A=20=20=20=20=20=20=20=20=
+=20=20maxItems:=202=0D=0A=20=20=20=20=20=20=20=20iommus-names:=20false=0D=
+=0A=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20-=20if:=0D=0A>=20>=20+=20=20=20=20=
+=20=20properties:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20compatible:=0D=0A>=
+=20>=20+=20=20=20=20=20=20=20=20=20=20contains:=0D=0A>=20>=20+=20=20=20=20=
+=20=20=20=20=20=20=20=20enum:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20-=20samsung,mfc-v6=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20-=20samsung,mfc-v8=0D=0A>=20>=20+=20=20=20=20then:=0D=0A>=20>=
+=20+=20=20=20=20=20=20properties:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20clo=
+cks:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20maxItems:=201=0D=0A>=20>=
+=20+=20=20=20=20=20=20=20=20clock-names:=0D=0A>=20>=20+=20=20=20=20=20=20=
+=20=20=20=20items:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20-=20co=
+nst:=20mfc=0D=0A>=20>=20+=20=20=20=20=20=20=20=20iommus:=0D=0A>=20>=20+=20=
+=20=20=20=20=20=20=20=20=20maxItems:=202=0D=0A>=20=0D=0A>=20...=20and=20her=
+e:=0D=0A>=20iommu-names:=0D=0A>=20=20=20items:=0D=0A>=20=20=20=20=20-=20con=
+st:=20left=0D=0A>=20=20=20=20=20-=20const:=20right=0D=0A>=20=0D=0AAgreed.=
+=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20-=20if:=0D=0A>=20>=20+=20=20=20=20=20=
+=20properties:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20compatible:=0D=0A>=20>=
+=20+=20=20=20=20=20=20=20=20=20=20contains:=0D=0A>=20>=20+=20=20=20=20=20=
+=20=20=20=20=20=20=20enum:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20-=20samsung,exynos5433-mfc=0D=0A>=20>=20+=20=20=20=20then:=0D=0A>=
+=20>=20+=20=20=20=20=20=20properties:=0D=0A>=20>=20+=20=20=20=20=20=20=20=
+=20clocks:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20maxItems:=203=0D=0A>=
+=20>=20+=20=20=20=20=20=20=20=20clock-names:=0D=0A>=20>=20+=20=20=20=20=20=
+=20=20=20=20=20items:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20-=
+=20const:=20pclk=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20-=20cons=
+t:=20aclk=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20-=20const:=20ac=
+lk_xiu=0D=0A>=20>=20+=20=20=20=20=20=20=20=20iommus:=0D=0A>=20>=20+=20=20=
+=20=20=20=20=20=20=20=20maxItems:=202=0D=0A>=20=0D=0A>=20the=20same=20here=
+=0D=0A>=20=0D=0AAgreed.=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20-=20if:=0D=0A>=
+=20>=20+=20=20=20=20=20=20properties:=0D=0A>=20>=20+=20=20=20=20=20=20=20=
+=20compatible:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20contains:=0D=0A>=
+=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20enum:=0D=0A>=20>=20+=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20-=20samsung,mfc-v7=0D=0A>=20>=20+=20=20=20=
+=20then:=0D=0A>=20>=20+=20=20=20=20=20=20properties:=0D=0A>=20>=20+=20=20=
+=20=20=20=20=20=20clocks:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20minIt=
+ems:=201=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20maxItems:=202=0D=0A>=
+=20=0D=0A>=20iommus:=0D=0A>=20=20=20maxItems:=201=0D=0A>=20iommu-names:=20f=
+alse=0D=0Asame=20explanation=20as=20above.=20Would=20prefer=20to=20go=20wit=
+h=0D=0A=20=20=20=20=20=20=20=20iommus:=0D=0A=20=20=20=20=20=20=20=20=20=20m=
+inItems:=201=0D=0A=20=20=20=20=20=20=20=20=20=20maxItems:=202=0D=0A=20=20=
+=20=20=20=20=20=20iommus-names:=20false=0D=0A>=20=0D=0A>=20=0D=0A>=20Best=
+=20regards,=0D=0A>=20Krzysztof=0D=0A=0D=0AThanks=20for=20the=20review.=0D=
+=0A=0D=0A
