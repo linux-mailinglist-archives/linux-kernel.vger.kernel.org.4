@@ -2,118 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3176B6A8419
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 253286A841C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjCBOY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S229749AbjCBOZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCBOYz (ORCPT
+        with ESMTP id S229552AbjCBOZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:24:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52E293669F;
-        Thu,  2 Mar 2023 06:24:54 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57E061FB;
-        Thu,  2 Mar 2023 06:25:37 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.26.133])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 305DF3F587;
-        Thu,  2 Mar 2023 06:24:53 -0800 (PST)
-Date:   Thu, 2 Mar 2023 14:24:50 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] tracing: Do not let histogram values have some
- modifiers
-Message-ID: <ZACxsje6oGZWUs7m@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230302010051.044209550@goodmis.org>
- <20230302020810.559462599@goodmis.org>
+        Thu, 2 Mar 2023 09:25:05 -0500
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CCA37548;
+        Thu,  2 Mar 2023 06:25:01 -0800 (PST)
+Received: by mail-vs1-f50.google.com with SMTP id s1so22537052vsk.5;
+        Thu, 02 Mar 2023 06:25:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8wDVKoxnSqfBIh2KA9I69m23GfuDCaWRKYYk9CbtV28=;
+        b=s965aUpIY1lbFNd9bzIr6F2lcdwZ1KNwXBG0x7nMUGvm8oKNl00CKi6bu11HLr7zhH
+         ycVEN0MBWYDNvTiLfpcykrYwNtcIBexEoqPQta3CREOZG8gQsN7IGy1gZy/Q89d1JK4Q
+         8ZOOYYtXSI/K0uSBIVI7Ane4XFAp0yAT6O5e0LSdBemxKtj1Wk0wS4z+TNW0/PYwwy7O
+         JU9PxiLgQbw0Cw5f+Np53HSOTRh5DNLOE3tpuLzzKE6rvuMk6F6iU6IsBk91FhN47qZY
+         PRgllyYcr64WHyOWPzCwwjn0lGaRxLUR53HzktU04SZI4kxZb9Att9GmnI7uTvcHhOH5
+         WIoQ==
+X-Gm-Message-State: AO0yUKXMvc+QpMjsthyzK5dgr7hlcOpPCBzgyMzPp0EJ6sJfYqJGWGO8
+        2jsSzfoDJy86z7UfsrAKNc3LvFum76Bo
+X-Google-Smtp-Source: AK7set8DcBKW2UHTl1N3Sx8zSZmipJcIPDcIoj4LHB6kl8FBAn53qpN6vh65KHTjOPO0RDA1pWLv/A==
+X-Received: by 2002:a67:e3ac:0:b0:412:4d64:8c00 with SMTP id j12-20020a67e3ac000000b004124d648c00mr4442928vsm.15.1677767100159;
+        Thu, 02 Mar 2023 06:25:00 -0800 (PST)
+Received: from robh_at_kernel.org ([209.91.220.210])
+        by smtp.gmail.com with ESMTPSA id t5-20020a675f05000000b0041f5ee512d7sm1681653vsb.3.2023.03.02.06.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 06:24:59 -0800 (PST)
+Received: (nullmailer pid 427877 invoked by uid 1000);
+        Thu, 02 Mar 2023 14:24:58 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302020810.559462599@goodmis.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <20230302134922.1120217-2-linux@rasmusvillemoes.dk>
+References: <20230302134922.1120217-1-linux@rasmusvillemoes.dk>
+ <20230302134922.1120217-2-linux@rasmusvillemoes.dk>
+Message-Id: <167776666863.418220.8691645201749142592.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: iio: ad74413r: allow setting sink
+ current for digital input
+Date:   Thu, 02 Mar 2023 08:24:58 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 08:00:52PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+
+On Thu, 02 Mar 2023 14:49:20 +0100, Rasmus Villemoes wrote:
+> Depending on the actual hardware wired up to a digital input channel,
+> it may be necessary to configure the ad74413r to sink a small
+> current. For example, in the case of a simple mechanical switch, the
+> charge on the external 68 nF capacitor (cf. the data sheet's Figure
+> 34) will keep the channel as reading high even after the switch is
+> turned off again.
 > 
-> Histogram values can not be strings, stacktraces, graphs, symbols,
-> syscalls, or grouped in buckets or log. Give an error if a value is set to
-> do so.
-> 
-> Note, the histogram code was not prepared to handle these modifiers for
-> histograms and caused a bug.
- 
-> Cc: stable@vger.kernel.org
-> Fixes: c6afad49d127f ("tracing: Add hist trigger 'sym' and 'sym-offset' modifiers")
-> Reported-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-Tested-by: Mark Rutland <mark.rutland@arm.com>
-
-I gave this a spin, and I see that the buckets modifier gerts rejected for
-hitcount, but is usable for other values as it should be:
-
-| # echo 'p:copy_to_user __arch_copy_to_user n=$arg3' >> /sys/kernel/tracing/kprobe_events
-| # echo 'hist:keys=n:vals=hitcount.buckets=8:sort=hitcount' > /sys/kernel/tracing/events/kprobes/copy_to_user/trigger
-| sh: write error: Invalid argument
-| # echo 'hist:keys=n.buckets=8:vals=hitcount:sort=hitcount' > /sys/kernel/tracing/events/kprobes/copy_to_user/trigger
-| # cat /sys/kernel/tracing/events/kprobes/copy_to_user/hist
-| # event histogram
-| #
-| # trigger info: hist:keys=n.buckets=8:vals=hitcount:sort=hitcount:size=2048 [active]
-| #
-| 
-| { n: ~ 336-343 } hitcount:          1
-| { n: ~ 16-23 } hitcount:          2
-| { n: ~ 32-39 } hitcount:          2
-| { n: ~ 832-839 } hitcount:          3
-| { n: ~ 8-15 } hitcount:          3
-| { n: ~ 128-135 } hitcount:          5
-| { n: ~ 0-7 } hitcount:         57
-| 
-| Totals:
-|     Hits: 73
-|     Entries: 7
-|     Dropped: 0
-
-Thanks,
-Mark.
-
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 > ---
->  kernel/trace/trace_events_hist.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  .../devicetree/bindings/iio/addac/adi,ad74413r.yaml    | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> index 89877a18f933..6e8ab726a7b5 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -4235,6 +4235,15 @@ static int __create_val_field(struct hist_trigger_data *hist_data,
->  		goto out;
->  	}
->  
-> +	/* Some types cannot be a value */
-> +	if (hist_field->flags & (HIST_FIELD_FL_GRAPH | HIST_FIELD_FL_PERCENT |
-> +				 HIST_FIELD_FL_BUCKET | HIST_FIELD_FL_LOG2 |
-> +				 HIST_FIELD_FL_SYM | HIST_FIELD_FL_SYM_OFFSET |
-> +				 HIST_FIELD_FL_SYSCALL | HIST_FIELD_FL_STACKTRACE)) {
-> +		hist_err(file->tr, HIST_ERR_BAD_FIELD_MODIFIER, errpos(field_str));
-> +		ret = -EINVAL;
-> +	}
-> +
->  	hist_data->fields[val_idx] = hist_field;
->  
->  	++hist_data->n_vals;
-> -- 
-> 2.39.1
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml: patternProperties:^channel@[0-3]$:properties:drive-strength-microamp: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230302134922.1120217-2-linux@rasmusvillemoes.dk
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
