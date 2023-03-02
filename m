@@ -2,140 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECBF6A8455
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E05DF6A845A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjCBOnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S229897AbjCBOps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:45:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCBOnm (ORCPT
+        with ESMTP id S229608AbjCBOpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:43:42 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D3838653
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:43:39 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id x6so12229884ljq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 06:43:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+NuIrQyu9sctpk8pQFgxNkYy00s89JzuKjWNu0rz86k=;
-        b=SXXi6eB+umI9ANFEoFGqSrifMaE0poWztgSMyQ22TTInkNboO5fBzmLJu8AVy9bLju
-         M6kRnEzSFF0tIKScNEJKtwGknd9HA8jIlBSeNTpA9OQ0f9rWBw0Ac3o87OdBq5qpWH6L
-         Hp9grmmptCV5jVYnuggL0wtHznofM7v2nu7ZWEw049NOOS9E5JjcztTeVp7gPUE4C+L7
-         W9KHKjq1tugzlmCOetH33O/q2pd/nVAr1GvLh4ynoV7NG6AHClJbXB+UVxoFI1aYc4Cl
-         LGS6rl1Q9iruf4NB+fghiDV8qU5Rqb4VK4VKXOSyITorbvahOUZuOjakf6L33nu6LEu7
-         yeHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+NuIrQyu9sctpk8pQFgxNkYy00s89JzuKjWNu0rz86k=;
-        b=q/4LmIo2Iu9Hie2uaG/ylPRHd5mhfE0Qr9CIze7kfg/k9T2jOKyf73IIEldJU9Jdx7
-         N510gKU+tVyIXShrLtbxfmU9OwHWFYpV8m9zAFDKRvlsqe6SxWfTXloL0XWKGadt8K9I
-         UALFw2TAyczlkK918GZ3GXzBybsdOluGmZWmacSSzXrRIP4eTTUzERxIOmed2iTEVJdg
-         x7dVC//mz6HPg4V+iHjITqKl3KvmxnJS1CmAF0S558XoEzEpkMFLjYTOtDMynT2OHtkM
-         10eUyvc+PvGtTAAaY8l00JBx11sLRWMefROEhNKJGNw+yFHZv0Ch7LacXxEnJVpqZPVi
-         +Qfg==
-X-Gm-Message-State: AO0yUKVXkjvGc3IMe9i2oCjaboGv3ekzVbJIgKuS3DZzguPFN+v++qSv
-        jmzuWOMspUbrhIefwhM4naaldRDULZ6NBHTo
-X-Google-Smtp-Source: AK7set9G/UyUxQKn0i1rnrYbqkFSeGhuf1tIk4E+t5lr32TMrrq16Jkgq8TWOo69tqns9sf6xocjZA==
-X-Received: by 2002:a2e:b98c:0:b0:295:a446:cd08 with SMTP id p12-20020a2eb98c000000b00295a446cd08mr2838122ljp.6.1677768217230;
-        Thu, 02 Mar 2023 06:43:37 -0800 (PST)
-Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id n15-20020a2e86cf000000b0029597ebacd0sm2070791ljj.64.2023.03.02.06.43.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 06:43:36 -0800 (PST)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Wenchao Chen <wenchao.chen666@gmail.com>,
+        Thu, 2 Mar 2023 09:45:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F5C3E626;
+        Thu,  2 Mar 2023 06:45:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B8CAB8122A;
+        Thu,  2 Mar 2023 14:45:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF57C433D2;
+        Thu,  2 Mar 2023 14:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677768342;
+        bh=Cdp+fzAk3TXRE5mc3Ioe3GgwQcA8HQfOrkZ9V3g4Kpw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mk80df8L8TkuG0GIllo9Olh/po96Ww5tPU5YvaD4EMB1os67PKP6XgAZOpIdUKhAC
+         q6Zf1iQr34m1lyVM2LJWoRYtibPKfOsrCt9JbalEksPsggYPB6Cqr7XZZVoHzjbdAt
+         5OeW2XjGR6N45ufHWEr6asv3+Z15ceJkMfQzlmIM6qGvBu9REHb8e4AKm1bd+7NcbV
+         3nfbDTbeeC9AhSU7yWTAK03CBg9OE/EnWjSDG3SOyjSSxV+zBSElZ1rrTbOE4cNlY5
+         wX/csEkDusJ/JyOhbw9tb9DrhLP5xePAcqEjvPzI1f2SFnP4F8Ji9TkrrJI68wexJ1
+         vegt4KvdAAcTg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D429A4049F; Thu,  2 Mar 2023 11:45:39 -0300 (-03)
+Date:   Thu, 2 Mar 2023 11:45:39 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Christian Lohle <cloehle@hyperstone.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an internal cache
-Date:   Thu,  2 Mar 2023 15:43:30 +0100
-Message-Id: <20230302144330.274947-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 08/10] perf parse-events: Pass ownership of the group
+ name
+Message-ID: <ZAC2k4I8rEPQWL/o@kernel.org>
+References: <20230302041211.852330-1-irogers@google.com>
+ <20230302041211.852330-9-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302041211.852330-9-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-REQ_FUA is in general supported for eMMC cards, which translates into so
-called "reliable writes". To support these write operations, the CMD23
-(MMC_CAP_CMD23), needs to be supported by the mmc host too, which is common
-but not always the case.
+Em Wed, Mar 01, 2023 at 08:12:09PM -0800, Ian Rogers escreveu:
+> Pass ownership of the group name rather than copying and freeing the
+> original. This saves a memory allocation and copy.
 
-For some eMMC devices, it has been reported that reliable writes are quite
-costly, leading to performance degradations.
+Looks ok.
 
-In a way to improve the situation, let's avoid announcing REQ_FUA support
-if the eMMC supports an internal cache, as that allows us to rely solely on
-flush-requests (REQ_OP_FLUSH) instead, which seems to be a lot cheaper.
-Note that, those mmc hosts that lacks CMD23 support are already using this
-type of configuration, whatever that could mean.
-
-Reported-by: Wenchao Chen <wenchao.chen666@gmail.com>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
-
-Note that, I haven't been able to test this patch myself, but are relying on
-Wenchao and others to help out. Sharing some performance number before and
-after the patch, would be nice.
-
-Moreover, what is not clear to me (hence the RFC), is whether relying solely on
-flush requests are sufficient and as such if it's a good idea after all.
-Comments are highly appreciated in this regards.
-
-Kind regards
-Ulf Hansson
-
----
- drivers/mmc/core/block.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 672ab90c4b2d..2a49531bf023 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -2490,15 +2490,20 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
- 			md->flags |= MMC_BLK_CMD23;
- 	}
+- Arnaldo
  
--	if (md->flags & MMC_BLK_CMD23 &&
--	    ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
--	     card->ext_csd.rel_sectors)) {
-+	/*
-+	 * REQ_FUA is supported through eMMC reliable writes, which has been
-+	 * reported to be quite costly for some eMMCs. Therefore, let's rely
-+	 * on flush requests (REQ_OP_FLUSH), if an internal cache is supported.
-+	 */
-+	if (mmc_cache_enabled(card->host)) {
-+		cache_enabled  = true;
-+	} else if (md->flags & MMC_BLK_CMD23 &&
-+		  (card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN ||
-+		   card->ext_csd.rel_sectors)) {
- 		md->flags |= MMC_BLK_REL_WR;
- 		fua_enabled = true;
- 		cache_enabled = true;
- 	}
--	if (mmc_cache_enabled(card->host))
--		cache_enabled  = true;
- 
- 	blk_queue_write_cache(md->queue.queue, cache_enabled, fua_enabled);
- 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/parse-events.c | 3 ++-
+>  tools/perf/util/parse-events.y | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+> index 0336ff27c15f..1be454697d57 100644
+> --- a/tools/perf/util/parse-events.c
+> +++ b/tools/perf/util/parse-events.c
+> @@ -1761,6 +1761,7 @@ parse_events__set_leader_for_uncore_aliase(char *name, struct list_head *list,
+>  
+>  handled:
+>  	ret = 1;
+> +	free(name);
+>  out:
+>  	free(leaders);
+>  	return ret;
+> @@ -1786,7 +1787,7 @@ void parse_events__set_leader(char *name, struct list_head *list,
+>  
+>  	leader = arch_evlist__leader(list);
+>  	__perf_evlist__set_leader(list, &leader->core);
+> -	leader->group_name = name ? strdup(name) : NULL;
+> +	leader->group_name = name;
+>  	list_move(&leader->core.node, list);
+>  }
+>  
+> diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+> index be8c51770051..541b8dde2063 100644
+> --- a/tools/perf/util/parse-events.y
+> +++ b/tools/perf/util/parse-events.y
+> @@ -202,8 +202,8 @@ PE_NAME '{' events '}'
+>  	struct list_head *list = $3;
+>  
+>  	inc_group_count(list, _parse_state);
+> +	/* Takes ownership of $1. */
+>  	parse_events__set_leader($1, list, _parse_state);
+> -	free($1);
+>  	$$ = list;
+>  }
+>  |
+> -- 
+> 2.39.2.722.g9855ee24e9-goog
+> 
+
 -- 
-2.34.1
 
+- Arnaldo
