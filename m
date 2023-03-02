@@ -2,283 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6406A7FC0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F686A7FC9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjCBKOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
+        id S230062AbjCBKQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCBKOi (ORCPT
+        with ESMTP id S229868AbjCBKQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:14:38 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2051.outbound.protection.outlook.com [40.107.8.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1211C30F;
-        Thu,  2 Mar 2023 02:14:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H/19bQvLAVzip1RnQ1t19T94i4Q4dB7bOTvjoA0MD0nU/OnJs7+rYzirCCzmB/G0Mk4IqZ3gyWFelEjWIi68vFiqa4HP7hRjPlIr6aPnlMhzMNzefykaj4JPux8NJQZpzyz496BsPLgdwq+/axkpC5qOA293teVBbFEmXMSmGZgnhSy0PNsWnRS4StdxzlaC/fYKxQ/j4kjWepetgJllwh2bTzOVTI9xdpAMi8x2S1qM743xcdnVXmTVhU0P1k+HPaVMVVISAfSAu3XOX/Lpn7ufJtJkoLK95uQ2Jh0ZhuwxZ1a/nEEM6/aRapMbin9kJbWIuGnt4gkV3hDlNbvBQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WazplwNN2sLg5ASnaTm14X+2gXab2tNL8GT7Vz/UJCc=;
- b=bcPYrjPq2fj4t18kaArJQxKRpd6A9fu+lDmcHE9bADuW4/H+ks65U2uGcstx4ZEARWlZqnS7grKF1DSZLaze9FvnIA4sKh/KqmgQ/RcWAlB77LS9XNoeON1ZZXzAfPL5ZxFRJ92h/yq7xjXy80xnkt4zyd7VUWf2lFE9gG02FmX1akQerd4ZScr7uc0DVBBVR3RmrTmQc4hcD/l2JitR9garUlCpDj4Bx+gsrUjWwzfJtAbnq3UPXCotJ/RfsMQuvdy86YojjgPjRmPCQgMuM4i8aTvmxjvxpf32Eh7k0tjaSsthQ3/4ELBzbNy2p+wmZA87JWhxAA5OWm0ZgQvWtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WazplwNN2sLg5ASnaTm14X+2gXab2tNL8GT7Vz/UJCc=;
- b=l5/NSB8KX5mC2rkTv+3q0p/JomvYE4CtLfYTn0oOibesAbYWHdvxrDZ5KqVlPphA0Mr4cXa5tV4AIOKPWfQSxkbYg2xRFg6FJtC3m+KsoQxRvCoQUC2PWHNee21dXvYw0RTAZVL4fefRssxatpJLSmyUtPZi8ULBPITRRKGZ7iaQXiqak5dSh/WwOSPFN/wotcY6hx/bJseH583BshxVRTuaeNnrjJWIEYtAO/Ro6D0hZ+Md3K/6sCyX4zht38S1dlZb7xzYJEH4n8x0h6Ut67837Jrlx8UemWsh7KtIEfRmkXiZWbzOyYFtCNAyJjCa5uh7fBbetsVso+UGXcxP7g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by AS8PR10MB6602.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:567::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.6; Thu, 2 Mar
- 2023 10:14:32 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::ee44:171b:4c40:d42c]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::ee44:171b:4c40:d42c%6]) with mapi id 15.20.6156.018; Thu, 2 Mar 2023
- 10:14:32 +0000
-Date:   Thu, 2 Mar 2023 11:14:27 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] leds: simatic-ipc-leds-gpio: introduce more
- Kconfig switches
-Message-ID: <20230302111427.47ba9f64@md1za8fc.ad001.siemens.net>
-In-Reply-To: <bfa3ede3-8cc0-ca6c-8e88-17e374aedcb6@redhat.com>
-References: <20230301170215.23382-1-henning.schild@siemens.com>
-        <20230301170215.23382-4-henning.schild@siemens.com>
-        <a6281345-95e1-3e8d-b6fb-146c1852373f@redhat.com>
-        <20230302094728.563c04ce@md1za8fc.ad001.siemens.net>
-        <bfa3ede3-8cc0-ca6c-8e88-17e374aedcb6@redhat.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0069.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4b::16) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+        Thu, 2 Mar 2023 05:16:54 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D00434311
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:16:53 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id p188-20020a6b8dc5000000b0074c96ca271bso10337039iod.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:16:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gfU34tRPzjFsfIGICwAUSyYWO7y40eQRHesXaw40d8s=;
+        b=aSNuvnyp/AEHJZ83RKqVy5Rgu1/4jEo29JHByryMCN8iuCrf0RcRGueae57Waq/LnB
+         maJAoL3RHAHk3wyce6mQRHHgDS+CIpAp++Pu1FIo0xUihYL4OiY7eHukIPiM7IjbGssk
+         hxeccTOiLRVqxfJRmqw97HGaaJSYTbjrePrwZIwjGUgFSimlo7dafhBOge6q0b2rZR2j
+         RspVvKYzkU3FA0RtBLufEmyDA+mzGIA03kpSxSO+9qkP6eSfiFGc+RbuWKgbslsAhquP
+         sBtzuvzNfE+RPC7cLDj1amBoeyzVl7jHMAgt9YGwrl8OSoky9zQzRZ3FsvmebP4K2K7y
+         v7Lw==
+X-Gm-Message-State: AO0yUKUh6U/IZvIvICtM9Ury6qt9zf9MCeAL6KVdnHgtcqFNGaNoqk2S
+        a9JQMDkZzYUi6BSPLUsYDkyVulWH6bKG+wpDxzr0dLwpPVYl
+X-Google-Smtp-Source: AK7set+/K3PFd/KL6aqokazUrBlm0Z0tvxLV672j3djpKYOCKyBsMKiRM1UiJba0CXhjSPWzLaKdu1YfYoeIRHv5TkCoXGLj2GRQ
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|AS8PR10MB6602:EE_
-X-MS-Office365-Filtering-Correlation-Id: 621f169b-e5da-4c2e-33b9-08db1b06ea6c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QuEgZjXYB4ZxQbT4B7GxX2zm0uXZTZzrTwETInaiZWkcmm3FbSoNgaLtfRXUyfrjFshwglnJDn0J+UrfHJWVupWVhZHv5HdUN4GBmN1KGDPlwJU8j0wSht7JY7I8pHo2ipib+QxEOHGOg5Kp/Se9YrmcXgC9zD+0tU3QQK7NtYN8lGS6vsi1kyZ6PmFN46gtAK2MS1Fh0xV6gPwYraN9WJfvHYrgWRh5TcjEL7O4iBG7FqquJb9IfW66B7HP4WXm+r4vRj+TqeT793MlDhVARzJFJhxbQg1FJQs+bv7BYS7dt8+RcuyOxiWluji4kyC+P0UtM8cKej4gHplgNyjZXf774aMKqiW5sr2SSV3d0wWrTc11XxvhlWCxJgnzx5KLqKcROw8vesdH1KnRKD9MBeFDGTH7B2a7LQpHS4dY6aAqP07JCSEar8id04BC+cD6t4gaULRIqRszfKGocN8YR556ZHyxeJVQAvI62EpKalfVGEkyXIdRdcgr+VyInpTtNnzk28I1VgdUMBEn1hlNrVVwvc93x6MyWBmTrM2RSgk0as0pbKRM3BT0Jsc13nbJq6+2eqTfnpNvrUbafShQHpc/Mri/HE4wFwQpdnud1m7t79RAmvltK0FLEy6LKx4p6bZGb7WQ23P7NV+cGDWAlQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199018)(5660300002)(4326008)(41300700001)(83380400001)(44832011)(316002)(66556008)(66946007)(2906002)(66476007)(8676002)(8936002)(6916009)(82960400001)(6486002)(38100700002)(1076003)(186003)(26005)(53546011)(6506007)(6512007)(9686003)(6666004)(86362001)(478600001)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bBALeQX85DKh2W89/KfYVeYdL2lTY1qfMxtiJH0jNKWJLUieOQ1BBAy5kjkc?=
- =?us-ascii?Q?6k2ETK/76t95mqOZYPCpoGskKZcVl5BdwsHRYoe1RSQlZYrIaEfm4QX3PCdI?=
- =?us-ascii?Q?n47WwWJsuGQZNWVZOOdtnqeTf4SP63O7nZVxwaZQzse9Eiw7djb+ozfyjO/O?=
- =?us-ascii?Q?1tdMz7o8aduJSU5+qOU90DDD89ejl3BW+xin6WkylNkSy2PyZ6rY4fc8zB26?=
- =?us-ascii?Q?eW0O/n2UMefipOxl+by3tPZIlVDYpi58R2+QqbI8rSEB22zw+fZj9yORkGvU?=
- =?us-ascii?Q?a1DahpRYA1KJa/NmU+MrtVtn39YGRw+v2E7qjLw3YSDQfQRkXf+E10mhhsjv?=
- =?us-ascii?Q?6X3vPc+kqvr6+e0AP7L4pedJKxmpNxj5kop37qXG+ctEc1M8osU+GjM/Cerv?=
- =?us-ascii?Q?9WiPqejwW4R8Zhl6yjg2XY0xF/ww1eD8wPV4oR+7HD+RAxx0KAkSnBPF1MSp?=
- =?us-ascii?Q?E7tNuzKvP/GO+6DIm2BEw9IA/78qK0zbebx2v1dUy+al9+0sfpZ3cl5mmCE7?=
- =?us-ascii?Q?MoIj8SG4OGqVoBrL7sO3ghS9M7TRNH6rX8I9buyWrMdFdeu/b4L/Yh6eX7qt?=
- =?us-ascii?Q?HP/Jsj7W9HZnD05QtikmOHr5n6iUo26bl7fOrJFmdPAwrf1itCVjCNqc7MQZ?=
- =?us-ascii?Q?c/x7Ldgs59pHzBGSY76uA6adqyChw6OGmY39g7MRUOPWbkCmCH8zpZXiHINv?=
- =?us-ascii?Q?ybv0OUsI1Td++dMB0fuxRMPDAjsV2PnjHiu/z1ZXRi9VyulTlzFrAfPmkdGr?=
- =?us-ascii?Q?paPgLSPPcbegFuyHpAFfWCDbLfDTY7jg8too69JR+PyFFrDsrKAy32CERPFj?=
- =?us-ascii?Q?dX+/abpbdNeC3n+6JrjWYL6YPlTtrryiQAJZwtnYHXXggcITwDytdLrTyC8w?=
- =?us-ascii?Q?ME1dIm4IHmBLcYn9LVZ7qmkzifsMlBagY3L/SHMX49ZoFGnM7Zi3u79ihpqs?=
- =?us-ascii?Q?p1lWeBhj+kSe0dVMPhItV3HG2RSO/7dQzPiLgBeknqy5IlpNK2ss00y3Z2L2?=
- =?us-ascii?Q?3so/5nTuq1CsnWioHCFoHQcTETckZnQibFOiKbYPY7Y7+qHUHPtdj+pCjGNH?=
- =?us-ascii?Q?cLsLa0zj375odCA9M2HbPibNnfn3Qy1UHL/m6Siik7uMLhyqxi4cfB+9jJ3l?=
- =?us-ascii?Q?xU2fM+YSZc5Fpg5P944dBMbwqTn2+AFMV6FYk2P+b4Glx1kPXabR3hT2+Jfo?=
- =?us-ascii?Q?jKqrU+l6cWB0X7vefBjaOYqUYBEVL4N1UIlus2arkNm7iaj4POXEvSXIVY4O?=
- =?us-ascii?Q?QX1nAcHgHoZOooWGxsR05kL2BLlMHIPHEDz0u+igotXnPBvo/JcTjrwjRTBO?=
- =?us-ascii?Q?+mhdZcUbhD5wl/P4SuYAnzAKzjj1YpyML4PE+rd4kkYL/GQkah0HtR8pL5Or?=
- =?us-ascii?Q?pq32f4/+CcomBIg5FzbcIg62Bg/5/VQjKMrh5OF/tK67lEC47zSX3bdMy9/9?=
- =?us-ascii?Q?i+MrzqvzQmj+OCjttdnqFn1PBANDR+7A3XGPSms0ki/nj4UUsEAuv2f+IP77?=
- =?us-ascii?Q?2u+9VemT6pERABue1YLTlPAG2J6e12ko7T5g3TNsJ1ZN43MU4rTncCEfH+xR?=
- =?us-ascii?Q?xV5imTgbL5H6u6YdzSD61skNvWkCy/ggLja2lLPJ2vLPvkjQgiCOJ44dpXYD?=
- =?us-ascii?Q?9A=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 621f169b-e5da-4c2e-33b9-08db1b06ea6c
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 10:14:32.1332
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: snOhtkV6EMpMbAIhU5TT8fHbYi542bXobi+mJ8e2x7wmhppjkd6Oqd9Xi2zLJeBicLAR8szzH1qBy0bltNBwKtgykDXhSW9HZUh7eNIdlBI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB6602
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:180b:0:b0:310:a298:1c95 with SMTP id
+ 11-20020a92180b000000b00310a2981c95mr4344576ily.6.1677752212861; Thu, 02 Mar
+ 2023 02:16:52 -0800 (PST)
+Date:   Thu, 02 Mar 2023 02:16:52 -0800
+In-Reply-To: <000000000000057d3e05edbd51b9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ab3bcc05f5e82073@google.com>
+Subject: Re: [syzbot] [net?] WARNING in default_device_exit_batch (4)
+From:   syzbot <syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, roman.gushchin@linux.dev, shakeelb@google.com,
+        shaozhengchao@huawei.com, syzkaller-bugs@googlegroups.com,
+        vasily.averin@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Thu, 2 Mar 2023 10:02:51 +0100
-schrieb Hans de Goede <hdegoede@redhat.com>:
+syzbot has found a reproducer for the following issue on:
 
-> Hi,
-> 
-> On 3/2/23 09:47, Henning Schild wrote:
-> > Am Wed, 1 Mar 2023 19:04:01 +0100
-> > schrieb Hans de Goede <hdegoede@redhat.com>:
-> >   
-> >> Hi,
-> >>
-> >> On 3/1/23 18:02, Henning Schild wrote:  
-> >>> To describe the dependency chain better and allow for potential
-> >>> fine-grained config tuning, introduce Kconfig switch for the
-> >>> individual GPIO based drivers.
-> >>>
-> >>> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> >>> ---
-> >>>  drivers/leds/simple/Kconfig  | 31 ++++++++++++++++++++++++++++---
-> >>>  drivers/leds/simple/Makefile |  7 +++----
-> >>>  2 files changed, 31 insertions(+), 7 deletions(-)
-> >>>
-> >>> diff --git a/drivers/leds/simple/Kconfig
-> >>> b/drivers/leds/simple/Kconfig index fd2b8225d926..44fa0f93cb3b
-> >>> 100644 --- a/drivers/leds/simple/Kconfig
-> >>> +++ b/drivers/leds/simple/Kconfig
-> >>> @@ -1,11 +1,36 @@
-> >>>  # SPDX-License-Identifier: GPL-2.0-only
-> >>>  config LEDS_SIEMENS_SIMATIC_IPC
-> >>>  	tristate "LED driver for Siemens Simatic IPCs"
-> >>> -	depends on LEDS_GPIO    
-> >>
-> >> Since it is simatic-ipc-leds-gpio-core.c which actually registers
-> >> the LEDs GPIO platform device, this one should stay IMHO.  
-> > 
-> > No this one is now only for the port-IO based driver. The GPIO core
-> > is built under the two new switches only.  
-> 
-> You are right, I thought this would enable building
-> simatic-ipc-leds-gpio-core.o into its own .ko which would
-> then be used by both other gpio LED drivers. But upon a closer
-> look at the Makefile changes I see that is not the case.
-> 
-> Note that with your current solution you are linking that into
-> the kernel twice.
-> 
-> As long this is build into modules that is fine. But if both are
-> builtin I *think* you may get linker errors because of duplicate
-> symbols?
-> 
-> I believe this is why Andy asked to try a build with all 3 options
-> set to Y.
+HEAD commit:    5b7c4cabbb65 Merge tag 'net-next-6.3' of git://git.kernel...
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12e7db64c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c74c134cc415a89b
+dashboard link: https://syzkaller.appspot.com/bug?extid=9dfc3f3348729cc82277
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13158898c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11c52674c80000
 
-Thanks. There are no linker errors so i think there is no need for yet
-another CONFIG especially for the core. I would try to keep it simple
-as the name of the directory suggests, so go with what we have.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/65932a118570/disk-5b7c4cab.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8de67fb8c522/vmlinux-5b7c4cab.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2b90e329d792/bzImage-5b7c4cab.xz
 
-Henning
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
 
-> 
-> >>>  	depends on SIEMENS_SIMATIC_IPC
-> >>>  	help
-> >>>  	  This option enables support for the LEDs of several
-> >>> Industrial PCs from Siemens.
-> >>>  
-> >>> -	  To compile this driver as a module, choose M here: the
-> >>> modules
-> >>> -	  will be called simatic-ipc-leds and
-> >>> simatic-ipc-leds-gpio.
-> >>> +	  To compile this driver as a module, choose M here: the
-> >>> module
-> >>> +	  will be called simatic-ipc-leds.
-> >>> +
-> >>> +config LEDS_SIEMENS_SIMATIC_IPC_APOLLOLAKE
-> >>> +	tristate "LED driver for Siemens Simatic IPCs based on
-> >>> Intel Apollo Lake GPIO"
-> >>> +	depends on LEDS_GPIO    
-> >>
-> >> And then it can be dropped here.
-> >>  
-> >>> +	depends on PINCTRL_BROXTON    
-> >>  
-> >>> +	depends on SIEMENS_SIMATIC_IPC    
-> >>
-> >> This should be "depends on LEDS_SIEMENS_SIMATIC_IPC" since it
-> >> actually uses symbol from that module.  
-> > 
-> > Same as above, the GPIO based drivers do not depend on the port-IO
-> > based driver.  
-> 
-> Ack.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
-> 
-> 
-> >>> +	default LEDS_SIEMENS_SIMATIC_IPC
-> >>> +	help
-> >>> +	  This option enables support for the LEDs of several
-> >>> Industrial PCs
-> >>> +	  from Siemens based on Apollo Lake GPIO i.e. IPC127E.
-> >>> +
-> >>> +	  To compile this driver as a module, choose M here: the
-> >>> module
-> >>> +	  will be called simatic-ipc-leds-gpio-apollolake.
-> >>> +
-> >>> +config LEDS_SIEMENS_SIMATIC_IPC_F7188X
-> >>> +	tristate "LED driver for Siemens Simatic IPCs based on
-> >>> Nuvoton GPIO"
-> >>> +	depends on LEDS_GPIO    
-> >>
-> >> Idem.
-> >>  
-> >>> +	depends on GPIO_F7188X
-> >>> +	depends on SIEMENS_SIMATIC_IPC    
-> >>
-> >> Idem.
-> >>  
-> >>> +	default LEDS_SIEMENS_SIMATIC_IPC
-> >>> +	help
-> >>> +	  This option enables support for the LEDs of several
-> >>> Industrial PCs
-> >>> +	  from Siemens based on Nuvoton GPIO i.e. IPC227G.
-> >>> +
-> >>> +	  To compile this driver as a module, choose M here: the
-> >>> module
-> >>> +	  will be called simatic-ipc-leds-gpio-f7188x.
-> >>> diff --git a/drivers/leds/simple/Makefile
-> >>> b/drivers/leds/simple/Makefile index ed9057f7b6da..e3e840cea275
-> >>> 100644 --- a/drivers/leds/simple/Makefile
-> >>> +++ b/drivers/leds/simple/Makefile
-> >>> @@ -1,5 +1,4 @@
-> >>>  # SPDX-License-Identifier: GPL-2.0
-> >>> -obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+=
-> >>> simatic-ipc-leds.o -obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)  +=
-> >>> simatic-ipc-leds-gpio-core.o
-> >>> -obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+=
-> >>> simatic-ipc-leds-gpio-apollolake.o
-> >>> -obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+=
-> >>> simatic-ipc-leds-gpio-f7188x.o
-> >>> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)			+=
-> >>> simatic-ipc-leds.o
-> >>> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_APOLLOLAKE)	+=
-> >>> simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-apollolake.o
-> >>> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_F7188X)		+=
-> >>> simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-f7188x.o    
-> >>
-> >> Regards,
-> >>
-> >> Hans
-> >>  
-> >   
-> 
+bond7 (unregistering): Released all slaves
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 56 at net/core/dev.c:10867 unregister_netdevice_many_notify+0x14cf/0x19f0 net/core/dev.c:10867
+Modules linked in:
+CPU: 1 PID: 56 Comm: kworker/u4:4 Not tainted 6.2.0-syzkaller-05251-g5b7c4cabbb65 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+Workqueue: netns cleanup_net
+RIP: 0010:unregister_netdevice_many_notify+0x14cf/0x19f0 net/core/dev.c:10867
+Code: af 1a 00 00 48 c7 c6 00 1c 5c 8b 48 c7 c7 40 1c 5c 8b c6 05 28 d4 4c 06 01 e8 5d 45 37 f9 0f 0b e9 01 f9 ff ff e8 f1 c8 6f f9 <0f> 0b e9 d8 f8 ff ff e8 85 66 c1 f9 e9 11 ed ff ff 4c 89 ef e8 d8
+RSP: 0018:ffffc90001577a38 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 000000007db3f601 RCX: 0000000000000000
+RDX: ffff888017d61d40 RSI: ffffffff8814e53f RDI: 0000000000000001
+RBP: ffff88807bc46100 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff88807bc46100 R14: ffff88802ab70000 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffcb678e960 CR3: 00000000768f2000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ unregister_netdevice_many net/core/dev.c:10897 [inline]
+ default_device_exit_batch+0x451/0x5b0 net/core/dev.c:11350
+ ops_exit_list+0x125/0x170 net/core/net_namespace.c:174
+ cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
+ process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
