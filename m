@@ -2,109 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4974D6A8645
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3723D6A864D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCBQXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
+        id S229906AbjCBQYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjCBQXt (ORCPT
+        with ESMTP id S229892AbjCBQYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:23:49 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28ED43905
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:23:48 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id i6so4092082ybu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 08:23:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jAXUc+7igsVtJKU/EXqB4y9E7c4M7owmalEpng7fGGs=;
-        b=t6gIv8PG8O2JCb4Pja+OY1bAmy+QfmXrfFtERdyeosrITN34js2EPockt2g180hHYL
-         pWe1W6HXqOiwIu3072C5tKjIbRE/MQ1j7xJ4TsJHFq1YK0c/PGV8NNn2Gdb8F/kPyiKB
-         DZPNzj0Hy2QWF9GyHk814k/ytH4LbE+co0vOT3J8Aywg0nPGBBqJTU62HPyJmSQbwyGH
-         d0IfJXkkx/0sg4YTUmf3FaAYlryUzM+3+GqTUBgISA5CljcZCwHVbDNbJ2/pdkGjb/94
-         UVsGjY2qnEbneGUKY/ru2PhJ7HCHT0cbF61rjlWtfTDEbd6FobedpulmtiwrsvBjVhPf
-         PcGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jAXUc+7igsVtJKU/EXqB4y9E7c4M7owmalEpng7fGGs=;
-        b=Ro1QdcEVwcnd7GqbFor1w50VcTX1GNgI2ZQh2oPQTcyKNbMp4cRqinQam5ysT682tD
-         Foha7M7kqW9q1yIjVGo14giEcQrKqtYC2GQcgUD1c3Y8ckU9QOF1FP+/zOtcST1DuEKP
-         571AWdCLE3LogH7llYePB9+zUQxxW13yRKNzo0TWukIi8d56vp7Ta1EgaqtVzaR+a+SB
-         BW357pAW2zLLC0Ka+KQ2QAHvVEt1rV6rQIf2VwHlY5aANLrtMBMIsJO+4Lf2ZFWRC/YL
-         72HhNImb0QM9tEtne8+cjqgbdCO3HZLYFuYHK0nYuSjyp5LIx7RHQz8MwcpMetB0CDnH
-         OupQ==
-X-Gm-Message-State: AO0yUKXhLTt7C0OV0WoH1372FG6ubj7h/KshoRQMI9oXMePbWoNNOrYE
-        tTAFBJL9pT9JOY6vNNvJTWFv8o5jugHDj980uTv9bg==
-X-Google-Smtp-Source: AK7set+RUYz2RLJUmCKAuN80E5C6LRyBdQu+UgKzzLI5prKcrosXVpbyJaqYOEnoLm71zPuAGfkUyepJH8UuFtbQ+Cg=
-X-Received: by 2002:a25:9983:0:b0:9f2:a18c:90ed with SMTP id
- p3-20020a259983000000b009f2a18c90edmr4846033ybo.10.1677774227956; Thu, 02 Mar
- 2023 08:23:47 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1677749625.git.quic_varada@quicinc.com> <70beab86eb21d1130e61f52753f514cfb433a4f2.1677749625.git.quic_varada@quicinc.com>
-In-Reply-To: <70beab86eb21d1130e61f52753f514cfb433a4f2.1677749625.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 2 Mar 2023 18:23:37 +0200
-Message-ID: <CAA8EJpq_B_f90W6ULk1q+ot8ACj68U0M8Yc8yXL-BGuF906xGA@mail.gmail.com>
-Subject: Re: [PATCH 2/8] dt-bindings: phy: qcom,qusb2: Document IPQ9574 compatible
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 2 Mar 2023 11:24:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D618F48E0B;
+        Thu,  2 Mar 2023 08:24:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73C27B811F9;
+        Thu,  2 Mar 2023 16:24:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C705C4339B;
+        Thu,  2 Mar 2023 16:24:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677774264;
+        bh=01eFD8NRrrvAiM4AYxII8YQ6013KzfYsBOCDwIhd+ZY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lTZIlxe8deWSZQ5rEFJs29iUepulOlAAlxQR3Ne3AoDPeNHkhXE7o+ld+loowZ3Vn
+         l2cjIruF8pauinMBDuj3kwWtE9xg17l+sbV86eCXFpSVICOXpsCBeDI45Wim6A2Qqf
+         DEouxOderMvwB1mwhqFFoeZ74CANBSP56+i/NicdkCshAgLqUzuGk3ejhFg7Ac2taH
+         l7Hy/PtYSZAH/XmfJzWhZ1fEX6CSDxh0izCNZmeBXz8ovB6AYPqCiw/JQ7brAun/7x
+         9LIFeo2SEtCKsWsBaYHmYBrbtYIZFCgz96jiZGv3lBeml5+FwmsrgnTraWBdIr5MSh
+         WN1Mxf83/vVqw==
+Date:   Thu, 2 Mar 2023 16:24:18 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv6 05/11] mfd: rk808: split into core and i2c
+Message-ID: <ZADNsoIYBEpPJH1F@google.com>
+References: <20230127181244.160887-1-sebastian.reichel@collabora.com>
+ <20230127181244.160887-6-sebastian.reichel@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230127181244.160887-6-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Mar 2023 at 11:56, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> Document the compatible string used for the qusb2 phy in IPQ9574.
->
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+On Fri, 27 Jan 2023, Sebastian Reichel wrote:
+
+> Split rk808 into a core and an i2c part in preperation for
+> SPI support.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
->  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
-> index 7f403e7..c426f78 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
-> @@ -25,6 +25,7 @@ properties:
->                - qcom,qcm2290-qusb2-phy
->                - qcom,sdm660-qusb2-phy
->                - qcom,ipq6018-qusb2-phy
+>  drivers/clk/Kconfig                   |   2 +-
+>  drivers/input/misc/Kconfig            |   2 +-
+>  drivers/mfd/Kconfig                   |   7 +-
+>  drivers/mfd/Makefile                  |   3 +-
+>  drivers/mfd/{rk808.c => rk8xx-core.c} | 209 +++++---------------------
+>  drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
+>  drivers/pinctrl/Kconfig               |   2 +-
+>  drivers/power/supply/Kconfig          |   2 +-
+>  drivers/regulator/Kconfig             |   2 +-
+>  drivers/rtc/Kconfig                   |   2 +-
+>  include/linux/mfd/rk808.h             |   6 +
+>  sound/soc/codecs/Kconfig              |   2 +-
+>  12 files changed, 256 insertions(+), 183 deletions(-)
+>  rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
+>  create mode 100644 drivers/mfd/rk8xx-i2c.c
 
-Please movef ipq6018 to the proper place and then put ipq9574 next to it.
+For my own reference (apply this as-is to your sign-off block):
 
-> +              - qcom,ipq9574-qusb2-phy
->                - qcom,sm4250-qusb2-phy
->                - qcom,sm6115-qusb2-phy
->        - items:
-> --
-> 2.7.4
->
-
+Acked-for-MFD-by: Lee Jones <lee@kernel.org>
 
 -- 
-With best wishes
-Dmitry
+Lee Jones [李琼斯]
