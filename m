@@ -2,85 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC9E6A8043
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6D36A8047
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjCBKsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
+        id S230047AbjCBKun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjCBKsS (ORCPT
+        with ESMTP id S229592AbjCBKul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:48:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF033771B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:47:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677754059;
+        Thu, 2 Mar 2023 05:50:41 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67347231DE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:50:39 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E62641EC06F4;
+        Thu,  2 Mar 2023 11:50:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677754238;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5S8M7VFiIrjWBjAA3FzviIVL8rgISq30wNe4WT8BzAg=;
-        b=TL7wKq/9P7idYtkeYxVycYYw9J69238xmCZxUPCn36vAxian84qTzoCwwLDO2ccTjrxeya
-        XnGspdXp6Xe4wFj5ZlXccGvurrgL+LO79d0ZeHMVecM3Ap4YFa+cxSRacMn+vTqeePISkO
-        4WxfoETv5AMK3xlvLGvPozY0tKXZEVw=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-260-7PkbwasgMVO2A5pxHfr-5Q-1; Thu, 02 Mar 2023 05:47:38 -0500
-X-MC-Unique: 7PkbwasgMVO2A5pxHfr-5Q-1
-Received: by mail-wr1-f71.google.com with SMTP id u5-20020a5d6da5000000b002cd82373455so2016971wrs.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:47:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5S8M7VFiIrjWBjAA3FzviIVL8rgISq30wNe4WT8BzAg=;
-        b=YVbGaCBZ6ih5U7nJa3dpvLOmKHANDBacZMxq+o7a9+XLfgkL4MwRxS6h9Ej4sNXEmq
-         MwfrhpKODD3c+F5WMfrwJMBtN83Nz9QqFjzhXlC2irM3qssflYr5MvBva/SYxNi/svrh
-         BvSxt1asJIb/wB9MgUojMjI/sed5l4fDPQ6/XVU8CzWpUaVT903b9FzIOmfLuhY12Xv7
-         2DcHP3elS1x3VL4jqBrG/OnyfHtI8aTiJXuOrP26Ab4tj/JVNNl1wZO3clEUPIeo6FDG
-         BQTxZbJX2272p379pvie5IJQ1RlYObdrmQr9we9rY6t0nXXmlZ5HenD5UT+SUAuq3+F7
-         VjdQ==
-X-Gm-Message-State: AO0yUKVgUlPvcWgeraK4MbwIe8ErqgBraPvYuyIgYW+zEkY+rUgs81ka
-        IjiIGZZWpigsFCXr53P6C5dfSxF0j6k5VmbhKSk92tD3CsTW6mNiMApPI8DI2YPzPvepUa/hCCC
-        ubJHI+8K/m7xm2cT4hIoglFDB
-X-Received: by 2002:a5d:63c6:0:b0:2ca:101e:1056 with SMTP id c6-20020a5d63c6000000b002ca101e1056mr6974944wrw.1.1677754056950;
-        Thu, 02 Mar 2023 02:47:36 -0800 (PST)
-X-Google-Smtp-Source: AK7set8AlFkoEPhUXgQ2qZuUUweAAfw6iklrEvSxh3Ozh0PDQfe1FKMeP5ddXBc216eHMfeobx/RnA==
-X-Received: by 2002:a5d:63c6:0:b0:2ca:101e:1056 with SMTP id c6-20020a5d63c6000000b002ca101e1056mr6974932wrw.1.1677754056612;
-        Thu, 02 Mar 2023 02:47:36 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:4f00:87ba:e9e9:3821:677b? (p200300cbc70e4f0087bae9e93821677b.dip0.t-ipconnect.de. [2003:cb:c70e:4f00:87ba:e9e9:3821:677b])
-        by smtp.gmail.com with ESMTPSA id w3-20020adff9c3000000b002c7e1a39adcsm15095664wrr.23.2023.03.02.02.47.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 02:47:36 -0800 (PST)
-Message-ID: <3331790c-95a1-6ab9-2667-86aae3d28d7d@redhat.com>
-Date:   Thu, 2 Mar 2023 11:47:35 +0100
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=tWz6s9l2WCuAQ512Au4zmKPORo5v7ghhLXhY91mwp3E=;
+        b=pOHIyZx/ODKTp9XHBtVIavPfqNRRgOZCuwYhA7EBjsj9zhO1vyc9Z2XO246n0OWQq7Z9za
+        lQvT7dYs8brvofPKG9cGQPbM6NsiJpmqsi6IDgEaVL8cEiOJhEXDSEOGqI5jm6WyMsYNmV
+        bUHQNu206l7qCzrLiZ8LRj3qHePwpfw=
+Date:   Thu, 2 Mar 2023 11:50:33 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Hugh Dickins <hughd@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [tip: x86/urgent] x86/setup: Always reserve the first 1M of RAM
+Message-ID: <ZAB/b+FjHjuRqe/S@zn.tnic>
+References: <20210601075354.5149-2-rppt@kernel.org>
+ <162274330352.29796.17521974349959809425.tip-bot2@tip-bot2>
+ <7d344756-aec4-4df2-9427-da742ef9ce6b@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 08/11] mm/vmstat: switch counter modification to
- cmpxchg
-Content-Language: en-US
-To:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Christoph Lameter <cl@linux.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.846239718@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230209153204.846239718@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7d344756-aec4-4df2-9427-da742ef9ce6b@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,47 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.02.23 16:01, Marcelo Tosatti wrote:
-> In preparation to switch vmstat shepherd to flush
-> per-CPU counters remotely, switch all functions that
-> modify the counters to use cmpxchg.
+On Wed, Mar 01, 2023 at 07:51:43PM -0800, Andy Lutomirski wrote:
+> This is quite broken.  The comments in the patch seem to understand
+> that Linux tries twice to allocate the real mode trampoline, but the
+> code has some issues.
 > 
-> To test the performance difference, a page allocator microbenchmark:
-> https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/mm/bench/page_bench01.c
-> with loops=1000000 was used, on Intel Core i7-11850H @ 2.50GHz.
+> First, it actively breaks the logic here:
 > 
-> For the single_page_alloc_free test, which does
-> 
->          /** Loop to measure **/
->          for (i = 0; i < rec->loops; i++) {
->                  my_page = alloc_page(gfp_mask);
->                  if (unlikely(my_page == NULL))
->                          return 0;
->                  __free_page(my_page);
->          }
-> 
-> Unit is cycles.
-> 
-> Vanilla			Patched		Diff
-> 159			165		3.7%
-> 
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> 
-> Index: linux-vmstat-remote/mm/vmstat.c
-> ===================================================================
-> --- linux-vmstat-remote.orig/mm/vmstat.c
-> +++ linux-vmstat-remote/mm/vmstat.c
-> @@ -334,6 +334,188 @@ void set_pgdat_percpu_threshold(pg_data_
->   	}
->   }
+> +               /*
+> +                * Don't free memory under 1M for two reasons:
+> +                * - BIOS might clobber it
+> +                * - Crash kernel needs it to be reserved
+> +                */
+> +               if (start + size < SZ_1M)
+> +                       continue;
+> +               if (start < SZ_1M) {
+> +                       size -= (SZ_1M - start);
+> +                       start = SZ_1M;
+> +               }
+> +
 
-I wonder why we get a diff that is rather hard to review because it 
-removes all existing codes and replaces it by almost-identical code. Are 
-you maybe moving a bunch of code while modifying some tiny bits at the 
-same time?
+Are you refering, per-chance, here to your comment in that same function
+a bit higher?
+
+Introduced by this thing here:
+
+5bc653b73182 ("x86/efi: Allocate a trampoline if needed in efi_free_boot_services()")
+
+?
+
+Also, it looks like Mike did pay attention to your commit:
+
+https://lore.kernel.org/all/YLZsEaimyAe0x6b3@kernel.org/
+
+And then there's the whole deal with kdump kernel needing lowmem. The
+function which became obsolete and got removed by:
+
+23721c8e92f7 ("x86/crash: Remove crash_reserve_low_1M()")
+
+So, considering how yours is the only report that breaks booting and
+this reservation of <=1M has been out there for ~2 years without any
+complaints, I'm thinking what we should do now is fix that logic.
+
+Btw, this whole effort started with
+
+  a799c2bd29d1 ("x86/setup: Consolidate early memory reservations")
+
+Also see this:
+
+ec35d1d93bf8 ("x86/setup: Document that Windows reserves the first MiB")
+
+and with shit like that, we're "piggybacking" on Windoze since there
+certification happens at least.
+
+Which begs the question: how does your laptop even boot on windoze if
+windoze reserves that 1M too?!
+
+> I real the commit message and the linked bug, and I'm having trouble
+> finding evidence of anything actually fixed by this patch.  Can we
+> just revert it?  If not, it would be nice to get a fixup patch that
+> genuinely cleans this up -- the whole structure of the code (first,
+> try to allocate trampoline, then free boot services, then try again)
+> isn't really conducive to a model where we *don't* free boot services
+> < 1M.
+
+Yes, I think this makes most sense. And that whole area is a minefield
+so the less we upset the current universe, the better.
+
+> Discovered by my delightful laptop, which does not boot with this patch applied.
+
+How come your laptop hasn't booted new Linux since then?!? Tztztztz
+
+Thx.
 
 -- 
-Thanks,
+Regards/Gruss,
+    Boris.
 
-David / dhildenb
-
+https://people.kernel.org/tglx/notes-about-netiquette
