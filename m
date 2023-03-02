@@ -2,163 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368386A84BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD87B6A84D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjCBO7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S229816AbjCBPDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:03:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjCBO7K (ORCPT
+        with ESMTP id S229617AbjCBPDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:59:10 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AD42D65;
-        Thu,  2 Mar 2023 06:59:06 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id c184-20020a4a4fc1000000b005250b2dc0easo2677106oob.2;
-        Thu, 02 Mar 2023 06:59:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qEpgxeitDDP5Tn7uIim35FMdWdclFw2u8SG1VaCEidM=;
-        b=YVCcOaNBTMmoAfpjjDb1z/1tHgiRHg7yxRnpeWD4pDu1+2dpzchhQKceqHJV8rJJSm
-         EzDLN+F1CbjibolcjaOiNgSGhV0Z64p+Yjj1+mGInnL679FELNsJdEN85NUuXFDGjugN
-         oJj45qgnI2DWoyuPc/No9P1BfvELrrbCeV6dhFM+zVIGOgorZVxOipoHB3hW7unamk4J
-         GQmFkA3zfn0p0o/YrWOFAyEIiFouGhjCcx6roAvtNQKioZrGfrIeloXpwHoZjqeWIDia
-         Xj2ZCJq6ZCdRRhZEPQliQglQPrhWW/19xapVoCn5BRS45AcirO9QBHx6oBZKene1sP3O
-         TkfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qEpgxeitDDP5Tn7uIim35FMdWdclFw2u8SG1VaCEidM=;
-        b=ZCgEhp5jCD77bu6uudZl3zjdUK/Y0XhOcfVSfjRqFr6n3v9oddMfw4fvXm4vUQEdWg
-         lQmG91/54i/YxkWlbO6x0GUySR0cqnzgsd4A4jcJejKlmpSK71NWE3kUpYPGu/za7DJ7
-         j1KDtDyPIYOXLJOd2iipYOOE86hxHtKh7pKDxdgkGf0Tc3Jnnt/ojk7FAg0xmviWQKDl
-         a9kTp5lNoPELXFadcvU9T57BzMl38pYRAR7tMsdEr4qGEa/hU70/EHKf1iwWOY1kCjiF
-         ifY9NS9ngDlhpQ259Edyg6VNHWBunqWU/sov4vBGgI9eSQkJ/EA2d3WYPWZfXmSX0ue3
-         sIGQ==
-X-Gm-Message-State: AO0yUKUcjhP3E+rkiXzluWi8eLtgtPR3ZS0KH5MRSFFU26nVgPWzVp1P
-        LwRJECSkDGYc/vXwe9zMn5c=
-X-Google-Smtp-Source: AK7set+SJASFyhOWznnJ//RCUCO/aNdtnRCrVi/mLeEWl1GBQgyJvXjf1BvjxCiPKvsrCpnZfTrlFQ==
-X-Received: by 2002:a4a:a689:0:b0:525:58f7:cbef with SMTP id f9-20020a4aa689000000b0052558f7cbefmr4911251oom.2.1677769145410;
-        Thu, 02 Mar 2023 06:59:05 -0800 (PST)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id v17-20020a4ae051000000b0051ac0f54447sm6076252oos.33.2023.03.02.06.59.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 06:59:05 -0800 (PST)
-Message-ID: <37578649-c696-f3b5-a216-196e210929e5@gmail.com>
-Date:   Thu, 2 Mar 2023 11:59:00 -0300
+        Thu, 2 Mar 2023 10:03:19 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D7CC0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:03:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677769394; x=1709305394;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pOkMwZcy0CWC/m1sgDQUMRxgyKO8htXi06dvzxtg0Ro=;
+  b=in1NxjLd/4zTiZhqyowPW2/74Kpz07tL800oU6VnygsyPuDc/P2GMWGZ
+   kj0H+UBNJ7upBfJw80i6Lyb+Vt6W2u/o9PuDTRCzBPwbTiRhv2hw/p8W1
+   1fuX/RaEpeuVxfqFW+G5OGc4SKSDENp/b2YIS3O1mKzF7QP8a8nftbHOz
+   W7c4A2pb0aeFOsZ6C76NavMouJep1XLyuLwYKVKnAmyTz7uo2u+hUk3iv
+   LWPRRwDiRmY6pljlFWODp+/55v3fsqEc9KWpYsXJBEtXyh/qTn3181oqM
+   ugvYx7h7y7c5WDx3MzMFDdFqdNrctBEly84wZ8hJMicMnaPshqFtMjgcz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="362333348"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="362333348"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 07:00:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="784867626"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="784867626"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 02 Mar 2023 07:00:16 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXkPn-0000Xg-33;
+        Thu, 02 Mar 2023 15:00:15 +0000
+Date:   Thu, 02 Mar 2023 22:59:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:anna-maria.2023.03.01a] BUILD SUCCESS
+ 20f03bc947d96d9f39ba24f0f92b5f555b7e0b20
+Message-ID: <6400b9ca.+BC88doZ2AahRDtU%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/1] rust: bindgen: Add `alt_instr` as opaque type
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>
-Cc:     Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Derek Barbosa <debarbos@redhat.com>,
-        rust-for-linux@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <ZACvxNOuuyifQ9Nx@kernel.org>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <ZACvxNOuuyifQ9Nx@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 11:16, Arnaldo Carvalho de Melo wrote:
-> To address this build error:
-> 
->     BINDGEN rust/bindings/bindings_generated.rs
->     BINDGEN rust/bindings/bindings_helpers_generated.rs
->     EXPORTS rust/exports_core_generated.h
->     RUSTC P rust/libmacros.so
->     RUSTC L rust/compiler_builtins.o
->     RUSTC L rust/alloc.o
->     RUSTC L rust/bindings.o
->     RUSTC L rust/build_error.o
->     EXPORTS rust/exports_alloc_generated.h
->   error[E0588]: packed type cannot transitively contain a `#[repr(align)]` type
->        --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10094:1
->         |
->   10094 | / pub struct alt_instr {
->   10095 | |     pub instr_offset: s32,
->   10096 | |     pub repl_offset: s32,
->   10097 | |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1,
->   10098 | |     pub instrlen: u8_,
->   10099 | |     pub replacementlen: u8_,
->   10100 | | }
->         | |_^
->         |
->   note: `alt_instr__bindgen_ty_1__bindgen_ty_1` has a `#[repr(align)]` attribute
->        --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10111:1
->         |
->   10111 | / pub struct alt_instr__bindgen_ty_1__bindgen_ty_1 {
->   10112 | |     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize], u16>,
->   10113 | | }
->         | |_^
->   note: `alt_instr` contains a field of type `alt_instr__bindgen_ty_1`
->        --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10097:9
->         |
->   10097 |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1,
->         |         ^^^^^^^^^^^^^^^^
->   note: ...which contains a field of type `alt_instr__bindgen_ty_1__bindgen_ty_1`
->        --> /var/home/acme/git/linux/rust/bindings/bindings_generated.rs:10104:9
->         |
->   10104 |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1__bindgen_ty_1,
->         |         ^^^^^^^^^^^^^^^^
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git anna-maria.2023.03.01a
+branch HEAD: 20f03bc947d96d9f39ba24f0f92b5f555b7e0b20  timer: Always queue timers on the local CPU
 
-Reading the kernel sources this field corresponds to an u16 which indeed
-represents a bit set and it says so in a comment on the field. I
-couldn't replicate this issue, though, because this struct is used only
-inside arch pretty much internally, then there's no problem to make it
-opaque. Still, we have to be careful if these kind of things appear in
-the future.
+elapsed time: 753m
 
-And I notice that You haven't mentioned the version of Bindgen that
-You've used, including its linked libclang too. Otherwise I think this
-could be accepted.
+configs tested: 101
+configs skipped: 5
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->   error: aborting due to previous error
-> 
->   For more information about this error, try `rustc --explain E0588`.
->   make[1]: *** [rust/Makefile:389: rust/bindings.o] Error 1
->   make: *** [Makefile:1293: prepare] Error 2
-> 
-> Cc: Derek Barbosa <debarbos@redhat.com>
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> ---
->  rust/bindgen_parameters | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/rust/bindgen_parameters b/rust/bindgen_parameters
-> index be4963bf720304da..552d9a85925b9945 100644
-> --- a/rust/bindgen_parameters
-> +++ b/rust/bindgen_parameters
-> @@ -6,6 +6,7 @@
->  --opaque-type local_apic
->  
->  # Packed type cannot transitively contain a `#[repr(align)]` type.
-> +--opaque-type alt_instr
->  --opaque-type x86_msi_data
->  --opaque-type x86_msi_addr_lo
->  
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r005-20230302   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r036-20230302   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230302   gcc  
+arc                  randconfig-r014-20230302   gcc  
+arc                  randconfig-r043-20230302   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r024-20230302   gcc  
+arm                  randconfig-r046-20230302   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r021-20230302   gcc  
+csky                 randconfig-r022-20230302   gcc  
+hexagon              randconfig-r041-20230302   clang
+hexagon              randconfig-r045-20230302   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r013-20230302   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r001-20230302   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r012-20230302   gcc  
+loongarch            randconfig-r033-20230302   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r002-20230302   gcc  
+m68k                 randconfig-r006-20230302   gcc  
+microblaze   buildonly-randconfig-r002-20230302   gcc  
+microblaze           randconfig-r011-20230302   gcc  
+microblaze           randconfig-r015-20230302   gcc  
+microblaze           randconfig-r023-20230302   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc     buildonly-randconfig-r003-20230302   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r035-20230302   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r034-20230302   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230302   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r005-20230302   gcc  
+s390                 randconfig-r031-20230302   gcc  
+s390                 randconfig-r044-20230302   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r003-20230302   gcc  
+sparc        buildonly-randconfig-r006-20230302   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r001-20230302   gcc  
+sparc                randconfig-r026-20230302   gcc  
+sparc64      buildonly-randconfig-r004-20230302   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r025-20230302   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
