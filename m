@@ -2,405 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F5B6A857B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1A16A8581
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjCBPjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
+        id S229862AbjCBPpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjCBPjo (ORCPT
+        with ESMTP id S229447AbjCBPpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:39:44 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EC4265AF
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:39:41 -0800 (PST)
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1FF9E3F230
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:39:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677771579;
-        bh=3HmLbQAZT9AMT7SUY7VcK9SW2kN+aBRS5yTd6ryKNO8=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=aCYoj+BT4SYjROOrHjavyPj1rOgaZNgBDwmBf0PA8kixSovr2dzyiXLOd2zSCIiaK
-         6h1X082OzC9B2usDPyUz6R8YvtAxlfTSsFvNCZvRwJGTRjZNsESOPnhlyBt2t77Nhr
-         6DiSZK4BlJ4AU5YAnrUtp7GYjVQKo+Fj5y7FkSNJT3hQMmq4NvkaSXzG1u+t7AqBqn
-         YYdH7KLqESizuvRe4Vm2WGx9LhhBOiqH4kYv3gfkaQkcfKif6SeBij6u3ZBM4PThk4
-         jFDitc1JYULXs5BEOpRQE0ZP6wY222F9NuU7VNC+9y28/Ihw//s6zt7ImtxYHwmYuu
-         ONC+rwibhHefw==
-Received: by mail-qt1-f197.google.com with SMTP id k17-20020ac84751000000b003b9b4ec27c4so8629211qtp.19
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:39:39 -0800 (PST)
+        Thu, 2 Mar 2023 10:45:30 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764EB3D0B3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:45:28 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id by13so5276695vsb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:45:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677771927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WjXGHa4EroNXT3gLEIRkeIrKvt5m5lkc5NjvxIOYA7M=;
+        b=RSFFWFEHk4qVxyHZ8nxZQVcPHMdItX9tW/O1x9DJFUNXT3FUeU9YzZSOH0whRAgemY
+         E9DG0dQXUD0RY5cHdk7RUHd0jseALf2MNqw6Ykk0vhW5i06Seqj/YSHsgQlpPA1xC+Xn
+         R5xjsm6OoxsjNHg0aZ4Cg9r2IoiUEpSoSoxxpSX2IlM4D5GqClzl6kwr7NrtFde/mF0s
+         /TKf87PhgH+A42EOClfbPCWNUqT0AAes95bMpsQlM6uWLmNxI7wSnZFKXkZchFfo7miA
+         L1tNQQa9iZ6mMudGkN/+pVl1SRx5PfK0v3cZe25qmxwtpX+2MWL4EuyUuZMcVXyhUa87
+         tVOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677771578;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3HmLbQAZT9AMT7SUY7VcK9SW2kN+aBRS5yTd6ryKNO8=;
-        b=HnLn4IVSl3dcG78/dx5fZhPSfgp2PUfj8QGOLKOLihX+IAWPoQyBLNpPBzah8XWH+g
-         lNoDFf8FsJGTwsXMzXumdwkbbZsiEW37/29gtTwq/BHtzl7TgyKF5xYH4MlPAs64JFhO
-         BzPG5Ri9LlkApWyIzYn9bzRsCCmje7kbfjhzp/h/86XovKV73I/Lnd2zDWbUaa80eY2i
-         9x8l1pMUwObMOSYYA+i8eClaotAb4iFEjU+NbJ2/nOcZzzDkhUQ4V6tImwpXI8l6LdaW
-         Acf5KsxqTfh2bVBY/sr3EVe4JMmZG//a9gv+oe5us6F/Z2L3cLDetTti4lrImIWcMOGS
-         8KLQ==
-X-Gm-Message-State: AO0yUKUfk0zvfzVK7WHWqcVgdSMqvTh3y4WFgv4tCOGuteYquqmYgIkh
-        W4oicodb5ZmzV9tF2oGupKKZ0aOMksblWCzIA43b7lh4HF4M/BFH6ygfF32gGjTWKXgpzbgybUF
-        POx2ZiV8ZJV70agLrAJ937mTYz9iBLvVzXy7iFI7vI18uPommJao+PUjAEQ==
-X-Received: by 2002:a05:6214:948:b0:56e:96c3:e0f0 with SMTP id dn8-20020a056214094800b0056e96c3e0f0mr2836466qvb.0.1677771578030;
-        Thu, 02 Mar 2023 07:39:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set/O3FhD3QqI7rIBh0eA0Bn2Yb/tLRN+hqxVYnrt84sPZWcdHfTwF7z6av8ugOmTfUJowapLtg6jXJlMrDAWJtY=
-X-Received: by 2002:a05:6214:948:b0:56e:96c3:e0f0 with SMTP id
- dn8-20020a056214094800b0056e96c3e0f0mr2836461qvb.0.1677771577743; Thu, 02 Mar
- 2023 07:39:37 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677771927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WjXGHa4EroNXT3gLEIRkeIrKvt5m5lkc5NjvxIOYA7M=;
+        b=LZy0gGFj+9DiISvbln4IL883jEPlJ6Jzei6PI6baluPkahkaWB8zwRtZ/Pfu8C16Tp
+         Hn8F3AqZ3xj1+oJE6YyT8zIGpVzIaEf013LPKyS+zcvyNAPD8aWLurV+VzlTd+6ReC0l
+         YsePY6/nI4P/+i7FFitPoyrwr9+wzQPsBwsIuijJOnvjsKiGLlOaQJ3/pyygpjptVNIS
+         NBXf9q4lPLCz/Hao6qdxp8YnJWFMF1PE2V1smoG/FPFXCBfODEca64cGKhrYzW5tCQp+
+         uV3YafjEq+GNXECwphAPXCs+OoXmMWV05/pfTplLmnwesnpbSzwyNnkbhzmDM1DQwe/T
+         y+Ww==
+X-Gm-Message-State: AO0yUKVRAnG6RttxMnwENNB+YhPIRIWacUkhx2Iq/iyuQxoU/Hed+T5H
+        adtuMG7g+LIWCrypnF2/lRU6mPvOcIW7uVMD2jDXGw==
+X-Google-Smtp-Source: AK7set+QZM7DvFhgUYUzYA9B/U5ASo6vV2oB5xM5bFvi4qz/G5ZFyV/yENXSnm8tS1b+l+4Zj/VqimM6gvV+Jw41fYE=
+X-Received: by 2002:a67:fd50:0:b0:415:48dd:e0b9 with SMTP id
+ g16-20020a67fd50000000b0041548dde0b9mr6706409vsr.3.1677771927420; Thu, 02 Mar
+ 2023 07:45:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20230221083323.302471-1-xingyu.wu@starfivetech.com> <20230221083323.302471-7-xingyu.wu@starfivetech.com>
-In-Reply-To: <20230221083323.302471-7-xingyu.wu@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Thu, 2 Mar 2023 16:39:21 +0100
-Message-ID: <CAJM55Z-D2s6FkQiR4_KSNkQ-QNHu3mLO_A8GBEY5XwVU5=VXAA@mail.gmail.com>
-Subject: Re: [PATCH v2 06/11] clk: starfive: Add StarFive JH7110
- Image-Signal-Process clock driver
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230218002819.1486479-1-jthoughton@google.com>
+ <20230218002819.1486479-6-jthoughton@google.com> <CACw3F538H+bYcvSY-qG4-gmrgGPRBgTScDzrX9suLyp_q+v_bQ@mail.gmail.com>
+In-Reply-To: <CACw3F538H+bYcvSY-qG4-gmrgGPRBgTScDzrX9suLyp_q+v_bQ@mail.gmail.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 2 Mar 2023 07:44:51 -0800
+Message-ID: <CADrL8HVMp9kA=c904pUCqa-J_1vY4UPtsL9up+ZVVDp4TZbG2w@mail.gmail.com>
+Subject: Re: [PATCH v2 05/46] rmap: hugetlb: switch from page_dup_file_rmap to page_add_file_rmap
+To:     Jiaqi Yan <jiaqiyan@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Frank van der Linden <fvdl@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 at 09:36, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+On Wed, Mar 1, 2023 at 5:06=E2=80=AFPM Jiaqi Yan <jiaqiyan@google.com> wrot=
+e:
 >
-> Add driver for the StarFive JH7110 Image-Signal-Process clock controller.
->
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
->  drivers/clk/starfive/Kconfig                  |  11 +
->  drivers/clk/starfive/Makefile                 |   1 +
->  .../clk/starfive/clk-starfive-jh7110-isp.c    | 254 ++++++++++++++++++
->  3 files changed, 266 insertions(+)
->  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-isp.c
->
-> diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
-> index a462b6e53543..59499acb95f7 100644
-> --- a/drivers/clk/starfive/Kconfig
-> +++ b/drivers/clk/starfive/Kconfig
-> @@ -53,3 +53,14 @@ config CLK_STARFIVE_JH7110_STG
->         help
->           Say yes here to support the System-Top-Group clock controller
->           on the StarFive JH7110 SoC.
-> +
-> +config CLK_STARFIVE_JH7110_ISP
-> +       tristate "StarFive JH7110 Image-Signal-Process clock support"
-> +       depends on CLK_STARFIVE_JH7110_SYS && JH71XX_PMU
-> +       select AUXILIARY_BUS
-> +       select CLK_STARFIVE_JH71X0
-> +       select RESET_STARFIVE_JH7110
-> +       default CLK_STARFIVE_JH7110_SYS
+> On Fri, Feb 17, 2023 at 4:28 PM James Houghton <jthoughton@google.com> wr=
+ote:
+> >
+> > This only applies to file-backed HugeTLB, and it should be a no-op unti=
+l
+> > high-granularity mapping is possible. Also update page_remove_rmap to
+> > support the eventual case where !compound && folio_test_hugetlb().
+> >
+> > HugeTLB doesn't use LRU or mlock, so we avoid those bits. This also
+> > means we don't need to use subpage_mapcount; if we did, it would
+> > overflow with only a few mappings.
 
-default m if ARCH_STARFIVE
+This is wrong; I guess I misunderstood the code when I wrote this
+commit. subpages_mapcount (now called _nr_pages_mapped) won't overflow
+(unless HugeTLB pages could be greater than 16G). It is indeed a bug
+not to update _nr_pages_mapped the same way THPs do.
 
-> +       help
-> +         Say yes here to support the Image-Signal-Process clock controller
-> +         on the StarFive JH7110 SoC.
-> diff --git a/drivers/clk/starfive/Makefile b/drivers/clk/starfive/Makefile
-> index b81e97ee2659..76fb9f8d628b 100644
-> --- a/drivers/clk/starfive/Makefile
-> +++ b/drivers/clk/starfive/Makefile
-> @@ -7,3 +7,4 @@ obj-$(CONFIG_CLK_STARFIVE_JH7100_AUDIO) += clk-starfive-jh7100-audio.o
->  obj-$(CONFIG_CLK_STARFIVE_JH7110_SYS)  += clk-starfive-jh7110-sys.o
->  obj-$(CONFIG_CLK_STARFIVE_JH7110_AON)  += clk-starfive-jh7110-aon.o
->  obj-$(CONFIG_CLK_STARFIVE_JH7110_STG)  += clk-starfive-jh7110-stg.o
-> +obj-$(CONFIG_CLK_STARFIVE_JH7110_ISP)  += clk-starfive-jh7110-isp.o
-> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-isp.c b/drivers/clk/starfive/clk-starfive-jh7110-isp.c
-> new file mode 100644
-> index 000000000000..b5bce1ac22e0
-> --- /dev/null
-> +++ b/drivers/clk/starfive/clk-starfive-jh7110-isp.c
-> @@ -0,0 +1,254 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * StarFive JH7110 Image-Signal-Process Clock Driver
-> + *
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/io.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/reset.h>
-> +
-> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
-> +
-> +#include "clk-starfive-jh71x0.h"
-> +
-> +/* external clocks */
-> +#define JH7110_ISPCLK_ISP_TOP_CORE             (JH7110_ISPCLK_END + 0)
-> +#define JH7110_ISPCLK_ISP_TOP_AXI              (JH7110_ISPCLK_END + 1)
-> +#define JH7110_ISPCLK_NOC_BUS_ISP_AXI          (JH7110_ISPCLK_END + 2)
-> +#define JH7110_ISPCLK_DVP_CLK                  (JH7110_ISPCLK_END + 3)
-> +#define JH7110_ISPCLK_EXT_END                  (JH7110_ISPCLK_END + 4)
-> +
-> +static const struct jh71x0_clk_data jh7110_ispclk_data[] = {
-> +       /* syscon */
-> +       JH71X0__DIV(JH7110_ISPCLK_DOM4_APB_FUNC, "dom4_apb_func", 15,
-> +                   JH7110_ISPCLK_ISP_TOP_AXI),
-> +       JH71X0__DIV(JH7110_ISPCLK_MIPI_RX0_PXL, "mipi_rx0_pxl", 8,
-> +                   JH7110_ISPCLK_ISP_TOP_CORE),
-> +       JH71X0__INV(JH7110_ISPCLK_DVP_INV, "dvp_inv", JH7110_ISPCLK_DVP_CLK),
-> +       /* vin */
-> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_CFGCLK_IN, "m31dphy_cfgclk_in", 16,
-> +                   JH7110_ISPCLK_ISP_TOP_CORE),
-> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_REFCLK_IN, "m31dphy_refclk_in", 16,
-> +                   JH7110_ISPCLK_ISP_TOP_CORE),
-> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_TXCLKESC_LAN0, "m31dphy_txclkesc_lan0", 60,
-> +                   JH7110_ISPCLK_ISP_TOP_CORE),
-> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PCLK, "vin_pclk", CLK_IGNORE_UNUSED,
-> +                   JH7110_ISPCLK_DOM4_APB_FUNC),
-> +       JH71X0__DIV(JH7110_ISPCLK_VIN_SYS_CLK, "vin_sys_clk", 8, JH7110_ISPCLK_ISP_TOP_CORE),
-> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF0, "vin_pixel_clk_if0", CLK_IGNORE_UNUSED,
-> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
-> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF1, "vin_pixel_clk_if1", CLK_IGNORE_UNUSED,
-> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
-> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF2, "vin_pixel_clk_if2", CLK_IGNORE_UNUSED,
-> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
-> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF3, "vin_pixel_clk_if3", CLK_IGNORE_UNUSED,
-> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
-> +       JH71X0__MUX(JH7110_ISPCLK_VIN_CLK_P_AXIWR, "vin_clk_p_axiwr", 2,
-> +                   JH7110_ISPCLK_MIPI_RX0_PXL,
-> +                   JH7110_ISPCLK_DVP_INV),
-> +       /* ispv2_top_wrapper */
-> +       JH71X0_GMUX(JH7110_ISPCLK_ISPV2_TOP_WRAPPER_CLK_C, "ispv2_top_wrapper_clk_c",
-> +                   CLK_IGNORE_UNUSED, 2,
-> +                   JH7110_ISPCLK_MIPI_RX0_PXL,
-> +                   JH7110_ISPCLK_DVP_INV),
-> +};
-
-Are all the clocks marked CLK_IGNORE_UNUSED here critical or are they
-just marked like so because the corresponding drivers don't yet claim
-the clocks they need? Please mark the clocks that can never be turned
-off CLK_IS_CRITICAL and remove the flag from the rest of the clocks.
-
-> +struct isp_top_crg {
-> +       struct clk_bulk_data *top_clks;
-> +       struct reset_control *top_rsts;
-> +       int top_clks_num;
-> +       void __iomem *base;
-> +};
-> +
-> +static struct clk_bulk_data jh7110_isp_top_clks[] = {
-> +       { .id = "isp_top_core" },
-> +       { .id = "isp_top_axi" }
-> +};
-> +
-> +static struct isp_top_crg *top_crg_from(void __iomem **base)
-> +{
-> +       return container_of(base, struct isp_top_crg, base);
-> +}
-> +
-> +static int jh7110_isp_top_crg_get(struct jh71x0_clk_priv *priv, struct isp_top_crg *top)
-> +{
-> +       int ret;
-> +
-> +       top->top_clks = jh7110_isp_top_clks;
-> +       top->top_clks_num = ARRAY_SIZE(jh7110_isp_top_clks);
-> +       ret = devm_clk_bulk_get(priv->dev, top->top_clks_num, top->top_clks);
-> +       if (ret) {
-> +               dev_err(priv->dev, "top clks get failed: %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       /* The resets should be shared and other ISP modules will use its. */
-> +       top->top_rsts = devm_reset_control_array_get_shared(priv->dev);
-> +       if (IS_ERR(top->top_rsts)) {
-> +               dev_err(priv->dev, "top rsts get failed\n");
-> +               return PTR_ERR(top->top_rsts);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int jh7110_isp_top_crg_enable(struct isp_top_crg *top)
-> +{
-> +       int ret;
-> +
-> +       ret = clk_bulk_prepare_enable(top->top_clks_num, top->top_clks);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return reset_control_deassert(top->top_rsts);
-> +}
-> +
-> +static void jh7110_isp_top_crg_disable(struct isp_top_crg *top)
-> +{
-> +       clk_bulk_disable_unprepare(top->top_clks_num, top->top_clks);
-> +}
-> +
-> +static struct clk_hw *jh7110_ispclk_get(struct of_phandle_args *clkspec, void *data)
-> +{
-> +       struct jh71x0_clk_priv *priv = data;
-> +       unsigned int idx = clkspec->args[0];
-> +
-> +       if (idx < JH7110_ISPCLK_END)
-> +               return &priv->reg[idx].hw;
-> +
-> +       return ERR_PTR(-EINVAL);
-> +}
-> +
-> +static int jh7110_ispcrg_probe(struct platform_device *pdev)
-> +{
-> +       struct jh71x0_clk_priv *priv;
-> +       struct isp_top_crg *top;
-> +       unsigned int idx;
-> +       int ret;
-> +
-> +       priv = devm_kzalloc(&pdev->dev,
-> +                           struct_size(priv, reg, JH7110_ISPCLK_END),
-> +                           GFP_KERNEL);
-> +       if (!priv)
-> +               return -ENOMEM;
-> +
-> +       top = devm_kzalloc(&pdev->dev, sizeof(*top), GFP_KERNEL);
-> +       if (!top)
-> +               return -ENOMEM;
-> +
-> +       spin_lock_init(&priv->rmw_lock);
-> +       priv->dev = &pdev->dev;
-> +       priv->base = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(priv->base))
-> +               return PTR_ERR(priv->base);
-> +
-> +       top->base = priv->base;
-> +       dev_set_drvdata(priv->dev, (void *)(&top->base));
-> +
-> +       pm_runtime_enable(priv->dev);
-> +       ret = pm_runtime_get_sync(priv->dev);
-> +       if (ret < 0) {
-> +               dev_err(priv->dev, "failed to turn on power: %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       ret = jh7110_isp_top_crg_get(priv, top);
-> +       if (ret)
-> +               goto err_clk;
-> +
-> +       ret = jh7110_isp_top_crg_enable(top);
-> +       if (ret)
-> +               goto err_clk;
-> +
-> +       for (idx = 0; idx < JH7110_ISPCLK_END; idx++) {
-> +               u32 max = jh7110_ispclk_data[idx].max;
-> +               struct clk_parent_data parents[4] = {};
-> +               struct clk_init_data init = {
-> +                       .name = jh7110_ispclk_data[idx].name,
-> +                       .ops = starfive_jh71x0_clk_ops(max),
-> +                       .parent_data = parents,
-> +                       .num_parents =
-> +                               ((max & JH71X0_CLK_MUX_MASK) >> JH71X0_CLK_MUX_SHIFT) + 1,
-> +                       .flags = jh7110_ispclk_data[idx].flags,
-> +               };
-> +               struct jh71x0_clk *clk = &priv->reg[idx];
-> +               unsigned int i;
-> +               char *fw_name[JH7110_ISPCLK_EXT_END - JH7110_ISPCLK_END] = {
-> +                       "isp_top_core",
-> +                       "isp_top_axi",
-> +                       "noc_bus_isp_axi",
-> +                       "dvp_clk"
-> +               };
-> +
-> +               for (i = 0; i < init.num_parents; i++) {
-> +                       unsigned int pidx = jh7110_ispclk_data[idx].parents[i];
-> +
-> +                       if (pidx < JH7110_ISPCLK_END)
-> +                               parents[i].hw = &priv->reg[pidx].hw;
-> +                       else
-> +                               parents[i].fw_name = fw_name[pidx - JH7110_ISPCLK_END];
-> +               }
-> +
-> +               clk->hw.init = &init;
-> +               clk->idx = idx;
-> +               clk->max_div = max & JH71X0_CLK_DIV_MASK;
-> +
-> +               ret = devm_clk_hw_register(&pdev->dev, &clk->hw);
-> +               if (ret)
-> +                       goto err_exit;
-> +       }
-> +
-> +       ret = devm_of_clk_add_hw_provider(&pdev->dev, jh7110_ispclk_get, priv);
-> +       if (ret)
-> +               goto err_exit;
-> +
-> +       ret = jh7110_reset_controller_register(priv, "reset-isp", 3);
-> +       if (ret)
-> +               goto err_exit;
-> +
-> +       return 0;
-> +
-> +err_exit:
-> +       jh7110_isp_top_crg_disable(top);
-> +err_clk:
-> +       pm_runtime_put_sync(priv->dev);
-> +       pm_runtime_disable(priv->dev);
-> +       return ret;
-> +}
-> +
-> +static int jh7110_ispcrg_remove(struct platform_device *pdev)
-> +{
-> +       void __iomem **base = dev_get_drvdata(&pdev->dev);
-> +       struct isp_top_crg *top = top_crg_from(base);
-> +
-> +       jh7110_isp_top_crg_disable(top);
-> +       pm_runtime_disable(&pdev->dev);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id jh7110_ispcrg_match[] = {
-> +       { .compatible = "starfive,jh7110-ispcrg" },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, jh7110_ispcrg_match);
-> +
-> +static struct platform_driver jh7110_ispcrg_driver = {
-> +       .probe = jh7110_ispcrg_probe,
-> +       .remove = jh7110_ispcrg_remove,
-> +       .driver = {
-> +               .name = "clk-starfive-jh7110-isp",
-> +               .of_match_table = jh7110_ispcrg_match,
-> +       },
-> +};
-> +module_platform_driver(jh7110_ispcrg_driver);
-> +
-> +MODULE_AUTHOR("Xingyu Wu <xingyu.wu@starfivetech.com>");
-> +MODULE_DESCRIPTION("StarFive JH7110 Image-Signal-Process clock driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.25.1
 >
+> >
+> > There is still one caller of page_dup_file_rmap left: copy_present_pte,
+> > and it is always called with compound=3Dfalse in this case.
+> >
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> >
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index 08004371cfed..6c008c9de80e 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -5077,7 +5077,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst=
+, struct mm_struct *src,
+> >                          * sleep during the process.
+> >                          */
+> >                         if (!PageAnon(ptepage)) {
+> > -                               page_dup_file_rmap(ptepage, true);
+> > +                               page_add_file_rmap(ptepage, src_vma, tr=
+ue);
+> >                         } else if (page_try_dup_anon_rmap(ptepage, true=
+,
+> >                                                           src_vma)) {
+> >                                 pte_t src_pte_old =3D entry;
+> > @@ -5910,7 +5910,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struc=
+t *mm,
+> >         if (anon_rmap)
+> >                 hugepage_add_new_anon_rmap(folio, vma, haddr);
+> >         else
+> > -               page_dup_file_rmap(&folio->page, true);
+> > +               page_add_file_rmap(&folio->page, vma, true);
+> >         new_pte =3D make_huge_pte(vma, &folio->page, ((vma->vm_flags & =
+VM_WRITE)
+> >                                 && (vma->vm_flags & VM_SHARED)));
+> >         /*
+> > @@ -6301,7 +6301,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *ds=
+t_mm,
+> >                 goto out_release_unlock;
+> >
+> >         if (folio_in_pagecache)
+> > -               page_dup_file_rmap(&folio->page, true);
+> > +               page_add_file_rmap(&folio->page, dst_vma, true);
+> >         else
+> >                 hugepage_add_new_anon_rmap(folio, dst_vma, dst_addr);
+> >
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index d3964c414010..b0f87f19b536 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -254,7 +254,7 @@ static bool remove_migration_pte(struct folio *foli=
+o,
+> >                                 hugepage_add_anon_rmap(new, vma, pvmw.a=
+ddress,
+> >                                                        rmap_flags);
+> >                         else
+> > -                               page_dup_file_rmap(new, true);
+> > +                               page_add_file_rmap(new, vma, true);
+> >                         set_huge_pte_at(vma->vm_mm, pvmw.address, pvmw.=
+pte, pte);
+> >                 } else
+> >  #endif
+> > diff --git a/mm/rmap.c b/mm/rmap.c
+> > index 15ae24585fc4..c010d0af3a82 100644
+> > --- a/mm/rmap.c
+> > +++ b/mm/rmap.c
 >
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> Given you are making hugetlb's ref/mapcount mechanism to be consistent
+> with THP, I think the special folio_test_hugetlb checks you added in
+> this commit will break page_mapped() and folio_mapped() if page/folio
+> is HGMed. With these checks, folio->_nr_pages_mapped are not properly
+> increased/decreased.
+
+Thank you, Jiaqi! I didn't realize I broke
+folio_mapped()/page_mapped(). The end result is that page_mapped() may
+report that an HGMed page isn't mapped when it is. Not good!
+
+>
+> > @@ -1318,21 +1318,21 @@ void page_add_file_rmap(struct page *page, stru=
+ct vm_area_struct *vma,
+> >         int nr =3D 0, nr_pmdmapped =3D 0;
+> >         bool first;
+> >
+> > -       VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
+> > +       VM_BUG_ON_PAGE(compound && !PageTransHuge(page)
+> > +                               && !folio_test_hugetlb(folio), page);
+> >
+> >         /* Is page being mapped by PTE? Is this its first map to be add=
+ed? */
+> >         if (likely(!compound)) {
+> >                 first =3D atomic_inc_and_test(&page->_mapcount);
+> >                 nr =3D first;
+> > -               if (first && folio_test_large(folio)) {
+> > +               if (first && folio_test_large(folio)
+> > +                         && !folio_test_hugetlb(folio)) {
+>
+> So we should still increment _nr_pages_mapped for hugetlb case here,
+> and decrement in the corresponding place in page_remove_rmap.
+>
+> >                         nr =3D atomic_inc_return_relaxed(mapped);
+> >                         nr =3D (nr < COMPOUND_MAPPED);
+> >                 }
+> > -       } else if (folio_test_pmd_mappable(folio)) {
+> > -               /* That test is redundant: it's for safety or to optimi=
+ze out */
+> > -
+> > +       } else {
+> >                 first =3D atomic_inc_and_test(&folio->_entire_mapcount)=
+;
+> > -               if (first) {
+> > +               if (first && !folio_test_hugetlb(folio)) {
+>
+> Same here: we should still increase _nr_pages_mapped by
+> COMPOUND_MAPPED and decrease by COMPOUND_MAPPED in the corresponding
+> place in page_remove_rmap.
+>
+> >                         nr =3D atomic_add_return_relaxed(COMPOUND_MAPPE=
+D, mapped);
+> >                         if (likely(nr < COMPOUND_MAPPED + COMPOUND_MAPP=
+ED)) {
+> >                                 nr_pmdmapped =3D folio_nr_pages(folio);
+> > @@ -1347,6 +1347,9 @@ void page_add_file_rmap(struct page *page, struct=
+ vm_area_struct *vma,
+> >                 }
+> >         }
+> >
+> > +       if (folio_test_hugetlb(folio))
+> > +               return;
+> > +
+> >         if (nr_pmdmapped)
+> >                 __lruvec_stat_mod_folio(folio, folio_test_swapbacked(fo=
+lio) ?
+> >                         NR_SHMEM_PMDMAPPED : NR_FILE_PMDMAPPED, nr_pmdm=
+apped);
+> > @@ -1376,8 +1379,7 @@ void page_remove_rmap(struct page *page, struct v=
+m_area_struct *vma,
+> >         VM_BUG_ON_PAGE(compound && !PageHead(page), page);
+> >
+> >         /* Hugetlb pages are not counted in NR_*MAPPED */
+> > -       if (unlikely(folio_test_hugetlb(folio))) {
+> > -               /* hugetlb pages are always mapped with pmds */
+> > +       if (unlikely(folio_test_hugetlb(folio)) && compound) {
+> >                 atomic_dec(&folio->_entire_mapcount);
+> >                 return;
+> >         }
+>
+> This entire if-block should be removed after you remove the
+> !folio_test_hugetlb checks in page_add_file_rmap.
+
+This is the not-so-obvious change that is needed. Thank you!
+
+>
+> > @@ -1386,15 +1388,14 @@ void page_remove_rmap(struct page *page, struct=
+ vm_area_struct *vma,
+> >         if (likely(!compound)) {
+> >                 last =3D atomic_add_negative(-1, &page->_mapcount);
+> >                 nr =3D last;
+> > -               if (last && folio_test_large(folio)) {
+> > +               if (last && folio_test_large(folio)
+> > +                        && !folio_test_hugetlb(folio)) {
+>
+> ditto.
+>
+> >                         nr =3D atomic_dec_return_relaxed(mapped);
+> >                         nr =3D (nr < COMPOUND_MAPPED);
+> >                 }
+> > -       } else if (folio_test_pmd_mappable(folio)) {
+> > -               /* That test is redundant: it's for safety or to optimi=
+ze out */
+> > -
+> > +       } else {
+> >                 last =3D atomic_add_negative(-1, &folio->_entire_mapcou=
+nt);
+> > -               if (last) {
+> > +               if (last && !folio_test_hugetlb(folio)) {
+>
+> ditto.
+
+I agree with all of your suggestions. Testing with the hugetlb-hgm
+selftest, nothing seems to break. :)
+
+Given that this is at least the third or fourth major bug in this
+version of the series, I'll go ahead and send a v3 sooner rather than
+later.
+
+>
+> >                         nr =3D atomic_sub_return_relaxed(COMPOUND_MAPPE=
+D, mapped);
+> >                         if (likely(nr < COMPOUND_MAPPED)) {
+> >                                 nr_pmdmapped =3D folio_nr_pages(folio);
+> > @@ -1409,6 +1410,9 @@ void page_remove_rmap(struct page *page, struct v=
+m_area_struct *vma,
+> >                 }
+> >         }
+> >
+> > +       if (folio_test_hugetlb(folio))
+> > +               return;
+> > +
+> >         if (nr_pmdmapped) {
+> >                 if (folio_test_anon(folio))
+> >                         idx =3D NR_ANON_THPS;
+> > --
+> > 2.39.2.637.g21b0678d19-goog
+> >
