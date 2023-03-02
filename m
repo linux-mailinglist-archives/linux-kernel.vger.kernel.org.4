@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367B36A87BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A156A87BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjCBRTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 12:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S229810AbjCBRTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 12:19:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjCBRTK (ORCPT
+        with ESMTP id S229567AbjCBRTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 12:19:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4768F113EC;
-        Thu,  2 Mar 2023 09:19:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEC9DB811F8;
-        Thu,  2 Mar 2023 17:19:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A95AC4339B;
-        Thu,  2 Mar 2023 17:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677777546;
-        bh=i3x0hEAvwMO1Hlbu0xv9iys3WfKl3C4x9NRYdvyKmeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SelwuPdr4PrPXwRyd32ta13tkvqBCvRh3Y9QJzAAIV3zVdE9LYHzj6ARVXyXI10Mv
-         TU00hCzfct5U7XTkPjE32lOH1k05XJQh9i1vA5yG6RmzbJZrot5TTpxY7kO7Q21qer
-         bKjHgAudKZd4un79mf6y/KZ+pPF/r+9SH7HVJkjLtYyXot+18efrxHgl+9n2cIu/rC
-         gLoUWQi7a+w4BH471vWihyoc+g6j95RMBkQQS0Fzx9seBw2HIKIcYXk3Jve8QWkj8y
-         p6zzvrTo8XBNm5o6YH3QQHUUP2GOvNst+TdJhiprNTiQ9MZs8NlJLns4Bt+Jn/TCaJ
-         8NQ+25i89lmgg==
-Received: by pali.im (Postfix)
-        id 68ED8AA6; Thu,  2 Mar 2023 18:19:03 +0100 (CET)
-Date:   Thu, 2 Mar 2023 18:19:03 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/29] platform/x86: dell: dell-smo8800: Convert to
- platform remove callback returning void
-Message-ID: <20230302171903.mzwcxe4pfefknds3@pali>
-References: <20230302144732.1903781-1-u.kleine-koenig@pengutronix.de>
- <20230302144732.1903781-11-u.kleine-koenig@pengutronix.de>
+        Thu, 2 Mar 2023 12:19:30 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245B6E8B;
+        Thu,  2 Mar 2023 09:19:29 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 82so4270708ybn.6;
+        Thu, 02 Mar 2023 09:19:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677777568;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uit9vXQN5dUsgYieCjn7laYXQPsqA8YR/x9Zxms4wJE=;
+        b=pI+LgniKKi36tZwoGnshSJXnnSrErIqYS61kZx3CdEp+v8NSKvDhRPt6a5hghfztqs
+         Exb96trUnaf40fDCIDeblbgUYW9XMmXLR2Sp/jbjF98oSo5WMB29LIRqXryFGvhu+ZhC
+         83hmmIa29wXivsbMKfGu015i8Cl+rPvOAW5zjAK5dES3OtCY6Jpwljw8nAuEr2U7YDSY
+         Oobi9Bi+2cjtuJTbQYsd109s2K7HcncMNo/NJwhk1uoQerJd1VbgLbd8BmB08ebHuxbM
+         xDXOUhIRpubjhhsERXkfqyg3oRCQbjeiYAdYr6rbtbvoD+QAMKji+7PN161b6b+Mytmp
+         hARw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677777568;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uit9vXQN5dUsgYieCjn7laYXQPsqA8YR/x9Zxms4wJE=;
+        b=04a6asOu9Jb6bH+nv4H1GiexYDTA/vK9/YBWIuJ6vkzUbgCTaTqdHr2xVEKmwtv1QU
+         MehaqqqZFaug4NN3QENM7mMMBGxazahjLMJ6KyhmIdgBvN6iysttqG09fyDp1QnTIWhh
+         1+VLI+e2oFSWgdZAeP0zG+7OPUIvNBb+uym/iGguMSGXbQh7JQimuYFzvz5ZFrUi/Z2V
+         0sOSlEZkdITvincz3y9qKAf8TPO7zCn/prW6LrDU1uHUbiU1SZNneO7hV5s02IeuErR3
+         RCjAh977x3c2Du/Br08TIpPwb506FR3lWog7m4XXtTyQxKS7aMthSI4I4nHoIXGsrNbC
+         ABvw==
+X-Gm-Message-State: AO0yUKW2no+sZZaA2j8imxqfIYxTtuBIDugrGPtWesReMapQ3o+9Xuqf
+        8TkVPehH00DOkJ+V3VhgvCeaR7o8qMFN4sgymv0iHGGHefYh9Q==
+X-Google-Smtp-Source: AK7set/hNqUOCRdsVB9sYdNOfDCdQlGLUIwPFoPFBIRH3epUIEIT2aXlninuryMFbjQKgc2AltMjJK9K3vOw4UfM0/M=
+X-Received: by 2002:a5b:892:0:b0:9fe:195a:ce0d with SMTP id
+ e18-20020a5b0892000000b009fe195ace0dmr3934270ybq.10.1677777568205; Thu, 02
+ Mar 2023 09:19:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230302144732.1903781-11-u.kleine-koenig@pengutronix.de>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302164129.4862-1-ubizjak@gmail.com>
+In-Reply-To: <20230302164129.4862-1-ubizjak@gmail.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Thu, 2 Mar 2023 18:19:16 +0100
+Message-ID: <CAFULd4bw3sa01_bZ1YhtSYEdbcxvsjVraH5bdQ4-djoYnpy8Sg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Improve trace/ring_buffer.c
+To:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 02 March 2023 15:47:13 Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Thu, Mar 2, 2023 at 5:41=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com> wrot=
+e:
+>
+> *** BLURB HERE ***
 
-Acked-by: Pali Rohár <pali@kernel.org>
+Eh...
 
-> ---
->  drivers/platform/x86/dell/dell-smo8800.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-smo8800.c b/drivers/platform/x86/dell/dell-smo8800.c
-> index 8d6b7a83cf24..f7ec17c56833 100644
-> --- a/drivers/platform/x86/dell/dell-smo8800.c
-> +++ b/drivers/platform/x86/dell/dell-smo8800.c
-> @@ -154,14 +154,13 @@ static int smo8800_probe(struct platform_device *device)
->  	return err;
->  }
->  
-> -static int smo8800_remove(struct platform_device *device)
-> +static void smo8800_remove(struct platform_device *device)
->  {
->  	struct smo8800_device *smo8800 = platform_get_drvdata(device);
->  
->  	free_irq(smo8800->irq, smo8800);
->  	misc_deregister(&smo8800->miscdev);
->  	dev_dbg(&device->dev, "device /dev/freefall unregistered\n");
-> -	return 0;
->  }
->  
->  /* NOTE: Keep this list in sync with drivers/i2c/busses/i2c-i801.c */
-> @@ -180,7 +179,7 @@ MODULE_DEVICE_TABLE(acpi, smo8800_ids);
->  
->  static struct platform_driver smo8800_driver = {
->  	.probe = smo8800_probe,
-> -	.remove = smo8800_remove,
-> +	.remove_new = smo8800_remove,
->  	.driver = {
->  		.name = DRIVER_NAME,
->  		.acpi_match_table = smo8800_ids,
-> -- 
-> 2.39.1
-> 
+Here should read:
+
+This series improves ring_buffer.c by changing the type of some
+static functions to void or bool and uses try_cmpxchg instead of
+cmpxchg (*ptr, old, new) =3D=3D old where appropriate.
+
+v2: Convert only loops with cmpxchg.
+
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+
+> Uros Bizjak (3):
+>   ring_buffer: Change some static functions to void
+>   ring_buffer: Change some static functions to bool
+>   ring_buffer: Use try_cmpxchg instead of cmpxchg
+>
+>  kernel/trace/ring_buffer.c | 77 ++++++++++++++++----------------------
+>  1 file changed, 33 insertions(+), 44 deletions(-)
+>
+> --
+> 2.39.2
+>
