@@ -2,163 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ECD6A7935
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97106A7938
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjCBByN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 20:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S229790AbjCBB5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 20:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCBByM (ORCPT
+        with ESMTP id S229518AbjCBB5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:54:12 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0775A4608E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:53:45 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id z11so9187857pfh.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 17:53:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677722024;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fqeOn4Q4cJcBqeA1Wx7fcXJepvZr6btV1VhI9yXuxDY=;
-        b=NN6Q/adlJrn+ion/Hu8qHS/qTlNK2RTEl6JRl7dVlig6o2u8yZDizsPOQwQALmQH8c
-         Ba+WHIY5C5nkHkq0tEJPuKH0ek0IWgsnDjaynaBC4g2q0mfKSBUVGobjyefVUkai2uJT
-         wxV3rrjQTwuz9rRuszRmtdgPr4eVzajX6kUog4wwPEmRnAiL2F8zBF1Zv6GLJ7ma1XDq
-         RMMEBcpE7TKbGfWxrVsRwA03mkdKH3LBFpsC/XIv64BlKylAJieLVU0nhvpes4146mgj
-         rmp6EtwO8lkICIVF++m3+Zkj48Sb3Sf7mBwOLdBck3OgWGVZti9VWR6LJCKiKjWvI+tL
-         NIhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677722024;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fqeOn4Q4cJcBqeA1Wx7fcXJepvZr6btV1VhI9yXuxDY=;
-        b=D/720hkHeIx4DXYj4FZjhJ4MI07AaFnW/wSq/5CWRzXsNo8Zq5Mfmb8liCHXiUxlXz
-         R06y5TgfeIRWK9ky/Idb25IwNyWOl9RcG9kaps5tqL9Dpplc7XIk4uiLwWY8fBvedOvv
-         1AiAzaa9X3iA4vo4ErOnikFAmFLuMybAzZNkkfEdKNK5yR8O5LPzouNQKR6W1uvA3OOY
-         3FTseeJPXp8QQ5MzxGXee366np5oUfzsLOk4XGgV6PSBeyJErToXKZ0wQGcwp3SkwGaB
-         qiEDKF4qlQLsm2Qa00z0MCdM2uLOf02rcIhah2VCCBCw8CPig2bae+tPslonuUNm/FJK
-         TEjA==
-X-Gm-Message-State: AO0yUKU0tkmwjR9/j9PyEXoT0jjlbgLBbfzQRTaAMX1DFf9U5ICpWC22
-        F8ZzTu8WFl48R9y1EZNRtZpdTugVMuS6TN+xxAIEWQ==
-X-Google-Smtp-Source: AK7set8ky6bHKGk0gbRu3jVk94mzKWlZMU93SWmLEMTSzH4UyXYwJ4HqXOVx6cjz9cSa86cMTjbhsuV+TI3KMRPH69E=
-X-Received: by 2002:a65:51c3:0:b0:4fb:3896:a7d4 with SMTP id
- i3-20020a6551c3000000b004fb3896a7d4mr2693551pgq.7.1677722024107; Wed, 01 Mar
- 2023 17:53:44 -0800 (PST)
+        Wed, 1 Mar 2023 20:57:36 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEEE4615D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:57:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677722254; x=1709258254;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VRqd90hY1t2FT2RytSp8WhhcLmPRYFAUnVuH7PxZTFs=;
+  b=kr80JiXYb+yZMpD9ZDCREiMLEB0p+uITzNXcctb1Cw4KrFrpA3JQNLfu
+   LDF/2sfLO9Ks+qbBMPru8MwHhYlvyMdJitAYzoyhyZaa11cklpofvwriI
+   Xd03aK8w+pqpHF+AWrisgqOXZqqFflZyfgbzFTvq6CRpEBQf2gb9D5pRf
+   BkHptXfurO0FrflFm4wwKvadk4hGbLoQllMUIgKGutK10HG3aBo8w4i9N
+   2AKVtfy4gL7d0fUJIUn5HEqI2rU350L46A5Ux8poS16vgktLklXR7sHq1
+   YUgmWbaDkEUsU4b2b+J7NTjmsH9k+UjiLeRZxh9/CVvsKlWemmzztFzUj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="336084413"
+X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
+   d="scan'208";a="336084413"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 17:57:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="624728809"
+X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
+   d="scan'208";a="624728809"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga003.jf.intel.com with ESMTP; 01 Mar 2023 17:57:31 -0800
+Message-ID: <f0ddf129-ec38-05d2-07dc-be5f97d37c78@linux.intel.com>
+Date:   Thu, 2 Mar 2023 09:56:39 +0800
 MIME-Version: 1.0
-References: <20230302014639.297514-1-saravanak@google.com>
-In-Reply-To: <20230302014639.297514-1-saravanak@google.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 1 Mar 2023 17:53:07 -0800
-Message-ID: <CAGETcx8BAud7fj7EYJNYXF+XjgSSk=GT7eOGAHhnxXQCp4R_rw@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: Mark a fwnode as initialized when using
- CLK_OF_DECLARE() macro
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, kernel-team@android.com,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] iommu/vt-d: Add opt-in for ATS support on discrete
+ devices
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20230228023341.973671-1-baolu.lu@linux.intel.com>
+ <Y/3yNaQD5Pkvf61k@nvidia.com>
+ <3891a9a8-c796-2644-9473-aafc9ecea64e@linux.intel.com>
+ <Y/9bWMoAYF10ynO3@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Y/9bWMoAYF10ynO3@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 5:46=E2=80=AFPM Saravana Kannan <saravanak@google.co=
-m> wrote:
->
-> We already mark fwnodes as initialized when they are registered as clock
-> providers. We do this so that fw_devlink can tell when a clock driver
-> doesn't use the driver core framework to probe/initialize its device.
-> This ensures fw_devlink doesn't block the consumers of such a clock
-> provider indefinitely.
->
-> However, some users of CLK_OF_DECLARE() macros don't use the same node
-> that matches the macro as the node for the clock provider, but they
-> initialize the entire node. To cover these cases, also mark the nodes
-> that match the macros as initialized when the init callback function is
-> called.
->
-> An example of this is "stericsson,u8500-clks" that's handled using
-> CLK_OF_DECLARE() and looks something like this:
->
-> clocks {
->         compatible =3D "stericsson,u8500-clks";
->
->         prcmu_clk: prcmu-clock {
->                 #clock-cells =3D <1>;
->         };
->
->         prcc_pclk: prcc-periph-clock {
->                 #clock-cells =3D <2>;
->         };
->
->         prcc_kclk: prcc-kernel-clock {
->                 #clock-cells =3D <2>;
->         };
->
->         prcc_reset: prcc-reset-controller {
->                 #reset-cells =3D <2>;
->         };
->         ...
->         ...
-> };
->
-> This patch makes sure that "clocks" is marked as initialized so that
-> fw_devlink knows that all nodes under it have been initialized.
->
-> If the driver creates struct devices for some of the subnodes,
-> fw_devlink is smart enough to know to wait for those devices to probe.
-> So, no special handling is required for those cases.
->
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reported-by: Linus Walleij <linus.walleij@linaro.org>
-> Link: https://lore.kernel.org/lkml/CACRpkdamxDX6EBVjKX5=3DD3rkHp17f5pwGdB=
-VhzFU90-0MHY6dQ@mail.gmail.com/
-> Fixes: 4a032827daa8 ("of: property: Simplify of_link_to_phandle()")
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+On 3/1/23 10:04 PM, Jason Gunthorpe wrote:
+>> Here we are talking about soc-integrated devices vs. discrete PCI
+>> devices (connected to the system through internal PCI slot). The problem
+>> is that the DMAR ACPI table only defines ATS attribute for Soc-
+>> integrated devices, which causes ATS (and its ancillary features) on the
+>> discrete PCI devices not to work.
+> So, IMHO, it is a bug to set what Linux calls as untrusted for
+> discrete slots. We also definately don't want internal slots forced to
+> non-identity mode either, for example.
 
-Linus, I changed the code a bit and I think this should work too. Can
-you give it a shot please?
+Linux doesn't set untrusted for PCI discrete slots. It reads port's
+ExternalFacingPort property and set pdev->untrusted for all devices
+underneath it. For ACPI compatible platforms, this property is only set
+for thunderbolt ports as far as I have seen.
 
--Saravana
+drivers/pci/pci-acpi.c:
+1373 static void pci_acpi_set_external_facing(struct pci_dev *dev)
+1374 {
+1375         u8 val;
+1376
+1377         if (pci_pcie_type(dev) != PCI_EXP_TYPE_ROOT_PORT)
+1378                 return;
+1379         if (device_property_read_u8(&dev->dev, 
+"ExternalFacingPort", &val))
+1380                 return;
+1381
+1382         /*
+1383          * These root ports expose PCIe (including DMA) outside of the
+1384          * system.  Everything downstream from them is external.
+1385          */
+1386         if (val)
+1387                 dev->external_facing = 1;
+1388 }
 
-> ---
->  include/linux/clk-provider.h | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-> index 842e72a5348f..c9f5276006a0 100644
-> --- a/include/linux/clk-provider.h
-> +++ b/include/linux/clk-provider.h
-> @@ -1363,7 +1363,13 @@ struct clk_hw_onecell_data {
->         struct clk_hw *hws[];
->  };
->
-> -#define CLK_OF_DECLARE(name, compat, fn) OF_DECLARE_1(clk, name, compat,=
- fn)
-> +#define CLK_OF_DECLARE(name, compat, fn) \
-> +       static void __init name##_of_clk_init_declare(struct device_node =
-*np) \
-> +       {                                                               \
-> +               fn(np);                                                 \
-> +               fwnode_dev_initialized(of_fwnode_handle(np), true);     \
-> +       }                                                               \
-> +       OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
->
->  /*
->   * Use this macro when you have a driver that requires two initializatio=
-n
-> --
-> 2.39.2.722.g9855ee24e9-goog
->
+and
+
+drivers/pci/probe.c:
+1597 static void set_pcie_untrusted(struct pci_dev *dev)
+1598 {
+1599         struct pci_dev *parent;
+1600
+1601         /*
+1602          * If the upstream bridge is untrusted we treat this device
+1603          * untrusted as well.
+1604          */
+1605         parent = pci_upstream_bridge(dev);
+1606         if (parent && (parent->untrusted || parent->external_facing))
+1607                 dev->untrusted = true;
+1608 }
+
+> 
+> This should be addressed at the PCI layer. Untrusted should always
+> mean that the iommu layer should fully secure the device. It means
+> identity translation should be blocked, it means the HW should reject
+> translated requests, and ATS thus is not supported.
+> 
+> Every single iommu driver should implement this consistently across
+> the whole subsystem.
+> 
+> If you don't want devices to be secured then that is a PCI/bios layer
+> problem to get the correct data into the untrusted flag.
+> 
+> Not an iommu problem to ignore the flag.
+
+The problem here is that, even for PCI *trusted* devices, the IOMMU
+drivers (Intel and SMMUv3) still have a allowed list for ATS. Only
+devices in this list are allowed to use ATS. This cause some PCI
+discrete devices not able to use ATS even its pdev->untrust is *not*
+set.
+
+The purpose of this patch is to allow privileged users to choose to skip
+the allowed list according to their wishes. So that, as long as the PCI
+layer treats the device as trusted, it can use ATS in the IOMMU layer.
+
+At present, this patch is only for VT-d driver, but I have no objection
+to bring it up to the core as a common mechanism.
+
+Best regards,
+baolu
