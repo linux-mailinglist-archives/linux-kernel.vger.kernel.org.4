@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368646A797E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3F36A7983
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 03:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjCBCaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 21:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S229675AbjCBCb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 21:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjCBCaS (ORCPT
+        with ESMTP id S229504AbjCBCbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 21:30:18 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4B038E9D;
-        Wed,  1 Mar 2023 18:30:16 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PRw463bBWz16NkW;
-        Thu,  2 Mar 2023 10:27:34 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 2 Mar
- 2023 10:30:14 +0800
-Subject: Re: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built
- from XDP frames
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-CC:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230301160315.1022488-1-aleksander.lobakin@intel.com>
- <20230301160315.1022488-2-aleksander.lobakin@intel.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <36d42e20-b33f-5442-0db7-e9f5ef9d0941@huawei.com>
-Date:   Thu, 2 Mar 2023 10:30:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Wed, 1 Mar 2023 21:31:25 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD08C497C9
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 18:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677724283; x=1709260283;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zXsz0L2xHLtSQ1rP40WgNGCJVV1zdFVoJYTu07FMoLE=;
+  b=GGeolP/NG3bwKh8mX9aU+xvCZfVZD9k5EPyldNPVRKAUzcI+f+YZzvUp
+   J5U9N7+5jApG1Z8gFXdr0kpm6t4wwfI+YnFsUgVTi0iCIl7QPdPus1ONd
+   MkXEk6A/VQTVs17XoIm8NKVupdfGHwdTZ8RzJnb4phKt57wFrnOjFlg99
+   W8mezo+86MydkS4gFejFAvO3x96Y63K9Ka6Z8NEgqGzu5a9P6CeGh/HtE
+   I83VE+H6YxLCWkbISjzkW0W1OzzC0kVtO22imdo0SRrKk4CLG9S8zHT82
+   vcUClB67JClXln9A7K6f+fALEydSkWC+Rk5y3KqOorGIcYD3XnIcF0Qks
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322865160"
+X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
+   d="scan'208";a="322865160"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 18:31:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="677002232"
+X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
+   d="scan'208";a="677002232"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Mar 2023 18:31:17 -0800
+Message-ID: <da143a6f-3eda-0292-d86b-a9283ba61a72@linux.intel.com>
+Date:   Thu, 2 Mar 2023 10:30:25 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230301160315.1022488-2-aleksander.lobakin@intel.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] iommu/vt-d: Add opt-in for ATS support on discrete
+ devices
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20230228023341.973671-1-baolu.lu@linux.intel.com>
+ <Y/3yNaQD5Pkvf61k@nvidia.com>
+ <3891a9a8-c796-2644-9473-aafc9ecea64e@linux.intel.com>
+ <Y/9bWMoAYF10ynO3@nvidia.com> <0f162421-479e-6ab3-bbaf-0090b1a2472c@arm.com>
+ <Y/+OobufnmGhg/R7@nvidia.com> <9aec8741-9394-60ad-70c5-f8da773d7da8@arm.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <9aec8741-9394-60ad-70c5-f8da773d7da8@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,63 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/2 0:03, Alexander Lobakin wrote:
-> __xdp_build_skb_from_frame() state(d):
+On 3/2/23 2:19 AM, Robin Murphy wrote:
+> On 2023-03-01 17:42, Jason Gunthorpe wrote:
+>> On Wed, Mar 01, 2023 at 05:15:33PM +0000, Robin Murphy wrote:
+>>> On 2023-03-01 14:04, Jason Gunthorpe wrote:
+>>>> On Wed, Mar 01, 2023 at 12:22:23PM +0800, Baolu Lu wrote:
+>>>>> On 2/28/23 8:23 PM, Jason Gunthorpe wrote:
+>>>>>> On Tue, Feb 28, 2023 at 10:33:41AM +0800, Lu Baolu wrote:
+>>>>>>> In normal processing of PCIe ATS requests, the IOMMU performs 
+>>>>>>> address
+>>>>>>> translation and returns the device a physical memory address which
+>>>>>>> will be stored in that device's IOTLB. The device may subsequently
+>>>>>>> issue Translated DMA request containing physical memory address. The
+>>>>>>> IOMMU only checks that the device was allowed to issue such requests
+>>>>>>> and does not attempt to validate the physical address.
+>>>>>>>
+>>>>>>> The Intel IOMMU implementation only allows PCIe ATS on several SOC-
+>>>>>>> integrated devices which are opt-in’ed through the ACPI tables to
+>>>>>>> prevent any compromised device from accessing arbitrary physical
+>>>>>>> memory.
+>>>>>>>
+>>>>>>> Add a kernel option intel_iommu=relax_ats to allow users to have an
+>>>>>>> opt-in to allow turning on ATS at as wish, especially for CSP-owned
+>>>>>>> vertical devices. In any case, risky devices are not allowed to use
+>>>>>>> ATS.
+>>>>>> Why is this an intel specific option?
+>>>>>
+>>>>> I only see similar situation on ARM SMMUv3 platforms. The device 
+>>>>> ATS is
+>>>>> only allowed when the ATS bit is set in RC node of the ACPI/IORT 
+>>>>> table.
+>>>>
+>>>> It should be common, all iommus using ATS need this logic.
+>>>
+>>> The IORT flags are not this kind of policy, they are a necessary 
+>>> description
+>>> of the hardware. The mix-and-match nature of licensable IP means that 
+>>> just
+>>> because an SMMU supports the ATS-relevant features defined by the SMMU
+>>> architecture, that doesn't say that whatever PCIe IP the customer has 
+>>> chosen
+>>> to pair it with also supports ATS. Even when both ends nominally 
+>>> support it,
+>>> it's still possible to integrate them together in ways where ATS 
+>>> wouldn't be
+>>> functional.
+>>>
+>>> In general, if a feature is marked as unsupported in IORT, the only 
+>>> way to
+>>> "relax" that would be if you have a silicon fab handy. If any system 
+>>> vendor
+>>> *was* to misuse IORT to impose arbitrary and unwelcome usage policy 
+>>> on their
+>>> customers, then those customers should demand a firmware update (or 
+>>> at least
+>>> use their own patched IORT, which is pretty trivial with the kernel's
+>>> existing ACPI table override mechanism).
+>>
+>> This makes sense.
+>>
+>> I think Intel has confused their version of the IORT.
+>>
+>> The ACPI tables read by the iommu driver should be strictly about
+>> IOMMU HW capability, like Robin describes for ARM.
+>>
+>> Security policy flows through the ExternalFacingPort ACPI via
+>> pci_acpi_set_external_facing() and triggers pdev->untrusted.
+>>
+>> When an iommu driver sees pdev->untrusted it is supposed to ensure
+>> that translated TLPs are blocked. Since nothing does this explicitly
+>> it is presumably happening because ATS being disabled also blocks
+>> translated TLPs and we check untrusted as part of pci_enable_ats()
 > 
-> /* Until page_pool get SKB return path, release DMA here */
+> At least for SMMU, we seem to be relying on pci_ats_supported() 
+> including pdev->untrusted in its decision - that will propagate back to 
+> master->ats_enabled = false inside the driver, which in turn will lead 
+> to arm_smmu_write_strtab_ent() leaving STE.EATS at the default setting 
+> which aborts all translation requests and translated transactions.
+
+Intel VT-d does the same thing.
+
 > 
-> Page Pool got skb pages recycling in April 2021, but missed this
-> function.
+>> If Intel BIOS's have populated the "satcu" to say that ATS is not
+>> supported by the HW when the HW supports ATS perfectly fine, then get
+>> the BIOS fixed or patch the ACPI until it is fixed. The BIOS should
+>> not be saying that the HW does not support ATS when it does, it is a
+>> simple BIOS bug.
+>>
+>> Alternatively if you have some definitive way to know that the HW
+>> supports ATS then you should route the satcu information to
+>> pdev->untrusted and ignore it at the iommu driver level.
 > 
-> xdp_release_frame() is relevant only for Page Pool backed frames and it
-> detaches the page from the corresponding Pool in order to make it
-> freeable via page_frag_free(). It can instead just mark the output skb
-> as eligible for recycling if the frame is backed by a PP. No change for
-> other memory model types (the same condition check as before).
-> cpumap redirect and veth on Page Pool drivers now become zero-alloc (or
-> almost).
+>  From a quick look at the VT-d spec, it sounds like the ATSR structure 
+> is intended to be functionally equivalent to IORT's Root Complex "ATS 
+> Attribute", while the SATC is a slightly specialised version for RCiEPs. 
+> The spec even says "Software must enable ATS on endpoint devices behind 
+> a Root Port only if the Root Port is reported as supporting ATS 
+> transactions". It also seems to be implied that this should be based on 
+> what Intel themselves have validated, so an option for the user to say 
+> "sure, ATS works everywhere, I know better" and simply bypass all the 
+> existing checks doesn't really seem safe to me :/
 > 
-> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> ---
->  net/core/xdp.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 8c92fc553317..a2237cfca8e9 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -658,8 +658,8 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
->  	 * - RX ring dev queue index	(skb_record_rx_queue)
->  	 */
->  
-> -	/* Until page_pool get SKB return path, release DMA here */
-> -	xdp_release_frame(xdpf);
-> +	if (xdpf->mem.type == MEM_TYPE_PAGE_POOL)
-> +		skb_mark_for_recycle(skb);
+> I'd be inclined to hold the same opinion as for IORT here - if a user 
+> ever really does need to engage expert mode to safely work around a bad 
+> BIOS with known-good information, they should already have the tools to 
+> override the whole DMAR table as they see fit.
 
+Make sense to me. BIOS upgrading or ACPI table overriding should help in
+such cases. I will stop this patch unless there're any other special
+reasons.
 
-We both rely on both skb->pp_recycle and page->pp_magic to decide
-the page is really from page pool. So there was a few corner case
-problem when we are sharing a page for different skb in the driver
-level or calling skb_clone() or skb_try_coalesce().
-see:
-https://github.com/torvalds/linux/commit/2cc3aeb5ecccec0d266813172fcd82b4b5fa5803
-https://lore.kernel.org/netdev/MW5PR15MB51214C0513DB08A3607FBC1FBDE19@MW5PR15MB5121.namprd15.prod.outlook.com/t/
-https://lore.kernel.org/netdev/167475990764.1934330.11960904198087757911.stgit@localhost.localdomain/
+> Thanks,
+> Robin.
 
-As the 'struct xdp_frame' also use 'struct skb_shared_info' which is
-sharable, see xdp_get_shared_info_from_frame().
-
-For now xdpf_clone() does not seems to handling frag page yet,
-so it should be fine for now.
-
-IMHO we should find a way to use per-page marker, instead of both
-per-skb and per-page markers, in order to avoid the above problem
-for xdp if xdp has a similar processing as skb, as suggested by Eric.
-
-https://lore.kernel.org/netdev/CANn89iKgZU4Q+THXupzZi4hETuKuCOvOB=iHpp5JzQTNv_Fg_A@mail.gmail.com/
-
->  
->  	/* Allow SKB to reuse area used by xdp_frame */
->  	xdp_scrub_frame(xdpf);
-> 
+Best regards,
+baolu
