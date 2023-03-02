@@ -2,110 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D166A7A2A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB716A7A2F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 04:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjCBDvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 22:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
+        id S229749AbjCBDwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 22:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCBDvF (ORCPT
+        with ESMTP id S229453AbjCBDwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 22:51:05 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466741EFCA;
-        Wed,  1 Mar 2023 19:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677729061; x=1709265061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=toBA4mc3ny1aMwi4RV7M4RKtYQeEFpm2ZaTseCjz1HA=;
-  b=Un9KSPZYfaN8vZfMoCRi11Qiodhe7yB2HQwOgYVdlhiAOidYQEzJcnYW
-   skR67Mb2IAeb1vzHORmpBNYteavc70h3y/rMQ/53ymkQGA05GdQ3X5uVg
-   R1yKGc6qWem8n6xwo9Rca+ucCXgxVbJAUJW4Bvxf1HaV9tufG5bU+JReN
-   tWCE8z0yxDt1UVelIsDUKTVi1UfQNBGh7Mx6Z69PYe0ssGil6MdD9QWFJ
-   jCD6u5hcrA0TlS9WkOaQbkkDWES9Kyjxws6pnHL/KabTjrKsTsH6vb1KE
-   Cjl1sl4qnxlpIEHg88JTMn7ClR+qDzCSC6VTtZpymCB1cQ6C/akkx6RKk
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="399394451"
-X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
-   d="scan'208";a="399394451"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 19:51:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="707263515"
-X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
-   d="scan'208";a="707263515"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Mar 2023 19:50:59 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXZy6-0000Ab-2O;
-        Thu, 02 Mar 2023 03:50:58 +0000
-Date:   Thu, 2 Mar 2023 11:50:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 05/16] dma-buf/sync_file: Surface sync-file uABI
-Message-ID: <202303021119.RAl7HvmC-lkp@intel.com>
-References: <20230228225833.2920879-6-robdclark@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228225833.2920879-6-robdclark@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 22:52:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD12B32532
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 19:52:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BCCF6124D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:52:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F92C4339B;
+        Thu,  2 Mar 2023 03:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677729126;
+        bh=s5Vq/wYHJA+zeaFjOEhQKu38pm6W1xLhaTbiAi2CJmk=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=FdA/Gg6WGhOpg48Qps2k1ihFI5uaJVQXUG0TlVw32ePLSbCSG6+p72aLjeB/u4A5g
+         qIa7WnlLt5HqI+2GPkU+YRnzCphMcIuVAfbnRLtAqWYsQtoE2Ioxqf1Bm+VbDybYSX
+         1Yn9tws7PZf2QQRrZu8ENc+B/MPocVnKQ7ylBp8hmbuZbKjLxOBrF+qVJ31s3qz/Tr
+         LbYpn6E0faEdwXnFZ0Er2rU4+nR5KUx6sfxcSSkSJ22DEfxBqxFDp+r57VhO85OsYI
+         fh+UjNBZh62flWGZQat00aWRHXCpnFupN1fgrj/xHDzNy4QBqeUtiIDE8uRQcSsMrf
+         FP8VgGMdZNI3Q==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 3F21C27C0054;
+        Wed,  1 Mar 2023 22:52:05 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Wed, 01 Mar 2023 22:52:05 -0500
+X-ME-Sender: <xms:ZB0AZLCWKl8Vdq-oOoVeycHzr7MceF7RQJkb37RcG6SkCUcWcg5YHw>
+    <xme:ZB0AZBhluprdOMkj3Jeb3Kdj1x5vqgFchUi8ycnWkC78OqmFg0i1Ch9u067pF_k9r
+    OMArXWvhA-MSnX-rRw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeliedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepveffgfevhfeiteduueetgeevvdevudevteefveffudeiveefuddt
+    leeitdeludfgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhguhidomhgvshhmthhprghu
+    thhhphgvrhhsohhnrghlihhthidqudduiedukeehieefvddqvdeifeduieeitdekqdhluh
+    htoheppehkvghrnhgvlhdrohhrgheslhhinhhugidrlhhuthhordhush
+X-ME-Proxy: <xmx:ZB0AZGnzsFFAJAFNjhTSeavCJGxLa5VfVsJ-0jxZfI5dQQ2AoTsSIg>
+    <xmx:ZB0AZNxlt3qbkpCa5DPW7We25ulwvFsu3u-z_HxyslKr41h9wiUNxA>
+    <xmx:ZB0AZATLrfBkXY0DNyIV9MaNA0Ta3SesYXYRFfqAVFZvrT2FXTxgAw>
+    <xmx:ZR0AZLe03Yd5KvVPhocFZU9yh1Yc9DcfqBzSUxAFhyrdeH4CaPCRTg>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BB8CF31A0063; Wed,  1 Mar 2023 22:52:04 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <7d344756-aec4-4df2-9427-da742ef9ce6b@app.fastmail.com>
+In-Reply-To: <162274330352.29796.17521974349959809425.tip-bot2@tip-bot2>
+References: <20210601075354.5149-2-rppt@kernel.org>
+ <162274330352.29796.17521974349959809425.tip-bot2@tip-bot2>
+Date:   Wed, 01 Mar 2023 19:51:43 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Cc:     "Mike Rapoport" <rppt@linux.ibm.com>,
+        "Borislav Petkov" <bp@suse.de>, "Hugh Dickins" <hughd@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Subject: Re: [tip: x86/urgent] x86/setup: Always reserve the first 1M of RAM
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, Jun 3, 2021, at 11:01 AM, tip-bot2 for Mike Rapoport wrote:
+> The following commit has been merged into the x86/urgent branch of tip:
+>
+> Commit-ID:     f1d4d47c5851b348b7713007e152bc68b94d728b
+> Gitweb:        
+> https://git.kernel.org/tip/f1d4d47c5851b348b7713007e152bc68b94d728b
+> Author:        Mike Rapoport <rppt@linux.ibm.com>
+> AuthorDate:    Tue, 01 Jun 2021 10:53:52 +03:00
+> Committer:     Borislav Petkov <bp@suse.de>
+> CommitterDate: Thu, 03 Jun 2021 19:57:55 +02:00
+>
+> x86/setup: Always reserve the first 1M of RAM
+>
+> There are BIOSes that are known to corrupt the memory under 1M, or more
+> precisely under 640K because the memory above 640K is anyway reserved
+> for the EGA/VGA frame buffer and BIOS.
+>
+> To prevent usage of the memory that will be potentially clobbered by the
+> kernel, the beginning of the memory is always reserved. The exact size
+> of the reserved area is determined by CONFIG_X86_RESERVE_LOW build time
+> and the "reservelow=" command line option. The reserved range may be
+> from 4K to 640K with the default of 64K. There are also configurations
+> that reserve the entire 1M range, like machines with SandyBridge graphic
+> devices or systems that enable crash kernel.
+>
+> In addition to the potentially clobbered memory, EBDA of unknown size may
+> be as low as 128K and the memory above that EBDA start is also reserved
+> early.
+>
+> It would have been possible to reserve the entire range under 1M unless for
+> the real mode trampoline that must reside in that area.
+>
+> To accommodate placement of the real mode trampoline and keep the memory
+> safe from being clobbered by BIOS, reserve the first 64K of RAM before
+> memory allocations are possible and then, after the real mode trampoline
+> is allocated, reserve the entire range from 0 to 1M.
+>
+> Update trim_snb_memory() and reserve_real_mode() to avoid redundant
+> reservations of the same memory range.
+>
+> Also make sure the memory under 1M is not getting freed by
+> efi_free_boot_services().
 
-I love your patch! Perhaps something to improve:
+This is quite broken.  The comments in the patch seem to understand that Linux tries twice to allocate the real mode trampoline, but the code has some issues.
 
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on drm-intel/for-linux-next-fixes drm/drm-next linus/master v6.2 next-20230301]
-[cannot apply to drm-misc/drm-misc-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/dma-buf-dma-fence-Add-deadline-awareness/20230301-070358
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20230228225833.2920879-6-robdclark%40gmail.com
-patch subject: [PATCH v8 05/16] dma-buf/sync_file: Surface sync-file uABI
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/b13821931cc3898065e4264fad78bad23c7d2208
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rob-Clark/dma-buf-dma-fence-Add-deadline-awareness/20230301-070358
-        git checkout b13821931cc3898065e4264fad78bad23c7d2208
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+First, it actively breaks the logic here:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303021119.RAl7HvmC-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
++               /*
++                * Don't free memory under 1M for two reasons:
++                * - BIOS might clobber it
++                * - Crash kernel needs it to be reserved
++                */
++               if (start + size < SZ_1M)
++                       continue;
++               if (start < SZ_1M) {
++                       size -= (SZ_1M - start);
++                       start = SZ_1M;
++               }
++
 
->> ./include/uapi/linux/sync_file.h:82: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
 
-vim +82 ./include/uapi/linux/sync_file.h
+The whole point is that, if we fail to allocate a trampoline, we free boot services and try again.  But if we can't free boot services below 1M, then we can't allocate a trampoline in boot services memory.  And then it does:
 
-64907b94dab947 drivers/staging/android/uapi/sync.h Colin Cross     2014-02-17  80  
-2d75c88fefb228 drivers/staging/android/uapi/sync.h Gustavo Padovan 2016-04-26  81  /**
-2d75c88fefb228 drivers/staging/android/uapi/sync.h Gustavo Padovan 2016-04-26 @82   * Opcodes  0, 1 and 2 were burned during a API change to avoid users of the
-2d75c88fefb228 drivers/staging/android/uapi/sync.h Gustavo Padovan 2016-04-26  83   * old API to get weird errors when trying to handling sync_files. The API
-2d75c88fefb228 drivers/staging/android/uapi/sync.h Gustavo Padovan 2016-04-26  84   * change happened during the de-stage of the Sync Framework when there was
-2d75c88fefb228 drivers/staging/android/uapi/sync.h Gustavo Padovan 2016-04-26  85   * no upstream users available.
-2d75c88fefb228 drivers/staging/android/uapi/sync.h Gustavo Padovan 2016-04-26  86   */
-2d75c88fefb228 drivers/staging/android/uapi/sync.h Gustavo Padovan 2016-04-26  87  
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
++       /*
++        * Unconditionally reserve the entire fisrt 1M, see comment in
++        * setup_arch().
++        */
++       memblock_reserve(0, SZ_1M);
+
+
+But this runs even if we just failed to allocate a trampoline on the first try, again dooming the kernel to panic.
+
+
+I real the commit message and the linked bug, and I'm having trouble finding evidence of anything actually fixed by this patch.  Can we just revert it?  If not, it would be nice to get a fixup patch that genuinely cleans this up -- the whole structure of the code (first, try to allocate trampoline, then free boot services, then try again) isn't really conducive to a model where we *don't* free boot services < 1M.
+
+
+Discovered by my delightful laptop, which does not boot with this patch applied.
+
+
+--Andy
