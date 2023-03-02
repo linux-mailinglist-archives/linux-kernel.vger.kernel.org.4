@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7776A78B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7147F6A78BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 02:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjCBBLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Mar 2023 20:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
+        id S229623AbjCBBLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Mar 2023 20:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjCBBL3 (ORCPT
+        with ESMTP id S229470AbjCBBLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:11:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B4F16ACD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 17:10:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677719440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=cnHHltz+FYOGt7sz4GByaHxQ6kD/wFuAdG0z56vTAmQ=;
-        b=czlSOupAVjZ73QqT28BIhPJC8+liPmJOitUALrlnOeiloUUB1bhLf0kowe9LXvCdnIDfvV
-        wjuJX2ZUFQZZBylF/TG9jFTLYlm//EW8WRjlSN9hY6IACJXZoerHIoTzIrT7buMA9bO1U2
-        y+xGBKAX20pVbZ63ql8seNS8ITYu2UU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-112-Oes6U4NmOv2GP5DIKo1Xxg-1; Wed, 01 Mar 2023 20:10:39 -0500
-X-MC-Unique: Oes6U4NmOv2GP5DIKo1Xxg-1
-Received: by mail-ed1-f72.google.com with SMTP id h13-20020a0564020e8d00b004a26ef05c34so21767470eda.16
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 17:10:39 -0800 (PST)
+        Wed, 1 Mar 2023 20:11:54 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584CC23102;
+        Wed,  1 Mar 2023 17:11:51 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id y2so15237809pjg.3;
+        Wed, 01 Mar 2023 17:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677719511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n+zNU2traPyY4e76JjN6VQpIVRi1XnP7HB+q7Nr0E/4=;
+        b=Mmro2sTZ/dgxsJ+grrWfL89raBn2OGoq/Drc+R2Mlxr8qJCZmZLA/1ORflcpcarfXt
+         gR3GoQYhl30tZ7KPX+gAhc/hDJ16+pItSV0/mZpg2Ps+DmYasaNQb6/pMUTAmboZxyc3
+         a6C95G2ajIvCLC/IFymCnpOcnEkjmMcLl7txXSfLXVMGXJnbPcu6hRnd4EZyRE1cSHrH
+         zOve4LFDhYzUTiHz9O8jevSmwTDVnLCRJSQVKt5brPYmp3tkz4aaCoB4ajw1Y8iduHgx
+         D16+EfXt1trqM6KVaN2fcJoJf3K3aST0AqjOMqTNlAIIrcb+p9RqZ8OFHPkx1Y3GXj+F
+         Lemg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cnHHltz+FYOGt7sz4GByaHxQ6kD/wFuAdG0z56vTAmQ=;
-        b=J79QfNbR7OM8xSCjCM90fkI8/GM2Co81Zbv4IFbuSXDWfsQHsm9dHSbjRzU9Iv/aqI
-         2RjrBFqWKpra63O5G/nlI4FdgrZYWLYWvQ8+Z/O92WdHIEeuZBlbmjW3LFnlENnxv5S1
-         GTmKxYTzL9tZDChRG/tFcDwGwYPS6pXBHSScx20UzkVKOqGYWMQprgAUpE+72Jj3XR+a
-         OES7LN3zbKMW3koN/W2rYHQlkavMZgbRx1yuLltxVDUUN+BQpU5ajJCnAzI0AxVI7oeP
-         c+N4A8JtLYO9/v3VMoi7oM9XjOcDUPngimRzRJTHJyQ98ww/WP1dgn/6rSuFkmm2FaM3
-         2ZRA==
-X-Gm-Message-State: AO0yUKX5WTGEiYbyWG17UHMRJ2Qeq1nhURlkFU87f7+gE5LNUyJ5YSoq
-        5SjrW3X8ZHdM+1uS3KKS/ZtVvXSg/uSTT5pz/XJav84nW3r/Hf+EcVy61R0GjqvhgQB+NC6VCbO
-        a882teQU8+0iwjQv+e8mqJS0h
-X-Received: by 2002:a17:907:982:b0:7d3:c516:6ef4 with SMTP id bf2-20020a170907098200b007d3c5166ef4mr11973456ejc.20.1677719438419;
-        Wed, 01 Mar 2023 17:10:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set8O/Vwba8NJ+8BhT/FVmIv+eAZGFSdO2VOXLhHhcZjSQYIv5Z3LRYkDPqYqXurp+BH9QMvY/g==
-X-Received: by 2002:a17:907:982:b0:7d3:c516:6ef4 with SMTP id bf2-20020a170907098200b007d3c5166ef4mr11973432ejc.20.1677719438139;
-        Wed, 01 Mar 2023 17:10:38 -0800 (PST)
-Received: from cassiopeiae.. ([2a02:810d:4b3f:de78:642:1aff:fe31:a19f])
-        by smtp.gmail.com with ESMTPSA id gr16-20020a170906e2d000b008eb5b085075sm6355004ejb.122.2023.03.01.17.10.37
+        d=1e100.net; s=20210112; t=1677719511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n+zNU2traPyY4e76JjN6VQpIVRi1XnP7HB+q7Nr0E/4=;
+        b=xx1RHmBB/hcO4G5kUKFQa9NUaXcP/kwxEJ4CZH8LxNBHhzx9lW4/xepxJQGVqPWj7w
+         nXK80h9PxbBwjJ+TQs9DmpYKlJW/DIJCkak9sDGjVLTUeCmsWu/kNfcCfgiySQq2e+y2
+         Z1BkauF916KL47jnvNYrpNZRjZS4qvjlKByKaZ/OZ9GlKSGmkDZVVCvn0JAmF2cGN3a2
+         W+ncI6iovFu2JdNuXAZmQGaig+HP7psMInQFbewSyY/cqrUXVYJLzitSLMXqIQkVbTnV
+         JrZpW4NJWhYTCrqHKW7jLSD7kO3fGbjChq3SQQXAWVyU5s/vzqi84Wr4knvgXCrJ2774
+         cLSA==
+X-Gm-Message-State: AO0yUKVtCH07IPhZPo3E0x6xqjX238d6I5/Y1/FPqVmgsENiECTrMf9J
+        X9ffmuaNRI1KXVPoNco7Ufo=
+X-Google-Smtp-Source: AK7set//9F6BtGJ1V3XpntmKtzHp1dSvX+v72vFs+x5Hmv+o7wUqfqc6rRldy2GK86dl72DVeRjtRA==
+X-Received: by 2002:a05:6a20:9388:b0:cc:59b7:79e6 with SMTP id x8-20020a056a20938800b000cc59b779e6mr330718pzh.24.1677719510548;
+        Wed, 01 Mar 2023 17:11:50 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id l72-20020a63914b000000b005030a00085asm8139712pge.46.2023.03.01.17.11.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 17:10:37 -0800 (PST)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     Liam.Howlett@oracle.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH] maple_tree: export symbol mas_preallocate()
-Date:   Thu,  2 Mar 2023 02:10:35 +0100
-Message-Id: <20230302011035.4928-1-dakr@redhat.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 01 Mar 2023 17:11:49 -0800 (PST)
+Date:   Wed, 1 Mar 2023 17:11:48 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH v12 013/106] KVM: TDX: create/destroy VM structure
+Message-ID: <20230302011148.GA2069594@ls.amr.corp.intel.com>
+References: <cover.1677484918.git.isaku.yamahata@intel.com>
+ <fd52ff91fbce051ecf9781af2e5c54138c995230.1677484918.git.isaku.yamahata@intel.com>
+ <e23b30cc-80a1-774f-7d58-a676d989b5ce@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e23b30cc-80a1-774f-7d58-a676d989b5ce@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,25 +80,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix missing EXPORT_SYMBOL_GPL() statement for mas_preallocate().
+On Wed, Mar 01, 2023 at 03:24:49PM +0800,
+Chenyi Qiang <chenyi.qiang@intel.com> wrote:
 
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- lib/maple_tree.c | 1 +
- 1 file changed, 1 insertion(+)
+> >  		return -EINVAL;
+> >  	}
+> >  
+> > +	max_pkgs = topology_max_packages();
+> > +	tdx_mng_key_config_lock = kcalloc(max_pkgs, sizeof(*tdx_mng_key_config_lock),
+> > +				   GFP_KERNEL);
+> > +	if (!tdx_mng_key_config_lock)
+> > +		return -ENOMEM;
+> > +	for (i = 0; i < max_pkgs; i++)
+> > +		mutex_init(&tdx_mng_key_config_lock[i]);
+> > +
+> >  	/* TDX requires VMX. */
+> >  	r = vmxon_all();
+> >  	if (!r)
+> > @@ -168,3 +600,9 @@ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+> >  
+> >  	return r;
+> >  }
+> > +
+> > +void tdx_hardware_unsetup(void)
+> > +{
+> 
+> To align with tdx_hardware_setup(), add some check like:
+> 
+> if (!enable_ept || !enable_tdx)
+> 	return;
+> 
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 26e2045d3cda..3bfb8a6f3f6d 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -5733,6 +5733,7 @@ int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
- 	mas_reset(mas);
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(mas_preallocate);
- 
- /*
-  * mas_destroy() - destroy a maple state.
+Oh yes, thanks for catching it.
 -- 
-2.39.2
-
+Isaku Yamahata <isaku.yamahata@gmail.com>
