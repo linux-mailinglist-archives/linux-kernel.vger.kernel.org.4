@@ -2,109 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396A56A8C3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5006A8C40
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjCBWwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S229805AbjCBWxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjCBWvw (ORCPT
+        with ESMTP id S230268AbjCBWxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:51:52 -0500
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247A35329A;
-        Thu,  2 Mar 2023 14:51:51 -0800 (PST)
-Received: from [192.168.192.83] (unknown [50.47.134.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 2 Mar 2023 17:53:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9321B2DB
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:53:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 6E3503F123;
-        Thu,  2 Mar 2023 22:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677797507;
-        bh=bioryjk+aw7umCRjJRv4QvVIBgleMXFeIjs93Jwz0DU=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=Cj7XrX8b3UMGQ4YO23XrAP0FCwraXl+y1is+aXBHq4Yaq0NJ8Y8zOoX9mLwzMi+cA
-         W3HPuGOFaftga2KXhKyZ5/4wS3BJLQBJ5S66CQM0hrX5LMpBQztUXGj1ZJW8M57Tj9
-         E70gT7F19dTUoCRQak+Bmmjm6DiRshfhlHBeKvil8gT2zCWDPf/XMYo1iREmsccTjN
-         W73jiILx6RoqVEa9UN6TtrU3KE8vHdtwQu/Blp/WvArnFFzabJzHpde6FZkpMk6+tz
-         aA8hHzFDIvRxA5sc+RxL5w2jCZ/b5qSxjxwm4eMptgFrVN4BVZW/vH7z72DRLHmUiF
-         E9HGDOJeYK7xg==
-Message-ID: <0767e9c6-b255-7c66-a75b-e3fc59f129f9@canonical.com>
-Date:   Thu, 2 Mar 2023 14:51:40 -0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19D49615FE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:53:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BCF3C433D2;
+        Thu,  2 Mar 2023 22:53:36 +0000 (UTC)
+Date:   Thu, 2 Mar 2023 17:53:34 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     John Stultz <jstultz@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
+        "Midas Chien" <midaschieh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Anton Vorontsov" <anton@enomsg.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
+Message-ID: <20230302175334.49abf342@gandalf.local.home>
+In-Reply-To: <dcf2fa0bde1e49a286c57c1e7d4a78d3@AcuMS.aculab.com>
+References: <20230302062741.483079-1-jstultz@google.com>
+        <20230302082414.77613351@gandalf.local.home>
+        <CANDhNCo4ruC4pP+iDe49b3e1nAcWtYQj4bx82+oZhyLFYkdFJQ@mail.gmail.com>
+        <20230302152103.2618f1b7@gandalf.local.home>
+        <dcf2fa0bde1e49a286c57c1e7d4a78d3@AcuMS.aculab.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 04/11] apparmor: simplify sysctls with
- register_sysctl_init()
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>, ebiederm@xmission.com,
-        keescook@chromium.org, yzaikin@google.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, luto@amacapital.net,
-        wad@chromium.org, dverkamp@chromium.org, paulmck@kernel.org,
-        baihaowen@meizu.com, frederic@kernel.org, jeffxu@google.com,
-        ebiggers@kernel.org, tytso@mit.edu, guoren@kernel.org
-Cc:     j.granados@samsung.com, zhangpeng362@huawei.com,
-        tangmeng@uniontech.com, willy@infradead.org, nixiaoming@huawei.com,
-        sujiaxun@uniontech.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230302202826.776286-1-mcgrof@kernel.org>
- <20230302202826.776286-5-mcgrof@kernel.org>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20230302202826.776286-5-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 12:28, Luis Chamberlain wrote:
-> Using register_sysctl_paths() is really only needed if you have
-> subdirectories with entries. We can use the simple register_sysctl()
-> instead.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: John Johansen <john.johansen@canonical.com>
+On Thu, 2 Mar 2023 22:41:36 +0000
+David Laight <David.Laight@ACULAB.COM> wrote:
 
-> ---
->   security/apparmor/lsm.c | 8 +-------
->   1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-> index d6cc4812ca53..47c7ec7e5a80 100644
-> --- a/security/apparmor/lsm.c
-> +++ b/security/apparmor/lsm.c
-> @@ -1764,11 +1764,6 @@ static int apparmor_dointvec(struct ctl_table *table, int write,
->   	return proc_dointvec(table, write, buffer, lenp, ppos);
->   }
->   
-> -static struct ctl_path apparmor_sysctl_path[] = {
-> -	{ .procname = "kernel", },
-> -	{ }
-> -};
-> -
->   static struct ctl_table apparmor_sysctl_table[] = {
->   	{
->   		.procname       = "unprivileged_userns_apparmor_policy",
-> @@ -1790,8 +1785,7 @@ static struct ctl_table apparmor_sysctl_table[] = {
->   
->   static int __init apparmor_init_sysctl(void)
->   {
-> -	return register_sysctl_paths(apparmor_sysctl_path,
-> -				     apparmor_sysctl_table) ? 0 : -ENOMEM;
-> +	return register_sysctl("kernel", apparmor_sysctl_table) ? 0 : -ENOMEM;
->   }
->   #else
->   static inline int apparmor_init_sysctl(void)
+> I can't help feeing that the RT kernel suffers from the
+> same problems if the system is under any kind of load.
+> You might get slightly better RT response, but the overall
+> amount of 'work' a system can actually do will be lower.
 
+That basically is the definition of an RTOS.
+
+But it's not "slightly better RT responses" what you get is a hell of a lot
+better responses, and no unbounded priority inversion.
+
+On some workloads I can still get millisecond latency cases on vanilla
+Linux where as with the PREEMPT_RT patch, the same workload is still under
+a 100 microseconds.
+
+-- Steve
