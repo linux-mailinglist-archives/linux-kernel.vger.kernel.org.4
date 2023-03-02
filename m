@@ -2,143 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551926A896A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE0F6A893F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjCBTTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
+        id S229758AbjCBTNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCBTTG (ORCPT
+        with ESMTP id S229629AbjCBTN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:19:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A8E126F7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:18:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677784703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NE0DZXa/zvRZJ6eaL4Afj3nXFIuAOckIe9J5zIxESJk=;
-        b=DEXBpX32/biE5g+dT54evxBlN6mOfIEIojEkKvN3JXygdFbU7JOPYChtuX8+6B4aMcauG8
-        j9qCUORq5g9KDJ5C0qQGeTzSo2HtnpQxfC0aAr14wPhq21lit0NR+EluvM8VHxHceBHRzb
-        0d9zU1D6SRW5Wjd820OGNGcWqBKkDoo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-_vBAMve-Phi6lQUXRGFG-A-1; Thu, 02 Mar 2023 14:18:19 -0500
-X-MC-Unique: _vBAMve-Phi6lQUXRGFG-A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 2 Mar 2023 14:13:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCFAB462;
+        Thu,  2 Mar 2023 11:13:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39D93811E9C;
-        Thu,  2 Mar 2023 19:18:19 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E7FF9440D8;
-        Thu,  2 Mar 2023 19:18:18 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id B93BA403F7F24; Thu,  2 Mar 2023 16:11:32 -0300 (-03)
-Date:   Thu, 2 Mar 2023 16:11:32 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 08/11] mm/vmstat: switch counter modification to
- cmpxchg
-Message-ID: <ZAD05KayfUwZQ4Vh@tpad>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.846239718@redhat.com>
- <3331790c-95a1-6ab9-2667-86aae3d28d7d@redhat.com>
- <ZAC3BxPIxAplvTzT@tpad>
- <ZADM4U49g+g4S5Xf@x1n>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97FDDB815AA;
+        Thu,  2 Mar 2023 19:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B44C4339C;
+        Thu,  2 Mar 2023 19:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677784406;
+        bh=FtcR9aIBdsTKKWp8Btl6rUSNdt+mDwclTbxn8UZFT5o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jRdwj79BFpo/1FJXIJWv7JSEfNvbrmtXYgFNUEDMuMXRKatejDNGDxN2WKWGMQgbD
+         fbEeIiLpp50tKciokYidWgsvmrgRwwFS92pE3ZPPuGSePkZSfcUTBgjTIF+JiHfh9n
+         8TfUmRltsYTU51qZvdGuN8XZeIkcYSAG0jeEPwHQAjrHIAfTVw3BRvhMojFFWGX02l
+         nedWi9oKTsGLO6H/z76/lmkoJRVJmr8D4WB7CTGgBTl7gLJ4yi5NQUeWAoeINsCNYe
+         KIKFFMp/TxH6kTvUbNmrvZMHwII3UwTqjLPA8bPHPfgnOGT387OErxtf6TQKur3peN
+         DK+SOuhE7S6EQ==
+Received: by mail-vs1-f51.google.com with SMTP id f13so273370vsg.6;
+        Thu, 02 Mar 2023 11:13:26 -0800 (PST)
+X-Gm-Message-State: AO0yUKXjnTEPdJRuU9bLvhDZnScTBue/Kurosym0BDQZIiehtWFs+rLv
+        fAR1PUnxCttpKtN/p7wpbqmwam1eXpGiGTRjgA==
+X-Google-Smtp-Source: AK7set+KeI9Jw3J2dM5zHlcQLdCwQFRbNcDR2tw+ktWE5ZKLnQNE2nVhJ9VVFQZRpBjBTihbqllLGFMe1SU8Jx6BclY=
+X-Received: by 2002:a67:d30a:0:b0:415:74b4:6067 with SMTP id
+ a10-20020a67d30a000000b0041574b46067mr7557996vsj.6.1677784405177; Thu, 02 Mar
+ 2023 11:13:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZADM4U49g+g4S5Xf@x1n>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230301152239.531194-1-miquel.raynal@bootlin.com> <20230301152239.531194-4-miquel.raynal@bootlin.com>
+In-Reply-To: <20230301152239.531194-4-miquel.raynal@bootlin.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 2 Mar 2023 13:13:14 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKsYeJz4M4v_NehyDqLHOHmArNgad4HDhYGN7RucHsv+A@mail.gmail.com>
+Message-ID: <CAL_JsqKsYeJz4M4v_NehyDqLHOHmArNgad4HDhYGN7RucHsv+A@mail.gmail.com>
+Subject: Re: [PATCH 3/8] of: Create an of_device_request_module() receiving an
+ OF node
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        rafal@milecki.pl
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 11:20:49AM -0500, Peter Xu wrote:
-> On Thu, Mar 02, 2023 at 11:47:35AM -0300, Marcelo Tosatti wrote:
-> > So it will be:
-> > 
-> > #ifdef CONFIG_HAVE_CMPXCHG_LOCAL
-> > mod_zone_page_state
-> > inc_zone_page_state
-> > dec_zone_page_state
-> > mod_node_page_state
-> > inc_node_page_state
-> > dec_node_page_state
-> > __mod_zone_page_state (new function, calls mod_zone_page_state).
-> > __mod_node_page_state (new function, calls mod_node_page_state).
-> > __inc_zone_page_state
-> > __inc_node_page_state
-> > __dec_zone_page_state
-> > __dec_node_page_state
-> > #else
-> > __mod_zone_page_state (old, shared function for both CONFIG_HAVE_CMPXCHG_LOCAL and not)
-> > __mod_node_page_state
-> > __inc_zone_page_state
-> > __inc_node_page_state
-> > __dec_zone_page_state
-> > __dec_node_page_state
-> > mod_zone_page_state
-> > inc_zone_page_state
-> > dec_zone_page_state
-> > mod_node_page_state
-> > inc_node_page_state
-> > dec_node_page_state
-> > #endif
-> > 
-> > Any suggestion on how to split this into multiple patchsets for easier
-> > reviewing? (can't think of anything obvious).
-> 
-> I figured this out before saw this, but it did take me some time to read
-> carefully into the code base..  maybe it'll be a good idea to mention
-> something like above in the commit message to ease future reviewers (and
-> more likelyhood to attract the experts to start chim in)?
-> 
-> One fundamental (but maybe another naive.. :) question on this code piece
-> (so not directly related to the changeset but maybe it is still..):
-> 
-> AFAICT CONFIG_HAVE_CMPXCHG_LOCAL only means we can do cmpxchg() without
-> locking memory bus, 
+On Wed, Mar 1, 2023 at 9:22=E2=80=AFAM Miquel Raynal <miquel.raynal@bootlin=
+.com> wrote:
+>
+> of_device_request_module() currently receives a "struct device" as main
+> argument, but the only use of this pointer is to access its .of_node
+> member. In practice, this function only needs a "struct
+> device_node". Let's move the logic into another helper which would
+> receive a "struct device_node" instead, and use that new helper from the
+> ancient of_device_request_module(). Exporting this new function will be
+> useful to request module loading when the "struct device" is not
+> available.
 
-CONFIG_HAVE_CMPXCHG_LOCAL means cmpxchg_local is implemented (that is
-cmpxchg which is atomic with respect to local CPU).
+of_device.h is for things that operate on struct device, so
+of_device_request_module() doesn't really belong here.
 
-LOCK cmpxchg is necessary for cmpxchg to be atomic on SMP.
+I wouldn't really care, but we have this ~12 year old line in of_device.h:
 
-> however when !CONFIG_HAVE_CMPXCHG_LOCAL here we're not
-> using non-local version but using preempt_disable_nested() to make sure the
-> read is atomic.  Does it really worth it?  What happens if we use cmpxchg()
-> unconditionally, but just use local (e.g. no "LOCK" prefix) version when
-> CONFIG_HAVE_CMPXCHG_LOCAL?
+#include <linux/of_platform.h> /* temporary until merge */
 
-Can't use local version of cmpxchg because the vmstat counters are supposed
-to be accessed from different CPUs simultaneously (this is the objective
-of the patchset):
+I started working on a very churny series to fix this only to wonder
+if a header split by consumer would be better. Anyways, concrete
+suggestions below...
 
-CPU-0					CPU-1
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  drivers/of/device.c       | 17 +++++++++++++----
+>  include/linux/of_device.h |  6 ++++++
+>  2 files changed, 19 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/of/device.c b/drivers/of/device.c
+> index 3efc17de1d57..7cdf252b9526 100644
+> --- a/drivers/of/device.c
+> +++ b/drivers/of/device.c
+> @@ -284,16 +284,16 @@ static ssize_t of_device_get_modalias(struct device=
+_node *np, char *str, ssize_t
+>         return tsize;
+>  }
+>
+> -int of_device_request_module(struct device *dev)
+> +int of_device_node_request_module(struct device_node *np)'
 
-vmstat_shepherd				mod_zone_page_state
-xchg location				LOCK cmpxchg location
+We use 'device_node' pretty much nowhere in the DT APIs. Just
+of_request_module() and define in of.h. There is only one user of
+of_device_request_module, so remove it and update the user to use
+of_request_module() (and hopefully drop of_device.h for it).
 
-xchg locks memory bus implicitly.
-
-Is this what you are thinking about or did i misunderstood what you
-mean?
-
+Rob
