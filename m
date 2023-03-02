@@ -2,170 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19386A7DC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8726A7DE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjCBJg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S229958AbjCBJip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:38:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjCBJgY (ORCPT
+        with ESMTP id S229947AbjCBJim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:36:24 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4594A15C96;
-        Thu,  2 Mar 2023 01:36:20 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id j2so15834854wrh.9;
-        Thu, 02 Mar 2023 01:36:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677749779;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dwotgqIloMzONTq30JRRScBiGhbpTJ7y9dF3roP3jSw=;
-        b=W2kO4E6+jzJftiTzk82HJ8DCHC5py2yVoF/dmuN2riWSN4fvxpCVBTFWewt7+Kfcv8
-         xDn3O2zLDmvIjpoHzyvvHcw04cV04rqy7UXiWDk/nCBrYslKd6MqjLHiHlDNx2SkAmys
-         FBBss1RsF8AzaxOTpequgnWUv1GDJl/K6h0EcjrL9MrR8d8TJnFvxgawKUX/4ZkAgqIu
-         AdYcpSMmpr8CJDXUdBwyzi/NYIbxLiDdCxI5RPb64YNmNRrYaHCMv7RhjoC6BcT7pYIC
-         kZ5vQlBkXY6Nrh1SZp9kPk1PNZ9WAkyo7lSZ6VhdinOP3+6cwYoVbovZPFmK3P/m4yhZ
-         e2mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677749779;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dwotgqIloMzONTq30JRRScBiGhbpTJ7y9dF3roP3jSw=;
-        b=0lF3mCySWqWdjzsEKUnEOIv1sF80E5mBaUmpPNfrIalVKYMasbpjAUrBLD0MP2A8SN
-         ci7OohSYk2j5pt92nMT6XvZmmytXjoF4df9aBvCsfr2Tui894KBRD+kn9iCqKLnwrTPO
-         IGq/T9x3TjDFNivtuzEa52q3gcIQLLCjLz+z04hCWRq/F3VSEYCN64+dJEDeqjeCp5fP
-         fBQo+jGQvyqzGn30Uy1yA3nnGGDbchzKlz/V5FEVm3gFfm2naGIn94n5tMuqgKwxwKIr
-         VXd3BPC6IeN91le+cHGKjHK6CY1jrBPgZdnKKEUPxZFQeZ1Ca55bDSlS/a1CjkEW5Imo
-         0ncQ==
-X-Gm-Message-State: AO0yUKXHKjWZxCkJFyrlRpd1ViCzeH/m2DHZSAgRrde7fnK6q/TaZncs
-        v3ryNVEdfsnWiXvvD9uLYZ2cIlZ3mlXxgA==
-X-Google-Smtp-Source: AK7set+UFPK2DJPNQSgoPOs8icPPSpDHiZkmVqQ3dyDTUnQHUukDDBzTOjU6nyCbDZtW5WADxWPpkQ==
-X-Received: by 2002:adf:f4cb:0:b0:2bf:d940:29b6 with SMTP id h11-20020adff4cb000000b002bfd94029b6mr7770316wrp.54.1677749778575;
-        Thu, 02 Mar 2023 01:36:18 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id s2-20020a5d6a82000000b002c53cc7504csm15177622wru.78.2023.03.02.01.36.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 01:36:18 -0800 (PST)
-Message-ID: <b4fc6bd8-e300-0f40-4216-8b99589c21cc@gmail.com>
-Date:   Thu, 2 Mar 2023 10:36:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thu, 2 Mar 2023 04:38:42 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 939B04EDF;
+        Thu,  2 Mar 2023 01:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=y+5KY
+        JiUtormz/jrT3bvfPhN0fTpLqDXBrS1X7+kgf8=; b=Luv9SL5uJJDc9RSVtLhqv
+        H9FG72kJFfqQAOmyzaVfLaS/CFaD6A9hWOTI0mplCS4xd1hJpyNtV36t7IiUt8lj
+        KEVn5axzv/lW9q8UksXsGSVD6IRLnj8RA4MFC2/5PgAQD1wCULqBGilUSTQvpy+b
+        D95rK4oukGMRnYo6HvacS8=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g0-1 (Coremail) with SMTP id _____wC3v4NNbgBkGKUVBw--.35501S2;
+        Thu, 02 Mar 2023 17:37:17 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     mchehab@kernel.org
+Cc:     bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org
-References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v4 00/19] Enable GPU with DVFS support on MediaTek SoCs
-In-Reply-To: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-mediatek@lists.infradead.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] media: mtk-jpeg: Fix use after free bug due to uncanceled work
+Date:   Thu,  2 Mar 2023 17:37:15 +0800
+Message-Id: <20230302093715.811758-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wC3v4NNbgBkGKUVBw--.35501S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF17uw15Jr4xtw4xCFy7trb_yoW8Xry7pr
+        ZxK3yDCrWUWrs0qr1UJ3WUAF1rCw1rKa1xWr17uw4Iv3y3Jrs7JryFya48tFWIyF92k3Wr
+        Jr10q3s7GrWDZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-6pkUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzg8mU2I0XgIo4gAAs0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Series looks good but from my understanding has a dependency on:
-[PATCH v4 00/12] Panfrost: Improve and add MediaTek SoCs support 
-(https://lore.kernel.org/linux-mediatek/20230228102610.707605-1-angelogioacchino.delregno@collabora.com/)
+In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
+mtk_jpeg_job_timeout_work. Then mtk_jpeg_dec_device_run
+and mtk_jpeg_enc_device_run may be called to start the
+work.
+If we remove the module which will call mtk_jpeg_remove
+to make cleanup, there may be a unfinished work. The
+possible sequence is as follows, which will cause a
+typical UAF bug.
 
-Did I get that right?
+Fix it by canceling the work before cleanup in the mtk_jpeg_remove
 
-Regards,
-Matthias
+CPU0                  CPU1
 
-On 01/03/2023 10:55, AngeloGioacchino Del Regno wrote:
-> Changes in v4:
->   - Added a fix for MT8192 Vgpu voltage constraints
->   - Changed constraints for MT8192 VSRAM-GPU to reflect the maximum
->     achievable voltage as per the actual vsram-vgpu relation constraint
-> 
-> Changes in v3:
->   - Changed MT8186 compatibles for new bindings
->   - Added min/max voltage overrides for vgpu/vsram_gpu on
->     mt8183-pumpkin and evb as suggested by Chen-Yu
->   - Cosmetic fixes for "arm64: dts: mediatek: mt8192: Add GPU nodes"
-> 
-> Changes in v2:
->   - Changed MT8186 to use only two power domains for the GPU.
-> 
-> We finally have working GPU DVFS on MediaTek SoCs.
-> On Panfrost.
-> For real.
-> ...and the best part is that it's going upstream.
-> 
-> In order to get GPU DVFS working, it was necessary to satisfy a
-> specific constraint (which is different, depending on the SoC)
-> between two regulators: GPU VCORE and GPU SRAM.
-> This was done through adding the mtk-regulator-coupler driver,
-> which transparently manages the voltage relation between these
-> two vregs, hence completely eliminating the need to manage these
-> regulators in the Panfrost driver; this solves the long standing
-> issue with devfreq+opp tables not supporting managing voltages
-> for two regulators per opp entry out of the box, due to which
-> we never got GPU DVFS on those SoCs, often locking them out to
-> a low GPU frequency.
-> 
-> This changes. Right now!
-> 
-> Tested on MT8192, MT8195 Chromebooks.
-> 
-> This series depends on [1].
-> 
-> [1]: https://lore.kernel.org/lkml/20230228102704.708150-1-angelogioacchino.delregno@collabora.com/
-> 
-> Alyssa Rosenzweig (2):
->    arm64: dts: mediatek: mt8192: Add GPU nodes
->    arm64: dts: mediatek: mt8192-asurada: Enable GPU
-> 
-> AngeloGioacchino Del Regno (16):
->    arm64: dts: mediatek: mt8183-kukui: Couple VGPU and VSRAM_GPU
->      regulators
->    arm64: dts: mediatek: mt8183-kukui: Override vgpu/vsram_gpu
->      constraints
->    arm64: dts: mediatek: mt8183: Remove second opp-microvolt entries from
->      gpu table
->    arm64: dts: mt8183-pumpkin: Couple VGPU and VSRAM_GPU regulators
->    arm64: dts: mediatek: mt8183-evb: Couple VGPU and VSRAM_GPU regulators
->    arm64: dts: mediatek: mt8183: Use mediatek,mt8183b-mali as GPU
->      compatible
->    arm64: dts: mediatek: mt8192: Add mfg_ref_sel clock to MFG0 domain
->    arm64: dts: mediatek: mt8192-asurada: Assign sram supply to MFG1 pd
->    arm64: dts: mediatek: mt8192-asurada: Fix voltage constraint for Vgpu
->    arm64: dts: mediatek: mt8192-asurada: Couple VGPU and VSRAM_OTHER
->      regulators
->    arm64: dts: mediatek: mt8195: Add mfg_core_tmp clock to MFG1 domain
->    arm64: dts: mt8195: Add panfrost node for Mali-G57 Valhall Natt GPU
->    arm64: dts: mediatek: mt8195-cherry: Enable Mali-G57 GPU
->    arm64: dts: mediatek: mt8186: Add GPU node
->    arm64: dts: mediatek: mt8183-pumpkin: Override vgpu/vsram_gpu
->      constraints
->    arm64: dts: mediatek: mt8183-evb: Override vgpu/vsram_gpu constraints
-> 
-> Nícolas F. R. A. Prado (1):
->    arm64: dts: mediatek: mt8192-asurada: Add MFG0 domain supply
-> 
->   arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  17 ++-
->   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  17 ++-
->   .../boot/dts/mediatek/mt8183-pumpkin.dts      |  17 ++-
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  34 ++---
->   arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  17 +++
->   .../boot/dts/mediatek/mt8192-asurada.dtsi     |  24 +++-
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 116 +++++++++++++++++-
->   .../boot/dts/mediatek/mt8195-cherry.dtsi      |   5 +
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  95 +++++++++++++-
->   9 files changed, 315 insertions(+), 27 deletions(-)
-> 
+                    |mtk_jpeg_job_timeout_work
+mtk_jpeg_remove     |
+  v4l2_m2m_release  |
+    kfree(m2m_dev); |
+                    |
+                    | v4l2_m2m_get_curr_priv
+                    |   m2m_dev->curr_ctx //use
+
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 969516a940ba..364513e7897e 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1793,7 +1793,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+ static int mtk_jpeg_remove(struct platform_device *pdev)
+ {
+ 	struct mtk_jpeg_dev *jpeg = platform_get_drvdata(pdev);
+-
++	cancel_delayed_work(&jpeg->job_timeout_work);
+ 	pm_runtime_disable(&pdev->dev);
+ 	video_unregister_device(jpeg->vdev);
+ 	v4l2_m2m_release(jpeg->m2m_dev);
+-- 
+2.25.1
+
