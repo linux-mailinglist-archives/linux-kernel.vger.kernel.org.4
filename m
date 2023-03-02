@@ -2,95 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D3C6A88BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F966A88C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 19:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjCBSwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 13:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S229579AbjCBS6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 13:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCBSv7 (ORCPT
+        with ESMTP id S229520AbjCBS6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 13:51:59 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E17624C85;
-        Thu,  2 Mar 2023 10:51:56 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id bh20so14334994oib.9;
-        Thu, 02 Mar 2023 10:51:56 -0800 (PST)
+        Thu, 2 Mar 2023 13:58:32 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892FD13DF7;
+        Thu,  2 Mar 2023 10:58:31 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so372pjz.1;
+        Thu, 02 Mar 2023 10:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677783116;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=g4miANRftKXvw3pXYRIpYFtXe5ceS+myUMxfIqC9f6g=;
-        b=eNTLwlcwVO9qt7WefOE/XSaVIJNFp3TkE3k79MaNYDmvuzhbrXB1q7do4Bwg4uyf//
-         HpuBJwSTrpJUE1IWFrIM/cAQQnspE7NJH8t/uARIWuCNC1z+kyd2/C5gDB0cNVprK77k
-         PkBZfGkNZFXL04GJ1qnNvAPo+NaINpS+y0yodzxbUVGKpY/pLEE/6pR1OnmDtsQNBCMk
-         P6jzmTJxsjtugzXKq7zeUTWCg49fmIkciZLhrdRlZ+j4+25o2YFaGMS9FOl1yWi1dd0X
-         1ByeOBMmrdHUK1A03dQ+ZFEpQU1nvIGo34NZDAgGRU/9ej7S4R2sRyRXuf1Bc7lh5ezZ
-         63Iw==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=VrTnLYcBM5sdj/5jPc/8vHx06BJ4wuh8IZTgTZbTpM4=;
+        b=f4oD1kCTLGwpj+45qsJH2wR5kcuUwNCgFI83sgqApq+KcuxSkpEFTZMvw4L9N7nrEY
+         V1a66afSo/Ed1CIXbt5D3SKFpHgaQfmKSwVlGazXMBxumYAzMspN+frw8ABUyvj36dr+
+         aI9eUd0klLaSKKz0G+W8JMhkEBUtF0DWiGDskrk/cICKUbCr3KsJG47GVmCEgan8q5js
+         ZvZ3hDMI07g8GZjl+3bfsQaGRN8ARa795eOI0dLdfHyK/JrcOrW4dCpRdw2g9nKHnL/q
+         +mDFdI1fw1T67ghJbdShjcRw5WC1YHybndr71JS06XQyQNPDs7k7XI2g4Ty2ypxiqsQj
+         Uk1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677783116;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=g4miANRftKXvw3pXYRIpYFtXe5ceS+myUMxfIqC9f6g=;
-        b=rzUZFdN5SKbH/67HOw2xj+Ha2DU/R25mJcQN8nq4sSeMtrkP0TFNjNRJMRPnLAfPk5
-         YhRTe05VMBNvNSQb6wDYyqqIo3YIvdiuqtZxbvUwM2eE60Z2fNmL7eErf2TIJLQAjEhJ
-         l4QhlOmSzY0Lao30v2WDEIubu2o695KLcwZa+g8qZ6vh7FX2itpNZsX5UpdvDp39CGIR
-         ipSBK8PYoU8kTcs7/YdMmLf5oIKXu/FnE+pVDEIUlEM+S8A/z+nsTq9cK3eqVPQppiHR
-         8Kt5Vozc2vDNXJgh27Kr6wzm+cat0y5VzRfRwr7IFi+hZAndLdxbuagsck1qwGN2IEhX
-         saHQ==
-X-Gm-Message-State: AO0yUKXau+Ggucz4wKQn5HLs1YKvbfvtmF71aYy6tZSvt3ceAxj3KFgD
-        Qm2IshrMxNfV8kOfNJrGo54dfyydvuMweRVg6T0=
-X-Google-Smtp-Source: AK7set8etazuQfWIK1AczOuew0I3NCmGN8J9YEHY9RTCA/pE6sM0ooCMbqPCnY41ITM7XwmeL6pSLFygSIv5F50p5Sk=
-X-Received: by 2002:a05:6808:d3:b0:378:74af:45ef with SMTP id
- t19-20020a05680800d300b0037874af45efmr3358790oic.11.1677783116012; Thu, 02
- Mar 2023 10:51:56 -0800 (PST)
+        bh=VrTnLYcBM5sdj/5jPc/8vHx06BJ4wuh8IZTgTZbTpM4=;
+        b=v3SSE0VTIyLNmhjPn0NmqtvX18Gv2+RSkT8tUliCKL6wpQ9TAaRoR4Ssf0AGvj2VSh
+         BnXPX0RQPAyn5FJvAZDHngkYvQ+3T+JMYsrseAkA0x2DgvHkeaTAMjDFI10Et7+sMr5G
+         IfTmUsWzT5HO6rf8b+3i4gvFsmcStBokOgJLenNtr6xTg2rUg4Hgjd8rN/3aViNUj4Cl
+         4o0rno+7NQnzttstaK1mLzz1qLfjqnziE++H/1j8K0t5BSsOxesNRnDkTyaTcd9nkDfL
+         Bve/co+ZsIw/WMPwljjBPH/+i1nEfcNdzsi1sDTjjJo1UkUApzMcLP+juzJ+uy322FFM
+         0DZg==
+X-Gm-Message-State: AO0yUKUOXU2fei2MOrntg81+d3+lCj+rWu2CWYClMZSGYVprWl6ZX6Qy
+        Zr5ooXBdsI3iPqZAdBlvyLc=
+X-Google-Smtp-Source: AK7set+BPAfEO94Eo0SfyhLJQVlqmnpLTONljPq0+jMirkpZVrDEjvhEr5rnm92FbaTbdkU1+M+4+A==
+X-Received: by 2002:a17:902:d2c5:b0:19a:a9d8:e48a with SMTP id n5-20020a170902d2c500b0019aa9d8e48amr13650135plc.22.1677783510785;
+        Thu, 02 Mar 2023 10:58:30 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:7baa])
+        by smtp.gmail.com with ESMTPSA id kn14-20020a170903078e00b0019460ac7c6asm24980plb.283.2023.03.02.10.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 10:58:29 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 2 Mar 2023 08:58:28 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, Dave Marchevsky <davemarchevsky@meta.com>,
+        David Vernet <void@manifault.com>,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: [PATCH bpf-next] bpf: Make bpf_get_current_[ancestor_]cgroup_id()
+ available for all program types
+Message-ID: <ZADx1NQBOGeImnrC@slm.duckdns.org>
 MIME-Version: 1.0
-Received: by 2002:ac9:4304:0:b0:4c1:4768:8c59 with HTTP; Thu, 2 Mar 2023
- 10:51:55 -0800 (PST)
-In-Reply-To: <ZADuWxU963sInrj/@ZenIV>
-References: <20230125155557.37816-1-mjguzik@gmail.com> <20230125155557.37816-2-mjguzik@gmail.com>
- <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
- <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
- <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
- <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
- <ZADuWxU963sInrj/@ZenIV>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Thu, 2 Mar 2023 19:51:55 +0100
-Message-ID: <CAGudoHFUkchB93rvOSFgBxkLJWT59hyGs==uTcvtO3pKyekxvQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> On Thu, Mar 02, 2023 at 07:22:17PM +0100, Mateusz Guzik wrote:
->
->> Ops, I meant "names_cache", here:
->> 	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
->> 			SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL);
->>
->> it is fs/dcache.c and I brainfarted into the above.
->
-> So you mean __getname() stuff?
->
+These helpers are safe to call from any context and there's no reason to
+restrict access to them. Remove them from bpf_trace and filter lists and add
+to bpf_base_func_proto() under perfmon_capable().
 
-yes. do some lookups in a loop on a kernel built with
-CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y (there may be a runtime switch for
-it?) and  you will see memset using most time in perf top
+Please note that while test_verifier results remain the same, I'm unsure
+whether subjecting their availability to perfmon_capable() is the right
+decision.
 
+Signed-off-by: Tejun Heo <tj@kernel.org>
+---
+ kernel/bpf/cgroup.c      | 4 ----
+ kernel/bpf/helpers.c     | 6 ++++++
+ kernel/trace/bpf_trace.c | 4 ----
+ net/core/filter.c        | 6 ------
+ 4 files changed, 6 insertions(+), 14 deletions(-)
+
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index bf2fdb33fb31..a4ae422b8f12 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -2529,10 +2529,6 @@ cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_current_pid_tgid_proto;
+ 	case BPF_FUNC_get_current_comm:
+ 		return &bpf_get_current_comm_proto;
+-	case BPF_FUNC_get_current_cgroup_id:
+-		return &bpf_get_current_cgroup_id_proto;
+-	case BPF_FUNC_get_current_ancestor_cgroup_id:
+-		return &bpf_get_current_ancestor_cgroup_id_proto;
+ #ifdef CONFIG_CGROUP_NET_CLASSID
+ 	case BPF_FUNC_get_cgroup_classid:
+ 		return &bpf_get_cgroup_classid_curr_proto;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 49a2ab8eb0bb..6f8545738a19 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1726,6 +1726,12 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_task_pt_regs_proto;
+ 	case BPF_FUNC_trace_vprintk:
+ 		return bpf_get_trace_vprintk_proto();
++#ifdef CONFIG_CGROUPS
++	case BPF_FUNC_get_current_cgroup_id:
++		return &bpf_get_current_cgroup_id_proto;
++	case BPF_FUNC_get_current_ancestor_cgroup_id:
++		return &bpf_get_current_ancestor_cgroup_id_proto;
++#endif
+ 	default:
+ 		return NULL;
+ 	}
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index c58baf9983cc..489942354a90 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1455,10 +1455,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		       NULL : &bpf_probe_read_compat_str_proto;
+ #endif
+ #ifdef CONFIG_CGROUPS
+-	case BPF_FUNC_get_current_cgroup_id:
+-		return &bpf_get_current_cgroup_id_proto;
+-	case BPF_FUNC_get_current_ancestor_cgroup_id:
+-		return &bpf_get_current_ancestor_cgroup_id_proto;
+ 	case BPF_FUNC_cgrp_storage_get:
+ 		return &bpf_cgrp_storage_get_proto;
+ 	case BPF_FUNC_cgrp_storage_delete:
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 1d6f165923bf..0f2589ea70f3 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8144,12 +8144,6 @@ sk_msg_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_sk_storage_delete_proto;
+ 	case BPF_FUNC_get_netns_cookie:
+ 		return &bpf_get_netns_cookie_sk_msg_proto;
+-#ifdef CONFIG_CGROUPS
+-	case BPF_FUNC_get_current_cgroup_id:
+-		return &bpf_get_current_cgroup_id_proto;
+-	case BPF_FUNC_get_current_ancestor_cgroup_id:
+-		return &bpf_get_current_ancestor_cgroup_id_proto;
+-#endif
+ #ifdef CONFIG_CGROUP_NET_CLASSID
+ 	case BPF_FUNC_get_cgroup_classid:
+ 		return &bpf_get_cgroup_classid_curr_proto;
 -- 
-Mateusz Guzik <mjguzik gmail.com>
+2.39.2
+
