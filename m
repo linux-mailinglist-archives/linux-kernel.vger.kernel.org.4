@@ -2,239 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DA66A8299
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3125B6A82AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCBMtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S229625AbjCBMw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCBMtK (ORCPT
+        with ESMTP id S229730AbjCBMw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:49:10 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3281ABC1
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:49:08 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id d30so67148427eda.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:49:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OQI/f+ntz5M4Olnk/oXWleUzJcGh7PHcTDgD3KqTpU4=;
-        b=VO8QARkqui3bdk9IgDxRJ8tx4sSXbFs0G9I1UfkB/mPtW5qbuuRsLbAz7IEJvCR5WZ
-         e213cGsSB5qapFM9ybYeGn0bw2vDHRbh8qMRlfP+AgEKhs9iG3p4fD7rxJmiKWzXLigi
-         8c22CgDUW8KROMfWXzj/ZMY4lr20WOXr7c457N3rJ2mSerL1XnkdtddJiBy2/lGmHsnx
-         nisdhFNONZ4ytJM+aJHTFnh7U/EIkIJJDW7HpDTNvr4Q7UOiT7PmBLipBtp0w3uCeu9I
-         iSw+vbkDFZQ9k0kzEGPifWsRB4nsgIR4DKKOcgY90ODVDMPLkq/3eWEeL4uGL4aCU37a
-         pa1A==
+        Thu, 2 Mar 2023 07:52:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006BE4A1D9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:51:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677761508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DR5YVBr/x9+aRDb+r/vDhczxRjgIEO+n2mwtVeMKmG8=;
+        b=ZBFB9q0Gb/tpqVFn4/bJ3uEQsyhlgTJbNXHoiVtRuNkbXfVcnsWWm+7Y0yj0OV8Ik3qJha
+        FdNwCqjV3Nf7n5ajHuhsgl4iAKHs8L6oGL5gYzbGY6Yi61Ef5G+dKxaNOnThBgQcjcOh+L
+        Kw1lRbL34Vt3W76+6c0zbL5epM+qjIQ=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-384-AoAu3vglP6OHSA6QhKtbQw-1; Thu, 02 Mar 2023 07:51:46 -0500
+X-MC-Unique: AoAu3vglP6OHSA6QhKtbQw-1
+Received: by mail-qt1-f200.google.com with SMTP id p7-20020ac84607000000b003b9b6101f65so8354657qtn.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:51:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OQI/f+ntz5M4Olnk/oXWleUzJcGh7PHcTDgD3KqTpU4=;
-        b=yezYkR1rYOr+sLyKIFzrRp4IAaDf61uyZPTfJLXDxPL+GtPrPrTFRvZOpRCjwLcu5j
-         nx1tB1epF6kipNYIHrkqkhe+eVKnDH8kspfgYMG85SSSfqqlH3vDhNATXGpg/puxXYr/
-         BJ0i2xzVVBEzAAYPodrJ6wSMEFXCp8IoyjrzlsyX+Ly0BbMBIN4+jEExHlsUTuOwts3t
-         YVjDCTDtuZ1Ka08Po/Db5V69CcBuzVODC0SZ1AQcwWfEmZT/Alps8U5pmEgcuFXSZsTj
-         72EkqxGcUcIQLKNpGoHeaqPVyMCurhTcIth44HJrH4KyDu4GctZoT40iaZNWPAIUDRzM
-         oQNw==
-X-Gm-Message-State: AO0yUKXFxJDcYRVfYvJsjKGClLOC1bQ3DAvsAYZg338fHARfdvscqxYZ
-        +8oOYZdhC8KSzIjKcRocoFl+9m4UOZ279l7JTCv+jQ==
-X-Google-Smtp-Source: AK7set+GzA4Iz2XRep1CHwWhdZQyez9Dskjo5QaBGEhnmuAfr806wQ+LW8fFYLjuNxLZakZkKnor0eSJ5dZ8PgbqZ9M=
-X-Received: by 2002:a17:906:9d90:b0:8d0:2c55:1aa with SMTP id
- fq16-20020a1709069d9000b008d02c5501aamr4713780ejc.0.1677761346825; Thu, 02
- Mar 2023 04:49:06 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677761506;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DR5YVBr/x9+aRDb+r/vDhczxRjgIEO+n2mwtVeMKmG8=;
+        b=fqAET98XSoFy1+UY82zS1sz0K7JqqI641DqDDmF0l3mLO0RZXYZaz1LBs5L8TEcWkJ
+         JWexAjVXiFZu9A5dVUEpT5rJC/Eoq7TpG0UHedHLCBHtD2JIPm9hNSpOKr45SEovD1gW
+         ldmm93SEYaupIKprQ7dWjet4ce9WeowUD9dP752vvaRBWt4FZ5iDiizqUruGlsUt8CCU
+         TP7vcDwx/xHIIOaAgzYjFf5NSdgreAQdzEoIJPtEyYibVql3kRTUrEMl5fY/8eCIskNK
+         rwmjp2+uBZKE1jL//i9iqvfetKy5eIrv9juL4s9N2CaoJOr7w3i/tuhwcgn+2I0aXqI0
+         n2uw==
+X-Gm-Message-State: AO0yUKWHV4KHuL7bWOECcKfIdDsyk7ydK8h6Pfahnt23UEhY0c60C6p9
+        c1VELZsLmwYGEXITT+9nU1HuWJJh6BalJtDk8BFzUlILChTV6/N/1BkPdHK1cCrnjhPW0b9FHBr
+        DkZ74m/4qj/FCSuFzLp/dFxqNcJW7yFLHkoBVvbVyv4uzGteyAT93BHTuj2ttF06ydK9tsfvBAH
+        Aj
+X-Received: by 2002:ad4:5e8c:0:b0:572:80ea:5fc7 with SMTP id jl12-20020ad45e8c000000b0057280ea5fc7mr19389444qvb.41.1677761506249;
+        Thu, 02 Mar 2023 04:51:46 -0800 (PST)
+X-Google-Smtp-Source: AK7set9jsnwyD2Sf7KyvM/J+R6gYA0DW2pRs4wFZmAJ5y3M16fMFvjRvODuFjV0jWoPb+A/GngRNHg==
+X-Received: by 2002:ad4:5e8c:0:b0:572:80ea:5fc7 with SMTP id jl12-20020ad45e8c000000b0057280ea5fc7mr19389412qvb.41.1677761505946;
+        Thu, 02 Mar 2023 04:51:45 -0800 (PST)
+Received: from [192.168.1.19] (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id 1-20020a370701000000b007426f115a4esm10776260qkh.129.2023.03.02.04.51.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 04:51:45 -0800 (PST)
+Subject: Re: [PATCH] fpga: bridge: fix kernel-doc parameter description
+To:     Marco Pagani <marpagan@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Tull <atull@kernel.org>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230301140309.512578-1-marpagan@redhat.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <4e15feab-5d75-6748-324d-ff58d0f862b8@redhat.com>
+Date:   Thu, 2 Mar 2023 04:51:43 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20230301180652.316428563@linuxfoundation.org>
-In-Reply-To: <20230301180652.316428563@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 2 Mar 2023 18:18:54 +0530
-Message-ID: <CA+G9fYud5NoObu9b4qAbFtWibgwgmMHyMs8rRhXV+1MzKvS0cg@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/19] 5.10.171-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230301140309.512578-1-marpagan@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 at 23:40, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+On 3/1/23 6:03 AM, Marco Pagani wrote:
+> Fix the kernel-doc description for the "struct fpga_image_info *info"
+> parameter of the fpga_bridge_get() function.
 >
-> This is the start of the stable review cycle for the 5.10.171 release.
-> There are 19 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> Fixes: 060ac5c8fa7b ("fpga: bridge: kernel-doc fixes")
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+Reviewed-by: Tom Rix <trix@redhat.com>
+> ---
+>   drivers/fpga/fpga-bridge.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.171-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+> index 5cd40acab5bf..ff4470067ed5 100644
+> --- a/drivers/fpga/fpga-bridge.c
+> +++ b/drivers/fpga/fpga-bridge.c
+> @@ -115,7 +115,7 @@ static int fpga_bridge_dev_match(struct device *dev, const void *data)
+>   /**
+>    * fpga_bridge_get - get an exclusive reference to an fpga bridge
+>    * @dev:	parent device that fpga bridge was registered with
+> - * @info:	fpga manager info
+> + * @info:	fpga image specific information
+>    *
+>    * Given a device, get an exclusive reference to an fpga bridge.
+>    *
 
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.171-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 032c569d266c83563696ed018f5679bf7b5afe45
-* git describe: v5.10.170-20-g032c569d266c
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.170-20-g032c569d266c
-
-## Test Regressions (compared to v5.10.170)
-
-## Metric Regressions (compared to v5.10.170)
-
-## Test Fixes (compared to v5.10.170)
-
-## Metric Fixes (compared to v5.10.170)
-
-## Test result summary
-total: 134470, pass: 112238, fail: 3614, skip: 18316, xfail: 302
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 112 total, 111 passed, 1 failed
-* arm64: 39 total, 37 passed, 2 failed
-* i386: 30 total, 28 passed, 2 failed
-* mips: 24 total, 24 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 23 total, 18 passed, 5 failed
-* riscv: 9 total, 9 passed, 0 failed
-* s390: 9 total, 9 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 33 total, 31 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
