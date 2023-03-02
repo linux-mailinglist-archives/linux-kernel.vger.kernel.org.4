@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3626A89E4
+	by mail.lfdr.de (Postfix) with ESMTP id ABAFE6A89E6
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCBT6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S230204AbjCBT6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjCBT5t (ORCPT
+        with ESMTP id S229958AbjCBT5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:57:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF37474D7
+        Thu, 2 Mar 2023 14:57:50 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA73474E3
         for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:57:47 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,30 +22,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2CZAbAfVRcCZykreSseF4BxE7wfvpnXRuXtzB7UnPI0=;
-        b=gj2EekBu62fenhSoE9+Y9XeOTSAa3N3PZvcS2tVf960lxHYOwZrOpLb+8gU1xuqGl9Ltmy
-        C69IOP98cKyez0YNrZMeLNd2aF9QUg0xHzLflDl+lqy7a8j5dQHJzQnOheo9R+eekeesi2
-        S6clEMuG697P3rCDwOqSAwqup96ghEPTSiKYjpd1NZ0cP5G75footxE/YC2282iDNuk5kO
-        QyIlKaQzy1VNgMVUDGYmj0lF1WjliDJoyUat2QuWkxRAB1v0Nz+52wSoVUzay7T8por5Gy
-        goIY+llQwZBYwG0UCISfmuhTAmXXKXEFmc+IqWZRoPTYxRAMwUOpBnbXjKnXfg==
+        bh=MBDHpobBKXIM6RJKVOV/6OUdGKuVSr8Ny7FvUBSWgMA=;
+        b=F9jgTIjau6FlbBvAkNBAGqExHf6rP9l0Bsbra3pCuqLciyr5U+3sOKcR51Ys9BhohKzDOQ
+        ygTHyVdbpUkccUIHtIZwiNJBR7CRy185ReNC5jiv8b3yWb078Mc+SzsAUmTqoSMlL7IBvx
+        7PSK2aA0AF+NsP6S2+n8gXAiXCihcyot56X84mk6Yrvf1u+aWcBQt+KeM4ElObelskrxTx
+        fmoHE9Wjrb2fkoAPGBiDjyBVKvvRPKJMeXeGjchOVIihMvdIC2RN+1gpz9MsCRGpTdvZiC
+        CxY4KqUCr86w9O7aetoqTk1zKJam1pU8Io//5zEnL5KPOWmdnTZ9hRJO1g7tYA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1677787064;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2CZAbAfVRcCZykreSseF4BxE7wfvpnXRuXtzB7UnPI0=;
-        b=hiSTFYVmmzLXgk6SuAxKWIIEc26zdd6CUaxwE2Lp1z4pHMXdtOsy74gfHb920MRVV8eqIA
-        zcPILMQyj99MGcCw==
+        bh=MBDHpobBKXIM6RJKVOV/6OUdGKuVSr8Ny7FvUBSWgMA=;
+        b=z9Uc4xrA3/WMTHj6hBOSc63s19KRlMAU+WpRllEa+ErDvhMF4h2f4M86PATw2yLy6iblRu
+        aBBusNS+sInwIrBw==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH printk v1 06/18] printk: nobkl: Add acquire/release logic
-Date:   Thu,  2 Mar 2023 21:02:06 +0106
-Message-Id: <20230302195618.156940-7-john.ogness@linutronix.de>
+Subject: [PATCH printk v1 07/18] printk: nobkl: Add buffer management
+Date:   Thu,  2 Mar 2023 21:02:07 +0106
+Message-Id: <20230302195618.156940-8-john.ogness@linutronix.de>
 In-Reply-To: <20230302195618.156940-1-john.ogness@linutronix.de>
 References: <20230302195618.156940-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -62,745 +62,362 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Add per console acquire/release functionality. The console 'locked'
-state is a combination of several state fields:
+In case of hostile takeovers it must be ensured that the previous
+owner cannot scribble over the output buffer of the emergency/panic
+context. This is achieved by:
 
-  - The 'locked' bit
+ - Adding a global output buffer instance for early boot (pre per CPU
+   data being available).
 
-  - The 'cpu' field that denotes on which CPU the console is locked
+ - Allocating an output buffer per console for threaded printers once
+   printer threads become available.
 
-  - The 'cur_prio' field that contains the severity of the printk
-    context that owns the console. This field is used for decisions
-    whether to attempt friendly handovers and also prevents takeovers
-    from a less severe context, e.g. to protect the panic CPU.
+ - Allocating per CPU output buffers per console for printing from
+   all contexts not covered by the other buffers.
 
-The acquire mechanism comes with several flavours:
+ - Choosing the appropriate buffer is handled in the acquire/release
+   functions.
 
-  - Straight forward acquire when the console is not contended
-
-  - Friendly handover mechanism based on a request/grant handshake
-
-    The requesting context:
-
-      1) Puts the desired handover state (CPU nr, prio) into a
-         separate handover state
-
-      2) Sets the 'req_prio' field in the real console state
-
-      3) Waits (with a timeout) for the owning context to handover
-
-    The owning context:
-
-      1) Observes the 'req_prio' field set
-
-      2) Hands the console over to the requesting context by
-         switching the console state to the handover state that was
-         provided by the requester
-
-  - Hostile takeover
-
-      The new owner takes the console over without handshake
-
-      This is required when friendly handovers are not possible,
-      i.e. the higher priority context interrupted the owning context
-      on the same CPU or the owning context is not able to make
-      progress on a remote CPU.
-
-The release is the counterpart which either releases the console
-directly or hands it gracefully over to a requester.
-
-All operations on console::atomic_state[CUR|REQ] are atomic
-cmpxchg based to handle concurrency.
-
-The acquire/release functions implement only minimal policies:
-
-  - Preference for higher priority contexts
-  - Protection of the panic CPU
-
-All other policy decisions have to be made at the call sites.
-
-The design allows to implement the well known:
-
-    acquire()
-    output_one_line()
-    release()
-
-algorithm, but also allows to avoid the per line acquire/release for
-e.g. panic situations by doing the acquire once and then relying on
-the panic CPU protection for the rest.
+The output buffer is wrapped into a separate data structure so other
+context related fields can be added in later steps.
 
 Co-developed-by: John Ogness <john.ogness@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Signed-off-by: Thomas Gleixner (Intel) <tglx@linutronix.de>
 ---
- include/linux/console.h      |  82 ++++++
- kernel/printk/printk_nobkl.c | 531 +++++++++++++++++++++++++++++++++++
- 2 files changed, 613 insertions(+)
+ include/linux/console.h      | 13 ++++++
+ kernel/printk/internal.h     | 22 +++++++--
+ kernel/printk/printk.c       | 26 +++++++----
+ kernel/printk/printk_nobkl.c | 90 +++++++++++++++++++++++++++++++++++-
+ 4 files changed, 137 insertions(+), 14 deletions(-)
 
 diff --git a/include/linux/console.h b/include/linux/console.h
-index b9d2ad580128..2c95fcc765e6 100644
+index 2c95fcc765e6..3d989104240f 100644
 --- a/include/linux/console.h
 +++ b/include/linux/console.h
-@@ -176,8 +176,20 @@ enum cons_flags {
-  * @seq:	Sequence for record tracking (64bit only)
-  * @bits:	Compound of the state bits below
+@@ -178,6 +178,7 @@ enum cons_flags {
   *
-+ * @locked:	Console is locked by a writer
-+ * @unsafe:	Console is busy in a non takeover region
-+ * @cur_prio:	The priority of the current output
-+ * @req_prio:	The priority of a handover request
-+ * @cpu:	The CPU on which the writer runs
-+ *
-  * To be used for state read and preparation of atomic_long_cmpxchg()
-  * operations.
-+ *
-+ * The @req_prio field is particularly important to allow spin-waiting to
-+ * timeout and give up without the risk of it being assigned the lock
-+ * after giving up. The @req_prio field has a nice side-effect that it
-+ * also makes it possible for a single read+cmpxchg in the common case of
-+ * acquire and release.
-  */
- struct cons_state {
- 	union {
-@@ -189,12 +201,79 @@ struct cons_state {
- 			union {
- 				u32	bits;
+  * @locked:	Console is locked by a writer
+  * @unsafe:	Console is busy in a non takeover region
++ * @thread:	Current owner is the printk thread
+  * @cur_prio:	The priority of the current output
+  * @req_prio:	The priority of a handover request
+  * @cpu:	The CPU on which the writer runs
+@@ -203,6 +204,7 @@ struct cons_state {
  				struct {
-+					u32 locked	:  1;
-+					u32 unsafe	:  1;
-+					u32 cur_prio	:  2;
-+					u32 req_prio	:  2;
-+					u32 cpu		: 18;
- 				};
- 			};
- 		};
- 	};
+ 					u32 locked	:  1;
+ 					u32 unsafe	:  1;
++					u32 thread	:  1;
+ 					u32 cur_prio	:  2;
+ 					u32 req_prio	:  2;
+ 					u32 cpu		: 18;
+@@ -233,6 +235,7 @@ enum cons_prio {
  };
  
-+/**
-+ * cons_prio - console writer priority for NOBKL consoles
-+ * @CONS_PRIO_NONE:		Unused
-+ * @CONS_PRIO_NORMAL:		Regular printk
-+ * @CONS_PRIO_EMERGENCY:	Emergency output (WARN/OOPS...)
-+ * @CONS_PRIO_PANIC:		Panic output
-+ *
-+ * Emergency output can carefully takeover the console even without consent
-+ * of the owner, ideally only when @cons_state::unsafe is not set. Panic
-+ * output can ignore the unsafe flag as a last resort. If panic output is
-+ * active no takeover is possible until the panic output releases the
-+ * console.
-+ */
-+enum cons_prio {
-+	CONS_PRIO_NONE = 0,
-+	CONS_PRIO_NORMAL,
-+	CONS_PRIO_EMERGENCY,
-+	CONS_PRIO_PANIC,
-+};
-+
-+struct console;
-+
-+/**
-+ * struct cons_context - Context for console acquire/release
-+ * @console:		The associated console
-+ * @state:		The state at acquire time
-+ * @old_state:		The old state when try_acquire() failed for analysis
-+ *			by the caller
-+ * @hov_state:		The handover state for spin and cleanup
-+ * @req_state:		The request state for spin and cleanup
-+ * @spinwait_max_us:	Limit for spinwait acquire
-+ * @prio:		Priority of the context
-+ * @hostile:		Hostile takeover requested. Cleared on normal
-+ *			acquire or friendly handover
-+ * @spinwait:		Spinwait on acquire if possible
-+ */
-+struct cons_context {
-+	struct console		*console;
-+	struct cons_state	state;
-+	struct cons_state	old_state;
-+	struct cons_state	hov_state;
-+	struct cons_state	req_state;
-+	unsigned int		spinwait_max_us;
-+	enum cons_prio		prio;
-+	unsigned int		hostile		: 1;
-+	unsigned int		spinwait	: 1;
-+};
-+
-+/**
-+ * struct cons_write_context - Context handed to the write callbacks
-+ * @ctxt:	The core console context
-+ * @outbuf:	Pointer to the text buffer for output
-+ * @len:	Length to write
-+ * @unsafe:	Invoked in unsafe state due to force takeover
-+ */
-+struct cons_write_context {
-+	struct cons_context	__private ctxt;
-+	char			*outbuf;
-+	unsigned int		len;
-+	bool			unsafe;
-+};
+ struct console;
++struct printk_buffers;
+ 
+ /**
+  * struct cons_context - Context for console acquire/release
+@@ -244,6 +247,8 @@ struct console;
+  * @req_state:		The request state for spin and cleanup
+  * @spinwait_max_us:	Limit for spinwait acquire
+  * @prio:		Priority of the context
++ * @pbufs:		Pointer to the text buffer for this context
++ * @thread:		The acquire is printk thread context
+  * @hostile:		Hostile takeover requested. Cleared on normal
+  *			acquire or friendly handover
+  * @spinwait:		Spinwait on acquire if possible
+@@ -256,6 +261,8 @@ struct cons_context {
+ 	struct cons_state	req_state;
+ 	unsigned int		spinwait_max_us;
+ 	enum cons_prio		prio;
++	struct printk_buffers	*pbufs;
++	unsigned int		thread		: 1;
+ 	unsigned int		hostile		: 1;
+ 	unsigned int		spinwait	: 1;
+ };
+@@ -274,6 +281,8 @@ struct cons_write_context {
+ 	bool			unsafe;
+ };
+ 
++struct cons_context_data;
 +
  /**
   * struct console - The console descriptor structure
   * @name:		The name of the console driver
-@@ -364,6 +443,9 @@ static inline bool console_is_registered(const struct console *con)
- 	lockdep_assert_console_list_lock_held();			\
- 	hlist_for_each_entry(con, &console_list, node)
+@@ -295,6 +304,8 @@ struct cons_write_context {
+  * @node:		hlist node for the console list
+  *
+  * @atomic_state:	State array for NOBKL consoles; real and handover
++ * @thread_pbufs:	Pointer to thread private buffer
++ * @pcpu_data:		Pointer to percpu context data
+  */
+ struct console {
+ 	char			name[16];
+@@ -317,6 +328,8 @@ struct console {
  
-+extern bool console_try_acquire(struct cons_write_context *wctxt);
-+extern bool console_release(struct cons_write_context *wctxt);
+ 	/* NOBKL console specific members */
+ 	atomic_long_t		__private atomic_state[2];
++	struct printk_buffers	*thread_pbufs;
++	struct cons_context_data	__percpu *pcpu_data;
+ };
+ 
+ #ifdef CONFIG_LOCKDEP
+diff --git a/kernel/printk/internal.h b/kernel/printk/internal.h
+index da380579263b..61ecdde5c872 100644
+--- a/kernel/printk/internal.h
++++ b/kernel/printk/internal.h
+@@ -13,8 +13,13 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
+ #define printk_sysctl_init() do { } while (0)
+ #endif
+ 
+-#ifdef CONFIG_PRINTK
++#define con_printk(lvl, con, fmt, ...)				\
++	printk(lvl pr_fmt("%s%sconsole [%s%d] " fmt),		\
++	       (con->flags & CON_NO_BKL) ? "" : "legacy ",	\
++	       (con->flags & CON_BOOT) ? "boot" : "",		\
++	       con->name, con->index, ##__VA_ARGS__)
+ 
++#ifdef CONFIG_PRINTK
+ #ifdef CONFIG_PRINTK_CALLER
+ #define PRINTK_PREFIX_MAX	48
+ #else
+@@ -64,7 +69,8 @@ u16 printk_parse_prefix(const char *text, int *level,
+ 			enum printk_info_flags *flags);
+ 
+ void cons_nobkl_cleanup(struct console *con);
+-void cons_nobkl_init(struct console *con);
++bool cons_nobkl_init(struct console *con);
++bool cons_alloc_percpu_data(struct console *con);
+ 
+ #else
+ 
+@@ -81,7 +87,7 @@ void cons_nobkl_init(struct console *con);
+ #define printk_safe_exit_irqrestore(flags) local_irq_restore(flags)
+ 
+ static inline bool printk_percpu_data_ready(void) { return false; }
+-static inline void cons_nobkl_init(struct console *con) { }
++static inline bool cons_nobkl_init(struct console *con) { return true; }
+ static inline void cons_nobkl_cleanup(struct console *con) { }
+ 
+ #endif /* CONFIG_PRINTK */
+@@ -113,3 +119,13 @@ struct printk_message {
+ 	u64			seq;
+ 	unsigned long		dropped;
+ };
 +
- extern int console_set_on_cmdline;
- extern struct console *early_console;
++/**
++ * struct cons_context_data - console context data
++ * @pbufs:		Buffer for storing the text
++ *
++ * Used for early boot and for per CPU data.
++ */
++struct cons_context_data {
++	struct printk_buffers		pbufs;
++};
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index b2c7c92c3d79..3abefdead7ae 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -459,6 +459,8 @@ static bool have_bkl_console;
+  */
+ bool have_boot_console;
  
-diff --git a/kernel/printk/printk_nobkl.c b/kernel/printk/printk_nobkl.c
-index 8df3626808dd..78136347a328 100644
---- a/kernel/printk/printk_nobkl.c
-+++ b/kernel/printk/printk_nobkl.c
-@@ -4,6 +4,7 @@
++static int unregister_console_locked(struct console *console);
++
+ #ifdef CONFIG_PRINTK
+ DECLARE_WAIT_QUEUE_HEAD(log_wait);
+ /* All 3 protected by @syslog_lock. */
+@@ -1117,7 +1119,19 @@ static inline void log_buf_add_cpu(void) {}
  
- #include <linux/kernel.h>
- #include <linux/console.h>
-+#include <linux/delay.h>
- #include "internal.h"
- /*
-  * Printk implementation for consoles that do not depend on the BKL style
-@@ -112,6 +113,536 @@ static inline bool cons_state_try_cmpxchg(struct console *con,
- 				       &old->atom, new->atom);
+ static void __init set_percpu_data_ready(void)
+ {
++	struct hlist_node *tmp;
++	struct console *con;
++
++	console_list_lock();
++
++	hlist_for_each_entry_safe(con, tmp, &console_list, node) {
++		if (!cons_alloc_percpu_data(con))
++			unregister_console_locked(con);
++	}
++
+ 	__printk_percpu_data_ready = true;
++
++	console_list_unlock();
  }
  
-+/**
-+ * cons_state_full_match - Check whether the full state matches
-+ * @cur:	The state to check
-+ * @prev:	The previous state
-+ *
-+ * Returns: True if matching, false otherwise.
-+ *
-+ * Check the full state including state::seq on 64bit. For take over
-+ * detection.
-+ */
-+static inline bool cons_state_full_match(struct cons_state cur,
-+					 struct cons_state prev)
-+{
-+	/*
-+	 * req_prio can be set by a concurrent writer for friendly
-+	 * handover. Ignore it in the comparison.
-+	 */
-+	cur.req_prio = prev.req_prio;
-+	return cur.atom == prev.atom;
-+}
+ static unsigned int __init add_to_rb(struct printk_ringbuffer *rb,
+@@ -3329,12 +3343,6 @@ static void try_enable_default_console(struct console *newcon)
+ 		newcon->flags |= CON_CONSDEV;
+ }
+ 
+-#define con_printk(lvl, con, fmt, ...)				\
+-	printk(lvl pr_fmt("%s%sconsole [%s%d] " fmt),		\
+-	       (con->flags & CON_NO_BKL) ? "" : "legacy ",	\
+-	       (con->flags & CON_BOOT) ? "boot" : "",		\
+-	       con->name, con->index, ##__VA_ARGS__)
+-
+ static void console_init_seq(struct console *newcon, bool bootcon_registered)
+ {
+ 	struct console *con;
+@@ -3399,8 +3407,6 @@ static void console_init_seq(struct console *newcon, bool bootcon_registered)
+ #define console_first()				\
+ 	hlist_entry(console_list.first, struct console, node)
+ 
+-static int unregister_console_locked(struct console *console);
+-
+ /*
+  * The console driver calls this routine during kernel initialization
+  * to register the console printing procedure with printk() and to
+@@ -3494,8 +3500,8 @@ void register_console(struct console *newcon)
+ 
+ 	if (!(newcon->flags & CON_NO_BKL))
+ 		have_bkl_console = true;
+-	else
+-		cons_nobkl_init(newcon);
++	else if (!cons_nobkl_init(newcon))
++		goto unlock;
+ 
+ 	if (newcon->flags & CON_BOOT)
+ 		have_boot_console = true;
+diff --git a/kernel/printk/printk_nobkl.c b/kernel/printk/printk_nobkl.c
+index 78136347a328..7db56ffd263a 100644
+--- a/kernel/printk/printk_nobkl.c
++++ b/kernel/printk/printk_nobkl.c
+@@ -166,6 +166,47 @@ static inline bool cons_check_panic(void)
+ 	return pcpu != PANIC_CPU_INVALID && pcpu != smp_processor_id();
+ }
+ 
++static struct cons_context_data early_cons_ctxt_data __initdata;
 +
 +/**
-+ * cons_state_bits_match - Check for matching state bits
-+ * @cur:	The state to check
-+ * @prev:	The previous state
++ * cons_context_set_pbufs - Set the output text buffer for the current context
++ * @ctxt:	Pointer to the acquire context
 + *
-+ * Returns: True if state matches, false otherwise.
++ * Buffer selection:
++ *   1) Early boot uses the global (initdata) buffer
++ *   2) Printer threads use the dynamically allocated per-console buffers
++ *   3) All other contexts use the per CPU buffers
 + *
-+ * Contrary to cons_state_full_match this checks only the bits and ignores
-+ * a sequence change on 64bits. On 32bit the two functions are identical.
++ * This guarantees that there is no concurrency on the output records ever.
++ * Early boot and per CPU nesting is not a problem. The takeover logic
++ * tells the interrupted context that the buffer has been overwritten.
++ *
++ * There are two critical regions that matter:
++ *
++ * 1) Context is filling the buffer with a record. After interruption
++ *    it continues to sprintf() the record and before it goes to
++ *    write it out, it checks the state, notices the takeover, discards
++ *    the content and backs out.
++ *
++ * 2) Context is in a unsafe critical region in the driver. After
++ *    interruption it might read overwritten data from the output
++ *    buffer. When it leaves the critical region it notices and backs
++ *    out. Hostile takeovers in driver critical regions are best effort
++ *    and there is not much that can be done about that.
 + */
-+static inline bool cons_state_bits_match(struct cons_state cur, struct cons_state prev)
-+{
-+	/*
-+	 * req_prio can be set by a concurrent writer for friendly
-+	 * handover. Ignore it in the comparison.
-+	 */
-+	cur.req_prio = prev.req_prio;
-+	return cur.bits == prev.bits;
-+}
-+
-+/**
-+ * cons_check_panic - Check whether a remote CPU is in panic
-+ *
-+ * Returns: True if a remote CPU is in panic, false otherwise.
-+ */
-+static inline bool cons_check_panic(void)
-+{
-+	unsigned int pcpu = atomic_read(&panic_cpu);
-+
-+	return pcpu != PANIC_CPU_INVALID && pcpu != smp_processor_id();
-+}
-+
-+/**
-+ * cons_cleanup_handover - Cleanup a handover request
-+ * @ctxt:	Pointer to acquire context
-+ *
-+ * @ctxt->hov_state contains the state to clean up
-+ */
-+static void cons_cleanup_handover(struct cons_context *ctxt)
-+{
-+	struct console *con = ctxt->console;
-+	struct cons_state new;
-+
-+	/*
-+	 * No loop required. Either hov_state is still the same or
-+	 * not.
-+	 */
-+	new.atom = 0;
-+	cons_state_try_cmpxchg(con, CON_STATE_REQ, &ctxt->hov_state, &new);
-+}
-+
-+/**
-+ * cons_setup_handover - Setup a handover request
-+ * @ctxt:	Pointer to acquire context
-+ *
-+ * Returns: True if a handover request was setup, false otherwise.
-+ *
-+ * On success @ctxt->hov_state contains the requested handover state
-+ *
-+ * On failure this context is not allowed to request a handover from the
-+ * current owner. Reasons would be priority too low or a remote CPU in panic.
-+ * In both cases this context should give up trying to acquire the console.
-+ */
-+static bool cons_setup_handover(struct cons_context *ctxt)
-+{
-+	unsigned int cpu = smp_processor_id();
-+	struct console *con = ctxt->console;
-+	struct cons_state old;
-+	struct cons_state hstate = {
-+		.locked		= 1,
-+		.cur_prio	= ctxt->prio,
-+		.cpu		= cpu,
-+	};
-+
-+	/*
-+	 * Try to store hstate in @con->atomic_state[REQ]. This might
-+	 * race with a higher priority waiter.
-+	 */
-+	cons_state_read(con, CON_STATE_REQ, &old);
-+	do {
-+		if (cons_check_panic())
-+			return false;
-+
-+		/* Same or higher priority waiter exists? */
-+		if (old.cur_prio >= ctxt->prio)
-+			return false;
-+
-+	} while (!cons_state_try_cmpxchg(con, CON_STATE_REQ, &old, &hstate));
-+
-+	/* Save that state for comparison in spinwait */
-+	copy_full_state(ctxt->hov_state, hstate);
-+	return true;
-+}
-+
-+/**
-+ * cons_setup_request - Setup a handover request in state[CUR]
-+ * @ctxt:	Pointer to acquire context
-+ * @old:	The state that was used to make the decision to spin wait
-+ *
-+ * Returns: True if a handover request was setup in state[CUR], false
-+ * otherwise.
-+ *
-+ * On success @ctxt->req_state contains the request state that was set in
-+ * state[CUR]
-+ *
-+ * On failure this context encountered unexpected state values. This
-+ * context should retry the full handover request setup process (the
-+ * handover request setup by cons_setup_handover() is now invalidated
-+ * and must be performed again).
-+ */
-+static bool cons_setup_request(struct cons_context *ctxt, struct cons_state old)
++static __ref void cons_context_set_pbufs(struct cons_context *ctxt)
 +{
 +	struct console *con = ctxt->console;
-+	struct cons_state cur;
-+	struct cons_state new;
 +
-+	/* Now set the request in state[CUR] */
-+	cons_state_read(con, CON_STATE_CUR, &cur);
-+	do {
-+		if (cons_check_panic())
-+			goto cleanup;
-+
-+		/* Bit state changed vs. the decision to spinwait? */
-+		if (!cons_state_bits_match(cur, old))
-+			goto cleanup;
-+
-+		/*
-+		 * A higher or equal priority context already setup a
-+		 * request?
-+		 */
-+		if (cur.req_prio >= ctxt->prio)
-+			goto cleanup;
-+
-+		/* Setup a request for handover. */
-+		copy_full_state(new, cur);
-+		new.req_prio = ctxt->prio;
-+	} while (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &cur, &new));
-+
-+	/* Save that state for comparison in spinwait */
-+	copy_bit_state(ctxt->req_state, new);
-+	return true;
-+
-+cleanup:
-+	cons_cleanup_handover(ctxt);
-+	return false;
++	/* Thread context or early boot? */
++	if (ctxt->thread)
++		ctxt->pbufs = con->thread_pbufs;
++	else if (!con->pcpu_data)
++		ctxt->pbufs = &early_cons_ctxt_data.pbufs;
++	else
++		ctxt->pbufs = &(this_cpu_ptr(con->pcpu_data)->pbufs);
 +}
 +
+ /**
+  * cons_cleanup_handover - Cleanup a handover request
+  * @ctxt:	Pointer to acquire context
+@@ -501,6 +542,7 @@ static bool __cons_try_acquire(struct cons_context *ctxt)
+ 	}
+ success:
+ 	/* Common updates on success */
++	cons_context_set_pbufs(ctxt);
+ 	return true;
+ 
+ check_hostile:
+@@ -623,6 +665,9 @@ static bool cons_release(struct cons_context *ctxt)
+ {
+ 	bool ret = __cons_release(ctxt);
+ 
++	/* Invalidate the buffer pointer. It is no longer valid. */
++	ctxt->pbufs = NULL;
++
+ 	ctxt->state.atom = 0;
+ 	return ret;
+ }
+@@ -643,16 +688,58 @@ bool console_release(struct cons_write_context *wctxt)
+ }
+ EXPORT_SYMBOL(console_release);
+ 
 +/**
-+ * cons_try_acquire_spin - Complete the spinwait attempt
-+ * @ctxt:	Pointer to an acquire context that contains
-+ *		all information about the acquire mode
++ * cons_alloc_percpu_data - Allocate percpu data for a console
++ * @con:	Console to allocate for
 + *
-+ * @ctxt->hov_state contains the handover state that was set in
-+ * state[REQ]
-+ * @ctxt->req_state contains the request state that was set in
-+ * state[CUR]
++ * Returns: True on success. False otherwise and the console cannot be used.
 + *
-+ * Returns: 0 if successfully locked. -EBUSY on timeout. -EAGAIN on
-+ * unexpected state values.
-+ *
-+ * On success @ctxt->state contains the new state that was set in
-+ * state[CUR]
-+ *
-+ * On -EBUSY failure this context timed out. This context should either
-+ * give up or attempt a hostile takeover.
-+ *
-+ * On -EAGAIN failure this context encountered unexpected state values.
-+ * This context should retry the full handover request setup process (the
-+ * handover request setup by cons_setup_handover() is now invalidated and
-+ * must be performed again).
++ * If it is not yet possible to allocate per CPU data, success is returned.
++ * When per CPU data becomes possible, set_percpu_data_ready() will call
++ * this function again for all registered consoles.
 + */
-+static bool cons_try_acquire_spin(struct cons_context *ctxt)
++bool cons_alloc_percpu_data(struct console *con)
 +{
-+	struct console *con = ctxt->console;
-+	struct cons_state cur;
-+	struct cons_state new;
-+	int err = -EAGAIN;
-+	int timeout;
-+
-+	/* Now wait for the other side to hand over */
-+	for (timeout = ctxt->spinwait_max_us; timeout >= 0; timeout--) {
-+		/* Timeout immediately if a remote panic is detected. */
-+		if (cons_check_panic())
-+			break;
-+
-+		cons_state_read(con, CON_STATE_CUR, &cur);
-+
-+		/*
-+		 * If the real state of the console matches the handover state
-+		 * that this context setup, then the handover was a success
-+		 * and this context is now the owner.
-+		 *
-+		 * Note that this might have raced with a new higher priority
-+		 * requester coming in after the lock was handed over.
-+		 * However, that requester will see that the owner changes and
-+		 * setup a new request for the current owner (this context).
-+		 */
-+		if (cons_state_bits_match(cur, ctxt->hov_state))
-+			goto success;
-+
-+		/*
-+		 * If state changed since the request was made, give up as
-+		 * it is no longer consistent. This must include
-+		 * state::req_prio since there could be a higher priority
-+		 * request available.
-+		 */
-+		if (cur.bits != ctxt->req_state.bits)
-+			goto cleanup;
-+
-+		/*
-+		 * Finally check whether the handover state is still
-+		 * the same.
-+		 */
-+		cons_state_read(con, CON_STATE_REQ, &cur);
-+		if (cur.atom != ctxt->hov_state.atom)
-+			goto cleanup;
-+
-+		/* Account time */
-+		if (timeout > 0)
-+			udelay(1);
-+	}
-+
-+	/*
-+	 * Timeout. Cleanup the handover state and carefully try to reset
-+	 * req_prio in the real state. The reset is important to ensure
-+	 * that the owner does not hand over the lock after this context
-+	 * has given up waiting.
-+	 */
-+	cons_cleanup_handover(ctxt);
-+
-+	cons_state_read(con, CON_STATE_CUR, &cur);
-+	do {
-+		/*
-+		 * The timeout might have raced with the owner coming late
-+		 * and handing it over gracefully.
-+		 */
-+		if (cons_state_bits_match(cur, ctxt->hov_state))
-+			goto success;
-+
-+		/*
-+		 * Validate that the state matches with the state at request
-+		 * time. If this check fails, there is already a higher
-+		 * priority context waiting or the owner has changed (either
-+		 * by higher priority or by hostile takeover). In all fail
-+		 * cases this context is no longer in line for a handover to
-+		 * take place, so no reset is necessary.
-+		 */
-+		if (cur.bits != ctxt->req_state.bits)
-+			goto cleanup;
-+
-+		copy_full_state(new, cur);
-+		new.req_prio = 0;
-+	} while (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &cur, &new));
-+	/* Reset worked. Report timeout. */
-+	return -EBUSY;
-+
-+success:
-+	/* Store the real state */
-+	copy_full_state(ctxt->state, cur);
-+	ctxt->hostile = false;
-+	err = 0;
-+
-+cleanup:
-+	cons_cleanup_handover(ctxt);
-+	return err;
-+}
-+
-+/**
-+ * __cons_try_acquire - Try to acquire the console for printk output
-+ * @ctxt:	Pointer to an acquire context that contains
-+ *		all information about the acquire mode
-+ *
-+ * Returns: True if the acquire was successful. False on fail.
-+ *
-+ * In case of success @ctxt->state contains the acquisition
-+ * state.
-+ *
-+ * In case of fail @ctxt->old_state contains the state
-+ * that was read from @con->state for analysis by the caller.
-+ */
-+static bool __cons_try_acquire(struct cons_context *ctxt)
-+{
-+	unsigned int cpu = smp_processor_id();
-+	struct console *con = ctxt->console;
-+	short flags = console_srcu_read_flags(con);
-+	struct cons_state old;
-+	struct cons_state new;
-+	int err;
-+
-+	if (WARN_ON_ONCE(!(flags & CON_NO_BKL)))
-+		return false;
-+again:
-+	cons_state_read(con, CON_STATE_CUR, &old);
-+
-+	/* Preserve it for the caller and for spinwait */
-+	copy_full_state(ctxt->old_state, old);
-+
-+	if (cons_check_panic())
-+		return false;
-+
-+	/* Set up the new state for takeover */
-+	copy_full_state(new, old);
-+	new.locked = 1;
-+	new.cur_prio = ctxt->prio;
-+	new.req_prio = CONS_PRIO_NONE;
-+	new.cpu = cpu;
-+
-+	/* Attempt to acquire it directly if unlocked */
-+	if (!old.locked) {
-+		if (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &old, &new))
-+			goto again;
-+
-+		ctxt->hostile = false;
-+		copy_full_state(ctxt->state, new);
-+		goto success;
-+	}
-+
-+	/*
-+	 * If the active context is on the same CPU then there is
-+	 * obviously no handshake possible.
-+	 */
-+	if (old.cpu == cpu)
-+		goto check_hostile;
-+
-+	/*
-+	 * If a handover request with same or higher priority is already
-+	 * pending then this context cannot setup a handover request.
-+	 */
-+	if (old.req_prio >= ctxt->prio)
-+		goto check_hostile;
-+
-+	/*
-+	 * If the caller did not request spin-waiting then performing a
-+	 * handover is not an option.
-+	 */
-+	if (!ctxt->spinwait)
-+		goto check_hostile;
-+
-+	/*
-+	 * Setup the request in state[REQ]. If this fails then this
-+	 * context is not allowed to setup a handover request.
-+	 */
-+	if (!cons_setup_handover(ctxt))
-+		goto check_hostile;
-+
-+	/*
-+	 * Setup the request in state[CUR]. Hand in the state that was
-+	 * used to make the decision to spinwait above, for comparison. If
-+	 * this fails then unexpected state values were encountered and the
-+	 * full request setup process is retried.
-+	 */
-+	if (!cons_setup_request(ctxt, old))
-+		goto again;
-+
-+	/*
-+	 * Spin-wait to acquire the console. If this fails then unexpected
-+	 * state values were encountered (for example, a hostile takeover by
-+	 * another context) and the full request setup process is retried.
-+	 */
-+	err = cons_try_acquire_spin(ctxt);
-+	if (err) {
-+		if (err == -EAGAIN)
-+			goto again;
-+		goto check_hostile;
-+	}
-+success:
-+	/* Common updates on success */
-+	return true;
-+
-+check_hostile:
-+	if (!ctxt->hostile)
-+		return false;
-+
-+	if (cons_check_panic())
-+		return false;
-+
-+	if (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &old, &new))
-+		goto again;
-+
-+	copy_full_state(ctxt->state, new);
-+	goto success;
-+}
-+
-+/**
-+ * cons_try_acquire - Try to acquire the console for printk output
-+ * @ctxt:	Pointer to an acquire context that contains
-+ *		all information about the acquire mode
-+ *
-+ * Returns: True if the acquire was successful. False on fail.
-+ *
-+ * In case of success @ctxt->state contains the acquisition
-+ * state.
-+ *
-+ * In case of fail @ctxt->old_state contains the state
-+ * that was read from @con->state for analysis by the caller.
-+ */
-+static bool cons_try_acquire(struct cons_context *ctxt)
-+{
-+	if (__cons_try_acquire(ctxt))
++	if (!printk_percpu_data_ready())
 +		return true;
 +
-+	ctxt->state.atom = 0;
++	con->pcpu_data = alloc_percpu(typeof(*con->pcpu_data));
++	if (con->pcpu_data)
++		return true;
++
++	con_printk(KERN_WARNING, con, "failed to allocate percpu buffers\n");
 +	return false;
 +}
 +
 +/**
-+ * __cons_release - Release the console after output is done
-+ * @ctxt:	The acquire context that contains the state
-+ *		at cons_try_acquire()
-+ *
-+ * Returns:	True if the release was regular
-+ *
-+ *		False if the console is in unusable state or was handed over
-+ *		with handshake or taken	over hostile without handshake.
-+ *
-+ * The return value tells the caller whether it needs to evaluate further
-+ * printing.
++ * cons_free_percpu_data - Free percpu data of a console on unregister
++ * @con:	Console to clean up
 + */
-+static bool __cons_release(struct cons_context *ctxt)
++static void cons_free_percpu_data(struct console *con)
 +{
-+	struct console *con = ctxt->console;
-+	short flags = console_srcu_read_flags(con);
-+	struct cons_state hstate;
-+	struct cons_state old;
-+	struct cons_state new;
++	if (!con->pcpu_data)
++		return;
 +
-+	if (WARN_ON_ONCE(!(flags & CON_NO_BKL)))
-+		return false;
-+
-+	cons_state_read(con, CON_STATE_CUR, &old);
-+again:
-+	if (!cons_state_bits_match(old, ctxt->state))
-+		return false;
-+
-+	/* Release it directly when no handover request is pending. */
-+	if (!old.req_prio)
-+		goto unlock;
-+
-+	/* Read the handover target state */
-+	cons_state_read(con, CON_STATE_REQ, &hstate);
-+
-+	/* If the waiter gave up hstate is 0 */
-+	if (!hstate.atom)
-+		goto unlock;
-+
-+	/*
-+	 * If a higher priority waiter raced against a lower priority
-+	 * waiter then unlock instead of handing over to either. The
-+	 * higher priority waiter will notice the updated state and
-+	 * retry.
-+	 */
-+	if (hstate.cur_prio != old.req_prio)
-+		goto unlock;
-+
-+	/* Switch the state and preserve the sequence on 64bit */
-+	copy_bit_state(new, hstate);
-+	copy_seq_state64(new, old);
-+	if (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &old, &new))
-+		goto again;
-+
-+	return true;
-+
-+unlock:
-+	/* Clear the state and preserve the sequence on 64bit */
-+	new.atom = 0;
-+	copy_seq_state64(new, old);
-+	if (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &old, &new))
-+		goto again;
-+
-+	return true;
++	free_percpu(con->pcpu_data);
++	con->pcpu_data = NULL;
 +}
-+
-+/**
-+ * cons_release - Release the console after output is done
-+ * @ctxt:	The acquire context that contains the state
-+ *		at cons_try_acquire()
-+ *
-+ * Returns:	True if the release was regular
-+ *
-+ *		False if the console is in unusable state or was handed over
-+ *		with handshake or taken	over hostile without handshake.
-+ *
-+ * The return value tells the caller whether it needs to evaluate further
-+ * printing.
-+ */
-+static bool cons_release(struct cons_context *ctxt)
-+{
-+	bool ret = __cons_release(ctxt);
-+
-+	ctxt->state.atom = 0;
-+	return ret;
-+}
-+
-+bool console_try_acquire(struct cons_write_context *wctxt)
-+{
-+	struct cons_context *ctxt = &ACCESS_PRIVATE(wctxt, ctxt);
-+
-+	return cons_try_acquire(ctxt);
-+}
-+EXPORT_SYMBOL(console_try_acquire);
-+
-+bool console_release(struct cons_write_context *wctxt)
-+{
-+	struct cons_context *ctxt = &ACCESS_PRIVATE(wctxt, ctxt);
-+
-+	return cons_release(ctxt);
-+}
-+EXPORT_SYMBOL(console_release);
 +
  /**
   * cons_nobkl_init - Initialize the NOBKL console specific data
   * @con:	Console to initialize
++ *
++ * Returns: True on success. False otherwise and the console cannot be used.
+  */
+-void cons_nobkl_init(struct console *con)
++bool cons_nobkl_init(struct console *con)
+ {
+ 	struct cons_state state = { };
+ 
++	if (!cons_alloc_percpu_data(con))
++		return false;
++
+ 	cons_state_set(con, CON_STATE_CUR, &state);
+ 	cons_state_set(con, CON_STATE_REQ, &state);
++	return true;
+ }
+ 
+ /**
+@@ -665,4 +752,5 @@ void cons_nobkl_cleanup(struct console *con)
+ 
+ 	cons_state_set(con, CON_STATE_CUR, &state);
+ 	cons_state_set(con, CON_STATE_REQ, &state);
++	cons_free_percpu_data(con);
+ }
 -- 
 2.30.2
 
