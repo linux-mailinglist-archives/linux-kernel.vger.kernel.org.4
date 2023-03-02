@@ -2,439 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407CB6A84DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C316A84E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjCBPFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
+        id S229868AbjCBPGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjCBPFe (ORCPT
+        with ESMTP id S229888AbjCBPFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:05:34 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE10303C2;
-        Thu,  2 Mar 2023 07:05:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677769530; x=1709305530;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KK4AIe+7Vv+aU8wHv4HOjgFbzka6y1VpUbQbhpno2LI=;
-  b=MbWsoHfuNhBaUSAI6z/ClFYhn00SeXPumsNHzTbit9esGm6C1PTeeb/R
-   2gFKlJ5lq4yaivRzesJvDSqYQKgqXOxV2HyWrrEyOFsYYETtuefiTmG7a
-   IrwQjWdp9DqvtXdPINxM+vm5xor3KUL7ODplA0+Bw5k7pTUIBM4pyWPJS
-   aqI9+PjEtBmwyorr5qJGMKrW4I3iesvkZTIFev+XI+epvneGbhO1LNEO+
-   w6EGOFNEBPKx0GJrQv6+9KntvCYbhRhCQF1nMy+QGWOsMHg1ZrKvz2aP5
-   zwYDYTue6O9FFQRyiVSXBYfPo+Y3DNX6ci+bE4YrRsfUVQxL85VMfyhs3
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="421002703"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="421002703"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 07:05:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="705297979"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="705297979"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 02 Mar 2023 07:05:21 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pXkUh-00EOgw-2R;
-        Thu, 02 Mar 2023 17:05:19 +0200
-Date:   Thu, 2 Mar 2023 17:05:19 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] iio: light: Add gain-time-scale helpers
-Message-ID: <ZAC7L8NQYgBcBTCF@smile.fi.intel.com>
-References: <cover.1677750859.git.mazziesaccount@gmail.com>
- <9895826669118a1aa1db3f85c2610fa759426c33.1677750859.git.mazziesaccount@gmail.com>
+        Thu, 2 Mar 2023 10:05:44 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3877E457C1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:05:42 -0800 (PST)
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 296D53F11D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677769540;
+        bh=ennINZICblkLNJRKAL6C7ysXY/vpm4KR2muFA6qF6vI=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=EZyd6UebuPiuudYZItBUpKLm87N5nanSwg54SBSo+D6K/6xS1F9xMpfiBKPwVu08Q
+         9idxxiJBRDzs7CZzLgbPT3R2xSyvgDchBGb7xGLqt1joXsrGv/bQUMnl1aQBahhOFt
+         FLRD2IWc/GbpxwjsFgLfJ5Lc1WCStUSfc9YiHG01z57zjM+gyf47zIu3NYRYw7kDlX
+         el29ib94TxhnwBUMZnDDXo+X/VgZKAVNL0fhcw8uCvI6MoQCO9xRg5KJP88kgYHi7i
+         KJ4VuQz0so4n4Lq4z56VnPxjiD1/+hnY0dUBSlMTFxniJnHNu2Q2g0t+7s6LTMCfqS
+         PwWyWjER4jVNA==
+Received: by mail-qv1-f69.google.com with SMTP id l13-20020ad44d0d000000b004c74bbb0affso8914515qvl.21
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:05:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677769539;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ennINZICblkLNJRKAL6C7ysXY/vpm4KR2muFA6qF6vI=;
+        b=1H7QDCpbFgC3Lru1nSc5WQN0f3xOwGbR1crq4m9GKnLVuvS1q8JRzTuUlqHEHy/U8Y
+         JVVlbS8SmLPW/98RsS8VMHkjpLM73Y5inrEJ6J4YqHbsm5SS+xw0cZWpVigushsanost
+         vfCUNuJ3N/yLPcEZpy3YrE257KvezLwBqYnxGejpDzKVNQrxjaV9/8jE9QJxKUGWR7Aw
+         XxtRMY/oG70PIXN2qi3ZT2F+tBxnwLiTfB467gHUDhL4k+iwbObo4ctEiLHTJPYcoruL
+         BIjd/9ZNnBOxmkLMHCmzqVtFHTfxniDptYE/YrmhFMkSU/rKZ0gFNJyZvse9Ot+I+wpH
+         h6bQ==
+X-Gm-Message-State: AO0yUKVyGN7HANFIwYEgCFrbNTksE2wQHDzr7cp4sHr2UfxggGTmyGjb
+        wyCNOM3rtGheVmaC4kFvnyrJm7xzngyunMMKMrU1lsWJdGlOR1KH0i05IkzfF0+4JsjM5bShLpI
+        SOHa92wU2fLbRC1KW79QHeu6lCNgL14LQyjVWVn/hMkORuFUqtHLhPxyi/A==
+X-Received: by 2002:a37:4385:0:b0:721:5339:2c89 with SMTP id q127-20020a374385000000b0072153392c89mr2581674qka.7.1677769539182;
+        Thu, 02 Mar 2023 07:05:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set/wLIZz+wN48cyx3bobDbJlcRdqTIx95pf2ooXaqJzdzUrI6PfTcx9xyTHMIuV8BHgY8aHD9TzSIKUGk43rNDo=
+X-Received: by 2002:a37:4385:0:b0:721:5339:2c89 with SMTP id
+ q127-20020a374385000000b0072153392c89mr2581660qka.7.1677769538838; Thu, 02
+ Mar 2023 07:05:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9895826669118a1aa1db3f85c2610fa759426c33.1677750859.git.mazziesaccount@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221083323.302471-1-xingyu.wu@starfivetech.com> <20230221083323.302471-2-xingyu.wu@starfivetech.com>
+In-Reply-To: <20230221083323.302471-2-xingyu.wu@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Thu, 2 Mar 2023 16:05:22 +0100
+Message-ID: <CAJM55Z_O+Gh0RGaAuLPxs4aSi4=5Aa3UksN_SnU-4pOn3X5fDw@mail.gmail.com>
+Subject: Re: [PATCH v2 01/11] dt-bindings: clock: Add StarFive JH7110
+ System-Top-Group clock and reset generator
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 12:57:54PM +0200, Matti Vaittinen wrote:
-> Some light sensors can adjust both the HW-gain and integration time.
-> There are cases where adjusting the integration time has similar impact
-> to the scale of the reported values as gain setting has.
-> 
-> IIO users do typically expect to handle scale by a single writable 'scale'
-> entry. Driver should then adjust the gain/time accordingly.
-> 
-> It however is difficult for a driver to know whether it should change
-> gain or integration time to meet the requested scale. Usually it is
-> preferred to have longer integration time which usually improves
-> accuracy, but there may be use-cases where long measurement times can be
-> an issue. Thus it can be preferable to allow also changing the
-> integration time - but mitigate the scale impact by also changing the gain
-> underneath. Eg, if integration time change doubles the measured values,
-> the driver can reduce the HW-gain to half.
-> 
-> The theory of the computations of gain-time-scale is simple. However,
-> some people (undersigned) got that implemented wrong for more than once.
-> 
-> Add some gain-time-scale helpers in order to not dublicate errors in all
-> drivers needing these computations.
-
-...
-
-> +/*
-
-Is it intentionally _not_ a kernel doc?
-
-> + * iio_gts_get_gain - Convert scale to total gain
-
-> + * Internal helper for converting scale to total gain.
-
-Otherwise this line should go after the fields, I remember kernel doc warnings
-on the similar cases.
-
-> + * @max:	Maximum linearized scale. As an example, when scale is creted in
-
-creted?
-
-IIRC I already pointed out to the very same mistake in your code in the past
-(sorry, if my memory doesn't serve me well).
-
-> + *		magnitude of NANOs and max scale is 64.1 - The linearized
-> + *		scale is 64 100 000 000.
-> + * @scale:	Linearized scale to compte the gain for.
-> + *
-> + * Return:	(floored) gain corresponding to the scales. -EINVAL if scale
-
-scales? (Plural?)
-
-> + *		is invalid.
-> + */
-
-Same remark to all of the comments.
-
-> +{
-> +	int tmp = 1;
+On Tue, 21 Feb 2023 at 09:37, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+> Add bindings for the System-Top-Group clock and reset generator (STGCRG)
+> on the JH7110 RISC-V SoC by StarFive Ltd.
+>
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+>  .../clock/starfive,jh7110-stgcrg.yaml         | 82 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  .../dt-bindings/clock/starfive,jh7110-crg.h   | 34 ++++++++
+>  .../dt-bindings/reset/starfive,jh7110-crg.h   | 28 +++++++
+>  4 files changed, 145 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+> new file mode 100644
+> index 000000000000..b64ccd84200a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-stgcrg.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	if (scale > max || !scale)
-> +		return -EINVAL;
+> +title: StarFive JH7110 System-Top-Group Clock and Reset Generator
 > +
-> +	if (U64_MAX - max < scale) {
-> +		/* Risk of overflow */
-> +		if (max - scale < scale)
-> +			return 1;
-
-> +		while (max - scale > scale * (u64) tmp)
-
-Space is not required after casting.
-
-> +			tmp++;
+> +maintainers:
+> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
 > +
-> +		return tmp + 1;
-
-Wondering why you can't simplify this to
-
-		max -= scale;
-		tmp++;
-
-> +	}
+> +properties:
+> +  compatible:
+> +    const: starfive,jh7110-stgcrg
 > +
-> +	while (max > scale * (u64) tmp)
-> +		tmp++;
+> +  reg:
+> +    maxItems: 1
 > +
-> +	return tmp;
-> +}
-
-Missing blank line.
-
-> +/*
-> + * gain_get_scale_fraction - get the gain or time based on scale and known one
-> + *
-> + * Internal helper for computing unknown fraction of total gain.
-> + * Compute either gain or time based on scale and either the gain or time
-> + * depending on which one is known.
-> + *
-> + * @max:	Maximum linearized scale. As an example, when scale is creted in
-
-creted?
-
-Is it mistakenly stored in your spellcheck database? Or is it simply
-copy'n'paste typo?
-
-> + *		magnitude of NANOs and max scale is 64.1 - The linearized
-> + *		scale is 64 100 000 000.
-> + * @scale:	Linearized scale to compute the gain/time for.
-> + * @known:	Either integration time or gain depending on which one is known
-> + * @unknown:	Pointer to variable where the computed gain/time is stored
-> + *
-> + * Return:	0 on success
-> + */
-
-...
-
-> +static const struct iio_itime_sel_mul *
-> +			iio_gts_find_itime_by_time(struct iio_gts *gts, int time)
-
-Strange indentation.
-
-Ditto for all these types of cases.
-
-...
-
-> +	*lin_scale = (u64) scale_whole * (u64)scaler + (u64)(scale_nano
-> +		     / (NANO / scaler));
-
-Strange indentation. Split on the logical (math) parts better.
-
-...
-
-> +EXPORT_SYMBOL_GPL(iio_init_iio_gts);
-
-I haven't noticed if you put these all exports into a proper namespace.
-If no, please do.
-
-...
-
-> +		sort(gains[i], gts->num_hwgain, sizeof(int), iio_gts_gain_cmp,
-> +		     NULL);
-
-One line is okay.
-
-...
-
-> +	all_gains = kcalloc(gts->num_itime * gts->num_hwgain, sizeof(int),
-
-Something from overflow.h is very suitable here.
-
-> +			    GFP_KERNEL);
-> +	if (!all_gains)
-> +		return -ENOMEM;
-
-...
-
-> +	memcpy(all_gains, gains[gts->num_itime - 1], gts->num_hwgain * sizeof(int));
-
-Maybe it's better to have a temporary which will be calculated as array_size()
-for allocation and reused here?
-
-...
-
-> +	for (i = gts->num_itime - 2; i >= 0; i--)
-
-Yeah, if you put this into temporary, like
-
-	i = gts->num_itime - 1;
-
-this becomes
-
-	while (i--) {
-
-Note, you missed {} for better reading.
-
-Note, you may re-use that i (maybe renamed to something better in the memcpy()
-above as well).
-
-> +		for (j = 0; j < gts->num_hwgain; j++) {
-> +			int candidate = gains[i][j];
-> +			int chk;
+> +  clocks:
+> +    items:
+> +      - description: Main Oscillator (24 MHz)
+> +      - description: HIFI4 core
+> +      - description: STG AXI/AHB
+> +      - description: USB (125 MHz)
+> +      - description: CPU Bus
+> +      - description: HIFI4 Axi
+> +      - description: NOC STG Bus
+> +      - description: APB Bus
 > +
-> +			if (candidate > all_gains[new_idx - 1]) {
-> +				all_gains[new_idx] = candidate;
-> +				new_idx++;
+> +  clock-names:
+> +    items:
+> +      - const: osc
+> +      - const: hifi4_core
+> +      - const: stg_axiahb
+> +      - const: usb_125m
+> +      - const: cpu_bus
+> +      - const: hifi4_axi
+> +      - const: nocstg_bus
+> +      - const: apb_bus
 > +
-> +				continue;
-> +			}
-> +			for (chk = 0; chk < new_idx; chk++)
-> +				if (candidate <= all_gains[chk])
-> +					break;
+> +  '#clock-cells':
+> +    const: 1
+> +    description:
+> +      See <dt-bindings/clock/starfive,jh7110-crg.h> for valid indices.
 > +
-> +			if (candidate == all_gains[chk])
-> +				continue;
+> +  '#reset-cells':
+> +    const: 1
+> +    description:
+> +      See <dt-bindings/reset/starfive,jh7110-crg.h> for valid indices.
 > +
-> +			memmove(&all_gains[chk + 1], &all_gains[chk],
-> +				(new_idx - chk) * sizeof(int));
-> +			all_gains[chk] = candidate;
-> +			new_idx++;
-> +		}
-
-...
-
-> +	gts->avail_all_scales_table = kcalloc(gts->num_avail_all_scales,
-> +					      2 * sizeof(int), GFP_KERNEL);
-> +	if (!gts->avail_all_scales_table)
-> +		ret = -ENOMEM;
-> +	else
-> +		for (i = 0; !ret && i < gts->num_avail_all_scales; i++)
-
-Much easier to read if you move this...
-
-> +			ret = iio_gts_total_gain_to_scale(gts, all_gains[i],
-> +					&gts->avail_all_scales_table[i * 2],
-> +					&gts->avail_all_scales_table[i * 2 + 1]);
-
-...here as
-
-		if (ret)
-			break;
-
-> +	kfree(all_gains);
-> +	if (ret && gts->avail_all_scales_table)
-> +		kfree(gts->avail_all_scales_table);
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +  - '#reset-cells'
 > +
-> +	return ret;
-
-But Wouldn't be better to use goto labels?
-
-...
-
-> +	while (i) {
-
-Instead of doing standard
-
-	while (i--) {
-
-> +		/*
-> +		 * It does not matter if i'th alloc was not succesfull as
-> +		 * kfree(NULL) is safe.
-> +		 */
-
-You add this comment, ...
-
-> +		kfree(per_time_gains[i]);
-> +		kfree(per_time_scales[i]);
-
-...an additional loop, ...
-
+> +additionalProperties: false
 > +
-> +		i--;
-
-...and a line of code.
-
-> +	}
-
-Why?
-
-> +	for (i = gts->num_itime - 1; i >= 0; i--) {
-
-	i = gts->num_itime;
-
-	while (i--) {
-
-> +		int new = gts->itime_table[i].time_us;
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/starfive,jh7110-crg.h>
 > +
-> +		if (times[idx] < new) {
-> +			times[idx++] = new;
-> +			continue;
-> +		}
+> +    stgcrg: clock-controller@10230000 {
+> +        compatible = "starfive,jh7110-stgcrg";
+> +        reg = <0x10230000 0x10000>;
+> +        clocks = <&osc>,
+> +                 <&syscrg JH7110_SYSCLK_HIFI4_CORE>,
+> +                 <&syscrg JH7110_SYSCLK_STG_AXIAHB>,
+> +                 <&syscrg JH7110_SYSCLK_USB_125M>,
+> +                 <&syscrg JH7110_SYSCLK_CPU_BUS>,
+> +                 <&syscrg JH7110_SYSCLK_HIFI4_AXI>,
+> +                 <&syscrg JH7110_SYSCLK_NOCSTG_BUS>,
+> +                 <&syscrg JH7110_SYSCLK_APB_BUS>;
+> +        clock-names = "osc", "hifi4_core",
+> +                      "stg_axiahb", "usb_125m",
+> +                      "cpu_bus", "hifi4_axi",
+> +                      "nocstg_bus", "apb_bus";
+> +        #clock-cells = <1>;
+> +        #reset-cells = <1>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 93eb504c3b21..2e70c9f21989 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19914,6 +19914,7 @@ F:      arch/riscv/boot/dts/starfive/
+>  STARFIVE JH71X0 CLOCK DRIVERS
+>  M:     Emil Renner Berthing <kernel@esmil.dk>
+>  M:     Hal Feng <hal.feng@starfivetech.com>
+> +M:     Xingyu Wu <xingyu.wu@starfivetech.com>
+>  S:     Maintained
+>  F:     Documentation/devicetree/bindings/clock/starfive,jh71*.yaml
+>  F:     drivers/clk/starfive/clk-starfive-jh71*
+> diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
+> index 5e4f21ca0642..5ac8a4d90a7a 100644
+> --- a/include/dt-bindings/clock/starfive,jh7110-crg.h
+> +++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
+> @@ -1,6 +1,7 @@
+>  /* SPDX-License-Identifier: GPL-2.0 OR MIT */
+>  /*
+>   * Copyright 2022 Emil Renner Berthing <kernel@esmil.dk>
+> + * Copyright 2022 StarFive Technology Co., Ltd.
+>   */
+>
+>  #ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
+> @@ -222,4 +223,37 @@
+>
+>  #define JH7110_AONCLK_END                      14
+
+Hi Xingyu,
+
+The clock and reset names below have been shortened from the very long
+names in the documentation. I see you've come to the same shortened
+names as I used in the first STGCRG driver I pushed, which is great,
+but I find it highly unlikely to have happened without looking at /
+copying my code like you did for the SYSCRG and AONCRG drivers Hal has
+posted. Unfortunately the commit message above doesn't reflect that,
+so please add a
+Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+
+I do have some updated suggestions for short names below though:
+
+> +/* STGCRG clocks */
+> +#define JH7110_STGCLK_HIFI4_CLK_CORE           0
+> +#define JH7110_STGCLK_USB0_APB                 1
+> +#define JH7110_STGCLK_USB0_UTMI_APB            2 unli
+> +#define JH7110_STGCLK_USB0_AXI                 3
+> +#define JH7110_STGCLK_USB0_LPM                 4
+> +#define JH7110_STGCLK_USB0_STB                 5
+> +#define JH7110_STGCLK_USB0_APP_125             6
+> +#define JH7110_STGCLK_USB0_REFCLK              7
+> +#define JH7110_STGCLK_PCIE0_AXI_MST0           8
+> +#define JH7110_STGCLK_PCIE0_APB                        9
+> +#define JH7110_STGCLK_PCIE0_TL                 10
+> +#define JH7110_STGCLK_PCIE1_AXI_MST0           11
+> +#define JH7110_STGCLK_PCIE1_APB                        12
+> +#define JH7110_STGCLK_PCIE1_TL                 13
+> +#define JH7110_STGCLK_PCIE01_SLV_DEC_MAINCLK   14
+
+Does PCIE01 here mean that the clock is used by both pcie0 and pcie1?
+If so then maybe just call it JH7110_PCIE_SLV_MAIN
+
+> +#define JH7110_STGCLK_SEC_HCLK                 15
+
+For other clocks I think "hclk" means ahb clock, so maybe JH7110_STGCLK_SEC_AHB
+
+> +#define JH7110_STGCLK_SEC_MISCAHB              16
+
+I find something like JH7110_STGCLK_SEC_MISC_AHB a little easier to read.
+
+> +#define JH7110_STGCLK_GRP0_MAIN                        17
+> +#define JH7110_STGCLK_GRP0_BUS                 18
+> +#define JH7110_STGCLK_GRP0_STG                 19
+> +#define JH7110_STGCLK_GRP1_MAIN                        20
+> +#define JH7110_STGCLK_GRP1_BUS                 21
+> +#define JH7110_STGCLK_GRP1_STG                 22
+> +#define JH7110_STGCLK_GRP1_HIFI                        23
+> +#define JH7110_STGCLK_E2_RTC                   24
+> +#define JH7110_STGCLK_E2_CORE                  25
+> +#define JH7110_STGCLK_E2_DBG                   26
+> +#define JH7110_STGCLK_DMA1P_AXI                        27
+> +#define JH7110_STGCLK_DMA1P_AHB                        28
 > +
-> +		for (j = 0; j <= idx; j++) {
-> +			if (times[j] > new) {
-> +				memmove(&times[j + 1], &times[j], (idx - j) * sizeof(int));
-> +				times[j] = new;
-> +				idx++;
-> +			}
-> +		}
-> +	}
-
-...
-
-> +void iio_gts_purge_avail_time_table(struct iio_gts *gts)
-> +{
-> +	if (gts->num_avail_time_tables) {
-
-	if (!...)
-		return;
-
-> +		kfree(gts->avail_time_tables);
-> +		gts->avail_time_tables = NULL;
-> +		gts->num_avail_time_tables = 0;
-> +	}
-> +}
-
-...
-
-> +			if (!diff) {
-
-Why not positive conditional?
-
-			if (diff) {
-				...
-			} else {
-				...
-			}
-
-> +				diff = gain - gts->hwgain_table[i].gain;
-> +				best = i;
-> +			} else {
-> +				int tmp = gain - gts->hwgain_table[i].gain;
+> +#define JH7110_STGCLK_END                      29
 > +
-> +				if (tmp < diff) {
-> +					diff = tmp;
-> +					best = i;
-> +				}
-> +			}
+>  #endif /* __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__ */
+> diff --git a/include/dt-bindings/reset/starfive,jh7110-crg.h b/include/dt-bindings/reset/starfive,jh7110-crg.h
+> index d78e38690ceb..4a865ded78b8 100644
+> --- a/include/dt-bindings/reset/starfive,jh7110-crg.h
+> +++ b/include/dt-bindings/reset/starfive,jh7110-crg.h
+> @@ -1,6 +1,7 @@
+>  /* SPDX-License-Identifier: GPL-2.0 OR MIT */
+>  /*
+>   * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
+> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>   */
+>
+>  #ifndef __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__
+> @@ -151,4 +152,31 @@
+>
+>  #define JH7110_AONRST_END                      8
+>
+> +/* STGCRG resets */
+> +#define JH7110_STGRST_SYSCON                   0
+> +#define JH7110_STGRST_HIFI4_CORE               1
+> +#define JH7110_STGRST_HIFI4_AXI                        2
+> +#define JH7110_STGRST_SEC_TOP_HRESETN          3
 
-...
+JH7110_STGRST_SEC_AHB to match the clock above.
 
-> +	ret = gain_get_scale_fraction(gts->max_scale, scale_linear, mul, gain);
-
+> +#define JH7110_STGRST_E24_CORE                 4
+> +#define JH7110_STGRST_DMA1P_AXI                        5
+> +#define JH7110_STGRST_DMA1P_AHB                        6
+> +#define JH7110_STGRST_USB0_AXI                 7
+> +#define JH7110_STGRST_USB0_APB                 8
+> +#define JH7110_STGRST_USB0_UTMI_APB            9
+> +#define JH7110_STGRST_USB0_PWRUP               10
+> +#define JH7110_STGRST_PCIE0_AXI_MST0           11
+> +#define JH7110_STGRST_PCIE0_AXI_SLV0           12
+> +#define JH7110_STGRST_PCIE0_AXI_SLV            13
+> +#define JH7110_STGRST_PCIE0_BRG                        14
+> +#define JH7110_STGRST_PCIE0_CORE               15
+> +#define JH7110_STGRST_PCIE0_APB                        16
+> +#define JH7110_STGRST_PCIE1_AXI_MST0           17
+> +#define JH7110_STGRST_PCIE1_AXI_SLV0           18
+> +#define JH7110_STGRST_PCIE1_AXI_SLV            19
+> +#define JH7110_STGRST_PCIE1_BRG                        20
+> +#define JH7110_STGRST_PCIE1_CORE               21
+> +#define JH7110_STGRST_PCIE1_APB                        22
 > +
-
-Redundant blank line.
-
-> +	if (ret || !iio_gts_valid_gain(gts, *gain))
-
-Why error code is shadowed?
-
-> +		return -EINVAL;
+> +#define JH7110_STGRST_END                      23
 > +
-
-...
-
-> +	ret = iio_gts_get_scale_linear(gts, old_gain, itime_old->time_us,
-> +				       &scale);
-
-Single line if fine.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = gain_get_scale_fraction(gts->max_scale, scale, itime_new->mul,
-> +				      new_gain);
-
-Ditto.
-
-> +	if (ret)
-> +		return -EINVAL;
-
-...
-
-> +#ifndef __GAIN_TIME_SCALE_HELPER__
-> +#define __GAIN_TIME_SCALE_HELPER__
-
-__IIO_... ?
-
-Missing types.h (at least, haven't checked for more).
-
-Missing some forward declarations, at least for struct device.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>  #endif /* __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__ */
+> --
+> 2.25.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
