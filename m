@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2940C6A82B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950986A82BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjCBMxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S229890AbjCBMxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjCBMw4 (ORCPT
+        with ESMTP id S229836AbjCBMw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:52:56 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782EF4A1EA;
-        Thu,  2 Mar 2023 04:52:45 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id fa28so588333pfb.12;
-        Thu, 02 Mar 2023 04:52:45 -0800 (PST)
+        Thu, 2 Mar 2023 07:52:58 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8FB185;
+        Thu,  2 Mar 2023 04:52:51 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id fa28so588506pfb.12;
+        Thu, 02 Mar 2023 04:52:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9zyweGzdA9jS1fyEsOsHkcKiajwcBVlOAfPTENEP1t0=;
-        b=TvwBcY9uVbl0p2l5Yxd74SXG0WA0SKa4wQOKSTf9WIfRoiRXc5LqQAaAQEnbRUq64e
-         pOi6hAYoLcWAkKvD4nIRNWT6qnxxmOIsCk2w3NfjpGJDEmrI3rXqeoSqvhj80amgN3DB
-         gs3pwd0zwlwGoTsWtutGfr7LmSYvWwxCTIgdnqfWws0wM0BjbdFEIJ6A+vv/8zpWifXH
-         94o+Lqt+GkhExg+PTovFYp60EiK4N39enher3M+MBFTLIOUTN11ak07QeHd0awpnfmYs
-         IHNzEuF6+tinBZZzRPr57ybxkrNKp1DTPcn7eZhcBMCV5+xKAo1YzNsxT86fPD3iEAtz
-         2Mkw==
+        bh=ElZGWPSn9CP8auAvlpdoQ6n2hX46C9RTZsGwRvPpbgc=;
+        b=j1ZnY7zsbC4LN55GLsFmwo37igkQ1Frh7YGwQbrxCBLETkPpVs4xLHP7jJElOoRF5Z
+         W16lxLUwEv9CN3gbz+MqtUhpEJvmdz9Y+0Q9H1Bqnvxlplu+c2DHQn8H1PA/uFFs1LIs
+         ch7vraMDdDwZmpyWTB4pcG0aW7bcwMAM9xubomrnYbC3ng0u7rPq0cT6HDGOm+PQ0Jrd
+         VgATUy+zWvGvg8uUh7aRivZK6Vi/21ZlfRU5PsUGDr0uBwnM8zuIQD1hBD+QOMjE+atv
+         5/JLij+/uEPvdqGe/a5QwJ7byncaTfsjSdtJjx72ByOq31SsCRf2yik3mziwUH3re6Kc
+         cyNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9zyweGzdA9jS1fyEsOsHkcKiajwcBVlOAfPTENEP1t0=;
-        b=OTffPWGjpkU3H2Y5d+TGxzwYe4FBcqyz/fsMGIjx9NpNs6URpFQkGt3zLSmLaK5G16
-         pIApP0XzK3sV1CH7aS3ESKxQBWNWMxjGSIoOyhJU5MKEPG1vK+0DGjsZxQ3yLh5fVYr3
-         3AyKHlZ2N8HenCuV/ofC9+kwSGvTovoQ18g+0nLjNZKnFASqaIS222dwoPLPyDolFu8h
-         zDVjkqA6/0jF+XYY7+swvyLbtmOKJxal92aRWzGX+blmjpmumC0Rz3yqYqhSUgjejzKL
-         InScO0QOKailjlPZe1ZA3pB2f373qTUVL2AFxfRxwnioZrd48bWW82XNkHBYh37Ow0/J
-         DwFg==
-X-Gm-Message-State: AO0yUKUg2RNQRIIIvE2azNKO0k3eCb3/GaRAL7ZElOKgqm5itnWc1ymK
-        6653tqs14Gh57k2+QsU2iOvhDy0w5Qs=
-X-Google-Smtp-Source: AK7set+SHWxvXTEjyB2cx85BN6na/7p9fbFI/+Z2RCGcFfbBp6lmnaWXTlThJIF+e6yXgqC3+WfZ2A==
-X-Received: by 2002:a62:62c6:0:b0:5a8:aa1d:30e9 with SMTP id w189-20020a6262c6000000b005a8aa1d30e9mr7493277pfb.18.1677761564572;
-        Thu, 02 Mar 2023 04:52:44 -0800 (PST)
+        bh=ElZGWPSn9CP8auAvlpdoQ6n2hX46C9RTZsGwRvPpbgc=;
+        b=PQNSW4tXrf9V7itaZJRZLXhY5fhPNPevPAP1YGRGqo1QQf9vYtGUtK9K2eC8mVML2u
+         YjqGI1vzPynpP2kpzp/eNOJbBeE5tcQF+/wbeLYErzYEjWtm4Nq24ZwPGL2yutbMBbpc
+         +bMHnVSNU55OH6edkKpbueclGKpRLiduof9GLvWbj0yBXYcGU5qunNqBuYL8gOdsP4IN
+         fZaCKHSP+7qr+aQSBAI7Z+aIgy7eySQaegHmTstMhRd2C6mmZj1wsEkNWCIRhnTlQ9IR
+         oUEJblAEGunDhNPNQtVDggrfY2hxB4FJjFcSvBf932cSxeDqcZG6JathYQYv//PNeqcw
+         2Htg==
+X-Gm-Message-State: AO0yUKUe4PepHqFrWwur8yLmkxELHSJS37zX8lXBS3KZHuq3F7X358iC
+        BjcOSujuEZ6tjZ60KSiK/r/htc/v9uIVtA==
+X-Google-Smtp-Source: AK7set9H4ghe7mKOm/BayKDrHgPnByE6BRDQmXGKFazoPyey/+FSuVhsPQFWesTAOAXH8axBN5kJgw==
+X-Received: by 2002:a62:1b51:0:b0:5a9:d0e6:6a85 with SMTP id b78-20020a621b51000000b005a9d0e66a85mr2266922pfb.7.1677761570646;
+        Thu, 02 Mar 2023 04:52:50 -0800 (PST)
 Received: from kelvin-ThinkPad-L14-Gen-1.lan ([223.85.203.147])
-        by smtp.gmail.com with ESMTPSA id j7-20020a62e907000000b005aa60d8545esm9791955pfh.61.2023.03.02.04.52.38
+        by smtp.gmail.com with ESMTPSA id j7-20020a62e907000000b005aa60d8545esm9791955pfh.61.2023.03.02.04.52.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 04:52:44 -0800 (PST)
+        Thu, 02 Mar 2023 04:52:50 -0800 (PST)
 From:   Keguang Zhang <keguang.zhang@gmail.com>
 To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -58,9 +58,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH v2 1/5] gpio: loongson1: Convert to SPDX identifier
-Date:   Thu,  2 Mar 2023 20:52:11 +0800
-Message-Id: <20230302125215.214014-2-keguang.zhang@gmail.com>
+Subject: [PATCH v2 2/5] gpio: loongson1: Use readl() & writel()
+Date:   Thu,  2 Mar 2023 20:52:12 +0800
+Message-Id: <20230302125215.214014-3-keguang.zhang@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230302125215.214014-1-keguang.zhang@gmail.com>
 References: <20230302125215.214014-1-keguang.zhang@gmail.com>
@@ -76,42 +76,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use SPDX-License-Identifier instead of the license text and
-update the author information.
+This patch replace __raw_readl() & __raw_writel() with readl() & writel().
 
 Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 ---
-V1 -> V2: Keep GPLv2, just convert to SPDX identifier
+V1 -> V2: Split this change to a separate patch
 ---
- drivers/gpio/gpio-loongson1.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/gpio/gpio-loongson1.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.c
-index 5d90b3bc5a25..8862c9ea0d41 100644
+index 8862c9ea0d41..b6c11caa3ade 100644
 --- a/drivers/gpio/gpio-loongson1.c
 +++ b/drivers/gpio/gpio-loongson1.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * GPIO Driver for Loongson 1 SoC
-  *
-- * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-+ * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
-  */
+@@ -23,8 +23,8 @@ static int ls1x_gpio_request(struct gpio_chip *gc, unsigned int offset)
+ 	unsigned long flags;
  
- #include <linux/module.h>
-@@ -90,6 +87,6 @@ static struct platform_driver ls1x_gpio_driver = {
+ 	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+-	__raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) | BIT(offset),
+-		     gpio_reg_base + GPIO_CFG);
++	writel(readl(gpio_reg_base + GPIO_CFG) | BIT(offset),
++	       gpio_reg_base + GPIO_CFG);
+ 	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
  
- module_platform_driver(ls1x_gpio_driver);
+ 	return 0;
+@@ -35,8 +35,8 @@ static void ls1x_gpio_free(struct gpio_chip *gc, unsigned int offset)
+ 	unsigned long flags;
  
--MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
-+MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
- MODULE_DESCRIPTION("Loongson1 GPIO driver");
- MODULE_LICENSE("GPL");
+ 	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+-	__raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) & ~BIT(offset),
+-		     gpio_reg_base + GPIO_CFG);
++	writel(readl(gpio_reg_base + GPIO_CFG) & ~BIT(offset),
++	       gpio_reg_base + GPIO_CFG);
+ 	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ }
+ 
 -- 
 2.34.1
 
