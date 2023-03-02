@@ -2,152 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DBB6A8035
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDC56A8036
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 11:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjCBKqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 05:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S229888AbjCBKqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 05:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjCBKqL (ORCPT
+        with ESMTP id S229703AbjCBKqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 05:46:11 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B266236FD9;
-        Thu,  2 Mar 2023 02:46:08 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 75C8960014;
-        Thu,  2 Mar 2023 10:45:54 +0000 (UTC)
-Message-ID: <5712b56e-e2a7-c1d2-081c-bcbecdbeffb5@ghiti.fr>
-Date:   Thu, 2 Mar 2023 11:45:54 +0100
+        Thu, 2 Mar 2023 05:46:36 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B393771B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 02:46:34 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so1218943wmi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 02:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677753993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GO6tJSKGhuKgdHNgP3IEYgtiqFiDG7WtsDPxWBs+xKc=;
+        b=E6+g09byyy+IW3IG+Z9rsgrNe2X8rBBoRl7EopRxtys36mVnmVl5GRdCVC8JuNM10g
+         GT3Zmpbo3cfkeicd92FRIGrMY4kLlwlRc+r0MLqTH//P1e0uI/ZOnYhkoUsr5csmBALM
+         FI7a9REbNUHREnzPKLZWtmQBSSRLg/JCf+oAus7LGmxe21A002xt2d8X5o7Ph7P3TqlC
+         TZhVS0Bqu6H1GBQiW+itYbN/QoNQ1p8jf+vOoAmbQAsjIDnkTyaWMz/5QniNcaSTnj/X
+         beYJCZbaKW8ELycRSIW1cCBDA6EaNd48Hi6e4iF3F/qnkHCIEEPbt2WFPipyg/y9KC8k
+         TwSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677753993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GO6tJSKGhuKgdHNgP3IEYgtiqFiDG7WtsDPxWBs+xKc=;
+        b=pN3Ts/0jA3Zcid4stW2/A9szIzvqxH4xmPPpPVDfnMecgBSDJyr6B8yAOjRdfSXeT9
+         Q+7S11uT9AhhYHner4mQeTIPYe6ri2P3inZCb6ocFFG8yVYi3/LzpedBDpk5W1yTjyYA
+         AFjZw05xOzHdi7LmcemfW8+7rSVxkH2QSf55iiWoo3z6GCUV6MDIikn1U4ZXOU9g2KoS
+         WgtVWMmjeLm5afXIeJvPNhFxgikAUnErdhYj6+emVhWSZUDLly7rBfohwe8bMHWrniUK
+         Xx1RzmCDbtee2F3G4mnkop7TNW6Rl7jwPlNSqodRAO5D4yZ+Mm9lBpRX26e5z0N3zxlZ
+         ADYw==
+X-Gm-Message-State: AO0yUKUv468X0Gw+vwcqS+/csv7IYK6btpyZ3+ImHVUsZP/8k+u0e8A+
+        uTIP39GzYUJG+Ud/AD9hQzLftA==
+X-Google-Smtp-Source: AK7set9Djd/6Vxw96gglKjfyYL7bSnZSB5gVDpn5iQoeb4+SPKAZKAF6cOCxFs2oRJeyQX9fIQIPeA==
+X-Received: by 2002:a05:600c:1608:b0:3df:e41f:8396 with SMTP id m8-20020a05600c160800b003dfe41f8396mr7078567wmn.37.1677753993153;
+        Thu, 02 Mar 2023 02:46:33 -0800 (PST)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id iz2-20020a05600c554200b003e11ad0750csm2522592wmb.47.2023.03.02.02.46.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 02:46:32 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        steev@kali.org, johan+linaro@kernel.org, quic_bjorande@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] ASoC: qcom: common: add kcontrol to jack pins
+Date:   Thu,  2 Mar 2023 10:46:16 +0000
+Message-Id: <20230302104616.26318-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 00/24] Remove COMMAND_LINE_SIZE from uapi
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-References: <20230302093539.372962-1-alexghiti@rivosinc.com>
- <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
- <c0dd1a6e-8e8e-5cdb-bc92-755462704edf@ghiti.fr>
- <CAMuHMdVSJADwTSkOD2mG2yU0XeFd0QAUjojQDz5phWhkRcLGOg@mail.gmail.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <CAMuHMdVSJADwTSkOD2mG2yU0XeFd0QAUjojQDz5phWhkRcLGOg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add Kcontrol to jack pins so that device switch in ucm can be done correctly.
 
-On 3/2/23 11:44, Geert Uytterhoeven wrote:
-> Hi Alex,
->
-> On Thu, Mar 2, 2023 at 11:09 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
->> On 3/2/23 10:47, Geert Uytterhoeven wrote:
->>> On Thu, Mar 2, 2023 at 10:35 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->>>> This all came up in the context of increasing COMMAND_LINE_SIZE in the
->>>> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
->>>> maximum length of /proc/cmdline and userspace could staticly rely on
->>>> that to be correct.
->>>>
->>>> Usually I wouldn't mess around with changing this sort of thing, but
->>>> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
->>>> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
->>>> increasing, but they're from before the UAPI split so I'm not quite sure
->>>> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
->>>> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
->>>> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
->>>> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
->>>> asm-generic/setup.h.").
->>>>
->>>> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
->>>> part of the uapi to begin with, and userspace should be able to handle
->>>> /proc/cmdline of whatever length it turns out to be.  I don't see any
->>>> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
->>>> search, but that's not really enough to consider it unused on my end.
->>>>
->>>> This issue was already considered in s390 and they reached the same
->>>> conclusion in commit 622021cd6c56 ("s390: make command line
->>>> configurable").
->>>>
->>>> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
->>>> shouldn't be part of uapi, so this now touches all the ports.  I've
->>>> tried to split this all out and leave it bisectable, but I haven't
->>>> tested it all that aggressively.
->>>>
->>>> Changes since v3 <https://lore.kernel.org/all/20230214074925.228106-1-alexghiti@rivosinc.com/>:
->>>> * Added RB/AB
->>>> * Added a mention to commit 622021cd6c56 ("s390: make command line
->>>>     configurable") in the cover letter
->>> Thanks for the update!
->>>
->>>    Apparently you forgot to add your own SoB?
->> I do not know, should I? Palmer did all the work, I only fixed 3 minor
->> things
-> If you are picking up patches, and submitting them to someone else
-> for upstream inclusion, you should add your own SoB.
-> https://elixir.bootlin.com/linux/latest/source/Documentation/process/submitting-patches.rst#L419
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ sound/soc/qcom/common.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
+diff --git a/sound/soc/qcom/common.c b/sound/soc/qcom/common.c
+index 96fe80241fb4..c1f24af17506 100644
+--- a/sound/soc/qcom/common.c
++++ b/sound/soc/qcom/common.c
+@@ -180,6 +180,18 @@ int qcom_snd_parse_of(struct snd_soc_card *card)
+ }
+ EXPORT_SYMBOL_GPL(qcom_snd_parse_of);
+ 
++static struct snd_soc_jack_pin qcom_headset_jack_pins[] = {
++	/* Headset */
++	{
++		.pin = "Mic Jack",
++		.mask = SND_JACK_MICROPHONE,
++	},
++	{
++		.pin = "Headphone Jack",
++		.mask = SND_JACK_HEADPHONE,
++	},
++};
++
+ int qcom_snd_wcd_jack_setup(struct snd_soc_pcm_runtime *rtd,
+ 			    struct snd_soc_jack *jack, bool *jack_setup)
+ {
+@@ -189,13 +201,14 @@ int qcom_snd_wcd_jack_setup(struct snd_soc_pcm_runtime *rtd,
+ 	int rval, i;
+ 
+ 	if (!*jack_setup) {
+-		rval = snd_soc_card_jack_new(card, "Headset Jack",
++		rval = snd_soc_card_jack_new_pins(card, "Headset Jack",
+ 					     SND_JACK_HEADSET | SND_JACK_LINEOUT |
+ 					     SND_JACK_MECHANICAL |
+ 					     SND_JACK_BTN_0 | SND_JACK_BTN_1 |
+ 					     SND_JACK_BTN_2 | SND_JACK_BTN_3 |
+ 					     SND_JACK_BTN_4 | SND_JACK_BTN_5,
+-					     jack);
++					     jack, qcom_headset_jack_pins,
++					     ARRAY_SIZE(qcom_headset_jack_pins));
+ 
+ 		if (rval < 0) {
+ 			dev_err(card->dev, "Unable to add Headphone Jack\n");
+-- 
+2.21.0
 
-Great, thanks for the pointer, I'll do that then!
-
-
-Thanks again,
-
-
-Alex
-
-
-> Gr{oetje,eeting}s,
->
->                          Geert
->
