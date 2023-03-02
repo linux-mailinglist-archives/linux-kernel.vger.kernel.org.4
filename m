@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CB96A8CCE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA0B6A8CD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 00:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjCBXRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 18:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
+        id S229826AbjCBXSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 18:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCBXQz (ORCPT
+        with ESMTP id S229461AbjCBXSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 18:16:55 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D8D59417
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:16:36 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id w23so1104115qtn.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 15:16:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled; t=1677798982;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C6wk6uyA/I4kJ0qrpbw4f072OcKkiUzKgNLTSxWPahY=;
-        b=lAxmF9mrCPEH2For/QcFimI2VcJ8P1+8Tues4emnY5xB9QSfo3ozFerN+4AjcNnKJ3
-         VzjgqVjdXE0UizJez6KzHFNKf7xQhibQGzyyJy4GGzp1narGuiBMqx2KX8dL3CDGnvOT
-         XJqyBMG9Iy4awk620SBFs9XNQKL3L9ix1HVPDWyZYCib/dcB7nHP7bkoicyV0egsIssp
-         NKNcDzmIiyhE7pB1EaszduvxfzO6HosFNNXGvZnyhHY1ViJAMugsIAzS0zj/3vC2Y/K2
-         9Elmdetaa0pxf/DGGVthEs4rUF6eIgmRN/crYBCBYVkAox5z3RTYSC52PKZUngCXrl8n
-         7gZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677798982;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C6wk6uyA/I4kJ0qrpbw4f072OcKkiUzKgNLTSxWPahY=;
-        b=rOLHrKjhlAnQAQIbNmwL2/kVuL4g9PUP6jfD5GyC7kMKhJogpWApkbtJqkz07bSnWI
-         DYBTuGuR0xMWqAd7W2skj+hsgkD5pv3UElmOtX/H4599bLhH9fUDe/WgEPz1XHwfZF9e
-         AAiAEFTfxKDmubrJ49AaWkX0ufYlwsKuhPWOQRxa7gYDbx2UwSe9xd7t5+7G19Phx9ta
-         szPvVQ3zdbbfl15m2FyTZgiw28eeXMV2QV+spl6Shbyzf4PBeWqfHfyMvZ4S+Rl9fWnu
-         YIx3NfNNH9mWNLHPVFjKPPQb5B7XKsy/C7pex9o2KpgE9xNTgWgBLO/dOw2raMY9w8kG
-         LTfg==
-X-Gm-Message-State: AO0yUKX27kc97Sp7CW0xbQT66scG8Rvxc/KFzHimG9FoaFsA6mwPeED1
-        ZA4xuiEoUkfZij6w5Z7LnJMSoD5HOeepEHr60zPstIspg8zVB5Sgk5pXKOXu2Cfssj9ZLAKL8cN
-        h6iJqjYHOsESOe2VAYXU=
-X-Google-Smtp-Source: AK7set/kcppLvcyubPB5r+FPoK2bZYHwtckOY9nQSDJAM4KdRP2dG997b3gCxUBe/EXI/lh/27HGYw==
-X-Received: by 2002:a05:622a:2c9:b0:3bf:ca92:3b3a with SMTP id a9-20020a05622a02c900b003bfca923b3amr20730412qtx.23.1677798981893;
-        Thu, 02 Mar 2023 15:16:21 -0800 (PST)
-Received: from ghost.leviathan.sladewatkins.net (pool-108-44-32-49.albyny.fios.verizon.net. [108.44.32.49])
-        by smtp.gmail.com with ESMTPSA id q25-20020a37f719000000b007343fceee5fsm608844qkj.8.2023.03.02.15.16.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 15:16:21 -0800 (PST)
-Message-ID: <ac0e63e6-294f-5ea7-0e2a-f9386b181d58@sladewatkins.net>
-Date:   Thu, 2 Mar 2023 18:16:20 -0500
+        Thu, 2 Mar 2023 18:18:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A5B5943C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:16:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677799010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LAJJhudeXwtcWIsgOSeQzqHZOSp/kZ+Tsq3aTHJfVgw=;
+        b=iZfi+qvnI3H+ALFiBwtPQqrO0pPv4xNvm5iVBBTcxTMcYRMRpK2sYAHUJx9dB23mQoLwWc
+        oZdOvCJYOS9SAoyziqA4gtf23SQUtPVwW3aT23PlqAxTmx9UaEfK7Dg2zS5mpwIdmLxw2t
+        Lqw6M1FFlLmfSUeYAZrPCxhj0acEbdM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656-L88jf00AM7usTIYZwG25HA-1; Thu, 02 Mar 2023 18:16:44 -0500
+X-MC-Unique: L88jf00AM7usTIYZwG25HA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9C151C05ABE;
+        Thu,  2 Mar 2023 23:16:43 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C38BC2026D76;
+        Thu,  2 Mar 2023 23:16:41 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Steve French <smfrench@gmail.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>,
+        Stefan Metzmacher <metze@samba.org>,
+        Paulo Alcantara <pc@cjr.nz>, Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] smb3, afs: Revert changes to {cifs,afs}_writepages_region()
+Date:   Thu,  2 Mar 2023 23:16:35 +0000
+Message-Id: <20230302231638.521280-1-dhowells@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 6.2 00/16] 6.2.2-rc1 review
-Content-Language: en-US, en-AU
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, rwarsow@gmx.de
-References: <20230301180653.263532453@linuxfoundation.org>
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <20230301180653.263532453@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SWM-Antispam: Scanned by proxmox-gateway.frozen.leviathan.sladewatkins.net
-X-SWM-Root-Server: frozen.leviathan.sladewatkins.net
-X-SWM-TLS-Policy-Status: enforced
-X-Gm-Spam: 0
-X-Gm-Phishy: 0
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,24 +67,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 13:07, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.2 release.
-> There are 16 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
+Hi Linus, Steve,
 
-6.2.2-rc1 compiled and booted on my x86_64 test system. No errors or regressions.
+Could you consider applying these please?
 
-Tested-by: Slade Watkins <srw@sladewatkins.net>
+I've split the patch that I proposed[1] to revert Vishal's patch to afs and
+Linus's changes to cifs back to the point where find_get_pages_range_tag()
+was being used to get a single folio and then replace that with a function,
+filemap_get_folio_tag() that just gets a single folio and done some
+benchmarking against this and some conversions to use write_cache_pages()
+in various ways.
 
--- Slade
+This is using the following to do testing of the write paths:
+
+	fio --ioengine=libaio --direct=0 --gtod_reduce=1 --name=readtest \
+	    --filename=/xfstest.test/foo --iodepth=128 --time_based \
+	    --runtime=120 --readwrite=randread --iodepth_low=96 \
+	    --iodepth_batch=16 --numjobs=4 --size=16M --bs=4k
+
+The base for comparison, the upstream kernel at commit:
+
+	d2980d8d826554fa6981d621e569a453787472f8
+	"Merge tag 'mm-nonmm-stable-2023-02-20-15-29' of git://git./linux/kernel/git/akpm/mm"
+
+plus the accumulated fixes on Steve's cifs for-next branch.
+
+AFS firstly.  The code that's upstream keeps track of the dirtied region of
+a folio in page->private, so I tried removing that to see what difference
+it makes, in addition to trying conversions to use write_cache_pages().  I
+also tried giving afs it's own copy of write_cache_pages() in order to
+eliminate the function pointer - in case that had a signifcant effect due
+to spectre mitigations.
+
+  Base:
+	WRITE: bw=302MiB/s (316MB/s), 71.9MiB/s-78.9MiB/s (75.3MB/s-82.8MB/s)
+	WRITE: bw=303MiB/s (318MB/s), 65.9MiB/s-84.0MiB/s (69.1MB/s-88.1MB/s)
+	WRITE: bw=310MiB/s (325MB/s), 73.6MiB/s-87.3MiB/s (77.1MB/s-91.5MB/s)
+
+  Base + Partial revert (these patches):
+	WRITE: bw=348MiB/s (365MB/s), 86.4MiB/s-87.5MiB/s (90.6MB/s-91.8MB/s)
+	WRITE: bw=350MiB/s (367MB/s), 86.6MiB/s-88.4MiB/s (90.8MB/s-92.7MB/s)
+	WRITE: bw=387MiB/s (406MB/s), 96.8MiB/s-97.0MiB/s (101MB/s-102MB/s)
+
+  Base + write_cache_pages():
+	WRITE: bw=280MiB/s (294MB/s), 69.7MiB/s-70.5MiB/s (73.0MB/s-73.9MB/s)
+	WRITE: bw=285MiB/s (299MB/s), 70.9MiB/s-71.5MiB/s (74.4MB/s-74.9MB/s)
+	WRITE: bw=290MiB/s (304MB/s), 71.6MiB/s-73.2MiB/s (75.1MB/s-76.8MB/s)
+
+  Base + Page-dirty-region removed:
+	WRITE: bw=301MiB/s (315MB/s), 70.4MiB/s-80.2MiB/s (73.8MB/s-84.1MB/s)
+	WRITE: bw=325MiB/s (341MB/s), 78.5MiB/s-87.1MiB/s (82.3MB/s-91.3MB/s)
+	WRITE: bw=320MiB/s (335MB/s), 71.6MiB/s-88.6MiB/s (75.0MB/s-92.9MB/s)
+
+  Base + Page-dirty-region tracking removed +  write_cache_pages():
+	WRITE: bw=288MiB/s (302MB/s), 71.9MiB/s-72.3MiB/s (75.4MB/s-75.8MB/s)
+	WRITE: bw=284MiB/s (297MB/s), 70.7MiB/s-71.3MiB/s (74.1MB/s-74.8MB/s)
+	WRITE: bw=287MiB/s (301MB/s), 71.2MiB/s-72.6MiB/s (74.7MB/s-76.1MB/s)
+
+  Base + Page-dirty-region tracking removed + Own write_cache_pages()
+	WRITE: bw=302MiB/s (316MB/s), 75.1MiB/s-76.1MiB/s (78.7MB/s-79.8MB/s)
+	WRITE: bw=302MiB/s (316MB/s), 74.5MiB/s-76.1MiB/s (78.1MB/s-79.8MB/s)
+	WRITE: bw=301MiB/s (316MB/s), 75.2MiB/s-75.5MiB/s (78.9MB/s-79.1MB/s)
+
+So the partially reverted code appears significantly faster than code based
+on write_cache_pages().  Removing the page-dirty-region tracking also slows
+things down - I have a suspicion that this may be due to multipage folios
+enlarging the apparently dirty regions of a file.
+
+And then CIFS.  There's no dirtied region tracking here, so just the
+partial reversion, a conversion to write_cache_pages() and its own version
+of write_cache_pages() to eliminate the function pointer.
+
+  Base:
+	WRITE: bw=464MiB/s (487MB/s), 116MiB/s-116MiB/s (122MB/s-122MB/s)
+	WRITE: bw=463MiB/s (486MB/s), 116MiB/s-116MiB/s (121MB/s-122MB/s)
+	WRITE: bw=465MiB/s (488MB/s), 116MiB/s-116MiB/s (122MB/s-122MB/s)
+
+  Base + Partial revert (these patches):
+	WRITE: bw=470MiB/s (493MB/s), 117MiB/s-118MiB/s (123MB/s-123MB/s)
+	WRITE: bw=467MiB/s (489MB/s), 117MiB/s-117MiB/s (122MB/s-122MB/s)
+	WRITE: bw=464MiB/s (486MB/s), 116MiB/s-116MiB/s (121MB/s-122MB/s)
+
+  Base + write_cache_pages():
+	WRITE: bw=457MiB/s (479MB/s), 114MiB/s-114MiB/s (120MB/s-120MB/s)
+	WRITE: bw=449MiB/s (471MB/s), 112MiB/s-113MiB/s (118MB/s-118MB/s)
+	WRITE: bw=459MiB/s (482MB/s), 115MiB/s-115MiB/s (120MB/s-121MB/s)
+
+  Base + Own write_cache_pages():
+	WRITE: bw=451MiB/s (473MB/s), 113MiB/s-113MiB/s (118MB/s-118MB/s)
+	WRITE: bw=455MiB/s (478MB/s), 114MiB/s-114MiB/s (119MB/s-120MB/s)
+	WRITE: bw=453MiB/s (475MB/s), 113MiB/s-113MiB/s (119MB/s-119MB/s)
+	WRITE: bw=459MiB/s (481MB/s), 115MiB/s-115MiB/s (120MB/s-120MB/s)
+
+Here the partially reverted code appears slightly better - but the results
+are very close so I'm not sure if it's statistically significant.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-cifs
+
+David
+
+Link: https://lore.kernel.org/r/2214157.1677250083@warthog.procyon.org.uk/ [1]
+
+David Howells (3):
+  mm: Add a function to get a single tagged folio from a file
+  afs: Partially revert and use filemap_get_folio_tag()
+  cifs: Partially revert and use filemap_get_folio_tag()
+
+ fs/afs/write.c          | 118 +++++++++++++++++++---------------------
+ fs/cifs/file.c          | 115 +++++++++++++++++----------------------
+ include/linux/pagemap.h |   2 +
+ mm/filemap.c            |  58 ++++++++++++++++++++
+ 4 files changed, 166 insertions(+), 127 deletions(-)
 
