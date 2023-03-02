@@ -2,129 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B846A7D78
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4CB6A7D8C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 10:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjCBJS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 04:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S229912AbjCBJV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 04:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCBJSZ (ORCPT
+        with ESMTP id S229958AbjCBJVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 04:18:25 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE01A279
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:18:24 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so1070355wmi.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:18:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677748702;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+v85GLUDrQ2zVLBvlWtS8ia1HQWcVPpr7GzHsjdX2Jw=;
-        b=MswMY0eyIVOvB1BGlIsjT7T7ZB+Coenk8J9ktojT2m4Q1VRDdt++rgRUovNUXlnJ8+
-         0n9yemw+T01QZcvWjHA+IRLf1JeQT4kgvMDTRAYyxhxbxVWsHDg9iQgAYLNOQNwzA9OF
-         sDZz74KhVDusvK5O1ZzeFkSdIarEHU0F40BXnkkl9lMTBvYQ5MhVKpY3D2OmLJcBkAEy
-         KcO16Kf5TQjdh+qmv8d3ljlMfUjsN/SwOUJhPHytWIHGEv2W78sjXEO3RFhRyQIfEBHP
-         PMv71bBDjxuLO7cV0gbppJac2jsSFYaYorLS8teQTqi/lzN5ml/LLJzfs4CWnvoIVFYD
-         TWyA==
+        Thu, 2 Mar 2023 04:21:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DD830EA3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 01:20:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677748820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mNAh7WwsaV0kOk2ITHv/T/MFdHkpYUKS8lAASyQo12s=;
+        b=cUMnoJruM/FiQCbLzYKR+v1jwYiCKkN3NTRfoYKkw4UnUWf7wmcVJ9Rk9KbKuYm0isTBie
+        zvG1Ajk9oaaty4OL7koiRtxLXpJPwmP204GZ4gxLS1l4/EuJPes5SeEAO+P6pTKssBW+YN
+        1eULUJeiyfH2N9o7LJaUAiOpTw8f/sM=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-356-GcS8EYWlNfGYu2NDuO6BEQ-1; Thu, 02 Mar 2023 04:20:19 -0500
+X-MC-Unique: GcS8EYWlNfGYu2NDuO6BEQ-1
+Received: by mail-wr1-f69.google.com with SMTP id r14-20020a0560001b8e00b002cdb76f7e80so1173324wru.19
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 01:20:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677748703;
+        d=1e100.net; s=20210112; t=1677748818;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+v85GLUDrQ2zVLBvlWtS8ia1HQWcVPpr7GzHsjdX2Jw=;
-        b=bxCvrYUUs6IDdYpIEo2TaSZhtyMGYkWz3CT1SWfT2LnCwBfMKJjetjgfzJcgKYZP8L
-         LvfMrPJGnXQwbrn5Q7k6Lv3rR9b1XxHs4y7PixJlOdQU2AJUwX+sFONoltjOoSv0ANwJ
-         8DJxCZAkVVvKK4fTgJSI91Ti0A2znbFcCtqHLyZdLjLa+PIpUF0aCFhGeag5mVby2k2F
-         56g0dqyeigTiCOxR0uw3alUcLAY2YAABKXYHwTgvlZkR6dB5MkgzT59TAOYZ5FYmY277
-         zWE/ngXk+bAqwa0xvo2qSVu8F1ZwA1OgC1OSF86P6LzMS+wg/1Aky9hSfv509AxAP7Fi
-         dTwg==
-X-Gm-Message-State: AO0yUKW7VxcB0nUArX1ZMTb5kKYZgh0Vt0LXTTpZlQm2FD/0ZhetzOGB
-        YAyXyG912h9Tj+WEdnddZH/95g==
-X-Google-Smtp-Source: AK7set+YPw1lyaEwaI48fxgT8GolHPnYxo9XVJyK/m4+bNoNPlN8Bml3v5HR6wybgri48X3tq2AU1w==
-X-Received: by 2002:a05:600c:3d8e:b0:3ea:bc08:b55e with SMTP id bi14-20020a05600c3d8e00b003eabc08b55emr6973744wmb.25.1677748702713;
-        Thu, 02 Mar 2023 01:18:22 -0800 (PST)
-Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id x14-20020adfec0e000000b002c54536c662sm14745006wrn.34.2023.03.02.01.18.21
+        bh=mNAh7WwsaV0kOk2ITHv/T/MFdHkpYUKS8lAASyQo12s=;
+        b=aJoXhSQnBiq2rvrnZfEVE0p8KFegXOaU3F3/N02ZnNxUkYhFV2yxNAdjYMmxQzVJ4s
+         BrajolJ7AABncTWYfPxdU246tACpAevaeJwJnM1ftD6SBNsdRfjCPZtdSnag/snWDmYF
+         Ct7OB0E9RergJZ1Uwjgr+nwXQFjgSGTB1ZQF265HQc/20z7iNaAp0eCnAU2l90MJ5wo7
+         v+lALIDPRVIVBikmGsnnP5DEnXYWBRTtnz9+f7GZDsXatQ1/DIQ3c3LXNT/LYtToX2DR
+         7g5YIMxDXBkOuZChgNsU58zfwkMyRoMWixXToqNl7etlJ60ydtfU9scZnfhXhPPBxv3x
+         AEVg==
+X-Gm-Message-State: AO0yUKXmNgb1NJSwUaUlA+aI8rt3j+sJ+vjkYD4QCZ38Bs1ODLLV1HJP
+        vmrDqz20E64/BNmVarjLdkFUX5NrOYPN9dUbSyh1iHFIZtfq+YkDejUg+a05tX5DwpavbKC+JO0
+        iHyAZx1leMARDC3all9zLT2T1
+X-Received: by 2002:adf:ce09:0:b0:2c5:52c3:3f05 with SMTP id p9-20020adfce09000000b002c552c33f05mr6913058wrn.37.1677748818283;
+        Thu, 02 Mar 2023 01:20:18 -0800 (PST)
+X-Google-Smtp-Source: AK7set9PN/kdkIqrGoMb6UfHqEwEV9RSL6zdzJVeFnieVx1t6UmihOxwNslkLjNRDZls5mCSN7BIMA==
+X-Received: by 2002:adf:ce09:0:b0:2c5:52c3:3f05 with SMTP id p9-20020adfce09000000b002c552c33f05mr6913041wrn.37.1677748818002;
+        Thu, 02 Mar 2023 01:20:18 -0800 (PST)
+Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
+        by smtp.gmail.com with ESMTPSA id x16-20020a5d54d0000000b002c71703876bsm14635935wrv.14.2023.03.02.01.20.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 01:18:22 -0800 (PST)
-Date:   Thu, 2 Mar 2023 09:18:24 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Itaru Kitayama <itaru.kitayama@gmail.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>,
-        James Morse <james.morse@arm.com>,
-        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Price <steven.price@arm.com>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
-Subject: Re: [RFC] Support for Arm CCA VMs on Linux
-Message-ID: <ZABp4KhrhsHcKmh2@myrica>
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
- <Y9PtKJ3Wicc19JF1@myrica>
- <CANW9uyud8RTkqgiL=64wV712QMxtAyubqeyCJ0vpcADJ42VqJA@mail.gmail.com>
- <Y/8Y3WLmiw6+Z5AS@myrica>
- <CANW9uysnvGCwANu+_6dp9+3rvHGOkThT9d0K2qpQV4exdmYWoA@mail.gmail.com>
+        Thu, 02 Mar 2023 01:20:17 -0800 (PST)
+Date:   Thu, 2 Mar 2023 10:20:09 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>, kvm@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Song Liu <song@kernel.org>, Eric Dumazet <edumazet@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Paolo Abeni <pabeni@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, Hao Luo <haoluo@google.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v3 1/3] vsock: support sockmap
+Message-ID: <20230302092009.xohos3cvowrrykck@sgarzare-redhat>
+References: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
+ <20230227-vsock-sockmap-upstream-v3-1-7e7f4ce623ee@bytedance.com>
+ <20230228163518-mutt-send-email-mst@kernel.org>
+ <Y/B9ddkfQw6Ae/lY@bullseye>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CANW9uysnvGCwANu+_6dp9+3rvHGOkThT9d0K2qpQV4exdmYWoA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y/B9ddkfQw6Ae/lY@bullseye>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 07:12:24AM +0900, Itaru Kitayama wrote:
-> On Wed, Mar 1, 2023 at 6:20 PM Jean-Philippe Brucker
-> <jean-philippe@linaro.org> wrote:
-> >
-> > Hi Itaru,
-> >
-> > On Wed, Mar 01, 2023 at 08:35:05AM +0900, Itaru Kitayama wrote:
-> > > Hi Jean,
-> > > I've tried your series in Real on CCA Host, but the KVM arch init
-> > > emits an Invalid argument error and terminates.
-> >
-> > Do you know which call returns this error?  Normally the RMEGuest support
-> > should print more detailed errors. Are you able to launch normal guests
-> > (without the rme-guest object and confidential-guest-support machine
-> > parameter)?  Could you give the complete QEMU command-line?
-> 
-> No, I cant say which. Yes, the CCA-capable QEMU boots if I don't set
-> RME-related options.
-> 
-> Here's mine (based upon your command-line):
-> qemu-system-aarch64 -cpu host -accel kvm -machine
-> virt,gic-version=3,confidential-guest-support=rme0 -smp 2 -m 256M
-> -nographic -object rme-guest,id=rme0,measurement-algo=sha512 -kernel
-> Image -initrd rootfs.ext2 -append 'console=ttyAMA0 earlycon'
-> -overcommit mem-lock=on
+On Sat, Feb 18, 2023 at 07:25:41AM +0000, Bobby Eshleman wrote:
+>On Tue, Feb 28, 2023 at 04:36:22PM -0500, Michael S. Tsirkin wrote:
+>> On Tue, Feb 28, 2023 at 07:04:34PM +0000, Bobby Eshleman wrote:
+>> > @@ -1241,19 +1252,34 @@ static int vsock_dgram_connect(struct socket *sock,
+>> >
+>> >  	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
+>> >  	sock->state = SS_CONNECTED;
+>> > +	sk->sk_state = TCP_ESTABLISHED;
+>> >
+>> >  out:
+>> >  	release_sock(sk);
+>> >  	return err;
+>> >  }
+>>
+>>
+>> How is this related? Maybe add a comment to explain? Does
+>> TCP_ESTABLISHED make sense for all types of sockets?
+>>
+>
+>Hey Michael, definitely, I can leave a comment.
 
-Thank you, this works on my setup so I'm not sure what's wrong. Check that
-KVM initialized successfully, with this in the host kernel log:
-"[    0.267019] kvm [1]: Using prototype RMM support (version 56.0)"
+I agree, since I had the same doubt in previous versions, I think it's 
+worth putting a comment in the code to explain why.
 
-Next step would be to find out where the EINVAL comes from, with printfs
-or GDB. This seems rather specific so I'll email you directly to avoid
-filling up everyone's inbox.
+Since there may be a v4, I'll leave some small comments in a separate 
+email.
 
 Thanks,
-Jean
+Stefano
+
+>
+>The real reason is due to this piece of logic in sockmap:
+>https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/sock_map.c?h=v6.2#n531
+>
+>And because of it, you see the same thing in (for example)
+>unix_dgram_connect():
+>https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/unix/af_unix.c?h=v6.2#n1394
+>
+>I believe it makes sense for these other socket types.
+>
+
