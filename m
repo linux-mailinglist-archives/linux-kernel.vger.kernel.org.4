@@ -2,125 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F616A835C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8930F6A835E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 14:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjCBNSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 08:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S230052AbjCBNTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 08:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjCBNSe (ORCPT
+        with ESMTP id S230047AbjCBNTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 08:18:34 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0563A1E1F7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 05:18:28 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 16so9727508pge.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 05:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1677763107;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=E166X9hjpFg3mdEW6iD+dySuMT8kiQ1PL60Qkh8UwsI=;
-        b=TG5uXivyNeE/uoFeSDp+u5QoerHsyjFLS7lek+Tf1ikHN52gtt0elSpqkLtCPZW6ii
-         W9CAReiVFbYFHVv+l7tSM7T26G7D7eRK5DYrTLuHGSw9CexbtpUHtZmti+kD/mvHiTb6
-         mWvv4X7tHbBuKoClb79/qw+aiqm/2uT0784MQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677763107;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E166X9hjpFg3mdEW6iD+dySuMT8kiQ1PL60Qkh8UwsI=;
-        b=qAZ+yBBv/zZmCCEApBA+oDUHzHrAW22oBky/lbF6e1dTKTKUnpB5uT0hhAHySNk99i
-         Cj5BGTP8SXcfeONrBpMgRrV5Dhm5axynmYkLqWs1a1DGSsyOjnoHOpvHD8bih7QEtvv3
-         VfnFN5wY+nh17Acw7vejFCngztiJJH+079zgrGyENmO2nNUK2gnqHOBjknHmjgfEi2N2
-         abg+0xusG0kR2DCCjaLPXv3jcJgBujCU5ZNcg6iabH/ASaH+U3dzozEKA+3Dylt85cg1
-         Wgm94jErbB5LOE5VPxL6UU6m9fjxSouNPvqCT1wWfKRHfjSps2zKGhcU4Vt9JnDu4V5M
-         6QEw==
-X-Gm-Message-State: AO0yUKUXgf2NVeqwvQzgAJcoTU9knhsHc1PeBrX7RMvDmTmWpjiCbGP/
-        bs8iEVZyFcj5qa3sJEwNdTTkCQ==
-X-Google-Smtp-Source: AK7set8K94g2rR6EFJDYXdaB7Du5j026byxnZEvzejgfLdVXgs+t85RvFhpPuQA9xTO2WjR7dpu7AA==
-X-Received: by 2002:a62:4ec8:0:b0:5cb:eecd:387b with SMTP id c191-20020a624ec8000000b005cbeecd387bmr7538411pfb.33.1677763107334;
-        Thu, 02 Mar 2023 05:18:27 -0800 (PST)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:739f:8bcf:3d43:dae5])
-        by smtp.gmail.com with ESMTPSA id s15-20020aa7828f000000b005905d2fe760sm9840086pfm.155.2023.03.02.05.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 05:18:26 -0800 (PST)
-From:   Pin-yen Lin <treapking@chromium.org>
-To:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH] media: mediatek: vcodec: Use 4K frame size when supported by stateful decoder
-Date:   Thu,  2 Mar 2023 21:18:21 +0800
-Message-Id: <20230302131821.2060936-1-treapking@chromium.org>
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
+        Thu, 2 Mar 2023 08:19:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658F418140;
+        Thu,  2 Mar 2023 05:18:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 052CD615B0;
+        Thu,  2 Mar 2023 13:18:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A88C433EF;
+        Thu,  2 Mar 2023 13:18:57 +0000 (UTC)
+Date:   Thu, 2 Mar 2023 08:18:55 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH 0/2] tracing: Fix adding some modifiers to histogram
+ values
+Message-ID: <20230302081855.7ee88b32@gandalf.local.home>
+In-Reply-To: <20230302010051.044209550@goodmis.org>
+References: <20230302010051.044209550@goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit b018be06f3c7 ("media: mediatek: vcodec: Read max resolution
-from dec_capability"), the stateful video decoder driver never really
-sets its output frame size to 4K.
 
-Parse the decoder capability reported by the firmware, and update the
-output frame size in mtk_init_vdec_params to enable 4K frame size when
-available.
+I forgot to add Tom Zanussi on this series.
 
-Fixes: b018be06f3c7 ("media: mediatek: vcodec: Read max resolution from dec_capability")
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
----
+-- Steve
 
- .../mediatek/vcodec/mtk_vcodec_dec_stateful.c        | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-index 035c86e7809f..679f4dc9acfb 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-@@ -11,7 +11,7 @@
- #include "mtk_vcodec_dec_pm.h"
- #include "vdec_drv_if.h"
- 
--static const struct mtk_video_fmt mtk_video_formats[] = {
-+static struct mtk_video_fmt mtk_video_formats[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_H264,
- 		.type = MTK_FMT_DEC,
-@@ -580,6 +580,16 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_ctx *ctx)
- 
- static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
- {
-+	unsigned int i;
-+
-+	if (!(ctx->dev->dec_capability & VCODEC_CAPABILITY_4K_DISABLED)) {
-+		for (i = 0; i < num_supported_formats; i++) {
-+			mtk_vdec_framesizes[i].stepwise.max_width =
-+				VCODEC_DEC_4K_CODED_WIDTH;
-+			mtk_vdec_framesizes[i].stepwise.max_height =
-+				VCODEC_DEC_4K_CODED_HEIGHT;
-+		}
-+	}
- }
- 
- static struct vb2_ops mtk_vdec_frame_vb2_ops = {
--- 
-2.39.2.722.g9855ee24e9-goog
+On Wed, 01 Mar 2023 20:00:51 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> Mark Rutland reported to me on IRC that he accidentally added the
+> ".buckets=8" modifier to hitcount. This should not be allowed, but it
+> did not error. Worse yet, when reading the hist file, it would crash
+> as there was a NULL pointer dereference due to the values not having
+> fields assigned to them.
+> 
+> The first fix is to make sure that histogram values do not get assigned
+> modifiers that they can't use.
+> 
+> The the second patch is to not crash if a NULL pointer is passed to
+> hist_field_name() (which is what happens if you allow some of these
+> modifiers to be used by values).
+> 
+> Steven Rostedt (Google) (2):
+>       tracing: Do not let histogram values have some modifiers
+>       tracing: Check field value in hist_field_name()
+> 
+> ----
+>  kernel/trace/trace_events_hist.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 
