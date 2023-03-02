@@ -2,219 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B806A8522
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D046A8525
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCBPam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:30:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
+        id S230037AbjCBPao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjCBPaP (ORCPT
+        with ESMTP id S229861AbjCBPaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:30:15 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2103.outbound.protection.outlook.com [40.107.223.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6525813508;
-        Thu,  2 Mar 2023 07:30:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FZOqNVwQ4zsZ76z6h9p+vmnSLBEiQFL1xDNdhVPo5MkFxO05CntgpYOH47qnaAilzRUTIlSZHE6h7L/y5SMgqSU14VENFCVVqNuOEwBTpjo5rxwjgnww6NKaBr5vZGKfeoL/NN1Eq07D9WYSoHBqI6gFB4o1Jsyg5QQ4Nnb9mXxezLV4kCOrtNFgMByM4++UgtOmXvsQc/yhIUrbEEGM5d7/3XQE1BGk7n6XS0o4bmB6+ua1+ZKd98Nx1Bx1ziI2S6BK8JmSGg6lSxciN0ZkuGx0S22PwvvJM+xcHVNknF0Tb6L3S4YuLNLdh8Cwf/vSbm5LiOa6P/dnqEJMsUsgkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B+pNEbcATjslmqm/4RpbloK1KP9eAfGMMZtmsjluYQQ=;
- b=kz6Js4hwfyGtzdMhVgq01iXy2Z/g1dLA7bWipe6LbXrN4IEtrxcQlf9hzj+jFIDrVasSzbdSI+bL6YEcIOVIe0jjjIjTpdvD7ymOT5tdQdBHgb4g3KuJD5CG8iRd/V71EBF1XeLtpGl9raIOwW6RwmvPvEi6G+Q9+DBRooMpiEg5KtupaJZwihOQ3of07kWt69FRZ/Tp2hLqkVmeNKq+MC60iEZw4Aph8kdVs+XySnvGnZW6GsIRXALJGGxhMbq9BzWYlye+gFnSoR+T5RkpeXLp+CChni+oW8jfsnSq4aPeq6VFXbDSugWIAL4/X1wthqnPg8KnikWY9WVC//4XpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 2 Mar 2023 10:30:21 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF5126D2
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:30:19 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id jo29so11931143qvb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 07:30:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B+pNEbcATjslmqm/4RpbloK1KP9eAfGMMZtmsjluYQQ=;
- b=gbC2yTBT3kfQ+IjtxeLvvLUXvSFNSXjHwapDxWMCr/uDB8gnGTUDh3aV2aUGun+t7hxewZt09WwFumfsgGoIcm1ocXKvNb0sUJERYh1QGPrGciAYGoLewotJHul8EQJYKyGquuPcZj/evXtKpIm9sU+aH6PQhx2rgZ0AUdiQiFU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH2PR13MB3832.namprd13.prod.outlook.com (2603:10b6:610:97::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
- 2023 15:30:11 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6156.018; Thu, 2 Mar 2023
- 15:30:11 +0000
-Date:   Thu, 2 Mar 2023 16:30:04 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 6/8] vdpa_sim: use kthread worker
-Message-ID: <ZADA/GgpbDoi+SzU@corigine.com>
-References: <20230302113421.174582-1-sgarzare@redhat.com>
- <20230302113421.174582-7-sgarzare@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302113421.174582-7-sgarzare@redhat.com>
-X-ClientProxiedBy: AM4PR05CA0018.eurprd05.prod.outlook.com (2603:10a6:205::31)
- To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1677771018;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MLSfo+hz5vTJ5ohI3IndEOkVuqNdnrD+B9QuUnbZ7t0=;
+        b=Yuc3GjL5Ae3STASZNhGMCqtIxArcAh5Wnnbvn4E9b8+BMSkHR1RoivucbdqQ/fcWMb
+         pUqUgMFarQvdmGoZEOycuK8epRhiUmc3k8itieZ6PwaIla/rlWd8hVJjACl/b3oqemuw
+         7JN1JLE/p0Jd9o/WpjBcsFZ9qAJ2kAZ0XvvIW28lUpEwsJgluteqYbfF0IDigG6MlJfI
+         KbHP+F86TOuVcoSsouz+IUw9UwdSOg5N3LugwO1HlldQl2spyTX/dh5e5grSMQOhdIrq
+         XnvvCM7U4ynFjeQLWUvR3t0P/dTBiWq7LQN6dRssMQtt5fGIJ5psvko5kv1o0ITqDoGt
+         slJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677771018;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MLSfo+hz5vTJ5ohI3IndEOkVuqNdnrD+B9QuUnbZ7t0=;
+        b=q4ZGjCatGK2I3eFp9+J1dWED8hcpnPTI2FiIl78hxxYFwg8fKiUr6jxz9xgHykOvo2
+         oB4Y8CVAm9JmuNfKjnbiIGbYpCDMzpPSOuPvNBd+bZqty5IXgd+PNInCsESLk4C7Jk8O
+         t/Tax3ARAXcEUiw2ERd5xotyGnLPf7d4hTwmnCdkKnxmjLKlECkmdlpRs8itNZv52xzi
+         fSMJdS1QiY6rlOIBsK1XABmcII55Lw8Xe2tIkOFz/JuNvijiMHTdRgOG+eI4r98dBe6J
+         liewesDe8PIKfZcqWQ5C6vI5P4fsa4mj0+M+PPZqltLAI3yZNQCsjW74CxRjK3EF3qmQ
+         gh4w==
+X-Gm-Message-State: AO0yUKXXtfgT93Xif1BstLgJv6/7sU5i0kOcTji0d+cNr8p1HcWKqEyx
+        9V4o3f2v037IghUPGgpynJALpg==
+X-Google-Smtp-Source: AK7set8Zi94EO/G0MiD2tk0zJB/YMF0sCaWg4Nr73waCi4EUvedOqA7UJ9O/l9aYTW8lBwtkvGMozw==
+X-Received: by 2002:a05:6214:e8f:b0:537:7061:89d7 with SMTP id hf15-20020a0562140e8f00b00537706189d7mr19950984qvb.40.1677771018035;
+        Thu, 02 Mar 2023 07:30:18 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:19d])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05620a034300b006fa16fe93bbsm11111379qkm.15.2023.03.02.07.30.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 07:30:17 -0800 (PST)
+Date:   Thu, 2 Mar 2023 10:30:16 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, peterz@infradead.org,
+        johunt@akamai.com, mhocko@suse.com, keescook@chromium.org,
+        quic_sudaraja@quicinc.com, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] psi: remove 500ms min window size limitation for
+ triggers
+Message-ID: <ZADBCEk68W1aGJAV@cmpxchg.org>
+References: <20230301193403.1507484-1-surenb@google.com>
+ <Y/+wlg5L8A1iebya@cmpxchg.org>
+ <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3832:EE_
-X-MS-Office365-Filtering-Correlation-Id: 52d1f08e-4c44-41d0-4935-08db1b33031d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j19ISSGPRlSJCzgONApg3DNZqPolGJXRoM/q2bJtThEaQXQBj370ueoiwLpu9I5wLTViCbDOvtFyii7KC0BsziuyvWzQqIgJyXKrAhHDrsE9116UFt9rs2gJDDYpCPLuOrGMIKStm/khmkvDmMhZJOkJi4i4rsPdM8ZewbbQX8Dt/CjzowZEs9S6K5yCVLDuv5vI/NwLTkJmL4PO26wW8cm+BWm8RAPrx+IIDb6pvRU0cVY7YU3FZ5tTLtbnG2NVmaoIur2k4+zC2s5BGOPeb5bmTCxFv3tQAhvg9Xgw1X1tRrqPxVG2k4928pxPc8BhNigB06crxwnuxw4UTO09um2kgF5ke+Biv1SOc/s188txYHTB7sfIQpE0wZijc5GNwah71izujitQ5vEX9RImlkmSAUiQOmG6tt4jQz4FAdmyvS7Bgz9ZI2q5IgIiw7HIEcAbQdQ8Zc16KZkmGEfnmQ+CGQwka/Hs+tIUk1YB4Tec+DX3ATOo//oHzzBhIm1vgM0kFgtIAdiDM0T6CpK5KEzvBC5/qpROj6/8N4z86xBAdGuOtAEtjAMgJO+GgpKZvVWPVi5kbnv/gGmsRbLIfQoKBMPO9YpDecoK6Ajjaul1TZrNZUVY41BPSX7Vt0VXIF9/27OeIm53xKg8QXIa71HELF8iq87Cwhksoinud4z/mzVuHEjaRokBaYFTUqoE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(396003)(376002)(366004)(136003)(346002)(451199018)(86362001)(36756003)(186003)(6512007)(6506007)(41300700001)(2906002)(66946007)(4326008)(8676002)(6916009)(66476007)(38100700002)(8936002)(5660300002)(7416002)(6666004)(44832011)(2616005)(478600001)(66556008)(54906003)(83380400001)(316002)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6Ur9Wn+TxdwreYHXGJJtL0nSMfejlU1O7iVf98wjzoaFRhjBWL2WayV7wkHw?=
- =?us-ascii?Q?O8lojtLuZCXXfzPBwxS6FOF3bMFh1py20ZEBZPFj3AT4+lHlHHtMxIdjY0rG?=
- =?us-ascii?Q?03QtET/pseb5B/yIHF9pptuzLjwNi5qgXJobeWj4Pt1tt9mYnIQskECnL3DK?=
- =?us-ascii?Q?XrWUQ88AzhjMRnmJX2PyKYN7THuvq8EhUo7MPFI6I+K5InBYaC/K3a1vcWLl?=
- =?us-ascii?Q?OQ3EeS+QMz5bS7vDhJtMLsm8cIG0fnnSRWaMFhOITRcRvhm2z2yv5EtEaaGR?=
- =?us-ascii?Q?TfGTdeEZAJB7Pv6yyOUalO2w7iA/WvWHzKXjlWhOyZN6++Dwc6t7yUNL+WRU?=
- =?us-ascii?Q?/oJlaiCqWLXqwLg02QJQzGOJOOL37MTue0/v9zAHeDtSuM/GQan8NM1BC8w6?=
- =?us-ascii?Q?K70+G+LH6QGjBSmzmTCucD5iVxaQf8V5xyb5PsWrY5HqMmYijOYw/bpz7/YM?=
- =?us-ascii?Q?UUcysymOK3NHjzuJltAlyaZl690Zsjf4zfskpA5y72jaxE+SAeVsfam8jWN/?=
- =?us-ascii?Q?19qrsyhoy7TO0Zh9mEP/jmHI5wlc0xqAbo+xJrwVDsh1pwRXOGm+mib4w66A?=
- =?us-ascii?Q?RhTZT46AmLTd/ZfplY/Hp+3UNLWTUViBLEVk5ACI6bbE32i4ju0C17G0/a3i?=
- =?us-ascii?Q?CJhqBXr8HTgbcM/Gr+MNSOpCriueMO/zuaw1/MHqVAer+lLLNsyXN6pnbOH8?=
- =?us-ascii?Q?M2uQ0RlBovrrcY2Sqo5J1Cr6SRdAyh7FvXsrKgwWj7lZ/dkmmbO12C/Sziv5?=
- =?us-ascii?Q?S3BT5DqH+wV98ftl0qQfXDfiYrGWdHQPSZOXqXv0+XWi2NeXeauNhXDesQcs?=
- =?us-ascii?Q?nSzyuDzjNacGAPvCNxN/6nS6lDPK+seTxxZpUYxfuz9q7k5Uf/Qk6a39uvEA?=
- =?us-ascii?Q?Zlxd+X22krtFo3bJn6o9S1HlldZG6uCP2NTjLSEwZ4OltXtJj8g+cf0Bruyv?=
- =?us-ascii?Q?ZHfDH9fDzIyy9oESHmV4AnIgh3TehieXZrBOLJPZvtkzGJgQT90dmc6tZAxb?=
- =?us-ascii?Q?jxRVbJv4L9HDz4QEEqDYt49HkmcUyPzRvdcDhdfsoS2KofGxHBVbDHzNXez0?=
- =?us-ascii?Q?8DT7+w9ypCkptxBOmYjVYKgbeGJGR0642KOZkm8OhBoOahENMu24Dgnrswk+?=
- =?us-ascii?Q?YuzciBTpd7WryX5Iryr9mtbmTn/z1Ci24YSPZC47Oz4PN4yABk+P/VJKHnOv?=
- =?us-ascii?Q?2tt1an4ZqFxPjQ7yS/XD2yKhoWKucNC3G7vPqlwuEoO5RnpYQg6Pe9AAyf7s?=
- =?us-ascii?Q?WVppGFre3rjFmw/VoTNRRowttkHXckl/4/AtpUMkpSgG3WIYNO3LtflBVVpP?=
- =?us-ascii?Q?yewSVWWB3yLNdq6Y+8EK98xRL1xhJ5/7nhdPkK1f11wQohF/xw8JodvdHiC9?=
- =?us-ascii?Q?aHA1pHsDD4UzoqVayrb+hJhGzQLjqgveW/iQQ4vQOB8tKAr3Xv3UsifqE4Ed?=
- =?us-ascii?Q?mmNwbaszEx+cXF8ZQpsaLdQ0HflO/hxN7gjngCZ9avK6n5JpoQXV/C7XUn+v?=
- =?us-ascii?Q?IcV2OoNC0Jn0xY3z4YkhjCcsi4rJUOmEJhWs+oSEfUqvjUGDPq6SNeP2DiAf?=
- =?us-ascii?Q?1bHfwxeKfqpVy0TKh7bUM3QlVi1Or8+RTncQsG5TGaWd/odH/h+kAkNzf4h3?=
- =?us-ascii?Q?yd4lHSVo2PKpyarqABx++OPago8Gsan8kOaabRyd8+lN1zrIpjo54/VK+X2n?=
- =?us-ascii?Q?3bHCmw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52d1f08e-4c44-41d0-4935-08db1b33031d
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 15:30:11.4933
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zm5OieZJE/iKB72DUwPZterNqJ/Pw2SEMKWlu9c3JQ95d9olBOuOTH52c1sWbzWMFlC1ESYsHbH6pSFLKFSLblAScjY/b44pN+bQdLl3jTo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3832
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpHhA4XpoE96u5CPktDcSChUkQG_Ax58NzJOiOoF2K+3qQ@mail.gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 12:34:19PM +0100, Stefano Garzarella wrote:
-> Let's use our own kthread to run device jobs.
-> This allows us more flexibility, especially we can attach the kthread
-> to the user address space when vDPA uses user's VA.
+On Wed, Mar 01, 2023 at 12:48:38PM -0800, Suren Baghdasaryan wrote:
+> On Wed, Mar 1, 2023 at 12:07 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Wed, Mar 01, 2023 at 11:34:03AM -0800, Suren Baghdasaryan wrote:
+> > > Current 500ms min window size for psi triggers limits polling interval
+> > > to 50ms to prevent polling threads from using too much cpu bandwidth by
+> > > polling too frequently. However the number of cgroups with triggers is
+> > > unlimited, so this protection can be defeated by creating multiple
+> > > cgroups with psi triggers (triggers in each cgroup are served by a single
+> > > "psimon" kernel thread).
+> > > Instead of limiting min polling period, which also limits the latency of
+> > > psi events, it's better to limit psi trigger creation to authorized users
+> > > only, like we do for system-wide psi triggers (/proc/pressure/* files can
+> > > be written only by processes with CAP_SYS_RESOURCE capability). This also
+> > > makes access rules for cgroup psi files consistent with system-wide ones.
+> > > Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers and
+> > > remove the psi window min size limitation.
+> > >
+> > > Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+> > > Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraja@quicinc.com/
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > ---
+> > >  kernel/cgroup/cgroup.c | 10 ++++++++++
+> > >  kernel/sched/psi.c     |  4 +---
+> > >  2 files changed, 11 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> > > index 935e8121b21e..b600a6baaeca 100644
+> > > --- a/kernel/cgroup/cgroup.c
+> > > +++ b/kernel/cgroup/cgroup.c
+> > > @@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct kernfs_open_file *of,
+> > >       return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
+> > >  }
+> > >
+> > > +static int cgroup_pressure_open(struct kernfs_open_file *of)
+> > > +{
+> > > +     return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESOURCE)) ?
+> > > +             -EPERM : 0;
+> > > +}
+> >
+> > I agree with the change, but it's a bit unfortunate that this check is
+> > duplicated between system and cgroup.
+> >
+> > What do you think about psi_trigger_create() taking the file and
+> > checking FMODE_WRITE and CAP_SYS_RESOURCE against file->f_cred?
 > 
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->  drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 ++-
->  drivers/vdpa/vdpa_sim/vdpa_sim.c | 17 ++++++++++++-----
->  2 files changed, 14 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> index acee20faaf6a..ce83f9130a5d 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> @@ -57,7 +57,8 @@ struct vdpasim_dev_attr {
->  struct vdpasim {
->  	struct vdpa_device vdpa;
->  	struct vdpasim_virtqueue *vqs;
-> -	struct work_struct work;
-> +	struct kthread_worker *worker;
-> +	struct kthread_work work;
->  	struct vdpasim_dev_attr dev_attr;
->  	/* spinlock to synchronize virtqueue state */
->  	spinlock_t lock;
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> index a6ee830efc38..6feb29726c2a 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> @@ -11,8 +11,8 @@
->  #include <linux/module.h>
->  #include <linux/device.h>
->  #include <linux/kernel.h>
-> +#include <linux/kthread.h>
->  #include <linux/slab.h>
-> -#include <linux/sched.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/vringh.h>
->  #include <linux/vdpa.h>
-> @@ -116,7 +116,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
->  static const struct vdpa_config_ops vdpasim_config_ops;
->  static const struct vdpa_config_ops vdpasim_batch_config_ops;
->  
-> -static void vdpasim_work_fn(struct work_struct *work)
-> +static void vdpasim_work_fn(struct kthread_work *work)
->  {
->  	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
->  
-> @@ -159,7 +159,13 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->  
->  	vdpasim = vdpa_to_sim(vdpa);
->  	vdpasim->dev_attr = *dev_attr;
-> -	INIT_WORK(&vdpasim->work, vdpasim_work_fn);
-> +
-> +	kthread_init_work(&vdpasim->work, vdpasim_work_fn);
-> +	vdpasim->worker = kthread_create_worker(0, "vDPA sim worker: %s",
-> +						dev_attr->name);
-> +	if (IS_ERR(vdpasim->worker))
-> +		goto err_iommu;
+> That's definitely doable and we don't even need to pass file to
+> psi_trigger_create() since it's called only when we write to the file.
+> However by moving the capability check into psi_trigger_create() we
+> also postpone the check until write() instead of failing early in
+> open(). I always assumed failing early is preferable but if
+> consolidating the code here makes more sense then I can make the
+> switch. Please let me know if you still prefer to move the check.
 
-Branching to err_iommu will result in a call to put_device(dev)...
+Just for context, a person on our team is working on allowing
+unprivileged polls with windows that are multiples of 2s, which can be
+triggered from the regular aggregator threads. This should be useful
+for container delegation, and also for the desktop monitor app usecase
+that Chris Down brought up some time ago. At that point, everybody can
+open the file for write, and permissions are checked against the
+trigger parameters.
 
-> +
->  	spin_lock_init(&vdpasim->lock);
->  	spin_lock_init(&vdpasim->iommu_lock);
+So I don't think it's a big deal to check this particular permission
+at write time. But if you prefer we can also merge your patch as-is
+and do the refactor as part of the other series.
 
-... but dev is not initialised until the line following this hunk,
-which is:
+Your call. In either case, please feel free to add
 
-	dev = &vdpasim->vdpa.dev;
-
-In order to avoid leaking dev I _think_ the correct approach
-is to move the initialisation of dev above the branch to
-err_iommu, perhaps above the call to kthread_init_work()
-is a good place.
-
-This does move the assignment outside the locks above.
-But I _think_ that is ok.
-
-> @@ -212,7 +218,7 @@ EXPORT_SYMBOL_GPL(vdpasim_create);
->  
->  void vdpasim_schedule_work(struct vdpasim *vdpasim)
->  {
-> -	schedule_work(&vdpasim->work);
-> +	kthread_queue_work(vdpasim->worker, &vdpasim->work);
->  }
->  EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
->  
-> @@ -612,7 +618,8 @@ static void vdpasim_free(struct vdpa_device *vdpa)
->  	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->  	int i;
->  
-> -	cancel_work_sync(&vdpasim->work);
-> +	kthread_cancel_work_sync(&vdpasim->work);
-> +	kthread_destroy_worker(vdpasim->worker);
->  
->  	for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
->  		vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
-> -- 
-> 2.39.2
-> 
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
