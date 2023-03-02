@@ -2,227 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8041C6A8B8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678EE6A8B94
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjCBWMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:12:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S229929AbjCBWSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCBWMu (ORCPT
+        with ESMTP id S229726AbjCBWR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:12:50 -0500
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4028E17CFC;
-        Thu,  2 Mar 2023 14:12:41 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id n18so334851ybm.10;
-        Thu, 02 Mar 2023 14:12:41 -0800 (PST)
+        Thu, 2 Mar 2023 17:17:59 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3035594;
+        Thu,  2 Mar 2023 14:17:57 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id ay9so940752qtb.9;
+        Thu, 02 Mar 2023 14:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677795477;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V0eFa8ILkm7saCjWoXNnQHqm1RHUvtu7xtFURhRmKWU=;
+        b=GWIdVRbSbgGAneugFpQgdh5lGR+K1O2RColDxiylPsGvgbxgTi3suTXXA6wFi8OCK0
+         VNr55Ah0Gc82W4FpWSTsMpjDZ1Erp/WmIRnZDS0YpniCm5SeKBzDA3FCJ8OcngRfT3am
+         LJR4Wv1lndNYH/Q/fwVcsuZerou4gr/yo1YSLP0kQcvMrmf2NmdjcDnwIAjLduXqmPNe
+         VlNJuhUG6Jamo98Ukf3GRQnXMF/KhWX9aS1xIH9/YtXknnp6o/3S59Xtp1bxusSnAubi
+         fOjhj1lJxSPeHuAjqExElFjdtMpPl+2YjDqfLqGQB/n6i2Ayg1FV3OBABQqVd1q1TZM5
+         StNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677795160;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6saCZ3E79yVnYszzUQo6SvNydCkpTtwym9Ni4bS0DrU=;
-        b=zPSxTLO9lJzfC7IvUxY1Lg3QpE1gX0EZ35GE1oPm/1w5Gz90f1pUARaW/5ZoXTEYT0
-         HOy0OwamIk5gE+5xTyF0+Dbj0/0MPcdNXmNcLMeSveNdpStBTsViywAjmGib5fOT1jb5
-         T9o5eI8HeRVeXoOMoLhfM4u/QTrg8wHJgT3i3MjUUF+khhlabpDcYBwo2aEvaTVjFS1X
-         yAyV7FBQsGe22huJalN5o5irjcDRrIO13XD/xy/NHClRc1oYwf+RQR9Kq/zKzqhFLpyK
-         Ygeq84J2JGEOSnIbu7WjlzAP65NYtKFpie/ErpJ4iYkZ+m5CLlvJF9ZKIh0mYS+lyxd1
-         IS+g==
-X-Gm-Message-State: AO0yUKUNCjGAVYKKpkefScur9Bx5ug1/TBzUFGstgUwphcm8Gc+RHT6b
-        uW4Q6wHFBpcpRfH6LJpqLOdbtlFRvqhKO5P3sx87wn00
-X-Google-Smtp-Source: AK7set+fy6p2dKVVJB3IiTU3fB42sqBJ+/a+xqn0gvOcAV9xu2BE3AViUN0Kwud/ov2Fy9iVx6LeWD7SRyexs4ou/KA=
-X-Received: by 2002:a05:6902:4d1:b0:ab8:1ed9:cfd2 with SMTP id
- v17-20020a05690204d100b00ab81ed9cfd2mr5554203ybs.5.1677795160369; Thu, 02 Mar
- 2023 14:12:40 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677795477;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=V0eFa8ILkm7saCjWoXNnQHqm1RHUvtu7xtFURhRmKWU=;
+        b=PfhIStD3sUWqPNqZ0b+WsqVzebSNeBsl5ZtGviX5kRLMbz2llsfjGYW/RuG2V2AdKr
+         ZvgBsPDsX7exDyv6fdIj1LhrDhNpYoI7ueg7KOUV5hYW+zTLLR2GabvRkkbehOMF7uG0
+         Tvc8TX79ZAIG9V8746HhTiqZ7Edj0lp2F7WjimQ0OZtcHtnvG3Uf5J6hTebQp5ksOD0w
+         2whAJNYqZUQ3gWu8bdnvXaGG70NKWA9COomtoeyXj4QdUFoPQidjsjKq1sZpgYALTX0n
+         JWS281PbwEa+iS0uGMUrhL1Z8mbADGAmb+sGal2+ooW58MbQc4vBjSmrDX1AVL3Wnna1
+         1soQ==
+X-Gm-Message-State: AO0yUKW/Egffzrgt67ZVhb+dbZUSUBybR6QL1HT4TvVoWdCf6UeI31xV
+        YGwbgZv4jXjyHYr5myGCNg==
+X-Google-Smtp-Source: AK7set/y+bOjExP+nvbPQ/5QcDoAS99DJhG2vCN39iU8gau82df1z2MZqb9gk8YkNPi+sskmliPrlQ==
+X-Received: by 2002:ac8:5f47:0:b0:3bf:dd45:ed68 with SMTP id y7-20020ac85f47000000b003bfdd45ed68mr19008132qta.47.1677795476934;
+        Thu, 02 Mar 2023 14:17:56 -0800 (PST)
+Received: from serve.minyard.net ([47.184.176.248])
+        by smtp.gmail.com with ESMTPSA id w19-20020ac843d3000000b003bfbf3afe51sm468742qtn.93.2023.03.02.14.17.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 14:17:56 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:9812:99fe:c8aa:e89a])
+        by serve.minyard.net (Postfix) with ESMTPSA id 2843A18000C;
+        Thu,  2 Mar 2023 22:17:55 +0000 (UTC)
+Date:   Thu, 2 Mar 2023 16:17:53 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        song@kernel.org, robinmholt@gmail.com, steve.wahl@hpe.com,
+        mike.travis@hpe.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, jgross@suse.com, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com, xen-devel@lists.xenproject.org,
+        j.granados@samsung.com, zhangpeng362@huawei.com,
+        tangmeng@uniontech.com, willy@infradead.org, nixiaoming@huawei.com,
+        sujiaxun@uniontech.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/7] ipmi: simplify sysctl registration
+Message-ID: <ZAEgkeb6E+k8PFZc@minyard.net>
+Reply-To: minyard@acm.org
+References: <20230302204612.782387-1-mcgrof@kernel.org>
+ <20230302204612.782387-3-mcgrof@kernel.org>
 MIME-Version: 1.0
-References: <20230302092109.367-1-ravi.bangoria@amd.com> <20230302092109.367-3-ravi.bangoria@amd.com>
-In-Reply-To: <20230302092109.367-3-ravi.bangoria@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 2 Mar 2023 14:12:29 -0800
-Message-ID: <CAM9d7chQA27aD_mPe=3-9jZLWP_a64ztihuK=upgNL++kMFSNw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf test: Add selftest to test IBS invocation via
- core pmu events
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     peterz@infradead.org, eranian@google.com, acme@kernel.org,
-        mark.rutland@arm.com, jolsa@kernel.org, irogers@google.com,
-        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302204612.782387-3-mcgrof@kernel.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 1:22 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
-> IBS pmu can be invoked via fixed set of core pmu events. Add simple
-> event open test for all these events.
->
-> Without kernel fix:
->   $ sudo ./perf test -vv 76
->    76: IBS via core pmu                                                :
->   --- start ---
->   test child forked, pid 6553
->   Using CPUID AuthenticAMD-25-1-1
->   type: 0x0, config: 0x0, fd: 3  -  Pass
->   type: 0x0, config: 0x1, fd: -1  -  Pass
->   type: 0x4, config: 0x76, fd: -1  -  Fail
->   type: 0x4, config: 0xc1, fd: -1  -  Fail
->   type: 0x4, config: 0x12, fd: -1  -  Pass
->   test child finished with -1
->   ---- end ----
->   IBS via core pmu: FAILED!
->
-> With kernel fix:
->   $ sudo ./perf test -vv 76
->    76: IBS via core pmu                                                :
->   --- start ---
->   test child forked, pid 7526
->   Using CPUID AuthenticAMD-25-1-1
->   type: 0x0, config: 0x0, fd: 3  -  Pass
->   type: 0x0, config: 0x1, fd: -1  -  Pass
->   type: 0x4, config: 0x76, fd: 3  -  Pass
->   type: 0x4, config: 0xc1, fd: 3  -  Pass
->   type: 0x4, config: 0x12, fd: -1  -  Pass
->   test child finished with 0
->   ---- end ----
->   IBS via core pmu: Ok
->
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+On Thu, Mar 02, 2023 at 12:46:07PM -0800, Luis Chamberlain wrote:
+> register_sysctl_table() is a deprecated compatibility wrapper.
+> register_sysctl() can do the directory creation for you so just use
+> that.
+
+Thanks, I have included this in my tree for the next merge window.
+
+-corey
+
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 > ---
->  tools/perf/tests/Build              |  1 +
->  tools/perf/tests/builtin-test.c     |  1 +
->  tools/perf/tests/ibs-via-core-pmu.c | 70 +++++++++++++++++++++++++++++
->  tools/perf/tests/tests.h            |  1 +
->  4 files changed, 73 insertions(+)
->  create mode 100644 tools/perf/tests/ibs-via-core-pmu.c
->
-> diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-> index fb9ac5dc4079..1a232cf13c33 100644
-> --- a/tools/perf/tests/Build
-> +++ b/tools/perf/tests/Build
-> @@ -69,6 +69,7 @@ perf-y += dlfilter-test.o
->  perf-y += sigtrap.o
->  perf-y += event_groups.o
->  perf-y += symbols.o
-> +perf-y += ibs-via-core-pmu.o
->
->  $(OUTPUT)tests/llvm-src-base.c: tests/bpf-script-example.c tests/Build
->         $(call rule_mkdir)
-> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-> index 35cc3807cc9e..aed887234500 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -119,6 +119,7 @@ static struct test_suite *generic_tests[] = {
->         &suite__sigtrap,
->         &suite__event_groups,
->         &suite__symbols,
-> +       &suite__ibs_via_core_pmu,
->         NULL,
+>  drivers/char/ipmi/ipmi_poweroff.c | 16 +---------------
+>  1 file changed, 1 insertion(+), 15 deletions(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_poweroff.c b/drivers/char/ipmi/ipmi_poweroff.c
+> index 163ec9749e55..870659d91db2 100644
+> --- a/drivers/char/ipmi/ipmi_poweroff.c
+> +++ b/drivers/char/ipmi/ipmi_poweroff.c
+> @@ -659,20 +659,6 @@ static struct ctl_table ipmi_table[] = {
+>  	{ }
 >  };
->
-> diff --git a/tools/perf/tests/ibs-via-core-pmu.c b/tools/perf/tests/ibs-via-core-pmu.c
-> new file mode 100644
-> index 000000000000..6ac539509791
-> --- /dev/null
-> +++ b/tools/perf/tests/ibs-via-core-pmu.c
-> @@ -0,0 +1,70 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "linux/perf_event.h"
-> +#include "tests.h"
-> +#include "pmu.h"
-> +#include "pmus.h"
-> +#include "../perf-sys.h"
-> +#include "debug.h"
-> +
-> +#define NR_SUB_TESTS 5
-> +
-> +static struct sub_tests {
-> +       int type;
-> +       unsigned long config;
-> +       bool valid;
-> +} sub_tests[NR_SUB_TESTS] = {
-> +       { PERF_TYPE_HARDWARE, PERF_COUNT_HW_CPU_CYCLES, true },
-> +       { PERF_TYPE_HARDWARE, PERF_COUNT_HW_INSTRUCTIONS, false },
-> +       { PERF_TYPE_RAW, 0x076, true },
-> +       { PERF_TYPE_RAW, 0x0C1, true },
-> +       { PERF_TYPE_RAW, 0x012, false },
-> +};
-> +
-> +static int event_open(int type, unsigned long config)
-> +{
-> +       struct perf_event_attr attr;
-> +
-> +       memset(&attr, 0, sizeof(struct perf_event_attr));
-> +       attr.type = type;
-> +       attr.size = sizeof(struct perf_event_attr);
-> +       attr.config = config;
-> +       attr.disabled = 1;
-> +       attr.precise_ip = 1;
-> +       attr.sample_type = PERF_SAMPLE_IP | PERF_SAMPLE_TID;
-> +       attr.sample_period = 100000;
-> +
-> +       return sys_perf_event_open(&attr, -1, 0, -1, 0);
-> +}
-> +
-> +static int test__ibs_via_core_pmu(struct test_suite *text __maybe_unused,
-> +                                 int subtest __maybe_unused)
-> +{
-> +       struct perf_pmu *ibs_pmu;
-> +       int ret = TEST_OK;
-> +       int fd, i;
-> +
-> +       if (list_empty(&pmus))
-> +               perf_pmu__scan(NULL);
-> +
-> +       ibs_pmu = perf_pmu__find("ibs_op");
-> +       if (!ibs_pmu)
-> +               return TEST_SKIP;
-> +
-> +       for (i = 0; i < NR_SUB_TESTS; i++) {
-> +               fd = event_open(sub_tests[i].type, sub_tests[i].config);
-> +               pr_debug("type: 0x%x, config: 0x%lx, fd: %d  -  ", sub_tests[i].type,
-> +                        sub_tests[i].config, fd);
-> +               if ((sub_tests[i].valid && fd == -1) ||
-> +                   (!sub_tests[i].valid && fd > 0)) {
-> +                       pr_debug("Fail\n");
-> +                       ret = TEST_FAIL;
-
-You need to close(fd) when it's succeeded for invalid one.
-
-Thanks,
-Namhyung
-
-
-> +               } else {
-> +                       pr_debug("Pass\n");
-> +                       close(fd);
-> +               }
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +DEFINE_SUITE("IBS via core pmu", ibs_via_core_pmu);
-> diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-> index 9a0f3904e53d..36339fdf9c36 100644
-> --- a/tools/perf/tests/tests.h
-> +++ b/tools/perf/tests/tests.h
-> @@ -149,6 +149,7 @@ DECLARE_SUITE(dlfilter);
->  DECLARE_SUITE(sigtrap);
->  DECLARE_SUITE(event_groups);
->  DECLARE_SUITE(symbols);
-> +DECLARE_SUITE(ibs_via_core_pmu);
->
->  /*
->   * PowerPC and S390 do not support creation of instruction breakpoints using the
-> --
-> 2.39.2
->
+>  
+> -static struct ctl_table ipmi_dir_table[] = {
+> -	{ .procname	= "ipmi",
+> -	  .mode		= 0555,
+> -	  .child	= ipmi_table },
+> -	{ }
+> -};
+> -
+> -static struct ctl_table ipmi_root_table[] = {
+> -	{ .procname	= "dev",
+> -	  .mode		= 0555,
+> -	  .child	= ipmi_dir_table },
+> -	{ }
+> -};
+> -
+>  static struct ctl_table_header *ipmi_table_header;
+>  #endif /* CONFIG_PROC_FS */
+>  
+> @@ -689,7 +675,7 @@ static int __init ipmi_poweroff_init(void)
+>  		pr_info("Power cycle is enabled\n");
+>  
+>  #ifdef CONFIG_PROC_FS
+> -	ipmi_table_header = register_sysctl_table(ipmi_root_table);
+> +	ipmi_table_header = register_sysctl("dev/ipmi", ipmi_table);
+>  	if (!ipmi_table_header) {
+>  		pr_err("Unable to register powercycle sysctl\n");
+>  		rv = -ENOMEM;
+> -- 
+> 2.39.1
+> 
