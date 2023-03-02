@@ -2,198 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE766A87B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367B36A87BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjCBRSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 12:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S229552AbjCBRTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 12:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjCBRSF (ORCPT
+        with ESMTP id S229564AbjCBRTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 12:18:05 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5BD0CA26;
-        Thu,  2 Mar 2023 09:18:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD251169E;
-        Thu,  2 Mar 2023 09:18:46 -0800 (PST)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BE54D3F67D;
-        Thu,  2 Mar 2023 09:18:02 -0800 (PST)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-trace-kernel@vger.kernel.org, mark.rutland@arm.com,
-        mhiramat@kernel.org, rostedt@goodmis.org, zanussi@kernel.org
-Subject: [PATCH 2/2] tracing/hist: add modulus operator
-Date:   Thu,  2 Mar 2023 17:17:55 +0000
-Message-Id: <20230302171755.1821653-3-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230302171755.1821653-1-mark.rutland@arm.com>
-References: <20230302171755.1821653-1-mark.rutland@arm.com>
+        Thu, 2 Mar 2023 12:19:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4768F113EC;
+        Thu,  2 Mar 2023 09:19:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEC9DB811F8;
+        Thu,  2 Mar 2023 17:19:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A95AC4339B;
+        Thu,  2 Mar 2023 17:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677777546;
+        bh=i3x0hEAvwMO1Hlbu0xv9iys3WfKl3C4x9NRYdvyKmeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SelwuPdr4PrPXwRyd32ta13tkvqBCvRh3Y9QJzAAIV3zVdE9LYHzj6ARVXyXI10Mv
+         TU00hCzfct5U7XTkPjE32lOH1k05XJQh9i1vA5yG6RmzbJZrot5TTpxY7kO7Q21qer
+         bKjHgAudKZd4un79mf6y/KZ+pPF/r+9SH7HVJkjLtYyXot+18efrxHgl+9n2cIu/rC
+         gLoUWQi7a+w4BH471vWihyoc+g6j95RMBkQQS0Fzx9seBw2HIKIcYXk3Jve8QWkj8y
+         p6zzvrTo8XBNm5o6YH3QQHUUP2GOvNst+TdJhiprNTiQ9MZs8NlJLns4Bt+Jn/TCaJ
+         8NQ+25i89lmgg==
+Received: by pali.im (Postfix)
+        id 68ED8AA6; Thu,  2 Mar 2023 18:19:03 +0100 (CET)
+Date:   Thu, 2 Mar 2023 18:19:03 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/29] platform/x86: dell: dell-smo8800: Convert to
+ platform remove callback returning void
+Message-ID: <20230302171903.mzwcxe4pfefknds3@pali>
+References: <20230302144732.1903781-1-u.kleine-koenig@pengutronix.de>
+ <20230302144732.1903781-11-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230302144732.1903781-11-u.kleine-koenig@pengutronix.de>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently historgram field expressions can use addition ('+'),
-substraction ('-'), division ('/'), and multiplication ('*') operators.
-It would be helpful to also have a modulus ('%') operator.
+On Thursday 02 March 2023 15:47:13 Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-This is helpful for capturing the alignment of pointers. For example, on
-arm64 with CONFIG_KPROBE_EVENTS_ON_NOTRACE=y, we can record the size and
-alignment of copies to user with:
+Acked-by: Pali Rohár <pali@kernel.org>
 
-| # echo 'p:copy_to_user __arch_copy_to_user to=$arg1 from=$arg2 n=$arg3' >> /sys/kernel/tracing/kprobe_events
-| # echo 'hist keys=n,to%8:vals=hitcount:sort=n,to%8' > /sys/kernel/tracing/events/kprobes/copy_to_user/trigger
-| # cat /sys/kernel/tracing/events/kprobes/copy_to_user/hist
-| # event histogram
-| #
-| # trigger info: hist:keys=n,to%8:vals=hitcount:sort=n,to%8:size=2048 [active]
-| #
-|
-| { n:          1, to%8:          1 } hitcount:          5
-| { n:          8, to%8:          0 } hitcount:          3
-| { n:         16, to%8:          0 } hitcount:          2
-| { n:         32, to%8:          0 } hitcount:          1
-| { n:         36, to%8:          0 } hitcount:          1
-| { n:        128, to%8:          0 } hitcount:          4
-| { n:        336, to%8:          0 } hitcount:          1
-| { n:        832, to%8:          0 } hitcount:          3
-|
-| Totals:
-|     Hits: 20
-|     Entries: 8
-|     Dropped: 0
-
-Add a modulus operator, with the same precedence as multiplication and
-division, matching C's operator precedence.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org
----
- Documentation/trace/histogram.rst |  4 ++--
- kernel/trace/trace_events_hist.c  | 35 +++++++++++++++++++++++++++++--
- 2 files changed, 35 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histogram.rst
-index f95459aa984f..534fb190ebe0 100644
---- a/Documentation/trace/histogram.rst
-+++ b/Documentation/trace/histogram.rst
-@@ -1771,8 +1771,8 @@ using the same key and variable from yet another event::
- 
-   # echo 'hist:key=pid:wakeupswitch_lat=$wakeup_lat+$switchtime_lat ...' >> event3/trigger
- 
--Expressions support the use of addition, subtraction, multiplication and
--division operators (+-\*/).
-+Expressions support the use of addition, subtraction, multiplication,
-+division, modulus operators (+-\*/%).
- 
- Note if division by zero cannot be detected at parse time (i.e. the
- divisor is not a constant), the result will be -1.
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index a308da2cde2f..629896aaed54 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -103,6 +103,7 @@ enum field_op_id {
- 	FIELD_OP_UNARY_MINUS,
- 	FIELD_OP_DIV,
- 	FIELD_OP_MULT,
-+	FIELD_OP_MOD,
- };
- 
- enum hist_field_fn {
-@@ -131,6 +132,7 @@ enum hist_field_fn {
- 	HIST_FIELD_FN_PLUS,
- 	HIST_FIELD_FN_DIV,
- 	HIST_FIELD_FN_MULT,
-+	HIST_FIELD_FN_MOD,
- 	HIST_FIELD_FN_DIV_POWER2,
- 	HIST_FIELD_FN_DIV_NOT_POWER2,
- 	HIST_FIELD_FN_DIV_MULT_SHIFT,
-@@ -436,6 +438,21 @@ static u64 hist_field_mult(struct hist_field *hist_field,
- 	return val1 * val2;
- }
- 
-+static u64 hist_field_mod(struct hist_field *hist_field,
-+			  struct tracing_map_elt *elt,
-+			  struct trace_buffer *buffer,
-+			  struct ring_buffer_event *rbe,
-+			  void *event)
-+{
-+	struct hist_field *operand1 = hist_field->operands[0];
-+	struct hist_field *operand2 = hist_field->operands[1];
-+
-+	u64 val1 = hist_fn_call(operand1, elt, buffer, rbe, event);
-+	u64 val2 = hist_fn_call(operand2, elt, buffer, rbe, event);
-+
-+	return val1 % val2;
-+}
-+
- static u64 hist_field_unary_minus(struct hist_field *hist_field,
- 				  struct tracing_map_elt *elt,
- 				  struct trace_buffer *buffer,
-@@ -1796,6 +1813,9 @@ static char *expr_str(struct hist_field *field, unsigned int level)
- 	case FIELD_OP_MULT:
- 		strcat(expr, "*");
- 		break;
-+	case FIELD_OP_MOD:
-+		strcat(expr, "%");
-+		break;
- 	default:
- 		kfree(expr);
- 		return NULL;
-@@ -1859,8 +1879,8 @@ static int contains_operator(char *str, char **sep)
- 		return field_op;
- 
- 	/*
--	 * Second, consider the higher precedence multiplication and division
--	 * operators.
-+	 * Second, consider the higher precedence multiplication, division, and
-+	 * modulus operators.
- 	 */
- 	op = strrchr(str, '/');
- 	if (op > *sep) {
-@@ -1874,6 +1894,12 @@ static int contains_operator(char *str, char **sep)
- 		field_op = FIELD_OP_MULT;
- 	}
- 
-+	op = strrchr(str, '%');
-+	if (op > *sep) {
-+		*sep = op;
-+		field_op = FIELD_OP_MOD;
-+	}
-+
- 	return field_op;
- }
- 
-@@ -2698,6 +2724,9 @@ static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
- 	case FIELD_OP_MULT:
- 		op_fn = HIST_FIELD_FN_MULT;
- 		break;
-+	case FIELD_OP_MOD:
-+		op_fn = HIST_FIELD_FN_MOD;
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		goto free_operands;
-@@ -4289,6 +4318,8 @@ static u64 hist_fn_call(struct hist_field *hist_field,
- 		return hist_field_div(hist_field, elt, buffer, rbe, event);
- 	case HIST_FIELD_FN_MULT:
- 		return hist_field_mult(hist_field, elt, buffer, rbe, event);
-+	case HIST_FIELD_FN_MOD:
-+		return hist_field_mod(hist_field, elt, buffer, rbe, event);
- 	case HIST_FIELD_FN_DIV_POWER2:
- 		return div_by_power_of_two(hist_field, elt, buffer, rbe, event);
- 	case HIST_FIELD_FN_DIV_NOT_POWER2:
--- 
-2.30.2
-
+> ---
+>  drivers/platform/x86/dell/dell-smo8800.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-smo8800.c b/drivers/platform/x86/dell/dell-smo8800.c
+> index 8d6b7a83cf24..f7ec17c56833 100644
+> --- a/drivers/platform/x86/dell/dell-smo8800.c
+> +++ b/drivers/platform/x86/dell/dell-smo8800.c
+> @@ -154,14 +154,13 @@ static int smo8800_probe(struct platform_device *device)
+>  	return err;
+>  }
+>  
+> -static int smo8800_remove(struct platform_device *device)
+> +static void smo8800_remove(struct platform_device *device)
+>  {
+>  	struct smo8800_device *smo8800 = platform_get_drvdata(device);
+>  
+>  	free_irq(smo8800->irq, smo8800);
+>  	misc_deregister(&smo8800->miscdev);
+>  	dev_dbg(&device->dev, "device /dev/freefall unregistered\n");
+> -	return 0;
+>  }
+>  
+>  /* NOTE: Keep this list in sync with drivers/i2c/busses/i2c-i801.c */
+> @@ -180,7 +179,7 @@ MODULE_DEVICE_TABLE(acpi, smo8800_ids);
+>  
+>  static struct platform_driver smo8800_driver = {
+>  	.probe = smo8800_probe,
+> -	.remove = smo8800_remove,
+> +	.remove_new = smo8800_remove,
+>  	.driver = {
+>  		.name = DRIVER_NAME,
+>  		.acpi_match_table = smo8800_ids,
+> -- 
+> 2.39.1
+> 
