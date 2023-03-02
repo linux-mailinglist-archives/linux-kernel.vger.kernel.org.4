@@ -2,191 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69376A87CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56C36A87CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 18:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCBRXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 12:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        id S229873AbjCBRW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 12:22:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjCBRW5 (ORCPT
+        with ESMTP id S229476AbjCBRWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 12:22:57 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2073.outbound.protection.outlook.com [40.107.15.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A73E4;
-        Thu,  2 Mar 2023 09:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pj8/GuZFRj5A2HK+TIuV2q9nJOl3/038ewsSkcZSCFE=;
- b=sEp2M+H8DZ9FjPJkgEquGHAFJ6S7Uf5dZeekxU3QOwmqjeFn8T1hFq7XPEeZ78q5mG85chuBAbRRnJwnVuOTlBc/dcNaaJvv9+zPDgh66h5YfI3GRINbFPuGO0OocYBjGaBXnSfUWq4iAyxweFpIYyEOdU7jKj78mQb5FN5OVHE=
-Received: from DB9PR06CA0014.eurprd06.prod.outlook.com (2603:10a6:10:1db::19)
- by DB9PR08MB9684.eurprd08.prod.outlook.com (2603:10a6:10:460::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Thu, 2 Mar
- 2023 17:22:47 +0000
-Received: from DBAEUR03FT011.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:1db:cafe::9a) by DB9PR06CA0014.outlook.office365.com
- (2603:10a6:10:1db::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
- Transport; Thu, 2 Mar 2023 17:22:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT011.mail.protection.outlook.com (100.127.142.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.20 via Frontend Transport; Thu, 2 Mar 2023 17:22:47 +0000
-Received: ("Tessian outbound cfb430c87a1e:v135"); Thu, 02 Mar 2023 17:22:46 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 792ff07a717a2c49
-X-CR-MTA-TID: 64aa7808
-Received: from 577749fc1fbc.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 43449BA5-A136-4DA6-BA09-8648F1DECC4C.1;
-        Thu, 02 Mar 2023 17:22:36 +0000
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 577749fc1fbc.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 02 Mar 2023 17:22:36 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lB4QnfWPJs4t8EIM8ooLjS8wooraQdXLbBRTPMPmDvhiZnOy7sFfNISP4tYo05yDX9+JGI9Vywtk3jkfn5bVWVmoD9Ebb0iylYWF0FLD+9fgFb0bAAWKKWPvk20KG2dVEtgxOzwVz+sv3oGs1hXFPKRuDpWEY5JYpsNhsjKgOraFF7gfrtI+pQfg5p24E8XADvbAEZL45UMNaxxjHQKj8CA6DHN3hWPEIg82CnAlNCBf2QVAKTqNMpj+DIptZgfp+O1CuoVX4Ngw1i8ehoBTEJlm8uTm0JvgwywIQLyQwvTSTDIa3LEY4p/0ucmnKIyzME2dxx+yhnUvD5REt9DMuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pj8/GuZFRj5A2HK+TIuV2q9nJOl3/038ewsSkcZSCFE=;
- b=fYZgGOGtjstJKz5wgTaBjmfTGBbnwTqBTF2LFX3AsSVIik9eO6I28c87StQQ6NCj2zfyS34EGaUJQEIazUDUNgUZQCndFb2M6VMPejqnO+53Zo3SdX9yv1jtuypRkZ+zdHpizK+4hoY/tEYMwvGRPyXrtmIMvB9oszN/jKhnMbG9G97y3LBtwhSSS2HHPTmK1Wy3DZVQCp7afORUvkGD6KRkgIvovrnk9RqEsNUBp0s8cGC7AqLtV6dUNJNK4ZKpQSkFZJRL54oZ8WeVeWDcy9BGsCRKDPA7yQlBxOLOavnHchtfbBPVML4DpBYorZujYfyv6KoLOlRDzXm5cv4xdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pj8/GuZFRj5A2HK+TIuV2q9nJOl3/038ewsSkcZSCFE=;
- b=sEp2M+H8DZ9FjPJkgEquGHAFJ6S7Uf5dZeekxU3QOwmqjeFn8T1hFq7XPEeZ78q5mG85chuBAbRRnJwnVuOTlBc/dcNaaJvv9+zPDgh66h5YfI3GRINbFPuGO0OocYBjGaBXnSfUWq4iAyxweFpIYyEOdU7jKj78mQb5FN5OVHE=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by AM7PR08MB5304.eurprd08.prod.outlook.com (2603:10a6:20b:10e::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
- 2023 17:22:22 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6134.027; Thu, 2 Mar 2023
- 17:22:22 +0000
-Date:   Thu, 2 Mar 2023 17:22:07 +0000
-From:   Szabolcs Nagy <szabolcs.nagy@arm.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com
-Cc:     nd@arm.com, al.grant@arm.com
-Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Message-ID: <ZADbP7HvyPHuwUY9@arm.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-34-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-34-rick.p.edgecombe@intel.com>
-X-ClientProxiedBy: LO2P123CA0092.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:139::7) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        Thu, 2 Mar 2023 12:22:24 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CF26E8B;
+        Thu,  2 Mar 2023 09:22:23 -0800 (PST)
+Date:   Thu, 02 Mar 2023 17:22:20 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677777741;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rZUI0Dp1XgfC+LUatB+59tfCAoLSvynVlofrlVu+tNI=;
+        b=lncaqsIrMNsB/08yz8YPUB+RSess4cdNNeDmCfvGOZP3pVxaYGFe0q+5uXXHuR++bsU4zR
+        jg+v7vk71GKO/Y13gVk9xU3s7TfzPC2Cqww5eo7o0ECzMM9pln8qsqcv23oZ7/EEEXkYTL
+        2qY6AEunP1SgJka+TuVHjDzG/FnLwjMITkHKXfEjqeoW57/fV1Zh68cnyo3mXpRaWBHaMq
+        G41b6EHT7H1wghlL79E+Tpd3v2z130vzmT14iLnGPLTKzjoijOzNN7k1Cn+Fi0HCo8O+eH
+        DPXS0uGnzL4/d1VJZSinWrjG31fzIUvvYMIKcQYuFfGoUvVhGEml9HOyykiq9g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677777741;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rZUI0Dp1XgfC+LUatB+59tfCAoLSvynVlofrlVu+tNI=;
+        b=IJhnM0bvuDtH3jMNeIDH8L+Acw3hVeQg+54WEZwkEvojSKUkCzJ3MsvsXju/KAvXYX1FnX
+        k9q6i5OZFNy0bQDw==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/urgent] genirq/msi, platform-msi: Ensure that MSI
+ descriptors are unreferenced
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <87mt4wkwnv.ffs@tglx>
+References: <87mt4wkwnv.ffs@tglx>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AM7PR08MB5304:EE_|DBAEUR03FT011:EE_|DB9PR08MB9684:EE_
-X-MS-Office365-Filtering-Correlation-Id: 48fdda02-b8c2-4563-c140-08db1b42be35
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: u/91laHY+UOhrbKGbX+FBpYcIppEdZ6guaSXiPiMED5Cozact7OXOODTAQWHIZSDkaq4/T819i1poQi9MdVhD6MlKI6BYcWPPeGXmWy/l5Mw6wvK5m1sYKHGbPa6307JFDD0DVl4wVrziRg20UbiaSk3YR4HG6WANKTAvmMyAoElLVHtIiymlDHmIi/yQ5JUQDW2YJ/nZZLv/EpuKihjSswHr4PCuFu3X9GroeNieii7ori/Z5Fv0IVHlyfNH+xPBgUOzz/xqyVT++jDGLZz0vo4dPYx9GtUDIQm1Ufgw9BVLawliYI5gX+2QPtBxqbruSU663vOczfbsVnsU4F3Lhkf18R1mIdIHEG/9xlMCShq7KpjIvrJHd+ekab8X1fYUhz1QLljTzVkipQV/VJIttwnxKhjruiuBUIoz8qT+rU4HQ3dZWi4ytDqlWxRvYigz/bUbHcWwf03+i8U/Z4m+VfmOqIVyyCXhS5E6m7OfYHsdJKFP2j3zVSkcceZbAzbJqwNZPMh7+jtPWNI6/AxbYjt6lqz9M6p7ujcyHX9GsxHkeSZ/CQ5JasgQUmtMk5urP67jRrVhwT3xtPt+KLNgenPp+efLZ4zClRhgoi8mxYmKKve9qoA0PRH0XJ0YxrVXQ7/7icFTeiHJte6HvldQpRN6cg3ffUOnHJTN5yH6wo1QFAKv/j99MrnLGekV93Z
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(366004)(136003)(39860400002)(451199018)(26005)(38100700002)(44832011)(186003)(8936002)(7416002)(5660300002)(7406005)(66899018)(6512007)(921005)(2906002)(6506007)(41300700001)(6666004)(2616005)(8676002)(4326008)(6486002)(66476007)(66556008)(66946007)(316002)(86362001)(110136005)(83380400001)(478600001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR08MB5304
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT011.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 4c0cd65a-06f5-44f3-6bd3-08db1b42aeae
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kmJULEtsoaBvxNEs0/hguPco3dytaYiEaae5GtK3FmgU8Kqvg0NL63kIAJRrqRtR1pWS8RrsDq92rp8GuknmhsyuxfoRJgTtcJr5gIEhdwZ7/O2CXOyd4bdW2TIubuxLTzfEKTns+BtD94JEB4/cdSw9xoSQ4tMvNP7P4K9Hzm/VXdPCTxHGM+7M4fLNARu7jirssTeUKbq24edwgJWJuqzThrdW5k7+L3Pego84KTzdVM78Zxf7Uw+C5Kb3wZ2U5tNdie9f6V1rbNCOnxjd+23fSfx0L2GX33zOvhT8gIRLe8K8inAJhi8+sJvmmHd8VFWoOuunJLtlvln/5ogOs8kzZrXrqUgqdCWQ6nq84csQibejqptBq+TMyA8oKNY9eh7rf45SKHbn8MYADCMsf1ixq8gydXS+UNJ7GwXRmGfNenGMkZOHySQ0hkvVrbKhrLSYhEW7GuQiiQJe1hfCAKwMvYRcySd1YAzqqspzjYollLpNpiZmFeNMLJ7eSQB+KJ3nI6tXHs2I3ratQKFP3W/amdy+6nfI7JecrXIQwSobQDR25OlM9yeFvtoLhAWTuxeBM1D5hRYeLsYa5X97RmbwMSNUEvHwq6bA5b44T7JxyMHftqrF/JMqiyZQKp1fZwXVS7TD37k2+VVCGuJ0pTFS40jE7ZOYn/40303ngZaj4BDFtn2C6d6WTsO9oc/SU+eVxruErNYezwRD2VcYuqqZxRgfkPfnsyRkkhxbynQ=
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199018)(40470700004)(46966006)(36840700001)(83380400001)(70206006)(36860700001)(66899018)(47076005)(6666004)(36756003)(40460700003)(5660300002)(478600001)(81166007)(82740400003)(8936002)(356005)(921005)(86362001)(82310400005)(40480700001)(2616005)(26005)(186003)(336012)(6512007)(6486002)(6506007)(2906002)(44832011)(8676002)(70586007)(4326008)(450100002)(316002)(41300700001)(110136005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 17:22:47.5886
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48fdda02-b8c2-4563-c140-08db1b42be35
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT011.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB9684
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Message-ID: <167777774038.5837.12233642737394455533.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 02/27/2023 14:29, Rick Edgecombe wrote:
-> Previously, a new PROT_SHADOW_STACK was attempted,
-...
-> So rather than repurpose two existing syscalls (mmap, madvise) that don't
-> quite fit, just implement a new map_shadow_stack syscall to allow
-> userspace to map and setup new shadow stacks in one step. While ucontext
-> is the primary motivator, userspace may have other unforeseen reasons to
-> setup it's own shadow stacks using the WRSS instruction. Towards this
-> provide a flag so that stacks can be optionally setup securely for the
-> common case of ucontext without enabling WRSS. Or potentially have the
-> kernel set up the shadow stack in some new way.
-...
-> The following example demonstrates how to create a new shadow stack with
-> map_shadow_stack:
-> void *shstk = map_shadow_stack(addr, stack_size, SHADOW_STACK_SET_TOKEN);
+The following commit has been merged into the irq/urgent branch of tip:
 
-i think
+Commit-ID:     0fb7fb713461e44b12e72c292bf90ee300f40710
+Gitweb:        https://git.kernel.org/tip/0fb7fb713461e44b12e72c292bf90ee300f40710
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Wed, 01 Mar 2023 22:07:48 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 02 Mar 2023 18:09:44 +01:00
 
-mmap(addr, size, PROT_READ, MAP_ANON|MAP_SHADOW_STACK, -1, 0);
+genirq/msi, platform-msi: Ensure that MSI descriptors are unreferenced
 
-could do the same with less disruption to users (new syscalls
-are harder to deal with than new flags). it would do the
-guard page and initial token setup too (there is no flag for
-it but could be squeezed in).
+Miquel reported a warning in the MSI core which is triggered when
+interrupts are freed via platform_msi_device_domain_free().
 
-most of the mmap features need not be available (EINVAL) when
-MAP_SHADOW_STACK is specified.
+This code got reworked to use core functions for freeing the MSI
+descriptors, but nothing took care to clear the msi_desc->irq entry, which
+then triggers the warning in msi_free_msi_desc() which uses desc->irq to
+validate that the descriptor has been torn down. The same issue exists in
+msi_domain_populate_irqs().
 
-the main drawback is running out of mmap flags so extension
-is limited. (but the new syscall has limitations too).
+Up to the point that msi_free_msi_descs() grew a warning for this case,
+this went un-noticed.
+
+Provide the counterpart of msi_domain_populate_irqs() and invoke it in
+platform_msi_device_domain_free() before freeing the interrupts and MSI
+descriptors and also in the error path of msi_domain_populate_irqs().
+
+Fixes: 2f2940d16823 ("genirq/msi: Remove filter from msi_free_descs_free_range()")
+Reported-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/87mt4wkwnv.ffs@tglx
+---
+ drivers/base/platform-msi.c |  1 +
+ include/linux/msi.h         |  2 ++
+ kernel/irq/msi.c            | 23 ++++++++++++++++++++++-
+ 3 files changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/base/platform-msi.c b/drivers/base/platform-msi.c
+index 5883e76..f37ad34 100644
+--- a/drivers/base/platform-msi.c
++++ b/drivers/base/platform-msi.c
+@@ -324,6 +324,7 @@ void platform_msi_device_domain_free(struct irq_domain *domain, unsigned int vir
+ 	struct platform_msi_priv_data *data = domain->host_data;
+ 
+ 	msi_lock_descs(data->dev);
++	msi_domain_depopulate_descs(data->dev, virq, nr_irqs);
+ 	irq_domain_free_irqs_common(domain, virq, nr_irqs);
+ 	msi_free_msi_descs_range(data->dev, virq, virq + nr_irqs - 1);
+ 	msi_unlock_descs(data->dev);
+diff --git a/include/linux/msi.h b/include/linux/msi.h
+index a112b91..15dd718 100644
+--- a/include/linux/msi.h
++++ b/include/linux/msi.h
+@@ -631,6 +631,8 @@ int msi_domain_prepare_irqs(struct irq_domain *domain, struct device *dev,
+ 			    int nvec, msi_alloc_info_t *args);
+ int msi_domain_populate_irqs(struct irq_domain *domain, struct device *dev,
+ 			     int virq, int nvec, msi_alloc_info_t *args);
++void msi_domain_depopulate_descs(struct device *dev, int virq, int nvec);
++
+ struct irq_domain *
+ __platform_msi_create_device_domain(struct device *dev,
+ 				    unsigned int nvec,
+diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+index efd21b7..d169ee0 100644
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -1109,14 +1109,35 @@ int msi_domain_populate_irqs(struct irq_domain *domain, struct device *dev,
+ 	return 0;
+ 
+ fail:
+-	for (--virq; virq >= virq_base; virq--)
++	for (--virq; virq >= virq_base; virq--) {
++		msi_domain_depopulate_descs(dev, virq, 1);
+ 		irq_domain_free_irqs_common(domain, virq, 1);
++	}
+ 	msi_domain_free_descs(dev, &ctrl);
+ unlock:
+ 	msi_unlock_descs(dev);
+ 	return ret;
+ }
+ 
++void msi_domain_depopulate_descs(struct device *dev, int virq_base, int nvec)
++{
++	struct msi_ctrl ctrl = {
++		.domid	= MSI_DEFAULT_DOMAIN,
++		.first  = virq_base,
++		.last	= virq_base + nvec - 1,
++	};
++	struct msi_desc *desc;
++	struct xarray *xa;
++	unsigned long idx;
++
++	if (!msi_ctrl_valid(dev, &ctrl))
++		return;
++
++	xa = &dev->msi.data->__domains[ctrl.domid].store;
++	xa_for_each_range(xa, idx, desc, ctrl.first, ctrl.last)
++		desc->irq = 0;
++}
++
+ /*
+  * Carefully check whether the device can use reservation mode. If
+  * reservation mode is enabled then the early activation will assign a
