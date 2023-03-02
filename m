@@ -2,119 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EBF6A7C23
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18E46A7C2F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjCBH5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 02:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S229661AbjCBIAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 03:00:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCBH5P (ORCPT
+        with ESMTP id S229447AbjCBIAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 02:57:15 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 551E934300;
-        Wed,  1 Mar 2023 23:57:14 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24BF71FB;
-        Wed,  1 Mar 2023 23:57:57 -0800 (PST)
-Received: from [10.162.41.9] (unknown [10.162.41.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4FC573F587;
-        Wed,  1 Mar 2023 23:57:11 -0800 (PST)
-Message-ID: <1fa898da-efdf-cf39-4be9-1d0354d3fa41@arm.com>
-Date:   Thu, 2 Mar 2023 13:27:08 +0530
+        Thu, 2 Mar 2023 03:00:39 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918852CFE7
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:00:38 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id m3-20020a17090ade0300b00229eec90a7fso3065642pjv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bj5jeIBQySglm8iH/PRsrrx+226h9Hbx2cQIENUHVIQ=;
+        b=XxyK4SX2tntnJjD5uJ1AZorK7UX4/Dvfl4/5IB5fSAclhy3ktUXYYf5EDuxScTzFPe
+         HEm/8URcs5WaUk+G1BtE3nniKTbuLt5w3PMhGiijYZmu81Kg+AQK9Ri5YyiHfCCUqqOG
+         2oYFFxZ9byduvftmIpamuRMJmuMOo8FsiFceDGmq5CnVkFuxRBs3Uc+S8bl8roQ7hA6c
+         WcgHrUw4om48E7ozZ+Gw+KqLs0hYVYzUOMVH2HOBuAxttsqcPB/KXi681/0EqHJj50un
+         +Ubth1AswnLYRb/y8RbFvjGaYe9sLSBFOqDDdZO+m1Bl9wVHv9mLptoOm6RXEfrcGipx
+         qeig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bj5jeIBQySglm8iH/PRsrrx+226h9Hbx2cQIENUHVIQ=;
+        b=62p371v7c1+1RN3Mgae2ACwpbBr9M9K8EvavCfDl9yfD0wnIA75MLDUcck/8OjVCHa
+         b47B3YcHKSa+/GyoGWfItlVP76R86Dr3bdoJIwvvzTIbks6PdYzvP4mredKn59uHixOB
+         9xXXk2kiYGQdEL+E5AVkeggG0wpe3xP+WNhdBfzJ/FJjrXP/G0Y0+ASTQW9rfETSu5c4
+         SIYW/NfpbotVF9psTjEZszR54OwhWHyZTHRYCaZZfOF7Tjv9AgqWahGdoR9W9tHdJH42
+         WTD3D+7pj7p3m1C/eu0riEVd0ppriWGjJxgzB3rIVPXbM/SdqPNzArK1XJi6T9SZYXO1
+         kvOg==
+X-Gm-Message-State: AO0yUKVrRRvr2XnK/o53VtvVhoyNJxEshzTWs5hvFshLirpaS/goOnuE
+        uGUWa/zAgVdGE/TORUBoyNiPsbszL1mwreAthVpGPA==
+X-Google-Smtp-Source: AK7set/rTmv11vbJXLoDBX6h8G5mkK4oxcjWyehmVaMfP5hlenR4+OSHUGo+95iCDM4L/J6OJPBQGIEkTMIK/JbZD68=
+X-Received: by 2002:a17:903:1303:b0:19a:afc4:2300 with SMTP id
+ iy3-20020a170903130300b0019aafc42300mr3429544plb.6.1677744037968; Thu, 02 Mar
+ 2023 00:00:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] mm/debug_vm_pgtable: Replace pte_mkhuge() with
- arch_make_huge_pte()
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230302031833.360679-1-anshuman.khandual@arm.com>
- <94473cc4-f84f-d42d-2bd1-b6389d8c9ab3@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <94473cc4-f84f-d42d-2bd1-b6389d8c9ab3@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com> <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
+ <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com> <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
+ <20221108194843.i4qckcu7zwqstyis@airbuntu> <Y2vMBWpPlIArwnI7@hirez.programming.kicks-ass.net>
+ <424e2c81-987d-f10e-106d-8b4c611768bc@arm.com> <CAKfTPtD0ZOndFef3-JxBn3G9tcX=cZEObjHZ0iqiVTJz7+QrmQ@mail.gmail.com>
+ <20230223153700.55zydy7jyfwidkis@airbuntu> <CAKfTPtDVGcvmR5BoJpyoOBE19PcWZP+6NjSD7MnJyBAc7VMnmg@mail.gmail.com>
+ <20230301172458.intrgsirjauzqmo3@airbuntu>
+In-Reply-To: <20230301172458.intrgsirjauzqmo3@airbuntu>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 2 Mar 2023 09:00:26 +0100
+Message-ID: <CAKfTPtDwDdpiQnUqi_OtER5EE0EN4ykDMqtwzHi3d7AyBd_aQA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 1 Mar 2023 at 18:25, Qais Yousef <qyousef@layalina.io> wrote:
+>
+> On 03/01/23 11:39, Vincent Guittot wrote:
+> > On Thu, 23 Feb 2023 at 16:37, Qais Yousef <qyousef@layalina.io> wrote:
+> > >
+> > > On 02/09/23 17:16, Vincent Guittot wrote:
+> > >
+> > > > I don't see how util_est_faster can help this 1ms task here ? It's
+> > > > most probably never be preempted during this 1ms. For such an Android
+> > > > Graphics Pipeline short task, hasn't uclamp_min been designed for and
+> > > > a better solution ?
+> > >
+> > > uclamp_min is being used in UI and helping there. But your mileage might vary
+> > > with adoption still.
+> > >
+> > > The major motivation behind this is to help things like gaming as the original
+> > > thread started. It can help UI and other use cases too. Android framework has
+> > > a lot of context on the type of workload that can help it make a decision when
+> > > this helps. And OEMs can have the chance to tune and apply based on the
+> > > characteristics of their device.
+> > >
+> > > > IIUC how util_est_faster works, it removes the waiting time when
+> > > > sharing cpu time with other tasks. So as long as there is no (runnable
+> > > > but not running time), the result is the same as current util_est.
+> > > > util_est_faster makes a difference only when the task alternates
+> > > > between runnable and running slices.
+> > > > Have you considered using runnable_avg metrics in the increase of cpu
+> > > > freq ? This takes into the runnable slice and not only the running
+> > > > time and increase faster than util_avg when tasks compete for the same
+> > > > CPU
+> > >
+> > > Just to understand why we're heading into this direction now.
+> > >
+> > > AFAIU the desired outcome to have faster rampup time (and on HMP faster up
+> > > migration) which both are tied to utilization signal.
+> > >
+> > > Wouldn't make the util response time faster help not just for rampup, but
+> > > rampdown too?
+> > >
+> > > If we improve util response time, couldn't this mean we can remove util_est or
+> > > am I missing something?
+> >
+> > not sure because you still have a ramping step whereas util_est
+> > directly gives you the final tager
+>
+> I didn't get you. tager?
 
+target
 
-On 3/2/23 12:31, Christophe Leroy wrote:
-> 
-> 
-> Le 02/03/2023 à 04:18, Anshuman Khandual a écrit :
->> Since the following commit arch_make_huge_pte() should be used directly in
->> generic memory subsystem as a platform provided page table helper, instead
->> of pte_mkhuge(). Change hugetlb_basic_tests() to call arch_make_huge_pte()
->> directly, and update its relevant documentation entry as required.
->>
->> 'commit 16785bd77431 ("mm: merge pte_mkhuge() call into arch_make_huge_pte()")'
->>
->> Cc: Jonathan Corbet <corbet@lwn.net>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
->> Cc: linux-doc@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Cc: linux-mm@kvack.org
->> Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->> Link: https://lore.kernel.org/all/1ea45095-0926-a56a-a273-816709e9075e@csgroup.eu/
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->> This applies on latest mainline.
->>
->>   Documentation/mm/arch_pgtable_helpers.rst | 2 +-
->>   mm/debug_vm_pgtable.c                     | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/mm/arch_pgtable_helpers.rst b/Documentation/mm/arch_pgtable_helpers.rst
->> index 30d9a09f01f4..af3891f895b0 100644
->> --- a/Documentation/mm/arch_pgtable_helpers.rst
->> +++ b/Documentation/mm/arch_pgtable_helpers.rst
->> @@ -214,7 +214,7 @@ HugeTLB Page Table Helpers
->>   +---------------------------+--------------------------------------------------+
->>   | pte_huge                  | Tests a HugeTLB                                  |
->>   +---------------------------+--------------------------------------------------+
->> -| pte_mkhuge                | Creates a HugeTLB                                |
->> +| arch_make_huge_pte        | Creates a HugeTLB                                |
->>   +---------------------------+--------------------------------------------------+
->>   | huge_pte_dirty            | Tests a dirty HugeTLB                            |
->>   +---------------------------+--------------------------------------------------+
->> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
->> index af59cc7bd307..92bed5bd5879 100644
->> --- a/mm/debug_vm_pgtable.c
->> +++ b/mm/debug_vm_pgtable.c
->> @@ -934,7 +934,7 @@ static void __init hugetlb_basic_tests(struct pgtable_debug_args *args)
->>   #ifdef CONFIG_ARCH_WANT_GENERAL_HUGETLB
->>   	pte = pfn_pte(args->fixed_pmd_pfn, args->page_prot);
->>   
->> -	WARN_ON(!pte_huge(pte_mkhuge(pte)));
->> +	WARN_ON(!pte_huge(arch_make_huge_pte(pte)));
-> 
-> Did you build it ?
+>
+> >
+> > >
+> > > Currently we have util response which is tweaked by util_est and then that is
+> > > tweaked further by schedutil with that 25% margin when maping util to
+> > > frequency.
+> >
+> > the 25% is not related to the ramping time but to the fact that you
+> > always need some margin to cover unexpected events and estimation
+> > error
+>
+> At the moment we have
+>
+>         util_avg -> util_est -> (util_est_faster) -> util_map_freq -> schedutil filter ==> current frequency selection
+>
+> I think we have too many transformations before deciding the current
+> frequencies. Which makes it hard to tweak the system response.
 
-Ahh bad ! Built on arm64 which does not subscribe ARCH_WANT_GENERAL_HUGETLB.
+What is proposed here with runnable_avg is more to take a new input
+when selecting a frequency: the level of contention on the cpu. But
+this is not used to modify the utilization seen by the scheduler
 
-> 
-> arch_make_huge_pte() need 3 arguments.
+>
+> >
+> > >
+> > > I think if we can allow improving general util response time by tweaking PELT
+> > > HALFLIFE we can potentially remove util_est and potentially that magic 25%
+> > > margin too.
+> > >
+> > > Why the approach of further tweaking util_est is better?
+> >
+> > note that in this case it doesn't really tweak util_est but Dietmar
+> > has taken into account runnable_avg to increase the freq in case of
+> > contention
+> >
+> > Also IIUC Dietmar's results, the problem seems more linked to the
+> > selection of a higher freq than increasing the utilization;
+> > runnable_avg tests give similar perf results than shorter half life
+> > and better power consumption.
+>
+> Does it ramp down faster too?
 
-Could call it with constants such as PMD_SHIFT and standard vm_flags without
-involving real arg based values (as they are not initialized for HugeTLB).
-But wondering if platform arch_make_huge_pte() implementation might complain.
+I don't think so.
 
-arch_make_huge_pte(pte, PMD_SHIFT, VM_READ | VM_WRITE)
+To be honest, I'm not convinced that modifying the half time is the
+right way to solve this. If it was only a matter of half life not
+being suitable for a system, the halk life would be set once at boot
+and people would not ask to modify it at run time.
+
+>
+>
+> Thanks
+>
+> --
+> Qais Yousef
+>
+> >
+> > >
+> > > Recently phoronix reported that schedutil behavior is suboptimal and I wonder
+> > > if the response time is contributing to that
+> > >
+> > >         https://www.phoronix.com/review/schedutil-quirky-2023
+> > >
+> > >
+> > > Cheers
+> > >
+> > > --
+> > > Qais Yousef
