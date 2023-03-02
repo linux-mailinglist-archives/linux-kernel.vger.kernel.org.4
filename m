@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B166A8228
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A876A822A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 13:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjCBM2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 07:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
+        id S229726AbjCBM3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 07:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCBM2i (ORCPT
+        with ESMTP id S229639AbjCBM3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 07:28:38 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82176E99
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:28:32 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id g18so15274604ljl.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:28:32 -0800 (PST)
+        Thu, 2 Mar 2023 07:29:15 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87B3196
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 04:29:13 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id u9so17413000edd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 04:29:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677760111;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QM9EzJ59d7bm12hYRBG6XOMDXAxFr+3VVIYgcW52hKU=;
-        b=lZIUY2xO9crjBnBglCG+jmfXGploPGWLi1NjlFyOGpVzQWKyDoe2m9nYrRtGHt/MwU
-         dGInHAH7wJx4Moi5TU1b0FoUn/6CpIc5ps0vqd+x3ta3xLYndI6VZoplvuQS6LfAo0mZ
-         8oYOb87lL2GqISnfyNi+xK7+ocr6kLZQ0Ha59By7OexU2iweDROpWTcXfwq7ss5VDaJk
-         +6GPno+LQxqgemVcxPHFMWOCCYQ2D82FDhf3ug6ZmB4eVC4BeN+7xGCyZ/DLxXTedkb1
-         1fGVnf8vxxlOdxy0QXukySqts6C+/0m/EzEArj75MDF4LGwgoJkn+/p982GXyAudP/7o
-         rTgA==
+        d=linaro.org; s=google; t=1677760152;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MkMpyzZmxlO9b2AsSdB9NaVD+MPuHTACY2Gn31+0dVU=;
+        b=UaZu2BYWB0K2sii6++RoHtMF5I+lioLvgxeEoscuP9Va3mg+vWk6yAcjGTSJGqaa3k
+         RGZ/LPMXH+9wXWkzahKFbc30DkZdm9Pbgyi+y7bHuu8bDoGPUeFAz54DCb3SOBMOZKNc
+         dGSDKozlupvguO0NRPCDD5XF5gPF+vbAn1YD8IGp+pCblCZjAkjPNmectE11GvBenTwD
+         THK74CQdYlgv+dhoxYvOkXw4X4foBcg4s9Px0u3M3UYD2eUM0rszKk41E7pnnv7acm3t
+         NOBOlZ8oDh63mQPWSNFPl53EIfzWEosnIU7qzq3Gag1PvGR7BGsVCt6OBNNQqXin3+JC
+         6UVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677760111;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QM9EzJ59d7bm12hYRBG6XOMDXAxFr+3VVIYgcW52hKU=;
-        b=cFXOPCIVBIeBXLC3LJSm/MbcE4hNskN5VuQHBBR/WkGmJeFKhU+0QfiGgg4VqkVAQc
-         cv94M8ekwP36L2hvBSZaxjjvRfNTlTyuEJsN8KjliYBLKw5DYYu27W3QnK56wWbtzYHO
-         24+cxY75QJQfketf3F0MKN00OYfZMwy8+BuUE3G8TtRPirNpYBSCrVp3ftKewBRzvFSo
-         LCNE9bExtVkF44N4ARi3ZewotmUw13hu9KGWjxU98xYyBfayXOCIfqcULMdxuUzw/n6o
-         wLZdPyv12X7gkcarFfKKGde0iIuCqerfV5Ct8f6CULYqD0vYltSA0isLyctLyY1GHEbD
-         /sGA==
-X-Gm-Message-State: AO0yUKVfvrT2EnOcXHiMfw1zaYacpKSx6CqTCld1fDVkhhFDgYCqEMJm
-        yLBG22gewukvFRH7Bx/p84ymOA==
-X-Google-Smtp-Source: AK7set/X14A60bT9t4QpESXUrKarmtui6NVnUQo6yUQoVYeTRj2Pq03+cx5bPgVW7QJbidOyAsln/g==
-X-Received: by 2002:a2e:9b49:0:b0:293:4b61:265a with SMTP id o9-20020a2e9b49000000b002934b61265amr3040517ljj.49.1677760111243;
-        Thu, 02 Mar 2023 04:28:31 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id g7-20020a2eb5c7000000b002946be8475esm2079985ljn.135.2023.03.02.04.28.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 04:28:30 -0800 (PST)
-Message-ID: <f39890de-54a9-297b-68ee-41dedd7bdf27@linaro.org>
-Date:   Thu, 2 Mar 2023 13:28:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp-x13s: fix va dmic dai
- links and routing
-Content-Language: en-US
+        d=1e100.net; s=20210112; t=1677760152;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MkMpyzZmxlO9b2AsSdB9NaVD+MPuHTACY2Gn31+0dVU=;
+        b=vpd1fR/GSgEQ23UyS2MlugVsbe16wpeYps9B+fTOKMg5ObWWW3eLEqyrxafoxlewQs
+         pWCWNNUxQUZWeLMEmUEf20HooIsEBaT7IYoF24lth0VPy+rI2AWDzee8RX3DJU7ImLvB
+         kve/MBLYMBdAO8Bq+W2aTsYl72m9kGfpacKv7VGMGjLOJxf4VLCkCfYX3Ep+hcoU3MvQ
+         xYKW1PeTFWz9PHmfhXyKFl6aesuQWzb8gHLJilysA5xYlbRIeTnfeR8fuhhteExOEmmq
+         O53F8Hjlrl2FKSUzmU5j33gQBf+luqFRSOz5sodyuUxyv4n9eyzruXf36jorA3gjyJ0W
+         4H4g==
+X-Gm-Message-State: AO0yUKVPnEjpXIuRckD5waxtMiPotxRpguGM4hnWSUBV+a5O2m71j1o7
+        vzy6JrROvn8RcEr80vwmbY9qew==
+X-Google-Smtp-Source: AK7set+vwQ+sJWL6Mw1/s1vP3DaSNtdfPbkp5RSPjIdryaxpJ01PRGBmL0J6RgaXTsCL7uxbGpM1qw==
+X-Received: by 2002:a17:906:4887:b0:8af:54d2:36af with SMTP id v7-20020a170906488700b008af54d236afmr9381027ejq.76.1677760152468;
+        Thu, 02 Mar 2023 04:29:12 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id v13-20020a1709064e8d00b008e3bf17fb2asm7162155eju.19.2023.03.02.04.29.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 04:29:12 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        agross@kernel.org, andersson@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230302115741.7726-1-srinivas.kandagatla@linaro.org>
- <20230302115741.7726-5-srinivas.kandagatla@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230302115741.7726-5-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] ASoC: qcom: q6prm: fix incorrect clk_root passed to ADSP
+Date:   Thu,  2 Mar 2023 13:29:08 +0100
+Message-Id: <20230302122908.221398-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The second to last argument is clk_root (root of the clock), however the
+code called q6prm_request_lpass_clock() with clk_attr instead
+(copy-paste error).  This effectively was passing value of 1 as root
+clock which worked on some of the SoCs (e.g. SM8450) but fails on
+others, depending on the ADSP.  For example on SM8550 this "1" as root
+clock is not accepted and results in errors coming from ADSP.
 
+Fixes: 2f20640491ed ("ASoC: qdsp6: qdsp6: q6prm: handle clk disable correctly")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ sound/soc/qcom/qdsp6/q6prm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 2.03.2023 12:57, Srinivas Kandagatla wrote:
-> VA dmics 0, 1, 2 micbias on X13s are connected to WCD MICBIAS1, WCD MICBIAS1
-> and WCD MICBIAS3 respectively. Reflect this in dt to get dmics working.
-I'm far from good when it comes to sound, but is it expected that
-(VA DMICn) are are connected to both (MIC BIASn) and (VA MIC BIAS{1, 1, 3})?
+diff --git a/sound/soc/qcom/qdsp6/q6prm.c b/sound/soc/qcom/qdsp6/q6prm.c
+index 8aa1a213bfb7..c1dc5bae715a 100644
+--- a/sound/soc/qcom/qdsp6/q6prm.c
++++ b/sound/soc/qcom/qdsp6/q6prm.c
+@@ -183,9 +183,9 @@ int q6prm_set_lpass_clock(struct device *dev, int clk_id, int clk_attr, int clk_
+ 			  unsigned int freq)
+ {
+ 	if (freq)
+-		return q6prm_request_lpass_clock(dev, clk_id, clk_attr, clk_attr, freq);
++		return q6prm_request_lpass_clock(dev, clk_id, clk_attr, clk_root, freq);
+ 
+-	return q6prm_release_lpass_clock(dev, clk_id, clk_attr, clk_attr, freq);
++	return q6prm_release_lpass_clock(dev, clk_id, clk_attr, clk_root, freq);
+ }
+ EXPORT_SYMBOL_GPL(q6prm_set_lpass_clock);
+ 
+-- 
+2.34.1
 
-> Also fix dmics to go via VA Macro instead of TX macro to fix device switching.
-> 
-> Fixes: 8c1ea87e80b4 ("arm64: dts: qcom: sc8280xp-x13s: Add soundcard support")
-If that doesn't depend on any driver changes, please Cc stable
-so that distros will pick this up.
-
-Konrad
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  .../arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index d18d405d1776..89230112e288 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -933,9 +933,9 @@
->  		"VA DMIC0", "MIC BIAS1",
->  		"VA DMIC1", "MIC BIAS1",
->  		"VA DMIC2", "MIC BIAS3",
-> -		"TX DMIC0", "MIC BIAS1",
-> -		"TX DMIC1", "MIC BIAS2",
-> -		"TX DMIC2", "MIC BIAS3",
-> +		"VA DMIC0", "VA MIC BIAS1",
-> +		"VA DMIC1", "VA MIC BIAS1",
-> +		"VA DMIC2", "VA MIC BIAS3",
->  		"TX SWR_ADC1", "ADC2_OUTPUT";
->  
->  	wcd-playback-dai-link {
-> @@ -986,7 +986,7 @@
->  	va-dai-link {
->  		link-name = "VA Capture";
->  		cpu {
-> -			sound-dai = <&q6apmbedai TX_CODEC_DMA_TX_3>;
-> +			sound-dai = <&q6apmbedai VA_CODEC_DMA_TX_0>;
->  		};
->  
->  		platform {
