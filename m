@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6106A84EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B0D6A84F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 16:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjCBPGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 10:06:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S229658AbjCBPJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 10:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbjCBPGu (ORCPT
+        with ESMTP id S229471AbjCBPJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 10:06:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5506C55072
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 07:06:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D839E615F6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 15:06:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF997C433A1;
-        Thu,  2 Mar 2023 15:06:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677769594;
-        bh=FdJDrtgvO+zazRZyI/ANj+54LorzkRO9vTG33XftdBc=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=Xkgd+P4X22UqIdrQRfjP6APYKx49gMV6gtd9XZM13QSdO5jBK3Na/LetFYAO9YcKp
-         t9q9Z6RAC7Hbv6a7+KYBm5F38FeVB8XLEliWhAWXvRW3s2hdhvbuwNna4f5X5DMsuk
-         3USIvYsF2LVjASIRUt/QjrPWyWJemlnPPFHNVEbB0fkw2g7m/UlrzbYh3+QRG34g2o
-         U9/tzia6M4IuA+/1Ws2PtXF7RiLSoruSBCt4aKKEfDGu/k2mSjGa8V5HjMNq6e1fIc
-         QE4L+J2deLAPwcMgBpGPDnOmYL9CBWLv0eoWXA4ij8ryjybqTT+TfXaqinIUkLg+5t
-         X80DoqGhNnGmQ==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id CB72B27C0054;
-        Thu,  2 Mar 2023 10:06:32 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Thu, 02 Mar 2023 10:06:32 -0500
-X-ME-Sender: <xms:eLsAZE-qQDzCbrpsyM4U0d3X7KDbBAVP4tK0ph4wjJuA7HCdpTFwZg>
-    <xme:eLsAZMuZVYtg1iRWCcJgzBKzUfIaN1Q-D19Uhr1oWRYXNkjJxwLbFBXlJHP2e4vjI
-    sB1LskPvVQl_1xalFY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeljedgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepveffgfevhfeiteduueetgeevvdevudevteefveffudeiveefuddt
-    leeitdeludfgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhguhidomhgvshhmthhprghu
-    thhhphgvrhhsohhnrghlihhthidqudduiedukeehieefvddqvdeifeduieeitdekqdhluh
-    htoheppehkvghrnhgvlhdrohhrgheslhhinhhugidrlhhuthhordhush
-X-ME-Proxy: <xmx:eLsAZKA1IwRoJ0fiCagLCdLL2GpG_N-sIMppDO_d5PHjXEiGTpT9mA>
-    <xmx:eLsAZEcBj9l8chUf6ddnub-0IpYEM9KjEvuHKg0CoulnZx5LX_NdjA>
-    <xmx:eLsAZJMZwRgqg5Cjj3unkIUeXe3wwfw5ZcEQ0wnn_NbCTVCl0YZu6g>
-    <xmx:eLsAZCam0NvcafK4tTtrLWeHYZjsxYfrX2j2M1l8nSExG2rct2EtYg>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 54A4F31A0064; Thu,  2 Mar 2023 10:06:32 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <840dcfd4-0d6c-400a-9cf7-8fe56d55ac7f@app.fastmail.com>
-In-Reply-To: <ZAB/b+FjHjuRqe/S@zn.tnic>
-References: <20210601075354.5149-2-rppt@kernel.org>
- <162274330352.29796.17521974349959809425.tip-bot2@tip-bot2>
- <7d344756-aec4-4df2-9427-da742ef9ce6b@app.fastmail.com>
- <ZAB/b+FjHjuRqe/S@zn.tnic>
-Date:   Thu, 02 Mar 2023 07:06:11 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Borislav Petkov" <bp@alien8.de>
-Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Mike Rapoport" <rppt@linux.ibm.com>,
-        "Hugh Dickins" <hughd@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [tip: x86/urgent] x86/setup: Always reserve the first 1M of RAM
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Mar 2023 10:09:18 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6632C1351A;
+        Thu,  2 Mar 2023 07:09:15 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 82B075FD0E;
+        Thu,  2 Mar 2023 18:09:12 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1677769752;
+        bh=arLYnzRobVfIG4Xp6X3i9HedVCLBAhYiuD+9xD5xV54=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=NuxGBxE/GMn/5Jxg6mKRWyM7waw7zJ5DmrumuRxbeMkZBAXbJ5cIXagAopnzXPPgv
+         6G5+EmDOjS9z2l7oIIOBVIW9ldWODX1HiqZ1npdGI9W9QrSOcqy41cBV95rpA8IY73
+         VoCkE1eDYGl0kt7uFKaxvoK2pLDDntzPnNc4d9PFW2FsnIBIU+oYN6bomsEe010k8k
+         ykjduawsI13bzUlIWIiVMmu2P+gmBIbslFyObfYyhPocIAVqxrcgAD4Y86jkYIeUmM
+         SKnP84W6gUNJUk6d+KMqM4ZKg8uW88OMyhCP3EmNgUsQjUkM7aIMektqs4hnR+Y44c
+         x2N5bZcimqwTQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  2 Mar 2023 18:09:07 +0300 (MSK)
+Message-ID: <63035ec9-6546-0881-353a-502b68daaada@sberdevices.ru>
+Date:   Thu, 2 Mar 2023 18:06:19 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v1] vsock: check error queue to set EPOLLERR
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>,
+        <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+References: <76e7698d-890b-d14d-fa34-da5dd7dd13d8@sberdevices.ru>
+ <20230302100621.gk45unegjbqjgpxh@sgarzare-redhat>
+ <3b38870c-7606-bf2e-8b17-21a75a1ed751@sberdevices.ru>
+ <20230302133845.hglm4uregjsvrcrc@sgarzare-redhat>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230302133845.hglm4uregjsvrcrc@sgarzare-redhat>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/02 07:22:00 #20908555
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,104 +76,112 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On Thu, Mar 2, 2023, at 2:50 AM, Borislav Petkov wrote:
-> On Wed, Mar 01, 2023 at 07:51:43PM -0800, Andy Lutomirski wrote:
->> This is quite broken.  The comments in the patch seem to understand
->> that Linux tries twice to allocate the real mode trampoline, but the
->> code has some issues.
->> 
->> First, it actively breaks the logic here:
->> 
->> +               /*
->> +                * Don't free memory under 1M for two reasons:
->> +                * - BIOS might clobber it
->> +                * - Crash kernel needs it to be reserved
->> +                */
->> +               if (start + size < SZ_1M)
->> +                       continue;
->> +               if (start < SZ_1M) {
->> +                       size -= (SZ_1M - start);
->> +                       start = SZ_1M;
->> +               }
->> +
->
-> Are you refering, per-chance, here to your comment in that same function
-> a bit higher?
->
-> Introduced by this thing here:
->
-> 5bc653b73182 ("x86/efi: Allocate a trampoline if needed in 
-> efi_free_boot_services()")
->
-> ?
+On 02.03.2023 16:38, Stefano Garzarella wrote:
+> On Thu, Mar 02, 2023 at 02:41:29PM +0300, Arseniy Krasnov wrote:
+>> Hello!
+>>
+>> On 02.03.2023 13:06, Stefano Garzarella wrote:
+>>> On Wed, Mar 01, 2023 at 08:19:45AM +0300, Arseniy Krasnov wrote:
+>>>> EPOLLERR must be set not only when there is error on the socket, but also
+>>>> when error queue of it is not empty (may be it contains some control
+>>>> messages). Without this patch 'poll()' won't detect data in error queue.
+>>>
+>>> Do you have a reproducer?
+>>>
+>> Dedicated reproducer - no:)
+>> To reproduce this issue, i used last MSG_ZEROCOPY patches. Completion was inserted to
+>> error queue, and 'poll()' didn't report about it. That was the reason, why this patch
+>> was included to MSG_ZEROCOPY patchset. But also i think it is better to reduce number
+>> of patches in it(i'm working on v2), so it is good to handle this patch separately.
+> 
+> Yep, absolutely!
+> 
+>> May be one way to reproduce it is use SO_TIMESTAMP(time info about skbuff will be queued
+>> to the error queue). IIUC this feature is implemented at socket layer and may work in
+>> vsock (but i'm not sure). Ok, i'll check it and try to implement reproducer.
+>>
+>> IIUC, for future, policy for fixes is "for each fix implement reproducer in vsock_test"?
+> 
+> Nope, but for each fix we should have a Fixes tag.
+> 
+> Usually we use vsock_test to check regressions on features and also the
+> behaviour of different transports.
+> My question was more about whether this problem was there before
+> supporting sk_buff or not, to figure out which Fixes tag to use.
+> 
+Ok i see
+>>
+>>>> This patch is based on 'tcp_poll()'.
+>>>
+>>> LGTM but we should add a Fixes tag.
+>>> It's not clear to me whether the problem depends on when we switched to using sk_buff or was pre-existing.
+>>>
+>>> Do you have any idea when we introduced this issue?
+>> git blame shows, that this code exists since first commit to vsock:
+> 
+> Okay, but did we use sk_error_queue before supporting sk_buff?
+> 
+No I think, sk_error_queue was unavailable to user(and still unavailable today),
+because we don't have check for MSG_ERRQUEUE flag in recv logic in af_vsock.c
+(i've added it in MSG_ZEROCOPY). So even if some subsystem of the kernel inserts
+skb to sk_error_queue in AF_VSOCK case, user won't dequeue it.
 
-Yes.
+> Anyway, if we are not sure I think we can use the following Fixes tag,
+> I don't see any issue if we backport this patch also before supporting
+> sk_buff.
+> 
+Ok, i'll try to prepare reproducer(may be in vsock_test) and add Fixes tag with the
+commit "VSOCK: Introduce VM Sockets."
 
->
-> Also, it looks like Mike did pay attention to your commit:
->
-> https://lore.kernel.org/all/YLZsEaimyAe0x6b3@kernel.org/
-
-He definitely did.  But I'm still pretty sure the patch in question broke it :-/
-
->
-> And then there's the whole deal with kdump kernel needing lowmem. The
-> function which became obsolete and got removed by:
->
-> 23721c8e92f7 ("x86/crash: Remove crash_reserve_low_1M()")
->
-> So, considering how yours is the only report that breaks booting and
-> this reservation of <=1M has been out there for ~2 years without any
-> complaints, I'm thinking what we should do now is fix that logic.
->
-> Btw, this whole effort started with
->
->   a799c2bd29d1 ("x86/setup: Consolidate early memory reservations")
->
-> Also see this:
->
-> ec35d1d93bf8 ("x86/setup: Document that Windows reserves the first MiB")
->
-> and with shit like that, we're "piggybacking" on Windoze since there
-> certification happens at least.
->
-> Which begs the question: how does your laptop even boot on windoze if
-> windoze reserves that 1M too?!
-
-I haven't booted Windoze on this thing in years.  But...
-
-There is no possible way that Windoze genuinely reserves the first 1M. It does SMP, and x86 needs <1M memory for SMP, so Windoze uses <1M memory.  QED :)
-
->
->> I real the commit message and the linked bug, and I'm having trouble
->> finding evidence of anything actually fixed by this patch.  Can we
->> just revert it?  If not, it would be nice to get a fixup patch that
->> genuinely cleans this up -- the whole structure of the code (first,
->> try to allocate trampoline, then free boot services, then try again)
->> isn't really conducive to a model where we *don't* free boot services
->> < 1M.
->
-> Yes, I think this makes most sense. And that whole area is a minefield
-> so the less we upset the current universe, the better.
-
-I'll send a revert patch.
-
-Thinking about this a bit more, if we actually want to "reserve" <1M, we should implement it completely differently by treating <1M as its very own special thing and teaching the memblock allocator to refuse to allocate <1M unless specifically requested.  There's only a very small number of allocations that need it (crashkernel for some reason?), and there are at least two spurious users of memblock_phys_alloc_range that curently may use <1M but have no business doing so (ramdisk code and the NUMA distance table).  But let's only do that if there's an actual problem to solve.
-
->
->> Discovered by my delightful laptop, which does not boot with this patch applied.
->
-> How come your laptop hasn't booted new Linux since then?!? Tztztztz
-
-Honestly, no clue.  Looking at the logs, I'm pretty sure I *did* boot an affected (6.0) kernel.  The actual problematic memory map on this laptop seems to show up a bit inconsistently as some horrible combination of firmware settings (especially SGX) and who-knows-what else.  My best guess is that a GRUB update I installed yesterday caused some tiny memory map change that triggered it.
-
-I did install a new kernel yesterday too, but the *previous* kernel stopped booting too.
-
->
-> Thx.
->
-> -- 
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Thanks, Arseniy
+> Thanks,
+> Stefano
+> 
+>>
+>> commit d021c344051af91f42c5ba9fdedc176740cbd238
+>> Author: Andy King <acking@vmware.com>
+>> Date:   Wed Feb 6 14:23:56 2013 +0000
+>>
+>>    VSOCK: Introduce VM Sockets
+>>
+>> For TCP same logic was added by:
+>>
+>> commit 4ed2d765dfaccff5ebdac68e2064b59125033a3b
+>> Author: Willem de Bruijn <willemb@google.com>
+>> Date:   Mon Aug 4 22:11:49 2014 -0400
+>>
+>>    net-timestamp: TCP timestamping
+>>
+>>
+>>>
+>>> Thanks,
+>>> Stefano
+>>>
+>>
+>> Thanks Arseniy
+>>
+>>>>
+>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>> ---
+>>>> net/vmw_vsock/af_vsock.c | 2 +-
+>>>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>>>> index 19aea7cba26e..b5e51ef4a74c 100644
+>>>> --- a/net/vmw_vsock/af_vsock.c
+>>>> +++ b/net/vmw_vsock/af_vsock.c
+>>>> @@ -1026,7 +1026,7 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+>>>>     poll_wait(file, sk_sleep(sk), wait);
+>>>>     mask = 0;
+>>>>
+>>>> -    if (sk->sk_err)
+>>>> +    if (sk->sk_err || !skb_queue_empty_lockless(&sk->sk_error_queue))
+>>>>         /* Signify that there has been an error on this socket. */
+>>>>         mask |= EPOLLERR;
+>>>>
+>>>> -- 
+>>>> 2.25.1
+>>>>
+>>>
+>>
+> 
