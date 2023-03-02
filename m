@@ -2,169 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6466A8649
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFE06A8600
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCBQYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        id S229694AbjCBQQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjCBQYS (ORCPT
+        with ESMTP id S229540AbjCBQQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:24:18 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572E746156;
-        Thu,  2 Mar 2023 08:24:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677774246; x=1709310246;
-  h=date:from:cc:subject:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to;
-  bh=TFwgDL0789xDmjxNmBV6y3MQ4MQjbev1D7zf/lwGBDY=;
-  b=F/Q5YX8kVlV9itSa+QdarfP5M860KIrLUYfD43Frugv7wdmWE77FMWki
-   sgCl/k1GLxRYe2v0AfvePITrzTNT1Sgrc4Gi6WhalZ//zkgzx4aM89Yz9
-   xmaDJ6eobMtWIBcuX+j+bbZPZsTmZeksfmwVvyu+wBCuC4M7ah4tpnaZH
-   My1xEvbrf3o4m9uCjeq2PHt2/3CmvfEczrPozD5MaD3T9P/WQ7ubOns28
-   XjgjsjgzuxLUty5acVyLdrhJmlZ2Y3zu9+vFOQV/ZvHQwF6xNFy39Ia6M
-   PzmeTDg40N/1Ns9WTGMwAjQKxB+oBLKgrmEg9k+vtrltfcpo5UQYE6UOW
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="397354061"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="397354061"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 08:16:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="739140687"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="739140687"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Mar 2023 08:16:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pXlbo-00EQJk-0m;
-        Thu, 02 Mar 2023 18:16:44 +0200
-Date:   Thu, 2 Mar 2023 18:16:43 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Thu, 2 Mar 2023 11:16:55 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F135329D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:16:53 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id v16so14261687wrn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 08:16:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677773812;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=5HYjZpMpytZSGqDsP2K0KCRwhR+itCR/8/lFWesuhjo=;
+        b=H7oc1ycRYvXIKKZhYMMqwsHf+0g+8ypaFk6dk8L5BQShyqbanuGVkSK7X2pcd1OgMu
+         LoMDBDJr5ykK0DXXxaByjexZWLV3FhGEHajt9+gVqQp0r08o3yw9DysU+0LrRmHcoG/b
+         FGKPZheIN/qjKt1uBthr/5wkcnzrW+1pE1lslRipqA9+AxMNNqsjpWpFktS8FbKGEuut
+         +r/t1Q1iKlJzVA4Q3mG77VVnvaUhr/yt/CNRV/GI+0DYxhsERZPEBc8rd/+8s3djqVNc
+         WhswMp7LjlqAs3A+En9SfpZ2OH3Ion3sgOq9NVPpmNiDroJEiekiPG2f+Z4P6BFNKcbY
+         oisA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677773812;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5HYjZpMpytZSGqDsP2K0KCRwhR+itCR/8/lFWesuhjo=;
+        b=ImNNRfTa5Ciht0NEWSXvqctel0OZCJvs3c9x9aINTTdh2NbO6bOoKcz9Hann4dAvOG
+         pDiKeZlMKlEJ3aCdlU6pOsBf2BhoORrJinDwzPYIqii0/ek3pdQkfKX9ewfKJgQ/U3oy
+         K8uz8ygU0dhtRDOi3ivgMpRP9DQ2YSYye54HIsbU9NCHk22SL457yZEP3/SBOq/94ftc
+         y2w0Ne8vIUruKblsbbuIwLK14rjeim/YvaceB8ZcradnctXRZH0iZJVSaZslQ1u3uIaw
+         XW+kLdRrzflKY7xnFgI3RKFYdvN6FGWoyjYlN9iw/sECv9q2WDlkhnqpFjFL0mh9F4kQ
+         F7fQ==
+X-Gm-Message-State: AO0yUKXORbviQ02zd7oFmj26RpzQDjnx7Podub2Ha1o8JE+FSC4hVJUx
+        FCWXTETGBwQLre2M5e5os67eHJEGFJ0stAruZnw=
+X-Google-Smtp-Source: AK7set/OXYKwHtUzDjDTB14sUjIPRR5ax4v3gv1KunbFBF2UbUGo3zPLpddvJ30FI1tl/xvyYK6StQ==
+X-Received: by 2002:a5d:404b:0:b0:2c7:420:5d52 with SMTP id w11-20020a5d404b000000b002c704205d52mr8232023wrp.62.1677773812032;
+        Thu, 02 Mar 2023 08:16:52 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:217a:db24:fe27:6b35? ([2a01:e0a:982:cbb0:217a:db24:fe27:6b35])
+        by smtp.gmail.com with ESMTPSA id a18-20020a5d53d2000000b002c70ce264bfsm16250852wrw.76.2023.03.02.08.16.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 08:16:51 -0800 (PST)
+Message-ID: <3b6f866b-1d38-2605-df35-7a937e73a2fe@linaro.org>
+Date:   Thu, 2 Mar 2023 17:16:50 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550: fix LPASS pinctrl slew base
+ address
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-Subject: Re: [PATCH v9 0/8] i2c-atr and FPDLink
-Message-ID: <ZADL62W6Mv6uNjKf@smile.fi.intel.com>
-References: <20230216140747.445477-1-tomi.valkeinen@ideasonboard.com>
- <Y+5Rb17FTG4IxcE0@smile.fi.intel.com>
- <e4141652-53c0-fce1-dac7-5da5368e2240@ideasonboard.com>
- <Y+9j3cYOG+Z0zmyC@smile.fi.intel.com>
- <9f3f0744-f771-cd2c-3b8e-5b79f7a430c7@ideasonboard.com>
- <Y++E+Rr54p3vd8Jn@smile.fi.intel.com>
- <96f8e0f9-d8cf-fa9b-a224-a5caad445992@ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <96f8e0f9-d8cf-fa9b-a224-a5caad445992@ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230302154724.856062-1-krzysztof.kozlowski@linaro.org>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230302154724.856062-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Cc: Saravana (for devlink issues)
-
-On Thu, Mar 02, 2023 at 05:52:24PM +0200, Tomi Valkeinen wrote:
-> On 17/02/2023 15:45, Andy Shevchenko wrote:
-> > On Fri, Feb 17, 2023 at 02:57:02PM +0200, Tomi Valkeinen wrote:
-> > > On 17/02/2023 13:24, Andy Shevchenko wrote:
-> > > > On Fri, Feb 17, 2023 at 08:57:32AM +0200, Tomi Valkeinen wrote:
-> > > > > On 16/02/2023 17:53, Andy Shevchenko wrote:
-> > > > > > On Thu, Feb 16, 2023 at 04:07:39PM +0200, Tomi Valkeinen wrote:
-
-...
-
-> > > > > > >     	struct i2c_board_info ser_info = {
-> > > > > > > -		.of_node = to_of_node(rxport->remote_fwnode),
-> > > > > > > -		.fwnode = rxport->remote_fwnode,
-> > > > > > 
-> > > > > > > +		.of_node = to_of_node(rxport->ser.fwnode),
-> > > > > > > +		.fwnode = rxport->ser.fwnode,
-> > > > > > 
-> > > > > > Why do you need to have both?!
-> > > > > 
-> > > > > I didn't debug it, but having only fwnode there will break the probing (no
-> > > > > match).
-> > > > 
-> > > > This needs to be investigated. The whole fwnode approach, when we have both
-> > > > fwnode and legacy of_node fields in the same data structure, is that fwnode
-> > > > _OR_ of_node initialization is enough, when both are defined the fwnode
-> > > > should take precedence.
-> > > > 
-> > > > If your testing is correct (and I have no doubts) it means we have a serious
-> > > > bug lurking somewhere.
-> > > 
-> > > Having both defined or only of_node defined works for me.
-> > 
-> > But of_node is _legacy_ stuff. We should not really consider this option in the
-> > new code.
-> > 
-> > > Perhaps the issue is that these drivers only add of_match_table, and thus
-> > > having only .fwnode above is not enough.
-> > 
-> > No, the code should work with fwnode that carrying DT node or another.
-> > The matching table shouldn't affect this either.
-> > 
-> > > Looking at i2c_device_match(), i2c_of_match_device() only uses of_node, so
-> > > perhaps I would need CONFIG_ACPI for acpi_driver_match_device to do matching
-> > > with of_node? Although I don't see the acpi code using fwnode, just of_node.
-> > > Well, I have to say I have no idea without spending more time on this.
-> > 
-> > Again, there is a bug and that bug seems nasty one as it would allow to
-> > work the device in one environment and not in another.
-> > 
-> > Since it's about I²C board files, I believe that an issue is in I²C core.
+On 02/03/2023 16:47, Krzysztof Kozlowski wrote:
+> The second LPASS pin controller IO address is supposed to be the MCC
+> range which contains the slew rate registers.  The Linux driver then
+> accesses slew rate register with hard-coded offset (0xa000).  However
+> the DTS contained the address of slew rate register as the second IO
+> address, thus any reads were effectively pass the memory space and lead
+> to "Internal error: synchronous external aborts" when applying pin
+> configuration.
 > 
-> I don't know if this is related in any way, but I see these when probing:
-
-I believe this is for devlink (Saravana Cc'ed).
-
-> [   36.952697] i2c 4-0044: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer/i2c/sensor@21/port/endpoint
-> [   36.969268] i2c 4-0044: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/ports/port@0/endpoint
-> [   36.983001] i2c 4-0044: Failed to create device link with 4-0044
-> [   36.992828] ds90ub953 4-0044: Found ub953 rev/mask 0x20
-> [   37.017761] i2c 5-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer/ports/port@0/endpoint
-> [   37.033843] i2c 5-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@0/serializer
-> [   37.117492] i2c 4-0045: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer/i2c/sensor@21/port/endpoint
-> [   37.134033] i2c 4-0045: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/ports/port@1/endpoint
-> [   37.147735] i2c 4-0045: Failed to create device link with 4-0045
-> [   37.156097] ds90ub953 4-0045: Found ub953 rev/mask 0x20
-> [   37.186584] i2c 6-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer/ports/port@0/endpoint
-> [   37.202636] i2c 6-0021: Fixed dependency cycle(s) with /ocp/interconnect@48000000/segment@0/target-module@7c000/i2c@0/deser@3d/links/link@1/serializer
+> Fixes: 6de7f9c34358 ("arm64: dts: qcom: sm8550: add GPR and LPASS pin controller")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Then again, I see similar warnings/errors for some other devices too, when booting up (TI's DRA76 EVM).
+> ---
+> 
+> Fix for current cycle - v6.3-rc1.
+> ---
+>   arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 1dea055a6815..6296eb7adecd 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -2001,7 +2001,7 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
+>   		lpass_tlmm: pinctrl@6e80000 {
+>   			compatible = "qcom,sm8550-lpass-lpi-pinctrl";
+>   			reg = <0 0x06e80000 0 0x20000>,
+> -			      <0 0x0725a000 0 0x10000>;
+> +			      <0 0x07250000 0 0x10000>;
+>   			gpio-controller;
+>   			#gpio-cells = <2>;
+>   			gpio-ranges = <&lpass_tlmm 0 0 23>;
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
