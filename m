@@ -2,128 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786EF6A872F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BEE6A8715
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 17:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjCBQqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 11:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S229984AbjCBQnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 11:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCBQqd (ORCPT
+        with ESMTP id S229530AbjCBQnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 11:46:33 -0500
-X-Greylist: delayed 118 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 08:46:31 PST
-Received: from cmx-mtlrgo002.bell.net (mta-mtl-002.bell.net [209.71.208.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B667B34C2D;
-        Thu,  2 Mar 2023 08:46:31 -0800 (PST)
-X-RG-CM-BuS: 0
-X-RG-CM-SC: 0
-X-RG-CM: Clean
-X-Originating-IP: [174.88.80.104]
-X-RG-Env-Sender: dave.anglin@bell.net
-X-RG-Rigid: 63F6814000DA1401
-X-CM-Envelope: MS4xfLVO8ITc1kj8qoxJFtfOPz1EuT7a95tpUZP4sXes5k+K6EBHSG976j7A+uSPtTUw4nb7P2L+8EePjZy+fJ0k7kzOAlWBq7pDr3YMv2wHDQMTnvASGOiD
- iZko+LpnFwlDJ00F7UdTQYrQWfNNROBalCvTEMRb4+VMkb0AC3XHCv7i5S96s4V1KAZoemqGkL+tlWfdN3QqdEz/71NqzV2pV2+amkfBZGBenRwRwFGJ4bh8
- ew3+rQUOOrZhFjB4suCAdJttJrIkkJ+WjltCUv2E1b9/svjrx+FvzK7Hr7TD0xFRsL72s/lN1vksOizeo54w8mgDkxFWnDE8209jNglwa40Gp90LnLmShC8S
- lcF2SLNoqjABa9jsVh0rcZ51aWoUCoLSzGNcIejRSxWRUN0hEx30W36VcUNxyvs60vSdKG3uddxVX+kKVtwKH5YRUMUFIpYIdYkEnP/F/wCiTpA5z3cWsY2E
- ogcxm4d3FqCHPgB2
-X-CM-Analysis: v=2.4 cv=GcB0ISbL c=1 sm=1 tr=0 ts=6400d21a
- a=jp24WXWxBM5iMX8AJ3NPbw==:117 a=jp24WXWxBM5iMX8AJ3NPbw==:17
- a=IkcTkHD0fZMA:10 a=FBHGMhGWAAAA:8 a=Sjfu5S3q6Ak1qpNjs2gA:9 a=QEXdDO2ut3YA:10
- a=9gvnlMMaQFpL9xblJ6ne:22
-Received: from [192.168.2.49] (174.88.80.104) by cmx-mtlrgo002.bell.net (5.8.814) (authenticated as dave.anglin@bell.net)
-        id 63F6814000DA1401; Thu, 2 Mar 2023 11:43:06 -0500
-Message-ID: <9bb5280e-c875-6eee-b28e-2abc03427e5f@bell.net>
-Date:   Thu, 2 Mar 2023 11:43:06 -0500
+        Thu, 2 Mar 2023 11:43:43 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6C593E9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 08:43:41 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id l25so17180266wrb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 08:43:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1677775420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cTZfZHAIhgJirPC83OpTOerMsHpSjvj4Zqm6PqES9bI=;
+        b=FLTFY/6ogRnvXZl26ubXndP14EhvGLTYCaDMe0E+v+D4uEwk1Rf1gm8Wy4t72NV9+G
+         S2u9Rd31ML2znI5/txqXW9xO8qEdvpSLfA4nUC5xX4FJ8Rn52hhXWVYAPXNHYm4RztqV
+         +eyaeMhr4GjL6r89L46CdH+M4AIl9tBtg5fByudIoWTMFpWLu2DH/FyyuQ8ntB/y+EZ5
+         AjwqXrF1xBPY0rvjE7U33tFVEoS2genDOGPbVYTo/j0DwP+aNLVolMZSeGVGfvBIFjeg
+         NoshzMBVoFFa/EWXz4d7VqG+xkFixPL0l9ODMScmp+7WYwuyWLGt8fnsecXh2/MuTKvI
+         552w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677775420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cTZfZHAIhgJirPC83OpTOerMsHpSjvj4Zqm6PqES9bI=;
+        b=AcceVfo4HkSaeKIXQCYKHzcjtu2Xr4e0yn1vXnKBwSkRyISEtDqkGFa7/7+6pcqSdQ
+         rpo3HZE3FVBJCAK4INaSx+AlTUL4Mci8YJag4sjuwxco30W/sxC5OEHE3T3WcM8evvnS
+         D6kNUhpBdkj1frtoDQts+TSbytlka90CJ0XdD9WxQM80Z3k148OFoRynOMj8sQwQwLf+
+         lzxVHV9JkZR7ipTpvDqNYUwhQlF00fE5OPrXeUOZ9N3kP225NEOE8mVeBGgmKs0K6zm2
+         aKbvhspzj5z/0cfrz6DT1RPJRnhsNYc6/ZotOvhm5DDY/9+8YOROw7mlCuZFpDzsc/wI
+         w6qw==
+X-Gm-Message-State: AO0yUKVAmea9NBlkWzbQ4rcifAakkPTOoQ0Vfw7QQ6suZBYJK3rZhpoh
+        D3YJAD8mKZ7u9U6q3aC4aeGESkZQWJppT8VJAyNnpw==
+X-Google-Smtp-Source: AK7set+vXKnI+Vramuu8NtDo2jEQGC5AgWDJT3qnrylYvn5UhjJ2TtTG/B1cjhWFAaWc/NDHXS6Z7OUXdMf+VKgpBck=
+X-Received: by 2002:adf:dd8b:0:b0:2c5:5941:a04b with SMTP id
+ x11-20020adfdd8b000000b002c55941a04bmr594881wrl.7.1677775420157; Thu, 02 Mar
+ 2023 08:43:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 18/34] parisc: Implement the new page table range API
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
-References: <20230228213738.272178-1-willy@infradead.org>
- <20230228213738.272178-19-willy@infradead.org>
-Content-Language: en-US
-From:   John David Anglin <dave.anglin@bell.net>
-In-Reply-To: <20230228213738.272178-19-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230301075751.43839-1-lma@semihalf.com> <Y/8PUdEwskXuWZHA@kroah.com>
+ <CAFJ_xbp+qD-_MGd3+SgBY=8zruZNy7k3CO3OMMmWhMGhA-tARQ@mail.gmail.com>
+ <Y/9Ddl7c2PKSEpsR@kroah.com> <CAFJ_xbr_petJ8=wKNLSnJ=97t+cERre07=hNYFeBVHp0nvPtWw@mail.gmail.com>
+In-Reply-To: <CAFJ_xbr_petJ8=wKNLSnJ=97t+cERre07=hNYFeBVHp0nvPtWw@mail.gmail.com>
+From:   Lukasz Majczak <lma@semihalf.com>
+Date:   Thu, 2 Mar 2023 17:43:28 +0100
+Message-ID: <CAFJ_xbrK9pGh_5muDKCCPz1gvaue7sKKELJfZ6TZHCU+gibtYg@mail.gmail.com>
+Subject: Re: [PATCH] serial: core: fix broken console after suspend
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-28 4:37 p.m., Matthew Wilcox (Oracle) wrote:
-> Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio()
-> and flush_icache_pages().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
-> from being per-page to per-folio.
-I have tested this change on rp3440 at mainline commit e492250d5252635b6c97d52eddf2792ec26f1ec1
-and c8000 at mainline commit ee3f96b164688dae21e2466a57f2e806b64e8a37.
+=C5=9Br., 1 mar 2023 o 15:09 Lukasz Majczak <lma@semihalf.com> napisa=C5=82=
+(a):
+>
+> =C5=9Br., 1 mar 2023 o 13:22 Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> napisa=C5=82(a):
+> >
+> > On Wed, Mar 01, 2023 at 10:51:31AM +0100, Lukasz Majczak wrote:
+> > > =C5=9Br., 1 mar 2023 o 09:39 Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> napisa=C5=82(a):
+> > > >
+> > > > On Wed, Mar 01, 2023 at 08:57:51AM +0100, Lukasz Majczak wrote:
+> > > > > Re-enable the console device after suspending, causes its cflags,
+> > > > > ispeed and ospeed to be set anew, basing on the values stored in
+> > > > > uport->cons. The issue is that these values are set only once,
+> > > > > when parsing console parameters after boot (see uart_set_options(=
+)),
+> > > > > next after configuring a port in uart_port_startup() these parame=
+teres
+> > > > > (cflags, ispeed and ospeed) are copied to termios structure and
+> > > > > the orginal one (stored in uport->cons) are cleared, but there is=
+ no place
+> > > > > in code where those fields are checked against 0.
+> > > > > When kernel calls uart_resume_port() and setups console, it copie=
+s cflags,
+> > > > > ispeed and ospeed values from uart->cons,but those are alread cle=
+ared.
+> > > > > The efect is that console is broken.
+> > > > > This patch address this by preserving the cflags, ispeed and
+> > > > > ospeed fields in uart->cons during uart_port_startup().
+> > > > >
+> > > > > Signed-off-by: Lukasz Majczak <lma@semihalf.com>
+> > > > > Cc: stable@vger.kernel.org
+> > > > > ---
+> > > > >  drivers/tty/serial/serial_core.c | 3 ---
+> > > > >  1 file changed, 3 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/seria=
+l/serial_core.c
+> > > > > index 2bd32c8ece39..394a05c09d87 100644
+> > > > > --- a/drivers/tty/serial/serial_core.c
+> > > > > +++ b/drivers/tty/serial/serial_core.c
+> > > > > @@ -225,9 +225,6 @@ static int uart_port_startup(struct tty_struc=
+t *tty, struct uart_state *state,
+> > > > >                       tty->termios.c_cflag =3D uport->cons->cflag=
+;
+> > > > >                       tty->termios.c_ispeed =3D uport->cons->ispe=
+ed;
+> > > > >                       tty->termios.c_ospeed =3D uport->cons->ospe=
+ed;
+> > > > > -                     uport->cons->cflag =3D 0;
+> > > > > -                     uport->cons->ispeed =3D 0;
+> > > > > -                     uport->cons->ospeed =3D 0;
+> > > > >               }
+> > > > >               /*
+> > > > >                * Initialise the hardware port settings.
+> > > > > --
+> > > > > 2.39.2.722.g9855ee24e9-goog
+> > > > >
+> > > >
+> > > > What commit id does this fix?
+> > > >
+> > > > thanks,
+> > > >
+> > > > greg k-h
+> > > Hi Greg,
+> > >
+> > > There are actually two commits that introduce problematic uport flags
+> > > clearing in uart_startup (for the sake of simplicity I'd ignore the
+> > > older history):
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+mmit/?h=3Dv6.2&id=3Dc7d7abff40c27f82fe78b1091ab3fad69b2546f9
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+mmit/?h=3Dv6.2&id=3D027b57170bf8bb6999a28e4a5f3d78bf1db0f90c
+> > > It's 10 years between those 2 and to me it was hard to decide about
+> > > picking a proper one for the `Fixes:` tag.
+> > > How would you recommend to proceed wrt applying this patch on the
+> > > stable releases?
+> >
+> > Where do you think this needs to go to?  Pick something?
+> >
+> > And as you have obviously found this on a device running an older kerne=
+l
+> > version, what kernel tree(s) did you test it on?
+> >
+> > thanks,
+> >
+> > greg k-h
+>
+> As this patch applies without conflict on 4.14, I would suggest 4.14+.
+> I have tested the patch on chromes-5.15 (cannonlake device).
+>
+> Best regards,
+> Lukasz
 
-So far, I haven't seen an issues on c8000.  On rp3440, I saw the following:
+I have tested my patch also with 4.14 and 6.1 (again chromeos tree).
+On 4.14 it fixed the issue, but on 6.1 although the console survived
+the suspend/resume,
+it is printing different characters than requested - I will try to
+debug it further.
 
-_swap_info_get: Unused swap offset entry 00000320
-BUG: Bad page map in process buildd  pte:00032100 pmd:003606c3
-addr:0000000000482000 vm_flags:00100077 anon_vma:0000000066f61340 mapping:0000000000000000 index:482
-file:(null) fault:0x0 mmap:0x0 read_folio:0x0
-CPU: 0 PID: 6813 Comm: buildd Not tainted 6.2.0+ #1
-Hardware name: 9000/800/rp3440
-Backtrace:
-  [<000000004020af50>] show_stack+0x70/0x90
-  [<0000000040b7d408>] dump_stack_lvl+0xd8/0x128
-  [<0000000040b7d48c>] dump_stack+0x34/0x48
-  [<00000000404513a4>] print_bad_pte+0x24c/0x318
-  [<00000000404560dc>] zap_pte_range+0x8d4/0x958
-  [<0000000040456398>] unmap_page_range+0x1d8/0x490
-  [<000000004045681c>] unmap_vmas+0x10c/0x1a8
-  [<0000000040466330>] exit_mmap+0x198/0x4a0
-  [<0000000040235cbc>] mmput+0x114/0x2a8
-  [<0000000040244e90>] do_exit+0x4e0/0xc68
-  [<0000000040245938>] do_group_exit+0x68/0x128
-  [<000000004025967c>] get_signal+0xae4/0xb60
-  [<000000004021a570>] do_signal+0x50/0x228
-  [<000000004021ab38>] do_notify_resume+0x68/0x150
-  [<00000000402030b4>] intr_check_sig+0x38/0x3c
-
-Disabling lock debugging due to kernel taint
-_swap_info_get: Unused swap offset entry 000003a9
-BUG: Bad page map in process buildd  pte:0003a940 pmd:003606c3
-addr:0000000000523000 vm_flags:00100077 anon_vma:0000000066f61340 mapping:0000000000000000 index:523
-file:(null) fault:0x0 mmap:0x0 read_folio:0x0
-CPU: 2 PID: 6813 Comm: buildd Tainted: G    B              6.2.0+ #1
-Hardware name: 9000/800/rp3440
-Backtrace:
-  [<000000004020af50>] show_stack+0x70/0x90
-  [<0000000040b7d408>] dump_stack_lvl+0xd8/0x128
-  [<0000000040b7d48c>] dump_stack+0x34/0x48
-  [<00000000404513a4>] print_bad_pte+0x24c/0x318
-  [<00000000404560dc>] zap_pte_range+0x8d4/0x958
-  [<0000000040456398>] unmap_page_range+0x1d8/0x490
-  [<000000004045681c>] unmap_vmas+0x10c/0x1a8
-  [<0000000040466330>] exit_mmap+0x198/0x4a0
-  [<0000000040235cbc>] mmput+0x114/0x2a8
-  [<0000000040244e90>] do_exit+0x4e0/0xc68
-  [<0000000040245938>] do_group_exit+0x68/0x128
-  [<000000004025967c>] get_signal+0xae4/0xb60
-  [<000000004021a570>] do_signal+0x50/0x228
-  [<000000004021ab38>] do_notify_resume+0x68/0x150
-  [<00000000402030b4>] intr_check_sig+0x38/0x3c
-[...]
-pagefault_out_of_memory: 1158973 callbacks suppressed
-Huh VM_FAULT_OOM leaked out to the #PF handler. Retrying PF
-Huh VM_FAULT_OOM leaked out to the #PF handler. Retrying PF
-Huh VM_FAULT_OOM leaked out to the #PF handler. Retrying PF
-
-Rebooted rp3440.  Since then, I haven't seen any more problems.
-
-Dave
-
--- 
-John David Anglin  dave.anglin@bell.net
-
+Best regards
+Lukasz
