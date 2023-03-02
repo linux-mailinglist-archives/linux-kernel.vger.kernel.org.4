@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118166A89E1
+	by mail.lfdr.de (Postfix) with ESMTP id 672296A89E2
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjCBT6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
+        id S230157AbjCBT6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCBT5q (ORCPT
+        with ESMTP id S229805AbjCBT5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Mar 2023 14:57:46 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62044474DE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CEE474E3
         for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 11:57:44 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,29 +22,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=P2i344YuQotLWLLh6A7EkhSEbuMCwNrp9Bq5Z1X7/c0=;
-        b=YMCQ3Q5j0mLRMU57xKPv0P3mSbWo0Ywjx2iCdMhsDuTXc1VGeoD7OhwB3PZioa1Q6rBV5x
-        op9kGRs7DNY2tbQ+m6gUZxo8isQ4uWQzwqGlv4d2PFhAfuJbrKmW0oigkvHuDDS0mEYedn
-        K09hhIZChvrQnP6jg13NnsoxEYMUXKke8zh/k3+wNURrPYkk1hC1Wp9WTHo2lLesvw8qiq
-        2yzsCgLNrX30Ebq2zr+YcKqFBwTlbsBWY1TltUhSJqP5LyVMzHRBX1djhklF0Q5sCoHXcH
-        CTFE6ChYtFsBfkrRFpCI9O/wU7BaD4JQkDUqKq9HeQuz8WjxVSm6Pz53lSXeHA==
+        bh=R9tOYyS2PzrZZNPqHz2RZVi/VNmEwSgQ/BXnraEltaw=;
+        b=t7LjSSSEITvx8kbiv5CVXv2TXdNm6VXkiTcPhTMnFJX4uIr7wF06FV5+xsBpNoi8RF6APL
+        UO2YbBOrbzGF/RMFHD+y8k1VuMeEzXW42wTe98I556VXsXrPWorh0w3dwAcO2Rwf4Vxgkd
+        I3enyGsYKtohM4C8uiKqw3hL//CQ8usus0d4Il4sQZK30JSxgfQ8QbCpygTMbOsDtRJTeJ
+        Fk+vKkKIejQ3e6s8f8TnxJ/kazi1uJky+fO9DpowvQunD4NR/+aCzJ+p7peDZ37PlzKSH9
+        mCK0vzr1g86tZ39IPMVc2Vo3iU3nFyewTWe7vUwFXdm+rNqrX4szqlm9ejBNtA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1677787063;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=P2i344YuQotLWLLh6A7EkhSEbuMCwNrp9Bq5Z1X7/c0=;
-        b=6LDiB0rmVnvPOZP6uR2CnybeIo6zVvSY0985uqwkaHrhDpNtH84j+OHtP7kKDCT1pBWMmC
-        Vrc8je4gESeoJrDg==
+        bh=R9tOYyS2PzrZZNPqHz2RZVi/VNmEwSgQ/BXnraEltaw=;
+        b=JM39akAot7pRoHec+7jJQXSabDYbtHF8CZ6R6xuPk+UspGwDe0FQfGbU+lqt/abGpZprEb
+        eBv9KM06PZPGPvDA==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH printk v1 03/18] printk: Consolidate console deferred printing
-Date:   Thu,  2 Mar 2023 21:02:03 +0106
-Message-Id: <20230302195618.156940-4-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH printk v1 04/18] printk: Add per-console suspended state
+Date:   Thu,  2 Mar 2023 21:02:04 +0106
+Message-Id: <20230302195618.156940-5-john.ogness@linutronix.de>
 In-Reply-To: <20230302195618.156940-1-john.ogness@linutronix.de>
 References: <20230302195618.156940-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,111 +60,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Printig to consoles can be deferred for several reasons:
+Currently the global @console_suspended is used to determine if
+consoles are in a suspended state. Its primary purpose is to allow
+usage of the console_lock when suspended without causing console
+printing. It is synchronized by the console_lock.
 
-- explicitly with printk_deferred()
-- printk() in NMI context
-- recursive printk() calls
+Rather than relying on the console_lock to determine suspended
+state, make it an official per-console state that is set within
+console->flags. This allows the state to be queried via SRCU.
 
-The current implementation is not consistent. For printk_deferred(),
-irq work is scheduled twice. For NMI und recursive, panic CPU
-suppression and caller delays are not properly enforced.
-
-Correct these inconsistencies by consolidating the deferred printing
-code so that vprintk_deferred() is the toplevel function for
-deferred printing and vprintk_emit() will perform whichever irq_work
-queueing is appropriate.
-
-Also add kerneldoc for wake_up_klogd() and defer_console_output() to
-clarify their differences and appropriate usage.
+@console_suspended will continue to exist, but now only to implement
+the console_lock/console_unlock trickery and _not_ to represent
+the suspend state of a particular console.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- kernel/printk/printk.c      | 31 ++++++++++++++++++++++++-------
- kernel/printk/printk_safe.c |  9 ++-------
- 2 files changed, 26 insertions(+), 14 deletions(-)
+ include/linux/console.h |  3 +++
+ kernel/printk/printk.c  | 46 ++++++++++++++++++++++++++++++++---------
+ 2 files changed, 39 insertions(+), 10 deletions(-)
 
+diff --git a/include/linux/console.h b/include/linux/console.h
+index 1e36958aa656..f7967fb238e0 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -153,6 +153,8 @@ static inline int con_debug_leave(void)
+  *			receiving the printk spam for obvious reasons.
+  * @CON_EXTENDED:	The console supports the extended output format of
+  *			/dev/kmesg which requires a larger output buffer.
++ * @CON_SUSPENDED:	Indicates if a console is suspended. If true, the
++ *			printing callbacks must not be called.
+  */
+ enum cons_flags {
+ 	CON_PRINTBUFFER		= BIT(0),
+@@ -162,6 +164,7 @@ enum cons_flags {
+ 	CON_ANYTIME		= BIT(4),
+ 	CON_BRL			= BIT(5),
+ 	CON_EXTENDED		= BIT(6),
++	CON_SUSPENDED		= BIT(7),
+ };
+ 
+ /**
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 84af038292d9..bdeaf12e0bd2 100644
+index bdeaf12e0bd2..626d467c7e9b 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -2321,7 +2321,10 @@ asmlinkage int vprintk_emit(int facility, int level,
- 		preempt_enable();
- 	}
- 
--	wake_up_klogd();
-+	if (in_sched)
-+		defer_console_output();
-+	else
-+		wake_up_klogd();
- 	return printed_len;
- }
- EXPORT_SYMBOL(vprintk_emit);
-@@ -3811,11 +3814,30 @@ static void __wake_up_klogd(int val)
- 	preempt_enable();
- }
- 
-+/**
-+ * wake_up_klogd - Wake kernel logging daemon
-+ *
-+ * Use this function when new records have been added to the ringbuffer
-+ * and the console printing for those records is handled elsewhere. In
-+ * this case only the logging daemon needs to be woken.
-+ *
-+ * Context: Any context.
-+ */
- void wake_up_klogd(void)
+@@ -2563,10 +2563,26 @@ MODULE_PARM_DESC(console_no_auto_verbose, "Disable console loglevel raise to hig
+  */
+ void suspend_console(void)
  {
- 	__wake_up_klogd(PRINTK_PENDING_WAKEUP);
++	struct console *con;
++
+ 	if (!console_suspend_enabled)
+ 		return;
+ 	pr_info("Suspending console(s) (use no_console_suspend to debug)\n");
+ 	pr_flush(1000, true);
++
++	console_list_lock();
++	for_each_console(con)
++		console_srcu_write_flags(con, con->flags | CON_SUSPENDED);
++	console_list_unlock();
++
++	/*
++	 * Ensure that all SRCU list walks have completed. All printing
++	 * contexts must be able to see that they are suspended so that it
++	 * is guaranteed that all printing has stopped when this function
++	 * completes.
++	 */
++	synchronize_srcu(&console_srcu);
++
+ 	console_lock();
+ 	console_suspended = 1;
+ 	up_console_sem();
+@@ -2574,11 +2590,26 @@ void suspend_console(void)
+ 
+ void resume_console(void)
+ {
++	struct console *con;
++
+ 	if (!console_suspend_enabled)
+ 		return;
+ 	down_console_sem();
+ 	console_suspended = 0;
+ 	console_unlock();
++
++	console_list_lock();
++	for_each_console(con)
++		console_srcu_write_flags(con, con->flags & ~CON_SUSPENDED);
++	console_list_unlock();
++
++	/*
++	 * Ensure that all SRCU list walks have completed. All printing
++	 * contexts must be able to see they are no longer suspended so
++	 * that they are guaranteed to wake up and resume printing.
++	 */
++	synchronize_srcu(&console_srcu);
++
+ 	pr_flush(1000, true);
  }
  
-+/**
-+ * defer_console_output - Wake kernel logging daemon and trigger
-+ *	console printing in a deferred context
-+ *
-+ * Use this function when new records have been added to the ringbuffer
-+ * but the current context is unable to perform the console printing.
-+ * This function also wakes the logging daemon.
-+ *
-+ * Context: Any context.
-+ */
- void defer_console_output(void)
- {
- 	/*
-@@ -3832,12 +3854,7 @@ void printk_trigger_flush(void)
+@@ -2681,6 +2712,9 @@ static inline bool console_is_usable(struct console *con)
+ 	if (!(flags & CON_ENABLED))
+ 		return false;
  
- int vprintk_deferred(const char *fmt, va_list args)
- {
--	int r;
--
--	r = vprintk_emit(0, LOGLEVEL_SCHED, NULL, fmt, args);
--	defer_console_output();
--
--	return r;
-+	return vprintk_emit(0, LOGLEVEL_SCHED, NULL, fmt, args);
- }
++	if ((flags & CON_SUSPENDED))
++		return false;
++
+ 	if (!con->write)
+ 		return false;
  
- int _printk_deferred(const char *fmt, ...)
-diff --git a/kernel/printk/printk_safe.c b/kernel/printk/printk_safe.c
-index ef0f9a2044da..6d10927a07d8 100644
---- a/kernel/printk/printk_safe.c
-+++ b/kernel/printk/printk_safe.c
-@@ -38,13 +38,8 @@ asmlinkage int vprintk(const char *fmt, va_list args)
- 	 * Use the main logbuf even in NMI. But avoid calling console
- 	 * drivers that might have their own locks.
- 	 */
--	if (this_cpu_read(printk_context) || in_nmi()) {
--		int len;
--
--		len = vprintk_store(0, LOGLEVEL_DEFAULT, NULL, fmt, args);
--		defer_console_output();
--		return len;
--	}
-+	if (this_cpu_read(printk_context) || in_nmi())
-+		return vprintk_deferred(fmt, args);
+@@ -3695,8 +3729,7 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
  
- 	/* No obstacles. */
- 	return vprintk_default(fmt, args);
+ 		/*
+ 		 * Hold the console_lock to guarantee safe access to
+-		 * console->seq and to prevent changes to @console_suspended
+-		 * until all consoles have been processed.
++		 * console->seq.
+ 		 */
+ 		console_lock();
+ 
+@@ -3712,14 +3745,7 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
+ 		}
+ 		console_srcu_read_unlock(cookie);
+ 
+-		/*
+-		 * If consoles are suspended, it cannot be expected that they
+-		 * make forward progress, so timeout immediately. @diff is
+-		 * still used to return a valid flush status.
+-		 */
+-		if (console_suspended)
+-			remaining = 0;
+-		else if (diff != last_diff && reset_on_progress)
++		if (diff != last_diff && reset_on_progress)
+ 			remaining = timeout_ms;
+ 
+ 		console_unlock();
 -- 
 2.30.2
 
