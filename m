@@ -2,218 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA826A8A91
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 21:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECD36A8A94
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 21:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjCBUk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 15:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S230074AbjCBUm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 15:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjCBUku (ORCPT
+        with ESMTP id S229455AbjCBUm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 15:40:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226C851FA4;
-        Thu,  2 Mar 2023 12:40:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 2 Mar 2023 15:42:26 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7470C3BD89
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 12:42:24 -0800 (PST)
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8388361648;
-        Thu,  2 Mar 2023 20:40:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E4AC433EF;
-        Thu,  2 Mar 2023 20:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677789646;
-        bh=pGMbS0TOxGlgoa8LXKcPCt0vONuP7PJlA1WB0iyh8bY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZmDACi3s6lSeGPOfqgoeW8L0vlNtXxdewTVzUmmumt62IgjD3aEtxVNlES/S0PGex
-         /78vToeN/z2gzX16nwn4QBJ/sQzdT+lgnIYkflZUY/N6aNL65UZWF087E9XfeFFrH2
-         Ovjju4je9K7QoZxZUTd3y0nI2NbPNoGV/GrRu97+Cgtm73iI2flF1e8ixeSTrTpGaP
-         FHlKchaoCvMdh7gQlg+xjGBM8XJOhWwx7RzYOEf5wscFwQGDWFBXyiq3y830onOD0l
-         J0eIgENd2Ns43Ojg0fWkkuDXpm+9JtTWZwUfp+UyMlo1Bxdb3m2/DFS+cnSeSQxsZg
-         pAM37jgzTw3MA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 417624049F; Thu,  2 Mar 2023 17:40:43 -0300 (-03)
-Date:   Thu, 2 Mar 2023 17:40:43 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Claire Jensen <cjense@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] perf tests stat+csv_output: Switch CSV separator
- to @
-Message-ID: <ZAEJy6RXAGjd7Erb@kernel.org>
-References: <20230223071818.329671-1-irogers@google.com>
- <Y/dq4yO+zXYLCQ8d@kernel.org>
- <CAP-5=fXuZ=sWJcKFUSPVSpjmHFHzSWQEMfoisvjqzJz2dDOXWQ@mail.gmail.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1950C3F231
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 20:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677789742;
+        bh=VPNnC6C1cy3MGBtKJ7RY2J7qDK3sxM2tBtUziWuIYdg=;
+        h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+         Content-Type:MIME-Version;
+        b=fR5ykiFqiJqksFR5sFlfm4Bmdx95y8ThEG9bxzb9ocgZm7JiSZs1wFab84mZmZ+Vn
+         2ZFQAEWto8cb3rm9SAa/T9kds2vyfK3DbEcQt/ATL0WBqac3KLT+MqWjbS4DoWfIqk
+         YsBSa96Hd91XXSMa7t/2PYedkgcb4XKztIJ4MS6vQY0lMhb9/KWYocm5wyzrR+l4MB
+         SULOQn5t+TdskdpntxRp1iDHlNY5LSvKSTa334mmpIdePvmFZnyIwCTDN9/nLuha3G
+         MRbxlkqfE2xglf2JCMr+YB2EqL00z41Cb9drxf+eRtJR5qngvmBuXdIN6X5k3AsGbf
+         KPzUzkHKqPwsg==
+Received: by mail-ot1-f69.google.com with SMTP id x23-20020a05683000d700b0069438ae848cso214475oto.21
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 12:42:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677789740;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VPNnC6C1cy3MGBtKJ7RY2J7qDK3sxM2tBtUziWuIYdg=;
+        b=7pYyJqH1QFuoafipvtEDsBjUhBVgwPRnkm2NESKNbj//IgZFUquZV8elidlqo+S1rR
+         Rl75bO+KtzTfiywN1Xc/O8QWiSfMBAKRTkLsiIo+BYKIJN6WkDkUL6d8YGe1thilY7ys
+         WsVy0UVncD3RWSn2lwBj1OZx5NGv0xwj7Io+381XBsD4/1/7kDKuC7QGa9Yt7wY/ch9t
+         6sfer89zl2IDTubwsaRoXOU+GX0NVh1cVC4fEg9KEk98dkfiOYhMgpXxJdL0ZmAbVS3b
+         guyjE7KWbx00Nb34c0CwhMpYJL9O28mun/dh6YVvM9yu+A21pVqLVXs2i/NXojVuZmdC
+         xOlQ==
+X-Gm-Message-State: AO0yUKX2OTSSStIA5+/kjfljJ92gjUdPIfreme5hDK+T5amevD2lM/Ua
+        haWCD75ClPyABkrljgmeIFC0nojFYTYPaDdTmepW1Xf6TTZMKcUPd395ldtS0kGiHzwh+dY/MOI
+        2AMhNb8cU9+mGBoL4vL1NoVbUbyglo2kZMUNg6dMd5g==
+X-Received: by 2002:a9d:803:0:b0:690:d198:4d1e with SMTP id 3-20020a9d0803000000b00690d1984d1emr1669409oty.8.1677789740519;
+        Thu, 02 Mar 2023 12:42:20 -0800 (PST)
+X-Google-Smtp-Source: AK7set+mzZi4KGEKQQVH4HIHgt8mr09sF5ZEI/y0N5gvVHOM4lDo9PhDEhWGcQyAF/1JU7UCO5GrTA==
+X-Received: by 2002:a9d:803:0:b0:690:d198:4d1e with SMTP id 3-20020a9d0803000000b00690d1984d1emr1669391oty.8.1677789740223;
+        Thu, 02 Mar 2023 12:42:20 -0800 (PST)
+Received: from ?IPv6:2804:1b3:a7c3:d46d:73b6:f440:93a4:30? ([2804:1b3:a7c3:d46d:73b6:f440:93a4:30])
+        by smtp.gmail.com with ESMTPSA id d11-20020a9d72cb000000b0068bcef4f543sm327296otk.21.2023.03.02.12.42.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 12:42:19 -0800 (PST)
+Message-ID: <c010472791aa57c8ea838b5e85780f5be98898d5.camel@canonical.com>
+Subject: Re: [PATCH 04/11] apparmor: simplify sysctls with
+ register_sysctl_init()
+From:   Georgia Garcia <georgia.garcia@canonical.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>, ebiederm@xmission.com,
+        keescook@chromium.org, yzaikin@google.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, luto@amacapital.net,
+        wad@chromium.org, dverkamp@chromium.org, paulmck@kernel.org,
+        baihaowen@meizu.com, frederic@kernel.org, jeffxu@google.com,
+        ebiggers@kernel.org, tytso@mit.edu, guoren@kernel.org
+Cc:     j.granados@samsung.com, zhangpeng362@huawei.com,
+        tangmeng@uniontech.com, willy@infradead.org, nixiaoming@huawei.com,
+        sujiaxun@uniontech.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 02 Mar 2023 17:42:07 -0300
+In-Reply-To: <20230302202826.776286-5-mcgrof@kernel.org>
+References: <20230302202826.776286-1-mcgrof@kernel.org>
+         <20230302202826.776286-5-mcgrof@kernel.org>
+Organization: Canonical
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fXuZ=sWJcKFUSPVSpjmHFHzSWQEMfoisvjqzJz2dDOXWQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Mar 02, 2023 at 11:30:36AM -0800, Ian Rogers escreveu:
-> On Thu, Feb 23, 2023 at 5:32 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Wed, Feb 22, 2023 at 11:18:17PM -0800, Ian Rogers escreveu:
-> > > Commas may appear in events like:
-> > > cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/
-> > > which causes the commachecker to see more fields than expected. Use @
-> > > as the CSV separator to avoid this.
-> >
-> > Thanks, applied both patches.
-> 
-> Thanks Arnaldo, I don't see the patches in the git branches so perhaps
-> something went wrong?
+On Thu, 2023-03-02 at 12:28 -0800, Luis Chamberlain wrote:
+> Using register_sysctl_paths() is really only needed if you have
+> subdirectories with entries. We can use the simple register_sysctl()
+> instead.
+>=20
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  security/apparmor/lsm.c | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+>=20
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index d6cc4812ca53..47c7ec7e5a80 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -1764,11 +1764,6 @@ static int apparmor_dointvec(struct ctl_table *tab=
+le, int write,
+>  	return proc_dointvec(table, write, buffer, lenp, ppos);
+>  }
+> =20
+> -static struct ctl_path apparmor_sysctl_path[] =3D {
+> -	{ .procname =3D "kernel", },
+> -	{ }
+> -};
+> -
+>  static struct ctl_table apparmor_sysctl_table[] =3D {
+>  	{
+>  		.procname       =3D "unprivileged_userns_apparmor_policy",
+> @@ -1790,8 +1785,7 @@ static struct ctl_table apparmor_sysctl_table[] =3D=
+ {
+> =20
+>  static int __init apparmor_init_sysctl(void)
+>  {
+> -	return register_sysctl_paths(apparmor_sysctl_path,
+> -				     apparmor_sysctl_table) ? 0 : -ENOMEM;
+> +	return register_sysctl("kernel", apparmor_sysctl_table) ? 0 : -ENOMEM;
+>  }
+>  #else
+>  static inline int apparmor_init_sysctl(void)
 
-Its in my local branch, I'll push it.
- 
-> Ian
-> 
-> > - Arnaldo
-> >
-> >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/tests/shell/stat+csv_output.sh | 23 ++++++++++++-----------
-> > >  1 file changed, 12 insertions(+), 11 deletions(-)
-> > >
-> > > diff --git a/tools/perf/tests/shell/stat+csv_output.sh b/tools/perf/tests/shell/stat+csv_output.sh
-> > > index b7f050aa6210..324fc9e6edd7 100755
-> > > --- a/tools/perf/tests/shell/stat+csv_output.sh
-> > > +++ b/tools/perf/tests/shell/stat+csv_output.sh
-> > > @@ -7,6 +7,7 @@
-> > >  set -e
-> > >
-> > >  skip_test=0
-> > > +csv_sep=@
-> > >
-> > >  function commachecker()
-> > >  {
-> > > @@ -34,7 +35,7 @@ function commachecker()
-> > >               [ "$x" = "Failed" ] && continue
-> > >
-> > >               # Count the number of commas
-> > > -             x=$(echo $line | tr -d -c ',')
-> > > +             x=$(echo $line | tr -d -c $csv_sep)
-> > >               cnt="${#x}"
-> > >               # echo $line $cnt
-> > >               [[ ! "$cnt" =~ $exp ]] && {
-> > > @@ -54,7 +55,7 @@ function ParanoidAndNotRoot()
-> > >  check_no_args()
-> > >  {
-> > >       echo -n "Checking CSV output: no args "
-> > > -     perf stat -x, true 2>&1 | commachecker --no-args
-> > > +     perf stat -x$csv_sep true 2>&1 | commachecker --no-args
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > @@ -66,7 +67,7 @@ check_system_wide()
-> > >               echo "[Skip] paranoid and not root"
-> > >               return
-> > >       fi
-> > > -     perf stat -x, -a true 2>&1 | commachecker --system-wide
-> > > +     perf stat -x$csv_sep -a true 2>&1 | commachecker --system-wide
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > @@ -79,14 +80,14 @@ check_system_wide_no_aggr()
-> > >               return
-> > >       fi
-> > >       echo -n "Checking CSV output: system wide no aggregation "
-> > > -     perf stat -x, -A -a --no-merge true 2>&1 | commachecker --system-wide-no-aggr
-> > > +     perf stat -x$csv_sep -A -a --no-merge true 2>&1 | commachecker --system-wide-no-aggr
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > >  check_interval()
-> > >  {
-> > >       echo -n "Checking CSV output: interval "
-> > > -     perf stat -x, -I 1000 true 2>&1 | commachecker --interval
-> > > +     perf stat -x$csv_sep -I 1000 true 2>&1 | commachecker --interval
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > @@ -94,7 +95,7 @@ check_interval()
-> > >  check_event()
-> > >  {
-> > >       echo -n "Checking CSV output: event "
-> > > -     perf stat -x, -e cpu-clock true 2>&1 | commachecker --event
-> > > +     perf stat -x$csv_sep -e cpu-clock true 2>&1 | commachecker --event
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > @@ -106,7 +107,7 @@ check_per_core()
-> > >               echo "[Skip] paranoid and not root"
-> > >               return
-> > >       fi
-> > > -     perf stat -x, --per-core -a true 2>&1 | commachecker --per-core
-> > > +     perf stat -x$csv_sep --per-core -a true 2>&1 | commachecker --per-core
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > @@ -118,7 +119,7 @@ check_per_thread()
-> > >               echo "[Skip] paranoid and not root"
-> > >               return
-> > >       fi
-> > > -     perf stat -x, --per-thread -a true 2>&1 | commachecker --per-thread
-> > > +     perf stat -x$csv_sep --per-thread -a true 2>&1 | commachecker --per-thread
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > @@ -130,7 +131,7 @@ check_per_die()
-> > >               echo "[Skip] paranoid and not root"
-> > >               return
-> > >       fi
-> > > -     perf stat -x, --per-die -a true 2>&1 | commachecker --per-die
-> > > +     perf stat -x$csv_sep --per-die -a true 2>&1 | commachecker --per-die
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > @@ -142,7 +143,7 @@ check_per_node()
-> > >               echo "[Skip] paranoid and not root"
-> > >               return
-> > >       fi
-> > > -     perf stat -x, --per-node -a true 2>&1 | commachecker --per-node
-> > > +     perf stat -x$csv_sep --per-node -a true 2>&1 | commachecker --per-node
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > @@ -154,7 +155,7 @@ check_per_socket()
-> > >               echo "[Skip] paranoid and not root"
-> > >               return
-> > >       fi
-> > > -     perf stat -x, --per-socket -a true 2>&1 | commachecker --per-socket
-> > > +     perf stat -x$csv_sep --per-socket -a true 2>&1 | commachecker --per-socket
-> > >       echo "[Success]"
-> > >  }
-> > >
-> > > --
-> > > 2.39.2.637.g21b0678d19-goog
-> > >
-> >
-> > --
-> >
-> > - Arnaldo
+Reviewed-by: Georgia Garcia <georgia.garcia@canonical.com>
 
--- 
-
-- Arnaldo
