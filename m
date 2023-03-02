@@ -2,133 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8116A818E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C39B6A8193
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 12:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjCBLvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 06:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
+        id S229728AbjCBLx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 06:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCBLv3 (ORCPT
+        with ESMTP id S229513AbjCBLxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:51:29 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA0735255;
-        Thu,  2 Mar 2023 03:51:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677757864; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=SN9puppPB/171h6AH8Mr5hidGWd4fY/hXs7wKplQ+spCW5r49QgeSuVD9YeYdJFNYE+7MzFqVsucDWq/pf4FNFEaENsm4MH2Gt7vWW3eE3v78r/OclWWeLZyS58mMg6AzH59iChPOloh7LXGunsi8+TkRM0KhPqV59rzFKz4UFY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677757864; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=leLmz9qeZA+jfwuaL6YwWi5P1E3ee6MYIL5R31QpwuA=; 
-        b=MPb6uLjaPAJiQ+KFzmDwl8PLJRznHybYD1CTOZ5ZD4EJxQaz/x96lXpAZhCNVpMbyrtiYa6FroMq7WxwgOTXEFxugZiDdiKpwSEL9qDTXXL6MOb13lmNZfBLWX0TV5LJD6uBsHYbuJwpnQVwUvSqD/QCdC/WiOHiwvuF1q4DDis=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677757864;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=leLmz9qeZA+jfwuaL6YwWi5P1E3ee6MYIL5R31QpwuA=;
-        b=FouMHzSLkUwW2vcXEEDRN411mAHMT8cdma9sbLsp0TZfR4S8Uc4rMO4mqCjzLUzj
-        oEVNeMI2V0QR74WaknuglXXIclVafbAFcPzb4Q61AWDJ5FtecTfZdlKmWn4gjwnhnIs
-        tATFiNSqtPLXxm4fjF2B75eNNP25JhWOebGOyFKk=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1677757862877899.0721856528986; Thu, 2 Mar 2023 03:51:02 -0800 (PST)
-Message-ID: <11d10e4e-65ec-3bec-3e0c-7e57feb03506@arinc9.com>
-Date:   Thu, 2 Mar 2023 14:50:49 +0300
+        Thu, 2 Mar 2023 06:53:25 -0500
+Received: from out-1.mta0.migadu.com (out-1.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FC7136EC
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 03:53:23 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1677758002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=R+FdjYwjTIiZWh/4rjUriZ8U6SsI4yJTAnV6fEgVezk=;
+        b=xWjTz3sW5v0NYdpVSQBxyYdOmQV8qT47leCscXVc8psi1ZFPH3GFUS9IQlKLoGSMABxErz
+        QmfV5ggeL8rFkQ+2SHyGbu82mOgYozb5hx3hM4NozlRSd2XOxJ3Uvq0IZ8ncBS0V+5s0nn
+        kx2aPQMpKcdv7+o1KT7XnyhDrh+89DY=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     cai.huoqing@linux.dev
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/i915/gvt: Make use of idr_find and idr_for_each_entry in dmabuf
+Date:   Thu,  2 Mar 2023 19:53:18 +0800
+Message-Id: <20230302115318.79487-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
- compatible strings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-8-arinc.unal@arinc9.com>
- <20230227173333.GA496999-robh@kernel.org>
- <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
- <20230301024431.GA251215-robh@kernel.org>
- <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
- <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
- <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
- <1aae7ac9-c83d-71b4-4fce-325f02fcd722@linaro.org>
- <89588f69-9cf0-e7a4-b976-5ce87d42e296@arinc9.com>
- <2ccb573d-39f4-cb80-7a3e-63a60c2bc0a8@linaro.org>
- <b48e0a5e-dd45-8b8a-4ee3-357a0985ca9c@arinc9.com>
- <83a03258-9e52-3d09-67fe-12e9e5ed4b76@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <83a03258-9e52-3d09-67fe-12e9e5ed4b76@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2.03.2023 14:36, Krzysztof Kozlowski wrote:
-> On 02/03/2023 11:47, Arınç ÜNAL wrote:
->> On 2.03.2023 13:29, Krzysztof Kozlowski wrote:
->>> On 02/03/2023 11:22, Arınç ÜNAL wrote:
->>>>>>
->>>>>> ## Incorrect naming
->>>>>>
->>>>>> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink,
->>>>>> introduce new ralink->mediatek compatible strings to address it.
->>>>>
->>>>> So this part was addressed by Rob - we don't do it, because it does not
->>>>> matter. Ralink is now Mediatek, thus there is no conflict and no issues
->>>>> with different vendor used.
->>>>
->>>> I think Rob was rather addressing that updating compatible strings based
->>>> on acquisition or marketing whims is not permitted. This condition does
->>>> not apply here as these SoCs were never Ralink.
->>>>
->>>> I understand your point that Ralink is now MediaTek but still, calling
->>>> these SoCs Ralink would be a bit misleading, don't you think?
->>>
->>> Misleading yes, but also does not matter. At least matter not enough to
->>> justify ABI break, so you would need to deprecate old ones and keep
->>> everything backwards compatible. You still would affect 3rd party users
->>> of DTS, though...
->>
->> I intend to do just that. Introduce new mediatek strings, keep the old
->> ones so it's backwards compatible, therefore don't break the ABI.
->>
->> Instead of deprecating old strings, I intend to introduce the checks I
->> mentioned, on the schema, so the pin muxing bindings only apply if the
->> DT has got a string that won't match multiple schemas. This way it
->> shouldn't affect 3rd party DTs.
-> 
-> I meant, 3rd party users of DTS. You will replace the compatible in the
-> DTS, right? So the DTS exported and used in all other projects, OS,
-> firmwares, bootloaders, out of tree kernel forks will stop working.
+This patch uses the already existing IDR mechanism to simplify
+and improve the dmabuf code.
 
-I plan to change it on the DTs for MediaTek SoCs, yes. Is this a 
-problem? From what I can tell, what must be ensured is that old DTs must 
-work with newer kernels, not new DTs on older kernels.
+Using 'vgpu.object_idr' directly instead of 'dmabuf_obj_list_head'
+or 'dmabuf.list', because the dmabuf_obj can be found by 'idr_find'
+or 'idr_for_each_entry'.
 
-Arınç
+Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+---
+ drivers/gpu/drm/i915/gvt/dmabuf.c | 69 +++++++------------------------
+ drivers/gpu/drm/i915/gvt/dmabuf.h |  1 -
+ drivers/gpu/drm/i915/gvt/gvt.h    |  1 -
+ drivers/gpu/drm/i915/gvt/vgpu.c   |  1 -
+ 4 files changed, 16 insertions(+), 56 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.c b/drivers/gpu/drm/i915/gvt/dmabuf.c
+index 6834f9fe40cf..7933bd843ae8 100644
+--- a/drivers/gpu/drm/i915/gvt/dmabuf.c
++++ b/drivers/gpu/drm/i915/gvt/dmabuf.c
+@@ -133,21 +133,15 @@ static void dmabuf_gem_object_free(struct kref *kref)
+ 	struct intel_vgpu_dmabuf_obj *obj =
+ 		container_of(kref, struct intel_vgpu_dmabuf_obj, kref);
+ 	struct intel_vgpu *vgpu = obj->vgpu;
+-	struct list_head *pos;
+ 	struct intel_vgpu_dmabuf_obj *dmabuf_obj;
++	int id;
+ 
+-	if (vgpu && test_bit(INTEL_VGPU_STATUS_ACTIVE, vgpu->status) &&
+-	    !list_empty(&vgpu->dmabuf_obj_list_head)) {
+-		list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
+-			dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
+-			if (dmabuf_obj == obj) {
+-				list_del(pos);
+-				idr_remove(&vgpu->object_idr,
+-					   dmabuf_obj->dmabuf_id);
+-				kfree(dmabuf_obj->info);
+-				kfree(dmabuf_obj);
+-				break;
+-			}
++	if (vgpu && test_bit(INTEL_VGPU_STATUS_ACTIVE, vgpu->status)) {
++		idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
++			idr_remove(&vgpu->object_idr, id);
++			kfree(dmabuf_obj->info);
++			kfree(dmabuf_obj);
++			break;
+ 		}
+ 	} else {
+ 		/* Free the orphan dmabuf_objs here */
+@@ -340,13 +334,11 @@ static struct intel_vgpu_dmabuf_obj *
+ pick_dmabuf_by_info(struct intel_vgpu *vgpu,
+ 		    struct intel_vgpu_fb_info *latest_info)
+ {
+-	struct list_head *pos;
+ 	struct intel_vgpu_fb_info *fb_info;
+ 	struct intel_vgpu_dmabuf_obj *dmabuf_obj = NULL;
+-	struct intel_vgpu_dmabuf_obj *ret = NULL;
++	int id;
+ 
+-	list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
+-		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
++	idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
+ 		if (!dmabuf_obj->info)
+ 			continue;
+ 
+@@ -357,31 +349,11 @@ pick_dmabuf_by_info(struct intel_vgpu *vgpu,
+ 		    (fb_info->drm_format_mod == latest_info->drm_format_mod) &&
+ 		    (fb_info->drm_format == latest_info->drm_format) &&
+ 		    (fb_info->width == latest_info->width) &&
+-		    (fb_info->height == latest_info->height)) {
+-			ret = dmabuf_obj;
+-			break;
+-		}
+-	}
+-
+-	return ret;
+-}
+-
+-static struct intel_vgpu_dmabuf_obj *
+-pick_dmabuf_by_num(struct intel_vgpu *vgpu, u32 id)
+-{
+-	struct list_head *pos;
+-	struct intel_vgpu_dmabuf_obj *dmabuf_obj = NULL;
+-	struct intel_vgpu_dmabuf_obj *ret = NULL;
+-
+-	list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
+-		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
+-		if (dmabuf_obj->dmabuf_id == id) {
+-			ret = dmabuf_obj;
+-			break;
+-		}
++		    (fb_info->height == latest_info->height))
++			return dmabuf_obj;
+ 	}
+ 
+-	return ret;
++	return dmabuf_obj;
+ }
+ 
+ static void update_fb_info(struct vfio_device_gfx_plane_info *gvt_dmabuf,
+@@ -477,11 +449,6 @@ int intel_vgpu_query_plane(struct intel_vgpu *vgpu, void *args)
+ 
+ 	update_fb_info(gfx_plane_info, &fb_info);
+ 
+-	INIT_LIST_HEAD(&dmabuf_obj->list);
+-	mutex_lock(&vgpu->dmabuf_lock);
+-	list_add_tail(&dmabuf_obj->list, &vgpu->dmabuf_obj_list_head);
+-	mutex_unlock(&vgpu->dmabuf_lock);
+-
+ 	gvt_dbg_dpy("vgpu%d: %s new dmabuf_obj ref %d, id %d\n", vgpu->id,
+ 		    __func__, kref_read(&dmabuf_obj->kref), ret);
+ 
+@@ -508,7 +475,7 @@ int intel_vgpu_get_dmabuf(struct intel_vgpu *vgpu, unsigned int dmabuf_id)
+ 
+ 	mutex_lock(&vgpu->dmabuf_lock);
+ 
+-	dmabuf_obj = pick_dmabuf_by_num(vgpu, dmabuf_id);
++	dmabuf_obj = idr_find(&vgpu->object_idr, dmabuf_id);
+ 	if (dmabuf_obj == NULL) {
+ 		gvt_vgpu_err("invalid dmabuf id:%d\n", dmabuf_id);
+ 		ret = -EINVAL;
+@@ -570,23 +537,19 @@ int intel_vgpu_get_dmabuf(struct intel_vgpu *vgpu, unsigned int dmabuf_id)
+ 
+ void intel_vgpu_dmabuf_cleanup(struct intel_vgpu *vgpu)
+ {
+-	struct list_head *pos, *n;
+ 	struct intel_vgpu_dmabuf_obj *dmabuf_obj;
++	int id;
+ 
+ 	mutex_lock(&vgpu->dmabuf_lock);
+-	list_for_each_safe(pos, n, &vgpu->dmabuf_obj_list_head) {
+-		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
++	idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
+ 		dmabuf_obj->vgpu = NULL;
+ 
+-		idr_remove(&vgpu->object_idr, dmabuf_obj->dmabuf_id);
+-		list_del(pos);
+-
++		idr_remove(&vgpu->object_idr, id);
+ 		/* dmabuf_obj might be freed in dmabuf_obj_put */
+ 		if (dmabuf_obj->initref) {
+ 			dmabuf_obj->initref = false;
+ 			dmabuf_obj_put(dmabuf_obj);
+ 		}
+-
+ 	}
+ 	mutex_unlock(&vgpu->dmabuf_lock);
+ }
+diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.h b/drivers/gpu/drm/i915/gvt/dmabuf.h
+index 3dcdb6570eda..93c0e00bdab9 100644
+--- a/drivers/gpu/drm/i915/gvt/dmabuf.h
++++ b/drivers/gpu/drm/i915/gvt/dmabuf.h
+@@ -57,7 +57,6 @@ struct intel_vgpu_dmabuf_obj {
+ 	__u32 dmabuf_id;
+ 	struct kref kref;
+ 	bool initref;
+-	struct list_head list;
+ };
+ 
+ int intel_vgpu_query_plane(struct intel_vgpu *vgpu, void *args);
+diff --git a/drivers/gpu/drm/i915/gvt/gvt.h b/drivers/gpu/drm/i915/gvt/gvt.h
+index 2d65800d8e93..1100c789f207 100644
+--- a/drivers/gpu/drm/i915/gvt/gvt.h
++++ b/drivers/gpu/drm/i915/gvt/gvt.h
+@@ -211,7 +211,6 @@ struct intel_vgpu {
+ 
+ 	struct dentry *debugfs;
+ 
+-	struct list_head dmabuf_obj_list_head;
+ 	struct mutex dmabuf_lock;
+ 	struct idr object_idr;
+ 	struct intel_vgpu_vblank_timer vblank_timer;
+diff --git a/drivers/gpu/drm/i915/gvt/vgpu.c b/drivers/gpu/drm/i915/gvt/vgpu.c
+index 08ad1bd651f1..0a511cfef067 100644
+--- a/drivers/gpu/drm/i915/gvt/vgpu.c
++++ b/drivers/gpu/drm/i915/gvt/vgpu.c
+@@ -329,7 +329,6 @@ int intel_gvt_create_vgpu(struct intel_vgpu *vgpu,
+ 	vgpu->sched_ctl.weight = conf->weight;
+ 	mutex_init(&vgpu->vgpu_lock);
+ 	mutex_init(&vgpu->dmabuf_lock);
+-	INIT_LIST_HEAD(&vgpu->dmabuf_obj_list_head);
+ 	INIT_RADIX_TREE(&vgpu->page_track_tree, GFP_KERNEL);
+ 	idr_init_base(&vgpu->object_idr, 1);
+ 	intel_vgpu_init_cfg_space(vgpu, 1);
+-- 
+2.34.1
+
