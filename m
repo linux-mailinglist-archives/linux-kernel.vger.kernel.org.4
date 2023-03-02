@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23526A88E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5118B6A88D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 20:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjCBTC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 14:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S229629AbjCBTCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 14:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjCBTCu (ORCPT
+        with ESMTP id S229537AbjCBTCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:02:50 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8012455043;
-        Thu,  2 Mar 2023 11:02:45 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id ne1so187693qvb.9;
-        Thu, 02 Mar 2023 11:02:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UgZLhcylDGqT1DTv86aGHQyWy2f7m4PatAYISBhTMus=;
-        b=lJv26ZaiE8s/Qo+UoeSNSZlH1LUB2Jd7TJeP3hyTd84KlfERut3Z47c3f2daYiUOiE
-         PecNDeGE9Tb0A5AIHrz+ibTahBRSBJC3c74BRCaFFJ/08pmpCoE9AdDK04rMy39dlOZB
-         2x0UZnwuQ/IrBk/I3DGEZH02hEkMJDt8TX6YC/nR/rSYWTepfbd88fRwb3rjCjugdeDU
-         7pwr4zquEQDMFfYgFmndMhOFX2oacaSuEC/MoG0FQ+pNzHXH/PHhbvR7AOgCiJV9A6fr
-         hCrJbt5WhHlKbrAeWxpxyvzY8ZVvhrMdxaP6cg/fhGaIC1K9sBFaI4al4xOsZfadxND8
-         lPUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UgZLhcylDGqT1DTv86aGHQyWy2f7m4PatAYISBhTMus=;
-        b=poBDbi+OCaGC+RorH3CEpckUDb1CvGypxDSZWL3aj+02fFqDuF8V1DFo5FtgpTojvG
-         XV1V4nHW0l+JnWf5zfBAAVICmROhTQPsByzW8S7UO6CrKzSHd+em8jC+FP24wgli1TLB
-         wZ77O4SfBHeRBkptCsUW0kvD2WvVbelC1/DGDpnUB0W/Y/zWcQaz6zShJKkCPOvwWLrb
-         j89yWtk49gRAyC6RqSjisLRCpKXF6FNTG/0ClNc7ttdyuR2UBBOP6uvIvYLJdqnfQNdx
-         hzyIvXQ4kZJjuc4OjelJpuax67nld6jAZcsEEUK8jYJ57W0VlGsA8VvyNd35/BsLQoiU
-         1vUA==
-X-Gm-Message-State: AO0yUKW2jqsnDqS/4EveRWe5VrcquWuqK5ehyjtgxRoCzjih6Ze9lAjO
-        KKS9hixNXiKxkXPB2xn1K/uuCywCcquGzOIRoZs=
-X-Google-Smtp-Source: AK7set+7k2lBWRyijszGFNhZnO21X6A9GVE6GeQOqqBiWhKjlnee70nQIPXvhTL+IDXUircQ7ZqgxtF9hPVs9QGcSak=
-X-Received: by 2002:ad4:4b6f:0:b0:56f:fe44:f257 with SMTP id
- m15-20020ad44b6f000000b0056ffe44f257mr3100124qvx.1.1677783764401; Thu, 02 Mar
- 2023 11:02:44 -0800 (PST)
+        Thu, 2 Mar 2023 14:02:17 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EC3193F3;
+        Thu,  2 Mar 2023 11:02:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lpBNVR74iubjvON2wguO4B8ttWa6FZ0mrtSI3Z/IcA8=; b=rL03dt7h2WxlaKHIIhcEPhjJxg
+        bn28ifI4tDnDJLbkFxlRtgBxfHTWBCn3JNL/d67e3Qek5xAdY9QlEWOeA2rtKVd8FI/HWCLZtWTA3
+        bBEGr74fT+YeSYz6BKm1vQQc7m1zT7oZ+Kr6ixxkfHdmgsp2m5+pEkOvmTBTUWAe7EnQQC92qcCWw
+        0/b6MbJRr2vvy0BChdIuu5UlRVaKuRNo3giHvqq8i1e3Qi2J/3v5fUzuris51tvCvNdQuRFNrcQkp
+        R8v4jASZ7AcFUyk97Ebmvr/yK3LI1XZyQEPz67Mw38spqI95ibMVF2ht8IY4n+Ui+ynvR4fDbv8cA
+        Gw530wDA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pXoBv-00DNPR-05;
+        Thu, 02 Mar 2023 19:02:11 +0000
+Date:   Thu, 2 Mar 2023 19:02:10 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Mateusz Guzik <mjguzik@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if
+ possible
+Message-ID: <ZADysodnEPRqhKqc@ZenIV>
+References: <20230125155557.37816-1-mjguzik@gmail.com>
+ <20230125155557.37816-2-mjguzik@gmail.com>
+ <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
+ <20230302083025.khqdizrnjkzs2lt6@wittgenstein>
+ <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
+ <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
+ <ZADoeOiJs6BRLUSd@ZenIV>
+ <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
+ <ZADuWxU963sInrj/@ZenIV>
 MIME-Version: 1.0
-References: <20230222111213.2241633-1-keguang.zhang@gmail.com>
- <20230222111213.2241633-2-keguang.zhang@gmail.com> <Y/YH20aKp+u+QEwA@surfacebook>
- <CAJhJPsVqPAC_GP0JE98nrpmvDTwXdt4m0z3SZQPX3GFCijT09w@mail.gmail.com>
- <5cc00c00-7dd3-4b7f-71e6-397f76acaed0@linaro.org> <CAJhJPsXFU5DqU1HUw402EKtU3Y7WJNP3UBE3_CQuCdAqg81UQQ@mail.gmail.com>
-In-Reply-To: <CAJhJPsXFU5DqU1HUw402EKtU3Y7WJNP3UBE3_CQuCdAqg81UQQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 2 Mar 2023 21:02:08 +0200
-Message-ID: <CAHp75Vc18wamJzNHQigs3XaJty5pJbuHCbSEHnpZKDG9wH7tsA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] gpio: loongson1: Update copyright
-To:     Kelvin Cheung <keguang.zhang@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZADuWxU963sInrj/@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 2:16 PM Kelvin Cheung <keguang.zhang@gmail.com> wrot=
-e:
-> On Thu, Mar 2, 2023 at 7:40=E2=80=AFPM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> > On 02/03/2023 12:09, Kelvin Cheung wrote:
-> > > On Wed, Feb 22, 2023 at 8:18=E2=80=AFPM <andy.shevchenko@gmail.com> w=
-rote:
-> > >> Wed, Feb 22, 2023 at 07:12:10PM +0800, Keguang Zhang kirjoitti:
-> > >>> This patch updates copyright and author information.
-> > >>
-> > >> ...
-> > >>
-> > >>> +// SPDX-License-Identifier: GPL-2.0-or-later
-> > >>
-> > >> Have you talked to your lawyers? This is an inequivalent to what was=
- written
-> > >> below.
-> > >>
-> > > Yes.
-> >
-> > Yes to what? You now change the license... and commit msg does not
-> > explain it and does not justify it. What is even weirder that your
-> > lawyers agreed on GPLv3! With GPLv3 you need to open a lot from your
-> > products... Not mentioning that they agreed on future GPLv4 and GPLv5,
-> > that's even weirder because GPLv4 might be saying you need to buy me
-> > flowers...
-> >
-> If so, I choose to leave the license as is.
-> Is "GPL-2.0-only" right?
+On Thu, Mar 02, 2023 at 06:43:39PM +0000, Al Viro wrote:
+> On Thu, Mar 02, 2023 at 07:22:17PM +0100, Mateusz Guzik wrote:
+> 
+> > Ops, I meant "names_cache", here:
+> > 	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
+> > 			SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL);
+> > 
+> > it is fs/dcache.c and I brainfarted into the above.
+> 
+> So you mean __getname() stuff?
 
-We do not know.
-It depends on what your company lawyers told you.
+The thing is, getname_flags()/getname_kernel() is not the only user of that
+thing; grep and you'll see (and keep in mind that cifs alloc_dentry_path()
+is a __getname() wrapper, with its own callers).  We might have bugs papered
+over^W^Whardened away^W^Wpapered over in some of those users.
 
---=20
-With Best Regards,
-Andy Shevchenko
+I agree that getname_flags()/getname_kernel()/sys_getcwd() have no need of
+pre-zeroing; fw_get_filesystem_firmware(), ceph_mdsc_build_path(),
+[hostfs]dentry_name() and ima_d_path() seem to be safe.  So's
+vboxsf_path_from_dentry() (I think).  But with this bunch I'd need
+a review before I'd be willing to say "this security theatre buys us
+nothing here":
+
+fs/cifs/cifsproto.h:67: return __getname();
+fs/exfat/dir.c:195:     nb->lfn = __getname();
+fs/fat/dir.c:287:               *unicode = __getname();
+fs/fat/namei_vfat.c:598:        uname = __getname();
+fs/ntfs3/dir.c:394:     name = __getname();
+fs/ntfs3/inode.c:1289:  new_de = __getname();
+fs/ntfs3/inode.c:1694:  de = __getname();
+fs/ntfs3/inode.c:1732:  de = __getname();
+fs/ntfs3/namei.c:71:    struct cpu_str *uni = __getname();
+fs/ntfs3/namei.c:286:   de = __getname();
+fs/ntfs3/namei.c:355:   struct cpu_str *uni = __getname();
+fs/ntfs3/namei.c:494:   uni = __getname();
+fs/ntfs3/namei.c:555:   uni1 = __getname();
+fs/ntfs3/xattr.c:532:   buf = __getname();
+
+fs/cifs/cifs_dfs_ref.c:168:     page = alloc_dentry_path();
+fs/cifs/cifsacl.c:1697: page = alloc_dentry_path();
+fs/cifs/cifsacl.c:1760: page = alloc_dentry_path();
+fs/cifs/cifsproto.h:65:static inline void *alloc_dentry_path(void)
+fs/cifs/dir.c:187:      void *page = alloc_dentry_path();
+fs/cifs/dir.c:604:      page = alloc_dentry_path();
+fs/cifs/dir.c:664:      page = alloc_dentry_path();
+fs/cifs/file.c:594:     page = alloc_dentry_path();
+fs/cifs/file.c:796:     page = alloc_dentry_path();
+fs/cifs/file.c:2223:    void *page = alloc_dentry_path();
+fs/cifs/file.c:2255:    void *page = alloc_dentry_path();
+fs/cifs/inode.c:1663:   page = alloc_dentry_path();
+fs/cifs/inode.c:1938:   page = alloc_dentry_path();
+fs/cifs/inode.c:2001:   void *page = alloc_dentry_path();
+fs/cifs/inode.c:2170:   page1 = alloc_dentry_path();
+fs/cifs/inode.c:2171:   page2 = alloc_dentry_path();
+fs/cifs/inode.c:2446:   page = alloc_dentry_path();
+fs/cifs/inode.c:2738:   void *page = alloc_dentry_path();
+fs/cifs/inode.c:2893:   void *page = alloc_dentry_path();
+fs/cifs/ioctl.c:34:     void *page = alloc_dentry_path();
+fs/cifs/link.c:491:     page1 = alloc_dentry_path();
+fs/cifs/link.c:492:     page2 = alloc_dentry_path();
+fs/cifs/misc.c:803:     page = alloc_dentry_path();
+fs/cifs/readdir.c:1071: void *page = alloc_dentry_path();
+fs/cifs/smb2ops.c:2059: void *page = alloc_dentry_path();
+fs/cifs/xattr.c:112:    page = alloc_dentry_path();
+fs/cifs/xattr.c:277:    page = alloc_dentry_path();
+fs/cifs/xattr.c:382:    page = alloc_dentry_path();
