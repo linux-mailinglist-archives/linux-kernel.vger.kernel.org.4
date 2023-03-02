@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FF06A7CD6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614556A7CD9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 09:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCBIgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 03:36:43 -0500
+        id S229744AbjCBIgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 03:36:47 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjCBIgk (ORCPT
+        with ESMTP id S229733AbjCBIgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 03:36:40 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4113B199CC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:36:35 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id v11so13260896plz.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:36:35 -0800 (PST)
+        Thu, 2 Mar 2023 03:36:41 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2338C126C9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 00:36:40 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id y11so12652180plg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 00:36:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lzrqYLYLaVpd0UyrhZ0yR0aqCz0cuXCviR24aa0kuPw=;
-        b=D43eGydreZR1VKVNvxdCLXaLMjZQGQzTS38Jo088r8l4Eepbu5JxDDCNecIGPi38Su
-         Je57YvFacOR6isjgT/KYGTV+qijaz6DVD9kcCtAbbfJORvRabkcBs28mgi/cbR9t24rr
-         RIz8+acB3dX6x8c03CjeFen3gCE3t4dHY20BH+LY3KybsYfa4XJ0lVTsDDKt2oSOf1sG
-         HSx5utpv50HwHOGOnPimcYmU1oo7gPSrkwHHvukr4cc34DxI3Umw+1bjFkSx7UKZJymE
-         jDHZ23+4P0UHnUZEthOHPNPHWh7bBsi71sZSBsI7MOqVgGz3yKIZoTloQV0i6X8MoFSn
-         BvjQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jmxYusaZZcaCSm0sR5ZUszZ82Vp7I8hpbdJ8Cb+CdPo=;
+        b=r9craTUyVx3uiDtRuxr4/PsO6K1XvUWzzxWl78/dUjOl/L8wD227JYgVbaPKALXV7d
+         AwT7JyTJwWwqbbltakIJvLX7CLUB9tmZ1FAl26xyS0zQ4e2XWy2rNSyswo+znHykXIiC
+         L64ErgYtW/eym+pT0buE046/tPbGvVYkktuAY8B6bPd8sNrozAnmkfHC/vmZLEAOoMp3
+         M4qfTRtDIzP6p9xtkg40jGtlNXciUo0Qs2fXCIdEmBrglff/9oNBHZIWaxlkD1cMMpzg
+         c2+DVFhE+Ma6GV881wTGMjyGitPtrtUuS8A3BgZf7ykT6iVpDyqmxJh1+m01dAvEkO4M
+         JaWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lzrqYLYLaVpd0UyrhZ0yR0aqCz0cuXCviR24aa0kuPw=;
-        b=p+BdF5o01KgCWBIg1sF/1aEvq8bcPiRu9H1IAcgLegnmBw7p+WOGfjWQ+9WMVx/5Fu
-         FVwIYyuP0k6TrsYOwOOk3VlcKD15az/AmDToQgPmXVx52SX+PonpRaQzlax50U3ZOvAS
-         98LNRPPItZOmIcDioK9nkJdphnc8FM24dqhmDiIWvrFa64YESDuldWw6+MgIIsL+8Saj
-         eSmIMrdkWU/Z5RDKgupDcwSfw8pnYX0oVdzaq8RhlPwRoi0SzEk/ar2LoxUsEs9WyFqa
-         vJs866zy7xhfDT1s1qRgIWLiT78hDGCo94Oe7C6XDhdwJJXKWDHxUHQsQUgkf6qULCZP
-         HumQ==
-X-Gm-Message-State: AO0yUKU9WcQbFrbkj+HxZ/kHK/m35mUx9iSESe7KW5HGLLGwp/msVkab
-        1FpaabO+GKAbfIesHSXXSY2C
-X-Google-Smtp-Source: AK7set+xaajcB0h5+hW2z33NsHRILEH9Ei8CBCfMkADOQc25cHl8/XAnaxyjni8gx1mPCvkbvVuKuw==
-X-Received: by 2002:a17:902:8603:b0:19e:711b:83c with SMTP id f3-20020a170902860300b0019e711b083cmr878146plo.39.1677746194689;
-        Thu, 02 Mar 2023 00:36:34 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jmxYusaZZcaCSm0sR5ZUszZ82Vp7I8hpbdJ8Cb+CdPo=;
+        b=J5oJip+y51aPKj3ejD0M8+ps6uE9HK36VbruduzIGGhP0rGqtxiiKP0Gnso5RD9OQM
+         CsOFZbAhomQ1J7Qm5GI0ZYhXzL33S/d6N6EfuPQn0iBOK6rq1QIJD+C3nyr9t7kUHGH0
+         4ftYlF2aTZ1+pC5hHygspQLlzeNUrFC2esp7w2ghTjxozyVv+MsyWzrzzcwzFfc+8vSK
+         69eG2mKjni5z8JFfOv694tCe9/yTDQwUUFMZ9sfHTFaFYi3jyTGxOKNDE7VMHv+Asb2x
+         0dW51qG6dkkBHSZDSP+LmSwpbjJX/OV1d2Z2/aBZB2kridNH3RYm6nUatLrL2jQEyhh8
+         QJ8w==
+X-Gm-Message-State: AO0yUKVDix+4RrOBOYxZtKcGfaptO34seQ+fwHgWiTXI2PCV7qKEHryt
+        brstpXFsMA0KU6nJZeLWlRdA
+X-Google-Smtp-Source: AK7set/z9bTIY3KHWMDcd0q6mvDWU2SD8PHHfPO+bvu6xJYNkMZLXx5iYVwJ6PLrvUr0JyNNI9Jlzw==
+X-Received: by 2002:a17:902:da90:b0:19c:e405:4446 with SMTP id j16-20020a170902da9000b0019ce4054446mr10433381plx.30.1677746199325;
+        Thu, 02 Mar 2023 00:36:39 -0800 (PST)
 Received: from localhost.localdomain ([59.97.53.52])
-        by smtp.gmail.com with ESMTPSA id p7-20020a1709028a8700b00198ef93d556sm9791912plo.147.2023.03.02.00.36.30
+        by smtp.gmail.com with ESMTPSA id p7-20020a1709028a8700b00198ef93d556sm9791912plo.147.2023.03.02.00.36.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 00:36:34 -0800 (PST)
+        Thu, 02 Mar 2023 00:36:38 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org
 Cc:     andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -56,11 +57,14 @@ Cc:     andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
         mka@chromium.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 0/1] PCI: qcom: Add support for system suspend and resume
-Date:   Thu,  2 Mar 2023 14:06:24 +0530
-Message-Id: <20230302083625.188482-1-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Dhruva Gole <d-gole@ti.com>
+Subject: [PATCH v2 1/1] PCI: qcom: Add support for system suspend and resume
+Date:   Thu,  2 Mar 2023 14:06:25 +0530
+Message-Id: <20230302083625.188482-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230302083625.188482-1-manivannan.sadhasivam@linaro.org>
+References: <20230302083625.188482-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,66 +77,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+During the system suspend, vote for minimal interconnect bandwidth and
+also turn OFF the resources like clock and PHY if there are no active
+devices connected to the controller. For the controllers with active
+devices, the resources are kept ON as removing the resources will
+trigger access violation during the late end of suspend cycle as kernel
+tries to access the config space of PCIe devices to mask the MSIs.
 
-This series (a single patch) adds the system suspend and resume support
-to the Qualcomm PCIe RC controller.
+Also, it is not desirable to put the link into L2/L3 state as that
+implies VDD supply will be removed and the devices may go into powerdown
+state. This will affect the lifetime of storage devices like NVMe.
 
-Background
-==========
+And finally, during resume, turn ON the resources if the controller was
+truly suspended (resources OFF) and update the interconnect bandwidth
+based on PCIe Gen speed.
 
-There were previous attempts [1][2] to add system suspend and resume
-support to this driver.
-
-In previous versions, the controller was put into low power mode by turning
-OFF the resources even if there were active PCIe devices connected. Thanks
-to Qualcomm's internal power topology, the link did not enter L2/L3 state
-and the devices were still powered ON. But during very late end of suspend
-cycle, kernel tried to disable MSIs of the PCIe devices. This caused access
-violations as the resources needed to access the PCIe devices config space
-were turned OFF. Series [1] worked around this issue by not accessing the
-PCIe config space if the link was down in dw_msi_{un}mask_irq() functions.
-But that approach was not accepted.
-
-Then, series [2] implemented the suspend and resume operations using the
-syscore framework that disabled the resources at the end of the suspend
-cycle. But that approach also did not get much acceptance.
-
-Proposal
-========
-
-So the proposal here is to just vote for minimal interconnect bandwidth and
-not turn OFF the resources if there are active PCIe devices connected to
-the controllers. This avoids the access violation issue during suspend and
-also saves some power due to the lower interconnect bandwidth used.
-
-Then if there are no active PCIe devices connected to the controller,
-the resources are turned OFF completely and brought back during resume.
-This also saves power if there are controllers in a system without any
-devices connected.
-
-Testing
-=======
-
-This series has been tested on Lenovo Thinkpad X13s.
-
-Thanks,
-Mani
-
-[1] https://lore.kernel.org/linux-pci/1656055682-18817-1-git-send-email-quic_krichai@quicinc.com/
-[2] https://lore.kernel.org/linux-pci/1663669347-29308-1-git-send-email-quic_krichai@quicinc.com/
-
-Changes in v2:
-
-* Used minimum icc vote to keep data path functional during suspend
-* Collected Ack
-
-Manivannan Sadhasivam (1):
-  PCI: qcom: Add support for system suspend and resume
-
+Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Acked-by: Dhruva Gole <d-gole@ti.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
  drivers/pci/controller/dwc/pcie-qcom.c | 53 ++++++++++++++++++++++++++
  1 file changed, 53 insertions(+)
 
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index a232b04af048..7147f0103026 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -227,6 +227,7 @@ struct qcom_pcie {
+ 	struct gpio_desc *reset;
+ 	struct icc_path *icc_mem;
+ 	const struct qcom_pcie_cfg *cfg;
++	bool suspended;
+ };
+ 
+ #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+@@ -1820,6 +1821,53 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static int qcom_pcie_suspend_noirq(struct device *dev)
++{
++	struct qcom_pcie *pcie = dev_get_drvdata(dev);
++	int ret;
++
++	/* Set minimum bandwidth required to keep data path functional during suspend */
++	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
++	if (ret) {
++		dev_err(pcie->pci->dev, "Failed to set interconnect bandwidth: %d\n", ret);
++		return ret;
++	}
++
++	/*
++	 * Turn OFF the resources only for controllers without active PCIe devices. For controllers
++	 * with active devices, the resources are kept ON and the link is expected to be in L0/L1
++	 * (sub)states.
++	 *
++	 * Turning OFF the resources for controllers with active PCIe devices will trigger access
++	 * violation during the end of the suspend cycle, as kernel tries to access the PCIe devices
++	 * config space for masking MSIs.
++	 *
++	 * Also, it is not desirable to put the link into L2/L3 state as that implies VDD supply
++	 * will be removed and the devices may go into powerdown state. This will affect the
++	 * lifetime of the storage devices like NVMe.
++	 */
++	if (!dw_pcie_link_up(pcie->pci)) {
++		qcom_pcie_host_deinit(&pcie->pci->pp);
++		pcie->suspended = true;
++	}
++
++	return 0;
++}
++
++static int qcom_pcie_resume_noirq(struct device *dev)
++{
++	struct qcom_pcie *pcie = dev_get_drvdata(dev);
++
++	if (pcie->suspended) {
++		qcom_pcie_host_init(&pcie->pci->pp);
++		pcie->suspended = false;
++	}
++
++	qcom_pcie_icc_update(pcie);
++
++	return 0;
++}
++
+ static const struct of_device_id qcom_pcie_match[] = {
+ 	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+ 	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
+@@ -1856,12 +1904,17 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
+ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
+ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+ 
++static const struct dev_pm_ops qcom_pcie_pm_ops = {
++	NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq, qcom_pcie_resume_noirq)
++};
++
+ static struct platform_driver qcom_pcie_driver = {
+ 	.probe = qcom_pcie_probe,
+ 	.driver = {
+ 		.name = "qcom-pcie",
+ 		.suppress_bind_attrs = true,
+ 		.of_match_table = qcom_pcie_match,
++		.pm = &qcom_pcie_pm_ops,
+ 	},
+ };
+ builtin_platform_driver(qcom_pcie_driver);
 -- 
 2.25.1
 
