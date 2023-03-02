@@ -2,115 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0BB6A8440
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D9F6A8441
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 15:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjCBOfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 09:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S229916AbjCBOfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 09:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjCBOe7 (ORCPT
+        with ESMTP id S229938AbjCBOfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 09:34:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837DD1284B;
-        Thu,  2 Mar 2023 06:34:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E7D5615D2;
-        Thu,  2 Mar 2023 14:34:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445C1C433EF;
-        Thu,  2 Mar 2023 14:34:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677767677;
-        bh=am2Pms4fC7Mb/X3wlNdEKvPjV1B08gkpE6ryQz2S3CI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HQUUGL8ZdCd64toSBpMY2gXtz8rhPG6UFK7zTU8cYXcH9s9YF+v4BXfjWioHvIX1E
-         uOm+1ZHKl86gMFbEWwIB7ACztp+OTESh4ehQQVJG9RcJr65CTfd1ABjn/Klj6w9caa
-         8b8KNS+NR/tGSqOLFz4cSZCLB7x1JIq/TFei3K/fG1hTR9zqKgUmUOh3Xqy5WN/Vrs
-         WMW9KESdw1YHg4yAED+v9myP13HpO5kMW71zHMwCW7Hhu2qDodrMREWiXKivR1YnIg
-         uwdY4n8xVNNQHmeALGTBPBdgjtnQQQq4KYCRbXF7MkukijPVdfB+j+BRb9HkdN5/Gj
-         irAaQ8DOAEB2A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5111E4049F; Thu,  2 Mar 2023 11:34:35 -0300 (-03)
-Date:   Thu, 2 Mar 2023 11:34:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 04/10] perf stat: Modify the group test
-Message-ID: <ZACz+ypWOFxtsu92@kernel.org>
-References: <20230302041211.852330-1-irogers@google.com>
- <20230302041211.852330-5-irogers@google.com>
+        Thu, 2 Mar 2023 09:35:01 -0500
+X-Greylist: delayed 6528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 06:34:44 PST
+Received: from out-43.mta0.migadu.com (out-43.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360201117B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 06:34:44 -0800 (PST)
+Date:   Thu, 2 Mar 2023 15:34:36 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1677767681;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ekEV5MAm7E6bjxp2q4ldu7Xx50sJODF+lRB04Y8cTWY=;
+        b=YfxbP5WynmZcy/mSFqeS8QHrrfDbdj3xuSCY7Nbir/eL0wkrwMT1QYZLcNGOc2pLv4ipFE
+        S00O9ppI7M8mC88e/oRAJsh7AhkuEd2tuJYR1l1vYYERKoYqHHEu8tnKE9g6F4plFuduMC
+        jdKeqFfVfCr1e7TYwJ7FUuygQPCVQtI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Richard Leitner <richard.leitner@linux.dev>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Richard Leitner <richard.leitner@skidata.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Ladislav Michl <ladis@linux-mips.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        devicetree@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH 1/3] ASoC: dt-bindings: maxim,max9867: convert txt
+ bindings to yaml
+Message-ID: <ZACz/C/lMh/WsyrB@g0hl1n.net>
+References: <20230302-max9867-v1-0-aa9f7f25db5e@skidata.com>
+ <20230302-max9867-v1-1-aa9f7f25db5e@skidata.com>
+ <167775917220.270950.1253335215666674705.robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230302041211.852330-5-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <167775917220.270950.1253335215666674705.robh@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Mar 01, 2023 at 08:12:05PM -0800, Ian Rogers escreveu:
-> Previously nr_members would be 0 for an event with no group. The
-> previous change made that count 1, the event is its own leader without
-> a group. Make the find_stat logic consistent with this, an improvement
-> suggested by Namhyung Kim.
-
-Is this the only place where this change in behaviour needs to be taken
-into account?
-
-- Arnaldo
- 
-> Suggested-by: Namhyung Kim <namhyung@kernel.org>
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/stat-shadow.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Mar 02, 2023 at 07:05:02AM -0600, Rob Herring wrote:
 > 
-> diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
-> index ef85f1ae1ab2..eeccab6751d7 100644
-> --- a/tools/perf/util/stat-shadow.c
-> +++ b/tools/perf/util/stat-shadow.c
-> @@ -163,7 +163,7 @@ static double find_stat(const struct evsel *evsel, int aggr_idx, enum stat_type
->  			continue;
->  
->  		/* Ignore evsels that are part of different groups. */
-> -		if (evsel->core.leader->nr_members &&
-> +		if (evsel->core.leader->nr_members > 1 &&
->  		    evsel->core.leader != cur->core.leader)
->  			continue;
->  		/* Ignore evsels with mismatched modifiers. */
-> -- 
-> 2.39.2.722.g9855ee24e9-goog
+> On Thu, 02 Mar 2023 12:55:01 +0100, richard.leitner@linux.dev wrote:
+> > From: Richard Leitner <richard.leitner@skidata.com>
+> > 
+> > Convert from max9867.txt to maxim,max9867.yaml and add missing
+> > '#sound-dai-cells' property.
+> > 
+> > Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+> > ---
+> >  .../devicetree/bindings/sound/max9867.txt          | 17 --------
+> >  .../devicetree/bindings/sound/maxim,max9867.yaml   | 51 ++++++++++++++++++++++
+> >  2 files changed, 51 insertions(+), 17 deletions(-)
+> > 
 > 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
+Thank you for the pointer, Rob!
 
-- Arnaldo
+Will fix those in v2 and from now on run 'make DT_CHECKER_FLAGS=-m
+dt_binding_check' before sending any patches 😉
+
+regards;rl
+
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/maxim,max9867.yaml: 'oneOf' conditional failed, one must be fixed:
+> 	'unevaluatedProperties' is a required property
+> 	'additionalProperties' is a required property
+> 	hint: Either unevaluatedProperties or additionalProperties must be present
+> 	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+> ./Documentation/devicetree/bindings/sound/maxim,max9867.yaml: $id: relative path/filename doesn't match actual path or filename
+> 	expected: http://devicetree.org/schemas/sound/maxim,max9867.yaml#
+> Error: Documentation/devicetree/bindings/sound/maxim,max9867.example.dts:18.9-13 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[1]: *** [scripts/Makefile.lib:434: Documentation/devicetree/bindings/sound/maxim,max9867.example.dtb] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1508: dt_binding_check] Error 2
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230302-max9867-v1-1-aa9f7f25db5e@skidata.com
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
