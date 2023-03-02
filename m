@@ -2,104 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBA76A8BD5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216DD6A8B9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 23:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjCBWas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 17:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
+        id S229726AbjCBWSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 17:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCBWap (ORCPT
+        with ESMTP id S229506AbjCBWSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:30:45 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E533403D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:30:43 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id v1-20020a9d6041000000b0068d4a8a8d2dso463058otj.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 14:30:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677796243;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0HDohv0lvkUtSClkIwD4MKqx28WrKdTpdtBDDMSSGgA=;
-        b=QK5ECiWqmMBIYChjTCoV1plMlRsQHILLL5Qy/L0tFkz0T5B+516OiUGoN1oGnwHkJp
-         WCLdYjxUmUl5GZEvc/9mcDLq5c+g8M/jysvcni8fKq7E/pz9KIov8jcUJWg+qDhgK8Il
-         2Hu0fe6rlSaC3WPcqiNxNajahwo3oodAJWra7MNllB9RHiP+WLzu0mD42MALpSlywSkK
-         HAlfblwrkejJHyXDPE5lfTBiMuWq01PLafhDpN1AxExPj6o90mZxPK7zvayQBQ2Iau31
-         D7Kb+a0aH7UXGY+LSsIHsMtjN2Ge5fE+7aJ4nFL4V++G06l+xjwxEJYqgD6k3eCF4lme
-         eDpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677796243;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0HDohv0lvkUtSClkIwD4MKqx28WrKdTpdtBDDMSSGgA=;
-        b=eADCG1hGL5oTcUL0LUTR2k/jhyxOTbf4e9zig3k8jREbSOqPnpYl/6SyMzS/Et2jJ8
-         cimx3mme9jUi45rEcr3p2UVe9xR/DXsj18SoTtL1JZmuIrOm8X2yb6oGOF73jBV3JwiY
-         PnxEvZhZdtp+SP7TxE3ygFNg3aC7MROv8hxwLg32+M8WEw6xccVIGl6v5GK/hedxK1hq
-         /pvYEFhdhlmNFx/pKvsboUkvCNOfRGzlwYXfpAVsHjgWfH2+kJUisozS9NI3/LJ1t6ID
-         rZTwLBZTun8ONN4n9huXr8t6MJf4T5c9rPKg9vDW+1C3CAJGbq2pONQXu9PB9ZlzoOjL
-         vo7w==
-X-Gm-Message-State: AO0yUKUa9tMsqWLPEwKzkp+niSfegrgE0iNuKam9fYb9W1YGlvTmdmtl
-        uLgr0YaUXt82f3slzXebm9znBw==
-X-Google-Smtp-Source: AK7set8aOSjPE5sh5YVuAen/6NBD9XPC1GJYtNeoPHfloJ8wL4Ac8gg9pWvda4YzAQAMyKKCz0oYPg==
-X-Received: by 2002:a9d:4e5:0:b0:68d:5b43:5ac9 with SMTP id 92-20020a9d04e5000000b0068d5b435ac9mr6213905otm.4.1677796243123;
-        Thu, 02 Mar 2023 14:30:43 -0800 (PST)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id a26-20020a056830101a00b00693ea7bfdc2sm346095otp.76.2023.03.02.14.30.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 14:30:42 -0800 (PST)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        techsupport@winsystems.com, stable@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Paul Demetrotion <pdemetrotion@winsystems.com>
-Subject: [RESEND] gpio: ws16c48: Fix off-by-one error in WS16C48 resource region extent
-Date:   Tue, 28 Feb 2023 03:17:24 -0500
-Message-Id: <20230228081724.94786-1-william.gray@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 2 Mar 2023 17:18:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C43A251
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 14:18:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677795481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uQ5SSw6v6jkYdu8pUhZUUJgBB1SJYEgd5Q/CexLSglM=;
+        b=T+AYtlZWRyxW5eTxVOnTPR9NWJ9DxPdroXA4BBIIIj681jeotRO1RvUAAycnt3x8ImvGFX
+        BlQ5yXdTqWCNadf/XBqYR0JNnrOeU+YdBMrhw0i9Y2RPijQW1ETjY+k35aTsN7YhOY/Wma
+        wvHhIaIyZuYQC1kk/tU0MpC4jRiw+/8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-227-VAq8u0t7MzKbczVyVcrBkQ-1; Thu, 02 Mar 2023 16:17:19 -0500
+X-MC-Unique: VAq8u0t7MzKbczVyVcrBkQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA74A185A78B;
+        Thu,  2 Mar 2023 21:17:18 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A5FA740C83B6;
+        Thu,  2 Mar 2023 21:17:18 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 37D79400E055B; Thu,  2 Mar 2023 18:04:25 -0300 (-03)
+Date:   Thu, 2 Mar 2023 18:04:25 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 02/11] this_cpu_cmpxchg: ARM64: switch
+ this_cpu_cmpxchg to locked, add _local function
+Message-ID: <ZAEPWQrdZd1N1rkn@tpad>
+References: <20230209150150.380060673@redhat.com>
+ <20230209153204.683821550@redhat.com>
+ <ZAEMuD5pkk/TrK23@x1n>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAEMuD5pkk/TrK23@x1n>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The WinSystems WS16C48 I/O address region spans offsets 0x0 through 0xA,
-which is a total of 11 bytes. Fix the WS16C48_EXTENT define to the
-correct value of 11 so that access to necessary device registers is
-properly requested in the ws16c48_probe() callback by the
-devm_request_region() function call.
+On Thu, Mar 02, 2023 at 03:53:12PM -0500, Peter Xu wrote:
+> On Thu, Feb 09, 2023 at 12:01:52PM -0300, Marcelo Tosatti wrote:
+> > Goal is to have vmstat_shepherd to transfer from
+> > per-CPU counters to global counters remotely. For this, 
+> > an atomic this_cpu_cmpxchg is necessary.
+> > 
+> > Following the kernel convention for cmpxchg/cmpxchg_local,
+> > change ARM's this_cpu_cmpxchg_ helpers to be atomic,
+> > and add this_cpu_cmpxchg_local_ helpers which are not atomic.
+> 
+> I can follow on the necessity of having the _local version, however two
+> questions below.
+> 
+> > 
+> > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+> > 
+> > Index: linux-vmstat-remote/arch/arm64/include/asm/percpu.h
+> > ===================================================================
+> > --- linux-vmstat-remote.orig/arch/arm64/include/asm/percpu.h
+> > +++ linux-vmstat-remote/arch/arm64/include/asm/percpu.h
+> > @@ -232,13 +232,23 @@ PERCPU_RET_OP(add, add, ldadd)
+> >  	_pcp_protect_return(xchg_relaxed, pcp, val)
+> >  
+> >  #define this_cpu_cmpxchg_1(pcp, o, n)	\
+> > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+> > +	_pcp_protect_return(cmpxchg, pcp, o, n)
+> >  #define this_cpu_cmpxchg_2(pcp, o, n)	\
+> > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+> > +	_pcp_protect_return(cmpxchg, pcp, o, n)
+> >  #define this_cpu_cmpxchg_4(pcp, o, n)	\
+> > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+> > +	_pcp_protect_return(cmpxchg, pcp, o, n)
+> >  #define this_cpu_cmpxchg_8(pcp, o, n)	\
+> > +	_pcp_protect_return(cmpxchg, pcp, o, n)
+> 
+> This makes this_cpu_cmpxchg_*() not only non-local, but also (especially
+> for arm64) memory barrier implications since cmpxchg() has a strong memory
+> barrier, while the old this_cpu_cmpxchg*() doesn't have, afaiu.
+> 
+> Maybe it's not a big deal if the audience of this helper is still limited
+> (e.g. we can add memory barriers if we don't want strict ordering
+> implication), but just to check with you on whether it's intended, and if
+> so whether it may worth some comments.
 
-Fixes: 2c05a0f29f41 ("gpio: ws16c48: Implement and utilize register structures")
-Cc: stable@vger.kernel.org
-Cc: Paul Demetrotion <pdemetrotion@winsystems.com>
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
- drivers/gpio/gpio-ws16c48.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It happens that on ARM-64 cmpxchg_local == cmpxchg_relaxed.
 
-diff --git a/drivers/gpio/gpio-ws16c48.c b/drivers/gpio/gpio-ws16c48.c
-index e73885a4dc32..afb42a8e916f 100644
---- a/drivers/gpio/gpio-ws16c48.c
-+++ b/drivers/gpio/gpio-ws16c48.c
-@@ -18,7 +18,7 @@
- #include <linux/spinlock.h>
- #include <linux/types.h>
- 
--#define WS16C48_EXTENT 10
-+#define WS16C48_EXTENT 11
- #define MAX_NUM_WS16C48 max_num_isa_dev(WS16C48_EXTENT)
- 
- static unsigned int base[MAX_NUM_WS16C48];
+See cf10b79a7d88edc689479af989b3a88e9adf07ff.
 
-base-commit: 4827aae061337251bb91801b316157a78b845ec7
--- 
-2.39.2
+This patchset maintains the current behaviour
+of this_cpu_cmpxch (for this_cpu_cmpxch_local), which was:
+
+ #define this_cpu_cmpxchg_1(pcp, o, n)  \                                                                           
+-       _pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
++       _pcp_protect_return(cmpxchg, pcp, o, n)
+ #define this_cpu_cmpxchg_2(pcp, o, n)  \                                                                           
+-       _pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
++       _pcp_protect_return(cmpxchg, pcp, o, n)
+ #define this_cpu_cmpxchg_4(pcp, o, n)  \                                                                           
+-       _pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
++       _pcp_protect_return(cmpxchg, pcp, o, n)
+ #define this_cpu_cmpxchg_8(pcp, o, n)  \                                                                           
++       _pcp_protect_return(cmpxchg, pcp, o, n)
+
+> > +
+> > +#define this_cpu_cmpxchg_local_1(pcp, o, n)	\
+> >  	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+> > +#define this_cpu_cmpxchg_local_2(pcp, o, n)	\
+> > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+> > +#define this_cpu_cmpxchg_local_4(pcp, o, n)	\
+> > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+> > +#define this_cpu_cmpxchg_local_8(pcp, o, n)	\
+> > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+> 
+> I think cmpxchg_relaxed()==cmpxchg_local() here for aarch64, however should
+> we still use cmpxchg_local() to pair with this_cpu_cmpxchg_local_*()?
+
+Since cmpxchg_local = cmpxchg_relaxed, seems like this is not necessary.
+
+> Nothing about your patch along since it was the same before, but I'm
+> wondering whether this is a good time to switchover.
+
+I would say that another patch is more appropriate to change this, 
+if desired.
+
+> The other thing is would it be good to copy arch-list for each arch patch?
+> Maybe it'll help to extend the audience too.
+
+Yes, should have done that (or CC each individual maintainer). Will do
+on next version.
+
+Thanks.
 
