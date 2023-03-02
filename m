@@ -2,88 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF076A7C28
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EBF6A7C23
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Mar 2023 08:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjCBH5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 02:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        id S229657AbjCBH5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 02:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCBH5W (ORCPT
+        with ESMTP id S229447AbjCBH5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 02:57:22 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AC236082
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Mar 2023 23:57:21 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so1051779wmb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Mar 2023 23:57:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1677743839;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3gGlmdrxpk12L0HtiU5R9bJeUayhxQ74GXgfAq6meuw=;
-        b=pn+DJn+k9uImMGeBMXuwnMQE1biMNzy71Plo8H7DOI3fKK/ceps9rgGUxc/bmw8s6L
-         4TQMSud9TXFc8/r2OEOEiAKv5SApxcJ1Yd/LQHA0imhiw3qi8hrsJYLIdS7LaNAmBH1O
-         AbgLlGVWFn2hf8BkmR90At5+g3zqQ61Ankq9cGuBB9WgQfAsyn4JZulcRbW71gf7ZeYz
-         oRP4F6/LxUTL9nxCbjnWUdwQSV0fTcnbx/sIcDMk8fB8xQ9dJ6UAQMnDD3HBbCn+Qr4a
-         fIykdIwuX5WmEnYpwkBvfu6oXc7MDCcdwlfNYOa5JGNIdVdo8Hubuxh+Kfco99U7Z89i
-         QfaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677743839;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3gGlmdrxpk12L0HtiU5R9bJeUayhxQ74GXgfAq6meuw=;
-        b=64TCkQjQwSv3GrpGqDic6+SNDgSXes9y1tp2BF6Kex+d1Iqhv7lGe15SGipMh6khZ8
-         qHYxQ9CeBlcqiqY1aLEeLzrccNs3l5UVx2wlqTpgTtKb/ztcxmNs8yPxZe4DBklVWUJI
-         EuOfiiDs6ObEbw+V7u9QihjuaqpqvRpGdP3VE46uuVcMqk9x+ZCgeKMQckb8BkC0dBui
-         N2AIAw+oNUMzkiD4FfO1kfwO6zQB5H7iLK6NiGpKzYYeqKlu0FzocVDoYfx5lM1hRXz2
-         TqYDNZjKhgYSs8sdQIV9MqixUxDUdnQ47FbT6hdYdsNIgxZri0Ks68U8VrVTN7NIpHiO
-         wMBg==
-X-Gm-Message-State: AO0yUKW9AOARy5qXy69naW5GKcI3VzwlVHCIIMN6UCg2V6kLxrAUV4i8
-        nxAwwE5eEZBUtjKmU7uhVu9BouayMtkk4EHXvKGNZw==
-X-Google-Smtp-Source: AK7set8WtHYe+gEo1Fgs1pSlJqsnM2tCvgsXzdB6/J3n+P8FnRw3jetc5Yrjj9TAlqQSjPmyeFZCYlu44lotg0az/Sk=
-X-Received: by 2002:a05:600c:4591:b0:3ea:8ed9:8e4b with SMTP id
- r17-20020a05600c459100b003ea8ed98e4bmr2655128wmo.6.1677743839531; Wed, 01 Mar
- 2023 23:57:19 -0800 (PST)
+        Thu, 2 Mar 2023 02:57:15 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 551E934300;
+        Wed,  1 Mar 2023 23:57:14 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24BF71FB;
+        Wed,  1 Mar 2023 23:57:57 -0800 (PST)
+Received: from [10.162.41.9] (unknown [10.162.41.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4FC573F587;
+        Wed,  1 Mar 2023 23:57:11 -0800 (PST)
+Message-ID: <1fa898da-efdf-cf39-4be9-1d0354d3fa41@arm.com>
+Date:   Thu, 2 Mar 2023 13:27:08 +0530
 MIME-Version: 1.0
-References: <Y+tSBlSsQBQF/Ro2@osiris> <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
-In-Reply-To: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Thu, 2 Mar 2023 08:57:08 +0100
-Message-ID: <CAHVXubgdr_NrLPnZ6NhuDt8uZYZD+R_swpCVGoLDxnD+eOJcuA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     hca@linux.ibm.com, geert@linux-m68k.org, corbet@lwn.net,
-        Richard Henderson <richard.henderson@linaro.org>,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, chenhuacai@kernel.org,
-        kernel@xen0n.name, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        chris@zankel.net, jcmvbkbc@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] mm/debug_vm_pgtable: Replace pte_mkhuge() with
+ arch_make_huge_pte()
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230302031833.360679-1-anshuman.khandual@arm.com>
+ <94473cc4-f84f-d42d-2bd1-b6389d8c9ab3@csgroup.eu>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <94473cc4-f84f-d42d-2bd1-b6389d8c9ab3@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,85 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 4:17=E2=80=AFAM Palmer Dabbelt <palmer@dabbelt.com> =
-wrote:
->
-> On Tue, 14 Feb 2023 01:19:02 PST (-0800), hca@linux.ibm.com wrote:
-> > On Tue, Feb 14, 2023 at 09:58:17AM +0100, Geert Uytterhoeven wrote:
-> >> Hi Heiko,
-> >>
-> >> On Tue, Feb 14, 2023 at 9:39 AM Heiko Carstens <hca@linux.ibm.com> wro=
-te:
-> >> > On Tue, Feb 14, 2023 at 08:49:01AM +0100, Alexandre Ghiti wrote:
-> >> > > This all came up in the context of increasing COMMAND_LINE_SIZE in=
- the
-> >> > > RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE =
-is the
-> >> > > maximum length of /proc/cmdline and userspace could staticly rely =
-on
-> >> > > that to be correct.
-> >> > >
-> >> > > Usually I wouldn't mess around with changing this sort of thing, b=
-ut
-> >> > > PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LIN=
-E_SIZE
-> >> > > to 2048").  There are also a handful of examples of COMMAND_LINE_S=
-IZE
-> >> > > increasing, but they're from before the UAPI split so I'm not quit=
-e sure
-> >> > > what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE =
-from
-> >> > > asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to ker=
-nel
-> >> > > boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE=
-"),
-> >> > > and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-> >> > > asm-generic/setup.h.").
-> >> > >
-> >> > > It seems to me like COMMAND_LINE_SIZE really just shouldn't have b=
-een
-> >> > > part of the uapi to begin with, and userspace should be able to ha=
-ndle
-> >> > > /proc/cmdline of whatever length it turns out to be.  I don't see =
-any
-> >> > > references to COMMAND_LINE_SIZE anywhere but Linux via a quick Goo=
-gle
-> >> > > search, but that's not really enough to consider it unused on my e=
-nd.
-> >> > >
-> >> > > The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE r=
-eally
-> >> > > shouldn't be part of uapi, so this now touches all the ports.  I'v=
-e
-> >> > > tried to split this all out and leave it bisectable, but I haven't
-> >> > > tested it all that aggressively.
-> >> >
-> >> > Just to confirm this assumption a bit more: that's actually the same
-> >> > conclusion that we ended up with when commit 3da0243f906a ("s390: ma=
-ke
-> >> > command line configurable") went upstream.
->
-> Thanks, I guess I'd missed that one.  At some point I think there was
-> some discussion of making this a Kconfig for everyone, which seems
-> reasonable to me -- our use case for this being extended is syzkaller,
-> but we're sort of just picking a value that's big enough for now and
-> running with it.
->
-> Probably best to get it out of uapi first, though, as that way at least
-> it's clear that it's not uABI.
->
-> >> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
-> >> I assume?
-> >
-> > Yes, sorry for that. I got distracted while writing and used the wrong
-> > branch to look this up.
->
-> Alex: Probably worth adding that to the list in the cover letter as it
-> looks like you were planning on a v4 anyway (which I guess you now have
-> to do, given that I just added the issue to RISC-V).
 
-Yep, I will :)
 
-Thanks,
+On 3/2/23 12:31, Christophe Leroy wrote:
+> 
+> 
+> Le 02/03/2023 à 04:18, Anshuman Khandual a écrit :
+>> Since the following commit arch_make_huge_pte() should be used directly in
+>> generic memory subsystem as a platform provided page table helper, instead
+>> of pte_mkhuge(). Change hugetlb_basic_tests() to call arch_make_huge_pte()
+>> directly, and update its relevant documentation entry as required.
+>>
+>> 'commit 16785bd77431 ("mm: merge pte_mkhuge() call into arch_make_huge_pte()")'
+>>
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>> Cc: linux-doc@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Cc: linux-mm@kvack.org
+>> Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> Link: https://lore.kernel.org/all/1ea45095-0926-a56a-a273-816709e9075e@csgroup.eu/
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>> This applies on latest mainline.
+>>
+>>   Documentation/mm/arch_pgtable_helpers.rst | 2 +-
+>>   mm/debug_vm_pgtable.c                     | 2 +-
+>>   2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/mm/arch_pgtable_helpers.rst b/Documentation/mm/arch_pgtable_helpers.rst
+>> index 30d9a09f01f4..af3891f895b0 100644
+>> --- a/Documentation/mm/arch_pgtable_helpers.rst
+>> +++ b/Documentation/mm/arch_pgtable_helpers.rst
+>> @@ -214,7 +214,7 @@ HugeTLB Page Table Helpers
+>>   +---------------------------+--------------------------------------------------+
+>>   | pte_huge                  | Tests a HugeTLB                                  |
+>>   +---------------------------+--------------------------------------------------+
+>> -| pte_mkhuge                | Creates a HugeTLB                                |
+>> +| arch_make_huge_pte        | Creates a HugeTLB                                |
+>>   +---------------------------+--------------------------------------------------+
+>>   | huge_pte_dirty            | Tests a dirty HugeTLB                            |
+>>   +---------------------------+--------------------------------------------------+
+>> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+>> index af59cc7bd307..92bed5bd5879 100644
+>> --- a/mm/debug_vm_pgtable.c
+>> +++ b/mm/debug_vm_pgtable.c
+>> @@ -934,7 +934,7 @@ static void __init hugetlb_basic_tests(struct pgtable_debug_args *args)
+>>   #ifdef CONFIG_ARCH_WANT_GENERAL_HUGETLB
+>>   	pte = pfn_pte(args->fixed_pmd_pfn, args->page_prot);
+>>   
+>> -	WARN_ON(!pte_huge(pte_mkhuge(pte)));
+>> +	WARN_ON(!pte_huge(arch_make_huge_pte(pte)));
+> 
+> Did you build it ?
 
-Alex
+Ahh bad ! Built on arm64 which does not subscribe ARCH_WANT_GENERAL_HUGETLB.
+
+> 
+> arch_make_huge_pte() need 3 arguments.
+
+Could call it with constants such as PMD_SHIFT and standard vm_flags without
+involving real arg based values (as they are not initialized for HugeTLB).
+But wondering if platform arch_make_huge_pte() implementation might complain.
+
+arch_make_huge_pte(pte, PMD_SHIFT, VM_READ | VM_WRITE)
