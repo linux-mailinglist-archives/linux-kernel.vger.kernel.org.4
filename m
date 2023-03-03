@@ -2,132 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86206A968A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12856A968E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbjCCLjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:39:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S229803AbjCCLj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCCLjb (ORCPT
+        with ESMTP id S231226AbjCCLjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:39:31 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B3B55530
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:39:26 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id z42so1968576ljq.13
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 03:39:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677843565;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BkDKt1YzeWNRwirQw6wvEDUUEXwHJr3b2oz6pXeJI9c=;
-        b=an6IW9IOqyPT/0W+RIywrkM13pW/VcHEkd9uXbu7e4T6Vd5YsK9TjNqy0JxhAoeK2B
-         Gte9u7qzh6EjQeEnKaMIKdVHVXrIVtjvNa1EOSLiH2xZylhhBs9nt1dY6pcxbz0biW0O
-         y8QfbjepIICLQJjqBYp77MF/OwckqwF/r+s7F+X0N1CG7tl0yBey5c+eJdtwBpAcxk0T
-         tKX8JNVp6drhjmeUW6ARDPqq3w/fL0fkZF0S/5K1yvIfhCp8T48pj/D8msPYhP4D+SYI
-         KU33KKMjaiZtwmc/esVQnULHhM0OVRgjz5h/Ik+P0Tw5c1bid6umneApMgpQDPEBP1yO
-         bTog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677843565;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BkDKt1YzeWNRwirQw6wvEDUUEXwHJr3b2oz6pXeJI9c=;
-        b=zsuxWiQyb7C9KCmLnEPo4KM96m3YynVeHzIgZFSJfOh+9ooqHP3qt6Mzpu68Q83/t5
-         21DQQgMDU3OUEQ6ag/foFskELx1e/XwiVQAAO1OHnpNY5ru0V5C8/PK+euCbG7CgBfvz
-         v3Shzd32WPygfG5uor8ihQEb3cQztV1xa1tAZF2jektvFfJNJ+yLfylX5MEa2SNtGmCo
-         FNb1vlYrFth4bBA3u7utdc4Lku42Z7qo++12VXpXZxYsrc+qCOL+XDTOz/0Ru10dGZiy
-         VGs4676CG83RIyqXYvqpF7JHHti208A03mqczoDQUfby2BtnBabYIi1XvcUn31Sv2R1G
-         ri2Q==
-X-Gm-Message-State: AO0yUKUYGppBvXoponlPKi/Cu60VT7tsHOqJjOvjK1CGC7v4aE+POBIW
-        5/51gVYFGwAj1SlXrlkcDMjANw==
-X-Google-Smtp-Source: AK7set8ukR79viwyY7va3KuIUT5EBlrrMxoo/tyCt9ry7Ct7pxXVLhRaEr6/7iSPVguhz4STOwk1iw==
-X-Received: by 2002:a2e:7d08:0:b0:295:a930:55d1 with SMTP id y8-20020a2e7d08000000b00295a93055d1mr421966ljc.18.1677843565268;
-        Fri, 03 Mar 2023 03:39:25 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id k26-20020a05651c10ba00b00295d38474e5sm269833ljn.46.2023.03.03.03.39.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 03:39:24 -0800 (PST)
-Message-ID: <db4f4e53-e8b9-0807-7490-2c6b76194ad5@linaro.org>
-Date:   Fri, 3 Mar 2023 12:39:23 +0100
+        Fri, 3 Mar 2023 06:39:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0001623659;
+        Fri,  3 Mar 2023 03:39:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C527B818A6;
+        Fri,  3 Mar 2023 11:39:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E60C4339E;
+        Fri,  3 Mar 2023 11:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677843590;
+        bh=I67wD2VPLvWn6k0HOQ0HyWEMmVsne14JmWKz+mBqvIk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GTkY9eXMB5r/ml0duVnEYUUCqH0mVYY/zdj1H0njOjVTkYPBqklKDEf0gq3XTzGdr
+         r+2IJjp23XkT5yNUBwrcdLtFzL7XnKVDp3KFPprMP5fiafUkZ4YFiuySHc9VR9lP2L
+         Gvx2mfl/TpOQ1QQOu9u2qFOw225zCOi1lKcOuADzB2FrPoJ8GiKBWKy5mz44oVJPBD
+         fKdL1cCcwvgmotXrD+yVEz4FUX5COcuNCH47ZSkeQsEgbwDtOk0kKLAJ6L1A2xUWmo
+         MwxikzdP50zEvZFQWIgfhtL6jtm6nV1nOHGpP05ua/9diiq6emMyU2IkT/M6Om60wF
+         eyMGzcqHBk64w==
+Date:   Fri, 3 Mar 2023 11:39:45 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     jacek.anaszewski@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        thunder.leizhen@huawei.com, festevam@gmail.com
+Subject: Re: [PATCH v6] dt-bindings: leds: Document commonly used LED triggers
+Message-ID: <20230303113945.GF2420672@google.com>
+References: <20230213072133.5977-1-manivannan.sadhasivam@linaro.org>
+ <20230303103407.GR2303077@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
- __qcom_icc_set twice on the same node
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
- <59b28fb4-1367-9872-ed63-90847e380bb6@linaro.org>
- <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
- <3116a08a-30a8-c9b9-f079-26739c9e6d49@linaro.org>
- <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230303103407.GR2303077@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 03 Mar 2023, Lee Jones wrote:
 
-
-On 3.03.2023 12:36, Bryan O'Donoghue wrote:
-> On 03/03/2023 11:35, Bryan O'Donoghue wrote:
->> On 03/03/2023 11:33, Konrad Dybcio wrote:
->>>
->>>
->>> On 3.03.2023 12:32, Bryan O'Donoghue wrote:
->>>> On 03/03/2023 02:35, Konrad Dybcio wrote:
->>>>> Currently, when sync_state calls set(n, n) all the paths for setting
->>>>> parameters on an icc node are called twice. Avoid that.
->>>>>
->>>>> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>> ---
->>>>> RFC comes from the fact that I *believe* this should be correct, but I'm
->>>>> not entirely sure about it..
->>>>>
->>>>>
->>>>>    drivers/interconnect/qcom/icc-rpm.c | 2 +-
->>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->>>>> index a6e0de03f46b..d35db1af9b08 100644
->>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
->>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
->>>>> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>>>>        ret = __qcom_icc_set(src, src_qn, sum_bw);
->>>>>        if (ret)
->>>>>            return ret;
->>>>> -    if (dst_qn) {
->>>>> +    if (dst_qn && src_qn != dst_qn) {
->>>>>            ret = __qcom_icc_set(dst, dst_qn, sum_bw);
->>>>>            if (ret)
->>>>>                return ret;
->>>>
->>>> Is it possible for src_qn == dst_qn ?
->>> As the commit message says, sync_state calls set(n, n) in
->>> drivers/interconnect/core.c : icc_sync_state(struct device *dev)
->>
->> So you've _seen_ that happen ?
->>
+> On Mon, 13 Feb 2023, Manivannan Sadhasivam wrote:
 > 
-> Assuming you have, then why isn't the fix in sync_state i.e. that's an error for everybody right ?
-I believe that there's simply no other way of updating every single node
-on its own with the icc api, without taking any links into play. But I
-see exynos and i.mx also effectively calling it twice on each node.
+> > Document the commonly used LED triggers by the SoCs. Not all triggers
+> > are documented as some of them are very application specific. Most of the
+> > triggers documented here are currently used in devicetrees of many SoCs.
+> > 
+> > While at it, also place the comment above the triggers (hci, mmc, wlan)
+> > to match the rest of the binding.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> > 
+> > Changes in v6:
+> > 
+> > * Rebased on top of lee/for-leds-next branch
+> > * Fixed the comment location for few triggers
+> > 
+> > Changes in v5:
+> > 
+> > * Rebased on top of v6.2-rc1
+> > 
+> > Changes in v4:
+> > 
+> > * Removed the sorting of triggers
+> > * Removed the "items" as they were not needed
+> > * Reworded the description
+> > * Dropped Zhen Lei's tested-by tag as the patch has changed
+> > * Added kbd-capslock trigger
+> > 
+> > Changes in v3:
+> > 
+> > * Rebased on top of v6.1-rc1
+> > * Added WLAN Rx trigger
+> > * Added tested tag from Zhen Lei
+> > 
+> > Changes in v2:
+> > 
+> > * Added more triggers, fixed the regex
+> > * Sorted triggers in ascending order
+> > 
+> >  .../devicetree/bindings/leds/common.yaml      | 37 +++++++++++++++++--
+> >  1 file changed, 34 insertions(+), 3 deletions(-)
+> 
+> Applied, thanks
 
-Konrad
+Change of plan.  This doesn't apply cleanly.
+
+Could you please rebase and resubmit please?
+
+-- 
+Lee Jones [李琼斯]
