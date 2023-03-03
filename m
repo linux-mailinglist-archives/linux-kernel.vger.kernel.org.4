@@ -2,147 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9C16A99F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE19E6A99AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjCCOzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        id S231252AbjCCOjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjCCOzv (ORCPT
+        with ESMTP id S231273AbjCCOi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:55:51 -0500
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Mar 2023 06:55:49 PST
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB14126FD;
-        Fri,  3 Mar 2023 06:55:49 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E05FF58209F;
-        Fri,  3 Mar 2023 09:38:37 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 03 Mar 2023 09:38:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1677854317; x=1677861517; bh=fE
-        NpqGS/+8eA5DI/UUI0vpXheU20dTSblaG27LRs1wM=; b=TMhMKykfeOcON4SmqH
-        CiYcR4MIZ49Z7wHVFPQNZj3iGkQl9Ekns63B0lEoL+meNxR+1YZlErUd72YNzWtc
-        Tc3ckFkvLMeh9z5LY4PAFBAmSGhVbQXp133+eiQ6TbSr8c0f+rN06dClkyxbipje
-        G99ggeGVGmhkM+vYhAS0iTVg1hZFSEFrqGP0d9QqHjS8ElbKXMyT/CaVXWnxeQKB
-        /7z5ZnS1fBdEZ8W9XD7NfqLT4E50Bhdgu3yHMLuWpcq1zHML7Xkl6vuvxxwWr/x4
-        kTDHrA9LQ5EfKoXkh3mlh09MDR4S8hkgaXi2RK52pdw166eV5NR15Pqw78vYO19m
-        5pnA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677854317; x=1677861517; bh=fENpqGS/+8eA5
-        DI/UUI0vpXheU20dTSblaG27LRs1wM=; b=S5/UuJmbtsS/NWyXg3Ps3ypf5/t2J
-        P263Lmin6EpwJeGdsXY7ll3SIMZ13M5mt47W1zamhNF1Za+SwrlDllq7hyfWwIJF
-        E0BALtrYPdg8Wv2JEv+lAFvDlUAVZSUieuhgvoqF6K/ORnQdbKnsVLBgOQyVKQ/a
-        1bRA8NkMejJ9bonI4XKeyEv4VEZ41/TS2ho+dfe4t7NIkfh7iQQqDRSgiIxIFf3n
-        bEhBuSvaJ2jJnfAd1mf7eTwFir4izLMxvO6ovQo7kuJIcXJXDbPbT17X6F4IdV5F
-        eOuCDvuhjDUvFXQRMxhiGcGpV9+x4iWQj01t/RarVARG5rhzaclijqE5Q==
-X-ME-Sender: <xms:bQYCZBqQ_OWB-XfeAkakbJrvkOlAPPrdrOfjnoXZNzAAbN2ysnU5_g>
-    <xme:bQYCZDrT7oGvvXps_IIKr4EyvuOtztAVxEjjLij73_GjNwXm2pjPb8clAUw7L-et6
-    THtA9aJSxq4Fthg0Rc>
-X-ME-Received: <xmr:bQYCZONjTuFbLn6b407OWCuogFfuUAkjkP7v-oYKOzKLTSWSB0h0NQ7KAgDn2usbc1W11_Ho64ar_UqZQMVs_dWdJ1SZ2Tw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledgieduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:bQYCZM7lRZBpN1iCDRWpa8RRIEzCmsRX5qOpjq_60GBkK-GZLyuuIA>
-    <xmx:bQYCZA6xZfTwaBxJlNayuRLhTYG2SBHDQ-3PlQ-sVrUwaNBFfq_FGA>
-    <xmx:bQYCZEiTLUpDKCmsz6nBVCy-qKZZKeYrjzBlgrYQuNET0iH3p73yMg>
-    <xmx:bQYCZDPi_FBzF2yyIJcOR5G-ya25UwN715kOJpXal74DI6neV3tjeA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Mar 2023 09:38:36 -0500 (EST)
-Date:   Fri, 3 Mar 2023 15:38:35 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
-Message-ID: <20230303143835.hxvkujrdxh7345ah@houat>
-References: <20230302013822.1808711-1-sboyd@kernel.org>
+        Fri, 3 Mar 2023 09:38:58 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C22B10439;
+        Fri,  3 Mar 2023 06:38:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AbaAvafZP1xfr+wB9hanYwLc2el3IrC2XvoYQ5U1N/E=; b=RreymLWFImULYU86P3aG/AZq2o
+        JjRhu70Xaa07I+8iwn6nQrXLpOLD349x+44DHxiz3eM9dM89yGnHIUIMkhNTk3oYNhTUqncgNN9up
+        JegIbhTXAkPI5e1yORpXwabhGxWHwK/Y1SUZUnu1VJgRA6FIqrXwqSPJ/CkJbKY5OKxrJDOjLL+Qv
+        vxyUCmsb/4IzDDtbGClAqKNKOfvPoTakvnpuOQXJaL+Zc48ozdlj3x0pTamPwEFPtrB0BLDNXngFV
+        X6F/OP/caX+SsIR34y6pAT4i4eTADKSgwBoX0rUkhgB9zy08/hNJhNNQ9iUNO+20l0cjYVMxAdx4C
+        kbkKmktw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pY6YT-003BQ2-It; Fri, 03 Mar 2023 14:38:41 +0000
+Date:   Fri, 3 Mar 2023 14:38:41 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michal Simek <monstr@monstr.eu>
+Subject: Re: [PATCH v3 14/34] microblaze: Implement the new page table range
+ API
+Message-ID: <ZAIGcXB77IoFw+IR@casper.infradead.org>
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-15-willy@infradead.org>
+ <ZAHRsPm89stqHDE5@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zxhsbaoummc7j6bf"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230302013822.1808711-1-sboyd@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZAHRsPm89stqHDE5@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 03, 2023 at 12:53:36PM +0200, Mike Rapoport wrote:
+> On Tue, Feb 28, 2023 at 09:37:17PM +0000, Matthew Wilcox (Oracle) wrote:
+> > +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> > +		pte_t *ptep, pte_t pte, unsigned int nr)
+> >  {
+> > -	*ptep = pte;
+> > +	for (;;) {
+> > +		set_pte(ptep, pte);
+> > +		if (--nr == 0)
+> > +			break;
+> > +		ptep++;
+> > +		pte_val(pte) += 1 << PFN_SHIFT_OFFSET;
+> 
+> This is the same as
+> 
+> 		pte_val(pte) += PAGE_SIZE;
+> 
+> isn't it?
 
---zxhsbaoummc7j6bf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks like it.  Based on this:
 
-Hi,
+$ git grep PFN_SHIFT_OFFSET arch/microblaze/
+arch/microblaze/include/asm/pgtable.h:#define PFN_SHIFT_OFFSET  (PAGE_SHIFT)
+arch/microblaze/include/asm/pgtable.h:#define pte_pfn(x)                (pte_val(x) >> PFN_SHIFT_OFFSET)
 
-On Wed, Mar 01, 2023 at 05:38:13PM -0800, Stephen Boyd wrote:
-> This patch series adds unit tests for the clk fixed rate basic type and
-> the clk registration functions that use struct clk_parent_data. To get
-> there, we add support for loading a DTB into the UML kernel that's
-> running the unit tests along with probing platform drivers to bind to
-> device nodes specified in DT.
->=20
-> With this series, we're able to exercise some of the code in the common
-> clk framework that uses devicetree lookups to find parents and the fixed
-> rate clk code that scans devicetree directly and creates clks. Please
-> review.
->=20
-> I Cced everyone to all the patches so they get the full context. I'm
-> hoping I can take the whole pile through the clk tree as they almost all
-> depend on each other. In the future I imagine it will be easy to add
-> more test nodes to the clk.dtsi file and not need to go across various
-> maintainer trees like this series does.
-
-That's really great, thanks!
-
-I wanted to have a look at how we could possibly do this for DRM, I
-guess I have a starting point now :)
-
-Maxime
-
---zxhsbaoummc7j6bf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZAIGawAKCRDj7w1vZxhR
-xS33AQD23xSdqBXlBOhJsMv6KYIZ12jQ2GO9rfSeTnQ8xbOokQD/bAnk3DyP7XE/
-fGO0wD2U0Tkw7bdC9RO2kuSjjCSIvgk=
-=gx7K
------END PGP SIGNATURE-----
-
---zxhsbaoummc7j6bf--
+I only looked at the definition of pte_pfn(); I didn't look to see how
+PFN_SHIFT_OFFSET was defined.  I don't see the need to change it from
+what I have though?
