@@ -2,90 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784886A921D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241EC6A921F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjCCIEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:04:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S229942AbjCCIFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 03:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCCIEE (ORCPT
+        with ESMTP id S229447AbjCCIFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:04:04 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285701514B;
-        Fri,  3 Mar 2023 00:04:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677830624; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=V7+QiGUeBZfUla4HgROFhe4Iq0FdEBuGP3vF6Zo4zC9lUH9lKc8WTmWxFkNdHBNBJf/gj4WNDv3KAw3zvbZ9cjYOHyhXejrrZGhPC6YtIiqrLRp13oDIrFdp7Wog257rvXwSi6UvRdmVbkWPm17ygRdZ+L6ap8YHKXVGRspI+e0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677830624; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=U1OiG7H/Mndwf7FgNU+g9XbP976CtK7OQMg286VnDUM=; 
-        b=juWgbbUiduOCDOa1YzX9yUxZDvclyubitBq6Rwwgcfh6Ux2AObY6GiIY9o+l6yLfhUwqi5iIRFv5KyQGpjmOE8FvfUe75UqNYK3p2YtPJ6n8bi1LbGp5ictiKjkzsKVfcKFqPuSGTwGLvXAW4OHaFlEEACqZ0IEenU9A/2JtyTM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677830624;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=U1OiG7H/Mndwf7FgNU+g9XbP976CtK7OQMg286VnDUM=;
-        b=DSiUittAGzcp8AMYtPvjUSI6NVhAhOgvuSldbQgK/WSP3UmfapRIS2zsxPkdXkUr
-        vVBhkT3WT6E3RWxxdYfpeH9cCybPeGwFVOgs3S158EAgzTc3ZIuu9P3BinvmhuvDJDG
-        98WVt9mkfMmFOS/lGTqiSgfCS3c6VROaMtiwsGsg=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1677830622645510.55169972795534; Fri, 3 Mar 2023 00:03:42 -0800 (PST)
-Message-ID: <fa01003f-b189-d84f-d934-9c7c712fce37@arinc9.com>
-Date:   Fri, 3 Mar 2023 11:03:36 +0300
+        Fri, 3 Mar 2023 03:05:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EB2559EE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:04:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677830662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s8QnxRpYQPEiLn8XmuErYmk8O10pIsFngcfQcnQ90xY=;
+        b=NXlQAWcllUXRV1QijanlvM1TiCDCYlvyN6FQxtyWmG3ddp5Z9tJGors4QRIeS7ek02sFqx
+        kJejqQChdpAvAi44PsF+c09Fd3UcqOyIOTn2uwQpagbzIwuXDWhkmMC77rbbcZvLdoYFfm
+        4OIAP27l4a4CPDsNmldbpx2FvnQ5tSA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-669-xogSDKKYNyqo2asL0GendQ-1; Fri, 03 Mar 2023 03:04:20 -0500
+X-MC-Unique: xogSDKKYNyqo2asL0GendQ-1
+Received: by mail-wm1-f69.google.com with SMTP id m28-20020a05600c3b1c00b003e7d4662b83so2489079wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 00:04:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677830659;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s8QnxRpYQPEiLn8XmuErYmk8O10pIsFngcfQcnQ90xY=;
+        b=3FvibvGgZ70e+KE9xQ87x3gwSbDZau940hyLhbvBb/UdFLNWthb2PP/kaBsfdEShDb
+         jJvVkKMMMnoBCxcmFD65KZv5AiGleIr2KSH5MCR9magSbrBfD6d0Cv/G6RU+yJFXYljv
+         yGcOqSxnHLnDiV2SyeikG5BHGvMKvurooGzC9LvLkaJ+frucdh4u7E1tdq+Pa/MQDuGy
+         d/iiLDIrIP4etH33wDDgoK5fqNpR3CJTDD1tUsTZ3+5xmoJF5xzdPHcHnLE6MGr/4S1Y
+         G5RVLeV0txR6AmNTOLG/W95YE3okBTR8i3roxWG6hK3FGLPRDRTSoZlsHNRh9y4rK5MM
+         Qgdw==
+X-Gm-Message-State: AO0yUKVfkTldYIXYZZxJbx/auaU9JDNTLGu7iggSosX/onvGK5m6mQWM
+        JXKBbrYdUGQnEzD5XzmCQxM7spfw90oWYxeJqt2BKcQlCuivsaCqSkuK8KkEt+g20yxPpsN3oRX
+        FpYukch4nAod3lgXJQOBGyRLF
+X-Received: by 2002:a05:600c:3ac8:b0:3db:2922:2b99 with SMTP id d8-20020a05600c3ac800b003db29222b99mr788319wms.4.1677830658951;
+        Fri, 03 Mar 2023 00:04:18 -0800 (PST)
+X-Google-Smtp-Source: AK7set/BXLT+lMpnyKVQLibkm04GCkyPcxM5MUEDfKB9hdx14azQTgROHFPeVko3IYxqiAwD1NbohQ==
+X-Received: by 2002:a05:600c:3ac8:b0:3db:2922:2b99 with SMTP id d8-20020a05600c3ac800b003db29222b99mr788279wms.4.1677830658649;
+        Fri, 03 Mar 2023 00:04:18 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id v16-20020a05600c471000b003e9ded91c27sm5848475wmo.4.2023.03.03.00.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 00:04:18 -0800 (PST)
+Message-ID: <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
+Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        mptcp@lists.linux.dev, Florian Westphal <fw@strlen.de>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Anders Roxell <anders.roxell@linaro.org>
+Date:   Fri, 03 Mar 2023 09:04:15 +0100
+In-Reply-To: <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
+References: <20230301180657.003689969@linuxfoundation.org>
+         <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
+         <ZAB6pP3MNy152f+7@kroah.com>
+         <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
+         <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
- compatible strings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-8-arinc.unal@arinc9.com>
- <20230227173333.GA496999-robh@kernel.org>
- <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
- <20230301024431.GA251215-robh@kernel.org>
- <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
- <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
- <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
- <1aae7ac9-c83d-71b4-4fce-325f02fcd722@linaro.org>
- <89588f69-9cf0-e7a4-b976-5ce87d42e296@arinc9.com>
- <2ccb573d-39f4-cb80-7a3e-63a60c2bc0a8@linaro.org>
- <b48e0a5e-dd45-8b8a-4ee3-357a0985ca9c@arinc9.com>
- <83a03258-9e52-3d09-67fe-12e9e5ed4b76@linaro.org>
- <11d10e4e-65ec-3bec-3e0c-7e57feb03506@arinc9.com>
- <a696bea5-3ba6-3b71-10ad-a04a7412c178@linaro.org>
- <4c522dc3-d6f4-fd3e-e715-4c7795576541@arinc9.com>
- <fd2018b2-757f-bd7a-5efd-8a1f28b178cd@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <fd2018b2-757f-bd7a-5efd-8a1f28b178cd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,103 +92,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3.03.2023 10:53, Krzysztof Kozlowski wrote:
-> On 03/03/2023 08:44, Arınç ÜNAL wrote:
->> On 3.03.2023 10:05, Krzysztof Kozlowski wrote:
->>> On 02/03/2023 12:50, Arınç ÜNAL wrote:
->>>> On 2.03.2023 14:36, Krzysztof Kozlowski wrote:
->>>>> On 02/03/2023 11:47, Arınç ÜNAL wrote:
->>>>>> On 2.03.2023 13:29, Krzysztof Kozlowski wrote:
->>>>>>> On 02/03/2023 11:22, Arınç ÜNAL wrote:
->>>>>>>>>>
->>>>>>>>>> ## Incorrect naming
->>>>>>>>>>
->>>>>>>>>> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink,
->>>>>>>>>> introduce new ralink->mediatek compatible strings to address it.
->>>>>>>>>
->>>>>>>>> So this part was addressed by Rob - we don't do it, because it does not
->>>>>>>>> matter. Ralink is now Mediatek, thus there is no conflict and no issues
->>>>>>>>> with different vendor used.
->>>>>>>>
->>>>>>>> I think Rob was rather addressing that updating compatible strings based
->>>>>>>> on acquisition or marketing whims is not permitted. This condition does
->>>>>>>> not apply here as these SoCs were never Ralink.
->>>>>>>>
->>>>>>>> I understand your point that Ralink is now MediaTek but still, calling
->>>>>>>> these SoCs Ralink would be a bit misleading, don't you think?
->>>>>>>
->>>>>>> Misleading yes, but also does not matter. At least matter not enough to
->>>>>>> justify ABI break, so you would need to deprecate old ones and keep
->>>>>>> everything backwards compatible. You still would affect 3rd party users
->>>>>>> of DTS, though...
->>>>>>
->>>>>> I intend to do just that. Introduce new mediatek strings, keep the old
->>>>>> ones so it's backwards compatible, therefore don't break the ABI.
->>>>>>
->>>>>> Instead of deprecating old strings, I intend to introduce the checks I
->>>>>> mentioned, on the schema, so the pin muxing bindings only apply if the
->>>>>> DT has got a string that won't match multiple schemas. This way it
->>>>>> shouldn't affect 3rd party DTs.
->>>>>
->>>>> I meant, 3rd party users of DTS. You will replace the compatible in the
->>>>> DTS, right? So the DTS exported and used in all other projects, OS,
->>>>> firmwares, bootloaders, out of tree kernel forks will stop working.
->>>>
->>>> I plan to change it on the DTs for MediaTek SoCs, yes. Is this a
->>>> problem? From what I can tell, what must be ensured is that old DTs must
->>>> work with newer kernels, not new DTs on older kernels.
->>>
->>> Can I be clearer than this?
->>>
->>> " So the DTS exported and used in all other projects, OS,
->>> firmwares, bootloaders, out of tree kernel forks will stop working."
->>>
->>> Yes, this is a problem - they will stop working.
->>
->> I've never seen any project just exporting DTs from the latest kernel
->> version and slap it onto old versions, as a new devicetree that was
-> 
-> Really? U-Boot does it all the time, other projects (like BSD) do it
-> periodically to some extend as well.
+Hello,
 
-They must do heavy reviewing before shipping it. Drivers like MediaTek 
-ethernet on U-Boot is different than in Linux, the dt-bindings are all 
-different. Under a review, these changes will pop out for them to 
-address so there're no problems.
+On Fri, 2023-03-03 at 01:32 +0530, Naresh Kamboju wrote:
+> On Thu, 2 Mar 2023 at 16:30, Naresh Kamboju <naresh.kamboju@linaro.org> w=
+rote:
+> >=20
+> > On Thu, 2 Mar 2023 at 16:00, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >=20
+> > > On Thu, Mar 02, 2023 at 03:49:31PM +0530, Naresh Kamboju wrote:
+> > > > On Wed, 1 Mar 2023 at 23:42, Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >=20
+> > > > > This is the start of the stable review cycle for the 6.1.15 relea=
+se.
+> > > > > There are 42 patches in this series, all will be posted as a resp=
+onse
+> > > > > to this one.  If anyone has any issues with these being applied, =
+please
+> > > > > let me know.
+> > > > >=20
+> > > > > Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> > > > > Anything received after that time might be too late.
+> > > > >=20
+> > > > > The whole patch series can be found in one patch at:
+> > > > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-revie=
+w/patch-6.1.15-rc1.gz
+> > > > > or in the git tree and branch at:
+> > > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linu=
+x-stable-rc.git linux-6.1.y
+> > > > > and the diffstat can be found below.
+> > > > >=20
+> > > > > thanks,
+> > > > >=20
+> > > > > greg k-h
+> > > >=20
+> > > > Regression found on Linux version 6.1.15-rc1 on 32-bit arm x15 and =
+i386.
+> > > >=20
+> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > >=20
+> > > > ## Build
+> > > > * kernel: 6.1.15-rc1
+> > > > * git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-r=
+c
+> > > > * git branch: linux-6.1.y
+> > > > * git commit: b6150251d4ddf8a80510c185d839631e252e6317
+> > > > * git describe: v6.1.14-43-gb6150251d4dd
+> > > > * test details:
+> > > > https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/buil=
+d/v6.1.14-43-gb6150251d4dd
+> > > >=20
+> > > > Regression test cases,
+> > > > i386:
+> > > > x15:
+> > > >   * kselftest-net-mptcp/net_mptcp_mptcp_sockopt_sh
+> > > >=20
+> > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
+> > > > Assertion `ti.d.size_user =3D=3D sizeof(struct tcp_info)' failed.
+> > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
+> > > > Assertion `ti.d.size_user =3D=3D sizeof(struct tcp_info)' failed.
+> > > >=20
+> > > > test log:
+> > > > ----------
+> > > >=20
+> > > > # selftests: net/mptcp: mptcp_sockopt.sh
+> >=20
+> > ....
+> >=20
+> > > Nit, wrapping a log like this makes it hard to read, don't you think?
+> >=20
+> > Me either.
+> > That is the reason I have shared "Assertion" above.
+> >=20
+> > >=20
+> > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
+> > > > Assertion `ti.d.size_user =3D=3D sizeof(struct tcp_info)' failed.
+> > > > # server killed by signal 6
+> > > > #
+> > > > # FAIL: SOL_MPTCP getsockopt
+> > > > # PASS: TCP_INQ cmsg/ioctl -t tcp
+> > > > # PASS: TCP_INQ cmsg/ioctl -6 -t tcp
+> > > > # PASS: TCP_INQ cmsg/ioctl -r tcp
+> > > > # PASS: TCP_INQ cmsg/ioctl -6 -r tcp
+> > > > # PASS: TCP_INQ cmsg/ioctl -r tcp -t tcp
+> > > > not ok 6 selftests: net/mptcp: mptcp_sockopt.sh # exit=3D1
+> > >=20
+> > > Any chance you can bisect?
+> >=20
+> > We are running our bisection scripts.
+>=20
+> We have tested with 6.1.14 kselftests source again and it passes.
+> Now that we have upgraded to 6.2.1 kselftests source, we find that
+> there is this problem reported. so, not a kernel regression.
 
-> 
->> introduced with a newer kernel version is not guaranteed to work with
->> older kernel versions.
-> 
-> Not guaranteed but it is expected, though, to some level and under some
-> conditions. Therefore it might be or might not be a problem. For some
-> platforms no one cares. For some people care.
+I read the above as you are running self-tests from 6.2.1 on top of an
+older (6.1) kernel. Is that correct? If so failures are expected;
+please use the self-tests and kernel from the same release.
 
-I'm going to assume there's not much care for this platform, at least 
-for mt7621, as I've heard no complaints when I did this before.
+Otherwise, could you please re-phrase the above?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/arch/mips/boot/dts/ralink/mt7621.dtsi?id=b4f209e32ba5c283e7b1dd00d867b0536d3e215e
+Thanks,
 
-> 
->>
->> If someone is actually doing this on a project, I think it's the
->> responsibility of the maintainers of these said projects to account for
->> this and modify the DT for the kernel version they're running it on.
->>
->> What's more usual is one'd run the kernel version where the new DT was
->> introduced, which will work fine.
-> 
-> "kernel" as Linux is only one part of it. I mentioned several other
-> projects.
-> 
->>
->> On to real life implications, popular projects like U-Boot and OpenWrt
->> maintain their own DTs for this platform so I think the impact is very
->> minimal.
-> 
-> And they sync with Linux kernel DTS.
+Paolo
 
-Again, the DTs must be reviewed so they will be modified and the 
-potential issue will be addressed.
 
-Arınç
