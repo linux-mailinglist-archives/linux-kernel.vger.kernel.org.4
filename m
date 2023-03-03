@@ -2,119 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7796A9969
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531E06A996C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjCCO3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
+        id S229740AbjCCOax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjCCO3b (ORCPT
+        with ESMTP id S229962AbjCCOav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:29:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F81812BF7
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:28:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677853724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o3ApB4exZoXcG63nEHDI8L+9x3I4wPipSfbFGyH/f0E=;
-        b=Kqq8v9XjdczmMFawP4kWi7W8SzB8q/q2eZcBFBSs6gdgFVlpmX1Xb9VBj5t/y7C7hTClF/
-        A/pp0lUaoY2Zqu+4sdmWMFFsegKLTgbvrFqGySSyTp/fg9n9/uMgWbXHSP47f75Athy6Rr
-        s0oag1wOb2OLHXf5GXqHcMs7Wn8XShk=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-27-2Xu_6hE1P46BBoc39_A4Iw-1; Fri, 03 Mar 2023 09:28:35 -0500
-X-MC-Unique: 2Xu_6hE1P46BBoc39_A4Iw-1
-Received: by mail-lf1-f72.google.com with SMTP id k7-20020ac257c7000000b004db20d1cf7fso1074648lfo.18
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:28:35 -0800 (PST)
+        Fri, 3 Mar 2023 09:30:51 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C98149B6
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:30:50 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id z128-20020a6bc986000000b0074d32ddcce7so1346895iof.21
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:30:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677853714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o3ApB4exZoXcG63nEHDI8L+9x3I4wPipSfbFGyH/f0E=;
-        b=sAIOOqa+niv/bQtGZYa5uikWkyNOUYGloIq1Ab/DQB6t9AyK8p9Y+/6b94PxdPzq9A
-         sS7VsZtxyHztwOY0sspE00hgCJTLAbYW4G3YjLhNblS6swPMOEhI1lGT3V4MNOrNRDnY
-         G2AQBexbmCSGhH63etstQ23srM2CbX1phgwCop1GwZ26L0gZ4dOhkDPRGZI4tQ3AxChr
-         bompYyXX5EuB3EOhbluGXGhxE3R9Bx4V5EFJ7fgw7XPJFm9JkHfQmmUtpazy7sSNefxV
-         2LNuxDxsQqafMo3bGgKD1gKig2/bgcGbli2Kg1OhgKthjhWhxBmlf7bhr264cPbohuHJ
-         vkJg==
-X-Gm-Message-State: AO0yUKWEPqpoeogiqwmGvOimYu31UOSBLsnE9WfneL2Ab8VI+L1kn+Wk
-        xlm4pym/Y7apiTe93c/SWIsdXQffmcPG2pBmb+VCB//sfeZyR5TfwglyiCrE9hdsnVuteKtx7ik
-        w9e7vwmuQ44uosF/2TUTJyDJiJ/Sx6l3hHg3Xj8zI
-X-Received: by 2002:ac2:5927:0:b0:4d5:ca32:6aec with SMTP id v7-20020ac25927000000b004d5ca326aecmr645064lfi.12.1677853714512;
-        Fri, 03 Mar 2023 06:28:34 -0800 (PST)
-X-Google-Smtp-Source: AK7set89z3ZaDV+0l8hN22o89ZbCZILIi4QRjANWBxaYKra+nJigSS7Ho1XPgvAOO/WyESHVRzmPsFP0RA2BCA7iIf8=
-X-Received: by 2002:ac2:5927:0:b0:4d5:ca32:6aec with SMTP id
- v7-20020ac25927000000b004d5ca326aecmr645049lfi.12.1677853714194; Fri, 03 Mar
- 2023 06:28:34 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LYGC+w3AgQ/UuUT2/eT2BWbBygwSydLWl4GHGcTVjNo=;
+        b=0tSeGdFHPzp7U3qRm81YV+vElrNzvoLnxTqhszhRRCTINIt1q6L/FplPAS5AvenXdL
+         TbUZV7vOYFuUgH+6fwoyJ3TB6Xt03jLLRyLBcsbbSlkeAoWkgNejd0BA5KRlcS/Hat2p
+         o7DqsmrL3yCC0ZgVZvKsvYTFSPGONVKbHce6lgci/ds5RpHf5jUPXzzP+ViwvDTDapZv
+         uQrCaJjsvjvGaWbOT4pcdE4b874SPnkzRF/j38vhzLqyYouDrcNb+tg/X1W9y2kBMVyS
+         MTBNPReXMF/cYwXmhmn3I8SYwSWWn2oWSRwSOp6tZZvzoDnEO5xowBI/hEpmeHFCFwky
+         JiDw==
+X-Gm-Message-State: AO0yUKWPVaW/QZ7cQJS6bLup2srVYslAE+sHiHgSAxbhCgqLNt/jYUju
+        OXxL/K6gTM53tbN3wxFfTzNdoDOX3P/+lDJxKuuZ07dLKb6I
+X-Google-Smtp-Source: AK7set+5pL/ks78WMSUWEvMvnWV7ChM7/TKJx0o1E99E4/mH9RGRKxZV6Bkx44Xyf/KteatM84nkvix++dPQRsZcX/UOsvJwzJwa
 MIME-Version: 1.0
-References: <20230303132731.1919329-1-trix@redhat.com>
-In-Reply-To: <20230303132731.1919329-1-trix@redhat.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Fri, 3 Mar 2023 15:28:21 +0100
-Message-ID: <CACO55tuMxp5M+zgG_p3QpXUfrPhcssPMz91tfMBFt5OVobOSaw@mail.gmail.com>
-Subject: Re: [PATCH] drm/nouveau/fifo: set gf100_fifo_nonstall_block_dump
- storage-class-specifier to static
-To:     Tom Rix <trix@redhat.com>
-Cc:     bskeggs@redhat.com, lyude@redhat.com, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a02:952e:0:b0:3c4:e84b:2a3a with SMTP id
+ y43-20020a02952e000000b003c4e84b2a3amr651104jah.4.1677853849412; Fri, 03 Mar
+ 2023 06:30:49 -0800 (PST)
+Date:   Fri, 03 Mar 2023 06:30:49 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000adec0205f5ffcaf4@google.com>
+Subject: [syzbot] [wpan?] general protection fault in nl802154_trigger_scan
+From:   syzbot <syzbot+bd85b31816913a32e473@syzkaller.appspotmail.com>
+To:     alex.aring@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-wpan@vger.kernel.org, miquel.raynal@bootlin.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        stefan@datenfreihafen.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Hello,
 
-will push in a moment
+syzbot found the following issue on:
 
-On Fri, Mar 3, 2023 at 2:27 PM Tom Rix <trix@redhat.com> wrote:
->
-> gcc with W=3D1 reports
-> drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: error:
->   no previous prototype for =E2=80=98gf100_fifo_nonstall_block=E2=80=99 [=
--Werror=3Dmissing-prototypes]
->   451 | gf100_fifo_nonstall_block(struct nvkm_event *event, int type, int=
- index)
->       | ^~~~~~~~~~~~~~~~~~~~~~~~~
->
-> gf100_fifo_nonstall_block is only used in gf100.c, so it should be static
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c b/drivers/g=
-pu/drm/nouveau/nvkm/engine/fifo/gf100.c
-> index 5bb65258c36d..6c94451d0faa 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c
-> @@ -447,7 +447,7 @@ gf100_fifo_nonstall_allow(struct nvkm_event *event, i=
-nt type, int index)
->         spin_unlock_irqrestore(&fifo->lock, flags);
->  }
->
-> -void
-> +static void
->  gf100_fifo_nonstall_block(struct nvkm_event *event, int type, int index)
->  {
->         struct nvkm_fifo *fifo =3D container_of(event, typeof(*fifo), non=
-stall.event);
-> --
-> 2.27.0
->
+HEAD commit:    f3a2439f20d9 Merge tag 'rproc-v6.3' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12df1a7f480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=81f5afa0c201c8de
+dashboard link: https://syzkaller.appspot.com/bug?extid=bd85b31816913a32e473
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1597f254c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15053e40c80000
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0719d575f3ac/disk-f3a2439f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4176aabb67b5/vmlinux-f3a2439f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2b0e3c0ab205/bzImage-f3a2439f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bd85b31816913a32e473@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 1 PID: 5076 Comm: syz-executor386 Not tainted 6.2.0-syzkaller-12485-gf3a2439f20d9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+RIP: 0010:nla_get_u8 include/net/netlink.h:1658 [inline]
+RIP: 0010:nl802154_trigger_scan+0x132/0xc90 net/ieee802154/nl802154.c:1415
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 3f 0a 00 00 48 8b ad f8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 7d 04 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 d0 07 00 00
+RSP: 0018:ffffc90003397568 EFLAGS: 00010247
+RAX: dffffc0000000000 RBX: ffffc900033975d8 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff89cec1a1 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888146fb4c90
+R13: ffff888146f82000 R14: ffff888146f820a0 R15: ffffc900033975f8
+FS:  0000555556c9b300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055be8d9c04f0 CR3: 0000000023513000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2574
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:722 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:745
+ ____sys_sendmsg+0x71c/0x900 net/socket.c:2504
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2558
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2587
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f416cc9ee69
+Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff243fe498 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f416cd17380 RCX: 00007f416cc9ee69
+RDX: 0000000000000000 RSI: 0000000020000240 RDI: 0000000000000003
+RBP: 0000000000000001 R08: 0000000000000000 R09: 001d00000000000c
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
+R13: 0000000000000003 R14: 00007fff243fe4b7 R15: 00007fff243fe4ba
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:nla_get_u8 include/net/netlink.h:1658 [inline]
+RIP: 0010:nl802154_trigger_scan+0x132/0xc90 net/ieee802154/nl802154.c:1415
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 3f 0a 00 00 48 8b ad f8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 7d 04 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 d0 07 00 00
+RSP: 0018:ffffc90003397568 EFLAGS: 00010247
+RAX: dffffc0000000000 RBX: ffffc900033975d8 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff89cec1a1 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888146fb4c90
+R13: ffff888146f82000 R14: ffff888146f820a0 R15: ffffc900033975f8
+FS:  0000555556c9b300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055be8d9c04f0 CR3: 0000000023513000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 c1 ea 03          	shr    $0x3,%rdx
+   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   8:	0f 85 3f 0a 00 00    	jne    0xa4d
+   e:	48 8b ad f8 00 00 00 	mov    0xf8(%rbp),%rbp
+  15:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  1c:	fc ff df
+  1f:	48 8d 7d 04          	lea    0x4(%rbp),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	48 89 fa             	mov    %rdi,%rdx
+  31:	83 e2 07             	and    $0x7,%edx
+  34:	38 d0                	cmp    %dl,%al
+  36:	7f 08                	jg     0x40
+  38:	84 c0                	test   %al,%al
+  3a:	0f 85 d0 07 00 00    	jne    0x810
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
