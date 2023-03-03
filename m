@@ -2,153 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8626AA2FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EC66AA447
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbjCCVwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
+        id S232840AbjCCWZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 17:25:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbjCCVvn (ORCPT
+        with ESMTP id S233324AbjCCWZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:51:43 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC165449;
-        Fri,  3 Mar 2023 13:47:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677880048; x=1709416048;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kj65eZ6x1XaMxzFMjvimVXP1TU9dIZpyh6Wk8sLAlnk=;
-  b=n/2TUIYNbv0IsFT7hK71sydMcakD4tcjml8BTP1xeveswn48Jv09HE6f
-   5k+GGKV7RG22OZK/JY1ozTsW3gxpXRAddxlJNxgheoGgOKlb7Smtw+Z0E
-   FUXfLbiG6/wVt7hpvOmR8lWVG43FqwSkx0AZ71bR0kZB8dwvvwyNORlOB
-   e9aDdwjgCXYzYxn9lwezxtpGdXHkQ+eq1tPo9zuJOgNe9plwlcAZJffwH
-   9cJPGDW2K6pYJCUQZj5bSILw8KJP8OZqx4ygb9oRFYWRQxoAT3SaE5vVZ
-   McRc6axBh9XCjdE4kE/dkFwwrQ8Es1Ga3Hz4AU2n7a0VvPAvCWHX53RYH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="337481927"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="337481927"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 13:44:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="668795971"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="668795971"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 13:44:03 -0800
-Date:   Fri, 3 Mar 2023 13:47:53 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 3/4] iommu/sva: Support reservation of global PASIDs
-Message-ID: <20230303134753.660d0755@jacob-builder>
-In-Reply-To: <BN9PR11MB52765C5E0DC0759880C08E258CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
-        <20230302005959.2695267-4-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB52765C5E0DC0759880C08E258CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Fri, 3 Mar 2023 17:25:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC14C59E42;
+        Fri,  3 Mar 2023 14:18:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4522A61958;
+        Fri,  3 Mar 2023 21:48:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74CC3C4339E;
+        Fri,  3 Mar 2023 21:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677880100;
+        bh=nhI+dErhOR7W6KnBDPC6kIMB6vX+XedcG9dfbS8rOFc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Lg1BaQWruUui1mLJOkiED9eDAE1uJ8vQ1rt/F7SO/aOJlBTLiv1ddHMdO01kUTVLX
+         O/RQtjuDBF/R6jDAX1+OBHSG1tAcb3e8+vV4NMVeLsYKinP07KjIzg1q3pa5HzhspN
+         N2Q21tW5fTmIW76wIirgUWzOMnomRDRF7dk2uQvfSAHLE72VLXXanv9Ztc5fHxiTe2
+         p+ElP/TBbR/z1B91X5CVwzJh+0EpzdvOuVmLK4sDdiCOD3EnJwLkrykaGaimkqiv/S
+         0KgnycDruEa+XAWv43Ee+tdzjtnrHvQAmOlOacQ+HlBf58UHyg1ivjXmQG3VBYkyto
+         Z6aZqgEMensyQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Sven Schnelle <svens@linux.ibm.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 07/20] tty: fix out-of-bounds access in tty_driver_lookup_tty()
+Date:   Fri,  3 Mar 2023 16:47:53 -0500
+Message-Id: <20230303214806.1453287-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230303214806.1453287-1-sashal@kernel.org>
+References: <20230303214806.1453287-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
+From: Sven Schnelle <svens@linux.ibm.com>
 
-On Thu, 2 Mar 2023 09:43:03 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
+[ Upstream commit db4df8e9d79e7d37732c1a1b560958e8dadfefa1 ]
 
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Thursday, March 2, 2023 9:00 AM
-> > 
-> > Global PASID allocation is under IOMMU SVA code since it is the primary
-> > use case.  However, some architecture such as VT-d, global PASIDs are
-> > necessary for its internal use of DMA API with PASID.  
-> 
-> No, global PASID is not a VT-d restriction. It's from ENQCMD/S hence a
-> device requirement.
-I meant VT-d based platforms, it is kind of intertwined in that ENQCMDS
-does not restrict RIDPASID!=DMA PASID, vt-d does. Without this
-restriction, there wouldn't be a need for this patch. Let me reword.
-> > 
-> > This patch introduces SVA APIs to reserve and release global PASIDs.
-> > 
-> > Link: https://lore.kernel.org/all/20230301235646.2692846-4-
-> > jacob.jun.pan@linux.intel.com/
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > ---
-> >  drivers/iommu/iommu-sva.c | 25 +++++++++++++++++++++++++
-> >  include/linux/iommu.h     | 14 ++++++++++++++
-> >  2 files changed, 39 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
-> > index 8c92a145e15d..cfdeafde88a9 100644
-> > --- a/drivers/iommu/iommu-sva.c
-> > +++ b/drivers/iommu/iommu-sva.c
-> > @@ -149,6 +149,31 @@ u32 iommu_sva_get_pasid(struct iommu_sva
-> > *handle)
-> >  }
-> >  EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
-> > 
-> > +ioasid_t iommu_sva_reserve_pasid(ioasid_t min, ioasid_t max)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (min == IOMMU_PASID_INVALID || max ==
-> > IOMMU_PASID_INVALID ||
-> > +	    min == 0 || max < min)
-> > +		return IOMMU_PASID_INVALID;
-> > +
-> > +	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
-> > GFP_KERNEL);
-> > +	if (ret < 0)
-> > +		return IOMMU_PASID_INVALID;
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(iommu_sva_reserve_pasid);
-> > +  
-> 
-> I'm not sure it's the right way. It's not related to SVA.
-> 
-> We should move iommu_global_pasid_ida to iomm.c and then have
-> another interface for allocation.
-> 
-> Above is pretty generic so probably a general one like:
-> 
-> 	ioasid_t iommu_allocate_global_pasid(struct device *dev)
-> 
-> internally it can use [1, dev->iommu->max_pasids] as min/max instead
-> of passed in from the caller.
-sounds good to me, will do.
+When specifying an invalid console= device like console=tty3270,
+tty_driver_lookup_tty() returns the tty struct without checking
+whether index is a valid number.
 
+To reproduce:
 
-Thanks,
+qemu-system-x86_64 -enable-kvm -nographic -serial mon:stdio \
+-kernel ../linux-build-x86/arch/x86/boot/bzImage \
+-append "console=ttyS0 console=tty3270"
 
-Jacob
+This crashes with:
+
+[    0.770599] BUG: kernel NULL pointer dereference, address: 00000000000000ef
+[    0.771265] #PF: supervisor read access in kernel mode
+[    0.771773] #PF: error_code(0x0000) - not-present page
+[    0.772609] Oops: 0000 [#1] PREEMPT SMP PTI
+[    0.774878] RIP: 0010:tty_open+0x268/0x6f0
+[    0.784013]  chrdev_open+0xbd/0x230
+[    0.784444]  ? cdev_device_add+0x80/0x80
+[    0.784920]  do_dentry_open+0x1e0/0x410
+[    0.785389]  path_openat+0xca9/0x1050
+[    0.785813]  do_filp_open+0xaa/0x150
+[    0.786240]  file_open_name+0x133/0x1b0
+[    0.786746]  filp_open+0x27/0x50
+[    0.787244]  console_on_rootfs+0x14/0x4d
+[    0.787800]  kernel_init_freeable+0x1e4/0x20d
+[    0.788383]  ? rest_init+0xc0/0xc0
+[    0.788881]  kernel_init+0x11/0x120
+[    0.789356]  ret_from_fork+0x22/0x30
+
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Link: https://lore.kernel.org/r/20221209112737.3222509-2-svens@linux.ibm.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/tty/tty_io.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index ddfe873b5fccb..37c46c65a65f4 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -1156,14 +1156,16 @@ static struct tty_struct *tty_driver_lookup_tty(struct tty_driver *driver,
+ {
+ 	struct tty_struct *tty;
+ 
+-	if (driver->ops->lookup)
++	if (driver->ops->lookup) {
+ 		if (!file)
+ 			tty = ERR_PTR(-EIO);
+ 		else
+ 			tty = driver->ops->lookup(driver, file, idx);
+-	else
++	} else {
++		if (idx >= driver->num)
++			return ERR_PTR(-EINVAL);
+ 		tty = driver->ttys[idx];
+-
++	}
+ 	if (!IS_ERR(tty))
+ 		tty_kref_get(tty);
+ 	return tty;
+-- 
+2.39.2
+
