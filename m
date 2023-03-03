@@ -2,215 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043A96A8E4E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 01:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC9F6A8E56
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 01:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjCCAtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 19:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S229621AbjCCAvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 19:51:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCCAsr (ORCPT
+        with ESMTP id S229453AbjCCAvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 19:48:47 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B66D14484
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 16:48:46 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g17so1594662lfv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 16:48:46 -0800 (PST)
+        Thu, 2 Mar 2023 19:51:15 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB9BA1;
+        Thu,  2 Mar 2023 16:51:14 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id s17so560714pgv.4;
+        Thu, 02 Mar 2023 16:51:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677804524;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g47XOfqIXPkQMg71PkE7DzCjUvdWFH0DgrcS34td7Co=;
-        b=fdbbJhBW2+uvzmJhzQqzt4BgJb4DujrRU47JnUORcVpjv7MqscGt4E03Lb0nUTuaXM
-         6Q024tYyRVPNuNfcaLt78AgS6OF+Xr94k4bLlVVhBYAv0QkXEHc9RqwcnUUL0Hpu53FI
-         hdpMmxIKXGO1SyFeceeZE+/+WkF0cxasJuIYwaRHLl+QAXrKt8/fDUx4by6VFp7wiy+m
-         pX8aOrdru0a/EhncNSs+LdbrZoUxXhHxsG4SvqIzkzMNwA/D/1NrASwS42Nc+6UkS9dg
-         2ri0Hs9y3eKsFHPV9Rzay5Xwi8JtxEvfP355hGQUBsuQ4lVdpMBUJOPzCg0EuB77t2og
-         bbLw==
+        d=gmail.com; s=20210112; t=1677804674;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qJYk4hCKjOxFQ49axmFLTnRK8yHcLGp0RaCvx6w4UZo=;
+        b=PTSN8VZY7bxIAnoE+oKlL98axPXERPDJ3I2XICKNOBUQsUqSYfN/k7TdWdpOfDO/uR
+         5RuxpBfv15zz5/XLJwLOmUePrOxW7T/HPfRZ1qnsOw7RSXLaQ1eJ2Fc1aicfCvD+rGC6
+         c3TX542Nx/WHx5i+1TrS+ITXmrU5/EEa59tdeYqoqBw5iKZGyz61IqupvT7pNcP879vP
+         gcRM7qCFoXY9Gr5EvJaNvHUisokzO2tzSK8bp6sa2D8NOAbz1Of6miZnYupjM4/10nJ7
+         s6+lnn2JB3QNeqE5/WI/23X/PmldskoYM2LUudD2tyXIG2pRmcp7oZq4xgtNWQt+1Rfj
+         Uo1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677804524;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g47XOfqIXPkQMg71PkE7DzCjUvdWFH0DgrcS34td7Co=;
-        b=yWKQMXfXt6VSXgUzDYZyYcVfRocnVSv/y0olrC1elpx1N5XhI/EDLJm0tMiKw0fSW4
-         Ca44RCx+eMD7NE1EiX/k0+6jF4V7IB7+gD6zzggXdBUnTFqm+NQtE4mAXaDJOnU4sQqZ
-         MiqCO4JI/Aa0GLRreD85suvXTtcGh3vw7A9co3bmOeh6wJaMHqQk3AcJJoR72dgsEKM8
-         Jpwobf8zJW+al//ALZJ6KIWpiA8RNk7AgM3iKVkh51ypaiWPGAXD1BkiGx3/FyaBdAAL
-         giOFP0JVyAbrYrxL1BovAheeePV3RF1ZbvdDJF1SOI2d/CQZqkrwGFARO3GMyj4PbaKw
-         EqQA==
-X-Gm-Message-State: AO0yUKWmQHI7yKzCMoFcmJt3ILOuu0Yl7gomLXt9LoxGG7nRqzp8xzbO
-        YfTta2y4LvLMciJvXCzwhkJa4A==
-X-Google-Smtp-Source: AK7set/YNUcS82YI7uO90LDx8Hq3KifrZ8RGQCEhiaKfz50dnn7BBBZFfSH/FCqVoovYtl+LgvamUQ==
-X-Received: by 2002:a19:c511:0:b0:4dd:9ddc:4461 with SMTP id w17-20020a19c511000000b004dd9ddc4461mr41665lfe.17.1677804524510;
-        Thu, 02 Mar 2023 16:48:44 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id y23-20020a197517000000b004db4fa67bf1sm151236lfe.157.2023.03.02.16.48.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 16:48:44 -0800 (PST)
-Message-ID: <9f56fb51-d4c6-8c14-76b2-c07959d3cc36@linaro.org>
-Date:   Fri, 3 Mar 2023 01:48:42 +0100
+        d=1e100.net; s=20210112; t=1677804674;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qJYk4hCKjOxFQ49axmFLTnRK8yHcLGp0RaCvx6w4UZo=;
+        b=FM/ncnBOrLmAssEi/9NmnFzu8bUTQ1B66nL/9M7+MD5N3DiG/Ixx5GSrgwTRJCWKO3
+         bB/hOLZQiJJ9S0LxCdCVJuywa3WJra0wv1JYczWTKCBlOwMnYLfHQ/ZQrY1wOTZ5VjiN
+         tnqCyx9Cz0GoVZodSZjwX0/62OiiP+Fze+Twij0fXNuTB+Ri8HPXBRpadueB9USu48LQ
+         3wrvKb0AFDTbVFWJ0BSAI9mftDQyn2d4dpupT+nCAZ/zEaMDc5v8LtRd1Q3Bo+I7jOZD
+         JWTuesBUQMGJSEhZKxxoMYmsJ67pAJv8t4XSmyXbHYgHyG/6hYqPp7Hf4XNwgG/VJ0LF
+         uhhw==
+X-Gm-Message-State: AO0yUKVa/vN53Lbwfc/IkfbVzExYEDPeg3Ue79EJLY4IYcMOuwG/mjz8
+        HmI3F3RUw+Mlv3H0zX4/dIpzY2lzhjfu5+GypbY=
+X-Google-Smtp-Source: AK7set+8913cW40rRk6iFWRxSLXX85Xkgyh4u1C4LzKcHqHle7Cfal1MiqBUSeP5RoeTmEVAjM9/SyCXFuNz4UCYoqU=
+X-Received: by 2002:a63:2b04:0:b0:503:83e8:9b54 with SMTP id
+ r4-20020a632b04000000b0050383e89b54mr1454436pgr.1.1677804674271; Thu, 02 Mar
+ 2023 16:51:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sc7180: Delete kingoftown-rev0
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     mka@chromium.org, swboyd@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230302211108.2129598-1-dianders@chromium.org>
- <20230302131031.v2.2.I68cbe5d5d45074428469da8c52f1d6a78bdc62fc@changeid>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230302131031.v2.2.I68cbe5d5d45074428469da8c52f1d6a78bdc62fc@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302163648.3349669-1-alvin@pqrs.dk>
+In-Reply-To: <20230302163648.3349669-1-alvin@pqrs.dk>
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Date:   Thu, 2 Mar 2023 19:51:02 -0500
+Message-ID: <CAB=otbTiCd0RTbJQxVrp1BB=MVtH-U70eM0fTMHdFH33bC00HA@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: u_audio: don't let userspace block driver unbind
+To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yadi Brar <yadi.brar01@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Felipe Balbi <balbi@ti.com>, alsa-devel@alsa-project.org,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 2, 2023 at 11:39=E2=80=AFAM Alvin =C5=A0ipraga <alvin@pqrs.dk> =
+wrote:
+>
+> From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+>
+> In the unbind callback for f_uac1 and f_uac2, a call to snd_card_free()
+> via g_audio_cleanup() will disconnect the card and then wait for all
+> resources to be released, which happens when the refcount falls to zero.
+> Since userspace can keep the refcount incremented by not closing the
+> relevant file descriptor, the call to unbind may block indefinitely.
+> This can cause a deadlock during reboot, as evidenced by the following
+> blocked task observed on my machine:
+>
+>   task:reboot  state:D stack:0   pid:2827  ppid:569    flags:0x0000000c
+>   Call trace:
+>    __switch_to+0xc8/0x140
+>    __schedule+0x2f0/0x7c0
+>    schedule+0x60/0xd0
+>    schedule_timeout+0x180/0x1d4
+>    wait_for_completion+0x78/0x180
+>    snd_card_free+0x90/0xa0
+>    g_audio_cleanup+0x2c/0x64
+>    afunc_unbind+0x28/0x60
+>    ...
+>    kernel_restart+0x4c/0xac
+>    __do_sys_reboot+0xcc/0x1ec
+>    __arm64_sys_reboot+0x28/0x30
+>    invoke_syscall+0x4c/0x110
+>    ...
+>
+> The issue can also be observed by opening the card with arecord and
+> then stopping the process through the shell before unbinding:
+>
+>   # arecord -D hw:UAC2Gadget -f S32_LE -c 2 -r 48000 /dev/null
+>   Recording WAVE '/dev/null' : Signed 32 bit Little Endian, Rate 48000 Hz=
+, Stereo
+>   ^Z[1]+  Stopped                    arecord -D hw:UAC2Gadget -f S32_LE -=
+c 2 -r 48000 /dev/null
+>   # echo gadget.0 > /sys/bus/gadget/drivers/configfs-gadget/unbind
+>   (observe that the unbind command never finishes)
+>
+> Fix the problem by using snd_card_free_when_closed() instead, which will
+> still disconnect the card as desired, but defer the task of freeing the
+> resources to the core once userspace closes its file descriptor.
 
+It seems nobody has tested that use-case before. Thank you for fixing it
 
-On 2.03.2023 22:11, Douglas Anderson wrote:
-> The earliest kingoftown that I could find in my pile of boards was
-> -rev2 and even that revision looks pretty rough (plastics on the case
-> are very unfinished). Though I don't actually have details about how
-> many -rev0 devices were produced, I can't imagine anyone still using
-> one. Let's delete support.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+
+>
+> Fixes: 132fcb460839 ("usb: gadget: Add Audio Class 2.0 Driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> 
-> Changes in v2:
-> - Get rid of kingoftown.dtsi and merge into dts (Konrad)
-> 
->  arch/arm64/boot/dts/qcom/Makefile             |  3 +-
->  .../dts/qcom/sc7180-trogdor-kingoftown-r0.dts | 38 -------------------
->  .../dts/qcom/sc7180-trogdor-kingoftown-r1.dts | 17 ---------
->  ...own.dtsi => sc7180-trogdor-kingoftown.dts} | 10 ++++-
->  4 files changed, 10 insertions(+), 58 deletions(-)
->  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
->  delete mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts
->  rename arch/arm64/boot/dts/qcom/{sc7180-trogdor-kingoftown.dtsi => sc7180-trogdor-kingoftown.dts} (95%)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index a51060378ddc..3ce51093ed8f 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -83,8 +83,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r3-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r3.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r4.dtb
-> -dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-kingoftown-r0.dtb
-> -dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-kingoftown-r1.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-kingoftown.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-r0.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-r1-kb.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
-> deleted file mode 100644
-> index 3abd6222fe46..000000000000
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
-> +++ /dev/null
-> @@ -1,38 +0,0 @@
-> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> -/*
-> - * Google Kingoftown board device tree source
-> - *
-> - * Copyright 2021 Google LLC.
-> - */
-> -
-> -/dts-v1/;
-> -
-> -#include "sc7180-trogdor.dtsi"
-> -#include "sc7180-trogdor-ti-sn65dsi86.dtsi"
-> -#include "sc7180-trogdor-kingoftown.dtsi"
-> -
-> -/ {
-> -	model = "Google Kingoftown (rev0)";
-> -	compatible = "google,kingoftown-rev0", "qcom,sc7180";
-> -};
-> -
-> -/*
-> - * In rev1+, the enable pin of pp3300_fp_tp will be tied to pp1800_l10a
-> - * power rail instead, since kingoftown does not have FP.
-> - */
-> -&pp3300_fp_tp {
-> -	gpio = <&tlmm 74 GPIO_ACTIVE_HIGH>;
-> -	enable-active-high;
-> -
-> -	pinctrl-names = "default";
-> -	pinctrl-0 = <&en_fp_rails>;
-> -};
-> -
-> -&tlmm {
-> -	en_fp_rails: en-fp-rails-state {
-> -		pins = "gpio74";
-> -		function = "gpio";
-> -		drive-strength = <2>;
-> -		bias-disable;
-> -	};
-> -};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts
-> deleted file mode 100644
-> index e0752ba7df11..000000000000
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts
-> +++ /dev/null
-> @@ -1,17 +0,0 @@
-> -// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> -/*
-> - * Google Kingoftown board device tree source
-> - *
-> - * Copyright 2021 Google LLC.
-> - */
-> -
-> -/dts-v1/;
-> -
-> -#include "sc7180-trogdor.dtsi"
-> -#include "sc7180-trogdor-parade-ps8640.dtsi"
-> -#include "sc7180-trogdor-kingoftown.dtsi"
-> -
-> -/ {
-> -	model = "Google Kingoftown (rev1+)";
-> -	compatible = "google,kingoftown", "qcom,sc7180";
-> -};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dts
-> similarity index 95%
-> rename from arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi
-> rename to arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dts
-> index 315ac5eb5f78..36326ef972dc 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dts
-> @@ -5,10 +5,18 @@
->   * Copyright 2021 Google LLC.
->   */
->  
-> -/* This file must be included after sc7180-trogdor.dtsi */
-> +/dts-v1/;
-> +
-> +#include "sc7180-trogdor.dtsi"
-> +#include "sc7180-trogdor-parade-ps8640.dtsi"
->  #include <arm/cros-ec-keyboard.dtsi>
->  #include "sc7180-trogdor-lte-sku.dtsi"
->  
-> +/ {
-> +	model = "Google Kingoftown";
-> +	compatible = "google,kingoftown", "qcom,sc7180";
-> +};
-> +
->  &alc5682 {
->  	compatible = "realtek,rt5682s";
->  	/delete-property/ VBAT-supply;
+>  drivers/usb/gadget/function/u_audio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/f=
+unction/u_audio.c
+> index c1f62e91b012..4a42574b4a7f 100644
+> --- a/drivers/usb/gadget/function/u_audio.c
+> +++ b/drivers/usb/gadget/function/u_audio.c
+> @@ -1422,7 +1422,7 @@ void g_audio_cleanup(struct g_audio *g_audio)
+>         uac =3D g_audio->uac;
+>         card =3D uac->card;
+>         if (card)
+> -               snd_card_free(card);
+> +               snd_card_free_when_closed(card);
+>
+>         kfree(uac->p_prm.reqs);
+>         kfree(uac->c_prm.reqs);
+> --
+> 2.39.1
+>
