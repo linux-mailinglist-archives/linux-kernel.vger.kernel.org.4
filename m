@@ -2,135 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5C26A960F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CC56A961A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjCCLYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S230526AbjCCLZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjCCLYM (ORCPT
+        with ESMTP id S230482AbjCCLYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:24:12 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F73F5D744;
-        Fri,  3 Mar 2023 03:24:01 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 3 Mar 2023 06:24:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7182D618B3;
+        Fri,  3 Mar 2023 03:24:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6A62A6602FA9;
-        Fri,  3 Mar 2023 11:23:59 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677842639;
-        bh=LUrVv03ntRmaeynFxWkF0Aq+0D78B7f2QaRdCqFRvhk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jSAHtSW5Iqlv5VvIbGIv6Z7RfnLmv3y5WjWuOkns1KNiX2UAdBwHqGwSyAWagFWB4
-         +CUVL5JgWWslgsszY92F/yC+KjCGEuJ1qhyeE0Cq2Wn1w5/7XgXJ09UrAxKXNbuZrk
-         pdpxbBRQkiIXkWOuMM63fGMVR1cKZsbYqtpQPBFpCA8EidRWLwaiOF6dJUP2DEoYIk
-         eVhn9UFNROI6XSq9/Mr6LCBG1s6F5VyJv1IVDepfxpBgwd9gjnQN4Y+U4ZWsKrvItM
-         7uAmvwc2dyytyjg4A4K64rk/sGx5V8c0AC/6IZXmk5LIO3X/R6pScIXA+vEf8nLHqV
-         Bd2Iz9y46+AkA==
-Message-ID: <a1e5bc34-2feb-2832-73dd-25d3d64807f7@collabora.com>
-Date:   Fri, 3 Mar 2023 12:23:56 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E57AB818A1;
+        Fri,  3 Mar 2023 11:24:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84290C433D2;
+        Fri,  3 Mar 2023 11:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677842651;
+        bh=OsF78/yN0ehmavW0bRuBeeiT9PPgaYigPodJU4hzE08=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FCk70iRfhKJKrEmtc2JQEmcATz8fQ7w5955vjIWfFOYfMXhJXW+2Mqz5m/nXMRXKP
+         4UO/Ycf04xqiAVY+aOUHj2+p8jAmr6QgTxWpk7mCgpTjxfAl9Rlvz5RnsDGhM+4M0a
+         n3hi5RbqtumUuEVFH26uNSuZfjfSy1xJqfDTs78Y=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 6.1.15
+Date:   Fri,  3 Mar 2023 12:23:58 +0100
+Message-Id: <167784263892226@kroah.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] arm64: dts: mediatek: Add cpufreq nodes for MT8192
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230303020014.23580-1-allen-kh.cheng@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230303020014.23580-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/03/23 03:00, Allen-KH Cheng ha scritto:
-> Add the cpufreq nodes for MT8192 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
-> Change in v1:
->      Fix : this should be <&performance 0>
+I'm announcing the release of the 6.1.15 kernel.
 
-I didn't say that *all of them should be <&performance 0>.
+All users of the 6.1 kernel series must upgrade.
 
-It's 0 for the cortex-a55 CPUs and it's 1 for the A76 CPUs.
+The updated 6.1.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.1.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-Please fix it.
+thanks,
 
+greg k-h
 
+------------
 
->      [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
-> ---
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 87b91c8feaf9..48a4fc88fde4 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -70,6 +70,7 @@
->   			d-cache-line-size = <64>;
->   			d-cache-sets = <128>;
->   			next-level-cache = <&l2_0>;
-> +			performance-domains = <&performance 0>;
->   			capacity-dmips-mhz = <530>;
->   		};
->   
-> @@ -87,6 +88,7 @@
->   			d-cache-line-size = <64>;
->   			d-cache-sets = <128>;
->   			next-level-cache = <&l2_0>;
-> +			performance-domains = <&performance 0>;
->   			capacity-dmips-mhz = <530>;
->   		};
->   
-> @@ -104,6 +106,7 @@
->   			d-cache-line-size = <64>;
->   			d-cache-sets = <128>;
->   			next-level-cache = <&l2_0>;
-> +			performance-domains = <&performance 0>;
->   			capacity-dmips-mhz = <530>;
->   		};
->   
-> @@ -121,6 +124,7 @@
->   			d-cache-line-size = <64>;
->   			d-cache-sets = <128>;
->   			next-level-cache = <&l2_0>;
-> +			performance-domains = <&performance 0>;
->   			capacity-dmips-mhz = <530>;
->   		};
+ Documentation/trace/ftrace.rst                                 |    2 
+ Makefile                                                       |    2 
+ arch/arm/boot/dts/rk3288.dtsi                                  |    1 
+ arch/arm/boot/dts/stihxxx-b2120.dtsi                           |    2 
+ arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts                 |    2 
+ arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi               |    2 
+ arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts          |    7 
+ arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts                |    2 
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi                       |    1 
+ arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dts    |    2 
+ arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dts    |    2 
+ arch/powerpc/Kconfig                                           |    1 
+ arch/x86/include/asm/intel-family.h                            |    2 
+ drivers/acpi/nfit/core.c                                       |    2 
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c              |  150 ++++------
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h              |   17 -
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c      |   10 
+ drivers/gpu/drm/amd/display/dc/dcn314/dcn314_hwseq.c           |   24 +
+ drivers/gpu/drm/amd/display/dc/dcn314/dcn314_hwseq.h           |    2 
+ drivers/gpu/drm/amd/display/dc/dcn314/dcn314_init.c            |    2 
+ drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h                |   25 +
+ drivers/hid/hid-core.c                                         |    3 
+ drivers/hid/hid-elecom.c                                       |   16 -
+ drivers/hid/hid-ids.h                                          |    5 
+ drivers/hid/hid-input.c                                        |    4 
+ drivers/hid/hid-quirks.c                                       |    3 
+ drivers/infiniband/hw/hfi1/user_exp_rcv.c                      |    9 
+ drivers/pinctrl/pinctrl-amd.c                                  |    1 
+ drivers/tty/vt/vc_screen.c                                     |    7 
+ drivers/usb/core/hub.c                                         |    5 
+ drivers/usb/core/sysfs.c                                       |    5 
+ drivers/usb/dwc3/dwc3-pci.c                                    |    4 
+ drivers/usb/gadget/function/u_serial.c                         |   23 +
+ drivers/usb/serial/option.c                                    |    4 
+ drivers/usb/typec/pd.c                                         |    1 
+ fs/attr.c                                                      |   74 ++++
+ fs/btrfs/send.c                                                |    6 
+ fs/fuse/file.c                                                 |    2 
+ fs/inode.c                                                     |   64 +---
+ fs/internal.h                                                  |   10 
+ fs/ocfs2/file.c                                                |    4 
+ fs/open.c                                                      |    8 
+ include/linux/fs.h                                             |    4 
+ kernel/power/process.c                                         |   21 -
+ net/caif/caif_socket.c                                         |    1 
+ net/core/filter.c                                              |    4 
+ net/core/neighbour.c                                           |   18 +
+ net/core/stream.c                                              |    1 
+ net/xfrm/xfrm_interface.c                                      |   54 +++
+ net/xfrm/xfrm_policy.c                                         |    3 
+ scripts/tags.sh                                                |    2 
+ sound/soc/codecs/es8326.c                                      |    6 
+ sound/soc/codecs/rt715-sdca-sdw.c                              |    2 
+ sound/soc/sof/amd/acp.c                                        |   36 +-
+ tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh |    2 
+ 55 files changed, 445 insertions(+), 227 deletions(-)
 
-It's 0 until there.
+Alan Stern (1):
+      USB: core: Don't hold device lock while reading the "descriptors" sysfs file
 
->   
-> @@ -138,6 +142,7 @@
->   			d-cache-line-size = <64>;
->   			d-cache-sets = <256>;
->   			next-level-cache = <&l2_1>;
-> +			performance-domains = <&performance 0>;
+Alexey Firago (1):
+      ASoC: codecs: es8326: Fix DTS properties reading
 
-Here, and later (for cortex-a76), it's <&performance 1>.
+Benedict Wong (1):
+      Fix XFRM-I support for nested ESP tunnels
 
+Carlos Llamas (1):
+      scripts/tags.sh: fix incompatibility with PCRE2
 
-Regards,
-Angelo
+Christian Brauner (5):
+      attr: add in_group_or_capable()
+      fs: move should_remove_suid()
+      attr: add setattr_should_drop_sgid()
+      attr: use consistent sgid stripping checks
+      fs: use consistent setgid checks in is_sxid()
+
+David Sterba (1):
+      btrfs: send: limit number of clones and allocated memory size
+
+Dean Luick (1):
+      IB/hfi1: Assign npages earlier
+
+Dmitry Torokhov (1):
+      ARM: dts: stihxxx-b2120: fix polarity of reset line of tsin0 port
+
+Florian Zumbiehl (1):
+      USB: serial: option: add support for VW/Skoda "Carstick LTE"
+
+Greg Kroah-Hartman (1):
+      Linux 6.1.15
+
+Heikki Krogerus (1):
+      usb: dwc3: pci: add support for the Intel Meteor Lake-M
+
+Jack Yu (1):
+      ASoC: rt715-sdca: fix clock stop prepare timeout issue
+
+Jarrah Gosbell (1):
+      arm64: dts: rockchip: reduce thermal limits on rk3399-pinephone-pro
+
+Jensen Huang (1):
+      arm64: dts: rockchip: add missing #interrupt-cells to rk356x pcie2x1
+
+Johan Jonker (1):
+      ARM: dts: rockchip: add power-domains property to dp node on rk3288
+
+Jonas Karlman (1):
+      arm64: dts: rockchip: fix probe of analog sound card on rock-3a
+
+Julian Anastasov (1):
+      neigh: make sure used and confirmed times are valid
+
+Kan Liang (1):
+      x86/cpu: Add Lunar Lake M
+
+Krzysztof Kozlowski (2):
+      arm64: dts: rockchip: drop unused LED mode property from rk3328-roc-cc
+      arm64: dts: rockchip: align rk3399 DMC OPP table with bindings
+
+Kunihiko Hayashi (1):
+      arm64: dts: uniphier: Fix property name in PXs3 USB node
+
+Kuniyuki Iwashima (1):
+      net: Remove WARN_ON_ONCE(sk->sk_forward_alloc) from sk_stream_kill_queues().
+
+Luka Guzenko (1):
+      HID: Ignore battery for ELAN touchscreen 29DF on HP
+
+Mario Limonciello (1):
+      pinctrl: amd: Fix debug output for debounce time
+
+Martin KaFai Lau (1):
+      bpf: bpf_fib_lookup should not return neigh in NUD_FAILED state
+
+Michael Ellerman (1):
+      powerpc: Don't select ARCH_WANTS_NO_INSTR
+
+Nicholas Kazlauskas (1):
+      drm/amd/display: Move DCN314 DOMAIN power control to DMCUB
+
+Prashanth K (1):
+      usb: gadget: u_serial: Add null pointer check in gserial_resume
+
+Rafael J. Wysocki (1):
+      PM: sleep: Avoid using pr_cont() in the tasks freezing code
+
+Saranya Gopal (1):
+      usb: typec: pd: Remove usb_suspend_supported sysfs from sink PDO
+
+Stylon Wang (2):
+      drm/amd/display: Fix race condition in DPIA AUX transfer
+      drm/amd/display: Properly reuse completion structure
+
+Takahiro Fujii (1):
+      HID: elecom: add support for TrackBall 056E:011C
+
+Thomas Weißschuh (1):
+      vc_screen: don't clobber return value in vcs_read
+
+V sujith kumar Reddy (1):
+      ASoC: SOF: amd: Fix for handling spurious interrupts from DSP
+
+Vishal Verma (1):
+      ACPI: NFIT: fix a potential deadlock during NFIT teardown
+
+Vladimir Oltean (1):
+      selftests: ocelot: tc_flower_chains: make test_vlan_ingress_modify() more comprehensive
+
+Xin Zhao (1):
+      HID: core: Fix deadloop in hid_apply_multiplier.
+
+marco.rodolfi@tuta.io (1):
+      HID: Ignore battery for Elan touchscreen on Asus TP420IA
 
