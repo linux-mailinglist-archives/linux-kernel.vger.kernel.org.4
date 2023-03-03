@@ -2,142 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04726A9F49
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD486A9F4E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbjCCSkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:40:22 -0500
+        id S231578AbjCCSlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:41:13 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbjCCSjz (ORCPT
+        with ESMTP id S231604AbjCCSk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:39:55 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E09F5A6DF;
-        Fri,  3 Mar 2023 10:39:07 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id fd25so2187085pfb.1;
-        Fri, 03 Mar 2023 10:39:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677868735;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KW5zlYPdh4KEZGnqXGymEZlZPZq2XOWrLglIoL3yYbM=;
-        b=NeSjzgAVcH618mykrKytTLTjNl+tmOdpa2naPP9um9V7H6W8FQTp/PoOzLPQ49UaRz
-         lLRb7Ei69pi2ttA1cpJMHunqc7/xtIxoTSCwBvtpRrBpw7lPYVsUa4Wm5TjHaoM5j7Vl
-         MCBEOvaNqPljFvYd+RlcEdKAGTnFqCak4MfIB6fx7a+xwsl0A4Oli6Fj3EB8lePCRZqz
-         KXs4C5Ci57j335oVTtHKMcxAMzMSOacoHIC9KAYBoWVHuDcjEHTUfZUf0GDUuJ5oPjwK
-         HMgvJN/cfRGDPxhyhZd1eWOj3P7VV34o613c69jHkTJc4SLJise+aT7n1MBqBxqlBGH9
-         DCwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677868735;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KW5zlYPdh4KEZGnqXGymEZlZPZq2XOWrLglIoL3yYbM=;
-        b=hgAmjzTqq37iG2vudO3VCX4chq1XYrBMc4k3iknhhKQv8AqOf3IGW0kmKv5Ipd/Hhv
-         Y/9x63zVgAS+TVwYV5rOeIa858egGFWkQWperA8llp1nwtnJ1/s2OhFaDGqQ/jdVmV9c
-         BpiV+yFdn0tYicr55oS4xxO/0/ii80MiYYvwl8CxtxfakfyA/qQXZ3WVGiiobeGI/NI3
-         Z2nTApPju41ZjibwEYbYT2EK4DdWBzMKhkhlhDI/DCDU8+eoPB6//zqxcSx7yjy+bqOn
-         4ka4XfCC576oyGkYZqHpZWnXOGs9SEI21hWEbE+lz8UDQyvfuciYKt1TCRIpgIM00jTu
-         16Nw==
-X-Gm-Message-State: AO0yUKV7m2U9ZG+vBZ9ILmoARS6Hqv0l7MjkzmR4pZY3TtTbjzwFB4s7
-        kROASSzOzKSVZsBvAalYndB8T3NHgG6e+31EnBA=
-X-Google-Smtp-Source: AK7set/hfR9Rcii36vKUJ5TL+U7hSRvp4CpKJDa6gvrZVAf+H0DuOQMNvIe5RszSZ05x7/BNECSknxdDDFn0nfZB81E=
-X-Received: by 2002:a63:9845:0:b0:503:8257:1cf0 with SMTP id
- l5-20020a639845000000b0050382571cf0mr816437pgo.11.1677868734579; Fri, 03 Mar
- 2023 10:38:54 -0800 (PST)
+        Fri, 3 Mar 2023 13:40:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79336CA3F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 10:40:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8764B818F7
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 18:39:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA85CC433D2;
+        Fri,  3 Mar 2023 18:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677868767;
+        bh=36+kEvSJeBiUlpNBhd6ZwIz+6aGArhfdJdUvPOwybOM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jTwfs1Y4oppNchmdXTk0x1fbjKInybQafPdgm4lcOZBZ9Z8434cwj3WqdHaU7ftPM
+         faBmxklDElDTzu90emvaI4k25GIT6PpUFLLAhpruObd4YKelT7lZoIhv1F3RLGux2Q
+         cImLi+jaCCFfkoWw85+0Kdi842UuD/Cy+yAcJOqQ47aPN/0YStqSAh9aw+EBMfB29d
+         YiglP88TNaE3yI5jbyAMXZ2ANWyKHA6uAz/gBRTVH03B+UK0iZb74ZwGB+WjFIgjvL
+         us5xb6GYlwdjsrHoWC2TUIZNGdW60vAibIuVENMS/tpuPrLWHpTpe3OSfmMqN5yNV3
+         0HiuZBxzE7icw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev
+Subject: Re: [PATCH v2 2/3] mm/damon/paddr: minor refactor of damon_pa_young()
+Date:   Fri,  3 Mar 2023 18:39:25 +0000
+Message-Id: <20230303183925.113520-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230303084343.171958-3-wangkefeng.wang@huawei.com>
+References: 
 MIME-Version: 1.0
-References: <20230121112947.53433-1-robimarko@gmail.com> <20230121112947.53433-4-robimarko@gmail.com>
- <d71e8a18-8a09-c722-d9dd-b2d48615828f@linaro.org> <CAA8EJppwNVtUjB7fUZSCrZ88Ssbhmc4HD6oA2nV0uEx+vHBXUw@mail.gmail.com>
- <2a7a43f1-a13d-f094-5167-de74d5092d91@linaro.org>
-In-Reply-To: <2a7a43f1-a13d-f094-5167-de74d5092d91@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Fri, 3 Mar 2023 19:38:43 +0100
-Message-ID: <CAOX2RU6vociXPTQE4tegQE8YXjHgQAHgdQWm3N9PPekgaw3ung@mail.gmail.com>
-Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: make qcom_cpufreq_get_msm_id()
- return the SoC ID
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Feb 2023 at 21:40, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 18.02.2023 21:36, Dmitry Baryshkov wrote:
-> > On Sat, 18 Feb 2023 at 16:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>
-> >>
-> >>
-> >> On 21.01.2023 12:29, Robert Marko wrote:
-> >>> Currently, qcom_cpufreq_get_msm_id() does not simply return the SoC ID
-> >>> after getting it via SMEM call but instead uses an enum to encode the
-> >>> matched SMEM ID to 2 variants of MSM8996 which are then used in
-> >>> qcom_cpufreq_kryo_name_version() to set the supported version.
-> >>>
-> >>> This prevents qcom_cpufreq_get_msm_id() from being universal and its doing
-> >>> more than its name suggests, so lets make it just return the SoC ID
-> >>> directly which allows matching directly on the SoC ID and removes the need
-> >>> for msm8996_version enum which simplifies the driver.
-> >>> It also allows reusing the qcom_cpufreq_get_msm_id() for new SoC-s.
-> >>>
-> >>> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> >>> ---
-> >>>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 44 ++++++++--------------------
-> >>>  1 file changed, 12 insertions(+), 32 deletions(-)
-> >>>
-> >>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> >>> index da55d2e1925a..9deaf9521d6d 100644
-> >>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> >>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> >>> @@ -32,12 +32,6 @@
-> >>>
-> >>>  #include <dt-bindings/arm/qcom,ids.h>
-> >>>
-> >>> -enum _msm8996_version {
-> >>> -     MSM8996_V3,
-> >>> -     MSM8996_SG,
-> >>> -     NUM_OF_MSM8996_VERSIONS,
-> >>> -};
-> >>> -
-> >>>  struct qcom_cpufreq_drv;
-> >>>
-> >>>  struct qcom_cpufreq_match_data {
-> >>> @@ -134,30 +128,16 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
-> >>>       dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
-> >>>  }
-> >>>
-> >>> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
-> >>> +static int qcom_cpufreq_get_msm_id(void)
-> >> This should be u32 as info->id is __le32
+Hi Kefeng,
 
-Nice catch.
+On Fri, 3 Mar 2023 16:43:42 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+
+> Omit three lines by unified folio_put(), and make code more clear.
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  mm/damon/paddr.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+> index 3fda00a0f786..2ef9db0189ca 100644
+> --- a/mm/damon/paddr.c
+> +++ b/mm/damon/paddr.c
+> @@ -130,24 +130,21 @@ static bool damon_pa_young(unsigned long paddr, unsigned long *folio_sz)
+>  			accessed = false;
+>  		else
+>  			accessed = true;
+> -		folio_put(folio);
+>  		goto out;
+
+Because you moved 'out' label to not include *folio_sz setting, folio_sz will
+not set in this case.  It should be set.
+
+>  	}
+>  
+>  	need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
+> -	if (need_lock && !folio_trylock(folio)) {
+> -		folio_put(folio);
+> -		return false;
+> -	}
+> +	if (need_lock && !folio_trylock(folio))
+> +		goto out;
+>  
+>  	rmap_walk(folio, &rwc);
+>  
+>  	if (need_lock)
+>  		folio_unlock(folio);
+> -	folio_put(folio);
+>  
+> -out:
+>  	*folio_sz = folio_size(folio);
+> +out:
+> +	folio_put(folio);
+
+Before this change, folio_size() is called after folio_put().  Shouldn't it be
+called before folio_put()?  If so, could we make a separate fix for that first,
+and then make this change on top of it, so that it can be easily applied to
+relevant stable kernels?
 
 
-> >>
-> >> And please export this function from socinfo, it'll come in
-> >> useful for other drivers!
+Thanks,
+SJ
 
-I intentionally did not do that as socinfo is currently fully optional
-and I dont really like
-the idea of making it required for anything using SMEM.
-
-Regards,
-Robert
-
->
-> Konrad
-> >
+>  	return accessed;
+>  }
+>  
+> -- 
+> 2.35.3
+> 
+> 
