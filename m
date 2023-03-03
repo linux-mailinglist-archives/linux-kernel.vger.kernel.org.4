@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4EF6A96A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDCC6A96A9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjCCLoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:44:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S231207AbjCCLq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:46:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbjCCLov (ORCPT
+        with ESMTP id S229820AbjCCLq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:44:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C0018AAF;
-        Fri,  3 Mar 2023 03:44:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 3 Mar 2023 06:46:58 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E780B5C107
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:46:56 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A43DF61802;
-        Fri,  3 Mar 2023 11:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F839C433D2;
-        Fri,  3 Mar 2023 11:44:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677843889;
-        bh=F4RrA5WPsZsbzw+U1mjjdICbEFuwxtrNykHfFUyhUvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hCKu5LRKWvGifmZspsKoPxF973tZQEUSIp9YRO16nLIRX5cK6fWfwqIPn7eoKYzBm
-         wjluU9he+p2i0VFSAes6As7bkkxuZyf01UUGITMC324XfeovfNWhW7FWru4wqNbayZ
-         mpxDC6QQ7hXIbl7VJROJYGfKOlg+oKi1M9Rc5K8A=
-Date:   Fri, 3 Mar 2023 12:44:46 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, mptcp@lists.linux.dev,
-        Florian Westphal <fw@strlen.de>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
-Message-ID: <ZAHdrhY2P+sBI+xX@kroah.com>
-References: <20230301180657.003689969@linuxfoundation.org>
- <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
- <ZAB6pP3MNy152f+7@kroah.com>
- <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
- <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
- <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
- <CA+G9fYuLQEfeTjx52NxbXV5914YJQ2tVd8k4SJjrAryujPjnqA@mail.gmail.com>
- <ZAG8dla274kYfxoK@kroah.com>
- <28afc90c1b8b51a36ced5b6026d1a64aeb7c0b14.camel@redhat.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6FA7A1EC0657;
+        Fri,  3 Mar 2023 12:46:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677844015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=qiGBt7B0mRCjrofKoblCFZs0an8sawnlWbGRochINd4=;
+        b=JUrmvvkQfN6eTb+URvjCH1wJuAixCLZW6rj/dqloq0QPIevBnC/3sQ0mOi6oU0SXOhw4Lf
+        i9hAh3jXVnI9rQDFsd0YvtUeAHNB5rqDA2z81uSQmCI99zU2EawNHrpDXILLI9cJ3HkD9j
+        h3Gv0ugfXhNsiCYfcir1Uj2zsjHEMYA=
+From:   Borislav Petkov <bp@alien8.de>
+To:     X86 ML <x86@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] x86/microcode: Do not taint when late loading on AMD
+Date:   Fri,  3 Mar 2023 12:46:49 +0100
+Message-Id: <20230303114649.18552-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <28afc90c1b8b51a36ced5b6026d1a64aeb7c0b14.camel@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 12:39:07PM +0100, Paolo Abeni wrote:
-> On Fri, 2023-03-03 at 10:23 +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Mar 03, 2023 at 02:34:05PM +0530, Naresh Kamboju wrote:
-> > > On Fri, 3 Mar 2023 at 13:34, Paolo Abeni <pabeni@redhat.com> wrote:
-> > > > I read the above as you are running self-tests from 6.2.1 on top of an
-> > > > older (6.1) kernel. Is that correct?
-> > > 
-> > > correct.
-> > > 
-> > > > If so failures are expected;
-> > 
-> > Shouldn't the test be able to know that "new features" are not present
-> > and properly skip the test for when that happens?  
-> 
-> I was not aware that running self-tests on older kernels is a common
-> practice. I'm surprised that hits mptcp specifically. I think most
-> networking tests have the same problem.
-> 
-> Additionally, some self-tests check for known bugs/regressions. Running
-> them on older kernel will cause real trouble, and checking for bug
-> presence in the running kernel would be problematic at best, I think.
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-No, not at all, why wouldn't you want to test for know bugs and
-regressions and fail?  That's a great thing to do, and so you will know
-to backport those bugfixes to those older kernels if you have to use
-them.
+Describe why the concurrency issues which late loading poses are not
+affecting AMD hardware, after discussing it with hw folks. Thus, do not
+taint when late loading on it.
 
-> > Otherwise this feels
-> > like a problem going forward as no one will know if this feature can be
-> > used or not (assuming it is a new feature and not just a functional
-> > change.)
-> 
-> I don't understand this later part, could you please re-phrase?
-> 
-> Users should look at release notes and/or official documentation to
-> know the supported features, not to self-tests output ?!?
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+---
+ Documentation/x86/microcode.rst      | 10 ++++++++++
+ arch/x86/kernel/cpu/microcode/core.c |  3 ++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-How can a program "read a release note"?
+diff --git a/Documentation/x86/microcode.rst b/Documentation/x86/microcode.rst
+index b627c6f36bcf..15b52e2b181d 100644
+--- a/Documentation/x86/microcode.rst
++++ b/Documentation/x86/microcode.rst
+@@ -208,6 +208,16 @@ Basically there is no way to declare a new microcode update suitable
+ for late-loading. This is another one of the problems that caused late
+ loading to be not enabled by default.
+ 
++AMD
++---
++
++Late loading on AMD does not have the concurrency issues described
++above: when loading is attempted on T0, the T1 is quiesced and does not
++execute instructions. Therefore, even if a higher priority interrupt or
++a fault happens, the whole core will see it either before the microcode
++patch has been applied or after. In either case, T0 and T1 will have the
++same microcode revision and nothing intermediate.
++
+ Builtin microcode
+ =================
+ 
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 7a329e561354..779f70547fb7 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -498,7 +498,8 @@ static ssize_t reload_store(struct device *dev,
+ 	if (ret == 0)
+ 		ret = size;
+ 
+-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
++		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
+ 
+ 	return ret;
+ }
+-- 
+2.35.1
 
-Features in the kernel should be able to be detected if they are present
-or not, in some way, right?  Syscalls work this way, as does sysfs
-entries and other ways of interacting with the kernel.
-
-If there is no way for a program to "know" if a feature is present or
-not, how can it detect the difference between "this failed because of
-something I did wrong", vs. "this failed because it is not present in
-this kernel at all".
-
-thanks,
-
-greg k-h
