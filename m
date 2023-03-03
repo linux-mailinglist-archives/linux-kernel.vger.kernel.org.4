@@ -2,148 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE766A8FAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259FE6A8FB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjCCDIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 22:08:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S229852AbjCCDOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 22:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjCCDIN (ORCPT
+        with ESMTP id S229811AbjCCDOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 22:08:13 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD97615553
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 19:08:12 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id r5so1585244qtp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 19:08:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1677812892;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EtFwTdVwKlt2HPFqS6JWdnkwoS9VbQjLUEhGF6OSSZE=;
-        b=QE/EDs4Ix3xkylm5Fcz5nQL80rHtuziqGz2kedrkucExE5w8dXBV35aYo7K5fMbAiH
-         S8MTdKueuqDmWABSVE0/moawK2y5Unlj/SQYKCHbHPaobw864hSn3jhGLWuO0PABMeey
-         5LcbQaH3D3W01hp8XAUtcUD9sNhRL4mKqAtNw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677812892;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EtFwTdVwKlt2HPFqS6JWdnkwoS9VbQjLUEhGF6OSSZE=;
-        b=IqOyZ/BruE7k/kIkbEjz5uTEcc00uKiAp/S7guYEzfhAhRXjgn3S2PESmX/LOYUNoi
-         PuM1UAMgAzX8E6Q9Tm3maP71uy6l/j5eZIXtO8We+FKjwoTYqqt0HXmV0ivOocTVUlYr
-         SJdUiIpkIJdNpbz6gk7eJJ9wheCz9suZk64AHBuqw4uYaUVBQG0RM3L6nFMgcznPrvrp
-         DaOpMaWXaYF5PqSnmwPwoh358apK9f0rjnDarPpnLVbMzKRmUdBcDTR5M/NChnQUhhJ2
-         wxJ3++kmjV1LdBa1kmzxhNfy/gUvMVgjYIuK3Es/8Ut8k3rs4U8WybiJn3P/EZqY59b8
-         qpIQ==
-X-Gm-Message-State: AO0yUKU4yYtXje5WjkPaRCNf5QM5hBmgobS17HCpgeixU1Jj8gAJpY/C
-        SA98QWEEbkfC4wkk8qx/LzjXOg==
-X-Google-Smtp-Source: AK7set8p1efjvsmZsXnYTfWfn4EuoPfVyXTwuYw5lQLPIyH8QD7/cBl02oG9UI97rsa78ytUbKBzsw==
-X-Received: by 2002:a05:622a:553:b0:3bf:bac6:9961 with SMTP id m19-20020a05622a055300b003bfbac69961mr646660qtx.55.1677812891786;
-        Thu, 02 Mar 2023 19:08:11 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id 17-20020ac85651000000b003b62bc6cd1csm902902qtt.82.2023.03.02.19.08.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 19:08:10 -0800 (PST)
-Date:   Fri, 3 Mar 2023 03:08:10 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, stable@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kheaders: Use array declaration instead of char
-Message-ID: <20230303030810.GA1598250@google.com>
-References: <20230302224946.never.243-kees@kernel.org>
+        Thu, 2 Mar 2023 22:14:12 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7758E144AF;
+        Thu,  2 Mar 2023 19:14:08 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id F37B324E401;
+        Fri,  3 Mar 2023 11:13:54 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Mar
+ 2023 11:13:54 +0800
+Received: from [192.168.125.128] (113.72.145.171) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Mar
+ 2023 11:13:53 +0800
+Message-ID: <190f5d4b-77dd-8c2b-0d23-33f717fc1562@starfivetech.com>
+Date:   Fri, 3 Mar 2023 11:14:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302224946.never.243-kees@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 01/11] dt-bindings: clock: Add StarFive JH7110
+ System-Top-Group clock and reset generator
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
+ <20230221083323.302471-2-xingyu.wu@starfivetech.com>
+ <CAJM55Z_O+Gh0RGaAuLPxs4aSi4=5Aa3UksN_SnU-4pOn3X5fDw@mail.gmail.com>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <CAJM55Z_O+Gh0RGaAuLPxs4aSi4=5Aa3UksN_SnU-4pOn3X5fDw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.171]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 02:49:50PM -0800, Kees Cook wrote:
-> Under CONFIG_FORTIFY_SOURCE, memcpy() will check the size of destination
-> and source buffers. Defining kernel_headers_data as "char" would trip
-> this check. Since these addresses are treated as byte arrays, define
-> them as arrays (as done everywhere else).
+On 2023/3/2 23:05, Emil Renner Berthing wrote:
+> On Tue, 21 Feb 2023 at 09:37, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+>> Add bindings for the System-Top-Group clock and reset generator (STGCRG)
+>> on the JH7110 RISC-V SoC by StarFive Ltd.
+>>
+>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>> ---
+>>  .../clock/starfive,jh7110-stgcrg.yaml         | 82 +++++++++++++++++++
+>>  MAINTAINERS                                   |  1 +
+>>  .../dt-bindings/clock/starfive,jh7110-crg.h   | 34 ++++++++
+>>  .../dt-bindings/reset/starfive,jh7110-crg.h   | 28 +++++++
+>>  4 files changed, 145 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+>> new file mode 100644
+>> index 000000000000..b64ccd84200a
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+>> @@ -0,0 +1,82 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-stgcrg.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: StarFive JH7110 System-Top-Group Clock and Reset Generator
+>> +
+>> +maintainers:
+>> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: starfive,jh7110-stgcrg
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: Main Oscillator (24 MHz)
+>> +      - description: HIFI4 core
+>> +      - description: STG AXI/AHB
+>> +      - description: USB (125 MHz)
+>> +      - description: CPU Bus
+>> +      - description: HIFI4 Axi
+>> +      - description: NOC STG Bus
+>> +      - description: APB Bus
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: osc
+>> +      - const: hifi4_core
+>> +      - const: stg_axiahb
+>> +      - const: usb_125m
+>> +      - const: cpu_bus
+>> +      - const: hifi4_axi
+>> +      - const: nocstg_bus
+>> +      - const: apb_bus
+>> +
+>> +  '#clock-cells':
+>> +    const: 1
+>> +    description:
+>> +      See <dt-bindings/clock/starfive,jh7110-crg.h> for valid indices.
+>> +
+>> +  '#reset-cells':
+>> +    const: 1
+>> +    description:
+>> +      See <dt-bindings/reset/starfive,jh7110-crg.h> for valid indices.
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +  - '#clock-cells'
+>> +  - '#reset-cells'
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/starfive,jh7110-crg.h>
+>> +
+>> +    stgcrg: clock-controller@10230000 {
+>> +        compatible = "starfive,jh7110-stgcrg";
+>> +        reg = <0x10230000 0x10000>;
+>> +        clocks = <&osc>,
+>> +                 <&syscrg JH7110_SYSCLK_HIFI4_CORE>,
+>> +                 <&syscrg JH7110_SYSCLK_STG_AXIAHB>,
+>> +                 <&syscrg JH7110_SYSCLK_USB_125M>,
+>> +                 <&syscrg JH7110_SYSCLK_CPU_BUS>,
+>> +                 <&syscrg JH7110_SYSCLK_HIFI4_AXI>,
+>> +                 <&syscrg JH7110_SYSCLK_NOCSTG_BUS>,
+>> +                 <&syscrg JH7110_SYSCLK_APB_BUS>;
+>> +        clock-names = "osc", "hifi4_core",
+>> +                      "stg_axiahb", "usb_125m",
+>> +                      "cpu_bus", "hifi4_axi",
+>> +                      "nocstg_bus", "apb_bus";
+>> +        #clock-cells = <1>;
+>> +        #reset-cells = <1>;
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 93eb504c3b21..2e70c9f21989 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19914,6 +19914,7 @@ F:      arch/riscv/boot/dts/starfive/
+>>  STARFIVE JH71X0 CLOCK DRIVERS
+>>  M:     Emil Renner Berthing <kernel@esmil.dk>
+>>  M:     Hal Feng <hal.feng@starfivetech.com>
+>> +M:     Xingyu Wu <xingyu.wu@starfivetech.com>
+>>  S:     Maintained
+>>  F:     Documentation/devicetree/bindings/clock/starfive,jh71*.yaml
+>>  F:     drivers/clk/starfive/clk-starfive-jh71*
+>> diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
+>> index 5e4f21ca0642..5ac8a4d90a7a 100644
+>> --- a/include/dt-bindings/clock/starfive,jh7110-crg.h
+>> +++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
+>> @@ -1,6 +1,7 @@
+>>  /* SPDX-License-Identifier: GPL-2.0 OR MIT */
+>>  /*
+>>   * Copyright 2022 Emil Renner Berthing <kernel@esmil.dk>
+>> + * Copyright 2022 StarFive Technology Co., Ltd.
+>>   */
+>>
+>>  #ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
+>> @@ -222,4 +223,37 @@
+>>
+>>  #define JH7110_AONCLK_END                      14
 > 
-> This was seen with:
+> Hi Xingyu,
 > 
->   $ cat /sys/kernel/kheaders.tar.xz >> /dev/null
-> 
->   detected buffer overflow in memcpy
->   kernel BUG at lib/string_helpers.c:1027!
->   ...
->   RIP: 0010:fortify_panic+0xf/0x20
->   [...]
->   Call Trace:
->    <TASK>
->    ikheaders_read+0x45/0x50 [kheaders]
->    kernfs_fop_read_iter+0x1a4/0x2f0
->   ...
-> 
-> Reported-by: Jakub Kicinski <kuba@kernel.org>
-> Link: https://lore.kernel.org/bpf/20230302112130.6e402a98@kernel.org/
-> Tested-by: Jakub Kicinski <kuba@kernel.org>
+> The clock and reset names below have been shortened from the very long
+> names in the documentation. I see you've come to the same shortened
+> names as I used in the first STGCRG driver I pushed, which is great,
+> but I find it highly unlikely to have happened without looking at /
+> copying my code like you did for the SYSCRG and AONCRG drivers Hal has
+> posted. Unfortunately the commit message above doesn't reflect that,
+> so please add a
+> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 
-Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Thanks. But these STG/ISP/VOUT drivers are transplanted from 7110-SDK wrote
+by myself one year ago and followed 7100 clock drivers framework and structure
+at that time. And I haven't seen your STGCRG driver before. I improved these
+to follow these SYSCRG and AONCRG drivers' framework. So you could look like copying
+your code but these are still little different like these clock and reset name.
 
-thanks,
+But I don't know if I am right. I follow your code framework to write it and
+I should add 'Co-developed-by' and 'Signed-off-by' to reflect that. It that right?
 
- - Joel
-
-
-> Fixes: 43d8ce9d65a5 ("Provide in-kernel headers to make extending kernel easier")
-> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  kernel/kheaders.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-> index 8f69772af77b..42163c9e94e5 100644
-> --- a/kernel/kheaders.c
-> +++ b/kernel/kheaders.c
-> @@ -26,15 +26,15 @@ asm (
->  "	.popsection				\n"
->  );
->  
-> -extern char kernel_headers_data;
-> -extern char kernel_headers_data_end;
-> +extern char kernel_headers_data[];
-> +extern char kernel_headers_data_end[];
->  
->  static ssize_t
->  ikheaders_read(struct file *file,  struct kobject *kobj,
->  	       struct bin_attribute *bin_attr,
->  	       char *buf, loff_t off, size_t len)
->  {
-> -	memcpy(buf, &kernel_headers_data + off, len);
-> +	memcpy(buf, &kernel_headers_data[off], len);
->  	return len;
->  }
->  
-> @@ -48,8 +48,8 @@ static struct bin_attribute kheaders_attr __ro_after_init = {
->  
->  static int __init ikheaders_init(void)
->  {
-> -	kheaders_attr.size = (&kernel_headers_data_end -
-> -			      &kernel_headers_data);
-> +	kheaders_attr.size = (kernel_headers_data_end -
-> +			      kernel_headers_data);
->  	return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
->  }
->  
-> -- 
-> 2.34.1
+> I do have some updated suggestions for short names below though:
 > 
+>> +/* STGCRG clocks */
+>> +#define JH7110_STGCLK_HIFI4_CLK_CORE           0
+>> +#define JH7110_STGCLK_USB0_APB                 1
+>> +#define JH7110_STGCLK_USB0_UTMI_APB            2 unli
+>> +#define JH7110_STGCLK_USB0_AXI                 3
+>> +#define JH7110_STGCLK_USB0_LPM                 4
+>> +#define JH7110_STGCLK_USB0_STB                 5
+>> +#define JH7110_STGCLK_USB0_APP_125             6
+>> +#define JH7110_STGCLK_USB0_REFCLK              7
+>> +#define JH7110_STGCLK_PCIE0_AXI_MST0           8
+>> +#define JH7110_STGCLK_PCIE0_APB                        9
+>> +#define JH7110_STGCLK_PCIE0_TL                 10
+>> +#define JH7110_STGCLK_PCIE1_AXI_MST0           11
+>> +#define JH7110_STGCLK_PCIE1_APB                        12
+>> +#define JH7110_STGCLK_PCIE1_TL                 13
+>> +#define JH7110_STGCLK_PCIE01_SLV_DEC_MAINCLK   14
+> 
+> Does PCIE01 here mean that the clock is used by both pcie0 and pcie1?
+> If so then maybe just call it JH7110_PCIE_SLV_MAIN
+
+Yes, it is used by both pcie0 and pcie1. Will modify it.
+
+> 
+>> +#define JH7110_STGCLK_SEC_HCLK                 15
+> 
+> For other clocks I think "hclk" means ahb clock, so maybe JH7110_STGCLK_SEC_AHB
+
+Will modify it.
+
+> 
+>> +#define JH7110_STGCLK_SEC_MISCAHB              16
+> 
+> I find something like JH7110_STGCLK_SEC_MISC_AHB a little easier to read.
+
+Will modify it.
+
+> 
+>> +#define JH7110_STGCLK_GRP0_MAIN                        17
+>> +#define JH7110_STGCLK_GRP0_BUS                 18
+>> +#define JH7110_STGCLK_GRP0_STG                 19
+>> +#define JH7110_STGCLK_GRP1_MAIN                        20
+>> +#define JH7110_STGCLK_GRP1_BUS                 21
+>> +#define JH7110_STGCLK_GRP1_STG                 22
+>> +#define JH7110_STGCLK_GRP1_HIFI                        23
+>> +#define JH7110_STGCLK_E2_RTC                   24
+>> +#define JH7110_STGCLK_E2_CORE                  25
+>> +#define JH7110_STGCLK_E2_DBG                   26
+>> +#define JH7110_STGCLK_DMA1P_AXI                        27
+>> +#define JH7110_STGCLK_DMA1P_AHB                        28
+>> +
+>> +#define JH7110_STGCLK_END                      29
+>> +
+>>  #endif /* __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__ */
+>> diff --git a/include/dt-bindings/reset/starfive,jh7110-crg.h b/include/dt-bindings/reset/starfive,jh7110-crg.h
+>> index d78e38690ceb..4a865ded78b8 100644
+>> --- a/include/dt-bindings/reset/starfive,jh7110-crg.h
+>> +++ b/include/dt-bindings/reset/starfive,jh7110-crg.h
+>> @@ -1,6 +1,7 @@
+>>  /* SPDX-License-Identifier: GPL-2.0 OR MIT */
+>>  /*
+>>   * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>>   */
+>>
+>>  #ifndef __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__
+>> @@ -151,4 +152,31 @@
+>>
+>>  #define JH7110_AONRST_END                      8
+>>
+>> +/* STGCRG resets */
+>> +#define JH7110_STGRST_SYSCON                   0
+>> +#define JH7110_STGRST_HIFI4_CORE               1
+>> +#define JH7110_STGRST_HIFI4_AXI                        2
+>> +#define JH7110_STGRST_SEC_TOP_HRESETN          3
+> 
+> JH7110_STGRST_SEC_AHB to match the clock above.
+
+Will modify it.
+
+> 
+>> +#define JH7110_STGRST_E24_CORE                 4
+>> +#define JH7110_STGRST_DMA1P_AXI                        5
+>> +#define JH7110_STGRST_DMA1P_AHB                        6
+>> +#define JH7110_STGRST_USB0_AXI                 7
+>> +#define JH7110_STGRST_USB0_APB                 8
+>> +#define JH7110_STGRST_USB0_UTMI_APB            9
+>> +#define JH7110_STGRST_USB0_PWRUP               10
+>> +#define JH7110_STGRST_PCIE0_AXI_MST0           11
+>> +#define JH7110_STGRST_PCIE0_AXI_SLV0           12
+>> +#define JH7110_STGRST_PCIE0_AXI_SLV            13
+>> +#define JH7110_STGRST_PCIE0_BRG                        14
+>> +#define JH7110_STGRST_PCIE0_CORE               15
+>> +#define JH7110_STGRST_PCIE0_APB                        16
+>> +#define JH7110_STGRST_PCIE1_AXI_MST0           17
+>> +#define JH7110_STGRST_PCIE1_AXI_SLV0           18
+>> +#define JH7110_STGRST_PCIE1_AXI_SLV            19
+>> +#define JH7110_STGRST_PCIE1_BRG                        20
+>> +#define JH7110_STGRST_PCIE1_CORE               21
+>> +#define JH7110_STGRST_PCIE1_APB                        22
+>> +
+>> +#define JH7110_STGRST_END                      23
+>> +
+>>  #endif /* __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__ */
+>> --
+>> 2.25.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+Best regards
