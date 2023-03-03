@@ -2,81 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA8E6A9768
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18296A976C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjCCMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 07:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S230157AbjCCMoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 07:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCCMoR (ORCPT
+        with ESMTP id S230053AbjCCMod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 07:44:17 -0500
-Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28991815F;
-        Fri,  3 Mar 2023 04:44:14 -0800 (PST)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 3 Mar
- 2023 15:44:11 +0300
-Received: from KANASHIN1.fintech.ru (10.0.253.125) by Ex16-01.fintech.ru
- (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Fri, 3 Mar 2023
- 15:44:11 +0300
-From:   Natalia Petrova <n.petrova@fintech.ru>
-To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-CC:     Natalia Petrova <n.petrova@fintech.ru>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ldv-project@linuxtesting.org>
-Subject: [PATCH v2] rdmavt: delete unnecessary NULL check
-Date:   Fri, 3 Mar 2023 15:44:08 +0300
-Message-ID: <20230303124408.16685-1-n.petrova@fintech.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <4c6939b5-05b9-1346-5376-82011b4cc093@cornelisnetworks.com>
-References: 
+        Fri, 3 Mar 2023 07:44:33 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EA75F501;
+        Fri,  3 Mar 2023 04:44:27 -0800 (PST)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PSnfH4bCfz16Nxc;
+        Fri,  3 Mar 2023 20:41:43 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 3 Mar
+ 2023 20:44:24 +0800
+Subject: Re: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built
+ from XDP frames
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230301160315.1022488-1-aleksander.lobakin@intel.com>
+ <20230301160315.1022488-2-aleksander.lobakin@intel.com>
+ <36d42e20-b33f-5442-0db7-e9f5ef9d0941@huawei.com>
+ <dd811304-44ed-0372-8fe7-00c425a453dd@intel.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <7ffbcac4-f4f2-5579-fd55-35813fbd792c@huawei.com>
+Date:   Fri, 3 Mar 2023 20:44:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.253.125]
-X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dd811304-44ed-0372-8fe7-00c425a453dd@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to check 'rdi->qp_dev' for NULL. The field 'qp_dev'
-is created in rvt_register_device() which will fail if the 'qp_dev'
-allocation fails in rvt_driver_qp_init(). Overwise this pointer
-doesn't changed and passed to rvt_qp_exit() by the next step.
+On 2023/3/3 19:22, Alexander Lobakin wrote:
+> From: Yunsheng Lin <linyunsheng@huawei.com>
+> Date: Thu, 2 Mar 2023 10:30:13 +0800
+> 
+>> On 2023/3/2 0:03, Alexander Lobakin wrote:
+>>> __xdp_build_skb_from_frame() state(d):
+>>>
+>>> /* Until page_pool get SKB return path, release DMA here */
+>>>
+>>> Page Pool got skb pages recycling in April 2021, but missed this
+>>> function.
+> 
+> [...]
+> 
+>> We both rely on both skb->pp_recycle and page->pp_magic to decide
+>> the page is really from page pool. So there was a few corner case
+>> problem when we are sharing a page for different skb in the driver
+>> level or calling skb_clone() or skb_try_coalesce().
+>> see:
+>> https://github.com/torvalds/linux/commit/2cc3aeb5ecccec0d266813172fcd82b4b5fa5803
+>> https://lore.kernel.org/netdev/MW5PR15MB51214C0513DB08A3607FBC1FBDE19@MW5PR15MB5121.namprd15.prod.outlook.com/t/
+>> https://lore.kernel.org/netdev/167475990764.1934330.11960904198087757911.stgit@localhost.localdomain/
+> 
+> And they are fixed :D
+> No drivers currently which use Page Pool mix PP pages with non-PP. And
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+The wireless adapter which use Page Pool *does* mix PP pages with
+non-PP, see below discussion:
 
-Fixes: 0acb0cc7ecc1 ("IB/rdmavt: Initialize and teardown of qpn table")
-Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
----
-v2: The remark about non-null value of 'rdi->qp_dev' by Leon Romanovsky <leon@kernel.org>
-and Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com> was taken into account.
- drivers/infiniband/sw/rdmavt/qp.c | 2 --
- 1 file changed, 2 deletions(-)
+https://lore.kernel.org/netdev/156f3e120bd0757133cb6bc11b76889637b5e0a6.camel@gmail.com/
 
-diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
-index 3acab569fbb9..2bdc4486c3da 100644
---- a/drivers/infiniband/sw/rdmavt/qp.c
-+++ b/drivers/infiniband/sw/rdmavt/qp.c
-@@ -464,8 +464,6 @@ void rvt_qp_exit(struct rvt_dev_info *rdi)
- 	if (qps_inuse)
- 		rvt_pr_err(rdi, "QP memory leak! %u still in use\n",
- 			   qps_inuse);
--	if (!rdi->qp_dev)
--		return;
- 
- 	kfree(rdi->qp_dev->qp_table);
- 	free_qpn_table(&rdi->qp_dev->qpn_table);
--- 
-2.34.1
+> it's impossible to trigger try_coalesce() or so at least on cpumap path
+> since we're only creating skbs at that moment, they don't come from
+> anywhere else.
+> 
+>>
+>> As the 'struct xdp_frame' also use 'struct skb_shared_info' which is
+>> sharable, see xdp_get_shared_info_from_frame().
+>>
+>> For now xdpf_clone() does not seems to handling frag page yet,
+>> so it should be fine for now.
+> 
+> xdpf_clone() clones a frame to a new full page and doesn't copy its
+> skb_shared_info.
+> 
+>>
+>> IMHO we should find a way to use per-page marker, instead of both
+>> per-skb and per-page markers, in order to avoid the above problem
+>> for xdp if xdp has a similar processing as skb, as suggested by Eric.
+>>
+>> https://lore.kernel.org/netdev/CANn89iKgZU4Q+THXupzZi4hETuKuCOvOB=iHpp5JzQTNv_Fg_A@mail.gmail.com/
+> 
+> As Jesper already pointed out, not having a quick way to check whether
+> we have to check ::pp_magic at all can decrease performance. So it's
+> rather a shortcut.
 
+When we are freeing a page by updating the _refcount, I think
+we are already touching the cache of ::pp_magic.
+
+Anyway, I am not sure checking ::pp_magic is correct when a
+page will be passing between different subsystem and back to
+the network stack eventually, checking ::pp_magic may not be
+correct if this happens.
+
+Another way is to use the bottom two bits in bv_page, see:
+https://www.spinics.net/lists/netdev/msg874099.html
+
+> 
+>>
+>>>  
+>>>  	/* Allow SKB to reuse area used by xdp_frame */
+>>>  	xdp_scrub_frame(xdpf);
+>>>
+> 
+> Thanks,
+> Olek
+> .
+> 
