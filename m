@@ -2,105 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CD76A9635
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC9F6A964B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCCL2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S230508AbjCCLbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjCCL2s (ORCPT
+        with ESMTP id S230374AbjCCLbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:28:48 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E28C5D75A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:28:26 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id k14so3137599lfj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 03:28:26 -0800 (PST)
+        Fri, 3 Mar 2023 06:31:14 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B7910E6;
+        Fri,  3 Mar 2023 03:30:49 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id y11so2382864plg.1;
+        Fri, 03 Mar 2023 03:30:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677842904;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zIEyfJHn9nwX9v5jkEb3Mml1NwAILd6wX1VPBLhmV8k=;
-        b=L6JrqYu+FyX5oZB7UCc86qvZC2nGgX2c0s3VWm/Ol7LDmz1ju31M98rBuL2TNdKjsB
-         WMoaBX9a86UgVUcos9lD+PLW3VcOcArV9NKna5AxRx8G/QRUfenjOlRMpLltoE/nu9Vf
-         AqeohNQohxiH59X0XZbenYk2f8PmgsIfwTcYQObyyJ+sBF0Qktjri8klyiMav4m/O90z
-         4a1AR2IkLLz/Ral6esb6Nj7quE6UmqP8Fal4N7ZI0UqT0Az/5tQ8RFMY2oj3eqNdCmiH
-         RG8qIrwL/9pZmMfw6sr3mKsFm5JJ9VPgiJL521lmEmvZUA8VbXVsauAdqNL1Yh+1kxKa
-         fovA==
+        d=gmail.com; s=20210112; t=1677843041;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Jwulz43qSqRAg3Hz4KUPdCaEn1N/UKdr4QvHFAQ7G8=;
+        b=C6otYZ8u80Ulh1aprWM1QUX8OkVlgtC8QVuWg/fzlBd4l5O1pikb1TYDnIM8ykHjjs
+         LFYhd2AXBoGABRDmr5SoY8tX+gD1KBz3EuYqQEHygI0k6LZ+Gl92muYCQRliPD9J4Wum
+         qEpSsDDJc9+zTF/xcfKnDLdakLEDzGUz/Ivs5o16Lr+kEgwUmsZFsScR1ImaFCrERzd8
+         vy3P/Zoq+7rkb87IXgEA86SrqyViuEiy9WJy5Xlq9QdxrEbUMijk1O8EOEOHJeGaRw7w
+         toyyQk1ZqkX4F4VlA8otO68SL5eAHa7iu7u2MozzPSrWqZMWuJdH0udC6+sCSejedrgN
+         zELQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677842904;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zIEyfJHn9nwX9v5jkEb3Mml1NwAILd6wX1VPBLhmV8k=;
-        b=3Yagm1UIsVEXOHgcbeFMEOGRVXoaZ8xM0wAHRANAoG+GATC3WN1+DjUK3LddoG9xD2
-         /1IfNi4QrogCbJwJbKVYZzrx8CZkOLCQazLN6iwxxkYQ0pFcD7a5gTwsU/ENMNxppFLr
-         6s/szb2szhgnfZfyoTKc4GCVdkqehXioa/ZBoMqMpD+woUYPImAb2FGJUhoCnteo8MrS
-         HVMtsoPF3ei6zw7W/kRvsRuVLCfhH3DWCAEuu56A87rXePHXPZAPz5mD6fQ16x+HFyFk
-         IFgyFtvrre89U8DNr5PlRNCKSVS4Mzpk0k+kC85KW46uB8GdT4qnYOpVIwGnRJ3gTQnV
-         Vz0g==
-X-Gm-Message-State: AO0yUKV87O26YKL2ObJi6TAtSuTvmxe3swiofr9eojoc99IdjgjydIbV
-        lqD3vvzPQHKLRnwBRxhoZKIcGg==
-X-Google-Smtp-Source: AK7set8gz3IR0Ej3BL25630lurVOHrKBX4z4hGn4Nl4VSby22cKKgVQ5pRWxNONwUeLQRHQOXiHCwA==
-X-Received: by 2002:ac2:490f:0:b0:4cc:a166:e27f with SMTP id n15-20020ac2490f000000b004cca166e27fmr478998lfi.3.1677842903780;
-        Fri, 03 Mar 2023 03:28:23 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id u13-20020ac251cd000000b004d0b1327b75sm354945lfm.61.2023.03.03.03.28.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 03:28:23 -0800 (PST)
-Message-ID: <41665c73-1647-2cb2-bd33-8dc281a97ee5@linaro.org>
-Date:   Fri, 3 Mar 2023 12:28:21 +0100
+        d=1e100.net; s=20210112; t=1677843041;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7Jwulz43qSqRAg3Hz4KUPdCaEn1N/UKdr4QvHFAQ7G8=;
+        b=7v9YzONkS7StX0XM05Xeu/N7MjsOQ+LouLCYRrBiJBAxe4+vA6tKLyYJl4zFqA7o/o
+         s4BlS4n0cAriM03vYtGnRquqmYZD7YqkQSX/pYrWIBBrAzh3mt2ggJMUi0BQy3vVI5XU
+         hrvC46x6QzIi+Yef172ualUlZ+w4L+5WR0DRTff9CoGAnB6ctNS292+8amKFlPxviuKx
+         k6UC3X3ja9twxdQFejxGba4fj0MUpQqhjRcXioTj4n+/v2aYiQA7k9qvR2bgr3I/cxPo
+         sbtp83VwrkmQPD78IX9j00ITsqqmwYHxdgYH8m5mPjGpxAiPjuQYFKQoweSTpYit2lZH
+         LonQ==
+X-Gm-Message-State: AO0yUKWbAmG63KPbo5rvkRrjZJBoCJckw3hGh4m+/S2VAian7w4rxoLD
+        zIevWLt+qqJJXySEs3ilUTWlxGUd89Y=
+X-Google-Smtp-Source: AK7set9LKrTzOtv1zwJdGqNwWPetYXEDtJ/ylJmR3m14NVoAJ4RCtiu1Oxgyn+lW/w6EKC7CT5rDSw==
+X-Received: by 2002:a05:6a20:3caa:b0:af:7233:5bfc with SMTP id b42-20020a056a203caa00b000af72335bfcmr1472441pzj.8.1677843041564;
+        Fri, 03 Mar 2023 03:30:41 -0800 (PST)
+Received: from localhost.localdomain (124-148-239-17.tpgi.com.au. [124.148.239.17])
+        by smtp.gmail.com with ESMTPSA id n4-20020a62e504000000b005a8c92f7c27sm1356262pff.212.2023.03.03.03.30.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 03:30:41 -0800 (PST)
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Seth Forshee <sforshee@kernel.org>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Orlando Chamberlain <orlandoch.dev@gmail.com>
+Subject: [PATCH v4 0/4] apple-gmux: support MMIO gmux type on T2 Macs
+Date:   Fri,  3 Mar 2023 22:28:39 +1100
+Message-Id: <20230303112842.3094-1-orlandoch.dev@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] dt-bindings: ath10k: Add vdd-smps supply
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230303024246.2175382-1-konrad.dybcio@linaro.org>
- <8e695c64-6abd-3c1e-8d80-de636d950442@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <8e695c64-6abd-3c1e-8d80-de636d950442@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi All,
 
+This patch series adds support for the MMIO based gmux present on these
+Dual GPU Apple T2 Macs: MacBookPro15,1, MacBookPro15,3, MacBookPro16,1,
+MacBookPro16,4 (although amdgpu isn't working on MacBookPro16,4 [1]).
 
-On 3.03.2023 08:12, Krzysztof Kozlowski wrote:
-> On 03/03/2023 03:42, Konrad Dybcio wrote:
->> Mention the newly added vdd-smps supply.
-> 
-> There is no explanation here, but looking at your driver change it
-> suggests name is not correct. You named it based on regulator (so the
-> provider), not the consumer.
+Changes from v3[2]:
 
-Right, I admit this could have been posted with an RFC tag.
-Maybe Kalle knows more.
+- Use acpi_execute_simple_method()
+- Document extra info about the gmux provided by Lukas
+- Squash the GMSP acpi method into the support MMIO gmux commit, as we
+  now just check if it's a MMIO gmux, not if the gmux config has a flag
+  set. This means it's hard to seperate the two now, so making them one
+  commit is simpler.
 
-Konrad
-> 
-> Best regards,
-> Krzysztof
-> 
+# 1:
+
+has a slight change in how the switch state is read: instead of checking
+for x == 2, check !(x & 1)
+
+# 2:
+
+implements a system to support more than 2 gmux types
+
+# 3:
+
+Adds support for the MMIO based gmux on T2 macs.
+
+# 4:
+
+Add a debugfs interface to apple-gmux so data from ports can be read
+and written to from userspace.
+
+This can be used for more easily researching what unknown ports do,
+and switching gpus when vga_switcheroo isn't ready (e.g. when one gpu
+is bound to vfio-pci and in use by a Windows VM, I can use this to
+switch my internal display between Linux and Windows easily).
+
+# Issues:
+
+1. Switching gpus at runtime has the same issue as indexed gmux's: the
+inactive gpu can't probe the DDC lines for eDP [3]
+
+2. iMacPro1,1, iMac20,1 and iMac20,2 all seem to have a gmux in their
+acpi tables, but they shouldn't. A check that hopefully will detect this
+is used, but it's untested as I don't have any of those computers.
+
+3. Powering on the amdgpu with vga_switcheroo doesn't work well. I'm
+told on the MacBookPro15,1 it works sometimes, and adding delays helps,
+but on my MacBookPro16,1 I haven't been able to get it to work at all:
+
+amdgpu: switched off
+amdgpu: switched on
+amdgpu 0000:03:00.0:
+    Unable to change power state from D3hot to D0, device inaccessible
+amdgpu 0000:03:00.0:
+    Unable to change power state from D3cold to D0, device inaccessible
+[drm] PCIE GART of 512M enabled (table at 0x00000080FEE00000).
+[drm] PSP is resuming...
+[drm:psp_hw_start [amdgpu]] *ERROR* PSP create ring failed!
+[drm:psp_resume [amdgpu]] *ERROR* PSP resume failed
+[drm:amdgpu_device_fw_loading [amdgpu]]
+    *ERROR* resume of IP block <psp> failed -62
+amdgpu 0000:03:00.0: amdgpu: amdgpu_device_ip_resume failed (-62).
+snd_hda_intel 0000:03:00.1: Enabling via vga_switcheroo
+snd_hda_intel 0000:03:00.1:
+    Unable to change power state from D3cold to D0, device inaccessible
+snd_hda_intel 0000:03:00.1: CORB reset timeout#2, CORBRP = 65535
+snd_hda_codec_hdmi hdaudioC0D0: Unable to sync register 0x2f0d00. -5
+
+There are some acpi methods (PWRD, PWG1 [4, 5]) that macOS calls when
+changing the amdgpu's power state, but we don't use them and that could be
+a cause. Additionally unlike previous generation Macbooks which work
+better, on MacBookPro16,1 the gpu is located behind 2 pci bridges:
+
+01:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
+    Navi 10 XL Upstream Port of PCI Express Switch (rev 43)
+02:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
+    Navi 10 XL Downstream Port of PCI Express Switch
+03:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI]
+    Navi 14 [Radeon RX 5500/5500M / Pro 5500M] (rev 43)
+03:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI]
+    Navi 10 HDMI Audio
+
+Upon attempting to power on the gpu with vga_switcheroo, all these
+devices except 01:00.0 have their config space filled with 1s.
+Rescanning pci makes the config space of all the devices go back to
+normal, however amdgpu still fails to resume with the same logs as
+above.
+
+[1]: https://lore.kernel.org/all/3AFB9142-2BD0-46F9-AEA9-C9C5D13E68E6@live.com/
+[2]: https://lore.kernel.org/platform-driver-x86/20230218132007.3350-1-orlandoch.dev@gmail.com/
+[3]: https://lore.kernel.org/all/9eed8ede6f15a254ad578e783b050e1c585d5a15.1439288957.git.lukas@wunner.de/
+[4]: https://gist.github.com/Redecorating/6c7136b7a4ac7ce3b77d8e41740dd87b
+[5]: https://lore.kernel.org/all/20120710160555.GA31562@srcf.ucam.org/
+
+Orlando Chamberlain (4):
+  apple-gmux: use first bit to check switch state
+  apple-gmux: refactor gmux types
+  apple-gmux: support MMIO gmux on T2 Macs
+  apple-gmux: add debugfs interface
+
+ drivers/platform/x86/apple-gmux.c | 351 ++++++++++++++++++++++++++----
+ include/linux/apple-gmux.h        |  70 ++++--
+ 2 files changed, 357 insertions(+), 64 deletions(-)
+
+-- 
+2.39.2
+
