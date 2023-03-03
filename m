@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09486A9CB5
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2406A9CB4
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjCCRE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S231608AbjCCRFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjCCREr (ORCPT
+        with ESMTP id S231540AbjCCREr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Mar 2023 12:04:47 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9804F222C5;
-        Fri,  3 Mar 2023 09:04:45 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323GnWbD007884;
-        Fri, 3 Mar 2023 17:04:29 GMT
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901E622DC5;
+        Fri,  3 Mar 2023 09:04:46 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323Fqs5a032495;
+        Fri, 3 Mar 2023 17:04:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=sr+BFW8reZBABt5u7cSOTeYzaqBChfLLm7cMYp26kQM=;
- b=BRFUAsN/LI6IVmB1rGpCSTWz+d8exOzbRYT3+VDrybE2WhCjqnmdF4CdZNe3inZEJW+y
- yB0YLDDjpXM/7nIUViLJi34MDvXoLdrK6ukoIWePNQ6X+xvhCUjsyWBu24B5xbDIVvGK
- pNb3fw/X+8Z2jUMD0Btq08tNzQa3rLwVxGLqYPPUtxhSTaMP6q02xwkloQj85XBJ1oBy
- RpjVTtj8LURN2gMv0y+LvH+sUutrvFcT/SOqM7NAm0myHOmhrmtIsi66ONTDjDJ03Eok
- uVHgxcIVzSs/AEkSx8+JZgWglKBz7SGz703JJs19VbYplQyAE4ekXsjFv2Rz2A9aPxYk xw== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p3mrf0crb-1
+ bh=tlmEo/kVrmSoI+f5eQKxgmNkhnCo7i/A1GBB4psqyLY=;
+ b=Vah+gJKk5k65cADWQUG4eH2IMJBqXq7d7Y+v8zl9+Y7ohdRZP3eLx1SeXWodyBSawlq6
+ WAhnPHIM4oCL21olAqTcYex4dyOzlTYU9DEuQxOmxYt8tu9BIqC6WwLZpUcOA2TfYezi
+ v8lUxbGAiVWnhpf8mrOWL8TX+l8rGRAZ4xx8sDOYzs3rMgVl2wM7D1ljRhbqPH5GIY+X
+ yiLLnhtxuWYbNAy6s6eiHSdwSKZRu6+v1Eo+i2cJUU8Jj1ENz6udDVk/2QdoC7Koi/L9
+ oqKRdDnKjjluSXV/3q738s1+qtSJP//V+VqRIZ1qRhvjjFJ+Rqko6aR80iJ9ewjNdRFG lg== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p3kx4a1w2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 17:04:29 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 323E8vLu018850;
-        Fri, 3 Mar 2023 17:04:28 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3nybccc1wn-1
+        Fri, 03 Mar 2023 17:04:31 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 323EKZo2019104;
+        Fri, 3 Mar 2023 17:04:30 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3nybduuybd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 17:04:28 +0000
+        Fri, 03 Mar 2023 17:04:30 +0000
 Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 323H4RMG32440808
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 323H4TNq60817778
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Mar 2023 17:04:27 GMT
+        Fri, 3 Mar 2023 17:04:29 GMT
 Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D2265805D;
+        by IMSVA (Postfix) with ESMTP id 961FD58043;
+        Fri,  3 Mar 2023 17:04:29 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6E1758053;
         Fri,  3 Mar 2023 17:04:27 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A810A58043;
-        Fri,  3 Mar 2023 17:04:25 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.77.137.234])
         by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Mar 2023 17:04:25 +0000 (GMT)
+        Fri,  3 Mar 2023 17:04:27 +0000 (GMT)
 From:   Eddie James <eajames@linux.ibm.com>
 To:     linux-fsi@lists.ozlabs.org
 Cc:     rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org,
@@ -58,23 +58,23 @@ Cc:     rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org,
         mhiramat@kernel.org, alistair@popple.id.au, joel@jms.id.au,
         jk@ozlabs.org, andrew@aj.id.au, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, eajames@linux.ibm.com
-Subject: [PATCH v7 4/7] fsi: Add I2C Responder SCOM driver
-Date:   Fri,  3 Mar 2023 11:04:13 -0600
-Message-Id: <20230303170416.1347530-5-eajames@linux.ibm.com>
+Subject: [PATCH v7 5/7] fsi: Add aliased device numbering
+Date:   Fri,  3 Mar 2023 11:04:14 -0600
+Message-Id: <20230303170416.1347530-6-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230303170416.1347530-1-eajames@linux.ibm.com>
 References: <20230303170416.1347530-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dlJmZcAuPVNiQXCr6te76kOEczn9eUwX
-X-Proofpoint-GUID: dlJmZcAuPVNiQXCr6te76kOEczn9eUwX
+X-Proofpoint-GUID: VYi3n3M2Z1-I9cRhMl_XUR_cxkO7i_-0
+X-Proofpoint-ORIG-GUID: VYi3n3M2Z1-I9cRhMl_XUR_cxkO7i_-0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-03_03,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- phishscore=0 bulkscore=0 clxscore=1015 spamscore=0 priorityscore=1501
- impostorscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ bulkscore=0 phishscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2303030143
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,207 +86,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2CR has the capability to directly perform SCOM operations,
-circumventing the need to drive the FSI2PIB engine. Add a new
-driver to perform SCOM operations through the I2CR.
+The I2C and SPI subsystems can use an aliased name to number the device.
+Add similar support to the FSI subsystem for any device type.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
-Changes since v6:
- - Update SCOM driver with newer interfaces and drop BE conversion
+ drivers/fsi/fsi-core.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
- drivers/fsi/Kconfig     |   8 +++
- drivers/fsi/Makefile    |   1 +
- drivers/fsi/i2cr-scom.c | 154 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 163 insertions(+)
- create mode 100644 drivers/fsi/i2cr-scom.c
-
-diff --git a/drivers/fsi/Kconfig b/drivers/fsi/Kconfig
-index 999be82720c5..79a31593618a 100644
---- a/drivers/fsi/Kconfig
-+++ b/drivers/fsi/Kconfig
-@@ -94,4 +94,12 @@ config FSI_OCC
- 	provide the raw sensor data as well as perform thermal and power
- 	management on the system.
+diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+index d591e68afd11..b77013b9d8a7 100644
+--- a/drivers/fsi/fsi-core.c
++++ b/drivers/fsi/fsi-core.c
+@@ -955,9 +955,34 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
+ 	return 0;
+ }
  
-+config I2CR_SCOM
-+	tristate "IBM I2C Responder SCOM driver"
-+	depends on FSI_MASTER_I2CR
-+	help
-+	  This option enables an I2C Responder based SCOM device driver. The
-+	  I2CR has the capability to directly perform SCOM operations instead
-+	  of using the FSI2PIB engine.
-+
- endif
-diff --git a/drivers/fsi/Makefile b/drivers/fsi/Makefile
-index 34dbaa1c452e..5550aa15e0b1 100644
---- a/drivers/fsi/Makefile
-+++ b/drivers/fsi/Makefile
-@@ -9,3 +9,4 @@ obj-$(CONFIG_FSI_MASTER_AST_CF) += fsi-master-ast-cf.o
- obj-$(CONFIG_FSI_SCOM) += fsi-scom.o
- obj-$(CONFIG_FSI_SBEFIFO) += fsi-sbefifo.o
- obj-$(CONFIG_FSI_OCC) += fsi-occ.o
-+obj-$(CONFIG_I2CR_SCOM) += i2cr-scom.o
-diff --git a/drivers/fsi/i2cr-scom.c b/drivers/fsi/i2cr-scom.c
-new file mode 100644
-index 000000000000..63b548bdef3e
---- /dev/null
-+++ b/drivers/fsi/i2cr-scom.c
-@@ -0,0 +1,154 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) IBM Corporation 2023 */
-+
-+#include <linux/cdev.h>
-+#include <linux/device.h>
-+#include <linux/fs.h>
-+#include <linux/fsi.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+
-+#include "fsi-master-i2cr.h"
-+#include "fsi-slave.h"
-+
-+struct i2cr_scom {
-+	struct device dev;
-+	struct cdev cdev;
-+	struct fsi_master_i2cr *i2cr;
++static const char *const fsi_dev_type_names[] = {
++	"cfam",
++	"sbefifo",
++	"scom",
++	"occ",
 +};
 +
-+static loff_t i2cr_scom_llseek(struct file *file, loff_t offset, int whence)
-+{
-+	switch (whence) {
-+	case SEEK_CUR:
-+		break;
-+	case SEEK_SET:
-+		file->f_pos = offset;
-+		break;
-+	default:
-+		return -EINVAL;
+ int fsi_get_new_minor(struct fsi_device *fdev, enum fsi_dev_type type,
+ 		      dev_t *out_dev, int *out_index)
+ {
++	if (fdev->dev.of_node) {
++		int aid = of_alias_get_id(fdev->dev.of_node, fsi_dev_type_names[type]);
++
++		if (aid >= 0) {
++			int id = (aid << 4) | type;
++
++			id = ida_simple_get(&fsi_minor_ida, id, id + 1, GFP_KERNEL);
++			if (id >= 0) {
++				*out_index = aid;
++				*out_dev = fsi_base_dev + id;
++				return 0;
++			}
++
++			if (id != -ENOSPC)
++				return id;
++		}
 +	}
 +
-+	return offset;
-+}
-+
-+static ssize_t i2cr_scom_read(struct file *filep, char __user *buf, size_t len, loff_t *offset)
-+{
-+	struct i2cr_scom *scom = filep->private_data;
-+	u64 data;
-+	int ret;
-+
-+	if (len != sizeof(data))
-+		return -EINVAL;
-+
-+	ret = fsi_master_i2cr_read(scom->i2cr, (u32)*offset, &data);
-+	if (ret)
-+		return ret;
-+
-+	ret = copy_to_user(buf, &data, len);
-+	if (ret)
-+		return ret;
-+
-+	return len;
-+}
-+
-+static ssize_t i2cr_scom_write(struct file *filep, const char __user *buf, size_t len,
-+			       loff_t *offset)
-+{
-+	struct i2cr_scom *scom = filep->private_data;
-+	u64 data;
-+	int ret;
-+
-+	if (len != sizeof(data))
-+		return -EINVAL;
-+
-+	ret = copy_from_user(&data, buf, len);
-+	if (ret)
-+		return ret;
-+
-+	ret = fsi_master_i2cr_write(scom->i2cr, (u32)*offset, data);
-+	if (ret)
-+		return ret;
-+
-+	return len;
-+}
-+
-+static const struct file_operations i2cr_scom_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= simple_open,
-+	.llseek		= i2cr_scom_llseek,
-+	.read		= i2cr_scom_read,
-+	.write		= i2cr_scom_write,
-+};
-+
-+static int i2cr_scom_probe(struct device *dev)
-+{
-+	struct fsi_device *fsi_dev = to_fsi_dev(dev);
-+	struct i2cr_scom *scom;
-+	int didx;
-+	int ret;
-+
-+	if (!(fsi_dev->slave->master->flags & FSI_MASTER_FLAG_I2CR))
-+		return -ENODEV;
-+
-+	scom = devm_kzalloc(dev, sizeof(*scom), GFP_KERNEL);
-+	if (!scom)
-+		return -ENOMEM;
-+
-+	scom->i2cr = to_fsi_master_i2cr(fsi_dev->slave->master);
-+	dev_set_drvdata(dev, scom);
-+
-+	scom->dev.type = &fsi_cdev_type;
-+	scom->dev.parent = dev;
-+	device_initialize(&scom->dev);
-+
-+	ret = fsi_get_new_minor(fsi_dev, fsi_dev_scom, &scom->dev.devt, &didx);
-+	if (ret)
-+		return ret;
-+
-+	dev_set_name(&scom->dev, "scom%d", didx);
-+	cdev_init(&scom->cdev, &i2cr_scom_fops);
-+	ret = cdev_device_add(&scom->cdev, &scom->dev);
-+	if (ret)
-+		fsi_free_minor(scom->dev.devt);
-+
-+	return ret;
-+}
-+
-+static int i2cr_scom_remove(struct device *dev)
-+{
-+	struct i2cr_scom *scom = dev_get_drvdata(dev);
-+
-+	cdev_device_del(&scom->cdev, &scom->dev);
-+	fsi_free_minor(scom->dev.devt);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id i2cr_scom_of_ids[] = {
-+	{ .compatible = "ibm,i2cr-scom" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, i2cr_scom_of_ids);
-+
-+static const struct fsi_device_id i2cr_scom_ids[] = {
-+	{ 0x5, FSI_VERSION_ANY },
-+	{ }
-+};
-+
-+static struct fsi_driver i2cr_scom_driver = {
-+	.id_table = i2cr_scom_ids,
-+	.drv = {
-+		.name = "i2cr_scom",
-+		.bus = &fsi_bus_type,
-+		.of_match_table = i2cr_scom_of_ids,
-+		.probe = i2cr_scom_probe,
-+		.remove = i2cr_scom_remove,
-+	}
-+};
-+
-+module_fsi_driver(i2cr_scom_driver);
-+
-+MODULE_AUTHOR("Eddie James <eajames@linux.ibm.com>");
-+MODULE_DESCRIPTION("IBM I2C Responder SCOM driver");
-+MODULE_LICENSE("GPL");
+ 	return __fsi_get_new_minor(fdev->slave, type, out_dev, out_index);
+ }
+ EXPORT_SYMBOL_GPL(fsi_get_new_minor);
 -- 
 2.31.1
 
