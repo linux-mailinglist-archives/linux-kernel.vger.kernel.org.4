@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A749C6A9A85
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D822A6A9A96
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjCCPXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 10:23:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S231297AbjCCP0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 10:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjCCPXC (ORCPT
+        with ESMTP id S231231AbjCCP0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 10:23:02 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661A4C66A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 07:23:01 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id p3-20020a17090ad30300b0023a1cd5065fso2615261pju.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 07:23:01 -0800 (PST)
+        Fri, 3 Mar 2023 10:26:34 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C0E2917F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 07:26:34 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id t22so2021492oiw.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 07:26:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677856981;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5kFGmiQs4hGB3dsTaclN/rSlgnX+dGLmiGsx43g87JM=;
-        b=ibTjnqNydigtkjuGTZ8oxgeIrUCESyIFqu2HZII0I47ZCpZpePGTEOwrccAEJtQ3ZW
-         8gEV9HlqX6vgKWl9gT/8uE55UeI4pK37AdnvPxW1boqQ1cgX2xVcDeAFtpzt9xjLVGCB
-         E76H0M7hwAuP1zo//OM73S2pV2/91tQgHydV10ETQ0JN0kYy0yiwPMZa45+iASy5mWhk
-         ZIw08AR8LeXCErc4uMFVoMP/NI45nYqjTsLrHypoPpsxd2cpYiQvNY5Rptv3AOWQq6s2
-         0gfbvs15WC/aNGXwE2xmu8LVyllaQzOoUs/ae4fNDxvikf1Y7TGOwa3TVtiPZCXPoqJD
-         Esxw==
+        d=chromium.org; s=google; t=1677857192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EEa5f5NbUQ9Kfmnp5btTdhemZ/7E/FPRRcXInOiUGEY=;
+        b=R178QZSgljLqAoKE9diLz27SuOjHRHaqnUVuigk6hXtWcHOUa29Uzkvnbem2imCsKF
+         V9nQTCpSScNtJe/ojpHvkGFURCn87QZPkGv7lZMrP10iTVCV0VcvlDyjYW2QXVbb2ZtM
+         yGy9Ynfjm3ggEUZVz8fcTmBAbV81IvGByaYZ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677856981;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5kFGmiQs4hGB3dsTaclN/rSlgnX+dGLmiGsx43g87JM=;
-        b=69iee+1mmPFFw7byoHA/hPn+W1Z07JngqxvzLHyTRqP40/ZXHdokPkf0dawGWvvfo6
-         vUCzG/zzVK9gLtcVVQWc3i9WD8yUp1o5dIWPpUm2W7ZOh1ADtErovE+uysx/o+Yl1PFk
-         47keSvqbG5lUQvXm09vh5VeFT4mQgGp0A1Q93XWQ5NbGGWBfS1M3C9Ykv8GNZ7Tbseac
-         gAXa6FznXb/ECi2oFIr17Ol5Rkg5OJUEY9VineSdMqXz0g+znqPzl+Lq91e7TjCuiJ4a
-         w05Pfg8sxpksTmU/tPO8dc1P+KKFhr0bQVDAdGshKq9/yTeiDfzmqwBI6yz4zYyNR+xo
-         m++g==
-X-Gm-Message-State: AO0yUKUIrqjNxn9o2dTMWfgNY3dpeg1FfcRWHyi7QyyvmtpWn07Jo6Dy
-        8HD+XD7D68dCstPxbFPzf5/EcQ==
-X-Google-Smtp-Source: AK7set8DydMAHy4wQVqZlksBBXv1wwVArVnKGPE6agOkluF9u0jqeeP0aC5cBDUvf+a4Myo6kXqRkQ==
-X-Received: by 2002:a17:903:2cd:b0:198:af50:e4e2 with SMTP id s13-20020a17090302cd00b00198af50e4e2mr250810plk.8.1677856980656;
-        Fri, 03 Mar 2023 07:23:00 -0800 (PST)
-Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id p22-20020aa78616000000b005d55225fc07sm1749768pfn.73.2023.03.03.07.22.59
+        d=1e100.net; s=20210112; t=1677857192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EEa5f5NbUQ9Kfmnp5btTdhemZ/7E/FPRRcXInOiUGEY=;
+        b=uQ6Mq91ZvH+Mx+A8e16ZhtwShoCyVlGejqj+yH5DhPFoRH5FfLlunab6/7/OWcH/rP
+         g2b+7PandmMNP9NsRbBs5/WMwG1zUpiWPkLDT4zy7hl7CwpuN6MwMS5MS0wBOTpusSte
+         fGuEn8jbvwMBLmVdzXvhUMe78ET8cBz7CTQcPLBov1OaAmBRc5ZrninGbVxfr5aYhHzZ
+         PHdu3+pMvewPmSsxJbCzoxstKJMOjIM8Rkxo2qD1iDZtCfsqbXhqieW0eUKAKqSDM57p
+         NYXhruVTtMsJMo3AO8vX6OMIAXXo4jeGB5bEFVGHvluPYXl67Z5KW2xBSThSEZIYIgi0
+         Xbcg==
+X-Gm-Message-State: AO0yUKV80VAMQ4eVEWDP8P2jk9EjfATygb9vcnRgAKhG20JVAWkmFYQu
+        f66DSEIHD3S8OUXdBWN7DCzEG1FgYYQoHmsqE9/NpQ==
+X-Google-Smtp-Source: AK7set+v1XbLGu0Af838tFwLLnH7TU3D50cVydeEOiqWBWrFk+9bROuPkSnJ5LccQoNZI/cKxWX93w==
+X-Received: by 2002:a05:6808:8e4:b0:383:b2bb:1212 with SMTP id d4-20020a05680808e400b00383b2bb1212mr864942oic.4.1677857192501;
+        Fri, 03 Mar 2023 07:26:32 -0800 (PST)
+Received: from jdenose34.roam.corp.google.com (99-137-158-190.lightspeed.cicril.sbcglobal.net. [99.137.158.190])
+        by smtp.gmail.com with ESMTPSA id i66-20020aca3b45000000b00383e9fa1eaasm980129oia.43.2023.03.03.07.26.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 07:23:00 -0800 (PST)
-Date:   Fri, 3 Mar 2023 07:22:56 -0800
-From:   Zach O'Keefe <zokeefe@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Stevens <stevensd@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH] mm/khugepaged: Cleanup memcg uncharge for failure path
-Message-ID: <20230303152256.a5z3wc2v6wri5ijy@google.com>
-References: <20230303151218.311015-1-peterx@redhat.com>
+        Fri, 03 Mar 2023 07:26:31 -0800 (PST)
+From:   Jonathan Denose <jdenose@chromium.org>
+X-Google-Original-From: Jonathan Denose <jdenose@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Jonathan Denose <jdenose@google.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH] Input: i8042 - Add quirk for Fujitsu Lifebook A574/H
+Date:   Fri,  3 Mar 2023 09:26:23 -0600
+Message-Id: <20230303152623.45859-1-jdenose@google.com>
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303151218.311015-1-peterx@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Peter!
+Fujitsu Lifebook A574/H requires the nomux option to properly
+probe the touchpad, especially when waking from sleep.
 
-On Mar 03 10:12, Peter Xu wrote:
-> Explicit memcg uncharging is not needed when the memcg accounting has the
-> same lifespan of the page/folio.  That becomes the case for khugepaged
-> after Yang & Zach's recent rework so the hpage will be allocated for each
-> collapse rather than being cached.
-> 
-> Cleanup the explicit memcg uncharge in khugepaged failure path and leave
-> that for put_page().
-> 
-> Suggested-by: Zach O'Keefe <zokeefe@google.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+Signed-off-by: Jonathan Denose <jdenose@google.com>
+---
 
-Reviewed-by: Zach O'Keefe <zokeefe@google.com>
+ drivers/input/serio/i8042-acpipnpio.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> ---
->  mm/khugepaged.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 941d1c7ea910..dd5a7d9bc593 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1230,10 +1230,8 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
->  out_up_write:
->  	mmap_write_unlock(mm);
->  out_nolock:
-> -	if (hpage) {
-> -		mem_cgroup_uncharge(page_folio(hpage));
-> +	if (hpage)
->  		put_page(hpage);
-> -	}
->  	trace_mm_collapse_huge_page(mm, result == SCAN_SUCCEED, result);
->  	return result;
->  }
-> @@ -2250,10 +2248,8 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
->  		unlock_page(hpage);
->  out:
->  	VM_BUG_ON(!list_empty(&pagelist));
-> -	if (hpage) {
-> -		mem_cgroup_uncharge(page_folio(hpage));
-> +	if (hpage)
->  		put_page(hpage);
-> -	}
->  
->  	trace_mm_khugepaged_collapse_file(mm, hpage, index, is_shmem, addr, file, nr, result);
->  	return result;
-> -- 
-> 2.39.1
-> 
+diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/i8042-acpipnpio.h
+index efc61736099b..fe7ffe30997c 100644
+--- a/drivers/input/serio/i8042-acpipnpio.h
++++ b/drivers/input/serio/i8042-acpipnpio.h
+@@ -610,6 +610,14 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+ 		},
+ 		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
+ 	},
++	{
++		/* Fujitsu Lifebook A574/H */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "FMVA0501PZ"),
++		},
++		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
++	},
+ 	{
+ 		/* Gigabyte M912 */
+ 		.matches = {
+-- 
+2.40.0.rc0.216.gc4246ad0f0-goog
+
