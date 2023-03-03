@@ -2,262 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB426A983A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CFB6A9844
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjCCNSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 08:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S230172AbjCCNWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 08:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCCNST (ORCPT
+        with ESMTP id S229698AbjCCNWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 08:18:19 -0500
-Received: from out-34.mta1.migadu.com (out-34.mta1.migadu.com [95.215.58.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8297D12863
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:18:17 -0800 (PST)
-Date:   Fri, 3 Mar 2023 21:18:12 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677849495;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FFxO8E9T+Oq0jzsBL8sdgu2TPlgHJxiXYlL0m/2CCdg=;
-        b=aUmankjUfaw4pEe073xYXgnsvgNTX2e21gTgc8XJq9NAajN7nc7Nt1FyxWWOmrOSt7PqsI
-        ChiopD3v99hqY1kFADi30Y2w+vCj57llTuhoj/Wyo0pP/CSSi6dvBVfldw7o5QBKhTXi9z
-        2wLjOSilAlP+F4IAUO09i7EVHqfPD7w=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>
-Cc:     Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915/gvt: Make use of idr_find and
- idr_for_each_entry in dmabuf
-Message-ID: <ZAHzlML6iAm/bgB2@chq-MS-7D45>
-References: <20230302115318.79487-1-cai.huoqing@linux.dev>
- <ZAGd0CeJ1OF6yCfg@debian-scheme>
+        Fri, 3 Mar 2023 08:22:05 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB2D5F511;
+        Fri,  3 Mar 2023 05:22:04 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3237R87M004261;
+        Fri, 3 Mar 2023 13:22:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ezmnzgleGoKIsUL8Pz0q/kFaBQ9AnYUqQ0G/Vtd+RuY=;
+ b=J0j2bz4drb7odBmZpgWtveEuyf9mdoOF8h30RjxpqUSrs20gUb6Trmh9ucqbcELuAW/i
+ 7a0fSIuhiMnCy6gRU/dRr5AUbHOsKuFjRbm2XyGGijIB6mTUG5OUs/Zmx33rdTyFO/2J
+ /haMD0ymcRCy+NzHMOf1geCkcc9ssplJ1q0TMnscZxZjHvIbXcGBykKFNJQ/rA4E2bJE
+ zEuXaVavljCuAWAGHzfr+cSPCCAiCNVEhWSABcsu82HyqMXe8c7ip0du40T0PsA6n8WN
+ Tb04Ai8qU3PMUHXvi5XiklogSSVe477zQHoTUsrnjwAawVU7axo3CHAz3pDOJn8WLUKz aA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2veeugbj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 13:22:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 323DLwM2024604
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Mar 2023 13:21:59 GMT
+Received: from [10.216.12.188] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 3 Mar 2023
+ 05:21:53 -0800
+Message-ID: <39f73580-f263-de0e-6819-89c3f4c75c3a@quicinc.com>
+Date:   Fri, 3 Mar 2023 18:51:49 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZAGd0CeJ1OF6yCfg@debian-scheme>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V2 4/6] regulator: qcom_smd: Add support to define the
+ bootup voltage
+To:     Mark Brown <broonie@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_srichara@quicinc.com>,
+        <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_ipkumar@quicinc.com>
+References: <20230217142030.16012-1-quic_devipriy@quicinc.com>
+ <20230217142030.16012-5-quic_devipriy@quicinc.com>
+ <907628d1-b88d-5ac6-ed9d-7f63e2875738@linaro.org>
+ <Y/aeu5ua7cY5cGON@sirena.org.uk>
+Content-Language: en-US
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <Y/aeu5ua7cY5cGON@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8bh5hIIS522p9i9Jqvw0VHcf-WtwcpkN
+X-Proofpoint-GUID: 8bh5hIIS522p9i9Jqvw0VHcf-WtwcpkN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_01,2023-03-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 mlxlogscore=999 impostorscore=0 bulkscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303030115
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03 3月 23 15:12:16, Zhenyu Wang wrote:
-> On 2023.03.02 19:53:18 +0800, Cai Huoqing wrote:
-> > This patch uses the already existing IDR mechanism to simplify
-> > and improve the dmabuf code.
-> > 
-> > Using 'vgpu.object_idr' directly instead of 'dmabuf_obj_list_head'
-> > or 'dmabuf.list', because the dmabuf_obj can be found by 'idr_find'
-> > or 'idr_for_each_entry'.
-> > 
-> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> > ---
-> >  drivers/gpu/drm/i915/gvt/dmabuf.c | 69 +++++++------------------------
-> >  drivers/gpu/drm/i915/gvt/dmabuf.h |  1 -
-> >  drivers/gpu/drm/i915/gvt/gvt.h    |  1 -
-> >  drivers/gpu/drm/i915/gvt/vgpu.c   |  1 -
-> >  4 files changed, 16 insertions(+), 56 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.c b/drivers/gpu/drm/i915/gvt/dmabuf.c
-> > index 6834f9fe40cf..7933bd843ae8 100644
-> > --- a/drivers/gpu/drm/i915/gvt/dmabuf.c
-> > +++ b/drivers/gpu/drm/i915/gvt/dmabuf.c
-> > @@ -133,21 +133,15 @@ static void dmabuf_gem_object_free(struct kref *kref)
-> >  	struct intel_vgpu_dmabuf_obj *obj =
-> >  		container_of(kref, struct intel_vgpu_dmabuf_obj, kref);
-> >  	struct intel_vgpu *vgpu = obj->vgpu;
-> > -	struct list_head *pos;
-> >  	struct intel_vgpu_dmabuf_obj *dmabuf_obj;
-> > +	int id;
-> >  
-> > -	if (vgpu && test_bit(INTEL_VGPU_STATUS_ACTIVE, vgpu->status) &&
-> > -	    !list_empty(&vgpu->dmabuf_obj_list_head)) {
-> > -		list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
-> > -			dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-> > -			if (dmabuf_obj == obj) {
-> > -				list_del(pos);
-> > -				idr_remove(&vgpu->object_idr,
-> > -					   dmabuf_obj->dmabuf_id);
-> > -				kfree(dmabuf_obj->info);
-> > -				kfree(dmabuf_obj);
-> > -				break;
-> > -			}
-> > +	if (vgpu && test_bit(INTEL_VGPU_STATUS_ACTIVE, vgpu->status)) {
-> > +		idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
-> > +			idr_remove(&vgpu->object_idr, id);
-> > +			kfree(dmabuf_obj->info);
-> > +			kfree(dmabuf_obj);
-> 
-> This is wrong, it is not to free all dmabuf objects, but just for target one.
-Indeed, I will use idr_find for the target.
-
-> 
-> > +			break;
-> >  		}
-> >  	} else {
-> >  		/* Free the orphan dmabuf_objs here */
-> > @@ -340,13 +334,11 @@ static struct intel_vgpu_dmabuf_obj *
-> >  pick_dmabuf_by_info(struct intel_vgpu *vgpu,
-> >  		    struct intel_vgpu_fb_info *latest_info)
-> >  {
-> > -	struct list_head *pos;
-> >  	struct intel_vgpu_fb_info *fb_info;
-> >  	struct intel_vgpu_dmabuf_obj *dmabuf_obj = NULL;
-> > -	struct intel_vgpu_dmabuf_obj *ret = NULL;
-> > +	int id;
-> >  
-> > -	list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
-> > -		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-> > +	idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
-> >  		if (!dmabuf_obj->info)
-> >  			continue;
-> >  
-> > @@ -357,31 +349,11 @@ pick_dmabuf_by_info(struct intel_vgpu *vgpu,
-> >  		    (fb_info->drm_format_mod == latest_info->drm_format_mod) &&
-> >  		    (fb_info->drm_format == latest_info->drm_format) &&
-> >  		    (fb_info->width == latest_info->width) &&
-> > -		    (fb_info->height == latest_info->height)) {
-> > -			ret = dmabuf_obj;
-> > -			break;
-> > -		}
-> 
-> Maybe just keep original code's use of extra ret to not include this cumbersome diff?
-Ok, will revert 'ret' related.
-
-Thanks,
-Cai-
-> 
-> > -	}
-> > -
-> > -	return ret;
-> > -}
-> > -
-> > -static struct intel_vgpu_dmabuf_obj *
-> > -pick_dmabuf_by_num(struct intel_vgpu *vgpu, u32 id)
-> > -{
-> > -	struct list_head *pos;
-> > -	struct intel_vgpu_dmabuf_obj *dmabuf_obj = NULL;
-> > -	struct intel_vgpu_dmabuf_obj *ret = NULL;
-> > -
-> > -	list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
-> > -		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-> > -		if (dmabuf_obj->dmabuf_id == id) {
-> > -			ret = dmabuf_obj;
-> > -			break;
-> > -		}
-> > +		    (fb_info->height == latest_info->height))
-> > +			return dmabuf_obj;
-> >  	}
-> >  
-> > -	return ret;
-> > +	return dmabuf_obj;
-> >  }
-> >  
-> >  static void update_fb_info(struct vfio_device_gfx_plane_info *gvt_dmabuf,
-> > @@ -477,11 +449,6 @@ int intel_vgpu_query_plane(struct intel_vgpu *vgpu, void *args)
-> >  
-> >  	update_fb_info(gfx_plane_info, &fb_info);
-> >  
-> > -	INIT_LIST_HEAD(&dmabuf_obj->list);
-> > -	mutex_lock(&vgpu->dmabuf_lock);
-> > -	list_add_tail(&dmabuf_obj->list, &vgpu->dmabuf_obj_list_head);
-> > -	mutex_unlock(&vgpu->dmabuf_lock);
-> > -
-> >  	gvt_dbg_dpy("vgpu%d: %s new dmabuf_obj ref %d, id %d\n", vgpu->id,
-> >  		    __func__, kref_read(&dmabuf_obj->kref), ret);
-> >  
-> > @@ -508,7 +475,7 @@ int intel_vgpu_get_dmabuf(struct intel_vgpu *vgpu, unsigned int dmabuf_id)
-> >  
-> >  	mutex_lock(&vgpu->dmabuf_lock);
-> >  
-> > -	dmabuf_obj = pick_dmabuf_by_num(vgpu, dmabuf_id);
-> > +	dmabuf_obj = idr_find(&vgpu->object_idr, dmabuf_id);
-> >  	if (dmabuf_obj == NULL) {
-> >  		gvt_vgpu_err("invalid dmabuf id:%d\n", dmabuf_id);
-> >  		ret = -EINVAL;
-> > @@ -570,23 +537,19 @@ int intel_vgpu_get_dmabuf(struct intel_vgpu *vgpu, unsigned int dmabuf_id)
-> >  
-> >  void intel_vgpu_dmabuf_cleanup(struct intel_vgpu *vgpu)
-> >  {
-> > -	struct list_head *pos, *n;
-> >  	struct intel_vgpu_dmabuf_obj *dmabuf_obj;
-> > +	int id;
-> >  
-> >  	mutex_lock(&vgpu->dmabuf_lock);
-> > -	list_for_each_safe(pos, n, &vgpu->dmabuf_obj_list_head) {
-> > -		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-> > +	idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
-> >  		dmabuf_obj->vgpu = NULL;
-> >  
-> > -		idr_remove(&vgpu->object_idr, dmabuf_obj->dmabuf_id);
-> > -		list_del(pos);
-> > -
-> > +		idr_remove(&vgpu->object_idr, id);
-> >  		/* dmabuf_obj might be freed in dmabuf_obj_put */
-> >  		if (dmabuf_obj->initref) {
-> >  			dmabuf_obj->initref = false;
-> >  			dmabuf_obj_put(dmabuf_obj);
-> >  		}
-> > -
-> >  	}
-> >  	mutex_unlock(&vgpu->dmabuf_lock);
-> >  }
-> > diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.h b/drivers/gpu/drm/i915/gvt/dmabuf.h
-> > index 3dcdb6570eda..93c0e00bdab9 100644
-> > --- a/drivers/gpu/drm/i915/gvt/dmabuf.h
-> > +++ b/drivers/gpu/drm/i915/gvt/dmabuf.h
-> > @@ -57,7 +57,6 @@ struct intel_vgpu_dmabuf_obj {
-> >  	__u32 dmabuf_id;
-> >  	struct kref kref;
-> >  	bool initref;
-> > -	struct list_head list;
-> >  };
-> >  
-> >  int intel_vgpu_query_plane(struct intel_vgpu *vgpu, void *args);
-> > diff --git a/drivers/gpu/drm/i915/gvt/gvt.h b/drivers/gpu/drm/i915/gvt/gvt.h
-> > index 2d65800d8e93..1100c789f207 100644
-> > --- a/drivers/gpu/drm/i915/gvt/gvt.h
-> > +++ b/drivers/gpu/drm/i915/gvt/gvt.h
-> > @@ -211,7 +211,6 @@ struct intel_vgpu {
-> >  
-> >  	struct dentry *debugfs;
-> >  
-> > -	struct list_head dmabuf_obj_list_head;
-> >  	struct mutex dmabuf_lock;
-> >  	struct idr object_idr;
-> >  	struct intel_vgpu_vblank_timer vblank_timer;
-> > diff --git a/drivers/gpu/drm/i915/gvt/vgpu.c b/drivers/gpu/drm/i915/gvt/vgpu.c
-> > index 08ad1bd651f1..0a511cfef067 100644
-> > --- a/drivers/gpu/drm/i915/gvt/vgpu.c
-> > +++ b/drivers/gpu/drm/i915/gvt/vgpu.c
-> > @@ -329,7 +329,6 @@ int intel_gvt_create_vgpu(struct intel_vgpu *vgpu,
-> >  	vgpu->sched_ctl.weight = conf->weight;
-> >  	mutex_init(&vgpu->vgpu_lock);
-> >  	mutex_init(&vgpu->dmabuf_lock);
-> > -	INIT_LIST_HEAD(&vgpu->dmabuf_obj_list_head);
-> >  	INIT_RADIX_TREE(&vgpu->page_track_tree, GFP_KERNEL);
-> >  	idr_init_base(&vgpu->object_idr, 1);
-> >  	intel_vgpu_init_cfg_space(vgpu, 1);
-> > -- 
-> > 2.34.1
-> > 
 
 
+On 2/23/2023 4:31 AM, Mark Brown wrote:
+> On Wed, Feb 22, 2023 at 11:11:42PM +0100, Konrad Dybcio wrote:
+> 
+>> Thinking about it again, this seems like something that could be
+>> generalized and introduced into regulator core.. Hardcoding this
+>> will not end well.. Not to mention it'll affect all mp5496-using
+>> boards that are already upstream.
+> 
+>> WDYT about regulator-init-microvolts Mark?
+> 
+> The overwhelming majority of devices that have variable voltages
+> support readback, these Qualcomm firmware devices are pretty much
+> unique in this regard.  We don't want a general property to set a
+> specific voltage since normally we should be using the
+> constraints and don't normally need to adjust things immediately
+> since we can tell what the current voltage is.
+> 
+> This is pretty much just going to be a device specific bodge,
+> ideally something that does know what the voltage is would be
+> able to tell us at runtime but if that's not possible then
+> there's no good options.  If the initial voltage might vary based
+> on board then a device specific DT property might be less
+> terrible, if it's determined by the regulator the current code
+> seems fine.  Or just leave the current behavour, if the
+> constraints are accurate then hopefully a temporary dip in
+> voltage is just inelegant rather than an issue.  Indeed the
+> current behaviour might well save power if you've got a voltage
+> range configured and nothing actually ever gets round to setting
+> the voltage (which is depressingly common, people seem keen on
+> setting voltage ranges even when the voltage is never varied in
+> practice).
+
+Hi Mark, The initial bootup voltage is actually blown into the OTP 
+register of the PMIC and it remains the same across boards for IPQ9574 
+SoC. Initially the SoC runs at 800MHz with a voltage of 875mV set by the 
+bootloaders. As kernel does not know the initial voltage, during 
+regulator registration the framework considers the current voltage to be 
+zero and tries to bring up the regulator to minimum supported voltage of 
+600mV. This causes the dip which might be of concern in SS parts where 
+the voltage might be insufficient leading to silent reboots.
+
+Best Regards,
+Devi Priya
