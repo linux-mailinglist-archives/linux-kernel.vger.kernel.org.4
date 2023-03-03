@@ -2,90 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD4B6A9B84
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BC36A9B87
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjCCQTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 11:19:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S230305AbjCCQTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 11:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbjCCQTV (ORCPT
+        with ESMTP id S231290AbjCCQTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:19:21 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2ED414480
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:19:08 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id bj30so2173758oib.6
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 08:19:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677860348;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e/r0L/PAnS5fOVQg6qj0+2DIJq2t1BxWauF5ORbF6tY=;
-        b=DmNnblxP5EQUIa/UThzd65X32kBgW2u0dAfqHsuYaH5+kAZKvrWLXq+Gz0PWjTTesp
-         tqcNNTNf+4hQNkRZeXiTZmxYADIGsfPgmNRp4Z9OUcOa7c0YGnikMIVxydyFWWHnMG4b
-         6y7JqopRo7VYTj7Nm9EKJR57EwjmGVFKz7biuRSlq82FM19KifGti9Z7elua7eBJFkJN
-         qrOzntW+e0+2ml4jxiUZKHNUde3yWmPIWytziwE24bG6MyqCPZK0eLwZvprwqvGBB4y5
-         mtK1zpT5mSDex4wCLsIZh8OTacCwwSBlbqcnJB5T2ya/NJJczARnOMcA46fhKgrbhMOK
-         StKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677860348;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e/r0L/PAnS5fOVQg6qj0+2DIJq2t1BxWauF5ORbF6tY=;
-        b=nmqQLix7quXjfWfcW3NcyG/Hjb9KfTQYJXGkmu7qajXMJqf9F6DkQXWeETlYIGf64U
-         PA0Il2xvdPlaMMdf8NqFqTSCbLx9AIVWCbCPABRpegnR17d6uMprfz5tGTL+sFgVFVg0
-         pAHxfsfmTR20sFE6WjIFs1QHyvbvlUnHCCln5JoKhSfsbuw/eHYa8wCujpRGcagdz0Ja
-         9ylmjKhyq6tx69m4VXjTBE1o6ixWAm7Xj/nrx5tljd1S+BKF6pZr3NqCHQ1KzIEThicl
-         0WASAHS5Fb1fE2hUNm/5okZkFV7M69Qhq9DY9zsc9o6vqjIGy4OeVPP0ZVcN8UTl/I7e
-         1Cgw==
-X-Gm-Message-State: AO0yUKWOSm+7waUObbNcRnU8rSo1+t1EkgO0XUAcYFA8oenwRulotVcJ
-        r0ZHdRSMxoN+WB3R0nUCebedGk+ntonoYx5H85E=
-X-Google-Smtp-Source: AK7set+B74UcFmJ8Z+NFBcV7N/VSAyfGZHxF9UdTs4Mu2LsnXCgzMOzLTP6LtQIZP+pnUz/bEn2Cebp6ojFP6bIopLI=
-X-Received: by 2002:a05:6808:2208:b0:37a:2bed:5756 with SMTP id
- bd8-20020a056808220800b0037a2bed5756mr3146197oib.0.1677860348339; Fri, 03 Mar
- 2023 08:19:08 -0800 (PST)
+        Fri, 3 Mar 2023 11:19:30 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84F323679;
+        Fri,  3 Mar 2023 08:19:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677860355; x=1709396355;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ek6XqKRjAwHSqFxYlwA0ot0sijMnK5XWyd+WPWb4jEI=;
+  b=a9qjSxGbbAcYO710Lon2yPUdH9349k+XLd5B9E+VTThmfPWktSN39wUn
+   67dWczqj7r8DDveqYxC7JXwodf7V/hH+Il1QJfcuErKz/IOAFNMGQelXV
+   Gy5JVXav2O/s8PDzR7JJVutj93LqCBKefIYBmTZipu5S/cSOKf3iKBlJa
+   906bcQiZEpNzTkr6c2V1D+O5zkPzs+Rx5b/xF9gJjPfe0yPvEZus+veR+
+   TfhQF4gEJC+Tb24fLQqaKIx3CbbbhGwy9pkGGwWR/mK0lV9l1Jshu43dc
+   GT3ujsrHsbXb/jTSoGX4YwguPw3kgRUFfMbyZxDzumbCCB7i/+JPUri7E
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="397667308"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="397667308"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 08:19:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="675425096"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="675425096"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga002.jf.intel.com with ESMTP; 03 Mar 2023 08:19:14 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] thermal: int340x: processor_thermal: Fix deadlock
+Date:   Fri,  3 Mar 2023 08:19:09 -0800
+Message-Id: <20230303161910.3195805-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Received: by 2002:a05:6358:2781:b0:eb:dfa:ec3d with HTTP; Fri, 3 Mar 2023
- 08:19:07 -0800 (PST)
-Reply-To: georgebrownhoward02@gmail.com
-From:   georgebrownhoward <mrsblessingkoffi04@gmail.com>
-Date:   Fri, 3 Mar 2023 17:19:07 +0100
-Message-ID: <CALh=pzWKtcBEFbzyxkSTV+LNgwT_7CpH1MqYP-+w61q6yWBH1w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ahoj
+From: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
 
-Jmenuji se George Brown, povol=C3=A1n=C3=ADm jsem pr=C3=A1vn=C3=ADk. Chci v=
-=C3=A1m nab=C3=ADdnout
-nejbli=C5=BE=C5=A1=C3=AD p=C5=99=C3=ADbuzn=C3=BD m=C3=A9ho klienta. Zd=C4=
-=9Bd=C3=ADte =C4=8D=C3=A1stku (8,5 milionu $)
-dolar=C5=AF, kter=C3=A9 m=C5=AFj klient nechal v bance p=C5=99ed svou smrt=
-=C3=AD.
+When user space updates the trip point there is a deadlock, which results
+in caller gets blocked forever.
 
-M=C5=AFj klient je ob=C4=8Dan va=C5=A1=C3=AD zem=C4=9B, kter=C3=BD zem=C5=
-=99el p=C5=99i autonehod=C4=9B se svou =C5=BEenou
-a jedin=C3=BD syn. Budu m=C3=ADt n=C3=A1rok na 50 % z celkov=C3=A9ho fondu,=
- zat=C3=ADmco 50 % ano
-b=C3=BDt pro tebe.
-Pro v=C3=ADce informac=C3=AD pros=C3=ADm kontaktujte m=C5=AFj soukrom=C3=BD=
- e-mail zde:
-georgebrown0004@gmail.com
+Commit 05eeee2b51b4 ("thermal/core: Protect sysfs accesses to thermal
+operations with thermal zone mutex"), added a mutex for tz->lock in the
+function trip_point_temp_store(). Hence, trip set callback() can't
+call any thermal zone API as they are protected with the same mutex lock.
 
-P=C5=99edem d=C4=9Bkuji,
-Pane George Browne,
+The callback here calling thermal_zone_device_enable(), which will result
+in deadlock.
+
+Move the thermal_zone_device_enable() to proc_thermal_pci_probe() to
+avoid this deadlock.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Cc: stable@vger.kernel.org
+---
+The commit which caused this issue was added during v6.2 cycle.
+
+ .../intel/int340x_thermal/processor_thermal_device_pci.c     | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index bf1b1cdfade4..acc11ad56975 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -194,7 +194,6 @@ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp
+ 	proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_THRES_0, _temp);
+ 	proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 1);
+ 
+-	thermal_zone_device_enable(tzd);
+ 	pci_info->stored_thres = temp;
+ 
+ 	return 0;
+@@ -277,6 +276,10 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
+ 		goto err_free_vectors;
+ 	}
+ 
++	ret = thermal_zone_device_enable(pci_info->tzone);
++	if (ret)
++		goto err_free_vectors;
++
+ 	return 0;
+ 
+ err_free_vectors:
+-- 
+2.34.1
+
