@@ -2,154 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D915E6A903F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 05:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 460A66A9041
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 05:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCCEar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 23:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S229608AbjCCEbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 23:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjCCEao (ORCPT
+        with ESMTP id S229586AbjCCEbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 23:30:44 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F88822DEF;
-        Thu,  2 Mar 2023 20:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1677817838; bh=ACQD43d0AOgkJQffrIDqolBmi9goAho/+WKSzK28JHw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=A3u/I/aMYzg9Gpt2xqwDquEnREVnd7wJ7DjrO8gl/hCULrx7vJNrhhqf0yXC8OUI5
-         alWcN/sIq62gRLOb+3laHDDGrnRRYsKDI7IGy7tJU36D5yc7OjloJqr2RBS9t16OyN
-         y4lP6YaDFr2EogAWE955R+cHNMNetK72M8YZU1w8=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E0C4560087;
-        Fri,  3 Mar 2023 12:30:37 +0800 (CST)
-Message-ID: <8b82786b-d810-a3c0-7919-e602e9e53de5@xen0n.name>
-Date:   Fri, 3 Mar 2023 12:30:36 +0800
+        Thu, 2 Mar 2023 23:31:11 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA1430B14
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 20:31:08 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so4963703pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 20:31:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677817868;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nluhokzZIdfUCFwkY0qQDl9mqZxSwoOfjFeFL6kIP6U=;
+        b=EFCLbHIdHgae3+6oY4bZyJSYTHH6OzxMtjVVrVUwcc/mQk+Mg6nb0sd9VTJ/U33eHo
+         dIfG4HS8FAcNtszk/xeNyGOLVEBcwzA4UGX7AAz2yM+GcLMHUQArrEp0KNlZwDnEjDzJ
+         8L38PifeLo7PA2wtsXUw+kXRx3vatkV1L9aj4C6KE1nhZkRV+ns7UkeqliVYidzIiGKh
+         Vr0U/r5BS1IwQFCbPxNgkw78xPFjEjTgcH14PpHXCf54YPHUMjnua1tnDTsHTQ4g/nLS
+         WSiqFcLqyTmxlhz2wRnm3QKwcSz2d8BLsBWfVtv0KPLiTipCQhJf4mwRoR5r3BokBbOV
+         TIyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677817868;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nluhokzZIdfUCFwkY0qQDl9mqZxSwoOfjFeFL6kIP6U=;
+        b=agLDdLE6cSTanrUJOp2mMA26cXUtAdbleUVOh5jDKJyTlJJGOGxz1c5G/VQmPva8RP
+         B9a2uDOz3ipuwPhLO5C0rdEvfzYPOQgPgRW3yYdipS4jenqsVjp8mipMOs/YuyQoMWyJ
+         /2kMxWiGB7UkaaN0m+8ezAZZxyEcwQuqbpUhN4At51xZTlXCof/lEoZL4ctzgSvs3ve+
+         SP2+fZz4guCsngNqgouLFS8B1B+EyCncaYWNQHYmMAh3uNqGjBhoMPmWGiOdxFixcHSb
+         RTS/6kF+QUAbfaUlWhP202t5rO+YqyITyuLhaxtfQc5zurNcpa9ovyRzLXi/tRnUQyfw
+         //zg==
+X-Gm-Message-State: AO0yUKUt0YreMIoPQaqg9DwdFoBt+plp1XCLhXKYRYfDSbF7E4cToEeK
+        ab9vdKXExeZai/oXpYJeUadzw7+MeFUZsZht2xyLdw==
+X-Google-Smtp-Source: AK7set+IFUAmsXFjvDCNiLbyLJEFEXKvKFpfoF+rTUh5RnAKunx2km5L53GaU7dqhD+GJQbh4YAIMYoj8dHFzVxz18c=
+X-Received: by 2002:a17:90a:4109:b0:22c:89b:5a8d with SMTP id
+ u9-20020a17090a410900b0022c089b5a8dmr91367pjf.6.1677817867772; Thu, 02 Mar
+ 2023 20:31:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] LoongArch: Fix the CRC32 feature probing
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <20230303002508.2891681-1-chenhuacai@loongson.cn>
- <480ab341-6437-e409-8779-c4938924fd64@xen0n.name>
- <CAAhV-H7NYCdqXGwvmVqR8Njw=kDpBdCq+QRzPFGxR5zjHcdZ9g@mail.gmail.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAAhV-H7NYCdqXGwvmVqR8Njw=kDpBdCq+QRzPFGxR5zjHcdZ9g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-9-rananta@google.com>
+In-Reply-To: <20230215010717.3612794-9-rananta@google.com>
+From:   Reiji Watanabe <reijiw@google.com>
+Date:   Thu, 2 Mar 2023 20:30:51 -0800
+Message-ID: <CAAeT=Fzww3z1Y47gZjmeU0p+fK=gxiqNx5DHGcu4109B7DWi4A@mail.gmail.com>
+Subject: Re: [REPOST PATCH 08/16] selftests: KVM: aarch64: Consider PMU event
+ filters for VM creation
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/3 11:55, Huacai Chen wrote:
-> Hi, Xuerui,
-> 
-> On Fri, Mar 3, 2023 at 11:15 AM WANG Xuerui <kernel@xen0n.name> wrote:
->>
->> On 2023/3/3 08:25, Huacai Chen wrote:
->>> Not all LoongArch processors support CRC32 instructions, and this feature
->>> is indicated by CPUCFG1.CRC32 (Bit25). This bit is wrongly defined in loongarch.h
->>
->> The ISA manual suggests it's IOCSR_BRD (likely "IOCSR Branding"). You
->> have to somehow reconcile the two, either by fixing the manuals, or
->> mention here explicitly that the manual is wrong. (Actually thinking
->> about it harder now, you may be in fact re-purposing the IOCSR_BRD field
->> for CRC32 capability, because all LoongArch cores in existence are
->> designed by Loongson, and you may very well know that all cores
->> supporting CRC32 have this bit set, and those not having CRC32 haven't.
->> If that's the case, please explicitly document this reasoning too.)
-> The ISA manual has been modified and will be released soon.
+Hi Raghu,
 
-I'm wary of Loongson official statements like this but let's see... 
-meanwhile the commit message and/or comments could be improved 
-nevertheless, to provide more background.
+On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
+<rananta@google.com> wrote:
+>
+> Accept a list of KVM PMU event filters as an argument while creating
+> a VM via create_vpmu_vm(). Upcoming patches would leverage this to
+> test the event filters' functionality.
+>
+> No functional change intended.
+>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  .../testing/selftests/kvm/aarch64/vpmu_test.c | 64 +++++++++++++++++--
+>  1 file changed, 60 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/test=
+ing/selftests/kvm/aarch64/vpmu_test.c
+> index 15aebc7d7dc94..2b3a4fa3afa9c 100644
+> --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> @@ -15,10 +15,14 @@
+>  #include <vgic.h>
+>  #include <asm/perf_event.h>
+>  #include <linux/bitfield.h>
+> +#include <linux/bitmap.h>
+>
+>  /* The max number of the PMU event counters (excluding the cycle counter=
+) */
+>  #define ARMV8_PMU_MAX_GENERAL_COUNTERS (ARMV8_PMU_MAX_COUNTERS - 1)
+>
+> +/* The max number of event numbers that's supported */
+> +#define ARMV8_PMU_MAX_EVENTS           64
 
-Also I've just noticed the patch title sounds unnatural too. "Fix 
-probing of the CRC32 feature" or dropping "the" from the current wording 
-sounds better IMO.
+The name and the comment would be a bit misleading.
+(This sounds like a max number of events that are supported by ARMv8)
 
->>> and CRC32 is set unconditionally now, so fix it.
->>>
->>> BTW, expose the CRC32 feature in /proc/cpuinfo.
->>>
->>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->>> ---
->>>    arch/loongarch/include/asm/cpu-features.h |  1 +
->>>    arch/loongarch/include/asm/cpu.h          | 40 ++++++++++++-----------
->>>    arch/loongarch/include/asm/loongarch.h    |  2 +-
->>>    arch/loongarch/kernel/cpu-probe.c         |  7 +++-
->>>    arch/loongarch/kernel/proc.c              |  1 +
->>>    5 files changed, 30 insertions(+), 21 deletions(-)
->>>
->>> diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/include/asm/cpu-features.h
->>> index b07974218393..f6177f133477 100644
->>> --- a/arch/loongarch/include/asm/cpu-features.h
->>> +++ b/arch/loongarch/include/asm/cpu-features.h
->>> @@ -42,6 +42,7 @@
->>>    #define cpu_has_fpu         cpu_opt(LOONGARCH_CPU_FPU)
->>>    #define cpu_has_lsx         cpu_opt(LOONGARCH_CPU_LSX)
->>>    #define cpu_has_lasx                cpu_opt(LOONGARCH_CPU_LASX)
->>> +#define cpu_has_crc32                cpu_opt(LOONGARCH_CPU_CRC32)
->>>    #define cpu_has_complex             cpu_opt(LOONGARCH_CPU_COMPLEX)
->>>    #define cpu_has_crypto              cpu_opt(LOONGARCH_CPU_CRYPTO)
->>>    #define cpu_has_lvz         cpu_opt(LOONGARCH_CPU_LVZ)
->>> diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/asm/cpu.h
->>> index c3da91759472..ca9e2be571ec 100644
->>> --- a/arch/loongarch/include/asm/cpu.h
->>> +++ b/arch/loongarch/include/asm/cpu.h
->>> @@ -78,25 +78,26 @@ enum cpu_type_enum {
->>>    #define CPU_FEATURE_FPU                     3       /* CPU has FPU */
->>>    #define CPU_FEATURE_LSX                     4       /* CPU has LSX (128-bit SIMD) */
->>>    #define CPU_FEATURE_LASX            5       /* CPU has LASX (256-bit SIMD) */
->>> -#define CPU_FEATURE_COMPLEX          6       /* CPU has Complex instructions */
->>> -#define CPU_FEATURE_CRYPTO           7       /* CPU has Crypto instructions */
->>> -#define CPU_FEATURE_LVZ                      8       /* CPU has Virtualization extension */
->>> -#define CPU_FEATURE_LBT_X86          9       /* CPU has X86 Binary Translation */
->>> -#define CPU_FEATURE_LBT_ARM          10      /* CPU has ARM Binary Translation */
->>> -#define CPU_FEATURE_LBT_MIPS         11      /* CPU has MIPS Binary Translation */
->>> -#define CPU_FEATURE_TLB                      12      /* CPU has TLB */
->>> -#define CPU_FEATURE_CSR                      13      /* CPU has CSR */
->>> -#define CPU_FEATURE_WATCH            14      /* CPU has watchpoint registers */
->>> -#define CPU_FEATURE_VINT             15      /* CPU has vectored interrupts */
->>> -#define CPU_FEATURE_CSRIPI           16      /* CPU has CSR-IPI */
->>> -#define CPU_FEATURE_EXTIOI           17      /* CPU has EXT-IOI */
->>> -#define CPU_FEATURE_PREFETCH         18      /* CPU has prefetch instructions */
->>> -#define CPU_FEATURE_PMP                      19      /* CPU has perfermance counter */
->>> -#define CPU_FEATURE_SCALEFREQ                20      /* CPU supports cpufreq scaling */
->>> -#define CPU_FEATURE_FLATMODE         21      /* CPU has flat mode */
->>> -#define CPU_FEATURE_EIODECODE                22      /* CPU has EXTIOI interrupt pin decode mode */
->>> -#define CPU_FEATURE_GUESTID          23      /* CPU has GuestID feature */
->>> -#define CPU_FEATURE_HYPERVISOR               24      /* CPU has hypervisor (running in VM) */
->>> +#define CPU_FEATURE_CRC32            6       /* CPU has Complex instructions */
->>
->> "CPU has CRC32 instructions".
->>
->> Also, the diff damage is real, is there any reason this must come here
->> and not last? To me "aesthetics" is not enough to justify such a diff
->> damage.
-> To keep CPU_FEATURE and elf_hwcap in the same order.
+Perhaps 'MAX_EVENT_FILTER_BITS' would be more clear ?
 
-IMO they don't have to. You could split into two commits so the mass 
-reordering could happen separately, making each change nicely focused.
 
--- 
-WANG "xen0n" Xuerui
+> +
+>  /*
+>   * The macros and functions below for reading/writing PMEV{CNTR,TYPER}<n=
+>_EL0
+>   * were basically copied from arch/arm64/kernel/perf_event.c.
+> @@ -224,6 +228,8 @@ struct pmc_accessor pmc_accessors[] =3D {
+>         { read_sel_evcntr, write_pmevcntrn, read_sel_evtyper, write_pmevt=
+ypern },
+>  };
+>
+> +#define MAX_EVENT_FILTERS_PER_VM 10
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+(Looking at just this patch,) it appears 'PER_VM' in the name
+might be rather misleading ?
 
+> +
+>  #define INVALID_EC     (-1ul)
+>  uint64_t expected_ec =3D INVALID_EC;
+>  uint64_t op_end_addr;
+> @@ -232,6 +238,7 @@ struct vpmu_vm {
+>         struct kvm_vm *vm;
+>         struct kvm_vcpu *vcpu;
+>         int gic_fd;
+> +       unsigned long *pmu_filter;
+>  };
+>
+>  enum test_stage {
+> @@ -541,8 +548,51 @@ static void guest_code(void)
+>  #define GICD_BASE_GPA  0x8000000ULL
+>  #define GICR_BASE_GPA  0x80A0000ULL
+>
+> +static unsigned long *
+> +set_event_filters(struct kvm_vcpu *vcpu, struct kvm_pmu_event_filter *pm=
+u_event_filters)
+
+Can you add a comment that explains the function ?
+(especially for @pmu_event_filters and the return value ?)
+
+> +{
+> +       int j;
+> +       unsigned long *pmu_filter;
+> +       struct kvm_device_attr filter_attr =3D {
+> +               .group =3D KVM_ARM_VCPU_PMU_V3_CTRL,
+> +               .attr =3D KVM_ARM_VCPU_PMU_V3_FILTER,
+> +       };
+> +
+> +       /*
+> +        * Setting up of the bitmap is similar to what KVM does.
+> +        * If the first filter denys an event, default all the others to =
+allow, and vice-versa.
+> +        */
+> +       pmu_filter =3D bitmap_zalloc(ARMV8_PMU_MAX_EVENTS);
+> +       TEST_ASSERT(pmu_filter, "Failed to allocate the pmu_filter");
+> +
+> +       if (pmu_event_filters[0].action =3D=3D KVM_PMU_EVENT_DENY)
+> +               bitmap_fill(pmu_filter, ARMV8_PMU_MAX_EVENTS);
+> +
+> +       for (j =3D 0; j < MAX_EVENT_FILTERS_PER_VM; j++) {
+> +               struct kvm_pmu_event_filter *pmu_event_filter =3D &pmu_ev=
+ent_filters[j];
+> +
+> +               if (!pmu_event_filter->nevents)
+
+What does this mean ? (the end of the valid entry in the array ?)
+
+
+> +                       break;
+> +
+> +               pr_debug("Applying event filter:: event: 0x%x; action: %s=
+\n",
+> +                               pmu_event_filter->base_event,
+> +                               pmu_event_filter->action =3D=3D KVM_PMU_E=
+VENT_ALLOW ? "ALLOW" : "DENY");
+> +
+> +               filter_attr.addr =3D (uint64_t) pmu_event_filter;
+> +               vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &filter_attr);
+> +
+> +               if (pmu_event_filter->action =3D=3D KVM_PMU_EVENT_ALLOW)
+> +                       __set_bit(pmu_event_filter->base_event, pmu_filte=
+r);
+> +               else
+> +                       __clear_bit(pmu_event_filter->base_event, pmu_fil=
+ter);
+> +       }
+> +
+> +       return pmu_filter;
+> +}
+> +
+>  /* Create a VM that has one vCPU with PMUv3 configured. */
+> -static struct vpmu_vm *create_vpmu_vm(void *guest_code)
+> +static struct vpmu_vm *
+> +create_vpmu_vm(void *guest_code, struct kvm_pmu_event_filter *pmu_event_=
+filters)
+>  {
+>         struct kvm_vm *vm;
+>         struct kvm_vcpu *vcpu;
+> @@ -586,6 +636,9 @@ static struct vpmu_vm *create_vpmu_vm(void *guest_cod=
+e)
+>                     "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pm=
+uver);
+>
+>         /* Initialize vPMU */
+> +       if (pmu_event_filters)
+> +               vpmu_vm->pmu_filter =3D set_event_filters(vcpu, pmu_event=
+_filters);
+> +
+>         vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
+>         vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
+>
+> @@ -594,6 +647,8 @@ static struct vpmu_vm *create_vpmu_vm(void *guest_cod=
+e)
+>
+>  static void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm)
+>  {
+> +       if (vpmu_vm->pmu_filter)
+> +               bitmap_free(vpmu_vm->pmu_filter);
+>         close(vpmu_vm->gic_fd);
+>         kvm_vm_free(vpmu_vm->vm);
+>         free(vpmu_vm);
+> @@ -631,7 +686,7 @@ static void run_counter_access_test(uint64_t pmcr_n)
+>         guest_data.expected_pmcr_n =3D pmcr_n;
+>
+>         pr_debug("Test with pmcr_n %lu\n", pmcr_n);
+> -       vpmu_vm =3D create_vpmu_vm(guest_code);
+> +       vpmu_vm =3D create_vpmu_vm(guest_code, NULL);
+>         vcpu =3D vpmu_vm->vcpu;
+>
+>         /* Save the initial sp to restore them later to run the guest aga=
+in */
+> @@ -676,7 +731,7 @@ static void run_counter_access_error_test(uint64_t pm=
+cr_n)
+>         guest_data.expected_pmcr_n =3D pmcr_n;
+>
+>         pr_debug("Error test with pmcr_n %lu (larger than the host)\n", p=
+mcr_n);
+> -       vpmu_vm =3D create_vpmu_vm(guest_code);
+> +       vpmu_vm =3D create_vpmu_vm(guest_code, NULL);
+>         vcpu =3D vpmu_vm->vcpu;
+>
+>         /* Update the PMCR_EL0.N with @pmcr_n */
+> @@ -719,9 +774,10 @@ static uint64_t get_pmcr_n_limit(void)
+>         struct vpmu_vm *vpmu_vm;
+>         uint64_t pmcr;
+>
+> -       vpmu_vm =3D create_vpmu_vm(guest_code);
+> +       vpmu_vm =3D create_vpmu_vm(guest_code, NULL);
+>         vcpu_get_reg(vpmu_vm->vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), &pmc=
+r);
+>         destroy_vpmu_vm(vpmu_vm);
+> +
+>         return FIELD_GET(ARMV8_PMU_PMCR_N, pmcr);
+>  }
+
+Thank you,
+Reiji
+
+
+>
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
