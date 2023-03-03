@@ -2,134 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961386AA4A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8C26AA418
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbjCCWki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 17:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S233709AbjCCWU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 17:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232160AbjCCWj1 (ORCPT
+        with ESMTP id S232383AbjCCWUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 17:39:27 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9DF93F7
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 14:38:14 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYDaM-0007X5-7q; Fri, 03 Mar 2023 23:09:06 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYDaF-001eHQ-77; Fri, 03 Mar 2023 23:08:59 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYDaE-001xZG-GT; Fri, 03 Mar 2023 23:08:58 +0100
-Date:   Fri, 3 Mar 2023 23:08:56 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-mtd@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
-        Crt Mori <cmo@melexis.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Fri, 3 Mar 2023 17:20:40 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8203EEB7E;
+        Fri,  3 Mar 2023 14:12:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1677881560; x=1709417560;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gBGQIz/KK+1MKmUrNx1EnCdZxItixQoWNB8185256gE=;
+  b=lZW/QdXXTQvSGd3vjXKIwIYlxFH9Lr33WPBU5ZMlkzuSF7q+qaZLrsqo
+   tFJH/qbmrvvUKsLdjNbCyJSWxuDAeC+Tpes1duj5o1e5OKxVMTCNhcS/x
+   lTAFErxaAUYIVBOvOw60NoZJR6DfiQ60rL7mG8/x7Dju8lQdN6e85VIab
+   o=;
+X-IronPort-AV: E=Sophos;i="5.98,231,1673913600"; 
+   d="scan'208";a="189551306"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 22:09:26 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com (Postfix) with ESMTPS id 5DCB78231C;
+        Fri,  3 Mar 2023 22:09:22 +0000 (UTC)
+Received: from EX19D047UWB002.ant.amazon.com (10.13.138.34) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Fri, 3 Mar 2023 22:09:21 +0000
+Received: from amazon.com (10.187.170.20) by EX19D047UWB002.ant.amazon.com
+ (10.13.138.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.24; Fri, 3 Mar
+ 2023 22:09:20 +0000
+Date:   Fri, 3 Mar 2023 15:09:18 -0700
+From:   Jordan Crouse <jorcrous@amazon.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, Albert Esteve <aesteve@redhat.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Sergio Lopez <slp@redhat.com>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Peter Rosin <peda@axentia.se>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH v2 0/9] i2c: Switch .probe() to not take an id parameter
-Message-ID: <20230303220856.ebloz7kjw7sskxym@pengutronix.de>
-References: <20230226222654.1741900-1-u.kleine-koenig@pengutronix.de>
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>
+Subject: Re: [PATCH] media: venus: dec: Fix capture formats enumeration order
+Message-ID: <20230303220918.qr5ydbin3nye3qtz@amazon.com>
+References: <20230210081835.2054482-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jphhkeygsgtmhvzu"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230226222654.1741900-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230210081835.2054482-1-javierm@redhat.com>
+X-Originating-IP: [10.187.170.20]
+X-ClientProxiedBy: EX19D031UWA003.ant.amazon.com (10.13.139.47) To
+ EX19D047UWB002.ant.amazon.com (10.13.138.34)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 10, 2023 at 09:18:35AM +0100, Javier Martinez Canillas wrote:
+> Commit 9593126dae3e ("media: venus: Add a handling of QC08C compressed
+> format") and commit cef92b14e653 ("media: venus: Add a handling of QC10C
+> compressed format") added support for the QC08C and QC10C compressed
+> formats respectively.
+> 
+> But these also caused a regression, because the new formats where added
+> at the beginning of the vdec_formats[] array and the vdec_inst_init()
+> function sets the default format output and capture using fixed indexes
+> of that array:
+> 
+> static void vdec_inst_init(struct venus_inst *inst)
+> {
+> ...
+> 	inst->fmt_out = &vdec_formats[8];
+> 	inst->fmt_cap = &vdec_formats[0];
+> ...
+> }
+> 
+> Since now V4L2_PIX_FMT_NV12 is not the first entry in the array anymore,
+> the default capture format is not set to that as it was done before.
+> 
+> Both commits changed the first index to keep inst->fmt_out default format
+> set to V4L2_PIX_FMT_H264, but did not update the latter to keep .fmt_out
+> default format set to V4L2_PIX_FMT_NV12.
+> 
+> Rather than updating the index to the current V4L2_PIX_FMT_NV12 position,
+> let's reorder the entries so that this format is the first entry again.
+> 
+> This would also make VIDIOC_ENUM_FMT report the V4L2_PIX_FMT_NV12 format
+> with an index 0 as it did before the QC08C and QC10C formats were added.
+> 
+> Fixes: 9593126dae3e ("media: venus: Add a handling of QC08C compressed format")
+> Fixes: cef92b14e653 ("media: venus: Add a handling of QC10C compressed format")
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
---jphhkeygsgtmhvzu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I just came across this issue independently and can confirm this patch fixes
+the GStreamer V4L2 decoder on QRB5165.
 
-Hello,
+Tested-by: Jordan Crouse <jorcrous@amazon.com>
 
-On Sun, Feb 26, 2023 at 11:26:45PM +0100, Uwe Kleine-K=F6nig wrote:
-> this is v2 of the series. I send it a bit earlier than I planned to do th=
-at
-> initially because I failed to send v1 completely to the linux-i2c list.
->=20
-> Changes since (implicit) v1:
->  - Added Acks for patches #5, #6 and #8
->  - Fixed kernel doc as pointed out by Luca Ceresoli (patch #7)
->  - Send all patches to linux-i2c mailing list
->  - Rebased to current Linus' tree.
->    This reduces the list of prerequisite patches to two.
->=20
-> I updated
->=20
-> 	https://git.pengutronix.de/git/ukl/linux i2c-probe-new
->=20
-> accordingly.
-
-Linus tree now contains all patches that are a prerequisite for this
-series. I rebased the above branch again on top of linus/master and now
-it contains only the change sets included in this series.
-
-Also no unexpected new usages of .probe() appeared in Linus's tree (nor
-in next). Also there are no changes to any of the files touched by this
-series in next.
-
-So this series is ready to be applied once Linus cuts -rc1.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---jphhkeygsgtmhvzu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQCb/UACgkQwfwUeK3K
-7AkuXgf/SMwWwnMqZjGgBPUDM9VgxnIlfQtagDo9nbprjQzoh3Ib5rPoV0hS3hvB
-47qsOgOL5iA240b8zcxn8IatQDJaPiDl7F06lLmWFEvMrhA233m84hU/U/O/0xbY
-0WuHom/ABjZwJ2JEl+qFUiE1Cm5r89LhYCw4UEXTG6Wn1dtuUb5Roq+uVAVjQxSS
-0aAP77IklhKDSPlpdnGXgiY1NrMiWmJWpFEyTLhNeqI7l9djO5tHLbezUcb2E4nU
-Xsz0eWpOmh85Eq8BhIFPY8CigES8ePIragUO4rxneI1ewhYWpvjEklysWIC0SO98
-Z9CJvnehDyeveIhwgTJsgtK21N7mxA==
-=QY8V
------END PGP SIGNATURE-----
-
---jphhkeygsgtmhvzu--
+> ---
+> 
+>  drivers/media/platform/qcom/venus/vdec.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> index 4ceaba37e2e5..bb14bea9fe09 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -31,15 +31,15 @@
+>   */
+>  static const struct venus_format vdec_formats[] = {
+>  	{
+> -		.pixfmt = V4L2_PIX_FMT_QC08C,
+> +		.pixfmt = V4L2_PIX_FMT_NV12,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>  	}, {
+> -		.pixfmt = V4L2_PIX_FMT_QC10C,
+> +		.pixfmt = V4L2_PIX_FMT_QC08C,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	},{
+> -		.pixfmt = V4L2_PIX_FMT_NV12,
+> +	}, {
+> +		.pixfmt = V4L2_PIX_FMT_QC10C,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>  	}, {
