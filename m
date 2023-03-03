@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7192F6A98FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D206A98FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjCCOAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S231169AbjCCOAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjCCOA3 (ORCPT
+        with ESMTP id S229957AbjCCOAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:00:29 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD335C13B;
-        Fri,  3 Mar 2023 06:00:28 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 3 Mar 2023 09:00:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EBE6151E;
+        Fri,  3 Mar 2023 06:00:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 242C31EC0657;
-        Fri,  3 Mar 2023 15:00:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677852027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=qnYHVDGtQv3jnmqIeyy8ite/fQyg2MBE/ckQjSbBpNM=;
-        b=YlRhGsYyfadQXHimloeHMfYzHgPMt4rRKJ5ZJpz3f7rZXiR4DcSs61vbGpJcRD7wubIbgn
-        Cy5sYRTCmvgOgF2q8BIUBY0oGyQjXPUVKD2axEEDzT4EdiJfZum0kFSwUDEeQjb4kIYCi9
-        dwYF79zrOj6nrFa4wG5FeRtKoWY9ZUM=
-Date:   Fri, 3 Mar 2023 15:00:22 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v7 19/41] x86/mm: Check shadow stack page fault errors
-Message-ID: <ZAH9dhFGtbR5J8j+@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-20-rick.p.edgecombe@intel.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D62402052E;
+        Fri,  3 Mar 2023 14:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1677852044; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wxV+vqRqP5FA17gWzru5WaqMedSYhLnPR0idRcduX0g=;
+        b=mGmx8NKmZojc13Vh+SoX62xVgQwefRgdcp9BblO5KfAFLL6taXUCrIP1i+Q6fSjo56vaQV
+        ioQvf+LNpmkhBAl3kw7hNZQTIX0WYJ9jqNKoQZGx3K2O/T5t2qIgR7sQN5OrFb11xozY+I
+        ugzz2FCwcnOVP6Ydqi1Uy0UDOSh8Vjw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1677852044;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wxV+vqRqP5FA17gWzru5WaqMedSYhLnPR0idRcduX0g=;
+        b=TLAgG9NwjxbPa5h72UbYo83Q/SnmtX0VCXL9B8AUov5zk8kSBDzwc5rtAF7zbGyc6AT+qY
+        KpQFcjqya9sSrOBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 519EA1329E;
+        Fri,  3 Mar 2023 14:00:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Yw8/E4z9AWSfCgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 03 Mar 2023 14:00:44 +0000
+Message-ID: <86906f29-9853-6e18-6e03-7b689088ed5d@suse.cz>
+Date:   Fri, 3 Mar 2023 15:00:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-20-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFC v8 08/56] KVM: SEV: Rename sev_{pin,unpin}_memory
+Content-Language: en-US
+To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
+Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, Nikunj A Dadhania <nikunj@amd.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-9-michael.roth@amd.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230220183847.59159-9-michael.roth@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:35PM -0800, Rick Edgecombe wrote:
-> @@ -1310,6 +1324,23 @@ void do_user_addr_fault(struct pt_regs *regs,
->  
->  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
->  
-> +	/*
-> +	 * For conventionally writable pages, a read can be serviced with a
-> +	 * read only PTE. But for shadow stack, there isn't a concept of
-> +	 * read-only shadow stack memory. If it a PTE has the shadow stack
-
-s/it //
-
-> +	 * permission, it can be modified via CALL and RET instructions. So
-> +	 * core MM needs to fault in a writable PTE and do things it already
-> +	 * does for write faults.
-> +	 *
-> +	 * Shadow stack accesses (read or write) need to be serviced with
-> +	 * shadow stack permission memory, which always include write
-> +	 * permissions. So in the case of a shadow stack read access, treat it
-> +	 * as a WRITE fault. This will make sure that MM will prepare
-> +	 * everything (e.g., break COW) such that maybe_mkwrite() can create a
-> +	 * proper shadow stack PTE.
-> +	 */
-> +	if (error_code & X86_PF_SHSTK)
-> +		flags |= FAULT_FLAG_WRITE;
->  	if (error_code & X86_PF_WRITE)
->  		flags |= FAULT_FLAG_WRITE;
->  	if (error_code & X86_PF_INSTR)
-> -- 
-> 2.17.1
+On 2/20/23 19:37, Michael Roth wrote:
+> From: Nikunj A Dadhania <nikunj@amd.com>
 > 
+> Rename sev_{pin|unpin}_memory to sev_memory_{get|put}_pages. Apart
+> from pinning the pages, sev_pin_memory also populates the pages array
+> which is used by its callers. SEV guest using restricted memfd do not
+> to pin the memory but will require the pages array to be populated.
 
--- 
-Regards/Gruss,
-    Boris.
+  ^need to?
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> Rename the function appropriately.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+
