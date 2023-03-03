@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEBE6A8DF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 01:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C65F86A8DF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 01:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjCCAa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 19:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S230018AbjCCAak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 19:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjCCAaY (ORCPT
+        with ESMTP id S230019AbjCCAah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 19:30:24 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38210580DF;
-        Thu,  2 Mar 2023 16:30:08 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id b13so755938ljf.6;
-        Thu, 02 Mar 2023 16:30:07 -0800 (PST)
+        Thu, 2 Mar 2023 19:30:37 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617C65A6EE;
+        Thu,  2 Mar 2023 16:30:11 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id y14so768067ljq.4;
+        Thu, 02 Mar 2023 16:30:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677803406;
+        d=gmail.com; s=20210112; t=1677803409;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wKy0/EJpfLjoekqVRMjvk2kg/XF7h2p24q53aPNe7AU=;
-        b=acK4qqSKf20QVJyPIbAhfQyTqip4UmKrLYAgN/Ll7dD7jOyu1/lXP8SccQHw0azBhP
-         /AEH9ueSYSKarCeZJfROCDNy3lL+zcHi4Ow6B5n0ukSo07DO5s2N9JSvcpQcFSG+xAhZ
-         pW8+HcLwln5AXAZRuCdOPn1I43dIPtnlrAsheGFyxmI/mnzn5hEXtPAlJskQV1kUFX+b
-         nzRtDyKuRRhRWw6n0OziglaNQFh8ytUrhoKU1bm46cOTblV41MTMQ9XjLXpUWrt7SMUU
-         gjCLoZliXavRi3lqGhjQSqsjkTotuyCxSmJR9krDcjq+2Gp+Ik2MbA7g6wdipbgl3jaI
-         ZIIg==
+        bh=uIiEAPTO8hoNXgl/LxoqTt9NNqmG3B3Oy7Nn4t7CBLM=;
+        b=TaU7EXcBXgw/CbfmBEl9ytxLFQPRgTkDzyVbFpjwbLWCgEBwdOl52Ks+nlBHfrqkjZ
+         fEvmivMoWjSsuGVQhsLW+ya5OD0RyTjRdEoRZZ0oa6r4CrJFUowHsQ4Kf+mRuUnVJ/ap
+         mYBFN1bT/nhAKwa7BxHpgFtd59npVD0ypQlXCMoOLHtiGzsi+phlBKWzuBD/46a9Q8tP
+         rXEe51Vdn94E3YUiBxOlFyx/vXLD94TFG96/paRTIEPRt3ovawu2qNoVTu/GaQoONXWq
+         k4MaIUvdUpgdURloLjXIAkdWIPyxYWuEdJtzYd79IcQV3RDz0rrsIavGskbhPYl7Rk4c
+         k9pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677803406;
+        d=1e100.net; s=20210112; t=1677803409;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wKy0/EJpfLjoekqVRMjvk2kg/XF7h2p24q53aPNe7AU=;
-        b=Xikw6Ug7ctoUn1A+8VSL6P46dNlwc/LVe+hxEQMQ8MTeykp2UTHJ6Gx5rQUIddROIq
-         Zc2z+3SvBGMUAunMELeqOKXQeevuc+QbUREm1jYpTjOJFSOE7aqtIDop71zZtdaq4IY/
-         UGWKoUJ9YtDrGD1Lo7olmGRf0sD7MWQ9iiWEiA0qQbon5+hcGmeVt/AeFguYbkslaRgJ
-         AO+H21k+jZUwXyLkPXqooZ0RnTW6XDGpkSPmmkJEQnD7cwyh1lhonx4wX+Hl6oZtBFi8
-         EhvBC14njvpEIwqFVK5JWAOF79LFPrkFzpKMVqoLVOba3+ihjduILE3lfVYzZohQl1NE
-         veHQ==
-X-Gm-Message-State: AO0yUKW91yauXs0Gjn9UQNIl2fxErccekwq96VVAKuDa4OHKUL4QYFhB
-        O+8bKgWQ+Tv4RWDZa/j0NM0=
-X-Google-Smtp-Source: AK7set8tavXUlxbw0lEjlPRImcDRr9AOHEPmhatXmmtIizKc5CCyFfRLT40arWAn3qXv6wOUz+8WVA==
-X-Received: by 2002:a2e:7e07:0:b0:294:6ef3:c2bc with SMTP id z7-20020a2e7e07000000b002946ef3c2bcmr2914567ljc.53.1677803406207;
-        Thu, 02 Mar 2023 16:30:06 -0800 (PST)
+        bh=uIiEAPTO8hoNXgl/LxoqTt9NNqmG3B3Oy7Nn4t7CBLM=;
+        b=uO/f0RD2pFyXGEu3RRTj9hA4kPdrkyRAMc3dB0j6RPXPgmmS6/3v9QS7xTpf8WOCxY
+         Aqn9mMw5ZdnCRoh1+bKN8yb2Y2vFmYlORBYwlhN2PLho7aXBsfHmNdbbLTNKfbe3JwsW
+         ybLgLTYHsHKy6u1WU0nevdRlInvptadMpTBb+y2VpUaKn/bsuXh/P+/m1wz3LjKbe50l
+         AwLzGN8YOEzr2jryWcXrl4K19KVv3k/rF8PDOvOGEH0CPQn9J204LYnmpmkn7byrj7BM
+         SpB9kgwPb4X/TVDO5hppADP1tcRgMceQE8I9A7jZR+VXEpFPhF3nv4Q2qlaTX+ACAXS1
+         jeMA==
+X-Gm-Message-State: AO0yUKWX+bdNkx6G4ZwKLldG8qAqaQURqjxgUSOebpFoJdscLLvYzrCd
+        U/lRIqvkExftDWhiKuLBOhg=
+X-Google-Smtp-Source: AK7set9868oEKPzDAUX1PtsbLKPRyzAb9dwq8fJ9VSnzNhzN8flaCAGO3fiUcBM5qQyp+aOiAqOO/g==
+X-Received: by 2002:a05:651c:516:b0:295:d385:88cd with SMTP id o22-20020a05651c051600b00295d38588cdmr3617059ljp.19.1677803408796;
+        Thu, 02 Mar 2023 16:30:08 -0800 (PST)
 Received: from arinc9-PC.lan ([212.68.60.226])
-        by smtp.gmail.com with ESMTPSA id v19-20020a2e9f53000000b002932b817990sm64901ljk.31.2023.03.02.16.30.03
+        by smtp.gmail.com with ESMTPSA id v19-20020a2e9f53000000b002932b817990sm64901ljk.31.2023.03.02.16.30.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 16:30:05 -0800 (PST)
+        Thu, 02 Mar 2023 16:30:08 -0800 (PST)
 From:   arinc9.unal@gmail.com
 X-Google-Original-From: arinc.unal@arinc9.com
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -70,9 +70,9 @@ Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         Landen Chao <Landen.Chao@mediatek.com>,
         DENG Qingfang <dqfext@gmail.com>,
         Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-Subject: [PATCH 06/20] pinctrl: mediatek: remove OF_GPIO as reverse dependency
-Date:   Fri,  3 Mar 2023 03:28:35 +0300
-Message-Id: <20230303002850.51858-7-arinc.unal@arinc9.com>
+Subject: [PATCH 07/20] dt-bindings: pinctrl: ralink: improve bindings
+Date:   Fri,  3 Mar 2023 03:28:36 +0300
+Message-Id: <20230303002850.51858-8-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230303002850.51858-1-arinc.unal@arinc9.com>
 References: <20230303002850.51858-1-arinc.unal@arinc9.com>
@@ -91,43 +91,185 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-The OF_GPIO option is enabled by default when GPIOLIB is enabled, and
-cannot be disabled. Remove it as a reverse dependency where GPIOLIB is also
-set as a reverse dependency.
+Move additionalProperties to the top. It's easier to read than after a long
+indented section.
+
+Drop the quotes from the referred schemas.
 
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 ---
- drivers/pinctrl/mediatek/Kconfig | 3 ---
- 1 file changed, 3 deletions(-)
+ .../bindings/pinctrl/ralink,mt7620-pinctrl.yaml          | 9 ++++-----
+ .../bindings/pinctrl/ralink,mt7621-pinctrl.yaml          | 9 ++++-----
+ .../bindings/pinctrl/ralink,rt2880-pinctrl.yaml          | 9 ++++-----
+ .../bindings/pinctrl/ralink,rt305x-pinctrl.yaml          | 9 ++++-----
+ .../bindings/pinctrl/ralink,rt3883-pinctrl.yaml          | 9 ++++-----
+ 5 files changed, 20 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
-index 2eeb55010563..7af287252834 100644
---- a/drivers/pinctrl/mediatek/Kconfig
-+++ b/drivers/pinctrl/mediatek/Kconfig
-@@ -17,7 +17,6 @@ config PINCTRL_MTK
- 	select GENERIC_PINCONF
- 	select GPIOLIB
- 	select EINT_MTK
--	select OF_GPIO
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+index 1e63ea34146a..cde6de77e228 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+@@ -22,11 +22,14 @@ properties:
+ patternProperties:
+   '-pins$':
+     type: object
++    additionalProperties: false
++
+     patternProperties:
+       '^(.*-)?pinmux$':
+         type: object
+         description: node for pinctrl.
+         $ref: pinmux-node.yaml#
++        additionalProperties: false
  
- config PINCTRL_MTK_V2
- 	tristate
-@@ -35,7 +34,6 @@ config PINCTRL_MTK_MOORE
- 	select GENERIC_PINCTRL_GROUPS
- 	select GENERIC_PINMUX_FUNCTIONS
- 	select GPIOLIB
--	select OF_GPIO
- 	select EINT_MTK
- 	select PINCTRL_MTK_V2
+         properties:
+           function:
+@@ -632,12 +635,8 @@ patternProperties:
+                 groups:
+                   enum: [i2c, spi cs1, uart0]
  
-@@ -46,7 +44,6 @@ config PINCTRL_MTK_PARIS
- 	select GENERIC_PINCONF
- 	select GPIOLIB
- 	select EINT_MTK
--	select OF_GPIO
- 	select PINCTRL_MTK_V2
+-        additionalProperties: false
+-
+-    additionalProperties: false
+-
+ allOf:
+-  - $ref: "pinctrl.yaml#"
++  - $ref: pinctrl.yaml#
  
- # For MIPS SoCs
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
+index 1b1d37b981d9..fb8c5459ea93 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
+@@ -22,11 +22,14 @@ properties:
+ patternProperties:
+   '-pins$':
+     type: object
++    additionalProperties: false
++
+     patternProperties:
+       '^(.*-)?pinmux$':
+         type: object
+         description: node for pinctrl.
+         $ref: pinmux-node.yaml#
++        additionalProperties: false
+ 
+         properties:
+           function:
+@@ -236,12 +239,8 @@ patternProperties:
+                 groups:
+                   enum: [wdt]
+ 
+-        additionalProperties: false
+-
+-    additionalProperties: false
+-
+ allOf:
+-  - $ref: "pinctrl.yaml#"
++  - $ref: pinctrl.yaml#
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+index 7fd0df880a76..e51667316b2e 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+@@ -22,11 +22,14 @@ properties:
+ patternProperties:
+   '-pins$':
+     type: object
++    additionalProperties: false
++
+     patternProperties:
+       '^(.*-)?pinmux$':
+         type: object
+         description: node for pinctrl.
+         $ref: pinmux-node.yaml#
++        additionalProperties: false
+ 
+         properties:
+           function:
+@@ -116,12 +119,8 @@ patternProperties:
+                 groups:
+                   enum: [pci]
+ 
+-        additionalProperties: false
+-
+-    additionalProperties: false
+-
+ allOf:
+-  - $ref: "pinctrl.yaml#"
++  - $ref: pinctrl.yaml#
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
+index 4d66ca752a30..8b1256af09c3 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
+@@ -23,11 +23,14 @@ properties:
+ patternProperties:
+   '-pins$':
+     type: object
++    additionalProperties: false
++
+     patternProperties:
+       '^(.*-)?pinmux$':
+         type: object
+         description: node for pinctrl.
+         $ref: pinmux-node.yaml#
++        additionalProperties: false
+ 
+         properties:
+           function:
+@@ -249,12 +252,8 @@ patternProperties:
+                 groups:
+                   enum: [spi_cs1]
+ 
+-        additionalProperties: false
+-
+-    additionalProperties: false
+-
+ allOf:
+-  - $ref: "pinctrl.yaml#"
++  - $ref: pinctrl.yaml#
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
+index 008d93181aea..adc4f42a175d 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
+@@ -22,11 +22,14 @@ properties:
+ patternProperties:
+   '-pins$':
+     type: object
++    additionalProperties: false
++
+     patternProperties:
+       '^(.*-)?pinmux$':
+         type: object
+         description: node for pinctrl.
+         $ref: pinmux-node.yaml#
++        additionalProperties: false
+ 
+         properties:
+           function:
+@@ -236,12 +239,8 @@ patternProperties:
+                 groups:
+                   enum: [uartlite]
+ 
+-        additionalProperties: false
+-
+-    additionalProperties: false
+-
+ allOf:
+-  - $ref: "pinctrl.yaml#"
++  - $ref: pinctrl.yaml#
+ 
+ required:
+   - compatible
 -- 
 2.37.2
 
