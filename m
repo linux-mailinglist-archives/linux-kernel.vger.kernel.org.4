@@ -2,142 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1401F6A9175
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DEC6A917C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjCCHK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 02:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
+        id S229797AbjCCHMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 02:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjCCHKz (ORCPT
+        with ESMTP id S229787AbjCCHMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 02:10:55 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A3F18B23;
-        Thu,  2 Mar 2023 23:10:53 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pXzZ5-0006KW-PD; Fri, 03 Mar 2023 08:10:51 +0100
-Message-ID: <ad02467d-d623-5933-67e0-09925c185568@leemhuis.info>
-Date:   Fri, 3 Mar 2023 08:10:49 +0100
+        Fri, 3 Mar 2023 02:12:17 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6671F33462
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 23:12:15 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id ay14so2902545edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 23:12:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677827534;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xi3e3zf8Klpq1iRcEdmcSTKwBOu4pz/Ei0EPeIx1fZY=;
+        b=EZLxu7Y+iizjsoeGeUbmzPxbTlnTsVxbNP5WplEQkHBNoOsLzB62obZ9C7HjJdud77
+         56/49ai23BGpoS36DG6EcSbmf63qfNq5oJWGrjeCcUiiqcP5s7T2Mro0aZ/J/j8ksgeI
+         +bg2Y9ZjHQdv3oumc/D705agQ/kTIHtIJYSd3isGNZ021cdwZsiNraxSgOkprbG1/VSs
+         Jy/A3i7jQicgkpkM9EZeoKOzBEgUtXQp/lpjyn7AuUuLTBZDpT2aSxgAtP6jsOAfs7BX
+         anizbYYk4ixsFk47zhnqdrNzqaha1yJxtgSvDN8tkCbRbvXSD9EdiLHjOJXucHQh16pa
+         x2XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677827534;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xi3e3zf8Klpq1iRcEdmcSTKwBOu4pz/Ei0EPeIx1fZY=;
+        b=GO+7xv3Z8Y0TE/aHnjJbEZbGmqWEeCafHfd8OMNanbFYdNmlmUc0LBEo3Gvn2EUTSH
+         bMyT5+TbZ1pMfMnhQiGjrI3DH33uydly17JnY4+ss90TRxtcr+Dv6YNtVGo0h3UhpHRl
+         NRRgIX6CaD2IsnT5KX53jo3dvRP5GQ1+KEa2Foau71gbjJle0HmvwByo7pV/6cVEE+k8
+         QKbnayzTxgRXK3q2Xi5yvn+7culcYk1fpBRCE4+EV+e9DBYMcY1qWh6QAYWtS0Y8JqMp
+         70YMl+Jg1xKiQDfMc0n1Ca4L458PXs5YE5jnw9hQv4Rci+c9qQH/Gm325k8a95TJ8aU9
+         cXCg==
+X-Gm-Message-State: AO0yUKWWFbTR7TYax1sMyqoOglth0i7wqC/pOfx2m+F78j4nkx1hodN7
+        DwsLSHiULUggM1SAl3b2BFT9ag==
+X-Google-Smtp-Source: AK7set+r+vvJNdv0SgAgspPvo26Cw4Qq2bYappwi6VBNmRDuHd2TtvD3UYnxUh2P0DnOzbQxgvzdAA==
+X-Received: by 2002:a17:907:7289:b0:8e3:74ad:94ce with SMTP id dt9-20020a170907728900b008e374ad94cemr866444ejc.8.1677827533823;
+        Thu, 02 Mar 2023 23:12:13 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t26-20020a1709060c5a00b008ec793ac3f4sm614812ejf.192.2023.03.02.23.12.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 23:12:13 -0800 (PST)
+Message-ID: <8e695c64-6abd-3c1e-8d80-de636d950442@linaro.org>
+Date:   Fri, 3 Mar 2023 08:12:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Simon Gaiser <simon@invisiblethingslab.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        emmi@emmixis.net, schwagsucks@gmail.com,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217114 - Tiger Lake SATA Controller not operating
- correctly [bisected]
+Subject: Re: [PATCH 1/2] dt-bindings: ath10k: Add vdd-smps supply
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230303024246.2175382-1-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230303024246.2175382-1-konrad.dybcio@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677827454;ec66d175;
-X-HE-SMSGID: 1pXzZ5-0006KW-PD
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+On 03/03/2023 03:42, Konrad Dybcio wrote:
+> Mention the newly added vdd-smps supply.
 
-I noticed a regression report in bugzilla.kernel.org that apparently
-affects 6.2 and later as well as 6.1.13 and later, as it was already
-backported there.
+There is no explanation here, but looking at your driver change it
+suggests name is not correct. You named it based on regulator (so the
+provider), not the consumer.
 
-As many (most?) kernel developer don't keep an eye on bugzilla, I
-decided to forward the report by mail. Quoting from
-https://bugzilla.kernel.org/show_bug.cgi?id=217114 :
+Best regards,
+Krzysztof
 
->  emmi@emmixis.net 2023-03-02 11:25:00 UTC
-> 
-> As per kernel problem found in https://bbs.archlinux.org/viewtopic.php?id=283906 ,
-> 
-> Commit 104ff59af73aba524e57ae0fef70121643ff270e
-
-[FWIW: That's "ata: ahci: Add Tiger Lake UP{3,4} AHCI controller" from
-Simon Gaiser]
-
-> seems to have broken Intel Tiger Lake SATA controllers in a way that prevents boot, as the sysroot partition will not be found. 
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=104ff59af73aba524e57ae0fef70121643ff270e
-> 
-> [tag] [reply] [−]
-> Private
-> Comment 1 schwagsucks@gmail.com 2023-03-02 17:31:53 UTC
-> 
-> As some people in the reference arch forum post reported this seems to have started in 6.1.13.  6.1.12 loads as expected.  
-> 
-> The problem is the sata disks can not be recognized any longer which is why the reported sysroot partition can't be found.  
-> 
-> My primary disk is nvme and as long as I remove all sata references from my fstab I can boot but then can't mount the device partitions because the devices are not present in /dev.  
-> 
-> Any attempts to boot with a sata disk in fstab results in a boot failure with emergency shell.
-> 
-> [tag] [reply] [−]
-> Private
-> Comment 2 schwagsucks@gmail.com 2023-03-02 19:31:28 UTC
-> 
-> I can provide any details required
-> 
-> My sata controller:
-> 10000:e0:17.0 SATA controller: Intel Corporation Tiger Lake-LP SATA Controller (rev 20) (prog-if 01 [AHCI 1.0])
-> 	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-> 	Status: Cap+ 66MHz+ UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0
-> 	Interrupt: pin A routed to IRQ 146
-> 	Region 0: Memory at 50100000 (32-bit, non-prefetchable) [size=8K]
-> 	Region 1: Memory at 50102800 (32-bit, non-prefetchable) [size=256]
-> 	Region 5: Memory at 50102000 (32-bit, non-prefetchable) [size=2K]
-> 	Capabilities: [80] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> 		Address: fee01000  Data: 0000
-> 	Capabilities: [70] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0-,D1-,D2-,D3hot+,D3cold-)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [a8] SATA HBA v1.0 BAR4 Offset=00000004
-> 	Kernel driver in use: ahci
-> 
-
-
-See the ticket for more details.
-
-
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: 104ff59af73a
-https://bugzilla.kernel.org/show_bug.cgi?id=217114
-#regzbot title: ata: ahci: Tiger Lake SATA Controller not operating
-correctly
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
