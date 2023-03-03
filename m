@@ -2,145 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BE66AA01A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F007D6AA020
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjCCT1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 14:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S231451AbjCCTcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 14:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjCCT06 (ORCPT
+        with ESMTP id S230244AbjCCTcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 14:26:58 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0251B553;
-        Fri,  3 Mar 2023 11:26:56 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id F21B33200437;
-        Fri,  3 Mar 2023 14:26:54 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 03 Mar 2023 14:26:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1677871614; x=1677958014; bh=cn8ZyhiM02WQ5IwSpSCmExINbOiY1FTRvSe
-        WV7cmSm0=; b=N1RSAryTYZAwtcYjGBO6mhkVHeOTEdBk1FiWfo+yxtKeRXF4BWM
-        Gup6AFOhZYSEIEQ0d3k350CjQNw6t1JE7sSyP292rNiqKk1km4cuQWgUgSIWYeeP
-        fxxR8aNHrOk+9JM+Qd9J7SkPdzahDXjgIvSyAyYLGN2HdM3e44lUF2FLjroz1VG3
-        ywUTkf7LzyS3gcrulzAkIszU83cpCRwZ9wnIe47w8ghHAAhIdTE5lgFeb7kH2v7y
-        iK1fSsMXA7Abhp9WAXtCqYEWSVobCBt0yKNYzHbsDeUzz9WM1Q4muyyw5cAWDBwf
-        GNm75WDHwJ9HdRnULxf9Zs5MuYgIDUVrv0Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1677871614; x=1677958014; bh=cn8ZyhiM02WQ5IwSpSCmExINbOiY1FTRvSe
-        WV7cmSm0=; b=kmDNuG7CWiWstb8TFK+mqFGxbQzUJwdWbBE5EUQNE+j/3nLPQDN
-        zkK7YlQESR5EMyn8bGovZT9uluSULGIIpJNLpsmlxK5e7jcNsa4qavsfFTxJUnhY
-        VwnboR/cfEH/qHWxnyMywlQX5fjsuiQGs/sQq/Vaa6QU5xHwNyY5/Cb67ju0vwr/
-        94kY2tI9nGDPcG5NuLEwqc1xvE3cyRkSorrYvGrFukgrXPHS013guFmZ0Zk5G/BO
-        lxFoHsCxRMEbt2LzEVqsSXgnJm4N/Cc4oe3wQfJ8h83cNlJgjCak/FNO+wmwBpgu
-        dmDFGy5S/pCUeApQ/bznYgazhzTGupR8AAA==
-X-ME-Sender: <xms:_kkCZD8LsWhMk1VoC3ce8QG2624zNGxgi-jz-M7j5rbTkSUHdQFzow>
-    <xme:_kkCZPt_huuq4-vlUmCvgMNzY89VYrTQTCz4r9PV5tzuNTPwRjAJCR3ruC3PHDhqQ
-    RwM7-h9G9Fqbzd->
-X-ME-Received: <xmr:_kkCZBBYBLzSmq7hVsHbhTW0OcGX6z8QQqqC_nSUGbtMCsbs3rhig0ZLKUxBIB3tJQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomhepuegv
-    rhhnugcuufgthhhusggvrhhtuceosggvrhhnugdrshgthhhusggvrhhtsehfrghsthhmrg
-    hilhdrfhhmqeenucggtffrrghtthgvrhhnpeffhfdtvdeviedvudeuudejteffkeeklefg
-    vdefgfeuffeifeejgfejffehtddtfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegsvghrnhgurdhstghhuhgsvghrthesfhgrshhtmhgrihhl
-    rdhfmh
-X-ME-Proxy: <xmx:_kkCZPdKm0iKnXzKoTEO74wQj1zBiJhb5oIYpJ1ztphhH5-zsoAKoQ>
-    <xmx:_kkCZIOZcPnDcbhWy-U54IKul76IDA_tP2CU0JjDiAR3_cXx08eC3g>
-    <xmx:_kkCZBmrh_58DWCT5-N4uL2M_-ig74T4b9o_XQZRma-nLoj9X1PUPw>
-    <xmx:_kkCZJGSjHabyAMAs4yAhGa-0J4iIjczMfee864DGEUiasoDazEKAg>
-Feedback-ID: id8a24192:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Mar 2023 14:26:52 -0500 (EST)
-Message-ID: <381a19bb-d17e-b48b-8259-6287dbe170df@fastmail.fm>
-Date:   Fri, 3 Mar 2023 20:26:52 +0100
+        Fri, 3 Mar 2023 14:32:19 -0500
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA10118158;
+        Fri,  3 Mar 2023 11:32:17 -0800 (PST)
+Received: by mail-ua1-f43.google.com with SMTP id bx14so2435915uab.0;
+        Fri, 03 Mar 2023 11:32:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677871937;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oWJ4FADfr2/FMxcGcYPZfY1Zl6PqjyD4YVCe6cweaQI=;
+        b=qpJ/XtXtW3t1BB2iKByZ61SsuHvp14l9KFXCVpYvc81wEshU7jvF+o0TsNTrls8rQz
+         RTRduzTmMcWQUo5mjb85RuRn2GlAt0XNp/KexyaBWlEYFrWHmo2K9QrUzMFB2wlvuu9l
+         Nwx1aaUkvzaftHnOgNFbJzMIo0BHaU9MgPlPDrBUNxoPPRe3Xw57d9MwBFoPVkjVvDuU
+         /fRKEgA5RzW3iLTtCq8Inq+iq+RvYH7zezVN55d9lXf7OQZtqlQS+YVw/yFP6GxeOjTI
+         u4YPrxPMJ+8choFsqcmAN0JnBkYBRRavrwpVzDzjjiSLfi4ktVlYxcHHDLxyAFrtHWxZ
+         5Yug==
+X-Gm-Message-State: AO0yUKUciGYAab77BNMXaLDZ/Bm5fhXcJ0H1DdMpuRpGU+XcN1c6lc5L
+        BPfm4V5LAFQogUZMrerR2g==
+X-Google-Smtp-Source: AK7set8cRF5Fe5+ipJkJLKsCcOKIoZDntxrqZxlmthlhgeK6tQ7aDR1UrXsoQlyGnVTerRgycdFerg==
+X-Received: by 2002:a05:6122:148b:b0:408:a4b6:a48c with SMTP id z11-20020a056122148b00b00408a4b6a48cmr1605791vkp.2.1677871936605;
+        Fri, 03 Mar 2023 11:32:16 -0800 (PST)
+Received: from robh_at_kernel.org (adsl-72-50-3-187.prtc.net. [72.50.3.187])
+        by smtp.gmail.com with ESMTPSA id u17-20020a1f2e11000000b004134e4380c2sm392541vku.24.2023.03.03.11.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 11:32:16 -0800 (PST)
+Received: (nullmailer pid 19152 invoked by uid 1000);
+        Fri, 03 Mar 2023 19:32:13 -0000
+Date:   Fri, 3 Mar 2023 13:32:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, airlied@redhat.com, dipenp@nvidia.com,
+        treding@nvidia.com, mwen@igalia.com, fmdefrancesco@gmail.com,
+        arnd@arndb.de, bvanassche@acm.org, ogabbay@kernel.org,
+        axboe@kernel.dk, mathieu.poirier@linaro.org, linux@zary.sk,
+        masahiroy@kernel.org, yangyicong@hisilicon.com,
+        dan.j.williams@intel.com, jacek.lawrynowicz@linux.intel.com,
+        benjamin.tissoires@redhat.com, devicetree@vger.kernel.org,
+        furong.zhou@linux.intel.com, andriy.shevchenko@intel.com,
+        linus.walleij@linaro.org
+Subject: Re: [PATCHv3 1/4] dt-bindings: wiegand: add Wiegand controller
+ common properties
+Message-ID: <20230303193213.GA6048-robh@kernel.org>
+References: <20230301142835.19614-1-m.zatovic1@gmail.com>
+ <20230301142835.19614-2-m.zatovic1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
-Content-Language: en-US
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        mszeredi@redhat.com
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
- <20230220193754.470330-8-aleksandr.mikhalitsyn@canonical.com>
-From:   Bernd Schubert <bernd.schubert@fastmail.fm>
-In-Reply-To: <20230220193754.470330-8-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230301142835.19614-2-m.zatovic1@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/20/23 20:37, Alexander Mikhalitsyn wrote:
-> This ioctl aborts fuse connection and then reinitializes it,
-> sends FUSE_INIT request to allow a new userspace daemon
-> to pick up the fuse connection.
+On Wed, Mar 01, 2023 at 03:28:32PM +0100, Martin Zaťovič wrote:
+> Wiegand bus is defined by a Wiegand controller node. This node
+> can contain one or more device nodes for devices attached to
+> the controller(it is advised to only connect one device as Wiegand
+> is a point-to-point bus).
 > 
-> Cc: Miklos Szeredi <mszeredi@redhat.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Amir Goldstein <amir73il@gmail.com>
-> Cc: StÃ©phane Graber <stgraber@ubuntu.com>
-> Cc: Seth Forshee <sforshee@kernel.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Andrei Vagin <avagin@gmail.com>
-> Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: criu@openvz.org
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> Wiegand controller needs to specify several attributes such as
+> the pulse length in order to function properly. These attributes
+> are documented here.
+> 
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
 > ---
->   fs/fuse/dev.c             | 132 ++++++++++++++++++++++++++++++++++++++
->   include/uapi/linux/fuse.h |   1 +
->   2 files changed, 133 insertions(+)
+>  .../bindings/wiegand/wiegand-controller.yaml  | 39 +++++++++++++++++++
+>  MAINTAINERS                                   |  5 +++
+>  2 files changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
 > 
-> diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-> index 737764c2295e..0f53ffd63957 100644
-> --- a/fs/fuse/dev.c
-> +++ b/fs/fuse/dev.c
-> @@ -2187,6 +2187,112 @@ void fuse_abort_conn(struct fuse_conn *fc)
->   }
->   EXPORT_SYMBOL_GPL(fuse_abort_conn);
->   
-> +static int fuse_reinit_conn(struct fuse_conn *fc)
-> +{
-> +	struct fuse_iqueue *fiq = &fc->iq;
-> +	struct fuse_dev *fud;
-> +	unsigned int i;
+> diff --git a/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml b/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+> new file mode 100644
+> index 000000000000..df985cb3045a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+> @@ -0,0 +1,39 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/wiegand/wiegand-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	if (fc->conn_gen + 1 < fc->conn_gen)
-> +		return -EOVERFLOW;
+> +title: Wiegand Generic Controller Common Properties
 > +
-> +	fuse_abort_conn(fc);
-> +	fuse_wait_aborted(fc);
+> +maintainers:
+> +  - Martin Zaťovič <martin.zatovic@tbs-biometrics.com>
+> +
+> +description:
+> +  Wiegand busses can be described with a node for the Wiegand controller device
+> +  and a set of child nodes for each SPI slave on the bus.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^wiegand(@.*|-[0-9a-f])?$"
+> +
+> +  pulse-len-us:
+> +    description: |
 
-Shouldn't this also try to flush all data first?
+Don't need '|' here and elsewhere.
 
+With that fixed,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +      Length of the low pulse in microseconds.
+> +
+> +  interval-len-us:
+> +    description: |
+> +      Length of a whole bit (both the pulse and the high phase) in microseconds.
+> +
+> +  frame-gap-us:
+> +    description: |
+> +      Length of the last bit of a frame (both the pulse and the high phase) in
+> +      microseconds.
+> +
+> +required:
+> +  - compatible
+> +  - pulse-len-us
+> +  - interval-len-us
+> +  - frame-gap-us
+> +
+> +additionalProperties: true
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b0db911207ba..1f6f6d236f0c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22512,6 +22512,11 @@ L:	linux-rtc@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/rtc/rtc-sd3078.c
+>  
+> +WIEGAND BUS DRIVER
+> +M:	Martin Zaťovič <m.zatovic1@gmail.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+> +
+>  WIIMOTE HID DRIVER
+>  M:	David Rheinsberg <david.rheinsberg@gmail.com>
+>  L:	linux-input@vger.kernel.org
+> -- 
+> 2.39.2
+> 
