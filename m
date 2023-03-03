@@ -2,194 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E706A99C6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1926A99C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjCCOtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
+        id S229586AbjCCOtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbjCCOs6 (ORCPT
+        with ESMTP id S231294AbjCCOtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:48:58 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA913D919;
-        Fri,  3 Mar 2023 06:48:57 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id bi17so1968343oib.3;
-        Fri, 03 Mar 2023 06:48:57 -0800 (PST)
+        Fri, 3 Mar 2023 09:49:08 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CB1474FF
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:49:03 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id k37so1795227wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:49:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677854936;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=95fD1OMocm4n8bJJC6tFnFtkplpEQySvwjBizvI/Tpo=;
-        b=H8QbelVEw4Vh8BarvpWGCoSzGSZZvuUsFbB+c82/q20vffUTswfFY2u+Tl0R3sXrbW
-         cFKl8/7P2yLWoKR1UV5jhiJfMbPITDEreXyy3XUd3Bx+EePTrtoW9mrK6wscRkoJ+2aJ
-         5fjoNNJzTeh5EoCDXG3GysgWY338xt4aBazpADFEOOpjcX08urE7ZuZGcrmHjRu/uNll
-         6wekbPxRCxNR6/RU2Jo+llW1KSCE+U/RMRtNk1Bjv+Ogrl1ILAEF4/5YyQNmzXZeqBGb
-         +m066zgXiE7fg+2WBqFBzKeXmpaWIPJHHVW6knXxmSiKugJXUMdzE/fK+fI6SYy+sDv7
-         YpWA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2Exy3Yn87eaf0ZXgYUzDkdrAAuGVg7rQYYWC6WdwO9g=;
+        b=kbZhL6OAvgwbkNo9fdSYcHXsh9vCMo3TLQzboWgPKF0SDG6svJglPowMGxgKdjXMFW
+         jMVjSps0ou14cXJZjLFj9SywH8cltV3ohEHzAQZ/ApbIXR7kZw+pCmlE1y0jvLAj4r66
+         zJmU7MzDDonT5mMERJHzVD6U6sWeGmDFIg3uKGneC/LWFpZ55O5jnVztDPzAyrLmVr/N
+         /+Yrz3kl0p+NgYkol0eB7FDxiDSGGR2hugkjDRkgB2bTFkCSILP9wtPs1udLjYalDhA4
+         DxWqr9Mgt8oRNxDMuUkDG3sIpDTv1DD8JPDBu03kPrXobtbvWhdXDN7amefCIaFWAcVo
+         2S+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677854936;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=95fD1OMocm4n8bJJC6tFnFtkplpEQySvwjBizvI/Tpo=;
-        b=Bt8kIWxOcjV2/VYhD0cMc21nJQYs8fADk/y3OwQ/dsy1ymjMBh+7Qo9v9YJWTcDmFY
-         BxkOzDR3jhjCTZGMyAR5dk0ZlEOUkqs3wWr5PVcXD3Zb5ObNA7nsZchPkTb8KUoiKFA/
-         89H05vTHlPhhXWUpd+Qiq1NKDi07Kj0V+zNOW2vxN9MkyCkns5TP6gdzNwsv9jhUNISk
-         UcJBQ5Kst/EQtDMZq9rYwYaGb/e8aaXlNKlMwuaSWV8XgEfChaRKFn6wSQwRevzrsEze
-         j8Ovn1GFNF97loD2DmOaZkmZBxkvY0zvVtITkf9fJHKiHzWKrmRdnKOlL65uf46eRPdI
-         VeJQ==
-X-Gm-Message-State: AO0yUKXL0CmDUcZxQqYdk7fYh1wsXXbXd7YN87Z4O4XEynf18vvKLhnR
-        zAxSUO0bZ+x99P1LDDw6gO48rwpqedMGq38mZ0U=
-X-Google-Smtp-Source: AK7set+3e72I1aKOy6TuglUkJuSkxFy00dwwauEHhVb/G5t4QUiLGNGQh5N5d5lD2/Blvvsq/7AIUvcQeTiZih4TE1k=
-X-Received: by 2002:a05:6808:354:b0:384:692c:56c9 with SMTP id
- j20-20020a056808035400b00384692c56c9mr624924oie.3.1677854936419; Fri, 03 Mar
- 2023 06:48:56 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Exy3Yn87eaf0ZXgYUzDkdrAAuGVg7rQYYWC6WdwO9g=;
+        b=A7D9bUMMmZN69AAiYb5sqE4pUzIUbFGdG6yTdLWUY0ZCiRmm0vSSIyYE8VcedDOY9T
+         yfySCYsYFwXXAfOeuUmZeXYqWE29OKARuHMri3AWrDWowtXC4ZlR2blLdDgtNuJFT9gK
+         3O4MWmIcufhREI4HymDVtIlwKYlHhVJN4a/DeUaekreoK9qK2e1PZx4xs/KHJ+nP6QcB
+         omoBPRDC6lDHPywjeW3wNEWJB8Wf+Ds4vo1D770d08B47/T9KLoIiCCb8UYBhrU7meB4
+         B/YncoDUfwtmzD23PyHXSDe7x1Wku1zeEUFLXjxUThDj2f3X5cC4dt0Ye4aeOFCpJXUc
+         xvbA==
+X-Gm-Message-State: AO0yUKVTuKC0CLldIqSxoNp/1Jej1J29Po7SjTHDDD87lvVbBOtpN+bu
+        P4sjbSxPxvRoxVdjWbg4echYxw==
+X-Google-Smtp-Source: AK7set+lDVlPjWxNw7wuUK44z3QFiTkfHBkIyGzChGvsvbbsS/tQPd3hiFc811hgMcqj6qPpvf1mPA==
+X-Received: by 2002:a05:600c:1f0a:b0:3ea:9530:22a6 with SMTP id bd10-20020a05600c1f0a00b003ea953022a6mr4242981wmb.1.1677854942041;
+        Fri, 03 Mar 2023 06:49:02 -0800 (PST)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id b16-20020a5d4d90000000b002c70851bfcasm2413130wru.28.2023.03.03.06.49.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 06:49:01 -0800 (PST)
+Message-ID: <97541a89-7677-8dd4-b852-27f00a253a59@baylibre.com>
+Date:   Fri, 3 Mar 2023 15:49:00 +0100
 MIME-Version: 1.0
-References: <20230302235356.3148279-1-robdclark@gmail.com> <20230302235356.3148279-16-robdclark@gmail.com>
- <ZAFnqbycMleLmRe9@intel.com> <3bded9d7-9796-4a9b-7c11-aac994d4fdc6@linux.intel.com>
-In-Reply-To: <3bded9d7-9796-4a9b-7c11-aac994d4fdc6@linux.intel.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 3 Mar 2023 06:48:43 -0800
-Message-ID: <CAF6AEGs6QYTESuwB8E9cTbv9LqQX16tz6-geeu9BCyFos9=sOA@mail.gmail.com>
-Subject: Re: [PATCH v9 15/15] drm/i915: Add deadline based boost support
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>, Matt Turner <mattst88@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
+ for TI TPS6594 regulators
+Content-Language: en-US
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
+        lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-4-eblanc@baylibre.com>
+ <ceb76b77-1361-5605-db18-3b6918c029aa@gmail.com>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <ceb76b77-1361-5605-db18-3b6918c029aa@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 1:58 AM Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
->
->
-> On 03/03/2023 03:21, Rodrigo Vivi wrote:
-> > On Thu, Mar 02, 2023 at 03:53:37PM -0800, Rob Clark wrote:
-> >> From: Rob Clark <robdclark@chromium.org>
-> >>
-> >
-> > missing some wording here...
-> >
-> >> v2: rebase
-> >>
-> >> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> >> ---
-> >>   drivers/gpu/drm/i915/i915_request.c | 20 ++++++++++++++++++++
-> >>   1 file changed, 20 insertions(+)
-> >>
-> >> diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
-> >> index 7503dcb9043b..44491e7e214c 100644
-> >> --- a/drivers/gpu/drm/i915/i915_request.c
-> >> +++ b/drivers/gpu/drm/i915/i915_request.c
-> >> @@ -97,6 +97,25 @@ static bool i915_fence_enable_signaling(struct dma_fence *fence)
-> >>      return i915_request_enable_breadcrumb(to_request(fence));
-> >>   }
-> >>
-> >> +static void i915_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
-> >> +{
-> >> +    struct i915_request *rq = to_request(fence);
-> >> +
-> >> +    if (i915_request_completed(rq))
-> >> +            return;
-> >> +
-> >> +    if (i915_request_started(rq))
-> >> +            return;
-> >
-> > why do we skip the boost if already started?
-> > don't we want to boost the freq anyway?
->
-> I'd wager Rob is just copying the current i915 wait boost logic.
 
-Yup, and probably incorrectly.. Matt reported fewer boosts/sec
-compared to your RFC, this could be the bug
 
-> >> +
-> >> +    /*
-> >> +     * TODO something more clever for deadlines that are in the
-> >> +     * future.  I think probably track the nearest deadline in
-> >> +     * rq->timeline and set timer to trigger boost accordingly?
-> >> +     */
-> >
-> > I'm afraid it will be very hard to find some heuristics of what's
-> > late enough for the boost no?
-> > I mean, how early to boost the freq on an upcoming deadline for the
-> > timer?
->
-> We can off load this patch from Rob and deal with it separately, or
-> after the fact?
+On 24/02/2023 15:05, Matti Vaittinen wrote:
+> Hi Esteban,
+> 
+> On 2/24/23 15:31, Esteban Blanc wrote:
+>> From: Jerome Neanne <jneanne@baylibre.com>
+>>
+>> This patch adds support for TPS6594 regulators (bucks and LDOs).
+>> The output voltages are configurable and are meant to supply power
+>> to the main processor and other components.
+>> Bucks can be used in single or multiphase mode, depending on PMIC
+>> part number.
+>>
+>> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
+>> ---
+>>   drivers/regulator/Kconfig             |  12 +
+>>   drivers/regulator/Makefile            |   1 +
+>>   drivers/regulator/tps6594-regulator.c | 559 ++++++++++++++++++++++++++
+>>   3 files changed, 572 insertions(+)
+>>   create mode 100644 drivers/regulator/tps6594-regulator.c
+>>
+>> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+>> index 820c9a0788e5..921540af6958 100644
+>> --- a/drivers/regulator/Kconfig
+>> +++ b/drivers/regulator/Kconfig
+>> @@ -1432,6 +1432,18 @@ config REGULATOR_TPS65219
+>>         voltage regulators. It supports software based voltage control
+>>         for different voltage domains.
+>> +config REGULATOR_TPS6594
+>> +    tristate "TI TPS6594 Power regulators"
+>> +    depends on MFD_TPS6594 && OF
+>> +    help
+>> +      This driver supports TPS6594 voltage regulator chips.
+>> +      TPS6594 series of PMICs have 5 BUCKs and 4 LDOs
+>> +      voltage regulators.
+>> +      BUCKs 1,2,3,4 can be used in single phase or multiphase mode.
+>> +      Part number defines which single or multiphase mode is i used.
+>> +      It supports software based voltage control
+>> +      for different voltage domains.
+>> +
+>>   config REGULATOR_TPS6524X
+>>       tristate "TI TPS6524X Power regulators"
+>>       depends on SPI
+>> diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+>> index b9f5eb35bf5f..948b53f6156b 100644
+>> --- a/drivers/regulator/Makefile
+>> +++ b/drivers/regulator/Makefile
+>> @@ -171,6 +171,7 @@ obj-$(CONFIG_REGULATOR_TPS6524X) += 
+>> tps6524x-regulator.o
+>>   obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
+>>   obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
+>>   obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
+>> +obj-$(CONFIG_REGULATOR_TPS6594) += tps6594-regulator.o
+>>   obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
+>>   obj-$(CONFIG_REGULATOR_TPS68470) += tps68470-regulator.o
+>>   obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o twl6030-regulator.o
+>> diff --git a/drivers/regulator/tps6594-regulator.c 
+>> b/drivers/regulator/tps6594-regulator.c
+>> new file mode 100644
+>> index 000000000000..c099711fd460
+>> --- /dev/null
+>> +++ b/drivers/regulator/tps6594-regulator.c
+>> @@ -0,0 +1,559 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Regulator driver for tps6594 PMIC
+>> + *
+>> + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
+>> + *
+>> + * This implementation derived from tps65218 authored by "J Keerthy 
+>> <j-keerthy@ti.com>"
+>> + */
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/err.h>
+>> +#include <linux/init.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/regulator/driver.h>
+>> +#include <linux/regulator/machine.h>
+>> +#include <linux/regulator/of_regulator.h>
+>> +
+>> +#include <linux/mfd/tps6594.h>
+>> +
+>> +#define BUCK_NB        5
+>> +#define LDO_NB        4
+>> +#define MULTI_PHASE_NB    4
+>> +
+>> +enum tps6594_regulator_id {
+>> +    /* DCDC's */
+>> +    TPS6594_BUCK_1,
+>> +    TPS6594_BUCK_2,
+>> +    TPS6594_BUCK_3,
+>> +    TPS6594_BUCK_4,
+>> +    TPS6594_BUCK_5,
+>> +
+>> +    /* LDOs */
+>> +    TPS6594_LDO_1,
+>> +    TPS6594_LDO_2,
+>> +    TPS6594_LDO_3,
+>> +    TPS6594_LDO_4,
+>> +};
+>> +
+>> +enum tps6594_multi_regulator_id {
+>> +    /* Multi-phase DCDC's */
+>> +    TPS6594_BUCK_12,
+>> +    TPS6594_BUCK_34,
+>> +    TPS6594_BUCK_123,
+>> +    TPS6594_BUCK_1234,
+>> +};
+>> +
+>> +struct tps6594_regulator_irq_type {
+>> +    const char *irq_name;
+>> +    const char *regulator_name;
+>> +    const char *event_name;
+>> +    unsigned long event;
+>> +};
+>> +
+>> +static struct tps6594_regulator_irq_type 
+>> tps6594_regulator_irq_types[] = {
+>> +    { TPS6594_IRQ_NAME_BUCK1_OV, "BUCK1", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_BUCK1_UV, "BUCK1", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+> 
+> You have warning level IRQs - which is cool :)
+> 
+> As warning level IRQs are used for non fatal errors, you probably would 
+> like to also implement a mechanism for consumers to know when the 
+> "warning is over" (assuming the HW provides the status information). 
+> Maybe regulator_get_error_flags() would serve you?
+> 
+> I'd be _really_ interested in hearing if you already have a use-case for 
+> the warnings.
+I double checked with TI PMIC team and so far we don't have any routine.
+The requirement for upstream driver is to raise the warning to the 
+processor nothing else. Up to the final customer to customize further.
+Note that it can be dangerous to handle in sw it in a generic way since 
+those warnings might affect some regulators that is supplying some 
+resources needed by the processor for correct behavior...
+> 
+>> +    { TPS6594_IRQ_NAME_BUCK1_SC, "BUCK1", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_BUCK1_ILIM, "BUCK1", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +    { TPS6594_IRQ_NAME_BUCK2_OV, "BUCK2", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_BUCK2_UV, "BUCK2", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_BUCK2_SC, "BUCK2", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_BUCK2_ILIM, "BUCK2", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +    { TPS6594_IRQ_NAME_BUCK3_OV, "BUCK3", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_BUCK3_UV, "BUCK3", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_BUCK3_SC, "BUCK3", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_BUCK3_ILIM, "BUCK3", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +    { TPS6594_IRQ_NAME_BUCK4_OV, "BUCK4", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_BUCK4_UV, "BUCK4", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_BUCK4_SC, "BUCK4", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_BUCK4_ILIM, "BUCK4", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +    { TPS6594_IRQ_NAME_BUCK5_OV, "BUCK5", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_BUCK5_UV, "BUCK5", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_BUCK5_SC, "BUCK5", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_BUCK5_ILIM, "BUCK5", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +    { TPS6594_IRQ_NAME_LDO1_OV, "LDO1", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_LDO1_UV, "LDO1", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_LDO1_SC, "LDO1", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_LDO1_ILIM, "LDO1", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +    { TPS6594_IRQ_NAME_LDO2_OV, "LDO2", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_LDO2_UV, "LDO2", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_LDO2_SC, "LDO2", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_LDO2_ILIM, "LDO2", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +    { TPS6594_IRQ_NAME_LDO3_OV, "LDO3", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_LDO3_UV, "LDO3", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_LDO3_SC, "LDO3", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_LDO3_ILIM, "LDO3", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +    { TPS6594_IRQ_NAME_LDO4_OV, "LDO4", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_LDO4_UV, "LDO4", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_LDO4_SC, "LDO4", "short circuit", 
+>> REGULATOR_EVENT_REGULATION_OUT },
+>> +    { TPS6594_IRQ_NAME_LDO4_ILIM, "LDO4", "reach ilim, overcurrent",
+>> +      REGULATOR_EVENT_OVER_CURRENT },
+>> +};
+>> +
+>> +static struct tps6594_regulator_irq_type 
+>> tps6594_ext_regulator_irq_types[] = {
+>> +    { TPS6594_IRQ_NAME_VCCA_OV, "VCCA", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_VCCA_UV, "VCCA", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_VMON1_OV, "VMON1", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_VMON1_UV, "VMON1", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_VMON1_RV, "VMON1", "residual voltage",
+>> +      REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_VMON2_OV, "VMON2", "overvoltage", 
+>> REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +    { TPS6594_IRQ_NAME_VMON2_UV, "VMON2", "undervoltage", 
+>> REGULATOR_EVENT_UNDER_VOLTAGE },
+>> +    { TPS6594_IRQ_NAME_VMON2_RV, "VMON2", "residual voltage",
+>> +      REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+>> +};
+>> +
+>> +struct tps6594_regulator_irq_data {
+>> +    struct device *dev;
+>> +    struct tps6594_regulator_irq_type *type;
+>> +    struct regulator_dev *rdev;
+>> +};
+>> +
+>> +struct tps6594_ext_regulator_irq_data {
+>> +    struct device *dev;
+>> +    struct tps6594_regulator_irq_type *type;
+>> +};
+>> +
+>> +    for (i = 0; i < ARRAY_SIZE(tps6594_regulator_irq_types); ++i) {
+>> +        irq_type = &tps6594_regulator_irq_types[i];
+>> +
+>> +        irq = platform_get_irq_byname(pdev, irq_type->irq_name);
+>> +        if (irq < 0)
+>> +            return -EINVAL;
+>> +
+>> +        irq_data[i].dev = tps->dev;
+>> +        irq_data[i].type = irq_type;
+>> +
+>> +        tps6594_get_rdev_by_name(irq_type->regulator_name, rdevbucktbl,
+>> +                     rdevldotbl, rdev);
+>> +
+>> +        if (rdev < 0) {
+>> +            dev_err(tps->dev, "Failed to get rdev for %s\n",
+>> +                irq_type->regulator_name);
+>> +            return -EINVAL;
+>> +        }
+>> +        irq_data[i].rdev = rdev;
+>> +
+>> +        error = devm_request_threaded_irq(tps->dev, irq, NULL,
+>> +                          tps6594_regulator_irq_handler,
+>> +                          IRQF_ONESHOT,
+>> +                          irq_type->irq_name,
+>> +                          &irq_data[i]);
+>> +        if (error) {
+>> +            dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
+>> +                irq_type->irq_name, irq, error);
+>> +            return error;
+>> +        }
+>> +    }
+> 
+> If I read this correctly, you have exact, 1 to 1 mapping from an IRQ to 
+> regulator and event? Maybe you could slightly simplify the driver by 
+> using the devm_regulator_irq_helper() and 
+> regulator_irq_map_event_simple() with it's map-event? And if the 
+> devm_regulator_irq_helper() does not work for you I'll be interested in 
+> hearing if it could be improved.
+> 
+I'll give it a try.
 
-That is completely my intention, I expect you to replace my i915 patch ;-)
-
-Rough idea when everyone is happy with the core bits is to setup an
-immutable branch without the driver specific patches, which could be
-merged into drm-next and $driver-next and then each driver team can
-add there own driver patches on top
-
-BR,
--R
-
-> It's a half solution without a smarter scheduler too. Like
-> https://lore.kernel.org/all/20210208105236.28498-10-chris@chris-wilson.co.uk/,
-> or if GuC plans to do something like that at any point.
->
-> Or bump the priority too if deadline is looming?
->
-> IMO it is not very effective to fiddle with the heuristic on an ad-hoc
-> basis. For instance I have a new heuristics which improves the
-> problematic OpenCL cases for further 5% (relative to the current
-> waitboost improvement from adding missing syncobj waitboost). But I
-> can't really test properly for regressions over platforms, stacks,
-> workloads.. :(
->
-> Regards,
->
-> Tvrtko
->
-> >
-> >> +
-> >> +    intel_rps_boost(rq);
-> >> +}
-> >> +
-> >>   static signed long i915_fence_wait(struct dma_fence *fence,
-> >>                                 bool interruptible,
-> >>                                 signed long timeout)
-> >> @@ -182,6 +201,7 @@ const struct dma_fence_ops i915_fence_ops = {
-> >>      .signaled = i915_fence_signaled,
-> >>      .wait = i915_fence_wait,
-> >>      .release = i915_fence_release,
-> >> +    .set_deadline = i915_fence_set_deadline,
-> >>   };
-> >>
-> >>   static void irq_execute_cb(struct irq_work *wrk)
-> >> --
-> >> 2.39.1
-> >>
+Thanks
