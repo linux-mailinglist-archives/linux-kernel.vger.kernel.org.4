@@ -2,135 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D516A9647
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553406A965F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbjCCLaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
+        id S229737AbjCCLdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjCCLaW (ORCPT
+        with ESMTP id S230490AbjCCLdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:30:22 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DB495D8A6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:30:01 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C0052F4;
-        Fri,  3 Mar 2023 03:30:38 -0800 (PST)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 910603F93E;
-        Fri,  3 Mar 2023 03:29:54 -0800 (PST)
-Date:   Fri, 3 Mar 2023 11:29:52 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 08/10] sched/topology: Remove SHARED_CHILD from
- ASYM_PACKING
-Message-ID: <ZAHaMKH7C0sVIjXX@arm.com>
-References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
- <20230207045838.11243-9-ricardo.neri-calderon@linux.intel.com>
+        Fri, 3 Mar 2023 06:33:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F9030E7;
+        Fri,  3 Mar 2023 03:32:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE1BDB818A6;
+        Fri,  3 Mar 2023 11:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F239CC433EF;
+        Fri,  3 Mar 2023 11:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677843105;
+        bh=jR+QCEQFJCzNfqYb/md+DBKXs+PmGlbXDXTESltRKcQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UAl0CVM7O+qdCC4Kms3+Bdubi2KBYFJlpYcctFCHxB8qv9A6WGsl/wwA56S/92b/S
+         uHtZ57SLgiNC80am71rFRlRZl4xtUEtpwD2uxyUria/SDfmM9bW46YczFtBOkwxLmq
+         4297nrlvGSVowOULU42P4wanBTdBUDSbKVA/vsDM=
+Date:   Fri, 3 Mar 2023 12:31:43 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, mptcp@lists.linux.dev,
+        Florian Westphal <fw@strlen.de>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
+Message-ID: <ZAHanxy5sXIE75l8@kroah.com>
+References: <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
+ <ZAB6pP3MNy152f+7@kroah.com>
+ <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
+ <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
+ <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
+ <CA+G9fYuLQEfeTjx52NxbXV5914YJQ2tVd8k4SJjrAryujPjnqA@mail.gmail.com>
+ <ZAG8dla274kYfxoK@kroah.com>
+ <3d92e773-896c-43c3-94ae-cb7851213c55@tessares.net>
+ <ZAHLYvOPEYghRcJ1@kroah.com>
+ <b4cb0542-df0c-48ae-b791-8c0a601f6ec0@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230207045838.11243-9-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b4cb0542-df0c-48ae-b791-8c0a601f6ec0@tessares.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+On Fri, Mar 03, 2023 at 11:56:26AM +0100, Matthieu Baerts wrote:
+> Hi Greg,
+> 
+> 3 Mar 2023 11:26:46 Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+> 
+> > On Fri, Mar 03, 2023 at 10:47:33AM +0100, Matthieu Baerts wrote:
+> >> Hi Greg, Naresh, Paolo,
+> >>
+> >> Thank you for the new version and for having reported the issue and running MPTCP selftests!
+> >>
+> >> 3 Mar 2023 10:23:06 Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+> >>
+> >>> On Fri, Mar 03, 2023 at 02:34:05PM +0530, Naresh Kamboju wrote:
+> >>>> On Fri, 3 Mar 2023 at 13:34, Paolo Abeni <pabeni@redhat.com> wrote:
+> >>>>>
+> >>>>> Hello,
+> >>>>>
+> >>>>> On Fri, 2023-03-03 at 01:32 +0530, Naresh Kamboju wrote:
+> >>>>>> …
+> >>>>>
+> >>>>> I read the above as you are running self-tests from 6.2.1 on top of an
+> >>>>> older (6.1) kernel. Is that correct?
+> >>>>
+> >>>> correct.
+> >>>>
+> >>>>> If so failures are expected;
+> >>>
+> >>> Shouldn't the test be able to know that "new features" are not present
+> >>> and properly skip the test for when that happens?  Otherwise this feels
+> >>> like a problem going forward as no one will know if this feature can be
+> >>> used or not (assuming it is a new feature and not just a functional
+> >>> change.)
+> >>
+> >> All MPTCP selftests are designed to run on the same kernel version
+> >> they are attached to. This allows us to do more checks knowing they
+> >> are not supposed to fail on newer kernel versions and not being
+> >> skipped if there is an error when trying to use the new feature. If
+> >> there are fixes, we make sure the stable team is Cc'ed. If there are
+> >> API changes, it would be visible because we would need to adapt
+> >> existing selftests.
+> >
+> > "Features" are not usually limited to specific kernel versions (think
+> > about the mess that "enterprise" kernels create by backports).  And if
+> > they are, running a userspace test should be able to detect if the
+> > feature is present or not by the error returned to it, right?  If not,
+> > then the feature is mis-designed.
+> 
+> Thank you for the explanation. (I didn't know these tests had to support "enterprise" kernels.)
 
-On Monday 06 Feb 2023 at 20:58:36 (-0800), Ricardo Neri wrote:
-> Only x86 and Power7 use ASYM_PACKING. They use it differently.
-> 
-> Power7 has cores of equal priority, but the SMT siblings of a core have
-> different priorities. Parent scheduling domains do not need (nor have) the
-> ASYM_PACKING flag. SHARED_CHILD is not needed. Using SHARED_PARENT would
-> cause the topology debug code to complain.
-> 
-> X86 has cores of different priority, but all the SMT siblings of the core
-> have equal priority. It needs ASYM_PACKING at the MC level, but not at the
-> SMT level (it also needs it at upper levels if they have scheduling groups
-> of different priority). Removing ASYM_PACKING from the SMT domain causes
-> the topology debug code to complain.
-> 
-> Remove SHARED_CHILD for now. We still need a topology check that satisfies
-> both architectures.
-> 
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Tim C. Chen <tim.c.chen@intel.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: x86@kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Suggested-by: Valentin Schneider <vschneid@redhat.com>
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v2:
->  * Introduced this patch.
-> 
-> Changes since v1:
->  * N/A
-> ---
->  include/linux/sched/sd_flags.h | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
-> index 57bde66d95f7..800238854ba5 100644
-> --- a/include/linux/sched/sd_flags.h
-> +++ b/include/linux/sched/sd_flags.h
-> @@ -132,12 +132,9 @@ SD_FLAG(SD_SERIALIZE, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
->  /*
->   * Place busy tasks earlier in the domain
->   *
-> - * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
-> - *               up, but currently assumed to be set from the base domain
-> - *               upwards (see update_top_cache_domain()).
->   * NEEDS_GROUPS: Load balancing flag.
->   */
-> -SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
-> +SD_FLAG(SD_ASYM_PACKING,  SDF_NEEDS_GROUPS)
+Tests have to run anywhere.
 
-While this silences the warning one would have gotten when removing
-SD_ASYM_PACKING from SMT level, it will still result in sd_asym_packing
-being NULL for these systems, which breaks nohz balance. That is because
-highest_flag_domain() still stops searching at the first level without
-the flag set, in this case SMT, even if levels above have the flag set.
+> For features where the userspace explicitly asks to use them, that's easy. For events that are only created from a specific kernel version, that will be harder but it is maybe a sign that something else is missing on our side :)
 
-Maybe highest_flag_domain() should be changed to take into account the
-metadata flags?
+Think about userspace, how will it even know if a feature is present or
+not in the kernel it is running on?  It needs to know "I tried to use
+this and it failed because of it not being there or because something
+else went wrong".  Userspace has to be able to distinguish between the
+two somehow, otherwise no one will be able to use your feature very
+well.
 
-Thanks,
-Ionela.
+So just rewrite the test to handle "not present", like we can handle
+ioctls or syscalls not being present vs. "an error happened".
 
->  
->  /*
->   * Prefer to place tasks in a sibling domain
-> -- 
-> 2.25.1
+> >> That's how we thought we should design MPTCP selftests. Maybe we need to change this design?
+> >
+> > Yes, please "skip" tests for features that are just not present, do not
+> > fail them.
 > 
-> 
+> It might take a bit of time but we will look at that. I think we don't
+> even check MPTCP is available before starting the first test, we just
+> assume it is there if someone explicitly starts these tests :-)
+
+That too should probably be fixed up :)
+
+thanks,
+
+greg k-h
