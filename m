@@ -2,166 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC27A6A9545
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BB46A954C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjCCKc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 05:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S230228AbjCCKeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 05:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCCKcZ (ORCPT
+        with ESMTP id S229451AbjCCKeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 05:32:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92523580E1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 02:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677839499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7hFKulmrqZbTf9q6Sh0sTv9iLMhiQyVri/7U3fZos58=;
-        b=XpeJBgJI5B4RYCIYnzi+nnFoTjWZkVIzuRTeH0vXkSvKIm5tL+Kue/C8powXR3OsXFHtAw
-        jD/SWZd5atbh1czv8g0QhRjOMynqc/93Z/RuEp2uh2JuTxbmTid+qjbCrrGLSI5iii8Kre
-        Rw1nmg2S/ak1nhTadxBy6vOXaJHNhjM=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-413-rkDU77uCMj-Gp2pDsiwq7w-1; Fri, 03 Mar 2023 05:31:38 -0500
-X-MC-Unique: rkDU77uCMj-Gp2pDsiwq7w-1
-Received: by mail-ed1-f70.google.com with SMTP id p36-20020a056402502400b004bb926a3d54so3381754eda.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 02:31:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hFKulmrqZbTf9q6Sh0sTv9iLMhiQyVri/7U3fZos58=;
-        b=HnzGF9p4bA7cepjfBm8p05DOJousywXCJ1WGac0HSX4P4PVXuKzfOizYgawnpG1ja1
-         4c4G9nAX6LohCAkcyoF9OL8Ui755dEUVMfQ2/01uqxYJi/URFvn+sJGHH0hmUIOAGjm5
-         VcPOrm9xImm7opNXlK2aYJY1DxUIO/ZAFDwzA2TLBFfbJ01SUoQASSTk6lp/EuOi3xDW
-         5o+iskvXtq3yaZ/QMDjsr0u0C0odo0Z+Oht/BDyVNKdsl0GqraXKV94gcv8mhyP9/L2T
-         Ed0EWmAiFC/jmHLY4Hawh7LP2d0KJ3fQa139Vzgb79+fC0oyP7kbnaQq2yQd7m8HGkCP
-         Y5lw==
-X-Gm-Message-State: AO0yUKUKAzrmOqQ/UtepJJOAwY+254Cc8jhMrHmpma6A7zAsVAKit2N2
-        G6ipgHt9YKBUayfdNnwA3XWwmcJUg8Eo0RgbejtPCAxO26WaegK9+TuxHsCY0eL4Qsk16B48lZy
-        Yr+EMjOaYrLLIerYwvUlTaEu7
-X-Received: by 2002:a17:906:a882:b0:8aa:a802:adcd with SMTP id ha2-20020a170906a88200b008aaa802adcdmr1126692ejb.30.1677839497577;
-        Fri, 03 Mar 2023 02:31:37 -0800 (PST)
-X-Google-Smtp-Source: AK7set+dNeTha+dpDazmX7Y6KMFZSZy5QW/4mxFqD4WQL+q6eFTVdNlEwM6IxZz2Z/PPEAHrK/Ks/w==
-X-Received: by 2002:a17:906:a882:b0:8aa:a802:adcd with SMTP id ha2-20020a170906a88200b008aaa802adcdmr1126668ejb.30.1677839497257;
-        Fri, 03 Mar 2023 02:31:37 -0800 (PST)
-Received: from [192.168.42.100] (nat-cgn9-185-107-15-52.static.kviknet.net. [185.107.15.52])
-        by smtp.gmail.com with ESMTPSA id ci25-20020a170906c35900b008b23e619960sm803620ejb.139.2023.03.03.02.31.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 02:31:36 -0800 (PST)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <ac7c7be0-656a-8b5a-c629-e135e39f844a@redhat.com>
-Date:   Fri, 3 Mar 2023 11:31:35 +0100
+        Fri, 3 Mar 2023 05:34:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA3D23C78;
+        Fri,  3 Mar 2023 02:34:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4AA8EB81646;
+        Fri,  3 Mar 2023 10:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52BF8C433EF;
+        Fri,  3 Mar 2023 10:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677839648;
+        bh=XKj25EOwdMQ/e4nJyVZY9U2p6+v/6uaMPztAGk8sI44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PFQVdQ5/nUJ1aYxf3f9wyV08jeot6+gIuwrVHyhxveL2saZ8afYaTpmnSkOP8jlae
+         8pctxGHg3RoQdj35MmDA4D8uZ5jYplxx1gIaIS2thfzGTTmZJwlrdi2lgdT5noOuNv
+         Ym5lO1lx8MgqIDooD6yjnQzh3pnT/OePZl7rKVeXKDrnvKpYtc4zBsJeQdECjY9bWy
+         Qm2Rp0lmnF3AgJjC/06Y61owRlWGk0xKqjW5JpORgCkTDczyJad/vrXy606d7jWM+Y
+         noWlFsFRHzvdK48dgLKC17enu3IaWTCDd5TcR5D19ZDDmMzvPgFiLAhVTkM0Gmn3bV
+         vSTvHWkVgmnvw==
+Date:   Fri, 3 Mar 2023 12:33:55 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 03/34] mm: Add folio_flush_mapping()
+Message-ID: <ZAHNEwN7pXoFHcp9@kernel.org>
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-4-willy@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built
- from XDP frames
-Content-Language: en-US
-To:     Yunsheng Lin <linyunsheng@huawei.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-References: <20230301160315.1022488-1-aleksander.lobakin@intel.com>
- <20230301160315.1022488-2-aleksander.lobakin@intel.com>
- <36d42e20-b33f-5442-0db7-e9f5ef9d0941@huawei.com>
-In-Reply-To: <36d42e20-b33f-5442-0db7-e9f5ef9d0941@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228213738.272178-4-willy@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 28, 2023 at 09:37:06PM +0000, Matthew Wilcox (Oracle) wrote:
+> This is the folio equivalent of page_mapping_file(), but rename it
+> to make it clear that it's very different from page_file_mapping().
+> Theoretically, there's nothing flush-only about it, but there are no
+> other users today, and I doubt there will be; it's almost always more
+> useful to know the swapfile's mapping or the swapcache's mapping.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  include/linux/pagemap.h | 26 +++++++++++++++++++++-----
+>  1 file changed, 21 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+> index 51b75b89730e..1b1ba3d5100d 100644
+> --- a/include/linux/pagemap.h
+> +++ b/include/linux/pagemap.h
+> @@ -369,6 +369,26 @@ static inline struct address_space *folio_file_mapping(struct folio *folio)
+>  	return folio->mapping;
+>  }
+>  
+> +/**
+> + * folio_flush_mapping - Find the file mapping this folio belongs to.
+> + * @folio: The folio.
+> + *
+> + * For folios which are in the page cache, return the mapping that this
+> + * page belongs to.  Anonymous folios return NULL, even if they're in
 
-On 02/03/2023 03.30, Yunsheng Lin wrote:
-> On 2023/3/2 0:03, Alexander Lobakin wrote:
->> __xdp_build_skb_from_frame() state(d):
->>
->> /* Until page_pool get SKB return path, release DMA here */
->>
->> Page Pool got skb pages recycling in April 2021, but missed this
->> function.
->>
->> xdp_release_frame() is relevant only for Page Pool backed frames and it
->> detaches the page from the corresponding Pool in order to make it
->> freeable via page_frag_free(). It can instead just mark the output skb
->> as eligible for recycling if the frame is backed by a PP. No change for
->> other memory model types (the same condition check as before).
->> cpumap redirect and veth on Page Pool drivers now become zero-alloc (or
->> almost).
->>
->> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->> ---
->>   net/core/xdp.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/net/core/xdp.c b/net/core/xdp.c
->> index 8c92fc553317..a2237cfca8e9 100644
->> --- a/net/core/xdp.c
->> +++ b/net/core/xdp.c
->> @@ -658,8 +658,8 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
->>   	 * - RX ring dev queue index	(skb_record_rx_queue)
->>   	 */
->>   
->> -	/* Until page_pool get SKB return path, release DMA here */
->> -	xdp_release_frame(xdpf);
->> +	if (xdpf->mem.type == MEM_TYPE_PAGE_POOL)
->> +		skb_mark_for_recycle(skb);
-> 
-> 
-> We both rely on both skb->pp_recycle and page->pp_magic to decide
-> the page is really from page pool. So there was a few corner case
-> problem when we are sharing a page for different skb in the driver
-> level or calling skb_clone() or skb_try_coalesce().
-> see:
-> https://github.com/torvalds/linux/commit/2cc3aeb5ecccec0d266813172fcd82b4b5fa5803
-> https://lore.kernel.org/netdev/MW5PR15MB51214C0513DB08A3607FBC1FBDE19@MW5PR15MB5121.namprd15.prod.outlook.com/t/
-> https://lore.kernel.org/netdev/167475990764.1934330.11960904198087757911.stgit@localhost.localdomain/
-> 
-> As the 'struct xdp_frame' also use 'struct skb_shared_info' which is
-> sharable, see xdp_get_shared_info_from_frame().
-> 
-> For now xdpf_clone() does not seems to handling frag page yet,
-> so it should be fine for now.
-> 
-> IMHO we should find a way to use per-page marker, instead of both
-> per-skb and per-page markers, in order to avoid the above problem
-> for xdp if xdp has a similar processing as skb, as suggested by Eric.
-> 
+      ^ folio ?
 
-Moving to a per-page marker can be *more* expensive if the struct-page
-memory isn't cache-hot.  So, if struct-page is accessed anyhow then sure
-we can move it to a per-page marker.
-
-> https://lore.kernel.org/netdev/CANn89iKgZU4Q+THXupzZi4hETuKuCOvOB=iHpp5JzQTNv_Fg_A@mail.gmail.com/
-> 
->>   
->>   	/* Allow SKB to reuse area used by xdp_frame */
->>   	xdp_scrub_frame(xdpf);
->>
+> + * the swap cache.  Other kinds of folio also return NULL.
+> + *
+> + * This is ONLY used by architecture cache flushing code.  If you aren't
+> + * writing cache flushing code, you want either folio_mapping() or
+> + * folio_file_mapping().
+> + */
+> +static inline struct address_space *folio_flush_mapping(struct folio *folio)
+> +{
+> +	if (unlikely(folio_test_swapcache(folio)))
+> +		return NULL;
+> +
+> +	return folio_mapping(folio);
+> +}
+> +
+>  static inline struct address_space *page_file_mapping(struct page *page)
+>  {
+>  	return folio_file_mapping(page_folio(page));
+> @@ -379,11 +399,7 @@ static inline struct address_space *page_file_mapping(struct page *page)
+>   */
+>  static inline struct address_space *page_mapping_file(struct page *page)
+>  {
+> -	struct folio *folio = page_folio(page);
+> -
+> -	if (unlikely(folio_test_swapcache(folio)))
+> -		return NULL;
+> -	return folio_mapping(folio);
+> +	return folio_flush_mapping(page_folio(page));
+>  }
+>  
+>  /**
+> -- 
+> 2.39.1
 > 
 
+-- 
+Sincerely yours,
+Mike.
