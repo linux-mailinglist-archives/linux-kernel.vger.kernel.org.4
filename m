@@ -2,74 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DF66A9BBA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D356A9BCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjCCQ0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 11:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S231140AbjCCQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 11:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCCQ0h (ORCPT
+        with ESMTP id S231126AbjCCQb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:26:37 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458491ACD7;
-        Fri,  3 Mar 2023 08:26:34 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323FuUF9032250;
-        Fri, 3 Mar 2023 16:26:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=KWWrGu9s6nFo3DaWQ+eqfEBda06NjJvV/h5p3RM6fDI=;
- b=V0FxVx0LF1V8s/M0HUodcG0F02Ev13WgBUVv72zi/CKDVI5iPPEdH73S90ziLuD0LEX0
- Gq+YIHJkr63TvIwkSgukM4R8eElmt1xcykFlt9GOrlVjdk/hHYCXbGLlctycHLd7ZqiN
- rRp1vamPH0JLctdxbNby3YK1Z+MzSF/Sp+0w8ZsTvYKqxCYw3rkP6PmupBftKB88SzfG
- X9BmAKnbGUq0vIxpxVKbAf4if92Sa7SPXTSd6pM0eZ8aAsdFSu1rtiNEmtkiwli5DMta
- BwFptu8piqyXfw92+r499FLZHPkUtLVDo/oEUorv6uJg6YLaGdicxErH7MaUeHFMB/2H tg== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nyb7wxtc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Mar 2023 16:26:21 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 323EbG0G004991;
-        Fri, 3 Mar 2023 16:26:19 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ny8sc0n8s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Mar 2023 16:26:19 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 323GM3cj020249;
-        Fri, 3 Mar 2023 16:26:19 GMT
-Received: from t460.home (dhcp-10-175-62-236.vpn.oracle.com [10.175.62.236])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ny8sc0n6r-1;
-        Fri, 03 Mar 2023 16:26:18 +0000
-From:   Vegard Nossum <vegard.nossum@oracle.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, backports@vger.kernel.org,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] docs: add backporting and conflict resolution document
-Date:   Fri,  3 Mar 2023 17:25:53 +0100
-Message-Id: <20230303162553.17212-1-vegard.nossum@oracle.com>
-X-Mailer: git-send-email 2.35.1.46.g38062e73e0
-MIME-Version: 1.0
+        Fri, 3 Mar 2023 11:31:28 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2045.outbound.protection.outlook.com [40.107.21.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3B4B762;
+        Fri,  3 Mar 2023 08:31:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UnXkqilarehHRVej9BHrS5YNxmgjnu+ApoGT/tOwEVo=;
+ b=aVvCyQhS3rp9NX3975/ufMDEZruAyvxa8Vq//TURrd7mJat4/TXhMdJ+9hN0fCW5utRS57cF2xT1BFQsZzP3/tXZIo3UQW1EgZwa0eeWmeQkAlt8pLY+CHNElafgoo3H6nog9uzLCqYI7T7mr7BAzQZWrYRt01/iGc69nsSLZyY=
+Received: from FR0P281CA0136.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:96::10)
+ by GV2PR08MB8098.eurprd08.prod.outlook.com (2603:10a6:150:76::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Fri, 3 Mar
+ 2023 16:31:19 +0000
+Received: from VI1EUR03FT022.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:d10:96:cafe::6a) by FR0P281CA0136.outlook.office365.com
+ (2603:10a6:d10:96::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.10 via Frontend
+ Transport; Fri, 3 Mar 2023 16:31:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ VI1EUR03FT022.mail.protection.outlook.com (100.127.144.146) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.22 via Frontend Transport; Fri, 3 Mar 2023 16:31:18 +0000
+Received: ("Tessian outbound b29c0599cbc9:v135"); Fri, 03 Mar 2023 16:31:18 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: dfbb8837bf3da4f7
+X-CR-MTA-TID: 64aa7808
+Received: from cb5e7e4f84ff.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id B1A65480-BAD4-4EF8-AA5D-5CFAD9267067.1;
+        Fri, 03 Mar 2023 16:31:10 +0000
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id cb5e7e4f84ff.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Fri, 03 Mar 2023 16:31:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GXI3lI32CJByB3whhIMfz6k1EN2cfyAqb1R/Xx+vmDR3Gq0l6RFHGhgy/ITEyEnBPiM8Ir0K1wEG1MYRA+SK3RKNL0YIm1USMmecjcealGfjk+KEwGnd+e5IlEVTxVTReCqSiyqNkEdKjRf2zMFzOLmjqI6NrwZ1ncAdpKPmhCNaBG5Jt17a+wWG/KFiDEg2gl6urKcC2jBo3f+xz2SulnztseZCxDgJ6g7CKFgpm3XKERlzy4RbGv1+/LHJZVuPyVkdQ6073zPsTAo12OiAOlrh0CWfUM1V50jcxcXFI1i7VO87HU2rVpQnSolE9IMzmTxKJO4SVTmCGP/Wnm2GTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UnXkqilarehHRVej9BHrS5YNxmgjnu+ApoGT/tOwEVo=;
+ b=NsUZZVYnuovDmFhoNqTlleE7WEDg34GX3GzohZCKxZYP5pi9N0ybhjGwkfhM1QeTeTL07gx1ITiViF3tfbIPweEFnl+IKemj32CJjYmgRkaqpoob5c8/drIQA1ZUJBRPbIWU4541MsIeSPffVkSyWxEPfJyLMN3RZoOMb9W52JmSxaKq/9LEAoxrh/wntM7d4fn9dfDNgt82be9ZXZzeDDckdnZS6fLiIbqeNgOKBEWBsgng2qh3mXOdftHO6EfaJ7RpCaCltu7hP8SWzIA0cWcun2VTvufjPAyUvGzLCa1c3L60E0y0VZgVZUkMGaVdXn+bOYdiLFCWfHCE1oygSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UnXkqilarehHRVej9BHrS5YNxmgjnu+ApoGT/tOwEVo=;
+ b=aVvCyQhS3rp9NX3975/ufMDEZruAyvxa8Vq//TURrd7mJat4/TXhMdJ+9hN0fCW5utRS57cF2xT1BFQsZzP3/tXZIo3UQW1EgZwa0eeWmeQkAlt8pLY+CHNElafgoo3H6nog9uzLCqYI7T7mr7BAzQZWrYRt01/iGc69nsSLZyY=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by PAXPR08MB6447.eurprd08.prod.outlook.com (2603:10a6:102:de::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Fri, 3 Mar
+ 2023 16:31:04 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6134.027; Fri, 3 Mar 2023
+ 16:31:04 +0000
+Date:   Fri, 3 Mar 2023 16:30:37 +0000
+From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
+Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <ZAIgrXQ4670gxlE4@arm.com>
+References: <Y/9fdYQ8Cd0GI+8C@arm.com>
+ <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
+ <ZADLZJI1W1PCJf5t@arm.com>
+ <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_03,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 suspectscore=0 phishscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303030142
-X-Proofpoint-GUID: W7vcRf8MNFU0gknmnBrkI1yoN64x5AzV
-X-Proofpoint-ORIG-GUID: W7vcRf8MNFU0gknmnBrkI1yoN64x5AzV
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
+X-ClientProxiedBy: SN7PR04CA0208.namprd04.prod.outlook.com
+ (2603:10b6:806:126::33) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
+MIME-Version: 1.0
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|PAXPR08MB6447:EE_|VI1EUR03FT022:EE_|GV2PR08MB8098:EE_
+X-MS-Office365-Filtering-Correlation-Id: 69e46c13-2d6e-4c82-6af6-08db1c04b789
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: /UXqjHLwi/bKlvotgF4qnKIest1mngSygeXxuJzwbzB62lroHGFZNEbsHo/4Am2V7Gs53UTrjnP0CNWCLB+K7d+AGC1GAt3DkAjUVjZcASDJltubLBnuUzktaq2Nu4mTf5rlj5uPcgBEYwcxMp+ua1iiHWFwTQSWE00qR/LVC1u469nTtAANPbUtvfmCAdKpVwnri3zQpOKcjoiyPdgA/kAEMzKuvY5Kk3V24OfnAjKC4LFzttwwV6fjSTm4UhsgqWNmr0ruyrEz2TSd3neGJ4smIukB9UAZjj556deSkhcEH4FkT9vO258nJamO5CJ+MNT1ZRVBxo49PZmBWnfT8nuP4nKFPyPx1VuG2YWbmqxdvVxNsL+K/Tp9LaSR3ls6n7Oelg8gnBQ+Fds1kGZ0KJ0zuLF7UAhXmLDnkK8Tu4Cjo145arhG5AKwMoqXsLiYuy6yI6SnbPWHiWLGw8dmBzuwQjFl2QSAwy22UZyBE4m690LKFSv/GuZssfNnqvBclpcE4aaC6rmxVGK35cvmNDb4HftmStEpMcfwMUkNeqp6aL1n1DqsC9yDZ7b6FjEjhe8zn4Sq2RstFsBzzF1uEfVbSc9uAd20+dSivJWeCBU6yWK2SdsF4JsFh6+RIOzXLg2WhpsNp4CqPsfM+r3kVNeK/0cnUREq6/revYI9H8ZJAu7Cz23i9R1oMumm+0CG
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199018)(6486002)(2906002)(66899018)(6666004)(7416002)(6506007)(6512007)(110136005)(54906003)(26005)(186003)(2616005)(36756003)(7406005)(86362001)(66946007)(66476007)(4326008)(8676002)(66556008)(316002)(5660300002)(478600001)(83380400001)(41300700001)(38100700002)(8936002)(921005);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB6447
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR03FT022.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: ae1d6e88-5166-4193-85db-08db1c04aee0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aeEuc1CFnd5ZUJn8osG4yJAVVl632K1dT5Qe/xepsO5D0daqEm1Co0wZz/IQq/ZFvsiKwRqeC/rGw1qfbz8iYdtu522Kny+FJztFz+IlxNFt7/SQ6m0Tf4iTLYrJnP9sRbB4xfF8iA+r2kyfVivg8ZCznAxzysrlkHRrtii30UUHKFQfbj2B3dN98w0AHKYhoA0IgXJ6gwCDkft/Nv1LAUtDo7dk1wriXCVJ0bVlkeRWXaHF85QpXFlH8441LFKrgwQe9IU07Php1eGi19yu2WzvYimeXZXLTt7xyjPNXzm5N3oyWesTXS6DBnrl4tgmP8ODI8QI8GUExsME1RLFzOHb4HKi/c1E0++c78edpG6B5Ni2siZBBN6Axm8oKGx+vM54mHD3MQo2zn3JklxNoCfivCOm4OGald5OpPunXO/mlr6KNpswqwT5rv5zAvH+Mk5ujniblC3depajl3TqoattzhxmBBTnG+nDDf4oyfRkAr7fHN86dPFJFyiO8THdhuN/ioNH3UuVS8ACI/ByBxUrUaVwv8QZjBIqN1d/XHKr/l+4L/WPyuRlYjIjSHqwB54v8IBdbOhKvyhZ8WK77X6WsGTigEgVWV5vM7uI4u1XAl+qFPwCbGTj5JMNngjxpZMGBA/zsniwYrDzNUwY4Ne+2zCHV/x4CDhUkeuBUcL7rVkQoCEB1K4D0WKP5g/xl7YuPV20Z226Z4l3iB2V0HZr6Itv+rBfneQWt6qDneY=
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199018)(36840700001)(46966006)(40470700004)(6486002)(36756003)(6666004)(70206006)(2906002)(8676002)(40480700001)(8936002)(4326008)(36860700001)(5660300002)(86362001)(82740400003)(356005)(81166007)(921005)(6506007)(26005)(6512007)(478600001)(54906003)(66899018)(316002)(186003)(450100002)(41300700001)(2616005)(70586007)(83380400001)(110136005)(82310400005)(40460700003)(336012)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 16:31:18.4928
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69e46c13-2d6e-4c82-6af6-08db1c04b789
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR03FT022.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB8098
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,543 +175,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a new document based on my 2022 blog post:
+The 03/02/2023 21:17, Edgecombe, Rick P wrote:
+> Is the idea that shadow stack would be forced on regardless of if the
+> linked libraries support it? In which case it could be allowed to crash
+> if they do not?
 
-  https://blogs.oracle.com/linux/post/backporting-patches-using-git
+execute a binary
+- with shstk enabled and locked (only if marked?).
+- with shstk disabled and locked.
+could be managed in userspace, but it is libc dependent then.
 
-Although this is aimed at stable contributors and distro maintainers, it
-does also contain useful tips and tricks for anybody who needs to
-resolve merge conflicts.
+> > > > - I think it's better to have a new limit specifically for shadow
+> > > >   stack size (which by default can be RLIMIT_STACK) so userspace
+> > > >   can adjust it if needed (another reason is that stack size is
+> > > >   not always a good indicator of max call depth).
+> 
+> Looking at this again, I'm not sure why a new rlimit is needed. It
+> seems many of those points were just formulations of that the clone3
+> stack size was not used, but it actually is and just not documented. If
+> you disagree perhaps you could elaborate on what the requirements are
+> and we can see if it seems tricky to do in a follow up.
 
-By adding this to the kernel as documentation we can more easily point
-to it e.g. from stable emails about failed backports, as well as allow
-the community to modify it over time if necessary.
+- tiny thread stack and deep signal stack.
+(note that this does not really work with glibc because it has
+implementation internal signals that don't run on alt stack,
+cannot be masked and don't fit on a tiny thread stack, but
+with other runtimes this can be a valid use-case, e.g. musl
+allows tiny thread stacks, < pagesize.)
 
-I've added this under process/ since it also has
-process/applying-patches.rst. Another interesting document is
-maintainer/rebasing-and-merging.rst which maybe should eventually refer
-to this one, but I'm leaving that as a future cleanup.
+- thread runtimes with clone (glibc uses clone3 but some dont).
 
-Thanks to Harshit for helping with the original blog post as well as
-this updated document.
+- huge stacks but small call depth (problem if some va limit
+  is hit or memory overcommit is disabled).
 
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
----
- Documentation/process/backporting.rst | 488 ++++++++++++++++++++++++++
- Documentation/process/index.rst       |   1 +
- 2 files changed, 489 insertions(+)
- create mode 100644 Documentation/process/backporting.rst
+> > "sigaltshstk() is separate from sigaltstack(). You can have one
+> > without the other, neither or both together. Because the shadow
+> > stack specific state is pushed to the shadow stack, the two
+> > features don’t need to know about each other."
+...
+> > i don't see why automatic alt shadow stack allocation would
+> > not work (kernel manages it transparently when an alt stack
+> > is installed or disabled).
+> 
+> Ah, I think I see where maybe I can fill you in. Andy Luto had
+> discounted this idea out of hand originally, but I didn't see it at
+> first. sigaltstack lets you set, retrieve, or disable the shadow stack,
+> right... But this doesn't allocate anything, it just sets where the
+> next signal will be handled. This is different than things like threads
+> where there is a new resources being allocated and it makes coming up
+> with logic to guess when to de-allocate the alt shadow stack difficult.
+> You probably already know...
+> 
+> But because of this there can be some modes where the shadow stack is
+> changed while on it. For one example, SS_AUTODISARM will disable the
+> alt shadow stack while switching to it and restore when sigreturning.
+> At which point a new altstack can be set. In the non-shadow stack case
+> this is nice because future signals won't clobber the alt stack if you
+> switch away from it (swapcontext(), etc). But it also means you can
+> "change" the alt stack while on it ("change" sort of, the auto disarm
+> results in the kernel forgetting it temporarily).
 
-diff --git a/Documentation/process/backporting.rst b/Documentation/process/backporting.rst
-new file mode 100644
-index 000000000000..1b03df759905
---- /dev/null
-+++ b/Documentation/process/backporting.rst
-@@ -0,0 +1,488 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===================================
-+Backporting and conflict resolution
-+===================================
-+
-+:Author: Vegard Nossum <vegard.nossum@oracle.com>
-+
-+.. contents::
-+    :local:
-+    :depth: 3
-+    :backlinks: none
-+
-+Introduction
-+============
-+
-+Some developers may never really have to deal with backporting patches,
-+merging branches, or resolving conflicts in their day-to-day work, so
-+when a merge conflict does pop up, it can be daunting. Luckily,
-+resolving conflicts is a skill like any other, and there are many useful
-+techniques you can use to make the process smoother and increase your
-+confidence in the result.
-+
-+This document aims to be a comprehensive, step-by-step guide to
-+backporting and conflict resolution.
-+
-+Applying the patch to a tree
-+============================
-+
-+Sometimes the patch you are backporting already exists as a git commit,
-+in which case you just cherry-pick it directly using
-+``git cherry-pick``. However, if the patch comes from an email, as it
-+often does for the Linux kernel, you will need to apply it to a tree
-+using ``git am``.
-+
-+If you've ever used ``git am``, you probably already know that it is
-+quite picky about the patch applying perfectly to your source tree. In
-+fact, you've probably had nightmares about ``.rej`` files and trying to
-+edit the patch to make it apply.
-+
-+It is strongly recommended to instead find an appropriate base version
-+where the patch applies cleanly and *then* cherry-pick it over to your
-+destination tree, as this will make git output conflict markers and let
-+you resolve conflicts with the help of git and any other conflict
-+resolution tools you might prefer to use.
-+
-+It's generally better to use the exact same base as the one the patch
-+was generated from, but it doesn't really matter that much as long as it
-+applies cleanly and isn't too far from the original base. The only
-+problem with applying the patch to the "wrong" base is that it may pull
-+in more unrelated changes in the context of the diff when cherry-picking
-+it to the older branch.
-+
-+If you are using
-+`b4 <https://people.kernel.org/monsieuricon/introducing-b4-and-patch-attestation>`__
-+and you are applying the patch directly from an email, you can use
-+``b4 am`` with the options ``-g``/``--guess-base`` and
-+``-3``/``--prep-3way`` to do some of this automatically (see `this
-+presentation <https://youtu.be/mF10hgVIx9o?t=2996>`__ for more
-+information). However, the rest of this article will assume that you are
-+doing a plain ``git cherry-pick``.
-+
-+Once you have the patch in git, you can go ahead and cherry-pick it into
-+your source tree. Don't forget to cherry-pick with ``-x`` if you want a
-+written record of where the patch came from!
-+
-+Resolving conflicts
-+===================
-+
-+Uh-oh; the cherry-pick failed with a vaguely threatening message::
-+
-+    CONFLICT (content): Merge conflict
-+
-+What to do now?
-+
-+In general, conflicts appear when the context of the patch (i.e., the
-+lines being changed and/or the lines surrounding the changes) doesn't
-+match what's in the tree you are trying to apply the patch *to*.
-+
-+For backports, what likely happened was that your older branch is
-+missing a patch compared to the branch you are backporting from --
-+however, it is also possible that your older branch has some commit that
-+doesn't exist in the newer branch. In any case, the result is a conflict
-+that needs to be resolved.
-+
-+If your attempted cherry-pick fails with a conflict, git automatically
-+edits the files to include so-called conflict markers showing you where
-+the conflict is and how the two branches have diverged. Resolving the
-+conflict typically means editing the end result in such a way that it
-+takes into account these other commits.
-+
-+Resolving the conflict can be done either by hand in a regular text
-+editor or using a dedicated conflict resolution tool.
-+
-+Many people prefer to use their regular text editor and edit the
-+conflict directly, as it may be easier to understand what you're doing
-+and to control the final result. There are definitely pros and cons to
-+each method, and sometimes there's value in using both.
-+
-+We will not cover using dedicated merge tools here beyond providing some
-+pointers to various tools that you could use:
-+
-+-  `vimdiff/gvimdiff <https://linux.die.net/man/1/vimdiff>`__
-+-  `KDiff3 <http://kdiff3.sourceforge.net/>`__
-+-  `TortoiseMerge <https://tortoisesvn.net/TortoiseMerge.html>`__
-+-  `Meld <https://meldmerge.org/help/>`__
-+-  `P4Merge <https://www.perforce.com/products/helix-core-apps/merge-diff-tool-p4merge>`__
-+-  `Beyond Compare <https://www.scootersoftware.com/>`__
-+-  `IntelliJ <https://www.jetbrains.com/help/idea/resolve-conflicts.html>`__
-+-  `VSCode <https://code.visualstudio.com/docs/editor/versioncontrol>`__
-+
-+To configure git to work with these, see ``git mergetool --help`` or
-+`the official git documentation <https://git-scm.com/docs/git-mergetool>`__.
-+
-+Prerequisite patches
-+~~~~~~~~~~~~~~~~~~~~
-+
-+Most conflicts happen because the branch you are backporting to is
-+missing some patches compared to the branch you are backporting *from*.
-+In the more general case (such as merging two independent branches),
-+development could have happened on either branch, or the branches have
-+simply diverged -- perhaps your older branch had some other backports
-+applied to it that themselves needed conflict resolutions, causing a
-+divergence.
-+
-+It's important to always identify the commit or commits that caused the
-+conflict, as otherwise you cannot be confident in the correctness of
-+your resolution. As an added bonus, especially if the patch is in an
-+area you're not that famliar with, the changelogs of these commits will
-+often give you the context to understand the code and potential problems
-+or pitfalls with your conflict resolution.
-+
-+git log
-+^^^^^^^
-+
-+A good first step is to look at ``git log`` for the file that has the
-+conflict -- this is usually sufficient when there aren't a lot of
-+patches to the file, but may get confusing if the file is big and
-+frequently patched. You should run ``git log`` on the range of commits
-+between your currently checked-out branch (``HEAD``) and the parent of
-+the patch you are picking (``COMMIT``), i.e.::
-+
-+    git log HEAD..COMMIT^ -- PATH
-+
-+Even better, if you want to restrict this output to a single function
-+(because that's where the conflict appears), you can use the following
-+syntax::
-+
-+    git log -L:'\<function\>':PATH HEAD..COMMIT^
-+
-+.. note::
-+     The ``\<`` and ``\>`` around the function name ensure that the
-+     matches are anchored on a word boundary. This is important, as this
-+     part is actually a regex and git only follows the first match, so
-+     if you use ``-L:thread_stack:kernel/fork.c`` it may only give you
-+     results for the function ``try_release_thread_stack_to_cache`` even
-+     though there are many other functions in that file containing the
-+     string ``thread_stack`` in their names.
-+
-+Another useful option for ``git log`` is ``-G``, which allows you to
-+filter on certain strings appearing in the diffs of the commits you are
-+listing::
-+
-+    git log -G'regex' HEAD..COMMIT^ -- PATH
-+
-+This can also be a handy way to quickly find when something (e.g. a
-+function call or a variable) was changed, added, or removed. The search
-+string is a regular expression, which means you can potentially search
-+for more specific things like assignments to a specific struct member::
-+
-+    git log -G'\->index\>.*='
-+
-+git blame
-+^^^^^^^^^
-+
-+Another way to find prerequisite commits (albeit only the most recent
-+one for a given conflict) is to run ``git blame``. In this case, you
-+need to run it against the parent commit of the patch you are
-+cherry-picking and the file where the conflict appared, i.e.::
-+
-+    git blame COMMIT^ -- PATH
-+
-+This command also accepts the ``-L`` argument (for restricting the
-+output to a single function), but in this case you specify the filename
-+at the end of the command as usual::
-+
-+    git blame -L:'\<function\>' COMMIT^ -- PATH
-+
-+Navigate to the place where the conflict occurred. The first column of
-+the blame output is the commit ID of the patch that added a given line
-+of code.
-+
-+It might be a good idea to ``git show`` these commits and see if they
-+look like they might be the source of the conflict. Sometimes there will
-+be more than one of these commits, either because multiple commits
-+changed different lines of the same conflict area *or* because multiple
-+subsequent patches changed the same line (or lines) multiple times. In
-+the latter case, you may have to run ``git blame`` again and specify the
-+older version of the file to look at in order to dig further back in
-+the history of the file.
-+
-+Prerequisite vs. incidental patches
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+Having found the patch that caused the conflict, you need to determine
-+whether it is a prerequisite for the patch you are backporting or
-+whether it is just incidental and can be skipped. An incidental patch
-+would be one that touches the same code as the patch you are
-+backporting, but does not change the semantics of the code in any
-+material way. For example, a whitespace cleanup patch is completely
-+incidental -- likewise, a patch that simply renames a function or a
-+variable would be incidental as well. On the other hand, if the function
-+being changed does not even exist in your current branch then this would
-+not be incidental at all and you need to carefully consider whether the
-+patch adding the function should be cherry-picked first.
-+
-+If you find that there is a necessary prerequisite patch, then you need
-+to stop and cherry-pick that instead. If you've already resolved some
-+conflicts in a different file and don't want to do it again, you can
-+create a temporary copy of that file.
-+
-+To abort the current cherry-pick, go ahead and run
-+``git cherry-pick --abort``, then restart the cherry-picking process
-+with the commit ID of the prerequisite patch instead.
-+
-+Understanding conflict markers
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Combined diffs
-+^^^^^^^^^^^^^^
-+
-+Let's say you've decided against picking (or reverting) additional
-+patches and you just want to resolve the conflict. Git will have
-+inserted conflict markers into your file. Out of the box, this will look
-+something like::
-+
-+    <<<<<<< HEAD
-+    this is what's in your current tree before cherry-picking
-+    =======
-+    this is what the patch wants it to be after cherry-picking
-+    >>>>>>> COMMIT... title
-+
-+This is what you would see if you opened the file in your editor.
-+However, if you were to run run ``git diff`` without any arguments, the
-+output would look something like this::
-+
-+    $ git diff
-+    [...]
-+    ++<<<<<<<< HEAD
-+     +this is what's in your current tree before cherry-picking
-+    ++========
-+    + this is what the patch wants it to be after cherry-picking
-+    ++>>>>>>>> COMMIT... title
-+
-+When you are resolving a conflict, the behavior of ``git diff`` differs
-+from its normal behavior. Notice the two columns of diff markers
-+instead of the usual one; this is a so-called "`combined diff
-+<https://git-scm.com/docs/diff-format#_combined_diff_format>`__", here
-+showing the 3-way diff (or diff-of-diffs) between
-+
-+#. the current branch (before cherry-picking) and the current working
-+   directory, and
-+#. the current branch (before cherry-picking) and the file as it looks
-+   after the original patch has been applied.
-+
-+Better diffs
-+^^^^^^^^^^^^
-+
-+3-way combined diffs include all the other changes that happened to the
-+file between your current branch and the branch you are cherry-picking
-+from. While this is useful for spotting other changes that you need to
-+take into account, this also makes the output of ``git diff`` somewhat
-+intimidating and difficult to read. You may instead prefer to run
-+``git diff HEAD`` (or ``git diff --ours``) which shows only the diff
-+between the current branch before cherry-picking and the current working
-+directory. It looks like this::
-+
-+    $ git diff HEAD
-+    [...]
-+    +<<<<<<<< HEAD
-+     this is what's in your current tree before cherry-picking
-+    +========
-+    +this is what the patch wants it to be after cherry-picking
-+    +>>>>>>>> COMMIT... title
-+
-+As you can see, this reads just like any other diff and makes it clear
-+which lines are in the current branch and which lines are being added
-+because they are part of the merge conflict or the patch being
-+cherry-picked.
-+
-+Merge styles and diff3
-+^^^^^^^^^^^^^^^^^^^^^^
-+
-+The default conflict marker style shown above is known as the ``merge``
-+style. There is also another style available, known as the ``diff3``
-+style, which looks like this::
-+
-+    <<<<<<< HEAD
-+    this is what is in your current tree before cherry-picking
-+    ||||||| parent of COMMIT (title)
-+    this is what the patch expected to find there
-+    =======
-+    this is what the patch wants it to be after being applied
-+    >>>>>>> COMMIT (title)
-+
-+As you can see, this has 3 parts instead of 2, and includes what git
-+expected to find there but didn't. Some people vastly prefer this style
-+as it makes it much clearer what the patch actually changed; i.e., it
-+allows you to compare the before-and-after versions of the file for the
-+commit you are cherry-picking. This allows you to make better decisions
-+about how to resolve the conflict.
-+
-+To change conflict marker styles, you can use the following command::
-+
-+    git config merge.conflictStyle diff3
-+
-+There is a third option, ``zdiff3``, introduced in `Git
-+2.35 <https://github.blog/2022-01-24-highlights-from-git-2-35/>`__,
-+which has the same 3 sections as ``diff3``, but where common lines have
-+been trimmed off, making the conflict area smaller in some cases.
-+
-+Iterating on conflict resolutions
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The first step in any conflict resolution process is to understand the
-+patch you are backporting. For the Linux kernel this is especially
-+important, since an incorrect change can lead to the whole system
-+crashing -- or worse, an undetected security vulnerability.
-+
-+Understanding the patch can be easy or difficult depending on the patch
-+itself, the changelog, and your familiarity with the code being changed.
-+However, a good question for every change (or every hunk of the patch)
-+might be: "Why is this hunk in the patch?" The answers to these
-+questions will inform your conflict resolution.
-+
-+Resolution process
-+^^^^^^^^^^^^^^^^^^
-+
-+Sometimes the easiest thing to do is to just remove all but the first
-+part of the conflict, leaving the file essentially unchanged, and apply
-+the changes by hand. Perhaps the patch is changing a function call
-+argument from ``0`` to ``1`` while a conflicting change added an
-+entirely new (and insignificant) parameter to the end of the parameter
-+list; in that case, it's easy enough to change the argument from ``0``
-+to ``1`` by hand and leave the rest of the arguments alone. This
-+technique of manually applying changes is mostly useful if the conflict
-+pulled in a lot of unrelated context that you don't really need to care
-+about.
-+
-+For particularly nasty conflicts with many conflict markers, you can use
-+``git add`` or ``git add -i`` to selectively stage your resolutions to
-+get them out of the way; this also lets you use ``git diff HEAD`` to
-+always see what remains to be resolved or ``git diff --cached`` to see
-+what your patch looks like so far.
-+
-+Function arguments
-+^^^^^^^^^^^^^^^^^^
-+
-+Pay attention to changing function arguments! It's easy to gloss over
-+details and think that two lines are the same but actually they differ
-+in some small detail like which variable was passed as an argument
-+(especially if the two variables are both a single character that look
-+the same, like i and j).
-+
-+Error handling
-+^^^^^^^^^^^^^^
-+
-+If you cherry-pick a patch that includes a ``goto`` statement (typically
-+for error handling), it is absolutely imperative to double check that
-+the target label is still correct in the branch you are backporting to.
-+Error handling is typically located at the bottom of the function, so it
-+may not be part of the conflict even though could have been changed by
-+other patches.
-+
-+A good way to ensure that you review the error paths is to always use
-+``git diff -W`` and ``git show -W`` (AKA ``--function-context``) when
-+inspecting your changes.  For C code, this will show you the whole
-+function that's being changed in a patch. One of the things that often
-+go wrong during backports is that something else in the function changed
-+on either of the branches that you're backporting from or to. By
-+including the whole function in the diff you get more context and can
-+more easily spot problems that might otherwise go unnoticed.
-+
-+Dealing with file renames
-+^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+One of the most annoying things that can happen while backporting a
-+patch is discovering that one of the files being patched has been
-+renamed, as that typically means git won't even put in conflict markers,
-+but will just throw up its hands and say (paraphrased): "Unmerged path!
-+You do the work..."
-+
-+There are generally a few ways to deal with this. If the patch to the
-+renamed file is small, like a one-line change, the easiest thing is to
-+just go ahead and apply the change by hand and be done with it. On the
-+other hand, if the change is big or complicated, you definitely don't
-+want to do it by hand.
-+
-+Sometimes the right thing to do will be to also backport the patch that
-+did the rename, but that's definitely not the most common case. Instead,
-+what you can do is to temporarily rename the file in the branch you're
-+backporting to (using ``git mv`` and committing the result), restart the
-+attempt to cherry-pick the patch, rename the file back (``git mv`` and
-+committing again), and finally squash the result using ``git rebase -i``
-+(`tutorial <https://medium.com/@slamflipstrom/a-beginners-guide-to-squashing-commits-with-git-rebase-8185cf6e62ec>`__)
-+so it appears as a single commit when you are done.
-+
-+Verifying the result
-+====================
-+
-+colordiff
-+~~~~~~~~~
-+
-+Having committed a conflict-free new patch, you can now compare your
-+patch to the original patch. It is highly recommended that you use a
-+tool such as `colordiff <https://www.colordiff.org/>`__ that can show
-+two files side by side and color them according to the changes between
-+them::
-+
-+    colordiff -yw -W 200 <(git diff -W UPSTREAM_COMMIT^-) <(git diff -W HEAD^-) | less -SR
-+
-+Here, ``-y`` means to do a side-by-side comparison; ``-w`` ignores
-+whitespace, and ``-W 200`` sets the width of the output (as otherwise it
-+will use 130 by default, which is often a bit too little).
-+
-+The ``rev^-`` syntax is a handy shorthand for ``rev^..rev``, essentially
-+giving you just the diff for that single commit; also see
-+`the official git documentation <https://git-scm.com/docs/git-rev-parse#_other_rev_parent_shorthand_notations>`__.
-+
-+Again, note the inclusion of ``-W`` for ``git diff``; this ensures that
-+you will see the full function for any function that has changed.
-+
-+One incredibly important thing that colordiff does is to highlight lines
-+that are different. For example, if an error-handling ``goto`` has
-+changed labels between the original and backported patch, colordiff will
-+show these side-by-side but highlighted in a different color.  Thus, it
-+is easy to see that the two ``goto`` statements are jumping to different
-+labels. Likewise, lines that were not modified by either patch but
-+differ in the context will also be highlighted and thus stand out during
-+a manual inspection.
-+
-+Of course, this is just a visual inspection; the real test is building
-+and running the patched kernel (or program).
-+
-+Build testing
-+~~~~~~~~~~~~~
-+
-+We won't cover runtime testing here, but it can be a good idea to build
-+just the files touched by the patch as a quick sanity check. For the
-+Linux kernel you can build single files like this, assuming you have the
-+``.config`` and build environment set up correctly::
-+
-+    make path/to/file.o
-+
-+Note that this won't discover linker errors, so you should still do a
-+full build after verifying that the single file compiles. By compiling
-+the single file first you can avoid having to wait for a full build *in
-+case* there are compiler errors in any of the files you've changed.
-+
-+Runtime testing
-+~~~~~~~~~~~~~~~
-+
-+Even a successful build or boot test is not necessarily enough to rule
-+out a missing dependency somewhere. Even though the chances are small,
-+there could be code changes where two independent changes to the same
-+file result in no conflicts, no compile-time errors, and runtime errors
-+only in exceptional cases.
-+
-+One concrete example of this was where a patch to the system call entry
-+code saved/restored a register and a later patch made use of the saved
-+register somewhere in the middle -- since there was no conflict, one
-+could backport the second patch and believe that everything was fine,
-+but in fact the code was now scribbling over an unsaved register.
-+
-+Although the vast majority of errors will be caught during compilation
-+or by superficially exercising the code, the only way to *really* verify
-+a backport is to review the final patch with the same level of scrutiny
-+as you would (or should) give to any other patch. Having unit tests and
-+regression tests or other types of automatic testing can help increase
-+the confidence in the correctness of a backport.
-+
-+Examples
-+========
-+
-+The above shows roughly the idealized process of backporting a patch.
-+For a more concrete example, see this video tutorial where two patches
-+are backported from mainline to stable:
-+`Backporting Linux Kernel patches <https://youtu.be/sBR7R1V2FeA>`__
-diff --git a/Documentation/process/index.rst b/Documentation/process/index.rst
-index d4b6217472b0..6eb6dcf9545e 100644
---- a/Documentation/process/index.rst
-+++ b/Documentation/process/index.rst
-@@ -58,6 +58,7 @@ lack of a better place.
-    :maxdepth: 1
- 
-    applying-patches
-+   backporting
-    adding-syscalls
-    magic-number
-    volatile-considered-harmful
--- 
-2.35.1.46.g38062e73e0
+the problem with swapcontext is that it may unmask signals
+that run on the alt stack, which means the code cannot jump
+back after another signal clobbered the alt stack.
 
+the non-standard SS_AUTODISARM aims to solve this by disabling
+alt stack settings on signal entry until the handler returns.
+
+so this use case is not about supporting swapcontext out, but
+about jumping back. however that does not work reliably with
+this patchset: if swapcontext goes to the thread stack (and
+not to another stack e.g. used by makecontext), then jump back
+fails. (and if there is a sigaltshstk installed then even jump
+out fails.)
+
+assuming
+- jump out from alt shadow stack can be made to work.
+- alt shadow stack management can be automatic.
+then this can be improved so jump back works reliably.
+
+> I hear where you are coming from with the desire to have it "just work"
+> with existing code, but I think the resulting ABI around the alt shadow
+> stack allocation lifecycle would be way too complicated even if it
+> could be made to work. Hence making a new interface. But also, the idea
+> was that the x86 signal ABI should support handling alt shadow stacks,
+> which is what we have done with this series. If a different interface
+> for configuring it is better than the one from the POC, I'm not seeing
+> a problem jump out. Is there any specific concern about backwards
+> compatibility here?
+
+sigaltstack syscall behaviour may be hard to change later
+and currently
+- shadow stack overflow cannot be recovered from.
+- longjmp out of signal handler fails (with sigaltshstk).
+- SS_AUTODISARM does not work (jump back can fail).
+
+> > "Since shadow alt stacks are a new feature, longjmp()ing from an
+> > alt shadow stack will simply not be supported. If a libc want’s
+> > to support this it will need to enable WRSS and write it’s own
+> > restore token."
+> > 
+> > i think longjmp should work without enabling writes to the shadow
+> > stack in the libc. this can also affect unwinding across signal
+> > handlers (not for c++ but e.g. glibc thread cancellation).
+> 
+> glibc today does not support longjmp()ing from a different stack (for
+> example even today after a swapcontext()) when shadow stack is used. If
+> glibc used wrss it could be supported maybe, but otherwise I don't see
+> how the HW can support it.
+> 
+> HJ and I were actually just discussing this the other day. Are you
+> looking at this series with respect to the arm shadow stack feature by
+> any chance? I would love if glibc/tools would document what the shadow
+> stack limitations are. If the all the arch's have the same or similar
+> limitations perhaps this could be one developer guide. For the most
+> part though, the limitations I've encountered are in glibc and the
+> kernel is more the building blocks.
+
+well we hope that shadow stack behaviour and limitations can
+be similar across targets.
+
+longjmp to different stack should work: it can do the same as
+setcontext/swapcontext: scan for the pivot token. then only
+longjmp out of alt shadow stack fails. (this is non-conforming
+longjmp use, but e.g. qemu relies on it.)
+
+for longjmp out of alt shadow stack, the target shadow stack
+needs a pivot token, which implies the kernel needs to push that
+on signal entry, which can overflow. but i suspect that can be
+handled the same way as stackoverflow on signal entry is handled.
+
+> A general comment. Not sure if you are aware, but this shadow stack
+> enabling effort is quite old at this point and there have been many
+> discussions on these topics stretching back years. The latest
+> conversation was around getting this series into linux-next soon to get
+> some testing on the MM pieces. I really appreciate getting this ABI
+> feedback as it is always tricky to get right, but at this stage I would
+> hope to be focusing mostly on concrete problems.
+> 
+> I also expect to have some amount of ABI growth going forward with all
+> the normal things that entails. Shadow stack is not special in that it
+> can come fully finalized without the need for the real world usage
+> iterative feedback process. At some point we need to move forward with
+> something, and we have quite a bit of initial changes at this point.
+> 
+> So I would like to minimize the initial implementation unless anyone
+> sees any likely problems with future growth. Can you be clear if you
+> see any concrete problems at this point or are more looking to evaluate
+> the design reasoning? I'm under the assumption there is nothing that
+> would prohibit linux-next testing while any ABI shakedown happens
+> concurrently at least?
+
+understood.
+
+the points that i think are worth raising:
+
+- shadow stack size logic may need to change later.
+  (it can be too big, or too small in practice.)
+- shadow stack overflow is not recoverable and the
+  possible fix for that (sigaltshstk) breaks longjmp
+  out of signal handlers.
+- jump back after SS_AUTODISARM swapcontext cannot be
+  reliable if alt signal uses thread shadow stack.
+- the above two concerns may be mitigated by different
+  sigaltstack behaviour which may be hard to add later.
+- end token for backtrace may be useful, if added
+  later it can be hard to check.
+
+thanks.
