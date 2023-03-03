@@ -2,187 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860C46A9F65
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA966A9E57
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjCCSny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
+        id S231553AbjCCSUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbjCCSnl (ORCPT
+        with ESMTP id S230523AbjCCSU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:43:41 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32C412BE3;
-        Fri,  3 Mar 2023 10:43:15 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PSx2N2nb4z9xrcx;
-        Sat,  4 Mar 2023 02:14:36 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBnMVgKOgJk5iFpAQ--.12605S24;
-        Fri, 03 Mar 2023 19:22:55 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 22/28] security: Introduce key_post_create_or_update hook
-Date:   Fri,  3 Mar 2023 19:18:36 +0100
-Message-Id: <20230303181842.1087717-23-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+        Fri, 3 Mar 2023 13:20:29 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02050D53B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 10:20:28 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id h14so3167913wru.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 10:20:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677867626;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8M4JJhK7OCXpM9WO1V+URKM7Lv3jQVkaIfYcDZqUPng=;
+        b=IvX4709SpETHwKZnaZ/VUBhGBnb3edIHYGjmnRTo1BR7Tt1xe823j2DQZTJ2WkNzK/
+         R5cpZFgbjIPciEMfKgv3NrYpZemZHbPp9Icf90pImph3WUIV+WDqmvGjINefz1TBaRa6
+         k/KQ2xsxWpgC9qzNcLTZlg/ZelSOQaxs+k6RYznEhGkEpU3bEguAOIWlzQdlyb5H1xtE
+         VhM3dxPKFeXIwpkmDHby9jXRGvqEma7hrM/d1JolXyCnXd0dnBQPWdb7RrSxvJV3t/CI
+         9pQTFRbY/5f5mK4RpUa+g9wxO53l8IjMJHYNBgiJUFgre7filrwaTOQ3mkJgtG3+sjO2
+         kQsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677867626;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8M4JJhK7OCXpM9WO1V+URKM7Lv3jQVkaIfYcDZqUPng=;
+        b=S47RZuvSTX3/1kNXI9NEdSg4Hto4d9rGb7jvGqLhuqmtICzLqG3Xa8bYmy1hEr+K4C
+         bKrKacM3cUXjBcdRhHZP5ASs8nmAEwzeD+GttXwiNcCAkEpu3GfQRBXcck7pbee1ai2E
+         /e0dEwmCB8YzBTV1wlZHg5carZmKAe4mbJyaYhaq95iojBZN9haliWfMw3vuILYJ/Aa9
+         FhUMGJ2xbiz9dQlyrmwcaj6jEWKmogt6BOCiB2/639nI0radywmmfzdZERxhe/XOXi+W
+         IReIaF3BR4TsNXbcfuWxMMuaSFi3dbxBpBs9UZdkFYLGK+X8N6hbvU7IiBFufEUDP4vi
+         Eu2w==
+X-Gm-Message-State: AO0yUKUFxPVXlIcehnFagyG34dbkNLr6DLpcC5KpEuIBss0IpfUFki24
+        CPMixZh/FEdTbpZA663vASDoqCZFasIkUEN8mPt6SA==
+X-Google-Smtp-Source: AK7set8oEHzqOqPD7jWE2EaUZk7vGnHcVw/OgqgaNvamVgg81oFWY/hFsoF4Gpyn8OzLm2vrZQT2ciIRG5AFFD0W2TQ=
+X-Received: by 2002:a5d:4347:0:b0:2c7:1320:7781 with SMTP id
+ u7-20020a5d4347000000b002c713207781mr635648wrr.13.1677867626499; Fri, 03 Mar
+ 2023 10:20:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBnMVgKOgJk5iFpAQ--.12605S24
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF1fCFy3GryfWFyrtFyDGFg_yoWrWrWUpa
-        yYk3W5t3y8KFyaqrZxAF17Way5t3y0gry7K39xu34rtFnYqw4xXr42kFn8CrW5Xry5Ary0
-        v3y7ZrW3Gr1qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-        AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW7JVWDJwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_GcCE3s1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F
-        4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26rxl6s0DYxBIdaVFxhVjvjDU0xZFpf9x07j7
-        GYLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj4otWgAAsM
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230303102751.9374-1-jason-ch.chen@mediatek.com>
+In-Reply-To: <20230303102751.9374-1-jason-ch.chen@mediatek.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Fri, 3 Mar 2023 11:20:15 -0700
+Message-ID: <CANLsYky0pbqiEfq7E6DZM=J+sm2JJ8gYST2atUyP8X7y9zdHWA@mail.gmail.com>
+Subject: Re: [PATCH] remoteproc: mediatek: Dereferencing a pointer that might
+ be NULL
+To:     Jason-ch Chen <jason-ch.chen@mediatek.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri, 3 Mar 2023 at 03:28, Jason-ch Chen <jason-ch.chen@mediatek.com> wrote:
+>
+> From: jason-ch chen <Jason-ch.Chen@mediatek.com>
+>
+> The res might be NULL when calling resource_size.
+>
 
-In preparation for moving IMA and EVM to the LSM infrastructure, introduce
-the key_post_create_or_update hook.
+"resource_size" ?  What is that?
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- include/linux/lsm_hook_defs.h |  3 +++
- include/linux/security.h      | 11 +++++++++++
- security/keys/key.c           |  7 ++++++-
- security/security.c           | 19 +++++++++++++++++++
- 4 files changed, 39 insertions(+), 1 deletion(-)
+> Signed-off-by: jason-ch chen <Jason-ch.Chen@mediatek.com>
+> ---
+>  drivers/remoteproc/mtk_scp.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> index eacdf241f4ef..863d18f63f58 100644
+> --- a/drivers/remoteproc/mtk_scp.c
+> +++ b/drivers/remoteproc/mtk_scp.c
+> @@ -829,6 +829,9 @@ static int scp_probe(struct platform_device *pdev)
+>         platform_set_drvdata(pdev, scp);
+>
+>         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
+> +       if (!res)
+> +               return -ENODEV;
+> +
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 6c324fe5099..cf171e65420 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -397,6 +397,9 @@ LSM_HOOK(void, LSM_RET_VOID, key_free, struct key *key)
- LSM_HOOK(int, 0, key_permission, key_ref_t key_ref, const struct cred *cred,
- 	 enum key_need_perm need_perm)
- LSM_HOOK(int, 0, key_getsecurity, struct key *key, char **_buffer)
-+LSM_HOOK(void, LSM_RET_VOID, key_post_create_or_update, struct key *keyring,
-+	 struct key *key, const void *payload, size_t payload_len,
-+	 unsigned long flags, bool create)
- #endif /* CONFIG_KEYS */
- 
- #ifdef CONFIG_AUDIT
-diff --git a/include/linux/security.h b/include/linux/security.h
-index f8df5b69667..be23a303bba 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -1952,6 +1952,9 @@ void security_key_free(struct key *key);
- int security_key_permission(key_ref_t key_ref, const struct cred *cred,
- 			    enum key_need_perm need_perm);
- int security_key_getsecurity(struct key *key, char **_buffer);
-+void security_key_post_create_or_update(struct key *keyring, struct key *key,
-+					const void *payload, size_t payload_len,
-+					unsigned long flags, bool create);
- 
- #else
- 
-@@ -1979,6 +1982,14 @@ static inline int security_key_getsecurity(struct key *key, char **_buffer)
- 	return 0;
- }
- 
-+static inline void security_key_post_create_or_update(struct key *keyring,
-+						      struct key *key,
-+						      const void *payload,
-+						      size_t payload_len,
-+						      unsigned long flags,
-+						      bool create)
-+{ }
-+
- #endif
- #endif /* CONFIG_KEYS */
- 
-diff --git a/security/keys/key.c b/security/keys/key.c
-index 5c0c7df833f..0f9c6faf349 100644
---- a/security/keys/key.c
-+++ b/security/keys/key.c
-@@ -934,6 +934,8 @@ static key_ref_t __key_create_or_update(key_ref_t keyring_ref,
- 		goto error_link_end;
- 	}
- 
-+	security_key_post_create_or_update(keyring, key, payload, plen, flags,
-+					   true);
- 	ima_post_key_create_or_update(keyring, key, payload, plen,
- 				      flags, true);
- 
-@@ -967,10 +969,13 @@ static key_ref_t __key_create_or_update(key_ref_t keyring_ref,
- 
- 	key_ref = __key_update(key_ref, &prep);
- 
--	if (!IS_ERR(key_ref))
-+	if (!IS_ERR(key_ref)) {
-+		security_key_post_create_or_update(keyring, key, payload, plen,
-+						   flags, false);
- 		ima_post_key_create_or_update(keyring, key,
- 					      payload, plen,
- 					      flags, false);
-+	}
- 
- 	goto error_free_prep;
- }
-diff --git a/security/security.c b/security/security.c
-index b3a9c317f75..322090a50cd 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -5195,6 +5195,25 @@ int security_key_getsecurity(struct key *key, char **_buffer)
- 	*_buffer = NULL;
- 	return call_int_hook(key_getsecurity, 0, key, _buffer);
- }
-+
-+/**
-+ * security_key_post_create_or_update() - Tell caller of key creation or update
-+ * @keyring: keyring to which the key is linked to
-+ * @key: created or updated key
-+ * @payload: data used to instantiate or update the key
-+ * @payload_len: length of payload
-+ * @flags: key flags
-+ * @create: flag indicating whether the key was created or updated
-+ *
-+ * Notify the caller of a key creation or update.
-+ */
-+void security_key_post_create_or_update(struct key *keyring, struct key *key,
-+					const void *payload, size_t payload_len,
-+					unsigned long flags, bool create)
-+{
-+	call_void_hook(key_post_create_or_update, keyring, key, payload,
-+		       payload_len, flags, create);
-+}
- #endif	/* CONFIG_KEYS */
- 
- #ifdef CONFIG_AUDIT
--- 
-2.25.1
+Please have a look at the implementation of devm_ioremap_resource()
+along with the function it calls and let me know if your patch is
+needed.
 
+>         scp->sram_base = devm_ioremap_resource(dev, res);
+>         if (IS_ERR((__force void *)scp->sram_base)) {
+>                 dev_err(dev, "Failed to parse and map sram memory\n");
+> --
+> 2.37.3
+>
