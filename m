@@ -2,220 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C816AA5A8
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 00:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E316AA5B0
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 00:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCCXgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 18:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
+        id S229702AbjCCXig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 18:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjCCXga (ORCPT
+        with ESMTP id S229689AbjCCXic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 18:36:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545426547E;
-        Fri,  3 Mar 2023 15:36:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE86761924;
-        Fri,  3 Mar 2023 23:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360F0C433EF;
-        Fri,  3 Mar 2023 23:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677886588;
-        bh=3u0XsrT3MOKCCnW5myaNz9pwfFsB2lT81dW3MxBXCVI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=hCGM0LD3uF1QqcsQSaE1mgkjMuVZCKxluma9CjrihKBDquxuKagKJB8nDzXtrbqgq
-         n80EV7rnL+G7m60bk4pJqpZUeVGsMaaRciMFDz2ypVLuGPWjvCb5kowWWHq7+RcdCc
-         glWyfLUVSwiHilXBFTYiaWb5SCGfkTknuouRueg6bj5qgC4j/XVGR6LFOZbXssRuUk
-         0sM+Kq2Y2yVaTOuhFn5Yvdw16f19wz736P6jDWzydilTrd++xxHNcLJJXIP+P0OvkN
-         KY1S2W0UvRgFW/c54GZXgaPEz13yr9SX1kULanqy1kEJRIhJ5B0TgXW5pJjyJdctpR
-         fyMCHfF2INAYA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C78735C0278; Fri,  3 Mar 2023 15:36:27 -0800 (PST)
-Date:   Fri, 3 Mar 2023 15:36:27 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        jstultz@google.com, edumazet@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] softirq: avoid spurious stalls due to need_resched()
-Message-ID: <20230303233627.GA2136520@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221222221244.1290833-1-kuba@kernel.org>
- <20221222221244.1290833-3-kuba@kernel.org>
- <87r0u6j721.ffs@tglx>
- <20230303133143.7b35433f@kernel.org>
- <20230303223739.GC1301832@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 3 Mar 2023 18:38:32 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CA61A953
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 15:38:29 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id by13so3932680vsb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 15:38:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VW/Jgy7OPnDt1x0GvM0FJ+v1d2CV3W+TQXV2zzgAUYc=;
+        b=6L8Onv7uDrP+1ncPNxj3EvpzXBhaPph1umg1oLhH+8pB0D1D6hHgpn9Bipleq5f75e
+         e9kYubQcbMH9Yv4JqkZJy76O50hopYR6ngtbymXsAJa0HuJfcJZ4rMIbmW5fDd2Ai81h
+         O9+kV5MmbxxQ6mdZ74cmJKcTf5AjReMgRqd1ILY3K0TpGPMG+dx/7rbRsDBhjnS9wiG/
+         5zGbmx0qmWrjKH8TwAkPmQuSAfW3zmFGc5fP3uxIZ9kZUF/lKikDjaa05vSaWQtLtCJt
+         OjlqV6LOM2AfVbYrEHMASHWD11sNYtXJzAdR8eT8sUvX2uG15OrESh1mAb0ZJWtEidVV
+         nbcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VW/Jgy7OPnDt1x0GvM0FJ+v1d2CV3W+TQXV2zzgAUYc=;
+        b=6G1PIdnsieX7Wr0ybQtRtMIJRPIiczbQ5Q2AiDcV4CbEaGbv/+5fUhsF0tqZbFvgs3
+         5DVvSLka+lqEQLLaQFJH8UoZO0LwCoAyFsa0eVbErOl5g5waucISVrsmdB/o2Z+y4J3G
+         KQ0/xbvm1R6GbEF52fuCSS/hnsfpR674OrkBfIq5fOT50xvXBSDn+YcP/rHEnc4Ygp1L
+         yGXab97t0SfQAwzwy3m/8ciBgnUEXNEgTOoDm8K+fEWdEdIzKhR6KzZpJ7oddS96K+hS
+         JpQ/mhQ+kFOpnc/8RurpAhwQFCeNcQhn+wxgdHM919M0uMAu1BHv9I0ilnT7rwdOl3wg
+         nfig==
+X-Gm-Message-State: AO0yUKWLMJrLrluLKEdrs8GsKx50LBQuZ+IzshaiDuj7q71ns8a10ZwK
+        PWcEN3MIlAqQzQYxygMGjyj+aMpG/eIvb2Oe8dZ5AQ==
+X-Google-Smtp-Source: AK7set9IauOkDqQ+Y4mwefS66UxFj7YpcBQV+wZXSDdEET7WIU5/gMC8mOPhWpo5ynJN1d7hGME0F6KvzBaL6kqDKis=
+X-Received: by 2002:a67:7304:0:b0:411:c1a2:9ea2 with SMTP id
+ o4-20020a677304000000b00411c1a29ea2mr2265285vsc.4.1677886708981; Fri, 03 Mar
+ 2023 15:38:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303223739.GC1301832@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJ+vNU2SC_Q3RWdeO9-mKDYC_TK8_vzefvGz_++O8StJer_h3Q@mail.gmail.com>
+ <CAPDyKFq23_vCunapQ=OHFFGXs5a8_cr8w7hBUP=HQ5f2zaTBUg@mail.gmail.com>
+In-Reply-To: <CAPDyKFq23_vCunapQ=OHFFGXs5a8_cr8w7hBUP=HQ5f2zaTBUg@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Fri, 3 Mar 2023 15:38:15 -0800
+Message-ID: <CAJ+vNU3RU_hM=H4Efh4WP7+d5LRJ7JeLsoSEfJeikXXE-pnH1w@mail.gmail.com>
+Subject: Re: mmc: core: Disable card detect during shutdown
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Robert Richter <rric@kernel.org>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Jan Glauber <jan.glauber@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 02:37:39PM -0800, Paul E. McKenney wrote:
-> On Fri, Mar 03, 2023 at 01:31:43PM -0800, Jakub Kicinski wrote:
-> > On Fri, 03 Mar 2023 14:30:46 +0100 Thomas Gleixner wrote:
-> > > > -		if (time_before(jiffies, end) && !need_resched() &&
-> > > > -		    --max_restart)
-> > > > +		unsigned long limit;
-> > > > +
-> > > > +		if (time_is_before_eq_jiffies(end) || !--max_restart)
-> > > > +			limit = SOFTIRQ_OVERLOAD_TIME;
-> > > > +		else if (need_resched())
-> > > > +			limit = SOFTIRQ_DEFER_TIME;
-> > > > +		else
-> > > >  			goto restart;
-> > > >  
-> > > > +		__this_cpu_write(overload_limit, jiffies + limit);  
-> > > 
-> > > The logic of all this is non-obvious and I had to reread it 5 times to
-> > > conclude that it is matching the intent. Please add comments.
-> > > 
-> > > While I'm not a big fan of heuristical duct tape, this looks harmless
-> > > enough to not end up in an endless stream of tweaking. Famous last
-> > > words...
-> > 
-> > Would it all be more readable if I named the "overload_limit"
-> > "overloaded_until" instead? Naming..
-> > I'll add comments, too.
-> > 
-> > > But without the sched_clock() changes the actual defer time depends on
-> > > HZ and the point in time where limit is set. That means it ranges from 0
-> > > to 1/HZ, i.e. the 2ms defer time ends up with close to 10ms on HZ=100 in
-> > > the worst case, which perhaps explains the 8ms+ stalls you are still
-> > > observing. Can you test with that sched_clock change applied, i.e. the
-> > > first two commits from
-> > > 
-> > >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/softirq
-> > > 
-> > > 59be25c466d9 ("softirq: Use sched_clock() based timeout")
-> > > bd5a5bd77009 ("softirq: Rewrite softirq processing loop")
-> > 
-> > Those will help, but I spent some time digging into the jiffies related
-> > warts with kprobes - while annoying they weren't a major source of wake
-> > ups. (FWIW the jiffies noise on our workloads is due to cgroup stats
-> > disabling IRQs for multiple ms on the timekeeping CPU).
-> > 
-> > Here are fresh stats on why we wake up ksoftirqd on our Web workload
-> > (collected over 100 sec):
-> > 
-> > Time exceeded:      484
-> > Loop max run out:  6525
-> > need_resched():   10219
-> > (control: 17226 - number of times wakeup_process called for ksirqd)
-> > 
-> > As you can see need_resched() dominates.
-> > 
-> > Zooming into the time exceeded - we can count nanoseconds between
-> > __do_softirq starting and the check. This is the histogram of actual
-> > usecs as seen by BPF (AKA ktime_get_mono_fast_ns() / 1000):
-> > 
-> > [256, 512)             1 |                                                    |
-> > [512, 1K)              0 |                                                    |
-> > [1K, 2K)             217 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
-> > [2K, 4K)             266 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> > 
-> > So yes, we can probably save ourselves ~200 wakeup with a better clock
-> > but that's just 1.3% of the total wake ups :(
-> > 
-> > 
-> > Now - now about the max loop count. I ORed the pending softirqs every
-> > time we get to the end of the loop. Looks like vast majority of the
-> > loop counter wake ups are exclusively due to RCU:
-> > 
-> > @looped[512]: 5516
-> > 
-> > Where 512 is the ORed pending mask over all iterations
-> > 512 == 1 << RCU_SOFTIRQ.
-> > 
-> > And they usually take less than 100us to consume the 10 iterations.
-> > Histogram of usecs consumed when we run out of loop iterations:
-> > 
-> > [16, 32)               3 |                                                    |
-> > [32, 64)            4786 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> > [64, 128)            871 |@@@@@@@@@                                           |
-> > [128, 256)            34 |                                                    |
-> > [256, 512)             9 |                                                    |
-> > [512, 1K)            262 |@@                                                  |
-> > [1K, 2K)              35 |                                                    |
-> > [2K, 4K)               1 |                                                    |
-> > 
-> > Paul, is this expected? Is RCU not trying too hard to be nice?
-> 
-> This is from way back in the day, so it is quite possible that better
-> tuning and/or better heuristics should be applied.
-> 
-> On the other hand, 100 microseconds is a good long time from an
-> CONFIG_PREEMPT_RT=y perspective!
-> 
-> > # cat /sys/module/rcutree/parameters/blimit
-> > 10
-> > 
-> > Or should we perhaps just raise the loop limit? Breaking after less 
-> > than 100usec seems excessive :(
-> 
-> But note that RCU also has rcutree.rcu_divisor, which defaults to 7.
-> And an rcutree.rcu_resched_ns, which defaults to three milliseconds
-> (3,000,000 nanoseconds).  This means that RCU will do:
-> 
-> o	All the callbacks if there are less than ten.
-> 
-> o	Ten callbacks or 1/128th of them, whichever is larger.
-> 
-> o	Unless the larger of them is more than 100 callbacks, in which
-> 	case there is an additional limit of three milliseconds worth
-> 	of them.
-> 
-> Except that if a given CPU ends up with more than 10,000 callbacks
-> (rcutree.qhimark), that CPU's blimit is set to 10,000.
+On Thu, Mar 2, 2023 at 2:37=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org>=
+ wrote:
+>
+> + Robert
+>
+> On Thu, 2 Mar 2023 at 00:32, Tim Harvey <tharvey@gateworks.com> wrote:
+> >
+> > Greetings,
+> >
+> > I've encountered a hang on shutdown on octeontx (CN8030 SoC, THUNDERX
+> > architecture) that I bisected to commit 66c915d09b94 ("mmc: core:
+> > Disable card detect during shutdown").
+> >
+> > It looks like the OMP5 Pyra ran into this as well related to a
+> > malfunctioning driver [1]
+> >
+> > In the case of MMC_CAVIUM_THUNDERX the host controller supports
+> > multiple slots each having their own CMD signal but shared clk/data
+> > via the following dt:
+> >
+> > mmc@1,4 {
+> >         compatible =3D "cavium,thunder-8890-mmc";
+> >         reg =3D <0xc00 0x00 0x00 0x00 0x00>;
+> >         #address-cells =3D <0x01>;
+> >         #size-cells =3D <0x00>;
+> >         clocks =3D <0x0b>;
+> >
+> >         /* eMMC */
+> >         mmc-slot@0 {
+> >                 compatible =3D "mmc-slot";
+> >                 reg =3D <0>;
+> >                 vmmc-supply =3D <&mmc_supply_3v3>;
+> >                 max-frequency =3D <35000000>;
+> >                 no-1-8-v;
+> >                 bus-width =3D <8>;
+> >                 no-sdio;
+> >                 no-sd;
+> >                 mmc-ddr-3_3v;
+> >                 cap-mmc-highspeed;
+> >         };
+> >
+> >         /* microSD */
+> >         mmc-slot@1 {
+> >                 compatible =3D "mmc-slot";
+> >                 reg =3D <1>;
+> >                 vmmc-supply =3D <&mmc_supply_3v3>;
+> >                 max-frequency =3D <35000000>;
+> >                 no-1-8-v;
+> >                 broken-cd;
+> >                 bus-width =3D <4>;
+> >                 cap-sd-highspeed;
+> >         };
+> > };
+> >
+> > mmc_add_host is only called once for mmc0 and I can't see any printk
+>
+> That looks wrong. There needs to be one mmc host registered per slot,
+> otherwise things will, for sure, not work.
+>
+> I suggest you have a closer look to see what goes on in thunder_mmc_probe=
+().
+>
 
-Also, if in the context of a softirq handler (as opposed to ksoftirqd)
-that interrupted the idle task with no pending task, the count of
-callbacks is ignored and only the 3-millisecond limit counts.  In the
-context of ksoftirq, the only limit is that which the scheduler chooses
-to impose.
+Ulf,
 
-But it sure seems like the ksoftirqd case should also pay attention to
-that 3-millisecond limit.  I will queue a patch to that effect, and maybe
-Eric Dumazet will show me the error of my ways.
+Sorry, I was mistaken. Each slot does get its own mmc host.
 
-> So there is much opportunity to tune the existing heuristics and also
-> much opportunity to tweak the heuristics themselves.
-> 
-> But let's see a good use case before tweaking, please.  ;-)
+I find that with thunderx_mmc I can reproduce this hang on shutdown
+even if I just have a single slot with broken-cd defined.
 
-							Thanx, Paul
+I wonder if it has to do with thunder_mmc_probe getting called
+multiple times because it defers due to gpio/regulator not yet being
+available:
+[    6.846262] thunderx_mmc 0000:01:01.4: Adding to iommu group 1
+[    6.852143] thunder_mmc_probe
+[    6.855622] thunder_mmc_probe scanning slots
+[    6.860137] mmc_alloc_host: mmc0 init delayed work
+[    6.864938] cvm_mmc_of_slot_probe mmc0
+[    6.868695] cvm_mmc_of_slot_probe mmc0 Failed: EPROBE_DEFER
+[    6.874269] mmc_free_host: mmc0
+[    6.877481] thunder_mmc_probe Failed: EPROBE_DEFER
+...
+[    7.737536] gpio_thunderx 0000:00:06.0: Adding to iommu group 16
+[    7.745252] gpio gpiochip0: (gpio_thunderx): not an immutable chip,
+please consider fixing it!
+[    7.754096] gpio_thunderx 0000:00:06.0: ThunderX GPIO: 48 lines
+with base 512.
+...
+[    7.946636] thunder_mmc_probe
+[    7.950125] thunder_mmc_probe scanning slots
+[    7.954597] mmc_alloc_host: mmc0 init delayed work
+[    7.959399] cvm_mmc_of_slot_probe mmc0
+[    7.963158] cvm_mmc_of_slot_probe mmc0 Failed: EPROBE_DEFER
+[    7.968732] mmc_free_host: mmc0
+[    7.971963] thunder_mmc_probe Failed: EPROBE_DEFER
+...
+[    7.998271] reg_fixed_voltage_probe
+[    8.001773] reg-fixed-voltage mmc_supply_3v3: reg_fixed_voltage_probe
+[    8.008360] reg-fixed-voltage mmc_supply_3v3: mmc_supply_3v3
+supplying 3300000uV
+[    8.015851] thunder_mmc_probe
+[    8.019318] thunder_mmc_probe scanning slots
+[    8.023794] mmc_alloc_host: mmc0 init delayed work
+[    8.028596] cvm_mmc_of_slot_probe mmc0
+[    8.032488] mmc_add_host: mmc0
+[    8.060655] cvm_mmc_of_slot_probe mmc0 ok
+[    8.064678] thunderx_mmc 0000:01:01.4: probed
+[    8.069041] mmc_rescan: mmc0 irq=3D-22
 
-> > > whether that makes a difference? Those two can be applied with some
-> > > minor polishing. The rest of that series is broken by f10020c97f4c
-> > > ("softirq: Allow early break").
-> > > 
-> > > There is another issue with this overload limit. Assume max_restart or
-> > > timeout triggered and limit was set to now + 100ms. ksoftirqd runs and
-> > > gets the issue resolved after 10ms.
-> > > 
-> > > So for the remaining 90ms any invocation of raise_softirq() outside of
-> > > (soft)interrupt context, which wakes ksoftirqd again, prevents
-> > > processing on return from interrupt until ksoftirqd gets on the CPU and
-> > > goes back to sleep, because task_is_running() == true and the stale
-> > > limit is not after jiffies.
-> > > 
-> > > Probably not a big issue, but someone will notice on some weird workload
-> > > sooner than later and the tweaking will start nevertheless. :) So maybe
-> > > we fix it right away. :)
-> > 
-> > Hm, Paolo raised this point as well, but the overload time is strictly
-> > to stop paying attention to the fact ksoftirqd is running.
-> > IOW current kernels behave as if they had overload_limit of infinity.
-> > 
-> > The current code already prevents processing until ksoftirqd schedules
-> > in, after raise_softirq() from a funky context.
+> > debugging added to __mmc_stop_host (maybe because serial/console has
+> > been disabled by that point?).
+>
+> The serial console should work fine at this point, at least on those
+> systems that I have tested this code with.
+>
+> Perhaps you added the debug print too late in the function, if the
+> calls to disable_irq() or cancel_delayed_work_sync() are hanging?
+>
+
+This was something to do with busybox reboot. I switched to using
+sysrq (echo o > /proc/sysrq-trigger) to reboot and now I can see my
+printk's
+
+> >
+> > It appears that what causes this hang is the 'broken-cd' which enables
+> > the detect change polling on mmc1. I have the ability to flip the CMD
+> > signal routing thus making mmc0 the microSD and mmc1 the eMMC and when
+> > I do that there isn't an issue so I think what happens is in the case
+> > where mmc polling is enabled on mmc1 but not mmc0 (as above) the
+> > polling causes a hang after __mmc_stop_host() is called for mmc0.
+>
+> The code in __mmc_stop_host() has been tested for both polling and
+> gpio card detections. That said, it looks to me that there is
+> something weird going on in the cavium mmc driver.
+>
+> What makes this even tricker, is that it's uncommon and not
+> recommended to use more than one mmc slot per host instance.
+>
+
+that was my mistake... there is one host instance per slot and I see
+this even if I only have 1 slot as long as polling is enabled.
+
+now that I can see my printk's I can confirm it hangs when
+_mmc_stop_host calls the cancel_delayed_work_sync:
+# echo o > /proc/sysrq-trigger
+[  210.370200] sysrq: Power Off
+[  210.373147] kernel_shutdown_prepare
+[  210.896927] mmc_rescan: mmc0 irq=3D-22
+[  213.038191] mmc_host_classdev_shutdown mmc0
+[  213.042384] __mmc_stop_host: mmc0 cd_irq=3D-22
+[  213.046658] __mmc_stop_host: mmc0 calling cancel_delayed_work_sync
+^^^ never comes back
+
+If I comment out the call to cancel_delayed_work_sync in
+__mmc_stop_host then shutdown does not hang so I think it has
+something to do with mmc_alloc_host setting up the polling multiple
+times.
+
+Best Regards,
+
+Tim
+
+
+
+> >
+> > Any ideas?
+>
+> I hope the above thoughts can point you in a direction to narrow down
+> this problem.
+>
+> >
+> > Best Regards,
+> >
+> > Tim
+> >
+> > [1] https://lore.kernel.org/all/55A0788B-03E8-457E-B093-40FD93F1B9F3@go=
+ldelico.com/
+>
+> Kind regards
+> Uffe
