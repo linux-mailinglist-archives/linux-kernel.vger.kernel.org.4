@@ -2,156 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFFD6A9674
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6DA6A966F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjCCLgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S231140AbjCCLfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:35:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjCCLgL (ORCPT
+        with ESMTP id S230118AbjCCLfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:36:11 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852855F525
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:35:53 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso1952279pjs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 03:35:53 -0800 (PST)
+        Fri, 3 Mar 2023 06:35:36 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FC25F235
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:35:06 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id c18so1371856wmr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 03:35:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677843348;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=29OzWpxyOz2YKbe7gk+wlUnvCGzWDi9lW+7/pophrnY=;
-        b=UXsv+zvJpY9npxxDaimqGLy6Jst1fhPTP8qDTyYqL5k8VsJK6RCu/FDuoLjqaptlTW
-         vDQ56LfI4SzRu6KWj0WwhuIzvIbcKRYeNV5ySrzG77VGflvocShjGwEdarhNyUfEY0IY
-         1WCjtxBYwmHAqHTua6ekv1ho1Kp1OYTgvIoFqT3ZL8XbvQkMbJ4GH5x7SAvtVl40nXnT
-         vHp19aimeOozvuCJWppH6cyyPsiBdUK2GXCNE0UcSjKAvz1AMPxVyvHJ5+GGH/q+3Z3/
-         sWF/lvIXxsdXSFukVTCVzW6i3xuUqlGrXDas780jw30i675/Vl6yrknmAZmKhJPgUuCR
-         Ib5A==
+        d=linaro.org; s=google; t=1677843302;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=++lCtQQa7+X6IbJitqa270p6tBDtglh3sC+2diUC4Wc=;
+        b=P7KeZy0MbCpa8uokBo1HcPwWSBQ8BXNQBUVd/JOxbqUC4BgUIsA9wMjfs2JzHZQCid
+         iYQ951Q3cExe7aIGtiEBWNWn5M+P8WsrHYoKScLTNJxMnbp8FraohdsXBMJ5/T8dHiv4
+         ro2RXVqixmyKiPfFo8Luu7OF8KbASxrvdJwX+tJcJHb2uKj+bVnaWUrcWAgAqF1xwpy8
+         /Mxr66G/ELW35keugG/WhgmVkGT4muQDK0SrS4M5h9uWAICgZ8Ujj4af4VSvl5A0kMKq
+         6aOvco6ZhlXKEoBB7+Cu8N+9tTbhSgwDCPN6Ox7sDePyHZxLVrYmr/pnzcDVZ1cqhJ2T
+         hsbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677843348;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=29OzWpxyOz2YKbe7gk+wlUnvCGzWDi9lW+7/pophrnY=;
-        b=skNInfzVaWbO6bnqKAugkXha08HA39SQ7szppvP+/F8yOvJ7xJFkOZb6D1fWMXVNsC
-         moLs3poqP4+RLKA5tr+0q2BU5LuoNaMQjLPfsDdGAKH0cxCrh/KhhsAoXdxYXOfazH7Y
-         cIb73K7wT0HLvKmLZPF+NiTpyRaFIqc/kMcMa1Kja+m3O1WYp6koXYnYu84MH187Yt4s
-         UbvnQ37M9LAI4/rRSrCmisrAnZH6jmF8gyEGOk60YniW29PgFeKi/8eTtyQmaEm49ytj
-         YBfOuXAk++O0ydo8siRrdgq9jf7VhV4AtJBFW5EV0iHGdjXLVe4mQwTmqB3UZXeehk2H
-         2s4Q==
-X-Gm-Message-State: AO0yUKUPogDH9D2/5oY+m4mHAQr26DtIqPhg5HzlwtJi+qPrlJI9cHdE
-        s5Z0WpE9fwQYJRuSkZb+W38=
-X-Google-Smtp-Source: AK7set++BCkVpQ27OESBIxlcacoRVz6Aj+XkJCD7OJ1vEPatpzdcaaEL/yM+9LCNECISm5A4drmRzw==
-X-Received: by 2002:a17:903:32cf:b0:19a:8e52:ce0 with SMTP id i15-20020a17090332cf00b0019a8e520ce0mr2187517plr.58.1677843348598;
-        Fri, 03 Mar 2023 03:35:48 -0800 (PST)
-Received: from localhost.localdomain (124-148-239-17.tpgi.com.au. [124.148.239.17])
-        by smtp.gmail.com with ESMTPSA id jz6-20020a170903430600b0019ab3308554sm1316798plb.85.2023.03.03.03.35.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 03:35:48 -0800 (PST)
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-To:     amd-gfx@lists.freedesktop.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Evan Quan <evan.quan@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Aditya Garg <gargaditya08@live.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Orlando Chamberlain <orlandoch.dev@gmail.com>
-Subject: [PATCH v2 RESEND] drm/amdgpu: register a vga_switcheroo client for MacBooks with apple-gmux
-Date:   Fri,  3 Mar 2023 22:34:25 +1100
-Message-Id: <20230303113423.3819-1-orlandoch.dev@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1677843302;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=++lCtQQa7+X6IbJitqa270p6tBDtglh3sC+2diUC4Wc=;
+        b=FBSe6d+HbuiBoquuqMK8G8d8JrF4VEpV4rgpqWlDL1sjan2vSP0URMyeR5ixY6h9NW
+         l5ZFsoPueEd84ZobVxQp1WJ4FPllLWlUW8h46VT+ttEi4VCovTw+GtcoxgipPDspFAY/
+         m4SMzdTKFLtepn3siyfu4Rpx6fTNVqy8B+zhw9DKUmIebCerrTW37aCc1Wmz1B68wijv
+         OinhN3RmFnWBqisbWKMpI3LYQKCRsibkTkKUeYgKAfKyBcGfr06vOYSKhhXL13E0weXA
+         GVNt6JLOOYuLEUcG87qgFF8Sfl3x3oz+1I0bea6/Fkot53hf+pvJhY2m2/0Iw6e1DaBp
+         o/og==
+X-Gm-Message-State: AO0yUKULyidA/e+lJBiDEVbYQNPXh5VwspXgG5Rwo+qVJUjM4YEF2nDe
+        bhahSbuDJ77XcipPbJtzAz7h0w==
+X-Google-Smtp-Source: AK7set/VoPy0DxdZaW+WU3Wk6rHfqx1Y9qwEwjfuG55qWo8QfcgBp4oUSSpbHD6h7QM5bXlu0pwfhQ==
+X-Received: by 2002:a05:600c:5101:b0:3e0:17d:aeaf with SMTP id o1-20020a05600c510100b003e0017daeafmr1296633wms.7.1677843302111;
+        Fri, 03 Mar 2023 03:35:02 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id m18-20020a05600c3b1200b003db0ad636d1sm6390616wms.28.2023.03.03.03.35.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 03:35:01 -0800 (PST)
+Message-ID: <3116a08a-30a8-c9b9-f079-26739c9e6d49@linaro.org>
+Date:   Fri, 3 Mar 2023 11:35:00 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
+ __qcom_icc_set twice on the same node
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
+ <59b28fb4-1367-9872-ed63-90847e380bb6@linaro.org>
+ <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and
-vga_switcheroo") made amdgpu only register a vga_switcheroo client for
-GPU's with PX, however AMD GPUs in dual gpu Apple Macbooks do need to
-register, but don't have PX. Instead of AMD's PX, they use apple-gmux.
+On 03/03/2023 11:33, Konrad Dybcio wrote:
+> 
+> 
+> On 3.03.2023 12:32, Bryan O'Donoghue wrote:
+>> On 03/03/2023 02:35, Konrad Dybcio wrote:
+>>> Currently, when sync_state calls set(n, n) all the paths for setting
+>>> parameters on an icc node are called twice. Avoid that.
+>>>
+>>> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>> RFC comes from the fact that I *believe* this should be correct, but I'm
+>>> not entirely sure about it..
+>>>
+>>>
+>>>    drivers/interconnect/qcom/icc-rpm.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>>> index a6e0de03f46b..d35db1af9b08 100644
+>>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>>> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>>>        ret = __qcom_icc_set(src, src_qn, sum_bw);
+>>>        if (ret)
+>>>            return ret;
+>>> -    if (dst_qn) {
+>>> +    if (dst_qn && src_qn != dst_qn) {
+>>>            ret = __qcom_icc_set(dst, dst_qn, sum_bw);
+>>>            if (ret)
+>>>                return ret;
+>>
+>> Is it possible for src_qn == dst_qn ?
+> As the commit message says, sync_state calls set(n, n) in
+> drivers/interconnect/core.c : icc_sync_state(struct device *dev)
 
-Use apple_gmux_detect() to identify these gpus, and
-pci_is_thunderbolt_attached() to ensure eGPUs connected to Dual GPU
-Macbooks don't register with vga_switcheroo.
-
-Fixes: 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and vga_switcheroo")
-Link: https://lore.kernel.org/amd-gfx/20230210044826.9834-10-orlandoch.dev@gmail.com/
-Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
----
-v1->v2: Use apple_gmux_detect()
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index 2f28a8c02f64..ef8b996f0622 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -35,6 +35,7 @@
- #include <linux/devcoredump.h>
- #include <generated/utsrelease.h>
- #include <linux/pci-p2pdma.h>
-+#include <linux/apple-gmux.h>
- 
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
-@@ -3919,12 +3920,15 @@ int amdgpu_device_init(struct amdgpu_device *adev,
- 	if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
- 		vga_client_register(adev->pdev, amdgpu_device_vga_set_decode);
- 
--	if (amdgpu_device_supports_px(ddev)) {
--		px = true;
-+	px = amdgpu_device_supports_px(ddev);
-+
-+	if (px || (!pci_is_thunderbolt_attached(adev->pdev) &&
-+				apple_gmux_detect(NULL, NULL)))
- 		vga_switcheroo_register_client(adev->pdev,
- 					       &amdgpu_switcheroo_ops, px);
-+
-+	if (px)
- 		vga_switcheroo_init_domain_pm_ops(adev->dev, &adev->vga_pm_domain);
--	}
- 
- 	if (adev->gmc.xgmi.pending_reset)
- 		queue_delayed_work(system_wq, &mgpu_info.delayed_reset_work,
-@@ -4029,6 +4033,7 @@ void amdgpu_device_fini_hw(struct amdgpu_device *adev)
- void amdgpu_device_fini_sw(struct amdgpu_device *adev)
- {
- 	int idx;
-+	bool px;
- 
- 	amdgpu_fence_driver_sw_fini(adev);
- 	amdgpu_device_ip_fini(adev);
-@@ -4048,10 +4053,16 @@ void amdgpu_device_fini_sw(struct amdgpu_device *adev)
- 
- 	kfree(adev->bios);
- 	adev->bios = NULL;
--	if (amdgpu_device_supports_px(adev_to_drm(adev))) {
-+
-+	px = amdgpu_device_supports_px(adev_to_drm(adev));
-+
-+	if (px || (!pci_is_thunderbolt_attached(adev->pdev) &&
-+				apple_gmux_detect(NULL, NULL)))
- 		vga_switcheroo_unregister_client(adev->pdev);
-+
-+	if (px)
- 		vga_switcheroo_fini_domain_pm_ops(adev->dev);
--	}
-+
- 	if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
- 		vga_client_unregister(adev->pdev);
- 
--- 
-2.39.1
+So you've _seen_ that happen ?
 
