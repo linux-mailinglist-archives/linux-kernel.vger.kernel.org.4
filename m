@@ -2,135 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B416A9690
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E86206A968A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbjCCLkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        id S231128AbjCCLjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjCCLjz (ORCPT
+        with ESMTP id S229437AbjCCLjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:39:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5A123131
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:39:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677843553;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v1Ct/6nINkmWZSFMigoxMFMstImpmSCqjjI/pBizmA0=;
-        b=WSJ9KZpK4vih8azuewSkt/m8tva5TYHJ7JGhLYzj3q9hsBZ2evR073WBJq8FRuo3AE6YaK
-        eSIK8x4Ft2Xa1PQunq3PPPAlKj+XoLmVobSEgQ+TnpTvtdKzypO6hOGYzTGY3bRLOoDUY7
-        HPclpe5BwkKQH584WwUMLdQP8moISOw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-261-kxqEj5dpOvWwxgqyxxxnkQ-1; Fri, 03 Mar 2023 06:39:11 -0500
-X-MC-Unique: kxqEj5dpOvWwxgqyxxxnkQ-1
-Received: by mail-wm1-f72.google.com with SMTP id n27-20020a05600c3b9b00b003e9ca0f4677so873346wms.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 03:39:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677843550;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        Fri, 3 Mar 2023 06:39:31 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B3B55530
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:39:26 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id z42so1968576ljq.13
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 03:39:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677843565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=v1Ct/6nINkmWZSFMigoxMFMstImpmSCqjjI/pBizmA0=;
-        b=lDxsIGDq2n1vOGOYiO+0R8hsCj3fB59uKLknSgU8dHBMKZ6H27AuZ9KlJ7kDjXMVo+
-         SXcW5EGuZbMZpcGn/JiVgY4ugHmzMRiTyuFUJiXoC7frycX52AM440cMyV3xOVzcpOPu
-         Q9ufSCggfgcCbG5hNKOiL7m5iqrZIyj+dBPmGAYf3gkrjv8JMGZczPxNCt2/3PhA9MAE
-         aLLLjdKUAJiM3hg93pSPE72tyS8a2jZsUe8U6AeJc1FRn4UJDauaz4J2jUeQAoLFO93l
-         EDJt+O9cotflqhh9pKfJ9c4yX2QW45oOnqaMwCTqiS7OrLvR8amf96Wy+DEeLrjkkUnx
-         hiaw==
-X-Gm-Message-State: AO0yUKVbXy10tJueRv/PbzbgbE9Z2WKT1VQLq5vwum9BLDqZ4NDPfnAv
-        UyPN9BcDkr51eBmmV+skrJ6MilrKTT2Ie8zfyKUfk6ARnqCxFRA8DrP0yppd9FPVXpsDKERIcHC
-        9sJI+ibfBsKSqX8ZkhlGuKN6i
-X-Received: by 2002:a05:600c:3b07:b0:3eb:2e2a:be82 with SMTP id m7-20020a05600c3b0700b003eb2e2abe82mr1246715wms.2.1677843550664;
-        Fri, 03 Mar 2023 03:39:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set9mwcWeiYEjlmyu4x2ILE7IqBBjOngusHgtCAMB0AGXHzaXoDMdecgdiEJ4F2mFuYU5V0UiRg==
-X-Received: by 2002:a05:600c:3b07:b0:3eb:2e2a:be82 with SMTP id m7-20020a05600c3b0700b003eb2e2abe82mr1246704wms.2.1677843550405;
-        Fri, 03 Mar 2023 03:39:10 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id s8-20020a7bc388000000b003eb2e685c7dsm5725689wmj.9.2023.03.03.03.39.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 03:39:09 -0800 (PST)
-Message-ID: <28afc90c1b8b51a36ced5b6026d1a64aeb7c0b14.camel@redhat.com>
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        mptcp@lists.linux.dev, Florian Westphal <fw@strlen.de>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Date:   Fri, 03 Mar 2023 12:39:07 +0100
-In-Reply-To: <ZAG8dla274kYfxoK@kroah.com>
-References: <20230301180657.003689969@linuxfoundation.org>
-         <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
-         <ZAB6pP3MNy152f+7@kroah.com>
-         <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
-         <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
-         <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
-         <CA+G9fYuLQEfeTjx52NxbXV5914YJQ2tVd8k4SJjrAryujPjnqA@mail.gmail.com>
-         <ZAG8dla274kYfxoK@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        bh=BkDKt1YzeWNRwirQw6wvEDUUEXwHJr3b2oz6pXeJI9c=;
+        b=an6IW9IOqyPT/0W+RIywrkM13pW/VcHEkd9uXbu7e4T6Vd5YsK9TjNqy0JxhAoeK2B
+         Gte9u7qzh6EjQeEnKaMIKdVHVXrIVtjvNa1EOSLiH2xZylhhBs9nt1dY6pcxbz0biW0O
+         y8QfbjepIICLQJjqBYp77MF/OwckqwF/r+s7F+X0N1CG7tl0yBey5c+eJdtwBpAcxk0T
+         tKX8JNVp6drhjmeUW6ARDPqq3w/fL0fkZF0S/5K1yvIfhCp8T48pj/D8msPYhP4D+SYI
+         KU33KKMjaiZtwmc/esVQnULHhM0OVRgjz5h/Ik+P0Tw5c1bid6umneApMgpQDPEBP1yO
+         bTog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677843565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BkDKt1YzeWNRwirQw6wvEDUUEXwHJr3b2oz6pXeJI9c=;
+        b=zsuxWiQyb7C9KCmLnEPo4KM96m3YynVeHzIgZFSJfOh+9ooqHP3qt6Mzpu68Q83/t5
+         21DQQgMDU3OUEQ6ag/foFskELx1e/XwiVQAAO1OHnpNY5ru0V5C8/PK+euCbG7CgBfvz
+         v3Shzd32WPygfG5uor8ihQEb3cQztV1xa1tAZF2jektvFfJNJ+yLfylX5MEa2SNtGmCo
+         FNb1vlYrFth4bBA3u7utdc4Lku42Z7qo++12VXpXZxYsrc+qCOL+XDTOz/0Ru10dGZiy
+         VGs4676CG83RIyqXYvqpF7JHHti208A03mqczoDQUfby2BtnBabYIi1XvcUn31Sv2R1G
+         ri2Q==
+X-Gm-Message-State: AO0yUKUYGppBvXoponlPKi/Cu60VT7tsHOqJjOvjK1CGC7v4aE+POBIW
+        5/51gVYFGwAj1SlXrlkcDMjANw==
+X-Google-Smtp-Source: AK7set8ukR79viwyY7va3KuIUT5EBlrrMxoo/tyCt9ry7Ct7pxXVLhRaEr6/7iSPVguhz4STOwk1iw==
+X-Received: by 2002:a2e:7d08:0:b0:295:a930:55d1 with SMTP id y8-20020a2e7d08000000b00295a93055d1mr421966ljc.18.1677843565268;
+        Fri, 03 Mar 2023 03:39:25 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id k26-20020a05651c10ba00b00295d38474e5sm269833ljn.46.2023.03.03.03.39.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 03:39:24 -0800 (PST)
+Message-ID: <db4f4e53-e8b9-0807-7490-2c6b76194ad5@linaro.org>
+Date:   Fri, 3 Mar 2023 12:39:23 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
+ __qcom_icc_set twice on the same node
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
+ <59b28fb4-1367-9872-ed63-90847e380bb6@linaro.org>
+ <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
+ <3116a08a-30a8-c9b9-f079-26739c9e6d49@linaro.org>
+ <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-03 at 10:23 +0100, Greg Kroah-Hartman wrote:
-> On Fri, Mar 03, 2023 at 02:34:05PM +0530, Naresh Kamboju wrote:
-> > On Fri, 3 Mar 2023 at 13:34, Paolo Abeni <pabeni@redhat.com> wrote:
-> > > I read the above as you are running self-tests from 6.2.1 on top of a=
-n
-> > > older (6.1) kernel. Is that correct?
-> >=20
-> > correct.
-> >=20
-> > > If so failures are expected;
->=20
-> Shouldn't the test be able to know that "new features" are not present
-> and properly skip the test for when that happens? =C2=A0
 
-I was not aware that running self-tests on older kernels is a common
-practice. I'm surprised that hits mptcp specifically. I think most
-networking tests have the same problem.
 
-Additionally, some self-tests check for known bugs/regressions. Running
-them on older kernel will cause real trouble, and checking for bug
-presence in the running kernel would be problematic at best, I think.
+On 3.03.2023 12:36, Bryan O'Donoghue wrote:
+> On 03/03/2023 11:35, Bryan O'Donoghue wrote:
+>> On 03/03/2023 11:33, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 3.03.2023 12:32, Bryan O'Donoghue wrote:
+>>>> On 03/03/2023 02:35, Konrad Dybcio wrote:
+>>>>> Currently, when sync_state calls set(n, n) all the paths for setting
+>>>>> parameters on an icc node are called twice. Avoid that.
+>>>>>
+>>>>> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>> ---
+>>>>> RFC comes from the fact that I *believe* this should be correct, but I'm
+>>>>> not entirely sure about it..
+>>>>>
+>>>>>
+>>>>>    drivers/interconnect/qcom/icc-rpm.c | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>>>>> index a6e0de03f46b..d35db1af9b08 100644
+>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>>>>> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>>>>>        ret = __qcom_icc_set(src, src_qn, sum_bw);
+>>>>>        if (ret)
+>>>>>            return ret;
+>>>>> -    if (dst_qn) {
+>>>>> +    if (dst_qn && src_qn != dst_qn) {
+>>>>>            ret = __qcom_icc_set(dst, dst_qn, sum_bw);
+>>>>>            if (ret)
+>>>>>                return ret;
+>>>>
+>>>> Is it possible for src_qn == dst_qn ?
+>>> As the commit message says, sync_state calls set(n, n) in
+>>> drivers/interconnect/core.c : icc_sync_state(struct device *dev)
+>>
+>> So you've _seen_ that happen ?
+>>
+> 
+> Assuming you have, then why isn't the fix in sync_state i.e. that's an error for everybody right ?
+I believe that there's simply no other way of updating every single node
+on its own with the icc api, without taking any links into play. But I
+see exynos and i.mx also effectively calling it twice on each node.
 
-> Otherwise this feels
-> like a problem going forward as no one will know if this feature can be
-> used or not (assuming it is a new feature and not just a functional
-> change.)
-
-I don't understand this later part, could you please re-phrase?
-
-Users should look at release notes and/or official documentation to
-know the supported features, not to self-tests output ?!?
-
-Thanks!
-
-Paolo
-
-p.s. for some reasons I did not receive the previous replies, I had to
-fetch the conversation from the ML archives.
-
+Konrad
