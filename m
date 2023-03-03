@@ -2,109 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116646A9719
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF436A96FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjCCMQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 07:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S229471AbjCCMIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 07:08:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjCCMQs (ORCPT
+        with ESMTP id S229676AbjCCMIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 07:16:48 -0500
-X-Greylist: delayed 562 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Mar 2023 04:16:45 PST
-Received: from esmtp-1.proxad.net (esmtp-1.proxad.net [213.36.6.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCD62A98D;
-        Fri,  3 Mar 2023 04:16:45 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by esmtp-1.proxad.net (Postfix) with ESMTP id 7051881BB1;
-        Fri,  3 Mar 2023 13:07:22 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at proxad.net
-Received: from esmtp-1.proxad.net ([127.0.0.1])
-        by localhost (esmtp-b23-1.proxad.net [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id kvvE6ffmOTT2; Fri,  3 Mar 2023 13:07:21 +0100 (CET)
-Received: from zstore-5.mgt.proxad.net (unknown [172.18.94.8])
-        by esmtp-1.proxad.net (Postfix) with ESMTP id 9A57181A18;
-        Fri,  3 Mar 2023 13:07:15 +0100 (CET)
-Date:   Fri, 3 Mar 2023 13:07:15 +0100 (CET)
-From:   Adrien Moulin <amoulin@corp.free.fr>
-To:     Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tariq Toukan <tariqt@nvidia.com>
-Message-ID: <61481278.42813558.1677845235112.JavaMail.zimbra@corp.free.fr>
-Subject: TLS zerocopy sendfile offset causes data corruption
+        Fri, 3 Mar 2023 07:08:07 -0500
+Received: from out-56.mta1.migadu.com (out-56.mta1.migadu.com [95.215.58.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416B010248
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 04:08:05 -0800 (PST)
+Date:   Fri, 3 Mar 2023 13:08:00 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1677845283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MFvIFOj655htJb0T58EwR5SPuf4Kw8SDISa3u05xsAw=;
+        b=lq3eAZqtOX8y1ppEtSrQbQ0RAcPAnrYhNK6RJB0/Sxg54a8WgtmPk0Rfu3EZdbJwDtw9oX
+        EVtXQgtsIA0IBl8zdUEqIT+/hnCqx3dFAEEIyDuLscf98gHokKXBXzUvCWZ4NPxjr38RXx
+        ux50WsG3ESbNWc3IvyGxaPNX/DQ+7i8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     Jean-Philippe Brucker <jpb@kernel.org>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Itaru Kitayama <itaru.kitayama@gmail.com>,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
+Subject: Re: [RFC] Support for Arm CCA VMs on Linux
+Message-ID: <20230303120800.ahtyc6et77ig4s27@orel>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+ <Y9PtKJ3Wicc19JF1@myrica>
+ <CANW9uyud8RTkqgiL=64wV712QMxtAyubqeyCJ0vpcADJ42VqJA@mail.gmail.com>
+ <Y/8Y3WLmiw6+Z5AS@myrica>
+ <CANW9uysnvGCwANu+_6dp9+3rvHGOkThT9d0K2qpQV4exdmYWoA@mail.gmail.com>
+ <20230303094618.GC361458@myrica>
+ <1c91b777-982e-e71a-4829-51744e9555c5@arm.com>
+ <20230303113905.GD361458@myrica>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - SAF16.2 (Mac)/8.8.12_GA_3794)
-Thread-Index: lTDPthBuN+Zxmy4UPuAb4ZDFQmGN9Q==
-Thread-Topic: TLS zerocopy sendfile offset causes data corruption
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303113905.GD361458@myrica>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Mar 03, 2023 at 11:39:05AM +0000, Jean-Philippe Brucker wrote:
+> On Fri, Mar 03, 2023 at 09:54:47AM +0000, Suzuki K Poulose wrote:
+> > On 03/03/2023 09:46, Jean-Philippe Brucker wrote:
+> > > On Thu, Mar 02, 2023 at 07:12:24AM +0900, Itaru Kitayama wrote:
+> > > > > > I've tried your series in Real on CCA Host, but the KVM arch init
+> > > > > > emits an Invalid argument error and terminates.
+> > > 
+> > > This was the KVM_SET_ONE_REG for the SVE vector size. During my tests I
+> > > didn't enable SVE in the host but shrinkwrap enables more options.
+> > 
+> > Does the Qemu check for SVE capability on /dev/kvm ? For kvmtool, we
+> > changed to using the VM instance and that would prevent using SVE,
+> > until the RMM supports it.
+> 
+> Yes, QEMU does check the SVE cap on /dev/kvm. I can propose changing it or
+> complementing it with a VM check in my next version, it seems to work
+> (though I need to double-check the VM fd lifetime). Same goes for
+> KVM_CAP_STEAL_TIME, which I need to disable explicitly at the moment.
 
-When doing a sendfile call on a TLS_TX_ZEROCOPY_RO-enabled socket with an offset that is neither zero nor 4k-aligned, and with a "count" bigger than a single TLS record, part of the data received will be corrupted.
+I'm probably missing something since I haven't looked at this, but I'm
+wondering what the "VM instance" check is and why it should be necessary.
+Shouldn't KVM only expose capabilities which it can provide? I.e. the
+"VM instance" check should be done by KVM and, when it fails, the SVE and
+steal-time capabilities should return 0.
 
-I am seeing this on 5.19 and 6.2.1 (x86_64) with a ConnectX-6 Dx NIC, with TLS NIC offload including sendfile otherwise working perfectly when not using TLS_TX_ZEROCOPY_RO.
-I have a simple reproducer program available here https://gist.github.com/elyosh/922e6c15f8d4d7102c8ac9508b0cdc3b
-
-Doing sendfile of a 32K file with a 8 bytes offset, first without zerocopy :
-
-# ./ktls_test -i testfile -p 443 -c cert.pem -k key.pem -o 8
-Serving file testfile, will send 32760 bytes (8 - 32768) with SHA1 sum 83fc1e3900cf900025311f2c27378a357f9f4d2c
-sendfile(5, 3, 8, 32760) = 32760
-
-% wget -S -q -O test_copy https://xxxxxx/; shasum test_copy
-  HTTP/1.1 200 OK
-  Content-Type: application/octet-stream
-  Content-Length: 32760
-  X-Source-SHA1: 83fc1e3900cf900025311f2c27378a357f9f4d2c
-83fc1e3900cf900025311f2c27378a357f9f4d2c  test_copy
-
-Same with TLS_TX_ZEROCOPY_RO enabled, received data will be corrupted :
-
-# ./ktls_test -i testfile -p 443 -c cert.pem -k key.pem -o 8 -z
-Serving file testfile, will send 32760 bytes (8 - 32768) with SHA1 sum 83fc1e3900cf900025311f2c27378a357f9f4d2c
-TLS_TX_ZEROCOPY_RO enabled
-sendfile(5, 3, 8, 32760) = 32760
-
-% wget -S -q -O test_zerocopy https://xxxxxx/; shasum test_zerocopy
-  HTTP/1.1 200 OK
-  Content-Type: application/octet-stream
-  Content-Length: 32760
-  X-Source-SHA1: 83fc1e3900cf900025311f2c27378a357f9f4d2c
-03374f669f98d5f56837660a3817ce1d2a2819f8  test_zerocopy
-
-% diff -U 1 -d <(xxd test_copy) <(xxd test_zerocopy)                             
---- /dev/fd/11	2023-03-03 10:13:26
-+++ /dev/fd/12	2023-03-03 10:13:26
-@@ -1087,3 +1087,3 @@
- 000043e0: 1010 1010 1010 1010 1010 1010 1010 1010  ................
--000043f0: 1010 1010 1010 1010 1111 1111 1111 1111  ................
-+000043f0: 1010 1010 1010 1010 1010 1010 1010 1010  ................
- 00004400: 1111 1111 1111 1111 1111 1111 1111 1111  ................
-@@ -1151,3 +1151,3 @@
- 000047e0: 1111 1111 1111 1111 1111 1111 1111 1111  ................
--000047f0: 1111 1111 1111 1111 1212 1212 1212 1212  ................
-+000047f0: 1111 1111 1111 1111 1111 1111 1111 1111  ................
- 00004800: 1212 1212 1212 1212 1212 1212 1212 1212  ................
-@@ -1215,3 +1215,3 @@
- 00004be0: 1212 1212 1212 1212 1212 1212 1212 1212  ................
--00004bf0: 1212 1212 1212 1212 1313 1313 1313 1313  ................
-+00004bf0: 1212 1212 1212 1212 1212 1212 1212 1212  ................
- 00004c00: 1313 1313 1313 1313 1313 1313 1313 1313  ................
-
-For context, I noticed this issue trying to serve cached files with nginx. For static files this works fine (sendfile offset is zero at first, then 16k-aligned), but cached files are stored with a ~500 bytes header that is skipped in the sendfile call, triggering this issue.
-
-Best regards
-
--- 
-Adrien Moulin
+Thanks,
+drew
