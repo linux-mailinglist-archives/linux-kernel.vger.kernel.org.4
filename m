@@ -2,178 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639876AA038
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 741B86AA04E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjCCTnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 14:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S231591AbjCCTsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 14:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjCCTnG (ORCPT
+        with ESMTP id S231377AbjCCTse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 14:43:06 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24991D914;
-        Fri,  3 Mar 2023 11:43:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UQIdmjef4LrtmAp5FSm11jc8drtfunONV184GSILOdNz0Aj8o85r2rn79uNY2fOPomV7E1AT8xegPsJOLPmphrDfUnoTTm4fbGXkNTJv2pqROOZvxOFGQjTcUQ8eO9o33znRZvakJBXdk/XMRNqmLC3P++XNJTSfp/VX3QWKuS1pb8t+bhlu0ye35+OPuVl15E2ZA3WQXIbtqsHHUo5YiJ7PlZJq+oGbA6AKcDtbt4dBAv/yhwfPbTPNmBG/WqviKTcBM+fg8nlvkwRrryWY4LamMO33TfmUXMszD6AcMp7i3lbN7uS6B7X9LbbRewcSZOqtV0dXbqVXfzq+wtuEAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RfLrVMBZmN/jTZh8/0G6diwNY058LSvqQ+9u5ClrxYY=;
- b=AYhF8jEwWCE1obLPTCAmcIOxQeT6ks/obi+iwvDx+n2WxVkcLoGZwvcL45W32OFKfpyqJol5b3OzwTg/unI+BZNlXAXq9drUcQ4Kfrl+GRLI1LXXPioQhgL8llqRQogyfabPEht+yhBv/PLDuG3A0RY9yEMjEQnJfzmlELUi4UBURjOpwcUGR/6Lzb6J7ZgGC5DyJft0MjzBkw/rJZwZHgjKIy1/XNvMaFJ0imuIagHPk7RcQ5nvRY3eDbcVq/Zn+L4MjlvQmGMWRKS8/qpDWdNVNvs09o13str9lZ3nhl0tqK7sjG+Ds6gWSRlulZIFZjPNJUi++6zCfNjiONwipQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ddn.com; dmarc=pass action=none header.from=ddn.com; dkim=pass
- header.d=ddn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RfLrVMBZmN/jTZh8/0G6diwNY058LSvqQ+9u5ClrxYY=;
- b=fa4wx2ebW/sCgWSn6UzvC9bMwD7c8rIs55QjMHkg3+STlPrRx6zjtBraAm7bG1YMMhjZcBBEYJACsMUD65G8s+Woi/v1f1DBsVnX21niYKCPoOCCzMRvkLt8ZvYnMrTr32rG9hzkcSgOB4ztwjG6wBksH6aeIf08Z4mO5QylUYc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ddn.com;
-Received: from DM5PR1901MB2037.namprd19.prod.outlook.com (2603:10b6:4:aa::29)
- by DS0PR19MB7767.namprd19.prod.outlook.com (2603:10b6:8:123::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Fri, 3 Mar
- 2023 19:43:01 +0000
-Received: from DM5PR1901MB2037.namprd19.prod.outlook.com
- ([fe80::e6d4:29f7:2077:bd69]) by DM5PR1901MB2037.namprd19.prod.outlook.com
- ([fe80::e6d4:29f7:2077:bd69%4]) with mapi id 15.20.6086.024; Fri, 3 Mar 2023
- 19:43:01 +0000
-Message-ID: <fc8d6066-a550-455c-c864-f418db3239a3@ddn.com>
-Date:   Fri, 3 Mar 2023 20:42:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 0/9] fuse: API for Checkpoint/Restore
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        mszeredi@redhat.com
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
-Content-Language: en-US
-From:   Bernd Schubert <bschubert@ddn.com>
-In-Reply-To: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0015.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:150::20) To DM5PR1901MB2037.namprd19.prod.outlook.com
- (2603:10b6:4:aa::29)
+        Fri, 3 Mar 2023 14:48:34 -0500
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA6B136DD;
+        Fri,  3 Mar 2023 11:48:29 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id d30so14743202eda.4;
+        Fri, 03 Mar 2023 11:48:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677872908;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qr3wWyppk2JO5cvuGc7OJNqcMG2NC5hwXnkMjN+yuLE=;
+        b=mXnS1hzVlXCx/SEZZDeRfFq3BbGUQ+FjBtAfGFxEc85b/SDiGvfpUX5JGXb2Z9tljK
+         rOiGhppg1i6z9oMLxW9thrYeiO19ASWqZ2fscBNdgDaVbRpvwU2kwtYDrC6vmS4ODpst
+         +94sWKfQlegHXJGKnUd9gtUYoKXXAozsoxfrJ/I3LlSe5MNcgeLDUr/IejCmigtQ+v6a
+         aE3C/A91wSwmjfJSKSCXIYoP+gLDxRUD30cluv2duVOIxollBv24c0jL7g6HcgIKN/lU
+         I2NKB480pc2+1Sm8d+irHvwfGtMYgmUPvT3mhMHdnmRF2+yAst3bcCgQaV/1hRwlWBHT
+         a0tw==
+X-Gm-Message-State: AO0yUKUPkSB+bPBxfzvK+deUOKRvGuaCQHQ3KJTrVnZjqpQ/33IEcdjy
+        lQk3i8K6WdCn2pEMgIDr2SCbV4U9+BGn131FnjeSFLkp
+X-Google-Smtp-Source: AK7set8pOENE3qQdov6OdbnX8NZeqRAuHLeW/9RDr9g861DgXcdaR15YJISLt3N0xGeu3omTus0Ig7L1FfyytK0BbOU=
+X-Received: by 2002:a50:ce19:0:b0:4bc:2776:5b61 with SMTP id
+ y25-20020a50ce19000000b004bc27765b61mr1748709edi.6.1677872907622; Fri, 03 Mar
+ 2023 11:48:27 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR1901MB2037:EE_|DS0PR19MB7767:EE_
-X-MS-Office365-Filtering-Correlation-Id: e56af343-59e0-4e20-656d-08db1c1f7f35
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GMmXwivGcK0Fy0nMPgfRoPtw8iBLXE+FGlv36sXiYO8WWS65uDKtXrPge+vgJT+3aJR1Cgn+3tpMYFFvjp2ef5M3WiLqEBd5kmq2DMBKsurJKofN3Ad/EIrqJsqYDLvOL2v8Tgy0uBdaUgMzttch1N8fSs8Hur6vkLdDIQUlFUC7rtb1P1gW0QBHjiFrmr+ub8CqjOjHgWYHhGZwEcg8Ws0CDVqltQop3RyhMj2XJlepAXaMZ4n/4zbDOkNM/zoEUeTp564h6vvGhSuHve28bQ4Gqe6pCLhDy4VC4rcexpibadz3ouyWKWEOYhFK2CEMgfXTnJuNTNUOyBC/4a+x9fNqxl3wWLgbgTt49ofXIb7oh2EP29+GKfUNPp6rajeHo6qc6e0DnwfWcLax+38M0ei9w6PvRfZI5KNdbN/SFygdQYhuYjaADpXlNfdQpfe09TWuuN8Vn187yWRlqnxsB9d1anqmonn8gPKQ9H+/cmXE2NlC2u77h9bmBzDkVMFd5i2OEXLBgdebOOLhHZEwC4zUc3exwDHGPmRpZo9oolvwC4Jc1ycnUNFJN+r7natccndNKs8HVWSub50YYgJpq0vjg/qeaHlTsH46171Ultf1lKVNf100CPTBKXYKGW5/KsyXVDn7k6AnbnGNv09RXAZ8a7IYv/uqZj8+VylCRUIv1fLaXsGIa4MLbCDktAovCgkz/02W/FhO1gpRic+V0/OjtVmnbcr1hnWD3UABX+M=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1901MB2037.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(396003)(136003)(346002)(376002)(366004)(451199018)(2906002)(8936002)(38100700002)(6486002)(31696002)(7416002)(4326008)(31686004)(41300700001)(66556008)(66476007)(66946007)(8676002)(5660300002)(26005)(36756003)(86362001)(6666004)(54906003)(478600001)(186003)(6506007)(53546011)(6512007)(83380400001)(2616005)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ejlSTllwbzZGaE5zNDl0TXAweFZGRmxWMkcreDAvcEdMeHFjbkxmRytZVmEv?=
- =?utf-8?B?SitaNnhuMU5jZUpBUWdTVkh1TVdVM042QjFOUWw5MnBjZEc4bmRyQVBhaTFx?=
- =?utf-8?B?UXBCNHhSMnZJcnlXcUg1STBDV0tOU2VPc0Z6Mml0dFZsUEZPQlV0LzUvY2M1?=
- =?utf-8?B?b3J1UUd5YXdlM09mVHIvYXIyOTdaL3MyMDlCNkZudEpLS0Rqei9lREVRcG9t?=
- =?utf-8?B?VzBPM1FJTkJJZUZXOVVvSTFseUxxTXQzQXNGeHFUVkRGVUIxUnRFd0FhN2Va?=
- =?utf-8?B?TXl6elpCcTFzTWcrSjRFQjZrZnYrU3JjWVJQMnI5WXF0K24vcmJTSUJBOW9m?=
- =?utf-8?B?Nk1GTU51and5Yk1VQVovcU1YWEFKVUFFOHZidkc0cFp5eTJINzAvT0ZzcVFU?=
- =?utf-8?B?Q3RyZ3ozYzdLTUdwQ2I2dDRwc2Q3T2N4cDZMQ2RDTGU2YjRMd2dmVkdGU3Q2?=
- =?utf-8?B?eUlPRldxUk56TVBqNG82OWlLeU5QczJKdGUwL2ZKeEdRK3JGejdaVEtNN2FZ?=
- =?utf-8?B?bEMyd3E5NlpKWVNrTlNUZ01BbklwSStEcTcwMkdOcXMva29PZkt0SUFMNDNi?=
- =?utf-8?B?V09uMGJpamoyYVd2U2EvTTVzTkIwaXExUytDejUySit0cDl2VnBCNXlaVnRQ?=
- =?utf-8?B?aUhXM2Z5U2xENnZFNXpzNzFIOTBtUGhIREtVdHYvTGwwdWJER3dLK1liWWIy?=
- =?utf-8?B?RXM0MUZ3V1BzOUYzN1VzNGwveXhvd2xpN3c0U09ETnQ4dEREV1kvZzhFMjdJ?=
- =?utf-8?B?UW1XRWxXTDl2a1VsRytRUlcwZHlwS3l1TG9MeklmSTFBOUQ1aUNzUWNOOVRt?=
- =?utf-8?B?Z2dqS2tWbjRmU01VU0lLY1lUTm1COVdGWldzOG83dFhMN2FJamx2SDJGcXdW?=
- =?utf-8?B?VHM1dWk4dk9OdlZxclFSWkZmSno4SFpnNWY5ekVVb2xTbDAzRnI1aEJJQXJD?=
- =?utf-8?B?cHBQbkdCcVQ0dEYwQWxFc3FCVFhLZFpYa2NOMVAzWS9uRm9qb2tlQWoyVVZO?=
- =?utf-8?B?NFRBQkhiaUZGSGgxS05DbE8xem11RTFwWkM4VHdMS1ViTExMVVI2NVgzL1Zo?=
- =?utf-8?B?bG1Ub2hXcTcxMEp0MUlMTkNLVGNaWnpFOEpmMlFjY2VqUVZZQ05zSWF3cUtw?=
- =?utf-8?B?VHMwaUlkZktlamlycXMvbm5KbXVLOUFDNzBncnYwWFpPRm1UMnJoYld4d2Ni?=
- =?utf-8?B?Q1ptclZXcDhmTmNHL0piVlN0QmYvWk9vaVBTNHRPczFvSGY3ZWZYeUpWejAw?=
- =?utf-8?B?aEJoV3c0b3FkcmRraEdhNFRVTEo5MEQ3VWVxMUZNQXQ3YTlYZlVTaDVrQmls?=
- =?utf-8?B?NS9GMDhpL2s4aHkxSlpuWGVDTHlkamdESmtIdXNmNFdhb3dmeG1uWFJIaXZH?=
- =?utf-8?B?TzlnSFFmUTlJbGswZ0F3MitydFA3WkVIRFpXbkxsWnE4SjJuMUNFOTA2UWRO?=
- =?utf-8?B?S0dQc2lqM0JnQzRKNkVyYTZFaEZTMjFSZDdiSy8rOGQ2WEY1Y0pPL3JQbWwz?=
- =?utf-8?B?V2d5SlEwdVVFTTRra3ZVdzFsVXh4ODJ5bWZKcEFuakRFeDExcEVoMEQrcTFk?=
- =?utf-8?B?M3VNczRVdWRXWTUwQUtQbUp2RXlHbGxLd2VuU0lUSDVyK2ViVlg2aUI5YzBo?=
- =?utf-8?B?VTExN25TRXVucHFPRW8vMFBoeTdaaTJIS0VwV0owcHB6MjdPeVF1Nm5XUmJw?=
- =?utf-8?B?K1RXMVVRVFpNTkViSkxteFBSb3BlUXc0N0hvZGVOR05XaHVLV05LQm1nY3M2?=
- =?utf-8?B?b203OXEyeWxySVNQajN3WXVFc3R6NFQ5UGZnZmg4QjRVb0x0aDJFOG11dTh2?=
- =?utf-8?B?MkFNQmR5NzVwY3k0dE05Mkl6Z3piZTlPRnVLRlpRdWYyV013ODhOT2lxNkh3?=
- =?utf-8?B?WlVQMEFIekFPbjQ3RGFOU0J1UTVjZnB4QjFHbDMvUCtaQVpySGpaSVJqSVht?=
- =?utf-8?B?RzRKVGFDUDNDZkxzRnd1Rk52REpPK1hmNUVZYUY0amhnQVM4a2ZuaVpRTGxv?=
- =?utf-8?B?SmErbGhMdWIyN0M3QzhRUW82Mk8rY0dXZm5UbVpPbldVSUo5bTZMUmpWZzJI?=
- =?utf-8?B?c2pqcExCSklLRkwwcnkrQTdoc2Nyb2wrY2tITjJWKzNaUWxFQnlTOG1yZkdF?=
- =?utf-8?Q?tHqMu8iJW1HTlUIw73mT/VThf?=
-X-OriginatorOrg: ddn.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e56af343-59e0-4e20-656d-08db1c1f7f35
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1901MB2037.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 19:43:01.3701
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1MhtDA8zn/xgmKGgkWEq5CpfPYR5Ugp5JMCAIZ6/rrtJ77Kj1LtWousmromAqzDAglcNkGVI5tdLRalYx0AgCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR19MB7767
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230301201446.3713334-1-daniel.lezcano@linaro.org> <1d3da42e-2499-7ff6-50fa-048a720e855f@linaro.org>
+In-Reply-To: <1d3da42e-2499-7ff6-50fa-048a720e855f@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 3 Mar 2023 20:48:16 +0100
+Message-ID: <CAJZ5v0i9fbEpedS-CCM5qvfaG095jUDzOFd-H83G3mpwDaxoAA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/18] Self-encapsulate the thermal zone device structure
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-acpi@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Daniel,
 
+On Fri, Mar 3, 2023 at 10:24 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> Do we have enough ack to apply this series, is it for you ?
 
-On 2/20/23 20:37, Alexander Mikhalitsyn wrote:
-> Hello everyone,
-> 
-> It would be great to hear your comments regarding this proof-of-concept Checkpoint/Restore API for FUSE.
-> 
-> Support of FUSE C/R is a challenging task for CRIU [1]. Last year I've given a brief talk on LPC 2022
-> about how we handle files C/R in CRIU and which blockers we have for FUSE filesystems. [2]
-> 
-> The main problem for CRIU is that we have to restore mount namespaces and memory mappings before the process tree.
-> It means that when CRIU is performing mount of fuse filesystem it can't use the original FUSE daemon from the
-> restorable process tree, but instead use a "fake daemon".
-> 
-> This leads to many other technical problems:
-> * "fake" daemon has to reply to FUSE_INIT request from the kernel and initialize fuse connection somehow.
-> This setup can be not consistent with the original daemon (protocol version, daemon capabilities/settings
-> like no_open, no_flush, readahead, and so on).
-> * each fuse request has a unique ID. It could confuse userspace if this unique ID sequence was reset.
-> 
-> We can workaround some issues and implement fragile and limited support of FUSE in CRIU but it doesn't make any sense, IMHO.
-> Btw, I've enumerated only CRIU restore-stage problems there. The dump stage is another story...
-> 
-> My proposal is not only about CRIU. The same interface can be useful for FUSE mounts recovery after daemon crashes.
-> LXC project uses LXCFS [3] as a procfs/cgroupfs/sysfs emulation layer for containers. We are using a scheme when
-> one LXCFS daemon handles all the work for all the containers and we use bindmounts to overmount particular
-> files/directories in procfs/cgroupfs/sysfs. If this single daemon crashes for some reason we are in trouble,
-> because we have to restart all the containers (fuse bindmounts become invalid after the crash).
-> The solution is fairly easy:
-> allow somehow to reinitialize the existing fuse connection and replace the daemon on the fly
-> This case is a little bit simpler than CRIU cause we don't need to care about the previously opened files
-> and other stuff, we are only interested in mounts.
+I've just queued it up for 6.4.
 
+It will reach linux-next and the thermal branch some time next week,
+but I will be traveling, so there may be delays.
 
-I like your patches, small and easy to read :)
-So this basically fails all existing open files - our (future) needs go 
-beyond that. I wonder if we can extend it later and re-init the new 
-daemon with something like "fuse_queue_recall" - basically the opposite 
-of fuse_queue_forget. Not sure if fuse can access the vfs dentry cache 
-to know for which files that would need to be done - if not, it would 
-need to do its own book-keeping.
-
-
-Thanks,
-Bernd
+Thanks!
