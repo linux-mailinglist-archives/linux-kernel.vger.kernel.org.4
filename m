@@ -2,145 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C7B6A9B6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF436A9B70
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjCCQOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 11:14:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S231176AbjCCQQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 11:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjCCQOw (ORCPT
+        with ESMTP id S229511AbjCCQQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:14:52 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7008D12F26
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:14:49 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id i6so2424413ybu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 08:14:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677860088;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+HigpCH+Z2DmMB8BhdGZnkGJxtK6UAghULTuYAvBYII=;
-        b=DBUjHTuC6OLAOEFQL/9SnCUwEjvU7+kYaOKx7lUZ2rsDkdc7y/weciI+YncXMe6yPq
-         6v7NyE0keu/sVTwXjsJ4KB5s6vKWaOGP/EGn2Ts18q4AM6xKHTTAs+FzN7P89jEGoSXx
-         Rn4xQV9h2vkZ7UOsVGBeGNj5DXmqTpDFn5+Gz2eRhQI6AJYkNZmXOzKQfRNBCpuBXRbB
-         POdcu+EOJT60kluX5CyxfEYIr7GmvmSf36YIDXysgZHS203zORKBRmpggPYflvsN1n8+
-         9lgiQHv8LJxYXWINdHGrRhDw3uhYq9n1+bTj6MIZ0yhPAuvCWKEBstJYeMFnHvnJVk+B
-         rlcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677860088;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+HigpCH+Z2DmMB8BhdGZnkGJxtK6UAghULTuYAvBYII=;
-        b=sSay4gT958HHvv6Ao9n//Q212Y11e5PCHvuVb4mVOczPO1uL8OoRNcGtS576ubnUfZ
-         5+7ImUEyBBrAMFRmZ1mVkGH4KAEuGNoWj7oxun5p7fbUPhcbrbbL0wwTyOvwOHvGFQ7s
-         B4Ek0T2v0amY0/b5i65+FaK3pC2tJD8MsDXtOrHZzzTzXEYG+DwRi7TkiuX2bhXZ35lO
-         /nQHUqpo5aCD6U+YEcSvxjRGSGDIyLBkPzvE2uQU5yfTQpOuLynnju9D0vuN1sSlbD4l
-         Nrk6mHqYITtuyJSY7jpqKES6uxMBawwHzC3TLnWR88RaN8L9d7xAcEssR+DEhxYqgWQS
-         KP5w==
-X-Gm-Message-State: AO0yUKVYxE6jo3OB+RJx4a+M8E4phXpqHFhBy84gtqWeOqHTjrvSAWbK
-        RMo1HXPljNiED2gfKXAEKd8G8E5OIRCTmpnFLwfSiA==
-X-Google-Smtp-Source: AK7set8tjuuaCGJxS2xjbV3oET8sl7sgczITsPDeROrOkb0RgwsUNDHjDBMroxTBST8vYw0SK0MsoSZi2W21t2t+4Gw=
-X-Received: by 2002:a05:6902:524:b0:ab8:1ed9:cfc5 with SMTP id
- y4-20020a056902052400b00ab81ed9cfc5mr1287342ybs.6.1677860088329; Fri, 03 Mar
- 2023 08:14:48 -0800 (PST)
+        Fri, 3 Mar 2023 11:16:41 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE1611167;
+        Fri,  3 Mar 2023 08:16:39 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323CvhM2027021;
+        Fri, 3 Mar 2023 16:16:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gTPbXrLroShWk4Eefkk2daQUenN8urjbbeRVzXU/I4E=;
+ b=H82+GNMYgek7C+PGAt+fBpPXvcNSNUW8RtuzUonqWYG12Cuyxrevyw71/5gJnTBsQ5bW
+ Av0QadECgt/166kLKO+3U3lZYAHyhH+ZbRGqZv9nw9zF7csAcLeXfPjN1RIefOeF0VZd
+ rrMcr6wkz9lOrdDIN8ivJLCuRjq4G4LxeaTHx0qY/QcPJNIlbqmVapU1b0uXL/xyYQuv
+ eoHu4dQv5SzmXDWS196xLZcDh2oii78Zw218nL6ynh+10iFLGy94DjR1eNcL+r0zh5Px
+ bP2oUiGzBUogrxSPOB25jOUM1DAq33hp+BRLS+DjT2ZdCht9NBlfZlzsIae94LHrvM2E Lg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2veev3sc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 16:16:32 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 323GGVns018007
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Mar 2023 16:16:31 GMT
+Received: from [10.216.34.86] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 3 Mar 2023
+ 08:16:29 -0800
+Message-ID: <f21a6563-d86a-447f-6096-55b74c9c288e@quicinc.com>
+Date:   Fri, 3 Mar 2023 21:46:25 +0530
 MIME-Version: 1.0
-References: <20230301190457.1498985-1-surenb@google.com> <31a88065-063a-727e-52fd-9fbc7d17fb5c@redhat.com>
- <CAJuCfpGKK5SwxQr_BKrqnn0ZeaLVtX=n31MbKUwdnSSd4umB3A@mail.gmail.com> <787e7d9a-fcf4-ad5f-97f1-c0e1c1553c2d@redhat.com>
-In-Reply-To: <787e7d9a-fcf4-ad5f-97f1-c0e1c1553c2d@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 3 Mar 2023 08:14:37 -0800
-Message-ID: <CAJuCfpH83Wq7RK2Xv9ipZFTv4epNJPfhsqzZCXOLJ1D83ih3zA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm/nommu: remove unnecessary VMA locking
-To:     David Hildenbrand <david@redhat.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/3] ring_buffer: Change some static functions to void
+Content-Language: en-US
+To:     Uros Bizjak <ubizjak@gmail.com>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+References: <20230303151706.57851-1-ubizjak@gmail.com>
+ <20230303151706.57851-2-ubizjak@gmail.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230303151706.57851-2-ubizjak@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: hSDYyiCpBuVfz04TArGsyiwLImh92yLf
+X-Proofpoint-GUID: hSDYyiCpBuVfz04TArGsyiwLImh92yLf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_03,2023-03-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 mlxlogscore=999 impostorscore=0 bulkscore=0 clxscore=1011
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303030140
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 1:05 AM David Hildenbrand <david@redhat.com> wrote:
->
-> >>
-> >> Just a general comment: usually, if review of the original series is
-> >> still going on, it makes a lot more sense to raise such things in the
-> >> original series so the author can fixup while things are still in
-> >> mm-unstable. Once the series is in mm-stable, it's a different story. In
-> >> that case, it is usually good to have the mail subjects be something
-> >> like  "[PATCH mm-stable 1/1] ...".
-> >
-> > Ok... For my education, do you mean the title of this patch should
-> > somehow reflect that it should be folded into the original patch? Just
-> > trying to understand the actionable item here. How would you change
-> > this patch when posting for mm-unstable and for mm-stable?
->
-> For patches that fixup something in mm-stable (stable commit ID but not
-> yet master -> we cannot squash anymore so we need separate commits),
-> it's good to include "mm-stable". The main difference to patches that
-> target master is that by indicating "mm-stable", everyone knows that
-> this is not broken in some upstream/production kernel.
->
->
-> For patches that fixup something that is in mm-unstable (no stable
-> commit ID -> still under review and fixup easily possible), IMHO we
-> distinguish between two cases:
->
-> (1) You fixup your own patches: simply send the fixup as reply to the
-> original patch. Andrew will pick it up and squash it before including it
-> in mm-stable. Sometimes a complete resend of a series makes sense instead.
->
-> (2) You fixup patches from someone else: simply raise it as a review
-> comment in reply to the original patch. It might make sense to send a
-> patch, but usually you just raise the issue to the patch author as a
-> review comment and the author will address that. Again, Andrew will pick
-> it up and squash it before moving it to mm-stable.
->
->
-> That way, it's clearer when stumbling over patches on the mailing list
-> if they fix a real issue in upstream, fix a issue in
-> soon-to-be-upstream, or are simply part of a WIP series that is still
-> under review.
 
-Thanks for the detailed explanation, David. I'll post fixups to
-mm-unstable patches by replying to the original ones from now on.
-Interestingly enough, I have another fix today (internal syzcaller
-found a potential deadlock) which might be interesting enough to be in
-a separate patch. So, I'll post it as a separate patch and we can
-discuss whether it should be squashed or kept apart.
-Thanks,
-Suren.
 
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+On 3/3/2023 8:47 PM, Uros Bizjak wrote:
+> The results of some static functions are not used. Change the
+> type of these function to void and remove unnecessary returns.
+> 
+> No functional change intended.
+> 
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>   kernel/trace/ring_buffer.c | 22 +++++++---------------
+>   1 file changed, 7 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+> index af50d931b020..05fdc92554df 100644
+> --- a/kernel/trace/ring_buffer.c
+> +++ b/kernel/trace/ring_buffer.c
+> @@ -1569,15 +1569,12 @@ static void rb_tail_page_update(struct ring_buffer_per_cpu *cpu_buffer,
+>   	}
+>   }
+>   
+> -static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
+> +static void rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
+>   			  struct buffer_page *bpage)
+>   {
+>   	unsigned long val = (unsigned long)bpage;
+>   
+> -	if (RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK))
+> -		return 1;
+> -
+> -	return 0;
+> +	RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK);
+>   }
+>   
+>   /**
+> @@ -1587,30 +1584,28 @@ static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
+>    * As a safety measure we check to make sure the data pages have not
+>    * been corrupted.
+>    */
+> -static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
+> +static void rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
+>   {
+>   	struct list_head *head = rb_list_head(cpu_buffer->pages);
+>   	struct list_head *tmp;
+>   
+>   	if (RB_WARN_ON(cpu_buffer,
+>   			rb_list_head(rb_list_head(head->next)->prev) != head))
+> -		return -1;
+> +		return;
+>   
+>   	if (RB_WARN_ON(cpu_buffer,
+>   			rb_list_head(rb_list_head(head->prev)->next) != head))
+> -		return -1;
+> +		return;
+>   
+>   	for (tmp = rb_list_head(head->next); tmp != head; tmp = rb_list_head(tmp->next)) {
+>   		if (RB_WARN_ON(cpu_buffer,
+>   				rb_list_head(rb_list_head(tmp->next)->prev) != tmp))
+> -			return -1;
+> +			return;
+>   
+>   		if (RB_WARN_ON(cpu_buffer,
+>   				rb_list_head(rb_list_head(tmp->prev)->next) != tmp))
+> -			return -1;
+> +			return;
+>   	}
+> -
+> -	return 0;
+>   }
+>   
+>   static int __rb_allocate_pages(struct ring_buffer_per_cpu *cpu_buffer,
+> @@ -4500,7 +4495,6 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
+>   	default:
+>   		RB_WARN_ON(cpu_buffer, 1);
+>   	}
+> -	return;
+>   }
+>   
+>   static void
+> @@ -4531,7 +4525,6 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
+>   	default:
+>   		RB_WARN_ON(iter->cpu_buffer, 1);
+>   	}
+> -	return;
+>   }
+>   
+>   static struct buffer_page *
+> @@ -4946,7 +4939,6 @@ rb_reader_unlock(struct ring_buffer_per_cpu *cpu_buffer, bool locked)
+>   {
+>   	if (likely(locked))
+>   		raw_spin_unlock(&cpu_buffer->reader_lock);
+> -	return;
+>   }
+>   
+
+Nice clean up, thanks.
+
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+
+-Mukesh
+>   /**
