@@ -2,192 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF7D6A8DCD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 01:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC6D6A8DCE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 01:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCCATt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 19:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S229889AbjCCAUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 19:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCCATq (ORCPT
+        with ESMTP id S229644AbjCCAUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 19:19:46 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704F743938
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 16:19:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677802785; x=1709338785;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kXmGcpoPi7aVjOE9sTwljkk+GdRZsvI9R7Mz5TbQEgU=;
-  b=NB+lUqdYvWVhxKtdSMegEtFD0gqbjGKvbSRauf5SNJ9isNwBfpA+5msG
-   yCBvfs9IWh+MCoKVjgRRHcdMUOjcK8Np2nupUWX3DopLipFVY/LAhBQp9
-   SYKxVjL1TC3MeeKEMKNPLypKSBoMZpNwsP/8EtlzH0nE19bfUSoRJkbIP
-   AyPpmgs/4ZQOPNJitlALctejwMbbApm9Qr61nPXOxiKKo8Gs1ITzDcYdN
-   cgjH3Iz063wq+v7Br/lIuEr+WKm5PzoLDBJTvEfFfR1874/oc7KbhzKwt
-   xJbs97MtCHQF9fEHwXhlX4Sa8dHm8uEAsoPUc3LVSXv5thWNwepzDyuBe
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="362495909"
-X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
-   d="scan'208";a="362495909"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 16:19:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="652601639"
-X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
-   d="scan'208";a="652601639"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2023 16:19:42 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXt9B-00011G-2O;
-        Fri, 03 Mar 2023 00:19:41 +0000
-Date:   Fri, 3 Mar 2023 08:19:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 10/18] printk: nobkl: Add emit function and
- callback functions for atomic printing
-Message-ID: <202303030859.j7DLimWU-lkp@intel.com>
-References: <20230302195618.156940-11-john.ogness@linutronix.de>
+        Thu, 2 Mar 2023 19:20:47 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0924A43456
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 16:20:47 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so670101pjg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 16:20:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677802846;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d09pCOgXcgV83C5wemsdhBVk0296NBI8B2AYqKA+7dU=;
+        b=MrvVWeacOGbHYAss+0b0UfKFXAgWPUAjaSE3KrOxbvQTyXppP3i9vNMcr5+oSVq9P/
+         ZywpC6Z9ycWmjoGGMsHRKs8tH8muNIP8Huy6GkjYF95XZ3lHDaCZOOJ3IwyiTyG7qYa1
+         4OJluaibGhUA1U3lIRA+9NYvr54VMzQdojt2Yx44sK9fNgIKEw67O2tXZR05M/0aSP1J
+         LTGl5JlcqPBGDvpCo4VGQ8j6puZp5AdnMpWbTmf1irJNE7lmIBClRKGb2g7npqGPJHZk
+         Gn/9ZcwjtMdiyhaLdNIs3BUlDvBqxRHno9YVr5LrXBUUWupZEfk0qq0yN6KoBWdbmCC+
+         yTxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677802846;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d09pCOgXcgV83C5wemsdhBVk0296NBI8B2AYqKA+7dU=;
+        b=FRlY7yfOh6IANiyDh/IRnqEPGFqPn9NYIdzUk7nPwNK+yFPB6Fej3KxkN8ycxLFXtm
+         3Ad5e0kDYVJrnYdHrLID5oEqAWtNjKadUo7x/h5cTtAgpQUsd8seL1HnoFJd/+UzCSEn
+         aIXitES3IBjn8U5DGphRhlXYs4MNGHiiDvuNpazXCSnikIJuCqlQTRQk5n+w7wM1dX94
+         CcJ6lkIhL7SSzUc3ptb9jxAGiDPUA55fEvrhV8ER6g1NtR5zdjoJkvHBXqFLN8c3uR9n
+         wlkzVKDxrrUjCd3S2UuONCtdNOutxe6xcfNnqMCGKgK/y82JZ/96SklpHJaysNDbvSen
+         /UCw==
+X-Gm-Message-State: AO0yUKV+yPBd4QrqIO0eKJhf5cfBiOpixZ9LnxGzwPltWYSbbSLCTvG3
+        kO7SVfKjDiXRd+nyQAGnTvE=
+X-Google-Smtp-Source: AK7set8vX00BwuBZA80O/1JUZspBj7SyOlV5bp212BRM7TU1Sun75OVJm6gc/CRv2RFc8HxAHSh53A==
+X-Received: by 2002:a05:6a20:6a1c:b0:c3:2bef:bd62 with SMTP id p28-20020a056a206a1c00b000c32befbd62mr363394pzk.1.1677802846323;
+        Thu, 02 Mar 2023 16:20:46 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:4036:e990:6bc4:4206])
+        by smtp.gmail.com with ESMTPSA id r7-20020a634407000000b005038291e5cbsm248330pga.35.2023.03.02.16.20.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 16:20:45 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 2 Mar 2023 16:20:43 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCHv2 3/6] zsmalloc: fine-grained inuse ratio based fullness
+ grouping
+Message-ID: <ZAE9W5xQmQecUzhj@google.com>
+References: <20230223030451.543162-1-senozhatsky@chromium.org>
+ <20230223030451.543162-4-senozhatsky@chromium.org>
+ <Y/f2WvhNlwhsf2Cz@google.com>
+ <Y/riPlQ2UK00WirI@google.com>
+ <Y/6GAYJ4c9W0bPzp@google.com>
+ <Y/8TENp78WSQ0UW3@google.com>
+ <Y//tqFQgsCeMimg5@google.com>
+ <Y//zbxEmAmoA69ed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230302195618.156940-11-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y//zbxEmAmoA69ed@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
+On Thu, Mar 02, 2023 at 09:53:03AM +0900, Sergey Senozhatsky wrote:
+> On (23/03/01 16:28), Minchan Kim wrote:
+> > On Wed, Mar 01, 2023 at 05:55:44PM +0900, Sergey Senozhatsky wrote:
+> > > On (23/02/28 14:53), Minchan Kim wrote:
+> > > > BTW, I still prefer the enum instead of 10 define.
+> > > > 
+> > > > enum fullness_group {
+> > > >     ZS_EMPTY,
+> > > >     ZS_INUSE_RATIO_MIN,
+> > > >     ZS_INUSE_RATIO_ALMOST_FULL = 7,
+> > > >     ZS_INUSE_RATIO_MAX = 10,
+> > > >     ZS_FULL,
+> > > >     NR_ZS_FULLNESS,
+> > > > }
+> > > 
+> > > For educational purposes, may I ask what do enums give us? We
+> > > always use integers - int:4 in zspage fullness, int for arrays
+> > > offsets and we cast to plain integers in get/set stats. So those
+> > > enums exist only at declaration point, and plain int otherwise.
+> > > What are the benefits over #defines?
+> > 
+> > Well, I just didn't like the 12 hard coded define *list* values
+> > and never used other places except zs_stats_size_show since
+> 
+> If we have two enums, then we need more lines
+> 
+> enum fullness {
+> 	ZS_INUSE_RATIO_0
+> 	...
+> 	ZS_INUSE_RATIO_100
+> }
+> 
+> enum stats {
+> 	INUSE_RATIO_0
+> 	...
+> 	INUSE_RATIO_100
+> 
+> 	// the rest of stats
+> }
+> 
+> and then we use int:4 fullness value to access stats.
 
-I love your patch! Perhaps something to improve:
+Yeah. I don't see any problem unless I miss your point.
 
-[auto build test WARNING on 10d639febe5629687dac17c4a7500a96537ce11a]
+> 
+> > I thought we could handle zs_stats_size_show in the loop without
+> > the specific each ratio definary.
+> 
+> For per inuse ratio zs_stats_size_show() we need to access stats
+> individually:
+> 
+> 	inuse10, inuse20, inuse30, ... inuse99
 
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Ogness/kdb-do-not-assume-write-callback-available/20230303-040039
-base:   10d639febe5629687dac17c4a7500a96537ce11a
-patch link:    https://lore.kernel.org/r/20230302195618.156940-11-john.ogness%40linutronix.de
-patch subject: [PATCH printk v1 10/18] printk: nobkl: Add emit function and callback functions for atomic printing
-config: nios2-buildonly-randconfig-r004-20230302 (https://download.01.org/0day-ci/archive/20230303/202303030859.j7DLimWU-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cae46beabb2dfe79a4c4c602601fa538a8d840f7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review John-Ogness/kdb-do-not-assume-write-callback-available/20230303-040039
-        git checkout cae46beabb2dfe79a4c4c602601fa538a8d840f7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash kernel/printk/
+Does it need specific index in the enum list?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303030859.j7DLimWU-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/printk/printk.c:2841:6: warning: no previous prototype for 'printk_get_next_message' [-Wmissing-prototypes]
-    2841 | bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/printk_get_next_message +2841 kernel/printk/printk.c
-
-  2821	
-  2822	/*
-  2823	 * Read and format the specified record (or a later record if the specified
-  2824	 * record is not available).
-  2825	 *
-  2826	 * @pmsg will contain the formatted result. @pmsg->pbufs must point to a
-  2827	 * struct printk_buffers.
-  2828	 *
-  2829	 * @seq is the record to read and format. If it is not available, the next
-  2830	 * valid record is read.
-  2831	 *
-  2832	 * @is_extended specifies if the message should be formatted for extended
-  2833	 * console output.
-  2834	 *
-  2835	 * @may_supress specifies if records may be skipped based on loglevel.
-  2836	 *
-  2837	 * Returns false if no record is available. Otherwise true and all fields
-  2838	 * of @pmsg are valid. (See the documentation of struct printk_message
-  2839	 * for information about the @pmsg fields.)
-  2840	 */
-> 2841	bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
-  2842				     bool is_extended, bool may_suppress)
-  2843	{
-  2844		static int panic_console_dropped;
-  2845	
-  2846		struct printk_buffers *pbufs = pmsg->pbufs;
-  2847		const size_t scratchbuf_sz = sizeof(pbufs->scratchbuf);
-  2848		const size_t outbuf_sz = sizeof(pbufs->outbuf);
-  2849		char *scratchbuf = &pbufs->scratchbuf[0];
-  2850		char *outbuf = &pbufs->outbuf[0];
-  2851		struct printk_info info;
-  2852		struct printk_record r;
-  2853		size_t len = 0;
-  2854	
-  2855		/*
-  2856		 * Formatting extended messages requires a separate buffer, so use the
-  2857		 * scratch buffer to read in the ringbuffer text.
-  2858		 *
-  2859		 * Formatting normal messages is done in-place, so read the ringbuffer
-  2860		 * text directly into the output buffer.
-  2861		 */
-  2862		if (is_extended)
-  2863			prb_rec_init_rd(&r, &info, scratchbuf, scratchbuf_sz);
-  2864		else
-  2865			prb_rec_init_rd(&r, &info, outbuf, outbuf_sz);
-  2866	
-  2867		if (!prb_read_valid(prb, seq, &r))
-  2868			return false;
-  2869	
-  2870		pmsg->seq = r.info->seq;
-  2871		pmsg->dropped = r.info->seq - seq;
-  2872	
-  2873		/*
-  2874		 * Check for dropped messages in panic here so that printk
-  2875		 * suppression can occur as early as possible if necessary.
-  2876		 */
-  2877		if (pmsg->dropped &&
-  2878		    panic_in_progress() &&
-  2879		    panic_console_dropped++ > 10) {
-  2880			suppress_panic_printk = 1;
-  2881			pr_warn_once("Too many dropped messages. Suppress messages on non-panic CPUs to prevent livelock.\n");
-  2882		}
-  2883	
-  2884		/* Skip record that has level above the console loglevel. */
-  2885		if (may_suppress && suppress_message_printing(r.info->level))
-  2886			goto out;
-  2887	
-  2888		if (is_extended) {
-  2889			len = info_print_ext_header(outbuf, outbuf_sz, r.info);
-  2890			len += msg_print_ext_body(outbuf + len, outbuf_sz - len,
-  2891						  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
-  2892		} else {
-  2893			len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
-  2894		}
-  2895	out:
-  2896		pmsg->outbuf_len = len;
-  2897		return true;
-  2898	}
-  2899	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I don't mind having all the hard coded index if it's *necessary*
+but wanted to try we could make the index with base + index
+on demand in the loop via simple arithmetic.
