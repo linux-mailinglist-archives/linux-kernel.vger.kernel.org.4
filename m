@@ -2,116 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6CA6A8E7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A81006A8E7D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjCCBFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 20:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S229674AbjCCBGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 20:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjCCBFB (ORCPT
+        with ESMTP id S229476AbjCCBGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 20:05:01 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16171457EF;
-        Thu,  2 Mar 2023 17:04:59 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PSVBG6pgSz4f3jJK;
-        Fri,  3 Mar 2023 09:04:54 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgC3YiC3RwFkxlz2EA--.36686S3;
-        Fri, 03 Mar 2023 09:04:56 +0800 (CST)
-Subject: Re: [PATCH] blk-mq: quiesce queue while reallocating hctxs
-To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de, ming.lei@redhat.com,
-        axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230221092436.3570192-1-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b63413ef-f65c-4e74-f7f8-98298842688c@huaweicloud.com>
-Date:   Fri, 3 Mar 2023 09:04:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 2 Mar 2023 20:06:49 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DA95551A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 17:06:48 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso759275pjs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 17:06:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EwwXsWMJrnirAh+/Y2JC4tS8+2STW/C39tOpLj/kUk8=;
+        b=FFoM7AZffas7rYnHcuBVGhC6QQzJaz41qkhKHUGlQyaZWY8FZ0UWf2mvf+e+nLJp5S
+         1+193lnt6XrZtaGiE6ydZGkvAjzd6+S4dXUJIayf9SrrpELU1+/Eq9vViRfpcmHwM9Wz
+         uCCJvwB5IZWP1O5VGhDYzHeDeJ48mULJR8CRs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EwwXsWMJrnirAh+/Y2JC4tS8+2STW/C39tOpLj/kUk8=;
+        b=Fc215ik0GtmcMKgqrqRJRvA644WZ7Zf7A1PVrVqoWhyFTV06H1veHt4I5wjkR+oFPQ
+         F/J6jWeP2YSoaM88pQbqolYqkXmLXD5BTLqhgJ4pH3x1lwJhzPFFcPpJKRPVhZUD2skH
+         xg/6x5WQfC6DehW/+XibpK1ld6j7ez6URfkTx80bp5rAntOLul0/vLwCPBDlB4X+S5vt
+         c0dZddR3dotLPwQh+I6ROVmI1ZIx8mjFOF5YGbX1M0qpZb41aE/SMlvRbDEjTY8W8VzP
+         dWHKENJhUq3wk8sYuIkLRnfW81CCjRlFPBRVIHG6fiPvMlUwe1GgrH/orMDdQvftg0Zi
+         PD1Q==
+X-Gm-Message-State: AO0yUKXGCkjZ4Zd35UqEMhjMMTrCV0DcW+6o1yImDsfFM/RtyG85QR+9
+        HEjve+ELsQg/BTAfgs80spFIpg==
+X-Google-Smtp-Source: AK7set8SRihRZc46G0YoZTU/j4Ue/C0DSlTqqvPMGPRayXqA+AtQLj4M95qxwZ0ZXyEktQnMFJxA2A==
+X-Received: by 2002:a05:6a20:8c0f:b0:bc:f336:98ed with SMTP id j15-20020a056a208c0f00b000bcf33698edmr307252pzh.45.1677805608072;
+        Thu, 02 Mar 2023 17:06:48 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id x24-20020aa793b8000000b00593adee79efsm307077pff.55.2023.03.02.17.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 17:06:47 -0800 (PST)
+Date:   Fri, 3 Mar 2023 10:06:43 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCHv2 3/6] zsmalloc: fine-grained inuse ratio based fullness
+ grouping
+Message-ID: <20230303010643.GA4022757@google.com>
+References: <20230223030451.543162-1-senozhatsky@chromium.org>
+ <20230223030451.543162-4-senozhatsky@chromium.org>
+ <Y/f2WvhNlwhsf2Cz@google.com>
+ <Y/riPlQ2UK00WirI@google.com>
+ <Y/6GAYJ4c9W0bPzp@google.com>
+ <Y/8TENp78WSQ0UW3@google.com>
+ <Y//tqFQgsCeMimg5@google.com>
+ <Y//zbxEmAmoA69ed@google.com>
+ <ZAE9W5xQmQecUzhj@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20230221092436.3570192-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgC3YiC3RwFkxlz2EA--.36686S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF4rWr1xGF48tryrJrW7twb_yoW8AF1xpF
-        W5GanrKw1IvF18Xa4jva1fWFyfJFs5Wr15ur4ag345Ar1UCrs2qr1xGr47WrW0yrZ5Arsr
-        Kr4DJFWkZF4DArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAE9W5xQmQecUzhj@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-friendly ping ...
-
-Thanks,
-Kuai
-
-ÔÚ 2023/02/21 17:24, Yu Kuai Ð´µÀ:
-> From: Yu Kuai <yukuai3@huawei.com>
+On (23/03/02 16:20), Minchan Kim wrote:
+> On Thu, Mar 02, 2023 at 09:53:03AM +0900, Sergey Senozhatsky wrote:
+> > On (23/03/01 16:28), Minchan Kim wrote:
+> > > On Wed, Mar 01, 2023 at 05:55:44PM +0900, Sergey Senozhatsky wrote:
+> > > > On (23/02/28 14:53), Minchan Kim wrote:
+> > > > > BTW, I still prefer the enum instead of 10 define.
+> > > > > 
+> > > > > enum fullness_group {
+> > > > >     ZS_EMPTY,
+> > > > >     ZS_INUSE_RATIO_MIN,
+> > > > >     ZS_INUSE_RATIO_ALMOST_FULL = 7,
+> > > > >     ZS_INUSE_RATIO_MAX = 10,
+> > > > >     ZS_FULL,
+> > > > >     NR_ZS_FULLNESS,
+> > > > > }
+> > > > 
+> > > > For educational purposes, may I ask what do enums give us? We
+> > > > always use integers - int:4 in zspage fullness, int for arrays
+> > > > offsets and we cast to plain integers in get/set stats. So those
+> > > > enums exist only at declaration point, and plain int otherwise.
+> > > > What are the benefits over #defines?
+> > > 
+> > > Well, I just didn't like the 12 hard coded define *list* values
+> > > and never used other places except zs_stats_size_show since
+> > 
+> > If we have two enums, then we need more lines
+> > 
+> > enum fullness {
+> > 	ZS_INUSE_RATIO_0
+> > 	...
+> > 	ZS_INUSE_RATIO_100
+> > }
+> > 
+> > enum stats {
+> > 	INUSE_RATIO_0
+> > 	...
+> > 	INUSE_RATIO_100
+> > 
+> > 	// the rest of stats
+> > }
+> > 
+> > and then we use int:4 fullness value to access stats.
 > 
-> commit 8237c01f1696 ("blk-mq: use quiesced elevator switch when
-> reinitializing queues") add quiesce queue while switching elevator,
-> however, if old elevator is none, queue is still not quiesced. Hence
-> reallocating hctxs can concurrent with run queue. Fix it by also
-> quiesce queue in the beginning of __blk_mq_update_nr_hw_queues().
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->   block/blk-mq.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index d3494a796ba8..fb44ef0dff8a 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -4691,8 +4691,10 @@ static void __blk_mq_update_nr_hw_queues(struct blk_mq_tag_set *set,
->   	if (set->nr_maps == 1 && nr_hw_queues == set->nr_hw_queues)
->   		return;
->   
-> -	list_for_each_entry(q, &set->tag_list, tag_set_list)
-> +	list_for_each_entry(q, &set->tag_list, tag_set_list) {
->   		blk_mq_freeze_queue(q);
-> +		blk_mq_quiesce_queue(q);
-> +	}
->   	/*
->   	 * Switch IO scheduler to 'none', cleaning up the data associated
->   	 * with the previous scheduler. We will switch back once we are done
-> @@ -4741,8 +4743,10 @@ static void __blk_mq_update_nr_hw_queues(struct blk_mq_tag_set *set,
->   	list_for_each_entry(q, &set->tag_list, tag_set_list)
->   		blk_mq_elv_switch_back(&head, q);
->   
-> -	list_for_each_entry(q, &set->tag_list, tag_set_list)
-> +	list_for_each_entry(q, &set->tag_list, tag_set_list) {
-> +		blk_mq_unquiesce_queue(q);
->   		blk_mq_unfreeze_queue(q);
-> +	}
->   }
->   
->   void blk_mq_update_nr_hw_queues(struct blk_mq_tag_set *set, int nr_hw_queues)
-> 
+> Yeah. I don't see any problem unless I miss your point.
 
+OK. How about having one enum? E.g. "zs_flags" or something which
+will contain all our constants?
+
+Otherwise I can create two big enums for fullness and stats.
+What's your preference on inuse_0 and inuse_100 naming? Do we
+keep unified naming or should it be INUSE_MIN/INUSE_MAX or
+EMPTY/FULL?
+
+> > For per inuse ratio zs_stats_size_show() we need to access stats
+> > individually:
+> > 
+> > 	inuse10, inuse20, inuse30, ... inuse99
+> 
+> Does it need specific index in the enum list?
+
+If we report per inuse group then yes:
+
+	sprintf("... %lu %lu ..... %lu %lu ...\n",
+		...
+		get_stat(ZS_INUSE_RATIO_10),
+		get_stat(ZS_INUSE_RATIO_20),
+		get_stat(ZS_INUSE_RATIO_30),
+		...
+		get_stat(ZS_INUSE_RATIO_99),
+		...);
