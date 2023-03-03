@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965006A9252
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459A46A9211
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjCCIXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S229789AbjCCH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 02:58:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjCCIXA (ORCPT
+        with ESMTP id S229447AbjCCH6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:23:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998EF5942B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:21:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89C736177D
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A123DC433EF;
-        Fri,  3 Mar 2023 08:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677831712;
-        bh=hCKGSiKvIcxZVZdweCbB73LwC3v6H/47hoxmeQECwHc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s7BF0ZBwLED3cwPkr+A3M1rClDSaEHq3pFAbcKpSdsuFGaIQ377miTIydiDwXPM8q
-         YoWWJrL3Osj7Vy8oavanEUT5mp7eliKSHJKy/jLEZe2AG6R/E8hivwBuRQPfVzmujf
-         AYvXyzfz5fhRR5Tkufwfenry4pzpZ5eYQDBZmBLYb7Mz1lyqCaC9OncoU/kjFJSINY
-         /EYeDxlfRnbcULT6C5+03TFwoncvUKZ1G4A53tRRcDxy6i9r0iIcSBQbLzwUlgt6/R
-         9BlSaBMIS8qA1nwLGMvOhDxpw+/5+7DgF4pe/eR3I+cwRKyu1QulVz+AKCZqY44r96
-         g1swX61TCJ5Ig==
-Date:   Fri, 3 Mar 2023 08:21:47 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: =?iso-8859-1?Q?atmel-flex?=
- =?iso-8859-1?Q?com=3A_use=A0devm=5Fplatform=5Fget=5Fand=5Fioremap=5Fresou?=
- =?iso-8859-1?B?cmNlKCk=?=
-Message-ID: <20230303082147.GG2303077@google.com>
-References: <202302081731593374472@zte.com.cn>
+        Fri, 3 Mar 2023 02:58:47 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE01457E1;
+        Thu,  2 Mar 2023 23:58:45 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PSgMh2FZKz4f3jMG;
+        Fri,  3 Mar 2023 15:58:40 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgCnUyGwqAFkWC0HEQ--.51341S4;
+        Fri, 03 Mar 2023 15:58:42 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH v2 0/2] ext4: fix WARNING in ext4_update_inline_data
+Date:   Fri,  3 Mar 2023 16:21:56 +0800
+Message-Id: <20230303082158.4012809-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <202302081731593374472@zte.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgCnUyGwqAFkWC0HEQ--.51341S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5L7kC6x804xWl14x267AKxVW8JVW5JwAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Feb 2023, ye.xingchen@zte.com.cn wrote:
+From: Ye Bin <yebin10@huawei.com>
 
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/mfd/atmel-flexcom.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+Diff v2 vs v1:
+Only update 'inline_off' when do extra expand.
 
-Applied, thanks
+
+Ye Bin (2):
+  ext4: introduce 'update_only' parameter for
+    ext4_find_inline_data_nolock()
+  ext4: fix WARNING in ext4_update_inline_data
+
+ fs/ext4/ext4.h   | 2 +-
+ fs/ext4/inline.c | 7 ++++---
+ fs/ext4/inode.c  | 2 +-
+ fs/ext4/xattr.c  | 3 +++
+ 4 files changed, 9 insertions(+), 5 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
+2.31.1
+
