@@ -2,174 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65466A9DDF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 999FC6A9DDA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjCCRkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
+        id S231343AbjCCRjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjCCRkR (ORCPT
+        with ESMTP id S231222AbjCCRjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:40:17 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2073.outbound.protection.outlook.com [40.107.247.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7DB19693;
-        Fri,  3 Mar 2023 09:40:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zb0z77rTLxbhwHIJ+nIMWrqRkaU1VxL9wNbFu4NMnIo=;
- b=Pa6A8S3yrlit6l13R4GqkSC4TfZa8O/dFy6da7Th3KX2Kn1rsafvG58rMdS12DGkkODw64q8Vv/ckbAvFyvA5VefCWZnJ4C3BnpR7uX3mSAEZrrWbNda7uZCexKDtP+xKVbuGPNRHLDIGAAx6GPT/Ddia1OdSYo+K04mrz6vbNI=
-Received: from DBBPR09CA0028.eurprd09.prod.outlook.com (2603:10a6:10:d4::16)
- by AM8PR08MB6531.eurprd08.prod.outlook.com (2603:10a6:20b:355::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.21; Fri, 3 Mar
- 2023 17:39:43 +0000
-Received: from DBAEUR03FT015.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:d4:cafe::bd) by DBBPR09CA0028.outlook.office365.com
- (2603:10a6:10:d4::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
- Transport; Fri, 3 Mar 2023 17:39:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT015.mail.protection.outlook.com (100.127.142.112) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.21 via Frontend Transport; Fri, 3 Mar 2023 17:39:43 +0000
-Received: ("Tessian outbound 2ba0ed2ebb9f:v135"); Fri, 03 Mar 2023 17:39:42 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 7c1788aba651410f
-X-CR-MTA-TID: 64aa7808
-Received: from 4f51883f0994.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 0094D8F4-9AA1-438C-850C-71E0AB3A0364.1;
-        Fri, 03 Mar 2023 17:39:35 +0000
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 4f51883f0994.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Fri, 03 Mar 2023 17:39:35 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ArLaq7Atrf76DWOuSsiyILktawCEHXo7BJWFRSs41Ze50AYciJiQgxCKKsokwsJEATkJ7CpiOQlugX/8YlpUv9ASP9JcCNF1IqBRvOpsUGr9CWrmCFJErF42N/lZ1ksTldaFw1j/yHAAF0KXcD5eUBPKtYT7RRS/FPvkU7bzQH8SPeVq61Wifr4nLMMGTfeBtqZUoPJ76O6e9lPx9gWK2m6ks4VQpQh5OeAWtWTrTQWbAtrplHsLikqEiQEfVceTm7t10DyvwqzIECzqhu8Xjv0CUwnJk82YQwvD5pFJ8xd1HZtWwRaqQ3g//j/2bBVjE/1ERBVo31+Ky/NKSnaAaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zb0z77rTLxbhwHIJ+nIMWrqRkaU1VxL9wNbFu4NMnIo=;
- b=oC39TH9G9p3miBJFaROJQa6ttEXAFSiV6lTYFghk/vIMyCWEZdCa6dkAUCi4dyUsoxgxP87wZ5LvUQ2E+oJe/shU2/5ertC5q6kR4AuvvrFGEkQ8jF6RBUAFvZi9Xs6+Jg5Ag+ziCi+mYKf0oGTE+/KaQEsyJkgZoGDZiUIuDKDfvSfUePmFCnd+oLjoEnefaUu9i+7RtrxpwlcuZMYKjVhJOzmiJh3vCGJfIH4T+d6SH6XlL4qnAPaTWjvgl+hl1SaP+0Pjw4jzbsVBd0r4X55DenhqNdUk/eertQ4gcoDNm02t/6fEYi3b6XtQ7SkyPtBIDQBsLgBgCKmF2qaKWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zb0z77rTLxbhwHIJ+nIMWrqRkaU1VxL9wNbFu4NMnIo=;
- b=Pa6A8S3yrlit6l13R4GqkSC4TfZa8O/dFy6da7Th3KX2Kn1rsafvG58rMdS12DGkkODw64q8Vv/ckbAvFyvA5VefCWZnJ4C3BnpR7uX3mSAEZrrWbNda7uZCexKDtP+xKVbuGPNRHLDIGAAx6GPT/Ddia1OdSYo+K04mrz6vbNI=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by DB4PR08MB9262.eurprd08.prod.outlook.com (2603:10a6:10:3f9::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Fri, 3 Mar
- 2023 17:39:34 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6134.027; Fri, 3 Mar 2023
- 17:39:34 +0000
-Date:   Fri, 3 Mar 2023 17:39:06 +0000
-From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
-Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <ZAIwuvfPqNW/w3yt@arm.com>
-References: <Y/9fdYQ8Cd0GI+8C@arm.com>
- <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
- <ZADLZJI1W1PCJf5t@arm.com>
- <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
- <ZAIgrXQ4670gxlE4@arm.com>
- <CAMe9rOrM=HXBY25rYrjLnHzSvHFuui06qRpc4xufxeaaGW-Fmw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMe9rOrM=HXBY25rYrjLnHzSvHFuui06qRpc4xufxeaaGW-Fmw@mail.gmail.com>
-X-ClientProxiedBy: SN7P220CA0012.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:806:123::17) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        Fri, 3 Mar 2023 12:39:15 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB84619F35;
+        Fri,  3 Mar 2023 09:39:13 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id n27-20020a4ad63b000000b005252709efdbso548245oon.4;
+        Fri, 03 Mar 2023 09:39:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677865153;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ml/fW6uXGZ8Kx6hmQHBX1K/9bVHlrFzX/LDTLTFj11g=;
+        b=O1mais1ppI/17jnqGCgJc4Hp6kEaPm0/KdWJUtzWWgKpyrNHoPKVOP3mWL2lH28cOR
+         bgskgNElQ+bX2ZUYledWouqqkloG97AKokQ21ACxm+fYP8W6P9aCrcNlnvitl9U523kr
+         C1GMYtgfKfmnukPWeLxlR307mJk6yV4xmF/21cxr9NbOC2rCFv9WcGFdhxSigc8LzsDW
+         B5q+LVn66YOfVpi2yCrKGCy/ag7CxVcGbq2vmOA1UU83nZZXymhruQ3daRcdiq2MHnIN
+         o0p/V3B6ivt8Upkuo+xN0U4kEXsQjSEcF39m/A0Igm1wmesShJW5xh/ywRyaagvnqsVH
+         ol0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677865153;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ml/fW6uXGZ8Kx6hmQHBX1K/9bVHlrFzX/LDTLTFj11g=;
+        b=gRIKG/WIZE2nsiQvQG1UOcnr9cyOqXNe7dXQ+3y71KOToXvhNgGaDV1LAFmwB1/dEv
+         7nd68xKKkyqGyVammskttOAbx12jNA7w8niKS1eOJoWpsxWTBkYddqmc99k3Ty2aBgTO
+         ZPmsY8stAeYdiQwXLK9HEQRwQnFe8/F6HCjr/w4DJH/JTdYBUXBDWNzZnD/GNWVP0Omo
+         aooJuqimmsCwvXSemxJMOctPIhm/S1fQ3Tc+2suB/j/DiLnuD8Yfyf6Pj18bPJP1/waY
+         xPJffdDA4KvUw2Yj5EVYVdetgUK+sw5JU5tTuqWGcMpkqnKqqphvo7U8dp53kK5x5l0e
+         wxxg==
+X-Gm-Message-State: AO0yUKUvx+BsbAKPWgh5cY0z2ALRkQeYLZ+I9ZZHZW7c+tgQtY1iK3Nq
+        j87Ri7BWUbAEuRq4rvWdsB/hieMT8+QnRdDgfOfiluCpNOc=
+X-Google-Smtp-Source: AK7set8sOGXUffR2UWjf1aVlRLZsiZzZbbn35nJdWBr42oUE2+83OF2vMAST0UrhRIdxj/MkA1Pbap1mHikHKrJKxi0=
+X-Received: by 2002:a4a:b101:0:b0:525:5f43:215a with SMTP id
+ a1-20020a4ab101000000b005255f43215amr2449978ooo.1.1677865152922; Fri, 03 Mar
+ 2023 09:39:12 -0800 (PST)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DB4PR08MB9262:EE_|DBAEUR03FT015:EE_|AM8PR08MB6531:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1aca97c7-08db-4bd0-34d8-08db1c0e45ec
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: YwH8ViLKUZAnX3aytvxUXeAJBlN5q6Tcwp1WN0R+FEsFzM7gYdIETRYy9Bh/o4FHyfJK181QZBqEeCuxrChKYnZgflT8UMCylAWzrGZmKqRS5qvzUIB8cfTPT42JAYksI5++ekBRlpy4fom5vfyNlV1KcJZzLzJJbQyfs04Wxj4zhIyyb+0pBrT506krDswwdJ+UGeZB9Ii8yXVF1RXh0KnBVpBMcYBSg/MEpkMQsJPicq8iaAVRHBmo8Jl4uawmVmMmQB1av2HxP/E0YjF5qxcQ+YgLv0EM/iWRdRakAInJFYoZCW1z1E0k4SxOUDSCr76fjVbPcBPHj25jA/ROppv3ExNNup+r43lCO5DSngVPBj42YYTAeWRnk1GTE+Y0PUZWmE3J49QDa4dm8L1xgIDZiFvczhYWFKmm29u/jYiBZQJVR5oq2XF+UaiRFz/Zd1Gj2ho8x77I+bAsxmdKSw9NGbSA0cLS0XAtghT217ap6sq5DadtqXh6bJGmiYhe90PFmiHQOriX9bGntPTvOj6cjE5fxDo1Ph1VvmuLe1dB1Mwy7jLXjsxxVhQsYVvTO3rwtpLV/YytgPuxSDrrrLkC+dZgfJQMkcBfRv3dloiU5O1yutj9OX7KwLF8G/e1MP+bIjyyTp+qeijLOEsOGg==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(396003)(39860400002)(366004)(451199018)(66476007)(6916009)(66556008)(36756003)(54906003)(8676002)(66946007)(4326008)(316002)(2906002)(41300700001)(83380400001)(6486002)(26005)(6506007)(478600001)(6666004)(53546011)(6512007)(186003)(86362001)(38100700002)(4744005)(2616005)(7416002)(5660300002)(7406005)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB9262
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT015.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 5e7b7c14-a57c-4919-9a7e-08db1c0e3fda
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fADR57DSBj6HB5+q16tguZC5OkAmPvNYX/oSn8IzMW3Xk8OQWjNh8VnuDSwVeTdpZHDFhhmMowLvaPd37QkX2JoH9FcHADbao869WX+arZjHpv61ezveQPGwhWt1UNIn0e5B84smvfqPjgkRYzIQ5HzD+T9NRoc1b1Uo70+bWmxbsd3htS7ZSMuOI2uymaLy1Abfw/bRvVUkrcB9eWaGUd2D3Z3t+OGYyyT9t/2+5fV88oJRzPd+tZmtxQJd3sg1SLAnNJmoavz0CmJJ/ATxBWDbh8C2JhoV6do4F5j4UULFqIPNObUFlOAyZ7DdRmOsICt1h+WbPnAWCN39xFa32nLuiXpnOzhiQuSTYfzBONsePPBqAd/Q/KoDADSmGBViNdD5TXI718q7KU5OMcyIWqzodc2oirUIFJSXzC7kHcQ7+GhOutMf1/staD76q051J9uWeUPKCLxPXkumhvdqy8kqeB/KeB+3icqldjk7OHJRyIQ0Ex6/CUIX4FZDCycjyQBmeUb8KqflrmaQR9E9oAKaAfBtryNCGduydlVhMcoBXJlAC9K/z/aCie/h3hFobaI/2HOrsHj66+SmhxOUe+WkfN/DaLRjxI/wTleJh3aJWtgS8iKnV4GEvr3Y0DB0DPfWPS5l10Xg55aRCWgW8c8DKDoTm9lXNjnHlT0f4jcy60QNIUAZKmoUp54yp1ROP3khhJ++CHdTmfLA/XnG9g==
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(396003)(346002)(451199018)(46966006)(36840700001)(40470700004)(47076005)(40460700003)(36756003)(336012)(6666004)(6506007)(6512007)(6486002)(41300700001)(2616005)(26005)(186003)(316002)(54906003)(4326008)(450100002)(70206006)(8676002)(4744005)(70586007)(2906002)(6862004)(5660300002)(478600001)(86362001)(82740400003)(81166007)(53546011)(82310400005)(40480700001)(356005)(83380400001)(8936002)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 17:39:43.1128
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1aca97c7-08db-4bd0-34d8-08db1c0e45ec
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT015.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6531
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+Received: by 2002:a05:6802:31f:b0:4c2:d201:fe1f with HTTP; Fri, 3 Mar 2023
+ 09:39:12 -0800 (PST)
+In-Reply-To: <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
+References: <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
+ <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
+ <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
+ <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
+ <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
+ <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
+ <ZAD21ZEiB2V9Ttto@ZenIV> <6400fedb.170a0220.ece29.04b8@mx.google.com>
+ <ZAEC3LN6oUe6BKSN@ZenIV> <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Fri, 3 Mar 2023 18:39:12 +0100
+Message-ID: <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -177,26 +83,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 03/03/2023 08:57, H.J. Lu wrote:
-> On Fri, Mar 3, 2023 at 8:31 AM szabolcs.nagy@arm.com
-> <szabolcs.nagy@arm.com> wrote:
-> > longjmp to different stack should work: it can do the same as
-> > setcontext/swapcontext: scan for the pivot token. then only
-> > longjmp out of alt shadow stack fails. (this is non-conforming
-> > longjmp use, but e.g. qemu relies on it.)
-> 
-> Restore token may not be used with longjmp.  Unlike setcontext/swapcontext,
-> longjmp is optional.  If longjmp isn't called, there will be an extra
-> token on shadow
-> stack and RET will fail.
+On 3/3/23, Alexander Potapenko <glider@google.com> wrote:
+> On Thu, Mar 2, 2023 at 9:11=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> =
+wrote:
+>>
+>> On Thu, Mar 02, 2023 at 11:54:03AM -0800, Kees Cook wrote:
+>> > On Thu, Mar 02, 2023 at 07:19:49PM +0000, Al Viro wrote:
+>> > > On Thu, Mar 02, 2023 at 11:10:03AM -0800, Linus Torvalds wrote:
+>> > > > On Thu, Mar 2, 2023 at 11:03=E2=80=AFAM Linus Torvalds
+>> > > > <torvalds@linux-foundation.org> wrote:
+>> > > > >
+>> > > > > It might be best if we actually exposed it as a SLAB_SKIP_ZERO
+>> > > > > thing,
+>> > > > > just to make it possible to say - exactly in situations like thi=
+s
+>> > > > > -
+>> > > > > that this particular slab cache has no advantage from
+>> > > > > pre-zeroing.
+>> > > >
+>> > > > Actually, maybe it's just as well to keep it per-allocation, and
+>> > > > just
+>> > > > special-case getname_flags() itself.
+>> > > >
+>> > > > We could replace the __getname() there with just a
+>> > > >
+>> > > >         kmem_cache_alloc(names_cachep, GFP_KERNEL |
+>> > > > __GFP_SKIP_ZERO);
+>> > > >
+>> > > > we're going to overwrite the beginning of the buffer with the path
+>> > > > we
+>> > > > copy from user space, and then we'd have to make people comfortabl=
+e
+>> > > > with the fact that even with zero initialization hardening on, the
+>> > > > space after the filename wouldn't be initialized...
+>> > >
+>> > > ACK; same in getname_kernel() and sys_getcwd(), at the very least.
+>> >
+>> > FWIW, much earlier analysis suggested opting out these kmem caches:
+>> >
+>> >       buffer_head
+>> >       names_cache
+>> >       mm_struct
+>> >       anon_vma
+>> >       skbuff_head_cache
+>> >       skbuff_fclone_cache
+>>
+>> I would probably add dentry_cache to it; the only subtle part is
+>> ->d_iname and I'm convinced that explicit "make sure there's a NUL
+>> at the very end" is enough.
+>
+> FWIW, a couple of years ago I was looking into implementing the
+> following scheme for opt-out that I also discussed with Kees:
+>
+> 1. Add a ___GFP_SKIP_ZERO flag that is not intended to be used
+> explicitly (e.g. disallow passing it to kmalloc(), add a checkpatch.pl
+> warning). Explicitly passing an opt-out flag to allocation functions
+> was considered harmful previously:
+> https://lore.kernel.org/kernel-hardening/20190423083148.GF25106@dhcp22.su=
+se.cz/
+>
+> 2. Define new allocation API that will allow opt-out:
+>
+>   struct page *alloc_pages_uninit(gfp_t gfp, unsigned int order, const
+> char *key);
+>   void *kmalloc_uninit(size_t size, gfp_t flags, const char *key);
+>   void *kmem_cache_alloc_uninit(struct kmem_cache *, gfp_t flags,
+> const char *key);
+>
+> , where @key is an arbitrary string that identifies a single
+> allocation or a group of allocations.
+>
+> 3. Provide a boot-time flag that holds a comma-separated list of
+> opt-out keys that actually take effect:
+>
+>   init_on_alloc.skip=3D"xyz-camera-driver,some_big_buffer".
+>
+> The rationale behind this two-step mechanism is that despite certain
+> allocations may be appealing opt-out targets for performance reasons,
+> some vendors may choose to be on the safe side and explicitly list the
+> allocations that should not be zeroed.
+>
+> Several possible enhancements include:
+> 1. A SLAB_NOINIT memcache flag that prohibits cache merging and
+> disables initialization. Because the number of caches is relatively
+> small, it might be fine to explicitly pass SLAB_NOINIT at cache
+> creation sites.
+> Again, if needed, we could only use this flag as a hint that needs to
+> be acknowledged by a boot-time option.
+> 2. No opt-out for kmalloc() - instead advise users to promote the
+> anonymous allocations they want to opt-out to memory caches with
+> SLAB_NOINIT.
+> 3. Provide an emergency brake that completely disables
+> ___GFP_SKIP_ZERO if a major security breach is discovered.
+>
+> Extending this idea of per-callsite opt-out we could generate unique
+> keys for every allocation in the kernel (or e.g. group them together
+> by the caller name) and decide at runtime if we want to opt them out.
+> But I am not sure anyone would want this level of control in their distro=
+.
+>
 
-what do you mean longjmp is optional?
+I intended to write a longer e-mail concerning the entire
+init-on-alloc situation along with some patches in not-so-distant
+future, but the bare minimum I wrote previously already got numerous
+people involved (unsurprisingly now that I look at it). I don't have
+time to write the thing I wanted at the moment, but now that there is
+traffic I think I should at least mention one other important bit.
 
-it can scan the target shadow stack and decide if it's the
-same as the current one or not and in the latter case there
-should be a restore token to switch to. then it can INCSSP
-to reach the target SSP state.
+I'm not going to argue for any particular level of granularity -- I'm
+a happy camper as long as I can end up with names_cachep allocations
+excluded without disabling the entire thing.
 
-qemu does setjmp, then swapcontext, then longjmp back.
-swapcontext can change the stack, but leaves a token behind
-so longjmp can switch back.
+So the key is: memset is underperforming at least on x86-64 for
+certain sizes and the init-on-alloc thingy makes it used significantly
+more, exacerbating the problem. Fixing it is worthwhile on its own and
+will reduce the impact of the option, but the need for some form of
+opt-out will remain.
+
+I don't have any numbers handy nor time to produce them, so the mail
+will be a little handwave-y. I only write it in case someone decides
+to bench now what would warrant exclusion with the mechanism under
+discussion. Should any of the claims below be challenged, I can
+respond some time late next week with hard data(tm).
+
+Onto the issue:
+Most cpus in use today have the ERMS bit, in which case the routine is:
+
+SYM_FUNC_START_LOCAL(memset_erms)
+        movq %rdi,%r9
+        movb %sil,%al
+        movq %rdx,%rcx
+        rep stosb
+        movq %r9,%rax
+        RET
+SYM_FUNC_END(memset_erms)
+
+The problem here is that instructions with the rep prefix have a very
+high startup latency. Afair this remains true even on cpus with FSRM
+in case of rep *stos* (what is helped by FSRM is rep *mov*, whereas
+stos remains unaffected).
+
+Interestingly looks like the problem was recognized in general --
+memcpy and copy_{to,from}_user have hand rolled smaller copies. Apart
+from that __clear_user relatively recently got a treatment of that
+sort but it somehow never got implemented in memset itself.
+
+If memory serves right, the least slow way to do it is to *NOT* use
+rep stos below 128 bytes of size (and this number is even higher the
+better the cpu). Instead, a 32-byte loop (as in 4 times movsq) would
+do it as long as there is space, along with overlapping stores to take
+care of whatever < 32 bytes.
+
+__clear_user got rep stos if FSRM is present and 64 byte non-rep
+treatment, with an 8 byte loop and 1 byte loop to cover the tail. As
+noted above, this leaves perf on the table. Even then, it would be an
+improvement for memset if transplanted over. Maybe this was mentioned
+in the discussion concerning the func, I had not read the thread -- I
+only see that memset remains unpatched.
+
+memset, even with init-on-alloc disabled, is used *a lot* with very
+small sizes. For that bit I do have data collected over 'make' in the
+kernel directory.
+
+bpftrace -e 'kprobe:memset { @ =3D lhist(arg2, 0, 128, 8); }'
+
+[0, 8)           9126030 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       =
+   |
+[8, 16)           515728 |@@                                               =
+   |
+[16, 24)          621902 |@@                                               =
+   |
+[24, 32)          110822 |                                                 =
+   |
+[32, 40)        11003451 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@  |
+[40, 48)             488 |                                                 =
+   |
+[48, 56)             164 |                                                 =
+   |
+[56, 64)         1493851 |@@@@@@                                           =
+   |
+[64, 72)          214613 |                                                 =
+   |
+[72, 80)           10468 |                                                 =
+   |
+[80, 88)           10524 |                                                 =
+   |
+[88, 96)             121 |                                                 =
+   |
+[96, 104)          81591 |                                                 =
+   |
+[104, 112)       1659699 |@@@@@@@                                          =
+   |
+[112, 120)          3240 |                                                 =
+   |
+[120, 128)          9058 |                                                 =
+   |
+[128, ...)      11287204 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+
+note: i failed to figure out how to attach to memset on stock kernel,
+thus the kernel was booted with the crappery below:
+
+diff --git a/arch/x86/lib/memset_64.S b/arch/x86/lib/memset_64.S
+index 6143b1a6fa2c..141d899d5f1d 100644
+--- a/arch/x86/lib/memset_64.S
++++ b/arch/x86/lib/memset_64.S
+@@ -45,9 +45,6 @@ SYM_FUNC_START(__memset)
+ SYM_FUNC_END(__memset)
+ EXPORT_SYMBOL(__memset)
+
+-SYM_FUNC_ALIAS(memset, __memset)
+-EXPORT_SYMBOL(memset)
+-
+ /*
+  * ISO C memset - set a memory block to a byte value. This function uses
+  * enhanced rep stosb to override the fast string function.
+diff --git a/fs/open.c b/fs/open.c
+index 4401a73d4032..6e11e95ad9c3 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1564,3 +1564,11 @@ int stream_open(struct inode *inode, struct file *fi=
+lp)
+ }
+
+ EXPORT_SYMBOL(stream_open);
++
++void *(memset)(void *s, int c, size_t n)
++{
++       return __memset(s, c, n);
++}
++
++EXPORT_SYMBOL(memset);
+
+--=20
+Mateusz Guzik <mjguzik gmail.com>
