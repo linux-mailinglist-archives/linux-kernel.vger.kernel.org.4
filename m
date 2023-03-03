@@ -2,191 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1266A9491
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1E26A9493
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCCJzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:55:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S230051AbjCCJzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:55:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCCJza (ORCPT
+        with ESMTP id S230365AbjCCJzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:55:30 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C793230B2B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:55:26 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id cw28so8033550edb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:55:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677837325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vcI9TwKeql7BEK1sJIRMqGKUdiKBhH06Xafoh6GvtOY=;
-        b=nV3ygc6++KEALlPvrCi/LzP/zqVtODcKrm2ci3aPLG7xZhFB701k2yIDEhfjZcEhE4
-         AAhPxw1QOuIa8o3cVU4jU1ajdZd7+9PPVYYH0fTK6WzPz8lWJfDfDgRrcMuAaIaJEoQI
-         94+us00zm4xpazZjUaX/Y0Khzztzh2y/fduLKZPC6UW7GX19w451IqC451Ehw2lB/Wtd
-         YKG9A+iY5IVJbrvt9r8pUsBd2eGVimX9PgEap/eYWqcoshRD7MlkLmQjg52ERd9lad9U
-         A5tk/bN1PJ8TrSB2oZpiUCqN0h/UPbx64HQvV3myN+kSefGrJ2P+cMwB8NUagZ5YlmUe
-         OFSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677837325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vcI9TwKeql7BEK1sJIRMqGKUdiKBhH06Xafoh6GvtOY=;
-        b=I3vtO5udZ9KQ98bzmrWdxO9XZmEQN0D/2kH7f4qTRXovxR0Nuot9/mNvc5pHFRK5jN
-         /PY0BdHLmKnsHdz11UummLFUnm0vlgvtHn2+D6jcl/osBPzVIKIG69wNZFU3FzVRPFyO
-         PSe3kOECvdfJxScxXE4h15G/03hpoFunNEIKc/wjm/MjISODJA9K+CRFJ0/bpP0gNHp4
-         IKtNUk8gD998fxghJ8WzouYqDzC5uo9Z13cknqFzoVHb63xfOJDxHmRzlnUWDxl7C20w
-         g7fJHtc3/fV3WZOgM07sCHFtLyOV1KMEetHGwpVFFzlzzKIIDX+eCVbRD1iJcuGjIo/i
-         fjyA==
-X-Gm-Message-State: AO0yUKV/1kaIDatgh5a6NtLqyqXzh1Wb23SpJcP59LrTSdKsPqr0bjNE
-        i7+KSwXDI9Msq4uqFFVg36QhxQ==
-X-Google-Smtp-Source: AK7set/ny4L1u0FncdnBsIrArL6/bdtnybsH8zYJlQ/du/6yDCErh0hTkh1Nsd2BHS3zVK4BhOKRpA==
-X-Received: by 2002:aa7:d347:0:b0:4ae:e51e:9e3e with SMTP id m7-20020aa7d347000000b004aee51e9e3emr1147431edr.24.1677837325252;
-        Fri, 03 Mar 2023 01:55:25 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l3-20020aa7cac3000000b004af6f37d25bsm932016edt.76.2023.03.03.01.55.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 01:55:24 -0800 (PST)
-Message-ID: <89cb8fb1-4e0f-4b5e-26ab-702c0fda8760@linaro.org>
-Date:   Fri, 3 Mar 2023 10:55:23 +0100
+        Fri, 3 Mar 2023 04:55:40 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53BD15C98;
+        Fri,  3 Mar 2023 01:55:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 49EE0203FA;
+        Fri,  3 Mar 2023 09:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1677837337; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qrtqDegA0tWUK1DtEqvHurlGCx5n+/cV4BubW106Fb0=;
+        b=jPal0subS/FC9zNxqLHjglGSF8Ol+x3nhF5zMMtlsXBtYCkdxw4AZ9Wi9NNAqdZrC/CN+s
+        VQ+jbkuy6543vAzeeNyTEqjpC+RLduOP6/vOLGpgGqg8ZVhkwL/NroNg9gZ9pB5Kpgh3mQ
+        N39Av/uEBy8GHujj1Yey69RqEsOM/Gk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1677837337;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qrtqDegA0tWUK1DtEqvHurlGCx5n+/cV4BubW106Fb0=;
+        b=vs0tcujqRktjKppQ84+dvpjEMjUNNYSAtGOw610lf5H0JiL/A7BM+4A6xMQuliFiZtaEhF
+        uRzx0a72i02mm3Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 309BE1329E;
+        Fri,  3 Mar 2023 09:55:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2FrVCxnEAWRSewAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 03 Mar 2023 09:55:37 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B6869A06E5; Fri,  3 Mar 2023 10:55:36 +0100 (CET)
+Date:   Fri, 3 Mar 2023 10:55:36 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH v2 1/2] ext4: introduce 'update_only' parameter for
+ ext4_find_inline_data_nolock()
+Message-ID: <20230303095536.7h7hlpf5v54tjpbj@quack3>
+References: <20230303082158.4012809-1-yebin@huaweicloud.com>
+ <20230303082158.4012809-2-yebin@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 3/9] dt-bindings: crypto: fsl-sec4: support sec5.4/0 and
- i.MX6UL
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        horia.geanta@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, stefan@agner.ch,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-References: <20230301015702.3388458-1-peng.fan@oss.nxp.com>
- <20230301015702.3388458-4-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230301015702.3388458-4-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303082158.4012809-2-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2023 02:56, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Fri 03-03-23 16:21:57, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
 > 
-> Add i.MX6UL, SEC 5.0 and SEC 5.4 support.
+> Introduce 'update_only' parameter for ext4_find_inline_data_nolock() to
+> use this function to update 'inline_off' only.
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+
+Now looking at the patch maybe we could do better? The call in
+ext4_write_inline_data_end() is there also only to update i_inline_off and
+setting EXT4_STATE_MAY_INLINE_DATA from that call is not strictly
+problematic (we are just writing new inline data so we cannot be converting
+them) but not necessary either. So maybe we should instead move setting of
+EXT4_STATE_MAY_INLINE_DATA into ext4_iget_extra_inode() and remove it from 
+ext4_find_inline_data_nolock()? Then we won't need the 'update_only'
+argument...
+
+								Honza
+
 > ---
->  .../devicetree/bindings/crypto/fsl-sec4.yaml  | 58 ++++++++++++++++---
->  1 file changed, 50 insertions(+), 8 deletions(-)
+>  fs/ext4/ext4.h   | 2 +-
+>  fs/ext4/inline.c | 7 ++++---
+>  fs/ext4/inode.c  | 2 +-
+>  3 files changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/crypto/fsl-sec4.yaml b/Documentation/devicetree/bindings/crypto/fsl-sec4.yaml
-> index 678c8389ef49..1b801ae5ab51 100644
-> --- a/Documentation/devicetree/bindings/crypto/fsl-sec4.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/fsl-sec4.yaml
-> @@ -45,8 +45,18 @@ maintainers:
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 4eeb02d456a9..b073976f4bf2 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -3545,7 +3545,7 @@ extern loff_t ext4_llseek(struct file *file, loff_t offset, int origin);
 >  
->  properties:
->    compatible:
-> -    enum:
-> -      - fsl,sec-v4.0
-> +    oneOf:
-> +      - enum:
-> +          - fsl,sec-v4.0
-> +      - items:
-> +          - enum:
-> +              - fsl,imx6ul-caam
-> +              - fsl,sec-v5.0
-> +          - const: fsl,sec-v4.0
-> +      - items:
-> +          - const: fsl,sec-v5.4
-> +          - const: fsl,sec-v5.0
-
-What's the point of having all these versions? Better to use
-SoC-compatibles.
-
-> +          - const: fsl,sec-v4.0
+>  /* inline.c */
+>  extern int ext4_get_max_inline_size(struct inode *inode);
+> -extern int ext4_find_inline_data_nolock(struct inode *inode);
+> +extern int ext4_find_inline_data_nolock(struct inode *inode, bool update_only);
+>  extern int ext4_init_inline_data(handle_t *handle, struct inode *inode,
+>  				 unsigned int len);
+>  extern int ext4_destroy_inline_data(handle_t *handle, struct inode *inode);
+> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+> index 2b42ececa46d..0fa8f41de3de 100644
+> --- a/fs/ext4/inline.c
+> +++ b/fs/ext4/inline.c
+> @@ -126,7 +126,7 @@ int ext4_get_max_inline_size(struct inode *inode)
+>   * currently only used in a code path coming form ext4_iget, before
+>   * the new inode has been unlocked
+>   */
+> -int ext4_find_inline_data_nolock(struct inode *inode)
+> +int ext4_find_inline_data_nolock(struct inode *inode, bool update_only)
+>  {
+>  	struct ext4_xattr_ibody_find is = {
+>  		.s = { .not_found = -ENODATA, },
+> @@ -159,7 +159,8 @@ int ext4_find_inline_data_nolock(struct inode *inode)
+>  					(void *)ext4_raw_inode(&is.iloc));
+>  		EXT4_I(inode)->i_inline_size = EXT4_MIN_INLINE_DATA_SIZE +
+>  				le32_to_cpu(is.s.here->e_value_size);
+> -		ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+> +		if (!update_only)
+> +			ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+>  	}
+>  out:
+>  	brelse(is.iloc.bh);
+> @@ -761,7 +762,7 @@ int ext4_write_inline_data_end(struct inode *inode, loff_t pos, unsigned len,
+>  		 * ext4_write_begin() called
+>  		 * ext4_try_to_write_inline_data()
+>  		 */
+> -		(void) ext4_find_inline_data_nolock(inode);
+> +		(void) ext4_find_inline_data_nolock(inode, false);
 >  
->    "#address-cells":
->      const: 1
-> @@ -77,6 +87,8 @@ properties:
->  
->    clock-names:
->      oneOf:
-> +      - items:
-> +          - const: ipg
->        - items:
->            - const: mem
->            - const: aclk
-> @@ -85,11 +97,17 @@ properties:
->        - items:
->            - const: aclk
->            - const: ipg
-> +      - items:
-> +          - const: ipg
-> +          - const: aclk
->        - items:
->            - const: ipg
->            - const: aclk
->            - const: mem
->  
-> +  dma-coherent:
-> +    type: boolean
-> +
->    fsl,sec-era:
->      description:
->        Optional. A standard property. Define the 'ERA' of the SEC device.
-> @@ -108,8 +126,16 @@ patternProperties:
->  
->      properties:
->        compatible:
-> -        enum:
-> -          - fsl,sec-v4.0-job-ring
-> +        oneOf:
-> +          - enum:
-> +              - fsl,sec-v4.0-job-ring
-> +          - items:
-> +              - const: fsl,sec-v5.0-job-ring
-> +              - const: fsl,sec-v4.0-job-ring
-> +          - items:
-> +              - const: fsl,sec-v5.4-job-ring
-> +              - const: fsl,sec-v5.0-job-ring
-> +              - const: fsl,sec-v4.0-job-ring
->  
->        reg:
->          maxItems: 1
-> @@ -148,8 +174,16 @@ patternProperties:
->  
->      properties:
->        compatible:
-> -        enum:
-> -          - fsl,sec-v4.0-rtic
-> +        oneOf:
-> +          - enum:
-> +              - fsl,sec-v4.0-rtic
-> +          - items:
-> +              - const: fsl,sec-v5.0-rtic
-> +              - const: fsl,sec-v4.0-rtic
-> +          - items:
-> +              - const: fsl,sec-v5.4-rtic
-> +              - const: fsl,sec-v5.0-rtic
-> +              - const: fsl,sec-v4.0-rtic
-
-This is also a bit odd... why do you version children?
-
-Best regards,
-Krzysztof
-
+>  		kaddr = kmap_atomic(page);
+>  		ext4_write_inline_data(inode, &iloc, kaddr, pos, copied);
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index d251d705c276..6ecaa1bef9bb 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -4798,7 +4798,7 @@ static inline int ext4_iget_extra_inode(struct inode *inode,
+>  	if (EXT4_INODE_HAS_XATTR_SPACE(inode)  &&
+>  	    *magic == cpu_to_le32(EXT4_XATTR_MAGIC)) {
+>  		ext4_set_inode_state(inode, EXT4_STATE_XATTR);
+> -		return ext4_find_inline_data_nolock(inode);
+> +		return ext4_find_inline_data_nolock(inode, false);
+>  	} else
+>  		EXT4_I(inode)->i_inline_off = 0;
+>  	return 0;
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
