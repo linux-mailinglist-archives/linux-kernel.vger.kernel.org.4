@@ -2,191 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9DE6A9273
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BA96A9275
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjCCIaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S230145AbjCCIao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 03:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjCCIaM (ORCPT
+        with ESMTP id S229445AbjCCIan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:30:12 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D8619F1B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:30:03 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id o15so7059786edr.13
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 00:30:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677832202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vyMEf9DcHz7Rey1/n9uL5ThzUAVI9l0JbNqQFMHxvRc=;
-        b=ndiZ3xAyUQhK0y/jMn9s9SmP4K2ugri8iWU6ePoBkWIz/Nr6QLQE4nLVBp6MC976Oc
-         WNtRVeQ6J1awkj1ScoitJkhM8K14Z1/PUTRj5zSZ4j15k7rm/eJ6ZiSCCl/bbUknEmSD
-         9B2DosfSEvYB/KYSW9jOFrKKzEg3axpqHCrV18DX2WhLun9fg+JdmF/avPwtsKke23F4
-         zHktnQSWQkJh8aP8BiSY5xZ3O8OpKuGDa7x3AIBlMGO2IYNEvTcBGQhc4fzG1c3LTIAe
-         /d05wpmQOGVYjZZPA45HFBMymdaKNF+jNGD/dxnsAArwC7oVFAD3ejelrTBcOACqg+hN
-         99TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677832202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vyMEf9DcHz7Rey1/n9uL5ThzUAVI9l0JbNqQFMHxvRc=;
-        b=tgVeVAR4yM6CXUHufGxudcggJjEWRQgVUzDmEvGTuRYzfrgGthvh+/ssJyYXoEspiQ
-         V7CSESxT8UounByOfh3Rd4OaUhKTkyXfpOj06ccCachxQZx7GW7W6FZqK60sfw0D+Mpe
-         qrnokxZZ37uTUwzJI8oADlHaBAsLEAHZEOw0NKRLc4jMNvfZ4R2yWj6l2pUojspMj+aP
-         2afEEu98in9T8T9FCwR4X0b+12QVvyi807WajYgbM1ohoxd08jWleD37DDdxILIujZZu
-         1x9vsT7D5MH01DAhDm4qsQ6lZgHbv2cpli1DqvHAsHzsvjRpMTPVyFYWkp+tXVHcUcEv
-         zGHw==
-X-Gm-Message-State: AO0yUKXyG5XLy/bU2Ucivj6BSTbKmdg5NQIuiHMSJuyW1XmLene0lUve
-        sjjLttiikfnl1UWbYtQTK42VLg==
-X-Google-Smtp-Source: AK7set/VLaLjdiP1fyM/FB0SX/nUogRG2TFTaQAtY/Ry8s11/NL7JEOUGMnEWKl8Vq3fHE6fT+KUvQ==
-X-Received: by 2002:a17:907:9b03:b0:8aa:be5c:b7c5 with SMTP id kn3-20020a1709079b0300b008aabe5cb7c5mr798990ejc.41.1677832202361;
-        Fri, 03 Mar 2023 00:30:02 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f20-20020a1709064dd400b008ec43ae626csm684564ejw.167.2023.03.03.00.30.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 00:30:02 -0800 (PST)
-Message-ID: <d5c93a9f-4a66-f884-a4d1-68cf47bcd7d4@linaro.org>
-Date:   Fri, 3 Mar 2023 09:29:59 +0100
+        Fri, 3 Mar 2023 03:30:43 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B416E2126;
+        Fri,  3 Mar 2023 00:30:40 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3238UQqq109971;
+        Fri, 3 Mar 2023 02:30:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1677832226;
+        bh=rlN6i9GoilkArfAt3gWnmzuKf78tjlq44dHBhfJgoGE=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=BoN+hpURM5dwbjucVqJTajhNMRAOl8mWtY/xofG5uZlZ2qFfwlhw1P407O0pOjepr
+         TQL74IUezTWfipkf/b7rzJBCrYpWhGl3qOGyfgTfVCafkwTNyVRj1h/jTMaBTibeNX
+         9iAtMG4LxMMVhClo/QET+ipCDftuVVckr+6/n5zg=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3238UQAJ012568
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 3 Mar 2023 02:30:26 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 3
+ Mar 2023 02:30:26 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 3 Mar 2023 02:30:26 -0600
+Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3238UMPp048896;
+        Fri, 3 Mar 2023 02:30:23 -0600
+Message-ID: <b83a2c9e-481b-a15e-d4a4-d8d68ae084a7@ti.com>
+Date:   Fri, 3 Mar 2023 14:00:21 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v9 5/5] dt-bindings: clock: meson: add A1 Peripherals
- clock controller bindings
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v12 3/8] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support
+ of OSPI
 Content-Language: en-US
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        neil.armstrong@linaro.org, jbrunet@baylibre.com,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
- <20230301183759.16163-6-ddrokosov@sberdevices.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230301183759.16163-6-ddrokosov@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+To:     Andrew Davis <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
+        <vaishnav.a@ti.com>, Ravi Gunasekaran <r-gunasekaran@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230301091136.17862-1-r-gunasekaran@ti.com>
+ <20230301091136.17862-4-r-gunasekaran@ti.com>
+ <61fab807-42df-cc2c-51de-f54e9ea477c8@ti.com>
+ <7843adf0-f883-280b-1d87-44010ceef767@ti.com>
+In-Reply-To: <7843adf0-f883-280b-1d87-44010ceef767@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2023 19:37, Dmitry Rokosov wrote:
-> Add the documentation for Amlogic A1 Peripherals clock driver,
-> and A1 Peripherals clock controller bindings.
+Andrew,
+
+On 02/03/23 9:03 am, Ravi Gunasekaran wrote:
 > 
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> ---
->  .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++++
->  include/dt-bindings/clock/a1-clkc.h           | 102 ++++++++++++++++++
->  2 files changed, 175 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
->  create mode 100644 include/dt-bindings/clock/a1-clkc.h
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
-> new file mode 100644
-> index 000000000000..3dc86e912dea
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/amlogic,a1-clkc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Meson A/C serials Peripheral Clock Control Unit
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +  - Jerome Brunet <jbrunet@baylibre.com>
-> +  - Jian Hu <jian.hu@jian.hu.com>
-> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> +
-> +properties:
-> +  compatible:
-> +    const: amlogic,a1-clkc
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: input fixed pll div2
-> +      - description: input fixed pll div3
-> +      - description: input fixed pll div5
-> +      - description: input fixed pll div7
-> +      - description: input hifi pll
-> +      - description: input oscillator (usually at 24MHz)
-> +
-> +  clock-names:
-> +    items:
-> +      - const: fclk_div2
-> +      - const: fclk_div3
-> +      - const: fclk_div5
-> +      - const: fclk_div7
-> +      - const: hifi_pll
-> +      - const: xtal
-> +
-> +required:
-> +  - compatible
-> +  - '#clock-cells'
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/a1-pll-clkc.h>
+> On 01/03/23 9:27 pm, Andrew Davis wrote:
+>> On 3/1/23 3:11 AM, Ravi Gunasekaran wrote:
+>>> From: Aswath Govindraju <a-govindraju@ti.com>
+>>>
+>>> Add support for two instance of OSPI in J721S2 SoC.
+>>>
+>>> Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
+>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+>>> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+>>> ---
 
-Eh, this explains bisectability problem.
+[...]
 
-Please do not sent patchets which are not bisectable. You can hard-code
-the IDs in the example, they don't really matter.
+>>>
+>>>   .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 46 +++++++++++++++++++
+>>>   1 file changed, 46 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>>> index 0af242aa9816..ab3ce8be7216 100644
+>>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>>> @@ -306,4 +306,50 @@
+>>>               ti,cpts-periodic-outputs = <2>;
+>>>           };
+>>>       };
+>>> +
+>>> +    fss: bus@47000000 {
+>>> +        compatible = "simple-bus";
+>>> +        #address-cells = <2>;
+>>> +        #size-cells = <2>;
+>>> +        ranges = <0x00 0x47000000 0x00 0x47000000 0x00 0x00068400>,
+>>> +             <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>,
+>>> +             <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>;
+>>> +
+>>> +        status = "disabled";
+>>
+>> Since this node doesn't need pinmux, why is it default disabled? Same for
+>> the other parent nodes in this series.
+>>
+>> Andrew
+> 
+> In this patch and others in this series, since child node is disabled,
+> I thought of disabling the parent as well. And to later enable the
+> parent node at the time when the child node needs to be enabled.
+> 
 
-> +    apb {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        clock-controller@800 {
-> +            compatible = "amlogic,a1-clkc";
-> +            reg = <0 0x800 0 0x104>;
-> +            #clock-cells = <1>;
-> +            clocks = <&clkc_pll CLKID_FCLK_DIV2>,
-> +                     <&clkc_pll CLKID_FCLK_DIV3>,
-> +                     <&clkc_pll CLKID_FCLK_DIV5>,
-> +                     <&clkc_pll CLKID_FCLK_DIV7>,
-> +                     <&clkc_pll CLKID_HIFI_PLL>,
-> +                     <&xtal>;
-> +            clock-names = "fclk_div2", "fclk_div3",
-> +                          "fclk_div5", "fclk_div7",
-> +                          "hifi_pll", "xtal";
-> +        };
-> +    };
-> diff --git a/include/dt-bindings/clock/a1-clkc.h b/include/dt-bindings/clock/a1-clkc.h
+Could you please provide your input on this?
 
-Same comment for filename as for previous patch.
+If the preferred way is to keep the parent node enabled, then I will
+do so. For the IPs added in this series, if the parent node needs additional
+information such as pinmux, gpio, I will disable both parent and child.
+And if only child node(s) need additional info, then I will keep the parent
+enabled and children disabled. 
 
+>>
+>>> +
+>>> +        ospi0: spi@47040000 {
+>>> +            compatible = "ti,am654-ospi", "cdns,qspi-nor";
+>>> +            reg = <0x00 0x47040000 0x00 0x100>,
+>>> +                  <0x05 0x00000000 0x01 0x00000000>;
+>>> +            interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
+>>> +            cdns,fifo-depth = <256>;
+>>> +            cdns,fifo-width = <4>;
+>>> +            cdns,trigger-address = <0x0>;
+>>> +            clocks = <&k3_clks 109 5>;
+>>> +            assigned-clocks = <&k3_clks 109 5>;
+>>> +            assigned-clock-parents = <&k3_clks 109 7>;
+>>> +            assigned-clock-rates = <166666666>;
+>>> +            power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <0>;
+>>> +
+>>> +            status = "disabled"; /* Needs pinmux */
+>>> +        };
+>>> +
+>>> +        ospi1: spi@47050000 {
+>>> +            compatible = "ti,am654-ospi", "cdns,qspi-nor";
+>>> +            reg = <0x00 0x47050000 0x00 0x100>,
+>>> +                  <0x07 0x00000000 0x01 0x00000000>;
+>>> +            interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
+>>> +            cdns,fifo-depth = <256>;
+>>> +            cdns,fifo-width = <4>;
+>>> +            cdns,trigger-address = <0x0>;
+>>> +            clocks = <&k3_clks 110 5>;
+>>> +            power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <0>;
+>>> +
+>>> +            status = "disabled"; /* Needs pinmux */
+>>> +        };
+>>> +    };
+>>>   };
+> 
 
-
-Best regards,
-Krzysztof
-
+-- 
+Regards,
+Ravi
