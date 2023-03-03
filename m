@@ -2,218 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8BE6A9A50
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 197DC6A9A56
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjCCPMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 10:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S231446AbjCCPNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 10:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjCCPMs (ORCPT
+        with ESMTP id S231432AbjCCPNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 10:12:48 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D166E60ABB
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 07:12:45 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id az36so1820583wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 07:12:45 -0800 (PST)
+        Fri, 3 Mar 2023 10:13:14 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2109.outbound.protection.outlook.com [40.107.96.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8711F49C;
+        Fri,  3 Mar 2023 07:13:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UOR7PqX2OfOyiT40qGF3NJ1XF/ghNCcRsWBSbTaavRoozXKSEwx7KUHYvlxSczSlAJPQ517B46iJFUNGj3GoEB1CpppBCyYxuWiZyrvz/hwY0Fa/7ZElxTPhpSnhHdUnvDhtf48QrMzf8LS7PG38WB1WpqLgaRXcHPVXAcBV55CnanZNu6vMP6/QtYg3CR2G9mwk1nKJwtjD5ItqR6U2+6jVP5RTrHWQ3UHZJQBYvHQ2Gpkj62J61bot+auKJi7BljB6igGpjaTgkkoUkS5BKN7rmLtwvXNeaBpk8iWSl6RYeIBKURcwZzcZnlObV+Ewdp9uPv7tYuKJVXxd7k7CeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8AUdj7kRsWbVlP7GQYjhRyZr9HdaWsYzqV8wiaBIoy8=;
+ b=HInoh0/zsYWyn6C/mKAXHhFDBRZBvU6rINomGa+bJxaGW6FtN0lPE/RqL/6AnKGIzniBNvYxz7XGj2hxasCkwCEnMglWedwOJOiXZ56nC1hhKjjBSPDYpMXCm7tlcVKKv4lRrRsX85vh/rLlILL7EpYMFEyajezW3Vb4jI30wbhrZTXDHlZ4gKofabTsZW6OYOpV4Cj+3CwUml1LJ3JixAtjkU4n1LOSRtE9gtdWbYk5cJMracQQooV5iOq7wYYZq/mVK8PLRJ8hznzYA2KoaorbaKFvttPwIG7R8fe3yLT7Tm3JsfgwhUHX/cp/km2/CLNSMYAU4BRqxM6ADvoEfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Uk+s/qD/3O1ooLhMXsQ7luVlbcQ85Ctw4HQhIQJpqbA=;
-        b=fjWQ2ZpgH6O2sZyyZ80AwkI1oUqIXLuZmt5hKWmC2Rim5niL6NUmMZRggQaT39/aAy
-         h2q4jABlQ7dE/R/LBBtaFIFPm3dWZ0eDjU7zLfjjxfoX3h0WtiF1P3YMKSL6mH6eN8gF
-         f6juQiew6u2ke/5gRQZLDQVsPT0fPUrAnJyPIYZ7/ej4pXjb8ECq12+/n0a7O1cnREuK
-         XN9OgQudAjsat8KOcZXu8nYZPVpeW3lciZZCpf3uvbW66zqUkKa4hktumH0rZCUKzC3j
-         +3SMbohjGMQHUagNpox9FbfDAvNHc5XDDjGfzlJh2hjleUewlrB4IjNCCzwAflp6oMA/
-         WTTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uk+s/qD/3O1ooLhMXsQ7luVlbcQ85Ctw4HQhIQJpqbA=;
-        b=EqSbE5xXhwmHniI/ntwMt/sukF69pIcJfGvuTiSmvrc2rvKo/jkeakwtCPYkujVE0Y
-         YD6VKb8ocThxgRPG/L4Bj9M9pp/KGTiJb5LRgZuPs62WxRfuesUCU44XwqusI+sJ7ARm
-         kOpLRttDW3Sap8HBYrysAbEWz4qhMhCflwhL3mfZG/AHVQafi67CHNYigaN/oxv/L861
-         Cq7Qrf1d9TnMVKkgwJSdwi11wXnxuR/f5sO+KfJcv6l+GSnJr4SOiKtRXmOqW5rlsrVf
-         VimyFdz0InTCIhmbvptVuEZFWSsr3TdsR29tnQpfHaGG/8Z8YzJN4gCzokkFHcKYBXVG
-         MZww==
-X-Gm-Message-State: AO0yUKWZUNJQ1HPsCKcyNk07v3OZGnZcEtCagGPu/sil3+dn1Ej56DvY
-        TJ6YM9ep5iRQd1XVmlnwzeKGjQ==
-X-Google-Smtp-Source: AK7set9tDQA71r+vFbwR6C+zydRKRlijrx8KIOT77KraGZKtxBVvJ3AeVv9AtZQ3I6S+Dhx38m3EaA==
-X-Received: by 2002:a05:600c:3d8b:b0:3eb:578d:ded3 with SMTP id bi11-20020a05600c3d8b00b003eb578dded3mr2023925wmb.35.1677856364323;
-        Fri, 03 Mar 2023 07:12:44 -0800 (PST)
-Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
-        by smtp.gmail.com with ESMTPSA id h22-20020a05600c351600b003daf6e3bc2fsm10568349wmq.1.2023.03.03.07.12.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 07:12:44 -0800 (PST)
-Message-ID: <8d9afb7e-0141-f2a7-a779-6c5bfd35e6f9@baylibre.com>
-Date:   Fri, 3 Mar 2023 16:12:43 +0100
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8AUdj7kRsWbVlP7GQYjhRyZr9HdaWsYzqV8wiaBIoy8=;
+ b=OV8ArPEyeCNa460+uEz9v1lA2w+s/cWM2lVgRUTdUCNi6k9dcMbrYJhBEQ60j5d6ziepNVcClXoq7TjAq8/MyiCFvJUEmPaRwoRrcZg/eOsIsMwSlDeFCbrX5aH2iK6KqHMUOA2fyV2Trr3LCCXd3A33LqscaGBkTibmV7rUL7E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by IA1PR10MB6805.namprd10.prod.outlook.com
+ (2603:10b6:208:42b::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17; Fri, 3 Mar
+ 2023 15:13:01 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6156.016; Fri, 3 Mar 2023
+ 15:13:00 +0000
+Date:   Fri, 3 Mar 2023 09:12:53 -0600
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [RFC v1 net-next 2/7] mfd: ocelot: add ocelot-serdes capability
+Message-ID: <ZAIOddFw//0VDoyw@MSI.localdomain>
+References: <20230216075321.2898003-1-colin.foster@in-advantage.com>
+ <20230216075321.2898003-3-colin.foster@in-advantage.com>
+ <20230303104807.GW2303077@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303104807.GW2303077@google.com>
+X-ClientProxiedBy: CH0PR03CA0231.namprd03.prod.outlook.com
+ (2603:10b6:610:e7::26) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] mfd: tps65219: Add support for soft shutdown via sys-off
- API
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Lee Jones <lee@kernel.org>
-Cc:     tony@atomide.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com, nm@ti.com,
-        msp@baylibre.com
-References: <20230203140150.13071-1-jneanne@baylibre.com>
- <Y/94Pew4vr6FROcI@google.com> <d4abf0c3-f5c8-fd54-87f6-4397596ae40f@ti.com>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <d4abf0c3-f5c8-fd54-87f6-4397596ae40f@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|IA1PR10MB6805:EE_
+X-MS-Office365-Filtering-Correlation-Id: 64b5fe39-3d97-4fa7-3993-08db1bf9c64a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aNDNPvodgNF0URzI5hbecwVNKwAlRhtjBifwaekeHGfB3ium5yfcZP7rdqiaOruZCAMXvUz4FqKugpM4DfLUkww1ZB3ETWYOGrxgkR+uDk2O1Ym1o3GgS25fdkiWwaGk7tttcLMH1XGZFnEChvwDjBw+AMl8aEmJrb9osKs2iYMzYEZQAEwd9InNzv6qAKVWgeA5e1kPsnPWk4ueOUhKnnkm53c8mHocH1XQ2nuN8g4ZPTzNUvvbcTeMQo82VbSstq1PZ4K3LKDJLQQDvRT1iWST7JUpCWqE+RbbsTxnNCSBeOKfcGL+rTEqr8PgtE/9shAT+u6UzX1knY5n01SSCMjvLx9R9Obf0h2S7fkDrewaa0uNWkYLlMIfVlh6oxUtw8PBCCbOrpwjO0vSSGoKRopZu2nAQZkfkjMN3MRNArJhOqgdjoFdfBrjfexJ28BzWeQiizq1wxiURFl0Qu3t0p/HSrG95sqlEgL07kJOhb5qjB+WBDNBgM8gTw9cBKKnybLIEgBJqNwGDXEuMNUgCMt2C0zMBYumyZ6F5Q+CeAhpbMvCddWALy1AvyNPSNUdMLFcblDk7dz6jN9Me6WMYQgnJI4CbgPWzxCZU0FZyysmQld+HqaaaJx0VlMnWkE4Xkvt2FMg+lt/aUqqzyWJyA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39830400003)(366004)(136003)(396003)(376002)(346002)(451199018)(66556008)(6666004)(38100700002)(8936002)(5660300002)(478600001)(7416002)(66476007)(86362001)(26005)(9686003)(186003)(6486002)(6506007)(6512007)(8676002)(44832011)(4326008)(6916009)(66946007)(4744005)(2906002)(316002)(41300700001)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZnqbeXAznGjr5j5DvxS8i9y/LuaX2xvXABRTt2gylikCS2RZ71AyDSy9x76Y?=
+ =?us-ascii?Q?dhQMhgPt+E/tM/vy48TB/jeWXTDtu4XZP8qe67BMY3GwrWfFhODWhBQ1ALcC?=
+ =?us-ascii?Q?0VxGxG2qgBJfzEcTw/cJuxXOsutS6tGl9tUch+TtSQomAvW2Ue0kpOFCnuKy?=
+ =?us-ascii?Q?mMs18k7PfEVlfp9/h7IgZyzSGnLFqA/suncXCoXDXvXq0asS171GA0Sz5GQ7?=
+ =?us-ascii?Q?CH0XhaKdh81L2PoWxz/bLsRuIwPoRHCC4cNRSbdRRLL6My1EQskin7gP7+Fr?=
+ =?us-ascii?Q?cxnmMtZRWCAyXiQzQiW4Bgvu2tLAIhLPmz+lKYyFcHbpaKMc+BKWXMm8O4X0?=
+ =?us-ascii?Q?+jLvKch0fsaDAAnceyd71JuvZrwcU0nAhakaFHD0yY7A8JcoHWIEB98uHh2z?=
+ =?us-ascii?Q?fesYuZI7ACJ61s3SWOg3xHJx1lvu/gka4/kGD5C5fi1Rxr8T/4mEf7+KyL+V?=
+ =?us-ascii?Q?hF27DVzTivaxIkEw+KFYS+/VKyxh7rb9TCRhR/c1cdT6tUsQlHuUyOwwD/b3?=
+ =?us-ascii?Q?Qg5dws46PSHXawMt9vcUs6vHfShd/pwGGykhwNXCuUYvjn9uBv8Bs9xmQObu?=
+ =?us-ascii?Q?0uxKoMOKC9+NWL6ywTxtuRUrO3hGhHdtDLHUGJrqep1PIuOKZlR7S+5IJ2ra?=
+ =?us-ascii?Q?nyhzTN4hRQ9lg831qArHh6B+u6+EVqUtG3m5SMHkHNK3XgXmM00ZaW2JP8AI?=
+ =?us-ascii?Q?TZ8tvGDpRNbJb7RUz4JMOh52LXL3qpqIdH7VJd/1dNVE4BI4GYzI8jb7KUn0?=
+ =?us-ascii?Q?HyegScbRvyq015xXmIkTLEqkTSWnNCQom3eTY6BLqPYEcJNNhWkwdXcseSzr?=
+ =?us-ascii?Q?0nTkKy1LjI0Szobi8pkiM7wn2lyZgwv7b4PLq+lBZjyra0VdZXwuBKhdqTny?=
+ =?us-ascii?Q?BH9CX6g6FUaXTiKVa+w+oeRP6128nokELW+O2RH53du60lFESv1+22sXtQ4A?=
+ =?us-ascii?Q?i3gj4nY1NN6VCgpOsIRVoabz23vw58xY2XYhfnGeSZuYfCNt3KvORxU6ia4d?=
+ =?us-ascii?Q?eF7sbnFlf7bQqW/qA1dhDRKIJ/AGYuTb6gwx6nR2wuBVs63ly1sCVESynNyD?=
+ =?us-ascii?Q?Hj6pz2Sa4xnlA3RtdIEbF1jQY4FdH8ywkf1Hsb34SGtZdFxvHHUicxDmqHgS?=
+ =?us-ascii?Q?I2p7A+UQau+zSILnBKxKS7zJeteaKBq+cKQkoM93Mza0ULheNk+W57sx889K?=
+ =?us-ascii?Q?XLikA5qaFRDfk1DVcT/LLiKdmS2hllBI9JGq7cck0zKNLysGiQbOSPXaAite?=
+ =?us-ascii?Q?PFxUDwccUAYxm+6Tpjcyc7EwI15bBrVl9iRxykos/P+tFGrWyHZ+oYFFyt/E?=
+ =?us-ascii?Q?22Wu5neIUrpALDhJk8rs7O7GdyxU3ZrLTj3kpPO9Kh/bAOwiI5mjOntoM68o?=
+ =?us-ascii?Q?onStIK+V3IDLhTkH1j05GRe6dcxrVGh1nEReYVpIeOxC20eJnt02iKRldVhq?=
+ =?us-ascii?Q?Ky6wnE2wMmMsWXSbndgN+4zyvkKUF2vEHEQhXSIw4F50Lu6YX4oUeh51BwnF?=
+ =?us-ascii?Q?bWMEohhKHXDZuOi84H1OEJCn0PusBLL3D2/mGdyeQdsvSoG7pOAZMfWPTKsd?=
+ =?us-ascii?Q?iDjK9gLG5rcd5oy8lF5WbKpYSPXc/i9Zyhmvd2HsfD+sYLnEi4W/aaX5BY3i?=
+ =?us-ascii?Q?sWXdeg2C7c1Px2xvpH3z/58=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64b5fe39-3d97-4fa7-3993-08db1bf9c64a
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 15:13:00.6865
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eLuoU027SD4d58W6YJ/ZB3xvM0opkEgQ9JsVo1MKtbQNmoqBdPVo+vYtuIckwjBODJcEZolbnNu8rL+ZAI5oUD1BclZGL6kFZpgxVs70FQg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6805
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 03, 2023 at 10:48:07AM +0000, Lee Jones wrote:
+> On Wed, 15 Feb 2023, Colin Foster wrote:
+> 
+> > Add support for the Ocelot SERDES module to support functionality of all
+> > non-internal phy ports.
+> 
+> Looks non-controversial.
+> 
+> Please provide some explanation of what SERDES means / is.
 
+Will do.
 
-On 01/03/2023 17:35, Andrew Davis wrote:
-> On 3/1/23 10:07 AM, Lee Jones wrote:
->> On Fri, 03 Feb 2023, Jerome Neanne wrote:
->>
->>> Use new API for power-off mode support:
->>> Link: https://lwn.net/Articles/894511/
->>> Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
->>>
->>> sys-off API allows support of shutdown handler and restart handler.
->>>
->>> Shutdown was not supported before that enhancement.
->>> This is required for platform that are not using PSCI.
->>>
+>  
+> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> > ---
+> >  drivers/mfd/ocelot-core.c | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
 > 
-> Not sure what platform doesn't have PSCI off, since you tested on
-> AM62-SK I'm guessing you manually disabled the PSCI off for testing?
-> 
-> Anyway I don't see any huge issues with the code itself, small comment 
-> below.
-> 
->>> Test:
->>> - restart:
->>>    # reboot
->>>    Default is cold reset:
->>>    # cat /sys/kernel/reboot/mode
->>>    Switch boot mode to warm reset:
->>>    # echo warm > /sys/kernel/reboot/mode
->>> - power-off:
->>>    # halt
->>>
->>> Tested on AM62-SP-SK board.
->>>
->>> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
->>> Suggested-by: Andrew Davis <afd@ti.com>
->>
->> A review from Andrew would be helpful here.
->>
->>> ---
->>>   drivers/mfd/tps65219.c | 45 +++++++++++++++++++++++++++++++-----------
->>>   1 file changed, 34 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/drivers/mfd/tps65219.c b/drivers/mfd/tps65219.c
->>> index 0e402fda206b..c134f3f6e202 100644
->>> --- a/drivers/mfd/tps65219.c
->>> +++ b/drivers/mfd/tps65219.c
->>> @@ -25,25 +25,34 @@ static int tps65219_cold_reset(struct tps65219 *tps)
->>>                     TPS65219_MFP_COLD_RESET_I2C_CTRL_MASK);
->>>   }
->>> -static int tps65219_restart(struct notifier_block *this,
->>> -                unsigned long reboot_mode, void *cmd)
->>> +static int tps65219_soft_shutdown(struct tps65219 *tps)
->>>   {
->>> -    struct tps65219 *tps;
->>> +    return regmap_update_bits(tps->regmap, TPS65219_REG_MFP_CTRL,
->>> +                  TPS65219_MFP_I2C_OFF_REQ_MASK,
->>> +                  TPS65219_MFP_I2C_OFF_REQ_MASK);
->>> +}
->>> -    tps = container_of(this, struct tps65219, nb);
->>> +static int tps65219_power_off_handler(struct sys_off_data *data)
->>> +{
->>> +    tps65219_soft_shutdown(data->cb_data);
->>> +    return NOTIFY_DONE;
->>> +}
->>> +static int tps65219_restart(struct tps65219 *tps,
->>> +                unsigned long reboot_mode)
->>> +{
->>>       if (reboot_mode == REBOOT_WARM)
->>>           tps65219_warm_reset(tps);
->>>       else
->>>           tps65219_cold_reset(tps);
->>> -
->>>       return NOTIFY_DONE;
->>>   }
->>> -static struct notifier_block pmic_rst_restart_nb = {
->>> -    .notifier_call = tps65219_restart,
->>> -    .priority = 200,
->>> -};
->>> +static int tps65219_restart_handler(struct sys_off_data *data)
->>> +{
->>> +    tps65219_restart(data->cb_data, data->mode);
->>> +    return NOTIFY_DONE;
->>> +}
->>>   static const struct resource tps65219_pwrbutton_resources[] = {
->>>       DEFINE_RES_IRQ_NAMED(TPS65219_INT_PB_FALLING_EDGE_DETECT, 
->>> "falling"),
->>> @@ -269,13 +278,27 @@ static int tps65219_probe(struct i2c_client 
->>> *client)
->>>           }
->>>       }
->>> -    tps->nb = pmic_rst_restart_nb;
->>> -    ret = register_restart_handler(&tps->nb);
->>> +    ret = devm_register_sys_off_handler(tps->dev,
->>> +                        SYS_OFF_MODE_RESTART,
->>> +                        SYS_OFF_PRIO_HIGH,
-> 
-> Why not default prio? SYS_OFF_PRIO_DEFAULT
-I'm not completely clear about PRIO recommendations. Will follow your 
-suggestion.
-> 
-> Then you can use this new helper devm_register_restart_handler()
-Sure!
-> 
->>> +                        tps65219_restart_handler,
->>> +                        tps);
->>> +
->>>       if (ret) {
->>>           dev_err(tps->dev, "cannot register restart handler, %d\n", 
->>> ret);
->>>           return ret;
->>>       }
->>> +    ret = devm_register_sys_off_handler(tps->dev,
->>> +                        SYS_OFF_MODE_POWER_OFF,
->>> +                        SYS_OFF_PRIO_DEFAULT,
->>> +                        tps65219_power_off_handler,
->>> +                        tps);
-> 
-> 
-> devm_register_power_off_handler()?
-> 
-Oh yes, right, this is solving the PRIO question by construction. This 
-is definitely a better option
-> Otherwise I see no major issues,
-> 
-> Reviewed-by: Andrew Davis <afd@ti.com>
-> 
-> Andrew
-> 
->>> +    if (ret) {
->>> +        dev_err(tps->dev, "failed to register sys-off handler: %d\n",
->>> +            ret);
->>> +        return ret;
->>> +    }
->>>       return 0;
->>>   }
->>> -- 
->>> 2.34.1
->>>
->>
+> I'd expect this to go in via MFD once it comes out of RFC.
+
+Understood. I'll be sure to make it clear that some sync will be needed
+between MFD and net-next in the cover letter this time.
+
+Thanks Lee!
