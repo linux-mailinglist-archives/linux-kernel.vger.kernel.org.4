@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40A06A8EB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BDD6A8EB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjCCB2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 20:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S229870AbjCCB3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 20:29:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCCB2k (ORCPT
+        with ESMTP id S229487AbjCCB3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 20:28:40 -0500
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B78173B;
-        Thu,  2 Mar 2023 17:28:37 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vcyz2mq_1677806914;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vcyz2mq_1677806914)
-          by smtp.aliyun-inc.com;
-          Fri, 03 Mar 2023 09:28:35 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     john.johansen@canonical.com
-Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] AppArmor: Fix some kernel-doc comments
-Date:   Fri,  3 Mar 2023 09:28:33 +0800
-Message-Id: <20230303012833.57690-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 2 Mar 2023 20:29:04 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B243544A8;
+        Thu,  2 Mar 2023 17:29:03 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id g6so387182iov.13;
+        Thu, 02 Mar 2023 17:29:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677806943;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HkH3s+ZPeSK2ETwzaKsgHIZ992yhpPipIE8vUYZJw2Y=;
+        b=RtfAOKC+mJNSD/uhNtJYRRI9TVyniOecmxhygUNLsTlaAFt8o75McIkhfCuG1rW9yF
+         Uu49DVgmOaXWXV/+FlLrzwcn+yZPcBszhAv0xhhDB+EQbaK/zMwZd4XiFl0bwtT/a/jI
+         MbePKAf+imN1TZs67X2OA6iyc9exqnkUcNIj9GCCrkZZk6+u+Bx7qWzmeqdORb4KMcs2
+         2lUCc01qYCOA6TF+FYbI+mWbxjkX++ywaACupJufsXDZWQDkdt08weZ+tDECOlH5LTO0
+         DaBiqXEIau/+OlaWhKbLBlhlCI8KanEkkiBJ/xQkal7I8hbWWLmCyCdD17Y6ImpqXJCr
+         CTFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677806943;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HkH3s+ZPeSK2ETwzaKsgHIZ992yhpPipIE8vUYZJw2Y=;
+        b=bfFOnLCrI0dYgX1k1Atp5eKNMxDSgLDpmDPVbwKBL26ZHtIaTCUP9BZBcLOsIHgK9G
+         VkOVD1ysXfDvTzFRqkz7FnqDts+cqupu46YG0oe+d37+Rd88eHZ+W2C4BvK9R7pz/SQn
+         kqauAog9+I9UZxgdKVfI+2DoI8j0D1blqT7DdOuvDyx6inAQIHQ64v2TRT1GsxYisKVR
+         kM83+hLavwj00ceMm/AnFgCN6mp9X2IaCV7YlliInnlSUeZXA+KRZm8pGQze1EliGXze
+         RwVU4mCH/xKlSbDU3uduMtkUaFJujkY71ZFOe8J8Jxk7fQtTTOFDisU+1Etf4z/3mKCE
+         um1A==
+X-Gm-Message-State: AO0yUKXINW+0tL3o2l5oDCdML1hip0//LOV0quF7uX2v/JRVXAlra1HW
+        dkeHvNZ/9KEo++A2F1CS9lM=
+X-Google-Smtp-Source: AK7set+8vJqsimfDBLj2Ki24EIQx+jOP3oQ1Vr3i5u/Tlq52h7zM7Ku53IbNYgTBunG8ag8NOxaCbg==
+X-Received: by 2002:a6b:e415:0:b0:74c:bf8f:4c88 with SMTP id u21-20020a6be415000000b0074cbf8f4c88mr8409207iog.14.1677806943078;
+        Thu, 02 Mar 2023 17:29:03 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m10-20020a6b7c0a000000b007456ab7c670sm293056iok.41.2023.03.02.17.29.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 17:29:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 2 Mar 2023 17:29:00 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.19 0/9] 4.19.275-rc1 review
+Message-ID: <2ac79950-8503-4e7b-addd-dc1e31abbc5e@roeck-us.net>
+References: <20230301180650.395562988@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301180650.395562988@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the description of @table to @strs in function unpack_trans_table()
-to silence the warnings:
+On Wed, Mar 01, 2023 at 07:07:16PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.275 release.
+> There are 9 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> Anything received after that time might be too late.
+> 
 
-security/apparmor/policy_unpack.c:456: warning: Function parameter or member 'strs' not described in 'unpack_trans_table'
-security/apparmor/policy_unpack.c:456: warning: Excess function parameter 'table' description in 'unpack_trans_table'
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 426 pass: 426 fail: 0
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4332
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- security/apparmor/policy_unpack.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-index cf2ceec40b28..c3f44f1deb07 100644
---- a/security/apparmor/policy_unpack.c
-+++ b/security/apparmor/policy_unpack.c
-@@ -448,7 +448,7 @@ static struct aa_dfa *unpack_dfa(struct aa_ext *e, int flags)
- /**
-  * unpack_trans_table - unpack a profile transition table
-  * @e: serialized data extent information  (NOT NULL)
-- * @table: str table to unpack to (NOT NULL)
-+ * @strs: str table to unpack to (NOT NULL)
-  *
-  * Returns: true if table successfully unpacked or not present
-  */
--- 
-2.20.1.7.g153144c
-
+Guenter
