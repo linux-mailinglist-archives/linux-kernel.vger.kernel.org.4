@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776A46A94D0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E1B6A94D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjCCKFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 05:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
+        id S229816AbjCCKGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 05:06:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjCCKEq (ORCPT
+        with ESMTP id S229661AbjCCKGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 05:04:46 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4753E5D897
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 02:04:32 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id t11so2908014lfr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 02:04:32 -0800 (PST)
+        Fri, 3 Mar 2023 05:06:20 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5F913538
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 02:06:19 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id s11so8067234edy.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 02:06:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=linaro.org; s=google; t=1677837978;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bu1XsCiuemEgXLrsyqbVOjx0c5HoiOQ23/TsjbuCBoM=;
-        b=sh/z6/R4aUSyJKc7WkEfC84gl355wbnXtzv9pgOWC/nInmAGvm9qM8m/hwYke4e6D2
-         OsK6lQbQEETsY02kiiYWajoKO3enetC7iXxWjK+Hk01+yi1h2F/vAedPkclf1woV+485
-         L9WVUwlu+XQPFwuYog2IhQ6v+YX8AdKnRzBjEkvEjjOC9RK7vC1v9H9gtnYhcMWHv1O9
-         YaIs8tnOLJVbv7lrlC72u5aZXh0vXOEP0jmXoVls+sGEYncp1e845U+MPpN20C+1x2Nr
-         qI3O+sppkZJFb3WCz9NThTYEzelmhPYDLhZ9nY4Te0jtxAbNObXAzKBM0OlVnyjkiqbm
-         LlVA==
+        bh=A52iRvnx5c7MGijeXJmmv5mrghysldEPBrnjdkAkJZ4=;
+        b=yr1lGj5AdVK9kPgEvrtJdc3zZz5bDs0BSUoUjg+sHzLPIMJTsPXA3OQ9nUqXxlNLZ+
+         ZmLGPmzovNOCnWNSKxurap8WIvGeWrYRu80UjGAyRj8vm7cBTLTgMBajvllO4gZItrnQ
+         XPfoX8g7C0Hp0ZZQ1dJQUG0uZXCHumzAVxP+yqxR5oWNsrDatY0vYddtrdgUSGV9PdMm
+         4EGZnFcJJ7WNoEGWhA5TE2hgwKollJcggbKcpjnWUHpOs1Mcjtz/9AvkcIE0byxowqAo
+         0LgC7WvNUc9Omqt0Nk9AZ7VOjPQlO2n555IuBNXFRTIvxJ/Z+q6BvNFEojv5DTF9Tz/1
+         P8QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
+        d=1e100.net; s=20210112; t=1677837978;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bu1XsCiuemEgXLrsyqbVOjx0c5HoiOQ23/TsjbuCBoM=;
-        b=UiRm40JC3WYmL+ttA5FGHxu97X2+0TMTamWzlmYKBl+yUqq8spFAT1b7HezIQK/BM8
-         KENqB059uMxyM5BJlpqTprOFGZW0bqyRjpnLNgPnUhSXvIFgLepYUls1JnVeyEWyKhFE
-         8xuAEYzJ+C86D64WYdENDRLyAEf38C8RWUrNFkTwAP2mNInvC/CkaIqVucoBJxEjpWEH
-         d9H12ngCNVyN6aL9NE2/OdqkraU87xI0LBV/3RnhAxgEsCTyuF+3qO40nhcvdGMRnrGG
-         Su9KXk3ZbNvutNZ1Um0yhFzAZK8AVuzfN2DcTDCaWQgq8KcPSwCn/fUtgOxipKkbRGc5
-         7lrA==
-X-Gm-Message-State: AO0yUKU8zG05PkYt8hqdPwRR/F3M2/Nm9QvMqPNukrG3khvc/faQbN16
-        EJmwY0AwjhpI68KZ2Yu7NWY27A==
-X-Google-Smtp-Source: AK7set9P64Lzkb6Z0OzuupIyugVRsWfQPf/es/+T2UMX0/iSa+2NFSVoLhg7hou7R53lJFPqZXXp0w==
-X-Received: by 2002:a19:f610:0:b0:4dd:abb6:8699 with SMTP id x16-20020a19f610000000b004ddabb68699mr388316lfe.40.1677837870086;
-        Fri, 03 Mar 2023 02:04:30 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id b9-20020ac25629000000b004dc4c5149dasm324457lff.301.2023.03.03.02.04.29
+        bh=A52iRvnx5c7MGijeXJmmv5mrghysldEPBrnjdkAkJZ4=;
+        b=NDN9aGoz4BB39eUWKYiLAiFYNC16Ksjfvj/FSmWerR2bMp1tmJtsGi75RIEd1UZNPv
+         ErNfK+2a6p/1lwjkr0F+fe+pgw7H9n19xG9aafoHyraAUygxvTe2ZfMNV5XGE1v8LhcJ
+         f1BtyKRaAtrY5FLitFqf969+gPzO9t6Z8vGTmmyhZaClqWo/nFvOWVGIQ5nXHc6DvbD6
+         ydHcn3d5d5OY87YHQyPfMsv8KjawS6bq9riQD66ls4hJfxs83hGUwpaXFuPH3s6opdH4
+         SEQxaIIh9rwdZjCLs0nB2pUOoV9c6Qk8ypddtTYnk72Vs8C9+r/fkVQ8ky9nPZMg4pl0
+         oKwg==
+X-Gm-Message-State: AO0yUKUKtmx0UBJ4yobRy9isfS4g0tajcSOgqqvLaPRyiWGYKZJG55j+
+        qF56oZVeZA/MO6uwLrnxKr8GBQ==
+X-Google-Smtp-Source: AK7set+ehJpZq1NePXVYHcpcgCL/tQBG+1grBrCeNQPJL4QzQpW6BkSTT9hiFKaiWt2LgNJT6dtWTA==
+X-Received: by 2002:aa7:c392:0:b0:4ac:d2b4:5e37 with SMTP id k18-20020aa7c392000000b004acd2b45e37mr1173029edq.39.1677837977750;
+        Fri, 03 Mar 2023 02:06:17 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id v5-20020a50d085000000b004af5968cb3bsm969650edd.17.2023.03.03.02.06.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 02:04:29 -0800 (PST)
-Message-ID: <9a14e543-98b3-8df5-46f6-b890b4d3baaa@linaro.org>
-Date:   Fri, 3 Mar 2023 12:04:28 +0200
+        Fri, 03 Mar 2023 02:06:17 -0800 (PST)
+Message-ID: <f175dcae-2729-2bac-d2e8-088537354160@linaro.org>
+Date:   Fri, 3 Mar 2023 11:06:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v9 13/15] drm/msm: Add wait-boost support
-Content-Language: en-GB
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230302235356.3148279-1-robdclark@gmail.com>
- <20230302235356.3148279-14-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230302235356.3148279-14-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 08/16] PCI: samsung: Rename exynos_pcie to samsung_pcie
+Content-Language: en-US
+To:     Pankaj Dubey <pankaj.dubey@samsung.com>,
+        'Shradha Todi' <shradha.t@samsung.com>, lpieralisi@kernel.org,
+        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
+        jingoohan1@gmail.com, Sergey.Semin@baikalelectronics.ru,
+        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, tglx@linutronix.de,
+        m.szyprowski@samsung.com, jh80.chung@samsung.co
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230214121333.1837-1-shradha.t@samsung.com>
+ <CGME20230214121436epcas5p1641de02220bea5edb23bc875b6311270@epcas5p1.samsung.com>
+ <20230214121333.1837-9-shradha.t@samsung.com>
+ <a4bfad9d-b9df-28a5-6bee-5cbbca4dd23f@linaro.org>
+ <146301d94d03$002ba040$0082e0c0$@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <146301d94d03$002ba040$0082e0c0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -88,21 +85,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2023 01:53, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+On 02/03/2023 13:32, Pankaj Dubey wrote:
 > 
-> Add a way for various userspace waits to signal urgency.
 > 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   drivers/gpu/drm/msm/msm_drv.c | 12 ++++++++----
->   drivers/gpu/drm/msm/msm_gem.c |  5 +++++
->   include/uapi/drm/msm_drm.h    | 14 ++++++++++++--
->   3 files changed, 25 insertions(+), 6 deletions(-)
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Thursday, February 16, 2023 4:37 PM
+>> To: Shradha Todi <shradha.t@samsung.com>; lpieralisi@kernel.org;
+>> kw@linux.com; robh@kernel.org; bhelgaas@google.com;
+>> krzysztof.kozlowski+dt@linaro.org; alim.akhtar@samsung.com;
+>> jingoohan1@gmail.com; Sergey.Semin@baikalelectronics.ru;
+>> lukas.bulwahn@gmail.com; hongxing.zhu@nxp.com; tglx@linutronix.de;
+>> m.szyprowski@samsung.com; jh80.chung@samsung.co;
+>> pankaj.dubey@samsung.com
+>> Cc: linux-pci@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+>> kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Subject: Re: [PATCH 08/16] PCI: samsung: Rename exynos_pcie to
+>> samsung_pcie
+>>
+>> On 14/02/2023 13:13, Shradha Todi wrote:
+>>> The platform specific structure being used is named exynos_pcie.
+>>> Changing it to samsung_pcie for making it generic.
+>>>
+>>> Suggested-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+>>> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
+>>> ---
+>>>  drivers/pci/controller/dwc/pci-samsung.c | 190
+>>> +++++++++++------------
+>>>  1 file changed, 95 insertions(+), 95 deletions(-)
+>>>
+>>> diff --git a/drivers/pci/controller/dwc/pci-samsung.c
+>>> b/drivers/pci/controller/dwc/pci-samsung.c
+>>> index d5adf1017a05..be0177fcd763 100644
+>>> --- a/drivers/pci/controller/dwc/pci-samsung.c
+>>> +++ b/drivers/pci/controller/dwc/pci-samsung.c
+>>> @@ -23,7 +23,7 @@
+>>>
+>>>  #include "pcie-designware.h"
+>>>
+>>> -#define to_exynos_pcie(x)	dev_get_drvdata((x)->dev)
+>>> +#define to_samsung_pcie(x)	dev_get_drvdata((x)->dev)
+>>>
+>>>  /* PCIe APPL registers */
+>>>  #define EXYNOS_PCIE_IRQ_PULSE			0x000
+>>> @@ -51,7 +51,7 @@
+>>>  #define EXYNOS_PCIE_APPL_SLV_ARMISC		0x120
+>>>  #define EXYNOS_PCIE_APPL_SLV_DBI_ENABLE	BIT(21)
+>>>
+>>> -struct exynos_pcie {
+>>> +struct samsung_pcie {
+>>
+>> No, I don't see benefit of this at all. How we call stuff inside driver is not related
+>> whether this is for Tesla or Exynos. We could even call it "pony". :) Thus
+>> renamings just to support new variant of Samsung device is not a good reason.
+>>
+> Whole intention of this whole series was to make exynos-pcie driver to support for all Samsung manufactured SoCs be it Exynos series or custom ASIC such as fsd, artpect-v8. 
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+But the patches does not do it, at least mostly. It only renames which
+does not bring any support... what's more, such renames without actual
+context - support for the new devices - is a bit pointless.
 
--- 
-With best wishes
-Dmitry
+> 
+> While doing so, we feel for better readability and conveying better names for files, structs, internal APIs will help developers for understanding and reusing it. For example we know that clock initialization will remain common (thanks for bulk_clk_xxx APIs) so we kept APIs for handling clocks starting with samsung_clk_xxxx, but if we have to implement two variant of APIs, or struct targeting different platforms it would be good if they have platform specific prefixes. This will help in grep or future code maintenance.
+
+Without context it's impossible to judge whether this makes any sense.
+
+Best regards,
+Krzysztof
 
