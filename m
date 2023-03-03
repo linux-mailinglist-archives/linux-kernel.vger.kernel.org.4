@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B946AA4A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13A06AA4B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjCCWkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 17:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        id S232128AbjCCWn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 17:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbjCCWjk (ORCPT
+        with ESMTP id S231799AbjCCWn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 17:39:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8924F16892;
-        Fri,  3 Mar 2023 14:38:36 -0800 (PST)
+        Fri, 3 Mar 2023 17:43:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2E7D33C;
+        Fri,  3 Mar 2023 14:42:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C8C361934;
-        Fri,  3 Mar 2023 22:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB8BC433EF;
-        Fri,  3 Mar 2023 22:37:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4446FB81928;
+        Fri,  3 Mar 2023 22:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4ADEC433D2;
+        Fri,  3 Mar 2023 22:41:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677883059;
-        bh=vPJ6IgeN1STHLi8nzv50PyN7PRUVaqLg8F1OkcFyxpQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=FvFt5jeEhHk0nQ5AXI/iNsJjMj9Ju3ETv7ZJ6SXRgMsMXmUDCSboZ8D7uc2irNrx8
-         VZjL4sAV9RsSR26aLwrmhL5yBJssETEyVZthJ/PTpV/Z5vRd00qxaxoyou7v/2EHMT
-         8CY87qGocfzo+VOq4heEiSETJR8xMjjbugiA0l/0nXGweAWWF9tSAIhtlHyYoSiNtq
-         llwCpbMhNQClhhbDGu8fBY4OV+SwlJuDxznAhoj2MnjdsjM93Wy2VewhOQpvxiIZBR
-         QQQs45L40qVogQdqkmY0NGYIV7foffU7PSvsuFGxmSYcnXAzpht+6TNcMmEVUda5QF
-         Dr9mdzsaBJtdA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 462805C0278; Fri,  3 Mar 2023 14:37:39 -0800 (PST)
-Date:   Fri, 3 Mar 2023 14:37:39 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        jstultz@google.com, edumazet@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] softirq: avoid spurious stalls due to need_resched()
-Message-ID: <20230303223739.GC1301832@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221222221244.1290833-1-kuba@kernel.org>
- <20221222221244.1290833-3-kuba@kernel.org>
- <87r0u6j721.ffs@tglx>
- <20230303133143.7b35433f@kernel.org>
+        s=k20201202; t=1677883287;
+        bh=ddB2tfpY7d7Vws0DiDOusuH4nDz5o7Zpo6VvcYiudRY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YZ6bBjWravOAs+mrgz5lGYEuxK/QhHX5ADhYZ+ylYmcn693HeRcrecWp79MJsQU8b
+         O4z85oS0DSXDP9/EOqx+MgetTc5U6/155AzRNg2BmpUQoIhHAyNTw9NxTqvxDb2A4l
+         vAGjTbEJ4bC4AxGGYSnglXP+jeKuWFw1gdVWXdIj7JGQiWYGahv+InpoO6lwBY12Pk
+         BBJNZ1zMTV7QCaxpdAvLHl6aKj02g3EjELXs8f+AZ5uWoP92bQkN7fCclrJ6lfJdMD
+         HFV3pWSCLr8Oyu3CqULOtbiKRjGcdR721kW1m2m8cELQrH/hbKbOnulkqvUUusE2iL
+         YOgtIiVwMlT8A==
+Received: by mail-lf1-f49.google.com with SMTP id d36so2343774lfv.8;
+        Fri, 03 Mar 2023 14:41:27 -0800 (PST)
+X-Gm-Message-State: AO0yUKWoLRbKYD2Yluz49D2nDJNw+YyB1sD44BHDO1QyarWZRJCCKpDb
+        bn6k5rqihGXPR5WtMdLaICDAAaCStzzCMKZPOPM=
+X-Google-Smtp-Source: AK7set9+8r88VEQ7/2q9Miz+CPEi/sAQJ8m2vNWn4VJYw+hYUvC0spLA41QyTJysmbtrvM3l5sm/trqaDYHW1mT3BZo=
+X-Received: by 2002:ac2:532c:0:b0:4dd:a058:f08f with SMTP id
+ f12-20020ac2532c000000b004dda058f08fmr1114274lfh.3.1677883285860; Fri, 03 Mar
+ 2023 14:41:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303133143.7b35433f@kernel.org>
+References: <a13cd3b5-cc41-bf2f-c8ac-e031ad0d5dd7@leemhuis.info>
+In-Reply-To: <a13cd3b5-cc41-bf2f-c8ac-e031ad0d5dd7@leemhuis.info>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 3 Mar 2023 14:41:13 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7ZWthh0PZt71hQh1_51C0yMSpOqWYJKc_+VzzTmW_r5A@mail.gmail.com>
+Message-ID: <CAPhsuW7ZWthh0PZt71hQh1_51C0yMSpOqWYJKc_+VzzTmW_r5A@mail.gmail.com>
+Subject: Re: [regression] Bug 217074 - upgrading to kernel 6.1.12 from 5.15.x
+ can no longer assemble software raid0
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Jes.Sorensen@gmail.com
+Cc:     linux-raid <linux-raid@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nikolay Kichukov <hijacker@oldum.net>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,150 +64,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 01:31:43PM -0800, Jakub Kicinski wrote:
-> On Fri, 03 Mar 2023 14:30:46 +0100 Thomas Gleixner wrote:
-> > > -		if (time_before(jiffies, end) && !need_resched() &&
-> > > -		    --max_restart)
-> > > +		unsigned long limit;
-> > > +
-> > > +		if (time_is_before_eq_jiffies(end) || !--max_restart)
-> > > +			limit = SOFTIRQ_OVERLOAD_TIME;
-> > > +		else if (need_resched())
-> > > +			limit = SOFTIRQ_DEFER_TIME;
-> > > +		else
-> > >  			goto restart;
-> > >  
-> > > +		__this_cpu_write(overload_limit, jiffies + limit);  
-> > 
-> > The logic of all this is non-obvious and I had to reread it 5 times to
-> > conclude that it is matching the intent. Please add comments.
-> > 
-> > While I'm not a big fan of heuristical duct tape, this looks harmless
-> > enough to not end up in an endless stream of tweaking. Famous last
-> > words...
-> 
-> Would it all be more readable if I named the "overload_limit"
-> "overloaded_until" instead? Naming..
-> I'll add comments, too.
-> 
-> > But without the sched_clock() changes the actual defer time depends on
-> > HZ and the point in time where limit is set. That means it ranges from 0
-> > to 1/HZ, i.e. the 2ms defer time ends up with close to 10ms on HZ=100 in
-> > the worst case, which perhaps explains the 8ms+ stalls you are still
-> > observing. Can you test with that sched_clock change applied, i.e. the
-> > first two commits from
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/softirq
-> > 
-> > 59be25c466d9 ("softirq: Use sched_clock() based timeout")
-> > bd5a5bd77009 ("softirq: Rewrite softirq processing loop")
-> 
-> Those will help, but I spent some time digging into the jiffies related
-> warts with kprobes - while annoying they weren't a major source of wake
-> ups. (FWIW the jiffies noise on our workloads is due to cgroup stats
-> disabling IRQs for multiple ms on the timekeeping CPU).
-> 
-> Here are fresh stats on why we wake up ksoftirqd on our Web workload
-> (collected over 100 sec):
-> 
-> Time exceeded:      484
-> Loop max run out:  6525
-> need_resched():   10219
-> (control: 17226 - number of times wakeup_process called for ksirqd)
-> 
-> As you can see need_resched() dominates.
-> 
-> Zooming into the time exceeded - we can count nanoseconds between
-> __do_softirq starting and the check. This is the histogram of actual
-> usecs as seen by BPF (AKA ktime_get_mono_fast_ns() / 1000):
-> 
-> [256, 512)             1 |                                                    |
-> [512, 1K)              0 |                                                    |
-> [1K, 2K)             217 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
-> [2K, 4K)             266 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> 
-> So yes, we can probably save ourselves ~200 wakeup with a better clock
-> but that's just 1.3% of the total wake ups :(
-> 
-> 
-> Now - now about the max loop count. I ORed the pending softirqs every
-> time we get to the end of the loop. Looks like vast majority of the
-> loop counter wake ups are exclusively due to RCU:
-> 
-> @looped[512]: 5516
-> 
-> Where 512 is the ORed pending mask over all iterations
-> 512 == 1 << RCU_SOFTIRQ.
-> 
-> And they usually take less than 100us to consume the 10 iterations.
-> Histogram of usecs consumed when we run out of loop iterations:
-> 
-> [16, 32)               3 |                                                    |
-> [32, 64)            4786 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> [64, 128)            871 |@@@@@@@@@                                           |
-> [128, 256)            34 |                                                    |
-> [256, 512)             9 |                                                    |
-> [512, 1K)            262 |@@                                                  |
-> [1K, 2K)              35 |                                                    |
-> [2K, 4K)               1 |                                                    |
-> 
-> Paul, is this expected? Is RCU not trying too hard to be nice?
++ Jes.
 
-This is from way back in the day, so it is quite possible that better
-tuning and/or better heuristics should be applied.
+It appeared to me that we can assemble the array if we have any of the
+following:
+1. Enable CONFIG_BLOCK_LEGACY_AUTOLOAD;
+2. Have a valid /etc/mdadm.conf;
+3. Update mdadm to handle this case. (I tried some ugly hacks, which worked but
+    weren't clean).
 
-On the other hand, 100 microseconds is a good long time from an
-CONFIG_PREEMPT_RT=y perspective!
+Since we eventually would like to get rid of CONFIG_BLOCK_LEGACY_AUTOLOAD, I
+think we need mdadm to handle this properly. But the logistics might
+be complicated, as
+mdadm are shipped separately.
 
-> # cat /sys/module/rcutree/parameters/blimit
-> 10
-> 
-> Or should we perhaps just raise the loop limit? Breaking after less 
-> than 100usec seems excessive :(
+Jes, what do you think about this? AFAICT, we need to update the logic in
+mdopen.c:create_mddev().
 
-But note that RCU also has rcutree.rcu_divisor, which defaults to 7.
-And an rcutree.rcu_resched_ns, which defaults to three milliseconds
-(3,000,000 nanoseconds).  This means that RCU will do:
+Thanks,
+Song
 
-o	All the callbacks if there are less than ten.
 
-o	Ten callbacks or 1/128th of them, whichever is larger.
-
-o	Unless the larger of them is more than 100 callbacks, in which
-	case there is an additional limit of three milliseconds worth
-	of them.
-
-Except that if a given CPU ends up with more than 10,000 callbacks
-(rcutree.qhimark), that CPU's blimit is set to 10,000.
-
-So there is much opportunity to tune the existing heuristics and also
-much opportunity to tweak the heuristics themselves.
-
-But let's see a good use case before tweaking, please.  ;-)
-
-							Thanx, Paul
-
-> > whether that makes a difference? Those two can be applied with some
-> > minor polishing. The rest of that series is broken by f10020c97f4c
-> > ("softirq: Allow early break").
-> > 
-> > There is another issue with this overload limit. Assume max_restart or
-> > timeout triggered and limit was set to now + 100ms. ksoftirqd runs and
-> > gets the issue resolved after 10ms.
-> > 
-> > So for the remaining 90ms any invocation of raise_softirq() outside of
-> > (soft)interrupt context, which wakes ksoftirqd again, prevents
-> > processing on return from interrupt until ksoftirqd gets on the CPU and
-> > goes back to sleep, because task_is_running() == true and the stale
-> > limit is not after jiffies.
-> > 
-> > Probably not a big issue, but someone will notice on some weird workload
-> > sooner than later and the tweaking will start nevertheless. :) So maybe
-> > we fix it right away. :)
-> 
-> Hm, Paolo raised this point as well, but the overload time is strictly
-> to stop paying attention to the fact ksoftirqd is running.
-> IOW current kernels behave as if they had overload_limit of infinity.
-> 
-> The current code already prevents processing until ksoftirqd schedules
-> in, after raise_softirq() from a funky context.
+On Thu, Feb 23, 2023 at 8:06 AM Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> Hi, this is your Linux kernel regression tracker.
+>
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217074 :
+>
+> > Hello,
+> > Installing a new kernel 6.1.12 does not allow assembly of raid0 device.
+> >
+> > Going back to previous working kernels: 5.15.65, 5.15.75 assembles the raid0 without any problems.
+> >
+> > Kernel command line parameters:
+> > ... ro kvm_amd.nested=0 kvm_amd.avic=1 kvm_amd.npt=1 raid0.default_layout=2
+> >
+> > mdadm assembly attempt fails with:
+> > 'mdadm: unexpected failure opening /dev/md<NR>'
+> >
+> > Tried with mdadm-4.1 and mdadm-4.2, but as it works with either versions of mdadm, I rule out the mdadm software.
+> >
+> > strace -f output, last few lines:
+> >
+> > mkdir("/run/mdadm", 0755)               = -1 EEXIST (File exists)
+> > openat(AT_FDCWD, "/run/mdadm/map.lock", O_RDWR|O_CREAT|O_TRUNC, 0600) = 3
+> > fcntl(3, F_GETFL)                       = 0x8002 (flags O_RDWR|O_LARGEFILE)
+> > flock(3, LOCK_EX)                       = 0
+> > newfstatat(3, "", {st_mode=S_IFREG|0600, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> > openat(AT_FDCWD, "/run/mdadm/map", O_RDONLY) = 4
+> > fcntl(4, F_GETFL)                       = 0x8000 (flags O_RDONLY|O_LARGEFILE)
+> > newfstatat(4, "", {st_mode=S_IFREG|0600, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> > read(4, "", 4096)                       = 0
+> > close(4)                                = 0
+> > openat(AT_FDCWD, "/run/mdadm/map", O_RDONLY) = 4
+> > fcntl(4, F_GETFL)                       = 0x8000 (flags O_RDONLY|O_LARGEFILE)
+> > newfstatat(4, "", {st_mode=S_IFREG|0600, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> > read(4, "", 4096)                       = 0
+> > close(4)                                = 0
+> > newfstatat(AT_FDCWD, "/dev/.udev", 0x7ffcd8243c90, 0) = -1 ENOENT (No such file or directory)
+> > newfstatat(AT_FDCWD, "/run/udev", {st_mode=S_IFDIR|0755, st_size=160, ...}, 0) = 0
+> > openat(AT_FDCWD, "/proc/mdstat", O_RDONLY) = 4
+> > fcntl(4, F_SETFD, FD_CLOEXEC)           = 0
+> > newfstatat(4, "", {st_mode=S_IFREG|0444, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> > read(4, "Personalities : [raid1] [raid0] "..., 1024) = 56
+> > read(4, "", 1024)                       = 0
+> > close(4)                                = 0
+> > openat(AT_FDCWD, "/sys/block/md127/dev", O_RDONLY) = -1 ENOENT (No such file or directory)
+> > getpid()                                = 18351
+> > mknodat(AT_FDCWD, "/dev/.tmp.md.18351:9:127", S_IFBLK|0600, makedev(0x9, 0x7f)) = 0
+> > openat(AT_FDCWD, "/dev/.tmp.md.18351:9:127", O_RDWR|O_EXCL|O_DIRECT) = -1 ENXIO (No such device or address)
+> > unlink("/dev/.tmp.md.18351:9:127")      = 0
+> > getpid()                                = 18351
+> > mknodat(AT_FDCWD, "/tmp/.tmp.md.18351:9:127", S_IFBLK|0600, makedev(0x9, 0x7f)) = 0
+> > openat(AT_FDCWD, "/tmp/.tmp.md.18351:9:127", O_RDWR|O_EXCL|O_DIRECT) = -1 ENXIO (No such device or address)
+> > unlink("/tmp/.tmp.md.18351:9:127")      = 0
+> > write(2, "mdadm: unexpected failure openin"..., 45mdadm: unexpected failure opening /dev/md127
+> > ) = 45
+> > unlink("/run/mdadm/map.lock")           = 0
+> > close(3)                                = 0
+> > exit_group(1)                           = ?
+> > +++ exited with 1 +++
+> >
+> >
+> > Tried with kernel compiled with either CONFIG_DEVTMPFS_SAFE=y or CONFIG_DEVTMPFS_SAFE=n, fails the same way.
+> >
+> > The raid consists of 4 devices, here is mdstat contents:
+> >
+> > Personalities : [raid0]
+> > md127 : active raid0 sda[0] sdc[2] sdd[3] sdb[1]
+> >       2929769472 blocks super 1.2 512k chunks
+> >
+> > unused devices: <none>
+> >
+> >
+> > Examining the 4 block devices:
+> >
+> > gnusystem /var/log # mdadm --misc -E /dev/sda
+> > /dev/sda:
+> >           Magic : a92b4efc
+> >         Version : 1.2
+> >     Feature Map : 0x0
+> >      Array UUID : bb710ce6:edd5d68d:a0a0a405:edd99547
+> >            Name : gnusystem:md0-store  (local to host gnusystem)
+> >   Creation Time : Wed Sep 29 22:28:09 2021
+> >      Raid Level : raid0
+> >    Raid Devices : 4
+> >
+> >  Avail Dev Size : 976508976 sectors (465.64 GiB 499.97 GB)
+> >     Data Offset : 264192 sectors
+> >    Super Offset : 8 sectors
+> >    Unused Space : before=264112 sectors, after=0 sectors
+> >           State : clean
+> >     Device UUID : 7f226c1c:23632b9d:e3d6c656:74522906
+> >
+> >     Update Time : Wed Sep 29 22:28:09 2021
+> >   Bad Block Log : 512 entries available at offset 8 sectors
+> >        Checksum : 51e99fb5 - correct
+> >          Events : 0
+> >
+> >      Chunk Size : 512K
+> >
+> >    Device Role : Active device 0
+> >    Array State : AAAA ('A' == active, '.' == missing, 'R' == replacing)
+> > gnusystem /var/log # mdadm --misc -E /dev/sdb
+> > /dev/sdb:
+> >           Magic : a92b4efc
+> >         Version : 1.2
+> >     Feature Map : 0x0
+> >      Array UUID : bb710ce6:edd5d68d:a0a0a405:edd99547
+> >            Name : gnusystem:md0-store  (local to host gnusystem)
+> >   Creation Time : Wed Sep 29 22:28:09 2021
+> >      Raid Level : raid0
+> >    Raid Devices : 4
+> >
+> >  Avail Dev Size : 1953260976 sectors (931.39 GiB 1000.07 GB)
+> >     Data Offset : 264192 sectors
+> >    Super Offset : 8 sectors
+> >    Unused Space : before=264112 sectors, after=0 sectors
+> >           State : clean
+> >     Device UUID : ed8795fe:c7e6719a:165db37e:32ec0894
+> >
+> >     Update Time : Wed Sep 29 22:28:09 2021
+> >   Bad Block Log : 512 entries available at offset 8 sectors
+> >        Checksum : 215db63b - correct
+> >          Events : 0
+> >
+> >      Chunk Size : 512K
+> >
+> >    Device Role : Active device 1
+> >    Array State : AAAA ('A' == active, '.' == missing, 'R' == replacing)
+> > gnusystem /var/log # mdadm --misc -E /dev/sdc
+> > /dev/sdc:
+> >           Magic : a92b4efc
+> >         Version : 1.2
+> >     Feature Map : 0x0
+> >      Array UUID : bb710ce6:edd5d68d:a0a0a405:edd99547
+> >            Name : gnusystem:md0-store  (local to host gnusystem)
+> >   Creation Time : Wed Sep 29 22:28:09 2021
+> >      Raid Level : raid0
+> >    Raid Devices : 4
+> >
+> >  Avail Dev Size : 976508976 sectors (465.64 GiB 499.97 GB)
+> >     Data Offset : 264192 sectors
+> >    Super Offset : 8 sectors
+> >    Unused Space : before=264112 sectors, after=0 sectors
+> >           State : clean
+> >     Device UUID : 3713dfff:d2e29aaf:3275039d:08b317bb
+> >
+> >     Update Time : Wed Sep 29 22:28:09 2021
+> >   Bad Block Log : 512 entries available at offset 8 sectors
+> >        Checksum : 42f70f03 - correct
+> >          Events : 0
+> >
+> >      Chunk Size : 512K
+> >
+> >    Device Role : Active device 2
+> >    Array State : AAAA ('A' == active, '.' == missing, 'R' == replacing)
+> > gnusystem /var/log # mdadm --misc -E /dev/sdd
+> > /dev/sdd:
+> >           Magic : a92b4efc
+> >         Version : 1.2
+> >     Feature Map : 0x0
+> >      Array UUID : bb710ce6:edd5d68d:a0a0a405:edd99547
+> >            Name : gnusystem:md0-store  (local to host gnusystem)
+> >   Creation Time : Wed Sep 29 22:28:09 2021
+> >      Raid Level : raid0
+> >    Raid Devices : 4
+> >
+> >  Avail Dev Size : 1953260976 sectors (931.39 GiB 1000.07 GB)
+> >     Data Offset : 264192 sectors
+> >    Super Offset : 8 sectors
+> >    Unused Space : before=264112 sectors, after=0 sectors
+> >           State : clean
+> >     Device UUID : 7da858ae:c0d6ca51:0ecaaaf0:280367cc
+> >
+> >     Update Time : Wed Sep 29 22:28:09 2021
+> >   Bad Block Log : 512 entries available at offset 8 sectors
+> >        Checksum : 32cf4ab4 - correct
+> >          Events : 0
+> >
+> >      Chunk Size : 512K
+> >
+> >    Device Role : Active device 3
+> >    Array State : AAAA ('A' == active, '.' == missing, 'R' == replacing)
+> >
+> > If any more information is needed, let me know.
+>
+> See the ticket for details.
+>
+>
+> [TLDR for the rest of this mail: I'm adding this report to the list of
+> tracked Linux kernel regressions; the text you find below is based on a
+> few templates paragraphs you might have encountered already in similar
+> form.]
+>
+> BTW, let me use this mail to also add the report to the list of tracked
+> regressions to ensure it's doesn't fall through the cracks:
+>
+> #regzbot introduced: v5.15..v6.1.12
+> https://bugzilla.kernel.org/show_bug.cgi?id=217074
+> #regzbot title: block: md: raid0 no longer assembled
+> #regzbot ignore-activity
+>
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
+>
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+> this thread sees some discussion). See page linked in footer for details.
+>
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
