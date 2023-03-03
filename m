@@ -2,142 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C09F6A9BE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BC16A9B0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjCCQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 11:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S231487AbjCCPsU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Mar 2023 10:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjCCQk3 (ORCPT
+        with ESMTP id S230436AbjCCPsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:40:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C893121A19
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:39:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677861584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yac0IUFozu9Hbpn/S3tdeJCwB7OfuW1Z38QiynjRF/c=;
-        b=iVd+3u1qstDZdBad3p1o72uXE6ib9kTd+rSWhm4gDX4V8VA+Jdy4YlTNTH62Pf2Yi4vSTo
-        9YRK40P5hYVg7YzNDmnDXTJcQRUmBbrgiT9qWBWByUg+5Kt5/C2o/FbyKHiUmnWmMFFaaD
-        bqy3HFs/KBof2pOWCARR09vrOMg64L8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-wZQY2SDpPNujwrXpzEKAQg-1; Fri, 03 Mar 2023 11:39:43 -0500
-X-MC-Unique: wZQY2SDpPNujwrXpzEKAQg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16E8A101A521;
-        Fri,  3 Mar 2023 16:39:43 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B62FD40C6EC4;
-        Fri,  3 Mar 2023 16:39:42 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 8DE8B403EA21C; Fri,  3 Mar 2023 12:47:02 -0300 (-03)
-Date:   Fri, 3 Mar 2023 12:47:02 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 02/11] this_cpu_cmpxchg: ARM64: switch
- this_cpu_cmpxchg to locked, add _local function
-Message-ID: <ZAIWds/yAuKAwb4a@tpad>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.683821550@redhat.com>
- <ZAEMuD5pkk/TrK23@x1n>
+        Fri, 3 Mar 2023 10:48:17 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D83ACA0C;
+        Fri,  3 Mar 2023 07:48:14 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pY7cn-0005si-GH; Fri, 03 Mar 2023 16:47:13 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Tim Zimmermann <tim@linux4.de>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Jiang Jian <jiangjian@cdjrlc.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:QUALCOMM TSENS THERMAL DRIVER" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v5 02/18] thermal/core: Use the thermal zone 'devdata' accessor in
+ thermal located drivers
+Date:   Fri, 03 Mar 2023 16:47:15 +0100
+Message-ID: <3152081.5fSG56mABF@diego>
+In-Reply-To: <20230301201446.3713334-3-daniel.lezcano@linaro.org>
+References: <20230301201446.3713334-1-daniel.lezcano@linaro.org>
+ <20230301201446.3713334-3-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAEMuD5pkk/TrK23@x1n>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 03:53:12PM -0500, Peter Xu wrote:
-> On Thu, Feb 09, 2023 at 12:01:52PM -0300, Marcelo Tosatti wrote:
-> > Goal is to have vmstat_shepherd to transfer from
-> > per-CPU counters to global counters remotely. For this, 
-> > an atomic this_cpu_cmpxchg is necessary.
-> > 
-> > Following the kernel convention for cmpxchg/cmpxchg_local,
-> > change ARM's this_cpu_cmpxchg_ helpers to be atomic,
-> > and add this_cpu_cmpxchg_local_ helpers which are not atomic.
+Am Mittwoch, 1. März 2023, 21:14:30 CET schrieb Daniel Lezcano:
+> The thermal zone device structure is exposed to the different drivers
+> and obviously they access the internals while that should be
+> restricted to the core thermal code.
 > 
-> I can follow on the necessity of having the _local version, however two
-> questions below.
+> In order to self-encapsulate the thermal core code, we need to prevent
+> the drivers accessing directly the thermal zone structure and provide
+> accessor functions to deal with.
 > 
-> > 
-> > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> > 
-> > Index: linux-vmstat-remote/arch/arm64/include/asm/percpu.h
-> > ===================================================================
-> > --- linux-vmstat-remote.orig/arch/arm64/include/asm/percpu.h
-> > +++ linux-vmstat-remote/arch/arm64/include/asm/percpu.h
-> > @@ -232,13 +232,23 @@ PERCPU_RET_OP(add, add, ldadd)
-> >  	_pcp_protect_return(xchg_relaxed, pcp, val)
-> >  
-> >  #define this_cpu_cmpxchg_1(pcp, o, n)	\
-> > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +	_pcp_protect_return(cmpxchg, pcp, o, n)
-> >  #define this_cpu_cmpxchg_2(pcp, o, n)	\
-> > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +	_pcp_protect_return(cmpxchg, pcp, o, n)
-> >  #define this_cpu_cmpxchg_4(pcp, o, n)	\
-> > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +	_pcp_protect_return(cmpxchg, pcp, o, n)
-> >  #define this_cpu_cmpxchg_8(pcp, o, n)	\
-> > +	_pcp_protect_return(cmpxchg, pcp, o, n)
+> Use the devdata accessor introduced in the previous patch.
 > 
-> This makes this_cpu_cmpxchg_*() not only non-local, but also (especially
-> for arm64) memory barrier implications since cmpxchg() has a strong memory
-> barrier, while the old this_cpu_cmpxchg*() doesn't have, afaiu.
+> No functional changes intended.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se> #R-Car
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> #MediaTek auxadc and lvts
+> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek lvts
+> Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com> #da9062
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>  #spread
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com> #sun8i_thermal
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com> #Broadcom
+> Reviewed-by: Dhruva Gole <d-gole@ti.com> # K3 bandgap
 
-A later patch changes users of this_cpu_cmpxchg to
-this_cpu_cmpxchg_local, which maintains behaviour.
+Acked-by: Heiko Stuebner <heiko@sntech.de> #rockchip
 
-> Maybe it's not a big deal if the audience of this helper is still limited
-> (e.g. we can add memory barriers if we don't want strict ordering
-> implication), but just to check with you on whether it's intended, and if
-> so whether it may worth some comments.
-> 
-> > +
-> > +#define this_cpu_cmpxchg_local_1(pcp, o, n)	\
-> >  	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +#define this_cpu_cmpxchg_local_2(pcp, o, n)	\
-> > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +#define this_cpu_cmpxchg_local_4(pcp, o, n)	\
-> > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +#define this_cpu_cmpxchg_local_8(pcp, o, n)	\
-> > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> 
-> I think cmpxchg_relaxed()==cmpxchg_local() here for aarch64, however should
-> we still use cmpxchg_local() to pair with this_cpu_cmpxchg_local_*()?
-> 
-> Nothing about your patch along since it was the same before, but I'm
-> wondering whether this is a good time to switchover.
-> 
-> The other thing is would it be good to copy arch-list for each arch patch?
-> Maybe it'll help to extend the audience too.
-> 
-> Thanks,
-> 
-> -- 
-> Peter Xu
-> 
-> 
 
