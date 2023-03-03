@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD73F6A99AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8DB6A99B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjCCOjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:39:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        id S231207AbjCCOlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbjCCOjS (ORCPT
+        with ESMTP id S229740AbjCCOlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:39:18 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777F9199;
-        Fri,  3 Mar 2023 06:39:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677854355; x=1709390355;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=enM9fqPmmUCNjfregnTQTxVlem+fBlV9uM7hLOVjTZk=;
-  b=iGukCSG/XG0XV1D3/JTNKtdG1Ju8ZK/9q51a0ZhBFgHkMNkbLcXj/Jiu
-   QhqckyOkLQlr/8dMMknzU4EaRzrUkIegMkMR89NHRaq5rDD06eIIygVJV
-   w/J73+hqIYFWhBs31DQ9VAJog0ysjMnxnFpbEhilq7rHXIcTVChwDBawD
-   qRPlX3gml7V7Qfv0uBq9f59eP5FQru96erxQEUHCCvegev0ZStQzeUPY/
-   OgsuHkgsAju3yWhNkbNAPV0FmDfZ3GnYGW8M6aOpL7OOYh1lC3xO5uuTx
-   SH/C3PNx3wKM1xvsHZk1iDrDucpl+AFjB6hn66o9Fau5BtUHqvZI7nFOF
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="315454031"
-X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="315454031"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 06:39:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="818491545"
-X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="818491545"
-Received: from ppatil1-mobl3.amr.corp.intel.com (HELO [10.252.140.187]) ([10.252.140.187])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 06:39:11 -0800
-Message-ID: <e237d765-3d18-3188-33fa-74b0bef95ac4@intel.com>
-Date:   Fri, 3 Mar 2023 06:39:11 -0800
+        Fri, 3 Mar 2023 09:41:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62966392BD
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:41:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677854463;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=npG840B2CWbytow6GiT2dpSNf/ra003xD6Hbov44E5k=;
+        b=csmqfc+t96P1cLqPxeUmEdpKkwViBQl5yUamKnFKJeaoTOkKGfv8rkeg/ZrdTO1BA8tTyJ
+        ejeYnxNu2ApiUaHFZYHW57Yc9trJ4sIsQKEXMOd9dfnFT4COkBelJC6tHzx0igRhuWEvYa
+        tteapInI1ThfNDrgHuSa73qKvxAUswE=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-YT8nqFh1MayRvjA25PaLuQ-1; Fri, 03 Mar 2023 09:41:00 -0500
+X-MC-Unique: YT8nqFh1MayRvjA25PaLuQ-1
+Received: by mail-yb1-f197.google.com with SMTP id 23-20020a250b17000000b00a1f7de39bf5so2546384ybl.19
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:40:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677854459;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=npG840B2CWbytow6GiT2dpSNf/ra003xD6Hbov44E5k=;
+        b=nV/OyVOIODu6DTUs4J0OjKb3snh6S1/a6x26lYlE1DkIuyhEd2L01PRL2Q3vSLOVbg
+         epyy9Nf5nvV9L37sdgfBVRD0iBnsaIDxbRiu6M28MKvLj2krA0fYpr/0a43n7GnWOlfE
+         97UycjfpnB8UcEIfpRuwrQFLNCb27LMuEgtGsW69kONq8FeXlZ2ikqH0YL9tLNS10TmV
+         1VEiGzTP089LITaEwb/gVPceoOBDHGxx2VXtVa9Amvy35xl1fMpxIj57xA8v9DB36czr
+         qcCBi5cRFScltTqoe+mKKHY34gO2TXA1LGvdFmbM9HkpDUXSW75j55MYHSQsHvaiXKGE
+         VDpg==
+X-Gm-Message-State: AO0yUKUJaIso5Ung7Swv0qq6mwyRwnkQ96392DBLgSJ8bRVCjbF0KKU5
+        Q4q4JMW2tY2VxS3XCDVqxcedegULu28VbeeMsi2ihR2oTl4rS1W3nPVssYfKOChphq8hMeUjG5o
+        9z+36ObNfEHioOrT8+m6mM6q4fy3mNUQJyK3kF7geCn6Ev3zu7yc=
+X-Received: by 2002:a81:ac21:0:b0:534:2d49:7912 with SMTP id k33-20020a81ac21000000b005342d497912mr1082724ywh.6.1677854459086;
+        Fri, 03 Mar 2023 06:40:59 -0800 (PST)
+X-Google-Smtp-Source: AK7set/3HdlAnj8H7lBeFLCOfIZvwPna5/7sZl5yd4f2J0klMCuKHZHk13uLuPEHUw5dpUvtCyDYBFF+POUh2WBPcU4=
+X-Received: by 2002:a81:ac21:0:b0:534:2d49:7912 with SMTP id
+ k33-20020a81ac21000000b005342d497912mr1082713ywh.6.1677854458709; Fri, 03 Mar
+ 2023 06:40:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 19/41] x86/mm: Check shadow stack page fault errors
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-20-rick.p.edgecombe@intel.com>
- <ZAH9dhFGtbR5J8j+@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <ZAH9dhFGtbR5J8j+@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230302113421.174582-1-sgarzare@redhat.com> <20230302113421.174582-6-sgarzare@redhat.com>
+In-Reply-To: <20230302113421.174582-6-sgarzare@redhat.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Fri, 3 Mar 2023 15:40:22 +0100
+Message-ID: <CAJaqyWd+_wEAtfUhVfgAPLvr_3dm5pQghpdFhys5Maniwkhv1g@mail.gmail.com>
+Subject: Re: [PATCH v2 5/8] vdpa_sim: make devices agnostic for work management
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,35 +78,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/23 06:00, Borislav Petkov wrote:
-> On Mon, Feb 27, 2023 at 02:29:35PM -0800, Rick Edgecombe wrote:
->> @@ -1310,6 +1324,23 @@ void do_user_addr_fault(struct pt_regs *regs,
->>  
->>  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
->>  
->> +	/*
->> +	 * For conventionally writable pages, a read can be serviced with a
->> +	 * read only PTE. But for shadow stack, there isn't a concept of
->> +	 * read-only shadow stack memory. If it a PTE has the shadow stack
-> s/it //
-> 
->> +	 * permission, it can be modified via CALL and RET instructions. So
->> +	 * core MM needs to fault in a writable PTE and do things it already
->> +	 * does for write faults.
->> +	 *
->> +	 * Shadow stack accesses (read or write) need to be serviced with
->> +	 * shadow stack permission memory, which always include write
->> +	 * permissions. So in the case of a shadow stack read access, treat it
->> +	 * as a WRITE fault. This will make sure that MM will prepare
->> +	 * everything (e.g., break COW) such that maybe_mkwrite() can create a
->> +	 * proper shadow stack PTE.
+On Thu, Mar 2, 2023 at 12:35 PM Stefano Garzarella <sgarzare@redhat.com> wr=
+ote:
+>
+> Let's move work management inside the vdpa_sim core.
+> This way we can easily change how we manage the works, without
+> having to change the devices each time.
+>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 
-I ended up just chopping that top paragraph out and rewording it a bit.  I think this still expresses the intent in a lot less space:
+Acked-by: Eugenio P=C3=A9rez Martin <eperezma@redhat.com>
 
-        /*
-         * Read-only permissions can not be expressed in shadow stack PTEs.
-         * Treat all shadow stack accesses as WRITE faults. This ensures
-         * that the MM will prepare everything (e.g., break COW) such that
-         * maybe_mkwrite() can create a proper shadow stack PTE.
-         */
+> ---
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  3 ++-
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 17 +++++++++++++++--
+>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  6 ++----
+>  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  6 ++----
+>  4 files changed, 21 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.h
+> index 144858636c10..acee20faaf6a 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> @@ -45,7 +45,7 @@ struct vdpasim_dev_attr {
+>         u32 ngroups;
+>         u32 nas;
+>
+> -       work_func_t work_fn;
+> +       void (*work_fn)(struct vdpasim *vdpasim);
+>         void (*get_config)(struct vdpasim *vdpasim, void *config);
+>         void (*set_config)(struct vdpasim *vdpasim, const void *config);
+>         int (*get_stats)(struct vdpasim *vdpasim, u16 idx,
+> @@ -78,6 +78,7 @@ struct vdpasim {
+>
+>  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
+>                                const struct vdpa_dev_set_config *config);
+> +void vdpasim_schedule_work(struct vdpasim *vdpasim);
+>
+>  /* TODO: cross-endian support */
+>  static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.c
+> index 481eb156658b..a6ee830efc38 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -116,6 +116,13 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim=
+)
+>  static const struct vdpa_config_ops vdpasim_config_ops;
+>  static const struct vdpa_config_ops vdpasim_batch_config_ops;
+>
+> +static void vdpasim_work_fn(struct work_struct *work)
+> +{
+> +       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
+rk);
+> +
+> +       vdpasim->dev_attr.work_fn(vdpasim);
+> +}
+> +
+>  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+>                                const struct vdpa_dev_set_config *config)
+>  {
+> @@ -152,7 +159,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_att=
+r *dev_attr,
+>
+>         vdpasim =3D vdpa_to_sim(vdpa);
+>         vdpasim->dev_attr =3D *dev_attr;
+> -       INIT_WORK(&vdpasim->work, dev_attr->work_fn);
+> +       INIT_WORK(&vdpasim->work, vdpasim_work_fn);
+>         spin_lock_init(&vdpasim->lock);
+>         spin_lock_init(&vdpasim->iommu_lock);
+>
+> @@ -203,6 +210,12 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_at=
+tr *dev_attr,
+>  }
+>  EXPORT_SYMBOL_GPL(vdpasim_create);
+>
+> +void vdpasim_schedule_work(struct vdpasim *vdpasim)
+> +{
+> +       schedule_work(&vdpasim->work);
+> +}
+> +EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
+> +
+>  static int vdpasim_set_vq_address(struct vdpa_device *vdpa, u16 idx,
+>                                   u64 desc_area, u64 driver_area,
+>                                   u64 device_area)
+> @@ -237,7 +250,7 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa,=
+ u16 idx)
+>         }
+>
+>         if (vq->ready)
+> -               schedule_work(&vdpasim->work);
+> +               vdpasim_schedule_work(vdpasim);
+>  }
+>
+>  static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim=
+/vdpa_sim_blk.c
+> index 5117959bed8a..eb4897c8541e 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> @@ -11,7 +11,6 @@
+>  #include <linux/module.h>
+>  #include <linux/device.h>
+>  #include <linux/kernel.h>
+> -#include <linux/sched.h>
+>  #include <linux/blkdev.h>
+>  #include <linux/vringh.h>
+>  #include <linux/vdpa.h>
+> @@ -286,9 +285,8 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vd=
+pasim,
+>         return handled;
+>  }
+>
+> -static void vdpasim_blk_work(struct work_struct *work)
+> +static void vdpasim_blk_work(struct vdpasim *vdpasim)
+>  {
+> -       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
+rk);
+>         bool reschedule =3D false;
+>         int i;
+>
+> @@ -326,7 +324,7 @@ static void vdpasim_blk_work(struct work_struct *work=
+)
+>         spin_unlock(&vdpasim->lock);
+>
+>         if (reschedule)
+> -               schedule_work(&vdpasim->work);
+> +               vdpasim_schedule_work(vdpasim);
+>  }
+>
+>  static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config=
+)
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim=
+/vdpa_sim_net.c
+> index 862f405362de..e61a9ecbfafe 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> @@ -11,7 +11,6 @@
+>  #include <linux/module.h>
+>  #include <linux/device.h>
+>  #include <linux/kernel.h>
+> -#include <linux/sched.h>
+>  #include <linux/etherdevice.h>
+>  #include <linux/vringh.h>
+>  #include <linux/vdpa.h>
+> @@ -192,9 +191,8 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasi=
+m)
+>         u64_stats_update_end(&net->cq_stats.syncp);
+>  }
+>
+> -static void vdpasim_net_work(struct work_struct *work)
+> +static void vdpasim_net_work(struct vdpasim *vdpasim)
+>  {
+> -       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
+rk);
+>         struct vdpasim_virtqueue *txq =3D &vdpasim->vqs[1];
+>         struct vdpasim_virtqueue *rxq =3D &vdpasim->vqs[0];
+>         struct vdpasim_net *net =3D sim_to_net(vdpasim);
+> @@ -260,7 +258,7 @@ static void vdpasim_net_work(struct work_struct *work=
+)
+>                 vdpasim_net_complete(rxq, write);
+>
+>                 if (tx_pkts > 4) {
+> -                       schedule_work(&vdpasim->work);
+> +                       vdpasim_schedule_work(vdpasim);
+>                         goto out;
+>                 }
+>         }
+> --
+> 2.39.2
+>
 
