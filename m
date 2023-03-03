@@ -2,74 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7166AA0D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832956AA0DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbjCCVJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S231821AbjCCVKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjCCVJW (ORCPT
+        with ESMTP id S231835AbjCCVJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:09:22 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1759860D70;
-        Fri,  3 Mar 2023 13:09:19 -0800 (PST)
-Received: (Authenticated sender: dodji@seketeli.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 592651BF206;
-        Fri,  3 Mar 2023 21:09:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seketeli.org;
-        s=gm1; t=1677877758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cv66zFFxlrbcWbvrnbTnad6WW7AbCdUiUsmIER3GGNo=;
-        b=VJ3mH6zdWteY8M4XC4ovydcmbhNtEm1vA24Iv/QkNqJXO8RZpPW1T7U0bgq0raGYksTqtt
-        RLPkBW5UVyKF3rL2oSwz0sy91JQzNeAugxrnzxtmaBo6wElmPyvJhp6IgSNe284tAEYuID
-        p6r4YlwLtc8wfKWWJrGt46K9Od8MJJCQNL5K7eFmbaA4gdt/gJcSCHU7mLqk8NDhpiQFI1
-        viL6RZSpzLJi2mhYHneDXdI/M439SUELnvFcSwddbX6WinC0J4gnxPltN98lnelSo71nV3
-        1A8IAeBQ2AyVH2MPJ5zsJhbpkM2JTsR+rUOwWyV8q8uoTsxvj06aAn5K977Pvg==
-Received: by localhost (Postfix, from userid 1000)
-        id 4FFA9B4E34; Fri,  3 Mar 2023 22:09:11 +0100 (CET)
-From:   Dodji Seketeli <dodji@seketeli.org>
-To:     John Moon via Libabigail <libabigail@sourceware.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        John Moon <quic_johmoo@quicinc.com>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        <kernel-team@android.com>, Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-Subject: Re: [PATCH v2 1/2] check-uapi: Introduce check-uapi.sh
-Organization: Me, myself and I
-References: <20230301075402.4578-1-quic_johmoo@quicinc.com>
-        <20230301075402.4578-2-quic_johmoo@quicinc.com>
-X-Operating-System: CentOS Stream release 9
-X-URL:  http://www.seketeli.net/~dodji
-Date:   Fri, 03 Mar 2023 22:09:11 +0100
-In-Reply-To: <20230301075402.4578-2-quic_johmoo@quicinc.com> (John Moon via
-        Libabigail's message of "Tue, 28 Feb 2023 23:54:01 -0800")
-Message-ID: <87zg8t5yq0.fsf@seketeli.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Fri, 3 Mar 2023 16:09:51 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2311B62D9B;
+        Fri,  3 Mar 2023 13:09:45 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id y184so2789122oiy.8;
+        Fri, 03 Mar 2023 13:09:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677877784;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gj3D0bfvOLWOuIuZ/qODED5yK5G7S3fF6CiSL+ecQPo=;
+        b=jusnkVmqUVn8BpkeS3wcTVdmD3nxUKwSxwRd5AINGAUtUNhzB2gTteVtP56gKT2Rla
+         G7zMprADCjK7S2827s53fX/tp3/yI+IfMJ4W/BSYs9xqCBjg7T1l+Umzxfw7aCu/nr8D
+         CiA09CoHTqH18B2Yu9voZ6ESLA+z3pX2Aa4w++TRhvIIihBJeUblCiywjw8UxN43UiSF
+         moHB56uXIfZeZ72aYiBt3r86yhTumXCnJ5a1pHccV60iVOUfiKdqj1YiCOLxWZzag01O
+         TdXNfdCiDwz5tvZHsF421frel03ADCK6bUScrAysNxUyZkMuQrE63iaWUkGHrk0mIICo
+         YOiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677877784;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gj3D0bfvOLWOuIuZ/qODED5yK5G7S3fF6CiSL+ecQPo=;
+        b=VFEwmqFBKn+ySPjccxGiY0dZhhxTu5SFZoZRYLqKiCKyLYW82ZnfbJjTIKaMPREK+D
+         k3So4WtdK2Efvh1/wBzZBSqKS4Cb5Msucs7f1svNnCXpZa5B0/P8KdJCdsUlkLgVbwZu
+         PhVAjD9ArOaPv8ukrthGn2P4kZXqm+njgAOzkx5uhpFCe2dUhP9zp7JIdoNZuieGOyOp
+         /q/iZ8OQczMwjB1CXEP4zlL385IcGZFIiaLtZCiA9lP4Ve4IUszDnuxsLwonNCx0E/GN
+         yoUlo9vNFmOn/e1kEQzYHG3EQLRNRu9qMoyQZ/I/hV2T3Xh80Qmb/Em7Wpwtd1Y9h5wN
+         mcvg==
+X-Gm-Message-State: AO0yUKVFS/m0gNVK6Ntyj1WWatIhPWYBzl9Aik+mESvARGL+kEmFHoCz
+        hFra8QtF5+3fuEiFNjZO8NcfQfYtvF1UJkebSIY=
+X-Google-Smtp-Source: AK7set+lv0o0V2rKWQs7DvncmnsJ+v43LjjTV15LKpUl42YJfJazb3W7NZuB6NmCG0wlS2lnai3p3IKi79M0Ludekfs=
+X-Received: by 2002:a54:4612:0:b0:37f:953b:f235 with SMTP id
+ p18-20020a544612000000b0037f953bf235mr1057917oip.11.1677877784547; Fri, 03
+ Mar 2023 13:09:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Received: by 2002:a05:6802:31f:b0:4c2:d201:fe1f with HTTP; Fri, 3 Mar 2023
+ 13:09:43 -0800 (PST)
+In-Reply-To: <CAHk-=wgz51x2gaiD4=6T3UGZtKOSm3k56iq=h4tqy3wQsN-VTA@mail.gmail.com>
+References: <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
+ <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
+ <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
+ <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
+ <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
+ <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
+ <ZAD21ZEiB2V9Ttto@ZenIV> <6400fedb.170a0220.ece29.04b8@mx.google.com>
+ <ZAEC3LN6oUe6BKSN@ZenIV> <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
+ <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
+ <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
+ <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com>
+ <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
+ <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com> <CAHk-=wgz51x2gaiD4=6T3UGZtKOSm3k56iq=h4tqy3wQsN-VTA@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Fri, 3 Mar 2023 22:09:43 +0100
+Message-ID: <CAGudoHGEOGJtcXFL2LVphNMpe38h3u4XT=PJZbc84Gka_h+tCg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,88 +88,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello John,
-
-John Moon via Libabigail <libabigail@sourceware.org> a =C3=A9crit:
-
-> While the kernel community has been good at maintaining backwards
-> compatibility with kernel UAPIs, it would be helpful to have a tool
-> to check if a commit introduces changes that break backwards
-> compatibility.
+On 3/3/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Fri, Mar 3, 2023 at 12:39=E2=80=AFPM Mateusz Guzik <mjguzik@gmail.com>=
+ wrote:
+>>
+>> I think there is a systemic problem which comes with the kzalloc API
 >
-> To that end, introduce check-uapi.sh: a simple shell script that
-> checks for changes to UAPI headers using libabigail.
+> Well, it's not necessarily the API that is bad, but the implementation.
 >
-> libabigail is "a framework which aims at helping developers and
-> software distributors to spot some ABI-related issues like interface
-> incompatibility in ELF shared libraries by performing a static
-> analysis of the ELF binaries at hand."
+> We could easily make kzalloc() with a constant size just expand to
+> kmalloc+memset, and get the behavior you want.
 >
-> The script uses one of libabigail's tools, "abidiff", to compile the
-> changed header before and after the commit to detect any changes.
+> We already do magical things for "find the right slab bucket" part of
+> kmalloc too for constant sizes. It's changed over the years, but that
+> policy goes back a long long time. See
 >
-> abidiff "compares the ABI of two shared libraries in ELF format. It
-> emits a meaningful report describing the differences between the two
-> ABIs."
 >
-> The script also includes the ability to check the compatibilty of
-> all UAPI headers across commits. This allows developers to inspect
-> the stability of the UAPIs over time.
+> https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?=
+id=3D95203fe78007f9ab3aebb96606473ae18c00a5a8
+>
+> from the BK history tree.
+>
+> Exactly because some things are worth optimizing for when the size is
+> known at compile time.
+>
+> Maybe just extending kzalloc() similarly? Trivial and entirely untested
+> patch:
+>
+>    --- a/include/linux/slab.h
+>    +++ b/include/linux/slab.h
+>    @@ -717,6 +717,12 @@ static inline void *kmem_cache_zalloc(struct
+> kmem_cache *k, gfp_t flags)
+>      */
+>     static inline __alloc_size(1) void *kzalloc(size_t size, gfp_t flags)
+>     {
+>    +    if (__builtin_constant_p(size)) {
+>    +            void *ret =3D kmalloc(size, flags);
+>    +            if (ret)
+>    +                    memset(ret, 0, size);
+>    +            return ret;
+>    +    }
+>         return kmalloc(size, flags | __GFP_ZERO);
+>     }
+>
+> This may well be part of what has changed over the years. People have
+> done a *lot* of pseudo-automated "kmalloc+memset -> kzalloc" code
+> simplification. And in the process we've lost a lot of good
+> optimizations.
 
-Thank you for working on this.
+I was about to write that kzalloc can use automagic treatment. I made
+a change of similar sort years back in FreeBSD
+https://cgit.freebsd.org/src/commit/?id=3D34c538c3560591a3856e85988b0b5eefd=
+de53b0c
 
-The libabigail bits look good to me, for what it's worth.  I just have
-some general considerations to discuss.
+The crux of the comment though was not about kzalloc (another
+brainfart, apologies), but kmem_cache_zalloc -- that one is kind of
+screwed as is.
 
-[...]
+Perhaps it would be unscrewed if calls could be converted to something
+in the lines of kmem_cache_zalloc_ptr(cachep, flags, returnobj);
 
-> +# Perform the A/B compilation and compare output ABI
-> +compare_abi() {
+so this from __alloc_file:
+        struct file *f;
+	int error;
 
-[...]
+	f =3D kmem_cache_zalloc(filp_cachep, GFP_KERNEL);
+        if (unlikely(!f))
+		return ERR_PTR(-ENOMEM);
 
-> +	if "$ABIDIFF" --non-reachable-types "${ref_header}.bin" "${base_header}=
-.bin" > "$log"; then
-> +		printf "No ABI differences detected in %s from %s -> %s\n" "$file" "$r=
-ef" "${base_ref:-dirty tree}"
-> +	else
-> +		# If the only changes were additions (not modifications to existing AP=
-Is), then
-> +		# there's no problem. Ignore these diffs.
-> +		if grep "Unreachable types summary" "$log" | grep -q "0 removed" &&
-> +		   grep "Unreachable types summary" "$log" | grep -q "0 changed"; then
-> +			return 0
+could be:
+	if (unlikely(!kmem_cache_zalloc_ptr(filp_cachep, GFP_KERNEL, f))
+		return ERR_PTR(-ENOMEM);
 
-There is no problem in parsing the output of the tool like this.
-However, the return code of the tool has been designed as a bit field that
-could be analysed to know more about the kind of changes that were
-reported: https://sourceware.org/libabigail/manual/abidiff.html#return-valu=
-es.
+... where the macro rolls with similar treatment to the one you pasted
+for kzalloc. and assigns to f.
 
-Right now, there is no bit assigned to detect new types (or interface)
-addition, but do you think that it would be a helpful new feature to add
-to abidiff for this use case?  We can discuss this in a separate thread
-if you prefer, so that we don't pollute others with this minutiae.
+if this sounds acceptable coccinelle could be used to do a sweep
 
-> +		fi
-> +		{
-> +			printf "!!! ABI differences detected in %s from %s -> %s !!!\n\n" "$f=
-ile" "$ref" "${base_ref:-dirty tree}"
-> +			sed  -e '/summary:/d' -e '/changed type/d' -e '/^$/d' -e 's/^/  /g' "=
-$log"
-
-Here again, if you'd like to have a particular output format emitted by
-the tool, we'd be glad to discuss how to improve the plasticity of the
-tool enough to emit the right output for you.  For instance, we could
-add a new --no-summary that would let the tool display the change
-directly without the summary header that you are strimming out with this
-sed script.
-
-[...]
-
-Thanks again for this tool that I think might be very useful.
-
-Cheers,
+I don't have a good name for it.
 
 --=20
-		Dodji
+Mateusz Guzik <mjguzik gmail.com>
