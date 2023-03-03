@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4716AA0AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1986AA0AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbjCCUhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 15:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S231578AbjCCUjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 15:39:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjCCUhQ (ORCPT
+        with ESMTP id S230512AbjCCUjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 15:37:16 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8900362D93
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:36:54 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id p26so2341361wmc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:36:54 -0800 (PST)
+        Fri, 3 Mar 2023 15:39:14 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C8512043;
+        Fri,  3 Mar 2023 12:39:13 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id bh20so2721062oib.9;
+        Fri, 03 Mar 2023 12:39:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112; t=1677875813;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fgszzA4iLkqp2Zj3jvtUEMi0N57rcS/AEl+wcAq2e+Q=;
-        b=6PPQLr/F52gpwOpytFiKq4e3HnHWfTo+6lE/XaXfcoiBYpu+2xackAesanwLDdiNYb
-         k3nNH8fq+ciAZwt+ScW15K/4PNWoYjeQhEBVqQR1/0U9tGYndtzIkOmknsidfimKzUN3
-         tpCbShpXGDuzPcoJ5XrOICV6GMDN5VCZwPX/oUGOo96oRL8/C+6wSynSMA7vrmXIljzU
-         hl1hDouceCfBV68bLVre8htsng3YSbFplPBU3ZgJS27UrebU84DUHPSQbPgcUcc1V5UO
-         QmwAThpKIoXsRbeJzeJmmiqoVpU3aICrG67juyoPpYH+p9nmfpvxZbg1tlMHJh95FXEE
-         20oQ==
+        d=gmail.com; s=20210112; t=1677875952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NG6EKujrzKyN55ZG7hxXPBM9OaZ+zgs1s5FPu+FTZes=;
+        b=lsqBDPsZuu7gE5EbM8Q+y8jrcDlY/HC/QV2Z2BrEljqejz2M6qHDnp1xPAbthI4ZYe
+         6sFuYReqJu2i23Q8RB0PsHwKq3Z3mIwVyuPxkqSsCy9T03EmNZTiLFRpWJ+Qyv4pGQBh
+         CeC2v8N2fZEAygBtyVB63+7wekUl2hnU4wAk30AULZ79SREwZ7OW98DSs0DG7AmzAZNL
+         s6ovCMC7aA9+O5XoHmtgUy1FNFDQ+XiGicXrJ44W8VKrJXQiQjrILpupQ1q0wZNP5iE1
+         2KjjOnCdunZ5NkiO78fqWOdQzz1d1Ru5qHw6amvCRLaspFa7zVvNjynMO90bUf9N8BLF
+         ps2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677875813;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fgszzA4iLkqp2Zj3jvtUEMi0N57rcS/AEl+wcAq2e+Q=;
-        b=zcHbVYvQM1kmWhNgNRWd9tkves+9+FIpfC9iS8iIkwc95VeLTTagnF+bqHAj2itNsR
-         5qYmcFnCBqraHpFeEQ0MK94a6DzZuxuTyCHATJtlzKBC8rT//2MDFQNEspDdIzLmmBKe
-         vgE1dCPu3sJ0JHpk6h/ePjh1+FWxbS6OkbSREEfHLKN0C3+n8jktNdbAQcXgLePg3MCi
-         1K3geKnHMkRTfHg4U7E5K7XJlBRLEy7sRiMlTvab0mELW9HXRpROZ7Z7Dpja7GqGoigf
-         AsP0VGTc3+cIWCXCnNZ5TmpuZrtKAmpCEcmjh5LVrBnhBs+MvSgdiizG9e+TBlABYWAb
-         Tk/g==
-X-Gm-Message-State: AO0yUKW+6UKI6czUU8Q4VwKKdk1o3BI+8GHW1z+Y3XQ5pXY48xoq+SJA
-        C0Ipr1ppA65g5Fz8pU2oKbtwRA==
-X-Google-Smtp-Source: AK7set/+j/pecXU/MnsEiCtd/7w4Fx2JFrqZG2kc94fTiTXP55VPhYwwVVLlN0hw4j7J9K+T2NnaFQ==
-X-Received: by 2002:a1c:2b47:0:b0:3eb:39e7:3604 with SMTP id r68-20020a1c2b47000000b003eb39e73604mr2966610wmr.5.1677875812937;
-        Fri, 03 Mar 2023 12:36:52 -0800 (PST)
-Received: from airbuntu (host86-168-251-3.range86-168.btcentralplus.com. [86.168.251.3])
-        by smtp.gmail.com with ESMTPSA id a10-20020a5d508a000000b002c54241b4fesm3040694wrt.80.2023.03.03.12.36.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 12:36:50 -0800 (PST)
-Date:   Fri, 3 Mar 2023 20:36:45 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
-        Midas Chien <midaschieh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tony Luck <tony.luck@intel.com>, kernel-team@android.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
-Message-ID: <20230303203645.etfz444pzg4xxi6f@airbuntu>
-References: <CANDhNCo4ruC4pP+iDe49b3e1nAcWtYQj4bx82+oZhyLFYkdFJQ@mail.gmail.com>
- <20230302152103.2618f1b7@gandalf.local.home>
- <20230302163253.541ac3a8@gandalf.local.home>
- <20230302163603.223313ba@gandalf.local.home>
- <20230302165613.2dcc18ca@gandalf.local.home>
- <20230302200136.381468f0@gandalf.local.home>
- <20230303181134.GA1837196@google.com>
- <20230303133702.4d336ee9@gandalf.local.home>
- <CAEXW_YQN=zPtbd6Nr=F-0GqkHQu+ox3eBnzP30=8MxYGYyFv0Q@mail.gmail.com>
- <20230303143822.027ce50b@gandalf.local.home>
+        d=1e100.net; s=20210112; t=1677875952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NG6EKujrzKyN55ZG7hxXPBM9OaZ+zgs1s5FPu+FTZes=;
+        b=y/IGfJtysJrf6sUUaKsAjw2tig8IvITtQzA/dO/4/wJ6dmTdQS1r6de+Xn9ZckmHRX
+         vQn22lprMGjQcKPNH2AJbu0TciGkVx9vwKuZ1bQIg1ZyxTjKLds/g+cQRjlRa7sCamfA
+         ycD1Cnsc+QdVsWGdXuZw8+mtfGMHzzMl847KYvC4Bt4cGbkat7rko9wyySn75EYN4y7y
+         ++61GSjYzj8kP73HYPGSnYgwQPeyfyoxP6nZ8V2JDI+tBViJ/rPW4k+MU0/3pxQXiLCa
+         s/+UBNy9N4lN5BfRvSTBQLel25DUT5oAA5uy9b8+MZz8wACg4fti246ADgiKT+a5VUmT
+         1dRQ==
+X-Gm-Message-State: AO0yUKXfe2bCTq18/Xr44s2P7zzi2LX6TGWV66HrpxC8odq9Ad9fotPv
+        MO65prMyKDbRF+Lt0t7yKmAmXLG8hb7bDJkqGZM=
+X-Google-Smtp-Source: AK7set/mqM3zFV4SCOt6b4PSJMXUFm4gpSadoEGXGfUF3+qxJSFjjOfT1eDZ6LQYAmR+TkScgh4SpaRqJAGq2X6A3TU=
+X-Received: by 2002:a05:6808:2098:b0:383:f981:b1e5 with SMTP id
+ s24-20020a056808209800b00383f981b1e5mr3495245oiw.5.1677875952073; Fri, 03 Mar
+ 2023 12:39:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230303143822.027ce50b@gandalf.local.home>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a05:6802:31f:b0:4c2:d201:fe1f with HTTP; Fri, 3 Mar 2023
+ 12:39:11 -0800 (PST)
+In-Reply-To: <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
+References: <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
+ <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
+ <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
+ <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
+ <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
+ <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
+ <ZAD21ZEiB2V9Ttto@ZenIV> <6400fedb.170a0220.ece29.04b8@mx.google.com>
+ <ZAEC3LN6oUe6BKSN@ZenIV> <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
+ <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
+ <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
+ <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com> <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Fri, 3 Mar 2023 21:39:11 +0100
+Message-ID: <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,108 +86,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/23 14:38, Steven Rostedt wrote:
-> On Fri, 3 Mar 2023 14:25:23 -0500
-> Joel Fernandes <joel@joelfernandes.org> wrote:
-> 
-> > On Fri, Mar 3, 2023 at 1:37 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > >
-> > > On Fri, 3 Mar 2023 18:11:34 +0000
-> > > Joel Fernandes <joel@joelfernandes.org> wrote:
-> > >  
-> > > > In the normal mutex's adaptive spinning, there is no check for if there is a
-> > > > change in waiter AFAICS (ignoring ww mutex stuff for a second).
-> > > >
-> > > > I can see one may want to do that waiter-check, as spinning
-> > > > indefinitely if the lock owner is on the CPU for too long may result in
-> > > > excessing power burn. But normal mutex does not seem to do that.
-> > > >
-> > > > What  makes the rtmutex spin logic different from normal mutex in this
-> > > > scenario, so that rtmutex wants to do that but normal ones dont?  
-> > >
-> > > Well, the point of the patch is that I don't think they should be different
-> > > ;-)  
-> > 
-> > But there's no "waiter change" thing for mutex_spin_on_owner right.
-> > 
-> > Then, should mutex_spin_on_owner() also add a call to
-> > __mutex_waiter_is_first() ?
-> 
-> Ah interesting, I missed the __mutex_waiter_is_first() in the mutex code,
-> where it looks to do basically the same thing as rt_mutex (but slightly
-> different). From looking at this, it appears that mutex() has FIFO fair
-> logic, where the second waiter will sleep.
-> 
-> Would be interesting to see why John sees such a huge difference between
-> normal mutex and rtmutex if they are doing the same thing. One thing is
-> perhaps the priority logic is causing the issue, where this will not
-> improve anything.
+On 3/3/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Fri, Mar 3, 2023 at 11:37=E2=80=AFAM Mateusz Guzik <mjguzik@gmail.com>=
+ wrote:
+>>
+>> I mentioned in the previous e-mail that memset is used a lot even
+>> without the problematic opt and even have shown size distribution of
+>> what's getting passed there.
+>
+> Well, I *have* been pushing Intel to try to fix memcpy and memset for
+> over two decades by now, but with FSRM I haven't actually seen the
+> huge problems any more.
+>
 
-I think that can be a good suspect. If the waiters are RT tasks the root cause
-might be starvation issue due to bad priority setup and moving to FIFO just
-happens to hide it.
+rep *stos* remains crap with FSRM, but I don't have sensible tests
+handy nor the ice lake cpu i tested on at the moment
 
-For same priority RT tasks, we should behave as FIFO too AFAICS.
+> I actually used to have the reverse of your hack for this - I've had
+> various hacks over the year that made memcpy and memset be inlined
+> "rep movs/stos", which (along with inlined spinlocks) is a great way
+> to see the _culprit_ (without having to deal with the call chains -
+> which always get done the wrong way around imnsho).
+>
 
-If there are a mix of RT vs CFS; RT will always win of course.
+that's all hackery which makes sense pre tooling like bpftrace, people
+can do better now (see the second part of the email)
 
-> 
-> I wonder if we add spinning to normal mutex for the other waiters if that
-> would improve things or make them worse?
+I think there is a systemic problem which comes with the kzalloc API, consi=
+der:
+static struct file *__alloc_file(int flags, const struct cred *cred)
+{
+	struct file *f;
+	int error;
 
-I see a potential risk depending on how long the worst case scenario for this
-optimistic spinning.
+	f =3D kmem_cache_zalloc(filp_cachep, GFP_KERNEL);
+	if (unlikely(!f))
+		return ERR_PTR(-ENOMEM);
+        [bunch of the struct gets initialized here]
 
-RT tasks can prevent all lower priority RT and CFS from running.
+the allocation routine does not have any information about the size
+available at compilation time, so has to resort to a memset call at
+runtime. Instead, should this be:
 
-CFS tasks will lose some precious bandwidth from their sched_slice() as this
-will be accounted for them as RUNNING time even if they were effectively
-waiting.
+f =3D kmem_cache_alloc(...);
+memset(f, 0, sizeof(*f));
 
+... the compiler could in principle inititalize stuff as indicated by
+code and emit zerofill for the rest. Interestingly, last I checked
+neither clang nor gcc knew how to do it, they instead resort to a full
+sized memset anyway, which is quite a bummer.
 
-Cheers
+Personally i grew up on dtrace, bpftrace I can barely use and don't
+know how to specifically get the caller, but kstack(2) seems like a
+good enough workaround.
 
---
-Qais Yousef
+as an example here is a one-liner to show crappers which do 0-sized ops:
+bpftrace -e 'kprobe:memset,kprobe:memcpy /arg2 =3D=3D 0/ { @[probe,
+kstack(2)] =3D count(); }'
 
-> 
-> > 
-> > > > Another thought is, I am wondering if all of them spinning indefinitely might
-> > > > be Ok for rtmutex as well, since as you mentioned, preemption is enabled. So
-> > > > adding the if (top_waiter != last_waiter) {...} might be unnecessary? In fact
-> > > > may be even harmful as you are disabling interrupts in the process.  
-> > >
-> > > The last patch only does the interrupt disabling if the top waiter changes.
-> > > Which in practice is seldom.
-> > >
-> > > But, I don't think a non top waiter should spin if the top waiter is not
-> > > running. The top waiter is the one that will get the lock next. If the
-> > > owner releases the lock and gives it to the top waiter, then it has to go
-> > > through the wake up of the top waiter.  
-> > 
-> > Correct me if I'm wrong, but I don't think it will go through
-> > schedule() after spinning, which is what adds the overhead for John.
-> 
-> Only if the lock becomes free.
-> 
-> > 
-> > > I don't see why a task should spin
-> > > to save a wake up if a wake up has to happen anyway.  
-> > 
-> > What about regular mutexes, happens there too or no?
-> 
-> Yes, but in a FIFO order, where in rt_mutex, a second, higher priority task
-> can make the first ones sleep. So maybe it's just the priority logic that
-> is causing the issues.
-> 
-> > 
-> > > > Either way, I think a comment should go on top of the "if (top_waiter !=
-> > > > waiter)" check IMO.  
-> > >
-> > > What type of comment?  
-> > 
-> > Comment explaining why "if (top_waiter != waiter)" is essential :-).
-> 
-> You mean, "Don't spin if the next owner is not on any CPU"?
-> 
-> -- Steve
+one can trace all kinds of degeneracy like that without recompiling
+anything, provided funcs are visible to bpftrace
+
+sample result from the above one-liner while doing 'make clean' in the
+kernel dir:
+@[kprobe:memcpy,
+    memcpy+5
+    realloc_array+78
+]: 1
+@[kprobe:memcpy,
+    memcpy+5
+    push_jmp_history+125
+]: 1
+@[kprobe:memset,
+    memset+5
+    blk_mq_dispatch_rq_list+687
+]: 3
+@[kprobe:memcpy,
+    memcpy+5
+    mix_interrupt_randomness+192
+]: 4
+@[kprobe:memcpy,
+    memcpy+5
+    d_alloc_pseudo+18
+]: 59
+@[kprobe:memcpy,
+    memcpy+5
+    add_device_randomness+111
+]: 241
+@[kprobe:memcpy,
+    memcpy+5
+    add_device_randomness+93
+]: 527
+@[kprobe:memset,
+    memset+5
+    copy_process+2904
+]: 2054
+@[kprobe:memset,
+    memset+5
+    dup_fd+283
+]: 6162
+
+--=20
+Mateusz Guzik <mjguzik gmail.com>
