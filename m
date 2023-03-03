@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9ED56A959D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CFD6A95A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjCCKxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 05:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S230111AbjCCKzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 05:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjCCKxt (ORCPT
+        with ESMTP id S229537AbjCCKzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 05:53:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807851E5D1;
-        Fri,  3 Mar 2023 02:53:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43905B81891;
-        Fri,  3 Mar 2023 10:53:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83419C433EF;
-        Fri,  3 Mar 2023 10:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677840826;
-        bh=il/hJ1rbXDBFxjUSExTJaS2yi2XYe6jDK2yZ9jjfB/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VStokG36pbq/IJOmywSpgDaF/apZZOQNfsGRsHUuhd2Nwqsmr47te1TVxF12yIgSs
-         PebtDrkjX117H4UPOsvLM1ClhfE974/mhNfXFP1lFqiHmuPHc2F75kcMUWmMXv/wmE
-         4I6Fcu3jBiQxYTxQUhNRMAEEjhwWm4T6xgzsrI1U1xqmi6SXCr9vMsi4q62inf93ir
-         Qk1apjkDbf580T/OQj75p6H7skHTyYOEWmMbWEUzgEHgmGjo/cnbTMIoijECMHXUCh
-         lwFlEalaCTjlbHQzUEGl8ljp9RyHx5P2J6GW4FcedEX1th4WhEguwdHTyZE8adMG2f
-         ybBQSY5s2CdSA==
-Date:   Fri, 3 Mar 2023 10:53:41 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org
-Subject: Re: [PATCH 10/27] leds: remove MODULE_LICENSE in non-modules
-Message-ID: <20230303105341.GC2420672@google.com>
-References: <20230224150811.80316-1-nick.alcock@oracle.com>
- <20230224150811.80316-11-nick.alcock@oracle.com>
+        Fri, 3 Mar 2023 05:55:20 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797FB1CAEF
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 02:55:19 -0800 (PST)
+Received: from canpemm100010.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PSlD40qtdzRs5T;
+        Fri,  3 Mar 2023 18:52:20 +0800 (CST)
+Received: from canpemm500010.china.huawei.com (7.192.105.118) by
+ canpemm100010.china.huawei.com (7.192.104.38) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 3 Mar 2023 18:55:17 +0800
+Received: from canpemm500010.china.huawei.com ([7.192.105.118]) by
+ canpemm500010.china.huawei.com ([7.192.105.118]) with mapi id 15.01.2507.021;
+ Fri, 3 Mar 2023 18:55:17 +0800
+From:   "liujian (CE)" <liujian56@huawei.com>
+To:     John Stultz <jstultz@google.com>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: RE: [Question] softlockup in run_timer_softirq
+Thread-Topic: [Question] softlockup in run_timer_softirq
+Thread-Index: AQHZP+XzD5YJ48ci7USTV771E31fma7PkEwwgBls1lA=
+Date:   Fri, 3 Mar 2023 10:55:17 +0000
+Message-ID: <760bbd9618154505b5f17640d1437afb@huawei.com>
+References: <fb8d80434b2148e78c0032c6c70a8b4d@huawei.com>
+ <CANDhNCqfBdh8zUd+LseTTQKpmJ27Uid+ZV_+FNckZPNc2Oy3-w@mail.gmail.com> 
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.176.93]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230224150811.80316-11-nick.alcock@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,46 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023, Nick Alcock wrote:
-
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
-> 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: linux-leds@vger.kernel.org
-> ---
->  drivers/leds/leds-asic3.c | 1 -
->  1 file changed, 1 deletion(-)
-
-Mention the driver in the subject line please.
-
-> diff --git a/drivers/leds/leds-asic3.c b/drivers/leds/leds-asic3.c
-> index 8cbc1b8bafa5..bc7e96c3732a 100644
-> --- a/drivers/leds/leds-asic3.c
-> +++ b/drivers/leds/leds-asic3.c
-> @@ -173,5 +173,4 @@ module_platform_driver(asic3_led_driver);
->  
->  MODULE_AUTHOR("Paul Parsons <lost.distance@yahoo.com>");
->  MODULE_DESCRIPTION("HTC ASIC3 LED driver");
-> -MODULE_LICENSE("GPL");
->  MODULE_ALIAS("platform:leds-asic3");
-> -- 
-> 2.39.1.268.g9de2f9a303
-> 
-
--- 
-Lee Jones [李琼斯]
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogbGl1amlhbiAoQ0UpDQo+
+IFNlbnQ6IFdlZG5lc2RheSwgRmVicnVhcnkgMTUsIDIwMjMgNDozNCBQTQ0KPiBUbzogJ0pvaG4g
+U3R1bHR6JyA8anN0dWx0ekBnb29nbGUuY29tPg0KPiBDYzogdGdseEBsaW51dHJvbml4LmRlOyBz
+Ym95ZEBrZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPiBwZXRlcnpA
+aW5mcmFkZWFkLm9yZzsgUGF1bCBFLiBNY0tlbm5leSA8cGF1bG1ja0BrZXJuZWwub3JnPg0KPiBT
+dWJqZWN0OiBSRTogW1F1ZXN0aW9uXSBzb2Z0bG9ja3VwIGluIHJ1bl90aW1lcl9zb2Z0aXJxDQo+
+IA0KPiANCj4gDQo+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPiBGcm9tOiBKb2hu
+IFN0dWx0eiBbbWFpbHRvOmpzdHVsdHpAZ29vZ2xlLmNvbV0NCj4gPiBTZW50OiBUdWVzZGF5LCBG
+ZWJydWFyeSAxNCwgMjAyMyA0OjAxIEFNDQo+ID4gVG86IGxpdWppYW4gKENFKSA8bGl1amlhbjU2
+QGh1YXdlaS5jb20+DQo+ID4gQ2M6IHRnbHhAbGludXRyb25peC5kZTsgc2JveWRAa2VybmVsLm9y
+ZzsNCj4gPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBwZXRlcnpAaW5mcmFkZWFkLm9y
+ZzsgUGF1bCBFLiBNY0tlbm5leQ0KPiA+IDxwYXVsbWNrQGtlcm5lbC5vcmc+DQo+ID4gU3ViamVj
+dDogUmU6IFtRdWVzdGlvbl0gc29mdGxvY2t1cCBpbiBydW5fdGltZXJfc29mdGlycQ0KPiA+DQo+
+ID4gT24gRnJpLCBGZWIgMTAsIDIwMjMgYXQgMTo1MSBBTSBsaXVqaWFuIChDRSkgPGxpdWppYW41
+NkBodWF3ZWkuY29tPiB3cm90ZToNCj4gPiA+DQo+ID4gPiBEdXJpbmcgdGhlIHN5eiB0ZXN0LCB3
+ZSBlbmNvdW50ZXJlZCBtYW55IHByb2JsZW1zIHdpdGggdmFyaW91cyB0aW1lcg0KPiA+ID4gaGFu
+ZGxlciBmdW5jdGlvbnMgc29mdGxvY2t1cC4NCj4gPiA+DQo+ID4gPiBXZSBhbmFseXplIF9fcnVu
+X3RpbWVycygpIGFuZCBmaW5kIHRoZSBmb2xsb3dpbmcgcHJvYmxlbS4NCj4gPiA+DQo+ID4gPiBJ
+biB0aGUgd2hpbGUgbG9vcCBvZiBfX3J1bl90aW1lcnMoKSwgYmVjYXVzZSB0aGVyZSBhcmUgdG9v
+IG1hbnkNCj4gPiA+IHRpbWVycyBvciBpbXByb3BlciB0aW1lciBoYW5kbGVyIGZ1bmN0aW9ucywg
+aWYgdGhlIHByb2Nlc3NpbmcgdGltZQ0KPiA+ID4gb2YgdGhlIGV4cGlyZWQgdGltZXJzIGlzIGFs
+d2F5cyBncmVhdGVyIHRoYW4gdGhlIHRpbWUgd2hlZWwncw0KPiA+ID4gbmV4dF9leHBpcnksIHRo
+ZSBmdW5jdGlvbiB3aWxsIGxvb3AgaW5maW5pdGVseS4NCj4gPiA+DQo+ID4gPiBUaGUgZm9sbG93
+aW5nIGV4dHJlbWUgdGVzdCBjYXNlIGNhbiBiZSB1c2VkIHRvIHJlcHJvZHVjZSB0aGUgcHJvYmxl
+bS4NCj4gPiA+IEFuIGV4dHJlbWUgdGVzdCBjYXNlWzFdIGlzIGNvbnN0cnVjdGVkIHRvIHJlcHJv
+ZHVjZSB0aGUgcHJvYmxlbS4NCj4gPg0KPiA+IFRoYW5rcyBmb3IgcmVwb3J0aW5nIGFuZCBzZW5k
+aW5nIG91dCB0aGlzIGRhdGE6DQo+ID4NCj4gPiBGaXJzdCwgYW55IGNoYW5jZSB5b3UgbWlnaHQg
+c3VibWl0IHRoaXMgYXMgYSBpbi1rZXJuZWwtc3RyZXNzIHRlc3Q/DQo+ID4gTWF5YmUgdXRpbGl6
+aW5nIHRoZSBrZXJuZWwvdG9ydHVyZS5jIGZyYW1ld29yaz8NCj4gPg0KPiBPa2F5LCAgIEknbGwg
+bGVhcm4gdGhpcyBmcmFtZXdvcmsgYW5kIGRvIHRoaXMgdGhpbmcuDQo+ID4gKFRob3VnaCB0aGUg
+dGVzdCBtYXkgbmVlZCB0byBvY2Nhc2lvbmFsbHkgdGFrZSBhIGJyZWFrIHNvIHRoZSBzeXN0ZW0N
+Cj4gPiBjYW4gZXZlbnR1YWxseSBjYXRjaCB1cCkNCj4gPg0KPiA+ID4gSXMgdGhpcyBhIHByb2Js
+ZW0gb3IgYW4gdW5yZWFzb25hYmxlIHVzZT8NCj4gPiA+DQo+ID4gPiBDYW4gd2UgbGltaXQgdGhl
+IHJ1bm5pbmcgdGltZSBvZiBfX3J1bl90aW1lcnMoKSBbMl0/DQo+ID4gPg0KPiA+ID4gRG9lcyBh
+bnlvbmUgaGF2ZSBhIGdvb2QgaWRlYSB0byBzb2x2ZSB0aGlzIHByb2JsZW0/DQo+ID4NCj4gPiBT
+byB5b3VyIHBhdGNoIHJlbWluZHMgbWUgb2YgUGV0ZXIncyBzb2Z0aXJxX25lZWRzX2JyZWFrKCkg
+bG9naWM6DQo+ID4NCj4gPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2Vy
+bmVsL2dpdC9wZXRlcnovcXVldWUuZ2l0L2xvZy8/DQo+ID4gaD1jbw0KPiA+IHJlL3NvZnRpcnEN
+Cj4gPg0KPiA+IE1heWJlIGl0IGNvdWxkIGV4dGVuZCB0aGF0IHNlcmllcyBmb3IgdGhlIHRpbWVy
+IHNvZnRpcnEgYXMgd2VsbD8NCj4gPg0KPiBUaGFuayB5b3UuIFllcy4NCj4gQmFzZSBvbiB0aGUg
+cGF0Y2hzZXQgYW5kIHRoZSBleHRlbmRlZCBwYXRjaCBmb3IgdGltZXIgWzFdLCB0aGUgc29mdCBs
+b2NrdXANCj4gcHJvYmxlbSBkb2VzIG5vdCBvY2N1ci4NCj4gDQo+IEJ5IHRoZSB3YXksIEkgc2Vl
+IHRoaXMgaXMgYSB2ZXJ5IG9sZCBwYXRjaHNldD8gIFdpbGwgdGhpcyBwYXRjaHNldCBwdXNoIHRo
+ZSBtYWluDQo+IGxpbmU/IEBKb2huIEBQZXRlcg0KPiANCkhpLCBwZXRlciwNCkRvIHlvdSBoYXZl
+IGFuIHVwc3RyZWFtIHBsYW4gZm9yIHRoaXMgcGF0Y2hzZXQ/IE9yIG90aGVyIGlkZWFzLg0KSSB3
+YW50IHRvIHVzZSBzb2Z0aXJxX25lZWRzX2JyZWFrKCkgdG8gbGltaXQgdGhlIHJ1bnRpbWUgb2Yg
+dGltZXIgc29mdCBpbnRlcnJ1cHQgaGFuZGxlciBmdW5jdGlvbiwgd29uZGVyIGlmIHRoaXMgaXMg
+YXBwcm9wcmlhdGU/DQpUaGFuayB5b3V+DQo+IA0KPiAgWzFdDQo+IEF1dGhvcjogTGl1IEppYW4g
+PGxpdWppYW41NkBodWF3ZWkuY29tPg0KPiBEYXRlOiAgIFR1ZSBGZWIgMTQgMDk6NTM6NDYgMjAy
+MyArMDgwMA0KPiANCj4gICAgIHNvZnRpcnEsIHRpbWVyOiBVc2Ugc29mdGlycV9uZWVkc19icmVh
+aygpDQo+IA0KPiAgICAgSW4gdGhlIHdoaWxlIGxvb3Agb2YgX19ydW5fdGltZXJzKCksIGJlY2F1
+c2UgdGhlcmUgYXJlIHRvbyBtYW55IHRpbWVycyBvcg0KPiAgICAgaW1wcm9wZXIgdGltZXIgaGFu
+ZGxlciBmdW5jdGlvbnMsIGlmIHRoZSBwcm9jZXNzaW5nIHRpbWUgb2YgdGhlIGV4cGlyZWQNCj4g
+ICAgIHRpbWVycyBpcyBhbHdheXMgZ3JlYXRlciB0aGFuIHRoZSB0aW1lIHdoZWVsJ3MgbmV4dF9l
+eHBpcnksIHRoZSBmdW5jdGlvbg0KPiAgICAgd2lsbCBsb29wIGluZmluaXRlbHkuDQo+IA0KPiAg
+ICAgVG8gcHJldmVudCB0aGlzLCB1c2UgdGhlIHRpbWVvdXQvYnJlYWsgbG9naWMgcHJvdmlkZWQg
+YnkgU29mdElSUXMuSWYgdGhlDQo+ICAgICBydW5uaW5nIHRpbWUgZXhjZWVkcyB0aGUgbGltaXQs
+IGJyZWFrIHRoZSBsb29wIGFuZCBhbiBhZGRpdGlvbmFsDQo+ICAgICBUSU1FUl9TT0ZUSVJRIGlz
+IHRyaWdnZXJlZC4NCj4gDQo+ICAgICBTaWduZWQtb2ZmLWJ5OiBMaXUgSmlhbiA8bGl1amlhbjU2
+QGh1YXdlaS5jb20+DQo+IA0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL3RpbWUvdGltZXIuYyBiL2tl
+cm5lbC90aW1lL3RpbWVyLmMgaW5kZXgNCj4gNjNhOGNlNzE3N2RkLi43MDc0NGE0NjlhMzkgMTAw
+NjQ0DQo+IC0tLSBhL2tlcm5lbC90aW1lL3RpbWVyLmMNCj4gKysrIGIva2VybmVsL3RpbWUvdGlt
+ZXIuYw0KPiBAQCAtMTk5Miw3ICsxOTkyLDcgQEAgdm9pZCB0aW1lcl9jbGVhcl9pZGxlKHZvaWQp
+DQo+ICAgKiBfX3J1bl90aW1lcnMgLSBydW4gYWxsIGV4cGlyZWQgdGltZXJzIChpZiBhbnkpIG9u
+IHRoaXMgQ1BVLg0KPiAgICogQGJhc2U6IHRoZSB0aW1lciB2ZWN0b3IgdG8gYmUgcHJvY2Vzc2Vk
+Lg0KPiAgICovDQo+IC1zdGF0aWMgaW5saW5lIHZvaWQgX19ydW5fdGltZXJzKHN0cnVjdCB0aW1l
+cl9iYXNlICpiYXNlKQ0KPiArc3RhdGljIGlubGluZSB2b2lkIF9fcnVuX3RpbWVycyhzdHJ1Y3Qg
+dGltZXJfYmFzZSAqYmFzZSwgc3RydWN0DQo+ICtzb2Z0aXJxX2FjdGlvbiAqaCkNCj4gIHsNCj4g
+ICAgICAgICBzdHJ1Y3QgaGxpc3RfaGVhZCBoZWFkc1tMVkxfREVQVEhdOw0KPiAgICAgICAgIGlu
+dCBsZXZlbHM7DQo+IEBAIC0yMDIwLDYgKzIwMjAsMTIgQEAgc3RhdGljIGlubGluZSB2b2lkIF9f
+cnVuX3RpbWVycyhzdHJ1Y3QgdGltZXJfYmFzZQ0KPiAqYmFzZSkNCj4gDQo+ICAgICAgICAgICAg
+ICAgICB3aGlsZSAobGV2ZWxzLS0pDQo+ICAgICAgICAgICAgICAgICAgICAgICAgIGV4cGlyZV90
+aW1lcnMoYmFzZSwgaGVhZHMgKyBsZXZlbHMpOw0KPiArDQo+ICsgICAgICAgICAgICAgICBpZiAo
+c29mdGlycV9uZWVkc19icmVhayhoKSkgew0KPiArICAgICAgICAgICAgICAgICAgICAgICBpZiAo
+dGltZV9hZnRlcl9lcShqaWZmaWVzLCBiYXNlLT5uZXh0X2V4cGlyeSkpDQo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgX19yYWlzZV9zb2Z0aXJxX2lycW9mZihUSU1FUl9TT0ZUSVJR
+KTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgYnJlYWs7DQo+ICsgICAgICAgICAgICAgICB9
+DQo+ICAgICAgICAgfQ0KPiAgICAgICAgIHJhd19zcGluX3VubG9ja19pcnEoJmJhc2UtPmxvY2sp
+Ow0KPiAgICAgICAgIHRpbWVyX2Jhc2VfdW5sb2NrX2V4cGlyeShiYXNlKTsNCj4gQEAgLTIwMzIs
+OSArMjAzOCw5IEBAIHN0YXRpYyBfX2xhdGVudF9lbnRyb3B5IHZvaWQNCj4gcnVuX3RpbWVyX3Nv
+ZnRpcnEoc3RydWN0IHNvZnRpcnFfYWN0aW9uICpoKSAgew0KPiAgICAgICAgIHN0cnVjdCB0aW1l
+cl9iYXNlICpiYXNlID0gdGhpc19jcHVfcHRyKCZ0aW1lcl9iYXNlc1tCQVNFX1NURF0pOw0KPiAN
+Cj4gLSAgICAgICBfX3J1bl90aW1lcnMoYmFzZSk7DQo+ICsgICAgICAgX19ydW5fdGltZXJzKGJh
+c2UsIGgpOw0KPiAgICAgICAgIGlmIChJU19FTkFCTEVEKENPTkZJR19OT19IWl9DT01NT04pKQ0K
+PiAtICAgICAgICAgICAgICAgX19ydW5fdGltZXJzKHRoaXNfY3B1X3B0cigmdGltZXJfYmFzZXNb
+QkFTRV9ERUZdKSk7DQo+ICsgICAgICAgICAgICAgICBfX3J1bl90aW1lcnModGhpc19jcHVfcHRy
+KCZ0aW1lcl9iYXNlc1tCQVNFX0RFRl0pLCBoKTsNCj4gIH0NCj4gDQo+ICAvKg0KPiA+IHRoYW5r
+cw0KPiA+IC1qb2huDQoNCg==
