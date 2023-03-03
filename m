@@ -2,126 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7144F6AA307
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8B66AA4D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232850AbjCCVxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S232513AbjCCWyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 17:54:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233026AbjCCVwa (ORCPT
+        with ESMTP id S232060AbjCCWyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:52:30 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAB96F493
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:47:47 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id h19so4498505qtk.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:47:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677879984;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s9GyH6PvrYz76tQ69KklK9vAGMdL/HL5FMP81h6rev4=;
-        b=TY98D/Vd9hutJ+rFgn75gJncB2EJqFyP1hW99JZyDZfQg54KEyaoB8vPI4UT5Jo5s8
-         EGprKDLKdPJY4/APyFyPgULhMV9Ns3ao44WWmQYY/7Zq9FvhLEpyMmsCj8K2wekflwEn
-         G3qWvzS6yJ8Ki7hphBmsLmaHYiFN7uss3cGJugqYvXhgTfOx7nCUOvfpBTkpqHTu+FPY
-         ikVLxXei8KZKMQ6raUp61nuh38Z8vnGg3zVuXdSfkkAT1YxjHmJfug+6N38X08n3916m
-         1u3lpfM+3gD/8m1PfHPAZmMGo0KjGHFTla8IocWdFOGrnkwYPBt7HuBmXcO9GaI2rkFv
-         wGig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677879984;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s9GyH6PvrYz76tQ69KklK9vAGMdL/HL5FMP81h6rev4=;
-        b=jf8jcsVV0cZt2+hotzO7OUsGskRAVkpcBorRtjz8NnPXgVOylUjPZ9voiN9ZcwmyXC
-         X0hNQcLV/vCvfMsnBYOD7Iwvg5qUE8NDxZAGCl4eW5XwM3wmoTKzY+F/YIwalV4Vv38y
-         JaNf+zJCHOvKXf90+8nu51eck7VBWhQmKr2LKj7wI5gpC7/I2Ooqrje4jRzqp6gc4F0F
-         rSwJiIjEPdImjmNM9Y4mWRtqtovpo3WAiIFvO7dWxbVb9DPl5C6iAvFhzc/vjYtoc2Zh
-         3q+5h9uBFqaBZWugI9VnESafArcOzl6sYt+Ta9QpT4rkw5wbt/Aesma1vM1PdcnpwCx5
-         uYlg==
-X-Gm-Message-State: AO0yUKXTDSKECyqcx+8V5si5y98XlNlzTC+5dBL9zbPzkmnvEyXTMXyO
-        huXHh2MrXcyvY3lDfPQoVg82Ac0ypvw=
-X-Google-Smtp-Source: AK7set9xByrPNRa27PcYJ6fG5Mu7tMBwfd3+9u3GzkWHpU9ILZ+2rFEZ1V4nIB92gC4BsaoqGzmiTg==
-X-Received: by 2002:ac8:5dd0:0:b0:3bf:b6ba:1c1f with SMTP id e16-20020ac85dd0000000b003bfb6ba1c1fmr5502695qtx.10.1677879984553;
-        Fri, 03 Mar 2023 13:46:24 -0800 (PST)
-Received: from mjollnir ([137.118.186.11])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac812c1000000b003bfa932525dsm2465361qtj.51.2023.03.03.13.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 13:46:23 -0800 (PST)
-Date:   Fri, 3 Mar 2023 16:46:21 -0500
-From:   Storm Dragon <stormdragon2976@gmail.com>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     George Kennedy <george.kennedy@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
-Message-ID: <ZAJqrfcfoM2eO5VL@mjollnir>
-References: <Y/KtG9vK0oz0nQrN@hotmail.com>
- <20230220064612.1783-1-linux@weissschuh.net>
- <Y/OacHw6nL/ZtrH3@hotmail.com>
- <00e5aee7-c7b3-4077-8c9f-4f28ec220567@t-8ch.de>
+        Fri, 3 Mar 2023 17:54:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30811B2CF;
+        Fri,  3 Mar 2023 14:53:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 729ACB818A4;
+        Fri,  3 Mar 2023 21:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D8DC4339E;
+        Fri,  3 Mar 2023 21:47:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677880038;
+        bh=kiILXqGGq0h+wtqtWnvVR1ipqj4Zf0m1sKRPOcQmT0A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=C4uv9dOCkbMYY53RvYVMyxK4L1fS14wljcwvCH/GPeg8auugjYIr32gWkO5lG4BBY
+         JFcv4i/P4V0ek18zERh25VihLEJe/wE6iVq4wszreD+oRHZzu+Yfkt1mj7vqiOQJEi
+         hiDMMaCQ0/vs/U6m10aWcdSHzwOxlhFUd9edsI/N5u3zEsl8jPu1ky4QloXYibANeZ
+         Jtn5TBiVxK0h2UhPnjxwx/1HgJCoM3HXLa9DeCO+RjOn4FcxwMnLUQ7OyxehnJDbTa
+         /FFd/Wf7LUqd3wPs8sgN/0zJE8/ID3Wt/9l8yGilbCBLD5yr1FYn9PxH1fV2W4fPIp
+         qbWk3RUGg2Lcw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dean Luick <dean.luick@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-rdma@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 01/30] IB/hfi1: Update RMT size calculation
+Date:   Fri,  3 Mar 2023 16:46:46 -0500
+Message-Id: <20230303214715.1452256-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JAK3wBCOzlxuTE/K"
-Content-Disposition: inline
-In-Reply-To: <00e5aee7-c7b3-4077-8c9f-4f28ec220567@t-8ch.de>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Dean Luick <dean.luick@cornelisnetworks.com>
 
---JAK3wBCOzlxuTE/K
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit 892ede5a77f337831609fb9c248ac60948061894 ]
 
-On Fri, Mar 03, 2023 at 09:12:50PM +0000, Thomas Wei=C3=9Fschuh wrote:
->Sorry for the long delay, but this should be fixed in the current round
->of stable kernels. Can you try the following:
->
->pacman -U https://mirrors.edge.kernel.org/archlinux/testing/os/x86_64/linu=
-x-6.2.2.arch1-1-x86_64.pkg.tar.zst
->
->Thomas
+Fix possible RMT overflow:  Use the correct netdev size.
+Don't allow adjusted user contexts to go negative.
 
-I have installed the package above. My screen reader is behaving much
-better now. Interestingly, however, trying to cat the /dev/vcs device
-still shows the following:
+Fix QOS calculation: Send kernel context count as an argument since
+dd->n_krcv_queues is not yet set up in earliest call.  Do not include
+the control context in the QOS calculation.  Use the same sized
+variable to find the max of krcvq[] entries.
 
-cat: /dev/vcs: No such device or address
+Update the RMT count explanation to make more sense.
 
-cat: /dev/vcsa: No such device or address
+Signed-off-by: Dean Luick <dean.luick@cornelisnetworks.com>
+Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Link: https://lore.kernel.org/r/167329106946.1472990.18385495251650939054.stgit@awfm-02.cornelisnetworks.com
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/infiniband/hw/hfi1/chip.c | 59 +++++++++++++++++--------------
+ 1 file changed, 32 insertions(+), 27 deletions(-)
 
-cat: /dev/vcsa1: No such device or address
+diff --git a/drivers/infiniband/hw/hfi1/chip.c b/drivers/infiniband/hw/hfi1/chip.c
+index 88476a1a601a4..4b41f35668b20 100644
+--- a/drivers/infiniband/hw/hfi1/chip.c
++++ b/drivers/infiniband/hw/hfi1/chip.c
+@@ -1097,7 +1097,7 @@ static void read_link_down_reason(struct hfi1_devdata *dd, u8 *ldr);
+ static void handle_temp_err(struct hfi1_devdata *dd);
+ static void dc_shutdown(struct hfi1_devdata *dd);
+ static void dc_start(struct hfi1_devdata *dd);
+-static int qos_rmt_entries(struct hfi1_devdata *dd, unsigned int *mp,
++static int qos_rmt_entries(unsigned int n_krcv_queues, unsigned int *mp,
+ 			   unsigned int *np);
+ static void clear_full_mgmt_pkey(struct hfi1_pportdata *ppd);
+ static int wait_link_transfer_active(struct hfi1_devdata *dd, int wait_ms);
+@@ -13403,7 +13403,6 @@ static int set_up_context_variables(struct hfi1_devdata *dd)
+ 	int ret;
+ 	unsigned ngroups;
+ 	int rmt_count;
+-	int user_rmt_reduced;
+ 	u32 n_usr_ctxts;
+ 	u32 send_contexts = chip_send_contexts(dd);
+ 	u32 rcv_contexts = chip_rcv_contexts(dd);
+@@ -13462,28 +13461,34 @@ static int set_up_context_variables(struct hfi1_devdata *dd)
+ 					 (num_kernel_contexts + n_usr_ctxts),
+ 					 &node_affinity.real_cpu_mask);
+ 	/*
+-	 * The RMT entries are currently allocated as shown below:
+-	 * 1. QOS (0 to 128 entries);
+-	 * 2. FECN (num_kernel_context - 1 + num_user_contexts +
+-	 *    num_netdev_contexts);
+-	 * 3. netdev (num_netdev_contexts).
+-	 * It should be noted that FECN oversubscribe num_netdev_contexts
+-	 * entries of RMT because both netdev and PSM could allocate any receive
+-	 * context between dd->first_dyn_alloc_text and dd->num_rcv_contexts,
+-	 * and PSM FECN must reserve an RMT entry for each possible PSM receive
+-	 * context.
++	 * RMT entries are allocated as follows:
++	 * 1. QOS (0 to 128 entries)
++	 * 2. FECN (num_kernel_context - 1 [a] + num_user_contexts +
++	 *          num_netdev_contexts [b])
++	 * 3. netdev (NUM_NETDEV_MAP_ENTRIES)
++	 *
++	 * Notes:
++	 * [a] Kernel contexts (except control) are included in FECN if kernel
++	 *     TID_RDMA is active.
++	 * [b] Netdev and user contexts are randomly allocated from the same
++	 *     context pool, so FECN must cover all contexts in the pool.
+ 	 */
+-	rmt_count = qos_rmt_entries(dd, NULL, NULL) + (num_netdev_contexts * 2);
+-	if (HFI1_CAP_IS_KSET(TID_RDMA))
+-		rmt_count += num_kernel_contexts - 1;
+-	if (rmt_count + n_usr_ctxts > NUM_MAP_ENTRIES) {
+-		user_rmt_reduced = NUM_MAP_ENTRIES - rmt_count;
+-		dd_dev_err(dd,
+-			   "RMT size is reducing the number of user receive contexts from %u to %d\n",
+-			   n_usr_ctxts,
+-			   user_rmt_reduced);
+-		/* recalculate */
+-		n_usr_ctxts = user_rmt_reduced;
++	rmt_count = qos_rmt_entries(num_kernel_contexts - 1, NULL, NULL)
++		    + (HFI1_CAP_IS_KSET(TID_RDMA) ? num_kernel_contexts - 1
++						  : 0)
++		    + n_usr_ctxts
++		    + num_netdev_contexts
++		    + NUM_NETDEV_MAP_ENTRIES;
++	if (rmt_count > NUM_MAP_ENTRIES) {
++		int over = rmt_count - NUM_MAP_ENTRIES;
++		/* try to squish user contexts, minimum of 1 */
++		if (over >= n_usr_ctxts) {
++			dd_dev_err(dd, "RMT overflow: reduce the requested number of contexts\n");
++			return -EINVAL;
++		}
++		dd_dev_err(dd, "RMT overflow: reducing # user contexts from %u to %u\n",
++			   n_usr_ctxts, n_usr_ctxts - over);
++		n_usr_ctxts -= over;
+ 	}
+ 
+ 	/* the first N are kernel contexts, the rest are user/netdev contexts */
+@@ -14340,15 +14345,15 @@ static void clear_rsm_rule(struct hfi1_devdata *dd, u8 rule_index)
+ }
+ 
+ /* return the number of RSM map table entries that will be used for QOS */
+-static int qos_rmt_entries(struct hfi1_devdata *dd, unsigned int *mp,
++static int qos_rmt_entries(unsigned int n_krcv_queues, unsigned int *mp,
+ 			   unsigned int *np)
+ {
+ 	int i;
+ 	unsigned int m, n;
+-	u8 max_by_vl = 0;
++	uint max_by_vl = 0;
+ 
+ 	/* is QOS active at all? */
+-	if (dd->n_krcv_queues <= MIN_KERNEL_KCTXTS ||
++	if (n_krcv_queues < MIN_KERNEL_KCTXTS ||
+ 	    num_vls == 1 ||
+ 	    krcvqsset <= 1)
+ 		goto no_qos;
+@@ -14406,7 +14411,7 @@ static void init_qos(struct hfi1_devdata *dd, struct rsm_map_table *rmt)
+ 
+ 	if (!rmt)
+ 		goto bail;
+-	rmt_entries = qos_rmt_entries(dd, &m, &n);
++	rmt_entries = qos_rmt_entries(dd->n_krcv_queues - 1, &m, &n);
+ 	if (rmt_entries == 0)
+ 		goto bail;
+ 	qpns_per_vl = 1 << m;
+-- 
+2.39.2
 
-Is this expected behavior?=20
-
---JAK3wBCOzlxuTE/K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEjjImGMhZhYoKESBfW+ojcUPdwZMFAmQCaqoACgkQW+ojcUPd
-wZPq5w//WeeUto0XS2zLGXUG6EUapeTDUUcHpP5Jf/qvS6FrLHCASETvY6kDKu7q
-kRzlWGYAARjrdSWWKGShtx0aizojQE7DQyBTbTOdx+Zbos5LCrhzSe7FpKDgl5AC
-HRj49VRKDB4kx8bYFw6XcuHiXTjZDUlqipOo1iRdThZtMlXZWs9lIwMx3tfcQN0k
-XPQOFmW16V5zNqd3wwEPlAoH5rJO8lX1XJOs/GqavphDOzXhHaNwoFqZkT0ziq3D
-493Qm1ZG47USuyJX/nn9Tlie0VI2sjnupKv8Hy+CBiLEwTxuWOwNJ5u/Ty21LY5X
-gaaqgbAuk5ZZBn09VXkCdODfB2CmTjh1GkjVhLMHe+tkAY3RAGXFD0SIPl1qzDNv
-9EoMH+KolCA+JnLlugtVg7+zNXLkFEpoBgiwU93X0hDa45UmMOWxkQeEObfzKnvF
-9CRmLgPeV2zsSg3qD5f1wYspxToNT6m6V4GJd/pS505gCn2tbMfh1F3nc1w4iTfR
-jKV5RbqThZKx1puwO6ae5Hi1G78z/JBjryd1i6aStzNQH6a0yTtT3a1HbL2oDElx
-cCPwfTnAlSnwYDxMZy6mOZJ9eUby3EzTdSdxOAvL5hiixG7IqBAqiCVzxvhyr/Pr
-+o591FJarLkbI6KU39Hpz3sf0WOfR158nj7mZ+e9UfYaUmcWDjU=
-=IEr2
------END PGP SIGNATURE-----
-
---JAK3wBCOzlxuTE/K--
