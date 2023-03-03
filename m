@@ -2,80 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C886A96A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4EF6A96A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjCCLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S231181AbjCCLoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:44:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbjCCLmr (ORCPT
+        with ESMTP id S231239AbjCCLov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:42:47 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63335CC22
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:42:43 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id s22so3176218lfi.9
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 03:42:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677843762;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3cCmKUFN1E+lTtBihbO+zz5iEjuJOShZ6eI1AUU2Ox8=;
-        b=QbW5Vgmr4Gmkhu4PG0UG/5KTbhkb43x2qM+G0WtLSh6EDuEEBzb9AnIQyiD+cpBL4X
-         btTtACy/NYXB6ZhG+LFbsFVP7JwnJuQgsauL79PCL9YBrJSVET7T1JGcSBFhZLbN0hz7
-         vE13lX/g7OJBDIlT+nWJXhYkuq+pp+8TxbLk9hYkJ+NFhr2kcClAZIQ5FaTDUtTvxAab
-         0T7+BOA1NmtyZs2fhi2FYpuwKcomu6gZdLOTBDwl7739VdLRb//4IF6Z6yFxnauC3Mrk
-         2gS/kHoDH2D1WvXOr9bjtCWWmi3R8m49bshrTMoXGy5POkiXu5+iCjjTiCJoM5UNw+K7
-         WUkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677843762;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3cCmKUFN1E+lTtBihbO+zz5iEjuJOShZ6eI1AUU2Ox8=;
-        b=bi0MAAczGZ3WmTOch2xqPZd95VNgEgNGumBJo/zusU7AhOwdpACPRcGwam5blv/IxS
-         tDimVa+BDMLLzb3Bb6RwEBDAKyJjMDTGwGhKIAcmynb5eAWe7ixyEZhyxLDDKjEPDUks
-         Do9tKGlpYhRWg3nLeCQtUR8ibcdX82fPWbGokAM0qHrLzAfz1MzA8KAToKlP5LmQeIo9
-         1yT0fKfQqoSDRQseAH/dwPBjKfYIPHi23vHoEMW0vhnx7i3a6cVKotZG+xYipHKDTcs1
-         +TDMpobyO1H1cI5bSO7ZZ1A/lQMjxAwFZYf/Rt80CyAv2Flxx/hutFsWCb+0OR1Y8lw8
-         6XhA==
-X-Gm-Message-State: AO0yUKW/qsJwmzAuYT/U8qK/2xf0XEJgyS2z9RsYKgHu3+pS/HPHKtQJ
-        Y4oVt6fcCU5unU8vaiYPHVytww==
-X-Google-Smtp-Source: AK7set/+qOVIwu+yxqJTnWn6xzy8nugk3umDW/3fbM136sNqDB/A2T81pQ0bJh2iHDa0rzvhxUKRVA==
-X-Received: by 2002:ac2:4c06:0:b0:4e0:6e01:7d28 with SMTP id t6-20020ac24c06000000b004e06e017d28mr497408lfq.60.1677843762102;
-        Fri, 03 Mar 2023 03:42:42 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id b14-20020a056512218e00b004dc4b00a1eesm355173lft.261.2023.03.03.03.42.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 03:42:41 -0800 (PST)
-Message-ID: <0b1fafe6-0814-f1a6-ae19-7bd273751102@linaro.org>
-Date:   Fri, 3 Mar 2023 12:42:40 +0100
+        Fri, 3 Mar 2023 06:44:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C0018AAF;
+        Fri,  3 Mar 2023 03:44:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A43DF61802;
+        Fri,  3 Mar 2023 11:44:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F839C433D2;
+        Fri,  3 Mar 2023 11:44:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677843889;
+        bh=F4RrA5WPsZsbzw+U1mjjdICbEFuwxtrNykHfFUyhUvs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hCKu5LRKWvGifmZspsKoPxF973tZQEUSIp9YRO16nLIRX5cK6fWfwqIPn7eoKYzBm
+         wjluU9he+p2i0VFSAes6As7bkkxuZyf01UUGITMC324XfeovfNWhW7FWru4wqNbayZ
+         mpxDC6QQ7hXIbl7VJROJYGfKOlg+oKi1M9Rc5K8A=
+Date:   Fri, 3 Mar 2023 12:44:46 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, mptcp@lists.linux.dev,
+        Florian Westphal <fw@strlen.de>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
+Message-ID: <ZAHdrhY2P+sBI+xX@kroah.com>
+References: <20230301180657.003689969@linuxfoundation.org>
+ <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
+ <ZAB6pP3MNy152f+7@kroah.com>
+ <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
+ <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
+ <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
+ <CA+G9fYuLQEfeTjx52NxbXV5914YJQ2tVd8k4SJjrAryujPjnqA@mail.gmail.com>
+ <ZAG8dla274kYfxoK@kroah.com>
+ <28afc90c1b8b51a36ced5b6026d1a64aeb7c0b14.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
- __qcom_icc_set twice on the same node
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
- <59b28fb4-1367-9872-ed63-90847e380bb6@linaro.org>
- <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
- <3116a08a-30a8-c9b9-f079-26739c9e6d49@linaro.org>
- <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
- <db4f4e53-e8b9-0807-7490-2c6b76194ad5@linaro.org>
- <2cfba291-656f-9a43-fdd5-7601a6fe6ef5@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <2cfba291-656f-9a43-fdd5-7601a6fe6ef5@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <28afc90c1b8b51a36ced5b6026d1a64aeb7c0b14.camel@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,68 +68,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3.03.2023 12:40, Bryan O'Donoghue wrote:
-> On 03/03/2023 11:39, Konrad Dybcio wrote:
->>
->>
->> On 3.03.2023 12:36, Bryan O'Donoghue wrote:
->>> On 03/03/2023 11:35, Bryan O'Donoghue wrote:
->>>> On 03/03/2023 11:33, Konrad Dybcio wrote:
->>>>>
->>>>>
->>>>> On 3.03.2023 12:32, Bryan O'Donoghue wrote:
->>>>>> On 03/03/2023 02:35, Konrad Dybcio wrote:
->>>>>>> Currently, when sync_state calls set(n, n) all the paths for setting
->>>>>>> parameters on an icc node are called twice. Avoid that.
->>>>>>>
->>>>>>> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
->>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>>> ---
->>>>>>> RFC comes from the fact that I *believe* this should be correct, but I'm
->>>>>>> not entirely sure about it..
->>>>>>>
->>>>>>>
->>>>>>>     drivers/interconnect/qcom/icc-rpm.c | 2 +-
->>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->>>>>>> index a6e0de03f46b..d35db1af9b08 100644
->>>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
->>>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
->>>>>>> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>>>>>>         ret = __qcom_icc_set(src, src_qn, sum_bw);
->>>>>>>         if (ret)
->>>>>>>             return ret;
->>>>>>> -    if (dst_qn) {
->>>>>>> +    if (dst_qn && src_qn != dst_qn) {
->>>>>>>             ret = __qcom_icc_set(dst, dst_qn, sum_bw);
->>>>>>>             if (ret)
->>>>>>>                 return ret;
->>>>>>
->>>>>> Is it possible for src_qn == dst_qn ?
->>>>> As the commit message says, sync_state calls set(n, n) in
->>>>> drivers/interconnect/core.c : icc_sync_state(struct device *dev)
->>>>
->>>> So you've _seen_ that happen ?
->>>>
->>>
->>> Assuming you have, then why isn't the fix in sync_state i.e. that's an error for everybody right ?
->> I believe that there's simply no other way of updating every single node
->> on its own with the icc api, without taking any links into play. But I
->> see exynos and i.mx also effectively calling it twice on each node.
->>
->> Konrad
+On Fri, Mar 03, 2023 at 12:39:07PM +0100, Paolo Abeni wrote:
+> On Fri, 2023-03-03 at 10:23 +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Mar 03, 2023 at 02:34:05PM +0530, Naresh Kamboju wrote:
+> > > On Fri, 3 Mar 2023 at 13:34, Paolo Abeni <pabeni@redhat.com> wrote:
+> > > > I read the above as you are running self-tests from 6.2.1 on top of an
+> > > > older (6.1) kernel. Is that correct?
+> > > 
+> > > correct.
+> > > 
+> > > > If so failures are expected;
+> > 
+> > Shouldn't the test be able to know that "new features" are not present
+> > and properly skip the test for when that happens? �
 > 
-> I mean. I'm fine for you to retain my RB on this qcom specific patch since this seems like a real bug to me but... it seems like a generic bug across arches that should probably be resolved @ the higher level.
+> I was not aware that running self-tests on older kernels is a common
+> practice. I'm surprised that hits mptcp specifically. I think most
+> networking tests have the same problem.
 > 
-> ?
-I suppose we could change the set(n, n) in sync_state to be set(n, NULL)
-and enforce parameter null-checking on all provider->set functions. Do
-I understand this correctly?
+> Additionally, some self-tests check for known bugs/regressions. Running
+> them on older kernel will cause real trouble, and checking for bug
+> presence in the running kernel would be problematic at best, I think.
 
-Konrad
+No, not at all, why wouldn't you want to test for know bugs and
+regressions and fail?  That's a great thing to do, and so you will know
+to backport those bugfixes to those older kernels if you have to use
+them.
+
+> > Otherwise this feels
+> > like a problem going forward as no one will know if this feature can be
+> > used or not (assuming it is a new feature and not just a functional
+> > change.)
 > 
-> ---
-> bod
+> I don't understand this later part, could you please re-phrase?
+> 
+> Users should look at release notes and/or official documentation to
+> know the supported features, not to self-tests output ?!?
+
+How can a program "read a release note"?
+
+Features in the kernel should be able to be detected if they are present
+or not, in some way, right?  Syscalls work this way, as does sysfs
+entries and other ways of interacting with the kernel.
+
+If there is no way for a program to "know" if a feature is present or
+not, how can it detect the difference between "this failed because of
+something I did wrong", vs. "this failed because it is not present in
+this kernel at all".
+
+thanks,
+
+greg k-h
