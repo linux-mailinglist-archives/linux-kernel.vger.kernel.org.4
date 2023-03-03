@@ -2,185 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF436A9B70
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CE26A9B73
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjCCQQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 11:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S229511AbjCCQQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 11:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCCQQl (ORCPT
+        with ESMTP id S231228AbjCCQQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:16:41 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE1611167;
-        Fri,  3 Mar 2023 08:16:39 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323CvhM2027021;
-        Fri, 3 Mar 2023 16:16:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gTPbXrLroShWk4Eefkk2daQUenN8urjbbeRVzXU/I4E=;
- b=H82+GNMYgek7C+PGAt+fBpPXvcNSNUW8RtuzUonqWYG12Cuyxrevyw71/5gJnTBsQ5bW
- Av0QadECgt/166kLKO+3U3lZYAHyhH+ZbRGqZv9nw9zF7csAcLeXfPjN1RIefOeF0VZd
- rrMcr6wkz9lOrdDIN8ivJLCuRjq4G4LxeaTHx0qY/QcPJNIlbqmVapU1b0uXL/xyYQuv
- eoHu4dQv5SzmXDWS196xLZcDh2oii78Zw218nL6ynh+10iFLGy94DjR1eNcL+r0zh5Px
- bP2oUiGzBUogrxSPOB25jOUM1DAq33hp+BRLS+DjT2ZdCht9NBlfZlzsIae94LHrvM2E Lg== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2veev3sc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 16:16:32 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 323GGVns018007
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 16:16:31 GMT
-Received: from [10.216.34.86] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 3 Mar 2023
- 08:16:29 -0800
-Message-ID: <f21a6563-d86a-447f-6096-55b74c9c288e@quicinc.com>
-Date:   Fri, 3 Mar 2023 21:46:25 +0530
+        Fri, 3 Mar 2023 11:16:52 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770E023128
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:16:50 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id da10so12462276edb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 08:16:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=29lhwYiW98gSQjktyysEqQtqN3RT8BV1yMsZ6bnD5sI=;
+        b=eSUDPW5xP/wrxbkAQZCoPLxpc0K1OMCa9agV1Wm10ELQIvysYEiVgYsOvmhXNOG5mM
+         9ny/FmnBEGvCx2Y6zzysd/kC2b3/r8cRXNYKJ1DnyLdwe5I16cUQDYnsspWM0GWlOFCX
+         qam18Hk4eI0Jn1Zsfan4YqLmAYElEMNFSl/6/Q5GW5EgmX8flCQV8tkG/fpF0DFpPTBl
+         E4sD4NhZt3AVhUYf4gerQKt67ehCL0+Z/psyWyJycFft9VScKfjLrCWNVJHMIGEmvZtK
+         tyvaQfY6Iv0R9scgm3mXheT5szkT7P1vRpCIQYWqFvolQ6oTCHLA57VKGz0nutMu8+ch
+         VWnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=29lhwYiW98gSQjktyysEqQtqN3RT8BV1yMsZ6bnD5sI=;
+        b=i0Vqw6Pu/8BNMiF4H7ZCyjq0O+BaZFAERMaGcd41AWXt8exABdHqb2Lw73VGlD1QoO
+         tY+W+otGRz9LA+yy9mymMb91n1s3+c2xei7aFKBDdCfWpJSiQEAWrpkOGTfNdN8W36PG
+         ACE8BdiQIaQIgdsKzbNbH/0/udRuZYEmI0irqaY1hSE8CO7PBTvqXhhC1dhYZMgeHLsp
+         4+lfemLFJC3funEuJW2+rbd0IyVooo4MjKbkxauSGEGvfhq3X76z0cgiHSuiwJpFLzFK
+         vlJMCVW2VTi1aZylNLiPIFMbdyrxpdAT/pDG2mdvDuZ07NPPwL4rqvCEqzVfkubwzLi1
+         Bk4Q==
+X-Gm-Message-State: AO0yUKVN2c0ZLC1p45dNiAJlbepF5RyMxW5xWuz5wgioBdkc52D04n72
+        g6x4qjU6cfEKilXU761SOYT4XvmRbmSxubuC
+X-Google-Smtp-Source: AK7set+6XDP/s9CIHVzW8AetHwFP9jbTQ+AvZLr8/rl3luYfPyfzQuWgTqOO4r/yk8Zqgfvc3nCasw==
+X-Received: by 2002:a17:907:8c09:b0:88a:888b:c8b with SMTP id ta9-20020a1709078c0900b0088a888b0c8bmr2512107ejc.35.1677860208550;
+        Fri, 03 Mar 2023 08:16:48 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id ga2-20020a170906b84200b00882f9130eafsm1107033ejb.26.2023.03.03.08.16.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 08:16:48 -0800 (PST)
+Date:   Fri, 3 Mar 2023 17:16:47 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        'Conor Dooley ' <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V3 12/20] RISC-V: cpufeature: Add ACPI support in
+ riscv_fill_hwcap()
+Message-ID: <20230303161647.mksonnutzaw4d3gb@orel>
+References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+ <20230303133647.845095-13-sunilvl@ventanamicro.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 1/3] ring_buffer: Change some static functions to void
-Content-Language: en-US
-To:     Uros Bizjak <ubizjak@gmail.com>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-References: <20230303151706.57851-1-ubizjak@gmail.com>
- <20230303151706.57851-2-ubizjak@gmail.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230303151706.57851-2-ubizjak@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hSDYyiCpBuVfz04TArGsyiwLImh92yLf
-X-Proofpoint-GUID: hSDYyiCpBuVfz04TArGsyiwLImh92yLf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_03,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- malwarescore=0 mlxlogscore=999 impostorscore=0 bulkscore=0 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030140
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303133647.845095-13-sunilvl@ventanamicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/3/2023 8:47 PM, Uros Bizjak wrote:
-> The results of some static functions are not used. Change the
-> type of these function to void and remove unnecessary returns.
+On Fri, Mar 03, 2023 at 07:06:39PM +0530, Sunil V L wrote:
+> On ACPI based systems, the information about the hart
+> like ISA is provided by the RISC-V Hart Capabilities Table (RHCT).
+> Enable filling up hwcap structure based on the information in RHCT.
 > 
-> No functional change intended.
-> 
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->   kernel/trace/ring_buffer.c | 22 +++++++---------------
->   1 file changed, 7 insertions(+), 15 deletions(-)
+>  arch/riscv/kernel/cpufeature.c | 41 ++++++++++++++++++++++++++--------
+>  1 file changed, 32 insertions(+), 9 deletions(-)
 > 
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> index af50d931b020..05fdc92554df 100644
-> --- a/kernel/trace/ring_buffer.c
-> +++ b/kernel/trace/ring_buffer.c
-> @@ -1569,15 +1569,12 @@ static void rb_tail_page_update(struct ring_buffer_per_cpu *cpu_buffer,
->   	}
->   }
->   
-> -static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
-> +static void rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
->   			  struct buffer_page *bpage)
->   {
->   	unsigned long val = (unsigned long)bpage;
->   
-> -	if (RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK))
-> -		return 1;
-> -
-> -	return 0;
-> +	RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK);
->   }
->   
->   /**
-> @@ -1587,30 +1584,28 @@ static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
->    * As a safety measure we check to make sure the data pages have not
->    * been corrupted.
->    */
-> -static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
-> +static void rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
->   {
->   	struct list_head *head = rb_list_head(cpu_buffer->pages);
->   	struct list_head *tmp;
->   
->   	if (RB_WARN_ON(cpu_buffer,
->   			rb_list_head(rb_list_head(head->next)->prev) != head))
-> -		return -1;
-> +		return;
->   
->   	if (RB_WARN_ON(cpu_buffer,
->   			rb_list_head(rb_list_head(head->prev)->next) != head))
-> -		return -1;
-> +		return;
->   
->   	for (tmp = rb_list_head(head->next); tmp != head; tmp = rb_list_head(tmp->next)) {
->   		if (RB_WARN_ON(cpu_buffer,
->   				rb_list_head(rb_list_head(tmp->next)->prev) != tmp))
-> -			return -1;
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 59d58ee0f68d..478dbf129922 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -6,6 +6,7 @@
+>   * Copyright (C) 2017 SiFive
+>   */
+>  
+> +#include <linux/acpi.h>
+>  #include <linux/bitmap.h>
+>  #include <linux/ctype.h>
+>  #include <linux/libfdt.h>
+> @@ -13,6 +14,8 @@
+>  #include <linux/memory.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <asm/acpi.h>
+>  #include <asm/alternative.h>
+>  #include <asm/cacheflush.h>
+>  #include <asm/errata_list.h>
+> @@ -91,7 +94,9 @@ void __init riscv_fill_hwcap(void)
+>  	char print_str[NUM_ALPHA_EXTS + 1];
+>  	int i, j, rc;
+>  	unsigned long isa2hwcap[26] = {0};
+> -	unsigned long hartid;
+> +	struct acpi_table_header *rhct;
+> +	acpi_status status;
+> +	unsigned int cpu;
+>  
+>  	isa2hwcap['i' - 'a'] = COMPAT_HWCAP_ISA_I;
+>  	isa2hwcap['m' - 'a'] = COMPAT_HWCAP_ISA_M;
+> @@ -104,18 +109,33 @@ void __init riscv_fill_hwcap(void)
+>  
+>  	bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
+>  
+> -	for_each_of_cpu_node(node) {
+> +	if (!acpi_disabled) {
+> +		status = acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
+> +		if (ACPI_FAILURE(status))
 > +			return;
->   
->   		if (RB_WARN_ON(cpu_buffer,
->   				rb_list_head(rb_list_head(tmp->prev)->next) != tmp))
-> -			return -1;
-> +			return;
->   	}
+> +	}
+> +
+> +	for_each_possible_cpu(cpu) {
+>  		unsigned long this_hwcap = 0;
+>  		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
+>  		const char *temp;
+>  
+> -		rc = riscv_of_processor_hartid(node, &hartid);
+> -		if (rc < 0)
+> -			continue;
+
+The above is an unrelated cleanup and should be in a separate patch.
+
 > -
-> -	return 0;
->   }
->   
->   static int __rb_allocate_pages(struct ring_buffer_per_cpu *cpu_buffer,
-> @@ -4500,7 +4495,6 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
->   	default:
->   		RB_WARN_ON(cpu_buffer, 1);
->   	}
-> -	return;
->   }
->   
->   static void
-> @@ -4531,7 +4525,6 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
->   	default:
->   		RB_WARN_ON(iter->cpu_buffer, 1);
->   	}
-> -	return;
->   }
->   
->   static struct buffer_page *
-> @@ -4946,7 +4939,6 @@ rb_reader_unlock(struct ring_buffer_per_cpu *cpu_buffer, bool locked)
->   {
->   	if (likely(locked))
->   		raw_spin_unlock(&cpu_buffer->reader_lock);
-> -	return;
->   }
->   
+> -		if (of_property_read_string(node, "riscv,isa", &isa)) {
+> -			pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
+> -			continue;
+> +		if (acpi_disabled) {
+> +			node = of_cpu_device_node_get(cpu);
+> +			if (node) {
+> +				rc = of_property_read_string(node, "riscv,isa", &isa);
+> +				of_node_put(node);
+> +				if (rc) {
+> +					pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
+> +					continue;
+> +				}
+> +			}
+> +		} else {
+> +			rc = acpi_get_riscv_isa(rhct, get_acpi_id_for_cpu(cpu), &isa);
+> +			if (rc < 0) {
+> +				pr_warn("Unable to get ISA for the hart - %d\n", cpu);
+> +				continue;
+> +			}
+>  		}
+>  
+>  		temp = isa;
+> @@ -248,6 +268,9 @@ void __init riscv_fill_hwcap(void)
+>  			bitmap_and(riscv_isa, riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
+>  	}
+>  
+> +	if (!acpi_disabled && rhct)
+> +		acpi_put_table((struct acpi_table_header *)rhct);
+> +
+>  	/* We don't support systems with F but without D, so mask those out
+>  	 * here. */
+>  	if ((elf_hwcap & COMPAT_HWCAP_ISA_F) && !(elf_hwcap & COMPAT_HWCAP_ISA_D)) {
+> -- 
+> 2.34.1
+>
 
-Nice clean up, thanks.
+Otherwise,
 
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
--Mukesh
->   /**
+Thanks,
+drew
