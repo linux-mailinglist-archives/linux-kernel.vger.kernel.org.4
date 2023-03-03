@@ -2,66 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AA86A9EEA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB456A9EE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbjCCSfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S231674AbjCCSfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjCCSfE (ORCPT
+        with ESMTP id S231893AbjCCSe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:35:04 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFA1C14E;
-        Fri,  3 Mar 2023 10:34:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677868498; x=1709404498;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YavG9SzN7R2V9f06OiIdyohGAgtDlBxsdq17qor+UyE=;
-  b=joVYnowMZa4NdX4IUnLgCqm77L1bPaNazN4DZw2Q9UkbFS2M3XuZoyBX
-   q9Gv66HA/9d3kY/EgH0XZpEGjlx4lsRYigZNNUFEQkyIWU1JZHK7dyNs9
-   Bm1MI/Q0t17dDmxwoGZahFonoI7O02BAnsmGlR+qx43OViITauVSeudFQ
-   5cuoGOsHXGkBii5RRewA9jCzqWERezNNEIseBk1HZmh6Dwi1lzFaiDUot
-   pizgmdXm+PvRVKYuOwOa8eLTrio5HDedmM/T+mNfGGyqiXDZ2Ji89onzW
-   lYKnuifsPXuwL5NCF0KSlUWpYf9piEqAuHnGtcSorE+rf3zHDhNi+NlTV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="399931576"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="399931576"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 10:34:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="675456279"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="675456279"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.209.141.249]) ([10.209.141.249])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 10:34:41 -0800
-Message-ID: <4dabd301-32d7-968e-e048-8135b072a7b5@intel.com>
-Date:   Fri, 3 Mar 2023 11:34:37 -0700
+        Fri, 3 Mar 2023 13:34:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66B3A60A84
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 10:34:51 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66E12143D;
+        Fri,  3 Mar 2023 10:35:34 -0800 (PST)
+Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09DE93F93E;
+        Fri,  3 Mar 2023 10:34:45 -0800 (PST)
+Message-ID: <753cd447-24a8-0dd8-6f35-9ad75ba619c5@arm.com>
+Date:   Fri, 3 Mar 2023 18:34:39 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH 4/4] docs: perf: Minimal introduction the the CXL PMU
- device and driver.
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-cxl@vger.kernel.org
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, will@kernel.org, dan.j.williams@intel.com,
-        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
-        alison.schofield@intel.com, linuxarm@huawei.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303175022.10806-1-Jonathan.Cameron@huawei.com>
- <20230303175022.10806-5-Jonathan.Cameron@huawei.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230303175022.10806-5-Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 05/18] x86/resctrl: Allow RMID allocation to be scoped
+ by CLOSID
+Content-Language: en-GB
+To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
+References: <20230113175459.14825-1-james.morse@arm.com>
+ <20230113175459.14825-6-james.morse@arm.com>
+ <2ad21ffe-6019-eb34-a0b3-2c9d26799269@intel.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <2ad21ffe-6019-eb34-a0b3-2c9d26799269@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,111 +59,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Reinette,
 
-
-On 3/3/23 10:50 AM, Jonathan Cameron wrote:
-> Very basic introduction to the device and the current driver support
-> provided. I expect to expand on this in future versions of this patch
-> set.
+On 02/02/2023 23:45, Reinette Chatre wrote:
+> On 1/13/2023 9:54 AM, James Morse wrote:
+>> MPAMs RMID values are not unique unless the CLOSID is considered as well.
+>>
+>> alloc_rmid() expects the RMID to be an independent number.
+>>
+>> Pass the CLOSID in to alloc_rmid(). Use this to compare indexes when
+>> allocating. If the CLOSID is not relevant to the index, this ends up
+>> comparing the free RMID with itself, and the first free entry will be
+>> used. With MPAM the CLOSID is included in the index, so this becomes a
+>> walk of the free RMID entries, until one that matches the supplied
+>> CLOSID is found.
+>>
+>> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+>> Signed-off-by: James Morse <james.morse@arm.com>
 > 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
+> ...
 > 
-> --
-> v1:
-> - Add docs for how to use a Vendor Defined Counter.
-> RFC:
-> - I'll post separately about this shortly, but it seems very odd
->    to me that there is no way to assign a parent to an event_sources
->    device.  As a result we get the messy approach of playing match
->    the name to figure out what the CPMU instance is connected to.
+>>  /*
+>> - * As of now the RMIDs allocation is global.
+>> + * As of now the RMIDs allocation is the same in each domain.
 
-Would it be too awkward to encode the parent name into the cpmu name?
+> Could you please elaborate what is meant/intended with this change
+> (global vs per domain)? From the changelog a comment that RMID
+> allocation is the same in each resource group for MPAM may be
+> expected but per domain is not clear to me.
 
-> ---
->   Documentation/admin-guide/perf/cxl.rst   | 65 ++++++++++++++++++++++++
->   Documentation/admin-guide/perf/index.rst |  1 +
->   2 files changed, 66 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/perf/cxl.rst b/Documentation/admin-guide/perf/cxl.rst
-> new file mode 100644
-> index 000000000000..46235dff4b21
-> --- /dev/null
-> +++ b/Documentation/admin-guide/perf/cxl.rst
-> @@ -0,0 +1,65 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================
-> +CXL Performance Monitoring Unit (CPMU)
-> +======================================
-> +
-> +The CXL rev 3.0 specification provides a definition of CXL Performance
-> +Monitoring Unit in section 13.2: Performance Monitoring.
-> +
-> +CXL components (e.g. Root Port, Switch Upstream Port, End Point) may have
-> +any number of CPMU instances. CPMU capabilities are fully discoverable from
-> +the devices. The specification provides event definitions for all CXL protocol
-> +message types and a set of additional events for things commonly counted on
-> +CXL devices (e.g. DRAM events).
-> +
-> +CPMU driver
-> +===========
-> +
-> +The CPMU driver register a perf PMU with the name cpmu<id> on the CXL bus.
-> +
-> +    /sys/bus/cxl/device/cpmu<id>
-> +
-> +The associated PMU is registered as
-> +
-> +   /sys/bus/event_sources/devices/cpmu<id>
-> +
-> +In common with other CXL bus devices, the id has no specific meaning and the
-> +relationship to specific CXL device should be established via the device parent
-> +of the device on the CXL bus.
-> +
-> +PMU driver provides description of available events and filter options in sysfs.
-> +
-> +The "format" directory describes all formats of the config (event vendor id,
-> +group id and mask) config1 (threshold, filter enables) and config2 (filter
-> +parameters) fields of the perf_event_attr structure.  The "events" directory
-> +describes all documented events show in perf list.
-> +
-> +The events shown in perf list are the most fine grained events with a single
-> +bit of the event mask set. More general events may be enable by setting
-> +multiple mask bits in config. For example, all Device to Host Read Requests
-> +may be captured on a single counter by setting the bits for all of
-> +
-> +* d2h_req_rdcurr
-> +* d2h_req_rdown
-> +* d2h_req_rdshared
-> +* d2h_req_rdany
-> +* d2h_req_rdownnodata
-> +
-> +Example of usage::
-> +
-> +  $#perf list
-> +  cpmu0/clock_ticks/                                 [Kernel PMU event]
-> +  cpmu0/d2h_req_itomwr/                              [Kernel PMU event]
-> +  cpmu0/d2h_req_rdany/                               [Kernel PMU event]
-> +  cpmu0/d2h_req_rdcurr/                              [Kernel PMU event]
-> +  -----------------------------------------------------------
-> +
-> +  $# perf stat -e cpmu0/clock_ticks/ -e cpmu0/d2h_req_itowrm/
-> +
-> +Vendor specific events may also be available and if so can be used via
-> +
-> +  $# perf stat -e cpmu0/vid=VID,gid=GID,mask=MASK/
-> +
-> +The driver does not support sampling. So "perf record" and attaching to
-> +a task are unsupported.
-> diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-> index 9de64a40adab..f60be04e4e33 100644
-> --- a/Documentation/admin-guide/perf/index.rst
-> +++ b/Documentation/admin-guide/perf/index.rst
-> @@ -21,3 +21,4 @@ Performance monitor support
->      alibaba_pmu
->      nvidia-pmu
->      meson-ddr-pmu
-> +   cxl
+This is badly worded. It's referring to the limbo list management, while RMID=7 isn't
+unique on MPAM, the struct rmid_entry used in two domains will be the same because the
+CLOSID doesn't change. This means its still sufficient to move around the struct
+rmid_entry to manage the limbo list.
+
+I think this had me confused because 'as of now' implies the RMID won't always be globally
+allocated, and MPAM has non-unique RMID/PMG values which are a different kind of global.
+
+
+I'll change this to read:
+/*
+ * For MPAM the RMID value is not unique, and has to be considered with
+ * the CLOSID. The (CLOSID, RMID) pair is allocated on all domains, which
+ * allows all domains to be managed by a single limbo list.
+ * Each domain also has a rmid_busy_llc to reduce the work of the limbo handler.
+ */
+
+(seeing as the function doesn't touch rmid_budy_llc, or refer to it by name)
+
+Thanks,
+
+James
