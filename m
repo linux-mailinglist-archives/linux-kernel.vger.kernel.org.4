@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193536AA424
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 208DE6AA3E7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbjCCWVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 17:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S233616AbjCCWJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 17:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbjCCWVU (ORCPT
+        with ESMTP id S233654AbjCCWI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 17:21:20 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE985FEB9
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 14:13:27 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id k14so5424867lfj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 14:13:27 -0800 (PST)
+        Fri, 3 Mar 2023 17:08:59 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B617B64868
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:59:36 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id t11so5415881lfr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:59:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677881518;
+        d=linaro.org; s=google; t=1677880710;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IQ4P/+hX2P6pikGGe2JrqWC+XZ4kPlYMVKBCWOIvu90=;
-        b=JfXMESTpuLLpfoLYdCXT1KYPEypIK6nONU9zAjZPejDc51xmw2R285ynJvTqN70tbe
-         ToGxgJj6pSF06xcFmq/j74gEGdtApafzGo796FnJJc4nem0DXS3/VsBEMEwBDxwrteb9
-         RAYOpKd0KQPQ/sD9kqod1s+Jf6hli4CGdShvXUfdFpFuCzrH/x2ux/xDOCHKd6xflEV+
-         3ONv4cKo1JzvLg7zQIxTM518ylSSfMHiHpk9L3djM3c4BISxtkWv9d2+GZywLU7eSHF0
-         seZX76xqBYbN5LIW/vHgCodyjk+vWgjBGXYDNQkjbkLK1Y4+fqADeVFWQbuTuZz9mKJ4
-         3yTg==
+        bh=xMUNS7sepBti40evG3v1VzCcdXq5T/S+i6PiT3G+pfs=;
+        b=mwKCN8Hd+7f+HoC4Zlb2O3XOI1pWE/V8SEf7jIDFZQ9ruRjREK4sfNVuT5Yy0aFDNI
+         4R2K/z/WIPEP2xGN8+VxguMd7cNNHgjWbZGHe9dmyni4dnXxrFc1yiuzicXnAaUXnmWO
+         hVFoBMAshKj2qEiajhjiFUdgw5veq2UWUqDR91c2VIP79cVQt/h/gqgYoZOvvC3VsbwE
+         8sbOjdGO+H5tf9ElRaLB3LARiEKYT8A0xrUFiqPRA9MUkgTr+tyJ9z8zVrU97L1VOvcz
+         M0agUjPa21WPgjlld+gGkwHzucMwDInRBkQPIMewB5ZlBKjS/j9OYyBHi66Lla2EfsMO
+         rF/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677881518;
+        d=1e100.net; s=20210112; t=1677880710;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IQ4P/+hX2P6pikGGe2JrqWC+XZ4kPlYMVKBCWOIvu90=;
-        b=zmsOUtjY6RJIjYO+3lKmgz+Tsc/2Z9DntGIQ7cxD/edZy8JL5rHak448Ekst/r0Vlf
-         txl32peWyOudt1JU1w33I9xeXbT4yAm9NziCFcbM24sgjpfqlbfs2gjW590Z47Rd8iMO
-         vBwhjkFgwK3kmSbLSj9YQuhqBqrT8Do1vSMPP7KKGBdml+2wWyhNK4EfcEIgRQOD23uv
-         uQ336e+yv0YiGjXcTBBgexeM7tzSBnp5YYmfTThUSPqPI42BCtVUMpZLFRa2j0vLkVer
-         CmrJMjWXOgu4TmwS+NHcAsFOBmK8tUSgUvxxJR39hpbBQU46X91unTQQigGZjvvTVIuQ
-         TXbw==
-X-Gm-Message-State: AO0yUKW8af14Xul21dzFHnJahVMvEbO8EwtUqPffZfNlcbatjCz/ZBYV
-        9AC63NEbjPA65aci58+DDRb1V262icFurK7kYug=
-X-Google-Smtp-Source: AK7set8JbxDAS54CalbP2WgixNwDWwcdFHlz3zpT4NUKQqMHsZiUw9hwQUWYwolhEtaE9qMOzuHq3g==
-X-Received: by 2002:a19:ee06:0:b0:4de:7b5b:f16f with SMTP id g6-20020a19ee06000000b004de7b5bf16fmr1001238lfb.7.1677880709251;
-        Fri, 03 Mar 2023 13:58:29 -0800 (PST)
+        bh=xMUNS7sepBti40evG3v1VzCcdXq5T/S+i6PiT3G+pfs=;
+        b=n12mPw3h8w6QfFWAQAECoac7J7bXba9ZG88OOW3bqmvcOmTvkxX/oIS3Yd7JMv2JUA
+         ZkFaeitmosO7Izp5+Zc1a7HX2gDX8dKepapOPoCgjr+5UYfF+K4Mk915TmvrCP4hQUnM
+         a4OCip7o+F7P737BUsMWr3G36B2F0HakzszTGh3ziDoGeSWXgdrfZqRF02GJVk6kk/TP
+         cZaWysmwZIWM2kOs2ZeM3fP2U5aEDUPLlJM2qFVmpsuzqfSPTWKhO/9iRlunPlh5rLTD
+         jtVFvwCijnO3Li1jecmIAdQQ7fCtipRRPoL5jvI3F8QpCJU/MhzfHDe28WaQTbo0+KI1
+         LaIQ==
+X-Gm-Message-State: AO0yUKXxrxlnUX4PAOcd562C4dM3v4QkxkjGq7DDpO0BuS5dWdKFZl1z
+        8M0+1EUaLWH2Wi9o+Ue6bKvDOQ==
+X-Google-Smtp-Source: AK7set+xTOMvHQPpikQYpYy36pXqXQETgeNZhjJI5qy6WIbBqGxqgoV4v/7eUZshp7eRmb+hJNNc7w==
+X-Received: by 2002:a19:7405:0:b0:4e1:7d1c:85ce with SMTP id v5-20020a197405000000b004e17d1c85cemr910940lfe.27.1677880710686;
+        Fri, 03 Mar 2023 13:58:30 -0800 (PST)
 Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id e27-20020ac2547b000000b004cafa01ebbfsm552670lfn.101.2023.03.03.13.58.27
+        by smtp.gmail.com with ESMTPSA id e27-20020ac2547b000000b004cafa01ebbfsm552670lfn.101.2023.03.03.13.58.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 13:58:28 -0800 (PST)
+        Fri, 03 Mar 2023 13:58:30 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 03 Mar 2023 22:58:12 +0100
-Subject: [PATCH 12/15] arm64: dts: qcom: sm6375: Introduce MPM support
+Date:   Fri, 03 Mar 2023 22:58:13 +0100
+Subject: [PATCH 13/15] arm64: dts: qcom: sm6375: Bump CPU rail power
+ collapse index
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-sm6375_features0_dts-v1-12-8c8d94fba6f0@linaro.org>
+Message-Id: <20230303-topic-sm6375_features0_dts-v1-13-8c8d94fba6f0@linaro.org>
 References: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
 In-Reply-To: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
 To:     Amit Kucheria <amitk@kernel.org>,
@@ -74,106 +75,110 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677880689; l=3281;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677880689; l=2856;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=iPa23Ps62e7Th5IYTb8Pdb0xoF/q147iZLwyUAl1QU0=;
- b=zPa/FrwPkdGsOQ4pHDIGF83/202i7LLx5FG4SCWhJkh9tsnmE3v3rmnziIAXgQyZ3UqQsSi2SsyM
- mbwdMHi7DxcP15g3E0/73AVlQwW29D+BP6tZEdF9l2y+LX6fqVbl
+ bh=Qo/t+wBOxYfbhVIzvJopzDAhr8R83GF/inpNjIKH5i4=;
+ b=g235hPJZ2ZyXkacBlAhRPLIHA1uGZC7mNoBH5+i+M1wYXAToQ+XNthEFZmTV3B9F+OBYu7mYBkwF
+ dpZhHdtcBlItLd+uTPAzfc0bCew7lPkDsplDEmTL1vif1Eaa8jYq
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node for MPM and wire it up on consumers that use it. This also
-fixes a very bad and sad assumption I made when initially porting this
-SoC that the downstream MPM-TLMM mappings were 1-1. That apparently
-changed some time ago, so with this patch the MPM consumers will actually
-be hooked up to the correct interrupt lines.
+In preparation for supporting a less-deep sleep state, rename the
+existing rail power off from _0 to _1.
 
-Fixes: 59d34ca97f91 ("arm64: dts: qcom: Add initial device tree for SM6375")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm6375.dtsi | 32 ++++++++++++++++++++++++++------
- 1 file changed, 26 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/qcom/sm6375.dtsi | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm6375.dtsi b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-index 94bb373f8d97..ecb654357288 100644
+index ecb654357288..05d8d6a012b6 100644
 --- a/arch/arm64/boot/dts/qcom/sm6375.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-@@ -315,6 +315,7 @@ CPU_PD7: power-domain-cpu7 {
+@@ -207,7 +207,7 @@ core7 {
+ 		idle-states {
+ 			entry-method = "psci";
+ 
+-			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
++			LITTLE_CPU_SLEEP_1: cpu-sleep-0-1 {
+ 				compatible = "arm,idle-state";
+ 				idle-state-name = "silver-rail-power-collapse";
+ 				arm,psci-suspend-param = <0x40000004>;
+@@ -217,7 +217,7 @@ LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
+ 				local-timer-stop;
+ 			};
+ 
+-			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
++			BIG_CPU_SLEEP_1: cpu-sleep-1-1 {
+ 				compatible = "arm,idle-state";
+ 				idle-state-name = "gold-rail-power-collapse";
+ 				arm,psci-suspend-param = <0x40000004>;
+@@ -268,49 +268,49 @@ psci {
+ 		CPU_PD0: power-domain-cpu0 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+-			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_1>;
+ 		};
+ 
+ 		CPU_PD1: power-domain-cpu1 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+-			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_1>;
+ 		};
+ 
+ 		CPU_PD2: power-domain-cpu2 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+-			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_1>;
+ 		};
+ 
+ 		CPU_PD3: power-domain-cpu3 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+-			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_1>;
+ 		};
+ 
+ 		CPU_PD4: power-domain-cpu4 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+-			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_1>;
+ 		};
+ 
+ 		CPU_PD5: power-domain-cpu5 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+-			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_1>;
+ 		};
+ 
+ 		CPU_PD6: power-domain-cpu6 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+-			domain-idle-states = <&BIG_CPU_SLEEP_0>;
++			domain-idle-states = <&BIG_CPU_SLEEP_1>;
+ 		};
+ 
+ 		CPU_PD7: power-domain-cpu7 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+-			domain-idle-states = <&BIG_CPU_SLEEP_0>;
++			domain-idle-states = <&BIG_CPU_SLEEP_1>;
+ 		};
  
  		CLUSTER_PD: power-domain-cpu-cluster0 {
- 			#power-domain-cells = <0>;
-+			power-domains = <&wakegic>;
- 			domain-idle-states = <&CLUSTER_SLEEP_0>;
- 		};
- 	};
-@@ -633,7 +634,7 @@ tlmm: pinctrl@500000 {
- 			reg = <0 0x00500000 0 0x800000>;
- 			interrupts = <GIC_SPI 227 IRQ_TYPE_LEVEL_HIGH>;
- 			gpio-ranges = <&tlmm 0 0 157>;
--			/* TODO: Hook up MPM as wakeup-parent when it's there */
-+			wakeup-parent = <&wakegic>;
- 			interrupt-controller;
- 			gpio-controller;
- 			#interrupt-cells = <2>;
-@@ -755,7 +756,7 @@ spmi_bus: spmi@1c40000 {
- 			      <0 0x01c0a000 0 0x26000>;
- 			reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
- 			interrupt-names = "periph_irq";
--			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&wakegic 86 IRQ_TYPE_LEVEL_HIGH>;
- 			qcom,ee = <0>;
- 			qcom,channel = <0>;
- 			#address-cells = <2>;
-@@ -791,6 +792,25 @@ rpm_msg_ram: sram@45f0000 {
- 			reg = <0 0x045f0000 0 0x7000>;
- 		};
- 
-+		wakegic: interrupt-controller@45f01b8 {
-+			compatible = "qcom,mpm";
-+			reg = <0 0x045f01b8 0 0x1000>;
-+			interrupts = <GIC_SPI 197 IRQ_TYPE_EDGE_RISING>;
-+			mboxes = <&ipcc IPCC_CLIENT_AOP IPCC_MPROC_SIGNAL_SMP2P>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+			#power-domain-cells = <0>;
-+			interrupt-parent = <&intc>;
-+			qcom,mpm-pin-count = <96>;
-+			qcom,mpm-pin-map = <5 296>,  /* Soundwire wake_irq */
-+					   <12 422>, /* DWC3 ss_phy_irq */
-+					   <86 183>, /* MPM wake, SPMI */
-+					   <89 314>, /* TSENS0 0C */
-+					   <90 315>, /* TSENS1 0C */
-+					   <93 164>, /* DWC3 dm_hs_phy_irq */
-+					   <94 165>; /* DWC3 dp_hs_phy_irq */
-+		};
-+
- 		sram@4690000 {
- 			compatible = "qcom,rpm-stats";
- 			reg = <0 0x04690000 0 0x400>;
-@@ -1185,10 +1205,10 @@ usb_1: usb@4ef8800 {
- 					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
- 			assigned-clock-rates = <19200000>, <133333333>;
- 
--			interrupts = <GIC_SPI 302 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&intc GIC_SPI 302 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&wakegic 12 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&wakegic 93 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&wakegic 94 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hs_phy_irq",
- 					  "ss_phy_irq",
- 					  "dm_hs_phy_irq",
 
 -- 
 2.39.2
