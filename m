@@ -2,123 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C6A6A948C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B676A948E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjCCJys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
+        id S229796AbjCCJzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjCCJyr (ORCPT
+        with ESMTP id S230436AbjCCJy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:54:47 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4411B36687;
-        Fri,  3 Mar 2023 01:54:31 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3236QsOa009479;
-        Fri, 3 Mar 2023 09:54:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2sCFqWkUj5tuG3vQzE8IwXlJBkVraVjQuvLOaYp90/s=;
- b=ISrfwXNDjK+jSKSHsMqvwge6sdRBVU4InmajHjX8DmsfndO8B1HfP54f5fyBk+rGxFt7
- 7//xSp1+Oz4s+YrgisQYRp6sRoiBXnTvFEPwcqe62LbQyH+79A1ADxZ2CSUcNW8iKMFk
- xrGF1+nSgY6k583p9xWRm6hl5BGG5fbcj7N4D3nEFB5029sBrinS5Q7GxFVjNuoK9TQV
- ltS6R9lm2hqacazUTT5G7Ye2hx2T4/vsROkDVu6cNj/kQ/7waxKfP0MLWLkS5E3RkmJ9
- /xCDx+7I2KgonSUvzzKSQndP+j1xKRtF31yIkfmWP43qQnplklGntb1pNbD+hLTPvgdq nA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2veetv08-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 09:54:25 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3239sOSH016998
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 09:54:24 GMT
-Received: from [10.50.35.127] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 3 Mar 2023
- 01:54:21 -0800
-Message-ID: <2eef90b9-ff67-15bb-3fa1-e7b28a6f4244@quicinc.com>
-Date:   Fri, 3 Mar 2023 15:24:18 +0530
+        Fri, 3 Mar 2023 04:54:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1702B1204A;
+        Fri,  3 Mar 2023 01:54:52 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F9C62F4;
+        Fri,  3 Mar 2023 01:55:35 -0800 (PST)
+Received: from [10.57.90.45] (unknown [10.57.90.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9ED7B3F587;
+        Fri,  3 Mar 2023 01:54:48 -0800 (PST)
+Message-ID: <1c91b777-982e-e71a-4829-51744e9555c5@arm.com>
+Date:   Fri, 3 Mar 2023 09:54:47 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 8/8] arm64: dts: qcom: ipq9574: Enable USB
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1677749625.git.quic_varada@quicinc.com>
- <405a87eebf3c6a971def16122b70158dd8c7ed03.1677749625.git.quic_varada@quicinc.com>
- <CAA8EJpqoocEYZPsaBe-pQ92ikLCAZD5hV46NZBC29pNv7U4dGg@mail.gmail.com>
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-In-Reply-To: <CAA8EJpqoocEYZPsaBe-pQ92ikLCAZD5hV46NZBC29pNv7U4dGg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [RFC] Support for Arm CCA VMs on Linux
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Itaru Kitayama <itaru.kitayama@gmail.com>
+Cc:     linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+ <Y9PtKJ3Wicc19JF1@myrica>
+ <CANW9uyud8RTkqgiL=64wV712QMxtAyubqeyCJ0vpcADJ42VqJA@mail.gmail.com>
+ <Y/8Y3WLmiw6+Z5AS@myrica>
+ <CANW9uysnvGCwANu+_6dp9+3rvHGOkThT9d0K2qpQV4exdmYWoA@mail.gmail.com>
+ <20230303094618.GC361458@myrica>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230303094618.GC361458@myrica>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: We0TW6e1lyEO-s2k1uzbwWV_K4E1GteT
-X-Proofpoint-GUID: We0TW6e1lyEO-s2k1uzbwWV_K4E1GteT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- malwarescore=0 mlxlogscore=678 impostorscore=0 bulkscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030087
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/03/2023 09:46, Jean-Philippe Brucker wrote:
+> On Thu, Mar 02, 2023 at 07:12:24AM +0900, Itaru Kitayama wrote:
+>>>> I've tried your series in Real on CCA Host, but the KVM arch init
+>>>> emits an Invalid argument error and terminates.
+> 
+> This was the KVM_SET_ONE_REG for the SVE vector size. During my tests I
+> didn't enable SVE in the host but shrinkwrap enables more options.
 
-On 3/2/2023 9:48 PM, Dmitry Baryshkov wrote:
-> On Thu, 2 Mar 2023 at 11:57, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
->> Turn on USB related nodes
->>
->> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->> index 8a6caae..6a06ca4 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->> +++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->> @@ -121,3 +121,7 @@
->>   &xo_board_clk {
->>          clock-frequency = <24000000>;
->>   };
->> +
->> +&usb3 { status = "ok"; };
->> +&ssphy_0 { status = "ok"; };
->> +&qusb_phy_0 { status = "ok"; };
-> Please follow an example of how it is done on other platforms. DT
-> nodes are sorted, newlines and empty lines are inserted in proper
-> places.
->
->> --
->> 2.7.4
+Does the Qemu check for SVE capability on /dev/kvm ? For kvmtool, we
+changed to using the VM instance and that would prevent using SVE,
+until the RMM supports it.
 
-Will rectify and post a new version.
+Suzuki
 
-Thanks
+> 
+> Until we figure out support for SVE, disable it on the QEMU command-line
+> (similarly to '--disable-sve' needed for kvmtool boot):
+> 
+> 	-cpu host,sve=off
+> 
+> Thanks,
+> Jean
 
-Varada
-
->
