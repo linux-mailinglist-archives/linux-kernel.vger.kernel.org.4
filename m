@@ -2,238 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D496A9C01
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF4C6A9C04
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjCCQnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 11:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S230381AbjCCQpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 11:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjCCQnt (ORCPT
+        with ESMTP id S230140AbjCCQo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:43:49 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A2E3A8C;
-        Fri,  3 Mar 2023 08:43:34 -0800 (PST)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 98BD140012;
-        Fri,  3 Mar 2023 16:43:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677861813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZkezqfSVIqRLfpbJoE+hx/1UCsqNMqn17crrczW4LZM=;
-        b=ai+OrhKsEcuFRB6tSIykAccCY+vTHaqJC9Zhg/zu3Ic36NqyydsD/MhV7ObpB2WpnpdbZ2
-        kCY7602loykn07k+c0gr3Uar38idVYNzaXQXDFxPU26JsnBnZtkOCkw/zzqFvrZLK55tEB
-        IccJXD1FWhIvhpobXcVuq8UUMqEEPHwcKT2uHNi7OJOwjG75hbY0T+aEw6L0QH4Wet2Mkm
-        fG1+5W26UNoTwYtSSHmUkQS0Hd7TAifdwcjoKykswCZTEDrCGqJPFOMjt/yv1KqBNMHOrp
-        1IOMOkA9dXMecV4289/Rx/otzHn/kSZsU2ygmrlBd00mgm1yVOfYoPTY2kSFzQ==
-From:   =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Cc:     Michael Walle <michael@walle.cc>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Kory Maincent <kory.maincent@bootlin.com>,
-        thomas.petazzoni@bootlin.com, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Jie Wang <wangjie125@huawei.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wang Yufen <wangyufen@huawei.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>
-Subject: [PATCH v2 4/4] net: fix up drivers WRT phy time stamping
-Date:   Fri,  3 Mar 2023 17:42:41 +0100
-Message-Id: <20230303164248.499286-5-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230303164248.499286-1-kory.maincent@bootlin.com>
-References: <20230303164248.499286-1-kory.maincent@bootlin.com>
+        Fri, 3 Mar 2023 11:44:59 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7062B298
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:44:35 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id b16so1195206iof.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 08:44:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677861869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2/MTNE26aRXfoD1WpUTjmXV2c/L1a5as96+J8QTw+PM=;
+        b=Xr/yHVwy/Zj1cBfRrs4AaSJvWVU1+6NDNq1NX3hDumSwSDzihtJc0k9dWCZp62g3n9
+         XxNtPLF8Egf6OXGBX1yQ2tOXBR6sqZbr7YeNHCvh8S36eyRPLRdxBCt/wx0/Xt+kp4ks
+         FlitKfdwilbk6xwu494vaaYhyhW75KE0XBUwXUIrn6NOIfA65m/Pk+uFYJBgSdwHcCSt
+         hqTfaSeGy661j/pZlrwJHFYZYQZYwV0ulbemiTJyYLmHUaTsyLNI+rLhsPpwFk582lqR
+         ncoUBV9qmz1EA5Vj3wIt+TXLYn5WmEuLet5KSKN08JD7XzHGnU34T7rskexdTPU7ciXz
+         RYtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677861869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2/MTNE26aRXfoD1WpUTjmXV2c/L1a5as96+J8QTw+PM=;
+        b=Jy1ZA9LKqvSXlG4ZrJ/FXZSNVI9oRcbu7B2CEq1AJYfcdrgB5uhWkIQ2cdlRYVJfcj
+         C4+xaM4I5NIBGNBYWoLu9Uz/FsFYWFMgPnwSInmzjLhEaGQsbaMMvuYXWK+VFBpWqyzT
+         +UfTMcj7iyJSrgYQ2twSeJJGVq19mFp5/e4P3uPCJJlXouaB150/8y7asCBMzrZqzNki
+         YmC/nObNk4FGLJRcDsfpmuOd6zqGyd8xvbmd83kReZzjq4yXRTwGDvQefYQrpHkNxrTC
+         j8kbmJ/Dt9Q85WRt7IIKsNkB1eemFIXdJkBH1WCbEzLPIKlfUQkhW4Ke3dQGEKaaWL37
+         T5/A==
+X-Gm-Message-State: AO0yUKWpbHGba5nztQIOWHfpRMaqfPn6ti5hGlPk2AXg31wWNrnOrBtk
+        4bm8PCKvB0VIYuNjM3aA+bmHa30o56sgXkErDbQHNw==
+X-Google-Smtp-Source: AK7set+4musQnbb0Y8lAnjg6jMwrEAK2db+bOLmt0zuywluYxhrIcd1g/AQv8zoHI+K7ZAW67bcPd3VNhikPOm6Nn28=
+X-Received: by 2002:a02:2b04:0:b0:3c2:c1c9:8bca with SMTP id
+ h4-20020a022b04000000b003c2c1c98bcamr2490077jaa.2.1677861869186; Fri, 03 Mar
+ 2023 08:44:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302212531.1043318-1-irogers@google.com> <20230302212531.1043318-3-irogers@google.com>
+ <962de75d-8e27-9b47-662e-e324b3ba5812@linux.intel.com>
+In-Reply-To: <962de75d-8e27-9b47-662e-e324b3ba5812@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 3 Mar 2023 08:44:15 -0800
+Message-ID: <CAP-5=fXiRtKF661e=-4dX30ooV7uKQbidjaaDhjckVRdjw7CzA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] perf stat: Don't remove all grouped events when
+ CPU maps disagree
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Cochran <richardcochran@gmail.com>
+On Fri, Mar 3, 2023 at 7:50=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.co=
+m> wrote:
+>
+>
+>
+> On 2023-03-02 4:25 p.m., Ian Rogers wrote:
+> > If the events in an evlist's CPU map differ then the entire group is
+> > removed. For example:
+> >
+> > ```
+> > $ perf stat -e '{imc_free_running/data_read/,imc_free_running/data_writ=
+e/,cs}' -a sleep 1
+> > WARNING: grouped events cpus do not match, disabling group:
+> >   anon group { imc_free_running/data_read/, imc_free_running/data_write=
+/, cs }
+> > ```
+> >
+> > Change the behavior so that just the events not matching the leader
+> > are removed. So in the example above, just 'cs' will be removed.
+> >
+> > Modify the warning so that it is produced once for each group, rather
+> > than once for the entire evlist. Shrink the scope and size of the
+> > warning text buffer.
+>
+> For the uncore, we usually have to create a group for each uncore PMU.
+> The number of groups may be big. For example, on ICX, we have 40 CHA
+> PMUs. For SPR, there should be more CHAs. If we have something like
+> {cycles,uncore_cha/event=3D0x1/}, is the warning shown 40 times on ICX?
+> If so, it should be very annoying.
+>
+> Maybe it's better to keep the current behavior which only print a
+> warning once and notify the users that perf will re-group the events.
+> For the details, they can get it from the -v option.
 
-For "git bisect" correctness, this patch should be squashed in to the
-previous one, but it is broken out here for the purpose of review.
+Thanks Kan, I could imagine that but I was also worried about cases
+where there are multiple groups like:
 
-Signed-off-by: Richard Cochran <richardcochran@gmail.com>
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
----
- drivers/net/ethernet/freescale/fec_main.c | 23 +++++++++-----------
- drivers/net/ethernet/mscc/ocelot_net.c    | 21 +++++++++---------
- drivers/net/ethernet/ti/cpsw_priv.c       | 12 +++++------
- drivers/net/ethernet/ti/netcp_ethss.c     | 26 +++++------------------
- 4 files changed, 31 insertions(+), 51 deletions(-)
+```
+$ perf stat -e '{imc_free_running/data_read/,cs},{uncore_clock/clockticks/,=
+cs}'
+-a sleep 1
+WARNING: grouped events cpus do not match.
+Events with CPUs not matching the leader will be removed from the group.
+ anon group { imc_free_running/data_read/, cs }
+WARNING: grouped events cpus do not match.
+Events with CPUs not matching the leader will be removed from the group.
+ anon group { uncore_clock/clockticks/, cs }
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index f250b0df27fb..b98119551e6a 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -3058,22 +3058,19 @@ static int fec_enet_ioctl(struct net_device *ndev, struct ifreq *rq, int cmd)
- 	if (!netif_running(ndev))
- 		return -EINVAL;
- 
-+	switch (cmd) {
-+	case SIOCSHWTSTAMP:
-+		return fep->bufdesc_ex ? fec_ptp_set(ndev, rq) :
-+		-EOPNOTSUPP;
-+
-+	case SIOCGHWTSTAMP:
-+		return fep->bufdesc_ex ? fec_ptp_get(ndev, rq) :
-+		-EOPNOTSUPP;
-+	}
-+
- 	if (!phydev)
- 		return -ENODEV;
- 
--	if (fep->bufdesc_ex) {
--		bool use_fec_hwts = !phy_has_hwtstamp(phydev);
--
--		if (cmd == SIOCSHWTSTAMP) {
--			if (use_fec_hwts)
--				return fec_ptp_set(ndev, rq);
--			fec_ptp_disable_hwts(ndev);
--		} else if (cmd == SIOCGHWTSTAMP) {
--			if (use_fec_hwts)
--				return fec_ptp_get(ndev, rq);
--		}
--	}
--
- 	return phy_mii_ioctl(phydev, rq, cmd);
- }
- 
-diff --git a/drivers/net/ethernet/mscc/ocelot_net.c b/drivers/net/ethernet/mscc/ocelot_net.c
-index 50858cc10fef..8c37db28a93d 100644
---- a/drivers/net/ethernet/mscc/ocelot_net.c
-+++ b/drivers/net/ethernet/mscc/ocelot_net.c
-@@ -882,18 +882,19 @@ static int ocelot_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
- 	struct ocelot *ocelot = priv->port.ocelot;
- 	int port = priv->port.index;
- 
--	/* If the attached PHY device isn't capable of timestamping operations,
--	 * use our own (when possible).
--	 */
--	if (!phy_has_hwtstamp(dev->phydev) && ocelot->ptp) {
--		switch (cmd) {
--		case SIOCSHWTSTAMP:
--			return ocelot_hwstamp_set(ocelot, port, ifr);
--		case SIOCGHWTSTAMP:
--			return ocelot_hwstamp_get(ocelot, port, ifr);
--		}
-+	switch (cmd) {
-+	case SIOCSHWTSTAMP:
-+		return ocelot->ptp ? ocelot_hwstamp_set(ocelot, port, ifr) :
-+		-EOPNOTSUPP;
-+
-+	case SIOCGHWTSTAMP:
-+		return ocelot->ptp ? ocelot_hwstamp_get(ocelot, port, ifr) :
-+		-EOPNOTSUPP;
- 	}
- 
-+	if (!dev->phydev)
-+		return -ENODEV;
-+
- 	return phy_mii_ioctl(dev->phydev, ifr, cmd);
- }
- 
-diff --git a/drivers/net/ethernet/ti/cpsw_priv.c b/drivers/net/ethernet/ti/cpsw_priv.c
-index 758295c898ac..b15b83bb269a 100644
---- a/drivers/net/ethernet/ti/cpsw_priv.c
-+++ b/drivers/net/ethernet/ti/cpsw_priv.c
-@@ -714,13 +714,11 @@ int cpsw_ndo_ioctl(struct net_device *dev, struct ifreq *req, int cmd)
- 
- 	phy = cpsw->slaves[slave_no].phy;
- 
--	if (!phy_has_hwtstamp(phy)) {
--		switch (cmd) {
--		case SIOCSHWTSTAMP:
--			return cpsw_hwtstamp_set(dev, req);
--		case SIOCGHWTSTAMP:
--			return cpsw_hwtstamp_get(dev, req);
--		}
-+	switch (cmd) {
-+	case SIOCSHWTSTAMP:
-+		return cpsw_hwtstamp_set(dev, req);
-+	case SIOCGHWTSTAMP:
-+		return cpsw_hwtstamp_get(dev, req);
- 	}
- 
- 	if (phy)
-diff --git a/drivers/net/ethernet/ti/netcp_ethss.c b/drivers/net/ethernet/ti/netcp_ethss.c
-index 751fb0bc65c5..36ce80f8bd6b 100644
---- a/drivers/net/ethernet/ti/netcp_ethss.c
-+++ b/drivers/net/ethernet/ti/netcp_ethss.c
-@@ -2557,15 +2557,6 @@ static int gbe_txtstamp_mark_pkt(struct gbe_intf *gbe_intf,
- 	    !gbe_dev->tx_ts_enabled)
- 		return 0;
- 
--	/* If phy has the txtstamp api, assume it will do it.
--	 * We mark it here because skb_tx_timestamp() is called
--	 * after all the txhooks are called.
--	 */
--	if (phy_has_txtstamp(phydev)) {
--		skb_shinfo(p_info->skb)->tx_flags |= SKBTX_IN_PROGRESS;
--		return 0;
--	}
--
- 	if (gbe_need_txtstamp(gbe_intf, p_info)) {
- 		p_info->txtstamp = gbe_txtstamp;
- 		p_info->ts_context = (void *)gbe_intf;
-@@ -2583,11 +2574,6 @@ static int gbe_rxtstamp(struct gbe_intf *gbe_intf, struct netcp_packet *p_info)
- 	if (p_info->rxtstamp_complete)
- 		return 0;
- 
--	if (phy_has_rxtstamp(phydev)) {
--		p_info->rxtstamp_complete = true;
--		return 0;
--	}
--
- 	if (gbe_dev->rx_ts_enabled)
- 		cpts_rx_timestamp(gbe_dev->cpts, p_info->skb);
- 
-@@ -2821,13 +2807,11 @@ static int gbe_ioctl(void *intf_priv, struct ifreq *req, int cmd)
- 	struct gbe_intf *gbe_intf = intf_priv;
- 	struct phy_device *phy = gbe_intf->slave->phy;
- 
--	if (!phy_has_hwtstamp(phy)) {
--		switch (cmd) {
--		case SIOCGHWTSTAMP:
--			return gbe_hwtstamp_get(gbe_intf, req);
--		case SIOCSHWTSTAMP:
--			return gbe_hwtstamp_set(gbe_intf, req);
--		}
-+	switch (cmd) {
-+	case SIOCGHWTSTAMP:
-+		return gbe_hwtstamp_get(gbe_intf, req);
-+	case SIOCSHWTSTAMP:
-+		return gbe_hwtstamp_set(gbe_intf, req);
- 	}
- 
- 	if (phy)
--- 
-2.25.1
+Performance counter stats for 'system wide':
 
+         1,255.75 MiB  imc_free_running/data_read/
+            7,571      cs
+    1,327,285,527      uncore_clock/clockticks/
+            7,571      cs
+
+      1.002772882 seconds time elapsed
+```
+
+Knowing that both groups were broken there feels like a value add.
+Given that this is a warning, and it can be fixed by moving the event
+out of the group or forcing the CPUs, I lean toward being
+informative/spammy as the spam is somewhat straightforwardly fixed on
+the command line.
+
+Thanks,
+Ian
+
+> Thanks,
+> Kan
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/builtin-stat.c | 24 +++++++++++++++---------
+> >  1 file changed, 15 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> > index d70b1ec88594..5c12ae5efce5 100644
+> > --- a/tools/perf/builtin-stat.c
+> > +++ b/tools/perf/builtin-stat.c
+> > @@ -181,14 +181,13 @@ static bool cpus_map_matched(struct evsel *a, str=
+uct evsel *b)
+> >
+> >  static void evlist__check_cpu_maps(struct evlist *evlist)
+> >  {
+> > -     struct evsel *evsel, *pos, *leader;
+> > -     char buf[1024];
+> > +     struct evsel *evsel, *warned_leader =3D NULL;
+> >
+> >       if (evlist__has_hybrid(evlist))
+> >               evlist__warn_hybrid_group(evlist);
+> >
+> >       evlist__for_each_entry(evlist, evsel) {
+> > -             leader =3D evsel__leader(evsel);
+> > +             struct evsel *leader =3D evsel__leader(evsel);
+> >
+> >               /* Check that leader matches cpus with each member. */
+> >               if (leader =3D=3D evsel)
+> > @@ -197,19 +196,26 @@ static void evlist__check_cpu_maps(struct evlist =
+*evlist)
+> >                       continue;
+> >
+> >               /* If there's mismatch disable the group and warn user. *=
+/
+> > -             WARN_ONCE(1, "WARNING: grouped events cpus do not match, =
+disabling group:\n");
+> > -             evsel__group_desc(leader, buf, sizeof(buf));
+> > -             pr_warning("  %s\n", buf);
+> > -
+> > +             if (warned_leader !=3D leader) {
+> > +                     char buf[200];
+> > +
+> > +                     pr_warning("WARNING: grouped events cpus do not m=
+atch.\n"
+> > +                             "Events with CPUs not matching the leader=
+ will "
+> > +                             "be removed from the group.\n");
+> > +                     evsel__group_desc(leader, buf, sizeof(buf));
+> > +                     pr_warning("  %s\n", buf);
+> > +                     warned_leader =3D leader;
+> > +             }
+> >               if (verbose > 0) {
+> > +                     char buf[200];
+> > +
+> >                       cpu_map__snprint(leader->core.cpus, buf, sizeof(b=
+uf));
+> >                       pr_warning("     %s: %s\n", leader->name, buf);
+> >                       cpu_map__snprint(evsel->core.cpus, buf, sizeof(bu=
+f));
+> >                       pr_warning("     %s: %s\n", evsel->name, buf);
+> >               }
+> >
+> > -             for_each_group_evsel(pos, leader)
+> > -                     evsel__remove_from_group(pos, leader);
+> > +             evsel__remove_from_group(evsel, leader);
+> >       }
+> >  }
+> >
