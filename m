@@ -2,344 +2,559 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D356A9BCC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3314A6A9BCF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjCCQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 11:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+        id S231203AbjCCQbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 11:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjCCQb2 (ORCPT
+        with ESMTP id S231260AbjCCQbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:31:28 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2045.outbound.protection.outlook.com [40.107.21.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3B4B762;
-        Fri,  3 Mar 2023 08:31:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UnXkqilarehHRVej9BHrS5YNxmgjnu+ApoGT/tOwEVo=;
- b=aVvCyQhS3rp9NX3975/ufMDEZruAyvxa8Vq//TURrd7mJat4/TXhMdJ+9hN0fCW5utRS57cF2xT1BFQsZzP3/tXZIo3UQW1EgZwa0eeWmeQkAlt8pLY+CHNElafgoo3H6nog9uzLCqYI7T7mr7BAzQZWrYRt01/iGc69nsSLZyY=
-Received: from FR0P281CA0136.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:96::10)
- by GV2PR08MB8098.eurprd08.prod.outlook.com (2603:10a6:150:76::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Fri, 3 Mar
- 2023 16:31:19 +0000
-Received: from VI1EUR03FT022.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:d10:96:cafe::6a) by FR0P281CA0136.outlook.office365.com
- (2603:10a6:d10:96::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.10 via Frontend
- Transport; Fri, 3 Mar 2023 16:31:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VI1EUR03FT022.mail.protection.outlook.com (100.127.144.146) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.22 via Frontend Transport; Fri, 3 Mar 2023 16:31:18 +0000
-Received: ("Tessian outbound b29c0599cbc9:v135"); Fri, 03 Mar 2023 16:31:18 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: dfbb8837bf3da4f7
-X-CR-MTA-TID: 64aa7808
-Received: from cb5e7e4f84ff.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id B1A65480-BAD4-4EF8-AA5D-5CFAD9267067.1;
-        Fri, 03 Mar 2023 16:31:10 +0000
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id cb5e7e4f84ff.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Fri, 03 Mar 2023 16:31:10 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GXI3lI32CJByB3whhIMfz6k1EN2cfyAqb1R/Xx+vmDR3Gq0l6RFHGhgy/ITEyEnBPiM8Ir0K1wEG1MYRA+SK3RKNL0YIm1USMmecjcealGfjk+KEwGnd+e5IlEVTxVTReCqSiyqNkEdKjRf2zMFzOLmjqI6NrwZ1ncAdpKPmhCNaBG5Jt17a+wWG/KFiDEg2gl6urKcC2jBo3f+xz2SulnztseZCxDgJ6g7CKFgpm3XKERlzy4RbGv1+/LHJZVuPyVkdQ6073zPsTAo12OiAOlrh0CWfUM1V50jcxcXFI1i7VO87HU2rVpQnSolE9IMzmTxKJO4SVTmCGP/Wnm2GTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UnXkqilarehHRVej9BHrS5YNxmgjnu+ApoGT/tOwEVo=;
- b=NsUZZVYnuovDmFhoNqTlleE7WEDg34GX3GzohZCKxZYP5pi9N0ybhjGwkfhM1QeTeTL07gx1ITiViF3tfbIPweEFnl+IKemj32CJjYmgRkaqpoob5c8/drIQA1ZUJBRPbIWU4541MsIeSPffVkSyWxEPfJyLMN3RZoOMb9W52JmSxaKq/9LEAoxrh/wntM7d4fn9dfDNgt82be9ZXZzeDDckdnZS6fLiIbqeNgOKBEWBsgng2qh3mXOdftHO6EfaJ7RpCaCltu7hP8SWzIA0cWcun2VTvufjPAyUvGzLCa1c3L60E0y0VZgVZUkMGaVdXn+bOYdiLFCWfHCE1oygSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UnXkqilarehHRVej9BHrS5YNxmgjnu+ApoGT/tOwEVo=;
- b=aVvCyQhS3rp9NX3975/ufMDEZruAyvxa8Vq//TURrd7mJat4/TXhMdJ+9hN0fCW5utRS57cF2xT1BFQsZzP3/tXZIo3UQW1EgZwa0eeWmeQkAlt8pLY+CHNElafgoo3H6nog9uzLCqYI7T7mr7BAzQZWrYRt01/iGc69nsSLZyY=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by PAXPR08MB6447.eurprd08.prod.outlook.com (2603:10a6:102:de::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Fri, 3 Mar
- 2023 16:31:04 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6134.027; Fri, 3 Mar 2023
- 16:31:04 +0000
-Date:   Fri, 3 Mar 2023 16:30:37 +0000
-From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
-Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <ZAIgrXQ4670gxlE4@arm.com>
-References: <Y/9fdYQ8Cd0GI+8C@arm.com>
- <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
- <ZADLZJI1W1PCJf5t@arm.com>
- <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
-Content-Type: text/plain; charset=utf-8
+        Fri, 3 Mar 2023 11:31:42 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0742722DF4
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:31:38 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so1599664wmi.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 08:31:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3FpG54a0q7mHCfdXjSiSVe47TEHmHAzfVTCcJHR/EkA=;
+        b=M4pgE2glgt607hxZPe2naOKqaa82H080l8fGBzsjv010/5yxrtb5QaBfmLudIM+fHo
+         XwvHS80TvRkG2CfOEdi3DkIbVf8zBYxXJ1Z29KzyJ+JEACpLIAI21vZD69v8vgdiVHjk
+         ekb9Gp1Ot2Atxy4xwFnADlEAmTq23R5mAYjVUxrD1JNVv+xbvvUGBvEn6zXqOgmget8/
+         XyWflIMD7L/qYYrHcuAgkoVzoD6Q8Ub44borkn/eV36qo1noln2XA0k6m8cLXm4yGGoZ
+         xLT13gJzfm+VjLri0Q6/sZr5k/A0HRog8OlAoBKBDRvvljzGBXl79Wbrh150ahF41KCW
+         c/xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3FpG54a0q7mHCfdXjSiSVe47TEHmHAzfVTCcJHR/EkA=;
+        b=EQ6ZaA+pvdQcM9907phap/6lgEPuK2qeKAm3YU5htZPyO2rPoFYPdFCRULibWAvyx9
+         hgWyyCOgAXs7z06PmgnVrlcLvP+FsYDcDmjJrJSuECHghMw7XMZSOvVb84FlvWdQjY8h
+         S3Vdwy3MbNJSbCGGtvoNL+kVd9mAwDjuNbsUIZD2+0Z8pnggpHxgLTG7VwrbGLxdRj4E
+         yD2gfncGYMlhQIu0EjI6S09LPqqaTFkJcoOuanHkpEzE8vSaXRqPVpoHrESSCJokE2EB
+         tc1kPU4tbKMywOrN/vRy9uSdPKNmoRwg24vlfmlpdtE2djTDiq1gfWJ5rOvvo2soYS+7
+         Zj5Q==
+X-Gm-Message-State: AO0yUKXsijfxWholoZRfIvj7T65eco878vMoJOXyG4wpqrtn6mUOghn2
+        Ovc/b9F8v84UK58lROS1Ia5tQQ==
+X-Google-Smtp-Source: AK7set+ZNH8QragaT/E0HIRCCAABi1XUHqo/bzDXHh//8cixtn4jabuUKLPhWvZWzdPeLCvvciTdsw==
+X-Received: by 2002:a05:600c:a49:b0:3df:fa56:7a33 with SMTP id c9-20020a05600c0a4900b003dffa567a33mr2289804wmq.26.1677861096180;
+        Fri, 03 Mar 2023 08:31:36 -0800 (PST)
+Received: from vingu-book ([2a01:e0a:f:6020:3a7a:9218:b15d:4987])
+        by smtp.gmail.com with ESMTPSA id h17-20020a05600c351100b003e4326a6d53sm7028231wmq.35.2023.03.03.08.31.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 08:31:35 -0800 (PST)
+Date:   Fri, 3 Mar 2023 17:31:33 +0100
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
+Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v12 8/8] sched/fair: Add latency list
+Message-ID: <ZAIg5de3EkHtHqLM@vingu-book>
+References: <20230224093454.956298-1-vincent.guittot@linaro.org>
+ <20230224093454.956298-9-vincent.guittot@linaro.org>
+ <4982b608-f8c7-531c-3322-c055643a5b2d@linux.vnet.ibm.com>
+ <CAKfTPtAEbzrxKOGXYRxp0qMM-TPj1q8BdcaVpK7ObZfe8QWn4g@mail.gmail.com>
+ <913b0491-cef6-87ac-bf7e-d6d6c8fc380a@linux.vnet.ibm.com>
+ <CAKfTPtA5wqBb1hAQa=qd6CicJbHsRi+q=s2tT0n6XspGOEA2Xg@mail.gmail.com>
+ <7dd8fa7e-3cbc-6d3f-5748-74ffdeb056a7@linux.vnet.ibm.com>
+ <2226e488-390d-ed64-832e-ca8e6a3a1731@linux.vnet.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
-X-ClientProxiedBy: SN7PR04CA0208.namprd04.prod.outlook.com
- (2603:10b6:806:126::33) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
-MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|PAXPR08MB6447:EE_|VI1EUR03FT022:EE_|GV2PR08MB8098:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69e46c13-2d6e-4c82-6af6-08db1c04b789
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: /UXqjHLwi/bKlvotgF4qnKIest1mngSygeXxuJzwbzB62lroHGFZNEbsHo/4Am2V7Gs53UTrjnP0CNWCLB+K7d+AGC1GAt3DkAjUVjZcASDJltubLBnuUzktaq2Nu4mTf5rlj5uPcgBEYwcxMp+ua1iiHWFwTQSWE00qR/LVC1u469nTtAANPbUtvfmCAdKpVwnri3zQpOKcjoiyPdgA/kAEMzKuvY5Kk3V24OfnAjKC4LFzttwwV6fjSTm4UhsgqWNmr0ruyrEz2TSd3neGJ4smIukB9UAZjj556deSkhcEH4FkT9vO258nJamO5CJ+MNT1ZRVBxo49PZmBWnfT8nuP4nKFPyPx1VuG2YWbmqxdvVxNsL+K/Tp9LaSR3ls6n7Oelg8gnBQ+Fds1kGZ0KJ0zuLF7UAhXmLDnkK8Tu4Cjo145arhG5AKwMoqXsLiYuy6yI6SnbPWHiWLGw8dmBzuwQjFl2QSAwy22UZyBE4m690LKFSv/GuZssfNnqvBclpcE4aaC6rmxVGK35cvmNDb4HftmStEpMcfwMUkNeqp6aL1n1DqsC9yDZ7b6FjEjhe8zn4Sq2RstFsBzzF1uEfVbSc9uAd20+dSivJWeCBU6yWK2SdsF4JsFh6+RIOzXLg2WhpsNp4CqPsfM+r3kVNeK/0cnUREq6/revYI9H8ZJAu7Cz23i9R1oMumm+0CG
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199018)(6486002)(2906002)(66899018)(6666004)(7416002)(6506007)(6512007)(110136005)(54906003)(26005)(186003)(2616005)(36756003)(7406005)(86362001)(66946007)(66476007)(4326008)(8676002)(66556008)(316002)(5660300002)(478600001)(83380400001)(41300700001)(38100700002)(8936002)(921005);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB6447
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR03FT022.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: ae1d6e88-5166-4193-85db-08db1c04aee0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aeEuc1CFnd5ZUJn8osG4yJAVVl632K1dT5Qe/xepsO5D0daqEm1Co0wZz/IQq/ZFvsiKwRqeC/rGw1qfbz8iYdtu522Kny+FJztFz+IlxNFt7/SQ6m0Tf4iTLYrJnP9sRbB4xfF8iA+r2kyfVivg8ZCznAxzysrlkHRrtii30UUHKFQfbj2B3dN98w0AHKYhoA0IgXJ6gwCDkft/Nv1LAUtDo7dk1wriXCVJ0bVlkeRWXaHF85QpXFlH8441LFKrgwQe9IU07Php1eGi19yu2WzvYimeXZXLTt7xyjPNXzm5N3oyWesTXS6DBnrl4tgmP8ODI8QI8GUExsME1RLFzOHb4HKi/c1E0++c78edpG6B5Ni2siZBBN6Axm8oKGx+vM54mHD3MQo2zn3JklxNoCfivCOm4OGald5OpPunXO/mlr6KNpswqwT5rv5zAvH+Mk5ujniblC3depajl3TqoattzhxmBBTnG+nDDf4oyfRkAr7fHN86dPFJFyiO8THdhuN/ioNH3UuVS8ACI/ByBxUrUaVwv8QZjBIqN1d/XHKr/l+4L/WPyuRlYjIjSHqwB54v8IBdbOhKvyhZ8WK77X6WsGTigEgVWV5vM7uI4u1XAl+qFPwCbGTj5JMNngjxpZMGBA/zsniwYrDzNUwY4Ne+2zCHV/x4CDhUkeuBUcL7rVkQoCEB1K4D0WKP5g/xl7YuPV20Z226Z4l3iB2V0HZr6Itv+rBfneQWt6qDneY=
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199018)(36840700001)(46966006)(40470700004)(6486002)(36756003)(6666004)(70206006)(2906002)(8676002)(40480700001)(8936002)(4326008)(36860700001)(5660300002)(86362001)(82740400003)(356005)(81166007)(921005)(6506007)(26005)(6512007)(478600001)(54906003)(66899018)(316002)(186003)(450100002)(41300700001)(2616005)(70586007)(83380400001)(110136005)(82310400005)(40460700003)(336012)(47076005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 16:31:18.4928
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69e46c13-2d6e-4c82-6af6-08db1c04b789
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR03FT022.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB8098
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2226e488-390d-ed64-832e-ca8e6a3a1731@linux.vnet.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 03/02/2023 21:17, Edgecombe, Rick P wrote:
-> Is the idea that shadow stack would be forced on regardless of if the
-> linked libraries support it? In which case it could be allowed to crash
-> if they do not?
-
-execute a binary
-- with shstk enabled and locked (only if marked?).
-- with shstk disabled and locked.
-could be managed in userspace, but it is libc dependent then.
-
-> > > > - I think it's better to have a new limit specifically for shadow
-> > > >   stack size (which by default can be RLIMIT_STACK) so userspace
-> > > >   can adjust it if needed (another reason is that stack size is
-> > > >   not always a good indicator of max call depth).
+Le jeudi 02 mars 2023 à 23:37:52 (+0530), Shrikanth Hegde a écrit :
 > 
-> Looking at this again, I'm not sure why a new rlimit is needed. It
-> seems many of those points were just formulations of that the clone3
-> stack size was not used, but it actually is and just not documented. If
-> you disagree perhaps you could elaborate on what the requirements are
-> and we can see if it seems tricky to do in a follow up.
-
-- tiny thread stack and deep signal stack.
-(note that this does not really work with glibc because it has
-implementation internal signals that don't run on alt stack,
-cannot be masked and don't fit on a tiny thread stack, but
-with other runtimes this can be a valid use-case, e.g. musl
-allows tiny thread stacks, < pagesize.)
-
-- thread runtimes with clone (glibc uses clone3 but some dont).
-
-- huge stacks but small call depth (problem if some va limit
-  is hit or memory overcommit is disabled).
-
-> > "sigaltshstk() is separate from sigaltstack(). You can have one
-> > without the other, neither or both together. Because the shadow
-> > stack specific state is pushed to the shadow stack, the two
-> > features donâ€™t need to know about each other."
-...
-> > i don't see why automatic alt shadow stack allocation would
-> > not work (kernel manages it transparently when an alt stack
-> > is installed or disabled).
 > 
-> Ah, I think I see where maybe I can fill you in. Andy Luto had
-> discounted this idea out of hand originally, but I didn't see it at
-> first. sigaltstack lets you set, retrieve, or disable the shadow stack,
-> right... But this doesn't allocate anything, it just sets where the
-> next signal will be handled. This is different than things like threads
-> where there is a new resources being allocated and it makes coming up
-> with logic to guess when to de-allocate the alt shadow stack difficult.
-> You probably already know...
+> On 3/2/23 8:30 PM, Shrikanth Hegde wrote:
+> >
+> > On 3/2/23 6:47 PM, Vincent Guittot wrote:
+> >> On Thu, 2 Mar 2023 at 12:00, Shrikanth Hegde <sshegde@linux.vnet.ibm.com> wrote:
+> >>> On 3/2/23 1:20 PM, Vincent Guittot wrote:
+> >>>> On Wed, 1 Mar 2023 at 19:48, shrikanth hegde <sshegde@linux.vnet.ibm.com> wrote:
+> >>>>> On 2/24/23 3:04 PM, Vincent Guittot wrote:
+
+[...]
+
+> >>>>> Ran the schbench and hackbench with this patch series. Here comparison is
+> >>>>> between 6.2 stable tree, 6.2 + Patch and 6.2 + patch + above re-arrange of
+> >>>>> latency_node. Ran two cgroups, in one cgroup running stress-ng at 50%(group1)
+> >>>>> and other is running these benchmarks (group2). Set the latency nice
+> >>>>> of group2 to -20. These are run on Power system with 12 cores with SMT=8.
+> >>>>> Total of 96 CPU.
+> >>>>>
+> >>>>> schbench gets lower latency compared to stabletree. Whereas hackbench seems
+> >>>>> to regress under this case. Maybe i am doing something wrong. I will re-run
+> >>>>> and attach the numbers to series.
+> >>>>> Please suggest if any variation in the test i need to try.
+> >>>> hackbench takes advanatge of a latency nice 19 as it mainly wants to
+> >>>> run longer slice to move forward rather than preempting others all the
+> >>>> time
+> >>> hackbench still seems to regress in different latency nice values compared to
+> >>> baseline of 6.2 in this case. up to 50% in some cases.
+> >>>
+> >>> 12 core powerpc system  with SMT=8 i.e 96 CPU
+> >>> running 2 CPU cgroups. No quota assigned.
+> >>> 1st cgroup is running stress-ng with 48 threads. Consuming 50% of CPU.
+> >>> latency is not changed for this cgroup.
+> >>> 2nd cgroup is running hackbench. This cgroup is assigned the different latency
+> >>> nice values of 0, -20 and 19.
+> >> According to your other emails, you are using the cgroup interface and
+> >> not the task's one. Do I get it right ?
+> > right. I create cgroup, attach bash command with echo $$, 
+> > assign the latency nice to cgroup, and run hackbench from that bash prompt.
+> >
+> >> I haven't run test such tests in a cgroup but at least the test with
+> >> latency_nice == 0 should not make any noticeable difference. Does this
+> >> include the re-arrange patch that you have proposed previously ?
+> > No. This is only with V12 of the series.
+> >
+> >> Also, the tests that you did on v6, gave better result.
+> >> https://lore.kernel.org/lkml/34112324-de67-55eb-92bc-181a98c4311c@linux.vnet.ibm.com/
+> >>
+> >> Are you running same tests or you changed something in the mean time ?
+> > Test machine got changed. 
+> > now i re-read my earlier mail. I see it was slightly different. 
+> > I had created only one cgroup and stress-ng was run
+> > without any cgroup. Let me try that scenario and get the numbers. 
 > 
-> But because of this there can be some modes where the shadow stack is
-> changed while on it. For one example, SS_AUTODISARM will disable the
-> alt shadow stack while switching to it and restore when sigreturning.
-> At which point a new altstack can be set. In the non-shadow stack case
-> this is nice because future signals won't clobber the alt stack if you
-> switch away from it (swapcontext(), etc). But it also means you can
-> "change" the alt stack while on it ("change" sort of, the auto disarm
-> results in the kernel forgetting it temporarily).
-
-the problem with swapcontext is that it may unmask signals
-that run on the alt stack, which means the code cannot jump
-back after another signal clobbered the alt stack.
-
-the non-standard SS_AUTODISARM aims to solve this by disabling
-alt stack settings on signal entry until the handler returns.
-
-so this use case is not about supporting swapcontext out, but
-about jumping back. however that does not work reliably with
-this patchset: if swapcontext goes to the thread stack (and
-not to another stack e.g. used by makecontext), then jump back
-fails. (and if there is a sigaltshstk installed then even jump
-out fails.)
-
-assuming
-- jump out from alt shadow stack can be made to work.
-- alt shadow stack management can be automatic.
-then this can be improved so jump back works reliably.
-
-> I hear where you are coming from with the desire to have it "just work"
-> with existing code, but I think the resulting ABI around the alt shadow
-> stack allocation lifecycle would be way too complicated even if it
-> could be made to work. Hence making a new interface. But also, the idea
-> was that the x86 signal ABI should support handling alt shadow stacks,
-> which is what we have done with this series. If a different interface
-> for configuring it is better than the one from the POC, I'm not seeing
-> a problem jump out. Is there any specific concern about backwards
-> compatibility here?
-
-sigaltstack syscall behaviour may be hard to change later
-and currently
-- shadow stack overflow cannot be recovered from.
-- longjmp out of signal handler fails (with sigaltshstk).
-- SS_AUTODISARM does not work (jump back can fail).
-
-> > "Since shadow alt stacks are a new feature, longjmp()ing from an
-> > alt shadow stack will simply not be supported. If a libc wantâ€™s
-> > to support this it will need to enable WRSS and write itâ€™s own
-> > restore token."
-> > 
-> > i think longjmp should work without enabling writes to the shadow
-> > stack in the libc. this can also affect unwinding across signal
-> > handlers (not for c++ but e.g. glibc thread cancellation).
 > 
-> glibc today does not support longjmp()ing from a different stack (for
-> example even today after a swapcontext()) when shadow stack is used. If
-> glibc used wrss it could be supported maybe, but otherwise I don't see
-> how the HW can support it.
+> Tried the same method of testing i had done on V7 of the series. on this
+> machine hackbench still regress's both on V12 as well as V7 of the series.
 > 
-> HJ and I were actually just discussing this the other day. Are you
-> looking at this series with respect to the arm shadow stack feature by
-> any chance? I would love if glibc/tools would document what the shadow
-> stack limitations are. If the all the arch's have the same or similar
-> limitations perhaps this could be one developer guide. For the most
-> part though, the limitations I've encountered are in glibc and the
-> kernel is more the building blocks.
+> Created one cpu cgroup called cgroup1. created two bash prompts. 
+> assigned "bash $$" to cgroup1 and on other bash prompt running,
+> stress-ng --cpu=96 -l 50. Ran hackbench from cgroup1 prompt. 
+> assigned latency values to the cgroup1.
 
-well we hope that shadow stack behaviour and limitations can
-be similar across targets.
+I have tried to reproduce your results on some of my systems but I can't see
+the impacts that you are reporting below.
+The fact that your other platform was not impacted as well could imply that
+it's specific to this platform.
+In particular, the lat nice=0 case should not show any real impact as it
+should be similar to a nop. At least that what I can see in the tests on my
+platforms and Prateek on his.
 
-longjmp to different stack should work: it can do the same as
-setcontext/swapcontext: scan for the pivot token. then only
-longjmp out of alt shadow stack fails. (this is non-conforming
-longjmp use, but e.g. qemu relies on it.)
+Nevertheless, could you try to run your tests with the changes below ?
+These are the only places which could have an impact even with lat nice = 0
 
-for longjmp out of alt shadow stack, the target shadow stack
-needs a pivot token, which implies the kernel needs to push that
-on signal entry, which can overflow. but i suspect that can be
-handled the same way as stackoverflow on signal entry is handled.
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 8137bca80572..979571a98b28 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4991,8 +4991,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+        if (delta < offset)
+                return;
 
-> A general comment. Not sure if you are aware, but this shadow stack
-> enabling effort is quite old at this point and there have been many
-> discussions on these topics stretching back years. The latest
-> conversation was around getting this series into linux-next soon to get
-> some testing on the MM pieces. I really appreciate getting this ABI
-> feedback as it is always tricky to get right, but at this stage I would
-> hope to be focusing mostly on concrete problems.
+-       if ((delta > ideal_runtime) ||
+-           (delta > get_latency_max()))
++       if (delta > ideal_runtime)
+                resched_curr(rq_of(cfs_rq));
+ }
+
+@@ -7574,9 +7573,10 @@ static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *
+         * Otherwise, use the latency weight to evaluate how much scheduling
+         * delay is acceptable by se.
+         */
+-       if ((latency_offset < 0) || (curr->latency_offset < 0))
++       if ((latency_offset < 0) || (curr->latency_offset < 0)) {
+                latency_offset -= curr->latency_offset;
+-       latency_offset = min_t(long, latency_offset, get_latency_max());
++               latency_offset = min_t(long, latency_offset, get_latency_max());
++       }
+
+        return latency_offset;
+ }
+@@ -7635,7 +7635,6 @@ wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
+         * for low priority task. Make sure that long sleeping task will get a
+         * chance to preempt current.
+         */
+-       gran = min_t(s64, gran, get_latency_max());
+
+        if (vdiff > gran)
+                return 1;
+
+
 > 
-> I also expect to have some amount of ABI growth going forward with all
-> the normal things that entails. Shadow stack is not special in that it
-> can come fully finalized without the need for the real world usage
-> iterative feedback process. At some point we need to move forward with
-> something, and we have quite a bit of initial changes at this point.
+> I will try to run with only task's set with latency_nice=0 as well. 
 > 
-> So I would like to minimize the initial implementation unless anyone
-> sees any likely problems with future growth. Can you be clear if you
-> see any concrete problems at this point or are more looking to evaluate
-> the design reasoning? I'm under the assumption there is nothing that
-> would prohibit linux-next testing while any ABI shakedown happens
-> concurrently at least?
-
-understood.
-
-the points that i think are worth raising:
-
-- shadow stack size logic may need to change later.
-  (it can be too big, or too small in practice.)
-- shadow stack overflow is not recoverable and the
-  possible fix for that (sigaltshstk) breaks longjmp
-  out of signal handlers.
-- jump back after SS_AUTODISARM swapcontext cannot be
-  reliable if alt signal uses thread shadow stack.
-- the above two concerns may be mitigated by different
-  sigaltstack behaviour which may be hard to add later.
-- end token for backtrace may be useful, if added
-  later it can be hard to check.
-
-thanks.
+> type	   groups |   v6.2      |v6.2 + V12| v6.2 + V12  | v6.2 + V12
+> 		  |	        |lat nice=0| lat nice=-20| lat nice=+19
+> 
+> Process	      10  |	0.33    |   0.37   |   0.38     |   0.37
+> Process       20  |	0.61    |   0.67   |   0.68     |   0.67
+> Process	      30  |	0.85    |   0.95   |   0.95     |   0.96
+> Process	      40  |	1.10    |   1.20   |   1.20     |   1.21
+> Process	      50  |	1.34    |   1.47   |   1.44     |   1.45
+> Process	      60  |	1.57    |   1.70   |   1.71     |   1.70
+> thread	      10  |	0.36    |   0.40   |   0.39     |   0.39
+> thread	      20  |	0.65    |   0.72   |   0.71     |   0.71
+> Process(Pipe) 10  |	0.18	|   0.31   |   0.31	|   0.33
+> Process(Pipe) 20  |	0.32	|   0.51   |   0.50	|   0.50
+> Process(Pipe) 30  |	0.43	|   0.65   |   0.67	|   0.67
+> Process(Pipe) 40  |	0.57	|   0.82   |   0.83	|   0.83
+> Process(Pipe) 50  |	0.67	|   1.00   |   0.97	|   0.98
+> Process(Pipe) 60  |	0.81	|   1.13   |   1.11	|   1.12
+> thread(Pipe)  10  |	0.19	|   0.33   |   0.33	|   0.33
+> thread(Pipe)  20  |	0.34	|   0.53   |   0.51	|   0.52
+> 
+> 
+> 
+> type	   groups |   v6.2	|v6.2 + V7 | v6.2 + V7  | v6.2 + V7
+> 		  |		|lat nice=0|lat nice=-20| lat nice=+19
+> Process	      10  |	0.33    |   0.37   |   0.37     |   0.37
+> Process	      20  |	0.61    |   0.67   |   0.67     |   0.67
+> Process	      30  |	0.85    |   0.96   |   0.94     |   0.95
+> Process	      40  |	1.10    |   1.20   |   1.20     |   1.20
+> Process	      50  |	1.34    |   1.45   |   1.46     |   1.45
+> Process	      60  |	1.57    |   1.71   |   1.68     |   1.72
+> thread	      10  |	0.36    |   0.40   |   0.40     |   0.40
+> thread	      20  |	0.65    |   0.71   |   0.71     |   0.71
+> Process(Pipe) 10  |	0.18	|   0.30   |   0.30	|   0.31
+> Process(Pipe) 20  |	0.32	|   0.50   |   0.50	|   0.50
+> Process(Pipe) 30  |	0.43	|   0.67   |   0.67	|   0.66
+> Process(Pipe) 40  |	0.57	|   0.86   |   0.84	|   0.84
+> Process(Pipe) 50  |	0.67	|   0.99   |   0.97	|   0.97
+> Process(Pipe) 60  |	0.81	|   1.10   |   1.13	|   1.13
+> thread(Pipe)  10  |	0.19	|   0.34   |   0.34	|   0.33
+> thread(Pipe)  20  |	0.34	|   0.55   |   0.53	|   0.54
+> 
+> >
+> >>> Numbers are average of 10 runs in each case. Time is in seconds
+> >>>
+> >>> type       groups |   v6.2     |  v6.2 + V12   | v6.2 + V12  | v6.2 + V12
+> >>>                   |            | lat nice=0    | lat nice=-20| lat nice=+19
+> >>>                   |            |               |             |
+> >>> Process       10  |   0.36     |     0.41      |    0.43     |    0.42
+> >>> Process       20  |   0.62     |     0.76      |    0.75     |    0.75
+> >>> Process       30  |   0.87     |     1.05      |    1.04     |    1.06
+> >>> Process       40  |   1.13     |     1.34      |    1.33     |    1.33
+> >>> Process       50  |   1.38     |     1.62      |    1.66     |    1.63
+> >>> Process       60  |   1.64     |     1.91      |    1.97     |    1.90
+> >>> thread        10  |   0.35     |     0.41      |    0.44     |    0.42
+> >>> thread        20  |   0.64     |     0.78      |    0.77     |    0.79
+> >>> Process(Pipe) 10  |   0.20     |     0.34      |    0.33     |    0.34
+> >>> Process(Pipe) 20  |   0.32     |     0.52      |    0.53     |    0.52
+> >>> Process(Pipe) 30  |   0.44     |     0.70      |    0.70     |    0.69
+> >>> Process(Pipe) 40  |   0.56     |     0.88      |    0.89     |    0.88
+> >>> Process(Pipe) 50  |   0.70     |     1.08      |    1.08     |    1.07
+> >>> Process(Pipe) 60  |   0.83     |     1.27      |    1.27     |    1.26
+> >>> thread(Pipe)  10  |   0.21     |     0.35      |    0.34     |    0.36
+> >>> thread(Pipe)  10  |   0.35     |     0.55      |    0.58     |    0.55
+> >>>
+> >>>
+> >>>
+> >>>>> Re-arrange seems to help the patch series by avoiding an cacheline miss.
+> >>>>>
+> >>>>> =========================
+> >>>>> schbench
+> >>>>> =========================
+> >>>>>                  6.2   |  6.2 + V12     |     6.2 + V12 + re-arrange
+> >>>>> 1 Thread
+> >>>>>   50.0th:        9.00  |    9.00        |        9.50
+> >>>>>   75.0th:       10.50  |   10.00        |        9.50
+> >>>>>   90.0th:       11.00  |   11.00        |       10.50
+> >>>>>   95.0th:       11.00  |   11.00        |       11.00
+> >>>>>   99.0th:       11.50  |   11.50        |       11.50
+> >>>>>   99.5th:       12.50  |   12.00        |       12.00
+> >>>>>   99.9th:       14.50  |   13.50        |       12.00
+> >>>>> 2 Threads
+> >>>>>   50.0th:        9.50  |    9.50        |        8.50
+> >>>>>   75.0th:       11.00  |   10.50        |        9.50
+> >>>>>   90.0th:       13.50  |   11.50        |       10.50
+> >>>>>   95.0th:       14.00  |   12.00        |       11.00
+> >>>>>   99.0th:       15.50  |   13.50        |       12.00
+> >>>>>   99.5th:       16.00  |   14.00        |       12.00
+> >>>>>   99.9th:       17.00  |   16.00        |       16.50
+> >>>>> 4 Threads
+> >>>>>   50.0th:       11.50  |   11.50        |       10.50
+> >>>>>   75.0th:       13.50  |   12.50        |       12.50
+> >>>>>   90.0th:       15.50  |   14.50        |       14.00
+> >>>>>   95.0th:       16.50  |   15.50        |       14.50
+> >>>>>   99.0th:       20.00  |   17.50        |       16.50
+> >>>>>   99.5th:       20.50  |   18.50        |       17.00
+> >>>>>   99.9th:       22.50  |   21.00        |       19.00
+> >>>>> 8 Threads
+> >>>>>   50.0th:       14.00  |   14.00        |       14.00
+> >>>>>   75.0th:       16.00  |   16.00        |       16.00
+> >>>>>   90.0th:       18.00  |   18.00        |       17.50
+> >>>>>   95.0th:       18.50  |   18.50        |       18.50
+> >>>>>   99.0th:       20.00  |   20.00        |       20.00
+> >>>>>   99.5th:       20.50  |   21.50        |       21.00
+> >>>>>   99.9th:       22.50  |   23.50        |       23.00
+> >>>>> 16 Threads
+> >>>>>   50.0th:       19.00  |   18.50        |       19.00
+> >>>>>   75.0th:       23.00  |   22.50        |       23.00
+> >>>>>   90.0th:       25.00  |   25.50        |       25.00
+> >>>>>   95.0th:       26.50  |   26.50        |       26.00
+> >>>>>   99.0th:       28.50  |   29.00        |       28.50
+> >>>>>   99.5th:       31.00  |   30.00        |       30.00
+> >>>>>   99.9th:     5626.00  | 4761.50        |       32.50
+> >>>>> 32 Threads
+> >>>>>   50.0th:       27.00  |   27.50        |       29.00
+> >>>>>   75.0th:       35.50  |   36.50        |       38.50
+> >>>>>   90.0th:       42.00  |   44.00        |       50.50
+> >>>>>   95.0th:      447.50  | 2959.00        |     8544.00
+> >>>>>   99.0th:     7372.00  | 17032.00       |    19136.00
+> >>>>>   99.5th:    15360.00  | 19808.00       |    20704.00
+> >>>>>   99.9th:    20640.00  | 30048.00       |    30048.00
+> >>>>>
+> >>>>> ====================
+> >>>>> hackbench
+> >>>>> ====================
+> >>>>>                         6.2     |  6.2 + V12        |     6.2+ V12 +re-arrange
+> >>>>>
+> >>>>> Process 10 Time:        0.35    |       0.42        |           0.41
+> >>>>> Process 20 Time:        0.61    |       0.76        |           0.76
+> >>>>> Process 30 Time:        0.87    |       1.06        |           1.05
+> >>>>> thread 10 Time:         0.35    |       0.43        |           0.42
+> >>>>> thread 20 Time:         0.66    |       0.79        |           0.78
+> >>>>> Process(Pipe) 10 Time:  0.21    |       0.33        |           0.32
+> >>>>> Process(Pipe) 20 Time:  0.34    |       0.52        |           0.52
+> >>>>> Process(Pipe) 30 Time:  0.46    |       0.72        |           0.71
+> >>>>> thread(Pipe) 10 Time:   0.21    |       0.34        |           0.34
+> >>>>> thread(Pipe) 20 Time:   0.36    |       0.56        |           0.56
+> >>>>>
+> >>>>>
+> >>>>>>       struct list_head                group_node;
+> >>>>>>       unsigned int                    on_rq;
+> >>>>>>
+> >>>>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> >>>>>> index 093cc1af73dc..752fd364216c 100644
+> >>>>>> --- a/kernel/sched/core.c
+> >>>>>> +++ b/kernel/sched/core.c
+> >>>>>> @@ -4434,6 +4434,7 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+> >>>>>>       p->se.nr_migrations             = 0;
+> >>>>>>       p->se.vruntime                  = 0;
+> >>>>>>       INIT_LIST_HEAD(&p->se.group_node);
+> >>>>>> +     RB_CLEAR_NODE(&p->se.latency_node);
+> >>>>>>
+> >>>>>>  #ifdef CONFIG_FAIR_GROUP_SCHED
+> >>>>>>       p->se.cfs_rq                    = NULL;
+> >>>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> >>>>>> index 125a6ff53378..e2aeb4511686 100644
+> >>>>>> --- a/kernel/sched/fair.c
+> >>>>>> +++ b/kernel/sched/fair.c
+> >>>>>> @@ -680,7 +680,85 @@ struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq)
+> >>>>>>
+> >>>>>>       return __node_2_se(last);
+> >>>>>>  }
+> >>>>>> +#endif
+> >>>>>>
+> >>>>>> +/**************************************************************
+> >>>>>> + * Scheduling class tree data structure manipulation methods:
+> >>>>>> + * for latency
+> >>>>>> + */
+> >>>>>> +
+> >>>>>> +static inline bool latency_before(struct sched_entity *a,
+> >>>>>> +                             struct sched_entity *b)
+> >>>>>> +{
+> >>>>>> +     return (s64)(a->vruntime + a->latency_offset - b->vruntime - b->latency_offset) < 0;
+> >>>>>> +}
+> >>>>>> +
+> >>>>>> +#define __latency_node_2_se(node) \
+> >>>>>> +     rb_entry((node), struct sched_entity, latency_node)
+> >>>>>> +
+> >>>>>> +static inline bool __latency_less(struct rb_node *a, const struct rb_node *b)
+> >>>>>> +{
+> >>>>>> +     return latency_before(__latency_node_2_se(a), __latency_node_2_se(b));
+> >>>>>> +}
+> >>>>>> +
+> >>>>>> +/*
+> >>>>>> + * Enqueue an entity into the latency rb-tree:
+> >>>>>> + */
+> >>>>>> +static void __enqueue_latency(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+> >>>>>> +{
+> >>>>>> +
+> >>>>>> +     /* Only latency sensitive entity can be added to the list */
+> >>>>>> +     if (se->latency_offset >= 0)
+> >>>>>> +             return;
+> >>>>>> +
+> >>>>>> +     if (!RB_EMPTY_NODE(&se->latency_node))
+> >>>>>> +             return;
+> >>>>>> +
+> >>>>>> +     /*
+> >>>>>> +      * The entity is always added the latency list at wakeup.
+> >>>>>> +      * Then, a not waking up entity that is put back in the list after an
+> >>>>>> +      * execution time less than sysctl_sched_min_granularity, means that
+> >>>>>> +      * the entity has been preempted by a higher sched class or an entity
+> >>>>>> +      * with higher latency constraint. In thi case, the entity is also put
+> >>>>>> +      * back in the latency list so it gets a chance to run 1st during the
+> >>>>>> +      * next slice.
+> >>>>>> +      */
+> >>>>>> +     if (!(flags & ENQUEUE_WAKEUP)) {
+> >>>>>> +             u64 delta_exec = se->sum_exec_runtime - se->prev_sum_exec_runtime;
+> >>>>>> +
+> >>>>>> +             if (delta_exec >= sysctl_sched_min_granularity)
+> >>>>>> +                     return;
+> >>>>>> +     }
+> >>>>>> +
+> >>>>>> +     rb_add_cached(&se->latency_node, &cfs_rq->latency_timeline, __latency_less);
+> >>>>>> +}
+> >>>>>> +
+> >>>>>> +/*
+> >>>>>> + * Dequeue an entity from the latency rb-tree and return true if it was really
+> >>>>>> + * part of the rb-tree:
+> >>>>>> + */
+> >>>>>> +static bool __dequeue_latency(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> >>>>>> +{
+> >>>>>> +     if (!RB_EMPTY_NODE(&se->latency_node)) {
+> >>>>>> +             rb_erase_cached(&se->latency_node, &cfs_rq->latency_timeline);
+> >>>>>> +             RB_CLEAR_NODE(&se->latency_node);
+> >>>>>> +             return true;
+> >>>>>> +     }
+> >>>>>> +
+> >>>>>> +     return false;
+> >>>>>> +}
+> >>>>>> +
+> >>>>>> +static struct sched_entity *__pick_first_latency(struct cfs_rq *cfs_rq)
+> >>>>>> +{
+> >>>>>> +     struct rb_node *left = rb_first_cached(&cfs_rq->latency_timeline);
+> >>>>>> +
+> >>>>>> +     if (!left)
+> >>>>>> +             return NULL;
+> >>>>>> +
+> >>>>>> +     return __latency_node_2_se(left);
+> >>>>>> +}
+> >>>>>> +
+> >>>>>> +#ifdef CONFIG_SCHED_DEBUG
+> >>>>>>  /**************************************************************
+> >>>>>>   * Scheduling class statistics methods:
+> >>>>>>   */
+> >>>>>> @@ -4758,8 +4836,10 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+> >>>>>>       check_schedstat_required();
+> >>>>>>       update_stats_enqueue_fair(cfs_rq, se, flags);
+> >>>>>>       check_spread(cfs_rq, se);
+> >>>>>> -     if (!curr)
+> >>>>>> +     if (!curr) {
+> >>>>>>               __enqueue_entity(cfs_rq, se);
+> >>>>>> +             __enqueue_latency(cfs_rq, se, flags);
+> >>>>>> +     }
+> >>>>>>       se->on_rq = 1;
+> >>>>>>
+> >>>>>>       if (cfs_rq->nr_running == 1) {
+> >>>>>> @@ -4845,8 +4925,10 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+> >>>>>>
+> >>>>>>       clear_buddies(cfs_rq, se);
+> >>>>>>
+> >>>>>> -     if (se != cfs_rq->curr)
+> >>>>>> +     if (se != cfs_rq->curr) {
+> >>>>>>               __dequeue_entity(cfs_rq, se);
+> >>>>>> +             __dequeue_latency(cfs_rq, se);
+> >>>>>> +     }
+> >>>>>>       se->on_rq = 0;
+> >>>>>>       account_entity_dequeue(cfs_rq, se);
+> >>>>>>
+> >>>>>> @@ -4941,6 +5023,7 @@ set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> >>>>>>                */
+> >>>>>>               update_stats_wait_end_fair(cfs_rq, se);
+> >>>>>>               __dequeue_entity(cfs_rq, se);
+> >>>>>> +             __dequeue_latency(cfs_rq, se);
+> >>>>>>               update_load_avg(cfs_rq, se, UPDATE_TG);
+> >>>>>>       }
+> >>>>>>
+> >>>>>> @@ -4979,7 +5062,7 @@ static struct sched_entity *
+> >>>>>>  pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+> >>>>>>  {
+> >>>>>>       struct sched_entity *left = __pick_first_entity(cfs_rq);
+> >>>>>> -     struct sched_entity *se;
+> >>>>>> +     struct sched_entity *latency, *se;
+> >>>>>>
+> >>>>>>       /*
+> >>>>>>        * If curr is set we have to see if its left of the leftmost entity
+> >>>>>> @@ -5021,6 +5104,12 @@ pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+> >>>>>>               se = cfs_rq->last;
+> >>>>>>       }
+> >>>>>>
+> >>>>>> +     /* Check for latency sensitive entity waiting for running */
+> >>>>>> +     latency = __pick_first_latency(cfs_rq);
+> >>>>>> +     if (latency && (latency != se) &&
+> >>>>>> +         wakeup_preempt_entity(latency, se) < 1)
+> >>>>>> +             se = latency;
+> >>>>>> +
+> >>>>>>       return se;
+> >>>>>>  }
+> >>>>>>
+> >>>>>> @@ -5044,6 +5133,7 @@ static void put_prev_entity(struct cfs_rq *cfs_rq, struct sched_entity *prev)
+> >>>>>>               update_stats_wait_start_fair(cfs_rq, prev);
+> >>>>>>               /* Put 'current' back into the tree. */
+> >>>>>>               __enqueue_entity(cfs_rq, prev);
+> >>>>>> +             __enqueue_latency(cfs_rq, prev, 0);
+> >>>>>>               /* in !on_rq case, update occurred at dequeue */
+> >>>>>>               update_load_avg(cfs_rq, prev, 0);
+> >>>>>>       }
+> >>>>>> @@ -12222,6 +12312,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+> >>>>>>  void init_cfs_rq(struct cfs_rq *cfs_rq)
+> >>>>>>  {
+> >>>>>>       cfs_rq->tasks_timeline = RB_ROOT_CACHED;
+> >>>>>> +     cfs_rq->latency_timeline = RB_ROOT_CACHED;
+> >>>>>>       u64_u32_store(cfs_rq->min_vruntime, (u64)(-(1LL << 20)));
+> >>>>>>  #ifdef CONFIG_SMP
+> >>>>>>       raw_spin_lock_init(&cfs_rq->removed.lock);
+> >>>>>> @@ -12378,6 +12469,7 @@ void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
+> >>>>>>       se->my_q = cfs_rq;
+> >>>>>>
+> >>>>>>       se->latency_offset = calc_latency_offset(tg->latency_prio);
+> >>>>>> +     RB_CLEAR_NODE(&se->latency_node);
+> >>>>>>
+> >>>>>>       /* guarantee group entities always have weight */
+> >>>>>>       update_load_set(&se->load, NICE_0_LOAD);
+> >>>>>> @@ -12529,8 +12621,19 @@ int sched_group_set_latency(struct task_group *tg, int prio)
+> >>>>>>
+> >>>>>>       for_each_possible_cpu(i) {
+> >>>>>>               struct sched_entity *se = tg->se[i];
+> >>>>>> +             struct rq *rq = cpu_rq(i);
+> >>>>>> +             struct rq_flags rf;
+> >>>>>> +             bool queued;
+> >>>>>> +
+> >>>>>> +             rq_lock_irqsave(rq, &rf);
+> >>>>>>
+> >>>>>> +             queued = __dequeue_latency(se->cfs_rq, se);
+> >>>>>>               WRITE_ONCE(se->latency_offset, latency_offset);
+> >>>>>> +             if (queued)
+> >>>>>> +                     __enqueue_latency(se->cfs_rq, se, ENQUEUE_WAKEUP);
+> >>>>>> +
+> >>>>>> +
+> >>>>>> +             rq_unlock_irqrestore(rq, &rf);
+> >>>>>>       }
+> >>>>>>
+> >>>>>>       mutex_unlock(&shares_mutex);
+> >>>>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> >>>>>> index 9a2e71231083..21dd309e98a9 100644
+> >>>>>> --- a/kernel/sched/sched.h
+> >>>>>> +++ b/kernel/sched/sched.h
+> >>>>>> @@ -570,6 +570,7 @@ struct cfs_rq {
+> >>>>>>  #endif
+> >>>>>>
+> >>>>>>       struct rb_root_cached   tasks_timeline;
+> >>>>>> +     struct rb_root_cached   latency_timeline;
+> >>>>>>
+> >>>>>>       /*
+> >>>>>>        * 'curr' points to currently running entity on this cfs_rq.
+> 
