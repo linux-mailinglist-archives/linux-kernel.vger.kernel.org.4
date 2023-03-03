@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12856A968E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDD06A9695
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCCLj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S230187AbjCCLka convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Mar 2023 06:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjCCLjx (ORCPT
+        with ESMTP id S229697AbjCCLk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:39:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0001623659;
-        Fri,  3 Mar 2023 03:39:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C527B818A6;
-        Fri,  3 Mar 2023 11:39:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E60C4339E;
-        Fri,  3 Mar 2023 11:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677843590;
-        bh=I67wD2VPLvWn6k0HOQ0HyWEMmVsne14JmWKz+mBqvIk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GTkY9eXMB5r/ml0duVnEYUUCqH0mVYY/zdj1H0njOjVTkYPBqklKDEf0gq3XTzGdr
-         r+2IJjp23XkT5yNUBwrcdLtFzL7XnKVDp3KFPprMP5fiafUkZ4YFiuySHc9VR9lP2L
-         Gvx2mfl/TpOQ1QQOu9u2qFOw225zCOi1lKcOuADzB2FrPoJ8GiKBWKy5mz44oVJPBD
-         fKdL1cCcwvgmotXrD+yVEz4FUX5COcuNCH47ZSkeQsEgbwDtOk0kKLAJ6L1A2xUWmo
-         MwxikzdP50zEvZFQWIgfhtL6jtm6nV1nOHGpP05ua/9diiq6emMyU2IkT/M6Om60wF
-         eyMGzcqHBk64w==
-Date:   Fri, 3 Mar 2023 11:39:45 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     jacek.anaszewski@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        thunder.leizhen@huawei.com, festevam@gmail.com
-Subject: Re: [PATCH v6] dt-bindings: leds: Document commonly used LED triggers
-Message-ID: <20230303113945.GF2420672@google.com>
-References: <20230213072133.5977-1-manivannan.sadhasivam@linaro.org>
- <20230303103407.GR2303077@google.com>
+        Fri, 3 Mar 2023 06:40:27 -0500
+Received: from mail6.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02181521D3;
+        Fri,  3 Mar 2023 03:40:25 -0800 (PST)
+Received: from mail6.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 492FF221761;
+        Fri,  3 Mar 2023 11:40:24 +0000 (UTC)
+Received: from mail6.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 3DFB5220859;
+        Fri,  3 Mar 2023 11:40:24 +0000 (UTC)
+X-TM-AS-ERS: 10.181.10.103-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgxLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx1.dmz.swissbit.com (mx1.dmz.swissbit.com [10.181.10.103])
+        by mail6.swissbit.com (Postfix) with ESMTPS;
+        Fri,  3 Mar 2023 11:40:24 +0000 (UTC)
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+CC:     Wenchao Chen <wenchao.chen666@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
+ internal cache
+Thread-Topic: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
+ internal cache
+Thread-Index: AQHZTRVhGw7IamWdbkW+N3YLAv3UBK7nlDEQgAFYhgA=
+Date:   Fri, 3 Mar 2023 11:40:23 +0000
+Message-ID: <a35f3d45cab0442b9491c0b120e3fb47@hyperstone.com>
+References: <20230302144330.274947-1-ulf.hansson@linaro.org>
+ <5712c69ae37447c5b576d87b247f5756@hyperstone.com>
+In-Reply-To: <5712c69ae37447c5b576d87b247f5756@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230303103407.GR2303077@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27480.007
+X-TMASE-Result: 10--1.097400-10.000000
+X-TMASE-MatchedRID: dwNgap4H9hjUL3YCMmnG4vHkpkyUphL9pIm7+t7/ErssTMNBTJAZWem5
+        73tusZjQtAooHLFhogVeWwXKQGp3JHh1rPkUeh+7upDIC9422DplH44U2Ru12mdAe5NczV1Ve8w
+        NVrnxqoN1trix3E1eFJ/NKWBrHFmLBXdkbv140jU1yhbbA7We06wfObg093CkJUvol+PHbEyqLr
+        Si9+cPfTvtgB+lCbJUb3JmPdq59vloMCLywE0ygbq9UFRTJ0kKxEHRux+uk8h+ICquNi0WJLxXM
+        1hseCqOlJuZJgT8RltlDYN/ce5s3vVHDCDtM7pWftwZ3X11IV0=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 7600cef7-30f3-4b32-8fd4-694eeb41f124-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Mar 2023, Lee Jones wrote:
 
-> On Mon, 13 Feb 2023, Manivannan Sadhasivam wrote:
+>> 
+>> REQ_FUA is in general supported for eMMC cards, which translates into so called "reliable writes". To support these write operations, the CMD23 (MMC_CAP_CMD23), needs to be supported by the mmc host too, which is common but not always the case.
+>> 
+>> For some eMMC devices, it has been reported that reliable writes are quite costly, leading to performance degradations.
+>> 
+>> In a way to improve the situation, let's avoid announcing REQ_FUA support if the eMMC supports an internal cache, as that allows us to rely solely on flush-requests (REQ_OP_FLUSH) instead, which seems to be a lot cheaper.
+>> Note that, those mmc hosts that lacks CMD23 support are already using this type of configuration, whatever that could mean.
 > 
-> > Document the commonly used LED triggers by the SoCs. Not all triggers
-> > are documented as some of them are very application specific. Most of the
-> > triggers documented here are currently used in devicetrees of many SoCs.
-> > 
-> > While at it, also place the comment above the triggers (hci, mmc, wlan)
-> > to match the rest of the binding.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> > 
-> > Changes in v6:
-> > 
-> > * Rebased on top of lee/for-leds-next branch
-> > * Fixed the comment location for few triggers
-> > 
-> > Changes in v5:
-> > 
-> > * Rebased on top of v6.2-rc1
-> > 
-> > Changes in v4:
-> > 
-> > * Removed the sorting of triggers
-> > * Removed the "items" as they were not needed
-> > * Reworded the description
-> > * Dropped Zhen Lei's tested-by tag as the patch has changed
-> > * Added kbd-capslock trigger
-> > 
-> > Changes in v3:
-> > 
-> > * Rebased on top of v6.1-rc1
-> > * Added WLAN Rx trigger
-> > * Added tested tag from Zhen Lei
-> > 
-> > Changes in v2:
-> > 
-> > * Added more triggers, fixed the regex
-> > * Sorted triggers in ascending order
-> > 
-> >  .../devicetree/bindings/leds/common.yaml      | 37 +++++++++++++++++--
-> >  1 file changed, 34 insertions(+), 3 deletions(-)
-> 
-> Applied, thanks
+> Just note that reliable write is strictly weaker than turning cache off/flushing, if card loses power during cache off/flush programming / busy, sector-wise atomicity is not mandated by the spec.
+> (And that is assuming cache off/flush is actually respected by the card as intended by the spec, should some cards be checked?) Maybe some FS people can also chime in?
 
-Change of plan.  This doesn't apply cleanly.
+Nevermind, the sector-wise atomicity should not matter on 5.1 cards or if the block length isn't being played with, which it isn't in our case.
+If reliable write is implemented only according to spec, I don't see why the cache flushing should be less expensive, which would only make sense if
+a) < sector chunks are committed to flash
+b) reliable write is implemented much stricter than the spec, ensuring atomicity for the entire write.
 
-Could you please rebase and resubmit please?
+I guess the cards which increase performance do b)? Or something else?
+Anyway regarding FUA i don't have any concerns regarding reliability with cache flush.
+I can add some performance comparisons with some eMMCs I have around though.
 
--- 
-Lee Jones [李琼斯]
+Regards,
+Christian
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+
