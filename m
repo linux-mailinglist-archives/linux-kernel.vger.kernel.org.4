@@ -2,251 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8DB6A99B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EB56A99B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjCCOlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S231191AbjCCOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjCCOlx (ORCPT
+        with ESMTP id S229740AbjCCOld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:41:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62966392BD
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:41:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677854463;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=npG840B2CWbytow6GiT2dpSNf/ra003xD6Hbov44E5k=;
-        b=csmqfc+t96P1cLqPxeUmEdpKkwViBQl5yUamKnFKJeaoTOkKGfv8rkeg/ZrdTO1BA8tTyJ
-        ejeYnxNu2ApiUaHFZYHW57Yc9trJ4sIsQKEXMOd9dfnFT4COkBelJC6tHzx0igRhuWEvYa
-        tteapInI1ThfNDrgHuSa73qKvxAUswE=
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
- [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-584-YT8nqFh1MayRvjA25PaLuQ-1; Fri, 03 Mar 2023 09:41:00 -0500
-X-MC-Unique: YT8nqFh1MayRvjA25PaLuQ-1
-Received: by mail-yb1-f197.google.com with SMTP id 23-20020a250b17000000b00a1f7de39bf5so2546384ybl.19
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:40:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677854459;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=npG840B2CWbytow6GiT2dpSNf/ra003xD6Hbov44E5k=;
-        b=nV/OyVOIODu6DTUs4J0OjKb3snh6S1/a6x26lYlE1DkIuyhEd2L01PRL2Q3vSLOVbg
-         epyy9Nf5nvV9L37sdgfBVRD0iBnsaIDxbRiu6M28MKvLj2krA0fYpr/0a43n7GnWOlfE
-         97UycjfpnB8UcEIfpRuwrQFLNCb27LMuEgtGsW69kONq8FeXlZ2ikqH0YL9tLNS10TmV
-         1VEiGzTP089LITaEwb/gVPceoOBDHGxx2VXtVa9Amvy35xl1fMpxIj57xA8v9DB36czr
-         qcCBi5cRFScltTqoe+mKKHY34gO2TXA1LGvdFmbM9HkpDUXSW75j55MYHSQsHvaiXKGE
-         VDpg==
-X-Gm-Message-State: AO0yUKUJaIso5Ung7Swv0qq6mwyRwnkQ96392DBLgSJ8bRVCjbF0KKU5
-        Q4q4JMW2tY2VxS3XCDVqxcedegULu28VbeeMsi2ihR2oTl4rS1W3nPVssYfKOChphq8hMeUjG5o
-        9z+36ObNfEHioOrT8+m6mM6q4fy3mNUQJyK3kF7geCn6Ev3zu7yc=
-X-Received: by 2002:a81:ac21:0:b0:534:2d49:7912 with SMTP id k33-20020a81ac21000000b005342d497912mr1082724ywh.6.1677854459086;
-        Fri, 03 Mar 2023 06:40:59 -0800 (PST)
-X-Google-Smtp-Source: AK7set/3HdlAnj8H7lBeFLCOfIZvwPna5/7sZl5yd4f2J0klMCuKHZHk13uLuPEHUw5dpUvtCyDYBFF+POUh2WBPcU4=
-X-Received: by 2002:a81:ac21:0:b0:534:2d49:7912 with SMTP id
- k33-20020a81ac21000000b005342d497912mr1082713ywh.6.1677854458709; Fri, 03 Mar
- 2023 06:40:58 -0800 (PST)
+        Fri, 3 Mar 2023 09:41:33 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C69360B3;
+        Fri,  3 Mar 2023 06:41:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677854492; x=1709390492;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PCA7xcIf7pUPetZRCkhEcheUlk5lHEZhdWB8pICiDFU=;
+  b=nJEH9APUT4DJ0WlHz2KViL4BB18UVqZZ2Ro4nz3zCdR6suY1qjO6FRAW
+   BeuR8FEM4a6UAR/mC6g6SNr4GRpGeJYWitdOha9VMJDDv7FEIYHEAPVyo
+   RZ18G3pwvpLiWhzNNIApuMSmRZ1q6Jy4pYUoBhem4LP0G68JxoFiYgnlh
+   aTmV/pl4cAGls+X+FI8BUJwXFrEUTcsOjMl+aCCR6KsxImJ9AkkcKo1NV
+   QnJKo0rHBZVRAV6p40bRwJzK5e8riMJt/4Clgmc+EedzUYn6oV9hTzrp5
+   WNuomMhwqpBP/qvzBPs11idiZJ6gdtzwkPVd6g/teZZLDvl5NlOBYnKKJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="362648656"
+X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
+   d="scan'208";a="362648656"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 06:41:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="705664872"
+X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
+   d="scan'208";a="705664872"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.216.227])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 06:41:27 -0800
+Message-ID: <5d7d48ff-b007-e339-8177-d0a7b7b8adc4@intel.com>
+Date:   Fri, 3 Mar 2023 16:41:23 +0200
 MIME-Version: 1.0
-References: <20230302113421.174582-1-sgarzare@redhat.com> <20230302113421.174582-6-sgarzare@redhat.com>
-In-Reply-To: <20230302113421.174582-6-sgarzare@redhat.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Fri, 3 Mar 2023 15:40:22 +0100
-Message-ID: <CAJaqyWd+_wEAtfUhVfgAPLvr_3dm5pQghpdFhys5Maniwkhv1g@mail.gmail.com>
-Subject: Re: [PATCH v2 5/8] vdpa_sim: make devices agnostic for work management
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
+ internal cache
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Wenchao Chen <wenchao.chen666@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
+        Bean Huo <huobean@gmail.com>
+References: <20230302144330.274947-1-ulf.hansson@linaro.org>
+ <5712c69ae37447c5b576d87b247f5756@hyperstone.com>
+ <a35f3d45cab0442b9491c0b120e3fb47@hyperstone.com>
+ <CAPDyKFpv3hHvg5X8WNpQEnnsNdGCBMybT-32EGPNYtBtSgK9Fw@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAPDyKFpv3hHvg5X8WNpQEnnsNdGCBMybT-32EGPNYtBtSgK9Fw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 12:35 PM Stefano Garzarella <sgarzare@redhat.com> wr=
-ote:
->
-> Let's move work management inside the vdpa_sim core.
-> This way we can easily change how we manage the works, without
-> having to change the devices each time.
->
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+On 3/03/23 14:01, Ulf Hansson wrote:
+> On Fri, 3 Mar 2023 at 12:40, Christian Löhle <CLoehle@hyperstone.com> wrote:
+>>
+>>
+>>>>
+>>>> REQ_FUA is in general supported for eMMC cards, which translates into so called "reliable writes". To support these write operations, the CMD23 (MMC_CAP_CMD23), needs to be supported by the mmc host too, which is common but not always the case.
+>>>>
+>>>> For some eMMC devices, it has been reported that reliable writes are quite costly, leading to performance degradations.
+>>>>
+>>>> In a way to improve the situation, let's avoid announcing REQ_FUA support if the eMMC supports an internal cache, as that allows us to rely solely on flush-requests (REQ_OP_FLUSH) instead, which seems to be a lot cheaper.
+>>>> Note that, those mmc hosts that lacks CMD23 support are already using this type of configuration, whatever that could mean.
+>>>
+>>> Just note that reliable write is strictly weaker than turning cache off/flushing, if card loses power during cache off/flush programming / busy, sector-wise atomicity is not mandated by the spec.
+>>> (And that is assuming cache off/flush is actually respected by the card as intended by the spec, should some cards be checked?) Maybe some FS people can also chime in?
+>>
+>> Nevermind, the sector-wise atomicity should not matter on 5.1 cards or if the block length isn't being played with, which it isn't in our case.
+>> If reliable write is implemented only according to spec, I don't see why the cache flushing should be less expensive, which would only make sense if
+>> a) < sector chunks are committed to flash
+>> b) reliable write is implemented much stricter than the spec, ensuring atomicity for the entire write.
+> 
+> Right, I agree!
+> 
+> Note 1) Reliable write was introduced way before cache management in
+> the eMMC spec. So, if the support for reliable write would have a
+> stricter implementation than needed, I would not be surprised.
 
-Acked-by: Eugenio P=C3=A9rez Martin <eperezma@redhat.com>
+I am not sure when you say stricter than needed.  Historically
+file systems assumed that sectors are updated atomically i.e.
+there is never a sector with a mixture of old and new data.
+The eMMC spec does not guarantee that, except for reliable
+write.
 
-> ---
->  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  3 ++-
->  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 17 +++++++++++++++--
->  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  6 ++----
->  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  6 ++----
->  4 files changed, 21 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdp=
-a_sim.h
-> index 144858636c10..acee20faaf6a 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> @@ -45,7 +45,7 @@ struct vdpasim_dev_attr {
->         u32 ngroups;
->         u32 nas;
->
-> -       work_func_t work_fn;
-> +       void (*work_fn)(struct vdpasim *vdpasim);
->         void (*get_config)(struct vdpasim *vdpasim, void *config);
->         void (*set_config)(struct vdpasim *vdpasim, const void *config);
->         int (*get_stats)(struct vdpasim *vdpasim, u16 idx,
-> @@ -78,6 +78,7 @@ struct vdpasim {
->
->  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
->                                const struct vdpa_dev_set_config *config);
-> +void vdpasim_schedule_work(struct vdpasim *vdpasim);
->
->  /* TODO: cross-endian support */
->  static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
-a_sim.c
-> index 481eb156658b..a6ee830efc38 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> @@ -116,6 +116,13 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim=
-)
->  static const struct vdpa_config_ops vdpasim_config_ops;
->  static const struct vdpa_config_ops vdpasim_batch_config_ops;
->
-> +static void vdpasim_work_fn(struct work_struct *work)
-> +{
-> +       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
-rk);
-> +
-> +       vdpasim->dev_attr.work_fn(vdpasim);
-> +}
-> +
->  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->                                const struct vdpa_dev_set_config *config)
->  {
-> @@ -152,7 +159,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_att=
-r *dev_attr,
->
->         vdpasim =3D vdpa_to_sim(vdpa);
->         vdpasim->dev_attr =3D *dev_attr;
-> -       INIT_WORK(&vdpasim->work, dev_attr->work_fn);
-> +       INIT_WORK(&vdpasim->work, vdpasim_work_fn);
->         spin_lock_init(&vdpasim->lock);
->         spin_lock_init(&vdpasim->iommu_lock);
->
-> @@ -203,6 +210,12 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_at=
-tr *dev_attr,
->  }
->  EXPORT_SYMBOL_GPL(vdpasim_create);
->
-> +void vdpasim_schedule_work(struct vdpasim *vdpasim)
-> +{
-> +       schedule_work(&vdpasim->work);
-> +}
-> +EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
-> +
->  static int vdpasim_set_vq_address(struct vdpa_device *vdpa, u16 idx,
->                                   u64 desc_area, u64 driver_area,
->                                   u64 device_area)
-> @@ -237,7 +250,7 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa,=
- u16 idx)
->         }
->
->         if (vq->ready)
-> -               schedule_work(&vdpasim->work);
-> +               vdpasim_schedule_work(vdpasim);
->  }
->
->  static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim=
-/vdpa_sim_blk.c
-> index 5117959bed8a..eb4897c8541e 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> @@ -11,7 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/device.h>
->  #include <linux/kernel.h>
-> -#include <linux/sched.h>
->  #include <linux/blkdev.h>
->  #include <linux/vringh.h>
->  #include <linux/vdpa.h>
-> @@ -286,9 +285,8 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vd=
-pasim,
->         return handled;
->  }
->
-> -static void vdpasim_blk_work(struct work_struct *work)
-> +static void vdpasim_blk_work(struct vdpasim *vdpasim)
->  {
-> -       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
-rk);
->         bool reschedule =3D false;
->         int i;
->
-> @@ -326,7 +324,7 @@ static void vdpasim_blk_work(struct work_struct *work=
-)
->         spin_unlock(&vdpasim->lock);
->
->         if (reschedule)
-> -               schedule_work(&vdpasim->work);
-> +               vdpasim_schedule_work(vdpasim);
->  }
->
->  static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config=
-)
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim=
-/vdpa_sim_net.c
-> index 862f405362de..e61a9ecbfafe 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> @@ -11,7 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/device.h>
->  #include <linux/kernel.h>
-> -#include <linux/sched.h>
->  #include <linux/etherdevice.h>
->  #include <linux/vringh.h>
->  #include <linux/vdpa.h>
-> @@ -192,9 +191,8 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasi=
-m)
->         u64_stats_update_end(&net->cq_stats.syncp);
->  }
->
-> -static void vdpasim_net_work(struct work_struct *work)
-> +static void vdpasim_net_work(struct vdpasim *vdpasim)
->  {
-> -       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
-rk);
->         struct vdpasim_virtqueue *txq =3D &vdpasim->vqs[1];
->         struct vdpasim_virtqueue *rxq =3D &vdpasim->vqs[0];
->         struct vdpasim_net *net =3D sim_to_net(vdpasim);
-> @@ -260,7 +258,7 @@ static void vdpasim_net_work(struct work_struct *work=
-)
->                 vdpasim_net_complete(rxq, write);
->
->                 if (tx_pkts > 4) {
-> -                       schedule_work(&vdpasim->work);
-> +                       vdpasim_schedule_work(vdpasim);
->                         goto out;
->                 }
->         }
-> --
-> 2.39.2
->
+File systems may use REQ_FUA for important information, like the
+superblock or a journal commit record, so using reliable write
+for REQ_FUA would seem to give better protection against file system
+corruption than a cache flush which could leave a sector
+half-written.
+
+On the other hand, sudden power loss is probably rare in battery
+powered systems because they are designed to monitor the battery
+power and shutdown when it gets too low.
+
+And file systems can use checksums to detect half-written updates.
+
+And there is anyway no protection for other (non REQ_FUA) writes a
+file system might do and expect not to tear sectors.
+
+And you are more likely to smash the screen than bounce the battery
+out and cause an unrecoverable file system error.
+
+Nevertheless, the commit message of this patch reads like the change
+is an optimization, whereas it seems more like a policy change.
+The commit message should perhaps say something like:
+"The consensus is that the benefit of improved performance by not
+using reliable-write for REQ_FUA is much greater than any potential
+benefit that reliable-write might provide to avoid file system
+corruption in the event of sudden power loss."
+
+As for allowing for the policy to be overridden, perhaps an mmc_core
+module option?
+
+> 
+> Note 2) In the eMMC v5.1 spec, the cache flushing support has been
+> extended to allow an explicit barrier operation. Perhaps, we should
+> let that option take precedence over a regular flush+barrier, for
+> REQ_OP_FLUSH!?
+> 
+>>
+>> I guess the cards which increase performance do b)? Or something else?
+> 
+> That's the tricky part to know, as it's the internals of the eMMC.
+
+It is the natural conclusion though.  The eMMC probably does not
+update mapping information with every write, instead if power is
+lost, it scans the updated areas at the next initialization. (The
+power-off notify feature would commit the mapping information to
+media to avoid that).  So a reliable write might have to:
+1. write information to record that the old mapping
+should be used, not what might be discovered by scanning
+2. do the actual write
+3. write mapping information to record the new mapping
+
+> 
+> Although, it seems like both Avri (WDC) and Bean (Micron) would be
+> happy to proceed with $subject patch, which makes me more comfortable
+> to move forward.
+> 
+>> Anyway regarding FUA i don't have any concerns regarding reliability with cache flush.
+>> I can add some performance comparisons with some eMMCs I have around though.
+> 
+> That would be great, thanks a lot for helping out with testing!
+> 
+> Kind regards
+> Uffe
 
