@@ -2,168 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC1B6A975F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A26836A9762
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjCCMlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 07:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S230053AbjCCMmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 07:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCCMlT (ORCPT
+        with ESMTP id S230004AbjCCMl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 07:41:19 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3525F501;
-        Fri,  3 Mar 2023 04:41:18 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id EF03D5C00B5;
-        Fri,  3 Mar 2023 07:41:14 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 03 Mar 2023 07:41:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1677847274; x=1677933674; bh=mi
-        W7z/m1o3Z+JHrWEAUIQgA5k8V0IlAjl3B3oQaEa/8=; b=hhOAXcZA+/RUyzOHaZ
-        T5ezvIZOpsKpWta+5rrs5rURKmZEvgPA6cw83GAsNk5jXNmWJNr/9JH0bGjrXp2V
-        WH+LWyzvgh+Lmd4E1BP7NdQbPTUnbwYE6lsNzFqF6jiYIGm7T5+2Avki93acIgjk
-        f9MAOtwpiiRYBRnujRdlHupSoNtrEjUG1Zk4z5/DevTsGYhYnGe9RFYZf8F5W537
-        NeYcoSCLsfzCCNoZJBcvFV+X42im7M6vpQgJRK8gnRM4OKHB6JfskOzoovAMu5eN
-        tTDriPdyV0XTLTJtZZn185F3N2o01MhpcOE9gK+BHgaLR4waa3wwNfma4dlQ8Cyn
-        ZVZw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677847274; x=1677933674; bh=miW7z/m1o3Z+J
-        HrWEAUIQgA5k8V0IlAjl3B3oQaEa/8=; b=p+1grLR0ZatZ8NvlWEJIT2nBMwBaT
-        JFJtPp4pdg9dZqck9YoxP5C4aMEZVQPW9OwIhuuJan0SIVnBAPm0atu/L5rBPctC
-        JZPTRQevuPvq3TxG8iR2ts7EanRMNBbBpcBAuMIBWGc0Hu4MUUfNlqKH2zFWMqt5
-        nxq3TezzlrAdE24np88ZQYJv3suX54SIYlhI7DPOfWKexOdBzmURa+3FKrsztG9c
-        GuXOJHGjep6q4SYY9vMsFb7z5W2p36nywwTmZryx9RQ4CaiVfYBc5fJYtYHawrZC
-        6E7bLbibTxM/arg414VxOX9I9r0LEICnX1UH7mhKm0NDsBWkm+nNd0psg==
-X-ME-Sender: <xms:6uoBZEVQwp6OkhoBU01S8fGgNYB7fyNSR4GMzvEezBk5bR4IkkrX4g>
-    <xme:6uoBZIlHbEpaBugk9eh7sWZ8iORnLfUKlz5r9Oa6HDgcw496BL7a_872ZWWVFXRjH
-    6lQQaL0j7fobz_56ZQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:6uoBZIbjC7Ao94WOmC3e9Cr3KWSWa4ymCPYLvQYGOF4k3DngGRZsAA>
-    <xmx:6uoBZDWw5dsHJooqG79Be4AbeGx_3g3sWgw2hvSCg9hT_yhO7z8TIg>
-    <xmx:6uoBZOloO6Bgm-tq5pjBSRwBaDm-JF7PUxLtpWoXf2JiNO8-UXuHwg>
-    <xmx:6uoBZAcgJG7Ey3IgxXmgI3jZEVBLTl7rZaH63dIfEXc5jKsQPu-vyA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1679EB60089; Fri,  3 Mar 2023 07:41:14 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
-In-Reply-To: <20230303102817.212148-2-bhe@redhat.com>
-References: <20230303102817.212148-1-bhe@redhat.com>
- <20230303102817.212148-2-bhe@redhat.com>
-Date:   Fri, 03 Mar 2023 13:40:53 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Baoquan He" <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Helge Deller" <deller@gmx.de>,
-        "Serge Semin" <fancer.lancer@gmail.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mips: add <asm-generic/io.h> including
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Mar 2023 07:41:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90E5F508
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 04:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677847268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FepeFCltrr6Y6adbFfF6ozHOJLVN2784TOOqblo8G3c=;
+        b=Lcf1uUZz8KkgL9RDOAl7ULD6gXigtr4zdbUlbqNl1Ym8ViPdv7HVN3TtPmlvhniiFAeXvk
+        5CPcFT/v7O7KZkaEO7yl4VsIlb13bBe71xI90b4OgVGvhaszlE5lTWmeGTFLsJ4vDluzzf
+        X7KquPU5cFaDZuGVi7xqXzbQfm/qQZs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-632-F7wK02j7NqacLRYwh5B_eg-1; Fri, 03 Mar 2023 07:41:06 -0500
+X-MC-Unique: F7wK02j7NqacLRYwh5B_eg-1
+Received: by mail-qk1-f199.google.com with SMTP id q25-20020a37f719000000b00742bfdd63ecso1297195qkj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 04:41:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677847266;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FepeFCltrr6Y6adbFfF6ozHOJLVN2784TOOqblo8G3c=;
+        b=19o382zaDB/djK1xfzyXrb8KyK6skVQ2RaCP/dtholBiVxKeriD7Qp86iY0VTBuYzb
+         QnIG20/lEfXgW3n6cSLmpIy4DmTZExoyH7YAx2ll9O3sS24XcLgYXx5/N2S0u0woCp9o
+         3zIuyieD+tbGApbUkNj0JWGWMRi773ZUk2nSBb9r6y7lhhOJApSfdJBeIT2OGkXUHdFb
+         mE3ZcVmVfYnFhYv9LX5fT7iu8zhYlehbTlkR4eqHY8NtKdML6ifWIUFhkfu3A5J6HSJk
+         Kb5Kr+A9P1RZTO2Ibu8P76q9oCuzNiJpb6S0m1yqtoxuDfQccEw4udP22OPJnkT5z9v/
+         yzUg==
+X-Gm-Message-State: AO0yUKVTNAXUtH40d0Ah7u2xeh7iSPxwNFLcZIwHcoj7uT7w3/pvmtGc
+        QBpGOYKwuH8glagq4PkcKr4T8jmUY5yH9cXwYm+SjykCODE7vgnKx6lzqZKg+3JTWQhS/jNQ81b
+        d0wb89OzzYD5E3HiahP1jORP9
+X-Received: by 2002:a0c:dd94:0:b0:572:54c1:c14e with SMTP id v20-20020a0cdd94000000b0057254c1c14emr1924529qvk.5.1677847266313;
+        Fri, 03 Mar 2023 04:41:06 -0800 (PST)
+X-Google-Smtp-Source: AK7set/FBxS/cUG+PDkuwIhgP84j9mKZaexu2RFQNHEszy7xrIX+bUBvWrgOvHDO1VJWm6twPe6o2g==
+X-Received: by 2002:a0c:dd94:0:b0:572:54c1:c14e with SMTP id v20-20020a0cdd94000000b0057254c1c14emr1924493qvk.5.1677847266015;
+        Fri, 03 Mar 2023 04:41:06 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id r145-20020a37a897000000b0073b69922cfesm1639351qke.85.2023.03.03.04.41.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 04:41:05 -0800 (PST)
+Message-ID: <d593e9434dba16a869ec48fcdfe8a3fe540c8a82.camel@redhat.com>
+Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, mptcp@lists.linux.dev,
+        Florian Westphal <fw@strlen.de>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Anders Roxell <anders.roxell@linaro.org>
+Date:   Fri, 03 Mar 2023 13:41:00 +0100
+In-Reply-To: <ZAHdrhY2P+sBI+xX@kroah.com>
+References: <20230301180657.003689969@linuxfoundation.org>
+         <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
+         <ZAB6pP3MNy152f+7@kroah.com>
+         <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
+         <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
+         <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
+         <CA+G9fYuLQEfeTjx52NxbXV5914YJQ2tVd8k4SJjrAryujPjnqA@mail.gmail.com>
+         <ZAG8dla274kYfxoK@kroah.com>
+         <28afc90c1b8b51a36ced5b6026d1a64aeb7c0b14.camel@redhat.com>
+         <ZAHdrhY2P+sBI+xX@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023, at 11:28, Baoquan He wrote:
-> With the adding, some default ioremap_xx methods defined in
-> asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-> NULL.
->
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Serge Semin <fancer.lancer@gmail.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: linux-mips@vger.kernel.org
+On Fri, 2023-03-03 at 12:44 +0100, Greg Kroah-Hartman wrote:
+> On Fri, Mar 03, 2023 at 12:39:07PM +0100, Paolo Abeni wrote:
+> > Additionally, some self-tests check for known bugs/regressions. Running
+> > them on older kernel will cause real trouble, and checking for bug
+> > presence in the running kernel would be problematic at best, I think.
+>=20
+> No, not at all, why wouldn't you want to test for know bugs and
+> regressions and fail?  That's a great thing to do, and so you will know
+> to backport those bugfixes to those older kernels if you have to use
+> them.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+I'm sorry, I likely was not clear at all. What I mean is that the self-
+test for a bug may trigger e.g. memory corruption on the bugged kernel
+(or more specifically to networking, the infamous, recurring
+"unregister_netdevice: waiting for ...") which in turn could cause
+random failures later.
 
-I think this is all good. I had look at what cleanups we could do as
-follow-ups:
+If that specific case runs on older (unpatched) kernel will screw the
+overall tests results. The same could happen in less-detectable way for
+old bugs non explicitly checked by any test, but still triggered by the
+test-suite. As a consequence I expect that the results observed running
+newer self-tests on older kernel are unreliable.=20
 
-> +#define phys_to_virt phys_to_virt
->  static inline void * phys_to_virt(unsigned long address)
->  {
->  	return __va(address);
+Cheers,
 
-This is the same as the asm-generic version, so the mips definition
-is no longer needed.
+Paolo
 
-> @@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
->  __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
->  #endif
-> 
-> +#define readb readb
-> +#define readw readw
-> +#define readl readl
-> +#define writeb writeb
-> +#define writew writew
-> +#define writel writel
-> +
-> +#ifdef CONFIG_64BIT
-> +#define readq readq
-> +#define writeq writeq
-> +#define __raw_readq __raw_readq
-> +#define __raw_writeq __raw_writeq
-> +#endif
-> +
-> +#define __raw_readb __raw_readb
-> +#define __raw_readw __raw_readw
-> +#define __raw_readl __raw_readl
-> +#define __raw_writeb __raw_writeb
-> +#define __raw_writew __raw_writew
-> +#define __raw_writel __raw_writel
-
-The mips code defines the __raw variants with slightly different
-semantics on both barriers and byteswap, which makes it impractical
-to share any of the above.				
-
-> +#define memset_io memset_io
->  static inline void memset_io(volatile void __iomem *addr, unsigned 
-> char val, int count)
->  {
->  	memset((void __force *) addr, val, count);
->  }
-> +#define memcpy_fromio memcpy_fromio
->  static inline void memcpy_fromio(void *dst, const volatile void 
-> __iomem *src, int count)
->  {
->  	memcpy(dst, (void __force *) src, count);
->  }
-> +#define memcpy_toio memcpy_toio
-
-These are again the same as the generic version
-
-    Arnd
