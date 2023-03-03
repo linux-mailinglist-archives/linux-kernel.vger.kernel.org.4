@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C706A9E23
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759A96A9E2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbjCCSF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S231514AbjCCSIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjCCSFy (ORCPT
+        with ESMTP id S230512AbjCCSIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:05:54 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDF65CC29
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 10:05:53 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id cy23so13527437edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 10:05:53 -0800 (PST)
+        Fri, 3 Mar 2023 13:08:41 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EF9DBFB;
+        Fri,  3 Mar 2023 10:08:40 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id b10so3271643ljr.0;
+        Fri, 03 Mar 2023 10:08:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677866751;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xj/aW7rv2hnxMKwTINLCdxn8Xpp5R3jKA3qZ2i6tZD4=;
-        b=XHgVAIvE4meRLWen/etowUrZu8sS+DUubGFdL4qz/BkZ7AfvIzfDiQooj4TYdTGGBa
-         QhacT/cEMq9umv8jT8lotS2p/U89+GCy8MSsH6a03GqHtfkflpwc9aiFZH39qliMAYwW
-         V49AJgiA3oevvtBF4j6HxQliGIMdJzdpyKzdk=
+        bh=Y779fsdPllk73iFSKFWEUZhysRcnGSThIiUqv0kC8lg=;
+        b=KQ5ad3dwukBu7s19Alqt1gcWpRvIarYj1lmtuc3GkDaEjFb03/azs9cd1TngN9K23v
+         vmu+W0tn6okdHwBgFxr+aGF/VaT2R3FJKnW1Zwk9SFCjgW5c2Hb/Nd5m5yAr+RYI3cZG
+         20mdAb1LEgNzwaaymymgH6i82VQjTJZgyEV6mALXSl4Ki8VgbLfFcN4NrKH9TcAz24un
+         5pEEm23LBnxAXe/Ie7kF8kaEcJx4Grv9HyBh8wwZAmCH6SV9vWuC4evMRp/cIiX2qPXG
+         IpETl8ca+Iq1LQTADtDCvb7JGliTo2n/sHIXI3KlyU6Jz3ylD/LWLBxSFslSH1Q4DPJl
+         6D9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677866751;
+        d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xj/aW7rv2hnxMKwTINLCdxn8Xpp5R3jKA3qZ2i6tZD4=;
-        b=zHan+QMkoA4lIfrSNywe99GVHnWCZqG4JL+LCloHxxwPLtm8xmd5KIGuE+3T/l0lrr
-         xekdcSHX5KKetED79b+d9WaVmOUReHSqb1d1lthHov1k6LH1LinhgWkAkParcUB5Ri1g
-         yqRfvKThWTvDDxlMtVjclayovfwlqDkfN2vWqRbwUwDn9JifUAuQBeoFGFBnwa7kBH9Z
-         QT8HjzmDkqdO7L+VuDLEf4ijGR1Ds2UbA5mDdj9Rm5lfH2UF9Bt4sNc+9+zHMZXadb50
-         fqdH/78IQsc8054Wvr7cAhKbJ39RmDTUOTjXSB41sHFhCE00k+Uyjs6rMeQyYQsFuVZL
-         /uOQ==
-X-Gm-Message-State: AO0yUKWX5J4w1UlTotVX507T+Zhjsh8pYi8i4jf4WCVZ6OOc3fXCx6fS
-        okNiLPkQ63Vgq4dk5214JAmCX5xPxuVGJW3dADjRfg==
-X-Google-Smtp-Source: AK7set+RAsozA8MOJcZlvdB1z+lBgcYfiomd7h0EQl+l67vw6UG82cx4GcjGC5dmu+kv3uG0eAMnrg==
-X-Received: by 2002:a17:907:94c5:b0:8b1:3821:1406 with SMTP id dn5-20020a17090794c500b008b138211406mr3412071ejc.45.1677866751218;
-        Fri, 03 Mar 2023 10:05:51 -0800 (PST)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id dx11-20020a170906a84b00b008e493b7bb61sm1182653ejb.153.2023.03.03.10.05.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 10:05:50 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id i34so13650906eda.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 10:05:50 -0800 (PST)
-X-Received: by 2002:a17:906:498e:b0:901:e556:6e23 with SMTP id
- p14-20020a170906498e00b00901e5566e23mr1304879eju.0.1677866750385; Fri, 03 Mar
- 2023 10:05:50 -0800 (PST)
+        bh=Y779fsdPllk73iFSKFWEUZhysRcnGSThIiUqv0kC8lg=;
+        b=FfVFDmTCe4HrXJUaEpJpcQGgGiF2QTCuKL8VrV0UFG9A7nVIoBQR0eYNo0/gBD1qpp
+         UoL+/a8wn8tXDypqB3v/FIkHI5KGrgxYkGhivKBd+E/D7Rbx5C4XlHXcJHQYx6xY6v1h
+         85VSj2DFEagq02vypGect4lGdmGULyos9WMRKf4YD9fluMZVKnFNdsWCrIcN20ixiloA
+         w7YZJRW2MSf6cyxLhzKtGH/aAoY0Jz01xnFG1BYNdpNqTb1+fSRi1iCfPKSvKamk3OKL
+         Tavi9/+rOW0Sjo6XLZW6gqhDf5yySdUsBvH48S+5UPYPXaKoasoqbgrJ508cigAZ+eaE
+         0dwQ==
+X-Gm-Message-State: AO0yUKVMwbsV9tX8KqVeTgYrXSW+LG7lGFVfwWIxeyFrnhqRJJ9jkYZ2
+        aWI65siVxwUt/wH0OdJtNC+8UK5UEVAJk7nNPi3f22GD
+X-Google-Smtp-Source: AK7set8imPN+V4oquFW31wvcp3uzwidOpMD/0dQQTK7/71jiXTpkZumCeQBM1P6XlCIYcfpHL2Okzyh1ue+X7mRpDpM=
+X-Received: by 2002:a2e:b4ae:0:b0:295:a3a8:b2a2 with SMTP id
+ q14-20020a2eb4ae000000b00295a3a8b2a2mr836976ljm.9.1677866918365; Fri, 03 Mar
+ 2023 10:08:38 -0800 (PST)
 MIME-Version: 1.0
-References: <C8C4DFDA-998F-48AD-93C9-DE16F8080A02@meta.com>
- <CAHk-=wghhViNZCj4ibSr42HjVGdHro_DWW7wCOQ61p2v59cciw@mail.gmail.com>
- <4BA6A759-F69C-406E-9D29-EDCC9B48F798@meta.com> <CAHk-=wjCNtTJ3DrG1266xXPZF=qH=GvpWApkYStJ9knskRnU3w@mail.gmail.com>
-In-Reply-To: <CAHk-=wjCNtTJ3DrG1266xXPZF=qH=GvpWApkYStJ9knskRnU3w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 3 Mar 2023 10:05:33 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjb2refiXJeVPUCcfLo=G+sozZOHsdQn4jAq17YBKP7eg@mail.gmail.com>
-Message-ID: <CAHk-=wjb2refiXJeVPUCcfLo=G+sozZOHsdQn4jAq17YBKP7eg@mail.gmail.com>
-Subject: Re: [GIT PULL] zstd changes for v6.3-rc1
-To:     Nick Terrell <terrelln@meta.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Terrell <nickrterrell@gmail.com>
+References: <CAAgLYK7pm06588j+W7F0+2mgfVs1Sr7ioL4x+Bd-TZfV-Zw9Pg@mail.gmail.com>
+In-Reply-To: <CAAgLYK7pm06588j+W7F0+2mgfVs1Sr7ioL4x+Bd-TZfV-Zw9Pg@mail.gmail.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Fri, 3 Mar 2023 10:08:27 -0800
+Message-ID: <CABBYNZL2RPLFfjs=EaS4khqLSXjwN2d=1FqY3Z-feX-j_QmOnw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Bluetooth: fix race condition in hidp_session_thread
+To:     lm0963 <lm0963hack@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, security@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Tedd Ho-Jeong An <hj.tedd.an@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,36 +73,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 9:59=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+Hi Tedd,
+
+On Wed, Mar 1, 2023 at 10:18=E2=80=AFPM lm0963 <lm0963hack@gmail.com> wrote=
+:
 >
-> You should not rebase your public trees.
+> There is a potential race condition in hidp_session_thread that may
+> lead to use-after-free. For instance, the timer is active while
+> hidp_del_timer is called in hidp_session_thread(). After hidp_session_put=
+,
+> then 'session' will be freed, causing kernel panic when hidp_idle_timeout
+> is running.
 >
-> But you should not merge mainline either.
+> The solution is to use del_timer_sync instead of del_timer.
+>
+> Here is the call trace:
+>
+> ? hidp_session_probe+0x780/0x780
+> call_timer_fn+0x2d/0x1e0
+> __run_timers.part.0+0x569/0x940
+> hidp_session_probe+0x780/0x780
+> call_timer_fn+0x1e0/0x1e0
+> ktime_get+0x5c/0xf0
+> lapic_next_deadline+0x2c/0x40
+> clockevents_program_event+0x205/0x320
+> run_timer_softirq+0xa9/0x1b0
+> __do_softirq+0x1b9/0x641
+> __irq_exit_rcu+0xdc/0x190
+> irq_exit_rcu+0xe/0x20
+> sysvec_apic_timer_interrupt+0xa1/0xc0
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Min Li <lm0963hack@gmail.com>
+> ---
+>  net/bluetooth/hidp/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/hidp/core.c b/net/bluetooth/hidp/core.c
+> index bed1a7b9205c..707f229f896a 100644
+> --- a/net/bluetooth/hidp/core.c
+> +++ b/net/bluetooth/hidp/core.c
+> @@ -433,7 +433,7 @@ static void hidp_set_timer(struct hidp_session *sessi=
+on)
+>  static void hidp_del_timer(struct hidp_session *session)
+>  {
+>         if (session->idle_to > 0)
+> -               del_timer(&session->timer);
+> +               del_timer_sync(&session->timer);
+>  }
+>
+>  static void hidp_process_report(struct hidp_session *session, int type,
+> --
+> 2.25.1
 
-So lwn has several articles about this, the one I found quickly with google=
- was
+Looks like CI didn't pick up this one.
 
-    https://lwn.net/Articles/791284/
-
-and it's worth noting that the rule is "don't rebase" and "don't merge
-from upstream", but as always, those are rules that then have to be
-balanced against other rules and concerns.
-
-Sometimes rebasing _is_ the right thing to do. Sometimes the public
-history simply ended up being so full of garbage that the only right
-thing to do is to just admit that and start again.
-
-And sometimes merging from upstream _is_ the right thing to do. Maybe
-there is something really important that made it upstream that is very
-relevant.
-
-But both situations need to be things that you really think about, and
-have a reason for. And when you do a merge, that reason should very
-much go into the merge message.
-
-For rebases, there's no "rebase message", so those you basically have
-to explain at pull time ("this was rebased last week to fix bad
-problem XYZ").
-
-              Linus
+--=20
+Luiz Augusto von Dentz
