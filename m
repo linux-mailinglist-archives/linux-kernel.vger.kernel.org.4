@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C7F6A91F0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A383B6A91F9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjCCHtV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Mar 2023 02:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S229723AbjCCHwr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Mar 2023 02:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCCHtS (ORCPT
+        with ESMTP id S229662AbjCCHwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 02:49:18 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3C616ADA;
-        Thu,  2 Mar 2023 23:49:17 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id cf14so1969826qtb.10;
-        Thu, 02 Mar 2023 23:49:17 -0800 (PST)
+        Fri, 3 Mar 2023 02:52:44 -0500
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E48155511;
+        Thu,  2 Mar 2023 23:52:43 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id nv15so1227030qvb.7;
+        Thu, 02 Mar 2023 23:52:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677829756;
+        d=1e100.net; s=20210112; t=1677829962;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZAR2N87vP4MjUgtQ2gw4JnK3iq+Hn4L+wybsd58CSxY=;
-        b=ZevB0hkG8a75zv4SHOwV9rf4BYPWelSyH2qBdP98JKk5q/MGzEweTeKdDOKgdgFyPg
-         hsVleJ5P02JgaZ3Sm6dHi6kfV5kDmmgHS9CWutCxImqXTqElX/xEw1oVU2wkm9JdnNF3
-         wkmzTJ0kMyZflqarq1uWDK8xBAyjycA1/RL7QgtNnEjkhwyWYpEJ7X5Ue8UxHmAmBBUP
-         8PdJtzfvxqbB8UCHfMi0ndztt+lYlVtwQq3+yLPofQJSeu73ZtAbDeDdyB9rfH6X1ZkM
-         1NecRoek2lnN8i91x2XQcjHkn/DS3WuBOe88OZUmOocu95SwFJMLG97c8cY9p/W/ydRQ
-         WjOw==
-X-Gm-Message-State: AO0yUKXnYRqw6pbiabZG6AayqKQoJmQ4hYxiKpvukxazebMk047d/ECZ
-        ykwuTzISXOsnlG3KeIhjM2PnTAfVaYT0fA==
-X-Google-Smtp-Source: AK7set+8teQiyKpyGXsnFvHCI7CoC9uaraSl0CzLg3kx7Q7xyoZD/wz12wJA8Bt8aGB04l0aAMMpnw==
-X-Received: by 2002:a05:622a:1353:b0:3bc:dd21:4a0 with SMTP id w19-20020a05622a135300b003bcdd2104a0mr1483967qtk.30.1677829756468;
-        Thu, 02 Mar 2023 23:49:16 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id r15-20020ac867cf000000b003bfc2fc3235sm1243286qtp.67.2023.03.02.23.49.15
+        bh=swIYUUiwEVljh3zvvJtD0QY2HuHSKEbKGNleKmwU12g=;
+        b=3vEsHs5IyMPmaeK/q2TXYykq/QeB9mc0BPvEFJuAl8TLmfp+uChNYQg/NPDadxqBV6
+         4Il26ewnq09lMMnoyvLZjhXFTK/1GEOVF2WufSt5EeriDK1yw5/863Fn7hXF5FpBo7Pr
+         ewFY7zhmfHOq4e1kv/5p7aH3sbDFTQzXl4buxEVjx+TVGxmA6LA67gGIkkgkbL0OW6zP
+         2A4XUVIoUo5eBmvW4/yN8N6NJaMAHg08aEZmYaY2wLPmifnwHHx4m3nsLo6btwbAIWjc
+         LO57/sSr39E97cbLEBxuTRFgOdt4WE9XOnyXtBUuhfXP/Vl8SrsA0yaKepcmrj6d1j5p
+         Szmg==
+X-Gm-Message-State: AO0yUKXIZRYNCh4vyEUdi/7HyO46CoyOa0BfDfk7hN0gqBBftq7QYfw3
+        qjMV9ZGTauVKVwCeEzevShAz+CoF7WUlmw==
+X-Google-Smtp-Source: AK7set+7g0wulw85k9CLOZqYAN0gFV9TS5ftFIpT3DSAgN4lxM90Az0reELwnv3MKsRcjnJmntVecg==
+X-Received: by 2002:a05:6214:b66:b0:56e:fbd5:8dda with SMTP id ey6-20020a0562140b6600b0056efbd58ddamr1708316qvb.44.1677829962577;
+        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id 74-20020a370a4d000000b0073b878e3f30sm1238948qkk.59.2023.03.02.23.52.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 23:49:16 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-536bbef1c5eso28282997b3.9;
-        Thu, 02 Mar 2023 23:49:15 -0800 (PST)
-X-Received: by 2002:a81:f105:0:b0:538:49a4:b1e0 with SMTP id
- h5-20020a81f105000000b0053849a4b1e0mr3042397ywm.2.1677829755610; Thu, 02 Mar
- 2023 23:49:15 -0800 (PST)
+        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id v101so1175837ybi.2;
+        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
+X-Received: by 2002:a05:6902:d2:b0:a8f:a6cc:9657 with SMTP id
+ i18-20020a05690200d200b00a8fa6cc9657mr356391ybs.7.1677829961948; Thu, 02 Mar
+ 2023 23:52:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20230302013822.1808711-1-sboyd@kernel.org> <20230302013822.1808711-2-sboyd@kernel.org>
- <CABVgOSkxOxpaHVtq1YpvNEshTZ3nic1p7NjV5DPdz066=tiS-A@mail.gmail.com>
-In-Reply-To: <CABVgOSkxOxpaHVtq1YpvNEshTZ3nic1p7NjV5DPdz066=tiS-A@mail.gmail.com>
+References: <20230302211759.30135-1-nick.alcock@oracle.com> <20230302211759.30135-6-nick.alcock@oracle.com>
+In-Reply-To: <20230302211759.30135-6-nick.alcock@oracle.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 3 Mar 2023 08:49:04 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVN=s-ytn03Kze5okA6rhzdWJ0cWxXV0vrtYXDvLoFMQw@mail.gmail.com>
-Message-ID: <CAMuHMdVN=s-ytn03Kze5okA6rhzdWJ0cWxXV0vrtYXDvLoFMQw@mail.gmail.com>
-Subject: Re: [PATCH 1/8] dt-bindings: Add linux,kunit binding
-To:     David Gow <davidgow@google.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Date:   Fri, 3 Mar 2023 08:52:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU2pCbOngWpeQOFYOmyLgSyMD-GCzsU4fQoafAvZchX1w@mail.gmail.com>
+Message-ID: <CAMuHMdU2pCbOngWpeQOFYOmyLgSyMD-GCzsU4fQoafAvZchX1w@mail.gmail.com>
+Subject: Re: [PATCH 05/17] drivers: bus: simple-pm-bus: remove MODULE_LICENSE
+ in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -82,25 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+Hi Nick,
 
-On Fri, Mar 3, 2023 at 8:16 AM David Gow <davidgow@google.com> wrote:
-> On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
-> > Document the linux,kunit board compatible string. This board is loaded
-> > into the Linux kernel when KUnit is testing devicetree dependent code.
+On Thu, Mar 2, 2023 at 11:25 PM Nick Alcock <nick.alcock@oracle.com> wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 >
-> As with the series as a whole, this might need to change a little bit
-> if we want to either use devicetree overlays and/or other
-> architectures.
+> So remove it in the files in this commit, none of which can be built as
+> modules.
 >
-> That being said, I'm okay with having this until then: the only real
-> topic for bikeshedding is the name.
-> - Is KUnit best as a board name, or part of the vendor name?
-> - Do we want to include the architecture in the name?
-> Should it be "linux,kunit", "linux-kunit,uml", "linux,kunit-uml", etc?
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
 
-I would not include an architecture (or virtualization method), as
-this is independent of the architecture or virtualization method.
+Thanks for your patch!
+
+> --- a/drivers/bus/simple-pm-bus.c
+> +++ b/drivers/bus/simple-pm-bus.c
+> @@ -92,4 +92,3 @@ module_platform_driver(simple_pm_bus_driver);
+>
+>  MODULE_DESCRIPTION("Simple Power-Managed Bus Driver");
+>  MODULE_AUTHOR("Geert Uytterhoeven <geert+renesas@glider.be>");
+> -MODULE_LICENSE("GPL v2");
+
+Please do not remove this line as long as the file has no SPDX-License
+tag.
 
 Gr{oetje,eeting}s,
 
