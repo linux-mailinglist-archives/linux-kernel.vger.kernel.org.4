@@ -2,148 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0C06A9466
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A3C6A9468
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjCCJrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S230179AbjCCJsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjCCJri (ORCPT
+        with ESMTP id S229895AbjCCJsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:47:38 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B99C10251
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:47:36 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id da10so8001445edb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:47:36 -0800 (PST)
+        Fri, 3 Mar 2023 04:48:21 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73B2D31F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:48:17 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so3065231wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:48:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1677836855;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQ+INM3VwliGTzVvk8H3UaLOz2MRWdPHZPc0Z190kHc=;
-        b=XDBR6dAdhp+6/U+LjGMvYZn2aMQ2GnSbRRuR4GsOvgRKx7Pq5mh379K9R+fVVz/2AV
-         Pt8eGvvvS5rRLT971V9cHyljbebo70nc6rNqS+bDj7I5m/cZB8PlBZkgQmheTFzbCINp
-         P+sfOrEiyYsLxEd/+4aMtUpK3bYWmjhl2QPEYp2Am0WfvcbZ7oyMUr/KUOq2o6vqtPoo
-         kiEzMko5dfpltTFxj8QTJDM1p3MGr0LWeB27uOlPXSq9KgFYott3o3uM5cBpiO2TLG3a
-         RuO1D5W6Kwjp9rvTmDckSi9QzBH08pwWQ+/uWs5SXy7TRN2N6toezs3DjhN47MNsZKb0
-         k/pg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=23Z3X1K5N5UuRVaVfx5jG4l/8tOn32i2PmVWKuVL6kA=;
+        b=q9hoRd/t3CA5Sz9OiT2YSI95/ifslPF/GIjYiJAzTXnCh5sD2HlUvUDhDHgj6aVeRj
+         e1RXGNwW0czS96IHKmuj/0I7lCngC4FUTU+mYdAp2hClefE1hYQB61mEV5GWeM5YAJ6I
+         +x/WMXoqPeLq/bwyayA3JJjoZ0H4zU3QjAYZQU1vgMEGadeD01O2WE+5igm8AhNId82g
+         nYvkykUw1OdMifF7BKTnfT4ldtZYsTp2l95238pr96pu+7VInggrCT73O0fB5g53yzo9
+         LJjdOZ9/aHZOQ8g+pLD+nXdcrpK9ZuHO/IfuqhCVRthaT0sQ8mPayCqyRgqpCcnZllb7
+         7BAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677836855;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LQ+INM3VwliGTzVvk8H3UaLOz2MRWdPHZPc0Z190kHc=;
-        b=avaIgRha7o6j6OvFQZF9SRoKjNL24jXt2RVnbyGGUm9qV8qfPjPtCiNqdvao8poT9q
-         nx0aIxCI7WAkyJSgPvPMsETsP3EoBeEqibQYN5wwybQ6XxL8knoW2o1o2PfMZ4bNoYe0
-         TS4xGcivMNkO6hJN8cyuFk74ulInX+mJyMECRM6Y3UchXeZ9KCCbwxssqInO9KwJ88kY
-         DZ0e3LpXpow5Y+GLkirS7Mr/EOveOdI60S6yec2Q6O2cPX0hzy8zS2nULYPYaKTvuJb6
-         Y2mYx2VvWyj4wdKxR5u76g5jJ14Z3sXjHSz9o8tiZbeGlkFbeHx/GFWb4fqklTxZWCVX
-         C4yQ==
-X-Gm-Message-State: AO0yUKWyjT9wQ9EK06lQd46SCQ1ajQza+0nuNvfTgndvJZobkcpxbbIS
-        v6hixpmv/AlIyXtJCKUUoubRzcO30i8MCtFl
-X-Google-Smtp-Source: AK7set9pHwKcED+DJNcPo6PEgMw4W5FOluoDPONxOKOnJv1Q+C1tUrW42StaSvzVymezAExY/UwGRw==
-X-Received: by 2002:a17:906:cccf:b0:8b2:c2fc:178e with SMTP id ot15-20020a170906cccf00b008b2c2fc178emr842246ejb.74.1677836854760;
-        Fri, 03 Mar 2023 01:47:34 -0800 (PST)
-Received: from [127.0.0.1] ([194.110.115.73])
-        by smtp.gmail.com with ESMTPSA id g14-20020a170906c18e00b008b1b86bf668sm773251ejz.4.2023.03.03.01.47.33
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=23Z3X1K5N5UuRVaVfx5jG4l/8tOn32i2PmVWKuVL6kA=;
+        b=ZmQTPn1jyt9Mn89BYol8BV+wi4DHVDohPE1h2MiAAy7I3FQEl3P2YkZu5j6+MTQF/h
+         E+HFMCfLCsQishksk4DYsfxopMMix+CpuQzekuJ/jJjm0TSV5aOwURNtMQ16kYTw7Kln
+         WrwJn3T2l/bdFj1xrkASbCWQQ9cE4xHMjOt9dMDnEct2C2d0Y7oLi9mqd9QAMD8nNZ4l
+         qHITGSsUYqONhMfTlC1d+sJG9iPeAaWg2yZ+REB+LlaqGngmzFLdd7un0GOZis68XpZT
+         NrsQxXqM49lpoMBzwbnrbIf+4QHTW3kweKqgwKCWMhPCkOs0NW4pkiUwGWvmHRAzdHoD
+         oflw==
+X-Gm-Message-State: AO0yUKWTcfSyDTaqwc4S0VIb6OmVh6F6J5e+AI1v96oUuwsTfgfXLMpt
+        pABaQyXTGwSub4HtEtAv0xJV1w==
+X-Google-Smtp-Source: AK7set/ZEFLM78ntYTmWl8llRTFGkS4U3M9sRqLEHjCHjzcyKzX9DNaUQQm5tv7/4dKbRmfGZ/4Sww==
+X-Received: by 2002:a05:600c:4e8f:b0:3eb:2da4:f32d with SMTP id f15-20020a05600c4e8f00b003eb2da4f32dmr1002977wmq.26.1677836896081;
+        Fri, 03 Mar 2023 01:48:16 -0800 (PST)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id m29-20020a05600c091d00b003dc521f336esm1902294wmp.14.2023.03.03.01.48.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 01:47:34 -0800 (PST)
-Date:   Fri, 3 Mar 2023 10:47:33 +0100 (GMT+01:00)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, mptcp@lists.linux.dev,
-        Florian Westphal <fw@strlen.de>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Message-ID: <3d92e773-896c-43c3-94ae-cb7851213c55@tessares.net>
-In-Reply-To: <ZAG8dla274kYfxoK@kroah.com>
-References: <20230301180657.003689969@linuxfoundation.org> <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com> <ZAB6pP3MNy152f+7@kroah.com> <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com> <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com> <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com> <CA+G9fYuLQEfeTjx52NxbXV5914YJQ2tVd8k4SJjrAryujPjnqA@mail.gmail.com> <ZAG8dla274kYfxoK@kroah.com>
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
+        Fri, 03 Mar 2023 01:48:15 -0800 (PST)
+Message-ID: <dbf4b01d-e3c7-28fc-890d-9bb51c919f59@baylibre.com>
+Date:   Fri, 3 Mar 2023 10:48:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <3d92e773-896c-43c3-94ae-cb7851213c55@tessares.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] mfd: tps65219: Add support for soft shutdown via sys-off
+ API
+Content-Language: en-US
+To:     Vignesh Raghavendra <vigneshr@ti.com>, tony@atomide.com,
+        lee@kernel.org
+Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, nm@ti.com, afd@ti.com, msp@baylibre.com
+References: <20230203140150.13071-1-jneanne@baylibre.com>
+ <4b9fc988-5313-757a-b3bc-ec90dba4f4b2@ti.com>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <4b9fc988-5313-757a-b3bc-ec90dba4f4b2@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg, Naresh, Paolo,
 
-Thank you for the new version and for having reported the issue and running=
- MPTCP selftests!
 
-3 Mar 2023 10:23:06 Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
-
-> On Fri, Mar 03, 2023 at 02:34:05PM +0530, Naresh Kamboju wrote:
->> On Fri, 3 Mar 2023 at 13:34, Paolo Abeni <pabeni@redhat.com> wrote:
->>>
->>> Hello,
->>>
->>> On Fri, 2023-03-03 at 01:32 +0530, Naresh Kamboju wrote:
->>>> On Thu, 2 Mar 2023 at 16:30, Naresh Kamboju <naresh.kamboju@linaro.org=
-> wrote:
->>>>>
->>>>> On Thu, 2 Mar 2023 at 16:00, Greg Kroah-Hartman
->>>>> <gregkh@linuxfoundation.org> wrote:
->>>>>> =E2=80=A6
->>>>>
->>>>> ....
->>>>>
->>>>>> =E2=80=A6
->>>>>
->>>>> Me either.
->>>>> That is the reason I have shared "Assertion" above.
->>>>>
->>>>>> =E2=80=A6
->>>>>
->>>>> We are running our bisection scripts.
->>>>
->>>> We have tested with 6.1.14 kselftests source again and it passes.
->>>> Now that we have upgraded to 6.2.1 kselftests source, we find that
->>>> there is this problem reported. so, not a kernel regression.
->>>
->>> I read the above as you are running self-tests from 6.2.1 on top of an
->>> older (6.1) kernel. Is that correct?
+On 03/03/2023 06:36, Vignesh Raghavendra wrote:
+> 
+> 
+> On 03/02/23 19:31, Jerome Neanne wrote:
+>> Use new API for power-off mode support:
+>> Link: https://lwn.net/Articles/894511/
+>> Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
 >>
->> correct.
+>> sys-off API allows support of shutdown handler and restart handler.
 >>
->>> If so failures are expected;
->
-> Shouldn't the test be able to know that "new features" are not present
-> and properly skip the test for when that happens?=C2=A0 Otherwise this fe=
-els
-> like a problem going forward as no one will know if this feature can be
-> used or not (assuming it is a new feature and not just a functional
-> change.)
-
-All MPTCP selftests are designed to run on the same kernel version they are=
- attached to. This allows us to do more checks knowing they are not suppose=
-d to fail on newer kernel versions and not being skipped if there is an err=
-or when trying to use the new feature. If there are fixes, we make sure the=
- stable team is Cc'ed. If there are API changes, it would be visible becaus=
-e we would need to adapt existing selftests.
-
-That's how we thought we should design MPTCP selftests. Maybe we need to ch=
-ange this design?
-
-Is it a common practice to run selftests' latest version on older kernels?
-
-Cheers,
-Matt
---
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+>> Shutdown was not supported before that enhancement.
+>> This is required for platform that are not using PSCI.
+>>
+>> Test:
+>> - restart:
+>>    # reboot
+>>    Default is cold reset:
+>>    # cat /sys/kernel/reboot/mode
+>>    Switch boot mode to warm reset:
+>>    # echo warm > /sys/kernel/reboot/mode
+>> - power-off:
+>>    # halt
+>>
+>> Tested on AM62-SP-SK board.
+>>
+> 
+> There is no -SP-SK that I am aware of.. Do you mean -LP-SK?
+You are right, this is a typo. It's LP-SK
+> [...]
+> 
