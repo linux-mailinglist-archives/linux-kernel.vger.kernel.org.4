@@ -2,125 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5716A9430
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C50F06A9438
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjCCJcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S229756AbjCCJe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCCJch (ORCPT
+        with ESMTP id S230179AbjCCJe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:32:37 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05AE1B9
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:32:36 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id l1so1576477wry.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:32:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677835955;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hBXC0lEHBdCxJFz/wvuTM5XuH7NecPstxoPUgvWZ2s=;
-        b=SSE+X/7c7/EWnLslcWs47ifdnKBucbfsZnJB0hottynmr4Hth/tXZ+ZEjFw3klk3oM
-         sjTML44wafkHpumaiksmrBmrkUQLThpTy7Kx9QN+gdamXckb3kQR67CEYlsRdz9BXdld
-         i6u/y8DoDAkUbdRvTsPM2FoV3UfMXbYz9KJkj1g2LKVObmJBYOtqDowHPVEg1rI8kdpK
-         tPqEy/cFSf2Litt5kQggaJc128Fp0T4QFSP+MGFNlCt2zABPuCRPXhNxdcvhiLHNP1oj
-         jBa9q7rLaC2UsSDriM/KvUM25nC3xaQxkLygZIXlCEArVEy0/ShgEXPan+61TyEwHRDi
-         p2gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677835955;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7hBXC0lEHBdCxJFz/wvuTM5XuH7NecPstxoPUgvWZ2s=;
-        b=YdAEQw7q4nn42L5Se/0sEnzJE96e5REhRtVhoV1t3qSHxvDhXkCytX0gpkt8w8SX3N
-         c8mrn/su8X2R+T74hGYwnQVvs7q57B92zGvsQY37BRxwSMWLrEuIlLw370n026WR5H4G
-         Jyypcv1P7LhSxqJNUwB8+42aho8660/ArOxx+msKbFJ5BCjrhcsmZRESiEIrspcMKCK0
-         IZmlFMNxaeOlNcQpIEZKrskCBZVNvyCRU2MzZdoisN5S3js+gXwoXmuGYuVftbiKvV5P
-         HdvtltelM+h/8ysxGY0OlR2QRbafdwRdeAejmgMRz9kzBvg+CgpbzDeo/tQHxPAnLZkw
-         QbzA==
-X-Gm-Message-State: AO0yUKVoJn34Ev1LzV9uJVdXJiCK3FF75px2jSUG3sZxxTl3cCJzxN6J
-        3nTVsajqiA/PhDJThOZckArJA65cEeGnGcjC
-X-Google-Smtp-Source: AK7set/JHlPkIR9MppkbXv5Ijhh5ttzcjun38qIQ2R+eSHmP8pbzOViSvPR3v5zMY1JfvJlm6rBqCw==
-X-Received: by 2002:a5d:6512:0:b0:2c6:85ef:4086 with SMTP id x18-20020a5d6512000000b002c685ef4086mr841564wru.32.1677835955377;
-        Fri, 03 Mar 2023 01:32:35 -0800 (PST)
-Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id k5-20020adfe8c5000000b002c56179d39esm1671455wrn.44.2023.03.03.01.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 01:32:34 -0800 (PST)
-Date:   Fri, 3 Mar 2023 09:32:35 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, bp@alien8.de,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-doc@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v4 3/6] iommu/sva: Stop using ioasid_set for SVA
-Message-ID: <20230303093235.GB361458@myrica>
-References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
- <20230301235646.2692846-4-jacob.jun.pan@linux.intel.com>
- <3b7fb4d3-1fe9-a3be-46ad-c271be9f96c7@linux.intel.com>
- <20230302091707.58d59964@jacob-builder>
- <794c7dad-2e62-3afa-ea10-92179b0d1659@linux.intel.com>
+        Fri, 3 Mar 2023 04:34:58 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAE91421B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:34:55 -0800 (PST)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 44D71240002;
+        Fri,  3 Mar 2023 09:34:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1677836093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PPN/c3ipGWQR2bm5yNDVoKeti4qZhppCJONmVazuaCg=;
+        b=Ajil5Dx2W9lyJXw8nlQ5udAC8XIZHc77lK2KbEGwbqJzeLdz+nnFA+hzJ9+zpOn2KKLkuR
+        wVy9khYUqsWqyeDWJ+vmRRDqmoqBollU6q9HZaBFp+JXwFKyRy5fhBSM9LfUFsdIaspwDh
+        ZcQT7QDVx+o/faXFKfcXcstlFVQJNGd1AeuCbVtBNd/MhGFWVK33z9j7zuyrYZdwvUnLNe
+        KpprY5zxwRWJIOWWiTnJhauST0OJssoOk0huljVIO+OSRDG2vfDnDwuQEC7sxxLyvqKQfm
+        FNZZT6UX6x/iOohN9+A9J5qKA40+vtPbXYHLRfCUsd5IoWg2nfcFMGR0zvJ0Yg==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     alsa-devel@alsa-project.org
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: clarify that SND_SOC_IMX_SGTL5000 is the old driver
+Date:   Fri,  3 Mar 2023 10:34:10 +0100
+Message-Id: <20230303093410.357621-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <794c7dad-2e62-3afa-ea10-92179b0d1659@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 10:24:42AM +0800, Baolu Lu wrote:
-> > > > -int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t
-> > > > max) +static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t
-> > > > min, ioasid_t max) {
-> > > > -	int ret = 0;
-> > > > -	ioasid_t pasid;
-> > > > +	int ret;
-> > > > -	if (min == INVALID_IOASID || max == INVALID_IOASID ||
-> > > > +	if (min == IOMMU_PASID_INVALID || max == IOMMU_PASID_INVALID ||
-> > > >    	    min == 0 || max < min)
-> > > 
-> > > It's irrelevant to this patch. Just out of curiosity, why do we need to
-> > > exclude PASID 0 here? I just had a quick look at PCI spec section 6.20.
-> > > The spec does not state that PASID 0 is invalid.
-> > > 
-> > my understanding is that ARM reserves PASID0, unlike VT-d where RID_PASID
-> > is programmable.
+Both SND_SOC_IMX_SGTL5000 and SND_SOC_FSL_ASOC_CARD implement the
+fsl,imx-audio-sgtl5000 compatible string, which is confusing. It took a
+little research to find out that the latter is much newer and it is
+supposed to be the preferred choice since several years.
 
-It does, but that's specific to the IOMMU driver so we shouldn't check it
-here.
+Add a clarification note to avoid wasting time for future readers.
 
-> I suppose the common thing is reserving some kind of special PASIDs.
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-Are you planning to use RID_PASID != 0 in VT-d?  Otherwise we could just
-communicate min_pasid from the IOMMU driver the same way we do max_pasid.
+---
 
-Otherwise I guess re-introduce a lighter ioasid_alloc() that the IOMMU
-driver calls to reserve PASID0/RID_PASID.
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Viorel Suman <viorel.suman@nxp.com>
+Cc: Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc: alsa-devel@alsa-project.org
+Cc: linux-kernel@vger.kernel.org
+---
+ sound/soc/fsl/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-Jean
+diff --git a/sound/soc/fsl/Kconfig b/sound/soc/fsl/Kconfig
+index 614eceda6b9e..33b67db8794e 100644
+--- a/sound/soc/fsl/Kconfig
++++ b/sound/soc/fsl/Kconfig
+@@ -294,6 +294,10 @@ config SND_SOC_IMX_SGTL5000
+ 	  Say Y if you want to add support for SoC audio on an i.MX board with
+ 	  a sgtl5000 codec.
+ 
++	  Note that this is an old driver. Consider enabling
++	  SND_SOC_FSL_ASOC_CARD and SND_SOC_SGTL5000 to use the newer
++	  driver.
++
+ config SND_SOC_IMX_SPDIF
+ 	tristate "SoC Audio support for i.MX boards with S/PDIF"
+ 	select SND_SOC_IMX_PCM_DMA
+-- 
+2.34.1
 
