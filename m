@@ -2,172 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EB56A99B7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453C36A99C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjCCOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S231169AbjCCOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjCCOld (ORCPT
+        with ESMTP id S230158AbjCCOpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:41:33 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C69360B3;
-        Fri,  3 Mar 2023 06:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677854492; x=1709390492;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PCA7xcIf7pUPetZRCkhEcheUlk5lHEZhdWB8pICiDFU=;
-  b=nJEH9APUT4DJ0WlHz2KViL4BB18UVqZZ2Ro4nz3zCdR6suY1qjO6FRAW
-   BeuR8FEM4a6UAR/mC6g6SNr4GRpGeJYWitdOha9VMJDDv7FEIYHEAPVyo
-   RZ18G3pwvpLiWhzNNIApuMSmRZ1q6Jy4pYUoBhem4LP0G68JxoFiYgnlh
-   aTmV/pl4cAGls+X+FI8BUJwXFrEUTcsOjMl+aCCR6KsxImJ9AkkcKo1NV
-   QnJKo0rHBZVRAV6p40bRwJzK5e8riMJt/4Clgmc+EedzUYn6oV9hTzrp5
-   WNuomMhwqpBP/qvzBPs11idiZJ6gdtzwkPVd6g/teZZLDvl5NlOBYnKKJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="362648656"
-X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="362648656"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 06:41:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="705664872"
-X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="705664872"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.216.227])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 06:41:27 -0800
-Message-ID: <5d7d48ff-b007-e339-8177-d0a7b7b8adc4@intel.com>
-Date:   Fri, 3 Mar 2023 16:41:23 +0200
+        Fri, 3 Mar 2023 09:45:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E185CC34
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:45:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 108FC61842
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 14:45:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E943C433EF;
+        Fri,  3 Mar 2023 14:45:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677854746;
+        bh=b4RwFCESFjNrLBvUVQgpijNy97sPadKeAXyYTE+YkBM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nVDB4vD5zWLZKO0IwFueqJ9f7arvN5VFKp6H91MxcMYI4QxadXJ+ljRVXUAaOuv7a
+         syJ6eAa5Ef0mOw/qDWTi4Axaykh4Uuk1D8LVuBpi6S4ek4d0dFe2QnlSUT01JNaNYl
+         k4mg2+TjLPBdTBKTK7R1RHR7XTLcelRCV/ne5sNP2A3cFc/uhcdnKnRaDghDFiCqlq
+         6+CxGmGLbbIKCg2Qo2OC+vQqNTz/EhdZsxSQrioIH2aKxwRh6Jks3u+UkIjiD2FBNp
+         PN6QYndV7CPUsfhIJi5JFl8vByixYFhgtKtoa4zWsIG0IGArJ8QikPQVFVqSBZP8Sr
+         U04Jz95EkB6FQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B6ADE4049F; Fri,  3 Mar 2023 11:45:43 -0300 (-03)
+Date:   Fri, 3 Mar 2023 11:45:43 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: [PATCH 1/1 fyi] tools headers cpufeatures: Sync with the kernel
+ sources
+Message-ID: <ZAIIFxz79H1xEz0O@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
- internal cache
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Wenchao Chen <wenchao.chen666@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        Bean Huo <huobean@gmail.com>
-References: <20230302144330.274947-1-ulf.hansson@linaro.org>
- <5712c69ae37447c5b576d87b247f5756@hyperstone.com>
- <a35f3d45cab0442b9491c0b120e3fb47@hyperstone.com>
- <CAPDyKFpv3hHvg5X8WNpQEnnsNdGCBMybT-32EGPNYtBtSgK9Fw@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAPDyKFpv3hHvg5X8WNpQEnnsNdGCBMybT-32EGPNYtBtSgK9Fw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/03/23 14:01, Ulf Hansson wrote:
-> On Fri, 3 Mar 2023 at 12:40, Christian Löhle <CLoehle@hyperstone.com> wrote:
->>
->>
->>>>
->>>> REQ_FUA is in general supported for eMMC cards, which translates into so called "reliable writes". To support these write operations, the CMD23 (MMC_CAP_CMD23), needs to be supported by the mmc host too, which is common but not always the case.
->>>>
->>>> For some eMMC devices, it has been reported that reliable writes are quite costly, leading to performance degradations.
->>>>
->>>> In a way to improve the situation, let's avoid announcing REQ_FUA support if the eMMC supports an internal cache, as that allows us to rely solely on flush-requests (REQ_OP_FLUSH) instead, which seems to be a lot cheaper.
->>>> Note that, those mmc hosts that lacks CMD23 support are already using this type of configuration, whatever that could mean.
->>>
->>> Just note that reliable write is strictly weaker than turning cache off/flushing, if card loses power during cache off/flush programming / busy, sector-wise atomicity is not mandated by the spec.
->>> (And that is assuming cache off/flush is actually respected by the card as intended by the spec, should some cards be checked?) Maybe some FS people can also chime in?
->>
->> Nevermind, the sector-wise atomicity should not matter on 5.1 cards or if the block length isn't being played with, which it isn't in our case.
->> If reliable write is implemented only according to spec, I don't see why the cache flushing should be less expensive, which would only make sense if
->> a) < sector chunks are committed to flash
->> b) reliable write is implemented much stricter than the spec, ensuring atomicity for the entire write.
-> 
-> Right, I agree!
-> 
-> Note 1) Reliable write was introduced way before cache management in
-> the eMMC spec. So, if the support for reliable write would have a
-> stricter implementation than needed, I would not be surprised.
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-I am not sure when you say stricter than needed.  Historically
-file systems assumed that sectors are updated atomically i.e.
-there is never a sector with a mixture of old and new data.
-The eMMC spec does not guarantee that, except for reliable
-write.
+- Arnaldo
 
-File systems may use REQ_FUA for important information, like the
-superblock or a journal commit record, so using reliable write
-for REQ_FUA would seem to give better protection against file system
-corruption than a cache flush which could leave a sector
-half-written.
+Full explanation:
 
-On the other hand, sudden power loss is probably rare in battery
-powered systems because they are designed to monitor the battery
-power and shutdown when it gets too low.
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
-And file systems can use checksums to detect half-written updates.
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
-And there is anyway no protection for other (non REQ_FUA) writes a
-file system might do and expect not to tear sectors.
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
 
-And you are more likely to smash the screen than bounce the battery
-out and cause an unrecoverable file system error.
+E.g.:
 
-Nevertheless, the commit message of this patch reads like the change
-is an optimization, whereas it seems more like a policy change.
-The commit message should perhaps say something like:
-"The consensus is that the benefit of improved performance by not
-using reliable-write for REQ_FUA is much greater than any potential
-benefit that reliable-write might provide to avoid file system
-corruption in the event of sudden power loss."
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
 
-As for allowing for the policy to be overridden, perhaps an mmc_core
-module option?
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
 
-> 
-> Note 2) In the eMMC v5.1 spec, the cache flushing support has been
-> extended to allow an explicit barrier operation. Perhaps, we should
-> let that option take precedence over a regular flush+barrier, for
-> REQ_OP_FLUSH!?
-> 
->>
->> I guess the cards which increase performance do b)? Or something else?
-> 
-> That's the tricky part to know, as it's the internals of the eMMC.
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
 
-It is the natural conclusion though.  The eMMC probably does not
-update mapping information with every write, instead if power is
-lost, it scans the updated areas at the next initialization. (The
-power-off notify feature would commit the mapping information to
-media to avoid that).  So a reliable write might have to:
-1. write information to record that the old mapping
-should be used, not what might be discovered by scanning
-2. do the actual write
-3. write mapping information to record the new mapping
+---
 
-> 
-> Although, it seems like both Avri (WDC) and Bean (Micron) would be
-> happy to proceed with $subject patch, which makes me more comfortable
-> to move forward.
-> 
->> Anyway regarding FUA i don't have any concerns regarding reliability with cache flush.
->> I can add some performance comparisons with some eMMCs I have around though.
-> 
-> That would be great, thanks a lot for helping out with testing!
-> 
-> Kind regards
-> Uffe
+To pick the changes from:
 
+  8415a74852d7c247 ("x86/cpu, kvm: Add support for CPUID_80000021_EAX")
+  84168ae786f8a15a ("x86/cpu, kvm: Move X86_FEATURE_LFENCE_RDTSC to its native leaf")
+  f334f723a63cfc25 ("x86/cpufeatures: Add Slow Memory Bandwidth Allocation feature flag")
+  78335aac6156eada ("x86/cpufeatures: Add Bandwidth Monitoring Event Configuration feature flag")
+  a018d2e3d4b1abc4 ("x86/cpufeatures: Add Architectural PerfMon Extension bit")
+  f8df91e73a6827a4 ("x86/cpufeatures: Add macros for Intel's new fast rep string features")
+  a9dc9ec5a1fafc3d ("x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature")
+  84168ae786f8a15a ("x86/cpu, kvm: Move X86_FEATURE_LFENCE_RDTSC to its native leaf")
+  e7862eda309ecfcc ("x86/cpu: Support AMD Automatic IBRS")
+  faabfcb194a8d068 ("x86/cpu, kvm: Add the SMM_CTL MSR not present feature")
+  be8de49bea505e77 ("x86/speculation: Identify processors vulnerable to SMT RSB predictions")
+
+This causes these perf files to be rebuilt:
+
+  CC       /tmp/build/perf/bench/mem-memcpy-x86-64-asm.o
+  CC       /tmp/build/perf/bench/mem-memset-x86-64-asm.o
+
+Addressing these perf build warnings:
+
+  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/disabled-features.h' differs from latest version at 'arch/x86/include/asm/disabled-features.h'
+  diff -u tools/arch/x86/include/asm/disabled-features.h arch/x86/include/asm/disabled-features.h
+  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/required-features.h' differs from latest version at 'arch/x86/include/asm/required-features.h'
+  diff -u tools/arch/x86/include/asm/required-features.h arch/x86/include/asm/required-features.h
+  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
+  diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Babu Moger <babu.moger@amd.com>
+Cc: Borislav Petkov (AMD) <bp@alien8.de>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Kim Phillips <kim.phillips@amd.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Link: http://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/x86/include/asm/cpufeatures.h       | 18 ++++++++++++++++--
+ tools/arch/x86/include/asm/disabled-features.h |  3 ++-
+ tools/arch/x86/include/asm/required-features.h |  3 ++-
+ 3 files changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
+index b70111a75688a794..73c9672c123b980c 100644
+--- a/tools/arch/x86/include/asm/cpufeatures.h
++++ b/tools/arch/x86/include/asm/cpufeatures.h
+@@ -13,7 +13,7 @@
+ /*
+  * Defines x86 CPU feature bits
+  */
+-#define NCAPINTS			20	   /* N 32-bit words worth of info */
++#define NCAPINTS			21	   /* N 32-bit words worth of info */
+ #define NBUGINTS			1	   /* N 32-bit bug flags */
+ 
+ /*
+@@ -97,7 +97,7 @@
+ #define X86_FEATURE_SYSENTER32		( 3*32+15) /* "" sysenter in IA32 userspace */
+ #define X86_FEATURE_REP_GOOD		( 3*32+16) /* REP microcode works well */
+ #define X86_FEATURE_AMD_LBR_V2		( 3*32+17) /* AMD Last Branch Record Extension Version 2 */
+-#define X86_FEATURE_LFENCE_RDTSC	( 3*32+18) /* "" LFENCE synchronizes RDTSC */
++/* FREE, was #define X86_FEATURE_LFENCE_RDTSC		( 3*32+18) "" LFENCE synchronizes RDTSC */
+ #define X86_FEATURE_ACC_POWER		( 3*32+19) /* AMD Accumulated Power Mechanism */
+ #define X86_FEATURE_NOPL		( 3*32+20) /* The NOPL (0F 1F) instructions */
+ #define X86_FEATURE_ALWAYS		( 3*32+21) /* "" Always-present feature */
+@@ -307,11 +307,17 @@
+ #define X86_FEATURE_SGX_EDECCSSA	(11*32+18) /* "" SGX EDECCSSA user leaf function */
+ #define X86_FEATURE_CALL_DEPTH		(11*32+19) /* "" Call depth tracking for RSB stuffing */
+ #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
++#define X86_FEATURE_SMBA		(11*32+21) /* "" Slow Memory Bandwidth Allocation */
++#define X86_FEATURE_BMEC		(11*32+22) /* "" Bandwidth Monitoring Event Configuration */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+ #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
+ #define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* "" CMPccXADD instructions */
++#define X86_FEATURE_ARCH_PERFMON_EXT	(12*32+ 8) /* "" Intel Architectural PerfMon Extension */
++#define X86_FEATURE_FZRM		(12*32+10) /* "" Fast zero-length REP MOVSB */
++#define X86_FEATURE_FSRS		(12*32+11) /* "" Fast short REP STOSB */
++#define X86_FEATURE_FSRC		(12*32+12) /* "" Fast short REP {CMPSB,SCASB} */
+ #define X86_FEATURE_LKGS		(12*32+18) /* "" Load "kernel" (userspace) GS */
+ #define X86_FEATURE_AMX_FP16		(12*32+21) /* "" AMX fp16 Support */
+ #define X86_FEATURE_AVX_IFMA            (12*32+23) /* "" Support for VPMADD52[H,L]UQ */
+@@ -427,6 +433,13 @@
+ #define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
+ #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
+ 
++/* AMD-defined Extended Feature 2 EAX, CPUID level 0x80000021 (EAX), word 20 */
++#define X86_FEATURE_NO_NESTED_DATA_BP	(20*32+ 0) /* "" No Nested Data Breakpoints */
++#define X86_FEATURE_LFENCE_RDTSC	(20*32+ 2) /* "" LFENCE always serializing / synchronizes RDTSC */
++#define X86_FEATURE_NULL_SEL_CLR_BASE	(20*32+ 6) /* "" Null Selector Clears Base */
++#define X86_FEATURE_AUTOIBRS		(20*32+ 8) /* "" Automatic IBRS */
++#define X86_FEATURE_NO_SMM_CTL_MSR	(20*32+ 9) /* "" SMM_CTL MSR is not present */
++
+ /*
+  * BUG word(s)
+  */
+@@ -467,5 +480,6 @@
+ #define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO Stale Data status is unknown */
+ #define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
+ #define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
++#define X86_BUG_SMT_RSB			X86_BUG(29) /* CPU is vulnerable to Cross-Thread Return Address Predictions */
+ 
+ #endif /* _ASM_X86_CPUFEATURES_H */
+diff --git a/tools/arch/x86/include/asm/disabled-features.h b/tools/arch/x86/include/asm/disabled-features.h
+index c44b56f7ffba0d0e..5dfa4fb76f4b2ba0 100644
+--- a/tools/arch/x86/include/asm/disabled-features.h
++++ b/tools/arch/x86/include/asm/disabled-features.h
+@@ -124,6 +124,7 @@
+ #define DISABLED_MASK17	0
+ #define DISABLED_MASK18	0
+ #define DISABLED_MASK19	0
+-#define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
++#define DISABLED_MASK20	0
++#define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 21)
+ 
+ #endif /* _ASM_X86_DISABLED_FEATURES_H */
+diff --git a/tools/arch/x86/include/asm/required-features.h b/tools/arch/x86/include/asm/required-features.h
+index aff774775c678434..7ba1726b71c7b8bf 100644
+--- a/tools/arch/x86/include/asm/required-features.h
++++ b/tools/arch/x86/include/asm/required-features.h
+@@ -98,6 +98,7 @@
+ #define REQUIRED_MASK17	0
+ #define REQUIRED_MASK18	0
+ #define REQUIRED_MASK19	0
+-#define REQUIRED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
++#define REQUIRED_MASK20	0
++#define REQUIRED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 21)
+ 
+ #endif /* _ASM_X86_REQUIRED_FEATURES_H */
+-- 
+2.39.2
