@@ -2,131 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F74C6A9EA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E506A9EA8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbjCCS1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S231678AbjCCS1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjCCS1I (ORCPT
+        with ESMTP id S231649AbjCCS1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:27:08 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2055.outbound.protection.outlook.com [40.107.237.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4DF10A85;
-        Fri,  3 Mar 2023 10:26:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bnKrpWCFou7tY8zP9B3wUGQKW57IY84F2dZMFcVDB7VZJIIXBbQGQPENcHgrjC23HTcED2wg2SBDCwnm5uDU3058lU0nvntLZdN1V6sBK4N/9uLzmJ5ZKm+71i4imZk0hYVpBMLsiKjFVclGYGF8Edf2Ab+YnvJ7OgHoHGUKgLhHZI/LTY3WcN3KHZ5NlP4i+YJhrCvchtVVCoHBK1GPNJZuvtU7rh6jmROUEFCrJfanFPZLIlI98C/EhcEvsp9ngsB/5qpWKQ0Dk76wgbmAiSpbG2vcVtvy/M62OApteJkymaLHdo5cn0JJpJclUELdAS3udZypHN6xRDSQET3PbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yyKSAPV55TpmSAeivDtmd0YblwRyYKrz9w1OBOFGdOQ=;
- b=VQQpwupvV8HAxn8bi+sruCjglFEyKTyHqMdEwiL/nqEvyjaDPOvLslzTuTclK08/aEZhrEHMBm3Q2Xt0yvV3DhGnnAkMvPQ9rXtWh9uOHoAZurbQ29joyu8bxcD6ccy/65we4b6nVlBN1FQLebUk52LKZdMfi8XuTKGXG1V3cXwNjoK7vMvXwQbPv/Xv1GyVf3mlsxOpMWdQDlFPzLm70r01VDc3E7yLjEPrJJKxpcCB7JSTEqBE66I9RTUCHVQVaqU5wxMmTFnRDMECcvlnhkb0m3tc0nrX/SkJ3yl159BshRxzZJUVb2/AljE1WB9v975yIz/zAvBpu9ymCQB/Lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ddn.com; dmarc=pass action=none header.from=ddn.com; dkim=pass
- header.d=ddn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yyKSAPV55TpmSAeivDtmd0YblwRyYKrz9w1OBOFGdOQ=;
- b=zFmhSKAt2DK6MYQ9qUrVmC1yvpR39hJN4+BgtbgYCLtglnJhwADzBO6/0VVV97eHgJroGyUFvXo9gL38XWQNrVKujQ06yhSfMaz2ucptcG5KaqLCMG+L4WsI0zaim5KQ9DICZg0157USE/e3Ippwc7vUQmHWb6987cJqZwrRILM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ddn.com;
-Received: from DM5PR1901MB2037.namprd19.prod.outlook.com (2603:10b6:4:aa::29)
- by DM6PR19MB4214.namprd19.prod.outlook.com (2603:10b6:5:2b9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Fri, 3 Mar
- 2023 18:26:56 +0000
-Received: from DM5PR1901MB2037.namprd19.prod.outlook.com
- ([fe80::e6d4:29f7:2077:bd69]) by DM5PR1901MB2037.namprd19.prod.outlook.com
- ([fe80::e6d4:29f7:2077:bd69%4]) with mapi id 15.20.6086.024; Fri, 3 Mar 2023
- 18:26:56 +0000
-Message-ID: <2111304e-6a22-e767-f79b-c72cde42294b@ddn.com>
-Date:   Fri, 3 Mar 2023 19:26:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 5/9] fuse: move fuse connection flags to the separate
- structure
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        mszeredi@redhat.com
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
- <20230220193754.470330-6-aleksandr.mikhalitsyn@canonical.com>
-Content-Language: en-US
-From:   Bernd Schubert <bschubert@ddn.com>
-In-Reply-To: <20230220193754.470330-6-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO3P265CA0019.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:387::18) To DM5PR1901MB2037.namprd19.prod.outlook.com
- (2603:10b6:4:aa::29)
+        Fri, 3 Mar 2023 13:27:45 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38E930B1C;
+        Fri,  3 Mar 2023 10:27:40 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id s20so4719064lfb.11;
+        Fri, 03 Mar 2023 10:27:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677868059;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mCx3juaUUrnRqZmgzU2kBUTMBbG/5SfMFxbwysSB4z0=;
+        b=P1fhX3cSqI+msIwxDwKvRqUfjXPQS5x0NYNZ7cOFfxp2eZfydQs8/DzJ462H+LID3/
+         197gGtEx7zx+RfBNXx/SSV9u4Wj2nLX1lSCcemh0JG3Hv3R03DxMEi7U9wf0amrvYHea
+         ObMO39MGR5mZgq6RAqidCxeTP6rQIr0MZHG6tKcYR4ZFtXI/jZaCPCVNjwuz1CX1eavk
+         HpQPZS4rkF8QNPIWujQMYML+zoJGPHZvJ18pImykUZOyAVT2uhKyHq87gAHRqt5rusN6
+         67zJea9wZ881wf+7ncRA4I4QpawuIaPmWuKBYCUaDCrpkQvvlSP3ImtYwnzJso0D+uK/
+         91Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677868059;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mCx3juaUUrnRqZmgzU2kBUTMBbG/5SfMFxbwysSB4z0=;
+        b=BLls6fRby/3cufvuUZbpXA07sXR9hQBCtS1RH08jYsAx/t+oYvfj4tJEr6yfIaoxqz
+         yJb3uJ+c22rfPgSWT7kGtFPl1Z/PNDYe5Nchqk30EYfbUKcbbGbxkT8RM+oIG8Y4X0BH
+         GZ9APZj4qyme3wqsh885igoQZBTrPlHaJzgeYsFv1Oo/Kl0/9tI78Skgswf9dX/J5Abk
+         DSc0TQVL03wJxKzbbdsfIP7S1ygLQyKyj1UOQkCv70H5IKJjDnAtMgxY224i9zcEH2jX
+         +T+2xBkaX/SAAmBEOziIZMZtw+i1V9M5Qz1eAwUauMmI9iCPYnGIaG4/CAKXP1iJzB5d
+         BY1A==
+X-Gm-Message-State: AO0yUKXY64GeXK0XOqlvRuiB5GAZEkycBGzBpQdUfK9yNSc6Dbh1LSpU
+        gpYh46deBk5zYNbZ9SCWTjk=
+X-Google-Smtp-Source: AK7set/jKFFALgws7uT7CRHPd7uE9JRfH1/WIHw+qzXHVXEZSyyT0atyEzs+EBiqaJSJht68akgCgQ==
+X-Received: by 2002:ac2:4905:0:b0:4e7:dd1e:e521 with SMTP id n5-20020ac24905000000b004e7dd1ee521mr201367lfi.9.1677868059039;
+        Fri, 03 Mar 2023 10:27:39 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id f16-20020a19ae10000000b00497a61453a9sm480992lfc.243.2023.03.03.10.27.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 10:27:38 -0800 (PST)
+Date:   Fri, 3 Mar 2023 21:27:36 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v5 4/4] dmaengine: dw-edma: Add HDMA DebugFS support
+Message-ID: <20230303182736.4south7cafnfujob@mobilestation>
+References: <20230303124642.5519-1-cai.huoqing@linux.dev>
+ <20230303124642.5519-5-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR1901MB2037:EE_|DM6PR19MB4214:EE_
-X-MS-Office365-Filtering-Correlation-Id: baa4b04b-88a4-4a95-9915-08db1c14de22
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LW4LFb+8Wk0xfrSR7sy1SjlXGOHbePg/wezE1XQhr3cwlHEwwj/r8dhSlII7tJgKKYn/kQhqcUHMSaXyFkgzvcRfoa7N9lSbpR55AJFcVQ8Q2Z2BTxoZ1Ds4QnfbOSKzd4edKiKl2akUCbYH41jmkZXG58uMMoJYUBeWzX7Co0dhQN5wa3TdtM8E9RhcSGY4xBjBGn5acpg0GBOo/nfDLXghO8yHZA2Vgje+/sUWB6K1+aKht3+JlalkE2rGBncsZkT7cQnCQUTxPZ/2uWAuJ1mwIWgJQ3ptTOXmvf8QE823uG5IY1CU32jlXEMBC6paEQuUNyIQjBACVTFdotfbhzI/1/GhRzekc+2QiT0QHeONO/+17jA/kEL/BBBkcW9WeiNSkt0DHxW9HenlkEv2Jc7/ZdFdYUJ59gXy991pS8VltUJ+1SFChPrXSYF3EvodGxtNq/2wADFztA9yGWymK1lbKMADNo8Nd8bySVlyEyGL/U2GtdS6d7y50FK6DlNg366B42pXEYutMW1j6aKYAzpbSjx/+LBX/wESnCyqS4SsBN82OQzyDWKO+Ln8tnQn/z0y1REqilYW/YMBh0PNR2l3lzlWgcnnXiu3xL/JSisG09bmDN8IhHQOkIsnasaGuHpQGMl2x/C9YX3mxb11jgc4bPgkgqZxb59cDe9ET+IWXoqZYy5Trqt6ilLaaRMlZDGRpnIOYdj64MmAjbYTW+n/ooaYIGO364bkN5YUvRc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1901MB2037.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39850400004)(136003)(396003)(346002)(376002)(366004)(451199018)(31686004)(26005)(6486002)(54906003)(316002)(6512007)(38100700002)(31696002)(4326008)(36756003)(86362001)(4744005)(6506007)(2616005)(83380400001)(66946007)(8676002)(478600001)(5660300002)(2906002)(186003)(66556008)(6666004)(66476007)(53546011)(8936002)(41300700001)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NnB2SkdxVTF6RndQMnp1TTJNSmxEajB3N3NmZWVUeFFydXZaaG9vMjFyWlNL?=
- =?utf-8?B?YkMzRzQwQ3RSMk9xMG9FUmtiTmFCdGp6cStzWWlpODA1b0llSjR1L0RiRFcx?=
- =?utf-8?B?UExQUThKTjVTQnhQdzJCNllRQWhvWFoyQmRyOGtiMTh3bGtRQVgzcWZvb0FQ?=
- =?utf-8?B?bkVrZVhUQlZLUzJYZXRxQk9VNnlEUk5qWTlPeVlrT295VWh3MTVxd2kvVnBt?=
- =?utf-8?B?NVBQUVFyb3VhRjhSMXNBQWp3dkJRWkdrNlpRMzd6ZFkvTHI0RkRBaEVLUElx?=
- =?utf-8?B?ek5BK1NHWUtlZ1JLMDhtVUR3eGt5NExTbzFyUzJWWjV3cDgwVDJ0SlJmQU91?=
- =?utf-8?B?eHF1NndGMWFSSnFEbXRTdkptVmtVRnNzZ0dKMVNjRytIKzNWakpkaEtLVDFF?=
- =?utf-8?B?VU9ZN0hYdWNZWlhFdjU5VFRmSnhKcEpaTC80dlJMMGZvdzFBdlVLRjNMVlZE?=
- =?utf-8?B?bHBrUGNGTUpwa0Jmcm1KZVM3SkR5RytyaDR5MFgydmVLanpjS1Y5MzljZGdM?=
- =?utf-8?B?cFMyV1liWUhUYTQ1ZC9YQ3ZsVUt2UWlUMFJBbGMrMUYzZzNJM21uUU56Y3Jw?=
- =?utf-8?B?cjlBS2hXcUhDTlNZSlh1OXRaUE04d2ZEYXA3aE40cUtpQlJINSs5YlpDTmJ0?=
- =?utf-8?B?b0NqZFVxdyt2aU52VDNMZ0VScmtrM0pNVVdEZ3h3dkk1OWdjZTBrWkdBKzRu?=
- =?utf-8?B?V2lRcHpqcGhWaFVRSHFJZTN6K0NUVnhidzhzbjAyM2FZWkJaYk9CcXpLdWx4?=
- =?utf-8?B?L1ZpaFdraWZWalJWMjVpZGVseWtQN2NaOHpSU00wTnVHQzd3eUZvOXNGaHdi?=
- =?utf-8?B?SFZNdkh1OGFVUkh6Y1pQWWJZL2p2OXlxWjZmdHFTbEk4WStkb0R1TnNnK0tt?=
- =?utf-8?B?M2x6T25aeWw3TzJSM1ZoRGg5b2hrWENScHlsWG9oOEtnUGZ3NnBLRFlmL0ZH?=
- =?utf-8?B?WmwrcURnaVhmQk9DRFloMVZSYUEyOTQ5ZW95cFJvRy9mWEVQelcxcVpBZE9K?=
- =?utf-8?B?ajhJK1NuVzc2Tm1YbXRVNGQzckk1TXcyaEZUTVZQTnhWUkRuOHk2NWs4UVU5?=
- =?utf-8?B?TEZPbjVjcGdrUnd3VGdWTjBJZ3ZaRTFGTmlCc1g3UTdhU1ZTZlNZQWJlRlBC?=
- =?utf-8?B?anl4L2s4K2tHaDBWajdNZ2dnNFZlaXQ5UDdDY0syTUNadE1SQ1o3L3oyQlB5?=
- =?utf-8?B?WU9GVExVNS8raW9RbTJaTXVYSmIzNlJvQ1RKQVJER0pIRkNaa1RienJXT1VY?=
- =?utf-8?B?bWplc2ViVlpHeWNZaDRCd0pLZE1RU3FpRzVGYmFMVkw2bnpEQzMrN2tJT2lS?=
- =?utf-8?B?N3liZEZ6NFRoYkJkTWUxK1JuTnZiOUkvTGZCMENURzRwSXZENGlXeU5hMDFC?=
- =?utf-8?B?ZFVyUDloMFU3NmdiVUtMc0RJUWZiNkl3NlBUd0IzcExtRU53cmJNU0l0VU9T?=
- =?utf-8?B?UXNzZTFXK3p6ZkpJNUNQZ0F5Um4xYjl3bUFRZkkyVkRYYzkyYXpFYngySW04?=
- =?utf-8?B?VE82TkpkWHQzeTY2NDhTYlJlQm5tR0U3bWNvbUJtTEdKMnEvUWhVUXNoVkl2?=
- =?utf-8?B?UFlFMVVEaThZSzF4S3d6ajdtSlFYTm4rZnphUFpROEpEUUZ2NXM0Yk9TclV1?=
- =?utf-8?B?U3UyK1JhTENlYTRPMnRxZldtQkZQZ2tZU3UzUGFHVzlYNys5aU1FZVZOY2Nk?=
- =?utf-8?B?MVd3c2pIQ3loSGxJc2ZTQ1p0ekJzY3E4dER1d05Na2x1WU5kR3RIaGt1aldX?=
- =?utf-8?B?ODBOdTNLZit6Rkx1L1Rnc2taeS90U0hGOG83bVR6LzBXQm85amp1SXRqY0Nv?=
- =?utf-8?B?d1A3TXBWcmVVVjE3MW8yK1d2ZWxuWkIzVy8ySHdMSGlLMjVQRWovd2xWdWdC?=
- =?utf-8?B?UHM0S05xNWxRUXM0NHU1MCs4cUs2Q21FYmJOdE1lQXRqVnllZUp3ekNtYVZL?=
- =?utf-8?B?MFVxb3JQREdJQmFqKzJHdzlBRVMxN1lka2lCMEtzSmJQaWRodXhocDJ1NUFG?=
- =?utf-8?B?WWljSVF3bkhKZDRYa3hsaXJlMzdqWi92ckMxUitKL3BqdEFkYXZQYWpXYnE3?=
- =?utf-8?B?SEZmNGhVNUxBdnJ0enhleUdSdEtSbGVuRzJ1d2p1dW1XTTRML1JyYUpBM3l5?=
- =?utf-8?Q?R7chjMhFstNJtjG65WQJwnCbF?=
-X-OriginatorOrg: ddn.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: baa4b04b-88a4-4a95-9915-08db1c14de22
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1901MB2037.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 18:26:56.0571
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tSMKp/gMdbBM8XrhGGKue7AKJUpBkvte13wnvKJZD6SGyJ44eb+jNJR5tvsrsnwrgFGGgDg5y4m1UGIOC0ukNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR19MB4214
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303124642.5519-5-cai.huoqing@linux.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,35 +79,281 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/20/23 20:37, Alexander Mikhalitsyn wrote:
-> Let's move all the fuse connection flags that can be safely zeroed
-> after connection reinitialization to the separate structure fuse_conn_flags.
+On Fri, Mar 03, 2023 at 08:46:34PM +0800, Cai Huoqing wrote:
+> From: Cai huoqing <cai.huoqing@linux.dev>
 > 
-> All of these flags values are calculated dynamically basing on
-> the userspace daemon capabilities (like no_open, no_flush) or on the
-> response for FUSE_INIT request.
+> Add HDMA DebugFS support to show register information
 > 
-
- From my point of view this makes the code a bit better readable, in 
-general.
-
-[...]
-
->   };
->   
-> +/**
-> + * A Fuse connection.
+> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
+> ---
+>   v4->v5:
+>     1.Remove the check of *regs_dent *ch_dent.
+> 
+>   v4 link:
+>   https://lore.kernel.org/lkml/20230221034656.14476-5-cai.huoqing@linux.dev/
+> 
+>  drivers/dma/dw-edma/Makefile             |   3 +-
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c    |   2 +
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 175 +++++++++++++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 +++
+>  4 files changed, 201 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> 
+> diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
+> index b1c91ef2c63d..83ab58f87760 100644
+> --- a/drivers/dma/dw-edma/Makefile
+> +++ b/drivers/dma/dw-edma/Makefile
+> @@ -1,7 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+>  obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
+> -dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
+> +dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o	\
+> +				   dw-hdma-v0-debugfs.o
+>  dw-edma-objs			:= dw-edma-core.o	\
+>  				   dw-edma-v0-core.o	\
+>  				   dw-hdma-v0-core.o $(dw-edma-y)
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> index e14a3907241d..d7abdf154594 100644
+> --- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> @@ -10,6 +10,7 @@
+>  #include "dw-edma-core.h"
+>  #include "dw-hdma-v0-core.h"
+>  #include "dw-hdma-v0-regs.h"
+> +#include "dw-hdma-v0-debugfs.h"
+>  
+>  enum dw_hdma_control {
+>  	DW_HDMA_V0_CB					= BIT(0),
+> @@ -284,6 +285,7 @@ static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
+>  /* HDMA debugfs callbacks */
+>  static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
+>  {
+> +	dw_hdma_v0_debugfs_on(dw);
+>  }
+>  
+>  static const struct dw_edma_core_ops dw_hdma_v0_core = {
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> new file mode 100644
+> index 000000000000..9516a6c3af73
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> @@ -0,0 +1,175 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 debugfs
 > + *
-> + * This structure is created, when the root filesystem is mounted, and
-> + * is destroyed, when the client device is closed and the last
-> + * fuse_mount is destroyed.
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
 > + */
-> +struct fuse_conn_flags {
-> +	/** Do readahead asynchronously?  Only set in INIT */
-> +	unsigned async_read:1;
+> +
+> +#include <linux/debugfs.h>
+> +#include <linux/bitfield.h>
+> +
+> +#include "dw-hdma-v0-debugfs.h"
+> +#include "dw-hdma-v0-regs.h"
+> +#include "dw-edma-core.h"
+> +
+> +#define REGS_ADDR(dw, name)						       \
+> +	({								       \
+> +		struct dw_hdma_v0_regs __iomem *__regs = (dw)->chip->reg_base; \
+> +									       \
+> +		(void __iomem *)&__regs->name;				       \
+> +	})
+> +
+> +#define REGS_CH_ADDR(dw, name, _dir, _ch)				       \
+> +	({								       \
+> +		struct dw_hdma_v0_ch_regs __iomem *__ch_regs;		       \
+> +									       \
+> +		if (_dir == EDMA_DIR_READ)				       \
+> +			__ch_regs = REGS_ADDR(dw, ch[_ch].rd);		       \
+> +		else							       \
+> +			__ch_regs = REGS_ADDR(dw, ch[_ch].wr);		       \
+> +									       \
+> +		(void __iomem *)&__ch_regs->name;			       \
+> +	})
+> +
+> +#define CTX_REGISTER(dw, name, dir, ch) \
+> +	{ dw, #name, REGS_CH_ADDR(dw, name, dir, ch), dir, ch }
+> +
+> +#define REGISTER(dw, name) \
+> +	{ dw, #name, REGS_ADDR(dw, name) }
+> +
+> +#define WRITE_STR				"write"
+> +#define READ_STR				"read"
+> +#define CHANNEL_STR				"channel"
+> +#define REGISTERS_STR				"registers"
+> +
+> +struct dw_hdma_debugfs_entry {
+> +	struct dw_edma				*dw;
+> +	const char				*name;
+> +	void __iomem				*reg;
+> +	enum dw_edma_dir			dir;
+> +	u16					ch;
+> +};
+> +
 
+> +static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
+> +{
+> +	void __iomem *reg = (void __force __iomem *)data;
+                      ^
+!!! ------------------+ Brr, did you test it out?
+                      v
+> +
+> +	*val = readl(reg);
 
-The comment does not match the struct?
+I am sure you'll get a mess returned because the
+debugfs_create_file_unsafe() method is called with the pointer to the
+dw_hdma_debugfs_entry instance passed. 
 
+-Serge(y)
+
+> +
+> +	return 0;
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
+> +
+> +static void dw_hdma_debugfs_create_x32(struct dw_edma *dw,
+> +				       const struct dw_hdma_debugfs_entry ini[],
+> +				       int nr_entries, struct dentry *dent)
+> +{
+> +	struct dw_hdma_debugfs_entry *entries;
+> +	int i;
+> +
+> +	entries = devm_kcalloc(dw->chip->dev, nr_entries, sizeof(*entries),
+> +			       GFP_KERNEL);
+> +	if (!entries)
+> +		return;
+> +
+> +	for (i = 0; i < nr_entries; i++) {
+> +		entries[i] = ini[i];
+> +
+> +		debugfs_create_file_unsafe(entries[i].name, 0444, dent,
+> +					   &entries[i], &fops_x32);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
+> +				    u16 ch, struct dentry *dent)
+> +{
+> +	const struct dw_hdma_debugfs_entry debugfs_regs[] = {
+> +		CTX_REGISTER(dw, ch_en, dir, ch),
+> +		CTX_REGISTER(dw, doorbell, dir, ch),
+> +		CTX_REGISTER(dw, prefetch, dir, ch),
+> +		CTX_REGISTER(dw, handshake, dir, ch),
+> +		CTX_REGISTER(dw, llp.lsb, dir, ch),
+> +		CTX_REGISTER(dw, llp.msb, dir, ch),
+> +		CTX_REGISTER(dw, cycle_sync, dir, ch),
+> +		CTX_REGISTER(dw, transfer_size, dir, ch),
+> +		CTX_REGISTER(dw, sar.lsb, dir, ch),
+> +		CTX_REGISTER(dw, sar.msb, dir, ch),
+> +		CTX_REGISTER(dw, dar.lsb, dir, ch),
+> +		CTX_REGISTER(dw, dar.msb, dir, ch),
+> +		CTX_REGISTER(dw, watermark_en, dir, ch),
+> +		CTX_REGISTER(dw, control1, dir, ch),
+> +		CTX_REGISTER(dw, func_num, dir, ch),
+> +		CTX_REGISTER(dw, qos, dir, ch),
+> +		CTX_REGISTER(dw, ch_stat, dir, ch),
+> +		CTX_REGISTER(dw, int_stat, dir, ch),
+> +		CTX_REGISTER(dw, int_setup, dir, ch),
+> +		CTX_REGISTER(dw, int_clear, dir, ch),
+> +		CTX_REGISTER(dw, msi_stop.lsb, dir, ch),
+> +		CTX_REGISTER(dw, msi_stop.msb, dir, ch),
+> +		CTX_REGISTER(dw, msi_watermark.lsb, dir, ch),
+> +		CTX_REGISTER(dw, msi_watermark.msb, dir, ch),
+> +		CTX_REGISTER(dw, msi_abort.lsb, dir, ch),
+> +		CTX_REGISTER(dw, msi_abort.msb, dir, ch),
+> +		CTX_REGISTER(dw, msi_msgdata, dir, ch),
+> +	};
+> +	int nr_entries = ARRAY_SIZE(debugfs_regs);
+> +
+> +	dw_hdma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+> +{
+> +	struct dentry *regs_dent, *ch_dent;
+> +	char name[16];
+> +	int i;
+> +
+> +	regs_dent = debugfs_create_dir(WRITE_STR, dent);
+> +
+> +	for (i = 0; i < dw->wr_ch_cnt; i++) {
+> +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+> +
+> +		ch_dent = debugfs_create_dir(name, regs_dent);
+> +
+> +		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_WRITE, i, ch_dent);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+> +{
+> +	struct dentry *regs_dent, *ch_dent;
+> +	char name[16];
+> +	int i;
+> +
+> +	regs_dent = debugfs_create_dir(READ_STR, dent);
+> +
+> +	for (i = 0; i < dw->rd_ch_cnt; i++) {
+> +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+> +
+> +		ch_dent = debugfs_create_dir(name, regs_dent);
+> +
+> +		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_READ, i, ch_dent);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs(struct dw_edma *dw)
+> +{
+> +	struct dentry *regs_dent;
+> +
+> +	regs_dent = debugfs_create_dir(REGISTERS_STR, dw->dma.dbg_dev_root);
+> +
+> +	dw_hdma_debugfs_regs_wr(dw, regs_dent);
+> +	dw_hdma_debugfs_regs_rd(dw, regs_dent);
+> +}
+> +
+> +void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
+> +{
+> +	if (!debugfs_initialized())
+> +		return;
+> +
+> +	debugfs_create_u32("mf", 0444, dw->dma.dbg_dev_root, &dw->chip->mf);
+> +	debugfs_create_u16("wr_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->wr_ch_cnt);
+> +	debugfs_create_u16("rd_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->rd_ch_cnt);
+> +
+> +	dw_hdma_debugfs_regs(dw);
+> +}
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> new file mode 100644
+> index 000000000000..e6842c83777d
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 debugfs
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#ifndef _DW_HDMA_V0_DEBUG_FS_H
+> +#define _DW_HDMA_V0_DEBUG_FS_H
+> +
+> +#include <linux/dma/edma.h>
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
+> +#else
+> +static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
+> +{
+> +}
+> +#endif /* CONFIG_DEBUG_FS */
+> +
+> +#endif /* _DW_HDMA_V0_DEBUG_FS_H */
+> -- 
+> 2.34.1
+> 
