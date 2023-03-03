@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC9F6A964B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A52C6A964C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjCCLbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S230505AbjCCLbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjCCLbO (ORCPT
+        with ESMTP id S229659AbjCCLbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Mar 2023 06:31:14 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B7910E6;
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AC6113EB;
         Fri,  3 Mar 2023 03:30:49 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id y11so2382864plg.1;
+Received: by mail-pf1-x42c.google.com with SMTP id fd25so1349986pfb.1;
         Fri, 03 Mar 2023 03:30:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677843041;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Jwulz43qSqRAg3Hz4KUPdCaEn1N/UKdr4QvHFAQ7G8=;
-        b=C6otYZ8u80Ulh1aprWM1QUX8OkVlgtC8QVuWg/fzlBd4l5O1pikb1TYDnIM8ykHjjs
-         LFYhd2AXBoGABRDmr5SoY8tX+gD1KBz3EuYqQEHygI0k6LZ+Gl92muYCQRliPD9J4Wum
-         qEpSsDDJc9+zTF/xcfKnDLdakLEDzGUz/Ivs5o16Lr+kEgwUmsZFsScR1ImaFCrERzd8
-         vy3P/Zoq+7rkb87IXgEA86SrqyViuEiy9WJy5Xlq9QdxrEbUMijk1O8EOEOHJeGaRw7w
-         toyyQk1ZqkX4F4VlA8otO68SL5eAHa7iu7u2MozzPSrWqZMWuJdH0udC6+sCSejedrgN
-         zELQ==
+        d=gmail.com; s=20210112; t=1677843045;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x6RNuvoFz5fD/fH7/1p3nNqLtid6rjBFpG3wpNETfTY=;
+        b=E7J4oCVoDrSrgXFmHAibCE4JVyXPjYGq/svSesvgERVS2e+39WuRl12DZgkGiwr4tV
+         YJgk2orOigu7rAM/5HWfJeRKEMcma3Ljh3Wtl/Pv62IlaU9JjwCR9Y/oAqvF894LZI1+
+         N4TNZaljA+G7UZHH+lLpnjXbhB/sPUgLrKWA+ywCHQg0hifyq9PG+d1X4diGGnRtbEeR
+         5ZCg70phOy0D5+VVs3jtUDRHyxFvSEqlmyd/+gk7Jz7bwq+ktJGs4Nz6TXI1kiPBJBmD
+         tcDKB1Hr2G7jj8kC5GSFtXKe0PNb7cYa+Vl5xCvRYxR0MS6ZAMM/u0ne2+AqZudODLRk
+         OUAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677843041;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7Jwulz43qSqRAg3Hz4KUPdCaEn1N/UKdr4QvHFAQ7G8=;
-        b=7v9YzONkS7StX0XM05Xeu/N7MjsOQ+LouLCYRrBiJBAxe4+vA6tKLyYJl4zFqA7o/o
-         s4BlS4n0cAriM03vYtGnRquqmYZD7YqkQSX/pYrWIBBrAzh3mt2ggJMUi0BQy3vVI5XU
-         hrvC46x6QzIi+Yef172ualUlZ+w4L+5WR0DRTff9CoGAnB6ctNS292+8amKFlPxviuKx
-         k6UC3X3ja9twxdQFejxGba4fj0MUpQqhjRcXioTj4n+/v2aYiQA7k9qvR2bgr3I/cxPo
-         sbtp83VwrkmQPD78IX9j00ITsqqmwYHxdgYH8m5mPjGpxAiPjuQYFKQoweSTpYit2lZH
-         LonQ==
-X-Gm-Message-State: AO0yUKWbAmG63KPbo5rvkRrjZJBoCJckw3hGh4m+/S2VAian7w4rxoLD
-        zIevWLt+qqJJXySEs3ilUTWlxGUd89Y=
-X-Google-Smtp-Source: AK7set9LKrTzOtv1zwJdGqNwWPetYXEDtJ/ylJmR3m14NVoAJ4RCtiu1Oxgyn+lW/w6EKC7CT5rDSw==
-X-Received: by 2002:a05:6a20:3caa:b0:af:7233:5bfc with SMTP id b42-20020a056a203caa00b000af72335bfcmr1472441pzj.8.1677843041564;
-        Fri, 03 Mar 2023 03:30:41 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677843045;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x6RNuvoFz5fD/fH7/1p3nNqLtid6rjBFpG3wpNETfTY=;
+        b=dBa4jnf9a+ltMTr0WNVay+MfvrkUXYVQUBYyp1pen68E9Zk5jPwpph6zksaUvKPc19
+         vg2tDT96JNFU5tJhOjKrrTtFdqg4rhVGRj1Fp3l3kneC/jKGunYtxWC7sa8Qki24whKd
+         +aBCvJMqXOYDrlGr8cvxMxTAFA12+ta23/R66U6B6yNehC/m9YrVUAw/hezSyNHAveSg
+         TtxLWD8lVyEq9+jzErWXt+9Pq7ozm95Nox16AY32Ky0lFkRL61HrlLBYlpGOMKfI8dOl
+         8w7B9Ah8Jt+Y0a/4+/PSWtJxlPUaD7QRzrCsrG40oAgkTSKxQS3Hs5FO2L2T6FISUVD9
+         zbrg==
+X-Gm-Message-State: AO0yUKXfYm0feT9x1HmAKKa7B8s6/s0A1h35kzFLpX/gyqo+3RELETFP
+        1EiBYdw9wjYqbB7QNZYXAAk=
+X-Google-Smtp-Source: AK7set8oBIJfyFFYsH9yrAp8ZoxBD8kIUliHnpVoh/zmfCpdWzDQN86O0zXmv7LIAL1uS57VCOiaSg==
+X-Received: by 2002:a62:1848:0:b0:5a8:9fc6:6fb5 with SMTP id 69-20020a621848000000b005a89fc66fb5mr1845483pfy.16.1677843045414;
+        Fri, 03 Mar 2023 03:30:45 -0800 (PST)
 Received: from localhost.localdomain (124-148-239-17.tpgi.com.au. [124.148.239.17])
-        by smtp.gmail.com with ESMTPSA id n4-20020a62e504000000b005a8c92f7c27sm1356262pff.212.2023.03.03.03.30.37
+        by smtp.gmail.com with ESMTPSA id n4-20020a62e504000000b005a8c92f7c27sm1356262pff.212.2023.03.03.03.30.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 03:30:41 -0800 (PST)
+        Fri, 03 Mar 2023 03:30:45 -0800 (PST)
 From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Mark Gross <markgross@kernel.org>,
@@ -59,10 +60,12 @@ Cc:     Mark Gross <markgross@kernel.org>,
         Aun-Ali Zaidi <admin@kodeit.net>,
         Kerem Karabay <kekrby@gmail.com>,
         Orlando Chamberlain <orlandoch.dev@gmail.com>
-Subject: [PATCH v4 0/4] apple-gmux: support MMIO gmux type on T2 Macs
-Date:   Fri,  3 Mar 2023 22:28:39 +1100
-Message-Id: <20230303112842.3094-1-orlandoch.dev@gmail.com>
+Subject: [PATCH v4 1/4] apple-gmux: use first bit to check switch state
+Date:   Fri,  3 Mar 2023 22:28:40 +1100
+Message-Id: <20230303112842.3094-2-orlandoch.dev@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230303112842.3094-1-orlandoch.dev@gmail.com>
+References: <20230303112842.3094-1-orlandoch.dev@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,112 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On T2 Macs with MMIO gmux, when GMUX_PORT_SWITCH_DISPLAY is read, it can
+have values of 2, 3, 4, and 5. Odd values correspond to the discrete gpu,
+and even values correspond to the integrated gpu. The current logic is
+that only 2 corresponds to IGD, but this doesn't work for T2 Macs.
+Instead, check the first bit to determine the connected gpu.
 
-This patch series adds support for the MMIO based gmux present on these
-Dual GPU Apple T2 Macs: MacBookPro15,1, MacBookPro15,3, MacBookPro16,1,
-MacBookPro16,4 (although amdgpu isn't working on MacBookPro16,4 [1]).
+As T2 Macs with gmux only can switch the internal display, it is
+untested if this change (or a similar change) would be applicable
+to GMUX_PORT_SWITCH_DDC and GMUX_PORT_SWITCH_EXTERNAL.
 
-Changes from v3[2]:
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+---
+v3->v4: Collect Hans' review
+ drivers/platform/x86/apple-gmux.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-- Use acpi_execute_simple_method()
-- Document extra info about the gmux provided by Lukas
-- Squash the GMSP acpi method into the support MMIO gmux commit, as we
-  now just check if it's a MMIO gmux, not if the gmux config has a flag
-  set. This means it's hard to seperate the two now, so making them one
-  commit is simpler.
-
-# 1:
-
-has a slight change in how the switch state is read: instead of checking
-for x == 2, check !(x & 1)
-
-# 2:
-
-implements a system to support more than 2 gmux types
-
-# 3:
-
-Adds support for the MMIO based gmux on T2 macs.
-
-# 4:
-
-Add a debugfs interface to apple-gmux so data from ports can be read
-and written to from userspace.
-
-This can be used for more easily researching what unknown ports do,
-and switching gpus when vga_switcheroo isn't ready (e.g. when one gpu
-is bound to vfio-pci and in use by a Windows VM, I can use this to
-switch my internal display between Linux and Windows easily).
-
-# Issues:
-
-1. Switching gpus at runtime has the same issue as indexed gmux's: the
-inactive gpu can't probe the DDC lines for eDP [3]
-
-2. iMacPro1,1, iMac20,1 and iMac20,2 all seem to have a gmux in their
-acpi tables, but they shouldn't. A check that hopefully will detect this
-is used, but it's untested as I don't have any of those computers.
-
-3. Powering on the amdgpu with vga_switcheroo doesn't work well. I'm
-told on the MacBookPro15,1 it works sometimes, and adding delays helps,
-but on my MacBookPro16,1 I haven't been able to get it to work at all:
-
-amdgpu: switched off
-amdgpu: switched on
-amdgpu 0000:03:00.0:
-    Unable to change power state from D3hot to D0, device inaccessible
-amdgpu 0000:03:00.0:
-    Unable to change power state from D3cold to D0, device inaccessible
-[drm] PCIE GART of 512M enabled (table at 0x00000080FEE00000).
-[drm] PSP is resuming...
-[drm:psp_hw_start [amdgpu]] *ERROR* PSP create ring failed!
-[drm:psp_resume [amdgpu]] *ERROR* PSP resume failed
-[drm:amdgpu_device_fw_loading [amdgpu]]
-    *ERROR* resume of IP block <psp> failed -62
-amdgpu 0000:03:00.0: amdgpu: amdgpu_device_ip_resume failed (-62).
-snd_hda_intel 0000:03:00.1: Enabling via vga_switcheroo
-snd_hda_intel 0000:03:00.1:
-    Unable to change power state from D3cold to D0, device inaccessible
-snd_hda_intel 0000:03:00.1: CORB reset timeout#2, CORBRP = 65535
-snd_hda_codec_hdmi hdaudioC0D0: Unable to sync register 0x2f0d00. -5
-
-There are some acpi methods (PWRD, PWG1 [4, 5]) that macOS calls when
-changing the amdgpu's power state, but we don't use them and that could be
-a cause. Additionally unlike previous generation Macbooks which work
-better, on MacBookPro16,1 the gpu is located behind 2 pci bridges:
-
-01:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
-    Navi 10 XL Upstream Port of PCI Express Switch (rev 43)
-02:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
-    Navi 10 XL Downstream Port of PCI Express Switch
-03:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI]
-    Navi 14 [Radeon RX 5500/5500M / Pro 5500M] (rev 43)
-03:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI]
-    Navi 10 HDMI Audio
-
-Upon attempting to power on the gpu with vga_switcheroo, all these
-devices except 01:00.0 have their config space filled with 1s.
-Rescanning pci makes the config space of all the devices go back to
-normal, however amdgpu still fails to resume with the same logs as
-above.
-
-[1]: https://lore.kernel.org/all/3AFB9142-2BD0-46F9-AEA9-C9C5D13E68E6@live.com/
-[2]: https://lore.kernel.org/platform-driver-x86/20230218132007.3350-1-orlandoch.dev@gmail.com/
-[3]: https://lore.kernel.org/all/9eed8ede6f15a254ad578e783b050e1c585d5a15.1439288957.git.lukas@wunner.de/
-[4]: https://gist.github.com/Redecorating/6c7136b7a4ac7ce3b77d8e41740dd87b
-[5]: https://lore.kernel.org/all/20120710160555.GA31562@srcf.ucam.org/
-
-Orlando Chamberlain (4):
-  apple-gmux: use first bit to check switch state
-  apple-gmux: refactor gmux types
-  apple-gmux: support MMIO gmux on T2 Macs
-  apple-gmux: add debugfs interface
-
- drivers/platform/x86/apple-gmux.c | 351 ++++++++++++++++++++++++++----
- include/linux/apple-gmux.h        |  70 ++++--
- 2 files changed, 357 insertions(+), 64 deletions(-)
-
+diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+index 9333f82cfa8a..ec99e05e532c 100644
+--- a/drivers/platform/x86/apple-gmux.c
++++ b/drivers/platform/x86/apple-gmux.c
+@@ -346,10 +346,10 @@ static void gmux_read_switch_state(struct apple_gmux_data *gmux_data)
+ 	else
+ 		gmux_data->switch_state_ddc = VGA_SWITCHEROO_DIS;
+ 
+-	if (gmux_read8(gmux_data, GMUX_PORT_SWITCH_DISPLAY) == 2)
+-		gmux_data->switch_state_display = VGA_SWITCHEROO_IGD;
+-	else
++	if (gmux_read8(gmux_data, GMUX_PORT_SWITCH_DISPLAY) & 1)
+ 		gmux_data->switch_state_display = VGA_SWITCHEROO_DIS;
++	else
++		gmux_data->switch_state_display = VGA_SWITCHEROO_IGD;
+ 
+ 	if (gmux_read8(gmux_data, GMUX_PORT_SWITCH_EXTERNAL) == 2)
+ 		gmux_data->switch_state_external = VGA_SWITCHEROO_IGD;
 -- 
 2.39.2
 
