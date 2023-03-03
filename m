@@ -2,95 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742146A9100
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95E36A9102
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjCCG0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 01:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
+        id S229592AbjCCGaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 01:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjCCG0l (ORCPT
+        with ESMTP id S229510AbjCCGaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 01:26:41 -0500
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4994112BFB
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:26:03 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vd-4.6P_1677824719;
-Received: from 30.97.48.241(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vd-4.6P_1677824719)
-          by smtp.aliyun-inc.com;
-          Fri, 03 Mar 2023 14:25:20 +0800
-Message-ID: <65437f0e-dea9-115e-decd-b34cd8c79f81@linux.alibaba.com>
-Date:   Fri, 3 Mar 2023 14:25:19 +0800
+        Fri, 3 Mar 2023 01:30:10 -0500
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B627685
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:30:09 -0800 (PST)
+Received: from alt-proxy28.mail.unifiedlayer.com (unknown [74.220.216.123])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id EC13780327C2
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:30:08 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 7528D1004061B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:30:08 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id XyvgpLKIDdUIVXyvgpHM9r; Fri, 03 Mar 2023 06:30:08 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=U89Xscnu c=1 sm=1 tr=0 ts=640193f0
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=k__wU0fu6RkA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=O3hNsnRcHcmrHKJ81Ype8MvM9VzJLv3jdg6F3Aeoh8E=; b=Z7zrzcrJmDEs7oJaDnc8FiPiDR
+        AhIx4IGaXPBSp7HALzHTU4BiOrq8uywW65FBFZZ9O6I6fZWyjz/RNxJpgULlgLWNmM3zunWejd+r1
+        5ZLlc5bHj/SO/OrE0xVqE992iC8URILpYbirkaHtESLWnBJQcxMC9jDXIVrNU+bAmlD7iZgLwR/W/
+        +N4bh1iiCi/aeRvLXXKIFLh5e1+EyxeP5DpX/6GOk0FO4Z3IdnvG1oBmLw6jbJjg5ZP3tvQqHeWJ1
+        eCfoSaacwCzleoM3NXvwmUPXrrk6cYTgNgZjfnPVzFlGaIQDkR9GcjSz/fXcGAkwCsb7d25KjClnx
+        O2WlylvQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58872 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pXyvf-002nvr-Jk;
+        Thu, 02 Mar 2023 23:30:07 -0700
+Subject: Re: [PATCH 5.15 00/22] 5.15.97-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230301180652.658125575@linuxfoundation.org>
+In-Reply-To: <20230301180652.658125575@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <781059bd-45f0-e300-c01c-7978a8ded5ef@w6rz.net>
+Date:   Thu, 2 Mar 2023 22:30:04 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] erofs: mark z_erofs_lzma_init/erofs_pcpubuf_init w/
- __init
-To:     Yue Hu <zbestahu@gmail.com>, Yangtao Li <frank.li@vivo.com>
-Cc:     xiang@kernel.org, chao@kernel.org, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230303031418.64553-1-frank.li@vivo.com>
- <20230303140405.000035a6.zbestahu@gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230303140405.000035a6.zbestahu@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pXyvf-002nvr-Jk
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:58872
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/1/23 10:08 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.97 release.
+> There are 22 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.97-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-On 2023/3/3 14:04, Yue Hu wrote:
-> On Fri,  3 Mar 2023 11:14:18 +0800
-> Yangtao Li <frank.li@vivo.com> wrote:
-> 
->> They are used during the erofs module init phase. Let's mark it as
->> __init like any other function.
->>
->> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->> ---
->>   fs/erofs/decompressor_lzma.c | 2 +-
->>   fs/erofs/pcpubuf.c           | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
->> index 091fd5adf818..307b37f0b9f5 100644
->> --- a/fs/erofs/decompressor_lzma.c
->> +++ b/fs/erofs/decompressor_lzma.c
->> @@ -47,7 +47,7 @@ void z_erofs_lzma_exit(void)
->>   	}
->>   }
->>   
->> -int z_erofs_lzma_init(void)
->> +int __init z_erofs_lzma_init(void)
->>   {
->>   	unsigned int i;
->>   
->> diff --git a/fs/erofs/pcpubuf.c b/fs/erofs/pcpubuf.c
->> index a2efd833d1b6..c7a4b1d77069 100644
->> --- a/fs/erofs/pcpubuf.c
->> +++ b/fs/erofs/pcpubuf.c
->> @@ -114,7 +114,7 @@ int erofs_pcpubuf_growsize(unsigned int nrpages)
->>   	return ret;
->>   }
->>   
->> -void erofs_pcpubuf_init(void)
->> +void __init erofs_pcpubuf_init(void)
->>   {
->>   	int cpu;
->>   
-> 
-> Update them in internal.h as well?
-
-Yeah, please help revise, thanks!
-
-Thanks,
-Gao Xiang
+Tested-by: Ron Economos <re@w6rz.net>
 
