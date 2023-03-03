@@ -2,181 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A676A9B25
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932AC6A9B32
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjCCPu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 10:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S231490AbjCCPwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 10:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCCPu0 (ORCPT
+        with ESMTP id S230140AbjCCPwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 10:50:26 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7611C31F;
-        Fri,  3 Mar 2023 07:50:25 -0800 (PST)
+        Fri, 3 Mar 2023 10:52:10 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15F6EFBA
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 07:52:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677858625; x=1709394625;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zgJrm/0CHMzsxm8TFxdkZyaRoDiAB6z4BjVyd2CwAg0=;
-  b=Fv3IZj7rIwbH+eTBultqLb0k8E/0CL/xd6EnsOtt01swhhBC9gKpYXJ6
-   h+hhgPuDaOezrEJ8ef2yTftRzDk8Up5KrnbM1A9RR03f+cOpG+a75mSH5
-   PIJjExwRJQKQ9ml8D1kfSu15n3rQIzjaV581LMOFvg7WNnR+anfAcr8ef
-   l+wwbJfRRCAoVyXPIcvSQo0eW0fjdu8n0y/hTaZtC7ZoXRc6mS+5VPpyA
-   FbMWfeNPaNs0cBokPj7iRr9tlRG2RVXZGWYLan1xEhj8dp/gjvbZ9BfbO
-   rQc5hGwfV3s3h3FbTLJ2W6j6td2KZ89vzahENuryxxsF4SPEqoDN3D+Hl
+  t=1677858728; x=1709394728;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=lsRjo7yTXyKCofFwzcN0jbA0ArTfH/fumplb/rfEDjk=;
+  b=d8JDpKdzfQkFLHouzaqxLRot9sroMjcM95SIE1kq+o02cTRQ/JObU9fJ
+   6D2M9VsrWdAPLY+IXbEJ9xTlD32hn83OnZMBcUbOWjZzDv4pQdzX65Z1O
+   MatLcl7QoJ9sKsUBeP+Gqv6ZLoBNi3qpjyuQrYCM0+UqlMkH5yRbN3lSj
+   SslPDKIMy/Yb+XMQRc/dkWHZp2H/aEqkvqzYLe7BnmPQKsT+HtOGnlgDU
+   OaWxtVY2yXBs78AnIQ6FcmEITC62Ei9bYHFPHmYz6LPD+IEmO5IDrMpgt
+   mISRjP+Ujz3nH3AvlPAfKeklF/7P0jP/4uZUK3AdJEcmL8PFQJtnb0EnX
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="333794818"
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="318896434"
 X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="333794818"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 07:50:25 -0800
+   d="scan'208";a="318896434"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 07:52:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="921159289"
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="818509745"
 X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="921159289"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Mar 2023 07:50:24 -0800
-Received: from [10.212.168.11] (kliang2-mobl1.ccr.corp.intel.com [10.212.168.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id A38F1580689;
-        Fri,  3 Mar 2023 07:50:18 -0800 (PST)
-Message-ID: <962de75d-8e27-9b47-662e-e324b3ba5812@linux.intel.com>
-Date:   Fri, 3 Mar 2023 10:50:12 -0500
+   d="scan'208";a="818509745"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
+  by fmsmga001.fm.intel.com with SMTP; 03 Mar 2023 07:52:03 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Fri, 03 Mar 2023 17:52:02 +0200
+Date:   Fri, 3 Mar 2023 17:52:02 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v9 11/15] drm/atomic-helper: Set fence deadline for vblank
+Message-ID: <ZAIXonf7orksoFhb@intel.com>
+References: <20230302235356.3148279-1-robdclark@gmail.com>
+ <20230302235356.3148279-12-robdclark@gmail.com>
+ <ZAIOaiogeUhhNVfo@intel.com>
+ <CAF6AEGuL+B6sR2=7MFvqT0zfsgraoOdzAJBF=Ke1ce1umYh4Xw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 02/10] perf stat: Don't remove all grouped events when
- CPU maps disagree
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20230302212531.1043318-1-irogers@google.com>
- <20230302212531.1043318-3-irogers@google.com>
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230302212531.1043318-3-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF6AEGuL+B6sR2=7MFvqT0zfsgraoOdzAJBF=Ke1ce1umYh4Xw@mail.gmail.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-03-02 4:25 p.m., Ian Rogers wrote:
-> If the events in an evlist's CPU map differ then the entire group is
-> removed. For example:
+On Fri, Mar 03, 2023 at 07:45:05AM -0800, Rob Clark wrote:
+> On Fri, Mar 3, 2023 at 7:12 AM Ville Syrjälä
+> <ville.syrjala@linux.intel.com> wrote:
+> >
+> > On Thu, Mar 02, 2023 at 03:53:33PM -0800, Rob Clark wrote:
+> > > From: Rob Clark <robdclark@chromium.org>
+> > >
+> > > For an atomic commit updating a single CRTC (ie. a pageflip) calculate
+> > > the next vblank time, and inform the fence(s) of that deadline.
+> > >
+> > > v2: Comment typo fix (danvet)
+> > >
+> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > ---
+> > >  drivers/gpu/drm/drm_atomic_helper.c | 36 +++++++++++++++++++++++++++++
+> > >  1 file changed, 36 insertions(+)
+> > >
+> > > diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+> > > index d579fd8f7cb8..d8ee98ce2fc5 100644
+> > > --- a/drivers/gpu/drm/drm_atomic_helper.c
+> > > +++ b/drivers/gpu/drm/drm_atomic_helper.c
+> > > @@ -1511,6 +1511,40 @@ void drm_atomic_helper_commit_modeset_enables(struct drm_device *dev,
+> > >  }
+> > >  EXPORT_SYMBOL(drm_atomic_helper_commit_modeset_enables);
+> > >
+> > > +/*
+> > > + * For atomic updates which touch just a single CRTC, calculate the time of the
+> > > + * next vblank, and inform all the fences of the deadline.
+> > > + */
+> > > +static void set_fence_deadline(struct drm_device *dev,
+> > > +                            struct drm_atomic_state *state)
+> > > +{
+> > > +     struct drm_crtc *crtc, *wait_crtc = NULL;
+> > > +     struct drm_crtc_state *new_crtc_state;
+> > > +     struct drm_plane *plane;
+> > > +     struct drm_plane_state *new_plane_state;
+> > > +     ktime_t vbltime;
+> > > +     int i;
+> > > +
+> > > +     for_each_new_crtc_in_state (state, crtc, new_crtc_state, i) {
+> > > +             if (wait_crtc)
+> > > +                     return;
+> > > +             wait_crtc = crtc;
+> > > +     }
+> > > +
+> > > +     /* If no CRTCs updated, then nothing to do: */
+> > > +     if (!wait_crtc)
+> > > +             return;
+> >
+> > Is there an actual point in limiting this to single crtc updates?
+> > That immediately excludes tiled displays/etc.
+> >
+> > Handling an arbitrary number of crtcs shouldn't really be a lot
+> > more complicated should it?
 > 
-> ```
-> $ perf stat -e '{imc_free_running/data_read/,imc_free_running/data_write/,cs}' -a sleep 1
-> WARNING: grouped events cpus do not match, disabling group:
->   anon group { imc_free_running/data_read/, imc_free_running/data_write/, cs }
-> ```
-> 
-> Change the behavior so that just the events not matching the leader
-> are removed. So in the example above, just 'cs' will be removed.
-> 
-> Modify the warning so that it is produced once for each group, rather
-> than once for the entire evlist. Shrink the scope and size of the
-> warning text buffer.
+> I guess I could find the soonest upcoming vblank of all the CRTCs and
+> use that as the deadline?
 
-For the uncore, we usually have to create a group for each uncore PMU.
-The number of groups may be big. For example, on ICX, we have 40 CHA
-PMUs. For SPR, there should be more CHAs. If we have something like
-{cycles,uncore_cha/event=0x1/}, is the warning shown 40 times on ICX?
-If so, it should be very annoying.
+Yeah, that seems reasonable. The flips are supposed to happen
+atomically (if possible) anyway so collapsing the thing to
+a single deadline for all makes sense to me.
 
-Maybe it's better to keep the current behavior which only print a
-warning once and notify the users that perf will re-group the events.
-For the details, they can get it from the -v option.
-
-Thanks,
-Kan
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-stat.c | 24 +++++++++++++++---------
->  1 file changed, 15 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index d70b1ec88594..5c12ae5efce5 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -181,14 +181,13 @@ static bool cpus_map_matched(struct evsel *a, struct evsel *b)
->  
->  static void evlist__check_cpu_maps(struct evlist *evlist)
->  {
-> -	struct evsel *evsel, *pos, *leader;
-> -	char buf[1024];
-> +	struct evsel *evsel, *warned_leader = NULL;
->  
->  	if (evlist__has_hybrid(evlist))
->  		evlist__warn_hybrid_group(evlist);
->  
->  	evlist__for_each_entry(evlist, evsel) {
-> -		leader = evsel__leader(evsel);
-> +		struct evsel *leader = evsel__leader(evsel);
->  
->  		/* Check that leader matches cpus with each member. */
->  		if (leader == evsel)
-> @@ -197,19 +196,26 @@ static void evlist__check_cpu_maps(struct evlist *evlist)
->  			continue;
->  
->  		/* If there's mismatch disable the group and warn user. */
-> -		WARN_ONCE(1, "WARNING: grouped events cpus do not match, disabling group:\n");
-> -		evsel__group_desc(leader, buf, sizeof(buf));
-> -		pr_warning("  %s\n", buf);
-> -
-> +		if (warned_leader != leader) {
-> +			char buf[200];
-> +
-> +			pr_warning("WARNING: grouped events cpus do not match.\n"
-> +				"Events with CPUs not matching the leader will "
-> +				"be removed from the group.\n");
-> +			evsel__group_desc(leader, buf, sizeof(buf));
-> +			pr_warning("  %s\n", buf);
-> +			warned_leader = leader;
-> +		}
->  		if (verbose > 0) {
-> +			char buf[200];
-> +
->  			cpu_map__snprint(leader->core.cpus, buf, sizeof(buf));
->  			pr_warning("     %s: %s\n", leader->name, buf);
->  			cpu_map__snprint(evsel->core.cpus, buf, sizeof(buf));
->  			pr_warning("     %s: %s\n", evsel->name, buf);
->  		}
->  
-> -		for_each_group_evsel(pos, leader)
-> -			evsel__remove_from_group(pos, leader);
-> +		evsel__remove_from_group(evsel, leader);
->  	}
->  }
->  
+-- 
+Ville Syrjälä
+Intel
