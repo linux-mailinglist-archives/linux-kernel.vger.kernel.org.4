@@ -2,163 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CEED6A91E1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0572E6A91E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjCCHpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 02:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S229803AbjCCHrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 02:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCCHpO (ORCPT
+        with ESMTP id S229534AbjCCHq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 02:45:14 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43EF15555;
-        Thu,  2 Mar 2023 23:45:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677829488; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=PxjbRLVNt8tc3gqOBUlPuEl2vdem8DJ630dv7Cquf5/ORgxh3aN49y8OfW8XI8TSx+RScUMsugtfe3wYVB6eoPqYV1uXZwAE0k0sVKH8n79oMQQYb5QFsC8G/EyJHrPBUInlfZNB+GIovqfwukgxjq9ciHozemAoUI9Ihj46G2g=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677829488; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=ryO/715HXYmlcWLd+2L0EnmXwar4LhfC0gZCXwMnKL8=; 
-        b=GQ4sFZMyQkBUlRU6zDhErU5+p9JhegjLhelz6elwhYVFt7w1UX3zM5UOmZicwL7U1fEUEGVMKXfD5rl8iYY+blBe9K1daayaOjJIbTglbMjcI15/CdevugsJS1AZgusVppKStj0d0wUa7lQULsEZjqCvilNenCknyyz6uyYHNRg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677829488;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=ryO/715HXYmlcWLd+2L0EnmXwar4LhfC0gZCXwMnKL8=;
-        b=jNe8Y4Sdpp08C58lbyr60V+t3wE7dP+kZJohcYAwcLUCqJyI3/G+1YpVgour+lPJ
-        db+aup8CYNUX5dpWE4uVnGHrt/8ZvaIwy8NttJGZdm/BJDRCpJ0gk5SLy/Q49P6sc27
-        wu8bkkemaep391c56ufUBki+BhENtQb0u2vQ43Mw=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1677829486602727.4785012329536; Thu, 2 Mar 2023 23:44:46 -0800 (PST)
-Message-ID: <4c522dc3-d6f4-fd3e-e715-4c7795576541@arinc9.com>
-Date:   Fri, 3 Mar 2023 10:44:31 +0300
+        Fri, 3 Mar 2023 02:46:59 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852A4521EF;
+        Thu,  2 Mar 2023 23:46:58 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32357uFJ011344;
+        Fri, 3 Mar 2023 07:46:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=NIT8nTfoZl7k2Y7KV2J6qVcc307frlqqTymfIe0oI6w=;
+ b=UoTOi4FigknZq+zCecWn+Wv/is2aP4fmLZvFxpo0lZuOvrFb6FMdUtbW+hHFrZR0yKcd
+ vrJKqFj4dHG8fKipomeoUS3F+2nzDa4ppLtQURiaq6ecqZ2yrejfP0eGtsDlhMjNQzam
+ diG8WW9VUGaSft3gaMycrYDlBXT4yGMTjln0Xwu0cT1LG/V5JaNvggxiDPVK1zZAIpEd
+ oMdGmwsbun2Kij/4UxyoKbRsTpaci7o0wfdlSGyyQDebIDagzWQfBZkVqni8efT2S6/Q
+ mjfrrj2wO6CBKfgGDE7Rrj+7O+5IP0bu7AG6880hetnlUXYHofczQqHehCX2hhvvThYl QQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2ar1572c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 07:46:48 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3237kmo7003991
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Mar 2023 07:46:48 GMT
+Received: from [10.216.34.86] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 2 Mar 2023
+ 23:46:45 -0800
+Message-ID: <fe07806e-e77b-1198-1ffb-be8e2df53dd6@quicinc.com>
+Date:   Fri, 3 Mar 2023 13:16:41 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
- compatible strings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-8-arinc.unal@arinc9.com>
- <20230227173333.GA496999-robh@kernel.org>
- <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
- <20230301024431.GA251215-robh@kernel.org>
- <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
- <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
- <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
- <1aae7ac9-c83d-71b4-4fce-325f02fcd722@linaro.org>
- <89588f69-9cf0-e7a4-b976-5ce87d42e296@arinc9.com>
- <2ccb573d-39f4-cb80-7a3e-63a60c2bc0a8@linaro.org>
- <b48e0a5e-dd45-8b8a-4ee3-357a0985ca9c@arinc9.com>
- <83a03258-9e52-3d09-67fe-12e9e5ed4b76@linaro.org>
- <11d10e4e-65ec-3bec-3e0c-7e57feb03506@arinc9.com>
- <a696bea5-3ba6-3b71-10ad-a04a7412c178@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/4] firmware: qcom_scm: Refactor code to support
+ multiple download mode
 Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <a696bea5-3ba6-3b71-10ad-a04a7412c178@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1677664555-30191-1-git-send-email-quic_mojha@quicinc.com>
+ <1677664555-30191-4-git-send-email-quic_mojha@quicinc.com>
+ <469b4a3a-ea40-ad6b-2848-210325b8914c@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <469b4a3a-ea40-ad6b-2848-210325b8914c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4dfNWHSxzdhU401kYcwlHKg-SFsvvD7p
+X-Proofpoint-ORIG-GUID: 4dfNWHSxzdhU401kYcwlHKg-SFsvvD7p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ bulkscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303030068
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3.03.2023 10:05, Krzysztof Kozlowski wrote:
-> On 02/03/2023 12:50, Arınç ÜNAL wrote:
->> On 2.03.2023 14:36, Krzysztof Kozlowski wrote:
->>> On 02/03/2023 11:47, Arınç ÜNAL wrote:
->>>> On 2.03.2023 13:29, Krzysztof Kozlowski wrote:
->>>>> On 02/03/2023 11:22, Arınç ÜNAL wrote:
->>>>>>>>
->>>>>>>> ## Incorrect naming
->>>>>>>>
->>>>>>>> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink,
->>>>>>>> introduce new ralink->mediatek compatible strings to address it.
->>>>>>>
->>>>>>> So this part was addressed by Rob - we don't do it, because it does not
->>>>>>> matter. Ralink is now Mediatek, thus there is no conflict and no issues
->>>>>>> with different vendor used.
->>>>>>
->>>>>> I think Rob was rather addressing that updating compatible strings based
->>>>>> on acquisition or marketing whims is not permitted. This condition does
->>>>>> not apply here as these SoCs were never Ralink.
->>>>>>
->>>>>> I understand your point that Ralink is now MediaTek but still, calling
->>>>>> these SoCs Ralink would be a bit misleading, don't you think?
->>>>>
->>>>> Misleading yes, but also does not matter. At least matter not enough to
->>>>> justify ABI break, so you would need to deprecate old ones and keep
->>>>> everything backwards compatible. You still would affect 3rd party users
->>>>> of DTS, though...
->>>>
->>>> I intend to do just that. Introduce new mediatek strings, keep the old
->>>> ones so it's backwards compatible, therefore don't break the ABI.
->>>>
->>>> Instead of deprecating old strings, I intend to introduce the checks I
->>>> mentioned, on the schema, so the pin muxing bindings only apply if the
->>>> DT has got a string that won't match multiple schemas. This way it
->>>> shouldn't affect 3rd party DTs.
->>>
->>> I meant, 3rd party users of DTS. You will replace the compatible in the
->>> DTS, right? So the DTS exported and used in all other projects, OS,
->>> firmwares, bootloaders, out of tree kernel forks will stop working.
+Thanks for your time in checking this..
+
+On 3/1/2023 4:29 PM, Dmitry Baryshkov wrote:
+> On 01/03/2023 11:55, Mukesh Ojha wrote:
+>> Currently on Qualcomm SoC, download_mode is enabled if
+>> CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT is selected.
 >>
->> I plan to change it on the DTs for MediaTek SoCs, yes. Is this a
->> problem? From what I can tell, what must be ensured is that old DTs must
->> work with newer kernels, not new DTs on older kernels.
+>> Refactor the code such that it supports multiple download
+>> modes and drop CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT config
+>> instead, give interface to set the download mode from
+>> module parameter.
+>>
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+>> Changes in v2:
+>>   - Passed download mode as parameter
+>>   - Accept human accepatable download mode string.
+>>   - enable = !!dload_mode
+>>   - Shifted module param callback to somewhere down in
+>>     the file so that it no longer need to know the
+>>     prototype of qcom_scm_set_download_mode()
+>>   - updated commit text.
+>>
+>>   drivers/firmware/Kconfig    | 11 --------
+>>   drivers/firmware/qcom_scm.c | 65 
+>> ++++++++++++++++++++++++++++++++++++++-------
+>>   2 files changed, 56 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+>> index b59e304..ff7e9f3 100644
+>> --- a/drivers/firmware/Kconfig
+>> +++ b/drivers/firmware/Kconfig
+>> @@ -215,17 +215,6 @@ config MTK_ADSP_IPC
+>>   config QCOM_SCM
+>>       tristate
+>> -config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
+>> -    bool "Qualcomm download mode enabled by default"
+>> -    depends on QCOM_SCM
+>> -    help
+>> -      A device with "download mode" enabled will upon an unexpected
+>> -      warm-restart enter a special debug mode that allows the user to
+>> -      "download" memory content over USB for offline postmortem 
+>> analysis.
+>> -      The feature can be enabled/disabled on the kernel command line.
+>> -
+>> -      Say Y here to enable "download mode" by default.
+>> -
+>>   config SYSFB
+>>       bool
+>>       select BOOT_VESA_SUPPORT
+>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+>> index c9f1fad..ca07208 100644
+>> --- a/drivers/firmware/qcom_scm.c
+>> +++ b/drivers/firmware/qcom_scm.c
+>> @@ -17,17 +17,22 @@
+>>   #include <linux/clk.h>
+>>   #include <linux/reset-controller.h>
+>>   #include <linux/arm-smccc.h>
+>> +#include <linux/kstrtox.h>
+>>   #include "qcom_scm.h"
+>> -static bool download_mode = 
+>> IS_ENABLED(CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT);
+>> -module_param(download_mode, bool, 0);
+>> -
+>>   #define SCM_HAS_CORE_CLK    BIT(0)
+>>   #define SCM_HAS_IFACE_CLK    BIT(1)
+>>   #define SCM_HAS_BUS_CLK        BIT(2)
+>>   #define QCOM_DOWNLOAD_MODE_MASK 0x30
+>> +#define QCOM_DOWNLOAD_FULLDUMP    0x10
+>> +#define QCOM_DOWNLOAD_NODUMP    0x0
+>> +
+>> +#define MAX_DLOAD_LEN    8
+>> +
+>> +static char download_mode[] = "off";
+>> +static u32 dload_mode;
+>>   struct qcom_scm {
+>>       struct device *dev;
+>> @@ -417,8 +422,9 @@ static int __qcom_scm_set_dload_mode(struct device 
+>> *dev, bool enable)
+>>       return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+>>   }
+>> -static void qcom_scm_set_download_mode(bool enable)
+>> +static void qcom_scm_set_download_mode(u32 dload_mode)
+>>   {
+>> +    bool enable = !!dload_mode;
+>>       bool avail;
+>>       int ret = 0;
+>>       u32 val;
+>> @@ -438,7 +444,7 @@ static void qcom_scm_set_download_mode(bool enable)
+>>           val &= ~QCOM_DOWNLOAD_MODE_MASK;
+>>           if (enable)
+>> -            val |= QCOM_SCM_BOOT_SET_DLOAD_MODE;
+>> +            val |= dload_mode;
+>>           ret = qcom_scm_io_writel(__scm->dload_mode_addr, val);
+>>       } else {
+>> @@ -1338,6 +1344,47 @@ bool qcom_scm_is_available(void)
+>>   }
+>>   EXPORT_SYMBOL(qcom_scm_is_available);
+>> +static int set_dload_mode(const char *val, const struct kernel_param 
+>> *kp)
+>> +{
+>> +    int ret;
+>> +
+>> +    if (!strncmp(val, "full", strlen("full"))) {
+>> +        dload_mode = QCOM_DOWNLOAD_FULLDUMP;
+>> +    } else if (!strncmp(val, "off", strlen("off"))) {
+>> +        dload_mode = QCOM_DOWNLOAD_NODUMP;
+>> +    } else {
+>> +        if (kstrtouint(val, 0, &dload_mode) ||
+>> +             !(dload_mode == 0 || dload_mode == 1)) {
+>> +            pr_err("unknown download mode\n");
+>> +            return -EINVAL;
+>> +        }
+>> +
+>> +    }
+>> +
+>> +    ret = param_set_copystring(val, kp);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    if (__scm)
+>> +        qcom_scm_set_download_mode(dload_mode);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct kernel_param_ops dload_mode_param_ops = {
+>> +    .set = set_dload_mode,
+>> +    .get = param_get_string,
 > 
-> Can I be clearer than this?
+> Please follow the param_get_bool approach and return sanitized data 
+> here. In other words, "full" / "none" depending on the dload_mode 
+> instead of storing the passed string and returning it later.
 > 
-> " So the DTS exported and used in all other projects, OS,
-> firmwares, bootloaders, out of tree kernel forks will stop working."
+
+This could be done.
+
+>> +};
+>> +
+>> +static struct kparam_string dload_mode_param = {
+>> +    .string = download_mode,
+>> +    .maxlen = MAX_DLOAD_LEN,
 > 
-> Yes, this is a problem - they will stop working.
+> I think writing "full" to this param might overwrite some kernel data. 
+> "00000000" should be even worse.
 
-I've never seen any project just exporting DTs from the latest kernel 
-version and slap it onto old versions, as a new devicetree that was 
-introduced with a newer kernel version is not guaranteed to work with 
-older kernel versions.
+There is check in param_set_copystring() which would avoid that.
 
-If someone is actually doing this on a project, I think it's the 
-responsibility of the maintainers of these said projects to account for 
-this and modify the DT for the kernel version they're running it on.
+> 
+>> +};
+>> +
+>> +module_param_cb(download_mode, &dload_mode_param_ops, 
+>> &dload_mode_param, 0644);
+>> +MODULE_PARM_DESC(download_mode,
+>> +         "Download mode: off/full or 0/1/off/on for existing users");
+> 
+> Nit: on is not supported even for existing users.
 
-What's more usual is one'd run the kernel version where the new DT was 
-introduced, which will work fine.
+Agree. just 0/1 would do fine there.
 
-On to real life implications, popular projects like U-Boot and OpenWrt 
-maintain their own DTs for this platform so I think the impact is very 
-minimal.
-
-Anyway, I'm not doing this change on this patch series so why don't we 
-cross this bridge when we get to it.
-
-Arınç
+-Mukesh
+> 
+>> +
+>>   static int qcom_scm_probe(struct platform_device *pdev)
+>>   {
+>>       struct qcom_scm *scm;
+>> @@ -1418,12 +1465,12 @@ static int qcom_scm_probe(struct 
+>> platform_device *pdev)
+>>       __get_convention();
+>>       /*
+>> -     * If requested enable "download mode", from this point on warmboot
+>> +     * If download mode is requested, from this point on warmboot
+>>        * will cause the boot stages to enter download mode, unless
+>>        * disabled below by a clean shutdown/reboot.
+>>        */
+>> -    if (download_mode)
+>> -        qcom_scm_set_download_mode(true);
+>> +    if (dload_mode)
+>> +        qcom_scm_set_download_mode(dload_mode);
+>>       return 0;
+>>   }
+>> @@ -1431,7 +1478,7 @@ static int qcom_scm_probe(struct platform_device 
+>> *pdev)
+>>   static void qcom_scm_shutdown(struct platform_device *pdev)
+>>   {
+>>       /* Clean shutdown, disable download mode to allow normal restart */
+>> -    qcom_scm_set_download_mode(false);
+>> +    qcom_scm_set_download_mode(QCOM_DOWNLOAD_NODUMP);
+>>   }
+>>   static const struct of_device_id qcom_scm_dt_match[] = {
+> 
