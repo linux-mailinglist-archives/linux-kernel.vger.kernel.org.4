@@ -2,251 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62886A949F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3846A6A94A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjCCJ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S229905AbjCCJ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjCCJ65 (ORCPT
+        with ESMTP id S229799AbjCCJ7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:58:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67FF3928C;
-        Fri,  3 Mar 2023 01:58:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F166617A5;
-        Fri,  3 Mar 2023 09:58:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E447C433EF;
-        Fri,  3 Mar 2023 09:58:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677837533;
-        bh=COxgWoqtEm0AFHGOR1W4I4K+0GIrgAspJnoVNaR3vyI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h5MGWw7hhoY1XUVAyhghsRhwNAbv19mArfwQ+hSCdOXJmKnvzzWYoJBPcV0J8pFb9
-         PoN66H0RYpcem9xkktOqOfMx62nECaGNWkG0Iagc8B8jrgQuPKS+Eoi/2Hqa25pYwj
-         Hx52k13ndzmsdnqZ275JOZBp6f8Uf/Q8AS0l0kD3dg6ZnTVg6jg8jdPlko+xZdUwnK
-         sCmRESOGWVSUe5hbRrSbqcIC+QEYrTx7+ALK86fgx8eM4DgjsijAAiis8DBTj1kbn8
-         wqNS7S6Ty7eqJdSQm1o5+wSeTTBfvaLXpC01rGxWrChcdbDqZhVv5ueFt4Kq0mcyk1
-         bTVxGfL+oNr1w==
-Date:   Fri, 3 Mar 2023 09:58:48 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Maarten Zanders <maarten.zanders@mind.be>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] leds: lp55xx: configure internal charge pump
-Message-ID: <20230303095848.GK2303077@google.com>
-References: <20230213102027.29961-1-maarten.zanders@mind.be>
- <20230213102027.29961-3-maarten.zanders@mind.be>
+        Fri, 3 Mar 2023 04:59:00 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0703BDA0
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:58:56 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id f13so8041057edz.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:58:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677837535;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CU36Qx0+p6MLOQ5K57tM7u0vitEOFBXc97asRJKCLJc=;
+        b=gYJLj1OTe0kwd7xyGeyqlwjfQiinuhH9B6dNW1bQsHTjABcw27hlCQSCPgFDnPr1Im
+         N5qe5qwrFnkNOVHXmstQ4R8guWRxzvhtNMNIml3KAen0XdBihZnVvBDWiNG7tb+rcuxC
+         6t8d99Pzle9zbqDjy7/V8vxw1MWss/tLh3Y9jDKtdT+ZR0qG5C6un1GajTuaR7uj8wZV
+         JSWulZ5N3lz+u3ZxMpSlvXeLtiuBgsakPq5rMs6Y1Z/Y24Z4SbXJxRpK2Dx71y3JDDTA
+         O1EiZiJo7JUukgDYgD0u0aLKYqKsxc8iHPR8GV6ndb3rDEAIDoYMhlrcLUHSHj0E0A/4
+         PleQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677837535;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CU36Qx0+p6MLOQ5K57tM7u0vitEOFBXc97asRJKCLJc=;
+        b=ZrRswblVMg6GG34HHVE17XMB5zfZp0Ze6KTAgFt/jW+kXf8yDh+8CBtMf0lyZAksAj
+         WQ/hG/Xrc3JdMx2csFaDNT+rIQssq8JEe+F8a3BiTDxss8NFwJm+RW/a6PnKEBG/RJ6e
+         eWqHzIPv5L2eGcm8mkP4RuTodvMaAhWra8aBVitp+mpxXT0wpUjPyrLgqocafxB7PQ4G
+         7Q0Ij+BdyFut6MH8OURlg7KC8URo5PG33d/15RuQc6+LBfUer9ub6HymIIBAFsZbIXl1
+         N+x4DfKO7JfPeV4cxcmee2eI0NBosXyEVh8XA9M9+V0pNO0xYHPjkgIzRMoDJmo++V5+
+         Lb0A==
+X-Gm-Message-State: AO0yUKXlit5Mjp+ITrX09prq72ALujwy6XSJp91yqpYmdBX2XrTRXaRz
+        KGCVGlXOlg/nskjrSWeDaDY4cg==
+X-Google-Smtp-Source: AK7set9Cb5INMEvYD4lAG27kFDAPOhxa7QVZp+bdKpJzdM+ARypsC1YxKja7qU/Mqmy/AEyKucFkBA==
+X-Received: by 2002:a17:906:3687:b0:881:4d98:fe2e with SMTP id a7-20020a170906368700b008814d98fe2emr903460ejc.29.1677837535150;
+        Fri, 03 Mar 2023 01:58:55 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id se9-20020a170906ce4900b008dd3956c2e3sm769047ejb.183.2023.03.03.01.58.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 01:58:54 -0800 (PST)
+Message-ID: <49da270d-6802-79e9-843f-d46efc9ef728@linaro.org>
+Date:   Fri, 3 Mar 2023 10:58:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230213102027.29961-3-maarten.zanders@mind.be>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 4/9] dt-bindings: crypto: add fsl-sec4-snvs DT schema
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        horia.geanta@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, stefan@agner.ch,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Peng Fan <peng.fan@nxp.com>
+References: <20230301015702.3388458-1-peng.fan@oss.nxp.com>
+ <20230301015702.3388458-5-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230301015702.3388458-5-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023, Maarten Zanders wrote:
+On 01/03/2023 02:56, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Convert fsl-sec4.txt SNVS RTC and PowerKey to DT schema
 
-> The LP55xx range of devices have an internal charge pump which
-> can (automatically) increase the output voltage towards the
-> LED's, boosting the output voltage to 4.5V.
+This is a mess. Subject says add, commit msg says convert and body does
+what?
+
 > 
-> Implement this option from the devicetree. When the setting
-> is not present it will operate in automatic mode as before.
-> 
-> Tested on LP55231. Datasheet analysis shows that LP5521, LP5523
-> and LP8501 are identical in topology and are modified in the
-> same way.
-> 
-> Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
+>  .../bindings/crypto/fsl-sec4-snvs.yaml        | 153 ++++++++++++++++++
+>  1 file changed, 153 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml
 > 
-> Notes:
->     v1: implement as bool to disable charge pump
->     v2: rewrite to use string configuration, supporting all modes
->     v3: simplification by replacing string from DTS by constant
->     v4: added notes
->     v5: property type to u32
-> 
->  drivers/leds/leds-lp5521.c                | 12 ++++++------
->  drivers/leds/leds-lp5523.c                | 18 +++++++++++++-----
->  drivers/leds/leds-lp55xx-common.c         | 14 ++++++++++++++
->  drivers/leds/leds-lp8501.c                |  8 ++++++--
->  include/linux/platform_data/leds-lp55xx.h |  3 +++
->  5 files changed, 42 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/leds/leds-lp5521.c b/drivers/leds/leds-lp5521.c
-> index 19478d9c19a7..76c6b81afb38 100644
-> --- a/drivers/leds/leds-lp5521.c
-> +++ b/drivers/leds/leds-lp5521.c
-> @@ -58,14 +58,11 @@
->  /* CONFIG register */
->  #define LP5521_PWM_HF			0x40	/* PWM: 0 = 256Hz, 1 = 558Hz */
->  #define LP5521_PWRSAVE_EN		0x20	/* 1 = Power save mode */
-> -#define LP5521_CP_MODE_OFF		0	/* Charge pump (CP) off */
-> -#define LP5521_CP_MODE_BYPASS		8	/* CP forced to bypass mode */
-> -#define LP5521_CP_MODE_1X5		0x10	/* CP forced to 1.5x mode */
-> -#define LP5521_CP_MODE_AUTO		0x18	/* Automatic mode selection */
-> +#define LP5521_CP_MODE_MASK		0x18	/* Charge pump mode */
-> +#define LP5521_CP_MODE_SHIFT		3
->  #define LP5521_R_TO_BATT		0x04	/* R out: 0 = CP, 1 = Vbat */
->  #define LP5521_CLK_INT			0x01	/* Internal clock */
-> -#define LP5521_DEFAULT_CFG		\
-> -	(LP5521_PWM_HF | LP5521_PWRSAVE_EN | LP5521_CP_MODE_AUTO)
-> +#define LP5521_DEFAULT_CFG		(LP5521_PWM_HF | LP5521_PWRSAVE_EN)
->  
->  /* Status */
->  #define LP5521_EXT_CLK_USED		0x08
-> @@ -310,6 +307,9 @@ static int lp5521_post_init_device(struct lp55xx_chip *chip)
->  	if (!lp55xx_is_extclk_used(chip))
->  		val |= LP5521_CLK_INT;
->  
-> +	val |= (chip->pdata->charge_pump_mode << LP5521_CP_MODE_SHIFT) &
-> +		LP5521_CP_MODE_MASK;
-> +
->  	ret = lp55xx_write(chip, LP5521_REG_CONFIG, val);
->  	if (ret)
->  		return ret;
-> diff --git a/drivers/leds/leds-lp5523.c b/drivers/leds/leds-lp5523.c
-> index e08e3de1428d..b5d10d4252e6 100644
-> --- a/drivers/leds/leds-lp5523.c
-> +++ b/drivers/leds/leds-lp5523.c
-> @@ -57,8 +57,12 @@
->  #define LP5523_AUTO_INC			0x40
->  #define LP5523_PWR_SAVE			0x20
->  #define LP5523_PWM_PWR_SAVE		0x04
-> -#define LP5523_CP_AUTO			0x18
-> +#define LP5523_CP_MODE_MASK		0x18
-> +#define LP5523_CP_MODE_SHIFT		3
->  #define LP5523_AUTO_CLK			0x02
-> +#define LP5523_DEFAULT_CONFIG	\
-> +	(LP5523_AUTO_INC | LP5523_PWR_SAVE |\
-> +	 LP5523_AUTO_CLK | LP5523_PWM_PWR_SAVE)
->  
->  #define LP5523_EN_LEDTEST		0x80
->  #define LP5523_LEDTEST_DONE		0x80
-> @@ -125,6 +129,7 @@ static void lp5523_set_led_current(struct lp55xx_led *led, u8 led_current)
->  static int lp5523_post_init_device(struct lp55xx_chip *chip)
->  {
->  	int ret;
-> +	int val;
->  
->  	ret = lp55xx_write(chip, LP5523_REG_ENABLE, LP5523_ENABLE);
->  	if (ret)
-> @@ -133,10 +138,13 @@ static int lp5523_post_init_device(struct lp55xx_chip *chip)
->  	/* Chip startup time is 500 us, 1 - 2 ms gives some margin */
->  	usleep_range(1000, 2000);
->  
-> -	ret = lp55xx_write(chip, LP5523_REG_CONFIG,
-> -			    LP5523_AUTO_INC | LP5523_PWR_SAVE |
-> -			    LP5523_CP_AUTO | LP5523_AUTO_CLK |
-> -			    LP5523_PWM_PWR_SAVE);
-> +	val = LP5523_DEFAULT_CONFIG;
-> +
-> +	val |= (chip->pdata->charge_pump_mode << LP5523_CP_MODE_SHIFT) &
-> +	       LP5523_CP_MODE_MASK;
-> +
-> +	ret = lp55xx_write(chip, LP5523_REG_CONFIG, val);
-> +
->  	if (ret)
->  		return ret;
->  
-> diff --git a/drivers/leds/leds-lp55xx-common.c b/drivers/leds/leds-lp55xx-common.c
-> index c1940964067a..5a02c4a4ec98 100644
-> --- a/drivers/leds/leds-lp55xx-common.c
-> +++ b/drivers/leds/leds-lp55xx-common.c
-> @@ -19,6 +19,8 @@
->  #include <linux/slab.h>
->  #include <linux/gpio/consumer.h>
->  
-> +#include <dt-bindings/leds/leds-lp55xx.h>
-> +
->  #include "leds-lp55xx-common.h"
->  
->  /* External clock rate */
-> @@ -691,6 +693,18 @@ struct lp55xx_platform_data *lp55xx_of_populate_pdata(struct device *dev,
->  		i++;
->  	}
->  
-> +	ret = of_property_read_u32(np, "ti,charge-pump-mode",
-> +				   &pdata->charge_pump_mode);
-> +	if (ret) {
-> +		pdata->charge_pump_mode = LP55XX_CP_AUTO;
-> +	} else {
+> diff --git a/Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml b/Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml
+> new file mode 100644
+> index 000000000000..633e70f9b303
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml
 
-You can clean this up by dropping the else.
+Filename matching compatibles.
 
-> +		if (pdata->charge_pump_mode > LP55XX_CP_AUTO) {
-> +			dev_err(dev, "invalid charge pump mode %d\n",
-> +				pdata->charge_pump_mode);
-
-Then this can be single line.
-
-> +			return ERR_PTR(-EINVAL);
-> +		}
-> +	}
+> @@ -0,0 +1,153 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/crypto/fsl-sec4-snvs.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	of_property_read_string(np, "label", &pdata->label);
->  	of_property_read_u8(np, "clock-mode", &pdata->clock_mode);
->  
-> diff --git a/drivers/leds/leds-lp8501.c b/drivers/leds/leds-lp8501.c
-> index ae11a02c0ab2..f0e70e116919 100644
-> --- a/drivers/leds/leds-lp8501.c
-> +++ b/drivers/leds/leds-lp8501.c
-> @@ -53,10 +53,11 @@
->  #define LP8501_PWM_PSAVE		BIT(7)
->  #define LP8501_AUTO_INC			BIT(6)
->  #define LP8501_PWR_SAVE			BIT(5)
-> -#define LP8501_CP_AUTO			0x18
-> +#define LP8501_CP_MODE_MASK		0x18
-> +#define LP8501_CP_MODE_SHIFT		3
->  #define LP8501_INT_CLK			BIT(0)
->  #define LP8501_DEFAULT_CFG	\
-> -	(LP8501_PWM_PSAVE | LP8501_AUTO_INC | LP8501_PWR_SAVE | LP8501_CP_AUTO)
-> +	(LP8501_PWM_PSAVE | LP8501_AUTO_INC | LP8501_PWR_SAVE)
->  
->  #define LP8501_REG_RESET		0x3D
->  #define LP8501_RESET			0xFF
-> @@ -102,6 +103,9 @@ static int lp8501_post_init_device(struct lp55xx_chip *chip)
->  	if (chip->pdata->clock_mode != LP55XX_CLOCK_EXT)
->  		val |= LP8501_INT_CLK;
->  
-> +	val |= (chip->pdata->charge_pump_mode << LP8501_CP_MODE_SHIFT) &
-> +	       LP8501_CP_MODE_MASK;
-> +
->  	ret = lp55xx_write(chip, LP8501_REG_CONFIG, val);
->  	if (ret)
->  		return ret;
-> diff --git a/include/linux/platform_data/leds-lp55xx.h b/include/linux/platform_data/leds-lp55xx.h
-> index 3441064713a3..3cc8db0b12b5 100644
-> --- a/include/linux/platform_data/leds-lp55xx.h
-> +++ b/include/linux/platform_data/leds-lp55xx.h
-> @@ -73,6 +73,9 @@ struct lp55xx_platform_data {
->  	/* Clock configuration */
->  	u8 clock_mode;
->  
-> +	/* Charge pump mode */
-> +	u32 charge_pump_mode;
-> +
->  	/* optional enable GPIO */
->  	struct gpio_desc *enable_gpiod;
->  
-> -- 
-> 2.37.3
-> 
+> +title: NXP SEC4 SNVS Binding
 
--- 
-Lee Jones [李琼斯]
+Drop Binding.
+
+
+> +
+> +description:
+> +  CONTENTS
+> +    -Secure Non-Volatile Storage (SNVS) Node
+> +    -Secure Non-Volatile Storage (SNVS) Low Power (LP) RTC Node
+
+OK, this is some copy-paste from some poor other code. Please fix all
+your bindings like I mentioned in previous emails.
+
+> +
+> +  Node defines address range and the associated interrupt for the SNVS
+> +  function.  This function monitors security state information & reports
+> +  security violations. This also included rtc, system power off and ON/OFF
+> +  key.
+> +
+> +  For more information on SEC4, ref fsl-sec4-crypto.yaml
+> +
+> +maintainers:
+> +  - Peng Fan <peng.fan@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: fsl,sec-v4.0-mon
+> +          - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +  ranges:
+> +    description:
+> +      A standard property. Specifies the physical address range of the SNVS
+
+So the rest are non-standard properties?
+
+
+> +      register space.  A triplet that includes the child address, parent
+> +      address, & length.
+> +
+> +  interrupts:
+> +    description:
+> +      Specifies the interrupts generated by this device.  The value of the
+> +      interrupts property consists of one interrupt specifier. The format
+> +      of the specifier is defined by the binding document describing the
+> +      node's interrupt parent.
+
+Please point me to any useful information in this description. Anything
+useful. All interrupts are generated from the devices, aren't they?
+
+> +    minItems: 1
+> +    maxItems: 2
+
+No, you need to describe the items instead.
+
+> +
+
+(...)
+
+> +    sec_mon: sec_mon@314000 {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+No underscores in node names.
+
+> +        compatible = "fsl,sec-v4.0-mon", "syscon";
+> +        reg = <0x314000 0x1000>;
+> +
+> +        snvs-rtc-lp {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+> +            compatible = "fsl,sec-v4.0-mon-rtc-lp";
+> +            regmap = <&sec_mon>;
+> +            offset = <0x34>;
+> +            interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&clks IMX7D_SNVS_CLK>;
+> +            clock-names = "snvs-rtc";
+> +        };
+> +
+> +        snvs-powerkey {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+
+Best regards,
+Krzysztof
+
