@@ -2,623 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECBD6A9821
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3086A9824
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjCCNEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 08:04:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S230159AbjCCNHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 08:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjCCNEw (ORCPT
+        with ESMTP id S230089AbjCCNHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 08:04:52 -0500
-X-Greylist: delayed 1077 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Mar 2023 05:04:50 PST
-Received: from out-51.mta1.migadu.com (out-51.mta1.migadu.com [95.215.58.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FC61689C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:04:49 -0800 (PST)
-Date:   Fri, 3 Mar 2023 21:04:44 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677848687;
+        Fri, 3 Mar 2023 08:07:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B615F229
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:06:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677848774;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Vw27qESoURGtEpWi73NVZo6KkWOl2+tETFaguhm6RhU=;
-        b=pKWjX3+9LYE90AqpzBvZzE8B5t5bD0An5C+rut4z265lUYysMe2vq8FmlXYdlWSTWyufo5
-        HzTP1j/hmQ8PvArvp1DgcVVtYLbsygfHmoRm4rJw5oElaYbJTowT3mv/ePaLWNstMMIEgx
-        JuHh/bbrqQtRhw8GbzkOqkOtFU+e0V4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     fancer.lancer@gmail.com, lars@metafoo.de
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 3/4] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <ZAHwbDHZyiVXYsVs@chq-MS-7D45>
-References: <20230303124642.5519-1-cai.huoqing@linux.dev>
- <20230303124642.5519-4-cai.huoqing@linux.dev>
+        bh=v07IDWMxZry0XXohrnatEt4gHWwOiAbWwK6lrNuE9qk=;
+        b=SoTJPx3ZAInSxlbtIsW1RnJVEDvVoWnOGhHXu0YX/M3CDCsAlqBBOVNFE2Wor1pIvUgR6D
+        lMeW95la4WS/UYNexFDuGyJp5RpNzIWOFRPoz7w+nJtMDmHZtnHivvOgHGjtumh3meYa2c
+        EhtHuGvg+pczorMImvTRUKsYvktSLCE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-356-caECKmB_PNWeUU7H5QlysA-1; Fri, 03 Mar 2023 08:06:10 -0500
+X-MC-Unique: caECKmB_PNWeUU7H5QlysA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 991A0802D2F;
+        Fri,  3 Mar 2023 13:06:09 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 05B5140C6EC4;
+        Fri,  3 Mar 2023 13:06:08 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Jean-Philippe Brucker <jpb@kernel.org>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Itaru Kitayama <itaru.kitayama@gmail.com>,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
+Subject: Re: [RFC] Support for Arm CCA VMs on Linux
+In-Reply-To: <2418536c-2658-18d6-f70c-c1af5adaa816@arm.com>
+Organization: Red Hat GmbH
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+ <Y9PtKJ3Wicc19JF1@myrica>
+ <CANW9uyud8RTkqgiL=64wV712QMxtAyubqeyCJ0vpcADJ42VqJA@mail.gmail.com>
+ <Y/8Y3WLmiw6+Z5AS@myrica>
+ <CANW9uysnvGCwANu+_6dp9+3rvHGOkThT9d0K2qpQV4exdmYWoA@mail.gmail.com>
+ <20230303094618.GC361458@myrica>
+ <1c91b777-982e-e71a-4829-51744e9555c5@arm.com>
+ <20230303113905.GD361458@myrica> <20230303120800.ahtyc6et77ig4s27@orel>
+ <2418536c-2658-18d6-f70c-c1af5adaa816@arm.com>
+User-Agent: Notmuch/0.37 (https://notmuchmail.org)
+Date:   Fri, 03 Mar 2023 14:06:07 +0100
+Message-ID: <875ybi0ytc.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230303124642.5519-4-cai.huoqing@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03 3月 23 20:46:33, Cai Huoqing wrote:
-> From: Cai huoqing <cai.huoqing@linux.dev>
-+ Lars-Peter
-> 
-> Add support for HDMA NATIVE, as long the IP design has set
-> the compatible register map parameter-HDMA_NATIVE,
-> which allows compatibility for native HDMA register configuration.
-> 
-> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> And the native HDMA registers are different from eDMA, so this patch
-> add support for HDMA NATIVE mode.
-> 
-> HDMA write and read channels operate independently to maximize
-> the performance of the HDMA read and write data transfer over
-> the link When you configure the HDMA with multiple read channels,
-> then it uses a round robin (RR) arbitration scheme to select
-> the next read channel to be serviced.The same applies when you
-> have multiple write channels.
-> 
-> The native HDMA driver also supports a maximum of 16 independent
-> channels (8 write + 8 read), which can run simultaneously.
-> Both SAR (Source Address Register) and DAR (Destination Address Register)
-> are aligned to byte.
-> 
-> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
-> ---
->   v4->v5:
->     1.Add missing the function call -dw_hdma_v0_core_register.
-> 
->   v4 link:
->   https://lore.kernel.org/lkml/20230221034656.14476-4-cai.huoqing@linux.dev/
-> 
->  drivers/dma/dw-edma/Makefile          |   5 +-
->  drivers/dma/dw-edma/dw-edma-core.c    |   6 +-
->  drivers/dma/dw-edma/dw-hdma-v0-core.c | 302 ++++++++++++++++++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-core.h |  17 ++
->  drivers/dma/dw-edma/dw-hdma-v0-regs.h | 129 +++++++++++
->  include/linux/dma/edma.h              |   3 +-
->  6 files changed, 458 insertions(+), 4 deletions(-)
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> 
-> diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
-> index 8d45c0d5689d..b1c91ef2c63d 100644
-> --- a/drivers/dma/dw-edma/Makefile
-> +++ b/drivers/dma/dw-edma/Makefile
-> @@ -2,6 +2,7 @@
->  
->  obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
->  dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
-> -dw-edma-objs			:= dw-edma-core.o \
-> -					dw-edma-v0-core.o $(dw-edma-y)
-> +dw-edma-objs			:= dw-edma-core.o	\
-> +				   dw-edma-v0-core.o	\
-> +				   dw-hdma-v0-core.o $(dw-edma-y)
->  obj-$(CONFIG_DW_EDMA_PCIE)	+= dw-edma-pcie.o
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index 5cfba5730695..4710009549b6 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -18,6 +18,7 @@
->  
->  #include "dw-edma-core.h"
->  #include "dw-edma-v0-core.h"
-> +#include "dw-hdma-v0-core.h"
->  #include "../dmaengine.h"
->  #include "../virt-dma.h"
->  
-> @@ -914,7 +915,10 @@ int dw_edma_probe(struct dw_edma_chip *chip)
->  
->  	dw->chip = chip;
->  
-> -	dw_edma_v0_core_register(dw);
-> +	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
-> +		dw_hdma_v0_core_register(dw);
-> +	else
-> +		dw_edma_v0_core_register(dw);
->  
->  	raw_spin_lock_init(&dw->lock);
->  
-> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-> new file mode 100644
-> index 000000000000..e14a3907241d
-> --- /dev/null
-> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-> @@ -0,0 +1,302 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2023 Cai Huoqing
-> + * Synopsys DesignWare HDMA v0 core
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/io-64-nonatomic-lo-hi.h>
-> +
-> +#include "dw-edma-core.h"
-> +#include "dw-hdma-v0-core.h"
-> +#include "dw-hdma-v0-regs.h"
-> +
-> +enum dw_hdma_control {
-> +	DW_HDMA_V0_CB					= BIT(0),
-> +	DW_HDMA_V0_TCB					= BIT(1),
-> +	DW_HDMA_V0_LLP					= BIT(2),
-> +	DW_HDMA_V0_LIE					= BIT(3),
-> +	DW_HDMA_V0_RIE					= BIT(4),
-> +	DW_HDMA_V0_CCS					= BIT(8),
-> +	DW_HDMA_V0_LLE					= BIT(9),
-> +};
-> +
-> +static inline struct dw_hdma_v0_regs __iomem *__dw_regs(struct dw_edma *dw)
-> +{
-> +	return dw->chip->reg_base;
-> +}
-> +
-> +static inline struct dw_hdma_v0_ch_regs __iomem *
-> +__dw_ch_regs(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch)
-> +{
-> +	if (dir == EDMA_DIR_WRITE)
-> +		return &(__dw_regs(dw)->ch[ch].wr);
-> +	else
-> +		return &(__dw_regs(dw)->ch[ch].rd);
-> +}
-> +
-> +#define SET_CH_32(dw, dir, ch, name, value) \
-> +	writel(value, &(__dw_ch_regs(dw, dir, ch)->name))
-> +
-> +#define GET_CH_32(dw, dir, ch, name) \
-> +	readl(&(__dw_ch_regs(dw, dir, ch)->name))
-> +
-> +#define SET_BOTH_CH_32(dw, ch, name, value) \
-> +	do {					\
-> +		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_WRITE, ch)->name));	\
-> +		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_READ, ch)->name));	\
-> +	} while (0)
-> +
-> +/* HDMA management callbacks */
-> +static void dw_hdma_v0_core_off(struct dw_edma *dw)
-> +{
-> +	int id;
-> +
-> +	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
-> +		SET_BOTH_CH_32(dw, id, int_setup,
-> +			       HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK);
-> +		SET_BOTH_CH_32(dw, id, int_clear,
-> +			       HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK);
-> +		SET_BOTH_CH_32(dw, id, ch_en, 0);
-> +	}
-> +}
-> +
-> +static u16 dw_hdma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
-> +{
-> +	u32 num_ch = 0;
-> +	int id;
-> +
-> +	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
-> +		if (GET_CH_32(dw, id, dir, ch_en) & BIT(0))
-> +			num_ch++;
-> +	}
-> +
-> +	if (num_ch > HDMA_V0_MAX_NR_CH)
-> +		num_ch = HDMA_V0_MAX_NR_CH;
-> +
-> +	return (u16)num_ch;
-> +}
-> +
-> +static enum dma_status dw_hdma_v0_core_ch_status(struct dw_edma_chan *chan)
-> +{
-> +	struct dw_edma *dw = chan->dw;
-> +	u32 tmp;
-> +
-> +	tmp = FIELD_GET(HDMA_V0_CH_STATUS_MASK,
-> +			GET_CH_32(dw, chan->id, chan->dir, ch_stat));
-> +
-> +	if (tmp == 1)
-> +		return DMA_IN_PROGRESS;
-> +	else if (tmp == 3)
-> +		return DMA_COMPLETE;
-> +	else
-> +		return DMA_ERROR;
-> +}
-> +
-> +static void dw_hdma_v0_core_clear_done_int(struct dw_edma_chan *chan)
-> +{
-> +	struct dw_edma *dw = chan->dw;
-> +
-> +	SET_CH_32(dw, chan->dir, chan->id, int_clear, HDMA_V0_STOP_INT_MASK);
-> +}
-> +
-> +static void dw_hdma_v0_core_clear_abort_int(struct dw_edma_chan *chan)
-> +{
-> +	struct dw_edma *dw = chan->dw;
-> +
-> +	SET_CH_32(dw, chan->dir, chan->id, int_clear, HDMA_V0_ABORT_INT_MASK);
-> +}
-> +
-> +static u32 dw_hdma_v0_core_status_int(struct dw_edma_chan *chan)
-> +{
-> +	struct dw_edma *dw = chan->dw;
-> +
-> +	return GET_CH_32(dw, chan->dir, chan->id, int_stat);
-> +}
-> +
-> +static u32 dw_hdma_v0_core_check_done_int(u32 val)
-> +{
-> +	return FIELD_GET(HDMA_V0_STOP_INT_MASK, val);
-> +}
-> +
-> +static u32 dw_hdma_v0_core_check_abort_int(u32 val)
-> +{
-> +	return FIELD_GET(HDMA_V0_ABORT_INT_MASK, val);
-> +}
-> +
-> +static
-> +irqreturn_t dw_hdma_v0_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir)
-> +{
-> +	struct dw_edma *dw = dw_irq->dw;
-> +	unsigned long total, pos, val;
-> +	struct dw_edma_chan *chan;
-> +	unsigned long off, mask;
-> +
-> +	if (dir == EDMA_DIR_WRITE) {
-> +		total = dw->wr_ch_cnt;
-> +		off = 0;
-> +		mask = dw_irq->wr_mask;
-> +	} else {
-> +		total = dw->rd_ch_cnt;
-> +		off = dw->wr_ch_cnt;
-> +		mask = dw_irq->rd_mask;
-> +	}
-> +
-> +	for_each_set_bit(pos, &mask, total) {
-> +		chan = &dw->chan[pos + off];
-> +
-> +		val = dw_hdma_v0_core_status_int(chan);
-> +		if (dw_hdma_v0_core_check_done_int(val)) {
-> +			dw_hdma_v0_core_clear_done_int(chan);
-> +			dw_edma_done_interrupt(chan);
-> +		}
-> +	}
-> +
-> +	for_each_set_bit(pos, &mask, total) {
-> +		chan = &dw->chan[pos + off];
-> +
-> +		val = dw_hdma_v0_core_status_int(chan);
-> +		if (dw_hdma_v0_core_check_abort_int(val)) {
-> +			dw_hdma_v0_core_clear_abort_int(chan);
-> +			dw_edma_abort_interrupt(&dw->chan[pos + off]);
-> +		}
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void dw_hdma_v0_write_ll_data(struct dw_edma_chunk *chunk, int i,
-> +				     u32 control, u32 size, u64 sar, u64 dar)
-> +{
-> +	ptrdiff_t ofs = i * sizeof(struct dw_hdma_v0_lli);
-> +
-> +	if (chunk->chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
-> +		struct dw_hdma_v0_lli *lli = chunk->ll_region.vaddr.mem + ofs;
-> +
-> +		lli->control = control;
-> +		lli->transfer_size = size;
-> +		lli->sar.reg = sar;
-> +		lli->dar.reg = dar;
-> +	} else {
-> +		struct dw_hdma_v0_lli __iomem *lli = chunk->ll_region.vaddr.io + ofs;
-> +
-> +		writel(control, &lli->control);
-> +		writel(size, &lli->transfer_size);
-> +		writeq(sar, &lli->sar.reg);
-> +		writeq(dar, &lli->dar.reg);
-> +	}
-> +}
-> +
-> +static void dw_hdma_v0_write_ll_link(struct dw_edma_chunk *chunk,
-> +				     int i, u32 control, u64 pointer)
-> +{
-> +	ptrdiff_t ofs = i * sizeof(struct dw_hdma_v0_lli);
-> +
-> +	if (chunk->chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
-> +		struct dw_hdma_v0_llp *llp = chunk->ll_region.vaddr.mem + ofs;
-> +
-> +		llp->control = control;
-> +		llp->llp.reg = pointer;
-> +	} else {
-> +		struct dw_hdma_v0_llp __iomem *llp = chunk->ll_region.vaddr.io + ofs;
-> +
-> +		writel(control, &llp->control);
-> +		writeq(pointer, &llp->llp.reg);
-> +	}
-> +}
-> +
-> +static void dw_hdma_v0_core_write_chunk(struct dw_edma_chunk *chunk)
-> +{
-> +	struct dw_edma_burst *child;
-> +	struct dw_edma_chan *chan = chunk->chan;
-> +	u32 control = 0, i = 0;
-> +	int j;
-> +
-> +	if (chunk->cb)
-> +		control = DW_HDMA_V0_CB;
-> +
-> +	j = chunk->bursts_alloc;
-> +	list_for_each_entry(child, &chunk->burst->list, list) {
-> +		j--;
-> +		if (!j) {
-> +			control |= DW_HDMA_V0_LIE;
-> +			if (!(chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL))
-> +				control |= DW_HDMA_V0_RIE;
-> +		}
-> +
-> +		dw_hdma_v0_write_ll_data(chunk, i++, control, child->sz,
-> +					 child->sar, child->dar);
-> +	}
-> +
-> +	control = DW_HDMA_V0_LLP | DW_HDMA_V0_TCB;
-> +	if (!chunk->cb)
-> +		control |= DW_HDMA_V0_CB;
-> +
-> +	dw_hdma_v0_write_ll_link(chunk, i, control, chunk->ll_region.paddr);
-> +}
-> +
-> +static void dw_hdma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
-> +{
-> +	struct dw_edma_chan *chan = chunk->chan;
-> +	struct dw_edma *dw = chan->dw;
-> +	u32 tmp;
-> +
-> +	dw_hdma_v0_core_write_chunk(chunk);
-> +
-> +	if (first) {
-> +		/* Enable engine */
-> +		SET_CH_32(dw, chan->dir, chan->id, ch_en, BIT(0));
-> +		/* Interrupt enable&unmask - done, abort */
-> +		tmp = GET_CH_32(dw, chan->dir, chan->id, int_setup) |
-> +		      HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK |
-> +		      HDMA_V0_LOCAL_STOP_INT_EN | HDMA_V0_LOCAL_STOP_INT_EN;
-> +		SET_CH_32(dw, chan->dir, chan->id, int_setup, tmp);
-> +		/* Channel control */
-> +		SET_CH_32(dw, chan->dir, chan->id, control1, HDMA_V0_LINKLIST_EN);
-> +		/* Linked list */
-> +		/* llp is not aligned on 64bit -> keep 32bit accesses */
-> +		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
-> +			  lower_32_bits(chunk->ll_region.paddr));
-> +		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
-> +			  upper_32_bits(chunk->ll_region.paddr));
-> +	}
-> +	/* Set consumer cycle */
-> +	SET_CH_32(dw, chan->dir, chan->id, cycle_sync,
-> +		  HDMA_V0_CONSUMER_CYCLE_STAT | HDMA_V0_CONSUMER_CYCLE_BIT);
-> +	/* Doorbell */
-> +	SET_CH_32(dw, chan->dir, chan->id, doorbell, HDMA_V0_DOORBELL_START);
-> +}
-> +
-> +static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
-> +{
-> +	struct dw_edma *dw = chan->dw;
-> +
-> +	/* MSI done addr - low, high */
-> +	SET_CH_32(dw, chan->dir, chan->id, msi_stop.lsb, chan->msi.address_lo);
-> +	SET_CH_32(dw, chan->dir, chan->id, msi_stop.msb, chan->msi.address_hi);
-> +	/* MSI abort addr - low, high */
-> +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.lsb, chan->msi.address_lo);
-> +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.msb, chan->msi.address_hi);
-> +	/* config MSI data */
-> +	SET_CH_32(dw, chan->dir, chan->id, msi_msgdata, chan->msi.data);
-> +}
-> +
-> +/* HDMA debugfs callbacks */
-> +static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
-> +{
-> +}
-> +
-> +static const struct dw_edma_core_ops dw_hdma_v0_core = {
-> +	.off = dw_hdma_v0_core_off,
-> +	.ch_count = dw_hdma_v0_core_ch_count,
-> +	.ch_status = dw_hdma_v0_core_ch_status,
-> +	.handle_int = dw_hdma_v0_core_handle_int,
-> +	.start = dw_hdma_v0_core_start,
-> +	.ch_config = dw_hdma_v0_core_ch_config,
-> +	.debugfs_on = dw_hdma_v0_core_debugfs_on,
-> +};
-> +
-> +void dw_hdma_v0_core_register(struct dw_edma *dw)
-> +{
-> +	dw->core = &dw_hdma_v0_core;
-> +}
-> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.h b/drivers/dma/dw-edma/dw-hdma-v0-core.h
-> new file mode 100644
-> index 000000000000..c373b4f0bd8a
-> --- /dev/null
-> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.h
-> @@ -0,0 +1,17 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2023 Cai Huoqing
-> + * Synopsys DesignWare HDMA v0 core
-> + *
-> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
-> + */
-> +
-> +#ifndef _DW_HDMA_V0_CORE_H
-> +#define _DW_HDMA_V0_CORE_H
-> +
-> +#include <linux/dma/edma.h>
-> +
-> +/* HDMA core register */
-> +void dw_hdma_v0_core_register(struct dw_edma *dw);
-> +
-> +#endif /* _DW_HDMA_V0_CORE_H */
-> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-regs.h b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> new file mode 100644
-> index 000000000000..61359d50e9f4
-> --- /dev/null
-> +++ b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> @@ -0,0 +1,129 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2023 Cai Huoqing
-> + * Synopsys DesignWare HDMA v0 reg
-> + *
-> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
-> + */
-> +
-> +#ifndef _DW_HDMA_V0_REGS_H
-> +#define _DW_HDMA_V0_REGS_H
-> +
-> +#include <linux/dmaengine.h>
-> +
-> +#define HDMA_V0_MAX_NR_CH			8
-> +#define HDMA_V0_LOCAL_ABORT_INT_EN		BIT(6)
-> +#define HDMA_V0_REMOTE_ABORT_INT_EN		BIT(5)
-> +#define HDMA_V0_LOCAL_STOP_INT_EN		BIT(4)
-> +#define HDMA_V0_REMOTEL_STOP_INT_EN		BIT(3)
-> +#define HDMA_V0_ABORT_INT_MASK			BIT(2)
-> +#define HDMA_V0_STOP_INT_MASK			BIT(0)
-> +#define HDMA_V0_LINKLIST_EN			BIT(0)
-> +#define HDMA_V0_CONSUMER_CYCLE_STAT		BIT(1)
-> +#define HDMA_V0_CONSUMER_CYCLE_BIT		BIT(0)
-> +#define HDMA_V0_DOORBELL_START			BIT(0)
-> +#define HDMA_V0_CH_STATUS_MASK			GENMASK(1, 0)
-> +
-> +struct dw_hdma_v0_ch_regs {
-> +	u32 ch_en;				/* 0x0000 */
-> +	u32 doorbell;				/* 0x0004 */
-> +	u32 prefetch;				/* 0x0008 */
-> +	u32 handshake;				/* 0x000c */
-> +	union {
-> +		u64 reg;			/* 0x0010..0x0014 */
-> +		struct {
-> +			u32 lsb;		/* 0x0010 */
-> +			u32 msb;		/* 0x0014 */
-> +		};
-> +	} llp;
-> +	u32 cycle_sync;				/* 0x0018 */
-> +	u32 transfer_size;			/* 0x001c */
-> +	union {
-> +		u64 reg;			/* 0x0020..0x0024 */
-> +		struct {
-> +			u32 lsb;		/* 0x0020 */
-> +			u32 msb;		/* 0x0024 */
-> +		};
-> +	} sar;
-> +	union {
-> +		u64 reg;			/* 0x0028..0x002c */
-> +		struct {
-> +			u32 lsb;		/* 0x0028 */
-> +			u32 msb;		/* 0x002c */
-> +		};
-> +	} dar;
-> +
-> +	u32 watermark_en;			/* 0x0030 */
-> +	u32 control1;				/* 0x0034 */
-> +	u32 func_num;				/* 0x0038 */
-> +	u32 qos;				/* 0x003c */
-> +	u32 reserved;				/* 0x0040..0x007c */
-> +	u32 ch_stat;				/* 0x0080 */
-> +	u32 int_stat;				/* 0x0084 */
-> +	u32 int_setup;				/* 0x0088 */
-> +	u32 int_clear;				/* 0x008c */
-> +	union {
-> +		u64 reg;			/* 0x0090..0x0094 */
-> +		struct {
-> +			u32 lsb;		/* 0x0090 */
-> +			u32 msb;		/* 0x0094 */
-> +		};
-> +	} msi_stop;
-> +	union {
-> +		u64 reg;			/* 0x0098..0x009c */
-> +		struct {
-> +			u32 lsb;		/* 0x0098 */
-> +			u32 msb;		/* 0x009c */
-> +		};
-> +	} msi_watermark;
-> +	union {
-> +		u64 reg;			/* 0x00a0..0x00a4 */
-> +		struct {
-> +			u32 lsb;		/* 0x00a0 */
-> +			u32 msb;		/* 0x00a4 */
-> +		};
-> +	} msi_abort;
-> +	u32 msi_msgdata;			/* 0x00a8 */
-> +} __packed;
-> +
-> +struct dw_hdma_v0_ch {
-> +	struct dw_hdma_v0_ch_regs wr;		/* 0x0000 */
-> +	struct dw_hdma_v0_ch_regs rd;		/* 0x0100 */
-> +} __packed;
-> +
-> +struct dw_hdma_v0_regs {
-> +	struct dw_hdma_v0_ch ch[HDMA_V0_MAX_NR_CH];	/* 0x0000..0x0fa8 */
-> +} __packed;
-> +
-> +struct dw_hdma_v0_lli {
-> +	u32 control;
-> +	u32 transfer_size;
-> +	union {
-> +		u64 reg;
-> +		struct {
-> +			u32 lsb;
-> +			u32 msb;
-> +		};
-> +	} sar;
-> +	union {
-> +		u64 reg;
-> +		struct {
-> +			u32 lsb;
-> +			u32 msb;
-> +		};
-> +	} dar;
-> +} __packed;
-> +
-> +struct dw_hdma_v0_llp {
-> +	u32 control;
-> +	u32 reserved;
-> +	union {
-> +		u64 reg;
-> +		struct {
-> +			u32 lsb;
-> +			u32 msb;
-> +		};
-> +	} llp;
-> +} __packed;
-> +
-> +#endif /* _DW_HDMA_V0_REGS_H */
-> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-> index ed401c965a87..3080747689f6 100644
-> --- a/include/linux/dma/edma.h
-> +++ b/include/linux/dma/edma.h
-> @@ -48,7 +48,8 @@ struct dw_edma_plat_ops {
->  enum dw_edma_map_format {
->  	EDMA_MF_EDMA_LEGACY = 0x0,
->  	EDMA_MF_EDMA_UNROLL = 0x1,
-> -	EDMA_MF_HDMA_COMPAT = 0x5
-> +	EDMA_MF_HDMA_COMPAT = 0x5,
-> +	EDMA_MF_HDMA_NATIVE = 0x7,
->  };
->  
->  /**
-> -- 
-> 2.34.1
-> 
+On Fri, Mar 03 2023, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+
+> On 03/03/2023 12:08, Andrew Jones wrote:
+>> On Fri, Mar 03, 2023 at 11:39:05AM +0000, Jean-Philippe Brucker wrote:
+>>> On Fri, Mar 03, 2023 at 09:54:47AM +0000, Suzuki K Poulose wrote:
+>>>> On 03/03/2023 09:46, Jean-Philippe Brucker wrote:
+>>>>> On Thu, Mar 02, 2023 at 07:12:24AM +0900, Itaru Kitayama wrote:
+>>>>>>>> I've tried your series in Real on CCA Host, but the KVM arch init
+>>>>>>>> emits an Invalid argument error and terminates.
+>>>>>
+>>>>> This was the KVM_SET_ONE_REG for the SVE vector size. During my tests I
+>>>>> didn't enable SVE in the host but shrinkwrap enables more options.
+>>>>
+>>>> Does the Qemu check for SVE capability on /dev/kvm ? For kvmtool, we
+>>>> changed to using the VM instance and that would prevent using SVE,
+>>>> until the RMM supports it.
+>>>
+>>> Yes, QEMU does check the SVE cap on /dev/kvm. I can propose changing it or
+>>> complementing it with a VM check in my next version, it seems to work
+>>> (though I need to double-check the VM fd lifetime). Same goes for
+>>> KVM_CAP_STEAL_TIME, which I need to disable explicitly at the moment.
+>> 
+>> I'm probably missing something since I haven't looked at this, but I'm
+>> wondering what the "VM instance" check is and why it should be necessary.
+>
+> Userspace can check for a KVM_CAP_ on KVM fd (/dev/kvm) or a VM fd
+> (returned via KVM_CREATE_VM).
+>
+>> Shouldn't KVM only expose capabilities which it can provide? I.e. the
+>
+> Correct, given now that we have different "types" of VMs possible on
+> Arm64, (Normal vs Realm vs pVM), the capabilities of each of these
+> could be different and thus we should use the KVM_CAP_ on the VM fd (
+> referred to VM instance above) and not the generic KVM fd.
+
+Using the vm ioctl is even encouraged in the doc for
+KVM_CHECK_EXTENSION:
+
+"Based on their initialization different VMs may have different capabilities.
+It is thus encouraged to use the vm ioctl to query for capabilities"
+
+It would probably make sense to convert QEMU to use the vm ioctl
+everywhere (the wrapper falls back to the global version on failure
+anyway.)
+
+>
+>> "VM instance" check should be done by KVM and, when it fails, the SVE and
+>> steal-time capabilities should return 0.
+>> 
+>
+> Correct.
+>
+> Suzuki
+>
+>> Thanks,
+>> drew
+
