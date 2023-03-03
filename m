@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11296A8EA6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40A06A8EB4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjCCBY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 20:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
+        id S229816AbjCCB2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 20:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCCBY0 (ORCPT
+        with ESMTP id S229487AbjCCB2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 20:24:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2B11557C;
-        Thu,  2 Mar 2023 17:24:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 971E7616CA;
-        Fri,  3 Mar 2023 01:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A644C433D2;
-        Fri,  3 Mar 2023 01:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677806665;
-        bh=Lcl+ON/n2tfB00oe/DNX6nE8UIFnf+CyFVbbzShggPY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B4SSwe/VEOuHUs08IN2lCHh6lAGJekITYyAVHZBN3waqQPxT37eoGELMc5MCfKCVx
-         okRRbO73SjuW/xnBRIIuFWiud8kDRPP9KWFEjGZbuug4Mt8bMRANkhHmOkCf/eA9hF
-         tRiyfrlQlAHpJD6wWVlXjUUB1aMV33XiXFNqqVHY9Zs9nZ2FUB3fpWSyaf8fECu70q
-         XJ2H74i/GOa/j20L7PA5nP/uckoiwXRRTDKMzCcYukDmBdPIJMhwbwiZvXSKL7mIqK
-         bLmdVgbRtlTok8WSyyq9IZMZ1j3oIJDkKMfPSXIYTrPJ7/iNvWwKILky5s9teEMTXg
-         KGuNTGZoN0agw==
-Date:   Thu, 2 Mar 2023 18:24:21 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@lst.de, ming.lei@redhat.com, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: Re: [PATCH] blk-mq: quiesce queue while reallocating hctxs
-Message-ID: <ZAFMRUo9fdcJh/JD@kbusch-mbp.dhcp.thefacebook.com>
-References: <20230221092436.3570192-1-yukuai1@huaweicloud.com>
+        Thu, 2 Mar 2023 20:28:40 -0500
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B78173B;
+        Thu,  2 Mar 2023 17:28:37 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vcyz2mq_1677806914;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vcyz2mq_1677806914)
+          by smtp.aliyun-inc.com;
+          Fri, 03 Mar 2023 09:28:35 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     john.johansen@canonical.com
+Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] AppArmor: Fix some kernel-doc comments
+Date:   Fri,  3 Mar 2023 09:28:33 +0800
+Message-Id: <20230303012833.57690-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221092436.3570192-1-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 05:24:36PM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> commit 8237c01f1696 ("blk-mq: use quiesced elevator switch when
-> reinitializing queues") add quiesce queue while switching elevator,
-> however, if old elevator is none, queue is still not quiesced. Hence
-> reallocating hctxs can concurrent with run queue. Fix it by also
-> quiesce queue in the beginning of __blk_mq_update_nr_hw_queues().
+Make the description of @table to @strs in function unpack_trans_table()
+to silence the warnings:
 
-Is this actually fixing anything? The quiesced elevator switch was to prevent
-use-after-free from an elevator being torn down, but if you are not switching
-elevators, then what resource does quiescing protect?
+security/apparmor/policy_unpack.c:456: warning: Function parameter or member 'strs' not described in 'unpack_trans_table'
+security/apparmor/policy_unpack.c:456: warning: Excess function parameter 'table' description in 'unpack_trans_table'
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4332
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ security/apparmor/policy_unpack.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
+index cf2ceec40b28..c3f44f1deb07 100644
+--- a/security/apparmor/policy_unpack.c
++++ b/security/apparmor/policy_unpack.c
+@@ -448,7 +448,7 @@ static struct aa_dfa *unpack_dfa(struct aa_ext *e, int flags)
+ /**
+  * unpack_trans_table - unpack a profile transition table
+  * @e: serialized data extent information  (NOT NULL)
+- * @table: str table to unpack to (NOT NULL)
++ * @strs: str table to unpack to (NOT NULL)
+  *
+  * Returns: true if table successfully unpacked or not present
+  */
+-- 
+2.20.1.7.g153144c
+
