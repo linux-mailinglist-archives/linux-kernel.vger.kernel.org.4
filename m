@@ -2,158 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DDD6A9A06
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E876C6A9A0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjCCPAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 10:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S229699AbjCCPAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 10:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbjCCPAF (ORCPT
+        with ESMTP id S231282AbjCCPAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 10:00:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6473521C2
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:59:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677855557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WWWXXqiDyIc6Rr6qCB3dXr2H5ZRa+ZVUM0XNMHhCm9k=;
-        b=ZKuiy8qi01waGUVUrw0STRx6K9GO26ilZk9Uqfyo3aXk39i3hc6T189TmicDrvaVk1u76V
-        rtbaOEAPAD5eHaycHxvjQxXjkPh5IbQGiw0wUujxCpPQMi9nK77tvqsUT4V6lgRNvUtunh
-        qC9I6KvZ/E4ADLj0DGSN+ZUXsnjTT/U=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-275-5YSxFOZUOdKBCSWPGaLg_A-1; Fri, 03 Mar 2023 09:59:17 -0500
-X-MC-Unique: 5YSxFOZUOdKBCSWPGaLg_A-1
-Received: by mail-qk1-f198.google.com with SMTP id d4-20020a05620a166400b00742859d0d4fso1505032qko.15
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:59:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677855556;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WWWXXqiDyIc6Rr6qCB3dXr2H5ZRa+ZVUM0XNMHhCm9k=;
-        b=57fAkevcPywuC2yeCxM1Izi5Yn0ZTEm7uavO36qDTY994cODGae77yMI4agLEENKbp
-         Xjxy/baPGkaIqHFcumoOh/zJVOqbsKRh9ib+oSoevNKurSz75BuGelCiE7xUG02b8wzq
-         EaWq6p00CGJjmJW9zbBOMWfBYkGPgUoTqyb0XHj6HkKjv/FLsyqcvqCa7WVdWHX9lXDb
-         CoP8wi4dR10uiBKhYv8WGcmTn+LfDx+OdDDVpho5m63r3w24/bD7SFk5LkZikMRr7Xy9
-         1M/WgoMQzwjZyOoHgjSG9+dhle+FJzBwIM6/vhXZzsKxp3/eNgpI/xdqPWgxCzBOHbxB
-         ladQ==
-X-Gm-Message-State: AO0yUKWe0+wKCRPGu9hvQswqPrrtuxlA/fj/a08zOGA+7ZNkc+df2BEE
-        /jN4kBhqeWOlF/suSX+Soi3c8fVXdtvSCvZ1zeh5NaU603uoXNqmXRyuAoef8ZnTuDkc+z9Qz9O
-        YUZit4CZfGeFyDp9o5j14r7bQRLPUAA==
-X-Received: by 2002:a0c:f251:0:b0:56e:99ea:966c with SMTP id z17-20020a0cf251000000b0056e99ea966cmr2512250qvl.4.1677855556048;
-        Fri, 03 Mar 2023 06:59:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set+ZeM2sghlJ2Lwmz8RHXDFH1s49AZ4Mnv5nWJG26/AZtTAFptUUX4noZn/0olp3Qqjd2BrzPw==
-X-Received: by 2002:a0c:f251:0:b0:56e:99ea:966c with SMTP id z17-20020a0cf251000000b0056e99ea966cmr2512232qvl.4.1677855555777;
-        Fri, 03 Mar 2023 06:59:15 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id q79-20020a374352000000b0073b27323c6dsm1757032qka.136.2023.03.03.06.59.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 06:59:15 -0800 (PST)
-Date:   Fri, 3 Mar 2023 09:59:14 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Zach O'Keefe <zokeefe@google.com>
-Cc:     Yang Shi <shy828301@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        David Stevens <stevensd@chromium.org>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH v2] mm/khugepaged: alloc_charge_hpage() take care of mem
- charge errors
-Message-ID: <ZAILQkpi7uomSBmb@x1n>
-References: <20230222195247.791227-1-peterx@redhat.com>
- <CAHbLzkp3PwpXir=YUuWmxpW5VXEba81UKb3YOyq+snKTZGjqDA@mail.gmail.com>
- <20230302232150.vvmszlrdzqm5ndjq@google.com>
+        Fri, 3 Mar 2023 10:00:22 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDF462333;
+        Fri,  3 Mar 2023 07:00:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677855619; x=1709391619;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TMNP08vwbk1/xlZyyZJWhOWKVuIm24PIkc1+069668g=;
+  b=k7UXAo8ANQzf/qRfG6hRzQAUlzcDhzGyiEGMk6TgFehp8NeGweN0YZbK
+   DBKWeK+UJg9FpEUvVWEcvyCoOcDYjV5DP9D7kjeG6T6gKARpLeuUcPKhl
+   gmBAT6yIpK9W1UQshoTILqFQmpNvjWjcvzwe0ULHBRy9UPEK5qhOfXsfj
+   +0U7Sy6vRRN1zVoXa8bCy8Td6LA2nv03iRRqrTfy9SZxjgBe+sGDi+h3u
+   w5MP47MzmIvI5rA2nhUOwIEQp4CvA/vet1QkQi+7N5ccE2FwI9xZClc+G
+   3Ye/gqgBupmv9n5V29j3C281vcQJuRTREaaJEEVDUXaB9og5FwzxQq9DZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="332539990"
+X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
+   d="scan'208";a="332539990"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 07:00:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="921142115"
+X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
+   d="scan'208";a="921142115"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Mar 2023 07:00:16 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pY6tL-0001U8-2R;
+        Fri, 03 Mar 2023 15:00:15 +0000
+Date:   Fri, 3 Mar 2023 22:59:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Taniya Das <quic_tdas@quicinc.com>, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>
+Subject: Re: [PATCH 2/2] clk: qcom: lpass: Initialize start_index
+Message-ID: <202303032224.tuvDnbbB-lkp@intel.com>
+References: <20230303092859.22094-3-quic_tdas@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230302232150.vvmszlrdzqm5ndjq@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230303092859.22094-3-quic_tdas@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 03:21:50PM -0800, Zach O'Keefe wrote:
-> On Feb 22 14:53, Yang Shi wrote:
-> > On Wed, Feb 22, 2023 at 11:52 AM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > If memory charge failed, instead of returning the hpage but with an error,
-> > > allow the function to cleanup the folio properly, which is normally what a
-> > > function should do in this case - either return successfully, or return
-> > > with no side effect of partial runs with an indicated error.
-> > >
-> > > This will also avoid the caller calling mem_cgroup_uncharge() unnecessarily
-> > > with either anon or shmem path (even if it's safe to do so).
-> > 
-> > Thanks for the cleanup. Reviewed-by: Yang Shi <shy828301@gmail.com>
-> > 
-> > >
-> > > Cc: Yang Shi <shy828301@gmail.com>
-> > > Reviewed-by: David Stevens <stevensd@chromium.org>
-> > > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> > > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > > ---
-> > > v1->v2:
-> > > - Enhance commit message, drop "Fixes:" and "Cc: stable" tag, add R-bs.
-> > > ---
-> > >  mm/khugepaged.c | 9 ++++++++-
-> > >  1 file changed, 8 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > > index 8dbc39896811..941d1c7ea910 100644
-> > > --- a/mm/khugepaged.c
-> > > +++ b/mm/khugepaged.c
-> > > @@ -1063,12 +1063,19 @@ static int alloc_charge_hpage(struct page **hpage, struct mm_struct *mm,
-> > >         gfp_t gfp = (cc->is_khugepaged ? alloc_hugepage_khugepaged_gfpmask() :
-> > >                      GFP_TRANSHUGE);
-> > >         int node = hpage_collapse_find_target_node(cc);
-> > > +       struct folio *folio;
-> > >
-> > >         if (!hpage_collapse_alloc_page(hpage, gfp, node, &cc->alloc_nmask))
-> > >                 return SCAN_ALLOC_HUGE_PAGE_FAIL;
-> > > -       if (unlikely(mem_cgroup_charge(page_folio(*hpage), mm, gfp)))
-> > > +
-> > > +       folio = page_folio(*hpage);
-> > > +       if (unlikely(mem_cgroup_charge(folio, mm, gfp))) {
-> > > +               folio_put(folio);
-> > > +               *hpage = NULL;
-> > >                 return SCAN_CGROUP_CHARGE_FAIL;
-> > > +       }
-> > >         count_memcg_page_event(*hpage, THP_COLLAPSE_ALLOC);
-> > > +
-> > >         return SCAN_SUCCEED;
-> > >  }
-> > >
-> > > --
-> > > 2.39.1
-> > >
-> > 
-> 
-> Thanks, Peter.
-> 
-> Can we also get rid of the unnecessary mem_cgroup_uncharge() calls while we're
-> at it? Maybe this deserves a separate patch, but after Yang's cleanup of the
-> !NUMA case (where we would preallocate a hugepage) we can depend on put_page()
-> do take care of that for us.
+Hi Taniya,
 
-Makes sense to me.  I can prepare a separate patch to clean it up.
+Thank you for the patch! Yet something to improve:
 
-> 
-> Regardless, can have my
-> 
-> Reviewed-by: Zach O'Keefe <zokeefe@google.com>
+[auto build test ERROR on clk/clk-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Taniya-Das/clk-qcom-common-Handle-invalid-index-error/20230303-173158
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230303092859.22094-3-quic_tdas%40quicinc.com
+patch subject: [PATCH 2/2] clk: qcom: lpass: Initialize start_index
+config: hexagon-randconfig-r021-20230302 (https://download.01.org/0day-ci/archive/20230303/202303032224.tuvDnbbB-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d26ce274e7b0af8a6c6985630d1da8e257c9031d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Taniya-Das/clk-qcom-common-Handle-invalid-index-error/20230303-173158
+        git checkout d26ce274e7b0af8a6c6985630d1da8e257c9031d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/qcom/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303032224.tuvDnbbB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/clk/qcom/lpassaudiocc-sc7280.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/clk/qcom/lpassaudiocc-sc7280.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/clk/qcom/lpassaudiocc-sc7280.c:13:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/clk/qcom/lpassaudiocc-sc7280.c:705:56: error: unexpected ';' before '}'
+           .start_index = LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC;
+                                                                 ^
+   6 warnings and 1 error generated.
+
+
+vim +705 drivers/clk/qcom/lpassaudiocc-sc7280.c
+
+   700	
+   701	static const struct qcom_cc_desc lpass_audio_cc_sc7280_desc = {
+   702		.config = &lpass_audio_cc_sc7280_regmap_config,
+   703		.clks = lpass_audio_cc_sc7280_clocks,
+   704		.num_clks = ARRAY_SIZE(lpass_audio_cc_sc7280_clocks),
+ > 705		.start_index = LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC;
+   706	};
+   707	
 
 -- 
-Peter Xu
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
