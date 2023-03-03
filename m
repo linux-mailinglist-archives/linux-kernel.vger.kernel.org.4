@@ -2,295 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DC96A9182
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6006A9186
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjCCHN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 02:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
+        id S229652AbjCCHPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 02:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCCHN4 (ORCPT
+        with ESMTP id S229644AbjCCHPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 02:13:56 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254E716895
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 23:13:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677827631; x=1709363631;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=s0IFmdT7IJACtVfSrsDyIVHVJ5Wmt3QuzZohLrmgr8o=;
-  b=kcvDa2V7xmFwMdRUYUbGqoUMeM5pc5D5NSyaYUNfwxXi00uTP9dAYps1
-   M5knkqxwagDMAa4/iMrzPvRQMfe+Jp1bDtbfMw15moao+EIMgEy6du28R
-   L5uzXMt2IEElQLuthYOdrA/jbTbw3bg5pyLqqxodf9VjtCJG5jIsD+maS
-   MP4aRbpAGEOTsyG654YSawX0Xz2Qq0RRQXFGqHA8z5fnjkjd2UKcsVzZz
-   odXpAWZSUGjBvnFbSUUtWivxdfIBMImdUYfholU4bMv4+W78737jaXoF9
-   /MKg5yYKKZBtojV7fVhey7VtGr2flTon4dGCv62I8aEhHYXfL0bczhesN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="336495444"
-X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
-   d="asc'?scan'208";a="336495444"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 23:13:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="799141534"
-X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
-   d="asc'?scan'208";a="799141534"
-Received: from debian-skl.sh.intel.com (HELO debian-skl) ([10.239.159.40])
-  by orsmga004.jf.intel.com with ESMTP; 02 Mar 2023 23:13:46 -0800
-Date:   Fri, 3 Mar 2023 15:12:16 +0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915/gvt: Make use of idr_find and
- idr_for_each_entry in dmabuf
-Message-ID: <ZAGd0CeJ1OF6yCfg@debian-scheme>
-Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <20230302115318.79487-1-cai.huoqing@linux.dev>
+        Fri, 3 Mar 2023 02:15:09 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109CB36095
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 23:15:08 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id x1so1009507uav.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 23:15:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677827707;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LbAx3zrsghkNB2fPEWcun6O//3gK+MP7cvmbhEI7oA8=;
+        b=O4xzcSdxn0PbR0GcXOW0YIU5hrgByvn4AR9KWeokvSrN+lrerte2JwUdkK4W6KWq2V
+         SV/ua0r5PbEWMKR/yTWDR0GzhfQWbwyTnt9xxUdudWf8XBgjHguv52MiaZt5uuaN+OB4
+         8lo40fzwrGsdgGOvmTB14mXFn1xG+7W/uYcaQu7J0dN6CKdcehDL5Gk5Jdov5/x30vjB
+         OmJrsbfslchAHXyfz03hPN2D7C4FTCRaSXAPYyCiH3uFwbX3y6DT51kA6h9BDlMKUl85
+         vEZ2MNDartu/MutABjWbHolGkAwhzByxeJlJbP4CQ9tGdW0KoH/NqasyzXqPXJjhgE22
+         5uBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677827707;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LbAx3zrsghkNB2fPEWcun6O//3gK+MP7cvmbhEI7oA8=;
+        b=2VZMiWyi+o8oXQeNsGTKfZruXCq4rbSfFMtMjeSnDrRSNyuAJzpcF2eo2zcbQTqmCE
+         daLWTSyy0nueQs58kfC4QPaklfQ/Oa7sask6BwwpDKYQOcKn8H471w6g74UWZmpEuYKo
+         lRDsscwk3vwbn19Md6JRSyTRdNou5nZTwFLrVHQkD/Ma3/ZbpbQRmtWWci1yr+Eo8Ueo
+         XYkR2PK4DDYNhR1bkzh/CvRS2VCFhqGWzTzJ3Y4K+akJRoHS5vBAqIqN11cjcH0mbCf2
+         r6iVTOjeN5Of4nsRMYzgF5pagBuhfBLD98/6Gx+MGn2JDZ8Qo44CeWTWNq6ts4VVl0eW
+         GBgA==
+X-Gm-Message-State: AO0yUKWlwC243Q/WALt3ykoU/LDYeLYsgS85s3glDE4WgZXuGQEu0Jsv
+        VmNrvxe5HMxh2qh/PT+cdyzJ69Z9CkNQtQ6veZDi6V/4MOcLS815VXG5DA==
+X-Google-Smtp-Source: AK7set8TolMdU86SOYcXBFVvGGoqEHdTSp18dB8blZWWucp5ieOP8ejPaNkC653AzURZYzsbwAn20wJ4gg+UERHbZEI=
+X-Received: by 2002:a9f:3017:0:b0:688:c23f:c22f with SMTP id
+ h23-20020a9f3017000000b00688c23fc22fmr265965uab.1.1677827707018; Thu, 02 Mar
+ 2023 23:15:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="VburrAZD58uFFpgd"
-Content-Disposition: inline
-In-Reply-To: <20230302115318.79487-1-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302013822.1808711-1-sboyd@kernel.org> <20230302013822.1808711-2-sboyd@kernel.org>
+In-Reply-To: <20230302013822.1808711-2-sboyd@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 3 Mar 2023 15:14:55 +0800
+Message-ID: <CABVgOSkxOxpaHVtq1YpvNEshTZ3nic1p7NjV5DPdz066=tiS-A@mail.gmail.com>
+Subject: Re: [PATCH 1/8] dt-bindings: Add linux,kunit binding
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000007dfa5c05f5f9b411"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--0000000000007dfa5c05f5f9b411
+Content-Type: text/plain; charset="UTF-8"
 
---VburrAZD58uFFpgd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Document the linux,kunit board compatible string. This board is loaded
+> into the Linux kernel when KUnit is testing devicetree dependent code.
 
-On 2023.03.02 19:53:18 +0800, Cai Huoqing wrote:
-> This patch uses the already existing IDR mechanism to simplify
-> and improve the dmabuf code.
->=20
-> Using 'vgpu.object_idr' directly instead of 'dmabuf_obj_list_head'
-> or 'dmabuf.list', because the dmabuf_obj can be found by 'idr_find'
-> or 'idr_for_each_entry'.
->=20
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+As with the series as a whole, this might need to change a little bit
+if we want to either use devicetree overlays and/or other
+architectures.
+
+That being said, I'm okay with having this until then: the only real
+topic for bikeshedding is the name.
+- Is KUnit best as a board name, or part of the vendor name?
+- Do we want to include the architecture in the name?
+Should it be "linux,kunit", "linux-kunit,uml", "linux,kunit-uml", etc?
+
+
+>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <davidgow@google.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 > ---
->  drivers/gpu/drm/i915/gvt/dmabuf.c | 69 +++++++------------------------
->  drivers/gpu/drm/i915/gvt/dmabuf.h |  1 -
->  drivers/gpu/drm/i915/gvt/gvt.h    |  1 -
->  drivers/gpu/drm/i915/gvt/vgpu.c   |  1 -
->  4 files changed, 16 insertions(+), 56 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.c b/drivers/gpu/drm/i915/gvt=
-/dmabuf.c
-> index 6834f9fe40cf..7933bd843ae8 100644
-> --- a/drivers/gpu/drm/i915/gvt/dmabuf.c
-> +++ b/drivers/gpu/drm/i915/gvt/dmabuf.c
-> @@ -133,21 +133,15 @@ static void dmabuf_gem_object_free(struct kref *kre=
-f)
->  	struct intel_vgpu_dmabuf_obj *obj =3D
->  		container_of(kref, struct intel_vgpu_dmabuf_obj, kref);
->  	struct intel_vgpu *vgpu =3D obj->vgpu;
-> -	struct list_head *pos;
->  	struct intel_vgpu_dmabuf_obj *dmabuf_obj;
-> +	int id;
-> =20
-> -	if (vgpu && test_bit(INTEL_VGPU_STATUS_ACTIVE, vgpu->status) &&
-> -	    !list_empty(&vgpu->dmabuf_obj_list_head)) {
-> -		list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
-> -			dmabuf_obj =3D list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-> -			if (dmabuf_obj =3D=3D obj) {
-> -				list_del(pos);
-> -				idr_remove(&vgpu->object_idr,
-> -					   dmabuf_obj->dmabuf_id);
-> -				kfree(dmabuf_obj->info);
-> -				kfree(dmabuf_obj);
-> -				break;
-> -			}
-> +	if (vgpu && test_bit(INTEL_VGPU_STATUS_ACTIVE, vgpu->status)) {
-> +		idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
-> +			idr_remove(&vgpu->object_idr, id);
-> +			kfree(dmabuf_obj->info);
-> +			kfree(dmabuf_obj);
+>  .../bindings/kunit/linux,kunit.yaml           | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/kunit/linux,kunit.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/kunit/linux,kunit.yaml b/Documentation/devicetree/bindings/kunit/linux,kunit.yaml
+> new file mode 100644
+> index 000000000000..dfe6da4796e8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/kunit/linux,kunit.yaml
+> @@ -0,0 +1,24 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/kunit/linux,kunit.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: KUnit
+> +
+> +maintainers:
+> +  - Brendan Higgins <brendanhiggins@google.com>
+> +  - David Gow <davidgow@google.com>
+> +
+> +description:
+> +  KUnit board used to unit test the Linux kernel in User Mode Linux (UML).
+> +
+> +properties:
+> +  $nodename:
+> +    const: "/"
+> +  compatible:
+> +    const: linux,kunit
+> +
+> +additionalProperties: true
+> +
+> +...
+> --
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+>
 
-This is wrong, it is not to free all dmabuf objects, but just for target on=
-e.
+--0000000000007dfa5c05f5f9b411
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> +			break;
->  		}
->  	} else {
->  		/* Free the orphan dmabuf_objs here */
-> @@ -340,13 +334,11 @@ static struct intel_vgpu_dmabuf_obj *
->  pick_dmabuf_by_info(struct intel_vgpu *vgpu,
->  		    struct intel_vgpu_fb_info *latest_info)
->  {
-> -	struct list_head *pos;
->  	struct intel_vgpu_fb_info *fb_info;
->  	struct intel_vgpu_dmabuf_obj *dmabuf_obj =3D NULL;
-> -	struct intel_vgpu_dmabuf_obj *ret =3D NULL;
-> +	int id;
-> =20
-> -	list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
-> -		dmabuf_obj =3D list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-> +	idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
->  		if (!dmabuf_obj->info)
->  			continue;
-> =20
-> @@ -357,31 +349,11 @@ pick_dmabuf_by_info(struct intel_vgpu *vgpu,
->  		    (fb_info->drm_format_mod =3D=3D latest_info->drm_format_mod) &&
->  		    (fb_info->drm_format =3D=3D latest_info->drm_format) &&
->  		    (fb_info->width =3D=3D latest_info->width) &&
-> -		    (fb_info->height =3D=3D latest_info->height)) {
-> -			ret =3D dmabuf_obj;
-> -			break;
-> -		}
-
-Maybe just keep original code's use of extra ret to not include this cumber=
-some diff?
-
-> -	}
-> -
-> -	return ret;
-> -}
-> -
-> -static struct intel_vgpu_dmabuf_obj *
-> -pick_dmabuf_by_num(struct intel_vgpu *vgpu, u32 id)
-> -{
-> -	struct list_head *pos;
-> -	struct intel_vgpu_dmabuf_obj *dmabuf_obj =3D NULL;
-> -	struct intel_vgpu_dmabuf_obj *ret =3D NULL;
-> -
-> -	list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
-> -		dmabuf_obj =3D list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-> -		if (dmabuf_obj->dmabuf_id =3D=3D id) {
-> -			ret =3D dmabuf_obj;
-> -			break;
-> -		}
-> +		    (fb_info->height =3D=3D latest_info->height))
-> +			return dmabuf_obj;
->  	}
-> =20
-> -	return ret;
-> +	return dmabuf_obj;
->  }
-> =20
->  static void update_fb_info(struct vfio_device_gfx_plane_info *gvt_dmabuf,
-> @@ -477,11 +449,6 @@ int intel_vgpu_query_plane(struct intel_vgpu *vgpu, =
-void *args)
-> =20
->  	update_fb_info(gfx_plane_info, &fb_info);
-> =20
-> -	INIT_LIST_HEAD(&dmabuf_obj->list);
-> -	mutex_lock(&vgpu->dmabuf_lock);
-> -	list_add_tail(&dmabuf_obj->list, &vgpu->dmabuf_obj_list_head);
-> -	mutex_unlock(&vgpu->dmabuf_lock);
-> -
->  	gvt_dbg_dpy("vgpu%d: %s new dmabuf_obj ref %d, id %d\n", vgpu->id,
->  		    __func__, kref_read(&dmabuf_obj->kref), ret);
-> =20
-> @@ -508,7 +475,7 @@ int intel_vgpu_get_dmabuf(struct intel_vgpu *vgpu, un=
-signed int dmabuf_id)
-> =20
->  	mutex_lock(&vgpu->dmabuf_lock);
-> =20
-> -	dmabuf_obj =3D pick_dmabuf_by_num(vgpu, dmabuf_id);
-> +	dmabuf_obj =3D idr_find(&vgpu->object_idr, dmabuf_id);
->  	if (dmabuf_obj =3D=3D NULL) {
->  		gvt_vgpu_err("invalid dmabuf id:%d\n", dmabuf_id);
->  		ret =3D -EINVAL;
-> @@ -570,23 +537,19 @@ int intel_vgpu_get_dmabuf(struct intel_vgpu *vgpu, =
-unsigned int dmabuf_id)
-> =20
->  void intel_vgpu_dmabuf_cleanup(struct intel_vgpu *vgpu)
->  {
-> -	struct list_head *pos, *n;
->  	struct intel_vgpu_dmabuf_obj *dmabuf_obj;
-> +	int id;
-> =20
->  	mutex_lock(&vgpu->dmabuf_lock);
-> -	list_for_each_safe(pos, n, &vgpu->dmabuf_obj_list_head) {
-> -		dmabuf_obj =3D list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-> +	idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
->  		dmabuf_obj->vgpu =3D NULL;
-> =20
-> -		idr_remove(&vgpu->object_idr, dmabuf_obj->dmabuf_id);
-> -		list_del(pos);
-> -
-> +		idr_remove(&vgpu->object_idr, id);
->  		/* dmabuf_obj might be freed in dmabuf_obj_put */
->  		if (dmabuf_obj->initref) {
->  			dmabuf_obj->initref =3D false;
->  			dmabuf_obj_put(dmabuf_obj);
->  		}
-> -
->  	}
->  	mutex_unlock(&vgpu->dmabuf_lock);
->  }
-> diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.h b/drivers/gpu/drm/i915/gvt=
-/dmabuf.h
-> index 3dcdb6570eda..93c0e00bdab9 100644
-> --- a/drivers/gpu/drm/i915/gvt/dmabuf.h
-> +++ b/drivers/gpu/drm/i915/gvt/dmabuf.h
-> @@ -57,7 +57,6 @@ struct intel_vgpu_dmabuf_obj {
->  	__u32 dmabuf_id;
->  	struct kref kref;
->  	bool initref;
-> -	struct list_head list;
->  };
-> =20
->  int intel_vgpu_query_plane(struct intel_vgpu *vgpu, void *args);
-> diff --git a/drivers/gpu/drm/i915/gvt/gvt.h b/drivers/gpu/drm/i915/gvt/gv=
-t.h
-> index 2d65800d8e93..1100c789f207 100644
-> --- a/drivers/gpu/drm/i915/gvt/gvt.h
-> +++ b/drivers/gpu/drm/i915/gvt/gvt.h
-> @@ -211,7 +211,6 @@ struct intel_vgpu {
-> =20
->  	struct dentry *debugfs;
-> =20
-> -	struct list_head dmabuf_obj_list_head;
->  	struct mutex dmabuf_lock;
->  	struct idr object_idr;
->  	struct intel_vgpu_vblank_timer vblank_timer;
-> diff --git a/drivers/gpu/drm/i915/gvt/vgpu.c b/drivers/gpu/drm/i915/gvt/v=
-gpu.c
-> index 08ad1bd651f1..0a511cfef067 100644
-> --- a/drivers/gpu/drm/i915/gvt/vgpu.c
-> +++ b/drivers/gpu/drm/i915/gvt/vgpu.c
-> @@ -329,7 +329,6 @@ int intel_gvt_create_vgpu(struct intel_vgpu *vgpu,
->  	vgpu->sched_ctl.weight =3D conf->weight;
->  	mutex_init(&vgpu->vgpu_lock);
->  	mutex_init(&vgpu->dmabuf_lock);
-> -	INIT_LIST_HEAD(&vgpu->dmabuf_obj_list_head);
->  	INIT_RADIX_TREE(&vgpu->page_track_tree, GFP_KERNEL);
->  	idr_init_base(&vgpu->object_idr, 1);
->  	intel_vgpu_init_cfg_space(vgpu, 1);
-> --=20
-> 2.34.1
->=20
-
---VburrAZD58uFFpgd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCZAGdywAKCRCxBBozTXgY
-J7AvAKCANbRmC8f7GuSmxqq1oYa2VFP1RQCeMhxxy/zqe2EQAxG16vXIbISGjpQ=
-=uJOk
------END PGP SIGNATURE-----
-
---VburrAZD58uFFpgd--
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAN
+Gn9wwn7/iyo7392BuZcmGaRNzPxkjMguHPzhZibVgzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMDMwNzE1MDdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEActIxaogsjhUHr/AZvEzf
+cgf3waXazmYuGqMW+Ma9nz+ycFzWmhzykCR/jdrCR0QmkJLFJ64z0V7wDd0sEOI4+xrSKPTKZtHE
+ahfk93QtkzeGQb/dmIqv9S3FEwxzefEUh67rKLf42qQI3nQ49vDWqA9kID9q/L5wFLw2ANjyt2/e
+5cTB3JQ6UyYOWoRPGRi9DWxeRSo47IloRftZ/W9LZ8ZKhFpVxhP0btyFZXZ6+mt9KX2mrmDWsTOP
+DUQ7KngLyWJvhXuoCvRhHkNt3LhVIM80bYdsFwD6FtwYo9AsbpcvOSjLEHuEiAiqTxTcJuSE7pju
+KpPiM7N7Jfmd/hDtew==
+--0000000000007dfa5c05f5f9b411--
