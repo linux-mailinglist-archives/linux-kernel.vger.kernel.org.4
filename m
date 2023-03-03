@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241EC6A921F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AC86A9223
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjCCIFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S229953AbjCCIGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 03:06:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCCIFO (ORCPT
+        with ESMTP id S229946AbjCCIGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:05:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EB2559EE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:04:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677830662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s8QnxRpYQPEiLn8XmuErYmk8O10pIsFngcfQcnQ90xY=;
-        b=NXlQAWcllUXRV1QijanlvM1TiCDCYlvyN6FQxtyWmG3ddp5Z9tJGors4QRIeS7ek02sFqx
-        kJejqQChdpAvAi44PsF+c09Fd3UcqOyIOTn2uwQpagbzIwuXDWhkmMC77rbbcZvLdoYFfm
-        4OIAP27l4a4CPDsNmldbpx2FvnQ5tSA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-669-xogSDKKYNyqo2asL0GendQ-1; Fri, 03 Mar 2023 03:04:20 -0500
-X-MC-Unique: xogSDKKYNyqo2asL0GendQ-1
-Received: by mail-wm1-f69.google.com with SMTP id m28-20020a05600c3b1c00b003e7d4662b83so2489079wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 00:04:19 -0800 (PST)
+        Fri, 3 Mar 2023 03:06:30 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A728B559E6;
+        Fri,  3 Mar 2023 00:06:23 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so1514851pjz.1;
+        Fri, 03 Mar 2023 00:06:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677830783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2GNgFypKn/0hc5Isav8O5f3I0hf4LLGb3YNTok/vC30=;
+        b=Ux8u3jgY4xPsXvtIDLngtm6THaaqQKr8ISSap3TtA42a9SIGaO7kOXmvJtURJTC7eU
+         ucpvgT3jdlM5QrvkTUaWCkj/ksmrJtpcp9sbpGb25MGQQ32ucJSJtaVBUnV+zGoSaOMU
+         qdLfegpB4yjaX0JZE+a+Ke4gCVS00j3fmQAIoEX0OkimEozc3WaldkliB+2TfcxlD/TT
+         b1fXh0LRXeaC/PKaECznitkJj4H8qUzZ4i9RWNUGCTUQlOhPhueSOEs86QjHHAwn6oop
+         NLMCDRiHxdXEHxN40O9Km1m23oE3XntsDCWjxh7Z1Do6zWaNmt3DTnOnd6rJ7BKJj0+K
+         qRuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677830659;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s8QnxRpYQPEiLn8XmuErYmk8O10pIsFngcfQcnQ90xY=;
-        b=3FvibvGgZ70e+KE9xQ87x3gwSbDZau940hyLhbvBb/UdFLNWthb2PP/kaBsfdEShDb
-         jJvVkKMMMnoBCxcmFD65KZv5AiGleIr2KSH5MCR9magSbrBfD6d0Cv/G6RU+yJFXYljv
-         yGcOqSxnHLnDiV2SyeikG5BHGvMKvurooGzC9LvLkaJ+frucdh4u7E1tdq+Pa/MQDuGy
-         d/iiLDIrIP4etH33wDDgoK5fqNpR3CJTDD1tUsTZ3+5xmoJF5xzdPHcHnLE6MGr/4S1Y
-         G5RVLeV0txR6AmNTOLG/W95YE3okBTR8i3roxWG6hK3FGLPRDRTSoZlsHNRh9y4rK5MM
-         Qgdw==
-X-Gm-Message-State: AO0yUKVfkTldYIXYZZxJbx/auaU9JDNTLGu7iggSosX/onvGK5m6mQWM
-        JXKBbrYdUGQnEzD5XzmCQxM7spfw90oWYxeJqt2BKcQlCuivsaCqSkuK8KkEt+g20yxPpsN3oRX
-        FpYukch4nAod3lgXJQOBGyRLF
-X-Received: by 2002:a05:600c:3ac8:b0:3db:2922:2b99 with SMTP id d8-20020a05600c3ac800b003db29222b99mr788319wms.4.1677830658951;
-        Fri, 03 Mar 2023 00:04:18 -0800 (PST)
-X-Google-Smtp-Source: AK7set/BXLT+lMpnyKVQLibkm04GCkyPcxM5MUEDfKB9hdx14azQTgROHFPeVko3IYxqiAwD1NbohQ==
-X-Received: by 2002:a05:600c:3ac8:b0:3db:2922:2b99 with SMTP id d8-20020a05600c3ac800b003db29222b99mr788279wms.4.1677830658649;
-        Fri, 03 Mar 2023 00:04:18 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id v16-20020a05600c471000b003e9ded91c27sm5848475wmo.4.2023.03.03.00.04.16
+        d=1e100.net; s=20210112; t=1677830783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2GNgFypKn/0hc5Isav8O5f3I0hf4LLGb3YNTok/vC30=;
+        b=3yDu5pJHcmw0/k9bobJFv+2iDGzKP1lctxQC0SFDh1/5mam1GYUbowTruDwBm1PcnF
+         U2476+Zp8uUUj7k3zBOky5HkB4gqiFjnoQkhxc/MNtNOKozbIZEJf0c7v8w2hG5nl2ZT
+         m9S1N9943uJa3cDpiSJzMJko+w5tRPlWTc048KlGmJlP9PlFQ+8HzB7+MYKdpxJTnUL2
+         jLhSBHqhiZA74VjvSWsO1jVNdqRfTYuWnv8oGxEC5YapZDAOWQg9QveLldduTXuXq31J
+         opXH48mny6T81+g4kUfd1U3Obszo0eKrlT/M2n7hAgVSuxucuvSdcOUysRfX9ANn3Dvz
+         a1lg==
+X-Gm-Message-State: AO0yUKW4i+3jE3YbSMC5+NcoVEjuSXEiM7OMquiVa0Lr0QGdvKVOYed+
+        WUG/TiG371+a8qmHBBW9AUg=
+X-Google-Smtp-Source: AK7set/y0ZWmbann7eE3oSNJgm0cy1BGxnKo48BhulCfaGdm1imER6hOYVoRuA6vUXdoT5U9GtHDhw==
+X-Received: by 2002:a05:6a20:8c97:b0:c7:5cb6:2ff7 with SMTP id k23-20020a056a208c9700b000c75cb62ff7mr1397114pzh.22.1677830782975;
+        Fri, 03 Mar 2023 00:06:22 -0800 (PST)
+Received: from debian.me (subs32-116-206-28-31.three.co.id. [116.206.28.31])
+        by smtp.gmail.com with ESMTPSA id r7-20020a634407000000b005038291e5cbsm918858pga.35.2023.03.03.00.06.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 00:04:18 -0800 (PST)
-Message-ID: <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        mptcp@lists.linux.dev, Florian Westphal <fw@strlen.de>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Date:   Fri, 03 Mar 2023 09:04:15 +0100
-In-Reply-To: <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
-References: <20230301180657.003689969@linuxfoundation.org>
-         <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
-         <ZAB6pP3MNy152f+7@kroah.com>
-         <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
-         <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Fri, 03 Mar 2023 00:06:22 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 267F1106180; Fri,  3 Mar 2023 15:06:18 +0700 (WIB)
+Date:   Fri, 3 Mar 2023 15:06:18 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Intel GFX Mailing List <intel-gfx@lists.freedesktop.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: Linux 6.2.1 hits a display driver bug (list_del corruption,
+ ffff88811b4af298->next is NULL)
+Message-ID: <ZAGqet3U8AMm4Uf1@debian.me>
+References: <6feae796-db3f-1135-a607-cfefb0259788@gnuweeb.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SfEzHmcCPaMIkdPc"
+Content-Disposition: inline
+In-Reply-To: <6feae796-db3f-1135-a607-cfefb0259788@gnuweeb.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,109 +89,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Fri, 2023-03-03 at 01:32 +0530, Naresh Kamboju wrote:
-> On Thu, 2 Mar 2023 at 16:30, Naresh Kamboju <naresh.kamboju@linaro.org> w=
-rote:
-> >=20
-> > On Thu, 2 Mar 2023 at 16:00, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >=20
-> > > On Thu, Mar 02, 2023 at 03:49:31PM +0530, Naresh Kamboju wrote:
-> > > > On Wed, 1 Mar 2023 at 23:42, Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > > > >=20
-> > > > > This is the start of the stable review cycle for the 6.1.15 relea=
-se.
-> > > > > There are 42 patches in this series, all will be posted as a resp=
-onse
-> > > > > to this one.  If anyone has any issues with these being applied, =
-please
-> > > > > let me know.
-> > > > >=20
-> > > > > Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> > > > > Anything received after that time might be too late.
-> > > > >=20
-> > > > > The whole patch series can be found in one patch at:
-> > > > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-revie=
-w/patch-6.1.15-rc1.gz
-> > > > > or in the git tree and branch at:
-> > > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linu=
-x-stable-rc.git linux-6.1.y
-> > > > > and the diffstat can be found below.
-> > > > >=20
-> > > > > thanks,
-> > > > >=20
-> > > > > greg k-h
-> > > >=20
-> > > > Regression found on Linux version 6.1.15-rc1 on 32-bit arm x15 and =
-i386.
-> > > >=20
-> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > >=20
-> > > > ## Build
-> > > > * kernel: 6.1.15-rc1
-> > > > * git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-r=
-c
-> > > > * git branch: linux-6.1.y
-> > > > * git commit: b6150251d4ddf8a80510c185d839631e252e6317
-> > > > * git describe: v6.1.14-43-gb6150251d4dd
-> > > > * test details:
-> > > > https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/buil=
-d/v6.1.14-43-gb6150251d4dd
-> > > >=20
-> > > > Regression test cases,
-> > > > i386:
-> > > > x15:
-> > > >   * kselftest-net-mptcp/net_mptcp_mptcp_sockopt_sh
-> > > >=20
-> > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > Assertion `ti.d.size_user =3D=3D sizeof(struct tcp_info)' failed.
-> > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > Assertion `ti.d.size_user =3D=3D sizeof(struct tcp_info)' failed.
-> > > >=20
-> > > > test log:
-> > > > ----------
-> > > >=20
-> > > > # selftests: net/mptcp: mptcp_sockopt.sh
-> >=20
-> > ....
-> >=20
-> > > Nit, wrapping a log like this makes it hard to read, don't you think?
-> >=20
-> > Me either.
-> > That is the reason I have shared "Assertion" above.
-> >=20
-> > >=20
-> > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > Assertion `ti.d.size_user =3D=3D sizeof(struct tcp_info)' failed.
-> > > > # server killed by signal 6
-> > > > #
-> > > > # FAIL: SOL_MPTCP getsockopt
-> > > > # PASS: TCP_INQ cmsg/ioctl -t tcp
-> > > > # PASS: TCP_INQ cmsg/ioctl -6 -t tcp
-> > > > # PASS: TCP_INQ cmsg/ioctl -r tcp
-> > > > # PASS: TCP_INQ cmsg/ioctl -6 -r tcp
-> > > > # PASS: TCP_INQ cmsg/ioctl -r tcp -t tcp
-> > > > not ok 6 selftests: net/mptcp: mptcp_sockopt.sh # exit=3D1
-> > >=20
-> > > Any chance you can bisect?
-> >=20
-> > We are running our bisection scripts.
+--SfEzHmcCPaMIkdPc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Mar 03, 2023 at 03:46:56AM +0700, Ammar Faizi wrote:
+> Hi,
 >=20
-> We have tested with 6.1.14 kselftests source again and it passes.
-> Now that we have upgraded to 6.2.1 kselftests source, we find that
-> there is this problem reported. so, not a kernel regression.
+> Linux 6.2.1 hits a display driver bug (list_del corruption, ffff88811b4af=
+298->next is NULL).
+>=20
+> Unfortunately, I don't know the last good commit and the first bad commit.
 
-I read the above as you are running self-tests from 6.2.1 on top of an
-older (6.1) kernel. Is that correct? If so failures are expected;
-please use the self-tests and kernel from the same release.
+Can you please try v6.1?
 
-Otherwise, could you please re-phrase the above?
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Thanks,
+--SfEzHmcCPaMIkdPc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Paolo
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAGqdAAKCRD2uYlJVVFO
+o6tYAPsHUCjEZzvaAnu5vqweP64uXu3vAHJpeX3chmv8QC747QD9FtDdYRCRW/a6
+ed37mcnX36rkPmyFZayYgbJln2MDjgg=
+=8ymv
+-----END PGP SIGNATURE-----
 
+--SfEzHmcCPaMIkdPc--
