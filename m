@@ -2,272 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB77D6A92BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3416A92C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjCCImF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S229673AbjCCIm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 03:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjCCImD (ORCPT
+        with ESMTP id S229541AbjCCImZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:42:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA14938B4B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:42:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DE06B81732
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BD4C433D2;
-        Fri,  3 Mar 2023 08:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677832919;
-        bh=azjRvVmh5QtPCcQyst3g1jyvlF46sxpBu2e0AE5jEWc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fVaxTeb3yBAGDIUfujccZ6x6eaFZwavT6a28sBUFIXrgmgcP9oXs+mwfXMJ022/Yh
-         m/zClPKY3KbQMIOSAmYNr74j8LJ9cbrUxR7tvWTJR6kR5hAV0x9O2OCO0UOHT+jCf+
-         kMNFLub/+HzdF3j18UusHRMIFxSfh0WW1GetfKg/5aGdSx7/0wCmtIgiSr1YbKF5UH
-         0wnVoeCKY4pHaxFauiyy+Q2WaFsjt2bOqbJDYvu+B3sRBEMv8i8yBtnAWe3B8Rm9mx
-         RKf1DIliDQMZEARqHL5xpu+cZWZYjMCeI24j4v23R2lyj5MZH+DeIvMnoQN8M8CT7P
-         /O3GCeaSDf8GQ==
-Date:   Fri, 3 Mar 2023 08:41:53 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Support Opensource <support.opensource@diasemi.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>,
-        kernel@dh-electronics.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] mfd: da9062: Remove IRQ requirement
-Message-ID: <20230303084153.GI2303077@google.com>
-References: <20230209105144.9351-1-cniedermaier@dh-electronics.com>
+        Fri, 3 Mar 2023 03:42:25 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F40439CFF
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:42:18 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id g3so7432773eda.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 00:42:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677832937;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TST4cThQaK2erJHSPGfkkNJ8p/M75cq++a+eKVWZxF0=;
+        b=l2xARqmNJdkYpMikLbVGrC4i/RCs/fqN3ecwn0vLc1zzqa7tvF+Wqi2lKOU/Z2LNVR
+         aDHcWJdCYYxNZ4krZW0lnO4QeghXuUIUKg4K0SZT4WZ0f6CDVmQS4MdAya/ABryWGHDh
+         U/XEz7pKAT+YoD4PBXrzhKnpWJk9IvLjibPtc2QoWJmX4wpkQ0ox9s0/tJB25QPyky4p
+         NVkZmhMiERVYb2Fm0AHlMRqbYi5LuMYUciiKGsfFNrCS5PDF0PN/RpkAxvOKFEPHhhU+
+         eyHDvk/viU3Q4jmnibBXDPYvml76gMdtP+wdxQPslME1hZ32yCOGHmIMqTSFn7rU4Czm
+         vqRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677832937;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TST4cThQaK2erJHSPGfkkNJ8p/M75cq++a+eKVWZxF0=;
+        b=5DrXzdvRuzuSerq4MqD/mj38Yd83LPnLCpsgBYdImh3XCOQzg2bFATxD4X2l68H+Iw
+         yQs66/ZZ/N+F8lkAXWaGhZ28/qGAfWpUIljLMo18EAhcBbW/WPBKQKbHyRuymzrtEZWR
+         Cc46tu/Tx5o9MVEP1GMZY07x+3ya123Xa03YmTqxJUnvkUsWtt+jkPktUyka4izAFQ3v
+         IF/I2JzIRBYLGanXpLqSvCYqEZDH6RxfNl1AdcdHgMMqTRaLRrC2IoC2T6E8UYp9LmVx
+         rS7R/u8Jlf91xgzqriZ1loLDUNbkisx8JjjZktl5Jk/r/rAdwK/qiqrWxopaP8Q6Cqc/
+         qYcA==
+X-Gm-Message-State: AO0yUKXtfRgqEknHbfBy7xBwB+r0TmKSyjei3aJInpUIC8KU5wvW0Eey
+        /T+XyLdBuHhhhLULnJ1DsstPXQ==
+X-Google-Smtp-Source: AK7set/FrDQkpv9xuFORleilLGkXPiWO2nkWOv+hJMBasSr31CouErbTswY9pCqI+LeMu4hoEacOqQ==
+X-Received: by 2002:a17:907:728e:b0:8b1:807e:d4d2 with SMTP id dt14-20020a170907728e00b008b1807ed4d2mr1140561ejc.34.1677832937187;
+        Fri, 03 Mar 2023 00:42:17 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id r16-20020a170906a21000b008cafeec917dsm701191ejy.101.2023.03.03.00.42.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 00:42:16 -0800 (PST)
+Message-ID: <711f0e08-a8c8-45ef-08cf-6ca4f166ed4a@linaro.org>
+Date:   Fri, 3 Mar 2023 09:42:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230209105144.9351-1-cniedermaier@dh-electronics.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 02/11] media: dt-bindings: starfive,jh7110-mipi-csi2:
+ add binding docmuent
+Content-Language: en-US
+To:     "jack.zhu" <jack.zhu@starfivetech.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, changhuang.liang@starfivetech.com
+References: <20230302091921.43309-1-jack.zhu@starfivetech.com>
+ <20230302091921.43309-3-jack.zhu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230302091921.43309-3-jack.zhu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Feb 2023, Christoph Niedermaier wrote:
+On 02/03/2023 10:19, jack.zhu wrote:
+> Add DT binding document for Starfive MIPI CSI2 receiver
 
-> This patch removes the requirement for an IRQ, because for the core
-> functionality IRQ isn't needed. So this makes the DA9061/62 chip
-> useable for designs which haven't connected the IRQ pin.
+Subject: drop second/last, redundant "add binding document". The
+"dt-bindings" prefix is already stating that these are bindings and it
+is a document. Write something useful instead.
+
 > 
-> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+> Signed-off-by: jack.zhu <jack.zhu@starfivetech.com>
 > ---
-> Cc: Support Opensource <support.opensource@diasemi.com>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: kernel@dh-electronics.com
-> Cc: linux-kernel@vger.kernel.org
-> To: linux-arm-kernel@lists.infradead.org
-> ---
-> V2: - Rebase on current next 20230209
->     - Add Lee Jones to Cc list
-> ---
->  drivers/mfd/da9062-core.c | 98 +++++++++++++++++++++++++++++++++++------------
->  1 file changed, 73 insertions(+), 25 deletions(-)
+>  .../media/starfive,jh7110-mipi-csi2.yaml      | 177 ++++++++++++++++++
+>  1 file changed, 177 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-mipi-csi2.yaml
 > 
-> diff --git a/drivers/mfd/da9062-core.c b/drivers/mfd/da9062-core.c
-> index 40cde51e5719..caa597400dd1 100644
-> --- a/drivers/mfd/da9062-core.c
-> +++ b/drivers/mfd/da9062-core.c
-> @@ -212,6 +212,27 @@ static const struct mfd_cell da9061_devs[] = {
->  	},
->  };
->  
-> +static const struct mfd_cell da9061_devs_without_irq[] = {
+> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-mipi-csi2.yaml
+> new file mode 100644
+> index 000000000000..6569fac9e856
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-mipi-csi2.yaml
+> @@ -0,0 +1,177 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 
-"_noirq"
+Why for patch 1 and 2 you are using difference SPDX?
 
-> +	{
-> +		.name		= "da9061-core",
-> +	},
-> +	{
-> +		.name		= "da9062-regulators",
-> +	},
-
-Place the one line entries on one line please.
-
-Even better, use MFD_CELL_NAME()
-
-> +	{
-> +		.name		= "da9061-watchdog",
-> +		.of_compatible  = "dlg,da9061-watchdog",
-> +	},
-
-MFD_CELL_OF(<name>, NULL, NULL, NULL, 0, <compatible>);
-
-> +	{
-> +		.name		= "da9061-thermal",
-> +		.of_compatible  = "dlg,da9061-thermal",
-> +	},
-> +	{
-> +		.name		= "da9061-onkey",
-> +		.of_compatible = "dlg,da9061-onkey",
-> +	},
-> +};
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/starfive,jh7110-mipi-csi2.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  static const struct resource da9062_core_resources[] = {
->  	DEFINE_RES_NAMED(DA9062_IRQ_VDD_WARN, 1, "VDD_WARN", IORESOURCE_IRQ),
->  };
-> @@ -288,6 +309,35 @@ static const struct mfd_cell da9062_devs[] = {
->  	},
->  };
->  
-> +static const struct mfd_cell da9062_devs_without_irq[] = {
-> +	{
-> +		.name		= "da9062-core",
-> +	},
-> +	{
-> +		.name		= "da9062-regulators",
-> +	},
-> +	{
-> +		.name		= "da9062-watchdog",
-> +		.of_compatible  = "dlg,da9062-watchdog",
-> +	},
-> +	{
-> +		.name		= "da9062-thermal",
-> +		.of_compatible  = "dlg,da9062-thermal",
-> +	},
-> +	{
-> +		.name		= "da9062-rtc",
-> +		.of_compatible  = "dlg,da9062-rtc",
-> +	},
-> +	{
-> +		.name		= "da9062-onkey",
-> +		.of_compatible	= "dlg,da9062-onkey",
-> +	},
-> +	{
-> +		.name		= "da9062-gpio",
-> +		.of_compatible	= "dlg,da9062-gpio",
-> +	},
-> +};
+> +title: Starfive JH7110 MIPI CSI-2 receiver
+> +
+> +maintainers:
+> +  - Jack Zhu <jack.zhu@starfivetech.com>
+> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+> +
+> +description: |-
 
-As above.
+Drop |-
 
->  static int da9062_clear_fault_log(struct da9062 *chip)
->  {
->  	int ret;
-> @@ -625,7 +675,7 @@ static int da9062_i2c_probe(struct i2c_client *i2c)
->  {
->  	const struct i2c_device_id *id = i2c_client_get_device_id(i2c);
->  	struct da9062 *chip;
-> -	unsigned int irq_base;
-> +	unsigned int irq_base = 0;
->  	const struct mfd_cell *cell;
->  	const struct regmap_irq_chip *irq_chip;
->  	const struct regmap_config *config;
-> @@ -645,21 +695,16 @@ static int da9062_i2c_probe(struct i2c_client *i2c)
->  	i2c_set_clientdata(i2c, chip);
->  	chip->dev = &i2c->dev;
->  
-> -	if (!i2c->irq) {
-> -		dev_err(chip->dev, "No IRQ configured\n");
-> -		return -EINVAL;
-> -	}
-> -
->  	switch (chip->chip_type) {
->  	case COMPAT_TYPE_DA9061:
-> -		cell = da9061_devs;
-> -		cell_num = ARRAY_SIZE(da9061_devs);
-> +		cell = i2c->irq ? da9061_devs : da9061_devs_without_irq;
-> +		cell_num = i2c->irq ? ARRAY_SIZE(da9061_devs) : ARRAY_SIZE(da9061_devs_without_irq);
+> +  The JH7110 MIPI CSI-2 receiver device is responsible for handling CSI2
+> +  protocol based camera sensor data stream.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - starfive,jh7110-csi2rx
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: CSI2Rx system clock
+> +      - description: Gated Register bank clock for APB interface
+> +      - description: pixel Clock for Stream interface 0
+> +      - description: pixel Clock for Stream interface 1
+> +      - description: pixel Clock for Stream interface 2
+> +      - description: pixel Clock for Stream interface 3
+> +
+> +  clock-names:
+> +    items:
+> +      - const: sys_clk
+> +      - const: p_clk
+> +      - const: pixel_if0_clk
+> +      - const: pixel_if1_clk
+> +      - const: pixel_if2_clk
+> +      - const: pixel_if3_clk
 
-This is hideous.
+Drop _clk suffixes
 
-Why not just NULLify the resources below instead?
+> +
+> +  resets:
+> +    items:
+> +      - description: CSI2Rx system reset
+> +      - description: Gated Register bank reset for APB interface
+> +      - description: pixel reset for Stream interface 0
+> +      - description: pixel reset for Stream interface 1
+> +      - description: pixel reset for Stream interface 2
+> +      - description: pixel reset for Stream interface 3
+> +
+> +  reset-names:
+> +    items:
+> +      - const: sys_rst
 
->  		irq_chip = &da9061_irq_chip;
->  		config = &da9061_regmap_config;
->  		break;
->  	case COMPAT_TYPE_DA9062:
-> -		cell = da9062_devs;
-> -		cell_num = ARRAY_SIZE(da9062_devs);
-> +		cell = i2c->irq ? da9062_devs : da9062_devs_without_irq;
-> +		cell_num = i2c->irq ? ARRAY_SIZE(da9062_devs) : ARRAY_SIZE(da9062_devs_without_irq);
->  		irq_chip = &da9062_irq_chip;
+Drop _rst suffixes
 
-Still setting this despite no IRQs?
+> +      - const: p_rst
+> +      - const: pixel_if0_rst
+> +      - const: pixel_if1_rst
+> +      - const: pixel_if2_rst
+> +      - const: pixel_if3_rst
+> +
+> +  phys:
+> +    maxItems: 1
+> +    description: MIPI D-PHY
+> +
+> +  phy-names:
+> +    items:
+> +      - const: dphy
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port node, single endpoint describing the CSI-2 transmitter.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              bus-type:
+> +                items:
 
->  		config = &da9062_regmap_config;
->  		break;
-  __
- _||_
- \  /
-  \/
+This is not an array.
 
-[...]
+> +                  - const: 4
+> +
+> +              clock-lanes:
+> +                maxItems: 1
 
-if (i2c->irq <= 0)
-  cell->resources = NULL;
-  cell->num_resources = 0;
+Not an array...
 
-> @@ -695,29 +740,32 @@ static int da9062_i2c_probe(struct i2c_client *i2c)
->  	if (ret)
->  		return ret;
->  
-> -	ret = da9062_configure_irq_type(chip, i2c->irq, &trigger_type);
-> -	if (ret < 0) {
-> -		dev_err(chip->dev, "Failed to configure IRQ type\n");
-> -		return ret;
-> -	}
-> +	if (i2c->irq) {
-> +		ret = da9062_configure_irq_type(chip, i2c->irq, &trigger_type);
-> +		if (ret < 0) {
-> +			dev_err(chip->dev, "Failed to configure IRQ type\n");
-> +			return ret;
-> +		}
->  
-> -	ret = regmap_add_irq_chip(chip->regmap, i2c->irq,
-> -			trigger_type | IRQF_SHARED | IRQF_ONESHOT,
-> -			-1, irq_chip, &chip->regmap_irq);
-> -	if (ret) {
-> -		dev_err(chip->dev, "Failed to request IRQ %d: %d\n",
-> -			i2c->irq, ret);
-> -		return ret;
-> -	}
-> +		ret = regmap_add_irq_chip(chip->regmap, i2c->irq,
-> +				trigger_type | IRQF_SHARED | IRQF_ONESHOT,
-> +				-1, irq_chip, &chip->regmap_irq);
-> +		if (ret) {
-> +			dev_err(chip->dev, "Failed to request IRQ %d: %d\n",
-> +				i2c->irq, ret);
-> +			return ret;
-> +		}
->  
-> -	irq_base = regmap_irq_chip_get_base(chip->regmap_irq);
-> +		irq_base = regmap_irq_chip_get_base(chip->regmap_irq);
-> +	}
->  
->  	ret = mfd_add_devices(chip->dev, PLATFORM_DEVID_NONE, cell,
->  			      cell_num, NULL, irq_base,
->  			      NULL);
->  	if (ret) {
->  		dev_err(chip->dev, "Cannot register child devices\n");
-> -		regmap_del_irq_chip(i2c->irq, chip->regmap_irq);
-> +		if (i2c->irq)
-> +			regmap_del_irq_chip(i2c->irq, chip->regmap_irq);
->  		return ret;
->  	}
->  
-> -- 
-> 2.11.0
-> 
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +                items:
+> +                  maximum: 4
+> +
+> +            required:
+> +              - bus-type
 
--- 
-Lee Jones [李琼斯]
+Since this is fixed 4, do you actually require it? Why?
+
+> +              - clock-lanes
+> +              - data-lanes
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Output port node
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +  - phys
+> +  - phy-names
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+
+Drop blank line
+
+> +    csi2rx: csi-bridge@19800000 {
+
+Maybe just "csi@"?
+> +        compatible = "starfive,jh7110-csi2rx";
+> +        reg = <0x19800000 0x10000>;
+> +        clocks = <&ispcrg 7>,
+> +            <&ispcrg 6>,
+
+Indentation looks odd... did you align it?
+
+> +            <&ispcrg 8>,
+> +            <&ispcrg 9>,
+> +            <&ispcrg 10>,
+> +            <&ispcrg 11>;
+> +        clock-names = "sys_clk", "p_clk",
+> +            "pixel_if0_clk", "pixel_if1_clk",
+> +            "pixel_if2_clk", "pixel_if3_clk";
+> +        resets = <&ispcrg 9>,
+> +            <&ispcrg 4>,
+> +            <&ispcrg 5>,
+> +            <&ispcrg 6>,
+> +            <&ispcrg 7>,
+> +            <&ispcrg 8>;
+> +        reset-names = "sys_rst", "p_rst",
+> +            "pixel_if0_rst", "pixel_if1_rst",
+> +            "pixel_if2_rst", "pixel_if3_rst";
+> +        phys = <&csi_phy>;
+> +        phy-names = "dphy";
+
+
+Best regards,
+Krzysztof
+
