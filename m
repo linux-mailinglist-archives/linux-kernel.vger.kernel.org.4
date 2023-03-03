@@ -2,431 +2,1923 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4216A910A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982E86A9111
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjCCGb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 01:31:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S229612AbjCCGg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 01:36:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCCGbZ (ORCPT
+        with ESMTP id S229498AbjCCGgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 01:31:25 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36627AAA
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:31:24 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3236BhcH001269
-        for <linux-kernel@vger.kernel.org>; Thu, 2 Mar 2023 22:31:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=content-type : from :
- to : cc : subject : date : message-id : references : in-reply-to :
- mime-version; s=s2048-2021-q4;
- bh=xjNyvv92Kb0wp3o3wAkI2dRZSszRrxBT6CglicCjJFk=;
- b=VVcyk/fpBoX+H6xqARoowKoWLEpSrnGBOMhG0rik+Ln5IuAL0Qp2zy4cFUWo+pxSz4Fa
- 7DlCs0NfFnnzZJMwdlV7/MwNn84vlFuf4+EepV5IC0J8U5UhJeJBia63VB8z3QCiLgiX
- aEwliIlzA3pt27D8RDZzN+DbIwdoyx1a6EZ8/eGju+c2Zf7+/zrkNsynD4vmjr/MtXgb
- vRTUgKxbgvH2TG0/orkHePTgwHwlMU2RyHqPYb5E+KbdHKxACemb9YTAKdnmcrUDX6uM
- 3O9R/8LMaCsBz7Qv2tEG1eXcBs+H2djH60nhPsb4sMpN9Fv6vk80QfEkdwNTuYU4UCaG pg== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3p2uad6e4a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 22:31:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F2Uz5iUpgcRZH2sN4wYj+sweZv4uJDT6o5Ze/6e1K6eVR+GtRaa7uBb+RPlkNHfkMRFEMozusoRQS5QMj6Oqp1OskOyO+iEJWiF8FmO/EHUsWi1JOARSBXBI2dL6YZp7RLr0uZLfBH4gqkPuv1+Wgw6zIP8F4yJ/TcUOhesAF0pticB0+xmgUaWMa0FQzbRZB7swQpeHZE0g6/DgHvpneWQmHjIVtraIuc/GTi1zRSAcylHjyKzLwjs34WEDzP+9vYO5qPIKeFFkaThgazJISbMF3+FYUuaJcPFSIBLQlJ3dc9QgM4AHspgIQVznme73Fccan2bSMfZROmpVuIGLWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vh+TfmOELelPMNm1bHljxgnzmFLEwUBzgaVCSVlmRbU=;
- b=EkXYmILIev+HSixDn6MJtTODUahVY6VS4iGP6DPgZk0ThT+e8lAQ9mnUFPX1ICH3PtrCb8WQ13h1uOc5Auldo81I6lDkcmL+EjPcYDWtJgPszhyFlPZ1BR/1okA++m9PbeSdkDbW6to0+PkA0Q+QESio6jm69uPKfvQsyaRWJ4ltA3t26Gi6iU/04E/067ZvObdJsOdqSmgXCFDE1MiCqFCo/H4O2+g5FuojoSjkC7U12FNbE3+ykR4za2OX2Y2IkjwnVqh+eRlpe416jTXu8mhrdkDJVCyTorllOtULK0GwPjqfRTFiINh2hqAxADRooGigrgx208beGf0leI8Uwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from BY5PR15MB3667.namprd15.prod.outlook.com (2603:10b6:a03:1f9::18)
- by SJ0PR15MB5179.namprd15.prod.outlook.com (2603:10b6:a03:427::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Fri, 3 Mar
- 2023 06:30:48 +0000
-Received: from BY5PR15MB3667.namprd15.prod.outlook.com
- ([fe80::4376:73:fdf9:d34a]) by BY5PR15MB3667.namprd15.prod.outlook.com
- ([fe80::4376:73:fdf9:d34a%6]) with mapi id 15.20.6156.018; Fri, 3 Mar 2023
- 06:30:48 +0000
-Content-Type: multipart/mixed;
-        boundary="_000_C19121055951462783B6BA84420FED0Dmetacom_"
-From:   Nick Terrell <terrelln@meta.com>
-To:     =?utf-8?B?Sm9uYXRoYW4gTmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>
-CC:     Nick Terrell <terrelln@meta.com>, Nick Terrell <terrelln@meta.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] zstd: Fix definition of assert()
-Thread-Topic: [PATCH] zstd: Fix definition of assert()
-Thread-Index: AQHZM+Oq/TKj4TuChUSUQZBrU+DTa67oy42A
-Date:   Fri, 3 Mar 2023 06:30:47 +0000
-Message-ID: <C1912105-5951-4627-83B6-BA84420FED0D@meta.com>
-References: <20230129131436.1343228-1-j.neuschaefer@gmx.net>
-In-Reply-To: <20230129131436.1343228-1-j.neuschaefer@gmx.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: <C1912105-5951-4627-83B6-BA84420FED0D@meta.com>
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR15MB3667:EE_|SJ0PR15MB5179:EE_
-x-ms-office365-filtering-correlation-id: 5c1b3528-24da-4439-e7e9-08db1bb0d379
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: i7UILJBgt7z6IgHoDkeE6OuwJY/moBViaj0qRAcEsZKcW5oUL/vX8ZNWF+TtBy3DxlbFRKbmy3q9MckCsvvkQuzvrUW3uS0e5RIKJC6q+Vv3rTrS9JdRvsm9LhM+ccgdJYuUQGF5A2hzFtWfRvaI8JTtKowrh8HqJQU6mQUmI4tdOUravv9DePcFD1iPsKNQeF8M+ywS/iPjTJCyyqPdcjPlOEyMBNzxakQTCH545Tlp/+aUGN9/vVmyL+H3hTeGifJ2Eo9JgM0ZJXaX988VDHXL71w862lDciCcQn+RKF3ewJxQ/DAoNzmUvJn6IphYV4rtyBQ3a6mmfLtXPdoBMbYUjg0i52m9xVNmMO4c/h80aGJUociLCrocS1DdZdjWKNsdNHUhIxjQX8M6zTLTCKnmcvFyXL1SN76Gmil1p7HTE7SGKKhwPzlBheDQHLFForItR4X8cHrlhVD8aTntNxBJMzKRhrCe6RGJ5jbRRNZuXt9uO1mdmXnKH9d4fhKXDhncKgWTRvCHmKegFE7MxRWBV3uHGBM5XEdQXOH4jdx9t8wo/CaD4AvSj1XWrXiePYISfG9p3dNj9DtZv1Q5+WqZn1e188VKyP52CZYCSzLcbAbRyDfV9fhy8gYvomfpinKy0EkOW25PkOHFeFA2//VGK2UtSx+VGeWz6pwF1wjyFOuUloF3vgN0y3+6H5bJGTv6d+R/r5wJlkJtd8bW+wpqF+j1WT65w4rOrWQCaJU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3667.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(396003)(346002)(376002)(451199018)(83380400001)(71200400001)(36756003)(66574015)(38100700002)(478600001)(122000001)(5660300002)(8936002)(86362001)(66946007)(33656002)(38070700005)(64756008)(26005)(186003)(2616005)(966005)(6506007)(53546011)(6512007)(6486002)(66556008)(8676002)(66476007)(76116006)(2906002)(66446008)(41300700001)(6916009)(316002)(4326008)(54906003)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WUY5WDZuVDdnaGNybk9rbjRZRDljV3lNVUZNam5Ta3VBbVVaWWFaV2RxZGpF?=
- =?utf-8?B?Q1pkanVTa3AxbHVsM29UajY5d0RsejEwS0JITm1Zc2YrbGNXS0tOV1lZdFZN?=
- =?utf-8?B?WnNMVktzbk41UHFqOXZEOC9iUlJyYlpCWjB0TkZqZDRHUFZxQkNGV29XOVBw?=
- =?utf-8?B?ZSs3eW10T3dJSjdYdEFUREErMk1lcnJrZExLQWhoYWdJeFBCbmliVW1QWnlz?=
- =?utf-8?B?OXdiNGZneFlpNGFIbzYreVFFUDJoSmRUUjFjTWJiT29tR2U3bW5UbjEzQ25y?=
- =?utf-8?B?ZTB2MGtsQjFiSHoxT3FmMm9QMkFtbysvSHozdnUvVXZkRFlvTnhXeTF2YktR?=
- =?utf-8?B?TEwyN0VJa28zZDkzYW9WQWFKZlFpZldTckxTOWpkYmRuMEFhOGRmY0ZsU0ZB?=
- =?utf-8?B?UXBqTUtxNFMrOTh2MDNwZ1VhREtpQ0lkUzRua29QTEI0b0d4WEIzbUtEeWVV?=
- =?utf-8?B?VDhDT1F1TlVhci9NRjMzV3hIbVhWeE0rWjAvK0h2bWhEM0cvRDNyUWkvR2l6?=
- =?utf-8?B?R3kzVDY4Q2M3Nk14R1lnSVI4d01ja0ZoUnowMlRDVVhpRnZPbXFnMVljdVJV?=
- =?utf-8?B?bEtGSWNBRzEweHA4WWJUb29KaUpja0FBQWlwN2c2V3BJR214dTFJRXNyMlMz?=
- =?utf-8?B?aCtmTWdjYlFseStTbTdNUnFSMnI5ZHNKcFV6RVNQSFJ2M2FTdnN3VTg4cHBo?=
- =?utf-8?B?Tk5USUh4Nk9hTUlvcHR5TU1DeU5LTCtpMXU4SW1BRUw2UmpHUTNITitxYldX?=
- =?utf-8?B?eGdGU0xIRTh6cTl5Skpob2FCR09jaEgxRDZwVnVpUzd1NC9iNWYveTJERlNF?=
- =?utf-8?B?aVJkUzBxamhyd3Z2aTJYMHBPWWpEcUdKbzZlemg4cGFlRk9nYUZjbFR6QzQz?=
- =?utf-8?B?SFVGWUFqS0Mrbk5kLzFMQ3RkcHpYZ1lMN3ByWDFYWCtBQUI4R1RmZUFoR3o4?=
- =?utf-8?B?aDcyZGcxbDdITEgzTWN3V3FIQkF1M3ZpSzZOTkpvSmRwNEh0bEN1M3VCVjdQ?=
- =?utf-8?B?L0djL0Z5NC9nL2dHNHpGdHorYjB5a09xOFBkRFJJdCtIczN3cURtZGZ4V0pI?=
- =?utf-8?B?Tk83K3NlNWNrS1VxcEYrc05PdXVzSjFpd2xnTmwyNmtDdUl4VzdBZWlobFo0?=
- =?utf-8?B?eTI3c2N4VGowc0t2NjhzRGN6cFVORTFudjlIbWdnaVVQN1VuOEhsUjNTTUhn?=
- =?utf-8?B?dUE0QkROcEwwcmIrU200Y1FnRnplK3JpSmQyTTM5NjliQnNPN3FpazRuOE9I?=
- =?utf-8?B?eXJUOW9rSndSSmZZVjY5ZmVkVUt6ZWZmdDd5RDhCelhqUEppRUVzYWI3MUJK?=
- =?utf-8?B?aGJoYTlnUmlMZmUrZVE0bFNvWWFUK01uQnJTYlVYMDN4TlhVQ3UzMk5NOUVF?=
- =?utf-8?B?MzlXM3VqajBlVS9zeExrSzBGSTlNenl5bVBZZERzVVk3WkRHbExNb0k2S3hJ?=
- =?utf-8?B?Nyt2R2dldlV1REVPYno5THZyMW55KzIvbmVwTHdkUzZvMlhJY1BON3p4d053?=
- =?utf-8?B?YWdWclhIMVArOVprT2lsV1VxYmVRNzNIYnhEQ1o5WTk0S0k0ckVqU2J6ZFE3?=
- =?utf-8?B?UXF4Q3VTSzRCRzhjS3c3VHJzaWw2Y1Bjd3FaOGkyYkpEWExQMXFQMVlPL3lW?=
- =?utf-8?B?QXdXY1pQNWMyQlpnRkd6dzVvQSs5aTRubS9ha3FxdzlXZWx4WmhsaFRBdUtH?=
- =?utf-8?B?UVZXbEVTYkVjYnc3elZRMnAxdHVKMmo3Z0NzVW4yQ3Z2dmxJaFdoaHQzVUVa?=
- =?utf-8?B?UVNIVEJQb1hoT29ld2VlaC81RWw5WDk3TEEyVG02RW9EdUJIOWFYV2QrUk05?=
- =?utf-8?B?bTJ1VWJISFVjSTlCSTBpQTdGRkpIMVB3NFRkOVhjeHhaWUtESThvdGNDaUZK?=
- =?utf-8?B?SFhlU0FBdWNjNWdkcjJrMWxyYm5DRmU2d3lTWVpUeHBOZ2pLNzQyMWQwbmp5?=
- =?utf-8?B?ejE3c3VPNVZyRDhubUxESTdCd3lnY3VhUzFxS1ZnczVsMk9RNE5kZHVDbWZh?=
- =?utf-8?B?Q21nQzN0blM1dVUvbW8wdUlEc29JOEY1NXBITU9Rb1lIWXlmL3pSSit6c1JH?=
- =?utf-8?B?VlRYZU9VSzcwVWtxSTZscjkzaHdyMU4rSExvaFlscVVteklJbFJtcER4MThB?=
- =?utf-8?Q?Pujm85YYzpPDBllI0fyjIc8Uf?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3667.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c1b3528-24da-4439-e7e9-08db1bb0d379
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2023 06:30:47.8608
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: z6FzSDbbxRN00RNmqTn+sSqE481axWq9Q5rWO2emhWiJV8sbkOc6anihoW38gxhXG1OmvpgwDeX4+bX1AEZWDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB5179
-X-Proofpoint-ORIG-GUID: fyljF4BExdFsB0_h0xIN35rpvacnXZ-c
-X-Proofpoint-GUID: fyljF4BExdFsB0_h0xIN35rpvacnXZ-c
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 3 Mar 2023 01:36:53 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E71166F4;
+        Thu,  2 Mar 2023 22:36:50 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so1337136pjz.1;
+        Thu, 02 Mar 2023 22:36:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677825409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WdPwSlZe8LTdEXIINuf3aZh5UNoXUd9cwwSy79Q5hsw=;
+        b=ZHzxKwO1wvJKSiDsTkbk7ln1pd/OTw+ISlW2xRp9KaEsIfQfJi/36cPvtrmpSBExEo
+         m2Di9bm0utfYcuxpZDHidiZWS5M9hLIG7oTSX+Nt6Oqd09n94VVhBv4jFzO55OkdCq5i
+         WZxUalrT65zbM+vichwfFqwJN6tdg63pkslF/5893XbcmL/CHhd6cf/OYZA9qAiG23Rt
+         da2eZYIOAfF6ezo9qRnn37P/PNX//6WBxf8TWnoYNa9IAts8f83SMrC9S/8jpMeFJoN4
+         h5hjSWbu9NHLRMQld85FkHuaQs6ntLXxC+jN+zhlbcJoPdMAmdjdy0sziG9gpiKn1NKD
+         wC5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677825409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WdPwSlZe8LTdEXIINuf3aZh5UNoXUd9cwwSy79Q5hsw=;
+        b=CRmns3GbSLIvHOCJMIQwvFpK2CHkwGbwNWZMuNoFP96ivb7FP8+/l3N9OmAyRN8Tur
+         J+Z9aQJvtb3SZ+aYj8fC1I3sw9CLywT6l3EJ7/6x4s1AbSmtq4d3e8WFen6OrY+xgIT+
+         xRHjMCCooyMzjg2WL6DN9DdbJjsg991OJ+zpsOR/t7A4i5Fn4UN3avTX7zlvsO0gXsY7
+         FU5VDgpTiY2RGKXus7DI87GXOexQZNc7uibWPcnobCha5Ve5PRZSrWneziFLGYH62EVi
+         EvYwHjIFb23a8BLRSBo3IMt+ojl2vnJd0uxOAD1YZQKHFcqpJZlWOKf/kAw+A9Utqzsq
+         VOOw==
+X-Gm-Message-State: AO0yUKX5ckEXcEhojPIm8qV1v8rAgGHgumNOCP8GruO/dmGsXOrvBfBO
+        OjYzcKs33QDox0VtVViiJJLNekb1HZgoxg==
+X-Google-Smtp-Source: AK7set8Vy0EXakvE/Zg9+Vq1Txf5z3rxdn5EBq6Fl1tBcGChJZzp/bJ7WHspQe++eMr0xv2NyPQWfg==
+X-Received: by 2002:a17:90b:1c81:b0:234:ba6b:7a02 with SMTP id oo1-20020a17090b1c8100b00234ba6b7a02mr591500pjb.32.1677825409352;
+        Thu, 02 Mar 2023 22:36:49 -0800 (PST)
+Received: from davidwang.dhcpserver.bu9bmc.local (1-34-79-176.hinet-ip.hinet.net. [1.34.79.176])
+        by smtp.gmail.com with ESMTPSA id l30-20020a635b5e000000b004ff6b744248sm736348pgm.48.2023.03.02.22.36.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 22:36:48 -0800 (PST)
+From:   David Wang <tomato1220@gmail.com>
+X-Google-Original-From: David Wang <davidwang@quantatw.com>
+To:     arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        fran.hsu@quantatw.com, David Wang <davidwang@quantatw.com>
+Subject: [PATCH 1/7] ARM: dts: nuvoton: Add Quanta GIS BMC Device Tree
+Date:   Fri,  3 Mar 2023 14:34:29 +0800
+Message-Id: <20230303063435.803097-1-davidwang@quantatw.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,WEIRD_QUOTING autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---_000_C19121055951462783B6BA84420FED0Dmetacom_
-Content-ID: <34FB6F849A19E44394956FCAE615A0C2@namprd15.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Add the device tree for the Quanta GIS BMC and it's
+based on NPCM730 SoC
 
-DQoNCj4gT24gSmFuIDI5LCAyMDIzLCBhdCA1OjE0IEFNLCBKb25hdGhhbiBOZXVzY2jDpGZlciA8
-ai5uZXVzY2hhZWZlckBnbXgubmV0PiB3cm90ZToNCj4gDQo+ICEtLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tfA0KPiAgVGhp
-cyBNZXNzYWdlIElzIEZyb20gYW4gRXh0ZXJuYWwgU2VuZGVyDQo+IA0KPiB8LS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSEN
-Cj4gDQo+IGFzc2VydCh4KSBzaG91bGQgZW1pdCBhIHdhcm5pbmcgaWYgeCBpcyBmYWxzZS4gV0FS
-Tl9PTih4KSBlbWl0cyBhDQo+IHdhcm5pbmcgaWYgeCBpcyB0cnVlLiBUaHVzLCBhc3NlcnQoeCkg
-c2hvdWxkIGJlIGRlZmluZWQgYXMgV0FSTl9PTigheCkNCj4gcmF0aGVyIHRoYW4gV0FSTl9PTih4
-KS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEpvbmF0aGFuIE5ldXNjaMOkZmVyIDxqLm5ldXNjaGFl
-ZmVyQGdteC5uZXQ+DQoNCkhpIEpvbmF0aGFuLA0KDQpJIGhhdmUgdG8gYXBvbG9naXplLCBJIGp1
-c3Qgc3VibWl0dGVkIG15IGJyYW5jaCBmb3IgYSBQUiBhbmQgSSByZWFsaXplIHRoYXQNCndoaWxl
-IEkgaW50ZW5kZWQgdG8gdGFrZSB5b3VyIHBhdGNoLCBJIHRvb2sgYSBkaWZmZXJlbnQgZXF1aXZh
-bGVudCBwYXRjaC4gU28NCkkgd2FudGVkIHRvIHNheSB0aGFua3MgZm9yIHNlbmRpbmcgdGhlIHBh
-dGNoIQ0KDQo+IC0tLQ0KPiANCj4gQ29tbWl0IGUwYzFiNDlmNWI2NzQgKCJsaWI6IHpzdGQ6IFVw
-Z3JhZGUgdG8gbGF0ZXN0IHVwc3RyZWFtIHpzdGQNCj4gdmVyc2lvbiAxLjQuMTAiKSBtZW50aW9u
-cyB0aGF0IHRoZSB6c3RkIGNvZGUgd2FzIGdlbmVyYXRlZCBmcm9tIHRoZQ0KPiB1cHN0cmVhbSB2
-ZXJzaW9uIG9mIHpzdGQsIHNvIHBlcmhhcHMgdGhlIGRlZmluaXRpb24gb2YgYXNzZXJ0IGJhc2Vk
-IG9uDQo+IFdBUk5fT04gc2hvdWxkIGJlIGZpeGVkIGluIHRoZSBjb252ZXJzaW9uIHNjcmlwdCBh
-bmQvb3IgdXBzdHJlYW0genN0ZA0KPiBzb3VyY2UgY29kZS4NCg0KWWVhaCwgd2UgbmVlZCB0byBm
-aXggaXQgdXBzdHJlYW0sIHNvIGlmIHlvdSB3b3VsZCBsaWtlIHRvIHN1Ym1pdCB0aGUgdXBzdHJl
-YW0gUFINCnRoZSBmaWxlIGlzIGNvbnRyaWIvbGludXgta2VybmVsL3pzdGRfZGVwcy5oIFswXS4g
-T3RoZXJ3aXNlLCBJIHdpbGwgdXBkYXRlIGl0IGJlZm9yZQ0KdGhlIG5leHQgaW1wb3J0Lg0KDQpC
-ZXN0LA0KTmljayBUZXJyZWxsDQoNClswXSBodHRwczovL2dpdGh1Yi5jb20vZmFjZWJvb2svenN0
-ZC9ibG9iL2Rldi9jb250cmliL2xpbnV4LWtlcm5lbC96c3RkX2RlcHMuaA0KDQo+IC0tLQ0KPiBs
-aWIvenN0ZC9jb21tb24venN0ZF9kZXBzLmggfCAyICstDQo+IDEgZmlsZSBjaGFuZ2VkLCAxIGlu
-c2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2xpYi96c3RkL2Nv
-bW1vbi96c3RkX2RlcHMuaCBiL2xpYi96c3RkL2NvbW1vbi96c3RkX2RlcHMuaA0KPiBpbmRleCA3
-YTViZjQ0ODM5YzljLi5mMDZkZjA2NWRlYzAxIDEwMDY0NA0KPiAtLS0gYS9saWIvenN0ZC9jb21t
-b24venN0ZF9kZXBzLmgNCj4gKysrIGIvbGliL3pzdGQvY29tbW9uL3pzdGRfZGVwcy5oDQo+IEBA
-IC04NCw3ICs4NCw3IEBAIHN0YXRpYyB1aW50NjRfdCBaU1REX2RpdjY0KHVpbnQ2NF90IGRpdmlk
-ZW5kLCB1aW50MzJfdCBkaXZpc29yKSB7DQo+IA0KPiAjaW5jbHVkZSA8bGludXgva2VybmVsLmg+
-DQo+IA0KPiAtI2RlZmluZSBhc3NlcnQoeCkgV0FSTl9PTigoeCkpDQo+ICsjZGVmaW5lIGFzc2Vy
-dCh4KSBXQVJOX09OKCEoeCkpDQo+IA0KPiAjZW5kaWYgLyogWlNURF9ERVBTX0FTU0VSVCAqLw0K
-PiAjZW5kaWYgLyogWlNURF9ERVBTX05FRURfQVNTRVJUICovDQo+IC0tDQo+IDIuMzkuMA0KPiAN
-Cg0K
+Signed-off-by: David Wang <davidwang@quantatw.com>
+---
+ arch/arm/boot/dts/Makefile                    |    1 +
+ .../boot/dts/nuvoton-npcm730-gis-pincfg.dtsi  |  732 +++++++++++
+ arch/arm/boot/dts/nuvoton-npcm730-gis.dts     | 1076 +++++++++++++++++
+ 3 files changed, 1809 insertions(+)
+ create mode 100644 arch/arm/boot/dts/nuvoton-npcm730-gis-pincfg.dtsi
+ create mode 100644 arch/arm/boot/dts/nuvoton-npcm730-gis.dts
 
---_000_C19121055951462783B6BA84420FED0Dmetacom_
-Content-Disposition: attachment; filename="winmail.dat"
-Content-Transfer-Encoding: base64
-Content-Type: application/ms-tnef; name="winmail.dat"
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index efe4152e5846..40659106cfe1 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -396,6 +396,7 @@ dtb-$(CONFIG_ARCH_WPCM450) += \
+ dtb-$(CONFIG_ARCH_NPCM7XX) += \
+ 	nuvoton-npcm730-gsj.dtb \
+ 	nuvoton-npcm730-gbs.dtb \
++	nuvoton-npcm730-gis.dtb \
+ 	nuvoton-npcm730-kudo.dtb \
+ 	nuvoton-npcm750-evb.dtb \
+ 	nuvoton-npcm750-runbmc-olympus.dtb
+diff --git a/arch/arm/boot/dts/nuvoton-npcm730-gis-pincfg.dtsi b/arch/arm/boot/dts/nuvoton-npcm730-gis-pincfg.dtsi
+new file mode 100644
+index 000000000000..6f00f337df54
+--- /dev/null
++++ b/arch/arm/boot/dts/nuvoton-npcm730-gis-pincfg.dtsi
+@@ -0,0 +1,732 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// Copyright (c) 2020 Quanta Computer Inc. Fran.Hsu@quantatw.com
++
++/ {
++	pinctrl: pinctrl@f0800000 {
++		gpio0od_pins: gpio0od-pins {
++			pins = "GPIO0/IOX1DI";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio1_pins: gpio1-pins {
++			pins = "GPIO1/IOX1LD";
++			input-enable;
++			bias-disable;
++		};
++		gpio1pp_pins: gpio1pp-pins {
++			pins = "GPIO1/IOX1LD";
++			bias-disable;
++			drive-push-pull;
++		};
++		gpio2_pins: gpio2-pins {
++			pins = "GPIO2/IOX1CK";
++			input-enable;
++			bias-disable;
++		};
++		gpio2pp_pins: gpio2pp-pins {
++			pins = "GPIO2/IOX1CK";
++			bias-disable;
++			drive-push-pull;
++		};
++		gpio3_pins: gpio3-pins {
++			pins = "GPIO3/IOX1D0";
++			input-enable;
++			bias-disable;
++		};
++		gpio3pp_pins: gpio3pp-pins {
++			pins = "GPIO3/IOX1D0";
++			bias-disable;
++			drive-push-pull;
++		};
++		gpio4_pins: gpio4-pins {
++			pins = "GPIO4/IOX2DI/SMB1DSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio5_pins: gpio5-pins {
++			pins = "GPIO5/IOX2LD/SMB1DSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio6od_pins: gpio6od-pins {
++			pins = "GPIO6/IOX2CK/SMB2DSDA";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio7od_pins: gpio7od-pins {
++			pins = "GPIO7/IOX2D0/SMB2DSCL";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio8_pins: gpio8-pins {
++			pins = "GPIO8/LKGPO1";
++			bias-disable;
++			input-enable;
++		};
++		gpio9_pins: gpio9-pins {
++			pins = "GPIO9/LKGPO2";
++			bias-disable;
++			input-enable;
++		};
++		gpio10_pins: gpio10-pins {
++			pins = "GPIO10/IOXHLD";
++			bias-disable;
++			input-enable;
++		};
++		gpio11_pins: gpio11-pins {
++			pins = "GPIO11/IOXHCK";
++			bias-disable;
++			input-enable;
++		};
++		gpio12od_pins: gpio12od-pins {
++			pins = "GPIO12/GSPICK/SMB5BSCL";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio13_pins: gpio13-pins {
++			pins = "GPIO13/GSPIDO/SMB5BSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio14_pins: gpio14-pins {
++			pins = "GPIO14/GSPIDI/SMB5CSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio15od_pins: gpio15od-pins {
++			pins = "GPIO15/GSPICS/SMB5CSDA";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio16pp_pins: gpio16pp-pins {
++			pins = "GPIO16/LKGPO0";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio17_pins: gpio17-pins {
++			pins = "GPIO17/PSPI2DI/SMB4DEN";
++			bias-disable;
++			input-enable;
++		};
++		gpio18o_pins: gpio18o-pins {
++			pins = "GPIO18/PSPI2D0/SMB4BSDA";
++			bias-disable;
++			output-high;
++		};
++		gpio19ol_pins: gpio19ol-pins {
++			pins = "GPIO19/PSPI2CK/SMB4BSCL";
++			bias-disable;
++			output-low;
++		};
++		gpio20_pins: gpio20-pins {
++			pins = "GPIO20/HGPIO0/SMB4CSDA/SMB15SDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio21_pins: gpio21-pins {
++			pins = "GPIO21/HGPIO1/SMB4CSCL/SMB15SCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio24_pins: gpio24-pins {
++			pins = "GPIO24/HGPIO4/IOXHDO";
++			bias-disable;
++			input-enable;
++		};
++		gpio25_pins: gpio25-pins {
++			pins = "GPIO25/HGPIO5/IOXHDI";
++			bias-disable;
++			input-enable;
++		};
++		gpio26od_pins: gpio26od-pins {
++			pins = "GPIO26/SMB5SDA";
++			bias-disable;
++			output-high;
++			drive-open-drain;
++		};
++		gpio27pp_pins: gpio27pp-pins {
++			pins = "GPIO27/SMB5SCL";
++			bias-disable;
++			output-high;
++			drive-push-pull;
++		};
++		gpio37pp_pins: gpio37pp-pins {
++			pins = "GPIO37/SMB3CSDA";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio38_pins: gpio38-pins {
++			pins = "GPIO38/SMB3CSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio39_pins: gpio39-pins {
++			pins = "GPIO39/SMB3BSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio40_pins: gpio40-pins {
++			pins = "GPIO40/SMB3BSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio59od_pins: gpio59od-pins {
++			pins = "GPIO59/HGPIO6/SMB3DSDA";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio64_pins: gpio64-pins {
++			pins = "GPIO64/FANIN0";
++			bias-disable;
++			input-enable;
++			input-debounce;
++		};
++		gpio65_pins: gpio65-pins {
++			pins = "GPIO65/FANIN1";
++			bias-disable;
++			input-enable;
++			input-debounce;
++		};
++		gpio66od_pins: gpio66od-pins {
++			pins = "GPIO66/FANIN2";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio67od_pins: gpio67od-pins {
++			pins = "GPIO67/FANIN3";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio68pp_pins: gpio68pp-pins {
++			pins = "GPIO68/FANIN4";
++			bias-disable;
++			output-high;
++			drive-push-pull;
++		};
++		gpio69pp_pins: gpio69pp-pins {
++			pins = "GPIO69/FANIN5";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio70od_pins: gpio70od-pins {
++			pins = "GPIO70/FANIN6";
++			bias-disable;
++			output-high;
++			drive-open-drain;
++		};
++		gpio71_pins: gpio71-pins {
++			pins = "GPIO71/FANIN7";
++			bias-disable;
++			input-enable;
++		};
++		gpio72od_pins: gpio72od-pins {
++			pins = "GPIO72/FANIN8";
++			bias-disable;
++			output-high;
++			drive-open-drain;
++		};
++		gpio73_pins: gpio73-pins {
++			pins = "GPIO73/FANIN9";
++			bias-disable;
++			input-enable;
++		};
++		gpio74_pins: gpio74-pins {
++			pins = "GPIO74/FANIN10";
++			bias-disable;
++			input-enable;
++		};
++		gpio75pp_pins: gpio75pp-pins {
++			pins = "GPIO75/FANIN11";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio76od_pins: gpio76od-pins {
++			pins = "GPIO76/FANIN12";
++			bias-disable;
++			output-low;
++			drive-open-drain;
++		};
++		gpio77od_pins: gpio77od-pins {
++			pins = "GPIO77/FANIN13";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio78_pins: gpio78-pins {
++			pins = "GPIO78/FANIN14";
++			bias-disable;
++			input-enable;
++		};
++		gpio79_pins: gpio79-pins {
++			pins = "GPIO79/FANIN15";
++			bias-disable;
++			input-enable;
++		};
++		gpio80pp_pins: gpio80pp-pins {
++			pins = "GPIO80/PWM0";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio81pp_pins: gpio81pp-pins {
++			pins = "GPIO81/PWM1";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio82od_pins: gpio82od-pins {
++			pins = "GPIO82/PWM2";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio83od_pins: gpio83od-pins {
++			pins = "GPIO83/PWM3";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio84od_pins: gpio84od-pins {
++			pins = "GPIO84/R2TXD0";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio85od_pins: gpio85od-pins {
++			pins = "GPIO85/R2TXD1";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio86od_pins: gpio86od-pins {
++			pins = "GPIO86/R2TXEN";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio87od_pins: gpio87od-pins {
++			pins = "GPIO87/R2RXD0";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio88_pins: gpio88-pins {
++			pins = "GPIO88/R2RXD1";
++			bias-disable;
++			input-enable;
++		};
++		gpio89od_pins: gpio89od-pins {
++			pins = "GPIO89/R2CRSDV";
++			bias-disable;
++			output-low;
++			drive-open-drain;
++		};
++		gpio90pp_pins: gpio90pp-pins {
++			pins = "GPIO90/R2RXERR";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio91od_pins: gpio91od-pins {
++			pins = "GPIO91/R2MDC";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio92od_pins: gpio92od-pins {
++			pins = "GPIO92/R2MDIO";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio93_pins: gpio93-pins {
++			pins = "GPIO93/GA20/SMB5DSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio94_pins: gpio94-pins {
++			pins = "GPIO94/nKBRST/SMB5DSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio120_pins: gpio120-pins {
++			pins = "GPIO120/SMB2CSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio121_pins: gpio121-pins {
++			pins = "GPIO121/SMB2CSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio122_pins: gpio122-pins {
++			pins = "GPIO122/SMB2BSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio123_pins: gpio123-pins {
++			pins = "GPIO123/SMB2BSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio124_pins: gpio124-pins {
++			pins = "GPIO124/SMB1CSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio125_pins: gpio125-pins {
++			pins = "GPIO125/SMB1CSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio126_pins: gpio126-pins {
++			pins = "GPIO126/SMB1BSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio127_pins: gpio127-pins {
++			pins = "GPIO127/SMB1BSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio130_pins: gpio130-pins {
++			pins = "GPIO130/SMB9SCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio131od_pins: gpio131od-pins {
++			pins = "GPIO131/SMB9SDA";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio132od_pins: gpio132od-pins {
++			pins = "GPIO132/SMB10SCL";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio133od_pins: gpio133od-pins {
++			pins = "GPIO133/SMB10SDA";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio136_pins: gpio136-pins {
++			pins = "GPIO136/SD1DT0";
++			bias-disable;
++			input-enable;
++		};
++		gpio137_pins: gpio137-pins {
++			pins = "GPIO137/SD1DT1";
++			bias-disable;
++			input-enable;
++		};
++		gpio138_pins: gpio138-pins {
++			pins = "GPIO138/SD1DT2";
++			bias-disable;
++			input-enable;
++		};
++		gpio139_pins: gpio139-pins {
++			pins = "GPIO139/SD1DT3";
++			bias-disable;
++			input-enable;
++		};
++		gpio140_pins: gpio140-pins {
++			pins = "GPIO140/SD1CLK";
++			bias-disable;
++			input-enable;
++		};
++		gpio141_pins: gpio141-pins {
++			pins = "GPIO141/SD1WP";
++			bias-disable;
++			input-enable;
++		};
++		gpio142_pins: gpio142-pins {
++			pins = "GPIO142/SD1CMD";
++			bias-disable;
++			input-enable;
++		};
++		gpio143_pins: gpio143-pins {
++			pins = "GPIO143/SD1CD/SD1PWR";
++			bias-disable;
++			input-enable;
++		};
++		gpio144_pins: gpio144-pins {
++			pins = "GPIO144/PWM4";
++			bias-disable;
++			input-enable;
++		};
++		gpio145od_pins: gpio145od-pins {
++			pins = "GPIO145/PWM5";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio146_pins: gpio146-pins {
++			pins = "GPIO146/PWM6";
++			bias-disable;
++			input-enable;
++		};
++		gpio147_pins: gpio147-pins {
++			pins = "GPIO147/PWM7";
++			bias-disable;
++			input-enable;
++		};
++		gpio148od_pins: gpio148od-pins {
++			pins = "GPIO148/MMCDT4";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio149od_pins: gpio149od-pins {
++			pins = "GPIO149/MMCDT5";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio150od_pins: gpio150od-pins {
++			pins = "GPIO150/MMCDT6";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio151od_pins: gpio151od-pins {
++			pins = "GPIO151/MMCDT7";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio152od_pins: gpio152od-pins {
++			pins = "GPIO152/MMCCLK";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio153pp_pins: gpio153pp-pins {
++			pins = "GPIO153/MMCWP";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio154_pins: gpio154-pins {
++			pins = "GPIO154/MMCCMD";
++			bias-disable;
++			input-enable;
++		};
++		gpio155_pins: gpio155-pins {
++			pins = "GPIO155/nMMCCD/nMMCRST";
++			bias-disable;
++			input-enable;
++		};
++		gpio156_pins: gpio156-pins {
++			pins = "GPIO156/MMCDT0";
++			bias-disable;
++			input-enable;
++		};
++		gpio157od_pins: gpio157od-pins {
++			pins = "GPIO157/MMCDT1";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio158od_pins: gpio158od-pins {
++			pins = "GPIO158/MMCDT2";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio159od_pins: gpio159od-pins {
++			pins = "GPIO159/MMCDT3";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio160od_pins: gpio160od-pins {
++			pins = "GPIO160/CLKOUT/RNGOSCOUT";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio169od_pins: gpio169od-pins {
++			pins = "GPIO169/nSCIPME";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio170od_pins: gpio170od-pins {
++			pins = "GPIO170/nSMI";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio171_pins: gpio171-pins {
++			pins = "GPIO171/SMB6SCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio172pp_pins: gpio172pp-pins {
++			pins = "GPIO172/SMB6SDA";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio173od_pins: gpio173od-pins {
++			pins = "GPIO173/SMB7SCL";
++			bias-disable;
++			output-low;
++			drive-open-drain;
++		};
++		gpio174_pins: gpio174-pins {
++			pins = "GPIO174/SMB7SDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio175ol_pins: gpio175ol-pins {
++			pins = "GPIO175/PSPI1CK/FANIN19";
++			bias-disable;
++			output-low;
++		};
++		gpio176o_pins: gpio176o-pins {
++			pins = "GPIO176/PSPI1DO/FANIN18";
++			bias-disable;
++			output-high;
++		};
++		gpio177_pins: gpio177-pins {
++			pins = "GPIO177/PSPI1DI/FANIN17";
++			bias-disable;
++			input-enable;
++		};
++		gpio188od_pins: gpio188od-pins {
++			pins = "GPIO188/SPI3D2/nSPI3CS2";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio189od_pins: gpio189od-pins {
++			pins = "GPIO189/SPI3D3/nSPI3CS3";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio191pp_pins: gpio191pp-pins {
++			pins = "GPIO191";
++			bias-disable;
++			output-high;
++			drive-push-pull;
++		};
++		gpio192pp_pins: gpio192pp-pins {
++			pins = "GPIO192";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio194_pins: gpio194-pins {
++			pins = "GPIO194/SMB0BSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio195_pins: gpio195-pins {
++			pins = "GPIO195/SMB0BSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio196_pins: gpio196-pins {
++			pins = "GPIO196/SMB0CSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio197_pins: gpio197-pins {
++			pins = "GPIO197/SMB0DEN";
++			bias-disable;
++			input-enable;
++		};
++		gpio198pp_pins: gpio198pp-pins {
++			pins = "GPIO198/SMB0DSDA";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio199_pins: gpio199-pins {
++			pins = "GPIO199/SMB0DSCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio200pp_pins: gpio200pp-pins {
++			pins = "GPIO200/R2CK";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio202_pins: gpio202-pins {
++			pins = "GPIO202/SMB0CSDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio204_pins: gpio204-pins {
++			pins = "GPIO204/DDC2SCL";
++			bias-disable;
++			input-enable;
++		};
++		gpio205_pins: gpio205-pins {
++			pins = "GPIO205/DDC2SDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio206pp_pins: gpio206pp-pins {
++			pins = "GPIO206/HSYNC2";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio207pp_pins: gpio207pp-pins {
++			pins = "GPIO207/VSYNC2";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio217pp_pins: gpio217pp-pins {
++			pins = "GPIO217/RG2MDIO/DVHSYNC";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio218pp_pins: gpio218pp-pins {
++			pins = "GPIO218/nWDO1";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio219od_pins: gpio219od-pins {
++			pins = "GPIO219/nWDO2";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio220pp_pins: gpio220pp-pins {
++			pins = "GPIO220/SMB12SCL";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio221pp_pins: gpio221pp-pins {
++			pins = "GPIO221/SMB12SDA";
++			bias-disable;
++			output-low;
++			drive-push-pull;
++		};
++		gpio222od_pins: gpio222od-pins {
++			pins = "GPIO222/SMB13SCL";
++			bias-disable;
++			drive-open-drain;
++		};
++		gpio223_pins: gpio223-pins {
++			pins = "GPIO223/SMB13SDA";
++			bias-disable;
++			input-enable;
++		};
++		gpio224_pins: gpio224-pins {
++			pins = "GPIO224/SPIXCK";
++			bias-disable;
++			input-enable;
++		};
++		gpio227_pins: gpio227-pins {
++			pins = "GPIO227/nSPIXCS0";
++			bias-disable;
++			input-enable;
++		};
++		gpio228_pins: gpio228-pins {
++			pins = "GPIO228/nSPIXCS1";
++			bias-disable;
++			input-enable;
++		};
++		gpio230_pins: gpio230-pins {
++			pins = "GPIO230/SPIXD3";
++			bias-disable;
++			input-enable;
++		};
++		gpio231_pins: gpio231-pins {
++			pins = "GPIO231/nCLKREQ";
++			bias-disable;
++			input-enable;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/nuvoton-npcm730-gis.dts b/arch/arm/boot/dts/nuvoton-npcm730-gis.dts
+new file mode 100644
+index 000000000000..1422b2aadebf
+--- /dev/null
++++ b/arch/arm/boot/dts/nuvoton-npcm730-gis.dts
+@@ -0,0 +1,1076 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// Copyright (c) 2020 Quanta Computer Inc. Fran.Hsu@quantatw.com
++
++/dts-v1/;
++#include "nuvoton-npcm730.dtsi"
++#include "nuvoton-npcm730-gis-pincfg.dtsi"
++#include <dt-bindings/gpio/gpio.h>
++
++/ {
++	model = "Quanta GIS Board (Device Tree v01.17)";
++	compatible = "nuvoton,npcm750";
++
++	aliases {
++		serial0 = &serial0;
++		serial1 = &serial1;
++		serial2 = &serial2;
++		serial3 = &serial3;
++		udc5 = &udc5;
++		udc6 = &udc6;
++		udc7 = &udc7;
++		udc8 = &udc8;
++		udc9 = &udc9;
++		i2c0 = &i2c0;
++		i2c1 = &i2c1;
++		i2c2 = &i2c2;
++		i2c3 = &i2c3;
++		i2c4 = &i2c4;
++		i2c8 = &i2c8;
++		i2c11 = &i2c11;
++		i2c14 = &i2c14;
++		i2c15 = &i2c15;
++		i2c16 = &i2c_cpu0_dimmA;
++		i2c17 = &i2c_cpu0_dimmE;
++		i2c18 = &i2c_cpu1_dimmA;
++		i2c19 = &i2c_cpu1_dimmE;
++		i2c20 = &i2c_clock_gen_0;
++		i2c21 = &i2c_clock_gen_1;
++		i2c22 = &i2c_clock_gen_2;
++		i2c23 = &i2c_clock_gen_3;
++		i2c24 = &i2c_slot0;
++		i2c25 = &i2c_slot1;
++		i2c26 = &i2c_slot2;
++		i2c27 = &i2c_slot3;
++		i2c28 = &i2c_slot4;
++		i2c29 = &i2c_slot5;
++		i2c30 = &i2c_slot6;
++		i2c31 = &i2c_slot7;
++		i2c32 = &i2c_power_0;
++		i2c33 = &i2c_power_1;
++		i2c34 = &i2c_power_2;
++		i2c35 = &i2c_power_3;
++		i2c36 = &i2c_isl_0;
++		i2c37 = &i2c_isl_1;
++		i2c38 = &i2c_isl_2;
++		i2c39 = &i2c_isl_3;
++		i2c40 = &i2c_isl_4;
++		i2c41 = &i2c_isl_5;
++		i2c42 = &i2c_isl_6;
++		i2c43 = &i2c_isl_7;
++		i2c44 = &i2c_hostswap;
++		i2c45 = &i2c_tmp;
++		i2c46 = &i2c_fan_controller_1;
++		i2c47 = &i2c_fan_controller_2;
++		i2c48 = &i2c_seq;
++		i2c49 = &i2c_fru_1;
++		i2c50 = &i2c_fru_2;
++		i2c51 = &i2c_i2cool_1;
++		i2c52 = &i2c_i2cool_2;
++		i2c53 = &i2c_i2cool_3;
++		i2c54 = &i2c_i2cool_4;
++		i2c55 = &i2c_cpu_pirom;
++		fiu0 = &fiu0;
++		fiu1 = &fiu3;
++	};
++
++	chosen {
++		stdout-path = &serial3;
++	};
++
++	memory {
++		reg = <0 0x40000000>;
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		sas-cable0 {
++			label = "sas-cable0";
++			gpios = <&gpio6 19 GPIO_ACTIVE_LOW>;
++			linux,code = <211>;
++		};
++
++		sas-cable1 {
++			label = "sas-cable1";
++			gpios = <&gpio6 20 GPIO_ACTIVE_LOW>;
++			linux,code = <212>;
++		};
++
++		power-failure {
++			label = "power-failure";
++			gpios = <&gpio6 21 GPIO_ACTIVE_LOW>;
++			linux,code = <213>;
++		};
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc 1>, <&adc 2>, <&adc 3>,
++			<&adc 4>, <&adc 5>, <&adc 6>, <&adc 7>;
++	};
++
++	iio-hwmon-battery {
++		compatible = "iio-hwmon";
++		io-channels = <&adc 0>;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led-bmc-live {
++			gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
++		};
++
++		LED_SYS_ERROR {
++			gpios = <&gpio5 12 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++
++		LED_BMC_FAULT {
++			gpios = <&gpio6 25 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++
++		LED_SYS_ATTN {
++			gpios = <&gpio6 28 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++
++		LED_SYS_STATE {
++			gpios = <&gpio6 29 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++	};
++
++	seven-seg-disp {
++		compatible = "seven-seg-gpio-dev";
++		refresh-interval-ms = /bits/ 16 <600>;
++		clock-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
++		data-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
++		clear-gpios = <&gpio0 1 GPIO_ACTIVE_HIGH>;
++	};
++
++	pcie-slot {
++		pcie0: pcie-slot@0 {
++			label = "PE0";
++		};
++
++		pcie1: pcie-slot@1 {
++			label = "PE1";
++		};
++
++		pcie2: pcie-slot@2 {
++			label = "PE2";
++		};
++
++		pcie3: pcie-slot@3 {
++			label = "PE3";
++		};
++
++		pcie4: pcie-slot@4 {
++			label = "PE4";
++		};
++
++		pcie5: pcie-slot@5 {
++			label = "PE5";
++		};
++
++		pcie6: pcie-slot@6 {
++			label = "PE6";
++		};
++
++		pcie7: pcie-slot@7 {
++			label = "PE7";
++		};
++	};
++};
++
++&gcr {
++	serial_port_mux: mux-controller {
++		compatible = "mmio-mux";
++		#mux-control-cells = <1>;
++		mux-reg-masks = <0x38 0x07>;
++		idle-states = <2>; /* Serial port mode 3 (takeover) */
++	};
++};
++
++&gmac0 {
++	phy-mode = "rgmii-id";
++	snps,eee-force-disable;
++	status = "okay";
++};
++
++&emc0 {
++	status = "okay";
++	fixed-link {
++		speed = <100>;
++		full-duplex;
++	};
++};
++
++&mc {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&ohci1 {
++	status = "okay";
++};
++
++&aes {
++	status = "okay";
++};
++
++&sha {
++	status = "okay";
++};
++
++&udc5 {
++	status = "okay";
++};
++
++&udc6 {
++	status = "okay";
++};
++
++&udc7 {
++	status = "okay";
++};
++
++&udc8 {
++	status = "okay";
++};
++
++&udc9 {
++	status = "okay";
++};
++
++&pcimbox {
++	status = "okay";
++};
++
++&fiu0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi0cs1_pins>;
++	status = "okay";
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		reg = <0>;
++		spi-max-frequency = <19000000>;
++		spi-rx-bus-width = <2>;
++		label = "bmc";
++		partitions {
++			compatible = "fixed-partitions";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			u-boot@0 {
++				label = "u-boot";
++				reg = <0x0000000 0xf0000>;
++			};
++			image-descriptor@f0000 {
++				label = "image-descriptor";
++				reg = <0xf0000 0x10000>;
++			};
++			hoth-update@100000 {
++				label = "hoth-update";
++				reg = <0x100000 0x100000>;
++			};
++			kernel@200000 {
++				label = "kernel";
++				reg = <0x200000 0x500000>;
++			};
++			rofs@700000 {
++				label = "rofs";
++				reg = <0x700000 0x35f0000>;
++			};
++			rwfs@3cf0000 {
++				label = "rwfs";
++				reg = <0x3cf0000 0x300000>;
++			};
++			hoth-mailbox@3ff0000 {
++				label = "hoth-mailbox";
++				reg = <0x3ff0000 0x10000>;
++			};
++		};
++	};
++};
++
++&fiu3 {
++	pinctrl-0 = <&spi3_pins>, <&spi3cs1_pins>;
++	status = "okay";
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		reg = <0>;
++		spi-max-frequency = <20000000>;
++		spi-rx-bus-width = <2>;
++		label="bios";
++	};
++	flash@1 {
++		compatible = "jedec,spi-nor";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		reg = <1>;
++		spi-max-frequency = <20000000>;
++		spi-rx-bus-width = <2>;
++		label = "bios-secondary";
++		partitions {
++			compatible = "fixed-partitions";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			bios-secondary-zero@0 {
++				label = "bios-secondary-0";
++				reg = <0x0000000 0x4000000>;
++			};
++			bios-secondary-one@4000000 {
++				label = "bios-secondary-1";
++				reg = <0x4000000 0x4000000>;
++			};
++		};
++	};
++};
++
++&watchdog1 {
++	status = "okay";
++};
++
++&rng {
++	status = "okay";
++};
++
++&serial0 {
++	status = "okay";
++};
++
++&serial1 {
++	status = "okay";
++};
++
++&serial2 {
++	status = "okay";
++};
++
++&serial3 {
++	status = "okay";
++};
++
++&adc {
++	#io-channel-cells = <1>;
++	status = "okay";
++};
++
++&otp {
++	status = "okay";
++};
++
++&lpc_kcs {
++	kcs1: kcs1@0 {
++		status = "okay";
++	};
++
++	kcs2: kcs2@0 {
++		status = "okay";
++	};
++
++	kcs3: kcs3@0 {
++		status = "okay";
++	};
++};
++
++&lpc_host {
++	lpc_bpc: lpc_bpc@40 {
++		monitor-ports = <0x80>;
++		status = "okay";
++	};
++};
++
++&i2c0 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	status = "disabled";
++	i2c-switch@73 {
++		compatible = "nxp,pca9546";
++		reg = <0x73>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		i2c-mux-idle-disconnect;
++		reset-gpios = <&pca9538 0 GPIO_ACTIVE_LOW>;
++
++		i2c_cpu0_dimmA: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++		};
++
++		i2c_cpu0_dimmE: i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++		};
++		i2c_cpu1_dimmA: i2c@2 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <2>;
++		};
++
++		i2c_cpu1_dimmE: i2c@3 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <3>;
++		};
++	};
++};
++
++&i2c1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	status = "okay";
++	i2c-switch@74 {
++		compatible = "nxp,pca9546";
++		reg = <0x74>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		i2c-mux-idle-disconnect;
++		reset-gpios = <&pca9538 1 GPIO_ACTIVE_LOW>;
++
++		i2c_clock_gen_0: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++		};
++
++		i2c_clock_gen_1: i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++		};
++		i2c_clock_gen_2: i2c@2 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <2>;
++		};
++
++		i2c_clock_gen_3: i2c@3 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <3>;
++		};
++	};
++
++	i2c-switch@75 {
++		compatible = "nxp,pca9548";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x75>;
++		i2c-mux-idle-disconnect;
++		reset-gpios = <&pca9538 4 GPIO_ACTIVE_LOW>;
++
++		i2c_slot0: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++			pcie-slot = &pcie0;
++		};
++
++		i2c_slot1: i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++			pcie-slot = &pcie1;
++		};
++
++		i2c_slot2: i2c@2 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <2>;
++			pcie-slot = &pcie2;
++			lm90@4a {
++				compatible = "national,lm90";
++				reg = <0x4a>;
++			};
++		};
++
++		i2c_slot3: i2c@3 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <3>;
++			pcie-slot = &pcie3;
++		};
++
++		i2c_slot4: i2c@4 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <4>;
++			pcie-slot = &pcie4;
++		};
++
++		i2c_slot5: i2c@5 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <5>;
++			pcie-slot = &pcie5;
++		};
++
++		i2c_slot6: i2c@6 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <6>;
++			pcie-slot = &pcie6;
++		};
++
++		i2c_slot7: i2c@7 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <7>;
++			pcie-slot = &pcie7;
++		};
++	};
++};
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	status = "okay";
++
++	i2c-switch@75 {
++		compatible = "nxp,pca9546";
++		reg = <0x75>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		i2c-mux-idle-disconnect;
++		reset-gpios = <&pca9538 2 GPIO_ACTIVE_LOW>;
++
++		i2c_power_0: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++			zl8802@5b {
++				compatible = "isil,zl8802";
++				reg = <0x5b>;
++			};
++		};
++
++		i2c_power_1: i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++			max16600@60 {
++				compatible = "max16600";
++				reg = <0x60>;
++			};
++		};
++
++		i2c_power_2: i2c@2 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <2>;
++			max16600@60 {
++				compatible = "max16600";
++				reg = <0x60>;
++			};
++		};
++
++		i2c_power_3: i2c@3 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <3>;
++			stb_12v@68 {
++				compatible = "pm6764tr";
++				reg = <0x68>;
++			};
++		};
++	};
++
++	i2c-switch@77 {
++		compatible = "nxp,pca9548";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x77>;
++		i2c-mux-idle-disconnect;
++		reset-gpios = <&pca9538 5 GPIO_ACTIVE_LOW>;
++
++		i2c_isl_0: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++			vrm@46 {
++				compatible = "isil,isl69222";
++				reg = <0x46>;
++			};
++		};
++
++		i2c_isl_1: i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++			vrm@46 {
++				compatible = "isil,isl69222";
++				reg = <0x46>;
++			};
++		};
++
++		i2c_isl_2: i2c@2 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <2>;
++			vrm@46 {
++				compatible = "isil,isl69222";
++				reg = <0x46>;
++			};
++		};
++
++		i2c_isl_3: i2c@3 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <3>;
++			vrm@46 {
++				compatible = "isil,isl69222";
++				reg = <0x46>;
++			};
++		};
++
++		i2c_isl_4: i2c@4 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <4>;
++			vrm@46 {
++				compatible = "isil,isl69228";
++				reg = <0x46>;
++			};
++		};
++
++		i2c_isl_5: i2c@5 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <5>;
++			vrm@46 {
++				compatible = "isil,isl69228";
++				reg = <0x46>;
++			};
++		};
++
++		i2c_isl_6: i2c@6 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <6>;
++			vrm@46 {
++				compatible = "isil,isl69228";
++				reg = <0x46>;
++			};
++		};
++
++		i2c_isl_7: i2c@7 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <7>;
++			vrm@46 {
++				compatible = "isil,isl69228";
++				reg = <0x46>;
++			};
++		};
++	};
++};
++
++&i2c3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	status = "okay";
++
++	pca9538: pca9538@72 {
++		compatible = "nxp,pca9538";
++		reg = <0x72>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		U3009_P0 {
++			gpio-hog;
++			gpios = <0 0>;
++			output-low;
++			line-name = "RST_SMB_MUX_TCA9545_N";
++		};
++	};
++
++	i2c-switch@75 {
++		compatible = "nxp,pca9546";
++		reg = <0x75>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		i2c-mux-idle-disconnect;
++		reset-gpios = <&pca9538 3 GPIO_ACTIVE_LOW>;
++
++		i2c_hostswap: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++
++			adm1272@1f {
++				compatible = "adi,adm1272";
++				reg = <0x1f>;
++				shunt-resistor-micro-ohms = <330>;
++			};
++		};
++		i2c_tmp: i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++		};
++		i2c_fan_controller_1: i2c@2 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <2>;
++			fan_controller@2c {
++				compatible = "maxim,max31790";
++				reg = <0x2c>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++		};
++
++		i2c_fan_controller_2: i2c@3 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <3>;
++			fan_controller@2c {
++				compatible = "maxim,max31790";
++				reg = <0x2c>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++		};
++	};
++
++	i2c-switch@77 {
++		compatible = "nxp,pca9548";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x77>;
++		i2c-mux-idle-disconnect;
++		reset-gpios = <&pca9538 6 GPIO_ACTIVE_LOW>;
++
++		i2c_seq: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++			Sequencer@59 {
++				compatible = "maxim,max34451";
++				reg = <0x59>;
++			};
++		};
++
++		i2c_fru_1: i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++			mobo_fru@55 {
++				compatible = "atmel,24c64";
++				reg = <0x55>;
++			};
++		};
++
++		i2c_fru_2: i2c@2 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <2>;
++			eeprom@50 {
++				compatible = "atmel,24c2048";
++				reg = <0x50>;
++			};
++		};
++
++		i2c_i2cool_1: i2c@3 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <3>;
++			lm75@5c {
++				compatible = "maxim,max31725";
++				reg = <0x5c>;
++				status = "okay";
++			};
++		};
++
++		i2c_i2cool_2: i2c@4 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <4>;
++			lm75@5c {
++				compatible = "maxim,max31725";
++				reg = <0x5c>;
++				status = "okay";
++			};
++		};
++
++		i2c_i2cool_3: i2c@5 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <5>;
++			lm75@5c {
++				compatible = "maxim,max31725";
++				reg = <0x5c>;
++				status = "okay";
++			};
++		};
++
++		i2c_i2cool_4: i2c@6 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <6>;
++			lm75@5c {
++				compatible = "maxim,max31725";
++				reg = <0x5c>;
++				status = "okay";
++			};
++		};
++
++		i2c_cpu_pirom: i2c@7 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <7>;
++		};
++	};
++};
++
++&i2c4 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	status = "okay";
++	slave_mqueue: i2c-slave-mqueue@40000010 {
++		compatible = "i2c-slave-mqueue";
++		reg = <0x40000010>;
++		status = "okay";
++	};
++};
++
++&i2c8 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	status = "okay";
++};
++
++&i2c11 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <100000>;
++	status = "okay";
++};
++
++&i2c14 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <100000>;
++	status = "okay";
++	Sequencer@59 {
++		compatible = "maxim,max34451";
++		reg = <0x59>;
++	};
++
++	bmc_fru@55 {
++		compatible = "atmel,24c64";
++		reg = <0x55>;
++	};
++};
++
++&spi0 {
++	cs-gpios = <&gpio6 22 GPIO_ACTIVE_HIGH>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&gpio175ol_pins &gpio176o_pins
++		&gpio177_pins>;
++	status = "okay";
++	jtag_master {
++		compatible = "nuvoton,npcm750-jtag-master";
++		spi-max-frequency = <25000000>;
++		reg = <0>;
++
++		pinctrl-names = "pspi", "gpio";
++		pinctrl-0 = <&pspi1_pins>;
++		pinctrl-1 = <&gpio175ol_pins &gpio176o_pins
++				&gpio177_pins>;
++
++		tck-gpios = <&gpio5 15 GPIO_ACTIVE_HIGH>;
++		tdi-gpios = <&gpio5 16 GPIO_ACTIVE_HIGH>;
++		tdo-gpios = <&gpio5 17 GPIO_ACTIVE_HIGH>;
++		tms-gpios = <&gpio6 11 GPIO_ACTIVE_HIGH>;
++		status = "okay";
++	};
++};
++
++&spi1 {
++	cs-gpios = <&gpio6 23 GPIO_ACTIVE_HIGH>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&gpio17_pins &gpio18o_pins
++		&gpio19ol_pins>;
++	status = "okay";
++	jtag_master {
++		compatible = "nuvoton,npcm750-jtag-master";
++		spi-max-frequency = <25000000>;
++		reg = <0>;
++
++		pinctrl-names = "pspi", "gpio";
++		pinctrl-0 = <&pspi2_pins>;
++		pinctrl-1 = <&gpio17_pins &gpio18o_pins
++				&gpio19ol_pins>;
++
++		tck-gpios = <&gpio0 19 GPIO_ACTIVE_HIGH>;
++		tdi-gpios = <&gpio0 18 GPIO_ACTIVE_HIGH>;
++		tdo-gpios = <&gpio0 17 GPIO_ACTIVE_HIGH>;
++		tms-gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
++		status = "okay";
++	};
++};
++
++&pinctrl {
++	pinctrl-names = "default";
++	pinctrl-0 = <
++			/* GPI pins*/
++			&gpio4_pins
++			&gpio5_pins
++			&gpio8_pins
++			&gpio9_pins
++			&gpio10_pins
++			&gpio11_pins
++			&gpio13_pins
++			&gpio14_pins
++			&gpio20_pins
++			&gpio21_pins
++			&gpio24_pins
++			&gpio25_pins
++			&gpio38_pins
++			&gpio39_pins
++			&gpio40_pins
++			&gpio64_pins
++			&gpio65_pins
++			&gpio71_pins
++			&gpio73_pins
++			&gpio74_pins
++			&gpio78_pins
++			&gpio79_pins
++			&gpio88_pins
++			&gpio93_pins
++			&gpio94_pins
++			&gpio120_pins
++			&gpio121_pins
++			&gpio122_pins
++			&gpio123_pins
++			&gpio124_pins
++			&gpio125_pins
++			&gpio126_pins
++			&gpio127_pins
++			&gpio130_pins
++			&gpio136_pins
++			&gpio137_pins
++			&gpio138_pins
++			&gpio139_pins
++			&gpio140_pins
++			&gpio141_pins
++			&gpio142_pins
++			&gpio143_pins
++			&gpio144_pins
++			&gpio146_pins
++			&gpio147_pins
++			&gpio154_pins
++			&gpio155_pins
++			&gpio156_pins
++			&gpio171_pins
++			&gpio174_pins
++			&gpio194_pins
++			&gpio195_pins
++			&gpio196_pins
++			&gpio197_pins
++			&gpio199_pins
++			&gpio202_pins
++			&gpio204_pins
++			&gpio205_pins
++			&gpio223_pins
++			&gpio224_pins
++			&gpio227_pins
++			&gpio228_pins
++			&gpio230_pins
++			&gpio231_pins
++			&gpio177_pins
++			&gpio17_pins
++			/* GPO pins*/
++			&gpio175ol_pins
++			&gpio176o_pins
++			&gpio18o_pins
++			&gpio19ol_pins
++			>;
++};
++
++&gpio0 {
++	gpio-line-names =
++	/*0-31*/	"","","","","","","RESET_OUT","POWER_OUT",
++			"","","CPU1_MEM_THERM_EVENT","CPU2_MEM_THERM_EVENT","","PS_PWROK","","",
++			"","","","","SIO_POWER_GOOD","","","",
++			"CPU1_THERMTRIP","CPU2_THERMTRIP","","","","","","";
++};
++
++&gpio1 {
++	gpio-line-names =
++	/*32-63*/	"","","","","","","CPU_CATERR","",
++			"CPU_MCERR","","","","","","","",
++			"","","","","","","","",
++			"","","","","","","","";
++};
++
++&gpio2 {
++	gpio-line-names =
++	/*64-95*/	"POWER_BUTTON","RESET_BUTTON","","","","","","",
++			"","CPU1_VRHOT","CPU2_VRHOT","","","DEBUG_EN_N","XDP_PRST_N","",
++			"","TCK_MUX_SEL","PWR_DEBUG_N","PREQ_N","","","","",
++			"","","","","","","PCH_BMC_THERMTRIP","";
++};
++
++&gpio4 {
++	gpio-line-names =
++	/*128-159*/	"","","","","","","","",
++			"","","CPU_ERR0","CPU_ERR1","CPU_ERR2","","","POST_COMPLETE",
++			"PRDY_N","SYSPWROK","","","","","","",
++			"","","","","SMI","","","";
++};
++
++&gpio6 {
++	gpio-line-names =
++	/*192-223*/	"","","","","","","","SIO_S5",
++			"","","","","","","","",
++			"","","","","","","","",
++			"","","","","","","","";
++};
++
++&gpio7 {
++	gpio-line-names =
++	/*224-255*/	"","","","PLTRST_N","CPU1_FIVR_FAULT","","CPU2_FIVR_FAULT","",
++			"","","","","","","","",
++			"","","","","","","","",
++			"","","","","","","","";
++};
++
++&peci0 {
++	cmd-timeout-ms = <1000>;
++	pull-down = <0>;
++	host-neg-bit-rate = <15>;
++	status = "okay";
++
++	intel-peci-dimmtemp@30 {
++		compatible = "intel,peci-client";
++		reg = <0x30>;
++		status = "okay";
++	};
++
++	intel-peci-dimmtemp@31 {
++		compatible = "intel,peci-client";
++		reg = <0x31>;
++		status = "okay";
++	};
++};
+-- 
+2.25.1
 
-eJ8+IjAxAQaQCAAEAAAAAAABAAEAAQeQBgAIAAAA5AQAAAAAAADoAAEJgAEAIQAAADlFNDczMkU2
-QkJGQzRBNDlCOEIwMUU4RUVGNzg4OEUyAHgHAQ2ABAACAAAAAgACAAEFgAMADgAAAOcHAwADAAYA
-HgAvAAUATAEBIIADAA4AAADnBwMAAwAGAB4ALwAFAEwBAQiABwAYAAAASVBNLk1pY3Jvc29mdCBN
-YWlsLk5vdGUAMQgBBIABAC0AAABSZTogW1BBVENIXSB6c3RkOiBGaXggZGVmaW5pdGlvbiBvZiBh
-c3NlcnQoKQDgDgEDkAYAiDQAAFUAAAACAX8AAQAAADAAAAA8QzE5MTIxMDUtNTk1MS00NjI3LTgz
-QjYtQkE4NDQyMEZFRDBEQG1ldGEuY29tPgACAQkQAQAAAJsFAACXBQAADwoAAExaRnXWRY38YQAK
-ZmJpZAQAAGNjwHBnMTI1MgD+A0PwdGV4dAH3AqQD4wIABGNoCsBzZXQwIO8HbQKDAFARTTIKgAa0
-AoCWfQqACMg7CWIxOQ7AvwnDFnIKMhZxAoAVYioJsHMJ8ASQYXQFsg5QA2Bzom8BgCBFeBHBbhgw
-XQZSdgSQF7YCEHIAwHR9CFBuGjEQIAXABaAbZGSaIANSIBAiF7JcdgiQ5HdrC4BkNR1TBPAHQA0X
-cDAKcRfyYmttawZzAZAAICBCTV9C4EVHSU59CvwB8QvwNQ7AbAuAZQqBIaQ+IIpPA6BKA5EyOSwi
-8BgwMjMjIBiAIDU6oDE0IEFNIyBKAiAXGIAZoQexdQTwaFwniEU0ZhuxPGouGFANJRJhARAEkEBn
-bXi1JfF0InB3A2AQIDoiB3kiByEtKO8p/ysPLA18OyIHEkBoBAAF0AeQc2H1GdFJBCBGHJIDkRlw
-G6E/JIADIAZgHcAEkCe/IHzvLA8ybzN/NI4hMD8jkAQQgRuBKHgpIHNoCGCibBxgZW1pBUBhJ0CX
-CsADABnAIAaQIHg4sA0EIGYHQBIALiBXQeBSTl9PTjciN9IEIOZhIgc4TnRyClA5kC3A9yUQI4E2
-3mIZ4AEBIbEcYLs9IDmnITcwIgcYcWgbsZskozm4LjWvBgBpZz6hgi0ZMGYtYnk6JF+nJW8meyGc
-SGlDxywhnFxJIBHQGjAcwG8jkHBhCPFnaXplIyBJMGpjRIAFQHN1YjfhHEJt9nk+IBhwbhHAHHAF
-sTgg/FBSLwEcYEkwCXAHQEox9UCydCGVdy3QHnBKcQuAXxAgL/EcYEmhAZBrGeB5dQhhIAqwdBHA
-SmIYkG9+azgRDeABIASQCfAFQGXwcXVpdh5hUaFQMzmQ/FNvSMc4QE7hT0MuQEug/0QSH1BMIxIA
-HcA4gkBxUCSvNZYiBzSBQc8gCFBtN+IBCmBjMWI0OWY1SGI2NyQAKCIhoGLVQ7B6H2BkQ7BVDnAY
-cJ8BAEmSC2AQIErBdXAfYH9NIRywWmIiBxoxAJACICDQMS40Lh6QIjdAB4D/AjBdgTxBTbFVo1pi
-G9FbEf84QAQgGDUcV0CAIgdb511G/xkwWlMjIBkgUCAEkBHQW/D/VaM+YzfwYtU9JD4gPSAcUd8C
-ICIHObU9uT6AeBxRC4DfVaMb5F1zBPVMwS8FsVvv9yJDGSAIcGNowgEAQbYhlfZZTTBQcXcZ4BhQ
-TzRoEf84sFvIY4M4wU/hJ0A3gyGg/0+xVBJLA1WjandMkCGVVbK/PoBOgS3hG+E8YFogLyGhGHV4
-LU+wBKBlbC8tWmJfAQBqgC5MEFswel05kE9AcgPxSlMD8Gz7AyBqcGRbgW6yPjAa4WFm71WyGFAQ
-QDiwbUngACBsjbZCW6FIRk4OUFDwVASQfwlwdvAhnHWxSUACQGqAOlwvL0ogRBBLAC4FoG2+LzlA
-bBAG4FDgdOMvAmDmb3QAAQB2L3OvdL1WX19XaVoRfsR+AQRgbnTrfOki8CArV3gxcxQZlGNxj4Yg
-C4A24l2BKCsphwL3AQAecIeTLT+4IgdRMldB/32RI5CAIYOfdSeAEosPgT1HInAdsRAwIDdhWZBm
-QDQ0ODM5Y4/wLlIuATA2ZJBRNQWBMPuGIB6RNo+wgiqKv42vIkOeK5TAjJ+TbyJDQEBXQPA4NCw3
-hWCXo5dhH2FdXoBjamBO0ZFgXwVAWrhTVER1MFIAkWAomPefmdEN0C/hIyCY8jMympW1GSByN0Bc
-AACJDyMLgNZjCkBbETyAMy+AlHWA80amKCktIz5kPRk5tjch/T+4K6CPPwiiK504VUI40AQvKpl0
-REVQU18AQVNTRVJUICrGL6WPpppORUWZsKdf01dBIgcyLo/gLgFApQ0HIZUVQq3gAB8AQgABAAAA
-GgAAAE4AaQBjAGsAIABUAGUAcgByAGUAbABsAAAAAAAfAGUAAQAAACQAAAB0AGUAcgByAGUAbABs
-AG4AQABtAGUAdABhAC4AYwBvAG0AAAAfAGQAAQAAAAoAAABTAE0AVABQAAAAAAACAUEAAQAAAGAA
-AAAAAAAAgSsfpL6jEBmdbgDdAQ9UAgAAAIBOAGkAYwBrACAAVABlAHIAcgBlAGwAbAAAAFMATQBU
-AFAAAAB0AGUAcgByAGUAbABsAG4AQABtAGUAdABhAC4AYwBvAG0AAAAfAAJdAQAAACQAAAB0AGUA
-cgByAGUAbABsAG4AQABtAGUAdABhAC4AYwBvAG0AAAAfAOVfAQAAAAQAAAAgAAAAHwAaDAEAAAAa
-AAAATgBpAGMAawAgAFQAZQByAHIAZQBsAGwAAAAAAB8AHwwBAAAAJAAAAHQAZQByAHIAZQBsAGwA
-bgBAAG0AZQB0AGEALgBjAG8AbQAAAB8AHgwBAAAACgAAAFMATQBUAFAAAAAAAAIBGQwBAAAAYAAA
-AAAAAACBKx+kvqMQGZ1uAN0BD1QCAAAAgE4AaQBjAGsAIABUAGUAcgByAGUAbABsAAAAUwBNAFQA
-UAAAAHQAZQByAHIAZQBsAGwAbgBAAG0AZQB0AGEALgBjAG8AbQAAAB8AAV0BAAAAJAAAAHQAZQBy
-AHIAZQBsAGwAbgBAAG0AZQB0AGEALgBjAG8AbQAAAAsAQDoBAAAAHwAaAAEAAAASAAAASQBQAE0A
-LgBOAG8AdABlAAAAAAADAPE/CQQAAAsAQDoBAAAAAwD9P+QEAAACAQswAQAAABAAAACeRzLmu/xK
-SbiwHo7veIjiAwAXAAEAAABAADkAgAV2sJlN2QFAAAgwifz2sJlN2QEfADcAAQAAAFoAAABSAGUA
-OgAgAFsAUABBAFQAQwBIAF0AIAB6AHMAdABkADoAIABGAGkAeAAgAGQAZQBmAGkAbgBpAHQAaQBv
-AG4AIABvAGYAIABhAHMAcwBlAHIAdAAoACkAAAAAAB8APQABAAAACgAAAFIAZQA6ACAAAAAAAAMA
-3j/p/QAAAwAmAAAAAAALACkAAAAAAAMANgAAAAAAHwBwAAEAAABSAAAAWwBQAEEAVABDAEgAXQAg
-AHoAcwB0AGQAOgAgAEYAaQB4ACAAZABlAGYAaQBuAGkAdABpAG8AbgAgAG8AZgAgAGEAcwBzAGUA
-cgB0ACgAKQAAAAAAAgFxAAEAAAAbAAAAAQHZM+Oq/TKj4TuChUSUQZBrU+DTa67oy42AAAsABgwA
-AAAAHwAVEAEAAAB2AAAAMwA0AEYAQgA2AEYAOAA0ADkAQQAxADkARQA0ADQAMwA5ADQAOQA1ADYA
-RgBDAEEARQA2ADEANQBBADAAQwAyAEAAbgBhAG0AcAByAGQAMQA1AC4AcAByAG8AZAAuAG8AdQB0
-AGwAbwBvAGsALgBjAG8AbQAAAAAAHwA1EAEAAABgAAAAPABDADEAOQAxADIAMQAwADUALQA1ADkA
-NQAxAC0ANAA2ADIANwAtADgAMwBCADYALQBCAEEAOAA0ADQAMgAwAEYARQBEADAARABAAG0AZQB0
-AGEALgBjAG8AbQA+AAAAHwA5EAEAAABiAAAAPAAyADAAMgAzADAAMQAyADkAMQAzADEANAAzADYA
-LgAxADMANAAzADIAMgA4AC0AMQAtAGoALgBuAGUAdQBzAGMAaABhAGUAZgBlAHIAQABnAG0AeAAu
-AG4AZQB0AD4AAAAAAB8AQhABAAAAYgAAADwAMgAwADIAMwAwADEAMgA5ADEAMwAxADQAMwA2AC4A
-MQAzADQAMwAyADIAOAAtADEALQBqAC4AbgBlAHUAcwBjAGgAYQBlAGYAZQByAEAAZwBtAHgALgBu
-AGUAdAA+AAAAAAADAJAQAAAAAAMAExIAAAAAQAAHMLuJwrCZTdkBAgETMAEAAAAQAAAA/TKj4TuC
-hUSUQZBrU+DTawMAWzMBAAAAAwBaNgAAAAADAGg2DQAAAAsA+jYBAAAAHwDZPwEAAAD4AQAAPgAg
-AE8AbgAgAEoAYQBuACAAMgA5ACwAIAAyADAAMgAzACwAIABhAHQAIAA1ADoAMQA0ACAAQQBNACwA
-IABKAG8AbgBhAHQAaABhAG4AIABOAGUAdQBzAGMAaADkAGYAZQByACAAPABqAC4AbgBlAHUAcwBj
-AGgAYQBlAGYAZQByAEAAZwBtAHgALgBuAGUAdAA+ACAAdwByAG8AdABlADoADQAKAD4AIAANAAoA
-PgAgACEALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAt
-AC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0A
-LQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQB8AA0ACgA+ACAAIABUAGgAaQBzACAATQBlAHMAcwBh
-AGcAZQAgAEkAcwAgAEYAcgBvAG0AIABhAG4AIABFAHgAdABlAHIAbgBhAGwAIABTAGUAbgBkAGUA
-cgANAAoAPgAgAA0ACgA+ACAAfAAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAt
-AC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAAAAHwD4PwEAAAAaAAAA
-TgBpAGMAawAgAFQAZQByAHIAZQBsAGwAAAAAAB8A+j8BAAAAGgAAAE4AaQBjAGsAIABUAGUAcgBy
-AGUAbABsAAAAAAAfACJAAQAAAAYAAABFAFgAAAAAAB8AI0ABAAAA/AAAAC8ATwA9AEUAWABDAEgA
-QQBOAEcARQBMAEEAQgBTAC8ATwBVAD0ARQBYAEMASABBAE4ARwBFACAAQQBEAE0ASQBOAEkAUwBU
-AFIAQQBUAEkAVgBFACAARwBSAE8AVQBQACAAKABGAFkARABJAEIATwBIAEYAMgAzAFMAUABEAEwA
-VAApAC8AQwBOAD0AUgBFAEMASQBQAEkARQBOAFQAUwAvAEMATgA9ADIANQBCAEMAOAA5AEMAOQA3
-ADYAMwAyADQAOABFADkAOQAxADkAQQBGAEIANwA1ADMAMQAzAEEARQA5ADIAMAAtAFQARQBSAFIA
-RQBMAEwATgAAAB8AJEABAAAABgAAAEUAWAAAAAAAHwAlQAEAAAD8AAAALwBPAD0ARQBYAEMASABB
-AE4ARwBFAEwAQQBCAFMALwBPAFUAPQBFAFgAQwBIAEEATgBHAEUAIABBAEQATQBJAE4ASQBTAFQA
-UgBBAFQASQBWAEUAIABHAFIATwBVAFAAIAAoAEYAWQBEAEkAQgBPAEgARgAyADMAUwBQAEQATABU
-ACkALwBDAE4APQBSAEUAQwBJAFAASQBFAE4AVABTAC8AQwBOAD0AMgA1AEIAQwA4ADkAQwA5ADcA
-NgAzADIANAA4AEUAOQA5ADEAOQBBAEYAQgA3ADUAMwAxADMAQQBFADkAMgAwAC0AVABFAFIAUgBF
-AEwATABOAAAAHwAwQAEAAAAaAAAATgBpAGMAawAgAFQAZQByAHIAZQBsAGwAAAAAAB8AMUABAAAA
-GgAAAE4AaQBjAGsAIABUAGUAcgByAGUAbABsAAAAAAAfADhAAQAAABoAAABOAGkAYwBrACAAVABl
-AHIAcgBlAGwAbAAAAAAAHwA5QAEAAAAaAAAATgBpAGMAawAgAFQAZQByAHIAZQBsAGwAAAAAAAMA
-WUAAAAAAAwBaQAAAAAADADdQAQAAAB8ACl0BAAAAJAAAAHQAZQByAHIAZQBsAGwAbgBAAG0AZQB0
-AGEALgBjAG8AbQAAAB8AC10BAAAAJAAAAHQAZQByAHIAZQBsAGwAbgBAAG0AZQB0AGEALgBjAG8A
-bQAAAAIBFV0BAAAAEAAAAP4n6YpVEqdHoq9fOgadqqICARZdAQAAABAAAAD+J+mKVRKnR6KvXzoG
-naqiCwAAgAggBgAAAAAAwAAAAAAAAEYAAAAAFIUAAAAAAAADAACACCAGAAAAAADAAAAAAAAARgEA
-AAAyAAAARQB4AGMAaABhAG4AZwBlAEEAcABwAGwAaQBjAGEAdABpAG8AbgBGAGwAYQBnAHMAAAAA
-ACAAAAAfAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAWAAAAQwBsAGkAZQBuAHQASQBuAGYAbwAAAAAA
-AQAAAJYAAABDAGwAaQBlAG4AdAA9AFcAZQBiAFMAZQByAHYAaQBjAGUAcwA7AEEAcABwAGwAZQBF
-AHgAYwBoAGEAbgBnAGUAVwBlAGIAUwBlAHIAdgBpAGMAZQBzAC8AOAAyADcALgA0ADAALgAxACAA
-TQBhAGkAbAAvADMANwAzADEALgA0ADAAMAAuADUAMQAuADEALgAxADsAAAAAAB8AAIAfpOszqHou
-Qr57eeGpjlSzAQAAADgAAABDAG8AbgB2AGUAcgBzAGEAdABpAG8AbgBJAG4AZABlAHgAVAByAGEA
-YwBrAGkAbgBnAEUAeAAAAAEAAADYAQAASQBJAD0AWwBDAEkARAA9ADEAOQBmADUAMAAwADgAMgAt
-ADEANgBhADMALQA0AGIAMgA1AC0AOAA5ADUAYgAtAGIAMQBhADkAYwBkAGEANwA4AGIAYgBlADsA
-SQBEAFgASABFAEEARAA9ADAAMQBEADkANABEADkAOQBCADAAOwBJAEQAWABDAE8AVQBOAFQAPQAx
-AF0AOwBTAEIATQBJAEQAPQA5ADsAUwAxAD0APAAyADAAMgAzADAAMQAyADkAMQAzADEANAAzADYA
-LgAxADMANAAzADIAMgA4AC0AMQAtAGoALgBuAGUAdQBzAGMAaABhAGUAZgBlAHIAQABnAG0AeAAu
-AG4AZQB0AD4AOwBSAFQAUAA9AEQAaQByAGUAYwB0AEMAaABpAGwAZAA7AFQARABOAD0AUwBhAG0A
-ZQA7AFQARgBSAD0ATgBvAHQARgBvAHIAawBpAG4AZwA7AFYAZQByAHMAaQBvAG4APQBWAGUAcgBz
-AGkAbwBuACAAMQA1AC4AMgAwACAAKABCAHUAaQBsAGQAIAA2ADEANQA2AC4AMAApACwAIABTAHQA
-YQBnAGUAPQBIADIAOwBVAFAAPQBEADAAOwBEAFAAPQAxADAAMQAAAAsAAIC1KbWndUunR6JPIHQ9
-bFXNAQAAACYAAABNAGUAcwBzAGEAZwBlAE4AbwB0AEoAdQBuAGsARgBsAGEAZwAAAAAAAQAAAAsA
-AIBQ42MLzJzQEbzbAIBfzM4EAQAAACYAAABJAHMAUABlAHIAbQBhAG4AZQBuAHQARgBhAGkAbAB1
-AHIAZQAAAAAAAAAAAAMAAIBQ42MLzJzQEbzbAIBfzM4EAQAAACQAAABJAG4AZABlAHgAaQBuAGcA
-RQByAHIAbwByAEMAbwBkAGUAAAAbAAAAHwAAgFDjYwvMnNARvNsAgF/MzgQBAAAAKgAAAEkAbgBk
-AGUAeABpAG4AZwBFAHIAcgBvAHIATQBlAHMAcwBhAGcAZQAAAAAAAQAAAHAAAABJAG4AZABlAHgA
-aQBuAGcAIABQAGUAbgBkAGkAbgBnACAAdwBoAGkAbABlACAAQgBpAGcARgB1AG4AbgBlAGwAUABP
-AEkASQBzAFUAcABUAG8ARABhAHQAZQAgAGkAcwAgAGYAYQBsAHMAZQAuAAAAAwANNP0/AAAfAACA
-hgMCAAAAAADAAAAAAAAARgEAAAAuAAAAYQB1AHQAaABlAG4AdABpAGMAYQB0AGkAbwBuAC0AcgBl
-AHMAdQBsAHQAcwAAAAAAAQAAALQAAABkAGsAaQBtAD0AbgBvAG4AZQAgACgAbQBlAHMAcwBhAGcA
-ZQAgAG4AbwB0ACAAcwBpAGcAbgBlAGQAKQAgAGgAZQBhAGQAZQByAC4AZAA9AG4AbwBuAGUAOwBk
-AG0AYQByAGMAPQBuAG8AbgBlACAAYQBjAHQAaQBvAG4APQBuAG8AbgBlACAAaABlAGEAZABlAHIA
-LgBmAHIAbwBtAD0AbQBlAHQAYQAuAGMAbwBtADsAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAAe
-AAAAYQBjAGMAZQBwAHQAbABhAG4AZwB1AGEAZwBlAAAAAAABAAAADAAAAGUAbgAtAFUAUwAAAB8A
-AICGAwIAAAAAAMAAAAAAAABGAQAAACAAAAB4AC0AbQBzAC0AaABhAHMALQBhAHQAdABhAGMAaAAA
-AAEAAAACAAAAAAAAAEgAAIAIIAYAAAAAAMAAAAAAAABGAQAAACIAAABOAGUAdAB3AG8AcgBrAE0A
-ZQBzAHMAYQBnAGUASQBkAAAAAAAoNRtc2iQ5ROfpCNsbsNN5HwAAgIYDAgAAAAAAwAAAAAAAAEYB
-AAAALgAAAHgALQBtAHMALQBwAHUAYgBsAGkAYwB0AHIAYQBmAGYAaQBjAHQAeQBwAGUAAAAAAAEA
-AAAMAAAARQBtAGEAaQBsAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAANgAAAHgALQBtAHMALQB0
-AHIAYQBmAGYAaQBjAHQAeQBwAGUAZABpAGEAZwBuAG8AcwB0AGkAYwAAAAAAAQAAAEgAAABCAFkA
-NQBQAFIAMQA1AE0AQgAzADYANgA3ADoARQBFAF8AfABTAEoAMABQAFIAMQA1AE0AQgA1ADEANwA5
-ADoARQBFAF8AAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAABQAAAAeAAtAG0AcwAtAG8AZgBmAGkA
-YwBlADMANgA1AC0AZgBpAGwAdABlAHIAaQBuAGcALQBjAG8AcgByAGUAbABhAHQAaQBvAG4ALQBp
-AGQAAAABAAAASgAAADUAYwAxAGIAMwA1ADIAOAAtADIANABkAGEALQA0ADQAMwA5AC0AZQA3AGUA
-OQAtADAAOABkAGIAMQBiAGIAMABkADMANwA5AAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAAY
-AAAAeAAtAGYAYgAtAHMAbwB1AHIAYwBlAAAAAQAAABIAAABJAG4AdABlAHIAbgBhAGwAAAAAAB8A
-AICGAwIAAAAAAMAAAAAAAABGAQAAADgAAAB4AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AcwBl
-AG4AZABlAHIAYQBkAGMAaABlAGMAawAAAAEAAAAEAAAAMQAAAB8AAICGAwIAAAAAAMAAAAAAAABG
-AQAAADoAAAB4AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AcgBl
-AGwAYQB5AAAAAAABAAAABAAAADAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAAqAAAAeAAtAG0A
-aQBjAHIAbwBzAG8AZgB0AC0AYQBuAHQAaQBzAHAAYQBtAAAAAAABAAAADgAAAEIAQwBMADoAMAA7
-AAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAABEAAAAeAAtAG0AaQBjAHIAbwBzAG8AZgB0AC0A
-YQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcAZQAtAGkAbgBmAG8AAAABAAAA2gUAAGkANwBV
-AEkATABKAEIAZwB0ADcAegA2AEkAZwBIAG8ARABrAGUARQA2AE8AdQB3AEoAWQAvAG0AbwBCAFYA
-aQBhAGoAMABxAFIAQQBjAEUAcwBaAEsAYwBXADUAbwBVAEwALwB2AFgAOABaAE4AVwBGACsAVAB0
-AEIAeQAzAEQAeABsAGIARgBSAEsAYgBtAHkAMwBxADkATQBjAGsAQwBzAHYAdgBrAFEAdQB6AHYA
-cgBVAFcAMwB1AFMAMABlADUAUgBJAEsASgBDADYAcQArAFYAdgAzAHIAVAByAFMAOQBKAGQAUgB2
-AHMAbQA5AEwAaABNACsAYwBjAGcAZABKAFkAdQBVAFEARwBGADUAQQAyAGgAegBGAHQAVwBmAFIA
-dgBhAEkAOABKAFQAdABLAG8AdwByAGgAOABIAHEASgBRAFUANgBtAFEAVQBtAEkANAB0AGQATwBV
-AHIAYQB2AHYAOQBEAGUAUABjAEYARAAxAGkAUABzAEsATgBRAGUARgA4AE0AKwB5AHcAUwAvAGkA
-UABqAFQASgBDAHkAeQBxAFAAZABjAGoAUABsAE8ARQB5AE0AQgBOAHoAeABhAGsAUQBUAEMASAA1
-ADQANQBUAGwAcAAvACsAYQBVAEcATgA5AC8AdgBWAG0AeQBMACsASAAzAGgAVABlAEcAaQBmAEoA
-MgBFAG8AOQBKAGcATQAwAFoASgBYAGEAWAA5ADgAOABWAEQASABYAEwANwAxAHcAOAA2ADIAbABE
-AGMAaQBDAGMAUQBuACsAUgBLAEYAMwBlAHcASgB4AFEALwBEAEEAbwBOAHoAbQBVAHYASgBuADYA
-SQBwAGgAWQBWADQAcgB0AHkAQgBRADMAYQA2AG0AbQBmAEwAdABYAFAAZABvAEIATQBiAFkAVQBq
-AGcAMABpADUAMgBtADkAeABWAE4AbQBNAE8ANABjAC8AaAA4ADAAYQBHAEoAVQBvAGMAaQBMAEMA
-cgBvAGMAUwAxAEQAZABaAGQAagBXAEsATgBzAGQATgBIAFUAaABJAHgAagBRAFgAOABNADYAegBU
-AEwAVABDAEsAbgBtAGMAdgBGAHkAWABMADEAUwBOADcANgBHAG0AaQBsADEAcAA3AEgAVABFADcA
-UwBHAEsASwBoAHcAUAB6AGwAQgBoAGUARABRAEgATABGAEYAbwByAEkAdABSADQAWAA4AGMASABy
-AGwAaABWAEQAOABhAFQAbgB0AE4AeABCAEoATQB6AEsAUgBoAHIAQwBlADYAUgBHAEoANQBqAGIA
-UgBSAE4AWgB1AFgAdAA5AHUATwAxAG0AZABtAFgAbgBLAEgAOQBkADQAZgBoAEsAWABEAGgAbgBj
-AEsAZwBXAFQAUgB2AEMASABtAEsAZQBnAEYARQA3AE0AeABSAFcAQgBWADMAdQBIAEcAQgBNADUA
-WABFAGQAUQBYAE8ASAA0AGoAZAB4ADkAdAA4AHcAbwAvAEMAYQBEADQAQQB2AFMAagAxAFgAVwBy
-AFgAaQBlAFAAWQBJAFMAZgBHADkAcAAzAGQATgBqADkARAB0AFoAdgAxAFEANQArAFcAcQBaAG4A
-MQBlADEAOAA4AFYASwB5AFAANQAyAEMAWgBZAEMAUwB6AEwAYwBiAEEAYgBSAHkARABmAFYAOQBm
-AGgAeQA4AGcAWQB2AG8AbQBmAHAAaQBuAEsAeQAwAEUAawBPAFcAMgA1AFAAawBPAEgARgBlAEYA
-QQAyAC8ALwBWAEcASwAyAFUAdABTAHgAKwBWAEcAZQBXAHoANgBwAHcARgAxAHcAagB5AEYATwB1
-AFUAbABvAEYAMwB2AGcATgAwAHkAMwArADYASAA1AGIASgBHAFQAdgA2AGQAKwBSAC8AcgA1AHcA
-SgBsAGsASgB0AGQAOABiAFcAKwB3AHAAcQBGACsAagAxAFcAVAA2ADUAdwA0AHIATwByAFcAUQBD
-AGEASgBVAD0AAAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAADgAAAB4AC0AZgBvAHIAZQBmAHIA
-bwBuAHQALQBhAG4AdABpAHMAcABhAG0ALQByAGUAcABvAHIAdAAAAAEAAABwBAAAQwBJAFAAOgAy
-ADUANQAuADIANQA1AC4AMgA1ADUALgAyADUANQA7AEMAVABSAFkAOgA7AEwAQQBOAEcAOgBlAG4A
-OwBTAEMATAA6ADEAOwBTAFIAVgA6ADsASQBQAFYAOgBOAEwASQA7AFMARgBWADoATgBTAFAATQA7
-AEgAOgBCAFkANQBQAFIAMQA1AE0AQgAzADYANgA3AC4AbgBhAG0AcAByAGQAMQA1AC4AcAByAG8A
-ZAAuAG8AdQB0AGwAbwBvAGsALgBjAG8AbQA7AFAAVABSADoAOwBDAEEAVAA6AE4ATwBOAEUAOwBT
-AEYAUwA6ACgAMQAzADIAMwAwADAAMgA1ACkAKAA0ADYAMwA2ADAAMAA5ACkAKAAzADYANgAwADAA
-NAApACgAMwA5ADgANgAwADQAMAAwADAAMAAyACkAKAAxADMANgAwADAAMwApACgAMwA5ADYAMAAw
-ADMAKQAoADMANAA2ADAAMAAyACkAKAAzADcANgAwADAAMgApACgANAA1ADEAMQA5ADkAMAAxADgA
-KQAoADgAMwAzADgAMAA0ADAAMAAwADAAMQApACgANwAxADIAMAAwADQAMAAwADAAMAAxACkAKAAz
-ADYANwA1ADYAMAAwADMAKQAoADYANgA1ADcANAAwADEANQApACgAMwA4ADEAMAAwADcAMAAwADAA
-MAAyACkAKAA0ADcAOAA2ADAAMAAwADAAMQApACgAMQAyADIAMAAwADAAMAAwADEAKQAoADUANgA2
-ADAAMwAwADAAMAAwADIAKQAoADgAOQAzADYAMAAwADIAKQAoADgANgAzADYAMgAwADAAMQApACgA
-NgA2ADkANAA2ADAAMAA3ACkAKAAzADMANgA1ADYAMAAwADIAKQAoADMAOAAwADcAMAA3ADAAMAAw
-ADAANQApACgANgA0ADcANQA2ADAAMAA4ACkAKAAyADYAMAAwADUAKQAoADEAOAA2ADAAMAAzACkA
-KAAyADYAMQA2ADAAMAA1ACkAKAA5ADYANgAwADAANQApACgANgA1ADAANgAwADAANwApACgANQAz
-ADUANAA2ADAAMQAxACkAKAA2ADUAMQAyADAAMAA3ACkAKAA2ADQAOAA2ADAAMAAyACkAKAA2ADYA
-NQA1ADYAMAAwADgAKQAoADgANgA3ADYAMAAwADIAKQAoADYANgA0ADcANgAwADAANwApACgANwA2
-ADEAMQA2ADAAMAA2ACkAKAAyADkAMAA2ADAAMAAyACkAKAA2ADYANAA0ADYAMAAwADgAKQAoADQA
-MQAzADAAMAA3ADAAMAAwADAAMQApACgANgA5ADEANgAwADAAOQApACgAMwAxADYAMAAwADIAKQAo
-ADQAMwAyADYAMAAwADgAKQAoADUANAA5ADAANgAwADAAMwApACgANAA1ADkAOAAwADUAMAAwADAA
-MAAxACkAOwBEAEkAUgA6AE8AVQBUADsAUwBGAFAAOgAxADEAMAAyADsAAAAfAACAhgMCAAAAAADA
-AAAAAAAARgEAAABcAAAAeAAtAG0AcwAtAGUAeABjAGgAYQBuAGcAZQAtAGEAbgB0AGkAcwBwAGEA
-bQAtAG0AZQBzAHMAYQBnAGUAZABhAHQAYQAtAGMAaAB1AG4AawBjAG8AdQBuAHQAAAABAAAABAAA
-ADEAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAABKAAAAeAAtAG0AcwAtAGUAeABjAGgAYQBuAGcA
-ZQAtAGEAbgB0AGkAcwBwAGEAbQAtAG0AZQBzAHMAYQBnAGUAZABhAHQAYQAtADAAAAAAAAEAAACC
-DAAAWQBGADkAWAA2AG4AVAA3AGcAaABjAHIAbgBPAGsAbgA0AFkARAA5AGMAVwB5AE0AVQBGAE0A
-agBuAFMAawB1AEEAbQBVAFoAWQBhAFoAVwBkAHEAZABqAEUAQwBaAGQAagB1AFMAawBwADEAbAB1
-AGwAMwBvAFQAagA2ADkAdwBEAGwAegAxADAASwBCAEgATgBtAFkAcwBmACsAbABjAFcASwBLAE4A
-VwBZAFkAdABWAE0AWgBzAEwAVgBLAHMAbgBOADUAUABxAGoAOQB2AEQAOAAvAGIAUgBSAHIAYgBa
-AEIAWgAwAHQATgBGAGoAZAA0AEcAUABWAHEAQgBDAEYAVwBvAFcAOQBQAHAAZQArADcAeQBtAHQA
-TwB3AEkASgA3AFgAdABBAFQARABBACsAMgBNAGUAcgByAGsAZABMAEsAQQBoAGgAYQBnAEkAeABQ
-AEIAbgBpAGIAVQBtAFAAWgB5AHMAOQB3AGIANABmAGcAeABZAGkANABhAEgAbwA2ACsAeQBRAEUA
-UAAyAGgASgBkAFQAUgAxAGMATQBiAGIATwBvAG0ARwBlADcAbQBuAFQAbgAxADMAQwBuAHIAZQAw
-AHYAMABrAGwAQgAxAGIASAB6ADEATwBxAGYAMgBvAFAAMgBBAG0AbwArAC8ASAB6ADMAdgB1AC8A
-VQB2AGQARABZAG8ATgB4AFcAeQAxAHYAYgBLAFEATABMADIANwBFAEkAawBvADMAZAA5ADMAYQBv
-AFYAQQBhAEoAZgBRAGkAZgBXAFMAcgBMAFMAOQBqAGQAYgBkAG4AMABBAGEAOABkAGYAYwBGAGwA
-UwBGAEEAUQBwAGoATQBLAHEANABTACsAOQA4AHYAMAAzAHAAZwBVAGEARABLAGkAQwBJAGQAUwA0
-AG4AawBvAFAATABCADQAbwBHAHgAWABCADMAbQBLAEQAeQBlAFUAVAA4AEMATwBRAHUATgBVAGEA
-cgAvAE0ARgAzADMAVwB4AEgAbQBYAFYAeABNACsAWgAwAC8AKwBIAHYAbQBoAEQAMwBHAC8ARAAz
-AHIAUQBpAC8ARwBpAHoARwB5ADMAVAA2ADgAQwBjADcANgBNAHgARwBZAGcASQBSADgAdwBNAGMA
-awBGAGgAUgB6ADAAMgBUAEMAVQBYAGkARgB2AE8AbQBxAGcAMQBZAGMAdQBSAFUAbABLAEYASQBj
-AEEARwAxADAAeABwADgAWQBiAFQAbwBvAEoAaQBKAGMAawBBAEEAQQBpAHAANwBnADYAVwBwAEkA
-RwBtAHgAdQAxAEkARQBzAHIAMgBTADMAaAArAGYATQBnAGMAYgBRAGwAeQArAFMAbQA3AE0AUgBx
-AFIAMgByADkAZABzAEoAcABVAHoARQBTAFAASABSAHYAMwBhAFMAdgBzAHcAVQA4ADgAcABwAGgA
-TgBOAFQASQBIAHgANgBPAGEATQBJAG8AcAB0AHkATQBNAEMAeQBOAEsATAArAGkAMQB1ADgASQBt
-AEEARQBMADYAUgBqAEcAUQAzAEgATgArAHEAYgBXAFcAeABnAEYAUwBMAEgARQA4AHoAcQA5AHkA
-SgBKAGgAbwBhAEIARwBPAGMAaABIADEARAA2AHAAVgB1AGkAUwA3AHUANAAvAGIANQBmAC8AeQAy
-AEQARgBTAEUAaQBSAGQAUwAwAHEAagBoAHIAdwB2AHYAaQAyAFgAMABwAE8AWQBqAEQAcQBHAEoA
-bwA2AGUAegBoADgAcABhAGUARgBPAGcAYQBGAGMAbABUAHoAQwA0ADMASABVAEYAWQBBAGoASwBD
-ACsAbgBOAGQALwAxAEwAQwB0AGQAcAB6AFgAZwBZAEwANwBwAHIAWAAxAFgAWAArAEEAQQBCADgA
-RwBUAGYAZQBBAGgARwB6ADgAaAA3ADIAZABnADEAbAA3AEgATABIADMATQBjAHcAVwBxAEgAQgBB
-AHUAMwB2AGkASwA2AE4ATgBKAG8ASgBkAHAANABIAHQAbABDAHUAMwB1AEIAVgA3AFAALwBHAGMA
-LwBGAHkANAAvAGcALwBnAEcANAB6AEYAdAB6ACsAYgAwAHkAawBPAHEAOABQAGQARABSAEkAdAAr
-AEgAcwAzAHcAcQBEAG0AZABmAHgAVwBKAEgATgBPADcAKwBzAGUANQBjAGsASwBVAHEAcABGACsA
-cwBOAE8AdQB1AHMASgAxAGkAdwBsAGcATgBsADIANgBrAEMAdQBJAHgAVwA3AEEAZQBpAGgAbABa
-ADQAeQAyADcAcwBjAHgAVABqADAAcwBLAHYANgA4AHMARABjAHoAcABVAE4ARQAxAG4AdgA5AEgA
-bQBnAGcAaQBVAFAANwBVAG4AOABIAGwAUgAzAFMATQBIAGcAdQBBADQAQgBEAE4AcABMADAAcgBi
-ACsAUwBtADQAYwBRAGcARgB6AGUAKwByAGkASgBkADIATQAzADkANgA5AGIAQgBzAE8ANwBxAGkA
-awA0AG4AOABPAEgAeQByAFQAOQBvAGsASgB3AFIASgBmAFkAVgA2ADkAZgBlAGQAVQBLAHoAZQBm
-AGYAdAA3AHkARAA4AEIAegBYAGoAUABKAGkARQBFAHMAYQBiADcAMQBCAEoAaABiAGgAYQA5AGcA
-UgBpAEwAZgBlACsAZQBRADQAbABTAG8AWQBhAFQAKwBNAG4AQgByAFMAYgBVAFgAMAAzAHgATgBY
-AFUAQwB1ADMAMgBOAE0AOQBFAEUAMwA5AFcAMwB1AGoAagAwAGUAVQAvAHMAeABMAGsASwAwAEYA
-SQA5AE0AegB5AHkAbQBQAFkAZABEAHMAVQBZADcAWgBEAEcAbABMAE0AbwBJADYASwB4AEkANwAr
-AHYARwBnAGUAdgBVAHUARABFAE8AYgB6ADkATAB2AHIAMQBuAHkAKwAyAC8AbgBlAHAATAB3AGQA
-UwA2AG8AMgBYAEkAYwBQAE4ANwB6AHgAdwBOAHcAYQBnAFYAcgBYAEgAMQBQACsAOQBaAGsATwBp
-AGwAVwBVAHEAYgBlAFEANwAzAEgAYgB4AEQAQwBaADkAWQA5ADQASwBJADQAcgBFAGoAUwBiAHoA
-ZABRADcAUQBxAHgAQwB1AFMASwA0AEIARwA4AGMASwB3ADcAVAByAHMAaQBsADYAYwBQAGMAdwBx
-AFoAOABpADIAYgBKAEQAWABMAFAAMQBxAFAAMQBZAE8ALwB5AFYAQQB3AFcAYwBaAFAANQBjADIA
-QgBaAGcARgBHAHoAdwA1AG8AQQArADkAaQA0AG4AbQAvAGEAawBxAHEAdwA5AFcAZQBsAHgAWgBo
-AGwAaABUAEEAdQBLAEcAUQBWAFcAbABFAFMAYgBFAGMAYgB3ADcAegBWAFEAMgBwADEAdAB1AEoA
-MgBqADcAZwBDAHMAVQBuADIAQwB2AHYAdgBsAEkAaABXAGgAaAB0ADMAVQBFAFoAUQBTAEgAVABC
-AFAAbwBYAGgATwBvAGUAdwBlAGUAaAAvADUARQBsADkAWAA5ADcATABBADIAVABtADYARQBvAEQA
-dQBCAEgAOQBhAFgAVwBkACsAUgBNADkAbQAyAHUAVQBiAEgASABVAGMASQA5AEIASQAwAGkAQQA3
-AEYARgBKAEgAMQBQAHcANABUAGQAOQBYAGMAeAB4AFoAWQBLAEQASQA4AG8AdABjAEMAaQBGAEoA
-SABYAGUAUwBBAEEAdQBjAGMANQBnAGQAcgAyAGsAMQBsAHIAYgBuAEMARgBlADYAdwB5AFMAWQBa
-AFQAeABwAE4AZwBqAEsANwA0ADIAMQBkADAAbgBqAHkAegAxADcAcwB1AE8ANQBWAHIARAA4AG4A
-bQBMAEQASQA3AEIAdwB5AGcAYwB1AGEAUwAxAHEASwBWAGcAcwA1AGwAMgBPAFEANABOAGQAZAB1
-AEMAbQBmAGEAQwBtAGcAQwAzAHQAbgBTADUAdQBVAC8AbQBvADAAdQBJAEQAcwBvAEkAOABGADUA
-NQBwAEgATQBPAFEAbwBZAEgAWQB5AGYALwB6AFIASgArAHoAcwBSAEcAVgBUAFgAZQBPAFUASwA3
-ADAAVQBrAHEASQA2AGwAcgA5ADMAaAB3AHIAMQBOACsASABMAG8AaABZAGwAcQBVAG0AegBJAEkA
-bABSAG0AcABEAHgAMQA4AEEAUAB1AGoAbQA4ADUAWQBZAHoAcABQAEQAQgBsAGwASQAwAGYAeQBq
-AEkAYwA4AFUAZgAAAAAArw8=
-
---_000_C19121055951462783B6BA84420FED0Dmetacom_--
