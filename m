@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87446A9F4B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DE36A9F4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjCCSke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:40:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S231790AbjCCSkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjCCSkM (ORCPT
+        with ESMTP id S231531AbjCCSkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:40:12 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194596230D
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 10:39:17 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id b5so1382918iow.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 10:39:17 -0800 (PST)
+        Fri, 3 Mar 2023 13:40:19 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80D962332
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 10:39:23 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id v10so1351850iox.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 10:39:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677868743;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RYomWrnmlC5qmjiU53zdzd7whsCIWTUkR9FfRWLgTa0=;
-        b=U9FxO9vuP9TlpksOhPjilHepjhcXpcFIo423RRWZ10KtVv8ttoen/K6Fpf/rtnrCjx
-         24gvap5zVC5VO7mtFx7Az4DUrvka3QpkOGo6707y7Fqg58ObIk+oyi0McryOltn5Oocx
-         kO1OJ/Cw46289yLhQxSCYpPcZmiNAO5JwgF6lf6UoSkIenXvARB36Rr6y8QjNttMffZA
-         ihqWqkwh0nzeP5unZFPRJxG3L7LCzFsZ+m0HdYQNIobHaSrmAAeUmw8ulqE4xka4GuI6
-         80S60XwrnIs+nGdgGEPgOivvmc3RqazVrTpYKN154HahQZR/X539Fu88quefgH253baO
-         F9DQ==
+        d=gmail.com; s=20210112; t=1677868752;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lj/t6Fz/u75jqRo8OM20KwqRZGxc+UX5ZSqckuG+0gc=;
+        b=aYvV43QPE3cPf6fntBuyX9cMHioXxxVTAMrSpgyW/aUaKAKKUVJ4JyrjKtrBn0yafI
+         vm0DeyPOkvctS8L1wE0Eg57BVSlGQn3jhpwOPPMbsOICpG/VV5reP05gispHhJkPvJk1
+         JfJAeIqtWYeTbIocnz5oRQIQATb3iawG5t9arkCQFahGf94YgUUUfZgD/Xjea4vuVtQO
+         7rt1gPV9GpO0wJrK31+Cm96hm7O52eelQSQ4E9S8j7cF9aQXXGChf7lJIq5CZLZU8IAK
+         55673Uj6te34ngXvKHDlsuMYNCxwHDSj2BwWTQLTJ5ykiAaq3CFq4C4A3qZTQk20vFG/
+         0ZUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677868743;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RYomWrnmlC5qmjiU53zdzd7whsCIWTUkR9FfRWLgTa0=;
-        b=2y/beg436Ca9SAYbUuoSBGCMp7Fomp1PT1zsSYuinbBAXIxmwD3ovq6NjfzzwyBkm2
-         PuT2cxuTF6G/Ij/owaG12G/GyTtmuzriE02fcPovX7wY62OcxxjLxPQS6DY9bxVNzHtb
-         n9lLbPVegmxyFYx02m4DxfY5XfGlq+DcOo6QDxph9w0dfesvHtlC5qpECBfs/5I27Lu6
-         5he+jIAZboQKvJBPRMeyBx5mrLDfPoDhxj1lnlZQG32YmW7ekwNb+UnsEiHMh2g4lY+9
-         8znqCUROkRqJAluzq6uPxaabZZFP+9xdhhuE2A8d/oT2S1GHK8Q5RTZh8WiW2qWpoY54
-         62XQ==
-X-Gm-Message-State: AO0yUKVU6T4Vt6QymtUHZeSrP2fwZH4PhqGdva20t9s7hXpqqT53wjPu
-        10D0Dkrp1lLIhCR9bOGD4BI=
-X-Google-Smtp-Source: AK7set9xDFJS6J7F7yR5ukntR3mUu0AiwOm+t4+7VlPaqMWQz6vLccq/Ns1RhLrR/Cb8piqPak0lUg==
-X-Received: by 2002:a5d:9555:0:b0:74c:91c3:3837 with SMTP id a21-20020a5d9555000000b0074c91c33837mr1761157ios.18.1677868743519;
-        Fri, 03 Mar 2023 10:39:03 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677868752;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lj/t6Fz/u75jqRo8OM20KwqRZGxc+UX5ZSqckuG+0gc=;
+        b=26FTa3Qmh3FXq2+nMA0CrArwjzOW1BecuRy+yjXX3hJ8IZdbJiaoOriuwmyPPDDKcH
+         lVGukSo1kG9iG8qj5BRxoye3ExK/hE/g7PkV1neECuonoWHNr0IF0kZK9ByPQNBfkqUu
+         YQBT51mDPfPz4nuvL2D54wt7Nv5iqzUUXh/y+qgphNBZdG1fjWHda073E0rYpWIPATFD
+         BWpqkaBRs1UFnU1Zz+rBrBQQs0CXV6C+LYjibaj4o+3rE6nIuZsnwSuIk9plxu/5ou0p
+         wpcTstru2iELMmY2QnqesY57FBdQVX4sQm5AASBIdWtyF+r677GjYbwzjgtWSnYnQCgW
+         w+KA==
+X-Gm-Message-State: AO0yUKUBQPJS0eY0quBOnFGD650vEZNiUk4tanSCprdsUD5oYwBFVtwb
+        cHo/iJts0gJdTX7PPKA/GAg=
+X-Google-Smtp-Source: AK7set+4yucOkRW1/d5e/kPN1MXE3eipNN0yVQZrke+VeTgk533pCsdP1C5ltGsIopAYsVSlqy80OQ==
+X-Received: by 2002:a5d:8150:0:b0:74d:1ccb:e5a5 with SMTP id f16-20020a5d8150000000b0074d1ccbe5a5mr1503812ioo.6.1677868752557;
+        Fri, 03 Mar 2023 10:39:12 -0800 (PST)
 Received: from ArchLinux.lan ([68.74.118.125])
-        by smtp.gmail.com with ESMTPSA id e12-20020a5ede0c000000b0074c9a4bb374sm875009iok.11.2023.03.03.10.38.59
+        by smtp.gmail.com with ESMTPSA id e12-20020a5ede0c000000b0074c9a4bb374sm875009iok.11.2023.03.03.10.39.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 10:39:03 -0800 (PST)
+        Fri, 03 Mar 2023 10:39:12 -0800 (PST)
 From:   Schspa Shi <schspa@gmail.com>
 To:     tglx@linutronix.de, longman@redhat.com, swboyd@chromium.org,
         linux@roeck-us.net, wuchi.zero@gmail.com
-Cc:     linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
-        syzbot+5093ba19745994288b53@syzkaller.appspotmail.com
-Subject: [PATCH v2 1/2] debugobject: fix concurrency issues with is_static_object
-Date:   Sat,  4 Mar 2023 02:31:47 +0800
-Message-Id: <20230303183147.934793-1-schspa@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>
+Subject: [PATCH v2 2/2] debugobject: add unit test for static debug object
+Date:   Sat,  4 Mar 2023 02:31:48 +0800
+Message-Id: <20230303183147.934793-2-schspa@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230303183147.934793-1-schspa@gmail.com>
+References: <20230303183147.934793-1-schspa@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,245 +73,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The is_static_object implementation relay on the initial state of the
-object. If multiple places are accessed concurrently, there is a
-probability that the debug object has been registered in the system, which
-will invalidate the judgment of is_static_object.
+Add test case to enusre that static debug object correctness.
 
-The following is the scenario where the problem occurs:
+Tested on little-endian arm64 qemu, result:
 
-T0                                                   T1
-=========================================================================
-mod_timer();
-  debug_object_assert_init
-	db = get_bucket((unsigned long) addr);
-	raw_spin_lock_irqsave(&db->lock, flags);
-	obj = lookup_object(addr, db);
-    if (!obj) {
-		raw_spin_unlock_irqrestore(&db->lock, flags);
-        << Context switch >>
-                                             mod_timer();
-                                               debug_object_assert_init
-                                               ...
-                                               enqueue_timer();
-        /*
-         * The initial state changed a static timer object, and
-         * is_static_object will return false
-         */
+[    2.385735] KTAP version 1
+[    2.385860] 1..1
+[    2.386406]     KTAP version 1
+[    2.386658]     # Subtest: static debugobject init
+[    2.386726]     1..1
+[    2.401777]     ok 1 static_debugobject_test
+[    2.402455] ok 1 static debugobject init
 
-        if (descr->is_static_object &&
-			descr->is_static_object(addr)) {
-                debug_object_init();
-            } else {
-               << Hit here for a static object >>
-			   debug_print_object(&o, "assert_init");
-			   debug_object_fixup(descr->fixup_assert_init, addr,
-					   ODEBUG_STATE_NOTAVAILABLE);
-            }
-    }
-
-To fix it, we got the is_static_object called within db->lock, and save
-it's state to struct debug_obj. This will ensure we won't hit the code
-branch not belong to the static object.
-
-For the same static object, debug_object_init may enter multiple times, but
-there is a lock in debug_object_init to ensure that there is no problem.
-
-Reported-by: syzbot+5093ba19745994288b53@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?id=22c8a5938eab640d1c6bcc0e3dc7be519d878462
 Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
-Changes from v1:
- - Reduce debug object size as Waiman Long suggested.
- - Add description for new members.
+ MAINTAINERS                    |   5 ++
+ lib/Kconfig.debug              |  14 ++++
+ lib/Makefile                   |   2 +
+ lib/test_static_debug_object.c | 125 +++++++++++++++++++++++++++++++++
+ 4 files changed, 146 insertions(+)
+ create mode 100644 lib/test_static_debug_object.c
 
----
- include/linux/debugobjects.h |  6 ++-
- lib/debugobjects.c           | 71 ++++++++++++++++++++++++++++--------
- 2 files changed, 60 insertions(+), 17 deletions(-)
-
-diff --git a/include/linux/debugobjects.h b/include/linux/debugobjects.h
-index 32444686b6ff4..19f9fb80557f6 100644
---- a/include/linux/debugobjects.h
-+++ b/include/linux/debugobjects.h
-@@ -21,13 +21,17 @@ struct debug_obj_descr;
-  * struct debug_obj - representation of an tracked object
-  * @node:	hlist node to link the object into the tracker list
-  * @state:	tracked object state
-+ * @is_state:	flag used to indicate that it is a static object
-  * @astate:	current active state
-  * @object:	pointer to the real object
-  * @descr:	pointer to an object type specific debug description structure
-  */
- struct debug_obj {
- 	struct hlist_node	node;
--	enum debug_obj_state	state;
-+	struct {
-+		enum debug_obj_state	state : 31;
-+		bool			is_static : 1;
-+	};
- 	unsigned int		astate;
- 	void			*object;
- 	const struct debug_obj_descr *descr;
-diff --git a/lib/debugobjects.c b/lib/debugobjects.c
-index df86e649d8be0..d1be18158a1f7 100644
---- a/lib/debugobjects.c
-+++ b/lib/debugobjects.c
-@@ -275,6 +275,8 @@ alloc_object(void *addr, struct debug_bucket *b, const struct debug_obj_descr *d
- 		obj->descr  = descr;
- 		obj->state  = ODEBUG_STATE_NONE;
- 		obj->astate = 0;
-+		obj->is_static = descr->is_static_object &&
-+			descr->is_static_object(addr);
- 		hlist_add_head(&obj->node, &b->list);
- 	}
- 	return obj;
-@@ -581,7 +583,16 @@ __debug_object_init(void *addr, const struct debug_obj_descr *descr, int onstack
- 			debug_objects_oom();
- 			return;
- 		}
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b0db911207ba4..38187e2921691 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23202,6 +23202,11 @@ L:	linux-mm@kvack.org
+ S:	Maintained
+ F:	mm/zswap.c
+ 
++STATIC DEBUGOBJECT TEST
++M:	Schspa Shi <schspa@gmail.com>
++S:	Maintained
++F:	lib/test_static_debug_object.c
 +
- 		check_stack = true;
-+	} else {
-+		/*
-+		 * The debug object is inited, and we should check this again
-+		 */
-+		if (obj->is_static) {
-+			raw_spin_unlock_irqrestore(&db->lock, flags);
-+			return;
-+		}
- 	}
+ THE REST
+ M:	Linus Torvalds <torvalds@linux-foundation.org>
+ L:	linux-kernel@vger.kernel.org
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index c8b379e2e9adc..9d5ee631d4380 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2801,6 +2801,20 @@ config TEST_CLOCKSOURCE_WATCHDOG
  
- 	switch (obj->state) {
-@@ -640,6 +651,29 @@ void debug_object_init_on_stack(void *addr, const struct debug_obj_descr *descr)
- }
- EXPORT_SYMBOL_GPL(debug_object_init_on_stack);
+ 	  If unsure, say N.
  
++config TEST_STATIC_DEBUGOBJECT
++	tristate "KUnit test for static debugobject"
++	depends on KUNIT
++	select KPROBES
++	select DEBUG_OBJECTS
++	select DEBUG_OBJECTS_TIMERS
++	help
++	  This builds the static debugobject unit test, which runs on boot.
++	  Tests the static debug object correctness.
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ endif # RUNTIME_TESTING_MENU
+ 
+ config ARCH_USE_MEMTEST
+diff --git a/lib/Makefile b/lib/Makefile
+index baf2821f7a00f..f663686beabd9 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -427,3 +427,5 @@ $(obj)/$(TEST_FORTIFY_LOG): $(addprefix $(obj)/, $(TEST_FORTIFY_LOGS)) FORCE
+ ifeq ($(CONFIG_FORTIFY_SOURCE),y)
+ $(obj)/string.o: $(obj)/$(TEST_FORTIFY_LOG)
+ endif
++
++obj-$(CONFIG_TEST_STATIC_DEBUGOBJECT) += test_static_debug_object.o
+diff --git a/lib/test_static_debug_object.c b/lib/test_static_debug_object.c
+new file mode 100644
+index 0000000000000..8a0d6ab5c24b5
+--- /dev/null
++++ b/lib/test_static_debug_object.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Check static object.
++ * THis module tests the static debugobject via a static timer instance. This
++ * test use kretprobe to inject some delay to make the problem easier to
++ * reproduce.
++ *
++ * Copyright (c) 2023, Schspa Shi <schspa@gmail.com>
 + */
-+static bool debug_object_check_static(struct debug_bucket *db, void *addr,
-+			const struct debug_obj_descr *descr)
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/sched.h>
++#include <linux/timer.h>
++#include <linux/delay.h>
++#include <linux/kprobes.h>
++#include <linux/workqueue.h>
++#include <linux/cpu.h>
++#include <kunit/test.h>
++
++static void ktest_timer_func(struct timer_list *);
++
++static DEFINE_TIMER(ktest_timer, ktest_timer_func);
++static int timer_stop;
++DEFINE_SPINLOCK(tlock);
++
++static DEFINE_PER_CPU(struct work_struct, timer_debugobject_test_work);
++
++static void timer_debugobject_workfn(struct work_struct *work)
 +{
-+	struct debug_obj *obj;
-+
-+	/*
-+	 * The is_static_object implementation relay on the initial state of the
-+	 * object. If multiple places are accessed concurrently, there is a
-+	 * probability that the debug object has been registered in the system,
-+	 * which will invalidate the judgment of is_static_object.
-+	 */
-+	lockdep_assert_held(&db->lock);
-+
-+	obj = lookup_object(addr, db);
-+	if (likely(obj))
-+		return obj->is_static;
-+
-+	return descr->is_static_object && descr->is_static_object(addr);
++	mod_timer(&ktest_timer, jiffies + (5 * HZ));
 +}
 +
- /**
-  * debug_object_activate - debug checks when an object is activated
-  * @addr:	address of the object
-@@ -656,6 +690,7 @@ int debug_object_activate(void *addr, const struct debug_obj_descr *descr)
- 	struct debug_obj o = { .object = addr,
- 			       .state = ODEBUG_STATE_NOTAVAILABLE,
- 			       .descr = descr };
-+	bool is_static;
- 
- 	if (!debug_objects_enabled)
- 		return 0;
-@@ -696,6 +731,7 @@ int debug_object_activate(void *addr, const struct debug_obj_descr *descr)
- 		return ret;
- 	}
- 
-+	is_static = debug_object_check_static(db, addr, descr);
- 	raw_spin_unlock_irqrestore(&db->lock, flags);
- 
- 	/*
-@@ -705,7 +741,7 @@ int debug_object_activate(void *addr, const struct debug_obj_descr *descr)
- 	 * static object is tracked in the object tracker. If
- 	 * not, this must be a bug, so we try to fix it up.
- 	 */
--	if (descr->is_static_object && descr->is_static_object(addr)) {
-+	if (is_static) {
- 		/* track this static object */
- 		debug_object_init(addr, descr);
- 		debug_object_activate(addr, descr);
-@@ -872,6 +908,7 @@ void debug_object_assert_init(void *addr, const struct debug_obj_descr *descr)
- 	struct debug_bucket *db;
- 	struct debug_obj *obj;
- 	unsigned long flags;
-+	bool is_static;
- 
- 	if (!debug_objects_enabled)
- 		return;
-@@ -886,13 +923,14 @@ void debug_object_assert_init(void *addr, const struct debug_obj_descr *descr)
- 				       .state = ODEBUG_STATE_NOTAVAILABLE,
- 				       .descr = descr };
- 
-+		is_static = debug_object_check_static(db, addr, descr);
- 		raw_spin_unlock_irqrestore(&db->lock, flags);
- 		/*
- 		 * Maybe the object is static, and we let the type specific
- 		 * code confirm. Track this static object if true, else invoke
- 		 * fixup.
- 		 */
--		if (descr->is_static_object && descr->is_static_object(addr)) {
-+		if (is_static) {
- 			/* Track this static object */
- 			debug_object_init(addr, descr);
- 		} else {
-@@ -1215,7 +1253,8 @@ static __initconst const struct debug_obj_descr descr_type_test = {
- 	.fixup_free		= fixup_free,
- };
- 
--static __initdata struct self_test obj = { .static_init = 0 };
-+static struct self_test obj __initdata = { .static_init = 0 };
-+static struct self_test sobj __initdata = { .static_init = 1 };
- 
- static void __init debug_objects_selftest(void)
- {
-@@ -1256,26 +1295,26 @@ static void __init debug_objects_selftest(void)
- 	if (check_results(&obj, ODEBUG_STATE_NONE, fixups, warnings))
- 		goto out;
- 
--	obj.static_init = 1;
--	debug_object_activate(&obj, &descr_type_test);
--	if (check_results(&obj, ODEBUG_STATE_ACTIVE, fixups, warnings))
-+	debug_object_init(&sobj, &descr_type_test);
-+	debug_object_activate(&sobj, &descr_type_test);
-+	if (check_results(&sobj, ODEBUG_STATE_ACTIVE, fixups, warnings))
- 		goto out;
--	debug_object_init(&obj, &descr_type_test);
--	if (check_results(&obj, ODEBUG_STATE_INIT, ++fixups, ++warnings))
-+	debug_object_init(&sobj, &descr_type_test);
-+	if (check_results(&sobj, ODEBUG_STATE_INIT, ++fixups, ++warnings))
- 		goto out;
--	debug_object_free(&obj, &descr_type_test);
--	if (check_results(&obj, ODEBUG_STATE_NONE, fixups, warnings))
-+	debug_object_free(&sobj, &descr_type_test);
-+	if (check_results(&sobj, ODEBUG_STATE_NONE, fixups, warnings))
- 		goto out;
- 
- #ifdef CONFIG_DEBUG_OBJECTS_FREE
--	debug_object_init(&obj, &descr_type_test);
--	if (check_results(&obj, ODEBUG_STATE_INIT, fixups, warnings))
-+	debug_object_init(&sobj, &descr_type_test);
-+	if (check_results(&sobj, ODEBUG_STATE_INIT, fixups, warnings))
- 		goto out;
--	debug_object_activate(&obj, &descr_type_test);
--	if (check_results(&obj, ODEBUG_STATE_ACTIVE, fixups, warnings))
-+	debug_object_activate(&sobj, &descr_type_test);
-+	if (check_results(&sobj, ODEBUG_STATE_ACTIVE, fixups, warnings))
- 		goto out;
--	__debug_check_no_obj_freed(&obj, sizeof(obj));
--	if (check_results(&obj, ODEBUG_STATE_NONE, ++fixups, ++warnings))
-+	__debug_check_no_obj_freed(&sobj, sizeof(sobj));
-+	if (check_results(&sobj, ODEBUG_STATE_NONE, ++fixups, ++warnings))
- 		goto out;
- #endif
- 	pr_info("selftest passed\n");
++/*
++ * Reaper for links from keyrings to dead keys.
++ */
++static void ktest_timer_func(struct timer_list *t)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&tlock, flags);
++	if (!timer_stop)
++		mod_timer(&ktest_timer, jiffies + (1 * HZ));
++	spin_unlock_irqrestore(&tlock, flags);
++}
++
++
++static int static_object_check_handler(
++	struct kretprobe_instance *ri, struct pt_regs *regs)
++{
++	void *address;
++
++	address = (void *)regs_get_register(regs, 0);
++
++	if (address == &ktest_timer) {
++		int this_cpu = raw_smp_processor_id();
++		/*
++		 * This hook point adds an extra delay to make the problem
++		 * easier to reproduce. We need different delay for
++		 * differenct processor.
++		 */
++		mdelay(this_cpu * 100);
++	}
++
++	return 0;
++}
++
++
++static struct kretprobe is_static_kretprobes = {
++	.entry_handler = static_object_check_handler,
++	.data_size = 0,
++	/* Probe up to 512 instances concurrently. */
++	.maxactive = 512,
++	.kp = {
++		.symbol_name = "timer_is_static_object",
++	}
++};
++
++
++static void static_debugobject_test(struct kunit *test)
++{
++	unsigned long flags;
++	int cpu;
++	int ret;
++
++	ret = register_kretprobe(&is_static_kretprobes);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	/* Do test */
++	cpus_read_lock();
++	for_each_online_cpu(cpu) {
++		struct work_struct *work =
++			&per_cpu(timer_debugobject_test_work, cpu);
++		INIT_WORK(work, timer_debugobject_workfn);
++		schedule_work_on(cpu, work);
++	}
++
++	for_each_online_cpu(cpu) {
++		struct work_struct *work =
++			&per_cpu(timer_debugobject_test_work, cpu);
++		flush_work(work);
++	}
++	cpus_read_unlock();
++
++	spin_lock_irqsave(&tlock, flags);
++	timer_stop = 0;
++	spin_unlock_irqrestore(&tlock, flags);
++
++	del_timer_sync(&ktest_timer);
++
++	unregister_kretprobe(&is_static_kretprobes);
++}
++
++static struct kunit_case static_debugobject_init_cases[] = {
++	KUNIT_CASE(static_debugobject_test),
++	{}
++};
++
++static struct kunit_suite static_debugobject_suite = {
++	.name = "static debugobject init",
++	.test_cases = static_debugobject_init_cases,
++};
++
++kunit_test_suite(static_debugobject_suite);
++MODULE_AUTHOR("Schspa <schspa@gmail.com>");
++MODULE_LICENSE("GPL");
 -- 
 2.39.2
 
