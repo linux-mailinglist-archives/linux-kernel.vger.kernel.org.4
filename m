@@ -2,165 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005F16AA357
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7144F6AA307
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233316AbjCCV5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
+        id S232850AbjCCVxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbjCCVy0 (ORCPT
+        with ESMTP id S233026AbjCCVwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:54:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C616A061;
-        Fri,  3 Mar 2023 13:48:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7920B618F8;
-        Fri,  3 Mar 2023 21:47:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830D3C4339C;
-        Fri,  3 Mar 2023 21:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677880034;
-        bh=F3NoOOYlAfGhlHphkBlJjylv7gfqdUjywibnVvhv6U4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i6iBoX786w4vgJ4kabz9QS+dpH8NJTcr6GikZCC+uENfIKNEoIwUQRNb73mgMqHRu
-         fts0r1L20gYkGn8bbWfKaZtshuPu+wPnnJDj6es4VruPWCFrVBtS+hplMAIQJbm8PA
-         gyDjaj1NpGjklFBR0hzKNATXt/jhK1owGclLv8fQd4UVdmoDSSWUPAt2S/cSGcXyzD
-         7suLgbkaTfpEm6Obgd6/VN5m2oX1NOinBg9A02jFoQLJ7VuDHDIPoCS+9cGxV+SgMj
-         lOffzEFbBwEu6eKxL2NN5B0aYo85VpiS1tSkDHTB6RrQnOxiSsVhB/DaeZ3NVbxI4Q
-         EL4pxPBMGeyAQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        yung-chuan.liao@linux.intel.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.15 50/50] soundwire: cadence: Drain the RX FIFO after an IO timeout
-Date:   Fri,  3 Mar 2023 16:45:31 -0500
-Message-Id: <20230303214531.1450154-50-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214531.1450154-1-sashal@kernel.org>
-References: <20230303214531.1450154-1-sashal@kernel.org>
+        Fri, 3 Mar 2023 16:52:30 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAB96F493
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:47:47 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id h19so4498505qtk.7
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:47:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677879984;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s9GyH6PvrYz76tQ69KklK9vAGMdL/HL5FMP81h6rev4=;
+        b=TY98D/Vd9hutJ+rFgn75gJncB2EJqFyP1hW99JZyDZfQg54KEyaoB8vPI4UT5Jo5s8
+         EGprKDLKdPJY4/APyFyPgULhMV9Ns3ao44WWmQYY/7Zq9FvhLEpyMmsCj8K2wekflwEn
+         G3qWvzS6yJ8Ki7hphBmsLmaHYiFN7uss3cGJugqYvXhgTfOx7nCUOvfpBTkpqHTu+FPY
+         ikVLxXei8KZKMQ6raUp61nuh38Z8vnGg3zVuXdSfkkAT1YxjHmJfug+6N38X08n3916m
+         1u3lpfM+3gD/8m1PfHPAZmMGo0KjGHFTla8IocWdFOGrnkwYPBt7HuBmXcO9GaI2rkFv
+         wGig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677879984;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s9GyH6PvrYz76tQ69KklK9vAGMdL/HL5FMP81h6rev4=;
+        b=jf8jcsVV0cZt2+hotzO7OUsGskRAVkpcBorRtjz8NnPXgVOylUjPZ9voiN9ZcwmyXC
+         X0hNQcLV/vCvfMsnBYOD7Iwvg5qUE8NDxZAGCl4eW5XwM3wmoTKzY+F/YIwalV4Vv38y
+         JaNf+zJCHOvKXf90+8nu51eck7VBWhQmKr2LKj7wI5gpC7/I2Ooqrje4jRzqp6gc4F0F
+         rSwJiIjEPdImjmNM9Y4mWRtqtovpo3WAiIFvO7dWxbVb9DPl5C6iAvFhzc/vjYtoc2Zh
+         3q+5h9uBFqaBZWugI9VnESafArcOzl6sYt+Ta9QpT4rkw5wbt/Aesma1vM1PdcnpwCx5
+         uYlg==
+X-Gm-Message-State: AO0yUKXTDSKECyqcx+8V5si5y98XlNlzTC+5dBL9zbPzkmnvEyXTMXyO
+        huXHh2MrXcyvY3lDfPQoVg82Ac0ypvw=
+X-Google-Smtp-Source: AK7set9xByrPNRa27PcYJ6fG5Mu7tMBwfd3+9u3GzkWHpU9ILZ+2rFEZ1V4nIB92gC4BsaoqGzmiTg==
+X-Received: by 2002:ac8:5dd0:0:b0:3bf:b6ba:1c1f with SMTP id e16-20020ac85dd0000000b003bfb6ba1c1fmr5502695qtx.10.1677879984553;
+        Fri, 03 Mar 2023 13:46:24 -0800 (PST)
+Received: from mjollnir ([137.118.186.11])
+        by smtp.gmail.com with ESMTPSA id b1-20020ac812c1000000b003bfa932525dsm2465361qtj.51.2023.03.03.13.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 13:46:23 -0800 (PST)
+Date:   Fri, 3 Mar 2023 16:46:21 -0500
+From:   Storm Dragon <stormdragon2976@gmail.com>
+To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     George Kennedy <george.kennedy@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
+Message-ID: <ZAJqrfcfoM2eO5VL@mjollnir>
+References: <Y/KtG9vK0oz0nQrN@hotmail.com>
+ <20230220064612.1783-1-linux@weissschuh.net>
+ <Y/OacHw6nL/ZtrH3@hotmail.com>
+ <00e5aee7-c7b3-4077-8c9f-4f28ec220567@t-8ch.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JAK3wBCOzlxuTE/K"
+Content-Disposition: inline
+In-Reply-To: <00e5aee7-c7b3-4077-8c9f-4f28ec220567@t-8ch.de>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
 
-[ Upstream commit 0603a47bd3a8f439d7844b841eee1819353063e0 ]
+--JAK3wBCOzlxuTE/K
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If wait_for_completion_timeout() times-out in _cdns_xfer_msg() it
-is possible that something could have been written to the RX FIFO.
-In this case, we should drain the RX FIFO so that anything in it
-doesn't carry over and mess up the next transfer.
+On Fri, Mar 03, 2023 at 09:12:50PM +0000, Thomas Wei=C3=9Fschuh wrote:
+>Sorry for the long delay, but this should be fixed in the current round
+>of stable kernels. Can you try the following:
+>
+>pacman -U https://mirrors.edge.kernel.org/archlinux/testing/os/x86_64/linu=
+x-6.2.2.arch1-1-x86_64.pkg.tar.zst
+>
+>Thomas
 
-Obviously, if we got to this state something went wrong, and we
-don't really know the state of everything. The cleanup in this
-situation cannot be bullet-proof but we should attempt to avoid
-breaking future transaction, if only to reduce the amount of
-error noise when debugging the failure from a kernel log.
+I have installed the package above. My screen reader is behaving much
+better now. Interestingly, however, trying to cat the /dev/vcs device
+still shows the following:
 
-Note that this patch only implements the draining for blocking
-(non-deferred) transfers. The deferred API doesn't have any proper
-handling of error conditions and would need some re-design before
-implementing cleanup. That is a task for a separate patch...
+cat: /dev/vcs: No such device or address
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20221202161812.4186897-4-rf@opensource.cirrus.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/soundwire/cadence_master.c | 50 ++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 23 deletions(-)
+cat: /dev/vcsa: No such device or address
 
-diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-index b229e1e0d7d97..842e08c56796b 100644
---- a/drivers/soundwire/cadence_master.c
-+++ b/drivers/soundwire/cadence_master.c
-@@ -555,6 +555,29 @@ cdns_fill_msg_resp(struct sdw_cdns *cdns,
- 	return SDW_CMD_OK;
- }
- 
-+static void cdns_read_response(struct sdw_cdns *cdns)
-+{
-+	u32 num_resp, cmd_base;
-+	int i;
-+
-+	/* RX_FIFO_AVAIL can be 2 entries more than the FIFO size */
-+	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN + 2);
-+
-+	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
-+	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
-+	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
-+		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
-+		num_resp = ARRAY_SIZE(cdns->response_buf);
-+	}
-+
-+	cmd_base = CDNS_MCP_CMD_BASE;
-+
-+	for (i = 0; i < num_resp; i++) {
-+		cdns->response_buf[i] = cdns_readl(cdns, cmd_base);
-+		cmd_base += CDNS_MCP_CMD_WORD_LEN;
-+	}
-+}
-+
- static enum sdw_command_response
- _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
- 	       int offset, int count, bool defer)
-@@ -596,6 +619,10 @@ _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
- 		dev_err(cdns->dev, "IO transfer timed out, cmd %d device %d addr %x len %d\n",
- 			cmd, msg->dev_num, msg->addr, msg->len);
- 		msg->len = 0;
-+
-+		/* Drain anything in the RX_FIFO */
-+		cdns_read_response(cdns);
-+
- 		return SDW_CMD_TIMEOUT;
- 	}
- 
-@@ -764,29 +791,6 @@ EXPORT_SYMBOL(cdns_reset_page_addr);
-  * IRQ handling
-  */
- 
--static void cdns_read_response(struct sdw_cdns *cdns)
--{
--	u32 num_resp, cmd_base;
--	int i;
--
--	/* RX_FIFO_AVAIL can be 2 entries more than the FIFO size */
--	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN + 2);
--
--	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
--	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
--	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
--		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
--		num_resp = ARRAY_SIZE(cdns->response_buf);
--	}
--
--	cmd_base = CDNS_MCP_CMD_BASE;
--
--	for (i = 0; i < num_resp; i++) {
--		cdns->response_buf[i] = cdns_readl(cdns, cmd_base);
--		cmd_base += CDNS_MCP_CMD_WORD_LEN;
--	}
--}
--
- static int cdns_update_slave_status(struct sdw_cdns *cdns,
- 				    u64 slave_intstat)
- {
--- 
-2.39.2
+cat: /dev/vcsa1: No such device or address
 
+Is this expected behavior?=20
+
+--JAK3wBCOzlxuTE/K
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEjjImGMhZhYoKESBfW+ojcUPdwZMFAmQCaqoACgkQW+ojcUPd
+wZPq5w//WeeUto0XS2zLGXUG6EUapeTDUUcHpP5Jf/qvS6FrLHCASETvY6kDKu7q
+kRzlWGYAARjrdSWWKGShtx0aizojQE7DQyBTbTOdx+Zbos5LCrhzSe7FpKDgl5AC
+HRj49VRKDB4kx8bYFw6XcuHiXTjZDUlqipOo1iRdThZtMlXZWs9lIwMx3tfcQN0k
+XPQOFmW16V5zNqd3wwEPlAoH5rJO8lX1XJOs/GqavphDOzXhHaNwoFqZkT0ziq3D
+493Qm1ZG47USuyJX/nn9Tlie0VI2sjnupKv8Hy+CBiLEwTxuWOwNJ5u/Ty21LY5X
+gaaqgbAuk5ZZBn09VXkCdODfB2CmTjh1GkjVhLMHe+tkAY3RAGXFD0SIPl1qzDNv
+9EoMH+KolCA+JnLlugtVg7+zNXLkFEpoBgiwU93X0hDa45UmMOWxkQeEObfzKnvF
+9CRmLgPeV2zsSg3qD5f1wYspxToNT6m6V4GJd/pS505gCn2tbMfh1F3nc1w4iTfR
+jKV5RbqThZKx1puwO6ae5Hi1G78z/JBjryd1i6aStzNQH6a0yTtT3a1HbL2oDElx
+cCPwfTnAlSnwYDxMZy6mOZJ9eUby3EzTdSdxOAvL5hiixG7IqBAqiCVzxvhyr/Pr
++o591FJarLkbI6KU39Hpz3sf0WOfR158nj7mZ+e9UfYaUmcWDjU=
+=IEr2
+-----END PGP SIGNATURE-----
+
+--JAK3wBCOzlxuTE/K--
