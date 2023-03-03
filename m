@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244A76A9094
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 06:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EBD6A9096
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 06:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjCCFvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 00:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
+        id S229747AbjCCFyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 00:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCCFvu (ORCPT
+        with ESMTP id S229633AbjCCFyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 00:51:50 -0500
-Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E513721A24;
-        Thu,  2 Mar 2023 21:51:48 -0800 (PST)
-Received: by mail-pj1-f65.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so1227251pjg.4;
-        Thu, 02 Mar 2023 21:51:48 -0800 (PST)
+        Fri, 3 Mar 2023 00:54:13 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B7D1A649
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 21:54:12 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id t4so972122ybg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 21:54:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677822851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i3He+bv3rDW0V3ny41kX0Dr7IEw0N5ROaGJRmfThagk=;
+        b=pkAcftF0deNqcuhVJl/YwMCK8cZxYxhDgztZRQ63faIhw1olHdb6jroHQFPQL8tuaG
+         LSWYDVFIq+4524BJdOAk+FsJghqzuxGSF/cK/3It0uJ+fHKlBE92LW5bEV8iBQImNxBQ
+         w94oK4JbJr0kaTDUr43tcfokMLxcNIwQ/9w1JS75ZQvq/Sy9fGFtVcf6jzJYQT72OZE2
+         I6j6fUxtpQtFySRfCpHer/6Rqzn5CYGCTl9vb13w3zqIF8A7A1m1rTydS+R4QWxhmdbm
+         afVDfCSjkceYnYCfrp+3U+y7fOOpVLL9zoQTLX8PgGlpZMOyVOso1Jk8lkokxKw8dHwJ
+         //jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677822708;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K0ZvyQY9ieS7Lbprj7ePFclxZH/ro+pYY7xE0pQIPTc=;
-        b=gxboLqo0WfqoWF1xe+1yXxeEGY+fD6ETUBvZ/4WYjgUNPSqnCOryXJUQZZ8jxZgD0B
-         OGwyCG5c4t0iSPzyHC0xuPfZFOGIiUwsTGCNhHBHx0RvaPpG/gfJnHNUXhKo/dkEPI1J
-         XHKpH4n+FnAgWb8coWo7sMEOmRwkLB0+Bwl1bHWnMTwY1snYYVtXdePylH25Tk4iJR0v
-         o969R4NKZzKbXCdqRbn1rlMpS5Z5omq1PF2V7SPCUV8+awdbcpfGVKAPQJ1mvkwTYFJQ
-         mCrxh6iJe1Xj8FbzjTCCCjGa2MAMQOOyBcvheT7xchtzArJCdhJ5m70Jmbj/EZzSmhdq
-         XaFg==
-X-Gm-Message-State: AO0yUKVryNXtcii9TwfJ1/S+yzIxVgEmRX1/6MMNRhj6nndQobfACsyi
-        yftzK+v5UTm2+r3mEY54BN6Lpv3k0U8k2UvZ
-X-Google-Smtp-Source: AK7set+zrwV8ACAn0414wihsIWb1KnqPSmmRV+qrKtVt89QYk57z9YX1w8FWuiLK714Lb3RxzmAxZg==
-X-Received: by 2002:a17:903:8cb:b0:19e:8e73:e977 with SMTP id lk11-20020a17090308cb00b0019e8e73e977mr876969plb.67.1677822708354;
-        Thu, 02 Mar 2023 21:51:48 -0800 (PST)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id jz14-20020a170903430e00b0019896d29197sm623094plb.46.2023.03.02.21.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 21:51:47 -0800 (PST)
-From:   Xueqin Luo <luoxueqin@kylinos.cn>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin@kylinos.cn, xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH v2] PM/hibernation: set the default image size for large memory
-Date:   Fri,  3 Mar 2023 13:51:33 +0800
-Message-Id: <20230303055133.28752-1-luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20210112; t=1677822851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i3He+bv3rDW0V3ny41kX0Dr7IEw0N5ROaGJRmfThagk=;
+        b=WzJLZ/DZ1fpOeMFjgI2sVB6X+wbKrdW+3TPwT1p2PCNORZ7zI6J285twehFjTj3rVz
+         w/x6Z/CS98jkqDvOcmPIdS8IhkejX4HDHdUe6pEJrcvp1S25mxj0HdKkVheYh/vecgZs
+         Sr0In3w/pNw8sPyNIpmV1xYteJsoxggIyPedsU/A45aegYZ9M35qpcSLwPkqBeyBfhVA
+         iIXKk7H9ZDO5Hyoj9uW8SaydZWVuyfHmz6sIGctFyJPOEqUmdw/XZCftyxmORt+g9k0A
+         i/+be9VhqNS6HLh6B54IIH0P4Hp9D5FPxLNvhGXCMkCYcOx5joyGjCrk0mCHFQzIYQdy
+         cdbg==
+X-Gm-Message-State: AO0yUKV/uebSsQnT2q5cb4NekEozA4Om25J5EagiVm0CmeSh8iC//hb2
+        a5MY0cvXYGWV4BKfHMk+xvGwh7NpANTP4R3hMs1AgQ==
+X-Google-Smtp-Source: AK7set/mXvJo2LRKEA1VZbdhiu7bdLsHIuFQ2iyJAYVS7KdwVWMwLUeyxkyg+UgWelh+593OLpYA0fPrfVFTZnchV+A=
+X-Received: by 2002:a05:6902:524:b0:9f2:a18c:90ed with SMTP id
+ y4-20020a056902052400b009f2a18c90edmr239306ybs.10.1677822851166; Thu, 02 Mar
+ 2023 21:54:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230301133841.18007-1-wei.w.wang@intel.com> <CALzav=eRYpnfg7bVQpVawAMraFdHu3OzqWr55Pg1SJC_Uh8t=Q@mail.gmail.com>
+ <DS0PR11MB637348F1351260F8B7E97A15DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <ZAAsIBUuIIO1prZT@google.com> <DS0PR11MB6373DAA05CEF9AB8A83A6499DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <CAL715WLo90-JkJe6=GfX755t1jvaW-kqD_w++hv3Ed53fhLC3w@mail.gmail.com> <DS0PR11MB63735E9AC8F4636AF27DAA4ADCB39@DS0PR11MB6373.namprd11.prod.outlook.com>
+In-Reply-To: <DS0PR11MB63735E9AC8F4636AF27DAA4ADCB39@DS0PR11MB6373.namprd11.prod.outlook.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Thu, 2 Mar 2023 21:53:35 -0800
+Message-ID: <CAL715WJsV3tPkMDK0exgHeuKOP9kJtc62Ra0jnRhT1Gd6AiEWg@mail.gmail.com>
+Subject: Re: [PATCH v1] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,78 +76,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xueqin Luo <luoxueqin@kylinos.cn>
+On Thu, Mar 2, 2023 at 5:50=E2=80=AFPM Wang, Wei W <wei.w.wang@intel.com> w=
+rote:
+>
+> On Friday, March 3, 2023 2:12 AM, Mingwei Zhang wrote:
+> > > On Thursday, March 2, 2023 12:55 PM, Mingwei Zhang wrote:
+> > > > I don't get it. Why bothering the type if we just do this?
+> > > >
+> > > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > > index 4f26b244f6d0..10455253c6ea 100644
+> > > > --- a/include/linux/kvm_host.h
+> > > > +++ b/include/linux/kvm_host.h
+> > > > @@ -848,7 +848,7 @@ static inline void kvm_vm_bugged(struct kvm
+> > > > *kvm)
+> > > >
+> > > >  #define KVM_BUG(cond, kvm, fmt...)                           \
+> > > >  ({                                                           \
+> > > > -     int __ret =3D (cond);                                     \
+> > > > +     int __ret =3D !!(cond);                                   \
+> > >
+> > > This is essentially "bool __ret". No biggie to change it this way.
+> >
+> > !! will return an int, not a boolean, but it is used as a boolean.
+>
+> What's the point of defining it as an int when actually being used as a B=
+oolean?
+> Original returning of an 'int' is a bug in this sense. Either returning a=
+ Boolean or
+> the same type (length) as cond is good way to me.
 
-As computers have more and more memory, they can store larger and
-larger images. This poses a problem. Let's take a 16GB computer as
-an example. When the number of pre-allocated pages is greater than
-900,000 and smaller than image_size, the duration of S4 increases
-with the number of saved pages. When the number of pre-allocated
-pages reaches 1.2 million, the duration of S4 increases by 8-10s.
+What's the point of using an integer? I think we need to ask the
+original author. But I think one of the reasons might be convenience
+as the return value. I am not sure if we can return a boolean in the
+function. But it should be fine here since it is a macro.
 
-We found that the image size is generally more than 900,000 pages,
-so we set the default size of image_size for 16GB and above
-computers to 1 million pages, which can reduce the running time
-of S4 under certain conditions.
+Anyway, returning an 'int' is not a bug. The bug is the casting from
+'cond' to the integer that may lose information and this is what you
+have captured.
+>
+> > This is consistent with the original code which _is_ returning an integ=
+er.
+> >
+> > > But I'm inclined to retain the original intention to have the macro
+> > > return the value that was passed in:
+> > > typeof(cond) __ret =3D (cond);
+> >
+> > hmm, I think it is appropriate to retain the original type of 'cond'
+> > especially since it may also involve other arithmetic operations. But I=
+ doubt it
+> > will be very useful. For instance, who is going to write this code?
+> >
+>
+> Maybe there is, maybe not. But it doesn=E2=80=99t hurt anything to leave =
+the
+> flexibility there using typeof(cond). As said, I'm also fine to use 'bool=
+ ret',
+> but probably not 'int' for no good reason.
 
-This is the test data for 5 hours after the computer is turned on:
+Right, maybe or maybe not. But using typeof(cond) for the variable
+does not always provide benefits. For instance if the 'cond' is
+resolved as the 8-byte type like u64, we are wasting space at runtime.
+We could have used a shorter type. In addition, throwing this to the
+compiler creates complexity and sometimes bugs since the compiler
+could have different behaviors.
 
-Original kernel begin:
+So, I prefer not having typeof(cond) for KVM_BUG(). But if you have
+strong opinions using typeof, go ahead.
 
-[2023-02-24 19:16:56] [   46.105423][ 2] [ T3075] PM: hibernation entry
-[2023-02-24 19:16:59] [   47.632000][ 1] [ T3075] done (allocated 
-959239 pages)
-[2023-02-24 19:18:05] [   56.987043][ 2] [ T3075] PM: hibernation exit
-
-Five hours later:
-
-[2023-02-25 00:22:48] [18069.651640][ 4] [ T7590] PM: hibernation entry
-[2023-02-25 01:23:59] [21671.194049][ 0] [ T8563] done (allocated 
-1228878 pages)
-[2023-02-25 00:24:06] [18080.639889][ 2] [ T7590] PM: hibernation exit
-
-After 5h, you can see that the S4 takes 8s more time.
-
-Five hours later, the modified kernel test data:
-
-[2023-02-24 15:52:08] [18190.171183][ 7] [T11151] PM: hibernation entry
-[2023-02-24 15:52:11] [18191.677021][ 7] [T11151] done (allocated 
-792597 pages)
-[2023-02-24 15:53:15] [18201.028488][ 2] [T11151] PM: hibernation exit
-
-You can see that after five hours, the time has changed little compared 
-to the initial test data.
-
-Signed-off-by: xueqin Luo <luoxueqin@kylinos.cn>
----
-
-v3: modify some comments
-
-v2: add test data
-
- kernel/power/snapshot.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index cd8b7b35f1e8..fa3950b19849 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -136,7 +136,14 @@ unsigned long image_size;
- 
- void __init hibernate_image_size_init(void)
- {
--	image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
-+	/* The totalram pages() for a computer of 16 memory size is
-+	 * equal to 4032990 pages. And according to our observation,
-+	 * the average image size is less than 1 million pages.
-+	 */
-+	if (totalram_pages() < 4032990)
-+		image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
-+	else
-+		image_size = 1000000 * PAGE_SIZE;
- }
- 
- /*
--- 
-2.25.1
-
+Thanks.
+-Mingwei
