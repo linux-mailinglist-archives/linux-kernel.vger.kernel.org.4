@@ -2,76 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27656A94B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3086A94B2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjCCKBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 05:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
+        id S230187AbjCCKBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 05:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjCCKBe (ORCPT
+        with ESMTP id S230051AbjCCKBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Mar 2023 05:01:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680505B5F5;
-        Fri,  3 Mar 2023 02:01:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF580617AE;
-        Fri,  3 Mar 2023 10:01:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF00FC433D2;
-        Fri,  3 Mar 2023 10:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677837692;
-        bh=F8qMc/kfGDmlmCTH8pqJK45nXvS2wbqeBWFFGTQThoA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jQ/U8KTre7xLotXJWUmmjhXV32NdKPNjMDxLgtAIsdAo1YJ2GH3LigDvGn5Qaav8c
-         jWtTU4uQ6WsqyXzicVjAH1MT4Eo/BSNbxt4yjay/T67pWuBQa677TdtvG6yTPCO1yH
-         iWgPoLFE5FvCqtXqPw03mrGELvzcx4rKEiwEPnmgtQmYt0EAnGovbTjE4bV5+c7FBB
-         n77pvh0tQlfSJxHB4UxHB4n0GQ+NRKDQiWeJWK4TTxLAgClTUaxOFYxJv2Cv6320jm
-         ZehtWWM88kO1uoNaZyYS6eQjQRfSH64kxE80eLwtyILoZzoBXX+icurWVQpMEsSRMV
-         4o0XZ6MP5GCLw==
-Date:   Fri, 3 Mar 2023 10:01:26 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mfd: qcom,spmi-pmic: Allow RRADC as adc@
- subnode
-Message-ID: <20230303100126.GL2303077@google.com>
-References: <20230213201337.2089970-1-konrad.dybcio@linaro.org>
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340575B5EB
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 02:01:33 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id i34so8052139eda.7
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 02:01:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677837691;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kl9JSJz46sgnG8LrVPxuzl/WiHthp+37Zaca1eh39eY=;
+        b=Ng4o5DNIo0TDtYWZ9jgx68zeRBFkRT4AjX/URLlM3a53NWhVQMck5gFu42vFq8Nopm
+         C6fBbyQ9kyN2oFMjb1TZFSmIjughb1B5LCe+JIXNXxwEBCEImV2SPJBkOf/gKUi4N4Kn
+         KEYd1x0NV7vLENWIs71wYLv+c6KSV6aYyR3ZoTzzpZCrolN+MQh1fw5dg5t+/zBexmDk
+         X+2rY2R/jUGpqDJyC+8SxCJkKmUawRZxRxb+GSBHV0p9aK3qv4WHJ28LUlzrw4aKsHjt
+         HeNOZE2/Xnb8niBGCSewnswsOUqobJCIM6ZHKCCTRz1UteydnZx14o626RVCNqHkMjR6
+         yfAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677837691;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kl9JSJz46sgnG8LrVPxuzl/WiHthp+37Zaca1eh39eY=;
+        b=ZTLtuSfJ5T2aiFyLUQpSw3eaS1DJYcSeuvAQqISxQnBJ0ef9LVQmBykCAm6f21m6Oo
+         jQurokgCmOcMw1R5diUPZQE2/C90NVs9/t+5OQFFqTTIHC/4ER5foL2UI5hvrSRJ2VcZ
+         eWyaOWDC/TE38b8JSLSA4QIXrUkfB6PtnJegFFWTxr3PFywcxaPNiutspAwPQZJZwTk0
+         gRbVWncIlsyfVlCgWaLYbGK8kma5ilAmPMlblskd75Zqz+dzKdOVbxUgn+5MUWJ6Ga+d
+         AzKLzXDeyHK/nhqlrnHd8tPZ4ePoMnUOkuVi8Tds/8ie8xQKdxjQ5bmANx4zw+DlJVCe
+         c6/w==
+X-Gm-Message-State: AO0yUKU7VJ/19yTbukfLlLY0P3JjWWNC048KRk4RrRptU4JExdeMS4su
+        0FYIbWRRtYn3ZvPQ2+ZBefABmw==
+X-Google-Smtp-Source: AK7set//c/zaLFnjyGSB6Ah4I07Td9TiQd97JsFNtrJX8iPphbgDDDkOahdUGlXIFwnN2NjRoMaL6g==
+X-Received: by 2002:a17:906:d208:b0:8de:502e:2061 with SMTP id w8-20020a170906d20800b008de502e2061mr942019ejz.3.1677837691831;
+        Fri, 03 Mar 2023 02:01:31 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h10-20020a170906718a00b008c33ebac259sm769846ejk.127.2023.03.03.02.01.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 02:01:31 -0800 (PST)
+Message-ID: <eff26254-0578-e6ca-f76f-412eb361bf54@linaro.org>
+Date:   Fri, 3 Mar 2023 11:01:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230213201337.2089970-1-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 6/9] dt-bindings: crypto: fsl-sec4-snvs: add fsl sec 5.x
+ compatible
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        horia.geanta@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, stefan@agner.ch,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Peng Fan <peng.fan@nxp.com>
+References: <20230301015702.3388458-1-peng.fan@oss.nxp.com>
+ <20230301015702.3388458-7-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230301015702.3388458-7-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023, Konrad Dybcio wrote:
-
-> This was omitted when adding the RRADC bindings.
+On 01/03/2023 02:56, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Fixes: 7ea58c951ab3 ("dt-bindings: iio: adc: document qcom-spmi-rradc")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Add fsl sec 5.x compatible, which is used by layerscape SoCs.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml b/Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml
+> index 6878ae8127ec..1a4b4975e1d9 100644
+> --- a/Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml
+> +++ b/Documentation/devicetree/bindings/crypto/fsl-sec4-snvs.yaml
+> @@ -24,6 +24,10 @@ maintainers:
+>  properties:
+>    compatible:
+>      oneOf:
+> +      - items:
+> +          - const: fsl,sec-v5.4-mon
+> +          - const: fsl,sec-v5.0-mon
+> +          - const: fsl,sec-v4.0-mon
 
-Applied, thanks
+This is odd... all of these are the same version then? What's the point
+of having versionable compatibles if they are compatible?
 
--- 
-Lee Jones [李琼斯]
+Best regards,
+Krzysztof
+
