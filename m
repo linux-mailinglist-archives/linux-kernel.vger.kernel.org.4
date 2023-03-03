@@ -2,219 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758056A98D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9886A9887
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjCCNo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 08:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
+        id S230521AbjCCNgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 08:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbjCCNoV (ORCPT
+        with ESMTP id S230157AbjCCNgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 08:44:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D1213D72
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:43:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677850963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+        Fri, 3 Mar 2023 08:36:36 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09C83D919
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:36:28 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 67CBA22CF1;
+        Fri,  3 Mar 2023 13:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1677850587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VRBvAso0m6Mh4AYb8jIiudho0ePNxChhIVaVb3X9gn0=;
-        b=Oa7rcj5jMNYHRrCZm8+QMBxmO22QGfzl9FXSYBF4HSZznfBLEvYZedBssOwWVyeeTAnZxK
-        2ksAWOXyD0ZAzWrplnKR2Fdk8O0NfAlcuXnVLrLHBL80jiwsGgRoMUiqHrkO6gyOk0YELA
-        +WjQvSifJ03gpp8Xm6cyF5tGmjUJh6o=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-25-NagnYjm7Nwq9dvTEuFxR1g-1; Fri, 03 Mar 2023 08:42:42 -0500
-X-MC-Unique: NagnYjm7Nwq9dvTEuFxR1g-1
-Received: by mail-wm1-f71.google.com with SMTP id bi21-20020a05600c3d9500b003e836e354e0so1020612wmb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 05:42:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677850961;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VRBvAso0m6Mh4AYb8jIiudho0ePNxChhIVaVb3X9gn0=;
-        b=uTVzOCPJpBupJMGDdv6RWMAZE/sZt7MzHlvj3I9ucKAlB23uohuzjU26M3iD1fL2xn
-         T10LdAcATKlBcFvtveVIWHQMUnHGRuvma3srzZcD1btznXUJtqIfoaATu8XUbDBleyXZ
-         VtBvJJQl3BFptuh5z9Z6mv+vg2kMRIhwVyiDGTlI/oyPYG8bceVEi7s+zU/TFjAVVhs/
-         004Z2a+EuFrCnVvgfU4+2TicKcBoYxzrZu7D9G33M7Sq0Wa9G+s/9guTRztVlfUpBEav
-         XY6O/LxzePEySwR063mmG6Q9wHPm8rvG71MCz6Wu1TFgIAIjTYK1rNtMIrn1rSV/f8m8
-         kHqw==
-X-Gm-Message-State: AO0yUKVWFlBhlXV++4h39We+TaZj1//iC92+eHB35KzZSrBlsVVNXa+7
-        2mMVsS/0ALk2hzNRQZ/ypbIFQ6x58difAuZDw2LrptzCD2DyrHijOV77JzreIM/uJ0lzUDMIM6/
-        Ze/8IhPKBEta+H6E5rk4L6BDk
-X-Received: by 2002:a05:6000:1289:b0:2c7:1524:eb07 with SMTP id f9-20020a056000128900b002c71524eb07mr1195449wrx.67.1677850961243;
-        Fri, 03 Mar 2023 05:42:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set/LUwHmGIAdTsbIGVjpc4uuopNpN8Lb5bV+jaI23Vz/K5QtjmEqhYCXmnTN3x4dHcJnCwSFbA==
-X-Received: by 2002:a05:6000:1289:b0:2c7:1524:eb07 with SMTP id f9-20020a056000128900b002c71524eb07mr1195437wrx.67.1677850961025;
-        Fri, 03 Mar 2023 05:42:41 -0800 (PST)
-Received: from localhost.localdomain ([46.33.96.29])
-        by smtp.gmail.com with ESMTPSA id a7-20020a5d4d47000000b002c5706f7c6dsm2208708wru.94.2023.03.03.05.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 05:42:40 -0800 (PST)
-From:   Michal Sekletar <msekleta@redhat.com>
-To:     gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, arozansk@redhat.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Michal Sekletar <msekleta@redhat.com>
-Subject: [PATCH 2/2] selftests: tty: add selftest for tty timestamp updates
-Date:   Fri,  3 Mar 2023 14:36:06 +0100
-Message-Id: <20230303133606.227934-2-msekleta@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303133606.227934-1-msekleta@redhat.com>
-References: <20230303133606.227934-1-msekleta@redhat.com>
+        bh=ldNbB431e/ZrOzvtR232Ztvv4QdqleBsDZOUWRjloKA=;
+        b=jfzbGUGtzuxxk/XkFN/jS61VUNyh3TiopbWLoZ0hI2G91eVu6KAArbMUGz/AW1haNkrR8g
+        dlCq/ANRqrB4GGAa9s68n79xTrPckDOMgc10dukYtGI0gQ7/xEm6tvPWp8uLbQjG1w+oDR
+        L+TAGHmLqVd2Bvv0T/X5aVDWU4d95sQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1677850587;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ldNbB431e/ZrOzvtR232Ztvv4QdqleBsDZOUWRjloKA=;
+        b=15qFMsVz58cvQ2nl6DWCa7NNpMEbBCW1jHU1o/xpXMTB5lAic7Iq8NyYVyj4Bmmj0lfHQr
+        lD+R2vNTyhDxypBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 51D9F1329E;
+        Fri,  3 Mar 2023 13:36:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yr84E9v3AWT2egAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 03 Mar 2023 13:36:27 +0000
+Message-ID: <8f4793ac-c283-8a23-4aff-ef9d7d5994bd@suse.cz>
+Date:   Fri, 3 Mar 2023 14:36:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm, page_alloc: batch cma update on pcp buffer refill
+To:     Alexander Halbuer <halbuer@sra.uni-hannover.de>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230217120504.87043-1-halbuer@sra.uni-hannover.de>
+ <89778da7-74a3-2f2a-1668-afe7b15487dc@suse.cz>
+ <0952ab0d-d640-decb-2f20-57881e45ab52@sra.uni-hannover.de>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <0952ab0d-d640-decb-2f20-57881e45ab52@sra.uni-hannover.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Michal Sekletar <msekleta@redhat.com>
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/tty/.gitignore        |  2 +
- tools/testing/selftests/tty/Makefile          |  5 ++
- .../testing/selftests/tty/tty_tstamp_update.c | 88 +++++++++++++++++++
- 4 files changed, 96 insertions(+)
- create mode 100644 tools/testing/selftests/tty/.gitignore
- create mode 100644 tools/testing/selftests/tty/Makefile
- create mode 100644 tools/testing/selftests/tty/tty_tstamp_update.c
+On 3/3/23 13:52, Alexander Halbuer wrote:
+> On 2/21/23 11:27, Vlastimil Babka wrote:
+>> Incidentally, did you observe any improvements by [2] with your test,
+>> especially as the batch freeing side also no longer does checking under zone
+>> lock?
+>> 
+>> Thanks!
+>> 
+> 
+> I finally managed to repeat the benchmark to see the effects of
+> disabling alloc and free sanity checks by default ("mm, page_alloc:
+> reduce page alloc/free sanity checks"; results below).
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 13a6837a0c6b..fc46926f505b 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -84,6 +84,7 @@ TARGETS += timers
- endif
- TARGETS += tmpfs
- TARGETS += tpm2
-+TARGETS += tty
- TARGETS += user
- TARGETS += vDSO
- TARGETS += mm
-diff --git a/tools/testing/selftests/tty/.gitignore b/tools/testing/selftests/tty/.gitignore
-new file mode 100644
-index 000000000000..fe70462a4aad
---- /dev/null
-+++ b/tools/testing/selftests/tty/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+tty_tstamp_update
-diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
-new file mode 100644
-index 000000000000..50d7027b2ae3
---- /dev/null
-+++ b/tools/testing/selftests/tty/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS = -O2 -Wall
-+TEST_GEN_PROGS := tty_tstamp_update
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/tty/tty_tstamp_update.c b/tools/testing/selftests/tty/tty_tstamp_update.c
-new file mode 100644
-index 000000000000..0ee97943dccc
---- /dev/null
-+++ b/tools/testing/selftests/tty/tty_tstamp_update.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+#include <linux/limits.h>
-+
-+#include "../kselftest.h"
-+
-+#define MIN_TTY_PATH_LEN 8
-+
-+static bool tty_valid(char *tty)
-+{
-+	if (strlen(tty) < MIN_TTY_PATH_LEN)
-+		return false;
-+
-+	if (strncmp(tty, "/dev/tty", MIN_TTY_PATH_LEN) == 0 ||
-+	    strncmp(tty, "/dev/pts", MIN_TTY_PATH_LEN) == 0)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int write_dev_tty(void)
-+{
-+	FILE *f;
-+	int r = 0;
-+
-+	f = fopen("/dev/tty", "r+");
-+	if (!f)
-+		return -errno;
-+
-+	r = fprintf(f, "hello, world!\n");
-+	if (r != strlen("hello, world!\n"))
-+		r = -EIO;
-+
-+	fclose(f);
-+	return r;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int r;
-+	char tty[PATH_MAX] = {};
-+	struct stat st1, st2;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	r = readlink("/proc/self/fd/0", tty, PATH_MAX);
-+	if (r < 0)
-+		ksft_exit_fail_msg("readlink on /proc/self/fd/0 failed: %m\n");
-+
-+	if (!tty_valid(tty))
-+		ksft_exit_skip("invalid tty path '%s'\n", tty);
-+
-+	r = stat(tty, &st1);
-+	if (r < 0)
-+		ksft_exit_fail_msg("stat failed on tty path '%s': %m\n", tty);
-+
-+	/* We need to wait at least 8 seconds in order to observe timestamp change */
-+	/* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fbf47635315ab308c9b58a1ea0906e711a9228de */
-+	sleep(10);
-+
-+	r = write_dev_tty();
-+	if (r < 0)
-+		ksft_exit_fail_msg("failed to write to /dev/tty: %s\n",
-+				   strerror(-r));
-+
-+	r = stat(tty, &st2);
-+	if (r < 0)
-+		ksft_exit_fail_msg("stat failed on tty path '%s': %m\n", tty);
-+
-+	/* We wrote to the terminal so timestamps should have been updated */
-+	if (st1.st_atim.tv_sec == st2.st_atim.tv_sec &&
-+	    st1.st_mtim.tv_sec == st2.st_mtim.tv_sec) {
-+		ksft_test_result_fail("tty timestamps not updated\n");
-+		ksft_exit_fail();
-+	}
-+
-+	ksft_test_result_pass(
-+		"timestamps of terminal '%s' updated after write to /dev/tty\n", tty);
-+	return EXIT_SUCCESS;
-+}
--- 
-2.39.2
+Thanks for the measurements!
+
+> Average huge page allocation latency drastically reduces by over 90% in
+> the single core case. However i can't see any real improvements for the
+> free operation.
+
+Ah, I see now why huge page freeing didn't improve. It's because
+bulkfree_pcp_prepare() was calling free_page_is_bad(page) thus checking just
+the head page. So the tail pages were not actually checked. Just another
+detail of how the checking wasn't thorough anyway.
+
+> ---
+> 
+> Measurement results for the batch allocation benchmark for different
+> core counts: Internally used functions are alloc_pages_node() for
+> allocation (get) and __free_pages() for free (put).
+> 
+> Compared kernel versions are from the mm-unstable branch:
+> - Reference version (without the mentioned patch):
+> daf4bcbf2b72 ("mm: cma: make kobj_type structure constant")
+> - Patched version:
+> 60114678f165 ("mm-page_alloc-reduce-page-alloc-free-sanity-checks-fix")
+> 
+> Normale pages
+> +-------+------+-------+---------+------+-------+---------+
+> | cores | base | patch |    diff | base | patch |  diff   |
+> |       |  get |   get |     get |  put |   put |   put   |
+> |       | (ns) |  (ns) |         | (ns) |  (ns) |         |
+> +-------+------+-------+---------+------+-------+---------+
+> |     1 |  122 |   118 | (-3.3%) |  118 |   116 | (-1.7%) |
+> |     2 |  133 |   130 | (-2.3%) |  130 |   123 | (-5.4%) |
+> |     3 |  136 |   132 | (-2.9%) |  175 |   162 | (-7.4%) |
+> |     4 |  161 |   149 | (-7.5%) |  241 |   226 | (-6.2%) |
+> |     6 |  247 |   228 | (-7.7%) |  366 |   344 | (-6.0%) |
+> |     8 |  331 |   304 | (-8.2%) |  484 |   456 | (-5.8%) |
+> |    10 |  416 |   390 | (-6.2%) |  615 |   578 | (-6.0%) |
+> |    12 |  502 |   472 | (-6.0%) |  727 |   687 | (-5.5%) |
+> |    14 |  584 |   552 | (-5.5%) |  862 |   816 | (-5.3%) |
+> |    16 |  669 |   632 | (-5.5%) |  967 |   923 | (-4.6%) |
+> |    20 |  833 |   787 | (-5.5%) | 1232 |  1164 | (-5.5%) |
+> |    24 |  999 |   944 | (-5.5%) | 1462 |  1384 | (-5.3%) |
+> +-------+------+-------+---------+------+-------+---------+
+> 
+> Huge Pages
+> +-------+------+-------+----------+-------+-------+---------+
+> | cores | base | patch |     diff |  base | patch |  diff   |
+> |       |  get |   get |      get |   put |   put |   put   |
+> |       | (ns) |  (ns) |          |  (ns) |  (ns) |         |
+> +-------+------+-------+----------+-------+-------+---------+
+> |     1 | 3148 |   177 | (-94.4%) |  2946 |  2872 | (-2.5%) |
+> |     2 | 3404 |   596 | (-82.5%) |  3318 |  3306 | (-0.4%) |
+> |     3 | 3581 |   950 | (-73.5%) |  3401 |  3358 | (-1.3%) |
+> |     4 | 3651 |  1284 | (-64.8%) |  3562 |  3616 | (1.5%)  |
+> |     6 | 3568 |  1929 | (-45.9%) |  4478 |  4564 | (1.9%)  |
+> |     8 | 3605 |  2328 | (-35.4%) |  5658 |  5546 | (-2.0%) |
+> |    10 | 4093 |  2935 | (-28.3%) |  6758 |  6457 | (-4.5%) |
+> |    12 | 4778 |  3540 | (-25.9%) |  7698 |  7565 | (-1.7%) |
+> |    14 | 5565 |  4097 | (-26.4%) |  8748 |  8810 | (0.7%)  |
+> |    16 | 6364 |  4725 | (-25.8%) |  9942 | 10103 | (1.6%)  |
+> |    20 | 8014 |  5915 | (-26.2%) | 12509 | 12772 | (2.1%)  |
+> |    24 | 8732 |  7138 | (-18.3%) | 15217 | 15433 | (1.4%)  |
+> +-------+------+-------+----------+-------+-------+---------+
+> 
+>>>
+>>> [1] https://lore.kernel.org/lkml/1d468148-936f-8816-eb71-1662f2d4945b@suse.cz/
+>>> [2] https://lore.kernel.org/linux-mm/20230216095131.17336-1-vbabka@suse.cz/
 
