@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DD16AA0ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEAE6AA0F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjCCVQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S231719AbjCCVRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjCCVQr (ORCPT
+        with ESMTP id S231666AbjCCVRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:16:47 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1582D61505
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:16:46 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id 2-20020a056e020ca200b003033a763270so1986726ilg.19
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:16:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iZMq3I524LZ3LyFG/4UrcrlRiCRLs/dbIEgvULqsulE=;
-        b=FM7McsVBNjyP0QlIOgLyaCddYMFle76mhK//TTBirCblWqlA3eaIVwlraqi9jTjVNR
-         iTltNKby3qWrz4XNZ+6+7ttYT81jpHBFnFmRQaHECP6kBV9TzDYSP9pKX3j7lfZhIRnw
-         rNkrop2wfh7xMqxXy8dL5hLyFp02h1gwI4n0lNz0+FSSHaEtSwWmquonmSXus4PaFPBv
-         73joq9A6gwZOfoedttN6XXaj62b26AUsJhLKaQqZ0wW8qm3suclcAKVFptvRAnc2fWD8
-         ftxlry/9DIg0CBYVtEqh4V/jjbsG8a4YpWX0JOjlV7X+omcVGggHN27SpXHvkNTl9PDn
-         reiw==
-X-Gm-Message-State: AO0yUKUQRJ9O9+lA5DIX0aE4mz0AVvqytRNPcKIS+W0yYxqgVgrPKew5
-        DAxomRfw2K0Kta9t1iZtkvheZv6RIBCuMpiUINTyAb2QSIaD
-X-Google-Smtp-Source: AK7set+mfsbnChKExhVMU5JwTUXJdUffgj3MzkjSGFSmdbTqAwHH5ibRwTuY/I/0xe0RTcrqAcy/xKgvNy+eTZ13UWsMdkUfXvJ8
+        Fri, 3 Mar 2023 16:17:41 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D594961507
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:17:36 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pYCmQ-0006lb-TU; Fri, 03 Mar 2023 22:17:30 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pYCmP-001e60-Kf; Fri, 03 Mar 2023 22:17:29 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pYCmO-001wpF-Vd; Fri, 03 Mar 2023 22:17:28 +0100
+Date:   Fri, 3 Mar 2023 22:17:25 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lorenz Brun <lorenz@brun.one>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] pwm: mediatek: support inverted polarity
+Message-ID: <20230303211725.7wtxdxjqpxlrp77b@pengutronix.de>
+References: <20230303205821.2285418-1-lorenz@brun.one>
 MIME-Version: 1.0
-X-Received: by 2002:a02:94ab:0:b0:3c4:d4b2:f72 with SMTP id
- x40-20020a0294ab000000b003c4d4b20f72mr1362791jah.3.1677878205481; Fri, 03 Mar
- 2023 13:16:45 -0800 (PST)
-Date:   Fri, 03 Mar 2023 13:16:45 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006a07d505f60576b3@google.com>
-Subject: [syzbot] [bluetooth?] WARNING in hci_send_acl
-From:   syzbot <syzbot+90c0638c7b912d27bfe7@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n7hf6kwnvue2vkyt"
+Content-Disposition: inline
+In-Reply-To: <20230303205821.2285418-1-lorenz@brun.one>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,85 +58,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--n7hf6kwnvue2vkyt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    2ebd1fbb946d Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=12aad518c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
-dashboard link: https://syzkaller.appspot.com/bug?extid=90c0638c7b912d27bfe7
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+On Fri, Mar 03, 2023 at 09:58:21PM +0100, Lorenz Brun wrote:
+> According to the MT7986 Reference Manual the Mediatek  PWM controller
+> doesn't appear to have support for inverted polarity.
+>=20
+> This implements the same solution as in pwm-meson and just inverts the
+> duty cycle instead, which results in the same outcome.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+This idea is broken. This was recently discussed on the linux-pwm list
+and I hope will be fixed soon. See
+https://lore.kernel.org/linux-pwm/20230228093911.bh2sbp4tyfir2z5g@pengutron=
+ix.de/T/#meda75ffbd4ef2048991ea2cd091c0c14b1bb09c2
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/16985cc7a274/disk-2ebd1fbb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fd3452567115/vmlinux-2ebd1fbb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c75510922212/Image-2ebd1fbb.gz.xz
+So this patch won't be accepted, still pointing out a style problem
+below.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+90c0638c7b912d27bfe7@syzkaller.appspotmail.com
+> Signed-off-by: Lorenz Brun <lorenz@brun.one>
+> ---
+>  drivers/pwm/pwm-mediatek.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-mediatek.c b/drivers/pwm/pwm-mediatek.c
+> index 5b5eeaff35da..6f4a54c8299f 100644
+> --- a/drivers/pwm/pwm-mediatek.c
+> +++ b/drivers/pwm/pwm-mediatek.c
+> @@ -202,9 +202,7 @@ static int pwm_mediatek_apply(struct pwm_chip *chip, =
+struct pwm_device *pwm,
+>  			      const struct pwm_state *state)
+>  {
+>  	int err;
+> -
+> -	if (state->polarity !=3D PWM_POLARITY_NORMAL)
+> -		return -EINVAL;
+> +	u64 duty_cycle;
+> =20
+>  	if (!state->enabled) {
+>  		if (pwm->state.enabled)
+> @@ -213,7 +211,14 @@ static int pwm_mediatek_apply(struct pwm_chip *chip,=
+ struct pwm_device *pwm,
+>  		return 0;
+>  	}
+> =20
+> -	err =3D pwm_mediatek_config(pwm->chip, pwm, state->duty_cycle, state->p=
+eriod);
+> +	// According to the MT7986 Reference Manual the peripheral does not
+> +	// appear to have the capability to invert the output. Instead just
+> +	// invert the duty cycle.
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 22417 at kernel/workqueue.c:1438 __queue_work+0x11e0/0x1484 kernel/workqueue.c:1438
-Modules linked in:
-CPU: 1 PID: 22417 Comm: syz-executor.0 Not tainted 6.2.0-syzkaller-18300-g2ebd1fbb946d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __queue_work+0x11e0/0x1484 kernel/workqueue.c:1438
-lr : __queue_work+0x11e0/0x1484 kernel/workqueue.c:1438
-sp : ffff80002bf37250
-x29: ffff80002bf37290 x28: 0000000000000008 x27: 0000000000002000
-x26: ffff0000ce923800 x25: dfff800000000000 x24: ffff0000ce9239c0
-x23: 0000000000000000 x22: ffff00012c509b48 x21: 1fffe000258a1369
-x20: 00000000000b0012 x19: ffff00012df8cd10 x18: ffff80002bf372e0
-x17: ffff800015b8d000 x16: ffff80000804d18c x15: 0000000000000000
-x14: 1ffff00002b720af x13: dfff800000000000 x12: 0000000000000001
-x11: ff80800008220790 x10: 0000000000000000 x9 : ffff800008220790
-x8 : ffff00012c509b40 x7 : ffff8000105bcce8 x6 : 0000000000000000
-x5 : 0000000000000001 x4 : 0000000000000001 x3 : ffff80000821f4ec
-x2 : ffff00012df8cd10 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- __queue_work+0x11e0/0x1484 kernel/workqueue.c:1438
- queue_work_on+0x9c/0x128 kernel/workqueue.c:1545
- queue_work include/linux/workqueue.h:503 [inline]
- hci_send_acl+0x86c/0xb54 net/bluetooth/hci_core.c:3183
- l2cap_do_send+0x238/0x350
- l2cap_chan_send+0x36c/0x2044
- l2cap_sock_sendmsg+0x184/0x2a8 net/bluetooth/l2cap_sock.c:1172
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0x558/0x844 net/socket.c:2479
- ___sys_sendmsg net/socket.c:2533 [inline]
- __sys_sendmmsg+0x318/0x7d8 net/socket.c:2619
- __do_sys_sendmmsg net/socket.c:2648 [inline]
- __se_sys_sendmmsg net/socket.c:2645 [inline]
- __arm64_sys_sendmmsg+0xa0/0xbc net/socket.c:2645
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-irq event stamp: 524
-hardirqs last  enabled at (523): [<ffff80001243d19c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (523): [<ffff80001243d19c>] _raw_spin_unlock_irqrestore+0x44/0xa4 kernel/locking/spinlock.c:194
-hardirqs last disabled at (524): [<ffff80000821f4d8>] queue_work_on+0x50/0x128 kernel/workqueue.c:1542
-softirqs last  enabled at (514): [<ffff80001058d02c>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
-softirqs last  enabled at (514): [<ffff80001058d02c>] release_sock+0x178/0x1cc net/core/sock.c:3497
-softirqs last disabled at (512): [<ffff80001058cef0>] spin_lock_bh include/linux/spinlock.h:355 [inline]
-softirqs last disabled at (512): [<ffff80001058cef0>] release_sock+0x3c/0x1cc net/core/sock.c:3484
----[ end trace 0000000000000000 ]---
+Wrong commenting style, please stick to C-style comments (/* ... */)
 
+> +	duty_cycle =3D state->duty_cycle;
+> +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED)
+> +		duty_cycle =3D state->period - state->duty_cycle;
+> +
+> +	err =3D pwm_mediatek_config(pwm->chip, pwm, duty_cycle, state->period);
+>  	if (err)
+>  		return err;
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Best regards
+Uwe
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--n7hf6kwnvue2vkyt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQCY+IACgkQwfwUeK3K
+7An4QAf/VVzJ1G1vLm5fgqHWXuxXbRYDJjva5NFicH4hK041/2hnM4z6BbR6dAI1
+YvBRLNTRTj6Wacfz19kTKht1KUHyJFo+0rXvm7OTVE2Kk+QonHuoWWDxkEYphlhG
+IYbl7xuHl42c4cQ2qyA2+j4pItly7UrZVEwm20UGTgEf04V3pZdjhtZ41BOMk/mN
+m4XRjJMwp/UURdNcj1D1a0LptvzNdqohH8t8y5RtIV8m6IRH2BdCyJsWi3iRyWNp
+A748CqKSRhN1gj1ow0zPZO+nNQ4N91ZAb6AM3PLnaUoL+r69lG3355uaj/5H6bjW
+ovEzhU8TABbvhEVdstiMVHpOulLcDg==
+=6bfG
+-----END PGP SIGNATURE-----
+
+--n7hf6kwnvue2vkyt--
