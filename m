@@ -2,600 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F666A9CF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048AC6A9D5A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjCCRPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S231540AbjCCRVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbjCCRPF (ORCPT
+        with ESMTP id S231653AbjCCRVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:15:05 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6B41514E;
-        Fri,  3 Mar 2023 09:15:02 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id z42so3009222ljq.13;
-        Fri, 03 Mar 2023 09:15:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677863701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iEw+K3SJWMgHRy2gdvxMP4r5YRkc67xMyxzZkLJBo0Q=;
-        b=E7eBhfoyoEkbYeFaVU+xLVM29Jm29NcOALA9NytC71x2xsGPWXRycKy4vQDvajYivI
-         TySy1ABEu6yDauYGaSsfY0t72ZUbQ0zwbNj3rNKt96iCj91tmU2QfBs17MDyEd1u0Y6o
-         Q7TJFkrNWhMGxdGoBK7AO0fqTcz5A5IJpWJyqqJA45ms+H/6Q2/9GPWJaao64yejmwF5
-         HojvLbJ9AQV0pSbEygun8H+nD0RkktcNh8BYoq5lweYHqY/aHGJCS1sqC7pMVblU6wlM
-         iPjrs1Q3N/tnUb5nYf5tHsQhRStZ4KLqY3CRbAu0oIOoribLbj9vV8XV2i2doOgKa9DL
-         bj+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677863701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iEw+K3SJWMgHRy2gdvxMP4r5YRkc67xMyxzZkLJBo0Q=;
-        b=mbGe4m+cE3oYFwQfHGRjzuzM9dCCIw2oQUYVXoAM3hZHzZ7OroHjpSOQVsRAiydHfx
-         omVT90kRDBfRRUsUEmQBdX2Q1n/w2j/ZVrVtsL4bdtb/kjGZULfAOYP3XjuoyoMTCeXV
-         PRoOepBtB1+fwJSg8jeN8/Pl8nwRUb9TIbQkMWEozM/iX+tt1GEtoJPvvyS1b6zdcq+x
-         uATpVrsApfAzbzar+ygaqP9L2WVAM/8gRcbKB0Dzlw5wfyr0hz5u7KrqRtWZZBrA8zfr
-         efgwcyv/8kt3PbJv6JkQq1VgDOkjKBI3uWZojhT/9MsycdfT/qgj6d0vq2xiQPOwcXEi
-         WaHQ==
-X-Gm-Message-State: AO0yUKVKEpvbFwrZRJXZ16YXimGTyxy4go9AcnJLPOzgXv73Rl18tUbf
-        VK7zkyjjlaKY2IEMSxy0/AQ=
-X-Google-Smtp-Source: AK7set8nfJvjI66QHEokndzFE0WPLKOtAobI7isKJk49VJV1tXjuQ7rKbKecavFTGhA6Z4M5O59p1Q==
-X-Received: by 2002:a2e:99c9:0:b0:295:a496:52c3 with SMTP id l9-20020a2e99c9000000b00295a49652c3mr700628ljj.47.1677863700713;
-        Fri, 03 Mar 2023 09:15:00 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id t21-20020ac25495000000b004d582cedca5sm465175lfk.2.2023.03.03.09.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 09:15:00 -0800 (PST)
-Date:   Fri, 3 Mar 2023 20:14:57 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 2/4] dmaengine: dw-edma: Create a new dw_edma_core_ops
- structure to abstract controller operation
-Message-ID: <20230303171457.dclmksdoyzhe5y6d@mobilestation>
-References: <20230303124642.5519-1-cai.huoqing@linux.dev>
- <20230303124642.5519-3-cai.huoqing@linux.dev>
- <20230303170931.noto3tk5lvq24ok2@mobilestation>
+        Fri, 3 Mar 2023 12:21:30 -0500
+Received: from mailout2.w2.samsung.com (mailout2.w2.samsung.com [211.189.100.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410054C6EA;
+        Fri,  3 Mar 2023 09:21:18 -0800 (PST)
+Received: from uscas1p1.samsung.com (unknown [182.198.245.206])
+        by mailout2.w2.samsung.com (KnoxPortal) with ESMTP id 20230303172115usoutp022f753e9274b73baaaef86a7dd2f8eaa1~I_HyWSFMn1288012880usoutp024;
+        Fri,  3 Mar 2023 17:21:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w2.samsung.com 20230303172115usoutp022f753e9274b73baaaef86a7dd2f8eaa1~I_HyWSFMn1288012880usoutp024
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1677864075;
+        bh=93rX8NnIr3BDpeiQw3kiHM30rlc8YYLmBMxPR1NBgNU=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+        b=UJvS5ss4MprStqlWFv5FG70FB3MnhWLCYvrQdHINeSA4Etyf5FphMBmOe4SUc61UM
+         s8/mh2AiiDcf2eto+ZlmXTOM/oqbeJ8xBj+n5OYVYuJXCWRa1KR3O/Xsoh7IvtAbny
+         /jN0TDZdFhxHGUGVudu3pyDIGD60i1xHqHzi42kQ=
+Received: from ussmges2new.samsung.com (u111.gpu85.samsung.co.kr
+        [203.254.195.111]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230303172114uscas1p2c0dd92fdd1da46e32f7023aefa6e054a~I_HyKgEi81348013480uscas1p2X;
+        Fri,  3 Mar 2023 17:21:14 +0000 (GMT)
+Received: from uscas1p1.samsung.com ( [182.198.245.206]) by
+        ussmges2new.samsung.com (USCPEMTA) with SMTP id B0.09.49129.A8C22046; Fri, 
+        3 Mar 2023 12:21:14 -0500 (EST)
+Received: from ussmgxs1new.samsung.com (u89.gpu85.samsung.co.kr
+        [203.254.195.89]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230303172114uscas1p24a96af84b17ca41ca7bc642eb9b60b6a~I_HxzzCil0702207022uscas1p26;
+        Fri,  3 Mar 2023 17:21:14 +0000 (GMT)
+X-AuditID: cbfec36f-167fe7000001bfe9-e7-64022c8a4d31
+Received: from SSI-EX3.ssi.samsung.com ( [105.128.2.146]) by
+        ussmgxs1new.samsung.com (USCPEXMTA) with SMTP id 9A.88.11378.A8C22046; Fri, 
+        3 Mar 2023 12:21:14 -0500 (EST)
+Received: from SSI-EX2.ssi.samsung.com (105.128.2.227) by
+        SSI-EX3.ssi.samsung.com (105.128.2.228) with Microsoft SMTP Server
+        (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+        15.1.2375.24; Fri, 3 Mar 2023 09:21:13 -0800
+Received: from SSI-EX2.ssi.samsung.com ([105.128.2.227]) by
+        SSI-EX2.ssi.samsung.com ([105.128.2.227]) with mapi id 15.01.2375.024; Fri,
+        3 Mar 2023 09:21:13 -0800
+From:   Fan Ni <fan.ni@samsung.com>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+CC:     Dave Jiang <dave.jiang@intel.com>,
+        "alison.schofield@intel.com" <alison.schofield@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cxl/hdm: Fix hdm decoder init by adding COMMIT field
+ check
+Thread-Topic: [PATCH] cxl/hdm: Fix hdm decoder init by adding COMMIT field
+        check
+Thread-Index: AQHZS8WnqoF9q+YY/UCqLavADTGrLa7mzPgAgADAioCAAJq2gIABgVGAgAAuHoA=
+Date:   Fri, 3 Mar 2023 17:21:13 +0000
+Message-ID: <20230303172054.GA1478149@bgt-140510-bm03>
+In-Reply-To: <20230303143605.0000159a@Huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [105.128.2.176]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <4C3593FCF5553B4D9EFCB298278AF9B3@ssi.samsung.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303170931.noto3tk5lvq24ok2@mobilestation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGKsWRmVeSWpSXmKPExsWy7djXc7pdOkwpBqsfmFrcfXyBzaJ58mJG
+        i+lTLzBanLjZyGax+uYaRov9T5+zWKxaeI3N4vysUywWl3fNYbO4NeEYkwOXR8uRt6wei/e8
+        ZPLYtKqTzWPq7HqPz5vkAlijuGxSUnMyy1KL9O0SuDKuXTzJVPDCtaJn8mqWBsZ7Zl2MnBwS
+        AiYSs+82sXcxcnEICaxklLg3bwkzSEJIoJVJYv68Ipii1qvz2CDiaxklHr+IhWj4yChxbdIn
+        ZghnKaPEozltYN1sAooS+7q2g3WICBhJXFl2EGwFs0Azi8S7+2+Zuhg5OIQFAiVenq6BqAmS
+        2HXqLguE7SexcepZdpASFgEViW87VEDCvAJmEmeO7wEr4RQwlHh1vBVsFaOAmMT3U2uYQGxm
+        AXGJW0/mM0EcLSixaPYeZghbTOLfrodsELaixP3vL9kh6nUkFuz+xAZh20ncXz2dEcLWlli2
+        8DUzxF5BiZMzn7BA9EpKHFxxgwXkFQmBDxwSr3a+YAW5U0LARaL3lRVEjbTE1etTmSHCyRKr
+        PnJBhHMk5i/ZAjXGWmLhn/VMExhVZiG5ehaSi2YhuWgWkotmIbloASPrKkbx0uLi3PTUYqO8
+        1HK94sTc4tK8dL3k/NxNjMCkdfrf4fwdjNdvfdQ7xMjEwXiIUYKDWUmEt7qBIUWINyWxsiq1
+        KD++qDQntfgQozQHi5I4r6HtyWQhgfTEktTs1NSC1CKYLBMHp1QDk7HPehs1Ue/rvxZq3Le4
+        c+9Z0WbrFK4VetU3G7/NkHx34c9nY99iXcs5dtubE/JiDDeH56cbz7z/Mftmo0Pk7993WNYl
+        3FCyMzllOoWPy8xgV/HO/xGpBo93n9j9fvkel6l2083FfBfXZJh+/+GtH7H+tb+t8MJrPZ43
+        v+ZLbj/df+7ogbPMibplNc3cCywFjiduMO9Kizz/u17z3q37NZeT7qdbXv7v0ZHBXfnZpOno
+        YcuFfvsPvequv/Ps1zeO++HvS5cocn/T/ZFmZf9r+fHrnYvveC/dGszlt/TbYSvRlZd/RMk8
+        jv5x4YRz7SbrpW3ThHfvfjNra+bWM4l/vs7g+R70I848+l/itx0THi1SYinOSDTUYi4qTgQA
+        0QM3rskDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsWS2cA0SbdLhynF4PsNGYu7jy+wWTRPXsxo
+        MX3qBUaLEzcb2SxW31zDaLH/6XMWi1ULr7FZnJ91isXi8q45bBa3JhxjcuDyaDnyltVj8Z6X
+        TB6bVnWyeUydXe/xeZNcAGsUl01Kak5mWWqRvl0CV8a1iyeZCl64VvRMXs3SwHjPrIuRk0NC
+        wESi9eo8ti5GLg4hgdWMEisv/2CEcD4ySqyeuQvKWcoo8WX+CTaQFjYBRYl9XdvBbBEBI4kr
+        yw6ygxQxCzSzSLy7/5api5GDQ1ggUOLl6RqImiCJu68WQ9X7SWycepYdpIRFQEXi2w4VkDCv
+        gJnEmeN7WCB2HWeSWPDqAhNIglPAUOLV8VZmEJtRQEzi+6k1YHFmAXGJW0/mM0G8ICCxZM95
+        ZghbVOLl43+sELaixP3vL9kh6nUkFuz+xAZh20ncXz2dEcLWlli28DUzxBGCEidnPmGB6JWU
+        OLjiBssERolZSNbNQjJqFpJRs5CMmoVk1AJG1lWM4qXFxbnpFcWGeanlesWJucWleel6yfm5
+        mxiBkX/63+HIHYxHb33UO8TIxMF4iFGCg1lJhLe6gSFFiDclsbIqtSg/vqg0J7X4EKM0B4uS
+        OK+Q68R4IYH0xJLU7NTUgtQimCwTB6dUA1PzvkwnuwlfTV6k8Kxx2m6TPv3X2oYaP933Atw8
+        P956PuGYMfOS9uJfEj9+ffolv3LL1OmNR3hddyZMC9ObP/v2/1n7N/BvXFMrGMPmkpHq/TIk
+        8NOsz23zlCSMivp+LGA91M51f2v88zkxLoweDF/K/Z8niBholm/tnf+vtVdHt/O8Yep5PoHj
+        Pz7L/c8/qsh/haF4S/j+x47+tjcKD/sXlarnWq0rPtsr9tV215P6fSf5TFbapWjnvFazlFri
+        uXSfdeakb8d+7Hy+/93cptcvE4N+TzbLP7ojWL1r+fHHT062nmC0zlo+y+ZLv/uhnR71zTV2
+        XfOOB6w/WZbxSP2srMNtd6M/K4typ10va5ypxFKckWioxVxUnAgA0+BbtWsDAAA=
+X-CMS-MailID: 20230303172114uscas1p24a96af84b17ca41ca7bc642eb9b60b6a
+CMS-TYPE: 301P
+X-CMS-RootMailID: 20230228224029uscas1p1e2fb92a8a595f80fa2985b452899d785
+References: <CGME20230228224029uscas1p1e2fb92a8a595f80fa2985b452899d785@uscas1p1.samsung.com>
+        <20230228224014.1402545-1-fan.ni@samsung.com>
+        <346a8225-609e-0188-ec8a-4abe8d271a09@intel.com>
+        <20230302062305.GA1444578@bgt-140510-bm03>
+        <e10b60ab-f666-8124-eb8f-6a2da6c0f989@intel.com>
+        <20230303143605.0000159a@Huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 08:09:38PM +0300, Serge Semin wrote:
-> On Fri, Mar 03, 2023 at 08:46:32PM +0800, Cai Huoqing wrote:
-> > From: Cai huoqing <cai.huoqing@linux.dev>
-> > 
-> > The structure dw_edma_core_ops has a set of the pointers
-> > abstracting out the DW eDMA vX and DW HDMA Native controllers.
-> > And use dw_edma_v0_core_register to set up operation.
-> > 
-> > Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
-> > ---
-> >   v4->v5:
-> >     1.Refactor add return irqreturn_t to dw_edma_core_handle_int
-> >     2.Define dw_edma_core_handle_int as inline fuction and move to
-> >       dw-edma-core.h.
-> > 
-> >   v4 link:
-> >   https://lore.kernel.org/lkml/20230221034656.14476-3-cai.huoqing@linux.dev/
-> > 
-> >  drivers/dma/dw-edma/dw-edma-core.c    | 83 ++++++++-------------------
-> >  drivers/dma/dw-edma/dw-edma-core.h    | 64 +++++++++++++++++++++
-> >  drivers/dma/dw-edma/dw-edma-v0-core.c | 75 ++++++++++++++++++++----
-> >  drivers/dma/dw-edma/dw-edma-v0-core.h | 14 +----
-> >  4 files changed, 153 insertions(+), 83 deletions(-)
-> > 
-> > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> > index 1906a836f0aa..5cfba5730695 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-core.c
-> > +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> > @@ -183,6 +183,7 @@ static void vchan_free_desc(struct virt_dma_desc *vdesc)
-> >  
-> >  static void dw_edma_start_transfer(struct dw_edma_chan *chan)
-> >  {
-> > +	struct dw_edma *dw = chan->dw;
-> >  	struct dw_edma_chunk *child;
-> >  	struct dw_edma_desc *desc;
-> >  	struct virt_dma_desc *vd;
-> > @@ -200,7 +201,7 @@ static void dw_edma_start_transfer(struct dw_edma_chan *chan)
-> >  	if (!child)
-> >  		return;
-> >  
-> > -	dw_edma_v0_core_start(child, !desc->xfer_sz);
-> > +	dw_edma_core_start(dw, child, !desc->xfer_sz);
-> >  	desc->xfer_sz += child->ll_region.sz;
-> >  	dw_edma_free_burst(child);
-> >  	list_del(&child->list);
-> > @@ -285,7 +286,7 @@ static int dw_edma_device_terminate_all(struct dma_chan *dchan)
-> >  		chan->configured = false;
-> >  	} else if (chan->status == EDMA_ST_IDLE) {
-> >  		chan->configured = false;
-> > -	} else if (dw_edma_v0_core_ch_status(chan) == DMA_COMPLETE) {
-> > +	} else if (dw_edma_core_ch_status(chan) == DMA_COMPLETE) {
-> >  		/*
-> >  		 * The channel is in a false BUSY state, probably didn't
-> >  		 * receive or lost an interrupt
-> > @@ -588,14 +589,12 @@ dw_edma_device_prep_interleaved_dma(struct dma_chan *dchan,
-> >  	return dw_edma_device_transfer(&xfer);
-> >  }
-> >  
-> > -static void dw_edma_done_interrupt(struct dw_edma_chan *chan)
-> > +void dw_edma_done_interrupt(struct dw_edma_chan *chan)
-> >  {
-> >  	struct dw_edma_desc *desc;
-> >  	struct virt_dma_desc *vd;
-> >  	unsigned long flags;
-> >  
-> > -	dw_edma_v0_core_clear_done_int(chan);
-> > -
-> >  	spin_lock_irqsave(&chan->vc.lock, flags);
-> >  	vd = vchan_next_desc(&chan->vc);
-> >  	if (vd) {
-> > @@ -631,13 +630,11 @@ static void dw_edma_done_interrupt(struct dw_edma_chan *chan)
-> >  	spin_unlock_irqrestore(&chan->vc.lock, flags);
-> >  }
-> >  
-> > -static void dw_edma_abort_interrupt(struct dw_edma_chan *chan)
-> > +void dw_edma_abort_interrupt(struct dw_edma_chan *chan)
-> >  {
-> >  	struct virt_dma_desc *vd;
-> >  	unsigned long flags;
-> >  
-> > -	dw_edma_v0_core_clear_abort_int(chan);
-> > -
-> >  	spin_lock_irqsave(&chan->vc.lock, flags);
-> >  	vd = vchan_next_desc(&chan->vc);
-> >  	if (vd) {
-> > @@ -649,63 +646,29 @@ static void dw_edma_abort_interrupt(struct dw_edma_chan *chan)
-> >  	chan->status = EDMA_ST_IDLE;
-> >  }
-> >  
-> > -static irqreturn_t dw_edma_interrupt(int irq, void *data, bool write)
-> > +static inline irqreturn_t dw_edma_interrupt_write(int irq, void *data)
-> >  {
-> >  	struct dw_edma_irq *dw_irq = data;
-> > -	struct dw_edma *dw = dw_irq->dw;
-> > -	unsigned long total, pos, val;
-> > -	unsigned long off;
-> > -	u32 mask;
-> > -
-> > -	if (write) {
-> > -		total = dw->wr_ch_cnt;
-> > -		off = 0;
-> > -		mask = dw_irq->wr_mask;
-> > -	} else {
-> > -		total = dw->rd_ch_cnt;
-> > -		off = dw->wr_ch_cnt;
-> > -		mask = dw_irq->rd_mask;
-> > -	}
-> > -
-> > -	val = dw_edma_v0_core_status_done_int(dw, write ?
-> > -							  EDMA_DIR_WRITE :
-> > -							  EDMA_DIR_READ);
-> > -	val &= mask;
-> > -	for_each_set_bit(pos, &val, total) {
-> > -		struct dw_edma_chan *chan = &dw->chan[pos + off];
-> > -
-> > -		dw_edma_done_interrupt(chan);
-> > -	}
-> > -
-> > -	val = dw_edma_v0_core_status_abort_int(dw, write ?
-> > -							   EDMA_DIR_WRITE :
-> > -							   EDMA_DIR_READ);
-> > -	val &= mask;
-> > -	for_each_set_bit(pos, &val, total) {
-> > -		struct dw_edma_chan *chan = &dw->chan[pos + off];
-> > -
-> > -		dw_edma_abort_interrupt(chan);
-> > -	}
-> >  
-> > -	return IRQ_HANDLED;
-> > -}
-> > -
-> > -static inline irqreturn_t dw_edma_interrupt_write(int irq, void *data)
-> > -{
-> > -	return dw_edma_interrupt(irq, data, true);
-> > +	return dw_edma_core_handle_int(dw_irq, EDMA_DIR_WRITE);
-> >  }
-> >  
-> >  static inline irqreturn_t dw_edma_interrupt_read(int irq, void *data)
-> >  {
-> > -	return dw_edma_interrupt(irq, data, false);
-> > +	struct dw_edma_irq *dw_irq = data;
-> > +
-> > +	return dw_edma_core_handle_int(dw_irq, EDMA_DIR_READ);
-> >  }
-> >  
-> >  static irqreturn_t dw_edma_interrupt_common(int irq, void *data)
-> >  {
-> > -	dw_edma_interrupt(irq, data, true);
-> > -	dw_edma_interrupt(irq, data, false);
-> > +	struct dw_edma_irq *dw_irq = data;
-> > +	irqreturn_t ret = IRQ_NONE;
-> > +
-> > +	ret |= dw_edma_core_handle_int(dw_irq, EDMA_DIR_WRITE);
-> > +	ret |= dw_edma_core_handle_int(dw_irq, EDMA_DIR_READ);
-> >  
-> > -	return IRQ_HANDLED;
-> > +	return ret;
-> >  }
-> >  
-> >  static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
-> > @@ -806,7 +769,7 @@ static int dw_edma_channel_setup(struct dw_edma *dw, u32 wr_alloc, u32 rd_alloc)
-> >  
-> >  		vchan_init(&chan->vc, dma);
-> >  
-> > -		dw_edma_v0_core_device_config(chan);
-> > +		dw_edma_core_ch_config(chan);
-> >  	}
-> >  
-> >  	/* Set DMA channel capabilities */
-> > @@ -951,14 +914,16 @@ int dw_edma_probe(struct dw_edma_chip *chip)
-> >  
-> >  	dw->chip = chip;
-> >  
-> > +	dw_edma_v0_core_register(dw);
-> > +
-> >  	raw_spin_lock_init(&dw->lock);
-> >  
-> >  	dw->wr_ch_cnt = min_t(u16, chip->ll_wr_cnt,
-> > -			      dw_edma_v0_core_ch_count(dw, EDMA_DIR_WRITE));
-> > +			      dw_edma_core_ch_count(dw, EDMA_DIR_WRITE));
-> >  	dw->wr_ch_cnt = min_t(u16, dw->wr_ch_cnt, EDMA_MAX_WR_CH);
-> >  
-> >  	dw->rd_ch_cnt = min_t(u16, chip->ll_rd_cnt,
-> > -			      dw_edma_v0_core_ch_count(dw, EDMA_DIR_READ));
-> > +			      dw_edma_core_ch_count(dw, EDMA_DIR_READ));
-> >  	dw->rd_ch_cnt = min_t(u16, dw->rd_ch_cnt, EDMA_MAX_RD_CH);
-> >  
-> >  	if (!dw->wr_ch_cnt && !dw->rd_ch_cnt)
-> > @@ -977,7 +942,7 @@ int dw_edma_probe(struct dw_edma_chip *chip)
-> >  		 dev_name(chip->dev));
-> >  
-> >  	/* Disable eDMA, only to establish the ideal initial conditions */
-> > -	dw_edma_v0_core_off(dw);
-> > +	dw_edma_core_off(dw);
-> >  
-> >  	/* Request IRQs */
-> >  	err = dw_edma_irq_request(dw, &wr_alloc, &rd_alloc);
-> > @@ -990,7 +955,7 @@ int dw_edma_probe(struct dw_edma_chip *chip)
-> >  		goto err_irq_free;
-> >  
-> >  	/* Turn debugfs on */
-> > -	dw_edma_v0_core_debugfs_on(dw);
-> > +	dw_edma_core_debugfs_on(dw);
-> >  
-> >  	chip->dw = dw;
-> >  
-> > @@ -1016,7 +981,7 @@ int dw_edma_remove(struct dw_edma_chip *chip)
-> >  		return -ENODEV;
-> >  
-> >  	/* Disable eDMA */
-> > -	dw_edma_v0_core_off(dw);
-> > +	dw_edma_core_off(dw);
-> >  
-> >  	/* Free irqs */
-> >  	for (i = (dw->nr_irqs - 1); i >= 0; i--)
-> > diff --git a/drivers/dma/dw-edma/dw-edma-core.h b/drivers/dma/dw-edma/dw-edma-core.h
-> > index 0ab2b6dba880..b0c4648cd30c 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-core.h
-> > +++ b/drivers/dma/dw-edma/dw-edma-core.h
-> > @@ -111,6 +111,19 @@ struct dw_edma {
-> >  	raw_spinlock_t			lock;		/* Only for legacy */
-> >  
-> >  	struct dw_edma_chip             *chip;
-> > +
-> > +	const struct dw_edma_core_ops	*core;
-> > +};
-> > +
-> > +struct dw_edma_core_ops {
-> > +	void (*off)(struct dw_edma *dw);
-> > +	u16 (*ch_count)(struct dw_edma *dw, enum dw_edma_dir dir);
-> > +	enum dma_status (*ch_status)(struct dw_edma_chan *chan);
-> > +	irqreturn_t (*handle_int)(struct dw_edma_irq *dw_irq,
-> > +				  enum dw_edma_dir dir);
-> > +	void (*start)(struct dw_edma_chunk *chunk, bool first);
-> > +	void (*ch_config)(struct dw_edma_chan *chan);
-> > +	void (*debugfs_on)(struct dw_edma *dw);
-> >  };
-> >  
-> >  struct dw_edma_sg {
-> > @@ -136,6 +149,9 @@ struct dw_edma_transfer {
-> >  	enum dw_edma_xfer_type		type;
-> >  };
-> > 
->  
-> > +void dw_edma_done_interrupt(struct dw_edma_chan *chan);
-> > +void dw_edma_abort_interrupt(struct dw_edma_chan *chan);
-> 
-> I'll ask one more time. So you've decided to go with the global
-> dw_edma_done_interrupt()/dw_edma_abort_interrupt() methods instead of
-> passing them as the function pointers to the handle_int callback.
-> 
-> Are you sure it looks better (simpler, more readable) that way?
-> 
-> > +
-> >  static inline
-> >  struct dw_edma_chan *vc2dw_edma_chan(struct virt_dma_chan *vc)
-> >  {
-> > @@ -148,4 +164,52 @@ struct dw_edma_chan *dchan2dw_edma_chan(struct dma_chan *dchan)
-> >  	return vc2dw_edma_chan(to_virt_chan(dchan));
-> >  }
-> >  
-> > +static inline
-> > +void dw_edma_core_off(struct dw_edma *dw)
-> > +{
-> > +	dw->core->off(dw);
-> > +}
-> > +
-> > +static inline
-> > +u16 dw_edma_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
-> > +{
-> > +	return dw->core->ch_count(dw, dir);
-> > +}
-> > +
-> > +static inline
-> > +enum dma_status dw_edma_core_ch_status(struct dw_edma_chan *chan)
-> > +{
-> > +	struct dw_edma *dw = chan->dw;
-> > +
-> > +	return dw->core->ch_status(chan);
-> > +}
-> > +
-> > +static inline irqreturn_t
-> > +dw_edma_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir)
-> > +{
-> > +	struct dw_edma *dw = dw_irq->dw;
-> > +
-> > +	return dw->core->handle_int(dw_irq, dir);
-> > +}
-> > +
-> > +static inline
-> > +void dw_edma_core_start(struct dw_edma *dw, struct dw_edma_chunk *chunk, bool first)
-> > +{
-> > +	dw->core->start(chunk, first);
-> > +}
-> > +
-> > +static inline
-> > +void dw_edma_core_ch_config(struct dw_edma_chan *chan)
-> > +{
-> > +	struct dw_edma *dw = chan->dw;
-> > +
-> > +	dw->core->ch_config(chan);
-> > +}
-> > +
-> > +static inline
-> > +void dw_edma_core_debugfs_on(struct dw_edma *dw)
-> > +{
-> > +	dw->core->debugfs_on(dw);
-> > +}
-> > +
-> >  #endif /* _DW_EDMA_CORE_H */
-> > diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
-> > index 72e79a0c0a4e..2ebae48531f9 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-v0-core.c
-> > +++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
-> > @@ -216,7 +216,7 @@ static inline u64 readq_ch(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch,
-> >  	readq_ch(dw, dir, ch, &(__dw_ch_regs(dw, dir, ch)->name))
-> >  
-> >  /* eDMA management callbacks */
-> > -void dw_edma_v0_core_off(struct dw_edma *dw)
-> > +static void dw_edma_v0_core_off(struct dw_edma *dw)
-> >  {
-> >  	SET_BOTH_32(dw, int_mask,
-> >  		    EDMA_V0_DONE_INT_MASK | EDMA_V0_ABORT_INT_MASK);
-> > @@ -225,7 +225,7 @@ void dw_edma_v0_core_off(struct dw_edma *dw)
-> >  	SET_BOTH_32(dw, engine_en, 0);
-> >  }
-> >  
-> > -u16 dw_edma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
-> > +static u16 dw_edma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
-> >  {
-> >  	u32 num_ch;
-> >  
-> > @@ -242,7 +242,7 @@ u16 dw_edma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
-> >  	return (u16)num_ch;
-> >  }
-> >  
-> > -enum dma_status dw_edma_v0_core_ch_status(struct dw_edma_chan *chan)
-> > +static enum dma_status dw_edma_v0_core_ch_status(struct dw_edma_chan *chan)
-> >  {
-> >  	struct dw_edma *dw = chan->dw;
-> >  	u32 tmp;
-> > @@ -258,7 +258,7 @@ enum dma_status dw_edma_v0_core_ch_status(struct dw_edma_chan *chan)
-> >  		return DMA_ERROR;
-> >  }
-> >  
-> > -void dw_edma_v0_core_clear_done_int(struct dw_edma_chan *chan)
-> > +static void dw_edma_v0_core_clear_done_int(struct dw_edma_chan *chan)
-> >  {
-> >  	struct dw_edma *dw = chan->dw;
-> >  
-> > @@ -266,7 +266,7 @@ void dw_edma_v0_core_clear_done_int(struct dw_edma_chan *chan)
-> >  		  FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id)));
-> >  }
-> >  
-> > -void dw_edma_v0_core_clear_abort_int(struct dw_edma_chan *chan)
-> > +static void dw_edma_v0_core_clear_abort_int(struct dw_edma_chan *chan)
-> >  {
-> >  	struct dw_edma *dw = chan->dw;
-> >  
-> > @@ -274,18 +274,56 @@ void dw_edma_v0_core_clear_abort_int(struct dw_edma_chan *chan)
-> >  		  FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id)));
-> >  }
-> >  
-> > -u32 dw_edma_v0_core_status_done_int(struct dw_edma *dw, enum dw_edma_dir dir)
-> > +static u32 dw_edma_v0_core_status_done_int(struct dw_edma *dw, enum dw_edma_dir dir)
-> >  {
-> >  	return FIELD_GET(EDMA_V0_DONE_INT_MASK,
-> >  			 GET_RW_32(dw, dir, int_status));
-> >  }
-> >  
-> > -u32 dw_edma_v0_core_status_abort_int(struct dw_edma *dw, enum dw_edma_dir dir)
-> > +static u32 dw_edma_v0_core_status_abort_int(struct dw_edma *dw, enum dw_edma_dir dir)
-> >  {
-> >  	return FIELD_GET(EDMA_V0_ABORT_INT_MASK,
-> >  			 GET_RW_32(dw, dir, int_status));
-> >  }
-> >  
-> > +static
-> > +irqreturn_t dw_edma_v0_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir)
-> > +{
-> > +	struct dw_edma *dw = dw_irq->dw;
-> > +	unsigned long total, pos, val;
-> > +	struct dw_edma_chan *chan;
+On Fri, Mar 03, 2023 at 02:36:05PM +0000, Jonathan Cameron wrote:
 
->   +	int ret = IRQ_NONE;
+> On Thu, 2 Mar 2023 08:36:59 -0700
+> Dave Jiang <dave.jiang@intel.com> wrote:
+>=20
+> > On 3/1/23 11:23 PM, Fan Ni wrote:
+> > > On Wed, Mar 01, 2023 at 11:54:08AM -0700, Dave Jiang wrote: =20
+> > >> =20
+> > > Hi Dave,
+> > > Thanks for looking into this. =20
+> > >>
+> > >> On 2/28/23 3:40 PM, Fan Ni wrote: =20
+> > >>> Add COMMIT field check aside with existing COMMITTED field check du=
+ring
+> > >>> hdm decoder initialization to avoid a system crash during module re=
+moval
+> > >>> after destroying a region which leaves the COMMIT field being reset=
+ while
+> > >>> the COMMITTED field still being set. =20
+> > >>
+> > >> Hi Fan. Are you seeing this issue on qemu emulation or hardware? The=
+ =20
+> > > I run into the issue with qemu emulation. =20
+> > >> situation does not make sense to me. If we clear the COMMIT bit, the=
+n the
+> > >> COMMITTED bit should be cleared by the hardware shortly after right?=
+ =20
+> > >=20
+> > >  From the spec, I cannot find any statement saying clearing the COMMI=
+T bit
+> > > will automatically clear the COMMITTED. If I have not missed the stat=
+ement in
+> > > the spec, I assume we should not make the assumption that it will be
+> > > cleared automatically for real hardware. But you may be right, leavin=
+g the
+> > > COMMITTED bit set can potentially cause some issue? Need to check mor=
+e. =20
+> >=20
+> > I have not been able to find direct verbiage that indicates this either=
+.=20
+> > However, logically it would make sense. Otherwise, the COMMITTED field=
+=20
+> > never clears and prevents reprogramming of the HDM decoders. The curren=
+t=20
+> > QEMU implementation is creating a situation where the HDM decoder is=20
+> > always active after COMMIT bit is set the first time, regardless whethe=
+r=20
+> > COMMIT field has been cleared later on during a teardown. It does sound=
+=20
+> > like a bug with QEMU emulation currently.
+>=20
+> I agree that one sane interpretation is that unsetting commit should resu=
+lt in
+> the decoder being deactivated and hence the commit bit dropping.  However
+> I'm not sure that's the only sane interpretation.
+>=20
+> There is no verbage that I'm aware of that says the committed bit being
+> set means that the current register values are in use.  It simply says th=
+at
+> when the commit bit was set, the HDM decoder was successfully committed
+> (using registers as set at that time).  There is a specific statement abo=
+ut
+> not changing the registers whilst checks are in progress, but those check=
+s
+> are only required if lock on commit is set, so it doesn't cover this case=
+.
+>=20
+> Wonderfully there isn't actually anything says what a commit transition t=
+o 0
+> means.  Does that result in the decoder become uncommitted, or does that =
+only
+> happen when the next 0 to 1 transition happens?
+>=20
+> The only stuff we have is what happens when lock on commit =3D 1, which i=
+sn't
+> the case here.
+>=20
+> So is there another valid implementation? I think yes.
+> In some implementations, there will be a complex state machine that is
+> triggered when commit is set.  That will then write some entirely invisib=
+le
+> internal state for decode logic based on the contents of the registers.
+> As such, once it's set committed, it typically won't look at the register=
+s
+> again until another commit 0->1 transition happens.  At that point the
+> committed bit drops and raised again once the commit state machine finish=
+es
+> (given QEMU doesn't emulate that delay the upshot is if you set commit th=
+en
+> check committed it will be set ;)
+>=20
+> In that implementation the commit 1->0 transition is an irrelevance and
+> it won't change the committed bit state.
+>=20
+> So whilst the QEMU code is doing the less obvious implementation, I think
+> the spec still allows it.  I don't mind QEMU changing to the more obvious
+> one though if someone wants to send a patch.
+>=20
+> Jonathan
+>=20
 
-I meant "irqreturn_t" type of course.
+In current qemu emulation, when COMMITTED bit is set when the decoder is
+committed and at the same time the COMMIT field will be cleared. Does
+the following fix make sense?
+1. At qemu side, when the commit completes, just set the COMMITTED bit,
+but leave the COMMIT bit as set, also check LOCK ON COMMIT bit,
+if it is set, clear it, which will allow further reset of COMMIT bit.
+2. for the kernel side, if it needs to reprogram the decoder, it needs to
+check the COMMITTED bit, if it is set, then OS need to reset COMMIT bit
+first, which will also clear COMMITTED bit automatically at qemu side.
+3. when the OS needs to reset the decoder, it does similar thing as 2 to
+reset COMMIT bit and qemu will clear COMMITTED bit.
 
--Serge(y)
+Fan
 
-> > +	unsigned long off;
-> > +	u32 mask;
-> > +
-> > +	if (dir == EDMA_DIR_WRITE) {
-> > +		total = dw->wr_ch_cnt;
-> > +		off = 0;
-> > +		mask = dw_irq->wr_mask;
-> > +	} else {
-> > +		total = dw->rd_ch_cnt;
-> > +		off = dw->wr_ch_cnt;
-> > +		mask = dw_irq->rd_mask;
-> > +	}
-> > +
-> > +	val = dw_edma_v0_core_status_done_int(dw, dir);
-> > +	val &= mask;
-> > +	for_each_set_bit(pos, &val, total) {
-> > +		chan = &dw->chan[pos + off];
->   + newline
-> > +		dw_edma_v0_core_clear_done_int(chan);
-> > +		dw_edma_done_interrupt(chan);
->   + newline
->   +		ret = IRQ_HANDLED;
-> > +	}
-> > +
-> > +	val = dw_edma_v0_core_status_abort_int(dw, dir);
-> > +	val &= mask;
-> > +	for_each_set_bit(pos, &val, total) {
-> > +		chan = &dw->chan[pos + off];
->   + newline
-> > +		dw_edma_v0_core_clear_abort_int(chan);
-> > +		dw_edma_abort_interrupt(chan);
->   + newline
->   +		ret = IRQ_HANDLED;
-> > +	}
-> > +
-> > -	return IRQ_HANDLED;
->   +	return ret;
-> > +}
-> 
-> Your version of the handler doesn't indicate whether the IRQ was
-> actually handled. Instead it misleadingly returns always-handled
-> status. What if no IRQ flag was actually set and no for-each
-> loop was taken? It's possible for the shared IRQ lines.
-> 
-> Besides of adding the actual IRQ-handling status return please note
-> 1. newlines
-> 2. include "linux/irqreturn.h" to the head of the file.
-> 
-> -Serge(y)
-> 
-> > +
-> >  static void dw_edma_v0_write_ll_data(struct dw_edma_chunk *chunk, int i,
-> >  				     u32 control, u32 size, u64 sar, u64 dar)
-> >  {
-> > @@ -356,7 +394,7 @@ static void dw_edma_v0_core_write_chunk(struct dw_edma_chunk *chunk)
-> >  	dw_edma_v0_write_ll_link(chunk, i, control, chunk->ll_region.paddr);
-> >  }
-> >  
-> > -void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
-> > +static void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
-> >  {
-> >  	struct dw_edma_chan *chan = chunk->chan;
-> >  	struct dw_edma *dw = chan->dw;
-> > @@ -427,7 +465,7 @@ void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
-> >  		  FIELD_PREP(EDMA_V0_DOORBELL_CH_MASK, chan->id));
-> >  }
-> >  
-> > -int dw_edma_v0_core_device_config(struct dw_edma_chan *chan)
-> > +static void dw_edma_v0_core_ch_config(struct dw_edma_chan *chan)
-> >  {
-> >  	struct dw_edma *dw = chan->dw;
-> >  	u32 tmp = 0;
-> > @@ -494,12 +532,25 @@ int dw_edma_v0_core_device_config(struct dw_edma_chan *chan)
-> >  		SET_RW_32(dw, chan->dir, ch67_imwr_data, tmp);
-> >  		break;
-> >  	}
-> > -
-> > -	return 0;
-> >  }
-> >  
-> >  /* eDMA debugfs callbacks */
-> > -void dw_edma_v0_core_debugfs_on(struct dw_edma *dw)
-> > +static void dw_edma_v0_core_debugfs_on(struct dw_edma *dw)
-> >  {
-> >  	dw_edma_v0_debugfs_on(dw);
-> >  }
-> > +
-> > +static const struct dw_edma_core_ops dw_edma_v0_core = {
-> > +	.off = dw_edma_v0_core_off,
-> > +	.ch_count = dw_edma_v0_core_ch_count,
-> > +	.ch_status = dw_edma_v0_core_ch_status,
-> > +	.handle_int = dw_edma_v0_core_handle_int,
-> > +	.start = dw_edma_v0_core_start,
-> > +	.ch_config = dw_edma_v0_core_ch_config,
-> > +	.debugfs_on = dw_edma_v0_core_debugfs_on,
-> > +};
-> > +
-> > +void dw_edma_v0_core_register(struct dw_edma *dw)
-> > +{
-> > +	dw->core = &dw_edma_v0_core;
-> > +}
-> > diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.h b/drivers/dma/dw-edma/dw-edma-v0-core.h
-> > index ab96a1f48080..04a882222f99 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-v0-core.h
-> > +++ b/drivers/dma/dw-edma/dw-edma-v0-core.h
-> > @@ -11,17 +11,7 @@
-> >  
-> >  #include <linux/dma/edma.h>
-> >  
-> > -/* eDMA management callbacks */
-> > -void dw_edma_v0_core_off(struct dw_edma *chan);
-> > -u16 dw_edma_v0_core_ch_count(struct dw_edma *chan, enum dw_edma_dir dir);
-> > -enum dma_status dw_edma_v0_core_ch_status(struct dw_edma_chan *chan);
-> > -void dw_edma_v0_core_clear_done_int(struct dw_edma_chan *chan);
-> > -void dw_edma_v0_core_clear_abort_int(struct dw_edma_chan *chan);
-> > -u32 dw_edma_v0_core_status_done_int(struct dw_edma *chan, enum dw_edma_dir dir);
-> > -u32 dw_edma_v0_core_status_abort_int(struct dw_edma *chan, enum dw_edma_dir dir);
-> > -void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first);
-> > -int dw_edma_v0_core_device_config(struct dw_edma_chan *chan);
-> > -/* eDMA debug fs callbacks */
-> > -void dw_edma_v0_core_debugfs_on(struct dw_edma *dw);
-> > +/* eDMA core register */
-> > +void dw_edma_v0_core_register(struct dw_edma *dw);
-> >  
-> >  #endif /* _DW_EDMA_V0_CORE_H */
-> > -- 
-> > 2.34.1
-> > 
+> >
+> > DJ
+> >=20
+> > >=20
+> > > Fan
+> > >  =20
+> > >> Otherwise, how would one reprogram the decoder if the decoder is ind=
+icating
+> > >> to be active?
+> > >>
+> > >> DJ
+> > >> =20
+> > >>>
+> > >>> In current kernel implementation, when destroying a region (cxl
+> > >>> destroy-region),the decoders associated to the region will be reset
+> > >>> as that in cxl_decoder_reset, where the COMMIT field will be reset.
+> > >>> However, resetting COMMIT field will not automatically reset the
+> > >>> COMMITTED field, causing a situation where COMMIT is reset (0) whil=
+e
+> > >>> COMMITTED is set (1) after the region is destroyed. Later, when
+> > >>> init_hdm_decoder is called (during modprobe), current code only che=
+ck
+> > >>> the COMMITTED to decide whether the decoder is enabled or not. Sinc=
+e
+> > >>> the COMMITTED will be 1 and the code treats the decoder as enabled,
+> > >>> which will cause unexpected behaviour.
+> > >>>
+> > >>> Before the fix, a system crash was observed when performing followi=
+ng
+> > >>> steps:
+> > >>> 1. modprobe -a cxl_acpi cxl_core cxl_pci cxl_port cxl_mem
+> > >>> 2. cxl create-region -m -d decoder0.0 -w 1 mem0 -s 256M
+> > >>> 3. cxl destroy-region region0 -f
+> > >>> 4. rmmod cxl_acpi cxl_pci cxl_port cxl_mem cxl_pmem cxl_core
+> > >>> 5. modprobe -a cxl_acpi cxl_core cxl_pci cxl_port cxl_mem (showing
+> > >>> "no CXL window for range 0x0:0xffffffffffffffff" error message)
+> > >>> 6. rmmod cxl_acpi cxl_pci cxl_port cxl_mem cxl_pmem cxl_core (kerne=
+l
+> > >>> crash at cxl_dpa_release due to dpa_res has been freed when destroy=
+ing
+> > >>> the region).
+> > >>>
+> > >>> The patch fixed the above issue, and is tested based on follow patc=
+h series:
+> > >>>
+> > >>> [PATCH 00/18] CXL RAM and the 'Soft Reserved' =3D> 'System RAM' def=
+ault
+> > >>> Message-ID: 167601992097.1924368.18291887895351917895.stgit@dwillia=
+2-xfh.jf.intel.com
+> > >>>
+> > >>> Signed-off-by: Fan Ni <fan.ni@samsung.com>
+> > >>> ---
+> > >>>    drivers/cxl/core/hdm.c | 8 +++++---
+> > >>>    1 file changed, 5 insertions(+), 3 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
+> > >>> index 80eccae6ba9e..6cf854c949f0 100644
+> > >>> --- a/drivers/cxl/core/hdm.c
+> > >>> +++ b/drivers/cxl/core/hdm.c
+> > >>> @@ -695,6 +695,7 @@ static int init_hdm_decoder(struct cxl_port *po=
+rt, struct cxl_decoder *cxld,
+> > >>>    	struct cxl_endpoint_decoder *cxled =3D NULL;
+> > >>>    	u64 size, base, skip, dpa_size;
+> > >>>    	bool committed;
+> > >>> +	bool should_commit;
+> > >>>    	u32 remainder;
+> > >>>    	int i, rc;
+> > >>>    	u32 ctrl;
+> > >>> @@ -710,10 +711,11 @@ static int init_hdm_decoder(struct cxl_port *=
+port, struct cxl_decoder *cxld,
+> > >>>    	base =3D ioread64_hi_lo(hdm + CXL_HDM_DECODER0_BASE_LOW_OFFSET(=
+which));
+> > >>>    	size =3D ioread64_hi_lo(hdm + CXL_HDM_DECODER0_SIZE_LOW_OFFSET(=
+which));
+> > >>>    	committed =3D !!(ctrl & CXL_HDM_DECODER0_CTRL_COMMITTED);
+> > >>> +	should_commit =3D !!(ctrl & CXL_HDM_DECODER0_CTRL_COMMIT);
+> > >>>    	cxld->commit =3D cxl_decoder_commit;
+> > >>>    	cxld->reset =3D cxl_decoder_reset;
+> > >>> -	if (!committed)
+> > >>> +	if (!should_commit || !committed)
+> > >>>    		size =3D 0;
+> > >>>    	if (base =3D=3D U64_MAX || size =3D=3D U64_MAX) {
+> > >>>    		dev_warn(&port->dev, "decoder%d.%d: Invalid resource range\n",
+> > >>> @@ -727,7 +729,7 @@ static int init_hdm_decoder(struct cxl_port *po=
+rt, struct cxl_decoder *cxld,
+> > >>>    	};
+> > >>>    	/* decoders are enabled if committed */
+> > >>> -	if (committed) {
+> > >>> +	if (should_commit && committed) {
+> > >>>    		cxld->flags |=3D CXL_DECODER_F_ENABLE;
+> > >>>    		if (ctrl & CXL_HDM_DECODER0_CTRL_LOCK)
+> > >>>    			cxld->flags |=3D CXL_DECODER_F_LOCK;
+> > >>> @@ -772,7 +774,7 @@ static int init_hdm_decoder(struct cxl_port *po=
+rt, struct cxl_decoder *cxld,
+> > >>>    		return 0;
+> > >>>    	}
+> > >>> -	if (!committed)
+> > >>> +	if (!should_commit || !committed)
+> > >>>    		return 0;
+> > >>>    	dpa_size =3D div_u64_rem(size, cxld->interleave_ways, &remainde=
+r); =20
+> =
