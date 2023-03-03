@@ -2,172 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CFA6A8ECF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCFD6A8ED5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjCCBiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 20:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S229947AbjCCBi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 20:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjCCBiN (ORCPT
+        with ESMTP id S229944AbjCCBit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 20:38:13 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7988FAD20
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 17:38:10 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so4711017pjh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 17:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677807490;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d+4wsqONS94BLAD7J2SQKnc2Ly/7mV4AxVfIdl1/JKQ=;
-        b=dTBMQZHHs+SLU8GuE3IT8ngOudbRWTTy4M2hi6X+1XNv5bfE+R4GsWClPXFwNK8cUE
-         UXa84vZ7q1XFNB4iIJtZMWeEF6HjGF6di4KZW/9TnOWlgUiP+vMIUw/oroe7JB5L0Evd
-         4J+6te56t9PamHXF0tz4bpiIVxZ0enZ+8MGO0m2fbn0FxKRE/95ovSXn5KmOh9yIOfzy
-         ZShswTWzcNpKlVi8g1QL+o+oAYxvKU7GaufW/MrhBzub+NjwDFeIaUD80lhk1lDZSUeL
-         uuFSj5NJ5yD2OG2xecUuYgYHskUyI43SwhmeeZMq65LNM8+IpBf2bNzXFdUygq56S5dO
-         jWJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677807490;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d+4wsqONS94BLAD7J2SQKnc2Ly/7mV4AxVfIdl1/JKQ=;
-        b=bo+dr+1M1oMIQHsHhQ+qKGqyP5AbpD3F5UxiLMHe46QSCcLUhQIvh3+oCIu7fM20C3
-         MaG8lNAxOtkTq5UhZQbuD5OWskgycpWyVuW91UBgyQ880H4CVB/+S3aSXL3PM1HfECCs
-         ywGzDJ/BTChyi3AtB54BJ7BmGww4EjwkVthhThYCElxl7zgkSf1QD1PVY5Ks/Y3vvRSk
-         HSgW//A0fDN75XaMmkCzpgAeG7S3RlkGYcXMcx1s8nX7oc4N3qD0gBgPLGBsXD/0Sh57
-         FCOncbx7BfH4vnynp2vzv/8tm3opplF02Jk1tCDIVPC9kTf6A+7nTb4+7Z+bGV0ZOyrJ
-         Ql9A==
-X-Gm-Message-State: AO0yUKWgURXPHvGu2JlW3IE2HvqOs4nHpPIEFilWfwbgnKvaLP5oF7+s
-        VLHfLamaRn0SIhfBWiFbWic=
-X-Google-Smtp-Source: AK7set8qVmO671kkfzWh6BakH4jRefkToDjbz+gnq5AXZrLF+NhcUqebsky0XvFRGUv4kVZDB5r/7A==
-X-Received: by 2002:a05:6a20:12c7:b0:cc:e0fb:a83f with SMTP id v7-20020a056a2012c700b000cce0fba83fmr607125pzg.36.1677807489852;
-        Thu, 02 Mar 2023 17:38:09 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:4036:e990:6bc4:4206])
-        by smtp.gmail.com with ESMTPSA id u20-20020aa78494000000b005ae8e94b0d5sm317463pfn.107.2023.03.02.17.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 17:38:09 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 2 Mar 2023 17:38:07 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2 3/6] zsmalloc: fine-grained inuse ratio based fullness
- grouping
-Message-ID: <ZAFPf9pv1CTmIgtL@google.com>
-References: <20230223030451.543162-1-senozhatsky@chromium.org>
- <20230223030451.543162-4-senozhatsky@chromium.org>
- <Y/f2WvhNlwhsf2Cz@google.com>
- <Y/riPlQ2UK00WirI@google.com>
- <Y/6GAYJ4c9W0bPzp@google.com>
- <Y/8TENp78WSQ0UW3@google.com>
- <Y//tqFQgsCeMimg5@google.com>
- <Y//zbxEmAmoA69ed@google.com>
- <ZAE9W5xQmQecUzhj@google.com>
- <20230303010643.GA4022757@google.com>
+        Thu, 2 Mar 2023 20:38:49 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E16CC30;
+        Thu,  2 Mar 2023 17:38:48 -0800 (PST)
+X-UUID: 22929828b96411eda06fc9ecc4dadd91-20230303
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=NPDcbWjUVSoLLjMtO/Z1QwJgNEyxQ1YYYXl9gvsi2R0=;
+        b=mwVx8okudEN/QBfAKR/FusnfwemjkOe5nZJnJih36Hv7O8m9RIK9WygvzSfe8vnZsaX6exbl4+U2G72CXoPnVJKJDsoN6hXSDmujTTjIXi6a5bXMBBURloxt77aXfI4WMCi1OZqdeDBo5jqFAdUK4W0FL4ui8JBTV9HalrsgIXs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:455c1fa1-6c9a-49c4-b21b-562cdc834dc6,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:25b5999,CLOUDID:faf02c27-564d-42d9-9875-7c868ee415ec,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 22929828b96411eda06fc9ecc4dadd91-20230303
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1370251418; Fri, 03 Mar 2023 09:38:44 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Fri, 3 Mar 2023 09:38:44 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 09:38:44 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <yunfei.dong@mediatek.com>,
+        "Allen-KH Cheng" <allen-kh.cheng@mediatek.com>
+Subject: [RESEND 0/6] media: mediatek: Update video decoder nodes for MT8195 and MT8192
+Date:   Fri, 3 Mar 2023 09:38:36 +0800
+Message-ID: <20230303013842.23259-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303010643.GA4022757@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 10:06:43AM +0900, Sergey Senozhatsky wrote:
-> On (23/03/02 16:20), Minchan Kim wrote:
-> > On Thu, Mar 02, 2023 at 09:53:03AM +0900, Sergey Senozhatsky wrote:
-> > > On (23/03/01 16:28), Minchan Kim wrote:
-> > > > On Wed, Mar 01, 2023 at 05:55:44PM +0900, Sergey Senozhatsky wrote:
-> > > > > On (23/02/28 14:53), Minchan Kim wrote:
-> > > > > > BTW, I still prefer the enum instead of 10 define.
-> > > > > > 
-> > > > > > enum fullness_group {
-> > > > > >     ZS_EMPTY,
-> > > > > >     ZS_INUSE_RATIO_MIN,
-> > > > > >     ZS_INUSE_RATIO_ALMOST_FULL = 7,
-> > > > > >     ZS_INUSE_RATIO_MAX = 10,
-> > > > > >     ZS_FULL,
-> > > > > >     NR_ZS_FULLNESS,
-> > > > > > }
-> > > > > 
-> > > > > For educational purposes, may I ask what do enums give us? We
-> > > > > always use integers - int:4 in zspage fullness, int for arrays
-> > > > > offsets and we cast to plain integers in get/set stats. So those
-> > > > > enums exist only at declaration point, and plain int otherwise.
-> > > > > What are the benefits over #defines?
-> > > > 
-> > > > Well, I just didn't like the 12 hard coded define *list* values
-> > > > and never used other places except zs_stats_size_show since
-> > > 
-> > > If we have two enums, then we need more lines
-> > > 
-> > > enum fullness {
-> > > 	ZS_INUSE_RATIO_0
-> > > 	...
-> > > 	ZS_INUSE_RATIO_100
-> > > }
-> > > 
-> > > enum stats {
-> > > 	INUSE_RATIO_0
-> > > 	...
-> > > 	INUSE_RATIO_100
-> > > 
-> > > 	// the rest of stats
-> > > }
-> > > 
-> > > and then we use int:4 fullness value to access stats.
-> > 
-> > Yeah. I don't see any problem unless I miss your point.
-> 
-> OK. How about having one enum? E.g. "zs_flags" or something which
-> will contain all our constants?
-> 
-> Otherwise I can create two big enums for fullness and stats.
+This series is based on matthias github v6.3-tmp. Since there is a
+dependence in the following series, I resend a series for them.
 
-Let's go with two enums at this moment since your great work is not
-tied into the problem. If that becomes really maintaince hole,
-we could tidy it up at that time.
+patchwork.kernel.org/project/linux-mediatek/list/?series=702423
+patchwork.kernel.org/project/linux-mediatek/list/?series=702078
 
-> What's your preference on inuse_0 and inuse_100 naming? Do we
-> keep unified naming or should it be INUSE_MIN/INUSE_MAX or
-> EMPTY/FULL?
+Allen-KH Cheng (3):
+  media: dt-bindings: media: mediatek: Rename child node names for
+    decoder
+  media: dt-bindings: media: mediatek: Remove "dma-ranges" property for
+    decoder
+  arm64: dts: mt8192: Add video-codec nodes
 
-I don't have strong opinion about it. I will follow your choice. ;-)
+Yunfei Dong (3):
+  media: dt-bindings: media: mediatek: vcodec: adapt to the
+    'clock-names' of different platforms
+  media: dt-bindings: media: mediatek: vcodec: Change the max reg value
+    to 2
+  arm64: dts: mt8195: Add video decoder node
 
-> 
-> > > For per inuse ratio zs_stats_size_show() we need to access stats
-> > > individually:
-> > > 
-> > > 	inuse10, inuse20, inuse30, ... inuse99
-> > 
-> > Does it need specific index in the enum list?
-> 
-> If we report per inuse group then yes:
-> 
-> 	sprintf("... %lu %lu ..... %lu %lu ...\n",
-> 		...
-> 		get_stat(ZS_INUSE_RATIO_10),
-> 		get_stat(ZS_INUSE_RATIO_20),
-> 		get_stat(ZS_INUSE_RATIO_30),
-> 		...
-> 		get_stat(ZS_INUSE_RATIO_99),
-> 		...);
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 113 +++++++-----------
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |  59 +++++++++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  70 +++++++++++
+ 3 files changed, 173 insertions(+), 69 deletions(-)
 
-I thought we could handle it with loop
+-- 
+2.18.0
 
-prologue - seq_printf
-for (ratio = min, ratio < max; ratio++ )
-    seq_printf(s, "%lu", get_stat(ratio)
-epilogue - seq_printf
-seq_puts(s, "\n");
