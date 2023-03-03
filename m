@@ -2,133 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E006AA353
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 806566AA428
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233200AbjCCV4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S232125AbjCCWVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 17:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233251AbjCCVzO (ORCPT
+        with ESMTP id S233718AbjCCWVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:55:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B88C6B317;
-        Fri,  3 Mar 2023 13:48:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59B0461865;
-        Fri,  3 Mar 2023 21:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AED0C433D2;
-        Fri,  3 Mar 2023 21:48:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677880127;
-        bh=g/MPPc/b4ShFbU9FycLtiqpTdn/ECgbYpxfZoEUHOqE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UxT5HMb2FveNEg/e5VFommhoUrYz4OkbTwBtJJs7x7fNTjEyugPAlOP5u7eauVioe
-         VSv0PnRCy5LTyu2A3+8zfEZuLzTnvCCcwQz9VhJLpoPj86HmwlD/ADsXx8BfwGJYFL
-         XMkVYc2VjBf3muMxYrwsrjpvIuGGhr45IpkucTEF83iBjiRp+VcKxUfXfMkG5VhrVw
-         GQ4ENUw9ZzEFU/3C/xV2x285ce1FcTN4Ym73GdV5cfsWWSNOaZevogpSsGLN6HCrV3
-         UMkbPhGx2ZJ8JJ4pvrBpAZkCxrM9OCktiiA9ArRWoe+lXYjr2DefkXn3K1Y7Lg61E3
-         Bt0nB6TBfGTjA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mengyuan Lou <mengyuanlou@net-swift.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pci@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 19/20] PCI: Add ACS quirk for Wangxun NICs
-Date:   Fri,  3 Mar 2023 16:48:05 -0500
-Message-Id: <20230303214806.1453287-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214806.1453287-1-sashal@kernel.org>
-References: <20230303214806.1453287-1-sashal@kernel.org>
+        Fri, 3 Mar 2023 17:21:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220CB637FF;
+        Fri,  3 Mar 2023 14:13:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AKHMXDVfAHRfMaDslUt/V0hIGlDNe8KFbQs3dDiWe0g=; b=aIYgdERojnOjewix/zRXSLwQcn
+        iHTF6AKe9PqZC3xjVdMnWRr+gNXeCDAoMYfaHCcWCmY483NMLsncAsBwk1JJ+LI64qLS6WjNtWNSx
+        C7GWQjcC7Rl7WLFD5nH+PFyYCVfuHbRHf3z7GTNqzg3iZX0ScvYOZbWV0vxjG5ctoUXue/1bbKnqR
+        6vTM0oYVhl9e0W6O/21CCLTFTmaiAYWophtc9atPRND4WgMuSCdvCUTGBmUs1O2bBuxysmc2Kf4RW
+        NFdbgcCO064NsMdwdEkKUF+cVvrhPBqQbMpLtNoFd76Fs/rNapuPLhiAG9iwC9LfHtBQrRGVNKdKG
+        tCHp67JA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pYDG3-007YjZ-0K; Fri, 03 Mar 2023 21:48:07 +0000
+Date:   Fri, 3 Mar 2023 13:48:06 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, keescook@chromium.org,
+        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
+ 165
+Message-ID: <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
+References: <20230206234344.2433950-1-mcgrof@kernel.org>
+ <20230206234344.2433950-2-mcgrof@kernel.org>
+ <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
+ <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
+ <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mengyuan Lou <mengyuanlou@net-swift.com>
+On Fri, Mar 03, 2023 at 01:35:10PM -0700, Shuah Khan wrote:
+> On 2/27/23 15:42, Luis Chamberlain wrote:
+> > On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
+> > > On 2/6/23 16:43, Luis Chamberlain wrote:
+> > > > The default sefltests timeout is 45 seconds. If you run the kmod
+> > > > selftests on your own with say:
+> > > > 
+> > > > ./tools/testings/selftests/kmod.sh
+> > > > 
+> > > > Then the default timeout won't be in effect.
+> > > > 
+> > > > I've never ran kmod selftests using the generic make wrapper
+> > > > (./tools/testing/selftests/run_kselftest.sh -s) util now
+> > > > that I have support for it on kdevops [0]. And with that the
+> > > > test is limitted to the default timeout which we quickly run
+> > > > into. Bump this up to what I see is required on 8GiB / 8 vcpu
+> > > > libvirt q35 guest as can be easily created now with kdevops.
+> > > > 
+> > > > To run selftests with kdevops:
+> > > > 
+> > > > make menuconfig # enable dedicated selftests and kmod test
+> > > > make
+> > > > make bringup
+> > > > make linux
+> > > > make selftests-kmod
+> > > > 
+> > > > This ends up taking about 280 seconds now, give or take add
+> > > > 50 seconds more more and we end up with 350. Document the
+> > > > rationale.
+> > > > 
+> > > > [0] https://github.com/linux-kdevops/kdevops
+> > > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > > ---
+> > > >    tools/testing/selftests/kmod/settings | 4 ++++
+> > > >    1 file changed, 4 insertions(+)
+> > > >    create mode 100644 tools/testing/selftests/kmod/settings
+> > > > 
+> > > > diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
+> > > > new file mode 100644
+> > > > index 000000000000..6fca0f1a4594
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/kmod/settings
+> > > > @@ -0,0 +1,4 @@
+> > > > +# measured from a manual run:
+> > > > +# time ./tools/testing/selftests/kmod/kmod.sh
+> > > > +# Then add ~50 seconds more gracetime.
+> > > > +timeout=350
+> > > 
+> > > Adding timeouts like this for individual tests increases the overall kselftest
+> > > run-time. I am not in favor of adding timeouts.
+> > > 
+> > > We have to find a better way to do this.
+> > 
+> > Well if folks don't have this the test will fail, and so a false
+> > positive. If the goal is to have a low time timeout for "do not run
+> > tests past this time and do not fail if we stopped the test" then
+> > that seems to be likely one way to go and each test may need to be
+> > modified to not fail fatally in case of a special signal.
+> > 
+> 
+> We are finding more and more that timeout values are requiring
+> tweaks. I am in favor of coming up a way to exit the test with
+> a timeout condition.
 
-[ Upstream commit a2b9b123ccac913e9f9b80337d687a2fe786a634 ]
+OK so do we use the existing timeout as a "optional, I don't want my
+test to take longer than this" or "if this test takes longer than
+this amount this is a fatal issue"?
 
-Wangxun has verified there is no peer-to-peer between functions for the
-below selection of SFxxx, RP1000 and RP2000 NICS.  They may be
-multi-function devices, but the hardware does not advertise ACS capability.
+I ask because right now we can't override it even with an environment
+variable. If we had such support we can let test runners (like kdevops)
+use selftests with its own set of qualified / verified timeouts for the
+VMs it uses.
 
-Add an ACS quirk for these devices so the functions can be in independent
-IOMMU groups.
+For instance, Iw ant to soon start asking 0day to enable my kdevops
+0-day tests for the subsystems I maintain, but I can't do that yet as
+the timeout is not correct.
 
-Link: https://lore.kernel.org/r/20230207102419.44326-1-mengyuanlou@net-swift.com
-Signed-off-by: Mengyuan Lou <mengyuanlou@net-swift.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/pci/quirks.c    | 22 ++++++++++++++++++++++
- include/linux/pci_ids.h |  2 ++
- 2 files changed, 24 insertions(+)
-
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 8b98b7f3eb246..acd69e34d75aa 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -4843,6 +4843,26 @@ static int pci_quirk_brcm_acs(struct pci_dev *dev, u16 acs_flags)
- 		PCI_ACS_SV | PCI_ACS_RR | PCI_ACS_CR | PCI_ACS_UF);
- }
- 
-+/*
-+ * Wangxun 10G/1G NICs have no ACS capability, and on multi-function
-+ * devices, peer-to-peer transactions are not be used between the functions.
-+ * So add an ACS quirk for below devices to isolate functions.
-+ * SFxxx 1G NICs(em).
-+ * RP1000/RP2000 10G NICs(sp).
-+ */
-+static int  pci_quirk_wangxun_nic_acs(struct pci_dev *dev, u16 acs_flags)
-+{
-+	switch (dev->device) {
-+	case 0x0100 ... 0x010F:
-+	case 0x1001:
-+	case 0x2001:
-+		return pci_acs_ctrl_enabled(acs_flags,
-+			PCI_ACS_SV | PCI_ACS_RR | PCI_ACS_CR | PCI_ACS_UF);
-+	}
-+
-+	return false;
-+}
-+
- static const struct pci_dev_acs_enabled {
- 	u16 vendor;
- 	u16 device;
-@@ -4988,6 +5008,8 @@ static const struct pci_dev_acs_enabled {
- 	{ PCI_VENDOR_ID_NXP, 0x8d9b, pci_quirk_nxp_rp_acs },
- 	/* Zhaoxin Root/Downstream Ports */
- 	{ PCI_VENDOR_ID_ZHAOXIN, PCI_ANY_ID, pci_quirk_zhaoxin_pcie_ports_acs },
-+	/* Wangxun nics */
-+	{ PCI_VENDOR_ID_WANGXUN, PCI_ANY_ID, pci_quirk_wangxun_nic_acs },
- 	{ 0 }
- };
- 
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index 526d423740eb2..a31aa3ac4219f 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -3024,6 +3024,8 @@
- #define PCI_DEVICE_ID_INTEL_VMD_9A0B	0x9a0b
- #define PCI_DEVICE_ID_INTEL_S21152BB	0xb152
- 
-+#define PCI_VENDOR_ID_WANGXUN		0x8088
-+
- #define PCI_VENDOR_ID_SCALEMP		0x8686
- #define PCI_DEVICE_ID_SCALEMP_VSMP_CTL	0x1010
- 
--- 
-2.39.2
-
+  Luis
