@@ -2,87 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B009D6A9CA4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 696AC6A9CAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjCCREE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        id S230244AbjCCREr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjCCRD7 (ORCPT
+        with ESMTP id S231474AbjCCREl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:03:59 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBF09EFF;
-        Fri,  3 Mar 2023 09:03:57 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id bm20so2277329oib.7;
-        Fri, 03 Mar 2023 09:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677863037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RZgVkTuvYky6LMx4NxO2XF22XxAb0kNEaLo11LroAxw=;
-        b=aOGeJ1/EH6Ky1XYhaXU0TsJT+zNZhRX4i75gv50jJxzyk5yPx96UkyKWieOtkzVY3O
-         hN8ODxeP1XYPMPf7SwNu4MHejDwj4TXGS127Jgd7gJ6noMxOwL8c8hhRkD0xL8fiHfqw
-         4Yn6kAQgFlodlvPaDknI06aIebmEk6VzQYnaal/4mCm9/a6wm7kZvsf0YFFcluYALTgS
-         hVPGHecfZ+8fmgoD1vBDQinhxKudGHCO+NGkek7Kz4ezJUXRP9zfBHKAKnrlnxw6V9nf
-         BqbKqMBGuwUM5XnAs+Tpf8v1vFBCE2qnZK4SAiwcPR7VcM1Jpf7gTqK7EMOg7C15qs/9
-         pOSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677863037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RZgVkTuvYky6LMx4NxO2XF22XxAb0kNEaLo11LroAxw=;
-        b=qKVK8JKB7j/cdHfhS5NtHACjTucZoRdNytP7P56l3fh2qaADrlxMIndKnMv2f3i1j4
-         NTGBypS5gEhhoXsEoT+EKY8/zW9cI0VHEcb+ZYetpg3CGDjRDZgn/pt3xr7rcFtsDZ8c
-         5PI6kOJpwvObjzjY6BQ6y48Q8aSDlmXtN/KhtCyeAoA9Xb+pbP39AWT99/89our2ZrEU
-         4FZmC+8MbBhTLZa/KBoAy2nJ1qvkbvQKXQRIn8ZamApuU0zy6xbwU8FEaFVLcnYANDwu
-         otOnayiLcUspqt/v1NuHP9pFU4xO1GAvISfae1G1FKWv0Fq1PeCJK9xBZh6qSzmVscHH
-         vJ8g==
-X-Gm-Message-State: AO0yUKVOwBb6fSVOBgkKBe1S3pc2MX1LpJePcTxIXVUPph2rv4bPbrh/
-        rBAdevUH40pkmiguX7XJZOwRuq1sX1ATSbTKtho=
-X-Google-Smtp-Source: AK7set8d1sH5CmkMtOZYFe3qHdkCNvFUCNh5IhHFhDkZUbzvMmuXQitmVFSmai3PhsUO/xlXcU4veEoq/pdQ4K3B4B8=
-X-Received: by 2002:a05:6808:913:b0:384:253:642d with SMTP id
- w19-20020a056808091300b003840253642dmr796082oih.3.1677863036851; Fri, 03 Mar
- 2023 09:03:56 -0800 (PST)
+        Fri, 3 Mar 2023 12:04:41 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833184201;
+        Fri,  3 Mar 2023 09:04:40 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323FfsaL007125;
+        Fri, 3 Mar 2023 17:04:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=wq3AH8u5wlweiaiE2n7B66++FFOVcFqeWMITnz01CiY=;
+ b=ozodOT6TRcQgJySAcrbk9EdVJtTEQzbzB/j18GYogVFzRZxF3O0Uox23ayZpLMXiLi8a
+ VXZFh8aKGk17GElAsZpG7sPzPjny9eFsfTrFiE+Pbgbs2gF5ySkgKXD6obknc2xX6q75
+ Ep+ZrwevZ1mk/LCb+bMbYot34GBSlOMY3VIrV1uBFIlMrDtGhLR1QS34KFV1P2XOr6K3
+ 7OWgt02JYghmEDvyKIGpMjDxEjZtXQD+FHsdOMhATQ4hojazNSGkPuZiBxTG3ewVh+CC
+ rTJ9wDTUsYt9IxpkgPfoWqLQeSOv78M1Bbm6RUDuMyeWf332fk2vK0XKaFqC2ZznQotG Yg== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p3krrjbq2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 17:04:21 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 323Ejvi3005616;
+        Fri, 3 Mar 2023 17:04:20 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3nybexvx5n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 17:04:20 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 323H4JV145285706
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Mar 2023 17:04:19 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3961558059;
+        Fri,  3 Mar 2023 17:04:19 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5CCC95805F;
+        Fri,  3 Mar 2023 17:04:17 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.77.137.234])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Mar 2023 17:04:17 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-fsi@lists.ozlabs.org
+Cc:     rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mhiramat@kernel.org, alistair@popple.id.au, joel@jms.id.au,
+        jk@ozlabs.org, andrew@aj.id.au, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, eajames@linux.ibm.com
+Subject: [PATCH v7 0/7] fsi: Add IBM I2C Responder virtual FSI master
+Date:   Fri,  3 Mar 2023 11:04:09 -0600
+Message-Id: <20230303170416.1347530-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20230302235356.3148279-1-robdclark@gmail.com> <20230302235356.3148279-13-robdclark@gmail.com>
- <a5249009-0bec-61a5-4dd2-5728ee3017e3@linaro.org>
-In-Reply-To: <a5249009-0bec-61a5-4dd2-5728ee3017e3@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 3 Mar 2023 09:03:45 -0800
-Message-ID: <CAF6AEGtmQu-8LEdm68vXJJSpssXq2AShEdexqTGVW0WO5VmtDQ@mail.gmail.com>
-Subject: Re: [PATCH v9 12/15] drm/msm: Add deadline based boost support
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: dDjIWwr1Uj2h7H-djzz7F2cpxPEgCJGE
+X-Proofpoint-GUID: dDjIWwr1Uj2h7H-djzz7F2cpxPEgCJGE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_03,2023-03-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
+ impostorscore=0 mlxscore=0 adultscore=0 spamscore=0 clxscore=1015
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2303030148
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,195 +83,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 2:10=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 03/03/2023 01:53, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Track the nearest deadline on a fence timeline and set a timer to expir=
-e
-> > shortly before to trigger boost if the fence has not yet been signaled.
-> >
-> > v2: rebase
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >   drivers/gpu/drm/msm/msm_fence.c | 74 ++++++++++++++++++++++++++++++++=
-+
-> >   drivers/gpu/drm/msm/msm_fence.h | 20 +++++++++
-> >   2 files changed, 94 insertions(+)
->
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->
-> A small question: do we boost to fit into the deadline or to miss the
-> deadline for as little as possible? If the former is the case, we might
-> need to adjust 3ms depending on the workload.
+The I2C Responder (I2CR) is an I2C device that translates I2C commands
+to CFAM or SCOM operations, effectively implementing an FSI master and
+bus.
 
-The goal is as much to run with higher clock on the next frame as it
-is to not miss a deadline.  Ie. we don't want devfreq to come to the
-conclusion that running at <50% clks is best due to the amount of
-utilization caused by missing ever other vblank.
+Changes since v6:
+ - Drop conversions to BE except in the FSI core interface
+ - Emulate the CFAM config table since it doesn't exist off the I2CR
+ - Drop status check during probe
+ - Add release function for device
+ - Update SCOM driver with newer interfaces and drop BE conversion
+ - New sbefifo change to not check state during probe
 
-But 3ms is mostly just "seems like a good compromise" value.  It might chan=
-ge.
+Changes since v5:
+ - Make I2CR scom driver depend on I2CR FSI master
 
-BR,
--R
+Changes since v4:
+ - Add I2CR scom driver and associated patches
+ - Use compatible strings for FSI drivers if specified
+ - Include aliased device numbering patch
+ - Restructure the trace events to eliminate holes
 
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_fence.c b/drivers/gpu/drm/msm/msm_=
-fence.c
-> > index 56641408ea74..51b461f32103 100644
-> > --- a/drivers/gpu/drm/msm/msm_fence.c
-> > +++ b/drivers/gpu/drm/msm/msm_fence.c
-> > @@ -8,6 +8,35 @@
-> >
-> >   #include "msm_drv.h"
-> >   #include "msm_fence.h"
-> > +#include "msm_gpu.h"
-> > +
-> > +static struct msm_gpu *fctx2gpu(struct msm_fence_context *fctx)
-> > +{
-> > +     struct msm_drm_private *priv =3D fctx->dev->dev_private;
-> > +     return priv->gpu;
-> > +}
-> > +
-> > +static enum hrtimer_restart deadline_timer(struct hrtimer *t)
-> > +{
-> > +     struct msm_fence_context *fctx =3D container_of(t,
-> > +                     struct msm_fence_context, deadline_timer);
-> > +
-> > +     kthread_queue_work(fctx2gpu(fctx)->worker, &fctx->deadline_work);
-> > +
-> > +     return HRTIMER_NORESTART;
-> > +}
-> > +
-> > +static void deadline_work(struct kthread_work *work)
-> > +{
-> > +     struct msm_fence_context *fctx =3D container_of(work,
-> > +                     struct msm_fence_context, deadline_work);
-> > +
-> > +     /* If deadline fence has already passed, nothing to do: */
-> > +     if (msm_fence_completed(fctx, fctx->next_deadline_fence))
-> > +             return;
-> > +
-> > +     msm_devfreq_boost(fctx2gpu(fctx), 2);
-> > +}
-> >
-> >
-> >   struct msm_fence_context *
-> > @@ -36,6 +65,13 @@ msm_fence_context_alloc(struct drm_device *dev, vola=
-tile uint32_t *fenceptr,
-> >       fctx->completed_fence =3D fctx->last_fence;
-> >       *fctx->fenceptr =3D fctx->last_fence;
-> >
-> > +     hrtimer_init(&fctx->deadline_timer, CLOCK_MONOTONIC, HRTIMER_MODE=
-_ABS);
-> > +     fctx->deadline_timer.function =3D deadline_timer;
-> > +
-> > +     kthread_init_work(&fctx->deadline_work, deadline_work);
-> > +
-> > +     fctx->next_deadline =3D ktime_get();
-> > +
-> >       return fctx;
-> >   }
-> >
-> > @@ -62,6 +98,8 @@ void msm_update_fence(struct msm_fence_context *fctx,=
- uint32_t fence)
-> >       spin_lock_irqsave(&fctx->spinlock, flags);
-> >       if (fence_after(fence, fctx->completed_fence))
-> >               fctx->completed_fence =3D fence;
-> > +     if (msm_fence_completed(fctx, fctx->next_deadline_fence))
-> > +             hrtimer_cancel(&fctx->deadline_timer);
-> >       spin_unlock_irqrestore(&fctx->spinlock, flags);
-> >   }
-> >
-> > @@ -92,10 +130,46 @@ static bool msm_fence_signaled(struct dma_fence *f=
-ence)
-> >       return msm_fence_completed(f->fctx, f->base.seqno);
-> >   }
-> >
-> > +static void msm_fence_set_deadline(struct dma_fence *fence, ktime_t de=
-adline)
-> > +{
-> > +     struct msm_fence *f =3D to_msm_fence(fence);
-> > +     struct msm_fence_context *fctx =3D f->fctx;
-> > +     unsigned long flags;
-> > +     ktime_t now;
-> > +
-> > +     spin_lock_irqsave(&fctx->spinlock, flags);
-> > +     now =3D ktime_get();
-> > +
-> > +     if (ktime_after(now, fctx->next_deadline) ||
-> > +                     ktime_before(deadline, fctx->next_deadline)) {
-> > +             fctx->next_deadline =3D deadline;
-> > +             fctx->next_deadline_fence =3D
-> > +                     max(fctx->next_deadline_fence, (uint32_t)fence->s=
-eqno);
-> > +
-> > +             /*
-> > +              * Set timer to trigger boost 3ms before deadline, or
-> > +              * if we are already less than 3ms before the deadline
-> > +              * schedule boost work immediately.
-> > +              */
-> > +             deadline =3D ktime_sub(deadline, ms_to_ktime(3));
-> > +
-> > +             if (ktime_after(now, deadline)) {
-> > +                     kthread_queue_work(fctx2gpu(fctx)->worker,
-> > +                                     &fctx->deadline_work);
-> > +             } else {
-> > +                     hrtimer_start(&fctx->deadline_timer, deadline,
-> > +                                     HRTIMER_MODE_ABS);
-> > +             }
-> > +     }
-> > +
-> > +     spin_unlock_irqrestore(&fctx->spinlock, flags);
-> > +}
-> > +
-> >   static const struct dma_fence_ops msm_fence_ops =3D {
-> >       .get_driver_name =3D msm_fence_get_driver_name,
-> >       .get_timeline_name =3D msm_fence_get_timeline_name,
-> >       .signaled =3D msm_fence_signaled,
-> > +     .set_deadline =3D msm_fence_set_deadline,
-> >   };
-> >
-> >   struct dma_fence *
-> > diff --git a/drivers/gpu/drm/msm/msm_fence.h b/drivers/gpu/drm/msm/msm_=
-fence.h
-> > index 7f1798c54cd1..cdaebfb94f5c 100644
-> > --- a/drivers/gpu/drm/msm/msm_fence.h
-> > +++ b/drivers/gpu/drm/msm/msm_fence.h
-> > @@ -52,6 +52,26 @@ struct msm_fence_context {
-> >       volatile uint32_t *fenceptr;
-> >
-> >       spinlock_t spinlock;
-> > +
-> > +     /*
-> > +      * TODO this doesn't really deal with multiple deadlines, like
-> > +      * if userspace got multiple frames ahead.. OTOH atomic updates
-> > +      * don't queue, so maybe that is ok
-> > +      */
-> > +
-> > +     /** next_deadline: Time of next deadline */
-> > +     ktime_t next_deadline;
-> > +
-> > +     /**
-> > +      * next_deadline_fence:
-> > +      *
-> > +      * Fence value for next pending deadline.  The deadline timer is
-> > +      * canceled when this fence is signaled.
-> > +      */
-> > +     uint32_t next_deadline_fence;
-> > +
-> > +     struct hrtimer deadline_timer;
-> > +     struct kthread_work deadline_work;
-> >   };
-> >
-> >   struct msm_fence_context * msm_fence_context_alloc(struct drm_device =
-*dev,
->
-> --
-> With best wishes
-> Dmitry
->
+Changes since v3:
+ - Rework the endian-ness in i2cr_write
+ - Rework the tracing to include the i2c bus and device address
+
+Changes since v2:
+ - Fix the bindings again, sorry for the spam
+
+Changes since v1:
+ - Fix the binding document
+ - Change the binding name
+ - Clean up the size argument checking
+ - Reduce __force by using packed struct for the command
+
+Eddie James (7):
+  fsi: Move fsi_slave structure definition to header
+  dt-bindings: fsi: Document the IBM I2C Responder virtual FSI master
+  fsi: Add IBM I2C Responder virtual FSI master
+  fsi: Add I2C Responder SCOM driver
+  fsi: Add aliased device numbering
+  fsi: Use of_match_table for bus matching if specified
+  fsi: sbefifo: Don't check status during probe
+
+ .../bindings/fsi/ibm,i2cr-fsi-master.yaml     |  41 +++
+ drivers/fsi/Kconfig                           |  17 +
+ drivers/fsi/Makefile                          |   2 +
+ drivers/fsi/fsi-core.c                        |  60 ++--
+ drivers/fsi/fsi-master-aspeed.c               |   2 +-
+ drivers/fsi/fsi-master-ast-cf.c               |   2 +-
+ drivers/fsi/fsi-master-gpio.c                 |   2 +-
+ drivers/fsi/fsi-master-hub.c                  |   2 +-
+ drivers/fsi/fsi-master-i2cr.c                 | 312 ++++++++++++++++++
+ drivers/fsi/fsi-master-i2cr.h                 |  24 ++
+ drivers/fsi/fsi-master.h                      |   3 +-
+ drivers/fsi/fsi-sbefifo.c                     |   8 -
+ drivers/fsi/fsi-scom.c                        |   8 +
+ drivers/fsi/fsi-slave.h                       |  28 ++
+ drivers/fsi/i2cr-scom.c                       | 154 +++++++++
+ include/trace/events/fsi_master_i2cr.h        | 107 ++++++
+ 16 files changed, 737 insertions(+), 35 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml
+ create mode 100644 drivers/fsi/fsi-master-i2cr.c
+ create mode 100644 drivers/fsi/fsi-master-i2cr.h
+ create mode 100644 drivers/fsi/fsi-slave.h
+ create mode 100644 drivers/fsi/i2cr-scom.c
+ create mode 100644 include/trace/events/fsi_master_i2cr.h
+
+-- 
+2.31.1
+
