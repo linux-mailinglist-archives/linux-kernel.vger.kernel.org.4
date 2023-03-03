@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6F46A94C6
+	by mail.lfdr.de (Postfix) with ESMTP id 590FB6A94C7
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjCCKEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 05:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S230405AbjCCKEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 05:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjCCKEP (ORCPT
+        with ESMTP id S230230AbjCCKEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 05:04:15 -0500
-Received: from out-22.mta1.migadu.com (out-22.mta1.migadu.com [95.215.58.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8341D136F4
+        Fri, 3 Mar 2023 05:04:16 -0500
+Received: from out-6.mta1.migadu.com (out-6.mta1.migadu.com [IPv6:2001:41d0:203:375::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42709136C3
         for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 02:04:13 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677837851;
+        t=1677837852;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GW339QZ/TdS68WJ1B968sS6Y3hjxt+W7MaaQRsWYRFA=;
-        b=NeQJKSuRZeOvVv8s+AOytxt9DC0bBF9R7g9zZHzlWCLcVyI4cTyZe972sMygJsVvZnfNxM
-        rMatKFHbkVoqqH0zYq5WKDOZxZnWKRTBVkIYiDBezJvGo56BKPY0v0OZ7jRLEbR6RfLVnX
-        Ide2ckQru9NXX2DW1LPkHVn2A885RkY=
+        bh=hcYJmRGskfPRmhAdzc8S9FcZG/yfwAAq4mWaDd/Lugo=;
+        b=rd7E5pCyZo37krxzehhlmD8gXrWZwmbdUMFvbrp5i9bDxMKlI0Kc5NyoCp1VzrEkLFV+sX
+        zrFtUmqhONVRfp0Kf/fkeivHwOZWJbvgacU9S9x8tZsfZrwS6e/SKi7nwAczGrUORuoXge
+        vJplx83DQ7aWwI3+pCGEmXnybm7CFIE=
 From:   richard.leitner@linux.dev
-Date:   Fri, 03 Mar 2023 11:04:01 +0100
-Subject: [PATCH v2 1/3] ASoC: dt-bindings: maxim,max9867: convert txt
- bindings to yaml
+Date:   Fri, 03 Mar 2023 11:04:02 +0100
+Subject: [PATCH v2 2/3] ASoC: dt-bindings: maxim,max9867: add clocks
+ property
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230302-max9867-v2-1-fd2036d5e825@skidata.com>
+Message-Id: <20230302-max9867-v2-2-fd2036d5e825@skidata.com>
 References: <20230302-max9867-v2-0-fd2036d5e825@skidata.com>
 In-Reply-To: <20230302-max9867-v2-0-fd2036d5e825@skidata.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -47,12 +47,12 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
 Cc:     Benjamin Bara <bbara93@gmail.com>, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Richard Leitner <richard.leitner@skidata.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2270;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1121;
  i=richard.leitner@skidata.com; h=from:subject:message-id;
- bh=bwaHQSWKYlK+16GPkCzDPEt1Tmvix8Ku+HlNfeU8Izc=;
- b=owGbwMvMwCX2R2KahkXN7wuMp9WSGFIYj0la3Tv++fkUD7Xnu65Z93hO//TLpFpq72GV50qcppMs
- f33+31HKwiDGxSArpshib8zV7p5b9r5SUScXZg4rE8gQBi5OAZjIVDuG/x4M8x+Grp51rnFrdanlxU
- zDzw+sfJ5HbOL8tfXs20729XcZGSZks07INlp45nMy5y5xXX65fO/Jhz6XH+LaoCWpt2SvDTsA
+ bh=Iw/3nRyv551zpvZ9GVbHR0uIwA0KwrzA9i3bmK0aYNU=;
+ b=owGbwMvMwCX2R2KahkXN7wuMp9WSGFIYj0k9KNl0Scd945wXUcxPbVI3u8f7HnqVNbO4qWraz02s
+ E8PbOkpZGMS4GGTFFFnsjbna3XPL3lcq6uTCzGFlAhnCwMUpABMpn8PIsOXiWQPl98q7PjyZs2PFzN
+ fb/574dlby0Qol92zDb/7KGW0M/x36pip5rDGsn5FlEb95gul5/Ys/05V2Xjp0x9njZei9XzwA
 X-Developer-Key: i=richard.leitner@skidata.com; a=openpgp;
  fpr=3F330A87476D76EF79212C6DFC189628387CFBD0
 X-Migadu-Flow: FLOW_OUT
@@ -67,99 +67,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Richard Leitner <richard.leitner@skidata.com>
 
-Convert from max9867.txt to maxim,max9867.yaml and add missing
-'#sound-dai-cells' property.
+Add clocks property to require a "mclk" definition for the
+maxim,max9867 codec.
 
 Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
 ---
- .../devicetree/bindings/sound/max9867.txt          | 17 -------
- .../devicetree/bindings/sound/maxim,max9867.yaml   | 55 ++++++++++++++++++++++
- 2 files changed, 55 insertions(+), 17 deletions(-)
+ Documentation/devicetree/bindings/sound/maxim,max9867.yaml | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/max9867.txt b/Documentation/devicetree/bindings/sound/max9867.txt
-deleted file mode 100644
-index b8bd914ee697..000000000000
---- a/Documentation/devicetree/bindings/sound/max9867.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--max9867 codec
--
--This device supports I2C mode only.
--
--Required properties:
--
--- compatible : "maxim,max9867"
--- reg : The chip select number on the I2C bus
--
--Example:
--
--&i2c {
--	max9867: max9867@18 {
--		compatible = "maxim,max9867";
--		reg = <0x18>;
--	};
--};
 diff --git a/Documentation/devicetree/bindings/sound/maxim,max9867.yaml b/Documentation/devicetree/bindings/sound/maxim,max9867.yaml
-new file mode 100644
-index 000000000000..74cd163546ec
---- /dev/null
+index 74cd163546ec..6f27029b137d 100644
+--- a/Documentation/devicetree/bindings/sound/maxim,max9867.yaml
 +++ b/Documentation/devicetree/bindings/sound/maxim,max9867.yaml
-@@ -0,0 +1,55 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/maxim,max9867.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim Integrated MAX9867 CODEC
-+
-+description: |
-+  This device supports I2C only.
-+  Pins on the device (for linking into audio routes):
-+      * LOUT
-+      * ROUT
-+      * LINL
-+      * LINR
-+      * MICL
-+      * MICR
-+      * DMICL
-+      * DMICR
-+
-+maintainers:
-+  - Ladislav Michl <ladis@linux-mips.org>
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - maxim,max9867
-+
-+  '#sound-dai-cells':
-+    const: 0
-+
-+  reg:
+@@ -35,9 +35,13 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  clocks:
 +    maxItems: 1
 +
-+required:
-+  - compatible
-+  - reg
+ required:
+   - compatible
+   - reg
++  - clocks
+ 
+ additionalProperties: false
+ 
+@@ -50,6 +54,13 @@ examples:
+             compatible = "maxim,max9867";
+             #sound-dai-cells = <0>;
+             reg = <0x18>;
++            clocks = <&codec_clk>;
+         };
+     };
 +
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        codec@18 {
-+            compatible = "maxim,max9867";
-+            #sound-dai-cells = <0>;
-+            reg = <0x18>;
-+        };
++    codec_clk: clock {
++        compatible = "fixed-clock";
++        #clock-cells = <0>;
++        clock-frequency = <12288000>;
 +    };
-+...
+ ...
 
 -- 
 2.39.2
