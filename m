@@ -2,126 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C586A9369
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F096A936D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjCCJKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S229840AbjCCJL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjCCJKv (ORCPT
+        with ESMTP id S229706AbjCCJL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:10:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4EE125A4;
-        Fri,  3 Mar 2023 01:10:49 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3231Zu84021050;
-        Fri, 3 Mar 2023 09:10:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Kfko2m90dOe5JfKrfE4Hr2ikjsZJ8P9Bp91AdKl5MWo=;
- b=H4lo/C7PZjc8kcIhSohagAGZEI8i1N5LI9DP5WybR+yrs7cRjEKJ5+VFYQTIz2EBXEj5
- TupsicXVBZ6LIJPmao+cnkT3/H6gfbgonkE9kJvml6bwn1AW/5gnKpKHcTtDPTF/QzCZ
- PLGp/2ZvW5Cr2S5zneAoV+eQnL/MJFhoSRBp3+e2rBF6rMZ2N19BQ1IyCipx+iC5XdAQ
- doh/FV8za79stz8/1vMZgOl0QXy4z7hNdGTMp+pOASujZ5uZ00VQ9i/K1dXAGPj65Q5y
- tsWoRczSGZcMJ+a31WiUW130rT9kCZL5i3QXfKALrmZ6it33noZEkOPHXBSAUzg1CF6i SQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p36my94d3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 09:10:42 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3239AfVj003104
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 09:10:41 GMT
-Received: from [10.50.35.127] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 3 Mar 2023
- 01:10:37 -0800
-Message-ID: <d2499ed9-082d-0c0a-ccaa-eec45f2f82f7@quicinc.com>
-Date:   Fri, 3 Mar 2023 14:40:33 +0530
+        Fri, 3 Mar 2023 04:11:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8F71814F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:10:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677834641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HXI/KwXPhFbkBH6af+6R7enVWQYOnZi8AQZj8HTOjaU=;
+        b=A+hERbnKHtn4yv/d0bZhUDNopqXvOwbJaygUJkugst4OsSSHzWtSuhz5q+50VjdMxXoN/d
+        9B9qw/IsObnPlgw0fT/IRzlegEFZN52zy+xVlmnAvMV/ghjdgyTwTVZ0KEvumF9la1yaIq
+        sFKKeycBYWj3j+mkEINBGwgbaBVNuPw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-608-RuKdtVfxOBOGsGQ1PYYrdg-1; Fri, 03 Mar 2023 04:10:40 -0500
+X-MC-Unique: RuKdtVfxOBOGsGQ1PYYrdg-1
+Received: by mail-wm1-f71.google.com with SMTP id s18-20020a7bc392000000b003deaf780ab6so728464wmj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:10:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HXI/KwXPhFbkBH6af+6R7enVWQYOnZi8AQZj8HTOjaU=;
+        b=U6r/yD4Q0v2k9Ttu4NTX5iT2OeFnlwXS7hC2WDRETL1O1VFXr8RbvKiWJGPKw6ZdBV
+         36jGyIZvAicFn1W1ZrAjI2oeTFtTBjR3muh7ijlF6LnJhgIyJtarqn1Hb912+mYqOMZw
+         GzADNlxf3iM3eMcxuRa2Am/dfkWdv2x4d8XSQbKkDH7xONz4sGc6IYAHt0q0+2GQ6c1n
+         TtmOai4FXbVeJjKh6kUTLSmdQBynJBYbxu+iag25h+IhGv6o+pRNrJKOJtdC8m5LDNZi
+         /1eSMTkea18LvBKcmk77Sq13Ot/WUQ78D9LnZVqF6IwckK7Lb3GT8dmONbcLOckBeVNK
+         DuIg==
+X-Gm-Message-State: AO0yUKVwV3itykyBbU2vwpAKGhFuX15K/nDUhAUgo8r8IlpLd1Bj/jsL
+        FdYf9yg46cI3H4ANbmzyWW1nsRZ+O6Y0dtx3Voke3Ek3ME5JEfo3paYhbMvKCkPkmt72may+0p0
+        DW+Lx/m0fvC18L3p0SdvUl2/6
+X-Received: by 2002:a05:600c:3506:b0:3e2:153e:6940 with SMTP id h6-20020a05600c350600b003e2153e6940mr928705wmq.3.1677834639427;
+        Fri, 03 Mar 2023 01:10:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set+nfWELVtc6ZcZE0RJVtqWlo1SAKeb38bjkeXY1Tqv3v2p5b+b/BgiTKzEB/8+zsdo8s/cDHQ==
+X-Received: by 2002:a05:600c:3506:b0:3e2:153e:6940 with SMTP id h6-20020a05600c350600b003e2153e6940mr928690wmq.3.1677834639084;
+        Fri, 03 Mar 2023 01:10:39 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:6100:f5c9:50a5:3310:d8ac? (p200300cbc7026100f5c950a53310d8ac.dip0.t-ipconnect.de. [2003:cb:c702:6100:f5c9:50a5:3310:d8ac])
+        by smtp.gmail.com with ESMTPSA id x8-20020a1c7c08000000b003eb2e33f327sm8915498wmc.2.2023.03.03.01.10.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 01:10:38 -0800 (PST)
+Message-ID: <69e08e1c-88f6-bf93-523a-b65ffb9235c5@redhat.com>
+Date:   Fri, 3 Mar 2023 10:10:37 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/8] dt-bindings: phy: qcom,qusb2: Document IPQ9574
- compatible
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm: teach mincore_hugetlb about pte markers
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <cover.1677749625.git.quic_varada@quicinc.com>
- <70beab86eb21d1130e61f52753f514cfb433a4f2.1677749625.git.quic_varada@quicinc.com>
- <CAA8EJpq_B_f90W6ULk1q+ot8ACj68U0M8Yc8yXL-BGuF906xGA@mail.gmail.com>
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-In-Reply-To: <CAA8EJpq_B_f90W6ULk1q+ot8ACj68U0M8Yc8yXL-BGuF906xGA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     James Houghton <jthoughton@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Anish Moorthy <amoorthy@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230302222404.175303-1-jthoughton@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230302222404.175303-1-jthoughton@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: I2k1OfhVnJ5bgKjvA7aHxqSZZpYHezJG
-X-Proofpoint-ORIG-GUID: I2k1OfhVnJ5bgKjvA7aHxqSZZpYHezJG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- clxscore=1015 mlxscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- priorityscore=1501 spamscore=0 malwarescore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030082
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 02.03.23 23:24, James Houghton wrote:
+> By checking huge_pte_none(), we incorrectly classify PTE markers as
+> "present". Instead, check huge_pte_none_mostly(), classifying PTE
+> markers the same as if the PTE were completely blank.
+> 
+> PTE markers, unlike other kinds of swap entries, don't reference any
+> physical page and don't indicate that a physical page was mapped
+> previously. As such, treat them as non-present for the sake of
+> mincore().
+> 
+> Fixes: 5c041f5d1f23 ("mm: teach core mm about pte markers")
+> Signed-off-by: James Houghton <jthoughton@google.com>
+> ---
+>   mm/mincore.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/mincore.c b/mm/mincore.c
+> index cd69b9db0081..d359650b0f75 100644
+> --- a/mm/mincore.c
+> +++ b/mm/mincore.c
+> @@ -33,7 +33,7 @@ static int mincore_hugetlb(pte_t *pte, unsigned long hmask, unsigned long addr,
+>   	 * Hugepages under user process are always in RAM and never
+>   	 * swapped out, but theoretically it needs to be checked.
+>   	 */
+> -	present = pte && !huge_pte_none(huge_ptep_get(pte));
+> +	present = pte && !huge_pte_none_mostly(huge_ptep_get(pte));
+>   	for (; addr != end; vec++, addr += PAGE_SIZE)
+>   		*vec = present;
+>   	walk->private = vec;
 
-On 3/2/2023 9:53 PM, Dmitry Baryshkov wrote:
-> On Thu, 2 Mar 2023 at 11:56, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
->> Document the compatible string used for the qusb2 phy in IPQ9574.
->>
->> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
->> index 7f403e7..c426f78 100644
->> --- a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
->> +++ b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
->> @@ -25,6 +25,7 @@ properties:
->>                 - qcom,qcm2290-qusb2-phy
->>                 - qcom,sdm660-qusb2-phy
->>                 - qcom,ipq6018-qusb2-phy
-> Please movef ipq6018 to the proper place and then put ipq9574 next to it.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Sure.
+-- 
+Thanks,
 
-Thanks
+David / dhildenb
 
-Varada
-
->
->> +              - qcom,ipq9574-qusb2-phy
->>                 - qcom,sm4250-qusb2-phy
->>                 - qcom,sm6115-qusb2-phy
->>         - items:
->> --
->> 2.7.4
->>
->
