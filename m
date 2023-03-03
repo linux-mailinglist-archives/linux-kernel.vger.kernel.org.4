@@ -2,102 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDD06A9695
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E996A9698
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCCLka convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Mar 2023 06:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
+        id S231196AbjCCLlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjCCLk1 (ORCPT
+        with ESMTP id S229697AbjCCLlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:40:27 -0500
-Received: from mail6.swissbit.com (mail5.swissbit.com [148.251.244.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02181521D3;
-        Fri,  3 Mar 2023 03:40:25 -0800 (PST)
-Received: from mail6.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 492FF221761;
-        Fri,  3 Mar 2023 11:40:24 +0000 (UTC)
-Received: from mail6.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 3DFB5220859;
-        Fri,  3 Mar 2023 11:40:24 +0000 (UTC)
-X-TM-AS-ERS: 10.181.10.103-127.5.254.253
-X-TM-AS-SMTP: 1.0 bXgxLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
-        Q==
-X-DDEI-TLS-USAGE: Used
-Received: from mx1.dmz.swissbit.com (mx1.dmz.swissbit.com [10.181.10.103])
-        by mail6.swissbit.com (Postfix) with ESMTPS;
-        Fri,  3 Mar 2023 11:40:24 +0000 (UTC)
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-CC:     Wenchao Chen <wenchao.chen666@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
- internal cache
-Thread-Topic: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
- internal cache
-Thread-Index: AQHZTRVhGw7IamWdbkW+N3YLAv3UBK7nlDEQgAFYhgA=
-Date:   Fri, 3 Mar 2023 11:40:23 +0000
-Message-ID: <a35f3d45cab0442b9491c0b120e3fb47@hyperstone.com>
-References: <20230302144330.274947-1-ulf.hansson@linaro.org>
- <5712c69ae37447c5b576d87b247f5756@hyperstone.com>
-In-Reply-To: <5712c69ae37447c5b576d87b247f5756@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Fri, 3 Mar 2023 06:41:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D3A5552B;
+        Fri,  3 Mar 2023 03:40:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED10EB81699;
+        Fri,  3 Mar 2023 11:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A04C433EF;
+        Fri,  3 Mar 2023 11:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677843650;
+        bh=ruSFyxEt4TFvCxQ7D5ZuCTiPoqk6MEI5Mh8KW4fJ6O8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bjYlbWmXEF6/jIBnZn2WVY1xVcL6etElUCDOJWt0Ja/uxH6MV1s8KMEupZrPA+ZLT
+         /cKsT5BTyrxt/M3AQdSMyar+2CZmuevWp/Vp8Sv8x9wlSpCOZ4GEcFeAgJ2IAg45DD
+         u+zOaeX0qBQHgVTigH4veZFtVNQp64llQes6U0scyI9reD0uFrR6QlObdX54CuAmt2
+         vpDYLXWY3f8R8tfyO6z1p7WZv42ECuEESwhVeOpQeRo1g0Gh6E2Df3jaxYoNhEBq+z
+         G8XcbfIt4IUzdXsVXvuktJ9dqDt9HHRsVRg8MHgzLyxbHYk1pOO+tw7Xx5egGBPm80
+         pEO/P6fQwKhsg==
+Date:   Fri, 3 Mar 2023 13:40:38 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org
+Subject: Re: [PATCH v3 09/34] csky: Implement the new page table range API
+Message-ID: <ZAHctugW4aeMy6oy@kernel.org>
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-10-willy@infradead.org>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27480.007
-X-TMASE-Result: 10--1.097400-10.000000
-X-TMASE-MatchedRID: dwNgap4H9hjUL3YCMmnG4vHkpkyUphL9pIm7+t7/ErssTMNBTJAZWem5
-        73tusZjQtAooHLFhogVeWwXKQGp3JHh1rPkUeh+7upDIC9422DplH44U2Ru12mdAe5NczV1Ve8w
-        NVrnxqoN1trix3E1eFJ/NKWBrHFmLBXdkbv140jU1yhbbA7We06wfObg093CkJUvol+PHbEyqLr
-        Si9+cPfTvtgB+lCbJUb3JmPdq59vloMCLywE0ygbq9UFRTJ0kKxEHRux+uk8h+ICquNi0WJLxXM
-        1hseCqOlJuZJgT8RltlDYN/ce5s3vVHDCDtM7pWftwZ3X11IV0=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 7600cef7-30f3-4b32-8fd4-694eeb41f124-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228213738.272178-10-willy@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->> 
->> REQ_FUA is in general supported for eMMC cards, which translates into so called "reliable writes". To support these write operations, the CMD23 (MMC_CAP_CMD23), needs to be supported by the mmc host too, which is common but not always the case.
->> 
->> For some eMMC devices, it has been reported that reliable writes are quite costly, leading to performance degradations.
->> 
->> In a way to improve the situation, let's avoid announcing REQ_FUA support if the eMMC supports an internal cache, as that allows us to rely solely on flush-requests (REQ_OP_FLUSH) instead, which seems to be a lot cheaper.
->> Note that, those mmc hosts that lacks CMD23 support are already using this type of configuration, whatever that could mean.
+On Tue, Feb 28, 2023 at 09:37:12PM +0000, Matthew Wilcox (Oracle) wrote:
+> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
+> Change the PG_dcache_clean flag from being per-page to per-folio.
 > 
-> Just note that reliable write is strictly weaker than turning cache off/flushing, if card loses power during cache off/flush programming / busy, sector-wise atomicity is not mandated by the spec.
-> (And that is assuming cache off/flush is actually respected by the card as intended by the spec, should some cards be checked?) Maybe some FS people can also chime in?
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Cc: linux-csky@vger.kernel.org
+> ---
+>  arch/csky/abiv1/cacheflush.c         | 32 +++++++++++++++++-----------
+>  arch/csky/abiv1/inc/abi/cacheflush.h |  2 ++
+>  arch/csky/abiv2/cacheflush.c         | 30 +++++++++++++-------------
+>  arch/csky/abiv2/inc/abi/cacheflush.h | 10 +++++++--
+>  arch/csky/include/asm/pgtable.h      | 21 +++++++++++++++---
+>  5 files changed, 62 insertions(+), 33 deletions(-)
+> 
+> diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
+> index fb91b069dc69..ba43f6c26b4f 100644
+> --- a/arch/csky/abiv1/cacheflush.c
+> +++ b/arch/csky/abiv1/cacheflush.c
+> @@ -14,43 +14,49 @@
+>  
+>  #define PG_dcache_clean		PG_arch_1
+>  
+> -void flush_dcache_page(struct page *page)
+> +void flush_dcache_folio(struct folio *folio)
+>  {
+>  	struct address_space *mapping;
+>  
+> -	if (page == ZERO_PAGE(0))
+> +	if (is_zero_pfn(folio_pfn(folio)))
+>  		return;
+>  
+> -	mapping = page_mapping_file(page);
+> +	mapping = folio_flush_mapping(folio);
+>  
+> -	if (mapping && !page_mapcount(page))
+> -		clear_bit(PG_dcache_clean, &page->flags);
+> +	if (mapping && !folio_mapped(folio))
+> +		clear_bit(PG_dcache_clean, &folio->flags);
+>  	else {
+>  		dcache_wbinv_all();
+>  		if (mapping)
+>  			icache_inv_all();
+> -		set_bit(PG_dcache_clean, &page->flags);
+> +		set_bit(PG_dcache_clean, &folio->flags);
+>  	}
+>  }
+> +EXPORT_SYMBOL(flush_dcache_folio);
+> +
+> +void flush_dcache_page(struct page *page)
+> +{
+> +	flush_dcache_folio(page_folio(page));
+> +}
+>  EXPORT_SYMBOL(flush_dcache_page);
+>  
+> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
+> -	pte_t *ptep)
+> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
+> +		pte_t *ptep, unsigned int nr)
+>  {
+>  	unsigned long pfn = pte_pfn(*ptep);
+> -	struct page *page;
+> +	struct folio *folio;
+>  
+>  	if (!pfn_valid(pfn))
+>  		return;
+>  
+> -	page = pfn_to_page(pfn);
+> -	if (page == ZERO_PAGE(0))
+> +	if (is_zero_pfn(pfn))
+>  		return;
+>  
+> -	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
+> +	folio = page_folio(pfn_to_page(pfn));
+> +	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
+>  		dcache_wbinv_all();
+>  
+> -	if (page_mapping_file(page)) {
+> +	if (folio_flush_mapping(folio)) {
+>  		if (vma->vm_flags & VM_EXEC)
+>  			icache_inv_all();
+>  	}
+> diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
+> index ed62e2066ba7..0d6cb65624c4 100644
+> --- a/arch/csky/abiv1/inc/abi/cacheflush.h
+> +++ b/arch/csky/abiv1/inc/abi/cacheflush.h
+> @@ -9,6 +9,8 @@
+>  
+>  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+>  extern void flush_dcache_page(struct page *);
+> +void flush_dcache_folio(struct folio *);
+> +#define flush_dcache_folio flush_dcache_folio
+>  
+>  #define flush_cache_mm(mm)			dcache_wbinv_all()
+>  #define flush_cache_page(vma, page, pfn)	cache_wbinv_all()
+> diff --git a/arch/csky/abiv2/cacheflush.c b/arch/csky/abiv2/cacheflush.c
+> index 39c51399dd81..c1cf0d55a2a1 100644
+> --- a/arch/csky/abiv2/cacheflush.c
+> +++ b/arch/csky/abiv2/cacheflush.c
+> @@ -6,30 +6,30 @@
+>  #include <linux/mm.h>
+>  #include <asm/cache.h>
+>  
+> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+> -		      pte_t *pte)
+> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
+> +		pte_t *pte, unsigned int nr)
+>  {
+> -	unsigned long addr;
+> +	unsigned long pfn = pte_pfn(*pte);
+>  	struct page *page;
 
-Nevermind, the sector-wise atomicity should not matter on 5.1 cards or if the block length isn't being played with, which it isn't in our case.
-If reliable write is implemented only according to spec, I don't see why the cache flushing should be less expensive, which would only make sense if
-a) < sector chunks are committed to flash
-b) reliable write is implemented much stricter than the spec, ensuring atomicity for the entire write.
+Should be struct folio *folio instead:
 
-I guess the cards which increase performance do b)? Or something else?
-Anyway regarding FUA i don't have any concerns regarding reliability with cache flush.
-I can add some performance comparisons with some eMMCs I have around though.
+  CC      arch/csky/abiv2/cacheflush.o
+arch/csky/abiv2/cacheflush.c: In function 'update_mmu_cache_range':
+arch/csky/abiv2/cacheflush.c:19:9: error: 'folio' undeclared (first use in this function)
+   19 |         folio = page_folio(pfn_to_page(pfn));
+      |         ^~~~~
+arch/csky/abiv2/cacheflush.c:19:9: note: each undeclared identifier is reported only once for each function it appears in
+arch/csky/abiv2/cacheflush.c:13:22: warning: unused variable 'page' [-Wunused-variable]
+   13 |         struct page *page;
+      |                      ^~~~
 
-Regards,
-Christian
+> +	unsigned int i;
+>  
+> -	if (!pfn_valid(pte_pfn(*pte)))
+> +	if (!pfn_valid(pfn) || is_zero_pfn(pfn))
+>  		return;
+>  
+> -	page = pfn_to_page(pte_pfn(*pte));
+> -	if (page == ZERO_PAGE(0))
+> -		return;
+> +	folio = page_folio(pfn_to_page(pfn));
+>  
+> -	if (test_and_set_bit(PG_dcache_clean, &page->flags))
+> +	if (test_and_set_bit(PG_dcache_clean, &folio->flags))
+>  		return;
+>  
+> -	addr = (unsigned long) kmap_atomic(page);
+> -
+> -	dcache_wb_range(addr, addr + PAGE_SIZE);
+> +	for (i = 0; i < folio_nr_pages(folio); i++) {
+> +		unsigned long addr = (unsigned long) kmap_local_folio(folio,
+> +								i * PAGE_SIZE);
+>  
+> -	if (vma->vm_flags & VM_EXEC)
+> -		icache_inv_range(addr, addr + PAGE_SIZE);
+> -
+> -	kunmap_atomic((void *) addr);
+> +		dcache_wb_range(addr, addr + PAGE_SIZE);
+> +		if (vma->vm_flags & VM_EXEC)
+> +			icache_inv_range(addr, addr + PAGE_SIZE);
+> +		kunmap_local((void *) addr);
+> +	}
+>  }
+>  
+>  void flush_icache_deferred(struct mm_struct *mm)
+> diff --git a/arch/csky/abiv2/inc/abi/cacheflush.h b/arch/csky/abiv2/inc/abi/cacheflush.h
+> index a565e00c3f70..9c728933a776 100644
+> --- a/arch/csky/abiv2/inc/abi/cacheflush.h
+> +++ b/arch/csky/abiv2/inc/abi/cacheflush.h
+> @@ -18,11 +18,17 @@
+>  
+>  #define PG_dcache_clean		PG_arch_1
+>  
+> +static inline void flush_dcache_folio(struct folio *folio)
+> +{
+> +	if (test_bit(PG_dcache_clean, &folio->flags))
+> +		clear_bit(PG_dcache_clean, &folio->flags);
+> +}
+> +#define flush_dcache_folio flush_dcache_folio
+> +
+>  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+>  static inline void flush_dcache_page(struct page *page)
+>  {
+> -	if (test_bit(PG_dcache_clean, &page->flags))
+> -		clear_bit(PG_dcache_clean, &page->flags);
+> +	flush_dcache_folio(page_folio(page));
+>  }
+>  
+>  #define flush_dcache_mmap_lock(mapping)		do { } while (0)
+> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+> index d4042495febc..a30ae048233e 100644
+> --- a/arch/csky/include/asm/pgtable.h
+> +++ b/arch/csky/include/asm/pgtable.h
+> @@ -90,7 +90,20 @@ static inline void set_pte(pte_t *p, pte_t pte)
+>  	/* prevent out of order excution */
+>  	smp_mb();
+>  }
+> -#define set_pte_at(mm, addr, ptep, pteval) set_pte(ptep, pteval)
+> +
+> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> +		pte_t *ptep, pte_t pte, unsigned int nr)
+> +{
+> +	for (;;) {
+> +		set_pte(ptep, pte);
+> +		if (--nr == 0)
+> +			break;
+> +		ptep++;
+> +		pte_val(pte) += PAGE_SIZE;
+> +	}
+> +}
+> +
+> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
+>  
+>  static inline pte_t *pmd_page_vaddr(pmd_t pmd)
+>  {
+> @@ -263,8 +276,10 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+>  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
+>  extern void paging_init(void);
+>  
+> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+> -		      pte_t *pte);
+> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
+> +		pte_t *pte, unsigned int nr);
+> +#define update_mmu_cache(vma, addr, ptep) \
+> +	update_mmu_cache_range(vma, addr, ptep, 1)
+>  
+>  #define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
+>  	remap_pfn_range(vma, vaddr, pfn, size, prot)
+> -- 
+> 2.39.1
+> 
 
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
-
+-- 
+Sincerely yours,
+Mike.
