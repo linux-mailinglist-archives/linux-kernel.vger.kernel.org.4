@@ -2,186 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F5B6A9357
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83DC6A935E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCCJEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S229848AbjCCJGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjCCJEo (ORCPT
+        with ESMTP id S229694AbjCCJGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:04:44 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC60231D3
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:04:21 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id o6so1740617vsq.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:04:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tz00Tqp2vtUy2svpLhqgrc/9lCdlqQYI0Iiyegg93jE=;
-        b=CPHtp3vSrP26nALKHfQarED/kNETYNYUQLVL0PuetjPrAthBn7Olz9gyYat9XJ/Jbc
-         uAqr5Q7NLdlz/6jnOJVPClXlOXQbDviCx0F+kz/x33pq/CXVGVylQGw6fOSmZk0nfpzy
-         m8ISNfilFU1VM2OH4H97LLa9J007eW0otluW1FX92zhrenCzENHK77Nfg72xLps4N/Gl
-         VTMVO+DpRHFMw+/Q1DfPq2YNddgxV+xRsrv/BL6PH+tg+WYErXo6SNVNs3OWtMQ1eVpg
-         iZUvflKKGakgtBkgo970lb6MLsxBbs/QGM408DHoY+zDfcWlF2iNiSWfcvQV6Cea5Hem
-         STYw==
+        Fri, 3 Mar 2023 04:06:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E93123659
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:06:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677834360;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YS0CjwhYVbsUEzzioDGeRBPspcNXXioriZQMTd1XWIQ=;
+        b=gOIn/CrUMxrg3g+RkC088rjIXObfEiu3mcPhNEvmGr7qLKqtkqzSIz4pO0Cb7Ua1JPL2ys
+        eK9p5oFvMm4jppzJBd8+7ZCsceyEbYrpTy9X3v/KjmjDXiX+pyWb1YHQJDEdy+7efy6IwC
+        UPD5rrRW/fL9zKxmCOn11V1ji+yUfKo=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-494-PGe70pWmOxu44z8WjTnUVQ-1; Fri, 03 Mar 2023 04:05:53 -0500
+X-MC-Unique: PGe70pWmOxu44z8WjTnUVQ-1
+Received: by mail-wm1-f69.google.com with SMTP id az39-20020a05600c602700b003e97eb80524so2534083wmb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:05:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Tz00Tqp2vtUy2svpLhqgrc/9lCdlqQYI0Iiyegg93jE=;
-        b=EOuUzni1rqiKrvsYXmLOxj15kCCywXPcuMtI06JqmpU0V5hL2Kzw+oKq1rJimL0cCV
-         wBn86dtYktCG0zQACuuWeL3+FA4RvIlQ4XNFWh4/hRJ1hus416Q+5VMFSyK5o6o+a86m
-         0yqQj5u39zrrVPPJ9rZ5hBrK3wqa8/PnPgv/tZP+SFQ7sDT6+IveUfhe+Jcn8h9LPvTv
-         I+DD64b1+rzwoBPlKbBMtELNJRnlHiiyl4taaidl39Fj61cINkbceuXa01PanOxXOic2
-         /d5NVQLW69D1Q342R30jZ7tGdQMe9D4lFOOKgjdnYYm4yJml3Wq/9glrapIjkMIyavKd
-         7uPw==
-X-Gm-Message-State: AO0yUKUzr2jov5QShNGO60BC5O+0ion1r6fOV4i2AbjH8QnXctBAK0Gi
-        7BAk/VifLT0mUofIXRnfRbA4JzHR9zjwvU7wrIlUjg==
-X-Google-Smtp-Source: AK7set8xJnpf1kTF5ZChezlWGbocRssXwa0E/otBhr1eDuSz97X8AuHW4Z/rfCNxFvtBeZ3CbxcRQAot48c8dRuVFmg=
-X-Received: by 2002:a67:cfc6:0:b0:402:999f:51dd with SMTP id
- h6-20020a67cfc6000000b00402999f51ddmr683904vsm.3.1677834256581; Fri, 03 Mar
- 2023 01:04:16 -0800 (PST)
+        bh=YS0CjwhYVbsUEzzioDGeRBPspcNXXioriZQMTd1XWIQ=;
+        b=34K73oKT1awgNlTwIijHcHDWL4LoAiPTCiB76bRaN+ZdCTZjHPpC3acm//SVn6xF3X
+         +3Hr3J4xRvusp7BwuZ8MTr3AKZimhqB2jt/crq6mzvmFXoqfKDDiPqcxF4CaT/sID7BC
+         k0c3FGwdqGlLK76ZGoH6OBTOrKEBNOAtAdGpWUDEEZSgPi34M5Z+2EadpGyQ4aOzfHx7
+         sjtrgbdCqbpZu6mj6bsPoM3GY58t6+4tr1DddUtR2bUmkFEZAKDH672e5h7jLBfk/WQK
+         Gvkg6ZMiipbAEJBkDN4pm7BOXd91aER/XKGMkdhhtUAoRmX+hbiKbyCwHo1fEMadet7c
+         Xcdw==
+X-Gm-Message-State: AO0yUKXzcRN5WwHpNEE1j5GcqQwZkCNt+vJmaroEAfU13hy6lvXndywp
+        2xrXqaQ9q4OG/qZKblW7n2s6GeXS8yBD4ObVbZ4ZySzJ90jF4pk3nPu4h1ylqNvOYOLWV+QrxV2
+        u9s3bzA1rW30h9RhjrcauhoDx
+X-Received: by 2002:a05:600c:46d1:b0:3e1:f8af:8772 with SMTP id q17-20020a05600c46d100b003e1f8af8772mr962685wmo.9.1677834352102;
+        Fri, 03 Mar 2023 01:05:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set8jagMcNMmXQyfHV0dH3kB3yk7ffQXREEni9HXk4xFVSy4fCDC0ZRzxCl37hRsdKx/W7igNWA==
+X-Received: by 2002:a05:600c:46d1:b0:3e1:f8af:8772 with SMTP id q17-20020a05600c46d100b003e1f8af8772mr962632wmo.9.1677834351710;
+        Fri, 03 Mar 2023 01:05:51 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:6100:f5c9:50a5:3310:d8ac? (p200300cbc7026100f5c950a53310d8ac.dip0.t-ipconnect.de. [2003:cb:c702:6100:f5c9:50a5:3310:d8ac])
+        by smtp.gmail.com with ESMTPSA id o14-20020a5d408e000000b002bfd524255esm1593826wrp.43.2023.03.03.01.05.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 01:05:51 -0800 (PST)
+Message-ID: <787e7d9a-fcf4-ad5f-97f1-c0e1c1553c2d@redhat.com>
+Date:   Fri, 3 Mar 2023 10:05:49 +0100
 MIME-Version: 1.0
-References: <20230301180657.003689969@linuxfoundation.org> <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
- <ZAB6pP3MNy152f+7@kroah.com> <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
- <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com> <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
-In-Reply-To: <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 3 Mar 2023 14:34:05 +0530
-Message-ID: <CA+G9fYuLQEfeTjx52NxbXV5914YJQ2tVd8k4SJjrAryujPjnqA@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        mptcp@lists.linux.dev, Florian Westphal <fw@strlen.de>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <20230301190457.1498985-1-surenb@google.com>
+ <31a88065-063a-727e-52fd-9fbc7d17fb5c@redhat.com>
+ <CAJuCfpGKK5SwxQr_BKrqnn0ZeaLVtX=n31MbKUwdnSSd4umB3A@mail.gmail.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/1] mm/nommu: remove unnecessary VMA locking
+In-Reply-To: <CAJuCfpGKK5SwxQr_BKrqnn0ZeaLVtX=n31MbKUwdnSSd4umB3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Mar 2023 at 13:34, Paolo Abeni <pabeni@redhat.com> wrote:
->
-> Hello,
->
-> On Fri, 2023-03-03 at 01:32 +0530, Naresh Kamboju wrote:
-> > On Thu, 2 Mar 2023 at 16:30, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > On Thu, 2 Mar 2023 at 16:00, Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Thu, Mar 02, 2023 at 03:49:31PM +0530, Naresh Kamboju wrote:
-> > > > > On Wed, 1 Mar 2023 at 23:42, Greg Kroah-Hartman
-> > > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > This is the start of the stable review cycle for the 6.1.15 release.
-> > > > > > There are 42 patches in this series, all will be posted as a response
-> > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > let me know.
-> > > > > >
-> > > > > > Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> > > > > > Anything received after that time might be too late.
-> > > > > >
-> > > > > > The whole patch series can be found in one patch at:
-> > > > > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.15-rc1.gz
-> > > > > > or in the git tree and branch at:
-> > > > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > > > > > and the diffstat can be found below.
-> > > > > >
-> > > > > > thanks,
-> > > > > >
-> > > > > > greg k-h
-> > > > >
-> > > > > Regression found on Linux version 6.1.15-rc1 on 32-bit arm x15 and i386.
-> > > > >
-> > > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > > >
-> > > > > ## Build
-> > > > > * kernel: 6.1.15-rc1
-> > > > > * git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-> > > > > * git branch: linux-6.1.y
-> > > > > * git commit: b6150251d4ddf8a80510c185d839631e252e6317
-> > > > > * git describe: v6.1.14-43-gb6150251d4dd
-> > > > > * test details:
-> > > > > https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.14-43-gb6150251d4dd
-> > > > >
-> > > > > Regression test cases,
-> > > > > i386:
-> > > > > x15:
-> > > > >   * kselftest-net-mptcp/net_mptcp_mptcp_sockopt_sh
-> > > > >
-> > > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > > Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> > > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > > Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> > > > >
-> > > > > test log:
-> > > > > ----------
-> > > > >
-> > > > > # selftests: net/mptcp: mptcp_sockopt.sh
-> > >
-> > > ....
-> > >
-> > > > Nit, wrapping a log like this makes it hard to read, don't you think?
-> > >
-> > > Me either.
-> > > That is the reason I have shared "Assertion" above.
-> > >
-> > > >
-> > > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > > Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> > > > > # server killed by signal 6
-> > > > > #
-> > > > > # FAIL: SOL_MPTCP getsockopt
-> > > > > # PASS: TCP_INQ cmsg/ioctl -t tcp
-> > > > > # PASS: TCP_INQ cmsg/ioctl -6 -t tcp
-> > > > > # PASS: TCP_INQ cmsg/ioctl -r tcp
-> > > > > # PASS: TCP_INQ cmsg/ioctl -6 -r tcp
-> > > > > # PASS: TCP_INQ cmsg/ioctl -r tcp -t tcp
-> > > > > not ok 6 selftests: net/mptcp: mptcp_sockopt.sh # exit=1
-> > > >
-> > > > Any chance you can bisect?
-> > >
-> > > We are running our bisection scripts.
-> >
-> > We have tested with 6.1.14 kselftests source again and it passes.
-> > Now that we have upgraded to 6.2.1 kselftests source, we find that
-> > there is this problem reported. so, not a kernel regression.
->
-> I read the above as you are running self-tests from 6.2.1 on top of an
-> older (6.1) kernel. Is that correct?
+>>
+>> Just a general comment: usually, if review of the original series is
+>> still going on, it makes a lot more sense to raise such things in the
+>> original series so the author can fixup while things are still in
+>> mm-unstable. Once the series is in mm-stable, it's a different story. In
+>> that case, it is usually good to have the mail subjects be something
+>> like  "[PATCH mm-stable 1/1] ...".
+> 
+> Ok... For my education, do you mean the title of this patch should
+> somehow reflect that it should be folded into the original patch? Just
+> trying to understand the actionable item here. How would you change
+> this patch when posting for mm-unstable and for mm-stable?
 
-correct.
+For patches that fixup something in mm-stable (stable commit ID but not 
+yet master -> we cannot squash anymore so we need separate commits), 
+it's good to include "mm-stable". The main difference to patches that 
+target master is that by indicating "mm-stable", everyone knows that 
+this is not broken in some upstream/production kernel.
 
-> If so failures are expected;
 
-Thanks for clarifying this.
+For patches that fixup something that is in mm-unstable (no stable 
+commit ID -> still under review and fixup easily possible), IMHO we 
+distinguish between two cases:
 
-> please use the self-tests and kernel from the same release.
->
-> Otherwise, could you please re-phrase the above?
->
-> Thanks,
->
-> Paolo
->
+(1) You fixup your own patches: simply send the fixup as reply to the 
+original patch. Andrew will pick it up and squash it before including it 
+in mm-stable. Sometimes a complete resend of a series makes sense instead.
 
-- Naresh
+(2) You fixup patches from someone else: simply raise it as a review 
+comment in reply to the original patch. It might make sense to send a 
+patch, but usually you just raise the issue to the patch author as a 
+review comment and the author will address that. Again, Andrew will pick 
+it up and squash it before moving it to mm-stable.
+
+
+That way, it's clearer when stumbling over patches on the mailing list 
+if they fix a real issue in upstream, fix a issue in 
+soon-to-be-upstream, or are simply part of a WIP series that is still 
+under review.
+
+-- 
+Thanks,
+
+David / dhildenb
+
