@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABA16A8EC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96896A8ECA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjCCBdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 20:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S229830AbjCCBes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 20:34:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjCCBdm (ORCPT
+        with ESMTP id S229511AbjCCBeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 20:33:42 -0500
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F44158BE;
-        Thu,  2 Mar 2023 17:33:40 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 0BAA51A00AB6;
-        Fri,  3 Mar 2023 09:34:25 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id iuzHbEDDySAe; Fri,  3 Mar 2023 09:34:24 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 81FEA1A00A11;
-        Fri,  3 Mar 2023 09:34:23 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     freude@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com,
-        Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH v2] s390/zcrypt: remove unnecessary (void*) conversions
-Date:   Fri,  3 Mar 2023 09:32:50 +0800
-Message-Id: <20230303013250.3058-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20230223011212.13045-1-yuzhe@nfschina.com>
-References: <20230223011212.13045-1-yuzhe@nfschina.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 2 Mar 2023 20:34:46 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C441556E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 17:34:45 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536bbe5f888so15986637b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 17:34:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677807284;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TciFh9FdyF3mrNIuO70cM61gX9uwhyReNw+Gw2pRUPA=;
+        b=Fu9U55wxTCLtEXaKgOYnyEQH6o/knLUeIWIORmIAitVZwfQOux0uTJ7B66Lcq0ckLn
+         DnaiYkrXI1vYlCgghAucupoHiJLokhAsINv3RZQOUyxdPAalX4v/jrQ0u6/kLfDotIq9
+         fLpMNArb7teZwLpvE7yeMPSDWGi9TR9ae2CG3WWhAqSW7EINvX/f7irqODYobdS+zhBJ
+         a7ooWCbNGLmh3/Gc2gFtAmGd5kUxNiekAbwj6joc0NC1oS5J6bD3OPBdhvO9gsTQ0ite
+         jNjMWQ4waHcWsNugjOXd04kipv5Kdf3uEMBA3Jbr551AWQN/ktqXyvrMm6S4Ke4LZV0c
+         2yuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677807284;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TciFh9FdyF3mrNIuO70cM61gX9uwhyReNw+Gw2pRUPA=;
+        b=FFqyMHsyx7pD/voKlExEsd/+SsbHYZkpLszACkTgw1DP0TPCmQXUKYWG/MMwIRWDor
+         33J4RbhyjZWfQ7X0XJp8SP3QuxvEXbREFT6Q7lPWOAgmXN76xRwUIrN+lLBlYnkQb3mf
+         w2KR05sxLmWYDsWyDfVV8+a7zpQNLGE4/IAIXo5LigOdbg2uIeYGHIex48UIzRMwQOmV
+         74s95fvR5Y8HB3wOO5QQZDGngcAIUGnafcMt9spLrrGC2jG/V1OclMMkelDyRsvokaPI
+         CDd708ovhwrx+d13Zf+nx56+7FNHlypUFh45uYpScMKJ4GC8xYNt+WmbB+C/FvLcNRw4
+         0JEw==
+X-Gm-Message-State: AO0yUKVSB/8/zoRwh8IRpnk0CTovyeGn5VhYICTywpuVqTRt/nvbP8AA
+        xv//k4ZJCz/MTIxKLTbOIj6DFXA8Vlr9alO1iL/DlA==
+X-Google-Smtp-Source: AK7set8EWcUQluqN8WKHq8/XSmKUp/RVBAW+c+8SuNyz0OuOQxujuvEHXp6QWVS8hEOwj7mZluNQW9cmwuljgEcX14A=
+X-Received: by 2002:a81:ac51:0:b0:53c:6fda:b469 with SMTP id
+ z17-20020a81ac51000000b0053c6fdab469mr4635252ywj.0.1677807284013; Thu, 02 Mar
+ 2023 17:34:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20230301190457.1498985-1-surenb@google.com> <31a88065-063a-727e-52fd-9fbc7d17fb5c@redhat.com>
+In-Reply-To: <31a88065-063a-727e-52fd-9fbc7d17fb5c@redhat.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 2 Mar 2023 17:34:33 -0800
+Message-ID: <CAJuCfpGKK5SwxQr_BKrqnn0ZeaLVtX=n31MbKUwdnSSd4umB3A@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm/nommu: remove unnecessary VMA locking
+To:     David Hildenbrand <david@redhat.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer variables of void * type do not require type cast.
+On Thu, Mar 2, 2023 at 1:41=E2=80=AFAM David Hildenbrand <david@redhat.com>=
+ wrote:
+>
+> On 01.03.23 20:04, Suren Baghdasaryan wrote:
+> > Since CONFIG_PER_VMA_LOCK depends on CONFIG_MMU, the changes in nommu
+> > are not needed. Remove them.
+> >
+> > Fixes: bad94decd6a4 ("mm: write-lock VMAs before removing them from VMA=
+ tree")
+> > Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> > Link: https://lore.kernel.org/all/Y%2F8CJQGNuMUTdLwP@localhost/
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> > Fix cleanly applies over mm-unstable, SHA in "Fixes" is from that tree.
+> >
+> >   mm/nommu.c | 5 -----
+> >   1 file changed, 5 deletions(-)
+> >
+> > diff --git a/mm/nommu.c b/mm/nommu.c
+> > index 2ab162d773e2..57ba243c6a37 100644
+> > --- a/mm/nommu.c
+> > +++ b/mm/nommu.c
+> > @@ -588,7 +588,6 @@ static int delete_vma_from_mm(struct vm_area_struct=
+ *vma)
+> >                      current->pid);
+> >               return -ENOMEM;
+> >       }
+> > -     vma_start_write(vma);
+> >       cleanup_vma_from_mm(vma);
+> >
+> >       /* remove from the MM's tree and list */
+> > @@ -1520,10 +1519,6 @@ void exit_mmap(struct mm_struct *mm)
+> >        */
+> >       mmap_write_lock(mm);
+> >       for_each_vma(vmi, vma) {
+> > -             /*
+> > -              * No need to lock VMA because this is the only mm user a=
+nd no
+> > -              * page fault handled can race with it.
+> > -              */
+> >               cleanup_vma_from_mm(vma);
+> >               delete_vma(mm, vma);
+> >               cond_resched();
+>
+> So, i assume this should be squashed.
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
----
- drivers/s390/crypto/zcrypt_msgtype6.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+Yes, that would be best.
 
-diff --git a/drivers/s390/crypto/zcrypt_msgtype6.c b/drivers/s390/crypto/zcrypt_msgtype6.c
-index 5ad251477593..a955dc97040c 100644
---- a/drivers/s390/crypto/zcrypt_msgtype6.c
-+++ b/drivers/s390/crypto/zcrypt_msgtype6.c
-@@ -926,8 +926,7 @@ static void zcrypt_msgtype6_receive(struct ap_queue *aq,
- 		.type = TYPE82_RSP_CODE,
- 		.reply_code = REP82_ERROR_MACHINE_FAILURE,
- 	};
--	struct response_type *resp_type =
--		(struct response_type *)msg->private;
-+	struct response_type *resp_type = msg->private;
- 	struct type86x_reply *t86r;
- 	int len;
- 
-@@ -982,8 +981,7 @@ static void zcrypt_msgtype6_receive_ep11(struct ap_queue *aq,
- 		.type = TYPE82_RSP_CODE,
- 		.reply_code = REP82_ERROR_MACHINE_FAILURE,
- 	};
--	struct response_type *resp_type =
--		(struct response_type *)msg->private;
-+	struct response_type *resp_type = msg->private;
- 	struct type86_ep11_reply *t86r;
- 	int len;
- 
-@@ -1157,7 +1155,7 @@ static long zcrypt_msgtype6_send_cprb(bool userspace, struct zcrypt_queue *zq,
- 				      struct ap_message *ap_msg)
- {
- 	int rc;
--	struct response_type *rtype = (struct response_type *)(ap_msg->private);
-+	struct response_type *rtype = (ap_msg->private);
- 	struct {
- 		struct type6_hdr hdr;
- 		struct CPRBX cprbx;
-@@ -1240,7 +1238,7 @@ static long zcrypt_msgtype6_send_ep11_cprb(bool userspace, struct zcrypt_queue *
- {
- 	int rc;
- 	unsigned int lfmt;
--	struct response_type *rtype = (struct response_type *)(ap_msg->private);
-+	struct response_type *rtype = (ap_msg->private);
- 	struct {
- 		struct type6_hdr hdr;
- 		struct ep11_cprb cprbx;
-@@ -1359,7 +1357,7 @@ static long zcrypt_msgtype6_rng(struct zcrypt_queue *zq,
- 		short int verb_length;
- 		short int key_length;
- 	} __packed * msg = ap_msg->msg;
--	struct response_type *rtype = (struct response_type *)(ap_msg->private);
-+	struct response_type *rtype = (ap_msg->private);
- 	int rc;
- 
- 	msg->cprbx.domain = AP_QID_QUEUE(zq->queue->qid);
--- 
-2.11.0
+>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 
+Thanks1
+
+>
+>
+> Just a general comment: usually, if review of the original series is
+> still going on, it makes a lot more sense to raise such things in the
+> original series so the author can fixup while things are still in
+> mm-unstable. Once the series is in mm-stable, it's a different story. In
+> that case, it is usually good to have the mail subjects be something
+> like  "[PATCH mm-stable 1/1] ...".
+
+Ok... For my education, do you mean the title of this patch should
+somehow reflect that it should be folded into the original patch? Just
+trying to understand the actionable item here. How would you change
+this patch when posting for mm-unstable and for mm-stable?
+Thanks,
+Suren.
+
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
