@@ -2,143 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4D26AA0C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CC46AA0C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjCCU6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 15:58:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S231787AbjCCU6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 15:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbjCCU6m (ORCPT
+        with ESMTP id S231675AbjCCU6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 15:58:42 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEFA17145
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:58:33 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id g3so15435465eda.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:58:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677877111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1o4OY5lQPKh+GkI89Rz6TXZXk/LYf31mRBJK3Sl9ezg=;
-        b=he65XQOu+UTB4in3Szyiw11xAa8mqRP2ytbOj4xIHb6LvrWUZKUzdsqGCCEJ1W4C3X
-         TuMyEiexc/qgDlzevsKPjI04q8h/4QsxnWeO2rFK26G98RH928vITMEmJoE2GmYgnrT9
-         +mC3ntKhkSOfnIoYv0aY8TgoZDk1kMSa2WELY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677877111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1o4OY5lQPKh+GkI89Rz6TXZXk/LYf31mRBJK3Sl9ezg=;
-        b=iLmsKqDK/yxWZQDn8A8yZ7bfyUJPAtE1qZ8LTn2edxSmy73jaiUwj5CqefHVP5yDDi
-         Y/3mASsBJQaxrVdd4MvpGlCGaqQv1IHO4Fz4O/NlxmDdEnOnZfLo0wObxNL6seKX5KmA
-         MSdtzjPwGMLyRCzlmIz/gEqI7ypkXYlgEGFm2i1sfOEApJwfYunyvsDgKneBCl4oSykf
-         v5UR3mbOwgsDXQeCeph6Vfbpr5Q/LYW4s2fwWUXN/BtfaR0E1OR77rj1aoZR9kQOPY/G
-         XQIJLA24S/R8quxhpK4yGrkxFN0+mTrL2dx61QISciEsU86QqKPBSdQFsup9LW6Vqnp8
-         FCCQ==
-X-Gm-Message-State: AO0yUKWwZzG/slkmsniLeN2edVX/4gyY6pq3Zxh9q5dmxbjixVXrBP4e
-        gXmHXL2p6wHZdnMXJJRmn34Rg65ugcfjumHLApu2mg==
-X-Google-Smtp-Source: AK7set+heXTvPJi8Jqm4Nl/lLabmZbxQHkGm4oXsMsfCuZY1OKEE0jTNZgNOyrPEFQEBN/Hj3av9iw==
-X-Received: by 2002:a17:906:a00a:b0:87b:d3f3:dcf3 with SMTP id p10-20020a170906a00a00b0087bd3f3dcf3mr2540396ejy.35.1677877111531;
-        Fri, 03 Mar 2023 12:58:31 -0800 (PST)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170906164d00b008deba75e89csm1342236ejd.66.2023.03.03.12.58.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 12:58:30 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id f13so15327817edz.6
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:58:30 -0800 (PST)
-X-Received: by 2002:a17:906:3d51:b0:8f1:4c6a:e72 with SMTP id
- q17-20020a1709063d5100b008f14c6a0e72mr1497478ejf.0.1677877109830; Fri, 03 Mar
- 2023 12:58:29 -0800 (PST)
+        Fri, 3 Mar 2023 15:58:46 -0500
+Received: from mx.dolansoft.org (s2.dolansoft.org [212.51.146.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C63144B2
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:58:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=brun.one;
+        s=s1; h=MIME-Version:Message-Id:Date:Subject:Cc:To:From:In-Reply-To:
+        References:From:To:Subject:Date:Message-ID:Reply-To;
+        bh=ujEZ6ExOsdh6hl+KaXU2L5kIkg0VilRWgkdQvPvZgAA=; b=HfaLr0SW+VLWr8EL7YPdwlHKkD
+        DY5UNw4wKhVRHP1TgIfGKhoJkMgOd/Ocs85vFb6eqqzpDDlj5E9RTV9totxL8CwaFOpysU3yfN1Xe
+        wYKX4/2sRorPuN6F7WeN64YG18ZJYhKvoJZ+qtgYf9hDN6ShtS+ojHdBtidyF8+Ogdv8h2uXgNWih
+        pRmqVOnj+RzNnLWv4zPVvJzf88Dd2Xq0Bw1bHZvEM1u0Dsezylhlp2h4FRywBypiZGlaoeng6MJF4
+        8qdD45DeZ95kis7Qy02L/LPntKQEa1/HNk9Wlm/781Q+LVkn/ZzBNwtg4wC3X/f9o5MYHXcVbWpgq
+        DDrrDUCg==;
+Received: from [212.51.153.89] (helo=blacklava.cluster.local)
+        by mx.dolansoft.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <lorenz@dolansoft.org>)
+        id 1pYCU2-0015v2-1I;
+        Fri, 03 Mar 2023 20:58:30 +0000
+From:   Lorenz Brun <lorenz@brun.one>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] pwm: mediatek: support inverted polarity
+Date:   Fri,  3 Mar 2023 21:58:21 +0100
+Message-Id: <20230303205821.2285418-1-lorenz@brun.one>
 MIME-Version: 1.0
-References: <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
- <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
- <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
- <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
- <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
- <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
- <ZAD21ZEiB2V9Ttto@ZenIV> <6400fedb.170a0220.ece29.04b8@mx.google.com>
- <ZAEC3LN6oUe6BKSN@ZenIV> <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
- <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
- <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
- <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com>
- <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com> <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com>
-In-Reply-To: <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 3 Mar 2023 12:58:13 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgz51x2gaiD4=6T3UGZtKOSm3k56iq=h4tqy3wQsN-VTA@mail.gmail.com>
-Message-ID: <CAHk-=wgz51x2gaiD4=6T3UGZtKOSm3k56iq=h4tqy3wQsN-VTA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
-To:     Mateusz Guzik <mjguzik@gmail.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Sender: lorenz@dolansoft.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 12:39=E2=80=AFPM Mateusz Guzik <mjguzik@gmail.com> w=
-rote:
->
-> I think there is a systemic problem which comes with the kzalloc API
+According to the MT7986 Reference Manual the Mediatek  PWM controller
+doesn't appear to have support for inverted polarity.
 
-Well, it's not necessarily the API that is bad, but the implementation.
+This implements the same solution as in pwm-meson and just inverts the
+duty cycle instead, which results in the same outcome.
 
-We could easily make kzalloc() with a constant size just expand to
-kmalloc+memset, and get the behavior you want.
+Signed-off-by: Lorenz Brun <lorenz@brun.one>
+---
+ drivers/pwm/pwm-mediatek.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-We already do magical things for "find the right slab bucket" part of
-kmalloc too for constant sizes. It's changed over the years, but that
-policy goes back a long long time. See
+diff --git a/drivers/pwm/pwm-mediatek.c b/drivers/pwm/pwm-mediatek.c
+index 5b5eeaff35da..6f4a54c8299f 100644
+--- a/drivers/pwm/pwm-mediatek.c
++++ b/drivers/pwm/pwm-mediatek.c
+@@ -202,9 +202,7 @@ static int pwm_mediatek_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 			      const struct pwm_state *state)
+ {
+ 	int err;
+-
+-	if (state->polarity != PWM_POLARITY_NORMAL)
+-		return -EINVAL;
++	u64 duty_cycle;
+ 
+ 	if (!state->enabled) {
+ 		if (pwm->state.enabled)
+@@ -213,7 +211,14 @@ static int pwm_mediatek_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 		return 0;
+ 	}
+ 
+-	err = pwm_mediatek_config(pwm->chip, pwm, state->duty_cycle, state->period);
++	// According to the MT7986 Reference Manual the peripheral does not
++	// appear to have the capability to invert the output. Instead just
++	// invert the duty cycle.
++	duty_cycle = state->duty_cycle;
++	if (state->polarity == PWM_POLARITY_INVERSED)
++		duty_cycle = state->period - state->duty_cycle;
++
++	err = pwm_mediatek_config(pwm->chip, pwm, duty_cycle, state->period);
+ 	if (err)
+ 		return err;
+ 
+-- 
+2.39.1
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/=
-?id=3D95203fe78007f9ab3aebb96606473ae18c00a5a8
-
-from the BK history tree.
-
-Exactly because some things are worth optimizing for when the size is
-known at compile time.
-
-Maybe just extending kzalloc() similarly? Trivial and entirely untested pat=
-ch:
-
-   --- a/include/linux/slab.h
-   +++ b/include/linux/slab.h
-   @@ -717,6 +717,12 @@ static inline void *kmem_cache_zalloc(struct
-kmem_cache *k, gfp_t flags)
-     */
-    static inline __alloc_size(1) void *kzalloc(size_t size, gfp_t flags)
-    {
-   +    if (__builtin_constant_p(size)) {
-   +            void *ret =3D kmalloc(size, flags);
-   +            if (ret)
-   +                    memset(ret, 0, size);
-   +            return ret;
-   +    }
-        return kmalloc(size, flags | __GFP_ZERO);
-    }
-
-This may well be part of what has changed over the years. People have
-done a *lot* of pseudo-automated "kmalloc+memset -> kzalloc" code
-simplification. And in the process we've lost a lot of good
-optimizations.
-
-I used to do profiling religiously, but these days I only do it for
-particular areas (usually just the walking part of pathname lookup)
-
-             Linus
