@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390B66A9F74
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146296A9F73
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjCCSpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S231946AbjCCSpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbjCCSpe (ORCPT
+        with ESMTP id S231868AbjCCSpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:45:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB3660D63;
-        Fri,  3 Mar 2023 10:45:12 -0800 (PST)
+        Fri, 3 Mar 2023 13:45:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C13A5ADEC;
+        Fri,  3 Mar 2023 10:45:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 485B3B819BB;
-        Fri,  3 Mar 2023 18:44:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 12D84C4339E;
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBE3AB819B5;
         Fri,  3 Mar 2023 18:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677869071;
-        bh=Fvp59q1WIMIuaKPAGAVI8w8l+uDJc2xZG2DFyKWLpjo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Bu/dr1pYylZS+XIOCAMDFmsZ4umE5AHtAui9CCbvyv7dgmapSh/jzxcVe3h704aWP
-         IWEHLAOoVjRJU4eCrFkpq4qNLaQDNgl72BqPXM8irvKV+rCZqLcYsf08Ur596VGuZe
-         dytcc2u9//2b4OLDP7hlwaEw7ZsIm9p9pRDjo0W3qixbrx4tbVPqJgQfjKn9+yAFdB
-         01P9mEUtGAJX2B0Ifzzro9Utk8EyS9SzEODG8xfpvY0dfX0ZvoiKagMqMSc0Ay8cW7
-         jZSKvpkYTefik/d7yOc4a9UWz3APsoGj6rSjPdjom3Qi0EDDUTLLwbCi0MmdNZZviZ
-         Nya5esspeeJaQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0FC4C41679;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 865D6C433EF;
         Fri,  3 Mar 2023 18:44:30 +0000 (UTC)
-Subject: Re: [GIT PULL] More power management updates for v6.3-rc1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677869070;
+        bh=uB24VT8QmRIhz2FWHluKTNPvoq3OEigd1vrKy6Gg7+Q=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=czsoNUCwEzduGzHE7zbcpAaD53r5Y/UXFDM+/qIZBx+fLct0Eovklt4OQv3i6JyhI
+         Enk75TrRH3j2KzP7VY2F0Cden2b0/mZ3IYsuxRZNetaIRIeyOsqbSkvdm0Jb6lRBMT
+         P49ll5IinFbf4VaOoGDHuNpMYwJbkN2vAN/YPizZqWiwFeynMIZTUIF4iHnItr+2EM
+         kXMV2Xznz3ofdvXPEXSDcdPnhelHobDynfo6BS9SnHVmuNpedi8tITMmpKdsEq4ulP
+         Xd8bripD5StwHBT2KxBZqD9uLEwdyQMCWoBpuaL0GslcNk6ZBbQMcwr1fxDqaEoT2J
+         e1AEUMBEUuMvw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75572C41679;
+        Fri,  3 Mar 2023 18:44:30 +0000 (UTC)
+Subject: Re: [GIT PULL] RTC for 6.3
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0ivhkBMX_864KbRdZsAN8AD373P-m_Tsb9KZZkGHg0zOw@mail.gmail.com>
-References: <CAJZ5v0ivhkBMX_864KbRdZsAN8AD373P-m_Tsb9KZZkGHg0zOw@mail.gmail.com>
+In-Reply-To: <2023030300024180930d7a@mail.local>
+References: <2023030300024180930d7a@mail.local>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0ivhkBMX_864KbRdZsAN8AD373P-m_Tsb9KZZkGHg0zOw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.3-rc1-2
-X-PR-Tracked-Commit-Id: 5719638d368f35934d53e4a8c3a2f007c32a1ecf
+X-PR-Tracked-Message-Id: <2023030300024180930d7a@mail.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.3
+X-PR-Tracked-Commit-Id: 3ca04951b004fa184ff84369448a37bf5df98a79
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c8b4accf860203fcb380f5d15b90a7646912d9c2
-Message-Id: <167786907098.30023.9532210541056027477.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 271d89394e33aae5391fd886c046ce54c8240e5b
+Message-Id: <167786907047.30023.4012839670328384187.pr-tracker-bot@kernel.org>
 Date:   Fri, 03 Mar 2023 18:44:30 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,12 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 3 Mar 2023 19:15:06 +0100:
+The pull request you sent on Fri, 3 Mar 2023 01:02:41 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.3-rc1-2
+> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.3
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c8b4accf860203fcb380f5d15b90a7646912d9c2
+https://git.kernel.org/torvalds/c/271d89394e33aae5391fd886c046ce54c8240e5b
 
 Thank you!
 
