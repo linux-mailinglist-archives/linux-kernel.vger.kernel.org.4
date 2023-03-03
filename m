@@ -2,165 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29936AA2B2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2236AA281
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjCCVvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
+        id S232622AbjCCVsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232679AbjCCVtO (ORCPT
+        with ESMTP id S232591AbjCCVrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:49:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C58067018;
-        Fri,  3 Mar 2023 13:45:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EBA1B81A0C;
-        Fri,  3 Mar 2023 21:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 370EFC433A7;
-        Fri,  3 Mar 2023 21:45:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677879927;
-        bh=b/RLWSejTFE9QqMTw1tzkCNobQw0ipmoV46ssE+9qWg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bd9wxFVDKJhIOicPRP07r+8wtzjxEiNSYUWI5urhLS3xwv+9OJYqFvJpcZuFnGp1S
-         yqUI52637NoDBKyzOiCR2ACRH6+N34At9fXQvC9fYR2zCIz7EIlacKMQoVdR8rM2hW
-         HthqjdObkhBtZG55N4mr/UUfsGpOxx3v/rFtLtkKudOeECXexDimObU9if93dZ5/Xz
-         qkedRs3Bd9LrnnYXPbvCcOr3RoSEpn+npzCsSl2gNmZ0v3oL9GV9ODGGjvVegco3kz
-         BFfALzmN1zPo+3Ovf4O3v40Z/y0M6mFTe/SWxS1jEl0k4tWZxV9SBZBlY+3458ytRR
-         LZmCvb0TlKb3A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        yung-chuan.liao@linux.intel.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.1 60/60] soundwire: cadence: Drain the RX FIFO after an IO timeout
-Date:   Fri,  3 Mar 2023 16:43:14 -0500
-Message-Id: <20230303214315.1447666-60-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214315.1447666-1-sashal@kernel.org>
-References: <20230303214315.1447666-1-sashal@kernel.org>
+        Fri, 3 Mar 2023 16:47:37 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9E470437
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:45:04 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id v3-20020a92c6c3000000b003159a0109ceso2095591ilm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:45:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=imuLu9SO+D8i258J/SyTaA2l+06SMEdt81hfYPO+LcE=;
+        b=66qNjwoniaAW/xamkINVyONf6r1rL54EeiQ0g6GmedJwBnUH0iY0O8PU1SbdO6PorD
+         Et7CqEdFkMmIGgT9GFA2RLP/HvmcTJpSjc/PnqADfh/NMCB9zpj89NmWXyP7G9G2QPYD
+         Wfb03an1o5bvHhYLt36tF5FODTEm2cp5SC01UKoax/c03fu7lSwWuGaBWE03KNWmmTEZ
+         MMnQxYUIs3cvvP1tiQh2Y+XpYez+txa8RhYhEi/z//1D13AlvrACkT7+MztKfQJvmz+C
+         Efg3y95Jn+Snc00DMTv57jO6sWnYfkWx4ecwtICAodTAxp0DCB51dpZK1ZUl9f//+vFH
+         hndw==
+X-Gm-Message-State: AO0yUKWtkyyT+NfQzUXUwXg5tBIkWNl6CFUJ8Lr5O7NqNuH2b3ODxg43
+        /GW+gtiaqGiEMiXq9RDhUzocRX3MsP/bDSxcreZgpgI3t+vj
+X-Google-Smtp-Source: AK7set9YuSm2/pz0nTOVFSMkJevmjTlgfb6KKMvziPbawz4HeK5Hpw7Y6gGMGpvpG/znK7/nFAjJlsKSphU9NXAuvSj7Bi0zXBM0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:96c:b0:310:c810:44c0 with SMTP id
+ q12-20020a056e02096c00b00310c81044c0mr1520188ilt.5.1677879817645; Fri, 03 Mar
+ 2023 13:43:37 -0800 (PST)
+Date:   Fri, 03 Mar 2023 13:43:37 -0800
+In-Reply-To: <000000000000ece18705f3b20934@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000081b83a05f605d613@google.com>
+Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in ext4_group_desc_csum
+From:   syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, joneslee@google.com,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        tudor.ambarus@linaro.org, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
+syzbot has found a reproducer for the following issue on:
 
-[ Upstream commit 0603a47bd3a8f439d7844b841eee1819353063e0 ]
+HEAD commit:    596b6b709632 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1151054cc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
+dashboard link: https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ce3de4c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b02598c80000
 
-If wait_for_completion_timeout() times-out in _cdns_xfer_msg() it
-is possible that something could have been written to the RX FIFO.
-In this case, we should drain the RX FIFO so that anything in it
-doesn't carry over and mess up the next transfer.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/06e2210b88a3/disk-596b6b70.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/79e6930ab577/vmlinux-596b6b70.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/56b95e6bcb5c/Image-596b6b70.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a765d6554060/mount_0.gz
 
-Obviously, if we got to this state something went wrong, and we
-don't really know the state of everything. The cleanup in this
-situation cannot be bullet-proof but we should attempt to avoid
-breaking future transaction, if only to reduce the amount of
-error noise when debugging the failure from a kernel log.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
 
-Note that this patch only implements the draining for blocking
-(non-deferred) transfers. The deferred API doesn't have any proper
-handling of error conditions and would need some re-design before
-implementing cleanup. That is a task for a separate patch...
+==================================================================
+BUG: KASAN: slab-out-of-bounds in crc16+0xc0/0x104 lib/crc16.c:58
+Read of size 1 at addr ffff0000d5eff0a8 by task syz-executor175/8245
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20221202161812.4186897-4-rf@opensource.cirrus.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/soundwire/cadence_master.c | 50 ++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 23 deletions(-)
+CPU: 1 PID: 8245 Comm: syz-executor175 Not tainted 6.2.0-syzkaller-18302-g596b6b709632 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Call trace:
+ dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x174/0x4c0 mm/kasan/report.c:417
+ kasan_report+0xd4/0x130 mm/kasan/report.c:517
+ __asan_report_load1_noabort+0x2c/0x38 mm/kasan/report_generic.c:348
+ crc16+0xc0/0x104 lib/crc16.c:58
+ ext4_group_desc_csum+0x6a8/0x99c fs/ext4/super.c:3187
+ ext4_group_desc_csum_set+0x17c/0x210 fs/ext4/super.c:3210
+ __ext4_new_inode+0x20dc/0x3acc fs/ext4/ialloc.c:1227
+ ext4_create+0x234/0x480 fs/ext4/namei.c:2809
+ lookup_open fs/namei.c:3413 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0xe6c/0x2578 fs/namei.c:3711
+ do_filp_open+0x1bc/0x3cc fs/namei.c:3741
+ do_sys_openat2+0x128/0x3d8 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __arm64_sys_openat+0x1f0/0x240 fs/open.c:1337
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
 
-diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-index 4e92a6b1ad626..cb59dc634658c 100644
---- a/drivers/soundwire/cadence_master.c
-+++ b/drivers/soundwire/cadence_master.c
-@@ -554,6 +554,29 @@ cdns_fill_msg_resp(struct sdw_cdns *cdns,
- 	return SDW_CMD_OK;
- }
- 
-+static void cdns_read_response(struct sdw_cdns *cdns)
-+{
-+	u32 num_resp, cmd_base;
-+	int i;
-+
-+	/* RX_FIFO_AVAIL can be 2 entries more than the FIFO size */
-+	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN + 2);
-+
-+	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
-+	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
-+	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
-+		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
-+		num_resp = ARRAY_SIZE(cdns->response_buf);
-+	}
-+
-+	cmd_base = CDNS_MCP_CMD_BASE;
-+
-+	for (i = 0; i < num_resp; i++) {
-+		cdns->response_buf[i] = cdns_readl(cdns, cmd_base);
-+		cmd_base += CDNS_MCP_CMD_WORD_LEN;
-+	}
-+}
-+
- static enum sdw_command_response
- _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
- 	       int offset, int count, bool defer)
-@@ -595,6 +618,10 @@ _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
- 		dev_err(cdns->dev, "IO transfer timed out, cmd %d device %d addr %x len %d\n",
- 			cmd, msg->dev_num, msg->addr, msg->len);
- 		msg->len = 0;
-+
-+		/* Drain anything in the RX_FIFO */
-+		cdns_read_response(cdns);
-+
- 		return SDW_CMD_TIMEOUT;
- 	}
- 
-@@ -768,29 +795,6 @@ EXPORT_SYMBOL(cdns_read_ping_status);
-  * IRQ handling
-  */
- 
--static void cdns_read_response(struct sdw_cdns *cdns)
--{
--	u32 num_resp, cmd_base;
--	int i;
--
--	/* RX_FIFO_AVAIL can be 2 entries more than the FIFO size */
--	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN + 2);
--
--	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
--	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
--	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
--		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
--		num_resp = ARRAY_SIZE(cdns->response_buf);
--	}
--
--	cmd_base = CDNS_MCP_CMD_BASE;
--
--	for (i = 0; i < num_resp; i++) {
--		cdns->response_buf[i] = cdns_readl(cdns, cmd_base);
--		cmd_base += CDNS_MCP_CMD_WORD_LEN;
--	}
--}
--
- static int cdns_update_slave_status(struct sdw_cdns *cdns,
- 				    u64 slave_intstat)
- {
--- 
-2.39.2
+Allocated by task 5961:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4c/0x80 mm/kasan/common.c:52
+ kasan_save_alloc_info+0x24/0x30 mm/kasan/generic.c:512
+ __kasan_slab_alloc+0x74/0x8c mm/kasan/common.c:328
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook+0x80/0x478 mm/slab.h:761
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x288/0x37c mm/slub.c:3476
+ kmem_cache_zalloc include/linux/slab.h:710 [inline]
+ __kernfs_new_node+0xe4/0x66c fs/kernfs/dir.c:614
+ kernfs_new_node+0x98/0x184 fs/kernfs/dir.c:676
+ __kernfs_create_file+0x60/0x2d4 fs/kernfs/file.c:1047
+ sysfs_add_file_mode_ns+0x1dc/0x298 fs/sysfs/file.c:294
+ create_files fs/sysfs/group.c:64 [inline]
+ internal_create_group+0x428/0xbec fs/sysfs/group.c:148
+ internal_create_groups fs/sysfs/group.c:188 [inline]
+ sysfs_create_groups+0x60/0x130 fs/sysfs/group.c:214
+ create_dir lib/kobject.c:68 [inline]
+ kobject_add_internal+0x5d4/0xb14 lib/kobject.c:223
+ kobject_add_varg lib/kobject.c:358 [inline]
+ kobject_init_and_add+0x130/0x1a0 lib/kobject.c:441
+ netdev_queue_add_kobject net/core/net-sysfs.c:1666 [inline]
+ netdev_queue_update_kobjects+0x1d8/0x470 net/core/net-sysfs.c:1718
+ register_queue_kobjects net/core/net-sysfs.c:1779 [inline]
+ netdev_register_kobject+0x22c/0x2d8 net/core/net-sysfs.c:2019
+ register_netdevice+0xcb8/0x1270 net/core/dev.c:10037
+ bond_newlink+0x50/0xa8 drivers/net/bonding/bond_netlink.c:560
+ rtnl_newlink_create net/core/rtnetlink.c:3407 [inline]
+ __rtnl_newlink net/core/rtnetlink.c:3624 [inline]
+ rtnl_newlink+0x1174/0x1b1c net/core/rtnetlink.c:3637
+ rtnetlink_rcv_msg+0x6ec/0xc8c net/core/rtnetlink.c:6141
+ netlink_rcv_skb+0x214/0x3c4 net/netlink/af_netlink.c:2574
+ rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6159
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x660/0x8d4 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x800/0xae0 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ __sys_sendto+0x3b4/0x504 net/socket.c:2120
+ __do_sys_sendto net/socket.c:2132 [inline]
+ __se_sys_sendto net/socket.c:2128 [inline]
+ __arm64_sys_sendto+0xd8/0xf8 net/socket.c:2128
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+The buggy address belongs to the object at ffff0000d5eff000
+ which belongs to the cache kernfs_node_cache of size 168
+The buggy address is located 0 bytes to the right of
+ 168-byte region [ffff0000d5eff000, ffff0000d5eff0a8)
+
+The buggy address belongs to the physical page:
+page:0000000016584f53 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x115eff
+flags: 0x5ffc00000000200(slab|node=0|zone=2|lastcpupid=0x7ff)
+raw: 05ffc00000000200 ffff0000c0844c00 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000110011 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff0000d5efef80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff0000d5eff000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff0000d5eff080: 00 00 00 00 00 fc fc fc fc fc fc fc fc 00 00 00
+                                  ^
+ ffff0000d5eff100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff0000d5eff180: 00 00 fc fc fc fc fc fc fc fc 00 00 00 00 00 00
+==================================================================
+EXT4-fs error (device loop3): __ext4_get_inode_loc:4560: comm syz-executor175: Invalid inode table block 4 in block_group 0
+EXT4-fs error (device loop3) in ext4_reserve_inode_write:5906: Corrupt filesystem
+EXT4-fs error (device loop3): __ext4_get_inode_loc:4560: comm syz-executor175: Invalid inode table block 4 in block_group 0
+EXT4-fs error (device loop3) in ext4_reserve_inode_write:5906: Corrupt filesystem
+EXT4-fs error (device loop3): ext4_evict_inode:279: inode #18: comm syz-executor175: mark_inode_dirty error
+EXT4-fs warning (device loop3): ext4_evict_inode:282: couldn't mark inode dirty (err -117)
 
